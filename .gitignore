@@ -1,6 +1,7 @@
 *.sw[a-p]
 /private*
 /junit-report/
+/features/tierN
 /Gemfile.lock
 /tools/Gemfile.lock
 /tools/Gemfiles_local/Gemfile*.lock
