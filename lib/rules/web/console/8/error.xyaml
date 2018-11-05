@@ -1,0 +1,53 @@
+# check error page info
+check_error_page:
+  elements:
+  - selector:
+      xpath: //h1[contains(.,'Error')]
+  - selector:
+      xpath: //div[contains(.,'<project_name> does not exist or you are not authorized to view it')]
+check_error_list_project_resources:
+  url: /console/project/<project_name>/overview
+  elements:
+  - selector:
+      xpath: //div[contains(.,'Failed to list')]
+check_error_no_permission_to_create_project:
+  elements:
+  - selector:
+      xpath: //span[contains(.,'User "<user_name>" cannot create processedtemplates in project "<project_name>"')]
+check_error_notification_on_page:
+  elements:
+  - selector:
+      xpath: //div[contains(.,'<error_message>')]
+check_login_error_message:
+  elements:
+  - selector:
+      xpath: //div[@class='alert alert-danger' and contains(., '<error_message>')]
+check_template_not_existed_with_error_message:
+  element:
+    selector:
+      xpath: //span[@ng-if="alert.message"][contains(.,'The requested template "<template_name>" could not be loaded.')]
+check_mail_format_error:
+  element:
+    selector:
+      xpath: //var[contains(.,"user@domain")]
+confirm_errors_with_invalid_template_label:
+  params:
+    tooltip_message: valid object label
+  action: check_input_validation_error
+confirm_errors_with_invalid_env_var:
+  params:
+    tooltip_message: valid environment variable
+  action: check_input_validation_error
+check_input_validation_error:
+  action: click_somewhere_out_of_focus
+  elements:
+  - selector:
+      xpath: //span[span[contains(text(),'validation error') or contains(text(),'Validation error')]]//a
+    visible: true
+    op: click
+  - selector:
+      xpath: //div[contains(@class,'tooltip')]/div[contains(text(), '<tooltip_message>')]
+check_system_status_issues_warning:
+  elements:
+  - selector:
+      xpath: //a[@href="http://status.openshift.com/"]//span[contains(.,"open issue")]

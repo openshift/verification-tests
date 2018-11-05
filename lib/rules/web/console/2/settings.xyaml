@@ -1,0 +1,88 @@
+# --check settings page
+check_settings_page:
+  action: goto_quota_page
+  elements:
+  - selector:
+      text: General information
+  - selector:
+      text: Quota
+  - selector:
+      text: Limit Range
+check_used_value:
+  elements:
+  - selector:
+      xpath: //td[contains(.,'<resource_type>')]/parent::tr/td[contains(.,'<used_value>')]
+check_max_value:
+  elements:
+  - selector:
+      xpath: //td[contains(.,'<resource_type>')]/parent::tr/td[contains(.,'<max_value>')]
+check_min_limit_value:
+  elements:
+  - selector:
+      xpath: //td[contains(.,'<resource_type>')]/parent::tr/td[contains(.,'<min_limit>')]
+check_max_limit_value:
+  elements:
+  - selector:
+      xpath: //td[contains(.,'<resource_type>')]/parent::tr/td[contains(.,'<max_limit>')]
+check_default_request:
+  elements:
+  - selector:
+      xpath: //td[contains(.,'<resource_type>')]/parent::tr/td[contains(.,'<default_request>')]
+check_default_limit:
+  elements:
+  - selector:
+      xpath: //td[contains(.,'<resource_type>')]/parent::tr/td[contains(.,'<default_limit>')]
+check_project_without_quota_settings:
+  action: goto_quota_page
+  elements:
+  #check quota
+  - selector:
+      text: There are no resource quotas set on this project.
+goto_quota_page:
+  url: /console/project/<project_name>/settings
+check_general_information:
+  action: goto_quota_page
+  action: check_specific_project_info
+check_specific_project_info:
+  elements:
+  - selector:
+      xpath: //div[contains(text(),"<project_name>")]
+  - selector:
+      xpath: //div[contains(text(),"<display_name>")]
+  - selector:
+      xpath: //truncate-long-text/span[text()="<description>"]
+edit_general_information:
+  elements:
+  - selector:
+      text: Actions
+    type: button
+    op: click
+  - selector:
+      text: Edit
+    type: a
+    op: click
+  - selector:
+      xpath: //input[@id='settings_display_name']
+    type: input
+    op: clear
+  - selector:
+      xpath: //input[@id='settings_display_name']
+    type: input
+    op: send_keys <new_display_name>
+  - selector:
+      xpath: //textarea[@id='settings_description']
+    type: textarea
+    op: set <new_description>
+cancel_edit_general_informantion:
+  action: edit_general_information
+  action: click_cancel
+  action: check_specific_project_info
+save_edit_general_informantion:
+  action: edit_general_information
+  action: click_save_button
+  action: check_specific_project_info
+check_quota_scope_type:
+  action: goto_quota_page
+  elements:
+  - selector:
+      xpath: //div[@class="ng-binding ng-scope" and contains(text(),'<scope_type>')]

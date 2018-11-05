@@ -1,0 +1,19 @@
+---
+:scroll_strategy: 1
+:hooks:
+  :click: |-
+    # this will execute in the Web4Cucumber instance context
+    proc { |block|
+      begin
+        block.call
+      rescue Selenium::WebDriver::Error::UnknownError => e
+        if e.message.include? "Other element would receive the click:"
+          # see https://bugzilla.redhat.com/show_bug.cgi?id=1512539
+          logger.warn e.inspect
+          run_action(:close_second_level_navigation)
+          block.call
+        else
+          raise
+        end
+      end
+    }

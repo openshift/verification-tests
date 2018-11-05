@@ -1,0 +1,78 @@
+--- # new project actions
+create_project_on_homepage:
+  action: click_create_project
+  action: new_project_form
+  action: click_create_button
+  element:
+    selector:
+      xpath: //span[contains(.,'successfully created')]
+    timeout: 20
+click_create_project:
+  element:
+    selector:
+      xpath: //button/span[text()='Create Project']
+    op: click
+check_getting_started_section_exists:
+  element: &getting_started_section
+    selector:
+      xpath: //h2[contains(.,'Getting Started')]
+check_getting_started_section_missing:
+  element:
+    <<: *getting_started_section
+    missing: true
+check_view_all_link_on_homepage:
+  element:
+    selector:
+      xpath: //a[contains(text(),'View All')]
+kebab_context_on_homepage:
+  element:
+    selector: &kebab_context
+      xpath: //a[@href='project/<project_name>']/../preceding-sibling::div
+view_membership_in_kebab_on_homepage:
+  action: click_kebab_on_homepage
+  element:
+    selector:
+      xpath: //a[@href='project/<project_name>']/../preceding-sibling::div//a[contains(.,'View Membership')]
+    op: click
+  element:
+    selector:
+      xpath: //h1[contains(.,'Membership')]
+    timeout: 80
+  action: goto_home_page
+click_kebab_on_homepage:
+  element:
+    selector:
+      id: dropdownKebab
+    op: click
+edit_project_in_kebab_on_homepage:
+  action:
+    context: *kebab_context
+    ref:
+    - click_kebab_on_homepage
+    - edit_project
+edit_project:
+  elements:
+  - selector:
+      xpath: .//ul//a[contains(text(),'Edit Project')]
+    op: click
+  action: set_project_display_name
+  action: set_project_description
+  action: click_save_button
+  element:
+    selector:
+      xpath: //span[contains(.,'successfully updated')]
+delete_project_in_kebab_on_homepage:
+  action:
+    context: *kebab_context
+    ref:
+    - click_kebab_on_homepage
+    - delete_project_on_homepage
+delete_project_on_homepage:
+  elements:
+  - selector:
+      xpath: .//ul//a[contains(text(),'Delete Project')]
+    op: click
+  action: send_delete_string
+  action: confirm_resource_deletion
+  action: check_project_deleted_message
+

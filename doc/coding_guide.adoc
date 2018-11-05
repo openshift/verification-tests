@@ -1,0 +1,49 @@
+= Coding Style Guideline and Other Conventions
+
+== Coding Style Guideline
+
+Basically follow rules described in
+https://github.com/bbatsov/ruby-style-guide
+
+Try to make sure, when you look at your code, it looks descent. See link:vim.adoc[vim.adoc] for some tips.
+
+== Tool to help indentation
+BushSlicer uses http://editorconfig.org/[EditorConfig] to have a universal
+indentation styles.  It supports various IDEs.  You can download a plugin and
+install it into your IDE from http://editorconfig.org/#download
+
+== Other conventions
+
+=== Variables vs Getters/Setters
+
+Direct usage of instance, class-instance, class and global variables is discouraged. Getters and setters are preferable to allow easier adding logic when needed. `attr_accessor`, `attr_reader` and `attr_writer` are a simple way to avoid writing actual methods when initially not needed.
+
+Class, class-instance and global variables should be avoided if possible as limiting global state improves flexibility.
+
+=== Object-Oriented Software Development
+
+Without getting in too much details, we aim at writing easily modifiable and extensible OOP code. Try to isolate logic specific to some concept in the system into a separate class. And separate complex algorithms into multiple methods and classes instead of one single big, hard to understand and modify method.
+
+An important good doc about separation of concerns can be seen here: +
+http://weblogs.asp.net/arturtrosin/separation-of-concern-vs-single-responsibility-principle-soc-vs-srp
+
+Here is a doc that looks like a good (but long) example of most needed principles applied with ruby: +
+http://blog.rubybestpractices.com/posts/gregory/055-issue-23-solid-design.html
+
+If a method or class is too long, there is probably an issue. If a class touches too much internals of another class, then there's probably an issue. What is too long and what is too much? No hard rule but as a rough guess I'd say a method over 50 lines and a class with 50+ methods can most probably be improved.
+
+=== Testing
+
+In `features/test/` we have feature files with scenarios used for testing particular functionality. We don't have a formal test suite for our test framework (yet), but when touching some part of the system, try to run related scenarios and see if they behave as expected. Also write new or extend existing scenarios to cover your changes.
+
+Issue is that some test scenarios are expected to fail. We need something like the Cucumber test suite, so we can write proper tests for ours. I hope we implement something eventually.
+
+=== Git guidelines
+
+When submitting pull-requests (PR) for review, try to not put too many things into same PR but separate between affected features.
+
+Have self-contained commits with descriptive message. i.e. do not put unrelated features/fixes in the same commit.
+
+When reviewer requests changes, amend the commits, do not just add new commits.
+
+Rebase to upstream instead of merge upstream.  What happens is that when git pull can't fast forward, it does a merge commit, and a merge commit puts the sucked in changes ON TOP of yours whereas a rebase puts them BELOW yours. In other words a merge commit makes the history a graph, and we prefer a cleaner, easier to follow linear history (hence the rebasing). Further once you do a merge commit it will be difficult to rebase the history before that commit (say you want to combine two commits to one later). `git pull --rebase upstream <branch>` or `git fetch upstream; git rebase upstream/<branch>`

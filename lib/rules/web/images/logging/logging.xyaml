@@ -1,0 +1,16 @@
+---
+kibana_verify_app_text:
+  elements:
+  - selector:
+      xpath: //table[contains(., '<checktext>')]
+    timeout: <time_out>
+    visible: true
+
+kibana_verify_default_index_pattern:
+  elements:
+  - selector:
+      xpath:  //li[@title=".all"]
+  - selector:
+      xpath:  //li[@title=".operations.*"]
+  - selector:
+      xpath:  //li[@title=" project.*"]

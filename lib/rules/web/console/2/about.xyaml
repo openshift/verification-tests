@@ -1,0 +1,5 @@
+goto_about_page:
+  url: /console/about
+  element:
+    selector:
+      text: About

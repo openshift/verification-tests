@@ -1,0 +1,75 @@
+#---check health/probes page
+check_health_alert:
+  element:
+    selector:
+      text: Not all containers have health checks
+add_http_probe:
+  action: click_to_add_probe
+  action: select_probe_type
+  action: input_http_probe_path
+  action: select_probe_port
+add_command_probe:
+  action: click_to_add_probe
+  action: select_probe_type
+  action: add_another_arg_of_command_probe
+add_socket_probe:
+  action: click_to_add_probe
+  action: select_probe_type
+  action: select_probe_port
+input_http_probe_path:
+  element:
+    selector:
+      xpath: //h2[text()='Container <container_name>']/following-sibling::div[@ng-if='container.<health_kind>Probe']//input[contains(@id,'path')]
+    op: send_keys <path>
+add_another_arg_of_command_probe:
+  elements:
+  - selector:
+      xpath: //h2[text()='Container <container_name>']/following-sibling::div[@ng-if='container.<health_kind>Probe']//input[contains(@id,'edit-command')]
+    op: send_keys <command_arg>
+  - selector:
+      xpath: //h2[text()='Container <container_name>']/following-sibling::div[@ng-if='container.<health_kind>Probe']//span[@class='input-group']//a[text()='Add']
+    op: click
+select_probe_type:
+  action: show_probe_type_list
+  action: click_probe_type_from_list
+click_to_add_probe:
+  element:
+    selector:
+      xpath: //h2[text()='Container <container_name>']/following-sibling::div/a[contains(.,'Add') and contains(., substring('<health_kind>', 2))]
+    op: click
+show_probe_type_list:
+  element:
+    selector:
+      xpath: //h2[text()='Container <container_name>']/following-sibling::div[@ng-if='container.<health_kind>Probe']//label[text()='Type']/following-sibling::select
+    op: click
+click_probe_type_from_list:
+  element:
+    selector:
+      xpath: //h2[text()='Container <container_name>']/following-sibling::div[@ng-if='container.<health_kind>Probe']//label[text()='Type']/following-sibling::select/option[text()='<probe_type>']
+    op: click
+select_probe_port:
+  action: show_probe_port_list
+  action: click_probe_port_from_list
+show_probe_port_list:
+  element:
+    selector:
+      xpath: //h2[text()='Container <container_name>']/following-sibling::div[@ng-if='container.<health_kind>Probe']//label[text()='Port']/following-sibling::select
+    op: click
+click_probe_port_from_list:
+  element:
+    selector:
+      xpath: //h2[text()='Container <container_name>']/following-sibling::div[@ng-if='container.<health_kind>Probe']//label[text()='Port']/following-sibling::select/option[text()='<port>']
+    op: click
+check_health_probe:
+  elements:
+  - selector:
+      xpath: |-
+        //div[text()='Container: <container_name>']/following-sibling::div[contains(normalize-space(), '<readiness_probe>')]
+  - selector:
+      xpath: |-
+        //div[text()='Container: <container_name>']/following-sibling::div[contains(normalize-space(), '<liveness_probe>')]
+remove_probe:
+  element:
+    selector:
+      xpath: //h2[text()='Container <container_name>']/following-sibling::div//a[contains(.,'Remove') and contains(., substring('<health_kind>', 2))]
+    op: click

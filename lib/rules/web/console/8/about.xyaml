@@ -1,0 +1,10 @@
+goto_about_page:
+  url: /console/about
+  element:
+    selector:
+      text: About
+check_internal_registry_in_about_page_online:
+  action: goto_about_page
+  elements:
+  - selector:
+      xpath: //input[@id='clipboardJs1' and @value='<internal_registry>']/..//a[@role='button' and @data-clipboard-text='<internal_registry>']

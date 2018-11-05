@@ -1,0 +1,98 @@
+#---------limits related----------
+check_limits_on_dc_page:
+  action: goto_one_dc_page
+  action: click_on_configuration_tab
+  action: check_limits_in_pod_template
+check_limits_on_k8s_deployment_page:
+  action: goto_one_k8s_deployment_configuration_tab
+  action: check_limits_in_pod_template
+check_limits_on_k8s_replicaset_page:
+  action: goto_one_k8s_replicaset_page
+  action: check_limits_in_pod_template
+check_limits_on_rc_page:
+  action: goto_one_deployment_page
+  action: check_limits_in_pod_template
+check_limits_on_specific_replica_set_page:
+  action: goto_one_k8s_deployment_page
+  action: click_on_specific_version_of_replica_set
+  action: check_limits_in_pod_template
+check_limits_on_pod_page:
+  action: goto_one_pod_page
+  action: check_limits_in_pod_template
+check_limits_in_pod_template:
+  action: check_cpu_in_pod_template
+  action: check_memory_in_pod_template
+check_cpu_in_pod_template:
+  elements:
+  - selector:
+      xpath: //div[contains(.,'<container_name>')]/parent::div[@class='pod-template']/div[contains(.,'CPU:')]
+  - selector:
+      xpath: //div[contains(.,'<container_name>')]/parent::div[@class='pod-template']//span[contains(.,'<cpu_range>')]
+check_memory_in_pod_template:
+  elements:
+  - selector:
+      xpath: //div[contains(.,'<container_name>')]/parent::div[@class='pod-template']/div[contains(.,'Memory:')]
+  - selector:
+      xpath: //div[contains(.,'<container_name>')]/parent::div[@class='pod-template']//span[contains(.,'<memory_range>')]
+check_resource_limit_error_info:
+  elements:
+  - selector:
+      xpath: //div[contains(.,"<error_info_for_resource_limit_setting>")]
+check_warn_info_for_rc_resource_setting:
+  elements:
+  - selector:
+      xpath: //div[@ng-if="showPodWarning" and contains(.,'<rc_resource_setting_warn_info>')]
+goto_set_resource_limits_for_dc:
+  action: goto_one_dc_page
+  action: goto_set_resource_limit_page
+goto_set_resource_limits_for_k8s_deployment:
+  action: goto_one_k8s_deployment_page
+  action: goto_set_resource_limit_page
+goto_set_resource_limits_for_k8s_replicaset:
+  action: goto_one_k8s_replicaset_page
+  action: goto_set_resource_limit_page
+goto_set_resource_limits_for_rc:
+  action: goto_one_standalone_rc_page
+  action: goto_set_resource_limit_page
+set_resource_limit:
+  elements:
+  - selector:
+      xpath: //h2[contains(.,'Container <container_name>')]/following::edit-request-limit[@type='<resource_type>'][<sequence_id>]/descendant::compute-resource[@label='<limit_type>']//div[@class='resource-amount']//input
+    op: clear
+  - selector:
+      xpath: //h2[contains(.,'Container <container_name>')]/following::edit-request-limit[@type='<resource_type>'][<sequence_id>]/descendant::compute-resource[@label='<limit_type>']//div[@class='resource-amount']//input
+    op: send_keys <resource_amount>
+  - selector:
+      xpath: //h2[contains(.,'Container <container_name>')]/following::edit-request-limit[@type='<resource_type>'][<sequence_id>]/descendant::compute-resource[@label='<limit_type>']//div[contains(@class,'ui-select-match')]/span
+    op: click
+  - selector:
+      xpath: //h2[contains(.,'Container <container_name>')]/following::edit-request-limit[@type='<resource_type>'][<sequence_id>]/descendant::compute-resource[@label='<limit_type>']//span[contains(@class,'ui-select-choices-row-inner')]/span[normalize-space(.)='<amount_unit>']
+    op: click
+set_resource_limit_single:
+  elements:
+  - selector:
+      xpath: //edit-request-limit[@type='<resource_type>']//compute-resource[@label='<limit_type>']//input[@name='amount']
+    op: clear
+  - selector:
+      xpath: //edit-request-limit[@type='<resource_type>']//compute-resource[@label='<limit_type>']//input[@name='amount']
+    op: send_keys <resource_amount>
+  - selector:
+      xpath: //edit-request-limit[@type='<resource_type>']//compute-resource[@label='<limit_type>']//div[contains(@class,'ui-select-match')]/span
+    op: click
+  - selector:
+      xpath: //edit-request-limit[@type='<resource_type>']//compute-resource[@label='<limit_type>']//span[contains(@class,'ui-select-choices-row-inner')]/span[normalize-space(.)='<amount_unit>']
+    op: click
+set_resource_limit_online:
+  elements:
+  - selector: &resource_amount_selector_online
+      xpath: //h2[text()='Container <container_name>']/following::edit-request-limit[@type='<resource_type>'][<sequence_id>]//compute-resource//div[contains(@class,'resource-amount')]/input
+    op: clear
+  - selector:
+      <<: *resource_amount_selector_online
+    op: send_keys <resource_amount>
+  - selector:
+      xpath: //h2[text()='Container <container_name>']/following::edit-request-limit[@type='<resource_type>'][<sequence_id>]//compute-resource//div[contains(@class,'ui-select-match')]/span
+    op: click
+  - selector:
+      xpath: //h2[text()='Container <container_name>']/following::edit-request-limit[@type='<resource_type>'][<sequence_id>]//compute-resource//div[span[normalize-space()='<amount_unit>']]
+    op: click

@@ -1,0 +1,203 @@
+goto_overview_page:
+  url: /registry#/overview
+create_new_project_in_iframe:
+  action:
+    context:
+      tag_name: iframe
+    ref: create_new_project
+create_new_project:
+  params:
+    cancel: 'false'
+  elements:
+  - selector:
+      xpath: //a[.//span[text()='New project']]
+    op: click
+  - selector:
+      id: project-new-name
+    op: send_keys <project_name>
+  action:
+    if_param: display_name
+    ref: set_display_name
+  action:
+    if_param: description
+    ref: set_description
+  action:
+    if_param: access_policy
+    ref: set_access_policy
+  action:
+    if_param:
+      cancel: 'false'
+    ref: click_create_button
+  action:
+    if_param:
+      cancel: 'true'
+    ref: click_cancel_button
+  action:
+    if_param: prompt_msg
+    ref:
+    - check_prompt_msg
+    - click_cancel_button
+set_display_name:
+  element:
+    selector:
+      id: project-new-display
+    op: send_keys <display_name>
+set_description:
+  element:
+    selector:
+      id: project-new-description
+    op: send_keys <description>
+set_access_policy:
+  elements:
+  - selector:
+      id: project-access-policy
+    op: click
+  - selector:
+      xpath: //div[@id='project-access-policy']//a[contains(text(),'<access_policy>')]
+    op: click
+check_project_on_overview_page_in_iframe:
+  action:
+    context:
+      tag_name: iframe
+    ref: check_project_on_overview_page
+check_project_on_overview_page:
+  element:
+    selector:
+      xpath: //div[contains(.,'Images by project') and .//a[text()='<project_name>']]
+
+create_new_image_stream_in_iframe:
+  action:
+    context:
+      tag_name: iframe
+    ref: create_new_image_stream
+create_new_image_stream:
+  elements:
+  - selector:
+      xpath: //a[.//span[text()='New image stream']]
+    op: click
+  - selector:
+      id: imagestream-modify-name
+    op: send_keys <is_name>
+  - selector:
+      id: imagestream-modify-project-text
+    op: send_keys <project_name>
+  action:
+    if_param: populate
+    ref: set_populate
+  action: click_create_button
+  action:
+    if_param: prompt_msg
+    ref:
+    - check_prompt_msg
+    - click_cancel_button
+set_populate:
+  elements:
+  - selector:
+      id: imagestream-modify-populate
+    op: click
+  - selector:
+      xpath: //div[@id='imagestream-modify-populate']//a[contains(text(),'<populate>')]
+    op: click
+  action:
+    if_param:
+      populate: Sync all tags from a remote image repository
+    ref: set_pull_from
+  action:
+    if_param:
+      populate: Pull specific tags from another image repository
+    ref: set_pull_specific_tags
+set_pull_from:
+  element:
+    selector:
+      id: imagestream-modify-pull
+    op: send_keys <pull_from>
+set_pull_specific_tags:
+  action: set_pull_from
+  action: set_tags
+  action:
+    if_param: unsecure_registry
+    ref: set_remote_unsecure_registry
+set_tags:
+  element:
+    selector:
+      id: imagestream-modify-tags
+    op: send_keys <tags>
+set_remote_unsecure_registry:
+  element:
+    selector:
+      xpath: //label[.//span[text()='Remote registry is insecure']]/input
+    type: checkbox
+    op: set <unsecure_registry>
+check_overview_page_in_iframe:
+  action:
+    context:
+      tag_name: iframe
+    ref: check_overview_page
+check_overview_page:
+  elements:
+  - selector:
+      xpath: //span[contains(.,'Images by project')]
+  - selector:
+      xpath: //span[contains(.,'Images pushed recently')]
+  - selector:
+      xpath: //span[contains(.,'Login commands')]
+  - selector:
+      xpath: //span[contains(.,'Image commands')]
+click_images_by_project_in_iframe:
+  action:
+    context:
+      tag_name: iframe
+    ref: click_images_by_project
+click_images_by_project:
+  elements:
+  - selector:
+      xpath: //td/a[contains(@ng-href,'#/images/<project_name>') and contains(text(), '<project_name>')]
+    op: click
+check_images_by_project_in_iframe:
+  action:
+    context:
+      tag_name: iframe
+    ref: check_images_by_project
+check_images_by_project:
+  elements:
+  - selector:
+      xpath: //th[contains(.,'<project_name>/<image_name>')]
+check_images_pushed_recently_in_iframe:
+  action:
+    context:
+      tag_name: iframe
+    ref: check_images_pushed_recently
+check_images_pushed_recently:
+  url: /registry#/overview
+  elements:
+  - selector:
+      xpath: //div[h2[contains(.,'Images pushed recently')]]/following-sibling::div//dt/a[contains(text(), '<project_name>/<image_name>')]
+check_all_images_overview_link_in_iframe:
+  action:
+    context:
+      tag_name: iframe
+    ref: check_all_images_overview_link
+check_all_images_overview_link:
+  elements:
+  - selector:
+      xpath: //span[contains(text(),'All images')]
+    op: click
+  - selector:
+      xpath: //th[contains(.,'<project_name>/<image_name>')]
+check_docker_commands_in_iframe:
+  action:
+    context:
+      tag_name: iframe
+    ref: check_docker_commands
+check_docker_commands:
+  elements:
+  - selector:
+      xpath: //code[contains(.,'sudo docker login')]
+  - selector:
+      xpath: //code[contains(.,'oc login')]
+  - selector:
+      xpath: //code[contains(.,'sudo docker tag')]
+  - selector:
+      xpath: //code[contains(.,'sudo docker push')]
+  - selector:
+      xpath: //code[contains(.,'sudo docker pull')]

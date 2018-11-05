@@ -1,0 +1,29 @@
+filter_by_keywords:
+  element:
+    selector:
+      id: search
+    type: input
+    op: send_keys <keyword>
+filter_by_tags:
+  elements:
+  - selector:
+      text: Browse
+    type: button
+    op: click
+  - selector:
+      xpath: //a[ancestor::ul and contains(text(),'<tag_name>')]
+    op: click
+  - selector:
+      xpath: //div[contains(text(),'Tagged with <tag_name>')]
+clear_tag_filters:
+  element:
+    selector:
+      text: See all tags
+    type: a
+    op: click
+clear_keyword_filters:
+  element:
+    selector:
+      id: search
+    type: input
+    op: clear

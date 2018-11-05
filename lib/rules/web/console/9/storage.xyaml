@@ -1,0 +1,235 @@
+#------pv/pvc related function---------
+goto_storage_page:
+  url: /console/project/<project_name>/browse/storage
+goto_one_pvc_page:
+  url: /console/project/<project_name>/browse/persistentvolumeclaims/<pvc_name>
+goto_create_pvc_page:
+  url: /console/project/<project_name>/create-pvc
+check_empty_storage_page:
+  action: goto_storage_page
+  elements:
+  - selector:
+      visible_text: !ruby/regexp '/No persistent volume claims/'
+check_pvcs_on_storage_page:
+  action: goto_storage_page
+  elements:
+  - selector:
+      xpath: //a[text()='<pvc_name>']
+    op: click
+  - selector:
+      xpath: //h1[contains(.,'<pvc_name>')]
+check_pvcs_detail_on_storage_page:
+  action: goto_storage_page
+  action: check_pvc_entry
+check_pvc_entry:
+  action:
+    if_param: pvc_status
+    ref: check_pvc_entry_status
+  elements:
+  - selector:
+      xpath: //td/a[text()='<pvc_name>']/../following-sibling::td[@data-title='Capacity'][contains(.,'<storage_size>')]
+  - selector:
+      xpath: //td/a[text()='<pvc_name>']/../following-sibling::td[@data-title='Access Modes'][contains(.,'<pvc_access_mode>')]
+check_pvc_entry_status:
+  element:
+    selector:
+      xpath: //td/a[text()='<pvc_name>']/../following-sibling::td[@data-title='Status'][contains(.,'<pvc_status>')]
+    timeout: 60
+check_one_pvc_detail:
+  action: goto_one_pvc_page
+  elements:
+  - selector:
+      xpath: //h1[contains(.,'<pvc_name>')]
+  - selector:
+      xpath: //dt[text()='Status:']
+  - selector:
+      xpath: //dt[text()='Requested Capacity:']
+  - selector:
+      xpath: //dt[text()='Access Modes:']
+create_pvc_from_storage_page:
+  action: goto_storage_page
+  action: open_create_pvc_page
+  action: set_pvc_name
+  action: set_pvc_access_mode
+  action: # in some env configuration storage size cannot be changed
+    unless_element:
+      selector:
+        xpath: //div[label[contains(text(),'Size')]]//small[contains(text(),'cannot be changed')]
+    ref:
+    - set_storage_size
+    - set_storage_unit
+  action: click_create_button
+  element:
+    selector:
+      xpath: //td[@data-title='Name']/a[text()='<pvc_name>']
+create_larger_than_quota_pvc_from_storage_page:
+  action: goto_storage_page
+  action: open_create_pvc_page
+  action: set_pvc_name
+  action: set_pvc_access_mode
+  action: set_storage_size
+  action: set_storage_unit
+  element:
+    selector:
+      xpath: //span[contains(text(),'quota will be exceeded' )] 
+  element:
+    selector:
+      xpath: //a[@href='project/<project_name>/quota' and contains(.,'View')] 
+check_pvc_info:
+  action: check_one_pvc_detail
+  action: check_pvc_set_info
+check_pvc_info_with_status:
+  action: check_one_pvc_detail
+  action: check_pvc_set_info
+  action: check_pvc_status
+delete_resources_pvc:
+  action: goto_one_pvc_page
+  action: delete_resource
+cancel_pvc_creation:
+  action: click_cancel
+create_pvc_with_invalid_name_and_check:
+  action: goto_storage_page
+  action: open_create_pvc_page
+  action: set_pvc_name
+  action: set_storage_size
+  action: check_error_for_invalid_value
+create_pvc_with_invalid_value_and_check:
+  action: goto_storage_page
+  action: open_create_pvc_page
+  action: set_pvc_name
+  action: set_storage_size
+  action: check_create_button_disabled
+create_pvc_with_min_length_and_check: {}
+create_pvc_with_storage_class:
+  action: goto_create_pvc_page
+  action: set_pvc_name
+  action: set_storage_class
+  action: set_pvc_access_mode
+  action: set_storage_size
+  action: set_storage_unit
+  action: click_create_button
+create_pvc_no_storage_class:
+  action: goto_create_pvc_page
+  action: set_pvc_name
+  action: set_no_storage_class
+  action: set_pvc_access_mode
+  action: set_storage_size
+  action: set_storage_unit
+  action: click_create_button
+check_prompt_info_for_pvc:
+  elements:
+  - selector:
+      xpath: //span[contains(text(),'<prompt_info>')]
+check_pvc_set_info:
+  elements:
+  - selector:
+      xpath: //span[contains(text(),'<storage_size>')]
+  - selector:
+      xpath: //dd[contains(text(),'<pvc_access_mode>')]
+check_pvc_status:
+  elements:
+  - selector:
+      xpath: //dd[contains(.,'<pvc_status>')]
+open_create_pvc_page:
+  elements:
+  - selector:
+      text: Create Storage
+    type: a
+    op: click
+set_pvc_name:
+  elements:
+  - selector:
+      id: claim-name
+    type: input
+    op: send_keys <pvc_name>
+set_pvc_access_mode:
+  elements:
+  - selector:
+      xpath: //label/input[@name='accessModes' and @value='<pvc_access_mode>']
+    op: click
+set_storage_size:
+  element:
+    selector:
+      xpath: //input[@id='claim-amount']
+    op: send_keys <storage_size>
+set_storage_unit:
+  elements:
+  - selector:
+      xpath: //div[@ng-model='claim.unit']
+    op: click
+  - selector:
+      xpath: //span[contains(text(),'<storage_unit>')]
+    op: click
+set_storage_class:
+  elements:
+  - selector:
+      xpath: //span[contains(text(),'Select a storage class')]
+    op: click
+  - selector:
+      xpath: //span[contains(text(),'<project_name>')]
+    op: click
+set_no_storage_class:
+  elements:
+  - selector:
+      xpath: //span[contains(text(),'Select a storage class')]
+    op: click
+  - selector:
+      xpath: //span[contains(text(),'No Storage Class')]
+    op: click
+check_storage_limit_min_size_on_paid:
+  action: goto_create_pvc_page
+  elements:
+  - selector:
+      xpath: >-
+         //fieldset[@class="form-inline compute-resource"]//small[contains(text(),"Min: 1 GiB")]
+check_storage_limit_min_size_on_free:
+  action: goto_create_pvc_page
+  elements:
+  - selector:
+      xpath: //div[contains(text(),"1 GiB")]//small[contains(text(),"(cannot be changed)")]
+check_exceed_quota_warning_on_add_storage_page:
+  action: goto_one_dc_page
+  action: click_actions_button
+  action: click_add_storage_link
+  action: check_warning_when_exceed_storage_quota
+check_create_storage_link_on_add_storage_page:
+  action: goto_one_dc_page
+  action: click_actions_button
+  action: click_add_storage_link
+  action: check_create_storage_link
+check_warning_when_exceed_storage_quota:
+  element:
+    selector:
+      xpath: //span[@ng-if='outOfClaims'][contains(.,'cannot create new storage')]  
+check_create_storage_link:
+  element:
+    selector:
+      xpath: //span/a[text()='create storage' and @href='project/<project_name>/create-pvc']
+click_storageclass_drop_down_list:
+  elements:
+  - selector:
+      xpath: //span[@ng-hide='$select.isEmpty()']/span[contains(text(),'<storage_class>')]
+    op: click
+check_storage_class_info:
+  action: click_storageclass_drop_down_list
+  elements:
+  - selector:
+      xpath: >-
+        //span[contains(text(),'<storage_class>')]/../div//*[contains(.,"Type: <storage_type>")]/./*[contains(.,"Access: ReadWriteOnce")]
+check_default_pvc_access_mode:
+  action: goto_create_pvc_page
+  action: check_storage_class_info
+  elements:
+  - selector:
+      xpath: //span[@ng-if='claim.storageClass && (claim.storageClass | storageClassAccessMode)'][contains(.,'(cannot be changed)')]
+create_default_pvc_from_storage_page:
+  action: goto_create_pvc_page
+  action: set_pvc_name 
+  action: # in Starter env configuration storage size cannot be changed
+    unless_element:
+      selector:
+        xpath: //div[label[contains(text(),'Size')]]//small[contains(text(),'cannot be changed')]
+    ref:
+    - set_storage_size
+    - set_storage_unit
+  action: click_create_button 

@@ -1,0 +1,102 @@
+= Guideline for storage test automation
+
+When it comes to OpenShift storage test automation, we always assume a storage provider or api endpoint is ready. In the past storage team had deployed containerized storage providers to power up test automation. While they reduce the complexity of preparing storage environments, they increased flaky tests. The team had to invest more time debugging failed tests. Dynamic provision is the future for OpenShift storage and is a good solution for testing various volume plugins.
+
+Even with dynamic provisioner you have to preconfigure your various storage clusters. This guideline aimed at specifying what kind of resources should be pre-configured. Storage team should follow this doc to setup their SDS and OpenShift resources before starting automated testing for the volume plugin. The ultimate goal is making playbooks take over all the labors, but playbooks should follow this specification as well.
+
+
+== Ceph
+
+Setup Ceph storage cluster with `storage-ansible` on vSphere for CephRBD, CephFS, Ceph radosgw.
+
+== Gluster
+
+Setup Gluster storage cluster with `storage-ansible` on vSphere for GlusterFS, GlusterBlock.
+
+
+== FibreChannel
+The automated FC test cases can only be tested on dedicated machines with FC cards. Therefore `targetWWNs` and `lun` are hardcoded values.
+
+== FlexVolume
+Use https://github.com/openshift-qe/v3-testfiles/tree/master/storage/flex/dummy[This example] and its playbooks to install.
+
+== StorageClass
+On AWS/GCP/Azure/Openstack/vSphere, OpenShift should be deployed with cloud provider enabled. A default StorageClass should be created for corresponding cloud provider when your OCP version is equal or greater than **3.6**.
+
+== Feature-gates
+All storage feature-gates should be enabled, the automation testing will always assume feature-gates are enabled. We do our best to avoid turning on/off feature gates during test automation to maintain good test efficiency and stability. Use either the ansible installer or manual configuration to setup a test environment meeting our requirements.
+
+Admission controller "PersistentVolumeClaimResize" always needs to be enabled
+----
+master-config.yaml
+admissionConfig:
+...
+    PersistentVolumeClaimResize:
+       configuration:
+         apiVersion: v1
+         disable: false
+         kind: DefaultAdmissionConfig
+...
+----
+
+=== Enable feature-gates with ansible installer
+
+====
+[source, flexy parameters]
+----
+openshift_ansible_vars:
+  osm_api_server_args: '{"feature-gates": ["BlockVolume=true"]}'
+  osm_controller_args: '{"feature-gates": ["BlockVolume=true"]}'
+  openshift_node_kubelet_args: '{"feature-gates": ["BlockVolume=true"],  "enable-controller-attach-detach": ["true"],"minimum-container-ttl-duration": ["10s"], "maximum-dead-containers-per-container": ["1"], "maximum-dead-containers": ["20"], "image-gc-high-threshold": ["80"], "image-gc-low-threshold": ["70"]}'
+----
+====
+
+=== Manual configurations
+
+
+Table: Enable local storage in diffrent OCP Versions (support from ocp3.7)
+|===
+|OCP Version |Enable feature gate
+
+|v3.7
+|PersistentLocalVolumes=true(apiServerArguments, controllerArguments, and kubeletArguments)
+
+|v3.9
+|PersistentLocalVolumes=true(apiServerArguments, controllerArguments, and kubeletArguments), VolumeScheduling=true(controllerArguments, schedulerArguments), MountPropagation=true(apiServerArguments, controllerArguments, and kubeletArguments)
+
+| >=v3.10
+|Do not need enable feature gate
+|===
+
+Table: Deploy local storage in OCP
+|===
+|Test Type|Deploy method
+
+|Not Errata
+|`cucumber -n "Enable LocalVolume for daily test"`
+
+|Errata
+|Get local-storage-provisioner version from errata, and update version in features/cluster_configuration/localstorage.feature line 12, then run `cucumber -n "Enable LocalVolume on stage env"`
+|===
+
+Table: Deploy csi in OCP(support from 3.10)
+|===
+|Test Type|Deploy method
+
+|Not Errata
+|`cucumber -n "Enable cinder csi driver and create storage class for cinder driver"`
+
+|Errata
+|Get csi images version from errata, and update version in features/cluster_configuration/csi.feature line 14, then run `cucumber -n "Enable cinder csi driver with specific version and create storage class for cinder driver"`
+|===
+
+Table: Deploy local raw block devices provisioner in OCP(support from 3.10, enable feature gate "BlockVolume" first)
+|===
+|Test Type|Deploy method
+
+|Not Errata
+|`cucumber -n "Enable Local raw block devices volume for daily test"`
+
+|Errata
+|Get local-storage-provisioner image version from errata, and update version in features/cluster_configuration/localstorage.feature line 24, then run `cucumber -n "Enable Local raw block devices volume on stage env"`
+|===

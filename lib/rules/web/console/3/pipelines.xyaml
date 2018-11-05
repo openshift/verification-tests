@@ -1,0 +1,3 @@
+--- # 3.3 has no pipeline page so far, so make the rule as a valid to skip the step
+
+check_pipline_no_permission_page: {}

@@ -1,0 +1,26 @@
+:global_options:
+  :debug: --debug
+  :h: -h
+  :project: --project <value>
+  :token: --token <value>
+:bootstrap:
+  :cmd: KUBECONFIG=<config> apb <global_options> bootstrap
+  :options:
+    :broker: --broker <value>
+    :broker-name: --broker-name <value>
+    :no-relist: --no-relist
+:list:
+  :cmd: KUBECONFIG=<config> apb <global_options> list
+  :options:
+    :broker: --broker <value>
+    :verbose: --verbose
+:push:
+  :cmd: KUBECONFIG=<config> apb <global_options> push
+  :options:
+    :registry-route: --registry-route <value>
+:remove:
+  :cmd: KUBECONFIG=<config> apb <global_options> remove
+  :options:
+    :all: --all 
+    :id: --id <value>
+    :local: --local

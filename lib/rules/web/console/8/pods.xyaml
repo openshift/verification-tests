@@ -1,0 +1,78 @@
+#----check pod page-----
+check_pod_list_with_no_pod:
+  action: goto_pods_page
+  elements:
+  - selector:
+      text: !ruby/regexp /.*No pods*/
+goto_one_pod_page:
+  url: /console/project/<project_name>/browse/pods/<pod_name>
+  elements:
+  - selector:
+      xpath: //div[@ng-if="pod"]
+goto_pods_page:
+  url: /console/project/<project_name>/browse/pods
+goto_one_pod_environment_tab:
+  action: goto_one_pod_page
+  action: goto_environment_tab
+check_pod_environment:
+  action: goto_one_pod_environment_tab
+  action: check_environment_tab
+check_pod_in_pods_table:
+  params: &check_pod_in_pods_table_params
+    ready: ''
+    restarts: ''
+  element: &check_pod_in_pods_table
+    selector:
+      xpath: //pods-table//tbody/tr[td[@data-title="Name" and a[text()="<pod_name>" and @href="project/<project_name>/browse/pods/<pod_name>"]] and td[@data-title="Status" and div/span[text()="<status>"]] and td[@data-title="Ready" and contains(text(),"<ready>")] and td[@data-title="Restarts" and contains(text(),"<restarts>")]]
+check_pod_in_pods_table_missing:
+  params: *check_pod_in_pods_table_params
+  element:
+    <<: *check_pod_in_pods_table
+    missing: true
+check_container_status_on_one_pod_page:
+  elements:
+  - selector:
+      xpath: //dl[../h4[contains(text(),'<name>')] and dt[text()='State:']/following-sibling::dd[contains(.,'<state>')]]
+  - selector:
+      xpath: //dl[../h4[contains(text(),'<name>')] and dt[text()='Ready:']/following-sibling::dd[contains(.,'<ready>')]]
+  - selector:
+      xpath: //dl[../h4[contains(text(),'<name>')] and dt[text()='Restart Count:']/following-sibling::dd[contains(.,'<restart_count>')]]
+check_init_container_successfully_completed_message:
+  element:
+    selector:
+      xpath: //span[contains(normalize-space(),'Init container <name> completed successfully')]
+check_container_template_on_one_pod_page:
+  action:
+    context:
+      xpath: >-
+        //div[@class='pod-template' and div[contains(.,'Container: <name>')]]
+    ref: check_container_template
+check_container_template:
+  action:
+    if_param: image
+    ref: check_container_template_image
+  action:
+    if_param: ports
+    ref: check_container_template_ports
+  action:
+    if_param: command
+    ref: check_container_template_command
+  action:
+    if_param: mount
+    ref: check_container_template_mount
+check_container_template_image:
+  element:
+    selector:
+      xpath: .//div[span[contains(text(),'Image:')] and span[contains(.,'<image>')]]
+check_container_template_ports:
+  element:
+    selector:
+      xpath: .//div[span[contains(text(),'Ports:')] and span[contains(.,'<ports>')]]
+check_container_template_command:
+  element:
+    selector:
+      xpath: .//div[span[contains(text(),'Command:')] and span[contains(.,'<command>')]]
+check_container_template_mount:
+  element:
+    selector:
+      xpath: .//div[span[contains(text(),'Mount:')] and span[contains(.,'<mount>')]]

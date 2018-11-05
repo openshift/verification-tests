@@ -1,0 +1,9 @@
+click_logout:
+  elements:
+  - selector:
+      xpath: //span[contains(@class, "username")]
+    op: click
+  - selector:
+      text: Logout
+    type: a
+    op: click

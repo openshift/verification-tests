@@ -1,0 +1,14 @@
+---
+access_overview_page_after_logout:
+  action:
+    ref:
+    - goto_overview_page
+    - login_page_loaded
+
+request_token_with_password:
+  url: /oauth/token/request
+  action: login_sequence
+  elements:
+    - selector:
+        text: Your API token is
+      timeout: 30

@@ -1,0 +1,133 @@
+---
+login:
+  url: /console
+  action: login_sequence
+  action: verify_logged_in
+
+login_sequence:
+  # wait to get page loaded first to avoid excessive wait on `if_element`
+  action: login_page_loaded
+  action:
+    ref:
+    - click_pre_login_button
+    - pre_login_buttons_gone
+    - login_page_loaded
+    if_element:
+      selector: &pre_login_buttons
+        # we just choose the first button per OPENSHIFTQ-12062
+        css: ".login-redhat:first-of-type, .idp:first-of-type"
+      timeout: 1
+  action:
+    ref: login_console
+    if_element:
+      selector:
+        # title RE not working w/ ff legacy
+        # text: !ruby/regexp '/Login - OpenShift/'
+        xpath: '//title[starts-with(.,"Login - OpenShift")]'
+      visible: false
+      timeout: 1
+  action:
+    ref: login_rhsso
+    if_element:
+      selector:
+        visible_text: !ruby/regexp '/Red Hat account to log in/'
+      timeout: 1
+oauth_proxy_login_with_openshift:
+  action: click_openshift_login
+  action: login_sequence
+  action: allow_all_sso_permission
+
+login_rhsso:
+  elements:
+    - selector:
+        id: username
+      op: send_keys <username>
+      type: input
+    - selector:
+        id: password
+      op: send_keys <password>
+      type: input
+  elements:
+    - selector:
+        value: Log in
+      op: click
+      type: input
+
+login_console:
+  elements:
+    - selector:
+        id: inputUsername
+      op: send_keys <username>
+      type: input
+    - selector:
+        id: inputPassword
+      op: send_keys <password>
+      type: input
+  scripts:
+  - command: return document.getElementsByName("csrf").length > 0
+    expect_result: true
+  cookies:
+  - name: csrf
+    expect_result: true
+  elements:
+    - selector:
+        text: Log In
+      type: button
+      op: click
+
+login_token:
+  #url: /console
+  #scripts:
+  #- command: return window.localStorage['LocalStorageUserStore.user'] = '<user>'
+  #  expect_result: <user>
+  #- command: return window.localStorage['LocalStorageUserStore.token'] = '<token>'
+  #  expect_result: <token>
+  #url: /console
+  url: /console/oauth#access_token=<token>&expires_in=86400&state=/&token_type=Bearer
+  element:
+    selector:
+      text: Continue
+      class: btn-primary
+    op: click
+    type: button
+    optional: true
+  action: verify_logged_in
+
+login_page_loaded:
+  element:
+    selector:
+      css: "#password, #inputPassword, .login-redhat, .idp, .navigation-container"
+    timeout: 30
+
+verify_logged_in:
+  element:
+    type: js
+    selector: |-
+      var token = window.localStorage['LocalStorageUserStore.token'];
+      return token ? document.documentElement : null;
+  scripts:
+  # token value may not be set quick enough so loop-checking as element above
+  #- command: return window.localStorage['LocalStorageUserStore.token'];
+  #  expect_result: true
+  - command: return window.localStorage['LocalStorageUserStore.user']
+    expect_result: true
+
+click_pre_login_button:
+  element:
+    selector: *pre_login_buttons
+    op: click
+pre_login_buttons_gone:
+  element:
+    selector: *pre_login_buttons
+    missing: true
+click_openshift_login:
+  element:
+    selector:
+      text: Log in with OpenShift
+    type: button
+    op: click
+allow_all_sso_permission:
+  element:
+    selector:
+      xpath: //input[@value='Allow selected permissions']
+    op: click

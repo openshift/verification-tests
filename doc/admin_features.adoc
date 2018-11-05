@@ -1,0 +1,110 @@
+= Guideline for writing tests regarding admin features and clean-up
+
+== Prerequisites
+
+You obviously need to have admin rights on the test environment. So environment needs to have `admin_creds` configuration option set.
+
+This will make possible calls to `Environment#admin` method. This method must return a `APIAccessor` or a `APIAccessorOwner` to allow performing operations as a cluster admin user.
+
+== What's the issue?
+
+Regular clean-up between scenarios consists of removing all user owned projects. This is enough as long as no configuration changes to environment is done and users did not obtain additional privileges during scenario.
+
+If configuration changes happened though, these can affect later scenarios execution and lead to false positives/negatives.
+
+== The solution
+
+For visibility, please see the <<Tags>>.
+
+To avoid such situation we have to define clean-up routines. Clean-up routines can be defined either directly in step code by calling `teardown_add { proc.. }` or by registering clean-up steps from within scenario.
+
+These clean-up steps will execute after scenario no matter if scenario succeeded or not. So you don't have to revert the changes in clean-up and regular steps.
+
+Another thing to note is that if these clean-up steps fail (raise a ruby error), cucumber execution will stop. That means no further scenarios will be run.
+
+Design your clean-up in a way that it fails only if further scenario execution could be negatively affected if clean-up is not successful. For example failing to remove some random project should not make whole cucumber fail (this is unlikely to affect anything). But a user with wrong permissions should cause cucumber to quit so that user can manually recover user or use another user.
+
+== Tags
+
+There are two tags that we use `@admin` and `@destructive`. They do not change
+scenario behavior in any way but serve the purpose to make scenario
+requirements more obvious as well scenarios can be filtered based on these.
+
+`@admin` tag should be used whenever a scenario executes commands or REST
+requests as the cluster admin user. Steps that require cluster admin
+permissions should check for the `@admin` tag and fail when it is not present.
+There is a convenience method for this that can be used in step body:
+`ensure_admin_tagged`.
+
+`@destructive` tag is used for scenarios that change configuration which
+can affect other scenarios running simultaneously as well. Breaking changes
+or not it doesn't matter. The criteria is whether things can fail if this
+and any other scenarios run at roughly the same time by different test
+executors. Main purpose of the tag is to filter out cases that need
+sequential execution and to not run them on shared test environments.
+Again there is a method `ensure_destructive_tagged` for steps. But step
+often can be destructive or non destructive depending on parameters used to
+call it. Thus `@destructive` cannot always be automatically enforced.
+
+== Example
+
+=== defining clean-up steps in scenario text
+
+See `features/test/clean_up.feature`.
+
+Note that upon execution, any dynamic code in steps is resolved so clean-up steps usually don't need special method and variable handling. You just need to ensure operations are well specified. For example if you want to remove a project at the end, specify its name in the step. Don't leave it just `the project`. Otherwise `the project` at teardown might be a completely different project. Same goes to users and any other resources we work with.
+
+=== clean-up defined in step code
+One admin scenario is "Admin could get/edit/delete the project" defined inside `features/admin/project.feature`. It creates a project as admin but at that point we don't have guarantee user will receive admin rights over it and will be able to remove it.
+
+So here we look at the step definition of `admin creates a project`. It is inside `features/step_definitions/project.rb`. What step does is insert following code in the beginning:
+
+     _project = project # we need variable for the teardown proc
+     teardown_add { @result = _project.delete(by: :admin) }
+
+Basically it adds up one more clean-up routine to the teardown sequence. As you see result of the operation is never checked because even if it fails, then likelihood of breaking other scenarios is minimal. So we don't want everything to break.
+
+One detail to think about is the variables use within these clean-up routines. Make sure you understand how procs and lambdas work in Ruby. Basically they resolve variables at the time they are called in the context (or with the binding) they were created in/with.
+
+In this case, if we skip doing `_project = project` and just use `project` inside the proc, then the `#project` method will be called at the time of teardown and it may resolve to any other project, not necessarily what we created with the step call. Using the `_project` variable ensures we try to delete the exact same project that we created as admin. No matter how many times we call the step, it will register a proper clean-up.
+
+As another example, see the step `Given /^(the [a-z]+) user is cluster-admin$/` in `features/step_definitions/policy.rb`:
+
+    _admin = admin
+    teardown_add {
+      res = _admin.cli_exec(
+        :oadm_policy,
+        policy_type: "remove-cluster-role-from-user",
+        role_name: "cluster-admin",
+        user_name: user_name
+      )
+      raise "could not restore user #{user_name}" unless res[:success]
+    }
+
+Here we fail whole run if user cannot be restored for any reason.
+
+== System verification steps
+
+System verification steps are closely related to clean-up steps. The basic idea is that we want to
+make sure that environment is in expected state before and after scenario execution. Because they
+would run both - before and after scenario, they would not perform any setup changes, just verify
+environment operational status.
+
+Again there are two ways verification steps can be used. One way is to use a dedicated verification
+steps like the networking step:
+
+    the#{OPT_QUOTED} node network is verified
+
+Then other way is to insert custom steps like:
+
+    Given system verification steps are used:
+    """
+    When I run the :get admin command with:
+      | resource                | scc              |
+      | o                       | yaml             |
+    Then the step should succeed
+    And the output should not contain:
+      | <%= user.name %>        |
+    And the output should match:
+      | \sanyuid\s              |
+    """

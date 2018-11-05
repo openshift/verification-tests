@@ -1,0 +1,247 @@
+wait_cancel:
+  element:
+    selector:
+      xpath: //button[contains(.,"Cancel")]
+    timeout: 60
+check_create_button_disabled:
+  elements:
+  - selector:
+      xpath: //button[@disabled='disabled' and normalize-space(text())='Create']
+check_error_for_invalid_value:
+  elements:
+    - selector:
+          xpath: //div[contains(.,"must consist of lower-case letters, numbers, periods, and hyphens")]
+    - selector:
+          xpath: //div[contains(.,"must start and end with a letter or a number")]
+check_error_for_long_value:
+  elements:
+    - selector:
+          xpath: //span[contains(.,"n't be longer than 253 characters")]
+check_save_button_disabled:
+  elements:
+  - selector:
+      xpath: //button[@disabled='disabled' and text()='Save']
+check_filtered_resource_entry:
+  element: &check_filtered_resource_entry
+    selector:
+      xpath: //table//td[a[contains(normalize-space(),'<resource_name>')]]
+check_filtered_resource_entry_missing:
+  element:
+    <<: *check_filtered_resource_entry
+    missing: true
+choose_resource_type:
+  elements:
+  - selector:
+      xpath: //div[@title='Choose a resource']
+    op: click
+  - selector:
+      xpath: //div[span/div[text()='<resource_type>']]
+    op: click
+click_actions_button:
+  elements:
+  - selector:
+      text: !ruby/regexp '/Actions/'
+    type: button
+    op: click
+click_add:
+  element:
+    selector:
+      xpath: //a[text()="Add" and not(@disabled)]
+    op: click
+click_add_button:
+  element:
+    selector:
+      xpath: //button[contains(text(),"Add") and not(@disabled)]
+    op: click
+click_create_button:
+  elements:
+  - selector:
+      xpath: //button[contains(text(),"Create") and not(@disabled)]
+    type: button
+    op: click
+click_cancel:
+  element:
+    selector:
+      text: Cancel
+    op: click
+click_close:
+  element:
+    selector:
+      text: Close
+    op: click
+click_on_configuration_tab:
+  element: &configuration_tab_link
+    selector:
+      xpath: //uib-tab-heading[contains(.,'Configuration')]
+    op: click
+click_on_hisory_tab:
+  element:
+    selector:
+      xpath: //uib-tab-heading[contains(.,'History')]
+    op: click
+click_on_details_tab:
+  element:
+    selector:
+      xpath: //uib-tab-heading[contains(.,'Details')]
+    op: click
+click_on_events_tab:
+  element:
+    selector:
+      xpath: //uib-tab-heading[contains(.,'Events')]
+    op: click
+click_on_history_tab:
+  element:
+    selector:
+      xpath: //uib-tab-heading[contains(.,'History')]
+    op: click
+click_on_logs_tab:
+  element:
+    selector:
+      xpath: //uib-tab-heading[contains(.,'Logs')]
+    op: click
+click_on_terminal_tab:
+  element:
+    selector:
+      xpath: //uib-tab-heading[contains(.,'Terminal')]
+    op: click
+click_somewhere_out_of_focus:
+  action: click_help_menu
+click_delete:
+  elements:
+  - selector:
+      text: Delete
+    op: click
+click_hide_annotations:
+  elements:
+  - selector:
+      text: Hide Annotations
+    op: click
+click_show_annotations:
+  elements:
+  - selector:
+      text: Show Annotations
+    op: click
+check_annotation:
+  element:
+    selector:
+      xpath: //div[contains(@ng-if,'annotations')]//tr[td[contains(@class,'key') and text()='<key>'] and td[contains(@class,'value') and contains(.,'<value>')]]
+click_edit:
+  element:
+    selector:
+      xpath: //a[text()='Edit']
+    op: click
+click_edit_YAML:
+  element:
+    selector:
+      xpath: //a[text()='Edit YAML']
+    op: click
+check_page_contain_text:
+  element:
+    selector:
+      text: !ruby/regexp /<text>/
+    timeout: 30
+check_page_not_contain_text:
+  element:
+    selector:
+      text: !ruby/regexp /<text>/
+    missing: true
+    timeout: 20
+click_remove_button:
+  element:
+    selector:
+      xpath: //button[contains(text(),"Remove") and not(@disabled)]
+    op: click
+click_continue_button:
+  element:
+    selector:
+      text: Continue
+    op: click
+    type: button
+click_save_button:
+  elements:
+  - selector:
+      xpath: //button[contains(text(),'Save') and not(@disabled)]
+    op: click
+click_view_details:
+  element:
+    selector:
+      text: View Details
+    type: a
+    op: click
+click_reveal:
+  element:
+    selector:
+      text: !ruby/regexp '/Reveal/'
+    type: a
+    op: click
+click_hide:
+  element:
+    selector:
+      text: !ruby/regexp '/Hide/'
+    type: a
+    op: click
+click_to_goto_edit_YAML_page:
+  action: click_actions_button
+  action: click_edit_YAML
+click_to_goto_edit_page:
+  action: click_actions_button
+  action: click_edit
+delete_resource:
+  action: click_actions_button
+  action: click_delete
+  action: click_delete
+click_ok:
+  element:
+    selector:
+      text: OK
+    op: click
+click_user_dropdown:
+  element:
+    selector:
+      id: user-dropdown
+    op: click
+close_all_toast_notifications:
+  scripts:
+  - command: |
+        document.querySelectorAll('toast-notifications div.toast-pf').forEach(
+          function(toast) {
+            toast.querySelector('button').click();
+          }
+        );
+        return true;
+    expect_result: true
+  element:
+    selector:
+      xpath: //toast-notifications//div[contains(@class,'toast-pf')]
+    missing: true
+click_help_menu:
+  element:
+    selector:
+      id: help-dropdown
+    op: click
+close_second_level_navigation:
+  element:
+    selector:
+      id: help-dropdown
+    op: hover
+  element:
+    selector:
+      class: nav-pf-secondary-nav
+    missing: true
+check_successful_info_for_adding:
+  element:
+    selector:
+      xpath: //span[contains(.,"Successfully added")]
+confirm_resource_deletion:
+  elements:
+  - selector:
+      text: Delete
+    type: button
+    op: click
+cancel_resource_deletion:
+  elements:
+  - selector:
+      text: Cancel
+    type: button
+    op: click
+

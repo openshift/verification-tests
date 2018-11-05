@@ -1,0 +1,12 @@
+---
+upload:
+  url: /
+  elements:
+    - selector:
+        id: fto
+      op: send_keys <upload_file>
+      type: input
+    - selector:
+        name: submit
+      op: click
+      type: input

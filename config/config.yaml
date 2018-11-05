@@ -1,0 +1,263 @@
+--- # BushSlicer framework configuration options
+global:
+  git_repo_url: https://github.com/openshift/BushSlicer
+  git_repo_default_branch: v3
+
+  debug_in_after_hook: false
+  debug_in_after_hook_always: false
+  debug_attacher_timeout: false
+
+  # use this parameter to control the ansible output verboseness
+  # valid parameters are
+  # -v        The output data is displayed.
+  # -vv      Both the output and input data are displayed.
+  # -vvv    Includes information about connections to managed hosts.
+  # -vvvv  Adds extra verbosity options to the connection plug-ins, including
+  #          the users being used in the managed hosts to execute scripts, and
+  #          what scripts have been executed.
+  ansible_log_level: -vv
+
+  # max length of generated instance names when launching
+  # this is used also for generated hostnames when machines lack such
+  # current value should limit hostnames to less than 63 chars which breaks
+  #   OpenShift installer
+  max_instance_name_length: 38
+
+  # default timeout waiting for VMs to become accessible after launch
+  # vm_accessible_timeout: 600
+
+  # base docker registry prefixes for quickstarts;
+  #   (one is for the upstream community supported *projects* and the other one
+  #   is for the Red Hat enterprise supported *products*);
+  #   product one can be overriden by PRODUCT_DOCKER_REPO
+  #   here "openshift" means "docker.io/openshift" as docker.io is the default
+  #   repo; see examples in features/quickstarts/quickstarts.feature
+  project_docker_repo: ""
+  # product_docker_repo: registry.access.redhat.com/
+
+  # use CUCUSHIFT_DEFAULT_ENVIRONMENT instead of setting here
+  # default_environment: ose
+
+  # use CUCUSHIFT_TEST_CASE_MANAGER instead of setting here
+  # test_case_manager: tcms
+
+  # select browser different from default (firefox)
+  # browser: chrome
+  # browser: firefox_marionette
+
+environments:
+  online_starter:
+    hosts: api.starter-us-east-1.openshift.com:etcd:master:node
+    web_console_url: https://console.starter-us-east-1.openshift.com
+    hosts_type: Host # we can't basically access that host so this should work
+    type: StaticEnvironment
+    user_manager: auto
+    #set OPENSHIFT_ENV_ONLINE_STARTER_USER_MANAGER_USERS=:user_token1,:user_token2,...
+    #user_manage_users:
+    cli: SharedLocalCliExecutor
+    admin_creds: false
+    api_port: 443
+  origin:
+    # hosts: use OPENSHIFT_ENV_ORIGIN_HOSTS=host:role1:...,host2:role1:...
+    hosts_type: SSHAccessibleHost
+    # this is the user for remote access to the OpenShift nodes
+    user: fedora
+    type: StaticEnvironment
+    user_manager: auto
+    # set users in OPENSHIFT_ENV_ORIGIN_USER_MANAGER_USERS=user:password,...
+    # user_manager_users: joe:redhat,alice:redhat
+    cli: SharedLocalCliExecutor
+    # cli: SharedLocalCliExecutor
+    admin_creds: MasterOsAdminCredentials
+    api_port: 8443
+  ose:
+    # hosts: use OPENSHIFT_ENV_OSE_HOSTS=host:role1:...,host2:role1:...
+    hosts_type: SSHAccessibleHost
+    # this is the user for remote access to the OpenShift nodes
+    user: root
+    type: StaticEnvironment
+    user_manager: auto
+    # set users in OPENSHIFT_ENV_OSE_USER_MANAGER_USERS=user:password,...
+    # user_manager_users: joe:redhat,alice:redhat
+    #cli: MasterOsPerUserCliExecutor
+    cli: SharedLocalCliExecutor
+    admin_creds: MasterOsAdminCredentials
+    api_port: 8443
+    # version: 3.6.1.44.16
+
+optional_classes:
+  tcms_tc_manager:
+    include_path: tcms/tcms_manager
+    class: BushSlicer::TCMSManager
+    opts: {}
+  polarshift_tc_manager:
+    include_path: test_case_manager
+    class: BushSlicer::TestCaseManager
+    opts:
+      test_suite_class: BushSlicer::PolarShift::TestSuite
+      test_suite_opts: {}
+services:
+  AWS:
+    create_opts:
+      # for all options see http://docs.aws.amazon.com/sdkforruby/api/Aws/EC2/Resource.html#create_instances-instance_method
+      # the actual key-pair name is under the private repo and will be over-written
+      key_name: "secret_key_pair"
+      #instance_type: "c4.large"
+      instance_type: "m3.medium"
+      #image_id: my_image_id
+      #subnet_id: my_subnet_id
+      #placement:
+      #  availability_zone: "us-east-1d"
+      min_count: 1
+      max_count: 1
+      #security_groups: ["String"]
+      #security_group_ids: ["String"]
+      #block_device_mappings:
+      #- device_name: "/dev/sda1"
+      #  ebs:
+      #    volume_size: 30
+      #    volume_type: gp2
+      # this is not standard option but these tags will be added after launch
+      # tags: {"key1": "val1", "key2": "val2"}
+
+    config_opts:
+      region: "us-east-1"
+
+    tag_ready: "qe-ready"
+    ami_types:
+      fedora: "devenv-fedora_*"
+      centos7: "devenv-centos7_*"
+      rhel7: "devenv-rhel7_*"
+      rhel7next: "devenv-rhel7next_*"
+      devenv_v2: "devenv_*"
+      devenv_stable_v2: "devenv-stage_*"
+      raw: "ami-01743f64"
+    hosts_type: SSHAccessibleHost
+    cloud_type: aws
+    # host_opts:
+      # ssh_private_key: relative/path
+      # user: the_username
+  azure:
+    # auth:
+    #   # az login --service-principal -u client_id --tenant tenant_id
+    #   tenant_id: 123134-1233-1233-1233-1231312331ff
+    #   client_id: 123123-1233-3123-1233-123123f1f3ff
+    #   client_secret: client_secret_string
+    # subscription_id: "12313212-1231231-12321-123213-12312313"
+    # resource_group: my-resource-group
+    fqdn_names: true
+    location: westus
+    network_options:
+      security_group: :auto
+    # os_options:
+    #   ssh_key: public/key/path
+    availability_set: :auto
+    hardware_options:
+      # https://docs.microsoft.com/en-us/azure/virtual-machines/windows/sizes-general
+      # https://azure.microsoft.com/en-us/pricing/details/virtual-machines/linux
+      vm_size: Standard_D1_v2
+    storage_options:
+      os_disk:
+        type: ComputeModels::DiskCreateOptionTypes::FromImage
+        # disk_size_gb: 30
+        params:
+          # please specify image and os_type OR publisher/offer/sku/version
+          # image: https://mystorageaccount.blob.core.windows.net/something/rhel-73-20170502.vhd
+          os_type: ComputeModels::OperatingSystemTypes::Linux
+          publisher: RedHat
+          offer: RHEL
+          sku: "7.3"
+          version: latest
+      data_disks: not implemented
+    host_connect_opts:
+      user: faux
+      ssh_private_key: private/key/path
+      class: SSHAccessibleHost
+    cloud_type: azure
+  GCE:
+    # project: yourproject
+    zone: us-central1-a
+    network: default
+    scopes: &gce_client_scopes
+      - https://www.googleapis.com/auth/compute
+    # json_cred: path/to/serviceaccount/json/creds/unless/using/signet/below
+    host_opts:
+      # user: provisioned machine username
+      # ssh_private_key: private/key/path
+      class: SSHAccessibleHost
+    # https://cloud.google.com/compute/docs/reference/latest/instances/insert
+    instance_opts:
+      # machine_type: url
+      machine_type_name: n1-standard-1
+      disks:
+      - initialize_params:
+          # source_image: projects/centos-cloud/global/images/centos-7-v20160216
+          # source_snapshot: url
+          image_name: rhel-guest-72
+          # snapshot_name: xyz
+          # img_snap_name: xyz
+          disk_size_gb: 30
+        boot: true
+        auto_delete: true
+      # - source: url # when creating with existing disk
+      #   boot: true
+      #   auto_delete: true
+      network_interfaces:
+        - :network: global/networks/default
+          :access_configs: [{}]
+      # metadata:
+      #  items:
+      #  - key: sshKeys
+      #    # value: "root:ssh-rsa AAAAB3Nza... asd@dsa"
+      #    # from_file: path/to/file/with/gcloud/style/ssh/pub/keys
+      tags:
+        items:
+        - host-type-openshift-master
+        - host-type-openshift-node
+    signet_opts:
+      audience: https://accounts.google.com/o/oauth2/token
+      auth_provider_x509_cert_url: https://www.googleapis.com/oauth2/v1/certs
+      # client_x509_cert_url: https://www.googleapis.com/robot/v1/metadata/x509/<serviceaccount email address>
+      # issuer: <serviceaccount email address>
+      scope: *gce_client_scopes
+      # signing_key: |
+      #  -----BEGIN RSA PRIVATE KEY-----
+      #  ...
+      #  -----END RSA PRIVATE KEY-----
+      token_credential_uri: https://accounts.google.com/o/oauth2/token
+    fix_hostnames: false
+    cloud_type: gce
+  vsphere_nay:
+    connect:
+      host: 'my.hostname.example.com'
+      insecure: false
+      user: myusername
+      password: mypassword
+      # cookie: abc # we can also auth by cookie but have not tested
+    common:
+      datacenter: null
+    create_opts:
+      type: :clone
+      clone_opts:
+        from_vm: "rhel74"
+        target_resource_pool: "resgroup-42" # null means firs pool we see
+        edit: {} # not implemented
+    host_connect_opts:
+      user: root
+      ssh_private_key: path/key.pem
+      class: SSHAccessibleHost
+    cloud_type: vsphere
+  # stomp_bus:
+  #   # default_queue: /topic/mytopic
+  #   sslctx_newparm:
+  #     # see https://docs.ruby-lang.org/en/2.4.0/OpenSSL/SSL/SSLContext.html
+  #     ca_path: some/private/path
+  #   hosts:
+  #   - :host: my.bus.example.com
+  #     :port: 61613
+  #     :ssl: true
+  #     # :login:
+  #     # :passcode:
+  # storage_class_host:
+  #   ssh_private_key: some/private/path/key.pem
+  #   user: root

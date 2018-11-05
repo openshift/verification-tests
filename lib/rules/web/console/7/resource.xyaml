@@ -1,0 +1,23 @@
+--- # resource related rules
+
+check_resource_succesfully_updated_message:
+  element: &check_resource_succesfully_updated_message
+    selector:
+      xpath: //*[contains(text(),'<resource> <name>') and contains(text(), 'successfully updated.')]
+check_resource_succesfully_updated_message_missing:
+  element:
+    <<: *check_resource_succesfully_updated_message
+    missing: true
+check_resource_succesfully_created_message:
+  element:
+    selector:
+      text: <resource> <name> was successfully created.
+check_resource_updated_message:
+  element:
+    selector:
+      xpath: //*[contains(text(),'<resource_name>') and contains(text(), 'successfully updated.')]
+    timeout: 10
+check_redirection_to_resource_page:
+  element:
+    selector:
+      xpath: //breadcrumbs[count(ol/li)=2]//li[contains(., '<resource>')]/following-sibling::li[contains(., '<name>')]

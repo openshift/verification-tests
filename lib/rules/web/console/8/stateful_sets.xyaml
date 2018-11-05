@@ -1,0 +1,62 @@
+--- # check stateful set page
+goto_stateful_sets_page:
+  url: /console/project/<project_name>/browse/stateful-sets/
+goto_one_stateful_sets_page:
+  url: /console/project/<project_name>/browse/stateful-sets/<stateful_sets_name>
+goto_stateful_sets_environment_tab:
+  url: /console/project/<project_name>/browse/stateful-sets/<stateful_sets_name>/?tab=environment
+click_to_goto_one_stateful_set_page:
+  element:
+    selector:
+      xpath: //a[text()="<name>"]
+    op: click
+click_to_goto_one_stateful_set_page_on_stateful_sets_page:
+  action: goto_stateful_sets_page
+  action: click_to_goto_one_stateful_set_page
+check_no_stateful_sets:
+  element:
+    selector:
+      text: !ruby/regexp /No stateful sets/
+check_stateful_set_entry_on_stateful_sets_page:
+  action: goto_stateful_sets_page
+  action: check_stateful_set_entry
+check_stateful_set_entry:
+  element: &stateful_set_entry
+    selector:
+      xpath: //tr[td[@data-title="Name" and a[.="<name>"]] and td[@data-title="Replicas" and contains(.,"<replicas> replica")]]
+check_stateful_set_entry_missing:
+  element:
+    <<: *stateful_set_entry
+    missing: true
+check_breadcrumb_link:
+  element:
+    selector:
+      xpath: //ol[li/a[text()="<resource>"] and li/strong[text()="<name>"]]
+check_one_stateful_set_details:
+  elements:
+  - selector:
+      xpath: //dl[dt[text()="Status:"]/following-sibling::dd[1][contains(.,"<status>")] and dt[text()="Replicas:"]/following-sibling::dd[1][contains(.,"<replicas> replica")]]
+  - selector:
+      xpath: //div[contains(@class, "pod-template-image")]//span[text()="Image:"]/following-sibling::span[text()="<image_name>"]
+  - selector:
+      xpath: //div[contains(@class, "pod-template-ports")]//span[text()="Ports:"]/following-sibling::span//span[text()="<ports>"]
+check_no_volumes_defined:
+  element:
+    selector:
+      xpath: //h3[text()="Volumes"]/following-sibling::p[normalize-space(text())="none"]
+check_volume_info:
+  element:
+    selector:
+      xpath: //volumes//h4[normalize-space(text())="<name>"]/following-sibling::dl/div[dt[text()="Type:"]/following-sibling::dd[1][normalize-space()="<type>"] and dt[text()="Medium:"]/following-sibling::dd[1]/span[text()="<medium>"]]
+check_stateful_set_environment_tab_info:
+  element:
+    selector:
+      xpath: //h3[text()='Container <container_name>']
+check_stateful_set_updated_successfully_message:
+  element: &stateful_set_updated_successfully_message
+    selector:
+      text: Stateful Set <name> was successfully updated.
+check_stateful_set_updated_successfully_message_missing:
+  element:
+    <<: *stateful_set_updated_successfully_message
+    missing: true

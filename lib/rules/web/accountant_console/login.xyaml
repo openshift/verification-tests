@@ -1,0 +1,31 @@
+login_acc_console:
+  url: /
+  action: login_sequence
+#  action: reach_acc_console
+#reach_acc_console:
+#  action: click_manage_account
+#  action: select_current_cluster
+click_user_dropdown:
+  element:
+    selector:
+      id: user-dropdown
+    op: click
+#click_manage_account:
+#  action: click_user_dropdown
+#  element:
+#    selector:
+#      text: Manage Account
+#    op: click
+navigate_to_subscription:
+  action: click_pre_login_button
+  action: pre_login_buttons_gone
+  action: click_current_subscription
+# current cluster would mean the first cluster button per OPENSHIFTQ-12062
+click_current_subscription:
+  elements:
+  - selector:
+      xpath: "(//a[. = 'Manage Subscription'])[1]"
+    type: a
+    op: click
+  - selector:
+      text: Back to Account Overview

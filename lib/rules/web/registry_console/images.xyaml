@@ -1,0 +1,196 @@
+goto_images_page:
+  url: /registry#/images
+goto_one_image_page:
+  url: /registry#/images/<project_name>/<image_name>
+click_images_link_in_new_tab_in_iframe:
+  action:
+    context:
+      tag_name: iframe
+    ref: click_images_link_in_new_tab
+click_images_link_in_new_tab:
+  element:
+    selector:
+      xpath: //a[i[@title='Images']]
+    op: "click - :control\n- :shift"
+click_images_link_in_iframe:
+  action:
+    context:
+      tag_name: iframe
+    ref: click_images_link
+click_images_link:
+  element:
+    selector:
+      xpath: //a[i[@title='Images']]
+    op: click
+click_tab_under_expanded_tag:
+  element:
+    selector:
+      xpath: //tr//a[normalize-space()='<tab_name>']
+    op: click
+click_to_goto_one_image_page_in_iframe:
+  action: click_images_link_in_iframe
+  action:
+    context:
+      tag_name: iframe
+    ref: click_to_goto_one_image_page
+click_to_goto_one_image_page:
+  element:
+    selector:
+      xpath: //tbody//th[contains(text(),'<project_name>/<image_name>')]
+    op: click
+click_to_goto_one_image_tag_page_in_iframe:
+  action:
+    context:
+      tag_name: iframe
+    ref: click_to_goto_one_image_tag_page
+click_to_goto_one_image_tag_page:
+  element:
+    selector:
+      xpath: //tbody//th[contains(.,'<tag_label>')]
+    op: click
+check_container_tab_under_expanded_tag_in_iframe:
+  action:
+    context:
+      tag_name: iframe
+    ref: check_container_tab_under_expanded_tag
+check_container_tab_under_expanded_tag:
+  params:
+    tab_name: Container
+  action: click_tab_under_expanded_tag
+  elements:
+  - selector:
+      xpath: //dt[normalize-space()='Command']/following-sibling::dd[contains(., '<command>')]
+  - selector:
+      xpath: //dt[normalize-space()='Ports']/following-sibling::dd[normalize-space()='<ports>']
+  action:
+    if_param: extra_ports
+    ref: check_container_tab_extra_ports
+check_container_tab_extra_ports:
+  element:
+    selector:
+      xpath: //dt[normalize-space()='Ports']/following-sibling::dd[normalize-space()='<extra_ports>']
+check_image_tab_under_expanded_tag_in_iframe:
+  action:
+    context:
+      tag_name: iframe
+    ref: check_image_tab_under_expanded_tag
+check_image_tab_under_expanded_tag:
+  params:
+    tab_name: Image
+  action: click_tab_under_expanded_tag
+  action: check_one_image_tag_detailed_info
+check_info_on_one_image_tag_page_in_iframe:
+  action: click_to_goto_one_image_tag_page_in_iframe
+  action:
+    context:
+      tag_name: iframe
+    ref: check_one_image_tag_detailed_info
+check_one_image_tag_detailed_info:
+  elements:
+  - selector:
+      xpath: //dt[normalize-space()='Author']
+  - selector:
+      xpath: //dt[normalize-space()='Built']/following-sibling::dd[contains(., 'ago')]
+  - selector:
+      xpath: //dt[normalize-space()='Digest']/following-sibling::dd[contains(., 'sha256:')]
+  - selector:
+      xpath: //dt[normalize-space()='Tags']/following-sibling::dd[contains(., '<project_name>/<image_name>:<tag_label>')]
+  - selector:
+      visible_text: !ruby/regexp /docker pull .*<project_name>.<image_name>:<tag_label>/
+check_no_images_on_images_page_in_iframe:
+  action:
+    context:
+      tag_name: iframe
+    ref: check_no_images_on_images_page
+check_no_images_on_images_page:
+  element:
+    selector:
+      text: No image streams are present.
+check_image_info_in_iframe_on_one_image_page:
+  action:
+    context:
+      tag_name: iframe
+    ref: check_image_info_on_one_image_page
+check_image_info_on_one_image_page:
+  params:
+    access_policy: ''
+    pull_repository: ''
+    image_count: ''
+  elements:
+  - selector:
+      xpath: //dt[span[text()='Access Policy']]/following-sibling::dd[contains(.,'<access_policy>')]
+  - selector:
+      xpath: //dt[text()='Pulling repository']/following-sibling::dd[contains(.,'<pull_repository>')]
+  - selector:
+      xpath: //dt[span[text()='Image count']]/following-sibling::dd[contains(.,'<image_count>')]
+check_image_tag_in_iframe_on_one_image_page:
+  action:
+    context:
+      tag_name: iframe
+    ref: check_image_tag_on_one_image_page
+check_image_tag_on_one_image_page:
+  element:
+    selector: &check_image_tag_toggle
+      xpath: //td[following-sibling::th/a[text()='<tag_label>']]
+check_metadata_tab_under_expanded_tag_in_iframe:
+  action:
+    context:
+      tag_name: iframe
+    ref: check_metadata_tab_under_expanded_tag
+check_metadata_tab_under_expanded_tag:
+  params:
+    tab_name: Metadata
+  action: click_tab_under_expanded_tag
+  element:
+    selector:
+      xpath: //registry-image-layers//ul/li[contains(., 'sha256:')]
+check_tag_collapsed:
+  element:
+    selector:
+      xpath: //tr//a[normalize-space()='Metadata']
+    missing: true
+check_tag_missing_on_one_imagestream_page_in_iframe:
+  action:
+    context:
+      tag_name: iframe
+    ref: check_tag_missing_on_one_imagestream_page
+check_tag_missing_on_one_imagestream_page:
+  element:
+    selector: *check_image_tag_toggle
+    missing: true
+delete_tag_on_one_imagestream_page_in_iframe:
+  action:
+    context:
+      tag_name: iframe
+    ref: delete_tag_on_one_imagestream_page
+delete_tag_on_one_imagestream_page:
+  params:
+    cancel: 'false'
+  element:
+    selector:
+      xpath: //tr//button[contains(@class, 'delete')]
+    op: click
+  action:
+    if_param:
+      cancel: 'true'
+    ref: click_cancel_button
+  action:
+    if_param:
+      cancel: 'false'
+    ref: click_delete_button
+tag_collapses_in_iframe:
+  action:
+    context:
+      tag_name: iframe
+    ref:
+    - toggle_tag_item
+    - check_tag_collapsed
+tag_expands_in_iframe:
+  action:
+    context:
+      tag_name: iframe
+    ref: toggle_tag_item
+toggle_tag_item:
+  element:
+    selector: *check_image_tag_toggle
+    op: click

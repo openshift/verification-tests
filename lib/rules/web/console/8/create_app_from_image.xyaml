@@ -1,0 +1,357 @@
+---
+# set app param to create app from image
+create_app_from_image:
+  # *** Required params:
+  # image_name, image_tag
+  # *** Optional params:
+  # source_url, try_sample_repo, git_ref, context_dir, include_routing, configure_build_trigger,
+  # build_new_image_on_image_change, launch_build_when_bc_created, bc_env_key, bc_env_value,
+  # autodeploy_on_image_update, autodeploy_on_dc_changes, dc_env_key, dc_env_value, replicas,
+  # cpu_request, memory_request, cpu_limit, memory_limit
+  # min_pods, max_pods, cpu_req_per
+  # *** Default params:
+  params:
+    namespace: openshift
+    sumbit_creation: 'true'
+    show_advanced_option: 'true'
+
+  action: create_app_from_image_navigate
+  action: create_app_from_image_set_app_name
+  action:
+    if_param: source_url
+    ref: create_app_from_image_set_source_url
+  action:
+    if_param:
+      try_sample_repo: 'true'
+    ref: create_app_from_image_try_sample_repo
+  action:
+    if_param:
+      show_advanced_option: 'true'
+    ref: create_app_from_image_show_advanced_param
+  action:
+    if_param:
+    - git_ref
+    - context_dir
+    ref: create_app_from_image_set_git_options
+  action:
+    if_param: include_routing
+    ref: create_app_from_image_include_routing
+  action:
+    if_param: configure_build_trigger
+    ref: create_app_frpm_image_configure_build_trigger
+  action:
+    if_param: build_new_image_on_image_change
+    ref: create_app_from_image_build_new_image_on_image_change
+  action:
+    if_param: launch_build_when_bc_created
+    ref: create_app_from_image_launch_build_when_bc_created
+  action:
+    if_param:
+    - bc_env_key
+    - bc_env_value
+    ref: create_app_from_image_add_bc_env_vars
+  action:
+    if_param: autodeploy_on_image_update
+    ref: create_app_from_image_autodeploy_on_image_update
+  action:
+    if_param: autodeploy_on_dc_changes
+    ref: create_app_from_image_autodeploy_on_dc_changes
+  action:
+    if_param:
+    - dc_env_key
+    - dc_env_value
+    ref: create_app_from_image_add_dc_env_vars
+  action:
+    if_param: max_pods
+    ref: create_app_from_image_set_hpa
+  action:
+    if_param: replicas
+    ref: create_app_from_image_set_number_of_replicas
+  action:
+    if_param: cpu_request
+    ref: create_app_from_image_set_cpu_resource_request
+  action:
+    if_param: memory_request
+    ref: create_app_from_image_set_memory_resource_request
+  action:
+    if_param: cpu_limit
+    ref: create_app_from_image_set_cpu_resource_limit
+  action:
+    if_param: memory_limit
+    ref: create_app_from_image_set_memory_resource_limit
+  action:
+    if_param:
+    - label_key
+    - label_value
+    ref: add_label_name_and_value
+  action:
+    if_param:
+      sumbit_creation: 'true'
+    ref:
+    - close_second_level_navigation
+    - create_app_from_image_submit
+create_app_from_image_base_action:
+  action: create_app_from_image_navigate
+  action: create_app_from_image_default_options
+# we can combine any of sub action rules to make different options
+create_app_without_route_action:
+  action: create_app_from_image_base_action
+  action: create_app_from_image_show_advanced_param
+  action: create_app_without_route
+  action: create_app_from_image_submit
+create_app_from_image_with_port:
+  action: create_app_from_image_base_action
+  action: create_app_from_image_show_advanced_param
+  action: check_port_in_list
+  action: create_app_from_image_submit
+create_app_from_image_with_secret:
+  action: create_app_from_image_base_action
+  action: create_app_from_image_try_sample_repo
+  action: create_app_from_image_show_advanced_param
+  action: select_one_secret_from_box
+  action: create_app_from_image_submit
+check_port_on_create_page:
+  action: create_app_from_image_navigate
+  action: create_app_from_image_show_advanced_param
+  action: check_port_in_list
+create_app_from_image_check_default_resource_limit:
+  action: create_app_from_image_base_action
+  action: create_app_from_image_show_advanced_param
+  action: create_app_from_image_check_cpu_limit_range
+  action: create_app_from_image_check_cpu_default_request
+  action: create_app_from_image_check_cpu_default_limit
+  action: create_app_from_image_check_memory_limit_range
+  action: create_app_from_image_check_memory_default_request
+  action: create_app_from_image_check_memory_default_limit
+create_app_from_image_check_label:
+  action: create_app_from_image_base_action
+  action: create_app_from_image_try_sample_repo
+  action: create_app_from_image_show_advanced_param
+  action: create_app_from_image_add_bc_env_vars
+  action: create_app_from_image_add_dc_env_vars
+  action: add_label_name_and_value
+create_app_from_image_set_hpa:
+  action: set_autoscaler_strategy_as_automatic
+  action:
+    if_param: min_pods
+    ref: set_min_pod_on_autoscaler_page
+  action: set_max_pod_on_autoscaler_page
+  action:
+    if_param: cpu_req_per
+    ref: set_cpu_request_percentage
+
+# all sub single action
+create_app_from_image_navigate:
+  url: /console/project/<project_name>/create/fromimage?imageStream=<image_name>&imageTag=<image_tag>&namespace=<namespace>
+create_app_from_image_set_app_name:
+  element:
+    selector:
+      id: appname
+    op: send_keys <app_name>
+    type: input
+create_app_from_image_set_source_url:
+  element:
+    selector:
+      id: sourceUrl
+    op: send_keys <source_url>
+    type: input
+create_app_from_image_default_options:
+  action: create_app_from_image_set_app_name
+  action: create_app_from_image_set_source_url
+create_app_from_image_show_advanced_param:
+  element:
+    selector:
+      xpath: //a[text()='advanced options']
+    op: click
+create_app_from_image_set_git_options:
+  elements:
+  - selector:
+      id: gitref
+    op: send_keys <git_ref>
+    type: input
+  - selector:
+      id: contextdir
+    op: send_keys <context_dir>
+    type: input
+create_app_from_image_change_dc_image_trigger:
+  element:
+    selector:
+      text: New image is available
+    op: click
+create_app_from_image_change_dc_config_trigger:
+  element:
+    selector:
+      text: Deployment configuration changes
+    op: click
+create_app_from_image_change_bc_webhook_trigger:
+  element:
+    selector:
+      text: Configure a webhook build trigger
+    op: click
+create_app_from_image_change_bc_image_trigger:
+  element:
+    selector:
+      text: Automatically build a new image when the builder image changes
+    op: click
+create_app_from_image_change_bc_config_trigger:
+  element:
+    selector:
+      text: Launch the first build when the build configuration is created
+    op: click
+create_app_from_image_change_routing_setting:
+  element:
+    selector:
+      text: Create a route to the application
+    op: click
+create_app_from_image_include_routing:
+  params:
+    checkbox_label: Create a route to the application
+    checkbox_value: <include_routing>
+  action: set_labeled_checkbox_value
+create_app_from_image_configure_build_trigger:
+  params:
+    checkbox_label: Configure a webhook build trigger
+    checkbox_value: <configure_build_trigger>
+  action: set_labeled_checkbox_value
+create_app_from_image_build_new_image_on_image_change:
+  params:
+    checkbox_label: Automatically build a new image when the builder image changes
+    checkbox_value: <build_new_image_on_image_change>
+  action: set_labeled_checkbox_value
+create_app_from_image_launch_build_when_bc_created:
+  params:
+    checkbox_label: Launch the first build when the build configuration is created
+    checkbox_value: <launch_build_when_bc_created>
+  action: set_labeled_checkbox_value
+create_app_from_image_autodeploy_on_image_update:
+  params:
+    checkbox_label: New image is available
+    checkbox_value: <autodeploy_on_image_update>
+  action: set_labeled_checkbox_value
+create_app_from_image_autodeploy_on_dc_changes:
+  params:
+    checkbox_label: Deployment configuration changes
+    checkbox_value: <autodeploy_on_dc_changes>
+  action: set_labeled_checkbox_value
+set_labeled_checkbox_value:
+  element:
+    selector:
+      xpath: //label[normalize-space()="<checkbox_label>"]/input
+    type: checkbox
+    op: set <checkbox_value>
+create_app_from_image_set_number_of_replicas:
+  element:
+    selector:
+      name: replicas
+    op: send_keys <replicas>
+    type: input
+add_label_name_and_value:
+  action:  add_new_label_form
+  elements:
+  - selector:
+      xpath: (//div[contains(text(),"Each label")]/following-sibling::div//input[@placeholder="Name"])[last()]
+    op: send_keys <label_key>
+    type: input
+  - selector:
+      xpath: (//div[contains(text(),"Each label")]/following-sibling::div//input[@placeholder="Value"])[last()]
+    op: send_keys <label_value>
+    type: input
+add_new_label_form:
+  element:
+    selector:
+      text: Add Label
+    op: click
+    type: a
+add_new_label:
+  action: add_new_label_form
+  action: add_label_name_and_value
+set_autoscaler_strategy_as_automatic:
+  action: click_autoscaler_strategy
+  elements:
+  - selector:
+      xpath: //span[contains(text(),'Automatic')]
+    op: click
+click_autoscaler_strategy:
+  elements:
+  - selector:
+      xpath: //label[contains(., 'Strategy')]/following-sibling::div[1]
+    op: click
+create_app_from_image_check_cpu_limit_range:
+  element:
+    selector:
+      xpath: //h3[contains(text(),'CPU')]/small[contains(text(),"<cpu_limit_range>")]
+create_app_from_image_check_cpu_default_request:
+  element:
+    selector:
+      xpath: //edit-request-limit[@type="cpu"]/descendant::compute-resource[@label="Request"]/descendant::input[@placeholder="<default_cpu_req>"]
+    type: input
+create_app_from_image_set_cpu_resource_request:
+  element:
+    selector:
+      xpath: //edit-request-limit[@type="cpu"]/descendant::compute-resource[@label="Request"]/descendant::input
+    type: input
+    op: send_keys <cpu_request>
+create_app_from_image_check_cpu_default_limit:
+  element:
+    selector:
+      xpath: //edit-request-limit[@type="cpu"]/descendant::compute-resource[@label="Limit"]/descendant::input[@placeholder="<default_cpu_lim>"]
+    type: input
+create_app_from_image_set_cpu_resource_limit:
+  element:
+    selector:
+      xpath: //edit-request-limit[@type="cpu"]/descendant::compute-resource[@label="Limit"]/descendant::input
+    type: input
+    op: send_keys <cpu_limit>
+create_app_from_image_check_memory_limit_range:
+  element:
+    selector:
+      xpath: //h3[contains(text(),'Memory')]/small[contains(text(),"<memory_limit_range>")]
+create_app_from_image_check_memory_default_request:
+  element:
+    selector:
+      xpath: //edit-request-limit[@type="memory"]/descendant::compute-resource[@label="Request"]/descendant::input[@placeholder="<default_memory_req>"]
+    type: input
+create_app_from_image_set_memory_resource_request:
+  element:
+    selector:
+      xpath: //edit-request-limit[@type="memory"]/descendant::compute-resource[@label="Request"]/descendant::input
+    type: input
+    op: send_keys <memory_request>
+create_app_from_image_check_memory_default_limit:
+  element:
+    selector:
+      xpath: //edit-request-limit[@type="memory"]/descendant::compute-resource[@label="Limit"]/descendant::input[@placeholder="<default_memory_lim>"]
+    type: input
+create_app_from_image_set_memory_resource_limit:
+  element:
+    selector:
+      xpath: //edit-request-limit[@type="memory"]/descendant::compute-resource[@label="Limit"]/descendant::input
+    type: input
+    op: send_keys <memory_limit>
+create_app_from_image_submit:
+  action: click_create_button
+  element:
+    selector:
+      text: Continue to the project overview
+  element:
+    selector:
+      text: Making code changes
+create_app_without_route:
+  elements:
+  - selector:
+      text: Create a route to the application
+    op: click
+check_port_in_list:
+  elements:
+  - selector:
+      xpath: //div[@input-id='routeTargetPort']
+    op: click
+  - selector:
+      xpath: //span[contains(text(),'<target_port>')]
+    op: click
+create_app_from_image_try_sample_repo:
+  element:
+    selector:
+      #xpath: //a[contains(text(), 'Try It')]
+      text: Try It
+    op: click

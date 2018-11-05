@@ -1,0 +1,73 @@
+check_page_contain_text:
+  element:
+    selector:
+      xpath: //*[contains(.,'<text>')]
+    timeout: 30
+check_page_not_contain_text:
+  element:
+    selector:
+      visible_text: !ruby/regexp /<text>/
+    missing: true
+    timeout: 20
+clear_input:
+  elements:
+  - selector:
+      xpath: //input[@id='<input_id>']
+    op: clear
+set_input:
+  elements:
+  - selector:
+      xpath: //input[@id='<input_id>']
+    op: send_keys <text>
+check_select_item_have_at_least_two_options:
+  element:
+    selector: 
+      xpath: //select[@id="<select_id>"]/option[2]
+check_input_could_be_edited_on_current_page:
+  elements: 
+  - selector: 
+      xpath: //input[not(contains(@readonly, "readOnly")) and contains(@id, "<input_id>") and not(contains(@class, "disabled"))]
+check_county_info:
+  elements:
+  - selector:
+      xpath: //label[@for="contact_county" and contains(.,"County")]/a[@data-original-title="County Info" and @data-toggle="popover" and @data-trigger="hover focus" and @data-content="County is required for accurate local tax calculation."]
+  - selector:
+     xpath:  //label[@for="billing_county" and contains(.,"County")]/a[@data-original-title="County Info" and @data-toggle="popover" and @data-trigger="hover focus" and @data-content="County is required for accurate local tax calculation."]
+check_hint_on_field_frame:
+  elements:
+  - selector:
+      xpath: //div[@class="help-block with-errors"]/preceding-sibling::*[@id="<checkpoint_id>" and @required="required"]
+check_the_hint_on_country_field:
+  elements:
+  - selector:
+      xpath: //*[@id="contact_country" and @required="required"]
+    visible: false 
+check_country_prepopulation:
+  elements:
+  - selector:
+      xpath: //select[@id="<country_id>" and @data-value != ""]
+    visible: false
+check_region_prepopulation:
+  elements:
+  - selector:
+      xpath: //select[@id="<region_id>" and @data-value != ""]
+check_input_profile_prepopulation:
+   elements:
+   - selector:
+       xpath: //input[@id="<checkpoint_id>" and @value != ""]  
+check_country_element_on_primary_contact_page:
+  elements:
+  - selector:
+      xpath: //label[@for="contact_country" and contains(.,"Country")]/../div/input[@class="disabled" and @type="hidden"]
+    visible: false
+  - selector:
+      xpath: //a[contains(.,"Why can't I change this?") and @data-content="When you created your account your contact information was used to determine your billing currency and invoice requirements. These cannot be changed at this time." and @data-trigger="hover focus"]
+click_cancel_on_primary_and_billing_contact_page:
+  elements:
+  - selector:
+      xpath: //a[contains(@href,"/index") and @id="contact-cancel-button" and contains(.,"Cancel")]
+    op: click
+check_update_contact_button_initially_disabled:
+  element:
+    selector:
+      xpath: //button[@class="btn btn-primary btn-lg disabled" and contains(.,"Update <contact_cap> Contact")]

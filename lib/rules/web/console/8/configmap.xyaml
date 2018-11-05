@@ -1,0 +1,296 @@
+goto_configmaps_page:
+  url: /console/project/<project_name>/browse/config-maps
+goto_create_configmap_page:
+  url: /console/project/<project_name>/create-config-map
+goto_one_configmap_page:
+  url: /console/project/<project_name>/browse/config-maps/<config_map_name>
+check_config_map_with_empty_value:
+  action: goto_one_configmap_page
+  elements:
+  - selector:
+      xpath: //td[@class='value'][string-length(normalize-space(.)) = 0]
+check_error_for_invalid_specified_path:
+  elements:
+   - selector:
+       xpath: //span[contains(.,'Path must be a relative path')]
+   - selector:
+       xpath: //span[contains(.,'It cannot start with / or contain .. path element')]
+check_configmap_error_indicating_duplicate_key:
+  element:
+    selector:
+      xpath: //div[contains(@class,'error')]//span[contains(normalize-space(),'Duplicate key')]
+check_empty_configmap_page_loaded_error:
+  elements:
+  - selector:
+      xpath: //h2[contains(.,'The config map could not be loaded')]
+  - selector:
+      xpath: //p[contains(.,'not found')]
+check_key_value_pairs_on_configmap_page:
+  element: &check_key_value_pairs_on_configmap_page
+    selector:
+      xpath: //tr[@ng-repeat and td[contains(normalize-space(),'<configmap_key>')] and td[@class='value' and contains(normalize-space(),'<configmap_value>')]]
+check_missing_key_value_pairs_on_configmap_page:
+  element:
+    <<: *check_key_value_pairs_on_configmap_page
+    missing: true
+check_no_configmap_to_show_warnings:
+  elements:
+  - selector:
+      text: !ruby/regexp /The filter is hiding all config maps/
+check_volume_type_is_configmap:
+  element:
+    selector:
+      xpath: //div[@ng-if='volume.configMap']/dt[.='Type:']/following::dd[1][contains(.,'config map')]
+check_volume_type_is_secret:
+  element:
+    selector:
+      xpath: //div[@ng-if='volume.secret']/dt[.='Type:']/following::dd[1][contains(.,'secret')]
+check_configmap_name_for_volume:
+  element:
+    selector:
+      xpath: //div[@ng-if='volume.configMap']/dt[.='Config Map:']/following::dd[1]//a[contains(.,'<configmap_name>')]
+check_secret_name_for_volume:
+  element:
+    selector:
+      xpath: //div[@ng-if='volume.secret']/dt[.='Secret:']//following::dd[1]//a[contains(.,'<secret_name>')]
+check_there_is_add_config_file_link:
+  element:
+    selector:
+      xpath: //a[starts-with(.,'Add Config Files')]
+click_add_config_files_link:
+  element:
+    selector:
+      xpath: //a[starts-with(.,'Add Config Files')]
+    op: click
+click_on_configmap_name:
+  element:
+    selector:
+      xpath: //div[@ng-if='volume.configMap']/dt[starts-with(.,'Config Map')]/following::dd[1]/a[contains(.,'<configmap_name>')]
+    op: click
+click_on_secret_name:
+  element:
+    selector:
+      xpath: //div[@ng-if='volume.secret']/dt[starts-with(.,'Secret')]/following::dd[1]//a[contains(.,'<secret_name>')]
+    op: click
+click_create_config_map_link:
+  elements:
+  - selector:
+      xpath: //a[contains(.,"Create Config Map")]
+    op: click
+click_to_add_item:
+  element:
+    selector:
+      xpath: //a[contains(.,'Add Item')]
+    op: click
+click_to_add_configmap_item:
+  element:
+    selector:
+      xpath: //a[contains(.,'Add Item')]
+    op: click
+click_to_goto_one_configmap_page:
+  element:
+    selector:
+      xpath: //a[contains(.,'<config_map_name>')]
+    op: click
+click_to_goto_edit_configmap_page:
+  action: click_to_goto_one_configmap_page
+  action: click_to_goto_edit_page
+edit_configmap_value:
+  scripts:
+  - command: |
+        var id = null
+        var p = new RegExp("<config_map_key>");
+        var el = document.getElementsByTagName("input");
+        for (var i=0; i<el.length; i++) {
+          if (p.test(el[i].value)) {
+            id = el[i].id;
+            break;
+          }
+        }
+        if (id == null) return null;
+        id = id.replace("key", "value");
+        editor = ace.edit(id);
+        editor.setValue(`<new_config_map_value>`);
+        return true;
+    expect_result: true
+pick_key_from_list:
+  elements:
+  - selector:
+      xpath: //div[@placeholder='Pick a key']/span
+    op: click
+  - selector:
+      xpath: //ul[contains(@class,'ui-select-choices')]//span[contains(.,'<specified_key>')]
+    op: click
+remove_configmap_item:
+  element:
+    selector: |
+        var id = null
+        var p = new RegExp("<config_map_key>");
+        var el = document.getElementsByTagName("input");
+        for (var i=0; i<el.length; i++) {
+          if (p.test(el[i].value)) {
+            id = el[i].id;
+            break;
+          }
+        }
+        if (id == null) return null;
+        id = id.replace("key", "drop-zone");
+        var elist = document.querySelectorAll('div[id*="drop-zone"]');
+        for (var j=0; j<elist.length; j++) {
+          if (elist[j].id == id ){
+            return elist[j].parentElement.querySelector('div a[ng-click*="remove"]')
+            break;
+           }
+        }
+    type: js
+    op: click
+set_specified_path:
+  elements:
+  - selector:
+      xpath: //input[@ng-model='item.path']
+    op: clear
+  - selector:
+      xpath: //input[@ng-model='item.path']
+    op: send_keys <specified_path>
+select_config_map_from_list:
+  elements:
+  - selector:
+      xpath: //div[@placeholder='Select config map or secret']/span
+    op: click
+  - selector:
+      xpath: //div[.='config map']/parent::li//span[.='<target_config_map>']
+    op: click
+select_secret_from_list:
+  elements:
+  - selector:
+      xpath: //div[@placeholder='Select config map or secret']/span
+    op: click
+  - selector:
+      xpath: //div[.='secret']/parent::li//span[.='<target_secret_name>']
+    op: click
+set_config_map_name:
+  elements:
+  - selector:
+      id: config-map-name
+    type: input
+    op: clear
+  - selector:
+      id: config-map-name
+    type: input
+    op: send_keys <target_config_map_name>
+set_config_map_key:
+  elements:
+  - selector:
+      xpath: (//div[@ng-repeat='item in data'])[last()]//input[contains(@id,'key')]
+    op: send_keys <config_map_key>
+set_config_mount_path:
+  elements:
+  - selector:
+      id: mount-path
+    op: send_keys <config_mount_path>
+toggle_select_specific_keys_and_paths:
+  element:
+    selector:
+      xpath: //label[contains(.,'Select specific keys and paths')]
+    op: click
+type_config_map_value:
+  element:
+    selector:
+      xpath: (//div[contains(@id,'value')])[last()]//textarea
+    type: textarea
+    visible: false
+    op: set <config_map_value>
+upload_config_map_value_from_file:
+  element:
+    selector:
+      xpath: (//osc-file-input)[last()]//span[contains(text(),'Browse…')]/input
+    visible: false
+    type: filefield
+    op: set <file_path>
+add_configmap_key_value_pairs:
+  action: set_config_map_key
+  action: type_config_map_value
+add_configmap_key_value_pairs_from_file:
+  action: set_config_map_key
+  action: upload_config_map_value_from_file
+add_values_from_configmap_as_volume:
+  action: select_config_map_from_list
+  action: set_config_mount_path
+  action: click_add_button
+add_values_from_secret_as_volume:
+  action: select_secret_from_list
+  action: set_config_mount_path
+  action: click_add_button
+add_values_from_configmap_as_volume_with_specific_keys_and_paths:
+  action: select_config_map_from_list
+  action: set_config_mount_path
+  action: toggle_select_specific_keys_and_paths
+add_values_from_secret_as_volume_with_specific_keys_and_paths:
+  action: select_secret_from_list
+  action: set_config_mount_path
+  action: toggle_select_specific_keys_and_paths
+check_there_is_add_config_file_for_dc:
+  action: goto_one_dc_page
+  action: click_on_configuration_tab
+  action: check_there_is_add_config_file_link
+check_there_is_add_config_file_for_rc:
+  action: goto_one_deployment_page
+  action: check_there_is_add_config_file_link
+check_volume_from_configmap_on_dc:
+  action: goto_one_dc_page
+  action: click_on_configuration_tab
+  action: check_volume_type_is_configmap
+  action: check_configmap_name_for_volume
+check_volume_from_secret_on_dc:
+  action: goto_one_dc_page
+  action: click_on_configuration_tab
+  action: check_volume_type_is_secret
+  action: check_secret_name_for_volume
+click_add_config_file_from_dc_page:
+  action: goto_one_dc_page
+  action: click_on_configuration_tab
+  action: click_add_config_files_link
+click_add_config_file_from_rc_page:
+  action: goto_one_deployment_page
+  action: click_add_config_files_link
+confirm_error_for_invalid_config_map_name:
+  action: check_error_for_invalid_value
+confirm_error_for_long_config_map_name:
+  action: check_error_for_long_value
+create_config_map_without_value_from_configmaps_page:
+  action: goto_configmaps_page
+  action: create_config_map_without_value
+  action: check_config_map_entry
+create_config_map_without_value:
+  action: click_create_config_map_link
+  action: set_config_map_name
+  action: set_config_map_key
+  action: click_create_button
+check_config_map_entry:
+  element:
+    selector:
+      xpath: //td[@data-title="Name" and a[text()="<target_config_map_name>"]]
+check_unable_to_create_config_map_without_value:
+  action: goto_configmaps_page
+  action: click_create_config_map_link
+  action: set_config_map_name
+  action: set_config_map_key
+  action: check_create_button_disabled
+pick_key_and_set_path:
+  action: pick_key_from_list
+  action: set_specified_path
+pick_another_key_and_set_another_path:
+  action: click_to_add_item
+  action: pick_key_and_set_path
+add_configmap_to_application_as_env:
+  action: goto_one_configmap_page
+  action: click_add_to_application
+  action: choose_application
+  action: choose_add_as_env
+  action: click_save_button
+add_configmap_to_application_as_volume:
+  action: goto_one_configmap_page
+  action: click_add_to_application
+  action: choose_application
+  action: choose_add_as_volume
+  action: click_save_button

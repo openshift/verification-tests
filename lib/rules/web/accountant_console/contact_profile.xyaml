@@ -1,0 +1,98 @@
+# --- subscription contact info related page
+update_contact_greeting_on_index_page:
+  action: click_edit_contact
+  action: set_greeting_value
+  action: submit_contact
+  params: 
+    text: <new_greeting>
+  action: check_page_contain_text
+check_greeting_value:
+  element: &greeting
+    selector: 
+      xpath: //select[@id='greeting' and contains(@data-value,'<current_greeting>')]
+click_select_greeting:
+  element:
+    <<: *greeting
+    op: click
+set_greeting_value:
+  action: click_select_greeting
+  elements: 
+  - selector: 
+      xpath: //select[@id='greeting']/option[@value='<new_greeting>']
+    op: click
+submit_contact:
+  element: 
+    selector: 
+      xpath: //*[@type="submit" and contains(.,"Update <contact_cap> Contact")]
+    op: click
+## <profile> is Primary or Billing
+check_autocomplete_from_country_input:
+  element: 
+    selector: 
+      xpath: //*[contains(.,'<profile>')]/ancestor::fieldset//option[contains(@data-alternative-spellings, '<spelling>') and contains(., '<autocomplete>')]
+    visible: false
+## <profile> is Primary or Billing
+check_autocomplete_from_country_input_nation_code:
+  element: 
+    selector: 
+      xpath: //*[contains(.,'<profile>')]/ancestor::fieldset//option[contains(@value, '<nation_code>') and contains(., '<autocomplete>')]
+    visible: false
+## check the not valid country not exist from both contact_country and billing_country option list
+check_unsupported_country_not_exist:
+  elements: 
+  - selector: 
+      xpath: //select[@id='contact_country']/option[not(contains(., '<country>'))]
+    visible: false
+  - selector: 
+      xpath: //select[@id='billing_country']/option[not(contains(., '<country>'))]
+    visible: false
+## <item> eg. data-postcode
+check_country_related_item_hide:
+  elements: 
+  - selector: 
+      xpath: //option[@<item>="" and contains(., "<country>")]
+    visible: false
+## this rule is to input/clear value from contanct profile EDIT page (not register profile page)
+## params: input_id is for xpath @id value, text is for input box value (could be skipped to set empty)
+update_contact_item_input_on_index_page:
+  action: click_edit_contact
+  params:
+    input_id: <input_id>
+  action: clear_input
+  action:
+    if_param: text
+    ref: set_input
+  action: submit_contact
+  action:
+    if_param: text
+    ref: check_page_contain_text
+check_maxlength_or_required:
+  action:
+    if_param: maxlength
+    ref:  check_maxlength
+  action:
+    if_param: maxlength_invisible
+    ref:  check_maxlength_hide
+  action:
+    if_param: required
+    ref: check_required
+  action:
+    if_param: required_invisible
+    ref: check_required_hide 
+check_maxlength:
+  element: 
+    selector: 
+      xpath: //*[contains(.,'<profile>')]/ancestor::fieldset//*[contains(@name, '<name>') and @maxlength='<maxlength>']
+check_maxlength_hide:
+  element:
+    selector: 
+      xpath: //*[contains(.,'<profile>')]/ancestor::fieldset//*[contains(@name, '<name>') and @maxlength='<maxlength_invisible>']
+    visible: false   
+check_required:
+  element: &invisible
+    selector: 
+      xpath: //*[contains(.,'<profile>')]/ancestor::fieldset//*[contains(@name, '<name>') and @required='required']
+check_required_hide:
+  element:
+    <<: *invisible
+    visible: false 

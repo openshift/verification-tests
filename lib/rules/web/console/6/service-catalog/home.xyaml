@@ -1,0 +1,6 @@
+#--- catalog page related
+click_helper_icon_on_home_page:
+  element:
+    selector:
+      xpath: //span[@title="Help"]
+    op: click

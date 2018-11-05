@@ -1,0 +1,40 @@
+# --- This is related to fuse plan
+
+check_size_page_title_and_description:
+  elements:
+  - selector:
+      xpath: //h1[@class="text-center" and contains(.,"Select Fuse Online Plan Size")]
+  - selector:
+      xpath: //p[@class="lead text-center" and contains(.,"Fuse Online offers plan sizes tailored to project needs. Select your preferred plan size below.")]
+check_fuse_small_plan_info_on_size_page:
+  elements:
+  - selector:
+      xpath: //strong[@class="fa-stack-1x text-warning" and contains(.,"S")]
+  - selector:
+      xpath: //span[@class="text-warning" and contains(.,"Small")]
+  - selector:
+      xpath: //*[contains(.,"For entry-level integration projects.")]
+  - selector:
+      xpath: //*[contains(.,"<integration_number> integrations")]
+  - selector:
+      xpath: //*[contains(.,"<memory> Memory")]
+  - selector: 
+      xpath: //*[contains(.,"<storage> Storage")]
+  - selector:
+      xpath: //*[contains(.,"<cpu_number> vCPU")]
+  - selector:
+      xpath: //*[contains(.,"Connectors included")]
+  - selector:
+      xpath: //*[contains(.,"Basic Support")]
+check_small_size_submit_button:
+  element: &start_small_size
+    selector:
+      xpath: //input[@class="btn btn-lg btn-primary btn-block" and @type="submit" and @value="$650/Month"]
+click_small_size_for_fuse_plan:
+  element:
+    <<: *start_small_size
+    op: click
+click_wizard_item_back_to_plan_page:
+  elements:
+  - selector:
+      xpath: //a[@href="/register/plan"]/span[@class="wizard-pf-step-title" and contains(.,"Plans")]

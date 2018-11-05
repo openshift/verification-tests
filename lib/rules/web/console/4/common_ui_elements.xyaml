@@ -1,0 +1,153 @@
+wait_cancel:
+  element:
+    selector:
+      xpath: //button[contains(.,"Cancel")]
+    timeout: 60
+choose_resource_type:
+  elements:
+  - selector:
+      xpath: //div[@title="Choose a resource"]
+    op: click
+  - selector:
+      xpath: //div[span/div[text()="<resource_type>"]]
+    op: click
+click_actions_button:
+  element:
+    selector:
+      text: Actions
+    type: button
+    op: click
+click_add:
+  element:
+    selector:
+      xpath: //a[text()="Add" and not(@disabled)]
+    op: click
+click_add_button:
+  element:
+    selector:
+      xpath: //button[contains(text(),"Add") and not(@disabled)]
+    op: click
+click_create_button:
+  element:
+    selector:
+      xpath: //button[contains(text(),"Create") and not(@disabled)]
+    type: button
+    op: click
+click_cancel:
+  element:
+    selector:
+      text: Cancel
+    op: click
+click_delete:
+  element:
+    selector:
+      text: Delete
+    op: click
+click_hide_annotations:
+  element:
+    selector:
+      text: Hide annotations
+    op: click
+click_on_configuration_tab:
+  element:
+    selector:
+      xpath: //uib-tab-heading[contains(.,'Configuration')]
+    op: click
+click_on_details_tab:
+  element:
+    selector:
+      xpath: //uib-tab-heading[contains(.,'Details')]
+    op: click
+click_on_environment_tab:
+  element:
+    selector:
+      xpath: //uib-tab-heading[contains(.,'Environment')]
+    op: click
+click_on_events_tab:
+  element:
+    selector:
+      xpath: //uib-tab-heading[contains(.,'Events')]
+    op: click
+click_on_summary_tab:
+  element:
+    selector:
+      xpath: //uib-tab-heading[contains(.,'Summary')]
+    op: click
+click_on_logs_tab:
+  element:
+    selector:
+      xpath: //uib-tab-heading[contains(.,'Logs')]
+    op: click
+click_on_terminal_tab:
+  element:
+    selector:
+      xpath: //uib-tab-heading[contains(.,'Terminal')]
+    op: click
+click_show_annotations:
+  element:
+    selector:
+      text: Show annotations
+    op: click
+click_edit:
+  element:
+    selector:
+      xpath: //a[text()='Edit']
+    op: click
+click_continue_button:
+  element:
+    selector:
+      text: Continue
+    op: click
+    type: button
+click_save_button:
+  element:
+    selector:
+      xpath: //button[contains(text(),'Save') and not(@disabled)]
+    op: click
+check_create_button_disabled:
+  element:
+    selector:
+      xpath: //button[@disabled='disabled' and text()='Create']
+check_page_contain_text:
+  element:
+    selector:
+      text: !ruby/regexp /<text>/
+    timeout: 30
+check_page_not_contain_text:
+  element:
+    selector:
+      text: !ruby/regexp /<text>/
+    missing: true
+    timeout: 20
+check_save_button_disabled:
+  element:
+    selector:
+      xpath: //button[@disabled='disabled' and text()='Save']
+click_to_goto_edit_page:
+  action: click_actions_button
+  action: click_edit
+delete_resource:
+  action: click_actions_button
+  action: click_delete
+  action: click_delete
+check_instructions_on_home_page:
+  elements:
+  - selector:
+      text: !ruby/regexp /Welcome/
+  - selector:
+      text: !ruby/regexp /Create a project/
+  - selector:
+      text: !ruby/regexp /OpenShift helps you quickly/
+confirm_resource_deletion:
+  elements:
+  - selector:
+      text: Delete
+    type: button
+    op: click
+cancel_resource_deletion:
+  elements:
+  - selector:
+      text: Cancel
+    type: button
+    op: click
+

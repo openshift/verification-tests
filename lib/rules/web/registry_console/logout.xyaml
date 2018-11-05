@@ -1,0 +1,14 @@
+---
+logout:
+  elements:
+  - selector:
+      class: dropdown-toggle
+      tag_name: a
+    op: click
+  - selector:
+      visible_text: !ruby/regexp /Log Out/i
+    type: a
+    op: click
+  - selector:
+      text: Login Again
+    type: a

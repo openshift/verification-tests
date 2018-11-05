@@ -1,0 +1,29 @@
+#------pv/pvc related function---------
+goto_storage_page:
+  url: /console/project/<project_name>/browse/storage
+goto_one_pvc_page:
+  url: /console/project/<project_name>/browse/persistentvolumeclaims/<pvc_name>
+check_empty_storage_page:
+  action: goto_storage_page
+  elements:
+  - selector:
+      xpath: //em[text()='No persistent volume claims to show']
+check_pvcs_on_storage_page:
+  action: goto_storage_page
+  elements:
+  - selector:
+      xpath: //a[text()='<pvc_name>']
+    op: click
+  - selector:
+      xpath: //h1[contains(text(),'<pvc_name>')]
+check_one_pvc_detail:
+  action: goto_one_pvc_page
+  elements:
+  - selector: 
+      xpath: //h1[contains(text(),'<pvc_name>')]
+  - selector:
+      xpath: //dt[text()='Status:']
+  - selector:
+      xpath: //dt[text()='Requested Capacity:']
+  - selector:
+      xpath: //dt[text()='Access Modes:']

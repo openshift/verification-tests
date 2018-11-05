@@ -1,0 +1,6 @@
+= Some git tips
+
+== common whitespace problems to notice
+
+*  git config core.whitespace trailing-space,tab-in-indent,cr-at-eol
+*  git config color.ui true

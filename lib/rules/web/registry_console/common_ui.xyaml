@@ -1,0 +1,37 @@
+check_prompt_msg:
+  element:
+    selector:
+      visible_text: !ruby/regexp /<prompt_msg>/
+click_add_button:
+  element:
+    selector:
+      xpath: //*[contains(text(),'Add')]
+    op: click
+click_create_button:
+  element:
+    selector:
+      text: Create
+      tag_name: button
+    op: click
+click_cancel_button:
+  element:
+    selector:
+      text: Cancel
+      tag_name: button
+    op: click
+click_delete_button:
+  element:
+    selector:
+      text: Delete
+      tag_name: button
+    op: click
+click_a_link_in_iframe:
+  action:
+    context:
+      tag_name: iframe
+    ref: click_a_link
+click_a_link:
+  element:
+    selector:
+      xpath: //a[substring(@href, string-length(@href) - string-length('<url_ends_with>') + 1) = '<url_ends_with>' and .='<link_text>']
+    op: click

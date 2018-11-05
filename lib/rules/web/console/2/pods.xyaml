@@ -1,0 +1,30 @@
+#----check pod page-----
+check_pod_list_page:
+  action: goto_pods_page
+  element:
+    selector:
+      xpath: //table[descendant::th[text()="Name"]]
+check_pod_list_with_no_pod:
+  action: check_pod_list_page
+  element:
+    selector:
+      xpath: //em[contains(text(),'No pods to show')]
+goto_one_pod_page:
+  url: /console/project/<project_name>/browse/pods/<pod_name>
+  elements:
+  - selector:
+      xpath: //div[@ng-if="pod"]
+goto_pods_page:
+  url: /console/project/<project_name>/browse/pods
+check_pod_in_pods_table:
+  params: &check_pod_in_pods_table_params
+    ready: ''
+    restarts: ''
+  element: &check_pod_in_pods_table
+    selector:
+      xpath: //table//tbody/tr[td[@data-title="Name" and a[text()="<pod_name>" and @href="project/<project_name>/browse/pods/<pod_name>"]] and td[@data-title="Status" and div/span[text()="<status>"]] and td[@data-title="Ready" and contains(text(),"<ready>")] and td[@data-title="Restarts" and contains(text(),"<restarts>")]]
+check_pod_in_pods_table_missing:
+  params: *check_pod_in_pods_table_params
+  element:
+    <<: *check_pod_in_pods_table
+    missing: true

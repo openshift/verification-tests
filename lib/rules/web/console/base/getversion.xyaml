@@ -1,0 +1,6 @@
+---
+get_master_version_from_webconsole:
+  url: /console/about
+  element:
+    selector:  
+      xpath: //dl/dt[contains(text(),'OpenShift Master')]

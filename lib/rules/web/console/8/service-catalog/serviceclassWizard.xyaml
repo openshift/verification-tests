@@ -1,0 +1,7 @@
+# --- serviceclass wizard panel
+
+check_wizard_information:
+  elements:
+  - selector:
+      xpath: //span[contains(.,"Information")]
+    timeout: 30

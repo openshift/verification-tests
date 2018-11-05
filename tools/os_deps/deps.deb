@@ -1,0 +1,17 @@
+git
+build-essential
+gnupg2
+openssl
+libyaml-dev
+libffi-dev
+openssl
+autoconf
+automake
+libtool
+bison
+sqlite
+firefox
+xvfb
+python-dev
+libssl-dev
+ansible

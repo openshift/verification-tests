@@ -1,0 +1,73 @@
+# search service catalog related
+check_max_shown_matches_in_search:
+  params:
+    has_tag: tag
+  action: search_catalog
+  elements:
+  - selector:
+      xpath: //div[@class='catalog-search']//ul[count(li[.//span[contains(@class, 'match-icon')] and .//div[contains(@class, 'match-label')] and .//span[contains(@class, '<has_tag>')]]) = 5]
+  - selector:
+      xpath: //div[@class='catalog-search']//li[6][contains(., 'View all')]
+check_name_match_in_search:
+  params:
+    class_name: match-label
+    pos: '> 0'
+  action: search_catalog
+  element:
+    selector: &check_match_in_search
+      xpath: >-
+        //div[@class='catalog-search']//li[.//*[contains(@class, '<class_name>') and
+        contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),
+        translate('<keyword>', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'))] and position() <pos>]
+check_tag_match_in_search:
+  params:
+    class_name: tag
+    pos: '> 0'
+  action: search_catalog
+  element:
+    selector: *check_match_in_search
+check_name_prior_to_tag_in_search:
+  params:
+    class_name: match-label
+    pos: '= 1'
+  action: search_catalog
+  elements:
+  - selector:
+      xpath: >-
+        //div[@class='catalog-search']//li[.//span[contains(@class, 'tag') and
+        contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),
+        translate('<keyword>', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'))]
+        and .//div[contains(@class, 'match-label') and
+        not(contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),
+        translate('<keyword>', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')))] and position() > 1]
+  - selector: *check_match_in_search
+goto_home_page:
+  url: /console
+  element:
+    selector:
+      text: Browse Catalog
+    timeout: 60
+search_catalog:
+  elements:
+  - selector:
+      id: search-input
+    op: clear
+    type: input
+  - selector:
+      id: search-input
+    op: send_keys <keyword>
+    type: input
+search_and_click_first_item_from_catalog:
+  params:
+    has_tag: tag
+  action: search_catalog
+  element:
+    selector:
+      xpath: //div[@class='catalog-search']//li[1][.//span[contains(@class, 'match-icon')] and .//div[contains(@class, 'match-label')] and .//span[contains(@class, '<has_tag>')]]/a
+    op: click
+search_catalog_no_result:
+  action: search_catalog
+  element:
+    selector:
+      xpath: //div[@class='catalog-search']//li[contains(., 'No results found')]
+

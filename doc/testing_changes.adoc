@@ -1,0 +1,22 @@
+= Testing code changes
+
+== testing step changes
+
+`grep`/`ack` for scenarios using the step and run a couple of them to make sure they still work
+
+there are scenarios in `features/test` covering some of the features, look for related scenarios there and consider adding more tests for your feature
+
+== testing changes to classes and rules
+
+grep to find where these classes are used and make sure old use cases still work as before (or fix **all** old use cases)
+
+== testing broader changes
+
+Often changes are not well isolated and we need a good selection of tests to catch anything unexpected. Let's try to list some good selection of those:
+
+* features/cli/create.feature:Create an application with overriding app name
+** test cli, rest, pod, service, project, route, html
+* features/cli/policy.feature:Add/Remove a global role
+** test admin and clean-up steps (check clean-up is run in after hook via log)
+
+Let's tag these scenarios `@smoke` so we can run all by `cucumber --tags @smoke`

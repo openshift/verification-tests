@@ -1,0 +1,58 @@
+# The standard name for this image is aosqe/bushslicer-base
+
+FROM openshift/jenkins-slave-base-centos7
+
+LABEL vendor="Red Hat inc."
+LABEL maintainer="AOS QE Team"
+
+ADD . $HOME/bushslicer
+RUN [ -d $HOME/bushslicer/private/config/ca ] && \
+    ( cd $HOME/bushslicer/private/config/ca && \
+    cp -v *.pem /etc/pki/ca-trust/source/anchors/ && \
+    update-ca-trust extract || \
+    exit 1 ) || :
+
+RUN set -x && \
+    SCL_BASE_PKGS="centos-release-scl scl-utils-build" && \
+    INSTALL_PKGS="rh-ruby24 rh-ror50-rubygem-nokogiri rh-ruby24-ruby-devel rh-git29 bsdtar" && \
+    yum -y update && \
+    yum install -y --enablerepo=centosplus $SCL_BASE_PKGS && \
+    yum install -y --enablerepo=centosplus $INSTALL_PKGS && \
+    yum install -y https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm && \
+    CHROMEDRIVER_URL="https://chromedriver.storage.googleapis.com" && \
+    CHROMEDRIVER_VERSION=`curl -sSL "$CHROMEDRIVER_URL/LATEST_RELEASE"` && \
+    curl -sSL "$CHROMEDRIVER_URL/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip"  | bsdtar xvf - -C /usr/local/bin && \
+    GECKODRIVER_DOWNLOAD_URL="$(curl -sSL https://api.github.com/repos/mozilla/geckodriver/releases/latest | grep -E 'browser_download_url.*linux64' | sed -E 's/.*(https[^"]*).*/\1/')" && \
+    curl -sSL "$GECKODRIVER_DOWNLOAD_URL" | bsdtar -xvf - -C /usr/local/bin && \
+    chmod +x /usr/local/bin/chromedriver /usr/local/bin/geckodriver && \
+    rpm -V $INSTALL_PKGS $SCL_BASE_PKGS && \
+    curl -sSL https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm -o /tmp/epel-release-latest-7.noarch.rpm && \
+    yum install -y /tmp/epel-release-latest-7.noarch.rpm && \
+    mkdir -p $HOME/bin
+
+RUN scl enable rh-ror50 "$HOME/bushslicer/tools/install_os_deps.sh"
+RUN scl enable rh-ror50 $HOME/bushslicer/tools/hack_bundle.rb
+
+# -k is a bad option, put certificated under private/config/ca instead
+# be mindful image will be visible if image is made public which is a mild
+#   security concern because of exposing VPN details
+# RUN sed -i -e 's/^\s\+curl\s/  curl -Sk /' /usr/local/bin/run-jnlp-client
+
+RUN rpm -qa && \
+    yum clean all -y && \
+    rm -rf $HOME/bushslicer /var/cache/yum /tmp/*
+
+RUN dbus-uuidgen > /etc/machine-id # e.g. needed for firefox
+RUN chown -R 1001:0 $HOME && chmod -R g+rw $HOME /etc/machine-id
+# allow yum/dnf; but probably fakeroot would be needed and still some install
+# scripts may fail because of lack of real root
+#RUN dirs="/usr /etc /var /home /opt" && \
+#    chown -R 1001:0 $dirs && chmod -R g+rw $dirs
+
+# have sudo working just in case
+RUN echo -e '#!/bin/bash\nexec "$@"' > /usr/local/bin/sudo && chmod 755 /usr/local/bin/sudo
+
+USER 1001
+
+# we need ruby and some gems from ror
+ENTRYPOINT ["/usr/bin/scl", "enable", "rh-git29", "rh-ror50", "--", "/usr/local/bin/run-jnlp-client"]

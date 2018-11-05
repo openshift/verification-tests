@@ -1,0 +1,83 @@
+#---------check log feature--------------
+check_log_tab_on_pod_page:
+  elements:
+  - selector:
+      xpath: //uib-tab-heading[text()='Logs']
+    op: click
+  - selector:
+      xpath: //div[@class='log-status']//span[@class='ng-binding' and contains(text(),'<status>')]
+    timeout: 300
+check_log_tab_on_deployed_deployment_page:
+  elements:
+  - selector:
+      xpath: //uib-tab-heading[text()='Logs']
+    op: click
+  - selector:
+      xpath: //div[@class='log-status']/span[contains(.,'Active')]
+    timeout: 300
+check_log_context:
+  elements:
+  - selector:
+      xpath: //table//td[contains(text(),'<log_context>')]
+    timeout: 180
+check_running_log_context:
+  elements:
+  - selector:
+      xpath: //table//td[contains(text(),'Scaling')]
+    timeout: 180
+check_deployed_log_context:
+  elements:
+  - selector:
+      xpath: //table//td[contains(text(),'PLEASE REMEMBER TO SET A PASSWORD FOR THE MySQL root USER')]
+    timeout: 180
+check_no_log_info:
+  elements:
+  - selector:
+      xpath: //log-viewer[@resource="builds/log"]//h2[contains(.,'<no_log_one>')]
+    timeout: 180
+  - selector:
+      xpath: //log-viewer[@resource="builds/log"]//p[contains(.,'<no_log_two>')]
+    timeout: 180
+open_in_new_window:
+  elements:
+  - selector:
+      text: Expand log
+    type: a
+    op: click
+select_a_container:
+  elements:
+  - selector:
+      xpath: //select[@id='selectLogContainer']//option[contains(text(),'<container_name>')]
+    op: click
+follow_log:
+  elements:
+  - selector:
+      xpath: //div[@class='log-view']//a/span[contains(text(),'Follow')]
+    op: click
+    timeout: 30
+stop_follow_log:
+  elements:
+  - selector:
+      xpath: //div[@class='log-view']//a/span[contains(text(),'Stop following')]
+    op: click
+go_to_top_log:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'log-view')]//a[contains(text(),'Go to top')]
+    op: click
+go_to_end_log:
+  elements:
+  - selector:
+      xpath: //div[@class='log-view']//a[contains(text(),'Go to end')]
+    op: click
+open_full_view_log:
+  action: open_in_new_window
+  action: check_log_context
+check_log_context_on_deployed_deployment_page:
+  action: goto_one_deployment_page
+  action: check_log_tab_on_deployed_deployment_page
+  action: check_deployed_log_context
+check_log_context_on_pod_page:
+  action: goto_one_pod_page
+  action: check_log_tab_on_pod_page
+  action: check_running_log_context

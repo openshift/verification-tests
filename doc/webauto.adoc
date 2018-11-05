@@ -1,0 +1,534 @@
+= Web scenarios browser automation
+
+
+== Knowledge needed to understand this doc
+* YAML basics (look https://www.w3.org/TR/xpath/[here] or on the https://en.wikipedia.org/wiki/YAML#Basic_components[wiki page])
+* what is scenario, step, step definition
+
+== Abstract
+The "web rules" represent whole structure we are using for web automation.
+The web rules were implemented for several reasons:
+
+* separate web automation from the BushSlicer core.
+* allow cross-browser && cross-version testing with one feature file.
+* make Scenarios maintenance easier when new releases coming.
+* provide neat way of communication with browser.
+
+At the root level of the `*.xyaml` file we do always have an `action` rule, which could
+consist of the following rules:
+
+* `action:`
+* `url:`
+* `element:`/`elements:`
+* `scripts:`
+* `params:`
+
+Any combination of rules could be used to locate required elements on the web
+page and perform operations on it.
+
+== Web Rules
+=== Action
+Each action has a `name`. Only by this name action could be
+called from the `*.feature` file. The action with name `empty_action`
+could be created as:
+`empty_action: {}`
+
+Reusing of existing actions or combining own is possible with `action` keyword:
+
+[source,yaml]
+----
+parent_web_rule:
+  action: child_web_rule_1
+  action: child_web_rule_2
+child_web_rule_1:
+  url: /console
+child_web_rule_2:
+  element:
+    selector:
+      text: Login
+----
+
+Actions could run optionally if some defined conditions were met.
+
+==== `if_element:`
+Example with element condition:
+
+[source,yaml]
+----
+click_save_button_if_exists:
+  action:
+    if_element:
+      selector:
+        tag_name: button
+        text: Save
+    ref: click_save_button
+----
+
+In the example above the `click_save_button` action will run only in case
+when `selector` rule can successfully select an element on the page.
+
+==== `if_param:`
+Set of examples with parameter condition:
+
+* to check if parameter key was defined:
+
+[source,yaml]
+----
+single_param_name_condition:
+  action:
+    if_param: namespace
+    ref: do_smth_with_namespace
+----
+
+* to check if several parameter keys were defined:
+
+[source,yaml]
+----
+multiple_param_name_condition:
+  action:
+    if_param:
+    - namespace
+    - image
+    ref: do_smth_with_namespace_and_image
+----
+
+* to check if parameter key and value were defined:
+
+[source,yaml]
+----
+param_condition:
+  action:
+    if_param:
+      namespace: openshift
+    ref: do_smth_with_openshift_namespace
+----
+
+==== `context:`
+This rule is used to reduce complexity of xpaths where you need to check
+multiple elements inside one or to work with elements, which are inside an iframe.
+Specify an element selector with `context` rule to work inside it.
+`ref` action and all nested actions will run against specified `context` element.
+
+[source,yaml]
+----
+iframe_context_action:
+  action:
+    context:
+      tag_name: iframe
+    ref: do_smth_in_iframe
+do_smth_in_iframe:
+  element:
+    selector:
+      xpath: //div
+----
+
+All xpaths which run against element context node should be relative:
+
+[source,yaml]
+----
+element_context_action:
+  action:
+    context:
+      xpath: //container
+    ref: do_smth_in_container
+do_smth_in_container:
+  elements:
+  - selector:
+      xpath: ./h2[text()='State']
+  - selector:
+      xpath: ./h2[text()='Ready']
+----
+
+==== `ref:`
+As you already could noticed this rule is used to reference another action which
+will run if all conditions were met or context was successfully provided. Also
+you can run multiple actions:
+
+[source,yaml]
+----
+single_param_name_condition:
+  action:
+    if_param:
+      more_actions: true
+    ref:
+    - first_action
+    - middle_action
+    - last_action
+----
+
+=== URL redirection
+URL can be opened with the following rule:
+
+[source,yaml]
+----
+open_console_url:
+  url: /console
+----
+
+If provided url is relative, then an absolute URL will be constructed based on the `Web4Cucumber#base_url`.
+For console cases, this will be automatically set to `Environment#web_console_url`.
+For browsers created for testing images or other purposes, then the step creating the browser
+should make sure to set correct `base_url` in the `Web4Cucumber` constructor.
+You can check `I have a browser with:` step for an example how to do so.
+
+=== Elements
+To select an element on web page `element` and following `selector` should be
+provided.
+
+[source,yaml]
+----
+select_single_element:
+  element:
+    selector:
+      text: hello world
+----
+
+If there is need to select multiple elements, then `elements` and list
+of `selector`s can be provided:
+
+[source,yaml]
+----
+select_multiple_elements:
+  elements:
+  - selector:
+      text: hello
+  - selector:
+      text: world
+----
+
+This is nicer but equivalent in function to:
+
+[source,yaml]
+----
+select_multiple_elements:
+  element:
+    selector:
+      text: hello
+  element:
+    selector:
+      text: world
+----
+
+Following element rules could be used to select and use an element:
+
+==== `selector:`
+To locate required element on the page various selectors could be used. General
+selectors listed in the http://www.rubydoc.info/gems/watir-webdriver/0.9.1/Watir/ElementLocator#WD_FINDERS-constant[WD_FINDERS] constant.
+HTML element property selectors listed https://github.com/watir/watir/blob/master/lib/watir/elements/html_elements.rb#L4-L94[here] and in
+https://github.com/watir/watir/blob/master/lib/watir/locators/element/selector_builder.rb#L6[RE].
+Example with `xpath:` selector:
+
+[source,yaml]
+----
+rule:
+  element:
+    selector:
+      xpath: //body
+----
+
+If the element can't be found with any of options above, JavaScript code
+could be used:
+
+[source,yaml]
+----
+rule:
+  element:
+    selector: |
+      return document.getElementsByTagName("input");
+    type: js
+----
+
+==== `type:`
+Subtype of the element could be specified. Currently supported types are listed
+in the https://github.com/openshift/BushSlicer/blob/master/lib/webauto/web4cucumber.rb#L13-L28[FUNMAP] constant.
+
+==== `op:`
+After the element was successfully found `click`,`hover`,`clear`,`set`,
+`send_keys`,`drag_and_drop_by`,`select_value` or `append` operations could be
+performed:
+
+[source,yaml]
+----
+rule:
+  element:
+    selector:
+      xpath: //input
+    op: send_keys <value>
+----
+
+the `op` which could be performed on the element depends on the element type.
+Full picture of `element_type` - `op` сorrespondence can be found in the
+https://github.com/openshift/BushSlicer/blob/master/lib/webauto/web4cucumber.rb#L391-L429[source].
+
+==== `missing:`
+**default:false**
+
+This option can be used for negative checks. When you need to make sure that
+particular element can**not** be found on the page.
+
+WARNING: Be aware that this option could give *false positive result* when the
+page is not loaded completely. Don't use this option right after page
+redirection took place.
+
+==== `optional:`
+**default:false**
+
+With this property web rule will not fail when requested element was not found.
+
+==== `timeout:`
+**default:10**
+
+Set maximum number of seconds to wait for the element before fail.
+
+=== JS code
+If required actions can't  be implemented with standard ways listed above, then
+**JavaScript** code could be executed on the web page:
+
+[source,yaml]
+----
+run_js_code:
+  scripts:
+  - command: |
+        console.log("Nice")
+        return true;
+    expect_result: true
+----
+
+Make sure, that your return value is matching the `expected_result`.
+
+==== `command:`
+The JavaScript code could be placed inline in the `*.xyaml` file.
+
+==== `file:`
+This option take as a parameter name of the JavaScript file located in the
+`/lib/rules/web/snippets/` directory. The `snippets` directory can be specified in the `Web4Cucumber` constructor.
+
+=== JavaScript Snippets
+
+All this snippets were created to keep web rules cleaner and don't copy
+the same code between different versions. If you want to add another snippet -
+make sure that you code is (almost) not affected by cluster version.
+
+==== `jquery.simulate.drag-sortable.js`
+This snippets is used to simulate drag&drop in jQuery sortable list.
+Basically this is a jQuery extension, which could be used to move selected
+element in the list on some number of positions above/below. See example:
+
+[source,yaml]
+----
+reorder_environment_variable:
+  scripts:
+  - file: jquery.simulate.drag-sortable
+    expect_result: true
+  - command: |
+        $(html_element).simulateDragSortable({ move: 1, handle: ".as-sortable-item-handle"});
+        return true;
+expect_result: true
+----
+
+Here we are trying to move `html_element` 1 position below by the handle with
+`as-sortable-item-handle` class.
+
+==== `json-patch.js`
+The library stored in `window.qe_jsonpatch` variable.
+
+Look at http://jsonpatch.com/ to see existing operations.
+Example of usage:
+
+[source,yaml]
+----
+pathc_json:
+  scripts:
+  - file: json-patch
+    expect_result: ~
+  - command: |
+        let json_object = {
+              "baz": "qux"
+            },
+            patch = [
+              { "op": "replace", "path": "/baz", "value": "boo" }
+            ],
+            result_json = '{"baz":"boo"}';
+        window.qe_jsonpatch.apply(json_object, patches);
+        return JSON.stringify(json_object) == result_json;
+expect_result: true
+----
+
+==== `ace-editor.js`
+The library stored in `window.qe_ace_editor` variable.
+
+This snippet provide you an easy way to communicate with ace editor on the page.
+Example of usage:
+
+[source,yaml]
+----
+patch_ace_editor_content:
+  scripts:
+  - file: json-patch
+    expect_result: ~
+  - file: ace-editor
+    expect_result: ~
+  - command: |
+        editor = ace.edit("<editor_id>");
+        window.qe_ace_editor.patch(editor, "<content_type>", <patch>);
+        return true;
+expect_result: true
+----
+
+The `qe_ace_editor` function takes as parameters:
+
+* `editor` - object which you can get by calling `ace.edit(editor_id);` or `ace.edit(editor_element);`
+* `content_type` - type of content in the editor ("JSON" or "YAML")
+* `patch` - actual patch you want to apply to the content (look at `json-patch`)
+
+=== Parameters
+To make web rule widely usable for many Scenarios there is an option to provide
+parameters within the table from the step:
+
+[source,yaml]
+----
+| tab_name     | fromFile |
+| project_name | xxxxx    |
+----
+
+In the web rule, provided parameter will be replaced by <key>:
+
+[source,yaml]
+----
+goto_dc_tab:
+  url: /console/project/<project_name>/create?tab=<tab_name>
+----
+
+Also you could set default parameters directly in the web rule:
+
+[source,yaml]
+----
+lets_use_default_params:
+  params:
+    project_name: hello_world
+    tab_name: configuration
+  url: /console/project/<project_name>/create?tab=<tab_name>
+----
+
+They will be overwritten with parameters provided with the step table.
+
+== How to call the web rule from Scenario?
+There are two common ways to call web rules from `*.feature` file:
+
+* without parameters:
+
+`I run the :web_rule_name web console action`
+
+* with parameters:
+
+[source,yaml]
+----
+I perform the :web_rule_name web console action with:
+  | param | value |
+----
+
+== Where can I find all the web rules?
+
+All existing web rules stored under the `lib/rules/web/console/<version>/`
+directory. Rules will be taken from appropriate version folder, depending on
+the environment version. Make sure to create new web rules for each version
+automated test case could run on.
+
+== Browser initialization options
+
+WebconsoleExecutor automatically checks for a `browser_opts.yml` within the
+version directory. If this file exists, it is parsed and merged with browser
+initialization parameters when creating the object.
+
+== Browser Hooks
+
+Hooks are useful to wrap around different operations and take actions - for
+example, to correct errors. Presently one use case is to workaround an issue
+where a secondary navigation menu is expanded on page load and covers some
+elements. Clicking on these elements results in a webdriver error.
+
+Check `lib/rules/web/console/7/browser_opts.yml` for the `:click` hook. Also
+check `web4cucumber.rb` where `#with_hook` is called to see existing hooks.
+Hooks will be added wherever we need to workaround some issue that makes
+testing unreliable. For example, if some version of console fails often on
+some particular operation, we can add a hook to detect that error and retry the
+operation.
+
+== XYAML vs YAML
+
+XYAML format allows us to use multiple rules in a single action with the same
+key, which will be parsed as an `Array` rather than a `Hash` with YAML:
+
+[source,yaml]
+----
+parent_action:
+  action: first
+  action: second
+  element: {...}
+  element: {...}
+----
+
+As YAML, XYAML supports anchoring. Be aware that anchors work only in the same
+file and there is no magic(https://developer.mozilla.org/en-US/docs/Glossary/Hoisting[hoisting]) in the XYAML: first - declare, then - use:
+
+[source,yaml]
+----
+# this would work
+action:
+  element: &anchor
+    xpath: ...
+another_action:
+  element:
+    <<: *anchor
+
+# this wouldn't
+another_action:
+  element:
+    <<: *anchor
+action:
+  element: &anchor
+    xpath: ...
+----
+
+== Good practices
+
+* Don't duplicate the rules!
+* Rule name should be unique, meaningful and short.
+* Always try to write unique xpath, which will select only one element.
+* Avoid using `Then the step should fail` for negative tests.
+* Use `$x("<xpath expression>")` in browser debug console to test if we could find specific element.
+* Use a simple ruby code `require 'yaml';YAML::load_file("<web_rule_file_path>")` to
+check whether the changed `*.xyaml` file has valid format.
+* To see all occurrences of specific web rule in the project use `grep -rnw '<project_path>' -e "<web_rule_name>"`.
+* Try to be aware of any changes in this doc :D
+
+== FAQ
+
+* Q: Could you explain why we should avoid using `Then the step should fail` step for negative tests?
+** A: When we are trying to check if element is missing on the page we need to wait for default timeout before the rule will fail. This was one of the reason to include `missing:` option.
+
+* Q: Why do we need to create an empty actions in web auto?
+** A: Our Scenarios in *.feature files are permanent for all version, but our web rules separated by version folder. Intention was to put all possible checks and operations which could change with upcoming releases to the web rules. So when we have new release we could just change web rules in appropriate folder and left Scenario untouched(so it works for previous version fine without any additional changes). Sometimes it happens that in new release we don't need action which was performed for previous releases, in this case we could left this action empty(If we'll simply delete this action, then Scenario will fail cause it couldn't find this action). For example look https://github.com/openshift/BushSlicer/search?utf8=%E2%9C%93&q=save_updated_env_value&type=[here]. We had separated "save button" for each env value in the second version, but when the editor was changed and this action is useless, so we just replaced the action content with {}.
+
+== Debugging Javascript in Firefox/Chrome
+
+When performing UI testing, and working with the automated framework, sometimes it's important or helpful to see what Javascript is doing. Often puzzling or troubling bugs will become immediately clear when you use the Javascript inspector and console debugger features that come standard with Firefox and Chrome.
+
+
+To use these tools, first navigate to a web page that you wish to debug (for MacOS, these commands may be slightly different).
+
+* In Firefox, either right click on the page, and navigate to `Inspect Element (Q)`, or hit `F-12`.
+* In Chrome, either right click on the page, and navigate to `Inspect` or hit `Ctrl-Shift-J`.
+
+Once the inspector appears, you can look at several things, including a console, a debugger, and a network analyzer among others. Please reference the Firefox or Chrome docs at the end of each point for a detailed explanation of the tool, including videos.
+
+* The inspector pane will show you the HTML and CSS layout of a page. You can search the HTML tree for element items in the `Search HTML` box at the top of the pane, and you can also look for CSS rules and styles in the right-hand side of the pane. You can also directly edit CSS and HTML with this feature. [Page Inspector - Firefox Developer Tools | MDN](https://developer.mozilla.org/en-US/docs/Tools/Page_Inspector)
+* The network pane will allow you to see which elements are loaded int he page, how fast they were loaded, and any ajax requests. It will also let you see actual return and send values for requests. You may need to refresh the page to see this. [Network Monitor - Firefox Developer Tools | MDN](https://developer.mozilla.org/en-US/docs/Tools/Network_Monitor)
+* The console pane will let you directly manipulate and view Javascript values. This is the most important feature for diagnosing Javascript issues. For example, in this pane, we can view console values with console.log(), and can evaluate xpath expressions using the $x() feature. [Web Console - Firefox Developer Tools | MDN](https://developer.mozilla.org/en-US/docs/Tools/Web_Console)
+* The debugger pane is a classical IDE debugger, where you can set breakpoints in the actual Javascript code, and re-run it. If code is minified, you can select the {} button, to pretty-print the code, set break points, and re-run the code, changing and viewing values. [Debugger - Firefox Developer Tools | MDN](https://developer.mozilla.org/en-US/docs/Tools/Debugger)
+
+For chrome, the same instructions can be located here: [Chrome DevTools  |  Tools for Web Developers  |  Google Developers](https://developers.google.com/web/tools/chrome-devtools/)
+
+BushSlicer specific concerns:
+
+At times, it is difficult to diagnose an automated run. To debug Javascript or HTML issues, it is preferred to diagnose a testcase locally. If this is not possible, insert `console.log()` print lines in the Javascript of the test case, to print out values that would otherwise be hidden. Liberal use of `pry` commands to freeze on a particular step aid in the debugging process as well.

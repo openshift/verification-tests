@@ -1,0 +1,97 @@
+#--------filter function ----------
+check_all_resources_tags_include:
+  scripts:
+  - command: return document.evaluate('count(//div[@class="catalog"]/div)=count(//div[@class="catalog"]/div[//div/a[@title="Filter by tag <tag_name>"]])', document, null, XPathResult.ANY_TYPE, null )["booleanValue"];
+    expect_result: true
+check_all_resources_tags_contain:
+  scripts:
+  - command: return document.evaluate('count(//div[@class="catalog"]/div)=count(//div[@class="catalog"]/div[//div/a[contains(.,"<tag_name>")]])', document, null, XPathResult.ANY_TYPE, null )["booleanValue"];
+    expect_result: true
+filter_resources:
+  elements:
+  - selector:
+      placeholder: 'Filter by label '
+    op: send_keys <label_key>
+    type: input
+  - selector:
+      xpath: //div[@class='selectize-dropdown-content']/div[contains(@data-value,'<label_key>')]
+    op: click
+  - selector:
+      xpath: //div[@class='selectize-dropdown-content']/div[text()='<filter_action>']
+    op: click
+  - selector:
+      xpath: //div[@data-value='<label_value>']
+    op: click
+  - selector:
+      class: label-filter-add
+    type: button
+    op: click
+filter_resources_with_non_existing_label:
+  elements:
+  - selector:
+      placeholder: 'Filter by label '
+    op: send_keys <label_key>
+    type: input
+  - selector:
+      placeholder: 'Filter by label '
+    op: send_keys <press_enter>
+    type: input
+  - selector:
+      xpath: //div[text()='<filter_action>']
+    op: click
+  - selector:
+      placeholder: 'Value(s)'
+    op: send_keys <label_value>
+    type: input
+  - selector:
+      placeholder: 'Value(s)'
+    op: send_keys <press_enter>
+    type: input
+  - selector:
+      class: label-filter-add
+    type: button
+    op: click
+
+filter_resources_with_exists_option:
+  elements:
+  - selector:
+      placeholder: 'Filter by label '
+    op: send_keys <label_key>
+    type: input
+  - selector:
+      xpath: //div[@class='selectize-dropdown-content']/div[contains(@data-value,'<label_key>')]
+    op: click
+  - selector:
+      xpath: //div[text()='<filter_action>']
+    op: click
+  - selector:
+      class: label-filter-add
+    type: button
+    op: click
+
+clear_one_filter:
+  elements:
+  - selector:
+      xpath: //a/span[text()='<filter_name>']
+    op: click
+clear_all_filters:
+  elements:
+  - selector:
+      xpath: //a/span[text()='Clear filters']
+    op: click
+click_clear_filter_link:
+  element:
+    selector:
+      xpath: //a[contains(.,'Clear filter')]
+    op: click
+click_filter_box:
+  elements:
+  - selector:
+      placeholder: 'Filter by label '
+    op: click
+    type: input
+check_suggested_label:
+  elements:
+  - selector:
+      xpath: //div[@class='selectize-dropdown-content']/div[contains(@data-value,'<label>')]
+check_suggested_label_on_overview_page: {}

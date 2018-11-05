@@ -1,0 +1,13 @@
+{lib,features,private}//**/*.rb
+{features,private/features}/**/*.feature
+- lib/client/*yaml lib/rest/*yaml doc/*md doc/overview.html
+--tag normal_tag:"normal tag"
+--name-tag name_tag:"name tag"
+--type-tag type_tag:"type tag"
+--type-name-tag type_name_tag:"type name tag"
+--type-name-tag 'association:Associations'
+--title-tag title_tag:"It's a title"
+--type-name-tag arg:"Valid arguments"
+--tag shell:"Equivalent shell commands"
+--tag rest:"Rest URL"
+--tag wrapper:"Wrapper step"

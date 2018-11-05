@@ -1,0 +1,58 @@
+= High Level BushSlicer v3 Overview
+
+== Knowledge needed to understand this doc
+
+* basic programming and ruby
+* Cucumber basics (look at http://cucumber.io for getting started)
+** what is scenario, step, step definition, World, hook
+** where do you usually find the above things
+
+== Requirements
+
+* ruby 2.2.2 or newer
+* Cucumber 2.0 or newer
+* proper passwordless ssh setup to test environments (when needed in scenario)
+* DNS setup such that routes created by OpenShift have locally resolvable DNS names
+* certificates generated for OpenShift environment should have the hostnames used to access environment by framework included; e.g. if we access master by DNS name master.test.example.com, then certificate should be valid for that name; it happens this to not be the case that's why I'm listing it here!
+* so far linux and mac are supported, hopefully in the future other platforms will be supported as well
+
+== How do we extend Cucumber
+
+=== env.rb
+Everything in cucumber starts with `features/support/env.rb` and other `.rb` files defined in there. `env.rb` defines initial configuration, what happens before/after scenarios and at exit. That's done using the standard Cucumber hooks.
+
+We try to keep `env.rb` small as an overview what happens at different stages. Most logic is implemented in other classes. We load these classes by adding to ruby load path the `lib/` directory so we can do `require 'some_file'` and have it loaded in our ruby environment.
+
+=== DefaultManager
+
+Manager is a class we define to keep and manage our global state. That mean everything not belonging to particular scenario. For example `environments`, `logger`, `formatter/test case manager` and other objects we need to clean-up at some point or have access to.
+
+The DefaultManager class has the singleton properties that we can have only one object instance of it and can alway access that instance by calling `Manager.instance`.
+
+=== DefaultWorld
+
+For every scenario a new object of that class is created. This is the context we execute most our code in. The scenarios (or actually the code inside step definitions) is run within that context. See also included modules in the beginning of the DefaultWorld class definition to see all methods available for use. There are a lot of helper and convenience methods.
+
+=== Environments
+
+Environment means a testing OpenShift environment with all its hosts. We have most everything else handled by individual Environments. User manager, cli rules executors, admin rules executors, web console rules executors, etc.
+
+=== Other objects we use for testing
+
+These classes are all defined under `lib/`. Classes that directly correspond to OpenShift resources are under `lib/openshift/`, e.g. Project, Pod, Service, etc.
+
+=== Custom HTML logging and test case management
+
+see `test_case_management.adoc`
+
+=== Public/Private
+
+In the BushSlicer::PRIVATE dir (see `lib/cucumber.rb`) we can have other classes and configuration that expose internal information or is security sensitive (keys for test services, etc.). We intend to have most of the code open sourced so we keep anything forbidden to public in the PRIVATE dir. It is a separate git internal repo.
+
+In the beginning of our `env.rb` we have a call to `PRIVATE/env.rb` if it exists. So any private code can be injected in this way, including to substitute DefaultWorld and DefaultManager.
+
+Also we load configuration from PRIVATE dir if such exists but see more about this in `configuration.adoc`.
+
+== Configuration
+
+see `configuration.adoc`

@@ -1,0 +1,51 @@
+#----check service page-----
+check_service_list_page:
+  action: goto_services_page
+  elements:
+  - selector:
+      text: <service_name>
+    type: a
+check_no_grouped_services: {}
+check_one_service_page:
+  action: goto_one_service_page
+  elements:
+  - selector:
+      text: <service_name>
+  - selector:
+      xpath: //span[contains(text(),'<selectors>')]
+  - selector:
+      text: <type>
+  - selector:
+      text: <routes>
+    type: a
+  - selector:
+      text: <target_port>
+check_target_port_on_services_page:
+  action: goto_services_page
+  elements:
+  - selector:
+      xpath: //td[@data-title="Name"]/a[contains(text(),'<service_name>')]
+  - selector:
+      xpath: //td[@data-title="Ports"]/span[contains(text(),'<target_port>')]
+goto_services_page:
+  url: console/project/<project_name>/browse/services
+goto_one_service_page:
+  url: console/project/<project_name>/browse/services/<service_name>
+check_redirection_to_service_page:
+  params:
+    resource: Services
+    name: <service_name>
+  action: check_redirection_to_resource_page
+check_resource_details_list_on_service_page:
+  elements:
+  - selector:
+      xpath: //dl[dt[text()="Selectors:"] and dt[text()="Type:"] and dt[text()="IP:"] and dt[text()="Hostname:"] and dt[text()="Session affinity:"]]
+  - selector:
+      xpath: //traffic-table//tr[th[text()="Route"] and th[text()="Service Port"] and th[text()="Target Port"] and th[text()="Hostname"] and th[text()="TLS Termination"]]
+  - selector:
+      xpath: //pods-table//tr[th[text()="Pod"] and th[text()="Status"] and th[text()="Containers Ready"] and th[text()="Container Restarts"] and th[text()="Age"] and th[text()="Receiving Traffic"]]
+check_pod_without_endpoints_error_on_service_page:
+  elements:
+  - selector:
+      xpath: //td[@data-title='Receiving Traffic']//span[contains(@data-content,'This pod has no endpoints and is not accepting traffic')]
+    timeout: 30

@@ -1,0 +1,130 @@
+# --- This is register different cluster plans related page
+
+check_free_plan_info:
+  elements:
+  - selector:
+      xpath: //*[contains(text(),'Starter')]
+  - selector:
+      text: 1 Project
+  - selector:
+      text: 1GiB Memory Included
+  - selector:
+      text: 1GiB Terminating Memory Included
+  - selector:
+      text: 1GiB Storage Included
+  - selector:
+      text: Resource Hibernation
+  - selector:
+      xpath: //*[contains(@data-content,"terminating resource quota applies to pods with an active deadline") and contains(@data-content, "usually include builds, deployers, and jobs")]
+  - selector:
+      xpath: //*[contains(@data-content,"project resources sleep after 30 minutes of inactivity") and contains(@data-content, "must sleep 18 hours in a 72 hour")]
+  - selector:
+      xpath: //*[@href="/register/confirm" and contains(., "FREE")]
+check_starting_at_fifty_dollars_per_month:
+  element: &start_pro
+    selector:
+      xpath: //*[@href='/register/pro_cluster' and contains(., 'Starting at $50.00/Month')]
+check_pro_plan_info:
+  elements:
+  - selector:
+      xpath: //*[contains(text(),'Pro')]
+  - selector:
+      text: For professional projects and hosting.
+  - selector:
+      text: 10 Projects
+  - selector:
+      xpath: //*[contains(.,'2GiB Memory Included')]
+  - selector:
+      xpath: //*[contains(., "2GiB Terminating Memory Include")]/*[contains(@data-original-title,"Terminating Resources")]
+    op: click
+  - selector:
+      xpath: //*[@data-original-title="Terminating Resources"]
+    op: hover
+  ## need mouse hover first to see this text
+  - selector:
+      xpath: //*[contains(., 'terminating resource quota applies to pods with an active deadline')]
+  - selector:
+      xpath: //*[contains(.,'Up to 48GiB Memory')]
+  - selector:
+      xpath: //*[contains(.,'Up to 150GiB Storage')]
+  - selector:
+      xpath: //*[contains(.,'Up to 20GiB Terminating Memory')]
+  - selector:
+      text: Always On, Unlimited Usage
+  - selector:
+      text: Invite Collaborators to Projects
+  - selector:
+      text: Supports Custom Domains
+  - selector:
+      text: Scheduled Jobs
+  action: check_starting_at_fifty_dollars_per_month
+click_starting_at_fifty_dollars_per_month:
+  element:
+    <<: *start_pro
+    op: click
+go_to_register_plan:
+  url: ../../register/plan
+  element:
+    selector:
+      text:  Select a Plan
+go_to_register_pro_cluster_page:
+  action: go_to_register_plan
+  action: click_starting_at_fifty_dollars_per_month
+  elements:
+  - selector:
+      text: Select Your Preferred Cluster/Region
+  - selector:
+      xpath: (//*[contains(@href, 'register/profile') and contains(., 'Online') and contains(., 'Environment')])[1]
+    op: click
+check_fuse_small_plan_info:
+  elements:
+  - selector:
+      xpath: //*[contains(text(),'Fuse Online')]
+  - selector:
+      text: Integrate everything—fast and online.
+  - selector:
+      text: Starting at 5 Integrations
+  - selector:
+      text: Starting at 8GiB Memory
+  - selector: 
+      text: Starting at 5GiB Storage
+  - selector:
+      text: Starting at 16 vCPU
+  - selector:
+      text: Up to 100 Storage Volumes Available
+  - selector:
+      text: Connectors Included
+  - selector:
+      text: Basic Support
+  action: check_starting_at_for_fuse
+check_starting_at_for_fuse:
+  elements:
+  - selector:
+      xpath: //a[@class='btn btn-lg btn-primary btn-block' and @href='/register/fuse/plans'][contains(text(),'Starting at $650/Month')]
+go_to_register_fuse_profile_page:
+  action: go_to_register_plan
+  action: click_starting_at_sixhundredandfifty_dollars_per_month
+  action: click_small_size_for_fuse_plan
+  elements:
+  - selector:
+      xpath: (//*[contains(@value, 'Online') and contains(@value, 'Environment')])[1]
+    op: click
+go_to_fuse_cluster_page:
+  action: go_to_register_plan
+  action: click_starting_at_sixhundredandfifty_dollars_per_month
+  action: click_small_size_for_fuse_plan
+click_starting_at_sixhundredandfifty_dollars_per_month:
+  elements:
+  - selector:
+      xpath: //a[@class='btn btn-lg btn-primary btn-block' and contains(text(),'Starting at $650/Month')]
+    op: click
+check_fuse_cluster_region_info:
+  elements:
+  - selector:
+      text: Select Your Preferred Cluster/Region
+  - selector:
+      xpath: //li[@class="active"]/a[contains(@href, '/register/fuse/clusters')]//span[contains(.,"Cluster Regions")]
+  - selector:
+      xpath: //p[contains(.,"Your Fuse Online Plan will be provisioned in your preferred cluster/region.") and contains(.,"your account will remain queued and will") and contains(.,"An email will be delivered to")]
+  - selector:
+      xpath: (//*[contains(@value, 'Online') and contains(@value, 'Environment')])[1]

@@ -1,0 +1,26 @@
+--- # perform operations with ace editor
+patch_ace_editor_content:
+  params:
+    editor_xpath: //div[contains(@class,'editor')]
+  scripts:
+  - file: json-patch
+    expect_result: ~
+  - file: ace-editor
+    expect_result: ~
+  - command: |
+        // documentation: https://developer.mozilla.org/en-US/docs/Web/API/Document/evaluate
+        editor_element = document.evaluate(`<editor_xpath>`, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+        editor = ace.edit(editor_element);
+        window.qe_ace_editor.patch(editor, "<content_type>", <patch>);
+        return true;
+    expect_result: true
+set_ace_editor_content:
+  params:
+    editor_xpath: //div[contains(@class,"editor")]
+  scripts:
+  - command: |
+        editor_element = document.evaluate(`<editor_xpath>`, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+        editor = ace.edit(editor_element);
+        editor.setValue(`<content>`);
+        return true;
+    expect_result: true

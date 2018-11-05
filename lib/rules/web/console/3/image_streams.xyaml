@@ -1,0 +1,113 @@
+#---check image stream
+check_empty_image_streams_page:
+  action: goto_image_streams_page
+  elements:
+  - selector: 
+      xpath: //tbody[@class='ng-scope']//em[contains(text(), 'No image streams to show')]
+check_image_streams:
+  elements:
+  - selector:
+      xpath: //a[ancestor::table and contains(text(), '<is_name>')]
+check_is_tag_basic_page:
+  elements:
+  - selector:
+      xpath: //a[contains(@href,'<image_name>/<istag>')]
+    type: a
+    op: click
+  - selector:
+      xpath: //li//uib-tab-heading[text()='Details']
+  - selector:
+      xpath: //li//uib-tab-heading[text()='Config']
+  - selector:
+      xpath: //li//uib-tab-heading[text()='Layers']
+check_is_tag_details_tab:
+  elements:
+  - selector:
+      xpath: //dt[text()="Digest"]/ancestor::registry-image-body//dd/tt[contains(text(),'<digest>')]
+  - selector:
+      xpath: //dt[text()="Docker Version"]/ancestor::registry-image-meta//dd[contains(text(),'<docker_version>')]
+  scripts:
+  - command: |
+        var el = document.querySelectorAll('dd[ng-repeat="(name, value) in image.metadata.annotations"]')
+        var value = []
+        for (var i=0; i<el.length; i++) {
+          value.push(el[i].textContent)
+        }
+        return value.toString() == <annotations>
+    expect_result: true
+  - command: |
+        var el = document.querySelectorAll('dd[ng-repeat="(name, value) in labels"] tt')
+        var value = []
+        for (var i=0; i<el.length; i++) {
+          if (el[i].textContent.indexOf("build-date=") == -1) {
+            value.push(el[i].textContent)
+          }
+        }
+        return value.toString() == <labels>
+    expect_result: true
+check_is_tag_config_tab:
+  elements:
+  - selector:
+      xpath: //li//uib-tab-heading[text()='Config']
+    op: click
+  - selector:
+      xpath: //dt[contains(text(),'Command:')]/../dd/code[contains(text(),'<config_cmd>')]
+  - selector:
+      xpath: //dd[@ng-if="config.User" and contains(text(),'<run_as>')]
+  - selector:
+      xpath: //dd[@ng-if="config.WorkingDir" and contains(text(),'<workdir>')]
+  - selector:
+      xpath: //dd[contains(@ng-repeat,"config.ExposedPorts") and contains(text(),'<ports>')]
+  scripts:
+  - command: |
+        var el = document.querySelectorAll('dd[ng-repeat="env in config.Env"] tt')
+        var value = []
+        for (var i=0; i<el.length; i++) {
+          value.push(el[i].textContent)
+        }
+        return value.toString() == <config_env>
+    expect_result: true
+check_is_tag_layers_tab:
+  element:
+    selector:
+      xpath: //li//uib-tab-heading[text()='Layers']
+    op: click
+  scripts:
+  - command: |
+        var el = document.querySelectorAll('li[ng-repeat="layer in layers"] p')
+        var value = []
+        for (var i=0; i<el.length; i++) {
+          value.push(el[i].innerHTML)
+        }
+        return value.length.toString() == <layers_len>
+    expect_result: true 
+check_one_image_stream:
+  action: goto_one_image_stream_page
+  action: click_show_annotations
+  elements:
+  - selector:
+      xpath: //td[contains(text(),"openshift.io")]
+  action: click_hide_annotations
+  elements:
+  - selector:
+      xpath: //table/tbody//td[@data-title='Tag']/a[text()='latest']
+    type: a
+  - selector:
+      xpath: //table/tbody//td[@data-title='From']//span[contains(text(),'<image_name>:')]
+  - selector:
+      xpath: //table/tbody//td[@data-title='Latest Image']//span//code
+  - selector:
+      xpath: //table/tbody//td[@data-title='Created']//span[contains(@class,'timestamp')]
+  - selector:
+      xpath: //table/tbody//td[@data-title='Pull Spec']//div[contains(text(),'<image_name>')]
+check_deleted_image_stream:
+  action: goto_one_image_stream_page
+  elements:
+  - selector:
+      xpath: //alerts//span[contains(text(),'The image stream details could not be loaded')]
+  - selector:
+      xpath: //alerts//span[contains(text(),'"<image_name>" not found')]
+goto_image_streams_page:
+  url: /console/project/<project_name>/browse/images
+goto_one_image_stream_page:
+  url: /console/project/<project_name>/browse/images/<image_name>

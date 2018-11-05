@@ -1,0 +1,147 @@
+deploy_from_image_stream_tag_with_normal_image_stream:
+  action: deploy_image_navigate
+  action: select_namespace
+  action: select_image_stream
+  action: select_image_stream_tag
+deploy_from_image_stream_tag_with_image_stream_more_than_24_chars:
+  action: deploy_image_navigate
+  action: select_namespace
+  action: select_image_stream
+  action: select_image_stream_tag
+deploy_from_image_stream_tag_with_normal_is_and_change_name:
+  action: deploy_image_navigate
+  action: select_namespace
+  action: select_image_stream
+  action: select_image_stream_tag
+  action: change_deploy_image_name_to_another
+  action: check_deploy_image_name
+  action: click_create_button
+deploy_from_image_stream_name_with_nonexist_image:
+  action: deploy_image_navigate
+  action: choose_image_name_method
+  action: set_image_name
+  action: click_to_search
+  action: check_error_for_nonexist_image
+deploy_from_image_stream_name_with_env_label:
+  action: deploy_image_navigate
+  action: choose_image_name_method
+  action: set_image_name
+  action: click_to_search
+  action: add_env_name_and_value_on_deploy_image_page
+  action: add_label_name_and_value
+  action: click_create_button
+add_env_name_and_value_on_deploy_image_page:
+  elements:
+  - selector:
+      xpath: //osc-form-section[@header="Environment Variables"]/descendant::div//input[@placeholder="Name"]
+    op: send_keys <env_var_key>
+  - selector:
+      xpath: //osc-form-section[@header="Environment Variables"]/descendant::div//input[@placeholder="Value"]
+    op: send_keys <env_var_value>
+change_deploy_image_name_to_another:
+  elements:
+  - selector:
+      xpath: //input[@id="name"]
+    op: clear
+  - selector:
+      xpath: //input[@id="name"]
+    op: send_keys <new_deploy_image_name>
+check_deploy_image_name:
+  scripts:
+  - command: return document.getElementById("name").value == "<image_name>"
+    expect_result: true
+check_error_for_nonexist_image:
+  elements:
+  - selector:
+      xpath: //h2[contains(.,"Could not load image metadata")]
+  - selector:
+      xpath: //p[contains(.,"You may not have access to the Docker image")]
+check_error_for_less_than_2_chars:
+  elements:
+  - selector:
+      xpath: //div[@class="has-error"]/div[contains(.,"must have at least 2 characters")]
+check_error_for_invalid_chars:
+  elements:
+  - selector:
+      xpath: //div[@class="has-error"]/div[contains(.,"must be an alphanumeric (a-z, 0-9) string with a maximum length of 24 characters")]
+  - selector:
+      xpath: //div[@class="has-error"]/div[contains(.,"first character is a letter (a-z)")]
+check_error_for_empty_name:
+  elements:
+  - selector:
+      xpath: //div[@class="has-error"]/div[contains(.,"A name is required")]
+check_error_for_dash_started_or_end_with_dash:
+  elements:
+  - selector:
+      xpath: //div[@class="has-error"]/div[contains(.,"The '-' character is allowed anywhere except the first or last character")]
+choose_image_name_method:
+  elements:
+  - selector:
+      xpath: //label[contains(.,"Image Name")]/input[@type="radio"]
+    op: click
+click_to_search:
+  elements:
+  - selector:
+      xpath: //button[@ng-click="findImage()"]
+    op: click
+deploy_image_navigate:
+  url: /console/project/<project_name>/create
+  elements:
+  - selector:
+      xpath: //uib-tab-heading[contains(.,'Deploy Image')]
+    op: click
+  - selector:
+      xpath: //p[contains(.,'Deploy an existing image from an image stream tag or Docker pull spec')]
+    op: click
+select_namespace:
+  elements:
+  - selector:
+      xpath: //span[contains(@class,"ui-select-placeholder") and contains(.,"Namespace")]
+    op: click
+  - selector:
+      xpath: //label[contains(.,"Namespace")]/parent::div[contains(@class, 'form-group')]//a[@class="ui-select-choices-row-inner"]/div[contains(.,'<namespace>')]
+    op: click
+select_image_stream:
+  elements:
+  - selector:
+      xpath: //span[contains(@class,"ui-select-placeholder") and contains(.,"Image Stream")]
+    op: click
+  - selector:
+      xpath: //label[contains(.,"Image Stream")]/parent::div[contains(@class, 'form-group')]//a[@class="ui-select-choices-row-inner"]/div[contains(.,'<image_stream_name>')]
+    op: click
+select_image_stream_tag:
+  elements:
+  - selector:
+      xpath: //span[contains(@class,"ui-select-placeholder") and contains(.,"Tag")]
+    op: click
+  - selector:
+      xpath: //div[contains(@class,'ui-select-choices-row')][count(//div[contains(@class,'ui-select-choices-row')])]
+    op: click
+set_image_name:
+  elements:
+  - selector:
+      xpath: //input[@id="imageName"]
+    op: clear
+  - selector:
+      xpath: //input[@id="imageName"]
+    op: send_keys <image_deploy_from>
+set_name_with_1_char:
+  action: change_deploy_image_name_to_another
+  action: check_error_for_less_than_2_chars
+  action: check_create_button_disabled
+set_name_with_invalid_chars:
+  action: change_deploy_image_name_to_another
+  action: check_error_for_invalid_chars
+  action: check_create_button_disabled
+set_name_to_blank:
+  action: change_deploy_image_name_to_another
+  action: check_error_for_empty_name
+  action: check_create_button_disabled
+set_name_to_dash_started_string:
+  action: change_deploy_image_name_to_another 
+  action: check_error_for_dash_started_or_end_with_dash
+  action: check_create_button_disabled
+set_name_to_string_end_with_dash:
+  action: change_deploy_image_name_to_another
+  action: check_error_for_dash_started_or_end_with_dash
+  action: check_create_button_disabled

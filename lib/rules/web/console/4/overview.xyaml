@@ -1,0 +1,272 @@
+#---check project overview page
+check_project_overview_without_resource:
+  action: goto_overview_page
+  #check value in the select box
+  elements:
+  - selector:
+      text: Get started with your project.
+  - selector:
+      class: dropdown-toggle
+    type: button
+    op: click
+check_alert_info_for_add_health_checks:
+  elements:
+  - selector:
+      xpath: //div[@class="service-group" and .//h2[contains(.,"<app_name>")]]//span[contains(., "<dc_name> has containers without health checks, which ensure your application is running correctly.")]
+  - selector:
+      xpath: //a[contains(.,"Add health checks")]
+check_autoscaler_min_pod_on_overview_page:
+  action: goto_overview_page
+  element:
+    selector:
+       xpath: //div[contains(.,'Autoscaled')]/span[contains(.,'min') and contains(.,'<min_pods>')]
+check_autoscaler_max_pod_on_overview_page:
+  action: goto_overview_page
+  element:
+    selector:
+       xpath: //div[contains(.,'Autoscaled')]/span[contains(.,'max') and contains(.,'<max_pods>')]
+check_build_info_on_overview_page:
+  elements:
+  - selector:
+      xpath: //div[@class="builds-block" and contains(.,"<build_config>")]
+  - selector:
+      xpath: //div[@class="builds-block" and contains(.,"<build_id>")]
+  - selector:
+      xpath: //div[@class="builds-block" and contains(.,"<build_status>")]
+check_deployment_config_link_info_on_overview:
+  elements:
+  - selector:
+      xpath: //a[@href="project/<project_name>/browse/dc/<dc_name>" and contains(.,"<dc_name>")]
+check_deployments_link_info_on_overview:
+  elements:
+  - selector:
+      xpath: //span[contains(.,'Deployment')]/following::a[contains(@href,"project/<project_name>/browse/deployments/<dc_name>/<deployments>")]
+check_deployments_rc_link_info_on_overview:
+  elements:
+  - selector:
+      xpath: //a[@href="project/<project_name>/browse/rc/<rc_name>"]
+check_view_log_link_info_on_overview:
+  elements:
+  - selector:
+      xpath: //a[contains(text(),'View Log') and contains(@href, "project/<project_name>/browse/builds/<bc_name>/<bc_build_id>?tab=logs")]
+check_pause_message_on_overview_page:
+  action: goto_overview_page
+  action: check_general_pause_message_on_overview_page
+  action: check_resume_option_exist_on_overview_page
+check_general_pause_message_on_overview_page:
+  element:
+    selector:
+       xpath: //div[contains(.,'Deployment is paused')]
+check_resume_option_exist_on_overview_page:
+  element:
+    selector:
+      xpath: //a[@role="button" and contains(.,'Resume')]
+check_pod_container_image:
+  elements:
+  - selector:
+      xpath: //div/span[contains(.,"<image_name>")]
+check_pod_container_ports:
+  elements:
+  - selector:
+      xpath: //div/span[contains(.,"<port>")]
+check_pod_container_info:
+  action: check_pod_container_image
+  action: check_pod_container_ports
+check_pod_info_on_overview:
+  scripts:
+  - command: return document.querySelector("text[class='c3-chart-arcs-title']").textContent.contains('<pod_display>')
+    expect_result: true
+check_pod_template_image_link:
+  elements:
+  - selector:
+      xpath: //div[contains(@class, 'pod-template-image')]/descendant::a[contains(@href,"project/<project_name>/browse/images/<image_name>")]
+check_pod_template_build_link:
+  elements:
+  - selector:
+      xpath: //div[contains(@class, 'pod-template-build')]/descendant::a[contains(@href,"project/<project_name>/browse/builds/<bc_name>/<bc_build_id>")]
+check_pod_template_source_info:
+  elements:
+  - selector:
+      xpath: //div[contains(@class, 'pod-template-build')]/descendant::div[contains(.,"Source")]
+  - selector:
+      xpath: //osc-git-link
+check_latest_deployment_version_on_overview:
+  element:
+    selector: # translate() used to make case insensitive check for resource_type (always use lower case <resource_type>)
+      xpath: //div[@class="overview-tile" and //div[@class="overview-tile-header" and //div[translate(normalize-space(text()),'DRS','drs')="<resource_type>" and //a[normalize-space(text())="<resource_name>"]]]]//span[contains(@class, "shield-number") and contains(text(), "<version>")]
+check_pod_template_image:
+  elements:
+  - selector:
+      xpath: //div//span[contains(.,'<image_name>')]
+check_overview_tile:
+  action: check_pod_template_image
+  action: check_pod_scaled_numbers
+check_standalone_rc_info_on_overview:
+  elements:
+  - selector:
+      xpath: //div[@class="component"]/div[@class="component-label" and contains(.,'Replication Controller')]/a[contains(.,'<rc_name>')]
+check_service_link_on_overview:
+  elements:
+  - selector:
+      xpath: //a[contains(text(),'<service_name>') and contains(@href, "project/<project_name>/browse/services/<service_name>")]
+check_standalone_pod_info_on_overview:
+  elements:
+  - selector:
+      xpath: //div[@class="component"]/span[contains(.,"<pod_name>")]
+check_route_link_on_overview:
+  elements:
+  - selector:
+      xpath: //div[@kind='Service']/descendant::a[contains(@href, "<route_host_name>")]
+check_dc_idle_text_on_overview:
+  action: check_idle_donut_text_on_overview
+  elements:
+  - selector:
+      xpath: //a[contains(.,'Start <previous_replicas> pod')]
+check_donut_text_on_overview:
+  action: goto_overview_page
+  elements:
+  - selector:
+      xpath: //div[@class="deployment-donut"]
+  scripts:
+    - command: return document.querySelectorAll('text[class=c3-chart-arcs-title] tspan')[0].innerHTML.contains("<donut_text>")
+      expect_result: true
+check_idle_donut_text_on_overview:
+  action: goto_overview_page
+  elements:
+  - selector:
+      xpath: //div[@class="deployment-donut"]
+  scripts:
+    - command: return document.querySelectorAll('text[class=c3-chart-arcs-title] tspan')[0].innerHTML.contains("Idle")
+      expect_result: true
+check_no_deployments_or_pods:
+  element:
+    selector:
+      xpath: //h2[contains(.,"No deployments or pods.")]
+check_no_grouped_serivce:
+  element:
+    selector:
+      xpath: //h2[contains(.,"No grouped services.")]
+click_close_alert:
+  element:
+    selector:
+      xpath: //div[@class="service-group"]//alerts//button
+    op: click
+click_confirm_cancel:
+  element:
+    selector:
+      xpath: //button[contains(.,"Yes, cancel")]
+    op: click
+click_cancel_and_confirm:
+  action: click_cancel
+  action: click_confirm_cancel
+click_create_route_on_overview:
+  element:
+    selector:
+      xpath: //a[contains(.,"Create Route")]
+    op: click
+click_resume:
+  element:
+    selector:
+      xpath: //a[@role="button" and contains(.,'Resume')]
+    op: click
+click_resume_on_overview_page:
+  action: goto_overview_page
+  action: click_resume
+click_wake_up_option_on_overview:
+  action: goto_overview_page
+  elements:
+  - selector:
+      xpath: //a[contains(.,'Start <previous_replicas> pod')]
+    op: click
+dismiss_build_log_on_overview:
+  elements:
+  - selector:
+      text: Dismiss
+    type: a
+    op: click
+goto_overview_page:
+  url: /console/project/<project_name>/overview
+check_pod_scaling_disabled:
+  elements:
+  - selector:
+      xpath: //a[@title='Scale up']
+    missing: true
+  - selector:
+      xpath: //a[@title='Scale down']   
+    missing: true
+check_pod_scaled_numbers:
+  elements:
+  - selector:
+      xpath: //*[name()='tspan'][@class='donut-title-big-pf'][text()='<scaled_number>']
+    timeout: 60
+check_pod_scaled_numbers_under_specified_resource:
+  elements:
+  - selector:
+      xpath: //div[normalize-space(text())="<resource_type>"]/a[text()='<resource_name>']/following::*[name()='tspan'][@class='donut-title-big-pf'][text()='<scaled_number>'][1]
+scale_up_once:
+  elements:
+  - selector:
+      xpath: //a[@title='Scale up']
+    op: click
+    type: a
+scale_down_once:
+  elements:
+  - selector:
+      xpath: //a[@title='Scale down']
+    op: click
+    type: a
+scale_down_to_zero:
+  elements:
+  - selector:
+      xpath: //a[@title='Scale down']
+    op: click
+    type: a
+  - selector:
+      text: Scale Down
+    op: click
+    type: button
+cancel_scale_down_to_zero:
+  elements:
+  - selector:
+      xpath: //a[@title='Scale down']
+    op: click
+    type: a
+  action: click_cancel
+check_scale_down_disabled:
+  elements:
+  - selector:
+      xpath: //a[@class='disabled' and @aria-disabled='true']/span[text()='Scale down']
+group_services:
+  elements:
+  - selector:
+      xpath: //overview-service[div//a[text()="<primary_service_name>"]]//a[span[contains(text(),"Group service to <primary_service_name>")]]/i
+    op: click
+  - selector:
+      xpath: //div[@title="Choose a service"]/div/span
+    op: click
+  - selector:
+      xpath: //div[contains(@class,"ui-select-choices-row") and */div[text()="<service_name>"]]
+    op: click
+  - selector:
+      text: OK
+    op: click
+remove_service_from_group:
+  elements:
+  - selector:
+      xpath: //overview-service[div//a[text()="<service_name>"]]//a[span[contains(text(),"Remove <service_name> from service group")]]
+    op: click
+  - selector:
+      text: Remove
+    type: button
+    op: click
+check_service_group_with_route:
+  element:
+    selector:
+      xpath: //div[contains(@class,"service-group-with-route-row") and overview-service-group//a[starts-with(@href,"http://<primary_service_name>-<project_name>")]]//div[@class="service-name"]//a[text()="<service_name>"]
+check_service_group_entry:
+  element:
+    selector:
+      xpath: //div[@class="overview-services" and overview-service[contains(@class,"primary-service") and div//div[@class="service-name"]//a[text()="<primary_service_name>"]]]//div[@class="service-name"]//a[text()="<service_name>"]
+check_petset_on_overview_page:
+  action: goto_overview_page
+  action: check_pod_scaled_numbers_under_specified_resource

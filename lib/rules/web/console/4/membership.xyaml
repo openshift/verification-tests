@@ -1,0 +1,151 @@
+--- # check membership page
+
+goto_membership_page:
+  url: /console/project/<project_name>/membership
+
+check_membership_no_permission_page:
+  action: goto_membership_page
+  element:
+    selector:
+      xpath: //h1[contains(.,"Membership")]
+click_to_goto_membership_page:
+  action: goto_overview_page
+  elements:
+  - selector:
+      xpath: //a[@data-toggle="dropdown" and contains(.,"Resources")]
+    op: click
+  - selector:
+      xpath: //div[contains(@class,"dropdown-menu")]//a[contains(.,"Membership")]
+    op: click
+click_to_goto_membership_tab:
+  action: goto_membership_page
+  elements:
+  - selector:
+      xpath: //span[contains(@class,"action-chip")]
+  - selector:
+      xpath: //uib-tab-heading[starts-with(normalize-space(text()), "<tab_name>")]
+    op: click
+edit_membership:
+  element:
+    selector:
+      xpath: //a[span[contains(text(),"Edit Membership")]]
+    op: click
+done_membership_editing:
+  element:
+    selector:
+      xpath: //a[span[contains(text(),"Done Editing")]]
+    op: click
+
+add_name_on_membership:
+  element:
+    selector:
+      xpath: //div[contains(@class,"active")]//div[contains(@class,"col-name")]/input
+    op: send_keys <name>
+select_role_on_membership:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,"active")]//span[span[text()="Select a role"]]
+    op: click
+  - selector:
+      xpath: //div[contains(@class,"active")]//div[contains(@class,"ui-select-choices-row")]//div[text()="<role>"]
+    op: click
+select_project_on_membership:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,"active")]//div[contains(@class,"action-set")]//span[span[text()="Select a project"]]
+    op: click
+  - selector:
+      xpath: //div[contains(@class,"active")]//div[contains(@class,"ui-select-choices-row")]//div[text()="<namespace>"]
+    op: click
+type_project_on_membership:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,"active")]//div[contains(@class,"action-set")]//span[span[text()="Select a project"]]
+    op: click
+  - selector:
+      xpath: //div[contains(@class,"active")]//div[@class="col-roles"]//div[@title="Select a project"]/input[contains(@class,"ui-select-search")]
+    op: send_keys <namespace>
+  - selector:
+      xpath: //div[contains(@class,"active")]//div[contains(@class,"ui-select-choices-row")]//div[text()="<namespace>"]
+    op: click
+click_on_delete_role_on_membership:
+  elements:
+  - selector:
+      xpath: //div[div//strong[normalize-space(text())="<name>"]]//span[span[normalize-space(text())="<role>"]]/a
+    op: click
+  - selector:
+      text: Remove
+    op: click
+  - selector:
+      text: The role "<role>" was removed from "<name>".
+click_on_delete_role_on_membership_with_namespace:
+  elements:
+  - selector:
+      xpath: //div[div//span[normalize-space(text())="<namespace> /"] and div//strong[normalize-space(text())="<name>"]]//span[span[normalize-space(text())="<role>"]]/a
+    op: click
+  - selector:
+      text: Remove
+    op: click
+  - selector:
+      text: The role "<role>" was removed from "<name>".
+click_add_button_on_membership:
+  element:
+    selector:
+      xpath: //div[contains(@class,"active")]//button[normalize-space(text())="Add" and not(@disabled="disabled")]
+    op: click
+add_role_on_membership:
+  action: click_to_goto_membership_tab
+  action: edit_membership
+  action: add_name_on_membership
+  action: select_role_on_membership
+  action: click_add_button_on_membership
+  action: done_membership_editing
+add_sa_role_on_membership_with_namespace:
+  action: click_to_goto_membership_tab
+  action: edit_membership
+  action: add_name_on_membership
+  action: select_project_on_membership
+  action: select_role_on_membership
+  action: click_add_button_on_membership
+  action: done_membership_editing
+add_role_on_membership_with_typed_namespace:
+  action: click_to_goto_membership_tab
+  action: edit_membership
+  action: add_name_on_membership
+  action: type_project_on_membership
+  action: select_role_on_membership
+  action: click_add_button_on_membership
+  action: done_membership_editing
+delete_role_on_membership:
+  action: click_to_goto_membership_tab
+  action: edit_membership
+  action: click_on_delete_role_on_membership
+  action: done_membership_editing
+delete_role_on_membership_with_namespace:
+  action: click_to_goto_membership_tab
+  action: edit_membership
+  action: click_on_delete_role_on_membership_with_namespace
+  action: done_membership_editing
+check_tab_count_on_membership:
+  action: goto_membership_page
+  element:
+    selector:
+      xpath: //uib-tab-heading[starts-with(normalize-space(text()), "<tab_name>") and contains(normalize-space(.), "(<count>)")]
+check_entry_content_on_membership:
+  action: click_to_goto_membership_tab
+  element:
+    selector:
+      xpath: //div[contains(@class,"active")]//div[contains(@class, "item-row") and div//strong[normalize-space(text())="<name>"] and div//span[normalize-space(text())="<role>"]]
+check_entry_content_on_membership_with_namespace:
+  action: click_to_goto_membership_tab
+  element:
+    selector:
+      xpath: //div[contains(@class,"active")]//div[contains(@class, "item-row") and div//span[normalize-space()="<namespace> /"] and div//strong[normalize-space()="<name>"] and div//span[normalize-space()="<role>"]]
+check_error_message_on_membership:
+  element:
+    selector:
+      text: The role "<role>" has already been granted to "<name>".
+check_permission_error_on_membership:
+  element:
+    selector:
+      text: You do not have permission to view roles in this project. 

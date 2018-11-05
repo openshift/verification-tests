@@ -1,0 +1,14 @@
+git
+
+gcc-c++
+make
+openssl
+rubygem-bundler
+rubygem-nokogiri
+
+firefox
+which
+Xvfb
+
+ansible
+pyOpenSSL

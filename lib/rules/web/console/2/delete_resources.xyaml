@@ -1,0 +1,98 @@
+--- # delete resources related
+delete_resources_in_the_project:
+  action: delete_resources_pod
+  action: delete_resources_service
+  action: delete_resources_buildconfig
+  action: delete_resources_build
+  action: delete_resources_deploymentconfig
+  action: delete_resources_rc
+  action: delete_resources_route
+  action: delete_resources_imagestream
+delete_resources_with_viewer_in_the_project:
+  action: delete_resources_pod_with_viewer
+  action: delete_resources_service_with_viewer
+  action: delete_resources_buildconfig_with_viewer
+  action: delete_resources_build_with_viewer
+  action: delete_resources_deploymentconfig_with_viewer
+  action: delete_resources_rc_with_viewer
+  action: delete_resources_route_with_viewer
+  action: delete_resources_imagestream_with_viewer
+delete_resources_pod_with_viewer:
+  action: delete_resources_pod
+  elements:
+  - selector:
+      xpath: //span[contains(text(),'cannot delete pods')]
+delete_resources_service_with_viewer:
+  action: delete_resources_service
+  elements:
+  - selector:
+      xpath: //span[contains(text(),'cannot delete services')]
+delete_resources_buildconfig_with_viewer:
+  action: delete_resources_buildconfig
+  elements:
+  - selector:
+      xpath: //span[contains(text(),'cannot delete buildconfigs')]
+delete_resources_deploymentconfig_with_viewer:
+  action: delete_resources_deploymentconfig
+  elements:
+  - selector:
+      xpath: //span[contains(text(),'cannot delete deploymentconfigs')]
+delete_resources_rc_with_viewer:
+  action: delete_resources_rc
+  elements:
+  - selector:
+      xpath: //span[contains(text(),'cannot delete replicationcontrollers')]
+delete_resources_build_with_viewer:
+  action: delete_resources_build
+  elements:
+  - selector:
+      xpath: //span[contains(text(),'cannot delete builds')]
+delete_resources_route_with_viewer:
+  action: delete_resources_route
+  elements:
+  - selector:
+      xpath: //span[contains(text(),'cannot delete routes')]
+delete_resources_imagestream_with_viewer:
+  action: delete_resources_imagestream
+  elements:
+  - selector:
+      xpath: //span[contains(text(),'cannot delete imagestreams')]
+ 
+delete_resources_pod:
+  action: goto_one_pod_page
+  action: delete_resource
+delete_resources_service:
+  action: goto_one_service_page
+  action: delete_resource
+delete_resources_build:
+  url: /console/project/<project_name>/browse/builds/<bc_name>/<build_name>
+  action: delete_resource
+delete_resources_rc:
+  action: goto_one_deployment_page
+  action: delete_resource
+delete_resources_deploymentconfig:
+  action: goto_one_dc_page
+  action: delete_resource
+delete_resources_buildconfig:
+  action: goto_one_buildconfig_page
+  action: delete_resource
+delete_resources_route:
+  action: goto_one_route_page
+  action: delete_resource
+delete_resources_imagestream:
+  action: goto_one_image_stream_page
+  action: delete_resource
+delete_resource:
+  elements:
+  - selector:
+      text: Actions
+    type: button
+    op: click
+  - selector:
+      text: Delete
+    type: a
+    op: click     
+  - selector:
+      text: Delete
+    type: button
+    op: click

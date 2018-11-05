@@ -1,0 +1,79 @@
+# ---- add pvc on web console -------
+add_pvc_to_pod:
+  action: goto_one_pod_page
+  action: goto_add_pvc_page
+  action: set_mount_path
+  action: set_volume_name
+  action: submit_attach
+add_pvc_on_rc_page:
+  action: goto_one_deployment_page
+  action: goto_add_pvc_page
+  action: set_mount_path
+  action: set_volume_name
+  action: submit_attach
+add_pvc_to_all_default_containers:
+  action: goto_one_dc_page
+  action: goto_add_pvc_page
+  action: choose_the_first_pvc
+  action: set_mount_path
+  action: set_volume_name
+  action: submit_attach
+add_pvc_to_one_container:
+  action: goto_one_dc_page
+  action: goto_add_pvc_page
+  action: choose_the_second_pvc
+  action: set_mount_path
+  action: set_volume_name
+  action: choose_the_first_container
+  action: submit_attach
+goto_add_pvc_page:
+  elements:
+  - selector:
+      xpath: //button[contains(text(), 'Actions')]
+    op: click
+  - selector:
+      xpath: //a[contains(text(), 'Attach Storage')]
+    op: click
+choose_the_first_pvc:
+  element:
+    selector:
+      xpath: //tbody/tr[1]/td[1]/input
+    op: click
+choose_the_second_pvc:
+  element:
+    selector:
+      xpath: //tbody/tr[2]/td[1]/input
+    op: click
+set_mount_path:
+  element:
+    selector:
+      id: mount-path
+    op: send_keys <mount_path>
+    type: input
+set_volume_name:
+  element:
+    selector:
+      id: volume-path
+    op: send_keys <volume_name> 
+    type: input
+choose_the_first_container:
+  elements:
+  - selector:
+      text: select specific containers
+    type: a
+    op: click
+  - selector:
+      xpath: //div[@class='checkbox ng-scope'][2]/label/input
+    op: click
+submit_attach:
+  element:
+    selector:
+      text: Attach
+    op: click
+    type: button
+check_mount_info:
+  elements:
+  - selector:
+      xpath: //span[contains(text(), <volume_name>)]
+  - selector:
+      xpath: //span[contains(text(), <mount_path>)]

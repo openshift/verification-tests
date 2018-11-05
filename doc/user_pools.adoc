@@ -1,0 +1,59 @@
+= How to use user pools with the user pool manager
+
+== Overview
+
+To allow easier sharing of environment users, BushSlicer supports putting
+users into a user pool using a generic locker/allocator web app and then
+reserving and releasing locks over the users as there is a demand for it.
+
+The `env.api_endpoint_url` is used as a `namespace` for the lock and the user
+credentials are used as a `resource`. This allows to use same pool for
+different environments as they will be differentiated by `namespace`. e.g.
+if you have a testing LDAP server, you can create a pool of LDAP users,
+then use same pool with different environments without confusion between the
+OpenShift environments.
+
+== Deploy the OwnThat locker app
+
+* see https://github.com/openshift-qe/ownthat
+
+== add app to your private config
+
+[source,yaml]
+----
+  ownthat_allocator:
+    url: https://ownthat.example.com
+    http_opts:
+      user: user
+      password: password
+      verify_ssl: 1
+----
+
+== create some pools of users
+
+* go to https://ownthat.example.com/pools
+* use the Web UI to create entries - pool name, resource, active and note
+
+Because the OwnThat app is generic purpose, the convention is to put into
+`resource` the user credentials. That would be `username:password` or
+`:tokenstring` in case user is identified by a token only.
+
+Only active entries will be used for creating actual locks later. You can
+use the note field to clarify origin of the user or reason why it is not
+active. In any case the `note` field is irrelevant for BushSlicer and is only
+meant to serve human users that manage the pools.
+
+=== launching Cucumber
+
+The key points are to have `OPENSHIFT_ENV_<ENV>_USER_MANAGER` unset, empty
+or set to `auto`. The other thing is to have users set to `pool:<pool name>`.
+
+
+[source,bash]
+----
+...
+export CUCUSHIFT_DEFAULT_ENVIRONMENT=ocp
+export OPENSHIFT_ENV_OCP_USER_MANAGER=auto # this might be default already
+export OPENSHIFT_ENV_OCP_USER_MANAGER_USERS=pool:mypool
+cucumber <opts>
+----

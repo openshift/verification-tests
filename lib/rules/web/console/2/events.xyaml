@@ -1,0 +1,130 @@
+--- # events related feature on web console
+check_events_page:
+  action: goto_events_page
+  element:
+    selector:
+      text: Events
+    selector:
+      text: Time
+    selector:
+      text: Kind
+    selector:
+      text: Reason
+    selector:
+      xpath: //table/thead/tr/th[5]
+    selector:
+      text: Pod
+goto_events_page:
+  url: /console/project/<project_name>/browse/events
+click_on_events_tab_on_build_page:
+  action: goto_one_build_page
+  action: click_on_events_tab
+click_on_events_tab_on_dc_page:
+  action: goto_one_dc_page
+  action: click_on_events_tab
+click_on_events_tab_on_deployment_page:
+  action: goto_one_deployment_page
+  action: click_on_events_tab
+click_on_events_tab_on_pod_page:
+  action: goto_one_pod_page
+  action: click_on_events_tab
+click_on_events_tab_on_service_page:
+  action: goto_one_service_page
+  action: click_on_events_tab
+click_on_events_tab_on_standalone_rc_page:
+  action: goto_one_standalone_rc_page
+  action: click_on_events_tab
+check_event_message:
+  # You could use any combination of parameters from this rule to check event
+  # message. Set message values to appropriate  parameters e.g.
+  # resource name to `name`
+  # reason to `reason`
+  # Optional parameters:
+  params: &event_message_params
+    time: ''
+    name: ''
+    kind: ''
+    reason: ''
+    message: ''
+  element: &event_message_selector
+    selector:
+      xpath: >
+        //tr[(not('<time>')    or td[ @data-title='Time'    and contains(.,'<time>')]) and
+             (not('<name>')    or td[ @data-title='Name'    and span//span[normalize-space()='<name>']]) and
+             (not('<kind>')    or td[(@data-title='Kind'    and //th/span[text()='Kind'] or
+                                      @data-title='Name'    and //th/span[text()='Kind and Name']) and
+                                                         contains(.,'<kind>')]) and
+             (not('<message>') or td[ @data-title='Message' and contains(.,'<message>')]) and
+             (not('<reason>')  or td[(@data-title='Reason'  and //th/span[text()='Reason'] or
+                                      @data-title='Message' and //th/span[text()='Reason and Message']) and
+                                                         contains(.,'<reason>')])]
+    timeout: 30
+check_event_message_missing:
+  params: *event_message_params
+  element:
+    <<: *event_message_selector
+    missing: true
+sort_by:
+  elements:
+  - selector:
+      xpath: //span[text()="Sort by"]/following-sibling::div//button[@data-toggle="dropdown"]
+    op: click
+  - selector:
+      xpath: //span[text()="Sort by"]/following-sibling::div//ul/li/a[text()="<sort_field>"]
+    op: click
+filter_by_keyword:
+  elements:
+  - selector:
+      xpath: //input[@type="search"]
+    op: clear
+  - selector:
+      xpath: //input[@type="search"]
+    op: send_keys <keyword>
+click_on_events_tab:
+  elements:
+  - selector:
+      xpath: //uib-tab-heading[text()='Events']
+    op: click
+check_messages_order:
+  # You could use any combination of parameters from this rule to check order
+  # of two messages simply set message values to appropriate  parameters e.g.
+  # resource name of the first message to `first_name`
+  # reason of the second message to `second_reason`
+  # Optional parameters:
+  params:
+    first_time: ''
+    first_name: ''
+    first_kind: ''
+    first_reason: ''
+    first_message: ''
+    second_time: ''
+    second_name: ''
+    second_kind: ''
+    second_reason: ''
+    second_message: ''
+  element:
+    selector:
+      xpath: >
+        //tr[(not('<first_time>')    or td[ @data-title='Time'    and contains(.,'<first_time>')]) and
+             (not('<first_name>')    or td[ @data-title='Name'    and span//span[normalize-space()='<first_name>']]) and
+             (not('<first_kind>')    or td[(@data-title='Kind'    and //th/span[text()='Kind'] or
+                                      @data-title='Name'    and //th/span[text()='Kind and Name']) and
+                                                         contains(.,'<first_kind>')]) and
+             (not('<first_message>') or td[ @data-title='Message' and contains(.,'<first_message>')]) and
+             (not('<first_reason>')  or td[(@data-title='Reason'  and //th/span[text()='Reason'] or
+                                      @data-title='Message' and //th/span[text()='Reason and Message']) and
+                                                         contains(.,'<first_reason>')])]/following-sibling::tr[
+             (not('<second_time>')    or td[ @data-title='Time'    and contains(.,'<second_time>')]) and
+             (not('<second_name>')    or td[ @data-title='Name'    and span//span[normalize-space()='<second_name>']]) and
+             (not('<second_kind>')    or td[(@data-title='Kind'    and //th/span[text()='Kind'] or
+                                      @data-title='Name'    and //th/span[text()='Kind and Name']) and
+                                                         contains(.,'<second_kind>')]) and
+             (not('<second_message>') or td[ @data-title='Message' and contains(.,'<second_message>')]) and
+             (not('<second_reason>')  or td[(@data-title='Reason'  and //th/span[text()='Reason'] or
+                                      @data-title='Message' and //th/span[text()='Reason and Message']) and
+                                                         contains(.,'<second_reason>')])]
+change_sort_direction:
+  element:
+    selector:
+      xpath: //span[text()="Sort by"]/following-sibling::div//button[@ng-click="changeDirection()"]
+    op: click

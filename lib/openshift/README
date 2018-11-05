@@ -1,0 +1,11 @@
+Put here classes that correspond to OpenShift concepts, e.g.
+* User
+* Project
+* Node
+* etc.
+
+Also some common API structures that are not standalone resources can be put
+here:
+* ContainerSpec
+* ObjectReference
+* etc.

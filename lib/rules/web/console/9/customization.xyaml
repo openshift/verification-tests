@@ -1,0 +1,81 @@
+# customization rules
+check_visible_items_when_more_saas_offerings:
+  action: check_first_visible_item_on_home_page
+  action: check_second_visible_item_on_home_page
+  action: check_third_visible_item_on_home_page
+  action: check_fourth_visible_item_on_home_page
+check_first_visible_item_on_home_page:
+  params:
+    card_title: UI Example App 1
+    content: this is added by uitester1
+  action: check_one_saas_body
+check_second_visible_item_on_home_page:
+  params:
+    card_title: UI Example App 2
+    content: this is added by uitester2
+  action: check_one_saas_body
+check_third_visible_item_on_home_page:
+  params:
+    card_title: UI Example App 3
+    content: this is added by uitester3
+  action: check_one_saas_body
+check_fourth_visible_item_on_home_page:
+  params:
+    card_title: UI Example App 4
+    content: this is added by uitester4
+  action: check_one_saas_body
+check_additional_visible_item:
+  params:
+    card_title: UI Example App 5
+    content: this is added by uitester5
+  action: check_one_saas_body
+check_additional_visible_item_missing:
+  element:
+    selector:
+      xpath: //div[contains(@class,'card-title') and contains(.,'UI Example App 5')]
+    missing: true
+check_one_saas_body:
+  elements:
+  - selector: &saas_card_title
+      xpath: //div[contains(@class,'card-title') and contains(.,'<card_title>')]
+  - selector: 
+      xpath: //span[contains(@class,'truncated-content') and contains(.,'<content>')]
+check_more_saas_offerings:
+  action: click_show_more
+  action: check_additional_visible_item
+check_less_saas_offerings:
+  action: click_show_less
+  action: check_additional_visible_item_missing
+click_show_more:
+  element:
+    selector:
+      class: more
+    type: span
+    op: click
+click_show_less:
+  element:
+    selector:
+      class: less
+    type: span
+    op: click
+check_launch_apps_items:
+  action: click_launcher_app
+  action: check_launcher_app_dashboard
+  action: check_launcher_app_manage_account
+click_launcher_app:
+  element:
+    selector: 
+      xpath: //*[@items="launcherApps"]
+    op: click
+check_launcher_app_dashboard:
+  elements:
+  - selector: 
+      xpath:  //*[contains(.,'Dashboard')]
+  - selector: 
+      xpath: //*[@href="http://example.com/dashboard"]
+check_launcher_app_manage_account:
+  elements:
+  - selector: 
+      xpath: //*[contains(.,'Manage Account')]
+  - selector: 
+      xpath: //*[@href="http://example.com/account"]

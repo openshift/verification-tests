@@ -1,0 +1,114 @@
+#---check project overview page
+check_project_overview_without_resource:
+  action: goto_overview_page
+  #check value in the select box 
+  elements:
+  - selector:
+      text: Get started with your project.
+  - selector:
+      class: dropdown-toggle
+    type: button
+    op: click
+check_build_info_on_overview_page:
+  elements:
+  - selector:
+      xpath: //div[@class="builds-block" and contains(.,"<build_config>")]
+  - selector:
+      xpath: //div[@class="builds-block" and contains(.,"<build_id>")]
+  - selector:
+      xpath: //div[@class="builds-block" and contains(.,"<build_status>")]
+check_deployment_config_link_info_on_overview:
+  elements:
+  - selector: 
+      xpath: //span[contains(.,'Deployment')]/following::a[contains(@href,"project/<project_name>/browse/deployments/<dc_name>")]
+check_deployments_link_info_on_overview:
+  elements:
+  - selector:
+      xpath: //span[contains(.,'Deployment')]/following::a[contains(@href,"project/<project_name>/browse/deployments/<dc_name>/<deployments>")]
+check_view_log_link_info_on_overview:
+  elements:
+  - selector:
+      xpath: //a[contains(text(),'View Log') and contains(@href, "project/<project_name>/browse/builds/<bc_name>/<bc_build_id>?tab=logs")]
+check_pod_info_on_overview:
+  scripts:
+  - command: return document.querySelector("text[class='c3-chart-arcs-title']").textContent.contains('<pod_display>')
+    expect_result: true
+check_pod_template_image_link:
+  elements:
+  - selector:
+      xpath: //div[contains(@class, 'pod-template-image')]/descendant::a[contains(@href,"project/<project_name>/browse/images/<image_name>")] 
+check_pod_template_build_link:
+  elements:
+  - selector:
+      xpath: //div[contains(@class, 'pod-template-build')]/descendant::a[contains(@href,"project/<project_name>/browse/builds/<bc_name>/<bc_build_id>")]
+check_pod_template_source_info:
+  elements:
+  - selector:
+      xpath: //div[contains(@class, 'pod-template-build')]/descendant::div[contains(.,"Source")]
+  - selector:
+      xpath: //osc-git-link
+check_pod_template_port_info:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,"pod-template-ports")]/descendant::div[contains(.,"Ports") and contains(.,"<port_number>")]
+check_standalone_rc_info_on_overview:
+  elements:
+  - selector:
+      xpath: //div[@class="component"]/div[@class="component-label" and contains(.,'Replication Controller')]/a[contains(.,'<rc_name>')]
+check_service_link_on_overview:
+  elements:
+  - selector:
+      xpath: //a[contains(text(),'<service_name>') and contains(@href, "project/<project_name>/browse/services/<service_name>")]
+check_standalone_pod_info_on_overview:
+  elements:
+  - selector:
+      xpath: //div[@class="component"]/span[contains(.,"<pod_name>")]
+check_route_link_on_overview:
+  elements:
+  - selector:
+      xpath: //div[@kind='Service']/descendant::a[contains(@href, "<route_host_name>")]
+dismiss_build_log_on_overview:
+  elements:
+  - selector:
+      text: Dismiss
+    type: a
+    op: click
+goto_overview_page:
+  url: /console/project/<project_name>/overview
+check_pod_scaled_numbers:
+  elements:
+  - selector:
+      xpath: //overview-deployment//*[name()='tspan'][@class='pod-count donut-title-big-pf' and text()='<scaled_number>']
+scale_up_once:
+  elements:
+  - selector:
+      xpath: //div[@class='scaling-controls']//a[@title='Scale up']
+    op: click
+    type: a 
+scale_down_once:
+  elements:
+  - selector:
+      xpath: //div[@class='scaling-controls']//a[@title='Scale down']
+    op: click
+    type: a
+scale_down_to_zero:
+  elements:
+  - selector:
+      xpath: //div[@class='scaling-controls']//a[@title='Scale down']
+    op: click
+    type: a
+  - selector:
+      text: Scale Down
+    op: click
+    type: button
+cancel_scale_down_to_zero:
+  elements:
+  - selector:
+      xpath: //div[@class='scaling-controls']//a[@title='Scale down']
+    op: click
+    type: a
+  action: click_cancel
+check_scale_down_disabled:
+  elements:
+  - selector:
+      xpath: //a[@class='disabled' and @aria-disabled='true']/span[text()='Scale down']

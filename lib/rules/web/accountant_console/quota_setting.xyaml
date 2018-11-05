@@ -1,0 +1,95 @@
+# --- plan quota detail setting related page (manage resource quota)
+set_additional_resources_to_same_value_by_url:
+  action: set_additional_resources_by_url
+  elements:
+  - selector:
+      text: Current Plan
+  - selector:
+      text: Invalid unit selection, no change in subscription
+set_additional_resources_to_invalid_value_by_url:
+  action: set_additional_resources_by_url
+  elements:
+  - selector:
+      text: Current Plan
+  - selector:
+      text: Unrecognized addon type provided
+set_additional_resources_by_url:
+  url: confirm?utf8=%E2%9C%93&<resource>=<size> 
+  ##utf8=%E2%9C%93& from url is utf8=✓ 
+goto_crq_and_set_resource_amount:
+  action: goto_resource_settings_page
+  action: set_resource_amount_by_input_and_update
+goto_resource_settings_page:
+  url: <resource>
+  elements:
+  - selector:
+      xpath: //*[contains(., "Current Plan")]
+set_resource_amount_by_input_and_update:
+  action: set_resource_amount_by_input
+  action: click_update_subscription_button
+  action: click_confirm_plan_change_button
+set_resource_amount_by_input_and_check_error_message:
+  action: set_resource_amount_by_input
+  action: click_update_subscription_button
+  action: check_error_message_for_quota
+set_resource_amount_by_input:
+  elements:
+  - selector:
+      id: addon_<resource>
+    type: input
+    op: clear
+    timeout: 30
+  - selector:
+      id: addon_<resource>
+    type: input
+    op: send_keys <amount>
+click_update_subscription_button:
+  elements:
+  - selector:
+      xpath: //button[contains(.,"Update Subscription")]
+    op: click
+    timeout: 35
+click_confirm_plan_change_button:
+  elements:
+  - selector:
+      xpath: //button[contains(.,"Confirm Plan Change")]
+    timeout: 60
+    op: click
+check_error_message_for_quota:
+  elements:
+  - selector:
+      xpath: //*[contains(.,'<quota>')] 
+  - selector:
+      visible_text: !ruby/regexp '/exceeds requested/'
+  - selector:
+      visible_text: !ruby/regexp '/No plan changes have been made/'
+set_max_value_by_exceed:
+  params:
+    amount: <exceed_amount>
+  action: set_resource_amount_by_input
+  elements:
+  - selector:
+      xpath: //input[@id="addon_<resource>" and @max="<cur_amount>"]
+  action: click_update_subscription_button
+  action: review_plan_changes_part
+  action: click_confirm_plan_change_button
+  action: check_additional_value_for_plan
+review_plan_changes_part: 
+  elements:
+  - selector:
+      xpath:  //*[contains(., "<total> GiB")]
+  - selector:
+      xpath:  //*[contains(., "<resource_page_name> for")]
+  - selector:
+      xpath:  //*[contains(., "<current>")]
+  - selector:
+      xpath:  //*[contains(., "of additional <resource_page_name>")]
+  - selector:
+      xpath:  //*[contains(., "(was <previous> GiB)")]
+    timeout: 10
+check_additional_value_for_plan:
+  elements:
+  - selector:
+      xpath:  //*[contains(., "<cur_amount>")]
+  - selector:
+      xpath:  //*[contains(., "of additional <resource_page_name>")]

@@ -1,0 +1,50 @@
+# next step page info relative
+create_from_template_complete_info_on_next_page:
+  action: goto_create_from_template_next_page
+  action: check_complete_info_on_next_page
+create_from_image_complete_info_on_next_page:
+  action: goto_create_from_image_next_page
+  action: check_complete_info_on_next_page
+  elements:
+  - selector:
+      text: Making code changes
+create_from_template_complete_with_error_info_on_next_page:
+  action: goto_create_from_template_next_page
+  action: check_complete_with_error_info_on_next_page
+goto_create_from_template_next_page:
+  url: /console/project/<project_name>/create/next?name=<template_name>&namespace=<project_name>
+  elements:
+  - selector:
+      text: Next Steps
+  - selector:
+      text: Command line tools
+goto_create_from_image_next_page:
+  url: /console/project/<project_name>/create/next?imageName=<image_name>&imageTag=<image_tag>&namespace=<namespace>&name=<app_name>
+  elements:
+  - selector:
+      text: Next Steps
+  - selector:
+      text: Command line tools
+check_command_line_tools_instruc_exist:
+  element:
+    selector:
+      text: Command line tools
+check_complete_info_on_next_page:
+  elements:
+  - selector:
+      text: Go to overview
+  - selector:
+      text: Manage your app
+check_complete_with_error_info_on_next_page:
+  elements:
+  - selector:
+      text: Completed, with errors
+  - selector:
+      text: Things you can do
+check_making_code_changes_instruc_exists:
+  element:
+    selector:
+      text: Making code changes 
+check_help_and_sug_on_next_step_page:
+  action: check_command_line_tools_instruc_exist
+  action: check_making_code_changes_instruc_exists

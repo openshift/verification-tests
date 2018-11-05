@@ -1,0 +1,95 @@
+filter_by_keywords:
+  element:
+    selector:
+      id: search
+    type: input
+    op: send_keys <keyword>
+filter_by_tags:
+  elements:
+  - selector:
+      text: Browse
+    type: button
+    op: click
+  - selector:
+      xpath: //a[ancestor::ul and contains(text(),'<tag_name>')]
+    op: click
+  - selector:
+      xpath: //div[contains(text(),'Tagged with <tag_name>')]
+clear_tag_filters:
+  element:
+    selector:
+      text: See all tags
+    type: a
+    op: click
+clear_keyword_filters:
+  element:
+    selector:
+      xpath: //div/button[contains(@class,'clear')]
+    op: click
+check_all_content_is_hidden:
+  element:
+    selector:
+      xpath: //div[normalize-space(text())='All content is hidden by the current filter.' and a[text()='Clear Filter']]
+click_add_to_project:
+  elements:
+  - selector:
+      xpath: //a[normalize-space()='Add to Project']
+    op: click
+  # check if the page is loaded
+  - selector:
+      text: Languages
+    timeout: 60
+  - selector:
+      text: Technologies
+    timeout: 60
+click_add_to_project_from_catalog:
+  action: click_add_to_project
+select_category_in_catalog:
+  elements:
+  - selector:
+      xpath: //a[contains(.,'<category>')]
+    op: click
+  # check if the page is loaded
+  - selector:
+      xpath: //a[contains(.,'Select')]
+    timeout: 60
+select_card_version_in_catalog:
+  elements:
+  - selector:
+      xpath: //div[@class="card-pf" and div//h2/span[text()="<card_name>"] and div/div[p[contains(text(),"<namespace>")] or ("<namespace>"="openshift" and not(p[contains(text(),"Namespace")]))]]//p[@class="card-pf-version"]/div
+    op: click
+  - selector:
+      xpath: //div[@class="card-pf"]//ul[not(contains(@class,"ng-hide"))]//div[span/span[normalize-space(text())="<version>"] or span/small[text()="<version>"]]
+    op: click
+check_card_version_missing_in_catalog:
+  elements:
+  - selector:
+      xpath: //div[@class="card-pf" and div//h2/span[text()="<card_name>"] and div/div[p[contains(text(),"<namespace>")] or ("<namespace>"="openshift" and not(p[contains(text(),"Namespace")]))]]//p[@class="card-pf-version"]/div
+    op: click
+  - selector:
+      xpath: //div[@class="card-pf"]//ul[not(contains(@class,"ng-hide"))]//div[span/span[normalize-space(text())="<version>"] or span/small[text()="<version>"]]
+    missing: true
+check_all_categories_in_language_catalog:
+  elements:
+  - selector:
+      xpath: //div[h2[normalize-space(text())='Languages']]//a[normalize-space()='Java']
+  - selector:
+      xpath: //div[h2[normalize-space(text())='Languages']]//a[normalize-space()='JavaScript']
+  - selector:
+      xpath: //div[h2[normalize-space(text())='Languages']]//a[normalize-space()='.NET']
+  - selector:
+      xpath: //div[h2[normalize-space(text())='Languages']]//a[normalize-space()='Perl']
+  - selector:
+      xpath: //div[h2[normalize-space(text())='Languages']]//a[normalize-space()='PHP']
+  - selector:
+      xpath: //div[h2[normalize-space(text())='Languages']]//a[normalize-space()='Python']
+  - selector:
+      xpath: //div[h2[normalize-space(text())='Languages']]//a[normalize-space()='Ruby']
+check_all_categories_in_technologies_catalog:
+  elements:
+  - selector:
+      xpath: //div[h2[normalize-space(text())='Technologies']]//a[normalize-space()='Continuous Integration & Deployment']
+  - selector:
+      xpath: //div[h2[normalize-space(text())='Technologies']]//a[normalize-space()='Data Stores']
+  - selector:
+      xpath: //div[h2[normalize-space(text())='Technologies']]//a[normalize-space()='Uncategorized']

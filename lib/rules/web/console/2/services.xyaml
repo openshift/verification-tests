@@ -1,0 +1,36 @@
+#----check service page-----
+check_service_list_page:
+  action: goto_services_page
+  elements:
+  - selector:
+      text: <service_name>
+    type: a 
+check_no_grouped_services:
+  elements:
+  - selector:
+      xpath: //h2[contains(., "No grouped services.")]
+check_one_service_page:
+  action: goto_one_service_page
+  elements:
+  - selector:
+      text: <service_name>
+  - selector:
+      xpath: //span[contains(text(),'<selectors>')]
+  - selector:
+      text: <type>
+  - selector:
+      text: <routes>
+    type: a
+  - selector:
+      text: <target_port>
+check_target_port_on_services_page:
+  action: goto_services_page
+  elements:
+  - selector:
+      xpath: //td[@data-title="Name"]/a[contains(text(),'<service_name>')]
+  - selector:
+      xpath: //td[@data-title="Ports"]/span[contains(text(),'<target_port>')]
+goto_services_page:
+  url: console/project/<project_name>/browse/services
+goto_one_service_page:
+  url: console/project/<project_name>/browse/services/<service_name>

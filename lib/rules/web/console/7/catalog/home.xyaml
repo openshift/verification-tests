@@ -1,0 +1,21 @@
+#----- catalog page related-------
+check_instructions_on_home_page:
+  elements:
+  - selector:
+      visible_text: !ruby/regexp /Home Page Tour/
+  - selector:
+      visible_text: !ruby/regexp /Documentation/
+  - selector:
+      visible_text: !ruby/regexp /Learning/
+  - selector:
+      visible_text: !ruby/regexp /Development/
+click_helper_icon_on_home_page:
+  element:
+    selector:
+      xpath: //span[@title="Help"]
+    op: click
+check_project_number_on_home_page:
+  scripts:
+  - command: return document.querySelectorAll('div[class~="project-tile"]').length == <project_number>
+    expect_result: true
+    timeout: 30

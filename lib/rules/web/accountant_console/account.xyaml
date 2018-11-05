@@ -1,0 +1,378 @@
+# --- subscription overview page (current plan page, no detail sub pages) 
+
+check_page_logo_banner:
+  elements:
+  - selector:
+      xpath: //a[@href='/']/img[@alt='OpenShift Online']
+check_page_title:
+  scripts:
+  - command: return document.title=="Manage Subscription - Openshift Online"
+    expect_result: true
+check_page_dropdown:
+  element: &dropdown
+    selector:
+      xpath: //a[@class='dropdown-toggle']
+click_page_dropdown:
+  element:
+    <<: *dropdown
+    op: click
+click_edit_contact:
+  elements: 
+  - selector: 
+      xpath: //*[contains(@href, "contact/<contact>") and contains(., "Edit")]
+    op: click
+  - selector:
+      text: <contact_cap> Contact
+    timeout: 30
+check_account_name:
+  elements: 
+  - selector: 
+      xpath: //*[@class="dropdown-toggle" and contains(., "<account_name>")]
+    timeout: 50
+check_account_page:
+  action: check_page_logo_banner
+  action: click_page_dropdown
+  elements:
+  - selector:
+      xpath: //a[@href='<console_url>' and text()='Go to OpenShift console']
+  - selector:
+      xpath: //*[contains(.,'Logout (<email>)')]
+    timeout: 20
+  action:
+    context:
+      xpath: //*[contains(.,'Current Plan')]
+    ref: check_current_plan_part
+  action:
+    context:
+      xpath: //*[contains(.,'Primary Contact')]
+    ref: check_primary_contact_part
+  action:
+    context:
+      xpath: //*[contains(.,'Billing Contact')]
+    ref: check_billing_contact_part
+  action:
+    context:
+      xpath: //*[contains(.,'Payment Method')]
+    ref: check_payment_method_part
+  action:
+    context:
+      xpath: //*[contains(.,'Collaborators')]
+    ref: check_collaborators_part
+  action:
+    context:
+      xpath: //*[contains(.,'Coupons')]
+    ref: check_coupons_part
+  action: check_back_to_account_overview
+check_current_plan_part:
+  elements:
+  - selector:
+      xpath: //*[contains(@href,'subscription') and contains(.,'Change')]
+  - selector:
+      xpath: //*[contains(.,'Your plan has been customized with:')] 
+  action: check_current_plan_content
+check_plan_includes_content:
+  elements:
+  - selector:
+      xpath: //*[contains(.,'10 projects')]
+  - selector:
+      xpath: //*[contains(.,'2GiB memory for your applications')]
+  - selector:
+      xpath: //*[contains(.,'2GiB terminating memory for your applications')]
+  - selector:
+      xpath: //*[contains(.,'Always on, unlimited usage')]
+  - selector:
+      xpath: //*[contains(.,'Option to invite collaborators to projects')]
+  - selector:
+      xpath: //*[contains(.,'Supports custom domains')]
+  - selector:
+      xpath: //*[contains(.,'Ability to schedule jobs')]
+check_current_plan_content:
+  elements:
+  - selector:
+      xpath: //*[contains(.,'Plan includes')] 
+  action: check_plan_includes_content
+check_primary_contact_part:
+  elements:
+  - selector:
+      xpath: //*[contains(@href,'/contact/primary') and text()='Edit']
+check_billing_contact_part:
+  elements:
+  - selector:
+      xpath: //*[contains(@href,'/contact/billing') and text()='Edit']
+check_payment_method_part:
+  elements:
+  - selector:
+      xpath: //*[contains(@href,'payment') and text()='Edit']
+  - selector:
+      xpath: //*[contains(.,'credit card')] 
+check_collaborators_part:
+  elements:
+  - selector:
+      xpath: //*[contains(@href,'/collaboration/index') and text()='Manage']
+  - selector:
+      xpath: //*[contains(.,'Invite other users')] 
+check_coupons_part:
+  elements:
+  - selector:
+      xpath: //*[contains(@href,'/coupons') and text()='Manage']
+  - selector:
+      xpath: //*[contains(.,'View and/or apply coupons to this subscription.')] 
+check_back_to_account_overview:
+  elements:
+  - selector:
+      xpath: //*[contains(@href,'/account') and text()='Back to Account Overview']
+click_to_change_plan:
+  elements:
+  - selector:
+      xpath: //*[contains(@href, '/overview') and contains(.,'Change')]
+    op: click
+  action: check_cancel_your_service_notice
+check_cancel_your_service_notice:
+  elements: 
+  - selector:
+      xpath: //*[contains(.,'automatically renew on the 1st day of each month')]
+  action: check_cancel_your_service_link
+  action: check_keep_current_plan_to_index
+check_keep_current_plan_to_index:
+  elements:
+  - selector:
+      xpath: //*[contains(@href, "/index") and contains(.,"Keep Current Plan")] 
+check_addon_resources:
+  action: check_addon_memory
+  action: check_addon_storage
+  action: check_addon_terminating_memory
+  action: check_max_resoure_notification
+check_addon_memory:
+  params:
+    resource_icon: memory
+    resource_type: memory
+    resource_name: Memory
+    resource_url: memory
+  action: check_addon_resource_elements
+check_addon_storage:
+  params:
+    resource_icon: volume
+    resource_type: storage
+    resource_name: Storage
+    resource_url: storage
+  action: check_addon_resource_elements
+check_addon_terminating_memory:
+  params:
+    resource_icon: build
+    resource_type: terminating memory
+    resource_name: Terminating Memory
+    resource_url: terminating_memory
+  action: check_addon_resource_elements
+check_max_resoure_notification:
+  elements:
+  - selector:
+      xpath: //p[contains(.,'up to a total of 48GiB of memory, 150GiB of storage, and 20GiB of terminating memory')]
+check_addon_resource_elements:
+  elements:
+  - selector:
+      xpath: //*[contains(@class, "card-pf-icon-circle pficon pficon-<resource_icon>")]
+  - selector:
+      text: <resource_name>
+  - selector:
+      xpath: //*[contains(., "Purchase") and contains(.,"<resource_name>")]
+  - selector:
+      xpath: //*[@role="button" and contains(@href, "<resource_url>") and contains(.,"Manage <resource_name>")]
+goto_coupons_webpage:
+  url: coupons
+  elements:
+  - selector:
+      xpath: //*[contains(.,"Subscription Coupons")]
+  - selector:
+      xpath: //*[contains(.,"No coupons have been applied to this subscription")]
+click_apply_new_coupon:
+  elements:
+  - selector:
+      xpath: //*[contains(text(),"Apply New Coupon")]
+    op: click
+check_apply_new_coupon_page:
+  elements:
+  - selector:
+      xpath: //*[contains(.,"Coupon token")]
+  - selector:
+      xpath:  //input[contains(@id,"coupon_token")]
+  - selector:
+      xpath: //input[contains(@class,"btn btn-primary apply_coupon") and contains(@value,"Apply Coupon")]
+  - selector:
+      xpath: //a[contains(@href,"/coupons") and contains(text(),"Cancel")]
+check_nav_link:
+  action: click_page_dropdown
+  elements:
+  - selector:
+      xpath: //a[contains(text(),"Account info") and contains(@href,"https://developers.redhat.com/auth/realms/rhd/account/")]  
+  - selector:
+      xpath: //a[contains(text(),"Change password") and contains(@href,"https://developers.redhat.com/auth/realms/rhd/account/password")]
+check_current_fuse_plan_content:
+  elements:
+  - selector:
+      xpath: //*[contains(.,'Plan includes')] 
+  action: check_fuse_small_plan_includes_content
+check_fuse_small_plan_includes_content:
+  elements:
+  - selector:
+      xpath: //*[contains(.,'<integration_number> integrations')]
+  - selector:
+      xpath: //*[contains(.,'<memory> memory for your applications')]
+  - selector:
+      xpath: //*[contains(.,'<cpu_number> for your applications')]
+  - selector:
+      xpath: //*[contains(.,'<storage> storage for your applications')]
+  - selector:
+      xpath: //*[contains(.,'Up to 100 storage volumes available')]
+  - selector:
+      xpath: //*[contains(.,'Connectors Included')]
+  - selector:
+      xpath: //*[contains(.,'Basic Support')]
+check_fuse_subscription_index_page:
+  action: check_page_logo_banner
+  action: click_page_dropdown
+  elements:
+  - selector:
+      xpath: //a[@href='<console_url>/console/' and text()='Go to OpenShift console']
+  - selector:
+      xpath: //*[contains(.,'Logout (<email>)')]
+    timeout: 20
+  action:
+    context:
+      xpath: //*[contains(.,'Current Plan')]
+    ref: check_current_fuse_plan_part
+  action:
+    context:
+      xpath: //*[contains(.,'Primary Contact')]
+    ref: check_primary_contact_part
+  action:
+    context:
+      xpath: //*[contains(.,'Billing Contact')]
+    ref: check_billing_contact_part
+  action:
+    context:
+      xpath: //*[contains(.,'Payment Method')]
+    ref: check_payment_method_part
+  action:
+    context:
+      xpath: //*[contains(.,'Collaborators')]
+    ref: check_collaborators_part
+  action:
+    context:
+      xpath: //*[contains(.,'Coupons')]
+    ref: check_coupons_part
+  action: check_back_to_account_overview
+check_current_fuse_plan_part:
+  elements:
+  - selector:
+      xpath: //*[contains(@href,'subscription') and contains(.,'Change')]
+  - selector:
+      xpath: //*[contains(.,'Your plan has been customized with:')] 
+  action: check_current_fuse_plan_content
+go_to_account_page:
+  url: ../../account/index
+  elements:
+  - selector:
+      text: Active Subscriptions
+check_fuse_account_overview_page:
+  elements:
+  - selector:
+      xpath: //a[contains(@href,'openshiftapps.com')]
+  action: check_tooltips_for_memory
+  action: check_tooltips_for_cpu
+  action: check_tooltips_for_storage
+  action: check_tooltips_for_support
+check_tooltips_for_cpu:
+  elements:
+  - selector:
+      xpath: //strong[contains(text(),'<cpu_number>')]
+    op: click
+  - selector:
+      xpath: //*[contains(.,'<cpu_number> is included with Fuse Online Small Online Integration Environment. Additional vCPU is not available for this plan.')] 
+check_tooltips_for_storage: 
+  elements:
+  - selector:
+      xpath: //strong[contains(text(),'<storage>')]
+    op: click
+  - selector:
+      xpath: //*[contains(.,'<storage> of storage is included with Fuse Online Small Online Integration Environment.')]
+check_tooltips_for_support:
+  elements:
+  - selector:
+      xpath: //strong[contains(text(),'Basic')]
+    op: click
+  - selector:
+      xpath: //*[contains(.,'Basic support is included with Fuse Online.')]
+check_tooltips_for_memory:
+  elements:
+  - selector:
+      xpath: //strong[contains(text(),'<memory>')]
+    op: click
+  - selector:
+      xpath: //*[contains(.,'<memory> of memory is included with Fuse Online Small Online Integration Environment. Additional memory is not available for this plan.')]
+check_open_web_console_link:
+  elements:
+  - selector:
+      xpath: //a[contains(@href,'openshift.com/console/')]
+check_resource_account_overview_page:
+  element: &resource
+    selector:
+      xpath: //span[@data-original-title='<cur_resource>']/strong[contains(text(),'<cur_amount>')]
+check_tooltips_for_terminating_memory:
+  element:
+    <<: *resource
+    op: click
+  elements:
+  - selector:
+      xpath: //h3[@class='popover-title' and contains(text(),'<cur_resource>')]
+  - selector:
+      xpath: //div[@class='popover-content' and contains(.,'<cur_amount> of terminating memory is included with each OpenShift Online Pro plan subscription.')]/a[contains(@href,'/terminating_memory')] 
+check_tooltips_for_persistent_storage: 
+  element:
+    <<: *resource
+    op: click
+  elements:
+  - selector:
+      xpath: //h3[@class='popover-title' and contains(text(),'<cur_resource>')]
+  - selector:
+      xpath: //div[@class='popover-content' and contains(.,'<cur_amount> of persistent storage is included with each OpenShift Online Pro plan subscription.')]/a[contains(@href,'/storage')]
+check_tooltips_for_pro_support:
+  elements:
+  - selector:
+      xpath: //span[contains(@data-content,'OpenShift Online Pro Online-int Basic Support')]
+    op: click
+  - selector:
+      xpath: //div[contains(.,'OpenShift Online Pro Online-int Basic Support is included with OpenShift Online Pro.')]
+check_tooltips_for_pro_memory:
+  element:
+    <<: *resource
+    op: click
+  elements:
+  - selector:
+      xpath: //h3[@class='popover-title' and contains(text(),'<cur_resource>')]
+  - selector:
+      xpath: //div[@class='popover-content' and contains(.,'<cur_amount> of memory is included with each OpenShift Online Pro plan subscription.')]/a[contains(@href,'/memory')]
+check_add_a_new_plan:
+  elements:
+  - selector:
+      xpath: //a[@href='/register/plan'][contains(text(),'Add a New Plan')]
+check_title_on_manage_resoure_page:
+  elements:
+  - selector:
+      xpath: //h2[contains(text(),'Customization')]
+  - selector:
+      xpath: //p[contains(text(),'Adjust the amount of additional <resource_title> in your subscription.')]
+check_addon_slider_of_resource:
+  elements:
+  - selector:
+      xpath: //input[@id='addon_<resource>_slider' and @min='0' and @max='<max_value>']
+check_addon_input_field_of_resource:
+  elements:
+  - selector:
+      xpath: //input[@id='addon_<resource>' and @min='0' and @max='<max_value>']
+  - selector:
+      xpath: //span[@id='addon_<resource>_addon' and contains(text(),'GiB')]
+check_update_subscription_button:
+  elements:
+  - selector:
+      xpath: //button[@disabled="disabled" and contains(.,"Update Subscription")]
+

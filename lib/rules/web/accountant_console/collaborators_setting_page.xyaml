@@ -1,0 +1,52 @@
+# --- collaborator setting page
+
+remove_all_collaborator:
+  action: click_remove_selected_button
+  action: check_pop_message_after_remove_collaborator
+goto_collaboration_setting_page:
+  url: collaboration/index
+  elements:
+  - selector:
+      xpath: //*[contains(., "Collaboration")]
+add_collaborator_by_input:
+  action: input_the_user_name_to_add_the_collaborator
+  action: click_add_collaborator
+  action: check_pop_message_after_adding_collaborator
+input_the_user_name_to_add_the_collaborator:
+  elements:
+  - selector:
+      id: username
+    type: input
+    op: send_keys <username>
+click_add_collaborator:
+  elements:
+  - selector:
+      xpath: //*[@value="Add collaborator"]
+    op: click
+check_pop_message_after_adding_collaborator:
+  elements:
+  - selector:
+      visible_text: !ruby/regexp '/The collaborator account for <username> has been added/'
+check_collaboration_info:
+  elements:
+  - selector:
+      visible_text: !ruby/regexp '/You are currently using <current_used> of <total> of your allowed collaborators/'
+click_select_all_button:
+  elements:
+  - selector:
+      xpath: //*[@select="select"]
+    op: click
+click_deselect_all_button:  
+  elements:
+  - selector:
+      xpath: //*[@select="deselect"]
+    op: click
+click_remove_selected_button:
+  elements:
+  - selector:
+      xpath: //button[contains(.,"Remove selected")]
+    op: click
+check_pop_message_after_remove_collaborator:
+  elements:
+  - selector:
+      visible_text: !ruby/regexp '/The requested collaborator\(s\) have been removed/'

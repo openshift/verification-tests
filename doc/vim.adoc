@@ -1,0 +1,10 @@
+= Some vim tips
+
+== align table cells automatically
+
+* https://gist.github.com/pruan-rht/b0e75db164437d48d2d67d851fdb823a
+* http://vimcasts.org/episodes/aligning-text-with-tabular-vim/
+
+== sample .vimrc from pruan along with colorscheme
+* https://gist.github.com/pruan-rht/621ab6b3cff137c3000e [ change color scheme or font to suit your preference]
+* https://gist.github.com/pruan-rht/eefc7a16d64ddc155e6a [color scheme reference by above .vimrc]

@@ -1,0 +1,36 @@
+# check error page info
+check_error_page:
+  elements:
+  - selector:
+      xpath: //h1[contains(.,'Error')]
+  - selector:
+      xpath: //div[contains(.,'<project_name> does not exist or you are not authorized to view it')]
+check_error_list_project_resources:
+  url: /console/project/<project_name>/overview
+  elements:
+  - selector:
+      xpath: //div[contains(.,'Failed to list')]
+check_error_notification_on_page:
+  elements:
+  - selector:
+      xpath: //div[contains(.,'<error_message>')]
+check_login_error_message:
+  elements:
+  - selector:
+      xpath: //div[@class='alert alert-danger' and contains(., '<error_message>')]
+
+check_key_editor_validation_error:
+  element:
+    selector:
+      xpath: //span[contains(text(),'alidation error')]
+check_mail_format_error: {}
+confirm_errors_with_invalid_template_label:
+  action: check_key_editor_validation_error
+  element:
+    selector:
+        xpath: //span/a[@data-toggle="tooltip" and contains(@title,'valid object label')]
+confirm_errors_with_invalid_env_var:
+  action: check_key_editor_validation_error
+  element:
+    selector:
+      xpath: //span/a[@data-toggle="tooltip" and contains(@title,'valid environment variable')]

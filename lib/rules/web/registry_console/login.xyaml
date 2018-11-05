@@ -1,0 +1,37 @@
+---
+goto_registry_console:
+  url: /
+login_reg_console:
+  action: login_sequence
+  action: verify_logged_in_reg_console
+login_token_reg_console:
+  url: /registry#access_token=<token>&expires_in=86400&token_type=Bearer
+  action: verify_logged_in_reg_console
+verify_logged_in_reg_console:
+  element:
+    selector:
+      text: Red Hat Container Registry
+      id: index-brand
+  scripts:
+  - command: return window.localStorage['login-data'];
+    expect_result: true
+click_login_again:
+  element:
+    selector:
+      text: Login Again
+    type: a
+    op: click
+click_login_again_in_new_tab:
+  elements:
+  - selector:
+      text: Login Again
+    type: a
+    op: "click - :control\n- :shift"
+  with_window:
+    selector:
+      url: !ruby/regexp '/login/'
+    action: check_redirection_to_login_page
+check_redirection_to_login_page:
+  element:
+    selector:
+      xpath: //strong[text()='Welcome to the OpenShift Container Platform.']

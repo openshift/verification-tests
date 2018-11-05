@@ -1,0 +1,6 @@
+dynect_plugin.rb is a copy with small changes of https://github.com/openshift/origin-server/blob/master/plugins/dns/dynect/lib/openshift/dynect_plugin.rb rev 033d420.
+
+oo_exception.rb is a direct copy of https://github.com/openshift/origin-server/raw/84798bc13966b04672afcc6418847f57c5ef6212/common/lib/openshift-origin-common/exceptions/oo_exception.rb
+
+It is a much better alternative to dyn-rb and dynect_rest as it supports
+auto reconnect and automatic retries.

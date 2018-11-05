@@ -1,0 +1,8 @@
+---
+logout_kibana:
+  url: <kibana_url>
+  elements:
+    - selector:
+        text: Log out
+      op: click
+      type: a

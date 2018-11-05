@@ -1,0 +1,56 @@
+= Configuration high level overview
+
+== configuration files
+
+Main configuration is inside `config/config.yaml`. Content of that file is also merged with `PRIVATE/config.yaml` and `PRIVATE/config/config.yaml` if such files exist.
+
+We have also some configuration in `config/cucumber.yml`. There are some profiles defined for easily calling with proper options.
+
+`lib/configuration.rb` is the class that handles the logic behind reading, merging and accessing configuration.
+
+== global configuration
+
+This is the the `global` section inside `config/config.yaml`. Some generic defaults like `git_repo_url` or `browser`.
+
+Some of these options can be overwritten by environment variables, see `#env_overrides` inside `lib/configuration.rb`
+
+== environment configuration
+
+Under `environments` there are default options for different environment types. The name of environment does not matter, you can rename environment but if you use same options, the end result should be the same. Names are to just make it easy to start with some reasonable defaults.
+
+The default environment is determined by the `default_environment` global option. It's usually set by the CUCUSHIFT_DEFAULT_ENVIRONMENT env variable.
+
+Let's take one example - OSE environment. It has as a default `hosts_type: SSHAccessibleHost`. If we want to override it, we can specify env variable OPENSHIFT_ENV_OSE_HOSTS_TYPE. Its the same with any other option. All variables that start with `OPENSHIFT_ENV_<env name>_SOMETHING` get an option for the named environment set. The first part `OPENSHIFT_ENV_<env name>_` is removed, then the other part `SOMETHING` is downcased and converted to a Symbol to become a key in the configuration Hash that is passed to the environment class constructor. That is taken care of in the `#load_env` private method of `BushSlicer::EnvironmentManager` class.
+
+== user configuration
+
+`UserManager`, whatever it is inherits options used to create environment. The user manager should only use options prefixed with `:user_manager_`. Because it inherits environment configuration, all such options can be provided or overriden by environment variables.
+
+So far we only have `StaticUserManager` so users are defined with the `OPENSHIFT_ENV_OSE_USER_MANAGER_USERS` env variable. Two ways to provide a user:
+
+* by user/password
+* by token
+
+User/password pairs are easier unless you run in environment where you can't login with a password, e.g. google auth, kerberos auth, etc. You have to generate a token via browser and then supply it to BushSlicer.
+
+Username should be written in full. e.g. with kerberos auth the client tool can take a short username like `asd`. But you need to use the full username like `asd@EXAMPLE.COM`.
+
+Some examples:
+
+* `export OPENSHIFT_ENV_OSE_USER_MANAGER_USERS=joe:password` - one user with name joe and password `password`
+* `export OPENSHIFT_ENV_OSE_USER_MANAGER_USERS=:eKORXg2tqwoNsTmd2s1OdhG2w0vOq9y7R6HbM4pgQ8U` one user where we only have a token (username auto-discovered)
+* `export OPENSHIFT_ENV_OSE_USER_MANAGER_USERS=joe:password,:eKORXg2tqwoNsTmd2s1OdhG2w0vOq9y7R6HbM4pgQ8U,alice:password` - 3 users where first and last specified by user/password pairs and the second one with a token; usually you use only one approach but it's possible to mix
+
+== other configuration
+
+So far we also have `optional_classes` root configuration option. It is used to define some classes to be instantiated with particular options. See `Configuration#get_optional_class_instance`.
+
+Also we have `services` to define some third party services options. Access to those configuration options is not wrapped in any way. Information should be accessed directly, see below.
+
+== accessing configuration
+
+Whenever you are, you should usually have the convenience `#conf` method available to get current loaded configuration. Reference to configuration is kept in the Manager object `Manager#conf` but direct use from manager is discouraged.
+
+To access global options just type `conf[:option_name]`. If option is nested, you could do: `conf[:neting0, :nesting1, :options_name]`. This guarantees you that you don't get an exception looking for nested options but just get a nil when the option is not defined.
+
+To access non-global options, you need to write the root option name first, e.g. `conf[:optional_classes, :tcms_tc_manager, :class]`. What is a `root` option name you can see in `Configuration#[]` method.

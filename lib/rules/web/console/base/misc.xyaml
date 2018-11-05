@@ -1,0 +1,10 @@
+open_new_tab:
+  element:
+    selector:
+      xpath: /*
+    op: "send_keys - :control\n- \"t\""
+close_tab:
+  element:
+    selector:
+      xpath: /*
+    op: "send_keys - :control\n- \"w\""

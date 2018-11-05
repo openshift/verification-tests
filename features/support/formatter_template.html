@@ -1,0 +1,188 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>BushSlicer Report</title>
+<style type="text/css">
+/* Background color for the whole web page */
+body {
+  background-color: #C8C8C8;
+}
+/* A div which contains the whole feature, including scenarios */
+.feature_container {
+  clear: both;
+}
+/* The name of the feature */
+.feature_name {
+  padding: 0.1% 0.3%;
+  font-family: "DejaVu Sans", DejaVu, sans-serif;
+  font-size: 130%;
+  margin-bottom: 0.4%;
+  border-left-style: solid;
+  border-width: thick;
+}
+/* Colors for passed features */
+.feature_name_pass {
+  box-shadow: 5px 5px 5px #666600;
+  background-color: #99CC00;
+  border-color: #669900;
+}
+/* Colors for failed features */
+.feature_name_fail {
+  box-shadow: 5px 5px 5px #990000;
+  background-color: #FF0000;
+  border-color: #990000;
+}
+/* A div which contains the whole scenario, including steps */
+.scenario_container {
+  margin-bottom: 1%;
+  margin-left: 1%;
+}
+/* The name of the scenario */
+.scenario_name {
+  padding: 0.1% 0.3%;
+  font-family: "DejaVu Sans", DejaVu, sans-serif;
+  font-size: 120%;
+  margin-bottom: 0.4%;
+  border-left-style: solid;
+  border-width: thick;
+}
+/* Colors for passed scenarios */
+.scenario_name_pass {
+  box-shadow: 5px 5px 5px #666600;
+  background-color: #99CC00;
+  border-color: #669900;
+}
+/* Colors for failed scenarios */
+.scenario_name_fail {
+  box-shadow: 5px 5px 5px #990000;
+  background-color: #FF0000;
+  border-color: #990000;
+}
+/* A div which contains the whole step */
+.step_container {
+  margin-bottom: 0.3%;
+  margin-left: 1%;
+  font-family: "DejaVu Sans Mono", DejaVu, monospace;
+  word-wrap: break-word;
+}
+/* The name of the step */
+.step_name {
+  padding: 0.1% 0.3%;
+  font-size: 110%;
+  color: #000000;
+  border-left-style: solid;
+  border-left-width: thick;
+  margin-bottom: 0.3%;
+  clear: both;
+  word-wrap: break-word;
+}
+/* The keyword of the step: Given, When, Then, And, But */
+.step_keyword {
+  float: left;
+  font-style: italic;
+  padding-right: 0.5%;
+  font-weight: bold;
+}
+/* The arguments within the step */
+.step_arg {
+  font-weight: bold;
+  color: #0066CC;
+}
+/* Colors for passed steps */
+.step_pass {
+  box-shadow: 3px 3px 3px #666600;
+  background-color: #99CC00;
+  border-color: #669900;
+}
+/* Colors for failed steps */
+.step_fail {
+  box-shadow: 3px 3px 3px #990000;
+  background-color: #FF3333;
+  border-color: #990000;
+}
+/* Colors for skipped steps */
+.step_skip {
+  box-shadow: 3px 3px 3px #000000;
+  background-color: #909090;
+  border-color: #404040;
+}
+/* A div which contains all the lines of step messages */
+.step_message_container {
+  border-radius: 10px;
+  padding: 0.5%;
+  border-color: #FFFFCC;
+  background-color: #FFFFCC;
+  font-size: 100%;
+  clear: both;
+  word-wrap: break-word;
+}
+/* A div which contains one line of the step message */
+.step_line_container {
+  clear: both;
+  width: 100%;
+  padding: 0.1%;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+/* The time stamp within the step message */
+.time_stamp {
+  padding-right: 0.5%;
+  color: #CC0000;
+  height: 100%;
+  float: left;
+  font-weight: bold;
+  background-color: inherit;
+  clear: both;
+}
+/* A INFO message */
+.step_line_info {
+  background-color: #99CC99;
+  border-color: #99CC99;
+  word-wrap: break-word;
+}
+/* A WARN message */
+.step_line_warn {
+  background-color: #FFFF00;
+  border-color: #FFFF00;
+  word-wrap: break-word;
+}
+/* A ERROR message */
+.step_line_error {
+  background-color: #9966FF;
+  border-color: #9966FF;
+  word-wrap: break-word;
+}
+/* backtrace info */
+.step_backtrace {
+  border-radius: 10px;
+  padding: 0.5%;
+  border-color: #000000;
+  background-color: #383838;
+  font-size: 100%;
+  color: #FFFFFF;
+  clear: both;
+  float: left;
+  word-wrap: break-word;
+}
+/* multiline arguments div */
+.multi_arg_container {
+  float: left;
+  clear: both;
+  margin-left: 1%;
+  background-color: #0099FF;
+}
+table {
+}
+th, td, tr {
+  border: 2px solid #383838;
+  text-align: center;
+  vertical-align: middle;
+}
+</style>
+</head>
+
+<body>
+#HTML_BODY#
+</body>
+</html>

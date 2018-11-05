@@ -1,0 +1,16 @@
+---
+:hooks:
+  :click: |-
+    # this will execute in the Web4Cucumber instance context
+    proc { |block|
+      begin
+        logger.trace "Clicking web element via hook.."
+        block.call
+      rescue Net::ReadTimeout => e
+        logger.warn "Operation over element timed out but we ignore this. " \
+          "The reason is that login often fails with Firefox legacy driver " \
+          "and a Jenkins 2 instance with default pod RAM. " \
+          "Please remove this logic once we stop using legacy FF driver"
+      end
+    }
+:size: [1280,1024]

@@ -1,0 +1,4 @@
+= Description
+
+Put in this directory classes for launching machines, OpenShift and other
+instances or classes related to launching jenkins builds.

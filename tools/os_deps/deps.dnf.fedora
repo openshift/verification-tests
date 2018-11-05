@@ -1,0 +1,20 @@
+git
+
+ruby
+ruby-devel
+rubygem-bundler
+rubygem-nokogiri
+
+gcc-c++
+make
+openssl
+
+firefox
+which
+Xvfb
+
+ansible
+pyOpenSSL
+# needed for local ansible repo/dnf operations
+redhat-rpm-config
+python-dnf

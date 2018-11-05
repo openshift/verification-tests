@@ -1,0 +1,965 @@
+---
+jenkins_add_build_string_parameter:
+  action: goto_configure_page
+  elements:
+  - selector:
+      text: This build is parameterized
+    op: click
+  - selector:
+      class: hetero-list-add
+      text: Add Parameter
+    type: button
+    op: click
+  - selector:
+      text: String Parameter
+    type: a
+    op: click
+  - selector:
+      class: setting-input
+      name: parameter.name
+    type: input
+    op: send_keys <string_parameter>
+  action: jenkins_click_save_button
+
+jenkins_check_build_string_parameter:
+  action: goto_configure_page
+  elements:
+  - selector:
+      class: setting-input
+      name: parameter.name
+      value: <env_name>
+    type: input
+  - selector:
+      class: setting-input
+      name: parameter.defaultValue
+      value: <env_value>
+    type: input
+
+jenkins_add_pod_template:
+  url: /configure
+  scripts:
+  - command: return document.getElementsByName("_.name")[document.getElementsByName("_.name").length-2].value = "<slave_name>"
+    expect_result: true
+  - command: return document.getElementsByName("_.label")[document.getElementsByName("_.label").length-1].value = "<slave_label>"
+    expect_result: true
+  - command: return document.getElementsByName("_.image")[document.getElementsByName("_.image").length-1].value = "<slave_image>"
+    expect_result: true
+  action: jenkins_click_save_button
+
+jenkins_build_now:
+  url: /job/<job_name>
+  elements:
+  - selector:
+      text: Build Now
+    op: click
+    type: a
+
+jenkins_build_with_string_parameter:
+  url: /job/<job_name>
+  elements:
+  - selector:
+      text: Build with Parameters
+    type: a
+    op: click
+  - selector:
+      name: value
+      class: setting-input
+    type: input
+    op: send_keys <build_parameter>
+  - selector:
+      text: Build
+    type: button
+    op: click
+
+jenkins_change_configure_label:
+  action: goto_configure_page
+  elements:
+  - selector:
+      name: _.label
+    type: input
+    op: clear
+  - selector:
+      name: _.label
+    type: input
+    op: send_keys <label>
+  action: jenkins_click_save_button
+
+jenkins_change_execute_shell_command:
+  action: goto_configure_page
+  action: jenkins_click_delete_execute_shell
+  scripts:
+  - command: return document.querySelectorAll('button')[document.querySelectorAll('button').length-4].id = 'clicktarget'
+    expect_result: true
+  elements:
+  - selector:
+      id: clicktarget
+    op: click
+    type: button
+  - selector:
+      text: Execute shell
+    type: a
+    op: click
+  scripts:
+  - command: return document.querySelectorAll('.CodeMirror')[1].querySelectorAll('div')[0].style.overflow = 'auto'
+    expect_result: true
+  - command: return document.querySelectorAll('.CodeMirror')[1].querySelectorAll('div')[0].style.height = '1px'
+    expect_result: true
+  - command: return document.querySelectorAll('.CodeMirror')[1].querySelectorAll('div')[0].querySelector('textarea').id = 'inputtarget'
+    expect_result: true
+  element:
+    selector:
+      xpath: //textarea[@id='inputtarget']
+    type: textarea
+    op: set <input>
+  action: jenkins_click_save_button
+
+jenkins_check_pipeline_script:
+  action: goto_configure_page
+  scripts:
+  - command: return document.getElementsByClassName("ace_string")[7].innerHTML == "<checktext>"
+    expect_result: true
+
+jenkins_click_delete_execute_shell:
+  scripts:
+  - command: return document.querySelector("div[name=builder]").querySelector("button").click()
+    expect_result: ~
+
+jenkins_check_openshift_pipeline_jenkins_plugin:
+  action: go_to_installed_plugin_manage_page
+  element:
+    selector:
+      class: display-name
+      text : OpenShift Pipeline Jenkins Plugin
+    type: a
+
+jenkins_check_kubernetes_plugin:
+  action: go_to_installed_plugin_manage_page
+  element:
+    selector:
+      class: display-name
+      text : Kubernetes plugin
+    type: a
+
+jenkins_click_add_build_step_button:
+  element:
+    selector:
+      xpath: //button[contains(., 'Add build step')]
+    op: click
+    type: button
+
+jenkins_check_build_fields:
+  action: goto_configure_page
+  action: jenkins_click_add_build_step_button
+  elements:
+  - selector:
+      class: yuimenuitemlabel
+      text: Trigger OpenShift Build
+    type: a
+    op: click
+  - selector:
+      xpath: //input[contains(@checkurl, 'OpenShiftBuilder/checkBldCfg')]
+    type: input
+    op: send_keys <build_config>
+  - selector:
+      xpath: //input[contains(@checkurl, 'OpenShiftBuilder/checkNamespace')]
+    type: input
+    op: send_keys <name_space>
+  - selector:
+      xpath: //input[contains(@checkurl, 'OpenShiftBuilder/checkAuthToken')]
+    type: input
+    op: send_keys <token>
+  - selector:
+      name: _.commitID
+    type: input
+    op: send_keys <commit_hash>
+  - selector:
+      xpath: //div[contains(@descriptorid, 'OpenShiftBuilder')]//td[contains(text(),"Allow for verbose logging during this build step plug-in")]/following-sibling::td[1]/input[1]
+      type: radio
+    type: input
+    op: click
+  - selector:
+      xpath: //div[contains(@descriptorid, 'OpenShiftBuilder')]//td[contains(text(),"Pipe the build logs from OpenShift to the Jenkins console")]/following-sibling::td[1]/input[1]
+      type: radio
+    type: input
+    op: click
+  - selector:
+      xpath: //div[contains(@descriptorid, 'OpenShiftBuilder')]//td[contains(text(),"Verify whether any deployments triggered by this build's output fired")]/following-sibling::td[1]/input[1]
+      type: radio
+    type: input
+    op: click
+  action: jenkins_click_save_button
+
+jenkins_check_post_build_fields:
+  action: goto_configure_page
+  action: jenkins_click_add_post_build_action_button
+  elements:
+  - selector:
+      class: yuimenuitemlabel
+      text: Cancel OpenShift Builds
+    type: a
+    op: click
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftBuildCanceller/checkNamespace")]
+    type: input
+    op: send_keys <store_project>
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftBuildCanceller/checkBldCfg")]
+    type: input
+    op: send_keys <build_config>
+  - selector:
+      xpath: //div[contains(@descriptorid, 'OpenShiftBuildCanceller')]//td[contains(text(),"Allow for verbose logging during this build step plug-in")]/following-sibling::td[1]/input[1]
+      type: radio
+    type: input
+    op: click
+  action: jenkins_click_save_button
+
+jenkins_check_logging_build_step_verbose:
+  action: goto_configure_page
+  action: jenkins_click_add_build_step_button
+  elements:
+  - selector:
+      class: yuimenuitemlabel
+      text: Trigger OpenShift Build
+    type: a
+    op: click
+  - selector:
+      xpath: //div[contains(@descriptorid, 'OpenShiftBuilder')]/descendant::input[@value="true"]
+      type: radio
+    type: input
+  - selector:
+      xpath: //div[contains(@descriptorid, 'OpenShiftBuilder')]/descendant::input[@value="false"]
+      type: radio
+    type: input
+  action: jenkins_click_add_build_step_button
+  elements:
+  - selector:
+      class: yuimenuitemlabel
+      text: Scale OpenShift Deployment
+    type: a
+    op: click
+  - selector:
+      xpath: //div[contains(@descriptorid, 'OpenShiftScaler')]/descendant::input[@value="true"]
+    type: input
+  - selector:
+      xpath: //div[contains(@descriptorid, 'OpenShiftScaler')]/descendant::input[@value="false"]
+    type: input
+  action: jenkins_click_add_build_step_button
+  elements:
+  - selector:
+      class: yuimenuitemlabel
+      text: Trigger OpenShift Deployment
+    type: a
+    op: click
+  - selector:
+      xpath: //div[contains(@descriptorid, 'OpenShiftDeployer')]/descendant::input[@value="true"]
+    type: input
+  - selector:
+      xpath: //div[contains(@descriptorid, 'OpenShiftDeployer')]/descendant::input[@value="false"]
+    type: input
+  action: jenkins_click_add_build_step_button
+  elements:
+  - selector:
+      class: yuimenuitemlabel
+      text: Verify OpenShift Service
+    type: a
+    op: click
+  - selector:
+      xpath: //div[contains(@descriptorid, 'OpenShiftServiceVerifier')]/descendant::input[@value="true"]
+    type: input
+  - selector:
+      xpath: //div[contains(@descriptorid, 'OpenShiftServiceVerifier')]/descendant::input[@value="false"]
+    type: input
+  action: jenkins_click_add_build_step_button
+  elements:
+  - selector:
+      class: yuimenuitemlabel
+      text: Tag OpenShift Image
+    type: a
+    op: click
+  - selector:
+      xpath: //div[contains(@descriptorid, 'OpenShiftImageTagger')]/descendant::input[@value="true"]
+    type: input
+  - selector:
+      xpath: //div[contains(@descriptorid, 'OpenShiftImageTagger')]/descendant::input[@value="false"]
+    type: input
+  action: jenkins_click_add_post_build_action_button
+  elements:
+  - selector:
+      class: yuimenuitemlabel
+      text: Cancel OpenShift Builds
+    type: a
+    op: click
+  - selector:
+      xpath: //div[contains(@descriptorid, 'OpenShiftBuildCanceller')]/descendant::input[@value="true"]
+      type: radio
+    type: input
+  - selector:
+      xpath: //div[contains(@descriptorid, 'OpenShiftBuildCanceller')]/descendant::input[@value="false"]
+      type: radio
+    type: input
+  action: jenkins_click_add_post_build_action_button
+  elements:
+  - selector:
+      class: yuimenuitemlabel
+      text: Cancel OpenShift Deployment
+    type: a
+    op: click
+  - selector:
+      xpath: //div[contains(@descriptorid, 'OpenShiftDeployCanceller')]/descendant::input[@value="true"]
+      type: radio
+    type: input
+  - selector:
+      xpath: //div[contains(@descriptorid, 'OpenShiftDeployCanceller')]/descendant::input[@value="false"]
+      type: radio
+    type: input
+
+jenkins_post_cancel_build_from_job:
+  action: goto_configure_page
+  action: jenkins_click_add_post_build_action_button
+  elements:
+  - selector:
+      class: yuimenuitemlabel
+      text: Cancel OpenShift Builds
+    type: a
+    op: click
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftBuildCanceller/checkNamespace")]
+    type: input
+    op: send_keys <store_project>
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftBuildCanceller/checkBldCfg")]
+    type: input
+    op: send_keys <build_config>
+  action: jenkins_click_save_button
+
+jenkins_cancel_deployment_from_job:
+  action: goto_configure_page
+  action: jenkins_click_add_post_build_action_button
+  elements:
+  - selector:
+      class: yuimenuitemlabel
+      text: Cancel OpenShift Deployment
+    type: a
+    op: click
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftDeployCanceller/checkNamespace")]
+    type: input
+    op: send_keys <store_project>
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftDeployCanceller/checkDepCfg")]
+    type: input
+    op: send_keys <deployment_config>
+  action: jenkins_click_save_button
+
+jenkins_click_add_post_build_action_button:
+  element:
+    selector:
+      text: Add post-build action
+      class: hetero-list-add
+    type: button
+    op: click
+
+jenkins_click_save_button:
+  element:
+    selector:
+      text: Save
+    type: button
+    op: click
+
+jenkins_create_freestyle_job:
+  url: /
+  elements:
+  - selector:
+      text: New Item
+    op: click
+    type: a
+  - selector:
+      value: hudson.model.FreeStyleProject
+    type: radio
+    op: click
+  - selector:
+      id: name
+    type: input
+    op: send_keys <job_name>
+  - selector:
+      id: ok-button
+    type: button
+    op: click
+
+jenkins_create_pipeline_job:
+  url: /
+  elements:
+  - selector:
+      text: New Item
+    op: click
+    type: a
+  - selector:
+      value: org.jenkinsci.plugins.workflow.job.WorkflowJob
+    type: radio
+    op: click
+  - selector:
+      id: name
+    type: input
+    op: send_keys <job_name>
+  - selector:
+      id: ok-button
+    type: button
+    op: click
+
+jenkins_create_openshift_build_trigger:
+  action: goto_configure_page
+  action: jenkins_click_add_build_step_button
+  scripts:
+  - command: return document.getElementsByClassName("yuimenuitemlabel")[document.getElementsByClassName("yuimenuitemlabel").length-1].scrollIntoView(true)
+    expect_result: ~
+  elements:
+  - selector:
+      text: Trigger OpenShift Build
+    type: a
+    op: click
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftBuilder/checkBldCfg")]
+    type: input
+    op: send_keys <build_config>
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftBuilder/checkNamespace")]
+    type: input
+    op: send_keys <store_project>
+  action: jenkins_click_save_button
+
+jenkins_create_openshift_deployment_trigger:
+  action: goto_configure_page
+  action: jenkins_click_add_build_step_button
+  scripts:
+  - command: return document.getElementsByClassName("yuimenuitemlabel")[document.getElementsByClassName("yuimenuitemlabel").length-1].scrollIntoView(true)
+    expect_result: ~
+  elements:
+  - selector:
+      text: Trigger OpenShift Deployment
+    type: a
+    op: click
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftDeployer/checkDepCfg")]
+    type: input
+    op: send_keys <deploymentconfig>
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftDeployer/checkNamespace")]
+    type: input
+    op: send_keys <store_project>
+  action: jenkins_click_save_button
+
+jenkins_create_openshift_resources:
+  action: goto_configure_page
+  action: jenkins_click_add_build_step_button
+  elements:
+  - selector:
+      text: Create OpenShift Resource(s)
+    op: click
+    type: a
+  - selector:
+      xpath: //textarea[contains(@checkurl,"OpenShiftCreator/checkJsonyaml")]
+    op: send_keys <jsonfile>
+    type: textarea
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftCreator/checkNamespace")]
+    op: send_keys <namespace>
+    type: input
+  - selector:
+      xpath: //button[contains(., 'Save')]
+    op: click
+    type: button
+
+jenkins_delete_openshift_resources:
+  action: goto_configure_page
+  action: jenkins_click_add_build_step_button
+  elements:
+  - selector:
+      text: Delete OpenShift Resource(s) <steptype>
+    op: click
+    type: a
+  - selector:
+      xpath: //textarea[contains(@name,"_.types")]
+    op: send_keys <resourcetype>
+    type: textarea
+  - selector:
+      xpath: //textarea[contains(@name,"_.keys")]
+    op: send_keys <resourcekey>
+    type: textarea
+  - selector:
+      xpath: //textarea[contains(@name,"_.values")]
+    op: send_keys <resourceval>
+    type: textarea
+  - selector:
+      xpath: //textarea[contains(@checkurl,"<deletertype>/checkJsonyaml")]
+    op: send_keys <resourcejsonyaml>
+    type: textarea
+  - selector:
+      xpath: //input[contains(@checkurl,"<deletertype>/checkNamespace")]
+    op: send_keys <namespace>
+    type: input
+  - selector:
+      xpath: //button[contains(., 'Save')]
+    op: click
+    type: button
+
+jenkins_install_kubernetes_plugin:
+  action: go_to_updates_plugin_manage_page
+  scripts:
+  - command: return document.getElementsByName("plugin.kubernetes.default")[0].click()
+    expect_result: ~
+  - command: return document.querySelector('button').click()
+    expect_result: ~
+
+jenkins_click_download_install_button:
+  element:
+    selector:
+      text: Download now and install after restart
+    type: button
+    op: click
+
+jenkins_standard_login:
+  url: /login
+  elements:
+  - selector:
+      id: j_username
+    op: send_keys <username>
+    type: input
+  - selector:
+      name: j_password
+    op: send_keys <password>
+    type: input
+  elements:
+  - selector:
+      id: yui-gen1-button
+    op: click
+    type: button
+  action: jenkins_verify_logged_in
+
+jenkins_oauth_login:
+  url: /securityRealm/commenceLogin?from=%2F
+  scripts:
+  - command: |
+        var Logtext = document.getElementsByClassName("btn btn-lg btn-primary")[0]
+        if (typeof(Logtext) == "undefined"){ 
+           return true;
+           }
+        Logtext.click();
+        return true;
+    expect_result: true
+  elements:
+  - selector:
+      id: inputUsername
+    op: send_keys <username>
+    type: input
+  - selector:
+      id: inputPassword
+    op: send_keys <password>
+    type: input
+  - selector:
+      text: Log In
+    op: click
+    type: button
+  scripts:
+  - command: |
+        var Auth = document.getElementsByName("approve")[0]
+        if (typeof(Auth) == "undefined"){ 
+           return true;
+           }
+        Auth.click();
+        return true;
+    expect_result: true
+  action: jenkins_verify_logged_in
+
+jenkins_logout:
+  elements:
+  - selector:
+      xpath: //a[contains(@href,"/logout")]
+    type: a
+    op: click
+
+jenkins_pipeline_create_resource_snippet:
+  url: job/<job_name>/pipeline-syntax/
+  elements:
+  - selector:
+      xpath: //select/option[contains(., "openshiftCreateResource")]
+    op: click
+    type: select
+  - selector:
+      xpath: //input[contains(@checkurl,"checkApiURL")]
+    op: send_keys <api_endpoint>
+    type: input
+  - selector:
+      xpath: //input[contains(@checkurl,"checkNamespace")]
+    op: send_keys <namespace>
+    type: input
+  - selector:
+      xpath: //textarea[contains(@name,"_.jsonyaml")]
+    op: send_keys <jsonfile>
+    type: textarea
+  - selector:
+      text: Generate Pipeline Script
+    op: click
+    type: button
+  scripts:
+    - command: return document.querySelector('textarea[name="_."]').value
+      expect_result: ~
+
+
+jenkins_pipeline_insert_script:
+  action: goto_configure_page
+  element:
+    selector:
+      xpath: //div[contains(@id,"workflow-editor-1")]
+    visible: true
+  scripts:
+    - command: |
+            var editor = document.querySelector("#workflow-editor-1").env.editor;
+            editor.session.insert({ <editor_position> }, <dsl_text>);
+            return true
+      expect_result: true
+  element:
+    selector:
+      text: Save
+    op: click
+    type: button
+
+jenkins_scale_openshift_deployment:
+  action: goto_configure_page
+  action: jenkins_click_add_build_step_button
+  scripts:
+  - command: return document.getElementsByClassName("yuimenuitemlabel")[document.getElementsByClassName("yuimenuitemlabel").length-1].scrollIntoView(true)
+    expect_result: ~
+  elements:
+  - selector:
+      text: Scale OpenShift Deployment
+    op: click
+    type: a
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftScaler/checkDepCfg")]
+    op: send_keys <depcfg>
+    type: input
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftScaler/checkNamespace")]
+    op: send_keys <namespace>
+    type: input
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftScaler/checkReplicaCount")]
+    op: send_keys <replicacount>
+    type: input
+  - selector:
+      xpath: //button[contains(., 'Save')]
+    op: click
+    type: button
+
+jenkins_trigger_sample_openshift_build:
+  action: goto_configure_page
+  elements:
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftScaler/checkApiURL")]
+    op: clear
+    type: input
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftScaler/checkApiURL")]
+    op: send_keys <scaler_apiurl>
+    type: input
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftScaler/checkNamespace")]
+    op: clear
+    type: input
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftScaler/checkNamespace")]
+    op: send_keys <scaler_namespace>
+    type: input
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftBuilder/checkApiURL")]
+    op: clear
+    type: input
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftBuilder/checkApiURL")]
+    op: send_keys <builder_apiurl>
+    type: input
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftBuilder/checkNamespace")]
+    op: clear
+    type: input
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftBuilder/checkNamespace")]
+    op: send_keys <builder_namespace>
+    type: input
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftDeploymentVerifier/checkApiURL")]
+    op: clear
+    type: input
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftDeploymentVerifier/checkApiURL")]
+    op: send_keys <deploy_verify_apiurl>
+    type: input
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftDeploymentVerifier/checkNamespace")]
+    op: clear
+    type: input
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftDeploymentVerifier/checkNamespace")]
+    op: send_keys <deploy_verify_namespace>
+    type: input
+  - selector:
+      xpath: (//input[contains(@checkurl, "OpenShiftScaler/checkApiURL")])[last()]
+    op: clear
+    type: input
+  - selector:
+      xpath: (//input[contains(@checkurl, "OpenShiftScaler/checkApiURL")])[last()]
+    op: send_keys <scaler_apiurl>
+    type: input
+  - selector:
+      xpath: (//input[contains(@checkurl, "OpenShiftScaler/checkNamespace")])[last()]
+    op: clear
+    type: input
+  - selector:
+      xpath: (//input[contains(@checkurl, "OpenShiftScaler/checkNamespace")])[last()]
+    op: send_keys <scaler_namespace>
+    type: input
+  - selector:
+      xpath: (//input[contains(@checkurl, "OpenShiftServiceVerifier/checkApiURL")])[last()]
+    op: clear
+    type: input
+  - selector:
+      xpath: (//input[contains(@checkurl, "OpenShiftServiceVerifier/checkApiURL")])[last()]
+    op: send_keys <service_verify_apiurl>
+    type: input
+  - selector:
+      xpath: (//input[contains(@checkurl, "OpenShiftServiceVerifier/checkNamespace")])[last()]
+    op: clear
+    type: input
+  - selector:
+      xpath: (//input[contains(@checkurl, "OpenShiftServiceVerifier/checkNamespace")])[last()]
+    op: send_keys <service_verify_namespace>
+    type: input
+  - selector:
+      xpath: //input[contains(@checkurl, "OpenShiftImageTagger/checkApiURL")]
+    op: clear
+    type: input
+  - selector:
+      xpath: //input[contains(@checkurl, "OpenShiftImageTagger/checkApiURL")]
+    op: send_keys <image_tagger_apiurl>
+    type: input
+  - selector:
+      xpath: //input[contains(@checkurl, "OpenShiftImageTagger/checkNamespace")]
+    op: clear
+    type: input
+  - selector:
+      xpath: //input[contains(@checkurl, "OpenShiftImageTagger/checkNamespace")]
+    op: send_keys <image_tagger_namespace>
+    type: input
+  - selector:
+      xpath: (//input[contains(@checkurl,"OpenShiftDeploymentVerifier/checkApiURL")])[last()]
+    op: clear
+    type: input
+  - selector:
+      xpath: (//input[contains(@checkurl,"OpenShiftDeploymentVerifier/checkApiURL")])[last()]
+    op: send_keys <deploy_verify_apiurl>
+    type: input
+  - selector:
+      xpath: (//input[contains(@checkurl,"OpenShiftDeploymentVerifier/checkNamespace")])[last()]
+    op: clear
+    type: input
+  - selector:
+      xpath: (//input[contains(@checkurl,"OpenShiftDeploymentVerifier/checkNamespace")])[last()]
+    op: send_keys <deploy_verify_namespace>
+    type: input
+  - selector:
+      xpath: //button[contains(., 'Save')]
+    op: click
+    type: button
+
+jenkins_tag_openshift_image:
+  action: goto_configure_page
+  action: jenkins_click_add_build_step_button
+  scripts:
+  - command: return document.getElementsByClassName("yuimenuitemlabel")[document.getElementsByClassName("yuimenuitemlabel").length-1].scrollIntoView(true)
+    expect_result: ~
+  elements:
+  - selector:
+      text: Tag OpenShift Image
+    op: click
+    type: a
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftImageTagger/checkTestTag")]
+    op: send_keys <curr_img_tag>
+    type: input
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftImageTagger/checkTestStream")]
+    op: send_keys <curr_img_tag_is>
+    type: input
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftImageTagger/checkProdTag")]
+    op: send_keys <new_img_tag>
+    type: input
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftImageTagger/checkProdStream")]
+    op: send_keys <new_img_tag_is>
+    type: input
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftImageTagger/checkNamespace")]
+    op: send_keys <tagnamespace>
+    type: input
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftImageTagger/checkDestinationNamespace")]
+    op: send_keys <destinationnamespace>
+    type: input
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftImageTagger/checkAuthToken")]
+    op: send_keys <auth_token>
+    type: input
+  - selector:
+      xpath: //input[@name="_.destinationAuthToken"]
+    op: send_keys <destination_auth_token>
+    type: input
+  - selector:
+      xpath: //button[contains(.,'Save')]
+    op: click
+    type: button
+
+jenkins_tag_openshift_image_update_dest_tag:
+  action: goto_configure_page
+  elements:
+  - selector:
+      xpath: //td[contains(text(),"whenever the source tag changes")]/following-sibling::td[1]/input[1]
+    type: input
+    op: click
+  - selector:
+      xpath: //button[contains(.,'Save')]
+    op: click
+    type: button
+
+jenkins_tag_openshift_image_id_update:
+  action: goto_configure_page
+  elements:
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftImageTagger/checkTestTag")]
+    op: clear
+    type: input
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftImageTagger/checkTestTag")]
+    op: send_keys <curr_img_tag>
+    type: input
+  - selector:
+      xpath: //button[contains(.,'Save')]
+    op: click
+    type: button
+
+jenkins_update_cloud_image:
+  url: /configure
+  elements:
+  - selector:
+      xpath: //input[contains(@value,"<currentimgval>")]
+    type: input
+    op: clear
+  - selector:
+      xpath: //input[contains(@value,"<currentimgval>")]
+    type: input
+    op: send_keys <cloudimage>
+  action: jenkins_click_save_button
+
+jenkins_verify_job_success:
+  url: /job/<job_name>
+  elements:
+  - selector:
+      xpath: //a[contains(@class,'build-link') and contains(.,"#<job_number>")]
+    timeout: <time_out>
+    visible: true
+  url: /job/<job_name>/<job_number>/console
+  elements:
+  - selector:
+      xpath: //div[@id='main-panel']//pre[contains(.,'SUCCESS')]
+    timeout: <time_out>
+    visible: true
+
+jenkins_verify_job_text:
+  url: /job/<job_name>/<job_num>/console
+  elements:
+  - selector:
+      xpath: //div[@id='main-panel']//pre[contains(.,'<checktext>')]
+    timeout: <time_out>
+    visible: true
+
+jenkins_verify_logged_in:
+  elements:
+  - selector:
+      xpath: //a[contains(@href,"/logout")]
+    timeout: 300
+
+jenkins_verify_openshift_build:
+  action: goto_configure_page
+  action: jenkins_click_add_build_step_button
+  scripts:
+  - command: return document.getElementsByClassName("yuimenuitemlabel")[document.getElementsByClassName("yuimenuitemlabel").length-1].scrollIntoView(true)
+    expect_result: ~
+  elements:
+  - selector:
+      text: Verify OpenShift Build
+    op: click
+    type: a
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftBuildVerifier/checkBldCfg")]
+    op: send_keys <bldcfg>
+    type: input
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftBuildVerifier/checkNamespace")]
+    op: send_keys <namespace>
+    type: input
+  action: jenkins_click_save_button
+
+jenkins_verify_openshift_deployment:
+  action: goto_configure_page
+  action: jenkins_click_add_build_step_button
+  scripts:
+  - command: return document.getElementsByClassName("yuimenuitemlabel")[document.getElementsByClassName("yuimenuitemlabel").length-1].scrollIntoView(true)
+    expect_result: ~
+  elements:
+  - selector:
+      text: Verify OpenShift Deployment
+    op: click
+    type: a
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftDeploymentVerifier/checkDepCfg")]
+    op: send_keys <deployconfig>
+    type: input
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftDeploymentVerifier/checkNamespace")]
+    op: send_keys <namespace>
+    type: input
+  action: jenkins_click_save_button
+
+jenkins_verify_openshift_service:
+  action: goto_configure_page
+  action: jenkins_click_add_build_step_button
+  scripts:
+  - command: return document.getElementsByClassName("yuimenuitemlabel")[document.getElementsByClassName("yuimenuitemlabel").length-1].scrollIntoView(true)
+    expect_result: ~
+  elements:
+  - selector:
+      text: Verify OpenShift Service
+    op: click
+    type: a
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftServiceVerifier/checkSvcName")]
+    op: send_keys <svcname>
+    type: input
+  - selector:
+      xpath: //input[contains(@checkurl,"OpenShiftServiceVerifier/checkNamespace")]
+    op: send_keys <namespace>
+    type: input
+  action: jenkins_click_save_button
+
+go_to_advanced_plugin_manage_page:
+  url: /pluginManager/advanced
+go_to_available_plugin_manage_page:
+  url: /pluginManager/available
+goto_configure_page:
+  url: /job/<job_name>/configure
+go_to_installed_plugin_manage_page:
+  url: /pluginManager/installed
+go_to_updates_plugin_manage_page:
+  url: /pluginManager
+goto_jenkins_buildlog_page:
+  url: /job/<job_name>/<job_num>/consoleFull

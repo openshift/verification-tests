@@ -1,0 +1,10 @@
+--- !ruby/hash:SymbolHash
+:load_plugins: true
+:ignored_plugins: []
+:autoload_plugins: []
+:safe_mode: false
+:"yard-cucumber":
+  language:
+      step_definitions: ["Given", "When", "Then", "And"]
+  menus: [ 'features', 'directories', 'tags', 'steps', 'step definitions' ]
+

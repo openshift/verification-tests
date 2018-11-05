@@ -1,0 +1,151 @@
+= Test Case Management
+:toc:
+:toc-placement: preamble
+
+== Overview
+
+BushSlicer has a feature to use an external test case manager for cases to be run and reporting of status and test artifacts. This is achieved by the collaboration of the following classes:
+
+* TestCaseManagerFilter - this is a http://www.rubydoc.info/github/cucumber/cucumber-ruby-core/Cucumber/Core/Filter[cucumber filter] that would ask actual test case manager if a test case is to be run and inform test case manager for events like begin/end execution of scenario. It needs to be the last Cucumber filter, otherwise operation of the whole system will be compromised.
+* CucuFormatter - custom cucumber formatter that creates HTML log files and accumulates test artifacts (TBD); also accepts requests to produce scenario result html file for attaching to test case by the test case manager
+* Manager - it keeps reference to actual test case manager and CucuFormatter so they can talk to each other
+* env.rb - instantiates test case manager and sends some more signals to test case manager
+* config/cucumber.yml - can define cucumber profiles for using different test case managers
+* actual test case manager - should implement some methods and that's all. See existing managers:
+** TCMSManager used for TCMS integration is kinda all-in-one
+** TestCaseManager is an abstraction that works similarly to TCMSManager but delegates to different test suite. We presently have implementes PolarShift::TestSuite
+
+== Selecting Test Case manager
+Selection of test case manager is done by inserting a filter in the Cucumber filter chain and configuring it to delegate to a particular manager implementation.
+
+Filter is usually inserted in Cucumber `AfterConfiguration`. We do it with `features/support/env.rb`. But in fact `env.rb` is delegating this to `Manager#init_test_case_manager` method inside `lib/manager.rb`.
+
+Selection of manager is based on `CUCUSHIFT_TEST_CASE_MANAGER` env variable or the `test_case_manager` global configuration option. If we have `CUCUSHIFT_TEST_CASE_MANAGER=foo`, then optional class `foo_tc_manager` is loaded and used as the manager (see `Configuration#get_optional_class_instance`).
+
+Look at the following section for how exactly we setup optional classes for TCMS and Polarion. Basically inlcude path, class name and options are provided in the configuration file. Then a profile in `config/cucumber.yml` is created for easier invoking the desired manager.
+
+== TestCaseManager generic manager
+
+The test case manager filter does three things:
+
+* push cucumber test cases to the manager one by one
+* asks manager for ready test cases one by one after every pushed test case
+* signal start and finish of test case execution to manager
+
+Test case manager also receives signals for other events from the regular Cucumber hooks (see `TestCaseManager#signal` method).
+
+The test case manager uses these signals to:
+
+* call different methods on the configured `TestSuite` class instance
+* does some consistency checks of execution process
+* manages artifacts uploading queue (when URL of artifacts is requested)
+* reports execution status at the end
+
+== TestCaseManager vs PolarShift
+
+=== Test Case Manager Basic Setup
+
+Manager setup for Polarshift can be seen in config/config.yaml
+
+[source,yaml]
+----
+optional_classes:
+  polarshift_tc_manager:
+    include_path: test_case_manager
+    class: BushSlicer::TestCaseManager
+    opts:
+      test_suite_class: BushSlicer::PolarShift::TestSuite
+      test_suite_opts: {}
+----
+
+You can see how we select the generic `TestCaseManager` class and initialize it with options to create an instance of `BushSlicer::PolarShift::TestSuite` class for handling PolarShift specific interactions.
+
+=== PolarShift loading and configuration
+
+`PolarShift` module and classes are setup for autoloading by `autoload :PolarShift, "polarshift/autoload"` line in `lib/bushslicer.rb`.
+You can then see how autoloading of the rest of the PolarShift classes is setup in `lib/polarshift/autoload.rb`. Some of them use regular `require` though.
+
+PolarShift logic is split into two parts - low-level requests and test management object model.
+
+Low level requests are just `lib/polarshift/request.rb` with methods to obtain test run, update a test record, etc. It essentially is responsible to communicate with the PolarShift API in a reliable way. PolarShift connection configuration can be found in `private/config/config.yaml` and looks like:
+
+[source,yaml]
+----
+  polarshift:
+    base_url: https://localhost:3000/
+    ca_path: config/ca
+    user: user
+    password: myuserpassword
+    manager:
+      project: PID
+----
+
+The test case management logic inherits config from the `Request` class. You can see the `manager` options above.
+
+=== Structure of test case management object model
+
+PolarShift object model is simple but deeply nested where outher items can contain multiples of the inner items. We have this structure:
+
+`TestSuite` -> `TestRun` -> `TestRecord` -> `TestCase` -> `ScenarioWrapper` -> Cucumber `Test::Case`
+
+Test Suite is handling any `signals` sent by `TestCaseManager` and delegating to a single `TestRun`. In the future it is possible to support multiple test runs per suite but not sure handling possible duplicates would be easy.
+
+TestRun is a placeholder for multiple `TestRecords`. Test runs and test records might be `virtual` which means there is no actual test run in PolarShift so operations about updating records are skipped.
+
+Test records correspond to a single `TestCase` which represents a PolarShift test case. Test case contains important information like `automated` and `automation-script` fileds, which are used to match scenarios for execution. Note that we can receive dummy test cases from PolarShift in the event test cases have been removed after the test run has been created. We skip such as not runnable.
+
+Test cases can match multiple Cucumber test cases (aka scenarios). The `ScenarioWrapper` class wraps a cucumber test case so we can use helper methods over them. A test case may refer to a single `Scenario`. A single example from a `Scenario Outline`. A single table from a scenario outline or a whole scenario outline.
+
+Because filter and manager ask us to match scenarios one by one, `TestCase` class figures out how many individual scenarios it has to match once it match the first one and considers itself complete once it finds matching exactly this number of scenarios.
+
+=== Testing PolarShift implementation
+
+TODO: we need to look at setting up unit testing for it
+
+== TCMS Test Case Manager
+
+Implementation is the `TCMSManager` class in `lib/tcms/tcms_manager.rb`.
+
+=== Configuration
+
+You need to have preferably in private/config.yaml your default settings:
+
+[source,yaml]
+----
+services:
+  tcms:
+    plan: 1234
+    product: 1234
+    product_version: 4321
+    manager: 1111
+    build: 2124
+    timeout: 240 # operation timeout seconds
+    xmlrpc_url: 'https://tcms.example.com/xmlrpc/'
+    ca_path: config/ca # you can use ca_file: as well or none for insecure
+----
+
+`ca_path` is in the format of openssl ca_path directory. The path or file specified can be absolute or relative. When relative, it is searched for in the `PRIVATE` dir, user home dir or BushSlicer::HOME dir.
+
+Only HTTP basic auth is supported by xmlrpc client. User/password pair can be supplied wither through `user` adn `password` configuration options, or using environment variables `TCMS_USER`, `TCMS_PASSWORD`. In absence of the above, user is asked for them on the console prompt. The latter method is most secure but not possible with jenkins and cron test runs.
+
+=== Usage
+
+Only thing you need to do configure is to set `TCMS_SPEC` environment variable. e.g.
+----
+export TCMS_SPEC=run:12345
+export TCMS_SPEC=cases:12345,23456
+export TCMS_SPEC=caseruns:34567,456778
+----
+
+Multiple test runs are also supported but don't make a lot of sense. When cases are specified, then they are only run but no status and logs attached (because we don't have caserun objects).
+
+To launch test you should just do:
+----
+$ cucumber -p tcms
+----
+
+This is a profile that enables the TCMS test case manager. To have a `devel` run so you are still able to debug issues easily, then run like this:
+
+----
+$ cucumber -p tcms -p _devel
+----

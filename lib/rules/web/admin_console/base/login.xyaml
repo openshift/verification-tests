@@ -1,0 +1,19 @@
+goto_admin_console_root:
+  url: /
+login_admin_console:
+  action: login_sequence
+  action: verify_logged_in_admin_console
+verify_logged_in_admin_console:
+  element:
+    type: js
+    selector: |-
+      var ns = window.localStorage['exp'];
+      return ns ? document.documentElement : null;
+  scripts:
+  - command: return window.localStorage['exp']
+    expect_result: true
+click_console_selector:
+  element:
+    selector:
+      css: .contextselector button
+    op: click

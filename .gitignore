@@ -1,0 +1,12 @@
+*.sw[a-p]
+/private*
+/junit-report/
+/Gemfile.lock
+/tools/Gemfile.lock
+/tools/Gemfiles_local/Gemfile*.lock
+.idea/
+.vscode/
+junit-report/
+.byebug_history
+/tmp
+*.iml

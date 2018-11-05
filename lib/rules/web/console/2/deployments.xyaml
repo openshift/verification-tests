@@ -1,0 +1,190 @@
+check_latest_deployment_version:
+  action: goto_one_dc_page
+  element:
+    selector:
+      xpath: //table[descendant::th[.='Deployment']]//tbody[1]//a[contains(text(),'<latest_deployment_version>')]
+wait_latest_deployments_to_status:
+  action: goto_one_dc_page
+  element:
+    selector:
+      xpath: (//td[@data-title="Deployment"]/following-sibling::td[@data-title="Status"])[1][contains(.,'<status_name>')]
+    timeout: 600
+wait_latest_deployments_to_deployed:
+  action: goto_one_dc_page
+  element:
+    selector:
+      xpath: (//td[@data-title="Deployment"]/following-sibling::td[@data-title="Status"])[1][contains(.,Deployed)]
+    timeout: 600
+manually_deploy:
+  action: goto_one_dc_page
+  elements:
+  - selector:
+      text: Deploy
+    type: button
+    op: click
+  - selector:
+      xpath: //strong[contains(text(),'has started')]
+cancel_deployment_on_one_deployment_page:
+  action: wait_cancel
+  action: click_cancel
+  element:
+    selector:
+      xpath: //dd[contains(normalize-space(),'Cancelled')]
+edit_replicas_on_dc_page:
+  action: goto_one_dc_page
+  elements:
+  - selector:
+      xpath: //a[@title='Edit']
+    type: a
+    op: click
+  - selector:
+      xpath: //input[@name='desired']
+    type: input
+    op: clear
+  - selector:
+      xpath: //input[@name='desired']
+    type: input
+    op: send_keys <replicas>
+  - selector:
+      xpath: //a[@title="Scale"]
+    type: a
+    op: click
+cancel_edit_replicas_on_dc_page:
+  elements:
+  - selector:
+      xpath: //a[@title='Cancel']
+    type: a
+    op: click
+edit_replicas_on_rc_page:
+  action: goto_one_deployment_page
+  elements:
+  - selector:
+      xpath: //a[@title='Edit']
+    type: a
+    op: click
+  - selector:
+      xpath: //input[@name='desired']
+    type: input
+    op: clear
+  - selector:
+      xpath: //input[@name='desired']
+    type: input
+    op: send_keys <replicas>
+  - selector:
+      xpath: //a[@title="Scale"]
+    type: a
+    op: click
+cancel_edit_replicas_on_rc_page:
+  elements:
+  - selector:
+      xpath: //a[@title='Cancel']
+    type: a
+    op: click
+click_specific_no_of_deploy:
+  action: goto_one_dc_page
+  element:
+    selector:
+      xpath: //table[descendant::th[.='Deployment']]//a[contains(text(),'<deploy_number>')]
+    op: click
+    timeout: 60
+rollback_all_components:
+  action: click_rollback_button
+  action: change_scale_settings
+  action: change_strategy
+  action: change_triggers
+  action: click_rollback_button_in_settings
+rollback_one_component:
+  action: click_rollback_button
+  action: change_triggers
+  action: click_rollback_button_in_settings
+rollback_two_components:
+  action: click_rollback_button
+  action: change_scale_settings
+  action: change_strategy
+  action: click_rollback_button_in_settings
+rollback_none_components:
+  action: click_rollback_button
+  action: click_rollback_button_in_settings
+click_rollback_button:
+  element:
+    selector:
+      text: Roll Back
+    type: button
+    op: click
+change_scale_settings:
+  element:
+    selector:
+      xpath: //input[@ng-model='changeScaleSettings']
+    op: click
+change_strategy:
+  element:
+    selector:
+      xpath: //input[@ng-model='changeStrategy']
+    op: click
+change_triggers:
+  element:
+    selector:
+      xpath: //input[@ng-model='changeTriggers']
+    op: click
+click_rollback_button_in_settings:
+  elements:
+  - selector:
+      xpath: //div[@ng-show='rollBackCollapsed']//button
+    op: click
+  - selector:
+      xpath: //strong[contains(text(),'is rolling back')]
+goto_deployments_page:
+  url: /console/project/<project_name>/browse/deployments
+goto_one_dc_page:
+  url: /console/project/<project_name>/browse/deployments/<dc_name>
+goto_one_standalone_rc_page:
+  url: /console/project/<project_name>/browse/deployments-replicationcontrollers/<rc_name>
+goto_set_resource_limit_page:
+  elements:
+  - selector:
+      xpath: //button[contains(text(), 'Actions')]
+    op: click
+  - selector:
+      xpath: //a[contains(text(), 'Set Resource Limits')]
+    op: click
+check_dc_loaded_completely:
+  action: goto_one_dc_page
+  elements:
+  - selector:
+      text: Configuration
+  - selector:
+      text: Triggers
+  - selector:
+      text: Template
+goto_one_deployment_page:
+  url: /console/project/<project_name>/browse/deployments/<dc_name>/<dc_name>-<dc_number>
+check_dc_strategy:
+  action: check_dc_loaded_completely
+  elements:
+  - selector:
+      xpath: //div[@ng-if="deploymentConfig.spec.strategy.type"]/dd[contains(.,'<dc_strategy>')]
+check_dc_manual_cli_trigger:
+  action: check_dc_loaded_completely
+  elements:
+  - selector:
+      xpath: //h3[contains(.,'Triggers')]//following::dd[contains(.,'<dc_manual_trigger_cli>')]
+check_dc_config_trigger:
+  action: check_dc_loaded_completely
+  elements:
+  - selector:
+      xpath: //dt[contains(.,"Change of")]/following-sibling::dd[contains(.,'<dc_config_change>')]
+check_dc_selector:
+  action: check_dc_loaded_completely
+  elements:
+  - selector:
+      xpath: //dt[contains(.,'Selectors')]/following-sibling::dd[contains(.,'<dc_selectors_key>=<dc_selectors_value>')]
+check_dc_replicas:
+  action: check_dc_loaded_completely
+  elements:
+  - selector:
+      xpath: //dt[contains(.,'Replicas')]/following-sibling::dd//span[contains(.,'<dc_replicas>')]
+check_specific_deploy_selector:
+  action: goto_one_deployment_page
+  elements:
+  - selector:
+      xpath: //dt[contains(.,'Selectors')]/following-sibling::dd[contains(.,'<specific_deployment_selector>')]
