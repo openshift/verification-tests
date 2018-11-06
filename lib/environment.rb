@@ -220,7 +220,7 @@ module BushSlicer
     end
 
     # some rules and logic to compare given version to current environment
-    # @return [Integer] less than 0 when env is older, 0 when it is comparable,
+    # @return [Float] less than 0 when env is older, 0 when it is comparable,
     #   more than 0 when environment is newer
     # @note for compatibility reasons we only compare only major and minor
     def version_cmp(version, user:)
@@ -231,14 +231,20 @@ module BushSlicer
 
       major, minor = parse_version(version)
 
-      # presently handle only major ver `3`for OCP and `1` for origin
-      bad_majors = [@major_version, major] - [1,3]
+      norm_version = @major_version == '1' ? '3' : @major_version
+      if ( major == '1' )
+        major = '3'
+      end
+
+      # presently handle only major ver `4`, `3`, `1` for OCP and OKD
+      bad_majors = [@major_version, major] - [1, 3, 4]
       unless bad_majors.empty?
         raise "do not know how to compare major versions #{bad_majors}"
       end
 
-      # lets compare minor version
-      return @minor_version - minor
+      # lets compare version
+      version_str = (norm_version.to_s + "." + @minor_version.to_s)
+      return (version_str.to_f - version.to_f)
     end
 
     def version_ge(version, user:)
