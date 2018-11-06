@@ -72,13 +72,15 @@ module BushSlicer
     # we may switch to `major.minor` rules versions in the future
     private def rules_version(str_version)
       v = str_version.split('.')
-      if v.first == '3' && v[1..2].all? {|e| e =~ /^[0-9]+$/} && v[3]
-        # version like v3.0.0.0-32-g3ae1d27, i.e. return version 0
-        return v[1]
+      # version like v1.y.z, i.e. return version 3.y
+      # version like v3.y.z, i.e. return version 3.y
+      # version like v4.y.z, i.e. return version 4.y
+      if v[0] == '1'
+        major = '3'
       else
-        # version like v1.0.2, i.e. return version 0
-        return v[1]
+        major = v[0]
       end
+      return [major, minor].join('.')
     end
 
     # prepare kube config according to parameters
