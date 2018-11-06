@@ -169,7 +169,7 @@ module BushSlicer
       def self.set_bushslicer_home
         # BushSlicer.const_set(:HOME, File.expand_path(__FILE__ + "../../.."))
         BushSlicer::HOME.freeze
-        ENV["CUCUSHIFT_HOME"] = BushSlicer::HOME
+        ENV["BUSHSLICER_HOME"] = BushSlicer::HOME
       end
     end
   end

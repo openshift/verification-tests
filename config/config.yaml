@@ -35,10 +35,10 @@ global:
   project_docker_repo: ""
   # product_docker_repo: registry.access.redhat.com/
 
-  # use CUCUSHIFT_DEFAULT_ENVIRONMENT instead of setting here
+  # use BUSHSLICER_DEFAULT_ENVIRONMENT instead of setting here
   # default_environment: ose
 
-  # use CUCUSHIFT_TEST_CASE_MANAGER instead of setting here
+  # use BUSHSLICER_TEST_CASE_MANAGER instead of setting here
   # test_case_manager: tcms
 
   # select browser different from default (firefox)

@@ -52,7 +52,7 @@ or set to `auto`. The other thing is to have users set to `pool:<pool name>`.
 [source,bash]
 ----
 ...
-export CUCUSHIFT_DEFAULT_ENVIRONMENT=ocp
+export BUSHSLICER_DEFAULT_ENVIRONMENT=ocp
 export OPENSHIFT_ENV_OCP_USER_MANAGER=auto # this might be default already
 export OPENSHIFT_ENV_OCP_USER_MANAGER_USERS=pool:mypool
 cucumber <opts>
