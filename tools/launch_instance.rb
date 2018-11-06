@@ -686,7 +686,7 @@ module BushSlicer
       ## help users persist home info
       hosts_spec = hosts.map{|h| "#{h.hostname}:#{h.roles.join(':')}"}.join(',')
       logger.info "HOSTS SPECIFICATION: #{hosts_spec}"
-      host_spec_out = ENV["CUCUSHIFT_HOSTS_SPEC_FILE"]
+      host_spec_out = ENV["BUSHSLICER_HOSTS_SPEC_FILE"]
       if host_spec_out && !File.exist?(host_spec_out)
         begin
           File.write(host_spec_out, hosts_spec)
@@ -696,7 +696,7 @@ module BushSlicer
       end
     ensure
       # create a file with launched instances information
-      vminfo_out = ENV["CUCUSHIFT_VMINFO_YAML"] || "vminfo.yml"
+      vminfo_out = ENV["BUSHSLICER_VMINFO_YAML"] || "vminfo.yml"
       unless vminfo_out.empty?
         vminfo = hosts.
           group_by { |h| h[:cloud_service_name] }.

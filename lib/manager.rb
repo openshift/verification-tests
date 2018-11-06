@@ -70,7 +70,7 @@ module BushSlicer
     end
 
     def init_test_case_manager(cucumbler_config)
-      tc_mngr = ENV['CUCUSHIFT_TEST_CASE_MANAGER'] || conf[:test_case_manager]
+      tc_mngr = ENV['BUSHSLICER_TEST_CASE_MANAGER'] || conf[:test_case_manager]
       tc_mngr = tc_mngr ? tc_mngr + '_tc_manager' : false
       if tc_mngr
         logger.info("Using #{tc_mngr} test case manager")

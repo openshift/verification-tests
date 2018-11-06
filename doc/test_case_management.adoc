@@ -20,7 +20,7 @@ Selection of test case manager is done by inserting a filter in the Cucumber fil
 
 Filter is usually inserted in Cucumber `AfterConfiguration`. We do it with `features/support/env.rb`. But in fact `env.rb` is delegating this to `Manager#init_test_case_manager` method inside `lib/manager.rb`.
 
-Selection of manager is based on `CUCUSHIFT_TEST_CASE_MANAGER` env variable or the `test_case_manager` global configuration option. If we have `CUCUSHIFT_TEST_CASE_MANAGER=foo`, then optional class `foo_tc_manager` is loaded and used as the manager (see `Configuration#get_optional_class_instance`).
+Selection of manager is based on `BUSHSLICER_TEST_CASE_MANAGER` env variable or the `test_case_manager` global configuration option. If we have `BUSHSLICER_TEST_CASE_MANAGER=foo`, then optional class `foo_tc_manager` is loaded and used as the manager (see `Configuration#get_optional_class_instance`).
 
 Look at the following section for how exactly we setup optional classes for TCMS and Polarion. Basically inlcude path, class name and options are provided in the configuration file. Then a profile in `config/cucumber.yml` is created for easier invoking the desired manager.
 

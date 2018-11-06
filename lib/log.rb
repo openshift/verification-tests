@@ -67,8 +67,8 @@ module BushSlicer
     def initialize(level=nil)
       if level
         @level = level
-      elsif ENV['CUCUSHIFT_LOG_LEVEL']
-        @level = Logger.const_get(ENV['CUCUSHIFT_LOG_LEVEL'].upcase)
+      elsif ENV['BUSHSLICER_LOG_LEVEL']
+        @level = Logger.const_get(ENV['BUSHSLICER_LOG_LEVEL'].upcase)
       else
         @level = INFO
       end

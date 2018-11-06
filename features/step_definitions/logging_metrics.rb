@@ -940,7 +940,7 @@ end
 
 # wrapper step to spin up a ansible-pod based on ose/ansible docker image
 # To override the image tag from the puddle, we need to do something like
-# export CUCUSHIFT_CONFIG='{"global":
+# export BUSHSLICER_CONFIG='{"global":
 #                             {"base_ansible_image_tag": "latest",
 #                             {"ansible_image_src: "openshift3/ose-ansible"}}'
 # possible 'image_src' values are openshift/origin-ansible (master) or

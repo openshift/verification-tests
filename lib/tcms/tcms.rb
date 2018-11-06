@@ -42,7 +42,7 @@ module BushSlicer
     #mapping tags=>Integer
     @@tags = {}
     def initialize(options={})
-      raise "No default options detected, please makse sure the PRIVATE_REPO is cloned into your repo or ENV CUCUSHIFT_PRIVATE_DIR is defined" if default_opts.nil?
+      raise "No default options detected, please makse sure the PRIVATE_REPO is cloned into your repo or ENV BUSHSLICER_PRIVATE_DIR is defined" if default_opts.nil?
       @options = default_opts.merge options
 
       ## try to obtain user/password in all possible ways

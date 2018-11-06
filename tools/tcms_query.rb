@@ -243,7 +243,7 @@ def update_notes(options)
 end
 
 def get_bushslicer_home
-  ENV['CUCUSHIFT_HOME'] || File.dirname(File.dirname(__FILE__))
+  ENV['BUSHSLICER_HOME'] || File.dirname(File.dirname(__FILE__))
 end
 
 def sync_tags(tcms)

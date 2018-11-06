@@ -18,7 +18,7 @@ Some of these options can be overwritten by environment variables, see `#env_ove
 
 Under `environments` there are default options for different environment types. The name of environment does not matter, you can rename environment but if you use same options, the end result should be the same. Names are to just make it easy to start with some reasonable defaults.
 
-The default environment is determined by the `default_environment` global option. It's usually set by the CUCUSHIFT_DEFAULT_ENVIRONMENT env variable.
+The default environment is determined by the `default_environment` global option. It's usually set by the BUSHSLICER_DEFAULT_ENVIRONMENT env variable.
 
 Let's take one example - OSE environment. It has as a default `hosts_type: SSHAccessibleHost`. If we want to override it, we can specify env variable OPENSHIFT_ENV_OSE_HOSTS_TYPE. Its the same with any other option. All variables that start with `OPENSHIFT_ENV_<env name>_SOMETHING` get an option for the named environment set. The first part `OPENSHIFT_ENV_<env name>_` is removed, then the other part `SOMETHING` is downcased and converted to a Symbol to become a key in the configuration Hash that is passed to the environment class constructor. That is taken care of in the `#load_env` private method of `BushSlicer::EnvironmentManager` class.
 
