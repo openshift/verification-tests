@@ -80,7 +80,7 @@ module BushSlicer
       else
         major = v[0]
       end
-      return [major, minor].join('.')
+      return [major, v[1]].join('.')
     end
 
     # prepare kube config according to parameters
