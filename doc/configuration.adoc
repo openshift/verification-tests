@@ -3,6 +3,8 @@
 == configuration files
 
 Main configuration is inside `config/config.yaml`. Content of that file is also merged with `PRIVATE/config.yaml` and `PRIVATE/config/config.yaml` if such files exist.
+`PRIVATE` defaults to `bushslicer_dir/private`.
+It is very useful to keep your private configuraion and/or credential files.
 
 We have also some configuration in `config/cucumber.yml`. There are some profiles defined for easily calling with proper options.
 
