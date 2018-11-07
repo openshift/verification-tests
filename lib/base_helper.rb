@@ -1,7 +1,8 @@
 # should not require 'common'
 # should only include helpers that do NOT load any other BushSlicer classes
 require 'securerandom'
-
+require 'find'
+require 'pathname'
 
 module BushSlicer
   module Common
@@ -312,7 +313,83 @@ module BushSlicer
           raise "unknown cpu unit '#{unit}'"
         end
       end
+
+      def find_follow(*paths)
+        block_given? or return enum_for(__method__, *paths)
+
+        link_cache = {}
+        link_resolve = lambda { |path|
+          # puts "++ link_resolve: #{path}" # trace
+          if link_cache[path]
+            return link_cache[path]
+          else
+            return link_cache[path] = Pathname.new(path).realpath.to_s
+          end
+        }
+        # this lambda should cleanup `link_cache` from unnecessary entries
+        link_cache_reset = lambda { |path|
+          # puts "++ link_cache_reset: #{path}" # trace
+          # puts link_cache.to_s # trace
+          link_cache.select! do |k,v|
+            path == k || k == "/" || path.start_with?(k + "/")
+          end
+          # puts link_cache.to_s # trace
+        }
+        link_is_recursive = lambda { |path|
+          # puts "++ link_is_recursive: #{path}" # trace
+          # the ckeck is useless if path is not a link but not our responsibility
+
+          # we need to check full path for link cycles
+          pn_initial = Pathname.new(path)
+          unless pn_initial.absolute?
+            # can we use `expand_path` here? Any issues with links?
+            pn_initial = Pathname.new(File.join(Dir.pwd, path))
+          end
+
+          # clear unnecessary cache
+          link_cache_reset.call(pn_initial.to_s)
+
+          link_dst = link_resolve.call(pn_initial.to_s)
+
+          pn_initial.ascend do |pn|
+            if pn != pn_initial && link_dst == link_resolve.call(pn.to_s)
+              return {:link => path, :dst => pn}
+            end
+          end
+
+          return false
+        }
+
+        do_find = proc { |path|
+          Find.find(path) do |path|
+            if File.symlink?(path) && File.directory?(File.realpath(path))
+              if path[-1] == "/"
+                # probably hitting https://github.com/jruby/jruby/issues/1895
+                yield(path.dup)
+                Dir.new(path).each { |subpath|
+                  do_find.call(path + subpath) unless [".", ".."].include?(subpath)
+                }
+              elsif is_recursive = link_is_recursive.call(path)
+                raise "cannot handle recursive links: #{is_recursive[:link]} => #{is_recursive[:dst]}"
+              else
+                do_find.call(path + "/")
+              end
+            else
+              yield(path)
+            end
+          end
+        }
+
+        while path = paths.shift
+          do_find.call(path)
+        end
+      end
+
+
     end
+
+
+
 
     module BaseHelperStatic
       extend BaseHelper

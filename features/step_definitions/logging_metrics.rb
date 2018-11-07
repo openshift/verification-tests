@@ -579,7 +579,7 @@ Given /^(logging|metrics|metering) service is (installed|uninstalled) with ansib
   # due to limitation of ParseConfig library, it won't allow key without value,
   # so we hack this with 'children=to_be_replace'
   new_text = inventory_io.string.gsub(/\s=\s/, '=').
-    gsub(/children=to_be_replaced/, "masters\netcd\nnodes\n").
+    gsub(/children=to_be_replaced/, "masters\netcd\nnodes\nnfs\n").
     gsub(/nodes=to_be_replaced/, cb.nodes_text_replacement)
   File.write(new_path, new_text)
 
@@ -657,6 +657,8 @@ Given /^(logging|metrics|metering) service is (installed|uninstalled) with ansib
       playbook_cmd = %W(ansible-playbook -i /tmp/#{new_path} #{conf[:ansible_log_level]}  #{ansible_template_path})
     end
     @result = pod.exec(*playbook_cmd, as: user)
+    ## save the output of the playbook run into a clipboard in case we need to check for playbook output
+    cb.playbook_output = @result[:stdout]
     #step %Q/I execute on the pod:/, table(%{
     #  | ansible-playbook | -i | /tmp/#{new_path} | #{conf[:ansible_log_level]} | #{ansible_template_path} |
     #  })
