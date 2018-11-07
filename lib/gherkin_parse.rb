@@ -10,6 +10,7 @@ require 'bushslicer'
 module BushSlicer
   # @note Used to help parse out feature files using Gherkin 3
   class GherkinParse
+    include Common::BaseHelper
     COMMENT_OR_TAG = /^\s*(#|@)/
     SCENARIO_DEFINITION = /^\s*(Scenario)/
     EMPTY_STRING = /^\s*$/
@@ -69,7 +70,7 @@ module BushSlicer
     def locations_for(*case_ids)
       raise "specify test case IDs" if case_ids.empty?
       res = {}
-      Find.find(*feature_dirs) do |path|
+      find_follow(*feature_dirs) do |path|
         next unless path.end_with?(".feature") && File.file?(path)
 
         id_found = nil
@@ -137,7 +138,7 @@ module BushSlicer
         dirs = feature_dirs
         relative_to = nil
       end
-      Find.find(*dirs) do |path|
+      find_follow(*dirs) do |path|
         break if case_ids.empty?
         next unless path.end_with?(".feature") && File.file?(path)
 
