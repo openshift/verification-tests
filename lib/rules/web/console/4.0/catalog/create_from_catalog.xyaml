@@ -1,0 +1,155 @@
+# --- create app from catalog relative
+
+select_service_to_order_from_catalog:
+  action: click_primary_category_from_catalog
+  action: click_sub_category_from_catalog
+  action: click_service_item_from_catalog
+create_app_from_image_with_advanced_options:
+  action: goto_home_page
+  action: click_primary_category_from_catalog
+  action: click_sub_category_from_catalog
+  action: click_service_item_from_catalog
+  action: click_next_button
+  action: check_advanced_options_link_in_wizard
+  action: create_app_from_image_set_app_name
+  action: create_app_from_image_try_sample_repo
+select_service_from_catalog_and_cancel:
+  action: click_service_item_from_catalog
+  action: click_cancel_button
+click_primary_category_from_catalog:
+  element:
+    selector:
+      xpath: //a[contains(@class,'services-category-heading') and contains(.,'<primary_catagory>')]
+    op: click
+click_sub_category_from_catalog:
+  element:
+    selector:
+      xpath: //a[contains(@class,'services-sub-category-tab')]//div[normalize-space()="<sub_catagory>"]
+    op: click
+check_service_item_from_catalog:
+  element: &catalog_item
+    selector:
+      xpath: //div[contains(@class,'services-items')]//div[@title='<service_item>']
+    timeout: 30
+click_service_item_from_catalog:
+  element:
+    <<: *catalog_item
+    op: click
+do_configuration_step_in_wizard:
+  action: select_existing_project_or_create_new_project
+  action: set_app_name_in_wizard
+  action: try_sample_repo_in_wizard
+select_existing_project_or_create_new_project:
+  action:
+    if_param:
+      create_project: 'true'
+    ref:
+    - create_new_project_in_wizard
+  action:
+    if_param:
+      create_project: 'false'
+    ref:
+    - click_project_dropdown_in_wizard
+    - select_existing_project_in_dropdown
+create_new_project_in_wizard:
+  action:
+    if_element:
+      selector:
+        xpath: //label[text()='Add to Project']
+    ref:
+    - click_project_dropdown_in_wizard
+    - select_create_project_in_dropdown
+    - set_project_name
+  action:
+    if_element:
+      selector:
+        xpath: //h3[text()='Create Project']
+    ref:
+    - set_project_name
+click_project_dropdown_in_wizard:
+  elements:
+  - selector:
+      xpath: //div[contains(@placeholder,'Select or create project')]/span[contains(@class,'ui-select-toggle')]
+    op: click
+select_create_project_in_dropdown:
+  element:
+    selector:
+      xpath: //ul//div/span[contains(@class,ui-select-choices-row-inner) and contains(.,'Create Project')]
+    op: click
+select_existing_project_in_dropdown:
+  element:
+    selector:
+      xpath: //ul//div/span[contains(@class,ui-select-choices-row-inner) and contains(.,'<project_name>')]
+    op: click
+set_app_name_in_wizard:
+  element:
+    selector:
+      id: app-name
+    op: send_keys <app_name>
+    type: input
+try_sample_repo_in_wizard:
+  element:
+    selector:
+      xpath: //a[normalize-space()='Try Sample Repository']
+    op: click
+check_advanced_options_link_in_wizard:
+  elements:
+  - selector:
+      visible_text: !ruby/regexp /private Git repository or need to change application defaults/
+  - selector:
+      xpath: //a[text()='advanced options']
+    op: click
+  - selector:
+      xpath: //h1[contains(.,'<service_item>')]
+check_successful_result_info_in_wizard:
+  element:
+    selector:
+      xpath: //h3[contains(.,'created in <project_name> successfully')]
+    timeout: 30
+check_goto_overview_page_link_in_wizard:
+  element:
+    selector:
+      xpath: //a[contains(@href,'project/<project_name>') and contains(.,'overview')]
+check_wizard_information:
+  elements:
+  - selector:
+      xpath: //span[contains(.,"Information")]
+    timeout: 30
+check_app_name_pattern_error_from_catalog:
+  element:
+    selector:
+      text: !ruby/regexp /Application name consists of lower-case letters, numbers, and dashes. It must start with a letter and can't end/
+
+provision_serviceclass_without_binding_on_homepage:
+  action: select_service_to_order_from_catalog
+  action: click_next_button
+  action: click_next_button
+  action: click_create_button
+  action: click_close
+provision_serviceclass_with_binding_on_homepage:
+  action: select_service_to_order_from_catalog
+  action: click_next_button
+  action: click_next_button
+  action: choose_create_binding_for_provision
+  action: click_create_button
+  action: click_close
+provision_serviceclass_with_binding_and_wait_secret_shown:
+  action: select_service_to_order_from_catalog
+  action: click_next_button
+  action: click_next_button
+  action: choose_create_binding_for_provision
+  action: click_create_button
+provision_from_unbindable_template_on_homepage:
+  action: select_service_to_order_from_catalog
+  action: click_next_button
+  action: click_create_button
+  action: click_close
+choose_create_binding_for_provision:
+  element:
+    selector:
+      xpath: //label[contains(.,'Create a secret')]
+    op: click
+wait_secret_showing_in_successful_result:
+  element:
+    selector:
+      xpath: //*[@class='results-message-details' and contains(.,'binding operation created the secret')]/a[contains(@href,'browse/secrets')]

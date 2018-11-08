@@ -1,0 +1,18 @@
+--- # check browse/builds page
+check_common_elements:
+  element:
+    selector:
+      xpath: //a[contains(text(),'<what>')]
+    type: a
+switch_window_demo:
+  element:
+    selector:
+      target: _blank
+    type: a
+    op: click
+  with_window:
+    selector:
+      # Regexp format
+      url: !ruby/regexp '/example\.com/'
+      # url: www.example.com
+    action: check_common_elements 
