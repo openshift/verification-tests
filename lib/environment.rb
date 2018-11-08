@@ -243,8 +243,11 @@ module BushSlicer
       end
 
       # lets compare version
-      version_str = (norm_version.to_s + "." + @minor_version.to_s)
-      return (version_str.to_f - version.to_f)
+      if norm_version == major
+        return @minor_version - minor
+      else
+        return norm_version - major
+      end
     end
 
     def version_ge(version, user:)
