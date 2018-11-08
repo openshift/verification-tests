@@ -76,7 +76,9 @@ module BushSlicer
     def get_master_version(user, via_rest: true)
       if via_rest
         @version, major, minor = env.get_version(user: user)
-        return minor
+        # for version like 3.y.z, lookup 3.y
+        # for version like 4.y.z, lookup 4.y
+        return [major, minor].join('.')
       else
         res = login(user)
         unless res[:success]
