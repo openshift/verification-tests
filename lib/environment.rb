@@ -220,7 +220,7 @@ module BushSlicer
     end
 
     # some rules and logic to compare given version to current environment
-    # @return [Float] less than 0 when env is older, 0 when it is comparable,
+    # @return [Integer] less than 0 when env is older, 0 when it is comparable,
     #   more than 0 when environment is newer
     # @note for compatibility reasons we only compare only major and minor
     def version_cmp(version, user:)
@@ -243,8 +243,11 @@ module BushSlicer
       end
 
       # lets compare version
-      version_str = (norm_version.to_s + "." + @minor_version.to_s)
-      return (version_str.to_f - version.to_f)
+      if ( norm_version == major )
+        return @minor_version - minor
+      else
+        return norm_version - major
+      end
     end
 
     def version_ge(version, user:)
