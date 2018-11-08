@@ -1,0 +1,65 @@
+click_add_value_from_configmap_or_secret:
+  element:
+    selector:
+      xpath: //span[contains(normalize-space(text()),'Add Value from Config Map or Secret')]
+    op: click
+add_env_vars:
+  action: add_env_var_name
+  action:
+    if_param: env_source_name
+    ref: add_env_var_pair_value
+  action:
+    if_param: env_var_value
+    ref: add_env_var_value
+add_env_var_name:
+  elements:
+  - selector: 
+      xpath: //div[contains(@class,'pairs-list__row')][last()]/div[contains(@class,'pairs-list__name-field')]/input[@placeholder='name']
+    op: send_keys <env_var_name>
+add_env_var_pair_value:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'pairs-list__row')][last()]/div[contains(@class,'pairs-list__value-pair-field')]//span[contains(normalize-space(text()),'Select a resource')]
+    op: click
+  - selector:
+      xpath: //div[contains(@class,'pairs-list__row')][last()]/div[contains(@class,'pairs-list__value-pair-field')]//span[contains(.,'<env_source_name>')]
+    op: click
+  - selector:
+      xpath: //div[contains(@class,'pairs-list__row')][last()]/div[contains(@class,'pairs-list__value-pair-field')]//span[contains(normalize-space(text()),'Select a key')]
+    op: click
+  - selector:
+      xpath: //div[contains(@class,'pairs-list__row')][last()]/div[contains(@class,'pairs-list__value-pair-field')]//a[contains(.,'<env_source_key>')]
+    op: click
+add_env_var_value:
+  element:
+    selector:
+      xpath: //div[contains(@class,'pairs-list__row')][last()]/div[contains(@class,'pairs-list__value-field')]/input[@placeholder='value']
+    op: send_keys <env_var_value>
+update_env_vars:
+  action:
+    if_param: env_source_name
+    ref: update_env_var_pair_value
+  action:
+    if_param: env_var_value
+    ref: update_env_var_value
+    op: click 
+update_env_var_pair_value:
+  action: update_pair_source
+  action: update_pair_key
+update_pair_source:
+  elements:
+  - selector:
+      xpath: //input[@value='<env_var_name>']/ancestor::div[contains(@class,'row pairs-list__row')]//div[@class='value-from'][1]//button
+    op: click
+  - selector:
+      xpath: //span[contains(.,'<env_source_name>')]
+    op: click
+update_pair_key:
+  elements:
+  - selector:
+      xpath: //input[@value='<env_var_name>']/ancestor::div[contains(@class,'row pairs-list__row')]//div[@class='value-from'][2]//button
+    op: click
+  - selector:
+      xpath: //a[contains(.,'<env_source_key>')]
+    op: click
+update_env_var_value: {}
