@@ -1,0 +1,113 @@
+create_resource_by_default_yaml:
+  elements:
+  - selector:
+      xpath: //button[@id="yaml-create"]
+    op: click
+  action: click_create_button
+click_create_button:
+  elements:
+  - selector:
+      xpath: //button[contains(text(),'Create')]
+    op: click
+click_delete_button:
+  elements:
+  - selector:
+      xpath: //button[contains(text(),'Delete')]
+    op: click
+click_resource_action_icon:
+  elements:
+  - selector:
+      xpath: //a[text()='<resource_name>']/ancestor::span/../div//span[contains(@class,'co-m-cog__icon')]
+    op: click
+click_tab:
+  elements:
+  - selector:
+      xpath: //ul[contains(@class,'nav__menu')]//a[text()='<tab_name>']
+    op: click
+clear_input_value:
+  elements:
+  - selector:
+      id: <clear_field_id>
+    op: clear
+    type: input
+check_row_filter_on_page:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'row-filter')]//div[text()='<filter>']
+check_resources_title_on_page:
+  elements:
+  - selector:
+      xpath: //span[text()='<resource_title>']
+check_resource_name_and_icon:
+  elements:
+  - selector:
+      xpath: //div[@class='co-m-pane__name'][/*[contains(.,'<icon_text>')] and /*[contains(., '<resource_name>')]]
+check_page_contains:
+  element:
+    selector:
+      xpath: //*[contains(.,'<content>')]
+operate_action_from_dropdown:
+  elements:
+  - selector:
+      xpath: //li/a[contains(text(),'<action_item>')]
+    op: click
+submit_changes:
+  element:
+    selector:
+      xpath: //button[@type='submit']
+    op: click
+
+## -------- check resource key and values pairs ------
+check_resource_details:
+  action:
+    if_param: name
+    ref: check_resource_name
+  action:
+    if_param: labels
+    ref: check_resource_labels
+  action:
+    if_param: annotations
+    ref: check_resource_annotations
+  action:
+    if_param: provisioner
+    ref: check_resource_provisioner
+  action:
+    if_param: reclaim_policy
+    ref: check_resource_reclaim_policy
+  action:
+    if_param: default_class
+    ref: check_resource_default_class
+check_resource_details_key_and_value:
+  element:
+    selector:
+      xpath: //dt[contains(text(),'<key>')]/following-sibling::dd[1][contains(.,'<value>')]
+check_resource_name:
+  params:
+    key: Name
+    value: <name>
+  action: check_resource_details_key_and_value
+check_resource_labels:
+  params:
+    key: Labels
+    value: <labels>
+  action: check_resource_details_key_and_value
+check_resource_annotations:
+  params:
+    key: Annotations
+    value: <annotations>
+  action: check_resource_details_key_and_value
+check_resource_provisioner:
+  params:
+    key: Provisioner
+    value: <provisioner>
+  action: check_resource_details_key_and_value
+check_resource_reclaim_policy:
+  params:
+    key: Reclaim Policy
+    value: <reclaim_policy>
+  action: check_resource_details_key_and_value
+check_resource_default_class:
+  params:
+    key: Default Class
+    value: <default_class>
+  action: check_resource_details_key_and_value

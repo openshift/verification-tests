@@ -1,0 +1,16 @@
+---
+check_pod_metrics_tab:
+  url: console/project/<project_name>/browse/pods/<pod_name>?tab=metrics
+  elements:
+  - selector:
+      id: memory-metrics-1-sparkline
+    type: div
+    timeout: 60
+  - selector:
+      id: cpu-metrics-1-sparkline
+    type: div
+    timeout: 60
+  - selector:
+      id: network-metrics-1-sparkline
+    type: div
+    timeout: 60

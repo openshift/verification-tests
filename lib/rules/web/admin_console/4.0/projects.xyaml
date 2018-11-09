@@ -1,0 +1,55 @@
+#---check project related action
+create_project:
+  action: click_create_button
+  action: set_project_name
+  action: 
+    if_param: display_name
+    ref: set_project_display_name
+  action:
+    if_param: 
+    ref: set_project_description
+  action: click_create_button
+set_project_name:
+  element:
+    selector:
+      xpath: //input[contains(@id,'input-name')]
+    op: send_keys <project_name>
+    type: input
+set_project_display_name:
+  element:
+    selector:
+      xpath: //input[contains(@id,'input-display-name')]
+    op: send_keys <display_name>
+    type: input
+set_project_description:
+  element:
+    selector:
+      xpath: //textarea[contains(@id,'input-description')]
+    op: set <description>
+    type: textarea
+delete_project_on_list_page:
+  action: click_resource_action_icon
+  action: click_delete_project_icon
+  action: send_delete_string
+  action: click_delete_button
+click_delete_project_icon:
+  action: operate_action_from_dropdown
+send_delete_string:
+  elements:
+  - selector:
+      xpath: //input[@class='form-control']
+    type: input
+    op: send_keys <resource_name>
+check_project_on_overview_page:
+  elements:
+  - selector:
+      xpath: //dt[text()="Name"]/following-sibling::dd[1][text()="<project_name>"]
+  - selector:
+      xpath: //dt[text()="Display Name"]/following-sibling::dd[1][text()="<display_name>"]
+check_project_list:
+  action: goto_projects_page
+  elements:
+  - selector:
+      xpath: //a[contains(@href,'project/')]
+    type: a
+
