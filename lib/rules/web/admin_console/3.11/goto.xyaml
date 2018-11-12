@@ -14,6 +14,10 @@ goto_one_buildconfig_page:
 goto_configmaps_page:
   url: k8s/ns/<project_name>/configmaps
 
+# events
+goto_project_events:
+  url: k8s/ns/<project_name>/events
+
 # secrets
 goto_secrets_page:
   url: k8s/ns/<project_name>/secrets
