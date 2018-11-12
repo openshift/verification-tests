@@ -124,9 +124,13 @@ check_resource_details:
     if_param: max_surge
     ref: check_resource_max_surge
 check_resource_details_key_and_value:
-  element:
+  element: &key_value
     selector:
       xpath: //dt[contains(text(),'<key>')]/following-sibling::dd[1][contains(.,'<value>')]
+click_value_on_resource_detail:
+  element:
+    <<: *key_value
+  op: click
 check_resource_name:
   params:
     key: Name
