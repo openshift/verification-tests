@@ -107,14 +107,17 @@ module BushSlicer
           key = executor.host.absolutize(File.basename(f.path))
           executor.host.copy_to(f.path, key)
         end
+        # must not match any popular project name like "default"
+        # see https://bugzilla.redhat.com/show_bug.cgi?id=1642149
+        default_context_name = "generated"
         # oc --config=/tmp/tmp.config --server=https://ec2-54-86-33-62.compute-1.amazonaws.com:443 --client-certificate=/tmp/crt --client-key=/tmp/key --insecure-skip-tls-verify=true get user '~' --template='{{.metadata.name}}'
         res = executor.run(:config_set_creds, name: user.id, cert: cert, key: key, embed: true, server: user.env.api_endpoint_url, **opts)
         raise "setting keys failed, see log" unless res[:success]
-        res = executor.run(:config_set_cluster, name: "default", server: user.env.api_endpoint_url, **opts)
+        res = executor.run(:config_set_cluster, name: "#{default_context_name}-cluster", server: user.env.api_endpoint_url, **opts)
         raise "setting cluster failed, see log" unless res[:success]
-        res = executor.run(:config_set_context, name: "default", cluster: "default", user: user.id, **opts)
+        res = executor.run(:config_set_context, name: default_context_name, cluster: "#{default_context_name}-cluster", user: user.id, **opts)
         raise "setting context failed, see log" unless res[:success]
-        res = executor.run(:config_use_context, name: "default", **opts)
+        res = executor.run(:config_use_context, name: default_context_name, **opts)
         raise "using context failed, see log" unless res[:success]
       else
         raise "no idea how to prepare kubeconfig for api accessor without a " \
