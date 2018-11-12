@@ -61,7 +61,7 @@ If any step fails, you will fall into a `pry` shell where you can investigate wh
 === Running tests from outside this repository
 
 You can put your private test scenarios under `features/tierN` directory.
-It is in `.gitignore` so thatyou can keep your test scenarios under the same file system tree without git messing them up.
+It is in `.gitignore` so that you can keep your test scenarios under the same file system tree without git messing them up.
 
 == Contributing
 
