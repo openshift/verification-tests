@@ -9,9 +9,8 @@
 
 == Requirements
 
-* ruby 2.2.2 or newer
-* Cucumber 2.0 or newer
-* proper passwordless ssh setup to test environments (when needed in scenario)
+* ruby 2.4 or newer
+* proper passwordless ssh setup to cluster nodes (when needed in scenario) or add SSH key path to configuration
 * DNS setup such that routes created by OpenShift have locally resolvable DNS names
 * certificates generated for OpenShift environment should have the hostnames used to access environment by framework included; e.g. if we access master by DNS name master.test.example.com, then certificate should be valid for that name; it happens this to not be the case that's why I'm listing it here!
 * so far linux and mac are supported, hopefully in the future other platforms will be supported as well
@@ -43,7 +42,7 @@ These classes are all defined under `lib/`. Classes that directly correspond to 
 
 === Custom HTML logging and test case management
 
-see `test_case_management.adoc`
+see link:test_case_management.adoc[Test case management].
 
 === Public/Private
 
@@ -51,8 +50,8 @@ In the BushSlicer::PRIVATE dir (see `lib/cucumber.rb`) we can have other classes
 
 In the beginning of our `env.rb` we have a call to `PRIVATE/env.rb` if it exists. So any private code can be injected in this way, including to substitute DefaultWorld and DefaultManager.
 
-Also we load configuration from PRIVATE dir if such exists but see more about this in `configuration.adoc`.
+Also we load configuration from PRIVATE dir if such exists but see more about this in link:configuration.adoc[Configuration].
 
 == Configuration
 
-see `configuration.adoc`
+see link:configuration.adoc[Configuration]

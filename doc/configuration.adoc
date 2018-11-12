@@ -3,6 +3,8 @@
 == configuration files
 
 Main configuration is inside `config/config.yaml`. Content of that file is also merged with `PRIVATE/config.yaml` and `PRIVATE/config/config.yaml` if such files exist.
+You shouldn't submit private configuraion and/or credential files to public Git repos thus `PRIVATE` is a good place to put them in.
+It defaults to `bushslicer_dir/private` dir and is listed in `.gitignore` not to be submitted to the BushSlicer repo.
 
 We have also some configuration in `config/cucumber.yml`. There are some profiles defined for easily calling with proper options.
 

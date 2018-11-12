@@ -1,0 +1,68 @@
+= Cucumber based blackbox testing framework for OpenShift
+
+== Getting started
+
+More info you can find in link:doc/overview.adoc[Overview document].
+
+=== Create local dev environment
+
+. Install git if not installed already, install ruby 2.4+ if not installed
+. git clone git@github.com:openshift/bushslicer.git
+. cd bushslicer
+. tools/install_os_deps.sh # need sudo; you may need to login again to terminal if ruby was installed via rvm during this phase
+. tools/hack_bundle.rb # normal user
+. install OKD or OpenShift Container Platform client tools
+
+=== Update local dev environment
+
+----
+bundle update
+----
+
+=== Test scenario execution
+
+Check link:doc/configuration.adoc[Configuring a BushSlicer v3 run]
+
+This is an example:
+
+----
+export BUSHSLICER_DEFAULT_ENVIRONMENT=ose
+export OPENSHIFT_ENV_OSE_HOSTS=<host1>:etcd:master:node,<host2>:node,...
+export OPENSHIFT_ENV_OSE_USER_MANAGER_USERS=user1:redhat,user2:redhat
+# execute a whole feature file
+bundle exec cucumber features/cli/create.feature
+# or execute a single scenario
+bundle exec cucumber features/cli/create.feature:5
+# or execute the smoke testsbundle exec cucumber --tags @smoke
+----
+
+For Origin environment, add the following environment variables:
+
+----
+export BUSHSLICER_DEFAULT_ENVIRONMENT=origin
+export OPENSHIFT_ENV_ORIGIN_HOSTS=<host1>:etcd:master:node,<host2>:node,...
+export OPENSHIFT_ENV_ORIGIN_USER_MANAGER_USERS=user1:redhat,user2:redhat
+----
+
+You can check which environments are defined in `config/config.yaml`.
+
+You could also use the BUSHSLICER_CONFIG variable to override other
+configuration options. Add YAML/JSON into it and it will be merged with
+configuration file.
+
+=== Debugging failures
+
+If any step fails, you will fall into a `pry` shell where you can investigate what's going on. This behavior depends on Cucumber profile that you enable during execution.
+
+. running steps using `step 'Step name'`
+. inspecting the `@result` variable
+. calling and methods in World
+
+=== Running tests from outside this repository
+
+You can put your private test scenarios under `features/tierN` directory.
+It is in `.gitignore` so that you can keep your test scenarios under the same file system tree without git messing them up.
+
+== Contributing
+
+Please submit issues and pull requests to the project. You can discuss and ask questions on https://lists.openshift.redhat.com/openshiftmm/listinfo/dev[OpenShift mailing list].
