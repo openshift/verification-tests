@@ -1,8 +1,3 @@
-add_storage_in_dropdown:
-  action: click_resource_action_button
-  action: operate_action_from_dropdown
-  action: attach_storage
-  action: submit_changes
 attach_storage:
   elements:
   - selector:

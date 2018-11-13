@@ -46,6 +46,11 @@ check_page_contains:
   element:
     selector:
       xpath: //*[contains(.,'<content>')]
+click_resource_action_button:
+  elements:
+  - selector:
+      xpath: //button//span[contains(text(),'Actions')]
+    op: click
 operate_action_from_dropdown:
   elements:
   - selector:
@@ -56,7 +61,35 @@ submit_changes:
     selector:
       xpath: //button[@type='submit']
     op: click
-
+click_one_dropdown_action:
+  action: click_resource_action_button
+  action: operate_action_from_dropdown
+edit_annotations:
+  action: click_add_more_button
+  elements:
+  - selector:
+      xpath: //input[contains(@placeholder,'key')]
+    op: send_keys <annotation_key>
+  - selector:
+      xpath: //input[contains(@placeholder,'value')]
+    op: send_keys <annotation_value>
+  action: submit_changes
+click_add_more_button:
+  element:
+    selector:
+      xpath: //button[contains(text(),'Add More')]
+    op: click
+delete_resource_panel:
+  action:
+    if_param:
+      cascade: 'false'
+    ref: uncheck_checkbox
+  action: submit_changes
+uncheck_checkbox:
+  element:
+    selector:
+      xpath: //input[contains(@type,'checkbox')]
+    op: click
 ## -------- check resource key and values pairs ------
 check_resource_details:
   action:
@@ -77,10 +110,26 @@ check_resource_details:
   action:
     if_param: default_class
     ref: check_resource_default_class
+  action:
+    if_param: pod_selector
+    ref: check_resource_pod_selector
+  action:
+    if_param: update_strategy
+    ref: check_resource_update_strategy
+  action:
+    if_param: max_unavailable
+    ref: check_resource_max_unavailable
+  action:
+    if_param: max_surge
+    ref: check_resource_max_surge
 check_resource_details_key_and_value:
-  element:
+  element: &key_value
     selector:
       xpath: //dt[contains(text(),'<key>')]/following-sibling::dd[1][contains(.,'<value>')]
+click_value_on_resource_detail:
+  element:
+    <<: *key_value
+    op: click
 check_resource_name:
   params:
     key: Name
@@ -110,4 +159,24 @@ check_resource_default_class:
   params:
     key: Default Class
     value: <default_class>
+  action: check_resource_details_key_and_value
+check_resource_pod_selector:
+  params:
+    key: Pod Selector
+    value: <pod_selector>
+  action: check_resource_details_key_and_value
+check_resource_update_strategy:
+  params:
+    key: Update Strategy
+    value: <update_strategy>
+  action: check_resource_details_key_and_value
+check_resource_max_unavailable:
+  params:
+    key: Max Unavailable
+    value: <max_unavailable>
+  action: check_resource_details_key_and_value
+check_resource_max_surge:
+  params:
+    key: Max Surge
+    value: <max_surge>
   action: check_resource_details_key_and_value
