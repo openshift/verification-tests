@@ -1,7 +1,7 @@
 click_add_value_from_configmap_or_secret:
   element:
     selector:
-      xpath: //span[contains(normalize-space(text()),'Add Value from Config Map or Secret')]
+      xpath: //*[contains(normalize-space(text()),'Add from Config Map or Secret')]
     op: click
 add_env_vars:
   action: add_env_var_name

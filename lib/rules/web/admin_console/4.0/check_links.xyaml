@@ -1,4 +1,4 @@
 check_doc_get_started_with_cli:
   elements:
   - selector:
-      xpath: //*[contains(@href, '<documentationbaseurl>/3.11/cli_reference/get_started_cli') and contains(., 'Get Started with the CLI')]
+      xpath: //*[contains(@href, '<documentationbaseurl>/4.0/cli_reference/get_started_cli') and contains(., 'Get Started with the CLI')]
