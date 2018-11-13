@@ -46,6 +46,11 @@ check_page_contains:
   element:
     selector:
       xpath: //*[contains(.,'<content>')]
+click_resource_action_button:
+  elements:
+  - selector:
+      xpath: //button//span[contains(text(),'Actions')]
+    op: click
 operate_action_from_dropdown:
   elements:
   - selector:
@@ -56,11 +61,9 @@ submit_changes:
     selector:
       xpath: //button[@type='submit']
     op: click
-edit_annotations_in_action_dropdown:
+click_one_dropdown_action:
   action: click_resource_action_button
   action: operate_action_from_dropdown
-  action: edit_annotations
-  action: submit_changes
 edit_annotations:
   action: click_add_more_button
   elements:
@@ -76,10 +79,6 @@ click_add_more_button:
     selector:
       xpath: //button[contains(text(),'Add More')]
     op: click
-delete_in_action_dropdown:
-  action: click_resource_action_button
-  action: operate_action_from_dropdown
-  action: delete_resource_panel
 delete_resource_panel:
   action:
     if_param:
@@ -130,7 +129,7 @@ check_resource_details_key_and_value:
 click_value_on_resource_detail:
   element:
     <<: *key_value
-  op: click
+    op: click
 check_resource_name:
   params:
     key: Name
