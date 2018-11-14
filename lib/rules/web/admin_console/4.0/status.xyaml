@@ -15,12 +15,6 @@ check_additional_support:
       xpath: //*[contains(.,'Additional Support')]
   - selector:
       xpath: //*[@href='https://learn.openshift.com' and contains(.,'Interactive Learning Portal' )]
-  - selector:
-      xpath: //*[@href='https://www.okd.io/minishift' and contains(.,'Containerized OKD Cluster' )]
-  - selector:
-      xpath: //*[@href='https://www.youtube.com/user/rhopenshift' and contains(.,'YouTube' )]
-  - selector:
-      xpath: //*[@href='https://blog.openshift.com' and contains(.,'Blog' )]
 check_getting_started:
   elements:
   - selector:
@@ -30,6 +24,6 @@ check_getting_started:
 check_dim_resource_list:
   elements:
   - selector:
-      xpath: //div[@class='co-disabled']//a[@href='/k8s/ns/default/<resource_url_name>/new']/button[contains(., 'Create <resource_singular>')]
+      xpath: //div[@class='co-disabled']//button[contains(@id,'create')]
   - selector:
       xpath: //div[@class='co-disabled']//div[contains(.,'No <resource_singular>s Found')]
