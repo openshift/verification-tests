@@ -241,7 +241,7 @@ module BushSlicer
 
     # @return [Hash] the raw status of resource as returned by API
     def status_raw(user: nil, cached: false, quiet: false)
-      raw_resource(user: user, quiet: quiet, cached: cached)["status"]
+      raw_resource(user: user, quiet: quiet, cached: cached).dig("status")
     end
 
     def phase(user: nil, cached: false, quiet: false)
