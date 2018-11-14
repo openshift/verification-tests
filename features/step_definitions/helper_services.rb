@@ -9,19 +9,7 @@ Given /^I have a NFS service in the(?: "([^ ]+?)")? project$/ do |project_name|
     raise "project #{project_name} does not exist"
   end
 
-  # in this policy we use policy name to be #ACCOUNT# name but with bad
-  #   characters removed
-  step %Q{I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/authorization/scc/scc_super_template.yaml"}
-  policy = YAML.load(@result[:response])
-  path = @result[:abs_path]
-  policy["metadata"]["name"] = "super-" + user.name.gsub(/[@]/,"-")
-  policy["users"] = [user.name]
-  policy["groups"] = ["system:serviceaccounts:" + project.name]
-  File.write(path, policy.to_yaml)
-
-  # now we seem to need setting policy on user, not project
-  step %Q@the following scc policy is created: #{path}@
-
+  step %Q/SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group/
   step %Q{I run oc create over "https://github.com/openshift-qe/v3-testfiles/raw/master/storage/nfs/nfs-server.yaml" replacing paths:}, table(%{
       | ["items"][0]["spec"]["volumes"][0]["hostPath"]["path"] | /mnt/#{project.name} |
   })
