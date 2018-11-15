@@ -241,11 +241,12 @@ module BushSlicer
 
     # @return [Hash] the raw status of resource as returned by API
     def status_raw(user: nil, cached: false, quiet: false)
-      raw_resource(user: user, quiet: quiet, cached: cached).dig("status")
+      raw_resource(user: user, quiet: quiet, cached: cached)["status"]
     end
 
     def phase(user: nil, cached: false, quiet: false)
-      return status_raw(user: user, cached: cached, quiet: quiet)["phase"].downcase.to_sym
+      raw_status = status_raw(user: user, cached: cached, quiet: quiet)
+      return raw_status["phase"].downcase.to_sym if raw_status
     rescue ResourceNotFoundError => e
       return :missing
     end

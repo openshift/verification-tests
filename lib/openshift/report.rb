@@ -13,9 +13,7 @@ module BushSlicer
       seconds = 60 # for PVs it can take longer than 30s
       success = wait_for(seconds) do
         # status field may not be ready, so we only query for 'finished' if the status field is present
-        if raw_resource(user: user, cached: false, quiet: quiet).keys.include? 'status'
-          finished?(user:user, cached: false, quiet: quiet)
-        end
+        finished?(user:user, cached: false, quiet: quiet)
       end
       raise "Report didn't become :finished" unless success
       return success

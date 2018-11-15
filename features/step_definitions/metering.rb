@@ -87,14 +87,11 @@ end
 
 ### set up an app for metering that will be capable of returning valid reports of different types
 # #### create an app that will excercise all of the reports
-# 1. create project
-#   - oc new-app foobar
-# 2. create a quickstart app with pv
+# 1. create a quickstart app with pv
 #    - oc new-app --template=django-psql-persistent
-# 3. wait until the app is ready
-# 4. need to patch it since the template does not have 'cpu' limits set under 'resources'.  We MUST see that parameter in order to trigger metrics
+# 2. need to patch it since the template does not have 'cpu' limits set under 'resources'.  We MUST see that parameter in order to trigger metrics
 #   - oc patch dc/django-psql-persistent  -p '{"spec":{"template":{"spec":{"containers":[{"name":"django-psql-persistent","resources":{"limits":{"memory": "512Mi","cpu": "200m"}}}]}}}}'
-# 5. wait for new pod to be created
+# 3. wait for new pod to be created
 Given /^I setup an app to test metering reports$/ do
   step %Q/I run the :new_app client command with:/, table(%{
     | template | django-psql-persistent |
@@ -108,18 +105,23 @@ Given /^I setup an app to test metering reports$/ do
     | resource_name | django-psql-persistent                                                                                                                      |
     | p             | {"spec":{"template":{"spec":{"containers":[{"name":"django-psql-persistent","resources":{"limits":{"memory": "512Mi","cpu": "200m"}}}]}}}}' |
   })
+  step %Q/a pod becomes ready with labels:/, table(%{
+     | name=django-psql-persistent |
+   })
 end
 
-Given /^I wait until #{QUOTED} report for #{QUOTED} namespace to be available$/ do | report_name, namespace |
-  # longest wait time is 5 minutes
-  seconds = 8 * 60  # for PVs it can take as long as 5 minutes
+Given /^I wait until #{QUOTED} report for #{QUOTED} namespace to be available$/ do | report_type, namespace |
+  # longest wait time is 8 minutes
+  seconds = 8 * 60  # for PVs it can take as long as 5 minutes sometimes more with timing of the query/creation
   res = []
   success = wait_for(seconds) do
-    step %Q/I get the "persistentvolumeclaim-request" report and store it in the clipboard using:/, table(%{
+    step %Q/I get the "#{report_type}" report and store it in the clipboard using:/, table(%{
        | query_type          | persistentvolumeclaim-request |
     })
     res = cb.report.select { |r| r['namespace'] == namespace }
     res.count > 0
   end
-  raise "report '#{report_name}' for project '#{namespace}' not found after #{seconds} seconds" if res.count == 0
+  if res.count == 0
+    raise "report '#{report_type}' for project '#{namespace}' not found after #{seconds} seconds"
+  end
 end
