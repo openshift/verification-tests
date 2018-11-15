@@ -246,7 +246,7 @@ module BushSlicer
 
     def phase(user: nil, cached: false, quiet: false)
       raw_status = status_raw(user: user, cached: cached, quiet: quiet)
-      return raw_status["phase"].downcase.to_sym if raw_status
+      return raw_status ? raw_status["phase"].downcase.to_sym : nil
     rescue ResourceNotFoundError => e
       return :missing
     end
