@@ -26,3 +26,14 @@ Feature: test metering related steps
       | query_type          | node-cpu-capacity |
       | use_existing_report | true              |
 
+  @admin
+  Scenario: test create app to support metering reports
+    Given I have a project
+    And evaluation of `project.name` is stored in the :org_proj_name clipboard
+    And I setup an app to test metering reports
+    Given I switch to cluster admin pseudo user
+    And I use the "openshift-metering" project
+    Given I select a random node's host
+    Given I get the "persistentvolumeclaim-request" report and store it in the clipboard using:
+      | query_type          | persistentvolumeclaim-request |
+    Given I wait until "persistentvolumeclaim-request" report for "<%= cb.org_proj_name %>" namespace to be available
