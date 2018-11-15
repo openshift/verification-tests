@@ -12,7 +12,6 @@ module BushSlicer
     def wait_till_finished(user: nil, quiet: false)
       seconds = 60 # for PVs it can take longer than 30s
       success = wait_for(seconds) do
-        # status field may not be ready, so we only query for 'finished' if the status field is present
         finished?(user:user, cached: false, quiet: quiet)
       end
       raise "Report didn't become :finished" unless success
