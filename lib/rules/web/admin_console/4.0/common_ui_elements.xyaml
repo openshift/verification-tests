@@ -9,11 +9,6 @@ click_create_button:
   - selector:
       xpath: //button[contains(text(),'Create')]
     op: click
-click_delete_button:
-  elements:
-  - selector:
-      xpath: //button[contains(text(),'Delete')]
-    op: click
 click_resource_action_icon:
   elements:
   - selector:
@@ -63,6 +58,9 @@ check_resource_details:
     if_param: name
     ref: check_resource_name
   action:
+    if_param: display_name
+    ref: check_resource_display_name
+  action:
     if_param: labels
     ref: check_resource_labels
   action:
@@ -85,6 +83,11 @@ check_resource_name:
   params:
     key: Name
     value: <name>
+  action: check_resource_details_key_and_value
+check_resource_display_name:
+  params:
+    key: Display Name
+    value: <display_name>
   action: check_resource_details_key_and_value
 check_resource_labels:
   params:
