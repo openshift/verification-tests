@@ -120,6 +120,12 @@ check_resource_details:
   action:
     if_param: max_surge
     ref: check_resource_max_surge
+  action:
+    if_param: schedule
+    ref: check_resource_schedule
+  action:
+    if_param: concurrency_policy
+    ref: check_resource_concurrency_policy
 check_resource_details_key_and_value:
   element: &key_value
     selector:
@@ -182,4 +188,14 @@ check_resource_max_surge:
   params:
     key: Max Surge
     value: <max_surge>
+  action: check_resource_details_key_and_vialue
+check_resource_schedule:
+  params:
+    key: Schedule
+    value: <schedule>
+  action: check_resource_details_key_and_value
+check_resource_concurrency_policy:
+  params:
+    key: Concurrency Policy
+    value: <concurrency_policy>
   action: check_resource_details_key_and_value
