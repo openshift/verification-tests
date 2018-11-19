@@ -1,0 +1,20 @@
+check_desired_pod_count:
+  element:
+    selector:
+      xpath: //dd//a[contains(text(),"<pod_count>")]
+update_pod_count:
+  elements:
+  - selector: &modal_count
+      xpath: //input[contains(@class,"co-m-number-spinner__input")]
+    op: clear
+  - selector:
+      <<: *modal_count
+    op: send_keys <pod_count>
+  action: submit_changes
+update_rollout_strategy:
+  elements:
+  - selector:
+      xpath: //input[@value='<update_strategy>']
+    op: click
+  action: submit_changes
+

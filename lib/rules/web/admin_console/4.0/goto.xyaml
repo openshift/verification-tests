@@ -29,3 +29,10 @@ goto_one_secret_page:
 # storageclass
 goto_storageclass_page:
   url: k8s/cluster/storageclasses
+
+# deployment
+goto_deployment_page:
+  url: k8s/ns/<project_name>/deployments
+goto_one_deployment_page:
+  url: k8s/ns/<project_name>/deployments/<deploy_name>
+
