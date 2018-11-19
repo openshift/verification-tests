@@ -9,6 +9,12 @@ click_create_button:
   - selector:
       xpath: //button[contains(text(),'Create')]
     op: click
+click_save_button:
+  elements:
+  - selector:
+      visible_text: !ruby/regexp '/Save/'
+    type: button
+    op: click
 click_resource_action_icon:
   elements:
   - selector:
