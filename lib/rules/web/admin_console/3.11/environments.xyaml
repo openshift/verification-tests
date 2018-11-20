@@ -68,8 +68,7 @@ remove_env_vars:
   - selector:
       xpath: //div[contains(@class,'pairs-list__row')]
   - selector: &env_var_delete_icon |
-      var env_name_input = document.querySelectorAll('input[value=<env_var_name>]')
-      var parent_row = env_name_input[0].parentElement.parentElement
+      var parent_row = document.querySelectorAll('input[value=<env_var_name>]')[0].parentElement.parentElement
       return parent_row.querySelector('.pairs-list__delete-icon')
     type: js
   - selector: *env_var_delete_icon
