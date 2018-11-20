@@ -11,7 +11,7 @@ Given /^I have a NFS service in the(?: "([^ ]+?)")? project$/ do |project_name|
 
   step %Q/SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group/
   step %Q{I run the :create client command with:}, table(%{
-    | f | https://github.com/liangxia/v3-testfiles/raw/nfs-server/storage/nfs/nfs-server.yaml |
+    | f | https://github.com/openshift-qe/v3-testfiles/raw/master/storage/nfs/nfs-server.yaml |
   })
   step %Q/the step should succeed/
 
