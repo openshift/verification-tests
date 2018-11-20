@@ -18,6 +18,10 @@ goto_configmaps_page:
 goto_project_events:
   url: k8s/ns/<project_name>/events
 
+# environment page
+goto_resource_environment_page:
+  url: k8s/ns/<project_name>/<resource_type>/<resource_name>/environment
+
 # secrets
 goto_secrets_page:
   url: k8s/ns/<project_name>/secrets

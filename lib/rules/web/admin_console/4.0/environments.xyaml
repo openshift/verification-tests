@@ -35,6 +35,12 @@ add_env_var_value:
     selector:
       xpath: //div[contains(@class,'pairs-list__row')][last()]/div[contains(@class,'pairs-list__value-field')]/input[@placeholder='value']
     op: send_keys <env_var_value>
+choose_container:
+  elements:
+  - selector:
+      xpath: //div[@class='dropdown']//span[@class='co-resource-link']
+    op: click
+  action: choose_item_from_list
 update_env_vars:
   action:
     if_param: env_source_name
@@ -63,3 +69,15 @@ update_pair_key:
       xpath: //a[contains(.,'<env_source_key>')]
     op: click
 update_env_var_value: {}
+remove_env_vars:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'pairs-list__row')]
+  - selector: &env_var_delete_icon |
+      var parent_row = document.querySelectorAll('input[value=<env_var_name>]')[0].parentElement.parentElement
+      return parent_row.querySelector('.pairs-list__delete-icon')
+    type: js
+  - selector: *env_var_delete_icon
+    type: js
+    op: click
+

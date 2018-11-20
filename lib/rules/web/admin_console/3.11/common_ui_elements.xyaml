@@ -28,7 +28,7 @@ clear_input_value:
 check_row_filter_on_page:
   elements:
   - selector:
-      xpath: //div[contains(@class,'row-filter')]//div[text()='<filter>']
+      xpath: //div[contains(@class,'row-filter')]//*[text()='<filter>']
 check_resources_title_on_page:
   elements:
   - selector:
@@ -46,10 +46,10 @@ click_resource_action_button:
   - selector:
       xpath: //button//span[contains(text(),'Actions')]
     op: click
-operate_action_from_dropdown:
+choose_item_from_list:
   elements:
   - selector:
-      xpath: //li/a[contains(text(),'<action_item>')]
+      xpath: //li//*[text()='<item>']
     op: click
 submit_changes:
   element:
@@ -58,7 +58,7 @@ submit_changes:
     op: click
 click_one_dropdown_action:
   action: click_resource_action_button
-  action: operate_action_from_dropdown
+  action: choose_item_from_list
 edit_annotations:
   action: click_add_more_button
   elements:
