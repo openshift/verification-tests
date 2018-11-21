@@ -10,8 +10,8 @@ Given /^I have a NFS service in the(?: "([^ ]+?)")? project$/ do |project_name|
   end
 
   step %Q/SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group/
-  step %Q{I run oc create over "https://github.com/openshift-qe/v3-testfiles/raw/master/storage/nfs/nfs-server.yaml" replacing paths:}, table(%{
-      | ["items"][0]["spec"]["volumes"][0]["hostPath"]["path"] | /mnt/#{project.name} |
+  step %Q{I run the :create client command with:}, table(%{
+    | f | https://github.com/openshift-qe/v3-testfiles/raw/master/storage/nfs/nfs-server.yaml |
   })
   step %Q/the step should succeed/
 
@@ -19,15 +19,7 @@ Given /^I have a NFS service in the(?: "([^ ]+?)")? project$/ do |project_name|
   # now you have NFS running, to get IP, call `service.ip` or
   #   `service("nfs-service").ip`
 
-  cb.nfs_pod = pod("nfs-server")
-  teardown_add {
-    step %/I use the "#{cb.nfs_pod.node_name(user: user)}" node/
-    step %Q{I run commands on the host:}, table(%{
-        | rm -rf /mnt/#{project.name} |
-     })
-    step %Q/the step should succeed/
-  }
-  @result = cb.nfs_pod.exec("bash", "-c", "chmod g+w /mnt/data", as: user)
+  @result = pod("nfs-server").exec("bash", "-c", "chmod g+w /mnt/data", as: user)
   step %Q/the step should succeed/
 end
 
