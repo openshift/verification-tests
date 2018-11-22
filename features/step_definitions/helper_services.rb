@@ -43,7 +43,7 @@ Given /^I have a nfs-provisioner (pod|service) in the(?: "([^ ]+?)")? project$/ 
   file_name = @result[:file_name]
   step %Q/I replace content in "#{file_name}":/, table(%{
     | default | <%= project.name %> |
-    })  
+    })
   @result = admin.cli_exec(:create, n: project.name, f: file_name)
   raise "could not create nfs-provisioner rbac" unless @result[:success]
   env.nodes.map(&:host).each do |host|
@@ -99,7 +99,7 @@ Given /^I have a efs-provisioner(?: with fsid "(.+)")?(?: of region "(.+)")? in 
   file_name = @result[:file_name]
   step %Q/I replace content in "#{file_name}":/, table(%{
     | default | <%= project.name %> |
-    })  
+    })
   @result = admin.cli_exec(:create, n: project.name, f: file_name)
   raise "could not create efs-provisioner rbac" unless @result[:success]
   step %Q|I download a file from "https://raw.githubusercontent.com/openshift/external-storage/master/aws/efs/deploy/deployment.yaml"|
@@ -646,6 +646,58 @@ Given /^I have a registry with htpasswd authentication enabled in my project$/ d
   step %Q/a pod becomes ready with labels:/, table(%{
        | deploymentconfig=registry |
   })
+end
+
+Given /^I have a logstash service in the project for kubernetes audit$/ do
+  cb.logstash = OpenStruct.new
+  @result = user.cli_exec(:create, f: "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/audit/configmap-simple-logstash.yml")
+  unless @result[:success]
+    raise "could not create logstash config map, see log"
+  end
+  cb.logstash.cm = config_map("logstash")
+
+  @result = user.cli_exec(:run, name: "logstash", image: "logstash:6.5.0", env: ["LOGSTASH_HOME=/usr/share/logstash"], command: true, cmd: ["bash", "--", "/etc/logstash/logstash-wrapper.sh", "-f", "/etc/logstash/config"])
+  unless @result[:success]
+    raise "could not create logstash deployment, see log"
+  end
+  cb.logstash.dc = dc("logstash")
+
+  @result = user.cli_exec(:set_volume, add: true, "configmap-name": "logstash", "mount-path": "/etc/logstash", resource: "dc/logstash")
+  unless @result[:success]
+    raise "could not create config map volume for logstash deployment, see log"
+  end
+
+  @result = user.cli_exec(:set_volume, add: true, "mount-path": "/var/log", resource: "dc/logstash")
+  unless @result[:success]
+    raise "could not create log volume for logstash deployment, see log"
+  end
+
+  # @result = user.cli_exec(:create_service, createservice_type: "clusterip", name: "logstash", tcp: "8888:8888")
+  @result = user.cli_exec(:expose, resource: "dc", resource_name: "logstash", port: "8888")
+  unless @result[:success]
+    raise "could not create logstash service, see log"
+  end
+  cb.logstash.svc = service("logstash")
+
+  # @result = user.cli_exec(:patch, resource_name: "logstash", resource: "service", p: '{"spec":{"selector":{"deploymentconfig":"logstash"}}}')
+  # unless @result[:success]
+  #   raise "could not set service selector, see log"
+  # end
+
+  @result = user.cli_exec(:expose, resource: "service", resource_name: "logstash", name: "logstash-http-input")
+  unless @result[:success]
+    raise "could not create logstash route, see log"
+  end
+  cb.logstash.route = route("logstash-http-input")
+
+  @result = service("logstash").wait_till_ready(user, 300)
+  raise "Logstash service did not become ready" unless @result[:success]
+
+  ## we assume to get git pod in the result above, fail otherwise
+  cache_pods *@result[:matching]
+  cb.logstash.pod = pod
+  cb.logstash.url_http = "http://#{service.hostname}:8888"
+  cb.logstash.url_ext = "http://#{route.dns}"
 end
 
 Given /^I have a cluster-capacity pod in my project$/ do

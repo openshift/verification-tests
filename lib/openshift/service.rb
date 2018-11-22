@@ -66,8 +66,12 @@ module BushSlicer
     # @note call without parameters only when props are loaded
     def url(user: nil, cached: true, quiet: false)
       ip = self.ip(user: user, cached: cached, quiet: quiet)
-      port = self.ports(user: user, cached: cached, quiet: quiet)
+      port = self.ports(user: user, cached: true, quiet: quiet)
       return "#{ip}:#{ports[0]["port"]}"
+    end
+
+    def hostname
+      "#{name}.#{project.name}.svc"
     end
 
     # @note call without parameters only when props are loaded
