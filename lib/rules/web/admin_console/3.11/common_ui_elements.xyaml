@@ -126,6 +126,18 @@ check_resource_details:
   action:
     if_param: concurrency_policy
     ref: check_resource_concurrency_policy
+  action:
+    if_param: last_schedule_time
+    ref: check_resource_last_schedule_time
+  action:
+    if_param: owner
+    ref: check_resource_owner
+  action:
+    if_param: desired_completions
+    ref: check_resource_desired_completions
+  action:
+    if_param: parallelism
+    ref: check_resource_parallelism
 check_resource_details_key_and_value:
   element: &key_value
     selector:
@@ -188,7 +200,7 @@ check_resource_max_surge:
   params:
     key: Max Surge
     value: <max_surge>
-  action: check_resource_details_key_and_vialue
+  action: check_resource_details_key_and_value
 check_resource_schedule:
   params:
     key: Schedule
@@ -198,4 +210,24 @@ check_resource_concurrency_policy:
   params:
     key: Concurrency Policy
     value: <concurrency_policy>
+  action: check_resource_details_key_and_value
+check_resource_last_schedule_time:
+  params:
+    key: Last Schedule Time
+    value: <last_schedule_time>
+  action: check_resource_details_key_and_value
+check_resource_owner:
+  params:
+    key: Owner
+    value: <owner>
+  action: check_resource_details_key_and_value
+check_resource_desired_completions:
+  params:
+    key: Desired Completions
+    value: <desired_completions>
+  action: check_resource_details_key_and_value
+check_resource_parallelism:
+  params:
+    key: Parallelism
+    value: <parallelism>
   action: check_resource_details_key_and_value
