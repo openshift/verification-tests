@@ -33,7 +33,8 @@ export OPENSHIFT_ENV_OSE_USER_MANAGER_USERS=user1:redhat,user2:redhat
 bundle exec cucumber features/cli/create.feature
 # or execute a single scenario
 bundle exec cucumber features/cli/create.feature:5
-# or execute the smoke testsbundle exec cucumber --tags @smoke
+# or execute the smoke tests
+bundle exec cucumber --tags @smoke
 ----
 
 For Origin environment, add the following environment variables:
@@ -44,7 +45,7 @@ export OPENSHIFT_ENV_ORIGIN_HOSTS=<host1>:etcd:master:node,<host2>:node,...
 export OPENSHIFT_ENV_ORIGIN_USER_MANAGER_USERS=user1:redhat,user2:redhat
 ----
 
-You can check which environments are defined in `config/config.yaml`.
+You can check which environments are defined in link:config/config.yaml[config/config.yaml].
 
 You could also use the BUSHSLICER_CONFIG variable to override other
 configuration options. Add YAML/JSON into it and it will be merged with
@@ -61,7 +62,7 @@ If any step fails, you will fall into a `pry` shell where you can investigate wh
 === Running tests from outside this repository
 
 You can put your private test scenarios under `features/tierN` directory.
-It is in `.gitignore` so that you can keep your test scenarios under the same file system tree without git messing them up.
+It is in link:.gitignore[.gitignore] so that you can keep your test scenarios under the same file system tree without git messing them up.
 
 == Contributing
 
