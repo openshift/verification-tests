@@ -370,6 +370,22 @@ module BushSlicer
       end
       return @local_storage_provisioner_project
     end
+
+    # return nil is no proxy enabled, else proxy value
+    def proxy
+      if version_le("3.9", user: admin)
+        proxy_check_cmd = "cat /etc/sysconfig/atomic-openshift-master-api | grep HTTP_PROXY"
+      else
+        proxy_check_cmd = "cat /etc/origin/master/master.env | grep HTTP_PROXY"
+      end
+      @result = master_hosts.first.exec(proxy_check_cmd)
+      if @result[:success]
+        return @result[:response].split('HTTP_PROXY=')[1].strip
+      else
+        return nil
+      end
+    end
+
   end
 
   # a quickly made up environment class for the PoC
