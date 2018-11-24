@@ -537,7 +537,6 @@ Given /^(logging|metrics|metering) service is (installed|uninstalled) with ansib
     end
   end
 
-  step %Q/I save installation inventory from master to the clipboard/
   logger.info("Performing operation '#{op[0..-3]}' to #{cb.target_proj}...")
   if op == 'installed' and not cb.no_cleanup
     step %Q/I register clean-up steps:/, table(%{
@@ -960,12 +959,8 @@ Given /^I have a pod with openshift-ansible playbook installed$/ do
   # to save time we are going to check if the base-ansible-pod already exists
   # use admin user to get the information so we don't need to switch user.
   unless pod("base-ansible-pod", cb.org_project_for_ansible).exists?(user: admin)
-    proxy_value = nil
-    step %Q/I save installation inventory from master to the clipboard/ unless cb.installation_inventory
-    if cb.installation_inventory['OSEv3:vars'].keys.include? 'openshift_http_proxy'
-      cb.proxy_value = cb.installation_inventory['OSEv3:vars']['openshift_http_proxy']
-    end
-    # cb.proxy_value will determine if proxy section is enabled.
+    cb.proxy_value = env.proxy
+    logger.info("Proxy set to: #{cb.proxy_value}")
     step %Q/I switch to cluster admin pseudo user/
     step %Q{I use the "<%= cb.org_project_for_ansible.name %>" project}
     step %Q{I run oc create over ERB URL: https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging_metrics/base_ansible_ose.yaml}
@@ -993,30 +988,6 @@ Given /^I save installation inventory from master to the#{OPT_SYM} clipboard$/ d
   else
     raise "'#{qe_inventory_file}' does not exists"
   end
-end
-
-# get the puddle information from master's /tmp/qe-inventory-host-file
-# @returns a copule of clipboard informaiton:
-#  1. :installation_inventory contains the installation inventory
-#  2. :rpms contains an array of all the rpms for the puddle
-#  3. :puddle_url
-#  4. :rpm_name
-Given /^I save the rpm names? matching #{RE} from puddle to the#{OPT_SYM} clipboard$/ do | package_pattern, cb_name |
-  ensure_admin_tagged
-
-  cb_name ||= :rpm_names
-  step %Q/I save installation inventory from master to the clipboard/ unless cb.installation_inventory
-  rpm_repos_key = cb[:installation_inventory]['OSEv3:vars'].keys.include?('openshift_playbook_rpm_repos') ? 'openshift_playbook_rpm_repos' : 'openshift_additional_repos'
-  puddle_url = eval(cb[:installation_inventory]['OSEv3:vars'][rpm_repos_key])[0][:baseurl]
-  cb.puddle_url = puddle_url
-  @result = BushSlicer::Http.get(url: puddle_url + "/Packages")
-
-  doc = Oga.parse_html(@result[:response])
-  rpms = (doc.css('a').select { |l| l.attributes[0].value if l.attributes[0].value.end_with? 'rpm'  }).map { |r| r.children[0].text}
-  cb.rpms = rpms
-  rpm_names = rpms.select { |r| r =~ /#{package_pattern}/ }
-  raise "No matching rpm found for #{package_pattern}" if rpm_names.count == 0
-  cb[cb_name] = rpm_names
 end
 
 
