@@ -52,7 +52,7 @@ RUN echo -e '#!/bin/bash\nexec "$@"' > /usr/local/bin/sudo && chmod 755 /usr/loc
 
 USER 1001
 
-WORKDIR /home/jenkins/bushslicer
+WORKDIR $HOME/bushslicer
 
 # we need ruby and some gems from ror
 ENTRYPOINT ["/usr/bin/scl", "enable", "rh-git29", "rh-ror50", "--", "cucumber features/cli/build.feature:5"]
