@@ -97,7 +97,7 @@ optional_classes:
       test_suite_class: BushSlicer::PolarShift::TestSuite
       test_suite_opts: {}
 services:
-  AWS:
+  AWS: &AWSBase
     create_opts:
       # for all options see http://docs.aws.amazon.com/sdkforruby/api/Aws/EC2/Resource.html#create_instances-instance_method
       # the actual key-pair name is under the private repo and will be over-written
@@ -137,6 +137,7 @@ services:
     # host_opts:
       # ssh_private_key: relative/path
       # user: the_username
+  AWS-CI: *AWSBase
   azure:
     # auth:
     #   # az login --service-principal -u client_id --tenant tenant_id
