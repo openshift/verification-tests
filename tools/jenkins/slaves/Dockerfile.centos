@@ -11,8 +11,6 @@ RUN [ -d $HOME/bushslicer/private/config/ca ] && \
     cp -v *.pem /etc/pki/ca-trust/source/anchors/ && \
     update-ca-trust extract || \
     exit 1 ) || :
-# Remove any instance of the private repository
-RUN rm -rf $HOME/bushslicer/private*
 
 RUN set -x && \
     SCL_BASE_PKGS="centos-release-scl scl-utils-build" && \
@@ -40,9 +38,10 @@ RUN scl enable rh-ror50 $HOME/bushslicer/tools/hack_bundle.rb
 #   security concern because of exposing VPN details
 # RUN sed -i -e 's/^\s\+curl\s/  curl -Sk /' /usr/local/bin/run-jnlp-client
 
+# Cleanup and remove any instance of the private repository
 RUN rpm -qa && \
     yum clean all -y && \
-    /var/cache/yum /tmp/*
+    rm -rf /var/cache/yum /tmp/* $HOME/bushslicer/private* $HOME/bushslicer/tierN
 
 RUN dbus-uuidgen > /etc/machine-id # e.g. needed for firefox
 RUN chown -R 1001:0 $HOME && chmod -R g+rw $HOME /etc/machine-id
