@@ -1,0 +1,34 @@
+# The standard name for this image is aosqe/bushslicer-base
+
+FROM openshift/jenkins-slave-base-centos7
+
+LABEL vendor="Red Hat inc."
+LABEL maintainer="AOS QE Team"
+
+USER root
+
+ADD . $HOME/bushslicer
+
+RUN set -x && \
+    SCL_BASE_PKGS="centos-release-scl scl-utils-build" && \
+    INSTALL_PKGS="rh-ruby24 rh-ror50-rubygem-nokogiri rh-ruby24-ruby-devel rh-git29 bsdtar" && \
+    yum -y update && \
+    yum install -y --enablerepo=centosplus $SCL_BASE_PKGS && \
+    yum install -y --enablerepo=centosplus $INSTALL_PKGS && \
+    yum install -y https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm && \
+    CHROMEDRIVER_URL="https://chromedriver.storage.googleapis.com" && \
+    CHROMEDRIVER_VERSION=`curl -sSL "$CHROMEDRIVER_URL/LATEST_RELEASE"` && \
+    curl -sSL "$CHROMEDRIVER_URL/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip"  | bsdtar xvf - -C /usr/local/bin && \
+    GECKODRIVER_DOWNLOAD_URL="$(curl -sSL https://api.github.com/repos/mozilla/geckodriver/releases/latest | grep -E 'browser_download_url.*linux64' | sed -E 's/.*(https[^"]*).*/\1/')" && \
+    curl -sSL "$GECKODRIVER_DOWNLOAD_URL" | bsdtar -xvf - -C /usr/local/bin && \
+    chmod +x /usr/local/bin/chromedriver /usr/local/bin/geckodriver && \
+    rpm -V $INSTALL_PKGS $SCL_BASE_PKGS && \
+    curl -sSL https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm -o /tmp/epel-release-latest-7.noarch.rpm && \
+    yum install -y /tmp/epel-release-latest-7.noarch.rpm && \
+    mkdir -p $HOME/bin
+
+RUN scl enable rh-ror50 "$HOME/bushslicer/tools/install_os_deps.sh"
+RUN scl enable rh-ror50 $HOME/bushslicer/tools/hack_bundle.rb
+RUN rpm -qa && \
+    yum clean all -y && \
+    rm -rf $HOME/bushslicer /var/cache/yum /tmp/*
