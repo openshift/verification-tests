@@ -9,6 +9,11 @@ click_create_button:
   - selector:
       xpath: //button[contains(text(),'Create')]
     op: click
+click_cancel_button:
+  elements:
+  - selector:
+      xpath: //button[contains(text(),'Cancel')]
+    op: click
 click_resource_action_icon:
   elements:
   - selector:
@@ -59,7 +64,11 @@ submit_changes:
 click_one_dropdown_action:
   action: click_resource_action_button
   action: choose_item_from_list
-edit_annotations:
+add_annotation_for_resource:
+  action: click_one_dropdown_action
+  action: add_annotation
+  action: submit_changes
+add_annotation:
   action: click_add_more_button
   elements:
   - selector:
@@ -68,12 +77,17 @@ edit_annotations:
   - selector:
       xpath: //input[contains(@placeholder,'value')]
     op: send_keys <annotation_value>
-  action: submit_changes
 click_add_more_button:
   element:
     selector:
-      xpath: //button[contains(text(),'Add More')]
+      xpath: //*[contains(text(),'Add More')]
     op: click
+click_annotation_link:
+  elements:
+  - selector:
+      xpath: //a[contains(text(), 'Annotation')]
+    op: click
+    timeout: 20
 delete_resource_panel:
   action:
     if_param:
@@ -85,6 +99,21 @@ uncheck_checkbox:
     selector:
       xpath: //input[contains(@type,'checkbox')]
     op: click
+add_label_for_resource:
+  action: click_one_dropdown_action:
+  action: add_label
+  action: submit_changes
+add_label:
+  elements:
+  - selector:
+      id: tags-input
+    type: input
+    op: send_keys <new_label>
+  - selector:
+      id: tags-input
+    type: input
+    op: send_keys <press_enter>
+
 ## -------- check resource key and values pairs ------
 check_resource_details:
   action:
