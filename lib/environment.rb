@@ -372,6 +372,10 @@ module BushSlicer
     end
 
     # return nil is no proxy enabled, else proxy value
+    # TODO: as alternative that's not OCP version dependent, but require parsing 
+    # YAML, we can do:
+    #  grep HTTP_PROXY /etc/origin/master/master-config.yaml
+    # 
     def proxy
       if version_le("3.9", user: admin)
         proxy_check_cmd = "cat /etc/sysconfig/atomic-openshift-master-api | grep HTTP_PROXY"
