@@ -137,6 +137,7 @@ services:
     # host_opts:
       # ssh_private_key: relative/path
       # user: the_username
+    # install_base_domain: my.route53.domain.example.com
   AWS-CI: *AWSBase
   azure:
     # auth:
