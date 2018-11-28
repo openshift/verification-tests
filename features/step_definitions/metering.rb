@@ -125,3 +125,40 @@ Given /^I wait until #{QUOTED} report for #{QUOTED} namespace to be available$/ 
     raise "report '#{report_type}' for project '#{namespace}' not found after #{seconds} seconds"
   end
 end
+
+Given /^I enable route for#{OPT_QUOTED} metering service$/ do | metering_name |
+  metering_name ||= "openshift-metering"
+  htpasswd = `htpasswd -nb -s #{user.name} #{user.password}`.strip
+  cookie_seed = `openssl rand -base64 32 | head -c32; echo`.strip
+  route_yaml = <<BASE_TEMPLATE
+    apiVersion: metering.openshift.io/v1alpha1
+    kind: Metering
+    metadata:
+      name: "#{metering_name}"
+    spec:
+      reporting-operator:
+        spec:
+          route:
+            enabled: true
+        authProxy:
+          enabled: true
+        htpasswdData: |
+          #{htpasswd}
+        cookieSeed: "#{cookie_seed}"
+        subjectAccessReviewEnabled: true
+        delegateURLsEnabled: true
+BASE_TEMPLATE
+  @result = user.cli_exec(:apply, f: "-", _stdin: route_yaml)
+  # route name is ALWAYS set to 'metering'
+  step %Q/I wait for the "metering" route to appear up to 120 seconds/
+end
+
+# XXX: should we check metering route exists first prior to patching?
+Given /^I disable route for#{OPT_QUOTED} metering service$/ do | metering_name |
+  metering_name ||= "openshift-metering"
+  patch_json = '{"spec":{"reporting-operator":{"spec":{"route":{"enabled":false}}}}}'
+  opts = {resource: 'metering', resource_name: metering_name, p: patch_json, type: 'merge'}
+  @result = user.cli_exec(:patch, **opts)
+  # route name is ALWAYS set to 'metering'
+  step %Q/I wait for the resource "route" named "metering" to disappear/
+end

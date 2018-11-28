@@ -37,3 +37,10 @@ Feature: test metering related steps
     Given I get the "persistentvolumeclaim-request" report and store it in the clipboard using:
       | query_type          | persistentvolumeclaim-request |
     Given I wait until "persistentvolumeclaim-request" report for "<%= cb.org_proj_name %>" namespace to be available
+
+  @admin
+  Scenario: test external access of metering query
+    Given the first user is cluster-admin
+    And I use the "openshift-metering" project
+    Given I enable route for metering service
+    Given I disable route for metering service
