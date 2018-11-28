@@ -13,11 +13,11 @@ Given /^metering service has been installed successfully$/ do
   end
   # change project context
   unless project('openshift-metering').exists?
-    # install metering using deault
+    # install metering using default
     step %Q/default metering service is installed without cleanup/
-  else
-    step %Q/all metering related pods are running in the project/
   end
+  step %Q/all metering related pods are running in the project/
+  step %Q/I wait for the "openshift-metering" metering to appear/
 end
 
 Given /^default metering service is installed without cleanup$/ do
