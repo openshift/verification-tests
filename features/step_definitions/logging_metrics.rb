@@ -681,6 +681,7 @@ Given /^(logging|metrics|metering) service is (installed|uninstalled) with ansib
           # for metering we need to create the
           @result = user.cli_exec(:create, f: "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/metering/default-storageclass-values.yaml")
           step %Q/all metering related pods are running in the "#{target_proj}" project/
+          step %Q/I wait for the "openshift-metering" metering to appear/
         end
       else
         if cb.negative_test
