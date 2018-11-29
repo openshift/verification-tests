@@ -5,6 +5,9 @@ gem 'psych'
 gem 'rest-client', '>=2.0'
 # gem 'httpclient', '>=2.4'
 gem 'net-ssh'
+# for ED25519 ssh keys gems `ed25519` and `bcrypt_pbkdf` are also needed
+# for RSA keys in the new OPENSSH format (not RSA) then newer net-ssh is needed:
+# https://github.com/net-ssh/net-ssh/pull/646
 gem 'net-scp'
 # gem 'net-ssh-multi'
 gem 'cucumber', '~>2.4.0'
