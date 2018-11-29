@@ -566,6 +566,17 @@ module BushSlicer
         ensure
           dyn.close if dyn
         end
+      when "shell_command"
+        exec_opts = {
+          single: true,
+          stderr: :out, stdout: STDOUT,
+          timeout: 36000
+        }
+        exec_opts[:env] = Collections.deep_hash_strkeys task[:env] if task[:env]
+        res = Host.localhost.exec(*[task[:cmd]].flatten, **exec_opts)
+        unless res[:success]
+          raise "shell command failed execution, see logs"
+        end
       when "playbook"
         inventory_erb = ERB.new(
           readfile(task[:inventory], config_dir),

@@ -13,15 +13,16 @@ module BushSlicer
 
     attr_reader :config
 
-    def initialize(ext_aws_cred = nil)
-      @config = conf[:services, :AWS]
+    def initialize(access_key: nil, secret_key: nil, service_name: nil)
+      service_name ||= :AWS
+      @config = conf[:services, service_name]
       @can_terminate = true
 
-      if ext_aws_cred and ext_aws_cred.count == 2
-        awscred = {}
-        awscred["AWSAccessKeyId"] = ext_aws_cred["AWS_ACCESS_KEY_ID"]
-        awscred["AWSSecretKey"] = ext_aws_cred["AWS_SECRET_ACCESS_KEY"]
-
+      if access_key && secret_key
+        awscred = {
+          "AWSAccessKeyId" => access_key,
+          "AWSSecretKey" => secret_key
+        }
       else
         # try to find a suitable Amazon AWS credentials file
         [ expand_private_path(config[:awscred]),
