@@ -138,7 +138,8 @@ services:
       # ssh_private_key: relative/path
       # user: the_username
     # install_base_domain: my.route53.domain.example.com
-  AWS-CI: *AWSBase
+  AWS-CI:
+    <<: *AWSBase
   azure:
     # auth:
     #   # az login --service-principal -u client_id --tenant tenant_id
