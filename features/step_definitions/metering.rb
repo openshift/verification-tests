@@ -128,8 +128,8 @@ end
 
 Given /^I enable route for#{OPT_QUOTED} metering service$/ do | metering_name |
   metering_name ||= "openshift-metering"
-  htpasswd = `htpasswd -nb -s #{user.name} #{user.password}`.strip
-  cookie_seed = `openssl rand -base64 32 | head -c32; echo`.strip
+  htpasswd = sh1_password(username: user.name, password: user.password)
+  cookie_seed = rand_str(32, :hex)
   route_yaml = <<BASE_TEMPLATE
     apiVersion: metering.openshift.io/v1alpha1
     kind: Metering
@@ -148,6 +148,7 @@ Given /^I enable route for#{OPT_QUOTED} metering service$/ do | metering_name |
         subjectAccessReviewEnabled: true
         delegateURLsEnabled: true
 BASE_TEMPLATE
+  logger.info("### Updating metering service with route enabled\n #{route_yaml}")
   @result = user.cli_exec(:apply, f: "-", _stdin: route_yaml)
   # route name is ALWAYS set to 'metering'
   step %Q/I wait for the "metering" route to appear up to 120 seconds/
