@@ -50,7 +50,7 @@ Feature: oc_set_probe.feature
     """
     When I run the :describe client command with:
       | resource | pod |
-      | l    | deployment=mysql-3 |
+      | l    | deployment=mysql-4 |
     Then the output should match:
       | Readiness |
       | tcp-socket :33 |
@@ -75,8 +75,6 @@ Feature: oc_set_probe.feature
       | get_url      | http://:8080/opt |
       | timeout_seconds | 30     |
     Then the step should succeed
-    And the output should match:
-      | deploymentconfig "mysql" updated|
     Given I wait until the status of deployment "mysql" becomes :running
     When I wait up to 30 seconds for the steps to pass:
     """
