@@ -1,13 +1,13 @@
 # The standard name for this image is aosqe/bushslicer-base
 
-FROM openshift/jenkins-slave-base-centos7
+FROM centos
 
 LABEL vendor="Red Hat inc."
 LABEL maintainer="AOS QE Team"
 
 USER root
 
-ADD . $HOME/bushslicer
+ADD . /bushslicer/
 
 RUN set -x && \
     SCL_BASE_PKGS="centos-release-scl scl-utils-build" && \
@@ -24,11 +24,13 @@ RUN set -x && \
     chmod +x /usr/local/bin/chromedriver /usr/local/bin/geckodriver && \
     rpm -V $INSTALL_PKGS $SCL_BASE_PKGS && \
     curl -sSL https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm -o /tmp/epel-release-latest-7.noarch.rpm && \
-    yum install -y /tmp/epel-release-latest-7.noarch.rpm && \
-    mkdir -p $HOME/bin
+    yum install -y /tmp/epel-release-latest-7.noarch.rpm
 
-RUN scl enable rh-ror50 "$HOME/bushslicer/tools/install_os_deps.sh"
-RUN scl enable rh-ror50 $HOME/bushslicer/tools/hack_bundle.rb
+RUN scl enable rh-ror50 /bushslicer/tools/install_os_deps.sh
+RUN scl enable rh-ror50 /bushslicer/tools/hack_bundle.rb
+
+RUN yum install -y http://mirror.centos.org/centos/7/paas/x86_64/openshift-origin/origin-clients-3.10.0-1.el7.git.0.0c4577e.x86_64.rpm
+
 RUN rpm -qa && \
     yum clean all -y && \
-    rm -rf $HOME/bushslicer /var/cache/yum /tmp/*
+    rm -rf /bushslicer /var/cache/yum /tmp/*
