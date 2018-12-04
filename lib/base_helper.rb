@@ -113,7 +113,7 @@ module BushSlicer
         return result
       end
 
-      def sh1_password(username: nil, password: nil)
+      def sha1_password(username: nil, password: nil)
         return "#{username}:{SHA}" + Base64.encode64(Digest::SHA1.digest(password)).strip()
       end
       # replace <something> strings inside strings given option hash with symbol
