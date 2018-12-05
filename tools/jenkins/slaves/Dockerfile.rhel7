@@ -5,14 +5,6 @@ FROM openshift3/jenkins-slave-base-rhel7
 LABEL vendor="Red Hat inc."
 LABEL maintainer="AOS QE Team"
 
-# make sure context dir is tools/jenkins/slaves to add whole repo to image
-ADD ../../.. $HOME/bushslicer
-
-RUN [ -d $HOME/bushslicer/private/config/ca ] && \
-    ( cd $HOME/bushslicer/private/config/ca && \
-    cp -v *.pem /etc/pki/ca-trust/source/anchors/ && \
-    update-ca-trust extract || \
-    exit 1 ) || :
 
 RUN set -x && \
     yum repolist all && \
@@ -37,8 +29,11 @@ RUN set -x && \
     yum install -y /tmp/epel-release-latest-7.noarch.rpm && \
     mkdir -p $HOME/bin
 
+# if you want to build before committing, then disable git clone and use:
+# ADD . $HOME/bushslicer
+RUN scl enable rh-git29 "git clone --depth 1 --single-branch 'https://github.com/openshift/verification-tests.git' '$HOME/bushslicer'"
 RUN scl enable rh-ror50 "$HOME/bushslicer/tools/install_os_deps.sh"
-RUN scl enable rh-ror50 $HOME/bushslicer/tools/hack_bundle.rb
+RUN scl enable rh-ror50 "$HOME/bushslicer/tools/hack_bundle.rb"
 
 # -k is a bad option, put certificated under private/config/ca instead
 # be mindful image will be visible if image is made public which is a mild
