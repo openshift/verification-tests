@@ -1,5 +1,6 @@
 require 'socket'
 require 'openssl'
+require 'base64'
 
 module BushSlicer
   module SSL
@@ -23,5 +24,10 @@ module BushSlicer
       ssl_client.close
       return chain
     end
+
+    def self.sha1_htpasswd(username: nil, password: nil)
+      return "#{username}:{SHA}" + Base64.encode64(OpenSSL::Digest::SHA1.digest(password)).strip()
+    end
+
   end
 end
