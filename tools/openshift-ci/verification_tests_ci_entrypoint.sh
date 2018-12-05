@@ -2,6 +2,7 @@
 
 export BUSHSLICER_DEFAULT_ENVIRONMENT="$TEST_ENVIRONMENT"
 export OPENSHIFT_ENV_$(echo "$TEST_ENVIRONMENT" | awk '{print toupper($0)}')_HOSTS="${TEST_CLUSTER}:etcd:master:node"
+export OPENSHIFT_ENV_$(echo "$TEST_ENVIRONMENT" | awk '{print toupper($0)}')_USER_MANAGER_USERS="${TEST_TOKEN}"
 export TESTENV="BUSHSLICER_V3"
 export BUSHSLICER_CONFIG=$TEST_CONFIG
 
