@@ -4,6 +4,12 @@
 [[ -z "$BUSHSLICER_TEST_CLUSTER" ]] && { echo "BUSHSLICER_TEST_CLUSTER not set"; exit 1; }
 [[ -z "$BUSHSLICER_TEST_TOKEN" ]] && { echo "BUSHSLICER_TEST_TOKEN not set"; exit 1; }
 [[ -z "$BUSHSLICER_TEST_CONFIG" ]] && { echo "BUSHSLICER_TEST_CONFIG not set"; exit 1; }
+if [ -z "$BUSHSLICER_TEST_RESULTS" ]
+then
+      echo "BUSHSLICER_TEST_RESULTS not set, setting to current dir"
+      export BUSHSLICER_TEST_RESULTS="./junit-report"
+fi
+
 
 export BUSHSLICER_DEFAULT_ENVIRONMENT="$BUSHSLICER_TEST_ENVIRONMENT"
 [[ -z "$BUSHSLICER_DEFAULT_ENVIRONMENT" ]] && { echo "BUSHSLICER_DEFAULT_ENVIRONMENT not set"; exit 1; }
@@ -16,7 +22,7 @@ export TESTENV="BUSHSLICER_V3"
 export BUSHSLICER_CONFIG="${BUSHSLICER_TEST_CONFIG}"
 unset BUSHSLICER_DEBUG_AFTER_FAIL
 
-/usr/bin/scl enable rh-git29 rh-ror50 -- cucumber -p junit \
+/usr/bin/scl enable rh-git29 rh-ror50 -- cucumber -p junit -o $BUSHSLICER_TEST_RESULTS \
   features/online/logging.feature:5 \
   features/web/settings.feature:164 \
   features/build/dockerbuild.feature:216 \
