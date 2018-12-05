@@ -1,188 +1,187 @@
 #!/bin/sh
 
-export BUSHSLICER_DEFAULT_ENVIRONMENT="$TEST_ENVIRONMENT"
-export OPENSHIFT_ENV_$(echo "$TEST_ENVIRONMENT" | awk '{print toupper($0)}')_HOSTS="${TEST_CLUSTER}:etcd:master:node"
-export OPENSHIFT_ENV_$(echo "$TEST_ENVIRONMENT" | awk '{print toupper($0)}')_USER_MANAGER_USERS="${TEST_TOKEN}"
+export BUSHSLICER_DEFAULT_ENVIRONMENT="${BUSHSLICER_TEST_ENVIRONMENT}"
+export OPENSHIFT_ENV_$(echo "${BUSHSLICER_TEST_ENVIRONMENT}" | awk '{print toupper($0)}')_HOSTS="${BUSHSLICER_TEST_CLUSTER}:etcd:master:node"
+export OPENSHIFT_ENV_$(echo "${BUSHSLICER_TEST_ENVIRONMENT}" | awk '{print toupper($0)}')_USER_MANAGER_USERS="${BUSHSLICER_TEST_TOKEN}"
+export OPENSHIFT_ENV_$(echo "${BUSHSLICER_TEST_ENVIRONMENT}" | awk '{print toupper($0)}')_WEB_CONSOLE_URL=https://${BUSHSLICER_TEST_CLUSTER}/console
 export TESTENV="BUSHSLICER_V3"
-export BUSHSLICER_CONFIG=$TEST_CONFIG
+export BUSHSLICER_CONFIG="${BUSHSLICER_TEST_CONFIG}"
+export BUSHSLICER_DEBUG_AFTER_FAIL=0
 
 /usr/bin/scl enable rh-git29 rh-ror50 -- cucumber  \
- --name Logout kibana web console \
- --name User could set console home page \
- --name Prevent STI builder images from running as root -- using onbuild image \
- --name Override nocache setting using --no-cache flag when docker build request \
- --name Check s2i build substatus and times \
- --name Check docker build substatus and times \
- --name Allow nocache to be specified on docker build request \
- --name User can schedule a Cronjob execution with cron format time \
- --name oc new-app to gather git creds \
- --name Access app througth secure service and regenerate service serving certs if it about to expire \
- --name '[origin_platformexp_391] Project admin can process local directory or files and convert it to kubernetes secret' \
- --name Check normal and warning information for kubernetes events \
- --name Container consume infomation from the downward API using a volume plugin \
- --name Pods can get IPs via downward API under race condition \
- --name Default termination grace period is 30s if it's not set \
- --name Could not create any context in non-existent project \
- --name Add a image with multiple paths as source input \
- --name seccomp=unconfined used by default \
- --name Consume the same Secrets as environment variables in multiple pods \
- --name deployment hook volume inheritance that volume name was null \
- --name Show hooks of recreate strategy DC \
- --name Set environment variables when creating application using non-DeploymentConfig template \
- --name When the latest deployment failed auto rollback to the active deployment \
- --name Manage project membership about users \
- --name deployment hook volume inheritance -- with persistentvolumeclaim Volume \
- --name Import image when spec.DockerImageRepository with some tags defined when Kind!=DockerImage \
- --name Start build from buildConfig/build \
- --name Trigger chain builds from a image update \
- --name Pre and post deployment hooks \
- --name CLI - Idle service with dry-run \
- --name Cannot create secret from local file and with same name via oc new-build \
- --name Manual scale dc will update the deploymentconfig's replicas \
- --name Could list all projects based on the user's authorization on web console \
- --name Create new-app from private git repo with ssh key \
- --name Start new deployment when deployment running \
- --name Create build without output \
- --name Add perma-failed - Rolling back to a failing deployment revision \
- --name Could delete all resources when delete the project \
- --name Tag should correctly add muptiple imagestreamtags to one imagestream \
- --name CLI - Idle service by label \
- --name start deployment when the latest deployment is completed \
- --name Docker build with both SourceURI and context dir \
- --name Verify pod is gracefully deleted when DeletionGracePeriodSeconds is specified. \
- --name Set pre/mid/post deployment hooks on deployment config via oc set deployment-hook \
- --name Check k8s deployments on Deployments page \
- --name CRUD operations on secrets \
- --name Create route with invalid name and hostname on web console \
- --name Manually start deployment by oc deploy \
- --name  new-app/new-build support for pipeline buildconfigs \
- --name Create an application from source code \
- --name CLI - Idle service from file \
- --name Add secret volume to dc and rc \
- --name Import Image when spec.DockerImageRepository not defined \
- --name Create a pod that consumes the secret in a volume \
- --name Import Image without tags and spec.DockerImageRepository set \
- --name Using a docker image as source input using new-build cmd \
- --name Check deployment info on web console \
- --name Add perma-failed - Negative value test of progressDeadlineSeconds in failing deployment \
- --name Scale up/down jobs \
- --name Import image when spec.DockerImageRepository with some tags defined when Kind==DockerImage \
- --name Create new secrets for ssh authentication \
- --name Add ARGs in docker build \
- --name Docker build with invalid context dir \
- --name Rebuild image when the underlying image changed for Docker build \
- --name Update ActiveDeadlineSeconds for pod \
- --name Implement supplemental groups for pod \
- --name Check Events page \
- --name Consume ConfigMap in environment variables \
- --name Handle build naming collisions \
- --name Could grant admin permission for the service account username to access to its own project \
- --name Allow specifying secret data using strings and images \
- --name Environment variables and label management in create app from image on web console \
- --name Support endpoints of RS in OpenShift \
- --name Build with specified Dockerfile to image with same image name via new-build \
- --name Check oc rsh for simpler access to a remote shell \
- --name Do not create tags for ImageStream if image repository does not have tags \
- --name Check Openshift Master and Kubernetes Master version on About page \
- --name Simple error message return when no value followed with oc build-logs \
- --name Mapping specified secret volume should update when secret is updated \
- --name Create job with different pod restartPolicy \
- --name Idled DC handling on web console \
- --name deployment hook volume inheritance --with secret volume \
- --name Manually make deployment \
- --name Access service pages from web console \
- --name Secret volume should update when secret is updated \
- --name Project secrets, configmap and downward API into the same volume with normal keys and path \
- --name Add perma-failed - Failing deployment can be rolled back successful \
- --name Build with specified Dockerfile via new-build -D \
- --name Import image when spec.DockerImageRepository defined without any tags \
- --name Create application from image on web console \
- --name Creates autoscaler for replication controller by oc autoscale \
- --name Trigger info is retained for deployment caused by image changes 37 new feature \
- --name STI build with invalid context dir \
- --name Create applications only with multiple db images \
- --name Creates autoscaler for replication controller with invalid value \
- --name CLI rollback output to file \
- --name User can get the serviceaccount token via client \
- --name Create job with multiple completions \
- --name Tags should be added to ImageStream if image repository is from an external docker registry \
- --name Bundle secret will not load subdir and warning message will be displayed when -q is not present \
- --name Support verbs of Deployment in OpenShift \
- --name View deployments streaming logs \
- --name kubectl secret subcommand - help \
- --name '[origin_platformexp_214] User can view, add , modify and delete specific role to/from new added project via admin role user' \
- --name Add multiple source inputs \
- --name Import image when pointing to non-existing docker image \
- --name Build from private git repo with/without ssh key \
- --name Create a build config based on the provided image and source code \
- --name Idling service with rc \
- --name Process with default FSGroup id can be ran when using the default MustRunAs as the RunAsGroupStrategy \
- --name Recreate deployment strategy \
- --name Set a probe to open a TCP socket \
- --name User can know whether the PodSpec he's describing will actually be allowed by the current SCC rules via CLI \
- --name Set an exec action probe \
- --name Create ConfigMap from directories \
- --name Create new build config use dockerfile with source repo \
- --name downward api pod name and pod namespace as env variables \
- --name make deployment from web console \
- --name Scale replicas via replicationcontrollers and deploymentconfig \
- --name Oauth provider info should be consumed in a pod \
- --name Set a probe over HTTPS/HTTP \
- --name Blue-Green Deployment \
- --name Create ConfigMap from literal values \
- --name Expose routes from services \
- --name Remove environment variables for resources using oc set env \
- --name Auto cleanup old RCs \
- --name Override incremental setting using --incremental flag when s2i build request \
- --name Manage project in popup panel on home page \
- --name Ordinary user could view CPU,memory, network metrics statistics on pod page of openshift web console \
- --name When no scheduler name is supplied, the pod is automatically scheduled using the default-scheduler \
- --name Add secrets to serviceaccount via oc secrets add \
- --name Check home page to list user projects \
- --name Make multiple deployment by oc deploy \
- --name Restart a failed deployment by oc deploy \
- --name View streaming logs for a running pod \
- --name New parameter can be passed via generic webhook \
- --name Consume ConfigMap via volume plugin \
- --name Using Secrets as Environment Variables \
- --name Change runpolicy to SerialLatestOnly build \
- --name Set environment variables for resources using oc set env \
- --name Docker build with blank source repo \
- --name Set post-build-commit on buildconfig via oc set build-hook \
- --name Could scale up and down on overview page \
- --name Perform CRUD operations against a ConfigMap resource \
- --name Tag an image into mutliple image streams \
- --name Can't stop a deployment in Failed status \
- --name Pods do not have access to each other's secrets in the same namespace \
- --name Check name requirements for oc secret \
- --name Add perma-failed - Make a change outside pod template for failing deployment \
- --name configchange triggers deploy automatically \
- --name Check app resources on overview page \
- --name Supply oc new-app parameter list+env vars via a file \
- --name Can set env vars on buildconfig with new-app --env and --env-file \
- --name Check storage page on web console \
- --name Add perma-failed - Deplyment succeed after change pod template by edit deployment \
- --name Add perma-failed - Deployment failed after pausing and resuming \
- --name CLI - Idle all the service in the same project \
- --name /dev/shm can be automatically shared among all of a pod's containers \
- --name Create job with pod parallelism \
- --name Result image will be tried to push after multi-build \
- --name Create a build config based on the source code in the current git repository \
- --name Add path when creating edge terminated route on web console \
- --name Could grant admin permission for the service account group to access to its own project \
- --name Check Deploy Image and Import YAML from new landing page \
- --name Docker build using Dockerfile with 'FROM scratch' \
- --name Return description of resources with cli describe \
- --name Edit ConfigMap on web console \
- --name CLI rollback with one component \
- --name Basic user could not get pv object info \
- --name A/B Deployment \
- --name Set command-line arguments with ConfigMap \
- --name Create ConfigMap from file \
- --name Event should show full failed reason when readiness probe failed \
- --name Setuid binaries shouldn't work inside of a running container \
- --name Specifying your own pod selector for job \
- --name Container could reach the dns server \
- --name User can know if he can create podspec against the current scc rules via CLI \
- --name Add/update env vars to pipeline buildconfigs using jenkinsfile field \
- --name Add/Edit env vars from config maps
+  features/online/logging.feature:5 \
+  features/web/settings.feature:164 \
+  features/build/dockerbuild.feature:216 \
+  features/build/buildlogic.feature:226 \
+  features/build/buildlogic.feature:246 \
+  features/build/dockerbuild.feature:183 \
+  features/cli/job.feature:543 \
+  features/cli/secrets.feature:698 \
+  features/cli/oc_expose.feature:5 \
+  features/cli/event.feature:51 \
+  features/cli/downwardapi.feature:34 \
+  features/cli/downwardapi.feature:5 \
+  features/cli/oc_delete.feature:84 \
+  features/cli/create.feature:5 \
+  features/cli/build.feature:207 \
+  features/node/seccomp.feature:5 \
+  features/cli/secrets.feature:365 \
+  features/cli/deploy.feature:435 \
+  features/web/hooks.feature:5 \
+  features/cli/oc_env.feature:5 \
+  features/cli/deploy.feature:558 \
+  features/web/membership.feature:5 \
+  features/storage/persistent_volume.feature:42 \
+  features/cli/oc_import_image.feature:120 \
+  features/build/buildconfig.feature:5 \
+  features/build/buildconfig.feature:42 \
+  features/cli/deploy.feature:415 \
+  features/cli/oc_idle.feature:121 \
+  features/cli/build.feature:284 \
+  features/cli/deploy.feature:482 \
+  features/web/project.feature:5 \
+  features/build/buildlogic.feature:193 \
+  features/cli/deploy.feature:539 \
+  features/build/buildlogic.feature:41 \
+  features/cli/deployment.feature:268 \
+  features/cli/projects.feature:5 \
+  features/cli/oc_tag.feature:60 \
+  features/cli/oc_idle.feature:46 \
+  features/cli/deploy.feature:467 \
+  features/build/dockerbuild.feature:19 \
+  features/cli/oc_delete.feature:110 \
+  features/cli/oc_set_deployment_hook.feature:5 \
+  features/web/k8s-deployments.feature:5 \
+  features/cli/oc_secrets.feature:57 \
+  features/web/routes.feature:5 \
+  features/cli/deploy.feature:402 \
+  features/images/jenkins.feature:261 \
+  features/cli/create.feature:55 \
+  features/cli/oc_idle.feature:81 \
+  features/cli/oc_volume.feature:51 \
+  features/cli/oc_import_image.feature:102 \
+  features/cli/oc_volume.feature:6 \
+  features/cli/oc_import_image.feature:166 \
+  features/cli/build.feature:223 \
+  features/web/deployments.feature:42 \
+  features/cli/deployment.feature:465 \
+  features/cli/scale.feature:52 \
+  features/cli/oc_import_image.feature:150 \
+  features/cli/secrets.feature:30 \
+  features/build/dockerbuild.feature:144 \
+  features/build/dockerbuild.feature:128 \
+  features/build/buildconfig.feature:26 \
+  features/cli/pod.feature:111 \
+  features/cli/pod.feature:53 \
+  features/web/check_page.feature:6 \
+  features/cli/configmap.feature:6 \
+  features/cli/build.feature:663 \
+  features/cli/serviceaccount.feature:5 \
+  features/cli/secrets.feature:654 \
+  features/web/create.feature:110 \
+  features/cli/replica_set.feature:6 \
+  features/build/buildlogic.feature:117 \
+  features/cli/rsh.feature:5 \
+  features/cli/oc_import_image.feature:39 \
+  features/web/settings.feature:145 \
+  features/cli/build.feature:638 \
+  features/cli/secrets.feature:624 \
+  features/cli/job.feature:209 \
+  features/web/deployments.feature:142 \
+  features/cli/secrets.feature:5 \
+  features/cli/deploy.feature:34 \
+  features/web/service.feature:5 \
+  features/cli/secrets.feature:591 \
+  features/cli/allinone-volume.feature:5 \
+  features/cli/deployment.feature:170 \
+  features/build/buildlogic.feature:5 \
+  features/cli/oc_import_image.feature:86 \
+  features/web/create.feature:6 \
+  features/cli/hpa.feature:73 \
+  features/cli/deploy.feature:795 \
+  features/build/stibuild.feature:5 \
+  features/cli/build.feature:132 \
+  features/cli/hpa.feature:120 \
+  features/cli/deploy.feature:71 \
+  features/cli/serviceaccount.feature:63 \
+  features/cli/job.feature:5 \
+  features/cli/oc_import_image.feature:179 \
+  features/cli/oc_secrets.feature:221 \
+  features/cli/deploy.feature:686 \
+  features/web/deployments.feature:100 \
+  features/cli/oc_help.feature:5 \
+  features/cli/build.feature:184 \
+  features/cli/oc_import_image.feature:71 \
+  features/build/buildlogic.feature:151 \
+  features/cli/build.feature:5 \
+  features/cli/oc_idle.feature:215 \
+  features/cli/projects.feature:137 \
+  features/cli/deploy.feature:445 \
+  features/cli/oc_set_probe.feature:5 \
+  features/cli/policy.feature:496 \
+  features/cli/oc_set_probe.feature:107 \
+  features/cli/configmap.feature:295 \
+  features/build/buildlogic.feature:53 \
+  features/cli/downwardapi.feature:18 \
+  features/web/deployments.feature:6 \
+  features/cli/scale.feature:5 \
+  features/cli/pod.feature:143 \
+  features/cli/oc_set_probe.feature:62 \
+  features/cli/deploy.feature:370 \
+  features/cli/configmap.feature:272 \
+  features/cli/route.feature:5 \
+  features/cli/oc_set_env.feature:58 \
+  features/cli/deploy.feature:763 \
+  features/build/stibuild.feature:59 \
+  features/web/service-catalog/project.feature:5 \
+  features/online/metrics.feature:5 \
+  features/admin/scheduler.feature:5 \
+  features/cli/oc_secrets.feature:5 \
+  features/web/check_page.feature:26 \
+  features/cli/deploy.feature:272 \
+  features/cli/deploy.feature:5 \
+  features/web/pod.feature:5 \
+  features/rest/webhook.feature:52 \
+  features/cli/configmap.feature:37 \
+  features/cli/secrets.feature:413 \
+  features/cli/build.feature:361 \
+  features/cli/oc_set_env.feature:5 \
+  features/build/dockerbuild.feature:5 \
+  features/cli/oc_set_build_hook.feature:6 \
+  features/web/scale.feature:5 \
+  features/cli/configmap.feature:75 \
+  features/cli/oc_tag.feature:5 \
+  features/cli/deploy.feature:188 \
+  features/cli/secrets.feature:62 \
+  features/cli/oc_secrets.feature:168 \
+  features/cli/deployment.feature:374 \
+  features/cli/deploy.feature:662 \
+  features/web/overview.feature:181 \
+  features/build/env.feature:5 \
+  features/web/check_page.feature:42 \
+  features/cli/deployment.feature:5 \
+  features/cli/deployment.feature:78 \
+  features/cli/oc_idle.feature:5 \
+  features/cli/pod.feature:161 \
+  features/cli/job.feature:84 \
+  features/build/buildlogic.feature:17 \
+  features/cli/build.feature:71 \
+  features/web/routes.feature:37 \
+  features/cli/serviceaccount.feature:30 \
+  features/web/create.feature:256 \
+  features/build/dockerbuild.feature:111 \
+  features/cli/resources.feature:5 \
+  features/web/configmap.feature:5 \
+  features/cli/deploy.feature:150 \
+  features/cli/policy.feature:379 \
+  features/cli/deploy.feature:321 \
+  features/cli/configmap.feature:115 \
+  features/cli/configmap.feature:179 \
+  features/cli/event.feature:92 \
+  features/containers/containers.feature:7 \
+  features/cli/job.feature:192 \
+  features/networking/pod.feature:42 \
+  features/cli/policy.feature:408 \
+  features/images/jenkins.feature:382 \
+  features/web/configmap.feature:63 \
+  features/cli/oc_set_deployment_hook.feature:1
