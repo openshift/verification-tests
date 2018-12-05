@@ -1,14 +1,22 @@
 #!/bin/sh
 
-export BUSHSLICER_DEFAULT_ENVIRONMENT="${BUSHSLICER_TEST_ENVIRONMENT}"
-export OPENSHIFT_ENV_$(echo "${BUSHSLICER_TEST_ENVIRONMENT}" | awk '{print toupper($0)}')_HOSTS="${BUSHSLICER_TEST_CLUSTER}:etcd:master:node"
-export OPENSHIFT_ENV_$(echo "${BUSHSLICER_TEST_ENVIRONMENT}" | awk '{print toupper($0)}')_USER_MANAGER_USERS="${BUSHSLICER_TEST_TOKEN}"
-export OPENSHIFT_ENV_$(echo "${BUSHSLICER_TEST_ENVIRONMENT}" | awk '{print toupper($0)}')_WEB_CONSOLE_URL=https://${BUSHSLICER_TEST_CLUSTER}/console
+[[ -z "$BUSHSLICER_TEST_ENVIRONMENT" ]] && { echo "BUSHSLICER_TEST_ENVIRONMENT not set"; exit 1; }
+[[ -z "$BUSHSLICER_TEST_CLUSTER" ]] && { echo "BUSHSLICER_TEST_CLUSTER not set"; exit 1; }
+[[ -z "$BUSHSLICER_TEST_TOKEN" ]] && { echo "BUSHSLICER_TEST_TOKEN not set"; exit 1; }
+[[ -z "$BUSHSLICER_TEST_CONFIG" ]] && { echo "BUSHSLICER_TEST_CONFIG not set"; exit 1; }
+
+export BUSHSLICER_DEFAULT_ENVIRONMENT="$BUSHSLICER_TEST_ENVIRONMENT"
+[[ -z "$BUSHSLICER_DEFAULT_ENVIRONMENT" ]] && { echo "BUSHSLICER_DEFAULT_ENVIRONMENT not set"; exit 1; }
+
+export OPENSHIFT_ENV_$(echo "$BUSHSLICER_TEST_ENVIRONMENT" | awk '{print toupper($0)}')_HOSTS="${BUSHSLICER_TEST_CLUSTER}:etcd:master:node"
+export OPENSHIFT_ENV_$(echo "$BUSHSLICER_TEST_ENVIRONMENT" | awk '{print toupper($0)}')_USER_MANAGER_USERS=:"${BUSHSLICER_TEST_TOKEN}"
+export OPENSHIFT_ENV_$(echo "$BUSHSLICER_TEST_ENVIRONMENT" | awk '{print toupper($0)}')_WEB_CONSOLE_URL=https://${BUSHSLICER_TEST_CLUSTER}/console
+
 export TESTENV="BUSHSLICER_V3"
 export BUSHSLICER_CONFIG="${BUSHSLICER_TEST_CONFIG}"
-export BUSHSLICER_DEBUG_AFTER_FAIL=0
+unset BUSHSLICER_DEBUG_AFTER_FAIL
 
-/usr/bin/scl enable rh-git29 rh-ror50 -- cucumber  \
+/usr/bin/scl enable rh-git29 rh-ror50 -- cucumber -p junit \
   features/online/logging.feature:5 \
   features/web/settings.feature:164 \
   features/build/dockerbuild.feature:216 \
