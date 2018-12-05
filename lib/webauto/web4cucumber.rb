@@ -104,19 +104,6 @@ require "base64"
         if @size
           browser.window.resize_to(*@size)
         end
-      elsif @browser_type == :firefox_legacy
-        # legacy driver usage https://github.com/watir/watir/issues/634
-        # we should switch to marionette once FF ESR becomes version  54+
-        logger.info "Launching Firefox Legacy"
-        caps = Selenium::WebDriver::Remote::Capabilities.firefox marionette: false, profile: firefox_profile #, firefox_binary: "/home/user/local/firefox-52-esr/firefox"
-        if Integer === @scroll_strategy
-          caps[:element_scroll_behavior] = @scroll_strategy
-        end
-        driver = Selenium::WebDriver.for :firefox, desired_capabilities: caps, http_client: client
-        @browser = Watir::Browser.new driver
-        if @size
-          browser.window.resize_to(*@size)
-        end
       elsif @browser_type == :chrome
         logger.info "Launching Chrome"
         if Integer === @scroll_strategy
