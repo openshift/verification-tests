@@ -5,7 +5,9 @@ FROM openshift3/jenkins-slave-base-rhel7
 LABEL vendor="Red Hat inc."
 LABEL maintainer="AOS QE Team"
 
-ADD . $HOME/bushslicer
+# make sure context dir is tools/jenkins/slaves to add whole repo to image
+ADD ../../.. $HOME/bushslicer
+
 RUN [ -d $HOME/bushslicer/private/config/ca ] && \
     ( cd $HOME/bushslicer/private/config/ca && \
     cp -v *.pem /etc/pki/ca-trust/source/anchors/ && \
