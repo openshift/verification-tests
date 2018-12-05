@@ -3,8 +3,6 @@
 require 'securerandom'
 require 'find'
 require 'pathname'
-require 'digest/sha1'
-require 'base64'
 
 module BushSlicer
   module Common
@@ -113,9 +111,6 @@ module BushSlicer
         return result
       end
 
-      def sha1_password(username: nil, password: nil)
-        return "#{username}:{SHA}" + Base64.encode64(Digest::SHA1.digest(password)).strip()
-      end
       # replace <something> strings inside strings given option hash with symbol
       #   keys
       # @param [String] str string to replace

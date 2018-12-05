@@ -1,5 +1,5 @@
 # helper step for metering scenarios
-
+require 'ssl'
 # For metering automation, we just install once and re-use the installation
 # unless the scenarios are for testing installation
 
@@ -128,7 +128,7 @@ end
 
 Given /^I enable route for#{OPT_QUOTED} metering service$/ do | metering_name |
   metering_name ||= "openshift-metering"
-  htpasswd = sha1_password(username: user.name, password: user.password)
+  htpasswd = BushSlicer::SSL.sha1_htpasswd(username: user.name, password: user.password)
   cookie_seed = rand_str(32, :hex)
   route_yaml = <<BASE_TEMPLATE
     apiVersion: metering.openshift.io/v1alpha1
