@@ -7,7 +7,7 @@
 if [ -z "$BUSHSLICER_TEST_RESULTS" ]
 then
       echo "BUSHSLICER_TEST_RESULTS not set, setting to current dir"
-      export BUSHSLICER_TEST_RESULTS="./junit-report"
+      export BUSHSLICER_TEST_RESULTS="$PWD/junit-report"
 fi
 
 
