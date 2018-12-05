@@ -14,6 +14,18 @@ goto_one_buildconfig_page:
 goto_configmaps_page:
   url: k8s/ns/<project_name>/configmaps
 
+# cronjobs
+goto_cronjobs_page:
+  url: k8s/ns/<project_name>/cronjobs
+goto_one_cronjob_page:
+  url: k8s/ns/<project_name>/cronjobs/<cronjob_name>
+
+# jobs
+goto_jobs_page:
+  url: k8s/ns/<project_name>/jobs
+goto_one_job_page:
+  url: k8s/ns/<project_name>/jobs/<job_name>
+          
 # events
 goto_project_events:
   url: k8s/ns/<project_name>/events
