@@ -29,9 +29,9 @@ RUN set -x && \
     yum install -y /tmp/epel-release-latest-7.noarch.rpm && \
     mkdir -p $HOME/bin
 
-# if you want to build before committing, then disable git clone and use:
-# ADD . $HOME/bushslicer
-RUN scl enable rh-git29 "git clone --depth 1 --single-branch 'https://github.com/openshift/verification-tests.git' '$HOME/bushslicer'"
+# make sure context dir is at the repo root
+ADD . $HOME/bushslicer
+# RUN scl enable rh-git29 "git clone --depth 1 --single-branch 'https://github.com/openshift/verification-tests.git' '$HOME/bushslicer'"
 RUN scl enable rh-ror50 "$HOME/bushslicer/tools/install_os_deps.sh"
 RUN scl enable rh-ror50 "$HOME/bushslicer/tools/hack_bundle.rb"
 
