@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
   # let you operate a git repo
   class Git
     include Common::Helper
@@ -7,7 +7,7 @@ module BushSlicer
     # @param [String] uri remote git uri; when nil, checking the `origin` remote
     # @param [String] dir base directory of git repo;
     #   might be a relative to workdir or absolute path on host
-    # @param [BushSlicer::Host] host the host repo is to be located
+    # @param [VerificationTests::Host] host the host repo is to be located
     # @param [String] user the host os user to run git as; usage is discouraged
     def initialize(uri: nil, dir: nil, host: nil, user: nil)
       @uri = uri
@@ -75,7 +75,7 @@ module BushSlicer
     def set_git_config
       res = host.exec_as(user, "git -C #{dir} config user.name")
       unless res[:success]
-        res = host.exec_as(user, "git -C #{dir} config user.name #{host.shell_escape 'BushSlicer User'}")
+        res = host.exec_as(user, "git -C #{dir} config user.name #{host.shell_escape 'VerificationTests User'}")
         unless res[:success]
           raise "git config user.name failed"
         end

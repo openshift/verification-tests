@@ -18,7 +18,7 @@ require 'http'
 
 require 'launchers/cloud_helper'
 
-module BushSlicer
+module VerificationTests
   class EnvLauncherCli
     include Commander::Methods
     include Common::Helper
@@ -96,7 +96,7 @@ module BushSlicer
     end
 
     def get_dyn
-      BushSlicer::Dynect.new()
+      VerificationTests::Dynect.new()
     end
 
     # @param erb_vars [Hash, Binding] additional variales for ERB user_data
@@ -269,7 +269,7 @@ module BushSlicer
     end
 
     def dns_component
-      @dns_component ||= BushSlicer::Dynect.gen_timed_random_component
+      @dns_component ||= VerificationTests::Dynect.gen_timed_random_component
     end
 
     def dns_component=(value)
@@ -353,19 +353,19 @@ module BushSlicer
 
       iaas = iaas_by_service(service_name)
       launched = case iaas
-      when BushSlicer::Amz_EC2
+      when VerificationTests::Amz_EC2
         launch_opts[:user_data] = Base64.encode64(user_data_string)
         host_opts = launch_opts.delete(:host_opts) || {}
         res = iaas.launch_instances(tag_name: host_names,
                                     image: launch_opts.delete(:image),
                                     host_opts: host_opts,
                                     create_opts: launch_opts)
-      when BushSlicer::Azure
+      when VerificationTests::Azure
         unless user_data_string.empty?
           raise "RHEL does not support user-data in Azure yet"
         end
         res = iaas.create_instances(host_names, **launch_opts)
-      when BushSlicer::Alicloud
+      when VerificationTests::Alicloud
         logger.debug "Creating a host group in Alibaba Cloud"
         host_opts = launch_opts.delete(:host_opts) || {}
         launch_opts = Collections.map_hash(launch_opts) { |k, v|
@@ -400,17 +400,17 @@ module BushSlicer
           create_opts: launch_opts.dup,
           host_opts: host_opts
         )
-      when BushSlicer::OpenStack, BushSlicer::OpenStack4, BushSlicer::OpenStack10
+      when VerificationTests::OpenStack, VerificationTests::OpenStack4, VerificationTests::OpenStack10
         create_opts = {}
         res = iaas.launch_instances(
           names: host_names,
           user_data: Base64.encode64(user_data_string),
           **launch_opts
         )
-      when BushSlicer::GCE
+      when VerificationTests::GCE
         res = iaas.create_instances(host_names, user_data: user_data_string,
                                     **launch_opts )
-      when BushSlicer::VSphere
+      when VerificationTests::VSphere
         if user_data_string && !user_data_string.empty?
           logger.warn "user-data not implemented for VSphere yet"
         end
@@ -697,7 +697,7 @@ module BushSlicer
       ## help users persist home info
       hosts_spec = hosts.map{|h| "#{h.hostname}:#{h.roles.join(':')}"}.join(',')
       logger.info "HOSTS SPECIFICATION: #{hosts_spec}"
-      host_spec_out = ENV["BUSHSLICER_HOSTS_SPEC_FILE"]
+      host_spec_out = ENV["VERIFICATION_TESTS_HOSTS_SPEC_FILE"]
       if host_spec_out && !File.exist?(host_spec_out)
         begin
           File.write(host_spec_out, hosts_spec)
@@ -707,7 +707,7 @@ module BushSlicer
       end
     ensure
       # create a file with launched instances information
-      vminfo_out = ENV["BUSHSLICER_VMINFO_YAML"] || "vminfo.yml"
+      vminfo_out = ENV["VERIFICATION_TESTS_VMINFO_YAML"] || "vminfo.yml"
       unless vminfo_out.empty?
         vminfo = hosts.
           group_by { |h| h[:cloud_service_name] }.
@@ -748,7 +748,7 @@ module BushSlicer
                            wait_accessible: true)
 
       instance, host = res[0]
-      unless host.kind_of? BushSlicer::Host
+      unless host.kind_of? VerificationTests::Host
         raise "bad return value: #{host.inspect}"
       end
 
@@ -788,5 +788,5 @@ module BushSlicer
 end
 
 if __FILE__ == $0
-  BushSlicer::EnvLauncherCli.new.run
+  VerificationTests::EnvLauncherCli.new.run
 end

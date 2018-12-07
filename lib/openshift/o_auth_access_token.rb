@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
   class OAuthAccessToken < ClusterResource
     RESOURCE = "oauthaccesstokens"
 

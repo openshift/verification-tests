@@ -10,7 +10,7 @@ require 'rest'
 require 'openshift/node'
 require 'webauto/webconsole_executor'
 
-module BushSlicer
+module VerificationTests
   # @note this class represents an OpenShift test environment and allows setting it up and in some cases creating and destroying it
   class Environment
     include Common::Helper
@@ -76,13 +76,13 @@ module BushSlicer
           StaticUserManager.new(self, **opts)
         end
       else
-        BushSlicer.const_get(opts[:user_manager]).new(self, **opts)
+        VerificationTests.const_get(opts[:user_manager]).new(self, **opts)
       end
     end
     alias users user_manager
 
     def cli_executor
-      @cli_executor ||= BushSlicer.const_get(opts[:cli]).new(self, **opts)
+      @cli_executor ||= VerificationTests.const_get(opts[:cli]).new(self, **opts)
     end
 
     def admin
@@ -101,7 +101,7 @@ module BushSlicer
 
     private def admin_creds
       if admin?
-        BushSlicer.const_get(opts[:admin_creds]).new(self, **opts)
+        VerificationTests.const_get(opts[:admin_creds]).new(self, **opts)
       else
         raise UnsupportedOperationError,
           "we cannot run as admins in this environment"
@@ -271,8 +271,8 @@ module BushSlicer
     end
 
     # obtain router detals like default router subdomain and router IPs
-    # @param user [BushSlicer::User]
-    # @param project [BushSlicer::project]
+    # @param user [VerificationTests::User]
+    # @param project [VerificationTests::project]
     def get_routing_details(user:, project:)
       clean_project = false
 
@@ -346,7 +346,7 @@ module BushSlicer
     end
 
     def master_services
-      @master_services_type ||= BushSlicer::Platform::MasterService.type(self.master_hosts.first)
+      @master_services_type ||= VerificationTests::Platform::MasterService.type(self.master_hosts.first)
       @master_services ||= self.master_hosts.map { |host|
         @master_services_type&.new(host, self)
       }
@@ -412,7 +412,7 @@ module BushSlicer
           host_type = opts[:hosts_type]
           hostname, garbage, roles = host.partition(":")
           roles = roles.split(":").map(&:to_sym)
-          hlist << BushSlicer.const_get(host_type).new(hostname, **opts, roles: roles)
+          hlist << VerificationTests.const_get(host_type).new(hostname, **opts, roles: roles)
         end
 
         missing_roles = MANDATORY_OPENSHIFT_ROLES.reject{|r| hlist.find {|h| h.has_role?(r)}}

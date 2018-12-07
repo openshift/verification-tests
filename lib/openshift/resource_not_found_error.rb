@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
   class ResourceNotFoundError < RuntimeError
   end
 end

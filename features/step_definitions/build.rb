@@ -79,7 +79,7 @@ Then(/^I save pruned builds in the #{QUOTED} project into the #{SYM} clipboard$/
   # lookbehind does not support quantifiers and jruby no support of \K
   build_names = @result[:response].scan(%r%(?<=^#{Regexp.escape(project.name)})\s+[^\s]*$%)
   builds = build_names.map { |bn|
-    BushSlicer::Build.new(name: bn.strip, project: project)
+    VerificationTests::Build.new(name: bn.strip, project: project)
   }
   cb[cb_name] = builds
 end

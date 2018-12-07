@@ -5,7 +5,7 @@ require_relative 'cluster_resource'
 require_relative 'pod'
 require_relative 'role_binding'
 
-module BushSlicer
+module VerificationTests
   # @note represents an OpenShift environment project
   class Project < ClusterResource
     RESOURCE = "projects".freeze
@@ -72,9 +72,9 @@ module BushSlicer
     end
 
     # creates a new project
-    # @param by [BushSlicer::APIAccessorOwner, BushSlicer::APIAccessor] the user to create project as
+    # @param by [VerificationTests::APIAccessorOwner, VerificationTests::APIAccessor] the user to create project as
     # @param name [String] the name of the project
-    # @return [BushSlicer::ResultHash]
+    # @return [VerificationTests::ResultHash]
     def self.create(by:, name: nil, **opts)
       if name
         res = self.new(name: name, env: by.env).create(by: by, **opts)
@@ -165,7 +165,7 @@ module BushSlicer
     #services/mysql-55-centos7
     #services/ruby-hello-world
     # @param labels [String, Array<String,String>, read carefully description of
-    #   [BushSlicer::Common::BaseHelper#selector_to_label_arr]
+    #   [VerificationTests::Common::BaseHelper#selector_to_label_arr]
     # @param by [User] the user to execute operation with
     # @param cmd_opts [**Hash] command line options overrides
     def delete_all_labeled(*labels, by:, **cmd_opts)

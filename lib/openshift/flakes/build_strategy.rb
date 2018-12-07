@@ -1,6 +1,6 @@
 require 'openshift/object_reference'
 
-module BushSlicer
+module VerificationTests
   class BuildStrategy
     SUBCLASSES = []
 

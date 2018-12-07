@@ -1,7 +1,7 @@
 # should not require 'common'
-# should only include helpers that do NOT load any other BushSlicer classes
+# should only include helpers that do NOT load any other VerificationTests classes
 
-module BushSlicer
+module VerificationTests
   module Common
     module CloudHelper
       # based on information in https://github.com/openshift/vagrant-openshift/blob/master/lib/vagrant-openshift/templates/command/init-openshift/box_info.yaml
@@ -28,15 +28,15 @@ module BushSlicer
         when "aws"
           Amz_EC2.new(service_name: service_name)
         when "azure"
-          BushSlicer::Azure.new(service_name: service_name)
+          VerificationTests::Azure.new(service_name: service_name)
         when "openstack"
-          BushSlicer::OpenStack.instance(service_name: service_name)
+          VerificationTests::OpenStack.instance(service_name: service_name)
         when "gce"
-          BushSlicer::GCE.new(service_name: service_name)
+          VerificationTests::GCE.new(service_name: service_name)
         when "vsphere"
-          BushSlicer::VSphere.new(service_name: service_name)
+          VerificationTests::VSphere.new(service_name: service_name)
         when "alibaba"
-          BushSlicer::Alicloud.new(service_name: service_name)
+          VerificationTests::Alicloud.new(service_name: service_name)
         else
           raise "unknown service type " \
             "#{conf[:services, service_name, :cloud_type]} for cloud " \

@@ -2,7 +2,7 @@
 
 == Overview
 
-To allow easier sharing of environment users, BushSlicer supports putting
+To allow easier sharing of environment users, verification-tests supports putting
 users into a user pool using a generic locker/allocator web app and then
 reserving and releasing locks over the users as there is a demand for it.
 
@@ -40,7 +40,7 @@ Because the OwnThat app is generic purpose, the convention is to put into
 
 Only active entries will be used for creating actual locks later. You can
 use the note field to clarify origin of the user or reason why it is not
-active. In any case the `note` field is irrelevant for BushSlicer and is only
+active. In any case the `note` field is irrelevant for verification-tests and is only
 meant to serve human users that manage the pools.
 
 === launching Cucumber
@@ -52,7 +52,7 @@ or set to `auto`. The other thing is to have users set to `pool:<pool name>`.
 [source,bash]
 ----
 ...
-export BUSHSLICER_DEFAULT_ENVIRONMENT=ocp
+export VERIFICATION_TESTS_DEFAULT_ENVIRONMENT=ocp
 export OPENSHIFT_ENV_OCP_USER_MANAGER=auto # this might be default already
 export OPENSHIFT_ENV_OCP_USER_MANAGER_USERS=pool:mypool
 cucumber <opts>

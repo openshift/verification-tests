@@ -1,6 +1,6 @@
 require 'yaml'
 
-module BushSlicer
+module VerificationTests
   module Common
     module Rules
       def self.load(*sources)

@@ -4,17 +4,17 @@ require 'login'
 require 'subscription_plan'
 require_relative 'project'
 
-module BushSlicer
+module VerificationTests
   # @note represents an OpenShift environment user account
   class User < ClusterResource
-    include BushSlicer::APIAccessorOwner
+    include VerificationTests::APIAccessorOwner
 
     attr_accessor :auth_name, :password
 
     RESOURCE = "users"
 
     # @param token [String] auth bearer token in plain string format
-    # @param env [BushSlicer::Environment] the test environment user belongs to
+    # @param env [VerificationTests::Environment] the test environment user belongs to
     # @return [User]
     def self.from_token(token, env:)
       api_accessor = APIAccessor.new(
@@ -29,7 +29,7 @@ module BushSlicer
       return user
     end
 
-    # @param env [BushSlicer::Environment] the test environment user belongs to
+    # @param env [VerificationTests::Environment] the test environment user belongs to
     # @param name [String] optional username as returned by `get user '~'
     # @param auth_name [String] the name used to auth to OpenShift
     # @param password [String] password

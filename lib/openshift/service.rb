@@ -5,12 +5,12 @@ require 'openshift/project_resource'
 require 'openshift/pod'
 require 'openshift/route'
 
-module BushSlicer
+module VerificationTests
   # represents OpenShift v3 Service concept
   class Service < ProjectResource
     RESOURCE = "services"
 
-    # @return [BushSlicer::ResultHash] with :success if at least one pod by
+    # @return [VerificationTests::ResultHash] with :success if at least one pod by
     #   selector is ready
     def ready?(user: nil, quiet: false, cached: false)
       res = {}
@@ -36,7 +36,7 @@ module BushSlicer
       return props[:pods]
     end
 
-    # @param by [BushSlicer::User] the user to create route with
+    # @param by [VerificationTests::User] the user to create route with
     def expose(user: nil, port: nil)
       opts = {
         output: :yaml,

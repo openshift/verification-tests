@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
   module Platform
     # a file with backup on modification so it can be restored later
     class RestorableFile

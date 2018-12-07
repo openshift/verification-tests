@@ -1,6 +1,6 @@
 require 'http'
 
-module BushSlicer
+module VerificationTests
   module Platform
     # @note this class represents an OpenShift master server that is running
     #   Kubernetes Services like API and Controller
@@ -14,7 +14,7 @@ module BushSlicer
       end
 
       def config
-        @config ||= BushSlicer::Platform::MasterConfig.for(self)
+        @config ||= VerificationTests::Platform::MasterConfig.for(self)
       end
 
       private def expected_load_time
@@ -45,14 +45,14 @@ module BushSlicer
       end
 
       def start(**opts)
-        BushSlicer::ResultHash.aggregate_results([super, wait_start(**opts)])
+        VerificationTests::ResultHash.aggregate_results([super, wait_start(**opts)])
       end
 
       def restart(**opts)
         res = super
         # no better idea than hardcoding time needed for node to react on master restart command
         sleep 10
-        BushSlicer::ResultHash.aggregate_results([res, wait_start(**opts)])
+        VerificationTests::ResultHash.aggregate_results([res, wait_start(**opts)])
       end
     end
   end

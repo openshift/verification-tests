@@ -1,7 +1,7 @@
 require 'openshift/object_reference'
 require_relative 'image_ref'
 
-module BushSlicer
+module VerificationTests
   # represents a trigger structure inside a deployment config
   class DeploymentConfigTrigger
     attr_reader :params, :spec, :from

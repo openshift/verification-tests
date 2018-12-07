@@ -1,8 +1,8 @@
-module BushSlicer
+module VerificationTests
   class VolumeSnapshotData < ClusterResource
     RESOURCE = "volumesnapshotdata"
 
-    # @return [BushSlicer::ResultHash] with :success depending on
+    # @return [VerificationTests::ResultHash] with :success depending on
     #   condition type=Ready and status=True
     def ready?(user:, quiet: false, cached: false)
       if cached && props[:raw]

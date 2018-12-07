@@ -2,7 +2,7 @@ require 'http'
 require 'json'
 require 'yaml'
 
-module BushSlicer
+module VerificationTests
   module Rest
     module Helper
       include Common::Helper

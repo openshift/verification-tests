@@ -1,7 +1,7 @@
 require 'openshift/cluster_resource'
 require 'openshift/flakes/unknown_role_binding_subject'
 
-module BushSlicer
+module VerificationTests
   # @note represents an OpenShift environment Persistent Volume
   class ClusterRoleBinding < ClusterResource
     RESOURCE = 'clusterrolebindings'
@@ -27,7 +27,7 @@ module BushSlicer
         props[:subjects] = rbs.map { |rb|
           case rb["kind"]
           when "SystemUser", "SystemGroup", "User", "Group"
-            Object.const_get("::BushSlicer::#{rb['kind']}")
+            Object.const_get("::VerificationTests::#{rb['kind']}")
               .new(name: rb["name"], env: env)
           when "ServiceAccount"
             ServiceAccount.new(

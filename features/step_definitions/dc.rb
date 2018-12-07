@@ -39,7 +39,7 @@ Given /^default (router|docker-registry) deployment config is restored after sce
   # first we need to save the current version
 
   # TODO: maybe we just use dc status => latestVersion ?
-  _rc = BushSlicer::ReplicationController.get_labeled(
+  _rc = VerificationTests::ReplicationController.get_labeled(
     resource,
     user: _admin,
     project: _project
@@ -99,7 +99,7 @@ end
 Given /^number of replicas of#{OPT_QUOTED} deployment config becomes:$/ do |name, table|
   options = hash_symkeys(table.rows_hash)
 
-  int_keys = %i[seconds] + BushSlicer::DeploymentConfig::REPLICA_COUNTERS.keys
+  int_keys = %i[seconds] + VerificationTests::DeploymentConfig::REPLICA_COUNTERS.keys
   int_options = options.slice(*int_keys)
   int_options.transform_values!(&:to_i)
   int_options[:seconds] ||= 5 * 60
@@ -204,7 +204,7 @@ Given /^a deploymentConfig becomes ready with labels:$/ do |table|
   dc_timeout = 10 * 60
   ready_timeout = 15 * 60
 
-  @result = BushSlicer::DeploymentConfig.wait_for_labeled(*labels, user: user, project: project, seconds: dc_timeout)
+  @result = VerificationTests::DeploymentConfig.wait_for_labeled(*labels, user: user, project: project, seconds: dc_timeout)
 
   if @result[:matching].empty?
     raise "See log, waiting for labeled dcs futile: #{labels.join(',')}"

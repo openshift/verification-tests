@@ -1,6 +1,6 @@
 require 'openshift/cluster_resource'
 
-module BushSlicer
+module VerificationTests
   # @note represents an OpenShift environment Cluster Service Class
   class ClusterServiceClass < ClusterResource
     RESOURCE = "clusterserviceclasses"
@@ -40,7 +40,7 @@ module BushSlicer
       return props[:plans]
     end
 
-    # @return [BushSlicer::ResultHash] with :success depending on
+    # @return [VerificationTests::ResultHash] with :success depending on
     #   condition type=Ready and status=True
     def ready?(user:, quiet: false, cached: false)
       if cached && props[:raw]

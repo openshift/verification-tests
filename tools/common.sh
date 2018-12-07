@@ -76,9 +76,9 @@ function need_sudo()
 # Setup sudo configuration
 function setup_sudo()
 {
-    $(need_sudo) grep BUSHSLICER_SETUP /etc/sudoers && return
+    $(need_sudo) grep VERIFICATION_TESTS_SETUP /etc/sudoers && return
     $(need_sudo) cat > /etc/sudoers <<END
-# BUSHSLICER_SETUP #
+# VERIFICATION_TESTS_SETUP #
 Defaults    env_reset
 Defaults    env_keep =  "COLORS DISPLAY HOSTNAME HISTSIZE INPUTRC KDEDIR LS_COLORS"
 Defaults    env_keep += "MAIL PS1 PS2 QTDIR USERNAME LANG LC_ADDRESS LC_CTYPE"
@@ -90,7 +90,7 @@ Defaults    secure_path = /usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/u
 
 root    ALL=(ALL)       ALL
 %wheel  ALL=NOPASSWD: ALL
-# BUSHSLICER_SETUP #
+# VERIFICATION_TESTS_SETUP #
 END
 }
 

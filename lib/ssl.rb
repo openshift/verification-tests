@@ -2,7 +2,7 @@ require 'socket'
 require 'openssl'
 require 'base64'
 
-module BushSlicer
+module VerificationTests
   module SSL
     # @param dst [String] the hostname or IP of SSL server
     # @param port [String, Integer] the port number to connect

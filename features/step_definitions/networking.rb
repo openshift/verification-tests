@@ -15,7 +15,7 @@ Given /^I run the ovs commands on the host:$/ do | table |
   # For 3.10 and runc env, should get containerID from the pod which landed on the node
   elsif env.version_ge("3.10", user: user)
     logger.info("OCP version >= 3.10 and environment may using runc to launch openvswith")
-    ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
+    ovs_pod = VerificationTests::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
       pod.node_name == node.name
     }.first
     container_id = ovs_pod.containers.first.id
@@ -111,7 +111,7 @@ Given /^the#{OPT_QUOTED} node network is verified$/ do |node_name|
 
   net_verify = proc {
     # to simplify the process, ping all node's tun0 IP including the node itself, even test env has only one node
-    hostsubnet = BushSlicer::HostSubnet.list(user: admin)
+    hostsubnet = VerificationTests::HostSubnet.list(user: admin)
     hostsubnet.each do | hostsubnet |
       dest_ip = IPAddr.new(hostsubnet.subnet).succ
       @result = _host.exec("ping -c 2 -W 2 #{dest_ip}")
@@ -455,11 +455,11 @@ Given /^I wait for the networking components of the node to be terminated$/ do
   ensure_admin_tagged
 
   if env.version_ge("3.10", user: user)
-    sdn_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
+    sdn_pod = VerificationTests::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
       pod.node_name == node.name
     }.first
 
-    ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
+    ovs_pod = VerificationTests::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
       pod.node_name == node.name
     }.first
 
@@ -485,11 +485,11 @@ Given /^I wait for the networking components of the node to become ready$/ do
   ensure_admin_tagged
 
   if env.version_ge("3.10", user: user)
-    sdn_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
+    sdn_pod = VerificationTests::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
       pod.node_name == node.name
     }.first
 
-    ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
+    ovs_pod = VerificationTests::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
       pod.node_name == node.name
     }.first
 
@@ -516,7 +516,7 @@ Given /^I restart the openvswitch service on the node$/ do
   # For 3.10 version, should delete the ovs container to restart service 
   if env.version_ge("3.10", user: user)
     logger.info("OCP version >= 3.10")
-    ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
+    ovs_pod = VerificationTests::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
       pod.node_name == node.name
     }.first
     @result = ovs_pod.ensure_deleted(user: _admin)
@@ -538,7 +538,7 @@ Given /^I restart the network components on the node( after scenario)?$/ do |aft
     # For 3.10 version, should delete the sdn pod to restart network components
     if env.version_ge("3.10", user: user)
       logger.info("OCP version >= 3.10")
-      sdn_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: _admin) { |pod, hash|
+      sdn_pod = VerificationTests::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: _admin) { |pod, hash|
         pod.node_name == _node.name
       }.first
       @result = sdn_pod.ensure_deleted(user: _admin)
@@ -559,7 +559,7 @@ Given /^I get the networking components logs of the node since "(.+)" ago$/ do |
   ensure_admin_tagged
 
   if env.version_ge("3.10", user: user)
-    sdn_pod = cb.sdn_pod || BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
+    sdn_pod = cb.sdn_pod || VerificationTests::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
       pod.node_name == node.name
     }.first
     @result = admin.cli_exec(:logs, resource_name: sdn_pod.name, n: "openshift-sdn", since: duration)

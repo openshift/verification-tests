@@ -11,7 +11,7 @@ require 'base_helper'
 # filename is log.rb to avoid interference with logger ruby feature
 require 'base_helper'
 
-module BushSlicer
+module VerificationTests
   class Logger
     include Common::BaseHelper
 
@@ -67,8 +67,8 @@ module BushSlicer
     def initialize(level=nil)
       if level
         @level = level
-      elsif ENV['BUSHSLICER_LOG_LEVEL']
-        @level = Logger.const_get(ENV['BUSHSLICER_LOG_LEVEL'].upcase)
+      elsif ENV['VERIFICATION_TESTS_LOG_LEVEL']
+        @level = Logger.const_get(ENV['VERIFICATION_TESTS_LOG_LEVEL'].upcase)
       else
         @level = INFO
       end
@@ -364,7 +364,7 @@ if __FILE__ == $0
     "message3"
   ]
 
-  logger = BushSlicer::Logger.new
+  logger = VerificationTests::Logger.new
 
   logger.dedup_start
   messages.each { |m| logger.info m }

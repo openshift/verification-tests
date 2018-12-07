@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
   # represents an OpenShift ConfigMap
   class ConfigMap < ProjectResource
     RESOURCE = 'configmaps'

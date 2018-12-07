@@ -1,6 +1,6 @@
 require_relative 'limit_range_constraint'
 
-module BushSlicer
+module VerificationTests
   # https://docs.openshift.com/online/rest_api/api/v1.LimitRange.html
   class LimitRangeItem
     include Common::BaseHelper

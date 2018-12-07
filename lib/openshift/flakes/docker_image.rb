@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
   class DockerImage
     attr_reader :raw, :owner, :name
     private :raw, :owner

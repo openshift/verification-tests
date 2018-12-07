@@ -1,6 +1,6 @@
 require 'rest_helper'
 
-module BushSlicer
+module VerificationTests
   module Rest
     module Kubernetes
       extend Helper

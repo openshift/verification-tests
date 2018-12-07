@@ -1,6 +1,6 @@
 require 'openshift/project_resource'
 
-module BushSlicer
+module VerificationTests
   # represents an OpenShift PersistentVolumeClaim (pvc for short)
   class PersistentVolumeClaim < ProjectResource
     STATUSES = [:bound, :failed, :pending, :lost, :terminating]
@@ -21,7 +21,7 @@ module BushSlicer
       return self # mainly to help ::from_api_object
     end
 
-    # @return [BushSlicer::ResultHash] with :success if status is Bound
+    # @return [VerificationTests::ResultHash] with :success if status is Bound
     def ready?(user: nil, quiet: false, cached: false)
       status?(user: user, status: :bound, quiet: quiet, cached: cached)
     end

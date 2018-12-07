@@ -6,13 +6,13 @@ end
 require 'jira-ruby'
 require 'common'
 
-module BushSlicer
+module VerificationTests
   class Jira
     include Common::Helper
 
     def initialize(options={})
       raise "No default options detected, please makse sure the PRIVATE_REPO \
-      is cloned into your repo or ENV BUSHSLICER_PRIVATE_DIR is defined" if default_opts.nil?
+      is cloned into your repo or ENV VERIFICATION_TESTS_PRIVATE_DIR is defined" if default_opts.nil?
       @options = default_opts.merge options
       ## try to obtain user/password in all possible ways
       @options[:username] = ENV['JIRA_USER'] if ENV['JIRA_USER']

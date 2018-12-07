@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
   class UnknownRoleBindingSubject
   end
 end

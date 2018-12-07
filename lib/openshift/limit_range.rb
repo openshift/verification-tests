@@ -1,6 +1,6 @@
 require 'openshift/flakes/limit_range_item'
 
-module BushSlicer
+module VerificationTests
   # https://docs.openshift.com/online/rest_api/api/v1.LimitRange.html
   class LimitRange < ProjectResource
     RESOURCE = 'limitranges'

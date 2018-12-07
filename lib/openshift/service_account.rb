@@ -3,10 +3,10 @@ require 'json'
 require 'api_accessor_owner'
 require 'openshift/secret'
 
-module BushSlicer
+module VerificationTests
   # represents OpenShift v3 Service account
   class ServiceAccount < ProjectResource
-    include BushSlicer::APIAccessorOwner
+    include VerificationTests::APIAccessorOwner
 
     RESOURCE = "serviceaccounts"
 

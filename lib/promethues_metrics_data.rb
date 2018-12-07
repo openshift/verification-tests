@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
   class PrometheusMetricsData
 
     def initialize(metrics)

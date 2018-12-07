@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
 
   class BundleInstance < ProjectResource
     RESOURCE = "bundleinstances"

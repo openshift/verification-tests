@@ -19,7 +19,7 @@ And /^I save the (logging|metrics) project name to the#{OPT_SYM} clipboard$/ do 
   else
     expected_rc_name = "hawkular-metrics"
   end
-  found_proj = BushSlicer::Project.get_matching(user: admin) { |project, project_hash|
+  found_proj = VerificationTests::Project.get_matching(user: admin) { |project, project_hash|
     rc(expected_rc_name, project).exists?(user: admin, quiet: true)
   }
   if found_proj.count != 1
@@ -38,7 +38,7 @@ Given /^there should be (\d+) (logging|metrics) services? installed/ do |count, 
     expected_rc_name = "hawkular-metrics"
   end
 
-  found_proj = BushSlicer::Project.get_matching(user: admin) { |project, project_hash|
+  found_proj = VerificationTests::Project.get_matching(user: admin) { |project, project_hash|
     rc(expected_rc_name, project).exists?(user: admin, quiet: true)
   }
   if found_proj.count != Integer(count)
@@ -128,7 +128,7 @@ When /^I perform the (GET|POST) metrics rest request with:$/ do | op_type, table
   end
   cb.metrics_data = []
 
-  @result = BushSlicer::Http.request(url: url, **https_opts, method: op_type)
+  @result = VerificationTests::Http.request(url: url, **https_opts, method: op_type)
 
   @result[:parsed] = YAML.load(@result[:response]) if @result[:success]
   if (@result[:parsed].is_a? Array) and (op_type == 'GET') and opts[:metrics_id].nil?
@@ -136,7 +136,7 @@ When /^I perform the (GET|POST) metrics rest request with:$/ do | op_type, table
       logger.info("Getting data from metrics id #{res['id']}...")
       query_url = url + "/" + res['id']
       # get the id to construct the metric_url to do the QUERY operation
-      result = BushSlicer::Http.request(url: query_url, **https_opts, method: op_type)
+      result = VerificationTests::Http.request(url: query_url, **https_opts, method: op_type)
       result[:parsed] = YAML.load(result[:response])
       cb.metrics_data << result
     end
@@ -751,7 +751,7 @@ Given /^logging service is installed in the#{OPT_QUOTED} project using deployer:
   step %Q|I run oc create over ERB URL: https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging_metrics/logging_deployer_configmap.yaml |
   step %Q/the step should succeed/
   # must create a label or else installation will fail
-  registry_nodes = BushSlicer::Node.get_labeled(["registry"], user: user)
+  registry_nodes = VerificationTests::Node.get_labeled(["registry"], user: user)
   registry_nodes.each do |node|
     step %Q/label "logging-infra-fluentd=true" is added to the "#{node.name}" node/
     step %Q/the step should succeed/
@@ -942,7 +942,7 @@ end
 
 # wrapper step to spin up a ansible-pod based on ose/ansible docker image
 # To override the image tag from the puddle, we need to do something like
-# export BUSHSLICER_CONFIG='{"global":
+# export VERIFICATION_TESTS_CONFIG='{"global":
 #                             {"base_ansible_image_tag": "latest",
 #                             {"ansible_image_src: "openshift3/ose-ansible"}}'
 # possible 'image_src' values are openshift/origin-ansible (master) or
@@ -1308,5 +1308,5 @@ Given /^I get the #{QUOTED} node's prometheus metrics$/ do |node_name|
   # get kubelet metrics and write to a file
   @result = pod.exec("/prom2json", "-cert=/cert/master.kubelet-client.crt", "-key=/key/master.kubelet-client.key", "-accept-invalid-cert=true", "https://#{node_name}:10250/metrics", as: user)
   raise "Failed when getting kubelet metrics" unless @result[:success]
-  cb.node_metrics = BushSlicer::PrometheusMetricsData.new(@result[:stdout])
+  cb.node_metrics = VerificationTests::PrometheusMetricsData.new(@result[:stdout])
 end

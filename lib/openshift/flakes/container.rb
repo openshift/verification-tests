@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
   class Container
     include Common::Helper
 

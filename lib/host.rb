@@ -5,7 +5,7 @@ require 'common'
 require 'net'
 require 'ssh'
 
-module BushSlicer
+module VerificationTests
   # @note a generic machine; base for creating actual implementations
   class Host
     include Common::Helper
@@ -31,12 +31,12 @@ module BushSlicer
     def self.from_ip(ip, opts)
       clz = opts[:class] || raise("need to know class to instantiate Host")
       hostname = Common::Net.reverse_lookup ip
-      return BushSlicer.const_get(clz).new(hostname, **opts, ip: ip)
+      return VerificationTests.const_get(clz).new(hostname, **opts, ip: ip)
     end
 
     def self.from_hostname(hostname, opts)
       clz = opts[:class] || raise("need to know class to instantiate Host")
-      return BushSlicer.const_get(clz).new(hostname, opts)
+      return VerificationTests.const_get(clz).new(hostname, opts)
     end
 
     def self.localhost
@@ -81,7 +81,7 @@ module BushSlicer
       unless res[:success]
         logger.warn res[:response]
         raise res[:error] rescue raise(
-          BushSlicer::TimeoutError,
+          VerificationTests::TimeoutError,
           "#{self} did not become available within #{timeout} seconds"
         )
       end
@@ -300,7 +300,7 @@ module BushSlicer
           raise e
         end
       else
-        # wait for another bushslicer instance to perform broker setup
+        # wait for another verification-tests instance to perform broker setup
         unless setup_lock_wait(key)
           raise "setup of broker failed on another runner, see its logs or clear it by removing the directory /root/broker_setup from the devenv"
         end
@@ -309,18 +309,18 @@ module BushSlicer
 
     # set setup lock on this broker instance
     private def setup_lock(key)
-      return mkdir("bushslicer_lock_#{key}", :raw => true, :parents => false)
+      return mkdir("verification_tests_lock_#{key}", :raw => true, :parents => false)
     end
 
     # clear setup lock for this instance
     private def setup_lock_clear(key, success=true)
-      touch("bushslicer_lock_#{key}/#{success ? 'DONE' : 'FAIL'}", :raw => true)
+      touch("verification_tests_lock_#{key}/#{success ? 'DONE' : 'FAIL'}", :raw => true)
       # ret_code, msg = ssh.exec("touch broker_setup/#{success ? 'DONE' : 'FAIL'}")
     end
 
     # wait until setup lock is cleared or status is fail
     private def setup_lock_wait(key)
-      file = wait_for_files("bushslicer_lock_#{key}/DONE", "bushslicer_lock_#{key}/FAIL", :raw => true)
+      file = wait_for_files("verification_tests_lock_#{key}/DONE", "verification_tests_lock_#{key}/FAIL", :raw => true)
       return file.include?("DONE")
       #ret_code, msg = ssh.exec('while sleep 1; do [ -f broker_setup/DONE ] && break; [ -f broker_setup/FAIL ] && exit 1; done')
       #return ret_code == 0
@@ -353,7 +353,7 @@ module BushSlicer
       if before_reboot < time - uptime
         return nil
       else
-        raise BushSlicer::TimeoutError,
+        raise VerificationTests::TimeoutError,
           "#{self} does not appear to have actually rebooted"
       end
     end
@@ -560,13 +560,13 @@ module BushSlicer
     # @return [nil]
     # @raise [Error] when any error was detected
     def reboot
-      cmd = 'shutdown -r now "BushSlicer triggered reboot"'
+      cmd = 'shutdown -r now "VerificationTests triggered reboot"'
       res = exec_raw(cmd, timeout: 20)
       if res[:success]
         return nil
       else
         case res[:error]
-        when IOError, BushSlicer::TimeoutError
+        when IOError, VerificationTests::TimeoutError
           return nil
         when nil
           raise "failed execute \`#{cmd}\` on #{self} for an unknown reason"

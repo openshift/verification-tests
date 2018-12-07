@@ -1,6 +1,6 @@
 require_relative 'image_stream_tag_event'
 
-module BushSlicer
+module VerificationTests
   # represents a tag status within an ImageStream, nothing to do with the
   #   ImageStreamTag resource
   class ImageStreamTagStatus

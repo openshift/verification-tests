@@ -63,7 +63,7 @@ Given /^I get the #{QUOTED} report and store it in the#{OPT_SYM} clipboard using
   run_now = opts[:run_now].nil? ? 'true' : opts[:run_now]
   report_format = opts[:format].nil? ? default_format : opts[:format]
   # create the report resource
-  opts[:report_yaml] = BushSlicer::Report.generate_yaml(
+  opts[:report_yaml] = VerificationTests::Report.generate_yaml(
     query_type: query_type, start_time: start_time, end_time: end_time,
     run_now: run_now) unless opts[:report_yaml]
   logger.info("#### gernated report using the following yaml:\n #{opts[:report_yaml]}")
@@ -128,7 +128,7 @@ end
 
 Given /^I enable route for#{OPT_QUOTED} metering service$/ do | metering_name |
   metering_name ||= "openshift-metering"
-  htpasswd = BushSlicer::SSL.sha1_htpasswd(username: user.name, password: user.password)
+  htpasswd = VerificationTests::SSL.sha1_htpasswd(username: user.name, password: user.password)
   cookie_seed = rand_str(32, :hex)
   route_yaml = <<BASE_TEMPLATE
     apiVersion: metering.openshift.io/v1alpha1

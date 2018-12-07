@@ -4,7 +4,7 @@ require 'yaml'
 
 require 'rules_command_executor'
 
-module BushSlicer
+module VerificationTests
   class CliExecutor
     include Common::Helper
 
@@ -17,11 +17,11 @@ module BushSlicer
       @opts = opts
     end
 
-    # @param [BushSlicer::User, BushSlicer::APIAccessor] user user to execute
+    # @param [VerificationTests::User, VerificationTests::APIAccessor] user user to execute
     #   command with
     # @param [Symbol] key command key
     # @param [Hash] opts command options
-    # @return [BushSlicer::ResultHash]
+    # @return [VerificationTests::ResultHash]
     def exec(user, key, opts={})
       raise
     end
@@ -54,7 +54,7 @@ module BushSlicer
 
     # get `oc` version on some host running as some username
     # @param user [String] string username
-    # @param host [BushSlicer::Host] the host to execute command on
+    # @param host [VerificationTests::Host] the host to execute command on
     # @return [String] version string
     def self.get_version_for(user, host)
       fake_config = Tempfile.new("kubeconfig")
@@ -184,7 +184,7 @@ module BushSlicer
       @executors = {}
     end
 
-    # @param [BushSlicer::APIAccessor] api accessor to execute command with
+    # @param [VerificationTests::APIAccessor] api accessor to execute command with
     # @return rules executor, separate one per user
     private def executor(user, cli_tool: nil)
       executor_id = "#{cli_tool}:#{user}"
@@ -209,7 +209,7 @@ module BushSlicer
     end
 
     # @param user [String] the user we want to get version for
-    # @param host [BushSlicer::Host] the host we'll be running commands on
+    # @param host [VerificationTests::Host] the host we'll be running commands on
     private def version_for_user(user, host)
       # we assume all users will use same oc version;
       #   we may revisit later if needed

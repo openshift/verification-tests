@@ -1,6 +1,6 @@
 require 'openshift/project_resource'
 
-module BushSlicer
+module VerificationTests
   # represnets an Openshift StatefulSets
   class StatefulSet < PodReplicator
     RESOURCE = "statefulsets"

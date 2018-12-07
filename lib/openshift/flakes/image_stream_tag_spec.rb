@@ -1,6 +1,6 @@
 require 'openshift/object_reference'
 
-module BushSlicer
+module VerificationTests
   # this is the spec->tags section inside ImageStream and is very different
   #   from the ImageStreamTag resource
   class ImageStreamTagSpec

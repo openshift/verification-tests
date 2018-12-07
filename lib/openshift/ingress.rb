@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
   class Ingress < ProjectResource
     RESOURCE = "ingresses"
   end

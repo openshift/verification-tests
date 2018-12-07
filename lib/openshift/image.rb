@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
   class Image < ClusterResource
     RESOURCE = "images"
   end

@@ -2,7 +2,7 @@ require 'openshift/cluster_resource'
 
 require_relative 'flakes/policy_rule'
 
-module BushSlicer
+module VerificationTests
   # @note represents an OpenShift environment Persistent Volume
   class ClusterRole < ClusterResource
     RESOURCE = 'clusterroles'

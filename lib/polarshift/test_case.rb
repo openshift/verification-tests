@@ -2,7 +2,7 @@
 
 require_relative 'scenario_wrapper'
 
-module BushSlicer
+module VerificationTests
   module PolarShift
     class TestCase
       attr_reader :request, :scenarios, :struct

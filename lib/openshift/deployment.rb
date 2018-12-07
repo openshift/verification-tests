@@ -4,7 +4,7 @@ require 'openshift/pod_replicator'
 
 # TODO: DRY together with replica_set.rb
 
-module BushSlicer
+module VerificationTests
 
   # represents an Openshift Deployment
   class Deployment < PodReplicator
@@ -35,7 +35,7 @@ module BushSlicer
       labels = match_labels(**shared_options, cached: cached)
       revision = self.revision(**shared_options)
 
-      BushSlicer::ReplicaSet.get_labeled(*labels, user: user, project: project)
+      VerificationTests::ReplicaSet.get_labeled(*labels, user: user, project: project)
         .select { |item| item.revision(**shared_options) == revision }
         .max_by { |item| item.created_at(**shared_options) }
     end

@@ -4,7 +4,7 @@
 
 Main configuration is inside `config/config.yaml`. Content of that file is also merged with `PRIVATE/config.yaml` and `PRIVATE/config/config.yaml` if such files exist.
 You shouldn't submit private configuraion and/or credential files to public Git repos thus `PRIVATE` is a good place to put them in.
-It defaults to `bushslicer_dir/private` dir and is listed in `.gitignore` not to be submitted to the BushSlicer repo.
+It defaults to `verification-tests_dir/private` dir and is listed in `.gitignore` not to be submitted to the verification-tests repo.
 
 We have also some configuration in `config/cucumber.yml`. There are some profiles defined for easily calling with proper options.
 
@@ -20,9 +20,9 @@ Some of these options can be overwritten by environment variables, see `#env_ove
 
 Under `environments` there are default options for different environment types. The name of environment does not matter, you can rename environment but if you use same options, the end result should be the same. Names are to just make it easy to start with some reasonable defaults.
 
-The default environment is determined by the `default_environment` global option. It's usually set by the BUSHSLICER_DEFAULT_ENVIRONMENT env variable.
+The default environment is determined by the `default_environment` global option. It's usually set by the VERIFICATION_TESTS_DEFAULT_ENVIRONMENT env variable.
 
-Let's take one example - OSE environment. It has as a default `hosts_type: SSHAccessibleHost`. If we want to override it, we can specify env variable OPENSHIFT_ENV_OSE_HOSTS_TYPE. Its the same with any other option. All variables that start with `OPENSHIFT_ENV_<env name>_SOMETHING` get an option for the named environment set. The first part `OPENSHIFT_ENV_<env name>_` is removed, then the other part `SOMETHING` is downcased and converted to a Symbol to become a key in the configuration Hash that is passed to the environment class constructor. That is taken care of in the `#load_env` private method of `BushSlicer::EnvironmentManager` class.
+Let's take one example - OSE environment. It has as a default `hosts_type: SSHAccessibleHost`. If we want to override it, we can specify env variable OPENSHIFT_ENV_OSE_HOSTS_TYPE. Its the same with any other option. All variables that start with `OPENSHIFT_ENV_<env name>_SOMETHING` get an option for the named environment set. The first part `OPENSHIFT_ENV_<env name>_` is removed, then the other part `SOMETHING` is downcased and converted to a Symbol to become a key in the configuration Hash that is passed to the environment class constructor. That is taken care of in the `#load_env` private method of `VerificationTests::EnvironmentManager` class.
 
 == user configuration
 
@@ -33,7 +33,7 @@ So far we only have `StaticUserManager` so users are defined with the `OPENSHIFT
 * by user/password
 * by token
 
-User/password pairs are easier unless you run in environment where you can't login with a password, e.g. google auth, kerberos auth, etc. You have to generate a token via browser and then supply it to BushSlicer.
+User/password pairs are easier unless you run in environment where you can't login with a password, e.g. google auth, kerberos auth, etc. You have to generate a token via browser and then supply it to verification-tests.
 
 Username should be written in full. e.g. with kerberos auth the client tool can take a short username like `asd`. But you need to use the full username like `asd@EXAMPLE.COM`.
 

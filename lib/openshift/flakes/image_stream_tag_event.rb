@@ -1,6 +1,6 @@
 require_relative 'image_ref'
 
-module BushSlicer
+module VerificationTests
   class ImageStreamTagEvent
     attr_reader :raw, :generation, :imageref, :created, :owner, :status
     private :raw, :owner

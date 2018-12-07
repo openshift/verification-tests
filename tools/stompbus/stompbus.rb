@@ -10,7 +10,7 @@ require_relative "../common/load_path"
 require 'common'
 
 class STOMPBus
-  include BushSlicer::Common::Helper
+  include VerificationTests::Common::Helper
 
   LOGIN_OPTS = [[:login, :passcode], [:cert_file, :key_file]].freeze
   REQUIRED_HOST_OPTS = [:host, :port].freeze

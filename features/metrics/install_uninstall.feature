@@ -55,7 +55,7 @@ Feature: metrics logging and uninstall tests
     # 1. pvc working
     Then the expression should be true> pvc('metrics-cassandra-1').ready?[:success]
     # 2. check pod volume name matches 'metrics-cassandra-1'
-    Then the expression should be true> pod.volumes.find { |v| v.name == 'cassandra-data' && v.kind_of?(BushSlicer::PVCPodVolumeSpec) && v.claim.name == 'metrics-cassandra-1' }
+    Then the expression should be true> pod.volumes.find { |v| v.name == 'cassandra-data' && v.kind_of?(VerificationTests::PVCPodVolumeSpec) && v.claim.name == 'metrics-cassandra-1' }
     # 3. check volume cassandra-data was mounted to /cassandra_data" in pod spec
     Then the expression should be true> pod.container(name: 'hawkular-cassandra-1').spec.volume_mounts.select { |v| v['mountPath'] == "/cassandra_data" }.count > 0
 

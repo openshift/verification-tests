@@ -3,7 +3,7 @@
 require 'time'
 require_relative 'test_case'
 
-module BushSlicer
+module VerificationTests
   module PolarShift
     class TestRecord
       attr_reader :test_run, :struct

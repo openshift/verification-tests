@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
   # @note represents an OpenShift environment SystemUser (undocumented it seems)
   class SystemUser
     attr_reader :name, :env

@@ -6,7 +6,7 @@ require 'common'
 require 'rules_common'
 require_relative 'web4cucumber'
 
-module BushSlicer
+module VerificationTests
   class WebConsoleExecutor
     include Common::Helper
 

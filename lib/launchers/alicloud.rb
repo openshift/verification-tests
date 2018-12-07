@@ -14,7 +14,7 @@ require 'collections'
 require 'common'
 require 'http'
 
-module BushSlicer
+module VerificationTests
   class Alicloud
     include Common::Helper
     include CollectionsIncl
@@ -130,8 +130,8 @@ module BushSlicer
 
     # @param create_opts [Hash] VM launch options according to Alibaba docs
     # @param host_opts [Hash] additional machine access options, should be
-    #   options valid for use in [BushSlicer::Host] constructor
-    # @return [Array] of [Alicloud::Instance, BushSlicer::Host] pairs
+    #   options valid for use in [VerificationTests::Host] constructor
+    # @return [Array] of [Alicloud::Instance, VerificationTests::Host] pairs
     # @see https://www.alibabacloud.com/help/doc-detail/63440.htm
     def create_instance(create_opts: {}, host_opts: {}, generate_host: true)
 
@@ -180,7 +180,7 @@ module BushSlicer
     end
 
     # @param vm [Alicloud::Instance]
-    # @return [BushSlicer::Host]
+    # @return [VerificationTests::Host]
     def get_vm_host(vm, host_opts = {})
       host_opts = (config[:host_opts] || {}).merge host_opts
       host_opts[:cloud_instance] = vm
@@ -358,7 +358,7 @@ module BushSlicer
       }
 
       unless success
-        raise BushSlicer::TimeoutError, "Timeout waiting for tasks: #{ids}"
+        raise VerificationTests::TimeoutError, "Timeout waiting for tasks: #{ids}"
       end
     end
 
@@ -508,7 +508,7 @@ module BushSlicer
             status(cached: false) == "Stopped"
           }
           unless success
-            raise BushSlicer::TimeoutError,
+            raise VerificationTests::TimeoutError,
               "Timeout waiting for instance #{id} to stop. Status: #{status}"
           end
           return nil
@@ -545,7 +545,7 @@ module BushSlicer
             status(cached: false) == "Deleted"
           }
           unless success
-            raise BushSlicer::TimeoutError,
+            raise VerificationTests::TimeoutError,
               "Timeout waiting to delete instance #{id}. Status: #{status}"
           end
           return nil
@@ -559,8 +559,8 @@ end
 
 ## Standalone test
 if __FILE__ == $0
-  extend BushSlicer::Common::Helper
-  ali = BushSlicer::Alicloud.new(service_name: "alicloud")
+  extend VerificationTests::Common::Helper
+  ali = VerificationTests::Alicloud.new(service_name: "alicloud")
 
   # params = {
   #   "RegionId" => "cn-zhangjiakou",
@@ -575,7 +575,7 @@ if __FILE__ == $0
   test_res = {}
   conf[:services].each do |name, service|
     if service[:cloud_type] == 'alibaba'
-      ali = BushSlicer::Alicloud.new(service_name: name)
+      ali = VerificationTests::Alicloud.new(service_name: name)
       res = true
       test_res[name] = res
       begin

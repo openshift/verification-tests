@@ -47,7 +47,7 @@ Feature: Egress-ingress related networking scenarios
     And evaluation of `project.name` is stored in the :proj1 clipboard
   
     # Create egress policy in project-1
-    And evaluation of `BushSlicer::Common::Net.dns_lookup("yahoo.com")` is stored in the :yahoo_ip clipboard
+    And evaluation of `VerificationTests::Common::Net.dns_lookup("yahoo.com")` is stored in the :yahoo_ip clipboard
     When I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/egress-ingress/dns-egresspolicy1.json"
     And I replace lines in "dns-egresspolicy1.json":
       | 98.138.0.0/16 | <%= cb.yahoo_ip %>/32 |
@@ -109,7 +109,7 @@ Feature: Egress-ingress related networking scenarios
     And evaluation of `project.name` is stored in the :proj1 clipboard
  
     # Create egress policy in project-1
-    And evaluation of `BushSlicer::Common::Net.dns_lookup("yahoo.com")` is stored in the :yahoo_ip clipboard
+    And evaluation of `VerificationTests::Common::Net.dns_lookup("yahoo.com")` is stored in the :yahoo_ip clipboard
     When I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/egress-ingress/dns-egresspolicy1.json"
     And I replace lines in "dns-egresspolicy1.json":
       | 98.138.0.0/16 | <%= cb.yahoo_ip %>/32 |
@@ -147,7 +147,7 @@ Feature: Egress-ingress related networking scenarios
     Given I have a project  
     Given I have a pod-for-ping in the project
     And evaluation of `project.name` is stored in the :proj1 clipboard
-    And evaluation of `BushSlicer::Common::Net.dns_lookup("www.yahoo.com", multi: true)` is stored in the :yahoo clipboard
+    And evaluation of `VerificationTests::Common::Net.dns_lookup("www.yahoo.com", multi: true)` is stored in the :yahoo clipboard
     Then the expression should be true> cb.yahoo.size >= 3
 
     # Create egress policy 

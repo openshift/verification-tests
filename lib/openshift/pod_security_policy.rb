@@ -1,6 +1,6 @@
 require 'openshift/cluster_resource'
 
-module BushSlicer
+module VerificationTests
   class PodSecurityPolicy < ClusterResource
     RESOURCE = 'podsecuritypolicies'
 

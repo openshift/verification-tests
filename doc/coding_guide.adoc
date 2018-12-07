@@ -8,7 +8,7 @@ https://github.com/bbatsov/ruby-style-guide
 Try to make sure, when you look at your code, it looks descent. See link:vim.adoc[vim.adoc] for some tips.
 
 == Tool to help indentation
-BushSlicer uses http://editorconfig.org/[EditorConfig] to have a universal
+verification-tests uses http://editorconfig.org/[EditorConfig] to have a universal
 indentation styles.  It supports various IDEs.  You can download a plugin and
 install it into your IDE from http://editorconfig.org/#download
 

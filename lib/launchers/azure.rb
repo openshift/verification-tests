@@ -11,7 +11,7 @@ require 'azure_mgmt_network'
 require 'collections'
 require 'common'
 
-module BushSlicer
+module VerificationTests
   class Azure
     include Common::Helper
     include CollectionsIncl
@@ -152,14 +152,14 @@ module BushSlicer
     # @param user_data [String] convenience to add metadata `startup-script` key
     # @param instance_opts [Hash] additional machines launch options
     # @param host_opts [Hash] additional machine access options, should be
-    #   options valid for use in [BushSlicer::Host] constructor
+    #   options valid for use in [VerificationTests::Host] constructor
     # @param boot_disk_opts [Hash] convenience way to merge some options for
     #   the boot disk without need to replace the whole disks configuration;
     #   disks from global config will be searched for the boot option and that
     #   disk entry will be intelligently merged
     # @param availability_set [String] name of availability set for VM, if value
     #   is :auto, a new one is created based on VM name without trailing numbers
-    # @return [Array] of [Instance, BushSlicer::Host] pairs
+    # @return [Array] of [Instance, VerificationTests::Host] pairs
     def create_instance( names,
                          fqdn_names: azure_config[:fqdn_names],
                          user_data: azure_config[:user_data],
@@ -339,12 +339,12 @@ module BushSlicer
     end
 
     def is_blob_uri?(str)
-      BushSlicer::Azure.is_blob_uri? str
+      VerificationTests::Azure.is_blob_uri? str
     end
 
     # @return [String, nil] when the string is not a blob URI
     def storage_account_from_blob_uri(str)
-      BushSlicer::Azure.send :storage_account_from_blob_uri, str
+      VerificationTests::Azure.send :storage_account_from_blob_uri, str
     end
 
     # creates or finds an availability set for a given future VM
@@ -454,7 +454,7 @@ module BushSlicer
             ref.version = opts[:os_disk][:params][:version]
           end
         end
-        type = BushSlicer::Azure.const_get opts[:os_disk][:type]
+        type = VerificationTests::Azure.const_get opts[:os_disk][:type]
         unless type = ComputeModels::DiskCreateOptionTypes::FromImage
           raise "only fromImage is presently supported"
         end
@@ -483,7 +483,7 @@ module BushSlicer
               vhd.uri = opts[:os_disk][:params][:image]
             end
             # e.g. Azure::ARM::Compute::Models::OperatingSystemTypes::Linux
-            os_disk.os_type = BushSlicer::Azure.const_get opts[:os_disk][:params][:os_type]
+            os_disk.os_type = VerificationTests::Azure.const_get opts[:os_disk][:params][:os_type]
           end
           os_disk.name = "#{vmname}"
           if opts.dig(:os_disk, :disk_size_gb)
@@ -696,17 +696,17 @@ end
 
 ## Standalone test
 if __FILE__ == $0
-  extend BushSlicer::Common::Helper
-  azure = BushSlicer::Azure.new
+  extend VerificationTests::Common::Helper
+  azure = VerificationTests::Azure.new
   vms = azure.create_instances(["test-terminate"], fqdn_names: true)
 
-  storage_account = BushSlicer::Azure.instance_storage_account vms[0][0]
+  storage_account = VerificationTests::Azure.instance_storage_account vms[0][0]
 
   require 'pry'; binding.pry
 
   # https://github.com/Azure/azure-sdk-for-ruby/issues/1615
   # resource_group = vms[0][0].resource_group
-  resource_group = BushSlicer::Azure.resource_group_from_id(vms[0][0].id)
+  resource_group = VerificationTests::Azure.resource_group_from_id(vms[0][0].id)
   azure.delete_instance vms[0][0].name
 
   if storage_account

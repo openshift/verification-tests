@@ -84,8 +84,8 @@ Given /^I have a browser with:$/ do |table|
 end
 
 Given /^I open registry console in a browser$/ do
-  base_rules = BushSlicer::WebConsoleExecutor::RULES_DIR + "/base/"
-  snippets_dir = BushSlicer::WebConsoleExecutor::SNIPPETS_DIR
+  base_rules = VerificationTests::WebConsoleExecutor::RULES_DIR + "/base/"
+  snippets_dir = VerificationTests::WebConsoleExecutor::SNIPPETS_DIR
   step "default registry-console route is stored in the :reg_console_url clipboard"
   step "I have a browser with:", table(%{
     | rules        | #{base_rules}                     |

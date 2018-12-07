@@ -2,7 +2,7 @@ require 'set'
 
 # should not require 'common'
 
-module BushSlicer
+module VerificationTests
   # a collections module that can be included
   module CollectionsIncl
     # @param struc [Object] array, hash or object to be deeply freezed

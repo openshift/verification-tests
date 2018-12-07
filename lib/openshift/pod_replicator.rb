@@ -4,7 +4,7 @@ require 'openshift/project_resource'
 require 'active_support/core_ext/hash/slice'
 require 'base_helper'
 
-module BushSlicer
+module VerificationTests
   class PodReplicator < ProjectResource
 
     ## must be defined in subclasses

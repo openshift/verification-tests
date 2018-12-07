@@ -1,9 +1,9 @@
 require 'openshift/cluster_resource'
 require 'openshift/node_taint'
 
-module BushSlicer
+module VerificationTests
   # @note this class represents OpenShift environment Node API pbject and this
-  #   is different from a BushSlicer::Host. Underlying a Node, there always is a
+  #   is different from a VerificationTests::Host. Underlying a Node, there always is a
   #   Host but not all Hosts are Nodes. Not sure if we can always have a
   #   mapping between Nodes and Hosts. Depends on access we have to the env
   #   under testing and proper configuration.
@@ -21,7 +21,7 @@ module BushSlicer
       return self
     end
 
-    # @return [BushSlicer:Host] underlying this node
+    # @return [VerificationTests:Host] underlying this node
     # @note may raise depending on proper OPENSHIFT_ENV_<NAME>_HOSTS
     # @note will return acorrding to:
     # 1. if the node name matches hosts, then use host
@@ -51,7 +51,7 @@ module BushSlicer
     end
 
     def service
-      @service ||= BushSlicer::Platform::NodeService.discover(host, env)
+      @service ||= VerificationTests::Platform::NodeService.discover(host, env)
     end
 
     def schedulable?(user: nil, cached: true, quiet: false)

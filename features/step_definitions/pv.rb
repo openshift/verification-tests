@@ -101,7 +101,7 @@ Given /^([0-9]+) PVs become #{SYM}(?: within (\d+) seconds)? with labels:$/ do |
   status = status.to_sym
   num = Integer(count)
 
-  @result = BushSlicer::PersistentVolume.wait_for_labeled(*labels, count: num,
+  @result = VerificationTests::PersistentVolume.wait_for_labeled(*labels, count: num,
                        user: admin, seconds: timeout) do |pv, pv_hash|
     pv.status?(user: admin, status: status, cached: true)[:success]
   end
@@ -158,7 +158,7 @@ When /^admin creates a PV from "([^"]*)" where:$/ do |location, table|
   end
 
   logger.info("Creating PV:\n#{pv_hash.to_yaml}")
-  @result = BushSlicer::PersistentVolume.create(by: admin, spec: pv_hash)
+  @result = VerificationTests::PersistentVolume.create(by: admin, spec: pv_hash)
 
   if @result[:success]
     cache_resources *@result[:resource]

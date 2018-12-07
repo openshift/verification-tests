@@ -1,6 +1,6 @@
 require 'openshift/cluster_resource'
 
-module BushSlicer
+module VerificationTests
   # represnets an Openshift NetNamespace
   class NetNamespace < ClusterResource
     RESOURCE = 'netnamespaces'

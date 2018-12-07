@@ -1,7 +1,7 @@
 require 'openshift/flakes/image_stream_tag_spec'
 require 'openshift/flakes/image_stream_tag_status'
 
-module BushSlicer
+module VerificationTests
   # represents an OpenShift Image Stream
   class ImageStream < ProjectResource
     RESOURCE = "imagestreams"

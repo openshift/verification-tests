@@ -1,4 +1,4 @@
-= High Level BushSlicer v3 Overview
+= High Level verification-tests v3 Overview
 
 == Knowledge needed to understand this doc
 
@@ -46,7 +46,7 @@ see link:test_case_management.adoc[Test case management].
 
 === Public/Private
 
-In the BushSlicer::PRIVATE dir (see `lib/cucumber.rb`) we can have other classes and configuration that expose internal information or is security sensitive (keys for test services, etc.). We intend to have most of the code open sourced so we keep anything forbidden to public in the PRIVATE dir. It is a separate git internal repo.
+In the VerificationTests::PRIVATE dir (see `lib/cucumber.rb`) we can have other classes and configuration that expose internal information or is security sensitive (keys for test services, etc.). We intend to have most of the code open sourced so we keep anything forbidden to public in the PRIVATE dir. It is a separate git internal repo.
 
 In the beginning of our `env.rb` we have a call to `PRIVATE/env.rb` if it exists. So any private code can be injected in this way, including to substitute DefaultWorld and DefaultManager.
 

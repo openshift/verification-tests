@@ -1,6 +1,6 @@
 require 'yaml'
 
-module BushSlicer
+module VerificationTests
   module Platform
     # class to help operation over node-config.yaml file on the OpenShift nodes
     class NodeConfig

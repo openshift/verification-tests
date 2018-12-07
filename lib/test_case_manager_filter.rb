@@ -1,6 +1,6 @@
 require 'cucumber/core/filter'
 
-module BushSlicer
+module VerificationTests
   # this class lives throughout the whole test execution
   #  it passes filter events to the Test Case Manager
   #  IMPORTANT: needs to run as last filter in the chain because test case

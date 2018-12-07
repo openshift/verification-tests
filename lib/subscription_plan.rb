@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
   class SubscriptionPlan
     attr_reader :id
 

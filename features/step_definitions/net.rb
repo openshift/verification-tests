@@ -56,12 +56,12 @@ When /^I open( secure)? web server via the(?: "(.+?)")? route$/ do |secure, rout
 end
 
 When /^I open web server via the(?: "(.+?)")? url$/ do |url|
-  @result = BushSlicer::Http.get(url: url, cookies: cb.http_cookies)
+  @result = VerificationTests::Http.get(url: url, cookies: cb.http_cookies)
 end
 
 Given /^I download a file from "(.+?)"(?: into the "(.+?)" dir)?$/ do |url, dl_path|
   retries = 3
-  @result = BushSlicer::Http.get(url: url, cookies: cb.http_cookies)
+  @result = VerificationTests::Http.get(url: url, cookies: cb.http_cookies)
   # force failure
   while true
     if @result[:success]
@@ -77,7 +77,7 @@ Given /^I download a file from "(.+?)"(?: into the "(.+?)" dir)?$/ do |url, dl_p
       @result[:abs_path] = File.absolute_path(file_name)
       break
     elsif @result[:exitstatus] >= 500 && retries > 0
-      @result = BushSlicer::Http.get(url: url, cookies: cb.http_cookies)
+      @result = VerificationTests::Http.get(url: url, cookies: cb.http_cookies)
     else
       raise "Failed to download file from #{url} with HTTP status #{@result[:exitstatus]}"
     end
@@ -93,7 +93,7 @@ end
 When /^I download a big file from "(.+?)"$/ do |url|
   file_name = File.basename(URI.parse(url).path)
   File.open(file_name, 'wb') do |file|
-    @result = BushSlicer::Http.get(url: url) do |chunk|
+    @result = VerificationTests::Http.get(url: url) do |chunk|
       file.write chunk
     end
   end
@@ -123,7 +123,7 @@ When /^I perform the HTTP request:$/ do |yaml_request|
   if Symbol == opts[:cookies]
     opts[:cookies] = cb[opts[:cookies]]
   end
-  @result = BushSlicer::Http.request(opts)
+  @result = VerificationTests::Http.request(opts)
   begin
     # only parse it if we are dealing with JSON/YAML return type
     if (['json', 'yaml'].any? { |word| @result[:headers]['content-type'][0].include?(word) })
@@ -140,7 +140,7 @@ When /^I perform (\d+) HTTP requests with concurrency (\d+):$/ do |num, concurre
   opts = YAML.load yaml_request
   opts[:count] = num.to_i
   opts[:concurrency] = concurrency.to_i
-  @result = BushSlicer::Http.flood_count(**opts)
+  @result = VerificationTests::Http.flood_count(**opts)
 end
 
 When /^I perform (\d+) HTTP GET requests with concurrency (\d+) to: (.+)$/ do |num, concurrency, url|
@@ -159,7 +159,7 @@ When /^I wait for the #{QUOTED} TCP server to start accepting connections$/ do |
   host, garbage, port = hostport.rpartition(":")
   port = Integer(port)
 
-  @result = BushSlicer::Common::Net.wait_for_tcp(host: host,
+  @result = VerificationTests::Common::Net.wait_for_tcp(host: host,
                                                 port: port,
                                                 timeout: seconds)
 

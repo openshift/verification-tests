@@ -5,9 +5,9 @@ require 'gherkin/parser'
 require 'gherkin/pickles/compiler'
 require 'pathname'
 
-require 'bushslicer'
+require 'verification-tests'
 
-module BushSlicer
+module VerificationTests
   # @note Used to help parse out feature files using Gherkin 3
   class GherkinParse
     include Common::BaseHelper

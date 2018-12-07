@@ -2,7 +2,7 @@
 
 require 'http'
 
-module BushSlicer
+module VerificationTests
   module PolarShift
     class Request
       include Common::Helper

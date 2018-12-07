@@ -1,10 +1,10 @@
 # should not require 'common'
-# should only include helpers that do NOT load any other BushSlicer classes
+# should only include helpers that do NOT load any other VerificationTests classes
 require 'securerandom'
 require 'find'
 require 'pathname'
 
-module BushSlicer
+module VerificationTests
   module Common
     module BaseHelper
       def to_bool(param)

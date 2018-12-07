@@ -1,6 +1,6 @@
 require 'openshift/pod_replicator'
 
-module BushSlicer
+module VerificationTests
   # represnets an Openshift StatefulSets
   class DaemonSet < PodReplicator
     RESOURCE = "daemonsets"

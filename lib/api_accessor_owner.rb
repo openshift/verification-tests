@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
   module APIAccessorOwner
     # add a token in plain string format to cached tokens
     # @param token [String] the bearer token

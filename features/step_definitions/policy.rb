@@ -50,7 +50,7 @@ Given /^cluster role #{QUOTED} is (added to|removed from) the #{QUOTED} (user|gr
     _add_command = :oadm_add_cluster_role_to_group
     _remove_command = :oadm_remove_cluster_role_from_group
     if which.start_with? "system:"
-      _subject = ::BushSlicer::SystemGroup.new(name: which, env: env)
+      _subject = ::VerificationTests::SystemGroup.new(name: which, env: env)
     else
       _subject = group(which)
     end
@@ -59,7 +59,7 @@ Given /^cluster role #{QUOTED} is (added to|removed from) the #{QUOTED} (user|gr
   when "user", "service account"
     if type == "user"
       if which.start_with? "system:"
-        _subject = ::BushSlicer::SystemUser.new(name: which, env: env)
+        _subject = ::VerificationTests::SystemUser.new(name: which, env: env)
       else
         _subject = user(word_to_num(which), switch: false)
       end
@@ -78,14 +78,14 @@ Given /^cluster role #{QUOTED} is (added to|removed from) the #{QUOTED} (user|gr
 
   case op
   when "added to"
-    if BushSlicer::ClusterRoleBinding.list(user: _admin).any? { |crb| crb.role.name == role && crb.subjects.include?(_subject) }
+    if VerificationTests::ClusterRoleBinding.list(user: _admin).any? { |crb| crb.role.name == role && crb.subjects.include?(_subject) }
       logger.info "#{_subject_name} already has role #{role}"
       next
     end
     _command = _add_command
     _teardown_command = _remove_command
   when "removed from"
-    if BushSlicer::ClusterRoleBinding.list(user: _admin).none? { |crb| crb.role.name == role && crb.subjects.include?(_subject) }
+    if VerificationTests::ClusterRoleBinding.list(user: _admin).none? { |crb| crb.role.name == role && crb.subjects.include?(_subject) }
       logger.info "#{_subject_name} does not have role #{role}"
       next
     end

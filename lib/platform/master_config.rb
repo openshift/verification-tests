@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
   module Platform
     class MasterConfig
       def self.for(service)

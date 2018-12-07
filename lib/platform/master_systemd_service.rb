@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
   module Platform
     class MasterSystemdService < MasterService
       attr_reader :env

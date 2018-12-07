@@ -7,8 +7,8 @@ More info you can find in link:doc/overview.adoc[Overview document].
 === Create local dev environment
 
 . Install git if not installed already, install ruby 2.4+ if not installed
-. git clone git@github.com:openshift/bushslicer.git
-. cd bushslicer
+. git clone git@github.com:openshift/verification-tests.git
+. cd verification-tests
 . tools/install_os_deps.sh # need sudo; you may need to login again to terminal if ruby was installed via rvm during this phase
 . tools/hack_bundle.rb # normal user
 . install OKD or OpenShift Container Platform client tools
@@ -21,12 +21,12 @@ bundle update
 
 === Test scenario execution
 
-Check link:doc/configuration.adoc[Configuring a BushSlicer v3 run]
+Check link:doc/configuration.adoc[Configuring a verification-tests v3 run]
 
 This is an example:
 
 ----
-export BUSHSLICER_DEFAULT_ENVIRONMENT=ose
+export VERIFICATION_TESTS_DEFAULT_ENVIRONMENT=ose
 export OPENSHIFT_ENV_OSE_HOSTS=<host1>:etcd:master:node,<host2>:node,...
 export OPENSHIFT_ENV_OSE_USER_MANAGER_USERS=user1:redhat,user2:redhat
 # execute a whole feature file
@@ -40,14 +40,14 @@ bundle exec cucumber --tags @smoke
 For Origin environment, add the following environment variables:
 
 ----
-export BUSHSLICER_DEFAULT_ENVIRONMENT=origin
+export VERIFICATION_TESTS_DEFAULT_ENVIRONMENT=origin
 export OPENSHIFT_ENV_ORIGIN_HOSTS=<host1>:etcd:master:node,<host2>:node,...
 export OPENSHIFT_ENV_ORIGIN_USER_MANAGER_USERS=user1:redhat,user2:redhat
 ----
 
 You can check which environments are defined in link:config/config.yaml[config/config.yaml].
 
-You could also use the BUSHSLICER_CONFIG variable to override other
+You could also use the VERIFICATION_TESTS_CONFIG variable to override other
 configuration options. Add YAML/JSON into it and it will be merged with
 configuration file.
 

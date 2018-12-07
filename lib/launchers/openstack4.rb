@@ -16,7 +16,7 @@ require 'http'
 require 'net'
 
 # Will be deleted, obsolete code
-module BushSlicer
+module VerificationTests
   # works with OSP4 and OSP7
   # @deprecated Please do not use
   class OpenStack4
@@ -359,7 +359,7 @@ module BushSlicer
           "volume": {
             "availability_zone": null,
             "source_volid": "#{id}",
-            "description": "BushSlicer created volume",
+            "description": "VerificationTests created volume",
             "multiattach ": false,
             "snapshot_id": null,
             "name": "#{name}"
@@ -384,7 +384,7 @@ module BushSlicer
             "size": #{size},
             "availability_zone": null,
             "source_volid": null,
-            "description": "BushSlicer created volume",
+            "description": "VerificationTests created volume",
             "multiattach ": false,
             "snapshot_id": null,
             "name": "#{name}",
@@ -548,7 +548,7 @@ module BushSlicer
     # @param os_opts [Hash] options to pass to [OpenStack::new]
     # @param names [Array<String>] array of names to give to new machines
     # @return [Hash] a hash of name => hostname pairs
-    # TODO: make this return a [Hash] of name => BushSlicer::Host pairs
+    # TODO: make this return a [Hash] of name => VerificationTests::Host pairs
     def launch_instances(names:, **create_opts)
       res = {}
       host_opts = create_opts[:host_opts] || {}
@@ -566,7 +566,7 @@ module BushSlicer
     class Instance
       attr_reader :client
 
-      # @param client [BushSlicer::OpenStack] the client to use for operations
+      # @param client [VerificationTests::OpenStack] the client to use for operations
       # @param name [String] instance name as shown in console; required unless
       #   `spec` is provided
       # @param spec [Hash] the hash describing instance as returned by API
@@ -673,11 +673,11 @@ end
 
 ## Standalone test
 if __FILE__ == $0
-  extend BushSlicer::Common::Helper
+  extend VerificationTests::Common::Helper
   test_res = {}
   conf[:services].each do |name, service|
     if service[:cloud_type] == 'openstack' && service[:ver] == 7 && service[:password]
-      os = BushSlicer::OpenStack4.new(service_name: name)
+      os = VerificationTests::OpenStack4.new(service_name: name)
       res = true
       test_res[name] = res
       begin

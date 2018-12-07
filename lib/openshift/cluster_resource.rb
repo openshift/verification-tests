@@ -2,7 +2,7 @@ require 'yaml'
 
 require_relative 'resource'
 
-module BushSlicer
+module VerificationTests
   # @note represents a Resource / OpenShift API Object
   class ClusterResource < Resource
 
@@ -24,11 +24,11 @@ module BushSlicer
     end
 
     # creates a new OpenShift Cluster Resource from spec
-    # @param by [BushSlicer::APIAccessorOwner, BushSlicer::APIAccessor] the user to create
+    # @param by [VerificationTests::APIAccessorOwner, VerificationTests::APIAccessor] the user to create
     #   Resource as
     # @param spec [String, Hash] the Hash representaion of the API object to
     #   be created or a String path of a JSON/YAML file
-    # @return [BushSlicer::ResultHash]
+    # @return [VerificationTests::ResultHash]
     # @note unify with ProjectResource and remove opts parameter
     def self.create(by:, spec:, **opts)
       if spec.kind_of? String
@@ -84,7 +84,7 @@ module BushSlicer
     end
 
     # @param labels [String, Array<String,String>] labels to filter on, read
-    #   [BushSlicer::Common::BaseHelper#selector_to_label_arr] carefully
+    #   [VerificationTests::Common::BaseHelper#selector_to_label_arr] carefully
     # @param count [Integer] minimum number of resources to wait for
     def self.wait_for_labeled(*labels, count: 1, user:, seconds:)
       wait_for_matching(user: user, seconds: seconds,
@@ -96,7 +96,7 @@ module BushSlicer
 
     # @param count [Integer] minimum number of items to wait for
     # @yield block that selects items by returning true; see [#get_matching]
-    # @return [BushSlicer::ResultHash] with :matching key being array of matched
+    # @return [VerificationTests::ResultHash] with :matching key being array of matched
     #   resource items;
     def self.wait_for_matching(count: 1, user:, seconds:, get_opts: [])
       res = {}
@@ -127,7 +127,7 @@ module BushSlicer
       return res
     end
     # @param labels [String, Array<String,String>] labels to filter on, read
-    #   [BushSlicer::Common::BaseHelper#selector_to_label_arr] carefully
+    #   [VerificationTests::Common::BaseHelper#selector_to_label_arr] carefully
     # @return [Array<ProjectResource>] with :matching key being array of matched
     #   resources
     def self.get_labeled(*labels, user:, result: {}, quiet: false)
@@ -139,7 +139,7 @@ module BushSlicer
       end
     end
     # list resources by a user
-    # @param user [BushSlicer::User] the user we list resources as
+    # @param user [VerificationTests::User] the user we list resources as
     # @param result [ResultHash] can be used to get full result hash from op
     # @param get_opts [Hash, Array] other options to pass down to oc get
     # @return [Array<ClusterResource>]

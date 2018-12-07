@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
   module Platform
     class OpenShiftService
       attr_reader :service, :host, :env

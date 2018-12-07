@@ -1,6 +1,6 @@
 require 'base_helper'
 
-module BushSlicer
+module VerificationTests
   # pls reference to kubernetes doc for more details
   # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.9/#endpointsubset-v1-core
   class EndpointSubset

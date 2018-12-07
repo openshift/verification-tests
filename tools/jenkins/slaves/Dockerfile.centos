@@ -1,13 +1,13 @@
-# The standard name for this image is aosqe/bushslicer-base
+# The standard name for this image is aosqe/verification-tests-base
 
 FROM openshift/jenkins-slave-base-centos7
 
 LABEL vendor="Red Hat inc."
 LABEL maintainer="AOS QE Team"
 
-ADD . $HOME/bushslicer
-RUN [ -d $HOME/bushslicer/private/config/ca ] && \
-    ( cd $HOME/bushslicer/private/config/ca && \
+ADD . $HOME/verification-tests
+RUN [ -d $HOME/verification-tests/private/config/ca ] && \
+    ( cd $HOME/verification-tests/private/config/ca && \
     cp -v *.pem /etc/pki/ca-trust/source/anchors/ && \
     update-ca-trust extract || \
     exit 1 ) || :
@@ -30,8 +30,8 @@ RUN set -x && \
     yum install -y /tmp/epel-release-latest-7.noarch.rpm && \
     mkdir -p $HOME/bin
 
-RUN scl enable rh-ror50 "$HOME/bushslicer/tools/install_os_deps.sh"
-RUN scl enable rh-ror50 $HOME/bushslicer/tools/hack_bundle.rb
+RUN scl enable rh-ror50 "$HOME/verification-tests/tools/install_os_deps.sh"
+RUN scl enable rh-ror50 $HOME/verification-tests/tools/hack_bundle.rb
 
 # -k is a bad option, put certificated under private/config/ca instead
 # be mindful image will be visible if image is made public which is a mild
@@ -40,7 +40,7 @@ RUN scl enable rh-ror50 $HOME/bushslicer/tools/hack_bundle.rb
 
 RUN rpm -qa && \
     yum clean all -y && \
-    rm -rf /var/cache/yum /tmp/* "$HOME"/bushslicer/private* "$HOME"/bushslicer/tierN
+    rm -rf /var/cache/yum /tmp/* "$HOME"/verification-tests/private* "$HOME"/verification-tests/tierN
 
 RUN dbus-uuidgen > /etc/machine-id # e.g. needed for firefox
 RUN chown -R 1001:0 $HOME && chmod -R g+rw $HOME /etc/machine-id
@@ -54,8 +54,8 @@ RUN echo -e '#!/bin/bash\nexec "$@"' > /usr/local/bin/sudo && chmod 755 /usr/loc
 
 USER 1001
 
-# Start in the bushslicer top level directory to run containerized bushslicer tests
-WORKDIR $HOME/bushslicer
+# Start in the verification-tests top level directory to run containerized verification-tests tests
+WORKDIR $HOME/verification-tests
 
 # we need ruby and some gems from ror
 ENTRYPOINT ["/usr/bin/scl", "enable", "rh-git29", "rh-ror50", "--", "/usr/local/bin/run-jnlp-client"]

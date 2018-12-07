@@ -1,7 +1,7 @@
 Given /^There are no PVs with local path #{QUOTED}$/ do | local_path |
   ensure_admin_tagged
 
-  pvs = BushSlicer::PersistentVolume.list(user: admin)
+  pvs = VerificationTests::PersistentVolume.list(user: admin)
   pvs.each { |pv|
     if pv.local_path == local_path
        raise "There is a persistentvolume for local path:#{local_path}"

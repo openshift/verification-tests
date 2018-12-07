@@ -31,7 +31,7 @@ Given /^I store the image stream tag of the#{OPT_QUOTED} image stream latest tag
 
   cb[cb_name] = image_stream.latest_tag_status.tag.from
 
-  unless BushSlicer::ImageStreamTag === cb[cb_name]
+  unless VerificationTests::ImageStreamTag === cb[cb_name]
     raise "step expected to see ImageStreamTag as latest tag in the " \
       "#{image_stream.name} image stream but it was #{cb[cb_name].inspect}"
   end

@@ -3,7 +3,7 @@ require 'openshift/pod_replicator'
 
 require 'openshift/flakes/container_spec'
 
-module BushSlicer
+module VerificationTests
   # represents an OpenShift ReplicationController (rc for short) used for scaling pods
   class ReplicationController < PodReplicator
     RESOURCE = "replicationcontrollers"
@@ -102,7 +102,7 @@ module BushSlicer
                 quiet: quiet)
     end
 
-    # @return [BushSlicer::ResultHash] with :success when ready and desired
+    # @return [VerificationTests::ResultHash] with :success when ready and desired
     #   replicas match and are more than zero
     # @note the complicated logic t oconstruct a result hash is to keep
     #   backward compatibility
@@ -128,7 +128,7 @@ module BushSlicer
       return res
     end
 
-    # @return [BushSlicer::ResultHash]
+    # @return [VerificationTests::ResultHash]
     def replica_count_match?(user:, state:, replica_count:, quiet: false)
       res = describe(user, quiet: quiet)
       if res[:success]

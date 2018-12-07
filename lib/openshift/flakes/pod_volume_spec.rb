@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
   class PodVolumeSpec
     attr_reader :raw, :name, :owner
     private :raw, :owner

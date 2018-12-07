@@ -1,6 +1,6 @@
 require 'base_helper'
 
-module BushSlicer
+module VerificationTests
   # pls reference to kubernetes doc for more details
   # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.9/#objectreference-v1-core
   # targetRef is a sub-component of a endpoint address
@@ -58,7 +58,7 @@ module BushSlicer
       def resource(referer)
         return @resource if @resource
 
-        clazz = Object.const_get("::BushSlicer::#{kind}")
+        clazz = Object.const_get("::VerificationTests::#{kind}")
         @resource = clazz.from_reference(self, referer)
         return @resource
       end

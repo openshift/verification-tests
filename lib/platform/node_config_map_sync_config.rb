@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
   module Platform
     # handles the fact node config is synced with a config map in 3.10
     class NodeConfigMapSyncConfig

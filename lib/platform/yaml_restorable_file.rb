@@ -1,6 +1,6 @@
 require 'yaml'
 
-module BushSlicer
+module VerificationTests
   module Platform
     class YAMLRestorableFile < RestorableFile
       def as_hash
@@ -16,7 +16,7 @@ module BushSlicer
         else
           raise ArgumentError, "unknown merge yaml merge data #{yaml.inspect}"
         end
-        update(BushSlicer::Collections.deep_merge(as_hash, yaml).to_yaml)
+        update(VerificationTests::Collections.deep_merge(as_hash, yaml).to_yaml)
       end
     end
   end

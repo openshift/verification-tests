@@ -1,6 +1,6 @@
 require 'openshift/project_resource'
 
-module BushSlicer
+module VerificationTests
   # represents an OpenShift ReplicationController (rc for short) used for scaling pods
   class Job < ProjectResource
     RESOURCE = "jobs"
@@ -18,7 +18,7 @@ module BushSlicer
       return self # mainly to help ::from_api_object
     end
 
-    # @return [BushSlicer::ResultHash] with :success depending on
+    # @return [VerificationTests::ResultHash] with :success depending on
     #   status['replicas'] == spec['replicas']
     # @note we also need to check that the spec.replicas is > 0
     def ready?(user:, quiet: false, cached: false)

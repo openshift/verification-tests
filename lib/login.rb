@@ -4,7 +4,7 @@ require 'uri'
 
 require 'http'
 
-module BushSlicer
+module VerificationTests
   # this file hosts necessary logic to login into OpenShift via username and
   # password
   module LoginIncl
@@ -44,11 +44,11 @@ module BushSlicer
     #   password
     # @param [String] login_url the address where we are directed to log in
     # @param [String] user the user to get a token for
-    # @return [BushSlicer::ResultHash] (:token key should be set on success)
+    # @return [VerificationTests::ResultHash] (:token key should be set on success)
     def web_bearer_token_obtain(user:, password:, login_url:)
       obtain_time = Time.now
 
-      res = BushSlicer::Http.http_request(method: :get, url: login_url)
+      res = VerificationTests::Http.http_request(method: :get, url: login_url)
       return res unless res[:success]
 
       cookies = res[:cookies]
@@ -61,7 +61,7 @@ module BushSlicer
         return res
       end
 
-      res = BushSlicer::Http.http_request(method: :post, url: login_action, cookies: cookies, payload: {username: user, password: password})
+      res = VerificationTests::Http.http_request(method: :post, url: login_action, cookies: cookies, payload: {username: user, password: password})
 
       if res[:exitstatus] == 302
         redir302 = res[:headers]["location"].first
@@ -75,7 +75,7 @@ module BushSlicer
           # referer: login_action
         }
 
-        res = BushSlicer::Http.http_request(method: :get, url: redir302, cookies: cookies, headers: headers)
+        res = VerificationTests::Http.http_request(method: :get, url: redir302, cookies: cookies, headers: headers)
       end
 
       return res unless res[:success]
@@ -95,7 +95,7 @@ module BushSlicer
     # @param [String] server_url e.g. "https://master.cluster.local:8443"
     # @param [String] user the username to get a token for
     # @param [String] password
-    # @return [BushSlicer::ResultHash]
+    # @return [VerificationTests::ResultHash]
     # @note curl -u joe -kv -H "X-CSRF-Token: xxx" 'https://master.cluster.local:8443/oauth/authorize?client_id=openshift-challenging-client&response_type=token'
     def oauth_bearer_token_challenge(server_url:, user:, password:)
       # :headers => {'X-CSRF-Token' => 'xx'} seems not needed

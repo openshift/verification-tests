@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
   module Platform
     class AggregationService
       attr_reader :services
@@ -10,19 +10,19 @@ module BushSlicer
       end
 
       def start(**opts)
-        BushSlicer::ResultHash.aggregate_results(services.map(&:start))
+        VerificationTests::ResultHash.aggregate_results(services.map(&:start))
       end
 
       def stop(**opts)
-        BushSlicer::ResultHash.aggregate_results(services.reverse_each.map(&:stop))
+        VerificationTests::ResultHash.aggregate_results(services.reverse_each.map(&:stop))
       end
 
       def restart(**opts)
-        BushSlicer::ResultHash.aggregate_results services.map { |s|
+        VerificationTests::ResultHash.aggregate_results services.map { |s|
           if s.respond_to? :restart
             s.restart
           else
-            BushSlicer::ResultHash.aggregate_results([s.stop, s.start])
+            VerificationTests::ResultHash.aggregate_results([s.stop, s.start])
           end
         }
       end

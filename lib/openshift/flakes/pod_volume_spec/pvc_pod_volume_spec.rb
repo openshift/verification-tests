@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
   class PVCPodVolumeSpec < PodVolumeSpec
     TYPE = "persistentVolumeClaim"
 

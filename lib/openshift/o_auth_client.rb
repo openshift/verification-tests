@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
   class OAuthClient < ClusterResource
     RESOURCE = "oauthclients"
     # pls refer https://github.com/openshift-qe/output_refrences/tree/master/oauthclient for output example

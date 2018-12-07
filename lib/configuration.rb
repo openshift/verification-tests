@@ -1,11 +1,11 @@
 require 'yaml'
 
-require 'bushslicer'
+require 'verification-tests'
 require 'collections'
 # should not require 'common'
 
-module BushSlicer
-  # @note bushslicer configuration logic
+module VerificationTests
+  # @note verification-tests configuration logic
   class Configuration
 
     def initialize(opts = {})
@@ -17,7 +17,7 @@ module BushSlicer
           "/config/config.yaml",
           "/config.yaml"
         ].each { |priv_config|
-          file = File.expand_path(BushSlicer::PRIVATE_DIR + priv_config)
+          file = File.expand_path(VerificationTests::PRIVATE_DIR + priv_config)
           opts[:files] << file if File.exist?(file)
         }
       end
@@ -39,8 +39,8 @@ module BushSlicer
       raw_configs.each { |c| Collections.deep_merge!(@raw_config, c) }
 
       # merge config from environment if present
-      if ENV["BUSHSLICER_CONFIG"] && !ENV["BUSHSLICER_CONFIG"].empty?
-        Collections.deep_merge!(@raw_config, YAML.load(ENV["BUSHSLICER_CONFIG"]))
+      if ENV["VERIFICATION_TESTS_CONFIG"] && !ENV["VERIFICATION_TESTS_CONFIG"].empty?
+        Collections.deep_merge!(@raw_config, YAML.load(ENV["VERIFICATION_TESTS_CONFIG"]))
       end
 
       Collections.deep_map_hash!(@raw_config) { |k, v| [k.to_sym, v] }
@@ -56,11 +56,11 @@ module BushSlicer
     # logic to overrige configuration from environment variables
     def env_overrides(conf)
       global_overrides = {
-        debug_in_after_hook: "BUSHSLICER_DEBUG_AFTER_FAIL",
-        debug_in_after_hook_always: "BUSHSLICER_DEBUG_AFTER_HOOK",
-        debug_attacher_timeout: "BUSHSLICER_DEBUG_ATTACHER_TIMEOUT",
-        debug_failed_steps: "BUSHSLICER_DEBUG_FAILSTEP",
-        default_environment: "BUSHSLICER_DEFAULT_ENVIRONMENT"
+        debug_in_after_hook: "VERIFICATION_TESTS_DEBUG_AFTER_FAIL",
+        debug_in_after_hook_always: "VERIFICATION_TESTS_DEBUG_AFTER_HOOK",
+        debug_attacher_timeout: "VERIFICATION_TESTS_DEBUG_ATTACHER_TIMEOUT",
+        debug_failed_steps: "VERIFICATION_TESTS_DEBUG_FAILSTEP",
+        default_environment: "VERIFICATION_TESTS_DEFAULT_ENVIRONMENT"
       }
 
       # if envvariable is set, then override the value where "false" is false

@@ -45,7 +45,7 @@ end
 
 Given /^I wait until the latest rc of internal registry is ready$/ do
   ensure_admin_tagged
-  _rc = BushSlicer::ReplicationController.get_labeled(
+  _rc = VerificationTests::ReplicationController.get_labeled(
     "docker-registry",
     user: admin,
     project: project("default", switch: false)

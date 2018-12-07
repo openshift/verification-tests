@@ -1,6 +1,6 @@
 Given /^I open accountant console in a browser$/ do
-  base_rules = BushSlicer::WebConsoleExecutor::RULES_DIR + "/base/"
-  snippets_dir = BushSlicer::WebConsoleExecutor::SNIPPETS_DIR
+  base_rules = VerificationTests::WebConsoleExecutor::RULES_DIR + "/base/"
+  snippets_dir = VerificationTests::WebConsoleExecutor::SNIPPETS_DIR
 
   step "evaluation of `env.web_console_url[/(?<=\\.).*(?=\.openshift)/]` is stored in the :acc_console_url clipboard"
   step "I have a browser with:", table(%{

@@ -2,7 +2,7 @@ require 'common'
 require 'rest_openshift'
 require 'rest_kubernetes'
 
-module BushSlicer
+module VerificationTests
   module Rest
     class RequestExecutor
       extend Common::Helper
@@ -86,7 +86,7 @@ module BushSlicer
       # @param [Hash] base_opts the base HTTP options relevant to server,
       #   authentication, and other things common between requests; these opts
       #   represent options in the format accepted but the
-      #   [BushSlicer::Http#http_request] method; but should not contain :params
+      #   [VerificationTests::Http#http_request] method; but should not contain :params
       #   and :payload
       # @param [Hash] req_opts the request options as understood by the
       #   specific `req` method to enrich base_opts for the actual API call

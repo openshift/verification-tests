@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
   # represents a trigger structure inside a deployment/build config
   class ImageRef
     attr_reader :uri, :hash_type, :hash_value, :name

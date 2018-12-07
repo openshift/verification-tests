@@ -1,6 +1,6 @@
 require 'openshift/project_resource'
 
-module BushSlicer
+module VerificationTests
   # represents an OpenShift Image Stream Tag
   class ImageStreamTag < ProjectResource
     RESOURCE = "imagestreamtags"

@@ -1,8 +1,8 @@
 require 'base_helper'
-module BushSlicer
+module VerificationTests
 
   # this class should help with parsing endpoint address element
-  #   [3] pry(#<BushSlicer::Endpoints>)> addrs[0]
+  #   [3] pry(#<VerificationTests::Endpoints>)> addrs[0]
   # => {
   #          "ip" => "10.10.10.101",
   #    "nodeName" => "myhost.example.com",

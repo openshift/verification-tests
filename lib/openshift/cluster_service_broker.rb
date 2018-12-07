@@ -1,6 +1,6 @@
 require 'openshift/cluster_resource'
 
-module BushSlicer
+module VerificationTests
   # @note represents an OpenShift environment Cluster Service Broker
   class ClusterServiceBroker < ClusterResource
     RESOURCE = "clusterservicebrokers"
@@ -34,7 +34,7 @@ module BushSlicer
       return rr.dig("spec", "url")
     end
 
-    # @return [BushSlicer::ResultHash] with :success depending on
+    # @return [VerificationTests::ResultHash] with :success depending on
     #   condition type=Ready and status=True
     def ready?(user:, quiet: false, cached: false)
       if cached && props[:raw]

@@ -1,6 +1,6 @@
 require 'openshift/project_resource'
 
-module BushSlicer
+module VerificationTests
   # represents an OpenShift build
   class Build < ProjectResource
     RESOURCE = "builds"
@@ -9,28 +9,28 @@ module BushSlicer
     STATUSES = [:complete, :running, :pending, :new, :failed, :error, :cancelled]
     TERMINAL_STATUSES = [:complete, :failed, :cancelled, :error]
 
-    # @return [BushSlicer::ResultHash] :success if build completes regardless of
+    # @return [VerificationTests::ResultHash] :success if build completes regardless of
     #   completion status
     def finished?(user:, quiet: false)
       status?(user: user, status: TERMINAL_STATUSES, quiet: quiet)
     end
 
-    # @return [BushSlicer::ResultHash] with :success depending on status
+    # @return [VerificationTests::ResultHash] with :success depending on status
     def completed?(user:)
       status?(user: user, status: :complete)
     end
 
-    # @return [BushSlicer::ResultHash] with :success depending on status
+    # @return [VerificationTests::ResultHash] with :success depending on status
     def failed?(user:)
       status?(user: user, status: :failed)
     end
 
-    # @return [BushSlicer::ResultHash] with :success depending on status
+    # @return [VerificationTests::ResultHash] with :success depending on status
     def running?(user:)
       status?(user: user, status: :running)
     end
 
-    # @return [BushSlicer::ResultHash] with :success true if we've eventually got
+    # @return [VerificationTests::ResultHash] with :success true if we've eventually got
     #   the build finished regardless of status, false if build never started or
     #   still running; the result hash is from last executed get call
     def wait_till_finished(user, seconds)
@@ -54,13 +54,13 @@ module BushSlicer
       return res
     end
 
-    # @return [BushSlicer::ResultHash] with :success true if we've eventually got
+    # @return [VerificationTests::ResultHash] with :success true if we've eventually got
     #   the build completed; the result hash is from last executed get call
     def wait_till_completed(user, seconds)
       wait_till_status(:complete, user, seconds)
     end
 
-    # @return [BushSlicer::ResultHash] with :success true if we've eventually got
+    # @return [VerificationTests::ResultHash] with :success true if we've eventually got
     #   the build failed; the result hash is from last executed get call
     def wait_till_failed(user, seconds)
       wait_till_status(:failed, user, seconds)

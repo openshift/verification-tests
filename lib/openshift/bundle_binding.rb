@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
 
   class BundleBinding < ProjectResource
     RESOURCE = "bundlebindings"

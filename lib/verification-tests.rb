@@ -6,7 +6,7 @@ require 'socket'
 require_relative 'error'
 
 # @note put only very base things here, do not use for configuration settings
-module BushSlicer
+module VerificationTests
   # autoload to avoid too much require statements and speed-up load times
   autoload :Dynect, 'launchers/dyn/dynect'
   autoload :Alicloud, 'launchers/alicloud'
@@ -29,7 +29,7 @@ module BushSlicer
   autoload :DockerImage, "openshift/flakes/docker_image"
 
   HOME = File.expand_path(__FILE__ + "/../..")
-  PRIVATE_DIR = ENV['BUSHSLICER_PRIVATE_DIR'] || File.expand_path(HOME + "/private")
+  PRIVATE_DIR = ENV['VERIFICATION_TESTS_PRIVATE_DIR'] || File.expand_path(HOME + "/private")
   HOSTNAME = Socket.gethostname.freeze
   LOCAL_USER = Etc.getlogin.freeze
 

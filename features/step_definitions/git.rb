@@ -6,7 +6,7 @@ require 'uri'
 # @param [String] dir_path Directory path
 # @note Clones the remote repository
 When /^I git clone the repo #{QUOTED}(?: to #{QUOTED})?$/ do |repo_url, dir_path|
-  git = BushSlicer::Git.new(uri: repo_url, dir: dir_path)
+  git = VerificationTests::Git.new(uri: repo_url, dir: dir_path)
   git.clone
 end
 
@@ -28,7 +28,7 @@ And /^I get the latest git commit id from repo "([^"]+)"$/ do | spec |
     uri = nil
     dir = spec
   end
-  git = BushSlicer::Git.new(uri: uri, dir: dir)
+  git = VerificationTests::Git.new(uri: uri, dir: dir)
   cb[:git_commit_id] = git.get_latest_commit_id
 end
 # @param [String] repo_url git repo that we want to commit
@@ -41,7 +41,7 @@ When /^I commit all changes in repo "([^"]*)" with message "([^"]+)"$/ do | spec
     uri = nil
     dir = spec
   end
-  git = BushSlicer::Git.new(uri: uri, dir: dir)
+  git = VerificationTests::Git.new(uri: uri, dir: dir)
   git.add(files:nil, :all => true)
   git.commit(:msg => message)
 end
@@ -53,7 +53,7 @@ Given /^I remove the remote repository "([^"]*)" from the "([^"]+)" repo$/ do |r
     uri = nil
     dir = spec
   end
-  git = BushSlicer::Git.new(uri: uri, dir: dir)
+  git = VerificationTests::Git.new(uri: uri, dir: dir)
   git.remove_remote(remote)
 end
 
@@ -71,6 +71,6 @@ Given /^I set local git global config with:$/ do |table|
     teardown_annotate_last annotation
   end
 
-  git = BushSlicer::Git.new(dir: localhost.workdir)
+  git = VerificationTests::Git.new(dir: localhost.workdir)
   git.set_global_config(opts_array_to_hash(table.raw, sym_mode: false))
 end

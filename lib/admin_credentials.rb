@@ -2,7 +2,7 @@ require 'base64'
 require 'openssl'
 require 'yaml'
 
-module BushSlicer
+module VerificationTests
   class MasterOsAdminCredentials
     include Common::Helper
 

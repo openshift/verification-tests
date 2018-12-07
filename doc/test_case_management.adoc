@@ -4,7 +4,7 @@
 
 == Overview
 
-BushSlicer has a feature to use an external test case manager for cases to be run and reporting of status and test artifacts. This is achieved by the collaboration of the following classes:
+verification-tests has a feature to use an external test case manager for cases to be run and reporting of status and test artifacts. This is achieved by the collaboration of the following classes:
 
 * TestCaseManagerFilter - this is a http://www.rubydoc.info/github/cucumber/cucumber-ruby-core/Cucumber/Core/Filter[cucumber filter] that would ask actual test case manager if a test case is to be run and inform test case manager for events like begin/end execution of scenario. It needs to be the last Cucumber filter, otherwise operation of the whole system will be compromised.
 * CucuFormatter - custom cucumber formatter that creates HTML log files and accumulates test artifacts (TBD); also accepts requests to produce scenario result html file for attaching to test case by the test case manager
@@ -20,7 +20,7 @@ Selection of test case manager is done by inserting a filter in the Cucumber fil
 
 Filter is usually inserted in Cucumber `AfterConfiguration`. We do it with `features/support/env.rb`. But in fact `env.rb` is delegating this to `Manager#init_test_case_manager` method inside `lib/manager.rb`.
 
-Selection of manager is based on `BUSHSLICER_TEST_CASE_MANAGER` env variable or the `test_case_manager` global configuration option. If we have `BUSHSLICER_TEST_CASE_MANAGER=foo`, then optional class `foo_tc_manager` is loaded and used as the manager (see `Configuration#get_optional_class_instance`).
+Selection of manager is based on `VERIFICATION_TESTS_TEST_CASE_MANAGER` env variable or the `test_case_manager` global configuration option. If we have `VERIFICATION_TESTS_TEST_CASE_MANAGER=foo`, then optional class `foo_tc_manager` is loaded and used as the manager (see `Configuration#get_optional_class_instance`).
 
 Look at the following section for how exactly we setup optional classes for TCMS and Polarion. Basically inlcude path, class name and options are provided in the configuration file. Then a profile in `config/cucumber.yml` is created for easier invoking the desired manager.
 
@@ -52,17 +52,17 @@ Manager setup for Polarshift can be seen in config/config.yaml
 optional_classes:
   polarshift_tc_manager:
     include_path: test_case_manager
-    class: BushSlicer::TestCaseManager
+    class: VerificationTests::TestCaseManager
     opts:
-      test_suite_class: BushSlicer::PolarShift::TestSuite
+      test_suite_class: VerificationTests::PolarShift::TestSuite
       test_suite_opts: {}
 ----
 
-You can see how we select the generic `TestCaseManager` class and initialize it with options to create an instance of `BushSlicer::PolarShift::TestSuite` class for handling PolarShift specific interactions.
+You can see how we select the generic `TestCaseManager` class and initialize it with options to create an instance of `VerificationTests::PolarShift::TestSuite` class for handling PolarShift specific interactions.
 
 === PolarShift loading and configuration
 
-`PolarShift` module and classes are setup for autoloading by `autoload :PolarShift, "polarshift/autoload"` line in `lib/bushslicer.rb`.
+`PolarShift` module and classes are setup for autoloading by `autoload :PolarShift, "polarshift/autoload"` line in `lib/verification-tests.rb`.
 You can then see how autoloading of the rest of the PolarShift classes is setup in `lib/polarshift/autoload.rb`. Some of them use regular `require` though.
 
 PolarShift logic is split into two parts - low-level requests and test management object model.
@@ -124,7 +124,7 @@ services:
     ca_path: config/ca # you can use ca_file: as well or none for insecure
 ----
 
-`ca_path` is in the format of openssl ca_path directory. The path or file specified can be absolute or relative. When relative, it is searched for in the `PRIVATE` dir, user home dir or BushSlicer::HOME dir.
+`ca_path` is in the format of openssl ca_path directory. The path or file specified can be absolute or relative. When relative, it is searched for in the `PRIVATE` dir, user home dir or VerificationTests::HOME dir.
 
 Only HTTP basic auth is supported by xmlrpc client. User/password pair can be supplied wither through `user` adn `password` configuration options, or using environment variables `TCMS_USER`, `TCMS_PASSWORD`. In absence of the above, user is asked for them on the console prompt. The latter method is most secure but not possible with jenkins and cron test runs.
 

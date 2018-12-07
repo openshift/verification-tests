@@ -1,6 +1,6 @@
 require 'base_helper'
 
-module BushSlicer
+module VerificationTests
 
   # this class should help with parsing endpoint port element
   class EndpointPort

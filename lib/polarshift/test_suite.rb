@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module BushSlicer
+module VerificationTests
   module PolarShift
     class TestSuite
       attr_reader :opts, :request, :test_run

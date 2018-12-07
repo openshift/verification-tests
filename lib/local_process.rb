@@ -1,6 +1,6 @@
 require 'common'
 
-module BushSlicer
+module VerificationTests
   # handle lifecycle of local spawned process and it's IO
   # IO is handled in the most simple way - using a separate thread for each
   #   stream. That can be improved in the future using select over all processes

@@ -4,7 +4,7 @@ require 'common'
 require 'collections'
 require 'http'
 
-module BushSlicer
+module VerificationTests
   # let you operate a git repo
   class OwnThat
     include Common::Helper

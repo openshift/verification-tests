@@ -8,7 +8,7 @@ end
 require_relative 'openstack4'
 require_relative 'openstack10'
 
-module BushSlicer
+module VerificationTests
   class OpenStack
     extend Common::Helper
 
@@ -51,11 +51,11 @@ end
 
 ## Standalone test
 if __FILE__ == $0
-  extend BushSlicer::Common::Helper
+  extend VerificationTests::Common::Helper
   test_res = {}
   conf[:services].each do |name, service|
     if service[:cloud_type] == 'openstack' && service[:password]
-      os = BushSlicer::OpenStack.instance(service_name: name)
+      os = VerificationTests::OpenStack.instance(service_name: name)
       res = true
       test_res[name] = res
       begin

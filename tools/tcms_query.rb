@@ -191,7 +191,7 @@ def report_query_result(options)
 
   query_file = options.query
   params = YAML.load_file(query_file)
-  params_hash = BushSlicer::Collections.hash_symkeys(params['filters'])
+  params_hash = VerificationTests::Collections.hash_symkeys(params['filters'])
 
   # translate tag names into ids
   if params_hash[:tag__in]
@@ -242,8 +242,8 @@ def update_notes(options)
   tcms.update_testcases(cases, {"notes" => notes})
 end
 
-def get_bushslicer_home
-  ENV['BUSHSLICER_HOME'] || File.dirname(File.dirname(__FILE__))
+def get_verification_tests_home
+  ENV['VERIFICATION_TESTS_HOME'] || File.dirname(File.dirname(__FILE__))
 end
 
 def sync_tags(tcms)
@@ -300,8 +300,8 @@ def update_script(options)
   polarion_arg_field = nil
   tags = []
 
-  gparser = BushSlicer::GherkinParse.new
-  file_contents = gparser.parse_feature(File.join(get_bushslicer_home, path))
+  gparser = VerificationTests::GherkinParse.new
+  file_contents = gparser.parse_feature(File.join(get_verification_tests_home, path))
   #Iterate over each scenario in a file
   # XXX for gherkin 4.0  or greater, the hash structures have changed and not
   # backward compatible
@@ -604,10 +604,10 @@ if __FILE__ == $0
       options.create_run=true
     end
   end.parse!
-  tcms = BushSlicer::TCMS.new(options.to_h)
+  tcms = VerificationTests::TCMS.new(options.to_h)
   options.tcms = tcms
   if options.create_jira
-    jira = BushSlicer::Jira.new(options.to_h)
+    jira = VerificationTests::Jira.new(options.to_h)
     options.jira = jira
   end
   cases = []

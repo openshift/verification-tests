@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
   class VolumeSnapshot < ProjectResource
     RESOURCE = "volumesnapshots"
 
@@ -7,7 +7,7 @@ module BushSlicer
       rr.dig('spec', 'snapshotDataName')
     end
 
-    # @return [BushSlicer::ResultHash] with :success depending on
+    # @return [VerificationTests::ResultHash] with :success depending on
     #   condition type=Ready and status=True
     def ready?(user:, quiet: false, cached: false)
       if cached && props[:raw]

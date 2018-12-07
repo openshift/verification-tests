@@ -6,7 +6,7 @@ end
 
 Given /^I have a project$/ do
   # system projects should not be selected by default
-  sys_projects = BushSlicer::Project::SYSTEM_PROJECTS
+  sys_projects = VerificationTests::Project::SYSTEM_PROJECTS
 
   project = @projects.reverse.find {|p|
     !sys_projects.include?(p.name) &&
@@ -36,7 +36,7 @@ end
 
 # try to create a new project with current user
 When /^I create a new project(?: via (.*?))?$/ do |via|
-  @result = BushSlicer::Project.create(by: user, name: rand_str(5, :dns), _via: (via.to_sym if via))
+  @result = VerificationTests::Project.create(by: user, name: rand_str(5, :dns), _via: (via.to_sym if via))
   if @result[:success]
     @projects << @result[:project]
     @result = @result[:project].wait_to_be_created(user)
@@ -56,7 +56,7 @@ end
 # https://stackoverflow.com/questions/33827789/self-signed-certificate-dnsname-components-must-begin-with-a-letter
 # https://bugs.openjdk.java.net/browse/JDK-8054380
 Given /^I create a project with non-leading digit name$/ do
-  @result = BushSlicer::Project.create(by: user, name: rand_str(5, :dns952))
+  @result = VerificationTests::Project.create(by: user, name: rand_str(5, :dns952))
   if @result[:success]
     @projects << @result[:project]
     @result = @result[:project].wait_to_be_created(user)
@@ -80,7 +80,7 @@ end
 # create a new project with user options,either via web or cli
 When /^I create a project via (.+?) with:$/ do |via, table|
   opts = opts_array_to_hash(table.raw)
-  @result = BushSlicer::Project.create(by: user, name: rand_str(5, :dns), _via: (via.to_sym if via), **opts)
+  @result = VerificationTests::Project.create(by: user, name: rand_str(5, :dns), _via: (via.to_sym if via), **opts)
   if @result[:success]
     @projects << @result[:project]
     @result = @result[:project].wait_to_be_created(user)
@@ -96,7 +96,7 @@ end
 
 Given /^I use the "(.+?)" project$/ do |project_name|
   # this would find project in cache and move it up the stack
-  # or create a new BushSlicer::Project object and put it on top of stack
+  # or create a new VerificationTests::Project object and put it on top of stack
   project(project_name)
 
   # setup cli to have it as default project
@@ -246,7 +246,7 @@ When /^I get project ([-a-zA-Z_]+) named #{QUOTED}(?: as (YAML|JSON))?$/ do |res
     # this is a hack but it is needed for backward compatibility and it is
     # too ugly to allow #get accept format as a parameter
     @result[:response] = JSON.pretty_generate(
-      BushSlicer::Resource.struct_iso8601_time(@result[:parsed])
+      VerificationTests::Resource.struct_iso8601_time(@result[:parsed])
     )
   end
 end
@@ -266,7 +266,7 @@ When /^I get project ([-a-zA-Z_]+) as (YAML|JSON)$/ do |type, format|
   @result = {}
   clazz = resource_class(type)
 
-  unless BushSlicer::ProjectResource > clazz
+  unless VerificationTests::ProjectResource > clazz
     raise "#{clazz} is not a project resource"
   end
 

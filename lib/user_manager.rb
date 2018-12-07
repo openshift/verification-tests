@@ -4,7 +4,7 @@ require 'api_accessor'
 require 'common'
 require 'openshift/user'
 
-module BushSlicer
+module VerificationTests
   class UserManager
     include Common::Helper
     attr_reader :env, :opts

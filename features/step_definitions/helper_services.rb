@@ -154,7 +154,7 @@ Given /^I have LDAP service in my project$/ do
     step %Q/the step should succeed/
     step %Q/I wait until replicationController "ldapserver-1" is ready/
 
-    cb.ldap_pod = BushSlicer::Pod.get_labeled(["run", "ldapserver"], user: user, project: project).first
+    cb.ldap_pod = VerificationTests::Pod.get_labeled(["run", "ldapserver"], user: user, project: project).first
     cb.ldap_pod_name = cb.ldap_pod.name
     cache_pods cb.ldap_pod
 
@@ -187,7 +187,7 @@ Given /^I have an ssh-git service in the(?: "([^ ]+?)")? project$/ do |project_n
   raise "cannot create git-server service" unless @result[:success]
 
   # wait to become available
-  @result = BushSlicer::Pod.wait_for_labeled("deployment-config=git-server",
+  @result = VerificationTests::Pod.wait_for_labeled("deployment-config=git-server",
                                             "run=git-server",
                                             count: 1,
                                             user: user,
@@ -200,7 +200,7 @@ Given /^I have an ssh-git service in the(?: "([^ ]+?)")? project$/ do |project_n
 
   # Setup SSH key
   cache_pods *@result[:matching]
-  ssh_key = BushSlicer::SSH::Helper.gen_rsa_key
+  ssh_key = VerificationTests::SSH::Helper.gen_rsa_key
   @result = pod.exec(
     "bash", "-c",
     "echo '#{ssh_key.to_pub_key_string}' >> /home/git/.ssh/authorized_keys",
@@ -255,7 +255,7 @@ Given /^I have an http-git service in the(?: "([^ ]+?)")? project$/ do |project_
   cache_pods *@result[:matching]
   unless pod.name.start_with? "git-"
     raise("looks like underlying implementation changed and service ready" +
-      "status does not return matching pods anymore; report BushSlicer bug")
+      "status does not return matching pods anymore; report VerificationTests bug")
   end
 
   # set some clipboards
@@ -276,7 +276,7 @@ Given /^I have a git client pod in the#{OPT_QUOTED} project$/ do |project_name|
   @result = user.cli_exec(:run, name: "git-client", image: "openshift/origin-gitserver", env: 'GIT_HOME=/var/lib/git')
   raise "could not create the git client pod" unless @result[:success]
 
-  @result = BushSlicer::Pod.wait_for_labeled("run=git-client", count: 1,
+  @result = VerificationTests::Pod.wait_for_labeled("run=git-client", count: 1,
                                             user: user, project: project, seconds: 300)
   raise "#{pod.name} pod did not become ready" unless @result[:success]
 
@@ -354,7 +354,7 @@ Given /^I have a header test service in the#{OPT_QUOTED} project$/ do |project_n
   cb.header_test_route = route("header-test-insecure",
                                service("header-test-insecure"))
 
-  @result = BushSlicer::Pod.wait_for_labeled(
+  @result = VerificationTests::Pod.wait_for_labeled(
     "deploymentconfig=header-test",
     count: 1, user: user, project: project, seconds: 300)
   raise "timeout waiting for header test pod to start" unless @result[:success]
@@ -583,7 +583,7 @@ end
 
 Given /^I have a registry in my project$/ do
   ensure_admin_tagged
-  if BushSlicer::Project::SYSTEM_PROJECTS.include?(project(generate: false).name)
+  if VerificationTests::Project::SYSTEM_PROJECTS.include?(project(generate: false).name)
     raise "I refuse create registry in a system project: #{project.name}"
   end
   @result = admin.cli_exec(:new_app, docker_image: "registry:2.5.1", namespace: project.name)
@@ -601,7 +601,7 @@ end
 
 Given /^I have a registry with htpasswd authentication enabled in my project$/ do
   ensure_admin_tagged
-  if BushSlicer::Project::SYSTEM_PROJECTS.include?(project(generate: false).name)
+  if VerificationTests::Project::SYSTEM_PROJECTS.include?(project(generate: false).name)
     raise "I refuse create registry in a system project: #{project.name}"
   end
   @result = admin.cli_exec(:new_app, docker_image: "registry:2", namespace: project.name)

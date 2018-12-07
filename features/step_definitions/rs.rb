@@ -20,7 +20,7 @@ end
 Given /^number of replicas of#{OPT_QUOTED} replica set becomes:$/ do |name, table|
   options = hash_symkeys(table.rows_hash)
 
-  int_keys = %i[seconds] + BushSlicer::ReplicaSet::REPLICA_COUNTERS.keys
+  int_keys = %i[seconds] + VerificationTests::ReplicaSet::REPLICA_COUNTERS.keys
   int_options = options.slice(*int_keys)
   int_options.transform_values!(&:to_i)
   int_options[:seconds] ||= 5 * 60

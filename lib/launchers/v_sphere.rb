@@ -8,7 +8,7 @@ end
 require 'collections'
 require 'common'
 
-module BushSlicer
+module VerificationTests
   class VSphere
     include Common::Helper
     include CollectionsIncl
@@ -32,8 +32,8 @@ module BushSlicer
     # @param user_data [String] not implemented yet
     # @param instance_opts [Hash] additional machines launch options
     # @param host_opts [Hash] additional machine access options, should be
-    #   options valid for use in [BushSlicer::Host] constructor
-    # @return [Array] of [RbVmomi::VIM::VirtualMachine, BushSlicer::Host] pairs
+    #   options valid for use in [VerificationTests::Host] constructor
+    # @return [Array] of [RbVmomi::VIM::VirtualMachine, VerificationTests::Host] pairs
     def create_instance( names,
                          user_data: nil,
                          create_opts: {},
@@ -204,7 +204,7 @@ module BushSlicer
         return ip if ip
       }
 
-      raise BushSlicer::TimeoutError, "VM #{vmname} did not get an IP within " \
+      raise VerificationTests::TimeoutError, "VM #{vmname} did not get an IP within " \
         "#{timeout} seconds"
     rescue RbVmomi::Fault => e
       if e.message.start_with? "NotAuthenticated:"
@@ -216,7 +216,7 @@ module BushSlicer
     end
 
     # @param vm [RbVmomi::VIM::VirtualMachine] vm object
-    # @return [BushSlicer::Host]
+    # @return [VerificationTests::Host]
     def get_vm_host(vm, host_opts = {})
       host_opts = (config[:host_connect_opts] || {}).merge host_opts
       host_opts[:cloud_instance] = vm
@@ -401,11 +401,11 @@ end
 
 ## Standalone test
 if __FILE__ == $0
-  extend BushSlicer::Common::Helper
+  extend VerificationTests::Common::Helper
   test_res = {}
   conf[:services].each do |name, service|
     if service[:cloud_type] == 'vsphere' && service.dig(:connect, :password)
-      vim = BushSlicer::VSphere.new(service_name: name)
+      vim = VerificationTests::VSphere.new(service_name: name)
       res = true
       test_res[name] = res
       begin

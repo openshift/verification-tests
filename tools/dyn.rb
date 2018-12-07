@@ -10,7 +10,7 @@ require 'commander'
 require 'common'
 require 'launchers/dyn/dynect'
 
-module BushSlicer
+module VerificationTests
   class DynManager
     include Commander::Methods
     include Common::Helper
@@ -95,5 +95,5 @@ module BushSlicer
 end
 
 if __FILE__ == $0
-  BushSlicer::DynManager.new.run
+  VerificationTests::DynManager.new.run
 end

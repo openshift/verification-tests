@@ -2,7 +2,7 @@ Given /^a pod becomes ready with labels:$/ do |table|
   labels = table.raw.flatten # dimentions irrelevant
   pod_timeout = 15 * 60
 
-  @result = BushSlicer::Pod.wait_for_labeled(*labels, user: user, project: project, seconds: pod_timeout) { |p,h| p.ready?(cached: true)[:success] }
+  @result = VerificationTests::Pod.wait_for_labeled(*labels, user: user, project: project, seconds: pod_timeout) { |p,h| p.ready?(cached: true)[:success] }
 
   if @result[:matching].empty?
     # logger.info("Pod list:\n#{@result[:response]}")
@@ -58,7 +58,7 @@ Given /^a pod is present with labels:$/ do |table|
 
   pods = project.pods(by:user)
 
-  @result = BushSlicer::Pod.wait_for_labeled(*labels, user: user, project: project, seconds: pod_timeout)
+  @result = VerificationTests::Pod.wait_for_labeled(*labels, user: user, project: project, seconds: pod_timeout)
   if @result[:matching].empty?
     raise "See log, waiting for labeled pods futile: #{labels.join(',')}"
   end
@@ -68,7 +68,7 @@ end
 
 Given /^I store in the#{OPT_SYM} clipboard the pods labeled:$/ do |cbn, labels|
   cbn ||= :pods
-  cb[cbn] = BushSlicer::Pod.get_labeled(*labels.raw.flatten,
+  cb[cbn] = VerificationTests::Pod.get_labeled(*labels.raw.flatten,
                                        project: project,
                                        user: user)
 end
@@ -87,7 +87,7 @@ Given /^status becomes :([^\s]*?) of( exactly)? ([0-9]+) pods? labeled:$/ do |st
   timeout = 15 * 60
   labels = labels.raw.flatten
 
-  @result = BushSlicer::Pod.wait_for_labeled(*labels, count: count.to_i,
+  @result = VerificationTests::Pod.wait_for_labeled(*labels, count: count.to_i,
               user: user, project: project, seconds: timeout) { |p, p_hash|
     p.status?(status: status.to_sym, user: user, cached: true, quiet: true)
   }
@@ -107,7 +107,7 @@ Given /^all the pods in the project reach a successful state$/ do
   logger.info("Number of pods: #{pods.count}")
   pods.each do | pod |
     cache_pods(pod)
-    res = pod.wait_till_status(BushSlicer::Pod::SUCCESS_STATUSES, user, 15*60)
+    res = pod.wait_till_status(VerificationTests::Pod::SUCCESS_STATUSES, user, 15*60)
 
     unless res[:success]
       raise "pod #{self.pod.name} did not reach expected status"
@@ -138,7 +138,7 @@ Given /^#{NUMBER} pods become ready with labels:$/ do |count, table|
   num = Integer(count)
 
   # TODO: make waiting a single step like for PVs and PVCs
-  @result = BushSlicer::Pod.wait_for_labeled(*labels, count: num,
+  @result = VerificationTests::Pod.wait_for_labeled(*labels, count: num,
                        user: user, project: project, seconds: pod_timeout)
 
   if !@result[:success] || @result[:matching].size < num
@@ -150,7 +150,7 @@ Given /^#{NUMBER} pods become ready with labels:$/ do |count, table|
 
   # keep last waiting @result as the @result for knowing how pod failed
   @result[:matching].each do |pod|
-    @result = pod.wait_till_status(BushSlicer::Pod::SUCCESS_STATUSES, user, ready_timeout)
+    @result = pod.wait_till_status(VerificationTests::Pod::SUCCESS_STATUSES, user, ready_timeout)
 
     unless @result[:success]
       raise "pod #{pod.name} did not reach expected status"
@@ -179,12 +179,12 @@ Given /^all existing pods die with labels:$/ do |table|
   timeout = 10 * 60
   start_time = monotonic_seconds
 
-  current_pods = BushSlicer::Pod.get_matching(user: user, project: project,
+  current_pods = VerificationTests::Pod.get_matching(user: user, project: project,
                                              get_opts: {l: selector_to_label_arr(*labels)})
 
   current_pods.each do |pod|
     @result =
-        pod.wait_till_status(BushSlicer::Pod::TERMINAL_STATUSES, user,
+        pod.wait_till_status(VerificationTests::Pod::TERMINAL_STATUSES, user,
                              timeout - monotonic_seconds + start_time)
     unless @result[:success]
       raise "pod #{pod.name} did not die within allowed time"
@@ -197,7 +197,7 @@ Given /^all existing pods are ready with labels:$/ do |table|
   timeout = 15 * 60
   start_time = monotonic_seconds
 
-  current_pods = BushSlicer::Pod.get_matching(user: user, project: project,
+  current_pods = VerificationTests::Pod.get_matching(user: user, project: project,
                                              get_opts: {l: selector_to_label_arr(*labels)})
 
   current_pods.each do |pod|

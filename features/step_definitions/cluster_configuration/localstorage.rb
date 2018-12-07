@@ -29,7 +29,7 @@ Given /^I deploy local storage provisioner(?: with "([^ ]+?)" version)?$/ do |im
     project.delete(by: admin)
     project.wait_to_disappear(admin)
 
-    BushSlicer::PersistentVolume.list(user: admin).each { |pv|
+    VerificationTests::PersistentVolume.list(user: admin).each { |pv|
       pv.delete(by: admin) if pv.name.start_with?("local-pv-") && (pv.local_path&.start_with?("#{path}/fast") || pv.local_path&.start_with?("#{path}/slow"))
     }
   end
@@ -101,7 +101,7 @@ Given /^I deploy local storage provisioner(?: with "([^ ]+?)" version)?$/ do |im
   })
 
   pv_count = 0
-  BushSlicer::PersistentVolume.list(user: admin).each { |pv|
+  VerificationTests::PersistentVolume.list(user: admin).each { |pv|
     if pv.name.start_with?("local-pv-") && (pv.local_path&.start_with?("#{path}/fast") || pv.local_path&.start_with?("#{path}/slow"))
       pv_count += 1
     end
@@ -153,7 +153,7 @@ Given /^I deploy local raw block devices provisioner(?: with "([^ ]+?)" version)
   if project.exists?(user: admin)
     project.delete(by: admin)
 
-    BushSlicer::PersistentVolume.list(user: admin).each { |pv|
+    VerificationTests::PersistentVolume.list(user: admin).each { |pv|
       pv.delete(by: admin) if pv.name.start_with?("local-pv-") && pv.local_path&.start_with?("#{path}/block-devices")
     }
   end
@@ -224,7 +224,7 @@ Given /^I deploy local raw block devices provisioner(?: with "([^ ]+?)" version)
   })
 
   pv_count = 0
-  BushSlicer::PersistentVolume.list(user: admin).each { |pv|
+  VerificationTests::PersistentVolume.list(user: admin).each { |pv|
     pv_count += 1 if pv.name.start_with?("local-pv-") && (pv.local_path&.start_with?("#{path}/block-devices"))
   }
 

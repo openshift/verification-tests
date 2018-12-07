@@ -1,7 +1,7 @@
 require_relative 'image_ref'
 require 'openshift/object_reference'
 
-module BushSlicer
+module VerificationTests
   # represents a trigger structure inside a build config
   class BuildConfigTrigger
     attr_reader :params, :spec, :bc

@@ -12,7 +12,7 @@
 # $HOME/go/bin/imagebuilder .
 # where the '.' folder contains a Dockerfile.
 #
-# To use this particular Dockerfile, copy this to the top-level bushslicer dir,
+# To use this particular Dockerfile, copy this to the top-level verification-tests dir,
 # change the name to remove the .centos/.rhel7 extension, and run imagebuilder.
 #
 # At this point, the image can be tagged and pushed to an internal repository

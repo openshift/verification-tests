@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
   module Platform
     # Class which represents a generic openshift service running on a host
     class SystemdService
@@ -76,7 +76,7 @@ module BushSlicer
           if opts[:raise]
             raise "could not stop service #{name} on #{host.hostname}"
           end
-          return BushSlicer::ResultHash.aggregate_results(results)
+          return VerificationTests::ResultHash.aggregate_results(results)
         end
 
         sleep 5 # lets guess some hardcoded sleep after stop for the time being
@@ -97,7 +97,7 @@ module BushSlicer
           end
         end
 
-        return BushSlicer::ResultHash.aggregate_results(results)
+        return VerificationTests::ResultHash.aggregate_results(results)
       end
 
       # Will restart the service.
@@ -114,7 +114,7 @@ module BushSlicer
           if opts[:raise]
             raise "could not restart service #{name} on #{host.hostname}"
           end
-          return BushSlicer::ResultHash.aggregate_results(results)
+          return VerificationTests::ResultHash.aggregate_results(results)
         end
 
         ## this below seems to not make much sense
@@ -129,7 +129,7 @@ module BushSlicer
         #  # the `:raise` option is not respected here because unless service
         #  #   reach some stable status, we can't say for sure whether
         #  #   restart failed or not (it could be just too slow)
-        #  raise BushSlicer::TimeoutError,
+        #  raise VerificationTests::TimeoutError,
         #    "service #{service} on #{host.hostname} never reached " \
         #    "a stable status:\n#{result[:response]}"
         #end
@@ -153,13 +153,13 @@ module BushSlicer
         #  err_msg = "service #{service} on #{host.hostname} could not be" \
         #    "activated:\n#{result[:response]}"
         #  if opts[:raise]
-        #    raise BushSlicer::TimeoutError, err_msg
+        #    raise VerificationTests::TimeoutError, err_msg
         #  else
         #    logger.warn err_msg
         #  end
         #end
 
-        return BushSlicer::ResultHash.aggregate_results(results)
+        return VerificationTests::ResultHash.aggregate_results(results)
       end
 
       # Will restart the service.
@@ -186,7 +186,7 @@ module BushSlicer
           if opts[:raise]
             raise "could not start service #{name} on #{host.hostname}"
           end
-          return BushSlicer::ResultHash.aggregate_results(results)
+          return VerificationTests::ResultHash.aggregate_results(results)
         end
 
         sleep expected_load_time
@@ -203,7 +203,7 @@ module BushSlicer
           end
         end
 
-        return BushSlicer::ResultHash.aggregate_results(results)
+        return VerificationTests::ResultHash.aggregate_results(results)
       end
     end
   end

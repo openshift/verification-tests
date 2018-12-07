@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
   class NodeTaint
     attr_reader :node, :effect, :key, :time_added, :value
 

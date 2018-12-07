@@ -2,7 +2,7 @@ require 'socket'
 
 require 'base_helper'
 
-module BushSlicer
+module VerificationTests
   module Common
     module Net
       extend BaseHelper

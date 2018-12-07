@@ -3,7 +3,7 @@ require 'net/ssh'
 require 'net/scp'
 require 'fileutils'
 
-module BushSlicer
+module VerificationTests
   module SSH
     module Helper
       # generate a key pair mainly useful for SSH but can be generic
@@ -12,7 +12,7 @@ module BushSlicer
         key = OpenSSL::PKey::RSA.generate(len)
         key.singleton_class.class_eval do
           def to_pub_key_string
-            ::BushSlicer::SSH::Helper.to_pub_key_string(self)
+            ::VerificationTests::SSH::Helper.to_pub_key_string(self)
           end
         end
 
@@ -114,7 +114,7 @@ module BushSlicer
           result { |r| r.has_key? :success }
         }
         unless result.has_key? :success
-          raise BushSlicer::TimeoutError, "timeout waiting for command to start exution"
+          raise VerificationTests::TimeoutError, "timeout waiting for command to start exution"
         end
       end
 
@@ -167,7 +167,7 @@ module BushSlicer
             else
               logger.error("ssh channel timeout @#{host}: #{command}")
             end
-            result[:error] = BushSlicer::TimeoutError.new("ssh channel timeout @#{host}: #{command}")
+            result[:error] = VerificationTests::TimeoutError.new("ssh channel timeout @#{host}: #{command}")
           end
         end
         unless opts[:quiet]
@@ -190,7 +190,7 @@ module BushSlicer
       def inspect
         cmd = result[:command]
         cmd = "#{cmd[0..25]}.." if cmd.size > 25
-        "#<BushSlicer::SSH::Command #{user}@#{host} #{cmd.inspect}>"
+        "#<VerificationTests::SSH::Command #{user}@#{host} #{cmd.inspect}>"
       end
     end
 

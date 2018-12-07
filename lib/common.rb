@@ -1,16 +1,16 @@
 require 'open3'
 
-require 'bushslicer'
+require 'verification-tests'
 require 'manager'
 require 'base_helper'
 
-module BushSlicer
+module VerificationTests
   module Common
     module Helper
       include BaseHelper
 
       def manager
-        BushSlicer::Manager.instance
+        VerificationTests::Manager.instance
       end
 
       def conf
@@ -33,8 +33,8 @@ module BushSlicer
           return Host.localhost.absolute_path(path)
         elsif File.exist?(PRIVATE_DIR + "/" + path)
           return PRIVATE_DIR + "/" + path
-        elsif public_safe && File.exist?(BushSlicer::HOME + "/" + path)
-          return BushSlicer::HOME + "/" + path
+        elsif public_safe && File.exist?(VerificationTests::HOME + "/" + path)
+          return VerificationTests::HOME + "/" + path
         elsif File.exist?(File.expand_path("~/#{path}"))
           return File.expand_path("~/#{path}")
         else
@@ -104,7 +104,7 @@ module BushSlicer
         return result
       end
 
-      ## @param res [BushSlicer::ResultHash] the result to verify
+      ## @param res [VerificationTests::ResultHash] the result to verify
       ## @note will log and raise error unless result is successful
       #def result_should_be_success(res)
       #  unless res[:success]
@@ -113,7 +113,7 @@ module BushSlicer
       #  end
       #end
       #
-      ## @param res [BushSlicer::ResultHash] the result to examine
+      ## @param res [VerificationTests::ResultHash] the result to examine
       ## @note will log and raise error unless result is failure
       #def result_should_be_failure(res)
       #  if res[:success]
@@ -125,7 +125,7 @@ module BushSlicer
       # hack to have host.rb autoloaded when it is used through Helper outside
       # Cucumber (at the same time avoiding circular dependencies). That avoids
       # need for the external script to know that host.rb is required.
-      BushSlicer.autoload :Host, "host"
+      VerificationTests.autoload :Host, "host"
     end # module Helper
 
     # some ugly hack that we need to be more reliable
@@ -166,10 +166,10 @@ module BushSlicer
         #Signal.trap('SIGTERM') { exit(false) } # it works like that already
       end
 
-      def self.set_bushslicer_home
-        # BushSlicer.const_set(:HOME, File.expand_path(__FILE__ + "../../.."))
-        BushSlicer::HOME.freeze
-        ENV["BUSHSLICER_HOME"] = BushSlicer::HOME
+      def self.set_verification_tests_home
+        # VerificationTests.const_set(:HOME, File.expand_path(__FILE__ + "../../.."))
+        VerificationTests::HOME.freeze
+        ENV["VERIFICATION_TESTS_HOME"] = VerificationTests::HOME
       end
     end
   end

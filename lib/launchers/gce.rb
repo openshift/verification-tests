@@ -10,7 +10,7 @@ end
 require 'collections'
 require 'common'
 
-module BushSlicer
+module VerificationTests
   class GCE
     include Common::Helper
     include CollectionsIncl
@@ -46,7 +46,7 @@ module BushSlicer
       return @compute if @compute
 
       @compute = Compute::ComputeService.new
-      @compute.client_options.application_name = "BushSlicer"
+      @compute.client_options.application_name = "VerificationTests"
       @compute.client_options.application_version = GIT_HASH
       # @compute.client_options.proxy_url = ENV['http_proxy'] if ENV['http_proxy']
 
@@ -138,12 +138,12 @@ module BushSlicer
     # @param user_data [String] convenience to add metadata `startup-script` key
     # @param instance_opts [Hash] additional machines launch options
     # @param host_opts [Hash] additional machine access options, should be
-    #   options valid for use in [BushSlicer::Host] constructor
+    #   options valid for use in [VerificationTests::Host] constructor
     # @param boot_disk_opts [Hash] convenience way to merge some options for
     #   the boot disk without need to replace the whole disks configuration;
     #   disks from global config will be searched for the boot option and that
     #   disk entry will be intelligently merged
-    # @return [Array] of [Instance, BushSlicer::Host] pairs
+    # @return [Array] of [Instance, VerificationTests::Host] pairs
     def create_instance( names,
                          project: config[:project],
                          zone: config[:zone],
@@ -421,7 +421,7 @@ module BushSlicer
 
     # @param instance_spec [Instance, Hash] instance object or hash
     #   representation
-    # @return [Array] with two elements - Instance and BushSlicer::Host
+    # @return [Array] with two elements - Instance and VerificationTests::Host
     def get_instance_host(instance_spec, host_opts = {})
       host_opts = config[:host_opts].merge host_opts
       instance = instance_spec.kind_of?(Hash) ?

@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
   module Platform
     class MasterScriptedStaticPodService < MasterService
       attr_reader :env

@@ -15,7 +15,7 @@ require 'zlib'
 
 require 'common' # mainly localhost is used
 
-module BushSlicer
+module VerificationTests
   # custom Cucumber HTML formatter that also cooperates with test case manager
   # TODO: new API https://github.com/cucumber/cucumber-ruby/pull/851/files/
 class CucuFormatter

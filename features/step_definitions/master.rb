@@ -14,13 +14,13 @@ Given /^master config is merged with the following hash:$/ do |yaml_string|
 end
 
 Given /^master config is restored from backup$/ do
-  @result = BushSlicer::ResultHash.aggregate_results(
+  @result = VerificationTests::ResultHash.aggregate_results(
     *env.master_services.map { |s| s.config.restore() }
   )
 end
 
 #Given(/^admin will download the master config to "(.+?)" file$/) do |file|
-#  @result = BushSlicer::MasterConfig.raw(env)
+#  @result = VerificationTests::MasterConfig.raw(env)
 #  if @result[:success]
 #    file = File.join(localhost.workdir, file)
 #    File.write(file, @result[:response])
@@ -28,12 +28,12 @@ end
 #end
 
 #Given(/^admin will update master config from "(.+?)" file$/) do |file|
-#  BushSlicer::MasterConfig.backup(env)
+#  VerificationTests::MasterConfig.backup(env)
 #  content = File.read(File.expand_path(file))
-#  @result = BushSlicer::MasterConfig.update(env, content)
+#  @result = VerificationTests::MasterConfig.update(env, content)
 
 #  teardown_add {
-#    BushSlicer::MasterConfig.restore(env)
+#    VerificationTests::MasterConfig.restore(env)
 #  }
 #end
 
@@ -68,7 +68,7 @@ Given /^I try to restart the master service on all master nodes$/ do
   env.master_services.each { |service|
     results.push(service.restart)
   }
-  @result = BushSlicer::ResultHash.aggregate_results(results)
+  @result = VerificationTests::ResultHash.aggregate_results(results)
 end
 
 Given /^I use the first master host$/ do
@@ -78,7 +78,7 @@ end
 
 Given /^I run commands on all masters:$/ do |table|
   ensure_admin_tagged
-  @result = BushSlicer::ResultHash.aggregate_results env.master_hosts.map { |host|
+  @result = VerificationTests::ResultHash.aggregate_results env.master_hosts.map { |host|
     host.exec_admin(table.raw.flatten)
   }
 end

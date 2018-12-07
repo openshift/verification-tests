@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
   module Platform
     # service controlled by custom scripting
     class ScriptService
@@ -54,7 +54,7 @@ module BushSlicer
         if restart_script
           exec_script(:restart, restart_script, **opts)
         else
-          BushSlicer::ResultHash.aggregate_results [
+          VerificationTests::ResultHash.aggregate_results [
             stop(**opts),
             start(**opts)
           ]

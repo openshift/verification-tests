@@ -4,14 +4,14 @@ require 'find'
 require 'collections'
 require 'rules_common.rb'
 
-module BushSlicer
+module VerificationTests
   class RulesCommandExecutor
-    # include BushSlicer::Common::Helper
+    # include VerificationTests::Common::Helper
 
     attr_reader :host
 
     # @param [Object] rules might be parsed rules, file, directory or array of any of these. All rules are merged and error is raised on duplicate rules. If directory string ends with slash `/` character, then it is loaded recursively.
-    # @param [BushSlicer::Host] host host to execute the commands on
+    # @param [VerificationTests::Host] host host to execute the commands on
     # @param [String] user host os user to execute command as (e.g. sudo)
     def initialize(host:, user: nil, rules:)
       @host = host
@@ -44,7 +44,7 @@ module BushSlicer
     #   `:unexpected` is strings in the output showing command failure
     #   `:properties` are parsed proparties from the command output returned
     #   `:optional_properties` same as above but will not cause fail if missing
-    # @return [BushSlicer::ResultHash] result hash
+    # @return [VerificationTests::ResultHash] result hash
     # @see #build_command_line
     # @see #build_expectations
     # @see #process_result

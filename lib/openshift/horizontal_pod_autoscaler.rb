@@ -1,6 +1,6 @@
 require 'openshift/pod_replicator'
 
-module BushSlicer
+module VerificationTests
   # represents an OpenShift Image Stream
   class HorizontalPodAutoscaler < PodReplicator
     RESOURCE = "horizontalpodautoscalers"

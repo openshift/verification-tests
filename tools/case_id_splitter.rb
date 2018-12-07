@@ -13,7 +13,7 @@ require_relative 'common/load_path'
 require 'common'
 require "gherkin_parse"
 
-module BushSlicer
+module VerificationTests
   class CaseIDSplitter
     include Commander::Methods
     include Common::Helper
@@ -144,5 +144,5 @@ module BushSlicer
 end
 
 if __FILE__ == $0
-  BushSlicer::CaseIDSplitter.new.run
+  VerificationTests::CaseIDSplitter.new.run
 end

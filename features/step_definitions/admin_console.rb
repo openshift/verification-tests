@@ -4,8 +4,8 @@
 # end
 
 Given /^I open admin console in a browser$/ do
-  base_rules = BushSlicer::WebConsoleExecutor::RULES_DIR + "/base/"
-  snippets_dir = BushSlicer::WebConsoleExecutor::SNIPPETS_DIR
+  base_rules = VerificationTests::WebConsoleExecutor::RULES_DIR + "/base/"
+  snippets_dir = VerificationTests::WebConsoleExecutor::SNIPPETS_DIR
 
   version = env.webconsole_executor.get_master_version(user, via_rest: true)
 

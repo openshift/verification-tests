@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
   module Platform
     class NodeService < OpenShiftService
 
@@ -12,7 +12,7 @@ module BushSlicer
       end
 
       def config
-        @config ||= BushSlicer::Platform::NodeConfig.for(self)
+        @config ||= VerificationTests::Platform::NodeConfig.for(self)
       end
     end
   end

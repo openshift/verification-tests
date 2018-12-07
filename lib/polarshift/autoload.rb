@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
   module PolarShift
     autoload :Request, "polarshift/request"
     autoload :TestSuite, "polarshift/test_suite"

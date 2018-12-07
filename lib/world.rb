@@ -2,7 +2,7 @@ require 'ostruct'
 require 'common'
 require 'collections'
 
-module BushSlicer
+module VerificationTests
   # @note this is our default cucumber World extension implementation
   class DefaultWorld
     include CollectionsIncl
@@ -35,7 +35,7 @@ module BushSlicer
     end
 
     def setup_logger
-      BushSlicer::Logger.runtime = @__cucumber_runtime
+      VerificationTests::Logger.runtime = @__cucumber_runtime
     end
 
     def debug_in_after_hook?
@@ -92,7 +92,7 @@ module BushSlicer
     def env(key=nil)
       return @env if key.nil? && @env
       key ||= conf[:default_environment]
-      raise "please specify default environment key in config or BUSHSLICER_DEFAULT_ENVIRONMENT env variable" unless key
+      raise "please specify default environment key in config or VERIFICATION_TESTS_DEFAULT_ENVIRONMENT env variable" unless key
       return @env = manager.environments[key]
     end
 
@@ -151,7 +151,7 @@ module BushSlicer
     # @return project from cached projects for this scenario
     #   note that you need to have default `#env` set already;
     #   if no name is spefified, returns the last requested project;
-    #   otherwise a BushSlicer::Project object is created (but not created in
+    #   otherwise a VerificationTests::Project object is created (but not created in
     #   the actual OpenShift environment)
     # @note we use a custom getter instead of auto-generated resource getters
     #   to allow generating project names; maybe that can be refactored some day
@@ -275,7 +275,7 @@ module BushSlicer
           cache << cache.delete(r)
           return r
         else
-          # create new BushSlicer::ProjectResource object with specified name
+          # create new VerificationTests::ProjectResource object with specified name
           cache << clazz.new(name: name, project: project)
           cache.last.default_user = user
           return cache.last
@@ -312,7 +312,7 @@ module BushSlicer
           var << var.delete(r) if switch
           return r
         else
-          # create new BushSlicer::ClusterResource object with specified name
+          # create new VerificationTests::ClusterResource object with specified name
           var << clazz.new(name: name, env: env)
           return var.last
         end
@@ -350,7 +350,7 @@ module BushSlicer
       end
     end
 
-    # convert from resource cli string to BushSlicer class
+    # convert from resource cli string to VerificationTests class
     def resource_class(cli_string)
       unless @shorthands
         @shorthands = {
@@ -374,7 +374,7 @@ module BushSlicer
 
       type = @shorthands[cli_string.to_sym] || cli_string
 
-      # classes = ObjectSpace.each_object(BushSlicer::Resource.singleton_class)
+      # classes = ObjectSpace.each_object(VerificationTests::Resource.singleton_class)
       # clazz = classes.find do |c|
       clazz = RESOURCES.keys.find do |c|
         defined?(c::RESOURCE) && [type, type + "s", type+"es"].include?(c::RESOURCE)

@@ -34,7 +34,7 @@ Given /^a replicationController becomes ready with labels:$/ do |table|
   rc_timeout = 10 * 60
   ready_timeout = 15 * 60
 
-  @result = BushSlicer::ReplicationController.wait_for_labeled(*labels, user: user, project: project, seconds: rc_timeout)
+  @result = VerificationTests::ReplicationController.wait_for_labeled(*labels, user: user, project: project, seconds: rc_timeout)
 
   if @result[:matching].empty?
     raise "See log, waiting for labeled rcs futile: #{labels.join(',')}"

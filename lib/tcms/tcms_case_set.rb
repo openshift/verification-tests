@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-module BushSlicer
+module VerificationTests
   class TCMSCaseSet
     @cases = []
 

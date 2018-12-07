@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
   module Platform
     autoload :OpenShiftService, "platform/openshift_service"
     autoload :MasterService, "platform/master_service"

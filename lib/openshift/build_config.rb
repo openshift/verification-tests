@@ -3,7 +3,7 @@ require 'openshift/project_resource'
 require 'openshift/flakes/build_config_trigger'
 require 'openshift/flakes/build_strategy'
 
-module BushSlicer
+module VerificationTests
   # represents an OpenShift build
   class BuildConfig < ProjectResource
     RESOURCE = "buildconfigs"

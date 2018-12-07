@@ -1,6 +1,6 @@
 require 'openshift/cluster_resource'
 
-module BushSlicer
+module VerificationTests
   # @note represents an OpenShift environment Host Subnet
   class HostSubnet < ClusterResource
     RESOURCE = 'hostsubnets'

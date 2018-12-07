@@ -40,7 +40,7 @@ When /^admin creates a StorageClass( in the node's zone)? from #{QUOTED} where:$
   end
 
   logger.info("Creating StorageClass:\n#{sc_hash.to_yaml}")
-  @result = BushSlicer::StorageClass.create(by: admin, spec: sc_hash)
+  @result = VerificationTests::StorageClass.create(by: admin, spec: sc_hash)
 
   if @result[:success]
     cache_resources *@result[:resource]
@@ -72,7 +72,7 @@ Given(/^I run commands on the StorageClass "([^"]*)" backing host:$/) do | stora
 
   opts = conf[:services, :storage_class_host]
 
-  host = BushSlicer::SSHAccessibleHost.new(hostname, opts)
+  host = VerificationTests::SSHAccessibleHost.new(hostname, opts)
 
   @result = host.exec_admin(*table.raw.flatten)
 end
@@ -80,7 +80,7 @@ end
 Given(/^default storage class is deleted$/) do
   ensure_destructive_tagged
   if env.version_ge("3.3", user: user)
-    _sc = BushSlicer::StorageClass.get_matching(user: user) { |sc, sc_hash|
+    _sc = VerificationTests::StorageClass.get_matching(user: user) { |sc, sc_hash|
       sc.default?
     }.first
     if _sc
@@ -91,11 +91,11 @@ Given(/^default storage class is deleted$/) do
       # Restore storeclass after scenario
       _admin = admin
       teardown_add {
-        raw = BushSlicer::Collections.deep_merge(
+        raw = VerificationTests::Collections.deep_merge(
           _sc.raw_resource,
           { "metadata" => { "creationTimestamp" => nil } }
         )
-        @result = BushSlicer::StorageClass.create(by: _admin, spec: raw)
+        @result = VerificationTests::StorageClass.create(by: _admin, spec: raw)
         unless @result[:success]
           raise "Warning unable to restore default storage class #{_sc.name}!"
         end
@@ -136,7 +136,7 @@ Given(/^admin recreate storage class #{QUOTED} with:$/) do |sc_name, table|
   src_sc.ensure_deleted(user: admin)
 
   logger.info("Creating StorageClass:\n#{sc_hash.to_yaml}")
-  @result = BushSlicer::StorageClass.create(by: admin, spec: sc_hash)
+  @result = VerificationTests::StorageClass.create(by: admin, spec: sc_hash)
 
   if @result[:success]
     cache_resources *@result[:resource]
@@ -146,7 +146,7 @@ Given(/^admin recreate storage class #{QUOTED} with:$/) do |sc_name, table|
     _admin = admin
     teardown_add {
       _sc.ensure_deleted(user: _admin)
-      BushSlicer::StorageClass.create(by: admin, spec: sc_org)
+      VerificationTests::StorageClass.create(by: admin, spec: sc_org)
     }
   else
     logger.error(@result[:response])
@@ -159,7 +159,7 @@ Given(/^admin clones storage class #{QUOTED} from #{QUOTED} with:$/) do |target_
 
   # Use :default to comment out the different storage class names on AWS/GCE/OpenStack
   if "#{src_sc}" == ":default"
-    _sc = BushSlicer::StorageClass.get_matching(user: user) { |sc, sc_hash| sc.default? }.first
+    _sc = VerificationTests::StorageClass.get_matching(user: user) { |sc, sc_hash| sc.default? }.first
     src_sc = _sc.raw_resource.dig("metadata", "name")
   end
   step %Q/I run the :get admin command with:/, table(%{
@@ -191,7 +191,7 @@ Given(/^admin clones storage class #{QUOTED} from #{QUOTED} with:$/) do |target_
   end
 
   logger.info("Creating StorageClass:\n#{sc_hash.to_yaml}")
-  @result = BushSlicer::StorageClass.create(by: admin, spec: sc_hash)
+  @result = VerificationTests::StorageClass.create(by: admin, spec: sc_hash)
 
   if @result[:success]
     cache_resources *@result[:resource]

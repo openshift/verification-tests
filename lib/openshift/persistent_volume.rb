@@ -1,6 +1,6 @@
 require 'openshift/cluster_resource'
 
-module BushSlicer
+module VerificationTests
   # @note represents an OpenShift environment Persistent Volume
   class PersistentVolume < ClusterResource
     STATUSES = [:available, :bound, :pending, :released, :failed]

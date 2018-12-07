@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
   # https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.9/#endpoints-v1-core
   class Endpoints < ProjectResource
     RESOURCE = "endpoints"

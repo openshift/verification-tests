@@ -5,7 +5,7 @@ require 'find'
 
 require 'common'
 
-module BushSlicer
+module VerificationTests
   # generic test case manager that delegates to specific test case management
   #   system test suite class
   class TestCaseManager
@@ -18,7 +18,7 @@ module BushSlicer
     def initialize(**opts)
       @opts = opts
 
-      @test_suite = BushSlicer.const_get(opts[:test_suite_class]).
+      @test_suite = VerificationTests.const_get(opts[:test_suite_class]).
                                             new(opts[:test_suite_opts])
 
       @attach_queue = Queue.new
@@ -31,7 +31,7 @@ module BushSlicer
 
     ############ test case manager interface methods ############
 
-    # act according to signal from BushSlicer
+    # act according to signal from VerificationTests
     #   job == TCMS test case == some set of Cucumber scenarios/test cases
     #   test case == Cucumber scenario
     # @note see [TCMSTestCaseRun#overall_status=] for how status works
@@ -207,11 +207,11 @@ module BushSlicer
       return urls
     end
 
-    # @return [BushSlicer::Host] of the server storing logs and artifacts
+    # @return [VerificationTests::Host] of the server storing logs and artifacts
     def artifacts_filer
       @artifacts_filer if @artifacts_filer
 
-      @artifacts_filer = BushSlicer.
+      @artifacts_filer = VerificationTests.
         const_get(conf[:services, :artifacts_file_server, :host_type]).
         new(
           conf[:services, :artifacts_file_server, :hostname],

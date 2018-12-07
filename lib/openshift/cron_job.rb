@@ -1,6 +1,6 @@
 require 'openshift/project_resource'
 
-module BushSlicer
+module VerificationTests
   # represents an OpenShift CronJob https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/
   class CronJob < ProjectResource
     RESOURCE = "cronjobs"

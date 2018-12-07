@@ -4,7 +4,7 @@ require 'openshift/pod_replicator'
 
 # TODO: DRY together with deployment.rb
 
-module BushSlicer
+module VerificationTests
 
   # represents an Openshift ReplicaSets (rs for short)
   class ReplicaSet < PodReplicator

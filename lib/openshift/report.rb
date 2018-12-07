@@ -1,6 +1,6 @@
 # for reference on how to use Metering please consult the following link
 # https://github.com/operator-framework/operator-metering/blob/master/Documentation/using-metering.md
-module BushSlicer
+module VerificationTests
   class Report < ProjectResource
     RESOURCE = "reports"
 

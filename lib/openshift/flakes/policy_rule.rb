@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
   # represents a rule inside a cluster role
   class PolicyRule
     attr_reader :non_resource_urls, :resource_names, :verbs

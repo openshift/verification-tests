@@ -4,7 +4,7 @@ require 'openshift/flakes/container'
 require 'openshift/flakes/container_spec'
 require 'openshift/flakes/pod_volume_spec'
 
-module BushSlicer
+module VerificationTests
   # represents an OpenShift pod
   class Pod < ProjectResource
     RESOURCE = "pods"
@@ -55,7 +55,7 @@ module BushSlicer
       return self # mainly to help ::from_api_object
     end
 
-    # @return [BushSlicer::ResultHash] with :success depending on pod
+    # @return [VerificationTests::ResultHash] with :success depending on pod
     #   condition type=Ready and status=True; only `Running` pods with all
     #   containers probes succeeding appear to have this
     def ready?(user: nil, quiet: false, cached: false)
@@ -155,7 +155,7 @@ module BushSlicer
         props[:containers] = container_specs(user: user,
                                              cached: cached,
                                              quiet: quiet).map { |spec|
-          BushSlicer::Container.new(name: spec.name, pod: self)
+          VerificationTests::Container.new(name: spec.name, pod: self)
         }
       end
       return props[:containers]

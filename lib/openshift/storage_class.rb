@@ -1,6 +1,6 @@
 require 'openshift/cluster_resource'
 
-module BushSlicer
+module VerificationTests
   # @note represents an OpenShift environment Storage Class
   class StorageClass < ClusterResource
     RESOURCE = "storageclasses"

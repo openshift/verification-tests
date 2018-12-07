@@ -2,7 +2,7 @@ require "base64"
 
 require 'common'
 
-module BushSlicer
+module VerificationTests
   # represents an OpenShift Secret
   class Secret < ProjectResource
     RESOURCE = "secrets"
@@ -13,12 +13,12 @@ module BushSlicer
       return obj['type']
     end
 
-    # @param user [BushSlicer::User] the user to run cli commands with if needed
+    # @param user [VerificationTests::User] the user to run cli commands with if needed
     def bearer_token?(user: nil, cached: true, quiet: false)
       type(user: user, cached: cached, quiet: quiet).include?('service-account-token') && raw_resource.dig('data', 'token')
     end
 
-    # @param user [BushSlicer::User] the user to run cli commands with if needed
+    # @param user [VerificationTests::User] the user to run cli commands with if needed
     # @return [String] bearer token
     def token(user: nil, cached: true, quiet: false)
       if bearer_token?(user: user, cached: cached, quiet: quiet)

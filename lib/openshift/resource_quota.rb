@@ -1,7 +1,7 @@
 require 'openshift/project_resource'
 require 'openshift/quota_limits'
 
-module BushSlicer
+module VerificationTests
   class ResourceQuota < ProjectResource
     RESOURCE = 'resourcequotas'
 

@@ -11,7 +11,7 @@ require 'zlib'
 require 'asciidoctor' # to generate html
 require 'term/ansicolor' #colorized terminal output
 
-module BushSlicer
+module VerificationTests
   class TcmsBackup
     include Commander::Methods
 
@@ -27,7 +27,7 @@ module BushSlicer
 
     def tcms
       return @tcms if @tcms
-      @tcms = BushSlicer::TCMS.new
+      @tcms = VerificationTests::TCMS.new
     end
 
     def run
@@ -608,7 +608,7 @@ module BushSlicer
             end
             begin
               #Use the Gherkin parser to collect all feature scenarios
-              gparser = BushSlicer::GherkinParse.new
+              gparser = VerificationTests::GherkinParse.new
               file_contents = gparser.parse_feature(File.join("#{HOME}/features", feature_file))
             rescue => e
               general_errors[case_id].push "Error in case #: #{case_id}, #{e.message}"
@@ -701,5 +701,5 @@ module BushSlicer
 end
 
 if __FILE__ == $0
-  BushSlicer::TcmsBackup.new.run
+  VerificationTests::TcmsBackup.new.run
 end

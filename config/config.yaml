@@ -1,6 +1,6 @@
---- # BushSlicer framework configuration options
+--- # verification-tests framework configuration options
 global:
-  git_repo_url: https://github.com/openshift/BushSlicer
+  git_repo_url: https://github.com/openshift/verification-tests
   git_repo_default_branch: master
 
   debug_in_after_hook: false
@@ -35,10 +35,10 @@ global:
   project_docker_repo: ""
   # product_docker_repo: registry.access.redhat.com/
 
-  # use BUSHSLICER_DEFAULT_ENVIRONMENT instead of setting here
+  # use VERIFICATION_TESTS_DEFAULT_ENVIRONMENT instead of setting here
   # default_environment: ose
 
-  # use BUSHSLICER_TEST_CASE_MANAGER instead of setting here
+  # use VERIFICATION_TESTS_TEST_CASE_MANAGER instead of setting here
   # test_case_manager: tcms
 
   # select browser different from default (firefox)
@@ -88,13 +88,13 @@ environments:
 optional_classes:
   tcms_tc_manager:
     include_path: tcms/tcms_manager
-    class: BushSlicer::TCMSManager
+    class: VerificationTests::TCMSManager
     opts: {}
   polarshift_tc_manager:
     include_path: test_case_manager
-    class: BushSlicer::TestCaseManager
+    class: VerificationTests::TestCaseManager
     opts:
-      test_suite_class: BushSlicer::PolarShift::TestSuite
+      test_suite_class: VerificationTests::PolarShift::TestSuite
       test_suite_opts: {}
 services:
   AWS: &AWSBase

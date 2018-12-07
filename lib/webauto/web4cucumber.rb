@@ -783,7 +783,7 @@ require "base64"
       end
     end
 
-    # parse BushSlicer webauto single rules file; that is a YAML file with the
+    # parse VerificationTests webauto single rules file; that is a YAML file with the
     #   only difference that duplicate keys on the second level are allowed;
     #   i.e. we can specify multiple `url`, `elements`, `action`, etc. child
     #   elements inside action rules

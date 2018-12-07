@@ -6,7 +6,7 @@ require 'openshift/replication_controller'
 require 'openshift/flakes/container_spec'
 require 'openshift/flakes/deployment_config_trigger'
 
-module BushSlicer
+module VerificationTests
 
   # represents an OpenShift DeploymentConfig (dc for short) used for scaling pods
   class DeploymentConfig < PodReplicator
@@ -53,7 +53,7 @@ module BushSlicer
       return res
     end
 
-    # @return [BushSlicer::ResultHash] with :success depending the rc readiness for the dc that it belongs to
+    # @return [VerificationTests::ResultHash] with :success depending the rc readiness for the dc that it belongs to
     def ready?(user: nil, cached: false, quiet: false)
       rc(user: user, cached: cached, quiet: quiet).ready?(user: user, cached: cached, quiet: quiet)
     end
@@ -79,7 +79,7 @@ module BushSlicer
         dig("status", "latestVersion")
     end
 
-    # @return [BushSlicer::ReplicationController]
+    # @return [VerificationTests::ReplicationController]
     def replication_controller(user: nil, cached: true, quiet: true)
       version = latest_version(user: user, cached: cached, quiet: quiet)
 

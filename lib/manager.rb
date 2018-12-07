@@ -5,7 +5,7 @@ require 'configuration'
 require 'environment_manager'
 # should not require 'common'
 
-module BushSlicer
+module VerificationTests
   # @note this class allows accessing global test execution state.
   #       Get the singleton object by calling Manager.instance.
   #       Manager should point always at the correct manager implementation.
@@ -20,7 +20,7 @@ module BushSlicer
 
       # # @browsers = ...
 
-      # keep reference to BushSlicer custom formatters so we can interact;
+      # keep reference to VerificationTests custom formatters so we can interact;
       #   at the moment we use to call #process_scenario_log from the test case
       #   manager to get hold on scenario log and artifacts at convenient time
       @custom_formatters = []
@@ -70,7 +70,7 @@ module BushSlicer
     end
 
     def init_test_case_manager(cucumbler_config)
-      tc_mngr = ENV['BUSHSLICER_TEST_CASE_MANAGER'] || conf[:test_case_manager]
+      tc_mngr = ENV['VERIFICATION_TESTS_TEST_CASE_MANAGER'] || conf[:test_case_manager]
       tc_mngr = tc_mngr ? tc_mngr + '_tc_manager' : false
       if tc_mngr
         logger.info("Using #{tc_mngr} test case manager")
@@ -92,7 +92,7 @@ module BushSlicer
   end
 
   # allow seamless use of manager outside Cucumber
-  unless defined?(SkipBushSlicerManagerDefault) && SkipBushSlicerManagerDefault
+  unless defined?(SkipVerificationTestsManagerDefault) && SkipVerificationTestsManagerDefault
     Manager ||= DefaultManager
   end
 end

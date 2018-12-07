@@ -1,7 +1,7 @@
 require 'openshift/project_resource'
 require 'openshift/quota_limits'
 
-module BushSlicer
+module VerificationTests
   # @note represents an OpenShift applied cluster resource quota
   class AppliedClusterResourceQuota < ProjectResource
     RESOURCE = 'appliedclusterresourcequotas'

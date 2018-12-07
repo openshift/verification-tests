@@ -3,7 +3,7 @@
 ---
 <% now = Time.now.to_i %>
 <% default_args = " --color -r features -f pretty --expand --strict" %>
-<% tcms_args = " --color -r features -f pretty -f BushSlicer::CucuFormatter -o :auto --expand --strict --order random" %>
+<% tcms_args = " --color -r features -f pretty -f VerificationTests::CucuFormatter -o :auto --expand --strict --order random" %>
 <% branch = `git branch | grep "*"  | sed "s/* //"`.strip %>
 <% common_libs = " -r features/step_definitions/ -r features/support/ "%>
 
@@ -13,12 +13,12 @@
 default: --profile devel
 debug: --profile _debug --profile devel
 devel: --profile _devel <%= default_args %>
-tcms: BUSHSLICER_TEST_CASE_MANAGER=tcms <%= tcms_args %>
-polarshift: BUSHSLICER_TEST_CASE_MANAGER=polarshift <%= tcms_args %>
+tcms: VERIFICATION_TESTS_TEST_CASE_MANAGER=tcms <%= tcms_args %>
+polarshift: VERIFICATION_TESTS_TEST_CASE_MANAGER=polarshift <%= tcms_args %>
 junit: <%= default_args %> -f junit -o "<%= junit_dir %>" --profile dir_embedder
-dir_embedder: -f BushSlicer::SaveToDirEmbeddingFormatter -o "embedded_files"
+dir_embedder: -f VerificationTests::SaveToDirEmbeddingFormatter -o "embedded_files"
 
-_debug: BUSHSLICER_LOG_LEVEL=debug
-_devel: BUSHSLICER_DEBUG_AFTER_FAIL=true BUSHSLICER_DEBUG_ATTACHER_TIMEOUT=true
+_debug: VERIFICATION_TESTS_LOG_LEVEL=debug
+_devel: VERIFICATION_TESTS_DEBUG_AFTER_FAIL=true VERIFICATION_TESTS_DEBUG_ATTACHER_TIMEOUT=true
 #
 # vim: set tabstop=2:shiftwidth=2:expandtab:

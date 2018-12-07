@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
   class TimeoutError < RuntimeError
   end
   class UnsupportedOperationError < RuntimeError

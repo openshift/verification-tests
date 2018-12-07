@@ -2,7 +2,7 @@ require 'rest-client'
 require 'http-cookie'
 require 'thread'
 
-module BushSlicer
+module VerificationTests
   module Http
     extend Common::Helper # include methods statically
 
@@ -26,7 +26,7 @@ module BushSlicer
     #   with chunks of body content as read by the remote server; note that
     #   HTTP status redirections, cookies, headers, etc. are all lost from
     #   response when a block is passed
-    # @return [BushSlicer::ResultHash] standard bushslicer result hash;
+    # @return [VerificationTests::ResultHash] standard verification-tests result hash;
     #   there is :headers populated as a [Hash] where headers are lower-cased
     def self.http_request(url:,
                           method:,

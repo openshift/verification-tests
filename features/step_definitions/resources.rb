@@ -44,7 +44,7 @@ Given /^the #{QUOTED} (\w+) is recreated( by admin)? in the#{OPT_QUOTED} project
     _user = user
   end
   _resource = resource(resource_name, resource_type, project_name: project_name)
-  unless BushSlicer::ProjectResource > _resource.class
+  unless VerificationTests::ProjectResource > _resource.class
     raise "step only supports project resources, but #{_resource.class} is not"
   end
 
@@ -75,7 +75,7 @@ Given /^(I|admin) checks? that there are no (\w+)(?: in the#{OPT_QUOTED} project
   _user = who == "admin" ? admin : user
 
   clazz = resource_class(resource_type)
-  if BushSlicer::ProjectResource > clazz
+  if VerificationTests::ProjectResource > clazz
     list = clazz.list(user: _user, project: project(namespace))
   else
     list = clazz.list(user: _user)
@@ -91,7 +91,7 @@ Given /^(I|admin) waits? for all (\w+) in the#{OPT_QUOTED} project to become rea
   _user = by == "admin" ? admin : user
   clazz = resource_class(type)
 
-  unless BushSlicer::ProjectResource > clazz
+  unless VerificationTests::ProjectResource > clazz
     raise "#{clazz} is not a ProjectResource"
   end
 
@@ -108,7 +108,7 @@ Given /^(I|admin) waits? for all (\w+) in the#{OPT_QUOTED} project to become rea
     end
     @result
   end
-  @result = BushSlicer::ResultHash.aggregate_results(results)
+  @result = VerificationTests::ResultHash.aggregate_results(results)
 end
 
 Given /^(I|admin) waits? for the#{OPT_QUOTED} (\w+) to become ready(?: in the#{OPT_QUOTED} project)?(?: up to (\d+) seconds)?$/ do |by, name, type, project_name, timeout|
@@ -192,9 +192,9 @@ Given /^#{WORD}( in the#{OPT_QUOTED} project)? with name matching #{RE} are stor
   clazz = resource_class(type)
   list_opts = {user: user}
 
-  if in_project && !(BushSlicer::ProjectResource > clazz)
+  if in_project && !(VerificationTests::ProjectResource > clazz)
     raise "#{clazz} is not a ProjectResource"
-  elsif BushSlicer::ProjectResource > clazz
+  elsif VerificationTests::ProjectResource > clazz
     list_opts[:project] = project(pr_name, generate: false)
   end
 

@@ -4,7 +4,7 @@ require 'yaml'
 require 'common'
 require 'openshift/resource_not_found_error'
 
-module BushSlicer
+module VerificationTests
   # @note represents a Resource / OpenShift API Object
   class Resource
     include Common::Helper
@@ -56,7 +56,7 @@ module BushSlicer
       if exists?(user: user, quiet: quiet, result: res)
         return res
       else
-        raise BushSlicer::ResourceNotFoundError,
+        raise VerificationTests::ResourceNotFoundError,
           "#{self.class::RESOURCE} '#{name}' not found"
       end
     end
@@ -185,7 +185,7 @@ module BushSlicer
       return res
     end
 
-    # @return [BushSlicer::ResultHash]
+    # @return [VerificationTests::ResultHash]
     def wait_to_appear(user, seconds = 30)
       res = {}
       iterations = 0
@@ -306,7 +306,7 @@ module BushSlicer
       return res
     end
 
-    # @return [BushSlicer::ResultHash] with :success true if we've eventually got
+    # @return [VerificationTests::ResultHash] with :success true if we've eventually got
     #   the resource in ready status; the result hash is from last executed
     #   get call
     # @note sub-class needs to implement the `#ready?` method

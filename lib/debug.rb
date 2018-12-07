@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
 
   # @note contain some debugging related code
   module Debug

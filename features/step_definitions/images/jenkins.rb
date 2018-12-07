@@ -15,7 +15,7 @@ Given /^I have an?( ephemeral| persistent)? jenkins v#{NUMBER} application(?: fr
     source = "| file | #{cust_templ} |"
   else
     unless type
-      scs = BushSlicer::StorageClass.get_matching(user: user) { |sc, sc_hash|
+      scs = VerificationTests::StorageClass.get_matching(user: user) { |sc, sc_hash|
         sc.default?
       }
       if scs.size != 1

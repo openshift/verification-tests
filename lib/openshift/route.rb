@@ -1,7 +1,7 @@
 require 'common'
 require 'openshift/project_resource'
 
-module BushSlicer
+module VerificationTests
   # @note represents an OpenShift route to a service
   #   https://docs.openshift.com/enterprise/3.0/architecture/core_concepts/routes.html
   class Route < ProjectResource
@@ -11,7 +11,7 @@ module BushSlicer
     attr_writer :service
 
     # @param name [String] name of route
-    # @param service [BushSlicer::Service] the service exposed via this route
+    # @param service [VerificationTests::Service] the service exposed via this route
     # @param props [Hash] additional properties of the route
     # @note custom constructor for historical reasons but should be compatible
     #   with ProjectResource@initialize
@@ -29,7 +29,7 @@ module BushSlicer
 
     def http_get(by:, proto: "http", port: nil, **http_opts)
       portstr = port ? ":#{port}" : ""
-      BushSlicer::Http.get(url: proto + "://" + dns(by: by) + portstr,
+      VerificationTests::Http.get(url: proto + "://" + dns(by: by) + portstr,
                           **http_opts)
     end
 

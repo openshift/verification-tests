@@ -2,7 +2,7 @@ require 'base64'
 require 'fileutils'
 require 'tmpdir' # Dir.tmpdir
 
-module BushSlicer
+module VerificationTests
   class SaveToDirEmbeddingFormatter
     attr_reader :target_dir, :log
     private :target_dir, :log

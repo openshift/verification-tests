@@ -74,7 +74,7 @@ Feature: ONLY ONLINE Quota related scripts in this file
   # @case_id OCP-10291
   Scenario: Can not create resource exceed the hard quota in appliedclusterresourcequota  
     Given I have a project  
-    And evaluation of `BushSlicer::AppliedClusterResourceQuota.list(user: user, project: project)` is stored in the :acrq clipboard
+    And evaluation of `VerificationTests::AppliedClusterResourceQuota.list(user: user, project: project)` is stored in the :acrq clipboard
     And evaluation of `cb.acrq.find{|o|o.name.end_with?("-compute")}` is stored in the :memory_crq clipboard
     And evaluation of `cb.acrq.find{|o|o.name.end_with?('-timebound')}` is stored in the :memory_terminate_crq clipboard
     And evaluation of `cb.acrq.find{|o|o.name.end_with?('-noncompute')}` is stored in the :storage_crq clipboard

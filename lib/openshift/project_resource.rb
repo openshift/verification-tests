@@ -3,7 +3,7 @@ require 'yaml'
 
 require 'openshift/resource'
 
-module BushSlicer
+module VerificationTests
   # @note represents an OpenShift namespaced Resource (part of a Project)
   class ProjectResource < Resource
     attr_reader :project
@@ -11,7 +11,7 @@ module BushSlicer
     # RESOURCE = "define me"
 
     # @param name [String] name of the resource
-    # @param project [BushSlicer::Project] the project we belong to
+    # @param project [VerificationTests::Project] the project we belong to
     # @param props [Hash] additional properties of the resource
     def initialize(name:, project:)
       unless String === name
@@ -30,12 +30,12 @@ module BushSlicer
     end
 
     # creates a new OpenShift Project Resource via API
-    # @param by [BushSlicer::APIAccessorOwner, BushSlicer::APIAccessor] the user to create
+    # @param by [VerificationTests::APIAccessorOwner, VerificationTests::APIAccessor] the user to create
     #   ProjectResource as
-    # @param project [BushSlicer::Project] the namespace for the new resource
+    # @param project [VerificationTests::Project] the namespace for the new resource
     # @param spec [String, Hash] the Hash object to create project resource or
     #   a String path of a JSON/YAML file
-    # @return [BushSlicer::ResultHash]
+    # @return [VerificationTests::ResultHash]
     def self.create(by:, project:, spec:, **opts)
       if spec.kind_of? String
         # assume a file path (TODO: be more intelligent)
@@ -122,7 +122,7 @@ module BushSlicer
     end
 
     # @param labels [String, Array<String,String>] labels to filter on, read
-    #   [BushSlicer::Common::BaseHelper#selector_to_label_arr] carefully
+    #   [VerificationTests::Common::BaseHelper#selector_to_label_arr] carefully
     # @param count [Integer] minimum number of resources to wait for
     def self.wait_for_labeled(*labels, count: 1, user:, project:, seconds:)
       wait_for_matching(user: user, project: project, seconds: seconds,
@@ -134,7 +134,7 @@ module BushSlicer
 
     # @param count [Integer] minimum number of items to wait for
     # @yield block that selects items by returning true; see [#get_matching]
-    # @return [BushSlicer::ResultHash] with :matching key being array of matched
+    # @return [VerificationTests::ResultHash] with :matching key being array of matched
     #   resource items;
     def self.wait_for_matching(count: 1, user:, project:, seconds:,
                                                                   get_opts: [])
@@ -167,7 +167,7 @@ module BushSlicer
     end
 
     # @param labels [String, Array<String,String>] labels to filter on, read
-    #   [BushSlicer::Common::BaseHelper#selector_to_label_arr] carefully
+    #   [VerificationTests::Common::BaseHelper#selector_to_label_arr] carefully
     # @return [Array<ProjectResource>] with :matching key being array of matched
     #   resources
     def self.get_labeled(*labels, user:, project:, result: {}, quiet: false)

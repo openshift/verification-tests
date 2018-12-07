@@ -5,7 +5,7 @@ require 'common'
 require 'host'
 require 'launchers/cloud_helper'
 
-module BushSlicer
+module VerificationTests
 
   class Amz_EC2
     include Common::Helper
@@ -352,7 +352,7 @@ module BushSlicer
       end
 
       hostname = instance.public_dns_name
-      host = BushSlicer.const_get(config[:hosts_type]).new(hostname, host_opts)
+      host = VerificationTests.const_get(config[:hosts_type]).new(hostname, host_opts)
       if wait
         logger.info("Waiting for #{hostname} to become accessible..")
         begin
@@ -442,7 +442,7 @@ module BushSlicer
     #   http://docs.aws.amazon.com/sdkforruby/api/Aws/EC2/Resource.html#create_instances-instance_method
     # @param [Integer] max_retries max retries to try (TODO)
     #
-    # @return [Array] of [amz_instance, BushSlicer::Host] pairs
+    # @return [Array] of [amz_instance, VerificationTests::Host] pairs
     #
     def launch_instances(image: nil,
                          tag_name: nil,

@@ -37,7 +37,7 @@ Given /^([0-9]+) PVCs become #{SYM}(?: within (\d+) seconds)? with labels:$/ do 
   status = status.to_sym
   num = Integer(count)
 
-  @result = BushSlicer::PersistentVolumeClaim.wait_for_labeled(*labels,
+  @result = VerificationTests::PersistentVolumeClaim.wait_for_labeled(*labels,
               project: project, count: num, user: user, seconds: timeout) do |pvc, pvc_hash|
     pvc.status?(user: user, status: status, cached: true)[:success]
   end

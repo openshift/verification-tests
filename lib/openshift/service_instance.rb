@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
   # represents an OpenShift ConfigMap
   class ServiceInstance < ProjectResource
     RESOURCE = "serviceinstances"
@@ -23,7 +23,7 @@ module BushSlicer
       rr.dig('spec', 'clusterServiceClassRef')
     end
 
-    # @return [BushSlicer::ResultHash] with :success depending on
+    # @return [VerificationTests::ResultHash] with :success depending on
     #   condition type=Ready and status=True
     def ready?(user:, quiet: false, cached: false)
       if cached && props[:raw]

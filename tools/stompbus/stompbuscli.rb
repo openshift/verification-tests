@@ -12,7 +12,7 @@ require_relative "stompbus"
 # require 'common'
 
 
-module BushSlicer
+module VerificationTests
   class STOMPBusCli
     include Commander::Methods
     # include Common::Helper
@@ -144,5 +144,5 @@ module BushSlicer
 end
 
 if __FILE__ == $0
-  BushSlicer::STOMPBusCli.new.run
+  VerificationTests::STOMPBusCli.new.run
 end

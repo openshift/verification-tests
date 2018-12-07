@@ -1,7 +1,7 @@
 Given /^host subnets are stored in the#{OPT_SYM} clipboard$/ do |clipboard|
   clipboard ||= "host_subnets"
 
-  cb[clipboard] = BushSlicer::HostSubnet.list(user: admin)
+  cb[clipboard] = VerificationTests::HostSubnet.list(user: admin)
   cache_resources *cb[clipboard]
 end
 

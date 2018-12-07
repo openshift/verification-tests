@@ -8,7 +8,7 @@ require 'json'
 require 'common'
 require_relative 'tcms'
 
-module BushSlicer
+module VerificationTests
   # this is our TCMS test case manager
   # tried to make it quick and dirty but it became only dirty
   class TCMSManager
@@ -33,7 +33,7 @@ module BushSlicer
 
     ############ test case manager interface methods ############
 
-    # act according to signal from BushSlicer
+    # act according to signal from VerificationTests
     #   job == TCMS test case == some set of Cucumber scenarios/test cases
     #   test case == Cucumber scenario
     # @note see [TCMSTestCaseRun#overall_status=] for how status works
@@ -225,7 +225,7 @@ module BushSlicer
         ## move artifacts to a separate dir
         dir = formatter.process_scenario_log(after_failed: after_failed?,
                                              before_failed: before_failed?)
-        #target_dir = Dir.mktmpdir("bushslicer_artifacts_")
+        #target_dir = Dir.mktmpdir("verification-tests_artifacts_")
         #FileUtils.mv dir, target_dir
 
         ## add attach_queue workitem
@@ -235,11 +235,11 @@ module BushSlicer
       end
     end
 
-    # @return [BushSlicer::Host] of the server storing logs and artifacts
+    # @return [VerificationTests::Host] of the server storing logs and artifacts
     def artifacts_filer
       @artifacts_filer if @artifacts_filer
 
-      @artifacts_filer = BushSlicer.
+      @artifacts_filer = VerificationTests.
         const_get(conf[:services, :artifacts_file_server, :host_type]).
         new(
           conf[:services, :artifacts_file_server, :hostname],

@@ -15,7 +15,7 @@ require 'host'
 require 'http'
 require 'net'
 
-module BushSlicer
+module VerificationTests
   # works with OSP10 and OSP7
   class OpenStack10
     include Common::Helper
@@ -436,7 +436,7 @@ module BushSlicer
           "volume": {
             "availability_zone": null,
             "source_volid": "#{id}",
-            "description": "BushSlicer created volume",
+            "description": "VerificationTests created volume",
             "multiattach ": false,
             "snapshot_id": null,
             "name": "#{name}"
@@ -461,7 +461,7 @@ module BushSlicer
             "size": #{size},
             "availability_zone": null,
             "source_volid": null,
-            "description": "BushSlicer created volume",
+            "description": "VerificationTests created volume",
             "multiattach ": false,
             "snapshot_id": null,
             "name": "#{name}",
@@ -668,7 +668,7 @@ module BushSlicer
         params[:floatingip].merge!({
           project_id: self.os_tenant_id,
           floating_network_id: floating_ip_networks[0]["id"],
-          description: "IP allocated automatically by BushSlicer"
+          description: "IP allocated automatically by VerificationTests"
         })
       end
 
@@ -706,7 +706,7 @@ module BushSlicer
     # @param host_opts [Hash<Symbol, Object>] options for connecting the host
     # @param names [Array<String>] array of names to give to new machines
     # @return [Hash] a hash of name => hostname pairs
-    # TODO: make this return a [Hash] of name => BushSlicer::Host pairs
+    # TODO: make this return a [Hash] of name => VerificationTests::Host pairs
     def launch_instances(names:, **create_opts)
       res = {}
       host_opts = create_opts.delete(:host_opts) || {}
@@ -725,7 +725,7 @@ module BushSlicer
     class Instance
       attr_reader :client
 
-      # @param client [BushSlicer::OpenStack] the client to use for operations
+      # @param client [VerificationTests::OpenStack] the client to use for operations
       # @param name [String] instance name as shown in console; required unless
       #   `spec` is provided
       # @param spec [Hash] the hash describing instance as returned by API
@@ -853,7 +853,7 @@ end
 
 ## Standalone test
 if __FILE__ == $0
-  extend BushSlicer::Common::Helper
+  extend VerificationTests::Common::Helper
   require 'pry'
   test_res = {}
   service_matcher = ARGV.first || ""
@@ -861,7 +861,7 @@ if __FILE__ == $0
     if service[:cloud_type] == 'openstack' &&
         name.to_s.include?(service_matcher) &&
         service[:password]
-      os = BushSlicer::OpenStack10.new(service_name: name)
+      os = VerificationTests::OpenStack10.new(service_name: name)
       res = true
       test_res[name] = res
       begin

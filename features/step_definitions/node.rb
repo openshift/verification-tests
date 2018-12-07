@@ -36,7 +36,7 @@ Given /^(I|admin) stores? in the#{OPT_SYM} clipboard the nodes backing pods(?: i
     _user = user
   end
 
-  pods = BushSlicer::Pod.get_labeled(*labels.raw.flatten,
+  pods = VerificationTests::Pod.get_labeled(*labels.raw.flatten,
                                        project: project(project),
                                        user: _user)
 
@@ -86,7 +86,7 @@ Given /^I run( background)? commands on the hosts in the#{OPT_SYM} clipboard:$/ 
   cbname ||= "hosts"
 
   unless Array === cb[cbname] && cb[cbname].size > 0 &&
-      cb[cbname].all? {|e| BushSlicer::Host === e}
+      cb[cbname].all? {|e| VerificationTests::Host === e}
     raise "You must set a clipboard prior to running this step"
   end
 
@@ -164,7 +164,7 @@ Given /^the #{QUOTED} file is restored on all hosts in the#{OPT_QUOTED} clipboar
 
   orig_host = @host
   cb[cb_name].each { |h|
-    @host = BushSlicer::Host === h ? h : h.host
+    @host = VerificationTests::Host === h ? h : h.host
     step %{the "#{path}" file is restored on host after scenario}
   }
   @host = orig_host
@@ -358,7 +358,7 @@ end
 
 Given /^all nodes config is restored$/ do
   ensure_destructive_tagged
-  BushSlicer::ResultHash.aggregate_results(
+  VerificationTests::ResultHash.aggregate_results(
     *env.nodes.map(&:service).each { |s| s.config.restore() }
   )
 end
@@ -401,7 +401,7 @@ Given /^I try to restart the node service on all( schedulable)? nodes$/ do |sche
     results.push(@result = service.restart)
   }
 
-  @result = BushSlicer::ResultHash.aggregate_results(results)
+  @result = VerificationTests::ResultHash.aggregate_results(results)
 end
 
 Given /^I try to restart the node service on node#{OPT_QUOTED}$/ do |node_name|
@@ -442,7 +442,7 @@ Given /^the taints of the nodes in the#{OPT_SYM} clipboard are restored after sc
   _original_taints = _nodes.map { |n| [n,n.taints] }.to_h
 
   teardown_add {
-    BushSlicer::Resource.bulk_update(user: admin, resources: _nodes)
+    VerificationTests::Resource.bulk_update(user: admin, resources: _nodes)
     _current_taints = _nodes.map { |n| [n,n.taints] }.to_h
     _diff_taints = _nodes.map do |node|
       [node, _current_taints[node] - _original_taints[node]]
@@ -473,7 +473,7 @@ Given /^the taints of the nodes in the#{OPT_SYM} clipboard are restored after sc
     end
 
     # verify if the restoration process was succesfull
-    BushSlicer::Resource.bulk_update(user: admin, resources: _nodes)
+    VerificationTests::Resource.bulk_update(user: admin, resources: _nodes)
     _current_taints = _nodes.map { |n| [n,n.taints] }.to_h
     _diff_taints = _nodes.map do |node|
       [node, _current_taints[node] - _original_taints[node]]
@@ -487,7 +487,7 @@ end
 
 Given /^I run commands on all nodes:$/ do |table|
   ensure_admin_tagged
-  @result = BushSlicer::ResultHash.aggregate_results env.node_hosts.map { |host|
+  @result = VerificationTests::ResultHash.aggregate_results env.node_hosts.map { |host|
     host.exec_admin(table.raw.flatten)
   }
 end

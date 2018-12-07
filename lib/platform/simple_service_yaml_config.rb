@@ -1,6 +1,6 @@
 require 'yaml'
 
-module BushSlicer
+module VerificationTests
   module Platform
     # class to help operations over master-config.yaml file on the masters
     class SimpleServiceYAMLConfig

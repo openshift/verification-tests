@@ -15,7 +15,7 @@ require "gherkin_parse"
 
 require_relative "stompbus/stompbus"
 
-module BushSlicer
+module VerificationTests
   class PolarShiftCli
     include Commander::Methods
     include Common::Helper
@@ -215,7 +215,7 @@ module BushSlicer
 
     def print_fileno(locations)
       puts "To execute listed test cases on command line, use this filter:"
-      home = Pathname.new(::BushSlicer::HOME)
+      home = Pathname.new(::VerificationTests::HOME)
       puts HighLine.color(
         locations.
           map(&:last).
@@ -329,5 +329,5 @@ module BushSlicer
 end
 
 if __FILE__ == $0
-  BushSlicer::PolarShiftCli.new.run
+  VerificationTests::PolarShiftCli.new.run
 end

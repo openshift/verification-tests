@@ -1,4 +1,4 @@
-module BushSlicer
+module VerificationTests
   # helper to access qoota limit values for classes like
   #   AppliedClusterResourceQuota
   class QuotaLimits

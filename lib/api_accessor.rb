@@ -1,11 +1,11 @@
-module BushSlicer
+module VerificationTests
   # common methods for all classes that have api access
   class APIAccessor
     attr_reader :env, :rest_preferences, :token, :expires, :client_cert,
       :client_key
     attr_writer :id
 
-    # @param env [BushSlicer::Environment] the test environment of accessor
+    # @param env [VerificationTests::Environment] the test environment of accessor
     # @param expires [Time, false] the time our auth is valid until, false
     #   if never expired
     # @param id [String] symbolic string to identify this API accessor, usually
@@ -15,7 +15,7 @@ module BushSlicer
     # @param token_protected [Boolean] are allowed to invalidate token
     # @param client_cert [Array] see [CliExecutor::client_cert_from_cli], if
     #   cert auth is to be used
-    # @param env [BushSlicer::Environment] the test environment of accessor
+    # @param env [VerificationTests::Environment] the test environment of accessor
     # @return [User]
     def initialize(id: nil, token: nil, token_protected: true,
                    expires: false, client_cert: nil, client_key: nil, env:)
