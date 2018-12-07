@@ -1,6 +1,4 @@
-# The standard name for this image is aosqe/bushslicer-base
-
-FROM centos
+FROM openshift/origin-cli
 
 LABEL vendor="Red Hat inc."
 LABEL maintainer="AOS QE Team"
@@ -25,7 +23,4 @@ RUN set -x && \
 RUN scl enable rh-ror50 /bushslicer/tools/install_os_deps.sh
 RUN scl enable rh-ror50 /bushslicer/tools/hack_bundle.rb
 
-RUN yum install -y http://mirror.centos.org/centos/7/paas/x86_64/openshift-origin/origin-clients-3.10.0-1.el7.git.0.0c4577e.x86_64.rpm
-
-RUN yum clean all -y && \
-    rm -rf /bushslicer /var/cache/yum /tmp/*
+RUN yum clean all -y && rm -rf /bushslicer /var/cache/yum /tmp/*
