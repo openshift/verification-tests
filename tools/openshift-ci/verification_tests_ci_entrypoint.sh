@@ -11,7 +11,6 @@ then
       export BUSHSLICER_TEST_RESULTS="$PWD/junit-report"
 fi
 
-
 export BUSHSLICER_DEFAULT_ENVIRONMENT="$BUSHSLICER_TEST_ENVIRONMENT"
 [[ -z "$BUSHSLICER_DEFAULT_ENVIRONMENT" ]] && { echo "BUSHSLICER_DEFAULT_ENVIRONMENT not set"; exit 1; }
 
@@ -27,7 +26,7 @@ unset BUSHSLICER_DEBUG_AFTER_FAIL
 # set Internal Field Separator for the file to the newline char
 IFS=$'\n'
 for i in $(cat < "case_id_lookup_table.txt"); do
-  COMMAND_STRING=$COMMAND_STRING$(echo " ";echo $i | awk -F '|' '{print $2 ":" $3}')
+  COMMAND_STRING=$COMMAND_STRING$(echo " ";echo $i | awk -F '|' '{print $2}')
 done
 
 /usr/bin/scl enable rh-git29 rh-ror50 -- cucumber -p junit -f $BUSHSLICER_TEST_FORMAT -o $BUSHSLICER_TEST_RESULTS $COMMAND_STRING
