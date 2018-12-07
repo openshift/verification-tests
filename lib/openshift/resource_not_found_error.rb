@@ -1,4 +1,6 @@
+require 'error'
+
 module BushSlicer
-  class ResourceNotFoundError < RuntimeError
+  class ResourceNotFoundError < NotFoundError
   end
 end
