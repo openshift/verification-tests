@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 [[ -z "$BUSHSLICER_TEST_ENVIRONMENT" ]] && { echo "BUSHSLICER_TEST_ENVIRONMENT not set"; exit 1; }
 [[ -z "$BUSHSLICER_TEST_CLUSTER" ]] && { echo "BUSHSLICER_TEST_CLUSTER not set"; exit 1; }
