@@ -1,7 +1,3 @@
-check_desired_pod_count:
-  element:
-    selector:
-      xpath: //dd//a[contains(text(),"<pod_count>")]
 update_resource_count:
   elements:
   - selector: &modal_count
