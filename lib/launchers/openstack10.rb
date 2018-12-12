@@ -273,7 +273,8 @@ module BushSlicer
     def os_network_url
       # select region?
       os_network_service['endpoints'][0]['publicURL'] ||
-        os_network_service['endpoints'][0]['url']
+        os_network_service['endpoints'].
+        find{|e| e["interface"] == "public"}['url']
     end
 
     def get_objects(obj_type, params: nil, quiet: false)
@@ -693,6 +694,10 @@ module BushSlicer
       return @floating_ip_networks if @floating_ip_networks && !refresh
 
       return get_networks.select{|n| n["router:external"]}
+    end
+
+    def network_by_id(id)
+      get_networks.find { |n| n["id"] == id }
     end
 
     # @param service_name [String] the service name of this openstack instance
