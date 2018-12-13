@@ -14,11 +14,6 @@ click_cancel_button:
   - selector:
       xpath: //button[contains(text(),'Cancel')]
     op: click
-click_resource_action_icon:
-  elements:
-  - selector:
-      xpath: //a[text()='<resource_name>']/ancestor::span/../div//span[contains(@class,'co-m-cog__icon')]
-    op: click
 click_tab:
   elements:
   - selector:
@@ -46,37 +41,11 @@ check_page_contains:
   element:
     selector:
       xpath: //*[contains(.,'<content>')]
-click_resource_action_button:
-  elements:
-  - selector:
-      xpath: //button//span[contains(text(),'Actions')]
-    op: click
-choose_item_from_list:
-  elements:
-  - selector:
-      xpath: //li//*[text()='<item>']
-    op: click
 submit_changes:
   element:
     selector:
       xpath: //button[@type='submit']
     op: click
-click_one_dropdown_action:
-  action: click_resource_action_button
-  action: choose_item_from_list
-add_annotation_for_resource:
-  action: click_one_dropdown_action
-  action: add_annotation
-  action: submit_changes
-add_annotation:
-  action: click_add_more_button
-  elements:
-  - selector:
-      xpath: //input[contains(@placeholder,'key')]
-    op: send_keys <annotation_key>
-  - selector:
-      xpath: //input[contains(@placeholder,'value')]
-    op: send_keys <annotation_value>
 click_add_more_button:
   element:
     selector:
@@ -88,31 +57,11 @@ click_annotation_link:
       xpath: //a[contains(text(), 'Annotation')]
     op: click
     timeout: 20
-delete_resource_panel:
-  action:
-    if_param:
-      cascade: 'false'
-    ref: uncheck_checkbox
-  action: submit_changes
 uncheck_checkbox:
   element:
     selector:
       xpath: //input[contains(@type,'checkbox')]
     op: click
-add_label_for_resource:
-  action: click_one_dropdown_action
-  action: add_label
-  action: submit_changes
-add_label:
-  elements:
-  - selector:
-      id: tags-input
-    type: input
-    op: send_keys <new_label>
-  - selector:
-      id: tags-input
-    type: input
-    op: send_keys <press_enter>
 
 ## -------- check resource key and values pairs ------
 check_resource_details:
