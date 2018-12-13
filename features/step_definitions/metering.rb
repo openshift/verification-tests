@@ -42,41 +42,52 @@ end
 #  ReportGenerationQueries do 'oc get reportgenerationqueries -n $METERING_NAMESPACE'
 # 2. Creating a report
 # =>
-
+# for easier to test, we default to 'runImmediately', to disable that parameter,
+# specify the parameter `run_immediately` the value `false` in the table
 Given /^I get the #{QUOTED} report and store it in the#{OPT_SYM} clipboard using:$/ do |name, cb_name, table|
   ensure_admin_tagged
 
   cb_name ||= :report
   opts = opts_array_to_hash(table.raw)
-  default_start_time = "#{Time.now.year}" + "-01-01T00:00:00Z"
-  default_end_time = "#{Time.now.year}" + "-12-30T23:59:59Z"
+  # one day before current time
+  default_start_time = (Time.now - 86400).utc.strftime('%FT%TZ') #"#{Time.now.year}" + "-01-01T00:00:00Z"
+  default_end_time = "#{Time.now.year}" + "-12-30T23:59:59Z"  # end of the year
   default_format = 'json'
+  opts[:run_immediately] ||= true
   # sanity check
   required_params = [:query_type ]
   required_params.each do |param|
     raise "Missing parameter '#{param}'" unless opts[param]
   end
+  opts[:start_time] ||= default_start_time
+  opts[:end_time] ||= default_end_time
+  opts[:run_immediately] = to_bool(opts[:run_immediately])
+  opts[:grace_period] ||= nil
+  opts[:schedule] ||= opts[:schedule]
+  opts[:format] ||= default_format
+  opts[:metadata_name] ||= name
 
-  query_type = opts[:query_type]  # short hand for reportGenerationQueries
-  start_time = opts[:start_time].nil? ? default_start_time : opts[:start_time]
-  end_time = opts[:end_time].nil? ? default_end_time : opts[:end_time]
-  run_now = opts[:run_now].nil? ? 'true' : opts[:run_now]
-  report_format = opts[:format].nil? ? default_format : opts[:format]
-  # create the report resource
-  opts[:report_yaml] = BushSlicer::Report.generate_yaml(
-    query_type: query_type, start_time: start_time, end_time: end_time,
-    run_now: run_now) unless opts[:report_yaml]
-  logger.info("#### gernated report using the following yaml:\n #{opts[:report_yaml]}")
-  report(name).construct(user: user, **opts)
-  report(name).wait_till_finished(user: user)
+  unless opts[:use_existing_report] == 'true'
+    # create the report resource
+    opts[:report_yaml] = BushSlicer::Report.generate_yaml(opts)
+    logger.info("#### generated report using the following yaml:\n #{opts[:report_yaml]}")
+    report(name).construct(user: user, **opts)
+    if opts[:run_immediately]
+      report(name).wait_till_finished(user: user, cached: false)
+    else
+      report(name).wait_till_running(user: user, cached: false)
+    end
+  end
+
   # report object confirm it's ready to be used, before querying, we need to enable proxy on the host
   host.exec('oc proxy', background: true)
   step %Q/I perform the :view_metering_report rest request with:/, table(%{
     | project_name  | #{project.name}  |
     | name          | #{name}          |
-    | report_format | #{report_format} |
+    | report_format | #{opts[:format]} |
     })
-  if report_format != 'json' and report_format != 'yaml'
+  binding.pry
+  if opts[:format] != 'json' and opts[:format] != 'yaml'
     # just return raw response for not easily parseable formats
     cb[cb_name] = @result[:response].to_s
   else
@@ -116,7 +127,7 @@ Given /^I wait until #{QUOTED} report for #{QUOTED} namespace to be available$/ 
   res = []
   success = wait_for(seconds) do
     step %Q/I get the "#{report_type}" report and store it in the clipboard using:/, table(%{
-       | query_type          | persistentvolumeclaim-request |
+       | query_type | #{report_type} |
     })
     res = cb.report.select { |r| r['namespace'] == namespace }
     res.count > 0

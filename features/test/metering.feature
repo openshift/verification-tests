@@ -18,13 +18,13 @@ Feature: test metering related steps
     And I use the "openshift-metering" project
     Given I select a random node's host
     Given I get the "node-cpu-capacity" report and store it in the clipboard using:
-      | query_type          | node-cpu-capacity |
-      | use_existing_report | true              |
-    Given I get the "node-cpu-capacity" report and store it in the clipboard using:
-      | query_type | node-cpu-capacity |
-    Given I get the "node-cpu-capacity" report and store it in the clipboard using:
-      | query_type          | node-cpu-capacity |
-      | use_existing_report | true              |
+      | run_immediately | true               |
+      | query_type      | node-cpu-capacity   |
+    Given I get the "node-memory-capacity-test" report and store it in the clipboard using:
+      | query_type      | node-memory-capacity                              |
+      | run_immediately | false                                             |
+      | schedule        | { period: hourly, hourly: {minute: 0, second: 0}} |
+      | start_time      | <%= Time.now.utc.strftime('%FT%TZ') %>            |
 
   @admin
   Scenario: test create app to support metering reports
