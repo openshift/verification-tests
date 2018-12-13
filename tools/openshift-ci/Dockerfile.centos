@@ -1,11 +1,11 @@
-FROM openshift/origin-cli
+FROM centos
 
 LABEL vendor="Red Hat inc."
 LABEL maintainer="AOS QE Team"
 
 USER root
 
-ADD . /bushslicer/
+ADD . /verification-tests/
 
 RUN set -x && \
     SCL_BASE_PKGS="centos-release-scl scl-utils-build" && \
@@ -20,7 +20,7 @@ RUN set -x && \
     curl -sSL https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm -o /tmp/epel-release-latest-7.noarch.rpm && \
     yum install -y /tmp/epel-release-latest-7.noarch.rpm
 
-RUN scl enable rh-ror50 /bushslicer/tools/install_os_deps.sh
-RUN scl enable rh-ror50 /bushslicer/tools/hack_bundle.rb
+RUN scl enable rh-ror50 /verification-tests/tools/install_os_deps.sh
+RUN scl enable rh-ror50 /verification-tests/tools/hack_bundle.rb
 
-RUN yum clean all -y && rm -rf /bushslicer /var/cache/yum /tmp/*
+RUN yum clean all -y && rm -rf /verification-tests /var/cache/yum /tmp/*
