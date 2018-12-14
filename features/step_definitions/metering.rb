@@ -50,7 +50,7 @@ Given /^I get the #{QUOTED} report and store it in the#{OPT_SYM} clipboard using
   cb_name ||= :report
   opts = opts_array_to_hash(table.raw)
   # one day before current time
-  default_start_time = (Time.now - 86400).utc.strftime('%FT%TZ') #"#{Time.now.year}" + "-01-01T00:00:00Z"
+  default_start_time = (Time.now - 86400).utc.strftime('%FT%TZ')
   default_end_time = "#{Time.now.year}" + "-12-30T23:59:59Z"  # end of the year
   default_format = 'json'
   opts[:run_immediately] ||= true
@@ -66,16 +66,15 @@ Given /^I get the #{QUOTED} report and store it in the#{OPT_SYM} clipboard using
   opts[:schedule] ||= opts[:schedule]
   opts[:format] ||= default_format
   opts[:metadata_name] ||= name
-
   unless opts[:use_existing_report] == 'true'
     # create the report resource
     opts[:report_yaml] = BushSlicer::Report.generate_yaml(opts)
     logger.info("#### generated report using the following yaml:\n #{opts[:report_yaml]}")
     report(name).construct(user: user, **opts)
     if opts[:run_immediately]
-      report(name).wait_till_finished(user: user, cached: false)
+      report(name).wait_till_finished(user: user)
     else
-      report(name).wait_till_running(user: user, cached: false)
+      report(name).wait_till_running(user: user)
     end
   end
 
@@ -86,7 +85,6 @@ Given /^I get the #{QUOTED} report and store it in the#{OPT_SYM} clipboard using
     | name          | #{name}          |
     | report_format | #{opts[:format]} |
     })
-  binding.pry
   if opts[:format] != 'json' and opts[:format] != 'yaml'
     # just return raw response for not easily parseable formats
     cb[cb_name] = @result[:response].to_s

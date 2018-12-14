@@ -1,7 +1,7 @@
 # for reference on how to use Metering please consult the following link
 # https://github.com/operator-framework/operator-metering/blob/master/Documentation/using-metering.md
 
-require 'openshift/flakes/conditions'
+require 'openshift/flakes/condition'
 
 module BushSlicer
   class Report < ProjectResource
@@ -10,7 +10,7 @@ module BushSlicer
 
     def conditions(user: nil, cached: false, quiet: false)
       rr = raw_resource(user: user, cached: cached, quiet: quiet).dig('status', 'conditions')
-      rr.map { |cond| Conditions.new cond }
+      rr.map { |cond| Condition.new cond }
     end
 
     def running?(user: nil, cached: false, quiet: false)
@@ -19,10 +19,10 @@ module BushSlicer
     end
 
     # wait until the stauts of the Report becomes 'Finished'
-    def wait_till_finished(user: nil, cached: false, quiet: false)
+    def wait_till_finished(user: nil, quiet: false)
       seconds = 60 # for PVs it can take longer than 30s
       success = wait_for(seconds) do
-        finished?(user:user, cached: cached, quiet: quiet)
+        finished?(user: user, quiet: quiet)
       end
       raise "Report '#{self.name}' didn't become :finished" unless success
       return success
@@ -30,22 +30,23 @@ module BushSlicer
 
     # for scheduledreport or a report that has not reached the reportingEnd
     # time, we just need to check that the type is Running and
-    def wait_till_running(user: nil, cached: false, quiet: false)
+    def wait_till_running(user: nil, quiet: false)
       seconds = 60 # for PVs it can take longer than 30s
       success = wait_for(seconds) do
-        running?(user: user, cached: cached, quiet: quiet)
+        running?(user: user, quiet: quiet)
       end
       raise "Report didn't become :running" unless success
       return success
     end
 
-    def finished?(user: nil, cached: false, quiet: false)
+    def finished?(user: nil, quiet: false)
       ## TODO: make this backwardcompatible
       # phase(user:user, cached: cached, quiet: quiet) == :finished
       conditions.any? { |c| c.reason == 'ReportPeriodFinished' }
     end
 
     def self.generate_yaml(**opts)
+      schedule = opts[:schedule].nil? ? nil : YAML.load(opts[:schedule])
       report_hash = {
         "apiVersion" => "metering.openshift.io/v1alpha1",
         "kind" => 'Report',
@@ -58,7 +59,7 @@ module BushSlicer
           "generationQuery" => opts[:query_type],
           "gracePeriod" => opts[:grace_period],
           "runImmediately" => opts[:run_immediately],
-          "schedule" => YAML.load(opts[:schedule])
+          "schedule" => schedule
         },
       }
       # delete the hash element if nil
