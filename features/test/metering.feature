@@ -44,3 +44,11 @@ Feature: test metering related steps
     And I use the "openshift-metering" project
     Given I enable route for metering service
     Given I disable route for metering service
+
+  @admin
+  @destructive
+  Scenario: install metering using openshift-install.sh
+    Given metering service has been installed successfully using shell script
+    Given metering service is uninstalled using shell script
+    And I switch to the first user
+    Given metering service has been installed successfully using ansible

@@ -2,22 +2,45 @@
 require 'ssl'
 # For metering automation, we just install once and re-use the installation
 # unless the scenarios are for testing installation
-
 # checks that metering service is already installed
-Given /^metering service has been installed successfully$/ do
+Given /^metering service has been installed successfully(?: using (ansible|shell script|OLM))?$/ do |method|
   ensure_admin_tagged
+
+  # default to shell script installation until OLM install is supported
+  method ||= "shell script"
+  case method
+  when "shell script"
+    namespace = "metering"
+    metering_name = "operator-metering"
+  when "ansible"
+    namespace = "openshift-metering"
+    metering_name = "openshift-metering"
+  when "OLM"
+    namespace = "metering"  # TDB
+  end
+  # save it to clipboard for future reference
+  cb.metering_namespace = namespace
+
+  step %Q/I save the project name hosting "metering" resource named "#{metering_name}" to clipboard/
   # a pre-req is that openshift-monitoring is installed in the system, w/o it
   # the openshift-metering won't function correctly
   unless project('openshift-monitoring').exists?
-    raise "service openshift-monitoring is a pre-requisite for openshift-metering"
+    raise "service openshift-monitoring is a pre-requisite for #{namespace}"
   end
   # change project context
-  unless project('openshift-metering').exists?
-    # install metering using default
-    step %Q/default metering service is installed without cleanup/
+  unless cb.namespace
+    case method
+    when "shell script"
+      step %Q/metering service is installed using shell script/
+    when "ansible"
+      # install metering using default
+      step %Q/default metering service is installed without cleanup/
+    when "OLM"
+      raise "OLM installation of metering service is not supported"
+    end
   end
-  step %Q/all metering related pods are running in the project/
-  step %Q/I wait for the "openshift-metering" metering to appear/
+  step %Q/all metering related pods are running in the "#{namespace}" project/
+  step %Q/I wait for the "#{metering_name}" metering to appear/
 end
 
 Given /^default metering service is installed without cleanup$/ do
@@ -162,4 +185,25 @@ Given /^I disable route for#{OPT_QUOTED} metering service$/ do | metering_name |
   @result = user.cli_exec(:patch, **opts)
   # route name is ALWAYS set to 'metering'
   step %Q/I wait for the resource "route" named "metering" to disappear/
+end
+
+# use the hack/openshift-install.sh shell script to install metering.  NOTE, metering
+# for shell-script installation, the default namespace is 'metering' which differs
+# from ansible install.  We set the cb['metering_namespace'] to it.
+Given /^metering service is (installed|uninstalled) using shell script$/ do | op |
+  step %Q/I use the first master host/
+  metering_repo='https://github.com/operator-framework/operator-metering.git'
+  # install git
+  install_git_via_yum = "yum -y install git"
+  host.exec(install_git_via_yum)
+  git_clone_cmd = "git clone #{metering_repo}"
+  res = host.exec(git_clone_cmd)
+  cb[:metering_namespace] = 'metering'
+  if op == 'installed'
+    shell_cmd = "./operator-metering/hack/openshift-install.sh"
+  else
+    shell_cmd = "./operator-metering/hack/openshift-uninstall.sh"
+  end
+  res = host.exec(shell_cmd)
+  raise "#{cb.metering_namespace} #{op} unsuccessfully" unless res[:success]
 end
