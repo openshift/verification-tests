@@ -29,6 +29,7 @@ Given /^I save the project name hosting #{QUOTED} resource named #{QUOTED} to#{O
   cb_name ||= :namespace
   @result = admin.cli_exec(:get, all_namespaces: true, resource: resource, o: 'yaml')
   if @result[:parsed].nil?
+    logger.info("Can't find resource matching '#{resource} in any projects")
     cb[cb_name] = nil
   else
     res = @result[:parsed]['items'].select { |i| i['metadata']['name']==res_name }
