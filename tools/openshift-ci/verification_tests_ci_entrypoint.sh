@@ -22,11 +22,4 @@ export TESTENV="BUSHSLICER_V3"
 export BUSHSLICER_CONFIG="${BUSHSLICER_TEST_CONFIG}"
 unset BUSHSLICER_DEBUG_AFTER_FAIL
 
-# Generate the cucumber file list from the case id lookup table
-# set Internal Field Separator for the file to the newline char
-IFS=$'\n'
-for i in $(cat < "case_id_lookup_table.txt"); do
-  COMMAND_STRING=$COMMAND_STRING$(echo " ";echo $i | awk -F '|' '{print $2}')
-done
-
-/usr/bin/scl enable rh-git29 rh-ror50 -- cucumber -p junit -f $BUSHSLICER_TEST_FORMAT -o $BUSHSLICER_TEST_RESULTS $COMMAND_STRING
+/usr/bin/scl enable rh-git29 rh-ror50 -- cucumber -p junit -f $BUSHSLICER_TEST_FORMAT -o $BUSHSLICER_TEST_RESULTS $(../case_id_splitter.rb list_features $(<case_id_lookup_table.txt))
