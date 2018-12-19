@@ -153,9 +153,9 @@ module BushSlicer
     # @param hash of location data, with the key as the case_id, and the value as the file
     # location and line numbers, separately.
     private def generate_feature_list(cases_loc_hash)
-      complete_feature_list = ""
+      complete_feature_list = []
       cases_loc_hash.each do |key, value|
-        complete_feature_list = complete_feature_list + "#{value[0]}:#{value[1].to_s} "
+        complete_feature_list << "#{value[0]}:#{value[1].to_s}"
       end
       return complete_feature_list
     end
