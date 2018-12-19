@@ -22,4 +22,4 @@ export TESTENV="BUSHSLICER_V3"
 export BUSHSLICER_CONFIG="${BUSHSLICER_TEST_CONFIG}"
 unset BUSHSLICER_DEBUG_AFTER_FAIL
 
-/usr/bin/scl enable rh-git29 rh-ror50 -- cucumber -p junit -f $BUSHSLICER_TEST_FORMAT -o $BUSHSLICER_TEST_RESULTS $(../case_id_splitter.rb list_features $(<case_id_lookup_table.txt))
+/usr/bin/scl enable rh-git29 rh-ror50 -- cucumber -p junit -f $BUSHSLICER_TEST_FORMAT -o $BUSHSLICER_TEST_RESULTS $(../case_id_splitter.rb list_features $(<cases_ded_azure_3_11.txt))
