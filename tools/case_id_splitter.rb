@@ -39,8 +39,8 @@ module BushSlicer
         end
       end
 
-      command :list_features do |c|
-        c.syntax = "#{$0} list_features [options]"
+      command :file-line do |c|
+        c.syntax = "#{$0} file-line [options]"
         c.description = "Generate a list of feature files and line numbers given a list of case IDs"
         c.action do |args, options|
           setup_global_opts(options)
