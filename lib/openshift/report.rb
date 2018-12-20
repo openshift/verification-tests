@@ -1,46 +1,70 @@
 # for reference on how to use Metering please consult the following link
 # https://github.com/operator-framework/operator-metering/blob/master/Documentation/using-metering.md
+
+require 'openshift/flakes/condition'
+
 module BushSlicer
   class Report < ProjectResource
     RESOURCE = "reports"
 
-    def finished?(user: nil, cached: false, quiet: false)
-      phase(user:user, cached: cached, quiet: quiet) == :finished
+
+    def conditions(user: nil, cached: false, quiet: false)
+      rr = raw_resource(user: user, cached: cached, quiet: quiet).dig('status', 'conditions')
+      rr.map { |cond| Condition.new cond }
+    end
+
+    def running?(user: nil, cached: false, quiet: false)
+      # the reason 'Scheduled' is an initial state what we
+      conditions.any? { |c| c.type == 'Running' and c.reason != 'Scheduled' }
     end
 
     # wait until the stauts of the Report becomes 'Finished'
     def wait_till_finished(user: nil, quiet: false)
       seconds = 60 # for PVs it can take longer than 30s
       success = wait_for(seconds) do
-        finished?(user:user, cached: false, quiet: quiet)
+        finished?(user: user, quiet: quiet)
       end
-      raise "Report didn't become :finished" unless success
+      raise "Report '#{self.name}' didn't become :finished" unless success
       return success
     end
 
-    # need 4 inputs
-    # a. ReportGenerationQuery
-    # b. reportingStart
-    # c. reportingEnd
-    # d. runImmediately
-    def self.generate_yaml(query_type: self.name, start_time: nil, end_time: nil, run_now: "true")
-      # span the whole year if user didn't give a range
-      start_time ||= "#{Time.now.year}" + "-01-01T00:00:00Z"
-      end_time ||= "#{Time.now.year}" + "-12-30T23:59:59Z"
-      run_immediately ||= "true"
+    # for scheduledreport or a report that has not reached the reportingEnd
+    # time, we just need to check that the type is Running and
+    def wait_till_running(user: nil, quiet: false)
+      seconds = 60 # for PVs it can take longer than 30s
+      success = wait_for(seconds) do
+        running?(user: user, quiet: quiet)
+      end
+      raise "Report didn't become :running" unless success
+      return success
+    end
 
-      report = <<BASE_TEMPLATE
-        apiVersion: metering.openshift.io/v1alpha1
-        kind: Report
-        metadata:
-          name: #{query_type}
-        spec:
-          reportingStart: #{start_time}
-          reportingEnd: #{end_time}
-          generationQuery: #{query_type}
-          runImmediately: #{run_immediately}
-BASE_TEMPLATE
-      return report
+    def finished?(user: nil, quiet: false)
+      ## TODO: make this backwardcompatible
+      # phase(user:user, cached: cached, quiet: quiet) == :finished
+      conditions.any? { |c| c.reason == 'ReportPeriodFinished' }
+    end
+
+    def self.generate_yaml(**opts)
+      schedule = opts[:schedule].nil? ? nil : YAML.load(opts[:schedule])
+      report_hash = {
+        "apiVersion" => "metering.openshift.io/v1alpha1",
+        "kind" => 'Report',
+        "metadata" => {
+          "name" => opts[:metadata_name]
+        },
+        "spec" => {
+          "reportingStart" => opts[:start_time],
+          "reportingEnd" => opts[:end_time],
+          "generationQuery" => opts[:query_type],
+          "gracePeriod" => opts[:grace_period],
+          "runImmediately" => opts[:run_immediately],
+          "schedule" => schedule
+        },
+      }
+      # delete the hash element if nil
+      report_hash['spec'].compact!
+      return report_hash.to_yaml
     end
 
     # Any existing report object matching will be deleted and re-created with the new paramter.
