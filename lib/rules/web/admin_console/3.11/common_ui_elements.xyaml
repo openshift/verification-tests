@@ -100,7 +100,7 @@ uncheck_checkbox:
       xpath: //input[contains(@type,'checkbox')]
     op: click
 add_label_for_resource:
-  action: click_one_dropdown_action:
+  action: click_one_dropdown_action
   action: add_label
   action: submit_changes
 add_label:
