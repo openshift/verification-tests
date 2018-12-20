@@ -16,8 +16,8 @@ RUN set -x && \
     SCL_BASE_PKGS="centos-release-scl scl-utils-build" && \
     INSTALL_PKGS="rh-ruby24 rh-ror50-rubygem-nokogiri rh-ruby24-ruby-devel rh-git29 bsdtar" && \
     yum -y update && \
-    yum install -y --enablerepo=centosplus $SCL_BASE_PKGS && \
-    yum install -y --enablerepo=centosplus $INSTALL_PKGS && \
+    yum install -y --enablerepo=centosplus --setopt=skip_missing_names_on_install=False $SCL_BASE_PKGS && \
+    yum install -y --enablerepo=centosplus --setopt=skip_missing_names_on_install=False $INSTALL_PKGS && \
     yum install -y https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm && \
     CHROMEDRIVER_URL="https://chromedriver.storage.googleapis.com" && \
     CHROMEDRIVER_VERSION=`curl -L "$CHROMEDRIVER_URL/LATEST_RELEASE"` && \
@@ -25,7 +25,6 @@ RUN set -x && \
     GECKODRIVER_DOWNLOAD_URL="$(curl -L $GITHUB_API_CURL_OPTS https://api.github.com/repos/mozilla/geckodriver/releases/latest | grep -E 'browser_download_url.*linux64' | sed -E 's/.*(https[^"]*).*/\1/')" && \
     curl -L "$GECKODRIVER_DOWNLOAD_URL" | bsdtar -xvf - -C /usr/local/bin && \
     chmod +x /usr/local/bin/chromedriver /usr/local/bin/geckodriver && \
-    rpm -V $INSTALL_PKGS $SCL_BASE_PKGS && \
     curl -L https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm -o /tmp/epel-release-latest-7.noarch.rpm && \
     yum install -y /tmp/epel-release-latest-7.noarch.rpm && \
     mkdir -p $HOME/bin
