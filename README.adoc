@@ -7,8 +7,8 @@ More info you can find in link:doc/overview.adoc[Overview document].
 === Create local dev environment
 
 . Install git if not installed already, install ruby 2.4+ if not installed
-. git clone git@github.com:openshift/bushslicer.git
-. cd bushslicer
+. git clone git@github.com:openshift/verification-tests.git
+. cd verification-tests
 . tools/install_os_deps.sh # need sudo; you may need to login again to terminal if ruby was installed via rvm during this phase
 . tools/hack_bundle.rb # normal user
 . install OKD or OpenShift Container Platform client tools
