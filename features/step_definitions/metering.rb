@@ -17,11 +17,12 @@ Given /^metering service has been installed successfully(?: using (ansible|shell
     metering_name = "openshift-metering"
   when "OLM"
     namespace = "metering"  # TDB
+    metering_name = "openshift-metering"  # placeholder
   end
   # save it to clipboard for future reference
   cb.metering_namespace = namespace
 
-  step %Q/I save the project name hosting "metering" resource named "#{metering_name}" to clipboard/
+  step %Q/I save the project hosting "metering" resource named "#{metering_name}" to clipboard/
   # a pre-req is that openshift-monitoring is installed in the system, w/o it
   # the openshift-metering won't function correctly
   unless project('openshift-monitoring').exists?

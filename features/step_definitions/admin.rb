@@ -23,7 +23,7 @@ Given /^a secret is created for admin kubeconfig in current project$/ do
   end
 end
 
-Given /^I save the project name hosting #{QUOTED} resource named #{QUOTED} to#{OPT_QUOTED} clipboard/ do |resource, res_name, cb_name|
+Given /^I save the project hosting #{QUOTED} resource named #{QUOTED} to#{OPT_QUOTED} clipboard/ do |resource, res_name, cb_name|
   ensure_admin_tagged
 
   cb_name ||= :namespace
@@ -36,7 +36,7 @@ Given /^I save the project name hosting #{QUOTED} resource named #{QUOTED} to#{O
       logger.info("Can't find resource matching name '#{res_name} in any projects")
       cb[cb_name] = nil
     else
-      cb[cb_name] = res.first['metadata']['namespace']
+      cb[cb_name] = project(res.first['metadata']['namespace'])
     end
   end
 end
