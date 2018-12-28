@@ -1,8 +1,9 @@
 Feature: Enable CSI in OCP cluster
   # @author piqin@redhat.com
+  # @case_id OCP-21804
   @admin
   @destructive
-  Scenario: Enable cinder csi driver and create storage class for cinder driver
+  Scenario: Deploy a cinder csi driver
     Given I deploy "cinder" driver using csi
     Given I create storage class for "cinder" csi driver
     Given I checked "cinder" csi driver is running
