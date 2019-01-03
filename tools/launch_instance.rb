@@ -498,7 +498,7 @@ module BushSlicer
     end
 
     # performs an installation task
-    def installation_task(task, template:, erb_binding:, config_dir: nil)
+    def installation_task(task, template:, erb_binding:, template_dir: nil)
       case task[:type]
       when "force_domain"
         self.dns_component = task[:name]
@@ -577,9 +577,11 @@ module BushSlicer
         unless res[:success]
           raise "shell command failed execution, see logs"
         end
+      when "ruby"
+        erb_binding.eval(readfile(task[:file], template_dir), task[:file])
       when "playbook"
         inventory_erb = ERB.new(
-          readfile(task[:inventory], config_dir),
+          readfile(task[:inventory], template_dir),
           nil,
           "<"
         )
@@ -694,7 +696,7 @@ module BushSlicer
           task,
           erb_binding: erb_binding,
           template: template,
-          config_dir: config_dir
+          template_dir: template_dir
         )
       end
 
@@ -716,6 +718,7 @@ module BushSlicer
       unless terminate_out.empty?
         vminfo = hosts.
           group_by { |h| h[:cloud_service_name] }.
+          select { |service_name, hosts| service_name }.
           map { |service_name, hosts|
             [
               service_name, hosts.map { |h|
