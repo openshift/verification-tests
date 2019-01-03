@@ -10,7 +10,17 @@ module BushSlicer
 
     def conditions(user: nil, cached: false, quiet: false)
       rr = raw_resource(user: user, cached: cached, quiet: quiet).dig('status', 'conditions')
-      rr.map { |cond| Condition.new cond }
+      unless rr.nil?
+        rr.map { |cond| Condition.new cond }
+      else
+        # on occasions in which metering is just installed and we call to
+        # generate report immediately, it sometime won't be ready, put in a
+        # short sleep and try again
+        sleep 10
+        logger.info("*** retry ****")
+        rr = raw_resource(user: user, cached: cached, quiet: quiet).dig('status', 'conditions')
+        rr.map { |cond| Condition.new cond }
+      end
     end
 
     def running?(user: nil, cached: false, quiet: false)

@@ -15,7 +15,7 @@ Feature: test metering related steps
   Scenario: test report class support
     Given metering service has been installed successfully
     Given I switch to cluster admin pseudo user
-    And I use the "openshift-metering" project
+    And I use the "<%= cb.metering_namespace.name %>" project
     Given I select a random node's host
     Given I get the "node-cpu-capacity" report and store it in the clipboard using:
       | run_immediately | true               |

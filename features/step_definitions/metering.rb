@@ -5,31 +5,38 @@ require 'ssl'
 # checks that metering service is already installed
 Given /^metering service has been installed successfully(?: using (ansible|shell script|OLM))?$/ do |method|
   ensure_admin_tagged
+  # first check if metering service exists, skip installation if already there
+  step %Q/I save the project hosting "metering" resource to "metering_namespace" clipboard/
 
-  # default to shell script installation until OLM install is supported
-  method ||= "shell script"
-  case method
-  when "shell script"
-    namespace = "metering"
-    metering_name = "operator-metering"
-  when "ansible"
-    namespace = "openshift-metering"
-    metering_name = "openshift-metering"
-  when "OLM"
-    namespace = "metering"  # TDB
-    metering_name = "openshift-metering"  # placeholder
+  unless cb.metering_namespace
+    # default to shell script installation until OLM install is supported
+    method ||= "shell script"
+    case method
+    when "shell script"
+      namespace = "metering"
+      metering_name = "operator-metering"
+    when "ansible"
+      namespace = "openshift-metering"
+      metering_name = "openshift-metering"
+    when "OLM"
+      namespace = "metering"  # TDB
+      metering_name = "openshift-metering"  # placeholder
+    end
+    # a pre-req is that openshift-monitoring is installed in the system, w/o it
+    # the openshift-metering won't function correctly
+    unless project('openshift-monitoring').exists?
+      raise "service openshift-monitoring is a pre-requisite for #{namespace}"
+    end
+  else
+    # save it to clipboard for future reference
+    cb.metering_namespace = project(namespace)
+    # get the metering service information
+    @result = admin.cli_exec(:get, namespace: cb.metering_namespace.name, resource: 'metering', o: 'yaml')
+    metering_name = @result[:parsed]['items'].first['metadata']['name']
   end
-  # save it to clipboard for future reference
-  cb.metering_namespace = namespace
 
-  step %Q/I save the project hosting "metering" resource named "#{metering_name}" to clipboard/
-  # a pre-req is that openshift-monitoring is installed in the system, w/o it
-  # the openshift-metering won't function correctly
-  unless project('openshift-monitoring').exists?
-    raise "service openshift-monitoring is a pre-requisite for #{namespace}"
-  end
   # change project context
-  unless cb.namespace
+  unless cb.metering_namespace
     case method
     when "shell script"
       step %Q/metering service is installed using shell script/
@@ -39,8 +46,9 @@ Given /^metering service has been installed successfully(?: using (ansible|shell
     when "OLM"
       raise "OLM installation of metering service is not supported"
     end
+    cb.metering_namespace = project(namespace)
   end
-  step %Q/all metering related pods are running in the "#{namespace}" project/
+  step %Q/all metering related pods are running in the "#{cb.metering_namespace.name}" project/
   step %Q/I wait for the "#{metering_name}" metering to appear/
 end
 
