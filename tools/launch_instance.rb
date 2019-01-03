@@ -716,6 +716,7 @@ module BushSlicer
       unless terminate_out.empty?
         vminfo = hosts.
           group_by { |h| h[:cloud_service_name] }.
+          select { |service_name, hosts| service_name }.
           map { |service_name, hosts|
             [
               service_name, hosts.map { |h|
