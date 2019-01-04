@@ -19,7 +19,21 @@ module BushSlicer
 
     # @return [APIAccessor]
     def get
-      res = master_host.exec_as(:admin, "cat /root/.kube/config", quiet: true)
+      res = master_host.exec_admin("cat /root/.kube/config", quiet: true)
+      if !res[:success] && res[:response].include?("No such file or directory")
+        # try to find kubeconfig in other locations
+        locations = [["kubeconfig", "/etc/kubernetes/static-pod-resources"]]
+        configs = locations.each do |pattern, path|
+          find = master_host.exec_admin(
+            "find '#{path}' -name '#{pattern}'", quiet: true)
+          if find[:success] && !find[:response].empty?
+            kubeconfig = find[:response].lines.first.strip
+            res = master_host.exec_admin("cat '#{kubeconfig}'", quiet: true)
+            break
+          end
+        end
+      end
+
       if res[:success]
         logger.plain res[:response], false
         # host_pattern = '(?:' << env.master_hosts.map{|h| Regexp.escape h.hostname).join('|') << ')'
@@ -43,7 +57,7 @@ module BushSlicer
         )
       else
         logger.error(res[:response])
-        raise "error running command on master #{master_host.hostname} as admin, see log"
+        raise "error getting kubeconfig from master #{master_host.hostname}, see log"
       end
     end
   end
