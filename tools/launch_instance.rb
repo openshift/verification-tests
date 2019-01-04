@@ -793,7 +793,10 @@ module BushSlicer
         when /^template_/
           # construct variables file with updated template
           vars = YAML.load(readfile(spec[:config]))
-          vars_org_dir = File.absolute_path(dirname_path_or_url(spec[:config]))
+          vars_org_dir = dirname_path_or_url(spec[:config])
+          unless vars_org_dir =~ %r{^\w+://}
+            vars_org_dir = File.absolute_path(vars_org_dir)
+          end
           template_org_dir = dirname_path_or_url(
             join_paths_or_urls(vars_org_dir, vars["template"])
           )
