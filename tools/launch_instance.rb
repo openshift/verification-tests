@@ -657,6 +657,8 @@ module BushSlicer
       template_dir = dirname_path_or_url(file_details[:location])
 
       # define convenience include methods
+      # defined variables here do not become available in caller template though
+      # see https://stackoverflow.com/questions/53886078
       erb_binding.local_variable_set :include_erb, lambda { |path, indent=0|
         t = ERB.new(
           readfile(path, template_dir), nil, "<", rand_str(10, :ruby_variable)
