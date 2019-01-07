@@ -357,6 +357,28 @@ module BushSlicer
           "#{self} does not appear to have actually rebooted"
       end
     end
+
+    # @param spec [String] comma separated list of host specifications which
+    #   begins optionally with flags between slash `/` characters, followed by
+    #   hostname and separated by colon `:` roles
+    def self.from_spec(spec, **env_opts)
+      hosts = spec.split(",").map do |host|
+        flags = host.slice! %r{^/.*/}
+        hostname, *roles = host.split(":")
+        roles.map!(&:to_sym)
+        self.new(hostname, **env_opts, roles: roles, flags: flags)
+      end
+      apply_host_flags(hosts)
+      return hosts
+    end
+
+    private_class_method def self.apply_host_flags(hosts)
+      hosts.each do |host|
+        if host[:flags] and !host[:flags].empty?
+          raise "flags '#{host[:flags]}' not supported by #{self}"
+        end
+      end
+    end
   end
 
   class LinuxLikeHost < Host
@@ -757,6 +779,24 @@ module BushSlicer
     def copy_from(remote, local, **opts)
       ssh.scp_from absolutize(remote, raw: opts[:raw]),
                    Host.localhost.absolutize(local, raw: opts[:raw])
+    end
+
+    private_class_method def self.apply_host_flags(hosts)
+      hosts.each do |host|
+        if host[:flags] == "/b/"
+          b = bastion(hosts)
+          b_connect_str =
+            "#{b.send(:ssh_opts,{})[:user]}@#{b.hostname}"
+          # host[:ssh_proxy] = "ssh -W %h:%p #{b_connect_str}"
+          host[:ssh_jump] = b_connect_str
+        elsif host[:flags] and !host[:flags].empty?
+          raise "flags '#{host[:flags]}' not supported by #{self}"
+        end
+      end
+    end
+
+    private_class_method def self.bastion(hosts)
+      hosts.find {|h| h[:roles].include?(:bastion) && !h[:ssh_proxy]}
     end
 
     private def close

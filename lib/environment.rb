@@ -372,10 +372,10 @@ module BushSlicer
     end
 
     # return nil is no proxy enabled, else proxy value
-    # TODO: as alternative that's not OCP version dependent, but require parsing 
+    # TODO: as alternative that's not OCP version dependent, but require parsing
     # YAML, we can do:
     #  grep HTTP_PROXY /etc/origin/master/master-config.yaml
-    # 
+    #
     def proxy
       if version_le("3.9", user: admin)
         proxy_check_cmd = "cat /etc/sysconfig/atomic-openshift-master-api | grep HTTP_PROXY"
@@ -404,17 +404,7 @@ module BushSlicer
 
     def hosts
       if @hosts.empty?
-        hlist = []
-        # generate hosts based on spec like: hostname1:role1:role2,hostname2:r3
-        opts[:hosts].split(",").each do |host|
-          # TODO: might do convenience type to class conversion
-          # TODO: we might also consider to support setting type per host
-          host_type = opts[:hosts_type]
-          hostname, garbage, roles = host.partition(":")
-          roles = roles.split(":").map(&:to_sym)
-          hlist << BushSlicer.const_get(host_type).new(hostname, **opts, roles: roles)
-        end
-
+        hlist = parse_hosts_spec
         missing_roles = MANDATORY_OPENSHIFT_ROLES.reject{|r| hlist.find {|h| h.has_role?(r)}}
         unless missing_roles.empty?
           raise "environment does not have hosts with roles: " +
@@ -424,6 +414,12 @@ module BushSlicer
         @hosts.concat hlist
       end
       return @hosts
+    end
+
+    # generate hosts based on spec like: hostname1:role1:role2,hostname2:r3
+    private def parse_hosts_spec
+      host_type = BushSlicer.const_get(opts[:hosts_type])
+      return host_type.from_spec(opts[:hosts], **opts)
     end
   end
 end
