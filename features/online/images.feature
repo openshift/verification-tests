@@ -20,7 +20,7 @@ Feature: ONLY ONLINE Images related scripts in this file
     Then the step should succeed
     """
     And the output should contain:
-      | 3.2 |
+      | 3.6 |
 
   # @author etrott@redhat.com
   # @case_id OCP-10144
