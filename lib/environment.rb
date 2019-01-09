@@ -19,7 +19,7 @@ module BushSlicer
 
     # :master represents register, scheduler, etc.
     MANDATORY_OPENSHIFT_ROLES = [:master, :node]
-    OPENSHIFT_ROLES = MANDATORY_OPENSHIFT_ROLES + [:lb, :etcd]
+    OPENSHIFT_ROLES = MANDATORY_OPENSHIFT_ROLES + [:lb, :etcd, :bastion]
 
     # e.g. you call `#node_hosts to get hosts with the node service`
     OPENSHIFT_ROLES.each do |role|
@@ -411,15 +411,34 @@ module BushSlicer
             missing_roles.to_s
         end
 
+        # so far masters are always also nodes but labels not always set
+        hlist.each do |host|
+          if host.roles.include?(:master) && !host.roles.include?(:node)
+            host.roles << :node
+          end
+        end
+
+        hlist.each {|h| h.apply_flags(hlist - [h])}
+
         @hosts.concat hlist
       end
       return @hosts
     end
 
+    # add a new host to environment with defaults
+    # usually used to add node hosts discovered dynamically
+    def host_add(hostname, **opts)
+      raise "new hosts need roles but none given" if opts[:roles].empty?
+      host = parse_hosts_spec(spec: "#{opts.delete(:flags)}#{hostname}:#{opts.delete(:roles).join(':')}", **opts).first
+      host.apply_flags(@hosts)
+      @hosts << host
+      return host
+    end
+
     # generate hosts based on spec like: hostname1:role1:role2,hostname2:r3
-    private def parse_hosts_spec
-      host_type = BushSlicer.const_get(opts[:hosts_type])
-      return host_type.from_spec(opts[:hosts], **opts)
+    private def parse_hosts_spec(spec: opts[:hosts], type: opts[:hosts_type], **additional_opts)
+      host_type = BushSlicer.const_get(type)
+      return host_type.from_spec(spec, **opts, **additional_opts)
     end
   end
 end

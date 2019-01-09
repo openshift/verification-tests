@@ -368,15 +368,12 @@ module BushSlicer
         roles.map!(&:to_sym)
         self.new(hostname, **env_opts, roles: roles, flags: flags)
       end
-      apply_host_flags(hosts)
       return hosts
     end
 
-    private_class_method def self.apply_host_flags(hosts)
-      hosts.each do |host|
-        if host[:flags] and !host[:flags].empty?
-          raise "flags '#{host[:flags]}' not supported by #{self}"
-        end
+    def apply_flags(other_hosts)
+      if self[:flags] and !self[:flags].empty?
+        raise "flags '#{self[:flags]}' not supported by #{self.class}"
       end
     end
   end
@@ -721,7 +718,7 @@ module BushSlicer
     end
 
     # processes ssh specific opts from the initialization options
-    private def ssh_opts(opts)
+    protected def ssh_opts(additional_opts={})
       ssh_opts = {}
       properties.each { |prop, val|
         if prop.to_s.start_with? 'ssh_'
@@ -730,14 +727,14 @@ module BushSlicer
           ssh_opts[:user] = val
         end
       }
-      ssh_opts.merge! opts
+      ssh_opts.merge! additional_opts
 
       return ssh_opts
     end
 
     # @return [String] host line suitable for use in ansible inventory
     def ansible_host_str(admin: true)
-      sshopts = ssh_opts({})
+      sshopts = ssh_opts
       str = hostname.dup
       if sshopts[:user]
         str << ' ansible_user=' << sshopts[:user]
@@ -781,22 +778,40 @@ module BushSlicer
                    Host.localhost.absolutize(local, raw: opts[:raw])
     end
 
-    private_class_method def self.apply_host_flags(hosts)
-      hosts.each do |host|
-        if host[:flags] == "/b/"
-          b = bastion(hosts)
-          b_connect_str =
-            "#{b.send(:ssh_opts,{})[:user]}@#{b.hostname}"
-          # host[:ssh_proxy] = "ssh -W %h:%p #{b_connect_str}"
-          host[:ssh_jump] = b_connect_str
-        elsif host[:flags] and !host[:flags].empty?
-          raise "flags '#{host[:flags]}' not supported by #{self}"
+    def apply_flags(other_hosts)
+      if self[:flags] == "/b/"
+        # setup bastion host
+        bastion = select_bastion(other_hosts)
+        if bastion.ssh_opts[:user]
+          bastion_connect_str = "#{bastion.ssh_opts[:user]}@#{bastion.hostname}"
+        else
+          bastion_connect_str = bastion.hostname
         end
+
+        # setup proxy/jump/bastion host
+        bastion_key = bastion.ssh_opts[:private_key]
+        if bastion_key
+          key_str = "-i #{Host.localhost.shell_escape(expand_private_path(bastion_key))}"
+        end
+        self[:ssh_proxy] = "ssh -W %h:%p #{key_str} #{bastion_connect_str}"
+        # https://github.com/net-ssh/net-ssh/issues/653 jump lacks key setup
+        # self[:ssh_jump] = bastion_connect_str
+      elsif self[:flags] and !self[:flags].empty?
+        raise "flags '#{self[:flags]}' not supported by #{self}"
       end
     end
 
-    private_class_method def self.bastion(hosts)
-      hosts.find {|h| h[:roles].include?(:bastion) && !h[:ssh_proxy]}
+    private def select_bastion(hosts)
+      hosts = hosts.select { |h| self.class === h }
+      b = hosts.find {|h| h.roles.include?(:bastion)}
+      unless b
+        # select first master as a bastion host
+        b = hosts.find { |h|
+          h.roles.include?(:master) && !h[:flags].include?("/b/")
+        }
+        b.roles << :bastion
+      end
+      return b
     end
 
     private def close
