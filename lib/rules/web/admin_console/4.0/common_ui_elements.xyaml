@@ -62,6 +62,14 @@ uncheck_checkbox:
     selector:
       xpath: //input[contains(@type,'checkbox')]
     op: click
+check_link_and_text:
+  element:
+    selector:
+      xpath: //a[@class='co-resource-link__resource-name' and text()='<text>' and @href='<link_url>']
+check_link:
+  element:
+    selector:
+      xpath: //*[@value='<link_url>']
 
 ## -------- check resource key and values pairs ------
 check_resource_details:
@@ -71,6 +79,9 @@ check_resource_details:
   action:
     if_param: display_name
     ref: check_resource_display_name
+  action:
+    if_param: namespace
+    ref: check_resource_namespace
   action:
     if_param: labels
     ref: check_resource_labels
@@ -116,6 +127,24 @@ check_resource_details:
   action:
     if_param: parallelism
     ref: check_resource_parallelism
+  action:
+    if_param: type
+    ref: check_resource_type
+  action:
+    if_param: git_repo
+    ref: check_resource_git_repository
+  action:
+    if_param: builder_image
+    ref: check_builder_image
+  action:
+    if_param: output_image
+    ref: check_output_to_image
+  action:
+    if_param: run_policy
+    ref: check_run_policy
+  action:
+    if_param: triggered_by
+    ref: check_triggered_by
 check_resource_details_key_and_value:
   element: &key_value
     selector:
@@ -208,4 +237,39 @@ check_resource_parallelism:
   params:
     key: Parallelism
     value: <parallelism>
+  action: check_resource_details_key_and_value
+check_resource_type:
+  params:
+    key: Type
+    value: <type>
+  action: check_resource_details_key_and_value
+check_resource_namespace:
+  params:
+    key: Namespace
+    value: <namespace>
+  action: check_resource_details_key_and_value
+check_resource_git_repository:
+  params:
+    key: Git Repository
+    value: <git_repo>
+  action: check_resource_details_key_and_value
+check_builder_image:
+  params:
+    key: Builder Image
+    value: <builder_image>
+  action: check_resource_details_key_and_value
+check_output_to_image:
+  params:
+    key: Output To
+    value: <output_image>
+  action: check_resource_details_key_and_value
+check_run_policy:
+  params:
+    key: Run Policy
+    value: <run_policy>
+  action: check_resource_details_key_and_value
+check_triggered_by:
+  params:
+    key: Triggered By
+    value: <triggered_by>
   action: check_resource_details_key_and_value

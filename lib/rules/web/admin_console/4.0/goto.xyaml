@@ -9,6 +9,8 @@ goto_resource_page_under_default_project:
 # builds
 goto_one_buildconfig_page:
   url: k8s/ns/<project_name>/buildconfigs/<bc_name>
+goto_one_build_page:
+  url: k8s/ns/<project_name>/builds/<build_name>
 
 # configmaps
 goto_configmaps_page:
