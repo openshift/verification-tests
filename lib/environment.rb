@@ -19,7 +19,7 @@ module BushSlicer
 
     # :master represents register, scheduler, etc.
     MANDATORY_OPENSHIFT_ROLES = [:master, :node]
-    OPENSHIFT_ROLES = MANDATORY_OPENSHIFT_ROLES + [:lb, :etcd]
+    OPENSHIFT_ROLES = MANDATORY_OPENSHIFT_ROLES + [:lb, :etcd, :bastion]
 
     # e.g. you call `#node_hosts to get hosts with the node service`
     OPENSHIFT_ROLES.each do |role|
@@ -372,10 +372,10 @@ module BushSlicer
     end
 
     # return nil is no proxy enabled, else proxy value
-    # TODO: as alternative that's not OCP version dependent, but require parsing 
+    # TODO: as alternative that's not OCP version dependent, but require parsing
     # YAML, we can do:
     #  grep HTTP_PROXY /etc/origin/master/master-config.yaml
-    # 
+    #
     def proxy
       if version_le("3.9", user: admin)
         proxy_check_cmd = "cat /etc/sysconfig/atomic-openshift-master-api | grep HTTP_PROXY"
@@ -404,26 +404,41 @@ module BushSlicer
 
     def hosts
       if @hosts.empty?
-        hlist = []
-        # generate hosts based on spec like: hostname1:role1:role2,hostname2:r3
-        opts[:hosts].split(",").each do |host|
-          # TODO: might do convenience type to class conversion
-          # TODO: we might also consider to support setting type per host
-          host_type = opts[:hosts_type]
-          hostname, garbage, roles = host.partition(":")
-          roles = roles.split(":").map(&:to_sym)
-          hlist << BushSlicer.const_get(host_type).new(hostname, **opts, roles: roles)
-        end
-
+        hlist = parse_hosts_spec
         missing_roles = MANDATORY_OPENSHIFT_ROLES.reject{|r| hlist.find {|h| h.has_role?(r)}}
         unless missing_roles.empty?
           raise "environment does not have hosts with roles: " +
             missing_roles.to_s
         end
 
+        # so far masters are always also nodes but labels not always set
+        hlist.each do |host|
+          if host.roles.include?(:master) && !host.roles.include?(:node)
+            host.roles << :node
+          end
+        end
+
+        hlist.each {|h| h.apply_flags(hlist - [h])}
+
         @hosts.concat hlist
       end
       return @hosts
+    end
+
+    # add a new host to environment with defaults
+    # usually used to add node hosts discovered dynamically
+    def host_add(hostname, **opts)
+      raise "new hosts need roles but none given" if opts[:roles].empty?
+      host = parse_hosts_spec(spec: "#{opts.delete(:flags)}#{hostname}:#{opts.delete(:roles).join(':')}", **opts).first
+      host.apply_flags(@hosts)
+      @hosts << host
+      return host
+    end
+
+    # generate hosts based on spec like: hostname1:role1:role2,hostname2:r3
+    private def parse_hosts_spec(spec: opts[:hosts], type: opts[:hosts_type], **additional_opts)
+      host_type = BushSlicer.const_get(type)
+      return host_type.from_spec(spec, **opts, **additional_opts)
     end
   end
 end

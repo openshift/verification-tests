@@ -357,6 +357,25 @@ module BushSlicer
           "#{self} does not appear to have actually rebooted"
       end
     end
+
+    # @param spec [String] comma separated list of host specifications which
+    #   begins optionally with flags between slash `/` characters, followed by
+    #   hostname and separated by colon `:` roles
+    def self.from_spec(spec, **env_opts)
+      hosts = spec.split(",").map do |host|
+        flags = host.slice! %r{^/.*/}
+        hostname, *roles = host.split(":")
+        roles.map!(&:to_sym)
+        self.new(hostname, **env_opts, roles: roles, flags: flags)
+      end
+      return hosts
+    end
+
+    def apply_flags(other_hosts)
+      if self[:flags] and !self[:flags].empty?
+        raise "flags '#{self[:flags]}' not supported by #{self.class}"
+      end
+    end
   end
 
   class LinuxLikeHost < Host
@@ -699,7 +718,7 @@ module BushSlicer
     end
 
     # processes ssh specific opts from the initialization options
-    private def ssh_opts(opts)
+    protected def ssh_opts(additional_opts={})
       ssh_opts = {}
       properties.each { |prop, val|
         if prop.to_s.start_with? 'ssh_'
@@ -708,14 +727,14 @@ module BushSlicer
           ssh_opts[:user] = val
         end
       }
-      ssh_opts.merge! opts
+      ssh_opts.merge! additional_opts
 
       return ssh_opts
     end
 
     # @return [String] host line suitable for use in ansible inventory
     def ansible_host_str(admin: true)
-      sshopts = ssh_opts({})
+      sshopts = ssh_opts
       str = hostname.dup
       if sshopts[:user]
         str << ' ansible_user=' << sshopts[:user]
@@ -757,6 +776,42 @@ module BushSlicer
     def copy_from(remote, local, **opts)
       ssh.scp_from absolutize(remote, raw: opts[:raw]),
                    Host.localhost.absolutize(local, raw: opts[:raw])
+    end
+
+    def apply_flags(other_hosts)
+      if self[:flags] == "/b/"
+        # setup bastion host
+        bastion = select_bastion(other_hosts)
+        if bastion.ssh_opts[:user]
+          bastion_connect_str = "#{bastion.ssh_opts[:user]}@#{bastion.hostname}"
+        else
+          bastion_connect_str = bastion.hostname
+        end
+
+        # setup proxy/jump/bastion host
+        bastion_key = bastion.ssh_opts[:private_key]
+        if bastion_key
+          key_str = "-i #{Host.localhost.shell_escape(expand_private_path(bastion_key))}"
+        end
+        self[:ssh_proxy] = "ssh -W %h:%p #{key_str} #{bastion_connect_str}"
+        # https://github.com/net-ssh/net-ssh/issues/653 jump lacks key setup
+        # self[:ssh_jump] = bastion_connect_str
+      elsif self[:flags] and !self[:flags].empty?
+        raise "flags '#{self[:flags]}' not supported by #{self}"
+      end
+    end
+
+    private def select_bastion(hosts)
+      hosts = hosts.select { |h| self.class === h }
+      b = hosts.find {|h| h.roles.include?(:bastion)}
+      unless b
+        # select first master as a bastion host
+        b = hosts.find { |h|
+          h.roles.include?(:master) && !h[:flags].include?("/b/")
+        }
+        b.roles << :bastion
+      end
+      return b
     end
 
     private def close
