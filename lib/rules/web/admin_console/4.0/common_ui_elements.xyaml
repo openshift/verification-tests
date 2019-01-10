@@ -65,11 +65,7 @@ uncheck_checkbox:
 check_link_and_text:
   element:
     selector:
-      xpath: //a[@class='co-resource-link__resource-name' and text()='<text>' and @href='<link_url>']
-check_link:
-  element:
-    selector:
-      xpath: //*[@value='<link_url>']
+      xpath: //a[contains(text(),'<text>') and @href='<link_url>']
 
 ## -------- check resource key and values pairs ------
 check_resource_details:
