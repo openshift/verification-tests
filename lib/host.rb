@@ -807,7 +807,7 @@ module BushSlicer
       unless b
         # select first master as a bastion host
         b = hosts.find { |h|
-          h.roles.include?(:master) && !h[:flags].include?("/b/")
+          h.roles.include?(:master) && !h[:flags]&.include?("/b/")
         }
         b.roles << :bastion
       end
