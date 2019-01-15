@@ -112,3 +112,22 @@ Given /^the last reload log of a router pod is stored in #{SYM} clipboard$/ do |
   cb[cb_name] = res[:response].scan(/^I\d+.*Router reloaded:$/).last
   logger.info "The last reloaded log with timestamp is: #{cb[cb_name]}."
 end
+
+Given /^I use the router project$/ do
+  if env.version_ge("4.0", user: user)
+    step %Q/I use the "openshift-ingress" project/
+  else
+    step %Q/I use the "default" project/
+  end
+end
+
+Given /^all default router pods become ready$/ do
+  if env.version_ge("4.0", user: user)
+    label_filter = "app=router"
+  else
+    label_filter = "deploymentconfig=router"
+  end
+    step %Q/all existing pods are ready with labels:/, table(%{
+      | <%= label_filter %> |
+    })
+end
