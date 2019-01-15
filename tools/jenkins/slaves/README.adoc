@@ -7,7 +7,7 @@
 # podman (recommended): https://podman.io
 #   example build:
 #   $ BUILDAH_LAYERS=false sudo podman build --layers=false -f \
-#   tools/jenkins/slaves/Dockerfile.rhel7 -t openshift-vtests-public:latest
+#   tools/jenkins/slaves/Dockerfile.rhel7 -t openshift-vtests-public:latest .
 # docker-squash: https://github.com/goldmann/docker-squash
 # imagebuilder (deprecated): https://github.com/openshift/imagebuilder
 #   imagebuilder squashes layers by default (but leaving base-image layers
