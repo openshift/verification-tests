@@ -232,7 +232,7 @@ check_fuse_subscription_index_page:
   action: click_page_dropdown
   elements:
   - selector:
-      xpath: //a[@href='<console_url>/console/' and text()='Go to OpenShift console']
+      xpath: //a[@href='<console_url>' and text()='Go to OpenShift console']
   - selector:
       xpath: //*[contains(.,'Logout (<email>)')]
     timeout: 20
