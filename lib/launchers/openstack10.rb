@@ -596,7 +596,8 @@ module BushSlicer
           res = create_instance_api_call(instance_name, **create_opts)
           server = Instance.new(spec: res["server"], client: self) rescue next
           sleep 15
-        elsif server.status == "ACTIVE" && server.floating_ip
+        elsif server.status == "ACTIVE" &&
+                ( opts[:public_network] || server.floating_ip )
           return server
         elsif server.status == "ACTIVE" && !ip_assigned
           ip_assigned = assign_ip(server)[:success]
@@ -720,7 +721,11 @@ module BushSlicer
         instance = create_instance(name, **create_opts)
         host_opts[:cloud_instance_name] = instance.name
         host_opts[:cloud_instance] = instance
-        res[name] = Host.from_ip(instance.floating_ip, host_opts)
+        if opts[:public_network]
+          res[name] = Host.from_ip(instance.internal_ip, host_opts)
+        else
+          res[name] = Host.from_ip(instance.floating_ip, host_opts)
+        end
         res[name].local_ip = instance.internal_ip
       }
       return res
