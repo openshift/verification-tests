@@ -13,7 +13,7 @@ module BushSlicer
     def conditions(user: nil, cached: false, quiet: false)
       rr = raw_resource(user: user, cached: cached, quiet: quiet).dig('status', 'conditions')
       if rr.nil?
-        return false
+        return []
       else
         rr.map { |cond| Condition.new cond }
       end
