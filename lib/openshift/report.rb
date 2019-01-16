@@ -7,18 +7,14 @@ module BushSlicer
   class Report < ProjectResource
     RESOURCE = "reports"
 
-
+    # on occasions in which metering is just installed and we call to
+    # generate report immediately, the raw_resource will return nil, in which case we just
+    # return false
     def conditions(user: nil, cached: false, quiet: false)
       rr = raw_resource(user: user, cached: cached, quiet: quiet).dig('status', 'conditions')
-      unless rr.nil?
-        rr.map { |cond| Condition.new cond }
+      if rr.nil?
+        return false
       else
-        # on occasions in which metering is just installed and we call to
-        # generate report immediately, it sometime won't be ready, put in a
-        # short sleep and try again
-        sleep 10
-        logger.info("*** retry ****")
-        rr = raw_resource(user: user, cached: cached, quiet: quiet).dig('status', 'conditions')
         rr.map { |cond| Condition.new cond }
       end
     end
