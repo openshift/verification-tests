@@ -5,7 +5,7 @@ Given /^I wait until job "(.+)" completes$/ do |job_name|
   raise "job #{job.name} never completed" unless @result[:success]
 end
 
-Given /^a job is present with labels:$/ do |table|
+Given /^a job appears with labels:$/ do |table|
   labels = table.raw.flatten
   job_timeout = 5 * 60
 
