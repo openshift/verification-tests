@@ -29,7 +29,6 @@ Feature: Testing the isolation during build scenarios
     Then the step should succeed
     When I run the :start_build client command with:
       | buildconfig | ruby-docker-test |
-      | <cache>     | true             |
     Then the step should succeed
     And the "ruby-docker-test-2" build was created
     And I wait up to 100 seconds for the steps to pass:
@@ -41,9 +40,9 @@ Feature: Testing the isolation during build scenarios
     """
 
     Examples:
-      | type   | repo                                                           | strategy       | cache       |
-      | Docker | https://github.com/zhaozhanqi/ruby-docker-test/#isolation      | dockerStrategy | no-cache    | # @case_id OCP-15741
-      | sti    | ruby~https://github.com/zhaozhanqi/ruby-docker-test/#isolation | sourceStrategy | incremental | # @case_id OCP-15734
+      | type   | repo                                                           | strategy       |
+      | Docker | https://github.com/zhaozhanqi/ruby-docker-test/#isolation      | dockerStrategy | # @case_id OCP-15741
+      | sti    | ruby~https://github.com/zhaozhanqi/ruby-docker-test/#isolation | sourceStrategy | # @case_id OCP-15734
 
   # @author zzhao@redhat.com
   # @bug_id 1487652
@@ -74,7 +73,6 @@ Feature: Testing the isolation during build scenarios
     Then the step should succeed
     When I run the :start_build client command with:
       | buildconfig | ruby-docker-test |
-      | <cache>     | true             |
     Then the step should succeed
     And the "ruby-docker-test-2" build was created
     And I wait up to 100 seconds for the steps to pass:
@@ -97,7 +95,6 @@ Feature: Testing the isolation during build scenarios
     Then the step should succeed
     When I run the :start_build client command with:
       | buildconfig | ruby-docker-test |
-      | <cache>     | true             |
     Then the step should succeed
     And the "ruby-docker-test-3" build was created
     And I wait up to 150 seconds for the steps to pass:
@@ -109,7 +106,7 @@ Feature: Testing the isolation during build scenarios
     """
 
     Examples:
-      | type   | repo                                                           | strategy       | cache       |
-      | Docker | https://github.com/zhaozhanqi/ruby-docker-test/#isolation      | dockerStrategy | no-cache    | # @case_id OCP-15731
-      | sti    | ruby~https://github.com/zhaozhanqi/ruby-docker-test/#isolation | sourceStrategy | incremental | # @case_id OCP-15744
+      | type   | repo                                                           | strategy       |
+      | Docker | https://github.com/zhaozhanqi/ruby-docker-test/#isolation      | dockerStrategy | # @case_id OCP-15731
+      | sti    | ruby~https://github.com/zhaozhanqi/ruby-docker-test/#isolation | sourceStrategy | # @case_id OCP-15744
 
