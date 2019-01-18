@@ -64,7 +64,7 @@ module BushSlicer
     end
 
     # convert test case ids to [file, line] pairs based on comments e.g.
-    #   `# case_id ABC-123456`
+    #   `# @case_id ABC-123456`
     # @param case_ids [Array<String>] test case IDs
     # @return [Hash<String, Array>] `{ case_id => [file, line] }` mapping
     def locations_for(*case_ids)
@@ -120,7 +120,7 @@ module BushSlicer
     end
 
     # convert test case ids to [file, range] pairs based on comments e.g.
-    #   `# case_id ABC-123456`
+    #   `# @case_id ABC-123456`
     # @param case_ids [Array<String>] test case IDs
     # @return [Hash<String, Hash>] `{ case_id => {file: [String], range: [Range]} }` mapping
     # @yield [path, lines, ranges] where `path` is a String, `lines` is an
