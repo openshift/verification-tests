@@ -81,7 +81,8 @@ module BushSlicer
       end
 
       def self.view_metering_report(base_opts, opts)
-        populate("/namespaces/<project_name>/services/https:reporting-operator:http/proxy/api/v1/reports/get?name=<name>&format=<report_format>", base_opts, opts)
+        # XXX: not backward compatible prior to metering 0.13
+        populate("/namespaces/<project_name>/services/https:reporting-operator:http/proxy/api/v1/reports/get?name=<name>&namespace=<project_name>&format=<report_format>", base_opts, opts)
         return perform(**base_opts, method: "GET")
       end
 

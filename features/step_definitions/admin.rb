@@ -23,21 +23,18 @@ Given /^a secret is created for admin kubeconfig in current project$/ do
   end
 end
 
-Given /^I save the project hosting #{QUOTED} resource named #{QUOTED} to#{OPT_QUOTED} clipboard/ do |resource, res_name, cb_name|
+Given /^I save the project hosting #{QUOTED} resource to#{OPT_QUOTED} clipboard/ do |resource, cb_name|
   ensure_admin_tagged
-
   cb_name ||= :namespace
   @result = admin.cli_exec(:get, all_namespaces: true, resource: resource, o: 'yaml')
   if @result[:parsed].nil?
     logger.info("Can't find resource matching '#{resource} in any projects")
     cb[cb_name] = nil
   else
-    res = @result[:parsed]['items'].select { |i| i['metadata']['name']==res_name }
-    if res.count.zero?
-      logger.info("Can't find resource matching name '#{res_name} in any projects")
+    if @result[:parsed]['items'].count == 0
       cb[cb_name] = nil
     else
-      cb[cb_name] = project(res.first['metadata']['namespace'])
+      cb[cb_name] = project(@result[:parsed]['items'].first['metadata']['namespace'])
     end
   end
 end

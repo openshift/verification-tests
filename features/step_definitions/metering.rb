@@ -5,31 +5,38 @@ require 'ssl'
 # checks that metering service is already installed
 Given /^metering service has been installed successfully(?: using (ansible|shell script|OLM))?$/ do |method|
   ensure_admin_tagged
+  # first check if metering service exists, skip installation if already there
+  step %Q/I save the project hosting "metering" resource to "metering_namespace" clipboard/
 
-  # default to shell script installation until OLM install is supported
-  method ||= "shell script"
-  case method
-  when "shell script"
-    namespace = "metering"
-    metering_name = "operator-metering"
-  when "ansible"
-    namespace = "openshift-metering"
-    metering_name = "openshift-metering"
-  when "OLM"
-    namespace = "metering"  # TDB
-    metering_name = "openshift-metering"  # placeholder
+  unless cb.metering_namespace
+    # default to shell script installation until OLM install is supported
+    method ||= "shell script"
+    case method
+    when "shell script"
+      namespace = "metering"
+      metering_name = "operator-metering"
+    when "ansible"
+      namespace = "openshift-metering"
+      metering_name = "openshift-metering"
+    when "OLM"
+      namespace = "metering"  # TDB
+      metering_name = "openshift-metering"  # placeholder
+    end
+    # a pre-req is that openshift-monitoring is installed in the system, w/o it
+    # the openshift-metering won't function correctly
+    unless project('openshift-monitoring').exists?
+      raise "service openshift-monitoring is a pre-requisite for #{namespace}"
+    end
+  else
+    # save it to clipboard for future reference
+    cb.metering_namespace = project(namespace)
+    # get the metering service information
+    @result = admin.cli_exec(:get, namespace: cb.metering_namespace.name, resource: 'metering', o: 'yaml')
+    metering_name = @result[:parsed]['items'].first['metadata']['name']
   end
-  # save it to clipboard for future reference
-  cb.metering_namespace = namespace
 
-  step %Q/I save the project hosting "metering" resource named "#{metering_name}" to clipboard/
-  # a pre-req is that openshift-monitoring is installed in the system, w/o it
-  # the openshift-metering won't function correctly
-  unless project('openshift-monitoring').exists?
-    raise "service openshift-monitoring is a pre-requisite for #{namespace}"
-  end
   # change project context
-  unless cb.namespace
+  unless cb.metering_namespace
     case method
     when "shell script"
       step %Q/metering service is installed using shell script/
@@ -39,8 +46,9 @@ Given /^metering service has been installed successfully(?: using (ansible|shell
     when "OLM"
       raise "OLM installation of metering service is not supported"
     end
+    cb.metering_namespace = project(namespace)
   end
-  step %Q/all metering related pods are running in the "#{namespace}" project/
+  step %Q/all metering related pods are running in the "#{cb.metering_namespace.name}" project/
   step %Q/I wait for the "#{metering_name}" metering to appear/
 end
 
@@ -158,40 +166,40 @@ Given /^I wait until #{QUOTED} report for #{QUOTED} namespace to be available$/ 
     raise "report '#{report_type}' for project '#{namespace}' not found after #{seconds} seconds"
   end
 end
-
 Given /^I enable route for#{OPT_QUOTED} metering service$/ do | metering_name |
-  metering_name ||= "openshift-metering"
+  metering_name ||= metering.name
   htpasswd = BushSlicer::SSL.sha1_htpasswd(username: user.name, password: user.password)
   cookie_seed = rand_str(32, :hex)
   route_yaml = <<BASE_TEMPLATE
     apiVersion: metering.openshift.io/v1alpha1
     kind: Metering
     metadata:
-      name: "#{metering_name}"
+      name: "#{metering.name}"
     spec:
       reporting-operator:
         spec:
           route:
             enabled: true
-        authProxy:
-          enabled: true
-        htpasswdData: |
-          #{htpasswd}
-        cookieSeed: "#{cookie_seed}"
-        subjectAccessReviewEnabled: true
-        delegateURLsEnabled: true
+          authProxy:
+            enabled: true
+            htpasswdData: |
+              #{htpasswd}
+            cookieSeed: "#{cookie_seed}"
+            subjectAccessReviewEnabled: true
+            delegateURLsEnabled: true
 BASE_TEMPLATE
   logger.info("### Updating metering service with route enabled\n #{route_yaml}")
-  @result = user.cli_exec(:apply, f: "-", _stdin: route_yaml)
+  @result = user.cli_exec(:apply, f: "-", _stdin: route_yaml, n: project.name)
   # route name is ALWAYS set to 'metering'
-  step %Q/I wait for the "metering" route to appear up to 120 seconds/
+  step %Q/I wait for the "metering" route to appear up to 600 seconds/
 end
 
 # XXX: should we check metering route exists first prior to patching?
 Given /^I disable route for#{OPT_QUOTED} metering service$/ do | metering_name |
-  metering_name ||= "openshift-metering"
+
+  metering_name ||= metering.name
   patch_json = '{"spec":{"reporting-operator":{"spec":{"route":{"enabled":false}}}}}'
-  opts = {resource: 'metering', resource_name: metering_name, p: patch_json, type: 'merge'}
+  opts = {resource: 'metering', resource_name: metering_name, p: patch_json, type: 'merge', n: project.name}
   @result = user.cli_exec(:patch, **opts)
   # route name is ALWAYS set to 'metering'
   step %Q/I wait for the resource "route" named "metering" to disappear/
