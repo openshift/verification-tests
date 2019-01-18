@@ -21,7 +21,7 @@ module BushSlicer
     include Common::Helper
 
     attr_reader :os_domain, :os_tenant_id, :os_tenant_name, :os_service_catalog
-    attr_reader :os_user, :os_passwd, :os_url, :opts, :os_volumes_url
+    attr_reader :os_user, :os_passwd, :os_url, :opts
     attr_accessor :os_token, :os_image, :os_flavor
 
     def initialize(**options)
@@ -597,7 +597,7 @@ module BushSlicer
           server = Instance.new(spec: res["server"], client: self) rescue next
           sleep 15
         elsif server.status == "ACTIVE" &&
-                ( opts[:public_network] || server.floating_ip )
+                ( !floating_ip_network_id || server.floating_ip )
           return server
         elsif server.status == "ACTIVE" && !ip_assigned
           ip_assigned = assign_ip(server)[:success]
@@ -645,9 +645,11 @@ module BushSlicer
       res = self.rest_run(url, "GET", params, self.os_token)
       result = res[:parsed]
       result['floatingips'].shuffle.each do | ip |
-        if ip['port_id'] == nil && self.os_tenant_id == ip["tenant_id"]
+        if ip['port_id'] == nil &&
+            self.os_tenant_id == ip["tenant_id"] &&
+            ip['floating_network_id'] == floating_ip_network_id
           assigning_ip = ip
-          logger.info("The floating ip is #{assigning_ip["floating_ip_address"]}")
+          logger.info("Selecting existing floating ip: #{assigning_ip["floating_ip_address"]}")
           break
         end
       end
@@ -669,7 +671,7 @@ module BushSlicer
         method = "POST"
         params[:floatingip].merge!({
           project_id: self.os_tenant_id,
-          floating_network_id: floating_ip_networks[0]["id"],
+          floating_network_id: floating_ip_network_id,
           description: "IP allocated automatically by BushSlicer"
         })
       end
@@ -693,12 +695,49 @@ module BushSlicer
 
     def floating_ip_networks(refresh: false)
       return @floating_ip_networks if @floating_ip_networks && !refresh
-
       return get_networks.select{|n| n["router:external"]}
+    end
+
+    # Figure out a working floating ip pool based on the internal network id
+    def floating_ip_network_id(refresh: false)
+      if opts[:floating_ip_network]
+        return opts[:floating_ip_network]
+      elsif opts[:floating_ip_network].nil?
+        # TODO: automatic detection
+        # * find router in network (maybe using default route in subnet)
+        # * get router ports
+        # * find port of external network
+        # * use that network for floating IPs
+        # * cache the result
+        return floating_ip_networks(refresh: refresh)[0]["id"]
+      else # floating_ip_network is false
+        return nil
+      end
     end
 
     def network_by_id(id)
       get_networks.find { |n| n["id"] == id }
+    end
+
+    def get_routers
+      res = self.rest_run(self.os_network_url + "/v2.0/routers", "GET", {}, self.os_token)
+      raise res[:response] unless res[:success]
+      return res[:parsed]["routers"]
+    end
+
+    # @return ports of device, e.g. router ports
+    def get_ports(device_id: nil, fixed_ips: nil)
+      get_opts = {}
+      if device_id
+        get_opts["device_id"] = device_id
+      end
+      if fixed_ips
+        get_opts["fixed_ips"] = fixed_ips
+      end
+      res = self.rest_run(self.os_network_url + "/v2.0/ports", "GET", get_opts, self.os_token)
+
+      raise res[:response] unless res[:success]
+      return res[:parsed]["ports"]
     end
 
     # @param service_name [String] the service name of this openstack instance
@@ -721,10 +760,10 @@ module BushSlicer
         instance = create_instance(name, **create_opts)
         host_opts[:cloud_instance_name] = instance.name
         host_opts[:cloud_instance] = instance
-        if opts[:public_network]
-          res[name] = Host.from_ip(instance.internal_ip, host_opts)
-        else
+        if instance.floating_ip
           res[name] = Host.from_ip(instance.floating_ip, host_opts)
+        else
+          res[name] = Host.from_ip(instance.internal_ip, host_opts)
         end
         res[name].local_ip = instance.internal_ip
       }
@@ -840,21 +879,14 @@ module BushSlicer
       def internal_network_port(refresh: false, proto: 4)
         return @internal_network_port if @internal_network_port
 
-        res = client.rest_run(client.os_network_url + "/v2.0/ports",
-                              "GET",
-                              {},
-                              client.os_token)
-        if res[:success]
-          myip = internal_ip(refresh: refresh, proto: proto)
-          port = res[:parsed]["ports"].find {|p| p["fixed_ips"]&.any?{|ip| ip["ip_address"] == myip}}
-          if port
-            @internal_network_port = port
-            return port.freeze
-          else
-            raise "cannot find port for #{internal_ip}:\n#{res[:response]}"
-          end
+        myip = internal_ip(refresh: refresh, proto: proto)
+        ports = client.get_ports(fixed_ips: "ip_address=#{myip}")
+        port = ports.find {|p| p["fixed_ips"]&.any?{|ip| ip["ip_address"] == myip}}
+        if port
+          @internal_network_port = port
+          return port.freeze
         else
-          raise "can't find network port"
+          raise "cannot find port for #{internal_ip}"
         end
       end
     end
