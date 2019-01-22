@@ -7,7 +7,7 @@ Feature: Testing HAProxy dynamic configuration manager related scenarios
   Scenario: unsecured route support haproxy dynamic changes
     Given the master version >= "3.11"
     Given I switch to cluster admin pseudo user
-    And I use the "default" project
+    And I use the router project
     Given admin ensures new router pod becomes ready after following env added:
       | ROUTER_HAPROXY_CONFIG_MANAGER=true |
     And the last reload log of a router pod is stored in :reload_1 clipboard
@@ -40,7 +40,7 @@ Feature: Testing HAProxy dynamic configuration manager related scenarios
   Scenario: edge route support haproxy dynamic changes
     Given the master version >= "3.11"
     Given I switch to cluster admin pseudo user
-    And I use the "default" project
+    And I use the router project
     Given admin ensures new router pod becomes ready after following env added:
       | ROUTER_HAPROXY_CONFIG_MANAGER=true |
     And the last reload log of a router pod is stored in :reload_1 clipboard
@@ -75,7 +75,7 @@ Feature: Testing HAProxy dynamic configuration manager related scenarios
   Scenario: passthrough route support haproxy dynamic changes
     Given the master version >= "3.11"
     Given I switch to cluster admin pseudo user
-    And I use the "default" project
+    And I use the router project
     Given admin ensures new router pod becomes ready after following env added:
       | ROUTER_HAPROXY_CONFIG_MANAGER=true |
     And the last reload log of a router pod is stored in :reload_1 clipboard
