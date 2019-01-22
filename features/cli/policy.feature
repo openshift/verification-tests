@@ -4,23 +4,23 @@ Feature: change the policy of user/service account
   # @case_id OCP-11074
   Scenario: User can view ,add, remove and modify roleBinding via admin role user
     Given I have a project
-    When I run the :describe client command with:
-      | resource | rolebinding |
-      | name     | admin       |
+    When I run the :get client command with:
+      | resource      | rolebinding |
+      | resource_name | admin       |
+      | o             | wide        |
     Then the output should match:
-      | Role:\\s+\/admin            |
-      | Users:\\s+<%= @user.name %> |
+      | admin.*<%= @user.name %> |
     When I run the :oadm_add_role_to_user client command with:
       | role_name        | admin                              |
       | user_name        | <%= user(1, switch: false).name %> |
       | rolebinding_name | admin                              |
     Then the step should succeed
-    When I run the :describe client command with:
-      | resource | rolebinding |
-      | name     | admin       |
+    When I run the :get client command with:
+      | resource      | rolebinding |
+      | resource_name | admin       |
+      | o             | wide        |
     Then the output should match:
-      | Role:\\s+\/admin                                                  |
-      | Users:\\s+<%= @user.name %>, <%= user(1, switch: false).name %> |
+      | admin.*<%= @user.name %>, <%= user(1, switch: false).name %> |
     Given I switch to the second user
     And I wait for the steps to pass:
     """
@@ -33,12 +33,12 @@ Feature: change the policy of user/service account
       | role_name | admin            |
       | user_name | <%= user(1, switch: false).name %> |
     Then the step should succeed
-    When I run the :describe client command with:
-      | resource | rolebinding |
-      | name     | admin       |
+    When I run the :get client command with:
+      | resource      | rolebinding |
+      | resource_name | admin       |
+      | o             | wide        |
     Then the output should match:
-      | Role:\\s+\/admin            |
-      | Users:\\s+<%= @user.name %> |
+      | admin.*<%= @user.name %> |
     Given I switch to the second user
     And I wait for the steps to pass:
     """
