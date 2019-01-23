@@ -128,6 +128,6 @@ Given /^all default router pods become ready$/ do
     label_filter = "deploymentconfig=router"
   end
     step %Q/all existing pods are ready with labels:/, table(%{
-      | <%= label_filter %> |
+      | #{label_filter} |
     })
 end

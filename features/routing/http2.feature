@@ -7,7 +7,7 @@ Feature: Testing HTTP/2 related scenarios
   Scenario: edge route support http2 protocol
     Given the master version >= "3.11"
     Given I switch to cluster admin pseudo user
-    And I use the "default" project
+    And I use the router project
     Given admin ensures new router pod becomes ready after following env added:
       | ROUTER_ENABLE_HTTP2=true |
 
@@ -48,7 +48,7 @@ Feature: Testing HTTP/2 related scenarios
   Scenario: reencrypt route support http2 protocol
     Given the master version >= "3.11"
     Given I switch to cluster admin pseudo user
-    And I use the "default" project
+    And I use the router project
     Given admin ensures new router pod becomes ready after following env added:
       | ROUTER_ENABLE_HTTP2=true |
 

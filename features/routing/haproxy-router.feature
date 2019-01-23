@@ -5,10 +5,9 @@ Feature: Testing haproxy router
   @admin
   Scenario: HTTP response header should return for default haproxy 503
     Given I switch to cluster admin pseudo user
-    And I use the "default" project
-    And a pod becomes ready with labels:
-      | deploymentconfig=router |
-    And I execute on the pod:
+    And I use the router project
+    And all default router pods become ready
+    When I execute on the pod:
       | /usr/bin/curl | -v  | 127.0.0.1:80 |
     Then the output should contain "HTTP/1.0 503 Service Unavailable"
 
@@ -204,10 +203,9 @@ Feature: Testing haproxy router
   @destructive
   Scenario: Haproxy router health check will use 1936 port if user disable the stats port
     Given I switch to cluster admin pseudo user
-    And I use the "default" project
+    And I use the router project
     And default router image is stored into the :default_router_image clipboard
-    And a pod becomes ready with labels:
-      | deploymentconfig=router |
+    And all default router pods become ready
     Given default router replica count is restored after scenario
     And admin ensures "tc-516836" dc is deleted after scenario
     And admin ensures "tc-516836" service is deleted after scenario
@@ -234,7 +232,7 @@ Feature: Testing haproxy router
   @destructive
   Scenario: The route auto generated can be accessed using the default cert
     Given I switch to cluster admin pseudo user
-    And I use the "default" project
+    And I use the router project
     And default router image is stored into the :default_router_image clipboard
     Given default router replica count is restored after scenario
     And admin ensures "ocp-12651" dc is deleted after scenario
@@ -297,7 +295,7 @@ Feature: Testing haproxy router
     # prepare router
     Given default router is disabled and replaced by a duplicate
     And I switch to cluster admin pseudo user
-    And I use the "default" project
+    And I use the router project
     When I run the :env admin command with:
       | resource | dc/<%= cb.new_router_dc.name %>         |
       | e        | RELOAD_INTERVAL=90s                     |
@@ -437,9 +435,8 @@ Feature: Testing haproxy router
   @admin
   Scenario: The backend health check interval of unsecure route can be set by annotation
     Given I switch to cluster admin pseudo user
-    And I use the "default" project
-    Given a pod becomes ready with labels:
-      | deploymentconfig=router |
+    And I use the router project
+    Given all default router pods become ready
     Then evaluation of `pod.name` is stored in the :router_pod clipboard
 
     Given I switch to the first user
@@ -462,7 +459,7 @@ Feature: Testing haproxy router
     Then the step should succeed
 
     Given I switch to cluster admin pseudo user
-    And I use the "default" project
+    And I use the router project
     And I wait up to 10 seconds for the steps to pass:
     """
     When I execute on the "<%=cb.router_pod %>" pod:
@@ -476,9 +473,8 @@ Feature: Testing haproxy router
   @admin
   Scenario: The backend health check interval of edge route can be set by annotation
     Given I switch to cluster admin pseudo user
-    And I use the "default" project
-    Given a pod becomes ready with labels:
-      | deploymentconfig=router |
+    And I use the router project
+    Given all default router pods become ready
     Then evaluation of `pod.name` is stored in the :router_pod clipboard
 
     Given I switch to the first user
@@ -502,7 +498,7 @@ Feature: Testing haproxy router
     Then the step should succeed
 
     Given I switch to cluster admin pseudo user
-    And I use the "default" project
+    And I use the router project
     And I wait up to 10 seconds for the steps to pass:
     """
     When I execute on the "<%=cb.router_pod %>" pod:
