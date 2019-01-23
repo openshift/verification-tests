@@ -1,8 +1,7 @@
-#Given /^default admin-console route is stored in the#{OPT_SYM} clipboard$/ do | cb_name |
+# Given /^default admin-console route is stored in the#{OPT_SYM} clipboard$/ do | cb_name |
 #   cb_name ||= :console
 #   cb[cb_name] = route('console', service('console',project('openshift-console', switch: false))).dns(by: admin)
-#end
-
+# end
 Given /^I open admin console in a browser$/ do
   base_rules = BushSlicer::WebConsoleExecutor::RULES_DIR + "/base/"
   snippets_dir = BushSlicer::WebConsoleExecutor::SNIPPETS_DIR
