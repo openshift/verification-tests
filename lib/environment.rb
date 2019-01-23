@@ -144,6 +144,18 @@ module BushSlicer
       opts[:web_console_url] || api_endpoint_url
     end
 
+    def admin_console_route
+      consoleproject = Project.new(name: "openshift-console", env: self)
+      consoleservice = Service.new(name: "console", project: consoleproject )
+      consoleroute = Route.new(name: "console", project: consoleproject, service: consoleservice)
+      console_route = "https://" + consoleroute.dns(by: admin)
+      return console_route
+    end
+
+    def admin_console_url
+      opts[:admin_console_url] || admin_console_route
+    end
+
     # naming scheme is https://logs.<cluster_id>.openshift.com for Online
     # for OCP it's https://logs.<subdomain>.openshift.com
     def logging_console_url
