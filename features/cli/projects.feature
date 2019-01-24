@@ -113,23 +113,24 @@ Feature: projects related features via cli
       | group_name       | system:serviceaccounts:<%= user(1, switch: false).name %> |
       | rolebinding_name | admin                                                     |
     Then the step should succeed
-    When I run the :describe client command with:
-      | resource | rolebinding |
-      | name     | admin       |
+    When I run the :get client command with:
+      | resource      | rolebinding |
+      | resource_name | admin       |
+      | o             | wide        |
     Then the step should succeed
     And the output should match:
-      | Users:\\s+<%= user.name %>, <%= user(1, switch: false).name %> |
-      | Groups:\\s+system:serviceaccounts:<%= user(1, switch: false).name %> |
+      | admin.*<%= user.name %>, <%= user(1, switch: false).name %>.*system:serviceaccounts:<%= user(1, switch: false).name %> |
     When I run the :policy_remove_group client command with:
       | group_name | system:serviceaccounts:<%= user(1, switch: false).name %> |
     Then the step should succeed
     And the output should contain "Removing admin from groups"
-    When I run the :describe client command with:
-      | resource | rolebinding |
-      | name     | admin       |
+    When I run the :get client command with:
+      | resource      | rolebinding |
+      | resource_name | admin       |
+      | o             | wide        |
     Then the step should succeed
     And the output should match:
-      | Users:\\s+<%= user.name %>, <%= user(1, switch: false).name %> |
+      | admin.*<%= user.name %>, <%= user(1, switch: false).name %> |
     And the output should not contain "system:serviceaccounts:<%= user(1, switch: false).name %>"
 
   # @author yinzhou@redhat.com

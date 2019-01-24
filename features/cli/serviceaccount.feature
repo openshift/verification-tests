@@ -12,12 +12,12 @@ Feature: ServiceAccount and Policy Managerment
     Then I wait for the "myapp" service to be created
     Given I create the serviceaccount "demo"
     And I give project admin role to the demo service account
-    When I run the :describe client command with:
-      | resource | rolebinding |
-      | name     | admin       |
+    When I run the :get client command with:
+      | resource      | rolebinding |
+      | resource_name | admin       |
+      | o             | wide        |
     Then the output should match:
-      | Role:\\s+\/admin |
-      | ServiceAccounts:\\s+demo |
+      | admin.*demo |
     Given I find a bearer token of the demo service account
     And I switch to the demo service account
     When I run the :get client command with:
