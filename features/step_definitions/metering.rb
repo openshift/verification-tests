@@ -7,7 +7,6 @@ Given /^metering service has been installed successfully(?: using (ansible|shell
   ensure_admin_tagged
   # first check if metering service exists, skip installation if already there
   step %Q/I save the project hosting "metering" resource to "metering_namespace" clipboard/
-
   unless cb.metering_namespace
     # default to shell script installation until OLM install is supported
     method ||= "shell script"
@@ -19,8 +18,8 @@ Given /^metering service has been installed successfully(?: using (ansible|shell
       namespace = "openshift-metering"
       metering_name = "openshift-metering"
     when "OLM"
-      namespace = "metering"  # TDB
-      metering_name = "openshift-metering"  # placeholder
+      namespace = "openshift-metering"  # TDB
+      metering_name = "operator-metering"  # placeholder
     end
     # a pre-req is that openshift-monitoring is installed in the system, w/o it
     # the openshift-metering won't function correctly
@@ -44,7 +43,7 @@ Given /^metering service has been installed successfully(?: using (ansible|shell
       # install metering using default
       step %Q/default metering service is installed without cleanup/
     when "OLM"
-      raise "OLM installation of metering service is not supported"
+      step %Q/the metering service is installed using OLM/
     end
     cb.metering_namespace = project(namespace)
   end
@@ -224,4 +223,48 @@ Given /^metering service is (installed|uninstalled) using shell script$/ do | op
   end
   res = host.exec(shell_cmd)
   raise "#{cb.metering_namespace} #{op} unsuccessfully" unless res[:success]
+end
+
+# install metering via OLM,
+Given /^the#{OPT_QUOTED} metering service is installed(?: to $QUOTED)? using OLM$/ do | metering_ns |
+  ensure_admin_tagged
+  # 1. create the metering namespace
+  metering_ns ||= "openshift-metering"
+  project(metering_ns)
+  step %Q/I switch to cluster admin pseudo user/
+  @result = user.cli_exec(:create_namespace, name: metering_ns)
+  # prep for OLM need to define configs via YAML
+  # 1. metering-catalogsourceconfig.yaml
+  catalog_source_config = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/metering/OLM_examples/metering-catalogsourceconfig.yaml"
+  # 2. metering-operatorgroup.yaml
+  operator_group = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/metering/OLM_examples/metering-operatorgroup.yaml"
+  # 3. metering-subscription.yaml
+  subscription = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/metering/OLM_examples/metering-subscription.yaml"
+  metering_crd = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/metering/OLM_examples/metering_crd.yaml"
+
+  # should really get the namespace dynamically
+  @result = user.cli_exec(:apply, f: catalog_source_config, n: 'openshift-marketplace')
+  @result = user.cli_exec(:apply, f: operator_group, n: project.name)
+  @result = user.cli_exec(:apply, f: subscription, n: project.name)
+  # wait for two initial metering pods to become running first and then apply CRD
+  step %Q/a pod becomes ready with labels:/, table(%{
+    | app=metering-operator |
+  })
+
+  step %Q/a pod becomes ready with labels:/, table(%{
+    | olm.catalogSource=metering |
+  })
+  @result = user.cli_exec(:apply, f: metering_crd, n: project.name)
+  raise "OLM install of metering failed" unless @result[:success]
+end
+
+# XXX: currently OLM uninstall is TBD, we uninstall by removing the namespace
+Given /^the#{OPT_QUOTED} metering service is uninstalled using OLM$/ do | metering_ns |
+  ensure_admin_tagged
+  metering_ns ||= "openshift-metering"
+  step %Q/I switch to cluster admin pseudo user/
+  project("openshift-marketplace")
+  step %Q/I ensure "metering" catalogsourceconfig is deleted/
+  project(metering_ns)
+  step %Q/I ensure "#{metering_ns}" project is deleted/
 end
