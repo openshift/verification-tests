@@ -102,10 +102,22 @@ module BushSlicer
       opts = {:user=> user,
               :password=> password,
               :max_redirects=>0,
-              :url=>"#{server_url}/oauth/authorize",
               :params=> {"client_id"=>"openshift-challenging-client", "response_type"=>"token"},
               :method=>"GET"
       }
+      oauth_opts = {:url => "#{server_url}/.well-known/oauth-authorization-server",
+                    :method=> "GET"
+      }
+
+      res_oauth = Http.request(**oauth_opts)
+
+      if res_oauth[:exitstatus] == 200
+        puts JSON.parse(res_oauth[:response])
+        opts[:url] = "#{JSON.parse(res_oauth[:response])["authorization_endpoint"]}"
+      else
+        opts[:url] = "{server_url}/oauth/authorization"
+      end
+
       res = Http.request(**opts)
 
       if res[:exitstatus] == 302 && res[:headers]["location"]
