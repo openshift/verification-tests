@@ -114,7 +114,7 @@ module BushSlicer
       if res_oauth[:exitstatus] == 200
         opts[:url] = "#{JSON.parse(res_oauth[:response])["authorization_endpoint"]}"
       else
-        opts[:url] = "{server_url}/oauth/authorize"
+        opts[:url] = "#{server_url}/oauth/authorize"
       end
 
       res = Http.request(**opts)
