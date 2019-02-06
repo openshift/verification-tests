@@ -354,6 +354,9 @@ module BushSlicer
     def resource_class(cli_string)
       unless @shorthands
         @shorthands = {
+          crd: "customresourcedefinition",
+          cs: "catalogsource",
+          csv: "clusterserviceversion",
           dc: "deploymentconfigs",
           ds: "daemonsets",
           hpa: "horizontalpodautoscalers",
