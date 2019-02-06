@@ -49,6 +49,8 @@ Given /^metering service has been installed successfully(?: using (ansible|shell
   end
   step %Q/all metering related pods are running in the "#{cb.metering_namespace.name}" project/
   step %Q/I wait for the "#{metering_name}" metering to appear/
+  # added check for datasource to make sure promethues imports are working
+  step %Q/all datasources for "<%= cb.metering_namespace.name %>" project are imported/
 end
 
 Given /^default metering service is installed without cleanup$/ do
@@ -228,6 +230,8 @@ end
 # install metering via OLM,
 Given /^the#{OPT_QUOTED} metering service is installed(?: to $QUOTED)? using OLM$/ do | metering_ns |
   ensure_admin_tagged
+  ensure_destructive_tagged
+
   # 1. create the metering namespace
   metering_ns ||= "openshift-metering"
   project(metering_ns)
@@ -261,10 +265,27 @@ end
 # XXX: currently OLM uninstall is TBD, we uninstall by removing the namespace
 Given /^the#{OPT_QUOTED} metering service is uninstalled using OLM$/ do | metering_ns |
   ensure_admin_tagged
+  ensure_destructive_tagged
+
   metering_ns ||= "openshift-metering"
   step %Q/I switch to cluster admin pseudo user/
   project("openshift-marketplace")
   step %Q/I ensure "metering" catalogsourceconfig is deleted/
   project(metering_ns)
   step %Q/I ensure "#{metering_ns}" project is deleted/
+end
+
+Given /^all datasources for#{OPT_QUOTED} project are imported$/ do | proj_name |
+  project ||= project(proj_name) if proj_name
+  data_sources  = BushSlicer::ReportDataSource.list(user: user, project: project)
+  seconds = 60
+  import_list = []
+  success = wait_for(seconds) {
+    data_sources.each do |ds|
+      import_time = ds.props.dig(:raw, 'status', 'prometheusMetricImportStatus', 'earliestImportedMetricTime')
+      import_list << import_time.nil?
+    end
+    import_list.count(false) == 0
+  }
+  raise "Querying for datasources returned failure, probabaly due to Prometheus import failed" unless success
 end
