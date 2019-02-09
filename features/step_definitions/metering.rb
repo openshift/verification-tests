@@ -50,7 +50,7 @@ Given /^metering service has been installed successfully(?: using (ansible|shell
   step %Q/all metering related pods are running in the "#{cb.metering_namespace.name}" project/
   step %Q/I wait for the "#{metering_name}" metering to appear/
   # added check for datasource to make sure promethues imports are working
-  step %Q/all datasources for "<%= cb.metering_namespace.name %>" project are imported/
+  step %Q/all reportdatasources are importing from Prometheus/
 end
 
 Given /^default metering service is installed without cleanup$/ do
@@ -275,17 +275,12 @@ Given /^the#{OPT_QUOTED} metering service is uninstalled using OLM$/ do | meteri
   step %Q/I ensure "#{metering_ns}" project is deleted/
 end
 
-Given /^all datasources for#{OPT_QUOTED} project are imported$/ do | proj_name |
-  project ||= project(proj_name) if proj_name
+Given /^all reportdatasources are importing from Prometheus$/ do
+  project ||= project(cb.metering_namespace)
   data_sources  = BushSlicer::ReportDataSource.list(user: user, project: project)
   seconds = 60
-  import_list = []
   success = wait_for(seconds) {
-    data_sources.each do |ds|
-      import_time = ds.props.dig(:raw, 'status', 'prometheusMetricImportStatus', 'earliestImportedMetricTime')
-      import_list << import_time.nil?
-    end
-    import_list.count(false) == 0
+    data_sources.any? { |ds| ds.last_import_time }
   }
-  raise "Querying for datasources returned failure, probabaly due to Prometheus import failed" unless success
+  raise "Querying for reportdatasources returned failure, probabaly due to Prometheus import failed" unless success
 end
