@@ -463,9 +463,24 @@ module BushSlicer
       raise
     end
 
+    def task_env_process(env, evalbinding, basepath)
+      case env
+      when nil
+        return env
+      when Hash
+        # do nothing
+      when /^file:.*\.rb$/
+        file = env.sub(/^file:/, "")
+        env = evalbinding.eval(readfile(file, basepath), file)
+      else
+        raise "unknown env specification: #{env}"
+      end
+
+      return Collections.deep_hash_strkeys env
+    end
+
     def run_ansible_playbook(playbook, inventory, extra_vars: nil, env: nil, retries: 1)
       env ||= {}
-      env = env.reduce({}) { |r,e| r[e[0].to_s] = e[1].to_s; r }
       env["ANSIBLE_FORCE_COLOR"] = "true"
       env["ANSIBLE_CALLBACK_WHITELIST"] = 'profile_tasks'
 
@@ -572,7 +587,9 @@ module BushSlicer
           stderr: :out, stdout: STDOUT,
           timeout: 36000
         }
-        exec_opts[:env] = Collections.deep_hash_strkeys task[:env] if task[:env]
+        if task[:env]
+          exec_opts[:env] = task_env_process(task[:env], erb_binding, template_dir)
+        end
         res = Host.localhost.exec(*[task[:cmd]].flatten, **exec_opts)
         unless res[:success]
           raise "shell command failed execution, see logs"
@@ -590,9 +607,12 @@ module BushSlicer
         inventory = Host.localhost.absolutize basename(task[:inventory])
         puts "Ansible inventory #{File.basename inventory}:\n#{inventory_str}"
         File.write(inventory, inventory_str)
-        run_ansible_playbook(localize(task[:playbook]), inventory,
-                             extra_vars: task[:extra_vars],
-                             retries: (task[:retries] || 1), env: task[:env])
+        run_ansible_playbook(
+          localize(task[:playbook]), inventory,
+          extra_vars: task[:extra_vars],
+          retries: (task[:retries] || 1),
+          env: task_env_process(task[:env], erb_binding, template_dir)
+        )
       when "launch_host_groups"
         existing_hosts = erb_binding.local_variable_get(:hosts)
         hosts = []
