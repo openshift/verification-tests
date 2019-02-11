@@ -280,7 +280,7 @@ Given /^all reportdatasources are importing from Prometheus$/ do
   data_sources  = BushSlicer::ReportDataSource.list(user: user, project: project)
   seconds = 60
   success = wait_for(seconds) {
-    data_sources.any? { |ds| ds.last_import_time }
+    data_sources.all? { |ds| ds.last_import_time }
   }
   raise "Querying for reportdatasources returned failure, probabaly due to Prometheus import failed" unless success
 end
