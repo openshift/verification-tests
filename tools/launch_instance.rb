@@ -469,6 +469,8 @@ module BushSlicer
         return env
       when Hash
         # do nothing
+      when /^expr:/
+        env = evalbinding.eval(env.sub(/^expr:/, ""))
       when /^file:.*\.rb$/
         file = env.sub(/^file:/, "")
         env = evalbinding.eval(readfile(file, basepath), file)
