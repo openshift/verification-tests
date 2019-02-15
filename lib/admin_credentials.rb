@@ -3,7 +3,7 @@ require 'openssl'
 require 'yaml'
 
 module BushSlicer
-  class MasterOsAdminCredentials
+  class AdminCredentials
     include Common::Helper
 
     attr_reader :env, :opts
@@ -12,6 +12,24 @@ module BushSlicer
       @env = env
       @opts = opts
     end
+
+    def accessor_from_kubeconfig(str)
+        conf = YAML.load(str)
+        uhash = conf["users"].first # minify should show us only current user
+
+        crt = uhash["user"]["client-certificate-data"]
+        key = uhash["user"]["client-key-data"]
+
+        return APIAccessor.new(
+          id: "admin",
+          client_cert: OpenSSL::X509::Certificate.new(Base64.decode64(crt)),
+          client_key: OpenSSL::PKey::RSA.new(Base64.decode64(key)),
+          env: env
+        )
+    end
+  end
+
+  class MasterOsAdminCredentials < AdminCredentials
 
     private def master_host
       env.master_hosts.first
@@ -43,21 +61,31 @@ module BushSlicer
         # config_str = res[:stdout].gsub(/^(\s*server:)\s.*$/) {
         #   $1 + " " + env.api_endpoint_url
         # }
-        conf = YAML.load(res[:response])
-        uhash = conf["users"].first # minify should show us only current user
-
-        crt = uhash["user"]["client-certificate-data"]
-        key = uhash["user"]["client-key-data"]
-
-        return APIAccessor.new(
-          id: "admin",
-          client_cert: OpenSSL::X509::Certificate.new(Base64.decode64(crt)),
-          client_key: OpenSSL::PKey::RSA.new(Base64.decode64(key)),
-          env: env
-        )
+        return accessor_from_kubeconfig(res[:response])
       else
         logger.error(res[:response])
         raise "error getting kubeconfig from master #{master_host.hostname}, see log"
+      end
+    end
+  end
+
+  class URLKubeconfigCredentials < AdminCredentials
+    def get
+      url = opts[:spec]
+      res = Http.get(url: url, raise_on_error: true)
+      return accessor_from_kubeconfig(res[:response])
+    end
+  end
+
+  class AutoKubeconfigCredentials < AdminCredentials
+    def get
+      case opts[:spec]
+      when nil
+        MasterOsAdminCredentials.new(env, **opts).get
+      when %r{://}
+        URLKubeconfigCredentials.new(env, **opts).get
+      else
+        raise "unknown gredentials specification: #{opts[:spec]}"
       end
     end
   end
