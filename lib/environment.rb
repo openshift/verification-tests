@@ -101,7 +101,13 @@ module BushSlicer
 
     private def admin_creds
       if admin?
-        BushSlicer.const_get(opts[:admin_creds]).new(self, **opts)
+        cred_opts = opts.reduce({}) { |m, (k,v)|
+          if k.to_s.start_with? "admin_creds_"
+            m[k.to_s.gsub(/^admin_creds_/, "").to_sym] = v
+          end
+          m
+        }
+        BushSlicer.const_get(opts[:admin_creds]).new(self, **cred_opts)
       else
         raise UnsupportedOperationError,
           "we cannot run as admins in this environment"
