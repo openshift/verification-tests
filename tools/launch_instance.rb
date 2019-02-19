@@ -725,7 +725,9 @@ module BushSlicer
       end
 
       ## help users persist home info
-      hosts_spec = hosts.map{|h| "#{h.hostname}:#{h.roles.join(':')}"}.join(',')
+      hosts_spec = hosts.map{ |h|
+        "#{h[:flags]}#{h.hostname}:#{h.roles.join(':')}"
+      }.join(',')
       logger.info "HOSTS SPECIFICATION: #{hosts_spec}"
       host_spec_out = ENV["BUSHSLICER_HOSTS_SPEC_FILE"]
       if host_spec_out && !File.exist?(host_spec_out)
