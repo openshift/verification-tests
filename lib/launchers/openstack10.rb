@@ -765,6 +765,9 @@ module BushSlicer
         else
           res[name] = Host.from_ip(instance.internal_ip, host_opts)
         end
+        logger.debug(
+          "Host #{res[name][:cloud_instance_name]} has ip #{res[name].ip}."
+        )
         res[name].local_ip = instance.internal_ip
       }
       return res
