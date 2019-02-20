@@ -6,7 +6,7 @@ module BushSlicer
       extend Helper
 
       def self.populate(path, base_opts, opts)
-        populate_common("/oapi/<oapi_version>", path, base_opts, opts)
+        populate_common("/apis/user.openshift.io/<oapi_version>", path, base_opts, opts)
       end
 
       class << self
@@ -52,11 +52,22 @@ module BushSlicer
       end
 
       def self.get_user(base_opts, opts)
+        base_opts_org = base_opts.dup
         populate("/users/<username>", base_opts, opts)
-        return perform(**base_opts, method: "GET") { |res|
+        res = perform(**base_opts, method: "GET") { |res|
           res[:props][:name] = res[:parsed]["metadata"]["name"]
           res[:props][:uid] = res[:parsed]["metadata"]["uid"]
         }
+        unless res[:success]
+          # failed with new url, fall back to old url path
+          populate_common("/oapi/<oapi_version>", "/users/<username>", base_opts_org, opts)
+          res = perform(**base_opts_org, method: "GET") { |res|
+            res[:props][:name] = res[:parsed]["metadata"]["name"]
+            res[:props][:uid] = res[:parsed]["metadata"]["uid"]
+          }
+        end
+
+        return res
       end
 
       # this usually creates a project in fact
