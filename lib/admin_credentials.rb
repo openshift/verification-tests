@@ -85,7 +85,7 @@ module BushSlicer
       when %r{://}
         URLKubeconfigCredentials.new(env, **opts).get
       else
-        raise "unknown gredentials specification: #{opts[:spec]}"
+        raise "unknown credentials specification: #{opts[:spec]}"
       end
     end
   end
