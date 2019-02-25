@@ -6,7 +6,7 @@ module BushSlicer
       extend Helper
 
       def self.populate(path, base_opts, opts)
-        populate_common("/api/<api_version>", path, base_opts, opts)
+        populate_common("/apis/#{path}.k8s.io/<api_version>", path, base_opts, opts)
       end
 
       class << self

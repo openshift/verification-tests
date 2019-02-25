@@ -31,8 +31,6 @@ module BushSlicer
         opts = {}
 
         opts[:options] = {}
-        opts[:options][:oapi_version] = user.rest_preferences[:oapi_version] ||
-                                          user.env.api_version
         opts[:options][:api_version] = user.rest_preferences[:api_version] ||
                                           user.env.api_version
         opts[:options][:accept] = "application/json"
@@ -94,7 +92,6 @@ module BushSlicer
       def self.delegate_rest_request(req, base_opts, req_opts)
         ## use special hash like class to track usage of supplied options
         tracked_opts = UsageTrackingHash.new(base_opts.delete(:options).merge(req_opts))
-        tracked_opts[:oapi_version] # make sure this is marked accessed
         tracked_opts[:api_version] # make sure this is marked accessed
 
         case
