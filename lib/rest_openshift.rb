@@ -6,7 +6,7 @@ module BushSlicer
       extend Helper
 
       def self.populate(path, base_opts, opts)
-        populate_common("/oapi/<oapi_version>", path, base_opts, opts)
+        populate_common("/apis/user.openshift.io/<oapi_version>", path, base_opts, opts)
       end
 
       class << self
