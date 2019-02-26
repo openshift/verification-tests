@@ -230,7 +230,7 @@ Feature: Pod related networking scenarios
    And evaluation of `host_subnet(cb.nodes[1].name).ip` is stored in the :client_ip clipboard
    
    # 'yes' command will send a character "h" continously for 3 seconds to /dev/udp on listener where the node is listening for udp traffic on exposed nodeport. The 3 seconds mechanism will create an Assured
-   #  entry whuch will give us enough time to validate upcoming steps 
+   #  entry which will give us enough time to validate upcoming steps 
    When I run the :exec background client command with:
      | pod              | <%= cb.client_pod %> |
      | oc_opts_end      |    |
@@ -254,7 +254,7 @@ Feature: Pod related networking scenarios
    And evaluation of `pod.ip` is stored in the :host_pod2_ip clipboard
    
    # 'yes' command will send a character "h" continously for 3 seconds to /dev/udp on listener where the node is listening for udp traffic on exposed nodeport. The 3 seconds mechanism will create an Assured
-   #  entry whuch will give us enough time to validate upcoming steps 
+   #  entry which will give us enough time to validate upcoming steps 
    When I run the :exec background client command with:
      | pod              | <%= cb.client_pod %> |
      | oc_opts_end      |    |
