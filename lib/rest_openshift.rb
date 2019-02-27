@@ -22,7 +22,7 @@ module BushSlicer
       #   "buildDate": "2016-08-29T14:44:33Z"
       # }
       def self.version(base_opts, opts)
-        populate_common("/version", "/openshift", base_opts, opts, type="version")
+        populate_common("/version", "/openshift", base_opts, opts)
         return perform(**base_opts, method: "GET") { |res|
           res[:props][:openshift] = res[:parsed]["gitVersion"]
           res[:props][:major] = res[:parsed]["major"]
