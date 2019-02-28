@@ -164,6 +164,20 @@ module BushSlicer
       return @admin_console_url
     end
 
+    def authentication_url
+      unless @authentication_url
+        if opts[:authentication_url]
+          @authentication_url= opts[:authentication_url]
+        else
+          authenticationproject = Project.new(name: "openshift-authentication", env: self)
+          authenticationservice = Service.new(name: "openshift-authentication", project: authenticationproject )
+          authenticationroute = Route.new(name: "openshift-authentication", project: authenticationproject, service: authenticationservice)
+          @authentication_url = "https://" + authenticationroute.dns(by: admin)
+        end
+      end
+      return @authentication_url
+    end
+
     # naming scheme is https://logs.<cluster_id>.openshift.com for Online
     # for OCP it's https://logs.<subdomain>.openshift.com
     def logging_console_url
