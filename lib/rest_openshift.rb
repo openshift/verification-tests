@@ -32,27 +32,27 @@ module BushSlicer
       end
 
       def self.delete_oauthaccesstoken(base_opts, opts)
-        populate("/oauthaccesstokens/<token_to_delete>", base_opts, opts, type="oauth")
+        populate("/oauthaccesstokens/<token_to_delete>", base_opts, opts, "oauth")
         return perform(**base_opts, method: "DELETE")
       end
 
       def self.list_projects(base_opts, opts)
-        populate("/projects", base_opts, opts, type="project")
+        populate("/projects", base_opts, opts, "project")
         return perform(**base_opts, method: "GET")
       end
 
       def self.delete_project(base_opts, opts)
-        populate("/projects/<project_name>", base_opts, opts, type="project")
+        populate("/projects/<project_name>", base_opts, opts, "project")
         return perform(**base_opts, method: "DELETE")
       end
 
       def self.get_project(base_opts, opts)
-        populate("/projects/<project_name>", base_opts, opts, type="project")
+        populate("/projects/<project_name>", base_opts, opts, "project")
         return perform(**base_opts, method: "GET")
       end
 
       def self.get_user(base_opts, opts)
-        populate("/users/<username>", base_opts, opts, type="user")
+        populate("/users/<username>", base_opts, opts, "user")
         return perform(**base_opts, method: "GET") { |res|
           res[:props][:name] = res[:parsed]["metadata"]["name"]
           res[:props][:uid] = res[:parsed]["metadata"]["uid"]
@@ -68,7 +68,7 @@ module BushSlicer
         # base_opts[:payload][:kind] = "ProjectRequest"
         base_opts[:payload][:metadata] = {name: opts[:project_name]}
 
-        populate("/projectrequests", base_opts, opts, type="project")
+        populate("/projectrequests", base_opts, opts, "project")
         return Http.request(**base_opts, method: "POST")
       end
 
@@ -78,7 +78,7 @@ module BushSlicer
         base_opts[:payload][:verb] = opts[:verb]
         base_opts[:payload][:resource] = opts[:resource]
         project_name = opts[:project_name]
-        populate("/namespaces/<project_name>/localresourceaccessreviews", base_opts, opts, type="authorization")
+        populate("/namespaces/<project_name>/localresourceaccessreviews", base_opts, opts, "authorization")
         return perform(**base_opts, method: "POST")
       end
 
@@ -90,7 +90,7 @@ module BushSlicer
         base_opts[:payload][:scopes] = opts[:scopes] if opts[:scopes]
 
 
-        populate("/oauthaccesstokens", base_opts, opts, type="oauth")
+        populate("/oauthaccesstokens", base_opts, opts, "oauth")
         return perform(**base_opts, method: "POST") { |res|
           # res[:props][:name] = res[:parsed]["metadata"]["name"]
           # res[:props][:uid] = res[:parsed]["metadata"]["uid"]
@@ -108,26 +108,26 @@ module BushSlicer
 
         project_name = opts[:project_name]
 
-        populate("/namespaces/<project_name>/deploymentconfigrollbacks", base_opts, opts, type="apps")
+        populate("/namespaces/<project_name>/deploymentconfigrollbacks", base_opts, opts, "apps")
         return Http.request(**base_opts, method: "POST")
       end
 
 
       def self.post_pod_security_policy_self_subject_reviews(base_opts, opts)
         base_opts[:payload] = File.read(expand_path(opts[:payload_file]))
-        populate("/namespaces/<project_name>/podsecuritypolicyselfsubjectreviews", base_opts, opts, type="security")
+        populate("/namespaces/<project_name>/podsecuritypolicyselfsubjectreviews", base_opts, opts, "security")
         return perform(**base_opts, method: "POST")
       end
 
       def self.post_pod_security_policy_subject_reviews(base_opts, opts)
         base_opts[:payload] = File.read(expand_path(opts[:payload_file]))
-        populate("/namespaces/<project_name>/podsecuritypolicysubjectreviews", base_opts, opts, type="security")
+        populate("/namespaces/<project_name>/podsecuritypolicysubjectreviews", base_opts, opts, "security")
         return perform(**base_opts, method: "POST")
       end
 
       def self.post_pod_security_policy_reviews(base_opts, opts)
         base_opts[:payload] = File.read(expand_path(opts[:payload_file]))
-        populate("/namespaces/<project_name>/podsecuritypolicyreviews", base_opts, opts, type="security")
+        populate("/namespaces/<project_name>/podsecuritypolicyreviews", base_opts, opts, "security")
         return perform(**base_opts, method: "POST")
       end
 
