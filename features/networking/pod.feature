@@ -208,16 +208,16 @@ Feature: Pod related networking scenarios
    And evaluation of `host_subnet(cb.nodes[0].name).ip` is stored in the :node_ip clipboard
    
    When I run the :expose client command with:
-     | resource          | pod |
-     | resource_name     | <%= cb.host_pod1_name %> |
-     | type              | NodePort |
-     | port              | 8080 |
-     | protocol          | UDP |
+     | resource      | pod                      |
+     | resource_name | <%= cb.host_pod1_name %> |
+     | type          | NodePort                 |
+     | port          | 8080                     |
+     | protocol      | UDP                      |
    Then the step should succeed
    
    When I run the :get client command with:
-     | resource      | service |
-     | output        | jsonpath='{.items[*].spec.ports[*].nodePort}' | 
+     | resource | service                                       |
+     | output   | jsonpath='{.items[*].spec.ports[*].nodePort}' | 
    Then the step should succeed
    And evaluation of `@result[:response]` is stored in the :nodeport clipboard
    
@@ -232,10 +232,10 @@ Feature: Pod related networking scenarios
    # 'yes' command will send a character "h" continously for 3 seconds to /dev/udp on listener where the node is listening for udp traffic on exposed nodeport. The 3 seconds mechanism will create an Assured
    #  entry which will give us enough time to validate upcoming steps 
    When I run the :exec background client command with:
-     | pod              | <%= cb.client_pod %> |
-     | oc_opts_end      |    |
-     | exec_command     | bash |
-     | exec_command_arg | -c |
+     | pod              | <%= cb.client_pod %>                                  |
+     | oc_opts_end      |                                                       | 
+     | exec_command     | bash                                                  |
+     | exec_command_arg | -c                                                    |
      | exec_command_arg | yes "h">/dev/udp/<%= cb.node_ip %>/<%= cb.nodeport %> |
    Given 3 seconds have passed
    And I terminate last background process
@@ -247,7 +247,7 @@ Feature: Pod related networking scenarios
      |<%= cb.host_pod1_ip %>|
    
    When I run the :delete client command with:
-     | object_type       | pod     |
+     | object_type       | pod                      |
      | object_name_or_id | <%= cb.host_pod1_name %> | 
    Given a pod becomes ready with labels:
      | name=udp-pods |
@@ -256,10 +256,10 @@ Feature: Pod related networking scenarios
    # 'yes' command will send a character "h" continously for 3 seconds to /dev/udp on listener where the node is listening for udp traffic on exposed nodeport. The 3 seconds mechanism will create an Assured
    #  entry which will give us enough time to validate upcoming steps 
    When I run the :exec background client command with:
-     | pod              | <%= cb.client_pod %> |
-     | oc_opts_end      |    |
-     | exec_command     | bash |
-     | exec_command_arg | -c |
+     | pod              | <%= cb.client_pod %>                                  |
+     | oc_opts_end      |                                                       |
+     | exec_command     | bash                                                  |
+     | exec_command_arg | -c                                                    |
      | exec_command_arg | yes "h">/dev/udp/<%= cb.node_ip %>/<%= cb.nodeport %> |
    Given 3 seconds have passed
    And I terminate last background process
