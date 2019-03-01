@@ -4,8 +4,12 @@ Feature: CSI testing related feature
   # @case_id OCP-21804
   @admin
   @destructive
-  Scenario: Deploy a cinder csi driver and test 
+  Scenario: Deploy a cinder csi driver and test
     Given I deploy "cinder" driver using csi
+    And I register clean-up steps:
+    """
+    I cleanup "cinder" csi driver
+    """
     And I create storage class for "cinder" csi driver
     And I checked "cinder" csi driver is running
     And I have a project
