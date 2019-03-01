@@ -77,6 +77,14 @@ module BushSlicer
     end
   end
 
+  class LocalKubeconfigCredentials < AdminCredentials
+    def get
+      raise "kubeconfig does not exists" unless File.exists? opts[:spec]
+      config = File.open(opts[:spec]).read
+      return accessor_from_kubeconfig(config)
+    end
+  end
+
   class AutoKubeconfigCredentials < AdminCredentials
     def get
       case opts[:spec]
@@ -84,6 +92,8 @@ module BushSlicer
         MasterOsAdminCredentials.new(env, **opts).get
       when %r{://}
         URLKubeconfigCredentials.new(env, **opts).get
+      when opts[:spec]
+        LocalKubeconfigCredentials.new(env, **opts).get
       else
         raise "unknown credentials specification: #{opts[:spec]}"
       end
