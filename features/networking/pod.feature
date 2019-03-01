@@ -203,13 +203,12 @@ Feature: Pod related networking scenarios
    Then the step should succeed
    Given a pod becomes ready with labels:
      | name=udp-pods |
-   And evaluation of `pod.name` is stored in the :host_pod1_name clipboard
-   And evaluation of `pod.ip` is stored in the :host_pod1_ip clipboard
+   And evaluation of `pod` is stored in the :host_pod1 clipboard
    And evaluation of `host_subnet(cb.nodes[0].name).ip` is stored in the :node_ip clipboard
    
    When I run the :expose client command with:
      | resource      | pod                      |
-     | resource_name | <%= cb.host_pod1_name %> |
+     | resource_name | <%= cb.host_pod1.name %> |
      | type          | NodePort                 |
      | port          | 8080                     |
      | protocol      | UDP                      |
@@ -226,13 +225,12 @@ Feature: Pod related networking scenarios
    Then the step should succeed
    Given a pod becomes ready with labels:
      | name=hello-pod |
-   And evaluation of `pod.name` is stored in the :client_pod clipboard
-   And evaluation of `host_subnet(cb.nodes[1].name).ip` is stored in the :client_ip clipboard
+   And evaluation of `pod` is stored in the :client_pod clipboard
    
    # 'yes' command will send a character "h" continously for 3 seconds to /dev/udp on listener where the node is listening for udp traffic on exposed nodeport. The 3 seconds mechanism will create an Assured
    #  entry which will give us enough time to validate upcoming steps 
    When I run the :exec background client command with:
-     | pod              | <%= cb.client_pod %>                                  |
+     | pod              | <%= cb.client_pod.name %>                             |
      | oc_opts_end      |                                                       | 
      | exec_command     | bash                                                  |
      | exec_command_arg | -c                                                    |
@@ -244,19 +242,19 @@ Feature: Pod related networking scenarios
      | conntrack -L \| grep <%= cb.nodeport %> | 
    Then the step should succeed 
    And the output should contain: 
-     |<%= cb.host_pod1_ip %>|
+     |<%= cb.host_pod1.ip %>|
    
    When I run the :delete client command with:
      | object_type       | pod                      |
-     | object_name_or_id | <%= cb.host_pod1_name %> | 
+     | object_name_or_id | <%= cb.host_pod1.name %> | 
    Given a pod becomes ready with labels:
      | name=udp-pods |
-   And evaluation of `pod.ip` is stored in the :host_pod2_ip clipboard
+   And evaluation of `pod` is stored in the :host_pod2 clipboard
    
    # 'yes' command will send a character "h" continously for 3 seconds to /dev/udp on listener where the node is listening for udp traffic on exposed nodeport. The 3 seconds mechanism will create an Assured
    #  entry which will give us enough time to validate upcoming steps 
    When I run the :exec background client command with:
-     | pod              | <%= cb.client_pod %>                                  |
+     | pod              | <%= cb.client_pod.name %>                             |
      | oc_opts_end      |                                                       |
      | exec_command     | bash                                                  |
      | exec_command_arg | -c                                                    |
@@ -266,6 +264,6 @@ Feature: Pod related networking scenarios
    
    When I run commands on the host:
      | conntrack -L \| grep <%= cb.nodeport %> |
-   Then the output should contain "<%= cb.host_pod2_ip %>"
-   And the output should not contain "<%= cb.host_pod1_ip %>"    
+   Then the output should contain "<%= cb.host_pod2.ip %>"
+   And the output should not contain "<%= cb.host_pod1.ip %>"    
 
