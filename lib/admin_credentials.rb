@@ -77,23 +77,26 @@ module BushSlicer
     end
   end
 
+  # expect user env to set simliar to below (prepend with `file:///`)
+  # export OPENSHIFT_ENV_OCP4_ADMIN_CREDS_SPEC=file:///~/.kube/config
   class LocalKubeconfigCredentials < AdminCredentials
     def get
-      raise "kubeconfig does not exists" unless File.exists? opts[:spec]
-      config = File.open(opts[:spec]).read
+      path = File.expand_path(opts[:spec].split("file:///")[1])
+      raise "kubeconfig does not exists" unless File.exists? File.expand_path(path)
+      config = File.open(path).read
       return accessor_from_kubeconfig(config)
     end
   end
-
+  
   class AutoKubeconfigCredentials < AdminCredentials
     def get
       case opts[:spec]
       when nil
         MasterOsAdminCredentials.new(env, **opts).get
+      when %r{^file:///}
+        LocalKubeconfigCredentials.new(env, **opts).get  
       when %r{://}
         URLKubeconfigCredentials.new(env, **opts).get
-      when opts[:spec]
-        LocalKubeconfigCredentials.new(env, **opts).get
       else
         raise "unknown credentials specification: #{opts[:spec]}"
       end
