@@ -471,7 +471,7 @@ Given /^I have a iSCSI setup in the environment$/ do
     @result = admin.cli_exec(:delete, n: _project.name, object_type: "pod", object_name_or_id: _pod.name)
     raise "could not delete broken iSCSI pod" unless @result[:success]
   else
-    env.hosts.each do |host|
+    env.node_hosts.each do |host|
       setup_commands = [
         "echo 'InitiatorName=iqn.2016-04.test.com:test.img' > /etc/iscsi/initiatorname.iscsi",
         "sed -i '/^node.session.auth./'d  /etc/iscsi/iscsid.conf",
