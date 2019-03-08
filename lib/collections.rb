@@ -117,7 +117,9 @@ module BushSlicer
     # @param tgt_hash [Hash] target hash that we will be **altering**
     # @param src_hash [Hash] read from this source hash
     # @return the modified target hash
-    # @note this one does not merge Arrays
+    # @note this one does not merge Arrays; additionally when you have same
+    #   Hash object in multiple parts of the tree, when merging on one part of
+    #   the tree it will end up having same modification on the others
     def deep_merge!(tgt_hash, src_hash)
       tgt_hash.merge!(src_hash) { |key, oldval, newval|
         if oldval.kind_of?(Hash) && newval.kind_of?(Hash)
