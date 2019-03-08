@@ -194,6 +194,7 @@ Feature: Pod related networking scenarios
   # @case_id OCP-19810
   @admin
   Scenario: Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted
+   Given the master version <= "3.11"		
    Given I store the schedulable nodes in the :nodes clipboard
    Given I use the "<%= cb.nodes[0].name %>" node
    And I have a project
