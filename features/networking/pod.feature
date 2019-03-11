@@ -194,77 +194,67 @@ Feature: Pod related networking scenarios
   # @case_id OCP-19810
   @admin
   Scenario: Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted
-   Given the master version <= "3.11"		
-   Given I store the schedulable nodes in the :nodes clipboard
-   Given I use the "<%= cb.nodes[0].name %>" node
-   And I have a project
-   
-   When I run the :create client command with:
-     | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/pod_with_udp_port_listener.json |
-   Then the step should succeed
-   Given a pod becomes ready with labels:
-     | name=udp-pods |
-   And evaluation of `pod` is stored in the :host_pod1 clipboard
-   And evaluation of `host_subnet(cb.nodes[0].name).ip` is stored in the :node_ip clipboard
-   
-   When I run the :expose client command with:
-     | resource      | pod                      |
-     | resource_name | <%= cb.host_pod1.name %> |
-     | type          | NodePort                 |
-     | port          | 8080                     |
-     | protocol      | UDP                      |
-   Then the step should succeed
-   
-   When I run the :get client command with:
-     | resource | service                                       |
-     | output   | jsonpath='{.items[*].spec.ports[*].nodePort}' | 
-   Then the step should succeed
-   And evaluation of `@result[:response]` is stored in the :nodeport clipboard
-   
-   When I run the :create client command with:
-     | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/aosqe-pod-for-ping.json |
-   Then the step should succeed
-   Given a pod becomes ready with labels:
-     | name=hello-pod |
-   And evaluation of `pod` is stored in the :client_pod clipboard
-   
-   # 'yes' command will send a character "h" continously for 3 seconds to /dev/udp on listener where the node is listening for udp traffic on exposed nodeport. The 3 seconds mechanism will create an Assured
-   #  entry which will give us enough time to validate upcoming steps 
-   When I run the :exec background client command with:
-     | pod              | <%= cb.client_pod.name %>                             |
-     | oc_opts_end      |                                                       | 
-     | exec_command     | bash                                                  |
-     | exec_command_arg | -c                                                    |
-     | exec_command_arg | yes "h">/dev/udp/<%= cb.node_ip %>/<%= cb.nodeport %> |
-   Given 3 seconds have passed
-   And I terminate last background process
-   
-   When I run commands on the host:
-     | conntrack -L \| grep <%= cb.nodeport %> | 
-   Then the step should succeed 
-   And the output should contain: 
-     |<%= cb.host_pod1.ip %>|
-   
-   When I run the :delete client command with:
-     | object_type       | pod                      |
-     | object_name_or_id | <%= cb.host_pod1.name %> | 
-   Given a pod becomes ready with labels:
-     | name=udp-pods |
-   And evaluation of `pod` is stored in the :host_pod2 clipboard
-   
-   # 'yes' command will send a character "h" continously for 3 seconds to /dev/udp on listener where the node is listening for udp traffic on exposed nodeport. The 3 seconds mechanism will create an Assured
-   #  entry which will give us enough time to validate upcoming steps 
-   When I run the :exec background client command with:
-     | pod              | <%= cb.client_pod.name %>                             |
-     | oc_opts_end      |                                                       |
-     | exec_command     | bash                                                  |
-     | exec_command_arg | -c                                                    |
-     | exec_command_arg | yes "h">/dev/udp/<%= cb.node_ip %>/<%= cb.nodeport %> |
-   Given 3 seconds have passed
-   And I terminate last background process
-   
-   When I run commands on the host:
-     | conntrack -L \| grep <%= cb.nodeport %> |
-   Then the output should contain "<%= cb.host_pod2.ip %>"
-   And the output should not contain "<%= cb.host_pod1.ip %>"    
-
+    Given the master version <= "3.11"		
+    Given I store the schedulable nodes in the :nodes clipboard
+    Given I use the "<%= cb.nodes[0].name %>" node
+    And I have a project
+    When I run the :create client command with:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/pod_with_udp_port_listener.json |
+    Then the step should succeed
+    Given a pod becomes ready with labels:
+      | name=udp-pods |
+    And evaluation of `pod` is stored in the :host_pod1 clipboard
+    And evaluation of `host_subnet(cb.nodes[0].name).ip` is stored in the :node_ip clipboard
+    When I run the :expose client command with:
+      | resource      | pod                      |
+      | resource_name | <%= cb.host_pod1.name %> |
+      | type          | NodePort                 |
+      | port          | 8080                     |
+      | protocol      | UDP                      |
+    Then the step should succeed
+    When I run the :get client command with:
+      | resource | service                                       |
+      | output   | jsonpath='{.items[*].spec.ports[*].nodePort}' | 
+    Then the step should succeed
+    And evaluation of `@result[:response]` is stored in the :nodeport clipboard
+    When I run the :create client command with:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/aosqe-pod-for-ping.json |
+    Then the step should succeed
+    Given a pod becomes ready with labels:
+      | name=hello-pod |
+    And evaluation of `pod` is stored in the :client_pod clipboard
+    # 'yes' command will send a character "h" continously for 3 seconds to /dev/udp on listener where the node is listening for udp traffic on exposed nodeport. The 3 seconds mechanism will create an Assured
+    #  entry which will give us enough time to validate upcoming steps 
+    When I run the :exec background client command with:
+      | pod              | <%= cb.client_pod.name %>                             |
+      | oc_opts_end      |                                                       | 
+      | exec_command     | bash                                                  |
+      | exec_command_arg | -c                                                    |
+      | exec_command_arg | yes "h">/dev/udp/<%= cb.node_ip %>/<%= cb.nodeport %> |
+    Given 3 seconds have passed
+    And I terminate last background process
+    When I run commands on the host:
+      | conntrack -L \| grep <%= cb.nodeport %> | 
+    Then the step should succeed 
+    And the output should contain: 
+      |<%= cb.host_pod1.ip %>|
+    When I run the :delete client command with:
+      | object_type       | pod                      |
+      | object_name_or_id | <%= cb.host_pod1.name %> | 
+    Given a pod becomes ready with labels:
+      | name=udp-pods |
+    And evaluation of `pod` is stored in the :host_pod2 clipboard
+    # 'yes' command will send a character "h" continously for 3 seconds to /dev/udp on listener where the node is listening for udp traffic on exposed nodeport. The 3 seconds mechanism will create an Assured
+    #  entry which will give us enough time to validate upcoming steps 
+    When I run the :exec background client command with:
+      | pod              | <%= cb.client_pod.name %>                             |
+      | oc_opts_end      |                                                       |
+      | exec_command     | bash                                                  |
+      | exec_command_arg | -c                                                    |
+      | exec_command_arg | yes "h">/dev/udp/<%= cb.node_ip %>/<%= cb.nodeport %> |
+    Given 3 seconds have passed
+    And I terminate last background process
+    When I run commands on the host:
+      | conntrack -L \| grep <%= cb.nodeport %> |
+    Then the output should contain "<%= cb.host_pod2.ip %>"
+    And the output should not contain "<%= cb.host_pod1.ip %>"    
