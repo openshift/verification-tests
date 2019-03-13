@@ -24,6 +24,7 @@ module BushSlicer
         }
       end
       unless @options[:password]
+        require 'io/console'
         STDERR.puts "JIRA Password: "
         @options[:password] = STDIN.noecho(&:gets).chomp
       end
@@ -75,7 +76,6 @@ module BushSlicer
       status = issue.save("fields"=>params)
       # call fetch to update the issue object
       @logger.error("Failed to create JIRA issue") unless status
-      issue.fetch if status
       return status, issue
     end
 
@@ -157,4 +157,12 @@ module JIRA
       return h
     end
   end
+end
+
+if __FILE__ == $0
+  extend BushSlicer::Common::Helper
+
+  jira = BushSlicer::Jira.new
+
+  require 'pry'; binding.pry
 end
