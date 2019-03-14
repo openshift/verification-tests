@@ -3,7 +3,17 @@ create_resource_by_default_yaml:
   - selector:
       xpath: //button[@id="yaml-create"]
     op: click
+  action:
+    if_element:
+      selector:
+        xpath: //a[text()='Edit YAML']
+    ref: click_edit_yaml_link
   action: click_create_button
+click_edit_yaml_link:
+  elements:
+  - selector:
+        xpath: //a[text()='Edit YAML']
+    op: click
 click_create_button:
   elements:
   - selector:
