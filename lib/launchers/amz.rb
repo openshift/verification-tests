@@ -489,7 +489,13 @@ module BushSlicer
       end
 
       logger.info("Launching EC2 instance from #{image.kind_of?(Aws::EC2::Image) ? image.name : image.inspect} named #{tag_name}...")
-      instances = @ec2.create_instances(instance_opt)
+      begin
+        instances = @ec2.create_instances(instance_opt)
+      rescue Aws::EC2::Errors::Unsupported => e
+        logger.error(e.context.http_request.body_contents)
+        logger.error(e.context.http_response.body_contents)
+        raise e
+      end
 
       res = []
       instances.each_with_index do | instance, i |
