@@ -240,7 +240,7 @@ rule:
 
 ==== `type:`
 Subtype of the element could be specified. Currently supported types are listed
-in the https://github.com/openshift/BushSlicer/blob/master/lib/webauto/web4cucumber.rb#L13-L28[FUNMAP] constant.
+in the https://github.com/openshift/verification-tests/blob/master/lib/webauto/web4cucumber.rb#L13-L28[FUNMAP] constant.
 
 ==== `op:`
 After the element was successfully found `click`,`hover`,`clear`,`set`,
@@ -258,7 +258,7 @@ rule:
 
 the `op` which could be performed on the element depends on the element type.
 Full picture of `element_type` - `op` сorrespondence can be found in the
-https://github.com/openshift/BushSlicer/blob/master/lib/webauto/web4cucumber.rb#L391-L429[source].
+https://github.com/openshift/verification-tests/blob/master/lib/webauto/web4cucumber.rb#L391-L429[source].
 
 ==== `missing:`
 **default:false**
@@ -508,7 +508,7 @@ check whether the changed `*.xyaml` file has valid format.
 ** A: When we are trying to check if element is missing on the page we need to wait for default timeout before the rule will fail. This was one of the reason to include `missing:` option.
 
 * Q: Why do we need to create an empty actions in web auto?
-** A: Our Scenarios in *.feature files are permanent for all version, but our web rules separated by version folder. Intention was to put all possible checks and operations which could change with upcoming releases to the web rules. So when we have new release we could just change web rules in appropriate folder and left Scenario untouched(so it works for previous version fine without any additional changes). Sometimes it happens that in new release we don't need action which was performed for previous releases, in this case we could left this action empty(If we'll simply delete this action, then Scenario will fail cause it couldn't find this action). For example look https://github.com/openshift/BushSlicer/search?utf8=%E2%9C%93&q=save_updated_env_value&type=[here]. We had separated "save button" for each env value in the second version, but when the editor was changed and this action is useless, so we just replaced the action content with {}.
+** A: Our Scenarios in *.feature files are permanent for all version, but our web rules separated by version folder. Intention was to put all possible checks and operations which could change with upcoming releases to the web rules. So when we have new release we could just change web rules in appropriate folder and left Scenario untouched(so it works for previous version fine without any additional changes). Sometimes it happens that in new release we don't need action which was performed for previous releases, in this case we could left this action empty(If we'll simply delete this action, then Scenario will fail cause it couldn't find this action). For example look https://github.com/openshift/verification-tests/search?utf8=%E2%9C%93&q=save_updated_env_value&type=[here]. We had separated "save button" for each env value in the second version, but when the editor was changed and this action is useless, so we just replaced the action content with {}.
 
 == Debugging Javascript in Firefox/Chrome
 
