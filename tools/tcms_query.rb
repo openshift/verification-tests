@@ -468,8 +468,8 @@ end
         "description" => error_logs,
         "components" => component_attrs #, [component_auto.attrs]
       }
-      status, new_issue = jira.create_issue(issue_params)
-      logger.info("Created issue #{new_issue.key} for '#{assignee.name}'") if status
+      new_issue = jira.create_issue(fields: issue_params)
+      logger.info("Created issue #{new_issue.key} for '#{assignee.name}'") unless new_issue.has_errors?
     end
   end
 
