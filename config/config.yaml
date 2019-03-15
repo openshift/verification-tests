@@ -1,6 +1,6 @@
 --- # BushSlicer framework configuration options
 global:
-  git_repo_url: https://github.com/openshift/BushSlicer
+  git_repo_url: https://github.com/openshift/verification-tests
   git_repo_default_branch: master
 
   debug_in_after_hook: false
