@@ -119,6 +119,8 @@ module BushSlicer
         result[:size] ||= response&.size || 0
       end
       result[:total_time] = total_time
+
+      logger.trace("HTTP response:\n#{result[:response]}")
       return result
     end
     class << self
