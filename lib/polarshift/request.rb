@@ -174,6 +174,54 @@ module BushSlicer
         }
       end
 
+      def query_test_cases(project_id:,
+                     case_query: nil,
+                     template_id: nil,
+                     custom_fields: nil)
+        create_opts = {}
+        b = binding
+        [
+          :project_id,
+          :case_query,
+          :template_id,
+          :custom_fields
+        ].each { |key|
+          if b.local_variable_get(key)
+            create_opts[key] = b.local_variable_get(key)
+          end
+        }
+
+
+        Http.request(
+          method: :post,
+          url: "#{base_url}project/#{project_id}/test-cases/query",
+          payload: create_opts,
+          raise_on_error: false,
+          **common_opts
+        )
+      end
+
+
+      def query_test_cases_smart(timeout: 360, **opts)
+        res = query_test_cases(**opts)
+        if res[:exitstatus] == 202
+          op_url = JSON.load(res[:response])["operation_result_url"]
+          logger.info "to check operation status manually, you can: " \
+            "curl '#{op_url}' -u user:thepassword"
+          pr = wait_op(url: op_url, timeout: timeout)
+        else
+          raise %Q{got status "#{res[:exitstatus]}" creating a new test run:\n#{res[:response]}}
+        end
+
+        unless pr.dig("properties", "list")
+          raise "faux query test cases response: #{pr}"
+        end
+
+        return {
+          list: pr["properties"]["list"],
+        }
+      end
+
       # @param case_ids [Array<String>] test case IDs
       def get_cases(project_id, case_ids)
         Http.request(
