@@ -9,6 +9,10 @@ module BushSlicer
         populate_common("/apis/#{type}.k8s.io/<api_version>", path, base_opts, opts)
       end
 
+      def self.populate_api(path, base_opts, opts)
+        populate_common("/api/<api_version>", path, base_opts, opts)
+      end
+
       class << self
         alias perform perform_common
       end
@@ -47,7 +51,7 @@ module BushSlicer
       end
 
       def self.delete_subresources_api(base_opts, opts)
-        populate("/namespaces/<project_name>/<resource_type>/<resource_name>/status", base_opts, opts)
+        populate_api("/namespaces/<project_name>/<resource_type>/<resource_name>/status", base_opts, opts)
         return perform(**base_opts, method: "DELETE")
       end
 
@@ -63,7 +67,7 @@ module BushSlicer
 
       def self.replace_pod_status(base_opts, opts)
         base_opts[:payload] = File.read(opts[:payload_file])
-        populate("/namespaces/<project_name>/pods/<pod_name>/status", base_opts, opts)
+        populate_api("/namespaces/<project_name>/pods/<pod_name>/status", base_opts, opts)
         return Http.request(**base_opts, method: "PUT")
       end
 
