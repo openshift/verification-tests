@@ -111,12 +111,8 @@ Given /^I get the #{QUOTED} report and store it in the#{OPT_SYM} clipboard using
     end
   end
 
-  # report object confirm it's ready to be used, before querying, we need to enable proxy on the host
-  host.exec('oc proxy', background: true)
-  step %Q/I perform the :view_metering_report rest request with:/, table(%{
-    | project_name  | #{project.name}  |
-    | name          | #{name}          |
-    | report_format | #{opts[:format]} |
+  step %Q/I perform the GET metering rest request with:/, table(%{
+      | report_name | #{name} |
     })
   if opts[:format] != 'json' and opts[:format] != 'yaml'
     # just return raw response for not easily parseable formats
@@ -173,6 +169,12 @@ Given /^I enable route for#{OPT_QUOTED} metering service$/ do | metering_name |
   # create the route only if one does not exists (currently it's hardcoded
   # in the chart file charts/reporting-operator/values.yaml)
   unless route('metering').exists?
+    org_user = user
+    if env.is_admin? user
+      # admin user doesn't have name and password properties, we switch to a user
+      step %Q/the first user is cluster-admin/
+      step %Q/I switch to the first user/
+    end
     htpasswd = BushSlicer::SSL.sha1_htpasswd(username: user.name, password: user.password)
     cookie_seed = rand_str(32, :hex)
     route_yaml = <<BASE_TEMPLATE
@@ -197,6 +199,8 @@ BASE_TEMPLATE
     @result = user.cli_exec(:apply, f: "-", _stdin: route_yaml, n: project.name)
     # route name is ALWAYS set to 'metering'
     step %Q/I wait for the "metering" route to appear up to 600 seconds/
+    # switch back to original user
+    @user = org_user if org_user
   end
 end
 
@@ -288,4 +292,28 @@ Given /^all reportdatasources are importing from Prometheus$/ do
     data_sources.all? { |ds| ds.last_import_time }
   }
   raise "Querying for reportdatasources returned failure, probabaly due to Prometheus import failed" unless success
+end
+
+# get the report using exposed API endpoint instead of doing it from the node
+# we need the following to build the REST URL
+# 1. METERING_REPORT_API_ROUTE: expoed route for metering
+# 2. METERING_NAMESPACE: the namespace under which metering is installed
+# 3. REPORT_NAME: the specific name of the report we are querying
+When /^I perform the GET metering rest request with:$/ do | table |
+  opts = opts_array_to_hash(table.raw)
+  bearer_token = opts[:token] ? opts[:token] : service_account('reporting-operator').load_bearer_tokens.first.token
+  https_opts = {}
+  https_opts[:headers] ||= {}
+  https_opts[:headers][:accept] ||= "application/json"
+  https_opts[:headers][:content_type] ||= "application/json"
+  https_opts[:headers][:authorization] ||= "Bearer #{bearer_token}"
+  # first we need to expose reporting API route if not route is found
+  step %Q/I enable route for metering service/
+  report_name = opts[:report_name]
+  url_path = "/api/v1/reports/get?name=#{report_name}&namespace=#{cb.metering_namespace.name}&format=json"
+  report_query_url = route.dns + url_path
+  @result = BushSlicer::Http.request(url: report_query_url, **https_opts, method: 'GET')
+  if @result[:success]
+    @result[:parsed] = YAML.load(@result[:response])
+  end
 end
