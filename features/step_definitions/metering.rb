@@ -248,12 +248,12 @@ Given /^the#{OPT_QUOTED} metering service is installed(?: to $QUOTED)? using OLM
   @result = user.cli_exec(:create_namespace, name: metering_ns)
   # prep for OLM need to define configs via YAML
   # 1. metering-catalogsourceconfig.yaml
-  catalog_source_config = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/metering/OLM_examples/metering-catalogsourceconfig.yaml"
+  catalog_source_config = "https://raw.githubusercontent.com/operator-framework/operator-metering/master/manifests/deploy/openshift/olm/metering.catalogsourceconfig.yaml"
   # 2. metering-operatorgroup.yaml
-  operator_group = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/metering/OLM_examples/metering-operatorgroup.yaml"
+  operator_group = "https://raw.githubusercontent.com/operator-framework/operator-metering/master/manifests/deploy/openshift/olm/metering.operatorgroup.yaml"
   # 3. metering-subscription.yaml
-  subscription = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/metering/OLM_examples/metering-subscription.yaml"
-  metering_crd = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/metering/OLM_examples/metering_crd.yaml"
+  subscription = "https://raw.githubusercontent.com/operator-framework/operator-metering/master/manifests/deploy/openshift/olm/metering.subscription.yaml"
+  metering_crd = "https://raw.githubusercontent.com/operator-framework/operator-metering/master/manifests/metering-config/default.yaml"
 
   # should really get the namespace dynamically
   @result = user.cli_exec(:apply, f: catalog_source_config, n: 'openshift-marketplace')
