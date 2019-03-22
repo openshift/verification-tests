@@ -4,7 +4,7 @@ Feature: Operator related networking scenarios
   # @case_id OCP-22704
   @admin
   Scenario: The clusteroperator should be able to reflect the network operator version corresponding to the OCP version
-    Given I use the "openshift-sdn" project
+    Given I have a project
     #Getting OCP version
     When I run the :get admin command with:
       | resource | clusterversion                                |
