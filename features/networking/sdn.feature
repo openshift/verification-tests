@@ -84,7 +84,7 @@ Feature: SDN related networking scenarios
     And I wait up to 60 seconds for the steps to pass:
     """
     When I run commands on the host:
-      | journalctl -l -u atomic-openshift-node --since "30s ago" \| grep SDN |
+      | journalctl -l -u kubelet --since "30s ago" \| grep SDN |
     Then the step should succeed
     And the output should contain:
       | SDN healthcheck detected unhealthy OVS server |
@@ -104,7 +104,7 @@ Feature: SDN related networking scenarios
     And I wait up to 60 seconds for the steps to pass:
     """
     When I run commands on the host:
-      | journalctl -l -u atomic-openshift-node --since "30s ago" \| grep SDN |
+      | journalctl -l -u kubelet --since "30s ago" \| grep SDN |
     Then the step should succeed
     And the output should contain:
       | SDN healthcheck detected unhealthy OVS server |
