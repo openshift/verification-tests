@@ -8,7 +8,7 @@ module BushSlicer
 
       def initialize(host, env)
         super
-        @service = SystemdService.new("atomic-openshift-node.service", host)
+        @service = SystemdService.new("kubelet.service", host)
       end
 
       def config
