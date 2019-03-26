@@ -168,14 +168,11 @@ Given /^I enable route for#{OPT_QUOTED} metering service$/ do | metering_name |
   metering_name ||= metering.name
   # create the route only if one does not exists (currently it's hardcoded
   # in the chart file charts/reporting-operator/values.yaml)
-  unless route('metering').exists?
+  unless route('metering', cb.metering_namespace).exists?
     org_user = user
-    if env.is_admin? user
-      # admin user doesn't have name and password properties, we switch to a user
-      step %Q/the first user is cluster-admin/
-      step %Q/I switch to the first user/
-    end
-    htpasswd = BushSlicer::SSL.sha1_htpasswd(username: user.name, password: user.password)
+    step %Q/I switch to cluster admin pseudo user/
+    htpasswd = BushSlicer::SSL.sha1_htpasswd(username: 'fake_user', password: 'fake_password')
+    #htpasswd = BushSlicer::SSL.sha1_htpasswd(username: user.name, password: user.password)
     cookie_seed = rand_str(32, :hex)
     route_yaml = <<BASE_TEMPLATE
       apiVersion: metering.openshift.io/v1alpha1
