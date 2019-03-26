@@ -512,7 +512,7 @@ Feature: Testing route
     And the output should contain "acceptable values are None, Redirect, or empty"
 
   # @author zzhao@redhat.com
-  # @case_id OCP-11839
+  # @case_id OCP-13839
   Scenario: Set insecureEdgeTerminationPolicy to Redirect and Allow for reencrypt route
     Given I have a project
     And I store default router IPs in the :router_ip clipboard
