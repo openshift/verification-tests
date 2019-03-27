@@ -6,17 +6,10 @@ module BushSlicer
       rr = raw_resource(user: user, cached: cached, quiet: quiet)
       rr.dig('status', 'versions').map { |v| v['version'] }
     end
-
-    def conditions(user: nil, cached: true, quiet: false)
-      rr = raw_resource(user: user, cached: cached, quiet: quiet)
-      rr.dig('status', 'conditions')
-    end
-
-    # returns a hash simliar to
-    # {"lastTransitionTime"=>2019-03-23 07:33:34 UTC, "status"=>"False", "type"=>"Progressing"}
-    def condition(type: type, user: nil, cached: true, quiet: false)
-      res = self.conditions.select { |c| c['type'] == type }
-      res.first
+    # given a target_version return true if has matching verison else false
+    def has_version?(version: nil, user: nil, cached: true, quiet: false)
+      res = self.versions.select { |v| v == version }
+      res.count != 0
     end
   end
 end
