@@ -1,27 +1,17 @@
 Feature: Operator related networking scenarios
-  
+
   # @auther anusaxen@redhat.com
   # @case_id OCP-22704
   @admin
   Scenario: The clusteroperator should be able to reflect the network operator version corresponding to the OCP version
-    Given I have a project
+
+    Given the master version > "3.11"
     #Getting OCP version
-    When I run the :get admin command with:
-      | resource | clusterversion                                |
-      | output   | jsonpath='{.items[*].status.desired.version}' |
-    Then the step should succeed
-    And evaluation of `@result[:response]` is stored in the :ocp_version clipboard
+    Given evaluation of `cluster_version('version').version` is stored in the :ocp_version clipboard
+    And evaluation of `cluster_operator('network').condition(type: 'Available')` is stored in the :operator_status clipboard
+    #Making sure that network operator AVAILABLE status value is True
+    Then the expression should be true> cb.operator_status["status"]=="True"
 
-    #Making sure that network operator AVAILABLE value is True 
-    When I run the :get admin command with:
-      | resource | clusteroperators.config.openshift.io/network                   |
-      | output   | jsonpath='{.status.conditions[?(@.type=="Available")].status}' |
-    Then the step should succeed
-    And the output should contain "True"
-
-    #Make sure that network operator version matches with ocp version
-    When I run the :get admin command with:
-      | resource | clusteroperators.config.openshift.io/network |
-      | output   | jsonpath='{.status.versions[*].version}'     |
-    Then the step should succeed
-    And the output should equal "<%= cb.ocp_version %>"
+    Given evaluation of `cluster_operator('network').versions` is stored in the :operator_version clipboard
+    #Confirm whether network operator version matches with ocp version`
+    Then the expression should be true> cb.operator_version="<%= cb.ocp_version%>"
