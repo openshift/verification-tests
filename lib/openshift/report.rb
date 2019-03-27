@@ -48,7 +48,7 @@ module BushSlicer
     def finished?(user: nil, quiet: false)
       ## TODO: make this backwardcompatible
       # phase(user:user, cached: cached, quiet: quiet) == :finished
-      conditions.any? { |c| c.reason == 'ReportPeriodFinished' }
+      conditions.any? { |c| c.reason.end_with? 'Finished' }
     end
 
     def self.generate_yaml(**opts)

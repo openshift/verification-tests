@@ -33,11 +33,9 @@ Feature: test metering related steps
     And evaluation of `project.name` is stored in the :org_proj_name clipboard
     And I setup an app to test metering reports
     Given metering service has been installed successfully
-    Given I switch to cluster admin pseudo user
     And I use the "<%= cb.metering_namespace.name %>" project
-    Given I select a random node's host
     Given I get the "persistentvolumeclaim-request" report and store it in the clipboard using:
-      | query_type          | persistentvolumeclaim-request |
+      | query_type | persistentvolumeclaim-request |
     Given I wait until "persistentvolumeclaim-request" report for "<%= cb.org_proj_name %>" namespace to be available
 
   @admin
@@ -45,10 +43,8 @@ Feature: test metering related steps
   Scenario: test external access of metering query
     Given metering service has been installed successfully
     And I use the "<%= cb.metering_namespace.name %>" project
-    Given the first user is cluster-admin
-    Given I switch to the first user
-    Given I enable route for metering service
-    Given I disable route for metering service
+    Given I get the "node-cpu-capacity" report and store it in the :res_json clipboard using:
+      | query_type | node-cpu-capacity |
 
   @admin
   @destructive
