@@ -14,4 +14,4 @@ Feature: Operator related networking scenarios
 
     Given evaluation of `cluster_operator('network').versions` is stored in the :operator_version clipboard
     #Confirm whether network operator version matches with ocp version`
-    Then the expression should be true> cb.operator_version="<%= cb.ocp_version%>"
+    Then the expression should be true> cb.operator_version=cb.ocp_version
