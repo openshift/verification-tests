@@ -283,9 +283,9 @@ Given /^the#{OPT_QUOTED} node service is verified$/ do |node_name|
 
   svc_verify = proc {
     # node service running
-    @result = _host.exec_admin('systemctl status atomic-openshift-node')
+    @result = _host.exec_admin('systemctl status kubelet')
     unless @result[:success] || @result[:response].include?("active (running)")
-      raise "node service not running, see log"
+      raise "kubelet service not running, see log"
     end
     # pod can be scheduled on node
     #step 'I have a project'

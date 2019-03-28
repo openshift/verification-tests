@@ -564,7 +564,7 @@ Given /^I get the networking components logs of the node since "(.+)" ago$/ do |
     }.first
     @result = admin.cli_exec(:logs, resource_name: sdn_pod.name, n: "openshift-sdn", since: duration)
   else
-    @result = node.host.exec_admin("journalctl -l -u atomic-openshift-node --since \"#{duration} ago\" \| grep -E 'controller.go\|network.go'")
+    @result = node.host.exec_admin("journalctl -l -u kubelet --since \"#{duration} ago\" \| grep -E 'controller.go\|network.go'")
   end
 end
 
