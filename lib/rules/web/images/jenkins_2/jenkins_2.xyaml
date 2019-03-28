@@ -603,14 +603,8 @@ jenkins_multi_oauth_login:
         Logtext.click();
         return true;
     expect_result: true
-  - command: |
-        var Authtype = document.getElementsByClassName("idp")[1]
-        if (typeof(Authtype) == "undefined"){ 
-           return true;
-           }
-        Authtype.click();
-        return true;
-    expect_result: true
+  - command: return document.getElementsByClassName("idp")[1].click()
+    expect_result: ~
   elements:
   - selector:
       id: inputUsername

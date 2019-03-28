@@ -240,10 +240,11 @@ module BushSlicer
       if obtained[:request_opts][:url].include?("/version/openshift") &&
           !obtained[:success]
         # seems like pre-3.3 version, lets hardcode to 3.2
+        # After bug 1692670 fix, will recover hardcode to '3.2'.
         obtained[:props] = {}
-        obtained[:props][:openshift] = "v3.2"
-        @major_version = obtained[:props][:major] = 3
-        @minor_version = obtained[:props][:minor] = 2
+        obtained[:props][:openshift] = "v4.0"
+        @major_version = obtained[:props][:major] = 4
+        @minor_version = obtained[:props][:minor] = 0
       elsif obtained[:success]
         @major_version = obtained[:props][:major].to_i
         @minor_version = obtained[:props][:minor].to_i
