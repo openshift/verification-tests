@@ -7,7 +7,7 @@ module BushSlicer
       rr.dig('status', 'versions').map { |v| v['version'] }
     end
     # given a target_version return true if has matching verison else false
-    def has_version?(version: nil, user: nil, cached: true, quiet: false)
+    def version_exists?(version: nil, user: nil, cached: true, quiet: false)
       res = self.versions.select { |v| v == version }
       res.count != 0
     end
