@@ -11,7 +11,5 @@ Feature: Operator related networking scenarios
     And evaluation of `cluster_operator('network').condition(type: 'Available')` is stored in the :operator_status clipboard
     #Making sure that network operator AVAILABLE status value is True
     Then the expression should be true> cb.operator_status["status"]=="True"
-
-    Given evaluation of `cluster_operator('network').versions` is stored in the :operator_version clipboard
-    #Confirm whether network operator version matches with ocp version`
-    Then the expression should be true> cb.operator_version=cb.ocp_version
+    #Confirm whether network operator version matches with ocp version
+    And the expression should be true> cluster_operator('network').version_exists?(version: cb.ocp_version)==true
