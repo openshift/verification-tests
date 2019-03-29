@@ -12,4 +12,4 @@ Feature: Operator related networking scenarios
     #Making sure that network operator AVAILABLE status value is True
     Then the expression should be true> cb.operator_status["status"]=="True"
     #Confirm whether network operator version matches with ocp version
-    And the expression should be true> cluster_operator('network').version_exists?(version: cb.ocp_version)==true
+    And the expression should be true> cluster_operator('network').version_exists?(version: cb.ocp_version)
