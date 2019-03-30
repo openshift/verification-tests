@@ -43,7 +43,7 @@ module BushSlicer
                     "* for template it specifies a file with YAML variables")
       global_option('-l', '--launched_instances_name_prefix PREFIX', 'prefix instance names; use string `{tag}` to have it replaced with MMDDb where MM in month, DD is day and b is build number; tag works only with PUDDLE_REPO')
       global_option('-d', '--user_data SPEC', "file containing user instances' data")
-      global_option('-s', '--service_name', 'service name to lookup in config')
+      global_option('-s', '--service_name SERVICE_NAME', 'service name to lookup in config')
       global_option('-i', '--image_name IMAGE', 'image to launch instance with')
       global_option('--it', '--instance_type TYPE', 'instance flavor to launch')
 
@@ -73,9 +73,6 @@ module BushSlicer
           say 'launching..'
           options.service_name ||= :AWS
           options.service_name = options.service_name.to_sym
-          unless options.service_name == :AWS
-            raise "for the time being only AWS is supported"
-          end
 
           launch_ec2_instance(options)
         end
@@ -777,7 +774,7 @@ module BushSlicer
         raise "you must specify instance name with -l"
       end
       user_data = user_data(options.user_data)
-      amz = Amz_EC2.new
+      amz = Amz_EC2.new(service_name: options.service_name)
       res = amz.launch_instances(tag_name: [instance_name], image: image,
                            create_opts: {user_data: Base64.encode64(user_data)},
                            wait_accessible: true)
