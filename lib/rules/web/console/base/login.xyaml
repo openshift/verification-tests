@@ -11,21 +11,12 @@ login_sequence:
     ref:
     - click_pre_login_button
     - pre_login_buttons_gone
-    - login_page_loaded
     if_element:
       selector: &pre_login_buttons
         # we just choose the first button per OPENSHIFTQ-12062
         css: ".login-redhat:first-of-type, .idp:first-of-type"
       timeout: 1
-  action:
-    ref: login_console
-    if_element:
-      selector:
-        # title RE not working w/ ff legacy
-        # text: !ruby/regexp '/Login - OpenShift/'
-        xpath: '//title[starts-with(.,"Login - OpenShift")]'
-      visible: false
-      timeout: 1
+  action: login_console
   action:
     ref: login_rhsso
     if_element:
@@ -56,23 +47,21 @@ login_rhsso:
 login_console:
   elements:
     - selector:
-        id: inputUsername
+        id: username
       op: send_keys <username>
       type: input
     - selector:
-        id: inputPassword
+        id: login-show-step2
+      op: click
+      type: button
+    - selector:
+        id: password
       op: send_keys <password>
       type: input
-  scripts:
-  - command: return document.getElementsByName("csrf").length > 0
-    expect_result: true
-  cookies:
-  - name: csrf
-    expect_result: true
   elements:
     - selector:
-        text: Log In
-      type: button
+        id: kc-login
+      type: input
       op: click
 
 login_token:
