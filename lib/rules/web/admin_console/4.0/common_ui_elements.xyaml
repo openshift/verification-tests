@@ -3,7 +3,17 @@ create_resource_by_default_yaml:
   - selector:
       xpath: //button[@id="yaml-create"]
     op: click
+  action:
+    if_element:
+      selector:
+        xpath: //a[text()='Edit YAML']
+    ref: click_edit_yaml_link
   action: click_create_button
+click_edit_yaml_link:
+  elements:
+  - selector:
+        xpath: //a[text()='Edit YAML']
+    op: click
 click_create_button:
   elements:
   - selector:
@@ -13,11 +23,6 @@ click_cancel_button:
   elements:
   - selector:
       xpath: //button[contains(text(),'Cancel')]
-    op: click
-click_resource_action_icon:
-  elements:
-  - selector:
-      xpath: //a[text()='<resource_name>']/ancestor::span/../div//span[contains(@class,'co-m-cog__icon')]
     op: click
 click_tab:
   elements:
@@ -46,37 +51,11 @@ check_page_contains:
   element:
     selector:
       xpath: //*[contains(.,'<content>')]
-click_resource_action_button:
-  elements:
-  - selector:
-      xpath: //button//span[contains(text(),'Actions')]
-    op: click
-choose_item_from_list:
-  elements:
-  - selector:
-      xpath: //li//*[text()='<item>']
-    op: click
 submit_changes:
   element:
     selector:
       xpath: //button[@type='submit']
     op: click
-click_one_dropdown_action:
-  action: click_resource_action_button
-  action: choose_item_from_list
-add_annotation_for_resource:
-  action: click_one_dropdown_action
-  action: add_annotation
-  action: submit_changes
-add_annotation:
-  action: click_add_more_button
-  elements:
-  - selector:
-      xpath: //input[contains(@placeholder,'key')]
-    op: send_keys <annotation_key>
-  - selector:
-      xpath: //input[contains(@placeholder,'value')]
-    op: send_keys <annotation_value>
 click_add_more_button:
   element:
     selector:
@@ -88,31 +67,15 @@ click_annotation_link:
       xpath: //a[contains(text(), 'Annotation')]
     op: click
     timeout: 20
-delete_resource_panel:
-  action:
-    if_param:
-      cascade: 'false'
-    ref: uncheck_checkbox
-  action: submit_changes
 uncheck_checkbox:
   element:
     selector:
       xpath: //input[contains(@type,'checkbox')]
     op: click
-add_label_for_resource:
-  action: click_one_dropdown_action
-  action: add_label
-  action: submit_changes
-add_label:
-  elements:
-  - selector:
-      id: tags-input
-    type: input
-    op: send_keys <new_label>
-  - selector:
-      id: tags-input
-    type: input
-    op: send_keys <press_enter>
+check_link_and_text:
+  element:
+    selector:
+      xpath: //a[contains(text(),'<text>') and @href='<link_url>']
 
 ## -------- check resource key and values pairs ------
 check_resource_details:
@@ -122,6 +85,9 @@ check_resource_details:
   action:
     if_param: display_name
     ref: check_resource_display_name
+  action:
+    if_param: namespace
+    ref: check_resource_namespace
   action:
     if_param: labels
     ref: check_resource_labels
@@ -149,6 +115,42 @@ check_resource_details:
   action:
     if_param: max_surge
     ref: check_resource_max_surge
+  action:
+    if_param: schedule
+    ref: check_resource_schedule
+  action:
+    if_param: concurrency_policy
+    ref: check_resource_concurrency_policy
+  action:
+    if_param: last_schedule_time
+    ref: check_resource_last_schedule_time
+  action:
+    if_param: owner
+    ref: check_resource_owner
+  action:
+    if_param: desired_completions
+    ref: check_resource_desired_completions
+  action:
+    if_param: parallelism
+    ref: check_resource_parallelism
+  action:
+    if_param: type
+    ref: check_resource_type
+  action:
+    if_param: git_repo
+    ref: check_resource_git_repository
+  action:
+    if_param: builder_image
+    ref: check_builder_image
+  action:
+    if_param: output_image
+    ref: check_output_to_image
+  action:
+    if_param: run_policy
+    ref: check_run_policy
+  action:
+    if_param: triggered_by
+    ref: check_triggered_by
 check_resource_details_key_and_value:
   element: &key_value
     selector:
@@ -211,4 +213,69 @@ check_resource_max_surge:
   params:
     key: Max Surge
     value: <max_surge>
+  action: check_resource_details_key_and_value
+check_resource_schedule:
+  params:
+    key: Schedule
+    value: <schedule>
+  action: check_resource_details_key_and_value
+check_resource_concurrency_policy:
+  params:
+    key: Concurrency Policy
+    value: <concurrency_policy>
+  action: check_resource_details_key_and_value
+check_resource_last_schedule_time:
+  params:
+    key: Last Schedule Time
+    value: <last_schedule_time>
+  action: check_resource_details_key_and_value
+check_resource_owner:
+  params:
+    key: Owner
+    value: <owner>
+  action: check_resource_details_key_and_value
+check_resource_desired_completions:
+  params:
+    key: Desired Completions
+    value: <desired_completions>
+  action: check_resource_details_key_and_value
+check_resource_parallelism:
+  params:
+    key: Parallelism
+    value: <parallelism>
+  action: check_resource_details_key_and_value
+check_resource_type:
+  params:
+    key: Type
+    value: <type>
+  action: check_resource_details_key_and_value
+check_resource_namespace:
+  params:
+    key: Namespace
+    value: <namespace>
+  action: check_resource_details_key_and_value
+check_resource_git_repository:
+  params:
+    key: Git Repository
+    value: <git_repo>
+  action: check_resource_details_key_and_value
+check_builder_image:
+  params:
+    key: Builder Image
+    value: <builder_image>
+  action: check_resource_details_key_and_value
+check_output_to_image:
+  params:
+    key: Output To
+    value: <output_image>
+  action: check_resource_details_key_and_value
+check_run_policy:
+  params:
+    key: Run Policy
+    value: <run_policy>
+  action: check_resource_details_key_and_value
+check_triggered_by:
+  params:
+    key: Triggered By
+    value: <triggered_by>
   action: check_resource_details_key_and_value

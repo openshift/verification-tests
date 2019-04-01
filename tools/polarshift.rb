@@ -165,6 +165,37 @@ module BushSlicer
         end
       end
 
+      command :"query-cases" do |c|
+        c.syntax = "#{$0} query-cases [options]"
+        c.description = "run query for test cases\n\te.g. " \
+          'tools/polarshift.rb query-cases -f ../polarshift/req.json'
+        c.option('-f', "--file FILE", "YAML file with create parameters.")
+        c.option('-o', "--output FILE", "Write query result to file.")
+        c.action do |args, options|
+          setup_global_opts(options)
+
+          unless options.file
+            raise "Please specify file to read test run create options from"
+          end
+
+          unless File.exist? options.file
+            raise "specified input file does not exist: #{options.file}"
+          end
+
+          params = YAML.load(File.read(options.file))
+          Collections.hash_symkeys! params
+
+          pr = polarshift.query_test_cases_smart(project_id: project, **params)
+
+          cases = pr[:list]
+
+          puts "#{HighLine.color(cases.join("\n"), :bright_blue)}"
+          if options.output
+            File.write options.output, cases.join("\n")
+          end
+        end
+      end
+
       command :"push-run" do |c|
         c.syntax = "#{$0} push-run [options]"
         c.description = "Pushes test run results from cache to backend\n\t" \

@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 require 'net/ssh'
+require 'net/ssh/proxy/jump'
+require 'net/ssh/proxy/command'
 require 'net/scp'
 require 'fileutils'
 
@@ -224,6 +226,11 @@ module BushSlicer
 
         @user = opts[:user] # can be nil for default username
         conn_opts = {keepalive: true}
+        if opts[:jump]
+          conn_opts[:proxy] = Net::SSH::Proxy::Jump.new(opts[:jump])
+        elsif opts[:proxy]
+          conn_opts[:proxy] = Net::SSH::Proxy::Command.new(opts[:proxy])
+        end
         if opts[:private_key]
           logger.debug("SSH Authenticating with publickey method")
           private_key = expand_private_path(opts[:private_key])

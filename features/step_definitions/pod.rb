@@ -201,6 +201,7 @@ Given /^all existing pods are ready with labels:$/ do |table|
                                              get_opts: {l: selector_to_label_arr(*labels)})
 
   current_pods.each do |pod|
+    cache_pods(pod)
     @result = pod.wait_till_ready(user, timeout - monotonic_seconds + start_time)
     unless @result[:success]
       raise "pod #{pod.name} did not become ready within allowed time"

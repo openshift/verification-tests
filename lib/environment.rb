@@ -19,7 +19,7 @@ module BushSlicer
 
     # :master represents register, scheduler, etc.
     MANDATORY_OPENSHIFT_ROLES = [:master, :node]
-    OPENSHIFT_ROLES = MANDATORY_OPENSHIFT_ROLES + [:lb, :etcd]
+    OPENSHIFT_ROLES = MANDATORY_OPENSHIFT_ROLES + [:lb, :etcd, :bastion]
 
     # e.g. you call `#node_hosts to get hosts with the node service`
     OPENSHIFT_ROLES.each do |role|
@@ -101,7 +101,13 @@ module BushSlicer
 
     private def admin_creds
       if admin?
-        BushSlicer.const_get(opts[:admin_creds]).new(self, **opts)
+        cred_opts = opts.reduce({}) { |m, (k,v)|
+          if k.to_s.start_with? "admin_creds_"
+            m[k.to_s.gsub(/^admin_creds_/, "").to_sym] = v
+          end
+          m
+        }
+        BushSlicer.const_get(opts[:admin_creds]).new(self, **cred_opts)
       else
         raise UnsupportedOperationError,
           "we cannot run as admins in this environment"
@@ -142,6 +148,34 @@ module BushSlicer
 
     def web_console_url
       opts[:web_console_url] || api_endpoint_url
+    end
+
+    def admin_console_url
+      unless @admin_console_url
+        if opts[:admin_console_url]
+          @admin_console_url = opts[:admin_console_url]
+        else
+          consoleproject = Project.new(name: "openshift-console", env: self)
+          consoleservice = Service.new(name: "console", project: consoleproject )
+          consoleroute = Route.new(name: "console", project: consoleproject, service: consoleservice)
+          @admin_console_url = "https://" + consoleroute.dns(by: admin)
+        end
+      end
+      return @admin_console_url
+    end
+
+    def authentication_url
+      unless @authentication_url
+        if opts[:authentication_url]
+          @authentication_url= opts[:authentication_url]
+        else
+          authenticationproject = Project.new(name: "openshift-authentication", env: self)
+          authenticationservice = Service.new(name: "openshift-authentication", project: authenticationproject )
+          authenticationroute = Route.new(name: "openshift-authentication", project: authenticationproject, service: authenticationservice)
+          @authentication_url = "https://" + authenticationroute.dns(by: admin)
+        end
+      end
+      return @authentication_url
     end
 
     # naming scheme is https://logs.<cluster_id>.openshift.com for Online
@@ -206,10 +240,11 @@ module BushSlicer
       if obtained[:request_opts][:url].include?("/version/openshift") &&
           !obtained[:success]
         # seems like pre-3.3 version, lets hardcode to 3.2
+        # After bug 1692670 fix, will recover hardcode to '3.2'.
         obtained[:props] = {}
-        obtained[:props][:openshift] = "v3.2"
-        @major_version = obtained[:props][:major] = 3
-        @minor_version = obtained[:props][:minor] = 2
+        obtained[:props][:openshift] = "v4.0"
+        @major_version = obtained[:props][:major] = 4
+        @minor_version = obtained[:props][:minor] = 0
       elsif obtained[:success]
         @major_version = obtained[:props][:major].to_i
         @minor_version = obtained[:props][:minor].to_i
@@ -372,10 +407,10 @@ module BushSlicer
     end
 
     # return nil is no proxy enabled, else proxy value
-    # TODO: as alternative that's not OCP version dependent, but require parsing 
+    # TODO: as alternative that's not OCP version dependent, but require parsing
     # YAML, we can do:
     #  grep HTTP_PROXY /etc/origin/master/master-config.yaml
-    # 
+    #
     def proxy
       if version_le("3.9", user: admin)
         proxy_check_cmd = "cat /etc/sysconfig/atomic-openshift-master-api | grep HTTP_PROXY"
@@ -404,26 +439,41 @@ module BushSlicer
 
     def hosts
       if @hosts.empty?
-        hlist = []
-        # generate hosts based on spec like: hostname1:role1:role2,hostname2:r3
-        opts[:hosts].split(",").each do |host|
-          # TODO: might do convenience type to class conversion
-          # TODO: we might also consider to support setting type per host
-          host_type = opts[:hosts_type]
-          hostname, garbage, roles = host.partition(":")
-          roles = roles.split(":").map(&:to_sym)
-          hlist << BushSlicer.const_get(host_type).new(hostname, **opts, roles: roles)
-        end
-
+        hlist = parse_hosts_spec
         missing_roles = MANDATORY_OPENSHIFT_ROLES.reject{|r| hlist.find {|h| h.has_role?(r)}}
         unless missing_roles.empty?
           raise "environment does not have hosts with roles: " +
             missing_roles.to_s
         end
 
+        # so far masters are always also nodes but labels not always set
+        hlist.each do |host|
+          if host.roles.include?(:master) && !host.roles.include?(:node)
+            host.roles << :node
+          end
+        end
+
+        hlist.each {|h| h.apply_flags(hlist - [h])}
+
         @hosts.concat hlist
       end
       return @hosts
+    end
+
+    # add a new host to environment with defaults
+    # usually used to add node hosts discovered dynamically
+    def host_add(hostname, **opts)
+      raise "new hosts need roles but none given" if opts[:roles].empty?
+      host = parse_hosts_spec(spec: "#{opts.delete(:flags)}#{hostname}:#{opts.delete(:roles).join(':')}", **opts).first
+      host.apply_flags(@hosts)
+      @hosts << host
+      return host
+    end
+
+    # generate hosts based on spec like: hostname1:role1:role2,hostname2:r3
+    private def parse_hosts_spec(spec: opts[:hosts], type: opts[:hosts_type], **additional_opts)
+      host_type = BushSlicer.const_get(type)
+      return host_type.from_spec(spec, **opts, **additional_opts)
     end
   end
 end

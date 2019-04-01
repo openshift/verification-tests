@@ -42,9 +42,8 @@ Feature: set deployment-hook/build-hook with CLI
       | failure policy: [Ii]gnore |
       | /bin/true                 |
     Given I wait until the status of deployment "rails-postgresql-example" becomes :complete
-    When I run the :deploy client command with:
-      | deployment_config | rails-postgresql-example |
-      | latest ||
+    When I run the :rollout_latest client command with:
+      | resource | dc/rails-postgresql-example |
     Then the step should succeed
     Given a pod becomes ready with labels:
       | deployment=rails-postgresql-example-2 |
@@ -65,9 +64,8 @@ Feature: set deployment-hook/build-hook with CLI
       | failure policy: [Rr]etry |
       | ./migrate-database.sh    |
     Given I wait until the status of deployment "rails-postgresql-example" becomes :complete    
-    When I run the :deploy client command with:
-      | deployment_config | rails-postgresql-example |
-      | latest ||
+    When I run the :rollout_latest client command with:
+      | resource | dc/rails-postgresql-example |
     Then the step should succeed
     Given a pod becomes ready with labels:
       | deployment=rails-postgresql-example-3 |
@@ -118,9 +116,8 @@ Feature: set deployment-hook/build-hook with CLI
       | failure policy: [Aa]bort |
       | /bin/false               |
     Given I wait until the status of deployment "rails-postgresql-example" becomes :complete
-    When I run the :deploy client command with:
-      | deployment_config | rails-postgresql-example |
-      | latest ||
+    When I run the :rollout_latest client command with:
+      | resource | dc/rails-postgresql-example |
     Then the step should succeed
     And I wait until the status of deployment "rails-postgresql-example" becomes :failed
 

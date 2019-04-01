@@ -279,6 +279,18 @@ module BushSlicer
       return res
     end
 
+    def conditions(user: nil, cached: true, quiet: false)
+      rr = raw_resource(user: user, cached: cached, quiet: quiet)
+      rr.dig('status', 'conditions')
+    end
+
+    # returns a hash simliar to
+    # {"lastTransitionTime"=>2019-03-23 07:33:34 UTC, "status"=>"False", "type"=>"Progressing"}
+    def condition(type: nil, user: nil, cached: true, quiet: false)
+      res = self.conditions.select { |c| c['type'] == type }
+      res.first
+    end
+
     # @note requires sub-class to define `#parse_oc_describe` method if
     #   parsing of the output is needed
     def describe(user=nil, quiet: false)

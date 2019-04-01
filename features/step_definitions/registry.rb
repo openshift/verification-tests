@@ -335,7 +335,9 @@ Given /^default registry service ip is stored in the#{OPT_SYM} clipboard$/ do |c
   cb_name ||= :registry_ip
   # XXX: TODO verify which OCP version the dns name does not resolve 
   # Error response from daemon: Get https://docker-registry.default:5000/v1/users/: dial tcp: lookup docker-registry.default on 172.16.120.63:53: no such host
-  if env.version_ge("3.10", user: user)
+  if env.version_ge("4.0", user: user)
+    cb[cb_name] = "image-registry.openshift-image-registry.svc:5000"
+  elsif env.version_ge("3.10", user: user)
     cb[cb_name] = "docker-registry.default.svc:5000"
   else
     cb[cb_name] = service("docker-registry", project('default')).url(user: admin)

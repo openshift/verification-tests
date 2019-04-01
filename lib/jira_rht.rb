@@ -24,6 +24,7 @@ module BushSlicer
         }
       end
       unless @options[:password]
+        require 'io/console'
         STDERR.puts "JIRA Password: "
         @options[:password] = STDIN.noecho(&:gets).chomp
       end
@@ -72,11 +73,18 @@ module BushSlicer
     # returns the save status & the issue object
     def create_issue(params)
       issue = client.Issue.build
-      status = issue.save("fields"=>params)
-      # call fetch to update the issue object
-      @logger.error("Failed to create JIRA issue") unless status
-      issue.fetch if status
-      return status, issue
+      status = issue.save(params)
+      # call fetch here to update the issue object
+      @logger.error("Failed to create JIRA issue: #{issue.attrs}") if issue.has_errors?
+      return issue
+    end
+
+    # https://docs.atlassian.com/software/jira/docs/api/REST/7.12.0/#api/2/issueLink-linkIssues
+    def link_issues(params)
+      il = client.Issuelink.build
+      status = il.save(params)
+      @logger.error("Failed to link issues: #{il.attrs}") if il.has_errors?
+      return il
     end
 
     # @params is a hash containing: assignee, and testrun id in the summary
@@ -85,6 +93,10 @@ module BushSlicer
       query = "(assignee = #{query_params[:assignee]}) AND (summary ~ run:#{query_params[:run_id]})"
       res = client.Issue.jql(query)
       return res
+    end
+
+    def find_issue_by_summary(summary)
+      client.Issue.jql(%{summary ~ "#{escape_text(summary)}"})
     end
 
     def get_all_project_issues(proj_id: nil)
@@ -138,6 +150,11 @@ module BushSlicer
       end
     end
 
+    def escape_text(str)
+      chars = '"+-&|!(){}[]^~*?\:'
+      return str.each_char.map {|c| chars.include?(c) ? "\\\\#{c}" : c}.join
+    end
+
     def default_opts
       return  conf[:services, :jira]
     end
@@ -157,4 +174,12 @@ module JIRA
       return h
     end
   end
+end
+
+if __FILE__ == $0
+  extend BushSlicer::Common::Helper
+
+  jira = BushSlicer::Jira.new
+
+  require 'pry'; binding.pry
 end

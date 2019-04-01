@@ -14,9 +14,17 @@ login_sequence:
     if_element:
       selector: &pre_login_buttons
         # we just choose the first button per OPENSHIFTQ-12062
-        css: ".login-redhat:first-of-type, .idp:first-of-type"
+        css: ".login-redhat:last-of-type, .idp:last-of-type"
       timeout: 1
-  action: login_console
+  action:
+    ref: login_console
+    if_element:
+      selector:
+        # title RE not working w/ ff legacy
+        # text: !ruby/regexp '/Login - OpenShift/'
+        xpath: '//title[starts-with(.,"Login - O")]'
+      visible: false
+      timeout: 1
   action:
     ref: login_rhsso
     if_element:

@@ -59,17 +59,18 @@ module BushSlicer
       }
       conn_cred = env.master_hosts[0].exec_admin(search_command, quiet: true)[:response].split("\n")
 
+      key, skey = nil
       conn_cred.each { |c|
         cred = c.split("=")
         case cred[0].strip
         when "AWS_ACCESS_KEY_ID"
-          aws_cred["AWS_ACCESS_KEY_ID"] = cred[1].strip
+          key = cred[1].strip
         when "AWS_SECRET_ACCESS_KEY"
-          aws_cred["AWS_SECRET_ACCESS_KEY"] = cred[1].strip
+          skey = cred[1].strip
         end
       }
 
-      return Amz_EC2.new(aws_cred)
+      return Amz_EC2.new(access_key: key, secret_key: skey)
     end
 
     def self.init_gce(env)

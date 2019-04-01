@@ -1,6 +1,6 @@
 --- # BushSlicer framework configuration options
 global:
-  git_repo_url: https://github.com/openshift/BushSlicer
+  git_repo_url: https://github.com/openshift/verification-tests
   git_repo_default_branch: master
 
   debug_in_after_hook: false
@@ -84,6 +84,20 @@ environments:
     admin_creds: MasterOsAdminCredentials
     api_port: 8443
     # version: 3.6.1.44.16
+  ocp4:
+    # hosts: use OPENSHIFT_ENV_OSE_HOSTS=host:role1:...,host2:role1:...
+    hosts_type: SSHAccessibleHost
+    # this is the user for remote access to the OpenShift nodes
+    user: core
+    type: StaticEnvironment
+    user_manager: auto
+    # set users in OPENSHIFT_ENV_OSE_USER_MANAGER_USERS=user:password,...
+    # user_manager_users: joe:redhat,alice:redhat
+    #cli: MasterOsPerUserCliExecutor
+    cli: SharedLocalCliExecutor
+    admin_creds: AutoKubeconfigCredentials
+    api_port: 6443
+    version: 4.0.0.0 # version not supported on cluster (yet)
 
 optional_classes:
   tcms_tc_manager:
@@ -97,7 +111,7 @@ optional_classes:
       test_suite_class: BushSlicer::PolarShift::TestSuite
       test_suite_opts: {}
 services:
-  AWS:
+  AWS: &AWSBase
     create_opts:
       # for all options see http://docs.aws.amazon.com/sdkforruby/api/Aws/EC2/Resource.html#create_instances-instance_method
       # the actual key-pair name is under the private repo and will be over-written
@@ -137,6 +151,9 @@ services:
     # host_opts:
       # ssh_private_key: relative/path
       # user: the_username
+    # install_base_domain: my.route53.domain.example.com
+  AWS-CI:
+    <<: *AWSBase
   azure:
     # auth:
     #   # az login --service-principal -u client_id --tenant tenant_id

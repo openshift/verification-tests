@@ -3,4 +3,6 @@ module BushSlicer
   end
   class UnsupportedOperationError < RuntimeError
   end
+  class NotFoundError < RuntimeError
+  end
 end

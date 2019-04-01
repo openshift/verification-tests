@@ -13,15 +13,16 @@ module BushSlicer
 
     attr_reader :config
 
-    def initialize(ext_aws_cred = nil)
-      @config = conf[:services, :AWS]
+    def initialize(access_key: nil, secret_key: nil, service_name: nil)
+      service_name ||= :AWS
+      @config = conf[:services, service_name]
       @can_terminate = true
 
-      if ext_aws_cred and ext_aws_cred.count == 2
-        awscred = {}
-        awscred["AWSAccessKeyId"] = ext_aws_cred["AWS_ACCESS_KEY_ID"]
-        awscred["AWSSecretKey"] = ext_aws_cred["AWS_SECRET_ACCESS_KEY"]
-
+      if access_key && secret_key
+        awscred = {
+          "AWSAccessKeyId" => access_key,
+          "AWSSecretKey" => secret_key
+        }
       else
         # try to find a suitable Amazon AWS credentials file
         [ expand_private_path(config[:awscred]),
@@ -46,13 +47,26 @@ module BushSlicer
           awscred["AWSSecretKey"]
         )
       }) )
-      client = Aws::EC2::Client.new
-      @ec2 = Aws::EC2::Resource.new(client: client)
+    end
 
+    private def client_ec2
+      @client_ec2 ||= Aws::EC2::Client.new
+    end
+
+    private def client_s3
+      @client_s3 ||= Aws::S3::Client.new
     end
 
     private def client_sts
       @client_sts ||= Aws::STS::Client.new
+    end
+
+    private def ec2
+      @ec2 ||= Aws::EC2::Resource.new(client: client_ec2)
+    end
+
+    private def s3
+      @s3 ||= Aws::S3::Resource.new(client: client_s3)
     end
 
     # @param ecoded_message [String]
@@ -70,12 +84,17 @@ module BushSlicer
       launch_instances(image=image_id)
     end
 
+    def s3_upload_file(bucket:, file:, target: nil)
+      target ||= File.basename file
+      s3.bucket(bucket).object(target).upload_file(file)
+    end
+
     ########################################################################
     # AMI helper methods
     ########################################################################
     def get_amis(filter_val=config[:ami_types][:devenv_wildcard])
       # returns a list of amis
-       @ec2.images({
+       ec2.images({
         filters: [
             {
               name: "name",
@@ -91,7 +110,7 @@ module BushSlicer
 
     def get_all_qe_ready_amis()
       # returns a list of amis
-       @ec2.images({
+       ec2.images({
         filters: [
             {
               name: "state",
@@ -109,7 +128,7 @@ module BushSlicer
     # @return [Sting] ami-id, if no match then nil
     #
     def get_ami_id_from_name(ami_name)
-      ami = @ec2.images({
+      ami = ec2.images({
         filters: [
             {
               name: "name",
@@ -129,7 +148,7 @@ module BushSlicer
         name: "state",
         values: ["available"]
       }
-      return @ec2.images({ filters: filters })
+      return ec2.images({ filters: filters })
     end
 
     def filter_qe_ready_amis(*filters)
@@ -173,8 +192,8 @@ module BushSlicer
     # @return [Hash] snapshot_set
     # example: {:tag_set=>[], :snapshot_id=>"snap-b4f04508", :volume_id=>"vol-81ab9fce", :status=>"completed", :start_time=>2014-11-11 16:05:50 UTC, :progress=>"100%", :owner_id=>"531415883065", :volume_size=>25, :description=>"Created by CreateImage(i-37f49418) for ami-1e51db76 from vol-81ab9fce", :encrypted=>false}
     # def get_snapshot_info(ami_id)
-    #   client = @ec2.client
-    #   res = @ec2.client.describe_images({:image_ids => [ami_id]})
+    #   client = ec2.client
+    #   res = ec2.client.describe_images({:image_ids => [ami_id]})
     #   begin
     #     snapshot_id = res.images_set[0].block_device_mapping[0].ebs.snapshot_id
     #     snapshot_res = client.describe_snapshots({:snapshot_ids=> [snapshot_id]})
@@ -205,7 +224,7 @@ module BushSlicer
     # @return [Array<String>, Array<Object>] the array of IP address with array of instances object
     #
     def get_instance_ip_by_tag(ec2_tag)
-      instances = @ec2.instances({
+      instances = ec2.instances({
         filters: [
           {
             name: "tag:Name",
@@ -226,7 +245,7 @@ module BushSlicer
     #
     # @return [Array<Object>]
     def get_instance_by_id(ec2_instance_id)
-      return @ec2.instances({
+      return ec2.instances({
         filters: [
           {
             name: "instance-id",
@@ -240,7 +259,7 @@ module BushSlicer
       # convert dns name to IP if necessary
       require 'resolv'
       ec2_instance_ip = Resolv.getaddress(ec2_instance_ip) unless ec2_instance_ip =~ /^[0-9]/
-      res = @ec2.instances({
+      res = ec2.instances({
         filters: [
           {
             name: "ip-address",
@@ -252,7 +271,7 @@ module BushSlicer
 
     # @return [Array<Instance>]
     def get_instances_by_name(*instance_names)
-      res = @ec2.instances({
+      res = ec2.instances({
         filters: [
           {
             name: "tag:Name",
@@ -265,7 +284,7 @@ module BushSlicer
     # @param [String] ami_id the EC2 AMI-ID
     # @return [Array<String>, Array<Object>] the array of IP address with array of instances object
     def get_instance_ip_by_ami_id(ami_id)
-      instances = @ec2.instances({
+      instances = ec2.instances({
         filters: [
           {
             name: "image-id",
@@ -318,15 +337,15 @@ module BushSlicer
 
     def get_volume_by_openshift_metadata(pv_name, project_name)
 
-      return @ec2.volumes({dry_run: false, filters: [{name: "tag:kubernetes.io/created-for/pv/name", values: [pv_name]},{name: "tag:kubernetes.io/created-for/pvc/namespace", values: [project_name]}]}).first
+      return ec2.volumes({dry_run: false, filters: [{name: "tag:kubernetes.io/created-for/pv/name", values: [pv_name]},{name: "tag:kubernetes.io/created-for/pvc/namespace", values: [project_name]}]}).first
     end
 
     def get_volume_by_id(id)
       # format the id provided by openshift into a format amazon REST api can work with
       id = id.split("/")[-1]
       begin
-        vol = @ec2.volume(id)
-        # the @ec2 will always return a volume object. It will raise an error only when
+        vol = ec2.volume(id)
+        # the ec2 will always return a volume object. It will raise an error only when
         # a method is invoked on the object. Thats why we use if vol.state to check
         # if the volume exists
         return vol if vol.state
@@ -369,12 +388,12 @@ module BushSlicer
 
     # @return [String]
     def access_key
-      @ec2.client.config.credentials.access_key_id
+      ec2.client.config.credentials.access_key_id
     end
 
     # @return [String]
     def secret_key
-      @ec2.client.config.credentials.secret_access_key
+      ec2.client.config.credentials.secret_access_key
     end
 
     # @return [Object] undefined
@@ -468,7 +487,7 @@ module BushSlicer
         end
       when /^ami-.+/
         instance_opt[:image_id] = image
-        # image = @ec2.images[image]
+        # image = ec2.images[image]
       else
         logger.info("Using image filter #{image}...")
         image = self.get_latest_ami(image)
@@ -478,7 +497,7 @@ module BushSlicer
       case tag_name
       when nil
         unless image.kind_of? Aws::EC2::Image
-          image = @ec2.images[instance_opt[:image_id]]
+          image = ec2.images[instance_opt[:image_id]]
         end
         tag_name = [ "QE_" + image.name + "_" + rand_str(4) ]
       when String
@@ -488,7 +507,13 @@ module BushSlicer
       end
 
       logger.info("Launching EC2 instance from #{image.kind_of?(Aws::EC2::Image) ? image.name : image.inspect} named #{tag_name}...")
-      instances = @ec2.create_instances(instance_opt)
+      begin
+        instances = ec2.create_instances(instance_opt)
+      rescue Aws::EC2::Errors::Unsupported => e
+        logger.error(e.context.http_request.body_contents)
+        logger.error(e.context.http_response.body_contents)
+        raise e
+      end
 
       res = []
       instances.each_with_index do | instance, i |

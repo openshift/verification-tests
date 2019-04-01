@@ -204,3 +204,20 @@ Feature: pods related scenarios
     Then the step should succeed
     And the output should contain "hello"
 
+  # @author chuyu@redhat.com
+  # @case_id OCP-22283
+  Scenario: 4.0 Oauth provider info should be consumed in a pod
+    Given I have a project
+    When I run the :new_app client command with:
+      | docker_image     | aosqe/ruby-ex        |
+    Then the step should succeed
+    Given a pod becomes ready with labels:
+      | app=ruby-ex      |
+    When I run the :rsh client command with:
+      | pod          | <%= pod.name %> |
+      | _stdin       | curl https://kubernetes.default.svc/.well-known/oauth-authorization-server -k |
+    Then the step should succeed
+    And the output should contain:
+      | implicit                |
+      | user:list-projects      |
+

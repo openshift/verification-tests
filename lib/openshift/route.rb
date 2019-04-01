@@ -106,5 +106,13 @@ module BushSlicer
       return raw_resource(user: user, cached: cached, quiet: quiet).
         dig("spec", "host")
     end
+    # check for ingress route only
+    def ready?(user: nil, cached: false, quiet: false)
+      status = raw_resource(user: user, cached: cached, quiet: quiet)['status']
+      ready = status&.('ingress').last['conditions'].any? do |con|
+        con['type'] == "Admitted" && con['status'] == "True"
+      end
+      return ready
+    end
   end
 end

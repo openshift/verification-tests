@@ -5,6 +5,9 @@ gem 'psych'
 gem 'rest-client', '>=2.0'
 # gem 'httpclient', '>=2.4'
 gem 'net-ssh'
+# for ED25519 ssh keys gems `ed25519` and `bcrypt_pbkdf` are also needed
+# for RSA keys in the new OPENSSH format (not RSA) then newer net-ssh is needed:
+# https://github.com/net-ssh/net-ssh/pull/646
 gem 'net-scp'
 # gem 'net-ssh-multi'
 gem 'cucumber', '~>2.4.0'
@@ -27,9 +30,9 @@ gem 'azure_mgmt_network', '~>0.17.0'
 ## Logging
 gem 'term-ansicolor'
 ## Webauto
-gem 'watir', '~> 6.10.3' # undefined methodnew' for nil:NilClass in #6276
+gem 'watir'
 gem 'headless'
-gem 'selenium-webdriver', "~>3.11.0" # limit webdriver to support legacy ff
+gem 'selenium-webdriver'
 ## Docs
 # beware https://github.com/pry/pry/issues/1465
 #        https://bugzilla.redhat.com/show_bug.cgi?id=1257578

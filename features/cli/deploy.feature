@@ -303,7 +303,7 @@ Feature: deployment related features
     Then the output should match:
       | caling.*to\\s+1 |
 
-    Given I collect the deployment log for pod "hooks-1-deploy" until it disappears
+    And I wait until the status of deployment "hooks" becomes :complete
     And I run the :logs client command with:
       | resource_name | dc/hooks |
     Then the step should succeed

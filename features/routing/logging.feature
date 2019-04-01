@@ -7,7 +7,7 @@ Feature: Testing HAProxy router logging related scenarios
   Scenario: deploy haproxy router with an rsyslog sidecar container
     Given the master version >= "3.11"
     Given I switch to cluster admin pseudo user
-    And I use the "default" project
+    And I use the router project
     And default router image is stored into the :default_router_image clipboard
     Given default router replica count is restored after scenario
     And admin ensures "ocp-19830" dc is deleted after scenario
@@ -54,7 +54,7 @@ Feature: Testing HAProxy router logging related scenarios
 
     # check access logs in syslog container
     Given I switch to cluster admin pseudo user
-    And I use the "default" project
+    And I use the router project
     When I run the :logs client command with:
       | resource_name | <%= cb.router_pod %> |
       | c             | syslog               |

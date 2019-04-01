@@ -165,14 +165,14 @@ Feature: Pod related networking scenarios
 
     # test the bandwidth limit with qos for egress
     When I execute on the "<%= cb.iperf_client %>" pod:
-      | sh | -c | iperf3 -c <%= cb.iperf_server %> -i 1 -t 12s \| grep "1.99 Mbits" |
+      | sh | -c | iperf3 -c <%= cb.iperf_server %> -i 1 -t 12s |
     Then the step should succeed
-    And the expression should be true> @result[:response].lines.count >= 6
+    And the expression should be true> @result[:response].scan(/[12].[0-9][0-9] Mbits/).size >= 10
     # test the bandwidth limit with qos for ingress
     When I execute on the "<%= cb.iperf_client %>" pod:
-      | sh | -c | iperf3 -c <%= cb.iperf_server %> -i 1 -t 12s -R \| grep "4.98 Mbits" |
+      | sh | -c | iperf3 -c <%= cb.iperf_server %> -i 1 -t 12s -R |
     Then the step should succeed
-    And the expression should be true> @result[:response].lines.count >= 6
+    And the expression should be true> @result[:response].scan(/[45].[0-9][0-9] Mbits/).size >= 10
 
     # remove the qos pod and check if the ovs qos configurations are removed
     When I run the :delete client command with:

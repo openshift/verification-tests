@@ -85,7 +85,7 @@ Given /^I cleanup #{QUOTED} csi driver$/ do |driver|
   ensure_admin_tagged
   ensure_destructive_tagged
 
-  serviceaccount    = "#{driver}-csi"
+  serviceaccount = "#{driver}-csi"
 
   # delete project
   step %Q/admin ensures "#{namespace}" project is deleted/

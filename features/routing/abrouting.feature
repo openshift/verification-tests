@@ -201,9 +201,8 @@ Feature: Testing abrouting
     Then the step should succeed
     #Check the default load blance policy
     Given I switch to cluster admin pseudo user
-    And I use the "default" project
-    And a pod becomes ready with labels:
-      | deploymentconfig=router |
+    And I use the router project
+    And all default router pods become ready
     Then evaluation of `pod.name` is stored in the :router_pod clipboard
     And I wait up to 5 seconds for the steps to pass:
     """

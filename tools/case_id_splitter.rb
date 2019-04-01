@@ -39,6 +39,23 @@ module BushSlicer
         end
       end
 
+      command :"file-line" do |c|
+        c.syntax = "#{$0} file-line CASE-123 ... [options]"
+        c.description = "Generate a list of feature files and line numbers given a list of case IDs"
+        c.action do |args, options|
+          setup_global_opts(options)
+          if args.empty?
+            raise "please add Test Case IDs in the command line"
+            exit false
+          end
+
+          parser = GherkinParse.new
+          cases_loc = parser.locations_for(*args)
+          features_list = generate_feature_list(cases_loc)
+          puts features_list
+        end
+      end
+
       command :split do |c|
         c.syntax = "#{$0} split [options]"
         c.description = "Split feature files based on provided case_id tag\n\t" \
@@ -130,6 +147,17 @@ module BushSlicer
         idx += 1
       end
       return sranges.to_h
+    end
+
+    # given a list of case_ids, generate a feature file location (file name + line number)
+    # @param hash of location data, with the key as the case_id, and the value as the file
+    # location and line numbers, separately.
+    private def generate_feature_list(cases_loc_hash)
+      complete_feature_list = []
+      cases_loc_hash.each do |key, value|
+        complete_feature_list << "#{value[0]}:#{value[1].to_s}"
+      end
+      return complete_feature_list
     end
 
     def opts

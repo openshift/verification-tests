@@ -43,7 +43,7 @@ module BushSlicer
                     "* for template it specifies a file with YAML variables")
       global_option('-l', '--launched_instances_name_prefix PREFIX', 'prefix instance names; use string `{tag}` to have it replaced with MMDDb where MM in month, DD is day and b is build number; tag works only with PUDDLE_REPO')
       global_option('-d', '--user_data SPEC', "file containing user instances' data")
-      global_option('-s', '--service_name', 'service name to lookup in config')
+      global_option('-s', '--service_name SERVICE_NAME', 'service name to lookup in config')
       global_option('-i', '--image_name IMAGE', 'image to launch instance with')
       global_option('--it', '--instance_type TYPE', 'instance flavor to launch')
 
@@ -73,9 +73,6 @@ module BushSlicer
           say 'launching..'
           options.service_name ||= :AWS
           options.service_name = options.service_name.to_sym
-          unless options.service_name == :AWS
-            raise "for the time being only AWS is supported"
-          end
 
           launch_ec2_instance(options)
         end
@@ -463,9 +460,26 @@ module BushSlicer
       raise
     end
 
+    def task_env_process(env, evalbinding, basepath)
+      case env
+      when nil
+        return env
+      when Hash
+        # do nothing
+      when /^expr:/
+        env = evalbinding.eval(env.sub(/^expr:/, ""))
+      when /^file:.*\.rb$/
+        file = env.sub(/^file:/, "")
+        env = evalbinding.eval(readfile(file, basepath), file)
+      else
+        raise "unknown env specification: #{env}"
+      end
+
+      return Collections.deep_hash_strkeys env
+    end
+
     def run_ansible_playbook(playbook, inventory, extra_vars: nil, env: nil, retries: 1)
       env ||= {}
-      env = env.reduce({}) { |r,e| r[e[0].to_s] = e[1].to_s; r }
       env["ANSIBLE_FORCE_COLOR"] = "true"
       env["ANSIBLE_CALLBACK_WHITELIST"] = 'profile_tasks'
 
@@ -498,7 +512,7 @@ module BushSlicer
     end
 
     # performs an installation task
-    def installation_task(task, template:, erb_binding:, config_dir: nil)
+    def installation_task(task, template:, erb_binding:, template_dir: nil)
       case task[:type]
       when "force_domain"
         self.dns_component = task[:name]
@@ -566,9 +580,24 @@ module BushSlicer
         ensure
           dyn.close if dyn
         end
+      when "shell_command"
+        exec_opts = {
+          single: true,
+          stderr: :out, stdout: STDOUT,
+          timeout: 36000
+        }
+        if task[:env]
+          exec_opts[:env] = task_env_process(task[:env], erb_binding, template_dir)
+        end
+        res = Host.localhost.exec(*[task[:cmd]].flatten, **exec_opts)
+        unless res[:success]
+          raise "shell command failed execution, see logs"
+        end
+      when "ruby"
+        erb_binding.eval(readfile(task[:file], template_dir), task[:file])
       when "playbook"
         inventory_erb = ERB.new(
-          readfile(task[:inventory], config_dir),
+          readfile(task[:inventory], template_dir),
           nil,
           "<"
         )
@@ -577,9 +606,12 @@ module BushSlicer
         inventory = Host.localhost.absolutize basename(task[:inventory])
         puts "Ansible inventory #{File.basename inventory}:\n#{inventory_str}"
         File.write(inventory, inventory_str)
-        run_ansible_playbook(localize(task[:playbook]), inventory,
-                             extra_vars: task[:extra_vars],
-                             retries: (task[:retries] || 1), env: task[:env])
+        run_ansible_playbook(
+          localize(task[:playbook]), inventory,
+          extra_vars: task[:extra_vars],
+          retries: (task[:retries] || 1),
+          env: task_env_process(task[:env], erb_binding, template_dir)
+        )
       when "launch_host_groups"
         existing_hosts = erb_binding.local_variable_get(:hosts)
         hosts = []
@@ -613,6 +645,7 @@ module BushSlicer
     # @param launched_instances_name_prefix [String]
     def launch_template(config:, launched_instances_name_prefix:)
       hosts = []
+      terminate_spec = {}
       file_details = {}
       vars = YAML.load(readfile(config, details: file_details))
       if ENV["LAUNCHER_VARS"] && !ENV["LAUNCHER_VARS"].strip.empty?
@@ -625,6 +658,9 @@ module BushSlicer
       end
       vars = Collections.deep_hash_symkeys vars
       vars[:instances_name_prefix] = launched_instances_name_prefix
+      vars[:variables_file] = config
+      vars[:hosts] = hosts
+      vars[:terminate_spec] = terminate_spec
       raise "specify 'template' in variables" unless vars[:template]
 
       # this dir can be a URL or a PATH
@@ -636,10 +672,12 @@ module BushSlicer
       )
       template.filename = file_details[:location]
       erb_binding = Common::BaseHelper.binding_from_hash(launcher_binding,
-                                                         hosts: hosts, **vars)
+                                                         **vars)
       template_dir = dirname_path_or_url(file_details[:location])
 
       # define convenience include methods
+      # defined variables here do not become available in caller template though
+      # see https://stackoverflow.com/questions/53886078
       erb_binding.local_variable_set :include_erb, lambda { |path, indent=0|
         t = ERB.new(
           readfile(path, template_dir), nil, "<", rand_str(10, :ruby_variable)
@@ -679,12 +717,14 @@ module BushSlicer
           task,
           erb_binding: erb_binding,
           template: template,
-          config_dir: config_dir
+          template_dir: template_dir
         )
       end
 
       ## help users persist home info
-      hosts_spec = hosts.map{|h| "#{h.hostname}:#{h.roles.join(':')}"}.join(',')
+      hosts_spec = hosts.map{ |h|
+        "#{h[:flags]}#{h.hostname}:#{h.roles.join(':')}"
+      }.join(',')
       logger.info "HOSTS SPECIFICATION: #{hosts_spec}"
       host_spec_out = ENV["BUSHSLICER_HOSTS_SPEC_FILE"]
       if host_spec_out && !File.exist?(host_spec_out)
@@ -696,10 +736,12 @@ module BushSlicer
       end
     ensure
       # create a file with launched instances information
-      vminfo_out = ENV["BUSHSLICER_VMINFO_YAML"] || "vminfo.yml"
-      unless vminfo_out.empty?
+      # TODO: change VMINFO to better name here and in Jenkins jobs
+      terminate_out = ENV["BUSHSLICER_VMINFO_YAML"] || "vminfo.yml"
+      unless terminate_out.empty?
         vminfo = hosts.
           group_by { |h| h[:cloud_service_name] }.
+          select { |service_name, hosts| service_name }.
           map { |service_name, hosts|
             [
               service_name, hosts.map { |h|
@@ -711,8 +753,9 @@ module BushSlicer
             ]
           }.
           to_h
+          terminate_spec.merge! vminfo
         begin
-          File.write(vminfo_out, vminfo.to_yaml)
+          File.write(terminate_out, terminate_spec.to_yaml)
         rescue => e
           logger.error("could not save vminfo YAML: #{e.inspect}")
         end
@@ -731,7 +774,7 @@ module BushSlicer
         raise "you must specify instance name with -l"
       end
       user_data = user_data(options.user_data)
-      amz = Amz_EC2.new
+      amz = Amz_EC2.new(service_name: options.service_name)
       res = amz.launch_instances(tag_name: [instance_name], image: image,
                            create_opts: {user_data: Base64.encode64(user_data)},
                            wait_accessible: true)
@@ -765,12 +808,37 @@ module BushSlicer
       end
     end
 
-    # @param vminfo [Hash] as generated by the template launcher - for each service
-    #   name it would list launch options used to start instances
+    # @param vminfo [Hash] as generated by the template launcher - for
+    #   each service name it would list launch options used to start instances
     def terminate(vminfo)
-      vminfo.each do |service_name, instances|
-        iaas = iaas_by_service(service_name)
-        iaas.terminate_by_launch_opts(instances)
+      vminfo.each do |target, spec|
+        case target
+        when /^template_/
+          # construct variables file with updated template
+          vars = YAML.load(readfile(spec[:config]))
+          vars_org_dir = dirname_path_or_url(spec[:config])
+          unless vars_org_dir =~ %r{^\w+://}
+            vars_org_dir = File.absolute_path(vars_org_dir)
+          end
+          template_org_dir = dirname_path_or_url(
+            join_paths_or_urls(vars_org_dir, vars["template"])
+          )
+          vars["template"] = join_paths_or_urls(
+            template_org_dir, spec[:template]
+          )
+          vars_file = Tempfile.new("vars_file_", Host.localhost.workdir)
+          vars_file.write(vars.to_yaml)
+          vars_file.close
+          # we launch a template to clean-up whatever it is
+          launch_template(
+            config: vars_file.path,
+            launched_instances_name_prefix: spec[:name_prefix]
+          )
+        else
+          # target assumed to be a service name
+          iaas = iaas_by_service(target)
+          iaas.terminate_by_launch_opts(spec)
+        end
       end
     end
   end

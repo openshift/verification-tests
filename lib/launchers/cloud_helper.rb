@@ -26,8 +26,7 @@ module BushSlicer
       def iaas_by_service(service_name)
         case conf[:services, service_name, :cloud_type]
         when "aws"
-          raise "TODO service choice" unless service_name == :AWS
-          Amz_EC2.new
+          Amz_EC2.new(service_name: service_name)
         when "azure"
           BushSlicer::Azure.new(service_name: service_name)
         when "openstack"

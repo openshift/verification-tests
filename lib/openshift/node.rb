@@ -36,13 +36,27 @@ module BushSlicer
         return @host
       end
 
+      hostname = labels["kubernetes.io/hostname"] || name
+
       # check whether we detect node hostname as local to any hosts
-      @host = env.hosts.find do |h|
-        h.local_ip?(labels["kubernetes.io/hostname"] || name)
+      # here we need to be more careful because we may not have access to
+      #   all environment hosts, e.g. elastic load balancer hosts
+      @host = env.node_hosts.find do |h|
+        env.nodes.none? {|n| n.host_var == h} && h.local_ip?(hostname)
       end
       return @host if @host
 
+      # treat as a new host
+      # set it to use bastion as usually we only see internal IP
+      @host = env.host_add(hostname, roles: [:node], flags: "/b/")
+      return @host if @host
+
       raise("no host mapping for #{self.name}")
+    end
+
+    # used as helper when optimizing host lookup
+    protected def host_var
+      @host
     end
 
     def taints(user: nil, cached: true, quiet: true)
