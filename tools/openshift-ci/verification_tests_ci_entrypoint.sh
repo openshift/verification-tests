@@ -18,8 +18,7 @@ export OPENSHIFT_ENV_$(echo "$BUSHSLICER_TEST_ENVIRONMENT" | awk '{print toupper
 export OPENSHIFT_ENV_$(echo "$BUSHSLICER_TEST_ENVIRONMENT" | awk '{print toupper($0)}')_USER_MANAGER_USERS=:"${BUSHSLICER_TEST_TOKEN}"
 export OPENSHIFT_ENV_$(echo "$BUSHSLICER_TEST_ENVIRONMENT" | awk '{print toupper($0)}')_WEB_CONSOLE_URL=https://${BUSHSLICER_TEST_CLUSTER}/console
 
-export TESTENV="BUSHSLICER_V3"
 export BUSHSLICER_CONFIG="${BUSHSLICER_TEST_CONFIG}"
-unset BUSHSLICER_DEBUG_AFTER_FAIL
 
-/usr/bin/scl enable rh-git29 rh-ror50 -- cucumber -p junit -f $BUSHSLICER_TEST_FORMAT -o $BUSHSLICER_TEST_RESULTS $(../case_id_splitter.rb file-line $(<cases_ded_azure_3_11.txt))
+cases=`curl "$0"` # $0 must be URL to white space separated case IDs
+"$( dirname "$( dirname "${BASH_SOURCE[0]}" )" )"/case_id_splitter.rb file-line "$cases" | xargs -d '\n' /usr/bin/scl enable rh-git29 rh-ror50 -- cucumber -p junit -f $BUSHSLICER_TEST_FORMAT -o $BUSHSLICER_TEST_RESULTS
