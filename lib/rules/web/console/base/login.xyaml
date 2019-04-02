@@ -29,7 +29,7 @@ login_sequence:
     ref: login_rhsso
     if_element:
       selector:
-        visible_text: !ruby/regexp '/Red Hat account to log in/'
+        visible_text: !ruby/regexp '/Log in to your Red Hat account/'
       timeout: 1
 oauth_proxy_login_with_openshift:
   action: click_openshift_login
@@ -43,22 +43,6 @@ login_rhsso:
       op: send_keys <username>
       type: input
     - selector:
-        id: password
-      op: send_keys <password>
-      type: input
-  elements:
-    - selector:
-        value: Log in
-      op: click
-      type: input
-
-login_console:
-  elements:
-    - selector:
-        id: username
-      op: send_keys <username>
-      type: input
-    - selector:
         id: login-show-step2
       op: click
       type: button
@@ -66,10 +50,30 @@ login_console:
         id: password
       op: send_keys <password>
       type: input
-  elements:
     - selector:
         id: kc-login
       type: input
+      op: click
+login_console:
+  elements:
+    - selector:
+        id: inputUsername
+      op: send_keys <username>
+      type: input
+    - selector:
+        id: inputPassword
+      op: send_keys <password>
+      type: input
+  scripts:
+  - command: return document.getElementsByName("csrf").length > 0
+    expect_result: true
+  cookies:
+  - name: csrf
+    expect_result: true
+  elements:
+    - selector:
+        text: Log In
+      type: button
       op: click
 
 login_token:
