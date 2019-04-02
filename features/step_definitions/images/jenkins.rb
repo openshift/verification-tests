@@ -61,13 +61,14 @@ Given /^I have an?( ephemeral| persistent)? jenkins v#{NUMBER} application(?: fr
   cb.jenkins_major_version = version
 
   # wait for actual startup as in 3.10+ it is slow on only 512M pod
-  timeout = 300
   if version == "1"
+    timeout = 300
     wait_string = "Jenkins is fully up and running"
   else
     # seems like recent jenkins has a delay caused by admin monitor
     # here trying to wait for it's operation to finish
     # possible remedy is DISABLE_ADMINISTRATIVE_MONITOR or give mor RAM to pod
+    timeout = 600
     wait_string = "Finished Download metadata."
   end
   started = wait_for(timeout) {
@@ -139,3 +140,22 @@ Given /^I update #{QUOTED} slave image for jenkins #{NUMBER} server$/ do |slave_
 
   step 'the step should succeed'
 end
+
+Given /^I update #{QUOTED} agent image to use slave image$/ do |agent_name|
+
+  step 'I store master major version in the clipboard'
+  if agent_name == 'maven'
+    step %Q/I perform the :jenkins_update_cloud_image web action with:/, table(%{
+      | currentimgval | openshift3/jenkins-agent-maven-35-rhel7                                                  |
+      | cloudimage    | <%= product_docker_repo %>openshift3/jenkins-slave-maven-rhel7:v<%= cb.master_version %> |
+      })
+  else agent_name == 'nodejs'
+    step %Q/I perform the :jenkins_update_cloud_image web action with:/, table(%{
+      | currentimgval | openshift3/jenkins-agent-nodejs-8-rhel7                                                   |
+      | cloudimage    | <%= product_docker_repo %>openshift3/jenkins-slave-nodejs-rhel7:v<%= cb.master_version %> |
+      })
+  end 
+
+  step 'the step should succeed'
+end
+
