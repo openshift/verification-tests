@@ -473,7 +473,6 @@ Given /^I have a iSCSI setup in the environment$/ do
   else
     env.node_hosts.each do |host|
       setup_commands = [
-        "echo 'InitiatorName=iqn.2016-04.test.com:test.img' > /etc/iscsi/initiatorname.iscsi",
         "sed -i '/^node.session.auth./'d  /etc/iscsi/iscsid.conf",
         "cat >> /etc/iscsi/iscsid.conf << EOF\n" +
           "node.session.auth.authmethod = CHAP\n" +
