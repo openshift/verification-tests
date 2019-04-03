@@ -158,38 +158,3 @@ Feature: Ansible-service-broker related scenarios
       | resource | clusterservicebroker/template-service-broker  |
     Then the output should match "Message:\s+Successfully fetched catalog entries from broker"
 
-  # @author zitang@redhat.com
-  # @case_id OCP-15395
-  @admin
-  Scenario: Check the ASB with bearer token auth
-    #Get asb route and ansible service broker  client secret
-    Given I have a project
-    And evaluation of `project.name` is stored in the :projectName clipboard
-    And I switch to cluster admin pseudo user
-    And I use the "openshift-ansible-service-broker" project
-    And evaluation of `secret('asb-client').token` is stored in the :token clipboard
-    And evaluation of `route("asb-1338").dns` is stored in the :asbUrl clipboard
-
-    #Access the ASB api with valid token
-    Given I switch to the first user
-    And I use the "<%= cb.projectName %>" project
-    And I have a pod-for-ping in the project
-    When I execute on the pod:
-      | curl                                                       |
-      | -H                                                         |
-      | Authorization: Bearer <%= cb.token %>                      |
-      | -sk                                                        |
-      | https://<%= cb.asbUrl %>/ansible-service-broker/v2/catalog |
-    Then the output should match:
-      | services      |
-      | name.*apb     |
-      | description   |
-    #Access the ASB api with invalid token
-     When I execute on the pod:
-      | curl                                                       |
-      | -H                                                         |
-      | Authorization: Bearer XXXXXXXXXXXX                         |
-      | -sk                                                        |
-      | https://<%= cb.asbUrl %>/ansible-service-broker/v2/catalog |
-    Then the output should contain "Unauthorized"
-
