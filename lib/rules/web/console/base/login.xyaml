@@ -11,10 +11,11 @@ login_sequence:
     ref:
     - click_pre_login_button
     - pre_login_buttons_gone
+    - login_page_loaded
     if_element:
       selector: &pre_login_buttons
         # we just choose the first button per OPENSHIFTQ-12062
-        css: ".login-redhat:last-of-type, .idp:last-of-type"
+        css: ".login-redhat:first-of-type, .idp:first-of-type"
       timeout: 1
   action:
     ref: login_console
@@ -50,28 +51,32 @@ login_rhsso:
         id: password
       op: send_keys <password>
       type: input
+  elements:
     - selector:
         id: kc-login
       type: input
       op: click
+
 login_console:
   elements:
     - selector:
-        id: username
+        id: inputUsername
       op: send_keys <username>
       type: input
     - selector:
-        id: login-show-step2
-      op: click
-      type: button
-    - selector:
-        id: password
+        id: inputPassword
       op: send_keys <password>
       type: input
+  scripts:
+  - command: return document.getElementsByName("csrf").length > 0
+    expect_result: true
+  cookies:
+  - name: csrf
+    expect_result: true
   elements:
     - selector:
-        id: kc-login
-      type: input
+        text: Log In
+      type: button
       op: click
 
 login_token:
@@ -95,7 +100,7 @@ login_token:
 login_page_loaded:
   element:
     selector:
-      css: "#password, #inputPassword, .login-redhat, .idp, .navigation-container"
+      css: "#kc-form-login, #password, #inputPassword, .login-redhat, .idp, .navigation-container"
     timeout: 30
 
 verify_logged_in:
