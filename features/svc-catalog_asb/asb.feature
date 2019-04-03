@@ -8,7 +8,7 @@ Feature: Ansible-service-broker related scenarios
     And evaluation of `project.name` is stored in the :org_proj_name clipboard
     # Get the registry name from the configmap
     When I switch to cluster admin pseudo user
-    And I use the "openshift-ansible-service-broker" project
+    And I use the "ansible-service-broker" project
     And evaluation of `YAML.load(config_map('broker-config').value_of('broker-config'))['registry'][0]['name']` is stored in the :prefix clipboard
     # need to swtich back to normal user mode
     And I switch to the first user
