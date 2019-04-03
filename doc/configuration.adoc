@@ -49,6 +49,19 @@ So far we also have `optional_classes` root configuration option. It is used to 
 
 Also we have `services` to define some third party services options. Access to those configuration options is not wrapped in any way. Information should be accessed directly, see below.
 
+== Web Driver
+
+For tests which require a web driver please install the driver for the browser you would prefer to use.
+
+Firefox:
+ Please download the server from https://github.com/mozilla/geckodriver/releases and place it somewhere on your PATH.
+ See https://developer.mozilla.org/en-US/docs/Mozilla/QA/Marionette/WebDriver for more information
+
+Chrome:
+ Please download the driver from http://chromedriver.storage.googleapis.com/index.html that matches the version of Chrome you are using, place it somewhere on your PATH and set the following environment variable. 
+
+* `export BUSHSLICER_CONFIG='{"global": {"browser": "chrome"}}'`
+
 == accessing configuration
 
 Whenever you are, you should usually have the convenience `#conf` method available to get current loaded configuration. Reference to configuration is kept in the Manager object `Manager#conf` but direct use from manager is discouraged.
