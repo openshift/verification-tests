@@ -11,7 +11,8 @@ More info you can find in link:doc/overview.adoc[Overview document].
 . cd verification-tests
 . tools/install_os_deps.sh # need sudo; you may need to login again to terminal if ruby was installed via rvm during this phase
 . tools/hack_bundle.rb # normal user
-. install OKD or OpenShift Container Platform client tools
+. Install OKD or OpenShift Container Platform client tools
+. Install the web driver if you desire to run tests which work with the Web UI. See link:doc/configuration.adoc[Web Driver]
 
 === Update local dev environment
 
