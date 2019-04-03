@@ -524,10 +524,12 @@ module BushSlicer
       end
       if opts[:raw]
         exec_raw("rm #{r} -f -- #{file}", opts)
+        exec_raw("sudo rm #{r} -f -- #{file}", opts)
         opts[:quiet] = true
         res = exec_raw("ls -d -- #{file}", opts)
       else
         exec("rm #{r} -f -- #{file}", opts)
+        exec("sudo rm #{r} -f -- #{file}", opts)
         opts[:quiet] = true
         res = exec("ls -d -- #{file}", opts)
       end
