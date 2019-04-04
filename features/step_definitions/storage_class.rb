@@ -171,6 +171,8 @@ Given(/^admin clones storage class #{QUOTED} from #{QUOTED} with:$/) do |target_
   sc_hash = YAML.load @result[:stdout]
 
   sc_hash["metadata"]["name"] = "#{target_sc}"
+  # Update sc to Immediate for smooth testing
+  sc_hash["volumeBindingMode"] = "Immediate"
   # Generally, make cloned storage class as non-default storage class.
   if sc_hash.dig("metadata", "annotations", "storageclass.beta.kubernetes.io/is-default-class")
     sc_hash["metadata"]["annotations"]["storageclass.beta.kubernetes.io/is-default-class"] = "false"
@@ -189,7 +191,6 @@ Given(/^admin clones storage class #{QUOTED} from #{QUOTED} with:$/) do |target_
      sc_hash.dig("metadata", "annotations", "storageclass.beta.kubernetes.io/is-default-class") == "true"
     ensure_destructive_tagged
   end
-
   logger.info("Creating StorageClass:\n#{sc_hash.to_yaml}")
   @result = BushSlicer::StorageClass.create(by: admin, spec: sc_hash)
 
