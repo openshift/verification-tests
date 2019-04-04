@@ -631,3 +631,13 @@ Given /^an IP echo service is setup on the master node and the ip is stored in t
     raise "Failed to delete the docker container." unless @result[:success]
   }
 end
+
+
+Given /^the multus is enabled on the cluster$/ do
+  ensure_admin_tagged
+
+  desired_multus_replicas = daemon_set('multus', project('openshift-multus')).replica_counters(user: admin)[:desired]
+  available_multus_replicas = daemon_set('multus', project('openshift-multus')).replica_counters(user: admin)[:available]
+
+  raise "Multus is not running correctly!" unless desired_multus_replicas == available_multus_replicas && available_multus_replicas != 0
+end
