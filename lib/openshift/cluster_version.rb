@@ -1,7 +1,7 @@
 module BushSlicer
   class ClusterVersion < ClusterResource
     RESOURCE = "clusterversions"
-    def channel(user: nil, cached: false, quiet: false)
+    def channel(user: nil, cached: true, quiet: false)
       rr = raw_resource(user: user, cached: cached, quiet: quiet)
       rr.dig('spec', 'channel')
     end
@@ -23,9 +23,7 @@ module BushSlicer
 
     # return a list of history matching the state we want to filter on
     # query_hash is the parameter we want to filter on,
-    def history_matching(query_hash: nil , user: nil, cached: true, quiet: false)
-      key = query_hash.keys.first
-      value = query_hash[key]
+    def history_matching(key: nil, value:nil , user: nil, cached: true, quiet: false)
       self.history.select { |h| h[key] == value }
     end
 
@@ -35,12 +33,12 @@ module BushSlicer
     end
 
     # get the last entry of the spec.history which should be where the original
-    def image_base_url(user: nil, cached: true, quiet: false)
+    def initial_image_url(user: nil, cached: true, quiet: false)
       self.history.last['image'].split('@sha256:')[0]
     end
 
     def upgrade_completed?(target_version:, user:nil, cached: false, quiet: false)
-      res = self.history_matching(query_hash: {'version' => target_version})
+      res = self.history_matching(key: 'version', value: target_version)
       if res.count > 0
         logger.debug("MSG: #{res.first['message']}")
         res.first['state'] == 'Completed'
