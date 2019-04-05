@@ -8,8 +8,8 @@ Given /^metering service has been installed successfully(?: using (ansible|shell
   # first check if metering service exists, skip installation if already there
   step %Q/I save the project hosting "metering" resource to "metering_namespace" clipboard/
   unless cb.metering_namespace
-    # default to shell script installation until OLM install is supported
-    method ||= "shell script"
+    # default to OLM install
+    method ||= "OLM"
     case method
     when "shell script"
       namespace = "metering"
@@ -18,8 +18,8 @@ Given /^metering service has been installed successfully(?: using (ansible|shell
       namespace = "openshift-metering"
       metering_name = "openshift-metering"
     when "OLM"
-      namespace = "openshift-metering"  # TDB
-      metering_name = "operator-metering"  # placeholder
+      namespace = "openshift-metering"  
+      metering_name = "operator-metering"  
     end
     # a pre-req is that openshift-monitoring is installed in the system, w/o it
     # the openshift-metering won't function correctly
@@ -256,14 +256,11 @@ Given /^the#{OPT_QUOTED} metering service is installed(?: to $QUOTED)? using OLM
   @result = user.cli_exec(:apply, f: catalog_source_config, n: 'openshift-marketplace')
   @result = user.cli_exec(:apply, f: operator_group, n: project.name)
   @result = user.cli_exec(:apply, f: subscription, n: project.name)
-  # wait for two initial metering pods to become running first and then apply CRD
+  # wait for initial metering pod to become running first and then apply CRD
   step %Q/a pod becomes ready with labels:/, table(%{
     | app=metering-operator |
   })
 
-  step %Q/a pod becomes ready with labels:/, table(%{
-    | olm.catalogSource=metering |
-  })
   @result = user.cli_exec(:apply, f: metering_crd, n: project.name)
   raise "OLM install of metering failed" unless @result[:success]
 end
