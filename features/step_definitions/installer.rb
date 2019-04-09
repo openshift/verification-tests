@@ -18,7 +18,7 @@ Given /^I upgrade my cluster to:$/ do | table |
   opts[:to_image] = cluster_version('version').initial_image_url + ":" + opts[:to_image]
   @result = _admin.cli_exec(:oadm_upgrade, opts)
   raise "Upgrade command failed #{@result[:response]}" unless @result[:success]
-  upgrade_status = cluster_version('version').wait_for_upgrade_completion(target_version: target_version)
+  upgrade_status = cluster_version('version').wait_for_upgrade_completion(version: target_version)
   raise "Upgrade to #{target_version} failed" unless upgrade_status
 end
 

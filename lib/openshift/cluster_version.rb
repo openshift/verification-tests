@@ -6,12 +6,12 @@ module BushSlicer
       rr.dig('spec', 'channel')
     end
 
-    def upstream(user: nil, cached: false, quiet: false)
+    def upstream(user: nil, cached: true, quiet: false)
       rr = raw_resource(user: user, cached: cached, quiet: quiet)
       rr.dig('spec', 'upstream')
     end
 
-    def version(user: nil, cached: false, quiet: false)
+    def version(user: nil, cached: true, quiet: false)
       rr = raw_resource(user: user, cached: cached, quiet: quiet)
       rr.dig('status', 'desired', 'version')
     end
@@ -37,8 +37,9 @@ module BushSlicer
       self.history.last['image'].split('@sha256:')[0]
     end
 
-    def upgrade_completed?(target_version:, user:nil, cached: false, quiet: false)
-      res = self.history_matching(key: 'version', value: target_version)
+    # @param version [String] upgrade version that we check for completion
+    def upgrade_completed?(version:, user: nil, cached: false, quiet: false)
+      res = self.history_matching(key: 'version', value: version)
       if res.count > 0
         logger.debug("MSG: #{res.first['message']}")
         res.first['state'] == 'Completed'
@@ -47,9 +48,9 @@ module BushSlicer
       end
     end
 
-    def wait_for_upgrade_completion(target_version:, user:nil, cached: false, quiet: false, upgrade_timeout: 2*60*60)
+    def wait_for_upgrade_completion(version:, user: nil, cached: false, quiet: false, upgrade_timeout: 2*60*60)
       wait_for(upgrade_timeout) {
-        upgrade_completed?(target_version: target_version)
+        upgrade_completed?(version: version)
       }
     end
     # extract the percentage done from the message field from spec.conditions
