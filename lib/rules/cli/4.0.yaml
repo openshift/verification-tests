@@ -1318,6 +1318,14 @@
     :overwrite: --overwrite=<value>
 :oadm_top_images:
   :cmd: oc adm top images
+:oadm_upgrade:
+  :cmd: oc adm upgrade
+  :options:
+    :clear: --clear=<value>
+    :force: --force=<value>
+    :to: --to=<value>
+    :to_image: --to-image=<value>
+    :to_latest: --to-latest=<value>
 :openshift_version:
   :cmd: openshift version
   :expected:
@@ -1336,3 +1344,5 @@
   :cmd: oc create clusterrolebinding <name>
   :options:
     :clusterrole: --clusterrole=<value>
+
+
