@@ -38,7 +38,7 @@ module BushSlicer
     end
 
     # @param version [String] upgrade version that we check for completion
-    def upgrade_completed?(version:, user: nil, cached: false, quiet: false)
+    def upgrade_completed?(version:, user: nil, cached: true, quiet: false)
       res = self.history_matching(key: 'version', value: version)
       if res.count > 0
         logger.debug("MSG: #{res.first['message']}")
@@ -48,9 +48,9 @@ module BushSlicer
       end
     end
 
-    def wait_for_upgrade_completion(version:, user: nil, cached: false, quiet: false, upgrade_timeout: 2*60*60)
-      wait_for(upgrade_timeout) {
-        upgrade_completed?(version: version)
+    def wait_for_upgrade_completion(version:, user: nil, quiet: false, timeout: 2*60*60)
+      wait_for(timeout) {
+        upgrade_completed?(version: version, user: user, cached: false, quiet: quiet)
       }
     end
     # extract the percentage done from the message field from spec.conditions
