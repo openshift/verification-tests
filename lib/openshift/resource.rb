@@ -286,8 +286,8 @@ module BushSlicer
 
     # returns a hash simliar to
     # {"lastTransitionTime"=>2019-03-23 07:33:34 UTC, "status"=>"False", "type"=>"Progressing"}
-    def condition(type: nil, user: nil, cached: true, quiet: false)
-      res = self.conditions.select { |c| c['type'] == type }
+    def condition(type: nil, user: nil, cached: false, quiet: false)
+      res = self.conditions(user: user, cached: cached, quiet: quiet).select { |c| c['type'] == type }
       res.first
     end
 
