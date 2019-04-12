@@ -17,6 +17,7 @@ Feature: Operator related networking scenarios
   # @auther anusaxen@redhat.com
   # @case_id OCP-22706
   @admin
+  @destructive
   Scenario: The clusteroperator should be able to reflect the correct version field post bad network operator config
 
     Given the master version >= "4.0"
@@ -38,8 +39,14 @@ Feature: Operator related networking scenarios
     And evaluation of `cluster_operator('network').condition(type: 'Failing',cached: false)` is stored in the :failing_status_post_patch clipboard
     Then the expression should be true> cb.failing_status_post_patch["status"]=="True"
     And the expression should be true> cluster_operator('network').version_exists?(version: cb.ocp_version)
-
-    #Fixing bad patch to make cluster healthy before exiting the test
+    
+    #Registering clean-up steps to move networkType back to OpenShiftSDN and to check Failing status is False before test exits
+    Given I register clean-up steps:
+    """
+    20 seconds have passed
+    evaluation of `cluster_operator('network').condition(type: 'Failing',cached: false)` is stored in the :failing_status clipboard
+    the expression should be true> cb.failing_status["status"]=="False"
+    """
     Given I register clean-up steps:
     """
     When I run the :patch admin command with:
