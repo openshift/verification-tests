@@ -174,6 +174,7 @@ Feature: Multus-CNI related scenarios
   # @author bmeng@redhat.com
   # @case_id OCP-21853
   @admin
+  @destructive
   Scenario: Create pods with multus-cni - host-device
     # Make sure that the multus is enabled
     Given the master version >= "4.0"
@@ -181,34 +182,14 @@ Feature: Multus-CNI related scenarios
     And I select a random node's host
     And evaluation of `node.name` is stored in the :target_node clipboard
 
-    # Add a host-device which will be used by the pod later
-    Given I run the :get admin command with:
-      | resource      | pod                                 |
-      | n             | openshift-sdn                       |
-      | fieldSelector | spec.nodeName=<%= cb.target_node %> |
-      | l             | app=sdn                             |
-      | o             | jsonpath={.items[0].metadata.name}  |
-    Then the step should succeed
-    And evaluation of `@result[:response]` is stored in the :target_sdnpod clipboard
-
-    Given I run the :exec admin command with:
-      | pod              | <%= cb.target_sdnpod %>                              |
-      | n                | openshift-sdn                                        |
-      | oc_opts_end      |                                                      |
-      | exec_command     | sh                                                   |
-      | exec_command_arg | -c                                                   |
-      | exec_command_arg | ip link add eth08 link eth0 type macvlan mode bridge |
+    # Prepare the net link on the node which will be attached to the pod
+    When I run network command on the "<%= cb.target_node %>" node's sdn pod:
+       | sh | -c | ip link add eth08 link eth0 type macvlan mode bridge |
     Then the step should succeed
     Given I register clean-up steps:
     """
-    I run the :exec admin command with:
-      | pod              | <%= cb.target_sdnpod %> |
-      | n                | openshift-sdn           |
-      | oc_opts_end      |                         |
-      | exec_command     | sh                      |
-      | exec_command_arg | -c                      |
-      | exec_command_arg | ip link del eth08       |
-    the step should succeed
+    I run network command on the "<%= cb.target_node %>" node's sdn pod:
+       | sh | -c | ip link del eth08 |
     """
 
     # Create the net-attach-def via cluster admin
@@ -240,13 +221,8 @@ Feature: Multus-CNI related scenarios
     And the output should contain "Hello OpenShift"
 
     # Check that the link is removed from node
-    Given I run the :exec admin command with:
-      | pod              | <%= cb.target_sdnpod %> |
-      | n                | openshift-sdn           |
-      | oc_opts_end      |                         |
-      | exec_command     | sh                      |
-      | exec_command_arg | -c                      |
-      | exec_command_arg | ip link show            |
+    When I run network command on the "<%= cb.target_node %>" node's sdn pod:
+      | sh | -c | ip link show |
     Then the step should succeed
     And the output should not contain "eth08"
 
@@ -255,12 +231,168 @@ Feature: Multus-CNI related scenarios
       | object_type | pod                  |
       | l           | name=host-device-pod |
     Then the step should succeed
-    Given I run the :exec admin command with:
-      | pod              | <%= cb.target_sdnpod %> |
-      | n                | openshift-sdn           |
-      | oc_opts_end      |                         |
-      | exec_command     | sh                      |
-      | exec_command_arg | -c                      |
-      | exec_command_arg | ip link show            |
+    When I run network command on the "<%= cb.target_node %>" node's sdn pod:
+      | sh | -c | ip link show |
     Then the step should succeed
     And the output should contain "eth08"
+
+
+  # @author bmeng@redhat.com
+  # @case_id OCP-21854
+  @admin
+  Scenario: Create pods with muliple cni plugins via multus-cni - macvlan + macvlan
+    # Make sure that the multus is enabled
+    Given the master version >= "4.0"
+    And the multus is enabled on the cluster
+
+    # Create the net-attach-def via cluster admin
+    Given I have a project
+    When I run the :create admin command with:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml |
+      | n | <%= project.name %> |
+    Then the step should succeed
+
+    # Create the pod which consumes multiple macvlan custom resources
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/2interface-macvlan-macvlan.yaml" replacing paths:
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | macvlan-bridge, macvlan-bridge |
+    Then the step should succeed
+    And a pod becomes ready with labels:
+      | name=two-macvlan-pod |
+
+    # Check that there are two additional interfaces attached to the pod
+    When I execute on the pod:
+      | /usr/sbin/ip | -d | link |
+    Then the output should contain "net1"
+    Then the output should contain "net2"
+    And the output should contain 2 times:
+      | macvlan mode bridge |
+    When I execute on the pod:
+      | bash | -c | /usr/sbin/ip -f inet addr show net1 \| grep -Po 'inet \K[\d.]+' |
+    Then the output should match "10.1.1.\d{1,3}"
+    And the expression should be true> IPAddr.new(@result[:response].chomp)
+    And evaluation of `@result[:response].chomp` is stored in the :pod_multus_ip1 clipboard
+    When I execute on the pod:
+      | bash | -c | /usr/sbin/ip -f inet addr show net2 \| grep -Po 'inet \K[\d.]+' |
+    Then the output should match "10.1.1.\d{1,3}"
+    And the expression should be true> IPAddr.new(@result[:response].chomp)
+    And evaluation of `@result[:response].chomp` is stored in the :pod_multus_ip2 clipboard
+    And the expression should be true> cb.pod_multus_ip1 != cb.pod_multus_ip2
+
+  # @author bmeng@redhat.com
+  # @case_id OCP-21855
+  @admin
+  @destructive
+  Scenario: Create pods with muliple cni plugins via multus-cni - macvlan + host-device
+    # Make sure that the multus is enabled
+    Given the master version >= "4.0"
+    And the multus is enabled on the cluster
+    And I select a random node's host
+    And evaluation of `node.name` is stored in the :target_node clipboard
+
+    # Create the net-attach-def via cluster admin
+    Given I have a project
+    When I run the :create admin command with:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml |
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/host-device.yaml    |
+      | n | <%= project.name %> |
+    Then the step should succeed
+
+    # Prepare the net link on the node which will be attached to the pod
+    When I run network command on the "<%= cb.target_node %>" node's sdn pod:
+       | sh | -c | ip link add eth08 link eth0 type macvlan mode private |
+    Then the step should succeed
+    Given I register clean-up steps:
+    """
+    I run network command on the "<%= cb.target_node %>" node's sdn pod:
+       | sh | -c | ip link del eth08 |
+    the step should succeed
+    """
+
+    # Create the pod which consumes both hostdev and macvlan custom resources
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/2interface-macvlan-hostdevice.yaml" replacing paths:
+      | ["spec"]["nodeName"] | "<%= cb.target_node %>" |
+    Then the step should succeed
+    And a pod becomes ready with labels:
+      | name=macvlan-hostdevice-pod |
+    Given I register clean-up steps:
+    """
+    I run the :delete client command with:
+      | object_type | pod                         |
+      | l           | name=macvlan-hostdevice-pod |
+    the step should succeed
+    """
+
+    # Check that there are two additional interfaces attached to the pod
+    When I execute on the pod:
+      | /usr/sbin/ip | -d | link |
+    Then the output should contain "net1"
+    And the output should contain "net2"
+    And the output should contain "macvlan mode bridge"
+    And the output should contain "macvlan mode private"
+    When I execute on the pod:
+      | bash | -c | /usr/sbin/ip -f inet addr show net2 \| grep -Po 'inet \K[\d.]+' |
+    Then the output should match "10.1.1.\d{1,3}"
+    And the expression should be true> IPAddr.new(@result[:response].chomp)
+
+  # @author bmeng@redhat.com
+  # @case_id OCP-21859
+  @admin
+  @destructive
+  Scenario: Create pods with muliple cni plugins via multus-cni - host-device + host-device
+    # Make sure that the multus is enabled
+    Given the master version >= "4.0"
+    And the multus is enabled on the cluster
+    And I select a random node's host
+    And evaluation of `node.name` is stored in the :target_node clipboard
+
+    # Create the net-attach-def via cluster admin
+    Given I have a project
+    When I run the :create admin command with:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/host-device.yaml |
+      | n | <%= project.name %> |
+    Then the step should succeed
+    When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/host-device.yaml" replacing paths:
+      | ["metadata"]["name"]      | host-device-2       |
+      | ["spec"]["config"]        | '{"cniVersion": "0.3.0", "type": "host-device", "device": "eth2008"}' |
+      | ["metadata"]["namespace"] | <%= project.name %> |
+    Then the step should succeed
+
+    # Prepare the net link on the node which will be attached to the pod
+    When I run network command on the "<%= cb.target_node %>" node's sdn pod:
+       | sh | -c | ip link add eth08 link eth0 type macvlan mode bridge |
+    Then the step should succeed
+    When I run network command on the "<%= cb.target_node %>" node's sdn pod:
+       | sh | -c | ip link add eth2008 link eth0 type macvlan mode bridge |
+    Then the step should succeed
+    Given I register clean-up steps:
+    """
+    I run network command on the "<%= cb.target_node %>" node's sdn pod:
+       | sh | -c | ip link del eth08 |
+    the step should succeed
+    I run network command on the "<%= cb.target_node %>" node's sdn pod:
+       | sh | -c | ip link del eth2008 |
+    the step should succeed
+    """
+
+    # Create the pod which consumes two hostdev custom resources
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/2interface-hostdevice-hostdevice.yaml" replacing paths:
+      | ["spec"]["nodeName"] | "<%= cb.target_node %>" |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | host-device, host-device-2 |
+    Then the step should succeed
+    And a pod becomes ready with labels:
+      | name=two-host-device-pod |
+    Given I register clean-up steps:
+    """
+    I run the :delete client command with:
+      | object_type | pod                      |
+      | l           | name=two-host-device-pod |
+    the step should succeed
+    """
+
+    # Check that there are two additional interfaces attached to the pod
+    When I execute on the pod:
+      | /usr/sbin/ip | -d | link |
+    Then the output should contain "net1"
+    And the output should contain "net2"
+    And the output should contain 2 times:
+      | macvlan mode bridge |
