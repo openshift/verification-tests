@@ -170,3 +170,97 @@ Feature: Multus-CNI related scenarios
     #  | curl | --connect-timeout | 5 | <%= cb.pod1_multus_ip %>:8080 |
     #Then the step should succeed
     #And the output should contain "Hello OpenShift"
+
+  # @author bmeng@redhat.com
+  # @case_id OCP-21853
+  @admin
+  Scenario: Create pods with multus-cni - host-device
+    # Make sure that the multus is enabled
+    Given the master version >= "4.0"
+    And the multus is enabled on the cluster
+    And I select a random node's host
+    And evaluation of `node.name` is stored in the :target_node clipboard
+
+    # Add a host-device which will be used by the pod later
+    Given I run the :get admin command with:
+      | resource      | pod                                 |
+      | n             | openshift-sdn                       |
+      | fieldSelector | spec.nodeName=<%= cb.target_node %> |
+      | l             | app=sdn                             |
+      | o             | jsonpath={.items[0].metadata.name}  |
+    Then the step should succeed
+    And evaluation of `@result[:response]` is stored in the :target_sdnpod clipboard
+
+    Given I run the :exec admin command with:
+      | pod              | <%= cb.target_sdnpod %>                              |
+      | n                | openshift-sdn                                        |
+      | oc_opts_end      |                                                      |
+      | exec_command     | sh                                                   |
+      | exec_command_arg | -c                                                   |
+      | exec_command_arg | ip link add eth08 link eth0 type macvlan mode bridge |
+    Then the step should succeed
+    Given I register clean-up steps:
+    """
+    I run the :exec admin command with:
+      | pod              | <%= cb.target_sdnpod %> |
+      | n                | openshift-sdn           |
+      | oc_opts_end      |                         |
+      | exec_command     | sh                      |
+      | exec_command_arg | -c                      |
+      | exec_command_arg | ip link del eth08       |
+    the step should succeed
+    """
+
+    # Create the net-attach-def via cluster admin
+    Given I have a project
+    When I run the :create admin command with:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/host-device.yaml |
+      | n | <%= project.name %> |
+    Then the step should succeed
+    # Create the first pod which consumes the host-device custom resource
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/1interface-host-device.yaml" replacing paths:
+      | ["spec"]["nodeName"] | "<%= cb.target_node %>" |
+    Then the step should succeed
+    And a pod becomes ready with labels:
+      | name=host-device-pod |
+    And evaluation of `pod.name` is stored in the :hostdev_pod clipboard
+
+    # Check that the host-device is added to the pod
+    When I execute on the pod:
+      | /usr/sbin/ip | -d | link |
+    Then the output should contain "net1"
+    And the output should contain "macvlan mode bridge"
+
+    # Make sure that the pod's master network works fine
+    Given I have a pod-for-ping in the project
+    And evaluation of `pod.ip` is stored in the :ping_pod clipboard
+    When I execute on the "<%= cb.hostdev_pod %>" pod:
+      | curl | --connect-timeout | 5 | -sS | <%= cb.ping_pod%>:8080 |
+    Then the step should succeed
+    And the output should contain "Hello OpenShift"
+
+    # Check that the link is removed from node
+    Given I run the :exec admin command with:
+      | pod              | <%= cb.target_sdnpod %> |
+      | n                | openshift-sdn           |
+      | oc_opts_end      |                         |
+      | exec_command     | sh                      |
+      | exec_command_arg | -c                      |
+      | exec_command_arg | ip link show            |
+    Then the step should succeed
+    And the output should not contain "eth08"
+
+    # Delete the pod and check the link on the node again
+    When I run the :delete client command with:
+      | object_type | pod                  |
+      | l           | name=host-device-pod |
+    Then the step should succeed
+    Given I run the :exec admin command with:
+      | pod              | <%= cb.target_sdnpod %> |
+      | n                | openshift-sdn           |
+      | oc_opts_end      |                         |
+      | exec_command     | sh                      |
+      | exec_command_arg | -c                      |
+      | exec_command_arg | ip link show            |
+    Then the step should succeed
+    And the output should contain "eth08"
