@@ -67,7 +67,7 @@ Feature: oc_expose.feature
     # When the expiry time has more than 3600s left, the cert will not regenerate
     And the expression should be true> File.read("tls.crt") == cb.crt
     # When the expiry time has less than 3600s, we could wait the cert to regenerate
-    Given I wait up to 3600 seconds for the steps to pass:
+    Given I wait up to 1800 seconds for the steps to pass:
     """
     Given 60 seconds have passed
     When I run the :extract client command with:
