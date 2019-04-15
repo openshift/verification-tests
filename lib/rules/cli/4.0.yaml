@@ -265,6 +265,7 @@
     :l: -l <value>
     :object_name_or_id: <value>
     :object_type: <value>
+    :wait: --wait=<value>
 :deploy:
   :cmd: oc deploy <deployment_config>
   :options:
