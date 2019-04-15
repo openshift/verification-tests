@@ -56,14 +56,15 @@ Feature: Storage object in use protection
     And the PV becomes :available
     And the expression should be true> pv.finalizers&.include? "kubernetes.io/pv-protection"
     When I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/auto/pvc-template.json" replacing paths:
-      | ["metadata"]["name"]   | pvc-<%= project.name %> |
-      | ["spec"]["volumeName"] | pv-<%= project.name %>  |
+      | ["metadata"]["name"]   | mypvc                  |
+      | ["spec"]["volumeName"] | pv-<%= project.name %> |
     Then the step should succeed
-    And the "pvc-<%= project.name %>" PVC becomes bound to the "pv-<%= project.name %>" PV
+    And the "mypvc" PVC becomes bound to the "pv-<%= project.name %>" PV
 
     When I run the :delete admin command with:
       | object_type       | pv                     |
       | object_name_or_id | pv-<%= project.name %> |
+      | wait              | false                  |
     Then the step should succeed
     And the "pv-<%= project.name %>" PV becomes terminating
     When I run the :describe admin command with:
@@ -71,7 +72,7 @@ Feature: Storage object in use protection
       | name     | pv-<%= project.name %> |
     Then the step should succeed
     And the output should match "Terminating\s+\((since|lasts)"
-    Given I ensure "pvc-<%= project.name %>" pvc is deleted
+    Given I ensure "mypvc" pvc is deleted
     And I switch to cluster admin pseudo user
     Then I wait for the resource "pv" named "pv-<%= project.name %>" to disappear within 30 seconds
 
