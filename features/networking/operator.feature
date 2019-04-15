@@ -43,16 +43,13 @@ Feature: Operator related networking scenarios
     #Registering clean-up steps to move networkType back to OpenShiftSDN and to check Failing status is False before test exits
     Given I register clean-up steps:
     """
-    20 seconds have passed
-    evaluation of `cluster_operator('network').condition(type: 'Failing',cached: false)` is stored in the :failing_status clipboard
-    the expression should be true> cb.failing_status["status"]=="False"
-    """
-    Given I register clean-up steps:
-    """
     When I run the :patch admin command with:
       | resource      | networks.config.openshift.io            |
       | resource_name | cluster                                 |
       | p             | {"spec":{"networkType":"OpenShiftSDN"}} |
       | type          | merge                                   |
     Then the step should succeed
+    20 seconds have passed
+    evaluation of `cluster_operator('network').condition(type: 'Failing',cached: false)` is stored in the :failing_status clipboard
+    the expression should be true> cb.failing_status["status"]=="False"
     """
