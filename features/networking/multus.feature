@@ -181,22 +181,24 @@ Feature: Multus-CNI related scenarios
     And the multus is enabled on the cluster
     And I select a random node's host
     And evaluation of `node.name` is stored in the :target_node clipboard
+    And an 4 character random string of type :hex is stored into the :nic_name clipboard
 
     # Prepare the net link on the node which will be attached to the pod
-    When I run network command on the "<%= cb.target_node %>" node's sdn pod:
-       | sh | -c | ip link add eth08 link eth0 type macvlan mode bridge |
+    When I run command on the "<%= cb.target_node %>" node's sdn pod:
+       | sh | -c | ip link add <%= cb.nic_name %> link eth0 type macvlan mode bridge |
     Then the step should succeed
     Given I register clean-up steps:
     """
-    I run network command on the "<%= cb.target_node %>" node's sdn pod:
-       | sh | -c | ip link del eth08 |
+    I run command on the "<%= cb.target_node %>" node's sdn pod:
+       | sh | -c | ip link del <%= cb.nic_name %> |
+    the step should succeed
     """
 
     # Create the net-attach-def via cluster admin
     Given I have a project
-    When I run the :create admin command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/host-device.yaml |
-      | n | <%= project.name %> |
+    When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/host-device.yaml" replacing paths:
+      | ["metadata"]["namespace"] | <%= project.name %> |
+      | ["spec"]["config"]        | '{"cniVersion": "0.3.0", "type": "host-device", "device": "<%= cb.nic_name %>"}' |
     Then the step should succeed
     # Create the first pod which consumes the host-device custom resource
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/1interface-host-device.yaml" replacing paths:
@@ -221,20 +223,20 @@ Feature: Multus-CNI related scenarios
     And the output should contain "Hello OpenShift"
 
     # Check that the link is removed from node
-    When I run network command on the "<%= cb.target_node %>" node's sdn pod:
+    When I run command on the "<%= cb.target_node %>" node's sdn pod:
       | sh | -c | ip link show |
     Then the step should succeed
-    And the output should not contain "eth08"
+    And the output should not contain "<%= cb.nic_name %>"
 
     # Delete the pod and check the link on the node again
     When I run the :delete client command with:
       | object_type | pod                  |
       | l           | name=host-device-pod |
     Then the step should succeed
-    When I run network command on the "<%= cb.target_node %>" node's sdn pod:
+    When I run command on the "<%= cb.target_node %>" node's sdn pod:
       | sh | -c | ip link show |
     Then the step should succeed
-    And the output should contain "eth08"
+    And the output should contain "<%= cb.nic_name %>"
 
 
   # @author bmeng@redhat.com
@@ -288,23 +290,27 @@ Feature: Multus-CNI related scenarios
     And the multus is enabled on the cluster
     And I select a random node's host
     And evaluation of `node.name` is stored in the :target_node clipboard
+    And an 4 character random string of type :hex is stored into the :nic_name clipboard
 
     # Create the net-attach-def via cluster admin
     Given I have a project
     When I run the :create admin command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml |
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/host-device.yaml    |
       | n | <%= project.name %> |
+    Then the step should succeed
+    When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/host-device.yaml" replacing paths:
+      | ["metadata"]["namespace"] | <%= project.name %> |
+      | ["spec"]["config"]        | '{"cniVersion": "0.3.0", "type": "host-device", "device": "<%= cb.nic_name %>"}' |
     Then the step should succeed
 
     # Prepare the net link on the node which will be attached to the pod
-    When I run network command on the "<%= cb.target_node %>" node's sdn pod:
-       | sh | -c | ip link add eth08 link eth0 type macvlan mode private |
+    When I run command on the "<%= cb.target_node %>" node's sdn pod:
+       | sh | -c | ip link add <%= cb.nic_name%> link eth0 type macvlan mode private |
     Then the step should succeed
     Given I register clean-up steps:
     """
-    I run network command on the "<%= cb.target_node %>" node's sdn pod:
-       | sh | -c | ip link del eth08 |
+    I run command on the "<%= cb.target_node %>" node's sdn pod:
+       | sh | -c | ip link del <%= cb.nic_name%> |
     the step should succeed
     """
 
@@ -312,15 +318,17 @@ Feature: Multus-CNI related scenarios
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/2interface-macvlan-hostdevice.yaml" replacing paths:
       | ["spec"]["nodeName"] | "<%= cb.target_node %>" |
     Then the step should succeed
-    And a pod becomes ready with labels:
-      | name=macvlan-hostdevice-pod |
     Given I register clean-up steps:
     """
     I run the :delete client command with:
       | object_type | pod                         |
       | l           | name=macvlan-hostdevice-pod |
     the step should succeed
+    all existing pods die with labels:
+      | name=macvlan-hostdevice-pod |
     """
+    And a pod becomes ready with labels:
+      | name=macvlan-hostdevice-pod |
 
     # Check that there are two additional interfaces attached to the pod
     When I execute on the pod:
@@ -344,33 +352,36 @@ Feature: Multus-CNI related scenarios
     And the multus is enabled on the cluster
     And I select a random node's host
     And evaluation of `node.name` is stored in the :target_node clipboard
+    And an 4 character random string of type :hex is stored into the :nic_name1 clipboard
+    And an 4 character random string of type :hex is stored into the :nic_name2 clipboard
 
     # Create the net-attach-def via cluster admin
     Given I have a project
-    When I run the :create admin command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/host-device.yaml |
-      | n | <%= project.name %> |
+    When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/host-device.yaml" replacing paths:
+      | ["metadata"]["name"]      | host-device       |
+      | ["spec"]["config"]        | '{"cniVersion": "0.3.0", "type": "host-device", "device": "<%= cb.nic_name1%>"}' |
+      | ["metadata"]["namespace"] | <%= project.name %> |
     Then the step should succeed
     When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/host-device.yaml" replacing paths:
       | ["metadata"]["name"]      | host-device-2       |
-      | ["spec"]["config"]        | '{"cniVersion": "0.3.0", "type": "host-device", "device": "eth2008"}' |
+      | ["spec"]["config"]        | '{"cniVersion": "0.3.0", "type": "host-device", "device": "<%= cb.nic_name2%>"}' |
       | ["metadata"]["namespace"] | <%= project.name %> |
     Then the step should succeed
 
     # Prepare the net link on the node which will be attached to the pod
-    When I run network command on the "<%= cb.target_node %>" node's sdn pod:
-       | sh | -c | ip link add eth08 link eth0 type macvlan mode bridge |
+    When I run command on the "<%= cb.target_node %>" node's sdn pod:
+       | sh | -c | ip link add <%= cb.nic_name1%> link eth0 type macvlan mode bridge |
     Then the step should succeed
-    When I run network command on the "<%= cb.target_node %>" node's sdn pod:
-       | sh | -c | ip link add eth2008 link eth0 type macvlan mode bridge |
+    When I run command on the "<%= cb.target_node %>" node's sdn pod:
+       | sh | -c | ip link add <%= cb.nic_name2%> link eth0 type macvlan mode bridge |
     Then the step should succeed
     Given I register clean-up steps:
     """
-    I run network command on the "<%= cb.target_node %>" node's sdn pod:
-       | sh | -c | ip link del eth08 |
+    I run command on the "<%= cb.target_node %>" node's sdn pod:
+       | sh | -c | ip link del <%= cb.nic_name1%> |
     the step should succeed
-    I run network command on the "<%= cb.target_node %>" node's sdn pod:
-       | sh | -c | ip link del eth2008 |
+    I run command on the "<%= cb.target_node %>" node's sdn pod:
+       | sh | -c | ip link del <%= cb.nic_name2%> |
     the step should succeed
     """
 
@@ -379,15 +390,17 @@ Feature: Multus-CNI related scenarios
       | ["spec"]["nodeName"] | "<%= cb.target_node %>" |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | host-device, host-device-2 |
     Then the step should succeed
-    And a pod becomes ready with labels:
-      | name=two-host-device-pod |
     Given I register clean-up steps:
     """
     I run the :delete client command with:
       | object_type | pod                      |
       | l           | name=two-host-device-pod |
     the step should succeed
+    all existing pods die with labels:
+      | name=two-host-device-pod |
     """
+    And a pod becomes ready with labels:
+      | name=two-host-device-pod |
 
     # Check that there are two additional interfaces attached to the pod
     When I execute on the pod:

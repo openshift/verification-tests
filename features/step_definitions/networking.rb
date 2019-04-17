@@ -663,10 +663,10 @@ Given /^the status of condition#{OPT_QUOTED} for network operator is :(.+)$/ do 
 end
 
 
-Given /^I run network command on the#{OPT_QUOTED} node's sdn pod:$/ do |node_name, table|
+Given /^I run command on the#{OPT_QUOTED} node's sdn pod:$/ do |node_name, table|
   ensure_admin_tagged
   network_cmd = table.raw
-  node_name = node_name
+  node_name = node.name
 
   sdn_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
     pod.node_name == node_name
