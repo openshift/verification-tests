@@ -5,11 +5,10 @@ Feature: Storage object in use protection
   Scenario: Delete pvc which is not in active use by pod should be deleted immediately
     Given I have a project
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
-      | ["metadata"]["name"] | pvc-<%= project.name %> |
+      | ["metadata"]["name"] | mypvc |
     Then the step should succeed
-    And the "pvc-<%= project.name %>" PVC becomes :bound
-    And the expression should be true> pvc.finalizers&.include? "kubernetes.io/pvc-protection"
-    Given I ensure "pvc-<%= project.name %>" pvc is deleted
+    And the expression should be true> pvc("mypvc").finalizers&.include? "kubernetes.io/pvc-protection"
+    Given I ensure "mypvc" pvc is deleted
 
   # @author lxia@redhat.com
   # @case_id OCP-17254
