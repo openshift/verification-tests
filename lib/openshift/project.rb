@@ -21,7 +21,7 @@ module BushSlicer
         return true
       else
         case  result[:response]
-        when /Error from server \(Forbidden\)/
+        when /Error from server \(Forbidden\)/, /Error from server \(NotFound\)/
           return false
         else
           raise "error getting project '#{name}' existence: #{result[:response]}"
