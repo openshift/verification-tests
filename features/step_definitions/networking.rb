@@ -641,3 +641,23 @@ Given /^the multus is enabled on the cluster$/ do
 
   raise "Multus is not running correctly!" unless desired_multus_replicas == available_multus_replicas && available_multus_replicas != 0
 end
+
+Given /^the status of condition#{OPT_QUOTED} for network operator is :(.+)$/ do | type, status |
+  ensure_admin_tagged
+  expected_status = status
+
+  if type == "Available"
+    @result = admin.cli_exec(:get, resource: "clusteroperators", resource_name: "network", o: "jsonpath={.status.conditions[?(.type == \"Available\")].status}")
+    real_status = @result[:response]
+  elsif type == "Progressing"
+    @result = admin.cli_exec(:get, resource: "clusteroperators", resource_name: "network", o: "jsonpath={.status.conditions[?(.type == \"Progressing\")].status}")
+    real_status = @result[:response]
+  elsif type == "Failing"
+    @result = admin.cli_exec(:get, resource: "clusteroperators", resource_name: "network", o: "jsonpath={.status.conditions[?(.type == \"Failing\")].status}")
+    real_status = @result[:response]
+  else
+    raise "Unknown condition type!"
+  end
+
+  raise "The status of condition #{type} is incorrect." unless expected_status == real_status
+end
