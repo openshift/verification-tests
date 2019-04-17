@@ -44,7 +44,7 @@ Feature: Persistent Volume Claim binding policies
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
       | ["metadata"]["name"] | nfsc |
     Then the step should succeed
-    And the "nfsc" PVC becomes :bound
+    And I wait for the "nfsc" pvc to appear
 
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/cases/510610/hooks-with-nfsvolume.json |
