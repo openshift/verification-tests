@@ -34,12 +34,6 @@ Feature: Operator related networking scenarios
       | type          | merge                                |
     Then the step should succeed
 
-    #Normally it takes 5-10 seconds for network config update to reconcile across the cluster but taking 20 seconds wait to make sure that Failing status becomes True post bad patch
-    Given 20 seconds have passed
-    And evaluation of `cluster_operator('network').condition(type: 'Failing',cached: false)` is stored in the :failing_status_post_patch clipboard
-    Then the expression should be true> cb.failing_status_post_patch["status"]=="True"
-    And the expression should be true> cluster_operator('network').version_exists?(version: cb.ocp_version)
-    
     #Registering clean-up steps to move networkType back to OpenShiftSDN and to check Failing status is False before test exits
     Given I register clean-up steps:
     """
@@ -53,3 +47,8 @@ Feature: Operator related networking scenarios
     evaluation of `cluster_operator('network').condition(type: 'Failing',cached: false)` is stored in the :failing_status clipboard
     the expression should be true> cb.failing_status["status"]=="False"
     """
+    #Normally it takes 5-10 seconds for network config update to reconcile across the cluster but taking 20 seconds wait to make sure that Failing status becomes True post bad patch
+    Given 20 seconds have passed
+    And evaluation of `cluster_operator('network').condition(type: 'Failing',cached: false)` is stored in the :failing_status_post_patch clipboard
+    Then the expression should be true> cb.failing_status_post_patch["status"]=="True"
+    And the expression should be true> cluster_operator('network').version_exists?(version: cb.ocp_version)
