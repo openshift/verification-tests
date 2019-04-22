@@ -253,7 +253,7 @@
      :exec_command: <value>
      :exec_command_arg: <value>
 :delete:
-  :cmd: oc delete
+  :cmd: oc delete --wait=false
   :options:
     :all: --all
     #The following 'all' can be used with selectors, like the -l flag.
