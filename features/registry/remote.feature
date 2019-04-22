@@ -12,7 +12,7 @@ Feature: remote registry related scenarios
       | dest        | mystream:latest         |
     Then the step should succeed
     And evaluation of `image_stream_tag("mystream:latest").digest(user:user)` is stored in the :digest clipboard
-    Given default docker-registry route is stored in the :integrated_reg_ip clipboard
+    Given default registry service ip is stored in the :integrated_reg_ip clipboard
     And I have a skopeo pod in the project
     And master CA is added to the "skopeo" dc
     When I execute on the pod:
@@ -32,7 +32,7 @@ Feature: remote registry related scenarios
   @admin
   Scenario: User should be denied pushing when it does not have 'admin' role
     Given I have a project
-    And default docker-registry route is stored in the :integrated_reg_ip clipboard
+    And default registry service ip is stored in the :integrated_reg_ip clipboard
     And I give project view role to the second user
 
     Given I switch to the second user
@@ -73,7 +73,7 @@ Feature: remote registry related scenarios
   @admin
   Scenario: Tracking tags with imageStream spec.tag
     Given I have a project
-    Given default docker-registry route is stored in the :integrated_reg_ip clipboard
+    Given default registry service ip is stored in the :integrated_reg_ip clipboard
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/image-streams/busybox.json |
     Then the step should succeed
@@ -114,7 +114,7 @@ Feature: remote registry related scenarios
     Then the step should succeed
     And the "ruby-ex-1" build was created
     And the "ruby-ex-1" build completes
-    Given default docker-registry route is stored in the :integrated_reg_ip clipboard
+    Given default registry service ip is stored in the :integrated_reg_ip clipboard
     And I have a skopeo pod in the project
     And master CA is added to the "skopeo" dc
     When I execute on the pod:
