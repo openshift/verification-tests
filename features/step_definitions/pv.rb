@@ -156,6 +156,7 @@ When /^admin creates a PV from "([^"]*)" where:$/ do |location, table|
     eval "pv_hash#{path} = YAML.load value" unless path == ''
     # e.g. pv_hash["spec"]["nfs"]["server"] = 10.10.10.10
   end
+  pv_name = pv_hash["metadata"]["name"]
 
   logger.info("Creating PV:\n#{pv_hash.to_yaml}")
   @result = BushSlicer::PersistentVolume.create(by: admin, spec: pv_hash)
@@ -164,14 +165,15 @@ When /^admin creates a PV from "([^"]*)" where:$/ do |location, table|
     cache_resources *@result[:resource]
 
     # register mandatory clean-up
-    _pv = @result[:resource]
     _admin = admin
     teardown_add {
-      @result = _pv.delete(by: _admin)
-      if !@result[:success] &&
-          @result[:response] !~ /persistent.*#{_pv.name}.*not found/i
-        raise "could not remove PV: #{_pv.name}"
-      end
+      @result = _admin.cli_exec(
+        :delete,
+        object_type: :pv,
+        object_name_or_id: pv_name,
+        wait: false
+      )
+      raise "could not remove PV: #{pv_name}" unless @result[:success]
     }
   else
     logger.error(@result[:response])
