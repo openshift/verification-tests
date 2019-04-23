@@ -753,7 +753,7 @@ Feature: build 'apps' with CLI
       | Build ConfigMaps:\s+cmtest->. |
       | Build Secrets:\s+secrettest->.|
     And the "ruby-hello-world-1" build completed
-    #Bug 1669981 comment #1, the secreti will not included in the output image.
+    #Bug 1669981 comment #1, the secret will not included in the output image.
     When I run the :get client command with:
       | resource      | po                       |
       | resource_name | ruby-hello-world-1-build |
