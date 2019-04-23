@@ -6,7 +6,7 @@ Feature: Testing registry
   @destructive
   Scenario: Prune images by command oadm_prune_images
     Given cluster role "system:image-pruner" is added to the "first" user
-    And default docker-registry route is stored in the :registry_ip clipboard
+    And default registry service ip is stored in the :registry_ip clipboard
     And I have a project
     When I run the :policy_add_role_to_user client command with:
       | role            | registry-admin   |
@@ -48,7 +48,7 @@ Feature: Testing registry
   Scenario: Have size information for images pushed to internal registry
     Given I have a project
     And I find a bearer token of the builder service account
-    And default docker-registry route is stored in the :registry_ip clipboard
+    And default registry service ip is stored in the :registry_ip clipboard
     And I have a skopeo pod in the project
     And master CA is added to the "skopeo" dc
     When I execute on the pod:

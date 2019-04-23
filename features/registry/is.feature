@@ -5,7 +5,7 @@ Feature: Testing imagestream
   @destructive
   @admin
   Scenario: Should prune the extenal image correctly
-    And default docker-registry route is stored in the :registry_hostname clipboard
+    Given default registry service ip is stored in the :registry_hostname clipboard
     Given I have a project
     And I have a skopeo pod in the project
     And master CA is added to the "skopeo" dc
