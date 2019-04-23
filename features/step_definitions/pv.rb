@@ -167,9 +167,8 @@ When /^admin creates a PV from "([^"]*)" where:$/ do |location, table|
     _pv = @result[:resource]
     _admin = admin
     teardown_add {
-      @result = _pv.delete(by: _admin)
-      if !@result[:success] &&
-          @result[:response] !~ /persistent.*#{_pv.name}.*not found/i
+      @result = _pv.delete_graceful(by: _admin)
+      unless @result[:success]
         raise "could not remove PV: #{_pv.name}"
       end
     }

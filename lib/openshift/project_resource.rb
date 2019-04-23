@@ -112,13 +112,13 @@ module BushSlicer
     end
 
     # @param grace_period [Boolean] useful to add the pod delete parameter
-    def delete(by: nil, grace_period: nil)
+    def delete(by: nil, grace_period: nil, wait: false)
       by = default_user(by)
       del_opts = {}
       del_opts[:grace_period] = grace_period unless grace_period.nil?
       by.cli_exec(:delete, object_type: self.class::RESOURCE,
                object_name_or_id: name, namespace: project.name,
-               **del_opts)
+               wait: "#{wait}", **del_opts)
     end
 
     # @param labels [String, Array<String,String>] labels to filter on, read
