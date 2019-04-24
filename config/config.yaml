@@ -133,6 +133,8 @@ services:
       #    volume_type: gp2
       # this is not standard option but these tags will be added after launch
       # tags: {"key1": "val1", "key2": "val2"}
+      # again non-standard option to allocate elastic IPs
+      # elastic_ip: :needed
 
     config_opts:
       region: "us-east-1"
