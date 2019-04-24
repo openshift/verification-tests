@@ -273,7 +273,7 @@ Given /^the#{OPT_QUOTED} metering service is uninstalled using OLM$/ do | meteri
   metering_ns ||= "openshift-metering"
   step %Q/I switch to cluster admin pseudo user/
   project("openshift-marketplace")
-  step %Q/I ensure "metering" catalogsourceconfig is deleted/
+  step %Q/I ensure "metering-operators" catalogsourceconfig is deleted/
   project(metering_ns)
   step %Q/I ensure "#{metering_ns}" project is deleted/
 end

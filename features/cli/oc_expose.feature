@@ -50,12 +50,13 @@ Feature: oc_expose.feature
       | resource | secret/ssl-key   |
     Then the step should succeed
     Given evaluation of `File.read("tls.crt")` is stored in the :crt clipboard
-    And evaluation of `secret('ssl-key').created` is stored in the :birth clipboard
+    And evaluation of `v = secret('ssl-key').created; (v.is_a? Time) ? v : Time.parse(v)` is stored in the :birth clipboard
     And evaluation of `Time.now` is stored in the :t2 clipboard
     And evaluation of `(cb.birth + (cb.t2 - cb.t1) + 3600 + 60).utc.strftime "%Y-%m-%dT%H:%M:%SZ"` is stored in the :newexpiry clipboard
     When I run the :annotate client command with:
       | resource     | secret/ssl-key                                          |
       | keyval       | service.alpha.openshift.io/expiry=<%= cb.newexpiry %>   |
+      | keyval       | service.beta.openshift.io/expiry=<%= cb.newexpiry %>    |
       | overwrite    | true                                                    |
     Then the step should succeed
     Given 30 seconds have passed

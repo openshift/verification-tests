@@ -753,6 +753,14 @@ Feature: build 'apps' with CLI
       | Build ConfigMaps:\s+cmtest->. |
       | Build Secrets:\s+secrettest->.|
     And the "ruby-hello-world-1" build completed
+    #Bug 1669981 comment #1, the secret will not included in the output image.
+    When I run the :get client command with:
+      | resource      | po                       |
+      | resource_name | ruby-hello-world-1-build |
+      | o             | yaml                     |
+    Then the output should match:
+      | mountPath: /var/run/secrets/openshift.io/build/secrettest | 
+
     Then evaluation of `image_stream("ruby-hello-world").docker_image_repository` is stored in the :user_image clipboard
     When I run the :run client command with:
       | name  | myapp                |
@@ -765,35 +773,27 @@ Feature: build 'apps' with CLI
     Then the step should succeed
     And the output should contain:
       | configmap.test -> ..data/configmap.test |
-      | aoskey -> ..data/aoskey                 | 
     When I execute on the pod:
       | cat | configmap.test |
     Then the step should succeed
     And the output should contain:
       | color.good=purple |
       | color.bad=yellow  |
-    When I execute on the pod:
-      | cat | aoskey |
-    Then the step should succeed
-    And the output should not contain:
-      | aosvalue |
     Then I run the :delete client command with:
       | object_type | all |
       | all         |     |
     Then the step should succeed
-    #Insert cm and secret to bc with specified destination
+    #Insert cm to bc with specified destination
     When I run the :new_build client command with:
       | app_repo       | https://github.com/openshift/ruby-hello-world |
       | image_stream   | ruby                                          |
       | build_config_map| cmtest:.m2                                   |
-      | build_secret   | secrettest:.ssh                               |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | bc               |
       | name     | ruby-hello-world |
     Then the output should match:
       | Build ConfigMaps:\s+cmtest->.m2  |
-      | Build Secrets:\s+secrettest->.ssh|
     And the "ruby-hello-world-1" build completed
     Then evaluation of `image_stream("ruby-hello-world").docker_image_repository` is stored in the :user_image clipboard
     When I run the :run client command with:
@@ -803,45 +803,40 @@ Feature: build 'apps' with CLI
     Given a pod becomes ready with labels:
       | deployment=myapp-1 |
     When I execute on the pod:
-      | ls | -al | .ssh | .m2 |
+      | ls | -al | .m2 |
     Then the step should succeed
     And the output should contain:
       | configmap.test -> ..data/configmap.test |
-      | aoskey -> ..data/aoskey                 | 
     Then I run the :delete client command with:
       | object_type | all |
       | all         |     |
     Then the step should succeed
-    #Insert cm and secret to bc with empty destination - succeed
+    #Insert cm to bc with empty destination - succeed
     When I run the :new_build client command with:
       | app_repo       | https://github.com/openshift/ruby-hello-world |
       | image_stream   | ruby                                          |
       | build_config_map| cmtest:                                      |
-      | build_secret   | secrettest:                                   |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | bc               |
       | name     | ruby-hello-world |
     Then the output should match:
       | Build ConfigMaps:\s+cmtest->.    |
-      | Build Secrets:\s+secrettest->.|
     Then I run the :delete client command with:
       | object_type | all |
       | all         |     |
     Then the step should succeed
-    #Insert cm and secret to bc with abs path - succeed
+    #Insert cm to bc with abs path - succeed
     When I run the :new_build client command with:
       | app_repo       | https://github.com/openshift/ruby-hello-world |
       | image_stream   | ruby                                          |
       | build_config_map| cmtest:/aoscm                                |
-      | build_secret   | secrettest:/aossecret                         |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | bc               |
       | name     | ruby-hello-world |
     Then the output should match:
       | Build ConfigMaps:	cmtest->/aoscm        |
-      | Build Secrets:		secrettest->/aossecret|
     Given the "ruby-hello-world-1" build completed
     Then evaluation of `image_stream("ruby-hello-world").docker_image_repository` is stored in the :user_image clipboard
     When I run the :run client command with:
@@ -851,11 +846,10 @@ Feature: build 'apps' with CLI
     Given a pod becomes ready with labels:
       | deployment=myapp-1 |
     When I execute on the pod:
-      | ls | -al | /aoscm/ | /aossecret/|
+      | ls | -al | /aoscm/ |
     Then the step should succeed
     And the output should contain:
       | configmap.test -> ..data/configmap.test |
-      | aoskey -> ..data/aoskey                 | 
 
   # @author xiuwang@redhat.com
   # @case_id OCP-18962
