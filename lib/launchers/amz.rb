@@ -343,10 +343,12 @@ module BushSlicer
           public_ip: ip.public_ip
         )
       end
+      return ip
     end
 
     # allocate an elastic IP suitable for particular instance
     def allocate_elastic_ip(instance)
+      logger.info("Allocating Elastic IP..")
       type = instance.vpc ? "vpc" : "standard"
       resp = ec2.client.allocate_address(
         domain: type,
@@ -555,6 +557,7 @@ module BushSlicer
       instance_opt = config[:create_opts] ? config[:create_opts].dup : {}
       instance_opt.merge!(create_opts) if create_opts
       tags = instance_opt.delete(:tags) || {}
+      elastic_ip = instance_opt.delete(:elastic_ip)
 
       if image.kind_of? Symbol
         image = config[:ami_types][image]
@@ -625,6 +628,10 @@ module BushSlicer
         end
         logger.info("Tagging instance with #{inst_tags} ..")
         inst.create_tags({ tags: inst_tags })
+        if elastic_ip
+          ip = assign_elastic_ip(inst, allocate: elastic_ip)
+          inst.reload
+        end
         inst.tags.concat inst_tags # odd that we need this
         # make sure we can ssh into the instance
         host = get_host(inst, host_opts, wait: wait_accessible)
