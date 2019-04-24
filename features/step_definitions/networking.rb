@@ -661,3 +661,16 @@ Given /^the status of condition#{OPT_QUOTED} for network operator is :(.+)$/ do 
 
   raise "The status of condition #{type} is incorrect." unless expected_status == real_status
 end
+
+
+Given /^I run command on the#{OPT_QUOTED} node's sdn pod:$/ do |node_name, table|
+  ensure_admin_tagged
+  network_cmd = table.raw
+  node_name ||= node.name
+
+  sdn_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
+    pod.node_name == node_name
+  }.first
+  @result = sdn_pod.exec(network_cmd, as: admin)
+  raise "Failed to execute network command!" unless @result[:success]
+end
