@@ -182,9 +182,9 @@ module BushSlicer
       alias list get_matching
     end
 
-    def delete(by: nil)
+    def delete(by: nil, wait: false)
       default_user(by).cli_exec(:delete, object_type: self.class::RESOURCE,
-               object_name_or_id: name)
+               object_name_or_id: name, wait: "#{wait}")
     end
 
     ############### take care of object comparison ###############

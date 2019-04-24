@@ -152,9 +152,10 @@ module BushSlicer
       return self # mainly to help ::from_api_object
     end
 
-    # subclasses need to implement #delete method
+    # deleted object if it exists but does not wait for completion
+    # @note subclasses need to implement #delete method
     def delete_graceful(by:)
-      res = delete(by: by)
+      res = delete(by: by, wait: false)
 
       # this will actually fail for mising project when run by a regular user;
       # we can override this method in project.rb but I'm thinking that
