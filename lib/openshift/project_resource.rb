@@ -117,7 +117,7 @@ module BushSlicer
       del_opts = {}
       del_opts[:grace_period] = grace_period unless grace_period.nil?
       by.cli_exec(:delete, object_type: self.class::RESOURCE,
-               object_name_or_id: name, namespace: project.name, wait: {wait},
+               object_name_or_id: name, namespace: project.name, wait: wait,
                **del_opts)
     end
 
