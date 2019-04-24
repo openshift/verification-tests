@@ -756,6 +756,11 @@ Feature: deployment related features
     Then the step should succeed
     And the output should contain:
       | deployment.kubernetes.io/revision:2 |
+    When I run the :get client command with:
+      | resource      | deployment                |
+    Then the step should succeed
+    And the output should contain:
+      | READY |
 
   # @author mcurlej@redhat.com
   # @case_id OCP-10902
