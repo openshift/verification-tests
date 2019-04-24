@@ -319,6 +319,89 @@ module BushSlicer
       raise "should never be here"
     end
 
+    # @param allocate [Symbol] :always, :never and :needed
+    # @see https://docs.aws.amazon.com/sdkforruby/api/Aws/EC2/VpcAddress.html#associate-instance_method
+    def assign_elastic_ip(instance, allocate: :needed)
+      if allocate == :always
+        available_ips = []
+      end
+      available_ips ||= list_available_elastic_ips(instance)
+      if allocate == :never && available_ips.empty?
+        raise "no suitable elastic IP found for #{instance.name}"
+      end
+
+      ip = available_ips.empty? ? allocate_elastic_ip(instance) : available_ips.sample
+
+      if instance.vpc
+        ip.associate(
+          instance_id: instance.id,
+          allocation_id: ip.allocation_id
+        )
+      else
+        ip.associate(
+          instance_id: instance.id,
+          public_ip: ip.public_ip
+        )
+      end
+    end
+
+    # allocate an elastic IP suitable for particular instance
+    def allocate_elastic_ip(instance)
+      type = instance.vpc ? "vpc" : "standard"
+      resp = ec2.client.allocate_address(
+        domain: type,
+      )
+      if type == "vpc"
+        return Aws::EC2::VpcAddress.new(resp.allocation_id, client: ec2.client)
+      else
+        return Aws::EC2::ClassicAddress.new(resp.public_ip, client: ec2.client)
+      end
+    end
+
+    # list non-associated elastic IPs suitable for the instance
+    # @see https://docs.aws.amazon.com/sdkforruby/api/Aws/EC2/Client.html
+    def list_available_elastic_ips(instance)
+      if instance.vpc
+        resp = ec2.client.describe_addresses({
+          filters: [
+            {
+              name: "domain",
+              values: [
+                "vpc",
+              ],
+            },
+            #{
+            #  name: "association-id",
+            #  values: [],
+            #},
+          ],
+        })
+
+        return resp.addresses.select { |a| a.association_id.nil? }.map { |addr|
+          Aws::EC2::VpcAddress.new(addr.allocation_id, client: ec2.client)
+        }
+      else
+        resp = ec2.client.describe_addresses({
+          filters: [
+            {
+              name: "domain",
+              values: [
+                "standard",
+              ],
+            },
+           # {
+           #   name: "instance-id",
+           #   values: nil,
+           # },
+          ],
+        })
+
+        return resp.addresses.select { |a| a.instance_id.nil? }.map { |addr|
+          Aws::EC2::ClassicAddress.new(addr.public_ip, client: ec2.client)
+        }
+      end
+    end
+
     def instance_status(instance)
       10.times do |i|
         begin
