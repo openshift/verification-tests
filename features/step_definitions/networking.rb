@@ -652,8 +652,8 @@ Given /^the status of condition#{OPT_QUOTED} for network operator is :(.+)$/ do 
   elsif type == "Progressing"
     @result = admin.cli_exec(:get, resource: "clusteroperators", resource_name: "network", o: "jsonpath={.status.conditions[?(.type == \"Progressing\")].status}")
     real_status = @result[:response]
-  elsif type == "Failing"
-    @result = admin.cli_exec(:get, resource: "clusteroperators", resource_name: "network", o: "jsonpath={.status.conditions[?(.type == \"Failing\")].status}")
+  elsif type == "Degraded"
+    @result = admin.cli_exec(:get, resource: "clusteroperators", resource_name: "network", o: "jsonpath={.status.conditions[?(.type == \"Degraded\")].status}")
     real_status = @result[:response]
   else
     raise "Unknown condition type!"
