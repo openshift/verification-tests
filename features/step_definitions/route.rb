@@ -123,7 +123,7 @@ end
 
 Given /^all default router pods become ready$/ do
   if env.version_ge("4.0", user: user)
-    label_filter = "ingress.operator.openshift.io/ingress-controller-deployment=default"
+    label_filter = "ingresscontroller.operator.openshift.io/deployment-ingresscontroller=default"
   else
     label_filter = "deploymentconfig=router"
   end
