@@ -132,19 +132,19 @@ Feature: build 'apps' with CLI
   Scenario: Create applications only with multiple db images
     Given I create a new project
     When I run the :new_app client command with:
-      | image_stream      | openshift/mongodb:2.6                               |
-      | image_stream      | openshift/mysql                                     |
-      | docker_image      | <%= product_docker_repo %>rhscl/postgresql-94-rhel7 |
-      | env               | MONGODB_USER=test                                   |
-      | env               | MONGODB_PASSWORD=test                               |
-      | env               | MONGODB_DATABASE=test                               |
-      | env               | MONGODB_ADMIN_PASSWORD=test                         |
-      | env               | POSTGRESQL_USER=user                                |
-      | env               | POSTGRESQL_DATABASE=db                              |
-      | env               | POSTGRESQL_PASSWORD=test                            |
-      | env               | MYSQL_ROOT_PASSWORD=test                            |
-      | l                 | app=testapps                                        |
-      | insecure_registry | true                                                |
+      | image_stream      | openshift/mongodb:2.6                  |
+      | image_stream      | openshift/mysql                        |
+      | docker_image      | openshift/postgresql-92-centos7:latest |
+      | env               | MONGODB_USER=test                      |
+      | env               | MONGODB_PASSWORD=test                  |
+      | env               | MONGODB_DATABASE=test                  |
+      | env               | MONGODB_ADMIN_PASSWORD=test            |
+      | env               | POSTGRESQL_USER=user                   |
+      | env               | POSTGRESQL_DATABASE=db                 |
+      | env               | POSTGRESQL_PASSWORD=test               |
+      | env               | MYSQL_ROOT_PASSWORD=test               |
+      | l                 | app=testapps                           |
+      | insecure_registry | true                                   |
     Then the step should succeed
 
     Given I wait for the "mysql" service to become ready up to 300 seconds
@@ -166,7 +166,7 @@ Feature: build 'apps' with CLI
     """
     And the output should contain:
       | 2.6 |
-    Given I wait for the "postgresql-94-rhel7" service to become ready up to 300 seconds
+    Given I wait for the "postgresql-92-centos7" service to become ready up to 300 seconds
     And I get the service pods
     And I wait up to 120 seconds for the steps to pass:
     """

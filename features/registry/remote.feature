@@ -102,9 +102,9 @@ Feature: remote registry related scenarios
 
   # @author yinzhou@redhat.com
   # @case_id OCP-10904
-  @admin
   Scenario: Support unauthenticated with registry-admin role
     Given I have a project
+    Given I find a bearer token of the default service account
     When I run the :policy_add_role_to_user client command with:
       | role            | registry-admin   |
       | user name       | system:anonymous |
@@ -116,14 +116,14 @@ Feature: remote registry related scenarios
     And the "ruby-ex-1" build completes
     Given default registry service ip is stored in the :integrated_reg_ip clipboard
     And I have a skopeo pod in the project
-    And master CA is added to the "skopeo" dc
     When I execute on the pod:
       | skopeo                     |
       | --debug                    |
       | --insecure-policy          |
       | inspect                    |
-      | --cert-dir                 |
-      | /opt/qe/ca                 |
+      | --tls-verify=false         |
+      | --creds                    |
+      | <%= service_account.cached_tokens.first %>                              |
       | docker://<%= cb.integrated_reg_ip %>/<%= project.name %>/ruby-ex:latest |
     Then the step should succeed
     When I execute on the pod:
@@ -131,9 +131,10 @@ Feature: remote registry related scenarios
       | --debug                    |
       | --insecure-policy          |
       | copy                       |
-      | --dest-cert-dir            |
-      | /opt/qe/ca                 |
-      | docker://docker.io/busybox |
+      | --dest-tls-verify=false    |
+      | --dcreds                   |
+      | <%= service_account.cached_tokens.first %>                                |
+      | docker://docker.io/busybox                                                |
       | docker://<%= cb.integrated_reg_ip %>/<%= project.name %>/mystream:latest  |
     Then the step should succeed
     Given I create a new project
@@ -148,20 +149,20 @@ Feature: remote registry related scenarios
       | --debug                    |
       | --insecure-policy          |
       | inspect                    |
-      | --cert-dir                 |
-      | /opt/qe/ca                 |
+      | --tls-verify=false         |
+      | --creds                    |
+      | <%= service_account.cached_tokens.first %>                         |
       | docker://<%= cb.integrated_reg_ip %>/<%= cb.u1p2 %>/ruby-ex:latest |
     Then the step should fail
+    And the output should contain:
+      | unauthorized |
     When I execute on the pod:
       | skopeo                     |
       | --debug                    |
       | --insecure-policy          |
       | copy                       |
-      | --dest-cert-dir            |
-      | /opt/qe/ca                 |
-      | docker://docker.io/busybox |
+      | --dest-tls-verify=false    |
+      | <%= service_account.cached_tokens.first %>                           |
+      | docker://docker.io/busybox                                           |
       | docker://<%= cb.integrated_reg_ip %>/<%= cb.u1p2 %>/mystream:latest  |
     Then the step should fail
-    And the output should contain:
-      | not authorized |
-
