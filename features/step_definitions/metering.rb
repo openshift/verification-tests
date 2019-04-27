@@ -199,12 +199,12 @@ BASE_TEMPLATE
     # switch back to original user
     @user = org_user if org_user
   end
+  step %Q/I wait for metering route to be accessible/
 end
 
 # XXX: should we check metering route exists first prior to patching?
 Given /^I disable route for#{OPT_QUOTED} metering service$/ do | metering_name |
-
-  metering_name ||= metering.name
+  metering_name ||= cb.metering_namespace.name
   patch_json = '{"spec":{"reporting-operator":{"spec":{"route":{"enabled":false}}}}}'
   opts = {resource: 'metering', resource_name: metering_name, p: patch_json, type: 'merge', n: project.name}
   @result = user.cli_exec(:patch, **opts)
@@ -302,12 +302,24 @@ When /^I perform the GET metering rest request with:$/ do | table |
   https_opts[:headers][:content_type] ||= "application/json"
   https_opts[:headers][:authorization] ||= "Bearer #{bearer_token}"
   # first we need to expose reporting API route if not route is found
-  step %Q/I enable route for metering service/
+  step %Q/I enable route for metering service/ unless route('metering').exists?
   report_name = opts[:report_name]
-  url_path = "/api/v1/reports/get?name=#{report_name}&namespace=#{cb.metering_namespace.name}&format=json"
+  url_path ||= opts[:custom_url]
+  url_path ||= "/api/v1/reports/get?name=#{report_name}&namespace=#{cb.metering_namespace.name}&format=json"
+
   report_query_url = route.dns + url_path
   @result = BushSlicer::Http.request(url: report_query_url, **https_opts, method: 'GET')
   if @result[:success]
     @result[:parsed] = YAML.load(@result[:response])
   end
+end
+Given /^I wait(?: up to ([0-9]+) seconds)? for metering route to be accessible$/ do | seconds |
+  seconds = seconds.to_i unless seconds.nil?
+  seconds ||= 60
+  wait_for(seconds) {
+    step %Q/I perform the GET metering rest request with:/, table(%{
+      | custom_url | /healthy |
+    })
+    @result[:success]
+  }
 end
