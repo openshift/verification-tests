@@ -292,5 +292,10 @@ Feature: storageClass related feature
       | ["metadata"]["name"]                         | pvc-<%= project.name %> |
       | ["spec"]["resources"]["requests"]["storage"] | 1Gi                     |
     Then the step should succeed
-    And the "pvc-<%= project.name %>" PVC becomes :bound
+
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                         | pod-<%= project.name %> |
+      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | pvc-<%= project.name %> |
+      | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt/iaas               |
+    Then the step should succeed
 
