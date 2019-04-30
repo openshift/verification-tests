@@ -117,7 +117,7 @@ services:
       # the actual key-pair name is under the private repo and will be over-written
       key_name: "secret_key_pair"
       #instance_type: "c4.large"
-      instance_type: "t3.medium"
+      instance_type: "m4.large"
       #image_id: my_image_id
       #subnet_id: my_subnet_id
       #placement:
