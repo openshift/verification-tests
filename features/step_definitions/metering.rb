@@ -313,6 +313,7 @@ When /^I perform the GET metering rest request with:$/ do | table |
     @result[:parsed] = YAML.load(@result[:response])
   end
 end
+
 Given /^I wait(?: up to ([0-9]+) seconds)? for metering route to be accessible$/ do | seconds |
   seconds = seconds.to_i unless seconds.nil?
   seconds ||= 60
