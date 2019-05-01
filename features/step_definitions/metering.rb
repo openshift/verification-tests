@@ -18,8 +18,8 @@ Given /^metering service has been installed successfully(?: using (ansible|shell
       namespace = "openshift-metering"
       metering_name = "openshift-metering"
     when "OLM"
-      namespace = "openshift-metering"  
-      metering_name = "operator-metering"  
+      namespace = "openshift-metering"
+      metering_name = "operator-metering"
     end
     # a pre-req is that openshift-monitoring is installed in the system, w/o it
     # the openshift-metering won't function correctly
@@ -323,4 +323,5 @@ Given /^I wait(?: up to ([0-9]+) seconds)? for metering route to be accessible$/
     })
     @result[:success]
   }
+  raise "Metering route did not become accessible within #{seconds} seconds" unless @result[:success]
 end
