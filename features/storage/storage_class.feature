@@ -298,4 +298,7 @@ Feature: storageClass related feature
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | pvc-<%= project.name %> |
       | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt/iaas               |
     Then the step should succeed
+    And the pod named "pod-<%= project.name %>" becomes ready
+
+
 
