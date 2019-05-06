@@ -316,7 +316,7 @@ end
 
 Given /^I wait(?: up to ([0-9]+) seconds)? for metering route to be accessible$/ do | seconds |
   seconds = seconds.to_i unless seconds.nil?
-  seconds ||= 60
+  seconds ||= 120
   wait_for(seconds) {
     step %Q/I perform the GET metering rest request with:/, table(%{
       | custom_url | /healthy |
