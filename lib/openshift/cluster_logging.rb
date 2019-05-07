@@ -65,7 +65,7 @@ module BushSlicer
     end
 
     private def kibana_pods(user: nil, cached: true, quiet: false)
-      self.kibana_status(user: user, cached: cached, quiet: quiet).first['pods']
+      kibana_status(user: user, cached: cached, quiet: quiet).first['pods']
     end
 
     # higher level methods

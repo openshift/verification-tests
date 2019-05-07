@@ -6,8 +6,8 @@ Given /^logging service has been installed successfully$/ do
   ensure_destructive_tagged
   crd_yaml = "https://raw.githubusercontent.com/operator-framework/operator-metering/master/manifests/metering-config/default.yaml"
   step %Q/logging service is installed with:/, table(%{
-    | keep_installation | true            |
-    | crd_yaml          | <%= crd_yaml %> |
+    | keep_installation | true        |
+    | crd_yaml          | #{crd_yaml} |
   })
 end
 

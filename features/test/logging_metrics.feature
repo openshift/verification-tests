@@ -177,4 +177,5 @@ Feature: test logging and metrics related steps
   @destructive
   Scenario: install logging with user parameters
     Given logging service is installed with:
+      | keep_installation | true                                                                                                   |
       | crd_yaml          | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/example.yaml |
