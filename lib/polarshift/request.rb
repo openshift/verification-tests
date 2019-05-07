@@ -125,6 +125,7 @@ module BushSlicer
       def create_run(project_id:,
                      run_id: nil,
                      run_title: nil,
+                     run_type: nil,
                      case_query: nil,
                      template_id: nil,
                      custom_fields: nil)
@@ -134,6 +135,7 @@ module BushSlicer
           :project_id,
           :run_id,
           :run_title,
+          :run_type,
           :case_query,
           :template_id,
           :custom_fields
