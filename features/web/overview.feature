@@ -182,11 +182,11 @@ Feature: Check overview page
     Given the master version >= "3.6"
     Given I have a project
     When I run the :new_app client command with:
-      | image_stream | openshift/ruby:latest                    |
+      | image_stream | openshift/ruby:latest                 |
       | app_repo     | https://github.com/sclorg/ruby-ex.git |
     Then the step should succeed
-    Given a pod becomes ready with labels:
-      | app=ruby-ex |
+    Given a pod is present with labels:
+      | openshift.io/build.name=ruby-ex-1 |
     When I expose the "ruby-ex" service
     When I perform the :goto_overview_page web console action with:
       | project_name | <%= project.name %> |
@@ -196,7 +196,6 @@ Feature: Check overview page
       | resource_type        | deployment                         |
       | project_name         | <%= project.name %>                |
       | build_num            | 1                                  |
-      | build_status         | complete                           |
       | route_url            | http://<%= route("ruby-ex").dns %> |
       | route_port_info      | 8080-tcp                           |
       | service_port_mapping | 8080/TCP (8080-tcp) 8080           |
@@ -204,11 +203,5 @@ Feature: Check overview page
       | container_source     | Merge pull request                 |
       | container_ports      | 8080/TCP                           |
       | bc_name              | ruby-ex                            |
-    Then the step should succeed
-    When I perform the :operate_in_kebab_drop_down_list_on_overview web console action with:
-      | project_name  | <%= project.name %> |
-      | resource_name | ruby-ex             |
-      | viewlog_type  | rc                  |
-      | log_name      | ruby-ex-1           |
     Then the step should succeed
 

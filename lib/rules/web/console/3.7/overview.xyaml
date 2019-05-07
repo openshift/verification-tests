@@ -285,8 +285,6 @@ check_build_info:
   - selector:
       xpath: .//span[text()="#<build_num>"]
   - selector:
-      xpath: .//span[contains(text(),"<build_status>")]
-  - selector:
       xpath: .//h3/a[contains(@href,"project/<project_name>/browse/builds/<build_name>") and text()="<build_name>"]
 check_pipeline_info_on_overview:
   action: check_pipeline_name
