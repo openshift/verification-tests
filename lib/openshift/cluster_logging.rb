@@ -4,36 +4,36 @@ module BushSlicer
     RESOURCE = "clusterloggings"
 
     ### represent status section ["collection", "curation", "logStore", "message", "visualization"]
-    def collection(user: nil, cached: true, quiet: false)
+    private def collection_raw(user: nil, cached: true, quiet: false)
       raw_resource(user: user, cached: cached, quiet: quiet).dig('status', 'collection')
     end
-    def curation(user: nil, cached: true, quiet: false)
+    private def curation_raw(user: nil, cached: true, quiet: false)
       raw_resource(user: user, cached: cached, quiet: quiet).dig('status', 'curation')
     end
 
-    def log_store(user: nil, cached: true, quiet: false)
+    private def log_store_raw(user: nil, cached: true, quiet: false)
       raw_resource(user: user, cached: cached, quiet: quiet).dig('status', 'logStore')
     end
 
-    def message(user: nil, cached: true, quiet: false)
+    private def message_raw(user: nil, cached: true, quiet: false)
       raw_resource(user: user, cached: cached, quiet: quiet).dig('status', 'message')
     end
 
-    def visualization(user: nil, cached: true, quiet: false)
+    private def visualization_raw(user: nil, cached: true, quiet: false)
       raw_resource(user: user, cached: cached, quiet: quiet).dig('status', 'visualization')
     end
 
 
-    def fluentd_status(user: nil, cached: true, quiet: false)
-      self.collection(user: user, cached: cached, quiet: quiet).dig('logs', 'fluentdStatus')
+    private def fluentd_status_raw(user: nil, cached: true, quiet: false)
+      collection_raw(user: user, cached: cached, quiet: quiet).dig('logs', 'fluentdStatus')
     end
 
-    def curator_status(user: nil, cached: true, quiet: false)
+    private def curator_status_raw(user: nil, cached: true, quiet: false)
       self.curation(user: user, cached: cached, quiet: quiet)['curatorStatus']
     end
 
     def fluentd_pods(user: nil, cached: true, quiet: false)
-      self.fluentd_status(user: user, cached: cached, quiet: quiet)['pods']
+      fluentd_status_raw(user: user, cached: cached, quiet: quiet)['pods']
     end
 
     def fluentd_ready_pods(user: nil, cached: true, quiet: false)
@@ -48,20 +48,20 @@ module BushSlicer
       self.fluentd_pods(user: user, cached: cached, quiet: quiet)['notReady']
     end
 
-    def es_status(user: nil, cached: true, quiet: false)
-      self.log_store(user: user, cached: cached, quiet: quiet)['elasticsearchStatus']
+    private def es_status_raw(user: nil, cached: true, quiet: false)
+      log_store_raw(user: user, cached: cached, quiet: quiet)['elasticsearchStatus']
     end
 
     def es_cluster_health(user: nil, cached: true, quiet: false)
-      self.es_status(user: user, cached: cached, quiet: quiet).first['clusterHealth']
+      es_status_raw(user: user, cached: cached, quiet: quiet).first['clusterHealth']
     end
 
     def es_pods(user: nil, cached: true, quiet: false)
-      self.es_status(user: user, cached: cached, quiet: quiet).first['pods']
+      es_status_raw(user: user, cached: cached, quiet: quiet).first['pods']
     end
 
     def kibana_status(user: nil, cached: true, quiet: false)
-      self.visualization(user: user, cached: cached, quiet: quiet)['kibanaStatus']
+      visualization_raw(user: user, cached: cached, quiet: quiet)['kibanaStatus']
     end
 
     def kibana_pods(user: nil, cached: true, quiet: false)
@@ -70,7 +70,7 @@ module BushSlicer
 
     # higher level methods
     def fluentd_ready?(user: nil, cached: true, quiet: false)
-      fluentd_nodes = self.fluentd_status(user: user, cached: cached, quiet: quiet)['nodes'].keys.sort
+      fluentd_nodes = fluentd_status_raw(user: user, cached: cached, quiet: quiet)['nodes'].keys.sort
       fluentd_nodes == self.fluentd_ready_pods && fluentd_failed_pods.count == 0 && fluentd_notready_pods.count == 0
     end
 
