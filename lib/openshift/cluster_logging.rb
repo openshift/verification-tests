@@ -32,46 +32,46 @@ module BushSlicer
       self.curation(user: user, cached: cached, quiet: quiet)['curatorStatus']
     end
 
-    def fluentd_pods(user: nil, cached: true, quiet: false)
+    private def fluentd_pods(user: nil, cached: true, quiet: false)
       fluentd_status_raw(user: user, cached: cached, quiet: quiet)['pods']
     end
 
-    def fluentd_ready_pods(user: nil, cached: true, quiet: false)
-      self.fluentd_pods(user: user, cached: cached, quiet: quiet)['ready']
+    private def fluentd_ready_pods(user: nil, cached: true, quiet: false)
+      fluentd_pods(user: user, cached: cached, quiet: quiet)['ready']
     end
 
-    def fluentd_failed_pods(user: nil, cached: true, quiet: false)
-      self.fluentd_pods(user: user, cached: cached, quiet: quiet)['failed']
+    private def fluentd_failed_pods(user: nil, cached: true, quiet: false)
+      fluentd_pods(user: user, cached: cached, quiet: quiet)['failed']
     end
 
-    def fluentd_notready_pods(user: nil, cached: true, quiet: false)
-      self.fluentd_pods(user: user, cached: cached, quiet: quiet)['notReady']
+    private def fluentd_notready_pods(user: nil, cached: true, quiet: false)
+      fluentd_pods(user: user, cached: cached, quiet: quiet)['notReady']
     end
 
     private def es_status_raw(user: nil, cached: true, quiet: false)
       log_store_raw(user: user, cached: cached, quiet: quiet)['elasticsearchStatus']
     end
 
-    def es_cluster_health(user: nil, cached: true, quiet: false)
+    private def es_cluster_health(user: nil, cached: true, quiet: false)
       es_status_raw(user: user, cached: cached, quiet: quiet).first['clusterHealth']
     end
 
-    def es_pods(user: nil, cached: true, quiet: false)
+    private def es_pods(user: nil, cached: true, quiet: false)
       es_status_raw(user: user, cached: cached, quiet: quiet).first['pods']
     end
 
-    def kibana_status(user: nil, cached: true, quiet: false)
+    private def kibana_status(user: nil, cached: true, quiet: false)
       visualization_raw(user: user, cached: cached, quiet: quiet)['kibanaStatus']
     end
 
-    def kibana_pods(user: nil, cached: true, quiet: false)
+    private def kibana_pods(user: nil, cached: true, quiet: false)
       self.kibana_status(user: user, cached: cached, quiet: quiet).first['pods']
     end
 
     # higher level methods
     def fluentd_ready?(user: nil, cached: true, quiet: false)
       fluentd_nodes = fluentd_status_raw(user: user, cached: cached, quiet: quiet)['nodes'].keys.sort
-      fluentd_nodes == self.fluentd_ready_pods && fluentd_failed_pods.count == 0 && fluentd_notready_pods.count == 0
+      fluentd_nodes == fluentd_ready_pods && fluentd_failed_pods.count == 0 && fluentd_notready_pods.count == 0
     end
 
     def wait_until_fluentd_is_ready(user: nil, quiet: false, timeout: 5*60)
@@ -81,7 +81,7 @@ module BushSlicer
     end
     # es is considered to be ready when clusterhealthy is gree
     def es_ready?(user: nil, cached: true, quiet: false)
-      self.es_cluster_health(user: user, cached: cached, quiet: quiet) == 'green'
+      es_cluster_health(user: user, cached: cached, quiet: quiet) == 'green'
     end
 
     def wait_until_es_is_ready(user: nil, quiet: false, timeout: 10*60)
@@ -91,10 +91,10 @@ module BushSlicer
     end
 
     def kibana_ready?(user: nil, cached: true, quiet: false)
-      failed_pods = self.kibana_pods(user: user, cached: cached, quiet: quiet)['failed']
-      notready_pods = self.kibana_pods(user: user, cached: cached, quiet: quiet)['notReady']
-      ready_pods = self.kibana_pods(user: user, cached: cached, quiet: quiet)['ready']
-      replicas = self.kibana_status(user: user, cached: cached, quiet: quiet).first['replicas']
+      failed_pods = kibana_pods(user: user, cached: cached, quiet: quiet)['failed']
+      notready_pods = kibana_pods(user: user, cached: cached, quiet: quiet)['notReady']
+      ready_pods = kibana_pods(user: user, cached: cached, quiet: quiet)['ready']
+      replicas = kibana_status(user: user, cached: cached, quiet: quiet).first['replicas']
       replicas == ready_pods.count && failed_pods.count == 0 && notready_pods.count == 0
     end
 

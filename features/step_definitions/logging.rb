@@ -50,7 +50,7 @@ Given /^logging service is installed with:$/ do | table |
   # Create operator group in `openshift-logging` namespace
   opts[:operator_group_yaml] ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/OCP-21311/operator-group.yaml"
   @result = admin.cli_exec(:create, f: opts[:operator_group_yaml], n: logging_ns)
-  raise "Error creating namespace" unless @result[:success]
+  raise "Error creating operatorgroup" unless @result[:success]
   # create catalogsourceconfig for logging and elasticsearch
   opts[:catsrc_logging_yaml] ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/OCP-21311/csc-clusterlogigng.yaml"
   opts[:catsrc_elasticsearch_yaml] ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/OCP-21311/csc-elasticsearch.yaml"
