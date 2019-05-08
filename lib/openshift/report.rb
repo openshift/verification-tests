@@ -62,7 +62,7 @@ module BushSlicer
         "spec" => {
           "reportingStart" => opts[:start_time],
           "reportingEnd" => opts[:end_time],
-          "generationQuery" => opts[:query_type],
+          "query" => opts[:query_type],
           "gracePeriod" => opts[:grace_period],
           "runImmediately" => opts[:run_immediately],
           "schedule" => schedule
