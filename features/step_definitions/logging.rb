@@ -4,7 +4,7 @@
 ### none configurable, just use default parameters
 Given /^logging service has been installed successfully$/ do
   ensure_destructive_tagged
-  crd_yaml = "https://raw.githubusercontent.com/operator-framework/operator-metering/master/manifests/metering-config/default.yaml"
+  crd_yaml = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/example.yaml"
   step %Q/logging service is installed with:/, table(%{
     | keep_installation | true        |
     | crd_yaml          | #{crd_yaml} |
