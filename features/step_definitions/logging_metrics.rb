@@ -1210,19 +1210,7 @@ Given /^I perform the HTTP request on the ES pod(?: with labels #{QUOTED})?:$/ d
   end
 end
 
-# currently just run the utility 'es_cluster_health' from the elasticsearch container within the es pod
-Given /^I wait(?: for (\d+) seconds)? until the ES cluster is healthy$/ do |seconds|
-  # pod type check for safeguard
-  step %Q/a pod becomes ready with labels:/, table(%{
-    | component=es |
-    })
-  seconds = Integer(seconds) unless seconds.nil?
-  seconds ||= 100
-  success = wait_for(seconds) do
-    status = YAML.load(pod.exec('es_cluster_health', as: user, container: 'elasticsearch')[:response])['status']
-    status == 'green'
-  end
-end
+
 
 # just call diagnostics w/o giving any arguments
 # dignostics command line options are different depending on the version of OCP, for OCP <= 3.7, the command must
