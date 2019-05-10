@@ -99,7 +99,7 @@ Feature: SDN related networking scenarios
       | Starting openshift-sdn network plugin         |
     
     """
-    # Expecting sdn pod to come back to default version the cluser was on
+    # Expecting sdn pod to come back to default version the cluser was on initially
     Given I wait up to 60 seconds for the steps to pass:
     """
     When I run command on the "<%= cb.node_name %>" node's sdn pod: 
@@ -124,7 +124,7 @@ Feature: SDN related networking scenarios
       | Starting openshift-sdn network plugin         |
     
     """
-    # Expecting sdn pod to come back to default type the clustr was on
+    # Expecting sdn pod to come back to default type the cluster was on initially
     Given I wait up to 60 seconds for the steps to pass:
     """
     When I run command on the "<%= cb.node_name %>" node's sdn pod: 
