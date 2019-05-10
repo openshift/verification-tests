@@ -81,7 +81,6 @@ Feature: SDN related networking scenarios
     And evaluation of `@result[:parsed]['items'][0]['metadata']['name']` is stored in the :sdn_pod clipboard
  
     Given the cluster network plugin type and version and stored in the clipboard 
-    
     #Changing plugin version to some arbitary value ff
     When I run command on the "<%= cb.node_name %>" node's sdn pod: 
       | ovs-ofctl| -O | openflow13 | mod-flows | br0 | table=253, actions=note:<%= cb.net_plugin[:type] %>.ff |
@@ -108,8 +107,7 @@ Feature: SDN related networking scenarios
 
     #Changing plugin type to some arbitary value 99
     When I run command on the "<%= cb.node_name %>" node's sdn pod: 
-	    | ovs-ofctl| -O | openflow13 | mod-flows | br0 | table=253, actions=note:99.<%= cb.net_plugin[:version] %> |
-
+      | ovs-ofctl| -O | openflow13 | mod-flows | br0 | table=253, actions=note:99.<%= cb.net_plugin[:version] %> |
     Then the step should succeed
     #Expecting sdn pod to be restarted due to plugin type value change
     And I wait up to 60 seconds for the steps to pass:
