@@ -239,7 +239,6 @@ Feature: storageClass related feature
       | ["metadata"]["name"]   | sc-<%= project.name %> |
       | ["provisioner"]        | kubernetes.io/aws-ebs  |
       | ["parameters"]["type"] | <type>                 |
-      | ["parameters"]["zone"] | us-east-1d             |
     Then the step should succeed
 
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
