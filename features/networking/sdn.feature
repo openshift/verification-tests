@@ -87,7 +87,7 @@ Feature: SDN related networking scenarios
       | ovs-ofctl| -O | openflow13 | mod-flows | br0 | table=253, actions=note:<%= cb.net_plugin[:type] %>.ff |
     Then the step should succeed
     #Expecting sdn pod to be restarted due to vesion value change
-    And I wait up to 30 seconds for the steps to pass:
+    And I wait up to 60 seconds for the steps to pass:
     """
     When I run the :logs admin command with:
       | resource_name | <%= cb.sdn_pod %> |
@@ -112,7 +112,7 @@ Feature: SDN related networking scenarios
       | ovs-ofctl| -O | openflow13 | mod-flows | br0 | table=253, actions=note:99.<%= cb.net_plugin[:version] %> |
     Then the step should succeed
     #Expecting sdn pod to be restarted due to plugin type value change
-    And I wait up to 30 seconds for the steps to pass:
+    And I wait up to 60 seconds for the steps to pass:
     """
     When I run the :logs admin command with:
       | resource_name | <%= cb.sdn_pod %> |
