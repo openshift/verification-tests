@@ -80,23 +80,26 @@ Feature: SDN related networking scenarios
     Then the step should succeed
     And evaluation of `@result[:parsed]['items'][0]['metadata']['name']` is stored in the :sdn_pod clipboard
  
+    #Below step will save plugin type and version value in net_plugin variable
     Given the cluster network plugin type and version and stored in the clipboard 
     #Changing plugin version to some arbitary value ff
     When I run command on the "<%= cb.node_name %>" node's sdn pod: 
       | ovs-ofctl| -O | openflow13 | mod-flows | br0 | table=253, actions=note:<%= cb.net_plugin[:type] %>.ff |
     Then the step should succeed
     #Expecting sdn pod to be restarted due to vesion value change
-    And I wait up to 60 seconds for the steps to pass:
+    And I wait up to 30 seconds for the steps to pass:
     """
     When I run the :logs admin command with:
-      | resource_name     | <%= cb.sdn_pod %> |
-      | namespace         | openshift-sdn     |
+      | resource_name | <%= cb.sdn_pod %> |
+      | namespace     | openshift-sdn     |
+      | since         | 30s               |
     Then the step should succeed
     And the output should contain:
-      | SDN healthcheck detected unhealthy OVS server, restarting: plugin is not setup |
+      | full SDN setup required (plugin is not setup) |
+      | Starting openshift-sdn network plugin         |
     
     """
-    # Expecting sdn pod post restart to come back to default version the cluser was on
+    # Expecting sdn pod to come back to default version the cluser was on
     Given I wait up to 60 seconds for the steps to pass:
     """
     When I run command on the "<%= cb.node_name %>" node's sdn pod: 
@@ -104,23 +107,24 @@ Feature: SDN related networking scenarios
     Then the step should succeed
     Then the output should contain "<%= cb.net_plugin[:type] %>.<%= cb.net_plugin[:version] %>"
     """
-
     #Changing plugin type to some arbitary value 99
     When I run command on the "<%= cb.node_name %>" node's sdn pod: 
       | ovs-ofctl| -O | openflow13 | mod-flows | br0 | table=253, actions=note:99.<%= cb.net_plugin[:version] %> |
     Then the step should succeed
     #Expecting sdn pod to be restarted due to plugin type value change
-    And I wait up to 60 seconds for the steps to pass:
+    And I wait up to 30 seconds for the steps to pass:
     """
     When I run the :logs admin command with:
-      | resource_name     | <%= cb.sdn_pod %> |
-      | namespace         | openshift-sdn     |
+      | resource_name | <%= cb.sdn_pod %> |
+      | namespace     | openshift-sdn     |
+      | since         | 30s               |
     Then the step should succeed
     And the output should contain:
-      | SDN healthcheck detected unhealthy OVS server, restarting: plugin is not setup |
- 
+      | full SDN setup required (plugin is not setup) |
+      | Starting openshift-sdn network plugin         |
+    
     """
-    # Expecting sdn pod post restart to come back to default type the clustr was on
+    # Expecting sdn pod to come back to default type the clustr was on
     Given I wait up to 60 seconds for the steps to pass:
     """
     When I run command on the "<%= cb.node_name %>" node's sdn pod: 
