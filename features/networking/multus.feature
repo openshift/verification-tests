@@ -7,12 +7,14 @@ Feature: Multus-CNI related scenarios
     # Make sure that the multus is enabled
     Given the master version >= "4.0"
     And the multus is enabled on the cluster
-
+    Given the default interface on nodes is stored in the :default_interface clipboard
+    And evaluation of `node.name` is stored in the :target_node clipboard    
     # Create the net-attach-def via cluster admin
     Given I have a project
-    When I run the :create admin command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml |
-      | n | <%= project.name %> |
+    When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml" replacing paths:
+      | ["metadata"]["namespace"] | <%= project.name %> |    
+      | ["spec"]["config"]["eth0"]| <%= cb.default_interface %> |
+      | ["spec"]["nodeName"] | "<%= cb.target_node %>" |      
     Then the step should succeed
 
     # Create the first pod which consumes the macvlan custom resource
@@ -64,12 +66,14 @@ Feature: Multus-CNI related scenarios
     # Make sure that the multus is enabled
     Given the master version >= "4.0"
     And the multus is enabled on the cluster
-
+    Given the default interface on nodes is stored in the :default_interface clipboard
+    And evaluation of `node.name` is stored in the :target_node clipboard    
     # Create the net-attach-def via cluster admin
     Given I have a project
-    When I run the :create admin command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-private.yaml |
-      | n | <%= project.name %> |
+    When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-private.yaml" replacing paths:
+      | ["metadata"]["namespace"] | <%= project.name %> |
+      | ["spec"]["config"]["eth0"]| <%= cb.default_interface %> |
+      | ["spec"]["nodeName"] | "<%= cb.target_node %>" |      
     Then the step should succeed
 
     # Create the first pod which consumes the macvlan custom resource
@@ -121,12 +125,14 @@ Feature: Multus-CNI related scenarios
     # Make sure that the multus is enabled
     Given the master version >= "4.0"
     And the multus is enabled on the cluster
-
+    Given the default interface on nodes is stored in the :default_interface clipboard
+    And evaluation of `node.name` is stored in the :target_node clipboard    
     # Create the net-attach-def via cluster admin
     Given I have a project
-    When I run the :create admin command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-vepa.yaml |
-      | n | <%= project.name %> |
+    When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-vepa.yaml" replacing paths:
+      | ["metadata"]["namespace"] | <%= project.name %> |
+      | ["spec"]["config"]["eth0"]| <%= cb.default_interface %> |
+      | ["spec"]["nodeName"] | "<%= cb.target_node %>" |      
     Then the step should succeed
 
     # Create the first pod which consumes the macvlan custom resource
@@ -179,13 +185,13 @@ Feature: Multus-CNI related scenarios
     # Make sure that the multus is enabled
     Given the master version >= "4.0"
     And the multus is enabled on the cluster
-    And I select a random node's host
+    Given the default interface on nodes is stored in the :default_interface clipboard    
     And evaluation of `node.name` is stored in the :target_node clipboard
     And an 4 character random string of type :hex is stored into the :nic_name clipboard
 
     # Prepare the net link on the node which will be attached to the pod
     When I run command on the "<%= cb.target_node %>" node's sdn pod:
-       | sh | -c | ip link add <%= cb.nic_name %> link eth0 type macvlan mode bridge |
+	    | sh | -c | ip link add <%= cb.nic_name %> link <%= cb.default_interface %> type macvlan mode bridge |
     Then the step should succeed
     Given I register clean-up steps:
     """
@@ -246,12 +252,14 @@ Feature: Multus-CNI related scenarios
     # Make sure that the multus is enabled
     Given the master version >= "4.0"
     And the multus is enabled on the cluster
-
+    Given the default interface on nodes is stored in the :default_interface clipboard
+    And evaluation of `node.name` is stored in the :target_node clipboard    
     # Create the net-attach-def via cluster admin
     Given I have a project
-    When I run the :create admin command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml |
-      | n | <%= project.name %> |
+    When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml" replacing paths:
+      | ["metadata"]["namespace"] | <%= project.name %> |
+      | ["spec"]["config"]["eth0"]| <%= cb.default_interface %> |
+      | ["spec"]["nodeName"] | "<%= cb.target_node %>" |      
     Then the step should succeed
 
     # Create the pod which consumes multiple macvlan custom resources
@@ -288,15 +296,15 @@ Feature: Multus-CNI related scenarios
     # Make sure that the multus is enabled
     Given the master version >= "4.0"
     And the multus is enabled on the cluster
-    And I select a random node's host
-    And evaluation of `node.name` is stored in the :target_node clipboard
     And an 4 character random string of type :hex is stored into the :nic_name clipboard
-
+    Given the default interface on nodes is stored in the :default_interface clipboard
+    And evaluation of `node.name` is stored in the :target_node clipboard
     # Create the net-attach-def via cluster admin
     Given I have a project
-    When I run the :create admin command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml |
-      | n | <%= project.name %> |
+    When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml" replacing paths:
+      | ["metadata"]["namespace"] | <%= project.name %> |
+      | ["spec"]["config"]["eth0"]| <%= cb.default_interface %> |
+      | ["spec"]["nodeName"] | "<%= cb.target_node %>" |      
     Then the step should succeed
     When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/host-device.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %> |
@@ -305,7 +313,7 @@ Feature: Multus-CNI related scenarios
 
     # Prepare the net link on the node which will be attached to the pod
     When I run command on the "<%= cb.target_node %>" node's sdn pod:
-       | sh | -c | ip link add <%= cb.nic_name%> link eth0 type macvlan mode private |
+       | sh | -c | ip link add <%= cb.nic_name%> link <%= cb.default_interface %> type macvlan mode private |
     Then the step should succeed
     Given I register clean-up steps:
     """
@@ -350,7 +358,7 @@ Feature: Multus-CNI related scenarios
     # Make sure that the multus is enabled
     Given the master version >= "4.0"
     And the multus is enabled on the cluster
-    And I select a random node's host
+    Given the default interface on nodes is stored in the :default_interface clipboard
     And evaluation of `node.name` is stored in the :target_node clipboard
     And an 4 character random string of type :hex is stored into the :nic_name1 clipboard
     And an 4 character random string of type :hex is stored into the :nic_name2 clipboard
@@ -370,10 +378,10 @@ Feature: Multus-CNI related scenarios
 
     # Prepare the net link on the node which will be attached to the pod
     When I run command on the "<%= cb.target_node %>" node's sdn pod:
-       | sh | -c | ip link add <%= cb.nic_name1%> link eth0 type macvlan mode bridge |
+       | sh | -c | ip link add <%= cb.nic_name1%> link <%= cb.default_interface %> type macvlan mode bridge |
     Then the step should succeed
     When I run command on the "<%= cb.target_node %>" node's sdn pod:
-       | sh | -c | ip link add <%= cb.nic_name2%> link eth0 type macvlan mode bridge |
+       | sh | -c | ip link add <%= cb.nic_name2%> link <%= cb.default_interface %> type macvlan mode bridge |
     Then the step should succeed
     Given I register clean-up steps:
     """
