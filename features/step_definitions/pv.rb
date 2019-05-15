@@ -45,7 +45,13 @@ Given /^I have a(?: (\d+) GB)? volume and save volume id in the#{OPT_SYM} clipbo
     | ["spec"]["resources"]["requests"]["storage"] | #{size}Gi                                      |
     })
   step %Q/the step should succeed/
+  step %Q{I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pod.yaml" replacing paths:}, table(%{
+      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | <%= project.name %>-<%= cb.dynamic_pvc_name %> |
+      | ["metadata"]["name"]                                         | <%= project.name %>-mypod                      |
+      | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt/test                                      |
+   })
   step %Q/the "<%= project.name %>-<%= cb.dynamic_pvc_name %>" PVC becomes :bound within #{timeout} seconds/
+  step %Q/I ensure "<%= project.name %>-mypod" pod is deleted/
   step %Q/admin ensures "<%= pvc.volume_name %>" pv is deleted after scenario/
   step %Q/I save volume id from PV named "<%= pvc.volume_name %>" in the :#{cbname} clipboard/
 end
