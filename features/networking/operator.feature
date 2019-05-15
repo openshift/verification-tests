@@ -25,10 +25,10 @@ Feature: Operator related networking scenarios
     Given evaluation of `cluster_version('version').version` is stored in the :ocp_version clipboard
     #Making sure that operator is not Degraded before proceesing further steps
     And evaluation of `cluster_operator('network').condition(type: 'Degraded')` is stored in the :degraded_status_before_patch clipboard
-    Then the expression should be true> cb.Degraded_status_before_patch["status"]=="False"
+    Then the expression should be true> cb.degraded_status_before_patch["status"]=="False"
     #Making sure that operator is not Degraded before proceesing further steps
     And evaluation of `cluster_operator('network').condition(type: 'Degraded')` is stored in the :degraded_status_before_patch clipboard
-    Then the expression should be true> cb.Degraded_status_before_patch["status"]=="False"
+    Then the expression should be true> cb.degraded_status_before_patch["status"]=="False"
     #Editing networks.config.openshift.io cluster to reflect bad config like changing networktype from OpenShiftSDN to OpenShift
     When I run the :patch admin command with:
       | resource      | networks.config.openshift.io         |
