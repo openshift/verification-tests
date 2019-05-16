@@ -14,10 +14,11 @@ Feature: resouces related scenarios
     And the output should match:
       | Name:\\s+database            |
       | Selector:\\s+name=database   |
-    When I run the :export client command with:
-      | resource     | svc           |
-      | name         | database      |
-      | o            | yaml          |
+    When I run the :get client command with:
+      | resource      | svc      |
+      | resource_name | database |
+      | o             | yaml     |
+      | export        | true     |
     Then the step should succeed
     Given I save the output to file>svc.yaml
     When I run the :describe client command with:

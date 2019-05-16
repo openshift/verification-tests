@@ -236,9 +236,6 @@ Feature: buildlogic.feature
     And the output should match:
       | Duration:\s+(\d+m)?\d+s        |
       | FetchInputs:\s+(\d+m)?\d+s     |
-      | CommitContainer:\s+(\d+m)?\d+s |
-      | Assemble:\s+(\d+m)?\d+s        |
-      | PostCommit:\s+(\d+m)?\d+s      |
       | PushImage:\s+(\d+m)?\d+s       |
 
   # @author dyan@redhat.com
@@ -257,7 +254,6 @@ Feature: buildlogic.feature
       | Duration:\s+(\d+m)?\d+s    |
       | FetchInputs:\s+(\d+m)?\d+s |
       | Build:\s+(\d+m)?\d+s       |
-      | PostCommit:\s+(\d+m)?\d+s  |
       | PushImage:\s+(\d+m)?\d+s   |
 
   # @author xiuwang@redhat.com
