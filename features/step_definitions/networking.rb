@@ -576,7 +576,7 @@ end
 
 Given /^the node's default gateway is stored in the#{OPT_SYM} clipboard$/ do |cb_name|
   ensure_admin_tagged
-  hosts = step "I select a random node's host"
+  step "I select a random node's host"
   cb_name = "gateway" unless cb_name
   @result = host.exec_admin("/sbin/ip route show default | awk '/default/ {print $3}'")
 
@@ -679,4 +679,14 @@ Given /^I run command on the#{OPT_QUOTED} node's sdn pod:$/ do |node_name, table
   }.first
   @result = sdn_pod.exec(network_cmd, as: admin)
   raise "Failed to execute network command!" unless @result[:success]
+end
+
+Given /^the default interface on nodes is stored in the#{OPT_SYM} clipboard$/ do |cb_name|
+  ensure_admin_tagged
+  hosts = step "I select a random node's host"
+  cb_name = "interface" unless cb_name
+  @result = host.exec_admin("/sbin/ip route show default | awk '/default/ {print $5}'")
+  raise "Failed to get the default interface of node" unless @result[:success]
+  cb[cb_name] = @result[:response].chomp
+  logger.info "The node's default interface is stored in the #{cb_name} clipboard."
 end

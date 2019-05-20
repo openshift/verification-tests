@@ -36,18 +36,4 @@ Feature: oc_set_build_hook
     When I run the :start_build client command with:
       | buildconfig | rails-postgresql-example |
     Then the step should succeed
-    Given the "rails-postgresql-example-3" build completes
-    When I run the :set_build_hook client command with:
-      | buildconfig | bc/rails-postgresql-example |
-      | post_commit | true                        |
-      | oc_opts_end |                             |
-      | args        | bundle                      |
-      | args        | exec                        |
-      | args        | rake                        |
-      | args        | test                        |
-    Then the step should succeed
-    When I run the :start_build client command with:
-      | buildconfig | rails-postgresql-example |
-    Then the step should succeed
-    Given the "rails-postgresql-example-4" build completes
-
+    And the "rails-postgresql-example-3" build completes

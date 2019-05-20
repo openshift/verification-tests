@@ -165,38 +165,36 @@ Feature: change the policy of user/service account
 
   # @author chaoyang@redhat.com
   # @case_id OCP-10447
-  @admin
   Scenario: Basic user could not get deeper storageclass object info
     Given I have a project
-    When admin creates a StorageClass from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/storageClass.yaml" where:
-      | ["metadata"]["name"] | sc-<%= project.name %> |
-      | ["provisioner"]      | kubernetes.io/aws-ebs  |
-    Then the step should succeed
     When I run the :get client command with:
       | resource | storageclass |
+      | o        | yaml         |
     Then the step should succeed
-    And the output should contain:
-      | sc-<%= project.name %> |
+    And I save the output to file> sc_names.yaml
 
     When I run the :get client command with:
-      | resource      | storageclass           |
-      | resource_name | sc-<%= project.name %> |
-      | o             | yaml                   |
+      | resource      | :false        |
+      | resource_name | :false        |
+      | f             | sc_names.yaml |
+      | o             | yaml          |
     Then the step should succeed
 
     When I run the :get client command with:
-      | resource      | storageclass           |
-      | o             | yaml                   |
+      | resource | storageclass |
+      | o        | yaml         |
     Then the step should succeed
 
     When I run the :describe client command with:
-      | resource | storageclass           |
-      | name     | sc-<%= project.name %> |
+      | resource | :false        |
+      | name     | :false        |
+      | f        | sc_names.yaml |
     Then the step should succeed
 
     When I run the :delete client command with:
-      | object_type       | storageclass           |
-      | object_name_or_id | sc-<%= project.name %> |
+      | object_type       | :false        |
+      | object_name_or_id | :false        |
+      | f                 | sc_names.yaml |
     And the output should match:
       | Error.*storageclasses.* at the cluster scope |
 
@@ -206,10 +204,6 @@ Feature: change the policy of user/service account
     And the output should match:
       | Error.*storageclasses.* at the cluster scope |
 
-    When I run the :get client command with:
-      | resource      | storageclass           |
-      | resource_name | sc-<%= project.name %> |
-    Then the step should succeed
 
   # @author chaoyang@redhat.com
   # @case_id OCP-10448
