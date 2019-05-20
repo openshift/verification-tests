@@ -66,57 +66,73 @@ Feature: SDN related networking scenarios
   @admin
   @destructive
   Scenario: SDN will detect the version and plugin type mismatch in openflow and restart node automatically
-    Given the master version >= "3.7"
-    And I select a random node's host
-    Given the cluster network plugin type and version and stored in the clipboard
-    And system verification steps are used:
-    """
-    When I run ovs dump flows commands on the host
-    Then the step should succeed
-    Then the output should contain "<%= cb.net_plugin[:type] %>.<%= cb.net_plugin[:version] %>"
-    """
-    And the node service is verified
-    And the node network is verified
+    Given the master version >= "3.10"
+    Given I select a random node's host
+    And evaluation of `node.name` is stored in the :node_name clipboard
 
-    When I run the ovs commands on the host:
-      | ovs-ofctl -O openflow13 mod-flows br0 "table=253, actions=note:<%= cb.net_plugin[:type] %>.ff" |
+    #Capturing the node's corresponding sdn pod to execute ovs commands on it
+    When I run the :get admin command with:
+       | resource      | pods                              |
+       | fieldSelector | spec.nodeName=<%= cb.node_name %> |
+       | namespace     | openshift-sdn                     |
+       | l             | app=sdn                           |
+       | output        | json                              |
     Then the step should succeed
+    And evaluation of `@result[:parsed]['items'][0]['metadata']['name']` is stored in the :sdn_pod clipboard
+ 
+    #Below step will save plugin type and version value in net_plugin variable
+    Given the cluster network plugin type and version and stored in the clipboard 
+    #Changing plugin version to some arbitary value ff
+    When I run command on the "<%= cb.node_name %>" node's sdn pod: 
+      | ovs-ofctl| -O | openflow13 | mod-flows | br0 | table=253, actions=note:<%= cb.net_plugin[:type] %>.ff |
+    Then the step should succeed
+    #Expecting sdn pod to be restarted due to vesion value change
     And I wait up to 60 seconds for the steps to pass:
     """
-    When I run commands on the host:
-      | journalctl -l -u atomic-openshift-node --since "30s ago" \| grep SDN |
+    When I run the :logs admin command with:
+      | resource_name | <%= cb.sdn_pod %> |
+      | namespace     | openshift-sdn     |
+      | since         | 30s               |
     Then the step should succeed
     And the output should contain:
-      | SDN healthcheck detected unhealthy OVS server |
-      | full SDN setup required |
+      | full SDN setup required (plugin is not setup) |
+      | Starting openshift-sdn network plugin         |
+    
     """
-    # wait 120s for the node restarting and ovs rule come back
-    Given I wait up to 120 seconds for the steps to pass:
+    # Expecting sdn pod to come back to default version the cluser was on initially
+    Given I wait up to 60 seconds for the steps to pass:
     """
-    When I run ovs dump flows commands on the host
+    When I run command on the "<%= cb.node_name %>" node's sdn pod: 
+      | ovs-ofctl| -O | openflow13 | dump-flows | br0 |
     Then the step should succeed
     Then the output should contain "<%= cb.net_plugin[:type] %>.<%= cb.net_plugin[:version] %>"
     """
-
-    When I run the ovs commands on the host:
-      | ovs-ofctl -O openflow13 mod-flows br0 "table=253, actions=note:99.<%= cb.net_plugin[:version] %>" |
+    #Changing plugin type to some arbitary value 99
+    When I run command on the "<%= cb.node_name %>" node's sdn pod: 
+      | ovs-ofctl| -O | openflow13 | mod-flows | br0 | table=253, actions=note:99.<%= cb.net_plugin[:version] %> |
     Then the step should succeed
+    #Expecting sdn pod to be restarted due to plugin type value change
     And I wait up to 60 seconds for the steps to pass:
     """
-    When I run commands on the host:
-      | journalctl -l -u atomic-openshift-node --since "30s ago" \| grep SDN |
+    When I run the :logs admin command with:
+      | resource_name | <%= cb.sdn_pod %> |
+      | namespace     | openshift-sdn     |
+      | since         | 30s               |
     Then the step should succeed
     And the output should contain:
-      | SDN healthcheck detected unhealthy OVS server |
-      | full SDN setup required |
+      | full SDN setup required (plugin is not setup) |
+      | Starting openshift-sdn network plugin         |
+    
     """
-    Given I wait up to 120 seconds for the steps to pass:
+    # Expecting sdn pod to come back to default type the cluster was on initially
+    Given I wait up to 60 seconds for the steps to pass:
     """
-    When I run ovs dump flows commands on the host
+    When I run command on the "<%= cb.node_name %>" node's sdn pod: 
+      | ovs-ofctl| -O | openflow13 | dump-flows | br0 |
     Then the step should succeed
     Then the output should contain "<%= cb.net_plugin[:type] %>.<%= cb.net_plugin[:version] %>"
     """
-
+ 
   # @author yadu@redhat.com
   # @case_id OCP-15251
   @admin
