@@ -570,7 +570,7 @@ end
 
 Given /^the node's default gateway is stored in the#{OPT_SYM} clipboard$/ do |cb_name|
   ensure_admin_tagged
-  hosts = step "I select a random node's host"
+  step "I select a random node's host"
   cb_name = "gateway" unless cb_name
   @result = host.exec_admin("/sbin/ip route show default | awk '/default/ {print $3}'")
 
