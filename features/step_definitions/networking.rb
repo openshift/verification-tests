@@ -451,6 +451,12 @@ Given /^the cluster network plugin type and version and stored in the clipboard$
     of_note = @result[:response].partition('note:').last.chomp
   end
 
+  cb.net_plugin = {
+    type: of_note[0,2],
+    version: of_note[3,2]
+  }
+end
+
 Given /^I wait for the networking components of the node to be terminated$/ do
   ensure_admin_tagged
 
