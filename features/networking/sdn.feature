@@ -66,7 +66,6 @@ Feature: SDN related networking scenarios
   @admin
   @destructive
   Scenario: SDN will detect the version and plugin type mismatch in openflow and restart node automatically
-    Given the master version >= "3.11"
     Given I select a random node's host
     And evaluation of `node.name` is stored in the :node_name clipboard
 
