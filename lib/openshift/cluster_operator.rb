@@ -11,15 +11,5 @@ module BushSlicer
       res = self.versions.select { |v| v == version }
       res.count != 0
     end
-
-    # return Hash of conditions for easier access
-    def conditions(user: nil, cached: true, quiet: false)
-      conditions = raw_resource(user: user, cached: cached, quiet: quiet).dig('status', 'conditions')
-      cond_hash = {}
-      conditions.each do |con|
-        cond_hash[con['type']] = con
-      end
-      cond_hash
-    end
   end
 end

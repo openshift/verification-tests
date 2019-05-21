@@ -8,10 +8,11 @@ Given /^all clusteroperators reached version #{QUOTED} successfully$/ do |versio
     # True        False         False
     conditions = co.conditions
     expected = {"Degraded"=>"False", "Progressing"=>"False", "Available"=>"True"}
-    conditions.each do |k, v|
+    conditions.each do |c|
       # only care about the `expected`, don't compare otherwise
-      if expected.keys.include? k
-        raise "Failed for condition #{k}" unless expected[k] == v['status']
+      if expected.keys.include? c['type']
+        expected_status = expected[c['type']]
+        raise "Failed for condition #{c['type']}, expected: #{expected_status}, got: #{c['status']}" unless expected_status == c['status']
       end
     end
   end
