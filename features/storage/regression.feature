@@ -10,7 +10,6 @@ Feature: Regression testing cases
       | ["metadata"]["name"]                         | ds            |
       | ["spec"]["accessModes"][0]                   | ReadWriteOnce |
       | ["spec"]["resources"]["requests"]["storage"] | 1Gi           |
-    And the "ds" PVC becomes :bound
 
     When I run the :create admin command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/damonset.json |
