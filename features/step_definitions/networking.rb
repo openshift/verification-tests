@@ -513,7 +513,7 @@ Given /^I restart the openvswitch service on the node$/ do
   _host = node.host
   _admin = admin
 
-  # For 3.10 version, should delete the ovs container to restart service 
+  # For 3.10 version, should delete the ovs container to restart service
   if env.version_ge("3.10", user: user)
     logger.info("OCP version >= 3.10")
     ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
@@ -671,6 +671,7 @@ Given /^I run command on the#{OPT_QUOTED} node's sdn pod:$/ do |node_name, table
   sdn_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
     pod.node_name == node_name
   }.first
+  cache_resources sdn_pod
   @result = sdn_pod.exec(network_cmd, as: admin)
   raise "Failed to execute network command!" unless @result[:success]
 end
