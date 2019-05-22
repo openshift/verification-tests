@@ -6,22 +6,22 @@ Feature: Update sql apb related feature
     Given I save the first service broker registry prefix to :prefix clipboard
     #provision postgresql
     And I have a project
-    When I run the :new_app client command with:
-      | file  | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/serviceinstance-template.yaml |
-      | param | INSTANCE_NAME=<db_name>                                                                                      |
-      | param | CLASS_EXTERNAL_NAME=<db_name>                                                                                |
-      | param | PLAN_EXTERNAL_NAME=<db_plan_1>                                                                               |
-      | param | SECRET_NAME=<secret_name>                                                                                    |
-      | param | INSTANCE_NAMESPACE=<%= project.name %>                                                                       |
+    When I process and create:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/serviceinstance-template.yaml |
+      | p | INSTANCE_NAME=<db_name>                                                                                      |
+      | p | CLASS_EXTERNAL_NAME=<db_name>                                                                                |
+      | p | PLAN_EXTERNAL_NAME=<db_plan_1>                                                                               |
+      | p | SECRET_NAME=<secret_name>                                                                                    |
+      | p | INSTANCE_NAMESPACE=<%= project.name %>                                                                       |
     Then the step should succeed
     And evaluation of `service_instance("<db_name>").uid` is stored in the :db_uid clipboard
-    When I run the :new_app client command with:
-      | file  | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/serviceinstance-parameters-template.yaml                 |
-      | param | SECRET_NAME=<secret_name>                                                                                                               |
-      | param | INSTANCE_NAME=<db_name>                                                                                                                 |
-      | param | PARAMETERS={"postgresql_database":"admin","postgresql_user":"admin","postgresql_version":"<db_version>","postgresql_password":"test"}   |
-      | param | UID=<%= cb.db_uid %>                                                                                                                    |
-      | n     | <%= project.name %>                                                                                                                     |
+    When I process and create:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/serviceinstance-parameters-template.yaml                 |
+      | p | SECRET_NAME=<secret_name>                                                                                                               |
+      | p | INSTANCE_NAME=<db_name>                                                                                                                 |
+      | p | PARAMETERS={"postgresql_database":"admin","postgresql_user":"admin","postgresql_version":"<db_version>","postgresql_password":"test"}   |
+      | p | UID=<%= cb.db_uid %>                                                                                                                    |
+      | n | <%= project.name %>                                                                                                                     |
     Then the step should succeed
     Given I wait for the "<db_name>" service_instance to become ready up to 360 seconds
     And dc with name matching /postgresql/ are stored in the :dc_1 clipboard
