@@ -70,21 +70,7 @@ environments:
     # cli: SharedLocalCliExecutor
     admin_creds: MasterOsAdminCredentials
     api_port: 8443
-  ose:
-    # hosts: use OPENSHIFT_ENV_OSE_HOSTS=host:role1:...,host2:role1:...
-    hosts_type: SSHAccessibleHost
-    # this is the user for remote access to the OpenShift nodes
-    user: root
-    type: StaticEnvironment
-    user_manager: auto
-    # set users in OPENSHIFT_ENV_OSE_USER_MANAGER_USERS=user:password,...
-    # user_manager_users: joe:redhat,alice:redhat
-    #cli: MasterOsPerUserCliExecutor
-    cli: SharedLocalCliExecutor
-    admin_creds: MasterOsAdminCredentials
-    api_port: 8443
-    # version: 3.6.1.44.16
-  ocp4:
+  ocp4: &ocp4
     # hosts: use OPENSHIFT_ENV_OSE_HOSTS=host:role1:...,host2:role1:...
     hosts_type: SSHAccessibleHost
     # this is the user for remote access to the OpenShift nodes
@@ -98,6 +84,7 @@ environments:
     admin_creds: AutoKubeconfigCredentials
     api_port: 6443
     version: 4.0.0.0 # version not supported on cluster (yet)
+  ose: *ocp4
 
 optional_classes:
   tcms_tc_manager:
