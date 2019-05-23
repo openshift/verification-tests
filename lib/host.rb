@@ -621,11 +621,14 @@ module BushSlicer
       # figure out workdir
       # write everything to WORKSPACE on jenkins, otherwise use `~/workdir`
       # on localhost, usage of relative workspace path may cause trouble
-      basepath = ENV["WORKSPACE"] ? ENV["WORKSPACE"]+"/workdir/" : "~/workdir/"
-      basepath = File.expand_path(basepath)
-
-      @workdir = opts[:workdir] ? opts[:workdir] : EXECUTOR_NAME
-      @workdir = File.absolute_path(@workdir, basepath).freeze
+      if ENV["WORKSPACE"]
+        @workdir = File.join(ENV["WORKSPACE"], "workdir")
+      else
+        basepath = File.expand_path("~/workdir/")
+        executor = properties[:workdir] ? properties[:workdir] : EXECUTOR_NAME
+        @workdir = File.absolute_path(executor, basepath)
+      end
+      @workdir.freeze
     end
 
     def accessible?
