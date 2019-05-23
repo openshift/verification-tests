@@ -15,39 +15,39 @@ Feature: Ansible-service-broker related scenarios
     And I use the "<%= cb.org_proj_name %>" project
 
     # Provision mediawiki apb
-    When I run the :new_app client command with:
-      | file  | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/serviceinstance-template.yaml |
-      | param | INSTANCE_NAME=<%= cb.prefix %>-mediawiki-apb          |
-      | param | CLASS_EXTERNAL_NAME=<%= cb.prefix %>-mediawiki-apb    |
-      | param | SECRET_NAME=<%= cb.prefix %>-mediawiki-apb-parameters |
-      | param | INSTANCE_NAMESPACE=<%= project.name %>                |
+    When I process and create:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/serviceinstance-template.yaml |
+      | p | INSTANCE_NAME=<%= cb.prefix %>-mediawiki-apb          |
+      | p | CLASS_EXTERNAL_NAME=<%= cb.prefix %>-mediawiki-apb    |
+      | p | SECRET_NAME=<%= cb.prefix %>-mediawiki-apb-parameters |
+      | p | INSTANCE_NAMESPACE=<%= project.name %>                |
     Then the step should succeed
     And evaluation of `service_instance(cb.prefix + "-mediawiki-apb").uid(user: user)` is stored in the :mediawiki_uid clipboard
-    When I run the :new_app client command with:
+    When I process and create:
       | file  | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/serviceinstance-parameters-template.yaml |
-      | param | SECRET_NAME=<%= cb.prefix %>-mediawiki-apb-parameters |
-      | param | INSTANCE_NAME=<%= cb.prefix %>-mediawiki-apb          |
-      | param | UID=<%= cb.mediawiki_uid %>                           |
-      | n     | <%= project.name %>                                   |
+      | p | SECRET_NAME=<%= cb.prefix %>-mediawiki-apb-parameters |
+      | p | INSTANCE_NAME=<%= cb.prefix %>-mediawiki-apb          |
+      | p | UID=<%= cb.mediawiki_uid %>                           |
+      | n | <%= project.name %>                                   |
     Then the step should succeed
 
     # Provision DB apb
-    When I run the :new_app client command with:
-      | file  | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/serviceinstance-template.yaml |
-      | param | INSTANCE_NAME=<db_name>                               |
-      | param | CLASS_EXTERNAL_NAME=<db_name>                         |
-      | param | PLAN_EXTERNAL_NAME=<db_plan>                          |
-      | param | SECRET_NAME=<db_secret_name>                          |
-      | param | INSTANCE_NAMESPACE=<%= project.name %>                |
+    When I process and create:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/serviceinstance-template.yaml |
+      | p | INSTANCE_NAME=<db_name>                               |
+      | p | CLASS_EXTERNAL_NAME=<db_name>                         |
+      | p | PLAN_EXTERNAL_NAME=<db_plan>                          |
+      | p | SECRET_NAME=<db_secret_name>                          |
+      | p | INSTANCE_NAMESPACE=<%= project.name %>                |
     Then the step should succeed
     And evaluation of `service_instance("<db_name>").uid(user: user)` is stored in the :db_uid clipboard
-    When I run the :new_app client command with:
-      | file  | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/serviceinstance-parameters-template.yaml |
-      | param | SECRET_NAME=<db_secret_name>                                                                                            |
-      | param | INSTANCE_NAME=<db_name>                                                                                                 |
-      | param | PARAMETERS=<db_parameters>                                                                                              |
-      | param | UID=<%= cb.db_uid %>                                                                                            |
-      | n     | <%= project.name %>                                                                                                     |
+    When I process and create:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/serviceinstance-parameters-template.yaml |
+      | p | SECRET_NAME=<db_secret_name>                                                                                            |
+      | p | INSTANCE_NAME=<db_name>                                                                                                 |
+      | p | PARAMETERS=<db_parameters>                                                                                              |
+      | p | UID=<%= cb.db_uid %>                                                                                            |
+      | n | <%= project.name %>                                                                                                     |
     Then the step should succeed
     And I wait for all service_instance in the project to become ready up to 360 seconds
 
@@ -71,12 +71,12 @@ Feature: Ansible-service-broker related scenarios
     """
 
     # Create servicebinding of DB apb
-    When I run the :new_app client command with:
-      | file  | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/servicebinding-template.yaml |
-      | param | BINDING_NAME=<db_name>                                                                                      |
-      | param | INSTANCE_NAME=<db_name>                                                                                     |
-      | param | SECRET_NAME=<db_credentials>                                                                                |
-      | n     | <%= project.name %>                                                                                         |
+    When I process and create:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/servicebinding-template.yaml |
+      | p | BINDING_NAME=<db_name>                                                                                      |
+      | p | INSTANCE_NAME=<db_name>                                                                                     |
+      | p | SECRET_NAME=<db_credentials>                                                                                |
+      | n | <%= project.name %>                                                                                         |
     And I wait up to 20 seconds for the steps to pass:
     """
     When I run the :describe client command with:
