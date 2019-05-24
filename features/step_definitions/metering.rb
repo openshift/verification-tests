@@ -5,6 +5,7 @@ require 'ssl'
 # checks that metering service is already installed
 Given /^metering service has been installed successfully(?: using (ansible|shell script|OLM))?$/ do |method|
   ensure_admin_tagged
+  namespace = "openshift-metering"  # set it as default
   # first check if metering service exists, skip installation if already there
   step %Q/I save the project hosting "metering" resource to "metering_namespace" clipboard/
   unless cb.metering_namespace
@@ -27,9 +28,6 @@ Given /^metering service has been installed successfully(?: using (ansible|shell
       raise "service openshift-monitoring is a pre-requisite for #{namespace}"
     end
   else
-    # save it to clipboard for future reference
-    cb.metering_namespace = project(namespace)
-    # get the metering service information
     @result = admin.cli_exec(:get, namespace: cb.metering_namespace.name, resource: 'metering', o: 'yaml')
     metering_name = @result[:parsed]['items'].first['metadata']['name']
   end
@@ -269,21 +267,23 @@ end
 Given /^the#{OPT_QUOTED} metering service is uninstalled using OLM$/ do | metering_ns |
   ensure_admin_tagged
   ensure_destructive_tagged
-
   metering_ns ||= "openshift-metering"
-  step %Q/I switch to cluster admin pseudo user/
+  step %Q/I switch to cluster admin pseudo user/ unless env.is_admin? user
+  project(metering_ns)
+  # step %Q/I use the "#{metering_ns}" project/ unless project.name == metering_ns
+  step %Q/I ensure "#{metering_ns}" project is deleted/
   project("openshift-marketplace")
   step %Q/I ensure "metering-operators" catalogsourceconfig is deleted/
-  project(metering_ns)
-  step %Q/I ensure "#{metering_ns}" project is deleted/
 end
 
 Given /^all reportdatasources are importing from Prometheus$/ do
-  project ||= project(cb.metering_namespace)
+  project ||= project(cb.metering_namespace.name)
   data_sources  = BushSlicer::ReportDataSource.list(user: user, project: project)
-  seconds = 60
+  # ignore reportdatasource that ends with `-raw`
+  dlist = data_sources.select{ |d| !d.name.end_with? '-raw'}
+  seconds = 240   # after initial installation it takes about 2-3 minutes to initiate Prometheus sync
   success = wait_for(seconds) {
-    data_sources.all? { |ds| ds.last_import_time }
+    dlist.all? { |ds| report_data_source(ds.name).last_import_time }
   }
   raise "Querying for reportdatasources returned failure, probabaly due to Prometheus import failed" unless success
 end

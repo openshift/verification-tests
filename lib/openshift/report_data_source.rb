@@ -3,19 +3,19 @@ module BushSlicer
     RESOURCE = "reportdatasources"
 
     def last_import_time(user: nil, cached: false, quiet: false)
-      raw_resource.dig('status', 'prometheusMetricImportStatus', 'lastImportTime')
+      raw_resource(user: user, cached: cached, quiet: quiet).dig('status', 'prometheusMetricsImportStatus', 'lastImportTime')
     end
 
     def newest_imported_metric_time(user: nil, cached: false, quiet: false)
-      raw_resource.dig('status', 'prometheusMetricImportStatus', 'newestImportedMetricTime')
+      raw_resource(user: user, cached: cached, quiet: quiet)..dig('status', 'prometheusMetricsImportStatus', 'newestImportedMetricTime')
     end
 
     def earliest_imported_metric_time(user: nil, cached: false, quiet: false)
-      raw_resource.dig('status', 'prometheusMetricImportStatus', 'earliestImportedMetricTime')
+      raw_resource(user: user, cached: cached, quiet: quiet)..dig('status', 'prometheusMetricsImportStatus', 'earliestImportedMetricTime')
     end
 
     def table_name(user: nil, cached: false, quiet: false)
-      raw_resource.dig('status', 'tableName')
+      raw_resource(user: user, cached: cached, quiet: quiet)..dig('status', 'tableRef', 'name')
     end
   end
 end
