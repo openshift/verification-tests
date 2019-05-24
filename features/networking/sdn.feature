@@ -81,7 +81,7 @@ Feature: SDN related networking scenarios
     And I wait up to 60 seconds for the steps to pass:
     """
     When I run the :logs admin command with:
-      | resource_name | pod.name |
+      | resource_name | <%= pod.name %> |
       | namespace     | openshift-sdn     |
       | since         | 30s               |
     Then the step should succeed
@@ -106,7 +106,7 @@ Feature: SDN related networking scenarios
     And I wait up to 60 seconds for the steps to pass:
     """
     When I run the :logs admin command with:
-      | resource_name | pod.name |
+      | resource_name | <%= pod.name %> |
       | namespace     | openshift-sdn     |
       | since         | 30s               |
     Then the step should succeed
