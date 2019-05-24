@@ -637,3 +637,16 @@ Given /^an IP echo service is setup on the master node and the ip is stored in t
     raise "Failed to delete the docker container." unless @result[:success]
   }
 end
+
+Given /^I run command on the#{OPT_QUOTED} node's sdn pod:$/ do |node_name, table|
+  ensure_admin_tagged
+  network_cmd = table.raw
+  node_name ||= node.name
+
+  sdn_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
+    pod.node_name == node_name
+  }.first
+  cache_resources sdn_pod
+  @result = sdn_pod.exec(network_cmd, as: admin)
+  raise "Failed to execute network command!" unless @result[:success]
+end
