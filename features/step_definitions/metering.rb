@@ -275,7 +275,7 @@ Given /^the#{OPT_QUOTED} metering service is uninstalled using OLM$/ do | meteri
   project("openshift-marketplace")
   step %Q/I ensure "metering-operators" catalogsourceconfig is deleted/
 end
-require 'pry'
+
 Given /^all reportdatasources are importing from Prometheus$/ do
   project ||= project(cb.metering_namespace.name)
   data_sources  = BushSlicer::ReportDataSource.list(user: user, project: project)
