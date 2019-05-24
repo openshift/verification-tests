@@ -7,15 +7,15 @@ module BushSlicer
     end
 
     def newest_imported_metric_time(user: nil, cached: true, quiet: false)
-      raw_resource(user: user, cached: cached, quiet: quiet)..dig('status', 'prometheusMetricsImportStatus', 'newestImportedMetricTime')
+      raw_resource(user: user, cached: cached, quiet: quiet).dig('status', 'prometheusMetricsImportStatus', 'newestImportedMetricTime')
     end
 
     def earliest_imported_metric_time(user: nil, cached: true, quiet: false)
-      raw_resource(user: user, cached: cached, quiet: quiet)..dig('status', 'prometheusMetricsImportStatus', 'earliestImportedMetricTime')
+      raw_resource(user: user, cached: cached, quiet: quiet).dig('status', 'prometheusMetricsImportStatus', 'earliestImportedMetricTime')
     end
 
     def table_name(user: nil, cached: true, quiet: false)
-      raw_resource(user: user, cached: cached, quiet: quiet)..dig('status', 'tableRef', 'name')
+      raw_resource(user: user, cached: cached, quiet: quiet).dig('status', 'tableRef', 'name')
     end
   end
 end
