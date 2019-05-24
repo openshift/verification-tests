@@ -283,7 +283,7 @@ Given /^all reportdatasources are importing from Prometheus$/ do
   dlist = data_sources.select{ |d| !d.name.end_with? '-raw'}
   seconds = 240   # after initial installation it takes about 2-3 minutes to initiate Prometheus sync
   success = wait_for(seconds) {
-    dlist.all? { |ds| report_data_source(ds.name).last_import_time }
+    dlist.all? { |ds| report_data_source(ds.name).last_import_time(cached: false) }
   }
   raise "Querying for reportdatasources returned failure, probabaly due to Prometheus import failed" unless success
 end
