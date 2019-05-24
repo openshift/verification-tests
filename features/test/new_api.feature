@@ -9,6 +9,7 @@ Feature: test new api methods
     And evaluation of `cluster_version('version').wait_for_upgrade_completion(version: ENV['UPGRADE_TARGET_VERSION'], timeout: 10)` is stored in the :upgrade_status clipboard
 
   @admin
+  @destructive
   Scenario: test upgrade by monitoring clusterversion
     Given I upgrade my cluster to:
       | to_image | <%= ENV['UPGRADE_TARGET_VERSION'] %> |

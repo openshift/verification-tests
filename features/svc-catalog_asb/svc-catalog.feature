@@ -20,9 +20,9 @@ Feature: Service-catalog related scenarios
     """
     When I switch to cluster admin pseudo user
     And I use the "<%= cb.ups_broker_project %>" project
-    When I run the :new_app client command with:
-      | file  | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/ups-broker-template.yaml |
-      | param | UPS_BROKER_PROJECT=<%= cb.ups_broker_project %>                                                         |
+    When I process and create:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/ups-broker-template.yaml |
+      | p | UPS_BROKER_PROJECT=<%= cb.ups_broker_project %>                                                         |
     Then the step should succeed
     And I wait for the steps to pass:
     """
@@ -38,9 +38,9 @@ Feature: Service-catalog related scenarios
     #Provision a serviceinstance
     Given I switch to the first user
     And I use the "<%= cb.user_project %>" project
-    When I run the :new_app client command with:
-      | file  | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/ups-instance-template.yaml |
-      | param | USER_PROJECT=<%= cb.user_project %>                                                                       |
+    When I process and create:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/ups-instance-template.yaml |
+      | p | USER_PROJECT=<%= cb.user_project %>                                                                       |
     Then the step should succeed
     And I wait up to 30 seconds for the steps to pass:
     """
@@ -50,9 +50,9 @@ Feature: Service-catalog related scenarios
     """
 
     # Create servicebinding
-    When I run the :new_app client command with:
-      | file  | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/ups-binding-template.yaml |
-      | param | USER_PROJECT=<%= cb.user_project %>                                                                      |
+    When I process and create:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/ups-binding-template.yaml |
+      | p | USER_PROJECT=<%= cb.user_project %>                                                                      |
     Then the step should succeed
     Given I check that the "my-secret" secret exists
     And I wait up to 10 seconds for the steps to pass:
@@ -145,9 +145,9 @@ Feature: Service-catalog related scenarios
     """
     When I switch to cluster admin pseudo user
     And I use the "<%= cb.ups_broker_project %>" project
-    When I run the :new_app client command with:
-      | file  | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/ups-broker-template.yaml |
-      | param | UPS_BROKER_PROJECT=<%= cb.ups_broker_project %>                                                         |
+    When I process and create:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/ups-broker-template.yaml |
+      | p | UPS_BROKER_PROJECT=<%= cb.ups_broker_project %>                                                         |
     Then the step should succeed
     And I wait for the steps to pass:
     """
@@ -219,9 +219,9 @@ Feature: Service-catalog related scenarios
 
     When I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
-    When I run the :new_app client command with:
-      | file  | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/ups-broker-template.yaml |
-      | param | UPS_BROKER_PROJECT=<%= project.name %>                                                                  |
+    When I process and create:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/ups-broker-template.yaml |
+      | p | UPS_BROKER_PROJECT=<%= project.name %>                                                                  |
     Then the step should succeed
     And I wait for the steps to pass:
     """

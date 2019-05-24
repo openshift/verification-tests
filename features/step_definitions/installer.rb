@@ -20,5 +20,8 @@ Given /^I upgrade my cluster to:$/ do | table |
   raise "Upgrade command failed #{@result[:response]}" unless @result[:success]
   upgrade_status = cluster_version('version').wait_for_upgrade_completion(version: target_version)
   raise "Upgrade to #{target_version} failed" unless upgrade_status
+  # added extra check to make sure all clusteroperators do not have DEGRADED
+  # status and all of the has the target version
+  step %Q/all clusteroperators reached version "#{target_version}" successfully/
 end
 
