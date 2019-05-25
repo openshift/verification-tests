@@ -15,6 +15,7 @@ module BushSlicer
       current:   %w[status replicas].freeze,
       updated:   %w[status updatedReplicas].freeze,
       available: %w[status availableReplicas].freeze,
+      ready: %w[status readyReplicas].freeze,
     }.freeze
 
     # we define this in method_missing so alias can't fly
