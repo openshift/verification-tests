@@ -437,14 +437,12 @@ end
 Given /^the cluster network plugin type and version and stored in the clipboard$/ do
   ensure_admin_tagged
   _host = node.host
-
-  step %Q/I run the ovs commands on the host:/, table([[
-    "ovs-ofctl dump-flows br0 -O openflow13 | grep table=253 | sed -n -e 's/^.*note://p'"
-  ]])
-  if @result[:success]
-    of_note = @result[:response].chomp
+  
+  step %Q/I run command on the node's sdn pod:/, table([["ovs-ofctl"],["dump-flows"],["br0"],["-O"],["openflow13"]])
+  unless @result[:success]
+    raise "Unable to execute ovs command successfully. Check your command."
   end
-
+  of_note = @result[:response].partition('note:').last.chomp
   cb.net_plugin = {
     type: of_note[0,2],
     version: of_note[3,2]
