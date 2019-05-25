@@ -1,5 +1,5 @@
 module BushSlicer
-  class IngressController < ProjectResource
+  class IngressController < PodReplicator
     RESOURCE = "ingresscontrollers"
 
 
