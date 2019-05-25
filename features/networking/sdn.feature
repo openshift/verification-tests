@@ -75,7 +75,6 @@ Feature: SDN related networking scenarios
     When I run command on the "<%= cb.node_name %>" node's sdn pod: 
       | ovs-ofctl| -O | openflow13 | mod-flows | br0 | table=253, actions=note:<%= cb.net_plugin[:type] %>.ff |
     Then the step should succeed
-    And evaluation of `pod` is stored in the clipboard
     #Expecting sdn pod to be restarted due to vesion value change
     And I wait up to 60 seconds for the steps to pass:
     """
