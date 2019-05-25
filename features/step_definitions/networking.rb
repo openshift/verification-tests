@@ -437,12 +437,18 @@ end
 Given /^the cluster network plugin type and version and stored in the clipboard$/ do
   ensure_admin_tagged
   _host = node.host
-
-  step %Q/I run the ovs commands on the host:/, table([[
-    "ovs-ofctl dump-flows br0 -O openflow13 | grep table=253 | sed -n -e 's/^.*note://p'"
-  ]])
-  if @result[:success]
-    of_note = @result[:response].chomp
+  
+  if env.version_lt("3.10", user: user)
+    step %Q/I run the ovs commands on the host:/, table([["ovs-ofctl dump-flows br0 -O openflow13"]])
+    unless @result[:success]
+      raise "Unable to execute ovs command successfully. Check your command."
+    end
+  else
+    step %Q/I run command on the node's sdn pod:/, table([["ovs-ofctl"],["dump-flows"],["br0"],["-O"],["openflow13"]])
+    unless @result[:success]
+      raise "Unable to execute ovs command successfully. Check your command."
+    end
+    of_note = @result[:response].partition('note:').last.chomp
   end
 
   cb.net_plugin = {
@@ -630,4 +636,17 @@ Given /^an IP echo service is setup on the master node and the ip is stored in t
     @result = host.exec_admin("docker rm -f ipecho")
     raise "Failed to delete the docker container." unless @result[:success]
   }
+end
+
+Given /^I run command on the#{OPT_QUOTED} node's sdn pod:$/ do |node_name, table|
+  ensure_admin_tagged
+  network_cmd = table.raw
+  node_name ||= node.name
+
+  sdn_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
+    pod.node_name == node_name
+  }.first
+  cache_resources sdn_pod
+  @result = sdn_pod.exec(network_cmd, as: admin)
+  raise "Failed to execute network command!" unless @result[:success]
 end
