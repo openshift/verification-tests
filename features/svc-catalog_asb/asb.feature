@@ -24,7 +24,7 @@ Feature: Ansible-service-broker related scenarios
     Then the step should succeed
     And evaluation of `service_instance(cb.prefix + "-mediawiki-apb").uid(user: user)` is stored in the :mediawiki_uid clipboard
     When I process and create:
-      | file  | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/serviceinstance-parameters-template.yaml |
+      | f  | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/serviceinstance-parameters-template.yaml |
       | p | SECRET_NAME=<%= cb.prefix %>-mediawiki-apb-parameters |
       | p | INSTANCE_NAME=<%= cb.prefix %>-mediawiki-apb          |
       | p | UID=<%= cb.mediawiki_uid %>                           |
