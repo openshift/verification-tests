@@ -279,7 +279,7 @@ end
 Given /^all reportdatasources are importing from Prometheus$/ do
   project ||= project(cb.metering_namespace.name)
   data_sources  = BushSlicer::ReportDataSource.list(user: user, project: project)
-  # ignore reportdatasource that ends with `-raw`
+  # valid reportdatasources are those with a prometheusMetricsImporter query statement
   dlist = data_sources.select{ |d| d.prometheus_metrics_importer_query}
   seconds = 240   # after initial installation it takes about 2-3 minutes to initiate Prometheus sync
   success = wait_for(seconds) {
