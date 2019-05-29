@@ -223,7 +223,7 @@ Feature: build 'apps' with CLI
   Scenario: Using a docker image as source input using new-build cmd
     Given I have a project
     When I run the :tag client command with:
-      | source | openshift/python:latest |
+      | source | docker.io/python:latest |
       | dest   | python:latest |
     Then the step should succeed
     And the "python" image stream becomes ready
