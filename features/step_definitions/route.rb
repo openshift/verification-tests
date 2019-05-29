@@ -131,3 +131,13 @@ Given /^all default router pods become ready$/ do
       | #{label_filter} |
     })
 end
+
+Given /^dns basedomain is stored in the#{OPT_SYM} clipboard$/ do | cb_name |
+  step %Q/I run the :get admin command with:/, table(%{
+    | resource      | dnses.config         |
+    | resource_name | cluster              |
+    | template      | {{.spec.baseDomain}} |
+  })
+  step %Q/the step should succeed/
+  cb[cb_name] = @result[:response]
+end
