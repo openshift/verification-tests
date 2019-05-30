@@ -589,7 +589,16 @@ module BushSlicer
         if task[:env]
           exec_opts[:env] = task_env_process(task[:env], erb_binding, template_dir)
         end
-        res = Host.localhost.exec(*[task[:cmd]].flatten, **exec_opts)
+        # if :cmd is passed as a string, then it will run unmodified in shell
+        # if :cmd is multi-element array, it will run without shell
+        # if :cmd is one-element array, we need special care to avoid shell
+        if Array === task[:cmd] && task[:cmd].size == 1
+          res = Host.localhost.exec([task[:cmd], task[:cmd]], **exec_opts)
+        elsif Array === task[:cmd]
+          res = Host.localhost.exec(*task[:cmd], **exec_opts)
+        else
+          res = Host.localhost.exec(task[:cmd], **exec_opts)
+        end
         unless res[:success]
           raise "shell command failed execution, see logs"
         end
