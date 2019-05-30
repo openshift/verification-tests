@@ -165,15 +165,14 @@ module BushSlicer
       pcmd = []
       # environment hash is first param according to docs
       pcmd << opts[:env] if opts[:env]
-      pcmd.concat cmd.flatten
+      pcmd.concat cmd
       return pcmd
     end
 
     def result
       return @res if @res
 
-      command = cmd.flatten
-      cmdstr = command.size == 1 ? command.first : command.to_s
+      cmdstr = cmd.size == 1 ? cmd.first : cmd.to_s
 
       result = opts[:result] || {}
       result[:command] = cmdstr
