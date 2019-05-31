@@ -22,7 +22,12 @@ Feature: ResourceQuata for storage
       | ["metadata"]["annotations"]["volume.alpha.kubernetes.io/storage-class"] | foo           |
       | ["spec"]["resources"]["requests"]["storage"]                            | 3Gi           |
     Then the step should succeed
-    And the "pvc-#{ cb.i }" PVC becomes :bound
+
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gce/pod.json" replacing paths:
+      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | pvc-#{ cb.i }   |
+      | ["metadata"]["name"]                                         | mypod-#{ cb.i } |
+    Then the step should succeed
+    And the pod named "mypod-#{ cb.i}" becomes ready
     """
 
     # Try to exceed the 12Gi storage
@@ -45,9 +50,12 @@ Feature: ResourceQuata for storage
       | ["metadata"]["annotations"]["volume.alpha.kubernetes.io/storage-class"] | foo            |
       | ["spec"]["resources"]["requests"]["storage"]                            | 1Gi            |
     Then the step should succeed
-    And the "pvc-#{ cb.i }" PVC becomes :bound
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gce/pod.json" replacing paths:
+      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | pvci-#{ cb.i }   |
+      | ["metadata"]["name"]                                         | mypodi-#{ cb.i } |
+    Then the step should succeed
+    And the pod named "mypodi-#{ cb.i }" becomes ready
     """
-
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
       | ["metadata"]["name"]                                                    | pvc-<%= project.name %> |
       | ["metadata"]["annotations"]["volume.alpha.kubernetes.io/storage-class"] | foo                     |
