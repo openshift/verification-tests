@@ -172,7 +172,7 @@ module BushSlicer
     def result
       return @res if @res
 
-      cmdstr = cmd.size == 1 ? cmd.first : cmd.to_s
+      cmdstr = cmd.size == 1 ? cmd.first.to_s : cmd.to_s
 
       result = opts[:result] || {}
       result[:command] = cmdstr
