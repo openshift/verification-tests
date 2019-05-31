@@ -593,7 +593,8 @@ module BushSlicer
         # if :cmd is multi-element array, it will run without shell
         # if :cmd is one-element array, we need special care to avoid shell
         if Array === task[:cmd] && task[:cmd].size == 1
-          res = Host.localhost.exec([task[:cmd], task[:cmd]], **exec_opts)
+          res = Host.localhost.exec([task[:cmd].first, task[:cmd].first],
+                                                                **exec_opts)
         elsif Array === task[:cmd]
           res = Host.localhost.exec(*task[:cmd], **exec_opts)
         else
