@@ -22,9 +22,7 @@ Feature: ResourceQuata for storage
       | ["metadata"]["annotations"]["volume.alpha.kubernetes.io/storage-class"] | foo           |
       | ["spec"]["resources"]["requests"]["storage"]                            | 3Gi           |
     Then the step should succeed
-    """
-    And I run the steps 3 times:
-    """
+
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gce/pod.json" replacing paths:
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | pvc-#{ cb.i }   |
       | ["metadata"]["name"]                                         | mypod-#{ cb.i } |
@@ -52,9 +50,6 @@ Feature: ResourceQuata for storage
       | ["metadata"]["annotations"]["volume.alpha.kubernetes.io/storage-class"] | foo            |
       | ["spec"]["resources"]["requests"]["storage"]                            | 1Gi            |
     Then the step should succeed
-    """
-    And I run the steps 2 times:
-    """
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gce/pod.json" replacing paths:
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | pvci-#{ cb.i }   |
       | ["metadata"]["name"]                                         | mypodi-#{ cb.i } |
