@@ -203,6 +203,7 @@ Feature: Pod related networking scenarios
     
     Given I have a project
     #pod-for-ping will be a non-hotnetwork pod
+    And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
     And I have a pod-for-ping in the project
     And the pod named "hello-pod" becomes ready
 
@@ -213,11 +214,11 @@ Feature: Pod related networking scenarios
       | curl | -I | http://<%= cb.master_ip %>:22624/master/config | -k |
     Then the output should contain "Connection refused"
     
-    Given I have a project
     #hostnetwork-pod will be a hostnetwork pod
     When I run the :create admin command with:
       | f | https://raw.githubusercontent.com/anuragthehatter/v3-testfiles/master/networking/hostnetwork-pod.json |
-    And the pod named "hostnetwork-pod" becomes ready
+      | n | <%= project.name %>                                                                                   |
+    Then the pod named "hostnetwork-pod" becomes ready
     When I execute on the pod:
       | curl | -I | http://<%= cb.master_ip %>:22623/master/config | -k |
     Then the output should contain "Connection refused"
@@ -233,7 +234,7 @@ Feature: Pod related networking scenarios
     And I run commands on the host:
       | ifconfig tun0 \| grep -w inet \| awk '{print $2}' |
     Then the step should succeed
-    And evaluation of `@result[:response]` is stored in the :master_tun0_ip clipboard
+    And evaluation of `@result[:response].strip` is stored in the :master_tun0_ip clipboard
     
     Given I select a random node's host
     And I have a project
