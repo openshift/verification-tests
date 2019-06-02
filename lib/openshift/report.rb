@@ -21,7 +21,7 @@ module BushSlicer
 
     def running?(user: nil, cached: false, quiet: false)
       # the reason 'Scheduled' is an initial state what we
-      conditions.any? { |c| c.type == 'Running' and c.reason != 'Scheduled' }
+      conditions.any? { |c| c.type == 'Running' }
     end
 
     # wait until the stauts of the Report becomes 'Finished'
@@ -52,7 +52,10 @@ module BushSlicer
     end
 
     def self.generate_yaml(**opts)
-      schedule = opts[:schedule].nil? ? nil : YAML.load(opts[:schedule])
+      if opts[:period]
+        schedule = {"period" => opts[:period] }
+        schedule["cron"] = {"expression" => opts[:expression] } if opts[:period] == "cron"
+      end
       report_hash = {
         "apiVersion" => "metering.openshift.io/v1alpha1",
         "kind" => 'Report',
@@ -63,8 +66,8 @@ module BushSlicer
           "reportingStart" => opts[:start_time],
           "reportingEnd" => opts[:end_time],
           "query" => opts[:query_type],
-          "gracePeriod" => opts[:grace_period],
           "runImmediately" => opts[:run_immediately],
+          "gracePeriod" => opts[:grace_period],
           "schedule" => schedule
         },
       }
