@@ -52,6 +52,7 @@ module BushSlicer
     end
 
     def self.generate_yaml(**opts)
+      schedule = nil
       if opts[:period]
         schedule = {"period" => opts[:period] }
         schedule["cron"] = {"expression" => opts[:expression] } if opts[:period] == "cron"
