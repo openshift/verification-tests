@@ -235,17 +235,12 @@ Feature: Pod related networking scenarios
     Then the step should succeed
     And evaluation of `@result[:response]` is stored in the :master_tun0_ip clipboard
     
-    #Step to obtain master IP
-    When I run the :get admin command with:
-      | resource | nodes |
-      | output   | json | 
-    And evaluation of `@result[:parsed]['items'][0]['status']['addresses'][0]['address']` is stored in the :master_ip clipboard		
-    
-    Given I have a project
+    Given I select a random node's host
+    And I have a project
     #pod-for-ping will be a non-hotnetwork pod
     And I have a pod-for-ping in the project
     And the pod named "hello-pod" becomes ready
-
+    #Curl on Master's tun0 IP to make sure connections are blocked to MCS via tun0
     When I execute on the pod:
       | curl | -I | http://<%= cb.master_tun0_ip %>:22623/master/config | -k |
     Then the output should contain "Connection refused"
