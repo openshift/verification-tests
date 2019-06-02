@@ -190,3 +190,66 @@ Feature: Pod related networking scenarios
     Then the step should succeed
     And the output should not contain "ingress_policing_rate: 1953"
 
+  # @auther anusaxen@redhat.com
+  # @case_id OCP-23890
+  @admin
+  Scenario: A pod with or without hostnetwork cannot access the MCS port 22623 or 22624 on the master
+    Given I select a random node's host
+    #Step to obtain master IP
+    When I run the :get admin command with:
+      | resource | nodes |
+      | output   | json | 
+    And evaluation of `@result[:parsed]['items'][0]['status']['addresses'][0]['address']` is stored in the :master_ip clipboard		
+    
+    Given I have a project
+    #pod-for-ping will be a non-hotnetwork pod
+    And I have a pod-for-ping in the project
+    And the pod named "hello-pod" becomes ready
+
+    When I execute on the pod:
+      | curl | -I | http://<%= cb.master_ip %>:22623/master/config | -k |
+    Then the output should contain "Connection refused"
+    When I execute on the pod:
+      | curl | -I | http://<%= cb.master_ip %>:22624/master/config | -k |
+    Then the output should contain "Connection refused"
+    
+    Given I have a project
+    #hostnetwork-pod will be a hostnetwork pod
+    When I run the :create admin command with:
+      | f | https://raw.githubusercontent.com/anuragthehatter/v3-testfiles/master/networking/hostnetwork-pod.json |
+    And the pod named "hostnetwork-pod" becomes ready
+    When I execute on the pod:
+      | curl | -I | http://<%= cb.master_ip %>:22623/master/config | -k |
+    Then the output should contain "Connection refused"
+    When I execute on the pod:
+      | curl | -I | http://<%= cb.master_ip %>:22624/master/config | -k |
+    Then the output should contain "Connection refused"
+
+  # @auther anusaxen@redhat.com
+  # @case_id OCP-23891
+  @admin
+  Scenario: A pod cannot access the MCS port 22623 or 22624 via the SDN/tun0 address of the master
+    Given I use the first master host		
+    And I run commands on the host:
+      | ifconfig tun0 \| grep -w "inet" \| awk \'{print $2}\' |
+    Then the step should succeed
+    And evaluation of `@result[:response]` is stored in the :master_tun0_ip clipboard
+    
+    Given I select a random node's host
+    #Step to obtain master IP
+    When I run the :get admin command with:
+      | resource | nodes |
+      | output   | json | 
+    And evaluation of `@result[:parsed]['items'][0]['status']['addresses'][0]['address']` is stored in the :master_ip clipboard		
+    
+    Given I have a project
+    #pod-for-ping will be a non-hotnetwork pod
+    And I have a pod-for-ping in the project
+    And the pod named "hello-pod" becomes ready
+
+    When I execute on the pod:
+      | curl | -I | http://<%= cb.master_tun0_ip %>:22623/master/config | -k |
+    Then the output should contain "Connection refused"
+    When I execute on the pod:
+      | curl | -I | http://<%= cb.master_tun0_ip %>:22624/master/config | -k |
+    Then the output should contain "Connection refused"
