@@ -231,7 +231,7 @@ Feature: Pod related networking scenarios
   Scenario: A pod cannot access the MCS port 22623 or 22624 via the SDN/tun0 address of the master
     Given I use the first master host		
     And I run commands on the host:
-      | ifconfig tun0 \| grep -w "inet" \| awk \'{print $2}\' |
+      | ifconfig | tun0 | \| | grep -w inet | \| | awk {print $2} |
     Then the step should succeed
     And evaluation of `@result[:response]` is stored in the :master_tun0_ip clipboard
     
