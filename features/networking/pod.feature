@@ -202,7 +202,7 @@ Feature: Pod related networking scenarios
     And evaluation of `@result[:parsed]['items'][0]['status']['addresses'][0]['address']` is stored in the :master_ip clipboard		
     
     Given I have a project
-    #pod-for-ping will be a non-hotnetwork pod
+    #pod-for-ping will be a non-hostnetwork pod
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
     And I have a pod-for-ping in the project
     And the pod named "hello-pod" becomes ready
@@ -238,7 +238,7 @@ Feature: Pod related networking scenarios
     
     Given I select a random node's host
     And I have a project
-    #pod-for-ping will be a non-hotnetwork pod
+    #pod-for-ping will be a non-hostnetwork pod
     And I have a pod-for-ping in the project
     And the pod named "hello-pod" becomes ready
     #Curl on Master's tun0 IP to make sure connections are blocked to MCS via tun0
@@ -248,3 +248,62 @@ Feature: Pod related networking scenarios
     When I execute on the pod:
       | curl | -I | http://<%= cb.master_tun0_ip %>:22624/master/config | -k |
     Then the output should contain "Connection refused"
+
+  # @auther anusaxen@redhat.com
+  # @case_id OCP-23892
+  @admin
+  Scenario: A pod cannot access the MCS via an egress router in http proxy mode
+    Given I select a random node's host
+    #Step to obtain master IP
+    When I run the :get admin command with:
+      | resource | nodes |
+      | output   | json |
+    And evaluation of `@result[:parsed]['items'][0]['status']['addresses'][0]['address']` is stored in the :master_ip clipboard
+
+    Given I have a project
+    And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
+    #pod-for-ping will be a non-hotnetwork pod
+    When I run the :create admin command with:
+      | f | https://raw.githubusercontent.com/weliang1/Openshift_Networking/master/egress-http-proxy/egress-http-proxy-pod.yaml |
+      | n | <%= project.name %>                                                                                   |
+    Then the pod named "egress-http-proxy" becomes ready
+
+    When I execute on the pod:
+      | curl | -I | http://<%= cb.master_ip %>:22623/master/config | -k |
+    Then the output should contain "Connection refused"
+    When I execute on the pod:
+      | curl | -I | http://<%= cb.master_ip %>:22624/master/config | -k |
+    Then the output should contain "Connection refused"
+
+  # @auther anusaxen@redhat.com
+  # @case_id OCP-23893
+  @admin
+  Scenario: A pod in a namespace with an egress IP cannot access the MCS
+    Given I select a random node's host
+    #Step to obtain master IP
+    When I run the :get admin command with:
+      | resource | nodes |
+      | output   | json |
+    And evaluation of `@result[:parsed]['items'][0]['status']['addresses'][0]['address']` is stored in the :master_ip clipboard
+
+    Given I have a project
+    And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
+    #pod-for-ping will be a non-hostnetwork pod
+    And I have a pod-for-ping in the project
+    And the pod named "hello-pod" becomes ready
+    
+    When I run the :patch admin command with:
+      | resource      | netnamespace |
+      | resource_name | <%= cb.project %> |
+      | p             | {"egressIPs":["<%= cb.valid_ip %>"]} |
+    Then the step should succeed
+    
+    Given I use the "<%= project.name %>" project
+    When I execute on the pod:
+      | curl | -I | http://<%= cb.master_ip %>:22623/master/config | -k |
+    Then the output should contain "Connection refused"
+    When I execute on the pod:
+      | curl | -I | http://<%= cb.master_ip %>:22624/master/config | -k |
+    Then the output should contain "Connection refused"
+
+
