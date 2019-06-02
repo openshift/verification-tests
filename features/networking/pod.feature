@@ -235,7 +235,6 @@ Feature: Pod related networking scenarios
     Then the step should succeed
     And evaluation of `@result[:response]` is stored in the :master_tun0_ip clipboard
     
-    Given I select a random node's host
     #Step to obtain master IP
     When I run the :get admin command with:
       | resource | nodes |
