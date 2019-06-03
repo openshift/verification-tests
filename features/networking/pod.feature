@@ -194,13 +194,14 @@ Feature: Pod related networking scenarios
   # @case_id OCP-23890
   @admin
   Scenario: A pod with or without hostnetwork cannot access the MCS port 22623 or 22624 on the master
-    Given I select a random node's host
+    Given I use the first master host
     #Step to obtain master IP
-    When I run the :get admin command with:
-      | resource | nodes |
-      | output   | json | 
-    And evaluation of `@result[:parsed]['items'][0]['status']['addresses'][0]['address']` is stored in the :master_ip clipboard		
+    And I run commands on the host:
+      | hostname -i |
+    Then the step should succeed
+    And evaluation of `@result[:response].strip` is stored in the :master_ip clipboard
     
+    Given I select a random node's host
     Given I have a project
     #pod-for-ping will be a non-hostnetwork pod
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
@@ -254,13 +255,14 @@ Feature: Pod related networking scenarios
   # @case_id OCP-23892
   @admin
   Scenario: A pod cannot access the MCS via an egress router in http proxy mode
-    Given I select a random node's host
+    Given I use the first master host
     #Step to obtain master IP
-    When I run the :get admin command with:
-      | resource | nodes |
-      | output   | json |
-    And evaluation of `@result[:parsed]['items'][0]['status']['addresses'][0]['address']` is stored in the :master_ip clipboard
-
+    And I run commands on the host:
+      | hostname -i |
+    Then the step should succeed
+    And evaluation of `@result[:response].strip` is stored in the :master_ip clipboard
+    
+    Given I select a random node's host
     Given I have a project
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
     #pod-for-ping will be a non-hotnetwork pod
@@ -280,13 +282,14 @@ Feature: Pod related networking scenarios
   # @case_id OCP-23893
   @admin
   Scenario: A pod in a namespace with an egress IP cannot access the MCS
-    Given I select a random node's host
+    Given I use the first master host
     #Step to obtain master IP
-    When I run the :get admin command with:
-      | resource | nodes |
-      | output   | json |
-    And evaluation of `@result[:parsed]['items'][0]['status']['addresses'][0]['address']` is stored in the :master_ip clipboard
-
+    And I run commands on the host:
+      | hostname -i |
+    Then the step should succeed
+    And evaluation of `@result[:response].strip` is stored in the :master_ip clipboard
+    
+    Given I select a random node's host
     Given I have a project
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
     #pod-for-ping will be a non-hostnetwork pod
