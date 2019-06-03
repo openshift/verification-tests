@@ -53,39 +53,40 @@ Feature: NFS Persistent Volume
       | chmod | -R | 770 | /mnt/data |
     Then the step should succeed
 
-    Given admin creates a PV from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/pv-gid.json" where:
+    When admin creates a PV from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/pv-gid.json" where:
       | ["spec"]["nfs"]["server"]                                | <%= service("nfs-service").ip %> |
       | ["spec"]["nfs"]["path"]                                  | /                                |
       | ["spec"]["capacity"]["storage"]                          | 1Gi                              |
       | ["metadata"]["name"]                                     | nfs-<%= project.name %>          |
-      | ["metadata"]["annotations"]["pv.beta.kubernetes.io/gid"] | <pv-gid>                         |
+      | ["metadata"]["annotations"]["pv.beta.kubernetes.io/gid"] | "<pv-gid>"                       |
+    Then the step should succeed
 
     When I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/claim-rwx.json" replacing paths:
-      | ["metadata"]["name"]                         | nfsc-<%= project.name %> |
-      | ["spec"]["resources"]["requests"]["storage"] | 1Gi                      |
+      | ["metadata"]["name"]                         | nfsc |
+      | ["spec"]["resources"]["requests"]["storage"] | 1Gi  |
     Then the step should succeed
-    And the "nfsc-<%= project.name %>" PVC becomes bound to the "nfs-<%= project.name %>" PV
+    And the "nfsc" PVC becomes bound to the "nfs-<%= project.name %>" PV
 
     Given I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/security/pod-supplementalgroup.json" replacing paths:
-      | ["metadata"]["name"]                                         | nfspd-<%= project.name %> |
-      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | nfsc-<%= project.name %>  |
+      | ["metadata"]["name"]                                         | nfspd |
+      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | nfsc  |
     Then the step should succeed
-    And the pod named "nfspd-<%= project.name %>" becomes ready
+    And the pod named "nfspd" becomes ready
 
-    When I execute on the "nfspd-<%= project.name %>" pod:
+    When I execute on the pod:
       | id | -u |
     Then the output should contain:
       | 101 |
-    When I execute on the "nfspd-<%= project.name %>" pod:
+    When I execute on the pod:
       | id | -G |
     Then the output should contain 1 times:
       | <pod-gid> |
-    Given I execute on the "nfspd-<%= project.name %>" pod:
+    Given I execute on the pod:
       | touch | /mnt/nfs/nfs_testfile |
     Then the step should succeed
-    When I execute on the "nfspd-<%= project.name %>" pod:
+    When I execute on the pod:
       | ls | -l | /mnt/nfs/nfs_testfile |
     Then the step should succeed
 
