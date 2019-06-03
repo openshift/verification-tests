@@ -219,6 +219,7 @@ Feature: Pod related networking scenarios
       | f | https://raw.githubusercontent.com/anuragthehatter/v3-testfiles/master/networking/hostnetwork-pod.json |
       | n | <%= project.name %>                                                                                   |
     Then the pod named "hostnetwork-pod" becomes ready
+    #Pods should not access the MCS port 22623 or 22624 on the master
     When I execute on the pod:
       | curl | -I | http://<%= cb.master_ip %>:22623/master/config | -k |
     Then the output should contain "Connection refused"
@@ -267,7 +268,7 @@ Feature: Pod related networking scenarios
       | f | https://raw.githubusercontent.com/weliang1/Openshift_Networking/master/egress-http-proxy/egress-http-proxy-pod.yaml |
       | n | <%= project.name %>                                                                                   |
     Then the pod named "egress-http-proxy" becomes ready
-
+    #Pod should not access MCS via an egress router pod
     When I execute on the pod:
       | curl | -I | http://<%= cb.master_ip %>:22623/master/config | -k |
     Then the output should contain "Connection refused"
@@ -293,17 +294,17 @@ Feature: Pod related networking scenarios
     And the pod named "hello-pod" becomes ready
     
     When I run the :patch admin command with:
-      | resource      | netnamespace |
-      | resource_name | <%= cb.project %> |
+      | resource      | netnamespace                         |
+      | resource_name | <%= project.name %>                  |
       | p             | {"egressIPs":["<%= cb.valid_ip %>"]} |
+      | type          | merge                                |
     Then the step should succeed
     
     Given I use the "<%= project.name %>" project
+    #Pod cannot access MCS
     When I execute on the pod:
       | curl | -I | http://<%= cb.master_ip %>:22623/master/config | -k |
     Then the output should contain "Connection refused"
     When I execute on the pod:
       | curl | -I | http://<%= cb.master_ip %>:22624/master/config | -k |
     Then the output should contain "Connection refused"
-
-

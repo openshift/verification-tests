@@ -105,3 +105,27 @@ Feature: Service related networking scenarios
     And the output should not contain:
       | <%= cb.service_ip %> |
 
+  # @auther anusaxen@redhat.com
+  # @case_id OCP-23895
+  @admin
+  Scenario: User cannot access the MCS by creating a LoadBalancer service that points to the MCS
+    Given I select a random node's host
+    Given I have a project
+    And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
+    And I have a pod-for-ping in the project
+    And the pod named "hello-pod" becomes ready
+    #Creating laodbalancer service that points to MCS IP
+    When I run the :create_service_loadbalancer client command with: 
+      | name | hello-pod  |
+      | tcp  | 22623:8080 | 
+    Then the step should succeed
+    #Getting loadbalancer service IP
+    When I run the :get admin command with:
+      | resource | svc                                 |
+      | output   | jsonpath={.items[*].spec.clusterIP} |
+      | n        | <%= project.name %>                 |
+    And evaluation of `@result[:response].strip` is stored in the :svc_lb_ip clipboard
+    #Make sure user cannot access the MCS by creating a LoadBalancer service that points to the MCS 
+    When I execute on the pod:
+      | curl | -I | http://<%= cb.svc_lb_ip %>:22623/master/config | -k |
+    Then the output should contain "Connection refused"
