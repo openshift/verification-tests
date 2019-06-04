@@ -603,7 +603,7 @@ Given /^the valid egress IP is added to the#{OPT_QUOTED} node$/ do |node_name|
   ensure_admin_tagged
   step "I store a random unused IP address from the reserved range to the clipboard"
 
-  @result = admin.cli_exec(:patch, resource: "hostsubnet", resource_name: "#{node_name}", p: "{\"egressIPs\":[\"#{cb.valid_ip}\"]}")
+  @result = admin.cli_exec(:patch, resource: "hostsubnet", resource_name: "#{node_name}", p: "{\"egressIPs\":[\"#{cb.valid_ip}\"]} --type=merge")
   raise "Failed to patch hostsubnet!" unless @result[:success]
   logger.info "The free IP #{cb.valid_ip} added to egress node #{node_name}."
 

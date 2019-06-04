@@ -282,12 +282,12 @@ Feature: Pod related networking scenarios
   # @case_id OCP-23893
   @admin
   Scenario: A pod in a namespace with an egress IP cannot access the MCS
-    Given I use the first master host
+    #Given I use the first master host
     #Step to obtain master IP
-    And I run commands on the host:
-      | hostname -i |
-    Then the step should succeed
-    And evaluation of `@result[:response].strip` is stored in the :master_ip clipboard
+    #And I run commands on the host:
+    #  | hostname -i |
+    #Then the step should succeed
+    #And evaluation of `@result[:response].strip` is stored in the :master_ip clipboard
     
     Given I select a random node's host
     And evaluation of `node.name` is stored in the :egress_node clipboard
