@@ -608,7 +608,7 @@ Given /^the valid egress IP is added to the#{OPT_QUOTED} node$/ do |node_name|
   logger.info "The free IP #{cb.valid_ip} added to egress node #{node_name}."
 
   teardown_add {
-    @result = admin.cli_exec(:patch, resource: "hostsubnet", resource_name: "#{node_name}", p: "{\"egressIPs\":[]}")
+    @result = admin.cli_exec(:patch, resource: "hostsubnet", resource_name: "#{node_name}", p: "{\"egressIPs\":[]}", type: "merge")
     raise "Failed to clear egress IP on node #{node_name}" unless @result[:success]
   }
 end
