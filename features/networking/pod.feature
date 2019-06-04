@@ -282,33 +282,23 @@ Feature: Pod related networking scenarios
   # @case_id OCP-23893
   @admin
   Scenario: A pod in a namespace with an egress IP cannot access the MCS
-    #Given I use the first master host
+    Given I use the first master host
     #Step to obtain master IP
-    #And I run commands on the host:
-    #  | hostname -i |
-    #Then the step should succeed
-    #And evaluation of `@result[:response].strip` is stored in the :master_ip clipboard
+    And I run commands on the host:
+      | hostname -i |
+    Then the step should succeed
+    And evaluation of `@result[:response].strip` is stored in the :master_ip clipboard
     
     Given I select a random node's host
     And evaluation of `node.name` is stored in the :egress_node clipboard
     #add the egress ip to the hostsubnet
     And the valid egress IP is added to the "<%= cb.egress_node %>" node
-    #Given I select a random node's host
-    
     Given I have a project
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
     #pod-for-ping will be a non-hostnetwork pod
     And I have a pod-for-ping in the project
     And the pod named "hello-pod" becomes ready
     
-    #When I run the :patch admin command with:
-    #  | resource      | netnamespace                         |
-    #  | resource_name | <%= project.name %>                  |
-    #  | p             | {"egressIPs":["<%= cb.valid_ip %>"]} |
-    #  | type          | merge                                |
-    #Then the step should succeed
-    
-    #Given I use the "<%= project.name %>" project
     #Pod cannot access MCS
     When I execute on the pod:
       | curl | -I | https://<%= cb.master_ip %>:22623/master/config | -k |
