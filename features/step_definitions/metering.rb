@@ -362,7 +362,7 @@ end
 #           "schedule" => schedule
 #         },
 #
-Then /^I generate a metering report with:$/ do |table|
+When /^I generate a metering report with:$/ do |table|
   opts = opts_array_to_hash(table.raw)
   ### these are defaults
   # 1. runImmediately=true unless schedule (period)is specified
