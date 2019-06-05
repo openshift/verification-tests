@@ -20,7 +20,6 @@ module BushSlicer
     end
 
     def running?(user: nil, cached: false, quiet: false)
-      # the reason 'Scheduled' is an initial state what we
       conditions.any? { |c| c.type == 'Running' }
     end
 
