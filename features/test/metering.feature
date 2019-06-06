@@ -55,3 +55,14 @@ Feature: test metering related steps
     Given metering service is uninstalled using shell script
     And I switch to the first user
     Given metering service has been installed successfully using ansible
+
+  @admin
+  Scenario: test report generation step
+    Given I switch to cluster admin pseudo user
+    Given I use the "openshift-metering" project
+
+    Then I generate a metering report with:
+      | metadata_name | test                     |
+      | query_type    | namespace-memory-request |
+
+
