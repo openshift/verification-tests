@@ -87,9 +87,9 @@ Feature: ResourceQuata for storage
     And I run the steps 2 times:
     """
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
-      | ["metadata"]["name"]                                                   | pvc-#{ cb.i }          |
-      | ["metadata"]["annotations"]["volume.beta.kubernetes.io/storage-class"] | sc-<%= project.name %> |
-      | ["spec"]["resources"]["requests"]["storage"]                           | 4Mi                    |
+      | ["metadata"]["name"]                         | pvc-#{ cb.i }          |
+      | ["spec"]["storageClassName"]                 | sc-<%= project.name %> |
+      | ["spec"]["resources"]["requests"]["storage"] | 4Mi                    |
     Then the step should succeed
     And the "pvc-#{ cb.i }" PVC becomes :bound
     And admin ensures "#{ pvc.volume_name }" pv is deleted after scenario
@@ -97,9 +97,9 @@ Feature: ResourceQuata for storage
 
     # Try to exceed the 10Mi storage
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
-      | ["metadata"]["name"]                                                   | pvc-<%= project.name %>             |
-      | ["metadata"]["annotations"]["volume.beta.kubernetes.io/storage-class"] | sc-<%= project.name %> |
-      | ["spec"]["resources"]["requests"]["storage"]                           | 4Mi                                 |
+      | ["metadata"]["name"]                         | pvc-<%= project.name %>             |
+      | ["spec"]["storageClassName"]                 | sc-<%= project.name %> |
+      | ["spec"]["resources"]["requests"]["storage"] | 4Mi                                 |
     Then the step should fail
     And the output should contain:
       | exceeded quota                                                                                  |
@@ -109,17 +109,17 @@ Feature: ResourceQuata for storage
 
     # Try to exceed total number of PVCs
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
-      | ["metadata"]["name"]                                                   | pvcnew                 |
-      | ["metadata"]["annotations"]["volume.beta.kubernetes.io/storage-class"] | sc-<%= project.name %> |
-      | ["spec"]["resources"]["requests"]["storage"]                           | 1Mi                    |
+      | ["metadata"]["name"]                         | pvcnew                 |
+      | ["spec"]["storageClassName"]                 | sc-<%= project.name %> |
+      | ["spec"]["resources"]["requests"]["storage"] | 1Mi                    |
     Then the step should succeed
     And the "pvcnew" PVC becomes :bound
     And admin ensures "<%= pvc('pvcnew').volume_name %>" pv is deleted after scenario
 
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
-      | ["metadata"]["name"]                                                   | pvcnew2                |
-      | ["metadata"]["annotations"]["volume.beta.kubernetes.io/storage-class"] | sc-<%= project.name %> |
-      | ["spec"]["resources"]["requests"]["storage"]                           | 1Mi                    |
+      | ["metadata"]["name"]                         | pvcnew2                |
+      | ["spec"]["storageClassName"]                 | sc-<%= project.name %> |
+      | ["spec"]["resources"]["requests"]["storage"] | 1Mi                    |
     Then the step should fail
     And the output should contain:
       | exceeded quota                                                                         |
@@ -131,9 +131,9 @@ Feature: ResourceQuata for storage
     Given admin clones storage class "sc1-<%= project.name %>" from ":default" with:
       | | |
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
-      | ["metadata"]["name"]                                                   | pvc1-<%= project.name %> |
-      | ["metadata"]["annotations"]["volume.beta.kubernetes.io/storage-class"] | sc1-<%= project.name %>  |
-      | ["spec"]["resources"]["requests"]["storage"]                           | 11Mi                     |
+      | ["metadata"]["name"]                         | pvc1-<%= project.name %> |
+      | ["spec"]["storageClassName"]                 | sc1-<%= project.name %>  |
+      | ["spec"]["resources"]["requests"]["storage"] | 11Mi                     |
     Then the step should succeed
     And the "pvc1-<%= project.name %>" PVC becomes :bound
     Given I ensure "pvc1-<%= project.name %>" pvc is deleted

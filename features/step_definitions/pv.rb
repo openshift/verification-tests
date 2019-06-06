@@ -82,9 +82,9 @@ Given /^I have a(?: (\d+) GB)? volume from provisioner "([^"]*)" and save volume
     })
   step %Q/the step should succeed/
   step %Q{I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/azure/azpvc-sc.yaml" replacing paths:}, table(%{
-    | ["metadata"]["name"]                                                   | <%= project.name %>-<%= cb.dynamic_pvc_name %> |
-    | ["spec"]["resources"]["requests"]["storage"]                           | #{size}Gi                                      |
-    | ["metadata"]["annotations"]["volume.beta.kubernetes.io/storage-class"] | <%= project.name %>-<%=cb.storage_class_name%> |
+    | ["metadata"]["name"]                         | <%= project.name %>-<%= cb.dynamic_pvc_name %> |
+    | ["spec"]["resources"]["requests"]["storage"] | #{size}Gi                                      |
+    | ["spec"]["storageClassName"]                 | <%= project.name %>-<%=cb.storage_class_name%> |
     })
   step %Q/the step should succeed/
   step %Q/the "<%= project.name %>-<%= cb.dynamic_pvc_name %>" PVC becomes :bound within #{timeout} seconds/

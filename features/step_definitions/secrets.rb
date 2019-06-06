@@ -9,8 +9,8 @@ Given /^the azure file secret name and key are stored to the clipboard$/ do
     })
   step %Q/the step should succeed/
   step %Q{I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/azure/azpvc-sc.yaml" replacing paths:}, table(%{
-    | ["metadata"]["name"]                                                   | <%= cb.dynamic_pvc_name %>   |
-    | ["metadata"]["annotations"]["volume.beta.kubernetes.io/storage-class"] | <%= cb.storage_class_name %> |
+    | ["metadata"]["name"]         | <%= cb.dynamic_pvc_name %>   |
+    | ["spec"]["storageClassName"] | <%= cb.storage_class_name %> |
     })
   step %Q/the step should succeed/
   step %Q/the "<%= cb.dynamic_pvc_name %>" PVC becomes :bound within 120 seconds/

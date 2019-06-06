@@ -11,8 +11,8 @@ Feature: AWS specific scenarios
       | ["provisioner"]      | openshift.org/aws-efs  |
     Then the step should succeed
     When I run oc create over "https://raw.githubusercontent.com/kubernetes-incubator/external-storage/master/aws/efs/deploy/claim.yaml" replacing paths:
-      | ["metadata"]["name"]                                                   | efspvc-<%= project.name %> |
-      | ["metadata"]["annotations"]["volume.beta.kubernetes.io/storage-class"] | sc-<%= project.name %>     |
+      | ["metadata"]["name"]         | efspvc-<%= project.name %> |
+      | ["spec"]["storageClassName"] | sc-<%= project.name %>     |
     Then the step should succeed
     And the "efspvc-<%= project.name %>" PVC becomes :bound within 60 seconds
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/ebs/pod.yaml" replacing paths:
