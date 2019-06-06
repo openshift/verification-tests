@@ -127,5 +127,5 @@ Feature: Service related networking scenarios
     And evaluation of `@result[:response].strip` is stored in the :svc_lb_ip clipboard
     #Make sure user cannot access the MCS by creating a LoadBalancer service that points to the MCS 
     When I execute on the pod:
-      | curl | -I | http://<%= cb.svc_lb_ip %>:22623/master/config | -k |
+      | curl | -I | http://<%= cb.svc_lb_ip %>:22623/config/master | -k |
     Then the output should contain "Connection refused"

@@ -209,10 +209,10 @@ Feature: Pod related networking scenarios
     And the pod named "hello-pod" becomes ready
 
     When I execute on the pod:
-      | curl | -I | https://<%= cb.master_ip %>:22623/master/config | -k |
+      | curl | -I | https://<%= cb.master_ip %>:22623/config/master | -k |
     Then the output should contain "Connection refused"
     When I execute on the pod:
-      | curl | -I | https://<%= cb.master_ip %>:22624/master/config | -k |
+      | curl | -I | https://<%= cb.master_ip %>:22624/config/master | -k |
     Then the output should contain "Connection refused"
     
     #hostnetwork-pod will be a hostnetwork pod
@@ -222,10 +222,10 @@ Feature: Pod related networking scenarios
     Then the pod named "hostnetwork-pod" becomes ready
     #Pods should not access the MCS port 22623 or 22624 on the master
     When I execute on the pod:
-      | curl | -I | https://<%= cb.master_ip %>:22623/master/config | -k |
+      | curl | -I | https://<%= cb.master_ip %>:22623/config/master | -k |
     Then the output should contain "Connection refused"
     When I execute on the pod:
-      | curl | -I | https://<%= cb.master_ip %>:22624/master/config | -k |
+      | curl | -I | https://<%= cb.master_ip %>:22624/config/master | -k |
     Then the output should contain "Connection refused"
 
   # @auther anusaxen@redhat.com
@@ -245,10 +245,10 @@ Feature: Pod related networking scenarios
     And the pod named "hello-pod" becomes ready
     #Curl on Master's tun0 IP to make sure connections are blocked to MCS via tun0
     When I execute on the pod:
-      | curl | -I | https://<%= cb.master_tun0_ip %>:22623/master/config | -k |
+      | curl | -I | https://<%= cb.master_tun0_ip %>:22623/config/master | -k |
     Then the output should contain "Connection refused"
     When I execute on the pod:
-      | curl | -I | https://<%= cb.master_tun0_ip %>:22624/master/config | -k |
+      | curl | -I | https://<%= cb.master_tun0_ip %>:22624/config/master | -k |
     Then the output should contain "Connection refused"
 
   # @auther anusaxen@redhat.com
@@ -272,10 +272,10 @@ Feature: Pod related networking scenarios
     Then the pod named "egress-http-proxy" becomes ready
     #Pod should not access MCS via an egress router pod
     When I execute on the pod:
-      | curl | -I | https://<%= cb.master_ip %>:22623/master/config | -k |
+      | curl | -I | https://<%= cb.master_ip %>:22623/config/master | -k |
     Then the output should contain "Connection refused"
     When I execute on the pod:
-      | curl | -I | https://<%= cb.master_ip %>:22624/master/config | -k |
+      | curl | -I | https://<%= cb.master_ip %>:22624/config/master | -k |
     Then the output should contain "Connection refused"
 
   # @auther anusaxen@redhat.com
@@ -294,15 +294,22 @@ Feature: Pod related networking scenarios
     #add the egress ip to the hostsubnet
     And the valid egress IP is added to the "<%= cb.egress_node %>" node
     Given I have a project
-    And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
+    And evaluation of `project.name` is stored in the :project clipboard
+    # add the egress ip to the project
+    When I run the :patch admin command with:
+    | resource      | netnamespace                         |
+    | resource_name | <%= cb.project %>                    |
+    | p             | {"egressIPs":["<%= cb.valid_ip %>"]} |
+    | type          | merge                                |
+    Then the step should succeed
     #pod-for-ping will be a non-hostnetwork pod
     And I have a pod-for-ping in the project
     And the pod named "hello-pod" becomes ready
     
     #Pod cannot access MCS
     When I execute on the pod:
-      | curl | -I | https://<%= cb.master_ip %>:22623/master/config | -k |
+      | curl | -I | https://<%= cb.master_ip %>:22623/config/master | -k |
     Then the output should contain "Connection refused"
     When I execute on the pod:
-      | curl | -I | https://<%= cb.master_ip %>:22624/master/config | -k |
+      | curl | -I | https://<%= cb.master_ip %>:22624/config/master | -k |
     Then the output should contain "Connection refused"
