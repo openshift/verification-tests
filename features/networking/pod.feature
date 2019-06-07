@@ -206,7 +206,6 @@ Feature: Pod related networking scenarios
     #pod-for-ping will be a non-hostnetwork pod
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
     And I have a pod-for-ping in the project
-    And the pod named "hello-pod" becomes ready
 
     When I execute on the pod:
       | curl | -I | https://<%= cb.master_ip %>:22623/config/master | -k |
@@ -242,7 +241,6 @@ Feature: Pod related networking scenarios
     And I have a project
     #pod-for-ping will be a non-hostnetwork pod
     And I have a pod-for-ping in the project
-    And the pod named "hello-pod" becomes ready
     #Curl on Master's tun0 IP to make sure connections are blocked to MCS via tun0
     When I execute on the pod:
       | curl | -I | https://<%= cb.master_tun0_ip %>:22623/config/master | -k |
@@ -265,7 +263,7 @@ Feature: Pod related networking scenarios
     Given I select a random node's host
     Given I have a project
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
-    #pod-for-ping will be a non-hotnetwork pod
+    #pod-for-ping will be a non-hostnetwork pod
     When I run the :create admin command with:
       | f | https://raw.githubusercontent.com/weliang1/Openshift_Networking/master/egress-http-proxy/egress-http-proxy-pod.yaml |
       | n | <%= project.name %>                                                                                   |
@@ -294,11 +292,11 @@ Feature: Pod related networking scenarios
     #add the egress ip to the hostsubnet
     And the valid egress IP is added to the "<%= cb.egress_node %>" node
     Given I have a project
-    And evaluation of `project.name` is stored in the :project clipboard
+    And evaluation of `project.name` is stored in the clipboard
     # add the egress ip to the project
     When I run the :patch admin command with:
     | resource      | netnamespace                         |
-    | resource_name | <%= cb.project %>                    |
+    | resource_name | <%= project.name %>                    |
     | p             | {"egressIPs":["<%= cb.valid_ip %>"]} |
     | type          | merge                                |
     Then the step should succeed

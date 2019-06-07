@@ -113,7 +113,6 @@ Feature: Service related networking scenarios
     Given I have a project
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
     And I have a pod-for-ping in the project
-    And the pod named "hello-pod" becomes ready
     #Creating laodbalancer service that points to MCS IP
     When I run the :create_service_loadbalancer client command with: 
       | name | hello-pod  |
