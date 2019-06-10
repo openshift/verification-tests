@@ -14,8 +14,8 @@ Feature: CSI testing related feature
     And I checked "cinder" csi driver is running
     And I have a project
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
-      | ["metadata"]["name"]                                                   | pvc-<%= project.name %> |
-      | ["metadata"]["annotations"]["volume.beta.kubernetes.io/storage-class"] | cinder-csi              |
+      | ["metadata"]["name"]         | pvc-<%= project.name %> |
+      | ["spec"]["storageClassName"] | cinder-csi              |
     Then the step should succeed
     And the "pvc-<%= project.name %>" PVC becomes :bound
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pod.yaml" replacing paths:

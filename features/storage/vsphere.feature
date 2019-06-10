@@ -9,8 +9,8 @@ Feature: vSphere test scenarios
       | ["parameters"]["diskformat"] | <disk_format>                    |
     Then the step should succeed
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/vsphere/pvc.json" replacing paths:
-        | ["metadata"]["name"]                                                   | pvc-<%= project.name %>          |
-        | ["metadata"]["annotations"]["volume.beta.kubernetes.io/storage-class"] | storageclass-<%= project.name %> |
+        | ["metadata"]["name"]         | pvc-<%= project.name %>          |
+        | ["spec"]["storageClassName"] | storageclass-<%= project.name %> |
     Then the step should succeed
     And the "pvc-<%= project.name %>" PVC becomes :bound
 
@@ -67,8 +67,8 @@ Feature: vSphere test scenarios
     Then the step should succeed
 
     Given I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/vsphere/pvc.json" replacing paths:
-      | ["metadata"]["name"]                                                   | pvc-<%= project.name %>          |
-      | ["metadata"]["annotations"]["volume.beta.kubernetes.io/storage-class"] | storageclass-<%= project.name %> |
+      | ["metadata"]["name"]         | pvc-<%= project.name %>          |
+      | ["spec"]["storageClassName"] | storageclass-<%= project.name %> |
     And I wait up to 30 seconds for the steps to pass:
     """
     When I run the :describe client command with:
