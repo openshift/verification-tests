@@ -13,9 +13,9 @@ Feature: storageClass related feature
     And the "pvc-<%= project.name %>" PVC status is :pending
 
     When admin creates a StorageClass from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/storageClass.yaml" where:
-      | ["metadata"]["name"]                                                            | sc-<%= project.name %>      |
-      | ["provisioner"]                                                                 | kubernetes.io/<provisioner> |
-      | ["metadata"]["annotations"]["storageclass.beta.kubernetes.io/is-default-class"] | true                        |
+      | ["metadata"]["name"]                                                       | sc-<%= project.name %>      |
+      | ["provisioner"]                                                            | kubernetes.io/<provisioner> |
+      | ["metadata"]["annotations"]["storageclass.kubernetes.io/is-default-class"] | true                        |
     Then the step should succeed
     When I run the :patch client command with:
       | resource      | pvc                                                    |
@@ -78,11 +78,11 @@ Feature: storageClass related feature
   Scenario Outline: storage class provisioner
     Given I have a project
     When admin creates a StorageClass from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gce/storageClass.yaml" where:
-      | ["metadata"]["name"]                                                            | sc-<%= project.name %>      |
-      | ["provisioner"]                                                                 | kubernetes.io/<provisioner> |
-      | ["parameters"]["type"]                                                          | <type>                      |
-      | ["parameters"]["zone"]                                                          | <zone>                      |
-      | ["metadata"]["annotations"]["storageclass.beta.kubernetes.io/is-default-class"] | <is-default>                |
+      | ["metadata"]["name"]                                                       | sc-<%= project.name %>      |
+      | ["provisioner"]                                                            | kubernetes.io/<provisioner> |
+      | ["parameters"]["type"]                                                     | <type>                      |
+      | ["parameters"]["zone"]                                                     | <zone>                      |
+      | ["metadata"]["annotations"]["storageclass.kubernetes.io/is-default-class"] | <is-default>                |
     Then the step should succeed
 
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
@@ -132,14 +132,14 @@ Feature: storageClass related feature
   Scenario Outline: New creation PVC failed when multiple classes are set as default
     Given I have a project
     When admin creates a StorageClass from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/storageClass.yaml" where:
-      | ["metadata"]["name"]                                                            | sc1-<%= project.name %>     |
-      | ["provisioner"]                                                                 | kubernetes.io/<provisioner> |
-      | ["metadata"]["annotations"]["storageclass.beta.kubernetes.io/is-default-class"] | true                        |
+      | ["metadata"]["name"]                                                       | sc1-<%= project.name %>     |
+      | ["provisioner"]                                                            | kubernetes.io/<provisioner> |
+      | ["metadata"]["annotations"]["storageclass.kubernetes.io/is-default-class"] | true                        |
     Then the step should succeed
     When admin creates a StorageClass from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/storageClass.yaml" where:
-      | ["metadata"]["name"]                                                            | sc2-<%= project.name %>     |
-      | ["provisioner"]                                                                 | kubernetes.io/<provisioner> |
-      | ["metadata"]["annotations"]["storageclass.beta.kubernetes.io/is-default-class"] | true                        |
+      | ["metadata"]["name"]                                                       | sc2-<%= project.name %>     |
+      | ["provisioner"]                                                            | kubernetes.io/<provisioner> |
+      | ["metadata"]["annotations"]["storageclass.kubernetes.io/is-default-class"] | true                        |
     Then the step should succeed
 
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc-without-annotations.json" replacing paths:
@@ -174,9 +174,9 @@ Feature: storageClass related feature
     Given I have a project
     # create one as default StorageClass
     When admin creates a StorageClass from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/storageClass.yaml" where:
-      | ["metadata"]["name"]                                                            | sc-<%= project.name %>      |
-      | ["provisioner"]                                                                 | kubernetes.io/<provisioner> |
-      | ["metadata"]["annotations"]["storageclass.beta.kubernetes.io/is-default-class"] | true                        |
+      | ["metadata"]["name"]                                                       | sc-<%= project.name %>      |
+      | ["provisioner"]                                                            | kubernetes.io/<provisioner> |
+      | ["metadata"]["annotations"]["storageclass.kubernetes.io/is-default-class"] | true                        |
     Then the step should succeed
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc-without-annotations.json" replacing paths:
       | ["metadata"]["name"] | pvc-<%= project.name %> |
