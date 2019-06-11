@@ -315,7 +315,7 @@ Feature: Pod related networking scenarios
   @admin
   Scenario: User cannot access the MCS by creating a service that maps to non-MCS port to port 22623 or 22624 on the IP of a master (via manually-created ep's)
     Given I use the first master host
-    Step to obtain master IP
+    #Step to obtain master IP
     And I run commands on the host:
       | hostname -i |
     Then the step should succeed
