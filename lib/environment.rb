@@ -164,6 +164,17 @@ module BushSlicer
       return @admin_console_url
     end
 
+    def openshift_idp
+      unless @openshift_idp
+        if opts[:openshift_idp]
+          @openshift_idp = opts[:openshift_idp]
+        else
+          @openshift_idp = "kube:admin"
+        end
+      end
+      return @openshift_idp
+    end
+
     def authentication_url
       unless @authentication_url
         if opts[:authentication_url]
