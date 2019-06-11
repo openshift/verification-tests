@@ -109,21 +109,38 @@ Feature: Service related networking scenarios
   # @case_id OCP-23895
   @admin
   Scenario: User cannot access the MCS by creating a LoadBalancer service that points to the MCS
+    Given I use the first master host
+    #Step to obtain master IP
+    And I run commands on the host:
+      | hostname -i |
+    Then the step should succeed
+    And evaluation of `@result[:response].strip` is stored in the :master_ip clipboard
+		
     Given I select a random node's host
     Given I have a project
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
     And I have a pod-for-ping in the project
+    
     #Creating laodbalancer service that points to MCS IP
     When I run the :create_service_loadbalancer client command with: 
-      | name | hello-pod  |
-      | tcp  | 22623:8080 | 
+      | name | <%= cb.ping_pod.name %>  |
+      | tcp  | 22623:8080               | 
     Then the step should succeed
     #Getting loadbalancer service IP
-    When I run the :get admin command with:
+    When I run the :get client command with:
       | resource | svc                                 |
       | output   | jsonpath={.items[*].spec.clusterIP} |
       | n        | <%= project.name %>                 |
     And evaluation of `@result[:response].strip` is stored in the :svc_lb_ip clipboard
+    
+    # Editing endpoint to point to mastr ip
+    When I run the :patch client command with:
+      | resource      | ep                         				      |
+      | resource_name | <%= cb.ping_pod.name %>                  		      |
+      | p             | {"subsets": [{"addresses": [{"ip": "<%= cb.master_ip %>"}]}]} |
+      | type          | merge                                			      |
+    Then the step should succeed
+
     #Make sure user cannot access the MCS by creating a LoadBalancer service that points to the MCS 
     When I execute on the pod:
       | curl | -I | http://<%= cb.svc_lb_ip %>:22623/config/master | -k |
