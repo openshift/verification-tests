@@ -142,9 +142,9 @@ Feature: Service related networking scenarios
     Then the step should succeed
     #Make sure ep points to master ip
     When I run the :get client command with:
-      | resource      | ep                            |
-      | resource_name | <%= cb.ping_pod.name %>       |
-      | output        | {.subsets[*].addresses[*].ip} |
+      | resource      | ep                            	       |
+      | resource_name | <%= cb.ping_pod.name %>       	       |
+      | output        | jsonpath={.subsets[*].addresses[*].ip} |
     And evaluation of `@result[:response].strip` is stored in the :ep_ip clipboard
     Then the expression should be true> cb.master_ip==cb.ep_ip
     #Make sure user cannot access the MCS by creating a LoadBalancer service that points to the MCS 
