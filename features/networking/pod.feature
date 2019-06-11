@@ -130,7 +130,7 @@ Feature: Pod related networking scenarios
     And the output should not contain:
       | -A KUBE-HOSTPORTS -p tcp --dport 110 -j ACCEPT |
 
-  # @auther bmeng@redhat.com
+  # @author bmeng@redhat.com
   # @case_id OCP-10817
   @admin
   Scenario: Check QoS after creating pod
