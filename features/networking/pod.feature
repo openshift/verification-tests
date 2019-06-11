@@ -265,7 +265,8 @@ Feature: Pod related networking scenarios
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/weliang1/Openshift_Networking/master/egress-http-proxy/egress-http-proxy-pod.yaml |
-    Then the pod named "egress-http-proxy" becomes ready
+    Then the step should succeed
+
     #Pod should not access MCS via an egress router pod
     When I execute on the pod:
       | curl | -I | https://<%= cb.master_ip %>:22623/config/master | -k |
@@ -300,7 +301,6 @@ Feature: Pod related networking scenarios
     Then the step should succeed
     #pod-for-ping will be a non-hostnetwork pod
     And I have a pod-for-ping in the project
-    And the pod named "hello-pod" becomes ready
     
     #Pod cannot access MCS
     When I execute on the pod:
