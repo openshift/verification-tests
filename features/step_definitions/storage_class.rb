@@ -182,7 +182,7 @@ Given(/^admin clones storage class #{QUOTED} from #{QUOTED} with:$/) do |target_
   end
   # Add/update any key/value pair.
   # Specially, add below line to make it a default storage class.
-  # | ["metadata"]["annotations"]["storageclass.beta.kubernetes.io/is-default-class"] | true |
+  # | ["metadata"]["annotations"]["storageclass.kubernetes.io/is-default-class"] | true |
   table.raw.each do |path, value|
     eval "sc_hash#{path} = YAML.load value" unless path == ''
   end
