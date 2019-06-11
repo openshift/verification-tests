@@ -315,7 +315,7 @@ Feature: Pod related networking scenarios
   @admin
   Scenario: User cannot access the MCS by creating a service that maps to non-MCS port to port 22623 or 22624 on the IP of a master (via manually-created ep's)
     Given I use the first master host
-    #Step to obtain master IP
+    Step to obtain master IP
     And I run commands on the host:
       | hostname -i |
     Then the step should succeed
@@ -339,4 +339,4 @@ Feature: Pod related networking scenarios
       | p             | {"subsets": [{"addresses": [{"ip": "<%= cb.master_ip %>"}],"ports": [{"port": 22623,"protocol": "TCP"}]}]} |
       | type          | merge                                                         						   |
     Then the step should fail
-    And the output should contain "endpoints "<%= cb.pind_pod.name %>" is forbidden: endpoint port TCP:22623 is not allowed"
+    And the output should contain "endpoints "<%= cb.ping_pod.name %>" is forbidden: endpoint port TCP:22623 is not allowed"
