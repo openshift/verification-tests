@@ -329,7 +329,7 @@ Feature: Pod related networking scenarios
     When I run the :expose client command with:
       | resource      | pod                     |
       | resource_name | <%= cb.ping_pod.name %> |
-      | target-port   | 22623                   |
+      | target_port   | 22623                   |
       | port          | 8080                    |
     Then the step should succeed
     # Editing endpoint created above during expose to point to master ip and the step should fail
