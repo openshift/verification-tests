@@ -133,22 +133,20 @@ Feature: Service related networking scenarios
       | n        | <%= project.name %>                 |
     And evaluation of `@result[:response].strip` is stored in the :svc_lb_ip clipboard
     
-    # Editing endpoint to point to mastr ip
+    # Editing endpoint to point to master ip
     When I run the :patch client command with:
       | resource      | ep                         				      |
       | resource_name | <%= cb.ping_pod.name %>                  		      |
       | p             | {"subsets": [{"addresses": [{"ip": "<%= cb.master_ip %>"}]}]} |
       | type          | merge                                			      |
     Then the step should succeed
-    And evaluation of `@result[:response].strip` is stored in the :ep_ip clipboard
     #Make sure ep points to master ip
-    Then the expression should be true> cb.master_ip==cb.ep_ip
     When I run the :get client command with:
       | resource      | ep                            |
       | resource_name | <%= cb.ping_pod.name %>       |
       | output        | {.subsets[*].addresses[*].ip} |
-    And evaluation of `@result[:response].strip` is stored in the :svc_lb_ip clipboard
-
+    And evaluation of `@result[:response].strip` is stored in the :ep_ip clipboard
+    Then the expression should be true> cb.master_ip==cb.ep_ip
     #Make sure user cannot access the MCS by creating a LoadBalancer service that points to the MCS 
     When I execute on the pod:
       | curl | -I | http://<%= cb.svc_lb_ip %>:22623/config/master | -k |
