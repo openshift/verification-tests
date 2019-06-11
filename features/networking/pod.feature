@@ -309,3 +309,34 @@ Feature: Pod related networking scenarios
     When I execute on the pod:
       | curl | -I | https://<%= cb.master_ip %>:22624/config/master | -k |
     Then the output should contain "Connection refused"
+
+  # @auther anusaxen@redhat.com
+  # @case_id OCP-23894
+  @admin
+  Scenario: User cannot access the MCS by creating a service that maps to non-MCS port to port 22623 or 22624 on the IP of a master (via manually-created ep's)
+    Given I use the first master host
+    #Step to obtain master IP
+    And I run commands on the host:
+      | hostname -i |
+    Then the step should succeed
+    And evaluation of `@result[:response].strip` is stored in the :master_ip clipboard
+    
+    Given I select a random node's host
+    And I have a project
+    #pod-for-ping will be a non-hostnetwork pod
+    And I have a pod-for-ping in the project
+    #Exposing above pod to MCS target port 22623
+    When I run the :expose client command with:
+      | resource      | pod                     |
+      | resource_name | <%= cb.ping_pod.name %> |
+      | target-port   | 22623                   |
+      | port          | 8080                    |
+    Then the step should succeed
+    # Editing endpoint created above during expose to point to master ip and the step should fail
+    When I run the :patch client command with:
+      | resource      | ep                                                            						   |
+      | resource_name | <%= cb.ping_pod.name %>                                       						   |
+      | p             | {"subsets": [{"addresses": [{"ip": "<%= cb.master_ip %>"}],"ports": [{"port": 22623,"protocol": "TCP"}]}]} |
+      | type          | merge                                                         						   |
+    Then the step should fail
+    And the output should contain "endpoints "<%= cb.pind_pod.name %>" is forbidden: endpoint port TCP:22623 is not allowed"
