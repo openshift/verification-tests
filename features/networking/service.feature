@@ -140,6 +140,14 @@ Feature: Service related networking scenarios
       | p             | {"subsets": [{"addresses": [{"ip": "<%= cb.master_ip %>"}]}]} |
       | type          | merge                                			      |
     Then the step should succeed
+    And evaluation of `@result[:response].strip` is stored in the :ep_ip clipboard
+    #Make sure ep points to master ip
+    Then the expression should be true> cb.master_ip==cb.ep_ip
+    When I run the :get client command with:
+      | resource      | ep                            |
+      | resource_name | <%= cb.ping_pod.name %>       |
+      | output        | {.subsets[*].addresses[*].ip} |
+    And evaluation of `@result[:response].strip` is stored in the :svc_lb_ip clipboard
 
     #Make sure user cannot access the MCS by creating a LoadBalancer service that points to the MCS 
     When I execute on the pod:
