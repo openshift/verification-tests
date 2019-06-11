@@ -263,10 +263,8 @@ Feature: Pod related networking scenarios
     Given I select a random node's host
     Given I have a project
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
-    #pod-for-ping will be a non-hostnetwork pod
-    When I run the :create admin command with:
+    When I run the :create client command with:
       | f | https://raw.githubusercontent.com/weliang1/Openshift_Networking/master/egress-http-proxy/egress-http-proxy-pod.yaml |
-      | n | <%= project.name %>                                                                                   |
     Then the pod named "egress-http-proxy" becomes ready
     #Pod should not access MCS via an egress router pod
     When I execute on the pod:
