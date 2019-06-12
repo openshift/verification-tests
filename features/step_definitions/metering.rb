@@ -248,7 +248,8 @@ Given /^the#{OPT_QUOTED} metering service is installed(?: to $QUOTED)? using OLM
   operator_group = "https://raw.githubusercontent.com/operator-framework/operator-metering/master/manifests/deploy/openshift/olm/metering.operatorgroup.yaml"
   # 3. metering-subscription.yaml
   subscription = "https://raw.githubusercontent.com/operator-framework/operator-metering/master/manifests/deploy/openshift/olm/metering.subscription.yaml"
-  metering_crd = "https://raw.githubusercontent.com/operator-framework/operator-metering/master/manifests/metering-config/default.yaml"
+  # XXX: this will need to be updted after 4.2 is released to the wild
+  metering_crd = "https://raw.githubusercontent.com/operator-framework/operator-metering/release-4.1/manifests/metering-config/default.yaml"
 
   # should really get the namespace dynamically
   @result = user.cli_exec(:apply, f: catalog_source_config, n: 'openshift-marketplace')
