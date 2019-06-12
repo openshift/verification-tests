@@ -18,6 +18,16 @@ module BushSlicer
       rr.dig('provisioner')
     end
 
+    def reclaim_policy(user: nil, cached: true, quiet: false)
+      rr = raw_resource(user: user, cached: cached, quiet: quiet)
+      rr.dig('reclaimPolicy')
+    end
+
+    def volume_binding_mode(user: nil, cached: true, quiet: false)
+      rr = raw_resource(user: user, cached: cached, quiet: quiet)
+      rr.dig('volumeBindingMode')
+    end
+
     def rest_url(user: nil, cached: true, quiet: false)
       rr = raw_resource(user: user, cached: cached, quiet: quiet)
       rr.dig('parameters', 'resturl')
