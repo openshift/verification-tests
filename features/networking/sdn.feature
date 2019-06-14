@@ -233,12 +233,12 @@ Feature: SDN related networking scenarios
       | template      | {{.netid}} 	    |
     Then the step should succeed
     And evaluation of `@result[:response].strip.to_f.to_i.to_s(16)` is stored in the :proj1netid clipboard
-    
+    #Executing ovs command on sdn pod associated with same node on which pod was created 
     When I run command on the "<%= pod.node_name(user: user) %>" node's sdn pod:
     | ovs-ofctl | dump-flows | br0 | -O | openflow13 |
     Then the step should succeed
     And the output should contain "<%= cb.proj1netid %>"
-
+    #Deleting project should delete its associated ovs entry as well
     When I run the :delete client command with:
       | object_type       | project             |
       | object_name_or_id | <%= project.name %> |
