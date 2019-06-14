@@ -219,3 +219,34 @@ Feature: SDN related networking scenarios
     Then the step should succeed
     And the output should not contain "No such device"
 
+  # @author anusaxen@redhat.com
+  # @case_id OCP-22655
+  @admin
+  @destructive
+  Scenario: The openflow should be clear up when namespaces is deleted
+    Given I have a project
+    And I have a pod-for-ping in the project
+    Then I use the "<%= pod.node_name(user: user) %>" node
+    When I run the :get admin command with:
+      | resource      | netnamespace 	    |
+      | resource_name | <%= project.name %> |
+      | template      | {{.netid}} 	    |
+    Then the step should succeed
+    And evaluation of `@result[:response].strip.to_f.to_i.to_s(16)` is stored in the :proj1netid clipboard
+    
+    When I run command on the "<%= pod.node_name(user: user) %>" node's sdn pod:
+    | ovs-ofctl | dump-flows | br0 | -O | openflow13 |
+    Then the step should succeed
+    And the output should contain "<%= cb.proj1netid %>"
+
+    When I run the :delete client command with:
+      | object_type       | project             |
+      | object_name_or_id | <%= project.name %> |
+    Then the step should succeed
+    And I wait up to 20 seconds for the steps to pass:
+    """
+    When I run the ovs commands on the host:
+      | ovs-ofctl dump-flows br0 -O openflow13 |
+    Then the step should succeed
+    And the output should not contain "<%= cb.proj1netid %>"
+    """
