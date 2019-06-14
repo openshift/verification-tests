@@ -66,10 +66,10 @@ Feature: Dynamic provisioning
     And I run the steps 1 times:
     """
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/azure/azpvc-sc.yaml" replacing paths:
-      | ["metadata"]["name"]                                                   | dpvc-#{cb.i}              |
-      | ["metadata"]["annotations"]["volume.beta.kubernetes.io/storage-class"] | sc-<%= project.name %>    |
-      | ["spec"]["accessModes"][0]                                             | #{cb.accessmodes[cb.i-1]} |
-      | ["spec"]["resources"]["requests"]["storage"]                           | #{cb.i}Gi                 |
+      | ["metadata"]["name"]                         | dpvc-#{cb.i}              |
+      | ["spec"]["storageClassName"]                 | sc-<%= project.name %>    |
+      | ["spec"]["accessModes"][0]                   | #{cb.accessmodes[cb.i-1]} |
+      | ["spec"]["resources"]["requests"]["storage"] | #{cb.i}Gi                 |
     Then the step should succeed
     And the "dpvc-#{cb.i}" PVC becomes :bound within 120 seconds
     And I save volume id from PV named "#{ pvc.volume_name }" in the :disk clipboard

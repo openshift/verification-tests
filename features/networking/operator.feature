@@ -1,6 +1,6 @@
 Feature: Operator related networking scenarios
 
-  # @auther anusaxen@redhat.com
+  # @author anusaxen@redhat.com
   # @case_id OCP-22704
   @admin
   Scenario: The clusteroperator should be able to reflect the network operator version corresponding to the OCP version
@@ -14,7 +14,7 @@ Feature: Operator related networking scenarios
     #Confirm whether network operator version matches with ocp version
     And the expression should be true> cluster_operator('network').version_exists?(version: cb.ocp_version)
 
-  # @auther anusaxen@redhat.com
+  # @author anusaxen@redhat.com
   # @case_id OCP-22706
   @admin
   @destructive

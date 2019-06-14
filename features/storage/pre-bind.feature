@@ -116,21 +116,23 @@ Feature: Testing for pv and pvc pre-bind feature
   # @author chaoyang@redhat.com
   # @case_id OCP-9940
   @admin
-  @destructive
   Scenario: PV and PVC bound successfully when pv created prebound to pvc
     Given I have a project
     Given admin creates a PV from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/preboundpv-rwo.yaml" where:
       | ["metadata"]["name"]              | nfspv-<%= project.name %> |
       | ["spec"]["claimRef"]["namespace"] | <%= project.name %>       |
-      | ["spec"]["claimRef"]["name"]      | nfsc2-<%= project.name %> |
-    Then I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/claim-rwo.json" replacing paths:
-      | ["metadata"]["name"]                         | nfsc1-<%= project.name %> |
-      | ["spec"]["resources"]["requests"]["storage"] | 1Gi                       |
-    Then I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/claim-rwo.json" replacing paths:
-      | ["metadata"]["name"]                         | nfsc2-<%= project.name %> |
-      | ["spec"]["resources"]["requests"]["storage"] | 1Gi                       |
-    And the "nfsc2-<%= project.name %>" PVC becomes bound to the "nfspv-<%= project.name %>" PV
-    And the "nfsc1-<%= project.name %>" PVC becomes :pending
+      | ["spec"]["claimRef"]["name"]      | nfsc2                     |
+      | ["spec"]["storageClassName"]      | <%= project.name %>       |
+    Then I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/claim-rwo.json" replacing paths:
+      | ["metadata"]["name"]                         | nfsc1               |
+      | ["spec"]["resources"]["requests"]["storage"] | 1Gi                 |
+      | ["spec"]["storageClassName"]                 | <%= project.name %> |
+    Then I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/claim-rwo.json" replacing paths:
+      | ["metadata"]["name"]                         | nfsc2               |
+      | ["spec"]["resources"]["requests"]["storage"] | 1Gi                 |
+      | ["spec"]["storageClassName"]                 | <%= project.name %> |
+    And the "nfsc2" PVC becomes bound to the "nfspv-<%= project.name %>" PV
+    And the "nfsc1" PVC becomes :pending
 
   # @author chaoyang@redhat.com
   # @case_id OCP-9939

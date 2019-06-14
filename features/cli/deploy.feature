@@ -599,9 +599,9 @@ Feature: deployment related features
     Given I wait up to 60 seconds for the steps to pass:
     """
     When I get project pods
-    And the output should contain:
-      | DeadlineExceeded |
-      | hooks-1          |
+    And the output should match:
+      | DeadlineExceeded\|Error |
+      | hooks-1                 |
     """
 
   # @author yinzhou@redhat.com

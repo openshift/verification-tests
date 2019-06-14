@@ -17,8 +17,8 @@ Feature: Storage of Ceph plugin testing
 
     Given I have a project
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/rbd/dynamic-provisioning/claim.yaml" replacing paths:
-      | ["metadata"]["name"]                                                   | pvc-<%= project.name %> |
-      | ["metadata"]["annotations"]["volume.beta.kubernetes.io/storage-class"] | cephrbdprovisioner      |
+      | ["metadata"]["name"]         | pvc-<%= project.name %> |
+      | ["spec"]["storageClassName"] | cephrbdprovisioner      |
     Then the step should succeed
     And the "pvc-<%= project.name %>" PVC becomes :bound within 120 seconds
 
@@ -58,8 +58,8 @@ Feature: Storage of Ceph plugin testing
     And I have a project
 
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/rbd/dynamic-provisioning/claim.yaml" replacing paths:
-      | ["metadata"]["name"]                                                   | pvc-<%= project.name %> |
-      | ["metadata"]["annotations"]["volume.beta.kubernetes.io/storage-class"] | cephrbdprovisioner      |
+      | ["metadata"]["name"]         | pvc-<%= project.name %> |
+      | ["spec"]["storageClassName"] | cephrbdprovisioner      |
       | ["spec"]["resources"]["requests"]["storage"]                           | 9Gi                     |
     Then the step should succeed
     And the "pvc-<%= project.name %>" PVC becomes :bound within 120 seconds

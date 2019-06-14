@@ -5,6 +5,7 @@ require 'ssl'
 # checks that metering service is already installed
 Given /^metering service has been installed successfully(?: using (ansible|shell script|OLM))?$/ do |method|
   ensure_admin_tagged
+  namespace = "openshift-metering"  # set it as default
   # first check if metering service exists, skip installation if already there
   step %Q/I save the project hosting "metering" resource to "metering_namespace" clipboard/
   unless cb.metering_namespace
@@ -27,9 +28,6 @@ Given /^metering service has been installed successfully(?: using (ansible|shell
       raise "service openshift-monitoring is a pre-requisite for #{namespace}"
     end
   else
-    # save it to clipboard for future reference
-    cb.metering_namespace = project(namespace)
-    # get the metering service information
     @result = admin.cli_exec(:get, namespace: cb.metering_namespace.name, resource: 'metering', o: 'yaml')
     metering_name = @result[:parsed]['items'].first['metadata']['name']
   end
@@ -250,7 +248,8 @@ Given /^the#{OPT_QUOTED} metering service is installed(?: to $QUOTED)? using OLM
   operator_group = "https://raw.githubusercontent.com/operator-framework/operator-metering/master/manifests/deploy/openshift/olm/metering.operatorgroup.yaml"
   # 3. metering-subscription.yaml
   subscription = "https://raw.githubusercontent.com/operator-framework/operator-metering/master/manifests/deploy/openshift/olm/metering.subscription.yaml"
-  metering_crd = "https://raw.githubusercontent.com/operator-framework/operator-metering/master/manifests/metering-config/default.yaml"
+  # XXX: this will need to be updted after 4.2 is released to the wild
+  metering_crd = "https://raw.githubusercontent.com/operator-framework/operator-metering/release-4.1/manifests/metering-config/default.yaml"
 
   # should really get the namespace dynamically
   @result = user.cli_exec(:apply, f: catalog_source_config, n: 'openshift-marketplace')
@@ -269,21 +268,23 @@ end
 Given /^the#{OPT_QUOTED} metering service is uninstalled using OLM$/ do | metering_ns |
   ensure_admin_tagged
   ensure_destructive_tagged
-
   metering_ns ||= "openshift-metering"
-  step %Q/I switch to cluster admin pseudo user/
+  step %Q/I switch to cluster admin pseudo user/ unless env.is_admin? user
+  project(metering_ns)
+  # step %Q/I use the "#{metering_ns}" project/ unless project.name == metering_ns
+  step %Q/I ensure "#{metering_ns}" project is deleted/
   project("openshift-marketplace")
   step %Q/I ensure "metering-operators" catalogsourceconfig is deleted/
-  project(metering_ns)
-  step %Q/I ensure "#{metering_ns}" project is deleted/
 end
 
 Given /^all reportdatasources are importing from Prometheus$/ do
-  project ||= project(cb.metering_namespace)
+  project ||= project(cb.metering_namespace.name)
   data_sources  = BushSlicer::ReportDataSource.list(user: user, project: project)
-  seconds = 60
+  # valid reportdatasources are those with a prometheusMetricsImporter query statement
+  dlist = data_sources.select{ |d| d.prometheus_metrics_importer_query}
+  seconds = 240   # after initial installation it takes about 2-3 minutes to initiate Prometheus sync
   success = wait_for(seconds) {
-    data_sources.all? { |ds| ds.last_import_time }
+    dlist.all? { |ds| report_data_source(ds.name).last_import_time(cached: false) }
   }
   raise "Querying for reportdatasources returned failure, probabaly due to Prometheus import failed" unless success
 end
@@ -324,4 +325,71 @@ Given /^I wait(?: up to ([0-9]+) seconds)? for metering route to be accessible$/
     @result[:success]
   }
   raise "Metering route did not become accessible within #{seconds} seconds" unless @result[:success]
+end
+## valid column names are EARLIEST METRIC, NEWEST METRIC, IMPORT START, IMPORT END, LAST IMPORT TIME
+And /^I get the (latest|earliest) timestamp from reportdatasource column #{QUOTED} and store it to#{OPT_SYM} clipboard$/ do | time_filter, column, cb_name |
+  ensure_admin_tagged
+  cb_name ||= :rds_timestamp
+  column_lookup = {
+    "EARLIEST METRIC"  => "earliestImportedMetricTime",
+    "NEWEST METRIC,"   => "newestImportedMetricTime",
+    "IMPORT START"     => "importDataStartTime",
+    "IMPORT END"       => "importDataEndTime",
+    "LAST IMPORT TIME" => "lastImportTime"
+  }
+  column_filter = column_lookup[column]
+  @result = admin.cli_exec(:get, resource: 'reportdatasource', o: 'yaml')
+  # filter out to use only non-raw ending
+  res = @result[:parsed]['items'].map { |i| i.dig('status', 'prometheusMetricsImportStatus', column_filter) }.compact
+  cb[cb_name] = time_filter == 'lastest'? res.max : res.min
+end
+
+# for flexiblity the order of precedence is
+#   1. ENV
+#   2. table option
+# valid options are feed into the report_hash Hash variable
+#   report_hash = {
+#         "apiVersion" => "metering.openshift.io/v1alpha1",
+#         "kind" => 'Report',
+#         "metadata" => {
+#           "name" => opts[:metadata_name]
+#         },
+#         "spec" => {
+#           "reportingStart" => opts[:start_time],
+#           "reportingEnd" => opts[:end_time],
+#           "query" => opts[:query_type],
+#           "gracePeriod" => opts[:grace_period],
+#           "runImmediately" => opts[:run_immediately],
+#           "schedule" => schedule
+#         },
+#
+When /^I generate a metering report with:$/ do |table|
+  opts = opts_array_to_hash(table.raw)
+  ### these are defaults
+  # 1. runImmediately=true unless schedule (period)is specified
+  # And I get the latest timestamp from reportdatasource column "EARLIEST METRIC" and store it to clipboard
+  opts[:query_type] ||= ENV['METERING_QUERY_TYPE']
+  raise "User must specify a query type " unless opts[:query_type]
+  opts[:period] ||= ENV['METERING_PERIOD']
+  opts[:expression] ||= ENV['METERING_CRON_EXPRESSION']
+  opts[:grace_period] ||= ENV['METREING_GRACE_PERIOD']
+  step %Q/I get the latest timestamp from reportdatasource column "EARLIEST METRIC" and store it to clipboard/
+  opts[:start_time] ||= cb.rds_timestamp
+  opts[:end_time] ||= "#{Time.now.year}" + "-12-30T23:59:59Z"  # end of the year
+  opts[:run_immediately] ||= opts[:period] ? nil : true
+  # just use the query + period or run_immediately
+  unless opts[:metadata_name]
+    # runImmediately, just attach 'now' to the end
+    suffix = opts[:period] ? opts[:period] : "now"
+    opts[:metadata_name] = opts[:query_type] + "-" + suffix
+  end
+  name = opts[:metadata_name]
+  opts[:report_yaml] = BushSlicer::Report.generate_yaml(opts)
+  logger.info("#### generated report using the following yaml:\n #{opts[:report_yaml]}")
+  report(name).construct(user: user, **opts)
+  if opts[:run_immediately]
+    report(name).wait_till_finished(user: user)
+  else
+    report(name).wait_till_running(user: user)
+  end
 end

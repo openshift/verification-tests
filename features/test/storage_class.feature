@@ -36,7 +36,7 @@ Feature: StorageClass testing scenarios
       | ["parameters"]["resturl"] | "http://error.address.com" |
     And admin clones storage class "test2" from ":default" with volume expansion enabled
     And admin clones storage class "my-default" from ":default" with:
-      | ["metadata"]["annotations"]["storageclass.beta.kubernetes.io/is-default-class"] | "true" |
+      | ["metadata"]["annotations"]["storageclass.kubernetes.io/is-default-class"] | "true" |
     When I run the :get admin command with:
       | resource      | storageclass |
       | resource_name | test1        |
