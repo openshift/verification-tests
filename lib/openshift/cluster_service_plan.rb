@@ -10,6 +10,11 @@ module BushSlicer
       return rr.dig("spec", "externalName")
     end
 
+    def cluster_svc_broker_name(user: nil, cached: true, quiet: false)
+      rr = raw_resource(user: user, cached: cached, quiet: quiet)
+      return rr.dig('spec', 'clusterServiceBrokerName')
+    end
+
     def cluster_service_class(user: nil, cached: true, quiet: false)
       unless cached && props[:csc]
         rr = raw_resource(user: user, cached: cached, quiet: quiet)

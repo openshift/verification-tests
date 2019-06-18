@@ -30,6 +30,11 @@ module BushSlicer
       return rr.dig('spec', 'externalMetadata', 'providerDisplayName')
     end
 
+    def cluster_svc_broker_name(user: nil, cached: true, quiet: false)
+      rr = raw_resource(user: user, cached: cached, quiet: quiet)
+      return rr.dig('spec', 'clusterServiceBrokerName')
+    end
+
     # @return [Array<ClusterServicePlan>]
     def plans(user: nil, cached: true)
       unless cached && props[:plans]
