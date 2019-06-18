@@ -194,13 +194,7 @@ Feature: Pod related networking scenarios
   # @case_id OCP-23890
   @admin
   Scenario: A pod with or without hostnetwork cannot access the MCS port 22623 or 22624 on the master
-    Given I use the first master host
-    #Step to obtain master IP
-    And I run commands on the host:
-      | hostname -i |
-    Then the step should succeed
-    And evaluation of `@result[:response].strip` is stored in the :master_ip clipboard
-    
+    Given evaluation of `env.master_hosts.first.local_ip` is stored in the :master_ip clipboard
     Given I select a random node's host
     Given I have a project
     #pod-for-ping will be a non-hostnetwork pod
@@ -253,13 +247,7 @@ Feature: Pod related networking scenarios
   # @case_id OCP-23892
   @admin
   Scenario: A pod cannot access the MCS via an egress router in http proxy mode
-    Given I use the first master host
-    #Step to obtain master IP
-    And I run commands on the host:
-      | hostname -i |
-    Then the step should succeed
-    And evaluation of `@result[:response].strip` is stored in the :master_ip clipboard
-    
+    Given evaluation of `env.master_hosts.first.local_ip` is stored in the :master_ip clipboard
     Given I select a random node's host
     Given I have a project
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
@@ -279,13 +267,7 @@ Feature: Pod related networking scenarios
   # @case_id OCP-23893
   @admin
   Scenario: A pod in a namespace with an egress IP cannot access the MCS
-    Given I use the first master host
-    #Step to obtain master IP
-    And I run commands on the host:
-      | hostname -i |
-    Then the step should succeed
-    And evaluation of `@result[:response].strip` is stored in the :master_ip clipboard
-    
+    Given evaluation of `env.master_hosts.first.local_ip` is stored in the :master_ip clipboard
     Given I select a random node's host
     And evaluation of `node.name` is stored in the :egress_node clipboard
     #add the egress ip to the hostsubnet
