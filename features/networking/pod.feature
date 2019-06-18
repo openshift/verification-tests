@@ -314,13 +314,7 @@ Feature: Pod related networking scenarios
   # @case_id OCP-23894
   @admin
   Scenario: User cannot access the MCS by creating a service that maps to non-MCS port to port 22623 or 22624 on the IP of a master (via manually-created ep's)
-    Given I use the first master host
-    #Step to obtain master IP
-    And I run commands on the host:
-      | hostname -i |
-    Then the step should succeed
-    And evaluation of `@result[:response].strip` is stored in the :master_ip clipboard
-    
+    Given evaluation of `env.master_hosts.first.local_ip` is stored in the :master_ip clipboard
     Given I select a random node's host
     And I have a project
     #pod-for-ping will be a non-hostnetwork pod
