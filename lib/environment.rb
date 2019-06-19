@@ -164,6 +164,17 @@ module BushSlicer
       return @admin_console_url
     end
 
+    def idp
+      unless @idp
+        if opts[:idp]
+          @idp = opts[:idp]
+        else
+          @idp = ''
+        end
+      end
+      return @idp
+    end
+
     def authentication_url
       unless @authentication_url
         if opts[:authentication_url]

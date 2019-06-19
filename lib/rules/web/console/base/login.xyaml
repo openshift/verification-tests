@@ -14,8 +14,10 @@ login_sequence:
     - login_page_loaded
     if_element:
       selector: &pre_login_buttons
-        # we just choose the first button per OPENSHIFTQ-12062
-        css: ".login-redhat:first-of-type, .idp:first-of-type"
+        # when idp is specified we use the correct IDP
+        # otherwise we always use the first one
+        # a hacking way to cover our requirements
+        xpath: //a[contains(@class, 'idp<idp>') or contains(@class, 'login-redhat<idp>') or text()='<idp>'][1]
       timeout: 1
   action:
     ref: login_console
@@ -23,7 +25,7 @@ login_sequence:
       selector:
         # title RE not working w/ ff legacy
         # text: !ruby/regexp '/Login - OpenShift/'
-        xpath: '//title[starts-with(.,"Login - O")]'
+        xpath: '//title[starts-with(.,"Login")]'
       visible: false
       timeout: 1
   action:
