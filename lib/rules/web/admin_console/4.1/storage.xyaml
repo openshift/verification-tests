@@ -1,0 +1,13 @@
+attach_storage:
+  elements:
+  - selector:
+      xpath: //button[@id="claimName"]
+    op: click
+  - selector:
+      xpath: //span[text()="<pvc_name>"]
+    op: click
+  - selector:
+      id: mount-path
+    type: input
+    op: send_keys <mount_path>
+

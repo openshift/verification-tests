@@ -1,0 +1,78 @@
+set_filter_strings:
+  elements:
+  - selector: &filter_text_ele
+      css: input.text-filter
+    op: clear
+  - selector:
+      <<: *filter_text_ele
+    op: send_keys <filter_text>
+search_by_type:
+  elements:
+  - selector:
+      xpath: //div[@class='co-m-pane__filter-bar-group']/div[1]
+    op: click
+  - selector:
+      xpath: //span[@class='co-resource-link__resource-name' and .='<type>']
+    op: click
+search_by_catagory:
+  elements:
+  - selector:
+      xpath: //div[@class='co-m-pane__filter-bar-group']/div[2]
+    op: click
+  - selector:
+      xpath: //a[contains(.,'<catagory>')]
+    op: click
+check_results_contain_correct_strings:
+  element:
+    selector:
+      css: div.co-sysevent__box
+  scripts:
+    - command: |
+        var allrs = document.querySelectorAll('div.co-sysevent__box');
+        var all_contain = true;
+        if (allrs.length == 0) {
+          all_contain = false;
+          return all_contain
+        }
+        allrs.forEach(function(oneRS){
+          all_contain = oneRS.innerHTML.includes('<filter_text>') && all_contain
+        })
+        return all_contain
+      expect_result: true
+check_results_contain_correct_type:
+  element:
+    selector:
+      css: span.co-m-resource-icon
+  scripts:
+    - command: |
+        var resourceicons = document.querySelectorAll('span.co-m-resource-icon');
+        var all_contain = true;
+        if (resourceicons.length == 0) {
+          all_contain = false;
+          return all_contain
+        }
+        resourceicons.forEach(function(resourceicon){
+          all_contain = resourceicon.getAttribute('title').length== "<type>".length &&  resourceicon.getAttribute('title').includes('<type>') && all_contain
+        })
+        return all_contain
+      expect_result: true
+check_result_contain_correct_catagory:
+  element:
+    selector:
+      css: div.co-sysevent
+  scripts:
+    - command: |
+        // for All and Info, class="co-sysevent slide-entered"
+        // for Error, class="co-sysevent co-sysevent--error slide-entered"
+        // so this rules only appies to Error catagory, All & Info are the same and as default
+        var catagories = document.querySelectorAll('div.co-sysevent');
+        var all_contain = true;
+        if (catagories.length == 0) {
+          all_contain = false;
+          return all_contain
+        }
+        catagories.forEach(function(catagory){
+          all_contain = catagory.className.includes('<catagory>'.toLowerCase()) && all_contain
+        })
+        return all_contain
+      expect_result: true
