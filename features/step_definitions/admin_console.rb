@@ -18,7 +18,7 @@ Given /^I open admin console in a browser$/ do
   @result = browser.run_action(:login_admin_console,
                                username: user.auth_name,
                                password: user.password,
-                               idp: env.openshift_idp)
+                               idp: env.idp)
   raise "cannot login to cluster console" unless @result[:success]
   browser.base_url = browser.url.sub(%r{(https://[^/]+/).*}, "\\1")
 end
