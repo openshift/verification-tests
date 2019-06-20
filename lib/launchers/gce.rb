@@ -181,7 +181,7 @@ module BushSlicer
         logger.info "waiting for instance #{names[index]}"
         op_report_str = "create #{names[index]} op"
         res = operation_from_hash(wait_status(create_op, "DONE",
-                                              timeout: 180,
+                                              timeout: 360,
                                               obj_report_name: op_report_str))
         if res.error
           res.error.errors.each do |e|
