@@ -1,0 +1,16 @@
+update_resource_count:
+  elements:
+  - selector: &modal_count
+      xpath: //input[contains(@class,"co-m-number-spinner__input")]
+    op: clear
+  - selector:
+      <<: *modal_count
+    op: send_keys <resource_count>
+  action: submit_changes
+update_rollout_strategy:
+  elements:
+  - selector:
+      xpath: //input[@value='<update_strategy>']
+    op: click
+  action: submit_changes
+
