@@ -4,7 +4,7 @@ Feature: ISCSI volume plugin testing
   # @case_id OCP-9638
   @admin
   @destructive
-  Scenario: ISCCI volume security test
+  Scenario: ISCSI volume security test
     Given I have a iSCSI setup in the environment
     And I have a project
 
