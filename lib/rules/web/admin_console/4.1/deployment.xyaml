@@ -13,4 +13,9 @@ update_rollout_strategy:
       xpath: //input[@value='<update_strategy>']
     op: click
   action: submit_changes
+click_initcontainer_in_detail_page:
+  element:
+    selector:
+      xpath: //h2[contains(.,'Init Containers')]/..//span[contains(.,'<container_name>')]
+    op: click
 

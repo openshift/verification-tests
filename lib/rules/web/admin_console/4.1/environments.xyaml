@@ -19,16 +19,16 @@ add_env_var_name:
 add_env_var_pair_value:
   elements:
   - selector:
-      xpath: //div[contains(@class,'pairs-list__row')][last()]/div[contains(@class,'pairs-list__value-pair-field')]//span[contains(normalize-space(text()),'Select a resource')]
+      xpath: //div[@class='co-m-pane__body-group']//span[contains(normalize-space(text()),'Select a resource')]
     op: click
   - selector:
-      xpath: //div[contains(@class,'pairs-list__row')][last()]/div[contains(@class,'pairs-list__value-pair-field')]//span[contains(.,'<env_source_name>')]
+      xpath: //div[@class='co-m-pane__body-group']//span[contains(.,'<env_source_name>')]
     op: click
   - selector:
-      xpath: //div[contains(@class,'pairs-list__row')][last()]/div[contains(@class,'pairs-list__value-pair-field')]//span[contains(normalize-space(text()),'Select a key')]
+      xpath: //div[@class='co-m-pane__body-group']//span[contains(normalize-space(text()),'Select a key')]
     op: click
   - selector:
-      xpath: //div[contains(@class,'pairs-list__row')][last()]/div[contains(@class,'pairs-list__value-pair-field')]//a[contains(.,'<env_source_key>')]
+      xpath: //div[@class='co-m-pane__body-group']//a[contains(.,'<env_source_key>')]
     op: click
 add_env_var_value:
   element:
@@ -38,7 +38,7 @@ add_env_var_value:
 choose_container:
   elements:
   - selector:
-      xpath: //div[@class='dropdown']//span[@class='co-resource-link']
+      xpath: //div[@class='dropdown']//span[@class='co-resource-item']
     op: click
   action: choose_item_from_list
 update_env_vars:
