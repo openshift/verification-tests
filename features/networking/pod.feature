@@ -297,7 +297,6 @@ Feature: Pod related networking scenarios
   @admin
   Scenario: User cannot access the MCS by creating a service that maps to non-MCS port to port 22623 or 22624 on the IP of a master (via manually-created ep's)
     Given evaluation of `env.master_hosts.first.local_ip` is stored in the :master_ip clipboard
-    Given I select a random node's host
     And I have a project
     #pod-for-ping will be a non-hostnetwork pod
     And I have a pod-for-ping in the project
