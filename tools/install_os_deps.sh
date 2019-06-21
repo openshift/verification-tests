@@ -6,10 +6,10 @@ export TOOLS_HOME=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 echo "Installing packages on $(os_type)"
 if [ "$(os_type)" == "fedora_dnf" ]; then
-    cmd="dnf install -y"
+    cmd="dnf install -y --setopt=skip_missing_names_on_install=False"
     file="deps.dnf.fedora"
 elif [ "$(os_type)" == "fedora" ]; then
-    cmd="yum install -y"
+    cmd="yum install -y --setopt=skip_missing_names_on_install=False"
     file="deps.yum.fedora"
     additional_deps=install_rvm_if_ruby_is_outdated
     need_bundler_from_gem=1
@@ -22,12 +22,17 @@ elif [ "$(os_type)" == "rhel6" ]; then
     cmd="yum install -y"
     file="deps.yum.RHEL"
     additional_deps=install_rvm_if_ruby_is_outdated
-    need_bundler_from_gem = 1
+    need_bundler_from_gem=1
 elif [ "$(os_type)" == "rhel7" ] || [ "$(os_type)" == "centos7" ]; then
-    cmd="yum install -y"
+    cmd="yum install -y --setopt=skip_missing_names_on_install=False"
     file="deps.yum.RHEL7"
     additional_deps=install_rvm_if_ruby_is_outdated
     need_bundler_from_gem=1
+elif [ "$(os_type)" == "rhel8" ] || [ "$(os_type)" == "centos8" ]; then
+    cmd="yum install -y --setopt=skip_missing_names_on_install=False"
+    file="deps.yum.RHEL8"
+    additional_deps=install_rvm_if_ruby_is_outdated
+    # need_bundler_from_gem=1
 elif [ "$(os_type)" == "Mac OS X" ]; then
     cmd="brew install"
     file="deps.macos"
@@ -51,4 +56,3 @@ cat "${TOOLS_HOME}/os_deps/$file" | grep -v '^\s*#' | xargs $(need_sudo) $cmd
 if [ -n "$need_bundler_from_gem" ]; then
     gem install bundler
 fi
-#gem install nokogiri
