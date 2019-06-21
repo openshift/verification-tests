@@ -58,7 +58,7 @@ Feature: NFS Persistent Volume
       | ["spec"]["nfs"]["path"]                                  | /                                |
       | ["spec"]["capacity"]["storage"]                          | 1Gi                              |
       | ["metadata"]["name"]                                     | nfs-<%= project.name %>          |
-      | ["metadata"]["annotations"]["pv.beta.kubernetes.io/gid"] | <pv-gid>                         |
+      | ["metadata"]["annotations"]["pv.beta.kubernetes.io/gid"] | "<pv-gid>"                       |
 
     When I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/claim-rwx.json" replacing paths:
       | ["metadata"]["name"]                         | nfsc-<%= project.name %> |
