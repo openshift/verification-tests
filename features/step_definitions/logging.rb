@@ -34,8 +34,13 @@ Given /^logging service is installed with:$/ do | table |
   # Create namespace
   unless project('openshift-logging').exists?
     # oc create -f https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/OCP-21311/namespace.yaml
-    namespace_yaml = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/OCP-21311/namespace.yaml"
+    namespace_yaml = "https://raw.githubusercontent.com/openshift/origin-aggregated-logging/master/openshift/ci-operator/build-image/openshift-logging-namespace.yaml"
     @result = admin.cli_exec(:create, f: namespace_yaml)
+    raise "Error creating namespace" unless @result[:success]
+  end
+  unless project('openshift-operators-redhat').exists?
+    eso_namespace_yaml = "https://raw.githubusercontent.com/openshift/origin-aggregated-logging/master/openshift/ci-operator/build-image/openshift-operators-redhat-namespace.yaml"
+    @result = admin.cli_exec(:create, f: eso_namespace_yaml)
     raise "Error creating namespace" unless @result[:success]
   end
   logging_ns = "openshift-logging"
@@ -51,9 +56,13 @@ Given /^logging service is installed with:$/ do | table |
   opts[:operator_group_yaml] ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/OCP-21311/operator-group.yaml"
   @result = admin.cli_exec(:create, f: opts[:operator_group_yaml], n: logging_ns)
   raise "Error creating operatorgroup" unless @result[:success]
+
+  # Create the CatalogSourceConfig for the elasticsearch-operator in the namespace openshift-marketplace:
+
   # create catalogsourceconfig for logging and elasticsearch
-  opts[:catsrc_logging_yaml] ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/OCP-21311/csc-clusterlogigng.yaml"
-  opts[:catsrc_elasticsearch_yaml] ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/OCP-21311/csc-elasticsearch.yaml"
+  opts[:catsrc_logging_yaml] ||= "https://raw.githubusercontent.com/openshift/origin-aggregated-logging/master/openshift/ci-operator/build-image/cluster-logging-catalogsourceconfig.yaml"
+  opts[:catsrc_elasticsearch_yaml] ||= "https://raw.githubusercontent.com/openshift/origin-aggregated-logging/master/openshift/ci-operator/build-image/elasticsearch-catalogsourceconfig.yaml"
+
 
   @result = admin.cli_exec(:create, f: opts[:catsrc_logging_yaml])
   raise "Error creating catalogsourceconfig for cluster_logging" unless @result[:success]
@@ -61,8 +70,8 @@ Given /^logging service is installed with:$/ do | table |
   raise "Error creating catalogsourceconfig for elasticsearch" unless @result[:success]
 
   # create subscription in "openshift-operators" namespace:
-  opts[:sub_logging_yaml] ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/OCP-21311/sub-cluster-logging.yaml"
-  opts[:sub_elasticsearch_yaml] ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/OCP-21311/sub-elasticsearch-operator.yaml"
+  opts[:sub_logging_yaml] ||= "https://raw.githubusercontent.com/openshift/origin-aggregated-logging/master/openshift/ci-operator/build-image/cluster-logging-subscription.yaml"
+  opts[:sub_elasticsearch_yaml] ||= "https://raw.githubusercontent.com/openshift/origin-aggregated-logging/master/openshift/ci-operator/build-image/elasticsearch-subscription.yaml"
 
   @result = admin.cli_exec(:create, f: opts[:sub_logging_yaml])
   raise "Error creating subscription for cluster_logging" unless @result[:success]
@@ -70,7 +79,7 @@ Given /^logging service is installed with:$/ do | table |
   raise "Error creating subscription for elasticsearch" unless @result[:success]
   step %Q/cluster logging operator is ready/
   # create instance in openshift-logging namespace
-  opts[:crd_yaml] ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/example.yaml"
+  opts[:crd_yaml] ||= "https://raw.githubusercontent.com/openshift/origin-aggregated-logging/master/openshift/ci-operator/build-image/cr.yaml"
   @result = admin.cli_exec(:create, f: opts[:crd_yaml], n: logging_ns)
   # Check the resource created by OLM
   step %Q/I wait for clusterlogging to be functional in the project/
