@@ -1300,6 +1300,10 @@
     :canonical_hostname: --router-canonical-hostname=<value>
     :default_cert: --default-cert=<value>
     :extended_logging: --extended-logging=<value>
+    :external_host: --external-host=<value>
+    :external_host_password: --external-host-password=<value>
+    :external_host_private_key: --external-host-private-key=<value>
+    :external_host_username: --external-host-username=<value>
     :force_subdomain: --force-subdomain=<value>
     :host_network: --host-network=<value>
     :host_ports: --host-ports=<value>
@@ -1311,6 +1315,7 @@
     :stats_passwd: --stats-password=<value>
     :stats_port: --stats-port=<value>
     :stats_user: --stats-user=<value>
+    :type: --type=<value>
     :n: -n <value>
 :oadm_taint_nodes:
   :cmd: oc adm taint nodes
