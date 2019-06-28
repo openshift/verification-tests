@@ -135,8 +135,8 @@ Given /^logging service is removed successfully$/ do
 
   step %Q/I use the "openshift-operators" project/
   step %Q/I wait for the resource "sub" named "elasticsearch-operator" to disappear/
-  @result = admin.cli_exec(:delete, object_type: 'csc', object_name_or_id: 'cluster-logging-operator', n: 'openshift-marketplace')
-  @result = admin.cli_exec(:delete, object_type: 'csc', object_name_or_id: 'elasticsearch-operator', n: 'openshift-marketplace')
+  @result = admin.cli_exec(:delete, object_type: 'csc', object_name_or_id: 'cluster-logging', n: 'openshift-marketplace')
+  @result = admin.cli_exec(:delete, object_type: 'csc', object_name_or_id: 'elasticsearch', n: 'openshift-marketplace')
   step %Q/I use the "openshift-marketplace" project/
   step %Q/I wait for the resource "csc" named "cluster-logging-operator" to disappear/
   step %Q/I wait for the resource "csc" named "elasticsearch-operator" to disappear/
