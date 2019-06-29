@@ -1,9 +1,9 @@
 click_logout:
   elements:
   - selector:
-      xpath: //span[contains(@class, "username")]
+      xpath: //*[contains(@class, 'username')]
     op: click
   - selector:
-      text: Logout
+      visible_text: !ruby/regexp /Log.*out/
     type: a
     op: click
