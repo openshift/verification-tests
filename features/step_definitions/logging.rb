@@ -45,7 +45,7 @@ Given /^logging service is installed with:$/ do | table |
   end
   logging_ns = "openshift-logging"
   # register clean up if user calls for it.
-  unless opts[:keep_installation]
+  if opts[:keep_installation] == 'false'
     teardown_add {
       step %Q/logging service is removed successfully/
     }
@@ -135,11 +135,13 @@ Given /^logging service is removed successfully$/ do
 
   step %Q/I use the "openshift-operators" project/
   step %Q/I wait for the resource "sub" named "elasticsearch-operator" to disappear/
-  @result = admin.cli_exec(:delete, object_type: 'csc', object_name_or_id: 'cluster-logging', n: 'openshift-marketplace')
-  @result = admin.cli_exec(:delete, object_type: 'csc', object_name_or_id: 'elasticsearch', n: 'openshift-marketplace')
+  csc_logging_name = "cluster-logging"
+  csc_elasticsearch_name = "elasticsearch"
+  @result = admin.cli_exec(:delete, object_type: 'csc', object_name_or_id: csc_logging_name, n: 'openshift-marketplace')
+  @result = admin.cli_exec(:delete, object_type: 'csc', object_name_or_id: csc_elasticsearch_name, n: 'openshift-marketplace')
   step %Q/I use the "openshift-marketplace" project/
-  step %Q/I wait for the resource "csc" named "cluster-logging-operator" to disappear/
-  step %Q/I wait for the resource "csc" named "elasticsearch-operator" to disappear/
+  step %Q/I wait for the resource "csc" named "#{csc_logging_name}" to disappear/
+  step %Q/I wait for the resource "csc" named "#{csc_elasticsearch_name}" to disappear/
 
 end
 
