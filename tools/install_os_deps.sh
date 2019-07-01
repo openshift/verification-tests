@@ -45,6 +45,10 @@ fi
 cat "${TOOLS_HOME}/os_deps/$file" | grep -v '^\s*#' | xargs $(need_sudo) $cmd
     $additional_deps
 
+if [ "$?" -ne 0 ]; then
+  echo 5
+fi
+
 # have to do these manually prior to bundler or else hell will break loose
 # We need to use 'gem install bundler' beacause for RHEL, using 'yum install rubygem-bundler'
 # will install ruby-2.0, which won't work with the rvm ruby stable version

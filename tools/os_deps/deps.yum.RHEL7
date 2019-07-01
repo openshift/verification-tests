@@ -6,7 +6,6 @@ bzip2
 firefox
 gcc-c++
 git
-iconv-devel
 jq
 libffi-devel
 libtool
