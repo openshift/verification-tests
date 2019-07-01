@@ -109,13 +109,7 @@ Feature: Service related networking scenarios
   # @case_id OCP-23895
   @admin
   Scenario: User cannot access the MCS by creating a LoadBalancer service that points to the MCS
-    Given I use the first master host
-    #Step to obtain master IP
-    And I run commands on the host:
-      | hostname -i |
-    Then the step should succeed
-    And evaluation of `@result[:response].strip` is stored in the :master_ip clipboard
-		
+    Given evaluation of `env.master_hosts.first.local_ip` is stored in the :master_ip clipboard
     Given I select a random node's host
     Given I have a project
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
@@ -126,28 +120,12 @@ Feature: Service related networking scenarios
       | name | <%= cb.ping_pod.name %>  |
       | tcp  | 22623:8080               | 
     Then the step should succeed
-    #Getting loadbalancer service IP
-    When I run the :get client command with:
-      | resource | svc                                 |
-      | output   | jsonpath={.items[*].spec.clusterIP} |
-      | n        | <%= project.name %>                 |
-    And evaluation of `@result[:response].strip` is stored in the :svc_lb_ip clipboard
     
     # Editing endpoint to point to master ip
     When I run the :patch client command with:
-      | resource      | ep                         				      |
-      | resource_name | <%= cb.ping_pod.name %>                  		      |
-      | p             | {"subsets": [{"addresses": [{"ip": "<%= cb.master_ip %>"}]}]} |
-      | type          | merge                                			      |
-    Then the step should succeed
-    #Make sure ep points to master ip
-    When I run the :get client command with:
-      | resource      | ep                            	       |
-      | resource_name | <%= cb.ping_pod.name %>       	       |
-      | output        | jsonpath={.subsets[*].addresses[*].ip} |
-    And evaluation of `@result[:response].strip` is stored in the :ep_ip clipboard
-    Then the expression should be true> cb.master_ip==cb.ep_ip
-    #Make sure user cannot access the MCS by creating a LoadBalancer service that points to the MCS 
-    When I execute on the pod:
-      | curl | -I | http://<%= cb.svc_lb_ip %>:22623/config/master | -k |
-    Then the output should contain "Connection refused"
+      | resource      | ep                         				      						   |
+      | resource_name | <%= cb.ping_pod.name %>                  		      						   |
+      | p             | {"subsets": [{"addresses": [{"ip": "<%= cb.master_ip %>"}],"ports": [{"port": 22623,"protocol": "TCP"}]}]} |
+      | type          | merge                                			      						   |
+    Then the step should fail
+    And the output should contain "endpoints "<%= cb.ping_pod.name %>" is forbidden: endpoint port TCP:22623 is not allowed"

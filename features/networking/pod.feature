@@ -244,26 +244,6 @@ Feature: Pod related networking scenarios
     Then the output should contain "Connection refused"
 
   # @auther anusaxen@redhat.com
-  # @case_id OCP-23892
-  @admin
-  Scenario: A pod cannot access the MCS via an egress router in http proxy mode
-    Given evaluation of `env.master_hosts.first.local_ip` is stored in the :master_ip clipboard
-    Given I select a random node's host
-    Given I have a project
-    And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
-    When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/weliang1/Openshift_Networking/master/egress-http-proxy/egress-http-proxy-pod.yaml |
-    Then the pod named "egress-http-proxy" becomes ready
-
-    #Pod should not access MCS via an egress router pod
-    When I execute on the pod:
-      | curl | -I | https://<%= cb.master_ip %>:22623/config/master | -k |
-    Then the output should contain "Connection refused"
-    When I execute on the pod:
-      | curl | -I | https://<%= cb.master_ip %>:22624/config/master | -k |
-    Then the output should contain "Connection refused"
-
-  # @auther anusaxen@redhat.com
   # @case_id OCP-23893
   @admin
   Scenario: A pod in a namespace with an egress IP cannot access the MCS
