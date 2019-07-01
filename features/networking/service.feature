@@ -105,3 +105,27 @@ Feature: Service related networking scenarios
     And the output should not contain:
       | <%= cb.service_ip %> |
 
+  # @auther anusaxen@redhat.com
+  # @case_id OCP-23895
+  @admin
+  Scenario: User cannot access the MCS by creating a LoadBalancer service that points to the MCS
+    Given evaluation of `env.master_hosts.first.local_ip` is stored in the :master_ip clipboard
+    Given I select a random node's host
+    Given I have a project
+    And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
+    And I have a pod-for-ping in the project
+    
+    #Creating laodbalancer service that points to MCS IP
+    When I run the :create_service_loadbalancer client command with: 
+      | name | <%= cb.ping_pod.name %>  |
+      | tcp  | 22623:8080               | 
+    Then the step should succeed
+    
+    # Editing endpoint to point to master ip
+    When I run the :patch client command with:
+      | resource      | ep                         				      						   |
+      | resource_name | <%= cb.ping_pod.name %>                  		      						   |
+      | p             | {"subsets": [{"addresses": [{"ip": "<%= cb.master_ip %>"}],"ports": [{"port": 22623,"protocol": "TCP"}]}]} |
+      | type          | merge                                			      						   |
+    Then the step should fail
+    And the output should contain "endpoints "<%= cb.ping_pod.name %>" is forbidden: endpoint port TCP:22623 is not allowed"

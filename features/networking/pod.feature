@@ -190,3 +190,108 @@ Feature: Pod related networking scenarios
     Then the step should succeed
     And the output should not contain "ingress_policing_rate: 1953"
 
+  # @auther anusaxen@redhat.com
+  # @case_id OCP-23890
+  @admin
+  Scenario: A pod with or without hostnetwork cannot access the MCS port 22623 or 22624 on the master
+    Given evaluation of `env.master_hosts.first.local_ip` is stored in the :master_ip clipboard
+    Given I select a random node's host
+    Given I have a project
+    #pod-for-ping will be a non-hostnetwork pod
+    And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
+    And I have a pod-for-ping in the project
+
+    When I execute on the pod:
+      | curl | -I | https://<%= cb.master_ip %>:22623/config/master | -k |
+    Then the output should contain "Connection refused"
+    When I execute on the pod:
+      | curl | -I | https://<%= cb.master_ip %>:22624/config/master | -k |
+    Then the output should contain "Connection refused"
+    
+    #hostnetwork-pod will be a hostnetwork pod
+    When I run the :create admin command with:
+      | f | https://raw.githubusercontent.com/anuragthehatter/v3-testfiles/master/networking/hostnetwork-pod.json |
+      | n | <%= project.name %>                                                                                   |
+    Then the pod named "hostnetwork-pod" becomes ready
+    #Pods should not access the MCS port 22623 or 22624 on the master
+    When I execute on the pod:
+      | curl | -I | https://<%= cb.master_ip %>:22623/config/master | -k |
+    Then the output should contain "Connection refused"
+    When I execute on the pod:
+      | curl | -I | https://<%= cb.master_ip %>:22624/config/master | -k |
+    Then the output should contain "Connection refused"
+
+  # @auther anusaxen@redhat.com
+  # @case_id OCP-23891
+  @admin
+  Scenario: A pod cannot access the MCS port 22623 or 22624 via the SDN/tun0 address of the master
+    Given I use the first master host		
+    And I run commands on the host:
+      | ifconfig tun0 \| grep -w inet \| awk '{print $2}' |
+    Then the step should succeed
+    And evaluation of `@result[:response].strip` is stored in the :master_tun0_ip clipboard
+    
+    Given I select a random node's host
+    And I have a project
+    #pod-for-ping will be a non-hostnetwork pod
+    And I have a pod-for-ping in the project
+    #Curl on Master's tun0 IP to make sure connections are blocked to MCS via tun0
+    When I execute on the pod:
+      | curl | -I | https://<%= cb.master_tun0_ip %>:22623/config/master | -k |
+    Then the output should contain "Connection refused"
+    When I execute on the pod:
+      | curl | -I | https://<%= cb.master_tun0_ip %>:22624/config/master | -k |
+    Then the output should contain "Connection refused"
+
+  # @auther anusaxen@redhat.com
+  # @case_id OCP-23893
+  @admin
+  Scenario: A pod in a namespace with an egress IP cannot access the MCS
+    Given evaluation of `env.master_hosts.first.local_ip` is stored in the :master_ip clipboard
+    Given I select a random node's host
+    And evaluation of `node.name` is stored in the :egress_node clipboard
+    #add the egress ip to the hostsubnet
+    And the valid egress IP is added to the "<%= cb.egress_node %>" node
+    Given I have a project
+    And evaluation of `project.name` is stored in the clipboard
+    # add the egress ip to the project
+    When I run the :patch admin command with:
+    | resource      | netnamespace                         |
+    | resource_name | <%= project.name %>                    |
+    | p             | {"egressIPs":["<%= cb.valid_ip %>"]} |
+    | type          | merge                                |
+    Then the step should succeed
+    #pod-for-ping will be a non-hostnetwork pod
+    And I have a pod-for-ping in the project
+    
+    #Pod cannot access MCS
+    When I execute on the pod:
+      | curl | -I | https://<%= cb.master_ip %>:22623/config/master | -k |
+    Then the output should contain "Connection refused"
+    When I execute on the pod:
+      | curl | -I | https://<%= cb.master_ip %>:22624/config/master | -k |
+    Then the output should contain "Connection refused"
+
+  # @auther anusaxen@redhat.com
+  # @case_id OCP-23894
+  @admin
+  Scenario: User cannot access the MCS by creating a service that maps to non-MCS port to port 22623 or 22624 on the IP of a master (via manually-created ep's)
+    Given evaluation of `env.master_hosts.first.local_ip` is stored in the :master_ip clipboard
+    And I have a project
+    #pod-for-ping will be a non-hostnetwork pod
+    And I have a pod-for-ping in the project
+    #Exposing above pod to MCS target port 22623
+    When I run the :expose client command with:
+      | resource      | pod                     |
+      | resource_name | <%= cb.ping_pod.name %> |
+      | target_port   | 22623                   |
+      | port          | 8080                    |
+    Then the step should succeed
+    # Editing endpoint created above during expose to point to master ip and the step should fail
+    When I run the :patch client command with:
+      | resource      | ep                                                            						   |
+      | resource_name | <%= cb.ping_pod.name %>                                       						   |
+      | p             | {"subsets": [{"addresses": [{"ip": "<%= cb.master_ip %>"}],"ports": [{"port": 22623,"protocol": "TCP"}]}]} |
+      | type          | merge                                                         						   |
+    Then the step should fail
+    And the output should contain "endpoints "<%= cb.ping_pod.name %>" is forbidden: endpoint port TCP:22623 is not allowed"
