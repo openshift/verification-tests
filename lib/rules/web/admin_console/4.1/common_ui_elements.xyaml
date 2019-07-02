@@ -50,7 +50,7 @@ check_resource_name_and_icon:
 check_page_contains:
   element:
     selector:
-      xpath: //*[contains(.,'<content>')]
+      visible_text: !ruby/regexp /<content>/i
 submit_changes:
   element:
     selector:

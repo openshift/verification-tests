@@ -12,7 +12,7 @@ search_by_type:
       xpath: //div[@class='co-m-pane__filter-bar-group']/div[1]
     op: click
   - selector:
-      xpath: //span[@class='co-resource-link__resource-name' and .='<type>']
+      xpath: (//span[@class='co-resource-item__resource-name' and text()='<type>'])[position()=1]
     op: click
 search_by_catagory:
   elements:
@@ -45,14 +45,14 @@ check_results_contain_correct_type:
       css: span.co-m-resource-icon
   scripts:
     - command: |
-        var resourceicons = document.querySelectorAll('span.co-m-resource-icon');
+        var resourceicons = document.querySelectorAll('span.co-m-resource-icon.co-m-resource-<type>');
         var all_contain = true;
         if (resourceicons.length == 0) {
           all_contain = false;
           return all_contain
         }
         resourceicons.forEach(function(resourceicon){
-          all_contain = resourceicon.getAttribute('title').length== "<type>".length &&  resourceicon.getAttribute('title').includes('<type>') && all_contain
+          all_contain = resourceicon.getAttribute('title').length== "<type>".length &&  resourceicon.getAttribute('title').toLowerCase().includes('<type>') && all_contain
         })
         return all_contain
       expect_result: true
