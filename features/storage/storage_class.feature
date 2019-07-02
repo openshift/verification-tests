@@ -167,17 +167,8 @@ Feature: storageClass related feature
       | azure-disk  | # @case_id OCP-13490
 
   # @author lxia@redhat.com
-  @admin
-  @destructive
   Scenario Outline: New created PVC without specifying storage class use default class when only one class is marked as default
-    Given default storage class is deleted
     Given I have a project
-    # create one as default StorageClass
-    When admin creates a StorageClass from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/storageClass.yaml" where:
-      | ["metadata"]["name"]                                                       | sc-<%= project.name %>      |
-      | ["provisioner"]                                                            | kubernetes.io/<provisioner> |
-      | ["metadata"]["annotations"]["storageclass.kubernetes.io/is-default-class"] | true                        |
-    Then the step should succeed
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc-without-annotations.json" replacing paths:
       | ["metadata"]["name"] | pvc-<%= project.name %> |
     Then the step should succeed
