@@ -179,3 +179,11 @@ Feature: test logging and metrics related steps
     Given logging service is installed with:
       | keep_installation | true                                                                                                   |
       | crd_yaml          | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/example.yaml |
+
+
+  @admin
+  @destructive
+  Scenario: install logging keep_installation flag
+    Given logging service is installed with:
+      | keep_installation | false |
+
