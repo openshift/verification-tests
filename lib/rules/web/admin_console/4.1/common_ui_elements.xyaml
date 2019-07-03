@@ -46,11 +46,15 @@ check_resources_title_on_page:
 check_resource_name_and_icon:
   elements:
   - selector:
-      xpath: //div[@class='co-m-pane__name'][/*[contains(.,'<icon_text>')] and /*[contains(., '<resource_name>')]]
+      xpath: //div[contains(@class,'co-m-pane__name')][/*[contains(.,'<icon_text>')] and /*[contains(., '<resource_name>')]]
 check_page_contains:
   element:
     selector:
       xpath: //*[contains(.,'<content>')]
+check_page_match:
+  element:
+    selector:
+      visible_text: !ruby/regexp /<content>/i
 submit_changes:
   element:
     selector:

@@ -150,6 +150,10 @@ module BushSlicer
     end
     alias_method :pods, :get_pods
 
+    def jobs(by:, **get_opts)
+      Job.list(user: by, project: self, **get_opts)
+    end
+
     def get_builds(by:, **get_opts)
       Build.list(user: by, project: self, **get_opts)
     end
