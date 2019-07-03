@@ -6,7 +6,7 @@ create_project:
     if_param: display_name
     ref: set_project_display_name
   action:
-    if_param: 
+    if_param: discription_name
     ref: set_project_description
   action: click_create_button
 set_project_name:
