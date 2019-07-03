@@ -77,44 +77,34 @@ Feature: storageClass related feature
   @destructive
   Scenario Outline: storage class provisioner
     Given I have a project
-    When admin creates a StorageClass from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gce/storageClass.yaml" where:
-      | ["metadata"]["name"]                                                       | sc-<%= project.name %>      |
-      | ["provisioner"]                                                            | kubernetes.io/<provisioner> |
-      | ["parameters"]["type"]                                                     | <type>                      |
-      | ["parameters"]["zone"]                                                     | <zone>                      |
-      | ["metadata"]["annotations"]["storageclass.kubernetes.io/is-default-class"] | <is-default>                |
-    Then the step should succeed
+    And admin clones storage class "sc-<%= project.name %>" from ":default" with:
+      | ["parameters"]["type"] | <type> |
 
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
-      | ["metadata"]["name"]                         | pvc-<%= project.name %> |
+      | ["metadata"]["name"]                         | mypvc                   |
       | ["spec"]["accessModes"][0]                   | ReadWriteOnce           |
       | ["spec"]["resources"]["requests"]["storage"] | <size>                  |
       | ["spec"]["storageClassName"]                 | sc-<%= project.name %>  |
     Then the step should succeed
-    And the "pvc-<%= project.name %>" PVC becomes :bound within 120 seconds
+
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                         | mypod     |
+      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc     |
+      | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt/iaas |
+    Then the step should succeed
+    Given the pod named "mypod" becomes ready
+    And the "mypvc" PVC becomes :bound within 120 seconds
     And the expression should be true> pvc.capacity == "<size>"
     And the expression should be true> pvc.access_modes[0] == "ReadWriteOnce"
     And the expression should be true> pv(pvc.volume_name).reclaim_policy == "Delete"
-    # ToDo
-    # check storage size info
-    # check storage type info
-    # check storage zone info
-    # gcloud compute disks describe --zone <zone> diskNameViaPvInfo
-
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pod.yaml" replacing paths:
-      | ["metadata"]["name"]                                         | pod-<%= project.name %> |
-      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | pvc-<%= project.name %> |
-      | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt/iaas               |
-    Then the step should succeed
-    Given the pod named "pod-<%= project.name %>" becomes ready
     When I execute on the pod:
       | ls | -ld | /mnt/iaas/ |
     Then the step should succeed
     When I execute on the pod:
       | touch | /mnt/iaas/testfile |
     Then the step should succeed
-    Given I ensure "pod-<%= project.name %>" pod is deleted
-    Given I ensure "pvc-<%= project.name %>" pvc is deleted
+    Given I ensure "mypod" pod is deleted
+    Given I ensure "mypvc" pvc is deleted
     Given I switch to cluster admin pseudo user
     And I wait for the resource "pv" named "<%= pvc.volume_name %>" to disappear
 
