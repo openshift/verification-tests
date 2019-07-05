@@ -150,11 +150,12 @@ Feature: storageClass related feature
     And the "pvc2-<%= project.name %>" PVC becomes :bound within 120 seconds
 
     Examples:
-      | provisioner |
-      | gce-pd      | # @case_id OCP-12223
-      | aws-ebs     | # @case_id OCP-12226
-      | cinder      | # @case_id OCP-12227
-      | azure-disk  | # @case_id OCP-13490
+      | provisioner    |
+      | aws-ebs        | # @case_id OCP-12226
+      | azure-disk     | # @case_id OCP-13490
+      | cinder         | # @case_id OCP-12227
+      | gce-pd         | # @case_id OCP-12223
+      | vsphere-volume | # @case_id OCP-24259
 
   # @author lxia@redhat.com
   Scenario Outline: New created PVC without specifying storage class use default class when only one class is marked as default
