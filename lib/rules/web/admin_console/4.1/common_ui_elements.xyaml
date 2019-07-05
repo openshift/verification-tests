@@ -58,8 +58,12 @@ check_page_contains:
       xpath: //*[contains(.,'<content>')]
 check_page_match:
   element:
-    selector:
+    selector: &page_content
       visible_text: !ruby/regexp /<content>/i
+check_page_not_match:
+  element:
+    selector: *page_content
+    missing: true
 submit_changes:
   element:
     selector:
@@ -93,7 +97,6 @@ click_secondary_menu:
   - selector:
       xpath: //a[@class='pf-c-nav__link' and text()='<secondary_menu>']
     op: click
-
 ## -------- check resource key and values pairs ------
 check_resource_details:
   action:
