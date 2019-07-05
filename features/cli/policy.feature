@@ -357,16 +357,14 @@ Feature: change the policy of user/service account
       | force | true              |
       | n     | <%= cb.project %> |
     And the step should fail
-    And the output should contain:
-      | User "<%= user.name %>" cannot delete persistentvolumeclaims |
+    And the output should contain "forbidden"
 
     When I run the :delete client command with:
       | object_type       | pvc                   |
       | object_name_or_id | pvc-<%= cb.project %> |
       | n                 | <%= cb.project %>     |
     And the step should fail
-    And the output should contain:
-      | User "<%= user.name %>" cannot delete persistentvolumeclaims |
+    And the output should contain "forbidden"
 
   # @author chaoyang@redhat.com
   # @case_id OCP-10465
