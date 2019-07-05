@@ -1,0 +1,301 @@
+create_resource_by_default_yaml:
+  elements:
+  - selector:
+      xpath: //button[@id="yaml-create"]
+    op: click
+  action:
+    if_element:
+      selector:
+        xpath: //a[text()='Edit YAML']
+    ref: click_edit_yaml_link
+  action: click_create_button
+click_edit_yaml_link:
+  elements:
+  - selector:
+        xpath: //a[text()='Edit YAML']
+    op: click
+click_create_button:
+  elements:
+  - selector:
+      xpath: //button[contains(text(),'Create')]
+    op: click
+click_cancel_button:
+  elements:
+  - selector:
+      xpath: //button[contains(text(),'Cancel')]
+    op: click
+click_button:
+  element:
+    selector:
+      xpath: //button[contains(.,'<button_text>')]
+    op: click
+click_tab:
+  elements:
+  - selector:
+      xpath: //ul[contains(@class,'nav__menu')]//a[text()='<tab_name>']
+    op: click
+clear_input_value:
+  elements:
+  - selector:
+      id: <clear_field_id>
+    op: clear
+    type: input
+check_row_filter_on_page:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'row-filter')]//*[text()='<filter>']
+check_resources_title_on_page:
+  elements:
+  - selector:
+      xpath: //span[text()='<resource_title>']
+check_resource_name_and_icon:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'co-m-pane__name')][/*[contains(.,'<icon_text>')] and /*[contains(., '<resource_name>')]]
+check_page_contains:
+  element:
+    selector:
+      xpath: //*[contains(.,'<content>')]
+check_page_match:
+  element:
+    selector: &page_content
+      visible_text: !ruby/regexp /<content>/i
+check_page_not_match:
+  element:
+    selector: *page_content
+    missing: true
+submit_changes:
+  element:
+    selector:
+      xpath: //button[@type='submit']
+    op: click
+click_add_more_button:
+  element:
+    selector:
+      xpath: //*[contains(text(),'Add More')]
+    op: click
+click_annotation_link:
+  elements:
+  - selector:
+      xpath: //a[contains(text(), 'Annotation')]
+    op: click
+    timeout: 20
+uncheck_checkbox:
+  element:
+    selector:
+      xpath: //input[contains(@type,'checkbox')]
+    op: click
+check_link_and_text:
+  element:
+    selector:
+      xpath: //a[contains(text(),'<text>') and @href='<link_url>']
+click_secondary_menu:
+  elements:
+  - selector:
+      xpath: //a[@data-component='pf-nav-expandable' and text()='<primary_menu>']
+    op: click
+  - selector:
+      xpath: //a[@class='pf-c-nav__link' and text()='<secondary_menu>']
+    op: click
+## -------- check resource key and values pairs ------
+check_resource_details:
+  action:
+    if_param: name
+    ref: check_resource_name
+  action:
+    if_param: display_name
+    ref: check_resource_display_name
+  action:
+    if_param: namespace
+    ref: check_resource_namespace
+  action:
+    if_param: labels
+    ref: check_resource_labels
+  action:
+    if_param: annotations
+    ref: check_resource_annotations
+  action:
+    if_param: provisioner
+    ref: check_resource_provisioner
+  action:
+    if_param: reclaim_policy
+    ref: check_resource_reclaim_policy
+  action:
+    if_param: default_class
+    ref: check_resource_default_class
+  action:
+    if_param: pod_selector
+    ref: check_resource_pod_selector
+  action:
+    if_param: update_strategy
+    ref: check_resource_update_strategy
+  action:
+    if_param: max_unavailable
+    ref: check_resource_max_unavailable
+  action:
+    if_param: max_surge
+    ref: check_resource_max_surge
+  action:
+    if_param: schedule
+    ref: check_resource_schedule
+  action:
+    if_param: concurrency_policy
+    ref: check_resource_concurrency_policy
+  action:
+    if_param: last_schedule_time
+    ref: check_resource_last_schedule_time
+  action:
+    if_param: owner
+    ref: check_resource_owner
+  action:
+    if_param: desired_completions
+    ref: check_resource_desired_completions
+  action:
+    if_param: parallelism
+    ref: check_resource_parallelism
+  action:
+    if_param: type
+    ref: check_resource_type
+  action:
+    if_param: git_repo
+    ref: check_resource_git_repository
+  action:
+    if_param: builder_image
+    ref: check_builder_image
+  action:
+    if_param: output_image
+    ref: check_output_to_image
+  action:
+    if_param: run_policy
+    ref: check_run_policy
+  action:
+    if_param: triggered_by
+    ref: check_triggered_by
+check_resource_details_key_and_value:
+  element: &key_value
+    selector:
+      xpath: //dt[contains(text(),'<key>')]/following-sibling::dd[1][contains(.,'<value>')]
+click_value_on_resource_detail:
+  element:
+    <<: *key_value
+    op: click
+check_resource_name:
+  params:
+    key: Name
+    value: <name>
+  action: check_resource_details_key_and_value
+check_resource_display_name:
+  params:
+    key: Display Name
+    value: <display_name>
+  action: check_resource_details_key_and_value
+check_resource_labels:
+  params:
+    key: Labels
+    value: <labels>
+  action: check_resource_details_key_and_value
+check_resource_annotations:
+  params:
+    key: Annotations
+    value: <annotations>
+  action: check_resource_details_key_and_value
+check_resource_provisioner:
+  params:
+    key: Provisioner
+    value: <provisioner>
+  action: check_resource_details_key_and_value
+check_resource_reclaim_policy:
+  params:
+    key: Reclaim Policy
+    value: <reclaim_policy>
+  action: check_resource_details_key_and_value
+check_resource_default_class:
+  params:
+    key: Default Class
+    value: <default_class>
+  action: check_resource_details_key_and_value
+check_resource_pod_selector:
+  params:
+    key: Pod Selector
+    value: <pod_selector>
+  action: check_resource_details_key_and_value
+check_resource_update_strategy:
+  params:
+    key: Update Strategy
+    value: <update_strategy>
+  action: check_resource_details_key_and_value
+check_resource_max_unavailable:
+  params:
+    key: Max Unavailable
+    value: <max_unavailable>
+  action: check_resource_details_key_and_value
+check_resource_max_surge:
+  params:
+    key: Max Surge
+    value: <max_surge>
+  action: check_resource_details_key_and_value
+check_resource_schedule:
+  params:
+    key: Schedule
+    value: <schedule>
+  action: check_resource_details_key_and_value
+check_resource_concurrency_policy:
+  params:
+    key: Concurrency Policy
+    value: <concurrency_policy>
+  action: check_resource_details_key_and_value
+check_resource_last_schedule_time:
+  params:
+    key: Last Schedule Time
+    value: <last_schedule_time>
+  action: check_resource_details_key_and_value
+check_resource_owner:
+  params:
+    key: Owner
+    value: <owner>
+  action: check_resource_details_key_and_value
+check_resource_desired_completions:
+  params:
+    key: Desired Completions
+    value: <desired_completions>
+  action: check_resource_details_key_and_value
+check_resource_parallelism:
+  params:
+    key: Parallelism
+    value: <parallelism>
+  action: check_resource_details_key_and_value
+check_resource_type:
+  params:
+    key: Type
+    value: <type>
+  action: check_resource_details_key_and_value
+check_resource_namespace:
+  params:
+    key: Namespace
+    value: <namespace>
+  action: check_resource_details_key_and_value
+check_resource_git_repository:
+  params:
+    key: Git Repository
+    value: <git_repo>
+  action: check_resource_details_key_and_value
+check_builder_image:
+  params:
+    key: Builder Image
+    value: <builder_image>
+  action: check_resource_details_key_and_value
+check_output_to_image:
+  params:
+    key: Output To
+    value: <output_image>
+  action: check_resource_details_key_and_value
+check_run_policy:
+  params:
+    key: Run Policy
+    value: <run_policy>
+  action: check_resource_details_key_and_value
+check_triggered_by:
+  params:
+    key: Triggered By
+    value: <triggered_by>
+  action: check_resource_details_key_and_value
