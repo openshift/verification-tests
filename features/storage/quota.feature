@@ -32,7 +32,7 @@ Feature: ResourceQuata for storage
 
     # Try to exceed the 12Gi storage
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
-      | ["metadata"]["name"]                                                    | pvc-<%= project.name %> |
+      | ["metadata"]["name"]                                                    | mypvc |
       | ["metadata"]["annotations"]["volume.alpha.kubernetes.io/storage-class"] | foo                     |
       | ["spec"]["resources"]["requests"]["storage"]                            | 4Gi                     |
     Then the step should fail
@@ -57,7 +57,7 @@ Feature: ResourceQuata for storage
     And the pod named "mypodi-#{ cb.i }" becomes ready
     """
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
-      | ["metadata"]["name"]                                                    | pvc-<%= project.name %> |
+      | ["metadata"]["name"]                                                    | mypvc |
       | ["metadata"]["annotations"]["volume.alpha.kubernetes.io/storage-class"] | foo                     |
       | ["spec"]["resources"]["requests"]["storage"]                            | 1Gi                     |
     Then the step should fail
@@ -97,7 +97,7 @@ Feature: ResourceQuata for storage
 
     # Try to exceed the 10Mi storage
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
-      | ["metadata"]["name"]                         | pvc-<%= project.name %>             |
+      | ["metadata"]["name"]                         | mypvc             |
       | ["spec"]["storageClassName"]                 | sc-<%= project.name %> |
       | ["spec"]["resources"]["requests"]["storage"] | 4Mi                                 |
     Then the step should fail
@@ -131,12 +131,12 @@ Feature: ResourceQuata for storage
     Given admin clones storage class "sc1-<%= project.name %>" from ":default" with:
       | | |
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
-      | ["metadata"]["name"]                         | pvc1-<%= project.name %> |
+      | ["metadata"]["name"]                         | mypvc1 |
       | ["spec"]["storageClassName"]                 | sc1-<%= project.name %>  |
       | ["spec"]["resources"]["requests"]["storage"] | 11Mi                     |
     Then the step should succeed
-    And the "pvc1-<%= project.name %>" PVC becomes :bound
-    Given I ensure "pvc1-<%= project.name %>" pvc is deleted
+    And the "mypvc1" PVC becomes :bound
+    Given I ensure "mypvc1" pvc is deleted
     Given I switch to cluster admin pseudo user
     And I wait for the resource "pv" named "<%= pvc.volume_name %>" to disappear within 300 seconds
 

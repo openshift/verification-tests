@@ -18,17 +18,17 @@ Feature: NoDiskConflict
 
     Given I have a 1 GB volume and save volume id in the :volumeID clipboard
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/<path_to_file>" replacing paths:
-      | ["metadata"]["name"]                                      | pod1-<%= project.name %> |
+      | ["metadata"]["name"]                                      | mypod1 |
       | ["spec"]["volumes"][0]["<storage_type>"]["<volume_name>"] | <%= cb.volumeID %>       |
     Then the step should succeed
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/<path_to_file>" replacing paths:
-      | ["metadata"]["name"]                                      | pod2-<%= project.name %> |
+      | ["metadata"]["name"]                                      | mypod2 |
       | ["spec"]["volumes"][0]["<storage_type>"]["<volume_name>"] | <%= cb.volumeID %>       |
     Then the step should succeed
 
     When I run the :describe client command with:
       | resource | pod                      |
-      | name     | pod2-<%= project.name %> |
+      | name     | mypod2 |
     Then the step should succeed
     And the output should match:
       | Pending                             |

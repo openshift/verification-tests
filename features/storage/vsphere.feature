@@ -9,16 +9,16 @@ Feature: vSphere test scenarios
       | ["parameters"]["diskformat"] | <disk_format>                    |
     Then the step should succeed
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/vsphere/pvc.json" replacing paths:
-        | ["metadata"]["name"]         | pvc-<%= project.name %>          |
+        | ["metadata"]["name"]         | mypvc          |
         | ["spec"]["storageClassName"] | storageclass-<%= project.name %> |
     Then the step should succeed
-    And the "pvc-<%= project.name %>" PVC becomes :bound
+    And the "mypvc" PVC becomes :bound
 
     # Testing volume mount and read/write
     Given I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/vsphere/pod.json" replacing paths:
-      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | pvc-<%= project.name %> |
+      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc |
       | ["metadata"]["name"]                                         | mypod                   |
     Then the step should succeed
     Given the pod named "mypod" becomes ready
@@ -46,7 +46,7 @@ Feature: vSphere test scenarios
 
     # Testing reclaim policy
     Given I ensure "mypod" pod is deleted
-    And I ensure "pvc-<%= project.name %>" pvc is deleted
+    And I ensure "mypvc" pvc is deleted
     Given I switch to cluster admin pseudo user
     And I wait for the resource "pv" named "<%= pvc.volume_name %>" to disappear within 60 seconds
 
@@ -67,12 +67,12 @@ Feature: vSphere test scenarios
     Then the step should succeed
 
     Given I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/vsphere/pvc.json" replacing paths:
-      | ["metadata"]["name"]         | pvc-<%= project.name %>          |
+      | ["metadata"]["name"]         | mypvc          |
       | ["spec"]["storageClassName"] | storageclass-<%= project.name %> |
     And I wait up to 30 seconds for the steps to pass:
     """
     When I run the :describe client command with:
-      | resource | pvc/pvc-<%= project.name %> |
+      | resource | pvc/mypvc |
     Then the output should contain:
       | Pending |
       | Failed  |

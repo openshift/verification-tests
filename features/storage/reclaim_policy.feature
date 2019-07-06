@@ -15,25 +15,25 @@ Feature: Persistent Volume reclaim policy tests
       | ["spec"]["persistentVolumeReclaimPolicy"]   | Default                |
     Then the step should succeed
     When I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gce/claim-rwo.json" replacing paths:
-      | ["metadata"]["name"]                         | pvc-<%= project.name %> |
+      | ["metadata"]["name"]                         | mypvc |
       | ["spec"]["volumeName"]                       | pv-<%= project.name %>  |
       | ["spec"]["accessModes"][0]                   | ReadWriteOnce           |
       | ["spec"]["resources"]["requests"]["storage"] | 1Gi                     |
     Then the step should succeed
-    And the "pvc-<%= project.name %>" PVC becomes bound to the "pv-<%= project.name %>" PV
+    And the "mypvc" PVC becomes bound to the "pv-<%= project.name %>" PV
 
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gce/pod.json" replacing paths:
-      | ["metadata"]["name"]                                         | pod-<%= project.name %> |
+      | ["metadata"]["name"]                                         | mypod |
       | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt                    |
-      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | pvc-<%= project.name %> |
+      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc |
     Then the step should succeed
-    Given the pod named "pod-<%= project.name %>" becomes ready
+    Given the pod named "mypod" becomes ready
     When I execute on the pod:
       | touch | /mnt/testfile |
     Then the step should succeed
 
-    Given I ensure "pod-<%= project.name %>" pod is deleted
-    And I ensure "pvc-<%= project.name %>" pvc is deleted
+    Given I ensure "mypod" pod is deleted
+    And I ensure "mypvc" pvc is deleted
     And the PV becomes :released
 
     Examples:
@@ -57,25 +57,25 @@ Feature: Persistent Volume reclaim policy tests
       | ["spec"]["persistentVolumeReclaimPolicy"]   | Delete                 |
     Then the step should succeed
     When I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gce/claim-rwo.json" replacing paths:
-      | ["metadata"]["name"]                         | pvc-<%= project.name %> |
+      | ["metadata"]["name"]                         | mypvc |
       | ["spec"]["volumeName"]                       | pv-<%= project.name %>  |
       | ["spec"]["accessModes"][0]                   | ReadWriteOnce           |
       | ["spec"]["resources"]["requests"]["storage"] | 1Gi                     |
     Then the step should succeed
-    And the "pvc-<%= project.name %>" PVC becomes bound to the "pv-<%= project.name %>" PV
+    And the "mypvc" PVC becomes bound to the "pv-<%= project.name %>" PV
 
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gce/pod.json" replacing paths:
-      | ["metadata"]["name"]                                         | pod-<%= project.name %> |
+      | ["metadata"]["name"]                                         | mypod |
       | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt                    |
-      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | pvc-<%= project.name %> |
+      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc |
     Then the step should succeed
-    Given the pod named "pod-<%= project.name %>" becomes ready
+    Given the pod named "mypod" becomes ready
     When I execute on the pod:
       | touch | /mnt/testfile |
     Then the step should succeed
 
-    Given I ensure "pod-<%= project.name %>" pod is deleted
-    And I ensure "pvc-<%= project.name %>" pvc is deleted
+    Given I ensure "mypod" pod is deleted
+    And I ensure "mypvc" pvc is deleted
     Given I switch to cluster admin pseudo user
     And I wait for the resource "pv" named "<%= pv.name %>" to disappear within 1200 seconds
 

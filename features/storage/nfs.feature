@@ -117,20 +117,20 @@ Feature: NFS Persistent Volume
     Then the step should succeed
 
     When I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/claim-rwx.json" replacing paths:
-      | ["metadata"]["name"]                         | nfsc-<%= project.name %> |
+      | ["metadata"]["name"]                         | mypvc |
       | ["spec"]["resources"]["requests"]["storage"] | 1Gi                      |
     Then the step should succeed
-    And the "nfsc-<%= project.name %>" PVC becomes bound to the "nfs-<%= project.name %>" PV
+    And the "mypvc" PVC becomes bound to the "nfs-<%= project.name %>" PV
 
     Given I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/security/pod-supplementalgroup.json" replacing paths:
-      | ["metadata"]["name"]                                         | nfspd-<%= project.name %> |
-      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | nfsc-<%= project.name %>  |
+      | ["metadata"]["name"]                                         | mypod |
+      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc  |
     Then the step should succeed
-    And the pod named "nfspd-<%= project.name %>" becomes ready
+    And the pod named "mypod" becomes ready
 
-    Given I execute on the "nfspd-<%= project.name %>" pod:
+    Given I execute on the "mypod" pod:
       | touch | /mnt/nfs/nfs_testfile |
     Then the step should fail
     And the output should contain:

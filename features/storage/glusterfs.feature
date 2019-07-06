@@ -24,39 +24,39 @@ Feature: Storage of GlusterFS plugin testing
     Then the step should succeed
 
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/security/gluster_pod_sg.json" replacing paths:
-      | ["metadata"]["name"] | glusterpd-<%= project.name %> |
+      | ["metadata"]["name"] | mypod |
     Then the step should succeed
 
-    Given the pod named "glusterpd-<%= project.name %>" becomes ready
-    And I execute on the "glusterpd-<%= project.name %>" pod:
+    Given the pod named "mypod" becomes ready
+    And I execute on the pod:
       | ls | /mnt/glusterfs |
     Then the step should succeed
 
-    And I execute on the "glusterpd-<%= project.name %>" pod:
+    And I execute on the pod:
       | touch | /mnt/glusterfs/gluster_testfile |
     Then the step should succeed
 
     # Testing execute permission
-    Given I execute on the "glusterpd-<%= project.name %>" pod:
+    Given I execute on the pod:
       | cp | /hello | /mnt/glusterfs/hello |
-    When I execute on the "glusterpd-<%= project.name %>" pod:
+    When I execute on the pod:
       | /mnt/glusterfs/hello |
     Then the step should succeed
     And the output should contain:
       | Hello OpenShift Storage |
 
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/security/gluster_pod_sg.json" replacing paths:
-      | ["metadata"]["name"]                              | glusterpd-negative-<%= project.name %> |
+      | ["metadata"]["name"]                              | glusterpd-negative |
       | ["spec"]["securityContext"]["supplementalGroups"] | [123460]                               |
     Then the step should succeed
-    Given the pod named "glusterpd-negative-<%= project.name %>" becomes ready
-    And I execute on the "glusterpd-negative-<%= project.name %>" pod:
+    Given the pod named "glusterpd-negative" becomes ready
+    And I execute on the pod:
       | ls | /mnt/glusterfs |
     Then the step should fail
     Then the outputs should contain:
       | Permission denied  |
 
-    And I execute on the "glusterpd-negative-<%= project.name %>" pod:
+    And I execute on the pod:
       | touch | /mnt/glusterfs/gluster_testfile |
     Then the step should fail
     Then the outputs should contain:
@@ -110,17 +110,17 @@ Feature: Storage of GlusterFS plugin testing
     And I have a project
 
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/dynamic-provisioning/claim.yaml" replacing paths:
-      | ["metadata"]["name"]         | pvc-<%= project.name %> |
+      | ["metadata"]["name"]         | mypvc |
       | ["spec"]["storageClassName"] | glusterprovisioner      |
     Then the step should succeed
-    And the "pvc-<%= project.name %>" PVC becomes :bound within 120 seconds
+    And the "mypvc" PVC becomes :bound within 120 seconds
 
     And the expression should be true> pv(pvc.volume_name).reclaim_policy == "Delete"
 
     # Test auto deleting PV
     Given I run the :delete client command with:
       | object_type       | pvc                     |
-      | object_name_or_id | pvc-<%= project.name %> |
+      | object_name_or_id | mypvc |
     And I switch to cluster admin pseudo user
     And I wait for the resource "pv" named "<%= pvc.volume_name %>" to disappear within 60 seconds
 
@@ -178,10 +178,10 @@ Feature: Storage of GlusterFS plugin testing
 
     # Verify Pod is assigned gid 3333
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/dynamic-provisioning/pod_gid.json" replacing paths:
-      | ["metadata"]["name"]                                         | pod-<%= project.name %> |
+      | ["metadata"]["name"]                                         | mypod |
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | pvc1                    |
     Then the step should succeed
-    Given the pod named "pod-<%= project.name %>" becomes ready
+    Given the pod named "mypod" becomes ready
     When I execute on the pod:
       | id | -G |
     Then the output should contain:
@@ -194,13 +194,13 @@ Feature: Storage of GlusterFS plugin testing
     Then the step should succeed
 
     # Pod should work as well having its supplementalGroups set to 3333 explicitly
-    Given I ensure "pod-<%= project.name %>" pod is deleted
+    Given I ensure "mypod" pod is deleted
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/dynamic-provisioning/pod_gid.json" replacing paths:
-      | ["metadata"]["name"]                                         | pod1-<%= project.name %> |
+      | ["metadata"]["name"]                                         | mypod1 |
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | pvc1                     |
       | ["spec"]["securityContext"]["supplementalGroups"]            | [3333]                   |
     Then the step should succeed
-    Given the pod named "pod1-<%= project.name %>" becomes ready
+    Given the pod named "mypod1" becomes ready
     When I execute on the pod:
       | id | -G |
     Then the output should contain:
