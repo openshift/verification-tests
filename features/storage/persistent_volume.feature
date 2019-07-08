@@ -72,25 +72,25 @@ Feature: Persistent Volume Claim binding policies
       | ["spec"]["accessModes"][0] | ReadOnlyMany           |
     Then the step should succeed
     When I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/claim-rwo.json" replacing paths:
-      | ["metadata"]["name"]                         | pvc1-<%= project.name %> |
+      | ["metadata"]["name"]                         | mypvc1 |
       | ["spec"]["accessModes"][0]                   | ReadOnlyMany             |
       | ["spec"]["resources"]["requests"]["storage"] | 10Gi                     |
     Then the step should succeed
     When I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/claim-rwo.json" replacing paths:
-      | ["metadata"]["name"]       | pvc2-<%= project.name %> |
+      | ["metadata"]["name"]       | mypvc2 |
       | ["spec"]["accessModes"][0] | ReadWriteOnce            |
     Then the step should succeed
     When I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/claim-rwo.json" replacing paths:
-      | ["metadata"]["name"]       | pvc3-<%= project.name %> |
+      | ["metadata"]["name"]       | mypvc3 |
       | ["spec"]["accessModes"][0] | ReadWriteMany            |
     Then the step should succeed
-    And the "pvc1-<%= project.name %>" PVC becomes :pending
-    And the "pvc2-<%= project.name %>" PVC becomes :pending
-    And the "pvc3-<%= project.name %>" PVC becomes :pending
+    And the "mypvc1" PVC becomes :pending
+    And the "mypvc2" PVC becomes :pending
+    And the "mypvc3" PVC becomes :pending
     And the "pv-<%= project.name %>" PV status is :available
-    Given I ensure "pvc1-<%= project.name %>" pvc is deleted
-    And I ensure "pvc2-<%= project.name %>" pvc is deleted
-    And I ensure "pvc3-<%= project.name %>" pvc is deleted
+    Given I ensure "mypvc1" pvc is deleted
+    And I ensure "mypvc2" pvc is deleted
+    And I ensure "mypvc3" pvc is deleted
     And admin ensures "pv-<%= project.name %>" pv is deleted
 
     When admin creates a PV from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/auto/pv-template.json" where:
@@ -98,25 +98,25 @@ Feature: Persistent Volume Claim binding policies
       | ["spec"]["accessModes"][0] | ReadWriteOnce          |
     Then the step should succeed
     When I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/claim-rwo.json" replacing paths:
-      | ["metadata"]["name"]                         | pvc1-<%= project.name %> |
+      | ["metadata"]["name"]                         | mypvc1 |
       | ["spec"]["accessModes"][0]                   | ReadWriteOnce            |
       | ["spec"]["resources"]["requests"]["storage"] | 10Gi                     |
     Then the step should succeed
     When I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/claim-rwo.json" replacing paths:
-      | ["metadata"]["name"]       | pvc2-<%= project.name %> |
+      | ["metadata"]["name"]       | mypvc2 |
       | ["spec"]["accessModes"][0] | ReadOnlyMany             |
     Then the step should succeed
     When I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/claim-rwo.json" replacing paths:
-      | ["metadata"]["name"]       | pvc3-<%= project.name %> |
+      | ["metadata"]["name"]       | mypvc3 |
       | ["spec"]["accessModes"][0] | ReadWriteMany            |
     Then the step should succeed
-    And the "pvc1-<%= project.name %>" PVC becomes :pending
-    And the "pvc2-<%= project.name %>" PVC becomes :pending
-    And the "pvc3-<%= project.name %>" PVC becomes :pending
+    And the "mypvc1" PVC becomes :pending
+    And the "mypvc2" PVC becomes :pending
+    And the "mypvc3" PVC becomes :pending
     And the "pv-<%= project.name %>" PV status is :available
-    Given I ensure "pvc1-<%= project.name %>" pvc is deleted
-    And I ensure "pvc2-<%= project.name %>" pvc is deleted
-    And I ensure "pvc3-<%= project.name %>" pvc is deleted
+    Given I ensure "mypvc1" pvc is deleted
+    And I ensure "mypvc2" pvc is deleted
+    And I ensure "mypvc3" pvc is deleted
     And admin ensures "pv-<%= project.name %>" pv is deleted
 
     When admin creates a PV from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/auto/pv-template.json" where:
@@ -124,21 +124,21 @@ Feature: Persistent Volume Claim binding policies
       | ["spec"]["accessModes"][0] | ReadWriteMany          |
     Then the step should succeed
     When I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/claim-rwo.json" replacing paths:
-      | ["metadata"]["name"]                         | pvc1-<%= project.name %> |
+      | ["metadata"]["name"]                         | mypvc1 |
       | ["spec"]["accessModes"][0]                   | ReadWriteMany            |
       | ["spec"]["resources"]["requests"]["storage"] | 10Gi                     |
     Then the step should succeed
     When I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/claim-rwo.json" replacing paths:
-      | ["metadata"]["name"]       | pvc2-<%= project.name %> |
+      | ["metadata"]["name"]       | mypvc2 |
       | ["spec"]["accessModes"][0] | ReadWriteOnce            |
     Then the step should succeed
     When I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/claim-rwo.json" replacing paths:
-      | ["metadata"]["name"]       | pvc3-<%= project.name %> |
+      | ["metadata"]["name"]       | mypvc3 |
       | ["spec"]["accessModes"][0] | ReadOnlyMany             |
     Then the step should succeed
-    And the "pvc1-<%= project.name %>" PVC becomes :pending
-    And the "pvc2-<%= project.name %>" PVC becomes :pending
-    And the "pvc3-<%= project.name %>" PVC becomes :pending
+    And the "mypvc1" PVC becomes :pending
+    And the "mypvc2" PVC becomes :pending
+    And the "mypvc3" PVC becomes :pending
     And the "pv-<%= project.name %>" PV status is :available
 
   # @author chaoyang@redhat.com

@@ -9,13 +9,13 @@ Feature: testing for parameter fsType
     And I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/<type>/security/<type>-selinux-fsgroup-test.json" replacing paths:
-      | ["metadata"]["name"]                                      | pod-<%= project.name %> |
+      | ["metadata"]["name"]                                      | mypod |
       | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"] | /mnt                    |
       | ["spec"]["securityContext"]["fsGroup"]                    | 24680                   |
       | ["spec"]["volumes"][0]["<storage_type>"]["<volume_name>"] | <%= cb.vid %>           |
       | ["spec"]["volumes"][0]["<storage_type>"]["fsType"]        | <fsType>                |
     Then the step should succeed
-    And the pod named "pod-<%= project.name %>" becomes ready
+    And the pod named "mypod" becomes ready
     When I execute on the pod:
       | mount |
     Then the step should succeed

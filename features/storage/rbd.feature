@@ -17,10 +17,10 @@ Feature: Storage of Ceph plugin testing
 
     Given I have a project
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/rbd/dynamic-provisioning/claim.yaml" replacing paths:
-      | ["metadata"]["name"]         | pvc-<%= project.name %> |
+      | ["metadata"]["name"]         | mypvc |
       | ["spec"]["storageClassName"] | cephrbdprovisioner      |
     Then the step should succeed
-    And the "pvc-<%= project.name %>" PVC becomes :bound within 120 seconds
+    And the "mypvc" PVC becomes :bound within 120 seconds
 
     # Switch to admin so as to create pod with desired FSGroup and SElinux levels
     Given I switch to cluster admin pseudo user
@@ -28,7 +28,7 @@ Feature: Storage of Ceph plugin testing
     And I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/rbd/dynamic-provisioning/user_secret.yaml" replacing paths:
       | ["data"]["key"] | <%= cb.secret_key %> |
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/rbd/dynamic-provisioning/pod.json" replacing paths:
-      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | pvc-<%= project.name %> |
+      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc |
     Then the step should succeed
     And the pod named "rbdpd" becomes ready
 
@@ -58,11 +58,11 @@ Feature: Storage of Ceph plugin testing
     And I have a project
 
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/rbd/dynamic-provisioning/claim.yaml" replacing paths:
-      | ["metadata"]["name"]         | pvc-<%= project.name %> |
+      | ["metadata"]["name"]         | mypvc |
       | ["spec"]["storageClassName"] | cephrbdprovisioner      |
       | ["spec"]["resources"]["requests"]["storage"]                           | 9Gi                     |
     Then the step should succeed
-    And the "pvc-<%= project.name %>" PVC becomes :bound within 120 seconds
+    And the "mypvc" PVC becomes :bound within 120 seconds
 
     And the expression should be true> pvc.capacity == "9Gi"
 

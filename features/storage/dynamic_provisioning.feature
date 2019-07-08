@@ -17,9 +17,9 @@ Feature: Dynamic provisioning
     And I use the "<%= cb.proj_name %>" project
 
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
-      | ["metadata"]["name"] | dynamic-pvc1-<%= project.name %> |
+      | ["metadata"]["name"] | mypvc1 |
     Then the step should succeed
-    And the "dynamic-pvc1-<%= project.name %>" PVC becomes :bound
+    And the "mypvc1" PVC becomes :bound
 
     And I save volume id from PV named "<%= pvc.volume_name %>" in the :volumeID clipboard
 
@@ -128,10 +128,10 @@ Feature: Dynamic provisioning
     """
     And the master service is restarted on all master nodes
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
-      | ["metadata"]["name"] | dynamic-pvc-<%= project.name %> |
+      | ["metadata"]["name"] | mypvc |
     Then the step should succeed
     When 30 seconds have passed
-    Then the "dynamic-pvc-<%= project.name %>" PVC status is :pending
+    Then the "mypvc" PVC status is :pending
 
     Examples:
       | provisioner |

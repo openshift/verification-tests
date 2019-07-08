@@ -6,11 +6,11 @@ Feature: storageClass related feature
   Scenario Outline: PVC modification after creating storage class
     Given I have a project
     When I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc-without-annotations.json" replacing paths:
-      | ["metadata"]["name"] | pvc-<%= project.name %> |
+      | ["metadata"]["name"] | mypvc |
     Then the step should succeed
-    And the "pvc-<%= project.name %>" PVC becomes :pending
+    And the "mypvc" PVC becomes :pending
     Given 30 seconds have passed
-    And the "pvc-<%= project.name %>" PVC status is :pending
+    And the "mypvc" PVC status is :pending
 
     When admin creates a StorageClass from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/storageClass.yaml" where:
       | ["metadata"]["name"]                                                       | sc-<%= project.name %>      |
@@ -19,14 +19,14 @@ Feature: storageClass related feature
     Then the step should succeed
     When I run the :patch client command with:
       | resource      | pvc                                                    |
-      | resource_name | pvc-<%= project.name %>                                |
+      | resource_name | mypvc                                |
       | p             | {"metadata":{"labels":{"<%= project.name %>":"test"}}} |
     Then the step should succeed
     Given 30 seconds have passed
-    And the "pvc-<%= project.name %>" PVC status is :pending
+    And the "mypvc" PVC status is :pending
     When I run the :patch client command with:
       | resource      | pvc                                                                                               |
-      | resource_name | pvc-<%= project.name %>                                                                           |
+      | resource_name | mypvc                                                                           |
       | p             | {"metadata":{"annotations":{"volume.beta.kubernetes.io/storage-class":"sc-<%= project.name %>"}}} |
     Then the expression should be true> @result[:success] == env.version_le("3.5", user: user)
 
@@ -58,11 +58,11 @@ Feature: storageClass related feature
     And the output should not contain:
       | is-default-class: "true" |
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc-without-annotations.json" replacing paths:
-      | ["metadata"]["name"] | pvc-<%= project.name %> |
+      | ["metadata"]["name"] | mypvc |
     Then the step should succeed
-    And the "pvc-<%= project.name %>" PVC becomes :pending
+    And the "mypvc" PVC becomes :pending
     Given 30 seconds have passed
-    And the "pvc-<%= project.name %>" PVC status is :pending
+    And the "mypvc" PVC status is :pending
 
     Examples:
       | provisioner |
@@ -133,21 +133,21 @@ Feature: storageClass related feature
     Then the step should succeed
 
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc-without-annotations.json" replacing paths:
-      | ["metadata"]["name"] | should-fail-<%= project.name %> |
+      | ["metadata"]["name"] | should-fail |
     Then the step should fail
     And the output should match:
       | Internal error occurred |
       | ([2-9]\|[1-9][0-9]+) default StorageClasses were found |
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
-      | ["metadata"]["name"]         | pvc1-<%= project.name %> |
+      | ["metadata"]["name"]         | mypvc1 |
       | ["spec"]["storageClassName"] | sc1-<%= project.name %>  |
     Then the step should succeed
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
-      | ["metadata"]["name"]         | pvc2-<%= project.name %> |
+      | ["metadata"]["name"]         | mypvc2 |
       | ["spec"]["storageClassName"] | sc2-<%= project.name %>  |
     Then the step should succeed
-    And the "pvc1-<%= project.name %>" PVC becomes :bound within 120 seconds
-    And the "pvc2-<%= project.name %>" PVC becomes :bound within 120 seconds
+    And the "mypvc1" PVC becomes :bound within 120 seconds
+    And the "mypvc2" PVC becomes :bound within 120 seconds
 
     Examples:
       | provisioner    |
@@ -161,9 +161,9 @@ Feature: storageClass related feature
   Scenario Outline: New created PVC without specifying storage class use default class when only one class is marked as default
     Given I have a project
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc-without-annotations.json" replacing paths:
-      | ["metadata"]["name"] | pvc-<%= project.name %> |
+      | ["metadata"]["name"] | mypvc |
     Then the step should succeed
-    And the "pvc-<%= project.name %>" PVC becomes :bound within 120 seconds
+    And the "mypvc" PVC becomes :bound within 120 seconds
 
     Examples:
       | provisioner |
@@ -181,30 +181,30 @@ Feature: storageClass related feature
     Then the step should succeed
 
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
-      | ["metadata"]["name"]                         | pvc-<%= project.name %> |
+      | ["metadata"]["name"]                         | mypvc |
       | ["spec"]["accessModes"][0]                   | ReadWriteOnce           |
       | ["spec"]["resources"]["requests"]["storage"] | <size>                  |
       | ["spec"]["storageClassName"]                 | sc-<%= project.name %>  |
     Then the step should succeed
-    And the "pvc-<%= project.name %>" PVC becomes :bound within 120 seconds
+    And the "mypvc" PVC becomes :bound within 120 seconds
     And the expression should be true> pvc.capacity == "<size>"
     And the expression should be true> pvc.access_modes[0] == "ReadWriteOnce"
     And the expression should be true> pv(pvc.volume_name).reclaim_policy == "Delete"
 
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pod.yaml" replacing paths:
-      | ["metadata"]["name"]                                         | pod-<%= project.name %> |
-      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | pvc-<%= project.name %> |
+      | ["metadata"]["name"]                                         | mypod |
+      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc |
       | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt/iaas               |
     Then the step should succeed
-    Given the pod named "pod-<%= project.name %>" becomes ready
+    Given the pod named "mypod" becomes ready
     When I execute on the pod:
       | ls | -ld | /mnt/iaas/ |
     Then the step should succeed
     When I execute on the pod:
       | touch | /mnt/iaas/testfile |
     Then the step should succeed
-    Given I ensure "pod-<%= project.name %>" pod is deleted
-    Given I ensure "pvc-<%= project.name %>" pvc is deleted
+    Given I ensure "mypod" pod is deleted
+    Given I ensure "mypvc" pvc is deleted
     Given I switch to cluster admin pseudo user
     And I wait for the resource "pv" named "<%= pvc.volume_name %>" to disappear within 300 seconds
 
@@ -224,7 +224,7 @@ Feature: storageClass related feature
     Then the step should succeed
 
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
-      | ["metadata"]["name"]                         | pvc-<%= project.name %> |
+      | ["metadata"]["name"]                         | mypvc |
       | ["spec"]["accessModes"][0]                   | ReadWriteOnce           |
       | ["spec"]["resources"]["requests"]["storage"] | <size>                  |
       | ["spec"]["storageClassName"]                 | sc-<%= project.name %>  |
@@ -232,7 +232,7 @@ Feature: storageClass related feature
     And I wait up to 60 seconds for the steps to pass:
     """
     When I run the :describe client command with:
-      | resource | pvc/pvc-<%= project.name %> |
+      | resource | pvc/mypvc |
     Then the output should contain:
       | ProvisioningFailed    |
       | InvalidParameterValue |
@@ -251,7 +251,7 @@ Feature: storageClass related feature
     Given I have a project
     # No sc exists
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
-      | ["metadata"]["name"]                         | pvc1-<%= project.name %> |
+      | ["metadata"]["name"]                         | mypvc |
       | ["spec"]["accessModes"][0]                   | ReadWriteOnce            |
       | ["spec"]["resources"]["requests"]["storage"] | 1Gi                      |
       | ["spec"]["storageClassName"]                 | sc1-<%= project.name %>  |
@@ -259,7 +259,7 @@ Feature: storageClass related feature
     And I wait up to 60 seconds for the steps to pass:
     """
     When I run the :describe client command with:
-      | resource | pvc/pvc1-<%= project.name %> |
+      | resource | pvc/mypvc |
     And the output should contain:
       | ProvisioningFailed                  |
       | "sc1-<%= project.name %>" not found |
@@ -270,16 +270,16 @@ Feature: storageClass related feature
   Scenario: AWS ebs volume is dynamic provisioned with default storageclass
     Given I have a project
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/ebs/pvc-retain.json" replacing paths:
-      | ["metadata"]["name"]                         | pvc-<%= project.name %> |
+      | ["metadata"]["name"]                         | mypvc |
       | ["spec"]["resources"]["requests"]["storage"] | 1Gi                     |
     Then the step should succeed
 
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pod.yaml" replacing paths:
-      | ["metadata"]["name"]                                         | pod-<%= project.name %> |
-      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | pvc-<%= project.name %> |
+      | ["metadata"]["name"]                                         | mypod |
+      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc |
       | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt/iaas               |
     Then the step should succeed
-    And the pod named "pod-<%= project.name %>" becomes ready
+    And the pod named "mypod" becomes ready
 
 
 
