@@ -1,0 +1,83 @@
+click_add_value_from_configmap_or_secret:
+  element:
+    selector:
+      xpath: //*[contains(normalize-space(text()),'Add from Config Map or Secret')]
+    op: click
+add_env_vars:
+  action: add_env_var_name
+  action:
+    if_param: env_source_name
+    ref: add_env_var_pair_value
+  action:
+    if_param: env_var_value
+    ref: add_env_var_value
+add_env_var_name:
+  elements:
+  - selector: 
+      xpath: //div[contains(@class,'pairs-list__row')][last()]/div[contains(@class,'pairs-list__name-field')]/input[@placeholder='name']
+    op: send_keys <env_var_name>
+add_env_var_pair_value:
+  elements:
+  - selector:
+      xpath: //div[@class='co-m-pane__body-group']//span[contains(normalize-space(text()),'Select a resource')]
+    op: click
+  - selector:
+      xpath: //div[@class='co-m-pane__body-group']//span[contains(.,'<env_source_name>')]
+    op: click
+  - selector:
+      xpath: //div[@class='co-m-pane__body-group']//span[contains(normalize-space(text()),'Select a key')]
+    op: click
+  - selector:
+      xpath: //div[@class='co-m-pane__body-group']//a[contains(.,'<env_source_key>')]
+    op: click
+add_env_var_value:
+  element:
+    selector:
+      xpath: //div[contains(@class,'pairs-list__row')][last()]/div[contains(@class,'pairs-list__value-field')]/input[@placeholder='value']
+    op: send_keys <env_var_value>
+choose_container:
+  elements:
+  - selector:
+      xpath: //div[@class='dropdown']//span[@class='co-resource-item']
+    op: click
+  action: choose_item_from_list
+update_env_vars:
+  action:
+    if_param: env_source_name
+    ref: update_env_var_pair_value
+  action:
+    if_param: env_var_value
+    ref: update_env_var_value
+    op: click 
+update_env_var_pair_value:
+  action: update_pair_source
+  action: update_pair_key
+update_pair_source:
+  elements:
+  - selector:
+      xpath: //input[@value='<env_var_name>']/ancestor::div[contains(@class,'row pairs-list__row')]//div[@class='value-from'][1]//button
+    op: click
+  - selector:
+      xpath: //span[contains(.,'<env_source_name>')]
+    op: click
+update_pair_key:
+  elements:
+  - selector:
+      xpath: //input[@value='<env_var_name>']/ancestor::div[contains(@class,'row pairs-list__row')]//div[@class='value-from'][2]//button
+    op: click
+  - selector:
+      xpath: //a[contains(.,'<env_source_key>')]
+    op: click
+update_env_var_value: {}
+remove_env_vars:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'pairs-list__row')]
+  - selector: &env_var_delete_icon |
+      var parent_row = document.querySelectorAll('input[value=<env_var_name>]')[0].parentElement.parentElement
+      return parent_row.querySelector('.pairs-list__delete-icon')
+    type: js
+  - selector: *env_var_delete_icon
+    type: js
+    op: click
+

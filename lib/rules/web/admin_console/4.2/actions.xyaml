@@ -1,0 +1,57 @@
+click_one_dropdown_action:
+  action: click_resource_action_button
+  action: choose_item_from_list
+click_resource_action_button:
+  elements:
+  - selector:
+      xpath: //button[contains(.,'Actions')]
+    op: click
+choose_item_from_list:
+  elements:
+  - selector:
+      xpath: //li//*[text()='<item>']
+    op: click
+click_resource_action_icon:
+  elements:
+  - selector:
+      xpath: //a[text()='<resource_name>']/ancestor::span/../div//span[contains(@class,'co-m-cog__icon')]
+    op: click
+
+# a combined action can be directly used for Edit Labels
+add_label_for_resource:
+  action: click_one_dropdown_action
+  action: add_label
+  action: submit_changes
+add_label:
+  elements:
+  - selector:
+      id: tags-input
+    type: input
+    op: send_keys <new_label>
+  - selector:
+      id: tags-input
+    type: input
+    op: send_keys <press_enter>
+
+# a combined action can be directly used for Edit Annotations
+add_annotation_for_resource:
+  action: click_one_dropdown_action
+  action: add_annotation
+  action: submit_changes
+add_annotation:
+  action: click_add_more_button
+  elements:
+  - selector:
+      xpath: //input[contains(@placeholder,'key')]
+    op: send_keys <annotation_key>
+  - selector:
+      xpath: //input[contains(@placeholder,'value')]
+    op: send_keys <annotation_value>
+
+# Delete <Resource Type>
+delete_resource_panel:
+  action:
+    if_param:
+      cascade: 'false'
+    ref: uncheck_checkbox
+  action: submit_changes
