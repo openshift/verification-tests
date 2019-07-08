@@ -258,65 +258,173 @@ Feature: buildlogic.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-13914
+  # Split 13914 mapping the e2e test scripts
   Scenario: Prune old builds automaticly
+    #Should prune completed builds based on the successfulBuildsHistoryLimit setting	
     Given I have a project
-    When I run the :new_app client command with:
-      | image_stream | ruby                                          |
-      | code         | https://github.com/openshift/ruby-hello-world |
+    When I run the :new_build client command with:
+      | D    | FROM busybox\nRUN touch /php-file |
+      | name | myphp                             |
     Then the step should succeed
-    When I run the :get client command with:
-      | resource      | buildconfig      |
-      | resource_name | ruby-hello-world |
-      | o             | yaml             |
-    Then the step should succeed
-    And the expression should be true> @result[:parsed]["spec"]["failedBuildsHistoryLimit"] == 5
-    And the expression should be true> @result[:parsed]["spec"]["successfulBuildsHistoryLimit"] == 5
-    Given the "ruby-hello-world-1" build completed
-    Given I run the steps 5 times:
+    Given the "myphp-1" build completed
+    Given I run the steps 6 times:
     """
     When I run the :start_build client command with:
-      | buildconfig | ruby-hello-world |
+      | buildconfig | myphp |
     Then the step should succeed
     """
-    Given the "ruby-hello-world-6" build completed
+    Given the "myphp-7" build completed
+    Then I wait up to 120 seconds for the steps to pass:
+    """
+    When I save project builds into the :builds_all clipboard
+    And evaluation of `cb.builds_all.select{|b| b.status?(user: user, status: :complete)[:success]}.size` is stored in the :builds_nums clipboard
+    Then the expression should be true> cb.builds_nums >= 5 and cb.builds_nums < 7
+    """
+    Given I get project builds
+    Then the output should not contain:
+      | myphp-1 |
+
+  # @author xiuwang@redhat.com
+  # @case_id OCP-24154
+  # Split 13914 mapping the e2e test scripts
+  Scenario: Should prune canceled builds based on the failedBuildsHistoryLimit setting	
+    Given I have a project
+    When I run the :new_app client command with:
+      | template | rails-postgresql-example |
+    Then the step should succeed
+    Given I run the :patch client command with:
+      | resource      | bc                                       |
+      | resource_name | rails-postgresql-example                 |
+      | p             | {"spec":{"failedBuildsHistoryLimit": 2}} |
+    Then the step should succeed
+    When I run the :cancel_build client command with:
+      | build_name | rails-postgresql-example-1 |
+    Then the step should succeed
+    Given I run the steps 3 times:
+    """
+    When I run the :start_build client command with:
+      | buildconfig | rails-postgresql-example |
+    Then the step should succeed
+    """
+    When I run the :cancel_build client command with:
+      | bc_name | bc/rails-postgresql-example |
+    Then the step should succeed
     Then I wait up to 480 seconds for the steps to pass:
     """
     Given I get project builds
-    Then the output should match 5 times:
-      | Complete |
+    Then the output should match 2 times:
+      | Git.*Cancelled |
     Then the output should not contain:
-      |ruby-hello-world-1|
+      | rails-postgresql-example-1 |
     """
-    Given I run the steps 3 times:
+
+  # @author xiuwang@redhat.com
+  # @case_id OCP-24155
+  # Split 13914 mapping the e2e test scripts
+  Scenario: Should prune failed builds based on the failedBuildsHistoryLimit setting
+    Given I have a project
+    When I run the :new_app client command with:
+      | template | rails-postgresql-example                                         |
+      | p        | SOURCE_REPOSITORY_URL=https://github.com/sclorg/unexist-repo.git |
+    Then the step should succeed
+    Given I run the steps 6 times:
+    """
+    When I run the :start_build client command with:
+      | buildconfig | rails-postgresql-example |
+    Then the step should succeed
+    """
+    Then I wait up to 120 seconds for the steps to pass:
+    """
+    When I save project builds into the :builds_all clipboard
+    And evaluation of `cb.builds_all.select{|b| b.status?(user: user, status: :failed)[:success]}.size` is stored in the :builds_nums clipboard
+    Then the expression should be true> cb.builds_nums >= 5 and cb.builds_nums < 7
+    """
+    Given I get project builds
+    Then the output should not contain:
+      | rails-postgresql-example-1 |
+
+  # @author xiuwang@redhat.com
+  # @case_id OCP-24156
+  # Add error scenario to map the e2e test scripts of build prune
+  Scenario: Should prune errored builds based on the failedBuildsHistoryLimit setting
+    Given I have a project
+    When I run the :create client command with:
+      | f | https://raw.githubusercontent.com/openshift/origin/master/test/extended/testdata/builds/build-pruning/errored-build-config.yaml |                                              
+    Then the step should succeed
+    Given I run the steps 4 times:
+    """
+    When I run the :start_build client command with:
+      | buildconfig | myphp |
+    Then the step should succeed
+    """
+    Then I wait up to 120 seconds for the steps to pass:
+    """
+    Given I get project builds
+    Then the output should match 2 times:
+      | Git.*Error |
+    Then the output should not contain:
+      | myphp-1 |
+    """
+
+  # @author xiuwang@redhat.com
+  # @case_id OCP-24158
+  # Add scenario to map the e2e test scripts of build prune
+  Scenario: Should prune builds after a buildConfig change 
+    Given I have a project
+    When I run the :new_app client command with:
+      | image_stream | ruby                                              |
+      | code         | https://github.com/openshift/ruby-hello-world.git |
+    Then the step should succeed
+    When I run the :cancel_build client command with:
+      | build_name | ruby-hello-world-1 |
+    Then the step should succeed
+    Given I run the steps 6 times:
     """
     When I run the :start_build client command with:
       | buildconfig | ruby-hello-world |
     Then the step should succeed
     """
     When I run the :cancel_build client command with:
-      | build_name | ruby-hello-world-7 |
-      | build_name | ruby-hello-world-8 |
-      | build_name | ruby-hello-world-9 |
+      | bc_name | bc/ruby-hello-world |
     Then the step should succeed
+    Then I wait up to 120 seconds for the steps to pass:
+    """
+    When I save project builds into the :builds_all clipboard
+    And evaluation of `cb.builds_all.select{|b| b.status?(user: user, status: :cancelled)[:success]}.size` is stored in the :builds_nums clipboard
+    Then the expression should be true> cb.builds_nums >= 5 and cb.builds_nums < 7
+    """
+    Given I get project builds
+    Then the output should not contain:
+      |ruby-hello-world-1|
     Given I run the :patch client command with:
-      | resource      | bc                                                                                |
-      | resource_name | ruby-hello-world                                                                  |
-      | p             | {"spec":{"source":{"git":{"uri":"https://xxxgithub.com/sclorg/ruby-ex.git"}}}} |
-    Given I run the steps 3 times:
-    """
-    When I run the :start_build client command with:
-      | buildconfig | ruby-hello-world |
+      | resource      | bc                                       |
+      | resource_name | ruby-hello-world                         |
+      | p             | {"spec":{"failedBuildsHistoryLimit": 2}} |
     Then the step should succeed
-    """
-    Given the "ruby-hello-world-12" build fails
     Then I wait up to 480 seconds for the steps to pass:
     """
     Given I get project builds
     Then the output should match 2 times:
       | Git.*Cancelled |
-    Then the output should match 3 times:
-      | Git.*Failed |
     Then the output should not contain:
-      |ruby-hello-world-7|
+      | ruby-hello-world-2 |
+      | ruby-hello-world-3 |
+      | ruby-hello-world-4 |
     """
 
+  # @author xiuwang@redhat.com
+  # @case_id OCP-24159
+  # Split 13914 mapping the e2e test scripts
+  Scenario: Buildconfigs should have a default history limit set when created via the group api
+    Given I have a project
+    When I run the :new_build client command with:
+      | app_repo | https://github.com/openshift/ruby-hello-world.git |
+    Then the step should succeed
+    When I run the :describe client command with:
+      | resource | buildconfig      |
+      | name     | ruby-hello-world |
+    Then the step should succeed
+    Then the output should contain:
+      | Builds History Limit |
+      | Successful:	5        |
+      | Failed:		5          |
