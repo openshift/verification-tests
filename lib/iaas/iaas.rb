@@ -38,7 +38,7 @@ module BushSlicer
       end
 
       return BushSlicer::OpenStack.instance(
-        :url => iaas_conf_params['auth-url'] + "tokens",
+        :url => iaas_conf_params['auth-url'] + "auth/tokens",
         :user => iaas_conf_params["username"],
         :password => iaas_conf_params["password"],
         :tenant_id => iaas_conf_params["tenant-id"]
