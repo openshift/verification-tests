@@ -687,6 +687,29 @@ module BushSlicer
       end
     end
 
+    def allocate_floating_ip(network_name)
+      request_url = self.os_network_url + "/v2.0/floatingips"
+      method = "POST"
+      network = get_networks.find {|n| n["name"] == network_name}
+      unless network
+        raise "could not find network in current tenant."
+      end
+      network_id = network["id"]
+      payload = {
+        floatingip: {
+          floating_network_id: network_id,
+          project_id: self.os_tenant_id,
+          description: "IP allocated automatically by BushSlicer"
+        }
+      }
+      res = self.rest_run(request_url, method, payload, self.os_token)
+      if res[:success]
+        return res
+      else
+        raise "could not allocate new floating ip:\n#{res[:response]}"
+      end
+    end
+
     def get_networks
       res = self.rest_run(self.os_network_url + "/v2.0/networks", "GET", {}, self.os_token)
       raise res[:response] unless res[:success]
