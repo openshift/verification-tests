@@ -7,7 +7,8 @@ LABEL maintainer="AOS QE Team"
 
 RUN set -x && \
     yum repolist all && \
-    INSTALL_PKGS="@ruby git bsdtar" && \
+    yum config-manager --enable ansible-2.8-for-rhel-8-x86_64-rpms && \
+    INSTALL_PKGS="@ruby git bsdtar ansible" && \
     yum -y update && \
     yum install -y --setopt=skip_missing_names_on_install=False $INSTALL_PKGS && \
     yum install -y https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm && \
