@@ -24,10 +24,10 @@ click_cancel_button:
   - selector:
       xpath: //button[contains(text(),'Cancel')]
     op: click
-click_button_on_page:
+click_button:
   element:
     selector:
-      xpath: //button[contains(.,'<text>')]
+      xpath: //button[contains(.,'<button_text>')]
     op: click
 click_tab:
   elements:
