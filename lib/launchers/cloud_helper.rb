@@ -37,6 +37,8 @@ module BushSlicer
           BushSlicer::VSphere.new(service_name: service_name)
         when "alibaba"
           BushSlicer::Alicloud.new(service_name: service_name)
+        when "packet"
+          BushSlicer::Packet.new(service_name: service_name)
         else
           raise "unknown service type " \
             "#{conf[:services, service_name, :cloud_type]} for cloud " \
