@@ -705,10 +705,7 @@ module BushSlicer
       # 2, floating ip is not preserved
       # 3, floating ip is not associated to instance
       filtered_fips = fips.find_all { |n|
-        n["floating_network_id"] == floating_ip_networks.select { |f|
-          f["name"] == network_name
-        }.first["id"] && !n["description"][/[Pp]reserve/] &&
-        !n["fixed_ip_address"]
+        n["floating_network_id"] == network["id"] && !n["description"][/[Pp]reserve/] && !n["fixed_ip_address"]
       }
       unless filtered_fips.empty?
         return filtered_fips.sample
