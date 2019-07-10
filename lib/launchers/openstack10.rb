@@ -688,26 +688,49 @@ module BushSlicer
     end
 
     def allocate_floating_ip(network_name)
-      request_url = self.os_network_url + "/v2.0/floatingips"
-      method = "POST"
+      fipsres = self.rest_run(self.os_network_url + "/v2.0/floatingips", "GET", {}, self.os_token)
+      if fipsres[:success]
+        fips = fipsres.dig(:parsed, "floatingips")
+      else
+        raise "Could not get all existing floating ips\n#{fipsres[:response]}"
+      end
+
       network = floating_ip_networks.find { |n| n["name"] == network_name }
       unless network
-        raise "could not find network in current tenant."
+        raise "could not find network #{network_name} in current tenant."
       end
-      network_id = network["id"]
-      payload = {
-        floatingip: {
-          floating_network_id: network_id,
-          project_id: self.os_tenant_id,
-          description: "IP allocated automatically by BushSlicer"
-        }
+
+      # filter condition is
+      # 1, floating ip is not belong to given network_name and
+      # 2, floating ip is not preserved
+      # 3, floating ip is not associated to instance
+      filtered_fips = fips.find_all { |n|
+        n["floating_network_id"] == floating_ip_networks.select { |f|
+          f["name"] == network_name
+        }.first["id"] && !n["description"][/[Pp]reserve/] &&
+        !n["fixed_ip_address"]
       }
-      res = self.rest_run(request_url, method, payload, self.os_token)
-      logger.debug(res[:response])
-      if res[:success]
-        return res.dig(:parsed, "floatingip")
+      unless filtered_fips.empty?
+        return filtered_fips.sample
       else
-        raise "could not allocate new floating ip:\n#{res[:response]}"
+        request_url = self.os_network_url + "/v2.0/floatingips"
+        method = "POST"
+  
+        network_id = network["id"]
+        payload = {
+          floatingip: {
+            floating_network_id: network_id,
+            project_id: self.os_tenant_id,
+            description: "IP allocated automatically by OpenShift verification-tests"
+          }
+        }
+        res = self.rest_run(request_url, method, payload, self.os_token)
+        logger.debug(res[:response])
+        if res[:success]
+          return res.dig(:parsed, "floatingip")
+        else
+          raise "could not allocate new floating ip:\n#{res[:response]}"
+        end
       end
     end
 
