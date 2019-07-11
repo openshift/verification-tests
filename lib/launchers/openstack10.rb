@@ -627,6 +627,30 @@ module BushSlicer
       end
     end
 
+    def delete_floating_ip(floating_ip_id)
+      url = self.os_network_url + "/v2.0/floatingips/#{floating_ip_id}"
+      params = {}
+      fip_res = self.rest_run(url, "GET", params, self.os_token)
+      unless fip_res[:success]
+        raise "could not get floating ip \"#{floating_ip_id}\""
+      end
+      logger.warn("deleteing floating ip \"#{floating_ip_id}\"")
+      res = self.rest_run(url, "DELETE", params, self.os_token)
+      unless res[:success]
+        raise "failed to delete floating ip \'#{floating_ip_id}\""
+      end
+      1.upto(60) do
+        sleep 10
+        res = self.rest_run(url, "GET", params, self.os_token)
+        if res[:exitstatus] == 404
+          return true
+        else
+          logger.info("Wait for 10s to delete floating ip #{floating_ip_id}")
+        end
+      end
+      raise "could not delete floating ip #{floating_ip_id}"
+    end
+
     # @param [Array<Hash>] launch_opts where each element is in the format
     #   `{name: "some-name", launch_opts: {...}}`; launch opts should match options for
     #   [#create_instance]
