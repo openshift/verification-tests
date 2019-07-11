@@ -371,3 +371,22 @@ Given /^I attempt the registry route based on API url and store it in the#{OPT_S
   cb_name ||= :registry_route
   cb[cb_name] = api_hostname.gsub("api","registry")
 end
+
+# Generate default route
+Given /^I enable image-registry default route$/ do
+  ensure_admin_tagged
+  step 'I run the :patch client command with:', table(%{
+      | resource      | configs.imageregistry.operator.openshift.io |
+      | resource_name | cluster                                     |
+      | p             | {"spec":{"defaultRoute":true}}              |
+      | type          | merge                                       |
+  })
+  step %Q/the step should succeed/
+end
+
+Given /^default (default-route) route is stored in the#{OPT_SYM} clipboard$/ do |route_name, cb_name|
+  org_proj_name = project(generate: false).name rescue nil
+  cb_name ||= :registry_route
+  cb[cb_name] = route(route_name, service(route_name,project('openshift-image-registry'))).dns(by: admin)
+  project(org_proj_name) if org_proj_name
+end
