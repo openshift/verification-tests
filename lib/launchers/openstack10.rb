@@ -627,6 +627,34 @@ module BushSlicer
       end
     end
 
+    def delete_floating_ip(floating_ip_id)
+      url = self.os_network_url + "/v2.0/floatingips/#{floating_ip_id}"
+      params = {}
+      fip_res = self.rest_run(url, "GET", params, self.os_token)
+      if fip_res[:exitstatus] == 404
+        logger.warn("the floating ip \"#{floating_ip_id}\" is already deleted")
+        return true
+      elsif fip_res[:success]
+        logger.warn("deleteing floating ip \"#{floating_ip_id}\"")
+        res = self.rest_run(url, "DELETE", params, self.os_token)
+        unless res[:success]
+          raise "failed to delete floating ip \'#{floating_ip_id}\""
+        end
+        1.upto(60) do
+          sleep 10
+          res = self.rest_run(url, "GET", params, self.os_token)
+          if res[:exitstatus] == 404
+            return true
+          else
+            logger.info("Wait for 10s to delete floating ip #{floating_ip_id}")
+          end
+        end
+        raise "could not delete floating ip #{floating_ip_id}"
+      else
+        raise "we got some problem to fetch floating ip\n#{fip_res[:response]}"
+      end
+    end
+
     # @param [Array<Hash>] launch_opts where each element is in the format
     #   `{name: "some-name", launch_opts: {...}}`; launch opts should match options for
     #   [#create_instance]
@@ -684,6 +712,54 @@ module BushSlicer
         return res
       else
         raise "could not associate a floating ip:\n#{res[:response]}"
+      end
+    end
+    
+    def allocate_floating_ip(network_name, reuse: true)
+      network = floating_ip_networks.find { |n| n["name"] == network_name }
+      unless network
+        raise "could not find network #{network_name} in current tenant."
+      end
+
+      if reuse
+        fipsres = self.rest_run(self.os_network_url + "/v2.0/floatingips", "GET", {}, self.os_token)
+        if fipsres[:success]
+          fips = fipsres.dig(:parsed, "floatingips")
+        else
+          raise "Could not get all existing floating ips\n#{fipsres[:response]}"
+        end  
+        # filter condition is
+        # 1, floating ip is not belong to given network_name and
+        # 2, floating ip is not preserved
+        # 3, floating ip is not associated to instance
+        filtered_fips = fips.find_all { |n|
+          n["floating_network_id"] == network["id"] && !n["description"][/[Pp]reserve/] && !n["fixed_ip_address"]
+        }
+        unless filtered_fips.empty?
+          return filtered_fips.sample
+        end
+      end
+      
+      # create new floating ip 
+      # 1. when reuse is false or
+      # 2. no existed floating ip
+      request_url = self.os_network_url + "/v2.0/floatingips"
+      method = "POST"
+
+      network_id = network["id"]
+      payload = {
+        floatingip: {
+          floating_network_id: network_id,
+          project_id: self.os_tenant_id,
+          description: "IP allocated automatically by OpenShift verification-tests"
+        }
+      }
+      res = self.rest_run(request_url, method, payload, self.os_token)
+      logger.debug(res[:response])
+      if res[:success]
+        return res.dig(:parsed, "floatingip")
+      else
+        raise "could not allocate new floating ip:\n#{res[:response]}"
       end
     end
 
