@@ -241,7 +241,7 @@ Feature: SDN related networking scenarios
     And evaluation of `@result[:response]` is stored in the :host_rules clipboard
     #Comparing host and sdn container rules for iptables
     When I run command on the node's sdn pod:
-      | iptables | --list\|wc -l|
+      | iptables | --list | \| | wc -l |
     Then the step should succeed
     And evaluation of `@result[:response]` is stored in the :sdn_pod_rules clipboard
     Then the expression should be true> cb.host_rules==cb.sdn_pod_rules
