@@ -230,9 +230,7 @@ Feature: SDN related networking scenarios
     And evaluation of `@result[:response]` is stored in the :iptables_version_host clipboard
     
     When I run command on the node's sdn pod:
-      | iptables-save --version |
+      | iptables-save | --version |
     Then the step should succeed
     And evaluation of `@result[:response]` is stored in the :iptables_version_pod clipboard
     Then the expression should be true> cb.iptables_version_host==cb.iptables_version_pod
-
-
