@@ -384,9 +384,9 @@ Given /^I enable image-registry default route$/ do
   step %Q/the step should succeed/
 end
 
-Given /^default (default-route) route is stored in the#{OPT_SYM} clipboard$/ do |route_name, cb_name|
+Given /^default image registry route is stored in the#{OPT_SYM} clipboard$/ do |cb_name|
   org_proj_name = project(generate: false).name rescue nil
   cb_name ||= :registry_route
-  cb[cb_name] = route(route_name, service(route_name,project('openshift-image-registry'))).dns(by: admin)
+  cb[cb_name] = route('default-route', service('default-route',project('openshift-image-registry'))).dns(by: admin)
   project(org_proj_name) if org_proj_name
 end
