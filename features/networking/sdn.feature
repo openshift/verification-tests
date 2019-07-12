@@ -235,14 +235,13 @@ Feature: SDN related networking scenarios
     And evaluation of `@result[:response]` is stored in the :iptables_version_pod clipboard
     Then the expression should be true> cb.iptables_version_host==cb.iptables_version_pod
     
-    Given I switch to cluster admin pseudo user
     When I run commands on the host:
-      | iptables --list \| wc -l |
+      | sudo iptables --list \| wc -l |
     Then the step should succeed
     And evaluation of `@result[:response]` is stored in the :host_rules clipboard
     #Comparing host and sdn container rules for iptables
     When I run command on the node's sdn pod:
-      | iptables | --list \| wc -l|
+      | iptables --list \| wc -l |
     Then the step should succeed
     And evaluation of `@result[:response]` is stored in the :sdn_pod_rules clipboard
     Then the expression should be true> cb.host_rules==cb.sdn_pod_rules
