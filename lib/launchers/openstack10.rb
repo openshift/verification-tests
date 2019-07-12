@@ -631,24 +631,28 @@ module BushSlicer
       url = self.os_network_url + "/v2.0/floatingips/#{floating_ip_id}"
       params = {}
       fip_res = self.rest_run(url, "GET", params, self.os_token)
-      unless fip_res[:success]
-        raise "could not get floating ip \"#{floating_ip_id}\""
-      end
-      logger.warn("deleteing floating ip \"#{floating_ip_id}\"")
-      res = self.rest_run(url, "DELETE", params, self.os_token)
-      unless res[:success]
-        raise "failed to delete floating ip \'#{floating_ip_id}\""
-      end
-      1.upto(60) do
-        sleep 10
-        res = self.rest_run(url, "GET", params, self.os_token)
-        if res[:exitstatus] == 404
-          return true
-        else
-          logger.info("Wait for 10s to delete floating ip #{floating_ip_id}")
+      if fip_res[:exitstatus] == 404
+        logger.warn("the floating ip \"#{floating_ip_id}\" is already deleted")
+        return true
+      elsif fip_res[:success]
+        logger.warn("deleteing floating ip \"#{floating_ip_id}\"")
+        res = self.rest_run(url, "DELETE", params, self.os_token)
+        unless res[:success]
+          raise "failed to delete floating ip \'#{floating_ip_id}\""
         end
+        1.upto(60) do
+          sleep 10
+          res = self.rest_run(url, "GET", params, self.os_token)
+          if res[:exitstatus] == 404
+            return true
+          else
+            logger.info("Wait for 10s to delete floating ip #{floating_ip_id}")
+          end
+        end
+        raise "could not delete floating ip #{floating_ip_id}"
+      else
+        raise "we got some problem to fetch floating ip\n#{fip_res[:response]}"
       end
-      raise "could not delete floating ip #{floating_ip_id}"
     end
 
     # @param [Array<Hash>] launch_opts where each element is in the format
@@ -711,7 +715,7 @@ module BushSlicer
       end
     end
     
-    def allocate_floating_ip(network_name, reuse=true)
+    def allocate_floating_ip(network_name, reuse: true)
       network = floating_ip_networks.find { |n| n["name"] == network_name }
       unless network
         raise "could not find network #{network_name} in current tenant."
