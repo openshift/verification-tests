@@ -234,7 +234,8 @@ Feature: SDN related networking scenarios
     Then the step should succeed
     And evaluation of `@result[:response]` is stored in the :iptables_version_pod clipboard
     Then the expression should be true> cb.iptables_version_host==cb.iptables_version_pod
-
+    
+    Given I switch to cluster admin pseudo user
     When I run commands on the host:
       | iptables --list \| wc -l |
     Then the step should succeed
