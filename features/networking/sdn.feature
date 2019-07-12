@@ -228,9 +228,20 @@ Feature: SDN related networking scenarios
       | iptables-save --version |
     Then the step should succeed
     And evaluation of `@result[:response]` is stored in the :iptables_version_host clipboard
-    
+    #Comparing host and sdn container version for iptables binary
     When I run command on the node's sdn pod:
       | iptables-save | --version |
     Then the step should succeed
     And evaluation of `@result[:response]` is stored in the :iptables_version_pod clipboard
     Then the expression should be true> cb.iptables_version_host==cb.iptables_version_pod
+
+    When I run commands on the host:
+      | iptables --list --line-numbers \| wc -l |
+    Then the step should succeed
+    And evaluation of `@result[:response]` is stored in the :host_rules clipboard
+    #Comparing host and sdn container rules for iptables
+    When I run command on the node's sdn pod:
+      | iptables | --list | --line-numbers \| wc -l|
+    Then the step should succeed
+    And evaluation of `@result[:response]` is stored in the :sdn_pod_rules clipboard
+    Then the expression should be true> cb.host_rules==cb.sdn_pod_rules
