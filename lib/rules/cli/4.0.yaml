@@ -1243,6 +1243,7 @@
   :cmd: oc adm prune images
   :options:
     :confirm: --confirm=<value>
+    :ignore_invalid_refs: --ignore-invalid-refs=<value>
     :keep_tag_revisions: --keep-tag-revisions=<value>
     :keep_younger_than: --keep-younger-than=<value>
     :prune_over_size_limit: --prune-over-size-limit=<value>
