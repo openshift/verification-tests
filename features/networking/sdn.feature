@@ -229,7 +229,7 @@ Feature: SDN related networking scenarios
     Then the step should succeed
     And evaluation of `@result[:response]` is stored in the :iptables_version_host clipboard
     
-    When I run command on the  node's sdn pod:
+    When I run command on the node's sdn pod:
       | iptables-save --version |
     Then the step should succeed
     And evaluation of `@result[:response]` is stored in the :iptables_version_pod clipboard
