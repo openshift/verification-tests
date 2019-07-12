@@ -375,11 +375,7 @@ end
 # Generate default route
 Given /^I enable image-registry default route$/ do
   ensure_admin_tagged
-<<<<<<< HEAD
   step 'I run the :patch admin command with:', table(%{
-=======
-  step 'I run the :patch client command with:', table(%{
->>>>>>> 3de3bee7dcfe4056053d0292d5352f7f0c7b1ee6
       | resource      | configs.imageregistry.operator.openshift.io |
       | resource_name | cluster                                     |
       | p             | {"spec":{"defaultRoute":true}}              |
@@ -388,11 +384,7 @@ Given /^I enable image-registry default route$/ do
   step %Q/the step should succeed/
 end
 
-<<<<<<< HEAD
 Given /^default image registry route is stored in the#{OPT_SYM} clipboard$/ do |cb_name| 
-=======
-Given /^default image registry route is stored in the#{OPT_SYM} clipboard$/ do |cb_name|
->>>>>>> 3de3bee7dcfe4056053d0292d5352f7f0c7b1ee6
   org_proj_name = project(generate: false).name rescue nil
   cb_name ||= :registry_route
   cb[cb_name] = route('default-route', service('default-route',project('openshift-image-registry'))).dns(by: admin)
