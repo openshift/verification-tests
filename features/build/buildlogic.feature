@@ -286,7 +286,6 @@ Feature: buildlogic.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-24154
-  # Split 13914 mapping the e2e test scripts
   Scenario: Should prune canceled builds based on the failedBuildsHistoryLimit setting	
     Given I have a project
     When I run the :new_app client command with:
@@ -320,7 +319,6 @@ Feature: buildlogic.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-24155
-  # Split 13914 mapping the e2e test scripts
   Scenario: Should prune failed builds based on the failedBuildsHistoryLimit setting
     Given I have a project
     When I run the :new_app client command with:
@@ -345,7 +343,6 @@ Feature: buildlogic.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-24156
-  # Add error scenario to map the e2e test scripts of build prune
   Scenario: Should prune errored builds based on the failedBuildsHistoryLimit setting
     Given I have a project
     When I run the :create client command with:
@@ -368,7 +365,6 @@ Feature: buildlogic.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-24158
-  # Add scenario to map the e2e test scripts of build prune
   Scenario: Should prune builds after a buildConfig change 
     Given I have a project
     When I run the :new_app client command with:
@@ -414,7 +410,6 @@ Feature: buildlogic.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-24159
-  # Split 13914 mapping the e2e test scripts
   Scenario: Buildconfigs should have a default history limit set when created via the group api
     Given I have a project
     When I run the :new_build client command with:
