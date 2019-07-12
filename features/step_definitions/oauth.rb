@@ -3,8 +3,7 @@ Given /^the #{QUOTED} oauth CRD is restored after scenario$/ do |name|
   org_oauth = {}
   @result = admin.cli_exec(:get, resource: 'oauth', resource_name: name, o: 'yaml')
   if @result[:success]
-     org_oauth['spec'] = @result[:parsed]['spec']
-     require 'pry'; binding.pry
+    org_oauth['spec'] = @result[:parsed]['spec']
     logger.info "OAuth restore tear_down registered:\n#{org_oauth}"
   else
     raise "Could not get OAuth: #{name}"
