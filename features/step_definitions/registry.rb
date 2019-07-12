@@ -375,7 +375,7 @@ end
 # Generate default route
 Given /^I enable image-registry default route$/ do
   ensure_admin_tagged
-  step 'I run the :patch client command with:', table(%{
+  step 'I run the :patch admin command with:', table(%{
       | resource      | configs.imageregistry.operator.openshift.io |
       | resource_name | cluster                                     |
       | p             | {"spec":{"defaultRoute":true}}              |
