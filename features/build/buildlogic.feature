@@ -258,7 +258,6 @@ Feature: buildlogic.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-13914
-  # Split 13914 mapping the e2e test scripts
   Scenario: Prune old builds automaticly
     #Should prune completed builds based on the successfulBuildsHistoryLimit setting	
     Given I have a project
