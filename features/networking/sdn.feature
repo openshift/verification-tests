@@ -219,3 +219,29 @@ Feature: SDN related networking scenarios
     Then the step should succeed
     And the output should not contain "No such device"
 
+  # @author anusaxen@redhat.com
+  # @case_id OCP-23543
+  @admin
+  Scenario: The iptables binary and rules on sdn containers should be the same as host
+    Given I select a random node's host
+    When I run commands on the host:
+      | iptables-save --version |
+    Then the step should succeed
+    And evaluation of `@result[:response]` is stored in the :iptables_version_host clipboard
+    #Comparing host and sdn container version for iptables binary
+    When I run command on the node's sdn pod:
+      | iptables-save | --version |
+    Then the step should succeed
+    And evaluation of `@result[:response]` is stored in the :iptables_version_pod clipboard
+    Then the expression should be true> cb.iptables_version_host==cb.iptables_version_pod
+    
+    When I run commands on the host:
+      | sudo iptables --list |
+    Then the step should succeed
+    And evaluation of `@result[:response].lines.count` is stored in the :host_rules clipboard
+    #Comparing host and sdn container rules for iptables
+    When I run command on the node's sdn pod:
+      | iptables | --list |
+    Then the step should succeed
+    And evaluation of `@result[:response].lines.count` is stored in the :sdn_pod_rules clipboard
+    Then the expression should be true> cb.host_rules==cb.sdn_pod_rules
