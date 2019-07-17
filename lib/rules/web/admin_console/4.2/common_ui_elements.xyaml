@@ -29,6 +29,10 @@ click_button:
     selector:
       xpath: //button[contains(.,'<button_text>')]
     op: click
+check_button_disabled:
+  element:
+    selector:
+      xpath: //button[contains(., '<button_text>') and @disabled]
 click_tab:
   elements:
   - selector:
@@ -39,6 +43,12 @@ clear_input_value:
   - selector:
       id: <clear_field_id>
     op: clear
+    type: input
+set_input_value:
+  element:
+    selector:
+      xpath: //input[contains(@id,'<input_field_id>')]
+    op: send_keys <input_value>
     type: input
 check_row_filter_on_page:
   elements:
@@ -97,6 +107,19 @@ click_secondary_menu:
   - selector:
       xpath: //a[@class='pf-c-nav__link' and text()='<secondary_menu>']
     op: click
+click_dropdown_field:
+  elements:
+  - selector:
+      xpath: //label[(.='<dropdown_field>')]/following-sibling::*//button[contains(@class, 'dropdown__toggle')]
+    op: click
+click_one_item:
+  elements:
+  - selector:
+      xpath: //*[@id='<dropdown_item>-link']
+    op: click
+choose_dropdown_item:
+  action: click_dropdown_field
+  action: click_one_item
 ## -------- check resource key and values pairs ------
 check_resource_details:
   action:
