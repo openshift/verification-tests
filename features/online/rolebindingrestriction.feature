@@ -40,7 +40,7 @@ Feature: rolebindingrestriction.feature
     Examples:
       | serviceaccount                                     | output                                                    | result  |
       | system:serviceaccount:openshift:deployer           | .*"view".*forbidden:.*".*deployer".*"<%= project.name %>" | fail    | # @case_id OCP-13805
-      | system:serviceaccount:<%= project.name %>:deployer | role "view" added: ".*deployer"                           | succeed | # @case_id OCP-13115
+      | system:serviceaccount:<%= project.name %>:deployer | view added: ".*deployer"                           | succeed | # @case_id OCP-13115
 
   # @author zhaliu@redhat.com
   Scenario Outline: Restrict making a role binding to groups except system group built in own project by default
@@ -67,7 +67,7 @@ Feature: rolebindingrestriction.feature
     # @case_id OCP-13795
     Examples: Allow to make a role binding to the system service account group
       | group_name                                 | output                                                          | result  |
-      | system:serviceaccounts:<%= project.name %> | role "view" added: "system:serviceaccounts:<%= project.name %>" | succeed |
+      | system:serviceaccounts:<%= project.name %> | view added: ".*serviceaccounts:<%= project.name %>" | succeed |
 
   # @author zhaliu@redhat.com
   # @case_id OCP-13798
