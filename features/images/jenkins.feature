@@ -80,11 +80,6 @@ Feature: jenkins.feature
   Scenario Outline: Trigger build of application from jenkins job with persistent volume
     Given I have a project
     And I have a jenkins v<ver> application
-    When I run the :patch client command with:
-      | resource      | pvc                                                                             |
-      | resource_name | jenkins                                                                         |
-      | p             | {"metadata":{"annotations":{"volume.alpha.kubernetes.io/storage-class":"foo"}}} |
-    Then the step should succeed
     And the "jenkins" PVC becomes :bound within 300 seconds
     When I run the :new_app client command with:
       | file | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/image/language-image-templates/application-template.json |

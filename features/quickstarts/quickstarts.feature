@@ -28,11 +28,6 @@ Feature: quickstarts.feature
     Given I have a project
     When I run the :new_app client command with:
       | template | <template> |
-    When I run the :patch client command with:
-      | resource      | pvc                                                                             |
-      | resource_name | <pvc>                                                                           |
-      | p             | {"metadata":{"annotations":{"volume.alpha.kubernetes.io/storage-class":"foo"}}} |
-    Then the step should succeed
     And the "<pvc>" PVC becomes :bound within 300 seconds
     Then the step should succeed
     And the "<buildcfg>-1" build was created
