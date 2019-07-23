@@ -95,6 +95,7 @@ Given /^I log in to jenkins$/ do
     step %Q/I perform the :jenkins_multi_oauth_login web action with:/, table(%{
       | username | <%= user.name %>     |
       | password | <%= user.password %> |
+      | idp      | <%= env.idp %>       |
       })
   elsif !user.password?
     step %Q/I perform the :jenkins_standard_login web action with:/, table(%{
