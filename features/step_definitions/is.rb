@@ -46,3 +46,27 @@ Given /^the(?: "([^"]*)")? image stream tag was created$/ do |istag_name|
     raise "ImageStreamTag #{istag_name} never created"
   end
 end
+
+Given /^the #{QUOTED} #{QUOTED} CRD was finalized$/ do |crd_type, crd_name|
+  ensure_admin_tagged
+  ensure_destructive_tagged
+  _user = admin
+
+  @result = admin.cli_exec(:get, resource: crd_type, resource_name: crd_name, o: 'yaml')
+  ts1 = @result[:parsed]['metadata']['creationTimestamp']
+  
+  success = wait_for(300) { 
+    @result = admin.cli_exec(:delete, object_type: crd_type, object_name_or_id: crd_name)
+  }
+  unless success
+    raise "The crd #{crd_type} can't be deleted."
+  end
+
+  @result = custom_resource_definition(crd_type).wait_to_appear(_user, 60)
+  @result = admin.cli_exec(:get, resource: crd_type, resource_name: crd_name, o: 'yaml')
+  ts2 = @result[:parsed]['metadata']['creationTimestamp']
+  
+  unless compare_time(ts1, ts2)
+    raise "The crd #{crd_type} doesn't be recreated. "
+  end
+end
