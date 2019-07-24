@@ -5,7 +5,7 @@ Feature: buildconfig.feature
   Scenario: Start build from buildConfig/build
     Given I have a project
     When I run the :new_app client command with:
-      | image_stream | openshift/ruby:2.2 |
+      | image_stream | openshift/ruby:latest |
       | app_repo     | https://github.com/openshift/ruby-hello-world |
     Then the step should succeed
     And the "ruby-hello-world-1" build was created
@@ -49,7 +49,7 @@ Feature: buildconfig.feature
     Given the "ruby-hello-world-1" build becomes :complete
     When I run the :new_build client command with:
       | image_stream | ruby-hello-world                     |
-      | code         | https://github.com/sclorg/ruby-ex |
+      | code         | https://github.com/sclorg/ruby-ex    |
       | name         | ruby-ex                              |
     Then the step should succeed
     And the "ruby-ex-1" build was created

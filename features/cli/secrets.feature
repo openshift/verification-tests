@@ -208,11 +208,11 @@ Feature: secrets related scenarios
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/tc519256/testsecret2.json |
     Then the step should succeed
     When I run the :new_build client command with:
-      | image_stream | ruby:2.2 |
+      | image_stream | ruby:latest    |
       | app_repo | https://github.com/yanliao/build-secret.git |
-      | strategy | <type> |
+      | strategy | <type>             |
       | build_secret | <build_secret> |
-      | build_secret | testsecret2 |
+      | build_secret | testsecret2    |
     Then the step should succeed
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/tc519261/test.json |

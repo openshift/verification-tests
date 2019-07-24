@@ -148,8 +148,9 @@ Feature: dockerbuild.feature
       | build_arg | ARG=VALUE                                     |
     Then the step should succeed
     Given the "ruby-hello-world-1" build was created
-    When I run the :export client command with:
+    When I run the :get client command with:
       | resource | build/ruby-hello-world-1 |
+      | o        | yaml                     |
     Then the step should succeed
     And the output should match:
       | name:\\s+ARG    |
@@ -160,8 +161,9 @@ Feature: dockerbuild.feature
       | build_arg   | ARG1=VALUE1      |
     Then the step should succeed
     Given the "ruby-hello-world-2" build was created
-    When I run the :export client command with:
+    When I run the :get client command with:
       | resource | build/ruby-hello-world-2 |
+      | o        | yaml                     |
     Then the step should succeed
     And the output should match:
       | name:\\s+ARG1    |
@@ -171,8 +173,9 @@ Feature: dockerbuild.feature
       | build_arg  | ARG=NEWVALUE       |
     Then the step should succeed
     Given the "ruby-hello-world-3" build was created
-    When I run the :export client command with:
+    When I run the :get client command with:
       | resource | build/ruby-hello-world-3 |
+      | o        | yaml                     |
     Then the step should succeed
     And the output should match:
       | name:\\s+ARG       |
