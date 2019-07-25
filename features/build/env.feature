@@ -5,8 +5,8 @@ Feature: env.feature
   Scenario: Can set env vars on buildconfig with new-app --env and --env-file
     Given I have a project
     When I run the :new_app client command with:
-      | app_repo | ruby:2.2~https://github.com/openshift/ruby-hello-world |
-      | env      | DB_USER=test                                           |
+      | app_repo | ruby:latest~https://github.com/openshift/ruby-hello-world |
+      | env      | DB_USER=test                                              |
     Then the step should succeed
     Given a pod becomes ready with labels:
       |deployment=ruby-hello-world-1|
