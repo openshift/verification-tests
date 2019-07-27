@@ -1,6 +1,6 @@
 Given /^the #{QUOTED} #{QUOTED} CRD is recreated after scenario$/ do |name, crd|
   ensure_admin_tagged
-  allowed_crds = ["kubeapiserver"]
+  allowed_crds = ["kubeapiserver", "openshiftapiserver"]
 
   if allowed_crds.include? crd
     cb.cluster_resource_to_recreate = resource(name, crd)
