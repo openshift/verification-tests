@@ -23,7 +23,7 @@ Feature: build 'apps' with CLI
     Then the output should contain:
       | ruby-hello-world |
     When I run the :new_build client command with:
-      | app_repo |  openshift/ruby:2.0~https://github.com/openshift/ruby-hello-world.git |
+      | app_repo |  openshift/ruby~https://github.com/openshift/ruby-hello-world.git |
       | strategy | docker                                                                |
       | name     | n1                                                                    |
     Then the step should succeed
@@ -132,9 +132,9 @@ Feature: build 'apps' with CLI
   Scenario: Create applications only with multiple db images
     Given I create a new project
     When I run the :new_app client command with:
-      | image_stream      | openshift/mongodb:2.6                  |
+      | image_stream      | openshift/mongodb:3.6                  |
       | image_stream      | openshift/mysql                        |
-      | docker_image      | openshift/postgresql-92-centos7:latest |
+      | docker_image      | openshift/postgresql-96-centos7:latest |
       | env               | MONGODB_USER=test                      |
       | env               | MONGODB_PASSWORD=test                  |
       | env               | MONGODB_DATABASE=test                  |
@@ -161,12 +161,12 @@ Feature: build 'apps' with CLI
     And I wait up to 120 seconds for the steps to pass:
     """
     When I execute on the pod:
-      | scl | enable | rh-mongodb26 | mongo $MONGODB_DATABASE -u $MONGODB_USER -p $MONGODB_PASSWORD  --eval 'db.version()' |
+      | scl | enable | rh-mongodb36 | mongo $MONGODB_DATABASE -u $MONGODB_USER -p $MONGODB_PASSWORD  --eval 'db.version()' |
     Then the step should succeed
     """
     And the output should contain:
-      | 2.6 |
-    Given I wait for the "postgresql-92-centos7" service to become ready up to 300 seconds
+      | 3.6 |
+    Given I wait for the "postgresql-96-centos7" service to become ready up to 300 seconds
     And I get the service pods
     And I wait up to 120 seconds for the steps to pass:
     """
