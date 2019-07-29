@@ -1174,6 +1174,12 @@
     :confirm: --confirm
     :type: --type=<value>
     :sort_by: --sort-by=<value>
+:oadm_ipfailover:
+  :cmd: oc adm ipfailover <name>
+  :options:
+    :images: --images=<value>
+    :virtual_ips: --virtual-ips=<value>
+    :watch_port: --watch-port=<value>
 :oadm_manage_node:
   :cmd: oc adm manage-node <node_name>
   :options:
