@@ -53,51 +53,8 @@ Feature: Dynamic provisioning
       | cinder         | # @case_id OCP-9656
       | ebs            | # @case_id OCP-9685
       | gce            | # @case_id OCP-12665
+      | azure          | # @case_id OCP-13787
 
-  # @author wehe@redhat.com
-  # @case_id OCP-13787
-  @admin
-  Scenario: azure disk dynamic provisioning
-    Given admin creates a project with a random schedulable node selector
-    When admin creates a StorageClass from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/azure/azsc-NOPAR.yaml" where:
-      | ["metadata"]["name"] | sc-<%= project.name %> |
-    Then the step should succeed
-    Given evaluation of `%w{ReadWriteOnce ReadWriteOnce ReadWriteOnce}` is stored in the :accessmodes clipboard
-    And I run the steps 1 times:
-    """
-    When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/azure/azpvc-sc.yaml" replacing paths:
-      | ["metadata"]["name"]                         | dpvc-#{cb.i}              |
-      | ["spec"]["storageClassName"]                 | sc-<%= project.name %>    |
-      | ["spec"]["accessModes"][0]                   | #{cb.accessmodes[cb.i-1]} |
-      | ["spec"]["resources"]["requests"]["storage"] | #{cb.i}Gi                 |
-    Then the step should succeed
-    And the "dpvc-#{cb.i}" PVC becomes :bound within 120 seconds
-    And I save volume id from PV named "#{ pvc.volume_name }" in the :disk clipboard
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/azure/azpvcpod.yaml" replacing paths:
-      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | dpvc-#{cb.i} |
-      | ["metadata"]["name"]                                         | mypod#{cb.i} |
-    Then the step should succeed
-    And the pod named "mypod#{cb.i}" becomes ready
-    When I execute on the pod:
-      | touch | /mnt/azure/testfile_#{cb.i} |
-    Then the step should succeed
-    When I run the :delete client command with:
-      | object_type | pod |
-      | all         |     |
-    Then the step should succeed
-    When I run the :delete client command with:
-      | object_type | pvc |
-      | all         |     |
-    Then the step should succeed
-    Given I switch to cluster admin pseudo user
-    Then I wait for the resource "pv" named "#{ pvc.volume_name }" to disappear within 1200 seconds
-    Given I use the "<%= node.name %>" node
-    And I run commands on the host:
-      | mount |
-    And the output should not contain:
-      | #{ pvc.volume_name }       |
-      | #{cb.disk.split("/").last} |
-    """
 
   # @author lxia@redhat.com
   # @case_id OCP-10790
