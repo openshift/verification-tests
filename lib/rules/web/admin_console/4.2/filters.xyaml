@@ -1,7 +1,7 @@
 set_filter_strings:
   elements:
   - selector: &filter_text_ele
-      css: input.text-filter
+      css: input[class*='text-filter']
     op: clear
   - selector:
       <<: *filter_text_ele
@@ -12,7 +12,7 @@ search_by_type:
       xpath: //div[@class='co-m-pane__filter-bar-group']/div[1]
     op: click
   - selector:
-      xpath: (//span[@class='co-resource-item__resource-name' and text()='<type>'])[position()=1]
+      xpath: (//li//*[@class='co-resource-item__resource-name' and text()='<type>'])[position()=1]
     op: click
 search_by_catagory:
   elements:
@@ -20,7 +20,7 @@ search_by_catagory:
       xpath: //div[@class='co-m-pane__filter-bar-group']/div[2]
     op: click
   - selector:
-      xpath: //a[contains(.,'<catagory>')]
+      xpath: //li//*[contains(.,'<catagory>')]
     op: click
 check_results_contain_correct_strings:
   element:
