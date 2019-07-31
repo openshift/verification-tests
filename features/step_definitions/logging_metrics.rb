@@ -380,13 +380,15 @@ Given /^all metering related pods are running in the#{OPT_QUOTED} project$/ do |
   step %Q/a pod becomes ready with labels:/, table(%{
     | app=metering-operator |
   })
-
-  step %Q/a pod becomes ready with labels:/, table(%{
-    | app=hdfs-datanode |
-  })
-  step %Q/a pod becomes ready with labels:/, table(%{
-    | app=hdfs-namenode |
-  })
+  # XXX: HDFS is not disabled by deafult, only check it if it's enabled
+  if pod('hdfs-datanode-0').exists?
+    step %Q/a pod becomes ready with labels:/, table(%{
+      | app=hdfs-datanode |
+    })
+    step %Q/a pod becomes ready with labels:/, table(%{
+      | app=hdfs-namenode |
+    })
+  end
   step %Q/a pod becomes ready with labels:/, table(%{
     | app=hive|
   })

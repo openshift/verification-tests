@@ -65,4 +65,11 @@ Feature: test metering related steps
       | metadata_name | test                     |
       | query_type    | namespace-memory-request |
 
+  @admin
+  Scenario: test enable metering route
+    Given I switch to cluster admin pseudo user
+    And I use the "openshift-metering" project
+    And evaluation of `"openshift-metering"` is stored in the :metering_namespace clipboard
+    And I enable route for metering service
+
 
