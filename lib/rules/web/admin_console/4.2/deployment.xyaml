@@ -18,4 +18,7 @@ click_initcontainer_in_detail_page:
     selector:
       xpath: //h2[contains(.,'Init Containers')]/..//span[contains(.,'<container_name>')]
     op: click
-
+confirm_cancel_rollout:
+  params:
+    button_text: Yes, cancel
+  action: click_button
