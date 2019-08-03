@@ -552,11 +552,9 @@ jenkins_standard_login:
       name: j_password
     op: send_keys <password>
     type: input
-  elements:
-  - selector:
-      id: yui-gen1-button
-    op: click
-    type: button
+  scripts:
+  - command: return document.getElementsByName("Submit")[0].click()
+    expect_result: ~
   action: jenkins_verify_logged_in
 
 jenkins_oauth_login:
@@ -564,7 +562,7 @@ jenkins_oauth_login:
   scripts:
   - command: |
         var Logtext = document.getElementsByClassName("btn btn-lg btn-primary")[0]
-        if (typeof(Logtext) == "undefined"){ 
+        if (typeof(Logtext) == "undefined"){
            return true;
            }
         Logtext.click();
@@ -586,7 +584,7 @@ jenkins_oauth_login:
   scripts:
   - command: |
         var Auth = document.getElementsByName("approve")[0]
-        if (typeof(Auth) == "undefined"){ 
+        if (typeof(Auth) == "undefined"){
            return true;
            }
         Auth.click();
