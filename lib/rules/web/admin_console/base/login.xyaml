@@ -17,3 +17,26 @@ click_console_selector:
     selector:
       css: .contextselector button
     op: click
+click_specified_idp:
+  element:
+    selector:
+      xpath: //a[@class='idp' and text()='<idp_name>']
+    op: click
+set_login_username:
+  element:
+    selector:
+      id: inputUsername
+    type: input
+    op: send_keys <username>
+set_login_password:
+  element:
+    selector:
+      id: inputPassword
+    type: input
+    op: send_keys <password>
+login_with_specified_idp:
+  action: click_specified_idp
+  action: set_login_username
+  action: set_login_password
+  action: submit_changes
+  
