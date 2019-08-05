@@ -163,7 +163,7 @@ Feature: buildlogic.feature
       | cd /repos/ && rm -rf sample.git && git clone --bare https://github.com/openshift/ruby-hello-world sample.git |
     Then the step should succeed
     When I run the :new_build client command with:
-      | image_stream | openshift/ruby:2.2                            |
+      | image_stream | openshift/ruby                                |
       | code         | https://github.com/openshift/ruby-hello-world |
       | name         | ruby-hello-world                              |
     Then the step should succeed
@@ -330,6 +330,7 @@ Feature: buildlogic.feature
       | buildconfig | rails-postgresql-example |
     Then the step should succeed
     """
+    Given the "rails-postgresql-example-7" build becomes :failed
     Then I wait up to 120 seconds for the steps to pass:
     """
     When I save project builds into the :builds_all clipboard
