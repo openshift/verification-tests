@@ -386,12 +386,12 @@ module BushSlicer
         end
       end
 
-      def compare_time(t1, t2)
+      def compare_str_time(t1, t2)
         tp1 = Time.parse(t1)
         tp2 = Time.parse(t2)
        
         if tp2 > tp1
-           return true
+           return tp2 - tp1
         end
       end
 
