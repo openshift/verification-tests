@@ -394,10 +394,8 @@ Given /^default image registry route is stored in the#{OPT_SYM} clipboard$/ do |
   project(org_proj_name) if org_proj_name
 end
 
-Given /^current generation number of#{OPT_QUOTED} deployment is stored into#{OPT_SYM} clipboard$/ do |name,cb_name|
+Given /^current generation number of#{OPT_QUOTED} deployment is stored into#{OPT_SYM} clipboard$/ do |name, cb_name|
   ensure_admin_tagged
-  ensure_destructive_tagged
   cb_name ||= :generation_number
-  @result = admin.cli_exec(:get, resource: 'deployment', resource_name: name, n: 'openshift-image-registry', o: 'yaml')
-  cb[cb_name] = @result[:parsed]['metadata']['generation']
+  cb[cb_name] = deployment(name).generation_number(user: user, cached: false)
 end
