@@ -20,13 +20,13 @@ module BushSlicer
       return props[:role]
     end
 
-    # @return [Array<User, Group, ServiceAccount, Systemuser, SystemGroup>]
+    # @return [Array<User, Group, ServiceAccount>]
     def subjects(user: nil, cached: true, quiet: false)
       unless cached && props[:subjects]
         rbs = raw_resource(user: user, cached: cached, quiet: quiet)["subjects"]
         props[:subjects] = rbs.map { |rb|
           case rb["kind"]
-          when "SystemUser", "SystemGroup", "User", "Group"
+          when "User", "Group"
             Object.const_get("::BushSlicer::#{rb['kind']}")
               .new(name: rb["name"], env: env)
           when "ServiceAccount"
