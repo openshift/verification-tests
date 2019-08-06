@@ -110,12 +110,12 @@ click_secondary_menu:
 click_dropdown_field:
   elements:
   - selector:
-      xpath: //label[(.='<dropdown_field>')]/following-sibling::*//button[contains(@class, 'dropdown__toggle')]
+      xpath: //*[(.='<dropdown_field>')]/following-sibling::*//button[contains(@class, 'dropdown__toggle')]
     op: click
 click_one_item:
   elements:
   - selector:
-      xpath: //*[@id='<dropdown_item>-link']
+      xpath: //li//*[@id='<dropdown_item>-link']
     op: click
 choose_dropdown_item:
   action: click_dropdown_field

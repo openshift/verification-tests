@@ -6,8 +6,15 @@ require 'ssl'
 Given /^metering service has been installed successfully(?: using (ansible|shell script|OLM))?$/ do |method|
   ensure_admin_tagged
   namespace = "openshift-metering"  # set it as default
+  project(namespace)
+  ### XXX: TODO until 4.2 is GAed,
+  if operator_group('metering_operators').exists?
+    cb[:metering_resource_type] = 'meteringconfig'
+  else
+    cb[:metering_resource_type] = 'metering'
+  end
   # first check if metering service exists, skip installation if already there
-  step %Q/I save the project hosting "metering" resource to "metering_namespace" clipboard/
+  step %Q/I save the project hosting "#{cb.metering_resource_type}" resource to "metering_namespace" clipboard/
   unless cb.metering_namespace
     # default to OLM install
     method ||= "OLM"
@@ -28,7 +35,7 @@ Given /^metering service has been installed successfully(?: using (ansible|shell
       raise "service openshift-monitoring is a pre-requisite for #{namespace}"
     end
   else
-    @result = admin.cli_exec(:get, namespace: cb.metering_namespace.name, resource: 'metering', o: 'yaml')
+    @result = admin.cli_exec(:get, namespace: cb.metering_namespace.name, resource: cb.metering_resource_type, o: 'yaml')
     metering_name = @result[:parsed]['items'].first['metadata']['name']
   end
 
@@ -46,7 +53,7 @@ Given /^metering service has been installed successfully(?: using (ansible|shell
     cb.metering_namespace = project(namespace)
   end
   step %Q/all metering related pods are running in the "#{cb.metering_namespace.name}" project/
-  step %Q/I wait for the "#{metering_name}" metering to appear/
+  step %Q/I wait for the "#{metering_name}" #{cb.metering_resource_type} to appear/
   # added check for datasource to make sure promethues imports are working
   step %Q/all reportdatasources are importing from Prometheus/
 end
@@ -162,36 +169,50 @@ Given /^I wait until #{QUOTED} report for #{QUOTED} namespace to be available$/ 
   end
 end
 
+Given /^I construct a patch_json with s3 enabled and save it to the#{OPT_SYM} clipboard$/ do |cb_name|
+  cb_name ||= :patch_json
+  htpasswd = BushSlicer::SSL.sha1_htpasswd(username: 'fake_user', password: 'fake_password')
+  cookie_seed = rand_str(32, :hex)
+  patch_json = <<BASE_TEMPLATE
+{
+   "spec": {
+      "reporting-operator": {
+         "spec": {
+            "authProxy": {
+               "cookieSeed": "#{cookie_seed}",
+               "delegateURLsEnabled": true,
+               "enabled": true,
+               "htpasswdData": "#{htpasswd}",
+               "subjectAccessReviewEnabled": true
+            },
+            "route": {
+               "enabled": true
+            }
+         }
+      }
+   }
+}
+BASE_TEMPLATE
+  cb[cb_name] = patch_json
+end
+
 Given /^I enable route for#{OPT_QUOTED} metering service$/ do | metering_name |
-  metering_name ||= metering.name
+  metering_name ||= metering_config('operator-metering').name
   # create the route only if one does not exists (currently it's hardcoded
   # in the chart file charts/reporting-operator/values.yaml)
-  unless route('metering', cb.metering_namespace).exists?
+  unless route('metering').exists?
     org_user = user
+    ### XXX: TODO until 4.2 is GAed,
+    if operator_group('metering_operators').exists?
+      cb[:metering_resource_type] = 'meteringconfig'
+    else
+      cb[:metering_resource_type] = 'metering'
+    end
     step %Q/I switch to cluster admin pseudo user/
-    htpasswd = BushSlicer::SSL.sha1_htpasswd(username: 'fake_user', password: 'fake_password')
-    #htpasswd = BushSlicer::SSL.sha1_htpasswd(username: user.name, password: user.password)
-    cookie_seed = rand_str(32, :hex)
-    route_yaml = <<BASE_TEMPLATE
-      apiVersion: metering.openshift.io/v1alpha1
-      kind: Metering
-      metadata:
-        name: "#{metering.name}"
-      spec:
-        reporting-operator:
-          spec:
-            route:
-              enabled: true
-            authProxy:
-              enabled: true
-              htpasswdData: |
-                #{htpasswd}
-              cookieSeed: "#{cookie_seed}"
-              subjectAccessReviewEnabled: true
-              delegateURLsEnabled: true
-BASE_TEMPLATE
-    logger.info("### Updating metering service with route enabled\n #{route_yaml}")
-    @result = user.cli_exec(:apply, f: "-", _stdin: route_yaml, n: project.name)
+    step %Q/I construct a patch_json with s3 enabled and save it to the clipboard/
+    logger.info("### Updating metering service with route enabled\n #{cb.patch_json}")
+    opts = {resource: cb.metering_resource_type, resource_name: metering_name, p: cb.patch_json, type: 'merge', n: project.name}
+    @result = user.cli_exec(:patch, **opts)
     # route name is ALWAYS set to 'metering'
     step %Q/I wait for the "metering" route to appear up to 600 seconds/
     # switch back to original user

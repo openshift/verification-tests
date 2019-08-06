@@ -14,5 +14,6 @@ Given /^the #{QUOTED} oauth CRD is restored after scenario$/ do |name|
     opts = {resource: 'oauth', resource_name: name, p: patch_json, type: 'merge' }
     @result = _admin.cli_exec(:patch, **opts)
     raise "Cannot restore OAuth: #{name}" unless @result[:success]
+    sleep 60
   }
 end

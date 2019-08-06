@@ -163,7 +163,7 @@ Feature: buildlogic.feature
       | cd /repos/ && rm -rf sample.git && git clone --bare https://github.com/openshift/ruby-hello-world sample.git |
     Then the step should succeed
     When I run the :new_build client command with:
-      | image_stream | openshift/ruby:2.2                            |
+      | image_stream | openshift/ruby                                |
       | code         | https://github.com/openshift/ruby-hello-world |
       | name         | ruby-hello-world                              |
     Then the step should succeed
@@ -193,9 +193,9 @@ Feature: buildlogic.feature
   Scenario: Create new-app from private git repo with ssh key
     Given I have a project
     When I run the :new_app client command with:
-      | image_stream   | openshift/perl:5.20       |
+      | image_stream   | openshift/perl:5.26                              |
       | code           | https://github.com/sclorg/s2i-perl-container.git |
-      | context_dir    | 5.20/test/sample-test-app/|
+      | context_dir    | 5.26/test/sample-test-app/                       |
     Then the step should succeed
     Given the "s2i-perl-container-1" build completes
     And I have an ssh-git service in the project
@@ -330,6 +330,7 @@ Feature: buildlogic.feature
       | buildconfig | rails-postgresql-example |
     Then the step should succeed
     """
+    Given the "rails-postgresql-example-7" build becomes :failed
     Then I wait up to 120 seconds for the steps to pass:
     """
     When I save project builds into the :builds_all clipboard

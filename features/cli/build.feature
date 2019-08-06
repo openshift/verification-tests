@@ -132,9 +132,9 @@ Feature: build 'apps' with CLI
   Scenario: Create applications only with multiple db images
     Given I create a new project
     When I run the :new_app client command with:
-      | image_stream      | openshift/mongodb:2.6                  |
+      | image_stream      | openshift/mongodb:3.6                  |
       | image_stream      | openshift/mysql                        |
-      | docker_image      | openshift/postgresql-92-centos7:latest |
+      | docker_image      | centos/postgresql-96-centos7:latest    |
       | env               | MONGODB_USER=test                      |
       | env               | MONGODB_PASSWORD=test                  |
       | env               | MONGODB_DATABASE=test                  |
@@ -161,12 +161,12 @@ Feature: build 'apps' with CLI
     And I wait up to 120 seconds for the steps to pass:
     """
     When I execute on the pod:
-      | scl | enable | rh-mongodb26 | mongo $MONGODB_DATABASE -u $MONGODB_USER -p $MONGODB_PASSWORD  --eval 'db.version()' |
+      | scl | enable | rh-mongodb36 | mongo $MONGODB_DATABASE -u $MONGODB_USER -p $MONGODB_PASSWORD  --eval 'db.version()' |
     Then the step should succeed
     """
     And the output should contain:
-      | 2.6 |
-    Given I wait for the "postgresql-92-centos7" service to become ready up to 300 seconds
+      | 3.6 |
+    Given I wait for the "postgresql-96-centos7" service to become ready up to 300 seconds
     And I get the service pods
     And I wait up to 120 seconds for the steps to pass:
     """
@@ -360,20 +360,17 @@ Feature: build 'apps' with CLI
   # @case_id OCP-11582
   Scenario: Change runpolicy to SerialLatestOnly build
     Given I have a project
-    And I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/ruby22rhel7-template-sti.json"
-    And I replace lines in "ruby22rhel7-template-sti.json":
-      | registry.access.redhat.com | <%= product_docker_repo %> |
-    And I process and create "ruby22rhel7-template-sti.json"
-    When I run the :start_build client command with:
-      | buildconfig | ruby22-sample-build |
+    When I run the :new_build client command with:
+      | code         | https://github.com/openshift/ruby-hello-world |
+      | image        | openshift/ruby                                |
     Then the step should succeed
+    Given I run the steps 3 times:
+    """
     When I run the :start_build client command with:
-      | buildconfig | ruby22-sample-build |
+      | buildconfig | ruby-hello-world |
     Then the step should succeed
-    When I run the :start_build client command with:
-      | buildconfig | ruby22-sample-build |
-    Then the step should succeed
-    Given the "ruby22-sample-build-1" build becomes :running
+    """
+    Given the "ruby-hello-world-1" build becomes :running
     And I get project builds
     Then the output should contain 1 times:
       | Running |
@@ -381,17 +378,17 @@ Feature: build 'apps' with CLI
       | New     |
     When I run the :patch client command with:
       | resource      | buildconfig                                  |
-      | resource_name | ruby22-sample-build                          |
+      | resource_name | ruby-hello-world                             |
       | p             | {"spec": {"runPolicy" : "SerialLatestOnly"}} |
     Then the step should succeed
+    Given I run the steps 2 times:
+    """
     When I run the :start_build client command with:
-      | buildconfig | ruby22-sample-build |
+      | buildconfig | ruby-hello-world |
     Then the step should succeed
-    When I run the :start_build client command with:
-      | buildconfig | ruby22-sample-build |
-    Then the step should succeed
-    Given the "ruby22-sample-build-1" build completes
-    And the "ruby22-sample-build-6" build becomes :running
+    """
+    Given the "ruby-hello-world-1" build completes
+    And the "ruby-hello-world-6" build becomes :running
     And I get project builds
     Then the output should contain 1 times:
       | Complete  |
@@ -399,13 +396,13 @@ Feature: build 'apps' with CLI
       | Running   |
     And the output should match 4 times:
       | Git.*Cancelled |
+    Given I run the steps 2 times:
+    """
     When I run the :start_build client command with:
-      | buildconfig | ruby22-sample-build |
+      | buildconfig | ruby-hello-world |
     Then the step should succeed
-    When I run the :start_build client command with:
-      | buildconfig | ruby22-sample-build |
-    Then the step should succeed
-    And the "ruby22-sample-build-7" build becomes :cancelled
+    """
+    And the "ruby-hello-world-7" build becomes :cancelled
     Given I get project builds
     Then the output should contain 1 times:
       | Complete  |
@@ -417,15 +414,15 @@ Feature: build 'apps' with CLI
       | New       |
     When I run the :patch client command with:
       | resource      | buildconfig                        |
-      | resource_name | ruby22-sample-build                |
+      | resource_name | ruby-hello-world                   |
       | p             | {"spec": {"runPolicy" : "Serial"}} |
     Then the step should succeed
+    Given I run the steps 2 times:
+    """
     When I run the :start_build client command with:
-      | buildconfig | ruby22-sample-build |
+      | buildconfig | ruby-hello-world |
     Then the step should succeed
-    When I run the :start_build client command with:
-      | buildconfig | ruby22-sample-build |
-    Then the step should succeed
+    """
     Given I get project builds
     Then the output should contain 1 times:
       | Complete  |
