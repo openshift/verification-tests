@@ -18,7 +18,7 @@ Feature: ONLY ONLINE related feature's scripts in this file
     When I process and create "https://raw.githubusercontent.com/openshift/origin/master/test/extended/testdata/builds/application-template-custombuild.json"
     Then the step should fail
     And the output should contain:
-      | Builds with docker strategy are prohibited on this cluster |
+      | build strategy Custom is not allowed |
     When I replace resource "bc" named "sti-bc":
       | sourceStrategy | dockerStrategy |
       | type: Source   | type: Docker   |
