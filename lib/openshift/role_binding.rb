@@ -21,9 +21,9 @@ module BushSlicer
     # - kind: ServiceAccount
     #   name: deployer
     #   namespace: user1-test-prj
-    # - kind: SystemUser
+    # - kind: User
     #   name: system:admin
-    # - kind: SystemGroup
+    # - kind: Group
     #   name: system:serviceaccounts:default
     # userNames:
     # - someuser

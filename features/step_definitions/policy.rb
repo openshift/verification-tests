@@ -49,20 +49,12 @@ Given /^cluster role #{QUOTED} is (added to|removed from) the #{QUOTED} (user|gr
   when "group"
     _add_command = :oadm_add_cluster_role_to_group
     _remove_command = :oadm_remove_cluster_role_from_group
-    if which.start_with? "system:"
-      _subject = ::BushSlicer::SystemGroup.new(name: which, env: env)
-    else
-      _subject = group(which)
-    end
+    _subject = group(which)
     _subject_name = _subject.name
     _opts = {role_name: role, group_name: _subject.name}
   when "user", "service account"
     if type == "user"
-      if which.start_with? "system:"
-        _subject = ::BushSlicer::SystemUser.new(name: which, env: env)
-      else
-        _subject = user(word_to_num(which), switch: false)
-      end
+      _subject = user(word_to_num(which), switch: false)
       _subject_name = _subject.name
     else
       _subject = service_account(which)
