@@ -27,3 +27,22 @@ check_dim_resource_list:
       xpath: //div[@class='co-disabled']//button[contains(.,'Create')]
   - selector:
       xpath: //div[@class='co-disabled']//div[contains(.,'No <resource_singular>s Found')]
+check_user_starter_guide_message:
+  elements:
+  - selector:
+      visible_text: !ruby/regexp /Welcome to OpenShift/i
+  - selector:
+      visible_text: !ruby/regexp /Create a project for your application/i
+check_get_started_message_when_no_resources:
+  elements:
+  - selector:
+      visible_text: !ruby/regexp /Get started with your project/i
+  - selector:
+      visible_text: !ruby/regexp /Add content to your project/i
+  - selector:
+      xpath: //a[.='Browse Catalog']
+  - selector:
+      xpath: //a[.='Deploy Image']
+  - selector:
+      xpath: //a[.='Import YAML']
+        
