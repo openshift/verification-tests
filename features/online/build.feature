@@ -14,8 +14,8 @@ Feature: ONLY ONLINE related feature's scripts in this file
       | strategy | docker    |
     Then the step should fail
     And the output should contain:
-      | build strategy Docker is not allowed |
-    When I process and create "https://raw.githubusercontent.com/openshift/origin/master/examples/sample-app/application-template-custombuild.json"
+      | Builds with docker strategy are prohibited |
+    When I process and create "https://raw.githubusercontent.com/openshift/origin/master/test/extended/testdata/builds/application-template-custombuild.json"
     Then the step should fail
     And the output should contain:
       | build strategy Custom is not allowed |
@@ -24,7 +24,7 @@ Feature: ONLY ONLINE related feature's scripts in this file
       | type: Source   | type: Docker   |
     Then the step should fail
     And the output should contain:
-      | build strategy Docker is not allowed |
+      | Builds with docker strategy are prohibited |
 
   # @author etrott@redhat.com
   Scenario Outline: Maven repository can be used to providing dependency caching for xPaas and wildfly STI builds
