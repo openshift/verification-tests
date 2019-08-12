@@ -42,3 +42,9 @@ check_get_started_message_when_no_resources:
   - selector:
       xpath: //a[.='Import YAML']
         
+check_message_and_doc_for_new_user:
+  elements:
+  - selector:
+      xpath: //p[contains(., 'To learn more, visit the OpenShift')]/a[contains(@href, 'docs.openshift.com/container-platform')]
+  - selector:
+      xpath: //a[contains(@href, 'mirror.openshift.com/pub/openshift-v4/clients/oc/4.1') and contains(., 'command-line tools')]

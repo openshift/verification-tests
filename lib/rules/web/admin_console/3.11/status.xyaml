@@ -27,3 +27,7 @@ check_dim_resource_list:
       xpath: //div[@class='co-disabled']//a[@href='/k8s/ns/default/<resource_url_name>/new']/button[contains(., 'Create <resource_singular>')]
   - selector:
       xpath: //div[@class='co-disabled']//div[contains(.,'No <resource_singular>s Found')]
+check_message_and_doc_for_new_user:
+  action: check_getting_started
+  action: check_doc_get_started_with_cli
+  action: check_additional_support

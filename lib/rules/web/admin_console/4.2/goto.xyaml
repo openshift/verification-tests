@@ -7,6 +7,8 @@ goto_resource_page_under_default_project:
   url: k8s/ns/default/<resource_url_name>
 goto_project_resources_page:
   url: k8s/cluster/projects/<project_name>/workloads
+goto_landing_page_for_empty_project:
+  url: k8s/cluster/projects
 
 # builds
 goto_one_buildconfig_page:
