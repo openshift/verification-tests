@@ -161,7 +161,7 @@ Feature: Testing for pv and pvc pre-bind feature
     And the "nfsc-<%= project.name %>" PVC becomes :pending
     And the "nfspv-<%= project.name %>" PV status is :available
     Examples:
-      | pre-bind-pvc              | pre-bind-pv                |
-      | nfsc-<%= project.name %>  | nfspv1-<%= project.name %> | # @case_id OCP-10108
-      | nfsc1-<%= project.name %> | nfspv-<%= project.name %>  | # @case_id OCP-10112
+      | pre-bind-pvc | pre-bind-pv                |
+      | nfsc         | nfspv1-<%= project.name %> | # @case_id OCP-10108
+      | nfsc1        | nfspv-<%= project.name %>  | # @case_id OCP-10112
 
