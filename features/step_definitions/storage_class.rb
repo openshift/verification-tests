@@ -77,6 +77,29 @@ Given(/^I run commands on the StorageClass "([^"]*)" backing host:$/) do | stora
   @result = host.exec_admin(*table.raw.flatten)
 end
 
+Given(/^default storage class is patched to non-default$/) do
+  ensure_admin_tagged
+  ensure_destructive_tagged
+
+  _sc = BushSlicer::StorageClass.get_matching(user: user) { |sc, sc_hash| sc.default? }.first
+  if _sc
+    logger.info "Default storage class will patched to non-default and be resotored after scenario:\n#{_sc.name}"
+    _admin = admin
+    patch_json_false = {"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}
+    patch_json_true = {"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}
+    patch_opts = {resource: "storageclass", resource_name: "#{_sc.name}"}
+    @result = _admin.cli_exec(:patch, p: patch_json_false.to_json, **patch_opts)
+    if @result[:success]
+      teardown_add {
+        @result = _admin.cli_exec(:patch, p: patch_json_true.to_json, **patch_opts)
+        raise "Unable to restore default storage class #{_sc.name}!" unless @result[:success]
+      }
+    else
+      raise "Unable to patch default storage class #{_sc.name} to non-default!"
+    end
+  end
+end
+
 Given(/^default storage class is deleted$/) do
   ensure_destructive_tagged
   if env.version_ge("3.3", user: user)
