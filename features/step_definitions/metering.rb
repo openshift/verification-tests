@@ -6,9 +6,11 @@ require 'ssl'
 Given /^metering service has been installed successfully(?: using (ansible|shell script|OLM))?$/ do |method|
   ensure_admin_tagged
   namespace = "openshift-metering"  # set it as default
-  project(namespace)
+  step %Q/I switch to cluster admin pseudo user/
+  # NOTE: we need to change project context as admin
+  step %Q/I use the "#{namespace}" project/
   ### XXX: TODO until 4.2 is GAed,
-  if operator_group('metering_operators').exists?
+  if operator_group('metering-operators').exists?
     cb[:metering_resource_type] = 'meteringconfig'
   else
     cb[:metering_resource_type] = 'metering'
@@ -203,7 +205,7 @@ Given /^I enable route for#{OPT_QUOTED} metering service$/ do | metering_name |
   unless route('metering').exists?
     org_user = user
     ### XXX: TODO until 4.2 is GAed,
-    if operator_group('metering-operators').exists?
+    if operator_group('metering_operators').exists?
       cb[:metering_resource_type] = 'meteringconfig'
     else
       cb[:metering_resource_type] = 'metering'
@@ -256,45 +258,33 @@ end
 Given /^the#{OPT_QUOTED} metering service is installed(?: to $QUOTED)? using OLM$/ do | metering_ns |
   ensure_admin_tagged
   ensure_destructive_tagged
+
   # 1. create the metering namespace
   metering_ns ||= "openshift-metering"
-  step %Q/I switch to cluster admin pseudo user/
   project(metering_ns)
-  if env.version_le('4.1', user: user)
-    metering_crd = "https://raw.githubusercontent.com/operator-framework/operator-metering/release-4.1/manifests/metering-config/default.yaml"
-  else
-    metering_crd = "https://raw.githubusercontent.com/operator-framework/operator-metering/master/manifests/metering-config/default.yaml"
-  end
-  begin
-    metering_installed = metering('operator-metering').exists?
-    cb.metering_resource_type = "metering"
-  rescue
-    cb.metering_resource_type = "meteringconfig"
-    metering_installed = metering_config('operator-metering').exists?
-  end
+  step %Q/I switch to cluster admin pseudo user/
+  @result = user.cli_exec(:create_namespace, name: metering_ns)
+  # prep for OLM need to define configs via YAML
+  # 1. metering-catalogsourceconfig.yaml
+  catalog_source_config = "https://raw.githubusercontent.com/operator-framework/operator-metering/master/manifests/deploy/openshift/olm/metering.catalogsourceconfig.yaml"
+  # 2. metering-operatorgroup.yaml
+  operator_group = "https://raw.githubusercontent.com/operator-framework/operator-metering/master/manifests/deploy/openshift/olm/metering.operatorgroup.yaml"
+  # 3. metering-subscription.yaml
+  subscription = "https://raw.githubusercontent.com/operator-framework/operator-metering/master/manifests/deploy/openshift/olm/metering.subscription.yaml"
+  # XXX: this will need to be updted after 4.2 is released to the wild
+  metering_crd = "https://raw.githubusercontent.com/operator-framework/operator-metering/release-4.1/manifests/metering-config/default.yaml"
 
-  unless project(metering_ns).exists? and metering_installed
-    @result = user.cli_exec(:create_namespace, name: metering_ns)
-    # prep for OLM need to define configs via YAML
-    # 1. metering-catalogsourceconfig.yaml
-    catalog_source_config = "https://raw.githubusercontent.com/operator-framework/operator-metering/master/manifests/deploy/openshift/olm/metering.catalogsourceconfig.yaml"
-    # 2. metering-operatorgroup.yaml
-    operator_group = "https://raw.githubusercontent.com/operator-framework/operator-metering/master/manifests/deploy/openshift/olm/metering.operatorgroup.yaml"
-    # 3. metering-subscription.yaml
-    subscription = "https://raw.githubusercontent.com/operator-framework/operator-metering/master/manifests/deploy/openshift/olm/metering.subscription.yaml"
-    # should really get the namespace dynamically
-    @result = user.cli_exec(:apply, f: catalog_source_config, n: 'openshift-marketplace')
-    @result = user.cli_exec(:apply, f: operator_group, n: project.name)
-    @result = user.cli_exec(:apply, f: subscription, n: project.name)
-    # wait for initial metering pod to become running first and then apply CRD
-    step %Q/a pod becomes ready with labels:/, table(%{
-      | app=metering-operator |
-    })
+  # should really get the namespace dynamically
+  @result = user.cli_exec(:apply, f: catalog_source_config, n: 'openshift-marketplace')
+  @result = user.cli_exec(:apply, f: operator_group, n: project.name)
+  @result = user.cli_exec(:apply, f: subscription, n: project.name)
+  # wait for initial metering pod to become running first and then apply CRD
+  step %Q/a pod becomes ready with labels:/, table(%{
+    | app=metering-operator |
+  })
 
-    @result = user.cli_exec(:apply, f: metering_crd, n: project.name)
-    raise "OLM install of metering failed" unless @result[:success]
-  end
-
+  @result = user.cli_exec(:apply, f: metering_crd, n: project.name)
+  raise "OLM install of metering failed" unless @result[:success]
 end
 
 # XXX: currently OLM uninstall is TBD, we uninstall by removing the namespace
@@ -338,8 +328,15 @@ When /^I perform the GET metering rest request with:$/ do | table |
   # first we need to expose reporting API route if not route is found
   step %Q/I enable route for metering service/ unless route('metering').exists?
   report_name = opts[:report_name]
+  opts[:api_version] ||= 'v2'
   url_path ||= opts[:custom_url]
-  url_path ||= "/api/v1/reports/get?name=#{report_name}&namespace=#{cb.metering_namespace.name}&format=json"
+  # v2
+  if opts[:api_version] == 'v2'
+    url_path ||= "/api/v2/reports/#{cb.metering_namespace.name}/#{report_name}/table?format=json"
+  else
+    # v1
+    url_path ||= "/api/v1/reports/get?name=#{report_name}&namespace=#{cb.metering_namespace.name}&format=json"
+  end
 
   report_query_url = route.dns + url_path
   @result = BushSlicer::Http.request(url: report_query_url, **https_opts, method: 'GET')
