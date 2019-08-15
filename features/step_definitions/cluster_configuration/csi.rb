@@ -118,7 +118,7 @@ Given /^I create (default )?storage class for #{QUOTED} csi driver$/ do |default
   filepath = @result[:abs_path]
 
   if default_sc
-    step %Q/default storage class is deleted/
+    step %Q/default storage class is patched to non-default/
     sc["metadata"]["annotations"]["storageclass.kubernetes.io/is-default-class"] = "true"
   end
   File.write(filepath, sc.to_yaml)

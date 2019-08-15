@@ -146,7 +146,7 @@ Feature: Persistent Volume Claim binding policies
   @admin
   @destructive
   Scenario: PV and PVC bound and unbound many times
-    Given default storage class is deleted
+    Given default storage class is patched to non-default
     Given I have a project
     And I have a NFS service in the project
 
