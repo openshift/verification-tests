@@ -574,3 +574,10 @@ Given /^ssh key for accessing nodes is copied to(?: the #{QUOTED} directory in)?
   @result = admin.cli_exec(:rsync, source: localhost.absolutize(dst_dir), destination: "#{pod.name}:/#{dst_dir}", loglevel: 5, n: _project.name)
   raise "Error syncing files over to '#{pod.name}' pod '#{@result[:stderr]}'" unless @result[:success]
 end
+
+
+Given /^I store all worker nodes to the#{OPT_SYM} clipboard$/ do |cb_name|
+  cb_name ||= :worker_nodes
+  nodes = BushSlicer::Node.list(user: admin)
+  cb[cb_name] = nodes.select { |n| n.is_worker? }
+end

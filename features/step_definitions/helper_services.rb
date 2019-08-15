@@ -714,3 +714,33 @@ Given /^I have a cluster-capacity pod in my project$/ do
   step 'the step should succeed'
   step 'the pod named "cluster-capacity" becomes ready'
 end
+
+# example of machine auto-scaler https://github.com/openshift-qe/output_references/blob/master/autoscale/machine-autoscaler.yaml
+Given /^I enable autoscaling for my cluster$/ do
+  name_place_holder = ""
+  base_template_hash = {
+    "apiVersion" => "autoscaling.openshift.io/v1beta1",
+    "kind" => "MachineAutoscaler",
+    "metadata" => {
+      "name" => name_place_holder,
+      "namespace" => "openshift-machine-api"
+    },
+    "spec" => {
+      "minReplicas" => 1,
+      "maxReplicas" => 10,
+      "scaleTargetRef" => {
+        "apiVersion" => "machine.openshift.io/v1beta1",
+        "kind" => "MachineSet",
+        "name" => name_place_holder
+      }
+    }
+  }
+
+  step %Q/I store all machinesets to the clipboard/
+  cb.machinesets.each do | machine_name |
+    base_template_hash['spec']['scaleTargetRef']['name'] = machine_name
+    base_template_hash['metadata']['name'] = machine_name
+    @result = admin.cli_exec(:create, f: "-", _stdin: base_template_hash.to_yaml)
+    raise "Failed to create MachineAutoscaler" unless @result[:success]
+  end
+end

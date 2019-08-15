@@ -73,6 +73,12 @@ module BushSlicer
       return !spec['unschedulable']
     end
 
+    def is_worker?(user: nil, cached: true, quiet: false)
+      rr = raw_resource(user: user, cached: cached, quiet: quiet)
+      current_config = rr.dig('metadata', 'annotations', 'machineconfiguration.openshift.io/currentConfig')
+      current_config.start_with? 'rendered-worker'
+    end
+
     def ready?(user: nil, cached: true, quiet: false)
       status = get_cached_prop(prop: :status, user:user, cached: cached, quiet: quiet)
       ready = status['conditions'].any? do |con|
