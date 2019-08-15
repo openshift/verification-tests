@@ -84,6 +84,7 @@ Given(/^default storage class is patched to non-default$/) do
   _sc = BushSlicer::StorageClass.get_matching(user: user) { |sc, sc_hash| sc.default? }.first
   if _sc
     logger.info "Default storage class will patched to non-default and be resotored after scenario:\n#{_sc.name}"
+    cache_resources _sc
     _admin = admin
     patch_json_false = {"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}
     patch_json_true = {"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}
