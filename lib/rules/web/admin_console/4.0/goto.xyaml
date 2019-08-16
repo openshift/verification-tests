@@ -5,8 +5,6 @@ goto_project_status:
   url: status/ns/<project>
 goto_resource_page_under_default_project:
   url: k8s/ns/default/<resource_url_name>
-goto_landing_page_for_empty_project:
-  action: goto_project_status
 
 # builds
 goto_one_buildconfig_page:
