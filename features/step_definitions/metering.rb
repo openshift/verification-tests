@@ -205,7 +205,7 @@ Given /^I enable route for#{OPT_QUOTED} metering service$/ do | metering_name |
   unless route('metering').exists?
     org_user = user
     ### XXX: TODO until 4.2 is GAed,
-    if operator_group('metering_operators').exists?
+    if operator_group('metering-operators').exists?
       cb[:metering_resource_type] = 'meteringconfig'
     else
       cb[:metering_resource_type] = 'metering'
