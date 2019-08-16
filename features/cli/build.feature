@@ -6,7 +6,7 @@ Feature: build 'apps' with CLI
     Given I have a project
     When I run the :new_build client command with:
       | code         | https://github.com/openshift/ruby-hello-world |
-      | image        | openshift/ruby                                |
+      | image_stream | openshift/ruby                                |
       | l            | app=rubytest                                  |
     Then the step should succeed
     When I run the :describe client command with:
@@ -23,9 +23,9 @@ Feature: build 'apps' with CLI
     Then the output should contain:
       | ruby-hello-world |
     When I run the :new_build client command with:
-      | app_repo |  openshift/ruby~https://github.com/openshift/ruby-hello-world.git |
-      | strategy | docker                                                                |
-      | name     | n1                                                                    |
+      | app_repo | centos/ruby-22-centos7~https://github.com/openshift/ruby-hello-world.git |
+      | strategy | docker |
+      | name     | n1     |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | bc               |
