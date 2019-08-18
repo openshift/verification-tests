@@ -136,10 +136,11 @@ module BushSlicer
 
     def update_from_api_object(hash)
       case
-      when hash["kind"] != shortclass
-        raise "hash not from a #{shortclass}: #{hash["kind"]}"
+      when hash["kind"] != type
+        raise "hash not from a #{shortclass}: expected #{type} but was #{hash["kind"]}"
       when name != hash["metadata"]["name"]
         raise "hash from a different #{shortclass}: #{name} vs #{hash["metadata"]["name"]}"
+      # TODO: check API name/version
       when self.respond_to?(:project) &&
            hash["metadata"]&.has_key?("namespace") &&
            project.name != hash["metadata"]["namespace"]
@@ -404,6 +405,22 @@ module BushSlicer
 
     def shortclass
       self.class.shortclass
+    end
+
+    # @return [String] the type of resource as would appear in YAML output
+    # @note we need to handle resources where api name part is significant and
+    #   RESOURCE contains dots
+    def self.type
+      unless @type
+        count_words = self::RESOURCE[/^[^.]*/].count("_") + 1
+        @type = shortclass.sub(/^((?:[A-Z][a-z0-9]*){#{count_words}}).*$/, "\\1")
+      end
+
+      return @type
+    end
+
+    def type
+      self.class.type
     end
 
     def self.struct_iso8601_time(struct)

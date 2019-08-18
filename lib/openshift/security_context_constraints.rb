@@ -6,14 +6,7 @@ module BushSlicer
     RESOURCE = 'securitycontextconstraints'
 
     def update_from_api_object(hash)
-      m = hash["metadata"]
-
-      unless hash["kind"] == shortclass
-        raise "hash not from a #{shortclass}: #{hash["kind"]}"
-      end
-      unless name == m["name"]
-        raise "hash from a different #{shortclass}: #{name} vs #{m["name"]}"
-      end
+      super
 
       props[:role_ref] = hash["roleRef"]
       props[:subjects] = hash["subjects"]

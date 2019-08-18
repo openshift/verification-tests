@@ -10,15 +10,6 @@ module BushSlicer
     def update_from_api_object(hash)
       super
 
-      m = hash["metadata"]
-
-      unless hash["kind"] == shortclass
-        raise "hash not from a #{shortclass}: #{hash["kind"]}"
-      end
-      unless name == m["name"]
-        raise "hash from a different #{shortclass}: #{name} vs #{m["name"]}"
-      end
-
       props[:role_ref] = hash["roleRef"]
       props[:subjects] = hash["subjects"]
       props[:user_names] = hash["userNames"]
