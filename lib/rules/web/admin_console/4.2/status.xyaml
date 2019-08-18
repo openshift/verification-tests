@@ -24,8 +24,6 @@ check_getting_started:
 check_dim_resource_list:
   elements:
   - selector:
-      xpath: //div[@class='co-disabled']//button[contains(.,'Create')]
-  - selector:
       xpath: //div[@class='co-disabled']//div[contains(.,'No <resource_singular>s Found')]
 check_user_starter_guide_message_when_no_projects:
   elements:
@@ -35,3 +33,9 @@ check_get_started_message_when_no_resources:
   elements:
   - selector:
       visible_text: !ruby/regexp /No Workloads Found/i
+check_message_and_doc_for_new_user:
+  elements:
+  - selector:
+      xpath: //p[contains(., 'To learn more, visit the OpenShift')]/a[contains(@href, 'docs.openshift.com/container-platform')]
+  - selector:
+      xpath: //a[contains(@href, 'mirror.openshift.com/pub/openshift-v4/clients/oc/4.2') and contains(., 'command-line tools')]
