@@ -6,9 +6,11 @@ require 'ssl'
 Given /^metering service has been installed successfully(?: using (ansible|shell script|OLM))?$/ do |method|
   ensure_admin_tagged
   namespace = "openshift-metering"  # set it as default
-  project(namespace)
+  step %Q/I switch to cluster admin pseudo user/
+  # NOTE: we need to change project context as admin
+  step %Q/I use the "#{namespace}" project/
   ### XXX: TODO until 4.2 is GAed,
-  if operator_group('metering_operators').exists?
+  if operator_group('metering-operators').exists?
     cb[:metering_resource_type] = 'meteringconfig'
   else
     cb[:metering_resource_type] = 'metering'
@@ -203,7 +205,7 @@ Given /^I enable route for#{OPT_QUOTED} metering service$/ do | metering_name |
   unless route('metering').exists?
     org_user = user
     ### XXX: TODO until 4.2 is GAed,
-    if operator_group('metering_operators').exists?
+    if operator_group('metering-operators').exists?
       cb[:metering_resource_type] = 'meteringconfig'
     else
       cb[:metering_resource_type] = 'metering'
@@ -326,8 +328,15 @@ When /^I perform the GET metering rest request with:$/ do | table |
   # first we need to expose reporting API route if not route is found
   step %Q/I enable route for metering service/ unless route('metering').exists?
   report_name = opts[:report_name]
+  opts[:api_version] ||= 'v2'
   url_path ||= opts[:custom_url]
-  url_path ||= "/api/v1/reports/get?name=#{report_name}&namespace=#{cb.metering_namespace.name}&format=json"
+  # v2
+  if opts[:api_version] == 'v2'
+    url_path ||= "/api/v2/reports/#{cb.metering_namespace.name}/#{report_name}/table?format=json"
+  else
+    # v1
+    url_path ||= "/api/v1/reports/get?name=#{report_name}&namespace=#{cb.metering_namespace.name}&format=json"
+  end
 
   report_query_url = route.dns + url_path
   @result = BushSlicer::Http.request(url: report_query_url, **https_opts, method: 'GET')
