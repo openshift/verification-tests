@@ -30,7 +30,7 @@ set_project_description:
 send_delete_string:
   elements:
   - selector:
-      xpath: //input[@class='form-control']
+      xpath: //input[contains(@class,'form-control')]
     type: input
     op: send_keys <resource_name>
 
