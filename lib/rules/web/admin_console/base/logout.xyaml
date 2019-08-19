@@ -1,7 +1,7 @@
 click_logout:
   elements:
   - selector:
-      xpath: //*[contains(@class, 'username')]
+      xpath: //nav[@data-test='user-dropdown']
     op: click
   - selector:
       visible_text: !ruby/regexp /Log.*out/

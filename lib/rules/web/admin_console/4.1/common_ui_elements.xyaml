@@ -88,6 +88,11 @@ click_add_more_button:
     selector:
       xpath: //*[contains(text(),'Add More')]
     op: click
+click_add_dropdown_button:
+  element:
+    selector:
+      xpath: //button//span[contains(text(),'Add')]
+    op: click
 click_annotation_link:
   elements:
   - selector:
