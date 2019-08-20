@@ -16,7 +16,7 @@ module BushSlicer
     end
 
     # return the generated name given a user provided name
-    def htpasswd(name: nil, user: nil, cached: true, quiet: false)
+    def generated_htpasswd_name(name: nil, user: nil, cached: true, quiet: false)
       htpasswds = self.htpasswds(user: user, cached: cached, quiet: quiet)
 
       res = htpasswds.select { |k| k.values.first  if k.keys.first == name}
