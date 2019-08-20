@@ -1,0 +1,40 @@
+create_route:
+  action: set_route_name
+  action: set_service_name
+  action: set_target_port
+  action:
+    if_param:
+      secure_route: "true"
+    ref: set_secure_route
+  action: click_create_button
+
+set_route_name:
+  element:
+    selector:
+      xpath: //input[@id='name']
+    op: send_keys <route_name>
+    type: input
+set_service_name:
+  params:
+    dropdown_field: Service
+    dropdown_item: <service_name>
+  action: choose_dropdown_item
+set_target_port:
+  params:
+    dropdown_field: Target Port
+    dropdown_item: <target_port>
+  action: choose_dropdown_item
+set_secure_route:
+  action: uncheck_checkbox
+  action: set_tls_termination
+  action: set_insecure_traffic
+set_tls_termination:
+  params:
+    dropdown_field: TLS Termination
+    dropdown_item: <tls_termination_type>
+  action: choose_dropdown_item
+set_insecure_traffic:
+  params:
+    dropdown_field: Insecure Traffic
+    dropdown_item: <insecure_traffic_type>
+  action: choose_dropdown_item
