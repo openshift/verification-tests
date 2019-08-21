@@ -375,6 +375,7 @@ end
 # Generate default route
 Given /^I enable image-registry default route$/ do
   ensure_admin_tagged
+  ensure_destructive_tagged
   step 'I run the :patch admin command with:', table(%{
       | resource      | configs.imageregistry.operator.openshift.io |
       | resource_name | cluster                                     |
@@ -385,8 +386,14 @@ Given /^I enable image-registry default route$/ do
 end
 
 Given /^default image registry route is stored in the#{OPT_SYM} clipboard$/ do |cb_name| 
+  ensure_admin_tagged
   org_proj_name = project(generate: false).name rescue nil
   cb_name ||= :registry_route
   cb[cb_name] = route('default-route', service('default-route',project('openshift-image-registry'))).dns(by: admin)
   project(org_proj_name) if org_proj_name
+end
+
+Given /^current generation number of#{OPT_QUOTED} deployment is stored into#{OPT_SYM} clipboard$/ do |name, cb_name|
+  cb_name ||= :generation_number
+  cb[cb_name] = deployment(name).generation_number(user: user, cached: false)
 end
