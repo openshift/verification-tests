@@ -52,5 +52,10 @@ module BushSlicer
     def collision_count(user: nil, cached: true, quiet: false)
       raw_resource(user: user, cached: true, quiet: quiet).dig('status', 'collisionCount')
     end
+
+    def generation_number(user: nil, cached: true, quiet: false)
+      raw_resource(user: user, cached: cached, quiet: quiet).dig('metadata', 'generation')
+    end
+
   end
 end

@@ -387,7 +387,6 @@ end
 
 Given /^default image registry route is stored in the#{OPT_SYM} clipboard$/ do |cb_name| 
   ensure_admin_tagged
-  ensure_destructive_tagged
   org_proj_name = project(generate: false).name rescue nil
   cb_name ||= :registry_route
   cb[cb_name] = route('default-route', service('default-route',project('openshift-image-registry'))).dns(by: admin)
@@ -395,7 +394,6 @@ Given /^default image registry route is stored in the#{OPT_SYM} clipboard$/ do |
 end
 
 Given /^current generation number of#{OPT_QUOTED} deployment is stored into#{OPT_SYM} clipboard$/ do |name, cb_name|
-  ensure_admin_tagged
   cb_name ||= :generation_number
   cb[cb_name] = deployment(name).generation_number(user: user, cached: false)
 end
