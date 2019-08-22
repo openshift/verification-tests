@@ -75,8 +75,8 @@ module BushSlicer
 
     def is_worker?(user: nil, cached: true, quiet: false)
       rr = raw_resource(user: user, cached: cached, quiet: quiet)
-      current_config = rr.dig('metadata', 'annotations', 'machineconfiguration.openshift.io/currentConfig')
-      current_config.start_with? 'rendered-worker'
+      res = rr.dig('metadata', 'labels', 'node-role.kubernetes.io/worker')
+      res.nil? ? false : true
     end
 
     def ready?(user: nil, cached: true, quiet: false)

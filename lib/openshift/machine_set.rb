@@ -2,7 +2,7 @@ require 'openshift/cluster_resource'
 
 module BushSlicer
   # represents MachineSet
-  class MachineSet < ClusterResource
-    RESOURCE = 'machineset'
+  class MachineSet < ProjectResource
+    RESOURCE = 'machinesets'
   end
 end
