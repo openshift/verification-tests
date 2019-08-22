@@ -141,7 +141,7 @@ module BushSlicer
     alias scc security_context_constraints
     alias kubeapiserver kube_a_p_i_server
     alias openshiftapiserver open_shift_a_p_i_server
-    alias configsamplesoperator config_samples_operator
+    alias samplesoperator config_samples_operator_openshift_io
 
     # @note call like `user(0)` or simply `user` for current user
     def user(num=nil, switch: true)
@@ -373,7 +373,8 @@ module BushSlicer
           rs: "replicasets",
           scc: "securitycontextconstraints",
           svc: "service",
-          sc: "storageclass"
+          sc: "storageclass",
+          samplesoperator: "configs.samples.operator.openshift.io"
         }
         @shorthands.merge!(RESOURCES.map {|clazz, snake_case| [snake_case, clazz::RESOURCE]}.to_h)
       end

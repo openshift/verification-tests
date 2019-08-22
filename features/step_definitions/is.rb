@@ -47,29 +47,19 @@ Given /^the(?: "([^"]*)")? image stream tag was created$/ do |istag_name|
   end
 end
 
-Given /^the #{QUOTED} #{QUOTED} CRD was recreated after deleted$/ do |crd_name, crd_type|
+Given /^samplesoperator CRD was recreated after deleted$/ do
   ensure_admin_tagged
   ensure_destructive_tagged
-  _user = admin
 
-  @result = admin.cli_exec(:get, resource: crd_type, resource_name: crd_name, o: 'yaml')
-  ts1 = @result[:parsed]['metadata']['creationTimestamp']
+  org_created = samplesoperator(cluster).created_at
+
+  step %Q/admin ensures "cluster" samplesoperator is deleted/
+
+  step %Q/admin waits for the "cluster" samplesoperator to appear up to 120 seconds/
+
+  new_created = samplesoperator(cluster).created_at
   
-#  success = wait_for(300) { 
-#    @result = admin.cli_exec(:delete, object_type: crd_type, object_name_or_id: crd_name)
-#  }
-#  unless success
-#    raise "The crd #{crd_type} can't be deleted."
-#  end
-  step %Q/admin ensures "#{crd_name}" #{crd_type} is deleted/
-
-  step %Q/admin waits for the "#{crd_name}" #{crd_type} to appear/
-
-#  @result = custom_resource_definition(crd_type).wait_to_appear(_user, 60)
-  @result = admin.cli_exec(:get, resource: crd_type, resource_name: crd_name, o: 'yaml')
-  ts2 = @result[:parsed]['metadata']['creationTimestamp']
-  
-  unless compare_str_time(ts1, ts2) > 0
-    raise "The crd #{crd_type} doesn't be recreated. "
+  unless compare_str_time(org_created, new_created) > 0
+    raise "The samplesoperator crd doesn't be recreated. "
   end
 end
