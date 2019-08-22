@@ -17,4 +17,4 @@ elif ! is_ruby_proper_version; then
   echo "Ruby not proper version, see tool/common.sh#is_ruby_proper_version"
 fi
 
-"$TOOLS_HOME"/case_id_splitter.rb file-line $cases | xargs -d '\n' $cucumber_command
+/usr/bin/scl enable rh-git29 rh-ror50 -- "$TOOLS_HOME"/case_id_splitter.rb file-line $cases | xargs -d '\n' $cucumber_command

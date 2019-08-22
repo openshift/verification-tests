@@ -11,6 +11,11 @@ function setup_git()
         git config --global user.email "$USER@redhat.com"
 }
 
+function is_ruby_proper_version()
+{
+    ruby -e 'exit Gem::Version.new("2.3") <= Gem::Version.new(RUBY_VERSION)'
+}
+
 function install_rvm_if_ruby_is_outdated()
 {
     if ! ruby -e 'exit Gem::Version.new("2.3") <= Gem::Version.new(RUBY_VERSION)' ; then
