@@ -299,7 +299,7 @@ module BushSlicer
     def cluster_resource(clazz, name = nil, env = nil, switch: nil)
       env ||= self.env
 
-      varname = "@#{clazz::RESOURCE}"
+      varname = "@#{clazz::RESOURCE}".tr(".","_")
       clazzname = clazz.shortclass
       var = instance_variable_get(varname) ||
               instance_variable_set(varname, [])
