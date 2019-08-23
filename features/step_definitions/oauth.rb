@@ -21,7 +21,7 @@ end
 # extract the secret given a htpasswd spec name
 Given /^the secret for #{QUOTED} htpasswd is stored in the#{OPT_SYM} clipboard$/ do |name, cb_name|
   cb_name ||= :htpasswd_secret
-  generated_htpasswd_name = o_auth('cluster').generated_htpasswd_name(name: name)
-  step %Q/I use the "openshift-config" project/
+  project('openshift-config')
+  generated_htpasswd_name = o_auth('cluster').htpasswds[name]
   cb[cb_name] = secret(generated_htpasswd_name).value_of('htpasswd')
 end
