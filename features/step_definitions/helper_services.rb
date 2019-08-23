@@ -718,6 +718,9 @@ end
 # two steps, 1. create clusterautoscaler, follow by machineautoscaler
 # example of machine auto-scaler https://github.com/openshift-qe/output_references/blob/master/autoscale/machine-autoscaler.yaml
 Given /^I enable autoscaling for my cluster$/ do
+  ensure_admin_tagged
+  ensure_destructive_tagged
+
   base_template_hash = {
     "apiVersion" => "autoscaling.openshift.io/v1beta1",
     "kind" => "MachineAutoscaler",

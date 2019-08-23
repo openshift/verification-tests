@@ -13,5 +13,3 @@ Feature: test nodes relates steps
     Then the expression should be true> cb.labels_after['testme'] == 'go'
     Then the expression should be true> project.labels.nil?
 
-  Scenario: setup autoscaling
-    Given I enable autoscaling for my cluster
