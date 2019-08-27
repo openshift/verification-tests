@@ -51,7 +51,7 @@ clear_input_value:
 set_input_value:
   element:
     selector:
-      xpath: //input[contains(@id,'<input_field_id>')]
+      xpath: //input[@id='<input_field_id>']
     op: send_keys <input_value>
     type: input
 check_row_filter_on_page:
@@ -129,6 +129,10 @@ click_one_item:
 choose_dropdown_item:
   action: click_dropdown_field
   action: click_one_item
+wait_form_loaded:
+  element:
+    selector:
+      css: form
 ## -------- check resource key and values pairs ------
 check_resource_details:
   action:
