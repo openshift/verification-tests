@@ -15,7 +15,8 @@ module BushSlicer
     #}
     def htpasswds(user: nil, cached: true, quiet: false)
       idps = raw_resource(user: user, cached: cached, quiet: quiet).dig('spec', 'identityProviders')
-      passwds = idps.map {|i| {i.dig('name') => i.dig('htpasswd', 'fileData', 'name')} if i['type'] == 'HTPasswd' }
+      # call .compact to remove `nil` compoents (type != 'HTPasswd')
+      passwds = idps.map {|i| {i.dig('name') => i.dig('htpasswd', 'fileData', 'name')} if i['type'] == 'HTPasswd' }.compact
       # covert array of hashes to just Hash
       passwds.inject(:merge)
     end
