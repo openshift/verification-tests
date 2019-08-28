@@ -1172,10 +1172,10 @@
     :confirm: --confirm
     :type: --type=<value>
     :sort_by: --sort-by=<value>
-:oadm_manage_node:
-  :cmd: oc adm manage-node <node_name>
-  :options:
-    :schedulable: --schedulable=<value>
+:oadm_cordon_node:
+  :cmd: oc adm cordon <node_name>
+:oadm_uncordon_node:
+  :cmd: oc adm uncordon <node_name>
 :oadm_manage_node_evacuate:
   :cmd: oc adm manage-node
   :options:
