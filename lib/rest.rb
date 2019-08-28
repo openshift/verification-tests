@@ -31,8 +31,9 @@ module BushSlicer
         opts = {}
 
         opts[:options] = {}
+        # TODO: refactor needed, no simple single API version since long
         opts[:options][:api_version] = user.rest_preferences[:api_version] ||
-                                          user.env.api_version
+                                          "v1"
         opts[:options][:accept] = "application/json"
         opts[:options][:content_type] = "application/json"
 

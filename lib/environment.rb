@@ -247,22 +247,24 @@ module BushSlicer
         return opts[:version], @major_version, @minor_version
       end
 
-      obtained = user.rest_request(:version)
-      if obtained[:request_opts][:url].include?("/version/openshift") &&
-          !obtained[:success]
+      raise "getting version of cluster as user not possible presently"
+
+      # obtained = user.rest_request(:version)
+      # if obtained[:request_opts][:url].include?("/version/openshift") &&
+      #     !obtained[:success]
         # seems like pre-3.3 version, lets hardcode to 3.2
         # After bug 1692670 fix, will recover hardcode to '3.2'.
-        obtained[:props] = {}
-        obtained[:props][:openshift] = "v4.0"
-        @major_version = obtained[:props][:major] = 4
-        @minor_version = obtained[:props][:minor] = 0
-      elsif obtained[:success]
-        @major_version = obtained[:props][:major].to_i
-        @minor_version = obtained[:props][:minor].to_i
-      else
-        raise "error getting version: #{obtained[:error].inspect}"
-      end
-      return obtained[:props][:openshift].sub(/^v/,""), @major_version, @minor_version
+      #   obtained[:props] = {}
+      #   obtained[:props][:openshift] = "v4.0"
+      #   @major_version = obtained[:props][:major] = 4
+      #   @minor_version = obtained[:props][:minor] = 0
+      # elsif obtained[:success]
+      #   @major_version = obtained[:props][:major].to_i
+      #   @minor_version = obtained[:props][:minor].to_i
+      # else
+      #   raise "error getting version: #{obtained[:error].inspect}"
+      # end
+      # return obtained[:props][:openshift].sub(/^v/,""), @major_version, @minor_version
     end
 
     # some rules and logic to compare given version to current environment
@@ -353,28 +355,30 @@ module BushSlicer
     end
 
     # get environment supported API paths
-    def api_paths
-      return @api_paths if @api_paths
-
-      opts = {:max_redirects=>0,
-              :url=>api_endpoint_url,
-              :method=>"GET"
-      }
-      res = Http.http_request(**opts)
-
-      unless res[:success]
-        raise "could not get API paths, see log"
-      end
-
-      return @api_paths = JSON.load(res[:response])["paths"]
-    end
+    # TODO: need to make this call authenticated,
+    #   see https://github.com/openshift/openshift-apiserver/pull/18
+    # def api_paths
+    #   return @api_paths if @api_paths
+    #
+    #   opts = {:max_redirects=>0,
+    #           :url=>api_endpoint_url,
+    #           :method=>"GET"
+    #   }
+    #   res = Http.http_request(**opts)
+    #
+    #   unless res[:success]
+    #     raise "could not get API paths, see log"
+    #   end
+    #
+    #   return @api_paths = JSON.load(res[:response])["paths"]
+    # end
 
     # get latest API version supported by server
-    def api_version
-      return @api_version if @api_version
-      idx = api_paths.rindex{|p| p.start_with?("/api/v")}
-      return @api_version = api_paths[idx][5..-1]
-    end
+    # def api_version
+    #   return @api_version if @api_version
+    #   idx = api_paths.rindex{|p| p.start_with?("/api/v")}
+    #   return @api_version = api_paths[idx][5..-1]
+    # end
 
     def nodes(user: admin, refresh: false)
       return @nodes if @nodes && !refresh
