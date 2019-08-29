@@ -23,13 +23,36 @@ module BushSlicer
       raw_resource(user: user, cached: cached, quiet: quiet).dig('status', 'visualization')
     end
 
+    private def collection_status_raw(user: nil, cached: true, quiet: false)
+      collection_raw(user: user, cached: cached, quiet: quiet)['logs']
+    end
+
+    private def rsyslog_status_raw(user: nil, cached: true, quiet: false)
+      collection_status_raw(user: user, cached: cached, quiet: quiet)['rsyslogStatus']
+    end
 
     private def fluentd_status_raw(user: nil, cached: true, quiet: false)
-      collection_raw(user: user, cached: cached, quiet: quiet).dig('logs', 'fluentdStatus')
+      collection_status_raw(user: user, cached: cached, quiet: quiet)['fluentdStatus']
     end
 
     private def curator_status_raw(user: nil, cached: true, quiet: false)
       self.curation(user: user, cached: cached, quiet: quiet)['curatorStatus']
+    end
+
+    private def rsyslog_pods(user: nil, cached: true, quiet: false)
+      rsyslog_status_raw(user: user, cached: cached, quiet: quiet)['pods']
+    end
+
+    private def rsyslog_ready_pods(user: nil, cached: true, quiet: false)
+      rsyslog_pods(user: user, cached: cached, quiet: quiet)['ready']
+    end
+
+    private def rsyslog_failed_pods(user: nil, cached: true, quiet: false)
+      rsyslog_pods(user: user, cached: cached, quiet: quiet)['failed']
+    end
+
+    private def rsyslog_notready_pods(user: nil, cached: true, quiet: false)
+      rsyslog_pods(user: user, cached: cached, quiet: quiet)['notReady']
     end
 
     private def fluentd_pods(user: nil, cached: true, quiet: false)
@@ -53,7 +76,8 @@ module BushSlicer
     end
 
     private def es_cluster_health(user: nil, cached: true, quiet: false)
-      es_status_raw(user: user, cached: cached, quiet: quiet).first['clusterHealth']
+      # es_status_raw(user: user, cached: cached, quiet: quiet).first['clusterHealth']
+      es_status_raw(user: user, cached: cached, quiet: quiet).first['cluster']['status']
     end
 
     private def es_pods(user: nil, cached: true, quiet: false)
@@ -69,9 +93,20 @@ module BushSlicer
     end
 
     # higher level methods
+    def rsyslog_ready?(user: nil, cached: true, quiet: false)
+      rsyslog_nodes = rsyslog_status_raw(user: user, cached: cached, quiet: quiet)['Nodes'].keys.sort
+      rsyslog_nodes == rsyslog_ready_pods && rsyslog_failed_pods.count == 0 && rsyslog_notready_pods.count == 0
+    end
+
     def fluentd_ready?(user: nil, cached: true, quiet: false)
       fluentd_nodes = fluentd_status_raw(user: user, cached: cached, quiet: quiet)['nodes'].keys.sort
       fluentd_nodes == fluentd_ready_pods && fluentd_failed_pods.count == 0 && fluentd_notready_pods.count == 0
+    end
+
+    def wait_until_rsyslog_is_ready(user: nil, quiet: false, timeout: 5*60)
+      wait_for(timeout) {
+        rsyslog_ready?(user: user, cached: false, quiet: quiet)
+      }
     end
 
     def wait_until_fluentd_is_ready(user: nil, quiet: false, timeout: 5*60)
