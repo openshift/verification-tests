@@ -171,5 +171,14 @@ Given /^cluster logging operator is ready$/ do
   step %Q/a pod becomes ready with labels:/, table(%{
     | name=cluster-logging-operator |
   })
+  step %Q/elasticsearch operator is ready/
+end
 
+Given /^elasticsearch operator is ready$/ do
+  ensure_admin_tagged
+  project("openshift-operators-redhat")
+
+  step %Q/a pod becomes ready with labels:/, table(%{
+    | name=elasticsearch-operator |
+  })
 end
