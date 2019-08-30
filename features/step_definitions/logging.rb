@@ -171,6 +171,7 @@ Given /^cluster logging operator is ready$/ do
   step %Q/a pod becomes ready with labels:/, table(%{
     | name=cluster-logging-operator |
   })
+  step %Q/elasticsearch operator is ready/
 end
 
 Given /^elasticsearch operator is ready$/ do
@@ -181,4 +182,3 @@ Given /^elasticsearch operator is ready$/ do
     | name=elasticsearch-operator |
   })
 end
-
