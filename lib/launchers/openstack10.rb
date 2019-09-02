@@ -768,10 +768,6 @@ module BushSlicer
     end
 
     def assign_ip_to_port(floatingip_id, port_id)
-      fips = get_floating_ips
-      unless fips.find { |fip| fip["id"] == floatingip_id }
-        raise "given floatingip_id #{floatingip_id} is not existed"
-      end
       request_url = self.os_network_url + "/v2.0/floatingips/#{floatingip_id}"
       method = "PUT"
       payload = {
