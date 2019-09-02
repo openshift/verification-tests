@@ -26,6 +26,8 @@ goto_one_build_page:
 # configmaps
 goto_configmaps_page:
   url: k8s/ns/<project_name>/configmaps
+goto_one_configmap_page:
+  url: k8s/ns/<project_name>/configmaps/<configmap_name>
 
 # cronjobs
 goto_cronjobs_page:
