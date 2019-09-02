@@ -715,6 +715,15 @@ module BushSlicer
       end
     end
     
+    def get_floating_ips()
+      res = self.rest_run(self.os_network_url + "/v2.0/floatingips", "GET", {}, self.os_token)
+      if res[:success]
+        return res.dig(:parsed, "floatingips")
+      else
+        raise "Could not get all existing floating ips\n#{res[:response]}"
+      end
+    end
+
     def allocate_floating_ip(network_name, reuse: true)
       network = floating_ip_networks.find { |n| n["name"] == network_name }
       unless network
@@ -722,12 +731,7 @@ module BushSlicer
       end
 
       if reuse
-        fipsres = self.rest_run(self.os_network_url + "/v2.0/floatingips", "GET", {}, self.os_token)
-        if fipsres[:success]
-          fips = fipsres.dig(:parsed, "floatingips")
-        else
-          raise "Could not get all existing floating ips\n#{fipsres[:response]}"
-        end  
+        fips = get_floating_ips()
         # filter condition is
         # 1, floating ip is not belong to given network_name and
         # 2, floating ip is not preserved
@@ -760,6 +764,23 @@ module BushSlicer
         return res.dig(:parsed, "floatingip")
       else
         raise "could not allocate new floating ip:\n#{res[:response]}"
+      end
+    end
+
+    def assign_ip_to_port(floatingip_id, port_id)
+      request_url = self.os_network_url + "/v2.0/floatingips/#{floatingip_id}"
+      method = "PUT"
+      payload = {
+        floatingip: {
+          port_id: port_id
+        }
+      }
+      res = self.rest_run(request_url, method, payload, self.os_token)
+      logger.debug(res[:response])
+      if res[:success]
+        return res.dig(:parsed, "floatingip")
+      else
+        raise "failed to set properties for floating ip:\n#{res[:response]}"
       end
     end
 
