@@ -46,9 +46,9 @@ end
 Given /^the env is using one of the listed network plugins:$/ do |table|
   ensure_admin_tagged
   plugin_list = table.raw.flatten
-  _admin = admin
+  #_admin = admin
 
-  @result = _admin.cli_exec(:get, resource: "clusternetwork", resource_name: "default", template: '{{.pluginName}}')
+  @result = admin.cli_exec(:get, resource: "clusternetwork", resource_name: "default", template: '{{.pluginName}}')
   if @result[:success] then
     plugin_name = @result[:response].split("-").last
     unless plugin_list.include? plugin_name
