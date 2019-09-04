@@ -1,5 +1,11 @@
 create_route:
   action: set_route_name
+  action:
+    if_param: route_hostname
+    ref: set_hostname
+  action: 
+    if_param: route_path
+    ref: set_route_path
   action: set_service_name
   action: set_target_port
   action:
@@ -9,11 +15,20 @@ create_route:
   action: click_create_button
 
 set_route_name:
-  element:
-    selector:
-      xpath: //input[@id='name']
-    op: send_keys <route_name>
-    type: input
+  params:
+    input_field_id: name
+    input_value: <route_name>
+  action: set_input_value
+set_hostname:
+  params:
+    input_field_id: hostname
+    input_value: <route_hostname>
+  action: set_input_value
+set_route_path:
+  params:
+    input_field_id: path
+    input_value: <route_path>
+  action: set_input_value
 set_service_name:
   params:
     dropdown_field: Service
@@ -28,6 +43,18 @@ set_secure_route:
   action: uncheck_checkbox
   action: set_tls_termination
   action: set_insecure_traffic
+  action:
+    if_param: certificate_path
+    ref: upload_certificate_file
+  action:
+    if_param: private_key_path
+    ref: upload_key_file
+  action:
+    if_param: ca_certificate_path
+    ref: upload_ca_certificate_file
+  action:
+    if_param: destination_ca_certificate
+    ref: upload_destination_ca_crt_file
 set_tls_termination:
   params:
     dropdown_field: TLS Termination
@@ -38,3 +65,31 @@ set_insecure_traffic:
     dropdown_field: Insecure Traffic
     dropdown_item: <insecure_traffic_type>
   action: choose_dropdown_item
+upload_certificate_file:
+  elements:
+  - selector:
+      xpath: //input[@aria-describedby="certificate-help"]/following-sibling::span[contains(.,"Browse…")]/input
+    visible: false
+    type: filefield
+    op: set <certificate_path>
+upload_key_file:
+  elements:
+  - selector:
+      xpath: //input[@aria-describedby="private-key-help"]/following-sibling::span[contains(.,"Browse…")]/input
+    visible: false
+    type: filefield
+    op: set <private_key_path>
+upload_ca_certificate_file:
+  elements:
+  - selector:
+      xpath: //input[@aria-describedby="ca-certificate-help"]/following-sibling::span[contains(.,"Browse…")]/input
+    visible: false
+    type: filefield
+    op: set <ca_certificate_path>
+upload_destination_ca_crt_file:
+  elements:
+  - selector:
+      xpath: //input[@aria-describedby="destination-ca-certificate-help"]/following-sibling::span[contains(.,"Browse…")]//input
+    visible: false
+    type: filefield
+    op: set <destination_ca_certificate>
