@@ -1,0 +1,51 @@
+check_list_heading_shown:
+  element:
+    selector:
+      xpath: //h2[@class='project-overview__group-heading' and text()='<heading>']
+check_list_item:
+  elements: 
+  - selector: &overview_item
+      xpath: //button[contains(@class,'co-resource-item__resource-name') and text()='<resource_name>']/ancestor::div[contains(@class,'project-overview__item--<resource_kind>')]
+check_pod_number:
+  element:
+    selector:
+      xpath: //dt[contains(text(),'Desired Count')]/following-sibling::dd[1]//button[starts-with(text(),'<pod_number>')]
+click_list_item:
+  element:
+    selector:
+      <<: *overview_item
+    op: click
+sidebar_is_loaded:
+  element:
+    selector:
+      css: .overview__sidebar
+click_sidebar_overview_tab:
+  element:
+    selector:
+      xpath: //div[contains(@class,'overview__sidebar')]//button[text()='Overview']
+    op: click
+click_sidebar_resources_tab:
+  element:
+    selector:
+      xpath: //div[contains(@class,'overview__sidebar')]//button[text()='Resources']
+    op: click
+check_dc_available_action_menus:
+  elements:
+  - selector:
+      xpath: //li//a[text()='Start Rollout']
+  - selector:
+      xpath: //li//a[text()='Pause Rollouts']      
+  - selector:
+      xpath: //li//a[text()='Edit Count']
+  - selector:
+      xpath: //li//a[text()='Add Storage']
+  - selector:
+      xpath: //li//a[text()='Edit Environment']
+  - selector:
+      xpath: //li//a[text()='Edit Labels']
+  - selector:
+      xpath: //li//a[text()='Edit Annotations']
+  - selector:
+      xpath: //li//a[text()='Edit Deployment Config']
+  - selector:
+      xpath: //li//a[text()='Delete Deployment Config']

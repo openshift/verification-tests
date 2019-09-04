@@ -9,7 +9,7 @@ click_resource_action_button:
 choose_item_from_list:
   elements:
   - selector:
-      xpath: //li//*[text()='<item>']
+      xpath: //li//*[@data-test-action='<item>']
     op: click
 click_resource_action_icon:
   elements:
