@@ -76,8 +76,12 @@ module BushSlicer
     end
 
     private def es_cluster_health(user: nil, cached: true, quiet: false)
-      # es_status_raw(user: user, cached: cached, quiet: quiet).first['clusterHealth']
-      es_status_raw(user: user, cached: cached, quiet: quiet).first['cluster']['status']
+      @result = es_status_raw(user: user, cached: cached, quiet: quiet).first['clusterHealth']
+      if @result
+        es_status_raw(user: user, cached: cached, quiet: quiet).first['clusterHealth']
+      else
+        es_status_raw(user: user, cached: cached, quiet: quiet).first['cluster']['status']
+      end
     end
 
     private def es_pods(user: nil, cached: true, quiet: false)
