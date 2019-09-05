@@ -1,3 +1,5 @@
+require 'openshift/flakes/related_object'
+
 module BushSlicer
   class ClusterOperator < ClusterResource
     RESOURCE = "clusteroperators"
@@ -23,8 +25,8 @@ module BushSlicer
     #     name: gp2
     #     resource: storageclasses
     def related_objects(user: nil, cached: true, quiet: false)
-      rr = raw_resource(user: user, cached: cached, quiet: quiet)
-      rr.dig('status', 'relatedObjects')
+      ro_raw = raw_resource(user: user, cached: cached, quiet: quiet).dig('status', 'relatedObjects')
+      ro_raw.map { |ro|  RelatedObject.new ro }
     end
 
     # @param filter_by [String] the hash key to filter by
