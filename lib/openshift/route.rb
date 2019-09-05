@@ -1,5 +1,6 @@
 require 'common'
 require 'openshift/project_resource'
+require 'openshift/flakes/route_spec'
 
 module BushSlicer
   # @note represents an OpenShift route to a service
@@ -114,5 +115,12 @@ module BushSlicer
       end
       return ready
     end
+
+    # @return a RouteSpec object instead of just a raw hash
+    def spec(user: nil, cached: true, quiet: false)
+      rr = raw_resource(user: user, cached: cached, quiet: quiet).dig("spec")
+      RouteSpec.new rr
+    end
+
   end
 end

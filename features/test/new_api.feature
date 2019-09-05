@@ -20,3 +20,9 @@ Feature: test new api methods
     Given I switch to cluster admin pseudo user
     And I use the "openshift-logging" project
     And I wait for clusterlogging to be functional in the project
+
+  @admin
+  Scenario: test new route apis
+    Given I switch to cluster admin pseudo user
+    And I use the "openshift-monitoring" project
+    And evaluation of `route('prometheus-k8s').spec.host` is stored in the clipboard
