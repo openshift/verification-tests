@@ -106,6 +106,23 @@ module BushSlicer
       return raw_resource(user: user, cached: cached, quiet: quiet).
         dig("spec", "host")
     end
+
+    def tls_insec_term_policy(by: nil, user: nil, cached: true, quiet: false)
+      return raw_resource(user: user, cached: cached, quiet: quiet)['spec'].dig("tls","insecureEdgeTerminationPolicy")
+    end
+
+    def tls_term_type(by: nil, user: nil, cached: true, quiet: false)
+      return raw_resource(user: user, cached: cached, quiet: quiet)['spec'].dig("tls","termination")
+    end
+
+    def host_path(by: nil, user: nil, cached: true, quiet: false)
+      return raw_resource(user: user, cached: cached, quiet: quiet)['spec'].dig("path")
+    end
+
+    def port_targetport(by: nil, user: nil, cached: true, quiet: false)
+      return raw_resource(user: user, cached: cached, quiet: quiet)['spec'].dig("port","targetPort")
+    end
+
     # check for ingress route only
     def ready?(user: nil, cached: false, quiet: false)
       status = raw_resource(user: user, cached: cached, quiet: quiet)['status']
