@@ -17,7 +17,7 @@ Feature: env.feature
     And the output should contain "DB_USER=test"
     And I delete all resources from the project
     When I run the :new_app client command with:
-      | app_repo | ruby:2.2~https://github.com/openshift/ruby-hello-world |
+      | app_repo | ruby:latest~https://github.com/openshift/ruby-hello-world |
       | env      | RACK_ENV=development                                   |
     Then the step should succeed
     Given a pod becomes ready with labels:

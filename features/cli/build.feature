@@ -185,11 +185,11 @@ Feature: build 'apps' with CLI
     Given I have a project
     When I run the :new_app client command with:
       | file | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/templates/tc517667/ruby22rhel7-template-sti.json |
-    Given the "ruby22-sample-build-1" build completes
+    Given the "ruby-sample-build-1" build completes
     When I run the :get client command with:
-      | resource | buildconfig |
-      | resource_name | ruby22-sample-build |
-      | o | yaml |
+      | resource      | buildconfig       |
+      | resource_name | ruby-sample-build |
+      | o             | yaml              |
     Then the output should match "xiuwangs2i-2$"
     And the output should not match "xiuwangs2i$"
     Given 1 pods become ready with labels:
@@ -208,8 +208,8 @@ Feature: build 'apps' with CLI
     Given I have a project
     When I run the :new_app client command with:
       | file | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/templates/tc517666/ruby22rhel7-template-sti.json |
-    Given the "ruby22-sample-build-1" build completes
-    When I get project build_config named "ruby22-sample-build" as YAML
+    Given the "ruby-sample-build-1" build completes
+    When I get project build_config named "ruby-sample-build" as YAML
     Then the output should contain "xiuwangs2i-2"
     Given 1 pods become ready with labels:
       | deploymentconfig=frontend |
@@ -291,17 +291,17 @@ Feature: build 'apps' with CLI
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/tc519256/testsecret2.json |
     Then the step should succeed
     When I run the :new_build client command with:
-      | image_stream | ruby:2.2 |
-      | app_repo | https://github.com/openshift-qe/build-secret.git |
-      | build_secret | /local/src/file:/destination/dir |
+      | image_stream | ruby:latest                                      |
+      | app_repo     | https://github.com/openshift-qe/build-secret.git |
+      | build_secret | /local/src/file:/destination/dir                 |
     Then the step should fail
     And the output should contain "must be valid secret"
     When I run the :new_build client command with:
-      | image_stream | ruby:2.2 |
+      | image_stream | ruby:latest                                  |
       | app_repo | https://github.com/openshift-qe/build-secret.git |
-      | strategy | docker |
-      | build_secret | testsecret1:/tmp/mysecret |
-      | build_secret | testsecret2 |
+      | strategy | docker                                           |
+      | build_secret | testsecret1:/tmp/mysecret                    |
+      | build_secret | testsecret2                                  |
     Then the step should fail
     And the output should contain "must be a relative path"
 
@@ -311,8 +311,8 @@ Feature: build 'apps' with CLI
     Given I have a project
     When I run the :new_app client command with:
       | file | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/templates/tc517668/ruby22rhel7-template-docker.json |
-    Given the "ruby22-sample-build-1" build completes
-    When I get project build_config named "ruby22-sample-build" as YAML
+    Given the "ruby-sample-build-1" build completes
+    When I get project build_config named "ruby-sample-build" as YAML
     Then the output should contain "xiuwangtest"
     Given 2 pods become ready with labels:
       | deployment=frontend-1 |
@@ -321,6 +321,7 @@ Feature: build 'apps' with CLI
     Then the step should succeed
 
   # @author yantan@redhat.com
+  @admin
   Scenario Outline: Do sti/custom build with no inputs in buildconfig
     Given I have a project
     When I run the :create client command with:
