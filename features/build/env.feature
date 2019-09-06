@@ -18,7 +18,7 @@ Feature: env.feature
     And I delete all resources from the project
     When I run the :new_app client command with:
       | app_repo | ruby:latest~https://github.com/openshift/ruby-hello-world |
-      | env      | RACK_ENV=development                                   |
+      | env      | RACK_ENV=development                                      |
     Then the step should succeed
     Given a pod becomes ready with labels:
       |deployment=ruby-hello-world-1|
