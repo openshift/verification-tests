@@ -1,0 +1,4 @@
+check_istag_warning_info:
+  element:
+    selector: 
+      xpath: //div[span[contains(., '<istag_name>')]]/following-sibling::span[contains(., '<info>')]

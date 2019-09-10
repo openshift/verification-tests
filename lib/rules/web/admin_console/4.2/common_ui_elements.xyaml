@@ -37,6 +37,10 @@ check_button_enabled:
   element:
     selector:
       xpath: //button[contains(., '<button_text>') and not(@disabled)]
+check_text_not_a_link:
+  element:
+    selector:
+      xpath: //*[contains(@class,'co-resource-item__resource-name') and text()='<text>' and not(@href)]
 click_tab:
   elements:
   - selector:
@@ -106,8 +110,13 @@ uncheck_checkbox:
     op: click
 check_link_and_text:
   element:
-    selector:
+    selector: &text_link
       xpath: //a[contains(text(),'<text>') and @href='<link_url>']
+click_link_with_text:
+  element:
+    selector:
+      <<: *text_link
+    op: click
 click_secondary_menu:
   elements:
   - selector:
