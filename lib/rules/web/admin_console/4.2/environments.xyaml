@@ -3,6 +3,11 @@ click_add_value_from_configmap_or_secret:
     selector:
       xpath: //*[contains(normalize-space(text()),'Add from Config Map or Secret')]
     op: click
+check_env_editor_loaded:
+  element:
+    selector:
+      css: .pairs-list__row
+    timeout: 30
 add_env_vars:
   action: add_env_var_name
   action:
@@ -63,7 +68,7 @@ update_pair_source:
 update_pair_key:
   elements:
   - selector:
-      xpath: //input[@value='<env_var_name>']/ancestor::div[contains(@class,'row pairs-list__row')]//div[@class='value-from'][2]//button
+      xpath: //input[@value='<env_var_name>']/ancestor::div[contains(@class,'row pairs-list__row')]//div[contains(@class,'value-from--key')][last()]//button
     op: click
   - selector:
       xpath: //a[contains(.,'<env_source_key>')]

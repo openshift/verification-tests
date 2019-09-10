@@ -32,10 +32,6 @@ check_user_starter_guide_message_when_no_projects:
 check_get_started_message_when_no_resources:
   elements:
   - selector:
-      css: div.loading-box.loading-box__loaded
-  - selector:
-      visible_text: !ruby/regexp /No Workloads Found/i
-  - selector:
       xpath: //a[.='Import YAML']
   - selector:
       xpath: //a[.='add other content']

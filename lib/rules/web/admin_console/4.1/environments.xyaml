@@ -3,6 +3,11 @@ click_add_value_from_configmap_or_secret:
     selector:
       xpath: //*[contains(normalize-space(text()),'Add from Config Map or Secret')]
     op: click
+check_env_editor_loaded:
+  element:
+    selector:
+      css: .pairs-list__row
+    timeout: 30
 add_env_vars:
   action: add_env_var_name
   action:
