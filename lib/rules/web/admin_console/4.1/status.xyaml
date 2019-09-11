@@ -34,10 +34,6 @@ check_user_starter_guide_message_when_no_projects:
 check_get_started_message_when_no_resources:
   elements:
   - selector:
-      css: div.loading-box.loading-box__loaded
-  - selector:
-      visible_text: !ruby/regexp /Add content to your project/i
-  - selector:
       xpath: //a[.='Browse Catalog']
   - selector:
       xpath: //a[.='Deploy Image']
