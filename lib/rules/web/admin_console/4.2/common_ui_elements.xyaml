@@ -65,7 +65,11 @@ check_resources_title_on_page:
 check_resource_name_and_icon:
   elements:
   - selector:
-      xpath: //div[contains(@class,'co-m-pane__name')][/*[contains(.,'<icon_text>')] and /*[contains(., '<resource_name>')]]
+      css: .co-resource-item>.co-m-resource-icon[title='<icon_text>']+.co-resource-item__resource-name[href*='<resource_name>']
+check_resource_link:
+  element:
+    selector:
+      css: a[href$='<resource_link>']
 check_page_contains:
   element:
     selector:
@@ -211,6 +215,14 @@ check_resource_details_key_and_value:
   element: &key_value
     selector:
       xpath: //dt[contains(text(),'<key>')]/following-sibling::dd[1][contains(.,'<value>')]
+check_key_and_resource_link:
+  element:
+    selector:
+      xpath: //dt[contains(text(),'<key>')]/following-sibling::dd[1]//a[contains(@href,'<resource_link>')]
+check_key_and_action_link:
+  element:
+    selector:
+      xpath: //dt[contains(text(),'<key>')]/following-sibling::dd[1]//button
 click_value_on_resource_detail:
   element:
     <<: *key_value
