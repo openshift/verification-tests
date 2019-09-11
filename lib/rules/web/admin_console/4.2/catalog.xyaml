@@ -1,0 +1,26 @@
+create_app_from_imagestream:
+  action: goto_create_app_from_imagestream_page
+  action: click_try_sample
+  action:
+    if_param: label
+    ref: set_label
+  action: click_create_button
+click_try_sample:
+  params:
+    button_text: Try Sample
+  action: click_button
+set_label:
+  params:
+    button_text: Labels
+  action: click_button
+  element:
+    selector:
+      xpath: //h2[contains(., 'Labels')]/following-sibling::div//input
+    op: send_keys <label>
+create_app_from_deploy_image:
+  action: goto_deploy_image_page
+  action: search_image
+  action:
+    if_param: label
+    ref: set_label
+  action: click_create_button
