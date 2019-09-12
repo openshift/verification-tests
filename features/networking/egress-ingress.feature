@@ -109,21 +109,18 @@ Feature: Egress-ingress related networking scenarios
     And evaluation of `project.name` is stored in the :proj1 clipboard
  
     # Create egress policy in project-1
-    And evaluation of `BushSlicer::Common::Net.dns_lookup("yahoo.com")` is stored in the :yahoo_ip clipboard
-    When I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/egress-ingress/dns-egresspolicy1.json"
-    And I replace lines in "dns-egresspolicy1.json":
-      | 98.138.0.0/16 | <%= cb.yahoo_ip %>/32 |
     And I run the :create admin command with:
-      | f | dns-egresspolicy1.json |
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/egress-ingress/dns-egresspolicy1.json |
       | n | <%= cb.proj1 %> |
     Then the step should succeed
  
     # Check egress rule added in openflow
     Given I select a random node's host
-    When I run the ovs commands on the host:
-       | ovs-ofctl dump-flows br0 -O openflow13 \| grep <%= cb.yahoo_ip %> |
-    And the output should contain 1 times:
-      | actions=drop |
+    And evaluation of `node.name` is stored in the :node_name clipboard
+    When I run command on the "<%= cb.node_name %>" node's sdn pod:
+      | ovs-ofctl| -O | openflow13 | dump-flows | br0 |
+    And the output should contain:
+      | nw_dst=98.138.0.0/16 actions=drop |
 
     # Check egress policy can be deleted
     When I run the :delete admin command with:
@@ -134,10 +131,12 @@ Feature: Egress-ingress related networking scenarios
 
     # Check egress rule deleted in openflow
     Given I select a random node's host
-    When I run the ovs commands on the host:
-      | ovs-ofctl dump-flows br0 -O openflow13 \| grep <%= cb.yahoo_ip %> |
+    And evaluation of `node.name` is stored in the :node_name clipboard
+    When I run command on the "<%= cb.node_name %>" node's sdn pod:
+      | ovs-ofctl| -O | openflow13 | dump-flows | br0 |
     And the output should not contain:
-      | actions=drop |
+      | nw_dst=98.138.0.0/16 actions=drop |
+
 
   # @author weliang@redhat.com
   # @case_id OCP-13509
@@ -147,15 +146,12 @@ Feature: Egress-ingress related networking scenarios
     Given I have a project  
     Given I have a pod-for-ping in the project
     And evaluation of `project.name` is stored in the :proj1 clipboard
-    And evaluation of `BushSlicer::Common::Net.dns_lookup("www.yahoo.com", multi: true)` is stored in the :yahoo clipboard
+    And evaluation of `BushSlicer::Common::Net.dns_lookup("yahoo.com", multi: true)` is stored in the :yahoo clipboard
     Then the expression should be true> cb.yahoo.size >= 3
 
     # Create egress policy 
-    When I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/egress-ingress/dns-egresspolicy2.json"
-    And I replace lines in "dns-egresspolicy2.json":
-      | yahoo.com | www.yahoo.com |
     When I run the :create admin command with:
-      | f | dns-egresspolicy2.json |
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/egress-ingress/dns-egresspolicy2.json|
       | n | <%= cb.proj1 %> |
     Then the step should succeed
  
@@ -233,17 +229,19 @@ Feature: Egress-ingress related networking scenarios
     Given I have a pod-for-ping in the project
     And evaluation of `pod('hello-pod').node_ip(user: user)` is stored in the :hostip clipboard
     And evaluation of `project.name` is stored in the :proj1 clipboard
+    And evaluation of `pod.name` is stored in the :pod1 clipboard
 
     # Check egress rule added in openflow
-    Given I use the "<%= pod.node_name(user: user) %>" node
-    When I run the ovs commands on the host:
-      | ovs-ofctl dump-flows br0 -O openflow13 \| grep tcp \| grep tp_dst=53 |
-    And the output should contain 1 times:
-      | nw_dst=<%= cb.hostip %> |
-    When I run the ovs commands on the host:
-      | ovs-ofctl dump-flows br0 -O openflow13 \| grep udp \| grep tp_dst=53 |
-    And the output should contain 1 times:
-      | nw_dst=<%= cb.hostip %> |
+    Given I select a random node's host
+    And evaluation of `node.name` is stored in the :node_name clipboard
+    And evaluation of `host_subnet(cb.node_name).ip` is stored in the :hostip clipboard
+
+    When I run command on the "<%= cb.node_name %>" node's sdn pod:
+      | ovs-ofctl| -O | openflow13 | dump-flows | br0 |
+    And the output should contain:
+      |tcp,nw_dst=<%= cb.hostip %>,tp_dst=53|
+      |udp,nw_dst=<%= cb.hostip %>,tp_dst=53|
+
 
     # Create egress policy to allow www.baidu.com
     When I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/egress-ingress/dns-egresspolicy1.json"
@@ -257,13 +255,14 @@ Feature: Egress-ingress related networking scenarios
 
     Given I wait up to 10 seconds for the steps to pass:
     """
-    When I run the ovs commands on the host:
-      | ovs-ofctl dump-flows br0 -O openflow13 \| grep table=101 |
+    When I run command on the "<%= cb.node_name %>" node's sdn pod:
+      | ovs-ofctl| -O | openflow13 | dump-flows | br0 | table=101 |
     And the output should contain:
       | actions=drop |
     """
     # Check ping from pod
-    When I execute on the pod:
+    Given I use the "<%= cb.proj1 %>" project
+    When I execute on the "<%= cb.pod1 %>" pod:
       | ping | -c2 | -W2 | www.cisco.com |
     Then the step should fail
     When I execute on the pod:
