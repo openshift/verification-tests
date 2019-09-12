@@ -22,13 +22,11 @@ confirm_cancel_rollout:
   params:
     button_text: Yes, cancel
   action: click_button
-deploy_app_from_image:
-  action: goto_deploy_image_page
-  action: search_image
 search_image:
-  elements:
-  - selector:
-      id: form-input-search-searchTerm-field
-    type: input
-    op: send_keys <image_name>
+  params:
+    clear_field_id: form-input-search-searchTerm-field
+    input_field_id: form-input-search-searchTerm-field
+    input_value: <search_content>
+  action: clear_input_value
+  action: set_input_value
   action: click_search_button
