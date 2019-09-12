@@ -79,6 +79,12 @@ module BushSlicer
       return ! res.nil?
     end
 
+    def is_master?(user: nil, cached: true, quiet: false)
+      rr = raw_resource(user: user, cached: cached, quiet: quiet)
+      res = rr.dig('metadata', 'labels', 'node-role.kubernetes.io/master')
+      return ! res.nil?
+    end
+
     def ready?(user: nil, cached: true, quiet: false)
       status = get_cached_prop(prop: :status, user:user, cached: cached, quiet: quiet)
       ready = status['conditions'].any? do |con|
