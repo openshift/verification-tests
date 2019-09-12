@@ -89,3 +89,9 @@ goto_routes_page:
   url: k8s/ns/<project_name>/routes
 goto_one_route_page:
   url: k8s/ns/<project_name>/routes/<route_name>
+
+#imagestream
+goto_imagestreams_page:
+  url: k8s/ns/<project_name>/imagestreams
+goto_one_imagestream_page:
+  url: k8s/ns/<project_name>/imagestreams/<imagestream_name>
