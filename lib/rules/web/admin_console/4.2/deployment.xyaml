@@ -22,7 +22,7 @@ confirm_cancel_rollout:
   params:
     button_text: Yes, cancel
   action: click_button
-deploy_image_from_image_registry:
+deploy_app_from_image:
   action: goto_deploy_image_page
   action: search_image
 search_image:
