@@ -207,7 +207,7 @@ end
 # B is the situation when the expected json != the patch json, though the patch succeeds.
 # E.g. if the resource has ONLY ONE label and we remove it, the "labels" key will be removed together, so
 # the expected json should be {"metadata":{"labels":null}}.
-Given /^(?:(as admin) )?I successfully patch resource "(.*)\/(.*)" with:$/ do |as_admin, resource_type, resource_name, table|
+Given /^(?:(as admin) )?I successfully#{OPT_WORD} patch resource "(.*)\/(.*)" with:$/ do |as_admin, patch_type, resource_type, resource_name, table|
   if table.raw[1]
     hash = table.rows_hash
     patch_json = hash["patch"]
@@ -223,7 +223,7 @@ Given /^(?:(as admin) )?I successfully patch resource "(.*)\/(.*)" with:$/ do |a
     _user = admin
   end
 
-  opts = {resource: resource_type, resource_name: resource_name, p: patch_json}
+  opts = {resource: resource_type, resource_name: resource_name, p: patch_json, type: patch_type}
   res = _user.cli_exec(:patch, **opts)
   unless res[:success]
     logger.error(res[:response])
