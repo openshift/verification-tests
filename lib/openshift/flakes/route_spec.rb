@@ -47,15 +47,15 @@ module BushSlicer
       return struct.dig('tls', 'destinationCACertificate')
     end
 
-    def to_kind
+    def target_kind
       return struct.dig('to', 'kind')
     end
 
-    def to_name
+    def target_name
       return struct.dig('to', 'name')
     end
 
-    def to_weight
+    def target_weight
       return struct.dig('to', 'weight')
     end
 
