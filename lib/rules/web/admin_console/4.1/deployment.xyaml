@@ -18,4 +18,13 @@ click_initcontainer_in_detail_page:
     selector:
       xpath: //h2[contains(.,'Init Containers')]/..//span[contains(.,'<container_name>')]
     op: click
+search_image:
+  params:
+    clear_field_id: image-name
+    input_field_id: image-name
+    input_value: <search_content>
+    button_text: Find
+  action: clear_input_value
+  action: set_input_value
+  action: click_button
 
