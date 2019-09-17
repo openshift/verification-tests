@@ -30,3 +30,18 @@ search_image:
   action: clear_input_value
   action: set_input_value
   action: click_search_button
+search_nonexisted_image_and_check_message:
+  params:
+    search_content: non-existed
+    content: Could not load image metadata
+  action: search_image
+  action: check_page_contains
+search_and_deploy_image:
+  action: search_image
+  action: click_create_button
+delete_dc_with_dependency_objects:
+  params:
+    item: Delete Deployment Config
+    button_text: Delete
+  action: click_one_dropdown_action
+  action: click_button
