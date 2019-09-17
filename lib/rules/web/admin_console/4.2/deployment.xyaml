@@ -39,14 +39,9 @@ search_nonexisted_image_and_check_message:
 search_and_deploy_image:
   action: search_image
   action: click_create_button
-delete_dc:
-  action: click_one_dropdown_action
-  params:
-    button_text: No Deployment Configs Found
-  action: check_page_contains
 delete_dc_with_dependency_objects:
-  action: click_one_dropdown_action
   params:
+    item: Delete Deployment Config
     button_text: Delete
+  action: click_one_dropdown_action
   action: click_button
-
