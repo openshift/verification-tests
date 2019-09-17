@@ -5,11 +5,9 @@
 Given /^logging service has been installed successfully$/ do
   ensure_destructive_tagged
   crd_yaml = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/example.yaml"
-  step %Q/logging operators are installed with:/, table(%{
-    | keep_installation | true        |
-  })
+  step %Q/logging operators are installed successfully/
   step %Q/I create clusterlogging instance with:/, table(%{
-    | remove_logging_pods | false       |
+    | remove_logging_pods | true        |
     | crd_yaml            | #{crd_yaml} |
     | log_collector       | fluentd     |
   })
@@ -25,83 +23,94 @@ end
 # :sub_logging_yaml  -- http url for logging subscription yaml
 # :sub_elasticsearch_yaml -- http url for elastic search yaml
 #
-Given /^logging operators are installed with:$/ do | table |
+Given /^logging operators are installed successfully$/ do
   ensure_destructive_tagged
-  opts = opts_array_to_hash(table.raw)
   step %Q/I switch to cluster admin pseudo user/
-  step %Q/I use the "openshift-marketplace" project/
-  # first check packagemanifest exists for cluster-logging and elasticsearch-operator
-  required_packagemanifests = ['cluster-logging', 'elasticsearch-operator']
-  required_packagemanifests.each do |pm_name|
-    raise "Required packagemanifest #{pm_name} no found!" unless package_manifest(pm_name).exists?
-  end
+  step %Q/evaluation of `cluster_version('version').version` is stored in the :ocp_cluster_version clipboard/
+
   # Create namespace
   unless project('openshift-logging').exists?
-    # oc create -f https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/OCP-21311/namespace.yaml
     namespace_yaml = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/deploy_clo_via_olm/01_clo_ns.yaml"
     @result = admin.cli_exec(:create, f: namespace_yaml)
     raise "Error creating namespace" unless @result[:success]
   end
+
+  step %Q/I use the "openshift-logging" project/
+  unless deployment('cluster-logging-operator').exists?
+    unless operator_group('openshift-logging').exists?
+      clo_operator_group_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/deploy_clo_via_olm/02_clo_og.yaml"
+      @result = admin.cli_exec(:create, f: clo_operator_group_yaml)
+      raise "Error creating operatorgroup" unless @result[:success]
+    end
+
+    unless subscription('cluster-logging').exists?
+      step %Q/I use the "openshift-marketplace" project/
+      # first check packagemanifest exists for cluster-logging
+      raise "Required packagemanifest 'cluster-logging' no found!" unless package_manifest('cluster-logging').exists?
+
+      if cb.ocp_cluster_version.include? "4.1."
+        # create catalogsourceconfig and subscription for cluster-logging-operator
+        catsrc_logging_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/deploy_clo_via_olm/4.1/03_clo_csc.yaml"
+        @result = admin.cli_exec(:create, f: catsrc_logging_yaml)
+        raise "Error creating catalogsourceconfig for cluster_logging" unless @result[:success]
+        sub_logging_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/deploy_clo_via_olm/4.1/04_clo_sub.yaml"
+        @result = admin.cli_exec(:create, f: sub_logging_yaml)
+        raise "Error creating subscription for cluster_logging" unless @result[:success]
+      else
+        # create subscription in `openshift-logging` namespace:
+        sub_logging_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/deploy_clo_via_olm/4.2/03_clo_sub.yaml"
+        @result = admin.cli_exec(:create, f: sub_logging_yaml)
+        raise "Error creating subscription for cluster_logging" unless @result[:success]
+      end
+    end
+  end
+
   unless project('openshift-operators-redhat').exists?
-    eso_namespace_yaml = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/eleasticsearch/deploy_via_olm/01_eo-project.yaml"
-    @result = admin.cli_exec(:create, f: eso_namespace_yaml)
+    eo_namespace_yaml = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/eleasticsearch/deploy_via_olm/01_eo-project.yaml"
+    @result = admin.cli_exec(:create, f: eo_namespace_yaml)
     raise "Error creating namespace" unless @result[:success]
   end
-  logging_ns = "openshift-logging"
-  # register clean up if user calls for it.
-  if opts[:keep_installation] == 'false'
-    teardown_add {
-      step %Q/logging service is removed successfully/
-    }
-  end
 
-  # project('openshift-logging')
-  # Create operator group in `openshift-logging` namespace
-  opts[:clo_operator_group_yaml] ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/deploy_clo_via_olm/02_clo_og.yaml"
-  @result = admin.cli_exec(:create, f: opts[:clo_operator_group_yaml])
-  raise "Error creating operatorgroup" unless @result[:success]
+  step %Q/I use the "openshift-operators-redhat" project/
+  unless deployment('elasticsearch-operator').exists?
+    unless operator_group('openshift-operators-redhat').exists?
+      # Create operator group in `openshift-operators-redhat` namespace
+      eo_operator_group_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/eleasticsearch/deploy_via_olm/02_eo-og.yaml"
+      @result = admin.cli_exec(:create, f: eo_operator_group_yaml)
+      raise "Error creating operatorgroup" unless @result[:success]
+    end
 
-  # Create operator group in `openshift-operators-redhat` namespace
-  opts[:eo_operator_group_yaml] ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/eleasticsearch/deploy_via_olm/02_eo-og.yaml"
-  @result = admin.cli_exec(:create, f: opts[:eo_operator_group_yaml])
-  raise "Error creating operatorgroup" unless @result[:success]
+    unless role_binding('prometheus-k8s').exists?
+      # create RBAC object in `openshift-operators-redhat` namespace
+      operator_group_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/eleasticsearch/deploy_via_olm/03_eo-rbac.yaml"
+      @result = admin.cli_exec(:create, f: operator_group_yaml)
+      raise "Error creating rolebinding" unless @result[:success]
+    end
 
-  # create RBAC object in `openshift-operators-redhat` namespace
-  opts[:operator_group_yaml] ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/eleasticsearch/deploy_via_olm/03_eo-rbac.yaml"
-  @result = admin.cli_exec(:create, f: opts[:operator_group_yaml])
-  raise "Error creating operatorgroup" unless @result[:success]
+    unless subscription('elasticsearch-operator').exists?
+      step %Q/I use the "openshift-marketplace" project/
+      # first check packagemanifest exists for elasticsearch-operator
+      raise "Required packagemanifest 'elasticsearch-operator' no found!" unless package_manifest('elasticsearch-operator').exists?
 
-  step %Q/evaluation of `cluster_version('version').version` is stored in the :ocp_cluster_version clipboard/
-  if cb.ocp_cluster_version.include? "4.1."
-    # create catalogsourceconfig for cluster-logging-operator and elasticsearch-operator
-    opts[:catsrc_logging_yaml] ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/deploy_clo_via_olm/4.1/03_clo_csc.yaml"
-    opts[:catsrc_elasticsearch_yaml] ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/eleasticsearch/deploy_via_olm/4.1/04_eo-csc.yaml"
-    @result = admin.cli_exec(:create, f: opts[:catsrc_logging_yaml])
-    raise "Error creating catalogsourceconfig for cluster_logging" unless @result[:success]
-    @result = admin.cli_exec(:create, f: opts[:catsrc_elasticsearch_yaml])
-    raise "Error creating catalogsourceconfig for elasticsearch" unless @result[:success]
-
-    # create subscription in `openshift-logging` and "openshift-operators-redhat" namespace:
-    opts[:sub_logging_yaml] ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/deploy_clo_via_olm/4.1/04_clo_sub.yaml"
-    opts[:sub_elasticsearch_yaml] ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/eleasticsearch/deploy_via_olm/4.1/05_eo-sub.yaml"
-    @result = admin.cli_exec(:create, f: opts[:sub_logging_yaml])
-    raise "Error creating subscription for cluster_logging" unless @result[:success]
-    @result = admin.cli_exec(:create, f: opts[:sub_elasticsearch_yaml])
-    raise "Error creating subscription for elasticsearch" unless @result[:success]
-
-  else
-    # create subscription in `openshift-logging` and "openshift-operators-redhat" namespace:
-    opts[:sub_logging_yaml] ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/deploy_clo_via_olm/4.2/03_clo_sub.yaml"
-    opts[:sub_elasticsearch_yaml] ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/eleasticsearch/deploy_via_olm/4.2/04_eo-sub.yaml"
-    @result = admin.cli_exec(:create, f: opts[:sub_logging_yaml])
-    raise "Error creating subscription for cluster_logging" unless @result[:success]
-    @result = admin.cli_exec(:create, f: opts[:sub_elasticsearch_yaml])
-    raise "Error creating subscription for elasticsearch" unless @result[:success]
+      if cb.ocp_cluster_version.include? "4.1."
+        # create catalogsourceconfig and subscription for elasticsearch-operator
+        catsrc_elasticsearch_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/eleasticsearch/deploy_via_olm/4.1/04_eo-csc.yaml"
+        @result = admin.cli_exec(:create, f: catsrc_elasticsearch_yaml)
+        raise "Error creating catalogsourceconfig for elasticsearch" unless @result[:success]
+        sub_elasticsearch_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/eleasticsearch/deploy_via_olm/4.1/05_eo-sub.yaml"
+        @result = admin.cli_exec(:create, f: sub_elasticsearch_yaml)
+        raise "Error creating subscription for elasticsearch" unless @result[:success]
+      else
+        # create subscription in "openshift-operators-redhat" namespace:
+        sub_elasticsearch_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/eleasticsearch/deploy_via_olm/4.2/04_eo-sub.yaml"
+        @result = admin.cli_exec(:create, f: sub_elasticsearch_yaml)
+        raise "Error creating subscription for elasticsearch" unless @result[:success]
+      end
+    end
   end
 
   step %Q/cluster logging operator is ready/
   step %Q/elasticsearch operator is ready/
-
 end
 
 ## To check cluserlogging is working correctly, we check all of the subcomponents' status
@@ -112,6 +121,8 @@ Given /^I wait for clusterlogging(?: named "(.+)")? with #{QUOTED} log collector
   proj_name = cb.target_proj if proj_name.nil?
   org_proj_name = project.name
   logging_name ||= 'instance'
+  log_collector ||= 'fluentd'
+
   step %Q/I switch to cluster admin pseudo user/
   step %Q/I use the "#{proj_name}" project/
 
@@ -237,14 +248,18 @@ Given /^I create clusterlogging instance with:$/ do | table |
   opts = opts_array_to_hash(table.raw)
   ensure_admin_tagged
   ensure_destructive_tagged
-  log_collector = opts[:log_collector]
   step %Q/I switch to cluster admin pseudo user/
   step %Q/I use the "openshift-logging" project/
   logging_ns = "openshift-logging"
-  opts[:crd_yaml] ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/example.yaml"
-  @result = admin.cli_exec(:create, f: opts[:crd_yaml], n: logging_ns)
-  raise "Unable to create clusterlogging instance" unless @result[:success]
+  crd_yaml = opts[:crd_yaml]
 
+  if cluster_logging("instance").exists?
+    step %Q/I delete the clusterlogging instance/
+  end
+
+  @result = admin.cli_exec(:create, f: crd_yaml, n: logging_ns)
+  raise "Unable to create clusterlogging instance" unless @result[:success]
+  log_collector = opts[:log_collector]
   step %Q/I wait for the "instance" clusterloggings to appear/
   step %Q/I wait for the "elasticsearch" elasticsearches to appear/
   step %Q/I wait for the "kibana" deployment to appear/
@@ -252,14 +267,15 @@ Given /^I create clusterlogging instance with:$/ do | table |
   # to wait for the status informations to show up in the clusterlogging instance
   sleep 10
   step %Q/I wait for clusterlogging with "#{log_collector}" log collector to be functional in the project/
+
   if opts[:remove_logging_pods] == 'true'
     teardown_add {
-      step %Q/I delete the clusterlogging instance with log collector "#{log_collector}"/
+      step %Q/I delete the clusterlogging instance/
     }
   end
 end
 
-Given /^I delete the clusterlogging instance with log collector #{QUOTED}/ do | log_collector |
+Given /^I delete the clusterlogging instance$/ do
   ensure_admin_tagged
   ensure_destructive_tagged
   step %Q/I switch to cluster admin pseudo user/
@@ -270,9 +286,31 @@ Given /^I delete the clusterlogging instance with log collector #{QUOTED}/ do | 
   step %Q/I wait for the resource "deployment" named "kibana" to disappear/
   step %Q/I wait for the resource "elasticsearch" named "elasticsearch" to disappear/
   step %Q/I wait for the resource "cronjob" named "curator" to disappear/
-  if log_collector == "fluentd" then
-    step %Q/I wait for the resource "daemonset" named "fluentd" to disappear/
+  step %Q/I wait for the resource "daemonset" named "rsyslog" to disappear/
+  step %Q/I wait for the resource "daemonset" named "fluentd" to disappear/
+end
+
+Given /^I run curl command on the CLO pod to get metrics with:$/ do | table |
+  ensure_admin_tagged
+  opts = opts_array_to_hash(table.raw)
+  step %Q/a pod becomes ready with labels:/, table(%{
+      | name=cluster-logging-operator |
+    })
+  query_object = opts[:object]
+  query_opts = "-H \"Authorization: Bearer #{opts[:token]}\" -H \"Content-type: application/json\""
+  if query_object == "rsyslog" or query_object == "fluentd"
+    query_cmd = "curl -k #{query_opts} https://#{opts[:service_ip]}:24231/metrics"
   else
-    step %Q/I wait for the resource "daemonset" named "rsyslog" to disappear/
+    query_cmd = "curl -k #{query_opts} https://#{opts[:service_ip]}:60000/_prometheus/metrics"
+  end
+
+  @result = pod.exec("bash", "-c", query_cmd, as: admin, container: "cluster-logging-operator")
+  if @result[:success]
+    @result[:parsed] = YAML.load(@result[:response])
+    if @result[:parsed].is_a? Hash and @result[:parsed].has_key? 'status'
+      @result[:exitstatus] = @result[:parsed]['status']
+    end
+  else
+    raise "Get metrics failed with error, #{@result[:response]}"
   end
 end
