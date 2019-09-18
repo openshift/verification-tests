@@ -15,6 +15,10 @@ module BushSlicer
       return struct['host']
     end
 
+    def path
+      struct['path']
+    def
+
     def target_port
       return struct.dig('port', 'targetPort')
     end
