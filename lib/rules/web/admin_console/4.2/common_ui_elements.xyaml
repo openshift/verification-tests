@@ -117,6 +117,10 @@ uncheck_checkbox:
     selector:
       xpath: //input[contains(@type,'checkbox')]
     op: click
+check_resource_list_column_header:
+  elements:
+  - selector:
+      xpath: //th[contains(@class, 'col-sm-3')]//.[contains(text(), '<column_header>')]
 check_link_and_text:
   element:
     selector: &text_link

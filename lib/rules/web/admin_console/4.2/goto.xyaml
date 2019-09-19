@@ -102,3 +102,11 @@ goto_deploy_image_page:
 
 goto_create_app_from_imagestream_page:
   url: catalog/source-to-image?imagestream=<is_name>&imagestream-ns=openshift&preselected-ns=<project_name>
+
+#administration
+goto_cluster_settings_page:
+  url: settings/cluster
+goto_cluster_operators_page:
+  url: settings/cluster/clusteroperators
+goto_global_configuration_page:
+  url: settings/cluster/globalconfig

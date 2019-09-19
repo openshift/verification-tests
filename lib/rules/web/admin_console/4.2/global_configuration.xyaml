@@ -1,0 +1,15 @@
+click_console_configuration_resource:
+  params:
+  	text: Console
+    link_url: /k8s/cluster/config.openshift.io~v1~Console/cluster
+  action: click_link_with_text
+
+check_overview_and_yaml_tab_exist:
+  params:
+    text: Overview
+    link_url: /k8s/cluster/config.openshift.io~v1~Console/cluster/
+  action: click_link_with_text
+  params:
+    text: YAML
+    link_url: /k8s/cluster/config.openshift.io~v1~Console/cluster/yaml
+  action: click_link_with_text

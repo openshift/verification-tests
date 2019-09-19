@@ -1,0 +1,63 @@
+# check cluster settings tab links
+check_cluster_settings_tab_links:
+  params:
+    text: Overview 
+    link_url: /settings/cluster/
+  action: check_link_and_text
+  params:
+    text: Cluster Operators 
+    link_url: /settings/cluster/clusteroperators
+  action: check_link_and_text
+  params:
+    text: Global Configuration 
+    link_url: /settings/cluster/globalconfig
+  action: check_link_and_text
+# check version table box section
+check_table_header:
+  elements:
+  - selector:
+      xpath: //.[contains(@class, 'co-detail-table') and contains(text(), '<text>')]
+check_version_table:
+  params:
+    text: Channel 
+  action: check_table_header
+  params:
+    text: Last Completed Version 
+  action: check_table_header
+  params:
+    text: Update Status 
+  action: check_table_header
+  elements:
+  - selector:
+      xpath: //div[contains(@class, 'co-detail-table__section')][1]//button[contains(@class, 'btn btn-link')]
+  - selector:
+      xpath: //div[contains(@class, 'co-detail-table__section')][2]//div[contains(text(), '4.2')]
+  - selector:
+      xpath: //div[contains(@class, 'co-detail-table__section')][3]//div[contains(text(), .)]
+# check key value pairs on cluster settings overview
+check_cluster_settings_key_value:
+  elements:
+  - selector:
+      xpath: //dt[contains(text(), 'Cluster ID')]/following-sibling::dd[1][contains(text(), '-')]
+  - selector:
+      xpath: //dt[contains(text(), 'Desired Release Image')]/following-sibling::dd[1][contains(text(), 'sha256')]
+  - selector:
+      xpath: //dt[contains(text(), 'Cluster Version Configuration')]/following-sibling::dd[1]/span/a[contains(@href, 'ClusterVersion/version')]
+  - selector:
+      xpath: //dt[contains(text(), 'Cluster Autoscaler')]/following-sibling::dd[1]/a[contains(@href, 'ClusterAutoscaler/~new')]
+# check update history section
+check_update_history_table:
+  elements:
+  - selector:
+      xpath: //.[contains(text(), 'Update History')]/following-sibling::div[contains(@class, 'co-table-container')]
+  - selector:
+      xpath: //div[contains(@class, 'co-table-container')]/table/thead/tr[contains(., 'Version') and contains(., 'State') and contains(., 'Started') and contains(., 'Completed')]
+  - selector:
+      xpath: //div[contains(@class, 'co-table-container')]/table/tbody/tr[contains(., '4.2') and contains(., 'Completed') and contains(., '<current_month>') and contains(., '<current_month>')]
+
+create_cluster_autoscaler_by_link:
+  element:
+    selector:
+      xpath: //.[contains(text(), 'Create Autoscaler')]
+    op: click
+  action: click_create_button
