@@ -17,7 +17,7 @@ module BushSlicer
 
     def path
       struct['path']
-    def
+    end
 
     def target_port
       return struct.dig('port', 'targetPort')

@@ -65,7 +65,7 @@ module BushSlicer
       fake_config.unlink
 
       raise "cannot execute on host #{host.hostname} as user '#{user}'" unless res[:success]
-      return res[:response].scan(/GitVersion:"v([^"]+)"|^Client Version: v(.+)$/)[0].find{|v| v != nil}
+      return res[:response].scan(/GitVersion:"v([^"]+)"|^Client Version: v([0-9].+)$/)[0].find{|v| v != nil}
     end
 
     # try to map ocp and origin cli version to a comparable integer value
