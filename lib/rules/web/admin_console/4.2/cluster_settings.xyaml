@@ -53,11 +53,54 @@ check_update_history_table:
   - selector:
       xpath: //div[contains(@class, 'co-table-container')]/table/thead/tr[contains(., 'Version') and contains(., 'State') and contains(., 'Started') and contains(., 'Completed')]
   - selector:
-      xpath: //div[contains(@class, 'co-table-container')]/table/tbody/tr[contains(., '4.2') and contains(., 'Completed') and contains(., '<current_month>') and contains(., '<current_month>')]
+      xpath: //div[contains(@class, 'co-table-container')]/table/tbody/tr[contains(., '4.2') and contains(., 'Completed')]
 
 create_cluster_autoscaler_by_link:
   element:
     selector:
       xpath: //.[contains(text(), 'Create Autoscaler')]
     op: click
+  action: wait_yaml_editor_loaded
   action: click_create_button
+
+# check Cluster Operators tab page
+check_cluster_operator_filter_box:
+  elements:
+  - selector:
+      xpath: //a[contains(@class, 'row-filter__box') and contains(text(), 'Available')]
+  - selector:
+      xpath: //a[contains(@class, 'row-filter__box') and contains(text(), "Updating")]
+  - selector:
+      xpath: //a[contains(@class, 'row-filter__box') and contains(text(), 'Degraded')]
+  - selector:
+      xpath: //a[contains(@class, 'row-filter__box') and contains(text(), 'Unknown')]
+check_list_columns:
+  params:
+    column_header: Name
+  action:  check_resource_list_column_header
+  params: 
+    column_header: Status
+  action:  check_resource_list_column_header
+  params: 
+    column_header: Version
+  action:  check_resource_list_column_header
+  params: 
+    column_header: Message
+  action:  check_resource_list_column_header
+
+# check Global Configuration tab page
+choose_console_configuration_resource:
+  params:
+    text: Console
+    link_url: /k8s/cluster/config.openshift.io~v1~Console/cluster
+  action: click_link_with_text
+
+check_overview_and_yaml_tab_exist:
+  params:
+    text: Overview
+    link_url: /k8s/cluster/config.openshift.io~v1~Console/cluster/
+  action: click_link_with_text
+  params:
+    text: YAML
+    link_url: /k8s/cluster/config.openshift.io~v1~Console/cluster/yaml
+  action: click_link_with_text
