@@ -136,30 +136,26 @@ Given /^I wait for clusterlogging(?: named "(.+)")? with #{QUOTED} log collector
     step %Q/a pod becomes ready with labels:/, table(%{
       | component=fluentd |
     })
-    fluentd_status = cl.wait_until_fluentd_is_ready
-    raise "Failed to wait for fluentd to be ready" unless fluentd_status
+    cl.wait_until_fluentd_is_ready
   else
     step %Q/a pod becomes ready with labels:/, table(%{
       | component=rsyslog |
     })
-    rsyslog_status = cl.wait_until_rsyslog_is_ready
-    raise "Failed to wait for rsyslog to be ready" unless rsyslog_status
+    cl.wait_until_rsyslog_is_ready
   end
   # check elasticsearch subcomponent is ready
   logger.info("### checking logging subcomponent status: elasticsearch")
   step %Q/a pod becomes ready with labels:/, table(%{
     | component=elasticsearch |
   })
-  es_status = cl.wait_until_es_is_ready
-  raise "Failed to wait for ES to be ready" unless es_status
+  cl.wait_until_es_is_ready
   # check curator, which is a cronjob with the name curator
 
   logger.info("### checking logging subcomponent status: kibana")
   step %Q/a pod becomes ready with labels:/, table(%{
     | component=kibana |
   })
-  kibana_status = cl.wait_until_kibana_is_ready
-  raise "Failed to wait for kibana to be ready" unless kibana_status
+  cl.wait_until_kibana_is_ready
   # lastly check the curator cronjob.
   # XXX: the curator pod will not appear immediately after the installation, should we wait for it??
   raise "Failed to find cronjob for curator" if cron_job('curator').schedule.nil?
@@ -206,8 +202,7 @@ Given /^I wait(?: for (\d+) seconds)? until fluentd is ready$/ do |seconds|
   seconds ||= 5 * 60
   cb.cluster_logging ||= cluster_logging('instance')
   cl = cb.cluster_logging
-  fluentd_status = cl.wait_until_fluentd_is_ready(timeout: seconds)
-  raise "Failed to wait for fluentd to be ready" unless fluentd_status
+  cl.wait_until_fluentd_is_ready(timeout: seconds)
 end
 
 Given /^I wait(?: for (\d+) seconds)? until rsyslog is ready$/ do |seconds|
@@ -215,8 +210,7 @@ Given /^I wait(?: for (\d+) seconds)? until rsyslog is ready$/ do |seconds|
   seconds ||= 5 * 60
   cb.cluster_logging ||= cluster_logging('instance')
   cl = cb.cluster_logging
-  rsyslog_status = cl.wait_until_rsyslog_is_ready(timeout: seconds)
-  raise "Failed to wait for rsyslog to be ready" unless rsyslog_status
+  cl.wait_until_rsyslog_is_ready(timeout: seconds)
 end
 
 Given /^I wait(?: for (\d+) seconds)? until the ES cluster is healthy$/ do |seconds|
@@ -224,8 +218,7 @@ Given /^I wait(?: for (\d+) seconds)? until the ES cluster is healthy$/ do |seco
   seconds ||= 9 * 60
   cb.cluster_logging ||= cluster_logging('instance')
   cl = cb.cluster_logging
-  es_status = cl.wait_until_es_is_ready(timeout: seconds)
-  raise "Failed to wait for ES to be ready" unless es_status
+  cl.wait_until_es_is_ready(timeout: seconds)
 end
 
 Given /^cluster logging operator is ready$/ do
@@ -281,8 +274,10 @@ Given /^I delete the clusterlogging instance$/ do
   step %Q/I switch to cluster admin pseudo user/
   step %Q/I use the "openshift-logging" project/
   logging_ns = "openshift-logging"
-  @result = admin.cli_exec(:delete, object_type: 'clusterlogging', object_name_or_id: 'instance', n: logging_ns)
-  raise "Unable to delete delete instance" unless @result[:success]
+  if cluster_logging("instance").exists?
+    @result = admin.cli_exec(:delete, object_type: 'clusterlogging', object_name_or_id: 'instance', n: logging_ns)
+    raise "Unable to delete instance" unless @result[:success]
+  end
   step %Q/I wait for the resource "deployment" named "kibana" to disappear/
   step %Q/I wait for the resource "elasticsearch" named "elasticsearch" to disappear/
   step %Q/I wait for the resource "cronjob" named "curator" to disappear/

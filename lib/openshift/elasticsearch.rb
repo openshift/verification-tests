@@ -1,5 +1,5 @@
 module BushSlicer
-  class Elasticsearch < ClusterResource
+  class Elasticsearch < ProjectResource
     RESOURCE = "elasticsearches"
   end
 end
