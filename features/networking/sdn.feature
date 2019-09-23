@@ -51,11 +51,12 @@ Feature: SDN related networking scenarios
   @admin
   Scenario: an empty OPENSHIFT-ADMIN-OUTPUT-RULES chain is created in filter table at startup
     Given the master version >= "3.6"
-    Given I select a random node's host
-    And the node service is verified
+    Given I have a project
+    Given I have a pod-for-ping in the project
+    Then evaluation of `pod.node_name` is stored in the :node_name clipboard
 
-    When I run commands on the host:
-      | iptables -S -t filter \| grep 'OPENSHIFT-ADMIN-OUTPUT-RULES' |
+    When I run command on the "<%= cb.node_name %>" node's sdn pod:
+      | iptables | -S | -t | filter |
     Then the step should succeed
     And the output should contain:
       | -N OPENSHIFT-ADMIN-OUTPUT-RULES |
@@ -208,14 +209,14 @@ Feature: SDN related networking scenarios
   Scenario: should not show "No such device" message when run "ovs-vsctl show" command
     Given I have a project
     And I have a pod-for-ping in the project
-    Then I use the "<%= pod.node_name(user: user) %>" node
+    And evaluation of `pod.node_name` is stored in the :node_name clipboard
     When I run the :delete client command with:
       | object_type       | pods      |
       | object_name_or_id | hello-pod |
     Then the step should succeed
     Given I wait for the resource "pod" named "hello-pod" to disappear
-    When I run the ovs commands on the host:
-      | ovs-vsctl show |
+    When I run command on the "<%= cb.node_name %>" node's sdn pod:
+      | ovs-vsctl | show |
     Then the step should succeed
     And the output should not contain "No such device"
 
