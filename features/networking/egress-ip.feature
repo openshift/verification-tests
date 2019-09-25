@@ -2,6 +2,7 @@ Feature: Egress IP related features
 
   # @author bmeng@redhat.com
   # @case_id OCP-15465
+  @admin
   Scenario: Only cluster admin can add/remove egressIPs on hostsubnet
     Given I select a random node's host
     And evaluation of `node.name` is stored in the :egress_node clipboard
