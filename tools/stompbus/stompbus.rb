@@ -16,7 +16,7 @@ class STOMPBus
   REQUIRED_HOST_OPTS = [:host, :port].freeze
   HOST_OPTS = ([:ssl, :ts_files, :key_password] +
                LOGIN_OPTS.flatten + REQUIRED_HOST_OPTS).freeze
-  SSL_OPTS = [:ts_files, :cert_file, :key_file, :key_password]
+  SSL_OPTS = [:ts_files, :cert_file, :key_file, :key_password, :fsck]
 
   attr_reader :opts, :default_queue
 
@@ -98,9 +98,6 @@ class STOMPBus
       if host[:key_file]
         host[:ssl][:key_file] = expand_private_path(host.delete(:key_file))
       end
-      if host[:key_password]
-        host[:ssl][:key_password] = host.delete(:key_password)
-      end
       if host[:ts_files]
         ts_files = expand_path(host.delete(:ts_files))
         if File.directory?(ts_files)
@@ -109,6 +106,11 @@ class STOMPBus
           host[:ssl][:ts_files] = ts_files
         end
       end
+      SSL_OPTS.each { |opt|
+        if host[opt]
+          host[:ssl][opt] = host.delete(opt)
+        end
+      }
       host[:ssl] = Stomp::SSLParams.new(host[:ssl])
     }
 

@@ -151,6 +151,7 @@ module BushSlicer
           quoted_run_id = "'" + pr[:run_id] + "'"
 
           puts "test run id: #{HighLine.color(quoted_run_id, :bright_blue)}"
+          # TODO: move waiting using HTTP to Polarshift, msg goes before we can subscribe
           filter = pr[:import_filter]
           if options.no_wait.nil?
             puts "waiting for a bus message with selector: #{filter}"
