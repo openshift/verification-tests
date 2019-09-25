@@ -99,3 +99,6 @@ goto_one_imagestream_page:
 #deploy image
 goto_deploy_image_page:
   url: deploy-image/ns/<project_name>?preselected-ns=<project_name>
+
+goto_create_app_from_imagestream_page:
+  url: catalog/source-to-image?imagestream=<is_name>&imagestream-ns=openshift&preselected-ns=<project_name>
