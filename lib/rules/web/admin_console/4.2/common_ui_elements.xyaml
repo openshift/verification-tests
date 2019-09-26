@@ -69,7 +69,7 @@ check_resources_title_on_page:
 check_resource_name_and_icon:
   elements:
   - selector:
-      css: .co-resource-item>.co-m-resource-icon[title='<icon_text>']+.co-resource-item__resource-name[href*='<resource_name>']
+      xpath: //span[contains(@class, 'co-m-resource-icon') and text()='<icon_text>']/following-sibling::span[@data-test-id='resource-title' and text()='<resource_name>']
 check_resource_link:
   element:
     selector:
