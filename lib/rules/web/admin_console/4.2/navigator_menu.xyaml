@@ -1,0 +1,15 @@
+expand_monitoring:
+  elements:
+  - selector:
+      xpath: //.[contains(@data-component, 'pf-nav-expandable') and contains(text(), 'Monitoring')]
+    op: click
+  - selector: 
+      xpath: //.[contains(@class, 'pf-c-nav__subnav')]
+
+check_monitoring_urls:
+  elements:
+  - selector: 
+      xpath: //.[contains(@class, 'pf-c-nav__link') and contains(@href, 'grafana-openshift-monitoring.apps') and contains(text(), 'Dashboards')]
+  - selector: 
+      xpath: //.[contains(@class, 'pf-c-nav__link') and contains(@href, 'kibana-openshift-logging.apps') and contains(text(), 'Logging')]
+ 
