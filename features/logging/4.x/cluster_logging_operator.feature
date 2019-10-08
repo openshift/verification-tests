@@ -46,3 +46,46 @@ Feature: cluster-logging-operator related test
       | token      | <%= cb.token %>           |
     Then the step should succeed
     And the expression should be true> @result[:response].include? (cb.collection_type == "fluentd" ? "fluentd_output_status_buffer_total_bytes": "rsyslog_action_processed")
+
+  # @auther qitang@redhat.com
+  # @case_id OCP-21907
+  @admin
+  @destructive
+  Scenario: Deploy elasticsearch-operator via OLM using CLI
+    Given logging operators are installed successfully
+
+  # @auther qitang@redhat.com
+  # @case_id OCP-22492
+  @admin @destructive
+  Scenario: Scale Elasticsearch nodes by nodeCount 2->3->4 in clusterlogging
+    Given I switch to cluster admin pseudo user
+    And I create clusterlogging instance with:
+      | remove_logging_pods | true                                                                                                     |
+      | crd_yaml            | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/scalebase.yaml |
+      | log_collector       | fluentd                                                                                                  |
+    Then the step should succeed
+    And the expression should be true> cluster_logging('instance').logstore_nodecount == 2
+    Given 2 pods become ready with labels:
+      | cluster-name=elasticsearch,component=elasticsearch,es-node-client=true,es-node-data=true,es-node-master=true |
+    When I run the :patch client command with:
+      | resource      | clusterlogging                                          |
+      | resource_name | instance                                                |
+      | p             | {"spec":{"logStore":{"elasticsearch":{"nodeCount":3}}}} |
+      | type          | merge                                                   |
+    Then the step should succeed
+    And the expression should be true> cluster_logging('instance').logstore_nodecount == 3
+    And 3 pods become ready with labels:
+      | cluster-name=elasticsearch,component=elasticsearch,es-node-client=true,es-node-data=true,es-node-master=true |
+    When I run the :patch client command with:
+      | resource      | clusterlogging                                          |
+      | resource_name | instance                                                |
+      | p             | {"spec":{"logStore":{"elasticsearch":{"nodeCount":4}}}} |
+      | type          | merge                                                   |
+    Then the step should succeed
+    And the expression should be true> cluster_logging('instance').logstore_nodecount == 4
+    And 4 pods become ready with labels:
+      | cluster-name=elasticsearch,component=elasticsearch,es-node-client=true,es-node-data=true |
+    And 3 pods become ready with labels:
+      | cluster-name=elasticsearch,component=elasticsearch,es-node-client=true,es-node-data=true,es-node-master=true |
+    And a pod becomes ready with labels:
+      | cluster-name=elasticsearch,component=elasticsearch,es-node-client=true,es-node-data=true,es-node-master=false |
