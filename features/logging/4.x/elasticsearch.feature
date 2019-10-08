@@ -11,7 +11,7 @@ Feature: Elasticsearch related tests
     Given I delete the clusterlogging instance
     Then the step should succeed
     And I run the :create client command with:
-      | f | https://raw.githubusercontent.com/QiaolingTang/scripts-and-files/master/template-cr-unmanaged.yaml |
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/example_unmanaged.yaml |
     Then the step should succeed
     Given I use the "openshift-logging" project
     Given I wait for the "instance" clusterloggings to appear

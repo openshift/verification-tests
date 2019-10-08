@@ -113,9 +113,9 @@ Feature: cluster-logging-operator related test
   Scenario: Scale Elasticsearch nodes by nodeCount 2->3->4 in clusterlogging
     Given I switch to cluster admin pseudo user
     And I create clusterlogging instance with:
-      | remove_logging_pods | true                                                                                                                                       |
-      | crd_yaml            | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/69ca185b6d90d5c053929c66970351744749c4e1/logging/clusterlogging/scalebase.yaml |
-      | log_collector       | fluentd                                                                                                                                    |
+      | remove_logging_pods | true                                                                                                     |
+      | crd_yaml            | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/scalebase.yaml |
+      | log_collector       | fluentd                                                                                                  |
     Then the step should succeed
     Given I get project clusterlogging named "instance" as YAML
     Then the step should succeed
