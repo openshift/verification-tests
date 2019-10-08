@@ -310,28 +310,6 @@ Given /^I run curl command on the CLO pod to get metrics with:$/ do | table |
   end
 end
 
-Given /^I run curl command to get info from ES cluster with:$/ do | table |
-  ensure_admin_tagged
-  opts = opts_array_to_hash(table.raw)
-
-  query_opts = "-H \"Authorization: Bearer #{opts[:token]}\" -H \"X-Forwarded-For: 127.0.0.1\""
-  query_cmd = "curl -vk -X GET #{query_opts} 'https://#{opts[:url]}/#{opts[:relative_url]}'"
-  step %Q/a pod becomes ready with labels:/, table(%{
-    | name=cluster-logging-operator |
-  })
-  @result = pod.exec("bash", "-c", query_cmd, as: admin, container: "cluster-logging-operator")
-
-  if @result[:success]
-    @result[:parsed] = YAML.load(@result[:response])
-    # curl returns 0 even with a http code of 403, we force it to match.
-    if @result[:parsed].is_a? Hash and @result[:parsed].has_key? 'status'
-      @result[:exitstatus] = @result[:parsed]['status']
-    end
-  else
-    raise "HTTP operation failed with error, #{@result[:response]}"
-  end
-end
-
 Given /^default storageclass is stored in the#{OPT_SYM} clipboard$/ do | cb_name |
   ensure_admin_tagged
   cb_name = 'default_sc' unless cb_name
