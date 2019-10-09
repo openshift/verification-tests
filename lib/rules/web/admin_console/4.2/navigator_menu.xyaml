@@ -1,12 +1,25 @@
-expand_monitoring:
+expand_primary_menu:
   elements:
   - selector:
-      xpath: //.[contains(@data-component, 'pf-nav-expandable') and contains(text(), 'Monitoring')]
+      xpath: //.[contains(@data-component, 'pf-nav-expandable') and contains(text(), '<primary_menu>')]
     op: click
-  - selector: 
-      xpath: //.[contains(@class, 'pf-c-nav__subnav')]
 
 check_monitoring_urls:
-  elements:
-  - selector: 
-      xpath: //.[contains(@class, 'pf-c-nav__link') and contains(@href, 'grafana-openshift-monitoring.apps') and contains(text(), 'Dashboards')]
+  action: check_alert_manager_url
+  action: check_metrics_prometheus_url
+  action: check_dashboards_grafana_url
+check_alert_manager_url:
+  params:
+    text: Alerting
+    link_url: /monitoring/alerts
+  action: check_link_and_text
+check_metrics_prometheus_url:
+  params:
+    text: Metrics
+    link_url: /monitoring/query-browser?query0=
+  action: check_link_and_text
+check_dashboards_grafana_url:
+  params:
+    text: Dashboards
+    link_url: https://<dashboards_grafana_route>
+  action: check_link_and_text
