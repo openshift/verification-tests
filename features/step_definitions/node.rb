@@ -28,7 +28,7 @@ Given /^I store the( schedulable| ready and schedulable)? (node|master|worker)s 
   if role == "worker"
     cb[cbname] = cb[cbname].select { |n| n.is_worker? }
   elsif role == "master"
-    cb[cbname] = cb[cbname].select { |n| ! n.is_worker? }
+    cb[cbname] = cb[cbname].select { |n| n.is_master? }
   end
 
   cache_resources *cb[cbname].shuffle
