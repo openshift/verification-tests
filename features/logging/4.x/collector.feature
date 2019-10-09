@@ -3,6 +3,7 @@ Feature: collector related tests
 
   # @auther qitang@redhat.com
   # @case_id OCP-24837
+  # @case_id OCP-25365
   @admin
   @destructive
   @commonlogging
@@ -70,16 +71,3 @@ Feature: collector related tests
       | op           | GET                                          |
     Then the step should succeed
     And the expression should be true> @result[:response].include? "ㄅㄉˇˋㄓˊ˙ㄚㄞㄢㄦㄆ 中国 883.317µs ā á ǎ à ō ó ▅ ▆ ▇ █ 々"
-    # @case_id OCP-18147
-    And the output should contain:
-      | "container_id" : "<%= cb.log_pod.container(user: user, name: 'centos-logtest').id %>" |
-      | "kubernetes" : {                                                                      |
-      |           "container_name" : "centos-logtest",                                        |
-      |           "namespace_name" : "<%= cb.proj.name %>"                                    |
-      |           "pod_name" : "<%= cb.log_pod.name %>"                                       |
-      | "pipeline_metadata" : {                                                               |
-      |           "collector" : {                                                             |
-      |             "ipaddr4" : "<%= cb.log_pod.node_ip %>",                                  |
-      |             "inputname" : "fluent-plugin-systemd",                                    |
-      |             "name" : "fluentd",                                                       |
-
