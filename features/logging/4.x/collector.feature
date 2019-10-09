@@ -3,7 +3,6 @@ Feature: collector related tests
 
   # @auther qitang@redhat.com
   # @case_id OCP-24837
-  # @case_id OCP-25365
   @admin
   @destructive
   @commonlogging
