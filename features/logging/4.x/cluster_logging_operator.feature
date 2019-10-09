@@ -3,7 +3,6 @@ Feature: cluster-logging-operator related test
 
   # @auther qitang@redhat.com
   # @case_id OCP-21907
-  # @case_id OCP-21288
   @admin
   @destructive
   Scenario: Deploy elasticsearch-operator via OLM using CLI
