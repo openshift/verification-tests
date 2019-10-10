@@ -13,7 +13,7 @@ Given /^I select a random node's host$/ do
   @host = node.host
 end
 
-Given /^I store the( schedulable| ready and schedulable)? nodes in the#{OPT_SYM} clipboard$/ do |state, cbname|
+Given /^I store the( schedulable| ready and schedulable)? (node|master|worker)s in the#{OPT_SYM} clipboard$/ do |state, role, cbname|
   ensure_admin_tagged
   cbname = 'nodes' unless cbname
 
@@ -23,6 +23,12 @@ Given /^I store the( schedulable| ready and schedulable)? nodes in the#{OPT_SYM}
     cb[cbname] = env.nodes.select { |n| n.schedulable? }
   else
     cb[cbname] = env.nodes.select { |n| n.ready? && n.schedulable? }
+  end
+  
+  if role == "worker"
+    cb[cbname] = cb[cbname].select { |n| n.is_worker? }
+  elsif role == "master"
+    cb[cbname] = cb[cbname].select { |n| n.is_master? }
   end
 
   cache_resources *cb[cbname].shuffle
