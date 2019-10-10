@@ -150,5 +150,20 @@ module BushSlicer
         raise "kibana did not become ready within #{timeout} seconds"
       end
     end
+
+    def collection_type(user: nil, quiet: false, cached: false)
+      rr = raw_resource(user: user, cached: cached, quiet: quiet)
+      return rr.dig('spec', 'collection', 'logs', 'type')
+    end
+
+    def management_state(user: nil, quiet: false, cached: false)
+      rr = raw_resource(user: user, cached: cached, quiet: quiet)
+      return rr.dig('spec', 'managementState')
+    end
+
+    def redundancy_policy(user: nil, quiet: false, cached: false)
+      rr = raw_resource(user: user, cached: cached, quiet: quiet)
+      return rr.dig('spec', 'logStore', 'elasticsearch', 'redundancyPolicy')
+    end
   end
 end
