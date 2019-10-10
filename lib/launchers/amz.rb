@@ -4,7 +4,7 @@ require 'aws-sdk'
 require 'common'
 require 'host'
 require 'launchers/cloud_helper'
-require 'pry-byebug'
+
 module BushSlicer
 
   class Amz_EC2
