@@ -69,7 +69,7 @@ Feature: ResourceQuata for storage
   Scenario: Setting quota for a StorageClass
     Given I have a project
     Given admin clones storage class "sc-<%= project.name %>" from ":default" with:
-      | | |
+      | ["volumeBindingMode"] | Immediate |
     And I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
 
@@ -125,7 +125,7 @@ Feature: ResourceQuata for storage
 
     # StorageClass without quota should not be limited
     Given admin clones storage class "sc1-<%= project.name %>" from ":default" with:
-      | | |
+      | ["volumeBindingMode"] | Immediate |
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
       | ["metadata"]["name"]                         | mypvc1                   |
       | ["spec"]["storageClassName"]                 | sc1-<%= project.name %>  |
