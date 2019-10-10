@@ -1,4 +1,4 @@
-FROM centos
+FROM centos:7
 
 LABEL vendor="Red Hat inc."
 LABEL maintainer="AOS QE Team"
