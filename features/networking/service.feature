@@ -129,3 +129,27 @@ Feature: Service related networking scenarios
       | type          | merge                                			      						   |
     Then the step should fail
     And the output should contain "endpoints "<%= cb.ping_pod.name %>" is forbidden: endpoint port TCP:22623 is not allowed"
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-21814
+  @admin
+  Scenario: The headless service can publish the pods even if they are not ready
+    Given I have a project
+    When I run the :create client command with:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/headless_notreadypod.json |
+    Then the step should succeed
+    Given I wait up to 30 seconds for the steps to pass:
+    """
+    When I run the :get client command with:
+      | resource      | pod                     |
+    Then the step should succeed
+    And the output should contain 2 times:
+      | ImagePullBackOff |
+    """
+
+    When I run the :get client command with:
+      | resource      | ep          |
+      | resource_name | test-service |
+    Then the step should succeed
+    And the output should contain:
+      | 8080 |
