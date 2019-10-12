@@ -63,6 +63,71 @@ check_resources_title_on_page:
   - selector:
       xpath: //span[text()='<resource_title>']
 check_resource_name_and_icon:
+  action:
+    if_param: service_name
+    ref: check_service_name_and_icon
+  action:
+    if_param: buildconfig_name
+    ref: check_buildconfig_name_and_icon
+  action:
+    if_param: route_name
+    ref: check_route_name_and_icon
+  action:
+    if_param: job_name
+    ref: check_job_name_and_icon
+  action:
+    if_param: cronjob_name
+    ref: check_cronjob_name_and_icon
+  action:
+    if_param: configmap_name
+    ref: check_configmap_name_and_icon
+  action:
+    if_param: imagestream_name
+    ref: check_imagestream_name_and_icon
+  action:
+    if_param: storageclass_name
+    ref: check_storageclass_name_and_icon
+check_storageclass_name_and_icon:
+  params:
+    icon_text: SC
+    resource_name: <storageclass_name>
+  action: check_resource_name_icon_info
+check_imagestream_name_and_icon:
+  params:
+    icon_text: IS
+    resource_name: <imagestream_name>
+  action: check_resource_name_icon_info
+check_configmap_name_and_icon:
+  params:
+    icon_text: CM
+    resource_name: <configmap_name>
+  action: check_resource_name_icon_info
+check_cronjob_name_and_icon:
+  params:
+    icon_text: CJ
+    resource_name: <cronjob_name>
+  action: check_resource_name_icon_info
+check_job_name_and_icon:
+  params:
+    icon_text: J
+    resource_name: <job_name>
+  action: check_resource_name_icon_info
+check_buildconfig_name_and_icon:
+  params:
+    icon_text: BC
+    resource_name: <buildconfig_name>
+  action: check_resource_name_icon_info
+check_route_name_and_icon:
+  params:
+    icon_text: RT
+    resource_name: <route_name>
+  action: check_resource_name_icon_info
+check_service_name_and_icon:
+  params:
+    icon_text: S
+    resource_name: <service_name>
+  action: check_resource_name_icon_info
+check_resource_name_icon_info:
   elements:
   - selector:
       xpath: //div[contains(@class,'co-m-pane__name')][/*[contains(.,'<icon_text>')] and /*[contains(., '<resource_name>')]]
