@@ -117,10 +117,6 @@ uncheck_checkbox:
     selector:
       xpath: //input[contains(@type,'checkbox')]
     op: click
-check_resource_list_column_header:
-  elements:
-  - selector:
-      xpath: //th[contains(@class, 'col-sm-3')]//.[contains(text(), '<column_header>')]
 check_link_and_text:
   element:
     selector: &text_link
@@ -239,7 +235,7 @@ check_resource_details_key_and_value:
     selector:
       xpath: //dt[contains(text(),'<key>')]/following-sibling::dd[1][contains(.,'<value>')]
 check_key_and_resource_link:
-  element:
+  element: 
     selector:
       xpath: //dt[contains(text(),'<key>')]/following-sibling::dd[1]//a[contains(@href,'<resource_link>')]
 check_key_and_action_link:
