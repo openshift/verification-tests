@@ -671,7 +671,6 @@ Given /^I run command on the#{OPT_QUOTED} node's sdn pod:$/ do |node_name, table
   }.first
   cache_resources sdn_pod
   @result = sdn_pod.exec(network_cmd, as: admin)
-  raise "Failed to execute network command!" unless @result[:success]
 end
 
 Given /^the default interface on nodes is stored in the#{OPT_SYM} clipboard$/ do |cb_name|
