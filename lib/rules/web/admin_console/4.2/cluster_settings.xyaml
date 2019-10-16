@@ -46,7 +46,6 @@ check_cluster_version_configuration:
     key: Cluster Version Configuration
     resource_link: ClusterVersion/version
   action: check_key_and_resource_link
-     xpath: //div[contains(@class, 'co-table-container')]/table/tbody/tr[contains(., '4.2') and contains(., 'Completed')]
 
 create_cluster_autoscaler_by_link:
   params:
