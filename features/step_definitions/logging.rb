@@ -293,10 +293,13 @@ Given /^I run curl command on the CLO pod to get metrics with:$/ do | table |
     })
   query_object = opts[:object]
   query_opts = "-H \"Authorization: Bearer #{opts[:token]}\" -H \"Content-type: application/json\""
-  if query_object == "rsyslog" or query_object == "fluentd"
+  case query_object
+  when "rsyslog", "fluentd"
     query_cmd = "curl -k #{query_opts} https://#{opts[:service_ip]}:24231/metrics"
-  else
+  when "elasticsearch"
     query_cmd = "curl -k #{query_opts} https://#{opts[:service_ip]}:60000/_prometheus/metrics"
+  else
+    raise "Invalid query_object"
   end
 
   @result = pod.exec("bash", "-c", query_cmd, as: admin, container: "cluster-logging-operator")
