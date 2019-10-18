@@ -12,7 +12,7 @@ RUN set -x && \
     yum-config-manager --enable rhel-server-rhscl-7-rpms && \
     yum-config-manager --enable rhel-7-server-ansible-2-rpms && \
     SCL_BASE_PKGS="scl-utils-build" && \
-    INSTALL_PKGS="rh-ruby24 rh-ror50-rubygem-nokogiri rh-ruby24-ruby-devel rh-git29 bsdtar" && \
+    INSTALL_PKGS="rh-ruby26 rh-ruby26-ruby-devel rh-git218 bsdtar" && \
     yum -y update && \
     yum install -y --setopt=skip_missing_names_on_install=False $SCL_BASE_PKGS && \
     yum install -y --setopt=skip_missing_names_on_install=False $INSTALL_PKGS && \
@@ -29,10 +29,10 @@ RUN set -x && \
 
 # make sure context dir is at the repo root
 ADD . $HOME/verification-tests
-# RUN scl enable rh-git29 "git clone --depth 1 --single-branch 'https://github.com/openshift/verification-tests.git' '$HOME/verification-tests'"
+# RUN scl enable rh-git218 "git clone --depth 1 --single-branch 'https://github.com/openshift/verification-tests.git' '$HOME/verification-tests'"
 
-RUN scl enable rh-ror50 "$HOME/verification-tests/tools/install_os_deps.sh"
-RUN scl enable rh-ror50 "$HOME/verification-tests/tools/hack_bundle.rb"
+RUN scl enable rh-ruby26 "$HOME/verification-tests/tools/install_os_deps.sh"
+RUN scl enable rh-ruby26 "$HOME/verification-tests/tools/hack_bundle.rb"
 
 # -k is a bad option, better setup proper system certificates in a layered image
 # RUN sed -i -e 's/^\s\+curl\s/  curl -Sk /' /usr/local/bin/run-jnlp-client
@@ -54,4 +54,4 @@ RUN echo -e '#!/bin/bash\nexec "$@"' > /usr/local/bin/sudo && chmod 755 /usr/loc
 USER 1001
 
 # we need ruby and some gems from ror
-ENTRYPOINT ["/usr/bin/scl", "enable", "rh-git29", "rh-ror50", "--", "/usr/local/bin/run-jnlp-client"]
+ENTRYPOINT ["/usr/bin/scl", "enable", "rh-git218", "rh-ruby26", "--", "/usr/local/bin/run-jnlp-client"]
