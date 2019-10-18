@@ -14,7 +14,7 @@ RUN [ -d $HOME/bushslicer/private/config/ca ] && \
 
 RUN set -x && \
     SCL_BASE_PKGS="centos-release-scl scl-utils-build" && \
-    INSTALL_PKGS="rh-ruby24 rh-ror50-rubygem-nokogiri rh-ruby24-ruby-devel rh-git29 bsdtar" && \
+    INSTALL_PKGS="rh-ruby26 rh-ruby26-ruby-devel rh-git218 bsdtar" && \
     yum -y update && \
     yum install -y --enablerepo=centosplus --setopt=skip_missing_names_on_install=False $SCL_BASE_PKGS && \
     yum install -y --enablerepo=centosplus --setopt=skip_missing_names_on_install=False $INSTALL_PKGS && \
@@ -29,8 +29,8 @@ RUN set -x && \
     yum install -y /tmp/epel-release-latest-7.noarch.rpm && \
     mkdir -p $HOME/bin
 
-RUN scl enable rh-ror50 "$HOME/bushslicer/tools/install_os_deps.sh"
-RUN scl enable rh-ror50 $HOME/bushslicer/tools/hack_bundle.rb
+RUN scl enable rh-ruby26 "$HOME/bushslicer/tools/install_os_deps.sh"
+RUN scl enable rh-ruby26 $HOME/bushslicer/tools/hack_bundle.rb
 
 # -k is a bad option, put certificated under private/config/ca instead
 # be mindful image will be visible if image is made public which is a mild
@@ -56,5 +56,4 @@ USER 1001
 # Start in the bushslicer top level directory to run containerized bushslicer tests
 WORKDIR $HOME/bushslicer
 
-# we need ruby and some gems from ror
-ENTRYPOINT ["/usr/bin/scl", "enable", "rh-git29", "rh-ror50", "--", "/usr/local/bin/run-jnlp-client"]
+ENTRYPOINT ["/usr/bin/scl", "enable", "rh-git218", "rh-ruby26", "--", "/usr/local/bin/run-jnlp-client"]
