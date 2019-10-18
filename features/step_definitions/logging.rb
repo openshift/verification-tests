@@ -47,7 +47,7 @@ Given /^logging operators are installed successfully$/ do
       step %Q/I use the "openshift-marketplace" project/
       # first check packagemanifest exists for cluster-logging
       raise "Required packagemanifest 'cluster-logging' no found!" unless package_manifest('cluster-logging').exists?
-
+      step %Q/I use the "openshift-logging" project/
       if cb.ocp_cluster_version.include? "4.1."
         # create catalogsourceconfig and subscription for cluster-logging-operator
         catsrc_logging_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/deploy_clo_via_olm/4.1/03_clo_csc.yaml"
@@ -58,8 +58,12 @@ Given /^logging operators are installed successfully$/ do
         raise "Error creating subscription for cluster_logging" unless @result[:success]
       else
         # create subscription in `openshift-logging` namespace:
-        sub_logging_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/deploy_clo_via_olm/4.2/03_clo_sub.yaml"
-        @result = admin.cli_exec(:create, f: sub_logging_yaml)
+        sub_logging_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/deploy_clo_via_olm/4.2/clo-sub-template.yaml"
+        step %Q/I process and create:/, table(%{
+          | f | #{sub_logging_yaml}                          |
+          | p | SOURCE=#{env.subscription_opsrc_name}        |
+          | p | CHANNEL=#{env.get_version(user: user).first} |
+        })
         raise "Error creating subscription for cluster_logging" unless @result[:success]
       end
     end
@@ -91,7 +95,7 @@ Given /^logging operators are installed successfully$/ do
       step %Q/I use the "openshift-marketplace" project/
       # first check packagemanifest exists for elasticsearch-operator
       raise "Required packagemanifest 'elasticsearch-operator' no found!" unless package_manifest('elasticsearch-operator').exists?
-
+      step %Q/I use the "openshift-operators-redhat" project/
       if cb.ocp_cluster_version.include? "4.1."
         # create catalogsourceconfig and subscription for elasticsearch-operator
         catsrc_elasticsearch_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/eleasticsearch/deploy_via_olm/4.1/04_eo-csc.yaml"
@@ -102,8 +106,12 @@ Given /^logging operators are installed successfully$/ do
         raise "Error creating subscription for elasticsearch" unless @result[:success]
       else
         # create subscription in "openshift-operators-redhat" namespace:
-        sub_elasticsearch_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/eleasticsearch/deploy_via_olm/4.2/04_eo-sub.yaml"
-        @result = admin.cli_exec(:create, f: sub_elasticsearch_yaml)
+        sub_elasticsearch_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/eleasticsearch/deploy_via_olm/4.2/eo-sub-template.yaml"
+        step %Q/I process and create:/, table(%{
+          | f | #{sub_elasticsearch_yaml}                    |
+          | p | SOURCE=#{env.subscription_opsrc_name}        |
+          | p | CHANNEL=#{env.get_version(user: user).first} |
+        })
         raise "Error creating subscription for elasticsearch" unless @result[:success]
       end
     end
