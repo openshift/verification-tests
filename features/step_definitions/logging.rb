@@ -27,6 +27,7 @@ Given /^logging operators are installed successfully$/ do
   ensure_destructive_tagged
   step %Q/I switch to cluster admin pseudo user/
   step %Q/evaluation of `cluster_version('version').version` is stored in the :ocp_cluster_version clipboard/
+  step %Q/logging channel name is stored in the :channel clipboard/
 
   # Create namespace
   unless project('openshift-logging').exists?
@@ -60,9 +61,9 @@ Given /^logging operators are installed successfully$/ do
         # create subscription in `openshift-logging` namespace:
         sub_logging_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/deploy_clo_via_olm/4.2/clo-sub-template.yaml"
         step %Q/I process and create:/, table(%{
-          | f | #{sub_logging_yaml}                          |
-          | p | SOURCE=#{env.subscription_opsrc_name}        |
-          | p | CHANNEL=#{env.get_version(user: user).first} |
+          | f | #{sub_logging_yaml}                   |
+          | p | SOURCE=#{env.subscription_opsrc_name} |
+          | p | CHANNEL=#{cb.channel}                 |
         })
         raise "Error creating subscription for cluster_logging" unless @result[:success]
       end
@@ -108,9 +109,9 @@ Given /^logging operators are installed successfully$/ do
         # create subscription in "openshift-operators-redhat" namespace:
         sub_elasticsearch_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/eleasticsearch/deploy_via_olm/4.2/eo-sub-template.yaml"
         step %Q/I process and create:/, table(%{
-          | f | #{sub_elasticsearch_yaml}                    |
-          | p | SOURCE=#{env.subscription_opsrc_name}        |
-          | p | CHANNEL=#{env.get_version(user: user).first} |
+          | f | #{sub_elasticsearch_yaml}             |
+          | p | SOURCE=#{env.subscription_opsrc_name} |
+          | p | CHANNEL=#{cb.channel}                 |
         })
         raise "Error creating subscription for elasticsearch" unless @result[:success]
       end
@@ -318,5 +319,17 @@ Given /^I run curl command on the CLO pod to get metrics with:$/ do | table |
     end
   else
     raise "Get metrics failed with error, #{@result[:response]}"
+  end
+end
+
+Given /^logging channel name is stored in the#{OPT_SYM} clipboard$/ do | cb_name |
+  cb_name = 'logging_channel_name' unless cb_name
+  case
+  when cluster_version('version').version.include?('4.1.')
+    cb[cb_name] = "preview"
+  when cluster_version('version').version.include?('4.2.')
+    cb[cb_name] = "4.2"
+  when cluster_version('version').version.include?('4.3.')
+    cb[cb_name] = "4.3"
   end
 end
