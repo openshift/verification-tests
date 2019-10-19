@@ -683,3 +683,16 @@ Given /^the default interface on nodes is stored in the#{OPT_SYM} clipboard$/ do
   cb[cb_name] = @result[:response].chomp
   logger.info "The node's default interface is stored in the #{cb_name} clipboard."
 end
+
+Given /^I restart the ovs pod on the#{OPT_QUOTED} node$/ do | node_name |
+  ensure_admin_tagged
+  ensure_destructive_tagged
+
+  ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
+    pod.node_name == node_name
+  }.first
+  @result = ovs_pod.ensure_deleted(user: admin)
+  unless @result[:success]
+    raise "Fail to delete the ovs pod"
+  end
+end
