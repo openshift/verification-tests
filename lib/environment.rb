@@ -229,18 +229,6 @@ module BushSlicer
       return @system_docker_repo
     end
 
-    # the opsrc used to create subscription, default to "redhat-operators"
-    def subscription_opsrc_name
-      unless @subscription_opsrc_name
-        if opts[:subscription_opsrc_name]
-          @subscription_opsrc_name = opts[:subscription_opsrc_name]
-        else
-          @subscription_opsrc_name = "redhat-operators"
-        end
-      end
-      return @subscription_opsrc_name
-    end
-
     # helper parser
     def parse_version(ver_str)
       ver = ver_str.sub(/^v/,"")
