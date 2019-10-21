@@ -216,6 +216,10 @@ wait_form_loaded:
   element:
     selector:
       css: form
+wait_box_loaded:
+  element:
+    selector:
+      css: .loading-box__loaded
 ## -------- check resource key and values pairs ------
 check_resource_details:
   action:
