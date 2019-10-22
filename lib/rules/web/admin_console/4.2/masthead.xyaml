@@ -1,0 +1,24 @@
+browse_to_cli_tools_page:
+  action: click_help_button
+  params:
+    text: Command Line Tools
+    link_url: "#"
+  action: click_link_with_text
+click_help_button:
+  element:
+    selector:
+      xpath: //button[contains(@aria-label, 'Help menu')]
+    op: click
+check_default_oc_download_links:
+  params:
+    text: Download oc for Linux
+    link_url: linux/oc.tar
+  action: check_link_and_text
+  params:
+    text: Download oc for Mac
+    link_url: mac/oc.zip
+  action: check_link_and_text
+  params:
+    text: Download oc for Windows
+    link_url: windows/oc.zip
+  action: check_link_and_text
