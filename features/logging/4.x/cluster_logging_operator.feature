@@ -23,9 +23,7 @@ Feature: cluster-logging-operator related test
     And the output should contain:
       | port: metrics  |
       | path: /metrics |
-    When I get project service named "<%= cb.collection_type %>" as YAML
-    Then the step should succeed
-    And evaluation of `@result[:parsed]['spec']['clusterIP']` is stored in the :service_ip clipboard
+    And evaluation of `service('<%= cb.collection_type %>').ip` is stored in the :service_ip clipboard
 
     Given I run curl command on the CLO pod to get metrics with:
       | object     | <%= cb.collection_type %> |
