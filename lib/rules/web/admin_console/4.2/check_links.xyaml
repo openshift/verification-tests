@@ -6,3 +6,34 @@ check_header_brand:
   elements:
   - selector:
       xpath: //img[@alt='<product_brand>']
+check_monitoring_urls:
+  action: click_alert_manager_menu
+  action: check_alert_manager_url
+  action: click_metrics_prometheus_menu
+  action: check_metrics_prometheus_url
+  action: check_dashboards_grafana_menu_url
+click_alert_manager_menu:
+  params:
+    text: Alerting
+    link_url: /monitoring/alerts
+  action: click_link_with_text
+check_alert_manager_url:
+  params:
+    text: Alertmanager UI
+    link_url: https://<alert_ui_route>/#/alerts
+  action: check_link_and_text
+click_metrics_prometheus_menu:
+  params:
+    text: Metrics
+    link_url: /monitoring/query-browser?query0=
+  action: click_link_with_text
+check_metrics_prometheus_url:
+  params:
+    text: Prometheus UI
+    link_url: https://<prometheus_ui_route>
+  action: check_link_and_text
+check_dashboards_grafana_menu_url:
+  params:
+    text: Dashboards
+    link_url: https://<dashboards_grafana_route>
+  action: click_link_with_text
