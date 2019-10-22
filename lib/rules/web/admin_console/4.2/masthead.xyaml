@@ -11,14 +11,24 @@ click_help_button:
     op: click
 check_default_oc_download_links:
   params:
-    text: Download oc for Linux
-    link_url: linux/oc.tar
+    text: Download oc
+    link_url: clients/oc/4.2
   action: check_link_and_text
   params:
-    text: Download oc for Mac
-    link_url: mac/oc.zip
+    text: Download odo
+    link_url: clients/odo/latest
+  action: check_link_and_text
+check_customized_oc_download_links:
+  params:
+    text: Download oc2
+    link_url: mirror.openshift.com/pub/openshift-v4/clients/oc
   action: check_link_and_text
   params:
-    text: Download oc for Windows
-    link_url: windows/oc.zip
+    text: Download oc3
+    link_url: mirror.openshift.com/pub/openshift-v4/clients/oc
   action: check_link_and_text
+  params:
+    text: 下载oc命令行
+    link_url: mirror.openshift.com/pub/openshift-v4/clients/oc
+  action: check_link_and_text
+  
