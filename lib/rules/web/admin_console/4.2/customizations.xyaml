@@ -21,3 +21,11 @@ upload_file:
     visible: false
     type: filefield
     op: set <file_path>
+check_console_notification:
+  elements:
+  - selector:
+      xpath: //div[@class='co-global-notification' and @data-test='notification3-BannerTopBottom']//.[contains(text(), 'Subscribe')]
+  params:
+    text: Youtube
+    link_url: https://www.youtube.com
+  action: check_link_and_text
