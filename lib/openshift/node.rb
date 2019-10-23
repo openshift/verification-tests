@@ -85,12 +85,13 @@ module BushSlicer
       return ! res.nil?
     end
 
-    def ready?(user: nil, cached: true, quiet: false)
-      status = get_cached_prop(prop: :status, user:user, cached: cached, quiet: quiet)
-      ready = status['conditions'].any? do |con|
+    def ready?(user: nil, cached: false, quiet: false)
+      status = get_cached_prop(prop: :status, user: user, cached: cached, quiet: quiet)
+      result = {}
+      result[:success] = status['conditions'].any? do |con|
         con['type'] == "Ready" && con['status'] == "True"
       end
-      return ready
+      return result
     end
 
     # @return [Integer} capacity cpu in 'm'
