@@ -35,13 +35,7 @@ end
 Given(/^I store the last provisioned machine in the#{OPT_SYM} clipboard$/) do | cb_name |
   machines = BushSlicer::Machine.list(user: admin, project: project("openshift-machine-api"))
   cache_resources *machines
-  step "I run the :get admin command with:", table(%{
-    | resource | machine                                                   |
-    | n        | openshift-machine-api                                     |
-    | sort_by  | {.metadata.creationTimestamp}                             |
-    | template | {{(index .items #{ machines.length - 1 }).metadata.name}} |
-  })
-  cb[cb_name] = @result[:response]
+  cb[cb_name] = machines.max_by(&:created_at).name
 end
 
 Given(/^I wait for the node of machine(?: named "(.+)")? to appear/) do | machine_name |

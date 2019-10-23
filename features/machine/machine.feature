@@ -65,14 +65,7 @@ Feature: Machine features testing
     And I wait for the node of machine named "<%= cb.new_machine %>" to appear
 
     # new node should be ready
-    And I wait up to 600 seconds for the steps to pass:
-    """
-    When I run the :get admin command with:
-      | resource      | node               |
-      | resource_name | <%= cb.new_node %> |
-    Then the output should contain:
-      | Ready |
-    """
+    And admin waits for the "<%= cb.new_node %>" node to become ready up to 600 seconds
 
     # scale down
     And I run the :scale admin command with:
