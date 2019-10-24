@@ -24,6 +24,7 @@ Feature: Kibana related features
     And I perform the :kibana_find_index_pattern web action with:
       | index_pattern_name | project.<%= cb.proj.name %>.<%= cb.proj.uid %>.* |
     Then the step should succeed
+    And I log out kibana logging web console
     Given cluster role "cluster-admin" is added to the "first" user
     Then I login to kibana logging web console
     Given evaluation of `[".operations.*", ".all", ".orphaned", "project.*"]` is stored in the :indices clipboard
@@ -35,12 +36,14 @@ Feature: Kibana related features
       | index_pattern_name | #{cb.index_name} |
     Then the step should succeed
     """
+    Then I log out kibana logging web console
     And cluster role "cluster-admin" is removed from the "first" user
 
     And I login to kibana logging web console
     And I perform the :kibana_find_index_pattern web action with:
       | index_pattern_name | project.<%= cb.proj.name %>.<%= cb.proj.uid %>.* |
     Then the step should succeed
+    And I run the :kibana_expand_index_patterns web action
     And I perform the :kibana_find_index_pattern web action with:
       | index_pattern_name | .operations.* |
     Then the step should fail

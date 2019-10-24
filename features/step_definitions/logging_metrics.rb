@@ -79,6 +79,14 @@ Given /^I login to kibana logging web console$/ do
   browser.base_url = cb.logging_console_url
 end
 
+Given /^I log out kibana logging web console$/ do
+  cb.logging_console_url = route('kibana', service('kibana',project('openshift-logging', switch: false))).dns(by: admin)
+  step %Q/I perform the :logout_kibana web action with:/, table(%{
+    | kibana_url | https://<%= cb.logging_console_url %> |
+  })
+  browser.finalize
+end
+
 # ##  curl
 # -H "Authorization: Bearer $USER_TOKEN"
 # -H "Hawkular-tenant: $PROJECT"
