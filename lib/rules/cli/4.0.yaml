@@ -1176,15 +1176,6 @@
   :cmd: oc adm cordon <node_name>
 :oadm_uncordon_node:
   :cmd: oc adm uncordon <node_name>
-:oadm_manage_node_evacuate:
-  :cmd: oc adm manage-node
-  :options:
-    :dry_run: --dry-run=<value>
-    :evacuate: --evacuate=<value>
-    :list_pods: --list-pods=<value>
-    :node_name: <value>
-    :pod_selector: --pod-selector=<value>
-    :selector: --selector=<value>
 :oadm_new_project:
   :cmd: oc adm new-project <project_name>
   #:expected:
