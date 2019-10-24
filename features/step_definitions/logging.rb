@@ -27,6 +27,7 @@ Given /^logging operators are installed successfully$/ do
   ensure_destructive_tagged
   step %Q/I switch to cluster admin pseudo user/
   step %Q/evaluation of `cluster_version('version').version` is stored in the :ocp_cluster_version clipboard/
+  step %Q/logging channel name is stored in the :channel clipboard/
 
   # Create namespace
   unless project('openshift-logging').exists?
@@ -47,7 +48,8 @@ Given /^logging operators are installed successfully$/ do
       step %Q/I use the "openshift-marketplace" project/
       # first check packagemanifest exists for cluster-logging
       raise "Required packagemanifest 'cluster-logging' no found!" unless package_manifest('cluster-logging').exists?
-
+      step %Q/"cluster-logging" packagemanifest's operator source name is stored in the :clo_opsrc clipboard/
+      step %Q/I use the "openshift-logging" project/
       if cb.ocp_cluster_version.include? "4.1."
         # create catalogsourceconfig and subscription for cluster-logging-operator
         catsrc_logging_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/deploy_clo_via_olm/4.1/03_clo_csc.yaml"
@@ -58,8 +60,12 @@ Given /^logging operators are installed successfully$/ do
         raise "Error creating subscription for cluster_logging" unless @result[:success]
       else
         # create subscription in `openshift-logging` namespace:
-        sub_logging_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/deploy_clo_via_olm/4.2/03_clo_sub.yaml"
-        @result = admin.cli_exec(:create, f: sub_logging_yaml)
+        sub_logging_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/deploy_clo_via_olm/4.2/clo-sub-template.yaml"
+        step %Q/I process and create:/, table(%{
+          | f | #{sub_logging_yaml}    |
+          | p | SOURCE=#{cb.clo_opsrc} |
+          | p | CHANNEL=#{cb.channel}  |
+        })
         raise "Error creating subscription for cluster_logging" unless @result[:success]
       end
     end
@@ -91,7 +97,8 @@ Given /^logging operators are installed successfully$/ do
       step %Q/I use the "openshift-marketplace" project/
       # first check packagemanifest exists for elasticsearch-operator
       raise "Required packagemanifest 'elasticsearch-operator' no found!" unless package_manifest('elasticsearch-operator').exists?
-
+      step %Q/"elasticsearch-operator" packagemanifest's operator source name is stored in the :eo_opsrc clipboard/
+      step %Q/I use the "openshift-operators-redhat" project/
       if cb.ocp_cluster_version.include? "4.1."
         # create catalogsourceconfig and subscription for elasticsearch-operator
         catsrc_elasticsearch_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/eleasticsearch/deploy_via_olm/4.1/04_eo-csc.yaml"
@@ -102,8 +109,12 @@ Given /^logging operators are installed successfully$/ do
         raise "Error creating subscription for elasticsearch" unless @result[:success]
       else
         # create subscription in "openshift-operators-redhat" namespace:
-        sub_elasticsearch_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/eleasticsearch/deploy_via_olm/4.2/04_eo-sub.yaml"
-        @result = admin.cli_exec(:create, f: sub_elasticsearch_yaml)
+        sub_elasticsearch_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/eleasticsearch/deploy_via_olm/4.2/eo-sub-template.yaml"
+        step %Q/I process and create:/, table(%{
+          | f | #{sub_elasticsearch_yaml} |
+          | p | SOURCE=#{cb.eo_opsrc}     |
+          | p | CHANNEL=#{cb.channel}     |
+        })
         raise "Error creating subscription for elasticsearch" unless @result[:success]
       end
     end
@@ -311,4 +322,23 @@ Given /^I run curl command on the CLO pod to get metrics with:$/ do | table |
   else
     raise "Get metrics failed with error, #{@result[:response]}"
   end
+end
+
+Given /^logging channel name is stored in the#{OPT_SYM} clipboard$/ do | cb_name |
+  cb_name = 'logging_channel_name' unless cb_name
+  case
+  when cluster_version('version').version.include?('4.1.')
+    cb[cb_name] = "preview"
+  when cluster_version('version').version.include?('4.2.')
+    cb[cb_name] = "4.2"
+  when cluster_version('version').version.include?('4.3.')
+    cb[cb_name] = "4.3"
+  end
+end
+
+Given /^#{QUOTED} packagemanifest's operator source name is stored in the#{OPT_SYM} clipboard$/ do |packagemanifest, cb_name|
+  cb_name = "opsrc_name" unless cb_name
+  @result = admin.cli_exec(:get, resource: 'packagemanifest', resource_name: packagemanifest, n: 'openshift-marketplace', o: 'yaml')
+  raise "Unable to get opsrc name" unless @result[:success]
+  cb[cb_name] = @result[:parsed]['metadata']['labels']['opsrc-owner-name']
 end
