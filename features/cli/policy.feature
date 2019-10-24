@@ -267,15 +267,13 @@ Feature: change the policy of user/service account
     Given I have a project
     And admin ensures "pv-<%= project.name %>" pv is deleted after scenario
     Given cluster role "storage-admin" is added to the "first" user
-    And I have a 1 GB volume and save volume id in the :volumeID clipboard
 
-    When I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/ebs/pv-rwo.yaml"
-    Then I replace lines in "pv-rwo.yaml":
-      | ebs                           | pv-<%= project.name %> |
-      | 10Gi                          | 1Gi                    |
-      | aws://us-east-1d/vol-e69f0b1c | <%= cb.volumeID %>     |
+    When I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/hostpath/pv-rwx-recycle.yaml"
+    Then I replace lines in "pv-rwx-recycle.yaml":
+      | local         | pv-<%= project.name %> |
+      | ReadWriteMany | ReadWriteOnce          |
     Then I run the :create client command with:
-      | f | pv-rwo.yaml |
+      | f | pv-rwx-recycle.yaml |
     And the step should succeed
 
     When I run the :get client command with:
@@ -295,12 +293,12 @@ Feature: change the policy of user/service account
       | name     | pv-<%= project.name %> |
     Then the step should succeed
 
-    Then I replace lines in "pv-rwo.yaml":
+    Then I replace lines in "pv-rwx-recycle.yaml":
       | ReadWriteOnce | ReadWriteMany |
 
     When I run the :replace client command with:
-      | f     | pv-rwo.yaml |
-      | force | true        |
+      | f     | pv-rwx-recycle.yaml |
+      | force | true                |
     And the step should succeed
 
     When I run the :describe client command with:
