@@ -1,11 +1,8 @@
 require 'text-table'
+require 'thread'
+require 'thwait'
+
 module BushSlicer
-  # represents what we want to show in the summary output
-  # 1. platform   (aws, azure, gce, openstack, and etc)
-  # 2. instance_name
-  # 3. uptime
-  # 4. link to Flexy job ID that was used to spin it up (none if nont-Fles
-  #
   class InstanceSummary
     attr_accessor :jenkins
 
@@ -15,7 +12,6 @@ module BushSlicer
 
     ## print out summary in a text table format
     def print_summary(summary)
-
       table = Text::Table.new
       table.head = ['name', 'uptime', 'flexy_job_id', 'region']
       summary.each do | s |
@@ -35,15 +31,13 @@ module BushSlicer
         total += s[:inst_count]
         table.rows << [s[:platform], s[:region], s[:inst_count]]
       end
-      table.rows << ["Total instances:", "", total]
+      table.foot = ["Total instances", "", total]
       puts table
-
     end
-
   end
 
   class AwsSummary < InstanceSummary
-    attr_accessor :amz, :summary, :table
+    attr_accessor :amz
     def initialize(jenkins: nil)
       @amz = Amz_EC2.new
       @jenkins = jenkins
@@ -98,25 +92,23 @@ module BushSlicer
       regions = amz.get_regions
       region_names =  regions.map {|r| r.region_name }
       aws_instances = {}
+      threads = []
       regions.each do | region |
-        ### for init debugging use one region only
         if target_region
           # first check name is valid
           raise "Unsupported region '#{target_region}'" unless region_names.include? target_region
-          amz = Amz_EC2.new(region: target_region)
-          instances = amz.get_instances_by_status('running')
-          aws_instances[target_region] = instances
-          break
-        else
-          amz = Amz_EC2.new(region: region.region_name)
-          inst = amz.get_instances_by_status('running')
-          aws_instances[region.region_name] = inst
+          region.region_name = target_region
         end
-
+        threads << Thread.new(Amz_EC2.new(region: region.region_name)) do |aws|
+          instances = aws.get_instances_by_status('running')
+          aws_instances[region.region_name] = instances
+          break if target_region == region.region_name
+        end
       end
+      ThreadsWait.all_waits(*threads)
       grand_summary = []
       aws_instances.each do |region, inst_list|
-        print "Getting summary for region '#{region}'\n"
+        # print "Getting summary for region '#{region}'\n"
         summary = summarize_instances(region, inst_list)
         print_summary(summary) if inst_list.count > 0
         grand_summary << {platform: 'aws', region: region, inst_count: inst_list.count}
@@ -127,11 +119,169 @@ module BushSlicer
   end
 
   class GceSummary < InstanceSummary
-    # WIP:
+    attr_accessor :gce
+
+    def initialize(jenkins: nil)
+      @gce = GCE.new
+      @jenkins = jenkins
+    end
+
+    # for GCE, group the instance by network
+    def regroup_instances(instances)
+      cluster_map = {}
+
+      instances.each do |inst|
+        rindex = inst.network_interfaces.first.network.split('/').last
+        if cluster_map[rindex]
+          cluster_map[rindex] << inst
+        else
+          cluster_map[rindex] = [inst]
+        end
+      end
+      return cluster_map
+    end
+
+    # @return <Array of Hash of summary>
+    def summarize_instances(region, instance_list)
+      summary = []
+      gce = @gce
+      project = gce.config[:project]
+      jenkins = @jenkins
+      cm = regroup_instances(instance_list)
+      cm.each do | network, inst_list |
+        inst_list.each do | inst |
+          inst_summary = {}
+          # inst_summary[:inst_obj] = inst
+          inst_summary[:region] = region
+          inst_summary[:name]= inst.name
+          inst_summary[:uptime]= gce.instance_uptime inst
+          inst_summary[:owned] = network
+          if inst_summary[:owned]
+            inst_summary[:flexy_job_id] = jenkins.get_jenkins_flexy_job_id(inst_summary[:owned][0..-9])
+          else
+            inst_summary[:flexy_job_id] = nil
+          end
+          summary << inst_summary
+        end
+      end
+      return summary
+    end
+
+    def get_summary(target_region: nil)
+      regions = gce.regions
+      gce_instances = {}
+      grand_summary = []
+      targets = {}
+      threads_zones = []
+
+      if target_region
+        targets[target_region] = regions[target_region]
+      else
+        targets = regions
+      end
+
+      targets.each do | region, zones |
+        gce_instances[region] = []
+        zone_threads = zones.each do |zone|
+          threads_zones << Thread.new(zone) do |z|
+            instances = gce.get_instances_by_status(zone: z, status: 'running')
+            if instances
+              instances.each do |inst|
+                gce_instances[region] << inst
+              end
+            end
+          end
+        end
+      end
+      ThreadsWait.all_waits(*threads_zones)
+
+      targets.each do |region, zones|
+        # print "Getting summary for region #{region}\n"
+        if gce_instances.keys.include? region
+          summary = summarize_instances(region, gce_instances[region])
+          print_summary(summary) if summary.count > 0
+          grand_summary << {platform: 'gce', region: region, inst_count: summary.count}
+        end
+      end
+      print_grand_summary(grand_summary)
+    end
   end
 
   class AzureSummary < InstanceSummary
-    # WIP:
+    attr_accessor :azure
+
+    def initialize(jenkins: nil)
+      @azure = Azure.new
+      @jenkins = jenkins
+    end
+
+    def summarize_instances(cm)
+      summary = []
+      cm.each do |rg_name, instances|
+        instances.each do |inst|
+          inst_summary = {}
+          inst_summary[:region] = inst[:inst].location
+          inst_summary[:name]= inst[:inst].name
+          inst_summary[:uptime]= inst[:uptime]
+          inst_summary[:owned] = rg_name.downcase
+          if inst_summary[:owned]
+            inst_summary[:flexy_job_id] = jenkins.get_jenkins_flexy_job_id(inst_summary[:owned][0..-10])
+          else
+            inst_summary[:flexy_job_id] = nil
+          end
+          summary << inst_summary
+        end
+      end
+      return summary
+    end
+
+    def get_summary
+      grand_summary = []
+      # default status is 'PowerState/Running'
+      # cluster_map keyed off by resource_group_name
+      cm = azure.get_running_instances
+      summary = summarize_instances(cm)
+      print_summary(summary) if summary.count > 0
+      grand_summary << {platform: 'azure', region: summary.first[:region], inst_count: summary.count}
+      print_grand_summary(grand_summary)
+    end
   end
 
+
+  class OpenstackSummary < InstanceSummary
+    attr_accessor :os
+
+    def initialize(jenkins: nil)
+      @os = OpenStack10.new
+      @jenkins = jenkins
+    end
+
+    # instances is <Array> of server objects
+    def summarize_instances(instances)
+      summary = []
+      sorted_instances = instances.sort_by {|k, v| k}.to_h
+      sorted_instances.each do |name, inst|
+        inst_summary = {}
+        inst_summary[:region] = 'upshift'
+        inst_summary[:name]= name
+        inst_summary[:uptime]= os.instance_uptime inst["created"]
+        inst_summary[:owned] =  name
+        inst_summary[:flexy_job_id] = jenkins.get_jenkins_flexy_job_id(name[0..13])
+        summary << inst_summary
+      end
+      return summary
+    end
+
+    def get_summary
+      grand_summary = []
+      inst_details = os.get_running_instances
+      # sleep 15
+      summary = summarize_instances(inst_details)
+        # summary = summarize_instances(rg_name, instances)
+      print_summary(summary) if summary.count > 0
+      grand_summary << {platform: 'openstack', region: summary.first[:region], inst_count: summary.count}
+      print_grand_summary(grand_summary)
+    end
+  end
 end
+

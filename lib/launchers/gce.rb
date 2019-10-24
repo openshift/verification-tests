@@ -131,6 +131,26 @@ module BushSlicer
       end
     end
 
+    # @input region_name
+    # @input status: filter to be used when calling the list_instances method, default to RUNNING
+    # @return <Array> of instance, if
+    def get_instances_by_status(zone: nil, status: 'RUNNING')
+      compute.list_instances(@config[:project], zone, filter: "status eq 'RUNNING'").items
+    end
+
+    # @return Hash of zones keyed by region name
+    def regions
+      r = {}
+      res = compute.list_regions(@config[:project])
+      res.items.each { |i| r[i.name] = i.zones.map {|z| z.split('/')[-1]} }
+      return r
+    end
+
+    # @return <Float>
+    def instance_uptime(inst)
+      return (Time.now - Time.parse(inst.creation_timestamp)) / (60*60).round(2)
+    end
+
 
     # @param names [String, Array<String>] one or more names to launch
     # @param project [String] project name we work with

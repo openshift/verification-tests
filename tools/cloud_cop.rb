@@ -18,7 +18,7 @@ require 'text-table'
 # GCE specific
 require 'google/apis/compute_v1'
 require 'googleauth'
-
+require 'launchers/openstack10'
 # user libs
 require 'instance_summary'
 require 'jenkins'
@@ -28,7 +28,9 @@ module BushSlicer
     include Commander::Methods
     include Common::Helper
     include Common::CloudHelper
-    attr_accessor :jenkins, :jenkins_build_map, :summary, :amz, :gce, :azure
+    attr_accessor :jenkins, :jenkins_build_map, :amz, :gce, :azure
+    # TODO: perhaps we can cache the jenkins id mapping into a db instead to
+    # to save time
     def initialize
       @jenkins = Jenkins.new
       @jenkins.construct_jenkins_build_map
@@ -61,10 +63,27 @@ module BushSlicer
         c.description = 'display summary of running instances'
         c.option("-r", "--region region_name", "report on this region only")
         c.action do |args, options|
-          say 'WIP, please check back later'
+          ps = GceSummary.new(jenkins: @jenkins)
+          ps.get_summary(target_region: options.region)
         end
       end
-
+      command :"azure" do |c|
+        c.syntax = "#{File.basename __FILE__}"
+        c.description = 'display summary of running instances'
+        c.action do |args, options|
+          ps = AzureSummary.new(jenkins: @jenkins)
+          ps.get_summary
+        end
+      end
+      # internal openstack
+      command :"upshift" do |c|
+        c.syntax = "#{File.basename __FILE__}"
+        c.description = 'display summary of running instances'
+        c.action do |args, options|
+          ps = OpenstackSummary.new(jenkins: @jenkins)
+          ps.get_summary
+        end
+      end
       run!
     end
   end

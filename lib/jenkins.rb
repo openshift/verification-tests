@@ -7,6 +7,14 @@ module BushSlicer
     def initialize
       @client = JenkinsApi::Client.new(:server_url => 'https://openshift-qe-jenkins.rhev-ci-vms.eng.rdu2.redhat.com',
          :username => ENV['JENKINS_USER'], :password => ENV['JENKINS_PASSWORD'])
+      # # xxx for debugging you can set @build_map manually and disable to
+      # init call in cloud_cop.rb to save time querying jenkins server
+      # repeatedly
+      #
+      #  @build_map =  {"qeci-293"=>69641,
+      #  ...
+      #  "juzhao-1023"=>69559}
+
     end
 
     # @return <Array of builds>
