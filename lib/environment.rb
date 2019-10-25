@@ -18,23 +18,13 @@ module BushSlicer
     attr_reader :opts
 
     # :master represents register, scheduler, etc.
-    MANDATORY_OPENSHIFT_ROLES = [:master, :node]
-    OPENSHIFT_ROLES = MANDATORY_OPENSHIFT_ROLES + [:lb, :etcd, :bastion]
+    MANDATORY_OPENSHIFT_ROLES = []
+    OPENSHIFT_ROLES = MANDATORY_OPENSHIFT_ROLES + [:master, :node, :lb, :etcd, :bastion]
 
     # e.g. you call `#node_hosts to get hosts with the node service`
     OPENSHIFT_ROLES.each do |role|
       define_method("#{role}_hosts") do
         hosts.select {|h| h.has_role?(role)}
-      end
-    end
-
-    # override generated method as etcd role not always defined
-    def etcd_hosts
-      etcd_list = hosts.select {|h| h.has_role?(:etcd)}
-      if etcd_list.empty?
-        master_hosts
-      else
-        etcd_list
       end
     end
 
@@ -382,8 +372,8 @@ module BushSlicer
 
     def nodes(user: admin, refresh: false)
       return @nodes if @nodes && !refresh
-
-      @nodes = Node.list(user: user)
+      @nodes ||= []
+      @nodes = @nodes.concat(Node.list(user: user))
     end
 
     # selects the correct configured IAAS provider
