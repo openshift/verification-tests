@@ -14,3 +14,34 @@ kibana_verify_default_index_pattern:
       xpath:  //li[@title=".operations.*"]
   - selector:
       xpath:  //li[@title=" project.*"]
+
+kibana_verify_logged_in:
+  action:
+    if_element:
+      selector:
+        text: Authorize Access
+    ref: kibana_click_approve
+  action: wait_kibana_logged_in
+
+kibana_click_approve:
+  elements:
+  - selector:
+      name: approve
+    op: click
+
+wait_kibana_logged_in:
+  elements:
+  - selector:
+      xpath: //div[@class="global-nav-link__title" and contains(., "Discover")]
+    timeout: 300
+
+kibana_find_index_pattern:
+  elements:
+  - selector:
+      xpath: //h2[contains(@class, "index-pattern-label") and contains(., "<index_pattern_name>")] | //span[contains(., "<index_pattern_name>")]
+
+kibana_expand_index_patterns:
+  elements:
+  - selector:
+      xpath: //div[contains(@ng-model, "selectedIndexPattern")]
+    op: click

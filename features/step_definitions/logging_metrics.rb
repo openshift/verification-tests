@@ -62,20 +62,29 @@ end
 # helper step that does the following:
 # 1. figure out project and route information
 Given /^I login to kibana logging web console$/ do
-  #step %Q/I store the logging url to the :logging_route clipboard/
-  cb.logging_console_url = env.logging_console_url
+  cb.logging_console_url = route('kibana', service('kibana',project('openshift-logging', switch: false))).dns(by: admin)
   step %Q/I have a browser with:/, table(%{
-    | rules    | lib/rules/web/images/logging/ |
-    | rules    | lib/rules/web/console/base/   |
-    | base_url | <%= cb.logging_console_url %> |
+    | rules        | lib/rules/web/images/logging/       |
+    | rules        | lib/rules/web/console/base/         |
+    | base_url     | <%= cb.logging_console_url %>       |
     })
   step %Q/I perform the :kibana_login web action with:/, table(%{
-    | username   | <%= user.name %>              |
-    | password   | <%= user.password %>          |
-    | kibana_url | <%= cb.logging_console_url %> |
+    | username   | <%= user.name %>                      |
+    | password   | <%= user.password %>                  |
+    | kibana_url | https://<%= cb.logging_console_url %> |
+    | idp        | <%= env.idp %>                        |
     })
+  step %Q/I run the :kibana_verify_logged_in web action/
   # change the base url so we don't need to specifiy kibana url every time afterward in the rule file
-  browser.base_url = env.logging_console_url
+  browser.base_url = cb.logging_console_url
+end
+
+Given /^I log out kibana logging web console$/ do
+  cb.logging_console_url = route('kibana', service('kibana',project('openshift-logging', switch: false))).dns(by: admin)
+  step %Q/I perform the :logout_kibana web action with:/, table(%{
+    | kibana_url | https://<%= cb.logging_console_url %> |
+  })
+  browser.finalize
 end
 
 # ##  curl
