@@ -1,3 +1,16 @@
+check_custom_dns_help_link:
+  params:
+    content: Do you need to set up custom DNS
+  action: wait_box_loaded
+  action: check_page_match
+open_custom_dns_help_modal:
+  params:
+    button_text: Do you need to set up custom DNS
+  action: click_button
+check_custom_dns_help_info:
+  params:
+    content: To use a custom route, you must update your DNS provider
+  action: check_page_contains
 create_route:
   action: set_route_name
   action:
