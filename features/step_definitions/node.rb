@@ -504,8 +504,12 @@ Given /^node schedulable status should be restored after scenario$/ do
   _admin = admin
   teardown_add {
     _org_schedulable.each do |node, schedulable|
-      opts = { :node_name =>  node.name, :schedulable => schedulable  }
-      _admin.cli_exec(:oadm_manage_node, opts)
+      opts = { :node_name =>  node.name }
+      if schedulable
+        _admin.cli_exec(:oadm_uncordon_node, opts)
+      else
+        _admin.cli_exec(:oadm_cordon_node, opts)
+      end
     end
   }
 end
