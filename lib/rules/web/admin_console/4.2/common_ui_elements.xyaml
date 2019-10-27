@@ -34,6 +34,11 @@ click_button:
     selector:
       xpath: //button[contains(.,'<button_text>')]
     op: click
+click_button_text:
+  element:
+    selector:
+      xpath: //button[text()='<button_text>']
+    op: click
 check_button_disabled:
   element:
     selector:
@@ -308,13 +313,17 @@ check_key_and_resource_link:
     selector:
       xpath: //dt[contains(text(),'<key>')]/following-sibling::dd[1]//a[contains(@href,'<resource_link>')]
 check_key_and_action_link:
-  element:
+  element: &key_action
     selector:
       xpath: //dt[contains(text(),'<key>')]/following-sibling::dd[1]//button
 click_value_on_resource_detail:
   element:
     <<: *key_value
     op: click
+click_key_and_action_link:
+   element:
+     <<: *key_action
+     op: click
 check_resource_name:
   params:
     key: Name

@@ -89,3 +89,9 @@ goto_one_route_page:
 #catalog page
 goto_catalog_page:
   url: catalog/ns/<project_name>
+
+#node
+goto_node_page:
+  url: k8s/cluster/nodes
+goto_one_node_page:
+  url: k8s/cluster/nodes/<node_name>
