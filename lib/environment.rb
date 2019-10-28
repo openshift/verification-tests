@@ -18,23 +18,13 @@ module BushSlicer
     attr_reader :opts
 
     # :master represents register, scheduler, etc.
-    MANDATORY_OPENSHIFT_ROLES = [:master, :node]
-    OPENSHIFT_ROLES = MANDATORY_OPENSHIFT_ROLES + [:lb, :etcd, :bastion]
+    MANDATORY_OPENSHIFT_ROLES = []
+    OPENSHIFT_ROLES = MANDATORY_OPENSHIFT_ROLES + [:master, :node, :lb, :etcd, :bastion]
 
     # e.g. you call `#node_hosts to get hosts with the node service`
     OPENSHIFT_ROLES.each do |role|
       define_method("#{role}_hosts") do
         hosts.select {|h| h.has_role?(role)}
-      end
-    end
-
-    # override generated method as etcd role not always defined
-    def etcd_hosts
-      etcd_list = hosts.select {|h| h.has_role?(:etcd)}
-      if etcd_list.empty?
-        master_hosts
-      else
-        etcd_list
       end
     end
 
@@ -322,8 +312,6 @@ module BushSlicer
     # @param user [BushSlicer::User]
     # @param project [BushSlicer::project]
     def get_routing_details(user:, project:)
-      clean_project = false
-
       service_res = Service.create(by: user, project: project, spec: 'https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/service_with_selector.json')
       raise "cannot create service" unless service_res[:success]
       service = service_res[:resource]
@@ -382,8 +370,24 @@ module BushSlicer
 
     def nodes(user: admin, refresh: false)
       return @nodes if @nodes && !refresh
+      @nodes ||= []
+      @nodes = @nodes.concat(Node.list(user: user))
+    end
 
-      @nodes = Node.list(user: user)
+    # @return [Project] a project unique to this executor for test framework
+    #   support purposes (e.g. host a debug pod for running node commands)
+    def service_project
+      unless @service_project
+        project = Project.new(name: "tests" + EXECUTOR_NAME.downcase, env: self)
+        unless project.exists?
+          res = project.create(by: admin, clean_up_registered: true)
+          unless res[:success]
+            raise "failed to create service project #{project.name}, see log"
+          end
+        end
+        @service_project = project
+      end
+      return @service_project
     end
 
     # selects the correct configured IAAS provider
@@ -409,6 +413,7 @@ module BushSlicer
     def clean_up
       @user_manager.clean_up if @user_manager
       @hosts.each {|h| h.clean_up } if @hosts
+      @service_project.delete_graceful(by: nil) if @service_project
       @cli_executor.clean_up if @cli_executor
       @webconsole_executor.clean_up if @webconsole_executor
     end

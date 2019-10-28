@@ -95,7 +95,9 @@ module BushSlicer
       # note that search for users is only done inside the set of users
       #   currently used by scenario; we don't expect scenario to know
       #   usernames before a user is actually requested from the user_manager
-      if env.is_admin?(by) && ! env.users.by_name(opts[:admin])
+      if env.is_admin?(by) &&
+             ! env.users.by_name(opts[:admin]) &&
+             ! opts.delete(:clean_up_registered)
         raise "creating project as admin without administrators may easily lead to project leaks in the test framework, avoid doing so"
       elsif opts.delete(:_via) == :web
         res = by.webconsole_exec(:new_project, project_name: name, **opts)

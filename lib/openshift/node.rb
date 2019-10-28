@@ -31,8 +31,12 @@ module BushSlicer
 
       # try to figure this out from host specification
       potential = env.hosts.select { |h| h.hostname.start_with? self.name }
+      # set internal IP and DNS name when possible to avoid pointless SSH
+
+
       if potential.size == 1
         @host = potential.first
+        @host[:node] = self
         return @host
       end
 
@@ -44,11 +48,18 @@ module BushSlicer
       @host = env.node_hosts.find do |h|
         env.nodes.none? {|n| n.host_var == h} && h.local_ip?(hostname)
       end
-      return @host if @host
+      if @host
+        @host[:node] = self
+        return @host
+      end
 
       # treat as a new host
       # set it to use bastion as usually we only see internal IP
-      @host = env.host_add(hostname, roles: [:node], flags: "/b/")
+      roles = is_master? ? [:master, :node] : [:node]
+      unless env.bastion_hosts.empty?
+        flags = "/b/"
+      end
+      @host = env.host_add(hostname, node: self, roles: roles, flags: flags)
       return @host if @host
 
       raise("no host mapping for #{self.name}")
