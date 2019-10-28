@@ -33,11 +33,8 @@ Feature: cluster-logging-operator related test
     And evaluation of `@result[:response]` is stored in the :token clipboard
     Given I use the "openshift-logging" project
     Given evaluation of `cluster_logging('instance').collection_type` is stored in the :collection_type clipboard
-    When I get project servicemonitor named "<%= cb.collection_type %>" as YAML
-    Then the step should succeed
-    And the output should contain:
-      | port: metrics  |
-      | path: /metrics |
+    Given the expression should be true> service_monitor('<%= cb.collection_type %>').port == "metrics"
+    And the expression should be true> service_monitor('<%= cb.collection_type %>').path == "/metrics"
     And evaluation of `service('<%= cb.collection_type %>').ip` is stored in the :service_ip clipboard
 
     Given I run curl command on the CLO pod to get metrics with:

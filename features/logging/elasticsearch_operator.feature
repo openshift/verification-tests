@@ -15,11 +15,8 @@ Feature: elasticsearch-operator related tests
     And evaluation of `@result[:response]` is stored in the :token clipboard
 
     Given I use the "openshift-logging" project
-    When I get project servicemonitor named "monitor-elasticsearch-cluster" as YAML
-    Then the step should succeed
-    And the output should contain:
-      | port: elasticsearch        |
-      | path: /_prometheus/metrics |
+    Given the expression should be true> service_monitor("monitor-elasticsearch-cluster").port == "elasticsearch"
+    And the expression should be true> service_monitor("monitor-elasticsearch-cluster").path == "/_prometheus/metrics"
     Given evaluation of `service("elasticsearch-metrics").ip` is stored in the :service_ip clipboard
 
     Given I run curl command on the CLO pod to get metrics with:
