@@ -24,8 +24,12 @@ upload_file:
 check_console_notification:
   elements:
   - selector:
-      xpath: //div[@class='co-global-notification' and @data-test='notification3-BannerTopBottom']//.[contains(text(), 'Subscribe')]
+      xpath: //div[@class='co-global-notification' and @data-test='<name>-<location>']//.[contains(text(), '<notification_text>')]
+  - selector:
+      css: '.co-global-notification[style*="background-color: <background>"]'
+  - selector:
+      css: '.co-global-notification[style*="color: <color>"]'
   params:
-    text: Youtube
-    link_url: https://www.youtube.com
+    text: <link_text>
+    link_url: <link_url>
   action: check_link_and_text
