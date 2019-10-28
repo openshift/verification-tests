@@ -67,12 +67,7 @@ Feature: pod related features
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/pod-pull-by-tag.yaml |
     Then the step should succeed
     And the pod named "pod-pull-by-tag" status becomes :running
-    Given I register clean-up steps:
-    """
-    I run the :oadm_uncordon_node admin command with:
-      | node_name | <%= cb.pod_node %> |
-    the step should succeed
-    """
+    Given node schedulable status should be restored after scenario
     When I run the :oadm_cordon_node admin command with:
       | node_name | <%= cb.pod_node %> |
     Then the step should succeed
@@ -109,12 +104,7 @@ Feature: pod related features
   Scenario: New pods creation will be disabled on unschedulable nodes
     Given I have a project
     Given I store the schedulable nodes in the :nodes clipboard
-    Given I register clean-up steps:
-    """
-    I run the :oadm_uncordon_node admin command with:
-      | node_name | noescape: <%= cb.nodes.map(&:name).join(" ") %> |
-    the step should succeed
-    """
+    Given node schedulable status should be restored after scenario
     When I run the :oadm_cordon_node admin command with:
       | node_name | noescape: <%= cb.nodes.map(&:name).join(" ") %> |
     Then the step should succeed
@@ -146,12 +136,7 @@ Feature: pod related features
       | p | {"metadata":{"annotations": {"openshift.io/node-selector": ""}}}|
     Then the step should succeed
     Given I store the schedulable nodes in the :nodes clipboard
-    Given I register clean-up steps:
-    """
-    I run the :oadm_uncordon_node admin command with:
-      | node_name | <%= cb.nodes[0].name %> |
-    the step should succeed
-    """
+    Given node schedulable status should be restored after scenario
     When I run the :oadm_cordon_node admin command with:
       | node_name | <%= cb.nodes[0].name %> |
     Then the step should succeed
@@ -201,12 +186,7 @@ Feature: pod related features
   Scenario: Pods will still be created by DaemonSet when nodes are SchedulingDisabled
     Given I have a project
     Given I store the schedulable nodes in the :nodes clipboard
-    Given I register clean-up steps:
-    """
-    I run the :oadm_uncordon_node admin command with:
-      | node_name | <%= cb.nodes[0].name %> |
-    the step should succeed
-    """
+    Given node schedulable status should be restored after scenario
     When I run the :oadm_cordon_node admin command with:
       | node_name | <%= cb.nodes[0].name %> |
     Then the step should succeed
