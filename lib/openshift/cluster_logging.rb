@@ -171,15 +171,15 @@ module BushSlicer
       return rr.dig('spec', 'logStore', 'elasticsearch', 'storage')
     end
 
-    def logstore_storageclassname(user: nil, cached: false, quiet: false)
+    def logstore_storage_class_name(user: nil, cached: false, quiet: false)
       return logstore_storage(user: user, cached: cached, quiet: quiet).dig('storageClassName')
     end
 
-    def logstore_storagesize(user: nil, cached: false, quiet: false)
+    def logstore_storage_size(user: nil, cached: false, quiet: false)
       return logstore_storage(user: user, cached: cached, quiet: quiet).dig('size')
     end
 
-    def logstore_nodecount(user: nil, cached: false, quiet: false)
+    def logstore_node_count(user: nil, cached: false, quiet: false)
       rr = raw_resource(user: user, cached: cached, quiet: quiet)
       return rr.dig('spec', 'logStore', 'elasticsearch', 'nodeCount')
     end

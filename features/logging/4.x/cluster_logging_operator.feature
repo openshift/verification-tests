@@ -64,7 +64,7 @@ Feature: cluster-logging-operator related test
       | crd_yaml            | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/scalebase.yaml |
       | log_collector       | fluentd                                                                                                  |
     Then the step should succeed
-    And the expression should be true> cluster_logging('instance').logstore_nodecount == 2
+    And the expression should be true> cluster_logging('instance').logstore_node_count == 2
     Given 2 pods become ready with labels:
       | cluster-name=elasticsearch,component=elasticsearch,es-node-client=true,es-node-data=true,es-node-master=true |
     When I run the :patch client command with:
@@ -73,7 +73,7 @@ Feature: cluster-logging-operator related test
       | p             | {"spec":{"logStore":{"elasticsearch":{"nodeCount":3}}}} |
       | type          | merge                                                   |
     Then the step should succeed
-    And the expression should be true> cluster_logging('instance').logstore_nodecount == 3
+    And the expression should be true> cluster_logging('instance').logstore_node_count == 3
     And 3 pods become ready with labels:
       | cluster-name=elasticsearch,component=elasticsearch,es-node-client=true,es-node-data=true,es-node-master=true |
     When I run the :patch client command with:
@@ -82,7 +82,7 @@ Feature: cluster-logging-operator related test
       | p             | {"spec":{"logStore":{"elasticsearch":{"nodeCount":4}}}} |
       | type          | merge                                                   |
     Then the step should succeed
-    And the expression should be true> cluster_logging('instance').logstore_nodecount == 4
+    And the expression should be true> cluster_logging('instance').logstore_node_count == 4
     And 4 pods become ready with labels:
       | cluster-name=elasticsearch,component=elasticsearch,es-node-client=true,es-node-data=true |
     And 3 pods become ready with labels:

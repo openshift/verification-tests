@@ -12,7 +12,7 @@ module BushSlicer
       return rr.dig('spec', 'redundancyPolicy')
     end
 
-    def es_nodes(user: nil, quiet: false, cached: false)
+    def nodes(user: nil, quiet: false, cached: false)
       rr = raw_resource(user: user, cached: cached, quiet: quiet)
       return rr.dig('spec', 'nodes')
     end

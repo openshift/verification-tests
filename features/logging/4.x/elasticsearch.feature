@@ -49,7 +49,7 @@ Feature: Elasticsearch related tests
       | p             | {"spec":{"logStore":{"elasticsearch":{"storage":{"storageClassName": "<%= cb.default_sc.name %>"}}}}} |
       | type          | merge                                                                                                 |
     Then the step should succeed
-    And the expression should be true> cluster_logging('instance').management_state == "Unmanaged" and cluster_logging('instance').logstore_storageclassname == cb.default_sc.name
+    And the expression should be true> cluster_logging('instance').management_state == "Unmanaged" and cluster_logging('instance').logstore_storage_class_name == cb.default_sc.name
     And the expression should be true> elasticsearch('elasticsearch').exists? == false
     When I run the :patch client command with:
       | resource      | clusterlogging                         |
@@ -57,11 +57,11 @@ Feature: Elasticsearch related tests
       | p             | {"spec":{"managementState":"Managed"}} |
       | type          | merge                                  |
     Then the step should succeed
-    And the expression should be true> cluster_logging('instance').management_state == "Managed" and cluster_logging('instance').logstore_storageclassname == cb.default_sc.name
+    And the expression should be true> cluster_logging('instance').management_state == "Managed" and cluster_logging('instance').logstore_storage_class_name == cb.default_sc.name
     Given I wait for the "elasticsearch" elasticsearches to appear
-    And the expression should be true> elasticsearch('elasticsearch').es_nodes[0]['storage']['storageClassName'] == cb.default_sc.name
+    And the expression should be true> elasticsearch('elasticsearch').nodes[0]['storage']['storageClassName'] == cb.default_sc.name
     And the expression should be true> elasticsearch('elasticsearch').management_state == "Managed"
-    And evaluation of `elasticsearch('elasticsearch').es_nodes[0]["genUUID"]` is stored in the :gen_uuid clipboard
+    And evaluation of `elasticsearch('elasticsearch').nodes[0]["genUUID"]` is stored in the :gen_uuid clipboard
 
     Given a pod becomes ready with labels:
       | component=elasticsearch |
