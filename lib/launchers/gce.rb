@@ -135,7 +135,7 @@ module BushSlicer
     # @input status: filter to be used when calling the list_instances method, default to RUNNING
     # @return <Array> of instance, if
     def get_instances_by_status(zone: nil, status: 'RUNNING')
-      compute.list_instances(@config[:project], zone, filter: "status eq 'RUNNING'").items
+      compute.list_instances(@config[:project], zone, filter: "status eq '#{status.upcase}'").items
     end
 
     # @return Hash of zones keyed by region name
