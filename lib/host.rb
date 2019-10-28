@@ -836,20 +836,24 @@ module BushSlicer
       @exec_lock = Mutex.new
     end
 
+    private def service_project
+      node.env.service_project
+    end
+
     # @note execute commands without special setup
     def exec_raw(*commands, **opts)
-      @accessed = true
       unless opts[:single]
         commands = ["bash", "-c", commands_to_string(commands)]
       end
 
       @exec_lock.synchronize {
         # note this will block until timeout if command does not exist remotely
-        # TODO: check debug pod status in the background
-        # note2: exit status is always 0, WRKLDS-98
+        # TODO: check debug pod status in the background to avoid freeze (WRKLDS-99)
+        # note2: exit status is always 0 (WRKLDS-98)
         node.env.admin.cli_exec(
           :debug,
           resource: "node/#{node.name}",
+          n: service_project.name,
           oc_opts_end: "",
           exec_command_arg: commands,
           _stdin: opts[:stdin],
