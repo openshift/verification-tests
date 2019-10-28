@@ -29,48 +29,6 @@ Given /^logging operators are installed successfully$/ do
   step %Q/evaluation of `cluster_version('version').version` is stored in the :ocp_cluster_version clipboard/
   step %Q/logging channel name is stored in the :channel clipboard/
 
-  # Create namespace
-  unless project('openshift-logging').exists?
-    namespace_yaml = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/deploy_clo_via_olm/01_clo_ns.yaml"
-    @result = admin.cli_exec(:create, f: namespace_yaml)
-    raise "Error creating namespace" unless @result[:success]
-  end
-
-  step %Q/I use the "openshift-logging" project/
-  unless deployment('cluster-logging-operator').exists?
-    unless operator_group('openshift-logging').exists?
-      clo_operator_group_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/deploy_clo_via_olm/02_clo_og.yaml"
-      @result = admin.cli_exec(:create, f: clo_operator_group_yaml)
-      raise "Error creating operatorgroup" unless @result[:success]
-    end
-
-    unless subscription('cluster-logging').exists?
-      step %Q/I use the "openshift-marketplace" project/
-      # first check packagemanifest exists for cluster-logging
-      raise "Required packagemanifest 'cluster-logging' no found!" unless package_manifest('cluster-logging').exists?
-      step %Q/"cluster-logging" packagemanifest's operator source name is stored in the :clo_opsrc clipboard/
-      step %Q/I use the "openshift-logging" project/
-      if cb.ocp_cluster_version.include? "4.1."
-        # create catalogsourceconfig and subscription for cluster-logging-operator
-        catsrc_logging_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/deploy_clo_via_olm/4.1/03_clo_csc.yaml"
-        @result = admin.cli_exec(:create, f: catsrc_logging_yaml)
-        raise "Error creating catalogsourceconfig for cluster_logging" unless @result[:success]
-        sub_logging_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/deploy_clo_via_olm/4.1/04_clo_sub.yaml"
-        @result = admin.cli_exec(:create, f: sub_logging_yaml)
-        raise "Error creating subscription for cluster_logging" unless @result[:success]
-      else
-        # create subscription in `openshift-logging` namespace:
-        sub_logging_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/deploy_clo_via_olm/4.2/clo-sub-template.yaml"
-        step %Q/I process and create:/, table(%{
-          | f | #{sub_logging_yaml}    |
-          | p | SOURCE=#{cb.clo_opsrc} |
-          | p | CHANNEL=#{cb.channel}  |
-        })
-        raise "Error creating subscription for cluster_logging" unless @result[:success]
-      end
-    end
-  end
-
   unless project('openshift-operators-redhat').exists?
     eo_namespace_yaml = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/eleasticsearch/deploy_via_olm/01_eo-project.yaml"
     @result = admin.cli_exec(:create, f: eo_namespace_yaml)
@@ -116,6 +74,48 @@ Given /^logging operators are installed successfully$/ do
           | p | CHANNEL=#{cb.channel}     |
         })
         raise "Error creating subscription for elasticsearch" unless @result[:success]
+      end
+    end
+  end
+
+  # Create namespace
+  unless project('openshift-logging').exists?
+    namespace_yaml = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/deploy_clo_via_olm/01_clo_ns.yaml"
+    @result = admin.cli_exec(:create, f: namespace_yaml)
+    raise "Error creating namespace" unless @result[:success]
+  end
+
+  step %Q/I use the "openshift-logging" project/
+  unless deployment('cluster-logging-operator').exists?
+    unless operator_group('openshift-logging').exists?
+      clo_operator_group_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/deploy_clo_via_olm/02_clo_og.yaml"
+      @result = admin.cli_exec(:create, f: clo_operator_group_yaml)
+      raise "Error creating operatorgroup" unless @result[:success]
+    end
+
+    unless subscription('cluster-logging').exists?
+      step %Q/I use the "openshift-marketplace" project/
+      # first check packagemanifest exists for cluster-logging
+      raise "Required packagemanifest 'cluster-logging' no found!" unless package_manifest('cluster-logging').exists?
+      step %Q/"cluster-logging" packagemanifest's operator source name is stored in the :clo_opsrc clipboard/
+      step %Q/I use the "openshift-logging" project/
+      if cb.ocp_cluster_version.include? "4.1."
+        # create catalogsourceconfig and subscription for cluster-logging-operator
+        catsrc_logging_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/deploy_clo_via_olm/4.1/03_clo_csc.yaml"
+        @result = admin.cli_exec(:create, f: catsrc_logging_yaml)
+        raise "Error creating catalogsourceconfig for cluster_logging" unless @result[:success]
+        sub_logging_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/deploy_clo_via_olm/4.1/04_clo_sub.yaml"
+        @result = admin.cli_exec(:create, f: sub_logging_yaml)
+        raise "Error creating subscription for cluster_logging" unless @result[:success]
+      else
+        # create subscription in `openshift-logging` namespace:
+        sub_logging_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/deploy_clo_via_olm/4.2/clo-sub-template.yaml"
+        step %Q/I process and create:/, table(%{
+          | f | #{sub_logging_yaml}    |
+          | p | SOURCE=#{cb.clo_opsrc} |
+          | p | CHANNEL=#{cb.channel}  |
+        })
+        raise "Error creating subscription for cluster_logging" unless @result[:success]
       end
     end
   end
