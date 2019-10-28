@@ -228,3 +228,12 @@ Given(/^admin clones storage class #{QUOTED} from #{QUOTED} with:$/) do |target_
     raise "failed to clone StorageClass from: #{src_sc}"
   end
 end
+
+Given /^default storageclass is stored in the#{OPT_SYM} clipboard$/ do | cb_name |
+  ensure_admin_tagged
+  cb_name = 'default_sc' unless cb_name
+  _sc = BushSlicer::StorageClass.get_matching(user: user) { |sc, sc_hash| sc.default? }.first
+  raise "Unable to get default storage class " unless _sc
+  cb[cb_name] = _sc
+  cache_resources _sc
+end
