@@ -131,6 +131,7 @@ module BushSlicer
     alias bc build_config
     alias dc deployment_config
     alias hpa horizontal_pod_autoscaler
+    alias is image_stream
     alias istag image_stream_tag
     alias netns net_namespace
     alias psp pod_security_policy
