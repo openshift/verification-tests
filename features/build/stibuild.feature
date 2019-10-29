@@ -114,10 +114,6 @@ Feature: stibuild.feature
       | resource_name | ruby-ex                                                                                                                                         |
       | p             | {"spec": {"strategy": {"sourceStrategy": {"from": {"kind": "DockerImage","name": "docker.io/centos/ruby-22-centos7:error"}}},"type": "Source"}} |
     Then the step should succeed
-    When I run the :describe client command with:
-      | resource | buildconfig |
-      | name     | ruby-ex     |
-    Then the step should succeed
     When I run the :start_build client command with:
       | buildconfig | ruby-ex |
     Then the step should succeed
