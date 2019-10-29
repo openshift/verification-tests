@@ -37,7 +37,7 @@ Given /^I wait(?: up to #{NUMBER} seconds)? for the steps to pass:$/ do |seconds
       steps_string = steps_string.raw.flatten.join("\n")
     end
     logger.dedup_start
-    seconds = Integer(seconds) rescue 60
+    seconds = Integer(seconds) rescue 180
     # repetitions = 0
     error = nil
     success = wait_for(seconds) {
