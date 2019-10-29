@@ -1,6 +1,6 @@
 Given /^a pod becomes ready with labels:$/ do |table|
   labels = table.raw.flatten # dimentions irrelevant
-  pod_timeout = 15 * 60
+  pod_timeout = 5 * 60
 
   @result = BushSlicer::Pod.wait_for_labeled(*labels, user: user, project: project, seconds: pod_timeout) { |p,h| p.ready?(cached: true)[:success] }
 
@@ -15,7 +15,7 @@ Given /^a pod becomes ready with labels:$/ do |table|
 end
 
 Given /^the pod(?: named "(.+)")? becomes ready$/ do |name|
-  ready_timeout = 15 * 60
+  ready_timeout = 5 * 60
   @result = pod(name).wait_till_ready(user, ready_timeout)
 
   unless @result[:success]
@@ -74,7 +74,7 @@ Given /^I store in the#{OPT_SYM} clipboard the pods labeled:$/ do |cbn, labels|
 end
 
 Given /^the pod(?: named "(.+)")? status becomes :([^\s]*?)(?: within #{NUMBER} seconds)?$/ do |name, status, timeout|
-  timeout = timeout ? Integer(timeout) : 15 * 60
+  timeout = timeout ? Integer(timeout) : 5 * 60
   @result = pod(name).wait_till_status(status.to_sym, user, timeout)
 
   unless @result[:success]
@@ -84,7 +84,7 @@ Given /^the pod(?: named "(.+)")? status becomes :([^\s]*?)(?: within #{NUMBER} 
 end
 
 Given /^status becomes :([^\s]*?) of( exactly)? ([0-9]+) pods? labeled:$/ do |status, exact_count, count, labels|
-  timeout = 15 * 60
+  timeout = 5 * 60
   labels = labels.raw.flatten
 
   @result = BushSlicer::Pod.wait_for_labeled(*labels, count: count.to_i,
@@ -118,7 +118,7 @@ end
 # use this with care and it just all of the pods in the project, better to filter out the pods with labels if possible
 Given /^all pods in the project are ready$/ do
   pods = project.pods(by:user)
-  ready_timeout = 15 * 60
+  ready_timeout = 5 * 60
   logger.info("Number of pods: #{pods.count}")
   pods.each do |pod|
     cache_pods(pod)
@@ -133,8 +133,8 @@ end
 
 Given /^#{NUMBER} pods become ready with labels:$/ do |count, table|
   labels = table.raw.flatten # dimentions irrelevant
-  pod_timeout = 10 * 60
-  ready_timeout = 15 * 60
+  pod_timeout = 5 * 60
+  ready_timeout = 5 * 60
   num = Integer(count)
 
   # TODO: make waiting a single step like for PVs and PVCs
@@ -163,7 +163,7 @@ end
 #   ready status, then somehow dies. With the parameter it just makes sure
 #   pod os not there regardless of its current status.
 Given /^I wait for the pod(?: named "(.+)")? to die( regardless of current status)?$/ do |name, ignore_status|
-  ready_timeout = 15 * 60
+  ready_timeout = 5 * 60
   @result = pod(name).wait_till_ready(user, ready_timeout) unless ignore_status
   if ignore_status || @result[:success]
     @result = pod(name).wait_till_not_ready(user, ready_timeout)
@@ -176,7 +176,7 @@ end
 
 Given /^all existing pods die with labels:$/ do |table|
   labels = table.raw.flatten # dimensions irrelevant
-  timeout = 10 * 60
+  timeout = 5 * 60
   start_time = monotonic_seconds
 
   current_pods = BushSlicer::Pod.get_matching(user: user, project: project,
@@ -194,7 +194,7 @@ end
 
 Given /^all existing pods are ready with labels:$/ do |table|
   labels = table.raw.flatten # dimensions irrelevant
-  timeout = 15 * 60
+  timeout = 5 * 60
   start_time = monotonic_seconds
 
   current_pods = BushSlicer::Pod.get_matching(user: user, project: project,
@@ -231,7 +231,7 @@ Given /^I collect the deployment log for pod "(.+)" until it disappears$/ do |po
   opts = {resource_name: pod_name}
   res_cache = {}
   res = {}
-  seconds = 15 * 60   # just put a timeout so we don't hang there indefintely
+  seconds = 5 * 60   # just put a timeout so we don't hang there indefintely
   success = wait_for(seconds) {
     res = user.cli_exec(:logs, **opts)
     if res[:response].include? 'not found'
