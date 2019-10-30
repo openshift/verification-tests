@@ -2,7 +2,7 @@ require 'openshift/cluster_resource'
 
 module BushSlicer
   # @note represents an OpenShift cluster resource about console
-  class ConsoleCliDownload < ClusterResource
-    RESOURCE = 'consoleclidownload'
+  class ConsoleclidownloadConsoleOpenshiftIo < ClusterResource
+    RESOURCE = 'consoleclidownload.console.openshift.io'
   end
 end

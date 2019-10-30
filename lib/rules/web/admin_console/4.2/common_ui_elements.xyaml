@@ -199,7 +199,11 @@ uncheck_checkbox:
     op: click
 check_link_and_text:
   element:
+<<<<<<< 647dce6f510196e59372ec86c4df83b98a477e72
     selector:
+=======
+    selector: 
+>>>>>>> update cluster resource type, adjust step order for cluster user login
       xpath: //a[contains(.,'<text>') and contains(@href,'<link_url>')]
 click_link_with_text:
   element:
