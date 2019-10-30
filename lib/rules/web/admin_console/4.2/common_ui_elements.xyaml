@@ -194,12 +194,12 @@ uncheck_checkbox:
     op: click
 check_link_and_text:
   element:
-    selector: &text_link
-      xpath: //a[contains(text(),'<text>') and @href='<link_url>']
+    selector:
+      xpath: //a[contains(.,'<text>') and contains(@href,'<link_url>')]
 click_link_with_text:
   element:
     selector:
-      <<: *text_link
+      xpath: //a[contains(.,'<text>') and contains(@href,'<link_url>')]
     op: click
 click_secondary_menu:
   elements:
