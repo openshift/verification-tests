@@ -37,3 +37,22 @@ check_dashboards_grafana_menu_url:
     text: Dashboards
     link_url: https://<dashboards_grafana_route>
   action: click_link_with_text
+check_mega_menu:
+  params:
+    content: Red Hat Applications
+    text: OpenShift Cluster Manager
+    link_url: https://cloud.redhat.com/openshift/details/
+  elements:
+  - selector:
+      xpath: //button[@aria-label='Application launcher']
+    op: click
+  action: check_page_contains
+  action: check_link_and_text
+navigate_to_dev_console:
+  elements:
+  - selector:
+      xpath: //button[contains(., 'Administrator')]
+    op: click
+  - selector:
+      xpath: //li//h1[contains(., 'Developer')]
+    op: click
