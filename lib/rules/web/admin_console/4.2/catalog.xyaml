@@ -56,3 +56,35 @@ clear_filter_by_keyword:
   element:
     selector: *filter_by_keyword
     op: clear
+click_on_catalog_item:
+  element:
+    selector:
+      xpath: //a[@data-test='<operator_name>-<catalog_name>-openshift-marketplace']
+click_catalog_overlay_button:
+  element:
+    selector:
+      xpath: //a[contains(@class,'co-catalog-page__overlay-create')]
+    op: click
+choose_installmode:
+  params:
+    radio_text: <install_mode>
+  action: click_radio_input
+choose_update_channel:
+  params:
+    radio_text: <update_channel>
+  action: click_radio_input
+choose_approval_strategy:
+  params:
+    radio_text: <approval_strategy>
+  action: click_radio_input
+click_subscribe_button:
+  params:
+    button_text: Subscribe
+  action: click_button_text
+subscribe_using_default_params:
+  action: wait_box_loaded
+  action: click_subscribe_button
+set_custom_channel_and_subscribe:
+  action: wait_box_loaded
+  action: choose_update_channel
+  action: click_subscribe_button
