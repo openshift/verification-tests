@@ -470,14 +470,14 @@ Feature: Multus-CNI related scenarios
     # Create the net-attach-def via cluster admin
     Given I switch to cluster admin pseudo user
     And I use the "default" project
-    When I run the :create admin command with:
+    When I run the :create client command with:
 	    | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml |
     Then the step should succeed
     Given I register clean-up steps:
     """
     Given I switch to cluster admin pseudo user
     And I use the "default" project
-    When I run the :delete admin command with:
+    When I run the :delete client command with:
             | object_type       | net-attach-def |
             | object_name_or_id | macvlan-bridge |
     Then the step should succeed
@@ -490,7 +490,7 @@ Feature: Multus-CNI related scenarios
             | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | default/macvlan-bridge-pod |
     Then the step should succeed
     And evaluation of `project.name` is stored in the :project_name clipboard
-    When I run the :get admin command with:
+    When I run the :get client command with:
 	    | resource | pod                |
 	    | output   | json               |
 	    | n        | <%= cb.project_name %> |
@@ -499,7 +499,7 @@ Feature: Multus-CNI related scenarios
 
     And I wait up to 30 seconds for the steps to pass:
     """
-    When I run the :describe admin command with:
+    When I run the :describe client command with:
 	    | resource | pod                    |
 	    | name     | <%= cb.pod_name %>     |
        	    | n        | <%= cb.project_name %> |
@@ -507,3 +507,4 @@ Feature: Multus-CNI related scenarios
     And the output should contain:
             | namespace isolation violation |
     """
+
