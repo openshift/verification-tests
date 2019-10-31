@@ -416,4 +416,94 @@ Feature: Multus-CNI related scenarios
     Then the output should contain "net1"
     And the output should contain "net2"
     And the output should contain 2 times:
-      | macvlan mode bridge |
+	    | macvlan mode bridge |
+  
+  # @author anusaxen@redhat.com
+  # @case_id OCP-21946
+  @admin
+  Scenario: The multus admission controller should be able to detect the syntax issue in the net-attach-def
+    # Make sure that the multus is enabled
+    Given the master version >= "4.0"
+    And the multus is enabled on the cluster
+    # Create the net-attach-def via cluster admin and simulating syntax errors
+    Given I have a project
+    When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml" replacing paths:
+      	    | ["spec"]["config"]| 'asdf' |
+    Then the step should fail
+    And the output should contain:
+	    | admission webhook "multus-validating-config.k8s.io" denied the request|
+    When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml" replacing paths:
+            | ["metadata"]["name"] | macvlan-bridge@$ |
+    Then the step should fail
+    And the output should contain:
+            |subdomain must consist of lower case alphanumeric characters|
+
+  # @author anusaxen@redhat.com
+  # @case_id OCP-21949
+  @admin
+  Scenario: The multus admission controller should be able to detect the issue in the pod template
+    # Make sure that the multus is enabled
+    Given the master version >= "4.0"
+    And the multus is enabled on the cluster
+    # Create the net-attach-def via cluster admin
+    Given I have a project
+    When I run the :create admin command with:
+	    | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml |
+    Then the step should succeed
+    # Create a pod consuming net-attach-def simulating wrong syntax in name
+    When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/1interface-macvlan-bridge.yaml" replacing paths:
+	    | ["metadata"]["generateName"] | macvlan-bridge-pod-$@ |
+    Then the step should fail
+    And the output should contain:
+            | subdomain must consist of lower case alphanumeric characters |
+
+  # @author anusaxen@redhat.com
+  # @case_id OCP-21793
+  @admin
+  Scenario: User cannot consume the net-attach-def created in other project which is namespace isolated	
+    # Make sure that the multus is enabled
+    Given the master version >= "4.0"
+    And the multus is enabled on the cluster
+    And an 4 character random string of type :hex is stored into the :nic_name clipboard
+    Given the default interface on nodes is stored in the :default_interface clipboard
+    And evaluation of `node.name` is stored in the :target_node clipboard
+    # Create the net-attach-def via cluster admin
+    Given I switch to cluster admin pseudo user
+    And I use the "default" project
+    When I run the :create admin command with:
+	    | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml |
+    Then the step should succeed
+    Given I register clean-up steps:
+    """
+    Given I switch to cluster admin pseudo user
+    And I use the "default" project
+    When I run the :delete admin command with:
+            | object_type       | net-attach-def |
+            | object_name_or_id | macvlan-bridge |
+    Then the step should succeed
+    """ 
+    # Creating pod in the user's namespace which consumes the net-attach-def created in default namespace 
+    Given I switch to the first user
+    And I create a new project
+    
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/1interface-macvlan-bridge.yaml" replacing paths:
+            | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | default/macvlan-bridge-pod |
+    Then the step should succeed
+    And evaluation of `project.name` is stored in the :project_name clipboard
+    When I run the :get admin command with:
+	    | resource | pod                |
+	    | output   | json               |
+	    | n        | <%= cb.project_name %> |
+    Then the step should succeed
+    And  evaluation of `@result[:parsed]['items'][0]['metadata']['name']` is stored in the :pod_name clipboard
+
+    And I wait up to 30 seconds for the steps to pass:
+    """
+    When I run the :describe admin command with:
+	    | resource | pod                    |
+	    | name     | <%= cb.pod_name %>     |
+       	    | n        | <%= cb.project_name %> |
+    Then the step should succeed
+    And the output should contain:
+            | namespace isolation violation |
+    """
