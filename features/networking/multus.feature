@@ -485,18 +485,12 @@ Feature: Multus-CNI related scenarios
     # Creating pod in the user's namespace which consumes the net-attach-def created in default namespace 
     Given I switch to the first user
     And I create a new project
-    
+    And evaluation of `project.name` is stored in the :project_name clipboard
+
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/1interface-macvlan-bridge.yaml" replacing paths:
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | default/macvlan-bridge-pod |
     Then the step should succeed
-    And evaluation of `project.name` is stored in the :project_name clipboard
-    When I run the :get client command with:
-      | resource | pod                    |
-      | output   | json                   |
-      | n        | <%= cb.project_name %> |
-    Then the step should succeed
-    And  evaluation of `@result[:parsed]['items'][0]['metadata']['name']` is stored in the :pod_name clipboard
-
+    And evaluation of `@result[:response].match(/pod\/(.*) created/)[1]` is stored in the :pod_name clipboard
     And I wait up to 30 seconds for the steps to pass:
     """
     When I run the :describe client command with:
@@ -507,4 +501,3 @@ Feature: Multus-CNI related scenarios
     And the output should contain:
       | namespace isolation violation |
     """
-
