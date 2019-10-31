@@ -500,7 +500,7 @@ Feature: Multus-CNI related scenarios
     And I wait up to 30 seconds for the steps to pass:
     """
     When I run the :describe client command with:
-	    | resource | pod                    |
+	    | resource | events                 |
 	    | name     | <%= cb.pod_name %>     |
        	    | n        | <%= cb.project_name %> |
     Then the step should succeed
