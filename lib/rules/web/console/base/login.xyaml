@@ -32,7 +32,7 @@ login_sequence:
     ref: login_rhsso
     if_element:
       selector:
-        visible_text: !ruby/regexp '/Log in to your Red Hat account/'
+        xpath: //*[contains(., 'Log in to your Red Hat account')]
       timeout: 1
 oauth_proxy_login_with_openshift:
   action: click_openshift_login

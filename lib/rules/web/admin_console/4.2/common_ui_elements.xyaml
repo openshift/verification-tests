@@ -226,6 +226,7 @@ wait_form_loaded:
   element:
     selector:
       css: form
+    timeout: 20
 wait_box_loaded:
   element:
     selector:
