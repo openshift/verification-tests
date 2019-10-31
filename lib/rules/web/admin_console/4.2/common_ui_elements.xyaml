@@ -56,6 +56,11 @@ click_tab:
   - selector:
       xpath: //ul[contains(@class,'nav__menu')]//a[text()='<tab_name>']
     op: click
+click_radio_input:
+  element:
+    selector:
+      xpath: //input[@type='radio' and @value='<radio_text>']
+    op: click
 clear_input_value:
   elements:
   - selector:
