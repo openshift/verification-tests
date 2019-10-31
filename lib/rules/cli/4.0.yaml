@@ -485,6 +485,7 @@
     :param_file: --param-file=<value>
     :env_file: --env-file <value>
     :source_secret: --source-secret=<value>
+    :source_spec: <value>
 :new_build:
   :cmd: oc new-build
   :options:
