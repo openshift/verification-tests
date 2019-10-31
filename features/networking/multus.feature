@@ -428,15 +428,15 @@ Feature: Multus-CNI related scenarios
     # Create the net-attach-def via cluster admin and simulating syntax errors
     Given I have a project
     When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml" replacing paths:
-      	    | ["spec"]["config"]| 'asdf' |
+      | ["spec"]["config"]| 'asdf' |
     Then the step should fail
     And the output should contain:
-	    | admission webhook "multus-validating-config.k8s.io" denied the request|
+      | admission webhook "multus-validating-config.k8s.io" denied the request|
     When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml" replacing paths:
-            | ["metadata"]["name"] | macvlan-bridge@$ |
+      | ["metadata"]["name"] | macvlan-bridge@$ |
     Then the step should fail
     And the output should contain:
-            |subdomain must consist of lower case alphanumeric characters|
+      |subdomain must consist of lower case alphanumeric characters|
 
   # @author anusaxen@redhat.com
   # @case_id OCP-21949
@@ -448,14 +448,14 @@ Feature: Multus-CNI related scenarios
     # Create the net-attach-def via cluster admin
     Given I have a project
     When I run the :create admin command with:
-	    | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml |
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml |
     Then the step should succeed
     # Create a pod consuming net-attach-def simulating wrong syntax in name
     When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/1interface-macvlan-bridge.yaml" replacing paths:
-	    | ["metadata"]["generateName"] | macvlan-bridge-pod-$@ |
+      | ["metadata"]["generateName"] | macvlan-bridge-pod-$@ |
     Then the step should fail
     And the output should contain:
-            | subdomain must consist of lower case alphanumeric characters |
+      | subdomain must consist of lower case alphanumeric characters |
 
   # @author anusaxen@redhat.com
   # @case_id OCP-21793
@@ -471,15 +471,15 @@ Feature: Multus-CNI related scenarios
     Given I switch to cluster admin pseudo user
     And I use the "default" project
     When I run the :create client command with:
-	    | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml |
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml |
     Then the step should succeed
     Given I register clean-up steps:
     """
     Given I switch to cluster admin pseudo user
     And I use the "default" project
     When I run the :delete client command with:
-            | object_type       | net-attach-def |
-            | object_name_or_id | macvlan-bridge |
+      | object_type       | net-attach-def |
+      | object_name_or_id | macvlan-bridge |
     Then the step should succeed
     """ 
     # Creating pod in the user's namespace which consumes the net-attach-def created in default namespace 
@@ -487,24 +487,24 @@ Feature: Multus-CNI related scenarios
     And I create a new project
     
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/1interface-macvlan-bridge.yaml" replacing paths:
-            | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | default/macvlan-bridge-pod |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | default/macvlan-bridge-pod |
     Then the step should succeed
     And evaluation of `project.name` is stored in the :project_name clipboard
     When I run the :get client command with:
-	    | resource | pod                |
-	    | output   | json               |
-	    | n        | <%= cb.project_name %> |
+      | resource | pod                    |
+      | output   | json                   |
+      | n        | <%= cb.project_name %> |
     Then the step should succeed
     And  evaluation of `@result[:parsed]['items'][0]['metadata']['name']` is stored in the :pod_name clipboard
 
     And I wait up to 30 seconds for the steps to pass:
     """
     When I run the :describe client command with:
-	    | resource | events                 |
-	    | name     | <%= cb.pod_name %>     |
-       	    | n        | <%= cb.project_name %> |
+      | resource | events                 |
+      | name     | <%= cb.pod_name %>     |
+      | n        | <%= cb.project_name %> |
     Then the step should succeed
     And the output should contain:
-            | namespace isolation violation |
+      | namespace isolation violation |
     """
 
