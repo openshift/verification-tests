@@ -378,7 +378,7 @@ module BushSlicer
     #   support purposes (e.g. host a debug pod for running node commands)
     def service_project
       unless @service_project
-        project = Project.new(name: "tests" + EXECUTOR_NAME.downcase, env: self)
+        project = Project.new(name: "tests-" + EXECUTOR_NAME.downcase, env: self)
         unless project.exists?
           res = project.create(by: admin, clean_up_registered: true)
           unless res[:success]
@@ -413,7 +413,10 @@ module BushSlicer
     def clean_up
       @user_manager.clean_up if @user_manager
       @hosts.each {|h| h.clean_up } if @hosts
-      @service_project.delete_graceful(by: nil) if @service_project
+      if @service_project
+        @service_project.delete_graceful(by: nil)
+        @service_project = nil
+      end
       @cli_executor.clean_up if @cli_executor
       @webconsole_executor.clean_up if @webconsole_executor
     end

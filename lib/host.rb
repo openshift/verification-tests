@@ -533,7 +533,9 @@ module BushSlicer
       opts[:quiet] = true
       res = public_send(exec_method, "ls -d -- #{file}", opts)
 
-      return ! res[:success]
+      # OCDebugAccessibleHost does not return exit status of executed command
+      # return ! res[:success]
+      return res[:response].include? "No such"
     end
 
     # wait until one file in the list is found and returns its name
@@ -832,7 +834,7 @@ module BushSlicer
   class OCDebugAccessibleHost < LinuxLikeHost
     def initialize(hostname, opts={})
       super
-      @workdir = "/host/tmp/workdir/" + EXECUTOR_NAME unless self[:workdir]
+      @workdir = "/tmp/workdir/" + EXECUTOR_NAME unless self[:workdir]
       @exec_lock = Mutex.new
     end
 
@@ -843,13 +845,14 @@ module BushSlicer
     # @note execute commands without special setup
     def exec_raw(*commands, **opts)
       unless opts[:single]
-        commands = ["bash", "-c", commands_to_string(commands)]
+        commands = ["chroot", "/host/", "bash", "-c", commands_to_string(commands)]
       end
 
       @exec_lock.synchronize {
         # note this will block until timeout if command does not exist remotely
         # TODO: check debug pod status in the background to avoid freeze (WRKLDS-99)
         # note2: exit status is always 0 (WRKLDS-98)
+        # note3: stdin and stderr come together (WRKLDS-110)
         node.env.admin.cli_exec(
           :debug,
           resource: "node/#{node.name}",
