@@ -78,3 +78,21 @@ Feature: Machine features testing
     # node should be deleted
     Given I switch to cluster admin pseudo user
     Then I wait for the resource "node" named "<%= cb.new_node %>" to disappear within 600 seconds
+
+  # @author jhou@redhat.com
+  # @case_id OCP-25652
+  @admin
+  Scenario: MAO metrics is exposed on https
+    Given I switch to cluster admin pseudo user
+    And I use the "openshift-monitoring" project
+    And evaluation of `secret(service_account('prometheus-k8s').get_secret_names.first).token` is stored in the :token clipboard
+
+    When I run the :exec admin command with:
+      | n                | openshift-monitoring                                                                                                         |
+      | pod              | prometheus-k8s-0                                                                                                             |
+      | c                | prometheus                                                                                                                   |
+      | oc_opts_end      |                                                                                                                              |
+      | exec_command     | sh                                                                                                                           |
+      | exec_command_arg | -c                                                                                                                           |
+      | exec_command_arg | curl -v -s -k -H "Authorization: Bearer <%= cb.token %>" https://machine-api-operator.openshift-machine-api.svc:8443/metrics |
+    Then the step should succeed
