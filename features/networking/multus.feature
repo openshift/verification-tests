@@ -464,9 +464,6 @@ Feature: Multus-CNI related scenarios
     # Make sure that the multus is enabled
     Given the master version >= "4.0"
     And the multus is enabled on the cluster
-    And an 4 character random string of type :hex is stored into the :nic_name clipboard
-    Given the default interface on nodes is stored in the :default_interface clipboard
-    And evaluation of `node.name` is stored in the :target_node clipboard
     # Create the net-attach-def via cluster admin
     Given I switch to cluster admin pseudo user
     And I use the "default" project
