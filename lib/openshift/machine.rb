@@ -10,5 +10,10 @@ module BushSlicer
       raw_resource(user: user, cached: cached, quiet: quiet).
         dig('status', 'nodeRef', 'name')
     end
+
+    def ready?(user: nil, cached: true, quiet: false)
+      instance_state = raw_resource(user: user, cached: cached, quiet: quiet).dig('status','providerStatus','instanceState')
+      instance_state == 'running'
+    end
   end
 end
