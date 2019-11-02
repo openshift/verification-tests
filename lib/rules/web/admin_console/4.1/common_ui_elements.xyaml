@@ -217,6 +217,7 @@ wait_form_loaded:
   element:
     selector:
       css: form
+    timeout: 20
 ## -------- check resource key and values pairs ------
 check_resource_details:
   action:
