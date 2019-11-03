@@ -678,9 +678,9 @@ Given /^the default interface on nodes is stored in the#{OPT_SYM} clipboard$/ do
   ensure_admin_tagged
   hosts = step "I select a random node's host"
   cb_name = "interface" unless cb_name
-  @result = host.exec_admin("/sbin/ip route show default | awk '/default/ {print $5;exit}'")
+  @result = host.exec_admin("/sbin/ip route show default | awk 'NR==1{print $5}'")
   raise "Failed to get the default interface of node" unless @result[:success]
-  cb[cb_name] = @result[:response].chomp
+  cb[cb_name] = @result[:response].split("\n").first
   logger.info "The node's default interface is stored in the #{cb_name} clipboard."
 end
 
