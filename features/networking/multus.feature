@@ -443,14 +443,7 @@ Feature: Multus-CNI related scenarios
       | /usr/sbin/ip | -d | link |
     Then the output should contain "net1"
     #Entering into corresponding no eot make sure No VLAN ID information shown for secondary interface
-    When I run the :debug admin command with:
-      | resource         | node/<%= cb.pod.node_name %>  |
-      | oc_opts_end      |                               |
-      | exec_command     | chroot    		         |
-      | exec_command_arg | /host 		         |
-      | exec_command_arg | bridge 		         |
-      | exec_command_arg | vlan 		         |
-      | exec_command_arg | show 		         |
+    Given CNI vlan info is obtained on the "<%= cb.pod.node_name %>" node
     Then the step should succeed
     And the output should contain 2 times:
       | 1 PVID untagged |
@@ -480,15 +473,8 @@ Feature: Multus-CNI related scenarios
       | /usr/sbin/ip | -d | link |
     Then the output should contain: 
       | net1 |
-    #Entering into corresponding no eot make sure VLAN ID information shown is for secondary interface
-    When I run the :debug admin command with:
-      | resource         | node/<%= cb.pod.node_name %>  |
-      | oc_opts_end      |                               |
-      | exec_command     | chroot                        |
-      | exec_command_arg | /host                         |
-      | exec_command_arg | bridge                        |
-      | exec_command_arg | vlan                          |
-      | exec_command_arg | show                          |
+    #Entering into corresponding node to make sure VLAN ID information shown for interfaces
+    Given CNI vlan info is obtained on the "<%= cb.pod.node_name %>" node
     Then the step should succeed
     And the output should contain 2 times:
       | 200 |

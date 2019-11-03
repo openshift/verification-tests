@@ -696,3 +696,11 @@ Given /^I restart the ovs pod on the#{OPT_QUOTED} node$/ do | node_name |
     raise "Fail to delete the ovs pod"
   end
 end
+
+Given /^CNI vlan info is obtained on the#{OPT_QUOTED} node$/ do | node_name |
+  ensure_admin_tagged
+  node = node(node_name)
+  host = node.host
+  @result = host.exec_admin("/sbin/bridge vlan show")
+  raise "Failed to execute bridge vlan show command" unless @result[:success]
+end
