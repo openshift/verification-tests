@@ -416,4 +416,119 @@ Feature: Multus-CNI related scenarios
     Then the output should contain "net1"
     And the output should contain "net2"
     And the output should contain 2 times:
-      | macvlan mode bridge |
+	    | macvlan mode bridge |
+
+  # @author anusaxen@redhat.com
+  # @case_id OCP-24488
+  @admin
+  Scenario: Create pod with Multus bridge CNI plugin without vlan
+    # Make sure that the multus is enabled
+    Given the master version >= "4.0"
+    And the multus is enabled on the cluster
+    # Create the net-attach-def via cluster admin
+    Given I have a project
+    And evaluation of `project.name` is stored in the :project_name clipboard
+    When I run the :create admin command with:
+      | f | https://raw.githubusercontent.com/weliang1/Openshift_Networking/master/Features/multus/bridge-host-local-novlan.yaml |
+      | n | <%= cb.project_name %>                                                                                               |
+    Then the step should succeed
+    #Creating no-vlan pod abosrbing above net-attach-def
+    When I run the :create client command with:
+      | f | https://raw.githubusercontent.com/weliang1/Openshift_Networking/master/Features/multus/pod-bridge-host-local-novlan.yaml |
+      | n | <%= cb.project_name %>                                                                                                   |
+    Then the step should succeed
+    And the pod named "pod-novlan" becomes ready
+    And evaluation of `pod` is stored in the :pod clipboard
+    When I execute on the pod:
+      | /usr/sbin/ip | -d | link |
+    Then the output should contain "net1"
+    #Entering into corresponding no eot make sure No VLAN ID information shown for secondary interface
+    When I run the :debug admin command with:
+      | resource         | node/<%= cb.pod.node_name %>  |
+      | t                |                               |
+      | oc_opts_end      |                               |
+      | exec_command     | chroot    		         |
+      | exec_command_arg | /host 		         |
+      | exec_command_arg | bridge 		         |
+      | exec_command_arg | vlan 		         |
+      | exec_command_arg | show 		         |
+    Then the step should succeed
+    And the output should contain 2 times:
+      | 1 PVID untagged |
+
+  # @author anusaxen@redhat.com
+  # @case_id OCP-24489
+  @admin
+  Scenario: Create pod with Multus bridge CNI plugin and vlan tag
+    # Make sure that the multus is enabled
+    Given the master version >= "4.0"
+    And the multus is enabled on the cluster
+    # Create the net-attach-def via cluster admin
+    Given I have a project
+    And evaluation of `project.name` is stored in the :project_name clipboard
+    When I run the :create admin command with:
+      | f | https://raw.githubusercontent.com/weliang1/Openshift_Networking/master/Features/multus/bridge-host-local-vlan200.yaml |
+      | n | <%= cb.project_name %>                                                                                                |
+    Then the step should succeed
+    #Creating vlan pod abosrbing above net-attach-def
+    When I run the :create client command with:
+      | f | https://raw.githubusercontent.com/weliang1/Openshift_Networking/master/Features/multus/pod1-bridge-host-local-vlan200.yaml |
+      | n | <%= cb.project_name %>                                                                                                     |
+    Then the step should succeed
+    And the pod named "pod1-vlan200" becomes ready
+    And evaluation of `pod` is stored in the :pod clipboard
+    When I execute on the pod:
+      | /usr/sbin/ip | -d | link |
+    Then the output should contain: 
+      | net1 |
+    #Entering into corresponding no eot make sure VLAN ID information shown is for secondary interface
+    When I run the :debug admin command with:
+      | resource         | node/<%= cb.pod.node_name %>  |
+      | t                |                               |
+      | oc_opts_end      |                               |
+      | exec_command     | chroot                        |
+      | exec_command_arg | /host                         |
+      | exec_command_arg | bridge                        |
+      | exec_command_arg | vlan                          |
+      | exec_command_arg | show                          |
+    Then the step should succeed
+    And the output should contain 2 times:
+      | 200 |
+
+  # @author anusaxen@redhat.com
+  # @case_id OCP-24467
+  @admin
+  Scenario: CNO manager mavlan configured manually with static
+    # Make sure that the multus is Running
+    Given the master version >= "4.0"
+    And the multus is enabled on the cluster
+    Given the default interface on nodes is stored in the :default_interface clipboard 
+    #Patching simplemacvlan config in network operator config CRD
+    Given as admin I successfully merge patch resource "networks.config.openshift.io/cluster" with:
+      | {"spec":{"additionalNetworks":[{"name": "test-macvlan-case3","namespace": "openshift-multus","simpleMacvlanConfig": {"ipamConfig": {"staticIPAMConfig": {"addresses": [{"address": "10.128.2.100/23","gateway": "10.128.2.1"}]},"type": "static"},"master": "<%= cb.default_interface %>","mode": "bridge"},"type": "SimpleMacvlan"}]}} |
+    #Cleanup for bringing CRD to original
+    Given I register clean-up steps:
+    """
+    Given as admin I successfully merge patch resource "networks.config.openshift.io/cluster" with: 
+    | {"spec":{"additionalNetworks": null}} |
+    """
+ 
+    And I wait up to 30 seconds for the steps to pass:
+    """
+    When I run the :get client command with:
+      | object_type | net-attach-def   |
+      | n           | openshift-multus |
+    Then the step should succeed
+    And the output should contain:
+      | test-macvlan-case3 |
+    """
+    #Creating pod under openshift-multus project to absorb above net-attach-def
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/1interface-macvlan-bridge.yaml" replacing paths:
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | test-macvlan-case3 |
+      | n | openshift-multus |
+    Then the step should succeed
+    And the pod named "macvlan-bridge-pod" becomes ready
+    When I execute on the pod:
+      | /usr/sbin/ip | -d | link |
+    Then the output should contain "net1"
+
