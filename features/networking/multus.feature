@@ -445,7 +445,6 @@ Feature: Multus-CNI related scenarios
     #Entering into corresponding no eot make sure No VLAN ID information shown for secondary interface
     When I run the :debug admin command with:
       | resource         | node/<%= cb.pod.node_name %>  |
-      | t                |                               |
       | oc_opts_end      |                               |
       | exec_command     | chroot    		         |
       | exec_command_arg | /host 		         |
@@ -484,7 +483,6 @@ Feature: Multus-CNI related scenarios
     #Entering into corresponding no eot make sure VLAN ID information shown is for secondary interface
     When I run the :debug admin command with:
       | resource         | node/<%= cb.pod.node_name %>  |
-      | t                |                               |
       | oc_opts_end      |                               |
       | exec_command     | chroot                        |
       | exec_command_arg | /host                         |
