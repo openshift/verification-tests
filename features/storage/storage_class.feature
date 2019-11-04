@@ -166,11 +166,12 @@ Feature: storageClass related feature
     And the expression should be true> pvc("mypvc").storage_class == "<default-storage-class-name>"
 
     Examples:
-      | provisioner | default-storage-class-name |
-      | gce-pd      | standard                   | # @case_id OCP-12171
-      | aws-ebs     | gp2                        | # @case_id OCP-12176
-      | cinder      | standard                   | # @case_id OCP-12177
-      | azure-disk  | managed-premium            | # @case_id OCP-13492
+      | provisioner    | default-storage-class-name |
+      | aws-ebs        | gp2                        | # @case_id OCP-12176
+      | azure-disk     | managed-premium            | # @case_id OCP-13492
+      | cinder         | standard                   | # @case_id OCP-12177
+      | gce-pd         | standard                   | # @case_id OCP-12171
+      | vsphere-volume | thin                       | # @case_id OCP-25789
 
   # @author chaoyang@redhat.com
   @admin
