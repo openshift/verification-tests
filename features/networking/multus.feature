@@ -485,5 +485,6 @@ Feature: Multus-CNI related scenarios
       | n        | <%= cb.project_name %> |
     Then the step should succeed
     And the output should contain:
-      | namespace isolation violation |
+      | namespace isolation |
+      | violat              |
     """
