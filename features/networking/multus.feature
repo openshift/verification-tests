@@ -423,8 +423,7 @@ Feature: Multus-CNI related scenarios
   @admin
   Scenario: Create pod with Multus bridge CNI plugin without vlan
     # Make sure that the multus is enabled
-    Given the master version >= "4.0"
-    And the multus is enabled on the cluster
+    Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin
     Given I have a project
     And evaluation of `project.name` is stored in the :project_name clipboard
@@ -453,8 +452,7 @@ Feature: Multus-CNI related scenarios
   @admin
   Scenario: Create pod with Multus bridge CNI plugin and vlan tag
     # Make sure that the multus is enabled
-    Given the master version >= "4.0"
-    And the multus is enabled on the cluster
+    Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin
     Given I have a project
     And evaluation of `project.name` is stored in the :project_name clipboard
@@ -484,8 +482,7 @@ Feature: Multus-CNI related scenarios
   @admin
   Scenario: CNO manager mavlan configured manually with static
     # Make sure that the multus is Running
-    Given the master version >= "4.0"
-    And the multus is enabled on the cluster
+    Given the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard 
     #Patching simplemacvlan config in network operator config CRD
     Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
