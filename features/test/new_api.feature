@@ -12,7 +12,8 @@ Feature: test new api methods
   @destructive
   Scenario: test upgrade by monitoring clusterversion
     Given I upgrade my cluster to:
-      | to_image | <%= ENV['UPGRADE_TARGET_VERSION'] %> |
+      | to_image               | <%= ENV['UPGRADE_TARGET_VERSION'] %> |
+      | allow_explicit_upgrade | true                                 |
 
   @admin
   @destructive

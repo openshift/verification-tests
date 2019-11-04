@@ -1321,6 +1321,7 @@
     :to: --to=<value>
     :to_image: --to-image=<value>
     :to_latest: --to-latest=<value>
+    :allow_explicit_upgrade: --allow-explicit-upgrade=<value>
 :openshift_version:
   :cmd: openshift version
   :expected:
