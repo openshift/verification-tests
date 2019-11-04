@@ -423,8 +423,7 @@ Feature: Multus-CNI related scenarios
   @admin
   Scenario: The multus admission controller should be able to detect the syntax issue in the net-attach-def
     # Make sure that the multus is enabled
-    Given the master version >= "4.0"
-    And the multus is enabled on the cluster
+    Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin and simulating syntax errors
     Given I have a project
     When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml" replacing paths:
@@ -443,8 +442,7 @@ Feature: Multus-CNI related scenarios
   @admin
   Scenario: The multus admission controller should be able to detect the issue in the pod template
     # Make sure that the multus is enabled
-    Given the master version >= "4.0"
-    And the multus is enabled on the cluster
+    Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin
     Given I have a project
     When I run the :create admin command with:
@@ -462,8 +460,7 @@ Feature: Multus-CNI related scenarios
   @admin
   Scenario: User cannot consume the net-attach-def created in other project which is namespace isolated	
     # Make sure that the multus is enabled
-    Given the master version >= "4.0"
-    And the multus is enabled on the cluster
+    Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin
     Given I switch to cluster admin pseudo user
     And I use the "default" project
