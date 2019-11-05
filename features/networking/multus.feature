@@ -474,7 +474,7 @@ Feature: Multus-CNI related scenarios
     #Entering into corresponding node to make sure VLAN ID information shown for interfaces
     Given CNI vlan info is obtained on the "<%= cb.pod.node_name %>" node
     Then the step should succeed
-    And the output should contain 2 times:
+    And the output should contain:
       | 200 |
 
   # @author anusaxen@redhat.com
