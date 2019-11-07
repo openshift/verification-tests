@@ -41,7 +41,11 @@ Feature: collector related tests
     Given the master version >= "4.2"
     Given I switch to cluster admin pseudo user
     Given I use the "openshift-logging" project
+    Given evaluation of `cluster_logging('instance').collection_type` is stored in the :collection_type clipboard
+    Given <%= daemon_set(cb.collection_type).replica_counters[:desired] %> pods become ready with labels:
+      | component=<%= cb.collection_type %> |
     And evaluation of `@pods.map {|n| n.node_ip}.uniq` is stored in the :node_ips clipboard
+    #And evaluation of `cluster_logging('instance').fluentd_ready_pods.map(&:node_ip)` is stored in the :node_ips clipboard
     And I wait for the ".operations" index to appear in the ES pod with labels "es-node-master=true"
     Given I get the ".operations" logging index information from a pod with labels "es-node-master=true"
     And the expression should be true> cb.index_data['docs.count'] > "0"
