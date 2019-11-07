@@ -10,7 +10,7 @@ Given /^I open ocm #{WORD} portal as #{WORD}$/ do |envi, usertype|
     | base_url     | #{base_url}       |
     | snippets_dir | #{snippets_dir}                    |
   })
-  @result = browser.run_action(:login_uhc_console,
+  @result = browser.run_action(:login_ocm_stage_console,
                                username: portals[portal_name]["users"][usertype]["username"],
                                password: portals[portal_name]["users"][usertype]["password"])
 end
