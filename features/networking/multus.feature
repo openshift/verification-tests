@@ -428,13 +428,14 @@ Feature: Multus-CNI related scenarios
     Given I have a project
     And evaluation of `project.name` is stored in the :project_name clipboard
     When I run the :create admin command with:
-      | f | https://raw.githubusercontent.com/weliang1/Openshift_Networking/master/Features/multus/bridge-host-local-novlan.yaml |
-      | n | <%= cb.project_name %>                                                                                               |
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/bridge-host-local-novlan.yaml |
+      | n | <%= cb.project_name %>                                                                                                                              |
     Then the step should succeed
     #Creating no-vlan pod abosrbing above net-attach-def
-    When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/weliang1/Openshift_Networking/master/Features/multus/pod-bridge-host-local-novlan.yaml |
-      | n | <%= cb.project_name %>                                                                                                   |
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["name"] | pod-novlan |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | bridge3    |
+      | ["spec"]["containers"][0]["name"] | pod-novlan |
     Then the step should succeed
     And the pod named "pod-novlan" becomes ready
     And evaluation of `pod` is stored in the :pod clipboard
@@ -444,7 +445,7 @@ Feature: Multus-CNI related scenarios
     #Entering into corresponding no eot make sure No VLAN ID information shown for secondary interface
     Given CNI vlan info is obtained on the "<%= cb.pod.node_name %>" node
     Then the step should succeed
-    And the output should contain 2 times:
+    And the output should contain:
       | 1 PVID untagged |
 
   # @author anusaxen@redhat.com
