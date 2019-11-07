@@ -431,7 +431,7 @@ Feature: Multus-CNI related scenarios
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/bridge-host-local-novlan.yaml |
       | n | <%= cb.project_name %>                                                                                                                              |
     Then the step should succeed
-    #Creating no-vlan pod abosrbing above net-attach-def
+    #Creating no-vlan pod absorbing above net-attach-def
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
       | ["metadata"]["name"] | pod-novlan |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | bridge3    |
