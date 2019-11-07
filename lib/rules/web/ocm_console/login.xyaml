@@ -1,6 +1,6 @@
 login_ocm_stage_console:
   url: /beta/openshift
-  action: login_uhc_sequence
+  action: login_ocm_sequence
 login_ocm_sequence:
   action: login_ocm_page_loaded
   action: login_ocm_portal

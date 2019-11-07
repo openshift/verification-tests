@@ -1,4 +1,4 @@
-Given /^I open ocm #{WORD} portal as #{WORD}$/ do |envi, usertype|
+Given /^I open ocm #{WORD} portal with #{WORD}$/ do |envi, usertype|
   base_rules = BushSlicer::WebConsoleExecutor::RULES_DIR + "/base/"
   snippets_dir = BushSlicer::WebConsoleExecutor::SNIPPETS_DIR
   portals = YAML.load_file(expand_private_path("config/credentials/ocm.yaml"))
@@ -6,7 +6,7 @@ Given /^I open ocm #{WORD} portal as #{WORD}$/ do |envi, usertype|
   base_url = portals[portal_name]["url"]
   step "I have a browser with:", table(%{
     | rules        | #{base_rules}                      |
-    | rules        | lib/rules/web/uhc_console/  |
+    | rules        | lib/rules/web/ocm_console/  |
     | base_url     | #{base_url}       |
     | snippets_dir | #{snippets_dir}                    |
   })
