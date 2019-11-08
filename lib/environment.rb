@@ -172,7 +172,7 @@ module BushSlicer
         else
           authenticationproject = Project.new(name: "openshift-authentication", env: self)
           authenticationservice = Service.new(name: "openshift-authentication", project: authenticationproject )
-          authenticationroute = Route.new(name: "openshift-authentication", project: authenticationproject, service: authenticationservice)
+          authenticationroute = Route.new(name: "oauth-openshift", project: authenticationproject, service: authenticationservice)
           @authentication_url = "https://" + authenticationroute.dns(by: admin)
         end
       end
