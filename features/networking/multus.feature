@@ -546,7 +546,7 @@ Feature: Multus-CNI related scenarios
       | f | https://raw.githubusercontent.com/anuragthehatter/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/bridge-host-local-vlan-200.yaml |
       | n | <%= project.name %>                                                                                                                                      |
     Then the step should succeed 
-    #Labeing a worker node to make sure couple of future pods to be scheduled on this node only
+    #Labeing a worker node to make sure all future pods to be scheduled on this node only
     When I run the :label admin command with:
       | resource | node                    |
       | name     | <%= cb.nodes[0].name %> |
@@ -563,9 +563,10 @@ Feature: Multus-CNI related scenarios
     the step should succeed
     """ 
     #Creating first pod in vlan 100
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod_nodeselector.yaml"" replacing paths:
       | ["metadata"]["name"] | pod1-vlan100 |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan100 |
+      | ["spec"]["nodeSelector"]["test"] | worker1 |
     Then the step should succeed
     And the pod named "pod1-vlan100" becomes ready
     And evaluation of `pod.name` is stored in the :pod1 clipboard
@@ -575,9 +576,10 @@ Feature: Multus-CNI related scenarios
     And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod1_net1_ip clipboard
     
     #Creating 2nd pod on same node as first in vlan 100
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod_nodeselector.yaml" replacing paths:
       | ["metadata"]["name"] | pod2-vlan100 |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan100 |
+      | ["spec"]["nodeSelector"]["test"] | worker1 |
     Then the step should succeed
     And the pod named "pod2-vlan100" becomes ready
     And evaluation of `pod.name` is stored in the :pod2 clipboard
@@ -587,9 +589,10 @@ Feature: Multus-CNI related scenarios
     And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod2_net1_ip clipboard
     
     #Creating 3rd pod on same node but in vlan 200
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod_nodeselector.yaml" replacing paths:
       | ["metadata"]["name"] | pod3-vlan200 |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan200 |
+      | ["spec"]["nodeSelector"]["test"] | worker1 |
     Then the step should succeed
     And the pod named "pod3-vlan200" becomes ready
     And evaluation of `pod.name` is stored in the :pod3 clipboard
