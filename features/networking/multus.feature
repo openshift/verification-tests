@@ -445,7 +445,6 @@ Feature: Multus-CNI related scenarios
       | name     | <%= cb.nodes[0].name %> |
       | key_val  | test-                   |
     Then the step should succeed
-    the step should succeed
     """ 
     #Labeing another worker node to make sure 3rd future pod to be scheduled on this node only
     When I run the :label admin command with:
@@ -461,7 +460,6 @@ Feature: Multus-CNI related scenarios
       | name     | <%= cb.nodes[1].name %> |
       | key_val  | test-            	   |
     Then the step should succeed
-    the step should succeed
     """ 
     #Creating first pod in vlan 100
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod_nodeselector.yaml" replacing paths:
@@ -530,7 +528,7 @@ Feature: Multus-CNI related scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-24491
   @admin
-  Scenario: Pods cannot communicate each other with same vlan tag
+  Scenario: Pods cannot communicate each other with different vlan tag
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     And I store all worker nodes to the :nodes clipboard
@@ -560,7 +558,6 @@ Feature: Multus-CNI related scenarios
       | name     | <%= cb.nodes[0].name %> |
       | key_val  | test-                   |
     Then the step should succeed
-    the step should succeed
     """ 
     #Creating first pod in vlan 100
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod_nodeselector.yaml" replacing paths:
