@@ -16,7 +16,7 @@ Feature: Add, update remove volume to rc/dc and --overwrite option
     And a pod becomes ready with labels:
       | app=mydb |
     # Check oc volume command
-    When I run the :volume client command with:
+    When I run the :set_volume client command with:
       | resource   | dc/mydb  |
       | action     | --add    |
       | type       | emptyDir |
@@ -30,7 +30,7 @@ Feature: Add, update remove volume to rc/dc and --overwrite option
       | grep | opt1 | /proc/mounts |
     Then the step should succeed
     # remove pvc from dc
-    When I run the :volume client command with:
+    When I run the :set_volume client command with:
       | resource | dc/mydb  |
       | action   | --remove |
       | name     | v1       |

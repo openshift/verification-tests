@@ -22,7 +22,7 @@ Feature: oc_volume.feature
     Then the step should succeed
     Given a pod becomes ready with labels:
       | deployment=mydc-1 |
-    When I run the :volume client command with:
+    When I run the :set_volume client command with:
       | resource      | dc                     |
       | resource_name | mydc                   |
       | action        | --add                  |
@@ -61,7 +61,7 @@ Feature: oc_volume.feature
     Then the step should succeed
 
     Given I wait until replicationController "mydc-1" is ready
-    When I run the :volume client command with:
+    When I run the :set_volume client command with:
       | resource      | rc                |
       | resource_name | mydc-1            |
       | action        | --add             |
@@ -71,7 +71,7 @@ Feature: oc_volume.feature
       | mount-path    | /etc              |
     Then the step should succeed
 
-    When I run the :volume client command with:
+    When I run the :set_volume client command with:
       | resource      | dc                |
       | resource_name | mydc              |
       | action        | --add             |
@@ -110,7 +110,7 @@ Feature: oc_volume.feature
     Then the step should succeed
     Given a pod becomes ready with labels:
       | label=mydc   |
-    When I run the :volume client command with:
+    When I run the :set_volume client command with:
       | resource      | dc                     |
       | resource_name | mydc                   |
       | action        | --add                  |
@@ -118,7 +118,7 @@ Feature: oc_volume.feature
       | source        | {"gitRepo": {"repository": "https://github.com/openshift/origin.git", "revision": "99c6de7216384f84369ad3f7572003a417206e8f"}} |
       | mount-path    | /etc                   |
     Then the step should succeed
-    When I run the :volume client command with:
+    When I run the :set_volume client command with:
       | resource      | rc                     |
       | resource_name | mydc-1                 |
       | action        | --add                  |
