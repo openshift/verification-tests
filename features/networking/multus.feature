@@ -563,7 +563,7 @@ Feature: Multus-CNI related scenarios
     the step should succeed
     """ 
     #Creating first pod in vlan 100
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod_nodeselector.yaml"" replacing paths:
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod_nodeselector.yaml" replacing paths:
       | ["metadata"]["name"] | pod1-vlan100 |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan100 |
       | ["spec"]["nodeSelector"]["test"] | worker1 |
