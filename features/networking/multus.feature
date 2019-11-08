@@ -537,14 +537,14 @@ Feature: Multus-CNI related scenarios
     # Create the net-attach-def with vlan 100 via cluster admin
     Given I have a project
     When I run the :create admin command with:
-      | f | https://raw.githubusercontent.com/anuragthehatter/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/bridge-host-local-vlan.yaml |
-      | n | <%= project.name %>                                                                                                                                  |
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/bridge-host-local-vlan.yaml |
+      | n | <%= project.name %>                                                                                                                               |
     Then the step should succeed 
     
     # Create the net-attach-def with vlan 200 via cluster admin
     When I run the :create admin command with:
-      | f | https://raw.githubusercontent.com/anuragthehatter/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/bridge-host-local-vlan-200.yaml |
-      | n | <%= project.name %>                                                                                                                                      |
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/bridge-host-local-vlan-200.yaml |
+      | n | <%= project.name %>                                                                                                                                   |
     Then the step should succeed 
     #Labeing a worker node to make sure all future pods to be scheduled on this node only
     When I run the :label admin command with:
@@ -635,8 +635,8 @@ Feature: Multus-CNI related scenarios
     # Create the net-attach-def without master pmtr via cluster admin
     Given I have a project
     When I run the :create admin command with:
-      | f | https://raw.githubusercontent.com/anuragthehatter/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-conf-without-master.yaml |
-      | n | <%= project.name %>                                                                                                                                       |
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-conf-without-master.yaml |
+      | n | <%= project.name %>                                                                                                                                    |
     Then the step should succeed
     
     #Creating a pod absorbing above net-attach-def
