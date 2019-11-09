@@ -499,6 +499,15 @@ Feature: Multus-CNI related scenarios
       | ifconfig | net1 |
     Then the step should succeed
     And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod3_net1_ip clipboard
+    
+    #Clean-up required to erase bridge interfcaes created on node
+    Given I register clean-up steps:
+    """
+    the bridge interface named "mybridge" is deleted from the "<%= cb.nodes[0].name %>" node
+    the bridge interface named "mybridge.100" is deleted from the "<%= cb.nodes[0].name %>" node
+    the bridge interface named "mybridge" is deleted from the "<%= cb.nodes[1].name %>" node
+    the bridge interface named "mybridge.100" is deleted from the "<%= cb.nodes[1].name %>" node
+    """  
     #making sure the pods on same node can ping while pods on diff nodes can't
 
     When I execute on the "<%= cb.pod1 %>" pod:
@@ -598,6 +607,13 @@ Feature: Multus-CNI related scenarios
     Then the step should succeed
     And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod3_net1_ip clipboard
     
+    #Clean-up required to erase bridge interfcaes created on node
+    Given I register clean-up steps:
+    """
+    the bridge interface named "mybridge" is deleted from the "<%= cb.nodes[0].name %>" node
+    the bridge interface named "mybridge.100" is deleted from the "<%= cb.nodes[0].name %>" node
+    the bridge interface named "mybridge.200" is deleted from the "<%= cb.nodes[0].name %>" node
+    """  
     #making sure the pods in same vlan can communicate but in different vlans cannot
     When I execute on the "<%= cb.pod1 %>" pod:
       | ping | -c1 | -W2 | <%= cb.pod2_net1_ip %> |
