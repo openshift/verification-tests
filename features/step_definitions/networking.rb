@@ -704,3 +704,11 @@ Given /^CNI vlan info is obtained on the#{OPT_QUOTED} node$/ do | node_name |
   @result = host.exec_admin("/sbin/bridge vlan show")
   raise "Failed to execute bridge vlan show command" unless @result[:success]
 end
+
+Given /^the bridge interface named "([^"]*)" is deleted from the "([^"]*)" node$/ do |bridge_name, node_name|
+  ensure_admin_tagged
+  node = node(node_name)
+  host = node.host
+  @result = host.exec_admin("/sbin/ip link delete #{bridge_name}")
+  raise "Failed to delete bridge interface" unless @result[:success]
+end

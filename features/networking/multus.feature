@@ -439,13 +439,19 @@ Feature: Multus-CNI related scenarios
     Then the step should succeed
     And the pod named "pod-novlan" becomes ready
     And evaluation of `pod` is stored in the :pod clipboard
+    
+    #Clean-up required to erase bridge interfcaes created on node after this step
+    Given I register clean-up steps:
+    """
+    the bridge interface named "bridge3" is deleted from the "<%= cb.pod.node_name %>" node
+    """
     When I execute on the pod:
       | /usr/sbin/ip | -d | link |
     Then the output should contain "net1"
     #Entering into corresponding no eot make sure No VLAN ID information shown for secondary interface
     Given CNI vlan info is obtained on the "<%= cb.pod.node_name %>" node
     Then the step should succeed
-    And the output should contain:
+    And the output should contain 2 times:
       | 1 PVID untagged |
 
   # @author anusaxen@redhat.com
@@ -461,13 +467,20 @@ Feature: Multus-CNI related scenarios
       | f | https://raw.githubusercontent.com/weliang1/Openshift_Networking/master/Features/multus/bridge-host-local-vlan200.yaml |
       | n | <%= cb.project_name %>                                                                                                |
     Then the step should succeed
-    #Creating vlan pod abosrbing above net-attach-def
+    #Creating vlan pod absorbing above net-attach-def
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/weliang1/Openshift_Networking/master/Features/multus/pod1-bridge-host-local-vlan200.yaml |
       | n | <%= cb.project_name %>                                                                                                     |
     Then the step should succeed
     And the pod named "pod1-vlan200" becomes ready
     And evaluation of `pod` is stored in the :pod clipboard
+    
+    #Clean-up required to erase bridge interfcaes created on node after this step
+    Given I register clean-up steps:
+    """
+    the bridge interface named "mybridge" is deleted from the "<%= cb.pod.node_name %>" node
+    the bridge interface named "mybridge.200" is deleted from the "<%= cb.pod.node_name %>" node
+    """
     When I execute on the pod:
       | /usr/sbin/ip | -d | link |
     Then the output should contain: 
@@ -477,7 +490,7 @@ Feature: Multus-CNI related scenarios
     Then the step should succeed
     And the output should contain:
       | 200 |
-
+    
   # @author anusaxen@redhat.com
   # @case_id OCP-24467
   @admin
