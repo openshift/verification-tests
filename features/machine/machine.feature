@@ -85,7 +85,7 @@ Feature: Machine features testing
   Scenario: MAO metrics is exposed on https
     Given I switch to cluster admin pseudo user
     And I use the "openshift-monitoring" project
-    And evaluation of `secret(service_account('prometheus-k8s').get_secret_names.first).token` is stored in the :token clipboard
+    And evaluation of `secret(service_account('prometheus-k8s').get_secret_names.find {|s| s.match('token')}).token` is stored in the :token clipboard
 
     When I run the :exec admin command with:
       | n                | openshift-monitoring                                                                                                         |
