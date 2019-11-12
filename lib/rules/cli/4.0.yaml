@@ -1017,9 +1017,10 @@
   :expected:
     - Client Version
   :properties:
-    :oc_version: !ruby/regexp '/^Client.*GitVersion:"v(.+?)"/'
+    :oc_version: !ruby/regexp '/^Client(?:.*Git| )Version:[" ]v(.+?)["\s]/'
   :optional_properties:
-    :kubernetes_server_version: !ruby/regexp '/^Server.*GitVersion:"v(.+?)"/'
+    :server_version: !ruby/regexp '/^Server Version: (.+?)\s/'
+    :kubernetes_server_version: !ruby/regexp '/^Kubernetes(?:.*Git| )Version:[" ]v(.+?)["\s]/'
 :wait:
   :cmd: oc wait
   :options:

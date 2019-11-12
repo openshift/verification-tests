@@ -42,6 +42,8 @@ module BushSlicer
         opts[:headers]["Accept"] = "<accept>"
         opts[:headers]["Content-Type"] = "<content_type>"
 
+        opts[:proxy] = user.env.client_proxy if user.env.client_proxy
+
         auth ||= user.rest_preferences[:auth]
         auth ||= user.known_cert? ? :client_cert : :bearer_token
 

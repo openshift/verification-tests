@@ -289,7 +289,9 @@ module BushSlicer
 
       # TODO: we may consider obtaining server CA chain and configuring it in
       #   instead of setting insecure SSL
-      config_setup(user: user, executor: executor, opts: {config: user_config, skip_tls_verify: "true"})
+      opts = {config: user_config, skip_tls_verify: "true"}
+      add_proxy_env_opt(user.env, opts)
+      config_setup(user: user, executor: executor, opts: opts)
 
       # success, set opts early to allow caching token
       logged_users[user.id] = {config: user_config}
@@ -302,6 +304,7 @@ module BushSlicer
         user_opts(user)
       end
 
+      add_proxy_env_opt(user.env, opts)
       cli_tool = tool_from_opts!(opts)
       executor(cli_tool: cli_tool).
         run(key, Common::Rules.merge_opts(logged_users[user.id], opts))
