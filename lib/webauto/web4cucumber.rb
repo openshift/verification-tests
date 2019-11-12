@@ -48,7 +48,8 @@ require "base64"
         browser: nil,
         scroll_strategy: nil,
         size: nil,
-        hooks: nil
+        hooks: nil,
+        http_proxy: nil
       )
       @browser_type = browser_type
       @rules = Web4Cucumber.load_rules [rules]
@@ -58,6 +59,7 @@ require "base64"
       @logger = logger
       @scroll_strategy = scroll_strategy
       @size = size
+      @http_proxy = http_proxy
       set_hooks(hooks)
     end
 
@@ -71,8 +73,9 @@ require "base64"
       chrome_caps = Selenium::WebDriver::Remote::Capabilities.chrome()
       safari_caps = Selenium::WebDriver::Remote::Capabilities.safari()
       chrome_switches = []
-      if ENV.has_key? "http_proxy"
-        proxy = ENV["http_proxy"].scan(/[\w\.\d\_\-]+\:\d+/)[0] # to get rid of the heading "http://" that breaks the profile
+      if ENV.has_key?("http_proxy") || @http_proxy
+        # get rid of the heading "http://" that breaks the profile
+        proxy = (@http_proxy || ENV["http_proxy"]).scan(/[\w\.\d\_\-]+\:\d+/)[0]
         firefox_profile.proxy = chrome_caps.proxy = safari_caps.proxy = Selenium::WebDriver::Proxy.new({:http => proxy, :ssl => proxy})
         firefox_profile['network.proxy.no_proxies_on'] = "localhost, 127.0.0.1"
         chrome_switches.concat %w[--proxy-bypass-list=127.0.0.1]
