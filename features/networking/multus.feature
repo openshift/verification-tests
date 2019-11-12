@@ -467,7 +467,7 @@ Feature: Multus-CNI related scenarios
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml |
     Then the step should succeed
-    And admin ensures "macvlan-bridge" networkattachmentdefinition is deleted from the "default" project after scenario
+    And admin ensures "macvlan-bridge" network_attachment_definition is deleted from the "default" project after scenario
     # Creating pod in the user's namespace which consumes the net-attach-def created in default namespace 
     Given I switch to the first user
     And I create a new project

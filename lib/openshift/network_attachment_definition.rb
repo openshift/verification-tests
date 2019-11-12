@@ -1,8 +1,8 @@
 require 'openshift/cluster_resource'
 
 module BushSlicer
-  # represnets an Openshift Namespace
-  class Networkattachmentdefinition < ClusterResource
+  # represents an Object
+  class NetworkAttachmentDefinition < ClusterResource
     RESOURCE = 'networkattachmentdefinition.k8s.cni.cncf.io'
 
   end
