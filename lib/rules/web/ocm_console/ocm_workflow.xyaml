@@ -1,0 +1,12 @@
+create_osd_cluster:
+    action: switch_to_osd_creation_page
+    element:
+        selector:
+            xpath: //input[@id='name']
+        op: send_keys <cluster_name>
+        type: input
+    action:
+        if_param: machine_type
+        ref: select_machine_type
+    action: click_create_button
+    action: cluster_detail_page_loaded <cluster_name>

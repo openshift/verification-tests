@@ -1,0 +1,14 @@
+#------------------------------ This file is used for cluster detail defination -------------------
+cluster_detail_page_loaded:
+    action: cluster_genera_info_loaded
+    action: overview_tab_loaded
+cluster_genera_info_loaded:
+    elements:
+        - selector:
+            xpath: //h1[class='pf-c-title pf-m-4xl vertical-align' and text()='<cluster_name>']
+        - selector:
+            xpath: //button[@class='pf-c-button pf-m-primary' and text()='Launch Console']
+        - selector:
+            xpath: //button[@class='pf-c-dropdown__toggle']/span[text()='Actions']
+        - selector:
+            xpath: //button[@class='pf-c-button pf-m-plain' and @aria-label='Refresh']

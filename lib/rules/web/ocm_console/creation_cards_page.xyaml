@@ -1,0 +1,37 @@
+#----------------------- This page is for create cards page ----------------------
+switch_to_creation_cards_page:
+  action: click_create_cluster_button
+  action: creation_cards_page_loaded_2
+
+creation_cards_page_loaded_2:
+    element:
+        selector:
+            xpath: //a[@class='infra-card pf-c-card create-cluster-card' and contains(@href, '/openshift/install')]
+
+creation_cards_page_loaded:
+    elements:
+        - selector:
+            xpath: //a[@class='pf-c-breadcrumb__link' and text()='Clusters']
+        - selector:
+            xpath: //li[@class='pf-c-breadcrumb__item' and text()='Create']
+        - selector:
+            xpath: //img[@class='openshift-logo-page-title' and @alt='OpenShift']
+        - selector:
+            xpath: //h1[@class='ocm-page-title' and text()='Create a Cluster to Get Started']
+        - selector:
+            xpath: //a[@class='infra-card pf-c-card create-cluster-card' and contains(@href, '/openshift/create/osd')]
+    element:
+        selector:
+            xpath: //a[@class='infra-card pf-c-card create-cluster-card' and contains(@href, '/openshift/install')]
+    timeout: 20
+
+click_create_osd_button:
+    element:
+        selector:
+            xpath: //a[@class='infra-card pf-c-card create-cluster-card' and contains(@href, '/openshift/create/osd')]
+        op: click
+click_create_ocp_button:
+    element:
+        selector:
+            xpath: //a[@class='infra-card pf-c-card create-cluster-card' and contains(@href, '/openshift/install')]
+

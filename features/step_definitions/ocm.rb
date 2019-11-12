@@ -14,3 +14,18 @@ Given /^I open ocm #{WORD} portal with #{WORD}$/ do |envi, usertype|
                                username: portals[portal_name]["users"][usertype]["username"],
                                password: portals[portal_name]["users"][usertype]["password"])
 end
+
+When /^I perform the :(.*?) page action$/ do |action|
+  @result = browser.run_action(action)
+end
+
+Given /^I create a ([^\s]*) ?OSD cluster (.*?)$/ do |machineType, clusterName|
+  if machineType != ""
+    @result = browser.run_action(:create_osd_cluster,
+    cluster_name: clusterName,
+    machine_type: machineType)
+  else
+    @result = browser.run_action(:create_osd_cluster,
+    cluster_name: clusterName)
+  end
+end

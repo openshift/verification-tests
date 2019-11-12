@@ -1,0 +1,217 @@
+cluster_list_page:
+    elements:
+    - selector:
+        css: input.pf-c-form-control.cluster-list-filter
+    - selector:
+        css: #pf-toggle-id-22
+    - selector:
+        xpath: //button[text()='Create Cluster' and @class='pf-c-button pf-m-primary']
+    - selector:
+        css: #pf-toggle-id-36
+    - selector:
+        css: #pagination-options-menu-toggle
+    - selector:
+        css: nav.pf-c-pagination__nav
+    - selector:
+        xpath: //button[@aria-label='Refresh']
+    - selector:
+        css: table.pf-c-table.pf-m-grid-md
+    action: expand_filter_dropdown
+    action: filter_dropdown_menu
+    action: click_actions_behind_create_button
+    action: actions_behind_create_button_menu
+    action: open_paging_options_dropdown
+    action: paging_dropdown_displayed
+filter_name_or_id:
+    element:
+        selector:
+            css: input.pf-c-form-control.cluster-list-filter
+        op: send_keys <filter_keyword>
+        type: input
+expand_filter_dropdown:
+    element:
+        selector:
+            css: #pf-toggle-id-22
+        op: click
+close_filter_dropdown:
+    element:
+        selector:
+            css: #pf-toggle-id-22
+        op: click
+filter_dropdown_menu:
+    elements:
+    - selector:
+        xpath: //label[@class='pf-c-dropdown__group-title' and text()='Subscription Status']
+    - selector:
+        xpath: //label[@class='pf-c-check__label' and text()='Subscribed']
+    - selector:
+        xpath: //label[@class='pf-c-check__label' and text()='Not Subscribed']
+    - selector:
+        xpath: //label[@class='pf-c-check__label' and text()='Insufficient']
+    - selector:
+        xpath: //label[@class='pf-c-check__label' and text()='Unknown']
+    - selector:
+        xpath: //label[@class='pf-c-dropdown__group-title' and text()='Cluster Type']
+    - selector:
+        xpath: //label[@class='pf-c-check__label' and text()='OSD']
+    - selector:
+        xpath: //label[@class='pf-c-check__label' and text()='OCP']
+select_filter:
+    if_param: expand
+    ref: expand_filter_dropdown
+    element:
+        selector:
+            xpath: //label[@class='pf-c-check__label' and text()='<filter_label>']
+        op: click
+click_create_cluster_button:
+    element:
+        selector:
+            xpath: //button[text()='Create Cluster' and @class='pf-c-button pf-m-primary']
+        op: click
+click_actions_behind_create_button:
+    element:
+        selector:
+            css: #pf-toggle-id-36
+        op: click
+actions_behind_create_button_menu:
+    element:
+    - selector:
+        xpath: //a[@href='/beta/openshift/register']
+    - selector:
+        xpath: //a[@href='/beta/openshift/archived']
+click_register_cluster_button:
+    element:
+        selector:
+            xpath: //a[@href='/beta/openshift/register']
+        op: click
+click_show_archived_cluster_button:
+    element:
+        selector:
+            xpath: //a[@href='/beta/openshift/archived']
+        op: click
+display_paging_menu:
+    action: open_paging_options_dropdown
+    action: paging_dropdown_displayed
+open_paging_options_dropdown:
+    element:
+        selector:
+            css: #pagination-options-menu-toggle
+        op: click
+paging_dropdown_displayed:
+    elements:
+    - selector:
+        xpath: //button[@data-action='per-page-10']
+    - selector:
+        xpath: //button[@data-action='per-page-20']
+    - selector:
+        xpath: //button[@data-action='per-page-50']
+    - selector:
+        xpath: //button[@data-action='per-page-100']
+show_10_per_page:
+    element:
+        selector:
+            xpath: //button[@data-action='per-page-10']
+        op: click
+show_20_per_page:
+    element:
+        selector:
+            xpath: //button[@data-action='per-page-20']
+        op: click
+show_50_per_page:
+    element:
+        selector:
+            xpath: //button[@data-action='per-page-50']
+        op: click
+show_100_per_page:
+    element:
+        selector:
+            xpath: //button[@data-action='per-page-100']
+        op: click
+first_page_button:
+    element:
+        selector:
+            xpath: //button[@data-action='first']
+pre_page_button:
+    element:
+        selector:
+            xpath: //button[@data-action='previous']
+click_refresh_button:
+    element:
+        selector:
+            xpath: //button[@aria-label='Refresh']
+        op: click
+cluster_list_table_columns:
+    elements:
+    - selector:
+        xpath: //table/thead//th/button[text()='Name']
+    - selector:
+        xpath: //table/thead//th[text()='Status']
+    - selector:
+        xpath: //table/thead//th[text()='Type']
+    - selector:
+        xpath: //table/thead//th[text()='Subscription Status']
+    - selector:
+        xpath: //table/thead//th[text()='Version']
+    - selector:
+        xpath: //table/thead//th[text()='Provider (Location)']
+    - selector:
+        xpath: //table/thead//th[@data-key='6']
+switch_to_cluster_detail_page:
+    element:
+        selector:
+            xpath: //table[@class='pf-c-table pf-m-grid-md']/tbody/tr/td/a[contains(text(), '<cluster_name>')]
+expand_cluster_actions_menu:
+    element:
+        selector:
+            xpath: //table[@class='pf-c-table pf-m-grid-md']/tbody/tr/td/a[contains(text(), '<cluster_name>')]/../..//button[@aria-label='Actions']
+        op: click
+close_cluster_name_actions_menu:
+    element:
+        selector:
+            xpath: //table[@class='pf-c-table pf-m-grid-md']/tbody/tr/td/a[contains(text(), '<cluster_name>')]/../..//button[@aria-label='Actions']
+        op: click
+actions_menu:
+    elements:
+    - selector:
+        xpath: //a[@class='pf-c-dropdown__menu-item' and text()='Launch Console']
+    - selector:
+        xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Edit Display Name']
+    - selector:
+        xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Scale Cluster']
+    - selector:
+        xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Delete Cluster']
+click_launch_console_button:
+    element:
+        selector:
+            xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Launch Console']
+        op: click
+click_edit_display_name:
+    element:
+        selector:
+            xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Edit Display Name']
+        op: click
+click_scale_cluster_button:
+    element:
+        selector:
+            xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Scale Cluster']
+        op: click
+click_delete_cluster_button:
+    element:
+        selector:
+            xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Delete Cluster']
+        op: click
+clear_filters_button:
+    element:
+        selector:
+            xpath: //button[text()='Clear filters']
+        op: click
+click_more_filters_button:
+    element:
+        selector:
+            xpath: //span[@class='pf-c-chip__text' and contains(text(),'more')]
+        op: click
+clear_spec_filter:
+    element:
+        selector:
+            xpath: //span[@class='pf-c-chip__text' and text()='<filter_label>']/..//button[@class='pf-c-button pf-m-plain']
+        op: click

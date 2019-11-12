@@ -1,0 +1,4 @@
+#----------------------------------- This file is used for subscription page definition -------------------------
+subscription_header_loaded:
+    element:
+        xpath: //h1[@class='pf-c-title pf-m-2xl' and text()='Subscriptions']

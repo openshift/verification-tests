@@ -1,0 +1,4 @@
+archived_nav_loaded:
+    elements:
+        - selector:
+            xpath: //a[@class='pf-c-breadcrumb__link' and text()='Clusters']

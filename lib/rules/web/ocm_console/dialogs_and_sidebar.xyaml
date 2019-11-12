@@ -1,0 +1,6 @@
+# ------------------- The including all of the dialogs defination-------------
+
+deletion_dialog_loaded:
+    elements:
+        - selector:
+            xpath: //button[@class='pf-c-button pf-m-plain' and @aria-label='Close']
