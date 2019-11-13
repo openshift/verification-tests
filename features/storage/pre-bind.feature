@@ -122,15 +122,15 @@ Feature: Testing for pv and pvc pre-bind feature
       | ["metadata"]["name"]              | nfspv-<%= project.name %> |
       | ["spec"]["claimRef"]["namespace"] | <%= project.name %>       |
       | ["spec"]["claimRef"]["name"]      | nfsc2                     |
-      | ["spec"]["storageClassName"]      | <%= project.name %>       |
+      | ["spec"]["storageClassName"]      | sc-<%= project.name %>    |
     Then I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/claim-rwo.json" replacing paths:
-      | ["metadata"]["name"]                         | nfsc1               |
-      | ["spec"]["resources"]["requests"]["storage"] | 1Gi                 |
-      | ["spec"]["storageClassName"]                 | <%= project.name %> |
+      | ["metadata"]["name"]                         | nfsc1                  |
+      | ["spec"]["resources"]["requests"]["storage"] | 1Gi                    |
+      | ["spec"]["storageClassName"]                 | sc-<%= project.name %> |
     Then I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/claim-rwo.json" replacing paths:
-      | ["metadata"]["name"]                         | nfsc2               |
-      | ["spec"]["resources"]["requests"]["storage"] | 1Gi                 |
-      | ["spec"]["storageClassName"]                 | <%= project.name %> |
+      | ["metadata"]["name"]                         | nfsc2                  |
+      | ["spec"]["resources"]["requests"]["storage"] | 1Gi                    |
+      | ["spec"]["storageClassName"]                 | sc-<%= project.name %> |
     And the "nfsc2" PVC becomes bound to the "nfspv-<%= project.name %>" PV
     And the "nfsc1" PVC becomes :pending
 
