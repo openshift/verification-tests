@@ -660,7 +660,6 @@ Given /^the status of condition#{OPT_QUOTED} for network operator is :(.+)$/ do 
   raise "The status of condition #{type} is incorrect." unless expected_status == real_status
 end
 
-
 Given /^I run command on the#{OPT_QUOTED} node's sdn pod:$/ do |node_name, table|
   ensure_admin_tagged
   network_cmd = table.raw
@@ -674,16 +673,6 @@ Given /^I run command on the#{OPT_QUOTED} node's sdn pod:$/ do |node_name, table
   raise "Failed to execute network command!" unless @result[:success]
 end
 
-Given /^the default interface on nodes is stored in the#{OPT_SYM} clipboard$/ do |cb_name|
-  ensure_admin_tagged
-  hosts = step "I select a random node's host"
-  cb_name = "interface" unless cb_name
-  @result = host.exec_admin("/sbin/ip route show default | awk 'NR==1{print $5}'")
-  raise "Failed to get the default interface of node" unless @result[:success]
-  cb[cb_name] = @result[:response].split("\n").first
-  logger.info "The node's default interface is stored in the #{cb_name} clipboard."
-end
-
 Given /^I restart the ovs pod on the#{OPT_QUOTED} node$/ do | node_name |
   ensure_admin_tagged
   ensure_destructive_tagged
@@ -695,6 +684,22 @@ Given /^I restart the ovs pod on the#{OPT_QUOTED} node$/ do | node_name |
   unless @result[:success]
     raise "Fail to delete the ovs pod"
   end
+end
+
+Given /^the default interface on nodes is stored in the#{OPT_SYM} clipboard$/ do |cb_name|
+  ensure_admin_tagged
+  step "I select a random node's host"
+  node_name ||= node.name
+  cb_name = "interface" unless cb_name
+
+  sdn_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
+    pod.node_name == node_name
+  }.first
+  cache_resources sdn_pod
+  @result = sdn_pod.exec("bash", "-c", "ip route show default | awk 'NR==1{print $5}'", as: admin)
+  raise "Failed to retrieve interface name from sdn pod" unless @result[:success]
+  cb[cb_name] = @result[:response].strip
+  logger.info "The node's default interface is stored in the #{cb_name} clipboard."
 end
 
 Given /^CNI vlan info is obtained on the#{OPT_QUOTED} node$/ do | node_name |
