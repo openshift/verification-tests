@@ -60,12 +60,15 @@ module BushSlicer
       fake_config = Tempfile.new("kubeconfig")
       fake_config.close
 
-      res = host.exec_as(user, "oc version --config=#{fake_config.path}")
+      res = host.exec_as(user, "oc version -o yaml --config=#{fake_config.path}")
 
       fake_config.unlink
 
       raise "cannot execute on host #{host.hostname} as user '#{user}'" unless res[:success]
-      return res[:response].scan(/GitVersion:"v([^"]+)"|^Client Version: (?:v|openshift-clients-)(\d+[-. _\w]*)$/)[0].find{|v| v != nil}
+      parsed = YAML.load res[:stdout]
+      version_str = parsed.dig("clientVersion", "gitVersion")
+      raise "unknown version format, see log" unless version_str
+      return version_str.sub(/^v/, "")
     end
 
     # try to map ocp and origin cli version to a comparable integer value
