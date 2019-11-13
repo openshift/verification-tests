@@ -240,9 +240,14 @@ Given /^cluster logging operator is ready$/ do
   })
 end
 
-Given /^elasticsearch operator is ready$/ do
+Given /^elasticsearch operator is ready(?: in the "(.+)" namespace)?$/ do | proj_name |
   ensure_admin_tagged
-  project("openshift-operators-redhat")
+  if proj_name
+    target_namespace = proj_name
+  else
+    target_namespace = "openshift-operators-redhat"
+  end
+  project(target_namespace)
   step %Q/a pod becomes ready with labels:/, table(%{
     | name=elasticsearch-operator |
   })
@@ -341,4 +346,11 @@ Given /^#{QUOTED} packagemanifest's operator source name is stored in the#{OPT_S
   @result = admin.cli_exec(:get, resource: 'packagemanifest', resource_name: packagemanifest, n: 'openshift-marketplace', o: 'yaml')
   raise "Unable to get opsrc name" unless @result[:success]
   cb[cb_name] = @result[:parsed]['metadata']['labels']['opsrc-owner-name']
+end
+
+Given /^the logging operators are redeployed after scenario$/ do
+  _admin = admin
+  teardown_add {
+    step %Q/logging operators are installed successfully/
+  }
 end
