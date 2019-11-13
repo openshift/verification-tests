@@ -61,5 +61,5 @@ Feature: Deploy logging operators via console
     Given I use the "openshift-operators" project
     Given I wait for the "elasticsearch-operator" subscriptions to appear
     And evaluation of `subscription("elasticsearch-operator").current_csv` is stored in the :eo_csv clipboard
-    Given admin ensures "<%= cb.eo_csv %>" clusterserviceversions is deleted from the "openshift-operators" project after scenario
+    Given admin ensures "<%= cb.eo_csv %>" cluster_service_version is deleted from the "openshift-operators" project after scenario
     Given elasticsearch operator is ready in the "openshift-operators" namespace
