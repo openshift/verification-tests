@@ -1,0 +1,90 @@
+create_app_from_imagestream:
+  action: goto_create_app_from_imagestream_page
+  action: click_try_sample
+  action:
+    if_param: label
+    ref: set_label
+  action: click_create_button
+click_try_sample:
+  params:
+    button_text: Try Sample
+  action: click_button
+set_label:
+  params:
+    button_text: Labels
+  action: click_button
+  element:
+    selector:
+      xpath: //h2[contains(., 'Labels')]/following-sibling::div//input
+    op: send_keys <label>
+create_app_from_deploy_image:
+  action: goto_deploy_image_page
+  action: search_image
+  action:
+    if_param: label
+    ref: set_label
+  action: click_create_button
+wait_for_catalog_loaded:
+  element:
+    selector:
+      css: .co-catalog-page
+    timeout: 20
+filter_by_category:
+  element:
+    selector:
+      xpath: //li/a[contains(., '<category>')]
+    op: click
+filter_by_sourcetoimage_type:
+  params:
+    type: image-stream
+  action: filter_by_type
+filter_by_serviceclass_type:
+  params:
+    type: cluster-service-class
+  action: filter_by_type
+filter_by_type:
+  element:
+    selector:
+      xpath: //input[@data-test='kind-<type>']
+    op: click
+filter_by_keyword:
+  element:
+    selector: &filter_by_keyword
+      xpath: //input[contains(@class, 'co-catalog-page__input')]
+    op: send_keys <keyword>
+clear_filter_by_keyword:
+  element:
+    selector: *filter_by_keyword
+    op: clear
+click_on_catalog_item:
+  element:
+    selector:
+      xpath: //a[@data-test='<operator_name>-<catalog_name>-openshift-marketplace']
+click_catalog_overlay_button:
+  element:
+    selector:
+      xpath: //a[contains(@class,'co-catalog-page__overlay-create')]
+    op: click
+choose_installmode:
+  params:
+    radio_text: <install_mode>
+  action: click_radio_input
+choose_update_channel:
+  params:
+    radio_text: <update_channel>
+  action: click_radio_input
+choose_approval_strategy:
+  params:
+    radio_text: <approval_strategy>
+  action: click_radio_input
+click_subscribe_button:
+  params:
+    button_text: Subscribe
+  action: click_button_text
+subscribe_using_default_params:
+  action: wait_box_loaded
+  action: click_subscribe_button
+set_custom_channel_and_subscribe:
+  action: wait_box_loaded
+  action: choose_update_channel
+  action: click_subscribe_button

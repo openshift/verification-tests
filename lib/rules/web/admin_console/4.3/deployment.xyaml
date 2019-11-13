@@ -1,0 +1,47 @@
+update_resource_count:
+  elements:
+  - selector: &modal_count
+      xpath: //input[contains(@class,"co-m-number-spinner__input")]
+    op: clear
+  - selector:
+      <<: *modal_count
+    op: send_keys <resource_count>
+  action: submit_changes
+update_rollout_strategy:
+  elements:
+  - selector:
+      xpath: //input[@value='<update_strategy>']
+    op: click
+  action: submit_changes
+click_initcontainer_in_detail_page:
+  element:
+    selector:
+      xpath: //h2[contains(.,'Init Containers')]/..//span[contains(.,'<container_name>')]
+    op: click
+confirm_cancel_rollout:
+  params:
+    button_text: Yes, cancel
+  action: click_button
+search_image:
+  params:
+    clear_field_id: form-input-search-searchTerm-field
+    input_field_id: form-input-search-searchTerm-field
+    input_value: <search_content>
+  action: clear_input_value
+  action: set_input_value
+  action: click_search_button
+search_nonexisted_image_and_check_message:
+  params:
+    search_content: non-existed
+    content: Could not load image metadata
+  action: search_image
+  action: check_page_contains
+search_and_deploy_image:
+  action: search_image
+  action: click_create_button
+delete_dc_with_dependency_objects:
+  params:
+    item: Delete Deployment Config
+    button_text: Delete
+  action: click_one_dropdown_action
+  action: click_button
