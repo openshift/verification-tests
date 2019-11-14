@@ -3,7 +3,7 @@ Feature: basic verification for upgrade testing
   @upgrade-prepare
   @users=upuser1,upuser2
   # @case_id OCP-10017000
-	Scenario: cakephp example works well after migrate
+  Scenario: upgrade-prepre cakephp example works well after migrate
 
     When I run the :new_project client command with:
       | project_name | project-ocp10017 |
@@ -27,7 +27,7 @@ Feature: basic verification for upgrade testing
   @admin
   # @author geliu@redhat.com
   # @case_id OCP-22606000
-  Scenario: etcd-operator and cluster works well after upgrade 
+  Scenario: upgrade-prepre etcd-operator and cluster works well after upgrade 
     Given I switch to cluster admin pseudo user
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/admin/subscription.yaml |
