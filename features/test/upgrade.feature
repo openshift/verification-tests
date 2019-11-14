@@ -1,7 +1,7 @@
 Feature: basic verification for upgrade testing
   # @author geliu@redhat.com
   @upgrade-prepare
-  @users=upuser1,upuser2
+  #@users=upuser1,upuser2
   # @case_id OCP-10017
   Scenario: cakephp example works well after migrate
     When I run the :new_project client command with:
@@ -14,14 +14,14 @@ Feature: basic verification for upgrade testing
       | project-ocp10017 |
 
   @upgrade-check
-  @users=upuser1,upuser2
+  #@users=upuser1,upuser2
   #@case_id OCP-10017
   Scenario: (upgrade-check) cakephp example works well after migrate
     Given I use the "project-ocp10017" project
     # This is upgrade example by geliu
 
   @upgrade-prepare
-  @users=upuser1,upuser2 
+  #@users=upuser1,upuser2 
   @admin
   # @author geliu@redhat.com
   # @case_id OCP-22606
@@ -42,7 +42,7 @@ Feature: basic verification for upgrade testing
       | etcd_cluster=example |
   
   @upgrade-check
-  @users=upuser1,upuser2  
+  #@users=upuser1,upuser2  
   @admin
   # @author geliu@redhat.com
   # @case_id OCP-22606
