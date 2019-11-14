@@ -4,7 +4,6 @@ Feature: basic verification for upgrade testing
   @users=upuser1,upuser2
   # @case_id OCP-10017000
   Scenario: upgrade-prepre cakephp example works well after migrate
-
     When I run the :new_project client command with:
       | project_name | project-ocp10017 |
     Then the step should succeed
@@ -13,10 +12,11 @@ Feature: basic verification for upgrade testing
     Then the step should succeed
     And the output should contain:
       | project-ocp10017 |
-
-  @admin
+  
+  #@author geliu@redhat.com
   #@users=upuser1,upuser2
   #@case_id OCP-10017
+  @admin
   Scenario: cakephp example works well after migrate
     Given I switch to cluster admin pseudo user
     Given I use the "project-ocp10017" project
@@ -26,6 +26,7 @@ Feature: basic verification for upgrade testing
   @users=upuser1,upuser2 
   # @author geliu@redhat.com
   # @case_id OCP-22606000
+  @admin
   Scenario: upgrade-prepre etcd-operator and cluster works well after upgrade 
     Given I switch to cluster admin pseudo user
     When I run the :create client command with:
@@ -42,10 +43,10 @@ Feature: basic verification for upgrade testing
     Then status becomes :running of exactly 3 pods labeled:
       | etcd_cluster=example |
   
-  #@users=upuser1,upuser2  
-  @admin
+  # @users=upuser1,upuser2  
   # @author geliu@redhat.com
   # @case_id OCP-22606
+  @admin
   Scenario: etcd-operator and cluster works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "openshift-operators" project
