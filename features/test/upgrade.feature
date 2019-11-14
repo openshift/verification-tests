@@ -1,9 +1,10 @@
 Feature: basic verification for upgrade testing
   # @author geliu@redhat.com
   @upgrade-prepare
-  #@users=upuser1,upuser2
+  @users=upuser1,upuser2
   # @case_id OCP-10017000
-  Scenario: cakephp example works well after migrate
+	Scenario: cakephp example works well after migrate
+
     When I run the :new_project client command with:
       | project_name | project-ocp10017 |
     Then the step should succeed
@@ -17,11 +18,12 @@ Feature: basic verification for upgrade testing
   #@users=upuser1,upuser2
   #@case_id OCP-10017
   Scenario: cakephp example works well after migrate
+    Given I switch to cluster admin pseudo user
     Given I use the "project-ocp10017" project
     # This is upgrade example by geliu
 
   @upgrade-prepare
-  #@users=upuser1,upuser2 
+  @users=upuser1,upuser2 
   @admin
   # @author geliu@redhat.com
   # @case_id OCP-22606000
