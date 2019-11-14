@@ -343,9 +343,14 @@ end
 
 Given /^#{QUOTED} packagemanifest's operator source name is stored in the#{OPT_SYM} clipboard$/ do |packagemanifest, cb_name|
   cb_name = "opsrc_name" unless cb_name
-  @result = admin.cli_exec(:get, resource: 'packagemanifest', resource_name: packagemanifest, n: 'openshift-marketplace', o: 'yaml')
-  raise "Unable to get opsrc name" unless @result[:success]
-  cb[cb_name] = @result[:parsed]['metadata']['labels']['opsrc-owner-name']
+  project("openshift-marketplace")
+  if catalog_source("qe-app-registry").exists?
+    cb[cb_name] = "qe-app-registry"
+  else
+    @result = admin.cli_exec(:get, resource: 'packagemanifest', resource_name: packagemanifest, n: 'openshift-marketplace', o: 'yaml')
+    raise "Unable to get opsrc name" unless @result[:success]
+    cb[cb_name] = @result[:parsed]['status']['catalogSource']
+  end
 end
 
 Given /^the logging operators are redeployed after scenario$/ do
