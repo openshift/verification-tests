@@ -16,7 +16,7 @@ Feature: basic verification for upgrade testing
   @upgrade-check
   @users=upuser1,upuser2
   #@case_id OCP-10017
-  Scenario:(upgrade-check) cakephp example works well after migrate
+  Scenario: (upgrade-check) cakephp example works well after migrate
     Given I use the "project-ocp10017" project
     # This is upgrade example by geliu
 
@@ -46,7 +46,7 @@ Feature: basic verification for upgrade testing
   @admin
   # @author geliu@redhat.com
   # @case_id OCP-22606
-  Scenario:(upgrade-check) etcd-operator and cluster works well after upgrade
+  Scenario: (upgrade-check) etcd-operator and cluster works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "openshift-operators" project
     Then status becomes :running of exactly 1 pods labeled:
