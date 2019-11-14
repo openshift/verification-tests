@@ -132,7 +132,7 @@ Feature: build 'apps' with CLI
   Scenario: Create applications only with multiple db images
     Given I create a new project
     When I run the :new_app client command with:
-      | image_stream      | openshift/mongodb:3.6                  |
+      | image_stream      | openshift/mongodb:latest               |
       | image_stream      | openshift/mysql                        |
       | docker_image      | centos/postgresql-96-centos7:latest    |
       | env               | MONGODB_USER=test                      |

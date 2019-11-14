@@ -33,7 +33,7 @@ Feature: env.feature
     DB_USER=test
     """
     When I run the :new_app client command with:
-      | app_repo | ruby:2.2~https://github.com/openshift/ruby-hello-world |
+      | app_repo | ruby:2.5~https://github.com/openshift/ruby-hello-world |
       | env_file | test                                                   |
     Then the step should succeed
     Given a pod becomes ready with labels:
@@ -49,7 +49,7 @@ Feature: env.feature
     RACK_ENV=development
     """
     When I run the :new_app client command with:
-      | app_repo | ruby:2.2~https://github.com/openshift/ruby-hello-world |
+      | app_repo | ruby:2.5~https://github.com/openshift/ruby-hello-world |
       | env_file | test                                                   |
     Then the step should succeed
     Given a pod becomes ready with labels:

@@ -64,9 +64,9 @@ Feature: creating 'apps' with CLI
     #Check http github url
     Given an 8 character random string of type :dns952 is stored into the :appname2 clipboard
     When I run the :new_app client command with:
-      | code | http://github.com/openshift/ruby-hello-world |
-      | image_stream | openshift/ruby:2.3 |
-      | name | <%= cb.appname2 %> |
+      | code         | http://github.com/openshift/ruby-hello-world |
+      | image_stream | openshift/ruby:2.5                           |
+      | name         | <%= cb.appname2 %>                           |
       | env | MYSQL_USER=test,MYSQL_PASSWORD=test,MYSQL_DATABASE=test |
     Given the "<%= cb.appname2 %>-1" build completes
     Given 1 pods become ready with labels:
