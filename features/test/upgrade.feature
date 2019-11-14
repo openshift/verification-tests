@@ -2,7 +2,7 @@ Feature: basic verification for upgrade testing
   # @author geliu@redhat.com
   @upgrade-prepare
   #@users=upuser1,upuser2
-  # @case_id OCP-10017
+  # @case_id OCP-10017000
   Scenario: cakephp example works well after migrate
     When I run the :new_project client command with:
       | project_name | project-ocp10017 |
@@ -16,7 +16,7 @@ Feature: basic verification for upgrade testing
   @upgrade-check
   #@users=upuser1,upuser2
   #@case_id OCP-10017
-  Scenario: upgrade-check cakephp example works well after migrate
+  Scenario: cakephp example works well after migrate
     Given I use the "project-ocp10017" project
     # This is upgrade example by geliu
 
@@ -24,7 +24,7 @@ Feature: basic verification for upgrade testing
   #@users=upuser1,upuser2 
   @admin
   # @author geliu@redhat.com
-  # @case_id OCP-22606
+  # @case_id OCP-22606000
   Scenario: etcd-operator and cluster works well after upgrade 
     Given I switch to cluster admin pseudo user
     When I run the :create client command with:
@@ -46,7 +46,7 @@ Feature: basic verification for upgrade testing
   @admin
   # @author geliu@redhat.com
   # @case_id OCP-22606
-  Scenario: upgrade-check etcd-operator and cluster works well after upgrade
+  Scenario: etcd-operator and cluster works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "openshift-operators" project
     Then status becomes :running of exactly 1 pods labeled:
