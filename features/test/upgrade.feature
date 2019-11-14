@@ -14,7 +14,7 @@ Feature: basic verification for upgrade testing
     And the output should contain:
       | project-ocp10017 |
 
-  @upgrade-check
+  @admin
   #@users=upuser1,upuser2
   #@case_id OCP-10017
   Scenario: cakephp example works well after migrate
@@ -24,7 +24,6 @@ Feature: basic verification for upgrade testing
 
   @upgrade-prepare
   @users=upuser1,upuser2 
-  @admin
   # @author geliu@redhat.com
   # @case_id OCP-22606000
   Scenario: upgrade-prepre etcd-operator and cluster works well after upgrade 
@@ -43,7 +42,6 @@ Feature: basic verification for upgrade testing
     Then status becomes :running of exactly 3 pods labeled:
       | etcd_cluster=example |
   
-  @upgrade-check
   #@users=upuser1,upuser2  
   @admin
   # @author geliu@redhat.com
