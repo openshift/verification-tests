@@ -1,4 +1,4 @@
-cluster_list_page:
+cluster_list_page_loaded:
     elements:
     - selector:
         css: input.pf-c-form-control.cluster-list-filter
@@ -38,7 +38,7 @@ close_filter_dropdown:
         selector:
             css: #pf-toggle-id-22
         op: click
-filter_dropdown_menu:
+filter_dropdown_menu_loaded:
     elements:
     - selector:
         xpath: //label[@class='pf-c-dropdown__group-title' and text()='Subscription Status']
@@ -89,7 +89,7 @@ click_show_archived_cluster_button:
         selector:
             xpath: //a[@href='/beta/openshift/archived']
         op: click
-display_paging_menu:
+open_paging_menu:
     action: open_paging_options_dropdown
     action: paging_dropdown_displayed
 open_paging_options_dropdown:
@@ -160,17 +160,17 @@ switch_to_cluster_detail_page:
     element:
         selector:
             xpath: //table[@class='pf-c-table pf-m-grid-md']/tbody/tr/td/a[contains(text(), '<cluster_name>')]
-expand_cluster_actions_menu:
+expand_cluster_list_page_actions_menu:
     element:
         selector:
             xpath: //table[@class='pf-c-table pf-m-grid-md']/tbody/tr/td/a[contains(text(), '<cluster_name>')]/../..//button[@aria-label='Actions']
         op: click
-close_cluster_name_actions_menu:
+close_cluster_list_page_actions_menu:
     element:
         selector:
             xpath: //table[@class='pf-c-table pf-m-grid-md']/tbody/tr/td/a[contains(text(), '<cluster_name>')]/../..//button[@aria-label='Actions']
         op: click
-actions_menu:
+actions_menu_all_enabled:
     elements:
     - selector:
         xpath: //a[@class='pf-c-dropdown__menu-item' and text()='Launch Console']
@@ -180,7 +180,8 @@ actions_menu:
         xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Scale Cluster']
     - selector:
         xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Delete Cluster']
-click_launch_console_button:
+# when cluster is in status of installing, only edit_display_name and delete cluster should be enabled
+click_actions_launch_console_button:
     element:
         selector:
             xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Launch Console']
@@ -215,3 +216,11 @@ clear_spec_filter:
         selector:
             xpath: //span[@class='pf-c-chip__text' and text()='<filter_label>']/..//button[@class='pf-c-button pf-m-plain']
         op: click
+launch_console_button_disabled:
+    element:
+        xpath: //button[@class='pf-c-button pf-m-primary pf-m-disabled' and text()='Launch Console']
+scale_cluster_button_disabled:
+    element:
+        selector:
+            xpath: "//button[@class='pf-m-disabled pf-c-dropdown__menu-item' and text()='Scale Cluster']"
+    

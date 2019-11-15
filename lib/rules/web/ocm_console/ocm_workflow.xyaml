@@ -9,4 +9,5 @@ create_osd_cluster:
         if_param: machine_type
         ref: select_machine_type
     action: click_create_button
-    action: cluster_detail_page_loaded <cluster_name>
+    action: cluster_detail_page_loaded
+    action: overview_tab_loaded
