@@ -40,4 +40,4 @@ check_message_and_doc_for_new_user:
   - selector:
       xpath: //p[contains(., 'To learn more, visit the OpenShift')]/a[contains(@href, 'docs.openshift.com/container-platform')]
   - selector:
-      xpath: //a[contains(@href, 'mirror.openshift.com/pub/openshift-v4/clients/oc/4.2') and contains(., 'command-line tools')]
+      xpath: //a[contains(@href, '/command-line-tools') and contains(., 'command-line tools')]

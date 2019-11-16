@@ -8,14 +8,7 @@ goto_resource_page_under_default_project:
 goto_project_resources_page:
   url: k8s/cluster/projects/<project_name>/workloads
 goto_project_details_page:
-  params:
-    button_text: Dashboard
-  action:
-   if_element:
-     selector:
-       xpath: //button[contains(text(),'Dashboard')]
-   ref:
-   - click_button
+  url: k8s/cluster/projects/<project_name>/overview
 
 # builds
 goto_one_buildconfig_page:
