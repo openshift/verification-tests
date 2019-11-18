@@ -432,7 +432,7 @@ check_resource_git_repository:
   action: check_resource_details_key_and_value
 check_builder_image:
   params:
-    key: Builder Image
+    key: Build From
     value: <builder_image>
   action: check_resource_details_key_and_value
 check_output_to_image:

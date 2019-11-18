@@ -38,6 +38,7 @@ search_nonexisted_image_and_check_message:
   action: check_page_contains
 search_and_deploy_image:
   action: search_image
+  action: choose_dc_type
   action: click_create_button
 delete_dc_with_dependency_objects:
   params:
