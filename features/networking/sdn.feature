@@ -246,3 +246,15 @@ Feature: SDN related networking scenarios
     Then the step should succeed
     And evaluation of `@result[:response].lines.count` is stored in the :sdn_pod_rules clipboard
     Then the expression should be true> cb.host_rules==cb.sdn_pod_rules
+
+  #@author huirwang@redhat.com
+  #@case_id OCP-25707
+  @admin
+  Scenario: ovs-vswitchd process must be running on all ovs pods
+    Given I switch to cluster admin pseudo user
+    And I use the "openshift-sdn" project
+    And all existing pods are ready with labels:
+      | app=ovs |
+    When I run cmds on all ovs pods:
+      | bash | -c | pgrep ovs-vswitchd |
+    Then the step should succeed
