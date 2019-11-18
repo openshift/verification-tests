@@ -236,6 +236,13 @@ wait_box_loaded:
   element:
     selector:
       css: .loading-box__loaded
+    timeout: 20
+wait_until_no_loading:
+  element:
+    selector:
+      css: .cos-status-box--loading
+    missing: true
+    timeout: 20
 ## -------- check resource key and values pairs ------
 check_resource_details:
   action:

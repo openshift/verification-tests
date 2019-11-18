@@ -1,5 +1,6 @@
 create_app_from_imagestream:
   action: goto_create_app_from_imagestream_page
+  action: wait_until_no_loading
   action: click_try_sample
   action:
     if_param: label
@@ -19,6 +20,7 @@ set_label:
     op: send_keys <label>
 create_app_from_deploy_image:
   action: goto_deploy_image_page
+  action: wait_until_no_loading
   action: search_image
   action:
     if_param: label
