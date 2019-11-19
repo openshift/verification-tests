@@ -119,7 +119,7 @@ Feature: projects related features via cli
       | o             | wide        |
     Then the step should succeed
     And the output should match:
-      | admin.*<%= user.name %>, <%= user(1, switch: false).name %>.*system:serviceaccounts:<%= user(1, switch: false).name %> |
+      | admin.*(<%= user.name %>, <%= user(1, switch: false).name %>.*system:serviceaccounts:<%= user(1, switch: false).name %>)? |
     When I run the :policy_remove_group client command with:
       | group_name | system:serviceaccounts:<%= user(1, switch: false).name %> |
     Then the step should succeed
@@ -130,7 +130,7 @@ Feature: projects related features via cli
       | o             | wide        |
     Then the step should succeed
     And the output should match:
-      | admin.*<%= user.name %>, <%= user(1, switch: false).name %> |
+      | admin.*(<%= user.name %>, <%= user(1, switch: false).name %>)? |
     And the output should not contain "system:serviceaccounts:<%= user(1, switch: false).name %>"
 
   # @author yinzhou@redhat.com
