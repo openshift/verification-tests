@@ -80,19 +80,24 @@ Feature: Machine features testing
     Then I wait for the resource "node" named "<%= cb.new_node %>" to disappear within 600 seconds
 
   # @author jhou@redhat.com
-  # @case_id OCP-25652
   @admin
-  Scenario: MAO metrics is exposed on https
+  Scenario Outline: Metrics is exposed on https
     Given I switch to cluster admin pseudo user
     And I use the "openshift-monitoring" project
     And evaluation of `secret(service_account('prometheus-k8s').get_secret_names.find {|s| s.match('token')}).token` is stored in the :token clipboard
 
     When I run the :exec admin command with:
-      | n                | openshift-monitoring                                                                                                         |
-      | pod              | prometheus-k8s-0                                                                                                             |
-      | c                | prometheus                                                                                                                   |
-      | oc_opts_end      |                                                                                                                              |
-      | exec_command     | sh                                                                                                                           |
-      | exec_command_arg | -c                                                                                                                           |
-      | exec_command_arg | curl -v -s -k -H "Authorization: Bearer <%= cb.token %>" https://machine-api-operator.openshift-machine-api.svc:8443/metrics |
+      | n                | openshift-monitoring                                           |
+      | pod              | prometheus-k8s-0                                               |
+      | c                | prometheus                                                     |
+      | oc_opts_end      |                                                                |
+      | exec_command     | sh                                                             |
+      | exec_command_arg | -c                                                             |
+      | exec_command_arg | curl -v -s -k -H "Authorization: Bearer <%= cb.token %>" <url> |
     Then the step should succeed
+
+    Examples:
+      | url                                                                          |
+      | https://machine-api-operator.openshift-machine-api.svc:8443/metrics          | # @case_id OCP-25652
+      | https://cluster-autoscaler-operator.openshift-machine-api.svc:9192/metrics   | # @case_id OCP-26111
+      | https://machine-approver.openshift-cluster-machine-approver.svc:9192/metrics | # @case_id OCP-26102
