@@ -17,7 +17,7 @@ Feature: ServiceAccount and Policy Managerment
       | resource_name | admin       |
       | o             | wide        |
     Then the output should match:
-      | admin.*demo |
+      | admin.*(demo)? |
     Given I find a bearer token of the demo service account
     And I switch to the demo service account
     When I run the :get client command with:
