@@ -10,7 +10,7 @@ check_list_heading_shown:
 check_list_item:
   elements: 
   - selector: &overview_item
-      xpath: //button[contains(@class,'co-resource-item__resource-name') and text()='<resource_name>']/ancestor::div[contains(@class,'project-overview__item--<resource_kind>')]
+      xpath: //button[contains(@class,'project-overview__item-heading--name') and text()='<resource_name>']/ancestor::div[contains(@class,'project-overview__item--<resource_kind>')]
 check_pod_number:
   element:
     selector:
