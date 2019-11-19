@@ -1,4 +1,21 @@
-archived_nav_loaded:
+archived_page_loaded:
     elements:
         - selector:
             xpath: //a[@class='pf-c-breadcrumb__link' and text()='Clusters']
+        - selector:
+            xpath: //input[@class='pf-c-form-control cluster-list-filter']
+        - selector:
+            xpath: //a[@href='/beta/openshift/' and text()='Show active clusters']
+        - selector:
+            xpath: //button[@id='pagination-options-menu-toggle']
+        - selector:
+            xpath: //nav[@class='pf-c-pagination__nav' and @aria-label='Pagination']
+        - selector:
+            xpath: //button[@class='pf-c-button pf-m-plain cluster-list-top' and @aria-label='Refresh']
+        - selector:
+            xpath: //table[@class='pf-c-table pf-m-grid-md']
+click_unarchive_cluster_button:
+    element:
+        selector:
+            xpath: //a[contains(@href,'/openshift/details/<cluster_id>')]/../..//button[text()='Unarchive']
+        op: click

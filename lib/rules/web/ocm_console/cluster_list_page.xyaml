@@ -3,25 +3,19 @@ cluster_list_page_loaded:
     - selector:
         css: input.pf-c-form-control.cluster-list-filter
     - selector:
-        css: #pf-toggle-id-22
+        xpath: //div[@class='pf-l-split__item split-margin-left']/div[@class='pf-c-dropdown']
     - selector:
         xpath: //button[text()='Create Cluster' and @class='pf-c-button pf-m-primary']
     - selector:
-        css: #pf-toggle-id-36
+        xpath: //button[text()='Create Cluster' and @class='pf-c-button pf-m-primary']/../../..//button[@aria-label='Actions']
     - selector:
-        css: #pagination-options-menu-toggle
+        xpath: //button[@id='pagination-options-menu-toggle']
     - selector:
         css: nav.pf-c-pagination__nav
     - selector:
         xpath: //button[@aria-label='Refresh']
     - selector:
         css: table.pf-c-table.pf-m-grid-md
-    action: expand_filter_dropdown
-    action: filter_dropdown_menu
-    action: click_actions_behind_create_button
-    action: actions_behind_create_button_menu
-    action: open_paging_options_dropdown
-    action: paging_dropdown_displayed
 filter_name_or_id:
     element:
         selector:
@@ -38,6 +32,13 @@ close_filter_dropdown:
         selector:
             css: #pf-toggle-id-22
         op: click
+expand_actions_behind_create_button:
+    element:
+        selector:
+            xpath: //button[text()='Create Cluster' and @class='pf-c-button pf-m-primary']/../../..//button[@aria-label='Actions']
+        op: click
+close_actions_behind_create_button:
+    action: expand_actions_behind_create_button
 filter_dropdown_menu_loaded:
     elements:
     - selector:
@@ -71,14 +72,14 @@ click_create_cluster_button:
 click_actions_behind_create_button:
     element:
         selector:
-            css: #pf-toggle-id-36
+            xpath: //button[text()='Create Cluster' and @class='pf-c-button pf-m-primary']/../../..//button[@aria-label='Actions']
         op: click
-actions_behind_create_button_menu:
-    element:
-    - selector:
-        xpath: //a[@href='/beta/openshift/register']
-    - selector:
-        xpath: //a[@href='/beta/openshift/archived']
+actions_behind_create_button_menu_displayed:
+    elements:
+        - selector:
+            xpath: //a[@href='/beta/openshift/register']
+        - selector:
+            xpath: //a[@href='/beta/openshift/archived' and text()='Show archived clusters']
 click_register_cluster_button:
     element:
         selector:
@@ -159,28 +160,26 @@ cluster_list_table_columns:
 switch_to_cluster_detail_page:
     element:
         selector:
-            xpath: //table[@class='pf-c-table pf-m-grid-md']/tbody/tr/td/a[contains(text(), '<cluster_name>')]
+            xpath: //table[@class='pf-c-table pf-m-grid-md']/tbody/tr/td/a[contains(@href,'/openshift/details/<cluster_id>')]
+        op: click
 expand_cluster_list_page_actions_menu:
     element:
         selector:
-            xpath: //table[@class='pf-c-table pf-m-grid-md']/tbody/tr/td/a[contains(text(), '<cluster_name>')]/../..//button[@aria-label='Actions']
+            xpath: //table[@class='pf-c-table pf-m-grid-md']/tbody/tr/td/a[contains(@href,'/openshift/details/<cluster_id>')]/../..//button[@aria-label='Actions']
         op: click
 close_cluster_list_page_actions_menu:
-    element:
-        selector:
-            xpath: //table[@class='pf-c-table pf-m-grid-md']/tbody/tr/td/a[contains(text(), '<cluster_name>')]/../..//button[@aria-label='Actions']
-        op: click
+    action: expand_cluster_list_page_actions_menu
 actions_menu_all_enabled:
-    elements:
-    - selector:
-        xpath: //a[@class='pf-c-dropdown__menu-item' and text()='Launch Console']
-    - selector:
-        xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Edit Display Name']
-    - selector:
-        xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Scale Cluster']
-    - selector:
-        xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Delete Cluster']
-# when cluster is in status of installing, only edit_display_name and delete cluster should be enabled
+    action: dropdown_launch_console_enabled
+    action: scale_cluster_enabled
+    action: delete_cluster_button_enabled
+    action: edit_display_name_enabled
+list_action_partial_enabled:
+    action: dropdown_launch_console_disabled
+    action: scale_cluster_button_disabled
+    action: delete_cluster_button_enabled
+    action: edit_display_name_enabled
+
 click_actions_launch_console_button:
     element:
         selector:
@@ -216,11 +215,43 @@ clear_spec_filter:
         selector:
             xpath: //span[@class='pf-c-chip__text' and text()='<filter_label>']/..//button[@class='pf-c-button pf-m-plain']
         op: click
-launch_console_button_disabled:
+dropdown_launch_console_disabled:
     element:
-        xpath: //button[@class='pf-c-button pf-m-primary pf-m-disabled' and text()='Launch Console']
+        xpath: //button[@class='pf-m-disabled pf-c-dropdown__menu-item' and text()='Launch Console']
 scale_cluster_button_disabled:
     element:
         selector:
-            xpath: "//button[@class='pf-m-disabled pf-c-dropdown__menu-item' and text()='Scale Cluster']"
+            xpath: "//button[@class='pf-c-dropdown__menu-item pf-m-disabled' and text()='Scale Cluster']"
+delete_cluster_button_enabled:
+    element:
+        selector:
+            xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Delete Cluster']
+edit_display_name_enabled:
+    element:
+        selector:
+            xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Edit Display Name']
+scale_cluster_enabled:
+    element:
+        selector:
+            xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Scale Cluster']
+dropdown_launch_console_enabled:
+    element:
+        selector:
+            xpath: //a[@class='pf-c-dropdown__menu-item' and text()='Launch Console']
+try_to_archive_cluster:
+    action: expand_cluster_list_page_actions_menu
+    element:
+        selector:
+            xpath: //button[@class='pf-c-dropdown__menu-item' and text()='Archive Cluster']
+        op: click
+go_to_archived_cluster_page:
+    action: expand_actions_behind_create_button
+    action: actions_behind_create_button_menu_displayed
+    element:
+        selector:
+            xpath: //a[@href='/beta/openshift/archived']
+        op: click
+    action: archived_page_loaded
+
+
     

@@ -2,6 +2,26 @@
 cluster_detail_page_loaded:
     action: cluster_genera_info_loaded
     action: overview_tab_loaded
+ocp_cluster_detail_page_loaded:
+    action: ocp_cluster_genera_info_loaded
+    action: ocp_details_tab_menus_loaded
+add_console_url_button_loaded:
+    element:
+        selector:
+            xpath: //button[@class='pf-c-button pf-m-primary' and text()='Add Console URL']
+ocp_details_tab_menus_loaded:
+    elements:
+        - selector:
+            xpath: //button[@class='pf-c-tabs__button' and text()='Overview']
+        - selector:
+            xpath: //button[@class='pf-c-tabs__button' and text()='Monitoring']
+ocp_cluster_genera_info_loaded:
+    elements:
+        - selector:
+            xpath: //button[@class='pf-c-dropdown__toggle']/span[text()='Actions']
+        - selector:
+            xpath: //button[@class='pf-c-button pf-m-plain' and @aria-label='Refresh']
+    action: ocp_details_tab_menus_loaded
 cluster_genera_info_loaded:
     action:
         if_param: cluster_name
@@ -63,6 +83,19 @@ details_loaded:
         - selector:
             xpath: //button[@aria-controls='monitoringTabContent' and text()='Monitoring']
 
-buttons_are_partial_enabled:
+detail_actions_are_partial_enabled:
     action: detail_launch_console_disabled
     action: scale_cluster_button_disabled
+    action: delete_cluster_button_enabled
+    action: edit_display_name_enabled
+click_clusters_url:
+    element:
+        selector:
+            xpath: //a[@class='pf-c-breadcrumb__link' and text()='Clusters']
+        op: click
+click_detail_archive_cluster_button:
+    element:
+        selector:
+            xpath: //button[@class='pf-c-dropdown__menu-item' and text()='Archive Cluster']
+        op: click
+

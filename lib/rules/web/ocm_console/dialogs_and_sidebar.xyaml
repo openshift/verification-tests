@@ -4,3 +4,65 @@ deletion_dialog_loaded:
     elements:
         - selector:
             xpath: //button[@class='pf-c-button pf-m-plain' and @aria-label='Close']
+archive_dialog_loaded:
+    elements:
+        - selector:
+            xpath: //div[@class='pf-c-modal-box pf-m-sm' and @aria-label='Archive Cluster']
+        - selector:
+            xpath: //button[@class='pf-c-button pf-m-plain' and @aria-label='Close']
+        - selector:
+            xpath: //h1[@class='pf-c-title pf-m-2xl' and text()='Archive Cluster']
+        - selector:
+            xpath: //form/p[contains(text(), 'Archiving a cluster will remove it from the cluster list and remove the cluster from subscription management.')]
+        - selector:
+            xpath: //form/p[contains(text(),'This action will not delete the cluster, only remove it from OpenShift Cluster Manager.')]
+        - selector:
+            xpath: //form//a[@href='https://access.redhat.com/articles/4397891' and text()='Instructions']
+        - selector:
+            xpath: //form/p[contains(text()[2], 'for deleting a cluster may be found in the knowledge base.')]
+        - selector:
+            xpath: //button[@class='pf-c-button pf-m-secondary' and text()='Cancel']
+        - selector:
+            xpath: //button[@class='pf-c-button pf-m-primary' and text()='Archive cluster']
+click_close_button:
+    element:
+        selector:
+            xpath: //button[@class='pf-c-button pf-m-plain' and @aria-label='Close']
+        op: click
+click_cancel_button:
+    element:
+        selector:
+            xpath: //button[@class='pf-c-button pf-m-secondary' and text()='Cancel']
+        op: click
+click_archive_button:
+    element:
+        selector:
+            xpath: //button[@class='pf-c-button pf-m-primary' and text()='Archive cluster']
+        op: click
+archive_succ_promt_message_displayed:
+    element:
+        selector:
+            xpath: //*[contains(text(),'Cluster successfully archived')]
+        timeout: 10
+unarchive_dialog_loaded:
+    elements:
+        - selector:
+            xpath: //button[@class='pf-c-button pf-m-plain' and @aria-label='Close']
+        - selector:
+            xpath: //h1[@class='pf-c-title pf-m-2xl' and text()='Unarchive Cluster']
+        - selector:
+            xpath: //p[text()='Un-archiving a cluster will make it visible in the active (default) cluster list. You may need to manage subscriptions if the cluster is active.']
+        - selector:
+            xpath: //button[@class='pf-c-button pf-m-secondary' and text()='Cancel']
+        - selector:
+            xpath: //button[@class='pf-c-button pf-m-primary' and text()='Unarchive cluster']
+click_unarchive_button:
+    element:
+        selector:
+            xpath: //button[@class='pf-c-button pf-m-primary' and text()='Unarchive cluster']
+        op: click
+unarhive_succ_prompt_message_displayed:
+    element:
+        selector:
+            xpath: //*[contains(text(),'Cluster successfully unarchived')]
+        timeout: 20
