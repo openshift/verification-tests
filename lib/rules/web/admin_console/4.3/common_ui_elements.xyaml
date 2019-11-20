@@ -324,11 +324,11 @@ check_resource_details_key_and_value:
 check_key_and_resource_link:
   element:
     selector:
-      xpath: //dt[contains(text(),'<key>')]/following-sibling::dd[1]//a[contains(@href,'<resource_link>')]
+      xpath: //button[(text()='<key>')]/parent::dt/following-sibling::dd[1]//a[contains(@href,'<resource_link>')] | //dt[contains(text(),'<key>')]/following-sibling::dd[1]//a[contains(@href,'<resource_link>')]
 check_key_and_action_link:
   element: &key_action
     selector:
-      xpath: //dt[contains(text(),'<key>')]/following-sibling::dd[1]//button
+      xpath: //dt[contains(text(),'<key>')]/following-sibling::dd[1]//button[text()='<text_in_action>'] | //button[(text()='<key>')]/parent::dt/following-sibling::dd[1]//button[text()='<text_in_action>']
 click_value_on_resource_detail:
   element:
     <<: *key_value
