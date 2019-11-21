@@ -120,3 +120,9 @@ goto_operator_subscription_page:
 
 goto_cli_tools_page:
   url: command-line-tools
+
+# machine config
+goto_machineconfigs_page:
+  url: k8s/cluster/machineconfiguration.openshift.io~v1~MachineConfig
+goto_machineconfig_pools_page:
+  url: k8s/cluster/machineconfiguration.openshift.io~v1~MachineConfigPool

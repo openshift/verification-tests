@@ -325,6 +325,12 @@ check_resource_details:
   action:
     if_param: canonical_hostname
     ref: check_route_canonical_hostname
+  action:
+    if_param: machine_config_selector
+    ref: check_machine_config_selector
+  action:
+    if_param: current_configuration
+    ref: check_current_configuration
 check_resource_details_key_and_value:
   element: &key_value
     selector:
@@ -489,4 +495,14 @@ check_route_canonical_hostname:
   params:
     key: Canonical Router Hostname
     value: <canonical_hostname>
+  action: check_resource_details_key_and_value
+check_machine_config_selector:
+  params:
+    key: Machine Config Selector
+    value: <machine_config_selector>
+  action: check_resource_details_key_and_value
+check_current_configuration:
+  params:
+    key: Current Configuration
+    value: <current_configuration>
   action: check_resource_details_key_and_value
