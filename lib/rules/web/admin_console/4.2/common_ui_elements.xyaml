@@ -99,6 +99,10 @@ check_table_text_data:
   element:
     selector:
       xpath: //td[text()='<text_data>']
+check_breadcrumb_on_resource_page:
+  element:
+    selector:
+      xpath: //.[a[contains(text(), "<resource>")] and span[@class="pf-c-breadcrumb__item-divider" ]]
 check_row_filter_on_page:
   elements:
   - selector:
@@ -262,6 +266,11 @@ click_dropdown_field:
   elements:
   - selector:
       xpath: //*[(.='<dropdown_field>')]/following-sibling::*//button[contains(@class, 'dropdown__toggle')]
+    op: click
+click_first_item_in_resource_list:
+  elements:
+  - selector:
+      xpath: //span[@class='co-resource-item']/a
     op: click
 click_one_item:
   elements:
