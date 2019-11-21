@@ -1,3 +1,4 @@
+require 'base64'
 require 'json'
 
 require 'cli_executor'
@@ -432,7 +433,7 @@ module BushSlicer
           if proxy_spec
             _role, proto, port, username, password = proxy_spec.to_s.split("__")
             if username
-              auth_str = "#{username}:#{password}@"
+              auth_str = "#{username}:#{Base64.decode64 password}@"
             else
               auth_str = ""
             end
