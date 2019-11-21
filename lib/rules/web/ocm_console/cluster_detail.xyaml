@@ -1,27 +1,10 @@
 #------------------------------ This file is used for cluster detail defination -------------------
 cluster_detail_page_loaded:
-    action: cluster_genera_info_loaded
     action: overview_tab_loaded
-ocp_cluster_detail_page_loaded:
-    action: ocp_cluster_genera_info_loaded
-    action: ocp_details_tab_menus_loaded
-add_console_url_button_loaded:
+add_console_url_button_on_cluster_detail_page_loaded:
     element:
         selector:
             xpath: //button[@class='pf-c-button pf-m-primary' and text()='Add Console URL']
-ocp_details_tab_menus_loaded:
-    elements:
-        - selector:
-            xpath: //button[@class='pf-c-tabs__button' and text()='Overview']
-        - selector:
-            xpath: //button[@class='pf-c-tabs__button' and text()='Monitoring']
-ocp_cluster_genera_info_loaded:
-    elements:
-        - selector:
-            xpath: //button[@class='pf-c-dropdown__toggle']/span[text()='Actions']
-        - selector:
-            xpath: //button[@class='pf-c-button pf-m-plain' and @aria-label='Refresh']
-    action: ocp_details_tab_menus_loaded
 cluster_genera_info_loaded:
     action:
         if_param: cluster_name
@@ -38,34 +21,24 @@ cluster_name_loaded:
         selector:
             xpath: //h1[@class='pf-c-title pf-m-4xl vertical-align' and text()='<cluster_name>']
         timeout: 20
-expand_detail_page_actions:
+expand_actions_on_cluster_detail_page:
     element:
         selector:
             xpath: //span[@id='cl-details-btns']/div[@class='pf-c-dropdown']
         op: click
 
-close_detail_page_actions:
-    element:
-        selector:
-            xpath: //button[@class='pf-c-dropdown__toggle']/span[text()='Actions']
-        op: click
+close_actions_on_cluster_detail_page:
+    action: expand_actions_on_cluster_detail_page
 
-detail_launch_console_disabled:
+disabled_launch_console_button_on_cluster_detail_page_loaded:
     element:
         selector:
             xpath: "//button[@class='pf-c-button pf-m-primary pf-m-disabled' and text()='Launch Console']"
-cluster_in_status:
+check_cluster_status:
     element:
         selector:
-            xpath: "//dd[@style='text-transform: capitalize;' and text()='<status>']"
+            xpath: "//dd[@style='text-transform: capitalize;' and text()='<expect_status>']"
         timeout: 300
-
-wait_cluster_status_to_installing:
-    element:
-        selector:
-            xpath: "//dd[@style='text-transform: capitalize;' and text()='installing']"
-        timeout: 600
-
 resource_usage_loaded:
     action: cpu_chart_loaded
 cpu_chart_loaded:
@@ -74,16 +47,11 @@ cpu_chart_loaded:
             xpath: //section[@id='overviewTabContent']//h4[@class='pf-c-title pf-m-xl metrics-chart' and text()='vCPU']
 
 overview_tab_loaded:
-    action: details_loaded
-
-details_loaded:
     elements:
         - selector:
             xpath: //section[@id='overviewTabContent']//h2[@class='pf-c-title pf-m-3xl' and text()='Details']
-        - selector:
-            xpath: //button[@aria-controls='monitoringTabContent' and text()='Monitoring']
 
-detail_actions_are_partial_enabled:
+check_actions_on_cluster_detail_page_partial_enabled:
     action: detail_launch_console_disabled
     action: scale_cluster_button_disabled
     action: delete_cluster_button_enabled
@@ -93,7 +61,7 @@ click_clusters_url:
         selector:
             xpath: //a[@class='pf-c-breadcrumb__link' and text()='Clusters']
         op: click
-click_detail_archive_cluster_button:
+click_archive_button_on_cluster_detail_page:
     element:
         selector:
             xpath: //button[@class='pf-c-dropdown__menu-item' and text()='Archive Cluster']
