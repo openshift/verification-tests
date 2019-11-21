@@ -206,6 +206,15 @@ click_link_with_text:
     selector:
       xpath: //a[contains(.,'<text>') and contains(@href,'<link_url>')]
     op: click
+click_kebab_of_one_resource:
+  elements:
+  - selector:
+      xpath: //*[text()='<resource_name>']//ancestor::tr//td[contains(@class,'dropdown-kebab-pf')]
+    op: click
+    timeout: 30
+click_one_operation_in_kebab:
+  action: click_kebab_of_one_resource
+  action: click_button
 click_secondary_menu:
   elements:
   - selector:
