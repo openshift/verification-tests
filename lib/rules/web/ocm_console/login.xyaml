@@ -1,6 +1,7 @@
-login_ocm_stage_console:
+goto_ocm_stage_console:
   url: /beta/openshift
-  action: login_ocm_sequence
+goto_ocm_prod_console:
+  url: /openshift
 login_ocm_sequence:
   action: login_ocm_page_loaded
   action: login_ocm_portal
