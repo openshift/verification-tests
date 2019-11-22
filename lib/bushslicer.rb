@@ -25,8 +25,6 @@ module BushSlicer
   autoload :Platform, "platform/autoload"
   autoload :IAAS, "iaas/iaas"
   autoload :ResultHash, "result_hash"
-  autoload :Environment, "environment"
-  autoload :StaticEnvironment, "environment"
 
   autoload :RESOURCES, "resources"
   autoload :DockerImage, "openshift/flakes/docker_image"

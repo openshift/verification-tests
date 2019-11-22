@@ -325,7 +325,6 @@ When /^I perform the GET metering rest request with:$/ do | table |
   https_opts[:headers][:accept] ||= "application/json"
   https_opts[:headers][:content_type] ||= "application/json"
   https_opts[:headers][:authorization] ||= "Bearer #{bearer_token}"
-  https_opts[:proxy] = env.client_proxy if env.client_proxy
   # first we need to expose reporting API route if not route is found
   step %Q/I enable route for metering service/ unless route('metering').exists?
   report_name = opts[:report_name]

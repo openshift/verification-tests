@@ -1,9 +1,0 @@
-* Generated pb file is with command:
-
- protoc --plugin=protoc-gen-ruby-protobuf=`ls ~/bin/protoc-gen-ruby` --ruby-protobuf_out=./ lib/webauto/resource/chrome_crx3/crx3.proto
-
-* gem used https://github.com/ruby-protobuf/protobuf
-
-* proto file from:
-
- https://cs.chromium.org/chromium/src/components/crx_file/crx3.proto

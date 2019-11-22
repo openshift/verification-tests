@@ -14,6 +14,7 @@ require 'common' # common code
 require 'world' # our custom bushslicer world
 require 'log' # BushSlicer::Logger
 require 'manager' # our shared global state
+require 'environment' # environment types classes
 require 'debug'
 
 ## default course of action would be to update BushSlicer files when

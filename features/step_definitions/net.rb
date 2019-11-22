@@ -56,16 +56,14 @@ When /^I open( secure)? web server via the(?: "(.+?)")? route$/ do |secure, rout
 end
 
 When /^I open web server via the(?: "(.+?)")? url$/ do |url|
-  proxy_opt = {}
-  proxy_opt[:proxy] = env.client_proxy if env.client_proxy
-
-  @result = BushSlicer::Http.get(url: url, cookies: cb.http_cookies, **proxy_opt)
+  @result = BushSlicer::Http.get(url: url, cookies: cb.http_cookies)
 end
 
 Given /^I download a file from "(.+?)"(?: into the "(.+?)" dir)?$/ do |url, dl_path|
   retries = 3
+  @result = BushSlicer::Http.get(url: url, cookies: cb.http_cookies)
+  # force failure
   while true
-    @result = BushSlicer::Http.get(url: url, cookies: cb.http_cookies)
     if @result[:success]
       if dl_path
         file_name = File.join(dl_path, File.basename(URI.parse(url).path))
@@ -79,7 +77,7 @@ Given /^I download a file from "(.+?)"(?: into the "(.+?)" dir)?$/ do |url, dl_p
       @result[:abs_path] = File.absolute_path(file_name)
       break
     elsif @result[:exitstatus] >= 500 && retries > 0
-      # we will wait for retry
+      @result = BushSlicer::Http.get(url: url, cookies: cb.http_cookies)
     else
       raise "Failed to download file from #{url} with HTTP status #{@result[:exitstatus]}"
     end
@@ -122,7 +120,6 @@ end
 #   """
 When /^I perform the HTTP request:$/ do |yaml_request|
   opts = YAML.load yaml_request
-  opts[:proxy] ||= env.client_proxy if env.client_proxy
   if Symbol == opts[:cookies]
     opts[:cookies] = cb[opts[:cookies]]
   end
@@ -143,8 +140,6 @@ When /^I perform (\d+) HTTP requests with concurrency (\d+):$/ do |num, concurre
   opts = YAML.load yaml_request
   opts[:count] = num.to_i
   opts[:concurrency] = concurrency.to_i
-  opts[:proxy] ||= env.client_proxy if env.client_proxy
-
   @result = BushSlicer::Http.flood_count(**opts)
 end
 

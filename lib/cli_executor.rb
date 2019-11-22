@@ -60,15 +60,12 @@ module BushSlicer
       fake_config = Tempfile.new("kubeconfig")
       fake_config.close
 
-      res = host.exec_as(user, "oc version -o yaml --config=#{fake_config.path}")
+      res = host.exec_as(user, "oc version --config=#{fake_config.path}")
 
       fake_config.unlink
 
       raise "cannot execute on host #{host.hostname} as user '#{user}'" unless res[:success]
-      parsed = YAML.load res[:stdout]
-      version_str = parsed.dig("clientVersion", "gitVersion")
-      raise "unknown version format, see log" unless version_str
-      return version_str.sub(/^v/, "")
+      return res[:response].scan(/GitVersion:"v([^"]+)"|^Client Version: (?:v|openshift-clients-)(\d+[-. _\w]*)$/)[0].find{|v| v != nil}
     end
 
     # try to map ocp and origin cli version to a comparable integer value
@@ -289,9 +286,7 @@ module BushSlicer
 
       # TODO: we may consider obtaining server CA chain and configuring it in
       #   instead of setting insecure SSL
-      opts = {config: user_config, skip_tls_verify: "true"}
-      add_proxy_env_opt(user.env, opts)
-      config_setup(user: user, executor: executor, opts: opts)
+      config_setup(user: user, executor: executor, opts: {config: user_config, skip_tls_verify: "true"})
 
       # success, set opts early to allow caching token
       logged_users[user.id] = {config: user_config}
@@ -304,7 +299,6 @@ module BushSlicer
         user_opts(user)
       end
 
-      add_proxy_env_opt(user.env, opts)
       cli_tool = tool_from_opts!(opts)
       executor(cli_tool: cli_tool).
         run(key, Common::Rules.merge_opts(logged_users[user.id], opts))

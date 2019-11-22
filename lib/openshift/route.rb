@@ -30,8 +30,8 @@ module BushSlicer
 
     def http_get(by:, proto: "http", port: nil, **http_opts)
       portstr = port ? ":#{port}" : ""
-      http_opts[:proxy] ||= env.client_proxy if env.client_proxy
-      BushSlicer::Http.get(url: proto + "://" + dns(by: by) + portstr, **http_opts)
+      BushSlicer::Http.get(url: proto + "://" + dns(by: by) + portstr,
+                          **http_opts)
     end
 
     def wait_http_accessible(by:, proto: "http", port: nil,

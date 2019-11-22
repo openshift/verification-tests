@@ -35,10 +35,8 @@ module BushSlicer
 
       private def wait_start(**opts)
         res = {}
-        proxy_opt = {}
-        proxy_opt[:proxy] = env.client_proxy if env.client_proxy
         success = wait_for(expected_load_time, interval: 5) {
-          (res = Http.get(url: api_url, **proxy_opt))[:success]
+          (res = Http.get(url: api_url))[:success]
         }
         if opts[:raise] && !success
           raise "API did not start responding on #{host.hostname}"
