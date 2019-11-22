@@ -45,6 +45,7 @@ class ChromeExtension
     signature_data << "CRX3 SignedData\00"
     signature_data << [ signed_data.size ].pack("V")
     signature_data << signed_data
+    signature_data << data
 
     signature = key.sign(digest, signature_data)
 
