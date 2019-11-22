@@ -17,5 +17,5 @@ archived_page_loaded:
 click_unarchive_cluster_button_on_archived_cluster_list_page:
     element:
         selector:
-            xpath: //a[contains(@href,'/openshift/details/<cluster_id>')]/../..//button[text()='Unarchive']
+            xpath: //a[contains(text(),'<cluster_name>')]/../..//button[text()='Unarchive']
         op: click

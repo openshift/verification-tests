@@ -145,12 +145,12 @@ cluster_list_table_columns_loaded:
 go_to_cluster_detail_page:
     element:
         selector:
-            xpath: //table[@class='pf-c-table pf-m-grid-md']/tbody/tr/td/a[contains(@href,'/openshift/details/<cluster_id>')]
+            xpath: //table[@class='pf-c-table pf-m-grid-md']/tbody/tr/td/a[contains(text(),'<cluster_name>')]
         op: click
 expand_cluster_actions_on_cluster_list_page:
     element:
         selector:
-            xpath: //table[@class='pf-c-table pf-m-grid-md']/tbody/tr/td/a[contains(@href,'/openshift/details/<cluster_id>')]/../..//button[@aria-label='Actions']
+            xpath: //table[@class='pf-c-table pf-m-grid-md']/tbody/tr/td/a[contains(text(),'<cluster_name>')]/../..//button[@aria-label='Actions']
         op: click
 close_cluster_actions_on_cluster_list_page:
     action: expand_cluster_actions_on_cluster_list_page
