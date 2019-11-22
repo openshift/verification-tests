@@ -117,3 +117,6 @@ goto_operator_hub_page:
   url: operatorhub/ns/default
 goto_operator_subscription_page:
   url: operatorhub/subscribe?pkg=<package_name>&catalog=<catalog_name>&catalogNamespace=openshift-marketplace&targetNamespace=<target_namespace>
+
+goto_cli_tools_page:
+  url: command-line-tools
