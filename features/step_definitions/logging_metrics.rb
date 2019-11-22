@@ -107,7 +107,6 @@ When /^I perform the (GET|POST) metrics rest request with:$/ do | op_type, table
   bearer_token = opts[:token] ? opts[:token] : user.cached_tokens.first
 
   https_opts = {}
-  https_opts[:proxy] = env.client_proxy if env.client_proxy
   https_opts[:headers] ||= {}
   https_opts[:headers][:accept] ||= "application/json"
   https_opts[:headers][:content_type] ||= "application/json"

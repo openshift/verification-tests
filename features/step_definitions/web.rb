@@ -77,9 +77,6 @@ Given /^I have a browser with:$/ do |table|
   if conf[:browser]
     init_params[:browser_type] ||= conf[:browser].to_sym
   end
-  if env.client_proxy
-    init_params[:http_proxy] ||= env.client_proxy
-  end
   init_params[:logger] = logger
   browser = Web4Cucumber.new(**init_params)
   cache_browser(browser)

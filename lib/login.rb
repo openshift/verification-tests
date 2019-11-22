@@ -15,8 +15,7 @@ module BushSlicer
       res = oauth_bearer_token_challenge(
         server_url: env.api_endpoint_url,
         user: user,
-        password: password,
-        proxy: env.client_proxy
+        password: password
       )
 
       if res[:exitstatus] == 401 && res[:headers]["link"]
@@ -24,8 +23,7 @@ module BushSlicer
         login_url = res[:headers]["link"][0][/(?<=<).*(?=>)/]
         Http.logger.info("trying to login via web at #{login_url}")
         res = web_bearer_token_obtain(user: user, password: password,
-                                      login_url: login_url,
-                                      proxy: env.client_proxy)
+                                      login_url: login_url)
       end
 
       unless res[:success]
@@ -47,12 +45,10 @@ module BushSlicer
     # @param [String] login_url the address where we are directed to log in
     # @param [String] user the user to get a token for
     # @return [BushSlicer::ResultHash] (:token key should be set on success)
-    def web_bearer_token_obtain(user:, password:, login_url:, proxy: nil)
+    def web_bearer_token_obtain(user:, password:, login_url:)
       obtain_time = Time.now
-      proxy_opt = {}
-      proxy_opt[:proxy] = proxy if proxy
 
-      res = BushSlicer::Http.http_request(method: :get, url: login_url, **proxy_opt)
+      res = BushSlicer::Http.http_request(method: :get, url: login_url)
       return res unless res[:success]
 
       cookies = res[:cookies]
@@ -65,7 +61,7 @@ module BushSlicer
         return res
       end
 
-      res = BushSlicer::Http.http_request(method: :post, url: login_action, cookies: cookies, payload: {username: user, password: password}, **proxy_opt)
+      res = BushSlicer::Http.http_request(method: :post, url: login_action, cookies: cookies, payload: {username: user, password: password})
 
       if res[:exitstatus] == 302
         redir302 = res[:headers]["location"].first
@@ -79,7 +75,7 @@ module BushSlicer
           # referer: login_action
         }
 
-        res = BushSlicer::Http.http_request(method: :get, url: redir302, cookies: cookies, headers: headers, **proxy_opt)
+        res = BushSlicer::Http.http_request(method: :get, url: redir302, cookies: cookies, headers: headers)
       end
 
       return res unless res[:success]
@@ -101,7 +97,7 @@ module BushSlicer
     # @param [String] password
     # @return [BushSlicer::ResultHash]
     # @note curl -u joe -kv -H "X-CSRF-Token: xxx" 'https://master.cluster.local:8443/oauth/authorize?client_id=openshift-challenging-client&response_type=token'
-    def oauth_bearer_token_challenge(server_url:, user:, password:, proxy: nil)
+    def oauth_bearer_token_challenge(server_url:, user:, password:)
       # :headers => {'X-CSRF-Token' => 'xx'} seems not needed
       opts = {:user=> user,
               :password=> password,
@@ -112,11 +108,6 @@ module BushSlicer
       oauth_opts = {:url => "#{server_url}/.well-known/oauth-authorization-server",
                     :method=> "GET"
       }
-
-      if proxy
-        opts[:proxy] = proxy
-        oauth_opts[:proxy] = proxy
-      end
 
       res_oauth = Http.request(**oauth_opts)
 
