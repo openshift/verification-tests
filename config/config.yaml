@@ -87,7 +87,7 @@ environments:
   ose: *ocp4
   ocm_stage:
     hosts: cloud.redhat.com:etcd:master:node
-    web_console_url: https://cloud.redhat.com
+    web_console_url: https://cloud.redhat.com/beta
     type: StaticEnvironment
     ocm_env: stage
   ocm_prod:
