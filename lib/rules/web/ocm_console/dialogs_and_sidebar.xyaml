@@ -42,7 +42,7 @@ click_archive_button:
 archive_succ_promt_message_displayed:
     element:
         selector:
-            xpath: //*[contains(text(),'Cluster successfully archived')]
+            xpath: //*[contains(text(),'has been archived')]
         timeout: 10
 unarchive_dialog_loaded:
     elements:
@@ -61,8 +61,8 @@ click_unarchive_button:
         selector:
             xpath: //button[@class='pf-c-button pf-m-primary' and text()='Unarchive cluster']
         op: click
-unarhive_succ_prompt_message_displayed:
+unarchive_succ_prompt_message_displayed:
     element:
         selector:
-            xpath: //*[contains(text(),'Cluster successfully unarchived')]
+            xpath: //*[contains(text(),'has been unarchived')]
         timeout: 20

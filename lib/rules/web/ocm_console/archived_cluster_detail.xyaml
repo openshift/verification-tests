@@ -22,7 +22,7 @@ click_detail_page_unarchive_cluster_button:
             xpath: //button[@class='pf-c-button pf-m-secondary' and text()='Unarchive']
         op: click
     action: unarchive_dialog_loaded
-go_to_archived_clusters_from_detail:
+go_to_archived_clusters_from_archived_cluster_detail_page:
     element:
         selector:
             xpath: //a[@class='pf-c-breadcrumb__link' and text()='Archived clusters']

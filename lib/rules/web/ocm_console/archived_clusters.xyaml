@@ -14,8 +14,8 @@ archived_page_loaded:
             xpath: //button[@class='pf-c-button pf-m-plain cluster-list-top' and @aria-label='Refresh']
         - selector:
             xpath: //table[@class='pf-c-table pf-m-grid-md']
-click_unarchive_cluster_button:
+click_unarchive_cluster_button_on_archived_cluster_list_page:
     element:
         selector:
-            xpath: //a[contains(@href,'/openshift/details/<cluster_id>')]/../..//button[text()='Unarchive']
+            xpath: //a[contains(text(),'<cluster_name>')]/../..//button[text()='Unarchive']
         op: click
