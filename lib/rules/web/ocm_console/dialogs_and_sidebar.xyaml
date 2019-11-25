@@ -61,7 +61,7 @@ click_unarchive_button:
         selector:
             xpath: //button[@class='pf-c-button pf-m-primary' and text()='Unarchive cluster']
         op: click
-unarhive_succ_prompt_message_displayed:
+unarchive_succ_prompt_message_displayed:
     element:
         selector:
             xpath: //*[contains(text(),'has been unarchived')]
