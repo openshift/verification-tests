@@ -8,8 +8,8 @@ Given(/^I have an IPI deployment$/) do
   end
 
   machine_sets.each do | machine_set |
-    unless machine_set.healthy?
-      raise "Not an IPI deployment, abort test."
+    unless machine_set.ready?
+      raise "Not an IPI deployment or machineSet #{machine_set.name} not fully scaled, abort test."
     end
   end
 end

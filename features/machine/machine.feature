@@ -29,55 +29,21 @@ Feature: Machine features testing
   @destructive
   Scenario: Scale up and scale down a machineSet
     Given I have an IPI deployment
-    And I store all machinesets to the :machinesets clipboard
+    And I pick a random machineset to scale
+    And evaluation of `machine_set.available_replicas` is stored in the :replicas_to_restore clipboard
 
-    Given evaluation of `machine_set.desired_replicas` is stored in the :replicas_original clipboard
-    And evaluation of `machine_set.desired_replicas.to_i + 1` is stored in the :replicas_expected clipboard
-    And I store the number of machines in the :num_machines_original clipboard
-
-    # scale up
-    When I run the :scale admin command with:
-      | resource | machineset                  |
-      | name     | <%= machine_set.name %>     |
-      | replicas | <%= cb.replicas_expected %> |
-      | n        | openshift-machine-api       |
+    Given I scale the machineset to +2
+    And I register clean-up steps:
+    """
+    And I scale the machineset to <%= cb.replicas_to_restore %>
+    """
     Then the step should succeed
+    And the machineset should have expected number of running machines
 
-    # register clean-up just in case of failure
-    Given I register clean-up steps:
-    """
-    When I run the :scale admin command with:
-      | resource | machineset                  |
-      | name     | <%= machine_set.name %>     |
-      | replicas | <%= cb.replicas_original %> |
-      | n        | openshift-machine-api       |
+    When I scale the machineset to -1
     Then the step should succeed
-    """
+    And the machineset should have expected number of running machines
 
-    # num of machines should increase
-    And I wait for the steps to pass:
-    """
-    Given I store the number of machines in the :num_machines_current clipboard
-    Then the expression should be true> cb.num_machines_current.to_i == cb.num_machines_original.to_i + 1
-    """
-
-    Given I store the last provisioned machine in the :new_machine clipboard
-    And I wait for the node of machine named "<%= cb.new_machine %>" to appear
-
-    # new node should be ready
-    And admin waits for the "<%= cb.new_node %>" node to become ready up to 600 seconds
-
-    # scale down
-    And I run the :scale admin command with:
-      | resource | machineset                  |
-      | name     | <%= machine_set.name %>     |
-      | replicas | <%= cb.replicas_original %> |
-      | n        | openshift-machine-api       |
-    Then the step should succeed
-
-    # node should be deleted
-    Given I switch to cluster admin pseudo user
-    Then I wait for the resource "node" named "<%= cb.new_node %>" to disappear within 600 seconds
 
   # @author jhou@redhat.com
   @admin
