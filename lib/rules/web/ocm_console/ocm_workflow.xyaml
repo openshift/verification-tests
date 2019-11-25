@@ -11,7 +11,7 @@ create_osd_cluster:
     action: click_create_button
     action: cluster_detail_page_loaded
     action: overview_tab_loaded
-archive_cluster_from_list:
+archive_cluster_from_cluster_list_page:
     action: cluster_list_page_loaded
     action: click_archive_button_on_cluster_list_page
     action: archive_dialog_loaded
@@ -19,13 +19,13 @@ archive_cluster_from_list:
     action: archive_succ_promt_message_displayed
     action: go_to_archived_cluster_page
     action: archived_page_loaded
-unarchive_cluster_from_list:
+unarchive_cluster_from_cluster_list_page:
     action: archived_page_loaded
     action: click_unarchive_cluster_button_on_archived_cluster_list_page
     action: unarchive_dialog_loaded
     action: click_unarchive_button
     action: unarhive_succ_prompt_message_displayed
-archive_cluster_from_detail:
+archive_cluster_from_cluster_detail_page:
     action: cluster_list_page_loaded
     action: go_to_cluster_detail_page
     action: cluster_detail_page_loaded
@@ -35,7 +35,7 @@ archive_cluster_from_detail:
     action: click_archive_button
     action: archive_succ_promt_message_displayed
     action: archived_cluster_detail_page_loaded
-unarchive_cluster_from_detail:
+unarchive_cluster_from_cluster_detail_page:
     action: archived_page_loaded
     action: go_to_cluster_detail_page
     action: click_detail_page_unarchive_cluster_button
