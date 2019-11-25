@@ -131,7 +131,7 @@ Given /^I have a(n authenticated)? proxy configured in the project$/ do |use_aut
   end
   step %Q/the step should succeed/
   step %Q/a pod becomes ready with labels:/, table(%{
-    | app=squid-proxy |
+    | deployment=squid-proxy-1 |
     })
   step %Q/I wait for the "squid-proxy" service to become ready/
   step %Q/evaluation of `service.ip` is stored in the :proxy_ip clipboard/
