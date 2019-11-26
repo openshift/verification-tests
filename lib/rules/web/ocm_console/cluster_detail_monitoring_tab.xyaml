@@ -1,3 +1,115 @@
-go_to_monitoring_tab:
+click_monitoring_tab:
     element:
-        xpath: //button[@class='pf-c-tabs__button' and text()='Monitoring']
+        selector:
+            xpath: //button[@class='pf-c-tabs__button' and text()='Monitoring']
+        op: click
+
+
+check_monitroing_tab:
+    action: issue_summary_loaded
+    action: check_alert_firing
+    action: check_nodes
+    action: check_cluster_operators
+    action: check_resource_usage
+
+issue_summary_loaded:
+    elements:
+        - selector:
+            xpath: //h2[@class='pf-c-title pf-m-3xl' and contains(text(), ' Issues Detected')]
+            timeout: 20
+        - selector:
+            xpath: //div[@class='pf-l-split__item' and contains(text(), 'Last check-in')]
+            timeout: 20
+        - selector:
+            xpath: //div[@class='pf-l-split__item' and contains(text(), 'minutes ago')]
+        - selector:
+            xpath: //h2[@class='pf-c-title pf-m-3xl' and text()='Status']
+        - selector:
+            xpath: //h4[@class='pf-c-title pf-m-2xl' and text()='Alerts firing']
+        - selector:
+            xpath: //h4[@class='pf-c-title pf-m-2xl' and text()='Nodes']
+        - selector:
+            xpath: //h4[@class='pf-c-title pf-m-2xl' and text()='Cluster operators']
+        - selector:
+            xpath: //h4[@class='pf-c-title pf-m-2xl' and text()='Resource usage']
+
+expand_alert_firing:
+    element:
+        selector:
+            css: button#alerts-firing-toggle
+        op: click
+close_alert_firing:
+    action: expand_alert_firing
+check_alert_firing:
+    action: expand_alert_firing
+    elements:
+        - selector:
+            xpath: //li[@aria-labelledby='alerts-firing']//span[contains(text()[3], 'discovered issues')]
+        - selector:
+            xpath: //li[@aria-labelledby='alerts-firing']//table[@class='pf-c-table pf-m-grid-md pf-m-compact']
+        - selector:
+            xpath: //li[@aria-labelledby='alerts-firing']//table//th[text()='Name']
+        - selector:
+            xpath: //li[@aria-labelledby='alerts-firing']//table//th[text()='Severity']
+    action: close_alert_firing
+expand_nodes:
+    element:
+        selector:
+            css: button#nodes-toggle
+        op: click
+close_nodes:
+    action: expand_nodes
+check_nodes:
+    action: expand_nodes
+    elements:
+        - selector:
+            xpath: //li[@aria-labelledby='nodes']//span[contains(text()[3], 'discovered issues')]
+        - selector:
+            xpath: //section[@id='nodes-expand']//table//th[text()='Name']
+        - selector:
+            xpath: //section[@id='nodes-expand']//table//th[text()='Status']
+        - selector:
+            xpath: //section[@id='nodes-expand']//table//th[text()='Node address']
+    action: close_nodes
+
+expand_cluster_operators:
+    element:
+        selector:
+            css: button#cluster-operators-toggle
+        op: click
+close_cluster_operators:
+    action: expand_cluster_operators
+check_cluster_operators:
+    action: expand_cluster_operators
+    elements:
+        - selector:
+            xpath: //li[@aria-labelledby='cluster-operators']//span[contains(text()[3], 'discovered issues')]
+        - selector:
+            xpath: //section[@id='cluster-operators-expand']//table//th[text()='Name']
+        - selector:
+            xpath: //section[@id='cluster-operators-expand']//table//th[text()='Status']
+        - selector:
+            xpath: //section[@id='cluster-operators-expand']//table//th[text()='Version']
+    action: close_cluster_operators
+
+expand_resource_usage:
+    element:
+        selector:
+            css: button#resource-usage-toggle
+        op: click
+close_resource_usage:
+    action: expand_resource_usage
+check_resource_usage:
+    action: expand_resource_usage
+    elements:
+        - selector:
+            xpath: //li[@aria-labelledby='resource-usage']//span[contains(text()[3], 'discovered issues')]
+        - selector:
+            xpath: //section[@id='resource-usage-expand']//h4[@class='pf-c-title pf-m-xl metrics-chart' and text()='vCPU']
+        - selector:
+            xpath: //section[@id='resource-usage-expand']//h4[text()='vCPU']/../div[@class='metrics-chart']
+        - selector:
+            xpath: //section[@id='resource-usage-expand']//h4[@class='pf-c-title pf-m-xl metrics-chart' and text()='Memory']
+        - selector:
+            xpath: //section[@id='resource-usage-expand']//h4[text()='Memory']/../div[@class='metrics-chart']
+    action: close_resource_usage
