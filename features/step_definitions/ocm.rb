@@ -5,9 +5,9 @@ Given /^I open ocm portal with #{WORD}$/ do |usertype|
   ocm_env = env.ocm_env
   base_url = env.web_console_url
   step "I have a browser with:", table(%{
-    | rules        | lib/rules/web/ocm_console/  |
-    | base_url     | #{base_url}       |
-    | snippets_dir | #{snippets_dir}                    |
+    | rules        | lib/rules/web/ocm_console/ |
+    | base_url     | #{base_url}                |
+    | snippets_dir | #{snippets_dir}            |
   })
   if ocm_env == "stage"
     browser.run_action(:goto_ocm_stage_console)

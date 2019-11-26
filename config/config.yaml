@@ -86,15 +86,15 @@ environments:
     version: 4.1.0.0 # version not supported on cluster (yet)
   ose: *ocp4
   ocm_stage:
-     hosts: cloud.redhat.com:etcd:master:node
-     web_console_url: https://cloud.redhat.com/beta
-     type: StaticEnvironment
-     ocm_env: stage
-   ocm_prod:
-     hosts: cloud.redhat.com:etcd:master:node
-     web_console_url: https://cloud.redhat.com
-     type: StaticEnvironment
-     ocm_env: product
+    hosts: cloud.redhat.com:etcd:master:node
+    web_console_url: https://cloud.redhat.com/beta
+    type: StaticEnvironment
+    ocm_env: stage
+  ocm_prod:
+    hosts: cloud.redhat.com:etcd:master:node
+    web_console_url: https://cloud.redhat.com
+    type: StaticEnvironment
+    ocm_env: product
 
 optional_classes:
   tcms_tc_manager:
