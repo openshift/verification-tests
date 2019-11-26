@@ -1,0 +1,29 @@
+--- # log in the ocm portal
+goto_ocm_stage_console:
+  url: /beta/openshift
+goto_ocm_prod_console:
+  url: /openshift
+login_ocm_sequence:
+  action: login_ocm_page_loaded
+  action: login_ocm_portal
+
+login_ocm_page_loaded:
+  element:
+    selector:
+      css: "#kc-form-login, #password, #username"
+    timeout: 30
+login_ocm_portal:
+  elements:
+    - selector:
+        id: username
+      op: send_keys <username>
+      type: input
+    - selector:
+        id: password
+      op: send_keys <password>
+      type: input
+  elements:
+    - selector:
+        id: _eventId_submit
+      type: button
+      op: click
