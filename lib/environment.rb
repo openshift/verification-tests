@@ -441,6 +441,17 @@ module BushSlicer
       # TODO: return value from https://docs.openshift.com/container-platform/4.2/networking/enable-cluster-wide-proxy.html#nw-proxy-configure-object_config-cluster-wide-proxy
       raise "not implemented"
     end
+
+    def ocm_env
+      unless @ocm_env
+        if opts[:ocm_env]
+          @ocm_env = opts[:ocm_env]
+        else
+          @ocm_env = ''
+        end
+      end
+      return @ocm_env
+    end
   end
 
   # a quickly made up environment class for the PoC
