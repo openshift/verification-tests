@@ -6,6 +6,7 @@ click_monitoring_tab:
 
 
 check_monitroing_tab:
+    action: click_monitoring_tab
     action: issue_summary_loaded
     action: check_alert_firing
     action: check_nodes

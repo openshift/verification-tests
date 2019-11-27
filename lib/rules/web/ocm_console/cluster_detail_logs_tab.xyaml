@@ -6,6 +6,7 @@ click_logs_tab:
         op: click
     
 check_logs_tab:
+    action: click_logs_tab
     elements:
         - selector:
             xpath: //div[@class='log-window__header' and text()='Last 100 lines']
