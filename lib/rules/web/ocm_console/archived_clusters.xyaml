@@ -19,3 +19,10 @@ click_unarchive_cluster_button_on_archived_cluster_list_page:
         selector:
             xpath: //a[contains(text(),'<cluster_name>')]/../..//button[text()='Unarchive']
         op: click
+go_to_archived_cluster_detail_page:
+    element:
+        selector:
+            xpath: //table[@class='pf-c-table pf-m-grid-md']/tbody/tr/td/a[contains(text(),'<cluster_name>')]
+        timeout: 30
+        op: click
+    action: archived_cluster_detail_page_loaded
