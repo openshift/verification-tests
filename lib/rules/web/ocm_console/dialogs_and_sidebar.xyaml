@@ -66,3 +66,24 @@ unarchive_succ_prompt_message_displayed:
         selector:
             xpath: //*[contains(text(),'has been unarchived')]
         timeout: 20
+check_display_name_dialog_loaded:
+  elements:
+    - selector:
+        xpath: //div[@class='pf-c-backdrop']/div/div/h1[text()='Edit Display Name'] 
+    - selector:
+        xpath: //*[@id='edit-display-name-input' and contains(@value,<original_name>)]
+edit_display_name_in_dialog:
+  elements:
+    - selector:
+        id: edit-display-name-input
+      type: input
+      op: clear
+  elements:
+    - selector:
+        id: edit-display-name-input
+      type: input
+      op: send_keys <new_name>
+  elements:
+    - selector:
+        xpath: //button[@class="pf-c-button pf-m-primary" and @type="submit"]
+      op: click

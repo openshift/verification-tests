@@ -72,4 +72,17 @@ click_archive_button_on_cluster_detail_page:
         selector:
             xpath: //button[@class='pf-c-dropdown__menu-item' and text()='Archive Cluster']
         op: click
-
+click_edit_display_name_button_on_cluster_detail_page:
+    element:
+        selector:
+            xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Edit Display Name']
+        op: click
+edit_display_name_on_cluster_detail_page:
+  action: click_edit_display_name_button_on_cluster_detail_page
+  action: check_display_name_dialog_loaded
+  action: edit_display_name_in_dialog
+  action: check_new_name_in_cluster_detail
+check_new_name_in_cluster_detail:
+  element:
+     selector:
+       xpath: //div[@id='cl-details-top']/div/div/h1[text()='<new_name>']
