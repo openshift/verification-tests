@@ -208,8 +208,8 @@ Feature: secrets related scenarios
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/tc519256/testsecret2.json |
     Then the step should succeed
     When I run the :new_build client command with:
-      | docker_image | centos/ruby-25-centos7:latest               |
-      | app_repo     | https://github.com/yanliao/build-secret.git |
+      | docker_image | centos/ruby-22-centos7:latest                |
+      | app_repo     | https://github.com/openshift-qe/build-secret |
       | strategy     | <type>         |
       | build_secret | <build_secret> |
       | build_secret | testsecret2    |
