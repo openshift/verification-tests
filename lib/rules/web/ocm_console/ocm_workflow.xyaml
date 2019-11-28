@@ -37,7 +37,7 @@ archive_cluster_from_cluster_detail_page:
     action: archived_cluster_detail_page_loaded
 unarchive_cluster_from_cluster_detail_page:
     action: archived_page_loaded
-    action: go_to_cluster_detail_page
+    action: go_to_archived_cluster_detail_page
     action: click_detail_page_unarchive_cluster_button
     action: unarchive_dialog_loaded
     action: click_unarchive_button

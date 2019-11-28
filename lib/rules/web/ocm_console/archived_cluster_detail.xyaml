@@ -25,6 +25,6 @@ click_detail_page_unarchive_cluster_button:
 go_to_archived_clusters_from_archived_cluster_detail_page:
     element:
         selector:
-            xpath: //a[@class='pf-c-breadcrumb__link' and text()='Archived clusters']
+            xpath: //li[contains(@href,'/openshift/archived')]
         op: click
     action: archived_page_loaded
