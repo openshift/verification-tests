@@ -245,6 +245,14 @@ go_to_archived_cluster_page:
             xpath: //a[@href='/beta/openshift/archived']
         op: click
     action: archived_page_loaded
+go_to_disconnected_cluster_register_page:
+    action: expand_actions_behind_create_button
+    action: actions_behind_create_button_menu_loaded
+    element:
+        selector:
+            xpath: //a[@href='/beta/openshift/register']
+        op: click
+    action: cluster_registration_page_loaded
 
 
     
