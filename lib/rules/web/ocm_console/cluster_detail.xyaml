@@ -1,6 +1,7 @@
 #------------------------------ This file is used for cluster detail defination -------------------
 cluster_detail_page_loaded:
     action: overview_tab_loaded
+    action: monitoring_tab_loaded
 add_console_url_button_on_cluster_detail_page_loaded:
     element:
         selector:
@@ -50,6 +51,11 @@ overview_tab_loaded:
     elements:
         - selector:
             xpath: //section[@id='overviewTabContent']//h2[@class='pf-c-title pf-m-3xl' and text()='Details']
+monitoring_tab_loaded:
+    element:
+        selector:
+            xpath: //button[@class='pf-c-tabs__button' and text()='Monitoring']
+        timeout: 30
 
 check_actions_on_cluster_detail_page_partial_enabled:
     action: detail_launch_console_disabled
