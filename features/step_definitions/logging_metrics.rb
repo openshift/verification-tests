@@ -74,7 +74,6 @@ Given /^I login to kibana logging web console$/ do
     | kibana_url | https://<%= cb.logging_console_url %> |
     | idp        | <%= env.idp %>                        |
     })
-  step %Q/I run the :kibana_verify_logged_in web action/
   # change the base url so we don't need to specifiy kibana url every time afterward in the rule file
   browser.base_url = cb.logging_console_url
 end
