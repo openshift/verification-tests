@@ -26,5 +26,6 @@ go_to_archived_clusters_from_archived_cluster_detail_page:
     element:
         selector:
             xpath: //li[contains(@href,'/openshift/archived')]
+            xpath: //nav/ol/li[2]
         op: click
     action: archived_page_loaded
