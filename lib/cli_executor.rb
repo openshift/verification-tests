@@ -81,7 +81,9 @@ module BushSlicer
       if v[0] == '1'
         major = '3'
       else
-        major = v[0]
+        # OCP <= 4.1 format `v4.1.10-201908061216+c8c05d4-dirty`
+        # OCP > 4.1 format  `openshift-clients-4.2.2-201910250432`
+        major = v[0].split('openshift-clients-').last
       end
       return [major, v[1]].join('.')
     end
