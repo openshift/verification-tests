@@ -170,16 +170,16 @@ Feature: storageClass related feature
   Scenario Outline: New created PVC without specifying storage class use default class when only one class is marked as default
     Given I have a project
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc-without-annotations.json" replacing paths:
-      | ["metadata"]["name"] | pvc-<%= project.name %> |
+      | ["metadata"]["name"] | mypvc |
     Then the step should succeed
-    And the "pvc-<%= project.name %>" PVC becomes :bound within 120 seconds
+    And the expression should be true> pvc("mypvc").storage_class == "<default-storage-class-name>"
 
     Examples:
-      | provisioner |
-      | gce-pd      | # @case_id OCP-12171
-      | aws-ebs     | # @case_id OCP-12176
-      | cinder      | # @case_id OCP-12177
-      | azure-disk  | # @case_id OCP-13492
+      | provisioner | default-storage-class-name |
+      | gce-pd      | standard                   | # @case_id OCP-12171
+      | aws-ebs     | gp2                        | # @case_id OCP-12176
+      | cinder      | standard                   | # @case_id OCP-12177
+      | azure-disk  | managed-premium            | # @case_id OCP-13492
 
   # @author chaoyang@redhat.com
   @admin
