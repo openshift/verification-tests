@@ -262,5 +262,61 @@ go_to_disconnected_cluster_register_page:
             xpath: //a[@href='/beta/openshift/register']
         op: click
     action: cluster_registration_page_loaded
-
-
+click_scale_cluster_in_action_dropdown:
+  element:
+    selector:
+      xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Scale Cluster']
+    op: click
+go_to_scale_cluster_dialog_on_cluster_list_page:
+  action: expand_cluster_actions_on_cluster_list_page
+  action: click_scale_cluster_in_action_dropdown
+check_elements_in_scale_cluster_dialog:
+  elements:
+  - selector: 
+      xpath: //div[@class='pf-c-backdrop']//div[@role='dialog' and @aria-label='Scale Cluster']//h1[text()='Scale Cluster']
+  - selector:
+      xpath: //div[@role='dialog' and @aria-label='Scale Cluster']//form/div[@class='form-group']/label[@for='nodes_compute' and text()='Compute nodes']
+  - selector:
+      xpath: //div[@role='dialog' and @aria-label='Scale Cluster']//form/div[@class='form-group']/input[@id='nodes_compute' and @value='<orignal_compute_node_number>']
+  action: check_close_button
+  action: check_cancel_button
+  action: check_apply_button
+scale_cluster_from_cluster_list_page:
+  action: expand_cluster_actions_on_cluster_list_page
+  action: click_scale_cluster_in_action_dropdown
+  action: edit_compute_node_in_dialog
+check_actions_items_of_ready_osd_cluster_on_list:
+  action: check_base_actions_items_of_ready_osd_cluster
+  elements:
+  - selector:
+      xpath: //div[@class='pf-c-dropdown pf-m-expanded']//a[@role='menuitem' and text()='Launch Console' and not(@disabled)]
+  - selector:
+      xpath: //div[@class='pf-c-dropdown pf-m-expanded']//button[@role='menuitem' and text()='Archive Cluster']
+    missing: true
+  - selector:
+      xpath: //div[@class='pf-c-dropdown pf-m-expanded']//button[@role='menuitem' and text()='Edit Console URL']
+    missing: true
+check_actions_items_of_ready_ocp_cluster_without_adding_url_on_list:
+  action: check_base_actions_items_of_ready_ocp_cluster_without_adding_url
+  elements:
+  - selector:
+      xpath: //div[@class='pf-c-dropdown pf-m-expanded']//button[@role='menuitem' and text()='Launch Console' and @disabled]
+  - selector:
+      xpath: //div[@class='pf-c-dropdown pf-m-expanded']//button[@role='menuitem' and text()='Scale Cluster']
+    missing: true
+  - selector:
+      xpath: //div[@class='pf-c-dropdown pf-m-expanded']//button[@role='menuitem' and text()='Delete Cluster']
+    missing: true
+  - selector:
+      xpath: //div[@class='pf-c-dropdown pf-m-expanded']//button[@role='menuitem' and text()='Add Console URL' and not(@disabled)]
+check_action_menu_of_ready_ocp_cluster_after_adding_url_on_list:
+  action: check_base_actions_items_of_ready_ocp_cluster_after_adding_url
+  elements:
+  - selector:
+      xpath: //div[@class='pf-c-dropdown pf-m-expanded']//a[@role='menuitem' and text()='Launch Console' and not(@disabled)]
+  - selector:
+      xpath: //div[@class='pf-c-dropdown pf-m-expanded']//button[@role='menuitem' and text()='Scale Cluster']
+    missing: true
+  - selector:
+      xpath: //div[@class='pf-c-dropdown pf-m-expanded']//button[@role='menuitem' and text()='Delete Cluster']
+    missing: true
