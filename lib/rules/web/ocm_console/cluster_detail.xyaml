@@ -6,21 +6,6 @@ add_console_url_button_on_cluster_detail_page_loaded:
     element: &add_console_url_on_detail_page
         selector:
             xpath: //button[@class='pf-c-button pf-m-primary' and text()='Add Console URL']
-add_console_url:
-  element:
-    <<: *add_console_url_on_detail_page
-    op: click
-  element:
-    selector:
-      id: edit-console-url-input
-    type: input
-    op: send_keys <console_url>
-  action: click_add_url_button
-  element:
-    selector:
-      xpath: //div[@class='pf-c-backdrop']/div[@class='pf-l-bullseye']
-    missing: true
-
 cluster_genera_info_loaded:
     action:
         if_param: cluster_name
@@ -165,15 +150,3 @@ check_base_actions_items_of_ready_ocp_cluster_after_adding_url:
       xpath: //div[@class='pf-c-dropdown pf-m-expanded']//button[@role='menuitem' and text()='Archive Cluster' and not(@disabled)]
   - selector:
       xpath: //div[@class='pf-c-dropdown pf-m-expanded']//button[@role='menuitem' and text()='Edit Console URL' and not(@disabled)]
-check_action_menu_of_ready_ocp_cluster_after_adding_url_on_detail:
-  action: check_base_actions_items_of_ready_ocp_cluster_after_adding_url
-  elements:
-  - selector:
-      xpath: //div[@class='pf-c-dropdown pf-m-expanded']//button[@role='menuitem' and text()='Launch Console']
-    missing: true
-  - selector:
-      xpath: //div[@class='pf-c-dropdown pf-m-expanded']//button[@role='menuitem' and text()='Scale Cluster']
-    missing: true
-  - selector:
-      xpath: //div[@class='pf-c-dropdown pf-m-expanded']//button[@role='menuitem' and text()='Delete Cluster']
-    missing: true

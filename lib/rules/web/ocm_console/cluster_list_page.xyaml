@@ -309,14 +309,3 @@ check_actions_items_of_ready_ocp_cluster_without_adding_url_on_list:
     missing: true
   - selector:
       xpath: //div[@class='pf-c-dropdown pf-m-expanded']//button[@role='menuitem' and text()='Add Console URL' and not(@disabled)]
-check_action_menu_of_ready_ocp_cluster_after_adding_url_on_list:
-  action: check_base_actions_items_of_ready_ocp_cluster_after_adding_url
-  elements:
-  - selector:
-      xpath: //div[@class='pf-c-dropdown pf-m-expanded']//a[@role='menuitem' and text()='Launch Console' and not(@disabled)]
-  - selector:
-      xpath: //div[@class='pf-c-dropdown pf-m-expanded']//button[@role='menuitem' and text()='Scale Cluster']
-    missing: true
-  - selector:
-      xpath: //div[@class='pf-c-dropdown pf-m-expanded']//button[@role='menuitem' and text()='Delete Cluster']
-    missing: true
