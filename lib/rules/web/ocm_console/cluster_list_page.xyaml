@@ -246,7 +246,7 @@ go_to_archived_cluster_page:
         op: click
     action: archived_page_loaded
 edit_display_name_on_cluster_list_page:
-  action: click_edit_display_name_button_on_cluster_list_page
+  action: click_edit_display_name_button_in_actions_dd
   action: check_display_name_dialog_loaded
   action: edit_display_name_in_dialog
   action: check_new_name_in_cluster_list
@@ -269,7 +269,7 @@ click_scale_cluster_in_action_dropdown:
     op: click
 go_to_scale_cluster_dialog_on_cluster_list_page:
   action: expand_cluster_actions_on_cluster_list_page
-  action: click_scale_cluster_in_action_dropdown
+  action: click_scale_cluster_button_in_actions_dd
 check_elements_in_scale_cluster_dialog:
   elements:
   - selector: 
@@ -283,29 +283,19 @@ check_elements_in_scale_cluster_dialog:
   action: check_apply_button
 scale_cluster_from_cluster_list_page:
   action: expand_cluster_actions_on_cluster_list_page
-  action: click_scale_cluster_in_action_dropdown
+  action: click_scale_cluster_button_in_actions_dd
   action: edit_compute_node_in_dialog
 check_actions_items_of_ready_osd_cluster_on_list:
-  action: check_base_actions_items_of_ready_osd_cluster
-  elements:
-  - selector:
-      xpath: //div[@class='pf-c-dropdown pf-m-expanded']//a[@role='menuitem' and text()='Launch Console' and not(@disabled)]
-  - selector:
-      xpath: //div[@class='pf-c-dropdown pf-m-expanded']//button[@role='menuitem' and text()='Archive Cluster']
-    missing: true
-  - selector:
-      xpath: //div[@class='pf-c-dropdown pf-m-expanded']//button[@role='menuitem' and text()='Edit Console URL']
-    missing: true
-check_actions_items_of_ready_ocp_cluster_without_adding_url_on_list:
-  action: check_base_actions_items_of_ready_ocp_cluster_without_adding_url
-  elements:
-  - selector:
-      xpath: //div[@class='pf-c-dropdown pf-m-expanded']//button[@role='menuitem' and text()='Launch Console' and @disabled]
-  - selector:
-      xpath: //div[@class='pf-c-dropdown pf-m-expanded']//button[@role='menuitem' and text()='Scale Cluster']
-    missing: true
-  - selector:
-      xpath: //div[@class='pf-c-dropdown pf-m-expanded']//button[@role='menuitem' and text()='Delete Cluster']
-    missing: true
-  - selector:
-      xpath: //div[@class='pf-c-dropdown pf-m-expanded']//button[@role='menuitem' and text()='Add Console URL' and not(@disabled)]
+  action: check_edit_display_name_button_in_actions_dd
+  action: check_scale_cluster_button_in_actions_dd
+  action: check_delete_cluster_button_in_actions_dd
+  action: check_archive_button_in_actions_dd_missing
+  action: check_edit_console_button_in_actions_dd_missing
+  action: check_launch_console_button_in_actions_dd
+check_actions_items_of_ready_ocp_cluster_on_list:
+  action: check_edit_console_button_in_actions_dd
+  action: check_edit_display_name_button_in_actions_dd
+  action: check_archive_button_in_actions_dd
+  action: check_delete_cluster_button_in_actions_dd_missing
+  action: check_scale_cluster_button_in_actions_dd_missing
+  action: check_launch_console_button_in_actions_dd
