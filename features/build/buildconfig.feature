@@ -92,6 +92,8 @@ Feature: buildconfig.feature
     When I run the :new_app client command with:
      | file | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/templates/OCP-12057/application-template-stibuild_pull_private_sourceimage.json |
     Then the step should succeed
+    And the "ruby-sample-build-1" build was created
+    And the "ruby-sample-build-1" build completed
     Given a pod becomes ready with labels:
      | name=frontend |
     When I execute on the pod:

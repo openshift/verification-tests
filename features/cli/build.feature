@@ -152,7 +152,7 @@ Feature: build 'apps' with CLI
     And I wait up to 120 seconds for the steps to pass:
     """
     When I execute on the pod:
-      | bash | -c | mysql  -h $MYSQL_SERVICE_HOST -u root -ptest -e "show databases" |
+      | bash | -c | mysql  -h $HOSTNAME -u root -ptest -e "show databases" |
     Then the step should succeed
     """
     And the output should contain "mysql"

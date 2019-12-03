@@ -158,44 +158,12 @@ Feature: jenkins.feature
     When I run the :new_app client command with:
       | file | https://raw.githubusercontent.com/openshift/origin/master/examples/jenkins/pipeline/maven-pipeline.yaml |
     Then the step should succeed
-    Given I have a jenkins browser
-    And I log in to jenkins
-    Given I update "maven" slave image for jenkins <version> server
     When I run the :start_build client command with:
       | buildconfig | openshift-jee-sample |
     Then the step should succeed
     Given a pod becomes ready with labels:
       | jenkins/maven=true |
     Given the "openshift-jee-sample-1" build completes
-    When I perform the :goto_jenkins_buildlog_page web action with:
-      | namespace|<%= project.name %>                      |
-      | job_name| <%= project.name %>-openshift-jee-sample |
-      | job_num | 1                                        |
-    Then the step should succeed
-    When I get the visible text on web html page
-    Then the output should contain:
-      | Building SampleApp 1.0 |
-      | BUILD SUCCESS          |
-    When I run the :patch client command with:
-      | resource      | bc                                                                                                                                       |
-      | resource_name | openshift-jee-sample                                                                                                                     |
-      | p             | {"spec" : {"strategy": {"jenkinsPipelineStrategy": {"jenkinsfile": "node('unexist') {\\nstage 'Check mvn version'\\nsh 'mvn -v'\\n}"}}}} |
-    Then the step should succeed
-    When I perform the :jenkins_add_pod_template web action with:
-      | slave_name  | unexist        |
-      | slave_label | unexist        |
-      | slave_image | unexist:latest |
-    Then the step should succeed
-    When I run the :start_build client command with:
-      | buildconfig | openshift-jee-sample |
-    Then the step should succeed
-    When I perform the :jenkins_verify_job_text web action with:
-      | namespace  | <%= project.name %>                      |
-      | job_name   | <%= project.name %>-openshift-jee-sample |
-      | checktext  | unexist         |
-      | job_num    | 2               |
-      | time_out   | 300             |
-    Then the step should succeed
 
     Examples:
       | version |
