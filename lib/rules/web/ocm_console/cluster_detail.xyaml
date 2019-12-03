@@ -78,7 +78,7 @@ click_edit_display_name_button_on_cluster_detail_page:
             xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Edit Display Name']
         op: click
 edit_display_name_on_cluster_detail_page:
-  action: click_edit_display_name_button_in_actions_dd
+  action: click_edit_display_name_button_in_dropdown
   action: check_display_name_dialog_loaded
   action: edit_display_name_in_dialog
   action: check_new_name_in_cluster_detail
@@ -88,7 +88,7 @@ check_new_name_in_cluster_detail:
        xpath: //div[@id='cl-details-top']/div/div/h1[text()='<new_name>']
 go_to_scale_cluster_dialog_on_cluster_detail_page:
   action: expand_actions_on_cluster_detail_page
-  action: click_scale_cluster_button_in_actions_dd
+  action: click_scale_cluster_button_in_dropdown
 check_scale_result_on_detail_page:
   action: check_cluster_status
   action: check_desired_compute_nodes
@@ -98,20 +98,19 @@ check_desired_compute_nodes:
       xpath: //div[@class='pf-c-card__body']//dt[text()='Desired Nodes']/following-sibling::dd[1]/dl/dt[text()='Compute:']/following-sibling::dd[text()='<desired_compute_nodes>']
 scale_cluster_from_cluster_detail_page:
   action: cluster_detail_page_loaded
-  action: expand_actions_on_cluster_detail_page
-  action: click_scale_cluster_button_in_actions_dd
+  action: go_to_scale_cluster_dialog_on_cluster_detail_page
   action: edit_compute_node_in_dialog
 check_actions_items_of_ready_osd_cluster_on_detail:
-  action: check_edit_display_name_button_in_actions_dd
-  action: check_scale_cluster_button_in_actions_dd
-  action: check_delete_cluster_button_in_actions_dd
-  action: check_archive_button_in_actions_dd_missing
-  action: check_edit_console_button_in_actions_dd_missing
-  action: check_launch_console_button_in_actions_dd_missing
+  action: check_edit_display_name_button_in_dropdown
+  action: check_scale_cluster_button_in_dropdown
+  action: check_delete_cluster_button_in_dropdown
+  action: check_archive_button_in_dropdown_missing
+  action: check_edit_console_button_in_dropdown_missing
+  action: check_launch_console_button_in_dropdown_missing
 check_actions_items_of_ready_ocp_cluster_on_detail:
-  action: check_edit_console_button_in_actions_dd
-  action: check_edit_display_name_button_in_actions_dd
-  action: check_archive_button_in_actions_dd
-  action: check_delete_cluster_button_in_actions_dd_missing
-  action: check_scale_cluster_button_in_actions_dd_missing
-  action: check_launch_console_button_in_actions_dd_missing
+  action: check_edit_console_button_in_dropdown
+  action: check_edit_display_name_button_in_dropdown
+  action: check_archive_button_in_dropdown
+  action: check_delete_cluster_button_in_dropdown_missing
+  action: check_scale_cluster_button_in_dropdown_missing
+  action: check_launch_console_button_in_dropdown_missing
