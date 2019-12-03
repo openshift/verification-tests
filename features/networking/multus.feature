@@ -8,18 +8,17 @@ Feature: Multus-CNI related scenarios
     Given the master version >= "4.0"
     And the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard
-    And evaluation of `node.name` is stored in the :target_node clipboard    
+    And evaluation of `node.name` is stored in the :target_node clipboard
     # Create the net-attach-def via cluster admin
     Given I have a project
     When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %> |    
-      | ["spec"]["config"]["eth0"]| <%= cb.default_interface %> |
-      | ["spec"]["nodeName"] | "<%= cb.target_node %>" |      
+      | ["spec"]["config"]| '{ "cniVersion": "0.3.0", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "bridge", "ipam": { "type": "host-local", "subnet": "10.1.1.0/24", "rangeStart": "10.1.1.100", "rangeEnd": "10.1.1.200", "routes": [ { "dst": "0.0.0.0/0" } ], "gateway": "10.1.1.1" } }' |
     Then the step should succeed
 
     # Create the first pod which consumes the macvlan custom resource
-    When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/1interface-macvlan-bridge.yaml |
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/1interface-macvlan-bridge.yaml" replacing paths:
+      | ["spec"]["nodeName"] | "<%= cb.target_node %>" |
     Then the step should succeed
     And a pod becomes ready with labels:
       | name=macvlan-bridge-pod |
@@ -42,7 +41,7 @@ Feature: Multus-CNI related scenarios
 
     # Create the second pod which consumes the macvlan cr
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/1interface-macvlan-bridge.yaml" replacing paths:
-      | ["spec"]["nodeName"] | "<%= cb.pod_node %>" |
+      | ["spec"]["nodeName"] | "<%= cb.target_node %>" |
     Then the step should succeed
     And 2 pods become ready with labels:
       | name=macvlan-bridge-pod |
@@ -67,22 +66,20 @@ Feature: Multus-CNI related scenarios
     Given the master version >= "4.0"
     And the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard
-    And evaluation of `node.name` is stored in the :target_node clipboard    
+    And evaluation of `node.name` is stored in the :target_node clipboard
     # Create the net-attach-def via cluster admin
     Given I have a project
     When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-private.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %> |
-      | ["spec"]["config"]["eth0"]| <%= cb.default_interface %> |
-      | ["spec"]["nodeName"] | "<%= cb.target_node %>" |      
+      | ["spec"]["config"]| '{ "cniVersion": "0.3.0", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "private", "ipam": { "type": "host-local", "subnet": "10.1.1.0/24", "rangeStart": "10.1.1.100", "rangeEnd": "10.1.1.200", "routes": [ { "dst": "0.0.0.0/0" } ], "gateway": "10.1.1.1" } }' |    
     Then the step should succeed
 
     # Create the first pod which consumes the macvlan custom resource
-    When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/1interface-macvlan-private.yaml |
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/1interface-macvlan-private.yaml" replacing paths:
+      | ["spec"]["nodeName"] | "<%= cb.target_node %>" |
     Then the step should succeed
     And a pod becomes ready with labels:
       | name=macvlan-private-pod |
-    And evaluation of `pod.node_name` is stored in the :pod_node clipboard
 
     # Check that the macvlan with mode private is added to the pod
     When I execute on the pod:
@@ -101,7 +98,7 @@ Feature: Multus-CNI related scenarios
 
     # Create the second pod which consumes the macvlan cr
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/1interface-macvlan-private.yaml" replacing paths:
-      | ["spec"]["nodeName"] | "<%= cb.pod_node %>" |
+      | ["spec"]["nodeName"] | "<%= cb.target_node %>" |
     Then the step should succeed
     And 2 pods become ready with labels:
       | name=macvlan-private-pod |
@@ -126,22 +123,20 @@ Feature: Multus-CNI related scenarios
     Given the master version >= "4.0"
     And the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard
-    And evaluation of `node.name` is stored in the :target_node clipboard    
+    And evaluation of `node.name` is stored in the :target_node clipboard
     # Create the net-attach-def via cluster admin
     Given I have a project
     When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-vepa.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %> |
-      | ["spec"]["config"]["eth0"]| <%= cb.default_interface %> |
-      | ["spec"]["nodeName"] | "<%= cb.target_node %>" |      
+      | ["spec"]["config"]| '{ "cniVersion": "0.3.0", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "vepa", "ipam": { "type": "host-local", "subnet": "10.1.1.0/24", "rangeStart": "10.1.1.100", "rangeEnd": "10.1.1.200", "routes": [ { "dst": "0.0.0.0/0" } ], "gateway": "10.1.1.1" } }' |      
     Then the step should succeed
 
     # Create the first pod which consumes the macvlan custom resource
-    When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/1interface-macvlan-vepa.yaml |
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/1interface-macvlan-vepa.yaml" replacing paths:
+      | ["spec"]["nodeName"] | "<%= cb.target_node %>" |
     Then the step should succeed
     And a pod becomes ready with labels:
       | name=macvlan-vepa-pod |
-    And evaluation of `pod.node_name` is stored in the :pod_node clipboard
 
     # Check that the macvlan with mode vepa is added to the pod
     When I execute on the pod:
@@ -160,7 +155,7 @@ Feature: Multus-CNI related scenarios
 
     # Create the second pod which consumes the macvlan cr
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/1interface-macvlan-vepa.yaml" replacing paths:
-      | ["spec"]["nodeName"] | "<%= cb.pod_node %>" |
+      | ["spec"]["nodeName"] | "<%= cb.target_node %>" |
     Then the step should succeed
     And 2 pods become ready with labels:
       | name=macvlan-vepa-pod |
@@ -258,13 +253,13 @@ Feature: Multus-CNI related scenarios
     Given I have a project
     When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %> |
-      | ["spec"]["config"]["eth0"]| <%= cb.default_interface %> |
-      | ["spec"]["nodeName"] | "<%= cb.target_node %>" |      
+      | ["spec"]["config"]| '{ "cniVersion": "0.3.0", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "bridge", "ipam": { "type": "host-local", "subnet": "10.1.1.0/24", "rangeStart": "10.1.1.100", "rangeEnd": "10.1.1.200", "routes": [ { "dst": "0.0.0.0/0" } ], "gateway": "10.1.1.1" } }' |      
     Then the step should succeed
 
     # Create the pod which consumes multiple macvlan custom resources
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/2interface-macvlan-macvlan.yaml" replacing paths:
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | macvlan-bridge, macvlan-bridge |
+      | ["spec"]["nodeName"] | "<%= cb.target_node %>" |
     Then the step should succeed
     And a pod becomes ready with labels:
       | name=two-macvlan-pod |
@@ -303,8 +298,7 @@ Feature: Multus-CNI related scenarios
     Given I have a project
     When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %> |
-      | ["spec"]["config"]["eth0"]| <%= cb.default_interface %> |
-      | ["spec"]["nodeName"] | "<%= cb.target_node %>" |      
+      | ["spec"]["config"]| '{ "cniVersion": "0.3.0", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "bridge", "ipam": { "type": "host-local", "subnet": "10.1.1.0/24", "rangeStart": "10.1.1.100", "rangeEnd": "10.1.1.200", "routes": [ { "dst": "0.0.0.0/0" } ], "gateway": "10.1.1.1" } }' |    
     Then the step should succeed
     When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/host-device.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %> |
