@@ -8,17 +8,13 @@ module BushSlicer
       include Common::Helper
 
       def initialize(options={})
-        svc_name = options[:service_name] ||
-                   ENV['POLARSHIFT_SERVICE_NAME'] ||
-                   :polarshift
+        options = options.merge load_env
+
+        svc_name = options[:service_name] || :polarshift
 
         if conf[:services, svc_name.to_sym]
           @options = conf[:services, svc_name.to_sym].merge options
-        else
-          @options = options.dup
         end
-
-        @options.merge! load_env
 
         unless @options[:user]
           Timeout::timeout(120) {
@@ -65,6 +61,26 @@ module BushSlicer
         end
 
         return opts
+      end
+
+      private def test_case_opts
+        @test_case_opts ||= opts_by_prefix("test_case_")
+      end
+
+      private def test_suite_opts
+        @test_suite_opts ||= opts_by_prefix("test_suite_")
+      end
+
+      private def opts_by_prefix(prefix)
+        prefix = "#{prefix}"
+        res = {}
+        opts.each do |key, value|
+          keys = key.to_s
+          if keys.start_with? prefix
+            res[keys[prefix.size..-1].to_sym] = value
+          end
+        end
+        return res.freeze
       end
 
       private def opts
