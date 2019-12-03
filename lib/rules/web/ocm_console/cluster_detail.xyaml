@@ -97,6 +97,7 @@ check_desired_compute_nodes:
     selector:
       xpath: //div[@class='pf-c-card__body']//dt[text()='Desired Nodes']/following-sibling::dd[1]/dl/dt[text()='Compute:']/following-sibling::dd[text()='<desired_compute_nodes>']
 scale_cluster_from_cluster_detail_page:
+  action: cluster_detail_page_loaded
   action: expand_actions_on_cluster_detail_page
   action: click_scale_cluster_button_in_actions_dd
   action: edit_compute_node_in_dialog
