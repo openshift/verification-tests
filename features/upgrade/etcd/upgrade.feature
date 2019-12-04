@@ -4,7 +4,7 @@ Feature: basic verification for upgrade testing
   @upgrade-prepare
   @users=upuser1,upuser2
   @admin
-  Scenario: etcd-operator and cluster works well after upgrade 
+  Scenario: etcd-operator and cluster works well after upgrade - prepare 
     Given I switch to cluster admin pseudo user		
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/admin/subscription.yaml |
