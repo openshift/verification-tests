@@ -50,5 +50,10 @@ module BushSlicer
       end
       return props[:pods]
     end
+
+    def creation_time_stamp(user: nil, quiet: false, cached: true)
+      raw_resource(user: user, cached: cached, quiet: quiet).
+        dig("metadata", "creationTimestamp")
+    end
   end
 end
