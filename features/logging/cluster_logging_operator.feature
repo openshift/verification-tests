@@ -53,17 +53,25 @@ Feature: cluster-logging-operator related test
 
   # @auther qitang@redhat.com
   # @case_id OCP-22492
-  @admin @destructive
+  @admin
+  @destructive
   Scenario: Scale Elasticsearch nodes by nodeCount 2->3->4 in clusterlogging
-    Given I switch to cluster admin pseudo user
-    And I create clusterlogging instance with:
-      | remove_logging_pods | true                                                                                                     |
-      | crd_yaml            | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/scalebase.yaml |
-      | log_collector       | fluentd                                                                                                  |
+    Given I delete the clusterlogging instance
     Then the step should succeed
+    And I run the :create client command with:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/scalebase.yaml |
+    Then the step should succeed
+    Given I register clean-up steps:
+    """
+    Given I delete the clusterlogging instance
+    """
+    # Given admin ensures "instance" cluster_logging is deleted from the "openshift-logging" project after scenario
+    And I wait for the "elasticsearch" elasticsearches to appear
     And the expression should be true> cluster_logging('instance').logstore_node_count == 2
-    Given 2 pods become ready with labels:
-      | cluster-name=elasticsearch,component=elasticsearch,es-node-client=true,es-node-data=true,es-node-master=true |
+    And the expression should be true> elasticsearch('elasticsearch').nodes[0]['nodeCount'] == 2
+    Given evaluation of `elasticsearch('elasticsearch').nodes[0]['genUUID']` is stored in the :gen_uuid_1 clipboard
+    Then I wait for the "elasticsearch-cdm-<%= cb.gen_uuid_1 %>-1" deployment to appear
+    And I wait for the "elasticsearch-cdm-<%= cb.gen_uuid_1 %>-2" deployment to appear
     When I run the :patch client command with:
       | resource      | clusterlogging                                          |
       | resource_name | instance                                                |
@@ -71,8 +79,11 @@ Feature: cluster-logging-operator related test
       | type          | merge                                                   |
     Then the step should succeed
     And the expression should be true> cluster_logging('instance').logstore_node_count == 3
-    And 3 pods become ready with labels:
-      | cluster-name=elasticsearch,component=elasticsearch,es-node-client=true,es-node-data=true,es-node-master=true |
+    Given I wait for the steps to pass:
+    """
+    And the expression should be true> elasticsearch('elasticsearch').nodes[0]['nodeCount'] == 3
+    """
+    And I wait for the "elasticsearch-cdm-<%= cb.gen_uuid_1%>-3" deployment to appear
     When I run the :patch client command with:
       | resource      | clusterlogging                                          |
       | resource_name | instance                                                |
@@ -80,9 +91,9 @@ Feature: cluster-logging-operator related test
       | type          | merge                                                   |
     Then the step should succeed
     And the expression should be true> cluster_logging('instance').logstore_node_count == 4
-    And 4 pods become ready with labels:
-      | cluster-name=elasticsearch,component=elasticsearch,es-node-client=true,es-node-data=true |
-    And 3 pods become ready with labels:
-      | cluster-name=elasticsearch,component=elasticsearch,es-node-client=true,es-node-data=true,es-node-master=true |
-    And a pod becomes ready with labels:
-      | cluster-name=elasticsearch,component=elasticsearch,es-node-client=true,es-node-data=true,es-node-master=false |
+    Given I wait for the steps to pass:
+    """
+    And the expression should be true> elasticsearch('elasticsearch').nodes[0]['nodeCount'] + elasticsearch('elasticsearch').nodes[1]['nodeCount'] == 4
+    """
+    Given evaluation of `elasticsearch('elasticsearch').nodes[1]['genUUID']` is stored in the :gen_uuid_2 clipboard
+    And I wait for the "elasticsearch-cd-<%= cb.gen_uuid_2 %>-1" deployment to appear
