@@ -45,3 +45,12 @@ kibana_expand_index_patterns:
   - selector:
       xpath: //div[contains(@ng-model, "selectedIndexPattern")]
     op: click
+
+click_kibana_link_in_console:
+  elements:
+  - selector:
+      xpath: //a[@data-component='pf-nav-expandable' and text()='Monitoring']
+    op: click
+  - selector:
+      xpath: //a[@href='<kibana_route>' and text()='Logging']
+    op: click

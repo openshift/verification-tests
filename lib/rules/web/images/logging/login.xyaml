@@ -8,7 +8,7 @@ kibana_login:
         text: Log in with OpenShift
     ref: click_log_in_with_openshift_button
   action: login_sequence
-  action: verify_logged_in
+  action: kibana_verify_logged_in
 
 click_log_in_with_openshift_button:
   element:
