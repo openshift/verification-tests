@@ -112,6 +112,7 @@ edit_compute_node_in_dialog:
     op: send_keys <new_compute_nodes_number>
   - selector: *apply_button_in_dialog
     op: click
+    timeout: 100
   - selector:
       xpath: //div[@class='pf-c-backdrop']/div[@class='pf-l-bullseye']
     missing: true
