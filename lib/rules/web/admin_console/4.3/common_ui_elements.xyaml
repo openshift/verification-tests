@@ -103,6 +103,7 @@ check_content_in_yaml_editor:
   element:
     selector:
       xpath: //*[contains(@class,'react-monaco-editor-container')]//*[contains(text(),'<yaml_content>')]
+
 # click and check the first item from resource list such as projects, pods, etc.
 click_first_item_from_resource_list_and_check_breadcrumb:
   action: wait_until_no_loading
