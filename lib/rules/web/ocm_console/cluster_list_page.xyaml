@@ -3,11 +3,9 @@ cluster_list_page_loaded:
     - selector:
         css: input.pf-c-form-control.cluster-list-filter
     - selector:
-        xpath: //div[@class='pf-l-split__item split-margin-left']/div[@class='pf-c-dropdown']
+        xpath: //button[text()='Create Cluster']
     - selector:
-        xpath: //button[text()='Create Cluster' and @class='pf-c-button pf-m-primary']
-    - selector:
-        xpath: //button[text()='Create Cluster' and @class='pf-c-button pf-m-primary']/../../..//button[@aria-label='Actions']
+        xpath: //button[text()='Create Cluster']/../../../div[@id='cluster-list-toolbar']//button[@aria-label='Actions']
     - selector:
         xpath: //button[@id='pagination-options-menu-toggle']
     - selector:
@@ -38,7 +36,7 @@ close_filter_dropdown:
 expand_actions_behind_create_button:
     element:
         selector:
-            xpath: //button[text()='Create Cluster' and @class='pf-c-button pf-m-primary']/../../..//button[@aria-label='Actions']
+            xpath: //button[text()='Create Cluster']/../../../div[@id='cluster-list-toolbar']//button[@aria-label='Actions']
         op: click
     action: actions_behind_create_button_menu_loaded
 close_actions_behind_create_button:
@@ -71,12 +69,12 @@ select_filter:
 click_create_cluster_button:
     element:
         selector:
-            xpath: //button[text()='Create Cluster' and @class='pf-c-button pf-m-primary']
+            xpath: //button[text()='Create Cluster']/../../../div[@id='cluster-list-toolbar']//button[@aria-label='Actions']
         op: click
 click_actions_behind_create_button:
     element:
         selector:
-            xpath: //button[text()='Create Cluster' and @class='pf-c-button pf-m-primary']/../../..//button[@aria-label='Actions']
+            xpath: //button[text()='Create Cluster']/../../../div[@id='cluster-list-toolbar']//button[@aria-label='Actions']
         op: click
 actions_behind_create_button_menu_loaded:
     elements:
