@@ -3,21 +3,21 @@ Feature: Testing for pv and pvc pre-bind feature
   # @author chaoyang@redhat.com
   # @case_id OCP-10107
   @admin
-  @destructive
   Scenario: Prebound pv is availabe due to requested pvc status is bound
     Given I have a project
     Given admin creates a PV from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/nfs.json" where:
-      | ["metadata"]["name"]            | nfspv1-<%= project.name %> |
-      | ["spec"]["capacity"]["storage"] | 1Gi                        |
-    Then I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/claim-rwo.json" replacing paths:
-      | ["metadata"]["name"]                         | mypvc |
-      | ["spec"]["resources"]["requests"]["storage"] | 1Gi                      |
-    And the "mypvc" PVC becomes bound to the "nfspv1-<%= project.name %>" PV
+      | ["metadata"]["name"]         | pv1-<%= project.name %> |
+      | ["spec"]["storageClassName"] | sc-<%= project.name %>  |
+    Then I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/claim-rwo.json" replacing paths:
+      | ["metadata"]["name"]         | mypvc                  |
+      | ["spec"]["storageClassName"] | sc-<%= project.name %> |
+    And the "mypvc" PVC becomes bound to the "pv1-<%= project.name %>" PV
     Then admin creates a PV from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/preboundpv-rwo.yaml" where:
-      | ["metadata"]["name"]              | nfspv2-<%= project.name %> |
-      | ["spec"]["claimRef"]["namespace"] | <%= project.name %>        |
-      | ["spec"]["claimRef"]["name"]      | mypvc   |
-    And the "nfspv2-<%= project.name %>" PV status is :available
+      | ["metadata"]["name"]              | pv2-<%= project.name %> |
+      | ["spec"]["claimRef"]["namespace"] | <%= project.name %>     |
+      | ["spec"]["claimRef"]["name"]      | mypvc                   |
+      | ["spec"]["storageClassName"]      | sc-<%= project.name %>  |
+    And the "pv2-<%= project.name %>" PV status is :available
 
   # @author chaoyang@redhat.com
   # @case_id OCP-10109
