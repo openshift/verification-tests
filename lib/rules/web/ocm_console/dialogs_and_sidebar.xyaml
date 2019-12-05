@@ -24,16 +24,30 @@ archive_dialog_loaded:
             xpath: //button[@class='pf-c-button pf-m-secondary' and text()='Cancel']
         - selector:
             xpath: //button[@class='pf-c-button pf-m-primary' and text()='Archive cluster']
+check_close_button:
+  element: &close_button_in_dialog
+    selector:
+      xpath: //button[@class='pf-c-button pf-m-plain' and @aria-label='Close']
 click_close_button:
-    element:
-        selector:
-            xpath: //button[@class='pf-c-button pf-m-plain' and @aria-label='Close']
-        op: click
+  element:
+    <<: *close_button_in_dialog
+    op: click
+check_cancel_button:
+  element: &cancel_button_in_dialog
+    selector:
+      xpath: //button[@class='pf-c-button pf-m-secondary' and text()='Cancel']
 click_cancel_button:
-    element:
-        selector:
-            xpath: //button[@class='pf-c-button pf-m-secondary' and text()='Cancel']
-        op: click
+  element:
+    <<: *cancel_button_in_dialog
+    op: click
+check_apply_button:
+  element: &apply_button_in_dialog
+    selector:
+      xpath: //button[@class='pf-c-button pf-m-primary' and @type='submit' and text()='Apply']
+click_apply_button:
+  element:
+    <<: *apply_button_in_dialog
+    op: click
 click_archive_button:
     element:
         selector:
@@ -146,3 +160,25 @@ close_error_message_dialog:
             type: submit
         op: click
 
+edit_compute_node_in_dialog:
+  elements:
+  - selector:
+      xpath: //div[@role='dialog' and @aria-label='Scale Cluster']//form/div[@class='form-group']/input[@id='nodes_compute' and @value='<orignal_compute_node_number>']
+    op: clear
+  - selector:
+      id: nodes_compute
+    type: input
+    op: send_keys <new_compute_nodes_number>
+  - selector: *apply_button_in_dialog
+    op: click
+  - selector:
+      xpath: //div[@class='pf-c-backdrop']/div[@class='pf-l-bullseye']
+    missing: true
+check_active_add_url_button:
+  element: &active_add_url_button
+    selector:
+      xpath: //div[@aria-label='Add Console URL' and @role='dialog']//button[@class='pf-c-button pf-m-primary']
+click_add_url_button:
+  element:
+    <<: *active_add_url_button
+    op: click
