@@ -4,8 +4,26 @@ click_monitoring_tab:
             xpath: //button[@class='pf-c-tabs__button' and text()='Monitoring']
         op: click
 
+check_installing_cluster_monitoring_tab:
+    elements:
+        - selector:
+            xpath: //div[@class='pf-l-split__item pf-m-fill']//h2[text()='Installation in progress']
+        - selector:
+            xpath: //div[@class='pf-c-empty-state styles.modifiers.lg']/*[name()='svg']
+        - selector:
+            xpath: //h5[text()='Monitoring Data is not available']
+        - selector:
+            xpath: //p[text()='Monitoring Data is not available at this time. Try again later.']
+check_disconnected_cluster_monitoring_tab:
+    elements:
+        - selector:
+            xpath: //h2[text()='Disconnected cluster']
+        - selector:
+            xpath: //h5[text()='Monitoring Data is not available']
+        - selector:
+            xpath: //p[contains(text(),'Last check-in:')]
 
-check_monitroing_tab:
+check_monitoring_tab:
     action: click_monitoring_tab
     action: issue_summary_loaded
     action: check_alert_firing

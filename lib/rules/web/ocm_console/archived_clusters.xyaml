@@ -5,7 +5,7 @@ archived_page_loaded:
         - selector:
             xpath: //input[@class='pf-c-form-control cluster-list-filter']
         - selector:
-            xpath: //a[@href='/beta/openshift/' and text()='Show active clusters']
+            xpath: //a[contains(@href,'/openshift/') and text()='Show active clusters']
         - selector:
             xpath: //button[@id='pagination-options-menu-toggle']
         - selector:
@@ -14,6 +14,17 @@ archived_page_loaded:
             xpath: //button[@class='pf-c-button pf-m-plain cluster-list-top' and @aria-label='Refresh']
         - selector:
             xpath: //table[@class='pf-c-table pf-m-grid-md']
+check_archived_cluster_list_page:
+    action: archived_cluster_detail_page_loaded
+    elements:
+        - selector:
+            xpath: //button[text()='Name']/span[@class='pf-c-table__sort-indicator']
+click_show_active_clusters_link:
+    element:
+        selector:
+            xpath: //a[contains(@href,'/openshift/') and text()='Show active clusters']
+        op: click
+
 click_unarchive_cluster_button_on_archived_cluster_list_page:
     element:
         selector:

@@ -29,3 +29,8 @@ go_to_archived_clusters_from_archived_cluster_detail_page:
             xpath: //nav/ol/li[2]
         op: click
     action: archived_page_loaded
+check_archived_cluster_detail_page:
+    action: archived_cluster_detail_page_loaded
+    elements:
+        - selector:
+            xpath: //h1[text()='<cluster_name>']

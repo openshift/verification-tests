@@ -87,3 +87,62 @@ edit_display_name_in_dialog:
     - selector:
         xpath: //button[@class="pf-c-button pf-m-primary" and @type="submit"]
       op: click
+delete_cluster_dialog_loaded:
+    elements:
+        - selector:
+            xpath: //h1[text()='Delete Cluster']
+        - selector:
+            xpath: //p[text()='This action cannot be undone. It will uninstall the cluster, and all data will be deleted.']
+        - selector:
+            xpath: //p[text()[1]='Confirm deletion by typing']
+        #- selector:
+        #    xpath: //p[text()[2]='below:']
+        - selector:
+            xpath: //p/span[text()='<cluster_name>']
+        - selector:
+            xpath: //input[@class='pf-c-form-control']
+            type: text
+        - selector:
+            xpath: //button[@aria-label='Close']
+        - selector:
+            xpath: //button[text()='Cancel']
+            type: button
+        - selector:
+            xpath: //button[text()='Delete' and @disabled='']
+            type: submit
+check_delete_button_disabled:
+    element:
+        selector:
+            xpath: //button[text()='Delete' and @disabled='']
+            type: submit
+input_cluster_name_on_deletion_dialog:
+    element:
+        selector:
+            xpath: //input[@class='pf-c-form-control']
+            type: text
+        op: send_keys <input_text>
+click_delete_button_on_deletion_dialog:
+    element:
+        selector:
+            xpath: //button[text()='Delete']
+            type: submit
+        op: click
+osd_creation_error_dialog_loaded:
+    elements:
+        - selector:
+            xpath: //h1[text()='Error Creating Cluster']
+        - selector:
+            xpath: //h1/*[name()='svg']
+        - selector:
+            xpath: //p[contains(text(),"<error_reason>")]
+        - selector:
+            xpath: //p[contains(text(), 'Operation ID')]
+        - selector:
+            xpath: //button[text()='Close']
+close_error_message_dialog:
+    element:
+        selector:
+            xpath: //button[text()='Close']
+            type: submit
+        op: click
+

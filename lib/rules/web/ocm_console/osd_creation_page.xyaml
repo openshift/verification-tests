@@ -4,6 +4,12 @@ osd_creation_page_loaded:
     action: page_title_displayed
     action: cluster_detail_displayed
     action: cluster_scale_displayed
+input_cluster_name_on_osd_creation_page:
+    element:
+        selector:
+            xpath: //input[@id='name']
+        op: send_keys <cluster_name>
+        type: input
 
 creation_page_navigation_displayed:
     elements:
@@ -18,7 +24,7 @@ page_title_displayed:
         - selector:
             xpath: //img[@class='openshift-logo-page-title' and @alt='OpenShift']
         - selector:
-            xpath: //h1[@class='ocm-page-title' and text()='Create an OpenShift Dedicated Cluster']
+            xpath: //h1[contains(@class,'ocm-page-title') and text()='Create an OpenShift Dedicated Cluster']
 cluster_detail_displayed:
     elements:
         - selector:
@@ -41,7 +47,6 @@ click_create_button:
         selector:
             xpath: //button[@type='submit']
         op: click
-    action: cluster_detail_page_loaded
 switch_to_osd_creation_page:
     action: switch_to_creation_cards_page
     element:
@@ -49,4 +54,58 @@ switch_to_osd_creation_page:
             xpath: //a[@href='/beta/openshift/create/osd']
         op: click
     action: osd_creation_page_loaded
+select_advanced_radio_button:
+    element:
+        selector:
+            xpath: //*[@id='network-congiguration-toggle-advanced']
+        op: click
+select_basic_radio_button:
+    element:
+        selector:
+            xpath: //*[@id='network-congiguration-toggle-basic']
+        op: click
 
+
+check_advanced_elements_loaded:
+    elements:
+        - selector:
+            xpath: //*[@id='network_machine_cidr' and @placeholder='10.0.0.0/16']
+        - selector:
+            xpath: //*[@id='network_service_cidr' and @placeholder='172.30.0.0/16']
+        - selector:
+            xpath: //*[@id='network_pod_cidr' and @placeholder='10.128.0.0/14']
+set_cidr_value:
+    element:
+        selector:
+            xpath: //*[@id='<locator_id>']
+        op: send_keys <cidr_value>
+check_cidr_error_message:
+    action: set_cidr_value
+    action: click_create_button
+    element:
+        selector:
+            xpath: //*[contains(text(),"IP address range '<cidr_value>' isn't valid CIDR notation")]
+    action: clear_input
+check_machine_cidr_error_message:
+    params:
+        locator_id: network_machine_cidr
+    action: check_cidr_error_message
+check_service_cidr_error_message:
+    params:
+        locator_id: network_service_cidr
+    action: check_cidr_error_message
+check_pod_cidr_error_message:
+    params:
+        locator_id: network_pod_cidr
+    action: check_cidr_error_message
+check_cidr_background_validation_error_message:
+    action: clear_input
+    action: osd_creation_page_loaded
+    action: check_advanced_elements_loaded
+    action: set_cidr_value
+    action: click_create_button
+    action: osd_creation_error_dialog_loaded
+    action: close_error_message_dialog
+fill_in_required_items_on_osd_creation_page:
+    action: input_cluster_name_on_osd_creation_page
+    action: select_machine_type
