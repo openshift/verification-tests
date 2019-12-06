@@ -689,16 +689,10 @@ end
 Given /^the default interface on nodes is stored in the#{OPT_SYM} clipboard$/ do |cb_name|
   ensure_admin_tagged
   step "I select a random node's host"
-  node_name ||= node.name
-  cb_name = "interface" unless cb_name
-
-  sdn_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
-    pod.node_name == node_name
-  }.first
-  cache_resources sdn_pod
-  @result = sdn_pod.exec("bash", "-c", "ip route show default | awk 'NR==1{print $5}'", as: admin)
-  raise "Failed to retrieve interface name from sdn pod" unless @result[:success]
-  cb[cb_name] = @result[:response].strip
+  cb_name ||= "interface"
+  
+  step %Q/I run command on the node's sdn pod:/, table("| bash | -c | ip route show default |")
+  cb[cb_name] = @result[:response].split("\n").first.split(/\W+/)[7]
   logger.info "The node's default interface is stored in the #{cb_name} clipboard."
 end
 

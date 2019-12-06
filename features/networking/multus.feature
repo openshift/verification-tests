@@ -426,10 +426,9 @@ Feature: Multus-CNI related scenarios
     Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin
     Given I have a project
-    And evaluation of `project.name` is stored in the :project_name clipboard
     When I run the :create admin command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/bridge-host-local-novlan.yaml |
-      | n | <%= cb.project_name %>                                                                                                                              |
+      | n | <%= project.name %>                                                                                                                              |
     Then the step should succeed
     #Creating no-vlan pod absorbing above net-attach-def
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
@@ -457,15 +456,15 @@ Feature: Multus-CNI related scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-24489
   @admin
+  @destructive
   Scenario: Create pod with Multus bridge CNI plugin and vlan tag
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin
     Given I have a project
-    And evaluation of `project.name` is stored in the :project_name clipboard
     When I run the :create admin command with:
       | f | https://raw.githubusercontent.com/weliang1/Openshift_Networking/master/Features/multus/bridge-host-local-vlan200.yaml |
-      | n | <%= cb.project_name %>                                                                                                |
+      | n | <%= project.name %>                                                                                                |
     Then the step should succeed
     #Creating vlan pod absorbing above net-attach-def
     When I run the :create client command with:
@@ -494,6 +493,7 @@ Feature: Multus-CNI related scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-24467
   @admin
+  @destructive
   Scenario: CNO manager mavlan configured manually with static
     # Make sure that the multus is Running
     Given the multus is enabled on the cluster
@@ -526,8 +526,8 @@ Feature: Multus-CNI related scenarios
     And a pod becomes ready with labels:
       | name=macvlan-bridge-pod |
     And evaluation of `pod` is stored in the :pod clipboard
-
+    And admin ensures "<%= cb.pod.name %>" pod is deleted from the "openshift-multus" project after scenario
+    
     When I execute on the pod:
       | /usr/sbin/ip | -d | link |
     Then the output should contain "net1"
-    And admin ensures "<%= cb.pod.name %>" pod is deleted from the "openshift-multus" project after scenario
