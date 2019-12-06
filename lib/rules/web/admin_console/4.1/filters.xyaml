@@ -76,3 +76,7 @@ check_result_contain_correct_catagory:
         })
         return all_contain
       expect_result: true
+check_item_in_table:
+  elements:
+  - selector:
+      xpath: //tr[@data-test-rows='resource-row']//*[text()='<item>']
