@@ -188,6 +188,23 @@ module BushSlicer
         end
       end
 
+      command :"clone-run" do |c|
+        c.syntax = "#{$0} clone-run [options]"
+        c.description = "clone a test run from Polarion\n\t" \
+          "e.g. tools/polarshift.rb clone-run my_run_id"
+        c.action do |args, options|
+          setup_global_opts(options)
+
+          if args.size != 1
+            raise "command expects exactly one parameter being the test run id"
+          end
+
+          test_run_id = args.first
+          result = polarshift.get_run_smart(project, test_run_id)
+          clone_run(query_result: result, src_id: test_run_id)
+        end
+      end
+
       command :"query-cases" do |c|
         c.syntax = "#{$0} query-cases [options]"
         c.description = "run query for test cases\n\te.g. " \
@@ -379,6 +396,60 @@ module BushSlicer
       end
       @opts = opts
     end
+
+    # given a query_result from a call to get_smart_run()
+    # @return Array of testcase IDs
+    def extract_test_case_ids(query_result)
+      query_result['records']['TestRecord'].map { |tr| tr['test_case']['id'] }
+    end
+
+    # given a query_result Custom object (Array)
+    # @return Hash to be constructed
+    def transform_custom_fields(src)
+      custom_fields = {}
+      src.each do |row_data|
+        # binding.pry
+        if row_data['value'].is_a? Hash
+          if row_data['value'].has_key? 'EnumOptionId'
+            if row_data['value']['EnumOptionId'].is_a? Hash
+              value = row_data['value']['EnumOptionId']['id']
+            else
+              value = row_data['value']['EnumOptionId'].map {|r| r['id'] }
+            end
+          else
+            value = row_data['value']['id']
+          end
+        else
+          value = row_data['value']
+        end
+        # in case of nil, just force it to be empty string
+        value ||= ""
+        custom_fields[row_data['key']] = value
+      end
+      return custom_fields
+    end
+
+    # given a query_result
+    # @return a YAML string that will be feed into create_run to clone a past
+    #         polarion run
+    # The YAML basically contains 3 fields
+    # 1.   "run_title":  "Clone of xyz run"
+    # 2.   "case_query": "<SQL_STATEMENT>"
+    # 3.   "custom_fields": <CONSTRUCTED_FROM_call_to_get_smart_run_method>
+    def clone_run(query_result: nil, src_id: nil)
+      template_hash = {}
+
+      tc_ids = extract_test_case_ids(query_result)
+      custom_fields = transform_custom_fields(query_result['customFields']['Custom'])
+      tc_str = tc_ids.join(" ")
+      template_hash[:run_title] = "Clone of #{src_id} -- #{query_result['title']}"
+      template_hash[:case_query] = "id:(#{tc_str})"
+      template_hash[:custom_fields] = custom_fields
+      pr = polarshift.create_run_smart(project_id: project, **template_hash)
+      quoted_run_id = "'" + pr[:run_id] + "'"
+      puts "Source run id '#{src_id}' cloned to new run id: #{HighLine.color(quoted_run_id, :bright_blue)}"
+    end
+
   end
 end
 
