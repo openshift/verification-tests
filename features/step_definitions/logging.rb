@@ -4,6 +4,7 @@
 ### none configurable, just use default parameters
 Given /^logging service has been installed successfully$/ do
   ensure_destructive_tagged
+  ensure_admin_tagged
   crd_yaml = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/example.yaml"
   step %Q/logging operators are installed successfully/
   step %Q/I create clusterlogging instance with:/, table(%{
@@ -25,6 +26,7 @@ end
 #
 Given /^logging operators are installed successfully$/ do
   ensure_destructive_tagged
+  ensure_admin_tagged
   step %Q/I switch to cluster admin pseudo user/
   step %Q/evaluation of `cluster_version('version').version` is stored in the :ocp_cluster_version clipboard/
   step %Q/logging channel name is stored in the :channel clipboard/
@@ -120,14 +122,14 @@ Given /^logging operators are installed successfully$/ do
     end
   end
 
-  step %Q/cluster logging operator is ready/
   step %Q/elasticsearch operator is ready/
+  step %Q/cluster logging operator is ready/
 end
 
 ## To check cluserlogging is working correctly, we check all of the subcomponents' status
 #  The list of components currently are: ["collection", "curation", "logStore",  "visualization"]
 Given /^I wait for clusterlogging(?: named "(.+)")? with #{QUOTED} log collector to be functional in the#{OPT_QUOTED} project$/ do | logging_name, log_collector, proj_name |
-  ensure_destructive_tagged
+  ensure_admin_tagged
   cb.target_proj ||= 'openshift-logging'
   proj_name = cb.target_proj if proj_name.nil?
   org_proj_name = project.name
@@ -175,7 +177,7 @@ end
 # to cleanup OLM installed clusterlogging
 Given /^logging service is removed successfully$/ do
   ensure_destructive_tagged
-
+  ensure_admin_tagged
   # remove namespace
   clo_proj_name = "openshift-logging"
   step %Q/I switch to cluster admin pseudo user/
@@ -185,7 +187,6 @@ Given /^logging service is removed successfully$/ do
     step %Q/I wait for the resource "project" named "#{clo_proj_name}" to disappear/
   end
   eo_proj_name = "openshift-operators-redhat"
-  step %Q/I switch to cluster admin pseudo user/
   if project(eo_proj_name).exists?
     @result = admin.cli_exec(:delete, object_type: 'project', object_name_or_id: eo_proj_name, n: eo_proj_name)
     raise "Unable to delete #{eo_proj_name}" unless @result[:success]
@@ -256,7 +257,6 @@ end
 Given /^I create clusterlogging instance with:$/ do | table |
   opts = opts_array_to_hash(table.raw)
   ensure_admin_tagged
-  ensure_destructive_tagged
   step %Q/I switch to cluster admin pseudo user/
   step %Q/I use the "openshift-logging" project/
   logging_ns = "openshift-logging"

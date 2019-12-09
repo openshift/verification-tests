@@ -8,8 +8,6 @@ Feature: collector related tests
   @commonlogging
   Scenario: All nodes logs are sent to Elasticsearch
     Given the master version == "4.1"
-    Given I switch to cluster admin pseudo user
-    Given I use the "openshift-logging" project
     Given evaluation of `cluster_logging('instance').fluentd_ready_pods.map(&:ip)` is stored in the :collector_pod_ips clipboard
     And I wait for the ".operations" index to appear in the ES pod with labels "es-node-master=true"
     Given I get the ".operations" logging index information from a pod with labels "es-node-master=true"
@@ -39,8 +37,6 @@ Feature: collector related tests
   @commonlogging
   Scenario: All nodes logs had sent logs to Elasticsearch
     Given the master version >= "4.2"
-    Given I switch to cluster admin pseudo user
-    Given I use the "openshift-logging" project
     Given evaluation of `cluster_logging('instance').collection_type` is stored in the :collection_type clipboard
     Given <%= daemon_set(cb.collection_type).replica_counters[:desired] %> pods become ready with labels:
       | component=<%= cb.collection_type %> |
@@ -72,8 +68,6 @@ Feature: collector related tests
   @admin @destructive
   @commonlogging
   Scenario: The System Journald log can be collected
-    Given I switch to cluster admin pseudo user
-    Given I use the "openshift-logging" project
     Given evaluation of `cluster_logging('instance').collection_type` is stored in the :collection_type clipboard
     And I wait for the ".operations" index to appear in the ES pod with labels "es-node-master=true"
     Then the step should succeed

@@ -7,8 +7,6 @@ Feature: cluster-logging-operator related test
   @destructive
   @commonlogging
   Scenario: Fluentd provide Prometheus metrics
-    Given I switch to cluster admin pseudo user
-    Given I use the "openshift-logging" project
     Given evaluation of `cluster_logging('instance').collection_type` is stored in the :collection_type clipboard
     Given a pod becomes ready with labels:
       | component=<%= cb.collection_type %> |
@@ -25,7 +23,6 @@ Feature: cluster-logging-operator related test
   @destructive
   @commonlogging
   Scenario: ServiceMonitor Object for collector is deployed along with cluster logging
-    Given I switch to cluster admin pseudo user
     Given I use the "openshift-monitoring" project
     And I run the :serviceaccounts_get_token client command with:
       |serviceaccount_name | prometheus-k8s |
