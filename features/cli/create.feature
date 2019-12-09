@@ -28,10 +28,10 @@ Feature: creating 'apps' with CLI
     Then the step should succeed
     Given an 8 character random string of type :dns952 is stored into the :appname clipboard
     When I run the :new_app client command with:
-      | app_repo     | ruby-hello-world      |
-      | image_stream | openshift/ruby:latest |
-      | name         | <%= cb.appname %>     |
-      | env          | MYSQL_USER=test,MYSQL_PASSWORD=test,MYSQL_DATABASE=test |
+      | app_repo     | ruby-hello-world         |
+      | image_stream | openshift/ruby:latest    |
+      | name         | <%= cb.appname %>        |
+      | env          | MYSQL_ROOT_PASSWORD=test | 
     Given the "<%= cb.appname %>-1" build completes
     Given 1 pods become ready with labels:
       | deployment=<%= cb.appname %>-1 |
@@ -46,10 +46,10 @@ Feature: creating 'apps' with CLI
     #Check https github url
     Given an 8 character random string of type :dns952 is stored into the :appname1 clipboard
     When I run the :new_app client command with:
-      | code         | https://github.com/openshift/ruby-hello-world           |
-      | image_stream | openshift/ruby                                          |
-      | name         | <%= cb.appname1 %>                                      |
-      | env          | MYSQL_USER=test,MYSQL_PASSWORD=test,MYSQL_DATABASE=test |
+      | code         | https://github.com/openshift/ruby-hello-world |
+      | image_stream | openshift/ruby                                |
+      | name         | <%= cb.appname1 %>                            |
+      | env          | MYSQL_ROOT_PASSWORD=test                      | 
     Given the "<%= cb.appname1 %>-1" build completes
     Given 1 pods become ready with labels:
       | deployment=<%= cb.appname1 %>-1 |
@@ -67,7 +67,7 @@ Feature: creating 'apps' with CLI
       | code         | http://github.com/openshift/ruby-hello-world |
       | image_stream | openshift/ruby:2.5                           |
       | name         | <%= cb.appname2 %>                           |
-      | env | MYSQL_USER=test,MYSQL_PASSWORD=test,MYSQL_DATABASE=test |
+      | env          | MYSQL_ROOT_PASSWORD=test                     | 
     Given the "<%= cb.appname2 %>-1" build completes
     Given 1 pods become ready with labels:
       | deployment=<%= cb.appname2 %>-1 |
@@ -82,10 +82,10 @@ Feature: creating 'apps' with CLI
     #Check git github url
     Given an 8 character random string of type :dns952 is stored into the :appname3 clipboard
     When I run the :new_app client command with:
-      | code | git://github.com/openshift/ruby-hello-world |
-      | image_stream | openshift/ruby |
-      | name | <%= cb.appname3 %> |
-      | env | MYSQL_USER=test,MYSQL_PASSWORD=test,MYSQL_DATABASE=test |
+      | code         | git://github.com/openshift/ruby-hello-world |
+      | image_stream | openshift/ruby                              |
+      | name         | <%= cb.appname3 %>                          |
+      | env          | MYSQL_ROOT_PASSWORD=test                    | 
     Given the "<%= cb.appname3 %>-1" build completes
     Given 1 pods become ready with labels:
       | deployment=<%= cb.appname3 %>-1 |
@@ -100,10 +100,10 @@ Feature: creating 'apps' with CLI
     #Check master branch
     Given an 8 character random string of type :dns952 is stored into the :appname4 clipboard
     When I run the :new_app client command with:
-      | code | https://github.com/openshift/ruby-hello-world#master |
-      | image_stream | openshift/ruby |
-      | name | <%= cb.appname4 %> |
-      | env | MYSQL_USER=test,MYSQL_PASSWORD=test,MYSQL_DATABASE=test |
+      | code         | https://github.com/openshift/ruby-hello-world#master |
+      | image_stream | openshift/ruby                                       |
+      | name         | <%= cb.appname4 %>                                   |
+      | env          | MYSQL_ROOT_PASSWORD=test                             | 
     When I run the :describe client command with:
       | resource | buildconfig |
       | name | <%= cb.appname4 %> |
@@ -112,19 +112,19 @@ Feature: creating 'apps' with CLI
     #Check invalid branch
     Given an 8 character random string of type :dns952 is stored into the :appname5 clipboard
     When I run the :new_app client command with:
-      | code | https://github.com/openshift/ruby-hello-world#invalid |
-      | image_stream | openshift/ruby |
-      | name | <%= cb.appname5 %> |
-      | env | MYSQL_USER=test,MYSQL_PASSWORD=test,MYSQL_DATABASE=test |
+      | code         | https://github.com/openshift/ruby-hello-world#invalid |
+      | image_stream | openshift/ruby                                        |
+      | name         | <%= cb.appname5 %>                                    |
+      | env          | MYSQL_ROOT_PASSWORD=test                              | 
     Then the output should contain "error"
     And I delete all resources from the project
     #Check non-master branch
     Given an 8 character random string of type :dns952 is stored into the :appname6 clipboard
     When I run the :new_app client command with:
-      | code | https://github.com/openshift/ruby-hello-world#beta4 |
-      | image_stream | openshift/ruby |
-      | name | <%= cb.appname6 %> |
-      | env | MYSQL_USER=test,MYSQL_PASSWORD=test,MYSQL_DATABASE=test |
+      | code 	     | https://github.com/openshift/ruby-hello-world#beta4 |
+      | image_stream | openshift/ruby 	                                   |
+      | name         | <%= cb.appname6 %>                                  |
+      | env          | MYSQL_ROOT_PASSWORD=test                            | 
     When I run the :describe client command with:
       | resource | buildconfig |
       | name | <%= cb.appname6 %> |
