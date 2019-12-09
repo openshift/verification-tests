@@ -325,10 +325,10 @@ Feature: build 'apps' with CLI
   Scenario Outline: Do sti/custom build with no inputs in buildconfig
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/nosrc-extended-test-bldr/master/nosrc-setup.json |
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/tc525736/nosrc-setup.json |
     Then the step should succeed
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/nosrc-extended-test-bldr/master/nosrc-test.json  |
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/tc525736/nosrc-test.json  |
     When I get project bc
     Then the output should contain:
       | <bc_name> |
