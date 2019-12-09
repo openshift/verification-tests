@@ -27,12 +27,6 @@ click_kebab_action_button:
   - selector:
       xpath: //button[@data-test-id='kebab-button']
     op: click
-check_kebab_actions_not_contain:
-  action: click_kebab_action_button
-  element:
-    selector: 
-      xpath: //button[contains(text(), '<button_text>')]
-    missing: true
 # a combined action can be directly used for Edit Labels
 add_label_for_resource:
   action: click_one_dropdown_action
