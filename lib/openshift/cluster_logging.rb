@@ -63,6 +63,12 @@ module BushSlicer
       fluentd_pods(user: user, cached: cached, quiet: quiet)['ready']
     end
 
+    def fluentd_ready_pods(user: nil, cached: true, quiet: false)
+      fluentd_ready_pod_names(user: user, cached: cached, quiet: quiet).map { |name|
+        Pod.new(name: name, project: project).tap{ |p| p.default_user = default_user(user) }
+      }
+    end
+
     private def fluentd_failed_pod_names(user: nil, cached: true, quiet: false)
       fluentd_pods(user: user, cached: cached, quiet: quiet)['failed']
     end

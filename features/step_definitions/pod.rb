@@ -78,7 +78,8 @@ Given /^the pod(?: named "(.+)")? status becomes :([^\s]*?)(?: within #{NUMBER} 
   @result = pod(name).wait_till_status(status.to_sym, user, timeout)
 
   unless @result[:success]
-    logger.error(@result[:response])
+    # logger.error(@result[:response])
+    pod.describe(user, quiet: false)
     raise "#{pod.name} pod did not become #{status}"
   end
 end

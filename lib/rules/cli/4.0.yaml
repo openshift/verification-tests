@@ -485,6 +485,7 @@
     :param_file: --param-file=<value>
     :env_file: --env-file <value>
     :source_secret: --source-secret=<value>
+    :source_spec: <value>
 :new_build:
   :cmd: oc new-build
   :options:
@@ -946,28 +947,27 @@
 :set_volume:
   :cmd: oc set volume
   :options:
-    :add: --add=<value>
-    :resource: <value>
-    :resource_name: <value>
     :action: <value>
+    :add: --add=<value>
+    :all: --all=<value>
+    :claim-class: --claim-class=<value>
+    :claim-mode: --claim-mode=<value>
+    :claim-name: --claim-name=<value>
+    :claim-size: --claim-size=<value>
+    :configmap-name: --configmap-name=<value>
     :confirm: --confirm=<value>
     :f: --filename=<value>
-    :o: --output=<value>
-    :name: --name=<value>
-    :type: --type=<value>
-    :secret-name: --secret-name=<value>
-    :source: --source=<value>
     :mount-path: --mount-path=<value>
-    :claim-name: --claim-name=<value>
-    :claim-mode: --claim-mode=<value>
-    :claim-size: --claim-size=<value>
-    :claim-class: --claim-class=<value>
-    :configmap-name: --configmap-name=<value>
-    :all: --all=<value>
-    :selector: --selector=<value>
+    :name: --name=<value>
+    :o: --output=<value>
     :overwrite: --overwrite
     :path: --path=<value>
-    :confirm: --confirm
+    :resource: <value>
+    :resource_name: <value>
+    :secret-name: --secret-name=<value>
+    :selector: --selector=<value>
+    :source: --source=<value>
+    :type: --type=<value>
 :start_build:
   :cmd: oc start-build
   :options:
@@ -1020,32 +1020,6 @@
     :oc_version: !ruby/regexp '/^Client.*GitVersion:"v(.+?)"/'
   :optional_properties:
     :kubernetes_server_version: !ruby/regexp '/^Server.*GitVersion:"v(.+?)"/'
-# The cmd :volume can be removed after 3.1 EOL (Nov 2018).
-# We have both :volume and :set_volume since 3.2.
-# Removed :volume in 3.11.
-:volume:
-  :cmd: oc set volume
-  :options:
-    :action: <value>
-    :add: --add=<value>
-    :all: --all=<value>
-    :claim-class: --claim-class=<value>
-    :claim-mode: --claim-mode=<value>
-    :claim-name: --claim-name=<value>
-    :claim-size: --claim-size=<value>
-    :confirm: --confirm=<value>
-    :f: --filename=<value>
-    :mount-path: --mount-path=<value>
-    :name: --name=<value>
-    :overwrite: --overwrite
-    :path: --path=<value>
-    :remove: --remove=<value>
-    :resource: <value>
-    :resource_name: <value>
-    :secret-name: --secret-name=<value>
-    :selector: --selector=<value>
-    :source: --source=<value>
-    :type: --type=<value>
 :wait:
   :cmd: oc wait
   :options:
@@ -1320,6 +1294,7 @@
     :to: --to=<value>
     :to_image: --to-image=<value>
     :to_latest: --to-latest=<value>
+    :allow_explicit_upgrade: --allow-explicit-upgrade=<value>
 :openshift_version:
   :cmd: openshift version
   :expected:

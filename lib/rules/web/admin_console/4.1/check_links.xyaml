@@ -5,7 +5,7 @@ check_doc_get_started_with_cli:
 check_header_brand:
   elements:
   - selector:
-      xpath: //img[@alt='<product_brand>']
+      xpath: //img[contains(@src, '<logo_source>') and @alt='<product_name>']
 check_monitoring_urls:
   action: click_alert_manager_menu
   action: check_alert_manager_url
