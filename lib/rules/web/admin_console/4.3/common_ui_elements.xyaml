@@ -135,6 +135,9 @@ check_breadcrumb_on_resource_detail_page:
 check_breadcrumb_on_sub_resource_detail_page:
   action: click_first_sub_item_in_resource_detail_list
   action: check_link_in_breadcrumb
+check_breadcrumb_on_resource_detail_page_from_grid_cell_list:
+  action: click_first_item_in_grid_cell_list
+  action: check_link_in_breadcrumb
 check_link_in_breadcrumb:
   element:
     selector:
