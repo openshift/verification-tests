@@ -1,3 +1,4 @@
+require 'base64'
 require 'json'
 
 require 'cli_executor'
@@ -15,7 +16,7 @@ module BushSlicer
   class Environment
     include Common::Helper
 
-    attr_reader :opts
+    attr_reader :opts, :client_proxy
 
     # :master represents register, scheduler, etc.
     MANDATORY_OPENSHIFT_ROLES = []
@@ -172,7 +173,7 @@ module BushSlicer
         else
           authenticationproject = Project.new(name: "openshift-authentication", env: self)
           authenticationservice = Service.new(name: "openshift-authentication", project: authenticationproject )
-          authenticationroute = Route.new(name: "openshift-authentication", project: authenticationproject, service: authenticationservice)
+          authenticationroute = Route.new(name: "oauth-openshift", project: authenticationproject, service: authenticationservice)
           @authentication_url = "https://" + authenticationroute.dns(by: admin)
         end
       end
@@ -221,7 +222,7 @@ module BushSlicer
 
     # helper parser
     def parse_version(ver_str)
-      ver = ver_str.sub(/^v/,"")
+      ver = ver_str.sub(/(^v|^openshift-clients-)/,"")
       if ver !~ /^[\d.]+$/
         raise "version '#{ver}' does not match /^[\d.]+$/"
       end
@@ -435,19 +436,9 @@ module BushSlicer
     #  grep HTTP_PROXY /etc/origin/master/master-config.yaml
     #
     def proxy
-      if version_le("3.9", user: admin)
-        proxy_check_cmd = "cat /etc/sysconfig/atomic-openshift-master-api | grep HTTP_PROXY"
-      else
-        proxy_check_cmd = "cat /etc/origin/master/master.env | grep HTTP_PROXY"
-      end
-      @result = master_hosts.first.exec(proxy_check_cmd)
-      if @result[:success]
-        return @result[:response].split('HTTP_PROXY=')[1].strip
-      else
-        return nil
-      end
+      # TODO: return value from https://docs.openshift.com/container-platform/4.2/networking/enable-cluster-wide-proxy.html#nw-proxy-configure-object_config-cluster-wide-proxy
+      raise "not implemented"
     end
-
   end
 
   # a quickly made up environment class for the PoC
@@ -469,10 +460,22 @@ module BushSlicer
             missing_roles.to_s
         end
 
-        # so far masters are always also nodes but labels not always set
         hlist.each do |host|
+          # so far masters are always also nodes but labels not always set
           if host.roles.include?(:master) && !host.roles.include?(:node)
             host.roles << :node
+          end
+
+          # handle client proxy
+          proxy_spec = host.roles.find { |r| r.to_s.start_with? "proxy__" }
+          if proxy_spec
+            _role, proto, port, username, password = proxy_spec.to_s.split("__")
+            if username
+              auth_str = "#{username}:#{Base64.decode64 password}@"
+            else
+              auth_str = ""
+            end
+            @client_proxy = "#{proto}://#{auth_str}#{host.hostname}:#{port}"
           end
         end
 
@@ -481,6 +484,11 @@ module BushSlicer
         @hosts.concat hlist
       end
       return @hosts
+    end
+
+    def client_proxy
+      hosts
+      return @client_proxy
     end
 
     # add a new host to environment with defaults

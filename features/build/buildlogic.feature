@@ -54,13 +54,13 @@ Feature: buildlogic.feature
     Given I have a project
     When I run the :new_build client command with:
       | app_repo | https://github.com/openshift/ruby-hello-world   |
-      | D        | FROM centos/ruby-22-centos7:latest\nRUN echo ok |
+      | D        | FROM centos/ruby-25-centos7:latest\nRUN echo ok |
     Then the step should succeed
     When I get project buildconfigs as YAML
     Then the step should succeed
     Then the output should match:
       | dockerfile   |
-      | FROM centos/ruby-22-centos7:latest                 |
+      | FROM centos/ruby-25-centos7:latest                 |
       | RUN echo ok  |
       | uri: https://github.com/openshift/ruby-hello-world |
       | type: [Gg]it |

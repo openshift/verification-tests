@@ -8,8 +8,8 @@ Given(/^I have an IPI deployment$/) do
   end
 
   machine_sets.each do | machine_set |
-    unless machine_set.healthy?
-      raise "Not an IPI deployment, abort test."
+    unless machine_set.ready?
+      raise "Not an IPI deployment or machineSet #{machine_set.name} not fully scaled, abort test."
     end
   end
 end
@@ -24,6 +24,11 @@ Then(/^the machines should be linked to nodes$/) do
   end
 end
 
+Given(/^I store all machines in the#{OPT_SYM} clipboard$/) do | cb_name |
+  machines = BushSlicer::Machine.list(user: admin, project: project("openshift-machine-api"))
+  cache_resources *machines
+  cb[cb_name] = machines
+end
 
 Given(/^I store the number of machines in the#{OPT_SYM} clipboard$/) do | cb_name |
   machines = BushSlicer::Machine.list(user: admin, project: project("openshift-machine-api"))

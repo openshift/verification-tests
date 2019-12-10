@@ -1,0 +1,134 @@
+# projects
+goto_projects_list_page:
+  url: k8s/cluster/projects
+goto_project_status:
+  url: status/ns/<project>
+goto_resource_page_under_default_project:
+  url: k8s/ns/default/<resource_url_name>
+goto_project_resources_page:
+  url: k8s/cluster/projects/<project_name>/workloads
+goto_project_details_page:
+  url: k8s/cluster/projects/<project_name>/overview
+goto_one_project_page:
+  url: k8s/cluster/projects/<project_name>
+
+# builds
+goto_one_buildconfig_page:
+  url: k8s/ns/<project_name>/buildconfigs/<bc_name>
+goto_one_build_page:
+  url: k8s/ns/<project_name>/builds/<build_name>
+
+# command line tools page
+goto_cli_tools_page:
+  url: command-line-tools
+
+# configmaps
+goto_configmaps_page:
+  url: k8s/ns/<project_name>/configmaps
+goto_one_configmap_page:
+  url: k8s/ns/<project_name>/configmaps/<configmap_name>
+
+# cronjobs
+goto_cronjobs_page:
+  url: k8s/ns/<project_name>/cronjobs
+goto_one_cronjob_page:
+  url: k8s/ns/<project_name>/cronjobs/<cronjob_name>
+
+# jobs
+goto_jobs_page:
+  url: k8s/ns/<project_name>/jobs
+goto_one_job_page:
+  url: k8s/ns/<project_name>/jobs/<job_name>
+          
+# events
+goto_project_events:
+  url: k8s/ns/<project_name>/events
+
+# environment page
+goto_resource_environment_page:
+  url: k8s/ns/<project_name>/<resource_type>/<resource_name>/environment
+
+# secrets
+goto_secrets_page:
+  url: k8s/ns/<project_name>/secrets
+goto_secrets_creation_page:
+  url: k8s/ns/<project_name>/secrets/~new/<secret_type>
+goto_one_secret_page:
+  url: k8s/ns/<project_name>/secrets/<secret_name>
+
+# storageclass
+goto_storageclass_page:
+  url: k8s/cluster/storageclasses
+goto_persistentvolumeclaims_page:
+  url: k8s/ns/<project_name>/persistentvolumeclaims
+goto_one_pvc_page:
+  url: k8s/ns/<project_name>/persistentvolumeclaims/<pvc_name>
+
+# deployment
+goto_deployment_page:
+  url: k8s/ns/<project_name>/deployments
+goto_one_deployment_page:
+  url: k8s/ns/<project_name>/deployments/<deploy_name>
+
+# deploymentconfig
+goto_dc_page:
+  url: k8s/ns/<project_name>/deploymentconfigs
+goto_one_dc_page:
+  url: k8s/ns/<project_name>/deploymentconfigs/<dc_name>
+goto_one_rc_page:
+  url: k8s/ns/<project_name>/replicationcontrollers/<rc_name>
+
+#pod
+goto_one_pod_page:
+  url: k8s/ns/<project_name>/pods/<resource_name>
+
+goto_cluster_oauth_configuration_page:
+  url: k8s/cluster/config.openshift.io~v1~OAuth/cluster
+
+#routes
+goto_routes_page:
+  url: k8s/ns/<project_name>/routes
+goto_one_route_page:
+  url: k8s/ns/<project_name>/routes/<route_name>
+
+#imagestream
+goto_imagestreams_page:
+  url: k8s/ns/<project_name>/imagestreams
+goto_one_imagestream_page:
+  url: k8s/ns/<project_name>/imagestreams/<imagestream_name>
+
+#deploy image
+goto_deploy_image_page:
+  url: deploy-image/ns/<project_name>?preselected-ns=<project_name>
+
+#catalog page
+goto_catalog_page:
+  url: catalog/ns/<project_name>
+goto_create_app_from_imagestream_page:
+  url: catalog/source-to-image?imagestream=<is_name>&imagestream-ns=openshift&preselected-ns=<project_name>
+
+# monitoring
+goto_monitoring_metrics_page:
+  url: monitoring/query-browser
+
+#node
+goto_node_page:
+  url: k8s/cluster/nodes
+goto_one_node_page:
+  url: k8s/cluster/nodes/<node_name>
+
+# namespace
+goto_one_namespace_page:
+  url: k8s/cluster/namespaces/<namespace_name>
+
+# operator hub
+goto_operator_hub_page:
+  url: operatorhub/ns/default
+goto_operator_subscription_page:
+  url: operatorhub/subscribe?pkg=<package_name>&catalog=<catalog_name>&catalogNamespace=openshift-marketplace&targetNamespace=<target_namespace>
+
+# machine config
+goto_machineconfigs_page:
+  url: k8s/cluster/machineconfiguration.openshift.io~v1~MachineConfig
+goto_machineconfig_pools_page:
+  url: k8s/cluster/machineconfiguration.openshift.io~v1~MachineConfigPool

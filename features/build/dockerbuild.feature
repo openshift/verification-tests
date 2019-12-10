@@ -37,7 +37,7 @@ Feature: dockerbuild.feature
   Scenario: Docker build with dockerImage with specified tag
     Given I have a project
     When I run the :new_app client command with:
-      | docker_image | centos/ruby-22-centos7                        |
+      | image_stream | openshift/ruby:2.5                            |
       | app_repo     | https://github.com/openshift/ruby-hello-world |
       | strategy     | docker                                        |
     Then the step should succeed
@@ -45,7 +45,7 @@ Feature: dockerbuild.feature
     When I run the :patch client command with:
       | resource      | buildconfig                                                                                                                                      |
       | resource_name | ruby-hello-world                                                                                                                                 |
-      | p             | {"spec": {"strategy": {"dockerStrategy": {"from": {"kind": "DockerImage","name": "docker.io/centos/ruby-22-centos7:latest"}}},"type": "Docker"}} |
+      | p             | {"spec": {"strategy": {"dockerStrategy": {"from": {"kind": "DockerImage","name": "docker.io/centos/ruby-25-centos7:latest"}}},"type": "Docker"}} |
     Then the step should succeed
     When I run the :start_build client command with:
       | buildconfig | ruby-hello-world |
@@ -55,7 +55,7 @@ Feature: dockerbuild.feature
     When I run the :patch client command with:
       | resource      | buildconfig                                                                                                                                     |
       | resource_name | ruby-hello-world                                                                                                                                |
-      | p             | {"spec": {"strategy": {"dockerStrategy": {"from": {"kind": "DockerImage","name": "docker.io/centos/ruby-22-centos7:error"}}},"type": "Docker"}} |
+      | p             | {"spec": {"strategy": {"dockerStrategy": {"from": {"kind": "DockerImage","name": "docker.io/centos/ruby-25-centos7:error"}}},"type": "Docker"}} |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | buildconfig      |

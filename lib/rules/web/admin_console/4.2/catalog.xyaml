@@ -9,6 +9,10 @@ click_try_sample:
   params:
     button_text: Try Sample
   action: click_button
+open_env_edit_for_dc:
+  params:
+    button_text: Deployment Configuration
+  action: click_button
 set_label:
   params:
     button_text: Labels

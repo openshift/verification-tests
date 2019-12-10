@@ -1,7 +1,7 @@
 expand_primary_menu:
   elements:
   - selector:
-      xpath: //.[contains(@data-component, 'pf-nav-expandable') and contains(text(), '<primary_menu>')]
+      xpath: //*[contains(@data-component, 'pf-nav-expandable') and contains(text(), '<primary_menu>')]
     op: click
 create_resource_by_default_yaml:
   elements:
@@ -310,6 +310,27 @@ check_resource_details:
   action:
     if_param: triggered_by
     ref: check_triggered_by
+  action:
+    if_param: termination_type
+    ref: check_termination_type
+  action:
+    if_param: insecure_traffic
+    ref: check_insecure_traffic
+  action:
+    if_param: hostname
+    ref: check_route_hostname
+  action:
+    if_param: path
+    ref: check_route_path
+  action:
+    if_param: canonical_hostname
+    ref: check_route_canonical_hostname
+  action:
+    if_param: machine_config_selector
+    ref: check_machine_config_selector
+  action:
+    if_param: current_configuration
+    ref: check_current_configuration
 check_resource_details_key_and_value:
   element: &key_value
     selector:
@@ -449,4 +470,39 @@ check_triggered_by:
   params:
     key: Triggered By
     value: <triggered_by>
+  action: check_resource_details_key_and_value
+check_termination_type:
+  params:
+    key: Termination Type
+    value: <termination_type>
+  action: check_resource_details_key_and_value
+check_insecure_traffic:
+  params:
+    key: Insecure Traffic
+    value: <insecure_traffic>
+  action: check_resource_details_key_and_value
+check_route_hostname:
+  params:
+    key: Hostname
+    value: <hostname>
+  action: check_resource_details_key_and_value
+check_route_path:
+  params:
+    key: Path
+    value: <path>
+  action: check_resource_details_key_and_value
+check_route_canonical_hostname:
+  params:
+    key: Canonical Router Hostname
+    value: <canonical_hostname>
+  action: check_resource_details_key_and_value
+check_machine_config_selector:
+  params:
+    key: Machine Config Selector
+    value: <machine_config_selector>
+  action: check_resource_details_key_and_value
+check_current_configuration:
+  params:
+    key: Current Configuration
+    value: <current_configuration>
   action: check_resource_details_key_and_value

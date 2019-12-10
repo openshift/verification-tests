@@ -132,7 +132,7 @@ Feature: build 'apps' with CLI
   Scenario: Create applications only with multiple db images
     Given I create a new project
     When I run the :new_app client command with:
-      | image_stream      | openshift/mongodb:3.6                  |
+      | image_stream      | openshift/mongodb:latest               |
       | image_stream      | openshift/mysql                        |
       | docker_image      | centos/postgresql-96-centos7:latest    |
       | env               | MONGODB_USER=test                      |
@@ -152,7 +152,7 @@ Feature: build 'apps' with CLI
     And I wait up to 120 seconds for the steps to pass:
     """
     When I execute on the pod:
-      | bash | -c | mysql  -h $MYSQL_SERVICE_HOST -u root -ptest -e "show databases" |
+      | bash | -c | mysql  -h $HOSTNAME -u root -ptest -e "show databases" |
     Then the step should succeed
     """
     And the output should contain "mysql"
@@ -325,10 +325,10 @@ Feature: build 'apps' with CLI
   Scenario Outline: Do sti/custom build with no inputs in buildconfig
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/nosrc-extended-test-bldr/master/nosrc-setup.json |
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/tc525736/nosrc-setup.json |
     Then the step should succeed
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/nosrc-extended-test-bldr/master/nosrc-test.json  |
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/tc525736/nosrc-test.json  |
     When I get project bc
     Then the output should contain:
       | <bc_name> |
