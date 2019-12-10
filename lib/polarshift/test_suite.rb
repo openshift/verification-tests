@@ -9,13 +9,12 @@ module BushSlicer
       # @param opts [Hash] options like services->polarshift->...
       def initialize(**opts)
         @request = Request.new(opts)
-        @opts = request.send(:opts)
+        @opts = request.send(:test_suite_opts)
 
-        init_by_spec
+        init_by_spec(ENV["TCMS_SPEC"] || @opts[:spec])
       end
 
-      def init_by_spec
-        spec = ENV["TCMS_SPEC"] || opts[:spec]
+      def init_by_spec(spec)
         if spec.nil? || spec.empty?
           raise "don't know what to execute, please specify TCMS execution specification in TCMS_SPEC"
         end
@@ -38,7 +37,7 @@ module BushSlicer
       end
 
       def project_id
-        opts[:manager][:project]
+        request.default_project
       end
 
       def artifacts_format

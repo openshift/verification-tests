@@ -149,7 +149,7 @@ Feature: Service-catalog related scenarios
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/ups-broker-template.yaml |
       | p | UPS_BROKER_PROJECT=<%= cb.ups_broker_project %>                                                         |
     Then the step should succeed
-    And I wait for the steps to pass:
+    And I wait up to 300 seconds for the steps to pass:
     """
     When I run the :describe client command with:
       | resource | clusterservicebroker/ups-broker |

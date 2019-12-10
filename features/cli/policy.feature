@@ -9,7 +9,7 @@ Feature: change the policy of user/service account
       | resource_name | admin       |
       | o             | wide        |
     Then the output should match:
-      | admin.*<%= @user.name %> |
+      | admin.*(<%= @user.name %>)? |
     When I run the :oadm_add_role_to_user client command with:
       | role_name        | admin                              |
       | user_name        | <%= user(1, switch: false).name %> |
@@ -20,7 +20,7 @@ Feature: change the policy of user/service account
       | resource_name | admin       |
       | o             | wide        |
     Then the output should match:
-      | admin.*<%= @user.name %>, <%= user(1, switch: false).name %> |
+      | admin.*(<%= @user.name %>, <%= user(1, switch: false).name %>)? |
     Given I switch to the second user
     And I wait for the steps to pass:
     """
@@ -38,7 +38,7 @@ Feature: change the policy of user/service account
       | resource_name | admin       |
       | o             | wide        |
     Then the output should match:
-      | admin.*<%= @user.name %> |
+      | admin.*(<%= @user.name %>)? |
     Given I switch to the second user
     And I wait for the steps to pass:
     """

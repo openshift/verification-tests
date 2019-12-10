@@ -57,28 +57,9 @@ check_dc_available_action_menus:
       xpath: //li//button[@data-test-action='Edit Deployment Config']
   - selector:
       xpath: //li//button[@data-test-action='Delete Deployment Config']
-check_build_error_icon_and_text:
-  params:
-    error_text: 1
+check_error_icon_for_overview_item:
   action: wait_overview_items_loaded
-  action: check_error_icon_and_text
-check_deploy_error_icon_and_text:
-  params:
-    error_text: Error
-  action: wait_overview_items_loaded
-  action: check_error_icon_and_text 
-check_error_icon_and_text:
   element:
     selector:
-      css: span.co-icon-and-text
-    timeout: 30
-  scripts:
-    - command: |
-        var error_icon_and_text = document.getElementsByClassName("co-icon-and-text")
-        var found = false
-        for(var i = 0; i < error_icon_and_text.length; i++){
-          if (error_icon_and_text[i].innerText.replace(/\n/g, "").indexOf("<error_text>") != -1)
-          found = true
-        }
-        return found
-      expect_result: true
+      css: .project-overview__detail--alert
+    timeout: 20

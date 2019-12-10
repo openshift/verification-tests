@@ -74,7 +74,6 @@ Given /^I login to kibana logging web console$/ do
     | kibana_url | https://<%= cb.logging_console_url %> |
     | idp        | <%= env.idp %>                        |
     })
-  step %Q/I run the :kibana_verify_logged_in web action/
   # change the base url so we don't need to specifiy kibana url every time afterward in the rule file
   browser.base_url = cb.logging_console_url
 end
@@ -107,6 +106,7 @@ When /^I perform the (GET|POST) metrics rest request with:$/ do | op_type, table
   bearer_token = opts[:token] ? opts[:token] : user.cached_tokens.first
 
   https_opts = {}
+  https_opts[:proxy] = env.client_proxy if env.client_proxy
   https_opts[:headers] ||= {}
   https_opts[:headers][:accept] ||= "application/json"
   https_opts[:headers][:content_type] ||= "application/json"

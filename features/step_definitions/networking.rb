@@ -736,3 +736,13 @@ Given /^I run command on the#{OPT_QUOTED} node's ovnkube pod:$/ do |node_name, t
   raise "Failed to execute network command!" unless @result[:success]
 end
 
+Given /^I run cmds on all ovs pods:$/ do | table |
+  ensure_admin_tagged
+  network_cmd = table.raw
+
+  ovs_pods = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin)
+  ovs_pods.each do |pod|
+    @result = pod.exec(network_cmd, as: admin)
+    raise "Failed to execute network command!" unless @result[:success]
+  end
+end

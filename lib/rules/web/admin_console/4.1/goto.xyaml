@@ -95,3 +95,10 @@ goto_node_page:
   url: k8s/cluster/nodes
 goto_one_node_page:
   url: k8s/cluster/nodes/<node_name>
+
+# machine config
+goto_machineconfigs_page:
+  url: k8s/cluster/machineconfiguration.openshift.io~v1~MachineConfig
+goto_machineconfig_pools_page:
+  url: k8s/cluster/machineconfiguration.openshift.io~v1~MachineConfigPool
+

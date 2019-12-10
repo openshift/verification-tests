@@ -240,9 +240,14 @@ Given /^cluster logging operator is ready$/ do
   })
 end
 
-Given /^elasticsearch operator is ready$/ do
+Given /^elasticsearch operator is ready(?: in the "(.+)" namespace)?$/ do | proj_name |
   ensure_admin_tagged
-  project("openshift-operators-redhat")
+  if proj_name
+    target_namespace = proj_name
+  else
+    target_namespace = "openshift-operators-redhat"
+  end
+  project(target_namespace)
   step %Q/a pod becomes ready with labels:/, table(%{
     | name=elasticsearch-operator |
   })
@@ -263,6 +268,11 @@ Given /^I create clusterlogging instance with:$/ do | table |
 
   @result = admin.cli_exec(:create, f: crd_yaml, n: logging_ns)
   raise "Unable to create clusterlogging instance" unless @result[:success]
+  if opts[:remove_logging_pods] == 'true'
+    teardown_add {
+      step %Q/I delete the clusterlogging instance/
+    }
+  end
   log_collector = opts[:log_collector]
   step %Q/I wait for the "instance" clusterloggings to appear/
   step %Q/I wait for the "elasticsearch" elasticsearches to appear/
@@ -272,11 +282,6 @@ Given /^I create clusterlogging instance with:$/ do | table |
   sleep 10
   step %Q/I wait for clusterlogging with "#{log_collector}" log collector to be functional in the project/
 
-  if opts[:remove_logging_pods] == 'true'
-    teardown_add {
-      step %Q/I delete the clusterlogging instance/
-    }
-  end
 end
 
 Given /^I delete the clusterlogging instance$/ do
@@ -338,7 +343,19 @@ end
 
 Given /^#{QUOTED} packagemanifest's operator source name is stored in the#{OPT_SYM} clipboard$/ do |packagemanifest, cb_name|
   cb_name = "opsrc_name" unless cb_name
-  @result = admin.cli_exec(:get, resource: 'packagemanifest', resource_name: packagemanifest, n: 'openshift-marketplace', o: 'yaml')
-  raise "Unable to get opsrc name" unless @result[:success]
-  cb[cb_name] = @result[:parsed]['metadata']['labels']['opsrc-owner-name']
+  project("openshift-marketplace")
+  if catalog_source("qe-app-registry").exists?
+    cb[cb_name] = "qe-app-registry"
+  else
+    @result = admin.cli_exec(:get, resource: 'packagemanifest', resource_name: packagemanifest, n: 'openshift-marketplace', o: 'yaml')
+    raise "Unable to get opsrc name" unless @result[:success]
+    cb[cb_name] = @result[:parsed]['status']['catalogSource']
+  end
+end
+
+Given /^the logging operators are redeployed after scenario$/ do
+  _admin = admin
+  teardown_add {
+    step %Q/logging operators are installed successfully/
+  }
 end

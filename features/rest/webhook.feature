@@ -15,12 +15,12 @@ Feature: Webhook REST Related Tests
       | name | ruby-sample-build |
     Then the output should not contain "<negative1>"
     Then the output should not contain "<negative2>"
-    Given I download a file from "https://raw.githubusercontent.com/openshift/origin/master/pkg/build/webhook/<path><file>"
+    Given I download a file from "https://raw.githubusercontent.com/openshift/origin/release-4.1/pkg/build/webhook/<path><file>"
     And I replace lines in "<file>":
       | 9bdc3a26ff933b32f3e558636b58aea86a69f051 ||
     When I perform the HTTP request:
     """
-    :url: <%= env.api_endpoint_url %>/oapi/v1/namespaces/<%= project.name %>/buildconfigs/ruby-sample-build/webhooks/secret101/<type>
+    :url: <%= env.api_endpoint_url %>/apis/build.openshift.io/v1/namespaces/<%= project.name %>/buildconfigs/ruby-sample-build/webhooks/secret101/<type>
     :method: post
     :headers:
       :Content-Type: application/json
@@ -34,7 +34,7 @@ Feature: Webhook REST Related Tests
       | deployment=frontend-2 |
     When I perform the HTTP request:
     """
-    :url: <%= env.api_endpoint_url %>/oapi/v1/namespaces/<%= project.name %>/buildconfigs/ruby-sample-build/webhooks/secret101/<negative3>
+    :url: <%= env.api_endpoint_url %>/apis/build.openshift.io/v1/namespaces/<%= project.name %>/buildconfigs/ruby-sample-build/webhooks/secret101/<negative3>
     :method: post
     :headers:
       :Content-Type: application/json
