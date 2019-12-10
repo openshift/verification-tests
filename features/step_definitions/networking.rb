@@ -583,11 +583,14 @@ end
 Given /^I store a random unused IP address from the reserved range to the#{OPT_SYM} clipboard$/ do |cb_name|
   ensure_admin_tagged
   cb_name = "valid_ip" unless cb_name
+  step "the subnet for primary interface on node is stored in the clipboard"
 
-  reserved_range = "172.16.123.240/29"
+  reserved_range = "#{cb.subnet_range}"
 
   validate_ip = IPAddr.new(reserved_range).to_range.to_a.shuffle.each { |ip|
-    @result = host.exec_admin("/usr/bin/ping -c 1 -W 2 #{ip}")
+    @result = step "I run command on the node's ovs pod:", table(
+      "| ping | -c1 | -W2 | #{ip} |"
+    )
     if @result[:exitstatus] == 0
       logger.info "The IP is in use."
     else
@@ -602,6 +605,7 @@ end
 Given /^the valid egress IP is added to the#{OPT_QUOTED} node$/ do |node_name|
   ensure_admin_tagged
   step "I store a random unused IP address from the reserved range to the clipboard"
+  node_name = node.name unless node_name
 
   @result = admin.cli_exec(:patch, resource: "hostsubnet", resource_name: "#{node_name}", p: "{\"egressIPs\":[\"#{cb.valid_ip}\"]}", type: "merge")
   raise "Failed to patch hostsubnet!" unless @result[:success]
@@ -745,4 +749,29 @@ Given /^I run cmds on all ovs pods:$/ do | table |
     @result = pod.exec(network_cmd, as: admin)
     raise "Failed to execute network command!" unless @result[:success]
   end
+end
+
+Given /^I run command on the#{OPT_QUOTED} node's ovs pod:$/ do |node_name, table|
+  ensure_admin_tagged
+  network_cmd = table.raw
+  node_name ||= node.name
+
+  ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
+     pod.node_name == node_name
+   }.first
+  cache_resources ovs_pod
+  @result = ovs_pod.exec(network_cmd, as: admin)
+end
+
+Given /^the subnet for primary interface on node is stored in the#{OPT_SYM} clipboard$/ do |cb_name|
+  ensure_admin_tagged
+  cb_name = "subnet_range" unless cb_name
+
+  step "the default interface on nodes is stored in the clipboard"
+  step "I run command on the node's sdn pod:", table(
+    "| bash | -c | ip a show \"<%= cb.interface %>\" \\| grep inet \\| grep -v inet6  \\| awk '{print $2}' |"
+  )
+  raise "Failed to get the subnet range for the primary interface on the node" unless @result[:success]
+  cb[cb_name] = @result[:response].chomp
+  logger.info "Subnet range for the primary interface on the node is stored in the #{cb_name} clipboard."
 end
