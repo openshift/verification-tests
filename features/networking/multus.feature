@@ -469,7 +469,7 @@ Feature: Multus-CNI related scenarios
     #Creating vlan pod absorbing above net-attach-def
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/weliang1/Openshift_Networking/master/Features/multus/pod1-bridge-host-local-vlan200.yaml |
-      | n | <%= project_name %>                                                                                                     |
+      | n | <%= project.name %>                                                                                                     |
     Then the step should succeed
     And the pod named "pod1-vlan200" becomes ready
     And evaluation of `pod` is stored in the :pod clipboard
