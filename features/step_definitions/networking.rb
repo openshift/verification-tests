@@ -673,6 +673,19 @@ Given /^I run command on the#{OPT_QUOTED} node's sdn pod:$/ do |node_name, table
   raise "Failed to execute network command!" unless @result[:success]
 end
 
+Given /^I run command on the#{OPT_QUOTED} node's ovnkube pod:$/ do |node_name, table|
+  ensure_admin_tagged
+  network_cmd = table.raw
+  node_name ||= node.name
+
+  ovnkube_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
+    pod.node_name == node_name
+  }.first
+  cache_resources ovnkube_pod
+  @result = ovnkube_pod.exec(network_cmd, as: admin)
+  raise "Failed to execute network command!" unless @result[:success]
+end
+
 Given /^I restart the ovs pod on the#{OPT_QUOTED} node$/ do | node_name |
   ensure_admin_tagged
   ensure_destructive_tagged
@@ -688,10 +701,21 @@ end
 
 Given /^the default interface on nodes is stored in the#{OPT_SYM} clipboard$/ do |cb_name|
   ensure_admin_tagged
+  _admin = admin
   step "I select a random node's host"
   cb_name ||= "interface"
-  
-  step %Q/I run command on the node's sdn pod:/, table("| bash | -c | ip route show default |")
+  @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
+  if @result[:success] then
+     networkType = @result[:response].strip
+  end
+  case networkType
+  when "OVNKubernetes"
+    step %Q/I run command on the node's ovnkube pod:/, table("| bash | -c | ip route show default |")
+  when "OpenShiftSDN"
+    step %Q/I run command on the node's sdn pod:/, table("| bash | -c | ip route show default |")
+  else
+    raise "unknown networkType"
+  end 
   cb[cb_name] = @result[:response].split("\n").first.split(/\W+/)[7]
   logger.info "The node's default interface is stored in the #{cb_name} clipboard."
 end
