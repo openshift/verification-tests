@@ -222,7 +222,7 @@ module BushSlicer
 
     # helper parser
     def parse_version(ver_str)
-      ver = ver_str.sub(/^v/,"")
+      ver = ver_str.sub(/(^v|^openshift-clients-)/,"")
       if ver !~ /^[\d.]+$/
         raise "version '#{ver}' does not match /^[\d.]+$/"
       end
