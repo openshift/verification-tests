@@ -541,7 +541,8 @@ Feature: Multus-CNI related scenarios
     # Create the net-attach-def via cluster admin and simulating syntax errors
     Given I have a project
     When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml" replacing paths:
-      | ["spec"]["config"]| 'asdf' |
+      | ["metadata"]["name"] | macvlan-bridge-21756 |
+      | ["spec"]["config"]   | 'asdf'               |
     Then the step should fail
     And the output should contain:
       | admission webhook "multus-validating-config.k8s.io" denied the request|
@@ -559,9 +560,10 @@ Feature: Multus-CNI related scenarios
     Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin
     Given I have a project
-    When I run the :create admin command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml |
-    Then the step should succeed
+    When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/1interface-macvlan-bridge.yaml" replacing paths:
+      | ["metadata"]["name"] | macvlan-bridge-21456 |
+    Then the step should succeed 
+    And admin ensures "macvlan-bridge-21456" network_attachment_definition is deleted from the "default" project after scenario
     # Create a pod consuming net-attach-def simulating wrong syntax in name
     When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/1interface-macvlan-bridge.yaml" replacing paths:
       | ["metadata"]["generateName"] | macvlan-bridge-pod-$@ |
@@ -578,10 +580,10 @@ Feature: Multus-CNI related scenarios
     # Create the net-attach-def via cluster admin
     Given I switch to cluster admin pseudo user
     And I use the "default" project
-    When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml |
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml" replacing paths:
+      | ["metadata"]["name"] | macvlan-bridge-21793 |
     Then the step should succeed
-    And admin ensures "macvlan-bridge" network_attachment_definition is deleted from the "default" project after scenario
+    And admin ensures "macvlan-bridge-21793" network_attachment_definition is deleted from the "default" project after scenario
     # Creating pod in the user's namespace which consumes the net-attach-def created in default namespace 
     Given I switch to the first user
     And I create a new project
