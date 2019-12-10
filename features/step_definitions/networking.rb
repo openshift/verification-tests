@@ -673,19 +673,6 @@ Given /^I run command on the#{OPT_QUOTED} node's sdn pod:$/ do |node_name, table
   raise "Failed to execute network command!" unless @result[:success]
 end
 
-Given /^I run command on the#{OPT_QUOTED} node's ovnkube pod:$/ do |node_name, table|
-  ensure_admin_tagged
-  network_cmd = table.raw
-  node_name ||= node.name
-
-  ovnkube_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
-    pod.node_name == node_name
-  }.first
-  cache_resources ovnkube_pod
-  @result = ovnkube_pod.exec(network_cmd, as: admin)
-  raise "Failed to execute network command!" unless @result[:success]
-end
-
 Given /^I restart the ovs pod on the#{OPT_QUOTED} node$/ do | node_name |
   ensure_admin_tagged
   ensure_destructive_tagged
@@ -735,3 +722,17 @@ Given /^the bridge interface named "([^"]*)" is deleted from the "([^"]*)" node$
   @result = host.exec_admin("/sbin/ip link delete #{bridge_name}")
   raise "Failed to delete bridge interface" unless @result[:success]
 end
+
+Given /^I run command on the#{OPT_QUOTED} node's ovnkube pod:$/ do |node_name, table|
+  ensure_admin_tagged
+  network_cmd = table.raw
+  node_name ||= node.name
+
+  ovnkube_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
+    pod.node_name == node_name
+  }.first
+  cache_resources ovnkube_pod
+  @result = ovnkube_pod.exec(network_cmd, as: admin)
+  raise "Failed to execute network command!" unless @result[:success]
+end
+
