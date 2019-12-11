@@ -18,9 +18,9 @@ check_additional_support:
 check_getting_started:
   elements:
   - selector:
-      xpath: //div[contains(.,'Getting Started') and contains(., 'To get started, create a project')]
+      xpath: //h2[contains(.,'Getting Started')]
   - selector:
-      xpath: //*[@href="/k8s/cluster/projects"]/button[contains(., "View My Projects")]
+      xpath: //button[contains(.,'Create Project')]
 check_dim_resource_list:
   elements:
   - selector:
