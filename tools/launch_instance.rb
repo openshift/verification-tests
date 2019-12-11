@@ -500,7 +500,7 @@ module BushSlicer
         res = Host.localhost.exec(
           'ansible-playbook', '-v', '-i', inventory, *extra_vars,
           playbook,
-          env: env, single: true, stderr: :out, stdout: STDOUT, timeout: 36000
+          env: env, single: true, stderr: :stdout, stdout: STDOUT, timeout: 36000
         )
         say "############ ANSIBLE END#{id_str} ############################"
         if res[:success]
@@ -600,7 +600,7 @@ module BushSlicer
       when "shell_command"
         exec_opts = {
           single: true,
-          stderr: :out, stdout: STDOUT,
+          stderr: :stdout, stdout: STDOUT,
           timeout: 36000
         }
         if task[:env]
