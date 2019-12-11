@@ -562,9 +562,10 @@ Feature: Multus-CNI related scenarios
     Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin
     Given I have a project
-    When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/1interface-macvlan-bridge.yaml" replacing paths:
+    When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml"" replacing paths:
       | ["metadata"]["name"] | macvlan-bridge-21456 |
     Then the step should succeed 
+    And admin ensures "macvlan-bridge-21456" network_attachment_definition is deleted from the "default" project after scenario
     # Create a pod consuming net-attach-def simulating wrong syntax in name
     When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/1interface-macvlan-bridge.yaml" replacing paths:
       | ["metadata"]["generateName"] | macvlan-bridge-pod-$@ |
