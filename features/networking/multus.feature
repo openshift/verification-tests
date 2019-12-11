@@ -606,7 +606,7 @@ Feature: Multus-CNI related scenarios
       | namespace isolation |
       | violat              |
     """
-
+ 
   # @author anusaxen@redhat.com
   # @case_id OCP-24490
   @admin
@@ -618,7 +618,7 @@ Feature: Multus-CNI related scenarios
     When I run the :create admin command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/bridge-host-local-vlan.yaml |
       | n | <%= project.name %>                                                                                                                               |
-    Then the step should succeed 
+    Then the step should succeed
     #Labeling a worker node to make sure couple of future pods to be scheduled on this node only
     When I run the :label admin command with:
       | resource | node                    |
@@ -675,6 +675,12 @@ Feature: Multus-CNI related scenarios
     Then the step should succeed
     And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod2_net1_ip clipboard
     
+    #Clean-up required to erase bridge interfaces created due to above pods on same node
+    Given I register clean-up steps:
+    """
+    the bridge interface named "mybridge" is deleted from the "<%= cb.nodes[0].name %>" node
+    the bridge interface named "mybridge.100" is deleted from the "<%= cb.nodes[0].name %>" node
+    """  
     #Creating 3rd pod on different node in vlan 100
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod_nodeselector.yaml" replacing paths:
       | ["metadata"]["name"] | pod3-vlan100 |
@@ -691,8 +697,6 @@ Feature: Multus-CNI related scenarios
     #Clean-up required to erase bridge interfcaes created on node
     Given I register clean-up steps:
     """
-    the bridge interface named "mybridge" is deleted from the "<%= cb.nodes[0].name %>" node
-    the bridge interface named "mybridge.100" is deleted from the "<%= cb.nodes[0].name %>" node
     the bridge interface named "mybridge" is deleted from the "<%= cb.nodes[1].name %>" node
     the bridge interface named "mybridge.100" is deleted from the "<%= cb.nodes[1].name %>" node
     """  
@@ -741,6 +745,7 @@ Feature: Multus-CNI related scenarios
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/bridge-host-local-vlan-200.yaml |
       | n | <%= project.name %>                                                                                                                                   |
     Then the step should succeed 
+    
     #Labeing a worker node to make sure all future pods to be scheduled on this node only
     When I run the :label admin command with:
       | resource | node                    |
@@ -795,7 +800,7 @@ Feature: Multus-CNI related scenarios
     Then the step should succeed
     And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod3_net1_ip clipboard
     
-    #Clean-up required to erase bridge interfcaes created on node
+    #Clean-up required to erase bridge interfcaes created on sam node above due to vlan pods
     Given I register clean-up steps:
     """
     the bridge interface named "mybridge" is deleted from the "<%= cb.nodes[0].name %>" node
@@ -839,7 +844,7 @@ Feature: Multus-CNI related scenarios
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-conf-without-master.yaml |
       | n | <%= project.name %>                                                                                                                                    |
     Then the step should succeed
-    
+
     #Creating a pod absorbing above net-attach-def
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | macvlan-conf |
@@ -849,3 +854,4 @@ Feature: Multus-CNI related scenarios
     When I execute on the pod:
       | /usr/sbin/ip | -d | link |
     Then the output should contain "net1"
+
