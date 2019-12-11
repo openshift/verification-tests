@@ -141,3 +141,7 @@ goto_crds_page:
   url: k8s/cluster/customresourcedefinitions
 goto_crd_instances_page:
   url: k8s/cluster/customresourcedefinitions/<crd_definition>/instances
+
+# catalog source
+goto_catalog_source_page:
+  url: k8s/cluster/config.openshift.io~v1~OperatorHub/cluster/sources

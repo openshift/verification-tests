@@ -73,10 +73,19 @@ set_input_value:
       xpath: //input[@id='<input_field_id>']
     op: send_keys <input_value>
     type: input
+deletion_confirm_panel:
+  element:
+    selector:
+      xpath: //input[@class='pf-c-form-control']
+    op: send_keys <input_value>
+    type: input
 check_row_filter_on_page:
   elements:
   - selector:
       xpath: //div[contains(@class,'row-filter')]//*[text()='<filter>']
+confirm_deletion:
+  action: deletion_confirm_panel
+  action: submit_changes
 check_resources_title_on_page:
   elements:
   - selector:
