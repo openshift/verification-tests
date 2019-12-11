@@ -9,3 +9,33 @@ click_provided_apis_of_operators:
       xpath: //a[contains(.,'<api>')]
     op: click
     timeout: 60
+create_catalog_source:
+  action: goto_catalog_source_page
+  action: click_button
+  action: input_catalog_source_name
+  action: input_display_name
+  action: input_publisher_name
+  action: input_image
+input_catalog_source_name:
+  params:
+    input_field_id: catalog-source-name
+    input_value: <catalog-source-name>
+  action: set_input_value
+input_display_name:
+  params:
+    input_field_id: catalog-source-display-name
+    input_value: <display-name>
+  action: set_input_value
+input_publisher_name:
+  params:
+    input_field_id: catalog-source-publisher
+    input_value: <publisher-name>
+  action: set_input_value
+input_image:
+  params:
+    input_field_id: catalog-source-image
+    input_value: <image>
+  action: set_input_value
+delete_one_catalog_source:
+  action: click_dropdown_field
+  action: click_button
