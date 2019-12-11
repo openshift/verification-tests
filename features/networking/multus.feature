@@ -546,12 +546,14 @@ Feature: Multus-CNI related scenarios
     Then the step should fail
     And the output should contain:
       | admission webhook "multus-validating-config.k8s.io" denied the request|
+    And admin ensures "macvlan-bridge-21756" network_attachment_definition is deleted from the "default" project after scenario
     When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml" replacing paths:
       | ["metadata"]["name"] | macvlan-bridge@$ |
     Then the step should fail
     And the output should contain:
       |subdomain must consist of lower case alphanumeric characters|
-
+    And admin ensures "macvlan-bridge@$" network_attachment_definition is deleted from the "default" project after scenario
+    
   # @author anusaxen@redhat.com
   # @case_id OCP-21949
   @admin
@@ -563,14 +565,13 @@ Feature: Multus-CNI related scenarios
     When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/1interface-macvlan-bridge.yaml" replacing paths:
       | ["metadata"]["name"] | macvlan-bridge-21456 |
     Then the step should succeed 
-    And admin ensures "macvlan-bridge-21456" network_attachment_definition is deleted from the "default" project after scenario
     # Create a pod consuming net-attach-def simulating wrong syntax in name
     When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/1interface-macvlan-bridge.yaml" replacing paths:
       | ["metadata"]["generateName"] | macvlan-bridge-pod-$@ |
     Then the step should fail
     And the output should contain:
       | subdomain must consist of lower case alphanumeric characters |
-
+    
   # @author anusaxen@redhat.com
   # @case_id OCP-21793
   @admin
