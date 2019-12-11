@@ -8,6 +8,7 @@ access_overview_page_after_logout:
 request_token_with_password:
   url: /oauth/token/request
   action: login_sequence
+  action: submit_changes
   elements:
     - selector:
         text: Your API token is
