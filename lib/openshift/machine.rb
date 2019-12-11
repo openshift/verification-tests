@@ -15,5 +15,10 @@ module BushSlicer
       instance_state = raw_resource(user: user, cached: cached, quiet: quiet).dig('status','providerStatus','instanceState')
       instance_state == 'running'
     end
+
+    def machine_set_name(user: nil, cached: true, quiet: false)
+      raw_resource(user: user, cached: cached, quiet: quiet).
+        dig('metadata', 'labels', 'machine.openshift.io/cluster-api-machineset')
+    end
   end
 end

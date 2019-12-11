@@ -104,23 +104,34 @@ module BushSlicer
         return result
       end
 
-      ## @param res [BushSlicer::ResultHash] the result to verify
-      ## @note will log and raise error unless result is successful
-      #def result_should_be_success(res)
-      #  unless res[:success]
-      #    logger.error(res[:response])
-      #    raise "result unsuccessful, see log"
-      #  end
-      #end
-      #
-      ## @param res [BushSlicer::ResultHash] the result to examine
-      ## @note will log and raise error unless result is failure
-      #def result_should_be_failure(res)
-      #  if res[:success]
-      #    logger.error(res[:response])
-      #    raise "result successful but should have been failure, see log"
-      #  end
-      #end
+      # @param [Environment] env to read proxy from
+      # @param [Hash, Array] opts to put `_env` option to if it is not there already
+      def add_proxy_env_opt(env, opts)
+        if env.client_proxy
+          opts_env_pair = opts.find{ |k,v| k == :_env }
+          opts_env = opts_env_pair&.last
+          unless opts_env&.dig(:http_proxy) || opts_env&.dig("http_proxy") ||
+              opts_env&.dig(:https_proxy) || opts_env&.dig("https_proxy")
+
+            opts_env ||= {}
+            opts_env = opts_env.merge({
+              "http_proxy" => env.client_proxy,
+              "https_proxy" => env.client_proxy,
+            })
+
+            case opts
+            when Hash
+              opts[:_env] = opts_env
+            when Array
+              if opts_env_pair
+                opts_env_pair[1] = opts_env
+              else
+                opts << [:_env, opts_env]
+              end
+            end
+          end
+        end
+      end
 
       # hack to have host.rb autoloaded when it is used through Helper outside
       # Cucumber (at the same time avoiding circular dependencies). That avoids

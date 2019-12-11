@@ -71,13 +71,13 @@ environments:
     admin_creds: MasterOsAdminCredentials
     api_port: 8443
   ocp4: &ocp4
-    # hosts: use OPENSHIFT_ENV_OSE_HOSTS=host:role1:...,host2:role1:...
+    # hosts: use OPENSHIFT_ENV_OCP4_HOSTS=host:role1:...,host2:role1:...
     hosts_type: OCDebugAccessibleHost
     # this is the user for remote access to the OpenShift nodes
     user: root
     type: StaticEnvironment
     user_manager: auto
-    # set users in OPENSHIFT_ENV_OSE_USER_MANAGER_USERS=user:password,...
+    # set users in OPENSHIFT_ENV_OCP4_USER_MANAGER_USERS=user:password,...
     # user_manager_users: joe:redhat,alice:redhat
     #cli: MasterOsPerUserCliExecutor
     cli: SharedLocalCliExecutor

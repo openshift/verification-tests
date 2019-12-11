@@ -23,7 +23,7 @@ Given /^I change the internal registry pod to use a new emptyDir volume$/ do
   ensure_destructive_tagged
   cb["reg_dir"] = "/registrytmp"
   begin
-    step %Q/I run the :volume admin command with:/, table(%{
+    step %Q/I run the :set_volume admin command with:/, table(%{
       | resource   | dc/docker-registry |
       | add        | true               |
       | mount-path | /registrytmp       |
@@ -279,7 +279,7 @@ Given /^I secure the default docker(?: (daemon set))? registry$/ do |deployment_
     _deployment = "dc"
   end
 
-  step 'I run the :volume admin command with:', table(%{
+  step 'I run the :set_volume admin command with:', table(%{
       | resource    | #{_deployment}/docker-registry       |
       | add         | true                     |
       | type        | secret                   |

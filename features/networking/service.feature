@@ -143,8 +143,8 @@ Feature: Service related networking scenarios
     When I run the :get client command with:
       | resource      | pod                     |
     Then the step should succeed
-    And the output should contain 2 times:
-      | ImagePullBackOff |
+    And the output should match 2 times:
+      | (Err)?ImagePull(BackOff)?\\s+0 |
     """
 
     When I run the :get client command with:

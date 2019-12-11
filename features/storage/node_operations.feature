@@ -25,6 +25,9 @@ Feature: Node operations test scenarios
     # Verify old pod is deleted
     And I wait for the resource "pod" named "<%= pod.name %>" to disappear
 
+    When I run the :oadm_uncordon_node admin command with:
+      | node_name | <%= pod.node_name %> |
+    Then the step should succeed
     # After draining, new Pod becomes available
     And a pod becomes ready with labels:
       | name=jenkins |

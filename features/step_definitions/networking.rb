@@ -660,7 +660,6 @@ Given /^the status of condition#{OPT_QUOTED} for network operator is :(.+)$/ do 
   raise "The status of condition #{type} is incorrect." unless expected_status == real_status
 end
 
-
 Given /^I run command on the#{OPT_QUOTED} node's sdn pod:$/ do |node_name, table|
   ensure_admin_tagged
   network_cmd = table.raw
@@ -674,16 +673,6 @@ Given /^I run command on the#{OPT_QUOTED} node's sdn pod:$/ do |node_name, table
   raise "Failed to execute network command!" unless @result[:success]
 end
 
-Given /^the default interface on nodes is stored in the#{OPT_SYM} clipboard$/ do |cb_name|
-  ensure_admin_tagged
-  hosts = step "I select a random node's host"
-  cb_name = "interface" unless cb_name
-  @result = host.exec_admin("/sbin/ip route show default | awk '/default/ {print $5}'")
-  raise "Failed to get the default interface of node" unless @result[:success]
-  cb[cb_name] = @result[:response].chomp
-  logger.info "The node's default interface is stored in the #{cb_name} clipboard."
-end
-
 Given /^I restart the ovs pod on the#{OPT_QUOTED} node$/ do | node_name |
   ensure_admin_tagged
   ensure_destructive_tagged
@@ -694,5 +683,66 @@ Given /^I restart the ovs pod on the#{OPT_QUOTED} node$/ do | node_name |
   @result = ovs_pod.ensure_deleted(user: admin)
   unless @result[:success]
     raise "Fail to delete the ovs pod"
+  end
+end
+
+Given /^the default interface on nodes is stored in the#{OPT_SYM} clipboard$/ do |cb_name|
+  ensure_admin_tagged
+  _admin = admin
+  step "I select a random node's host"
+  cb_name ||= "interface"
+  @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
+  if @result[:success] then
+     networkType = @result[:response].strip
+  end
+  case networkType
+  when "OVNKubernetes"
+    step %Q/I run command on the node's ovnkube pod:/, table("| bash | -c | ip route show default |")
+  when "OpenShiftSDN"
+    step %Q/I run command on the node's sdn pod:/, table("| bash | -c | ip route show default |")
+  else
+    raise "unknown networkType"
+  end 
+  cb[cb_name] = @result[:response].split("\n").first.split(/\W+/)[7]
+  logger.info "The node's default interface is stored in the #{cb_name} clipboard."
+end
+
+Given /^CNI vlan info is obtained on the#{OPT_QUOTED} node$/ do | node_name |
+  ensure_admin_tagged
+  node = node(node_name)
+  host = node.host
+  @result = host.exec_admin("/sbin/bridge vlan show")
+  raise "Failed to execute bridge vlan show command" unless @result[:success]
+end
+
+Given /^the bridge interface named "([^"]*)" is deleted from the "([^"]*)" node$/ do |bridge_name, node_name|
+  ensure_admin_tagged
+  node = node(node_name)
+  host = node.host
+  @result = host.exec_admin("/sbin/ip link delete #{bridge_name}")
+  raise "Failed to delete bridge interface" unless @result[:success]
+end
+
+Given /^I run command on the#{OPT_QUOTED} node's ovnkube pod:$/ do |node_name, table|
+  ensure_admin_tagged
+  network_cmd = table.raw
+  node_name ||= node.name
+
+  ovnkube_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
+    pod.node_name == node_name
+  }.first
+  cache_resources ovnkube_pod
+  @result = ovnkube_pod.exec(network_cmd, as: admin)
+  raise "Failed to execute network command!" unless @result[:success]
+end
+
+Given /^I run cmds on all ovs pods:$/ do | table |
+  ensure_admin_tagged
+  network_cmd = table.raw
+
+  ovs_pods = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin)
+  ovs_pods.each do |pod|
+    @result = pod.exec(network_cmd, as: admin)
+    raise "Failed to execute network command!" unless @result[:success]
   end
 end
