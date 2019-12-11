@@ -621,7 +621,12 @@ module BushSlicer
           raise "shell command failed execution, see logs"
         end
       when "ruby"
-        erb_binding.eval(readfile(task[:file], template_dir), task[:file])
+        if task[:file]
+          ruby_file_details = {}
+          erb_binding.eval(readfile(task[:file], template_dir, details: ruby_file_details), ruby_file_details[:location])
+        elsif task[:expression]
+          erb_binding.eval(task[:expression], "expression_in_template")
+        end
       when "playbook"
         inventory_erb = ERB.new(
           readfile(task[:inventory], template_dir),
