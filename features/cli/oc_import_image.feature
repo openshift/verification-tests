@@ -202,8 +202,8 @@ Feature: oc import-image related feature
       | source_type | docker                       |
       | source      | openshift/deployment-example |
       | dest        | deployment-example:latest    |
-    Then the output should match:
-      | [Tt]ag deployment-example:latest           |
+    Then the step should succeed
+    And the "deployment-example" image stream becomes ready
     When I run the :new_app client command with:
       | image_stream | deployment-example:latest   |
     Then the output should match:
@@ -235,8 +235,8 @@ Feature: oc import-image related feature
       | source           | openshift/deployment-example |
       | dest             | deployment-example:latest    |
       | reference_policy | local                        |
-    Then the output should match:
-      | [Tt]ag deployment-example:latest           |
+    Then the step should succeed
+    And the "deployment-example" image stream becomes ready
     When I run the :new_app client command with:
       | image_stream | deployment-example:latest   |
     Then the output should match:
