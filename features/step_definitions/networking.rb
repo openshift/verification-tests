@@ -15,11 +15,19 @@ Given /^I run the ovs commands on the host:$/ do | table |
   # For 3.10 and runc env, should get containerID from the pod which landed on the node
   elsif env.version_ge("3.10", user: user)
     logger.info("OCP version >= 3.10 and environment may using runc to launch openvswith")
-    ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
-      pod.node_name == node.name
-    }.first
-    container_id = ovs_pod.containers.first.id
+    @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
+        if @result[:response] == "OpenShiftSDN" 
+           ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
+              pod.node_name == node.name
+           }.first
+           container_id = ovs_pod.containers.first.id
+        else
+	  ovnkube_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
+              pod.node_name == node.name
+           }.first
+           container_id = ovnkube_pod.containers.first.id
     ovs_cmd = "runc exec #{container_id} " + ovs_cmd
+        end
   else
     raise "Cannot find the ovs command"
   end
