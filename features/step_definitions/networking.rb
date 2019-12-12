@@ -13,21 +13,28 @@ Given /^I run the ovs commands on the host:$/ do | table |
     logger.info("environment using runc to launch openvswith")
     ovs_cmd = "runc exec openvswitch " + ovs_cmd
   # For 3.10 and runc env, should get containerID from the pod which landed on the node
-  elsif env.version_ge("3.10", user: user)
+  elsif env.version_ge("3.10", user: user) && env.version_le("4.1", user: user)
     logger.info("OCP version >= 3.10 and environment may using runc to launch openvswith")
-    @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
-        if @result[:response] == "OpenShiftSDN" 
-           ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
-              pod.node_name == node.name
-           }.first
-           container_id = ovs_pod.containers.first.id
-        else
-	  ovnkube_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
-              pod.node_name == node.name
-           }.first
-           container_id = ovnkube_pod.containers.first.id
+    ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
+       pod.node_name == node.name
+    }.first
+    container_id = ovs_pod.containers.first.id
     ovs_cmd = "runc exec #{container_id} " + ovs_cmd
-        end
+  elsif env.version_gt("4.1", user: user)
+    logger.info("OCP version >=4.1 are on Operator Framework")
+    @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
+      if @result[:response] == "OpenShiftSDN" 
+         ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
+            pod.node_name == node.name
+         }.first
+         container_id = ovs_pod.containers.first.id
+      else
+         ovnkube_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
+            pod.node_name == node.name
+         }.first
+         container_id = ovnkube_pod.containers.first.id
+      ovs_cmd = "runc exec #{container_id} " + ovs_cmd
+      end
   else
     raise "Cannot find the ovs command"
   end
@@ -673,21 +680,29 @@ Given /^I run command on the#{OPT_QUOTED} node's sdn pod:$/ do |node_name, table
   network_cmd = table.raw
   node_name ||= node.name
   _admin = admin
-  @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}") 
-  if @result[:response] == "OpenShiftSDN"
+  if env.version_lt("4.1", user: user)
      sdn_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
        pod.node_name == node_name
      }.first
      cache_resources sdn_pod
      @result = sdn_pod.exec(network_cmd, as: admin)
   else
-     ovnkube_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
-       pod.node_name == node_name
-     }.first
-     cache_resources ovnkube_pod
-     @result = ovnkube_pod.exec(network_cmd, as: admin)   
-  end
+     @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}") 
+     if @result[:response] == "OpenShiftSDN"
+        sdn_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
+          pod.node_name == node_name
+        }.first
+        cache_resources sdn_pod
+        @result = sdn_pod.exec(network_cmd, as: admin)
+     else
+        ovnkube_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
+          pod.node_name == node_name
+        }.first
+        cache_resources ovnkube_pod
+        @result = ovnkube_pod.exec(network_cmd, as: admin)   
+     end
   raise "Failed to execute network command!" unless @result[:success]
+  end
 end
  
 Given /^I restart the ovs pod on the#{OPT_QUOTED} node$/ do | node_name |
