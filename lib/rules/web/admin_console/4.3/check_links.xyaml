@@ -63,6 +63,8 @@ check_external_link:
     timeout: 20
   - selector:
       xpath: //a[contains(@class,'co-external-link') and text()='<link_text>']
+check_external_log_link:
+  action: check_link_and_text
 # --- links on masthead ---
 browse_to_cli_tools_page:
   action: click_help_button

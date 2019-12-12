@@ -142,6 +142,7 @@ module BushSlicer
     alias kubeapiserver kube_a_p_i_server
     alias openshiftapiserver open_shift_a_p_i_server
     alias consolenotification console_notifications_console_openshift_io
+    alias consoleexternalloglink console_external_log_link
     # @note call like `user(0)` or simply `user` for current user
     def user(num=nil, switch: true)
       return @user if num.nil? && @user
