@@ -46,3 +46,13 @@ delete_dc_with_dependency_objects:
     button_text: Delete
   action: click_one_dropdown_action
   action: click_button
+navigate_to_rs_tab_page:
+  params:
+    text: Replica Sets
+    link_url: deployments/<deploy_name>/replicasets
+  action: click_link_with_text
+navigate_to_rc_tab_page:
+  params:
+    text: Replication Controllers
+    link_url: deploymentconfigs/<dc_name>/replicationcontrollers
+  action: click_link_with_text
