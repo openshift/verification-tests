@@ -301,12 +301,24 @@ Given /^I delete the clusterlogging instance$/ do
   step %Q/I wait for the resource "daemonset" named "fluentd" to disappear/
 end
 
-Given /^I run curl command on the CLO pod to get metrics with:$/ do | table |
+Given /^I run curl command on the (CLO|ES|fluentd) pod to get metrics with:$/ do | pod_type, table |
   ensure_admin_tagged
   opts = opts_array_to_hash(table.raw)
+  case pod_type
+  when "CLO"
+    selector = "name=cluster-logging-operator"
+    container_name = "cluster-logging-operator"
+  when "ES"
+    selector = "cluster-name=elasticsearch,component=elasticsearch"
+    container_name = "elasticsearch"
+  when "fluentd"
+    selector = "logging-infra=fluentd"
+    container_name = "fluentd"
+  end
   step %Q/a pod becomes ready with labels:/, table(%{
-      | name=cluster-logging-operator |
-    })
+    | #{selector} |
+  })
+
   query_object = opts[:object]
   query_opts = "-H \"Authorization: Bearer #{opts[:token]}\" -H \"Content-type: application/json\""
   case query_object
@@ -318,7 +330,7 @@ Given /^I run curl command on the CLO pod to get metrics with:$/ do | table |
     raise "Invalid query_object"
   end
 
-  @result = pod.exec("bash", "-c", query_cmd, as: admin, container: "cluster-logging-operator")
+  @result = pod.exec("bash", "-c", query_cmd, as: admin, container: container_name)
   if @result[:success]
     @result[:parsed] = YAML.load(@result[:response])
     if @result[:parsed].is_a? Hash and @result[:parsed].has_key? 'status'

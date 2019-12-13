@@ -37,7 +37,7 @@ Feature: cluster-logging-operator related test
     And the expression should be true> service_monitor('<%= cb.collection_type %>').path == "/metrics"
     And evaluation of `service('<%= cb.collection_type %>').ip` is stored in the :service_ip clipboard
 
-    Given I run curl command on the CLO pod to get metrics with:
+    Given I run curl command on the fluentd pod to get metrics with:
       | object     | <%= cb.collection_type %> |
       | service_ip | <%= cb.service_ip %>      |
       | token      | <%= cb.token %>           |
