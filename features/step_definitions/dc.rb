@@ -151,18 +151,20 @@ end
 
 Given /^master CA is added to the#{OPT_QUOTED} dc$/ do |name|
   ensure_admin_tagged
+  
+  org_user = @user
+  org_proj_name = project.name
+  @user = admin
+  @result = secret("router-certs-default", project("openshift-ingress", switch: false)).value_of("tls.crt")
+  File.open("/tmp/openshift.crt", 'wb') { |f| 
+    f.write(@result)
+  }
 
-  steps """
-    Given I use the first master host
-    When I run commands on the host:
-      | cat /etc/origin/master/ca.crt |
-    Then the step should succeed
-    And I save the output to file> openshift.crt
-  """
-
+  @user = org_user
+  project(org_proj_name)
   step %Q/I run the :create_configmap client command with:/, table(%{
-    | name      | ca              |
-    | from_file | openshift.crt   |
+    | name      | ca                 |
+    | from_file | /tmp/openshift.crt |
   })
   step %Q/the step should succeed/
 
@@ -170,7 +172,7 @@ Given /^master CA is added to the#{OPT_QUOTED} dc$/ do |name|
 
   steps """
     When I run the :rollout_pause client command with:
-      | resource | dc     |
+      | resource | dc      |
       | name     | #{name} |
     Then the step should succeed
     When I run the :set_volume client command with:
@@ -186,7 +188,7 @@ Given /^master CA is added to the#{OPT_QUOTED} dc$/ do |name|
       | key_val  | mastercert=#{name} |
     Then the step should succeed
     When I run the :rollout_resume client command with:
-      | resource | dc     |
+      | resource | dc      |
       | name     | #{name} |
     Then the step should succeed
   """
