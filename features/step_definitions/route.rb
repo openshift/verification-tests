@@ -131,3 +131,20 @@ Given /^all default router pods become ready$/ do
       | #{label_filter} |
     })
 end
+
+Given /^I store an available router IP in the#{OPT_SYM} clipboard$/ do |cb_name|
+  step %Q/I run the :create client command with:/, table(%{
+    | f |  https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/service_with_selector.json |
+  })
+  step %Q/I expose the "selector-service" service/
+  step %Q/I have a pod-for-ping in the project/
+  step %Q/I execute on the pod:/, table(%{
+    | bash | -c | curl http://<%= route("selector-service", service("selector-service")).dns(by: user) %>/ --connect-timeout 10 -I -v -s |
+  })
+
+  cb[cb_name] = @result[:response].match(/Connected to .* \((\d+.\d+.\d+.\d+)\)/).captures
+  raise "Cannot find an available router IP" if cb[cb_name].nil?
+  logger.info cb[cb_name]
+
+  step %Q/I delete all resources from the project/
+end
