@@ -101,6 +101,7 @@ Feature: projects related features via cli
 
   # @author cryan@redhat.com
   # @case_id OCP-12561
+  @admin
   Scenario: Could remove user and group from the current project
     Given I have a project
     When I run the :oadm_add_role_to_user client command with:
