@@ -3,10 +3,10 @@
 Feature: eventrouter related test
 
   # @author qitang@redhat.com
-  # @case_id OCP-21389
+  # @case_id OCP-25899
   @admin
   @destructive
-  Scenario: Deploy Openshift Event following Docs
+  Scenario: The Openshift Events be parsed
     Given I switch to the first user
     Given I create a project with non-leading digit name
     Then I run the :new_app client command with:
@@ -25,21 +25,6 @@ Feature: eventrouter related test
       | "verb":  |
       | "event": |
       | "reason" |
-    Given I wait for the ".operations" index to appear in the ES pod with labels "es-node-master=true"
-    And I wait for the steps to pass:
-    """
-    And I perform the HTTP request on the ES pod with labels "es-node-master=true":
-      | relative_url | .operations*/_search?pretty' -d '{"sort": [{"@timestamp": {"order":"desc"}}],"query":{"term":{"kubernetes.container_name":"eventrouter"}}} |
-      | op           | GET                                                                                                                                        |
-    Then the expression should be true> @result[:parsed]['hits']['total'] > 0
-    """
-
-  # @author qitang@redhat.com
-  # @case_id OCP-25899
-  @admin
-  @destructive
-  Scenario: The Openshift Events be parsed
-    Given logging eventrouter is installed in the cluster
     Given I wait for the ".operations" index to appear in the ES pod with labels "es-node-master=true"
     And I wait for the steps to pass:
     """
