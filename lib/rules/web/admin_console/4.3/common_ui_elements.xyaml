@@ -13,6 +13,7 @@ create_resource_by_default_yaml:
       selector:
         xpath: //a[text()='Edit YAML']
     ref: click_edit_yaml_link
+  action: wait_until_no_loading
   action: click_create_button
 click_edit_yaml_link:
   elements:
@@ -96,6 +97,10 @@ set_label_input:
   - selector:
       <<: *label_input
     op: send_keys <input_value>
+check_content_in_yaml_editor:
+  element:
+    selector:
+      xpath: //*[contains(@class,'react-monaco-editor-container')]//*[contains(text(),'<yaml_content>')]
 check_row_filter_on_page:
   elements:
   - selector:
@@ -201,6 +206,10 @@ check_page_not_match:
   element:
     selector: *page_content
     missing: true
+check_sidebar_item:
+  element:
+    selector:
+      xpath: //li[@class='co-resource-sidebar-item']//*[contains(text(),'<sidebar_item>')]
 submit_changes:
   element:
     selector:
@@ -240,6 +249,11 @@ click_link_with_text:
   element:
     selector:
       xpath: //a[contains(.,'<text>') and contains(@href,'<link_url>')]
+    op: click
+click_on_resource_item:
+  element:
+    selector:
+      xpath: //a[@class='co-resource-item__resource-name' and @data-test-id='<resource_name>']
     op: click
 click_secondary_menu:
   elements:
@@ -282,7 +296,7 @@ wait_until_no_loading:
     selector:
       css: .cos-status-box--loading
     missing: true
-    timeout: 20
+    timeout: 30
 ## -------- check resource key and values pairs ------
 check_resource_details:
   action:

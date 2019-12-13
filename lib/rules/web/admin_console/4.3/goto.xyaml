@@ -151,6 +151,8 @@ goto_crds_page:
   url: k8s/cluster/customresourcedefinitions
 goto_crd_instances_page:
   url: k8s/cluster/customresourcedefinitions/<crd_definition>/instances
+goto_consoleyamlsample_crd_instances_page:
+  url: /k8s/cluster/customresourcedefinitions/consoleyamlsamples.console.openshift.io/instances
 
 # catalog source
 goto_catalog_source_page:
@@ -159,3 +161,4 @@ goto_catalog_source_page:
 # quota
 goto_quotas_page:
   url: k8s/ns/<project_name>/resourcequotas
+
