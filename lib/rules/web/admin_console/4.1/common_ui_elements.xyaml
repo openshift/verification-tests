@@ -321,7 +321,7 @@ check_key_and_resource_link:
 check_key_and_action_link:
   element:
     selector:
-      xpath: //dt[contains(text(),'<key>')]/following-sibling::dd[1]//button[text()='<text_in_action>']
+      xpath: //dt[contains(text(),'<key>')]/following-sibling::dd[1]//button
 click_key_and_action_link:
   element:
     selector:
