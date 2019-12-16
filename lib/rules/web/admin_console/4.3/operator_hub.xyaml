@@ -13,7 +13,7 @@ create_catalog_source:
   params:
     button_text: Create Catalog Source
     button_id: catalog-source-namespace
-    radio_text: Namespace catalog source
+    radio_text: 1
   action: goto_catalog_source_page
   action: click_button
   action: input_catalog_source_name

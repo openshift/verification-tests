@@ -129,6 +129,8 @@ goto_operator_hub_page:
   url: operatorhub/ns/default
 goto_operator_subscription_page:
   url: operatorhub/subscribe?pkg=<package_name>&catalog=<catalog_name>&catalogNamespace=openshift-marketplace&targetNamespace=<target_namespace>
+goto_one_project_subscription_page:
+  url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~Subscription/<subscription_name>
 
 # machine config
 goto_machineconfigs_page:
