@@ -70,7 +70,7 @@ click_tab:
 click_radio_input:
   element:
     selector:
-      xpath: //input[@type='radio' and @value='<radio_text>'] | //input[@type='radio' and text()='<radio_text>']
+      xpath: //input[@type='radio' and @value='<radio_text>']
     op: click
 clear_input_value:
   elements:
