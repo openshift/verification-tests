@@ -7,7 +7,7 @@ create_resource_by_default_yaml:
   elements:
   - selector:
       xpath: //button[@id="yaml-create"]
-    op: lick
+    op: click
   action:
     if_element:
       selector:
