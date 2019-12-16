@@ -105,7 +105,7 @@ Feature: Service related networking scenarios
     And the output should not contain:
       | <%= cb.service_ip %> |
 
-  # @auther anusaxen@redhat.com
+  # @author anusaxen@redhat.com
   # @case_id OCP-23895
   @admin
   Scenario: User cannot access the MCS by creating a LoadBalancer service that points to the MCS

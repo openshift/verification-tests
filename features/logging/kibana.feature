@@ -2,7 +2,7 @@
 @commonlogging
 Feature: Kibana related features
 
-  # @auther qitang@redhat.com
+  # @author qitang@redhat.com
   # @case_id OCP-25599
   @admin
   @destructive

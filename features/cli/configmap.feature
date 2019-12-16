@@ -340,8 +340,8 @@ Feature: configMap
       | how.nice.to.look=fairlyNice          |
       | name: game-config                    |
 
- # @author xiuli@redhat.com
- # @case_id OCP-16721
+  # @author xiuli@redhat.com
+  # @case_id OCP-16721
   Scenario: Changes to ConfigMap should be auto-updated into container	
     Given I have a project
     When I run the :create client command with:

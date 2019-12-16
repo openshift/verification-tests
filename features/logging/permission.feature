@@ -1,7 +1,7 @@
 @clusterlogging
 Feature: permission related test
 
-  # @auther qitang@redhat.com
+  # @author qitang@redhat.com
   # @case_id OCP-25364
   @admin
   @destructive

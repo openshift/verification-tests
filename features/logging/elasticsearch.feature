@@ -17,7 +17,7 @@ Feature: Elasticsearch related tests
       | es_cluster_nodes_number                   |
       | es_cluster_shards_active_percent          |
 
-  # @auther qitang@redhat.com
+  # @author qitang@redhat.com
   # @case_id OCP-22050
   @admin
   @destructive
