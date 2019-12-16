@@ -42,6 +42,7 @@ click_button:
   element:
     selector:
       xpath: //button[contains(.,'<button_text>')]
+    timeout: 10
     op: click
 click_button_text:
   element:
@@ -99,10 +100,27 @@ check_table_text_data:
   element:
     selector:
       xpath: //td[text()='<text_data>']
-check_breadcrumb_on_resource_page:
+
+# click and check the first item from resource list such as projects, pods, etc.
+click_first_item_from_resource_list_and_check_breadcrumb:
+  action: click_first_item_in_resource_list
+  action: check_link_in_breadcrumb
+# click and check the first sub item from a resource such as one of imagestreamtag on imagestream detail page
+click_first_item_from_sub_resource_list_and_check_breadcrumb:
+  action: click_first_sub_item_in_resource_detail_list
+  action: check_link_in_breadcrumb
+# click and check the first item from resources listed in grid cell, such as installed operator
+click_first_item_from_gridcell_list_and_check_breadcrumb:
+  action: click_first_item_in_grid_cell_list
+  action: check_link_in_breadcrumb
+check_link_in_breadcrumb:
   element:
     selector:
-      xpath: //.[a[contains(text(), "<resource>")] and span[@class="pf-c-breadcrumb__item-divider" ]]
+      xpath: //ol[contains(@class, 'breadcrumb')]/li[<layer_number>]/a[contains(@data-test-id,'breadcrumb-link') and contains(@href,'<link>') and translate(normalize-space(text()), ' ','')='<text>']
+check_text_in_breadcrumb:
+  element:
+    selector:
+      xpath: //ol[contains(@class, 'breadcrumb')]/li[<layer_number>][translate(normalize-space(text()), ' ','')='<text>']
 check_row_filter_on_page:
   elements:
   - selector:
@@ -270,7 +288,18 @@ click_dropdown_field:
 click_first_item_in_resource_list:
   elements:
   - selector:
-      xpath: //span[@class='co-resource-item']/a
+      xpath: //td[1]//span[@class='co-resource-item']/a
+    timeout: 30
+    op: click
+click_first_sub_item_in_resource_detail_list:
+  elements:
+  - selector:
+      xpath: (//div[@class='co-m-table-grid__body']//a)[1]
+    op: click
+click_first_item_in_grid_cell_list:
+  elements:
+  - selector:
+      xpath: //td[@role='gridcell'][1]
     op: click
 click_one_item:
   elements:

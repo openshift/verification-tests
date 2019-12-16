@@ -136,8 +136,10 @@ browse_to_install_plan:
   elements:
   - selector:
       xpath: //.[contains(@href, 'subscription')]
+    timeout: 60
     op: click
   - selector:
       xpath: //a[contains(@href, 'InstallPlan')]
+    timeout: 60
     op: click
 

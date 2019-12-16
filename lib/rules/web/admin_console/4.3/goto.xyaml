@@ -99,8 +99,8 @@ goto_cluster_oauth_configuration_page:
 
 
 #replica sets
-goto_all_replica_sets_page:
-  url: k8s/all-namespaces/replicasets
+goto_replica_sets_page:
+  url: k8s/ns/<project_name>/replicasets
 
 #routes
 goto_routes_page:
@@ -137,12 +137,6 @@ goto_monitoring_alerts_page:
   url: monitoring/alerts
 goto_monitoring_silences_page:
   url: monitoring/silences
-
-#compute
-goto_all_machines_page: 
-  url: k8s/all-namespaces/machine.openshift.io~v1beta1~Machine
-goto_all_machine_sets_page: 
-  url: k8s/all-namespaces/machine.openshift.io~v1beta1~MachineSet
 
 #node
 goto_node_page:
@@ -207,3 +201,10 @@ goto_users_list_page:
   url: k8s/cluster/user.openshift.io~v1~User
 goto_rolebinding_page_of_user:
   url: k8s/cluster/user.openshift.io~v1~User/<username>/roles
+
+goto_all_machines_page: 
+  url: k8s/all-namespaces/machine.openshift.io~v1beta1~Machine
+goto_all_machine_sets_page: 
+  url: k8s/all-namespaces/machine.openshift.io~v1beta1~MachineSet
+
+
