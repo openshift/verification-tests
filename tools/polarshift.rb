@@ -200,8 +200,7 @@ module BushSlicer
           end
 
           test_run_id = args.first
-          result = polarshift.get_run_smart(project, test_run_id)
-          clone_run(query_result: result, src_id: test_run_id)
+          clone_run(test_run_id: test_run_id)
         end
       end
 
@@ -403,12 +402,44 @@ module BushSlicer
       query_result['records']['TestRecord'].map { |tr| tr['test_case']['id'] }
     end
 
-    # given a query_result Custom object (Array)
+    # the Custom fields object from the original run is the form of {key: value
+    # } Hash which is not suitable format for the query statement
+    # INPUT:
+    # [{"key"=>"assignee", "value"=>{"id"=>"pruan"}},
+    # {"key"=>"products", "value"=>{"id"=>"ocp"}},
+    # {"key"=>"version", "value"=>{"id"=>"4_3"}},
+    # {"key"=>"plannedin", "value"=>{"id"=>"OCP_4_3_Feature_Feeze"}},
+    # {"key"=>"caseimportance", "value"=>{"EnumOptionId"=>[{"id"=>"critical"}, {"id"=>"high"}, {"id"=>"medium"}, {"id"=>"low"}]}},
+    # {"key"=>"tags", "value"=>"ocp43ff13"},
+    # {"key"=>"env_container_runtime", "value"=>{"id"=>"crio_1x"}},
+    # {"key"=>"env_install_method", "value"=>{"id"=>"ipi"}},
+    # {"key"=>"env_iaas_cloud_provider", "value"=>{"id"=>"azure"}},
+    # {"key"=>"env_registry_storage_type", "value"=>{"id"=>"s3"}},
+    # {"key"=>"subteam", "value"=>{"EnumOptionId"=>{"id"=>"metering"}}},
+    # {"key"=>"caseautomation", "value"=>{"EnumOptionId"=>[{"id"=>"manualonly"}, {"id"=>"notautomated"}]}},
+    # {"key"=>"env_network_backend", "value"=>{"id"=>"openshift-sdn"}},
+    # {"key"=>"env_cluster", "value"=>{"EnumOptionId"=>{"id"=>"ocp_cluster"}}}]
+    #
+    # OUTPUT:
+    # {"assignee"=>"pruan",
+    #  "products"=>"ocp",
+    #  "version"=>"4_3",
+    #  "plannedin"=>"OCP_4_3_Feature_Feeze",
+    #  "caseimportance"=>["critical", "high", "medium", "low"],
+    #  "tags"=>"ocp43ff13",
+    #  "env_container_runtime"=>"crio_1x",
+    #  "env_install_method"=>"ipi",
+    #  "env_iaas_cloud_provider"=>"azure",
+    #  "env_registry_storage_type"=>"s3",
+    #  "subteam"=>"metering",
+    #  "caseautomation"=>["manualonly", "notautomated"],
+    #  "env_network_backend"=>"openshift-sdn",
+    #  "env_cluster"=>"ocp_cluster"}
+    # given a query_result Custom object (Array).
     # @return Hash to be constructed
     def transform_custom_fields(src)
       custom_fields = {}
       src.each do |row_data|
-        # binding.pry
         if row_data['value'].is_a? Hash
           if row_data['value'].has_key? 'EnumOptionId'
             if row_data['value']['EnumOptionId'].is_a? Hash
@@ -436,18 +467,19 @@ module BushSlicer
     # 1.   "run_title":  "Clone of xyz run"
     # 2.   "case_query": "<SQL_STATEMENT>"
     # 3.   "custom_fields": <CONSTRUCTED_FROM_call_to_get_smart_run_method>
-    def clone_run(query_result: nil, src_id: nil)
+    def clone_run(test_run_id: nil)
       template_hash = {}
+      query_result = polarshift.get_run_smart(project, test_run_id)
 
       tc_ids = extract_test_case_ids(query_result)
       custom_fields = transform_custom_fields(query_result['customFields']['Custom'])
       tc_str = tc_ids.join(" ")
-      template_hash[:run_title] = "Clone of #{src_id} -- #{query_result['title']}"
+      template_hash[:run_title] = "Clone of #{test_run_id} -- #{query_result['title']}"
       template_hash[:case_query] = "id:(#{tc_str})"
       template_hash[:custom_fields] = custom_fields
       pr = polarshift.create_run_smart(project_id: project, **template_hash)
       quoted_run_id = "'" + pr[:run_id] + "'"
-      puts "Source run id '#{src_id}' cloned to new run id: #{HighLine.color(quoted_run_id, :bright_blue)}"
+      puts "Source run id '#{test_run_id}' cloned to new run id: #{HighLine.color(quoted_run_id, :bright_blue)}"
     end
 
   end
