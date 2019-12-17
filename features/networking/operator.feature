@@ -186,3 +186,57 @@ Feature: Operator related networking scenarios
     And the output should not contain "NotReady"
     Given the status of condition "Progressing" for network operator is :False
     """
+  # @author anusaxen@redhat.com
+  # @case_id OCP-24918
+  @admin
+  Scenario: Service should not get unidle when config flag is disabled under CNO
+  Given I have a project
+  When I run the :create client command with:
+    | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json |
+  Then the step should succeed
+  And a pod becomes ready with labels:
+      | name=test-pods |
+  Given I use the "test-service" service
+  And evaluation of `service.ip(user: user)` is stored in the :service_ip clipboard
+  And I wait for the "test-service" service to become ready
+  # Checking idling unidling manually to make sure it works fine before inducing flag feature
+  When I run the :idle client command with:
+    | svc_name | test-service |
+  Then the step should succeed 
+  And the output should contain:
+    | The service "<%= project.name %>/test-service" has been marked as idled |
+  Given I have a pod-for-ping in the project
+  When I execute on the pod:
+    | /usr/bin/curl | --connect-timeout | 5 | <%= cb.service_ip %>:27017 |
+  Then the step should succeed
+  And the output should contain:
+    | Hello OpenShift |
+  #Inducing flag disablement here
+  Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
+    | {"spec":{"defaultNetwork":{"openshiftSDNConfig":{"enableUnidling" : false}}}} |
+  # Cleanup required to move operator config back to normal
+  Given I register clean-up steps:
+  """
+  as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
+    | {"spec":{"defaultNetwork":{"openshiftSDNConfig": null}}} |
+  60 seconds have passed
+  """
+  #We are idling service again and making sure it doesn't get unidle due to the above enableUnidling flag set to false
+  Given 60 seconds have passed
+  When I run the :idle client command with:
+    | svc_name | test-service |
+  Then the step should succeed 
+  And the output should contain:
+    | The service "<%= project.name %>/test-service" has been marked as idled |
+  When I execute on the "hello-pod" pod:
+    | /usr/bin/curl | --connect-timeout | 10 | <%= cb.service_ip %>:27017 |
+  Then the step should fail
+  #Moving CNO config back to normal and expect service to unidle then
+  Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
+    | {"spec":{"defaultNetwork":{"openshiftSDNConfig": null}}} |
+  Given 60 seconds have passed
+  When I execute on the "hello-pod" pod:
+    | /usr/bin/curl | --connect-timeout | 10 | <%= cb.service_ip %>:27017 |
+  Then the step should succeed
+  And the output should contain:
+    | Hello OpenShift |
