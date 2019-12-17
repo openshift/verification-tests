@@ -621,6 +621,11 @@ Feature: Multus-CNI related scenarios
       | n | <%= project.name %>                                                                                                                               |
     Then the step should succeed
     
+    #Clean-up required to erase bridge interfaces created due to above net-attach-def
+    Given I register clean-up steps:
+    """
+    the bridge interface named "mybridge" is deleted from the "<%= cb.nodes[0].name %>" node
+    """  
     #Labeling a worker node to make sure couple of future pods to be scheduled on this node only
     Given  label "test=worker1" is added to the "<%= cb.nodes[0].name %>" node
     
@@ -640,6 +645,11 @@ Feature: Multus-CNI related scenarios
     Then the step should succeed
     And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod1_net1_ip clipboard
     
+    #Clean-up required to erase bridge interfaces created due to above pod on same node
+    Given I register clean-up steps:
+    """
+    the bridge interface named "mybridge.100" is deleted from the "<%= cb.nodes[0].name %>" node
+    """  
     #Creating 2nd pod on same node as first in vlan 100
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod_nodeselector.yaml" replacing paths:
       | ["metadata"]["name"] | pod2-vlan100 |
@@ -653,12 +663,6 @@ Feature: Multus-CNI related scenarios
     Then the step should succeed
     And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod2_net1_ip clipboard
     
-    #Clean-up required to erase bridge interfaces created due to above pods on same node
-    Given I register clean-up steps:
-    """
-    the bridge interface named "mybridge" is deleted from the "<%= cb.nodes[0].name %>" node
-    the bridge interface named "mybridge.100" is deleted from the "<%= cb.nodes[0].name %>" node
-    """  
     #Creating 3rd pod on different node in vlan 100
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod_nodeselector.yaml" replacing paths:
       | ["metadata"]["name"] | pod3-vlan100 |
@@ -719,6 +723,11 @@ Feature: Multus-CNI related scenarios
       | n | <%= project.name %>                                                                                                                               |
     Then the step should succeed 
     
+    #Clean-up required to erase bridge interfcaes created on sam node above due to vlan pods
+    Given I register clean-up steps:
+    """
+    the bridge interface named "mybridge" is deleted from the "<%= cb.nodes[0].name %>" node
+    """  
     # Create the net-attach-def with vlan 200 via cluster admin
     When I run the :create admin command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/bridge-host-local-vlan-200.yaml |
@@ -741,6 +750,11 @@ Feature: Multus-CNI related scenarios
     Then the step should succeed
     And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod1_net1_ip clipboard
     
+    #Clean-up required to erase bridge interfcaes created on sam node above due to vlan pods
+    Given I register clean-up steps:
+    """
+    the bridge interface named "mybridge.100" is deleted from the "<%= cb.nodes[0].name %>" node
+    """  
     #Creating 2nd pod on same node as first in vlan 100
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod_nodeselector.yaml" replacing paths:
       | ["metadata"]["name"] | pod2-vlan100 |
@@ -770,8 +784,6 @@ Feature: Multus-CNI related scenarios
     #Clean-up required to erase bridge interfcaes created on sam node above due to vlan pods
     Given I register clean-up steps:
     """
-    the bridge interface named "mybridge" is deleted from the "<%= cb.nodes[0].name %>" node
-    the bridge interface named "mybridge.100" is deleted from the "<%= cb.nodes[0].name %>" node
     the bridge interface named "mybridge.200" is deleted from the "<%= cb.nodes[0].name %>" node
     """  
     
