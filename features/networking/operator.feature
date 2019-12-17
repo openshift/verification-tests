@@ -195,10 +195,9 @@ Feature: Operator related networking scenarios
     | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json |
   Then the step should succeed
   And a pod becomes ready with labels:
-      | name=test-pods |
+    | name=test-pods |
   Given I use the "test-service" service
   And evaluation of `service.ip(user: user)` is stored in the :service_ip clipboard
-  And I wait for the "test-service" service to become ready
   # Checking idling unidling manually to make sure it works fine before inducing flag feature
   When I run the :idle client command with:
     | svc_name | test-service |
