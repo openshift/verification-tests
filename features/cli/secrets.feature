@@ -760,7 +760,7 @@ Feature: secrets related scenarios
     Then the step should succeed
     And the "sample-2" build completed
 
-  # @author shiywang@redhat.com xiuwang@redhat.com
+  # @author xiuwang@redhat.com
   # @case_id OCP-12838
   Scenario: Use build source secret based on annotation on Secret --http
     Given I have a project
