@@ -151,7 +151,7 @@ Feature: jenkins.feature
       | 1   | # @case_id OCP-11179
       | 2   | # @case_id OCP-11369
 
-  # @author cryan@redhat.com xiuwang@redhat.com
+  # @author xiuwang@redhat.com
   Scenario Outline: Make jenkins slave configurable when do jenkinspipeline strategy with maven slave
     Given I have a project
     And I have a jenkins v<version> application
