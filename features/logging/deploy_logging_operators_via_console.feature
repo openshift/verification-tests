@@ -1,6 +1,6 @@
 Feature: Deploy logging operators via console
 
-  # @auther qitang@redhat.com
+  # @author qitang@redhat.com
   # @case_id OCP-22558
   @admin
   @destructive
@@ -33,7 +33,7 @@ Feature: Deploy logging operators via console
       | approval_strategy | Automatic                 |
     Given cluster logging operator is ready
 
-  # @auther qitang@redhat.com
+  # @author qitang@redhat.com
   # @case_id OCP-24292
   @admin
   @destructive

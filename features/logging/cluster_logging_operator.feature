@@ -44,14 +44,14 @@ Feature: cluster-logging-operator related test
     Then the step should succeed
     And the expression should be true> @result[:response].include? (cb.collection_type == "fluentd" ? "fluentd_output_status_buffer_total_bytes": "rsyslog_action_processed")
 
-  # @auther qitang@redhat.com
+  # @author qitang@redhat.com
   # @case_id OCP-21907
   @admin
   @destructive
   Scenario: Deploy elasticsearch-operator via OLM using CLI
     Given logging operators are installed successfully
 
-  # @auther qitang@redhat.com
+  # @author qitang@redhat.com
   # @case_id OCP-22492
   @admin
   @destructive

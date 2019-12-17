@@ -1,7 +1,7 @@
 @clusterlogging
 Feature: collector related tests
 
-  # @auther qitang@redhat.com
+  # @author qitang@redhat.com
   # @case_id OCP-25767
   @admin
   @destructive
@@ -32,7 +32,7 @@ Feature: collector related tests
     And the expression should be true> @result[:response].include? cb.ip
     """
 
-  # @auther qitang@redhat.com
+  # @author qitang@redhat.com
   # @case_id OCP-24837
   @admin
   @destructive
@@ -67,7 +67,7 @@ Feature: collector related tests
     And the expression should be true> @result[:response].include? cb.ip
     """
 
-  # @auther qitang@redhat.com
+  # @author qitang@redhat.com
   # case_id OCP-25365
   @admin @destructive
   @commonlogging
@@ -84,7 +84,7 @@ Feature: collector related tests
     And the expression should be true> @result[:parsed]['hits']['hits'][0]['_source']['pipeline_metadata']['collector']['name'] == cb.collection_type
     And the expression should be true> @result[:parsed]['hits']['hits'][0]['_source']['pipeline_metadata']['collector']['inputname'] == (cb.collection_type == "fluentd" ? "fluent-plugin-systemd" : "imfile")
 
-  # @auther qitang@redhat.com
+  # @author qitang@redhat.com
   # @case_id OCP-18147
   @admin @destructive
   @commonlogging
@@ -118,7 +118,7 @@ Feature: collector related tests
     And the expression should be true> @result[:parsed]['hits']['hits'][0]['_source']['kubernetes']['namespace_name'] == cb.proj.name
     And the expression should be true> @result[:parsed]['hits']['hits'][0]['_source']['kubernetes']['pod_name'] == cb.log_pod.name
 
-  # @auther qitang@redhat.com
+  # @author qitang@redhat.com
   # @case_id OCP-25768
   @admin @destructive
   @commonlogging

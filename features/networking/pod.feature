@@ -193,7 +193,7 @@ Feature: Pod related networking scenarios
     Then the step should succeed
     And the output should not contain "ingress_policing_rate: 1953"
 
-  # @auther anusaxen@redhat.com
+  # @author anusaxen@redhat.com
   # @case_id OCP-23890
   @admin
   Scenario: A pod with or without hostnetwork cannot access the MCS port 22623 or 22624 on the master
@@ -224,7 +224,7 @@ Feature: Pod related networking scenarios
       | curl | -I | https://<%= cb.master_ip %>:22624/config/master | -k |
     Then the output should contain "Connection refused"
 
-  # @auther anusaxen@redhat.com
+  # @author anusaxen@redhat.com
   # @case_id OCP-23891
   @admin
   Scenario: A pod cannot access the MCS port 22623 or 22624 via the SDN/tun0 address of the master
@@ -246,7 +246,7 @@ Feature: Pod related networking scenarios
       | curl | -I | https://<%= cb.master_tun0_ip %>:22624/config/master | -k |
     Then the output should contain "Connection refused"
 
-  # @auther anusaxen@redhat.com
+  # @author anusaxen@redhat.com
   # @case_id OCP-23893
   @admin
   Scenario: A pod in a namespace with an egress IP cannot access the MCS
@@ -275,7 +275,7 @@ Feature: Pod related networking scenarios
       | curl | -I | https://<%= cb.master_ip %>:22624/config/master | -k |
     Then the output should contain "Connection refused"
 
-  # @auther anusaxen@redhat.com
+  # @author anusaxen@redhat.com
   # @case_id OCP-23894
   @admin
   Scenario: User cannot access the MCS by creating a service that maps to non-MCS port to port 22623 or 22624 on the IP of a master (via manually-created ep's)
