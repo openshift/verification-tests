@@ -1,0 +1,11 @@
+create_custom_resource:
+  params:
+    button_text: Create
+  action: click_provided_apis_of_operators
+  action: click_button
+click_provided_apis_of_operators:
+  element:
+    selector:
+      xpath: //a[contains(.,'<api>')]
+    op: click
+    timeout: 60
