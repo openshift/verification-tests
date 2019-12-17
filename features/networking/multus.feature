@@ -610,6 +610,7 @@ Feature: Multus-CNI related scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-24490
   @admin
+  @destructive	
   Scenario: Pods can communicate each other with same vlan tag
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -619,36 +620,13 @@ Feature: Multus-CNI related scenarios
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/bridge-host-local-vlan.yaml |
       | n | <%= project.name %>                                                                                                                               |
     Then the step should succeed
+    
     #Labeling a worker node to make sure couple of future pods to be scheduled on this node only
-    When I run the :label admin command with:
-      | resource | node                    |
-      | name     | <%= cb.nodes[0].name %> |
-      | key_val  | test=worker1            |
-    Then the step should succeed
+    Given  label "test=worker1" is added to the "<%= cb.nodes[0].name %>" node
     
-    Given I register clean-up steps:
-    """
-    When I run the :label admin command with:
-      | resource | node                    |
-      | name     | <%= cb.nodes[0].name %> |
-      | key_val  | test-                   |
-    Then the step should succeed
-    """ 
     #Labeing another worker node to make sure 3rd future pod to be scheduled on this node only
-    When I run the :label admin command with:
-      | resource | node                    |
-      | name     | <%= cb.nodes[1].name %> |
-      | key_val  | test=worker2            |
-    Then the step should succeed
+    Given  label "test=worker2" is added to the "<%= cb.nodes[1].name %>" node
     
-    Given I register clean-up steps:
-    """
-    When I run the :label admin command with:
-      | resource | node                    |
-      | name     | <%= cb.nodes[1].name %> |
-      | key_val  | test-            	   |
-    Then the step should succeed
-    """ 
     #Creating first pod in vlan 100
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod_nodeselector.yaml" replacing paths:
       | ["metadata"]["name"] | pod1-vlan100 |
@@ -729,6 +707,7 @@ Feature: Multus-CNI related scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-24491
   @admin
+  @destructive
   Scenario: Pods cannot communicate each other with different vlan tag
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -747,20 +726,8 @@ Feature: Multus-CNI related scenarios
     Then the step should succeed 
     
     #Labeing a worker node to make sure all future pods to be scheduled on this node only
-    When I run the :label admin command with:
-      | resource | node                    |
-      | name     | <%= cb.nodes[0].name %> |
-      | key_val  | test=worker1            |
-    Then the step should succeed
+    Given  label "test=worker1" is added to the "<%= cb.nodes[0].name %>" node
     
-    Given I register clean-up steps:
-    """
-    When I run the :label admin command with:
-      | resource | node                    |
-      | name     | <%= cb.nodes[0].name %> |
-      | key_val  | test-                   |
-    Then the step should succeed
-    """ 
     #Creating first pod in vlan 100
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod_nodeselector.yaml" replacing paths:
       | ["metadata"]["name"] | pod1-vlan100 |
@@ -807,6 +774,7 @@ Feature: Multus-CNI related scenarios
     the bridge interface named "mybridge.100" is deleted from the "<%= cb.nodes[0].name %>" node
     the bridge interface named "mybridge.200" is deleted from the "<%= cb.nodes[0].name %>" node
     """  
+    
     #making sure the pods in same vlan can communicate but in different vlans cannot
     When I execute on the "<%= cb.pod1 %>" pod:
       | ping | -c1 | -W2 | <%= cb.pod2_net1_ip %> |
