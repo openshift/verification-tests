@@ -371,3 +371,18 @@ Given /^the logging operators are redeployed after scenario$/ do
     step %Q/logging operators are installed successfully/
   }
 end
+
+Given /^logging eventrouter is installed in the cluster$/ do
+  step %Q/admin ensures "event-reader" cluster_role is deleted after scenario/
+  step %Q/admin ensures "event-reader-binding" cluster_role_binding is deleted after scenario/
+  step %Q/admin ensures "eventrouter" service_account is deleted from the "openshift-logging" project after scenario/
+  step %Q/admin ensures "eventrouter" config_map is deleted from the "openshift-logging" project after scenario/
+  step %Q/admin ensures "eventrouter" deployment is deleted from the "openshift-logging" project after scenario/
+  @result = admin.cli_exec(:new_app, file: "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/eventrouter/internal_eventrouter.yaml")
+  unless @result[:success]
+    raise "Unable to deploy eventrouter"
+  end
+  step %Q/a pod becomes ready with labels:/, table(%{
+    | component=eventrouter |
+  })
+end
