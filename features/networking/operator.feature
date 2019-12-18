@@ -210,7 +210,7 @@ Feature: Operator related networking scenarios
   Then the step should succeed
   And the output should contain:
     | Hello OpenShift |
-  #Inducing flag disablement here
+  #Inducing flag disablement here an wait 60 seconds for CNO to update it across the nodes
   Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
     | {"spec":{"defaultNetwork":{"openshiftSDNConfig":{"enableUnidling" : false}}}} |
   # Cleanup required to move operator config back to normal
@@ -220,8 +220,8 @@ Feature: Operator related networking scenarios
     | {"spec":{"defaultNetwork":{"openshiftSDNConfig": null}}} |
   60 seconds have passed
   """
+  And 60 seconds have passed
   #We are idling service again and making sure it doesn't get unidle due to the above enableUnidling flag set to false
-  Given 60 seconds have passed
   When I run the :idle client command with:
     | svc_name | test-service |
   Then the step should succeed 
@@ -233,7 +233,7 @@ Feature: Operator related networking scenarios
   #Moving CNO config back to normal and expect service to unidle then
   Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
     | {"spec":{"defaultNetwork":{"openshiftSDNConfig": null}}} |
-  Given 60 seconds have passed
+  And 60 seconds have passed
   When I execute on the "hello-pod" pod:
     | /usr/bin/curl | --connect-timeout | 10 | <%= cb.service_ip %>:27017 |
   Then the step should succeed
