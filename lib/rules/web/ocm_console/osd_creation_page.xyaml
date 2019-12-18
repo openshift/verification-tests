@@ -57,7 +57,7 @@ switch_to_osd_creation_page:
 select_advanced_radio_button:
     element:
         selector:
-            xpath: //*[@id='network-congiguration-toggle-advanced']
+            xpath: //*[@id='network-configuration-toggle-advanced']
         op: click
 select_basic_radio_button:
     element:
