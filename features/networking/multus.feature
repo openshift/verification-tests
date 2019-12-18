@@ -606,3 +606,232 @@ Feature: Multus-CNI related scenarios
       | namespace isolation |
       | violat              |
     """
+ 
+  # @author anusaxen@redhat.com
+  # @case_id OCP-24490
+  @admin
+  @destructive	
+  Scenario: Pods can communicate each other with same vlan tag
+    # Make sure that the multus is enabled
+    Given the multus is enabled on the cluster
+    And I store all worker nodes to the :nodes clipboard
+    Given I have a project
+    When I run the :create admin command with:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/bridge-host-local-vlan.yaml |
+      | n | <%= project.name %>                                                                                                                               |
+    Then the step should succeed
+    
+    #Clean-up required to erase bridge interfaces created due to above net-attach-def
+    Given I register clean-up steps:
+    """
+    the bridge interface named "mybridge" is deleted from the "<%= cb.nodes[0].name %>" node
+    """  
+    #Labeling a worker node to make sure couple of future pods to be scheduled on this node only
+    Given  label "test=worker1" is added to the "<%= cb.nodes[0].name %>" node
+    
+    #Labeing another worker node to make sure 3rd future pod to be scheduled on this node only
+    Given  label "test=worker2" is added to the "<%= cb.nodes[1].name %>" node
+    
+    #Creating first pod in vlan 100
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod_nodeselector.yaml" replacing paths:
+      | ["metadata"]["name"] | pod1-vlan100 |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan100 |
+      | ["spec"]["nodeSelector"]["test"] | worker1 |
+    Then the step should succeed
+    And the pod named "pod1-vlan100" becomes ready
+    And evaluation of `pod.name` is stored in the :pod1 clipboard
+    And I execute on the pod:
+      | ifconfig | net1 |
+    Then the step should succeed
+    And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod1_net1_ip clipboard
+    
+    #Clean-up required to erase bridge interfaces created due to above pod on same node
+    Given I register clean-up steps:
+    """
+    the bridge interface named "mybridge.100" is deleted from the "<%= cb.nodes[0].name %>" node
+    """  
+    #Creating 2nd pod on same node as first in vlan 100
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod_nodeselector.yaml" replacing paths:
+      | ["metadata"]["name"] | pod2-vlan100 |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan100 |
+      | ["spec"]["nodeSelector"]["test"] | worker1 |
+    Then the step should succeed
+    And the pod named "pod2-vlan100" becomes ready
+    And evaluation of `pod.name` is stored in the :pod2 clipboard
+    And I execute on the pod:
+      | ifconfig | net1 |
+    Then the step should succeed
+    And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod2_net1_ip clipboard
+    
+    #Creating 3rd pod on different node in vlan 100
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod_nodeselector.yaml" replacing paths:
+      | ["metadata"]["name"] | pod3-vlan100 |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan100 |
+      | ["spec"]["nodeSelector"]["test"] | worker2 |
+    Then the step should succeed
+    And the pod named "pod3-vlan100" becomes ready
+    And evaluation of `pod.name` is stored in the :pod3 clipboard
+    And I execute on the pod:
+      | ifconfig | net1 |
+    Then the step should succeed
+    And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod3_net1_ip clipboard
+    
+    #Clean-up required to erase bridge interfcaes created on node
+    Given I register clean-up steps:
+    """
+    the bridge interface named "mybridge" is deleted from the "<%= cb.nodes[1].name %>" node
+    the bridge interface named "mybridge.100" is deleted from the "<%= cb.nodes[1].name %>" node
+    """  
+    #making sure the pods on same node can ping while pods on diff nodes can't
+
+    When I execute on the "<%= cb.pod1 %>" pod:
+      | ping | -c1 | -W2 | <%= cb.pod2_net1_ip %> |
+    Then the step should succeed
+
+    When I execute on the "<%= cb.pod2 %>" pod:
+      | ping | -c1 | -W2 | <%= cb.pod1_net1_ip %> |
+    Then the step should succeed
+    
+    When I execute on the "<%= cb.pod1 %>" pod:
+      | ping | -c1 | -W2 | <%= cb.pod3_net1_ip %> |
+    Then the step should fail
+
+    When I execute on the "<%= cb.pod3 %>" pod:
+      | ping | -c1 | -W2 | <%= cb.pod1_net1_ip %> |
+    Then the step should fail
+    
+    When I execute on the "<%= cb.pod3 %>" pod:
+      | ping | -c1 | -W2 | <%= cb.pod2_net1_ip %> |
+    Then the step should fail
+    
+    When I execute on the "<%= cb.pod2 %>" pod:
+      | ping | -c1 | -W2 | <%= cb.pod3_net1_ip %> |
+    Then the step should fail
+    
+  # @author anusaxen@redhat.com
+  # @case_id OCP-24491
+  @admin
+  @destructive
+  Scenario: Pods cannot communicate each other with different vlan tag
+    # Make sure that the multus is enabled
+    Given the multus is enabled on the cluster
+    And I store all worker nodes to the :nodes clipboard
+    # Create the net-attach-def with vlan 100 via cluster admin
+    Given I have a project
+    When I run the :create admin command with:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/bridge-host-local-vlan.yaml |
+      | n | <%= project.name %>                                                                                                                               |
+    Then the step should succeed 
+    
+    #Clean-up required to erase bridge interfcaes created on sam node above due to vlan pods
+    Given I register clean-up steps:
+    """
+    the bridge interface named "mybridge" is deleted from the "<%= cb.nodes[0].name %>" node
+    """  
+    # Create the net-attach-def with vlan 200 via cluster admin
+    When I run the :create admin command with:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/bridge-host-local-vlan-200.yaml |
+      | n | <%= project.name %>                                                                                                                                   |
+    Then the step should succeed 
+    
+    #Labeing a worker node to make sure all future pods to be scheduled on this node only
+    Given  label "test=worker1" is added to the "<%= cb.nodes[0].name %>" node
+    
+    #Creating first pod in vlan 100
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod_nodeselector.yaml" replacing paths:
+      | ["metadata"]["name"] | pod1-vlan100 |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan100 |
+      | ["spec"]["nodeSelector"]["test"] | worker1 |
+    Then the step should succeed
+    And the pod named "pod1-vlan100" becomes ready
+    And evaluation of `pod.name` is stored in the :pod1 clipboard
+    And I execute on the pod:
+      | ifconfig | net1 |
+    Then the step should succeed
+    And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod1_net1_ip clipboard
+    
+    #Clean-up required to erase bridge interfcaes created on sam node above due to vlan pods
+    Given I register clean-up steps:
+    """
+    the bridge interface named "mybridge.100" is deleted from the "<%= cb.nodes[0].name %>" node
+    """  
+    #Creating 2nd pod on same node as first in vlan 100
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod_nodeselector.yaml" replacing paths:
+      | ["metadata"]["name"] | pod2-vlan100 |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan100 |
+      | ["spec"]["nodeSelector"]["test"] | worker1 |
+    Then the step should succeed
+    And the pod named "pod2-vlan100" becomes ready
+    And evaluation of `pod.name` is stored in the :pod2 clipboard
+    And I execute on the pod:
+      | ifconfig | net1 |
+    Then the step should succeed
+    And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod2_net1_ip clipboard
+    
+    #Creating 3rd pod on same node but in vlan 200
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod_nodeselector.yaml" replacing paths:
+      | ["metadata"]["name"] | pod3-vlan200 |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan200 |
+      | ["spec"]["nodeSelector"]["test"] | worker1 |
+    Then the step should succeed
+    And the pod named "pod3-vlan200" becomes ready
+    And evaluation of `pod.name` is stored in the :pod3 clipboard
+    And I execute on the pod:
+      | ifconfig | net1 |
+    Then the step should succeed
+    And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod3_net1_ip clipboard
+    
+    #Clean-up required to erase bridge interfcaes created on sam node above due to vlan pods
+    Given I register clean-up steps:
+    """
+    the bridge interface named "mybridge.200" is deleted from the "<%= cb.nodes[0].name %>" node
+    """  
+    
+    #making sure the pods in same vlan can communicate but in different vlans cannot
+    When I execute on the "<%= cb.pod1 %>" pod:
+      | ping | -c1 | -W2 | <%= cb.pod2_net1_ip %> |
+    Then the step should succeed
+
+    When I execute on the "<%= cb.pod2 %>" pod:
+      | ping | -c1 | -W2 | <%= cb.pod1_net1_ip %> |
+    Then the step should succeed
+    
+    When I execute on the "<%= cb.pod1 %>" pod:
+      | ping | -c1 | -W2 | <%= cb.pod3_net1_ip %> |
+    Then the step should fail
+
+    When I execute on the "<%= cb.pod3 %>" pod:
+      | ping | -c1 | -W2 | <%= cb.pod1_net1_ip %> |
+    Then the step should fail
+    
+    When I execute on the "<%= cb.pod3 %>" pod:
+      | ping | -c1 | -W2 | <%= cb.pod2_net1_ip %> |
+    Then the step should fail
+    
+    When I execute on the "<%= cb.pod2 %>" pod:
+      | ping | -c1 | -W2 | <%= cb.pod3_net1_ip %> |
+    Then the step should fail
+
+  # @author anusaxen@redhat.com
+  # @case_id OCP-24607
+  @admin
+  Scenario: macvlan plugin without master parameter	
+    # Make sure that the multus is enabled
+    Given the multus is enabled on the cluster
+    # Create the net-attach-def without master pmtr via cluster admin
+    Given I have a project
+    When I run the :create admin command with:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-conf-without-master.yaml |
+      | n | <%= project.name %>                                                                                                                                    |
+    Then the step should succeed
+
+    #Creating a pod absorbing above net-attach-def
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | macvlan-conf |
+    Then the step should succeed
+    And the pod named "test-pod" becomes ready
+    And evaluation of `pod` is stored in the :pod clipboard
+    When I execute on the pod:
+      | /usr/sbin/ip | -d | link |
+    Then the output should contain "net1"
+
