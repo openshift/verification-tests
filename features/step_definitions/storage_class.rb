@@ -19,13 +19,6 @@ When /^admin creates a StorageClass( in the node's zone)? from #{QUOTED} where:$
     raise "why do you give me #{sc_hash["kind"]}"
   end
 
-  # starts from 3.6, change apiVersion from v1beta1 to v1
-  if env.version_cmp("3.6", user: user) >= 0
-    sc_hash["apiVersion"] = "storage.k8s.io/v1"
-  else
-    sc_hash["apiVersion"] = "storage.k8s.io/v1beta1"
-  end
-
   iaas_type = env.iaas[:type] rescue nil
 
   if nodezone && iaas_type == "gce" &&
