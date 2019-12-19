@@ -8,7 +8,11 @@ create_project:
   action:
     if_param: discription_name
     ref: set_project_description
-  action: click_create_button
+  action: submit_changes
+  element:
+    selector:
+      xpath: //span[contains(text(),'<project_name>')]
+    timeout: 30
 set_project_name:
   element:
     selector:
