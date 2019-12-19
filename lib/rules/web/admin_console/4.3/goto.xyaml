@@ -132,3 +132,9 @@ goto_machineconfigs_page:
   url: k8s/cluster/machineconfiguration.openshift.io~v1~MachineConfig
 goto_machineconfig_pools_page:
   url: k8s/cluster/machineconfiguration.openshift.io~v1~MachineConfigPool
+
+#crd
+goto_crds_page:
+  url: k8s/cluster/customresourcedefinitions
+goto_crd_instances_page:
+  url: k8s/cluster/customresourcedefinitions/<crd_definition>/instances
