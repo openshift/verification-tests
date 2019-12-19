@@ -1,6 +1,8 @@
 # projects
 goto_projects_list_page:
   url: k8s/cluster/projects
+goto_one_project_dashboard_page:
+  url: k8s/cluster/projects/<project_name>
 goto_project_status:
   url: status/ns/<project>
 goto_resource_page_under_default_project:
@@ -129,10 +131,12 @@ goto_machineconfigs_page:
 goto_machineconfig_pools_page:
   url: k8s/cluster/machineconfiguration.openshift.io~v1~MachineConfigPool
 
-
 #crd
 goto_crds_page:
   url: k8s/cluster/customresourcedefinitions
 goto_crd_instances_page
   url: k8s/cluster/customresourcedefinitions/<crd_definition>/instances
 
+# quota
+goto_quotas_page:
+  url: k8s/ns/<project_name>/resourcequotas
