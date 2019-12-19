@@ -48,12 +48,13 @@ check_button_enabled:
     selector:
       xpath: //button[contains(., '<button_text>') and not(@disabled)]
 check_text_not_a_link:
-  element: &text
+  element: 
     selector:
       xpath: //*[contains(@class,'co-resource-item__resource-name') and text()='<text>' and not(@href)]
 click_text_not_a_link:
   element:
-    <<: *text
+    selector:
+      xpath: //*[contains(@class,'co-resource-item__resource-name') and text()='<text>' and not(@href)]
     op: click
 click_tab:
   elements:
