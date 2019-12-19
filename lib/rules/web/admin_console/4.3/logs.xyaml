@@ -1,0 +1,13 @@
+# logs page
+switch_to_second_container:
+  action: open_container_dropdown
+  action: choose_new_contaienr
+open_container_dropdown:
+  params:
+    text: <current_container_name>
+  action: click_text_not_a_link
+choose_new_contaienr:
+  params:
+    text: <new_container_name>
+  action: click_text_not_a_link
+
