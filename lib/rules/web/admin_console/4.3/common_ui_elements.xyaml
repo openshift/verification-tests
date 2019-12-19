@@ -44,11 +44,11 @@ click_button_by_id:
     selector:
       xpath: //button[contains(@id,'<button_id>')]
     op: click
-select_namespace:
+select_resource_item:
   action: click_button_by_id
   element:
     selector:
-      xpath: //*[contains(@class,'co-resource-item__resource-name') and text()='<namespace>']
+      xpath: //*[contains(@class,'co-resource-item__resource-name') and text()='<item>']
     op: click
 check_button_disabled:
   element:

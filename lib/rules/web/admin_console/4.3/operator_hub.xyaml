@@ -21,10 +21,10 @@ create_catalog_source:
   action: input_publisher_name
   action: input_image
   action:
-    if_param: namespace
+    if_param: item
     ref:
     - click_radio_input
-    - select_namespace
+    - select_resource_item
   action: submit_changes
 input_catalog_source_name:
   params:
@@ -46,11 +46,4 @@ input_image:
     input_field_id: catalog-source-image
     input_value: <image>
   action: set_input_value
-goto_one_tab_of_operator:
-  action: click_one_operator_csv
-  action: click_link_with_text
-click_one_operator_csv:
-  element:
-    selector:
-      xpath: //h1[contains(.,'<csv_name>')]
-    op: click
+
