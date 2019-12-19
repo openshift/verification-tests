@@ -1,22 +1,29 @@
 Given /^I run the ovs commands on the host:$/ do | table |
   ensure_admin_tagged
   _host = node.host
-  _admin = admin
+  
   ovs_cmd = table.raw.flatten.join
-  @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
-  if @result[:response] == "OpenShiftSDN" 
-     ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
-        pod.node_name == node.name
-     }.first
-     container_id = ovs_pod.containers.first.id
+  if _host.exec_admin("ovs-vsctl --version")[:response].include? "Open vSwitch"
+    logger.info("environment using rpm to launch openvswitch")
+  elsif _host.exec_admin("docker ps")[:response].include? "openvswitch"
+    logger.info("environment using docker to launch openvswith")
+    container_id = _host.exec_admin("docker ps | grep openvswitch | cut -d' ' -f1")[:response].chomp
+    ovs_cmd = "docker exec #{container_id} " + ovs_cmd
+  elsif _host.exec_admin("runc list")[:response].include? "openvswitch"
+    logger.info("environment using runc to launch openvswith")
+    ovs_cmd = "runc exec openvswitch " + ovs_cmd
+  # For 3.10 and runc env, should get containerID from the pod which landed on the node
+  elsif env.version_ge("3.10", user: user)
+    logger.info("OCP version >= 3.10 and environment may using runc to launch openvswith")
+    ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
+      pod.node_name == node.name
+    }.first
+    container_id = ovs_pod.containers.first.id
+    ovs_cmd = "runc exec #{container_id} " + ovs_cmd
   else
-     ovnkube_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
-        pod.node_name == node.name
-     }.first
-     container_id = ovnkube_pod.containers.first.id
+    raise "Cannot find the ovs command"
   end
   @result = _host.exec_admin(ovs_cmd)
-  raise "Cannot find the ovs command"unless @result[:success]
 end
 
 Given /^I run ovs dump flows commands on the host$/ do
