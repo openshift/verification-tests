@@ -6,7 +6,8 @@ Feature: Testing registry
   @destructive
   Scenario: Prune images by command oadm_prune_images
     Given cluster role "system:image-pruner" is added to the "first" user
-    And default registry service ip is stored in the :registry_ip clipboard
+    Given I enable image-registry default route
+    Given default image registry route is stored in the :registry_ip clipboard
     And I have a project
     When I run the :policy_add_role_to_user client command with:
       | role            | registry-admin   |
