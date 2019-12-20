@@ -6,6 +6,7 @@ cluster_list_page_loaded:
         xpath: //button[text()='Create Cluster']
     - selector:
         xpath: //button[text()='Create Cluster']/../../../div[@id='cluster-list-toolbar']//button[@aria-label='Actions']
+        timeout: 20
     - selector:
         xpath: //button[@id='pagination-options-menu-toggle']
     - selector:
@@ -60,8 +61,9 @@ filter_dropdown_menu_loaded:
     - selector:
         xpath: //label[@class='pf-c-check__label' and text()='OCP']
 select_filter:
-    if_param: expand
-    ref: expand_filter_dropdown
+    action:
+        if_param: expand
+        ref: expand_filter_dropdown
     element:
         selector:
             xpath: //label[@class='pf-c-check__label' and text()='<filter_label>']
@@ -69,7 +71,7 @@ select_filter:
 click_create_cluster_button:
     element:
         selector:
-            xpath: //button[text()='Create Cluster']/../../../div[@id='cluster-list-toolbar']//button[@aria-label='Actions']
+            xpath: //button[text()='Create Cluster']
         op: click
 click_actions_behind_create_button:
     element:

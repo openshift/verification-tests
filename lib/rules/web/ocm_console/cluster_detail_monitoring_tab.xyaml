@@ -9,8 +9,6 @@ check_installing_cluster_monitoring_tab:
         - selector:
             xpath: //div[@class='pf-l-split__item pf-m-fill']//h2[text()='Installation in progress']
         - selector:
-            xpath: //div[@class='pf-c-empty-state styles.modifiers.lg']/*[name()='svg']
-        - selector:
             xpath: //h5[text()='Monitoring Data is not available']
         - selector:
             xpath: //p[text()='Monitoring Data is not available at this time. Try again later.']

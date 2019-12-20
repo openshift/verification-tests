@@ -54,10 +54,16 @@ click_archive_button:
             xpath: //button[@class='pf-c-button pf-m-primary' and text()='Archive cluster']
         op: click
 archive_succ_promt_message_displayed:
-    element:
+    element: &archive_succ_promt_message
         selector:
-            xpath: //*[contains(text(),'has been archived')]
-        timeout: 10
+            xpath: //h4[contains(text(),'has been archived')]
+        timeout: 120
+    action: archive_succ_promt_message_missing
+archive_succ_promt_message_missing:
+    element:
+        <<: *archive_succ_promt_message
+        missing: true
+        
 unarchive_dialog_loaded:
     elements:
         - selector:
@@ -76,10 +82,16 @@ click_unarchive_button:
             xpath: //button[@class='pf-c-button pf-m-primary' and text()='Unarchive cluster']
         op: click
 unarchive_succ_prompt_message_displayed:
-    element:
+    element: &unarchive_succ_prompt_message
         selector:
             xpath: //*[contains(text(),'has been unarchived')]
-        timeout: 20
+        timeout: 60
+    action: unarchive_succ_prompt_message_missing
+unarchive_succ_prompt_message_missing:
+    element:
+        <<: *unarchive_succ_prompt_message
+        missing: true
+        
 check_display_name_dialog_loaded:
   elements:
     - selector:
