@@ -826,19 +826,18 @@ Feature: Multus-CNI related scenarios
 
     # Create the net-attach-def via cluster admin
     Given I have a project
-    And evaluation of `project.name` is stored in the :project_name clipboard
     When I run the :create admin command with:
       | f | https://raw.githubusercontent.com/weliang1/Openshift_Networking/master/Features/multus/runtimeconfig-def-ipandmac.yaml |
-      | n | <%= cb.project_name %>                                                                                                 |
+      | n | <%= project.name %>                                                                                                 |
     Then the step should succeed
 
     #Clean-up required to erase above net-attach-def after testing done
-    And admin ensures "runtimeconfig-def" network_attachment_definition is deleted from the "<%= cb.project_name %>" project after scenario
+    And admin ensures "runtimeconfig-def" network_attachment_definition is deleted from the "<%= project.name %>" project after scenario
 
     # Create a pod absorbing above net-attach-def
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/weliang1/Openshift_Networking/master/Features/multus/runtimeconfig-pod-ipandmac.yaml |
-      | n | <%= cb.project_name %>                                                                                                 |
+      | n | <%= project.name %>                                                                                                 |
     Then the step should succeed
     And the pod named "runtimeconfig-pod" becomes ready
 
