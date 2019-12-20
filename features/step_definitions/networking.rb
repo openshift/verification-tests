@@ -1,7 +1,6 @@
 Given /^I run the ovs commands on the host:$/ do | table |
   ensure_admin_tagged
   _host = node.host
-  
   ovs_cmd = table.raw.flatten.join
   if _host.exec_admin("ovs-vsctl --version")[:response].include? "Open vSwitch"
     logger.info("environment using rpm to launch openvswitch")
