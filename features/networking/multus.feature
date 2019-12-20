@@ -875,8 +875,7 @@ Feature: Multus-CNI related scenarios
     Given the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard
     And I store all worker nodes to the :nodes clipboard
-    #Patching simplemacvlan config in network operator config CRD
-    Given I have a project
+    #Patching config in network operator config CRD
     Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
       | {"spec":{"additionalNetworks": [{"name":"bridge-ipam-dhcp","namespace":"openshift-multus","rawCNIConfig":"{\"name\":\"bridge-ipam-dhcp\",\"cniVersion\":\"0.3.1\",\"type\":\"bridge\",\"master\":\"<%= cb.default_interface %>\",\"ipam\":{\"type\": \"dhcp\"}}","type":"Raw"}]}} |
     #Cleanup for bringing CRD to original
