@@ -56,7 +56,8 @@ navigate_to_dev_console:
   - selector:
       xpath: //li//h1[contains(., 'Developer')]
     op: click
-
+check_external_log_link:
+  action: check_link_and_text
 # --- links on masthead ---
 browse_to_cli_tools_page:
   action: click_help_button
