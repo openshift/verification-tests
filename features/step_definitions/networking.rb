@@ -1,7 +1,6 @@
 Given /^I run the ovs commands on the host:$/ do | table |
   ensure_admin_tagged
   _host = node.host
-
   ovs_cmd = table.raw.flatten.join
   if _host.exec_admin("ovs-vsctl --version")[:response].include? "Open vSwitch"
     logger.info("environment using rpm to launch openvswitch")
@@ -668,15 +667,24 @@ Given /^I run command on the#{OPT_QUOTED} node's sdn pod:$/ do |node_name, table
   ensure_admin_tagged
   network_cmd = table.raw
   node_name ||= node.name
-
-  sdn_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
-    pod.node_name == node_name
-  }.first
-  cache_resources sdn_pod
-  @result = sdn_pod.exec(network_cmd, as: admin)
+  _admin = admin
+   @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}") 
+  if @result[:response] == "OpenShiftSDN"
+     sdn_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
+       pod.node_name == node_name
+     }.first
+     cache_resources sdn_pod
+     @result = sdn_pod.exec(network_cmd, as: admin)
+  else
+     ovnkube_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
+       pod.node_name == node_name
+     }.first
+     cache_resources ovnkube_pod
+     @result = ovnkube_pod.exec(network_cmd, as: admin)   
+   end
   raise "Failed to execute network command!" unless @result[:success]
 end
-
+ 
 Given /^I restart the ovs pod on the#{OPT_QUOTED} node$/ do | node_name |
   ensure_admin_tagged
   ensure_destructive_tagged
@@ -775,3 +783,9 @@ Given /^the subnet for primary interface on node is stored in the#{OPT_SYM} clip
   cb[cb_name] = @result[:response].chomp
   logger.info "Subnet range for the primary interface on the node is stored in the #{cb_name} clipboard."
 end
+
+Given /^the env is using "([^"]*)" networkType$/ do |network_type|
+  ensure_admin_tagged
+  _admin = admin
+  @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
+  raise "the networkType is not #{network_type}" unless @result[:response] == network_type
