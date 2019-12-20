@@ -1,6 +1,6 @@
 Feature: Features about k8s deployments
 
-# @author etrott@redhat.com
+  # @author etrott@redhat.com
   # @case_id OCP-12329
   Scenario: Check k8s deployments on Deployments page
     Given the master version >= "3.4"

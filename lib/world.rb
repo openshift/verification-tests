@@ -133,6 +133,7 @@ module BushSlicer
     alias hpa horizontal_pod_autoscaler
     alias istag image_stream_tag
     alias netns net_namespace
+    alias opsrc operator_source
     alias psp pod_security_policy
     alias pv persistent_volume
     alias pvc persistent_volume_claim
@@ -365,6 +366,7 @@ module BushSlicer
           is: "imagestreams",
           istag: "imagestreamtags",
           netns: "netnamespaces",
+          opsrc: "operatorsources",
           psp: "podsecuritypolicy",
           pv: "persistentvolumes",
           pvc: "persistentvolumeclaims",

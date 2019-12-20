@@ -7,8 +7,6 @@ Feature: Elasticsearch related tests
   @destructive
   @commonlogging
   Scenario: Elasticsearch Prometheus metrics can be accessed.
-    Given I switch to cluster admin pseudo user
-    Given I use the "openshift-logging" project
     And I perform the HTTP request on the ES pod with labels "es-node-master=true":
       | relative_url | _prometheus/metrics |
       | op           | GET                 |
@@ -17,12 +15,11 @@ Feature: Elasticsearch related tests
       | es_cluster_nodes_number                   |
       | es_cluster_shards_active_percent          |
 
-  # @auther qitang@redhat.com
+  # @author qitang@redhat.com
   # @case_id OCP-22050
   @admin
   @destructive
   Scenario: Elasticsearch using dynamic volumes
-    Given I switch to cluster admin pseudo user
     And default storageclass is stored in the :default_sc clipboard
     Given I delete the clusterlogging instance
     Then the step should succeed

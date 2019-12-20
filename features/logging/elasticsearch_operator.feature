@@ -7,7 +7,6 @@ Feature: elasticsearch-operator related tests
   @destructive
   @commonlogging
   Scenario: ServiceMonitor Object for Elasticsearch is deployed along with the Elasticsearch cluster
-    Given I switch to cluster admin pseudo user
     Given I use the "openshift-monitoring" project
     And I run the :serviceaccounts_get_token client command with:
       |serviceaccount_name | prometheus-k8s |
@@ -19,7 +18,7 @@ Feature: elasticsearch-operator related tests
     And the expression should be true> service_monitor("monitor-elasticsearch-cluster").path == "/_prometheus/metrics"
     Given evaluation of `service("elasticsearch-metrics").ip` is stored in the :service_ip clipboard
 
-    Given I run curl command on the CLO pod to get metrics with:
+    Given I run curl command on the ES pod to get metrics with:
       | object     | elasticsearch        |
       | service_ip | <%= cb.service_ip %> |
       | token      | <%= cb.token %>      |

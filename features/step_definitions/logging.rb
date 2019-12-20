@@ -4,6 +4,7 @@
 ### none configurable, just use default parameters
 Given /^logging service has been installed successfully$/ do
   ensure_destructive_tagged
+  ensure_admin_tagged
   crd_yaml = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/example.yaml"
   step %Q/logging operators are installed successfully/
   step %Q/I create clusterlogging instance with:/, table(%{
@@ -25,6 +26,7 @@ end
 #
 Given /^logging operators are installed successfully$/ do
   ensure_destructive_tagged
+  ensure_admin_tagged
   step %Q/I switch to cluster admin pseudo user/
   step %Q/evaluation of `cluster_version('version').version` is stored in the :ocp_cluster_version clipboard/
   step %Q/logging channel name is stored in the :channel clipboard/
@@ -120,14 +122,14 @@ Given /^logging operators are installed successfully$/ do
     end
   end
 
-  step %Q/cluster logging operator is ready/
   step %Q/elasticsearch operator is ready/
+  step %Q/cluster logging operator is ready/
 end
 
 ## To check cluserlogging is working correctly, we check all of the subcomponents' status
 #  The list of components currently are: ["collection", "curation", "logStore",  "visualization"]
 Given /^I wait for clusterlogging(?: named "(.+)")? with #{QUOTED} log collector to be functional in the#{OPT_QUOTED} project$/ do | logging_name, log_collector, proj_name |
-  ensure_destructive_tagged
+  ensure_admin_tagged
   cb.target_proj ||= 'openshift-logging'
   proj_name = cb.target_proj if proj_name.nil?
   org_proj_name = project.name
@@ -175,7 +177,7 @@ end
 # to cleanup OLM installed clusterlogging
 Given /^logging service is removed successfully$/ do
   ensure_destructive_tagged
-
+  ensure_admin_tagged
   # remove namespace
   clo_proj_name = "openshift-logging"
   step %Q/I switch to cluster admin pseudo user/
@@ -185,7 +187,6 @@ Given /^logging service is removed successfully$/ do
     step %Q/I wait for the resource "project" named "#{clo_proj_name}" to disappear/
   end
   eo_proj_name = "openshift-operators-redhat"
-  step %Q/I switch to cluster admin pseudo user/
   if project(eo_proj_name).exists?
     @result = admin.cli_exec(:delete, object_type: 'project', object_name_or_id: eo_proj_name, n: eo_proj_name)
     raise "Unable to delete #{eo_proj_name}" unless @result[:success]
@@ -256,7 +257,6 @@ end
 Given /^I create clusterlogging instance with:$/ do | table |
   opts = opts_array_to_hash(table.raw)
   ensure_admin_tagged
-  ensure_destructive_tagged
   step %Q/I switch to cluster admin pseudo user/
   step %Q/I use the "openshift-logging" project/
   logging_ns = "openshift-logging"
@@ -301,12 +301,24 @@ Given /^I delete the clusterlogging instance$/ do
   step %Q/I wait for the resource "daemonset" named "fluentd" to disappear/
 end
 
-Given /^I run curl command on the CLO pod to get metrics with:$/ do | table |
+Given /^I run curl command on the (CLO|ES|fluentd) pod to get metrics with:$/ do | pod_type, table |
   ensure_admin_tagged
   opts = opts_array_to_hash(table.raw)
+  case pod_type
+  when "CLO"
+    selector = "name=cluster-logging-operator"
+    container_name = "cluster-logging-operator"
+  when "ES"
+    selector = "cluster-name=elasticsearch,component=elasticsearch"
+    container_name = "elasticsearch"
+  when "fluentd"
+    selector = "logging-infra=fluentd"
+    container_name = "fluentd"
+  end
   step %Q/a pod becomes ready with labels:/, table(%{
-      | name=cluster-logging-operator |
-    })
+    | #{selector} |
+  })
+
   query_object = opts[:object]
   query_opts = "-H \"Authorization: Bearer #{opts[:token]}\" -H \"Content-type: application/json\""
   case query_object
@@ -318,7 +330,7 @@ Given /^I run curl command on the CLO pod to get metrics with:$/ do | table |
     raise "Invalid query_object"
   end
 
-  @result = pod.exec("bash", "-c", query_cmd, as: admin, container: "cluster-logging-operator")
+  @result = pod.exec("bash", "-c", query_cmd, as: admin, container: container_name)
   if @result[:success]
     @result[:parsed] = YAML.load(@result[:response])
     if @result[:parsed].is_a? Hash and @result[:parsed].has_key? 'status'
@@ -358,4 +370,19 @@ Given /^the logging operators are redeployed after scenario$/ do
   teardown_add {
     step %Q/logging operators are installed successfully/
   }
+end
+
+Given /^logging eventrouter is installed in the cluster$/ do
+  step %Q/admin ensures "event-reader" cluster_role is deleted after scenario/
+  step %Q/admin ensures "event-reader-binding" cluster_role_binding is deleted after scenario/
+  step %Q/admin ensures "eventrouter" service_account is deleted from the "openshift-logging" project after scenario/
+  step %Q/admin ensures "eventrouter" config_map is deleted from the "openshift-logging" project after scenario/
+  step %Q/admin ensures "eventrouter" deployment is deleted from the "openshift-logging" project after scenario/
+  @result = admin.cli_exec(:new_app, file: "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/eventrouter/internal_eventrouter.yaml")
+  unless @result[:success]
+    raise "Unable to deploy eventrouter"
+  end
+  step %Q/a pod becomes ready with labels:/, table(%{
+    | component=eventrouter |
+  })
 end

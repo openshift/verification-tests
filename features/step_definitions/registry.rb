@@ -71,9 +71,9 @@ Given /^all the image layers in the#{OPT_SYM} clipboard do( not)? exist in the r
   end
   begin
     step %Q/I switch to cluster admin pseudo user/
-    step %Q/I use the "default" project/
+    step %Q/I use the "openshift-image-registry" project/
     step %Q/a pod becomes ready with labels:/, table(%{
-        | deploymentconfig=docker-registry |
+        | docker-registry=default |
     })
     layers.each { | layer|
       id =  layer.dig("name").split(':')[1]

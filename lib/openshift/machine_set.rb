@@ -21,5 +21,10 @@ module BushSlicer
         available_replicas(user: user, cached: cached, quiet: quiet))
       return result
     end
+
+    def cluster(user: nil, cached: true, quiet: false)
+      rr = raw_resource(user: user, cached: cached, quiet: quiet)
+      rr.dig('spec', 'selector', 'matchLabels', 'machine.openshift.io/cluster-api-cluster')
+    end
   end
 end
