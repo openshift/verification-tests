@@ -83,6 +83,8 @@ goto_one_pod_page:
 
 goto_cluster_oauth_configuration_page:
   url: k8s/cluster/config.openshift.io~v1~OAuth/cluster
+goto_one_pod_log_page:
+  url: k8s/ns/<project_name>/pods/<pod_name>/logs
 
 #routes
 goto_routes_page:
