@@ -758,7 +758,6 @@ end
 Given /^the env is using "([^"]*)" networkType$/ do |network_type|
   ensure_admin_tagged
   _admin = admin
-#  step "I select a random node's host"
   @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
   raise "the networkType is not #{network_type}" unless @result[:response] == network_type
 end
