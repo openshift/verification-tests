@@ -829,3 +829,56 @@ Feature: Multus-CNI related scenarios
       | /usr/sbin/ip | -d | link |
     Then the output should contain "net1"
 
+  # @author anusaxen@redhat.com
+  # @case_id OCP-24465
+  @admin
+  @destructive
+  Scenario: Multus CNI type bridge with DHCP
+    # Make sure that the multus is Running
+    Given the multus is enabled on the cluster
+    Given the default interface on nodes is stored in the :default_interface clipboard
+    And I store all worker nodes to the :nodes clipboard
+    #Patching simplemacvlan config in network operator config CRD
+    Given I have a project
+    Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
+      | {"spec":{"additionalNetworks": [{"name":"bridge-ipam-dhcp","namespace":"openshift-multus","rawCNIConfig":"{\"name\":\"bridge-ipam-dhcp\",\"cniVersion\":\"0.3.1\",\"type\":\"bridge\",\"master\":\"<%= cb.default_interface %>\",\"ipam\":{\"type\": \"dhcp\"}}","type":"Raw"}]}} |
+    #Cleanup for bringing CRD to original
+    Given I register clean-up steps:
+    """
+    as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
+    | {"spec":{"additionalNetworks": null}} |
+    """
+    And admin ensures "bridge-ipam-dhcp" network_attachment_definition is deleted from the "openshift-multus" project after scenario
+    #Adding brige interface on target node
+    Given the bridge interface named "testbr1" is added to the "<%= cb.nodes[0].name %>" node
+    #Cleanup for deleting testbr1 interface
+    Given I register clean-up steps:
+    """
+    the bridge interface named "testbr1" is deleted from the "<%= cb.nodes[0].name %>" node
+    """
+    And a DHCP server is configured on the "<%= cb.nodes[0].name %>" node 
+    
+    #Cleanup for deconfiguring DHCP server on target node
+    Given I register clean-up steps:
+    """
+    a DHCP server is deconfigured on the "<%= cb.nodes[0].name %>" node
+    """
+    #Creating ipam type net-attach-def
+    Given I have a project
+    When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/ipam-dhcp.yaml" replacing paths:
+      | ["metadata"]["name"]      | bridge-dhcp         																	 |
+      | ["metadata"]["namespace"] | <%= project.name %> 																	 |
+      | ["spec"]["config"]        | '{ "cniVersion": "0.3.0", "type": "bridge", "bridge": "testbr1", "hairpinMode": true, "master": "<%= cb.default_interface %>", "ipam": {"type": "dhcp"}}' |
+    Then the step should succeed
+    And admin ensures "bridge-dhcp" network_attachment_definition is deleted from the "<%= project.name %>" project after scenario
+
+    #Creating dhcp pod absorbing above net-attach-def
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["namespace"]                                  | <%= project.name %>     |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | bridge-dhcp             |
+      | ["spec"]["nodeName"]                                       | <%= cb.nodes[0].name %> |
+    Then the step should succeed
+    And the pod named "test-pod" becomes ready
+    When I execute on the pod:
+      | /usr/sbin/ip | a |
+    Then the output should contain "88.8.8"

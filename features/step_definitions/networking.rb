@@ -775,3 +775,43 @@ Given /^the subnet for primary interface on node is stored in the#{OPT_SYM} clip
   cb[cb_name] = @result[:response].chomp
   logger.info "Subnet range for the primary interface on the node is stored in the #{cb_name} clipboard."
 end
+
+Given /^the bridge interface named "([^"]*)" is added to the "([^"]*)" node$/ do |bridge_name, node_name|
+  ensure_admin_tagged
+  node = node(node_name)
+  host = node.host
+  @result = host.exec_admin("ip link add #{bridge_name} type bridge;ip address add 88.8.8.200/24 dev #{bridge_name};ip link set up #{bridge_name}")
+  raise "Failed to add  bridge interface" unless @result[:success]
+end
+
+Given /^a DHCP server is configured on the "([^"]*)" node$/ do |node_name|
+  ensure_admin_tagged
+  node = node(node_name)
+  host = node.host
+  #Following will take dnsmasq backup and append curl contents to the dnsmasq config after
+  @result = host.exec_admin("cp /etc/dnsmasq.conf /etc/dnsmasq.conf.bak;curl https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/dnsmasq_for_testbridge.conf >> /etc/dnsmasq.conf;systemctl restart dnsmasq --now")
+  raise "Failed to configure DNS server" unless @result[:success]
+  step "10 seconds have passed"
+  if host.exec_admin("systemctl status dnsmasq")[:response].include? "running"
+    logger.info("DNS server is running fine")
+  else
+    raise "Failed to start DNS server. Check you cluster health manually"
+  end
+  raise "Failed to configure DNS server. Check your cluster health manually" unless @result[:success]
+end
+
+Given /^a DHCP server is deconfigured on the "([^"]*)" node$/ do |node_name|
+  ensure_admin_tagged
+  node = node(node_name)
+  host = node.host
+  #Copying original dnsmasq on to the modified one
+  @result = host.exec_admin("systemctl stop dnsmasq;cp /etc/dnsmasq.conf.bak /etc/dnsmasq.conf;systemctl restart dnsmasq --now")
+  raise "Failed to configure DNS server" unless @result[:success]
+  step "10 seconds have passed"
+  if host.exec_admin("systemctl status dnsmasq")[:response].include? "running"
+    logger.info("DNS server is running fine")
+  else
+    raise "Failed to bring your DNS server back to normal. Check you cluster health manually"
+  end
+  host.exec_admin("rm /etc/dnsmasq.conf.bak")
+end
