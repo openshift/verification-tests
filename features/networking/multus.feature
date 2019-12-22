@@ -829,6 +829,43 @@ Feature: Multus-CNI related scenarios
       | /usr/sbin/ip | -d | link |
     Then the output should contain "net1"
 
+  # @author weliang@redhat.com
+  # @case_id OCP-25676
+  @admin
+  Scenario: Supported runtimeConfig/capability for MAC/IP
+    # Make sure that the multus is enabled
+    Given the multus is enabled on the cluster
+
+    # Create the net-attach-def via cluster admin
+    Given I have a project
+    And evaluation of `project.name` is stored in the :project_name clipboard
+    When I run the :create admin command with:
+      | f | https://raw.githubusercontent.com/weliang1/Openshift_Networking/master/Features/multus/runtimeconfig-def-ipandmac.yaml |
+      | n | <%= cb.project_name %>                                                                                                 |
+    Then the step should succeed
+
+    #Clean-up required to erase above net-attach-def after testing done
+    And admin ensures "runtimeconfig-def" network_attachment_definition is deleted from the "<%= cb.project_name %>" project after scenario
+
+    # Create a pod absorbing above net-attach-def
+    When I run the :create client command with:
+      | f | https://raw.githubusercontent.com/weliang1/Openshift_Networking/master/Features/multus/runtimeconfig-pod-ipandmac.yaml |
+      | n | <%= cb.project_name %>                                                                                                 |
+    Then the step should succeed
+    And the pod named "runtimeconfig-pod" becomes ready
+
+    # Check created pod has correct MAC and IP for interface net1
+    When I execute on the pod:
+      | /usr/sbin/ip | -d | link |
+    Then the output should contain: 
+      | net1                 |
+      | macvlan  mode bridge |
+    When I execute on the pod:
+      | /usr/sbin/ip | a |
+    Then the output should contain:
+      | 192.168.22.2      |
+      | ca:fe:c0:ff:ee:00 |
+
   # @author anusaxen@redhat.com
   # @case_id OCP-24465
   @admin
