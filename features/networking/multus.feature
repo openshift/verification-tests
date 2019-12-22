@@ -925,7 +925,6 @@ Feature: Multus-CNI related scenarios
   @destructive
   Scenario: CNO manager macvlan configured manually with DHCP	
     Given the multus is enabled on the cluster
-    Given the default interface on nodes is stored in the :default_interface clipboard
     And I store the masters in the :master clipboard
     And I store all worker nodes to the :worker clipboard
     #Obtaining master's tunnel interface name, address and worker's interface name,address
