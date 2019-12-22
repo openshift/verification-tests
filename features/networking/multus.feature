@@ -902,8 +902,8 @@ Feature: Multus-CNI related scenarios
     #Creating ipam type net-attach-def
     Given I have a project
     When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/ipam-dhcp.yaml" replacing paths:
-      | ["metadata"]["name"]      | bridge-dhcp         																	 |
-      | ["metadata"]["namespace"] | <%= project.name %> 																	 |
+      | ["metadata"]["name"]      | bridge-dhcp                                                                                                                                               |
+      | ["metadata"]["namespace"] | <%= project.name %>                                                                                                                                       |
       | ["spec"]["config"]        | '{ "cniVersion": "0.3.0", "type": "bridge", "bridge": "testbr1", "hairpinMode": true, "master": "<%= cb.default_interface %>", "ipam": {"type": "dhcp"}}' |
     Then the step should succeed
     And admin ensures "bridge-dhcp" network_attachment_definition is deleted from the "<%= project.name %>" project after scenario
@@ -940,7 +940,6 @@ Feature: Multus-CNI related scenarios
       | ip link set up mvlanp0                                                                                              |
       | ip a add 192.168.1.2/24 dev mvlanp0                                                                                 |
     Then the step should succeed
-      
     #Cleanup for deleting worker interface
     Given I register clean-up steps:
     """
@@ -950,10 +949,9 @@ Feature: Multus-CNI related scenarios
     Given I use the "<%= cb.master[0].name %>" node
     And I run commands on the host:
       | ip link add mvlanp0 type vxlan id 100 remote <%= cb.workr_inf_address %> dev <%= cb.mastr_inf_name %> dstport 14789 |
-      | ip link set up mvlanp0                                                                                               |
-      | ip a add 192.168.1.1/24 dev mvlanp0                                                                                  |
+      | ip link set up mvlanp0                                                                                              |
+      | ip a add 192.168.1.1/24 dev mvlanp0                                                                                 |
     Then the step should succeed
-    
     #Cleanup for deleting master interface
     Given I register clean-up steps:
     """
@@ -961,11 +959,11 @@ Feature: Multus-CNI related scenarios
     """
     #Confirm the link connectivity between master and worker
     When I run commands on the host:
-      | ping -c1 -W2 192.168.1.2                                                                                             |
+      | ping -c1 -W2 192.168.1.2 |
     Then the step should succeed
     Given I use the "<%= cb.worker[0].name %>" node
     And I run commands on the host:
-      | ping -c1 -W2 192.168.1.1                                                                                             |
+      | ping -c1 -W2 192.168.1.1 |
     Then the step should succeed
     
     #Configuring DHCP service on master node
