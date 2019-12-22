@@ -855,12 +855,12 @@ Feature: Multus-CNI related scenarios
     """
     the bridge interface named "testbr1" is deleted from the "<%= cb.nodes[0].name %>" node
     """
-    And a DHCP server is configured on the "<%= cb.nodes[0].name %>" node 
+    And a DHCP service is configured on the "<%= cb.nodes[0].name %>" node 
     
-    #Cleanup for deconfiguring DHCP server on target node
+    #Cleanup for deconfiguring DHCP service on target node
     Given I register clean-up steps:
     """
-    a DHCP server is deconfigured on the "<%= cb.nodes[0].name %>" node
+    a DHCP service is deconfigured on the "<%= cb.nodes[0].name %>" node
     """
     #Creating ipam type net-attach-def
     Given I have a project
@@ -881,3 +881,84 @@ Feature: Multus-CNI related scenarios
     When I execute on the pod:
       | /usr/sbin/ip | a |
     Then the output should contain "88.8.8"
+ 
+  # @author anusaxen@redhat.com
+  # @case_id OCP-24466
+  @admin
+  @destructive
+  Scenario: CNO manager macvlan configured manually with DHCP	
+    Given the multus is enabled on the cluster
+    Given the default interface on nodes is stored in the :default_interface clipboard
+    And I store the masters in the :master clipboard
+    And I store all worker nodes to the :worker clipboard
+    #Obtaining master's tunnel interface name, address and worker's interface name,address
+    Given the vxlan tunnel name of node "<%= cb.master[0].name %>" is stored in the :mastr_inf_name clipboard
+    And the vxlan tunnel address of node "<%= cb.master[0].name %>" is stored in the :mastr_inf_address clipboard
+    Given the vxlan tunnel name of node "<%= cb.worker[0].name %>" is stored in the :workr_inf_name clipboard
+    And the vxlan tunnel address of node "<%= cb.worker[0].name %>" is stored in the :workr_inf_address clipboard
+    #Configuing tunnel interface on a worker node
+    Given I use the "<%= cb.worker[0].name %>" node
+    And I run commands on the host:
+      | ip link add mvlanp0 type vxlan id 100 remote <%= cb.mastr_inf_address %> dev <%= cb.workr_inf_name %> dstport 14789 |
+      | ip link set up mvlanp0                                                                                              |
+      | ip a add 192.168.1.2/24 dev mvlanp0                                                                                 |
+    Then the step should succeed
+      
+    #Cleanup for deleting worker interface
+    Given I register clean-up steps:
+    """
+    the bridge interface named "mpvlan0" is deleted from the "<%= cb.worker[0].name %>" node
+    """
+    #Configuing tunnel interface on master node
+    Given I use the "<%= cb.master[0].name %>" node
+    And I run commands on the host:
+      | ip link add mvlanp0 type vxlan id 100 remote <%= cb.workr_inf_address %> dev <%= cb.mastr_inf_name %> dstport 14789 |
+      | ip link set up mvlanp0                                                                                               |
+      | ip a add 192.168.1.1/24 dev mvlanp0                                                                                  |
+    Then the step should succeed
+    
+    #Cleanup for deleting master interface
+    Given I register clean-up steps:
+    """
+    the bridge interface named "mpvlan0" is deleted from the "<%= cb.master[0].name %>" node
+    """
+    #Confirm the link connectivity between master and worker
+    When I run commands on the host:
+      | ping -c1 -W2 192.168.1.2                                                                                             |
+    Then the step should succeed
+    Given I use the "<%= cb.worker[0].name %>" node
+    And I run commands on the host:
+      | ping -c1 -W2 192.168.1.1                                                                                             |
+    Then the step should succeed
+    
+    #Configuring DHCP service on master node
+    Given a DHCP service for macvlan tunnel mode is configured on the "<%= cb.master[0].name %>" node 
+    #Cleanup for deconfiguring DHCP service on target node
+    Given I register clean-up steps:
+    """
+    a DHCP service is deconfigured on the "<%= cb.master[0].name %>" node
+    """
+    #Patching simplemacvlan config in network operator config CRD
+    Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
+      | {"spec": {"additionalNetworks": [{"name": "testmacvlan","namespace": "openshift-multus","simpleMacvlanConfig": {"ipamConfig": {"type": "dhcp"},"master": "mvlanp0"},"type": "SimpleMacvlan"}]}} |
+    #Cleanup for bringing CRD to original
+    Given I register clean-up steps:
+    """
+    Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
+    | {"spec":{"additionalNetworks": null}} |
+    """
+    And admin ensures "testmacvlan" network_attachment_definition is deleted from the "openshift-multus" project after scenario
+    
+    #Creating pod under openshift-multus project to absorb above net-attach-def
+    Given I switch to cluster admin pseudo user
+    Given I use the "openshift-multus" project
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["namespace"]                                  | <%= project.name %>      |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | testmacvlan              |
+      | ["spec"]["nodeName"]                                       | <%= cb.worker[0].name %> |
+    Then the step should succeed
+    And the pod named "test-pod" becomes ready
+    And admin ensures "<%= pod.name %>" pod is deleted from the "openshift-multus" project after scenario
+    When I execute on the pod:
+      | /usr/sbin/ip | a |
+    Then the output should contain "192.168.1"
