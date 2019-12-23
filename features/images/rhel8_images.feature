@@ -113,3 +113,49 @@ Feature: rhel8images.feature
     """
     And the output should contain:
       | 10 |
+
+  # @author wewang@redhat.com
+  # @case_id OCP-22958
+  @admin
+  Scenario: Create mysql service from imagestream via oc new-app mysql-rhel8 image
+    Given I have a project
+    When I run the :tag admin command with:
+      | source           | registry.redhat.io/rhel8/mysql-80 |
+      | dest             | qe-mysql-80-rhel8:latest          |
+      | reference_policy | local                             |
+      | n                | openshift                         |
+    Then the step should succeed
+    When I run the :new_app client command with:
+      | image_stream | openshift/qe-mysql-80-rhel8 |
+      | env          | MYSQL_USER=user             |
+      | env          | MYSQL_PASSWORD=pass         |
+      | env          | MYSQL_DATABASE=db           |
+    Then the step should succeed
+    Given I wait for the "qe-mysql-80-rhel8" service to become ready
+    And I get the service pods
+    When I wait up to 60 seconds for the steps to pass:
+    """
+    When I execute on the pod:
+      | bash |
+      | -c   |
+      | mysql -h $QE_MYSQL_80_RHEL8_SERVICE_HOST -uuser -ppass -e "show databases" |
+    Then the step should succeed
+    """
+    Then the output should contain "db"
+    When I execute on the pod:
+      | bash |
+      | -c   |
+      | mysql -h $QE_MYSQL_80_RHEL8_SERVICE_HOST -uuser -ppass   -e "use db;create table test (name VARCHAR(20))" |
+    Then the step should succeed
+    When I execute on the pod:
+      | bash |
+      | -c   |
+      | mysql -h $QE_MYSQL_80_RHEL8_SERVICE_HOST -uuser -ppass   -e "use db;insert into test VALUES('openshift')" |
+    Then the step should succeed
+    When I execute on the pod:
+      | bash |
+      | -c   |
+      | mysql -h $QE_MYSQL_80_RHEL8_SERVICE_HOST -uuser -ppass  -e "use db;select * from test" |
+    Then the output should contain:
+      | name      |
+      | openshift |
