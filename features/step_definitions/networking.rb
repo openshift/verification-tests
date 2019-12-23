@@ -791,11 +791,11 @@ Given /^the env is using "([^"]*)" networkType$/ do |network_type|
   raise "the networkType is not #{network_type}" unless @result[:response] == network_type
 end
 
-Given /^the bridge interface named "([^"]*)" is added to the "([^"]*)" node$/ do |bridge_name, node_name|
+Given /^the bridge interface named "([^"]*)" with address "([^"]*)" is added to the "([^"]*)" node$/ do |bridge_name,address,node_name|
   ensure_admin_tagged
   node = node(node_name)
   host = node.host
-  @result = host.exec_admin("ip link add #{bridge_name} type bridge;ip address add 88.8.8.200/24 dev #{bridge_name};ip link set up #{bridge_name}")
+  @result = host.exec_admin("ip link add #{bridge_name} type bridge;ip address add #{address} dev #{bridge_name};ip link set up #{bridge_name}")
   raise "Failed to add  bridge interface" unless @result[:success]
 end
 

@@ -886,7 +886,7 @@ Feature: Multus-CNI related scenarios
     """
     And admin ensures "bridge-ipam-dhcp" network_attachment_definition is deleted from the "openshift-multus" project after scenario
     #Adding brige interface on target node
-    Given the bridge interface named "testbr1" is added to the "<%= cb.nodes[0].name %>" node
+    Given the bridge interface named "testbr1" with address "88.8.8.200/24" is added to the "<%= cb.nodes[0].name %>" node
     #Cleanup for deleting testbr1 interface
     Given I register clean-up steps:
     """
@@ -942,7 +942,7 @@ Feature: Multus-CNI related scenarios
     #Cleanup for deleting worker interface
     Given I register clean-up steps:
     """
-    the bridge interface named "mpvlan0" is deleted from the "<%= cb.worker[0].name %>" node
+    the bridge interface named "mvlanp0" is deleted from the "<%= cb.worker[0].name %>" node
     """
     #Configuing tunnel interface on master node
     Given I use the "<%= cb.master[0].name %>" node
@@ -954,7 +954,7 @@ Feature: Multus-CNI related scenarios
     #Cleanup for deleting master interface
     Given I register clean-up steps:
     """
-    the bridge interface named "mpvlan0" is deleted from the "<%= cb.master[0].name %>" node
+    the bridge interface named "mvlanp0" is deleted from the "<%= cb.master[0].name %>" node
     """
     #Confirm the link connectivity between master and worker
     When I run commands on the host:
