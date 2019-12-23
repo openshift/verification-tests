@@ -18,14 +18,6 @@ check_rolebinding_of_user:
   action:
     if_param: rolebinding
     ref: check_link_and_text
-click_kebab_of_one_resource:
-  elements:
-  - selector:
-      xpath: //*[text()='<resource_name>']//ancestor::tr//td[contains(@class,'dropdown-kebab-pf')]
-    op: click
-click_one_operation_in_kebab:
-  action: click_kebab_of_one_resource
-  action: click_button
 impersonate_one_user:
   action: goto_users_list_page
   action: click_one_operation_in_kebab
