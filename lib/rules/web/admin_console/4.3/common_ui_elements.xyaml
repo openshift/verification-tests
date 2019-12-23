@@ -331,7 +331,6 @@ click_first_item_in_resource_list:
   elements:
   - selector:
       xpath: //td[1]//span[@class='co-resource-item']/a
-    timeout: 30
     op: click
 click_first_sub_item_in_resource_detail_list:
   elements:
