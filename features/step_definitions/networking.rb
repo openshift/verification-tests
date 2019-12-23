@@ -789,3 +789,4 @@ Given /^the env is using "([^"]*)" networkType$/ do |network_type|
   _admin = admin
   @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
   raise "the networkType is not #{network_type}" unless @result[:response] == network_type
+end
