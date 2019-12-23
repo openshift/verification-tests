@@ -65,11 +65,56 @@ browse_to_cli_tools_page:
     text: Command Line Tools
     link_url: "#"
   action: click_link_with_text
+check_consolelink:
+  params:
+    link_url: "#"
+  action:
+    if_param:
+      location: Help menu
+    ref: check_console_link_in_helpmenu
+  action:
+    if_param:
+      location: Application launcher
+    ref: check_console_link_in_applauncher
+  action:
+    if_param:
+      location: User menu
+    ref: check_console_link_in_usermenu
+check_console_link_in_helpmenu:
+  params:
+    link_url: "#"
+  action: click_help_button
+  action: check_link_and_text
+check_console_link_in_applauncher:
+  action: click_application_launcher_button
+  action: check_link_and_text
+  action: check_image_url
+check_console_link_in_usermenu:
+  params:
+    link_url: "#"
+  action: click_user_menu_button
+  action: check_link_and_text
 click_help_button:
+  params:
+    aria_label: Help menu
+  action: click_masthead_button
+click_application_launcher_button:
+  params:
+    aria_label: Application launcher
+  action: click_masthead_button
+click_user_menu_button:
+  params:
+    aria_label: User menu
+  action: click_masthead_button
+click_masthead_button:
   element:
     selector:
-      xpath: //button[contains(@aria-label, 'Help menu')]
+      xpath: //button[contains(@aria-label, '<aria_label>')]
     op: click
+check_image_url:
+  element:
+    selector:
+      xpath: //img[contains(@src,'<image_src>')]
 check_default_oc_download_links:
   params:
     text: Download oc
