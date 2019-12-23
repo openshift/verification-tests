@@ -1,27 +1,27 @@
 check_edit_display_name_button_in_dropdown:
   element: &edit_display_name_button_in_dropdown
     selector:
-      xpath: //div[@class='pf-c-dropdown pf-m-expanded']//li[@role='menuitem']/button[text()='Edit Display Name' and not(@disabled)]
+      xpath: //ul[@role='menu']//li[@role='menuitem']/button[text()='Edit Display Name' and not(@disabled)]
 check_launch_console_button_in_dropdown:
   element: &launch_console_button_in_dropdown
     selector:
-      xpath: //div[@class='pf-c-dropdown pf-m-expanded']//li[@role='menuitem']/a[text()='Launch Console' and not(@disabled)]
+      xpath: //ul[@role='menu']//li[@role='menuitem']/a[text()='Launch Console' and not(@disabled)]
 check_archive_button_in_dropdown:
   element: &archive_button_in_dropdown
     selector:
-      xpath: //div[@class='pf-c-dropdown pf-m-expanded']//li[@role='menuitem']/button[text()='Archive Cluster' and not(@disabled)]
+      xpath: //ul[@role='menu']//li[@role='menuitem']/button[text()='Archive Cluster' and not(@disabled)]
 check_edit_console_button_in_dropdown:
   element: &edit_console_button_in_dropdown
     selector:
-      xpath: //div[@class='pf-c-dropdown pf-m-expanded']//li[@role='menuitem']/button[text()='Edit Console URL' and not(@disabled)]
+      xpath: //ul[@role='menu']//li[@role='menuitem']/button[text()='Edit Console URL' and not(@disabled)]
 check_scale_cluster_button_in_dropdown:
   element: &scale_cluster_button_in_dropdown
     selector:
-      xpath: //div[@class='pf-c-dropdown pf-m-expanded']//li[@role='menuitem']/button[text()='Scale Cluster' and not(@disabled)]
+      xpath: //ul[@role='menu']//li[@role='menuitem']/button[text()='Scale Cluster' and not(@disabled)]
 check_delete_cluster_button_in_dropdown:
   element: &delete_cluster_button_in_dropdown
     selector:
-      xpath: //div[@class='pf-c-dropdown pf-m-expanded']//li[@role='menuitem']/button[text()='Delete Cluster' and not(@disabled)]
+      xpath: //ul[@role='menu']//li[@role='menuitem']/button[text()='Delete Cluster' and not(@disabled)]
 click_edit_display_name_button_in_dropdown:
   element:
     <<: *edit_display_name_button_in_dropdown
@@ -49,25 +49,25 @@ click_delete_cluster_button_in_dropdown:
 check_archive_button_in_dropdown_missing:
   element:
     selector:
-      xpath: //div[@class='pf-c-dropdown pf-m-expanded']//li[@role='menuitem']/button[text()='Archive Cluster']
+      xpath: //ul[@role='menu']//li[@role='menuitem']/button[text()='Archive Cluster']
     missing: true
 check_edit_console_button_in_dropdown_missing:
   element:
     selector:
-      xpath: //div[@class='pf-c-dropdown pf-m-expanded']//li[@role='menuitem']/button[text()='Edit Console URL']
+      xpath: //ul[@role='menu']//li[@role='menuitem']/button[text()='Edit Console URL']
     missing: true
 check_launch_console_button_in_dropdown_missing:
   element:
     selector:
-      xpath: //div[@class='pf-c-dropdown pf-m-expanded']//li[@role='menuitem']/a[text()='Launch Console']
+      xpath: //ul[@role='menu']//li[@role='menuitem']/a[text()='Launch Console']
     missing: true
 check_delete_cluster_button_in_dropdown_missing:
   element:
     selector:
-      xpath: //div[@class='pf-c-dropdown pf-m-expanded']//li[@role='menuitem']/button[text()='Delete Cluster']
+      xpath: //ul[@role='menu']//li[@role='menuitem']/button[text()='Delete Cluster']
     missing: true
 check_scale_cluster_button_in_dropdown_missing:
   element:
     selector:
-      xpath: //div[@class='pf-c-dropdown pf-m-expanded']//li[@role='menuitem']/button[text()='Scale Cluster']
+      xpath: //ul[@role='menu']//li[@role='menuitem']/button[text()='Scale Cluster']
     missing: true
