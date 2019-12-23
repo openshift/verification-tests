@@ -906,7 +906,6 @@ Feature: Multus-CNI related scenarios
       | ["metadata"]["namespace"] | <%= project.name %>                                                                                                                                       |
       | ["spec"]["config"]        | '{ "cniVersion": "0.3.0", "type": "bridge", "bridge": "testbr1", "hairpinMode": true, "master": "<%= cb.default_interface %>", "ipam": {"type": "dhcp"}}' |
     Then the step should succeed
-    And admin ensures "bridge-dhcp" network_attachment_definition is deleted from the "<%= project.name %>" project after scenario
 
     #Creating dhcp pod absorbing above net-attach-def
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
