@@ -39,6 +39,17 @@ click_button_text:
     selector:
       xpath: //button[text()='<button_text>']
     op: click
+click_button_by_id:
+  element:
+    selector:
+      xpath: //button[contains(@id,'<button_id>')]
+    op: click
+select_resource_item:
+  action: click_button_by_id
+  element:
+    selector:
+      xpath: //*[contains(@class,'co-resource-item__resource-name') and text()='<item>']
+    op: click
 check_button_disabled:
   element:
     selector:
@@ -77,10 +88,21 @@ check_row_filter_on_page:
   elements:
   - selector:
       xpath: //div[contains(@class,'row-filter')]//*[text()='<filter>']
+confirm_deletion:
+  action: send_delete_string
+  action: submit_changes
 check_resources_title_on_page:
   elements:
   - selector:
       xpath: //span[text()='<resource_title>']
+click_kebab_of_one_resource:
+  elements:
+  - selector:
+      xpath: //*[text()='<resource_name>']//ancestor::tr//td[contains(@class,'dropdown-kebab-pf')]
+    op: click
+click_one_operation_in_kebab:
+  action: click_kebab_of_one_resource
+  action: click_button
 check_resource_name_and_icon:
   action:
     if_param: service_name
