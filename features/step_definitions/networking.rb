@@ -842,11 +842,10 @@ Given /^the vxlan tunnel name of node "([^"]*)" is stored in the#{OPT_SYM} clipb
   end
   case networkType
   when "OVNKubernetes"
-    @result = host.exec_admin("ifconfig | egrep -o '^k8[^:]+'")
-    cb[cb_name] = @result[:response].match(/k8s-\w*-\w*-\w*-\w*-/)[0]
+    @inf_name = host.exec_admin("ifconfig | egrep -o '^k8[^:]+'")
+    cb[cb_name] = @inf_name[:response].split("\n")[0]
   when "OpenShiftSDN"
     cb[cb_name]="tun0"
-    #@result=host.exec_admin("ifconfig tun0")
   else
     raise "unable to find interface name or networkType"
   end
@@ -864,9 +863,8 @@ Given /^the vxlan tunnel address of node "([^"]*)" is stored in the#{OPT_SYM} cl
   end
   case networkType
   when "OVNKubernetes"
-    @result = host.exec_admin("ifconfig | egrep -o '^k8[^:]+'")
-    interface_name = @result[:response].match(/k8s-\w*-\w*-\w*-\w*-/)[0]
-    @result = host.exec_admin("ifconfig #{interface_name}")
+    @inf_name = host.exec_admin("ifconfig | egrep -o '^k8[^:]+'")
+    @result = host.exec_admin("ifconfig #{@inf_name[:response].split("\n")[0]}")
     cb[cb_address] = @result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]
   when "OpenShiftSDN"
     @result=host.exec_admin("ifconfig tun0")
