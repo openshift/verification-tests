@@ -13,4 +13,5 @@ Feature: rc related test
     And the expression should be true> rc.current_replicas == 2
     And status becomes :running of exactly 2 pods labeled:
       | name=test-pods |
+    Given I store all replicationControllers in the project to the clipboard
 

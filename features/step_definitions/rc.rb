@@ -48,3 +48,9 @@ Given /^a replicationController becomes ready with labels:$/ do |table|
     raise "#{rc.name} replication_controller did not become ready"
   end
 end
+
+Given /^I store all replicationControllers in the#{OPT_QUOTED} project to the#{OPT_SYM} clipboard$/ do |proj_name, cb_name|
+  cb_name ||= :rcs
+  project(proj_name) if proj_name
+  cb[cb_name] = BushSlicer::ReplicationController.list(user: user, project: project)
+end
