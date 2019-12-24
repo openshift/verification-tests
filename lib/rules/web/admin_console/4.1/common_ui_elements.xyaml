@@ -155,7 +155,8 @@ check_page_match:
       visible_text: !ruby/regexp /<content>/i
 check_page_not_match:
   element:
-    selector: *page_content
+    selector:
+      xpath: //*[contains(.,'<content>')] 
     missing: true
 submit_changes:
   element:
@@ -186,7 +187,7 @@ uncheck_checkbox:
 check_link_and_text:
   element:
     selector: &text_link
-      xpath: //a[contains(text(),'<text>') and @href='<link_url>']
+      xpath: //a[contains(text(),'<text>') and contains(@href, '<link_url>')]
 click_link_with_text:
   element:
     selector:
@@ -217,6 +218,11 @@ wait_form_loaded:
   element:
     selector:
       css: form
+    timeout: 20
+wait_box_loaded:
+  element:
+    selector:
+      css: .loading-box__loaded
     timeout: 20
 ## -------- check resource key and values pairs ------
 check_resource_details:

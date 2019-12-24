@@ -1,6 +1,9 @@
 # projects
 goto_projects_list_page:
   url: k8s/cluster/projects
+goto_one_project_dashboard_page:
+  action: goto_project_resources_page
+  action: goto_project_details_page
 goto_project_status:
   url: status/ns/<project>
 goto_resource_page_under_default_project:
@@ -102,3 +105,6 @@ goto_machineconfigs_page:
 goto_machineconfig_pools_page:
   url: k8s/cluster/machineconfiguration.openshift.io~v1~MachineConfigPool
 
+# quota
+goto_quotas_page:
+  url: k8s/ns/<project_name>/resourcequotas
