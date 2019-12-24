@@ -19,3 +19,13 @@ Given /^number of replicas of#{OPT_QUOTED} daemon set becomes:$/ do |name, table
 
   raise 'expected replica set replica counters not reached within timeout' unless matched[:success]
 end
+
+Given /^current generation number of#{OPT_QUOTED} daemonset is stored into#{OPT_SYM} clipboard$/ do |name, cb_name|
+  cb_name ||= :generation_number
+  cb[cb_name] = daemon_set(name).generation_number(user: user, cached: false)
+end
+
+Given /desired number of#{OPT_QUOTED} daemonset is stored into#{OPT_SYM} clipboard$/ do |name, cb_name|
+  cb_name ||= :desired_num
+  cb[cb_name] = daemon_set(name).desired_replicas
+end
