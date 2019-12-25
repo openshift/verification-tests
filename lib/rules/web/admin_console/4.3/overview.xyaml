@@ -18,6 +18,15 @@ check_pod_number:
   scripts:
     - command: return document.getElementsByTagName("text")[0].getElementsByTagName("tspan")[0].innerHTML == "<pod_number>" || document.getElementsByTagName("text")[0].getElementsByTagName("tspan")[1].innerHTML == "scaling to <pod_number>"
       expect_result: true
+check_pod_number_and_link:
+  element:
+    selector:
+      xpath: //a[@href='<link>']
+  scripts:
+    - command: return document.querySelector('a[href="<link>"]').innerText
+      expect_result: <text>
+check_pod_info_on_overview_sidebar:
+  action: check_page_contains
 click_list_item:
   element:
     selector:
