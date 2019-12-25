@@ -44,6 +44,10 @@ click_button_by_id:
     selector:
       xpath: //button[contains(@id,'<button_id>')]
     op: click
+check_resource_item:
+  elements:
+  - selector:
+      xpath: //span[contains(@class,'co-m-resource-icon') and @title='<resource_type>']/parent::span[@class='co-resource-item']//a[@class='co-resource-item__resource-name' and @title='<resource_name>' and @href='<resource_link>']
 select_resource_item:
   action: click_button_by_id
   element:
@@ -84,6 +88,14 @@ set_input_value:
       xpath: //input[@id='<input_field_id>']
     op: send_keys <input_value>
     type: input
+set_label_input:
+  elements:
+  - selector: &label_input
+      xpath: //label[text()='<label_text>']/following::input[1]
+    op: clear
+  - selector:
+      <<: *label_input
+    op: send_keys <input_value>
 check_row_filter_on_page:
   elements:
   - selector:

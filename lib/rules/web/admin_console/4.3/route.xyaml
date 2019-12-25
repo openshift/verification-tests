@@ -1,8 +1,29 @@
+click_create_route_button:
+  params:
+    button_text: Create Route
+  action: click_button_text
 check_custom_dns_help_link:
   params:
     content: Do you need to set up custom DNS
   action: wait_box_loaded
   action: check_page_match
+check_route_traffic_table_shown:
+  elements:
+  - selector:
+      xpath: //h2[@data-test-section-heading='Traffic']
+  - selector:
+      xpath: //table//th[1][text()='Service']
+  - selector:
+      xpath: //table//th[2][text()='Weight']
+  - selector:
+      xpath: //table//th[3][text()='Percent']
+check_data_in_traffic_table:
+  action: check_resource_item
+  elements:
+  - selector:
+      xpath: //tr//td[2][text()='<weight>']
+  - selector:
+      xpath: //tr//td[3][text()='<percent>']
 open_custom_dns_help_modal:
   params:
     button_text: Do you need to set up custom DNS
@@ -20,13 +41,15 @@ create_route:
     if_param: route_path
     ref: set_route_path
   action: set_service_name
+  action:
+    if_param: alternative_service_name
+    ref: set_alternative_service
   action: set_target_port
   action:
     if_param:
       secure_route: "true"
     ref: set_secure_route
   action: click_create_button
-
 set_route_name:
   params:
     input_field_id: name
@@ -47,6 +70,31 @@ set_service_name:
     dropdown_field: Service
     dropdown_item: <service_name>
   action: choose_dropdown_item
+set_alternative_service_name:
+  params:
+    dropdown_field: Alternate Service Target
+    dropdown_item: <alternative_service_name>
+  action: choose_dropdown_item
+click_add_alternative_service:
+  element:
+    selector:
+      xpath: //button[contains(@class,'co-create-route__add-service-btn')]
+    op: click
+set_weight_for_main_service:
+  params:
+    label_text: Weight
+    input_value: <service_weight>
+  action: set_label_input
+set_weight_for_alternative_service:
+  params:
+    label_text: Alternate Service Weight
+    input_value: <alternative_service_weight>
+  action: set_label_input
+set_alternative_service:
+  action: click_add_alternative_service
+  action: set_weight_for_main_service
+  action: set_alternative_service_name  
+  action: set_weight_for_alternative_service
 set_target_port:
   params:
     dropdown_field: Target Port
