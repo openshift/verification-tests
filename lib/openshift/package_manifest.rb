@@ -1,5 +1,5 @@
 module BushSlicer
-  class PackageManifest < ProjectResource
+  class PackageManifest < ClusterResource
     RESOURCE = "packagemanifests"
 
   end
