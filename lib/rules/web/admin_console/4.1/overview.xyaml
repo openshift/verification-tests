@@ -10,6 +10,14 @@ check_pod_number:
   element:
     selector:
       xpath: //dt[contains(text(),'Desired Count')]/following-sibling::dd[1]//button[starts-with(text(),'<pod_number>')]
+check_pod_number_and_link:
+  element:
+    selector:
+      xpath: //a[@href='<link>']
+  scripts:
+    - command: return document.querySelector('a[href="<link>"]').innerText
+      expect_result: <text>
+check_pod_info_on_overview_sidebar: {}
 click_list_item:
   element:
     selector:

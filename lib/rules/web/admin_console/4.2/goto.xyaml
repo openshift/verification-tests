@@ -134,7 +134,7 @@ goto_machineconfig_pools_page:
 #crd
 goto_crds_page:
   url: k8s/cluster/customresourcedefinitions
-goto_crd_instances_page
+goto_crd_instances_page:
   url: k8s/cluster/customresourcedefinitions/<crd_definition>/instances
 
 # quota
