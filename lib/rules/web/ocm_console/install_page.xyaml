@@ -1,0 +1,37 @@
+go_to_azure_ipi_install_page:
+    url: /beta/openshift/install/azure/installer-provisioned
+
+check_azure_install_page:
+    action: required_azure_install_items_loaded
+    action: check_azure_page_title
+    elements:
+        - selector:
+            xpath: //*[contains(., 'install a cluster on Microsoft Azure using infrastructure')]
+        - selector:
+            xpath: //*[contains(@href, '/4.2/installing/installing_azure/installing-azure-account.html') and contains(.,'official documentation')]
+        - selector:
+            xpath: //a[contains(@href, '/4.2/installing/installing_azure/installing-azure-account.html') and text()='Get started']
+        - selector:
+            xpath: //a[contains(@href, 'https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/') and text()='Download installer']
+        - selector:
+            xpath: //a[contains(@href, '/openshift/install/pre-release') and text()='pre-release builds']
+        - selector:
+            xpath: //button[@type='button' and text()='Download pull secret']
+        - selector:
+            xpath: //button[@id='copyPullSecret' and contains(., 'Copy Pull Secret')]
+        - selector:
+            xpath: //button[@type='button' and text()='Download command-line tools']
+
+required_azure_install_items_loaded:
+    elements:
+        - selector:
+            xpath: //h1[@class='pf-c-title pf-m-2xl ocm-page-title' and contains(., 'Install OpenShift Container Platform 4')]
+        - selector:
+            xpath: //h3[@class='pf-c-title pf-m-2xl' and contains(., 'Install on Azure with Installer-Provisioned Infrastructure')]
+check_azure_page_title:
+    scripts:
+    - command: return document.title=='Install OpenShift 4 | Red Hat OpenShift Cluster Manager | Azure'
+      expect_result: true
+
+
+
