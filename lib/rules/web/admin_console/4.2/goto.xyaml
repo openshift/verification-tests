@@ -59,6 +59,10 @@ goto_secrets_creation_page:
 goto_one_secret_page:
   url: k8s/ns/<project_name>/secrets/<secret_name>
 
+#serviceaccounts
+goto_serviceaccounts_page:
+  url: k8s/ns/<project_name>/serviceaccounts
+
 # storageclass
 goto_storageclass_page:
   url: k8s/cluster/storageclasses
@@ -134,7 +138,7 @@ goto_machineconfig_pools_page:
 #crd
 goto_crds_page:
   url: k8s/cluster/customresourcedefinitions
-goto_crd_instances_page
+goto_crd_instances_page:
   url: k8s/cluster/customresourcedefinitions/<crd_definition>/instances
 
 # quota
