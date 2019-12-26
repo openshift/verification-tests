@@ -1,11 +1,7 @@
 # logs page
-switch_to_second_container:
+switch_to_other_container:
   elements:
   - selector:
-      xpath: //button[contains(@class,'pf-c-dropdown__toggle')]//span[contains(text(),'<current_container_name>')]
+      xpath: //button[@data-test-id='dropdown-button']
     op: click
-  action: check_page_contains
-  elements:
-  - selector:
-      xpath: //button[contains(@class,'pf-c-dropdown__menu-item')]//span[contains(text(),'<new_container_name>')]
-    op: click
+  action: click_one_item
