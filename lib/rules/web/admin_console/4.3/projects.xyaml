@@ -11,7 +11,7 @@ create_project:
   action: submit_changes
   element:
     selector:
-      xpath: //span[contains(text(),'<project_name>')]
+      xpath: //*[contains(text(),'<project_name>')]
     timeout: 30
 set_project_name:
   element:
