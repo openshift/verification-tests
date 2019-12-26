@@ -100,6 +100,7 @@ click_kebab_of_one_resource:
   - selector:
       xpath: //*[text()='<resource_name>']//ancestor::tr//td[contains(@class,'dropdown-kebab-pf')]
     op: click
+    timeout: 30
 click_one_operation_in_kebab:
   action: click_kebab_of_one_resource
   action: click_button

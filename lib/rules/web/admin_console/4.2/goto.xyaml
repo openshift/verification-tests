@@ -22,6 +22,8 @@ goto_project_details_page:
 # builds
 goto_one_buildconfig_page:
   url: k8s/ns/<project_name>/buildconfigs/<bc_name>
+goto_builds_page:
+  url: k8s/ns/<project_name>/builds
 goto_one_build_page:
   url: k8s/ns/<project_name>/builds/<build_name>
 
