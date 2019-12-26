@@ -799,12 +799,12 @@ Given /^the bridge interface named "([^"]*)" with address "([^"]*)" is added to 
   raise "Failed to add  bridge interface" unless @result[:success]
 end
 
-Given /^a DHCP service is configured on the "([^"]*)" node$/ do |node_name|
+Given /^a DHCP service is configured for interface "([^"]*)" on "([^"]*)" node with address range and lease time as "([^"]*)"$/ do |br_inf,node_name,add_lease|
   ensure_admin_tagged
   node = node(node_name)
   host = node.host
   #Following will take dnsmasq backup and append curl contents to the dnsmasq config after
-  @result = host.exec_admin("cp /etc/dnsmasq.conf /etc/dnsmasq.conf.bak;curl https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/dnsmasq_for_testbridge.conf >> /etc/dnsmasq.conf;systemctl restart dnsmasq --now")
+  @result = host.exec_admin("cp /etc/dnsmasq.conf /etc/dnsmasq.conf.bak;curl https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/dnsmasq_for_testbridge.conf | sed s/testbr1/#{br_inf}/g | sed s/88.8.8.100,88.8.8.110,24h/#{add_lease}/g >> /etc/dnsmasq.conf;systemctl restart dnsmasq --now")
   raise "Failed to configure DNS server" unless @result[:success]
   step "10 seconds have passed"
   if host.exec_admin("systemctl status dnsmasq")[:response].include? "running"
@@ -875,12 +875,12 @@ Given /^the vxlan tunnel address of node "([^"]*)" is stored in the#{OPT_SYM} cl
   logger.info "The tunnel interface address is stored in the #{cb_address} clipboard."
 end
 
-Given /^a DHCP service for macvlan tunnel mode is configured on the "([^"]*)" node$/ do |node_name|
+Given /^a DHCP service for macvlan tunnel mode is configured for interface "([^"]*)" on "([^"]*)" node with address range and lease time as "([^"]*)"$/ do |br_inf,node_name,add_lease|
   ensure_admin_tagged
   node = node(node_name)
   host = node.host
   #Following will take dnsmasq backup and append curl contents to the dnsmasq config after
-  @result = host.exec_admin("cp /etc/dnsmasq.conf /etc/dnsmasq.conf.bak;curl https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/dnsmasq_for_testbridge.conf | sed s/testbr1/mvlanp0/g | sed s/88.8.8.100,88.8.8.110,24h/192.168.1.100,192.168.1.120,24h/g >> /etc/dnsmasq.conf;systemctl restart dnsmasq --now")
+  @result = host.exec_admin("cp /etc/dnsmasq.conf /etc/dnsmasq.conf.bak;curl https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/dnsmasq_for_testbridge.conf | sed s/88.8.8.100,88.8.8.110,24h/#{add_lease}/g | sed s/testbr1/#{br_inf}/g>>/etc/dnsmasq.conf;systemctl restart dnsmasq --now")
   raise "Failed to configure DNS server" unless @result[:success]
   step "10 seconds have passed"
   if host.exec_admin("systemctl status dnsmasq")[:response].include? "running"
