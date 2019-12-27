@@ -971,27 +971,23 @@ Feature: Multus-CNI related scenarios
     """
     a DHCP service is deconfigured on the "<%= cb.master[0].name %>" node
     """
+    Given I have a project
     #Patching simplemacvlan config in network operator config CRD
-    Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
-      | {"spec": {"additionalNetworks": [{"name": "testmacvlan","namespace": "openshift-multus","simpleMacvlanConfig": {"ipamConfig": {"type": "dhcp"},"master": "mvlanp0"},"type": "SimpleMacvlan"}]}} |
+    And as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
+      | {"spec": {"additionalNetworks": [{"name": "testmacvlan","namespace": "<%= project.name %>","simpleMacvlanConfig": {"ipamConfig": {"type": "dhcp"},"master": "mvlanp0"},"type": "SimpleMacvlan"}]}} |
     #Cleanup for bringing CRD to original
     Given I register clean-up steps:
     """
-    Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
+    as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
     | {"spec":{"additionalNetworks": null}} |
     """
-    And admin ensures "testmacvlan" network_attachment_definition is deleted from the "openshift-multus" project after scenario
-    
-    #Creating pod under openshift-multus project to absorb above net-attach-def
-    Given I switch to cluster admin pseudo user
-    Given I use the "openshift-multus" project
+    #Creating pod under test project to absorb above net-attach-def
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
       | ["metadata"]["namespace"]                                  | <%= project.name %>      |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | testmacvlan              |
       | ["spec"]["nodeName"]                                       | <%= cb.worker[0].name %> |
     Then the step should succeed
     And the pod named "test-pod" becomes ready
-    And admin ensures "<%= pod.name %>" pod is deleted from the "openshift-multus" project after scenario
     When I execute on the pod:
       | /usr/sbin/ip | a |
     Then the output should contain "192.168.1"
