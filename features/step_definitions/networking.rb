@@ -790,3 +790,13 @@ Given /^the env is using "([^"]*)" networkType$/ do |network_type|
   @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
   raise "the networkType is not #{network_type}" unless @result[:response] == network_type
 end
+
+Given /^the Internal IP of node "([^"]*)" is stored in the#{OPT_SYM} clipboard$/ do |node_name,cb_ipaddr|
+  ensure_admin_tagged
+  node = node(node_name)
+  host = node.host
+  step "the default interface on nodes is stored in the clipboard"
+  @result = host.exec_admin("ifconfig #{cb.interface}")
+  cb[cb_ipaddr]=@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]
+  logger.info "The Internal IP of node is stored in the #{cb_ipaddr} clipboard."
+end

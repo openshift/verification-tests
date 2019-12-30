@@ -444,8 +444,9 @@ Feature: Multus-CNI related scenarios
     #Entering into corresponding no eot make sure No VLAN ID information shown for secondary interface
     Given CNI vlan info is obtained on the "<%= cb.pod.node_name %>" node
     Then the step should succeed
-    And the output should contain 2 times:
-      | 1 PVID untagged |
+    And the output should contain 1 times:
+      | 1 PVID   |
+      | untagged |
 
   # @author anusaxen@redhat.com
   # @case_id OCP-24489
@@ -677,29 +678,16 @@ Feature: Multus-CNI related scenarios
     the bridge interface named "mybridge.100" is deleted from the "<%= cb.nodes[1].name %>" node
     """  
     #making sure the pods on same node can ping while pods on diff nodes can't
-
     When I execute on the "<%= cb.pod1 %>" pod:
-      | ping | -c1 | -W2 | <%= cb.pod2_net1_ip %> |
+      | arping | -I | net1 |-c1 | -w2 | <%= cb.pod2_net1_ip %> |
     Then the step should succeed
-
-    When I execute on the "<%= cb.pod2 %>" pod:
-      | ping | -c1 | -W2 | <%= cb.pod1_net1_ip %> |
-    Then the step should succeed
-    
-    When I execute on the "<%= cb.pod1 %>" pod:
-      | ping | -c1 | -W2 | <%= cb.pod3_net1_ip %> |
-    Then the step should fail
 
     When I execute on the "<%= cb.pod3 %>" pod:
-      | ping | -c1 | -W2 | <%= cb.pod1_net1_ip %> |
+      | arping | -I | net1 |-c1 | -w2 | <%= cb.pod1_net1_ip %> |
     Then the step should fail
     
     When I execute on the "<%= cb.pod3 %>" pod:
-      | ping | -c1 | -W2 | <%= cb.pod2_net1_ip %> |
-    Then the step should fail
-    
-    When I execute on the "<%= cb.pod2 %>" pod:
-      | ping | -c1 | -W2 | <%= cb.pod3_net1_ip %> |
+      | arping | -I | net1 |-c1 | -w2 | <%= cb.pod2_net1_ip %> |
     Then the step should fail
     
   # @author anusaxen@redhat.com

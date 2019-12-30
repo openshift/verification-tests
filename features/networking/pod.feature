@@ -197,7 +197,8 @@ Feature: Pod related networking scenarios
   # @case_id OCP-23890
   @admin
   Scenario: A pod with or without hostnetwork cannot access the MCS port 22623 or 22624 on the master
-    Given evaluation of `env.master_hosts.first.local_ip` is stored in the :master_ip clipboard
+    Given I store the masters in the :masters clipboard
+    And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master_ip clipboard
     Given I select a random node's host
     Given I have a project
     #pod-for-ping will be a non-hostnetwork pod
@@ -228,29 +229,26 @@ Feature: Pod related networking scenarios
   # @case_id OCP-23891
   @admin
   Scenario: A pod cannot access the MCS port 22623 or 22624 via the SDN/tun0 address of the master
-    Given I use the first master host		
-    And I run commands on the host:
-      | ifconfig tun0 \| grep -w inet \| awk '{print $2}' |
-    Then the step should succeed
-    And evaluation of `@result[:response].strip` is stored in the :master_tun0_ip clipboard
-    
+    Given I store the masters in the :masters clipboard
+    And the vxlan tunnel address of node "<%= cb.masters[0].name %>" is stored in the :master_tunnel_address clipboard		
     Given I select a random node's host
     And I have a project
     #pod-for-ping will be a non-hostnetwork pod
     And I have a pod-for-ping in the project
-    #Curl on Master's tun0 IP to make sure connections are blocked to MCS via tun0
+    #Curl on Master's tun0/k8s-x-x- IP to make sure connections are blocked to MCS via tun0
     When I execute on the pod:
-      | curl | -I | https://<%= cb.master_tun0_ip %>:22623/config/master | -k |
+      | curl | -I | https://<%= cb.master_tunnel_address %>:22623/config/master | -k |
     Then the output should contain "Connection refused"
     When I execute on the pod:
-      | curl | -I | https://<%= cb.master_tun0_ip %>:22624/config/master | -k |
+      | curl | -I | https://<%= cb.master_tunnel_address %>:22624/config/master | -k |
     Then the output should contain "Connection refused"
 
   # @author anusaxen@redhat.com
   # @case_id OCP-23893
   @admin
   Scenario: A pod in a namespace with an egress IP cannot access the MCS
-    Given evaluation of `env.master_hosts.first.local_ip` is stored in the :master_ip clipboard
+    Given I store the masters in the :masters clipboard
+    And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master_ip clipboard
     Given I select a random node's host
     And evaluation of `node.name` is stored in the :egress_node clipboard
     #add the egress ip to the hostsubnet
@@ -279,8 +277,9 @@ Feature: Pod related networking scenarios
   # @case_id OCP-23894
   @admin
   Scenario: User cannot access the MCS by creating a service that maps to non-MCS port to port 22623 or 22624 on the IP of a master (via manually-created ep's)
-    Given evaluation of `env.master_hosts.first.local_ip` is stored in the :master_ip clipboard
-    And I have a project
+    Given I store the masters in the :masters clipboard
+    And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master_ip clipboard
+    Given I have a project
     #pod-for-ping will be a non-hostnetwork pod
     And I have a pod-for-ping in the project
     #Exposing above pod to MCS target port 22623
