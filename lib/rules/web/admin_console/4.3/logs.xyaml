@@ -2,6 +2,6 @@
 switch_to_other_container:
   elements:
   - selector:
-      xpath: //button[@data-test-id='dropdown-button']
+      xpath: //button[contains(@data-test-id, 'dropdown-button')]
     op: click
   action: click_one_item
