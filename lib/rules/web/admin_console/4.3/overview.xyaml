@@ -72,3 +72,60 @@ check_error_icon_for_overview_item:
     selector:
       css: .project-overview__detail--alert
     timeout: 20
+check_popover_info:
+  elements:
+  - selector:
+      xpath: //button[contains(@class, 'details-popover-button') and contains(text(), '<popover_item>')]
+    op: click
+  - selector:
+      xpath: //.[contains(@id, 'popover')]/div[contains(text(),"<popover_item>")]
+  action:
+    if_param: 
+      popover_item: Run Policy
+    ref: check_run_policy_popover_info
+  action:
+    if_param: 
+      popover_item: Triggered By
+    ref: check_triggered_by_popover_info
+  action:
+    if_param: 
+      popover_item: Update Strategy
+    ref: check_update_strategy_popover_info
+  action:
+    if_param: 
+      popover_item: Namespace
+    ref: check_namespace_popover_info
+  action:
+    if_param: 
+      popover_item: Labels
+    ref: check_label_popover_info
+  action:
+    if_param: 
+      popover_item: Service
+    ref: check_service_popover_info
+check_run_policy_popover_info:
+  params:
+    content: RunPolicy describes how the new build created from this build configuration
+  action: check_page_contains
+check_triggered_by_popover_info:
+  params:
+    content: triggeredBy describes which triggers started the most recent update to the build configuration
+  action: check_page_contains
+check_update_strategy_popover_info:
+  params:
+    content: the name of a deployment strategy
+  action: check_page_contains
+check_namespace_popover_info:
+  params:
+    text: docs/user-guide/namespaces
+    link_url: docs/user-guide/namespaces
+  action: click_link_with_text
+check_label_popover_info:
+  params:
+    text: docs/user-guide/labels
+    link_url: docs/user-guide/labels
+  action: click_link_with_text
+check_service_popover_info:
+  params:
+    content: name of the service/target that is being referred
+  action: check_page_contains
