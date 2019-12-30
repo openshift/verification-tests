@@ -81,3 +81,12 @@ create_autoscaler_action:
   params:
     item: Create Autoscaler
   action: click_one_dropdown_action
+click_add_users_action:
+  params:
+    item: Add Users
+  action: click_one_dropdown_action
+click_remove_group_action:
+  params:
+    item: Delete Group
+  action: click_one_dropdown_action
+  action: click_confirm_button

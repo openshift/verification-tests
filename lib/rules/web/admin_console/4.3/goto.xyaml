@@ -137,6 +137,12 @@ goto_node_page:
 goto_one_node_page:
   url: k8s/cluster/nodes/<node_name>
 
+# users
+goto_groups_page:
+  url: /k8s/cluster/user.openshift.io~v1~Group
+goto_one_group_page:
+  url: /k8s/cluster/user.openshift.io~v1~Group/<group_name>
+
 # namespace
 goto_one_namespace_page:
   url: k8s/cluster/namespaces/<namespace_name>
