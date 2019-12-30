@@ -232,6 +232,11 @@ wait_form_loaded:
     selector:
       css: form
     timeout: 20
+wait_dropdown_loaded:
+  element:
+    selector:
+      xpath: //*[contains(@class, 'dropdown-menu--text-wrap')]
+    timeout: 20
 wait_box_loaded:
   element:
     selector:
