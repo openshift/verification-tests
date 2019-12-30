@@ -25,21 +25,21 @@ module BushSlicer
 
     # @param status [Symbol, Array<Symbol>] the expected statuses as a symbol
     # @return [Boolean] if pod status is what's expected
-    # def status?(user:, status:, quiet: false, cached: false)
-    #   statuses = {
-    #     waiting: "Waiting",
-    #     running: "Running",
-    #     succeeded: "Succeeded",
-    #     failed: "Failed",
-    #     complete: "Complete",
-    #   }
-    #   res = describe(user, quiet: quiet)
-    #   if res[:success]
-    #     pods_status = res[:parsed][:pods_status]
-    #     res[:success] = (pods_status[status].to_i != 0)
-    #   end
-    #   return res
-    # end
+    def status?(user:, status:, quiet: false, cached: false)
+      statuses = {
+        waiting: "Waiting",
+        running: "Running",
+        succeeded: "Succeeded",
+        failed: "Failed",
+        complete: "Complete",
+      }
+      res = describe(user, quiet: quiet)
+      if res[:success]
+        pods_status = res[:parsed][:pods_status]
+        res[:success] = (pods_status[status].to_i != 0)
+      end
+      return res
+    end
 
     def selector(user: nil, cached: true, quiet: false)
       raw_resource(user: user, cached: cached, quiet: quiet).
