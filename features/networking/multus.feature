@@ -444,7 +444,7 @@ Feature: Multus-CNI related scenarios
     #Entering into corresponding no eot make sure No VLAN ID information shown for secondary interface
     Given CNI vlan info is obtained on the "<%= cb.pod.node_name %>" node
     Then the step should succeed
-    And the output should contain 1 times:
+    And the output should contain 2 times:
       | 1 PVID   |
       | untagged |
 
