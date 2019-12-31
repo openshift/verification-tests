@@ -90,3 +90,35 @@ click_to_machines_page:
     primary_menu: Compute
     secondary_menu: Machines
   action: click_secondary_menu
+set_minimum_replicas:
+  params:
+    label_text: Minimum Replicas
+    input_value: <replicas>
+  action: set_label_input
+set_maximum_replicas:
+  params:
+    label_text: Maximum Replicas
+    input_value: <replicas>
+  action: set_label_input
+check_machineautoscaler_list_table_struc:
+  elements:
+  - selector:
+      xpath: //th[@data-label='Name']
+  - selector:
+      xpath: //th[@data-label='Namespace']
+  - selector:
+      xpath: //th[@data-label='Scale Target']
+  - selector:
+      xpath: //th[@data-label='Min']
+  - selector:
+      xpath: //th[@data-label='Max']  
+check_machineautoscaler_name_and_link:
+  params:
+    resource_type: MachineAutoscaler
+    resource_link: /k8s/ns/openshift-machine-api/autoscaling.openshift.io~v1beta1~MachineAutoscaler/<resource_name>
+  action: check_resource_item
+check_machineset_name_and_link:
+  params:
+    resource_type: MachineSet
+    resource_link: /k8s/ns/openshift-machine-api/machine.openshift.io~v1beta1~MachineSet/<resource_name>
+  action: check_resource_item
