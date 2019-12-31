@@ -24,10 +24,10 @@ confirm_cancel_rollout:
   action: click_button
 search_image:
   params:
-    clear_field_id: form-input-search-searchTerm-field
+    field_css: input#form-input-search-searchTerm-field
     input_field_id: form-input-search-searchTerm-field
     input_value: <search_content>
-  action: clear_input_value
+  action: clear_value
   action: set_input_value
   action: click_search_button
 search_nonexisted_image_and_check_message:

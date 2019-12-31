@@ -20,11 +20,11 @@ click_initcontainer_in_detail_page:
     op: click
 search_image:
   params:
-    clear_field_id: image-name
+    field_css: input#image-name
     input_field_id: image-name
     input_value: <search_content>
     button_text: Find
-  action: clear_input_value
+  action: clear_value
   action: set_input_value
   action: click_button
 search_nonexisted_image_and_check_message:
