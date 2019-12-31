@@ -86,6 +86,13 @@ clear_input_value:
       id: <clear_field_id>
     op: clear
     type: input
+clear_value:
+  element:
+    selector:
+      css: <field_css>
+  scripts:
+    - command: return document.querySelector("<field_css>").value = '';
+      expect_result: true
 set_input_value:
   element:
     selector:
