@@ -86,13 +86,12 @@ goto_one_rc_page:
 goto_one_pod_page:
   url: k8s/ns/<project_name>/pods/<resource_name>
 goto_one_pod_log_page:
-  url: k8s/ns/<project_name>/pods/<resource_name>/logs
+  url: k8s/ns/<project_name>/pods/<pod_name>/logs
+
 
 goto_cluster_oauth_configuration_page:
   url: k8s/cluster/config.openshift.io~v1~OAuth/cluster
 
-goto_one_pod_log_page:
-  url: k8s/ns/<project_name>/pods/<pod_name>/logs
 
 #routes
 goto_routes_page:
