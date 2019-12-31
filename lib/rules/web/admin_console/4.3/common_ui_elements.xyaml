@@ -59,7 +59,7 @@ check_button_enabled:
     selector:
       xpath: //button[contains(., '<button_text>') and not(@disabled)]
 check_text_not_a_link:
-  element:
+  element: 
     selector:
       xpath: //*[contains(@class,'co-resource-item__resource-name') and text()='<text>' and not(@href)]
 click_tab:
@@ -254,6 +254,11 @@ wait_form_loaded:
   element:
     selector:
       css: form
+    timeout: 20
+wait_dropdown_loaded:
+  element:
+    selector:
+      xpath: //*[contains(@class, 'dropdown-menu--text-wrap')]
     timeout: 20
 wait_box_loaded:
   element:
