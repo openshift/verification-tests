@@ -304,6 +304,7 @@ Feature: Pod related networking scenarios
   @admin
   Scenario: [4.x] Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted
     Given I store the workers in the :nodes clipboard
+    And the Internal IP of node "<%= cb.nodes[0].name %>" is stored in the :node_ip clipboard
     Given I have a project
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
     When I run oc create over "https://raw.githubusercontent.com/anuragthehatter/v3-testfiles/master/networking/pod_with_udp_port_4789_nodename.json" replacing paths:
@@ -324,9 +325,10 @@ Feature: Pod related networking scenarios
     #Getting nodeport value
     When I run the :get client command with:
       | resource | service                                       |
-      | output   | jsonpath='{.items[*].spec.ports[*].nodePort}' |
+      | output   | jsonpath={.items[*].spec.ports[*].nodePort} |
     Then the step should succeed
     And evaluation of `@result[:response]` is stored in the :nodeport clipboard
+    
     #Creating a simple client pod to generate traffic from it towards the exposed node IP address
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/aosqe-pod-for-ping.json |
@@ -341,9 +343,10 @@ Feature: Pod related networking scenarios
       | oc_opts_end      |                                                        |
       | exec_command     | bash                                                   |
       | exec_command_arg | -c                                                     |
-      | exec_command_arg | yes "h">/dev/udp/<%= pod.node_ip %>/<%= cb.nodeport %> |
+      | exec_command_arg | yes "h">/dev/udp/<%= cb.node_ip %>/<%= cb.nodeport %> |
     Given 3 seconds have passed
     And I terminate last background process
+    
     #Creating network test pod to levearage conntrack tool
     When I run oc create over "https://raw.githubusercontent.com/anuragthehatter/v3-testfiles/master/networking/net_admin_cap_pod.yaml" replacing paths:
       | ["spec"]["nodeName"] | <%= cb.nodes[0].name %> |
@@ -372,11 +375,10 @@ Feature: Pod related networking scenarios
       | oc_opts_end      |                                                        |
       | exec_command     | bash                                                   |
       | exec_command_arg | -c                                                     |
-      | exec_command_arg | yes "h">/dev/udp/<%= pod.node_ip %>/<%= cb.nodeport %> |
+      | exec_command_arg | yes "h">/dev/udp/<%= cb.node_ip %>/<%= cb.nodeport %> |
     Given 3 seconds have passed
     And I terminate last background process
-    And 10 seconds have passed
-    #Making sure that the conntrack table should not contain old deleted udp listener pod IP entries but new pod one's after we wait around 10 seconds post old pod deletion
+    #Making sure that the conntrack table should not contain old deleted udp listener pod IP entries but new pod one's
     When I execute on the "<%= cb.network_pod %>" pod:
       | conntrack | -L |
     Then the output should contain "<%= cb.host_pod2.ip %>"
