@@ -893,7 +893,7 @@ Feature: Multus-CNI related scenarios
     the bridge interface named "testbr1" is deleted from the "<%= cb.nodes[0].name %>" node
     """
     #Configuring DHCP service on target node
-    And a DHCP service for macvlan tunnel mode is configured for interface "testbr1" on "<%= cb.nodes[0].name %>" node with address range and lease time as "88.8.8.100,88.8.8.110,24h"
+    And a DHCP service is configured for interface "testbr1" on "<%= cb.nodes[0].name %>" node with address range and lease time as "88.8.8.100,88.8.8.110,24h"
     #Cleanup for deconfiguring DHCP service on target node
     Given I register clean-up steps:
     """
@@ -965,7 +965,7 @@ Feature: Multus-CNI related scenarios
     Then the step should succeed
     
     #Configuring DHCP service on master node
-    Given a DHCP service for macvlan tunnel mode is configured for interface "mvlanp0" on "<%= cb.master[0].name %>" node with address range and lease time as "192.168.1.100,192.168.1.120,24h"
+    Given a DHCP service is configured for interface "mvlanp0" on "<%= cb.master[0].name %>" node with address range and lease time as "192.168.1.100,192.168.1.120,24h"
     #Cleanup for deconfiguring DHCP service on target node
     Given I register clean-up steps:
     """

@@ -803,16 +803,18 @@ Given /^a DHCP service is configured for interface "([^"]*)" on "([^"]*)" node w
   ensure_admin_tagged
   node = node(node_name)
   host = node.host
+  dhcp_status_timeout = 30
   #Following will take dnsmasq backup and append curl contents to the dnsmasq config after
   @result = host.exec_admin("cp /etc/dnsmasq.conf /etc/dnsmasq.conf.bak;curl https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/dnsmasq_for_testbridge.conf | sed s/testbr1/#{br_inf}/g | sed s/88.8.8.100,88.8.8.110,24h/#{add_lease}/g >> /etc/dnsmasq.conf;systemctl restart dnsmasq --now")
   raise "Failed to configure DNS server" unless @result[:success]
-  step "10 seconds have passed"
-  if host.exec_admin("systemctl status dnsmasq")[:response].include? "running"
-    logger.info("DNS server is running fine")
-  else
-    raise "Failed to start DNS server. Check you cluster health manually"
-  end
-  raise "Failed to configure DNS server. Check your cluster health manually" unless @result[:success]
+  wait_for(dhcp_status_timeout) {
+    if host.exec_admin("systemctl status dnsmasq")[:response].include? "running"
+      logger.info("DNS server is running fine")
+    else
+      raise "Failed to start DNS server. Check you cluster health manually"
+    end
+  }
+  #raise "Failed to configure DNS server. Check your cluster health manually" unless @result[:success]
 end
 
 Given /^a DHCP service is deconfigured on the "([^"]*)" node$/ do |node_name|
@@ -842,8 +844,8 @@ Given /^the vxlan tunnel name of node "([^"]*)" is stored in the#{OPT_SYM} clipb
   end
   case networkType
   when "OVNKubernetes"
-    @inf_name = host.exec_admin("ifconfig | egrep -o '^k8[^:]+'")
-    cb[cb_name] = @inf_name[:response].split("\n")[0]
+    inf_name = host.exec_admin("ifconfig | egrep -o '^k8[^:]+'")
+    cb[cb_name] = inf_name[:response].split("\n")[0]
   when "OpenShiftSDN"
     cb[cb_name]="tun0"
   else
@@ -873,20 +875,4 @@ Given /^the vxlan tunnel address of node "([^"]*)" is stored in the#{OPT_SYM} cl
     raise "unable to find interface address or networkType"
   end
   logger.info "The tunnel interface address is stored in the #{cb_address} clipboard."
-end
-
-Given /^a DHCP service for macvlan tunnel mode is configured for interface "([^"]*)" on "([^"]*)" node with address range and lease time as "([^"]*)"$/ do |br_inf,node_name,add_lease|
-  ensure_admin_tagged
-  node = node(node_name)
-  host = node.host
-  #Following will take dnsmasq backup and append curl contents to the dnsmasq config after
-  @result = host.exec_admin("cp /etc/dnsmasq.conf /etc/dnsmasq.conf.bak;curl https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/dnsmasq_for_testbridge.conf | sed s/88.8.8.100,88.8.8.110,24h/#{add_lease}/g | sed s/testbr1/#{br_inf}/g>>/etc/dnsmasq.conf;systemctl restart dnsmasq --now")
-  raise "Failed to configure DNS server" unless @result[:success]
-  step "10 seconds have passed"
-  if host.exec_admin("systemctl status dnsmasq")[:response].include? "running"
-    logger.info("DNS server is running fine")
-  else
-    raise "Failed to start DNS server. Check you cluster health manually"
-  end
-  raise "Failed to configure DNS server. Check your cluster health manually" unless @result[:success]
 end
