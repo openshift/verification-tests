@@ -91,8 +91,6 @@ set_input_value:
       xpath: //input[@id='<input_field_id>']
     op: send_keys <input_value>
     type: input
-<<<<<<< 099665d477b6a16512677540757ba9973e09c945
-
 set_label_input:
   elements:
   - selector: &label_input
@@ -106,8 +104,6 @@ check_content_in_yaml_editor:
     selector:
       xpath: //*[contains(@class,'react-monaco-editor-container')]//*[contains(text(),'<yaml_content>')]
 
-=======
->>>>>>> update rules for comments
 # click and check the first item from resource list such as projects, pods, etc.
 click_first_item_from_resource_list_and_check_breadcrumb:
   action: wait_until_no_loading
@@ -127,33 +123,12 @@ check_link_in_breadcrumb:
   element:
     selector:
       xpath: //ol[@class='pf-c-breadcrumb__list']/li[<layer_number>]/a[contains(@data-test-id,'breadcrumb-link') and contains(@href,'<link>') and translate(normalize-space(text()), ' ','')='<text>']
-<<<<<<< 099665d477b6a16512677540757ba9973e09c945
+
 check_text_in_breadcrumb:
   element:
     selector:
       xpath: //ol[@class='pf-c-breadcrumb__list']/li[<layer_number>][translate(normalize-space(text()), ' ','')='<text>']
 
-check_breadcrumb_on_resource_detail_page:
-  action: click_first_item_in_resource_list
-  action: check_link_in_breadcrumb
-check_breadcrumb_on_sub_resource_detail_page:
-  action: click_first_sub_item_in_resource_detail_list
-  action: check_link_in_breadcrumb
-check_link_in_breadcrumb:
-  element:
-    selector:
-      xpath: //ol[@class='pf-c-breadcrumb__list']/li[<layer_number>]/a[contains(@data-test-id,'breadcrumb-link') and contains(@href,'<link>') and contains(text(),'<text>')]
-check_text_in_breadcrumb:
-  element:
-    selector:
-      xpath: //ol[@class='pf-c-breadcrumb__list']/li[<layer_number>][contains(text(),'<text>')]
->>>>>>> update
-=======
-check_text_in_breadcrumb:
-  element:
-    selector:
-      xpath: //ol[@class='pf-c-breadcrumb__list']/li[<layer_number>][translate(normalize-space(text()), ' ','')='<text>']
->>>>>>> update rules for comments
 check_row_filter_on_page:
   elements:
   - selector:
