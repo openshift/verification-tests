@@ -4,6 +4,8 @@ go_to_azure_ipi_install_page:
 check_azure_install_page:
     action: required_azure_install_items_loaded
     action: check_azure_page_title
+    action: check_breadcrumbs_in_azure_page
+    action: click_copyPullSecret_button
     elements:
         - selector:
             xpath: //*[contains(., 'install a cluster on Microsoft Azure using infrastructure')]
@@ -32,6 +34,23 @@ check_azure_page_title:
     scripts:
     - command: return document.title=='Install OpenShift 4 | Red Hat OpenShift Cluster Manager | Azure'
       expect_result: true
-
+check_breadcrumbs_in_azure_page:
+    elements:
+        - selector:
+            xpath: //li[contains(@href, '/openshift/')]/a[text()='Clusters']
+        - selector:
+            xpath: //a[contains(@href, '/openshift/create') and text()='Create']
+        - selector:
+            xpath: //a[contains(@href, '/openshift/install') and text()='OpenShift Container Platform']
+        - selector:
+            xpath: //li[@class='pf-c-breadcrumb__item' and text()='Microsoft Azure']
+click_copyPullSecret_button:
+    element:
+        selector:
+            xpath: //button[@id='copyPullSecret']
+        op: click
+    element:
+        selector:
+            xpath: //button[@id='copyPullSecret']/../../span[contains(., 'Copied!')]
 
 
