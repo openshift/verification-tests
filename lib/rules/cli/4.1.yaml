@@ -1023,6 +1023,8 @@
   :optional_properties:
     :server_version: !ruby/regexp '/^Server Version: (.+?)\s/'
     :kubernetes_server_version: !ruby/regexp '/^Kubernetes(?:.*Git| )Version:[" ]v(.+?)["\s]/'
+  :options:
+    :o: --output=<value>
 :wait:
   :cmd: oc wait
   :options:
@@ -1113,10 +1115,15 @@
 :oadm_drain:
   :cmd: oc adm drain
   :options:
-    :node_name: <value>
-    :force: --force=<value>
+    :-l: --selector=<value>
     :delete-local-data: --delete-local-data=<value>
+    :force: --force=<value>
+    :grace-period: --grace-period=<value>
     :ignore-daemonsets: --ignore-daemonsets=<value>
+    :node_name: <value>
+    :pod-selector: --pod-selector=<value>
+    :selector: --selector=<value>
+    :timeout: --timeout=<value>
 :oadm_groups_add_users:
   :cmd: oc adm groups add-users
   :options:
