@@ -814,23 +814,24 @@ Given /^a DHCP service is configured for interface "([^"]*)" on "([^"]*)" node w
       raise "Failed to start DNS server. Check you cluster health manually"
     end
   }
-  #raise "Failed to configure DNS server. Check your cluster health manually" unless @result[:success]
 end
 
 Given /^a DHCP service is deconfigured on the "([^"]*)" node$/ do |node_name|
   ensure_admin_tagged
   node = node(node_name)
   host = node.host
+  dhcp_status_timeout = 30
   #Copying original dnsmasq on to the modified one
   @result = host.exec_admin("systemctl stop dnsmasq;cp /etc/dnsmasq.conf.bak /etc/dnsmasq.conf;systemctl restart dnsmasq --now")
   raise "Failed to configure DNS server" unless @result[:success]
-  step "10 seconds have passed"
-  if host.exec_admin("systemctl status dnsmasq")[:response].include? "running"
-    logger.info("DNS server is running fine")
-  else
-    raise "Failed to bring your DNS server back to normal. Check you cluster health manually"
-  end
-  host.exec_admin("rm /etc/dnsmasq.conf.bak")
+  wait_for(dhcp_status_timeout) {
+    if host.exec_admin("systemctl status dnsmasq")[:response].include? "running"
+      logger.info("DNS server is running fine")
+      host.exec_admin("rm /etc/dnsmasq.conf.bak")
+    else
+      raise "Failed to start DNS server. Check you cluster health manually"
+    end
+  }
 end
 
 Given /^the vxlan tunnel name of node "([^"]*)" is stored in the#{OPT_SYM} clipboard$/ do |node_name,cb_name|
