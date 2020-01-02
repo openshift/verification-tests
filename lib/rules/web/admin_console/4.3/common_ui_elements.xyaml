@@ -213,7 +213,7 @@ check_sidebar_item:
 submit_changes:
   element:
     selector:
-      xpath: //button[@type='submit']
+      xpath: //button[@type='submit' and not(@disabled)]
     op: click
 click_add_more_button:
   element:
