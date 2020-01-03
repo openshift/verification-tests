@@ -877,3 +877,13 @@ Given /^the vxlan tunnel address of node "([^"]*)" is stored in the#{OPT_SYM} cl
   end
   logger.info "The tunnel interface address is stored in the #{cb_address} clipboard."
 end
+
+Given /^the Internal IP of node "([^"]*)" is stored in the#{OPT_SYM} clipboard$/ do |node_name,cb_ipaddr|
+  ensure_admin_tagged
+  node = node(node_name)
+  host = node.host
+  step "the default interface on nodes is stored in the clipboard"
+  @result = host.exec_admin("ifconfig #{cb.interface}")
+  cb[cb_ipaddr]=@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]
+  logger.info "The Internal IP of node is stored in the #{cb_ipaddr} clipboard."
+end
