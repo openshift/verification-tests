@@ -13,6 +13,7 @@ create_resource_by_default_yaml:
       selector:
         xpath: //a[text()='Edit YAML']
     ref: click_edit_yaml_link
+  action: wait_until_no_loading
   action: click_create_button
 click_edit_yaml_link:
   elements:
@@ -44,6 +45,10 @@ click_button_by_id:
     selector:
       xpath: //button[contains(@id,'<button_id>')]
     op: click
+check_resource_item:
+  elements:
+  - selector:
+      xpath: //span[contains(@class,'co-m-resource-icon') and @title='<resource_type>']/parent::span[@class='co-resource-item']//a[@class='co-resource-item__resource-name' and text()='<resource_name>' and @href='<resource_link>']
 select_resource_item:
   action: click_button_by_id
   element:
@@ -59,7 +64,7 @@ check_button_enabled:
     selector:
       xpath: //button[contains(., '<button_text>') and not(@disabled)]
 check_text_not_a_link:
-  element:
+  element: 
     selector:
       xpath: //*[contains(@class,'co-resource-item__resource-name') and text()='<text>' and not(@href)]
 click_tab:
@@ -84,6 +89,18 @@ set_input_value:
       xpath: //input[@id='<input_field_id>']
     op: send_keys <input_value>
     type: input
+set_label_input:
+  elements:
+  - selector: &label_input
+      xpath: //label[text()='<label_text>']/following::input[1]
+    op: clear
+  - selector:
+      <<: *label_input
+    op: send_keys <input_value>
+check_content_in_yaml_editor:
+  element:
+    selector:
+      xpath: //*[contains(@class,'react-monaco-editor-container')]//*[contains(text(),'<yaml_content>')]
 check_row_filter_on_page:
   elements:
   - selector:
@@ -189,6 +206,10 @@ check_page_not_match:
   element:
     selector: *page_content
     missing: true
+check_sidebar_item:
+  element:
+    selector:
+      xpath: //li[@class='co-resource-sidebar-item']//*[contains(text(),'<sidebar_item>')]
 submit_changes:
   element:
     selector:
@@ -229,6 +250,11 @@ click_link_with_text:
     selector:
       xpath: //a[contains(.,'<text>') and contains(@href,'<link_url>')]
     op: click
+click_on_resource_item:
+  element:
+    selector:
+      xpath: //a[@class='co-resource-item__resource-name' and @data-test-id='<resource_name>']
+    op: click
 click_secondary_menu:
   elements:
   - selector:
@@ -255,6 +281,11 @@ wait_form_loaded:
     selector:
       css: form
     timeout: 20
+wait_dropdown_loaded:
+  element:
+    selector:
+      xpath: //*[contains(@class, 'dropdown-menu--text-wrap')]
+    timeout: 20
 wait_box_loaded:
   element:
     selector:
@@ -265,7 +296,7 @@ wait_until_no_loading:
     selector:
       css: .cos-status-box--loading
     missing: true
-    timeout: 20
+    timeout: 30
 ## -------- check resource key and values pairs ------
 check_resource_details:
   action:

@@ -791,6 +791,93 @@ Given /^the env is using "([^"]*)" networkType$/ do |network_type|
   raise "the networkType is not #{network_type}" unless @result[:response] == network_type
 end
 
+Given /^the bridge interface named "([^"]*)" with address "([^"]*)" is added to the "([^"]*)" node$/ do |bridge_name,address,node_name|
+  ensure_admin_tagged
+  node = node(node_name)
+  host = node.host
+  @result = host.exec_admin("ip link add #{bridge_name} type bridge;ip address add #{address} dev #{bridge_name};ip link set up #{bridge_name}")
+  raise "Failed to add  bridge interface" unless @result[:success]
+end
+
+Given /^a DHCP service is configured for interface "([^"]*)" on "([^"]*)" node with address range and lease time as "([^"]*)"$/ do |br_inf,node_name,add_lease|
+  ensure_admin_tagged
+  node = node(node_name)
+  host = node.host
+  dhcp_status_timeout = 30
+  #Following will take dnsmasq backup and append curl contents to the dnsmasq config after
+  @result = host.exec_admin("cp /etc/dnsmasq.conf /etc/dnsmasq.conf.bak;curl https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/dnsmasq_for_testbridge.conf | sed s/testbr1/#{br_inf}/g | sed s/88.8.8.100,88.8.8.110,24h/#{add_lease}/g >> /etc/dnsmasq.conf;systemctl restart dnsmasq --now")
+  raise "Failed to configure dnsmasq service" unless @result[:success]
+  wait_for(dhcp_status_timeout) {
+    if host.exec_admin("systemctl status dnsmasq")[:response].include? "running"
+      logger.info("dnsmasq service is running fine")
+    else
+      raise "Failed to start dnsmasq service. Check you cluster health manually"
+    end
+  }
+end
+
+Given /^a DHCP service is deconfigured on the "([^"]*)" node$/ do |node_name|
+  ensure_admin_tagged
+  node = node(node_name)
+  host = node.host
+  dhcp_status_timeout = 30
+  #Copying original dnsmasq on to the modified one
+  @result = host.exec_admin("systemctl stop dnsmasq;cp /etc/dnsmasq.conf.bak /etc/dnsmasq.conf;systemctl restart dnsmasq --now")
+  raise "Failed to configure dnsmasq service" unless @result[:success]
+  wait_for(dhcp_status_timeout) {
+    if host.exec_admin("systemctl status dnsmasq")[:response].include? "running"
+      logger.info("dnsmasq service is running fine")
+      host.exec_admin("rm /etc/dnsmasq.conf.bak")
+    else
+      raise "Failed to start dnsmasq service. Check you cluster health manually"
+    end
+  }
+end
+
+Given /^the vxlan tunnel name of node "([^"]*)" is stored in the#{OPT_SYM} clipboard$/ do |node_name,cb_name|
+  ensure_admin_tagged
+  node = node(node_name)
+  host = node.host
+  cb_name ||= "interface_name"
+  @result = admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
+  if @result[:success] then
+     networkType = @result[:response].strip
+  end
+  case networkType
+  when "OVNKubernetes"
+    inf_name = host.exec_admin("ifconfig | egrep -o '^k8[^:]+'")
+    cb[cb_name] = inf_name[:response].split("\n")[0]
+  when "OpenShiftSDN"
+    cb[cb_name]="tun0"
+  else
+    raise "unable to find interface name or networkType"
+  end
+  logger.info "The tunnel interface name is stored in the #{cb_name} clipboard."
+end
+
+Given /^the vxlan tunnel address of node "([^"]*)" is stored in the#{OPT_SYM} clipboard$/ do |node_name,cb_address|
+  ensure_admin_tagged
+  node = node(node_name)
+  host = node.host
+  cb_name ||= "interface_address"
+  @result = admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
+  if @result[:success] then
+     networkType = @result[:response].strip
+  end
+  case networkType
+  when "OVNKubernetes"
+    inf_name = host.exec_admin("ifconfig | egrep -o '^k8[^:]+'")
+    @result = host.exec_admin("ifconfig #{inf_name[:response].split("\n")[0]}")
+    cb[cb_address] = @result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]
+  when "OpenShiftSDN"
+    @result=host.exec_admin("ifconfig tun0")
+    cb[cb_address] = @result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]
+  else
+    raise "unable to find interface address or networkType"
+  end
+  logger.info "The tunnel interface address is stored in the #{cb_address} clipboard."
+end
+
 Given /^the Internal IP of node "([^"]*)" is stored in the#{OPT_SYM} clipboard$/ do |node_name,cb_ipaddr|
   ensure_admin_tagged
   node = node(node_name)
