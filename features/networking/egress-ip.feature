@@ -111,3 +111,70 @@ Feature: Egress IP related features
     Then the step should succeed
     And the output should not contain "<%= cb.valid_ip %>"
     """
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-21812 OCP-15473
+  # @bug_id  1609112
+  @admin
+  @destructive
+  Scenario: Should remove the egressIP from the array if it was not being used
+    Given I store a random unused IP address from the reserved range to the clipboard
+    And evaluation of `IPAddr.new("<%= cb.valid_ip %>").to_i + 1 ` is stored in the :newipint clipboard
+    And evaluation of `IPAddr.new(<%= cb.newipint %>, Socket::AF_INET).to_s` is stored in the :newip clipboard
+
+    #Patch egress cidr to the node
+    Given as admin I successfully merge patch resource "hostsubnet/<%= node.name %>" with:
+      | {"egressCIDRs": ["<%= cb.subnet_range %>"] }   |
+    And I register clean-up steps:
+    """
+    as admin I successfully merge patch resource "hostsubnet/<%= node.name %>" with:
+      | {"egressCIDRs":null}   |
+    """
+
+    # Patch egress IP to the project twice
+    Given I have a project
+    And as admin I successfully merge patch resource "netnamespace/<%= project.name %>" with:
+      | {"egressIPs": ["<%= cb.newip %>"]} |
+    And as admin I successfully merge patch resource "netnamespace/<%= project.name %>" with:
+      | {"egressIPs": ["<%= cb.valid_ip %>"]} |
+
+    # Check the egress ip is the last one applied
+    And I wait up to 30 seconds for the steps to pass:
+    """
+    When I run command on the "<%= node.name%>" node's sdn pod:
+      | bash | -c | ip address show <%= cb.interface %> |
+    Then the step should succeed
+    And the output should contain "<%= cb.valid_ip %>"
+    """
+
+    #Check related iptables added
+    When I run command on the "<%= node.name%>" node's sdn pod:
+      | bash | -c | iptables-save \| grep "<%= cb.valid_ip %>" |
+    Then the step should succeed
+    And the output should contain:
+      | OPENSHIFT-MASQUERADE      |
+      | OPENSHIFT-FIREWALL-ALLOW  |
+
+    #check related openflow added
+    When I run command on the "<%= node.name%>" node's sdn pod:
+      | bash | -c | ovs-ofctl dump-flows br0 -O OpenFlow13 \| grep table=100 |
+    Then the step should succeed
+    And the output should contain "reg0=0x"
+
+    #Remove egress ip from namespace
+    Given as admin I successfully merge patch resource "netnamespace/<%= project.name %>" with:
+      | {"egressIPs": null} |
+
+    # Check related iptables and openlows removed
+    And I wait up to 30 seconds for the steps to pass:
+    """
+    When I run command on the "<%= node.name%>" node's sdn pod:
+      | bash | -c | iptables-save \| egrep "OPENSHIFT-FIREWALL-ALLOW\|OPENSHIFT-MASQUERADE" |
+    Then the step should succeed
+    And the output should not contain:
+      |  <%= cb.valid_ip %> |
+    When I run command on the "<%= node.name%>" node's sdn pod:
+      | bash | -c | ovs-ofctl dump-flows br0 -O OpenFlow13 \| grep table=100 |
+    Then the step should succeed
+    And the output should not contain "reg0=0x"
+    """
