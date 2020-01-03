@@ -806,12 +806,12 @@ Given /^a DHCP service is configured for interface "([^"]*)" on "([^"]*)" node w
   dhcp_status_timeout = 30
   #Following will take dnsmasq backup and append curl contents to the dnsmasq config after
   @result = host.exec_admin("cp /etc/dnsmasq.conf /etc/dnsmasq.conf.bak;curl https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/dnsmasq_for_testbridge.conf | sed s/testbr1/#{br_inf}/g | sed s/88.8.8.100,88.8.8.110,24h/#{add_lease}/g >> /etc/dnsmasq.conf;systemctl restart dnsmasq --now")
-  raise "Failed to configure DNS server" unless @result[:success]
+  raise "Failed to configure dnsmasq service" unless @result[:success]
   wait_for(dhcp_status_timeout) {
     if host.exec_admin("systemctl status dnsmasq")[:response].include? "running"
-      logger.info("DNS server is running fine")
+      logger.info("dnsmasq service is running fine")
     else
-      raise "Failed to start DNS server. Check you cluster health manually"
+      raise "Failed to start dnsmasq service. Check you cluster health manually"
     end
   }
 end
@@ -823,13 +823,13 @@ Given /^a DHCP service is deconfigured on the "([^"]*)" node$/ do |node_name|
   dhcp_status_timeout = 30
   #Copying original dnsmasq on to the modified one
   @result = host.exec_admin("systemctl stop dnsmasq;cp /etc/dnsmasq.conf.bak /etc/dnsmasq.conf;systemctl restart dnsmasq --now")
-  raise "Failed to configure DNS server" unless @result[:success]
+  raise "Failed to configure dnsmasq service" unless @result[:success]
   wait_for(dhcp_status_timeout) {
     if host.exec_admin("systemctl status dnsmasq")[:response].include? "running"
-      logger.info("DNS server is running fine")
+      logger.info("dnsmasq service is running fine")
       host.exec_admin("rm /etc/dnsmasq.conf.bak")
     else
-      raise "Failed to start DNS server. Check you cluster health manually"
+      raise "Failed to start dnsmasq service. Check you cluster health manually"
     end
   }
 end
