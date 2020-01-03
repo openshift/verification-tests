@@ -330,7 +330,7 @@ Feature: Pod related networking scenarios
       | o             | jsonpath={.items[*].metadata.name}    |
     Then the step should succeed
     And evaluation of `@result[:response]` is stored in the :ovnkube_pod_name clipboard
-    And admin ensure "<%= cb.ovnkube_pod_name %>" pod is deleted from the "opneshift-ovn-kubernetes" project
+    And admin ensure "<%= cb.ovnkube_pod_name %>" pod is deleted from the "openshift-ovn-kubernetes" project
     #Waiting 60 seconds for new ovnkube pod to get created and running
     Given 60 seconds have passed
     When I run the :get admin command with:
