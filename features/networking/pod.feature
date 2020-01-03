@@ -306,6 +306,7 @@ Feature: Pod related networking scenarios
     Given I store the workers in the :nodes clipboard
     And the Internal IP of node "<%= cb.nodes[0].name %>" is stored in the :node_ip clipboard
     Given I have a project
+    #privileges are needed to support network-pod as hostnetwork pod creation later
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/pod_with_udp_port_4789_nodename.json" replacing paths:
       | ["items"][0]["spec"]["template"]["spec"]["nodeName"] | <%= cb.nodes[0].name %> |
