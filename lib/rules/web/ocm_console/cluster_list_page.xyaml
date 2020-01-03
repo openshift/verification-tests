@@ -298,3 +298,9 @@ check_actions_items_of_ready_ocp_cluster_on_list:
   action: check_delete_cluster_button_in_dropdown_missing
   action: check_scale_cluster_button_in_dropdown_missing
   action: check_launch_console_button_in_dropdown
+go_to_users_tab:
+  action:
+    if_param: cluster_name
+    ref: go_to_cluster_detail_page
+  action: click_users_tab
+  action: click_add_user_button
