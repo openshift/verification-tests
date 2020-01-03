@@ -979,3 +979,39 @@ Feature: Multus-CNI related scenarios
     When I execute on the pod:
       | /usr/sbin/ip | a |
     Then the output should contain "192.168.1"
+
+  # @author weliang@redhat.com
+  # @case_id OCP-25909
+  @admin
+  Scenario: Assign static IP address using pod annotation			 
+    # Make sure that the multus is enabled
+    Given the multus is enabled on the cluster
+
+    # Create the net-attach-def via cluster admin
+    Given I have a project
+    When I run the :create admin command with:
+      | f | https://raw.githubusercontent.com/weliang1/Openshift_Networking/master/Features/multus/runtimeconfig-def-ip.yaml |
+      | n | <%= project.name %>                                                                                              |
+    Then the step should succeed
+    
+    #Clean-up required to erase above net-attach-def after testing done
+    And admin ensures "runtimeconfig-def-ip" network_attachment_definition is deleted from the "<%= project.name %>" project after scenario
+    
+    # Create a pod absorbing above net-attach-def
+    When I run the :create client command with:
+      | f | https://raw.githubusercontent.com/weliang1/Openshift_Networking/master/Features/multus/runtimeconfig-pod-ip.yaml |
+      | n | <%= project.name %>                                                                                              |
+    Then the step should succeed
+    And the pod named "runtimeconfig-pod-ip" becomes ready
+
+    # Check created pod has correct IP for interface net1
+    When I execute on the pod:
+      | /usr/sbin/ip | -d | link |
+    Then the output should contain: 
+      | net1                 |
+      | macvlan mode bridge |
+    When I execute on the pod:
+      | /usr/sbin/ip | a |
+    Then the output should contain:
+      | 192.168.22.2     |
+
