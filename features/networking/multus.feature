@@ -994,9 +994,6 @@ Feature: Multus-CNI related scenarios
       | n | <%= project.name %>                                                                                              |
     Then the step should succeed
     
-    #Clean-up required to erase above net-attach-def after testing done
-    And admin ensures "runtimeconfig-def-ip" network_attachment_definition is deleted from the "<%= project.name %>" project after scenario
-    
     # Create a pod absorbing above net-attach-def
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/weliang1/Openshift_Networking/master/Features/multus/runtimeconfig-pod-ip.yaml |
