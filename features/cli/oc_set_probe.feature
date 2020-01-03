@@ -5,10 +5,10 @@ Feature: oc_set_probe.feature
   Scenario: Set a probe to open a TCP socket
     Given I have a project
     When I run the :new_app client command with:
-      | image_stream | openshift/mysql:5.6 |
-      | env          | MYSQL_USER=user     |
-      | env          | MYSQL_PASSWORD=pass |
-      | env          | MYSQL_DATABASE=db   |
+      | image_stream | openshift/mysql:latest |
+      | env          | MYSQL_USER=user        |
+      | env          | MYSQL_PASSWORD=pass    |
+      | env          | MYSQL_DATABASE=db      |
     Then the step should succeed
     Given I wait until the status of deployment "mysql" becomes :complete
     When I run the :set_probe client command with:
@@ -62,10 +62,10 @@ Feature: oc_set_probe.feature
   Scenario: Set a probe over HTTPS/HTTP
     Given I have a project
     When I run the :new_app client command with:
-      | image_stream | openshift/mysql:5.6 |
-      | env          | MYSQL_USER=user     |
-      | env          | MYSQL_PASSWORD=pass |
-      | env          | MYSQL_DATABASE=db   |
+      | image_stream | openshift/mysql:latest |
+      | env          | MYSQL_USER=user        |
+      | env          | MYSQL_PASSWORD=pass    |
+      | env          | MYSQL_DATABASE=db      |
     Then the step should succeed
     Given I wait until the status of deployment "mysql" becomes :complete
     When I run the :set_probe client command with:
@@ -107,10 +107,10 @@ Feature: oc_set_probe.feature
   Scenario: Set an exec action probe
     Given I have a project
     When I run the :new_app client command with:
-      | image_stream | openshift/mysql:5.6 |
-      | env          | MYSQL_USER=user     |
-      | env          | MYSQL_PASSWORD=pass |
-      | env          | MYSQL_DATABASE=db   |
+      | image_stream | openshift/mysql:latest |
+      | env          | MYSQL_USER=user        |
+      | env          | MYSQL_PASSWORD=pass    |
+      | env          | MYSQL_DATABASE=db      |
     Then the step should succeed
     Given I wait until the status of deployment "mysql" becomes :complete
     When I run the :set_probe client command with:

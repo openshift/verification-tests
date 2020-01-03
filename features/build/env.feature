@@ -5,9 +5,11 @@ Feature: env.feature
   Scenario: Can set env vars on buildconfig with new-app --env and --env-file
     Given I have a project
     When I run the :new_app client command with:
-      | app_repo | ruby:2.2~https://github.com/openshift/ruby-hello-world |
-      | env      | DB_USER=test                                           |
+      | app_repo | ruby:latest~https://github.com/openshift/ruby-hello-world |
+      | env      | DB_USER=test                                              |
     Then the step should succeed
+    And the "ruby-hello-world-1" build was created
+    Given the "ruby-hello-world-1" build completed
     Given a pod becomes ready with labels:
       |deployment=ruby-hello-world-1|
     When I run the :set_env client command with:
@@ -17,9 +19,11 @@ Feature: env.feature
     And the output should contain "DB_USER=test"
     And I delete all resources from the project
     When I run the :new_app client command with:
-      | app_repo | ruby:2.2~https://github.com/openshift/ruby-hello-world |
-      | env      | RACK_ENV=development                                   |
+      | app_repo | ruby:latest~https://github.com/openshift/ruby-hello-world |
+      | env      | RACK_ENV=development                                      |
     Then the step should succeed
+    And the "ruby-hello-world-1" build was created
+    Given the "ruby-hello-world-1" build completed
     Given a pod becomes ready with labels:
       |deployment=ruby-hello-world-1|
     When I run the :set_env client command with:
@@ -33,9 +37,11 @@ Feature: env.feature
     DB_USER=test
     """
     When I run the :new_app client command with:
-      | app_repo | ruby:2.2~https://github.com/openshift/ruby-hello-world |
+      | app_repo | ruby:2.5~https://github.com/openshift/ruby-hello-world |
       | env_file | test                                                   |
     Then the step should succeed
+    And the "ruby-hello-world-1" build was created
+    Given the "ruby-hello-world-1" build completed
     Given a pod becomes ready with labels:
       |deployment=ruby-hello-world-1|
     When I run the :set_env client command with:
@@ -49,9 +55,11 @@ Feature: env.feature
     RACK_ENV=development
     """
     When I run the :new_app client command with:
-      | app_repo | ruby:2.2~https://github.com/openshift/ruby-hello-world |
+      | app_repo | ruby:2.5~https://github.com/openshift/ruby-hello-world |
       | env_file | test                                                   |
     Then the step should succeed
+    And the "ruby-hello-world-1" build was created
+    Given the "ruby-hello-world-1" build completed
     Given a pod becomes ready with labels:
       |deployment=ruby-hello-world-1|
     When I run the :set_env client command with:

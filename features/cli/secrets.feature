@@ -208,11 +208,11 @@ Feature: secrets related scenarios
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/tc519256/testsecret2.json |
     Then the step should succeed
     When I run the :new_build client command with:
-      | image_stream | ruby:2.2 |
-      | app_repo | https://github.com/yanliao/build-secret.git |
-      | strategy | <type> |
+      | docker_image | centos/ruby-22-centos7:latest                |
+      | app_repo     | https://github.com/openshift-qe/build-secret |
+      | strategy     | <type>         |
       | build_secret | <build_secret> |
-      | build_secret | testsecret2 |
+      | build_secret | testsecret2    |
     Then the step should succeed
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/tc519261/test.json |
@@ -244,11 +244,6 @@ Feature: secrets related scenarios
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/image/gitserver/gitserver-persistent.yaml |
-    Then the step should succeed
-    When I run the :patch client command with:
-      | resource      | pvc                                                                             |
-      | resource_name | git                                                                             |
-      | p             | {"metadata":{"annotations":{"volume.alpha.kubernetes.io/storage-class":"foo"}}} |
     Then the step should succeed
     And the "git" PVC becomes :bound within 300 seconds
 
@@ -437,11 +432,6 @@ Feature: secrets related scenarios
     Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/image/gitserver/gitserver-persistent.yaml |
-    Then the step should succeed
-    When I run the :patch client command with:
-      | resource      | pvc                                                                             |
-      | resource_name | git                                                                             |
-      | p             | {"metadata":{"annotations":{"volume.alpha.kubernetes.io/storage-class":"foo"}}} |
     Then the step should succeed
     And the "git" PVC becomes :bound within 300 seconds
 
@@ -770,7 +760,7 @@ Feature: secrets related scenarios
     Then the step should succeed
     And the "sample-2" build completed
 
-  # @author shiywang@redhat.com xiuwang@redhat.com
+  # @author xiuwang@redhat.com
   # @case_id OCP-12838
   Scenario: Use build source secret based on annotation on Secret --http
     Given I have a project

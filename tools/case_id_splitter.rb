@@ -59,7 +59,7 @@ module BushSlicer
       command :split do |c|
         c.syntax = "#{$0} split [options]"
         c.description = "Split feature files based on provided case_id tag\n\t" \
-          'Example: tools/case_id_splitter.rb split --dir=features/ --target-dir=/tmp/split "OCP-10625" "OCP-16661" "OCP-20436"'
+          'Example: tools/case_id_splitter.rb split --dir=features/ --target-dir=/tmp/split "OCP-xxxxx" "OCP-yyyyy" "OCP-zzzzz"'
         c.option('--dir DIR', "Where to search for feature files")
         c.option('--target-dir DIR', "Where to write the split files")
         c.option('--suffix STRING', "Feature name suffix of split files")

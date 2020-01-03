@@ -80,11 +80,6 @@ Feature: jenkins.feature
   Scenario Outline: Trigger build of application from jenkins job with persistent volume
     Given I have a project
     And I have a jenkins v<ver> application
-    When I run the :patch client command with:
-      | resource      | pvc                                                                             |
-      | resource_name | jenkins                                                                         |
-      | p             | {"metadata":{"annotations":{"volume.alpha.kubernetes.io/storage-class":"foo"}}} |
-    Then the step should succeed
     And the "jenkins" PVC becomes :bound within 300 seconds
     When I run the :new_app client command with:
       | file | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/image/language-image-templates/application-template.json |
@@ -156,51 +151,19 @@ Feature: jenkins.feature
       | 1   | # @case_id OCP-11179
       | 2   | # @case_id OCP-11369
 
-  # @author cryan@redhat.com xiuwang@redhat.com
+  # @author xiuwang@redhat.com
   Scenario Outline: Make jenkins slave configurable when do jenkinspipeline strategy with maven slave
     Given I have a project
     And I have a jenkins v<version> application
     When I run the :new_app client command with:
       | file | https://raw.githubusercontent.com/openshift/origin/master/examples/jenkins/pipeline/maven-pipeline.yaml |
     Then the step should succeed
-    Given I have a jenkins browser
-    And I log in to jenkins
-    Given I update "maven" slave image for jenkins <version> server
     When I run the :start_build client command with:
       | buildconfig | openshift-jee-sample |
     Then the step should succeed
     Given a pod becomes ready with labels:
       | jenkins/maven=true |
     Given the "openshift-jee-sample-1" build completes
-    When I perform the :goto_jenkins_buildlog_page web action with:
-      | namespace|<%= project.name %>                      |
-      | job_name| <%= project.name %>-openshift-jee-sample |
-      | job_num | 1                                        |
-    Then the step should succeed
-    When I get the visible text on web html page
-    Then the output should contain:
-      | Building SampleApp 1.0 |
-      | BUILD SUCCESS          |
-    When I run the :patch client command with:
-      | resource      | bc                                                                                                                                       |
-      | resource_name | openshift-jee-sample                                                                                                                     |
-      | p             | {"spec" : {"strategy": {"jenkinsPipelineStrategy": {"jenkinsfile": "node('unexist') {\\nstage 'Check mvn version'\\nsh 'mvn -v'\\n}"}}}} |
-    Then the step should succeed
-    When I perform the :jenkins_add_pod_template web action with:
-      | slave_name  | unexist        |
-      | slave_label | unexist        |
-      | slave_image | unexist:latest |
-    Then the step should succeed
-    When I run the :start_build client command with:
-      | buildconfig | openshift-jee-sample |
-    Then the step should succeed
-    When I perform the :jenkins_verify_job_text web action with:
-      | namespace  | <%= project.name %>                      |
-      | job_name   | <%= project.name %>-openshift-jee-sample |
-      | checktext  | unexist         |
-      | job_num    | 2               |
-      | time_out   | 300             |
-    Then the step should succeed
 
     Examples:
       | version |
@@ -545,3 +508,17 @@ Feature: jenkins.feature
     And the output should contain:
       | x86_64 |
 
+  # @author xiuwang@redhat.com
+  # @case_id 25401
+  Scenario: Create jenkins application directly
+    Given I have a project
+    When I run the :new_app client command with:
+      | image_stream | openshift/jenkins:2 |
+    Then the step should succeed
+    And a pod becomes ready with labels:
+      | deploymentconfig=jenkins |
+    When I execute on the pod:
+      |  ls | -la | /usr/bin/java |
+    Then the step should succeed
+    Then the output should contain:
+      | /usr/bin/java -> /etc/alternatives/java |

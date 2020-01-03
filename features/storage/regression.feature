@@ -13,14 +13,13 @@ Feature: Regression testing cases
 
     When I run the :create admin command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/damonset.json |
-      | n | <%= project.name %>                                                                                      |
+      | n | <%= project.name %>                                                                           |
     Then the step should succeed
 
     And I wait up to 60 seconds for the steps to pass:
     """
     When I run the :describe client command with:
       | resource | pod |
-    Then the output should contain:
-      | already |
+    Then the output should match:
+      | (already\|conflict) |
     """
-

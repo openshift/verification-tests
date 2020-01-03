@@ -13,7 +13,7 @@ Given /^I select a random node's host$/ do
   @host = node.host
 end
 
-Given /^I store the( schedulable| ready and schedulable)? nodes in the#{OPT_SYM} clipboard$/ do |state, cbname|
+Given /^I store the( schedulable| ready and schedulable)? (node|master|worker)s in the#{OPT_SYM} clipboard$/ do |state, role, cbname|
   ensure_admin_tagged
   cbname = 'nodes' unless cbname
 
@@ -23,6 +23,12 @@ Given /^I store the( schedulable| ready and schedulable)? nodes in the#{OPT_SYM}
     cb[cbname] = env.nodes.select { |n| n.schedulable? }
   else
     cb[cbname] = env.nodes.select { |n| n.ready? && n.schedulable? }
+  end
+  
+  if role == "worker"
+    cb[cbname] = cb[cbname].select { |n| n.is_worker? }
+  elsif role == "master"
+    cb[cbname] = cb[cbname].select { |n| n.is_master? }
   end
 
   cache_resources *cb[cbname].shuffle
@@ -498,8 +504,12 @@ Given /^node schedulable status should be restored after scenario$/ do
   _admin = admin
   teardown_add {
     _org_schedulable.each do |node, schedulable|
-      opts = { :node_name =>  node.name, :schedulable => schedulable  }
-      _admin.cli_exec(:oadm_manage_node, opts)
+      opts = { :node_name =>  node.name }
+      if schedulable
+        _admin.cli_exec(:oadm_uncordon_node, opts)
+      else
+        _admin.cli_exec(:oadm_cordon_node, opts)
+      end
     end
   }
 end
@@ -573,4 +583,11 @@ Given /^ssh key for accessing nodes is copied to(?: the #{QUOTED} directory in)?
   FileUtils.copy(pem_file_path, dst_dir)
   @result = admin.cli_exec(:rsync, source: localhost.absolutize(dst_dir), destination: "#{pod.name}:/#{dst_dir}", loglevel: 5, n: _project.name)
   raise "Error syncing files over to '#{pod.name}' pod '#{@result[:stderr]}'" unless @result[:success]
+end
+
+
+Given /^I store all worker nodes to the#{OPT_SYM} clipboard$/ do |cb_name|
+  cb_name ||= :worker_nodes
+  nodes = BushSlicer::Node.list(user: admin)
+  cb[cb_name] = nodes.select { |n| n.is_worker? }
 end

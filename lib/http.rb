@@ -72,7 +72,10 @@ module BushSlicer
       rc_opts[:open_timeout] = open_timeout
 
       # RestClient.proxy = proxy if proxy && ! proxy.empty?
-      rc_opts[:proxy] = proxy if proxy && ! proxy.empty?
+      if proxy && ! proxy.empty?
+        proxy = "http://#{proxy}" unless proxy.include?("://")
+        rc_opts[:proxy] = proxy
+      end
 
       userstr = user ? "#{user}@" : ""
       result ||= {}

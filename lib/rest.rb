@@ -31,8 +31,9 @@ module BushSlicer
         opts = {}
 
         opts[:options] = {}
+        # TODO: refactor needed, no simple single API version since long
         opts[:options][:api_version] = user.rest_preferences[:api_version] ||
-                                          user.env.api_version
+                                          "v1"
         opts[:options][:accept] = "application/json"
         opts[:options][:content_type] = "application/json"
 
@@ -40,6 +41,8 @@ module BushSlicer
         opts[:headers] = {}
         opts[:headers]["Accept"] = "<accept>"
         opts[:headers]["Content-Type"] = "<content_type>"
+
+        opts[:proxy] = user.env.client_proxy if user.env.client_proxy
 
         auth ||= user.rest_preferences[:auth]
         auth ||= user.known_cert? ? :client_cert : :bearer_token

@@ -9,7 +9,7 @@ Feature: change the policy of user/service account
       | resource_name | admin       |
       | o             | wide        |
     Then the output should match:
-      | admin.*<%= @user.name %> |
+      | admin.*(<%= @user.name %>)? |
     When I run the :oadm_add_role_to_user client command with:
       | role_name        | admin                              |
       | user_name        | <%= user(1, switch: false).name %> |
@@ -20,7 +20,7 @@ Feature: change the policy of user/service account
       | resource_name | admin       |
       | o             | wide        |
     Then the output should match:
-      | admin.*<%= @user.name %>, <%= user(1, switch: false).name %> |
+      | admin.*(<%= @user.name %>, <%= user(1, switch: false).name %>)? |
     Given I switch to the second user
     And I wait for the steps to pass:
     """
@@ -38,7 +38,7 @@ Feature: change the policy of user/service account
       | resource_name | admin       |
       | o             | wide        |
     Then the output should match:
-      | admin.*<%= @user.name %> |
+      | admin.*(<%= @user.name %>)? |
     Given I switch to the second user
     And I wait for the steps to pass:
     """
@@ -267,15 +267,13 @@ Feature: change the policy of user/service account
     Given I have a project
     And admin ensures "pv-<%= project.name %>" pv is deleted after scenario
     Given cluster role "storage-admin" is added to the "first" user
-    And I have a 1 GB volume and save volume id in the :volumeID clipboard
 
-    When I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/ebs/pv-rwo.yaml"
-    Then I replace lines in "pv-rwo.yaml":
-      | ebs                           | pv-<%= project.name %> |
-      | 10Gi                          | 1Gi                    |
-      | aws://us-east-1d/vol-e69f0b1c | <%= cb.volumeID %>     |
+    When I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/hostpath/pv-rwx-recycle.yaml"
+    Then I replace lines in "pv-rwx-recycle.yaml":
+      | local         | pv-<%= project.name %> |
+      | ReadWriteMany | ReadWriteOnce          |
     Then I run the :create client command with:
-      | f | pv-rwo.yaml |
+      | f | pv-rwx-recycle.yaml |
     And the step should succeed
 
     When I run the :get client command with:
@@ -295,12 +293,12 @@ Feature: change the policy of user/service account
       | name     | pv-<%= project.name %> |
     Then the step should succeed
 
-    Then I replace lines in "pv-rwo.yaml":
+    Then I replace lines in "pv-rwx-recycle.yaml":
       | ReadWriteOnce | ReadWriteMany |
 
     When I run the :replace client command with:
-      | f     | pv-rwo.yaml |
-      | force | true        |
+      | f     | pv-rwx-recycle.yaml |
+      | force | true                |
     And the step should succeed
 
     When I run the :describe client command with:
@@ -319,34 +317,29 @@ Feature: change the policy of user/service account
     Then I wait for the resource "pv" named "pv-<%= project.name %>" to disappear within 60 seconds
 
   # @author chaoyang@redhat.com
+  # @author lxia@redhat.com
   # @case_id OCP-10467
   @admin
   Scenario: User with role storage-admin can get pvc object info
     Given I have a project
     And evaluation of `project.name` is stored in the :project clipboard
 
-    When I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/ebs/dynamic-provisioning/pvc.yaml"
-    And I replace lines in "pvc.yaml":
-      | ebsc | pvc-<%= cb.project %> |
-    And the step should succeed
-
-    Then I run the :create client command with:
-      | f | pvc.yaml |
+    When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
+      | ["metadata"]["name"] | mypvc |
     And the step should succeed
 
     Given I switch to the second user
     And cluster role "storage-admin" is added to the "second" user
     When I run the :get client command with:
-      | resource | pvc               |
+      | resource | pvc/mypvc         |
+      | o        | yaml              |
       | n        | <%= cb.project %> |
     And the step should succeed
-    And the output should contain:
-      | pvc-<%= cb.project %> |
+    And I save the output to file> pvc.yaml
 
     When I run the :describe client command with:
-      | resource | pvc                   |
-      | name     | pvc-<%= cb.project %> |
-      | n        | <%= cb.project %>     |
+      | resource | pvc/mypvc         |
+      | n        | <%= cb.project %> |
     Then the step should succeed
 
     And I replace lines in "pvc.yaml":

@@ -1,3 +1,4 @@
+require 'base64'
 require 'json'
 
 require 'cli_executor'
@@ -15,26 +16,16 @@ module BushSlicer
   class Environment
     include Common::Helper
 
-    attr_reader :opts
+    attr_reader :opts, :client_proxy
 
     # :master represents register, scheduler, etc.
-    MANDATORY_OPENSHIFT_ROLES = [:master, :node]
-    OPENSHIFT_ROLES = MANDATORY_OPENSHIFT_ROLES + [:lb, :etcd, :bastion]
+    MANDATORY_OPENSHIFT_ROLES = []
+    OPENSHIFT_ROLES = MANDATORY_OPENSHIFT_ROLES + [:master, :node, :lb, :etcd, :bastion]
 
     # e.g. you call `#node_hosts to get hosts with the node service`
     OPENSHIFT_ROLES.each do |role|
       define_method("#{role}_hosts") do
         hosts.select {|h| h.has_role?(role)}
-      end
-    end
-
-    # override generated method as etcd role not always defined
-    def etcd_hosts
-      etcd_list = hosts.select {|h| h.has_role?(:etcd)}
-      if etcd_list.empty?
-        master_hosts
-      else
-        etcd_list
       end
     end
 
@@ -182,7 +173,7 @@ module BushSlicer
         else
           authenticationproject = Project.new(name: "openshift-authentication", env: self)
           authenticationservice = Service.new(name: "openshift-authentication", project: authenticationproject )
-          authenticationroute = Route.new(name: "openshift-authentication", project: authenticationproject, service: authenticationservice)
+          authenticationroute = Route.new(name: "oauth-openshift", project: authenticationproject, service: authenticationservice)
           @authentication_url = "https://" + authenticationroute.dns(by: admin)
         end
       end
@@ -231,7 +222,7 @@ module BushSlicer
 
     # helper parser
     def parse_version(ver_str)
-      ver = ver_str.sub(/^v/,"")
+      ver = ver_str.sub(/(^v|^openshift-clients-)/,"")
       if ver !~ /^[\d.]+$/
         raise "version '#{ver}' does not match /^[\d.]+$/"
       end
@@ -247,22 +238,24 @@ module BushSlicer
         return opts[:version], @major_version, @minor_version
       end
 
-      obtained = user.rest_request(:version)
-      if obtained[:request_opts][:url].include?("/version/openshift") &&
-          !obtained[:success]
+      raise "getting version of cluster as user not possible presently"
+
+      # obtained = user.rest_request(:version)
+      # if obtained[:request_opts][:url].include?("/version/openshift") &&
+      #     !obtained[:success]
         # seems like pre-3.3 version, lets hardcode to 3.2
         # After bug 1692670 fix, will recover hardcode to '3.2'.
-        obtained[:props] = {}
-        obtained[:props][:openshift] = "v4.0"
-        @major_version = obtained[:props][:major] = 4
-        @minor_version = obtained[:props][:minor] = 0
-      elsif obtained[:success]
-        @major_version = obtained[:props][:major].to_i
-        @minor_version = obtained[:props][:minor].to_i
-      else
-        raise "error getting version: #{obtained[:error].inspect}"
-      end
-      return obtained[:props][:openshift].sub(/^v/,""), @major_version, @minor_version
+      #   obtained[:props] = {}
+      #   obtained[:props][:openshift] = "v4.0"
+      #   @major_version = obtained[:props][:major] = 4
+      #   @minor_version = obtained[:props][:minor] = 0
+      # elsif obtained[:success]
+      #   @major_version = obtained[:props][:major].to_i
+      #   @minor_version = obtained[:props][:minor].to_i
+      # else
+      #   raise "error getting version: #{obtained[:error].inspect}"
+      # end
+      # return obtained[:props][:openshift].sub(/^v/,""), @major_version, @minor_version
     end
 
     # some rules and logic to compare given version to current environment
@@ -320,8 +313,6 @@ module BushSlicer
     # @param user [BushSlicer::User]
     # @param project [BushSlicer::project]
     def get_routing_details(user:, project:)
-      clean_project = false
-
       service_res = Service.create(by: user, project: project, spec: 'https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/service_with_selector.json')
       raise "cannot create service" unless service_res[:success]
       service = service_res[:resource]
@@ -353,33 +344,51 @@ module BushSlicer
     end
 
     # get environment supported API paths
-    def api_paths
-      return @api_paths if @api_paths
-
-      opts = {:max_redirects=>0,
-              :url=>api_endpoint_url,
-              :method=>"GET"
-      }
-      res = Http.http_request(**opts)
-
-      unless res[:success]
-        raise "could not get API paths, see log"
-      end
-
-      return @api_paths = JSON.load(res[:response])["paths"]
-    end
+    # TODO: need to make this call authenticated,
+    #   see https://github.com/openshift/openshift-apiserver/pull/18
+    # def api_paths
+    #   return @api_paths if @api_paths
+    #
+    #   opts = {:max_redirects=>0,
+    #           :url=>api_endpoint_url,
+    #           :method=>"GET"
+    #   }
+    #   res = Http.http_request(**opts)
+    #
+    #   unless res[:success]
+    #     raise "could not get API paths, see log"
+    #   end
+    #
+    #   return @api_paths = JSON.load(res[:response])["paths"]
+    # end
 
     # get latest API version supported by server
-    def api_version
-      return @api_version if @api_version
-      idx = api_paths.rindex{|p| p.start_with?("/api/v")}
-      return @api_version = api_paths[idx][5..-1]
-    end
+    # def api_version
+    #   return @api_version if @api_version
+    #   idx = api_paths.rindex{|p| p.start_with?("/api/v")}
+    #   return @api_version = api_paths[idx][5..-1]
+    # end
 
     def nodes(user: admin, refresh: false)
       return @nodes if @nodes && !refresh
+      @nodes ||= []
+      @nodes = @nodes.concat(Node.list(user: user))
+    end
 
-      @nodes = Node.list(user: user)
+    # @return [Project] a project unique to this executor for test framework
+    #   support purposes (e.g. host a debug pod for running node commands)
+    def service_project
+      unless @service_project
+        project = Project.new(name: "tests-" + EXECUTOR_NAME.downcase, env: self)
+        unless project.exists?
+          res = project.create(by: admin, clean_up_registered: true)
+          unless res[:success]
+            raise "failed to create service project #{project.name}, see log"
+          end
+        end
+        @service_project = project
+      end
+      return @service_project
     end
 
     # selects the correct configured IAAS provider
@@ -405,6 +414,10 @@ module BushSlicer
     def clean_up
       @user_manager.clean_up if @user_manager
       @hosts.each {|h| h.clean_up } if @hosts
+      if @service_project
+        @service_project.delete_graceful(by: nil)
+        @service_project = nil
+      end
       @cli_executor.clean_up if @cli_executor
       @webconsole_executor.clean_up if @webconsole_executor
     end
@@ -423,19 +436,9 @@ module BushSlicer
     #  grep HTTP_PROXY /etc/origin/master/master-config.yaml
     #
     def proxy
-      if version_le("3.9", user: admin)
-        proxy_check_cmd = "cat /etc/sysconfig/atomic-openshift-master-api | grep HTTP_PROXY"
-      else
-        proxy_check_cmd = "cat /etc/origin/master/master.env | grep HTTP_PROXY"
-      end
-      @result = master_hosts.first.exec(proxy_check_cmd)
-      if @result[:success]
-        return @result[:response].split('HTTP_PROXY=')[1].strip
-      else
-        return nil
-      end
+      # TODO: return value from https://docs.openshift.com/container-platform/4.2/networking/enable-cluster-wide-proxy.html#nw-proxy-configure-object_config-cluster-wide-proxy
+      raise "not implemented"
     end
-
   end
 
   # a quickly made up environment class for the PoC
@@ -457,10 +460,22 @@ module BushSlicer
             missing_roles.to_s
         end
 
-        # so far masters are always also nodes but labels not always set
         hlist.each do |host|
+          # so far masters are always also nodes but labels not always set
           if host.roles.include?(:master) && !host.roles.include?(:node)
             host.roles << :node
+          end
+
+          # handle client proxy
+          proxy_spec = host.roles.find { |r| r.to_s.start_with? "proxy__" }
+          if proxy_spec
+            _role, proto, port, username, password = proxy_spec.to_s.split("__")
+            if username
+              auth_str = "#{username}:#{Base64.decode64 password}@"
+            else
+              auth_str = ""
+            end
+            @client_proxy = "#{proto}://#{auth_str}#{host.hostname}:#{port}"
           end
         end
 
@@ -469,6 +484,11 @@ module BushSlicer
         @hosts.concat hlist
       end
       return @hosts
+    end
+
+    def client_proxy
+      hosts
+      return @client_proxy
     end
 
     # add a new host to environment with defaults

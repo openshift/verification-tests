@@ -1,7 +1,6 @@
 Given /^I run the ovs commands on the host:$/ do | table |
   ensure_admin_tagged
   _host = node.host
-
   ovs_cmd = table.raw.flatten.join
   if _host.exec_admin("ovs-vsctl --version")[:response].include? "Open vSwitch"
     logger.info("environment using rpm to launch openvswitch")
@@ -583,11 +582,14 @@ end
 Given /^I store a random unused IP address from the reserved range to the#{OPT_SYM} clipboard$/ do |cb_name|
   ensure_admin_tagged
   cb_name = "valid_ip" unless cb_name
+  step "the subnet for primary interface on node is stored in the clipboard"
 
-  reserved_range = "172.16.123.240/29"
+  reserved_range = "#{cb.subnet_range}"
 
   validate_ip = IPAddr.new(reserved_range).to_range.to_a.shuffle.each { |ip|
-    @result = host.exec_admin("/usr/bin/ping -c 1 -W 2 #{ip}")
+    @result = step "I run command on the node's ovs pod:", table(
+      "| ping | -c1 | -W2 | #{ip} |"
+    )
     if @result[:exitstatus] == 0
       logger.info "The IP is in use."
     else
@@ -602,6 +604,7 @@ end
 Given /^the valid egress IP is added to the#{OPT_QUOTED} node$/ do |node_name|
   ensure_admin_tagged
   step "I store a random unused IP address from the reserved range to the clipboard"
+  node_name = node.name unless node_name
 
   @result = admin.cli_exec(:patch, resource: "hostsubnet", resource_name: "#{node_name}", p: "{\"egressIPs\":[\"#{cb.valid_ip}\"]}", type: "merge")
   raise "Failed to patch hostsubnet!" unless @result[:success]
@@ -660,26 +663,227 @@ Given /^the status of condition#{OPT_QUOTED} for network operator is :(.+)$/ do 
   raise "The status of condition #{type} is incorrect." unless expected_status == real_status
 end
 
-
 Given /^I run command on the#{OPT_QUOTED} node's sdn pod:$/ do |node_name, table|
   ensure_admin_tagged
   network_cmd = table.raw
   node_name ||= node.name
+  _admin = admin
+   @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}") 
+  if @result[:response] == "OpenShiftSDN"
+     sdn_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
+       pod.node_name == node_name
+     }.first
+     cache_resources sdn_pod
+     @result = sdn_pod.exec(network_cmd, as: admin)
+  else
+     ovnkube_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
+       pod.node_name == node_name
+     }.first
+     cache_resources ovnkube_pod
+     @result = ovnkube_pod.exec(network_cmd, as: admin)   
+   end
+  raise "Failed to execute network command!" unless @result[:success]
+end
+ 
+Given /^I restart the ovs pod on the#{OPT_QUOTED} node$/ do | node_name |
+  ensure_admin_tagged
+  ensure_destructive_tagged
 
-  sdn_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
+  ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
     pod.node_name == node_name
   }.first
-  cache_resources sdn_pod
-  @result = sdn_pod.exec(network_cmd, as: admin)
-  raise "Failed to execute network command!" unless @result[:success]
+  @result = ovs_pod.ensure_deleted(user: admin)
+  unless @result[:success]
+    raise "Fail to delete the ovs pod"
+  end
 end
 
 Given /^the default interface on nodes is stored in the#{OPT_SYM} clipboard$/ do |cb_name|
   ensure_admin_tagged
-  hosts = step "I select a random node's host"
-  cb_name = "interface" unless cb_name
-  @result = host.exec_admin("/sbin/ip route show default | awk '/default/ {print $5}'")
-  raise "Failed to get the default interface of node" unless @result[:success]
-  cb[cb_name] = @result[:response].chomp
+  _admin = admin
+  step "I select a random node's host"
+  cb_name ||= "interface"
+  @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
+  if @result[:success] then
+     networkType = @result[:response].strip
+  end
+  case networkType
+  when "OVNKubernetes"
+    step %Q/I run command on the node's ovnkube pod:/, table("| bash | -c | ip route show default |")
+  when "OpenShiftSDN"
+    step %Q/I run command on the node's sdn pod:/, table("| bash | -c | ip route show default |")
+  else
+    raise "unknown networkType"
+  end 
+  cb[cb_name] = @result[:response].split("\n").first.split(/\W+/)[7]
   logger.info "The node's default interface is stored in the #{cb_name} clipboard."
+end
+
+Given /^CNI vlan info is obtained on the#{OPT_QUOTED} node$/ do | node_name |
+  ensure_admin_tagged
+  node = node(node_name)
+  host = node.host
+  @result = host.exec_admin("/sbin/bridge vlan show")
+  raise "Failed to execute bridge vlan show command" unless @result[:success]
+end
+
+Given /^the bridge interface named "([^"]*)" is deleted from the "([^"]*)" node$/ do |bridge_name, node_name|
+  ensure_admin_tagged
+  node = node(node_name)
+  host = node.host
+  @result = host.exec_admin("/sbin/ip link delete #{bridge_name}")
+  raise "Failed to delete bridge interface" unless @result[:success]
+end
+
+Given /^I run command on the#{OPT_QUOTED} node's ovnkube pod:$/ do |node_name, table|
+  ensure_admin_tagged
+  network_cmd = table.raw
+  node_name ||= node.name
+
+  ovnkube_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
+    pod.node_name == node_name
+  }.first
+  cache_resources ovnkube_pod
+  @result = ovnkube_pod.exec(network_cmd, as: admin)
+  raise "Failed to execute network command!" unless @result[:success]
+end
+
+Given /^I run cmds on all ovs pods:$/ do | table |
+  ensure_admin_tagged
+  network_cmd = table.raw
+
+  ovs_pods = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin)
+  ovs_pods.each do |pod|
+    @result = pod.exec(network_cmd, as: admin)
+    raise "Failed to execute network command!" unless @result[:success]
+  end
+end
+
+Given /^I run command on the#{OPT_QUOTED} node's ovs pod:$/ do |node_name, table|
+  ensure_admin_tagged
+  network_cmd = table.raw
+  node_name ||= node.name
+
+  ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
+     pod.node_name == node_name
+   }.first
+  cache_resources ovs_pod
+  @result = ovs_pod.exec(network_cmd, as: admin)
+end
+
+Given /^the subnet for primary interface on node is stored in the#{OPT_SYM} clipboard$/ do |cb_name|
+  ensure_admin_tagged
+  cb_name = "subnet_range" unless cb_name
+
+  step "the default interface on nodes is stored in the clipboard"
+  step "I run command on the node's sdn pod:", table(
+    "| bash | -c | ip a show \"<%= cb.interface %>\" \\| grep inet \\| grep -v inet6  \\| awk '{print $2}' |"
+  )
+  raise "Failed to get the subnet range for the primary interface on the node" unless @result[:success]
+  cb[cb_name] = @result[:response].chomp
+  logger.info "Subnet range for the primary interface on the node is stored in the #{cb_name} clipboard."
+end
+
+Given /^the env is using "([^"]*)" networkType$/ do |network_type|
+  ensure_admin_tagged
+  _admin = admin
+  @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
+  raise "the networkType is not #{network_type}" unless @result[:response] == network_type
+end
+
+Given /^the bridge interface named "([^"]*)" with address "([^"]*)" is added to the "([^"]*)" node$/ do |bridge_name,address,node_name|
+  ensure_admin_tagged
+  node = node(node_name)
+  host = node.host
+  @result = host.exec_admin("ip link add #{bridge_name} type bridge;ip address add #{address} dev #{bridge_name};ip link set up #{bridge_name}")
+  raise "Failed to add  bridge interface" unless @result[:success]
+end
+
+Given /^a DHCP service is configured for interface "([^"]*)" on "([^"]*)" node with address range and lease time as "([^"]*)"$/ do |br_inf,node_name,add_lease|
+  ensure_admin_tagged
+  node = node(node_name)
+  host = node.host
+  dhcp_status_timeout = 30
+  #Following will take dnsmasq backup and append curl contents to the dnsmasq config after
+  @result = host.exec_admin("cp /etc/dnsmasq.conf /etc/dnsmasq.conf.bak;curl https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/dnsmasq_for_testbridge.conf | sed s/testbr1/#{br_inf}/g | sed s/88.8.8.100,88.8.8.110,24h/#{add_lease}/g >> /etc/dnsmasq.conf;systemctl restart dnsmasq --now")
+  raise "Failed to configure dnsmasq service" unless @result[:success]
+  wait_for(dhcp_status_timeout) {
+    if host.exec_admin("systemctl status dnsmasq")[:response].include? "running"
+      logger.info("dnsmasq service is running fine")
+    else
+      raise "Failed to start dnsmasq service. Check you cluster health manually"
+    end
+  }
+end
+
+Given /^a DHCP service is deconfigured on the "([^"]*)" node$/ do |node_name|
+  ensure_admin_tagged
+  node = node(node_name)
+  host = node.host
+  dhcp_status_timeout = 30
+  #Copying original dnsmasq on to the modified one
+  @result = host.exec_admin("systemctl stop dnsmasq;cp /etc/dnsmasq.conf.bak /etc/dnsmasq.conf;systemctl restart dnsmasq --now")
+  raise "Failed to configure dnsmasq service" unless @result[:success]
+  wait_for(dhcp_status_timeout) {
+    if host.exec_admin("systemctl status dnsmasq")[:response].include? "running"
+      logger.info("dnsmasq service is running fine")
+      host.exec_admin("rm /etc/dnsmasq.conf.bak")
+    else
+      raise "Failed to start dnsmasq service. Check you cluster health manually"
+    end
+  }
+end
+
+Given /^the vxlan tunnel name of node "([^"]*)" is stored in the#{OPT_SYM} clipboard$/ do |node_name,cb_name|
+  ensure_admin_tagged
+  node = node(node_name)
+  host = node.host
+  cb_name ||= "interface_name"
+  @result = admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
+  if @result[:success] then
+     networkType = @result[:response].strip
+  end
+  case networkType
+  when "OVNKubernetes"
+    inf_name = host.exec_admin("ifconfig | egrep -o '^k8[^:]+'")
+    cb[cb_name] = inf_name[:response].split("\n")[0]
+  when "OpenShiftSDN"
+    cb[cb_name]="tun0"
+  else
+    raise "unable to find interface name or networkType"
+  end
+  logger.info "The tunnel interface name is stored in the #{cb_name} clipboard."
+end
+
+Given /^the vxlan tunnel address of node "([^"]*)" is stored in the#{OPT_SYM} clipboard$/ do |node_name,cb_address|
+  ensure_admin_tagged
+  node = node(node_name)
+  host = node.host
+  cb_name ||= "interface_address"
+  @result = admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
+  if @result[:success] then
+     networkType = @result[:response].strip
+  end
+  case networkType
+  when "OVNKubernetes"
+    inf_name = host.exec_admin("ifconfig | egrep -o '^k8[^:]+'")
+    @result = host.exec_admin("ifconfig #{inf_name[:response].split("\n")[0]}")
+    cb[cb_address] = @result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]
+  when "OpenShiftSDN"
+    @result=host.exec_admin("ifconfig tun0")
+    cb[cb_address] = @result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]
+  else
+    raise "unable to find interface address or networkType"
+  end
+  logger.info "The tunnel interface address is stored in the #{cb_address} clipboard."
+end
+
+Given /^the Internal IP of node "([^"]*)" is stored in the#{OPT_SYM} clipboard$/ do |node_name,cb_ipaddr|
+  ensure_admin_tagged
+  node = node(node_name)
+  host = node.host
+  step "the default interface on nodes is stored in the clipboard"
+  @result = host.exec_admin("ifconfig #{cb.interface}")
+  cb[cb_ipaddr]=@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]
+  logger.info "The Internal IP of node is stored in the #{cb_ipaddr} clipboard."
 end

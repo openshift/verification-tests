@@ -18,9 +18,8 @@ Feature: ResourceQuata for storage
     And I run the steps 3 times:
     """
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
-      | ["metadata"]["name"]                                                    | pvc-#{ cb.i } |
-      | ["metadata"]["annotations"]["volume.alpha.kubernetes.io/storage-class"] | foo           |
-      | ["spec"]["resources"]["requests"]["storage"]                            | 3Gi           |
+      | ["metadata"]["name"]                         | pvc-#{ cb.i } |
+      | ["spec"]["resources"]["requests"]["storage"] | 3Gi           |
     Then the step should succeed
 
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gce/pod.json" replacing paths:
@@ -32,9 +31,8 @@ Feature: ResourceQuata for storage
 
     # Try to exceed the 12Gi storage
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
-      | ["metadata"]["name"]                                                    | mypvc |
-      | ["metadata"]["annotations"]["volume.alpha.kubernetes.io/storage-class"] | foo                     |
-      | ["spec"]["resources"]["requests"]["storage"]                            | 4Gi                     |
+      | ["metadata"]["name"]                         | mypvc |
+      | ["spec"]["resources"]["requests"]["storage"] | 4Gi   |
     Then the step should fail
     And the output should contain:
       | exceeded quota                 |
@@ -46,9 +44,8 @@ Feature: ResourceQuata for storage
     And I run the steps 2 times:
     """
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
-      | ["metadata"]["name"]                                                    | pvci-#{ cb.i } |
-      | ["metadata"]["annotations"]["volume.alpha.kubernetes.io/storage-class"] | foo            |
-      | ["spec"]["resources"]["requests"]["storage"]                            | 1Gi            |
+      | ["metadata"]["name"]                         | pvci-#{ cb.i } |
+      | ["spec"]["resources"]["requests"]["storage"] | 1Gi            |
     Then the step should succeed
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gce/pod.json" replacing paths:
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | pvci-#{ cb.i }   |
@@ -57,9 +54,8 @@ Feature: ResourceQuata for storage
     And the pod named "mypodi-#{ cb.i }" becomes ready
     """
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
-      | ["metadata"]["name"]                                                    | mypvc |
-      | ["metadata"]["annotations"]["volume.alpha.kubernetes.io/storage-class"] | foo                     |
-      | ["spec"]["resources"]["requests"]["storage"]                            | 1Gi                     |
+      | ["metadata"]["name"]                         | mypvc |
+      | ["spec"]["resources"]["requests"]["storage"] | 1Gi   |
     Then the step should fail
     And the output should contain:
       | exceeded quota                      |
@@ -73,7 +69,7 @@ Feature: ResourceQuata for storage
   Scenario: Setting quota for a StorageClass
     Given I have a project
     Given admin clones storage class "sc-<%= project.name %>" from ":default" with:
-      | | |
+      | ["volumeBindingMode"] | Immediate |
     And I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
 
@@ -97,12 +93,12 @@ Feature: ResourceQuata for storage
 
     # Try to exceed the 10Mi storage
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
-      | ["metadata"]["name"]                         | mypvc             |
+      | ["metadata"]["name"]                         | mypvc                  |
       | ["spec"]["storageClassName"]                 | sc-<%= project.name %> |
-      | ["spec"]["resources"]["requests"]["storage"] | 4Mi                                 |
+      | ["spec"]["resources"]["requests"]["storage"] | 4Mi                    |
     Then the step should fail
     And the output should contain:
-      | exceeded quota                                                                                  |
+      | exceeded quota                                                                     |
       | requested: sc-<%= project.name %>.storageclass.storage.k8s.io/requests.storage=4Mi |
       | used: sc-<%= project.name %>.storageclass.storage.k8s.io/requests.storage=8Mi      |
       | limited: sc-<%= project.name %>.storageclass.storage.k8s.io/requests.storage=10Mi  |
@@ -129,9 +125,9 @@ Feature: ResourceQuata for storage
 
     # StorageClass without quota should not be limited
     Given admin clones storage class "sc1-<%= project.name %>" from ":default" with:
-      | | |
+      | ["volumeBindingMode"] | Immediate |
     When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
-      | ["metadata"]["name"]                         | mypvc1 |
+      | ["metadata"]["name"]                         | mypvc1                   |
       | ["spec"]["storageClassName"]                 | sc1-<%= project.name %>  |
       | ["spec"]["resources"]["requests"]["storage"] | 11Mi                     |
     Then the step should succeed

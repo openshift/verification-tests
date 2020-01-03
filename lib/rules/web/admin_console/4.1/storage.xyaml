@@ -10,4 +10,22 @@ attach_storage:
       id: mount-path
     type: input
     op: send_keys <mount_path>
-
+set_storageclass_name:
+  params:
+    input_field_id: storage-class-name
+    input_value: <sc_name>
+  action: set_input_value
+set_provisioner:
+  params:
+    dropdown_field: Provisioner
+    dropdown_item: <provisioner>
+  action: choose_dropdown_item
+create_storageclass_from_form:
+  params:
+    button_text: Create Storage Class
+  action: goto_storageclass_page
+  action: click_button
+  action: wait_form_loaded
+  action: set_storageclass_name
+  action: set_provisioner
+  action: click_create_button

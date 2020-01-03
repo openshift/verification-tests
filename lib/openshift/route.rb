@@ -1,5 +1,6 @@
 require 'common'
 require 'openshift/project_resource'
+require 'openshift/flakes/route_spec'
 
 module BushSlicer
   # @note represents an OpenShift route to a service
@@ -29,8 +30,8 @@ module BushSlicer
 
     def http_get(by:, proto: "http", port: nil, **http_opts)
       portstr = port ? ":#{port}" : ""
-      BushSlicer::Http.get(url: proto + "://" + dns(by: by) + portstr,
-                          **http_opts)
+      http_opts[:proxy] ||= env.client_proxy if env.client_proxy
+      BushSlicer::Http.get(url: proto + "://" + dns(by: by) + portstr, **http_opts)
     end
 
     def wait_http_accessible(by:, proto: "http", port: nil,
@@ -114,5 +115,12 @@ module BushSlicer
       end
       return ready
     end
+
+    # @return a RouteSpec object instead of just a raw hash
+    def spec(user: nil, cached: true, quiet: false)
+      rr = raw_resource(user: user, cached: cached, quiet: quiet).dig("spec")
+      RouteSpec.new rr
+    end
+
   end
 end

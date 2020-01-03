@@ -106,11 +106,12 @@ Feature: job.feature
       | object_type       | job  |
       | object_name_or_id | zero |
     Then the step should succeed
-    Given all existing pods die with labels:
+    And I wait for the steps to pass:
+    """
+    When I store in the clipboard the pods labeled:
       | app=pi |
-    When I get project pods with labels:
-      | app=pi |
-    Then the output should not contain "zero-"
+    Then the expression should be true> cb.pods.empty?
+    """
     # Create a job with invalid completions valuse
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/job/job_with_0_activeDeadlineSeconds.yaml" replacing paths:
       | ["spec"]["parallelism"]           | -1   |
@@ -126,8 +127,6 @@ Feature: job.feature
       | ["spec"]["activeDeadlineSeconds"] | null |
     Then the step should fail
     # Create a job with both "parallelism" < "completions"
-    Given all existing pods die with labels:
-      | app=pi |
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/job/job_with_0_activeDeadlineSeconds.yaml" replacing paths:
       | ["spec"]["parallelism"]           | 2    |
       | ["spec"]["completions"]           | 3    |
@@ -148,9 +147,12 @@ Feature: job.feature
       | object_type       | job  |
       | object_name_or_id | zero |
     Then the step should succeed
-    Given all existing pods die with labels:
+    And I wait for the steps to pass:
+    """
+    When I store in the clipboard the pods labeled:
       | app=pi |
-    Then the step should succeed
+    Then the expression should be true> cb.pods.empty?
+    """
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/job/job_with_0_activeDeadlineSeconds.yaml" replacing paths:
       | ["spec"]["parallelism"]           | 3    |
       | ["spec"]["completions"]           | 2    |

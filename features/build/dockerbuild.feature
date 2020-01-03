@@ -32,37 +32,45 @@ Feature: dockerbuild.feature
     Then the step should succeed
     And the output should contain "ContextDir:"
 
-  # @author dyan@redhat.com
-  Scenario Outline: Docker and STI build with dockerImage with specified tag
+  # @author wzheng@redhat.com
+  # @case_id OCP-11109
+  Scenario: Docker build with dockerImage with specified tag
     Given I have a project
-    When I run oc create over "<template>" replacing paths:
-      | ["spec"]["strategy"]["<strategy>"]["from"]["name"] | <%= product_docker_repo %>rhscl/ruby-22-rhel7:latest |
+    When I run the :new_app client command with:
+      | image_stream | openshift/ruby:2.5                            |
+      | app_repo     | https://github.com/openshift/ruby-hello-world |
+      | strategy     | docker                                        |
     Then the step should succeed
-    Given the "ruby-sample-build-1" build completed
-    When I run the :describe client command with:
-      | resource | build |
-      | name | ruby-sample-build-1 |
-    Then the output should contain:
-      | DockerImage <%= product_docker_repo %>rhscl/ruby-22-rhel7:latest |
+    And the "ruby-hello-world-1" build completes
     When I run the :patch client command with:
-      | resource      | bc              |
-      | resource_name | ruby-sample-build |
-      | p             | {"spec":{"strategy":{"<strategy>":{"from":{"name":"<%= product_docker_repo %>rhscl/ruby-22-rhel7:incorrect"}}}}} |
+      | resource      | buildconfig                                                                                                                                      |
+      | resource_name | ruby-hello-world                                                                                                                                 |
+      | p             | {"spec": {"strategy": {"dockerStrategy": {"from": {"kind": "DockerImage","name": "docker.io/centos/ruby-25-centos7:latest"}}},"type": "Docker"}} |
     Then the step should succeed
-    Given I run the :start_build client command with:
-      | buildconfig | ruby-sample-build |
-    And the "ruby-sample-build-2" build failed
+    When I run the :start_build client command with:
+      | buildconfig | ruby-hello-world |
+    Then the step should succeed
+    And the "ruby-hello-world-2" build completes
+    Then the step should succeed
+    When I run the :patch client command with:
+      | resource      | buildconfig                                                                                                                                     |
+      | resource_name | ruby-hello-world                                                                                                                                |
+      | p             | {"spec": {"strategy": {"dockerStrategy": {"from": {"kind": "DockerImage","name": "docker.io/centos/ruby-25-centos7:error"}}},"type": "Docker"}} |
+    Then the step should succeed
     When I run the :describe client command with:
-      | resource | build |
-      | name | ruby-sample-build-2 |
-    Then the output should contain:
-      | Failed |
-      | DockerImage <%= product_docker_repo %>rhscl/ruby-22-rhel7:incorrect |
+      | resource | buildconfig      |
+      | name     | ruby-hello-world |
+    Then the step should succeed
+    When I run the :start_build client command with:
+      | buildconfig | ruby-hello-world |
+    Then the step should succeed
+    And the "ruby-hello-world-3" build failed
+    When I run the :describe client command with:
+      | resource | build              |
+      | name     | ruby-hello-world-3 |
+    Then the step should succeed
+    And the output should contain "error"
 
-    Examples:
-      | template | strategy |
-      | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/tc479297/test-template-dockerbuild.json | dockerStrategy | # @case_id OCP-11109
-      | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/tc482273/test-template-stibuild.json    | sourceStrategy | # @case_id OCP-11120
 
   # @author wewang@redhat.com
   # @case_id OCP-9869
@@ -148,8 +156,9 @@ Feature: dockerbuild.feature
       | build_arg | ARG=VALUE                                     |
     Then the step should succeed
     Given the "ruby-hello-world-1" build was created
-    When I run the :export client command with:
+    When I run the :get client command with:
       | resource | build/ruby-hello-world-1 |
+      | o        | yaml                     |
     Then the step should succeed
     And the output should match:
       | name:\\s+ARG    |
@@ -160,8 +169,9 @@ Feature: dockerbuild.feature
       | build_arg   | ARG1=VALUE1      |
     Then the step should succeed
     Given the "ruby-hello-world-2" build was created
-    When I run the :export client command with:
+    When I run the :get client command with:
       | resource | build/ruby-hello-world-2 |
+      | o        | yaml                     |
     Then the step should succeed
     And the output should match:
       | name:\\s+ARG1    |
@@ -171,8 +181,9 @@ Feature: dockerbuild.feature
       | build_arg  | ARG=NEWVALUE       |
     Then the step should succeed
     Given the "ruby-hello-world-3" build was created
-    When I run the :export client command with:
+    When I run the :get client command with:
       | resource | build/ruby-hello-world-3 |
+      | o        | yaml                     |
     Then the step should succeed
     And the output should match:
       | name:\\s+ARG       |

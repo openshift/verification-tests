@@ -557,20 +557,16 @@ module BushSlicer
         ensure
           dyn&.close
         end
-      when "wildcard_dns"
+      when "a_dns"
         begin
           dyn = get_dyn
-          ips = []
+          ips = task[:ips]
 
-          if task[:roles]
-            hosts = erb_binding.local_variable_get(:hosts)
-            ips.concat(hosts.select{|h| h.has_any_role? task[:roles]}.map(&:ip))
-          end
-          if task[:ips]
-            ips.concat task[:ips]
+          unless ips && !ips.empty?
+            raise 'You need to specify IPs for the `a_dns` task.'
           end
 
-          dns_record = "*.apps.#{dns_component}"
+          dns_record = "#{task[:prefix]}.#{dns_component}"
           logger.info "Creating '#{dns_record}' record for: #{ips.join(?,)}"
           fqdn = dyn.dyn_replace_a_records(dns_record, ips)
           if task[:store_in]
@@ -580,6 +576,27 @@ module BushSlicer
         ensure
           dyn.close if dyn
         end
+      when "wildcard_dns"
+        ips = []
+
+        if task[:roles]
+          hosts = erb_binding.local_variable_get(:hosts)
+          ips.concat(hosts.select{|h| h.has_any_role? task[:roles]}.map(&:ip))
+        end
+        if task[:ips]
+          ips.concat task[:ips]
+        end
+
+        a_task = {
+          type: "a_dns",
+          prefix: "*.apps",
+          ips: ips,
+          store_in: task[:store_in]
+        }
+        installation_task( a_task,
+                           template: template,
+                           erb_binding: erb_binding,
+                           template_dir: template_dir )
       when "shell_command"
         exec_opts = {
           single: true,
@@ -605,7 +622,8 @@ module BushSlicer
         end
       when "ruby"
         if task[:file]
-          erb_binding.eval(readfile(task[:file], template_dir), task[:file])
+          ruby_file_details = {}
+          erb_binding.eval(readfile(task[:file], template_dir, details: ruby_file_details), ruby_file_details[:location])
         elsif task[:expression]
           erb_binding.eval(task[:expression], "expression_in_template")
         end

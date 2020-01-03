@@ -19,13 +19,6 @@ When /^admin creates a StorageClass( in the node's zone)? from #{QUOTED} where:$
     raise "why do you give me #{sc_hash["kind"]}"
   end
 
-  # starts from 3.6, change apiVersion from v1beta1 to v1
-  if env.version_cmp("3.6", user: user) >= 0
-    sc_hash["apiVersion"] = "storage.k8s.io/v1"
-  else
-    sc_hash["apiVersion"] = "storage.k8s.io/v1beta1"
-  end
-
   iaas_type = env.iaas[:type] rescue nil
 
   if nodezone && iaas_type == "gce" &&
@@ -75,6 +68,30 @@ Given(/^I run commands on the StorageClass "([^"]*)" backing host:$/) do | stora
   host = BushSlicer::SSHAccessibleHost.new(hostname, opts)
 
   @result = host.exec_admin(*table.raw.flatten)
+end
+
+Given(/^default storage class is patched to non-default$/) do
+  ensure_admin_tagged
+  ensure_destructive_tagged
+
+  _sc = BushSlicer::StorageClass.get_matching(user: user) { |sc, sc_hash| sc.default? }.first
+  if _sc
+    logger.info "Default storage class will patched to non-default and be resotored after scenario:\n#{_sc.name}"
+    cache_resources _sc
+    _admin = admin
+    patch_json_false = {"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}
+    patch_json_true = {"metadata":{"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}
+    patch_opts = {resource: "storageclass", resource_name: "#{_sc.name}"}
+    @result = _admin.cli_exec(:patch, p: patch_json_false.to_json, **patch_opts)
+    if @result[:success]
+      teardown_add {
+        @result = _admin.cli_exec(:patch, p: patch_json_true.to_json, **patch_opts)
+        raise "Unable to restore default storage class #{_sc.name}!" unless @result[:success]
+      }
+    else
+      raise "Unable to patch default storage class #{_sc.name} to non-default!"
+    end
+  end
 end
 
 Given(/^default storage class is deleted$/) do
@@ -171,8 +188,6 @@ Given(/^admin clones storage class #{QUOTED} from #{QUOTED} with:$/) do |target_
   sc_hash = YAML.load @result[:stdout]
 
   sc_hash["metadata"]["name"] = "#{target_sc}"
-  # Update sc to Immediate for smooth testing
-  sc_hash["volumeBindingMode"] = "Immediate"
   # Generally, make cloned storage class as non-default storage class.
   if sc_hash.dig("metadata", "annotations", "storageclass.beta.kubernetes.io/is-default-class")
     sc_hash["metadata"]["annotations"]["storageclass.beta.kubernetes.io/is-default-class"] = "false"
@@ -205,4 +220,13 @@ Given(/^admin clones storage class #{QUOTED} from #{QUOTED} with:$/) do |target_
     logger.error(@result[:response])
     raise "failed to clone StorageClass from: #{src_sc}"
   end
+end
+
+Given /^default storageclass is stored in the#{OPT_SYM} clipboard$/ do | cb_name |
+  ensure_admin_tagged
+  cb_name = 'default_sc' unless cb_name
+  _sc = BushSlicer::StorageClass.get_matching(user: user) { |sc, sc_hash| sc.default? }.first
+  raise "Unable to get default storage class " unless _sc
+  cb[cb_name] = _sc
+  cache_resources _sc
 end

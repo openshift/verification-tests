@@ -12,7 +12,8 @@ Feature: test new api methods
   @destructive
   Scenario: test upgrade by monitoring clusterversion
     Given I upgrade my cluster to:
-      | to_image | <%= ENV['UPGRADE_TARGET_VERSION'] %> |
+      | to_image               | <%= ENV['UPGRADE_TARGET_VERSION'] %> |
+      | allow_explicit_upgrade | true                                 |
 
   @admin
   @destructive
@@ -20,3 +21,9 @@ Feature: test new api methods
     Given I switch to cluster admin pseudo user
     And I use the "openshift-logging" project
     And I wait for clusterlogging to be functional in the project
+
+  @admin
+  Scenario: test new route apis
+    Given I switch to cluster admin pseudo user
+    And I use the "openshift-monitoring" project
+    And evaluation of `route('prometheus-k8s').spec.host` is stored in the clipboard

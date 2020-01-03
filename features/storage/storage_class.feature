@@ -42,7 +42,7 @@ Feature: storageClass related feature
   @destructive
   Scenario Outline: No dynamic provision when no default storage class
     Given I have a project
-    And default storage class is deleted
+    And default storage class is patched to non-default
     When admin creates a StorageClass from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/storageClass.yaml" where:
       | ["metadata"]["name"] | sc-<%= project.name %>      |
       | ["provisioner"]      | kubernetes.io/<provisioner> |
@@ -163,14 +163,15 @@ Feature: storageClass related feature
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc-without-annotations.json" replacing paths:
       | ["metadata"]["name"] | mypvc |
     Then the step should succeed
-    And the "mypvc" PVC becomes :bound within 120 seconds
+    And the expression should be true> pvc("mypvc").storage_class == "<default-storage-class-name>"
 
     Examples:
-      | provisioner |
-      | gce-pd      | # @case_id OCP-12171
-      | aws-ebs     | # @case_id OCP-12176
-      | cinder      | # @case_id OCP-12177
-      | azure-disk  | # @case_id OCP-13492
+      | provisioner    | default-storage-class-name |
+      | aws-ebs        | gp2                        | # @case_id OCP-12176
+      | azure-disk     | managed-premium            | # @case_id OCP-13492
+      | cinder         | standard                   | # @case_id OCP-12177
+      | gce-pd         | standard                   | # @case_id OCP-12171
+      | vsphere-volume | thin                       | # @case_id OCP-25789
 
   # @author chaoyang@redhat.com
   @admin

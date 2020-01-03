@@ -8,9 +8,10 @@ Given /^I open admin console in a browser$/ do
 
   version = env.webconsole_executor.get_master_version(user, via_rest: true)
   step "I have a browser with:", table(%{
+    | rules        | lib/rules/web/admin_console/#{version}/  |
     | rules        | #{base_rules}                            |
     | rules        | lib/rules/web/admin_console/base/        |
-    | rules        | lib/rules/web/admin_console/#{version}/  |
+    | rules        | lib/rules/web/images/logging/            |
     | base_url     | <%= env.admin_console_url %>             |
     | snippets_dir | #{snippets_dir}                          |
   })

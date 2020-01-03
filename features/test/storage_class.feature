@@ -44,3 +44,14 @@ Feature: StorageClass testing scenarios
       | resource_name | my-default   |
       | o             | yaml         |
     Then the step should succeed
+
+  @admin
+  @destructive
+  Scenario: Patch default storage class to non-default
+    When I run the :get admin command with:
+      | resource | storageclass |
+    Then the step should succeed
+    Given default storage class is patched to non-default
+    When I run the :get admin command with:
+      | resource | storageclass |
+    Then the step should succeed

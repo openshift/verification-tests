@@ -6,10 +6,11 @@ click_resource_action_button:
   - selector:
       xpath: //button[contains(.,'Actions')]
     op: click
+    timeout: 30
 choose_item_from_list:
   elements:
   - selector:
-      xpath: //li//*[text()='<item>']
+      xpath: //li//*[@data-test-action='<item>']
     op: click
 click_resource_action_icon:
   elements:
@@ -35,6 +36,8 @@ add_label:
 
 # a combined action can be directly used for Edit Annotations
 add_annotation_for_resource:
+  params:
+    item: Edit Annotations
   action: click_one_dropdown_action
   action: add_annotation
   action: submit_changes
@@ -55,3 +58,17 @@ delete_resource_panel:
       cascade: 'false'
     ref: uncheck_checkbox
   action: submit_changes
+confirm_cancel_action:
+  action:
+    if_param:
+      cancel: 'true'
+    ref: submit_changes
+  action:
+    if_param:
+      cancel: 'false'
+    ref: click_not_cancel
+click_not_cancel:
+  element:
+    selector:
+      xpath: //button[@data-test-id='modal-cancel-action']
+    op: click

@@ -523,16 +523,19 @@ module BushSlicer
         file = '~/' + file
       end
       if opts[:raw]
-        exec_raw("rm #{r} -f -- #{file}", opts)
-        opts[:quiet] = true
-        res = exec_raw("ls -d -- #{file}", opts)
+        exec_method = :exec_raw
+      elsif opts[:admin]
+        exec_method = :exec_admin
       else
-        exec("rm #{r} -f -- #{file}", opts)
-        opts[:quiet] = true
-        res = exec("ls -d -- #{file}", opts)
+        exec_method = :exec
       end
+      public_send(exec_method, "rm #{r} -f -- #{file}", opts)
+      opts[:quiet] = true
+      res = public_send(exec_method, "ls -d -- #{file}", opts)
 
-      return ! res[:success]
+      # OCDebugAccessibleHost does not return exit status of executed command
+      # return ! res[:success]
+      return res[:response].include? "No such"
     end
 
     # wait until one file in the list is found and returns its name
@@ -825,6 +828,80 @@ module BushSlicer
       return unless connected?
       super
       close
+    end
+  end
+
+  class OCDebugAccessibleHost < LinuxLikeHost
+    def initialize(hostname, opts={})
+      super
+      @workdir = "/tmp/workdir/" + EXECUTOR_NAME unless self[:workdir]
+      @exec_lock = Mutex.new
+    end
+
+    private def service_project
+      node.env.service_project
+    end
+
+    # @note execute commands without special setup
+    def exec_raw(*commands, **opts)
+      unless opts[:single]
+        commands = ["chroot", "/host/", "bash", "-c", commands_to_string(commands)]
+      end
+
+      @exec_lock.synchronize {
+        # note this will block until timeout if command does not exist remotely
+        # TODO: check debug pod status in the background to avoid freeze (WRKLDS-99)
+        # note2: exit status is always 0 (WRKLDS-98)
+        # note3: stdin and stderr come together (WRKLDS-110)
+        node.env.admin.cli_exec(
+          :debug,
+          resource: "node/#{node.name}",
+          n: service_project.name,
+          oc_opts_end: "",
+          exec_command_arg: commands,
+          _stdin: opts[:stdin],
+          _stdout: opts[:stdout]
+        )
+      }
+    end
+
+    def copy_to(local, remote, **opts)
+      File.open(Host.localhost.absolutize(local, raw: opts[:raw]), "r") { |fd|
+        res = exec_as(
+          opts[:user],
+          "cat > #{shell_escape absolutize(remote, raw: opts[:raw])}",
+          stdin: fd,
+        )
+
+        unless res[:success]
+          raise "failed to cat file to node, see log"
+        end
+      }
+    end
+
+    def copy_from(remote, local, **opts)
+      File.open(Host.localhost.absolutize(local, raw: opts[:raw]), "w") { |fd|
+        res = exec_as(
+          opts[:user],
+          "cat #{shell_escape absolutize(remote, raw: opts[:raw])}",
+          stdout: fd
+        )
+
+        unless res[:success]
+          raise "failed to cat file from node and write locally, see log"
+        end
+      }
+    end
+
+    def node
+      unless properties[:node]
+        raise "Host object was not created with :node specified."
+      end
+      properties[:node]
+    end
+
+    def local_ip?(hostname_or_ip)
+      hostname == hostname_or_ip
     end
   end
 end

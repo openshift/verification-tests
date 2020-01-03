@@ -62,20 +62,28 @@ end
 # helper step that does the following:
 # 1. figure out project and route information
 Given /^I login to kibana logging web console$/ do
-  #step %Q/I store the logging url to the :logging_route clipboard/
-  cb.logging_console_url = env.logging_console_url
+  cb.logging_console_url = route('kibana', service('kibana',project('openshift-logging', switch: false))).dns(by: admin)
   step %Q/I have a browser with:/, table(%{
-    | rules    | lib/rules/web/images/logging/ |
-    | rules    | lib/rules/web/console/base/   |
-    | base_url | <%= cb.logging_console_url %> |
+    | rules        | lib/rules/web/images/logging/       |
+    | rules        | lib/rules/web/console/base/         |
+    | base_url     | <%= cb.logging_console_url %>       |
     })
   step %Q/I perform the :kibana_login web action with:/, table(%{
-    | username   | <%= user.name %>              |
-    | password   | <%= user.password %>          |
-    | kibana_url | <%= cb.logging_console_url %> |
+    | username   | <%= user.name %>                      |
+    | password   | <%= user.password %>                  |
+    | kibana_url | https://<%= cb.logging_console_url %> |
+    | idp        | <%= env.idp %>                        |
     })
   # change the base url so we don't need to specifiy kibana url every time afterward in the rule file
-  browser.base_url = env.logging_console_url
+  browser.base_url = cb.logging_console_url
+end
+
+Given /^I log out kibana logging web console$/ do
+  cb.logging_console_url = route('kibana', service('kibana',project('openshift-logging', switch: false))).dns(by: admin)
+  step %Q/I perform the :logout_kibana web action with:/, table(%{
+    | kibana_url | https://<%= cb.logging_console_url %> |
+  })
+  browser.finalize
 end
 
 # ##  curl
@@ -98,6 +106,7 @@ When /^I perform the (GET|POST) metrics rest request with:$/ do | op_type, table
   bearer_token = opts[:token] ? opts[:token] : user.cached_tokens.first
 
   https_opts = {}
+  https_opts[:proxy] = env.client_proxy if env.client_proxy
   https_opts[:headers] ||= {}
   https_opts[:headers][:accept] ||= "application/json"
   https_opts[:headers][:content_type] ||= "application/json"
@@ -380,13 +389,15 @@ Given /^all metering related pods are running in the#{OPT_QUOTED} project$/ do |
   step %Q/a pod becomes ready with labels:/, table(%{
     | app=metering-operator |
   })
-
-  step %Q/a pod becomes ready with labels:/, table(%{
-    | app=hdfs-datanode |
-  })
-  step %Q/a pod becomes ready with labels:/, table(%{
-    | app=hdfs-namenode |
-  })
+  # XXX: HDFS is not disabled by deafult, only check it if it's enabled
+  if pod('hdfs-datanode-0').exists?
+    step %Q/a pod becomes ready with labels:/, table(%{
+      | app=hdfs-datanode |
+    })
+    step %Q/a pod becomes ready with labels:/, table(%{
+      | app=hdfs-namenode |
+    })
+  end
   step %Q/a pod becomes ready with labels:/, table(%{
     | app=hive|
   })
@@ -1133,19 +1144,19 @@ When /^I wait(?: (\d+) seconds)? for the #{QUOTED} index to appear in the ES pod
   end
 
   seconds = Integer(seconds) unless seconds.nil?
-  seconds ||= 8 * 60
+  seconds ||= 10 * 60
   index_data = nil
   success = wait_for(seconds) {
-    step %Q/I get the "#{index_name}" logging index information/
+    step %Q/I get the "#{index_name}" logging index information from a pod with labels "#{pod_labels}"/
     res = cb.index_data
     if res
       index_data = res
-      # exit only health is not 'red' and index is 'open'
+      # exit only health is not 'red' and index is 'open' and the docs.count > 0
       # XXX note, to be more correct, we should check that the index is not red
       # for an extended persiod.  The tricky part is how to define extended period????
       # for now, just consider it not red to be good
       #https://www.elastic.co/guide/en/elasticsearch/reference/5.6/cluster-health.html
-      res['health'] != 'red' and res['status'] == 'open'
+      res['health'] != 'red' and res['status'] == 'open' and res['docs.count'].to_i > 0
     end
   }
   raise "Index '#{index_name}' failed to appear in #{seconds} seconds" unless success
@@ -1163,7 +1174,7 @@ When /^I get the #{QUOTED} logging index information(?: from a pod with labels #
     raise 'Current pod must be of type ES' unless pod.labels.key? 'component' and pod.labels['component'].start_with? 'es'
   end
 
-  step %Q/I perform the HTTP request on the ES pod:/, table(%{
+  step %Q/I perform the HTTP request on the ES pod with labels "#{pod_labels}":/, table(%{
     | relative_url | _cat/indices?format=JSON |
     | op           | GET                      |
   })

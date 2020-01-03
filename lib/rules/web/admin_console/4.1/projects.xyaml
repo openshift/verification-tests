@@ -8,7 +8,7 @@ create_project:
   action:
     if_param: discription_name
     ref: set_project_description
-  action: click_create_button
+  action: submit_changes
 set_project_name:
   element:
     selector:
@@ -30,7 +30,12 @@ set_project_description:
 send_delete_string:
   elements:
   - selector:
-      xpath: //input[@class='form-control']
+      xpath: //input[contains(@class,'form-control')]
     type: input
     op: send_keys <resource_name>
-
+create_project_from_get_started_instru:
+  params:
+    button_text: View My Projects
+  action: click_button
+  action: create_project
+nagivate_to_project_resources_page: {}

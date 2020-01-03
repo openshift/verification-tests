@@ -14,6 +14,8 @@ require 'common'
 require 'host'
 require 'http'
 require 'net'
+require 'thread'
+require 'thwait'
 
 module BushSlicer
   # works with OSP10 and OSP7
@@ -29,7 +31,7 @@ module BushSlicer
       #   allow users to keep configuration for multiple OpenStack instances
       service_name = options[:service_name] ||
                      ENV['OPENSTACK_SERVICE_NAME'] ||
-                     'openstack_qeos7'
+                     'openstack_upshift'
       @opts = default_opts(service_name).merge options
 
       @os_user = ENV['OPENSTACK_USER'] || opts[:user]
@@ -714,7 +716,16 @@ module BushSlicer
         raise "could not associate a floating ip:\n#{res[:response]}"
       end
     end
-    
+
+    def get_floating_ips()
+      res = self.rest_run(self.os_network_url + "/v2.0/floatingips", "GET", {}, self.os_token)
+      if res[:success]
+        return res.dig(:parsed, "floatingips")
+      else
+        raise "Could not get all existing floating ips\n#{res[:response]}"
+      end
+    end
+
     def allocate_floating_ip(network_name, reuse: true)
       network = floating_ip_networks.find { |n| n["name"] == network_name }
       unless network
@@ -722,12 +733,7 @@ module BushSlicer
       end
 
       if reuse
-        fipsres = self.rest_run(self.os_network_url + "/v2.0/floatingips", "GET", {}, self.os_token)
-        if fipsres[:success]
-          fips = fipsres.dig(:parsed, "floatingips")
-        else
-          raise "Could not get all existing floating ips\n#{fipsres[:response]}"
-        end  
+        fips = get_floating_ips()
         # filter condition is
         # 1, floating ip is not belong to given network_name and
         # 2, floating ip is not preserved
@@ -739,8 +745,8 @@ module BushSlicer
           return filtered_fips.sample
         end
       end
-      
-      # create new floating ip 
+
+      # create new floating ip
       # 1. when reuse is false or
       # 2. no existed floating ip
       request_url = self.os_network_url + "/v2.0/floatingips"
@@ -760,6 +766,23 @@ module BushSlicer
         return res.dig(:parsed, "floatingip")
       else
         raise "could not allocate new floating ip:\n#{res[:response]}"
+      end
+    end
+
+    def assign_ip_to_port(floatingip_id, port_id)
+      request_url = self.os_network_url + "/v2.0/floatingips/#{floatingip_id}"
+      method = "PUT"
+      payload = {
+        floatingip: {
+          port_id: port_id
+        }
+      }
+      res = self.rest_run(request_url, method, payload, self.os_token)
+      logger.debug(res[:response])
+      if res[:success]
+        return res.dig(:parsed, "floatingip")
+      else
+        raise "failed to set properties for floating ip:\n#{res[:response]}"
       end
     end
 
@@ -801,6 +824,34 @@ module BushSlicer
       return res[:parsed]["routers"]
     end
 
+    def get_instances
+      get_objects("servers")
+    end
+
+    def get_instance_detail(id)
+      res = self.rest_run(self.os_compute_url + "/servers/#{id}", "GET", {}, self.os_token)
+      raise res[:response] unless res[:success]
+      return res[:parsed]
+    end
+
+    def get_running_instances
+      threads = []
+      running_inst = {}
+      instances = get_objects("servers")
+      instances.each do |instance|
+        threads << Thread.new(instance) do | i|
+          inst_details = get_instance_detail(i['id'])
+          running_inst[inst_details.dig('server', 'name')] = inst_details['server'] if inst_details.dig('server','status') == "ACTIVE"
+        end
+      end
+      ThreadsWait.all_waits(*threads)
+      return running_inst
+    end
+
+    # input: timestamp in string format
+    def instance_uptime(inst_creation_time)
+      ((Time.now.utc - Time.parse(inst_creation_time)) / (60 * 60)).round(2)
+    end
     # @return ports of device, e.g. router ports
     def get_ports(device_id: nil, fixed_ips: nil)
       get_opts = {}

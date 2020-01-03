@@ -1,3 +1,8 @@
+expand_primary_menu:
+  elements:
+  - selector:
+      xpath: //*[contains(@data-component, 'pf-nav-expandable') and contains(text(), '<primary_menu>')]
+    op: click
 create_resource_by_default_yaml:
   elements:
   - selector:
@@ -29,16 +34,44 @@ click_button:
     selector:
       xpath: //button[contains(.,'<button_text>')]
     op: click
+click_button_text:
+  element:
+    selector:
+      xpath: //button[text()='<button_text>']
+    op: click
+check_button_disabled:
+  element:
+    selector:
+      xpath: //button[contains(., '<button_text>') and @disabled]
+check_button_enabled:
+  element:
+    selector:
+      xpath: //button[contains(., '<button_text>') and not(@disabled)]
+check_text_not_a_link:
+  element:
+    selector:
+      xpath: //*[contains(@class,'co-resource-item__resource-name') and text()='<text>' and not(@href)]
 click_tab:
   elements:
   - selector:
       xpath: //ul[contains(@class,'nav__menu')]//a[text()='<tab_name>']
+    op: click
+click_radio_input:
+  element:
+    selector:
+      xpath: //input[@type='radio' and @value='<radio_text>']
     op: click
 clear_input_value:
   elements:
   - selector:
       id: <clear_field_id>
     op: clear
+    type: input
+set_input_value:
+  element:
+    selector:
+      xpath: //input[@id='<input_field_id>']
+    op: send_keys <input_value>
     type: input
 check_row_filter_on_page:
   elements:
@@ -49,9 +82,78 @@ check_resources_title_on_page:
   - selector:
       xpath: //span[text()='<resource_title>']
 check_resource_name_and_icon:
+  action:
+    if_param: service_name
+    ref: check_service_name_and_icon 
+  action:
+    if_param: buildconfig_name
+    ref: check_buildconfig_name_and_icon
+  action:
+    if_param: route_name
+    ref: check_route_name_and_icon
+  action:
+    if_param: job_name
+    ref: check_job_name_and_icon
+  action:
+    if_param: cronjob_name
+    ref: check_cronjob_name_and_icon
+  action:
+    if_param: configmap_name
+    ref: check_configmap_name_and_icon
+  action:
+    if_param: imagestream_name
+    ref: check_imagestream_name_and_icon
+  action:
+    if_param: storageclass_name
+    ref: check_storageclass_name_and_icon
+check_storageclass_name_and_icon:
+  params:
+    icon_text: SC
+    resource_name: <storageclass_name>
+  action: check_resource_name_icon_info
+check_imagestream_name_and_icon:
+  params:
+    icon_text: IS
+    resource_name: <imagestream_name>
+  action: check_resource_name_icon_info
+check_configmap_name_and_icon:
+  params:
+    icon_text: CM
+    resource_name: <configmap_name>
+  action: check_resource_name_icon_info
+check_cronjob_name_and_icon:
+  params:
+    icon_text: CJ
+    resource_name: <cronjob_name>
+  action: check_resource_name_icon_info
+check_job_name_and_icon:
+  params:
+    icon_text: J
+    resource_name: <job_name>
+  action: check_resource_name_icon_info
+check_buildconfig_name_and_icon:
+  params:
+    icon_text: BC
+    resource_name: <buildconfig_name>
+  action: check_resource_name_icon_info
+check_route_name_and_icon:
+  params:
+    icon_text: RT
+    resource_name: <route_name>
+  action: check_resource_name_icon_info
+check_service_name_and_icon:
+  params:
+    icon_text: S
+    resource_name: <service_name>
+  action: check_resource_name_icon_info
+check_resource_name_icon_info:
   elements:
   - selector:
-      xpath: //div[contains(@class,'co-m-pane__name')][/*[contains(.,'<icon_text>')] and /*[contains(., '<resource_name>')]]
+      xpath: //span[contains(@class, 'co-m-resource-icon') and text()='<icon_text>']/following-sibling::*[text()='<resource_name>']
+check_resource_link:
+  element:
+    selector:
+      css: a[href$='<resource_link>']
 check_page_contains:
   element:
     selector:
@@ -74,6 +176,16 @@ click_add_more_button:
     selector:
       xpath: //*[contains(text(),'Add More')]
     op: click
+click_add_dropdown_button:
+  element:
+    selector:
+      xpath: //button[contains(.,'Add')]
+    op: click
+click_search_button:
+  element:
+    selector:
+      xpath: //button[contains(@data-test-id,'search')]
+    op: click
 click_annotation_link:
   elements:
   - selector:
@@ -88,7 +200,21 @@ uncheck_checkbox:
 check_link_and_text:
   element:
     selector:
-      xpath: //a[contains(text(),'<text>') and @href='<link_url>']
+      xpath: //a[contains(.,'<text>') and contains(@href,'<link_url>')]
+click_link_with_text:
+  element:
+    selector:
+      xpath: //a[contains(.,'<text>') and contains(@href,'<link_url>')]
+    op: click
+click_kebab_of_one_resource:
+  elements:
+  - selector:
+      xpath: //*[text()='<resource_name>']//ancestor::tr//td[contains(@class,'dropdown-kebab-pf')]
+    op: click
+    timeout: 30
+click_one_operation_in_kebab:
+  action: click_kebab_of_one_resource
+  action: click_button
 click_secondary_menu:
   elements:
   - selector:
@@ -97,6 +223,28 @@ click_secondary_menu:
   - selector:
       xpath: //a[@class='pf-c-nav__link' and text()='<secondary_menu>']
     op: click
+click_dropdown_field:
+  elements:
+  - selector:
+      xpath: //*[(.='<dropdown_field>')]/following-sibling::*//button[contains(@class, 'dropdown__toggle')]
+    op: click
+click_one_item:
+  elements:
+  - selector:
+      xpath: //li//*[@id='<dropdown_item>-link']
+    op: click
+choose_dropdown_item:
+  action: click_dropdown_field
+  action: click_one_item
+wait_form_loaded:
+  element:
+    selector:
+      css: form
+    timeout: 20
+wait_box_loaded:
+  element:
+    selector:
+      css: .loading-box__loaded
 ## -------- check resource key and values pairs ------
 check_resource_details:
   action:
@@ -171,14 +319,47 @@ check_resource_details:
   action:
     if_param: triggered_by
     ref: check_triggered_by
+  action:
+    if_param: termination_type
+    ref: check_termination_type
+  action:
+    if_param: insecure_traffic
+    ref: check_insecure_traffic
+  action:
+    if_param: hostname
+    ref: check_route_hostname
+  action:
+    if_param: path
+    ref: check_route_path
+  action:
+    if_param: canonical_hostname
+    ref: check_route_canonical_hostname
+  action:
+    if_param: machine_config_selector
+    ref: check_machine_config_selector
+  action:
+    if_param: current_configuration
+    ref: check_current_configuration
 check_resource_details_key_and_value:
   element: &key_value
     selector:
       xpath: //dt[contains(text(),'<key>')]/following-sibling::dd[1][contains(.,'<value>')]
+check_key_and_resource_link:
+  element:
+    selector:
+      xpath: //dt[contains(text(),'<key>')]/following-sibling::dd[1]//a[contains(@href,'<resource_link>')]
+check_key_and_action_link:
+  element: &key_action
+    selector:
+      xpath: //dt[contains(text(),'<key>')]/following-sibling::dd[1]//button
 click_value_on_resource_detail:
   element:
     <<: *key_value
     op: click
+click_key_and_action_link:
+   element:
+     <<: *key_action
+     op: click
 check_resource_name:
   params:
     key: Name
@@ -298,4 +479,39 @@ check_triggered_by:
   params:
     key: Triggered By
     value: <triggered_by>
+  action: check_resource_details_key_and_value
+check_termination_type:
+  params:
+    key: Termination Type
+    value: <termination_type>
+  action: check_resource_details_key_and_value
+check_insecure_traffic:
+  params:
+    key: Insecure Traffic
+    value: <insecure_traffic>
+  action: check_resource_details_key_and_value
+check_route_hostname:
+  params:
+    key: Hostname
+    value: <hostname>
+  action: check_resource_details_key_and_value
+check_route_path:
+  params:
+    key: Path
+    value: <path>
+  action: check_resource_details_key_and_value
+check_route_canonical_hostname:
+  params:
+    key: Canonical Router Hostname
+    value: <canonical_hostname>
+  action: check_resource_details_key_and_value
+check_machine_config_selector:
+  params:
+    key: Machine Config Selector
+    value: <machine_config_selector>
+  action: check_resource_details_key_and_value
+check_current_configuration:
+  params:
+    key: Current Configuration
+    value: <current_configuration>
   action: check_resource_details_key_and_value

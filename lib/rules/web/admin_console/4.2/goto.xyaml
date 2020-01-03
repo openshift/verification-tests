@@ -1,20 +1,37 @@
 # projects
 goto_projects_list_page:
   url: k8s/cluster/projects
+goto_one_project_dashboard_page:
+  url: k8s/cluster/projects/<project_name>
 goto_project_status:
   url: status/ns/<project>
 goto_resource_page_under_default_project:
   url: k8s/ns/default/<resource_url_name>
+goto_project_resources_page:
+  url: k8s/cluster/projects/<project_name>/workloads
+goto_project_details_page:
+  params:
+    button_text: Dashboard
+  action:
+   if_element:
+     selector:
+       xpath: //button[contains(text(),'Dashboard')]
+   ref:
+   - click_button
 
 # builds
 goto_one_buildconfig_page:
   url: k8s/ns/<project_name>/buildconfigs/<bc_name>
+goto_builds_page:
+  url: k8s/ns/<project_name>/builds
 goto_one_build_page:
   url: k8s/ns/<project_name>/builds/<build_name>
 
 # configmaps
 goto_configmaps_page:
   url: k8s/ns/<project_name>/configmaps
+goto_one_configmap_page:
+  url: k8s/ns/<project_name>/configmaps/<configmap_name>
 
 # cronjobs
 goto_cronjobs_page:
@@ -27,7 +44,7 @@ goto_jobs_page:
   url: k8s/ns/<project_name>/jobs
 goto_one_job_page:
   url: k8s/ns/<project_name>/jobs/<job_name>
-          
+
 # events
 goto_project_events:
   url: k8s/ns/<project_name>/events
@@ -43,6 +60,10 @@ goto_secrets_creation_page:
   url: k8s/ns/<project_name>/secrets/~new/<secret_type>
 goto_one_secret_page:
   url: k8s/ns/<project_name>/secrets/<secret_name>
+
+#serviceaccounts
+goto_serviceaccounts_page:
+  url: k8s/ns/<project_name>/serviceaccounts
 
 # storageclass
 goto_storageclass_page:
@@ -67,3 +88,61 @@ goto_one_dc_page:
 #pod
 goto_one_pod_page:
   url: k8s/ns/<project_name>/pods/<resource_name>
+
+goto_cluster_oauth_configuration_page:
+  url: k8s/cluster/config.openshift.io~v1~OAuth/cluster
+goto_one_pod_log_page:
+  url: k8s/ns/<project_name>/pods/<pod_name>/logs
+
+#routes
+goto_routes_page:
+  url: k8s/ns/<project_name>/routes
+goto_one_route_page:
+  url: k8s/ns/<project_name>/routes/<route_name>
+
+#imagestream
+goto_imagestreams_page:
+  url: k8s/ns/<project_name>/imagestreams
+goto_one_imagestream_page:
+  url: k8s/ns/<project_name>/imagestreams/<imagestream_name>
+
+#deploy image
+goto_deploy_image_page:
+  url: deploy-image/ns/<project_name>?preselected-ns=<project_name>
+
+#catalog page
+goto_catalog_page:
+  url: catalog/ns/<project_name>
+goto_create_app_from_imagestream_page:
+  url: catalog/source-to-image?imagestream=<is_name>&imagestream-ns=openshift&preselected-ns=<project_name>
+
+#node
+goto_node_page:
+  url: k8s/cluster/nodes
+goto_one_node_page:
+  url: k8s/cluster/nodes/<node_name>
+
+# operator hub
+goto_operator_hub_page:
+  url: operatorhub/ns/default
+goto_operator_subscription_page:
+  url: operatorhub/subscribe?pkg=<package_name>&catalog=<catalog_name>&catalogNamespace=openshift-marketplace&targetNamespace=<target_namespace>
+
+goto_cli_tools_page:
+  url: command-line-tools
+
+# machine config
+goto_machineconfigs_page:
+  url: k8s/cluster/machineconfiguration.openshift.io~v1~MachineConfig
+goto_machineconfig_pools_page:
+  url: k8s/cluster/machineconfiguration.openshift.io~v1~MachineConfigPool
+
+#crd
+goto_crds_page:
+  url: k8s/cluster/customresourcedefinitions
+goto_crd_instances_page:
+  url: k8s/cluster/customresourcedefinitions/<crd_definition>/instances
+
+# quota
+goto_quotas_page:
+  url: k8s/ns/<project_name>/resourcequotas

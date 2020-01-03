@@ -7,7 +7,7 @@ Feature: Add pvc to pod from web related
   Scenario: Attach pvc to pod with multiple containers from web console
     Given I have a project
     And I have a NFS service in the project
-    And default storage class is deleted
+    And default storage class is patched to non-default
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/dc-with-two-containers.yaml |
     Then the step should succeed

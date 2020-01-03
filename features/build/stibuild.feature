@@ -28,7 +28,7 @@ Feature: stibuild.feature
     Then the step should succeed
     When I run the :import_image client command with:
       | image_name | myimage               |
-      | from       | aosqe/ruby-22-centos7 |
+      | from       | centos/ruby-25-centos7|
       | confirm    | true                  |
     Then the step should succeed
     And the "sample-build-2" build was created
@@ -38,7 +38,7 @@ Feature: stibuild.feature
     Then the step should succeed
     And the output should contain:
       |Build trigger cause:	Image change          |
-      |Image ID:		aosqe/ruby-22-centos7 |
+      |Image ID:		centos/ruby-25-centos7|
       |Image Name/Kind:	myimage:latest                |
     When I run the :start_build client command with:
       | buildconfig | sample-build |
@@ -89,4 +89,38 @@ Feature: stibuild.feature
       | resource_name | bc/ruby-hello-world |
     Then the output should not contain:
       | save-artifacts: No such file or directory|
+
+  # @author wzheng@redhat.com
+  # @case_id OCP-11120
+  Scenario: STI build with dockerImage with specified tag
+    Given I have a project
+    When I run the :new_app client command with:
+      | docker_image | centos/ruby-25-centos7                  |
+      | app_repo     | https://github.com/openshift-qe/ruby-ex |
+    Then the step should succeed
+    And the "ruby-ex-1" build completes
+    When I run the :patch client command with:
+      | resource      | buildconfig                                                                                                                                      |
+      | resource_name | ruby-ex                                                                                                                                          |
+      | p             | {"spec": {"strategy": {"sourceStrategy": {"from": {"kind": "DockerImage","name": "docker.io/centos/ruby-25-centos7:latest"}}},"type": "Source"}} |
+    Then the step should succeed
+    When I run the :start_build client command with:
+      | buildconfig | ruby-ex |
+    Then the step should succeed
+    And the "ruby-ex-2" build completes
+    Then the step should succeed
+    When I run the :patch client command with:
+      | resource      | buildconfig                                                                                                                                     |
+      | resource_name | ruby-ex                                                                                                                                         |
+      | p             | {"spec": {"strategy": {"sourceStrategy": {"from": {"kind": "DockerImage","name": "docker.io/centos/ruby-25-centos7:error"}}},"type": "Source"}} |
+    Then the step should succeed
+    When I run the :start_build client command with:
+      | buildconfig | ruby-ex |
+    Then the step should succeed
+    And the "ruby-ex-3" build failed
+    When I run the :describe client command with:
+      | resource | build     |
+      | name     | ruby-ex-3 |
+    Then the step should succeed
+    And the output should contain "error"
 

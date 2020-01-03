@@ -136,10 +136,11 @@ module BushSlicer
 
     def update_from_api_object(hash)
       case
-      when hash["kind"] != shortclass
-        raise "hash not from a #{shortclass}: #{hash["kind"]}"
+      when hash["kind"] != kind
+        raise "hash not from a #{shortclass}: expected #{kind} but was #{hash["kind"]}"
       when name != hash["metadata"]["name"]
         raise "hash from a different #{shortclass}: #{name} vs #{hash["metadata"]["name"]}"
+      # TODO: check API name/version
       when self.respond_to?(:project) &&
            hash["metadata"]&.has_key?("namespace") &&
            project.name != hash["metadata"]["namespace"]
@@ -404,6 +405,29 @@ module BushSlicer
 
     def shortclass
       self.class.shortclass
+    end
+
+    # @return [String] the resource name without the API name, e.g.
+    #   for `configs.samples.operator.openshift.io` it will return `configs`
+    def self.resource_link_element
+      @resource_link_element ||= self::RESOURCE[/^[^.]*/].freeze
+    end
+
+    # @return [String] the type of resource as would appear in YAML output
+    # @note we need to handle resources where api name part is significant and
+    #   RESOURCE contains dots
+    def self.kind
+      unless @kind
+        resource_without_dots = self::RESOURCE.gsub(".", "")
+        api_name_no_dots = resource_without_dots[resource_link_element.size..-1]
+        @kind = shortclass[/.*?(?=#{api_name_no_dots}\z)/i]
+      end
+
+      return @kind
+    end
+
+    def kind
+      self.class.kind
     end
 
     def self.struct_iso8601_time(struct)

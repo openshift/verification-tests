@@ -3,6 +3,11 @@ click_add_value_from_configmap_or_secret:
     selector:
       xpath: //*[contains(normalize-space(text()),'Add from Config Map or Secret')]
     op: click
+check_env_editor_loaded:
+  element:
+    selector:
+      css: .pairs-list__row
+    timeout: 30
 add_env_vars:
   action: add_env_var_name
   action:
@@ -19,16 +24,16 @@ add_env_var_name:
 add_env_var_pair_value:
   elements:
   - selector:
-      xpath: //div[@class='co-m-pane__body-group']//span[contains(normalize-space(text()),'Select a resource')]
+      xpath: (//input[@value='<env_var_name>']/parent::*/following-sibling::*[contains(@class,'pairs-list__value-pair-field')]//button)[1]
     op: click
   - selector:
-      xpath: //div[@class='co-m-pane__body-group']//span[contains(.,'<env_source_name>')]
+      xpath: //li//*[text()='<env_source_name>']
     op: click
   - selector:
-      xpath: //div[@class='co-m-pane__body-group']//span[contains(normalize-space(text()),'Select a key')]
+      xpath: (//input[@value='<env_var_name>']/parent::*/following-sibling::*[contains(@class,'pairs-list__value-pair-field')]//button)[2]
     op: click
   - selector:
-      xpath: //div[@class='co-m-pane__body-group']//a[contains(.,'<env_source_key>')]
+      xpath: //li//*[text()='<env_source_key>']
     op: click
 add_env_var_value:
   element:
@@ -38,7 +43,7 @@ add_env_var_value:
 choose_container:
   elements:
   - selector:
-      xpath: //div[@class='dropdown']//span[@class='co-resource-item']
+      xpath: //*[(.='Container:')]/following-sibling::*//button[contains(@class, 'dropdown__toggle')]
     op: click
   action: choose_item_from_list
 update_env_vars:
@@ -63,7 +68,7 @@ update_pair_source:
 update_pair_key:
   elements:
   - selector:
-      xpath: //input[@value='<env_var_name>']/ancestor::div[contains(@class,'row pairs-list__row')]//div[@class='value-from'][2]//button
+      xpath: //input[@value='<env_var_name>']/ancestor::div[contains(@class,'row pairs-list__row')]//div[contains(@class,'value-from--key')][last()]//button
     op: click
   - selector:
       xpath: //a[contains(.,'<env_source_key>')]

@@ -58,9 +58,10 @@ Feature: Pod related networking scenarios
   Scenario: The openflow list will be cleaned after delete the pods
     Given I have a project
     Given I have a pod-for-ping in the project
-    Then I use the "<%= pod.node_name(user: user) %>" node
+    Then evaluation of `pod.node_name` is stored in the :node_name clipboard
     Then evaluation of `pod.ip` is stored in the :pod_ip clipboard
-    When I run ovs dump flows commands on the host
+    When I run command on the "<%= cb.node_name %>" node's sdn pod:
+      | ovs-ofctl| -O | openflow13 | dump-flows | br0 |
     Then the step should succeed
     And the output should contain:
       | <%=cb.pod_ip %> |
@@ -68,11 +69,14 @@ Feature: Pod related networking scenarios
       | object_type       | pod       |
       | object_name_or_id | hello-pod |
     Then the step should succeed
-    Given I select a random node's host
-    When I run ovs dump flows commands on the host
+    Given I wait up to 10 seconds for the steps to pass:
+    """
+    When I run command on the "<%= cb.node_name %>" node's sdn pod:
+      | ovs-ofctl| -O | openflow13 | dump-flows | br0 |
     Then the step should succeed
     And the output should not contain:
       | <%=cb.pod_ip %> |
+    """
 
   # @author yadu@redhat.com
   # @case_id OCP-16729
@@ -150,16 +154,15 @@ Feature: Pod related networking scenarios
     And a pod becomes ready with labels:
       | name=iperf-pods |
     And evaluation of `pod.name` is stored in the :iperf_client clipboard
-    And evaluation of `pod.node_name` is stored in the :iperf_client_node clipboard
+    And evaluation of `pod.node_name` is stored in the :node_name clipboard
 
     # check the ovs port and interface for the qos availibility
-    Given I use the "<%= cb.iperf_client_node %>" node
-    When I run the ovs commands on the host:
-      | ovs-vsctl list qos |
+    When I run command on the "<%= cb.node_name %>" node's sdn pod:
+      | ovs-vsctl | list | qos |
     Then the step should succeed
     And the output should contain "max-rate="5000000""
-    When I run the ovs commands on the host:
-      | ovs-vsctl list interface \| grep ingress |
+    When I run command on the "<%= cb.node_name %>" node's sdn pod:
+      | ovs-vsctl | list | interface |
     Then the step should succeed
     And the output should contain "ingress_policing_rate: 1953"
 
@@ -181,20 +184,21 @@ Feature: Pod related networking scenarios
     Then the step should succeed
     And I wait for the resource "pod" named "<%= cb.iperf_client %>" to disappear
 
-    When I run the ovs commands on the host:
-      | ovs-vsctl list qos |
+    When I run command on the "<%= cb.node_name %>" node's sdn pod:
+      | ovs-vsctl | list | qos |
     Then the step should succeed
     And the output should not contain "max-rate="5000000""
-    When I run the ovs commands on the host:
-      | ovs-vsctl list interface \| grep ingress |
+    When I run command on the "<%= cb.node_name %>" node's sdn pod:
+      | ovs-vsctl | list | interface |
     Then the step should succeed
     And the output should not contain "ingress_policing_rate: 1953"
 
-  # @auther anusaxen@redhat.com
+  # @author anusaxen@redhat.com
   # @case_id OCP-23890
   @admin
   Scenario: A pod with or without hostnetwork cannot access the MCS port 22623 or 22624 on the master
-    Given evaluation of `env.master_hosts.first.local_ip` is stored in the :master_ip clipboard
+    Given I store the masters in the :masters clipboard
+    And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master_ip clipboard
     Given I select a random node's host
     Given I have a project
     #pod-for-ping will be a non-hostnetwork pod
@@ -221,33 +225,30 @@ Feature: Pod related networking scenarios
       | curl | -I | https://<%= cb.master_ip %>:22624/config/master | -k |
     Then the output should contain "Connection refused"
 
-  # @auther anusaxen@redhat.com
+  # @author anusaxen@redhat.com
   # @case_id OCP-23891
   @admin
   Scenario: A pod cannot access the MCS port 22623 or 22624 via the SDN/tun0 address of the master
-    Given I use the first master host		
-    And I run commands on the host:
-      | ifconfig tun0 \| grep -w inet \| awk '{print $2}' |
-    Then the step should succeed
-    And evaluation of `@result[:response].strip` is stored in the :master_tun0_ip clipboard
-    
+    Given I store the masters in the :masters clipboard
+    And the vxlan tunnel address of node "<%= cb.masters[0].name %>" is stored in the :master_tunnel_address clipboard		
     Given I select a random node's host
     And I have a project
     #pod-for-ping will be a non-hostnetwork pod
     And I have a pod-for-ping in the project
-    #Curl on Master's tun0 IP to make sure connections are blocked to MCS via tun0
+    #Curl on Master's tun0/k8s-x-x- IP to make sure connections are blocked to MCS via tun0
     When I execute on the pod:
-      | curl | -I | https://<%= cb.master_tun0_ip %>:22623/config/master | -k |
+      | curl | -I | https://<%= cb.master_tunnel_address %>:22623/config/master | -k |
     Then the output should contain "Connection refused"
     When I execute on the pod:
-      | curl | -I | https://<%= cb.master_tun0_ip %>:22624/config/master | -k |
+      | curl | -I | https://<%= cb.master_tunnel_address %>:22624/config/master | -k |
     Then the output should contain "Connection refused"
 
-  # @auther anusaxen@redhat.com
+  # @author anusaxen@redhat.com
   # @case_id OCP-23893
   @admin
   Scenario: A pod in a namespace with an egress IP cannot access the MCS
-    Given evaluation of `env.master_hosts.first.local_ip` is stored in the :master_ip clipboard
+    Given I store the masters in the :masters clipboard
+    And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master_ip clipboard
     Given I select a random node's host
     And evaluation of `node.name` is stored in the :egress_node clipboard
     #add the egress ip to the hostsubnet
@@ -272,12 +273,13 @@ Feature: Pod related networking scenarios
       | curl | -I | https://<%= cb.master_ip %>:22624/config/master | -k |
     Then the output should contain "Connection refused"
 
-  # @auther anusaxen@redhat.com
+  # @author anusaxen@redhat.com
   # @case_id OCP-23894
   @admin
   Scenario: User cannot access the MCS by creating a service that maps to non-MCS port to port 22623 or 22624 on the IP of a master (via manually-created ep's)
-    Given evaluation of `env.master_hosts.first.local_ip` is stored in the :master_ip clipboard
-    And I have a project
+    Given I store the masters in the :masters clipboard
+    And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master_ip clipboard
+    Given I have a project
     #pod-for-ping will be a non-hostnetwork pod
     And I have a pod-for-ping in the project
     #Exposing above pod to MCS target port 22623

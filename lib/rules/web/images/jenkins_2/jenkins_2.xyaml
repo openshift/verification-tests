@@ -603,9 +603,13 @@ jenkins_multi_oauth_login:
         Logtext.click();
         return true;
     expect_result: true
-  - command: return document.getElementsByClassName("idp")[1].click()
-    expect_result: ~
+ # - command: return document.getElementsByClassName("idp")[1].click()
+ #   expect_result: ~
+ # getting idp type from env var when jenkins enables openshift oauth.
   elements:
+  - selector:
+      xpath: //a[text()='<idp>']
+    op: click
   - selector:
       id: inputUsername
     op: send_keys <username>

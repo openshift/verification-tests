@@ -67,16 +67,9 @@ Feature: pod related features
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/pod-pull-by-tag.yaml |
     Then the step should succeed
     And the pod named "pod-pull-by-tag" status becomes :running
-    Given I register clean-up steps:
-    """
-    I run the :oadm_manage_node admin command with:
-      | node_name   | <%= cb.pod_node %> |
-      | schedulable | true               |
-    the step should succeed
-    """
-    When I run the :oadm_manage_node admin command with:
-      | node_name   | <%= cb.pod_node %> |
-      | schedulable | false              |
+    Given node schedulable status should be restored after scenario
+    When I run the :oadm_cordon_node admin command with:
+      | node_name | <%= cb.pod_node %> |
     Then the step should succeed
     When I execute on the pod:
       | bash |
@@ -111,16 +104,9 @@ Feature: pod related features
   Scenario: New pods creation will be disabled on unschedulable nodes
     Given I have a project
     Given I store the schedulable nodes in the :nodes clipboard
-    Given I register clean-up steps:
-    """
-    I run the :oadm_manage_node admin command with:
-      | node_name   | noescape: <%= cb.nodes.map(&:name).join(" ") %> |
-      | schedulable | true                                                           |
-    the step should succeed
-    """
-    When I run the :oadm_manage_node admin command with:
-      | node_name   | noescape: <%= cb.nodes.map(&:name).join(" ") %> |
-      | schedulable | false                                                                                                 |
+    Given node schedulable status should be restored after scenario
+    When I run the :oadm_cordon_node admin command with:
+      | node_name | noescape: <%= cb.nodes.map(&:name).join(" ") %> |
     Then the step should succeed
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift/origin/master/examples/hello-openshift/hello-pod.json |
@@ -150,25 +136,17 @@ Feature: pod related features
       | p | {"metadata":{"annotations": {"openshift.io/node-selector": ""}}}|
     Then the step should succeed
     Given I store the schedulable nodes in the :nodes clipboard
-    Given I register clean-up steps:
-    """
-    I run the :oadm_manage_node admin command with:
-      | node_name   | <%= cb.nodes[0].name %> |
-      | schedulable | true                    |
-    the step should succeed
-    """
-    When I run the :oadm_manage_node admin command with:
-      | node_name   | <%= cb.nodes[0].name %> |
-      | schedulable | false                   |
+    Given node schedulable status should be restored after scenario
+    When I run the :oadm_cordon_node admin command with:
+      | node_name | <%= cb.nodes[0].name %> |
     Then the step should succeed
     Given label "os=fedora" is added to the "<%= cb.nodes[0].name %>" node
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/pod-with-nodeselector.yaml |
     Then the step should succeed
     And the pod named "hello-pod" status becomes :pending
-    When I run the :oadm_manage_node admin command with:
-      | node_name   | <%= cb.nodes[0].name %> |
-      | schedulable | true                    |
+    When I run the :oadm_uncordon_node admin command with:
+      | node_name | <%= cb.nodes[0].name %> |
     Then the step should succeed
     And the pod named "hello-pod" status becomes :running
 
@@ -208,16 +186,9 @@ Feature: pod related features
   Scenario: Pods will still be created by DaemonSet when nodes are SchedulingDisabled
     Given I have a project
     Given I store the schedulable nodes in the :nodes clipboard
-    Given I register clean-up steps:
-    """
-    I run the :oadm_manage_node admin command with:
-      | node_name   | <%= cb.nodes[0].name %> |
-      | schedulable | true                    |
-    the step should succeed
-    """
-    When I run the :oadm_manage_node admin command with:
-      | node_name   | <%= cb.nodes[0].name %> |
-      | schedulable | false                   |
+    Given node schedulable status should be restored after scenario
+    When I run the :oadm_cordon_node admin command with:
+      | node_name | <%= cb.nodes[0].name %> |
     Then the step should succeed
     Given cluster role "cluster-admin" is added to the "first" user
     When I run the :create client command with:
