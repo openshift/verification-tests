@@ -356,7 +356,7 @@ Feature: Pod related networking scenarios
       | name=network-pod |
     And evaluation of `pod.name` is stored in the :network_pod clipboard
     And I execute on the pod:
-      | conntrack | -L |
+      | bash | -c | conntrack -L \| grep "<%= cb.nodeport %>" |
     Then the step should succeed
     And the output should contain:
       |<%= cb.host_pod1.ip %>|
@@ -381,6 +381,6 @@ Feature: Pod related networking scenarios
     And I terminate last background process
     #Making sure that the conntrack table should not contain old deleted udp listener pod IP entries but new pod one's
     When I execute on the "<%= cb.network_pod %>" pod:
-      | conntrack | -L |
+      | bash | -c | conntrack -L \| grep "<%= cb.nodeport %>" |
     Then the output should contain "<%= cb.host_pod2.ip %>"
     And the output should not contain "<%= cb.host_pod1.ip %>"
