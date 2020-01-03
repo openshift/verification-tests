@@ -297,3 +297,45 @@ Feature: Pod related networking scenarios
       | type          | merge                                                         						   |
     Then the step should fail
     And the output should contain "endpoints "<%= cb.ping_pod.name %>" is forbidden: endpoint port TCP:22623 is not allowed"
+
+  # @author anusaxen@redhat.com
+  # @case_id OCP-21846
+  @admin
+  @destructive
+  Scenario: ovn pod can be scheduled even if the node taint to unschedule
+    Given the env is using "OVNKubernetes" networkType
+    And I store all worker nodes to the :nodes clipboard
+    #Tainting node to NoSchedule
+    When I run the :oadm_taint_nodes admin command with:
+      | node_name | <%= cb.nodes[0].name %> |
+      | key_val   | key2=value2:NoSchedule  |
+    Then the step should succeed
+    And I register clean-up steps:
+    """
+    I run the :oadm_taint_nodes admin command with:
+      | node_name | <%= cb.nodes[0].name %> |
+      | key_val   | key2-  |
+    Then the step should succeed
+    """
+    Given I have a project
+    #Makng sure test pods can' be sceduled on tha tainted node
+    And I run the :create client command with:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/pod-for-ping.json |
+    Then the step should succeed
+    And the pod named "hello-pod" status becomes :pending
+    When I run the :get admin command with:
+      | resource      | pod                                   |
+      | fieldSelector | spec.nodeName=<%= cb.nodes[0].name %> |
+      | n             | openshift-ovn-kubernetes              |
+      | o             | jsonpath={.items[*].metadata.name}    |
+    Then the step should succeed
+    And evaluation of `@result[:response]` is stored in the :ovnkube_pod_name clipboard
+    And admin ensure "<%= cb.ovnkube_pod_name %>" pod is deleted from the "opneshift-ovn-kubernetes" project
+    #Waiting 60 seconds for new ovnkube pod to get created and running
+    Given 60 seconds have passed
+    When I run the :get admin command with:
+      | resource      | pod                                   |
+      | fieldSelector | spec.nodeName=<%= cb.nodes[0].name %> |
+      | n             | openshift-ovn-kubernetes              |
+    Then the step should succeed
+    And the output should contain "Running"  
