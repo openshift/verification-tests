@@ -392,6 +392,15 @@ check_resource_details:
   action:
     if_param: current_configuration
     ref: check_current_configuration
+  action:
+    if_param: max_unhealthy
+    ref: check_max_unhealthy
+  action:
+    if_param: expected_machines
+    ref: check_expected_machines
+  action:
+    if_param: current_healthy
+    ref: check_current_healthy
 check_resource_details_key_and_value:
   element: &key_value
     selector:
@@ -567,3 +576,19 @@ check_current_configuration:
     key: Current Configuration
     value: <current_configuration>
   action: check_resource_details_key_and_value
+check_max_unhealthy:
+  params:
+    key: Max Unhealthy
+    value: <max_unhealthy>
+  action: check_resource_details_key_and_value
+check_expected_machines:
+  params:
+    key: Expected Machines
+    value: <expected_machines>
+  action: check_resource_details_key_and_value
+check_current_healthy:
+  params:
+    key: Current Healthy
+    value: <current_healthy>
+  action: check_resource_details_key_and_value
+
