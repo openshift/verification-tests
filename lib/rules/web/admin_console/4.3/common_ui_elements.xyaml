@@ -158,7 +158,7 @@ click_one_operation_in_kebab:
 check_field_on_resource_list_page:
   elements:
   - selector:
-      xpath: //td[contains(.,'<resource_name>')]/following-sibling::td[contains(.,'<value>')]
+      xpath: //th[contains(@data-label,'<field>')]
     timeout: 30
 check_resource_name_and_icon:
   action:
@@ -497,6 +497,13 @@ check_resource_details:
   action:
     if_param: short_names
     ref: check_short_names
+  action:
+    if_param: created_at
+    ref: check_created_at
+check_resource_details_key_only:
+  element:
+    selector:
+      xpath: //button[(text()='<key>')]
 check_resource_details_key_and_value:
   element: &key_value
     selector:
@@ -722,3 +729,7 @@ check_short_names:
     key: Short Names
     value: <short_names>
   action: check_resource_details_key_and_value
+check_created_at:
+  params:
+    key: Created At
+  action: check_resource_details_key_only
