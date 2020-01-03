@@ -75,7 +75,7 @@ Feature: Testing the isolation during build scenarios
       | buildconfig | ruby-docker-test |
     Then the step should succeed
     And the "ruby-docker-test-2" build was created
-    And I wait up to 100 seconds for the steps to pass:
+    And I wait up to 200 seconds for the steps to pass:
     """
     When I run the :logs client command with:
       | resource_name | build/ruby-docker-test-2 |
@@ -97,7 +97,7 @@ Feature: Testing the isolation during build scenarios
       | buildconfig | ruby-docker-test |
     Then the step should succeed
     And the "ruby-docker-test-3" build was created
-    And I wait up to 150 seconds for the steps to pass:
+    And I wait up to 200 seconds for the steps to pass:
     """
     When I run the :logs client command with:
       | resource_name | build/ruby-docker-test-3 |
