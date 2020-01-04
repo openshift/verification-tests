@@ -300,3 +300,44 @@ Feature: SDN related networking scenarios
     Then the step should succeed
     And the output should contain "Hello OpenShift"
     """
+  # @author anusaxen@redhat.com
+  # @case_id OCP-25787
+  @admin
+  Scenario: Don't write CNI configuration file until ovn-controller has done at least one iteration
+    Given the env is using "OVNKubernetes" networkType
+    And I store all worker nodes to the :nodes clipboard
+    When I run the :get admin command with:
+      | resource      | pod                                   |
+      | fieldSelector | spec.nodeName=<%= cb.nodes[0].name %> |
+      | n             | openshift-ovn-kubernetes              |
+      | o             | jsonpath={.items[*].metadata.name}    |
+    Then the step should succeed
+    And evaluation of `@result[:response]` is stored in the :ovnkube_pod_name clipboard
+    #Login into ovn-kube pod to check various values 
+    Given I switch to cluster admin pseudo user
+    And I use the "openshift-ovn-kubernetes" project
+    #Checking controller iteration 1
+    Given admin executes on the "<%= cb.ovnkube_pod_name %>" pod:
+      | bash | -c | ovs-appctl -t ovn-controller connection-status |
+    Then the step should succeed
+    And the output should contain "connected"
+    #Checking controller iteration 2
+    Given admin executes on the "<%= cb.ovnkube_pod_name %>" pod:
+      | bash | -c | ls -l /var/run/openvswitch/ |
+    Then the step should succeed
+    And evaluation of `@result[:response].match(/ovn-controller.\d*\.ctl/)[0]` is stored in the :controller_pid_file clipboard
+    #Checking controller iteration 3
+    Given admin executes on the "<%= cb.ovnkube_pod_name %>" pod:
+      | bash | -c | ovs-appctl -t /var/run/openvswitch/<%= cb.controller_pid_file %> connection-status |
+    Then the step should succeed
+    And the output should contain "connected"
+    #Checking controller iteration 4
+    Given admin executes on the "<%= cb.ovnkube_pod_name %>" pod:
+      | bash | -c | ovs-ofctl dump-flows br-int \| wc -l |
+    Then the step should succeed
+    And the expression should be true> @result[:response].match(/\d*/)[0].to_i> 0
+    #Checking final iteration post all above iterations passed. In this iteration we expect CNi file to be created
+    Given I use the "<%= cb.nodes[0].name %>" node
+    And I run commands on the host:
+      | ls -l /var/run/multus/cni/net.d/ |
+    And the output should contain "ovn-kubernetes.conf"
