@@ -1,0 +1,262 @@
+# ------------------------- This page is only for the actions about disconnected cluster register page --------------
+cluster_registration_page_loaded:
+    elements:
+      - selector:
+            css: div.pf-l-grid 
+check_disconnected_cluster_register_page:
+    action: required_items_loaded
+    action: optional_items_loaded
+    elements:
+        - selector:
+            xpath: //button[@type='submit' and text()='Register cluster']
+        - selector:
+            xpath: //button[text()='Cancel']
+
+required_items_loaded:
+    elements:
+        - selector:
+            text: 'Cluster ID'
+        - selector:
+            xpath: //span[text()='Cluster ID']/../span[text()='*']
+        - selector:
+            css: input#cluster_id
+            type: text
+        - selector:
+            text: 'Operating System'
+        - selector:
+            xpath: //span[text()='Operating System']/../span[text()='*']
+        - selector:
+            text: 'Red Hat Enterprise Linux CoreOS'
+        - selector:
+            xpath: //input[@id='operating_system-Red Hat Enterprise Linux CoreOS']
+            type: radio
+        - selector:
+            text: 'Red Hat Enterprise Linux'
+        - selector:
+            xpath: //input[@id='operating_system-Red Hat Enterprise Linux']
+            type: radio
+        - selector:
+            text: 'System Type'
+        - selector:
+            xpath: //span[text()='System Type']/../span[text()='*']
+        - selector:
+            text: 'Physical'
+        - selector:
+            css: input#system_type-physical
+            type: radio
+        - selector:
+            text: Virtual
+        - selector:
+            css: input#system_type-virtual
+            type: radio
+        - selector:
+            text: 'Number of sockets or LAPRs'
+        - selector:
+            xpath: //span[text()='Number of sockets or LAPRs']/../span[text()='*']
+        - selector:
+            css: input#socket_num
+            type: text
+optional_items_loaded:
+    elements:
+        - selector:
+            text: 'Display name'
+        - selector:
+            css: input#display_name
+        - selector:
+            text: 'Web console URL'
+        - selector:
+            css: input#web_console_url
+        - selector:
+            text: 'Memory capacity (GiB)'
+        - selector:
+            css: input#memory_gib
+        - selector:
+            text: 'Number of compute nodes'
+        - selector:
+            css: input#nodes_compute
+click_register_cluster_button_on_cluster_register_page:
+    element:
+        selector:
+            xpath: //button[@type='submit' and text()='Register cluster']
+        op: click
+input_text:
+    element:
+        selector:
+            css: input#<locator_id>
+            type: text
+        op: send_keys <input_value>
+clear_input:
+    element:
+        selector:
+            css: input#<locator_id>
+        op: clear
+check_error_message:
+    element:
+        selector:
+            text: <error_message>
+
+check_cluster_id_no_input_error_message:
+    params:
+        error_message: 'Cluster ID is required.'
+    action: check_error_message
+check_sockets_or_vcpu_no_input_error_message:
+    params:
+        error_message: 'Field is required'
+    action: check_error_message
+check_cluster_id_illegal_value_error_message:
+    params:
+        input_value: invalidclusterid
+        error_message: "Cluster ID 'invalidclusterid' is not a valid UUID."
+        locator_id: cluster_id
+    action: input_text
+    action: check_error_message
+check_sockets_or_vcpu_nonum_value_error_message:
+    params:
+        input_value: abcd
+        error_message: 'Input must be a number.'
+    action: input_text
+    action: check_error_message
+check_sockets_or_vcpu_negative_number_error_message:
+    params:
+        input_value: -1
+        error_message: 'Input must be a positive number.'
+    action: input_text
+    action: check_error_message
+check_sockets_exceed_max_number_error_messag:
+    params:
+        input_value: 10000000000000000
+        error_message: 'Input cannot be more than 2000.'
+    action: input_text
+    action: check_error_message
+check_vcpu_exceed_max_number_error_messag:
+    params:
+        input_value: 10000000000000000
+        error_message: 'Input cannot be more than 16000.'
+    action: input_text
+    action: check_error_message
+click_virtual_radio_button:
+    element:
+        selector:
+            xpath: //input[@id='system_type-virtual']
+        op: click
+select_virtual_system_type:
+    action: click_virtual_radio_button
+    elements:
+        - selector:
+            text: 'Number of vCPUs'
+        - selector:
+            xpath: //span[text()='Number of vCPUs']/../span[text()='*']
+check_external_id_invalid_input_error_messages:
+    action: click_register_cluster_button_on_cluster_register_page
+    action: check_cluster_id_no_input_error_message
+    action: check_cluster_id_illegal_value_error_message
+check_sockets_invalid_input_error_messages:
+    params:
+        locator_id: socket_num
+    action: clear_input
+    action: click_register_cluster_button_on_cluster_register_page
+    action: check_sockets_or_vcpu_no_input_error_message
+    action: clear_input
+    action: check_sockets_or_vcpu_nonum_value_error_message
+    action: clear_input
+    action: check_sockets_or_vcpu_negative_number_error_message
+    action: clear_input
+    action: check_sockets_exceed_max_number_error_messag
+check_vcpu_invalid_input_error_messages:
+    params:
+        locator_id: cpu
+    action: select_virtual_system_type
+    action: clear_input
+    action: click_register_cluster_button_on_cluster_register_page
+#   action: check_sockets_or_vcpu_no_input_error_message
+    action: clear_input
+    action: check_sockets_or_vcpu_nonum_value_error_message
+    action: clear_input
+    action: check_sockets_or_vcpu_negative_number_error_message
+    action: clear_input
+    action: check_vcpu_exceed_max_number_error_messag
+    
+check_required_items_invalid_input_error_messages:
+    action: check_external_id_invalid_input_error_messages
+    action: check_sockets_invalid_input_error_messages
+    action: check_vcpu_invalid_input_error_messages
+check_display_name_exceed_max_characters_input_error_message:
+    params:
+        locator_id: display_name
+        input_value: I-am-longer-than-63-characters-I-am-longer-than-63-characters-I-am-longer-than-63-characters
+        error_message: Cluster display name may not exceed 63 characters.
+    action: input_text
+    action: check_error_message
+check_display_name_invalid_input_error_messages:
+    params:
+        locator_id: display_name
+    action: check_display_name_exceed_max_characters_input_error_message
+check_nodes_nonum_input_error_message:
+    params:
+        input_value: not-a-number
+        error_message: 'Input must be a number.'
+    action: input_text
+    action: check_error_message
+check_nodes_negative_input_error_message:
+    params:
+        input_value: -1
+        error_message: 'The minimum number of nodes is 0.'
+    action: input_text
+    action: check_error_message
+check_nodes_exceed_max_num_input_error_message:
+    params:
+        input_value: 100000000000
+        error_message: 'Maximum number allowed is 250.'
+    action: input_text
+    action: check_error_message
+check_nodes_invalid_input_error_messages:
+    params:
+        locator_id: nodes_compute
+    action: check_nodes_nonum_input_error_message
+    action: clear_input
+    action: check_nodes_negative_input_error_message
+    action: clear_input
+    action: check_nodes_exceed_max_num_input_error_message
+check_web_console_url_illegal_input_error_message:
+    params:
+        input_value: $%^&
+    action: input_text
+    element:
+        selector:
+            xpath: //*[contains(text(),'The URL should include the scheme prefix')]
+    
+check_web_console_url_invalid_input_error_messages:
+    params:
+        locator_id: web_console_url
+    action: check_web_console_url_illegal_input_error_message
+check_memory_capacity_nonum_input_error_message:
+    params:
+        input_value: not-a-number
+        error_message: 'Input must be a number.'
+    action: input_text
+    action: check_error_message
+check_memory_capacity_negative_input_error_message:
+    params:
+        input_value: -1
+        error_message: 'Input must be a positive number.'
+    action: input_text
+    action: check_error_message
+check_memory_capacity_exceed_max_num_input_error_message:
+    params:
+        input_value: 100000000000
+        error_message: 'Input cannot be more than 256000.'
+    action: input_text
+    action: check_error_message
+check_memory_capacity_invalid_input_error_messages:
+    params:
+        locator_id: memory_gib
+    action: check_memory_capacity_nonum_input_error_message
+    action: clear_input
+    action: check_memory_capacity_negative_input_error_message
+    action: clear_input
+    action: check_memory_capacity_exceed_max_num_input_error_message
+check_optional_items_invalid_input_error_messages:
+    action: check_memory_capacity_invalid_input_error_messages
+    action: check_web_console_url_invalid_input_error_messages
+    action: check_nodes_invalid_input_error_messages
+    action: check_display_name_invalid_input_error_messages

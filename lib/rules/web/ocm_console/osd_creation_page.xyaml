@@ -1,0 +1,52 @@
+#--------------------- This is for OSD creation page --------------------
+osd_creation_page_loaded:
+    action: creation_page_navigation_displayed
+    action: page_title_displayed
+    action: cluster_detail_displayed
+    action: cluster_scale_displayed
+
+creation_page_navigation_displayed:
+    elements:
+    - selector:
+        xpath: //a[@class='pf-c-breadcrumb__link' and text()='Clusters']
+    - selector:
+        xpath: //a[@class='pf-c-breadcrumb__link' and text()='Create']
+    - selector:
+        xpath: //li[@class='pf-c-breadcrumb__item' and text()='OpenShift Dedicated']
+page_title_displayed:
+    elements:
+        - selector:
+            xpath: //img[@class='openshift-logo-page-title' and @alt='OpenShift']
+        - selector:
+            xpath: //h1[@class='ocm-page-title' and text()='Create an OpenShift Dedicated Cluster']
+cluster_detail_displayed:
+    elements:
+        - selector:
+            xpath: //h3[@class='osd-page-header' and text()='Cluster Details']
+cluster_scale_displayed:
+    elements:
+    - selector:
+        text: Compute node instance type
+    - selector:
+        xpath: //label[@class='pf-c-form__label' and @for='node_type']/span[@class='pf-c-form__label-required']
+    - selector:
+        xpath: //div[@class='machine-types-flex-container']
+select_machine_type:
+    element:
+        selector:
+            xpath: //button[contains(@id,"<machine_type>")]
+        op: click
+click_create_button:
+    element:
+        selector:
+            xpath: //button[@type='submit']
+        op: click
+    action: cluster_detail_page_loaded
+switch_to_osd_creation_page:
+    action: switch_to_creation_cards_page
+    element:
+        selector:
+            xpath: //a[@href='/beta/openshift/create/osd']
+        op: click
+    action: osd_creation_page_loaded
+

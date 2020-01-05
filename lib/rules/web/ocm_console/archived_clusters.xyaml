@@ -1,0 +1,28 @@
+archived_page_loaded:
+    elements:
+        - selector:
+            xpath: //a[@class='pf-c-breadcrumb__link' and text()='Clusters']
+        - selector:
+            xpath: //input[@class='pf-c-form-control cluster-list-filter']
+        - selector:
+            xpath: //a[@href='/beta/openshift/' and text()='Show active clusters']
+        - selector:
+            xpath: //button[@id='pagination-options-menu-toggle']
+        - selector:
+            xpath: //nav[@class='pf-c-pagination__nav' and @aria-label='Pagination']
+        - selector:
+            xpath: //button[@class='pf-c-button pf-m-plain cluster-list-top' and @aria-label='Refresh']
+        - selector:
+            xpath: //table[@class='pf-c-table pf-m-grid-md']
+click_unarchive_cluster_button_on_archived_cluster_list_page:
+    element:
+        selector:
+            xpath: //a[contains(text(),'<cluster_name>')]/../..//button[text()='Unarchive']
+        op: click
+go_to_archived_cluster_detail_page:
+    element:
+        selector:
+            xpath: //table[@class='pf-c-table pf-m-grid-md']/tbody/tr/td/a[contains(text(),'<cluster_name>')]
+        timeout: 30
+        op: click
+    action: archived_cluster_detail_page_loaded

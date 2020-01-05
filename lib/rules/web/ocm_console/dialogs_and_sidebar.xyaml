@@ -1,0 +1,132 @@
+# ------------------- The including all of the dialogs defination-------------
+
+deletion_dialog_loaded:
+    elements:
+        - selector:
+            xpath: //button[@class='pf-c-button pf-m-plain' and @aria-label='Close']
+archive_dialog_loaded:
+    elements:
+        - selector:
+            xpath: //div[@class='pf-c-modal-box pf-m-sm' and @aria-label='Archive Cluster']
+        - selector:
+            xpath: //button[@class='pf-c-button pf-m-plain' and @aria-label='Close']
+        - selector:
+            xpath: //h1[@class='pf-c-title pf-m-2xl' and text()='Archive Cluster']
+        - selector:
+            xpath: //form/p[contains(text(), 'Archiving a cluster will remove it from the cluster list and remove the cluster from subscription management.')]
+        - selector:
+            xpath: //form/p[contains(text(),'This action will not delete the cluster, only remove it from OpenShift Cluster Manager.')]
+        - selector:
+            xpath: //form//a[@href='https://access.redhat.com/articles/4397891' and text()='Instructions']
+        - selector:
+            xpath: //form/p[contains(text()[2], 'for deleting a cluster may be found in the knowledge base.')]
+        - selector:
+            xpath: //button[@class='pf-c-button pf-m-secondary' and text()='Cancel']
+        - selector:
+            xpath: //button[@class='pf-c-button pf-m-primary' and text()='Archive cluster']
+check_close_button:
+  element: &close_button_in_dialog
+    selector:
+      xpath: //button[@class='pf-c-button pf-m-plain' and @aria-label='Close']
+click_close_button:
+  element:
+    <<: *close_button_in_dialog
+    op: click
+check_cancel_button:
+  element: &cancel_button_in_dialog
+    selector:
+      xpath: //button[@class='pf-c-button pf-m-secondary' and text()='Cancel']
+click_cancel_button:
+  element:
+    <<: *cancel_button_in_dialog
+    op: click
+check_apply_button:
+  element: &apply_button_in_dialog
+    selector:
+      xpath: //button[@class='pf-c-button pf-m-primary' and @type='submit' and text()='Apply']
+click_apply_button:
+  element:
+    <<: *apply_button_in_dialog
+    op: click
+click_archive_button:
+    element:
+        selector:
+            xpath: //button[@class='pf-c-button pf-m-primary' and text()='Archive cluster']
+        op: click
+archive_succ_promt_message_displayed:
+    element:
+        selector:
+            xpath: //*[contains(text(),'has been archived')]
+        timeout: 10
+unarchive_dialog_loaded:
+    elements:
+        - selector:
+            xpath: //button[@class='pf-c-button pf-m-plain' and @aria-label='Close']
+        - selector:
+            xpath: //h1[@class='pf-c-title pf-m-2xl' and text()='Unarchive Cluster']
+        - selector:
+            xpath: //p[text()='Un-archiving a cluster will make it visible in the active (default) cluster list. You may need to manage subscriptions if the cluster is active.']
+        - selector:
+            xpath: //button[@class='pf-c-button pf-m-secondary' and text()='Cancel']
+        - selector:
+            xpath: //button[@class='pf-c-button pf-m-primary' and text()='Unarchive cluster']
+click_unarchive_button:
+    element:
+        selector:
+            xpath: //button[@class='pf-c-button pf-m-primary' and text()='Unarchive cluster']
+        op: click
+unarchive_succ_prompt_message_displayed:
+    element:
+        selector:
+            xpath: //*[contains(text(),'has been unarchived')]
+        timeout: 20
+check_display_name_dialog_loaded:
+  elements:
+    - selector:
+        xpath: //div[@class='pf-c-backdrop']/div/div/h1[text()='Edit Display Name'] 
+    - selector:
+        xpath: //*[@id='edit-display-name-input' and contains(@value,<original_name>)]
+edit_display_name_in_dialog:
+  elements:
+    - selector:
+        id: edit-display-name-input
+      type: input
+      op: clear
+  elements:
+    - selector:
+        id: edit-display-name-input
+      type: input
+      op: send_keys <new_name>
+  elements:
+    - selector:
+        xpath: //button[@class="pf-c-button pf-m-primary" and @type="submit"]
+      op: click
+edit_compute_node_in_dialog:
+  action: clear_original_compute_node_in_dialog
+  action: input_compute_node_in_dialog
+  action: click_apply_button
+  action: check_dialog_missing
+clear_original_compute_node_in_dialog:
+  element:
+    selector:
+      xpath: //div[@role='dialog' and @aria-label='Scale Cluster']//form/div[@class='form-group']/input[@id='nodes_compute' and @value='<orignal_compute_node_number>']
+    op: clear
+input_compute_node_in_dialog:
+  element:
+    selector:
+      id: nodes_compute
+    type: input
+    op: send_keys <new_compute_nodes_number>
+check_dialog_missing:
+  element:
+    selector:
+      xpath: //div[@class='pf-c-backdrop']/div[@class='pf-l-bullseye']
+    missing: true
+check_active_add_url_button:
+  element: &active_add_url_button
+    selector:
+      xpath: //div[@aria-label='Add Console URL' and @role='dialog']//button[@class='pf-c-button pf-m-primary']
+click_add_url_button:
+  element:
+    <<: *active_add_url_button
+    op: click
