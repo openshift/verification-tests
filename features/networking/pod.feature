@@ -323,7 +323,7 @@ Feature: Pod related networking scenarios
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/pod-for-ping.json |
     Then the step should succeed
     And the pod named "hello-pod" status becomes :pending within 60 seconds
-    #Getting ovnkube pod name from any of node
+    #Getting ovnkube pod name from any of worker node
     When I run the :get admin command with:
       | resource      | pod                                   |
       | fieldSelector | spec.nodeName=<%= cb.nodes[0].name %> |
