@@ -165,7 +165,6 @@ goto_catalog_source_page:
 goto_quotas_page:
   url: k8s/ns/<project_name>/resourcequotas
 
-
 # machinehealthcheck
 goto_machinehealthcheck_page:
   url: k8s/ns/<project_name>/machine.openshift.io~v1beta1~MachineHealthCheck
