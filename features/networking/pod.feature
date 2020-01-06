@@ -307,22 +307,22 @@ Feature: Pod related networking scenarios
     And I store all worker nodes to the :nodes clipboard
     #Tainting node to NoSchedule
     When I run the :oadm_taint_nodes admin command with:
-      | node_name | <%= cb.nodes[0].name %> |
-      | key_val   | key2=value2:NoSchedule  |
+      | all       | true                   |
+      | key_val   | key2=value2:NoSchedule |
     Then the step should succeed
     And I register clean-up steps:
     """
     I run the :oadm_taint_nodes admin command with:
-      | node_name | <%= cb.nodes[0].name %> |
-      | key_val   | key2-  |
+      | all       | true  |
+      | key_val   | key2- |
     Then the step should succeed
     """
     Given I have a project
-    #Makng sure test pods can' be sceduled on tha tainted node
+    #Makng sure test pods can't be scheduled on any of worker node
     And I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/pod-for-ping.json |
     Then the step should succeed
-    And the pod named "hello-pod" status becomes :pending
+    And the pod named "hello-pod" status becomes :pending within 60 seconds
     When I run the :get admin command with:
       | resource      | pod                                   |
       | fieldSelector | spec.nodeName=<%= cb.nodes[0].name %> |
@@ -331,11 +331,11 @@ Feature: Pod related networking scenarios
     Then the step should succeed
     And evaluation of `@result[:response]` is stored in the :ovnkube_pod_name clipboard
     And admin ensure "<%= cb.ovnkube_pod_name %>" pod is deleted from the "openshift-ovn-kubernetes" project
-    #Waiting 60 seconds for new ovnkube pod to get created and running
+    #Waiting 60 seconds for new ovnkube pod to get created and running on the same node it was deleted before
     Given 60 seconds have passed
     When I run the :get admin command with:
       | resource      | pod                                   |
       | fieldSelector | spec.nodeName=<%= cb.nodes[0].name %> |
       | n             | openshift-ovn-kubernetes              |
     Then the step should succeed
-    And the output should contain "Running"  
+    And the output should contain "Running"
