@@ -25,12 +25,6 @@ click_create_button:
   - selector:
       xpath: //button[contains(text(),'Create')]
     op: click
-click_confirm_button:
-  element:
-    selector:
-      id: confirm-action
-    type: button
-    op: click
 click_cancel_button:
   elements:
   - selector:

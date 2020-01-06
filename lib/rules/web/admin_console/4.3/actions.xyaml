@@ -89,4 +89,4 @@ click_remove_group_action:
   params:
     item: Delete Group
   action: click_one_dropdown_action
-  action: click_confirm_button
+  action: submit_changes

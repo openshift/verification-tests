@@ -20,4 +20,4 @@ remove_user_from_group:
     item: Remove User
   action: click_kebab_of_one_resource
   action: choose_action_item_from_list
-  action: click_confirm_button
+  action: submit_changes
