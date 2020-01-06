@@ -10,7 +10,7 @@ click_resource_action_button:
 choose_action_item_from_list:
   element:
     selector:
-      xpath: //button[@data-test-action='<item>']
+      xpath: //button[@data-test-action='<item>' and not(@disabled)]
     op: click
 choose_item_from_list:
   elements:

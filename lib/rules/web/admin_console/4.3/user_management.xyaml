@@ -1,0 +1,10 @@
+check_user_in_users_page:
+  action: goto_users_list_page
+  action: check_link_and_text
+
+delete_user_from_kebab:
+  params:
+    item: Delete User
+  action: click_kebab_of_one_resource
+  action: choose_action_item_from_list
+  action: submit_changes

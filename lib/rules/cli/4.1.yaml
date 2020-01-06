@@ -141,8 +141,8 @@
     :c: -c=<value>
     :source: <value>
     :dest: <value>
-:create:
-  :cmd: oc create
+:create: 
+  :cmd: oc create <reource_type> <resouce_name>
   :options:
     :f: -f <value>
     :filename: --filename=<value>
