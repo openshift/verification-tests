@@ -305,16 +305,16 @@ Feature: Pod related networking scenarios
   Scenario: ovn pod can be scheduled even if the node taint to unschedule
     Given the env is using "OVNKubernetes" networkType
     And I store all worker nodes to the :nodes clipboard
-    #Tainting all nodes to NoSchedule
+    #Tainting all worker nodes to NoSchedule
     When I run the :oadm_taint_nodes admin command with:
-      | all       | true                   |
-      | key_val   | key2=value2:NoSchedule |
+      | l         | node-role.kubernetes.io/worker |
+      | key_val   | key2=value2:NoSchedule         |
     Then the step should succeed
     And I register clean-up steps:
     """
     I run the :oadm_taint_nodes admin command with:
-      | all       | true  |
-      | key_val   | key2- |
+      | l         | node-role.kubernetes.io/worker |
+      | key_val   | key2-                          |
     Then the step should succeed
     """
     Given I have a project

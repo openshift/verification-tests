@@ -1294,6 +1294,7 @@
     :key_val: <value>
     :output: --output <value>
     :overwrite: --overwrite=<value>
+    :l: -l <value>
 :oadm_top_images:
   :cmd: oc adm top images
 :oadm_upgrade:
