@@ -305,7 +305,7 @@ Feature: Pod related networking scenarios
   Scenario: ovn pod can be scheduled even if the node taint to unschedule
     Given the env is using "OVNKubernetes" networkType
     And I store all worker nodes to the :nodes clipboard
-    #Tainting node to NoSchedule
+    #Tainting all nodes to NoSchedule
     When I run the :oadm_taint_nodes admin command with:
       | all       | true                   |
       | key_val   | key2=value2:NoSchedule |
@@ -323,6 +323,7 @@ Feature: Pod related networking scenarios
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/pod-for-ping.json |
     Then the step should succeed
     And the pod named "hello-pod" status becomes :pending within 60 seconds
+    #Getting ovnkube pod name from any of node
     When I run the :get admin command with:
       | resource      | pod                                   |
       | fieldSelector | spec.nodeName=<%= cb.nodes[0].name %> |
