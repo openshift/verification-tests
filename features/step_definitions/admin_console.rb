@@ -2,6 +2,12 @@
 #   cb_name ||= :console
 #   cb[cb_name] = route('console', service('console',project('openshift-console', switch: false))).dns(by: admin)
 # end
+
+Given /^default admin-console downloads route is stored in the#{OPT_SYM} clipboard$/ do | cb_name |
+  cb_name ||= :downloads_route
+  cb[cb_name] = route('downloads', service('downloads',project('openshift-console', switch: false))).dns(by: admin)
+end
+
 Given /^I open admin console in a browser$/ do
   base_rules = BushSlicer::WebConsoleExecutor::RULES_DIR + "/base/"
   snippets_dir = BushSlicer::WebConsoleExecutor::SNIPPETS_DIR
@@ -23,3 +29,4 @@ Given /^I open admin console in a browser$/ do
   raise "cannot login to cluster console" unless @result[:success]
   browser.base_url = browser.url.sub(%r{(https://[^/]+/).*}, "\\1")
 end
+
