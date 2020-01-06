@@ -125,9 +125,9 @@ goto_create_app_from_imagestream_page:
 goto_monitoring_metrics_page:
   url: monitoring/query-browser
 goto_monitoring_alerts_page:
-   url: monitoring/alerts
+  url: monitoring/alerts
 goto_monitoring_silences_page:
-   url: monitoring/silences
+  url: monitoring/silences
 
 #node
 goto_node_page:
