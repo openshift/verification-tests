@@ -1,3 +1,12 @@
+create_app_from_template:
+  action: goto_create_app_from_template_page
+  action: wait_form_loaded
+  action: click_create_button
+delete_template_instance_action:
+  params:
+    item: Delete Template Instance
+  action: click_one_dropdown_action
+  action: submit_changes
 create_app_from_imagestream:
   action: goto_create_app_from_imagestream_page
   action: click_try_sample
@@ -45,6 +54,10 @@ filter_by_sourcetoimage_type:
 filter_by_serviceclass_type:
   params:
     type: cluster-service-class
+  action: filter_by_type
+filter_by_template_type:
+  params:
+    type: template
   action: filter_by_type
 filter_by_type:
   element:

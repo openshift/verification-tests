@@ -186,6 +186,11 @@ check_service_name_and_icon:
     icon_text: S
     resource_name: <service_name>
   action: check_resource_name_icon_info
+check_templateinstance_name_and_icon:
+  params:
+    icon_text: TI
+    resource_name: <templateinstance_name>
+  action: check_resource_name_icon_info
 check_resource_name_icon_info:
   elements:
   - selector:
