@@ -116,6 +116,14 @@ goto_catalog_page:
 goto_create_app_from_imagestream_page:
   url: catalog/source-to-image?imagestream=<is_name>&imagestream-ns=openshift&preselected-ns=<project_name>
 
+# monitoring
+ goto_monitoring_metrics_page:
+   url: monitoring/query-browser
+ goto_monitoring_alerts_page:
+   url: monitoring/alerts
+ goto_monitoring_silences_page:
+   url: monitoring/silences
+
 #node
 goto_node_page:
   url: k8s/cluster/nodes
