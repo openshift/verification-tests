@@ -126,7 +126,7 @@ goto_monitoring_metrics_page:
   url: monitoring/query-browser
 goto_monitoring_alerts_page:
    url: monitoring/alerts
- goto_monitoring_silences_page:
+goto_monitoring_silences_page:
    url: monitoring/silences
 
 #node
