@@ -61,6 +61,11 @@ click_radio_input:
     selector:
       xpath: //input[@type='radio' and @value='<radio_text>']
     op: click
+click_on_resource_name:
+  element:
+    selector:
+      xpath: //a[contains(@class,'co-resource-item__resource-name') and text()='<item>']
+    op: click
 clear_input_value:
   elements:
   - selector:
@@ -73,6 +78,18 @@ set_input_value:
       xpath: //input[@id='<input_field_id>']
     op: send_keys <input_value>
     type: input
+set_label_input:
+  elements:
+  - selector: &label_input
+      xpath: (//label[contains(text(),'<label_text>')]/following::input[1] | //label[contains(text(),'<label_text>')]//input[1])[1]
+    op: clear
+  - selector:
+      <<: *label_input
+    op: send_keys <input_value>
+check_table_text_data:
+  element:
+    selector:
+      xpath: //td[text()='<text_data>']
 check_row_filter_on_page:
   elements:
   - selector:
@@ -81,6 +98,10 @@ check_resources_title_on_page:
   elements:
   - selector:
       xpath: //span[text()='<resource_title>']
+check_resource_item:
+  elements:
+  - selector:
+      xpath: //span[contains(@class,'co-m-resource-icon') and @title='<resource_type>']/parent::span[@class='co-resource-item']//a[@class='co-resource-item__resource-name' and text()='<resource_name>' and @href='<resource_link>']
 check_resource_name_and_icon:
   action:
     if_param: service_name
@@ -250,6 +271,11 @@ wait_box_loaded:
   element:
     selector:
       css: .loading-box__loaded
+wait_table_loaded:
+  element:
+    selector:
+      xpath: //table//tr
+    timeout: 30
 ## -------- check resource key and values pairs ------
 check_resource_details:
   action:
@@ -519,4 +545,14 @@ check_current_configuration:
   params:
     key: Current Configuration
     value: <current_configuration>
+  action: check_resource_details_key_and_value
+check_min_replicas:
+  params:
+    key: Min Replicas
+    value: <replicas_value>
+  action: check_resource_details_key_and_value
+check_max_replicas:
+  params:
+    key: Max Replicas
+    value: <replicas_value>
   action: check_resource_details_key_and_value

@@ -77,3 +77,7 @@ click_not_cancel:
     selector:
       xpath: //button[@data-test-id='modal-cancel-action']
     op: click
+create_autoscaler_action:
+  params:
+    item: Create Autoscaler
+  action: click_one_dropdown_action
