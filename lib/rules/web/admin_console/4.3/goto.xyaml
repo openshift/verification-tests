@@ -171,17 +171,15 @@ goto_catalog_source_page:
 goto_quotas_page:
   url: k8s/ns/<project_name>/resourcequotas
 
-<<<<<<< HEAD
 # machinehealthcheck
 goto_machinehealthcheck_page:
   url: k8s/ns/<project_name>/machine.openshift.io~v1beta1~MachineHealthCheck
 
 goto_users_list_page:
   url: k8s/cluster/user.openshift.io~v1~User
-=======
+
 #user
 goto_users_list_page:
   url: k8s/cluster/user.openshift.io~v1~User
 goto_rolebinding_page_of_user:
   url: k8s/cluster/user.openshift.io~v1~User/<username>/roles
->>>>>>> auto OCP-25765
