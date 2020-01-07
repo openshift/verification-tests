@@ -175,9 +175,6 @@ goto_quotas_page:
 goto_machinehealthcheck_page:
   url: k8s/ns/<project_name>/machine.openshift.io~v1beta1~MachineHealthCheck
 
-goto_users_list_page:
-  url: k8s/cluster/user.openshift.io~v1~User
-
 #user
 goto_users_list_page:
   url: k8s/cluster/user.openshift.io~v1~User
