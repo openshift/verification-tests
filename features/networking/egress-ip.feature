@@ -178,3 +178,42 @@ Feature: Egress IP related features
     Then the step should succeed
     And the output should not contain "reg0=0x"
     """
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-15992
+  @admin
+  @destructive
+  Scenario: The EgressNetworkPolicy should work well with egressIP
+    Given the valid egress IP is added to the node
+    And I have a project
+    And I have a pod-for-ping in the project
+
+    # Create egressnetworkpolicy
+    When I run the :create admin command with:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/egressnetworkpolicy/limit_policy.json |
+      | n | <%= project.name %>                                                                                                 |
+    Then the step should succeed
+
+    # add the egress ip to the project
+    Given as admin I successfully merge patch resource "netnamespace/<%= project.name %>" with:
+      | {"egressIPs": ["<%= cb.valid_ip %>"]} |
+
+    #The traffic should be denied
+    When I execute on the pod:
+      | curl | -s | --connect-timeout | 5 | ifconfig.me |
+    Then the step should fail
+
+    # Update egressnetworkpolicy as Allow
+    When I run the :patch admin command with:
+      | resource      | egressnetworkpolicy                                                       |
+      | resource_name | policy1                                                                   |
+      | p             | {"spec":{"egress":[{"type":"Allow","to":{"cidrSelector": "0.0.0.0/0"}}]}} |
+      | n             | <%= project.name %>                                                       |
+      | type          | merge                                                                     |
+    Then the step should succeed
+
+    # The traffic should be allowed and the source ip is egress ip
+    When I execute on the pod:
+      | curl | -s | --connect-timeout | 5 | ifconfig.me |
+    Then the step should succeed
+    And the output should contain "<%= cb.valid_ip %>"
