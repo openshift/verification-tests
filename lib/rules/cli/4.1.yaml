@@ -141,9 +141,9 @@
     :c: -c=<value>
     :source: <value>
     :dest: <value>
-:create: 
-  :cmd: oc create 
-  :options: 
+:create:
+  :cmd: oc create
+  :options:
     :f: -f <value>
     :filename: --filename=<value>
     :record: --record=<value>
