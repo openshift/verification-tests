@@ -142,11 +142,13 @@
     :source: <value>
     :dest: <value>
 :create: 
-  :cmd: oc create <reource_type> <resouce_name>
-  :options:
+  :cmd: oc create 
+  :options: 
     :f: -f <value>
     :filename: --filename=<value>
     :record: --record=<value>
+    :reource_type: <reource_type>
+    :resouce_name: <resouce_name>
 :create_clusterresourcequota:
   :cmd: oc create clusterresourcequota <name>
   :options:
