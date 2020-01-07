@@ -60,86 +60,61 @@ Feature: Persistent Volume Claim binding policies
       | claimName: nfsc        |
     """
 
-  # @author wehe@redhat.com
-  # @author chaoyang@redhat.com
-  # @case_id OCP-9931
+  # @author lxia@redhat.com
   @admin
-  @destructive
-  Scenario: PV can not bind PVC which request more storage and mismatched accessMode
+  Scenario Outline: PV can not bind PVC which request more storage
+    Given I have a project
+    # PV is 100Mi and PVC is 1Gi
+    When admin creates a PV from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/auto/pv-template.json" where:
+      | ["metadata"]["name"]            | pv-<%= project.name %> |
+      | ["spec"]["accessModes"][0]      | <access_mode>          |
+      | ["spec"]["capacity"]["storage"] | 100Mi                  |
+      | ["spec"]["storageClassName"]    | sc-<%= project.name %> |
+    Then the step should succeed
+    When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
+      | ["metadata"]["name"]         | mypvc                  |
+      | ["spec"]["accessModes"][0]   | <access_mode>          |
+      | ["spec"]["storageClassName"] | sc-<%= project.name %> |
+    Then the step should succeed
+    And the "pv-<%= project.name %>" PV status is :available
+    And the "mypvc" PVC becomes :pending
+
+    Examples:
+      | access_mode   |
+      | ReadOnlyMany  | # @case_id OCP-26880
+      | ReadWriteMany | # @case_id OCP-26881
+      | ReadWriteOnce | # @case_id OCP-26879
+
+
+  # @author lxia@redhat.com
+  @admin
+  Scenario Outline: PV can not bind PVC with mismatched accessMode
     Given I have a project
     When admin creates a PV from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/auto/pv-template.json" where:
-      | ["metadata"]["name"]       | pv-<%= project.name %> |
-      | ["spec"]["accessModes"][0] | ReadOnlyMany           |
+      | ["metadata"]["name"]         | pv-<%= project.name %> |
+      | ["spec"]["accessModes"][0]   | <pv_access_mode>       |
+      | ["spec"]["storageClassName"] | sc-<%= project.name %> |
     Then the step should succeed
-    When I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/claim-rwo.json" replacing paths:
-      | ["metadata"]["name"]                         | mypvc1 |
-      | ["spec"]["accessModes"][0]                   | ReadOnlyMany             |
-      | ["spec"]["resources"]["requests"]["storage"] | 10Gi                     |
+    When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
+      | ["metadata"]["name"]         | mypvc1                 |
+      | ["spec"]["accessModes"][0]   | <pvc_access_mode1>     |
+      | ["spec"]["storageClassName"] | sc-<%= project.name %> |
     Then the step should succeed
-    When I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/claim-rwo.json" replacing paths:
-      | ["metadata"]["name"]       | mypvc2 |
-      | ["spec"]["accessModes"][0] | ReadWriteOnce            |
+    When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
+      | ["metadata"]["name"]         | mypvc2                 |
+      | ["spec"]["accessModes"][0]   | <pvc_access_mode2>     |
+      | ["spec"]["storageClassName"] | sc-<%= project.name %> |
     Then the step should succeed
-    When I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/claim-rwo.json" replacing paths:
-      | ["metadata"]["name"]       | mypvc3 |
-      | ["spec"]["accessModes"][0] | ReadWriteMany            |
-    Then the step should succeed
+    And the "pv-<%= project.name %>" PV status is :available
     And the "mypvc1" PVC becomes :pending
     And the "mypvc2" PVC becomes :pending
-    And the "mypvc3" PVC becomes :pending
-    And the "pv-<%= project.name %>" PV status is :available
-    Given I ensure "mypvc1" pvc is deleted
-    And I ensure "mypvc2" pvc is deleted
-    And I ensure "mypvc3" pvc is deleted
-    And admin ensures "pv-<%= project.name %>" pv is deleted
 
-    When admin creates a PV from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/auto/pv-template.json" where:
-      | ["metadata"]["name"]       | pv-<%= project.name %> |
-      | ["spec"]["accessModes"][0] | ReadWriteOnce          |
-    Then the step should succeed
-    When I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/claim-rwo.json" replacing paths:
-      | ["metadata"]["name"]                         | mypvc1 |
-      | ["spec"]["accessModes"][0]                   | ReadWriteOnce            |
-      | ["spec"]["resources"]["requests"]["storage"] | 10Gi                     |
-    Then the step should succeed
-    When I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/claim-rwo.json" replacing paths:
-      | ["metadata"]["name"]       | mypvc2 |
-      | ["spec"]["accessModes"][0] | ReadOnlyMany             |
-    Then the step should succeed
-    When I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/claim-rwo.json" replacing paths:
-      | ["metadata"]["name"]       | mypvc3 |
-      | ["spec"]["accessModes"][0] | ReadWriteMany            |
-    Then the step should succeed
-    And the "mypvc1" PVC becomes :pending
-    And the "mypvc2" PVC becomes :pending
-    And the "mypvc3" PVC becomes :pending
-    And the "pv-<%= project.name %>" PV status is :available
-    Given I ensure "mypvc1" pvc is deleted
-    And I ensure "mypvc2" pvc is deleted
-    And I ensure "mypvc3" pvc is deleted
-    And admin ensures "pv-<%= project.name %>" pv is deleted
+    Examples:
+      | pv_access_mode | pvc_access_mode1 | pvc_access_mode2 |
+      | ReadOnlyMany   | ReadWriteMany    | ReadWriteOnce    | # @case_id OCP-26882
+      | ReadWriteMany  | ReadWriteOnce    | ReadOnlyMany     | # @case_id OCP-26883
+      | ReadWriteOnce  | ReadOnlyMany     | ReadWriteMany    | # @case_id OCP-26884
 
-    When admin creates a PV from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/auto/pv-template.json" where:
-      | ["metadata"]["name"]       | pv-<%= project.name %> |
-      | ["spec"]["accessModes"][0] | ReadWriteMany          |
-    Then the step should succeed
-    When I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/claim-rwo.json" replacing paths:
-      | ["metadata"]["name"]                         | mypvc1 |
-      | ["spec"]["accessModes"][0]                   | ReadWriteMany            |
-      | ["spec"]["resources"]["requests"]["storage"] | 10Gi                     |
-    Then the step should succeed
-    When I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/claim-rwo.json" replacing paths:
-      | ["metadata"]["name"]       | mypvc2 |
-      | ["spec"]["accessModes"][0] | ReadWriteOnce            |
-    Then the step should succeed
-    When I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/claim-rwo.json" replacing paths:
-      | ["metadata"]["name"]       | mypvc3 |
-      | ["spec"]["accessModes"][0] | ReadOnlyMany             |
-    Then the step should succeed
-    And the "mypvc1" PVC becomes :pending
-    And the "mypvc2" PVC becomes :pending
-    And the "mypvc3" PVC becomes :pending
-    And the "pv-<%= project.name %>" PV status is :available
 
   # @author chaoyang@redhat.com
   # @case_id OCP-9937
