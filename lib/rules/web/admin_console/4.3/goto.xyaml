@@ -177,3 +177,9 @@ goto_machinehealthcheck_page:
 
 goto_users_list_page:
   url: k8s/cluster/user.openshift.io~v1~User
+
+#user
+goto_users_list_page:
+  url: k8s/cluster/user.openshift.io~v1~User
+goto_rolebinding_page_of_user:
+  url: k8s/cluster/user.openshift.io~v1~User/<username>/roles
