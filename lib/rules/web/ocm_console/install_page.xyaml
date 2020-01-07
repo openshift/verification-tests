@@ -19,7 +19,6 @@ go_to_codeready_install_page:
 go_to_pre_release_page:
     url: /beta/openshift/install/pre-release
 
-# Need confirm the href
 check_common_part:
     action: check_cluster_list_page_title
     action: check_account_username
