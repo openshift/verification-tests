@@ -104,7 +104,9 @@ check_table_text_data:
 # click and check the first item from resource list such as projects, pods, etc.
 click_first_item_from_resource_list_and_check_breadcrumb:
   action: wait_until_no_loading
-  action: click_first_item_in_resource_list
+  params:
+    line_index: 1
+  action: click_item_in_resource_list
   action: check_link_in_breadcrumb
 # click and check the first sub item from a resource such as one of imagestreamtag on imagestream detail page
 click_first_item_from_sub_resource_list_and_check_breadcrumb:
@@ -288,10 +290,10 @@ click_dropdown_field:
   - selector:
       xpath: //*[(.='<dropdown_field>')]/following-sibling::*//button[contains(@class, 'dropdown__toggle')]
     op: click
-click_first_item_in_resource_list:
+click_item_in_resource_list:
   elements:
   - selector:
-      xpath: //td[1]//span[@class='co-resource-item']/a
+      xpath: //tr[<line_index>]//td[1]//span[@class='co-resource-item']/a
     op: click
 click_first_sub_item_in_resource_detail_list:
   elements:
