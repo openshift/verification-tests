@@ -155,11 +155,11 @@ click_kebab_of_one_resource:
 click_one_operation_in_kebab:
   action: click_kebab_of_one_resource
   action: click_button
-check_field_on_resource_list_page:
+check_column_in_table:
+  action: wait_box_loaded
   elements:
   - selector:
       xpath: //th[contains(@data-label,'<field>')]
-    timeout: 30
 check_resource_name_and_icon:
   action:
     if_param: service_name
@@ -285,7 +285,6 @@ check_link_and_text:
   element:
     selector:
       xpath: //a[contains(.,'<text>') and contains(@href,'<link_url>')]
-    timeout: 30
 click_link_with_text:
   element:
     selector:
