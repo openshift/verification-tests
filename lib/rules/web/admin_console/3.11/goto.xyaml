@@ -51,3 +51,5 @@ goto_deployment_page:
   url: k8s/ns/<project_name>/deployments
 goto_one_deployment_page:
   url: k8s/ns/<project_name>/deployments/<deploy_name>
+goto_one_dc_page:
+  url: k8s/ns/<project_name>/deploymentconfigs/<dc_name>
