@@ -30,3 +30,7 @@ clear_filter_by_keyword:
   element:
     selector: *filter_by_keyword
     op: clear
+click_image_tag_dropdown:
+  params:
+    button_id: form-dropdown-image-tag-field
+  action: click_button_by_id
