@@ -30,7 +30,7 @@ Feature: secrets related scenarios
   Scenario: Create new secrets for ssh authentication
     Given I have a project
     When I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/cases/508971/id_rsa"
-    When I run the :oc_secrets_new_sshauth client command with:
+    When I run the :secrets_new_sshauth client command with:
       |secret_name    |testsecret |
       |ssh_privatekey |id_rsa     |
     Then the step should succeed
@@ -42,7 +42,7 @@ Feature: secrets related scenarios
     And the output should contain:
       |ssh-privatekey:|
     When I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/cases/508970/ca.crt"
-    When I run the :oc_secrets_new_sshauth client command with:
+    When I run the :secrets_new_sshauth client command with:
       |secret_name    |testsecret2 |
       |ssh_privatekey |id_rsa      |
       |cafile         |ca.crt      |
@@ -323,7 +323,7 @@ Feature: secrets related scenarios
       | resource | dc/git                    |
       | e        | ALLOW_ANON_GIT_PULL=false |
     Then the step should succeed
-    When I run the :oc_secrets_new_basicauth client command with:
+    When I run the :secrets_new_basicauth client command with:
       |secret_name |mysecret                          |
       |password    |<%= user.cached_tokens.first %>|
     Then the step should succeed
@@ -513,7 +513,7 @@ Feature: secrets related scenarios
       | e        | ALLOW_ANON_GIT_PULL=false |
     Then the step should succeed
     When I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/cases/508964/.gitconfig"
-    When I run the :oc_secrets_new_basicauth client command with:
+    When I run the :secrets_new_basicauth client command with:
       |secret_name|mysecret  |
       |username   |openshift |
       |password   |redhat    |
@@ -547,7 +547,7 @@ Feature: secrets related scenarios
     Given the "ruby-hello-world-2" build completes
 
     #Trigger third build automaticlly with secret which only contain a pair correct secret
-    When I run the :oc_secrets_new_basicauth client command with:
+    When I run the :secrets_new_basicauth client command with:
       |secret_name|mysecret1 |
       |username   |invaild   |
       |password   |invaild   |
@@ -706,7 +706,7 @@ Feature: secrets related scenarios
     When I run the :new_app client command with:
       | app_repo | ruby~http://<%= cb.git_route %>/ruby-hello-world.git |
     Then the step should succeed
-    When I run the :oc_secrets_new_basicauth client command with:
+    When I run the :secrets_new_basicauth client command with:
       | secret_name | mysecret  |
       | username    | openshift |
       | password    | redhat    |
@@ -733,7 +733,7 @@ Feature: secrets related scenarios
     When I have an ssh-git service in the project
     And the "secret" file is created with the following lines:
       | <%= cb.ssh_private_key.to_pem %> |
-    And I run the :oc_secrets_new_sshauth client command with:
+    And I run the :secrets_new_sshauth client command with:
       | ssh_privatekey | secret    |
       | secret_name    | sshsecret |
     Then the step should succeed
@@ -780,7 +780,7 @@ Feature: secrets related scenarios
       | -c                                                                                                      |
       | cd /var/lib/git/ && git clone --bare https://github.com/openshift/ruby-hello-world ruby-hello-world.git |
     Then the step should succeed
-    When I run the :oc_secrets_new_basicauth client command with:
+    When I run the :secrets_new_basicauth client command with:
       | secret_name | mysecret  |
       | username    | openshift |
       | password    | redhat    |
@@ -819,7 +819,7 @@ Feature: secrets related scenarios
       | l           | app=newapp2 |
     Then the step should succeed
 
-    When I run the :oc_secrets_new_basicauth client command with:
+    When I run the :secrets_new_basicauth client command with:
       | secret_name | override  |
       | username    | openshift |
       | password    | redhat    |

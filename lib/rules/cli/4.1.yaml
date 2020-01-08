@@ -806,6 +806,39 @@
   :cmd: oc secrets new <secret_name>
   :options:
     :source: <value>
+:secrets_new_basicauth:
+  :cmd: oc secrets new-basicauth <secret_name>
+  :options:
+    :cafile: --ca-cert=<value>
+    :gitconfig: --gitconfig=<value>
+    :no_headers: --no-headers=<value>
+    :output: --output=<value>
+    :output_version: --output-version=<value>
+    :password: --password=<value>
+    :prompt: --prompt=<value>
+    :template: --template=<value>
+    :username: --username=<value>
+:secrets_new_dockercfg:
+  :cmd: oc secrets new-dockercfg <secret_name>
+  :options:
+    :docker_email: --docker-email=<value>
+    :docker_password: --docker-password=<value>
+    :docker_server: --docker-server=<value>
+    :docker_username: --docker-username=<value>
+    :no_headers: --no-headers=<value>
+    :output: --output=<value>  # One of: json|yaml|template|templatefile|wide
+    :output_version: --output-version=<value>
+    :template: --template=<value>
+:secrets_new_sshauth:
+  :cmd: oc secrets new-sshauth <secret_name>
+  :options:
+    :cafile: --ca-cert=<value>
+    :gitconfig: --gitconfig=<value>
+    :no_headers: --no-headers=<value>
+    :output: --output=<value>
+    :prompt: --prompt=<value>
+    :ssh_privatekey: --ssh-privatekey=<value>
+    :template: --template=<value>
 :secret_unlink:
   :cmd: oc secrets unlink serviceaccount/<sa_name> secrets/<secret_name>
 :serviceaccounts_get_token:
