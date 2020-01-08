@@ -843,7 +843,7 @@ Feature: Multus-CNI related scenarios
       | /usr/sbin/ip | -d | link |
     Then the output should contain:
       | net1                 |
-      | macvlan  mode bridge |
+      | macvlan mode bridge |
     When I execute on the pod:
       | /usr/sbin/ip | a |
     Then the output should contain:
