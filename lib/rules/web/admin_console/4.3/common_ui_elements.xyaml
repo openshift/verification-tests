@@ -499,6 +499,10 @@ check_resource_details:
   action:
     if_param: created_at
     ref: check_created_at
+check_resource_details_key_and_value:
+  element: &key_value
+    selector:
+      xpath: //dt[contains(text(),'<key>')]/following-sibling::dd[1][contains(.,'<value>')] | //button[(text()='<key>')]/parent::dt/following-sibling::dd[1][contains(.,'<value>')]
 check_resource_details_key_only:
   element:
     selector:
