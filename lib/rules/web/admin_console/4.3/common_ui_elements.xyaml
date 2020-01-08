@@ -707,6 +707,7 @@ check_max_replicas:
     key: Max Replicas
     value: <replicas_value>
   action: check_resource_details_key_and_value
+<<<<<<< HEAD
 check_resource_kind:
   params:
     key: Kind
