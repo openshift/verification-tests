@@ -979,3 +979,350 @@ Feature: Multus-CNI related scenarios
     When I execute on the pod:
       | /usr/sbin/ip | a |
     Then the output should contain "192.168.1"
+
+  # @author weliang@redhat.com
+  # @case_id OCP-24668
+  Scenario: externalIP defined in service but no sepc.externalIP defined	
+    Given I have a project 
+    # Create a service with a externalIP in :proj1
+    When I run the :create client command with:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/externalip_service1.json | 
+    Then the step should fail
+    Then the output should contain "externalIPs have been disabled"
+
+  # @author weliang@redhat.com
+  # @case_id OCP-24669
+  @admin
+  @destructive
+  Scenario: externalIP defined in service with set ExternalIP in allowedCIDRs	 
+    # Create additional network through CNO
+    # Get node_1's host IP and save to clipboard
+    Given environment has at least 2 nodes
+    And I store the nodes in the :nodes clipboard
+    Given I use the "<%= cb.nodes[0].name %>" node
+    And evaluation of `host_subnet(cb.nodes[0].name).ip` is stored in the :hostip clipboard
+
+    Given as admin I successfully merge patch resource "networks.config.openshift.io/cluster" with:
+      | {"spec":{"externalIP":{"policy":{"allowedCIDRs":["<%= cb.hostip %>/24"]}}}} |
+    And I wait up to 10 seconds for the steps to pass:
+    """
+    When I run the :get admin command with:
+      | resource      | networks.config.openshift.io                 |
+      | resource_name | cluster                                      |
+      | template      | {{{{.spec.externalIP.policy.allowedCIDRs}}}} |
+      | o             | yaml                                         |
+    And the output should contain "<%= cb.hostip %>"
+    """
+    #Clean-up required to erase above net-attach-def after testing done
+    Given I register clean-up steps:
+    """
+    Given as admin I successfully merge patch resource "networks.config.openshift.io/cluster" with:
+      | {"spec":{"externalIP":{"policy":{"allowedCIDRs": null}}}}    |
+    """
+
+    # Need wait for about 400 seconds to apply new additional network configuration
+    # In the future this script can be updated if we find a way to check whether cluster is reay with new CNO configuration and not using 400 seconds
+    Given 400 seconds have passed
+
+    # Create a svc with externalIP
+    Given I have a project 
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/externalip_service1.json" replacing paths:
+      | ["spec"]["externalIPs"][0]  | <%= cb.hostip %> |
+    Then the step should succeed
+    Then I wait up to 10 seconds for the steps to pass:
+    """
+    When I run the :get client command with:
+      | resource      | service               |
+      | resource_name | service-unsecure      |
+      | template      | {{.spec.externalIPs}} |
+      | o             | yaml                  |
+    And the output should contain "<%= cb.hostip %>"
+    """
+
+    # Create a pod
+    When I run the :create client command with:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker.json |
+    Then the step should succeed
+    Then I wait up to 20 seconds for the steps to pass:
+    """
+    And a pod becomes ready with labels:
+      | name=caddy-docker |
+    """
+     
+    # Curl externalIP:portnumber should pass
+    When I execute on the pod:
+      | /usr/bin/curl | -k | <%= cb.hostip %>:27017 |
+    Then the output should contain:
+      | Hello-OpenShift-1 http-8080                 |
+
+
+  # @author weliang@redhat.com
+  # @case_id OCP-24670
+  @admin
+  @destructive
+  Scenario: externalIP defined in service with set ExternalIP in rejectedCIDRs
+    # Create additional network through CNO
+    # Get node_1's host IP and save to clipboard
+    Given environment has at least 2 nodes
+    And I store the nodes in the :nodes clipboard
+    Given I use the "<%= cb.nodes[0].name %>" node
+    And evaluation of `host_subnet(cb.nodes[0].name).ip` is stored in the :hostip clipboard
+
+    # Create additional network through CNO
+    Given as admin I successfully merge patch resource "networks.config.openshift.io/cluster" with:
+      | {"spec":{"externalIP":{"policy":{"rejectedCIDRs":["<%= cb.hostip %>/24"]}}}} |
+    Then I wait up to 10 seconds for the steps to pass:
+    """
+    When I run the :get admin command with:
+      | resource      | networks.config.openshift.io                  |
+      | resource_name | cluster                                       |
+      | template      | {{{{.spec.externalIP.policy.rejectedCIDRs}}}} |
+      | o             | yaml                                          |
+    And the output should contain "<%= cb.hostip %>"
+    """
+    #Clean-up required to erase above net-attach-def after testing done
+    Given I register clean-up steps:
+    """
+    Given as admin I successfully merge patch resource "networks.config.openshift.io/cluster" with:
+      | {"spec":{"externalIP":{"policy":{"rejectedCIDRs": null}}}} |
+    """
+
+    # Need wait for about 400 seconds to apply new additional network configuration
+    # In the future this script can be updated if we find a way to check whether cluster is reay with new CNO configuration and not using 400 seconds
+    Given 400 seconds have passed
+
+    # Create a svc with externalIP
+    Given I have a project
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/externalip_service1.json" replacing paths:
+      | ["spec"]["externalIPs"][0]  | <%= cb.hostip %> |
+    Then the step should fail
+    And the output should contain "externalIPs have been disabled"
+   
+  # @author weliang@redhat.com
+  # @case_id OCP-24691
+  @admin
+  @destructive
+  Scenario: Defined Multiple allowedCIDRs 
+    # Create additional network through CNO
+    # Get node_1's host IP and save to clipboard
+    Given environment has at least 2 nodes
+    And I store the nodes in the :nodes clipboard
+    Given I use the "<%= cb.nodes[0].name %>" node
+    And evaluation of `host_subnet(cb.nodes[0].name).ip` is stored in the :host1ip clipboard
+    Given I use the "<%= cb.nodes[0].name %>" node
+    And evaluation of `host_subnet(cb.nodes[1].name).ip` is stored in the :host2ip clipboard
+
+    # Create additional network through CNO
+    Given as admin I successfully merge patch resource "networks.config.openshift.io/cluster" with:
+      | {"spec":{"externalIP":{"policy":{"allowedCIDRs":["<%= cb.host1ip %>/24","<%= cb.host2ip %>/24"]}}}} |
+    Then I wait up to 10 seconds for the steps to pass:
+    """
+    When I run the :get admin command with:
+      | resource      | networks.config.openshift.io                 |
+      | resource_name | cluster                                      |
+      | template      | {{{{.spec.externalIP.policy.allowedCIDRs}}}} |
+      | o             | yaml                                         |
+    And the output should contain "<%= cb.host1ip %>"
+    And the output should contain "<%= cb.host2ip %>"
+    """
+    #Clean-up required to erase above net-attach-def after testing done
+    Given I register clean-up steps:
+    """
+    Given as admin I successfully merge patch resource "networks.config.openshift.io/cluster" with:
+      | {"spec":{"externalIP":{"policy":{"allowedCIDRs":null }}}}  |
+    """
+
+    # Need wait for about 400 seconds to apply new additional network configuration
+    # In the future this script can be updated if we find a way to check whether cluster is reay with new CNO configuration and not using 400 seconds
+    Given 400 seconds have passed
+    
+    # Create a svc with externalIP
+    Given I have a project 
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/externalip_service1.json" replacing paths:
+      | ["spec"]["externalIPs"][0]  | <%= cb.host1ip %> |
+    Then the step should succeed
+    Then I wait up to 10 seconds for the steps to pass:
+    """
+    When I run the :get client command with:
+      | resource      | service               |
+      | resource_name | service-unsecure      |
+      | template      | {{.spec.externalIPs}} |
+      | o             | yaml                  |
+    And the output should contain "<%= cb.host1ip %>"
+    """
+    
+    # Create a pod
+    When I run the :create client command with:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker.json |
+    Then the step should succeed
+    Then I wait up to 20 seconds for the steps to pass:
+    """
+    And a pod becomes ready with labels:
+      | name=caddy-docker |
+    """
+    
+    # Curl externalIP:portnumber from pod 
+    When I execute on the pod:
+      | /usr/bin/curl | -k | <%= cb.host1ip %>:27017 |
+    Then the output should contain:
+      | Hello-OpenShift-1 http-8080                  |
+    
+    # Delete created pod and svc
+    When I run the :delete client command with:
+      | object_type | all             |
+      | all         |                 |
+    Then I wait up to 10 seconds for the steps to pass:
+    """
+    When I run the :get client command with:
+      | resource      | all               |
+    And the output should contain "No resources found"
+    """
+    
+    # Create a svc with externalIP
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/externalip_service1.json" replacing paths:
+      | ["spec"]["externalIPs"][0]  | <%= cb.host2ip %> |
+    Then the step should succeed
+    Then I wait up to 10 seconds for the steps to pass:
+    """
+    When I run the :get client command with:
+      | resource      | service               |
+      | resource_name | service-unsecure      |
+      | template      | {{.spec.externalIPs}} |
+      | o             | yaml                  |
+    And the output should contain "<%= cb.host2ip %>"
+    """
+ 
+    # Create a pod
+    When I run the :create client command with:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker.json |
+    Then the step should succeed
+    Then I wait up to 20 seconds for the steps to pass:
+    """
+    And a pod becomes ready with labels:
+      | name=caddy-docker |
+    """
+    
+    # Curl externalIP:portnumber on new pod 
+    When I execute on the pod:
+      | /usr/bin/curl | -k | <%= cb.host2ip %>:27017 |
+    Then the output should contain:
+      | Hello-OpenShift-1 http-8080                  |
+
+   
+  # @author weliang@redhat.com
+  # @case_id OCP-24692
+  @admin
+  @destructive
+  Scenario: A rejectedCIDRs inside an allowedCIDRs	 
+    # Create additional network through CNO
+    Given as admin I successfully merge patch resource "networks.config.openshift.io/cluster" with:
+      | {"spec":{"externalIP":{"policy":{"allowedCIDRs":["22.2.2.0/24"],"rejectedCIDRs":["22.2.2.0/25"]}}}} |
+    Then I wait up to 10 seconds for the steps to pass:
+    """
+    When I run the :get admin command with:
+      | resource      | networks.config.openshift.io                 |
+      | resource_name | cluster                                      |
+      | template      | {{{{.spec.externalIP.policy.allowedCIDRs}}}} |
+      | o             | yaml                                         |
+    And the output should contain "22.2.2.0/24"
+    When I run the :get admin command with:
+      | resource      | networks.config.openshift.io                  |
+      | resource_name | cluster                                       |
+      | template      | {{{{.spec.externalIP.policy.rejectedCIDRs}}}} |
+      | o             | yaml                                          |
+    And the output should contain "22.2.2.0/25"
+    """
+    #Clean-up required to erase above net-attach-def after testing done
+    Given I register clean-up steps:
+    """
+    Given as admin I successfully merge patch resource "networks.config.openshift.io/cluster" with:
+      | {"spec":{"externalIP":{"policy":{"allowedCIDRs":null }}}}  |
+    """
+
+    # Need wait for about 400 seconds to apply new additional network configuration
+    # In the future this script can be updated if we find a way to check whether cluster is reay with new CNO configuration and not using 400 seconds
+    Given 400 seconds have passed
+    
+    # Create a svc with externalIP/22.2.2.10 which is in 22.2.2.0/25
+    Given I have a project 
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/externalip_service1.json" replacing paths:
+      | ["spec"]["externalIPs"][0]  | 22.2.2.10 |
+    Then the step should fail
+    Then the output should contain "externalIP is not allowed"
+    
+    # Create a svc with externalIP/22.2.2.130 which is not in 22.2.2.0/25
+     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/externalip_service1.json" replacing paths:
+      | ["spec"]["externalIPs"][0]  | 22.2.2.130 |
+    Then the step should succeed
+    Then I wait up to 10 seconds for the steps to pass:
+    """
+    When I run the :get client command with:
+      | resource      | service               |
+      | resource_name | service-unsecure      |
+      | template      | {{.spec.externalIPs}} |
+      | o             | yaml                  |
+    And the output should contain "22.2.2.130"
+    """
+ 
+    # Create a pod
+    When I run the :create client command with:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker.json |
+    Then the step should succeed
+    Then I wait up to 20 seconds for the steps to pass:
+    """
+    And a pod becomes ready with labels:
+      | name=caddy-docker |
+    """
+    
+    # Curl externalIP:portnumber on new pod 
+    When I execute on the pod:
+      | /usr/bin/curl | -k | 22.2.2.130:27017 |
+    Then the output should contain:
+      | Hello-OpenShift-1 http-8080           |
+
+
+  # @author weliang@redhat.com
+  # @case_id OCP-24739
+  @admin
+  @destructive
+  Scenario: An allowedCIDRs inside an rejectedCIDRs	 
+    # Create additional network through CNO
+    Given as admin I successfully merge patch resource "networks.config.openshift.io/cluster" with:
+      | {"spec":{"externalIP":{"policy":{"allowedCIDRs":["22.2.2.0/25"],"rejectedCIDRs":["22.2.2.0/24"]}}}}  |                                                                                  
+    Then I wait up to 10 seconds for the steps to pass:
+    """
+    When I run the :get admin command with:
+      | resource      | networks.config.openshift.io                 |
+      | resource_name | cluster                                      |
+      | template      | {{{{.spec.externalIP.policy.allowedCIDRs}}}} |
+      | o             | yaml                                         |
+    And the output should contain "22.2.2.0/25"
+    When I run the :get admin command with:
+      | resource      | networks.config.openshift.io                  |
+      | resource_name | cluster                                       |
+      | template      | {{{{.spec.externalIP.policy.rejectedCIDRs}}}} |
+      | o             | yaml                                          |
+    And the output should contain "22.2.2.0/24"
+    """
+    #Clean-up required to erase above net-attach-def after testing done
+    Given I register clean-up steps:
+    """
+    Given as admin I successfully merge patch resource "networks.config.openshift.io/cluster" with:
+      | {"spec":{"externalIP":{"policy":{"allowedCIDRs":null }}}}  |
+    """
+
+    # Need wait for about 400 seconds to apply new additional network configuration 
+    # In the future this script can be updated if we find a way to check whether cluster is reay with new CNO configuration and not using 400 seconds
+    Given 400 seconds have passed
+    
+    # Create a svc with externalIP/22.2.2.10 which is in rejectedCIDRs
+    Given I have a project 
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/externalip_service1.json" replacing paths:
+      | ["spec"]["externalIPs"][0]  | 22.2.2.10 |
+    Then the output should contain "externalIP is not allowed"
+    
+    # Create a svc with externalIP/22.2.2.130 which is in rejectedCIDRs
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/externalip_service1.json" replacing paths:
+      | ["spec"]["externalIPs"][0]  | 22.2.2.130 |
+    Then the output should contain "externalIP is not allowed"
+ 
