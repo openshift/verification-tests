@@ -218,9 +218,9 @@ Feature: Operator related networking scenarios
   """
   as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
     | {"spec":{"defaultNetwork":{"openshiftSDNConfig": null}}} |
-  60 seconds have passed
+  120 seconds have passed
   """
-  And 60 seconds have passed
+  And 120 seconds have passed
   #We are idling service again and making sure it doesn't get unidle due to the above enableUnidling flag set to false
   When I run the :idle client command with:
     | svc_name | test-service |
@@ -228,14 +228,14 @@ Feature: Operator related networking scenarios
   And the output should contain:
     | The service "<%= project.name %>/test-service" has been marked as idled |
   When I execute on the "hello-pod" pod:
-    | /usr/bin/curl | --connect-timeout | 30 | <%= cb.service_ip %>:27017 |
+    | /usr/bin/curl | --connect-timeout | 60 | <%= cb.service_ip %>:27017 |
   Then the step should fail
   #Moving CNO config back to normal and expect service to unidle then
   Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
     | {"spec":{"defaultNetwork":{"openshiftSDNConfig": null}}} |
-  And 60 seconds have passed
+  And 120 seconds have passed
   When I execute on the "hello-pod" pod:
-    | /usr/bin/curl | --connect-timeout | 30 | <%= cb.service_ip %>:27017 |
+    | /usr/bin/curl | --connect-timeout | 60 | <%= cb.service_ip %>:27017 |
   Then the step should succeed
   And the output should contain:
     | Hello OpenShift |
