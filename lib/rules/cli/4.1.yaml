@@ -322,6 +322,7 @@
   :cmd: oc explain
   :options:
     :resource: <value>
+    :api_version: --api-version=<value>
 :export:
   :cmd: oc export
   :options:
