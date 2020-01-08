@@ -49,11 +49,17 @@ check_resource_item:
   elements:
   - selector:
       xpath: //span[contains(@class,'co-m-resource-icon') and @title='<resource_type>']/parent::span[@class='co-resource-item']//a[@class='co-resource-item__resource-name' and text()='<resource_name>' and @href='<resource_link>']
-select_resource_item:
-  action: click_button_by_id
+check_table_text_data:
   element:
     selector:
-      xpath: //*[contains(@class,'co-resource-item__resource-name') and text()='<item>']
+      xpath: //td[text()='<text_data>']
+select_resource_item:
+  action: click_button_by_id
+  action: click_on_resource_name
+click_on_resource_name:
+  element:
+    selector:
+      xpath: //a[contains(@class,'co-resource-item__resource-name') and text()='<item>']
     op: click
 check_button_disabled:
   element:
@@ -92,7 +98,7 @@ set_input_value:
 set_label_input:
   elements:
   - selector: &label_input
-      xpath: //label[text()='<label_text>']/following::input[1]
+      xpath: (//label[contains(text(),'<label_text>')]/following::input[1] | //label[contains(text(),'<label_text>')]//input[1])[1]
     op: clear
   - selector:
       <<: *label_input
@@ -265,9 +271,16 @@ click_secondary_menu:
   - selector:
       xpath: //a[@data-component='pf-nav-expandable' and text()='<primary_menu>']
     op: click
-  - selector:
+  - selector: &secondary_menu
       xpath: //a[@class='pf-c-nav__link' and text()='<secondary_menu>']
     op: click
+check_secondary_menu:
+  element:
+    selector: *secondary_menu
+check_secondary_menu_missing:
+  element:
+    selector: *secondary_menu
+    missing: true
 click_dropdown_field:
   elements:
   - selector:
@@ -301,6 +314,11 @@ wait_until_no_loading:
     selector:
       css: .cos-status-box--loading
     missing: true
+    timeout: 30
+wait_table_loaded:
+  element:
+    selector:
+      xpath: //table//tr
     timeout: 30
 ## -------- check resource key and values pairs ------
 check_resource_details:
@@ -596,4 +614,13 @@ check_current_healthy:
     key: Current Healthy
     value: <current_healthy>
   action: check_resource_details_key_and_value
-
+check_min_replicas:
+  params:
+    key: Min Replicas
+    value: <replicas_value>
+  action: check_resource_details_key_and_value
+check_max_replicas:
+  params:
+    key: Max Replicas
+    value: <replicas_value>
+  action: check_resource_details_key_and_value
