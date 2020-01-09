@@ -991,7 +991,7 @@ Feature: Multus-CNI related scenarios
       | ["metadata"]["namespace"] | <%= project(-1).name %> |    
     Then the step should succeed
     Given I use the "<%= project(-2).name %>" project
-    # Create a pod consuming net-attach-def
+    # Create a pod in new project consuming net-attach-def from 1st project
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/1interface-macvlan-bridge.yaml" replacing paths:
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | macvlan-bridge-25657 |
     Then the step should succeed
