@@ -259,8 +259,8 @@ Feature: Operator related networking scenarios
   Given I switch to cluster admin pseudo user
   And I use the "openshift-network-operator" project
   When I run the :get client command with:
-      | resource | pods                               |
-      | o        | jsonpath={.items[*].metadata.name} |
+    | resource | pods                               |
+    | o        | jsonpath={.items[*].metadata.name} |
   Then the step should succeed
   And evaluation of `@result[:response]` is stored in the :network_operator_pod clipboard
   When I run the :logs client command with:
