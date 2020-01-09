@@ -10,7 +10,7 @@ Feature: change the policy of user/service account
       | o             | wide        |
     Then the output should match:
       | admin.*(<%= @user.name %>)? |
-    When I run the :oadm_add_role_to_user client command with:
+    When I run the :oadm_policy_add_role_to_user client command with:
       | role_name        | admin                              |
       | user_name        | <%= user(1, switch: false).name %> |
       | rolebinding_name | admin                              |
@@ -29,7 +29,7 @@ Feature: change the policy of user/service account
     Then the output should contain "<%= project.name %>"
     """
     Given I switch to the first user
-    When I run the :oadm_remove_role_from_user client command with:
+    When I run the :oadm_policy_remove_role_from_user client command with:
       | role_name | admin            |
       | user_name | <%= user(1, switch: false).name %> |
     Then the step should succeed
@@ -61,7 +61,7 @@ Feature: change the policy of user/service account
       | the step should succeed               |
     When admin creates a project
     Then the step should succeed
-    When I run the :oadm_add_role_to_user admin command with:
+    When I run the :oadm_policy_add_role_to_user admin command with:
       | role_name      | viewproject      |
       | user_name      | <%= user.name %> |
       | n              | <%= project.name %> |
