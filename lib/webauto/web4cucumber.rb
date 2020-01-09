@@ -107,7 +107,7 @@ require_relative 'chrome_extension'
       client.open_timeout = 180
       client.read_timeout = 600 # ff legacy vs `I have a jenkins v2 application`
       headless
-      Selenium::WebDriver.logger.level = :debug
+      # Selenium::WebDriver.logger.level = :debug
       if @browser_type == :firefox
         logger.info "Launching Firefox Marionette/Geckodriver"
         raise "auth proxy not implemented for Firefox" if proxy_pass
@@ -124,7 +124,7 @@ require_relative 'chrome_extension'
 
         # This is actually a shortcut for trace logging
         # this also needs debug webdriver logging enabled above to work
-        options.log_level = 'trace'
+        # options.log_level = 'trace'
 
         @browser = Watir::Browser.new :firefox, :http_client=>client, desired_capabilities: caps, options: options
         if @size
