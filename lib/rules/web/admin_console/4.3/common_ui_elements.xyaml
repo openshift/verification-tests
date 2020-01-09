@@ -320,6 +320,10 @@ wait_table_loaded:
     selector:
       xpath: //table//tr
     timeout: 30
+check_item_in_list:
+  element:
+    selector:
+      xpath: //ul[contains(.,'<item>')]
 ## -------- check resource key and values pairs ------
 check_resource_details:
   action:

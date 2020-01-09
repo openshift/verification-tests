@@ -72,6 +72,15 @@ check_resources_title_on_page:
   elements:
   - selector:
       xpath: //span[text()='<resource_title>']
+check_item_in_list:
+  element:
+    selector:
+      xpath: //ul[contains(.,'<item>')]
+click_button_by_id:
+  element:
+    selector:
+      xpath: //button[contains(@id,'<button_id>')]
+    op: click
 check_resource_name_and_icon:
   action:
     if_param: service_name
