@@ -979,3 +979,29 @@ Feature: Multus-CNI related scenarios
     When I execute on the pod:
       | /usr/sbin/ip | a |
     Then the output should contain "192.168.1"
+
+  # @author anusaxen@redhat.com
+  # @case_id OCP-22504
+  @admin
+  Scenario: The multus adminssion controller should be able to detect that the pod is using net-attach-def in other namespaces when the isolation is enabled
+    Given I create 2 new projects
+    # Create the net-attach-def via cluster admin
+    When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml" replacing paths:
+      | ["metadata"]["name"] | macvlan-bridge-25657        |
+      | ["metadata"]["namespace"] | <%= project(-1).name %> |    
+    Then the step should succeed
+    Given I use the "<%= project(-2).name %>" project
+    # Create a pod consuming net-attach-def
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/1interface-macvlan-bridge.yaml" replacing paths:
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | macvlan-bridge-25657 |
+    Then the step should succeed
+    And evaluation of `@result[:response].match(/pod\/(.*) created/)[1]` is stored in the :pod_name clipboard
+    And I wait up to 30 seconds for the steps to pass:
+    """
+    When I run the :describe client command with:
+      | resource | pods               |
+      | name     | <%= cb.pod_name %> |
+    Then the step should succeed
+    And the output should contain:
+      | cannot find get a network-attachment-definition |
+    """
