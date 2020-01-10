@@ -147,6 +147,8 @@
     :f: -f <value>
     :filename: --filename=<value>
     :record: --record=<value>
+    :reource_type: <reource_type>
+    :resouce_name: <resouce_name>
 :create_clusterresourcequota:
   :cmd: oc create clusterresourcequota <name>
   :options:
