@@ -987,7 +987,7 @@ Feature: Multus-CNI related scenarios
     Given I create 2 new projects
     # Create the net-attach-def via cluster admin
     When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml" replacing paths:
-      | ["metadata"]["name"] | macvlan-bridge-25657         |
+      | ["metadata"]["name"]      | macvlan-bridge-25657    |
       | ["metadata"]["namespace"] | <%= project(-1).name %> |    
     Then the step should succeed
     Given I use the "<%= project(-2).name %>" project
