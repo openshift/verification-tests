@@ -1055,7 +1055,7 @@ Feature: Multus-CNI related scenarios
       | ["spec"] ["config"]       | '{ "cniVersion": "0.3.1", "name": "myipvlan76", "type": "ipvlan", "master": "<%= cb.default_interface %>", "ipam": { "type": "host-local", "subnet": "22.2.2.0/24" } }' |
     Then the step should succeed
 
-    #Creating variosu pods and making sure their mac matches to default inf and they get unique IPs assigned
+    #Creating various pods and making sure their mac matches to default inf and they get unique IPs assigned
     #Creating pod1 absorbing above net-attach-def
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
       | ["metadata"]["name"]                                       | pod1                    |
