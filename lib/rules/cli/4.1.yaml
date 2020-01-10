@@ -1047,23 +1047,6 @@
     :invalid_option: -b   # for negative testing
     :t: -t
 #################### admin commands section
-:oadm_add_cluster_role_to_group:
-  :cmd: oc adm policy add-cluster-role-to-group <role_name> <group_name>
-:oadm_add_cluster_role_to_user:
-  :cmd: oc adm policy add-cluster-role-to-user <role_name>
-  :options:
-    :serviceaccount: --serviceaccount=<value>
-    :user_name: <value>
-    :z:  -z <value>
-:oadm_add_role_to_group:
-  :cmd: oc adm policy add-role-to-group <role_name> <group_name>
-  :options:
-    :rolebinding_name: --rolebinding-name=<value>
-:oadm_add_role_to_user:
-  :cmd: oc adm policy add-role-to-user <role_name> <user_name>
-  :options:
-    :role_namespace: --role-namespace=<value>
-    :rolebinding_name: --rolebinding-name=<value>
 :oadm_build_chain:
   :cmd: oc adm build-chain
   :options:
@@ -1282,18 +1265,6 @@
     :mount_host: --mount-host=<value>
     :ports: --ports=<value>
     :serviceaccount: --service-account=<value>
-:oadm_remove_cluster_role_from_group:
-  :cmd: oc adm policy remove-cluster-role-from-group <role_name> <group_name>
-:oadm_remove_cluster_role_from_user:
-  :cmd: oc adm policy remove-cluster-role-from-user <role_name>
-  :options:
-    :serviceaccount: --serviceaccount=<value>
-    :user_name: <value>
-    :z:  -z <value>
-:oadm_remove_role_from_group:
-  :cmd: oc adm policy remove-role-from-group <role_name> <group_name>
-:oadm_remove_role_from_user:
-  :cmd: oc adm policy remove-role-from-user <role_name> <user_name>
 :oadm_router:
   :cmd: oc adm router <name>
   :options:
