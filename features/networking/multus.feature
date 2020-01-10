@@ -827,8 +827,8 @@ Feature: Multus-CNI related scenarios
     # Create the net-attach-def via cluster admin
     Given I have a project
     When I run the :create admin command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/runtimeconfig-def-ipandmac.yaml                                                                                                                           |
-      | n | <%= project.name %>                                                                                                           |
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/runtimeconfig-def-ipandmac.yaml                   |
+      | n | <%= project.name %>   |
     Then the step should succeed
 
     # Create a pod absorbing above net-attach-def
@@ -843,7 +843,7 @@ Feature: Multus-CNI related scenarios
       | /usr/sbin/ip | -d | link |
     Then the output should contain:
       | net1                 |
-      | macvlan mode bridge |
+      | macvlan mode bridge  |
     When I execute on the pod:
       | /usr/sbin/ip | a |
     Then the output should contain:
