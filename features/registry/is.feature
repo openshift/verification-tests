@@ -94,7 +94,7 @@ Feature: Testing imagestream
     Given I have a project
     Given I enable image-registry default route
     Given default image registry route is stored in the :registry_hostname clipboard
-    Given certification for default image registry is saved
+    Given certification for default image registry is stored to the :reg_crt_name clipboard
     When I run the :new_app client command with:
       | app_repo | ruby~https://github.com/sclorg/ruby-ex.git |
     Then the step should succeed
@@ -137,7 +137,7 @@ Feature: Testing imagestream
     And evaluation of `project.name` is stored in the :u1p1 clipboard
     Given I enable image-registry default route
     Given default image registry route is stored in the :registry_hostname clipboard
-    Given certification for default image registry is saved
+    Given certification for default image registry is stored to the :reg_crt_name clipboard
 
     When I run the :new_app client command with:
       | app_repo | ruby~https://github.com/sclorg/ruby-ex.git |
