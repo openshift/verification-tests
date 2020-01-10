@@ -312,7 +312,7 @@ module BushSlicer
     # obtain router detals like default router subdomain and router IPs
     # @param user [BushSlicer::User]
     # @param project [BushSlicer::project]
-    def get_routing_details(user:, project:)
+    def get_routing_details(user:, project:, obj:)
       service_res = Service.create(by: user, project: project, spec: 'https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/service_with_selector.json')
       raise "cannot create service" unless service_res[:success]
       service = service_res[:resource]
@@ -321,16 +321,18 @@ module BushSlicer
       route = service.expose(user: user)
 
       fqdn = route.dns(by: user)
-      opts[:router_subdomain] = fqdn.split('.',2)[1]
-      opts[:router_ips] = Common::Net.dns_lookup(fqdn, multi: true)
-
+      if obj == 'subdomain'
+        opts[:router_subdomain] = fqdn.split('.',2)[1]
+      else
+        opts[:router_ips] = Common::Net.dns_lookup(fqdn, multi: true)
+      end
       raise unless route.delete(by: user)[:success]
       raise unless service.delete(by: user)[:success]
     end
 
     def router_ips(user:, project:)
       unless opts[:router_ips]
-        get_routing_details(user: user, project: project)
+        get_routing_details(user: user, project: project, obj: 'ips')
       end
 
       return opts[:router_ips]
@@ -338,7 +340,7 @@ module BushSlicer
 
     def router_default_subdomain(user:, project:)
       unless opts[:router_subdomain]
-        get_routing_details(user: user, project: project)
+        get_routing_details(user: user, project: project, obj: 'subdomain')
       end
       return opts[:router_subdomain]
     end

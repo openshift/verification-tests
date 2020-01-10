@@ -147,6 +147,8 @@
     :f: -f <value>
     :filename: --filename=<value>
     :record: --record=<value>
+    :reource_type: <reource_type>
+    :resouce_name: <resouce_name>
 :create_clusterresourcequota:
   :cmd: oc create clusterresourcequota <name>
   :options:
@@ -325,6 +327,7 @@
 :explain:
   :cmd: oc explain
   :options:
+    :api_version: --api-version=<value>
     :resource: <value>
 :export:
   :cmd: oc export
@@ -1045,23 +1048,6 @@
     :invalid_option: -b   # for negative testing
     :t: -t
 #################### admin commands section
-:oadm_add_cluster_role_to_group:
-  :cmd: oc adm policy add-cluster-role-to-group <role_name> <group_name>
-:oadm_add_cluster_role_to_user:
-  :cmd: oc adm policy add-cluster-role-to-user <role_name>
-  :options:
-    :serviceaccount: --serviceaccount=<value>
-    :user_name: <value>
-    :z:  -z <value>
-:oadm_add_role_to_group:
-  :cmd: oc adm policy add-role-to-group <role_name> <group_name>
-  :options:
-    :rolebinding_name: --rolebinding-name=<value>
-:oadm_add_role_to_user:
-  :cmd: oc adm policy add-role-to-user <role_name> <user_name>
-  :options:
-    :role_namespace: --role-namespace=<value>
-    :rolebinding_name: --rolebinding-name=<value>
 :oadm_build_chain:
   :cmd: oc adm build-chain
   :options:
@@ -1188,6 +1174,23 @@
   :options:
     :project: <value>
     :selector: --selector=<value>
+:oadm_policy_add_cluster_role_to_group:
+  :cmd: oc adm policy add-cluster-role-to-group <role_name> <group_name>
+:oadm_policy_add_cluster_role_to_user:
+  :cmd: oc adm policy add-cluster-role-to-user <role_name>
+  :options:
+    :serviceaccount: --serviceaccount=<value>
+    :user_name: <value>
+    :z:  -z <value>
+:oadm_policy_add_role_to_group:
+  :cmd: oc adm policy add-role-to-group <role_name> <group_name>
+  :options:
+    :rolebinding_name: --rolebinding-name=<value>
+:oadm_policy_add_role_to_user:
+  :cmd: oc adm policy add-role-to-user <role_name> <user_name>
+  :options:
+    :role_namespace: --role-namespace=<value>
+    :rolebinding_name: --rolebinding-name=<value>
 :oadm_policy_add_scc_to_group:
   :cmd: oc adm policy add-scc-to-group <scc> <group_name>
 :oadm_policy_add_scc_to_user:
@@ -1204,6 +1207,18 @@
   :options:
     :additive_only: --additive-only=<value>
     :confirm: --confirm
+:oadm_policy_remove_cluster_role_from_group:
+  :cmd: oc adm policy remove-cluster-role-from-group <role_name> <group_name>
+:oadm_policy_remove_cluster_role_from_user:
+  :cmd: oc adm policy remove-cluster-role-from-user <role_name>
+  :options:
+    :serviceaccount: --serviceaccount=<value>
+    :user_name: <value>
+    :z:  -z <value>
+:oadm_policy_remove_role_from_group:
+  :cmd: oc adm policy remove-role-from-group <role_name> <group_name>
+:oadm_policy_remove_role_from_user:
+  :cmd: oc adm policy remove-role-from-user <role_name> <user_name>
 :oadm_policy_remove_scc_from_group:
   :cmd: oc adm policy remove-scc-from-group <scc> <group_name>
 :oadm_policy_remove_scc_from_user:
@@ -1251,18 +1266,6 @@
     :mount_host: --mount-host=<value>
     :ports: --ports=<value>
     :serviceaccount: --service-account=<value>
-:oadm_remove_cluster_role_from_group:
-  :cmd: oc adm policy remove-cluster-role-from-group <role_name> <group_name>
-:oadm_remove_cluster_role_from_user:
-  :cmd: oc adm policy remove-cluster-role-from-user <role_name>
-  :options:
-    :serviceaccount: --serviceaccount=<value>
-    :user_name: <value>
-    :z:  -z <value>
-:oadm_remove_role_from_group:
-  :cmd: oc adm policy remove-role-from-group <role_name> <group_name>
-:oadm_remove_role_from_user:
-  :cmd: oc adm policy remove-role-from-user <role_name> <user_name>
 :oadm_router:
   :cmd: oc adm router <name>
   :options:
