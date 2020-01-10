@@ -151,7 +151,7 @@ end
 
 Given /^master CA is added to the#{OPT_QUOTED} dc$/ do |name|
 
-  step %Q/certification for default image registry is saved/
+  step %Q/certification for default image registry is stored to the :reg_crt_name clipboard/
   step %Q/I run the :create_configmap client command with:/, table(%{
     | name      | ca                     |
     | from_file | <%= cb.reg_crt_name %> |

@@ -76,7 +76,7 @@ Feature: Testing registry
   @admin
   Scenario: Copy image to another tag via 'oc image mirror'
     Given I have a project
-    Given docker config for default image registry is saved
+    Given docker config for default image registry is stored to the :dockercfg_file clipboard
     Then I run the :image_mirror client command with:
       | source_image | <%= cb.integrated_reg_ip %>/openshift/ruby:2.5                 |
       | dest_image   | <%= cb.integrated_reg_ip %>/<%= project.name %>/myimage:latest |
@@ -93,7 +93,7 @@ Feature: Testing registry
   @admin
   Scenario: Mirror multiple locations to another registry via 'oc image mirror'
     Given I have a project
-    Given docker config for default image registry is saved
+    Given docker config for default image registry is stored to the :dockercfg_file clipboard
     Then I run the :image_mirror client command with:
       | source_image | docker.io/library/busybox:latest=<%= cb.integrated_reg_ip %>/<%= project.name %>/myimage1:v1 |
       | dest_image   | centos/ruby-25-centos7:latest=<%= cb.integrated_reg_ip %>/<%= project.name %>/myimage2:v1    |
