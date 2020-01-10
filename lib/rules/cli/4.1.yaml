@@ -551,39 +551,6 @@
     :oc_opts_end: --
     :once: --once=<value>
     :resync_period: --resync-period=<value>
-:oc_secrets_new_basicauth:
-  :cmd: oc secrets new-basicauth <secret_name>
-  :options:
-    :cafile: --ca-cert=<value>
-    :gitconfig: --gitconfig=<value>
-    :no_headers: --no-headers=<value>
-    :output: --output=<value>
-    :output_version: --output-version=<value>
-    :password: --password=<value>
-    :prompt: --prompt=<value>
-    :template: --template=<value>
-    :username: --username=<value>
-:oc_secrets_new_dockercfg:
-  :cmd: oc secrets new-dockercfg <secret_name>
-  :options:
-    :docker_email: --docker-email=<value>
-    :docker_password: --docker-password=<value>
-    :docker_server: --docker-server=<value>
-    :docker_username: --docker-username=<value>
-    :no_headers: --no-headers=<value>
-    :output: --output=<value>  # One of: json|yaml|template|templatefile|wide
-    :output_version: --output-version=<value>
-    :template: --template=<value>
-:oc_secrets_new_sshauth:
-  :cmd: oc secrets new-sshauth <secret_name>
-  :options:
-    :cafile: --ca-cert=<value>
-    :gitconfig: --gitconfig=<value>
-    :no_headers: --no-headers=<value>
-    :output: --output=<value>
-    :prompt: --prompt=<value>
-    :ssh_privatekey: --ssh-privatekey=<value>
-    :template: --template=<value>
 :options:
   :cmd: oc options
 :patch:
@@ -808,6 +775,39 @@
   :cmd: oc secrets new <secret_name>
   :options:
     :source: <value>
+:secrets_new_basicauth:
+  :cmd: oc secrets new-basicauth <secret_name>
+  :options:
+    :cafile: --ca-cert=<value>
+    :gitconfig: --gitconfig=<value>
+    :no_headers: --no-headers=<value>
+    :output: --output=<value>
+    :output_version: --output-version=<value>
+    :password: --password=<value>
+    :prompt: --prompt=<value>
+    :template: --template=<value>
+    :username: --username=<value>
+:secrets_new_dockercfg:
+  :cmd: oc secrets new-dockercfg <secret_name>
+  :options:
+    :docker_email: --docker-email=<value>
+    :docker_password: --docker-password=<value>
+    :docker_server: --docker-server=<value>
+    :docker_username: --docker-username=<value>
+    :no_headers: --no-headers=<value>
+    :output: --output=<value>  # One of: json|yaml|template|templatefile|wide
+    :output_version: --output-version=<value>
+    :template: --template=<value>
+:secrets_new_sshauth:
+  :cmd: oc secrets new-sshauth <secret_name>
+  :options:
+    :cafile: --ca-cert=<value>
+    :gitconfig: --gitconfig=<value>
+    :no_headers: --no-headers=<value>
+    :output: --output=<value>
+    :prompt: --prompt=<value>
+    :ssh_privatekey: --ssh-privatekey=<value>
+    :template: --template=<value>
 :secret_unlink:
   :cmd: oc secrets unlink serviceaccount/<sa_name> secrets/<secret_name>
 :serviceaccounts_get_token:
@@ -1190,6 +1190,23 @@
   :options:
     :project: <value>
     :selector: --selector=<value>
+:oadm_policy_add_cluster_role_to_group:
+  :cmd: oc adm policy add-cluster-role-to-group <role_name> <group_name>
+:oadm_policy_add_cluster_role_to_user:
+  :cmd: oc adm policy add-cluster-role-to-user <role_name>
+  :options:
+    :serviceaccount: --serviceaccount=<value>
+    :user_name: <value>
+    :z:  -z <value>
+:oadm_policy_add_role_to_group:
+  :cmd: oc adm policy add-role-to-group <role_name> <group_name>
+  :options:
+    :rolebinding_name: --rolebinding-name=<value>
+:oadm_policy_add_role_to_user:
+  :cmd: oc adm policy add-role-to-user <role_name> <user_name>
+  :options:
+    :role_namespace: --role-namespace=<value>
+    :rolebinding_name: --rolebinding-name=<value>
 :oadm_policy_add_scc_to_group:
   :cmd: oc adm policy add-scc-to-group <scc> <group_name>
 :oadm_policy_add_scc_to_user:
@@ -1206,6 +1223,18 @@
   :options:
     :additive_only: --additive-only=<value>
     :confirm: --confirm
+:oadm_policy_remove_cluster_role_from_group:
+  :cmd: oc adm policy remove-cluster-role-from-group <role_name> <group_name>
+:oadm_policy_remove_cluster_role_from_user:
+  :cmd: oc adm policy remove-cluster-role-from-user <role_name>
+  :options:
+    :serviceaccount: --serviceaccount=<value>
+    :user_name: <value>
+    :z:  -z <value>
+:oadm_policy_remove_role_from_group:
+  :cmd: oc adm policy remove-role-from-group <role_name> <group_name>
+:oadm_policy_remove_role_from_user:
+  :cmd: oc adm policy remove-role-from-user <role_name> <user_name>
 :oadm_policy_remove_scc_from_group:
   :cmd: oc adm policy remove-scc-from-group <scc> <group_name>
 :oadm_policy_remove_scc_from_user:

@@ -162,10 +162,13 @@ check_metrics_charts_on_route_overview:
   elements:
   - selector:
       xpath: //h5[@class='graph-title' and text()='Traffic In']/following::div[1][@class='pf-c-chart']
+    timeout: 20
   - selector:
       xpath: //h5[@class='graph-title' and text()='Traffic Out']/following::div[1][@class='pf-c-chart']
+    timeout: 20
   - selector:
       xpath: //h5[@class='graph-title' and text()='Connection Rate']/following::div[1][@class='pf-c-chart']
+    timeout: 20
   - selector:
       xpath: //h1[contains(@class,'graph-empty-state__title') and contains(text(),'No datapoints found')]
     missing: true

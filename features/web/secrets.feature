@@ -4,7 +4,7 @@ Feature: web secrets related
   # @case_id OCP-11386
   Scenario: Add secret on Create From Image page
     Given I have a project
-    When I run the :oc_secrets_new_basicauth client command with:
+    When I run the :secrets_new_basicauth client command with:
       | secret_name | gitsecret |
       | username    | user      |
       | password    | 12345678  |

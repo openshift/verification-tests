@@ -45,10 +45,6 @@ click_button_by_id:
     selector:
       xpath: //button[contains(@id,'<button_id>')]
     op: click
-check_resource_item:
-  elements:
-  - selector:
-      xpath: //span[contains(@class,'co-m-resource-icon') and @title='<resource_type>']/parent::span[@class='co-resource-item']//a[@class='co-resource-item__resource-name' and text()='<resource_name>' and @href='<resource_link>']
 check_table_text_data:
   element:
     selector:
@@ -114,6 +110,10 @@ check_row_filter_on_page:
 confirm_deletion:
   action: send_delete_string
   action: submit_changes
+check_resource_item:
+  elements:
+  - selector:
+      xpath: //span[contains(@class,'co-m-resource-icon') and @title='<resource_type>']/parent::span[@class='co-resource-item']//a[@class='co-resource-item__resource-name' and text()='<resource_name>' and @href='<resource_link>']
 check_resources_title_on_page:
   elements:
   - selector:
@@ -121,7 +121,7 @@ check_resources_title_on_page:
 click_kebab_of_one_resource:
   elements:
   - selector:
-      xpath: //*[text()='<resource_name>']//ancestor::tr//td[contains(@class,'dropdown-kebab-pf')]
+      xpath: //*[text()='<resource_name>']//ancestor::tr//button[@data-test-id='kebab-button']
     op: click
     timeout: 30
 click_one_operation_in_kebab:
@@ -320,6 +320,10 @@ wait_table_loaded:
     selector:
       xpath: //table//tr
     timeout: 30
+check_item_in_list:
+  element:
+    selector:
+      xpath: //ul[contains(.,'<item>')]
 ## -------- check resource key and values pairs ------
 check_resource_details:
   action:

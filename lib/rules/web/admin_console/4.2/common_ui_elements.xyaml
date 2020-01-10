@@ -14,6 +14,15 @@ create_resource_by_default_yaml:
         xpath: //a[text()='Edit YAML']
     ref: click_edit_yaml_link
   action: click_create_button
+click_button_by_id:
+  element:
+    selector:
+      xpath: //button[contains(@id,'<button_id>')]
+    op: click
+check_item_in_list:
+  element:
+    selector:
+      xpath: //ul[contains(.,'<item>')]
 click_edit_yaml_link:
   elements:
   - selector:
