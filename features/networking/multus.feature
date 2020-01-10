@@ -1005,3 +1005,87 @@ Feature: Multus-CNI related scenarios
     And the output should contain:
       | cannot find get a network-attachment-definition |
     """
+
+  # @author anusaxen@redhat.com
+  # @case_id OCP-24492
+  @admin
+  Scenario: Create pod with Multus ipvlan CNI plugin	
+    # Make sure that the multus is enabled
+    Given the multus is enabled on the cluster
+    And the default interface on nodes is stored in the :default_interface clipboard
+    And evaluation of `node.name` is stored in the :target_node clipboard
+    #Storing default interface mac address for comparison later with pods macs
+    When I run commands on the host:
+      | ifconfig <%= cb.default_interface %> |
+    Then the step should succeed
+    And evaluation of `@result[:response].match(/\w{2}:\w{2}:\w{2}:\w{2}:\w{2}:\w{2}/)[0]` is stored in the :default_interface_mac clipboard
+    # Create the net-attach-def via cluster admin
+    Given I have a project
+    When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/ipvlan-host-local.yaml" replacing paths:
+      | ["metadata"]["name"]      | myipvlan76 											      								            |
+      | ["metadata"]["namespace"] | <%= project.name %> 															                            |    
+      | ["spec"] ["config"]       | '{ "cniVersion": "0.3.1", "name": "myipvlan76", "type": "ipvlan", "master": "<%= cb.default_interface %>", "ipam": { "type": "host-local", "subnet": "22.2.2.0/24" } }' |
+    Then the step should succeed
+
+    #Creating variosu pods and making sure their mac matches to default inf and they get unique IPs assigned
+    #Creating pod1 absorbing above net-attach-def
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                       | pod1                    |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | myipvlan76              |
+      | ["spec"]["nodeName"]                                       | <%= cb.target_node %>   |
+    Then the step should succeed
+    And the pod named "pod1" becomes ready
+    When I execute on the pod:
+      | /usr/sbin/ifconfig | net1 |
+    Then the step should succeed
+    And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod1_net1_ip clipboard
+    And evaluation of `@result[:response].match(/\w{2}:\w{2}:\w{2}:\w{2}:\w{2}:\w{2}/)[0]` is stored in the :pod1_net1_mac clipboard
+    And the expression should be true> cb.pod1_net1_mac==cb.default_interface_mac
+    
+    #Creating pod2 absorbing above net-attach-def
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                       | pod2                    |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | myipvlan76              |
+      | ["spec"]["nodeName"]                                       | <%= cb.target_node %>   |
+    Then the step should succeed
+    And the pod named "pod2" becomes ready
+    When I execute on the pod:
+      | /usr/sbin/ifconfig | net1 |
+    Then the step should succeed
+    And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod2_net1_ip clipboard
+    And evaluation of `@result[:response].match(/\w{2}:\w{2}:\w{2}:\w{2}:\w{2}:\w{2}/)[0]` is stored in the :pod2_net1_mac clipboard
+    And the expression should be true> cb.pod2_net1_mac==cb.default_interface_mac
+    And the expression should be true> !(cb.pod2_net1_ip==cb.pod1_net1_ip)
+    
+    #Creating pod3 absorbing above net-attach-def
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                       | pod3                    |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | myipvlan76              |
+      | ["spec"]["nodeName"]                                       | <%= cb.target_node %>   |
+    Then the step should succeed
+    And the pod named "pod3" becomes ready
+    When I execute on the pod:
+      | /usr/sbin/ifconfig | net1 |
+    Then the step should succeed
+    And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod3_net1_ip clipboard
+    And evaluation of `@result[:response].match(/\w{2}:\w{2}:\w{2}:\w{2}:\w{2}:\w{2}/)[0]` is stored in the :pod3_net1_mac clipboard
+    And the expression should be true> cb.pod3_net1_mac==cb.default_interface_mac
+    And the expression should be true> !(cb.pod3_net1_ip==cb.pod2_net1_ip)
+    And the expression should be true> !(cb.pod3_net1_ip==cb.pod1_net1_ip)
+
+    #Creating pod4 absorbing above net-attach-def
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                       | pod4                    |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | myipvlan76              |
+      | ["spec"]["nodeName"]                                       | <%= cb.target_node %>   |
+    Then the step should succeed
+    And the pod named "pod4" becomes ready
+    When I execute on the pod:
+      | /usr/sbin/ifconfig | net1 |
+    Then the step should succeed
+    And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod4_net1_ip clipboard
+    And evaluation of `@result[:response].match(/\w{2}:\w{2}:\w{2}:\w{2}:\w{2}:\w{2}/)[0]` is stored in the :pod4_net1_mac clipboard
+    And the expression should be true> cb.pod4_net1_mac==cb.default_interface_mac
+    And the expression should be true> !(cb.pod4_net1_ip==cb.pod3_net1_ip)
+    And the expression should be true> !(cb.pod4_net1_ip==cb.pod2_net1_ip)
+    And the expression should be true> !(cb.pod4_net1_ip==cb.pod1_net1_ip)
