@@ -29,7 +29,7 @@ Feature: Testing HAProxy router logging related scenarios
       | deploymentconfig=ocp-19830 |
     Then evaluation of `pod.name` is stored in the :router_pod clipboard
 
-    When I run the :env client command with:
+    When I run the :set_env client command with:
       | resource | dc/ocp-19830 |
       | e        | ROUTER_LOG_LEVEL=debug |
     Then the step should succeed
