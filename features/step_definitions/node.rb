@@ -24,7 +24,7 @@ Given /^I store the( schedulable| ready and schedulable)? (node|master|worker)s 
   else
     cb[cbname] = env.nodes.select { |n| n.ready? && n.schedulable? }
   end
-  
+
   if role == "worker"
     cb[cbname] = cb[cbname].select { |n| n.is_worker? }
   elsif role == "master"
@@ -590,4 +590,34 @@ Given /^I store all worker nodes to the#{OPT_SYM} clipboard$/ do |cb_name|
   cb_name ||= :worker_nodes
   nodes = BushSlicer::Node.list(user: admin)
   cb[cb_name] = nodes.select { |n| n.is_worker? }
+end
+
+Given /^I store the node #{QUOTED} YAML to the#{OPT_SYM} clipboard$/ do |node, cb_name|
+  ensure_admin_tagged
+
+  cb_name ||= :deleted_node
+  @result = admin.cli_exec(:get, resource: 'node', resource_name: node, o: 'yaml')
+  if @result[:success]
+    logger.info "node '#{node}' is saved in #{cb_name}"
+  else
+    raise "could not get node: '#{node}'"
+  end
+
+  cb[cb_name] = @result[:response]
+end
+
+Given /^the node in the#{OPT_SYM} clipboard is restored from YAML after scenario$/ do |cb_name|
+  ensure_admin_tagged
+
+  cb_name ||= :deleted_node
+  _admin = admin
+  teardown_add {
+    @result = _admin.cli_exec(
+        :create,
+        f: "-",
+        _stdin: cb[cb_name]
+    )
+    # print the whole thing in case we fail
+    raise "cannot restore node '#{cb[cb_name]}'" unless @result[:success]
+  }
 end
