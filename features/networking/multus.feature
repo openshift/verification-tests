@@ -621,17 +621,11 @@ Feature: Multus-CNI related scenarios
     """
     the bridge interface named "mybridge" is deleted from the "<%= cb.nodes[0].name %>" node
     """  
-    #Labeling a worker node to make sure couple of future pods to be scheduled on this node only
-    Given  label "test=worker1" is added to the "<%= cb.nodes[0].name %>" node
-    
-    #Labeing another worker node to make sure 3rd future pod to be scheduled on this node only
-    Given  label "test=worker2" is added to the "<%= cb.nodes[1].name %>" node
-    
     #Creating first pod in vlan 100
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod_nodeselector.yaml" replacing paths:
-      | ["metadata"]["name"] | pod1-vlan100 |
-      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan100 |
-      | ["spec"]["nodeSelector"]["test"] | worker1 |
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                      | pod1-vlan100            |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan100           |
+      | ["spec"]["nodeName"]                                      | <%= cb.nodes[0].name %> |
     Then the step should succeed
     And the pod named "pod1-vlan100" becomes ready
     And evaluation of `pod.name` is stored in the :pod1 clipboard
@@ -646,10 +640,10 @@ Feature: Multus-CNI related scenarios
     the bridge interface named "mybridge.100" is deleted from the "<%= cb.nodes[0].name %>" node
     """  
     #Creating 2nd pod on same node as first in vlan 100
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod_nodeselector.yaml" replacing paths:
-      | ["metadata"]["name"] | pod2-vlan100 |
-      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan100 |
-      | ["spec"]["nodeSelector"]["test"] | worker1 |
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                      | pod2-vlan100            |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan100           |
+      | ["spec"]["nodeName"]                                      | <%= cb.nodes[0].name %> |
     Then the step should succeed
     And the pod named "pod2-vlan100" becomes ready
     And evaluation of `pod.name` is stored in the :pod2 clipboard
@@ -659,10 +653,10 @@ Feature: Multus-CNI related scenarios
     And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod2_net1_ip clipboard
     
     #Creating 3rd pod on different node in vlan 100
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod_nodeselector.yaml" replacing paths:
-      | ["metadata"]["name"] | pod3-vlan100 |
-      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan100 |
-      | ["spec"]["nodeSelector"]["test"] | worker2 |
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                      | pod3-vlan100            |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan100           |
+      | ["spec"]["nodeName"]                                      | <%= cb.nodes[1].name %> |
     Then the step should succeed
     And the pod named "pod3-vlan100" becomes ready
     And evaluation of `pod.name` is stored in the :pod3 clipboard
@@ -716,14 +710,11 @@ Feature: Multus-CNI related scenarios
       | n | <%= project.name %>                                                                                                                                   |
     Then the step should succeed 
     
-    #Labeing a worker node to make sure all future pods to be scheduled on this node only
-    Given  label "test=worker1" is added to the "<%= cb.nodes[0].name %>" node
-    
     #Creating first pod in vlan 100
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod_nodeselector.yaml" replacing paths:
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
       | ["metadata"]["name"] | pod1-vlan100 |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan100 |
-      | ["spec"]["nodeSelector"]["test"] | worker1 |
+      | ["spec"]["nodeName"]                                       | <%= cb.nodes[0].name %> |
     Then the step should succeed
     And the pod named "pod1-vlan100" becomes ready
     And evaluation of `pod.name` is stored in the :pod1 clipboard
@@ -738,10 +729,10 @@ Feature: Multus-CNI related scenarios
     the bridge interface named "mybridge.100" is deleted from the "<%= cb.nodes[0].name %>" node
     """  
     #Creating 2nd pod on same node as first in vlan 100
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod_nodeselector.yaml" replacing paths:
-      | ["metadata"]["name"] | pod2-vlan100 |
-      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan100 |
-      | ["spec"]["nodeSelector"]["test"] | worker1 |
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                      | pod2-vlan100            |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan100           |
+      | ["spec"]["nodeName"]                                      | <%= cb.nodes[0].name %> |
     Then the step should succeed
     And the pod named "pod2-vlan100" becomes ready
     And evaluation of `pod.name` is stored in the :pod2 clipboard
@@ -751,10 +742,10 @@ Feature: Multus-CNI related scenarios
     And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod2_net1_ip clipboard
     
     #Creating 3rd pod on same node but in vlan 200
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod_nodeselector.yaml" replacing paths:
-      | ["metadata"]["name"] | pod3-vlan200 |
-      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan200 |
-      | ["spec"]["nodeSelector"]["test"] | worker1 |
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                      | pod3-vlan200            |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan200           |
+      | ["spec"]["nodeName"]                                      | <%= cb.nodes[0].name %> |
     Then the step should succeed
     And the pod named "pod3-vlan200" becomes ready
     And evaluation of `pod.name` is stored in the :pod3 clipboard
@@ -870,7 +861,7 @@ Feature: Multus-CNI related scenarios
     """
     And admin ensures "bridge-ipam-dhcp" network_attachment_definition is deleted from the "openshift-multus" project after scenario
     #Adding brige interface on target node
-    Given the bridge interface named "testbr1" with address "88.8.8.200/24" is added to the "<%= cb.nodes[0].name %>" node
+    Given the bridge interface named "testbr1" with address "88.8.8.191/24" is added to the "<%= cb.nodes[0].name %>" node
     #Cleanup for deleting testbr1 interface
     Given I register clean-up steps:
     """
