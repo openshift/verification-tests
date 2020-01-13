@@ -342,7 +342,6 @@ wait_until_no_loading:
     selector:
       css: .cos-status-box--loading
     missing: true
-<<<<<<< 0279d16f72b19bc0f9ee5fab004e431f8400987e
     timeout: 30
 wait_table_loaded:
   element:
@@ -353,9 +352,8 @@ check_item_in_list:
   element:
     selector:
       xpath: //ul[contains(.,'<item>')]
-=======
     timeout: 20
->>>>>>> Automate OCP-24106
+
 ## -------- check resource key and values pairs ------
 check_resource_details:
   action:
