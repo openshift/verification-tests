@@ -1,3 +1,5 @@
+go_to_install_page:
+    url: /beta/openshift/install
 go_to_aws_ipi_install_page:
     url: /beta/openshift/install/aws/installer-provisioned
 go_to_aws_upi_install_page:
@@ -37,13 +39,13 @@ check_common_part:
         - selector:
             xpath: //a[@class='pf-c-page__header-brand-link' and @href='./']/img[@alt='Red Hat Logo']
         - selector:
-            xpath: //div[@class='pf-l-split__item ins-c-page__home-icon']/a[@href='https://cloud.redhat.com/beta/']
+            xpath: //div[@class='pf-l-split__item ins-c-page__home-icon']/a[contains(@href, 'https://cloud.redhat.com/')]
         - selector:
             xpath: //div[@class='ins-c-navigation__header-title' and text()='Red Hat OpenShift Cluster Manager']
         - selector:
-            xpath: //nav[@class='pf-c-nav pf-m-dark']/ul/li/a[@href='https://cloud.redhat.com/beta/openshift/' and contains(., 'Clusters')]
+            xpath: //nav[@class='pf-c-nav pf-m-dark']/ul/li/a[contains(@href, '/openshift/') and contains(., 'Clusters')]
         - selector:
-            xpath: //nav[@class='pf-c-nav pf-m-dark']/ul/li/a[@href='https://cloud.redhat.com/beta/openshift/subscriptions' and contains(., 'Subscriptions')]
+            xpath: //nav[@class='pf-c-nav pf-m-dark']/ul/li/a[contains(@href, '/openshift/subscriptions') and contains(., 'Subscriptions')]
         - selector:
             xpath: //nav[@class='pf-c-nav pf-m-dark']/ul/li/a[@href='https://docs.openshift.com/container-platform/4.2/' and contains(., 'Documentation')]
         - selector:
@@ -72,6 +74,40 @@ check_account_username:
             xpath: //div[@class='pf-c-dropdown pf-m-expanded']/ul/li/a[@href='https://access.redhat.com/user' and text()='My profile']
         - selector:
             xpath: //div[@class='pf-c-dropdown pf-m-expanded']/ul/li/button[@type='button' and text()='Logout']
+
+check_install_page:
+    action: required_install_page_items_loaded
+    action: check_install_page_title
+    action: check_breadcrumbs_in_install_overview_page
+    element:
+        selector:
+            xpath: //span[@class='infra-crc-icon-text' and text()='Powered by Red Hat CodeReady Containers']
+required_install_page_items_loaded:
+    elements:
+        - selector:
+            xpath: //h1[@class='pf-c-title pf-m-2xl ocm-page-title' and contains(., 'Install OpenShift Container Platform 4')]
+        - selector:
+            xpath: //h3[@class='pf-c-title pf-m-2xl' and text()='Select an infrastructure provider']
+check_install_page_title:
+    scripts:
+    - command: return document.title=='Install OpenShift 4 | Red Hat OpenShift Cluster Manager | Infrastructure Provider'
+      expect_result: true
+check_breadcrumbs_in_install_overview_page:
+    elements:
+        - selector:
+            xpath: //li[contains(@href, '/openshift/')]/a[text()='Clusters']
+        - selector:
+            xpath: //a[contains(@href, '/openshift/create') and text()='Create']
+        - selector:
+            xpath: //li[text()='OpenShift Container Platform']
+check_provider_card:
+    elements:
+        - selector:
+            xpath: //div[@class='pf-c-card__body']/img[@alt='<provider>']
+        - selector:
+            xpath: //div[@class='pf-c-card__body']/h5[text()='<provider_context>']
+        - selector:
+            xpath: //a[@class='infra-card infra-card-cloud-provider' and contains(@href, '/openshift/install/<provider_href>')]
 
 check_aws_ipi_install_page:
     action: required_aws_ipi_install_items_loaded
