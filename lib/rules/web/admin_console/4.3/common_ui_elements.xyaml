@@ -13,7 +13,6 @@ create_resource_by_default_yaml:
       selector:
         xpath: //a[text()='Edit YAML']
     ref: click_edit_yaml_link
-  action: wait_until_no_loading
   action: click_create_button
 click_edit_yaml_link:
   elements:
@@ -34,6 +33,7 @@ click_button:
   element:
     selector:
       xpath: //button[contains(.,'<button_text>')]
+    timeout: 15
     op: click
 click_button_text:
   element:
@@ -45,15 +45,17 @@ click_button_by_id:
     selector:
       xpath: //button[contains(@id,'<button_id>')]
     op: click
-check_resource_item:
-  elements:
-  - selector:
-      xpath: //span[contains(@class,'co-m-resource-icon') and @title='<resource_type>']/parent::span[@class='co-resource-item']//a[@class='co-resource-item__resource-name' and text()='<resource_name>' and @href='<resource_link>']
-select_resource_item:
-  action: click_button_by_id
+check_table_text_data:
   element:
     selector:
-      xpath: //*[contains(@class,'co-resource-item__resource-name') and text()='<item>']
+      xpath: //td[text()='<text_data>']
+select_resource_item:
+  action: click_button_by_id
+  action: click_on_resource_name
+click_on_resource_name:
+  element:
+    selector:
+      xpath: //a[contains(@class,'co-resource-item__resource-name') and text()='<item>']
     op: click
 check_button_disabled:
   element:
@@ -64,7 +66,7 @@ check_button_enabled:
     selector:
       xpath: //button[contains(., '<button_text>') and not(@disabled)]
 check_text_not_a_link:
-  element: 
+  element:
     selector:
       xpath: //*[contains(@class,'co-resource-item__resource-name') and text()='<text>' and not(@href)]
 click_tab:
@@ -92,7 +94,7 @@ set_input_value:
 set_label_input:
   elements:
   - selector: &label_input
-      xpath: //label[text()='<label_text>']/following::input[1]
+      xpath: (//label[contains(text(),'<label_text>')]/following::input[1] | //label[contains(text(),'<label_text>')]//input[1])[1]
     op: clear
   - selector:
       <<: *label_input
@@ -101,6 +103,34 @@ check_content_in_yaml_editor:
   element:
     selector:
       xpath: //*[contains(@class,'react-monaco-editor-container')]//*[contains(text(),'<yaml_content>')]
+
+# click and check the first item from resource list such as projects, pods, etc.
+click_first_item_from_resource_list_and_check_breadcrumb:
+  action: wait_until_no_loading
+  params:
+    line_index: 1
+  action: click_item_in_resource_list
+  action: check_link_in_breadcrumb
+# click and check the first sub item from a resource such as one of imagestreamtag on imagestream detail page
+click_first_item_from_sub_resource_list_and_check_breadcrumb:
+  action: wait_until_no_loading
+  action: click_first_sub_item_in_resource_detail_list
+  action: check_link_in_breadcrumb
+# click and check the first item from resources listed in grid cell, such as installed operator
+click_first_item_from_gridcell_list_and_check_breadcrumb:
+  action: wait_until_no_loading
+  action: click_first_item_in_grid_cell_list
+  action: check_link_in_breadcrumb
+check_link_in_breadcrumb:
+  element:
+    selector:
+      xpath: //ol[@class='pf-c-breadcrumb__list']/li[<layer_number>]/a[contains(@data-test-id,'breadcrumb-link') and contains(@href,'<link>') and translate(normalize-space(text()), ' ','')='<text>']
+
+check_text_in_breadcrumb:
+  element:
+    selector:
+      xpath: //ol[@class='pf-c-breadcrumb__list']/li[<layer_number>][translate(normalize-space(text()), ' ','')='<text>']
+
 check_row_filter_on_page:
   elements:
   - selector:
@@ -108,6 +138,10 @@ check_row_filter_on_page:
 confirm_deletion:
   action: send_delete_string
   action: submit_changes
+check_resource_item:
+  elements:
+  - selector:
+      xpath: //span[contains(@class,'co-m-resource-icon') and @title='<resource_type>']/parent::span[@class='co-resource-item']//a[@class='co-resource-item__resource-name' and text()='<resource_name>' and @href='<resource_link>']
 check_resources_title_on_page:
   elements:
   - selector:
@@ -115,9 +149,8 @@ check_resources_title_on_page:
 click_kebab_of_one_resource:
   elements:
   - selector:
-      xpath: //*[text()='<resource_name>']//ancestor::tr//td[contains(@class,'dropdown-kebab-pf')]
+      xpath: //*[text()='<resource_name>']//ancestor::tr//button[@data-test-id='kebab-button']
     op: click
-    timeout: 30
 click_one_operation_in_kebab:
   action: click_kebab_of_one_resource
   action: click_button
@@ -211,10 +244,6 @@ check_page_not_match:
   element:
     selector: *page_content
     missing: true
-check_sidebar_item:
-  element:
-    selector:
-      xpath: //li[@class='co-resource-sidebar-item']//*[contains(text(),'<sidebar_item>')]
 submit_changes:
   element:
     selector:
@@ -255,23 +284,40 @@ click_link_with_text:
     selector:
       xpath: //a[contains(.,'<text>') and contains(@href,'<link_url>')]
     op: click
-click_on_resource_item:
-  element:
-    selector:
-      xpath: //a[@class='co-resource-item__resource-name' and @data-test-id='<resource_name>']
-    op: click
 click_secondary_menu:
   elements:
   - selector:
       xpath: //a[@data-component='pf-nav-expandable' and text()='<primary_menu>']
     op: click
-  - selector:
+  - selector: &secondary_menu
       xpath: //a[@class='pf-c-nav__link' and text()='<secondary_menu>']
     op: click
+check_secondary_menu:
+  element:
+    selector: *secondary_menu
+check_secondary_menu_missing:
+  element:
+    selector: *secondary_menu
+    missing: true
 click_dropdown_field:
   elements:
   - selector:
       xpath: //*[(.='<dropdown_field>')]/following-sibling::*//button[contains(@class, 'dropdown__toggle')]
+    op: click
+click_item_in_resource_list:
+  elements:
+  - selector:
+      xpath: //tr[<line_index>]//td[1]//span[@class='co-resource-item']/a
+    op: click
+click_first_sub_item_in_resource_detail_list:
+  elements:
+  - selector:
+      xpath: (//div[@class='co-m-table-grid__body']//a)[1]
+    op: click
+click_first_item_in_grid_cell_list:
+  elements:
+  - selector:
+      xpath: (//td[@role='gridcell'][1])[1]
     op: click
 click_one_item:
   elements:
@@ -286,11 +332,6 @@ wait_form_loaded:
     selector:
       css: form
     timeout: 20
-wait_dropdown_loaded:
-  element:
-    selector:
-      xpath: //*[contains(@class, 'dropdown-menu--text-wrap')]
-    timeout: 20
 wait_box_loaded:
   element:
     selector:
@@ -302,6 +343,17 @@ wait_until_no_loading:
       css: .cos-status-box--loading
     missing: true
     timeout: 30
+wait_table_loaded:
+  element:
+    selector:
+      xpath: //table//tr
+    timeout: 30
+check_item_in_list:
+  element:
+    selector:
+      xpath: //ul[contains(.,'<item>')]
+    timeout: 20
+
 ## -------- check resource key and values pairs ------
 check_resource_details:
   action:
@@ -596,4 +648,13 @@ check_current_healthy:
     key: Current Healthy
     value: <current_healthy>
   action: check_resource_details_key_and_value
-
+check_min_replicas:
+  params:
+    key: Min Replicas
+    value: <replicas_value>
+  action: check_resource_details_key_and_value
+check_max_replicas:
+  params:
+    key: Max Replicas
+    value: <replicas_value>
+  action: check_resource_details_key_and_value

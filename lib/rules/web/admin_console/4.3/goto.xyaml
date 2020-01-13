@@ -91,11 +91,17 @@ goto_one_pod_page:
   url: k8s/ns/<project_name>/pods/<resource_name>
 goto_one_pod_log_page:
   url: k8s/ns/<project_name>/pods/<pod_name>/logs
+goto_project_pods_list_page:
+  url: k8s/ns/<project_name>/pods
 
 
 goto_cluster_oauth_configuration_page:
   url: k8s/cluster/config.openshift.io~v1~OAuth/cluster
 
+
+#replica sets
+goto_replica_sets_page:
+  url: k8s/ns/<project_name>/replicasets
 
 #routes
 goto_routes_page:
@@ -106,6 +112,8 @@ goto_route_creation_page:
   url: k8s/ns/<project_name>/routes/~new/form
 
 #imagestream
+goto_all_imagestreams_list:
+  url: k8s/all-namespaces/imagestreams
 goto_imagestreams_page:
   url: k8s/ns/<project_name>/imagestreams
 goto_one_imagestream_page:
@@ -137,6 +145,12 @@ goto_node_page:
 goto_one_node_page:
   url: k8s/cluster/nodes/<node_name>
 
+# users
+goto_groups_page:
+  url: /k8s/cluster/user.openshift.io~v1~Group
+goto_one_group_page:
+  url: /k8s/cluster/user.openshift.io~v1~Group/<group_name>
+
 # namespace
 goto_one_namespace_page:
   url: k8s/cluster/namespaces/<namespace_name>
@@ -144,6 +158,8 @@ goto_one_namespace_page:
 # operator hub
 goto_operator_hub_page:
   url: operatorhub/ns/default
+goto_installed_operators_page:
+  url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion
 goto_operator_subscription_page:
   url: operatorhub/subscribe?pkg=<package_name>&catalog=<catalog_name>&catalogNamespace=openshift-marketplace&targetNamespace=<target_namespace>
 goto_one_project_subscription_page:
@@ -154,6 +170,12 @@ goto_machineconfigs_page:
   url: k8s/cluster/machineconfiguration.openshift.io~v1~MachineConfig
 goto_machineconfig_pools_page:
   url: k8s/cluster/machineconfiguration.openshift.io~v1~MachineConfigPool
+goto_machine_sets_page:
+  url: k8s/ns/openshift-machine-api/machine.openshift.io~v1beta1~MachineSet
+goto_machineautoscaler_list_page:
+  url: k8s/ns/openshift-machine-api/autoscaling.openshift.io~v1beta1~MachineAutoscaler
+goto_one_machineautoscaler_page:
+  url: k8s/ns/openshift-machine-api/autoscaling.openshift.io~v1beta1~MachineAutoscaler/<machineautoscaler_name>
 
 #crd
 goto_crds_page:
@@ -175,5 +197,15 @@ goto_quotas_page:
 goto_machinehealthcheck_page:
   url: k8s/ns/<project_name>/machine.openshift.io~v1beta1~MachineHealthCheck
 
+#user
 goto_users_list_page:
   url: k8s/cluster/user.openshift.io~v1~User
+goto_rolebinding_page_of_user:
+  url: k8s/cluster/user.openshift.io~v1~User/<username>/roles
+
+goto_all_machines_page: 
+  url: k8s/all-namespaces/machine.openshift.io~v1beta1~Machine
+goto_all_machine_sets_page: 
+  url: k8s/all-namespaces/machine.openshift.io~v1beta1~MachineSet
+
+

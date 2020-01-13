@@ -88,11 +88,16 @@ goto_one_dc_page:
 #pod
 goto_one_pod_page:
   url: k8s/ns/<project_name>/pods/<resource_name>
-
+goto_project_pods_list_page:
+  url: k8s/ns/<project_name>/pods
 goto_cluster_oauth_configuration_page:
   url: k8s/cluster/config.openshift.io~v1~OAuth/cluster
 goto_one_pod_log_page:
   url: k8s/ns/<project_name>/pods/<pod_name>/logs
+
+#replica sets
+goto_replica_sets_page:
+  url: k8s/ns/<project_name>/replicasets
 
 #routes
 goto_routes_page:
@@ -105,6 +110,8 @@ goto_imagestreams_page:
   url: k8s/ns/<project_name>/imagestreams
 goto_one_imagestream_page:
   url: k8s/ns/<project_name>/imagestreams/<imagestream_name>
+goto_all_imagestreams_list:
+  url: k8s/all-namespaces/imagestreams
 
 #deploy image
 goto_deploy_image_page:
@@ -137,7 +144,8 @@ goto_operator_hub_page:
   url: operatorhub/ns/default
 goto_operator_subscription_page:
   url: operatorhub/subscribe?pkg=<package_name>&catalog=<catalog_name>&catalogNamespace=openshift-marketplace&targetNamespace=<target_namespace>
-
+goto_installed_operators_page:
+  url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion
 goto_cli_tools_page:
   url: command-line-tools
 
@@ -146,7 +154,13 @@ goto_machineconfigs_page:
   url: k8s/cluster/machineconfiguration.openshift.io~v1~MachineConfig
 goto_machineconfig_pools_page:
   url: k8s/cluster/machineconfiguration.openshift.io~v1~MachineConfigPool
-
+goto_machine_sets_page:
+  url: k8s/ns/openshift-machine-api/machine.openshift.io~v1beta1~MachineSet
+goto_machineautoscaler_list_page:
+  url: k8s/ns/openshift-machine-api/autoscaling.openshift.io~v1beta1~MachineAutoscaler
+goto_one_machineautoscaler_page:
+  url: k8s/ns/openshift-machine-api/autoscaling.openshift.io~v1beta1~MachineAutoscaler/<machineautoscaler_name>
+  
 #crd
 goto_crds_page:
   url: k8s/cluster/customresourcedefinitions
@@ -156,3 +170,8 @@ goto_crd_instances_page:
 # quota
 goto_quotas_page:
   url: k8s/ns/<project_name>/resourcequotas
+
+goto_all_machines_page: 
+  url: k8s/all-namespaces/machine.openshift.io~v1beta1~Machine
+goto_all_machine_sets_page: 
+  url: k8s/all-namespaces/machine.openshift.io~v1beta1~MachineSet

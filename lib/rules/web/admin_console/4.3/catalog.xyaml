@@ -128,3 +128,18 @@ set_custom_channel_and_subscribe:
   action: wait_box_loaded
   action: choose_update_channel
   action: click_subscribe_button
+click_image_tag_dropdown:
+  params:
+    button_id: form-dropdown-image-tag-field
+  action: click_button_by_id
+browse_to_install_plan:
+  elements:
+  - selector:
+      xpath: //.[contains(@href, 'subscription')]
+    timeout: 60
+    op: click
+  - selector:
+      xpath: //a[contains(@href, 'InstallPlan')]
+    timeout: 60
+    op: click
+
