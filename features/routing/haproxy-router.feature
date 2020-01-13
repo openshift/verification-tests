@@ -460,7 +460,7 @@ Feature: Testing haproxy router
 
     Given I switch to cluster admin pseudo user
     And I use the router project
-    And I wait up to 10 seconds for the steps to pass:
+    And I wait up to 30 seconds for the steps to pass:
     """
     When I execute on the "<%=cb.router_pod %>" pod:
       | grep | <%=cb.pod_ip %> | /var/lib/haproxy/conf/haproxy.config |
@@ -499,7 +499,7 @@ Feature: Testing haproxy router
 
     Given I switch to cluster admin pseudo user
     And I use the router project
-    And I wait up to 10 seconds for the steps to pass:
+    And I wait up to 30 seconds for the steps to pass:
     """
     When I execute on the "<%=cb.router_pod %>" pod:
       | grep | <%=cb.pod_ip %> | /var/lib/haproxy/conf/haproxy.config |
