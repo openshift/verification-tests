@@ -243,6 +243,15 @@
     :tcp: --tcp=<value>
 :create_serviceaccount:
   :cmd: oc create serviceaccount <serviceaccount_name>
+:create_user:
+  :cmd: oc create user <username>
+  :options:
+     :allow_missing_template_keys: --allow-missing-template-keys=<value>
+     :dry_run: --dry-run=<value>
+     :full_name: --full-name=<value>
+     :o: -o <value>
+     :output: --output=<value>
+     :template: --template=<value>
 :debug:
   :cmd: oc debug <global_options>
   :options:
