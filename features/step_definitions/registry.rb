@@ -399,7 +399,7 @@ Given /^current generation number of#{OPT_QUOTED} deployment is stored into#{OPT
 end
 
 Given /^docker config for default image registry is stored to the#{OPT_SYM} clipboard$/ do |cb_name|
-
+  cb_name ||= :dockercfg_file
   step %Q/I enable image-registry default route/
   step %Q/default image registry route is stored in the :integrated_reg_ip clipboard/
   step %Q/a 5 characters random string of type :dns is stored into the :dockercfg_name clipboard/
@@ -424,6 +424,7 @@ end
 
 Given /^certification for default image registry is stored to the#{OPT_SYM} clipboard$/ do |cb_name|
   ensure_admin_tagged
+  cb_name ||= :reg_crt_name
   
   step %Q/a 5 characters random string of type :dns is stored into the :regcrt clipboard/
   cb[cb_name] ="/tmp/#{cb.regcrt}.crt"
