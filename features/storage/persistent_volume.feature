@@ -1,40 +1,40 @@
 Feature: Persistent Volume Claim binding policies
 
   # @author jhou@redhat.com
-  # @author wehe@redhat.com
+  # @author lxia@redhat.com
   # @author chaoyang@redhat.com
   @admin
-  @destructive
   Scenario Outline: PVC with one accessMode can bind PV with all accessMode
-    # Preparations
     Given I have a project
 
     # Create 2 PVs
     # Create PV with all accessMode
     When admin creates a PV from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/auto/pv-template-all-access-modes.json" where:
-      | ["metadata"]["name"] | nfs-<%= project.name %> |
+      | ["metadata"]["name"]         | pv1-<%= project.name %> |
+      | ["spec"]["storageClassName"] | sc-<%= project.name %>  |
     Then the step should succeed
     # Create PV without accessMode3
     When admin creates a PV from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/auto/pv.json" where:
-      | ["metadata"]["name"]       | nfs1-<%= project.name %> |
-      | ["spec"]["accessModes"][0] | <accessMode1>            |
-      | ["spec"]["accessModes"][1] | <accessMode2>            |
+      | ["metadata"]["name"]         | pv2-<%= project.name %> |
+      | ["spec"]["accessModes"][0]   | <accessMode1>           |
+      | ["spec"]["accessModes"][1]   | <accessMode2>           |
+      | ["spec"]["storageClassName"] | sc-<%= project.name %>  |
     Then the step should succeed
 
     # Create PVC with accessMode3
-    When I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/claim-rwo.json" replacing paths:
-      | ["spec"]["accessModes"][0] | <accessMode3> |
+    When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
+      | ["metadata"]["name"]         | mypvc                  |
+      | ["spec"]["accessModes"][0]   | <accessMode3>          |
+      | ["spec"]["storageClassName"] | sc-<%= project.name %> |
     Then the step should succeed
 
-    # First PV can bound
-    And the "nfsc" PVC becomes bound to the "nfs-<%= project.name %>" PV
-    # Second PV can not bound
-    And the "nfs1-<%= project.name %>" PV status is :available
+    And the "mypvc" PVC becomes bound to the "pv1-<%= project.name %>" PV
+    And the "pv2-<%= project.name %>" PV status is :available
 
     Examples:
       | accessMode1   | accessMode2   | accessMode3   |
       | ReadOnlyMany  | ReadWriteMany | ReadWriteOnce | # @case_id OCP-9702
-      | ReadOnlyMany  | ReadWriteOnce | ReadWriteMany | # @case_id OCP-10680
+      | ReadWriteOnce | ReadOnlyMany  | ReadWriteMany | # @case_id OCP-10680
       | ReadWriteMany | ReadWriteOnce | ReadOnlyMany  | # @case_id OCP-11168
 
   # @author yinzhou@redhat.com
