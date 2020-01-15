@@ -117,7 +117,7 @@ Feature: buildlogic.feature
   Scenario: Build with specified Dockerfile to image with same image name via new-build
     Given I have a project
     When I run the :new_build client command with:
-      | D | FROM centos:7\nRUN yum install -y httpd |
+      | D | FROM centos:7 |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | bc     |
@@ -127,9 +127,9 @@ Feature: buildlogic.feature
       | Output to:\s+ImageStreamTag centos:latest |
     Given the "centos-1" build becomes :complete
     When I run the :new_build client command with:
-      | D    | FROM centos:7\nRUN yum install -y httpd |
-      | to   | centos:7                                |
-      | name | myapp                                   |
+      | D    | FROM centos:7 |
+      | to   | centos:7      |
+      | name | myapp         |
     And I get project bc
     Then the output should contain:
       | myapp |
