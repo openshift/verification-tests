@@ -1,7 +1,10 @@
 approvers:
+#  - chengzhang1016
+#  - xingxingxia
+#  - yapei
 
 reviewers:
-- chengzhang1016
-- zhouying7780
-- xiuwang
-- xiaocwan
+  - chengzhang1016
+  - xiaocwan
+  - xiuwang
+  - zhouying7780

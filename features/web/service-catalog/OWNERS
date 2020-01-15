@@ -1,6 +1,8 @@
 approvers:
+#  - chengzhang1016
+#  - yapei
 
 reviewers:
-- emmajiafan
-- SSshahan
-- jianzhangbjz
+  - emmajiafan
+  - jianzhangbjz
+  - SSshahan

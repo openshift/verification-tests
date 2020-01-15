@@ -1,4 +1,5 @@
 approvers:
+#  - qinpingli
 
 reviewers:
-- lihongan
+  - lihongan

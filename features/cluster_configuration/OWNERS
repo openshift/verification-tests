@@ -1,6 +1,6 @@
 approvers:
 
 reviewers:
-- qinpingli
-- pruan-rht
-- liangxia
+  - liangxia
+  - pruan-rht
+  - qinpingli

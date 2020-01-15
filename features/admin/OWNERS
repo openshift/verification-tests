@@ -1,6 +1,8 @@
 approvers:
+#  - chengzhang1016
+#  - xingxingxia
 
 reviewers:
-- chengzhang1016
-- pruan-rht
-- xingxingxia
+  - chengzhang1016
+  - pruan-rht
+  - xingxingxia

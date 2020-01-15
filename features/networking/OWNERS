@@ -1,5 +1,6 @@
 approvers:
+#  - qinpingli
 
 reviewers:
-- anuragthehatter
-- lihongan
+  - anuragthehatter
+  - lihongan

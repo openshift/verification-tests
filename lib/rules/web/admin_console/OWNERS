@@ -1,6 +1,8 @@
 approvers:
+#  - yapei
+
 reviewers:
-- SSshahan
-- xiaocwan
-- yanpzhan
-- yapei
+  - SSshahan
+  - xiaocwan
+  - yanpzhan
+  - yapei

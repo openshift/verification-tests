@@ -1,5 +1,7 @@
 approvers:
+#  - xingxingxia
+#  - yapei
 
 reviewers:
-- zhouying7780
-- pruan-rht
+  - pruan-rht
+  - zhouying7780
