@@ -446,7 +446,7 @@ Feature: Multus-CNI related scenarios
     Then the step should succeed
     And the output should contain 2 times:
       | 1 PVID   |
-      | untagged |
+      | ntagged |
 
   # @author anusaxen@redhat.com
   # @case_id OCP-24489
@@ -490,12 +490,13 @@ Feature: Multus-CNI related scenarios
   @admin
   @destructive
   Scenario: CNO manager mavlan configured manually with static
-    # Make sure that the multus is Running
     Given the multus is enabled on the cluster
+    And I store all worker nodes to the :nodes clipboard
     Given the default interface on nodes is stored in the :default_interface clipboard 
     #Patching simplemacvlan config in network operator config CRD
+    Given I have a project
     Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
-      | {"spec":{"additionalNetworks":[{"name":"test-macvlan-case3","namespace":"openshift-multus","simpleMacvlanConfig":{"ipamConfig":{"staticIPAMConfig":{"addresses": [{"address":"10.128.2.100/23","gateway":"10.128.2.1"}]},"type":"static"},"master":"<%= cb.default_interface %>","mode":"bridge"},"type":"SimpleMacvlan"}]}} |
+	    | {"spec":{"additionalNetworks":[{"name":"test-macvlan-case3","namespace":"<%= project.name %>","simpleMacvlanConfig":{"ipamConfig":{"staticIPAMConfig":{"addresses": [{"address":"10.128.2.100/23","gateway":"10.128.2.1"}]},"type":"static"},"master":"<%= cb.default_interface %>","mode":"bridge"},"type":"SimpleMacvlan"}]}} |
     #Cleanup for bringing CRD to original
     Given I register clean-up steps:
     """
@@ -506,23 +507,21 @@ Feature: Multus-CNI related scenarios
     And I wait up to 30 seconds for the steps to pass:
     """
     When I run the :get admin command with:
-      | resource | net-attach-def   |
-      | n        | openshift-multus |
+      | resource | net-attach-def      |
+      | n        | <%= project.name %> |
     Then the step should succeed
     And the output should contain:
       | test-macvlan-case3 |
     """
     #Creating pod under openshift-multus project to absorb above net-attach-def
-    Given I switch to cluster admin pseudo user
-    Given I use the "openshift-multus" project
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/1interface-macvlan-bridge.yaml" replacing paths:
-      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | test-macvlan-case3 |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | test-macvlan-case3      |
+      | ["metadata"]["namespace"]                                  | <%= project.name %>     |
+      | ["spec"]["nodeName"]                                       | <%= cb.nodes[0].name %> |
     Then the step should succeed
     And a pod becomes ready with labels:
       | name=macvlan-bridge-pod |
     And evaluation of `pod` is stored in the :pod clipboard
-    And admin ensures "<%= cb.pod.name %>" pod is deleted from the "openshift-multus" project after scenario
-    
     When I execute on the pod:
       | /usr/sbin/ip | -d | link |
     Then the output should contain "net1"
