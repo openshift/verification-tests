@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'active_support/core_ext/hash/slice.rb'
-#require 'active_support/core_ext/hash/transform_values.rb'
 
 Given /^I wait until the status of deployment "(.+)" becomes :(.+)$/ do |resource_name, status|
   ready_timeout = 10 * 60
@@ -150,6 +149,15 @@ Given /^(I|admin) redeploys? #{QUOTED} dc( after scenario)?$/ do |who, dc_name, 
 end
 
 Given /^master CA is added to the#{OPT_QUOTED} dc$/ do |name|
+  ensure_admin_tagged
+
+  org_user = @user
+  org_proj_name = project.name
+  @user = admin
+  @result = secret("router-certs-default", project("openshift-ingress", switch: false)).value_of("tls.crt")
+  File.open("/tmp/openshift.crt", 'wb') { |f|
+    f.write(@result)
+  }
 
   step %Q/certification for default image registry is stored to the :reg_crt_name clipboard/
   step %Q/I run the :create_configmap client command with:/, table(%{
