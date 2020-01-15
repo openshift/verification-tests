@@ -17,7 +17,7 @@ Feature: Testing websocket features
     And I wait up to 30 seconds for the steps to pass:
     """
     When I execute on the pod:
-      | bash | -c | (echo WebsocketTesting ; sleep 3) \| ws ws://<%= route("ws-unsecure", service("ws-unsecure")).dns(by: user) %>/echo |
+      | bash | -c | (echo WebsocketTesting ; sleep 20) \| ws ws://<%= route("ws-unsecure", service("ws-unsecure")).dns(by: user) %>/echo |
     Then the step should succeed
     And the output should contain "< WebsocketTesting"
     """

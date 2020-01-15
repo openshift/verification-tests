@@ -713,7 +713,6 @@ Feature: Testing route
     """
     When I open web server via the route
     Then the step should fail
-    And expression should be true> @result[:exitstatus] == -1
     """
 
     # Add IP whitelist for route
