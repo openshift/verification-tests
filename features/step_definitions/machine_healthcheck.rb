@@ -22,6 +22,7 @@ When(/^I create the 'Ready' unhealthyCondition$/) do
     | ["spec"]["nodeName"] | #{machine.node_name}  |
   })
   step %Q{the step should succeed}
+  step %Q{admin ensures "kubelet-killer" pod is deleted from the "openshift-machine-api" project after scenario}
 end
 
 Then(/^the machine should be remediated$/) do
