@@ -666,7 +666,7 @@ Feature: deployment related features
     Then the step should succeed
     Given status becomes :succeeded of exactly 1 pods labeled:
       | name=hello-openshift |
-    When I run the :env client command with:
+    When I run the :set_env client command with:
       | resource | dc/hooks                   |
       | e        | MYSQL_PASSWORD=update12345 |
     Then the step should succeed

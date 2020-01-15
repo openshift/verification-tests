@@ -296,7 +296,7 @@ Feature: Testing haproxy router
     Given default router is disabled and replaced by a duplicate
     And I switch to cluster admin pseudo user
     And I use the router project
-    When I run the :env admin command with:
+    When I run the :set_env admin command with:
       | resource | dc/<%= cb.new_router_dc.name %>         |
       | e        | RELOAD_INTERVAL=90s                     |
     Then the step should succeed
