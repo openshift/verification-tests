@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'active_support/core_ext/hash/slice.rb'
-require 'active_support/core_ext/hash/transform_values.rb'
+#require 'active_support/core_ext/hash/transform_values.rb'
 
 ### Deployment related steps
 

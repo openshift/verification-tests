@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'active_support/core_ext/hash/slice.rb'
-require 'active_support/core_ext/hash/transform_values.rb'
+#require 'active_support/core_ext/hash/transform_values.rb'
 
 Given /^I wait until the status of deployment "(.+)" becomes :(.+)$/ do |resource_name, status|
   ready_timeout = 10 * 60

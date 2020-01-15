@@ -529,9 +529,9 @@ module BushSlicer
       else
         exec_method = :exec
       end
-      public_send(exec_method, "rm #{r} -f -- #{file}", opts)
+      public_send(exec_method, "rm #{r} -f -- #{file}", **opts)
       opts[:quiet] = true
-      res = public_send(exec_method, "ls -d -- #{file}", opts)
+      res = public_send(exec_method, "ls -d -- #{file}", **opts)
 
       # OCDebugAccessibleHost does not return exit status of executed command
       # return ! res[:success]
