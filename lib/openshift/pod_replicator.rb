@@ -81,7 +81,7 @@ module BushSlicer
     # translate template containers into ContainerSpec object
     def containers_spec(user: nil, cached: true, quiet: false)
       specs = []
-      containers_spec = template(user: user)['spec']['containers']
+      containers_spec = template(user: user, cached: cached, quiet: quiet)['spec']['containers']
       containers_spec.each do | container_spec |
         specs.push ContainerSpec.new container_spec
       end
@@ -99,5 +99,17 @@ module BushSlicer
       return target_spec
     end
 
+    private def volumes_raw(user: nil, cached: true, quiet: false)
+      template(user: user, cached: cached, quiet: quiet)['spec']['volumes']
+    end
+
+    # @return [Array<PodVolumeSpec>]
+    def volumes(user: nil, cached: true, quiet: false)
+      unless cached && props[:volume_specs]
+        raw = volumes_raw(user: user, cached: cached, quiet: quiet) || []
+        props[:volume_specs] = raw.map {|vs| PodVolumeSpec.from_spec(vs, self) }
+      end
+      return props[:volume_specs]
+    end
   end
 end
