@@ -4,6 +4,9 @@ create_osd_cluster:
     action:
         if_param: machine_type
         ref: select_machine_type
+    action:
+        if_param: region_id
+        ref: select_region
     action: click_create_button
     action: cluster_detail_page_loaded
     action: overview_tab_loaded

@@ -157,14 +157,19 @@ osd_creation_error_dialog_loaded:
     elements:
         - selector:
             xpath: //h1[text()='Error Creating Cluster']
+            timeout: 30
         - selector:
             xpath: //h1/*[name()='svg']
+            timeout: 30
         - selector:
             xpath: //p[contains(text(),"<error_reason>")]
+            timeout: 30
         - selector:
             xpath: //p[contains(text(), 'Operation ID')]
+            timeout: 30
         - selector:
             xpath: //button[text()='Close']
+            timeout: 30
 close_error_message_dialog:
     element:
         selector:
@@ -201,3 +206,36 @@ click_add_url_button:
   element:
     <<: *active_add_url_button
     op: click
+customer_cloud_subscription_prompt_message_loaded:
+    elements:
+        - selector:
+            xpath: //h1[text()='Customer Cloud Subscription']
+        - selector:
+            text: "This billing option will transfer the resources associated with this cluster to your AWS account, allowing you to take advantage of the discounts you have already negotiated with AWS."
+        - selector:
+            xpath: //h3[text()='Important'] 
+        - selector:
+            text: "In order for the account transfer to succeed, you must ensure the following:"
+        - selector:
+            text: "Your AWS account has an Enterprise Support Plan attached."
+        - selector:
+            xpath: //*[contains(text(),"Your AWS account has the necessary limits to support the desired cluster size.")]
+        - selector:
+            xpath: //a[@href='https://www.openshift.com/dedicated/byoc' and text()=' See resource requirements.']
+        - selector:
+            xpath: //li[contains(text(),'osdCcsAdmin')]
+        - selector:
+            xpath: //li[contains(text(),'An Organization Service Control Policy (SCP) is set up according to the')]
+        - selector:
+            xpath: //a[@href='https://www.openshift.com/dedicated/byoc' and text()='documentation.']
+        - selector:
+            xpath: //div[text()[1]='Refer to the']
+        #- selector:
+        #    xpath: //div[text()[2]='for more detail around the requirements for Customer Cloud Subscription.']
+close_customer_cloud_subscription_prompt_message:
+    action: customer_cloud_subscription_prompt_message_loaded
+    element:
+        selector:
+            xpath: //button[text()='Close']
+        op: click
+

@@ -124,3 +124,31 @@ check_actions_items_of_ready_ocp_cluster_on_detail:
   action: check_delete_cluster_button_in_dropdown_missing
   action: check_scale_cluster_button_in_dropdown_missing
   action: check_launch_console_button_in_dropdown_missing
+check_disconnected_cluster_overview_information:
+    elements:
+        - selector:
+            xpath: //div[@class='pf-l-grid']/div[1]//dt[6][text()='Operating system']/../dd[6][text()='<operating_system>']
+        - selector:
+            xpath: //div[@class='pf-l-grid']/div[1]//dt[2][text()='Type']/../dd[2][text()='OCP']
+        - selector:
+            xpath: //div[@class='pf-l-grid']/div[1]//dt[3][text()='Location']/../dd[3][text()='N/A']
+        - selector:
+            xpath: //div[@class='pf-l-grid']/div[1]//dt[4][text()='Provider']/../dd[4][text()='N/A']
+        - selector:
+            xpath: //div[@class='pf-l-grid']/div[2]//dt[1][text()='Status']/../dd[1][text()='disconnected']
+        - selector:
+            xpath: //div[@class='pf-l-grid']/div[2]//dt[5][text()='Support Level']/../dd[5][text()='Self-Support']
+    action:
+        if_param: vcpu_type
+        ref: total_vCPU_loaded
+    action:
+        if_param: sockets_type
+        ref: total_sockets_loaded
+total_vCPU_loaded:
+    element:
+        selector:
+            xpath: //div[@class='pf-l-grid']/div[2]//dt[2][text()='Total vCPU']/../dd[2][contains(.,'vCPU')]
+total_sockets_loaded:
+    element:
+        selector:
+            xpath: //div[@class='pf-l-grid']/div[2]//dt[3][text()='Total Sockets']

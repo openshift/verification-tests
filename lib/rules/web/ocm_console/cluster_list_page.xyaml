@@ -27,6 +27,14 @@ clear_filter_name_or_id:
         selector:
             css: input.pf-c-form-control.cluster-list-filter
         op: clear
+check_filter_cluster_existed:
+    element:
+        selector:
+            xpath: //tbody/tr[<coloumn_number>]/td/a[contains(text(),'<filter_keyword>')]
+check_filter_no_result_message:
+    element:
+        selector:
+            text: No Results Match the Filter Criteria.
 expand_filter_dropdown:
     element:
         selector:
@@ -81,13 +89,13 @@ click_actions_behind_create_button:
 actions_behind_create_button_menu_loaded:
     elements:
         - selector:
-            xpath: //a[@href='/beta/openshift/register']
+            xpath: //a[contains(@href,'/openshift/register')]
         - selector:
-            xpath: //a[@href='/beta/openshift/archived' and text()='Show archived clusters']
+            xpath: //a[contains(@href, '/openshift/archived') and text()='Show archived clusters']
 click_register_cluster_button:
     element:
         selector:
-            xpath: //a[@href='/beta/openshift/register']
+            xpath: //a[contains(@href,'/openshift/register')]
         op: click
 click_show_archived_cluster_button:
     element:
