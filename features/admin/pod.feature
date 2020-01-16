@@ -405,3 +405,43 @@ Feature: pod related features
     And the output should contain:
       | system_u:system_r:svirt_lxc_net_t:s0:c24,c965 |
 
+  # @author minmli@redhat.com
+  # @case_id OCP-26948
+  @admin
+  @destructive
+  Scenario: Should show image digests in node status - 4.x
+    Given I store the schedulable nodes in the :nodes clipboard
+    Given I use the "<%= cb.nodes[0].name %>" node
+    Given I run commands on the host:
+      | crictl pull docker.io/openshift/mysql-56-centos7@sha256:3fd34fda8d10cae95a1e0756d90a8f7d5bc7b90d25ab65549a72ad2206cae92f                                               |
+      | crictl pull docker.io/openshift/hello-openshift@sha256:05bbc54e84a393be64dc3acde9f7d350b52e9e8bc21e5798c6b27c702aa4a155                                                |
+      | crictl pull openshift/ruby-20-centos7:latest                                                                                                                           |
+      | crictl pull openshift/python-33-centos7:latest                                                                                                                         |
+      | crictl images --digests \| grep -E "docker.io/openshift/mysql-56-centos7\|docker.io/openshift/hello-openshift\|openshift/ruby-20-centos7\|openshift/python-33-centos7" |
+    Then the step should succeed
+    And I wait up to 120 seconds for the steps to pass:
+    """
+    When I run the :get admin command with:
+      | resource      | no                      |
+      | resource_name | <%= cb.nodes[0].name %> |
+      | o             | yaml                    |
+    Then the output should contain:
+      | docker.io/openshift/mysql-56-centos7@sha256:3fd34fda8d10cae95a1e0756d90a8f7d5bc7b90d25ab65549a72ad2206cae92f |
+      | docker.io/openshift/hello-openshift@sha256:05bbc54e84a393be64dc3acde9f7d350b52e9e8bc21e5798c6b27c702aa4a155  |
+      | openshift/ruby-20-centos7:latest                                                                             |
+      | openshift/python-33-centos7:latest                                                                           |
+    """
+    Given I use the "<%= cb.nodes[0].name %>" node
+    Given I run commands on the host:
+      | crictl rmi openshift/ruby-20-centos7:latest              |
+    Then the step should succeed
+    And I wait up to 120 seconds for the steps to pass:
+    """
+    When I run the :get admin command with:
+      | resource      | no                      |
+      | resource_name | <%= cb.nodes[0].name %> |
+      | o             | yaml                    |
+    Then the output should not contain:
+      | openshift/ruby-20-centos7:latest |
+    """
+
