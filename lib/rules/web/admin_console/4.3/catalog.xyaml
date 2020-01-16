@@ -135,7 +135,7 @@ click_image_tag_dropdown:
 browse_to_install_plan:
   elements:
   - selector:
-      xpath: //.[contains(@href, 'subscription')]
+      xpath: //ul[contains(@class,'nav__menu')]//a[contains(text(), 'Subscription')]
     timeout: 60
     op: click
   - selector:

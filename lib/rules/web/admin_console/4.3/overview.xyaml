@@ -73,10 +73,10 @@ check_error_icon_for_overview_item:
       css: .project-overview__detail--alert
     timeout: 20
 check_popover_info:
-  action: wait_until_no_loading
+  action: wait_resource_summary_loaded
   action: click_open_popover
   action:
-    if_param: 
+    if_param:
       popover_item: Run Policy
     ref: check_run_policy_popover_info
   action:
@@ -99,10 +99,15 @@ check_popover_info:
     if_param: 
       popover_item: Service
     ref: check_service_popover_info
+wait_resource_summary_loaded:
+  elements:
+  - selector:
+      xpath: //*[contains(@class,'co-m-pane__details') and @data-test-id='resource-summary']
+    timeout: 20
 click_open_popover:
   elements:
   - selector:
-      xpath: //button[contains(@class, 'details-popover-button') and contains(text(), '<popover_item>')]
+      xpath: //button[contains(@class, 'details-popover-button') and contains(text(), '<popover_item>') and not(@disabled)]
     op: click
 check_popover_title:
   elements:
@@ -128,13 +133,13 @@ check_namespace_popover_info:
     text: docs/user-guide/namespaces
     link_url: docs/user-guide/namespaces
   action: check_popover_title
-  action: click_link_with_text
+  action: check_link_and_text
 check_label_popover_info:
   params:
     text: docs/user-guide/labels
     link_url: docs/user-guide/labels
   action: check_popover_title
-  action: click_link_with_text
+  action: check_link_and_text
 check_service_popover_info:
   params:
     content: name of the service/target that is being referred
