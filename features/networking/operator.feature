@@ -199,7 +199,7 @@ Feature: Operator related networking scenarios
   And 2 pods become ready with labels:
     | name=test-pods |
     #And evaluation of `pod(0).node_name` is stored in the :node_name clipboard
-  And I store "<%= pod(0).node_name %>" node's corresponding sdn or ovnkube pod name in the :sdn_pod clipboard
+  And I store "<%= pod(0).node_name %>" node's corresponding default networkType pod name in the :sdn_pod clipboard
   
   Given I use the "test-service" service
   And evaluation of `service.ip(user: user)` is stored in the :service_ip clipboard

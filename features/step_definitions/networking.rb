@@ -888,7 +888,7 @@ Given /^the Internal IP of node "([^"]*)" is stored in the#{OPT_SYM} clipboard$/
   logger.info "The Internal IP of node is stored in the #{cb_ipaddr} clipboard."
 end
 
-Given /^I store "([^"]*)" node's corresponding sdn or ovnkube pod name in the#{OPT_SYM} clipboard$/ do |node_name,cb_pod_name|
+Given /^I store "([^"]*)" node's corresponding default networkType pod name in the#{OPT_SYM} clipboard$/ do |node_name,cb_pod_name|
   ensure_admin_tagged
   node_name ||= node.name
   _admin = admin
