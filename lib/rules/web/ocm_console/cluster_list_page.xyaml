@@ -83,9 +83,9 @@ check_clusters_list_info:
         - selector: 
             xpath: //td[@data-label='Name']/a[text()='<cluster_name>' and contains(@href, '/openshift/details/')]
         - selector: 
-            xpath: //a[text()='<cluster_name>']/../..//span[text()='<cluster_status>']
+            xpath: //a[text()='<cluster_name>']/../../td[@data-label='Status']/span[text()='<cluster_status>']
         - selector:
-            xpath: //a[text()='<cluster_name>']/../..//span[text()='<cluster_type>']
+            xpath: //a[text()='<cluster_name>']/../../td[@data-label='Type']/span[text()='<cluster_type>']
 filter_name_or_id:
     action: clear_filter_name_or_id
     element:
@@ -368,6 +368,12 @@ check_actions_items_of_ready_ocp_cluster_on_list:
   action: check_delete_cluster_button_in_dropdown_missing
   action: check_scale_cluster_button_in_dropdown_missing
   action: check_launch_console_button_in_dropdown
+go_to_users_tab:
+  action:
+    if_param: cluster_name
+    ref: go_to_cluster_detail_page
+  action: click_users_tab
+  action: click_add_user_button
 click_logout_button:
   element:
     selector:
