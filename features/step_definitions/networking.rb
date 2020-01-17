@@ -892,7 +892,9 @@ Given /^I store "([^"]*)" node's corresponding default networkType pod name in t
   ensure_admin_tagged
   node_name ||= node.name
   _admin = admin
+  cb_pod_name ||= "pod_name"
   @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
+  raise "Unable to find corresponding networkType pod name" unless @result[:success]
   if @result[:response] == "OpenShiftSDN"
      app="app=sdn"
      project_name="openshift-sdn"
@@ -900,7 +902,6 @@ Given /^I store "([^"]*)" node's corresponding default networkType pod name in t
      app="app=ovnkube-node"
      project_name="openshift-ovn-kubernetes"
   end   
-  raise "Unable to find corresponding networkType pod name" unless @result[:success]
   cb[cb_pod_name] = BushSlicer::Pod.get_labeled(app, project: project(project_name, switch: false), user: admin) { |pod, hash|
     pod.node_name == node_name
   }.first.name
