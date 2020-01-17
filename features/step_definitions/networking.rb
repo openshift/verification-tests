@@ -892,17 +892,17 @@ Given /^I store "([^"]*)" node's corresponding default networkType pod name in t
   ensure_admin_tagged
   node_name ||= node.name
   _admin = admin
-  @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}") 
+  @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
   if @result[:response] == "OpenShiftSDN"
-     cb[cb_pod_name] = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
-       pod.node_name == node_name
-     }.first.name
-     logger.info "node's corresponding sdn pod name is stored in the #{cb_pod_name} clipboard."
+     app="app=sdn"
+     project_name="openshift-sdn"
   else
-     cb[cb_pod_name] = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
-       pod.node_name == node_name
-     }.first.name
-     logger.info "node's corresponding ovnkube pod name is stored in the #{cb_pod_name} clipboard."
-   end
-  raise "Unable to find corresponding sdn or ovnkube pod name" unless @result[:success]
+     app="app=ovnkube-node"
+     project_name="openshift-ovn-kubernetes"
+  end   
+  raise "Unable to find corresponding networkType pod name" unless @result[:success]
+  cb[cb_pod_name] = BushSlicer::Pod.get_labeled(app, project: project(project_name, switch: false), user: admin) { |pod, hash|
+    pod.node_name == node_name
+  }.first.name
+  logger.info "node's corresponding networkType pod name is stored in the #{cb_pod_name} clipboard."
 end
