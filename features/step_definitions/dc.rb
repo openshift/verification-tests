@@ -150,21 +150,11 @@ Given /^(I|admin) redeploys? #{QUOTED} dc( after scenario)?$/ do |who, dc_name, 
 end
 
 Given /^master CA is added to the#{OPT_QUOTED} dc$/ do |name|
-  ensure_admin_tagged
-  
-  org_user = @user
-  org_proj_name = project.name
-  @user = admin
-  @result = secret("router-certs-default", project("openshift-ingress", switch: false)).value_of("tls.crt")
-  File.open("/tmp/openshift.crt", 'wb') { |f| 
-    f.write(@result)
-  }
 
-  @user = org_user
-  project(org_proj_name)
+  step %Q/certification for default image registry is stored to the :reg_crt_name clipboard/
   step %Q/I run the :create_configmap client command with:/, table(%{
-    | name      | ca                 |
-    | from_file | /tmp/openshift.crt |
+    | name      | ca                     |
+    | from_file | <%= cb.reg_crt_name %> |
   })
   step %Q/the step should succeed/
 
