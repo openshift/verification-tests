@@ -165,6 +165,28 @@ module BushSlicer
           end
         end
       end
+      
+      command :"get-run" do |c|
+        c.syntax = "#{$0} get-run [options]"
+        c.description = "retrieve a test run Polarion\n\t" \
+          "e.g. tools/polarshift.rb get-run my_run_id"
+        c.option('-o', "--output FILE", "Write query result to file in JSON format")
+        c.action do |args, options|
+          setup_global_opts(options)
+
+          if args.size != 1
+            raise "command expects exactly one parameter being the test run id"
+          end
+
+          test_run_id = args.first
+          query_result = polarshift.get_run_smart(project, test_run_id)
+          result = query_result
+          pp(result)
+          if options.output
+            File.write(options.output, JSON.pretty_generate(result))
+          end
+        end
+      end
 
       command :"query-cases" do |c|
         c.syntax = "#{$0} query-cases [options]"
