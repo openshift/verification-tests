@@ -1,20 +1,91 @@
+check_cluster_list_page_without_cluster:
+    elements:
+        - selector:
+            xpath: //h4[@class='pf-c-title pf-m-2xl' and text()='No OpenShift clusters to display']
+        - selector:
+            xpath: //div[@class='pf-c-empty-state__body' and contains(., 'create your first cluster')]
+        - selector:
+            xpath: //a[contains(@href, '/openshift/create')]/button[@id='cluster-list-emptystate-primary-action' and text()='Create Cluster']
+        - selector:
+            xpath: //a[contains(@href, '/openshift/register')]/button[@class='pf-c-button pf-m-link' and text()='Register disconnected cluster']
+        - selector:
+            xpath: //a[contains(@href, '/openshift/archived')]/button[@class='pf-c-button pf-m-link' and text()='View archived clusters']
+
 cluster_list_page_loaded:
     elements:
-    - selector:
-        css: input.pf-c-form-control.cluster-list-filter
-    - selector:
-        xpath: //button[text()='Create Cluster']
-    - selector:
-        xpath: //button[text()='Create Cluster']/../../../div[@id='cluster-list-toolbar']//button[@aria-label='Actions']
-        timeout: 20
-    - selector:
-        xpath: //button[@id='pagination-options-menu-toggle']
-    - selector:
-        css: nav.pf-c-pagination__nav
-    - selector:
-        xpath: //button[@aria-label='Refresh']
-    - selector:
-        css: table.pf-c-table.pf-m-grid-md
+        - selector:
+            xpath: //h1[@class='pf-c-title pf-m-2xl' and @widget-type='InsightsPageHeaderTitle' and text()='Clusters']
+        - selector:
+            xpath: //button[@class='pf-c-button pf-m-primary toolbar-item' and text()='Create Cluster']
+        - selector:
+            xpath: //button[@class='pf-c-button pf-m-plain' and text()='Name']
+check_cluster_list_page:
+    elements:
+        - selector:
+            css: input.pf-c-form-control.cluster-list-filter
+        - selector:
+            xpath: //div[@class='pf-c-dropdown toolbar-item']/button/span[text()='Filter']
+        - selector:
+            xpath: //a[contains(@href, '/openshift/create')]/button[@class='pf-c-button pf-m-primary toolbar-item' and text()='Create Cluster']
+        - selector:
+            xpath: //button[@class='pf-c-button pf-m-primary toolbar-item' and text()='Create Cluster']/../..//button[@aria-label='Actions']
+          op: click
+        - selector:
+            xpath: //a[text()='Register cluster' and contains(@href, '/openshift/register')]
+        - selector:
+            xpath: //a[text()='Show archived clusters' and contains(@href, '/openshift/archived')]
+        - selector:
+            xpath: //button[@class='pf-c-button pf-m-primary toolbar-item' and text()='Create Cluster']/../..//button[@aria-label='Actions']
+          op: click
+    elements:
+        - selector:
+            xpath: //div[@id='cluster-list-toolbar']//span[contains(., 'of')]
+        - selector:
+            xpath: //div[@id='cluster-list-toolbar']//button[@id='pagination-options-menu-toggle']
+          op: click
+        - selector:
+            xpath: //ul[@aria-labelledby='pagination-options-menu-toggle']/li/button[@data-action='per-page-10' and text()='10']
+        - selector:
+            xpath: //ul[@aria-labelledby='pagination-options-menu-toggle']/li/button[@data-action='per-page-20' and text()='20']
+        - selector:
+            xpath: //ul[@aria-labelledby='pagination-options-menu-toggle']/li/button[@data-action='per-page-50' and text()='50']
+        - selector:
+            xpath: //ul[@aria-labelledby='pagination-options-menu-toggle']/li/button[@data-action='per-page-100' and text()='100']
+        - selector:
+            xpath: //div[@id='cluster-list-toolbar']//button[@id='pagination-options-menu-toggle']
+          op: click
+        - selector:
+            css: nav.pf-c-pagination__nav
+        - selector:
+            xpath: //button[@aria-label='Refresh']
+    elements:
+        - selector:
+            xpath: //button[@class='pf-c-button pf-m-plain' and text()='Name']
+        - selector:
+            xpath: //span[@class='pf-c-table__sort-indicator']
+        - selector:
+            xpath: //th[@data-label='Status' and text()='Status']
+        - selector:
+            xpath: //th[@data-label='Type' and text()='Type']
+        - selector:
+            xpath: //th[@data-label='Subscription Status' and text()='Subscription Status']
+        - selector:
+            xpath: //th[@data-label='Version' and text()='Version']
+        - selector:
+            xpath: //th[@data-label='Provider (Location)' and text()='Provider (Location)']
+    elements:
+        - selector:
+            xpath: //div[@class='pf-c-pagination pf-m-footer']//span[contains(., 'of')]
+        - selector:
+            xpath: //div[@class='pf-c-pagination pf-m-footer']//button[@id='pagination-options-menu-toggle']
+check_clusters_list_info:
+    elements:
+        - selector: 
+            xpath: //td[@data-label='Name']/a[text()='<cluster_name>' and contains(@href, '/openshift/details/')]
+        - selector: 
+            xpath: //a[text()='<cluster_name>']/../../td[@data-label='Status']/span[text()='<cluster_status>']
+        - selector:
+            xpath: //a[text()='<cluster_name>']/../../td[@data-label='Type']/span[text()='<cluster_type>']
 filter_name_or_id:
     action: clear_filter_name_or_id
     element:
@@ -79,7 +150,7 @@ select_filter:
 click_create_cluster_button:
     element:
         selector:
-            xpath: //button[text()='Create Cluster']
+            xpath: //a[contains(@href, '/openshift/create')]/button[text()='Create Cluster']
         op: click
 click_actions_behind_create_button:
     element:
@@ -306,3 +377,23 @@ check_actions_items_of_ready_ocp_cluster_on_list:
   action: check_delete_cluster_button_in_dropdown_missing
   action: check_scale_cluster_button_in_dropdown_missing
   action: check_launch_console_button_in_dropdown
+go_to_users_tab:
+  action:
+    if_param: cluster_name
+    ref: go_to_cluster_detail_page
+  action: click_users_tab
+  action: click_add_user_button
+click_logout_button:
+  element:
+    selector:
+      xpath: //div[@class='pf-c-dropdown']/button/span[contains(., 'UItesting')]/../../button
+    op: click
+  element:
+    selector:
+      xpath: //button[@class='pf-c-dropdown__menu-item' and text()='Logout']
+    op: click
+    timeout: 20
+logout_page_loaded:
+  element:
+    selector:
+      xpath: //button[contains(., 'Log in to your Red Hat account')]

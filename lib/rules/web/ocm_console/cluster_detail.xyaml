@@ -25,7 +25,7 @@ cluster_name_loaded:
 expand_actions_on_cluster_detail_page:
     element:
         selector:
-            xpath: //button[@class='pf-c-dropdown__toggle']
+            xpath: //span[@id='cl-details-btns']//button[@class='pf-c-dropdown__toggle']
         op: click
 
 close_actions_on_cluster_detail_page:
