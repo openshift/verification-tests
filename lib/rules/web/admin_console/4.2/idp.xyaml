@@ -1,0 +1,89 @@
+add_basicauth_idp:
+  action: click_add_dropdown_button
+  params:
+    dropdown_item: basicauth
+  action: click_one_item
+  action: set_idp_name
+  action: set_remote_url
+  action:
+    if_param: ca_path
+    ref: set_idp_ca_path
+  action:
+    if_param: crt_path
+    ref: set_idp_crt_path
+  action:
+    if_param: key_path
+    ref: set_idp_key_path
+  action: submit_changes
+set_remote_url:
+  params:
+    input_field_id: url
+    input_value: <remote_url>
+  action: set_input_value
+set_idp_ca_path:
+  params:
+    file_path: <ca_path>
+    field_name: idp-file
+  action: upload_file_for_one_field
+set_idp_crt_path:
+  params:
+    file_path: <crt_path>
+    field_name: cert-file
+  action: upload_file_for_one_field
+set_idp_key_path:
+  params:
+    file_path: <key_path>
+    field_name: key-file
+  action: upload_file_for_one_field
+check_idp_in_table_list:
+  elements:
+  - selector:
+      xpath: //td[text()='<idp_name>']/following-sibling::td[text()='<idp_type>']
+    timeout: 20
+add_github_idp:
+  action: click_add_dropdown_button
+  params:
+    dropdown_item: github
+  action: click_one_item
+  action: set_idp_name
+  action: set_client_id
+  action: set_client_secret
+  action:
+    if_param: org_name
+    ref: set_org_name
+  action:
+    if_param: team_name
+    ref: set_team_name
+  action: submit_changes
+set_client_id:
+  params:
+    input_field_id: client-id
+    input_value: <client_id>
+  action: set_input_value
+set_client_secret:
+  params:
+    input_field_id: client-secret
+    input_value: <client_secret>
+  action: set_input_value
+set_org_name:
+  params:
+    label_text: Organization
+    input_value: <org_name>
+  action: set_label_input
+set_team_name:
+  params:
+    label_text: Team
+    input_value: <team_name>
+  action: set_label_input
+check_error_info_for_no_org_and_team:
+  params:
+    content: one of organizations or teams must be specified unless hostname is set or lookup is used
+  action: check_page_contains
+check_error_info_for_both_org_and_team:
+  params:
+    content: Specify either organizations or teams, but not both
+  action: check_page_contains
+check_error_info_for_dupicated_idp_name:
+  params:
+    content: must have a unique name
+  action: check_page_contains

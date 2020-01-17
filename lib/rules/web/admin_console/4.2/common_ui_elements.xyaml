@@ -324,6 +324,13 @@ click_one_item:
 choose_dropdown_item:
   action: click_dropdown_field
   action: click_one_item
+upload_file_for_one_field:
+  elements:
+  - selector:
+      xpath: //input[contains(@aria-describedby, '<field_name>')]/following-sibling::span/input
+    visible: false
+    type: filefield
+    op: set <file_path>
 wait_form_loaded:
   element:
     selector:
