@@ -120,6 +120,7 @@ check_default_oc_download_links:
     text: Download oc
     link_url: clients/oc/4.2
   action: check_link_and_text
+check_default_odo_download_links:
   params:
     text: Download odo
     link_url: clients/odo/latest
