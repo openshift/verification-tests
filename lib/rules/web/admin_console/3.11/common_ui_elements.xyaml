@@ -112,7 +112,6 @@ add_label:
       id: tags-input
     type: input
     op: send_keys <press_enter>
-
 ## -------- check resource key and values pairs ------
 check_resource_details:
   action:
