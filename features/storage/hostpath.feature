@@ -3,6 +3,7 @@ Feature: Storage of Hostpath plugin testing
   # @author chaoyang@redhat.com
   # @author lxia@redhat.com
   @admin
+  @destructive
   Scenario Outline: Create hostpath pv with access mode and reclaim policy
     Given I have a project
     When admin creates a PV from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/hostpath/local.yaml" where:
