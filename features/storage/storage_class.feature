@@ -102,12 +102,12 @@ Feature: storageClass related feature
     And I wait for the resource "pv" named "<%= pvc.volume_name %>" to disappear
 
     Examples:
-      | provisioner | type        | zone          | is-default | size  |
-      | gce-pd      | pd-ssd      | us-central1-a | false      | 1Gi   | # @case_id OCP-11359
-      | gce-pd      | pd-standard | us-central1-a | false      | 2Gi   | # @case_id OCP-11640
-      | aws-ebs     | gp2         | us-east-1d    | false      | 1Gi   | # @case_id OCP-10160
-      | aws-ebs     | sc1         | us-east-1d    | false      | 500Gi | # @case_id OCP-10161
-      | aws-ebs     | st1         | us-east-1d    | false      | 500Gi | # @case_id OCP-10424
+      | provisioner | type        | size  |
+      | gce-pd      | pd-ssd      | 1Gi   | # @case_id OCP-11359
+      | gce-pd      | pd-standard | 2Gi   | # @case_id OCP-11640
+      | aws-ebs     | gp2         | 1Gi   | # @case_id OCP-10160
+      | aws-ebs     | sc1         | 500Gi | # @case_id OCP-10161
+      | aws-ebs     | st1         | 500Gi | # @case_id OCP-10424
 
   # @author lxia@redhat.com
   @admin
