@@ -149,7 +149,7 @@ check_default_oc_download_links:
   action: check_link_and_text  
 check_default_odo_download_links:
   params:
-    text: Download odo
+    text: odo
     link_url: clients/odo/latest
   action: check_link_and_text
 check_customized_oc_download_links:
