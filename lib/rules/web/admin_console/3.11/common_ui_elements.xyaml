@@ -46,6 +46,10 @@ check_page_contains:
   element:
     selector:
       xpath: //*[contains(.,'<content>')]
+check_page_match:
+  element:
+    selector:
+      visible_text: !ruby/regexp /<content>/i
 click_resource_action_button:
   elements:
   - selector:
@@ -55,11 +59,6 @@ choose_item_from_list:
   elements:
   - selector:
       xpath: //li//*[text()='<item>']
-    op: click
-submit_changes:
-  element:
-    selector:
-      xpath: //button[@type='submit']
     op: click
 click_one_dropdown_action:
   action: click_resource_action_button
