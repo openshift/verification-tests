@@ -255,6 +255,7 @@
      :keep_liveness: --keep-liveness
      :keep_readiness: --keep-readiness
      :node_name: --node-name=<value>
+     :dry_run: --dry-run
      :o: -o <value>
      :oc_opts_end: --
      :one_container: --one-container=<value>
