@@ -226,6 +226,19 @@ When /^(I execute|admin executes) on the(?: "(.+?)")? pod:$/ do |by, pod_name, r
   @result = pod(pod_name).exec(*args, as: _user)
 end
 
+When /^(I|admin) rsh on the(?: "(.+?)")? pod:$/ do |by, pod_name, raw_args|
+  _user = by.split.first == "admin" ? admin : user
+  if raw_args.respond_to? :raw
+    # this is table, we don't mind dimentions used by user
+    args = raw_args.raw.flatten
+  else
+    # multi-line string; useful when piping is needed
+    args = raw_args.split("\n").map(&:strip)
+  end
+
+  @result = pod(pod_name).rsh(*args, as: _user)
+end
+
 # wrapper around  oc logs, keep executing the command until we have an non-empty response
 # There are few occassion that the 'oc logs' cmd returned empty response
 #   this step should address those situations

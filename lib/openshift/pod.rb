@@ -303,5 +303,12 @@ module BushSlicer
                exec_command_arg: args,
                _stdin: stdin)
     end
+
+    def rsh(command, *args, as:, container:nil, stdin: nil)
+      default_user(as).cli_exec(:rsh, pod: name, n: project.name,
+               c: container,
+               command: command,
+               command_arg: args)
+    end
   end
 end
