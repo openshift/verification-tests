@@ -218,7 +218,7 @@ Feature: pod related features
       | p | {"metadata":{"annotations": {"openshift.io/node-selector": ""}}}|
     Then the step should succeed
     Given I store the schedulable nodes in the :nodes clipboard
-    Given environment has at least 2 schedulable nodes
+    Given environment has at least 2 schedulable worker nodes
     Given label "daemon=yes" is added to the "<%= cb.nodes[0].name %>" node
     Given label "daemon=no" is added to the "<%= cb.nodes[1].name %>" node
     Given cluster role "cluster-admin" is added to the "first" user
