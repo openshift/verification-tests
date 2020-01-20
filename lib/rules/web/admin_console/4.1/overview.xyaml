@@ -57,7 +57,7 @@ check_dc_available_action_menus:
       xpath: //li//a[text()='Edit Deployment Config']
   - selector:
       xpath: //li//a[text()='Delete Deployment Config']
-click_group_by_dropdown_button:
+click_groupby_dropdown_button:
   elements:
   - selector:
       xpath: //span[contains(.,'Group by')]/ancestor::button[contains(@class,'btn-dropdown')]
@@ -87,15 +87,15 @@ check_overview_group_items:
 group_by_application:
   params:
     dropdown_menu_item: Application
-  action: click_group_by_dropdown_button
+  action: click_groupby_dropdown_button
   action: click_groupby_dropdown_menu_item
 group_by_resource:
   params:
     dropdown_menu_item: Resource
-  action: click_group_by_dropdown_button
+  action: click_groupby_dropdown_button
   action: click_groupby_dropdown_menu_item
 group_by_label:
   params:
     dropdown_menu_item: <label>
-  action: click_group_by_dropdown_button
+  action: click_groupby_dropdown_button
   action: click_groupby_dropdown_menu_item

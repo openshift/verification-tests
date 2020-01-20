@@ -72,7 +72,7 @@ check_error_icon_for_overview_item:
     selector:
       css: .project-overview__detail--alert
     timeout: 20
-click_group_by_dropdown_button:
+click_groupby_dropdown_button:
   elements:
   - selector:
       xpath: //span[contains(@class,'pf-c-dropdown__toggle-text') and contains(.,'Group by')]/parent::button[contains(@class,'pf-c-dropdown__toggle')]
@@ -102,15 +102,15 @@ check_overview_group_items:
 group_by_application:
   params:
     dropdown_menu_item: Application
-  action: click_group_by_dropdown_button
+  action: click_groupby_dropdown_button
   action: click_groupby_dropdown_menu_item
 group_by_resource:
   params:
     dropdown_menu_item: Resource
-  action: click_group_by_dropdown_button
+  action: click_groupby_dropdown_button
   action: click_groupby_dropdown_menu_item
 group_by_label:
   params:
     dropdown_menu_item: <label>
-  action: click_group_by_dropdown_button
+  action: click_groupby_dropdown_button
   action: click_groupby_dropdown_menu_item
