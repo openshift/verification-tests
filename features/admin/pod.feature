@@ -185,7 +185,7 @@ Feature: pod related features
   @destructive
   Scenario: Pods will still be created by DaemonSet when nodes are SchedulingDisabled
     Given I have a project
-    Given I store the schedulable nodes in the :nodes clipboard
+    Given I store the schedulable workers in the :nodes clipboard
     Given node schedulable status should be restored after scenario
     When I run the :oadm_cordon_node admin command with:
       | node_name | <%= cb.nodes[0].name %> |
