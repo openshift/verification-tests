@@ -218,13 +218,7 @@ Feature: Service-catalog related scenarios
     And evaluation of `project.name` is stored in the :user_project clipboard
 
     # Deploy ups broker
-    Given I register clean-up steps:
-    """
-    I run the :delete admin command with:
-      | object_type       | clusterservicebroker |
-      | object_name_or_id | ups-broker           |
-    the step should succeed
-    """
+    Given admin ensures "ups-instance" serviceinstance is deleted
     When I switch to cluster admin pseudo user
     And I use the "<%= cb.ups_broker_project %>" project
     When I process and create:
@@ -265,13 +259,7 @@ Feature: Service-catalog related scenarios
       | resource   | serviceinstance/ups-instance |
       | show_label | true                         |
     Then the output should contain "app=test-instance"
-
-    #Delete serviceinstance
-    When I run the :delete client command with:
-      | object_type       | serviceinstance |
-      | object_name_or_id | ups-instance    |
-    Then the step should succeed
-    And I ensure "ups-instance" serviceinstance is deleted
+    Given I ensure "ups-instance" serviceinstance is deleted
 
   # @author chezhang@redhat.com
   # @case_id OCP-15605
@@ -284,13 +272,7 @@ Feature: Service-catalog related scenarios
     And evaluation of `project.name` is stored in the :user_project clipboard
 
     # Deploy ups broker
-    Given I register clean-up steps:
-    """
-    I run the :delete admin command with:
-      | object_type       | clusterservicebroker |
-      | object_name_or_id | ups-broker           |
-    the step should succeed
-    """
+    And admin ensures "ups-broker" clusterservicebroker is deleted
     When I switch to cluster admin pseudo user
     And I use the "<%= cb.ups_broker_project %>" project
     When I process and create:
@@ -346,10 +328,6 @@ Feature: Service-catalog related scenarios
     Then the output should contain "app=test-binding"
 
     # Delete servicebinding
-    When I run the :delete client command with:
-      | object_type       | servicebinding |
-      | object_name_or_id | ups-binding    |
-    Then the step should succeed
     Given I ensure "ups-binding" servicebinding is deleted
     And I wait for the resource "secret" named "my-secret" to disappear within 60 seconds  
 
