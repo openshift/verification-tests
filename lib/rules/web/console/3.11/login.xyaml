@@ -13,3 +13,8 @@ request_token_with_password:
     - selector:
         text: Your API token is
       timeout: 30
+submit_changes:
+  element:
+    selector:
+      xpath: //button[@type='submit']
+    op: click

@@ -131,9 +131,3 @@ allow_all_sso_permission:
     selector:
       xpath: //input[@value='Allow selected permissions']
     op: click
-submit_changes:
-  element:
-    selector:
-      xpath: //button[@type='submit']
-    op: click
-
