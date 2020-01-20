@@ -26,6 +26,7 @@ module BushSlicer
   autoload :IAAS, "iaas/iaas"
   autoload :ResultHash, "result_hash"
   autoload :Environment, "environment"
+  autoload :OCMEnvironment, "environment"
   autoload :StaticEnvironment, "environment"
 
   autoload :RESOURCES, "resources"
