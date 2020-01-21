@@ -23,18 +23,18 @@ Feature: Alerting for machine-api
     Then the step should succeed
     """
     When I run the :scale admin command with:
-      | resource | deployment            |
-      | name     | <operator>            |
-      | replicas | 0                     |
-      | n        | openshift-machine-api |
+      | resource | deployment  |
+      | name     | <operator>  |
+      | replicas | 0           |
+      | n        | <namespace> |
     Then the step should succeed
     And I register clean-up steps:
     """
     When I run the :scale admin command with:
-      | resource | deployment            |
-      | name     | <operator>            |
-      | replicas | 1                     |
-      | n        | openshift-machine-api |
+      | resource | deployment  |
+      | name     | <operator>  |
+      | replicas | 1           |
+      | n        | <namespace> |
     Then the step should succeed
     """
 
@@ -58,7 +58,7 @@ Feature: Alerting for machine-api
     """
 
     Examples:
-      | operator                    | alertname                     |
-      | cluster-autoscaler-operator | ClusterAutoscalerOperatorDown | # @case_id OCP-26250
-      | machine-api-operator        | MachineAPIOperatorDown        | # @case_id OCP-26248
-
+      | operator                    | namespace                          | alertname                     |
+      | cluster-autoscaler-operator | openshift-machine-api              | ClusterAutoscalerOperatorDown | # @case_id OCP-26250
+      | machine-api-operator        | openshift-machine-api              | MachineAPIOperatorDown        | # @case_id OCP-26248
+      | machine-approver            | openshift-cluster-machine-approver | ClusterMachineApproverDown    | # @case_id OCP-26110

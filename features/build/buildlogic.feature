@@ -423,3 +423,52 @@ Feature: buildlogic.feature
       | Builds History Limit |
       | Successful:	5        |
       | Failed:		5          |
+
+  # @author xiuwang@redhat.com
+  # @case_id OCP-19133
+  Scenario: Pipeline build can be pruned automatically	
+    Given I have a project
+    And I have a jenkins v2 application
+    When I run the :new_app client command with:
+      | file | https://raw.githubusercontent.com/openshift/origin/master/examples/jenkins/pipeline/samplepipeline.yaml |
+    Then the step should succeed
+    When I run the :describe client command with:
+      | resource | buildconfig     |
+      | name     | sample-pipeline |
+    Then the step should succeed
+    Then the output should contain:
+      | Builds History Limit |
+      | Successful:	5        |
+      | Failed:		5          |
+    Given I run the :patch client command with:
+      | resource      | bc                                                                         |
+      | resource_name | sample-pipeline                                                            |
+      | p             | {"spec":{"failedBuildsHistoryLimit": 1,"successfulBuildsHistoryLimit": 1}} |
+    Then the step should succeed
+    Given I run the steps 2 times:
+    """
+    When I run the :start_build client command with:
+      | buildconfig | sample-pipeline |
+    Then the step should succeed
+    """
+    When I run the :cancel_build client command with:
+      | build_name | sample-pipeline-2 |
+    Then the step should succeed
+    Given the "sample-pipeline-1" build completed
+    Given I run the steps 2 times:
+    """
+    When I run the :start_build client command with:
+      | buildconfig | sample-pipeline |
+    Then the step should succeed
+    """
+    When I run the :cancel_build client command with:
+      | build_name | sample-pipeline-4 |
+    Then the step should succeed
+    Given the "sample-pipeline-3" build completed
+    And I wait up to 120 seconds for the steps to pass:
+    """
+    Given I get project builds
+    Then the output should match 1 times:
+      | sample-pipeline.*Cancelled |
+      | sample-pipeline.*Complete  |
+    """

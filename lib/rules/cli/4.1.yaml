@@ -293,19 +293,6 @@
   :options:
     :filename: --filename=<value>
     :output: --output=<value>
-# The cmd :env can be removed after 3.1 EOL (nov 2018).
-# We have both :env and :set_env since 3.2.
-# Removed :env in 3.11.
-:env:
-  :cmd: oc set env
-  :options:
-    :all: --all=<value>
-    :e: -e <value>
-    :env_name: <value>
-    :keyval: <value>
-    :list: --list=<value>
-    :o: -o <value>
-    :resource: <value>
 :exec:
   # reorder global_options and options to allow specifying exec command
   :cmd: oc exec <pod> <global_options> <options>
@@ -403,6 +390,17 @@
     :l: -l <value>
     :resource-names-file: --resource-names-file=<value>
     :svc_name: <value>
+:image_mirror:
+  :cmd: oc image mirror <source_image> <dest_image>
+  :options:
+    :a: --registry-config=<value>
+    :dry_run: --dry-run=<value>
+    :f: --filename=<value>
+    :force: --force=<value>
+    :from_dir: --from-dir=<value>
+    :insecure: --insecure=<value>
+    :s3_source_bucket: --s3-source-bucket=<value>
+    :skip_verification: --skip-verification=<value>
 :import:
   :cmd: oc import <command>
   :options:
@@ -862,6 +860,7 @@
     :post: --post
     :pre: --pre
     :remove: --remove
+# We have :set_env since 3.2.
 :set_env:
   :cmd: oc set env
   :options:

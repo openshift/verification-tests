@@ -92,5 +92,9 @@ Feature: cluster-logging-operator related test
     """
     And the expression should be true> elasticsearch('elasticsearch').nodes[0]['nodeCount'] + elasticsearch('elasticsearch').nodes[1]['nodeCount'] == 4
     """
+    Given I wait for the steps to pass:
+    """
     Given evaluation of `elasticsearch('elasticsearch').nodes[1]['genUUID']` is stored in the :gen_uuid_2 clipboard
+    And the expression should be true> cb.gen_uuid_2 != nil
+    """
     And I wait for the "elasticsearch-cd-<%= cb.gen_uuid_2 %>-1" deployment to appear

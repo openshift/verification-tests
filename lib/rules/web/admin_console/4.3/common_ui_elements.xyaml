@@ -74,6 +74,7 @@ click_tab:
   - selector:
       xpath: //ul[contains(@class,'nav__menu')]//a[contains(text(), '<tab_name>')]
     op: click
+    timeout: 20
 click_radio_input:
   element:
     selector:
@@ -103,7 +104,20 @@ check_content_in_yaml_editor:
   element:
     selector:
       xpath: //*[contains(@class,'react-monaco-editor-container')]//*[contains(text(),'<yaml_content>')]
-
+check_sidebar_item:
+  element:
+    selector:
+      xpath: //li[@class='co-resource-sidebar-item']//*[contains(text(),'<sidebar_item>')]
+click_on_resource_item:
+  element:
+    selector:
+      xpath: //a[@class='co-resource-item__resource-name' and @data-test-id='<resource_name>']
+    op: click
+wait_dropdown_loaded:
+  element:
+    selector:
+      xpath: //*[contains(@class, 'dropdown-menu--text-wrap')]
+    timeout: 20
 # click and check the first item from resource list such as projects, pods, etc.
 click_first_item_from_resource_list_and_check_breadcrumb:
   action: wait_until_no_loading
@@ -299,6 +313,16 @@ check_secondary_menu_missing:
   element:
     selector: *secondary_menu
     missing: true
+click_dropdown:
+  element:
+    selector: &dropdown_name
+      xpath: //div[contains(@data-test-id, '<dropdown_name>')]//button
+    op: click
+check_dropdown_missing:
+  element:
+    selector:
+      <<: *dropdown_name
+    missing: true
 click_dropdown_field:
   elements:
   - selector:
@@ -327,6 +351,13 @@ click_one_item:
 choose_dropdown_item:
   action: click_dropdown_field
   action: click_one_item
+upload_file_for_one_field:
+  elements:
+  - selector:
+      xpath: //input[contains(@aria-describedby, '<field_name>')]/following-sibling::span/input
+    visible: false
+    type: filefield
+    op: set <file_path>
 wait_form_loaded:
   element:
     selector:
@@ -342,7 +373,6 @@ wait_until_no_loading:
     selector:
       css: .cos-status-box--loading
     missing: true
-<<<<<<< 0279d16f72b19bc0f9ee5fab004e431f8400987e
     timeout: 30
 wait_table_loaded:
   element:
@@ -353,9 +383,8 @@ check_item_in_list:
   element:
     selector:
       xpath: //ul[contains(.,'<item>')]
-=======
     timeout: 20
->>>>>>> Automate OCP-24106
+
 ## -------- check resource key and values pairs ------
 check_resource_details:
   action:
@@ -460,10 +489,25 @@ check_resource_details:
   action:
     if_param: current_healthy
     ref: check_current_healthy
+  action:
+    if_param: kind
+    ref: check_resource_kind
+  action:
+    if_param: api_group
+    ref: check_api_group
+  action:
+    if_param: api_version
+    ref: check_api_version
+  action:
+    if_param: namespaced
+    ref: check_namespaced
+  action:
+    if_param: short_names
+    ref: check_short_names
 check_resource_details_key_and_value:
   element: &key_value
     selector:
-      xpath: //dt[contains(text(),'<key>')]/following-sibling::dd[1][contains(.,'<value>')] | //button[(text()='<key>')]/parent::dt/following-sibling::dd[1][contains(.,'<value>')]
+      xpath: //dt[contains(.,'<key>')]/following-sibling::dd[1][contains(.,'<value>')] | //button[(text()='<key>')]/parent::dt/following-sibling::dd[1][contains(.,'<value>')]
 check_key_and_resource_link:
   element:
     selector:
@@ -659,4 +703,29 @@ check_max_replicas:
   params:
     key: Max Replicas
     value: <replicas_value>
+  action: check_resource_details_key_and_value
+check_resource_kind:
+  params:
+    key: Kind
+    value: <kind>
+  action: check_resource_details_key_and_value
+check_api_group:
+  params:
+    key: API Group
+    value: <api_group>
+  action: check_resource_details_key_and_value
+check_api_version:
+  params:
+    key: API Version
+    value: <api_version>
+  action: check_resource_details_key_and_value
+check_namespaced:
+  params:
+    key: Namespaced
+    value: <namespaced>
+  action: check_resource_details_key_and_value
+check_short_names:
+  params:
+    key: Short Names
+    value: <short_names>
   action: check_resource_details_key_and_value

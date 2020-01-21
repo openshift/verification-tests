@@ -85,6 +85,12 @@ environments:
     api_port: 6443
     version: 4.1.0.0 # version not supported on cluster (yet)
   ose: *ocp4
+  ocm_stage:
+    web_console_url: https://cloud.redhat.com/beta
+    type: OCMEnvironment
+  ocm_prod:
+    web_console_url: https://cloud.redhat.com
+    type: OCMEnvironment
 
 optional_classes:
   tcms_tc_manager:
