@@ -1031,7 +1031,6 @@ Feature: Multus-CNI related scenarios
   # @author weliang@redhat.com
   # @case_id OCP-25915
   @admin
-  @destructive
   Scenario: Multus default route overwrite
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -1046,8 +1045,8 @@ Feature: Multus-CNI related scenarios
       
     # Create a pod absorbing above net-attach-def
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/weliang1/Openshift_Networking/master/Features/multus/multus-default-route-pod.yaml   |
-      | n | <%= project.name %>                                                                                                    |
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/multus-default-route-pod.yaml |
+      | n | <%= project.name %>                                                                                                         |
     Then the step should succeed
     And the pod named "multus-default-route-pod" becomes ready
 
