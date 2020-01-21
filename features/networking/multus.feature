@@ -1027,3 +1027,33 @@ Feature: Multus-CNI related scenarios
       | /usr/sbin/ip | a  |
     Then the output should contain:
       | c2:b0:57:49:47:f1 |
+
+  # @author weliang@redhat.com
+  # @case_id OCP-25915
+  @admin
+  @destructive
+  Scenario: Multus default route overwrite
+    # Make sure that the multus is enabled
+    Given the multus is enabled on the cluster
+
+    # Create the net-attach-def via cluster admin
+    Given I have a project
+    When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/ipam-static.yaml" replacing paths:
+      | ["metadata"]["namespace"]  | <%= project.name %> | 
+      | ["metadata"]["name"]       | bridge-static       |
+      | ["spec"]["config"]| '{ "cniVersion": "0.3.0", "type": "bridge", "master": "ens3", "ipam": {"type":"static","addresses": [{"address": "22.2.2.22/24","gateway": "22.2.2.1"}]}}' |
+    Then the step should succeed
+      
+    # Create a pod absorbing above net-attach-def
+    When I run the :create client command with:
+      | f | https://raw.githubusercontent.com/weliang1/Openshift_Networking/master/Features/multus/multus-default-route-pod.yaml   |
+      | n | <%= project.name %>                                                                                                    |
+    Then the step should succeed
+    And the pod named "multus-default-route-pod" becomes ready
+
+    # Check created pod has correct default route
+    When I execute on the pod:
+      | /usr/sbin/ip | route             |
+    Then the output should contain:
+      | default via 22.2.2.254 dev net1  |
+
