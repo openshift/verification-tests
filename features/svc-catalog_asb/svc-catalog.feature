@@ -339,7 +339,7 @@ Feature: Service-catalog related scenarios
     Given I have a project
 
     # Deploy ups broker
-    Given I ensures "ups-broker" clusterservicebroker is deleted after scenario
+    Given admin ensures "ups-broker" clusterservicebroker is deleted after scenario
 
     When I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
