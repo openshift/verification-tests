@@ -502,15 +502,11 @@ check_resource_details:
 check_resource_details_key_and_value:
   element: &key_value
     selector:
-      xpath: //dt[contains(text(),'<key>')]/following-sibling::dd[1][contains(.,'<value>')] | //button[(text()='<key>')]/parent::dt/following-sibling::dd[1][contains(.,'<value>')]
+      xpath: //dt[contains(.,'<key>')]/following-sibling::dd[1][contains(.,'<value>')] | //button[(text()='<key>')]/parent::dt/following-sibling::dd[1][contains(.,'<value>')]
 check_resource_details_key_only:
   element:
     selector:
       xpath: //button[(text()='<key>')]
-check_resource_details_key_and_value:
-  element: &key_value
-    selector:
-      xpath: //dt[contains(.,'<key>')]/following-sibling::dd[1][contains(.,'<value>')] | //button[(text()='<key>')]/parent::dt/following-sibling::dd[1][contains(.,'<value>')]
 check_key_and_resource_link:
   element:
     selector:
@@ -707,7 +703,6 @@ check_max_replicas:
     key: Max Replicas
     value: <replicas_value>
   action: check_resource_details_key_and_value
-<<<<<<< HEAD
 check_resource_kind:
   params:
     key: Kind
