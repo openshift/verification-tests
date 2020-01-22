@@ -461,7 +461,7 @@ module BushSlicer
     end
 
     # given a testrun_id, generate a query statement based on testcase IDs and custom fields
-    # which is feed into create_run_smart method to generate the new polarion run
+    # which is fed into create_run_smart method to generate the new polarion run
     # The YAML basically contains 3 fields
     # 1.   "run_title":  "Clone of xyz run"
     # 2.   "case_query": "<SQL_STATEMENT>"
