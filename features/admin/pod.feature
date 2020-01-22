@@ -207,7 +207,7 @@ Feature: pod related features
     Then the output should match:
       | nodeName: <%= cb.nodes[0].name %> |
 
-  # @author chezhang@redhat.com
+  # @author chezhang@redhat.com, weinliu@redhat.com
   # @case_id OCP-12047
   @admin
   Scenario: When node labels change, DaemonSet will add pods to newly matching nodes and delete pods from not-matching nodes
@@ -217,8 +217,8 @@ Feature: pod related features
       | resource_name | <%=project.name%> |
       | p | {"metadata":{"annotations": {"openshift.io/node-selector": ""}}}|
     Then the step should succeed
-    Given I store the schedulable nodes in the :nodes clipboard
-    Given environment has at least 2 schedulable worker nodes
+    Given I store the schedulable workers in the :nodes clipboard
+    Given environment has at least 2 schedulable nodes
     Given label "daemon=yes" is added to the "<%= cb.nodes[0].name %>" node
     Given label "daemon=no" is added to the "<%= cb.nodes[1].name %>" node
     Given cluster role "cluster-admin" is added to the "first" user
