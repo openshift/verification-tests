@@ -207,7 +207,8 @@ Feature: pod related features
     Then the output should match:
       | nodeName: <%= cb.nodes[0].name %> |
 
-  # @author chezhang@redhat.com, weinliu@redhat.com
+  # @author chezhang@redhat.com
+  # @author weinliu@redhat.com
   # @case_id OCP-12047
   @admin
   Scenario: When node labels change, DaemonSet will add pods to newly matching nodes and delete pods from not-matching nodes
