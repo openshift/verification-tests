@@ -84,6 +84,7 @@ goto_deployment_page:
 goto_one_deployment_page:
   url: k8s/ns/<project_name>/deployments/<deploy_name>
 
+
 # deploymentconfig
 goto_dc_page:
   url: k8s/ns/<project_name>/deploymentconfigs
@@ -91,6 +92,8 @@ goto_one_dc_page:
   url: k8s/ns/<project_name>/deploymentconfigs/<dc_name>
 goto_one_rc_page:
   url: k8s/ns/<project_name>/replicationcontrollers/<rc_name>
+goto_rc_list_page:
+  url: k8s/ns/<project_name>/replicationcontrollers
 
 #pod
 goto_one_pod_page:
@@ -108,6 +111,8 @@ goto_cluster_oauth_configuration_page:
 #replica sets
 goto_replica_sets_page:
   url: k8s/ns/<project_name>/replicasets
+goto_one_rs_page:
+  url: k8s/ns/<project_name>/replicasets/<rs_name>
 
 #routes
 goto_routes_page:

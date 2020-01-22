@@ -168,6 +168,11 @@ click_kebab_of_one_resource:
 click_one_operation_in_kebab:
   action: click_kebab_of_one_resource
   action: click_button
+check_column_in_table:
+  action: wait_box_loaded
+  elements:
+  - selector:
+      xpath: //th[contains(@data-label,'<field>')]
 check_resource_name_and_icon:
   action:
     if_param: service_name
@@ -504,10 +509,17 @@ check_resource_details:
   action:
     if_param: short_names
     ref: check_short_names
+  action:
+    if_param: created_at
+    ref: check_created_at
 check_resource_details_key_and_value:
   element: &key_value
     selector:
       xpath: //dt[contains(.,'<key>')]/following-sibling::dd[1][contains(.,'<value>')] | //button[(text()='<key>')]/parent::dt/following-sibling::dd[1][contains(.,'<value>')]
+check_resource_details_key_only:
+  element:
+    selector:
+      xpath: //button[(text()='<key>')]
 check_key_and_resource_link:
   element:
     selector:
@@ -729,3 +741,7 @@ check_short_names:
     key: Short Names
     value: <short_names>
   action: check_resource_details_key_and_value
+check_created_at:
+  params:
+    key: Created At
+  action: check_resource_details_key_only
