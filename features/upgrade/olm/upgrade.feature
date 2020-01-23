@@ -5,7 +5,7 @@ Feature: OLM related scenarios
   # @case_id OCP-22615
   @admin
   @upgrade-prepare
-  @users=upuser1
+  @users=upuser1,upuser2
   Scenario: upgrade OLM - prepare
     # Check OLM version
     Given The "operator-lifecycle-manager" operator version matchs the current cluster version
@@ -23,7 +23,6 @@ Feature: OLM related scenarios
     Given etcdCluster "sample-cluster" is installed successfully in "olm-upgrade" project
     
   @admin
-  @users=upuser1
   @upgrade-check
   Scenario: upgrade OLM
     # Check OLM version after upgraded
