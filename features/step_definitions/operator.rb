@@ -12,23 +12,25 @@ end
 
 Given /^etcd operator "([^"]*)" is removed successfully from "([^"]*)" project$/ do | name, proj_name|
   ensure_admin_tagged
-  step %Q/I use the "#{proj_name}" project/
   raise "!!! Error doesn't exist etcd operator: #{name} in this #{proj_name} project" unless subscription("#{name}").exists?
   step %Q/I run the :delete client command with:/, table(%{
     | object_type       | subscription |
     | object_name_or_id | #{name}      |
+    | n                 | #{proj_name} |
   })
   raise "Error removing subscription: #{name} in #{proj_name} project" unless @result[:success]
 
   step %Q/I run the :delete client command with:/, table(%{
     | object_type       | clusterserviceversion |
     | object_name_or_id | etcdoperator.v0.9.4   |
+    | n                 | #{proj_name} |
   })
   raise "Error removing CSV: #{name} in #{proj_name} project" unless @result[:success]
 
   step %Q/I run the :delete client command with:/, table(%{
     | object_type       | deployment |
     | object_name_or_id | etcd-operator   |
+    | n                 | #{proj_name} |
   })
   step %Q/I wait for the resource "deployment" named "etcd-operator" to disappear within 180 seconds/
   logger.info("### etcd operator: #{name} is removed successfully from #{proj_name} namespace")

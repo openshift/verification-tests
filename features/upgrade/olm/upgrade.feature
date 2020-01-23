@@ -34,7 +34,8 @@ Feature: OLM related scenarios
     Given The status of condition "Available" for "operator-lifecycle-manager" operator is: True
     Given The status of condition "Upgradeable" for "operator-lifecycle-manager" operator is: True
     # Check if this operator works well by changing its customer resource
-    Given I use the "olm-upgrade" project 
+    Given I switch to cluster admin pseudo user
+    And I use the "olm-upgrade" project 
     When I run the :patch client command with:
       | resource      | etcdcluster            |
       | resource_name | sample-cluster         |
