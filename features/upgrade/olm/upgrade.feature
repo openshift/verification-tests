@@ -24,6 +24,7 @@ Feature: OLM related scenarios
     
   @admin
   @upgrade-check
+  @users=upuser1,upuser2
   Scenario: upgrade OLM
     # Check OLM version after upgraded
     Given The "operator-lifecycle-manager" operator version matchs the current cluster version
