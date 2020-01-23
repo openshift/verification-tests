@@ -255,5 +255,14 @@ module BushSlicer
       return remaining_pods_count if pod_requests.empty?
       return [ max_pod_count_capacity(user: user, cached: false, quiet: quiet, **pod_requests), remaining_pods_count].min
     end
+
+    def images(user: nil, cached: true, quiet: false)
+      raw_resource(user: user, cached: cached, quiet: quiet).dig('status', 'images')
+    end
+
+    def images_names(user: nil, cached: true, quiet: false)
+      images.map { |i| i['names'].first }
+    end
+
   end
 end
