@@ -881,10 +881,9 @@ end
 Given /^the Internal IP of node "([^"]*)" is stored in the#{OPT_SYM} clipboard$/ do |node_name,cb_ipaddr|
   ensure_admin_tagged
   node = node(node_name)
-  _admin = admin
   host = node.host
   cb_ipaddr ||= "ip_address"
-  @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
+  @result = admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
   if @result[:success] then
      networkType = @result[:response].strip
   end
