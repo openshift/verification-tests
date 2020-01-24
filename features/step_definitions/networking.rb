@@ -881,9 +881,24 @@ end
 Given /^the Internal IP of node "([^"]*)" is stored in the#{OPT_SYM} clipboard$/ do |node_name,cb_ipaddr|
   ensure_admin_tagged
   node = node(node_name)
+  _admin = admin
   host = node.host
-  step "the default interface on nodes is stored in the clipboard"
-  @result = host.exec_admin("ifconfig #{cb.interface}")
+  cb_ipaddr ||= "ip_address"
+  @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
+  if @result[:success] then
+     networkType = @result[:response].strip
+  end
+  case networkType
+  when "OVNKubernetes"
+    step %Q/I run command on the node's ovnkube pod:/, table("| bash | -c | ip route show default |")
+  when "OpenShiftSDN"
+    step %Q/I run command on the node's sdn pod:/, table("| bash | -c | ip route show default |")
+  else
+    raise "unknown networkType"
+  end
+  def_inf = @result[:response].split("\n").first.split(/\W+/)[7]
+  logger.info "The node's default interface is #{def_inf}"
+  @result = host.exec_admin("ifconfig #{def_inf}")
   cb[cb_ipaddr]=@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]
   logger.info "The Internal IP of node is stored in the #{cb_ipaddr} clipboard."
 end
