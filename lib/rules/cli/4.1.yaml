@@ -256,6 +256,7 @@
   :cmd: oc debug <global_options>
   :options:
      :c: -c <value>
+     :dry_run: --dry-run
      :exec_command: <value>
      :exec_command_arg: <value>
      :f: -f <value>
