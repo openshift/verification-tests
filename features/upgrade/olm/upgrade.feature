@@ -51,7 +51,7 @@ Feature: OLM related scenarios
       | sample-cluster.* | 
     """
     # Clean this operator and its resource
-    Given etcdCluster "sample-cluster" is removed successfully from "<%= cb.user_project %>" project
-    Given etcd operator "etcd-test" is removed successfully from "<%= cb.user_project %>" project
+    Given etcdCluster "sample-cluster" is removed successfully from "olm-upgrade" project
+    Given etcd operator "etcd-test" is removed successfully from "olm-upgrade" project
     # This operator can be re-installed succefully
     Given etcd operator "etcd-test" is installed successfully in "olm-upgrade" project

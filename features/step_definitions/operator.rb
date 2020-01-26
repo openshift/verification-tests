@@ -19,10 +19,11 @@ Given /^etcd operator "([^"]*)" is removed successfully from "([^"]*)" project$/
     | n                 | #{proj_name} |
   })
   raise "Error removing subscription: #{name} in #{proj_name} project" unless @result[:success]
+  step %Q/I ensures "#{name}" subscription is deleted from the "#{proj_name}" project after scenario/
 
   step %Q/I run the :delete client command with:/, table(%{
     | object_type       | clusterserviceversion |
-    | object_name_or_id | etcdoperator.v0.9.4   |
+    | all               |                       |
     | n                 | #{proj_name} |
   })
   raise "Error removing CSV: #{name} in #{proj_name} project" unless @result[:success]
@@ -33,6 +34,7 @@ Given /^etcd operator "([^"]*)" is removed successfully from "([^"]*)" project$/
     | n                 | #{proj_name} |
   })
   step %Q/I wait for the resource "deployment" named "etcd-operator" to disappear within 180 seconds/
+  step %Q/I ensures "etcd-operator" deployment is deleted from the "#{proj_name}" project after scenario/
   logger.info("### etcd operator: #{name} is removed successfully from #{proj_name} namespace")
 
 end
@@ -78,7 +80,6 @@ Given /^etcd operator "([^"]*)" is installed successfully in "([^"]*)" project$/
     step %Q/the output should contain "No resources found"/
     raise "Error find the etcdCluster resource in #{proj_name} project" unless @result[:success]
     logger.info("### etcd operator: #{name} is installed successfully in #{proj_name} namespace")
-
 end
 
 Given /^etcdCluster "([^"]*)" is installed successfully in "([^"]*)" project$/ do | name, proj_name|
@@ -91,7 +92,6 @@ Given /^etcdCluster "([^"]*)" is installed successfully in "([^"]*)" project$/ d
   })
   raise "Error creating etcdCluster: #{name} in project: #{proj_name}" unless @result[:success]
   logger.info("### etcdCluster: #{name} is installed successfully in #{proj_name} namespace")
-
 end
 
 Given /^etcdCluster "([^"]*)" is removed successfully from "([^"]*)" project$/ do | name, proj_name|
@@ -102,6 +102,7 @@ Given /^etcdCluster "([^"]*)" is removed successfully from "([^"]*)" project$/ d
   })
   step %Q/the output should contain "deleted"/
   step %Q/I wait for the resource "etcdcluster" named "#{name}" to disappear within 180 seconds/
+  step %Q/I ensure "#{name}" etcdcluster is deleted from the "#{proj_name}" project after scenario/
   step %Q/I run the :get client command with:/, table(%{
     | resource      | etcdcluster  | 
     | resource_name | #{name}      |
@@ -109,30 +110,14 @@ Given /^etcdCluster "([^"]*)" is removed successfully from "([^"]*)" project$/ d
   })
   step %Q/the output should contain "NotFound"/
   logger.info("### etcdCluster: #{name} is removed successfully from #{proj_name} namespace")
-
 end
 
 Given /^The status of condition "([^"]*)" for "([^"]*)" operator is: (.+)$/ do | type, operator, status |
   ensure_admin_tagged
-  expected_status = status
-
-  if type == "Available"
-    @result = admin.cli_exec(:get, resource: "clusteroperators", resource_name: operator, o: "jsonpath={.status.conditions[?(.type == \"Available\")].status}")
-    real_status = @result[:response]
-  elsif type == "Progressing"
-    @result = admin.cli_exec(:get, resource: "clusteroperators", resource_name: operator, o: "jsonpath={.status.conditions[?(.type == \"Progressing\")].status}")
-    real_status = @result[:response]
-  elsif type == "Degraded"
-    @result = admin.cli_exec(:get, resource: "clusteroperators", resource_name: operator, o: "jsonpath={.status.conditions[?(.type == \"Degraded\")].status}")
-    real_status = @result[:response]
-  elsif type == "Upgradeable"
-    @result = admin.cli_exec(:get, resource: "clusteroperators", resource_name: operator, o: "jsonpath={.status.conditions[?(.type == \"Upgradeable\")].status}")
-    real_status = @result[:response]
-  else
-    raise "Unknown condition type!"
+  actual_status = cluster_operator(operator).condition(type: type, cached: false)['status']
+  unless status == actual_status
+    raise "status of #{operator} condition #{type} is #{actual_status}"
   end
-
-  raise "The status of condition #{type} is incorrect." unless expected_status == real_status
 end
 
 Given /^The "([^"]*)" operator version matchs the current cluster version$/ do | operator |
@@ -145,5 +130,4 @@ Given /^The "([^"]*)" operator version matchs the current cluster version$/ do |
 
   raise "The #{operator} version doesn't match the current cluster version" unless operator_version == cluster_version
   logger.info("### the cluster version is #{cluster_version}")
-
 end
