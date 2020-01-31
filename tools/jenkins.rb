@@ -1,6 +1,5 @@
 require 'net/https'
 require 'thread'
-require 'pry-byebug'
 
 module BushSlicer
   class Jenkins
