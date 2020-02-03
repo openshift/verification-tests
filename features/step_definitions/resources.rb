@@ -127,9 +127,6 @@ Given /^I wait until the status of #{QUOTED} (\w+) becomes :(.+)$/ do |name, typ
   _resource = resource(name, type)
   ready_timeout = 10 * 60
   @result = _resource.wait_till_status(status.to_sym, user, ready_timeout)
-  unless @result[:success]
-    raise %Q{#{type} "#{name}" did not become #{status} within timeout}
-  end
 end
 
 
