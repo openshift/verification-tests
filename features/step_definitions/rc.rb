@@ -10,9 +10,17 @@ Given /^(I|admin) waits? until replicationController#{OPT_QUOTED} is ready$/ do 
   raise "replication controller #{rc.name} never became ready" unless @result[:success]
 end
 
-Given /^I wait until the status of replication controller "(.+)" becomes :(.+)$/ do |resource_name, status|
+#Given /^I wait until the status of replication controller "(.+)" becomes :(.+)$/ do |resource_name, status|
+#  ready_timeout = 10 * 60
+#  rc(resource_name).wait_till_status(status.to_sym, user, ready_timeout)
+#end
+
+Given /^I wait until the status of #{QUOTED} (\w+) becomes :(.+)$/ do |name, type, status|
+  _resource = resource(name, type)
   ready_timeout = 10 * 60
-  rc(resource_name).wait_till_status(status.to_sym, user, ready_timeout)
+  _resource.wait_till_status(status.to_sym, user, ready_timeout)
+
+
 end
 
 Given /^I wait until number of(?: "(.*?)")? replicas match "(\d+)" for replicationController "(.+)"$/ do |state, number, rc_name|
