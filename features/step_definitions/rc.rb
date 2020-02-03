@@ -15,7 +15,6 @@ end
 #   rc(resource_name).wait_till_status(status.to_sym, user, ready_timeout)
 # end
 
-
 Given /^I wait until number of(?: "(.*?)")? replicas match "(\d+)" for replicationController "(.+)"$/ do |state, number, rc_name|
 ready_timeout = 300
   state = :running if state.nil?
