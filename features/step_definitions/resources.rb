@@ -123,6 +123,16 @@ Given /^(I|admin) waits? for the#{OPT_QUOTED} (\w+) to become ready(?: in the#{O
   end
 end
 
+Given /^I wait until the status of #{QUOTED} (\w+) becomes :(.+)$/ do |name, type, status|
+  _resource = resource(name, type)
+  ready_timeout = 10 * 60
+  @result = _resource.wait_till_status(status.to_sym, user, ready_timeout)
+  unless @result[:success]
+    raise %Q{#{type} "#{name}" did not become #{status} within timeout}
+  end
+end
+
+
 # tries to delete resource if it exists and make sure it disappears
 # example: I ensure "hello-openshift" pod is deleted
 Given /^(I|admin) ensures? #{QUOTED} (\w+) is deleted(?: from the#{OPT_QUOTED} project)?( after scenario)?$/ do |by, name, type, project_name, after|
