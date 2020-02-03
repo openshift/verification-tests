@@ -1160,6 +1160,11 @@
     :description: --description=<value>
     :admin: --admin=<value>
     :node_selector: --node-selector=<value>
+:oadm_node_logs:
+  :cmd: oc adm node-logs <options>
+  :options:
+    :path: --path=<value>
+    :role: --role=<value>
 :oadm_policy_add_scc_to_user:
   :cmd: oc adm policy add-scc-to-user <scc>
   :options:
