@@ -87,7 +87,8 @@ module BushSlicer
         # OCP > 4.1 format  `openshift-clients-4.2.2-201910250432`
         major = v[0].split('openshift-clients-').last
       end
-      return [major, v[1]].join('.')
+      minor = v[1].split('.').first.split('-').first
+      return [major, minor].join('.')
     end
 
     # prepare kube config according to parameters
