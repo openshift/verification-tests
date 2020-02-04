@@ -111,21 +111,21 @@ Feature: Testing imagestream
       | p             | {"spec":{"template":{"spec":{"containers":[{"image":"<%= cb.registry_hostname %>/<%= project.name %>/ruby-ex@sha256:nonono","name":"ruby-ex"}]}}}}|
     Given cluster role "system:image-pruner" is added to the "first" user
     And I run the :oadm_prune_images client command with:
-      | keep_tag_revisions    | 1                           |
-      | keep_younger_than     | 0                           |
-      | registry_url          | <%= cb.registry_hostname %> |
-      | confirm               | true                        |
-      | certificate_authority | <%= cb.reg_crt_name %>      |
+      | keep_tag_revisions | 1                           |
+      | keep_younger_than  | 0                           |
+      | registry_url       | <%= cb.registry_hostname %> |
+      | confirm            | true                        |
+      | ca                 | <%= cb.reg_crt_name %>      |
     Then the step should fail
     And the output should contain:
       | invalid container image reference |
     And I run the :oadm_prune_images client command with:
-      | keep_tag_revisions    | 1                           |
-      | keep_younger_than     | 0                           |
-      | registry_url          | <%= cb.registry_hostname %> |
-      | confirm               | true                        |
-      | certificate_authority | <%= cb.reg_crt_name %>      |
-      | ignore_invalid_refs   | true                        |
+      | keep_tag_revisions  | 1                           |
+      | keep_younger_than   | 0                           |
+      | registry_url        | <%= cb.registry_hostname %> |
+      | confirm             | true                        |
+      | ca                  | <%= cb.reg_crt_name %>      |
+      | ignore_invalid_refs | true                        |
     Then the step should succeed
 
   # @author xiuwang@redhat.com
@@ -161,10 +161,10 @@ Feature: Testing imagestream
 
     Given cluster role "system:image-pruner" is added to the "first" user
     And I run the :oadm_prune_images client command with:
-      | keep_younger_than     | 1m                          |
-      | registry_url          | <%= cb.registry_hostname %> |
-      | confirm               | true                        |
-      | certificate_authority | <%= cb.reg_crt_name %>      |
+      | keep_younger_than | 1m                          |
+      | registry_url      | <%= cb.registry_hostname %> |
+      | confirm           | true                        |
+      | ca                | <%= cb.reg_crt_name %>      |
     Then the step should succeed
     And the output should contain:
       | <%= cb.digest1 %> |
