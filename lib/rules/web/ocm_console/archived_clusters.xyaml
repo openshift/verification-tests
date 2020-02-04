@@ -15,7 +15,7 @@ archived_page_loaded:
 empty_table_loaded:
     element:
         selector:
-            xpath: //p[@class='notfound' and text()='No Results Match the Filter Criteria.']
+            xpath: //p[@class='notfound' and text()='No results match the filter criteria.']
 archived_cluster_list_table_loaded:
     elements:
         - selector:
