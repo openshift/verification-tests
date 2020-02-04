@@ -1167,6 +1167,11 @@
     :description: --description=<value>
     :display_name: --display-name=<value>
     :node_selector: --node-selector=<value>
+:oadm_node_logs:
+  :cmd: oc adm node-logs <options>
+  :options:
+    :path: --path=<value>
+    :role: --role=<value>    
 :oadm_pod_network_join_projects:
   :cmd: oc adm pod-network join-projects
   :options:
