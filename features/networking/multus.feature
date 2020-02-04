@@ -98,22 +98,21 @@ Feature: Multus-CNI related scenarios
 
     # Create the second pod which consumes the macvlan cr
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/1interface-macvlan-private.yaml" replacing paths:
-      | ["spec"]["nodeName"] | "<%= cb.target_node %>" |
+       | ["metadata"]["name"]              | macvlan-private-secondpod   |      
+       | ["spec"]["nodeName"]              | "<%= cb.target_node %>"     |
+       | ["spec"]["containers"][0]["name"] | macvlan-private-secondpod   |
     Then the step should succeed
-    And 2 pods become ready with labels:
-      | name=macvlan-private-pod |
-    And evaluation of `pod(-1).name` is stored in the :pod2 clipboard
+    And the pod named "macvlan-private-secondpod" becomes ready
 
     # Try to access both the cluster ip and macvlan ip on pod1 from pod2
-    When I execute on the "<%= cb.pod2 %>" pod:
+    When I execute on the "macvlan-private-secondpod" pod:
       | curl | --connect-timeout | 5 | <%= cb.pod1_sdn_ip %>:8080 |
     Then the step should succeed
     And the output should contain "Hello OpenShift"
-    When I execute on the "<%= cb.pod2 %>" pod:
+    When I execute on the "macvlan-private-secondpod" pod:
       | curl | --connect-timeout | 5 | <%= cb.pod1_multus_ip %>:8080 |
     Then the step should fail
     And the output should not contain "Hello OpenShift"
-
 
   # @author bmeng@redhat.com
   # @case_id OCP-21496
