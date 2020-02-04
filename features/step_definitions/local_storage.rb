@@ -1,4 +1,4 @@
-Given /^There are no PVs with local path #{QUOTED}$/ do | local_path |
+Given /^there are no PVs with local path #{QUOTED}$/ do | local_path |
   ensure_admin_tagged
 
   pvs = BushSlicer::PersistentVolume.list(user: admin)
