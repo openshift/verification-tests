@@ -24,12 +24,6 @@ Then(/^the machines should be linked to nodes$/) do
   end
 end
 
-Given(/^I store all machines in the#{OPT_SYM} clipboard$/) do | cb_name |
-  machines = BushSlicer::Machine.list(user: admin, project: project("openshift-machine-api"))
-  cache_resources *machines
-  cb[cb_name] = machines
-end
-
 Given(/^I store the number of machines in the#{OPT_SYM} clipboard$/) do | cb_name |
   machines = BushSlicer::Machine.list(user: admin, project: project("openshift-machine-api"))
   cache_resources *machines
