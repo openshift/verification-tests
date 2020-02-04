@@ -39,7 +39,7 @@ Given /^etcd operator "([^"]*)" is installed successfully in "([^"]*)" project$/
         | p | NAME=#{name}                          |
         | p | NAMESPACE=#{proj_name}                |
         | p | SOURCENAME=community-operators        |
-        | p | SOURCENAMESPACE=openshift-marketplace |     
+        | p | SOURCENAMESPACE=openshift-marketplace |
       })
       raise "Error creating subscription: #{name}" unless @result[:success]
     end
@@ -49,9 +49,9 @@ Given /^etcd operator "([^"]*)" is installed successfully in "([^"]*)" project$/
       | name=etcd-operator-alm-owned |
     })
     raise "Error creating #{name} pods in #{proj_name} project" unless @result[:success]
-    
+
     step %Q/I run the :get client command with:/, table(%{
-      | resource | etcdcluster |                                                  
+      | resource | etcdcluster |
     })
     step %Q/the output should contain "No resources found"/
     raise "Error find the etcdCluster resource in #{proj_name} project" unless @result[:success]
@@ -71,26 +71,8 @@ Given /^etcdCluster "([^"]*)" is installed successfully in "([^"]*)" project$/ d
 end
 
 Given /^etcdCluster "([^"]*)" is removed successfully from "([^"]*)" project$/ do | name, proj_name|
-  step %Q/I ensure "#{name}" etcdcluster is deleted from the "#{proj_name}" project/
+  step %Q/I ensure "#{name}" etcd_cluster is deleted from the "#{proj_name}" project/
   logger.info("### etcdCluster: #{name} is removed successfully from #{proj_name} namespace")
 end
 
-Given /^the status of condition "([^"]*)" for "([^"]*)" operator is: (.+)$/ do | type, operator, status |
-  ensure_admin_tagged
-  actual_status = cluster_operator(operator).condition(type: type, cached: false)['status']
-  unless status == actual_status
-    raise "status of #{operator} condition #{type} is #{actual_status}"
-  end
-end
 
-Given /^the "([^"]*)" operator version matchs the current cluster version$/ do | operator |
-  ensure_admin_tagged
-  @result = admin.cli_exec(:get, resource: "clusteroperators", resource_name: operator, o: "jsonpath={.status.versions[?(.name == \"operator\")].version}")
-  operator_version = @result[:response]
-
-  @result = admin.cli_exec(:get, resource: "clusterversion", resource_name: "version", o: "jsonpath={.status.desired.version}")
-  cluster_version = @result[:response]
-
-  raise "The #{operator} version doesn't match the current cluster version" unless operator_version == cluster_version
-  logger.info("### the cluster version is #{cluster_version}")
-end
