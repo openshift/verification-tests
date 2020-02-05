@@ -75,19 +75,13 @@ module BushSlicer
     # we may switch to `major.minor` rules versions in the future
     private def rules_version(str_version)
       v = str_version.split('.')
-      # version like v1.y.z, i.e. return version 3.y
-      # version like v3.y.z, i.e. return version 3.y
-      # version like v4.y.z, i.e. return version 4.y
-      if v[0] == '1'
-        major = '3'
-      else
-        major = v[0]
-        # https://bugzilla.redhat.com/show_bug.cgi?id=1781909
-        # OCP <= 4.1 format `v4.1.10-201908061216+c8c05d4-dirty`
-        # OCP > 4.1 format  `openshift-clients-4.2.2-201910250432`
-        major = v[0].split('openshift-clients-').last
-      end
-      minor = v[1].split('.').first.split('-').first
+
+      # https://bugzilla.redhat.com/show_bug.cgi?id=1781909
+      # OCP = 4.1 format `v4.1.10-201908061216+c8c05d4-dirty`, return version 4.1
+      # OCP = 4.2 format `openshift-clients-4.2.2-201910250432`, return version 4.2
+      # OCP = 4.3 format `openshift-clients-4.3-2-ge0666000`, return version 4.3
+      major = v[0].split('openshift-clients-').last
+      minor = v[1].split('-').first
       return [major, minor].join('.')
     end
 
