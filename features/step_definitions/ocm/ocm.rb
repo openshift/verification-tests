@@ -8,19 +8,16 @@ Given /^I open ocm portal with #{WORD}$/ do |usertype|
     | base_url     | #{base_url}                |
     | snippets_dir | #{snippets_dir}            |
   })
-  if base_url == "https://cloud.redhat.com/beta/openshift/"
+  if ENV['BUSHSLICER_DEFAULT_ENVIRONMENT'] == "ocm_stage"
     ocm_env = "stage"
-  elsif base_url == "https://cloud.redhat.com/openshift/"
+  elsif ENV['BUSHSLICER_DEFAULT_ENVIRONMENT'] == "ocm_prod"
     ocm_env = "product"
   end
   if portals[ocm_env]["users"][usertype] != nil
     loginname = portals[ocm_env]["users"][usertype]["username"]
-  else
-    loginname = env.static_user(usertype).loginname
-  end
-  if portals[ocm_env]["users"][usertype] != nil
     loginpassword = portals[ocm_env]["users"][usertype]["password"]
   else
+    loginname = env.static_user(usertype).loginname
     loginpassword = env.static_user(usertype).password
   end
   browser.browser.goto base_url

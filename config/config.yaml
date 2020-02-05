@@ -86,7 +86,7 @@ environments:
     version: 4.1.0.0 # version not supported on cluster (yet)
   ose: *ocp4
   ocm_stage:
-    web_console_url: https://cloud.redhat.com/beta/openshift/
+    web_console_url: https://qaprodauth.cloud.redhat.com/openshift/
     type: OCMEnvironment
   ocm_prod:
     web_console_url: https://cloud.redhat.com/openshift/
