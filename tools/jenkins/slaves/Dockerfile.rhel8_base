@@ -64,5 +64,5 @@ RUN yum install -y --setopt=tsflags=nodocs yum-utils && \
 RUN svn export --force https://github.com/openshift/jenkins/trunk/slave-base/contrib/bin /usr/local/bin/
 
 # Run the Jenkins JNLP client
-ENTRYPOINT ["/usr/bin/dumb-init", "--", "/usr/local/bin/run-jnlp-client"]
+ENTRYPOINT ["/usr/local/bin/dumb-init", "--", "/usr/local/bin/run-jnlp-client"]
 
