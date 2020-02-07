@@ -38,23 +38,13 @@ Feature: Alerting for machine-api
     Then the step should succeed
     """
 
-    And I use the "openshift-monitoring" project
-    And evaluation of `secret(service_account('prometheus-k8s').get_secret_names.find {|s| s.match('token')}).token` is stored in the :token clipboard
-
-    # verify alert is fired by querying prometheus http api
-    And I wait up to 180 seconds for the steps to pass:
+    Given I wait up to 180 seconds for the steps to pass:
     """
-    When I run the :exec admin command with:
-      | n                | openshift-monitoring                                                                                                                                                                |
-      | pod              | prometheus-k8s-0                                                                                                                                                                    |
-      | c                | prometheus                                                                                                                                                                          |
-      | oc_opts_end      |                                                                                                                                                                                     |
-      | exec_command     | sh                                                                                                                                                                                  |
-      | exec_command_arg | -c                                                                                                                                                                                  |
-      | exec_command_arg | curl -G -s -k -H "Authorization: Bearer <%= cb.token %>" --data-urlencode 'query=ALERTS{alertname="<alertname>"}' https://prometheus-k8s.openshift-monitoring.svc:9091/api/v1/query |
+    When I perform the GET prometheus rest client with:
+      | path  | /api/v1/query?                  |
+      | query | ALERTS{alertname="<alertname>"} |
     Then the step should succeed
-    And the output should match:
-      | "alertstate":"pending\|firing" |
+    And the expression should be true> @result[:parsed]["data"]["result"][0]["metric"]["alertstate"] =~ /pending|firing/
     """
 
     Examples:
