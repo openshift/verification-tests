@@ -504,6 +504,7 @@ module BushSlicer
 
           # handle client proxy
           proxy_spec = host.roles.find { |r| r.to_s.start_with? "proxy__" }
+
           if proxy_spec
             _role, proto, port, username, password = proxy_spec.to_s.split("__")
             if username
@@ -511,7 +512,7 @@ module BushSlicer
             else
               auth_str = ""
             end
-            client_proxy = "#{proto}://#{auth_str}#{host.hostname}:#{port}"
+            self.client_proxy = "#{proto}://#{auth_str}#{host.hostname}:#{port}"
           end
         end
 
