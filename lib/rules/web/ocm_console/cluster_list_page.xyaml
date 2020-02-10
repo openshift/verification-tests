@@ -105,7 +105,7 @@ check_filter_cluster_existed:
 check_filter_no_result_message:
     element:
         selector:
-            text: No results match the filter criteria.
+            text: No Results Match the Filter Criteria.
 expand_filter_dropdown:
     element:
         selector:
