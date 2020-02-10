@@ -408,3 +408,42 @@ Feature: Service related networking scenarios
   Then the step should succeed
   And the output should contain:
     | Hello OpenShift |
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-11645
+  Scenario: Create loadbalancer service
+    Given I have a project
+    When I run the :create client command with:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/ping_for_pod_containerPort.json |
+    Then the step should succeed
+
+    # Create loadbalancer service
+    When I run the :create_service_loadbalancer client command with:
+      | name | hello-pod |
+      | tcp  | 5678:8080 |
+    Then the step should succeed
+
+    # Get the external ip of the loadbaclancer service
+    And I wait up to 60 seconds for the steps to pass:
+    """
+    When I run the :get client command with:
+      | resource      | svc                                        |
+      | resource_name | hello-pod                                  |
+      | template      | {{(index .status.loadBalancer.ingress 0)}} |
+    Then the step should succeed
+    """
+    And evaluation of `@result[:response].match(/:(.*)]/)[1]` is stored in the :service_hostname clipboard
+
+    # check the external:ip of loadbalancer can be accessed
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json" replacing paths:
+      | ["items"][0]["spec"]["replicas"] | 1 |
+    Then the step should succeed
+    Given 1 pods become ready with labels:
+      | name=test-pods |
+    And I wait up to 90 seconds for the steps to pass:
+    """
+    When I execute on the pod:
+      | curl | -s | --connect-timeout | 2 | <%= cb.service_hostname %>:5678 |
+    Then the step should succeed
+    And the output should contain "Hello OpenShift"
+    """
