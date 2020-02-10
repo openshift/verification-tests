@@ -14,7 +14,7 @@ check_cluster_list_page_without_cluster:
 cluster_list_page_loaded:
     elements:
         - selector:
-            xpath: //h1[@class='pf-c-title pf-m-2xl' and @widget-type='InsightsPageHeaderTitle' and text()='Clusters']
+            xpath: //h1[text()='Clusters']
         - selector:
             xpath: //button[@class='pf-c-button pf-m-primary toolbar-item' and text()='Create Cluster']
         - selector:
