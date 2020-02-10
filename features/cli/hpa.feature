@@ -1,6 +1,7 @@
 Feature: hpa scale
 
   # @author chezhang@redhat.com
+  # @author weinliu@redhat.com
   # @case_id OCP-10931
   Scenario: HPA shouldn't scale up target if the replicas of dc is 0
     Given I have a project
@@ -32,7 +33,6 @@ Feature: hpa scale
       | deployment=hello-openshift-1 |
     When I get project pods
     Then the step should succeed
-    And the output should not contain "hello-openshift-"
 
   # @author chezhang@redhat.com
   # @case_id OCP-11338
