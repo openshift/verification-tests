@@ -17,7 +17,7 @@ login_sequence:
         # when idp is specified we use the correct IDP
         # otherwise we always use the first one
         # a hacking way to cover our requirements
-        xpath: //a[contains(@class, 'idp<idp>') or contains(@class, 'login-redhat<idp>') or text()='<idp>'][last()]
+        xpath: //a[contains(@class, 'idp<idp>') or contains(@class, 'login-redhat<idp>') or text()='<idp>'][last()] | //li[contains(@class, 'idp<idp>') or contains(@class, 'login-redhat<idp>') or text()='<idp>'][last()]
       timeout: 1
   action:
     ref: login_console
