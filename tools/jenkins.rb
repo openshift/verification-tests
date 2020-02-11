@@ -3,9 +3,12 @@ require 'thread'
 
 module BushSlicer
   class Jenkins
+    include Common::Helper
+
     attr_accessor :client, :build_map
     def initialize
-      @client = JenkinsApi::Client.new(:server_url => 'https://openshift-qe-jenkins.rhev-ci-vms.eng.rdu2.redhat.com',
+      url = "https://#{conf[:services][:jenkins][:host]}"
+      @client = JenkinsApi::Client.new(:server_url => url,
          :username => ENV['JENKINS_USER'], :password => ENV['JENKINS_PASSWORD'])
       # # xxx for debugging you can set @build_map manually and disable to
       # init call in cloud_cop.rb to save time querying jenkins server
@@ -44,10 +47,11 @@ module BushSlicer
 
     def construct_jenkins_build_map
       threads = []
+      thread_count= 15
       # API only limits at 100 at the moment...should be sufficient
       builds = get_builds('Launch Environment Flexy')
       build_map = {}
-      builds.each do | build |
+      builds.each_slice(thread_count) do | build |
         threads << Thread.new(build) do |b|
           instance_build_prefix = get_instance_prefix_from_build(build_id: build['number'])
           build_map[instance_build_prefix] = build['number']

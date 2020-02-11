@@ -35,7 +35,8 @@ Feature: Machine features testing
     Given I scale the machineset to +2
     And I register clean-up steps:
     """
-    And I scale the machineset to <%= cb.replicas_to_restore %>
+    When I scale the machineset to <%= cb.replicas_to_restore %>
+    Then the machineset should have expected number of running machines
     """
     Then the step should succeed
     And the machineset should have expected number of running machines

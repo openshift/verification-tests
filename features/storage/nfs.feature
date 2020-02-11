@@ -1,19 +1,20 @@
 Feature: NFS Persistent Volume
 
   # @author jhou@redhat.com
+  # @author lxia@redhat.com
   # @case_id OCP-9572
   @admin
-  @destructive
   Scenario: Share NFS with multiple pods with ReadWriteMany mode
     Given I have a project
     And I have a NFS service in the project
 
-    # Preparations
-    And admin creates a PV from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/auto/pv-retain.json" where:
-      | ["metadata"]["name"]      | nfs-<%= project.name %>          |
-      | ["spec"]["nfs"]["server"] | <%= service("nfs-service").ip %> |
-    And I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/auto/pvc-rwx.json" replacing paths:
-      | ["spec"]["volumeName"] | <%= pv.name %> |
+    Given admin creates a PV from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/auto/pv-retain.json" where:
+      | ["metadata"]["name"]         | pv-<%= project.name %>           |
+      | ["spec"]["nfs"]["server"]    | <%= service("nfs-service").ip %> |
+      | ["spec"]["storageClassName"] | sc-<%= project.name %>           |
+    And I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/auto/pvc-rwx.json" replacing paths:
+      | ["spec"]["volumeName"]       | <%= pv.name %>         |
+      | ["spec"]["storageClassName"] | sc-<%= project.name %> |
     And the PV becomes :bound
 
     # Create a replication controller
