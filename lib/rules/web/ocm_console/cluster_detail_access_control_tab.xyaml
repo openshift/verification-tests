@@ -6,7 +6,7 @@ click_access_control_tab:
   element:
     <<: *access_control_tab
     op: click
-check_add_user_card_content_without_users:
+check_elements_on_user_card:
   action: check_user_card_title
   action: check_user_card_description
   action: check_add_user_field
