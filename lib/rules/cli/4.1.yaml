@@ -155,10 +155,17 @@
     :annotation-selector: --project-annotation-selector=<value>
     :hard: --hard=<value>
     :label-selector: --project-label-selector=<value>
+:create_clusterrole:
+  :cmd: oc create clusterrole <name>
+  :options:
+    :resource: --resource=<value>
+    :resource-name: --resource-name=<value>
+    :verb: --verb=<value>
 :create_clusterrolebinding:
   :cmd: oc create clusterrolebinding <name>
   :options:
     :clusterrole: --clusterrole=<value>
+    :group: --group=<value>
 :create_configmap:
   :cmd: oc create configmap
   :options:
