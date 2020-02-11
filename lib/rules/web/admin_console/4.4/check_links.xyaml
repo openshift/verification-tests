@@ -32,15 +32,7 @@ check_metrics_prometheus_url:
     text: Prometheus UI
     link_url: https://<prometheus_ui_route>
   action: check_link_and_text
-check_dashboards_grafana_menu_url:
-  params:
-    text: Dashboards
-    link_url: https://<dashboards_grafana_route>
-  action:
-    if_element:
-      selector:
-        xpath: //a[contains(text(),'<text>') and @href='<link_url>']
-    ref: click_link_with_text
+check_dashboards_grafana_menu_url: {}
 check_mega_menu:
   params:
     content: Red Hat Applications
