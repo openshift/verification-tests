@@ -39,7 +39,7 @@ sidebar_is_loaded:
 click_sidebar_overview_tab:
   element:
     selector:
-      xpath: //div[contains(@class,'overview__sidebar')]//button[text()='Overview']
+      xpath: //div[contains(@class,'overview__sidebar')]//button[text()='Details']
     op: click
 click_sidebar_resources_tab:
   element:
