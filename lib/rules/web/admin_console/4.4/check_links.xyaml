@@ -36,7 +36,11 @@ check_dashboards_grafana_menu_url:
   params:
     text: Dashboards
     link_url: https://<dashboards_grafana_route>
-  action: click_link_with_text
+  action:
+    if_element:
+      selector:
+        xpath: //a[contains(text(),'<text>') and @href='<link_url>']
+    ref: click_link_with_text
 check_mega_menu:
   params:
     content: Red Hat Applications
