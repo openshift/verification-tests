@@ -436,7 +436,7 @@ end
 Given /^the cluster network plugin type and version and stored in the clipboard$/ do
   ensure_admin_tagged
   _host = node.host
-  
+
   step %Q/I run command on the node's sdn pod:/, table([["ovs-ofctl"],["dump-flows"],["br0"],["-O"],["openflow13"]])
   unless @result[:success]
     raise "Unable to execute ovs command successfully. Check your command."
@@ -668,7 +668,7 @@ Given /^I run command on the#{OPT_QUOTED} node's sdn pod:$/ do |node_name, table
   network_cmd = table.raw
   node_name ||= node.name
   _admin = admin
-   @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}") 
+   @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
   if @result[:response] == "OpenShiftSDN"
      sdn_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
        pod.node_name == node_name
@@ -680,11 +680,11 @@ Given /^I run command on the#{OPT_QUOTED} node's sdn pod:$/ do |node_name, table
        pod.node_name == node_name
      }.first
      cache_resources ovnkube_pod
-     @result = ovnkube_pod.exec(network_cmd, as: admin)   
+     @result = ovnkube_pod.exec(network_cmd, as: admin)
    end
   raise "Failed to execute network command!" unless @result[:success]
 end
- 
+
 Given /^I restart the ovs pod on the#{OPT_QUOTED} node$/ do | node_name |
   ensure_admin_tagged
   ensure_destructive_tagged
@@ -714,7 +714,7 @@ Given /^the default interface on nodes is stored in the#{OPT_SYM} clipboard$/ do
     step %Q/I run command on the node's sdn pod:/, table("| bash | -c | ip route show default |")
   else
     raise "unknown networkType"
-  end 
+  end
   cb[cb_name] = @result[:response].split("\n").first.split(/\W+/)[7]
   logger.info "The node's default interface is stored in the #{cb_name} clipboard."
 end
@@ -795,7 +795,7 @@ Given /^the bridge interface named "([^"]*)" with address "([^"]*)" is added to 
   ensure_admin_tagged
   node = node(node_name)
   host = node.host
-  @result = host.exec_admin("ip link add #{bridge_name} type bridge;ip address add #{address} dev #{bridge_name};ip link set up #{bridge_name}")
+  @result = host.exec_admin("ip -4 -o addr show ; ip link add #{bridge_name} type bridge;for f in {111..230} ; do  if [[ $(ip -4 -o  a show | sed -n  's/.*inet \\+\\(88[.]8[.]8[.]'${f}'\\).*/\\1/p') != 88.8.8.${f} ]] ; then echo $f; ip addr add 88.8.8.${f}/24 dev #{bridge_name} ; break ; fi ; done ;ip link set up #{bridge_name}")
   raise "Failed to add  bridge interface" unless @result[:success]
 end
 
@@ -915,7 +915,7 @@ Given /^I store "([^"]*)" node's corresponding default networkType pod name in t
   else
      app="app=ovnkube-node"
      project_name="openshift-ovn-kubernetes"
-  end   
+  end
   cb[cb_pod_name] = BushSlicer::Pod.get_labeled(app, project: project(project_name, switch: false), user: admin) { |pod, hash|
     pod.node_name == node_name
   }.first.name
