@@ -168,6 +168,10 @@ check_resources_title_on_page:
   elements:
   - selector:
       xpath: //span[text()='<resource_title>']
+check_actions_items_open:
+  elements:
+  - selector:
+      xpath: //*[@data-test-id="action-items"]
 click_kebab_of_one_resource:
   elements:
   - selector:
@@ -272,8 +276,10 @@ check_page_not_match:
     selector: *page_content
     missing: true
 submit_changes:
-  element:
-    selector:
+  elements:
+  - selector:
+      xpath: //button[@type='submit' and not(@disabled)]
+  - selector:
       xpath: //button[@type='submit' and not(@disabled)]
     op: click
 click_add_more_button:
