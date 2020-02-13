@@ -1,4 +1,3 @@
-require 'webauto/webconsole_executor'
 Given /^I open ocm portal as an? #{WORD} user$/ do |usertype|
   base_rules = BushSlicer::WebConsoleExecutor::RULES_DIR
   snippets_dir = BushSlicer::WebConsoleExecutor::SNIPPETS_DIR
