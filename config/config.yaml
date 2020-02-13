@@ -86,11 +86,10 @@ environments:
     version: 4.1.0.0 # version not supported on cluster (yet)
   ose: *ocp4
   ocm_stage:
-    web_console_url: https://qaprodauth.cloud.redhat.com/openshift/
+    web_console_url: https://cloud.redhat.com/example1/
     type: OCMEnvironment
-  ocm_prod:
-    web_console_url: https://cloud.redhat.com/openshift/
-    type: OCMEnvironment
+    static_users_map:
+      exampleSymbolicUserName: "user1:password1"
 
 optional_classes:
   tcms_tc_manager:
@@ -102,8 +101,9 @@ optional_classes:
     class: BushSlicer::TestCaseManager
     opts:
       test_suite_class: BushSlicer::PolarShift::TestSuite
-      test_suite_opts: {}
-services:
+    st_suite_opts: {}
+      exampleserv
+ices:
   AWS: &AWSBase
     create_opts:
       # for all options see http://docs.aws.amazon.com/sdkforruby/api/Aws/EC2/Resource.html#create_instances-instance_method
