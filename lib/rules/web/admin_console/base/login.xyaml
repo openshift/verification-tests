@@ -21,7 +21,7 @@ click_console_selector:
 click_specified_idp:
   element:
     selector:
-      xpath: //a[@class='idp' and text()='<idp_name>']
+      xpath: //a[text()='<idp_name>']
     op: click
 set_login_username:
   element:
