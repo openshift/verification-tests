@@ -6,7 +6,7 @@
   :api_version: --api-version=<value>
   :ca: --certificate-authority=<value>
   :cluster: --cluster=<value>
-  :config: --config=<value>
+  :config: --kubeconfig=<value>
   :context: --context=<value>
   :h: -h
   :help: --help
@@ -1110,7 +1110,7 @@
   :cmd: oc adm diagnostics
   :options:
     :cluster-context: --cluster-context=<value>
-    :config: --config=<value>
+    :config: --kubeconfig=<value>
     :context: --context=<value>
     :diaglevel: --diaglevel=<value>
     :diagnostics_name: <value>
