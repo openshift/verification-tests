@@ -6,7 +6,7 @@
   :api_version: --api-version=<value>
   :ca: --certificate-authority=<value>
   :cluster: --cluster=<value>
-  :config: --config=<value>
+  :config: --kubeconfig=<value>
   :context: --context=<value>
   :h: -h
   :help: --help
@@ -155,10 +155,17 @@
     :annotation-selector: --project-annotation-selector=<value>
     :hard: --hard=<value>
     :label-selector: --project-label-selector=<value>
+:create_clusterrole:
+  :cmd: oc create clusterrole <name>
+  :options:
+    :resource: --resource=<value>
+    :resource-name: --resource-name=<value>
+    :verb: --verb=<value>
 :create_clusterrolebinding:
   :cmd: oc create clusterrolebinding <name>
   :options:
     :clusterrole: --clusterrole=<value>
+    :group: --group=<value>
 :create_configmap:
   :cmd: oc create configmap
   :options:
@@ -1103,7 +1110,7 @@
   :cmd: oc adm diagnostics
   :options:
     :cluster-context: --cluster-context=<value>
-    :config: --config=<value>
+    :config: --kubeconfig=<value>
     :context: --context=<value>
     :diaglevel: --diaglevel=<value>
     :diagnostics_name: <value>
@@ -1167,6 +1174,11 @@
     :description: --description=<value>
     :display_name: --display-name=<value>
     :node_selector: --node-selector=<value>
+:oadm_node_logs:
+  :cmd: oc adm node-logs <options>
+  :options:
+    :path: --path=<value>
+    :role: --role=<value>    
 :oadm_pod_network_join_projects:
   :cmd: oc adm pod-network join-projects
   :options:

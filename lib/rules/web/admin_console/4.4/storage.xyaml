@@ -148,3 +148,7 @@ create_storageclass_from_form:
   action: set_storageclass_name
   action: set_provisioner
   action: click_create_button
+set_iops_value:
+  params:
+    input_field_id: storage-class-provisioner-iops-per-gi-b
+  action: set_input_value

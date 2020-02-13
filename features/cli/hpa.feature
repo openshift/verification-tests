@@ -32,7 +32,8 @@ Feature: hpa scale
       | deployment=hello-openshift-1 |
     When I get project pods
     Then the step should succeed
-    And the output should not contain "hello-openshift-"
+    And the output should not match:
+      | hello-openshift-1.*Running |
 
   # @author chezhang@redhat.com
   # @case_id OCP-11338

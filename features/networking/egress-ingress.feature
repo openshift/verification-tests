@@ -56,12 +56,12 @@ Feature: Egress-ingress related networking scenarios
       | n | <%= cb.proj1 %> |
     Then the step should succeed
    
-    # Check ping from pod
+    # Check curl from pod
     When I execute on the pod:
-      | ping | -c1 | -W2 | yahoo.com |
+      | curl | --head | yahoo.com |
     Then the step should succeed
     When I execute on the pod:
-      | ping | -c1 | -W2 | <%= cb.yahoo_ip %> | 
+      | curl | --head | <%= cb.yahoo_ip %> | 
     Then the step should succeed
     
     Given I create a new project
@@ -77,12 +77,12 @@ Feature: Egress-ingress related networking scenarios
       | n | <%= cb.proj2 %> |
     Then the step should succeed
  
-    # Check ping from pod
+    # Check curl from pod
     When I execute on the pod:
-      | ping | -c1 | -W2 | yahoo.com |
+      | curl | --head | yahoo.com |
     Then the step should fail
     When I execute on the pod:
-      | ping | -c1 | -W2 | <%= cb.yahoo_ip %> | 
+      | curl | --head | <%= cb.yahoo_ip %> | 
     Then the step should fail
 
     # Check egress policy can be deleted in project1
@@ -92,12 +92,12 @@ Feature: Egress-ingress related networking scenarios
       | n                 |  <%= cb.proj1 %>    |
     Then the step should succeed
  
-    # Check ping from pod after egress policy deleted
+    # Check curl from pod after egress policy deleted
     When I execute on the pod:
-      | ping | -c1 | -W2 | yahoo.com |
+      | curl | --head | yahoo.com |
     Then the step should fail
     When I execute on the pod:
-      | ping | -c1 | -W2 | <%= cb.yahoo_ip %> | 
+      | curl | --head | <%= cb.yahoo_ip %> | 
     Then the step should fail   
 
   # @author weliang@redhat.com
@@ -155,15 +155,15 @@ Feature: Egress-ingress related networking scenarios
       | n | <%= cb.proj1 %> |
     Then the step should succeed
  
-    # Check ping from pod
+    # Check curl from pod
     When I execute on the pod:
-      | ping | -c1 | -W2 | <%= cb.yahoo[0] %> |
+      | curl | --head | <%= cb.yahoo[0] %> |
     Then the step should fail
     When I execute on the pod:
-      | ping | -c1 | -W2 | <%= cb.yahoo[1] %> |
+      | curl | --head | <%= cb.yahoo[1] %> |
     Then the step should fail
     When I execute on the pod:
-     | ping | -c1 | -W2 | <%= cb.yahoo[2] %> |
+      | curl | --head | <%= cb.yahoo[2] %> |
     Then the step should fail 
 
   # @author weliang@redhat.com
@@ -193,7 +193,7 @@ Feature: Egress-ingress related networking scenarios
     
     # Check curl from pod
     When I execute on the pod:
-      | curl |-ILs  | www.test.com |
+      | curl | --head | www.test.com |
     Then the step should fail
 
     # Delete egress network policy
@@ -217,7 +217,7 @@ Feature: Egress-ingress related networking scenarios
 
     # Check curl from pod
     When I execute on the pod:
-      | curl | -ILs  | www.test.com |    
+      | curl | --head | www.test.com |    
     Then the step should succeed
 
   # @author weliang@redhat.com
@@ -260,12 +260,13 @@ Feature: Egress-ingress related networking scenarios
     And the output should contain:
       | actions=drop |
     """
-    # Check ping from pod
+    # Check curl from pod
     Given I use the "<%= cb.proj1 %>" project
     When I execute on the "<%= cb.pod1 %>" pod:
-      | ping | -c2 | -W2 | www.cisco.com |
+      | curl | --head | www.cisco.com |
     Then the step should fail
     When I execute on the pod:
-      | ping | -c2 | -W2 | www.baidu.com |
+      | curl | --head | www.baidu.com |
     Then the step should succeed
+
 

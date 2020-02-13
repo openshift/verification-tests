@@ -159,6 +159,7 @@ Feature: Operator related networking scenarios
       | replicas | <%= cb.original_replicas %> |
       | n        | openshift-machine-api       |
     Then the step should succeed
+    Then the machineset should have expected number of running machines
     """
 
     # Check that the status of Progressing is truned to True during the new node provisioning

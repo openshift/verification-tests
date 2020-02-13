@@ -45,5 +45,10 @@ module BushSlicer
       return rr.dig('spec', 'nodeSpec', 'nodeSelector')
     end
 
+    def cluster_status(user: nil, quiet: false, cached: false)
+      rr = raw_resource(user: user, cached: cached, quiet: quiet)
+      return rr.dig('status', 'cluster')
+    end
+
   end
 end
