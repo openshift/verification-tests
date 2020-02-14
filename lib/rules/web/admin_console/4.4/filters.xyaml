@@ -7,17 +7,25 @@ set_filter_strings:
       <<: *filter_text_ele
     op: send_keys <filter_text>
 search_by_type:
+  params:
+    api_group: <type>
   elements:
   - selector:
-      xpath: //div[@class='co-m-pane__filter-bar-group']/div[1]
+      xpath: //button[contains(@class,'pf-c-dropdown__toggle')][contains(.,'Resource')]
     op: click
   - selector:
-      xpath: (//li//*[@class='co-resource-item__resource-name' and text()='<type>'])[position()=1]
+      xpath: //input[@data-test-id='dropdown-text-filter']
+    op: send_keys <type>
+    type: input
+  - selector:
+      xpath: //span[contains(@class,'co-resource-item__resource-name')]/span[normalize-space()='<api_group>']
     op: click
 search_by_catagory:
+  params:
+    catagory: Normal
   elements:
   - selector:
-      xpath: //div[@class='co-m-pane__filter-bar-group']/div[2]
+      xpath: //button[contains(@class,'pf-c-dropdown__toggle')][contains(.,'All Types')]
     op: click
   - selector:
       xpath: //li//*[contains(.,'<catagory>')]
@@ -62,21 +70,23 @@ check_result_contain_correct_catagory:
       css: div.co-sysevent
   scripts:
     - command: |
-        // for All and Info, class="co-sysevent slide-entered"
-        // for Error, class="co-sysevent co-sysevent--error slide-entered"
-        // so this rules only appies to Error catagory, All & Info are the same and as default
+        // since 4.4, the events type are Normal and Warning
+        // for Normal, class="co-sysevent slide-entered"
+        // for Waring, class="co-sysevent co-sysevent--warning"
+        // so this rules only appies to warning catagory
         var catagories = document.querySelectorAll('div.co-sysevent');
-        var all_contain = true;
+        var contain = false;
         if (catagories.length == 0) {
-          all_contain = false;
-          return all_contain
+          contain = false;
+          return contain
         }
         catagories.forEach(function(catagory){
-          all_contain = catagory.className.includes('<catagory>'.toLowerCase()) && all_contain
+          contain = catagory.className.includes('warning') || contain
         })
-        return all_contain
-      expect_result: true
+        return contain
+      expect_result: false
 check_item_in_table:
   elements:
   - selector:
       xpath: //tr[@data-test-rows='resource-row']//*[text()='<item>']
+
