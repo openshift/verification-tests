@@ -29,16 +29,17 @@ Feature: Machine features testing
   @destructive
   Scenario: Scale up and scale down a machineSet
     Given I have an IPI deployment
+    And I switch to cluster admin pseudo user
     And I pick a random machineset to scale
     And evaluation of `machine_set.available_replicas` is stored in the :replicas_to_restore clipboard
 
     Given I scale the machineset to +2
+    Then the step should succeed
     And I register clean-up steps:
     """
     When I scale the machineset to <%= cb.replicas_to_restore %>
     Then the machineset should have expected number of running machines
     """
-    Then the step should succeed
     And the machineset should have expected number of running machines
 
     When I scale the machineset to -1
