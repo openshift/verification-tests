@@ -348,7 +348,7 @@ Feature: Testing route
     And the output should contain:
       | Hello-OpenShift |
       | HTTP/1.1 302 Found |
-      | Location: https:// |
+      | ocation: https:// |
 
   # @author yadu@redhat.com
   # @case_id OCP-9650
@@ -502,7 +502,7 @@ Feature: Testing route
     And the output should contain:
       | Hello-OpenShift |
       | HTTP/1.1 302 Found |
-      | Location: https:// |
+      | ocation: https:// |
     """
     When I run the :patch client command with:
       | resource      | route              |
@@ -551,7 +551,7 @@ Feature: Testing route
     And the output should contain:
       | Hello-OpenShift |
       | HTTP/1.1 302 Found |
-      | Location: https:// |
+      | ocation: https:// |
     """
     When I run the :patch client command with:
       | resource      | route           |
@@ -638,7 +638,7 @@ Feature: Testing route
     And the output should contain:
       | Hello-OpenShift |
       | HTTP/1.1 302 Found |
-      | Location: https:// |
+      | ocation: https:// |
     And I execute on the pod:
       | cat |
       | /tmp/cookie |
@@ -671,7 +671,7 @@ Feature: Testing route
     And the output should contain:
       | Hello-OpenShift |
       | HTTP/1.1 302 Found |
-      | Location: https:// |
+      | ocation: https:// |
     """
     And I execute on the pod:
       | cat |
