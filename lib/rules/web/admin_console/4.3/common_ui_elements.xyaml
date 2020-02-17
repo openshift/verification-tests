@@ -75,6 +75,14 @@ click_tab:
       xpath: //ul[contains(@class,'nav__menu')]//a[contains(text(), '<tab_name>')]
     op: click
     timeout: 20
+click_environment_tab:
+  params:
+    tab_name: Environment
+  action: click_tab
+click_overview_tab:
+  params:
+    tab_name: Overview
+  action: click_tab
 click_radio_input:
   element:
     selector:
