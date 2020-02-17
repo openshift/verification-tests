@@ -21,9 +21,9 @@ When I repeat the following steps for each :consoleOutput in cb.consoleOutput_ar
    """
 
    And evaluation of `cb.consoleOutput.split(":")[1].split("]")[0]` is stored in the :providerStatus clipboard
-   And evaluation of `cb.consoleOutput.split("]")[1].split("/\t")[1].split("/")[0]` is stored in the :instanceStatus clipboard
+   And evaluation of `cb.consoleOutput.split("]")[1].split("/\t")[1].split("/")[0]` is stored in the :instanceState clipboard
 
-   Then the expression should be true> cb.providerStatus == 'running'
+   Then the expression should be true> cb.providerStatus == 'cb.instanceState'
 
    """
 
