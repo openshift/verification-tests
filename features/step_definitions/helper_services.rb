@@ -609,7 +609,7 @@ Given /^I have a registry with htpasswd authentication enabled in my project$/ d
        | deploymentconfig=registry |
   })
   step %Q{I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/registry/htpasswd"}
-  @result = user.cli_exec(:new_secret, secret_name: "htpasswd-secret", credential_file: "./htpasswd", namespace: project.name)
+  @result = user.cli_exec(:create_secret, secret_type: "generic", name: "htpasswd-secret", from_file: "./htpasswd", namespace: project.name)
   step %Q/I run the :set_volume client command with:/, table(%{
     | resource    | dc/registry     |
     | add         | true            |
