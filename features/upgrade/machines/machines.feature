@@ -20,7 +20,7 @@ Feature: Machine-api components upgrade tests
     | "cluster-autoscaler" | # @case_id OCP-27664
 
   # @author jhou@redhat.com
-  # @case_id
+  # @case_id OCP-22692
   @upgrade-check
   @admin
   Scenario: There should be no pending or firing alerts for machine-api operators
