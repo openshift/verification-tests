@@ -168,10 +168,6 @@ check_resources_title_on_page:
   elements:
   - selector:
       xpath: //span[text()='<resource_title>']
-check_actions_items_open:
-  elements:
-  - selector:
-      xpath: //*[@data-test-id="action-items"]
 click_kebab_of_one_resource:
   elements:
   - selector:

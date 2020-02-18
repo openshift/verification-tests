@@ -8,9 +8,10 @@ click_resource_action_button:
     op: click
     timeout: 30
 choose_action_item_from_list:
-  action: check_actions_items_open
-  element:
-    selector:
+  elements:
+  - selector:
+      xpath: //*[@data-test-id="action-items"] 
+  - selector:
       xpath: //button[@data-test-action='<item>' and not(@disabled)]
     op: click
 choose_item_from_list:
