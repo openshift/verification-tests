@@ -69,3 +69,49 @@ Feature: Machine features testing
       | https://machine-api-operator.openshift-machine-api.svc:8443/metrics          | # @case_id OCP-25652
       | https://cluster-autoscaler-operator.openshift-machine-api.svc:9192/metrics   | # @case_id OCP-26111
       | https://machine-approver.openshift-cluster-machine-approver.svc:9192/metrics | # @case_id OCP-26102
+
+  # @author zhsun@redhat.com
+  # @case_id OCP-25608
+  @admin
+  @destructive
+  Scenario: Machine should have immutable field providerID and nodeRef
+    Given I have an IPI deployment
+    Given I store the last provisioned machine in the :machine clipboard
+
+    When I run the :get admin command with:
+      | resource      | machine                                |
+      | resource_name | <%= cb.machine %>                      |
+      | o             | yaml                                   |
+      | n             | openshift-machine-api                  |
+    Then the step should succeed
+    And evaluation of `@result[:parsed]["status"]["nodeRef"]["name"]` is stored in the :nodeRef_name clipboard
+    And evaluation of `@result[:parsed]["spec"]["providerID"]` is stored in the :providerID clipboard
+
+    When I run the :patch admin command with:
+      | resource      | machine                                |
+      | resource_name | <%= cb.machine %>                      |
+      | p             | {"status":{"nodeRef":{"name":"test"}}} |
+      | type          | merge                                  |
+      | n             | openshift-machine-api                  |
+    Then the step should succeed
+    When I run the :describe admin command with:
+      | resource      | machine                                |
+      | name          | <%= cb.machine %>                      |
+      | n             | openshift-machine-api                  |
+    Then the step should succeed
+    And the output should match "Name:\s+<%= cb.nodeRef_name %>"
+
+    When I run the :patch admin command with:
+      | resource      | machine                                |
+      | resource_name | <%= cb.machine %>                      |
+      | p             | {"spec":{"providerID":"invalid"}}      |
+      | type          | merge                                  |
+      | n             | openshift-machine-api                  |
+    Then the step should succeed
+    When I run the :describe admin command with:
+      | resource      | machine                                |
+      | name          | <%= cb.machine %>                      |
+      | n             | openshift-machine-api                  |
+    Then the step should succeed
+    And the output should match "Provider ID:\s+<%= cb.providerID %>"
+
