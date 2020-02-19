@@ -7,6 +7,7 @@ Given /^a pod becomes ready with labels:$/ do |table|
   if @result[:matching].empty?
     # logger.info("Pod list:\n#{@result[:response]}")
     # logger.error("Waiting for labeled pods futile: #{labels.join(",")}")
+    logger.error(@result[:response])
     raise "See log, timeout waiting for ready pods with " \
       "labels: #{labels.join(',')}"
   end
@@ -78,7 +79,8 @@ Given /^the pod(?: named "(.+)")? status becomes :([^\s]*?)(?: within #{NUMBER} 
   @result = pod(name).wait_till_status(status.to_sym, user, timeout)
 
   unless @result[:success]
-    logger.error(@result[:response])
+    # logger.error(@result[:response])
+    pod.describe(user, quiet: false)
     raise "#{pod.name} pod did not become #{status}"
   end
 end

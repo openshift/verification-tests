@@ -40,8 +40,28 @@ kibana_find_index_pattern:
   - selector:
       xpath: //h2[contains(@class, "index-pattern-label") and contains(., "<index_pattern_name>")] | //span[contains(., "<index_pattern_name>")]
 
+kibana_click_index:
+  elements:
+  - selector:
+      xpath: //h2[contains(@class, "index-pattern-label") and contains(., "<index_pattern_name>")] | //span[contains(., "<index_pattern_name>")]
+    op: click
+
 kibana_expand_index_patterns:
   elements:
   - selector:
       xpath: //div[contains(@ng-model, "selectedIndexPattern")]
     op: click
+
+click_kibana_link_in_console:
+  elements:
+  - selector:
+      xpath: //a[@data-component='pf-nav-expandable' and text()='Monitoring']
+    op: click
+  - selector:
+      xpath: //a[@href='<kibana_route>' and text()='Logging']
+    op: click
+
+kibana_check_status:
+  elements:
+  - selector:
+      xpath: //span[contains(@class,'overall_state_color') and contains(., '<state>')]

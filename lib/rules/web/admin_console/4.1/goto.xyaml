@@ -1,6 +1,9 @@
 # projects
 goto_projects_list_page:
   url: k8s/cluster/projects
+goto_one_project_dashboard_page:
+  action: goto_project_resources_page
+  action: goto_project_details_page
 goto_project_status:
   url: status/ns/<project>
 goto_resource_page_under_default_project:
@@ -55,6 +58,10 @@ goto_secrets_creation_page:
 goto_one_secret_page:
   url: k8s/ns/<project_name>/secrets/<secret_name>
 
+#serviceaccounts
+goto_serviceaccounts_page:
+  url: k8s/ns/<project_name>/serviceaccounts
+
 # storageclass
 goto_storageclass_page:
   url: k8s/cluster/storageclasses
@@ -89,9 +96,27 @@ goto_one_route_page:
 #catalog page
 goto_catalog_page:
   url: catalog/ns/<project_name>
+goto_create_app_from_imagestream_page:
+  url: catalog/source-to-image?imagestream=<is_name>&imagestream-ns=openshift&preselected-ns=<project_name>
+
+# monitoring
+goto_monitoring_alerts_page:
+  url: monitoring/alerts
+goto_monitoring_silences_page:
+  url: monitoring/silences
 
 #node
 goto_node_page:
   url: k8s/cluster/nodes
 goto_one_node_page:
   url: k8s/cluster/nodes/<node_name>
+
+# machine config
+goto_machineconfigs_page:
+  url: k8s/cluster/machineconfiguration.openshift.io~v1~MachineConfig
+goto_machineconfig_pools_page:
+  url: k8s/cluster/machineconfiguration.openshift.io~v1~MachineConfigPool
+
+# quota
+goto_quotas_page:
+  url: k8s/ns/<project_name>/resourcequotas

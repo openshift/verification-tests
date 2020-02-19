@@ -61,11 +61,12 @@ module BushSlicer
       end
 
       private def automation_scenario
-        automation_script_parsed.dig("cucushift", "scenario")
+        @automation_scenario ||= "#{automation_script_parsed.dig("cucushift", "scenario")}#{opts[:name_suffix]}"
       end
 
       private def automation_args
-        automation_script_parsed.dig("cucushift", "args")
+        @automation_args ||=
+          automation_script_parsed.dig("cucushift", "args")
       end
 
       private def tags_raw
@@ -168,6 +169,10 @@ module BushSlicer
 
       def logger
         request.logger
+      end
+
+      def opts
+        @opts ||= request.send(:test_case_opts)
       end
     end
   end

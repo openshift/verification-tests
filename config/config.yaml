@@ -71,13 +71,13 @@ environments:
     admin_creds: MasterOsAdminCredentials
     api_port: 8443
   ocp4: &ocp4
-    # hosts: use OPENSHIFT_ENV_OSE_HOSTS=host:role1:...,host2:role1:...
+    # hosts: use OPENSHIFT_ENV_OCP4_HOSTS=host:role1:...,host2:role1:...
     hosts_type: OCDebugAccessibleHost
     # this is the user for remote access to the OpenShift nodes
     user: root
     type: StaticEnvironment
     user_manager: auto
-    # set users in OPENSHIFT_ENV_OSE_USER_MANAGER_USERS=user:password,...
+    # set users in OPENSHIFT_ENV_OCP4_USER_MANAGER_USERS=user:password,...
     # user_manager_users: joe:redhat,alice:redhat
     #cli: MasterOsPerUserCliExecutor
     cli: SharedLocalCliExecutor
@@ -86,15 +86,10 @@ environments:
     version: 4.1.0.0 # version not supported on cluster (yet)
   ose: *ocp4
   ocm_stage:
-    hosts: cloud.redhat.com:etcd:master:node
-    web_console_url: https://cloud.redhat.com/beta
-    type: StaticEnvironment
-    ocm_env: stage
-  ocm_prod:
-    hosts: cloud.redhat.com:etcd:master:node
-    web_console_url: https://cloud.redhat.com
-    type: StaticEnvironment
-    ocm_env: product
+    web_console_url: https://cloud.redhat.com/example1/
+    type: OCMEnvironment
+    static_users_map:
+      exampleSymbolicUserName: "user1:password1"
 
 optional_classes:
   tcms_tc_manager:
@@ -107,6 +102,7 @@ optional_classes:
     opts:
       test_suite_class: BushSlicer::PolarShift::TestSuite
       test_suite_opts: {}
+
 services:
   AWS: &AWSBase
     create_opts:

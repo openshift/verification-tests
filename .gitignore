@@ -8,6 +8,7 @@
 .idea/
 .vscode/
 junit-report/
+vendor/
 .byebug_history
 /tmp
 *.iml

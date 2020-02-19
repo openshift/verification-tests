@@ -150,19 +150,11 @@ Given /^(I|admin) redeploys? #{QUOTED} dc( after scenario)?$/ do |who, dc_name, 
 end
 
 Given /^master CA is added to the#{OPT_QUOTED} dc$/ do |name|
-  ensure_admin_tagged
 
-  steps """
-    Given I use the first master host
-    When I run commands on the host:
-      | cat /etc/origin/master/ca.crt |
-    Then the step should succeed
-    And I save the output to file> openshift.crt
-  """
-
+  step %Q/certification for default image registry is stored to the :reg_crt_name clipboard/
   step %Q/I run the :create_configmap client command with:/, table(%{
-    | name      | ca              |
-    | from_file | openshift.crt   |
+    | name      | ca                     |
+    | from_file | <%= cb.reg_crt_name %> |
   })
   step %Q/the step should succeed/
 
@@ -170,7 +162,7 @@ Given /^master CA is added to the#{OPT_QUOTED} dc$/ do |name|
 
   steps """
     When I run the :rollout_pause client command with:
-      | resource | dc     |
+      | resource | dc      |
       | name     | #{name} |
     Then the step should succeed
     When I run the :set_volume client command with:
@@ -186,7 +178,7 @@ Given /^master CA is added to the#{OPT_QUOTED} dc$/ do |name|
       | key_val  | mastercert=#{name} |
     Then the step should succeed
     When I run the :rollout_resume client command with:
-      | resource | dc     |
+      | resource | dc      |
       | name     | #{name} |
     Then the step should succeed
   """

@@ -1,6 +1,7 @@
 Feature: limit range related scenarios:
 
-  # @author pruan@redhat.com, dma@redhat.com, azagayno@redhat.com
+  # @author pruan@redhat.com
+  # @author azagayno@redhat.com
   @admin
   Scenario Outline: Limit range default request tests
     Given I have a project
@@ -24,7 +25,8 @@ Feature: limit range related scenarios:
       | tc508039 | Container\\s+cpu\\s+200m\\s+\-\\s+200m\\s+\-\\s+\-    | Container\\s+memory\\s+1Gi\\s+\-\\s+1Gi\\s+\-\\s+\-  | # @case_id OCP-11175
       | tc508040 | Container\\s+cpu\\s+\-\\s+200m\\s+200m\\s+200m\\s+\-  | Container\\s+memory\\s+\-\\s+1Gi\\s+1Gi\\s+1Gi\\s+\- | # @case_id OCP-11519
 
-  # @author pruan@redhat.com, dma@redhat.com, azagayno@redhat.com
+  # @author pruan@redhat.com
+  # @author azagayno@redhat.com
   @admin
   Scenario Outline: Limit range invalid values tests
     Given I have a project
@@ -43,7 +45,8 @@ Feature: limit range related scenarios:
       | tc508041 | 400m | default request | 400m | max | 200m | 200m | default | 400m | max | 200m | 2Gi | default request | 2Gi | max | 1Gi | 1Gi | default | 2Gi  | max   | 1Gi    | # @case_id OCP-11745
       | tc508045 | 200m | min | 400m | default request | 200m | 400m | min | 400m | default | 200m | 1Gi | min | 2Gi | default request | 1Gi | 2Gi | min | 2Gi  | default   | 1Gi    | # @case_id OCP-12200
 
-  # @author pruan@redhat.com, dma@redhat.com, azagayno@redhat.com
+  # @author pruan@redhat.com
+  # @author azagayno@redhat.com
   # @case_id OCP-12286
   @admin
   Scenario Outline: Limit range incorrect values
@@ -59,7 +62,8 @@ Feature: limit range related scenarios:
       | path | expr1 | expr2 | expr3 | expr4 | expr5 | expr6 | expr7 | expr8 | expr9 | expr10 |
       | tc508047 | 2Gi | min | 2Gi | max | 1Gi | 400m | min | 400m | max | 200m |
 
-  # @author pruan@redhat.com, dma@redhat.com, azagayno@redhat.com
+  # @author pruan@redhat.com
+  # @author azagayno@redhat.com
   # @case_id OCP-12250
   @admin
   Scenario: Limit range does not allow min > defaultRequest
@@ -71,7 +75,8 @@ Feature: limit range related scenarios:
       | cpu.*min value 400m is greater than default request value 200m    |
       | memory.*min value 2Gi is greater than default request value 1Gi   |
 
-  # @author gpei@redhat.com, dma@redhat.com, azagayno@redhat.com
+  # @author gpei@redhat.com
+  # @author azagayno@redhat.com
   # @case_id OCP-11918
   @admin
   Scenario: Limit range does not allow defaultRequest > default
@@ -83,7 +88,8 @@ Feature: limit range related scenarios:
       | cpu.*default request value 400m is greater than default limit value 200m       |
       | memory.*default request value 2Gi is greater than default limit value 1Gi      |
 
-  # @author gpei@redhat.com, dma@redhat.com, azagayno@redhat.com
+  # @author gpei@redhat.com
+  # @author azagayno@redhat.com
   # @case_id OCP-12043
   @admin
   Scenario: Limit range does not allow defaultRequest > max
@@ -95,7 +101,8 @@ Feature: limit range related scenarios:
       | cpu.*default request value 400m is greater than max value 200m      |
       | memory.*default request value 2Gi is greater than max value 1Gi     |
 
-  # @author gpei@redhat.com, dma@redhat.com, azagayno@redhat.com
+  # @author gpei@redhat.com
+  # @author azagayno@redhat.com
   # @case_id OCP-12139
   @admin
   Scenario: Limit range does not allow maxLimitRequestRatio > Limit/Request
@@ -115,7 +122,8 @@ Feature: limit range related scenarios:
     And the output should contain:
       | cpu max limit to request ratio per Container is 4, but provided ratio is 15.000000              |
 
-  # @author gpei@redhat.com, azagayno@redhat.com
+  # @author gpei@redhat.com
+  # @author azagayno@redhat.com
   # @case_id OCP-12315
   @admin
   Scenario: Limit range with all values set with proper values

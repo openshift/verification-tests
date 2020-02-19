@@ -131,7 +131,7 @@ Given /^I have a(n authenticated)? proxy configured in the project$/ do |use_aut
   end
   step %Q/the step should succeed/
   step %Q/a pod becomes ready with labels:/, table(%{
-    | app=squid-proxy |
+    | deployment=squid-proxy-1 |
     })
   step %Q/I wait for the "squid-proxy" service to become ready/
   step %Q/evaluation of `service.ip` is stored in the :proxy_ip clipboard/
@@ -609,8 +609,8 @@ Given /^I have a registry with htpasswd authentication enabled in my project$/ d
        | deploymentconfig=registry |
   })
   step %Q{I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/registry/htpasswd"}
-  @result = user.cli_exec(:new_secret, secret_name: "htpasswd-secret", credential_file: "./htpasswd", namespace: project.name)
-  step %Q/I run the :volume client command with:/, table(%{
+  @result = user.cli_exec(:create_secret, secret_type: "generic", name: "htpasswd-secret", from_file: "./htpasswd", namespace: project.name)
+  step %Q/I run the :set_volume client command with:/, table(%{
     | resource    | dc/registry     |
     | add         | true            |
     | mount-path  | /auth           |

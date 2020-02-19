@@ -14,7 +14,6 @@ Feature: create app on web console related
       | source_url   | https://github.com/sclorg/django-ex.git |
       | git_ref      | v1.0.1                                     |
     Given the "python-sample-1" build was created
-    Given the "python-sample-1" build completed
 
   # @author xxing@redhat.com
   # @case_id OCP-11445

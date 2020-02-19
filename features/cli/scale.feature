@@ -10,6 +10,8 @@ Feature: scaling related scenarios
       | code         | https://github.com/sclorg/s2i-perl-container |
       | context_dir  | 5.26/test/sample-test-app/                   |
     Then the step should succeed
+    And the "myapp-1" build was created
+    Given the "myapp-1" build completes
     When I expose the "myapp" service
     Then the step should succeed
     Given I wait for the "myapp" service to become ready up to 300 seconds

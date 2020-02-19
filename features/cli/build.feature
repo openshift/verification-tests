@@ -132,7 +132,7 @@ Feature: build 'apps' with CLI
   Scenario: Create applications only with multiple db images
     Given I create a new project
     When I run the :new_app client command with:
-      | image_stream      | openshift/mongodb:3.6                  |
+      | image_stream      | openshift/mongodb:latest               |
       | image_stream      | openshift/mysql                        |
       | docker_image      | centos/postgresql-96-centos7:latest    |
       | env               | MONGODB_USER=test                      |
@@ -152,7 +152,7 @@ Feature: build 'apps' with CLI
     And I wait up to 120 seconds for the steps to pass:
     """
     When I execute on the pod:
-      | bash | -c | mysql  -h $MYSQL_SERVICE_HOST -u root -ptest -e "show databases" |
+      | bash | -c | mysql  -h $HOSTNAME -u root -ptest -e "show databases" |
     Then the step should succeed
     """
     And the output should contain "mysql"
@@ -325,10 +325,10 @@ Feature: build 'apps' with CLI
   Scenario Outline: Do sti/custom build with no inputs in buildconfig
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/nosrc-extended-test-bldr/master/nosrc-setup.json |
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/tc525736/nosrc-setup.json |
     Then the step should succeed
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/nosrc-extended-test-bldr/master/nosrc-test.json  |
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/tc525736/nosrc-test.json  |
     When I get project bc
     Then the output should contain:
       | <bc_name> |
@@ -474,17 +474,19 @@ Feature: build 'apps' with CLI
       | resource_name | ruby-hello-world                         |
       | p             | {"spec": {"runPolicy": "Parallel"}} |
     Then the step should succeed
-    Given I run the steps 3 times:
+    Given I run the steps 2 times:
     """
     When I run the :start_build client command with:
       | buildconfig | ruby-hello-world |
     Then the step should succeed
     """
-    Given the "ruby-hello-world-9" build becomes :pending
+    Given the "ruby-hello-world-8" build becomes :pending
     When I run the :cancel_build client command with:
       | build_name | ruby-hello-world-7 |
       | build_name | ruby-hello-world-8 |
-      | build_name | ruby-hello-world-9 |
+    Then the step should succeed
+    When I run the :start_build client command with:
+      | buildconfig | ruby-hello-world |
     Then the step should succeed
     And I wait up to 480 seconds for the steps to pass:
     """
@@ -492,8 +494,7 @@ Feature: build 'apps' with CLI
     Then the output should match <num1> times:
       | Git.*Cancelled |
     """
-    And the output should not contain "New"
-    Given I run the steps 3 times:
+    Given I run the steps 2 times:
     """
     When I run the :start_build client command with:
       | buildconfig | ruby-hello-world |
@@ -503,25 +504,27 @@ Feature: build 'apps' with CLI
       | bc_name | bc/ruby-hello-world |
       | state   | pending             |
     Then the step should succeed
+    When I run the :start_build client command with:
+      | buildconfig | ruby-hello-world |
+    Then the step should succeed
     And I wait up to 480 seconds for the steps to pass:
     """
     Given I get project builds
     Then the output should match <num2> times:
       | Git.*Cancelled |
     """
-    And the output should not contain "New"
-    Given I run the steps 3 times:
-    """
     When I run the :start_build client command with:
       | buildconfig | ruby-hello-world |
     Then the step should succeed
-    """
     Given I get project builds
     Given the "ruby-hello-world-13" build becomes :running
     When I run the :cancel_build client command with:
+      | build_name | ruby-hello-world-11 |
+      | build_name | ruby-hello-world-12 |
       | build_name | ruby-hello-world-13 |
-      | build_name | ruby-hello-world-14 |
-      | build_name | ruby-hello-world-15 |
+    Then the step should succeed
+    When I run the :start_build client command with:
+      | buildconfig | ruby-hello-world |
     Then the step should succeed
     And I wait up to 480 seconds for the steps to pass:
     """
@@ -529,16 +532,19 @@ Feature: build 'apps' with CLI
     Then the output should match <num3> times:
       | Git.*Cancelled |
     """
-    Given I run the steps 3 times:
+    Given I run the steps 2 times:
     """
     When I run the :start_build client command with:
       | buildconfig | ruby-hello-world |
     Then the step should succeed
     """
-    Given the "ruby-hello-world-16" build becomes :running
+    Given the "ruby-hello-world-15" build becomes :running
     When I run the :cancel_build client command with:
       | bc_name | bc/ruby-hello-world |
       | state   | running             |
+    Then the step should succeed
+    When I run the :start_build client command with:
+      | buildconfig | ruby-hello-world |
     Then the step should succeed
     And I wait up to 480 seconds for the steps to pass:
     """
@@ -546,7 +552,7 @@ Feature: build 'apps' with CLI
     Then the output should match <num4> times:
       | Git.*Cancelled |
     """
-    Given I run the steps 3 times:
+    Given I run the steps 2 times:
     """
     When I run the :start_build client command with:
       | buildconfig | ruby-hello-world |
@@ -554,6 +560,9 @@ Feature: build 'apps' with CLI
     """
     When I run the :cancel_build client command with:
       | bc_name | bc/ruby-hello-world |
+    Then the step should succeed
+    When I run the :start_build client command with:
+      | buildconfig | ruby-hello-world |
     Then the step should succeed
     And I wait up to 480 seconds for the steps to pass:
     """

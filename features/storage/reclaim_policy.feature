@@ -2,7 +2,6 @@ Feature: Persistent Volume reclaim policy tests
 
   # @author lxia@redhat.com
   @admin
-  @destructive
   Scenario Outline: Persistent disk with RWO access mode and Default policy
     Given I have a project
     And I have a 1 GB volume and save volume id in the :vid clipboard
@@ -13,18 +12,18 @@ Feature: Persistent Volume reclaim policy tests
       | ["spec"]["accessModes"][0]                  | ReadWriteOnce          |
       | ["spec"]["<storage_type>"]["<volume_name>"] | <%= cb.vid %>          |
       | ["spec"]["persistentVolumeReclaimPolicy"]   | Default                |
+      | ["spec"]["storageClassName"]                | sc-<%= project.name %> |
     Then the step should succeed
-    When I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gce/claim-rwo.json" replacing paths:
-      | ["metadata"]["name"]                         | mypvc |
-      | ["spec"]["volumeName"]                       | pv-<%= project.name %>  |
-      | ["spec"]["accessModes"][0]                   | ReadWriteOnce           |
-      | ["spec"]["resources"]["requests"]["storage"] | 1Gi                     |
+    When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
+      | ["metadata"]["name"]         | mypvc                  |
+      | ["spec"]["volumeName"]       | pv-<%= project.name %> |
+      | ["spec"]["storageClassName"] | sc-<%= project.name %> |
     Then the step should succeed
     And the "mypvc" PVC becomes bound to the "pv-<%= project.name %>" PV
 
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gce/pod.json" replacing paths:
       | ["metadata"]["name"]                                         | mypod |
-      | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt                    |
+      | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt  |
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc |
     Then the step should succeed
     Given the pod named "mypod" becomes ready
@@ -44,7 +43,6 @@ Feature: Persistent Volume reclaim policy tests
 
   # @author lxia@redhat.com
   @admin
-  @destructive
   Scenario Outline: Persistent volume with RWO access mode and Delete policy
     Given I have a project
     And I have a 1 GB volume and save volume id in the :vid clipboard
@@ -55,18 +53,18 @@ Feature: Persistent Volume reclaim policy tests
       | ["spec"]["accessModes"][0]                  | ReadWriteOnce          |
       | ["spec"]["<storage_type>"]["<volume_name>"] | <%= cb.vid %>          |
       | ["spec"]["persistentVolumeReclaimPolicy"]   | Delete                 |
+      | ["spec"]["storageClassName"]                | sc-<%= project.name %> |
     Then the step should succeed
-    When I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gce/claim-rwo.json" replacing paths:
-      | ["metadata"]["name"]                         | mypvc |
-      | ["spec"]["volumeName"]                       | pv-<%= project.name %>  |
-      | ["spec"]["accessModes"][0]                   | ReadWriteOnce           |
-      | ["spec"]["resources"]["requests"]["storage"] | 1Gi                     |
+    When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
+      | ["metadata"]["name"]         | mypvc                  |
+      | ["spec"]["volumeName"]       | pv-<%= project.name %> |
+      | ["spec"]["storageClassName"] | sc-<%= project.name %> |
     Then the step should succeed
     And the "mypvc" PVC becomes bound to the "pv-<%= project.name %>" PV
 
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gce/pod.json" replacing paths:
       | ["metadata"]["name"]                                         | mypod |
-      | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt                    |
+      | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt  |
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc |
     Then the step should succeed
     Given the pod named "mypod" becomes ready

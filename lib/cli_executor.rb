@@ -60,27 +60,29 @@ module BushSlicer
       fake_config = Tempfile.new("kubeconfig")
       fake_config.close
 
-      res = host.exec_as(user, "oc version --config=#{fake_config.path}")
+      res = host.exec_as(user, "oc version -o yaml --kubeconfig=#{fake_config.path}")
 
       fake_config.unlink
 
       raise "cannot execute on host #{host.hostname} as user '#{user}'" unless res[:success]
-      return res[:response].scan(/GitVersion:"v([^"]+)"|^Client Version: (?:v|openshift-clients-)(\d+[-. _\w]*)$/)[0].find{|v| v != nil}
+      parsed = YAML.load res[:stdout]
+      version_str = parsed.dig("clientVersion", "gitVersion")
+      raise "unknown version format, see log" unless version_str
+      return version_str.sub(/^v/, "")
     end
 
     # try to map ocp and origin cli version to a comparable integer value
     # we may switch to `major.minor` rules versions in the future
     private def rules_version(str_version)
       v = str_version.split('.')
-      # version like v1.y.z, i.e. return version 3.y
-      # version like v3.y.z, i.e. return version 3.y
-      # version like v4.y.z, i.e. return version 4.y
-      if v[0] == '1'
-        major = '3'
-      else
-        major = v[0]
-      end
-      return [major, v[1]].join('.')
+
+      # https://bugzilla.redhat.com/show_bug.cgi?id=1781909
+      # OCP = 4.1 format `v4.1.10-201908061216+c8c05d4-dirty`, return version 4.1
+      # OCP = 4.2 format `openshift-clients-4.2.2-201910250432`, return version 4.2
+      # OCP = 4.3 format `openshift-clients-4.3-2-ge0666000`, return version 4.3
+      major = v[0].split('openshift-clients-').last
+      minor = v[1].split('-').first
+      return [major, minor].join('.')
     end
 
     # prepare kube config according to parameters
@@ -286,7 +288,9 @@ module BushSlicer
 
       # TODO: we may consider obtaining server CA chain and configuring it in
       #   instead of setting insecure SSL
-      config_setup(user: user, executor: executor, opts: {config: user_config, skip_tls_verify: "true"})
+      opts = {config: user_config, skip_tls_verify: "true"}
+      add_proxy_env_opt(user.env, opts)
+      config_setup(user: user, executor: executor, opts: opts)
 
       # success, set opts early to allow caching token
       logged_users[user.id] = {config: user_config}
@@ -299,6 +303,7 @@ module BushSlicer
         user_opts(user)
       end
 
+      add_proxy_env_opt(user.env, opts)
       cli_tool = tool_from_opts!(opts)
       executor(cli_tool: cli_tool).
         run(key, Common::Rules.merge_opts(logged_users[user.id], opts))
