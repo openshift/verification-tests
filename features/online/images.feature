@@ -113,46 +113,46 @@ Feature: ONLY ONLINE Images related scripts in this file
       | bash | -c | mysql -h <%= pod.name %> --user=$MYSQL_USER --password=redhat -e 'use sampledb;select * from test;' |
     Then the step should succeed
 
-    # @author etrott@redhat.com
-    # @case_id OCP-12681
-    Scenario: mem based auto-tuning mariadb
-      Given I have a project
-      When I run the :new_app client command with:
-        | name  | mariadb                  |
-        | image | openshift/mariadb:10.1   |
-        | env   | MYSQL_ROOT_PASSWORD=test |
-      Then the step should succeed
-      Given a pod becomes ready with labels:
-        | deployment=mariadb-1 |
-      When I execute on the pod:
-        | cat | /etc/my.cnf.d/50-my-tuning.cnf |
-      Then the output should contain:
-        | key_buffer_size = 51M          |
-        | read_buffer_size = 25M         |
-        | innodb_buffer_pool_size = 256M |
-        | innodb_log_file_size = 76M     |
-        | innodb_log_buffer_size = 76M   |
-      Given I perform the :goto_set_resource_limits_for_dc web console action with:
-        | project_name | <%= project.name %> |
-        | dc_name      | mariadb             |
-      Then the step should succeed
-      When I perform the :set_resource_limit_single web console action with:
-        | resource_type   | memory |
-        | limit_type      | |
-        | amount_unit     | MiB    |
-        | resource_amount | 400    |
-      Then the step should succeed
-      When I run the :click_save_button web console action
-      Then the step should succeed
-      Given I wait for the pod named "mariadb-2-deploy" to die
-      And a pod becomes ready with labels:
-        | deployment=mariadb-2 |
-      When I execute on the pod:
-        | cat | /etc/my.cnf.d/50-my-tuning.cnf |
-      Then the output should contain:
-        | key_buffer_size = 40M          |
-        | read_buffer_size = 20M         |
-        | innodb_buffer_pool_size = 200M |
-        | innodb_log_file_size = 60M     |
-        | innodb_log_buffer_size = 60M   |
+  # @author etrott@redhat.com
+  # @case_id OCP-12681
+  Scenario: mem based auto-tuning mariadb
+    Given I have a project
+    When I run the :new_app client command with:
+      | name  | mariadb                  |
+      | image | openshift/mariadb:10.1   |
+      | env   | MYSQL_ROOT_PASSWORD=test |
+    Then the step should succeed
+    Given a pod becomes ready with labels:
+      | deployment=mariadb-1 |
+    When I execute on the pod:
+      | cat | /etc/my.cnf.d/50-my-tuning.cnf |
+    Then the output should contain:
+      | key_buffer_size = 51M          |
+      | read_buffer_size = 25M         |
+      | innodb_buffer_pool_size = 256M |
+      | innodb_log_file_size = 76M     |
+      | innodb_log_buffer_size = 76M   |
+    Given I perform the :goto_set_resource_limits_for_dc web console action with:
+      | project_name | <%= project.name %> |
+      | dc_name      | mariadb             |
+    Then the step should succeed
+    When I perform the :set_resource_limit_single web console action with:
+      | resource_type   | memory |
+      | limit_type      | |
+      | amount_unit     | MiB    |
+      | resource_amount | 400    |
+    Then the step should succeed
+    When I run the :click_save_button web console action
+    Then the step should succeed
+    Given I wait for the pod named "mariadb-2-deploy" to die
+    And a pod becomes ready with labels:
+      | deployment=mariadb-2 |
+    When I execute on the pod:
+      | cat | /etc/my.cnf.d/50-my-tuning.cnf |
+    Then the output should contain:
+      | key_buffer_size = 40M          |
+      | read_buffer_size = 20M         |
+      | innodb_buffer_pool_size = 200M |
+      | innodb_log_file_size = 60M     |
+      | innodb_log_buffer_size = 60M   |
 

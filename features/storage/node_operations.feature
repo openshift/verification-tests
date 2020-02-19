@@ -20,6 +20,7 @@ Feature: Node operations test scenarios
       | node_name         | <%= pod.node_name %> |
       | delete-local-data | true                 |
       | ignore-daemonsets | true                 |
+      | force             | true                 |
     Then the step should succeed
 
     # Verify old pod is deleted

@@ -8,6 +8,8 @@ Feature: env.feature
       | app_repo | ruby:latest~https://github.com/openshift/ruby-hello-world |
       | env      | DB_USER=test                                              |
     Then the step should succeed
+    And the "ruby-hello-world-1" build was created
+    Given the "ruby-hello-world-1" build completed
     Given a pod becomes ready with labels:
       |deployment=ruby-hello-world-1|
     When I run the :set_env client command with:
@@ -20,6 +22,8 @@ Feature: env.feature
       | app_repo | ruby:latest~https://github.com/openshift/ruby-hello-world |
       | env      | RACK_ENV=development                                      |
     Then the step should succeed
+    And the "ruby-hello-world-1" build was created
+    Given the "ruby-hello-world-1" build completed
     Given a pod becomes ready with labels:
       |deployment=ruby-hello-world-1|
     When I run the :set_env client command with:
@@ -36,6 +40,8 @@ Feature: env.feature
       | app_repo | ruby:2.5~https://github.com/openshift/ruby-hello-world |
       | env_file | test                                                   |
     Then the step should succeed
+    And the "ruby-hello-world-1" build was created
+    Given the "ruby-hello-world-1" build completed
     Given a pod becomes ready with labels:
       |deployment=ruby-hello-world-1|
     When I run the :set_env client command with:
@@ -52,6 +58,8 @@ Feature: env.feature
       | app_repo | ruby:2.5~https://github.com/openshift/ruby-hello-world |
       | env_file | test                                                   |
     Then the step should succeed
+    And the "ruby-hello-world-1" build was created
+    Given the "ruby-hello-world-1" build completed
     Given a pod becomes ready with labels:
       |deployment=ruby-hello-world-1|
     When I run the :set_env client command with:

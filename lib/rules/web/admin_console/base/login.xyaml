@@ -9,6 +9,7 @@ verify_logged_in_admin_console:
     selector: |-
       var ns = window.localStorage['exp'];
       return ns ? document.documentElement : null;
+    timeout: 120
   scripts:
   - command: return window.localStorage['exp']
     expect_result: true
@@ -20,7 +21,7 @@ click_console_selector:
 click_specified_idp:
   element:
     selector:
-      xpath: //a[@class='idp' and text()='<idp_name>']
+      xpath: //a[text()='<idp_name>']
     op: click
 set_login_username:
   element:

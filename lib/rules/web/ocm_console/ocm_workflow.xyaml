@@ -1,25 +1,33 @@
 create_osd_cluster:
     action: switch_to_osd_creation_page
-    element:
-        selector:
-            xpath: //input[@id='name']
-        op: send_keys <cluster_name>
-        type: input
+    action: input_cluster_name_on_osd_creation_page
     action:
         if_param: machine_type
         ref: select_machine_type
+    action:
+        if_param: region_id
+        ref: select_region
     action: click_create_button
     action: cluster_detail_page_loaded
     action: overview_tab_loaded
+delete_osd_cluster_from_detail_page:
+    action: expand_actions_on_cluster_detail_page
+    action: click_delete_button_on_cluster_detail_page
+    action: delete_cluster_dialog_loaded
+    action: input_cluster_name_on_deletion_dialog
+    action: click_delete_button_on_deletion_dialog
+    action: cluster_list_page_loaded
 archive_cluster_from_cluster_list_page:
     action: cluster_list_page_loaded
     action: click_archive_button_on_cluster_list_page
     action: archive_dialog_loaded
     action: click_archive_button
     action: archive_succ_promt_message_displayed
+    action: cluster_list_page_loaded
+    
+unarchive_cluster_from_cluster_list_page:
     action: go_to_archived_cluster_page
     action: archived_page_loaded
-unarchive_cluster_from_cluster_list_page:
     action: archived_page_loaded
     action: click_unarchive_cluster_button_on_archived_cluster_list_page
     action: unarchive_dialog_loaded

@@ -1,0 +1,35 @@
+check_user_in_users_page:
+  action: goto_users_list_page
+  action: check_link_and_text
+delete_user_from_kebab:
+  params:
+    item: Delete User
+  action: click_kebab_of_one_resource
+  action: choose_action_item_from_list
+  action: submit_changes
+check_rolebinding_of_user:
+  params:
+    text: <rolebinding>
+  action: goto_rolebinding_page_of_user
+  action: wait_until_no_loading
+  action:
+    if_param: content
+    ref: check_page_contains
+  action:
+    if_param: rolebinding
+    ref: check_link_and_text
+impersonate_one_user:
+  action: goto_users_list_page
+  action: click_one_operation_in_kebab
+check_impersonate_notifications:
+  elements:
+  - selector:
+      xpath: //span[contains(.,"Impersonating User")]
+  - selector:
+      xpath: //span[contains(@class,'co-global-notification__impersonate-name') and text()='<username>']
+  - selector: &stop_impersonation
+      xpath: //a[text()='Stop Impersonation']
+click_stop_impersonation:
+  element:
+    selector: *stop_impersonation
+    op: click

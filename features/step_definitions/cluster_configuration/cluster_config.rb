@@ -23,7 +23,7 @@ Given /^I enable autoscaling for my cluster$/ do
   # first create cluster autoscaler
   cluster_autoscaler_yaml = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/metering/cluster-autoscaler.yaml"
   admin.cli_exec(:create, f: cluster_autoscaler_yaml)
-  step %Q/I store all machinesets to the clipboard/
+  step %Q/I store all machinesets in the "openshift-machine-api" project to the :machinesets clipboard/
   cb.machinesets.each do | machineset |
     # we need to add the `name` elements
     base_template_hash['spec']['scaleTargetRef']['name'] = machineset.name

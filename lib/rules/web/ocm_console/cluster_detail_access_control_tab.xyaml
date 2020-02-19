@@ -1,34 +1,23 @@
-check_users_tab:
-  element: &users_tab
+check_access_control_tab:
+  element: &access_control_tab
     selector:
-      xpath: //section[@id='clusterdetails-content']//div[@class='pf-c-tabs']/ul[@class='pf-c-tabs__list']//li/button[@class='pf-c-tabs__button' and text()='Users']
-click_users_tab:
+      xpath: //section[@id='clusterdetails-content']//div[@class='pf-c-tabs']/ul[@class='pf-c-tabs__list']//li/button[@class='pf-c-tabs__button' and text()='Access Control']
+click_access_control_tab:
   element:
-    <<: *users_tab
+    <<: *access_control_tab
     op: click
-check_add_user_button_in_empty_content_card:
-  element: &add_user_button
-    selector:
-      xpath: //section[@id='clusterdetails-content']//section[@id='usersTabContent']/div[@class='pf-c-empty-state pf-m-lg cluster-details-user-tab-contents']/button[@class='pf-c-button pf-m-primary' and text()='Add user']
-click_add_user_button:
-  element:
-    <<: *add_user_button
-    op: click
-check_empty_user_tab_content:
-  action: check_add_user_button_in_empty_content_card
-  element:
-    selector:
-      xpath: .//parent::h5[@class="pf-c-title pf-m-lg" and text()='No users exist for this cluster']
-  element: &user_description_in_tab
-    selector:
-      xpath: .//parent::div[@class="pf-c-empty-state__body" and text()='You can add users to grant them access to the cluster. Users will be authenticated via your selected identity provider.']
-check_add_user_tab_content_without_users:
-  action: check_user_tab_content
+check_elements_on_user_card:
+  action: check_user_card_title
+  action: check_user_card_description
   action: check_add_user_field
-check_user_tab_content:
+check_user_card_title:
   element:
     selector:
-      xpath: //div[@class='cluster-details-user-tab-contents']/p[text()='Grant permission to manage this cluster to users defined in your identity provider.']
+      xpath: //section[@id='accessControlTabContent']/div[@class='cluster-details-user-tab-contents']/article/div[@class='pf-c-card__body']/h3[text()='Cluster Administrative Users']
+check_user_card_description:
+  element:
+    selector:
+      xpath: //section[@id='accessControlTabContent']/div[@class='cluster-details-user-tab-contents']/article/div[@class='pf-c-card__body']/p[text()='Grant permission to manage this cluster to users defined in your identity provider.']/a[@href='https://docs.openshift.com/dedicated/4/administering_a_cluster/dedicated-admin-role.html' and text()='Learn more.']
 check_add_user_field:
   action: check_user_input_field
   action: check_users_group_select
@@ -36,17 +25,17 @@ check_add_user_field:
 check_user_input_field:
   elements:
   - selector:
-      xpath: //div[@class='cluster-details-user-tab-contents']/div/div/h3[text()='Add user:']
+      xpath: //section[@id='accessControlTabContent']/div[@class='cluster-details-user-tab-contents']/article/div[@class='pf-c-card__body']/h3[text()='Add user:']
   element: &user_input_field
     selector:
-      xpath: //div[@class='pf-l-grid pf-m-gutter']//input[@id='edit-user-id-input' and @placeholder='Enter a user name or user ID']
+      xpath: //section[@id='accessControlTabContent']/div[@class='cluster-details-user-tab-contents']/article/div[@class='pf-c-card__body']//input[@id='edit-user-id-input' and @placeholder='Enter a user name or user ID']
 check_users_group_select:
   element: &users_group_select_button
     selector: 
-      xpath: //div[@class='pf-l-grid pf-m-gutter']//div[@class='pf-c-select']/button[@class='pf-c-select__toggle']
+      xpath: //section[@id='accessControlTabContent']/div[@class='cluster-details-user-tab-contents']/article/div[@class='pf-c-card__body']//button[@class='pf-c-select__toggle']
   element:
     selector:
-      xpath: //div[@class='pf-l-grid pf-m-gutter']//div[@class='pf-c-select']//div/span[@class='pf-c-select__toggle-text' and text()='dedicated-admins']
+      xpath: //section[@id='accessControlTabContent']/div[@class='cluster-details-user-tab-contents']/article/div[@class='pf-c-card__body']//button[@class='pf-c-select__toggle']//div/span[@class='pf-c-select__toggle-text' and text()='dedicated-admins']
 click_users_group_select:
   element:
     <<: *users_group_select_button
@@ -93,10 +82,10 @@ check_user_added:
 check_the_user_table_header:
   element: &user_id_helper_button
     selector:
-      xpath: //div[@class='cluster-details-user-tab-contents']//div[@class='pf-l-grid']//div[@class='pf-l-grid__item pf-m-2-col-on-sm']/h3[text()='User ID']/button[@class='pf-c-button pf-m-plain']
+      xpath: //section[@id='accessControlTabContent']/div[@class='cluster-details-user-tab-contents']//div[@class='pf-c-card__body']//table[@role='grid']//thead/tr/th[text()='User ID']/button[@class='pf-c-button pf-m-plain']
   element: &user_group_helper_button
     selector:
-      xpath: //div[@class='cluster-details-user-tab-contents']//div[@class='pf-l-grid']//div[@class='pf-l-grid__item pf-m-2-col-on-sm']/h3[text()='Group']/button[@class='pf-c-button pf-m-plain']
+      xpath: //section[@id='accessControlTabContent']/div[@class='cluster-details-user-tab-contents']//div[@class='pf-c-card__body']//table[@role='grid']//thead/tr/th[text()='Group']/button[@class='pf-c-button pf-m-plain']
 check_popover_content_for_user_id:
   element:
     <<: *user_id_helper_button
@@ -118,12 +107,12 @@ check_popover_content_for_user_group:
 check_the_user_list_item:
   elements:
   - selector:
-      xpath: //div[@class='cluster-details-user-tab-contents']//div[@class='pf-l-grid']/div[@class='pf-l-grid']/div[@class='pf-l-grid__item pf-m-2-col-on-sm' and text()='<user_id>']
+      xpath: //section[@id='accessControlTabContent']/div[@class='cluster-details-user-tab-contents']//div[@class='pf-c-card__body']//table[@role='grid']//tbody/tr/td[text()='<user_id>']
   - selector:
-      xpath: //div[@class='cluster-details-user-tab-contents']//div[@class='pf-l-grid']/div[@class='pf-l-grid']/div[@class='pf-l-grid__item pf-m-2-col-on-sm' and text()='<user_group>']
-  element: &delete_user_button
+      xpath: //section[@id='accessControlTabContent']/div[@class='cluster-details-user-tab-contents']//div[@class='pf-c-card__body']//table[@role='grid']//tbody/tr/td[text()='<user_group>']
+  element: &user_option_dropdowm_button
     selector:
-      xpath: //div[@class='cluster-details-user-tab-contents']//div[@class='pf-l-grid']/div[@class='pf-l-grid']/div[@class='pf-l-grid__item pf-m-2-col-on-sm' and text()='<user_id>']/following-sibling::div[@class='pf-l-grid__item pf-m-1-col-on-sm']/button[@aria-label='Delete']
+      xpath: //section[@id='accessControlTabContent']/div[@class='cluster-details-user-tab-contents']//div[@class='pf-c-card__body']//table[@role='grid']//tbody/tr/td[text()='<user_id>']/following-sibling::td/div/button[@class='pf-c-dropdown__toggle pf-m-plain']
 choose_user_group:
   action: click_users_group_select
   element:
@@ -132,7 +121,11 @@ choose_user_group:
     op: click 
 delete_user:
   element:
-    <<: *delete_user_button
+    <<: *user_option_dropdowm_button
+    op: click
+  element:
+    selector:
+      xpath: //section[@id='accessControlTabContent']/div[@class='cluster-details-user-tab-contents']//div[@class='pf-c-card__body']//table[@role='grid']//tbody/tr/td[text()='<user_id>']/following-sibling::td/div/ul[@role='menu']/li[@role='menuitem']/div[text()='Delete']
     op: click
 check_danger_alert_box_in_user_tab:
   elements:

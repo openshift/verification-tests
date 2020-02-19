@@ -54,10 +54,16 @@ click_archive_button:
             xpath: //button[@class='pf-c-button pf-m-primary' and text()='Archive cluster']
         op: click
 archive_succ_promt_message_displayed:
-    element:
+    element: &archive_succ_promt_message
         selector:
-            xpath: //*[contains(text(),'has been archived')]
-        timeout: 10
+            xpath: //h4[contains(text(),'has been archived')]
+        timeout: 120
+    action: archive_succ_promt_message_missing
+archive_succ_promt_message_missing:
+    element:
+        <<: *archive_succ_promt_message
+        missing: true
+        
 unarchive_dialog_loaded:
     elements:
         - selector:
@@ -76,10 +82,16 @@ click_unarchive_button:
             xpath: //button[@class='pf-c-button pf-m-primary' and text()='Unarchive cluster']
         op: click
 unarchive_succ_prompt_message_displayed:
-    element:
+    element: &unarchive_succ_prompt_message
         selector:
             xpath: //*[contains(text(),'has been unarchived')]
-        timeout: 20
+        timeout: 60
+    action: unarchive_succ_prompt_message_missing
+unarchive_succ_prompt_message_missing:
+    element:
+        <<: *unarchive_succ_prompt_message
+        missing: true
+        
 check_display_name_dialog_loaded:
   elements:
     - selector:
@@ -101,6 +113,70 @@ edit_display_name_in_dialog:
     - selector:
         xpath: //button[@class="pf-c-button pf-m-primary" and @type="submit"]
       op: click
+delete_cluster_dialog_loaded:
+    elements:
+        - selector:
+            xpath: //h1[text()='Delete Cluster']
+        - selector:
+            xpath: //p[text()='This action cannot be undone. It will uninstall the cluster, and all data will be deleted.']
+        - selector:
+            xpath: //p[text()[1]='Confirm deletion by typing']
+        #- selector:
+        #    xpath: //p[text()[2]='below:']
+        - selector:
+            xpath: //p/span[text()='<cluster_name>']
+        - selector:
+            xpath: //input[@class='pf-c-form-control']
+            type: text
+        - selector:
+            xpath: //button[@aria-label='Close']
+        - selector:
+            xpath: //button[text()='Cancel']
+            type: button
+        - selector:
+            xpath: //button[text()='Delete' and @disabled='']
+            type: submit
+check_delete_button_disabled:
+    element:
+        selector:
+            xpath: //button[text()='Delete' and @disabled='']
+            type: submit
+input_cluster_name_on_deletion_dialog:
+    element:
+        selector:
+            xpath: //input[@class='pf-c-form-control']
+            type: text
+        op: send_keys <input_text>
+click_delete_button_on_deletion_dialog:
+    element:
+        selector:
+            xpath: //button[text()='Delete']
+            type: submit
+        op: click
+osd_creation_error_dialog_loaded:
+    elements:
+        - selector:
+            xpath: //h1[text()='Error Creating Cluster']
+            timeout: 30
+        - selector:
+            xpath: //h1/*[name()='svg']
+            timeout: 30
+        - selector:
+            xpath: //p[contains(text(),"<error_reason>")]
+            timeout: 30
+        - selector:
+            xpath: //p[contains(text(), 'Operation ID')]
+            timeout: 30
+        - selector:
+            xpath: //button[text()='Close']
+            timeout: 30
+close_error_message_dialog:
+    element:
+        selector:
+            xpath: //button[text()='Close']
+            type: submit
+        op: click
+
 edit_compute_node_in_dialog:
   action: clear_original_compute_node_in_dialog
   action: input_compute_node_in_dialog
@@ -130,3 +206,36 @@ click_add_url_button:
   element:
     <<: *active_add_url_button
     op: click
+customer_cloud_subscription_prompt_message_loaded:
+    elements:
+        - selector:
+            xpath: //h1[text()='Customer Cloud Subscription']
+        - selector:
+            text: "This billing option will transfer the resources associated with this cluster to your AWS account, allowing you to take advantage of the discounts you have already negotiated with AWS."
+        - selector:
+            xpath: //h3[text()='Important'] 
+        - selector:
+            text: "In order for the account transfer to succeed, you must ensure the following:"
+        - selector:
+            text: "Your AWS account has an Enterprise Support Plan attached."
+        - selector:
+            xpath: //*[contains(text(),"Your AWS account has the necessary limits to support the desired cluster size.")]
+        - selector:
+            xpath: //a[@href='https://www.openshift.com/dedicated/byoc' and text()=' See resource requirements.']
+        - selector:
+            xpath: //li[contains(text(),'osdCcsAdmin')]
+        - selector:
+            xpath: //li[contains(text(),'An Organization Service Control Policy (SCP) is set up according to the')]
+        - selector:
+            xpath: //a[@href='https://www.openshift.com/dedicated/byoc' and text()='documentation.']
+        - selector:
+            xpath: //div[text()[1]='Refer to the']
+        #- selector:
+        #    xpath: //div[text()[2]='for more detail around the requirements for Customer Cloud Subscription.']
+close_customer_cloud_subscription_prompt_message:
+    action: customer_cloud_subscription_prompt_message_loaded
+    element:
+        selector:
+            xpath: //button[text()='Close']
+        op: click
+

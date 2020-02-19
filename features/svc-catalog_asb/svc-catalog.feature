@@ -24,7 +24,7 @@ Feature: Service-catalog related scenarios
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/ups-broker-template.yaml |
       | p | UPS_BROKER_PROJECT=<%= cb.ups_broker_project %>                                                         |
     Then the step should succeed
-    And I wait for the steps to pass:
+    And I wait up to 360 seconds for the steps to pass:
     """
     When I run the :describe client command with:
       | resource | clusterservicebroker/ups-broker |
@@ -131,7 +131,7 @@ Feature: Service-catalog related scenarios
   # @case_id OCP-15604
   @admin
   @destructive
-  Scenario: Create/get/update/delete for ClusterServiceBroker resource	
+  Scenario: Create/get/update/delete for ClusterServiceBroker resource  
     Given I have a project
     And evaluation of `project.name` is stored in the :ups_broker_project clipboard
 
@@ -149,7 +149,7 @@ Feature: Service-catalog related scenarios
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/ups-broker-template.yaml |
       | p | UPS_BROKER_PROJECT=<%= cb.ups_broker_project %>                                                         |
     Then the step should succeed
-    And I wait for the steps to pass:
+    And I wait up to 300 seconds for the steps to pass:
     """
     When I run the :describe client command with:
       | resource | clusterservicebroker/ups-broker |
@@ -208,6 +208,130 @@ Feature: Service-catalog related scenarios
     Then the output should not contain "user-provided"
 
   # @author chezhang@redhat.com
+  # @case_id OCP-15603
+  @admin
+  @destructive
+  Scenario: Create/get/update/delete for ServiceInstance resource
+    Given I have a project
+    And evaluation of `project.name` is stored in the :ups_broker_project clipboard
+    And I create a new project
+    And evaluation of `project.name` is stored in the :user_project clipboard
+
+    # Deploy ups broker
+    Given admin ensures "ups-instance" serviceinstance is deleted
+    Given admin ensures "ups-broker" clusterservicebroker is deleted
+    When I switch to cluster admin pseudo user
+    And I use the "<%= cb.ups_broker_project %>" project
+    When I process and create:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/ups-broker-template.yaml |
+      | p | UPS_BROKER_PROJECT=<%= cb.ups_broker_project %>                                                         |
+    Then the step should succeed
+    And I wait up to 300 seconds for the steps to pass:
+    """
+    When I run the :describe client command with:
+      | resource | clusterservicebroker/ups-broker |
+    Then the output should contain "Successfully fetched catalog entries from broker"
+    When I run the :get client command with:
+      | resource | clusterserviceclass                                                       |
+      | o        | custom-columns=CLASSNAME:.metadata.name,EXTERNAL\ NAME:.spec.externalName |
+    Then the output should contain "user-provided"
+    """
+
+    #Provision a serviceinstance
+    Given I switch to the first user
+    And I use the "<%= cb.user_project %>" project
+    When I process and create:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/ups-instance-template.yaml |
+      | p | USER_PROJECT=<%= cb.user_project %>                                                                       |
+    Then the step should succeed
+    And I wait up to 30 seconds for the steps to pass:
+    """
+    When I run the :describe client command with:
+      | resource | serviceinstance/ups-instance |
+    Then the output should match "Message.*The instance was provisioned successfully"
+    """
+
+    #Update serviceinstance
+    When I run the :patch client command with:
+      | resource | serviceinstance/ups-instance                    |
+      | p        | {"metadata":{"labels":{"app":"test-instance"}}} |
+    Then the step should succeed
+    When I run the :get client command with:
+      | resource   | serviceinstance/ups-instance |
+      | show_label | true                         |
+    Then the output should contain "app=test-instance"
+    Given admin ensures "ups-instance" serviceinstance is deleted
+
+  # @author chezhang@redhat.com
+  # @case_id OCP-15605
+  @admin
+  @destructive
+  Scenario: Create/get/update/delete for ServiceBinding resource
+    Given I have a project
+    And evaluation of `project.name` is stored in the :ups_broker_project clipboard
+    And I create a new project
+    And evaluation of `project.name` is stored in the :user_project clipboard
+
+    # Deploy ups broker
+    Given admin ensures "ups-broker" clusterservicebroker is deleted
+    When I switch to cluster admin pseudo user
+    And I use the "<%= cb.ups_broker_project %>" project
+    When I process and create:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/ups-broker-template.yaml |
+      | p | UPS_BROKER_PROJECT=<%= cb.ups_broker_project %>                                                         |
+    Then the step should succeed
+    And I wait up to 300 seconds for the steps to pass:
+    """
+    When I run the :describe client command with:
+      | resource | clusterservicebroker/ups-broker |
+    Then the output should contain "Successfully fetched catalog entries from broker"
+    When I run the :get client command with:
+      | resource | clusterserviceclass                                                       |
+      | o        | custom-columns=CLASSNAME:.metadata.name,EXTERNAL\ NAME:.spec.externalName |
+    Then the output should contain "user-provided"
+    """
+
+    #Provision a serviceinstance
+    Given I switch to the first user
+    And I use the "<%= cb.user_project %>" project
+    When I process and create:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/ups-instance-template.yaml |
+      | p | USER_PROJECT=<%= cb.user_project %>                                                                       |
+    Then the step should succeed
+    And I wait up to 30 seconds for the steps to pass:
+    """
+    When I run the :describe client command with:
+      | resource | serviceinstance/ups-instance |
+    Then the output should match "Message.*The instance was provisioned successfully"
+    """
+
+    # Create servicebinding
+    When I process and create:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/ups-binding-template.yaml |
+      | p | USER_PROJECT=<%= cb.user_project %>                                                                      |
+    Then the step should succeed
+    And I wait up to 10 seconds for the steps to pass:
+    """
+    When I run the :describe client command with:
+      | resource | servicebinding |
+    Then the output should match "Message.*Injected bind result"
+    """
+
+    #Update servicebinding
+    When I run the :patch client command with:
+      | resource | servicebinding/ups-binding                     |
+      | p        | {"metadata":{"labels":{"app":"test-binding"}}} |
+    Then the step should succeed
+    When I run the :get client command with:
+      | resource   | servicebinding/ups-binding |
+      | show_label | true                       |
+    Then the output should contain "app=test-binding"
+
+    # Delete servicebinding
+    Given admin ensures "ups-binding" servicebinding is deleted
+    And I wait for the resource "secret" named "my-secret" to disappear within 60 seconds  
+
+  # @author chezhang@redhat.com
   # @case_id OCP-15602
   @admin
   @destructive
@@ -223,7 +347,7 @@ Feature: Service-catalog related scenarios
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/ups-broker-template.yaml |
       | p | UPS_BROKER_PROJECT=<%= project.name %>                                                                  |
     Then the step should succeed
-    And I wait for the steps to pass:
+    And I wait up to 300 seconds for the steps to pass:
     """
     When I run the :describe client command with:
       | resource | clusterservicebroker/ups-broker |

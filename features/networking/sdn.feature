@@ -247,8 +247,8 @@ Feature: SDN related networking scenarios
     And evaluation of `@result[:response].lines.count` is stored in the :sdn_pod_rules clipboard
     Then the expression should be true> cb.host_rules==cb.sdn_pod_rules
 
-  #@author huirwang@redhat.com
-  #@case_id OCP-25707
+  # @author huirwang@redhat.com
+  # @case_id OCP-25707
   @admin
   Scenario: ovs-vswitchd process must be running on all ovs pods
     Given I switch to cluster admin pseudo user
@@ -258,3 +258,86 @@ Feature: SDN related networking scenarios
     When I run cmds on all ovs pods:
       | bash | -c | pgrep ovs-vswitchd |
     Then the step should succeed
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-25706
+  # @bug_id 1669311
+  @admin
+  @destructive
+  Scenario: Killing ovs process should not put sdn and ovs pods in bad shape
+    Given I have a project
+    And evaluation of `project.name` is stored in the :usr_project clipboard
+    When I run the :create client command with:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json |
+    Then the step should succeed
+    Given 2 pods become ready with labels:
+      | name=test-pods |
+    And evaluation of `pod(0).node_name` is stored in the :node_name clipboard
+    And evaluation of `pod(0).ip` is stored in the :pod1_ip clipboard
+    And evaluation of `pod(1).name` is stored in the :pod2_name clipboard
+
+    # Kill ovs process
+    When I run command on the "<%= cb.node_name %>" node's sdn pod:
+      | bash | -c | pgrep ovs-vswitchd |
+    Then the step should succeed
+    When I run command on the "<%= cb.node_name %>" node's sdn pod:
+      | bash | -c | pgrep ovs-vswitchd \| xargs kill -9 |
+    Then the step should succeed
+    And I wait up to 60 seconds for the steps to pass:
+    """
+    Given I switch to cluster admin pseudo user
+    And I use the "openshift-sdn" project
+    And all pods in the project are ready
+    """
+
+    #Check sdn works
+    Given I switch to the first user
+    And I use the "<%= cb.usr_project%>" project
+    And I wait up to 60 seconds for the steps to pass:
+    """
+    When I execute on the "<%= cb.pod2_name%>" pod:
+      | curl | <%= cb.pod1_ip%>:8080 |
+    Then the step should succeed
+    And the output should contain "Hello OpenShift"
+    """
+
+  # @author weliang@redhat.com
+  # @case_id OCP-27655
+  @admin
+  Scenario: Networking should work on default namespace	
+  #Test for bug https://bugzilla.redhat.com/show_bug.cgi?id=1800324 and https://bugzilla.redhat.com/show_bug.cgi?id=1796157
+    Given I switch to cluster admin pseudo user
+    And I use the "default" project
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json" replacing paths:
+      | ["items"][0]["spec"]["replicas"] | 4 |
+    Then the step should succeed
+    And 4 pods become ready with labels:
+      | name=test-pods |
+    And evaluation of `pod(0).name` is stored in the :pod1_name clipboard
+    And evaluation of `pod(0).ip` is stored in the :pod1_ip clipboard
+    And evaluation of `pod(1).ip` is stored in the :pod2_ip clipboard
+    And evaluation of `pod(2).ip` is stored in the :pod3_ip clipboard
+    And evaluation of `pod(3).ip` is stored in the :pod4_ip clipboard
+    And I register clean-up steps:
+    """
+    Given I ensure "test-rc" replicationcontroller is deleted
+    Given I ensure "test-service" service is deleted
+    """
+
+    When I execute on the "<%= cb.pod1_name %>" pod:
+      | curl | --connect-timeout | 5 | <%= cb.pod1_ip %>:8080 |
+    Then the step should succeed
+    And the output should contain "Hello OpenShift"
+    When I execute on the "<%= cb.pod1_name %>" pod:
+      | curl | --connect-timeout | 5 | <%= cb.pod2_ip %>:8080 |
+    Then the step should succeed
+    And the output should contain "Hello OpenShift"
+    When I execute on the "<%= cb.pod1_name %>" pod:
+      | curl | --connect-timeout | 5 | <%= cb.pod3_ip %>:8080 |
+    Then the step should succeed
+    And the output should contain "Hello OpenShift"
+    When I execute on the "<%= cb.pod1_name %>" pod:
+      | curl | --connect-timeout | 5 | <%= cb.pod4_ip %>:8080 |
+    Then the step should succeed
+    And the output should contain "Hello OpenShift"
+

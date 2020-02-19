@@ -105,11 +105,12 @@ Feature: Service related networking scenarios
     And the output should not contain:
       | <%= cb.service_ip %> |
 
-  # @auther anusaxen@redhat.com
+  # @author anusaxen@redhat.com
   # @case_id OCP-23895
   @admin
   Scenario: User cannot access the MCS by creating a LoadBalancer service that points to the MCS
-    Given evaluation of `env.master_hosts.first.local_ip` is stored in the :master_ip clipboard
+    Given I store the masters in the :masters clipboard
+    And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master_ip clipboard
     Given I select a random node's host
     Given I have a project
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group

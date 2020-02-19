@@ -8,7 +8,7 @@ Given /^the azure file secret name and key are stored to the clipboard$/ do
     | ["parameters"]["storageAccount"] | #{azsac}                     |
     })
   step %Q/the step should succeed/
-  step %Q{I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/azure/azpvc-sc.yaml" replacing paths:}, table(%{
+  step %Q{I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:}, table(%{
     | ["metadata"]["name"]         | <%= cb.dynamic_pvc_name %>   |
     | ["spec"]["storageClassName"] | <%= cb.storage_class_name %> |
     })

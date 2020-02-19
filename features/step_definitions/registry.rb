@@ -71,9 +71,9 @@ Given /^all the image layers in the#{OPT_SYM} clipboard do( not)? exist in the r
   end
   begin
     step %Q/I switch to cluster admin pseudo user/
-    step %Q/I use the "default" project/
+    step %Q/I use the "openshift-image-registry" project/
     step %Q/a pod becomes ready with labels:/, table(%{
-        | deploymentconfig=docker-registry |
+        | docker-registry=default |
     })
     layers.each { | layer|
       id =  layer.dig("name").split(':')[1]
@@ -396,4 +396,47 @@ end
 Given /^current generation number of#{OPT_QUOTED} deployment is stored into#{OPT_SYM} clipboard$/ do |name, cb_name|
   cb_name ||= :generation_number
   cb[cb_name] = deployment(name).generation_number(user: user, cached: false)
+end
+
+Given /^docker config for default image registry is stored to the#{OPT_SYM} clipboard$/ do |cb_name|
+  cb_name ||= :dockercfg_file
+  step %Q/I enable image-registry default route/
+  step %Q/default image registry route is stored in the :integrated_reg_ip clipboard/
+  step %Q/a 5 characters random string of type :dns is stored into the :dockercfg_name clipboard/
+  cb[cb_name] ="/tmp/#{cb.dockercfg_name}"
+
+  generated_cfg={
+        "#{cb.integrated_reg_ip}" => {
+          "auth" => Base64.strict_encode64(
+            "#{user.name}:#{user.cached_tokens.first}"
+          ),
+        } 
+  }
+
+  File.open("#{cb[cb_name]}", 'wb') { |f| 
+    f.write(
+       {   
+         "auths" => generated_cfg
+       }.to_json
+    )
+  }
+end
+
+Given /^certification for default image registry is stored to the#{OPT_SYM} clipboard$/ do |cb_name|
+  ensure_admin_tagged
+  cb_name ||= :reg_crt_name
+  
+  step %Q/a 5 characters random string of type :dns is stored into the :regcrt clipboard/
+  cb[cb_name] ="/tmp/#{cb.regcrt}.crt"
+
+  org_user = @user
+  org_proj_name = project.name
+  @user = admin
+  @result = secret("router-certs-default", project("openshift-ingress", switch: false)).value_of("tls.crt")
+  File.open("#{cb[cb_name]}", 'wb') { |f| 
+    f.write(@result)
+  }
+
+  @user = org_user
+  project(org_proj_name)
 end

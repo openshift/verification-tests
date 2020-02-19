@@ -17,6 +17,10 @@ module BushSlicer
       available: %w[status numberAvailable].freeze,
     }.freeze
 
+    def generation_number(user: nil, cached: true, quiet: false)
+      raw_resource(user: user, cached: cached, quiet: quiet).dig('metadata', 'generation')
+    end
+
     def node_selector(user: nil, cached: true, quiet: false)
       template(user: user, cached: cached, quiet: quiet).
         dig("spec", "nodeSelector")
@@ -49,6 +53,11 @@ module BushSlicer
                                        result: result)
       end
       return props[:pods]
+    end
+
+    def creation_time_stamp(user: nil, quiet: false, cached: true)
+      raw_resource(user: user, cached: cached, quiet: quiet).
+        dig("metadata", "creationTimestamp")
     end
   end
 end

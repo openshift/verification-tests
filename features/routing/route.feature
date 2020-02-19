@@ -90,7 +90,7 @@ Feature: Testing route
   @smoke
   Scenario: Edge terminated route with custom cert
     Given I have a project
-    And I store default router IPs in the :router_ip clipboard
+    And I store an available router IP in the :router_ip clipboard
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker.json |
     Then the step should succeed
@@ -137,7 +137,7 @@ Feature: Testing route
   # @case_id OCP-12477
   Scenario: Passthrough terminated route with custom cert
     Given I have a project
-    And I store default router IPs in the :router_ip clipboard
+    And I store an available router IP in the :router_ip clipboard
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker.json |
     Then the step should succeed
@@ -170,7 +170,7 @@ Feature: Testing route
   # @case_id OCP-12481
   Scenario: Reencrypt terminated route with custom cert
     Given I have a project
-    And I store default router IPs in the :router_ip clipboard
+    And I store an available router IP in the :router_ip clipboard
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker.json |
     Then the step should succeed
@@ -261,7 +261,7 @@ Feature: Testing route
   @smoke
   Scenario: The path specified in route can work well for reencrypt terminated
     Given I have a project
-    And I store default router IPs in the :router_ip clipboard
+    And I store an available router IP in the :router_ip clipboard
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker.json |
     Then the step should succeed
@@ -311,7 +311,7 @@ Feature: Testing route
   # @case_id OCP-9651
   Scenario: Config insecureEdgeTerminationPolicy to Redirect for route
     Given I have a project
-    And I store default router IPs in the :router_ip clipboard
+    And I store an available router IP in the :router_ip clipboard
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker.json |
     Then the step should succeed
@@ -348,13 +348,13 @@ Feature: Testing route
     And the output should contain:
       | Hello-OpenShift |
       | HTTP/1.1 302 Found |
-      | Location: https:// |
+      | ocation: https:// |
 
   # @author yadu@redhat.com
   # @case_id OCP-9650
   Scenario: Config insecureEdgeTerminationPolicy to Allow for route
     Given I have a project
-    And I store default router IPs in the :router_ip clipboard
+    And I store an available router IP in the :router_ip clipboard
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker.json |
     Then the step should succeed
@@ -468,7 +468,7 @@ Feature: Testing route
   # @case_id OCP-11036
   Scenario: Set insecureEdgeTerminationPolicy to Redirect for passthrough route
     Given I have a project
-    And I store default router IPs in the :router_ip clipboard
+    And I store an available router IP in the :router_ip clipboard
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker.json |
     Then the step should succeed
@@ -502,7 +502,7 @@ Feature: Testing route
     And the output should contain:
       | Hello-OpenShift |
       | HTTP/1.1 302 Found |
-      | Location: https:// |
+      | ocation: https:// |
     """
     When I run the :patch client command with:
       | resource      | route              |
@@ -515,7 +515,7 @@ Feature: Testing route
   # @case_id OCP-13839
   Scenario: Set insecureEdgeTerminationPolicy to Redirect and Allow for reencrypt route
     Given I have a project
-    And I store default router IPs in the :router_ip clipboard
+    And I store an available router IP in the :router_ip clipboard
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker.json |
     Then the step should succeed
@@ -551,7 +551,7 @@ Feature: Testing route
     And the output should contain:
       | Hello-OpenShift |
       | HTTP/1.1 302 Found |
-      | Location: https:// |
+      | ocation: https:// |
     """
     When I run the :patch client command with:
       | resource      | route           |
@@ -609,7 +609,7 @@ Feature: Testing route
   # @case_id OCP-13753
   Scenario: Check the cookie if using secure mode when insecureEdgeTerminationPolicy to Redirect for edge/reencrypt route
     Given I have a project
-    And I store default router IPs in the :router_ip clipboard
+    And I store an available router IP in the :router_ip clipboard
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker.json |
     Then the step should succeed
@@ -638,7 +638,7 @@ Feature: Testing route
     And the output should contain:
       | Hello-OpenShift |
       | HTTP/1.1 302 Found |
-      | Location: https:// |
+      | ocation: https:// |
     And I execute on the pod:
       | cat |
       | /tmp/cookie |
@@ -671,7 +671,7 @@ Feature: Testing route
     And the output should contain:
       | Hello-OpenShift |
       | HTTP/1.1 302 Found |
-      | Location: https:// |
+      | ocation: https:// |
     """
     And I execute on the pod:
       | cat |
@@ -713,7 +713,6 @@ Feature: Testing route
     """
     When I open web server via the route
     Then the step should fail
-    And expression should be true> @result[:exitstatus] == -1
     """
 
     # Add IP whitelist for route

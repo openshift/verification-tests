@@ -6,16 +6,18 @@ Feature: Storage of Hostpath plugin testing
   Scenario Outline: Create hostpath pv with access mode and reclaim policy
     Given I have a project
     When admin creates a PV from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/hostpath/local.yaml" where:
-      | ["metadata"]["name"]         | pv-<%= project.name %>                   |
-      | ["spec"]["hostPath"]["path"] | /etc/origin/hostpath/<%= project.name %> |
-      | ["spec"]["hostPath"]["type"] | DirectoryOrCreate                        |
-      | ["spec"]["accessModes"][0]   | <access_mode>                            |
-      | ["spec"]["persistentVolumeReclaimPolicy"] | <reclaim_policy>            |
+      | ["metadata"]["name"]                      | pv-<%= project.name %>                   |
+      | ["spec"]["hostPath"]["path"]              | /etc/origin/hostpath/<%= project.name %> |
+      | ["spec"]["hostPath"]["type"]              | DirectoryOrCreate                        |
+      | ["spec"]["accessModes"][0]                | <access_mode>                            |
+      | ["spec"]["storageClassName"]              | sc-<%= project.name %>                   |
+      | ["spec"]["persistentVolumeReclaimPolicy"] | <reclaim_policy>                         |
     Then the step should succeed
-    When I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/hostpath/claim.yaml" replacing paths:
-      | ["metadata"]["name"]       | mypvc                  |
-      | ["spec"]["volumeName"]     | pv-<%= project.name %> |
-      | ["spec"]["accessModes"][0] | <access_mode>          |
+    When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/hostpath/claim.yaml" replacing paths:
+      | ["metadata"]["name"]         | mypvc                  |
+      | ["spec"]["volumeName"]       | pv-<%= project.name %> |
+      | ["spec"]["accessModes"][0]   | <access_mode>          |
+      | ["spec"]["storageClassName"] | sc-<%= project.name %> |
     Then the step should succeed
     And the "mypvc" PVC becomes bound to the "pv-<%= project.name %>" PV
 
@@ -27,7 +29,7 @@ Feature: Storage of Hostpath plugin testing
     Then the step should succeed
 
     Given the pod named "mypod" becomes ready
-    And I use the "<%= pod.node_name(user: user) %>" node
+    And I use the "<%= pod.node_name %>" node
     And the "/etc/origin/hostpath/<%= project.name %>" path is recursively removed on the host after scenario
     When I execute on the pod:
       | touch | /mnt/local/test |

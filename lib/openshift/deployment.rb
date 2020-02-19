@@ -57,5 +57,8 @@ module BushSlicer
       raw_resource(user: user, cached: cached, quiet: quiet).dig('metadata', 'generation')
     end
 
+    def node_selector(user: nil, cached: false, quiet: false)
+      template(user: user, cached: cached, quiet: quiet).dig('spec', 'nodeSelector')
+    end
   end
 end

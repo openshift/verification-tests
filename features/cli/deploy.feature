@@ -666,7 +666,7 @@ Feature: deployment related features
     Then the step should succeed
     Given status becomes :succeeded of exactly 1 pods labeled:
       | name=hello-openshift |
-    When I run the :env client command with:
+    When I run the :set_env client command with:
       | resource | dc/hooks                   |
       | e        | MYSQL_PASSWORD=update12345 |
     Then the step should succeed
@@ -676,9 +676,14 @@ Feature: deployment related features
     Given I wait until number of replicas match "0" for replicationController "hooks-1"
     Then I wait for the "hooks-2" rc to appear
     And I wait until number of replicas match "1" for replicationController "hooks-2"
-    When I get project pod
-    Then the output should match:
-      | hooks-2.*Running |
+    Given I wait up to 60 seconds for the steps to pass:
+    """
+    When I run the :get client command with:
+     | resource | po    |
+    Then the step should succeed
+    And the output should match:
+     | hooks-2.*Running |
+    """
 
   # @author yinzhou@redhat.com
   # @case_id OCP-11326
@@ -795,7 +800,7 @@ Feature: deployment related features
   Scenario: Trigger info is retained for deployment caused by image changes 37 new feature
     Given the master version >= "3.7"
     Given I have a project
-    When I process and create "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/OCP-11384/application-template-stibuild.json"
+    When I process and create "https://raw.githubusercontent.com/openshift/origin/master/examples/sample-app/application-template-stibuild.json"
     Then the step should succeed
     Given the "ruby-sample-build-1" build was created
     And the "ruby-sample-build-1" build completed
