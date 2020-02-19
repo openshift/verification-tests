@@ -109,6 +109,7 @@ click_open_popover:
   - selector:
       xpath: //button[contains(@class, 'details-popover-button') and contains(text(), '<popover_item>') and not(@disabled)]
     op: click
+  action: check_popover_title
 check_popover_title:
   elements:
   - selector:
