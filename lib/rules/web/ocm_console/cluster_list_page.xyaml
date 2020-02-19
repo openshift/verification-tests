@@ -14,7 +14,7 @@ check_cluster_list_page_without_cluster:
 cluster_list_page_loaded:
     elements:
         - selector:
-            xpath: //h1[@class='pf-c-title pf-m-2xl' and @widget-type='InsightsPageHeaderTitle' and text()='Clusters']
+            xpath: //h1[text()='Clusters']
         - selector:
             xpath: //button[@class='pf-c-button pf-m-primary toolbar-item' and text()='Create Cluster']
         - selector:
@@ -98,6 +98,14 @@ clear_filter_name_or_id:
         selector:
             css: input.pf-c-form-control.cluster-list-filter
         op: clear
+check_filter_cluster_existed:
+    element:
+        selector:
+            xpath: //tbody/tr[<coloumn_number>]/td/a[contains(text(),'<filter_keyword>')]
+check_filter_no_result_message:
+    element:
+        selector:
+            text: No Results Match the Filter Criteria.
 expand_filter_dropdown:
     element:
         selector:
@@ -108,7 +116,7 @@ close_filter_dropdown:
 expand_actions_behind_create_button:
     element:
         selector:
-            xpath: //button[text()='Create Cluster' and @class='pf-c-button pf-m-primary']/../../..//button[@aria-label='Actions']
+            xpath: //button[text()='Create Cluster']/../../../div[@id='cluster-list-toolbar']//button[@aria-label='Actions']
         op: click
     action: actions_behind_create_button_menu_loaded
 close_actions_behind_create_button:
@@ -132,8 +140,9 @@ filter_dropdown_menu_loaded:
     - selector:
         xpath: //label[@class='pf-c-check__label' and text()='OCP']
 select_filter:
-    if_param: expand
-    ref: expand_filter_dropdown
+    action:
+        if_param: expand
+        ref: expand_filter_dropdown
     element:
         selector:
             xpath: //label[@class='pf-c-check__label' and text()='<filter_label>']
@@ -146,18 +155,18 @@ click_create_cluster_button:
 click_actions_behind_create_button:
     element:
         selector:
-            xpath: //button[text()='Create Cluster' and @class='pf-c-button pf-m-primary']/../../..//button[@aria-label='Actions']
+            xpath: //button[text()='Create Cluster']/../../../div[@id='cluster-list-toolbar']//button[@aria-label='Actions']
         op: click
 actions_behind_create_button_menu_loaded:
     elements:
         - selector:
-            xpath: //a[@href='/beta/openshift/register']
+            xpath: //a[contains(@href,'/openshift/register')]
         - selector:
-            xpath: //a[@href='/beta/openshift/archived' and text()='Show archived clusters']
+            xpath: //a[contains(@href, '/openshift/archived') and text()='Show archived clusters']
 click_register_cluster_button:
     element:
         selector:
-            xpath: //a[@href='/beta/openshift/register']
+            xpath: //a[contains(@href,'/openshift/register')]
         op: click
 click_show_archived_cluster_button:
     element:
