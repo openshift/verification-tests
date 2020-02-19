@@ -70,29 +70,25 @@ Feature: Machine features testing
       | https://machine-approver.openshift-cluster-machine-approver.svc:9192/metrics | # @case_id OCP-26102
 
 
-
   # @author miyadav@redhat.com
   # @case_id OCP-27627
 
  @admin
- Scenario: Verify all machine instance-state should be  consistent with their providerStats.instanceState
+ Scenario: Verify all machine instance-state should be consistent with their providerStats.instanceState
    Given I have an IPI deployment
    When I run the :get admin command with:
-      | resource  | machines                           |
-      | namespace | openshift-machine-api |
+      | resource  | machines                                                                                              |
+      | namespace | openshift-machine-api                                                                                 |
       | o         | jsonpath='{range .items[*]}{.metadata.annotations}{.status.providerStatus.instanceState}{"/\\n"}{end}'|
 
    And evaluation of `@result[:response].split(":")` is stored in the :console_output_array clipboard
 
    #Evaluating Result for each line
    When I repeat the following steps for each :console_output in cb.console_output_array:
-
    """
    And evaluation of `cb.console_output_array.pop.split("]")[0]` is stored in the :provider_status clipboard
    And evaluation of `cb.console_output_array.pop.split(":").pop.split("]")[1].split("/")[0]` is stored in the :instance_state clipboard
-
    Then the expression should be true> cb.provider_status == cb.instance_state
-
    """
   Then the step should succeed
-    
+
