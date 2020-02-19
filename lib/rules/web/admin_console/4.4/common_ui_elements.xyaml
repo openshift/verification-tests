@@ -272,8 +272,8 @@ check_page_not_match:
     selector: *page_content
     missing: true
 submit_changes:
-  element:
-    selector:
+  elements:
+  - selector:
       xpath: //button[@type='submit' and not(@disabled)]
     op: click
 click_add_more_button:
