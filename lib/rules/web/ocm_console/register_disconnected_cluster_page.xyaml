@@ -22,9 +22,9 @@ required_items_loaded:
             css: input#cluster_id
             type: text
         - selector:
-            text: 'Operating System'
+            text: 'Operating system'
         - selector:
-            xpath: //span[text()='Operating System']/../span[text()='*']
+            xpath: //span[text()='Operating system']/../span[text()='*']
         - selector:
             text: 'Red Hat Enterprise Linux CoreOS'
         - selector:
@@ -36,9 +36,9 @@ required_items_loaded:
             xpath: //input[@id='operating_system-Red Hat Enterprise Linux']
             type: radio
         - selector:
-            text: 'System Type'
+            text: 'System type'
         - selector:
-            xpath: //span[text()='System Type']/../span[text()='*']
+            xpath: //span[text()='System type']/../span[text()='*']
         - selector:
             text: 'Physical'
         - selector:

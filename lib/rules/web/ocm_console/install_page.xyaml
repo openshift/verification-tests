@@ -108,12 +108,21 @@ check_provider_card:
             xpath: //div[@class='pf-c-card__body']/h5[text()='<provider_context>']
         - selector:
             xpath: //a[@class='infra-card infra-card-cloud-provider' and contains(@href, '/openshift/install/<provider_href>')]
+check_evaluation_notification_in_install_page:
+    elements:
+        - selector:
+            xpath: //h4[@class='pf-c-alert__title' and text()='New clusters are automatically registered with a 60-day evaluation subscription.']
+        - selector:
+            xpath: //div[@class='pf-c-alert__description' and text()='Evaluation subscriptions do not include support from Red Hat. For non-evaluation use, you should attach a subscription that includes support.']
+        - selector:
+            xpath: //a[@href='https://access.redhat.com/articles/4389911' and text()='Learn more']
 
 check_aws_ipi_install_page:
     action: required_aws_ipi_install_items_loaded
     action: check_aws_ipi_page_title
     action: check_breadcrumbs_in_aws_ipi_page
     action: click_copyPullSecret_button
+    action: check_evaluation_notification_in_install_page
     elements:
         - selector:
             xpath: //a[contains(@href, '/4.2/support/remote_health_monitoring/about-remote-health-monitoring.html') and contains(., 'Learn more')]
@@ -181,6 +190,7 @@ check_aws_upi_install_page:
     action: check_aws_upi_page_title
     action: check_breadcrumbs_in_aws_upi_page
     action: click_copyPullSecret_button
+    action: check_evaluation_notification_in_install_page
     elements:
         - selector:
             xpath: //a[contains(@href, '/4.2/support/remote_health_monitoring/about-remote-health-monitoring.html') and contains(., 'Learn more')]
@@ -229,6 +239,7 @@ check_azure_install_page:
     action: required_azure_install_items_loaded
     action: check_azure_page_title
     action: click_copyPullSecret_button
+    action: check_evaluation_notification_in_install_page
     elements:
         - selector:
             xpath: //*[contains(., 'install a cluster on Microsoft Azure using infrastructure')]
@@ -269,6 +280,7 @@ check_gcp_install_page:
     action: required_gcp_install_items_loaded
     action: check_gcp_page_title
     action: click_copyPullSecret_button
+    action: check_evaluation_notification_in_install_page
     elements:
         - selector:
             xpath: //a[contains(@href, '/4.2/support/remote_health_monitoring/about-remote-health-monitoring.html') and contains(., 'Learn more')]
@@ -305,6 +317,7 @@ check_vsphere_install_page:
     action: required_vsphere_install_items_loaded
     action: check_vsphere_page_title
     action: click_copyPullSecret_button
+    action: check_evaluation_notification_in_install_page
     elements:
         - selector:
             xpath: //a[contains(@href, '/4.2/support/remote_health_monitoring/about-remote-health-monitoring.html') and contains(., 'Learn more')]
@@ -345,6 +358,7 @@ check_bare_metal_install_page:
     action: required_bare_metal_install_items_loaded
     action: check_bare_metal_page_title
     action: click_copyPullSecret_button
+    action: check_evaluation_notification_in_install_page
     elements:
         - selector:
             xpath: //a[contains(@href, '/4.2/support/remote_health_monitoring/about-remote-health-monitoring.html') and contains(., 'Learn more')]
@@ -385,6 +399,7 @@ check_ibm_z_install_page:
     action: required_ibm_z_install_items_loaded
     action: check_ibm_z_page_title
     action: click_copyPullSecret_button
+    action: check_evaluation_notification_in_install_page
     elements:
         - selector:
             xpath: //a[contains(@href, '/4.2/support/remote_health_monitoring/about-remote-health-monitoring.html') and contains(., 'Learn more')]
@@ -421,6 +436,7 @@ check_openstack_install_page:
     action: required_openstack_install_items_loaded
     action: check_openstack_page_title
     action: click_copyPullSecret_button
+    action: check_evaluation_notification_in_install_page
     elements:
         - selector:
             xpath: //a[contains(@href, '/4.2/support/remote_health_monitoring/about-remote-health-monitoring.html') and contains(., 'Learn more')]
