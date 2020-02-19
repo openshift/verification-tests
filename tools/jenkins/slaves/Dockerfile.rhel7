@@ -19,7 +19,7 @@ RUN set -x && \
     yum install -y https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm && \
     CHROMEDRIVER_URL="https://chromedriver.storage.googleapis.com" && \
     CHROMEDRIVER_VERSION=`curl -L "$CHROMEDRIVER_URL/LATEST_RELEASE"` && \
-    curl -L "$CHROMEDRIVER_URL/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip"  | bsdtar xvf - -C /usr/local/bin && \
+    curl -L "$CHROMEDRIVER_URL/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip"  | bsdtar --no-same-owner --no-same-permissions xvf - -C /usr/local/bin && \
     GECKODRIVER_DOWNLOAD_URL="$(curl -L $GITHUB_API_CURL_OPTS https://api.github.com/repos/mozilla/geckodriver/releases/latest | grep -E 'browser_download_url.*linux64' | sed -E 's/.*(https[^"]*).*/\1/')" && \
     curl -L "$GECKODRIVER_DOWNLOAD_URL" | bsdtar -xvf - -C /usr/local/bin && \
     chmod +x /usr/local/bin/chromedriver /usr/local/bin/geckodriver && \
