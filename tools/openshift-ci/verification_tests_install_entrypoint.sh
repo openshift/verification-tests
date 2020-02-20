@@ -14,8 +14,8 @@ fi
 
 # First clone verification-tests repo itself
 # TODO: read variables to allow different fork or branch of it
-GIT_FLEXY_URI="https://github.com/openshift/verification-tests.git"
-git clone --depth 1 --single-branch "$GIT_FLEXY_URI" "$WORKSPACE"
+FLEXY_URI="https://github.com/openshift/verification-tests.git"
+git clone --depth 1 --single-branch "$FLEXY_URI" "$WORKSPACE"
 cd "$WORKSPACE"
 
 # Go over all GIT_xyz_URI environment variables and clone them
