@@ -108,6 +108,10 @@ check_provider_card:
             xpath: //div[@class='pf-c-card__body']/h5[text()='<provider_context>']
         - selector:
             xpath: //a[@class='infra-card infra-card-cloud-provider' and contains(@href, '/openshift/install/<provider_href>')]
+check_preview_bar:
+    element:
+        selector:
+            xpath: //div[@class='pf-c-card__body']/img[@alt='Red Hat Virtualization']/../../div/span[text()='Developer Preview']
 
 check_evaluation_notification_in_install_page:
     elements:
