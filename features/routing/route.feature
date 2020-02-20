@@ -388,7 +388,6 @@ Feature: Testing route
     Then the step should succeed
     And the output should contain:
       | Hello-OpenShift |
-      | HTTP/1.1 200    |
     And the output should not contain:
       | HTTP/1.1 302 Found |
     When I execute on the pod:
@@ -402,7 +401,6 @@ Feature: Testing route
     Then the step should succeed
     And the output should contain:
       | Hello-OpenShift |
-      | HTTP/1.1 200    |
     And the output should not contain:
       | HTTP/1.1 302 Found |
     And I execute on the pod:
