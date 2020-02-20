@@ -135,18 +135,11 @@ Feature: Service-catalog related scenarios
     Given I have a project
     When I run the :get admin command with:
       | resource | clusterservicebroker |
-    Then the step should succeed
-    Given admin ensures "ups-broker" clusterservicebroker is deleted after scenario
+    Then the step should succeed  
     And evaluation of `project.name` is stored in the :ups_broker_project clipboard
 
     # Deploy ups broker
-    Given I register clean-up steps:
-    """
-    I run the :delete admin command with:
-      | object_type       | clusterservicebroker |
-      | object_name_or_id | ups-broker           |
-    the step should fail
-    """
+    Given admin ensures "ups-broker" clusterservicebroker is deleted after scenario
     When I switch to cluster admin pseudo user
     And I use the "<%= cb.ups_broker_project %>" project
     When I process and create:
@@ -220,12 +213,12 @@ Feature: Service-catalog related scenarios
     When I run the :get admin command with:
       | resource | clusterservicebroker |
     Then the step should succeed
-    Given admin ensures "ups-broker" clusterservicebroker is deleted after scenario
     And evaluation of `project.name` is stored in the :ups_broker_project clipboard
     And I create a new project
     And evaluation of `project.name` is stored in the :user_project clipboard
 
     # Deploy ups broker
+    Given admin ensures "ups-broker" clusterservicebroker is deleted after scenario
     Given admin ensures "ups-instance" serviceinstance is deleted
     Given admin ensures "ups-broker" clusterservicebroker is deleted
     When I switch to cluster admin pseudo user
@@ -279,12 +272,12 @@ Feature: Service-catalog related scenarios
     When I run the :get admin command with:
       | resource | clusterservicebroker |
     Then the step should succeed
-    Given admin ensures "ups-broker" clusterservicebroker is deleted after scenario
     And evaluation of `project.name` is stored in the :ups_broker_project clipboard
     And I create a new project
     And evaluation of `project.name` is stored in the :user_project clipboard
 
     # Deploy ups broker
+    Given admin ensures "ups-broker" clusterservicebroker is deleted after scenario
     Given admin ensures "ups-broker" clusterservicebroker is deleted
     When I switch to cluster admin pseudo user
     And I use the "<%= cb.ups_broker_project %>" project
