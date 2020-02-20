@@ -6,11 +6,29 @@
 
 export WORKSPACE=`pwd`/flexy
 
-if [[ "$1" == "destroy" ]]; then
-  cd "$WORKSPACE"
-  tools/launch_instance.rb terminate vminfo.yml
-  exit 0
-fi
+case "$1" in
+
+  "destroy")
+    cd "$WORKSPACE"
+    tools/launch_instance.rb terminate vminfo.yml
+    exit 0
+    ;;
+
+  "fiddle")
+    exec bash
+    ;;
+
+  "debug")
+    # fall into a shell in case of an error
+    trap "exec bash" ERR
+    ;;
+
+  ?*)
+    echo "invalid argument '$1'" >&2
+    exit 1
+    ;;
+esac
+
 
 # First clone verification-tests repo itself
 # TODO: read variables to allow different fork or branch of it
