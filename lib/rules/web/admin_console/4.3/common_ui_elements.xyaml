@@ -167,7 +167,7 @@ check_resource_item:
 check_resources_title_on_page:
   elements:
   - selector:
-      xpath: //span[text()='<resource_title>']
+      xpath: //span[text()='<resource_title>']     
 click_kebab_of_one_resource:
   elements:
   - selector:
@@ -272,8 +272,8 @@ check_page_not_match:
     selector: *page_content
     missing: true
 submit_changes:
-  element:
-    selector:
+  elements:
+  - selector:
       xpath: //button[@type='submit' and not(@disabled)]
     op: click
 click_add_more_button:

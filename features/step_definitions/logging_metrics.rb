@@ -1309,3 +1309,14 @@ Given /^I get the #{QUOTED} node's prometheus metrics$/ do |node_name|
   raise "Failed when getting kubelet metrics" unless @result[:success]
   cb.node_metrics = BushSlicer::PrometheusMetricsData.new(@result[:stdout])
 end
+
+Given /^I check the #{QUOTED} prometheus rule in the #{QUOTED} project on the prometheus server$/ do | prometheus_rule_name, project_name |
+  step %Q/I run the :exec client command with:/, table(%{
+    | n                | openshift-monitoring                                                                          |
+    | container        | prometheus                                                                                    |
+    | pod              | prometheus-k8s-0                                                                              |
+    | exec_command     | cat                                                                                           |
+    | exec_command_arg | /etc/prometheus/rules/prometheus-k8s-rulefiles-0/#{project_name}-#{prometheus_rule_name}.yaml |
+  })
+  step %Q/the step should succeed/
+end
