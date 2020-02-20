@@ -533,6 +533,7 @@ check_resource_details_key_and_value:
   element: &key_value
     selector:
       xpath: //dt[contains(.,'<key>')]/following-sibling::dd[1][contains(.,'<value>')] | //button[(text()='<key>')]/parent::dt/following-sibling::dd[1][contains(.,'<value>')]
+    timeout: 90
 check_resource_details_key_only:
   element:
     selector:
