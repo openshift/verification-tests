@@ -47,9 +47,10 @@ for git_var in "${!GIT_@}"; do
 
     git_branch_var="GIT_${git_name}_BRANCH"
     if [[ "${!git_branch_var}" ]]; then
-      git_branch="--branch $git_branch"
+      git_branch="--branch ${!git_branch_var}"
     fi
     git clone --depth 1 --single-branch $git_branch "${!git_var}" $git_dir
+    unset git_branch
 
     set +x
     git_crypt_var="GIT_${git_name}_GIT_CRYPT"
