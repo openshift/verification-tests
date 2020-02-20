@@ -1,5 +1,6 @@
 # BUILDAH_LAYERS=false sudo podman build -f tools/openshift-ci/Dockerfile.installer-example -t aosqe/installer:latest --layers=false .
-# podman run --env-file=MY_INSTALL.env aosqe/installer:latest
+# podman run --rm=true --env-file=MY_INSTALL-osp.env -w=/mnt --mount=type=bind,source=installer,destination=/mnt,relabel=shared docker-registry.upshift.redhat.com/aosqe/flexy:poc
+# podman run --rm=true --env-file=MY_INSTALL-osp.env -w=/mnt --mount=type=bind,source=installer,destination=/mnt,relabel=shared docker-registry.upshift.redhat.com/aosqe/flexy:poc destroy
 FROM	aosqe/cucushift-public
 
 LABEL vendor="Red Hat inc."
