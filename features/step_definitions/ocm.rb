@@ -1,4 +1,4 @@
-Given /^I open ocm portal as an? #{WORD} user$/ do |usertype|                                                                                                                
+Given /^I open ocm portal as an? #{WORD} user$/ do |usertype|
   base_rules = BushSlicer::WebConsoleExecutor::RULES_DIR
   snippets_dir = BushSlicer::WebConsoleExecutor::SNIPPETS_DIR
   base_url = env.web_console_url
