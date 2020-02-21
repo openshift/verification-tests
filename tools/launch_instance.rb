@@ -858,6 +858,7 @@ module BushSlicer
           vars["template"] = join_paths_or_urls(
             template_org_dir, spec[:template]
           )
+          vars["command_terminate"] = true
           vars_file = Tempfile.new("vars_file_", Host.localhost.workdir)
           vars_file.write(vars.to_yaml)
           vars_file.close
@@ -873,6 +874,11 @@ module BushSlicer
         end
       end
     end
+
+    # return name of currently executed command
+    # def active_command
+    #   Commander::Runner.instance.active_command.name
+    # end
   end
 end
 
