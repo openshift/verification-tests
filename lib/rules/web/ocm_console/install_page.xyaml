@@ -478,8 +478,9 @@ check_rhv_install_page:
     action: required_rhv_install_items_loaded
     action: check_rhv_page_title
     action: click_copyPullSecret_button
-    action: check_evaluation_notification_in_install_page
     elements:
+        - selector:
+            xpath: //div[@class='developer-preview' and text()='Developer Preview']
         - selector:
             xpath: //a[contains(@href, '/latest/support/remote_health_monitoring/about-remote-health-monitoring.html') and contains(., 'Learn more')]
         - selector:
