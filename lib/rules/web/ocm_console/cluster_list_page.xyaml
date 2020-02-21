@@ -86,6 +86,23 @@ check_clusters_list_info:
             xpath: //a[text()='<cluster_name>']/../../td[@data-label='Status']/span[text()='<cluster_status>']
         - selector:
             xpath: //a[text()='<cluster_name>']/../../td[@data-label='Type']/span[text()='<cluster_type>']
+check_hover_in_cluster_list:
+    elements:
+        - selector:
+            xpath: //td[@data-label='Type']/span[text()='OCP']
+          op: hover
+        - selector:
+            xpath: //div[@class='tippy-popper' and contains(., 'Self-managed')]
+        - selector:
+            xpath: //td[@data-label='Type']/span[text()='OSD']
+          op: hover
+        - selector:
+            xpath: //div[@class='tippy-popper' and contains(., 'Dedicated')]
+        - selector:
+            xpath: //td[@data-label='Name']/a[text()='sdqe-ui-ocp']
+          op: hover
+        - selector:
+            xpath: //div[@class='tippy-popper' and contains(., 'cluster name:')]
 filter_name_or_id:
     action: clear_filter_name_or_id
     element:
