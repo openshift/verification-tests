@@ -16,6 +16,11 @@ module BushSlicer
         dig('status', 'nodeRef', 'name')
     end
 
+    def provider_id(user: nil, cached: true, quiet: false)
+      raw_resource(user: user, cached: cached, quiet: quiet).
+        dig('spec', 'providerID')
+    end
+
     def phase(user: nil, cached: true, quiet: false)
       raw_resource(user: user, cached: cached, quiet: quiet).
         dig('status','phase')
