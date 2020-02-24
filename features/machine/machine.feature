@@ -77,15 +77,8 @@ Feature: Machine features testing
   Scenario: Machine should have immutable field providerID and nodeRef
     Given I have an IPI deployment
     Given I store the last provisioned machine in the :machine clipboard
-
-    When I run the :get admin command with:
-      | resource      | machine                                |
-      | resource_name | <%= cb.machine %>                      |
-      | o             | yaml                                   |
-      | n             | openshift-machine-api                  |
-    Then the step should succeed
-    And evaluation of `@result[:parsed]["status"]["nodeRef"]["name"]` is stored in the :nodeRef_name clipboard
-    And evaluation of `@result[:parsed]["spec"]["providerID"]` is stored in the :providerID clipboard
+    And evaluation of `machine(cb.machine).node_name` is stored in the :nodeRef_name clipboard
+    And evaluation of `machine(cb.machine).provider_id` is stored in the :providerID clipboard
 
     When I run the :patch admin command with:
       | resource      | machine                                |
