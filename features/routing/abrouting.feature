@@ -2,15 +2,25 @@ Feature: Testing abrouting
 
   # @author yadu@redhat.com
   # @case_id OCP-12076
+  @admin
   Scenario: Set backends weight for unsecure route
-    Given I have a project
+    Given I switch to cluster admin pseudo user
+    And I use the router project
+    Given all default router pods become ready
+    Then evaluation of `pod.name` is stored in the :router_pod clipboard
+
+    Given I switch to the first user
+    And I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/abrouting/caddy-docker.json |
     Then the step should succeed
+    And the pod named "caddy-docker" becomes ready
+    And evaluation of `pod.ip` is stored in the :pod_ip1 clipboard
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/abrouting/caddy-docker-2.json |
     Then the step should succeed
-    And all pods in the project are ready
+    And the pod named "caddy-docker-2" becomes ready
+    And evaluation of `pod.ip` is stored in the :pod_ip2 clipboard
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/abrouting/unseucre/service_unsecure.json |
     Then the step should succeed
@@ -38,20 +48,19 @@ Feature: Testing abrouting
     Then the output should contain 1 times:
       | (20%) |
       | (80%) |
-    Given the "access.log" file is deleted if it exists
-    When I wait up to 20 seconds for a web server to become available via the "service-unsecure" route
-    And I run the steps 40 times:
+
+    Given I switch to cluster admin pseudo user
+    And I use the router project
+    And I wait up to 30 seconds for the steps to pass:
     """
-    When I open web server via the "service-unsecure" route
-    Then the step should succeed
-    And the output should contain "Hello-OpenShift"
-    And the "access.log" file is appended with the following lines:
-      | #{@result[:response].strip} |
+    When I execute on the "<%= cb.router_pod %>" pod:
+      | grep | <%= cb.pod_ip1 %> | /var/lib/haproxy/conf/haproxy.config | -C 1 |
+    Then the output should match:
+      | <%= cb.pod_ip1 %>.* weight 64  |
+      | <%= cb.pod_ip2 %>.* weight 256 |
     """
-    Given evaluation of `File.read("access.log").scan("Hello-OpenShift-2").size` is stored in the :accesslength2 clipboard
-    Then the expression should be true> (28..36).include? cb.accesslength2
-    Given evaluation of `File.read("access.log").scan("Hello-OpenShift-1").size` is stored in the :accesslength1 clipboard
-    Then the expression should be true> (4..12).include? cb.accesslength1
+
+    Given I switch to the first user
     When I run the :set_backends client command with:
       | routename | service-unsecure      |
       | adjust    | true                  |
@@ -63,33 +72,39 @@ Feature: Testing abrouting
     Then the output should contain 1 times:
       | (10%) |
       | (90%) |
-    Given the "access1.log" file is deleted if it exists
-    When I wait up to 20 seconds for a web server to become available via the "service-unsecure" route
-    And I run the steps 40 times:
+
+    Given I switch to cluster admin pseudo user
+    And I use the router project
+    And I wait up to 30 seconds for the steps to pass:
     """
-    When I open web server via the "service-unsecure" route
-    Then the step should succeed
-    And the output should contain "Hello-OpenShift"
-    And the "access1.log" file is appended with the following lines:
-      | #{@result[:response].strip} |
+    When I execute on the "<%= cb.router_pod %>" pod:
+      | grep | <%= cb.pod_ip1 %> | /var/lib/haproxy/conf/haproxy.config | -C 1 |
+    Then the output should match:
+      | <%= cb.pod_ip1 %>.* weight 28  |
+      | <%= cb.pod_ip2 %>.* weight 256 |
     """
-    Given evaluation of `File.read("access1.log").scan("Hello-OpenShift-2").size` is stored in the :accesslength4 clipboard
-    Then the expression should be true> (32..39).include? cb.accesslength4
-    Given evaluation of `File.read("access1.log").scan("Hello-OpenShift-1").size` is stored in the :accesslength3 clipboard
-    Then the expression should be true> (1..8).include? cb.accesslength3
 
   # @author yadu@redhat.com
   # @case_id OCP-11970
+  @admin
   Scenario: Set backends weight for reencrypt route
-    Given I have a project
-    And I store an available router IP in the :router_ip clipboard
+    Given I switch to cluster admin pseudo user
+    And I use the router project
+    Given all default router pods become ready
+    Then evaluation of `pod.name` is stored in the :router_pod clipboard
+
+    Given I switch to the first user
+    And I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/abrouting/caddy-docker.json |
     Then the step should succeed
+    And the pod named "caddy-docker" becomes ready
+    And evaluation of `pod.ip` is stored in the :pod_ip1 clipboard
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/abrouting/caddy-docker-2.json |
     Then the step should succeed
-    And all pods in the project are ready
+    And the pod named "caddy-docker-2" becomes ready
+    And evaluation of `pod.ip` is stored in the :pod_ip2 clipboard
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/abrouting/reencrypt/service_secure.json |
     Then the step should succeed
@@ -128,28 +143,19 @@ Feature: Testing abrouting
     Then the output should contain 1 times:
       | (30%) |
       | (70%) |
-    Given I have a pod-for-ping in the project
-    And CA trust is added to the pod-for-ping
-    Given the "access.log" file is deleted if it exists
-    And I run the steps 20 times:
+
+    Given I switch to cluster admin pseudo user
+    And I use the router project
+    And I wait up to 30 seconds for the steps to pass:
     """
-    When I execute on the pod:
-      | curl |
-      | -sS |
-      | --resolve |
-      | <%= route("route-reencrypt", service("route-reencrypt")).dns(by: user) %>:443:<%= cb.router_ip[0] %> |
-      | https://<%= route("route-reencrypt", service("route-reencrypt")).dns(by: user) %>/ |
-      | --cacert |
-      | /tmp/ca.pem |
-    Then the step should succeed
-    And the output should contain "Hello-OpenShift"
-    And the "access.log" file is appended with the following lines:
-      | #{@result[:response].strip} |
+    When I execute on the "<%= cb.router_pod %>" pod:
+      | grep | <%= cb.pod_ip1 %> | /var/lib/haproxy/conf/haproxy.config | -C 1 |
+    Then the output should match:
+      | <%= cb.pod_ip1 %>.* weight 109 |
+      | <%= cb.pod_ip2 %>.* weight 256 |
     """
-    Given evaluation of `File.read("access.log").scan("Hello-OpenShift-2").size` is stored in the :accesslength2 clipboard
-    Then the expression should be true> (13..15).include? cb.accesslength2
-    Given evaluation of `File.read("access.log").scan("Hello-OpenShift-1").size` is stored in the :accesslength1 clipboard
-    Then the expression should be true> (5..7).include? cb.accesslength1
+
+    Given I switch to the first user
     When I run the :set_backends client command with:
       | routename | route-reencrypt        |
       | adjust    | true                   |
@@ -160,28 +166,17 @@ Feature: Testing abrouting
     Then the output should contain 1 times:
       | (10%) |
       | (90%) |
-    Then the step should succeed
-    Given the "access1.log" file is deleted if it exists
-    Given I run the steps 20 times:
-    """
-    When I execute on the pod:
-      | curl |
-      | -sS |
-      | --resolve |
-      | <%= route("route-reencrypt", service("route-reencrypt")).dns(by: user) %>:443:<%= cb.router_ip[0] %> |
-      | https://<%= route("route-reencrypt", service("route-reencrypt")).dns(by: user) %>/ |
-      | --cacert |
-      | /tmp/ca.pem |
-    Then the step should succeed
-    And the output should contain "Hello-OpenShift"
 
-    And the "access1.log" file is appended with the following lines:
-      | #{@result[:response].strip} |
+    Given I switch to cluster admin pseudo user
+    And I use the router project
+    And I wait up to 30 seconds for the steps to pass:
     """
-    Given evaluation of `File.read("access1.log").scan("Hello-OpenShift-2").size` is stored in the :accesslength4 clipboard
-    Then the expression should be true> (17..19).include? cb.accesslength4
-    Given evaluation of `File.read("access1.log").scan("Hello-OpenShift-1").size` is stored in the :accesslength3 clipboard
-    Then the expression should be true> (1..3).include? cb.accesslength3
+    When I execute on the "<%= cb.router_pod %>" pod:
+      | grep | <%= cb.pod_ip1 %> | /var/lib/haproxy/conf/haproxy.config | -C 1 |
+    Then the output should match:
+      | <%= cb.pod_ip1 %>.* weight 28  |
+      | <%= cb.pod_ip2 %>.* weight 256 |
+    """
 
   # @author yadu@redhat.com
   # @case_id OCP-13519
@@ -204,7 +199,7 @@ Feature: Testing abrouting
     And I use the router project
     And all default router pods become ready
     Then evaluation of `pod.name` is stored in the :router_pod clipboard
-    And I wait up to 5 seconds for the steps to pass:
+    And I wait up to 30 seconds for the steps to pass:
     """
     When I execute on the "<%= cb.router_pod %>" pod:
       | grep             |
@@ -223,7 +218,7 @@ Feature: Testing abrouting
     Then the step should succeed
 
     Given I switch to cluster admin pseudo user
-    And I wait up to 5 seconds for the steps to pass:
+    And I wait up to 30 seconds for the steps to pass:
     """
     When I execute on the "<%= cb.router_pod %>" pod:
       | grep             |
@@ -241,7 +236,7 @@ Feature: Testing abrouting
     Then the step should succeed
     #Set one of the service weight to 0
     Given I switch to cluster admin pseudo user
-    And I wait up to 5 seconds for the steps to pass:
+    And I wait up to 30 seconds for the steps to pass:
     """
     When I execute on the "<%= cb.router_pod %>" pod:
       | grep             |
@@ -259,7 +254,7 @@ Feature: Testing abrouting
     Then the step should succeed
     #Set all the service weight to 0
     Given I switch to cluster admin pseudo user
-    And I wait up to 5 seconds for the steps to pass:
+    And I wait up to 30 seconds for the steps to pass:
     """
     When I execute on the "<%= cb.router_pod %>" pod:
       | grep             |
@@ -272,19 +267,25 @@ Feature: Testing abrouting
 
   # @author yadu@redhat.com
   # @case_id OCP-15910
+  @admin
   Scenario: Each endpoint gets weight/numberOfEndpoints portion of the requests - unsecure route
+    Given I switch to cluster admin pseudo user
+    And I use the router project
+    Given all default router pods become ready
+    Then evaluation of `pod.name` is stored in the :router_pod clipboard
+
+    Given I switch to the first user
+    And I have a project
     # Create pods and services
-    Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/abrouting/abwithrc_pod1.json |
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/abrouting/abwithrc_pod2.json |
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/abrouting/abwithrc_pod3.json |
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/abrouting/abwithrc_pod4.json |
     Then the step should succeed
-    Given I wait for the "service-unsecure" service to become ready
-    Given I wait for the "service-unsecure-2" service to become ready
-    Given I wait for the "service-unsecure-3" service to become ready
-    Given I wait for the "service-unsecure-4" service to become ready
+    And a pod becomes ready with labels:
+      | type=test1 |
+    And evaluation of `pod.ip` is stored in the :pod_ip clipboard
     # Create route and set route backends
     When I expose the "service-unsecure" service
     Then the step should succeed
@@ -320,40 +321,47 @@ Feature: Testing abrouting
       | replicas | 3                      |
     Then the step should succeed
     And all pods in the project are ready
-    # Access the route
-    Given the "access.log" file is deleted if it exists
-    When I wait up to 20 seconds for a web server to become available via the "service-unsecure" route
-    And I run the steps 20 times:
+
+    Given I switch to cluster admin pseudo user
+    And I use the router project
+    And I wait up to 30 seconds for the steps to pass:
     """
-    When I open web server via the "service-unsecure" route
-    And the output should contain "Hello-OpenShift"
-    And the "access.log" file is appended with the following lines:
-      | #{@result[:response].strip} |
+    When I execute on the "<%= cb.router_pod %>" pod:
+      | grep | <%= cb.pod_ip %> | /var/lib/haproxy/conf/haproxy.config | -C 9 |
+    Then the output should match:
+      | :service-unsecure:.* weight 64    |
+      | :service-unsecure:.* weight 64    |
+      | :service-unsecure-2:.* weight 16  |
+      | :service-unsecure-2:.* weight 16  |
+      | :service-unsecure-2:.* weight 16  |
+      | :service-unsecure-2:.* weight 16  |
+      | :service-unsecure-3:.* weight 64  |
+      | :service-unsecure-3:.* weight 64  |
+      | :service-unsecure-3:.* weight 64  |
+      | :service-unsecure-4:.* weight 256 |
     """
-    Given evaluation of `File.read("access.log").scan("Hello-OpenShift-4").size` is stored in the :accesslength4 clipboard
-    Then the expression should be true> (6..10).include? cb.accesslength4
-    Given evaluation of `File.read("access.log").scan("Hello-OpenShift-3").size` is stored in the :accesslength3 clipboard
-    Then the expression should be true> (4..8).include? cb.accesslength3
-    Given evaluation of `File.read("access.log").scan("Hello-OpenShift-2").size` is stored in the :accesslength2 clipboard
-    Then the expression should be true> (1..3).include? cb.accesslength2
-    Given evaluation of `File.read("access.log").scan("Hello-OpenShift-1").size` is stored in the :accesslength1 clipboard
-    Then the expression should be true> (2..6).include? cb.accesslength1
 
   # @author yadu@redhat.com
   # @case_id OCP-15994
+  @admin
   Scenario: Each endpoint gets weight/numberOfEndpoints portion of the requests - passthrough route
+    Given I switch to cluster admin pseudo user
+    And I use the router project
+    Given all default router pods become ready
+    Then evaluation of `pod.name` is stored in the :router_pod clipboard
+
+    Given I switch to the first user
+    And I have a project
     # Create pods and services
-    Given I have a project
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/abrouting/abwithrc_pod1.json |
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/abrouting/abwithrc_pod2.json |
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/abrouting/abwithrc_pod3.json |
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/abrouting/abwithrc_pod4.json |
     Then the step should succeed
-    Given I wait for the "service-secure" service to become ready
-    Given I wait for the "service-secure-2" service to become ready
-    Given I wait for the "service-secure-3" service to become ready
-    Given I wait for the "service-secure-4" service to become ready
+    And a pod becomes ready with labels:
+      | type=test1 |
+    And evaluation of `pod.ip` is stored in the :pod_ip clipboard
     # Create route and set route backends
     When I run the :create_route_passthrough client command with:
       | name    | route-pass     |
@@ -391,24 +399,22 @@ Feature: Testing abrouting
       | replicas | 3                      |
     Then the step should succeed
     And all pods in the project are ready
-    # Access the route
-    When I use the "service-secure" service
-    Given the "access.log" file is deleted if it exists
-    When I wait up to 20 seconds for a secure web server to become available via the "route-pass" route
-    And I run the steps 20 times:
-    """
-    When I open secure web server via the "route-pass" route
-    Then the step should succeed
-    And the output should contain "Hello-OpenShift"
-    And the "access.log" file is appended with the following lines:
-      | #{@result[:response].strip} |
-    """
-    Given evaluation of `File.read("access.log").scan("Hello-OpenShift-4").size` is stored in the :accesslength4 clipboard
-    Then the expression should be true> (6..10).include? cb.accesslength4
-    Given evaluation of `File.read("access.log").scan("Hello-OpenShift-3").size` is stored in the :accesslength3 clipboard
-    Then the expression should be true> (4..8).include? cb.accesslength3
-    Given evaluation of `File.read("access.log").scan("Hello-OpenShift-2").size` is stored in the :accesslength2 clipboard
-    Then the expression should be true> (1..3).include? cb.accesslength2
-    Given evaluation of `File.read("access.log").scan("Hello-OpenShift-1").size` is stored in the :accesslength1 clipboard
-    Then the expression should be true> (2..6).include? cb.accesslength1
 
+    Given I switch to cluster admin pseudo user
+    And I use the router project
+    And I wait up to 30 seconds for the steps to pass:
+    """
+    When I execute on the "<%= cb.router_pod %>" pod:
+      | grep | <%= cb.pod_ip %> | /var/lib/haproxy/conf/haproxy.config | -C 9 |
+    Then the output should match:
+      | :service-secure:.* weight 64    |
+      | :service-secure:.* weight 64    |
+      | :service-secure-2:.* weight 16  |
+      | :service-secure-2:.* weight 16  |
+      | :service-secure-2:.* weight 16  |
+      | :service-secure-2:.* weight 16  |
+      | :service-secure-3:.* weight 64  |
+      | :service-secure-3:.* weight 64  |
+      | :service-secure-3:.* weight 64  |
+      | :service-secure-4:.* weight 256 |
+    """
