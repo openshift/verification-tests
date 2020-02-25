@@ -15,8 +15,6 @@ search_by_type:
       xpath: //span[@class='co-resource-link__resource-name' and .='<type>']
     op: click
 search_by_catagory:
-  params:
-    catagory: Error
   elements:
   - selector:
       xpath: //div[@class='co-m-pane__filter-bar-group']/div[2]
@@ -74,7 +72,7 @@ check_result_contain_correct_catagory:
           return all_contain
         }
         catagories.forEach(function(catagory){
-          all_contain = catagory.className.includes('error') && all_contain
+          all_contain = catagory.className.includes('<catagory>'.toLowerCase()) && all_contain
         })
         return all_contain
       expect_result: true
