@@ -7,8 +7,6 @@ set_filter_strings:
       <<: *filter_text_ele
     op: send_keys <filter_text>
 search_by_type:
-  params:
-    api_group: <type>
   elements:
   - selector:
       xpath: //button[contains(@class,'pf-c-dropdown__toggle')][contains(.,'Resource')]
@@ -17,6 +15,14 @@ search_by_type:
       xpath: //input[@data-test-id='dropdown-text-filter']
     op: send_keys <type>
     type: input
+  - selector:
+      xpath: //span[contains(@class,'co-resource-item__resource-name')]/span[normalize-space()='<type>']
+    op: click
+search_by_api_group:
+  elements:
+  - selector:
+      xpath: //button[contains(@class,'pf-c-dropdown__toggle')][contains(.,'Resource')]
+    op: click
   - selector:
       xpath: //span[contains(@class,'co-resource-item__resource-name')]/span[normalize-space()='<api_group>']
     op: click
