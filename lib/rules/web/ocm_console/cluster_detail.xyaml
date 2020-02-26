@@ -109,7 +109,7 @@ check_desired_compute_nodes:
 scale_cluster_from_cluster_detail_page:
   action: cluster_detail_page_loaded
   action: go_to_scale_cluster_dialog_on_cluster_detail_page
-  action: edit_compute_node_in_dialog
+  action: choose_compute_node_in_dialog
 check_actions_items_of_ready_osd_cluster_on_detail:
   action: check_edit_display_name_button_in_dropdown
   action: check_scale_cluster_button_in_dropdown
