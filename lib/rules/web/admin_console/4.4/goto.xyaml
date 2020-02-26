@@ -14,6 +14,8 @@ goto_one_project_page:
   url: k8s/cluster/projects/<project_name>
 goto_one_project_dashboard_page:
   action: goto_one_project_page
+goto_cluster_dashboards_page:
+  url: /dashboards
 
 #api explore
 goto_api_explore_page:

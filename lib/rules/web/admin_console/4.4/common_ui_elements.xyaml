@@ -71,10 +71,14 @@ check_text_not_a_link:
       xpath: //*[contains(@class,'co-resource-item__resource-name') and text()='<text>' and not(@href)]
 click_tab:
   elements:
-  - selector:
+  - selector: &tab
       xpath: //ul[contains(@class,'nav__menu')]//a[contains(text(), '<tab_name>')]
     op: click
     timeout: 20
+check_tab:
+  element:
+    selector:
+      <<: *tab
 click_environment_tab:
   params:
     tab_name: Environment
