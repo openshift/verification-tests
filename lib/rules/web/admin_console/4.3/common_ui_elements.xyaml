@@ -167,7 +167,12 @@ check_resource_item:
 check_resources_title_on_page:
   elements:
   - selector:
-      xpath: //span[text()='<resource_title>']     
+      xpath: //span[text()='<resource_title>']
+click_kebab_item:
+  element:
+    selector:
+      xpath: //button[contains(@class,'pf-c-dropdown__menu-item') and not(contains(@class,'pf-m-disabled')) and text()='<kebab_item>']
+    op: click
 click_kebab_of_one_resource:
   elements:
   - selector:
@@ -175,7 +180,7 @@ click_kebab_of_one_resource:
     op: click
 click_one_operation_in_kebab:
   action: click_kebab_of_one_resource
-  action: click_button
+  action: click_kebab_item
 check_column_in_table:
   action: wait_box_loaded
   elements:
