@@ -37,7 +37,7 @@ click_button:
     op: click
 click_button_text:
   element:
-    selector:
+    selector: &button_with_text
       xpath: //button[text()='<button_text>']
     op: click
 click_button_by_id:
@@ -45,6 +45,11 @@ click_button_by_id:
     selector:
       xpath: //button[contains(@id,'<button_id>')]
     op: click
+check_button_missing:
+  element:
+    selector:
+      <<: *button_with_text
+    missing: true
 check_table_text_data:
   element:
     selector:
@@ -87,6 +92,10 @@ click_overview_tab:
   params:
     tab_name: Details
   action: click_tab
+click_yaml_tab:
+  params:
+    tab_name: YAML
+  action: click_tab
 click_radio_input:
   element:
     selector:
@@ -112,6 +121,10 @@ set_label_input:
   - selector:
       <<: *label_input
     op: send_keys <input_value>
+check_editor_is_monaco_editor:
+  element:
+    selector:
+      xpath: //div[@class='yaml-editor']//div[contains(@class,'monaco-editor')]
 check_content_in_yaml_editor:
   element:
     selector:
