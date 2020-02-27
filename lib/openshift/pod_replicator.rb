@@ -111,5 +111,10 @@ module BushSlicer
       end
       return props[:volume_specs]
     end
+
+    def tolerations(user: user, cached: true, quiet: false)
+      template(user: user, cached: cached, quiet: quiet).dig('spec', 'tolerations')
+    end
+
   end
 end
