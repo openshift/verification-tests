@@ -45,7 +45,7 @@ view_AlertmanagerReceiversNotConfigured_alert:
   action: click_alert_name
 click_alert_name:
   elements:
-  - selector: 
+  - selector:
       xpath: //h4[contains(.,'<alert_name>')]
     op: click
   - selector:
