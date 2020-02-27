@@ -198,6 +198,7 @@ check_dialog_missing:
     selector:
       xpath: //div[@class='pf-c-backdrop']/div[@class='pf-l-bullseye']
     missing: true
+    timeout: 30
 check_active_add_url_button:
   element: &active_add_url_button
     selector:
