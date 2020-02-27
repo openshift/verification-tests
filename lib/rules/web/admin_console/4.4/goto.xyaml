@@ -16,6 +16,8 @@ goto_one_project_dashboard_page:
   action: goto_one_project_page
 goto_cluster_dashboards_page:
   url: /dashboards
+goto_search_page:
+  url: search
 
 #api explore
 goto_api_explore_page:

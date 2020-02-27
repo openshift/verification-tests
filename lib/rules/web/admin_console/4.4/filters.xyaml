@@ -98,4 +98,9 @@ check_item_in_table:
   elements:
   - selector:
       xpath: //tr[@data-test-rows='resource-row']//*[text()='<item>']
-
+    timeout: 15
+clear_all_filters:
+  elements:
+  - selector:
+      xpath: //div/button[starts-with(text(),'Clear')]
+    op: click
