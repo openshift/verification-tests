@@ -6,11 +6,12 @@ wait_overview_items_loaded:
 check_list_heading_shown:
   element:
     selector:
-      xpath: //button[contains(@class,'project-overview__item-heading--name') and text()='<heading>']
+      xpath: //button[contains(@class,'project-overview__item-heading--name') and text()='<heading>' and not(contains(@class,'pf-m-disabled'))]
 check_list_item:
   elements: 
   - selector: &overview_item
       xpath: //button[contains(@class,'project-overview__item-heading--name') and text()='<resource_name>']/ancestor::div[contains(@class,'project-overview__item--<resource_kind>')]
+    timeout: 90
 check_pod_number:
   element:
     selector:
@@ -50,22 +51,41 @@ check_dc_available_action_menus:
   elements:
   - selector:
       xpath: //li//button[@data-test-action='Start Rollout']
-  - selector:
+  - selector: &pause_rollouts
       xpath: //li//button[@data-test-action='Pause Rollouts']      
-  - selector:
+  - selector: &edit_counts
       xpath: //li//button[@data-test-action='Edit Count']
-  - selector:
+  - selector: &add_storage
       xpath: //li//button[@data-test-action='Add Storage']
-  - selector:
+  - selector: &edit_app_grouping
       xpath: //li//button[@data-test-action='Edit Application Grouping']
-  - selector:
+  - selector: &edit_labels
       xpath: //li//button[@data-test-action='Edit Labels']
-  - selector:
+  - selector: &edit_annotations
       xpath: //li//button[@data-test-action='Edit Annotations']
   - selector:
       xpath: //li//button[@data-test-action='Edit Deployment Config']
   - selector:
       xpath: //li//button[@data-test-action='Delete Deployment Config']
+check_deployment_availble_action_menus:
+  action: click_resource_action_button_on_sidebar
+  elements:
+  - selector:
+      <<: *pause_rollouts
+  - selector:
+      <<: *edit_counts    
+  - selector:
+      <<: *add_storage
+  - selector:
+      <<: *edit_app_grouping
+  - selector:
+      <<: *edit_labels
+  - selector:
+      <<: *edit_annotations
+  - selector:
+      xpath: //li//button[@data-test-action='Edit Deployment']
+  - selector:
+      xpath: //li//button[@data-test-action='Delete Deployment']   
 check_error_icon_for_overview_item:
   action: wait_overview_items_loaded
   element:
