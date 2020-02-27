@@ -5,7 +5,7 @@ check_edit_display_name_button_in_dropdown:
 check_launch_console_button_in_dropdown:
   element: &launch_console_button_in_dropdown
     selector:
-      xpath: //ul[@role='menu']//li[@role='menuitem']/a[text()='Launch Console' and not(@disabled)]
+      xpath: //ul[@role='menu']//li[@role='menuitem']/a[text()='Open Console' and not(@disabled)]
 check_archive_button_in_dropdown:
   element: &archive_button_in_dropdown
     selector:
@@ -59,7 +59,7 @@ check_edit_console_button_in_dropdown_missing:
 check_launch_console_button_in_dropdown_missing:
   element:
     selector:
-      xpath: //ul[@role='menu']//li[@role='menuitem']/a[text()='Launch Console']
+      xpath: //ul[@role='menu']//li[@role='menuitem']/a[text()='Open Console']
     missing: true
 check_delete_cluster_button_in_dropdown_missing:
   element:
