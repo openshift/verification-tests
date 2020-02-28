@@ -39,7 +39,7 @@ module BushSlicer
       template(user: user, cached: cached, quiet: quiet).dig('spec', 'nodeSelector')
     end
 
-    def tolerations(user: user, cached: true, quiet: false)
+    def tolerations(user: nil, cached: true, quiet: false)
       template(user: user, cached: cached, quiet: quiet).dig('spec', 'tolerations')
     end
 
