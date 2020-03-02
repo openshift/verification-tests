@@ -17,7 +17,7 @@ module BushSlicer
     end
 
     def get_env_credentials
-      idx = ENV["DYNECT_CREDENTIALS"].index(':')
+      idx = ENV["DYNECT_CREDENTIALS"]&.index(':')
       if idx
         return { user_name: ENV["DYNECT_CREDENTIALS"][0..idx-1],
                  password: ENV["DYNECT_CREDENTIALS"][idx+1..-1]}
