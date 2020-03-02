@@ -8,13 +8,16 @@ When(/^I create the 'Ready' unhealthyCondition$/) do
 
   # somtimes PDB may prevent a successful node-drain thus blocks the test
   # annnotate the machine to exclude node-drain so that test does not flake
-  step %Q{I run the :annotate client command with:}, table(%{
-    | n            | openshift-machine-api                       |
-    | resource     | machine                                     |
-    | resourcename | #{machine.name}                             |
-    | overwrite    | true                                        |
-    | keyval       | machine.openshift.io/exclude-node-draining= |
-  })
+  # this is no longer needed after 4.4
+  if env.version_le("4.3", user: user)
+    step %Q{I run the :annotate client command with:}, table(%{
+      | n            | openshift-machine-api                       |
+      | resource     | machine                                     |
+      | resourcename | #{machine.name}                             |
+      | overwrite    | true                                        |
+      | keyval       | machine.openshift.io/exclude-node-draining= |
+    })
+  end
 
   # create a priviledged pod that kills kubelet on its node
   step %Q{I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/cloud/mhc/kubelet-killer-pod.yml" replacing paths:}, table(%{
