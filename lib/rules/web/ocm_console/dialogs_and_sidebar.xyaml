@@ -177,27 +177,28 @@ close_error_message_dialog:
             type: submit
         op: click
 
-edit_compute_node_in_dialog:
-  action: clear_original_compute_node_in_dialog
-  action: input_compute_node_in_dialog
+choose_compute_node_in_dialog:
+  action: click_compute_node_dropdown
+  action: select_compute_node_in_dialog
   action: click_apply_button
   action: check_dialog_missing
-clear_original_compute_node_in_dialog:
+click_compute_node_dropdown:
   element:
     selector:
-      xpath: //div[@role='dialog' and @aria-label='Scale Cluster']//form/div[@class='form-group']/input[@id='nodes_compute' and @value='<orignal_compute_node_number>']
-    op: clear
-input_compute_node_in_dialog:
+      xpath: //select[@name='nodes_compute']
+    op: click
+select_compute_node_in_dialog:
   element:
     selector:
-      id: nodes_compute
-    type: input
-    op: send_keys <new_compute_nodes_number>
+      xpath: //select[@name='nodes_compute']//option[text()='<compute_node_number>']
+    timeout: 50
+    op: click
 check_dialog_missing:
   element:
     selector:
       xpath: //div[@class='pf-c-backdrop']/div[@class='pf-l-bullseye']
     missing: true
+    timeout: 30
 check_active_add_url_button:
   element: &active_add_url_button
     selector:

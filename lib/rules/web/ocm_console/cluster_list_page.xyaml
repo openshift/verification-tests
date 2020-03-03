@@ -230,15 +230,16 @@ cluster_list_table_columns_loaded:
 go_to_cluster_detail_page:
     element:
         selector:
-            xpath: //table[@class='pf-c-table pf-m-grid-md']/tbody/tr/td/a[contains(text(),'<cluster_name>')]
+            xpath: //td/a[contains(text(),'<cluster_name>')]
         timeout: 30
         op: click
     action: cluster_detail_page_loaded
 expand_cluster_actions_on_cluster_list_page:
     element:
         selector:
-            xpath: //table[@class='pf-c-table pf-m-grid-md']/tbody/tr/td/a[contains(text(),'<cluster_name>')]/../..//button[@aria-label='Actions']
+            xpath: //td[@data-label='Name']/a[contains(text(),'<cluster_name>')]/../following-sibling::td//button[@aria-label='Actions']
         op: click
+        timeout: 30
 close_cluster_actions_on_cluster_list_page:
     action: expand_cluster_actions_on_cluster_list_page
 check_cluster_actions_on_cluster_list_page_all_enabled:
@@ -331,8 +332,9 @@ edit_display_name_on_cluster_list_page:
   action: check_new_name_in_cluster_list
 check_new_name_in_cluster_list:
   element:
-     selector:
-       xpath: //td[@data-label='Name']//a[contains(.,'<new_name>')]
+    selector:
+      xpath: //td[@data-label='Name']//a[contains(.,'<new_name>')]
+    timeout: 40
 go_to_disconnected_cluster_register_page:
     action: expand_actions_behind_create_button
     action: actions_behind_create_button_menu_loaded
@@ -350,19 +352,12 @@ go_to_scale_cluster_dialog_on_cluster_list_page:
   action: expand_cluster_actions_on_cluster_list_page
   action: click_scale_cluster_button_in_dropdown
 check_elements_in_scale_cluster_dialog:
-  elements:
-  - selector: 
-      xpath: //div[@class='pf-c-backdrop']//div[@role='dialog' and @aria-label='Scale Cluster']//h1[text()='Scale Cluster']
-  - selector:
-      xpath: //div[@role='dialog' and @aria-label='Scale Cluster']//form/div[@class='form-group']/label[@for='nodes_compute' and text()='Compute nodes']
-  - selector:
-      xpath: //div[@role='dialog' and @aria-label='Scale Cluster']//form/div[@class='form-group']/input[@id='nodes_compute' and @value='<orignal_compute_node_number>']
   action: check_close_button
   action: check_cancel_button
   action: check_apply_button
 scale_cluster_from_cluster_list_page:
   action: go_to_scale_cluster_dialog_on_cluster_list_page
-  action: edit_compute_node_in_dialog
+  action: choose_compute_node_in_dialog
 check_actions_items_of_ready_osd_cluster_on_list:
   action: check_edit_display_name_button_in_dropdown
   action: check_scale_cluster_button_in_dropdown

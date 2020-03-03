@@ -106,10 +106,11 @@ check_desired_compute_nodes:
   element:
     selector:
       xpath: //div[@class='pf-c-card__body']//dt[text()='Desired Nodes']/following-sibling::dd[1]/dl/dt[text()='Compute:']/following-sibling::dd[text()='<desired_compute_nodes>']
+    timeout: 50
 scale_cluster_from_cluster_detail_page:
   action: cluster_detail_page_loaded
   action: go_to_scale_cluster_dialog_on_cluster_detail_page
-  action: edit_compute_node_in_dialog
+  action: choose_compute_node_in_dialog
 check_actions_items_of_ready_osd_cluster_on_detail:
   action: check_edit_display_name_button_in_dropdown
   action: check_scale_cluster_button_in_dropdown
