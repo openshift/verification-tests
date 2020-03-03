@@ -22,16 +22,16 @@ Feature: Service Catalog related scenarios
     Given the status of condition "Upgradeable" for "service-catalog-controller-manager" operator is: True
     #enable the svcat
     When I run the :patch client command with:
-      | resource      | ServiceCatalogAPIServer          |
-      | resource_name | cluster                          |
-      | p             | spec:\n  managementState:Managed |
-      | type          | merge                            |
+      | resource      | ServiceCatalogAPIServer                 |
+      | resource_name | cluster                                 |
+      | p             | {"spec":{"managementState": "Managed"}} |
+      | type          | merge                                   |
     Then the step should succeed
     When I run the :patch client command with:
-      | resource      | ServiceCatalogControllerManager  |
-      | resource_name | cluster                          |
-      | p             | spec:\n  managementState:Managed |
-      | type          | merge                            |
+      | resource      | ServiceCatalogControllerManager         |
+      | resource_name | cluster                                 |
+      | p             | {"spec":{"managementState": "Managed"}} |
+      | type          | merge                                   |
     Then the step should succeed
     
   @admin
