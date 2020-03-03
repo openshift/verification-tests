@@ -18,7 +18,7 @@ module BushSlicer
     def ready?(user: nil, cached: false, quiet: false)
       result = {}
       result[:success] = (desired_replicas(user: user, cached: cached, quiet: quiet) ==
-        available_replicas(user: user, cached: cached, quiet: quiet))
+        available_replicas(user: user, cached: true, quiet: quiet))
       return result
     end
 
