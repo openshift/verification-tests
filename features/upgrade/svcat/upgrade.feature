@@ -21,6 +21,7 @@ Feature: Service Catalog related scenarios
     Given the status of condition "Available" for "service-catalog-controller-manager" operator is: True
     Given the status of condition "Upgradeable" for "service-catalog-controller-manager" operator is: True
     #enable the svcat
+    Given I switch to cluster admin pseudo user
     When I run the :patch client command with:
       | resource      | ServiceCatalogAPIServer                 |
       | resource_name | cluster                                 |
