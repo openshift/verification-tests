@@ -108,3 +108,11 @@ Feature: Machine features testing
     Then the step should succeed
     And the output should match "Provider ID:\s+<%= cb.providerID %>"
 
+  # @author miyadav@redhat.com
+  # @case_id OCP-27627
+  @admin
+  Scenario: Verify all machine instance-state should be consistent with their providerStats.instanceState
+    Given I have an IPI deployment
+    And evaluation of `BushSlicer::Machine.list(user: admin, project: project('openshift-machine-api'))` is stored in the :machines clipboard
+    Then the expression should be true> cb.machines.select{|m|m.instance_state == m.annotation_instance_state}.count == cb.machines.count
+ 
