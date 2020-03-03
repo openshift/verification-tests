@@ -70,7 +70,7 @@ Feature: Service Catalog related scenarios
       | resource | clusterserviceclass                                                       |
       | o        | custom-columns=CLASSNAME:.metadata.name,EXTERNAL\ NAME:.spec.externalName |
     Then the output should contain "user-provided"
-    """
+
     #Provision a serviceinstance
     Given I switch to the first user
     And I use the "<%= cb.user_project %>" project
