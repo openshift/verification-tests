@@ -156,7 +156,7 @@ require_relative 'chrome_extension'
         driver = Selenium::WebDriver.for :safari, desired_capabilities: safari_caps
         @browser = Watir::Browser.new driver
       else
-        raise "Not implemented yet"
+        raise "Web4Cucumber: browser type '#{@browser_type}' not supported"
       end
       @browser
     end
