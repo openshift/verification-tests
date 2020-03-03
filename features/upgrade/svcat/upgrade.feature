@@ -19,7 +19,7 @@ Feature: Service Catalog related scenarios
     Given the status of condition "Degraded" for "service-catalog-controller-manager" operator is: False
     Given the status of condition "Progressing" for "service-catalog-controller-manager" operator is: False
     Given the status of condition "Available" for "service-catalog-controller-manager" operator is: True
-    Given the status of condition "Upgradeable" for "service-catalog-controller-manager" operator is: Unknown
+    Given the status of condition "Upgradeable" for "service-catalog-controller-manager" operator is: True
     #enable the svcat
     When I run the :patch client command with:
       | resource      | ServiceCatalogAPIServer                 |
