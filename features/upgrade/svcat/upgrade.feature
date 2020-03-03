@@ -84,4 +84,3 @@ Feature: Service Catalog related scenarios
       | resource | serviceinstance/ups-instance |
     Then the output should match "Message.*The instance was provisioned successfully"
     """
-    
