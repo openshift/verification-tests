@@ -51,7 +51,6 @@ Feature: Service Catalog related scenarios
     Given the status of condition "Available" for "service-catalog-controller-manager" operator is: True
     Given the status of condition "Upgradeable" for "service-catalog-controller-manager" operator is: True
     
-    # Create a broker
     # Deploy ups broker
     Given admin ensures "ups-broker" clusterservicebroker is deleted after scenario
     Given I have a project
@@ -72,6 +71,7 @@ Feature: Service Catalog related scenarios
       | o        | custom-columns=CLASSNAME:.metadata.name,EXTERNAL\ NAME:.spec.externalName |
     Then the output should contain "user-provided"
     """
+    #Provision a serviceinstance
     Given I switch to the first user
     And I use the "<%= cb.user_project %>" project
     When I process and create:
@@ -84,3 +84,22 @@ Feature: Service Catalog related scenarios
       | resource | serviceinstance/ups-instance |
     Then the output should match "Message.*The instance was provisioned successfully"
     """
+
+    # Delete serviceinstance
+    When I run the :delete client command with:
+      | object_type       | serviceinstance |
+      | object_name_or_id | ups-instance    |
+    Then the step should succeed
+    Given I wait for the resource "serviceinstance" named "ups-instance" to disappear within 60 seconds
+
+    # Delete ups broker
+    When I switch to cluster admin pseudo user
+    When I run the :delete client command with:
+      | object_type       | clusterservicebroker |
+      | object_name_or_id | ups-broker           |
+    Then the step should succeed
+    And I wait for the resource "clusterservicebrokers" named "ups-broker" to disappear within 60 seconds
+    When I run the :get client command with:
+      | resource | clusterserviceclass                                                       |
+      | o        | custom-columns=CLASSNAME:.metadata.name,EXTERNAL\ NAME:.spec.externalName |
+    Then the output should not contain "user-provided"
