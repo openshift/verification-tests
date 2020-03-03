@@ -48,7 +48,7 @@ Feature: Service Catalog related scenarios
     Given the "service-catalog-controller-manager" operator version matchs the current cluster version
     Given the status of condition "Degraded" for "service-catalog-controller-manager" operator is: False
     Given the status of condition "Progressing" for "service-catalog-controller-manager" operator is: False
-    Given the status of condition "Available" for "operator-lifecycle-manager" operator is: True
+    Given the status of condition "Available" for "service-catalog-controller-manager" operator is: True
     Given the status of condition "Upgradeable" for "service-catalog-controller-manager" operator is: True
     
     # Create a broker
