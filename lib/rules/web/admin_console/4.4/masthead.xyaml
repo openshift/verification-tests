@@ -1,9 +1,7 @@
 click_notification_drawer:
-  elements:
-  - selector:
-      xpath: //button[contains(@aria-label,'Notification Drawer')]
-    op: click
-    timeout: 30
+  params:
+    aria_label: Notification Drawer
+  action: click_masthead_button
 open_notification_drawer:
   action: click_notification_drawer
   element:
@@ -48,5 +46,3 @@ click_alert_name:
   - selector:
       xpath: //h4[contains(.,'<alert_name>')]
     op: click
-  - selector:
-      xpath: //div[contains(@class,'co-resource-item') and contains(.,'<alert_name>')]
