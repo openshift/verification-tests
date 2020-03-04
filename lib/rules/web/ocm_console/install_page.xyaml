@@ -45,15 +45,15 @@ check_common_part:
         - selector:
             xpath: //div[@class='ins-c-navigation__header-title' and text()='Red Hat OpenShift Cluster Manager']
         - selector:
-            xpath: //nav[@class='pf-c-nav pf-m-dark']/ul/li/a[contains(@href, '/openshift/') and contains(., 'Clusters')]
+            xpath: //a[contains(@href, '/openshift/') and contains(., 'Clusters')]
         - selector:
-            xpath: //nav[@class='pf-c-nav pf-m-dark']/ul/li/a[contains(@href, '/openshift/subscriptions') and contains(., 'Subscriptions')]
+            xpath: //a[contains(@href, '/openshift/subscriptions') and contains(., 'Subscriptions')]
         - selector:
-            xpath: //nav[@class='pf-c-nav pf-m-dark']/ul/li/a[@href='https://docs.openshift.com/container-platform/latest/' and contains(., 'Documentation')]
+            xpath: //a[@href='https://docs.openshift.com/container-platform/latest/' and contains(., 'Documentation')]
         - selector:
-            xpath: //nav[@class='pf-c-nav pf-m-dark']/ul/li/a[@href='https://access.redhat.com/support/cases' and contains(., 'Support Cases')]
+            xpath: //a[@href='https://access.redhat.com/support/cases' and contains(., 'Support Cases')]
         - selector:
-            xpath: //nav[@class='pf-c-nav pf-m-dark']/ul/li/a[@href='mailto:ocm-feedback@redhat.com' and contains(., 'Cluster Manager Feedback')]
+            xpath: //a[@href='mailto:ocm-feedback@redhat.com' and contains(., 'Cluster Manager Feedback')]
 check_cluster_list_page_title:
     scripts:
     - command: return document.title=='Clusters | Red Hat OpenShift Cluster Manager'
@@ -61,19 +61,19 @@ check_cluster_list_page_title:
 check_account_username:
     element:
         selector:
-            xpath: //div[@class='pf-c-dropdown pf-m-align-right']/button/span[contains(., 'UItesting')]/../../button
+            xpath: //div[@class='pf-c-dropdown pf-m-align-right']/button/span[contains(., '<username>')]/../../button
         op: click
     elements:
         - selector:
-            xpath: //div[@class='pf-c-dropdown pf-m-align-right pf-m-expanded']/ul/li/a/dl/dt[contains(., 'Username')]
+            xpath: //dt[contains(., 'Username')]
         - selector:
-            xpath: //div[@class='pf-c-dropdown pf-m-align-right pf-m-expanded']/ul/li/a/dl/dt[contains(., 'Account Number')]
+            xpath: //dt[contains(., 'Account Number')]
         - selector:
             xpath: //a[contains(@href, '/usermgt/userList.html') and text()='User management']
         - selector:
             xpath: //a[contains(@href, '/user') and text()='My profile']
         - selector:
-            xpath: //div[@class='pf-c-dropdown pf-m-align-right pf-m-expanded']/ul/li/button[@type='button' and text()='Logout']
+            xpath: //button[@type='button' and text()='Logout']
 
 check_install_page:
     action: required_install_page_items_loaded
@@ -111,7 +111,7 @@ check_provider_card:
 check_preview_bar:
     element:
         selector:
-            xpath: //div[@class='pf-c-card__body']/img[@alt='Red Hat Virtualization']/../../div/span[text()='Developer Preview']
+            xpath: //img[@alt='Red Hat Virtualization']/../../div/span[text()='Developer Preview']
 
 check_evaluation_notification_in_install_page:
     elements:

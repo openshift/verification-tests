@@ -5,11 +5,11 @@ check_cluster_list_page_without_cluster:
         - selector:
             xpath: //div[@class='pf-c-empty-state__body' and contains(., 'create your first cluster')]
         - selector:
-            xpath: //a[contains(@href, '/openshift/create')]/button[@id='cluster-list-emptystate-primary-action' and text()='Create cluster']
+            xpath: //a[contains(@href, '/openshift/create')]/button[text()='Create cluster']
         - selector:
-            xpath: //a[contains(@href, '/openshift/register')]/button[@class='pf-c-button pf-m-link' and text()='Register cluster']
+            xpath: //a[contains(@href, '/openshift/register')]/button[text()='Register cluster']
         - selector:
-            xpath: //a[contains(@href, '/openshift/archived')]/button[@class='pf-c-button pf-m-link' and text()='View archived clusters']
+            xpath: //a[contains(@href, '/openshift/archived')]/button[text()='View archived clusters']
 
 cluster_list_page_loaded:
     elements:
@@ -26,7 +26,7 @@ check_cluster_list_page:
         - selector:
             xpath: //div[@class='pf-c-dropdown toolbar-item']/button/span[text()='Filter']
         - selector:
-            xpath: //a[contains(@href, '/openshift/create')]/button[@class='pf-c-button pf-m-primary toolbar-item' and text()='Create cluster']
+            xpath: //a[contains(@href, '/openshift/create')]/button[text()='Create cluster']
         - selector:
             xpath: //button[@class='pf-c-button pf-m-primary toolbar-item' and text()='Create cluster']/../..//button[@aria-label='Actions']
           op: click
@@ -68,7 +68,7 @@ check_cluster_list_page:
         - selector:
             xpath: //th[@data-label='Type' and text()='Type']
         - selector:
-            xpath: //th[@data-label='Subscription Status' and text()='Subscription Status']
+            xpath: //th[@data-label='Created' and text()='Created']
         - selector:
             xpath: //th[@data-label='Version' and text()='Version']
         - selector:
@@ -237,7 +237,7 @@ cluster_list_table_columns_loaded:
     - selector:
         xpath: //table/thead//th[text()='Type']
     - selector:
-        xpath: //table/thead//th[text()='Subscription Status']
+        xpath: //table/thead//th[text()='Created']
     - selector:
         xpath: //table/thead//th[text()='Version']
     - selector:
@@ -363,6 +363,7 @@ check_ocp_in_detail_page:
     action: check_ocp_tab_in_detail_page
     action: check_ocp_usage_in_detail_page
     action: check_ocp_details_in_detail_page
+    action: check_ocp_subscription_settings_in_detail_page
 check_osd_in_detail_page:
     action: check_osd_title_in_detail_page
     action: check_osd_tab_in_detail_page
@@ -374,7 +375,7 @@ check_ocp_title_in_detail_page:
     action: close_actions_behind_open_console_button
     elements:
         - selector:
-            xpath: //a[@class='pf-c-breadcrumb__link' and contains(@href, 'openshift') and text()='Clusters']
+            xpath: //a[contains(@href, 'openshift') and text()='Clusters']
         - selector:
             xpath: //li[@class='pf-c-breadcrumb__item' and text()='<cluster_name>']
         - selector:
@@ -383,10 +384,6 @@ check_ocp_title_in_detail_page:
             xpath: //button[@class='pf-c-button pf-m-primary' and text()='Open Console']
         - selector:
             xpath: //button[@aria-label='Refresh']
-        - selector:
-            xpath: //h4[@class='pf-c-alert__title' and text()='This cluster is not attached to a subscription']
-        - selector:
-            xpath: //a[contains(@href, '/management/systems') and text()='Red Hat Customer Portal']
 check_ocp_tab_in_detail_page:
     elements:
         - selector:
@@ -439,8 +436,22 @@ check_ocp_details_in_detail_page:
             xpath: //dl[@class='cluster-details-item-list left']/dt[text()='Master:']
         - selector:
             xpath: //dl[@class='cluster-details-item-list left']/dt[text()='Compute:']
+check_ocp_subscription_settings_in_detail_page:
+    elements:
         - selector:
-            xpath: //dl[@class='cluster-details-item left']/dt[text()='Support Level']
+            xpath: //h2[@class='pf-c-title pf-m-3xl' and text()='Subscription Settings']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dt[text()='SLA']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dt[text()='Production status']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dt[text()='Service level']
+        - selector:
+            xpath: //dl[@class='cluster-details-item right']/dt[text()='Subscription units']
+        - selector:
+            xpath: //dl[@class='cluster-details-item right']/dt[text()='Subscription obligation']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dd/button[text()='Edit subscription settings']
 check_osd_title_in_detail_page:
     action: expand_actions_behind_open_console_button
     action: check_osd_actions_behind_open_console_button
@@ -538,21 +549,23 @@ expand_actions_behind_open_console_button:
 check_ocp_actions_behind_open_console_button:
     elements:
         - selector:
-            xpath: //button[@class='pf-c-dropdown__menu-item' and text()='Edit Display Name']
+            xpath: //button[text()='Edit Display Name']
         - selector:
-            xpath: //button[@class='pf-c-dropdown__menu-item' and text()='Edit Console URL']
+            xpath: //button[text()='Edit Console URL']
         - selector:
-            xpath: //button[@class='pf-c-dropdown__menu-item' and text()='Archive Cluster']
+            xpath: //button[text()='Archive Cluster']
         - selector:
-            xpath: //button[@class='pf-c-dropdown__menu-item' and text()='Edit Cluster Registration']
+            xpath: //button[text()='Edit Cluster Registration']
+        - selector:
+            xpath: //button[text()='Edit Subscription Settings']
 check_osd_actions_behind_open_console_button:
     elements:
         - selector:
-            xpath: //button[@class='pf-c-dropdown__menu-item' and text()='Edit Display Name']
+            xpath: //button[text()='Edit Display Name']
         - selector:
-            xpath: //button[@class='pf-c-dropdown__menu-item' and text()='Scale Cluster']
+            xpath: //button[text()='Scale Cluster']
         - selector:
-            xpath: //button[@class='pf-c-dropdown__menu-item' and text()='Delete Cluster']
+            xpath: //button[text()='Delete Cluster']
 close_actions_behind_open_console_button:
     action: expand_actions_behind_open_console_button
 click_scale_cluster_in_action_dropdown:
@@ -599,7 +612,7 @@ go_to_access_control_tab:
 click_logout_button:
   element:
     selector:
-      xpath: //div[@class='pf-c-dropdown pf-m-align-right']/button/span[contains(., 'UItesting')]/../../button
+      xpath: //div[@aria-label='Overflow actions']/button[@class='pf-c-dropdown__toggle pf-m-plain']
     op: click
   element:
     selector:
