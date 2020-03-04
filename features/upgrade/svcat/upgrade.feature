@@ -95,15 +95,3 @@ Feature: Service Catalog related scenarios
       | object_name_or_id | ups-instance    |
     Then the step should succeed
     Given I wait for the resource "serviceinstance" named "ups-instance" to disappear within 60 seconds
-
-    # Delete ups broker
-    When I switch to cluster admin pseudo user
-    When I run the :delete client command with:
-      | object_type       | clusterservicebroker |
-      | object_name_or_id | ups-broker           |
-    Then the step should succeed
-    And I wait for the resource "clusterservicebrokers" named "ups-broker" to disappear within 60 seconds
-    When I run the :get client command with:
-      | resource | clusterserviceclass                                                       |
-      | o        | custom-columns=CLASSNAME:.metadata.name,EXTERNAL\ NAME:.spec.externalName |
-    Then the output should not contain "user-provided"
