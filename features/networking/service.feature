@@ -182,7 +182,7 @@ Feature: Service related networking scenarios
     Given I register clean-up steps:
     """
     Given as admin I successfully merge patch resource "networks.config.openshift.io/cluster" with:
-      | {"spec":{"externalIP":{"policy":{"allowedCIDRs": null}}}}    |
+      | {"spec":{"externalIP":{"policy":{"allowedCIDRs": null}}}} |
     """
 
     # Create a svc with externalIP
@@ -190,7 +190,7 @@ Feature: Service related networking scenarios
     And I wait up to 300 seconds for the steps to pass:
     """
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/externalip_service1.json" replacing paths:
-      | ["spec"]["externalIPs"][0]  | <%= cb.hostip %> |
+      | ["spec"]["externalIPs"][0] | <%= cb.hostip %> |
     Then the step should succeed
     """ 
     
@@ -204,7 +204,7 @@ Feature: Service related networking scenarios
     When I execute on the pod:
       | /usr/bin/curl | --connect-timeout | 10 | <%= cb.hostip %>:27017 |
     Then the output should contain:
-      | Hello-OpenShift-1 http-8080                                     |
+      | Hello-OpenShift-1 http-8080 |
 
   # @author weliang@redhat.com
   # @case_id OCP-24692
@@ -227,7 +227,7 @@ Feature: Service related networking scenarios
     And I wait up to 300 seconds for the steps to pass:
     """
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/externalip_service1.json" replacing paths:
-      | ["spec"]["externalIPs"][0]  | 22.2.2.10 |
+      | ["spec"]["externalIPs"][0] | 22.2.2.10 |
     Then the step should fail
     """
 
@@ -235,7 +235,7 @@ Feature: Service related networking scenarios
     And I wait up to 300 seconds for the steps to pass:
     """
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/externalip_service1.json" replacing paths:
-      | ["spec"]["externalIPs"][0]  | 22.2.2.130 |
+      | ["spec"]["externalIPs"][0] | 22.2.2.130 |
     Then the step should succeed
     """
  
@@ -249,7 +249,7 @@ Feature: Service related networking scenarios
     When I execute on the pod:
       | /usr/bin/curl | -k | 22.2.2.130:27017 |
     Then the output should contain:
-      | Hello-OpenShift-1 http-8080           |
+      | Hello-OpenShift-1 http-8080 |
 
   # @author weliang@redhat.com
   # @case_id OCP-24670
@@ -277,7 +277,7 @@ Feature: Service related networking scenarios
     And I wait up to 300 seconds for the steps to pass:
     """
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/externalip_service1.json" replacing paths:
-      | ["spec"]["externalIPs"][0]  | <%= cb.hostip %> |
+      | ["spec"]["externalIPs"][0] | <%= cb.hostip %> |
     Then the step should fail
     """
 
@@ -288,13 +288,13 @@ Feature: Service related networking scenarios
   Scenario: An allowedCIDRs inside an rejectedCIDRs	 
     # Create additional network through CNO
     Given as admin I successfully merge patch resource "networks.config.openshift.io/cluster" with:
-      | {"spec":{"externalIP":{"policy":{"allowedCIDRs":["22.2.2.0/25"],"rejectedCIDRs":["22.2.2.0/24"]}}}}  |                                                                                  
+      | {"spec":{"externalIP":{"policy":{"allowedCIDRs":["22.2.2.0/25"],"rejectedCIDRs":["22.2.2.0/24"]}}}} |                                                                                  
    
     # Clean-up required to erase above externalIP policy after testing done
     Given I register clean-up steps:
     """
     Given as admin I successfully merge patch resource "networks.config.openshift.io/cluster" with:
-      | {"spec":{"externalIP":{"policy": {"allowedCIDRs": null, "rejectedCIDRs": null}}}}  |
+      | {"spec":{"externalIP":{"policy": {"allowedCIDRs": null, "rejectedCIDRs": null}}}} |
     """
 
     # Create a svc with externalIP/22.2.2.10 which is in rejectedCIDRs
@@ -302,7 +302,7 @@ Feature: Service related networking scenarios
     And I wait up to 300 seconds for the steps to pass:
     """
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/externalip_service1.json" replacing paths:
-      | ["spec"]["externalIPs"][0]  | 22.2.2.10 |
+      | ["spec"]["externalIPs"][0] | 22.2.2.10 |
     Then the step should fail
     """
 
@@ -310,7 +310,7 @@ Feature: Service related networking scenarios
     And I wait up to 300 seconds for the steps to pass:
     """
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/externalip_service1.json" replacing paths:
-      | ["spec"]["externalIPs"][0]  | 22.2.2.130 |
+      | ["spec"]["externalIPs"][0] | 22.2.2.130 |
     Then the step should fail
     """
 
@@ -333,7 +333,7 @@ Feature: Service related networking scenarios
     Given I register clean-up steps:
     """
     Given as admin I successfully merge patch resource "networks.config.openshift.io/cluster" with:
-      | {"spec":{"externalIP":{"policy":{"allowedCIDRs":null }}}}  |
+      | {"spec":{"externalIP":{"policy":{"allowedCIDRs":null }}}} |
     """
     
     # Create a svc with externalIP
@@ -341,7 +341,7 @@ Feature: Service related networking scenarios
     And I wait up to 300 seconds for the steps to pass:
     """
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/externalip_service1.json" replacing paths:
-      | ["spec"]["externalIPs"][0]  | <%= cb.host1ip %> |
+      | ["spec"]["externalIPs"][0] | <%= cb.host1ip %> |
     Then the step should succeed
     """
 
@@ -355,7 +355,7 @@ Feature: Service related networking scenarios
     When I execute on the pod:
       | /usr/bin/curl | --connect-timeout | 10 | <%= cb.host1ip %>:27017 |
     Then the output should contain:
-      | Hello-OpenShift-1 http-8080                  |
+      | Hello-OpenShift-1 http-8080 |
     
     # Delete created pod and svc
     When I run the :delete client command with:
@@ -367,7 +367,7 @@ Feature: Service related networking scenarios
     And I wait up to 300 seconds for the steps to pass:
     """
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/externalip_service1.json" replacing paths:
-      | ["spec"]["externalIPs"][0]  | <%= cb.host2ip %> |
+      | ["spec"]["externalIPs"][0] | <%= cb.host2ip %> |
     Then the step should succeed
     """
     
@@ -381,6 +381,6 @@ Feature: Service related networking scenarios
     When I execute on the pod:
       | /usr/bin/curl | --connect-timeout | 10 | <%= cb.host2ip %>:27017 |
     Then the output should contain:
-      | Hello-OpenShift-1 http-8080                                      |
+      | Hello-OpenShift-1 http-8080 |
 
 
