@@ -55,7 +55,8 @@ Feature: Service Catalog related scenarios
     # Deploy ups broker
     When I run the :get admin command with:
       | resource | clusterservicebroker |
-    Then the step should succeed  
+    Then the step should succeed
+    Given admin ensures "ups-broker" clusterservicebroker is deleted after scenario  
     Given I have a project
     When I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
