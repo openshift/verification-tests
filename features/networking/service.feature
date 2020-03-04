@@ -359,8 +359,8 @@ Feature: Service related networking scenarios
     
     # Delete created pod and svc
     When I run the :delete client command with:
-    | object_type | all |
-    | all         |     |
+      | object_type | all |
+      | all         |     |
     Then the step should succeed
 
     # Create a svc with second externalIP
