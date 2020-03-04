@@ -53,7 +53,9 @@ Feature: Service Catalog related scenarios
     Given the status of condition "Upgradeable" for "service-catalog-controller-manager" operator is: True
     
     # Deploy ups broker
-    Given admin ensures "ups-broker" clusterservicebroker is deleted after scenario
+    When I run the :get admin command with:
+      | resource | clusterservicebroker |
+    Then the step should succeed  
     Given I have a project
     When I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
