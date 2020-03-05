@@ -951,6 +951,6 @@ Given /^I store the ovnkube-master#{OPT_QUOTED} leader pod in the#{OPT_SYM} clip
     pod.node_name == leader_node || pod.ip == leader_node
   }.first
   cache_resources leader_pod
-  cb[cb_leader_name] = leader_pod.name
+  cb[cb_leader_name] = leader_pod
 end
 
