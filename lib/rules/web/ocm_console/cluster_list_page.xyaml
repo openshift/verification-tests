@@ -421,8 +421,6 @@ check_ocp_details_in_detail_page:
         - selector:
             xpath: //dl[@class='cluster-details-item left']/dt[text()='Owner']
         - selector:
-            xpath: //dl[@class='cluster-details-item left']/dd[text()='ocm-orgMem01 UItesting']
-        - selector:
             xpath: //dl[@class='cluster-details-item left']/dt[text()='Status']
         - selector:
             xpath: //dl[@class='cluster-details-item left']/dd[text()='disconnected']
@@ -511,8 +509,6 @@ check_osd_details_in_detail_page:
             xpath: //dl[@class='cluster-details-item left']/dt[text()='Created at']
         - selector:
             xpath: //dl[@class='cluster-details-item left']/dt[text()='Owner']
-        - selector:
-            xpath: //dl[@class='cluster-details-item left']/dd[text()='ocm-orgMem01 UItesting']
         - selector:
             xpath: //dl[@class='cluster-details-item left']/dt[text()='Billing Model']
         - selector:
