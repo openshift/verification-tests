@@ -954,3 +954,18 @@ Given /^I store the ovnkube-master#{OPT_QUOTED} leader pod in the#{OPT_SYM} clip
   cb[cb_leader_name] = leader_pod
 end
 
+
+Given /^the OVN "([^"]*)" database is killed on the "([^"]*)" node$/ do |ovndb, node_name|
+  ensure_admin_tagged
+  node = node(node_name)
+  host = node.host
+  case ovndb
+  when "north"
+    kill_match = "OVN_Northbound"
+  else
+    kill_match = "OVN_Southbound"
+  end
+  @result = host.exec_admin("pkill -f #{kill_match}")
+  raise "Failed to kill the #{ovndb} database daemon" unless @result[:success]
+end
+
