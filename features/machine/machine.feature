@@ -30,16 +30,15 @@ Feature: Machine features testing
   Scenario: Scale up and scale down a machineSet
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
-    And I pick a random machineset to scale
-    And evaluation of `machine_set.available_replicas` is stored in the :replicas_to_restore clipboard
+
+    Given I store the number of machines in the :num_to_restore clipboard
+    And admin ensures node number is restored to "<%= cb.num_to_restore %>" after scenario
+
+    Given I clone a machineset named "machineset-clone-25436"
+    And admin ensures "machineset-clone-25436" machineset is deleted after scenario
 
     Given I scale the machineset to +2
     Then the step should succeed
-    And I register clean-up steps:
-    """
-    When I scale the machineset to <%= cb.replicas_to_restore %>
-    Then the machineset should have expected number of running machines
-    """
     And the machineset should have expected number of running machines
 
     When I scale the machineset to -1
@@ -115,4 +114,3 @@ Feature: Machine features testing
     Given I have an IPI deployment
     And evaluation of `BushSlicer::Machine.list(user: admin, project: project('openshift-machine-api'))` is stored in the :machines clipboard
     Then the expression should be true> cb.machines.select{|m|m.instance_state == m.annotation_instance_state}.count == cb.machines.count
- 
