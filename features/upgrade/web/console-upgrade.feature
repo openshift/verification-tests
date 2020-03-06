@@ -41,7 +41,7 @@ Feature: web console related upgrade check
       | resource_name | hooks            |
     Then the step should succeed
 
-  # author yanpzhan@redhat.com
+  # @author yanpzhan@redhat.com
   # @case_id OCP-22597
   @upgrade-check
   @admin
