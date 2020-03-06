@@ -19,11 +19,11 @@ empty_table_loaded:
 archived_cluster_list_table_loaded:
     elements:
         - selector:
-          xpath: //h1[text()='Archived clusters']
+            xpath: //h1[text()='Archived clusters']
         - selector:
-          xpath: //table[@class='pf-c-table pf-m-grid-md']
+            xpath: //table[@class='pf-c-table pf-m-grid-md']
         - selector:
-          xpath: //button[text()='Name']/span[@class='pf-c-table__sort-indicator']
+            xpath: //button[text()='Name']/span[@class='pf-c-table__sort-indicator']
         
 check_archived_cluster_list_page:
     action: archived_page_loaded
@@ -44,6 +44,7 @@ click_unarchive_cluster_button_on_archived_cluster_list_page:
     element:
         selector:
             xpath: //a[contains(text(),'<cluster_name>')]/../..//button[text()='Unarchive']
+        timeout: 30
         op: click
 go_to_archived_cluster_detail_page:
     element:

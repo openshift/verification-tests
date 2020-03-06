@@ -56,7 +56,7 @@ click_archive_button:
 archive_succ_promt_message_displayed:
     element: &archive_succ_promt_message
         selector:
-            xpath: //h4[contains(text(),'has been archived')]
+            xpath: //h4[contains(text(),'Cluster <cluster_name> has been archived')]
         timeout: 120
     action: archive_succ_promt_message_missing
 archive_succ_promt_message_missing:
@@ -84,7 +84,7 @@ click_unarchive_button:
 unarchive_succ_prompt_message_displayed:
     element: &unarchive_succ_prompt_message
         selector:
-            xpath: //*[contains(text(),'has been unarchived')]
+            xpath: //*[contains(text(),'Cluster <cluster_name> has been unarchived')]
         timeout: 60
     action: unarchive_succ_prompt_message_missing
 unarchive_succ_prompt_message_missing:
