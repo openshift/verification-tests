@@ -111,7 +111,7 @@ Feature: TSB related scenarios
     And I wait up to 180 seconds for the steps to pass:
     """
     And a pod becomes ready with labels:
-        | app=template-service-broker |
+      | app=template-service-broker |
     """
     # Check if the new TSB works works well.
     And I wait up to 300 seconds for the steps to pass:
