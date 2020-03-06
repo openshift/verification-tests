@@ -24,16 +24,19 @@ confirm_cancel_rollout:
   action: click_button
 search_image:
   params:
-    clear_field_id: form-input-search-searchTerm-field
-    input_field_id: form-input-search-searchTerm-field
+    clear_field_id: form-input-searchTerm-field
+    input_field_id: form-input-searchTerm-field
     input_value: <search_content>
   action: clear_input_value
   action: set_input_value
-  action: click_search_button
+  element:
+    selector:
+      xpath: //div[@class='pf-c-radio']
+    op: click
 search_nonexisted_image_and_check_message:
   params:
     search_content: non-existed
-    content: Could not load image metadata
+    content: may not have access to the container image
   action: search_image
   action: check_page_contains
 search_and_deploy_image:
