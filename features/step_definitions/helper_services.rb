@@ -316,7 +316,7 @@ Given /^I have a git client pod in the#{OPT_QUOTED} project$/ do |project_name|
 end
 
 # pod-for-ping is a pod that has curl, wget, telnet and ncat
-Given /^I have a pod-for-ping in the(?: "([^ ]+?)")? project$/ do |project_name|
+Given /^I have a pod-for-ping in the#{OPT_QUOTED} project$/ do |project_name|
   project(project_name, switch: true)
   unless project.exists?(user: user)
     raise "project #{project_name} does not exist"
