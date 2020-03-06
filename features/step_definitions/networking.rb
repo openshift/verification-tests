@@ -952,7 +952,7 @@ Given /^I store "([^"]*)" node's corresponding default networkType pod name in t
   logger.info "node's corresponding networkType pod name is stored in the #{cb_pod_name} clipboard."
 end
 
-Given /^I store the ovnkube-master#{OPT_QUOTED} leader pod in the#{OPT_SYM} clipboard$/ do |ovndb, cb_leader_name|
+Given /^I store the ovnkube-master#{OPT_QUOTED} leader pod in the#{OPT_SYM} clipboard(?: using node #{QUOTED})?$/ do |ovndb, cb_leader_name, node_name|
   ensure_admin_tagged
   cb_leader_name ||= "#{ovndb}_leader"
   case ovndb
@@ -962,15 +962,28 @@ Given /^I store the ovnkube-master#{OPT_QUOTED} leader pod in the#{OPT_SYM} clip
     ovsappctl_cmd = %w(ovs-appctl -t /var/run/ovn/ovnsb_db.ctl cluster/status OVN_Southbound)
   end
 
-  ovn_pods = BushSlicer::Pod.get_labeled("app=ovnkube-master", project: project("openshift-ovn-kubernetes", switch: false), user: admin, quiet: true) { |pod, hash|
-    # make sure we pick a Running master
-    pod.ready?(user: admin, cached: false, quiet: true)
-  }
-  # use the oldest sdn_pod, hopying that it is the master
-  ovn_pods.sort!{ |a,b| a.props[:created] <=> b.props[:created]}
+  if node_name == nil
+    # if we don't specify a node pick the oldest pod to check leader status
+    ovn_pods = BushSlicer::Pod.get_labeled("app=ovnkube-master", project: project("openshift-ovn-kubernetes", switch: false),
+                                           user: admin, quiet: true) { |pod, hash|
+      # make sure we pick a Running master
+      pod.ready?(user: admin, cached: false, quiet: true)
+    }
+    # use the oldest ovn_pod, hoping that it is the master
+    ovn_pods.sort!{ |a,b| a.props[:created] <=> b.props[:created]}
+
+  else
+    ovn_pods = BushSlicer::Pod.get_labeled("app=ovnkube-master", project: project("openshift-ovn-kubernetes", switch: false),
+                                           user: admin, quiet: true) { |pod, hash|
+      # always make sure it is ready
+      pod.node_name == node_name && pod.ready?(user: admin, cached: false, quiet: true)
+    }
+    # there should be only one pod.
+  end
+
   cluster_state = nil
-  ovn_pods.each{ |sdn_pod|
-    @result = sdn_pod.exec(*ovsappctl_cmd, as: admin, container: "northd")
+  ovn_pods.each{ |ovn_pod|
+    @result = ovn_pod.exec(*ovsappctl_cmd, as: admin, container: "northd")
     if @result[:success]
       cluster_state = @result[:response].strip
       break
@@ -993,10 +1006,27 @@ Given /^I store the ovnkube-master#{OPT_QUOTED} leader pod in the#{OPT_SYM} clip
                                            user: admin, quiet: true) { |pod, hash|
     pod.node_name == leader_node || pod.ip == leader_node
   }.first
+  # update the cache so we can execute on the pod without specify the name
+  cache_resources leader_pod
   cb[cb_leader_name] = leader_pod
   logger.info "cb.#{cb_leader_name}.name = #{leader_pod.name}"
+  logger.info "cb.#{cb_leader_name}.node_name = #{leader_pod.node_name}"
 end
 
+# work-around nested clipboard Transform <% cb.south_leader.name %> issues by combining this step
+Given /^admin deletes the ovnkube-master#{OPT_QUOTED} leader$/ do |ovndb|
+  ensure_admin_tagged
+
+  cb_leader_name ||= "#{ovndb}_leader"
+  if cb[cb_leader_name] == nil
+    step %Q/I store the ovnkube-master "#{ovndb}" leader pod in the :#{cb_leader_name} clipboard/
+  end
+  leader_pod_name = cb[cb_leader_name].name
+  # this doens't work for some reason, can't find the dynamic step
+  # step %Q/Given admin ensures "#{leader_pod_name}" pod is deleted from the "openshift-ovn-kubernetes" project/
+
+  @result = resource(leader_pod_name, "pod", project_name: "openshift-ovn-kubernetes").ensure_deleted(user: admin, wait: 300)
+end
 
 Given /^the OVN "([^"]*)" database is killed on the "([^"]*)" node$/ do |ovndb, node_name|
   ensure_admin_tagged
@@ -1167,7 +1197,7 @@ Given /^the mtu value "([^"]*)" is patched in CNO config according to the networ
   end
   @result = admin.cli_exec(:patch, resource: "network.operator", resource_name: "cluster", p: "{\"spec\":{\"defaultNetwork\":{\"#{config_var}\":{\"mtu\": #{mtu_value}}}}}", type: "merge")
   raise "Failed to patch CNO!" unless @result[:success]
-  
+
   teardown_add {
       @result = admin.cli_exec(:patch, resource: "network.operator", resource_name: "cluster", p: "{\"spec\":{\"defaultNetwork\":{\"ovnKubernetesConfig\":{\"mtu\": null}}}}", type: "merge")
       raise "Failed to clear mtu field from CNO" unless @result[:success]
