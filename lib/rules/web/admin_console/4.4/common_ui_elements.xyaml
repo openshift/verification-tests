@@ -101,6 +101,15 @@ click_radio_input:
     selector:
       xpath: //input[@type='radio' and @value='<radio_text>']
     op: click
+click_close_button:
+  element:
+    selector:
+      xpath: //button[contains(@aria-label,'Close')]
+    op: click
+click_yaml_create_button:
+  params:
+    button_id: yaml-create
+  action: click_button_by_id
 clear_input_value:
   elements:
   - selector:
