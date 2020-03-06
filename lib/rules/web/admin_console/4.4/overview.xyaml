@@ -6,12 +6,12 @@ wait_overview_items_loaded:
 check_list_heading_shown:
   element:
     selector:
-      xpath: //button[contains(@class,'project-overview__item-heading--name') and text()='<heading>' and not(contains(@class,'pf-m-disabled'))]
+      xpath: //button[contains(@class,'project-overview__item-heading--name') and text()='<heading>']
 check_list_item:
   elements: 
   - selector: &overview_item
       xpath: //button[contains(@class,'project-overview__item-heading--name') and text()='<resource_name>']/ancestor::div[contains(@class,'project-overview__item--<resource_kind>')]
-    timeout: 90
+    timeout: 30
 check_pod_number:
   element:
     selector:
