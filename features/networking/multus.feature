@@ -5,7 +5,7 @@ Feature: Multus-CNI related scenarios
   @admin
   Scenario: Create pods with multus-cni - macvlan bridge mode
     # Make sure that the multus is enabled
-    Given the master version >= "4.0"
+    Given the master version >= "4.1"
     And the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard
     And evaluation of `node.name` is stored in the :target_node clipboard
@@ -63,7 +63,7 @@ Feature: Multus-CNI related scenarios
   @admin
   Scenario: Create pods with multus-cni - macvlan private mode
     # Make sure that the multus is enabled
-    Given the master version >= "4.0"
+    Given the master version >= "4.1"
     And the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard
     And evaluation of `node.name` is stored in the :target_node clipboard
@@ -119,7 +119,7 @@ Feature: Multus-CNI related scenarios
   @admin
   Scenario: Create pods with multus-cni - macvlan vepa mode
     # Make sure that the multus is enabled
-    Given the master version >= "4.0"
+    Given the master version >= "4.1"
     And the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard
     And evaluation of `node.name` is stored in the :target_node clipboard
@@ -177,7 +177,7 @@ Feature: Multus-CNI related scenarios
   @destructive
   Scenario: Create pods with multus-cni - host-device
     # Make sure that the multus is enabled
-    Given the master version >= "4.0"
+    Given the master version >= "4.1"
     And the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard    
     And evaluation of `node.name` is stored in the :target_node clipboard
@@ -244,7 +244,7 @@ Feature: Multus-CNI related scenarios
   @admin
   Scenario: Create pods with muliple cni plugins via multus-cni - macvlan + macvlan
     # Make sure that the multus is enabled
-    Given the master version >= "4.0"
+    Given the master version >= "4.1"
     And the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard
     And evaluation of `node.name` is stored in the :target_node clipboard    
@@ -288,7 +288,7 @@ Feature: Multus-CNI related scenarios
   @destructive
   Scenario: Create pods with muliple cni plugins via multus-cni - macvlan + host-device
     # Make sure that the multus is enabled
-    Given the master version >= "4.0"
+    Given the master version >= "4.1"
     And the multus is enabled on the cluster
     And an 4 character random string of type :hex is stored into the :nic_name clipboard
     Given the default interface on nodes is stored in the :default_interface clipboard
@@ -349,7 +349,7 @@ Feature: Multus-CNI related scenarios
   @destructive
   Scenario: Create pods with muliple cni plugins via multus-cni - host-device + host-device
     # Make sure that the multus is enabled
-    Given the master version >= "4.0"
+    Given the master version >= "4.1"
     And the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard
     And evaluation of `node.name` is stored in the :target_node clipboard
