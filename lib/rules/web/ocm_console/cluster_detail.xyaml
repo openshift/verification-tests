@@ -137,8 +137,6 @@ check_disconnected_cluster_overview_information:
             xpath: //div[@class='pf-l-grid']/div[1]//dt[4][text()='Provider']/../dd[4][text()='N/A']
         - selector:
             xpath: //div[@class='pf-l-grid']/div[2]//dt[1][text()='Status']/../dd[1][text()='disconnected']
-        - selector:
-            xpath: //div[@class='pf-l-grid']/div[2]//dt[5][text()='Support Level']/../dd[5][text()='Self-Support']
     action:
         if_param: vcpu_type
         ref: total_vCPU_loaded

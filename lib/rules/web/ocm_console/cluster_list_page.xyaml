@@ -1,32 +1,35 @@
+create_cluster_button_loaded:
+    element: &create_cluster_button
+        selector:
+            xpath: //a[contains(@href, '/openshift/create')]/button[text()='Create cluster']
+
+
 check_cluster_list_page_without_cluster:
+    action: create_cluster_button_loaded
     elements:
         - selector:
             xpath: //h4[@class='pf-c-title pf-m-2xl' and text()='No OpenShift clusters to display']
         - selector:
             xpath: //div[@class='pf-c-empty-state__body' and contains(., 'create your first cluster')]
         - selector:
-            xpath: //a[contains(@href, '/openshift/create')]/button[text()='Create cluster']
-        - selector:
             xpath: //a[contains(@href, '/openshift/register')]/button[@class='pf-c-button pf-m-link' and text()='Register disconnected cluster']
         - selector:
             xpath: //a[contains(@href, '/openshift/archived')]/button[@class='pf-c-button pf-m-link' and text()='View archived clusters']
 
 cluster_list_page_loaded:
+    action: create_cluster_button_loaded
     elements:
         - selector:
             xpath: //h1[text()='Clusters']
         - selector:
-            xpath: //button[text()='Create cluster']
-        - selector:
             xpath: //button[@class='pf-c-button pf-m-plain' and text()='Name']
 check_cluster_list_page:
+    action: create_cluster_button_loaded
     elements:
         - selector:
             css: input.pf-c-form-control.cluster-list-filter
         - selector:
             xpath: //div[@class='pf-c-dropdown toolbar-item']/button/span[text()='Filter']
-        - selector:
-            xpath: //button[text()='Create cluster']
         - selector:
             xpath: //button[text()='Create cluster']/../..//button[@aria-label='Actions']
           op: click
@@ -149,8 +152,7 @@ select_filter:
         op: click
 click_create_cluster_button:
     element:
-        selector:
-            xpath: //a[contains(@href, '/openshift/create')]/button[text()='Create Cluster']
+        <<: *create_cluster_button
         op: click
 click_actions_behind_create_button:
     element:
@@ -340,7 +342,7 @@ go_to_disconnected_cluster_register_page:
     action: actions_behind_create_button_menu_loaded
     element:
         selector:
-            xpath: //a[@href='/beta/openshift/register']
+            xpath: //a[contains(@href,'/openshift/register')]
         op: click
     action: cluster_registration_page_loaded
 click_scale_cluster_in_action_dropdown:

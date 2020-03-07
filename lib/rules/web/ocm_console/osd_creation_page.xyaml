@@ -60,18 +60,18 @@ switch_to_osd_creation_page:
     action: switch_to_creation_cards_page
     element:
         selector:
-            xpath: //a[@href='/beta/openshift/create/osd']
+            xpath: //a[contains(@href,'/openshift/create/osd')]
         op: click
     action: osd_creation_page_loaded
 select_advanced_radio_button:
     element:
         selector:
-            xpath: //*[@id='network-configuration-toggle-advanced']
+            xpath: //*[@id='network_configuration_toggle-advanced']
         op: click
 select_basic_radio_button:
     element:
         selector:
-            xpath: //*[@id='network-configuration-toggle-basic']
+            xpath: //*[@id='network_configuration_toggle-basic']
         op: click
 
 check_networking_configuration:
@@ -241,3 +241,4 @@ check_non_support_multi_az_region_error_message:
     action: select_region
     action: click_create_button
     action: osd_creation_error_dialog_loaded
+    action: close_error_message_dialog

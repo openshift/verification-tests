@@ -59,15 +59,6 @@ close_alert_firing:
     action: expand_alert_firing
 check_alert_firing:
     action: expand_alert_firing
-    elements:
-        - selector:
-            xpath: //li[@aria-labelledby='alerts-firing']//span[contains(text()[3], 'discovered issues')]
-        - selector:
-            xpath: //li[@aria-labelledby='alerts-firing']//table[@class='pf-c-table pf-m-grid-md pf-m-compact']
-        - selector:
-            xpath: //li[@aria-labelledby='alerts-firing']//table//th[text()='Name']
-        - selector:
-            xpath: //li[@aria-labelledby='alerts-firing']//table//th[text()='Severity']
     action: close_alert_firing
 expand_nodes:
     element:
@@ -79,8 +70,6 @@ close_nodes:
 check_nodes:
     action: expand_nodes
     elements:
-        - selector:
-            xpath: //li[@aria-labelledby='nodes']//span[contains(text()[3], 'discovered issues')]
         - selector:
             xpath: //section[@id='nodes-expand']//table//th[text()='Name']
         - selector:
@@ -99,8 +88,6 @@ close_cluster_operators:
 check_cluster_operators:
     action: expand_cluster_operators
     elements:
-        - selector:
-            xpath: //li[@aria-labelledby='cluster-operators']//span[contains(text()[3], 'discovered issues')]
         - selector:
             xpath: //section[@id='cluster-operators-expand']//table//th[text()='Name']
         - selector:

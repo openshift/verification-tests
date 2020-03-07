@@ -212,11 +212,13 @@ customer_cloud_subscription_prompt_message_loaded:
         - selector:
             xpath: //h1[text()='Customer Cloud Subscription']
         - selector:
-            text: "This billing option will transfer the resources associated with this cluster to your AWS account, allowing you to take advantage of the discounts you have already negotiated with AWS."
+            text: "With this subscription option, the cluster will be provisioned in an AWS account owned by you or your company. This allows you to pay AWS directly for public cloud costs, leveraging your existing relationship."
         - selector:
             xpath: //h3[text()='Important'] 
         - selector:
-            text: "In order for the account transfer to succeed, you must ensure the following:"
+            text: "In order for the cluster provisioning to succeed, you must ensure the following:"
+        - selector:
+            xpath: //*[contains(text(),"Your AWS account has no services deployed in it.")]
         - selector:
             text: "Your AWS account has an Enterprise Support Plan attached."
         - selector:
@@ -231,8 +233,7 @@ customer_cloud_subscription_prompt_message_loaded:
             xpath: //a[@href='https://www.openshift.com/dedicated/byoc' and text()='documentation.']
         - selector:
             xpath: //div[text()[1]='Refer to the']
-        #- selector:
-        #    xpath: //div[text()[2]='for more detail around the requirements for Customer Cloud Subscription.']
+
 close_customer_cloud_subscription_prompt_message:
     action: customer_cloud_subscription_prompt_message_loaded
     element:
