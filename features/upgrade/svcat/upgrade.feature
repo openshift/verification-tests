@@ -77,7 +77,6 @@ Feature: Service Catalog related scenarios
 
     #Provision a serviceinstance
     Given I switch to the first user
-    And I use the "<%= cb.user_project %>" project
     When I process and create:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/ups-instance-template.yaml |
       | p | USER_PROJECT=<%= cb.user_project %>                                                                       |
@@ -88,10 +87,4 @@ Feature: Service Catalog related scenarios
       | resource | serviceinstance/ups-instance |
     Then the output should match "Message.*The instance was provisioned successfully"
     """
-
-    # Delete serviceinstance
-    When I run the :delete client command with:
-      | object_type       | serviceinstance |
-      | object_name_or_id | ups-instance    |
-    Then the step should succeed
-    Given I wait for the resource "serviceinstance" named "ups-instance" to disappear within 60 seconds
+    Given admin ensures "ups-instance" service_instance is deleted
