@@ -79,7 +79,7 @@ Feature: Service Catalog related scenarios
     Given I switch to the first user
     When I process and create:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/ups-instance-template.yaml |
-      | p | USER_PROJECT=<%= cb.user_project %>                                                                       |
+      | p | USER_PROJECT=<%= project.name %>                                                                          |
     Then the step should succeed
     And I wait up to 30 seconds for the steps to pass:
     """
