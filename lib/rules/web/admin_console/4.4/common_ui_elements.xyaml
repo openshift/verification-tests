@@ -55,7 +55,7 @@ select_resource_item:
 click_on_resource_name:
   element:
     selector:
-      xpath: //span[contains(@class,'co-resource-item__resource-name') and text()='<item>']
+      xpath: //*[contains(@class,'co-resource-item__resource-name') and text()='<item>']
     op: click
 check_button_disabled:
   element:
