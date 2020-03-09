@@ -17,7 +17,7 @@ click_add_more_users:
   action: click_button_text
 remove_user_from_group:
   params:
-    item: Remove User
+    kebab_item: Remove User
   action: click_kebab_of_one_resource
   action: click_kebab_item
   action: submit_changes
