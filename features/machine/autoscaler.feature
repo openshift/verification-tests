@@ -176,3 +176,23 @@ Feature: Cluster Autoscaler Tests
     Then the step should succeed
     And the output should match "Annotations:\s+<none>"
 
+  # @author zhsun@redhat.com
+  # @case_id OCP-23745
+  @admin
+  @destructive
+  Scenario: Machineautoscaler can be deleted when its referenced machineset does not exist
+    Given I have an IPI deployment
+    And I switch to cluster admin pseudo user
+
+    Given I store the number of machines in the :num_to_restore clipboard
+    And admin ensures node number is restored to "<%= cb.num_to_restore %>" after scenario
+
+    Given I use the "openshift-machine-api" project
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/cloud/machine-autoscaler.yml" replacing paths:
+      | ["metadata"]["name"]               | maotest |
+      | ["spec"]["minReplicas"]            | 1       |
+      | ["spec"]["maxReplicas"]            | 3       |
+      | ["spec"]["scaleTargetRef"]["name"] | invalid |
+    Then the step should succeed
+    And admin ensures "maotest" machineautoscaler is deleted
+
