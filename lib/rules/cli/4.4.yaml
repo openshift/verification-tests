@@ -1117,21 +1117,6 @@
     :raw: --raw
 :oadm_cordon_node:
   :cmd: oc adm cordon <node_name>
-:oadm_diagnostics:
-  :cmd: oc adm diagnostics
-  :options:
-    :cluster-context: --cluster-context=<value>
-    :config: --kubeconfig=<value>
-    :context: --context=<value>
-    :diaglevel: --diaglevel=<value>
-    :diagnostics_name: <value>
-    :host: --host=<value>
-    :images: --images=<value>
-    :latest-images: --latest-images=<value>
-    :loglevel: --loglevel=<value>
-    :master-config: --master-config=<value>
-    :node-config: --node-config=<value>
-    :prevent-modification: --prevent-modification=<value>
 :oadm_drain:
   :cmd: oc adm drain
   :options:

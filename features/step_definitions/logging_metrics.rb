@@ -1054,26 +1054,6 @@ end
 Given /^I verify metrics service is functioning$/ do
   if cb.install_prometheus
     step %Q/I verify Prometheus metrics service is functioning/
-  else
-    # assume the other is Hawkular
-    # XXX: disable this check for now until https://bugzilla.redhat.com/show_bug.cgi?id=1571176  is fixed
-    #step %Q/I verify Hawkular metrics service is functioning/
-  end
-end
-
-# do a quick sanity check using oc adm diagnostics MetricsApiProxy
-# XXX: only seems to be supported by OCP >= 3.3
-# https://docs.openshift.com/container-platform/3.3/install_config/cluster_metrics.html
-# https://docs.openshift.com/container-platform/3.6/install_config/cluster_metrics.html
-
-Given /^I verify Hawkular metrics service is functioning$/ do
-  ensure_admin_tagged
-  @result = admin.cli_exec(:oadm_diagnostics, diagnostics_name: "MetricsApiProxy")
-
-  if @result[:success]
-    raise "Failed diagnostic, output: #{@result[:response]}"  unless @result[:response].include? 'Completed with no errors or warnings seen'
-  else
-    raise "Failed diagnostic, output: #{@result[:response]}"
   end
 end
 
