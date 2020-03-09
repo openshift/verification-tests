@@ -486,8 +486,10 @@ module BushSlicer
       case extra_vars
       when nil
         extra_vars = []
-      when Array, Hash
+      when Hash
         extra_vars = ["-e", extra_vars.to_json]
+      when Array
+        extra_vars = extra_vars.each_with_object([]) { |i, arr| arr << "-e" << i }
       when String
         extra_vars = ["-e", extra_vars]
       else
