@@ -34,6 +34,9 @@ Feature: NFS Persistent Volume
       | touch | /mnt/nfs/testfile_2 |
     Then the step should succeed
 
+    # Delete the rc to ensure the data synced to the nfs server
+    Given I ensure "hellopod" replicationcontroller is deleted
+
     # Finally verify both files created by each pod are under the same export dir in the nfs-server pod
     When I execute on the "nfs-server" pod:
       | ls | /mnt/data |
@@ -87,9 +90,13 @@ Feature: NFS Persistent Volume
     Given I execute on the pod:
       | touch | /mnt/nfs/nfs_testfile |
     Then the step should succeed
+    # workaround for https://bugzilla.redhat.com/show_bug.cgi?id=1810971
+    Then I wait up to 30 seconds for the steps to pass:
+    """
     When I execute on the pod:
       | ls | -l | /mnt/nfs/nfs_testfile |
     Then the step should succeed
+    """
 
     Examples:
       | nfs-uid-gid   | pv-gid | pod-gid |
