@@ -2,3 +2,69 @@ click_view_alerts_button:
   params:
     button_text: View alerts
   action: click_button_text
+# grafana dashboards
+check_grafana_dashboard_body_loaded:
+  element:
+    selector:
+      xpath: //div[contains(@class,'co-dashboard-body')]//*[contains(@class,'monitoring-dashboards')]
+    timeout: 20
+click_dashboard_dropdown:
+  params:
+    dropdown_field: Dashboard
+  action: click_dropdown_field
+check_dashboard_etcd:
+  params:
+    dropdown_menu_item: etcd
+  action: check_dropdown_menu_item
+check_dashboard_kubernetes_compute_resources_cluster:
+  params:
+    dropdown_menu_item: Kubernetes / Compute Resources / Cluster
+  action: check_dropdown_menu_item
+check_dashboard_kubernetes_compute_resources_namespace_pods:
+  params:
+    dropdown_menu_item: Kubernetes / Compute Resources / Namespace (Pods)
+  action: check_dropdown_menu_item
+check_dashboard_kubernetes_compute_resources_namespace_workloads:
+  params:
+    dropdown_menu_item: Kubernetes / Compute Resources / Namespace (Workloads)
+  action: check_dropdown_menu_item
+check_dashboard_kubernetes_compute_resources_namespace_node_pods:
+  params:
+    dropdown_menu_item: Kubernetes / Compute Resources / Node (Pods)
+  action: check_dropdown_menu_item
+check_dashboard_kubernetes_compute_resources_pod:
+  params:
+    dropdown_menu_item: Kubernetes / Compute Resources / Pod
+  action: check_dropdown_menu_item
+check_dashboard_kubernetes_compute_resources_workload:
+  params:
+    dropdown_menu_item: Kubernetes / Compute Resources / Workload
+  action: check_dropdown_menu_item
+check_dashboard_kubernetes_networking_cluster:
+  params:
+    dropdown_menu_item: Kubernetes / Networking / Cluster
+  action: check_dropdown_menu_item
+check_dashboard_prometheus:
+  params:
+    dropdown_menu_item: Prometheus
+  action: check_dropdown_menu_item
+check_dashboard_use_method_cluster:
+  params:
+    dropdown_menu_item: USE Method / Cluster
+  action: check_dropdown_menu_item
+check_dashboard_use_method_node:
+  params:
+    dropdown_menu_item: USE Method / Node
+  action: check_dropdown_menu_item
+check_dashboard_dropdown_items:
+  action: check_dashboard_etcd
+  action: check_dashboard_kubernetes_compute_resources_cluster
+  action: check_dashboard_kubernetes_compute_resources_namespace_pods
+  action: check_dashboard_kubernetes_compute_resources_namespace_workloads
+  action: check_dashboard_kubernetes_compute_resources_namespace_node_pods
+  action: check_dashboard_kubernetes_compute_resources_pod
+  action: check_dashboard_kubernetes_compute_resources_workload
+  action: check_dashboard_kubernetes_networking_cluster
+  action: check_dashboard_prometheus
+  action: check_dashboard_use_method_cluster
+  action: check_dashboard_use_method_node
