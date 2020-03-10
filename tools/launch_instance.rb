@@ -486,8 +486,10 @@ module BushSlicer
       case extra_vars
       when nil
         extra_vars = []
-      when Array, Hash
+      when Hash
         extra_vars = ["-e", extra_vars.to_json]
+      when Array
+        extra_vars = extra_vars.each_with_object([]) { |i, arr| arr << "-e" << i }
       when String
         extra_vars = ["-e", extra_vars]
       else
@@ -862,6 +864,7 @@ module BushSlicer
           vars_file = Tempfile.new("vars_file_", Host.localhost.workdir)
           vars_file.write(vars.to_yaml)
           vars_file.close
+          ENV["BUSHSLICER_VMINFO_YAML"] = "" # avoid initializing the file
           # we launch a template to clean-up whatever it is
           launch_template(
             config: vars_file.path,

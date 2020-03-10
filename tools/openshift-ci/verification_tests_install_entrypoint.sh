@@ -61,6 +61,8 @@ function git_clone() {
   set -x
 }
 
+/usr/local/bin/generate_container_user || echo Not running with rootless podman or error creating passwd entry.
+
 # First clone verification-tests repo itself
 : ${FLEXY_URI:=https://github.com/openshift/verification-tests.git}
 git_clone FLEXY_URI
