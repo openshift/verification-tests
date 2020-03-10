@@ -49,3 +49,9 @@ Given /^admin updated the operator crd "([^"]*)" managementstate operand to (Man
   })
   step %Q/the step should succeed/
 end
+
+# Get the Major.Minor cluster version
+Given /^the major.minor version of the cluster is stored in the#{OPT_SYM} clipboard$/ do | cb_name |
+  cb_name = 'operator_channel_name' unless cb_name
+  cb[cb_name] = cluster_version('version').channel.split('-')[1]
+end 
