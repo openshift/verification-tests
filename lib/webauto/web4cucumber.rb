@@ -143,6 +143,9 @@ require_relative 'chrome_extension'
         options = {}
         options[:extensions] = [proxy_chrome_ext_file] if proxy_chrome_ext_file
         @browser = Watir::Browser.new :chrome, desired_capabilities: chrome_caps, switches: chrome_switches, options: options
+        if @size
+          browser.window.resize_to(*@size)
+        end
       elsif @browser_type == :safari
         logger.info "Launching Safari"
         raise "auth proxy not implemented for Safari" if proxy_pass
