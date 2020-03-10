@@ -24,6 +24,11 @@ click_try_sample:
   params:
     button_text: Try Sample
   action: click_button
+set_app_name:
+  params:
+    input_field_id: form-input-name-field
+    input_value: <app_name>
+  action: set_input_value
 choose_dc_type:
   params:
     radio_text: openshift
@@ -51,6 +56,9 @@ create_app_from_deploy_image:
   action: goto_deploy_image_page
   action: wait_until_no_loading
   action: search_image
+  action:
+    if_param: app_name
+    ref: set_app_name
   action: choose_dc_type
   action:
     if_param:
