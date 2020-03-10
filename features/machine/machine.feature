@@ -35,7 +35,6 @@ Feature: Machine features testing
     And admin ensures node number is restored to "<%= cb.num_to_restore %>" after scenario
 
     Given I clone a machineset named "machineset-clone-25436"
-    And admin ensures "machineset-clone-25436" machineset is deleted after scenario
 
     Given I scale the machineset to +2
     Then the step should succeed

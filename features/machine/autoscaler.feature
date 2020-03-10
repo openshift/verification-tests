@@ -12,7 +12,6 @@ Feature: Cluster Autoscaler Tests
     And admin ensures node number is restored to "<%= cb.num_to_restore %>" after scenario
 
     Given I clone a machineset named "machineset-clone"
-    And admin ensures "machineset-clone" machineset is deleted after scenario
 
     # Create clusterautoscaler
     Given I use the "openshift-machine-api" project
@@ -52,7 +51,7 @@ Feature: Cluster Autoscaler Tests
     the expression should be true> machine_set.desired_replicas(cached: false) == 1
     """
     Then the machineset should have expected number of running machines
-  
+
   # @author zhsun@redhat.com
   # @case_id OCP-21516
   @admin
@@ -81,7 +80,6 @@ Feature: Cluster Autoscaler Tests
 
     Given I use the "openshift-machine-api" project
     Given I clone a machineset named "machineset-clone"
-    And admin ensures "machineset-clone" machineset is deleted after scenario
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/cloud/machine-autoscaler.yml" replacing paths:
       | ["metadata"]["name"]               | maotest                 |
       | ["spec"]["minReplicas"]            | 1                       |
@@ -100,7 +98,7 @@ Feature: Cluster Autoscaler Tests
       | object_type       | machineautoscaler |
       | object_name_or_id | maotest           |
     Then the step succeeded
-    When I run the :describe admin command with: 
+    When I run the :describe admin command with:
       | resource | machineset              |
       | name     | <%= machine_set.name %> |
     Then the step should succeed
@@ -113,16 +111,14 @@ Feature: Cluster Autoscaler Tests
   Scenario: Update machineAutoscaler to reference a different MachineSet
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
-    
+
     Given I store the number of machines in the :num_to_restore clipboard
     And admin ensures node number is restored to "<%= cb.num_to_restore %>" after scenario
- 
+
     Given I use the "openshift-machine-api" project
     Given I clone a machineset named "machineset-clone0"
-    And admin ensures "machineset-clone0" machineset is deleted after scenario
     And evaluation of `machine_set.name` is stored in the :machineset_clone0_name clipboard
     Given I clone a machineset named "machineset-clone1"
-    And admin ensures "machineset-clone1" machineset is deleted after scenario
     And evaluation of `machine_set.name` is stored in the :machineset_clone1_name clipboard
 
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/cloud/machine-autoscaler.yml" replacing paths:
@@ -140,7 +136,7 @@ Feature: Cluster Autoscaler Tests
       | resource | machineautoscaler |
       | name     | maotest0          |
     Then the step should succeed
-    And the output should match "Name:\s+<%= cb.machineset_clone1_name %>"  
+    And the output should match "Name:\s+<%= cb.machineset_clone1_name %>"
     When I run the :describe admin command with:
       | resource | machineset                       |
       | name     | <%= cb.machineset_clone0_name %> |
@@ -151,12 +147,12 @@ Feature: Cluster Autoscaler Tests
       | name     | <%= cb.machineset_clone1_name %> |
     Then the step should succeed
     And the output should match "Annotations:\s+autoscaling.openshift.io/machineautoscaler: openshift-machine-api/maotest0"
-  
+
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/cloud/machine-autoscaler.yml" replacing paths:
       | ["metadata"]["name"]               | maotest1                         |
       | ["spec"]["scaleTargetRef"]["name"] | <%= cb.machineset_clone0_name %> |
     Then the step should succeed
-    And admin ensures "maotest1" machineautoscaler is deleted after scenario   
+    And admin ensures "maotest1" machineautoscaler is deleted after scenario
     When I run the :patch admin command with:
       | resource      | machineautoscaler                                                       |
       | resource_name | maotest0                                                                |
