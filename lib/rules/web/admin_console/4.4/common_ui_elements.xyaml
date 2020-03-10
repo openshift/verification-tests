@@ -21,9 +21,14 @@ click_edit_yaml_link:
     op: click
 click_create_button:
   elements:
-  - selector:
+  - selector: &create_button
       xpath: //button[contains(text(),'Create')]
     op: click
+check_create_button_missing:
+  elements:
+  - selector:
+      <<: *create_button
+    missing: true
 click_cancel_button:
   elements:
   - selector:
