@@ -69,6 +69,7 @@ Given(/^I clone a machineset named "([^"]*)"$/) do | ms_name |
   new_spec.delete("status")
 
   BushSlicer::MachineSet.create(by: admin, project: project("openshift-machine-api"), spec: new_spec)
+  step %Q{admin ensures "#{ms_name}" machineset is deleted after scenario}
 
   machine_sets = BushSlicer::MachineSet.list(user: admin, project: project("openshift-machine-api"))
   cache_resources *machine_sets.max_by(&:created_at)
