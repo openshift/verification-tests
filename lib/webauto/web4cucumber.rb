@@ -132,6 +132,9 @@ require_relative 'chrome_extension'
         end
       elsif @browser_type == :chrome
         logger.info "Launching Chrome"
+
+	      #https://bugs.chromium.org/p/chromium/issues/detail?id=1056073
+	      chrome_caps[:acceptInsecureCerts] = true
         if Integer === @scroll_strategy
           chrome_caps[:element_scroll_behavior] = @scroll_strategy
         end
@@ -153,7 +156,7 @@ require_relative 'chrome_extension'
         driver = Selenium::WebDriver.for :safari, desired_capabilities: safari_caps
         @browser = Watir::Browser.new driver
       else
-        raise "Not implemented yet"
+        raise "Web4Cucumber: browser type '#{@browser_type}' not supported"
       end
       @browser
     end

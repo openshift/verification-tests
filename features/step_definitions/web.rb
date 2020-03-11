@@ -229,3 +229,8 @@ Given /^I open metrics console in the browser$/ do
   metrics_url = env.metrics_console_url + "/metrics"
   step %Q/I access the "#{metrics_url}" url in the web browser/
 end
+
+# close out current browser to conserve system memory during test
+Given /^I close the current browser$/ do
+  browser.finalize
+end
