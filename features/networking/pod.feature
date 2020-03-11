@@ -363,9 +363,6 @@ Feature: Pod related networking scenarios
 
     #Deleting the udp listener pod which will trigger a new udp listener pod with new IP
     Given I ensure "<%= cb.host_pod1.name %>" pod is deleted
-    #When I run the :delete client command with:
-    #  | object_type       | pod                      |
-    #  | object_name_or_id | <%= cb.host_pod1.name %> |
     And a pod becomes ready with labels:
       | name=udp-pods |
     And evaluation of `pod` is stored in the :host_pod2 clipboard
