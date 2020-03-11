@@ -50,9 +50,9 @@ required_items_loaded:
             css: input#system_type-virtual
             type: radio
         - selector:
-            text: 'Number of sockets or LAPRs'
+            text: 'Number of sockets or LPARs'
         - selector:
-            xpath: //span[text()='Number of sockets or LAPRs']/../span[text()='*']
+            xpath: //span[text()='Number of sockets or LPARs']/../span[text()='*']
         - selector:
             css: input#socket_num
             type: text
@@ -164,7 +164,7 @@ check_sockets_invalid_input_error_messages:
     action: check_sockets_exceed_max_number_error_messag
 check_vcpu_invalid_input_error_messages:
     params:
-        locator_id: cpu
+        locator_id: vcpu_num
     action: select_virtual_system_type
     action: clear_input
     action: click_register_cluster_button_on_cluster_register_page
