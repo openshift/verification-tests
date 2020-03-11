@@ -1072,6 +1072,7 @@ Feature: Multus-CNI related scenarios
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | macvlan-bridge-25657 |
     Then the step should succeed
     And evaluation of `@result[:response].match(/pod\/(.*) created/)[1]` is stored in the :pod_name clipboard
+    #making sure the created pod complains about net-attach-def and hence stuck in ContainerCreating state
     And I wait up to 30 seconds for the steps to pass:
     """
     When I run the :describe client command with:
@@ -1080,6 +1081,7 @@ Feature: Multus-CNI related scenarios
     Then the step should succeed
     And the output should contain:
       | cannot find get a network-attachment-definition |
+      | ContainerCreating                               |
     """
 
   # @author anusaxen@redhat.com
