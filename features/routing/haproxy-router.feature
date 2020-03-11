@@ -296,7 +296,7 @@ Feature: Testing haproxy router
     Given default router is disabled and replaced by a duplicate
     And I switch to cluster admin pseudo user
     And I use the router project
-    When I run the :env admin command with:
+    When I run the :set_env admin command with:
       | resource | dc/<%= cb.new_router_dc.name %>         |
       | e        | RELOAD_INTERVAL=90s                     |
     Then the step should succeed
@@ -460,7 +460,7 @@ Feature: Testing haproxy router
 
     Given I switch to cluster admin pseudo user
     And I use the router project
-    And I wait up to 10 seconds for the steps to pass:
+    And I wait up to 30 seconds for the steps to pass:
     """
     When I execute on the "<%=cb.router_pod %>" pod:
       | grep | <%=cb.pod_ip %> | /var/lib/haproxy/conf/haproxy.config |
@@ -499,7 +499,7 @@ Feature: Testing haproxy router
 
     Given I switch to cluster admin pseudo user
     And I use the router project
-    And I wait up to 10 seconds for the steps to pass:
+    And I wait up to 30 seconds for the steps to pass:
     """
     When I execute on the "<%=cb.router_pod %>" pod:
       | grep | <%=cb.pod_ip %> | /var/lib/haproxy/conf/haproxy.config |

@@ -300,6 +300,46 @@ Feature: SDN related networking scenarios
     Then the step should succeed
     And the output should contain "Hello OpenShift"
     """
+
+  # @author weliang@redhat.com
+  # @case_id OCP-27655
+  @admin
+  Scenario: Networking should work on default namespace	
+  #Test for bug https://bugzilla.redhat.com/show_bug.cgi?id=1800324 and https://bugzilla.redhat.com/show_bug.cgi?id=1796157
+    Given I switch to cluster admin pseudo user
+    And I use the "default" project
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json" replacing paths:
+      | ["items"][0]["spec"]["replicas"] | 4 |
+    Then the step should succeed
+    And 4 pods become ready with labels:
+      | name=test-pods |
+    And evaluation of `pod(0).name` is stored in the :pod1_name clipboard
+    And evaluation of `pod(0).ip` is stored in the :pod1_ip clipboard
+    And evaluation of `pod(1).ip` is stored in the :pod2_ip clipboard
+    And evaluation of `pod(2).ip` is stored in the :pod3_ip clipboard
+    And evaluation of `pod(3).ip` is stored in the :pod4_ip clipboard
+    And I register clean-up steps:
+    """
+    Given I ensure "test-rc" replicationcontroller is deleted
+    Given I ensure "test-service" service is deleted
+    """
+
+    When I execute on the "<%= cb.pod1_name %>" pod:
+      | curl | --connect-timeout | 5 | <%= cb.pod1_ip %>:8080 |
+    Then the step should succeed
+    And the output should contain "Hello OpenShift"
+    When I execute on the "<%= cb.pod1_name %>" pod:
+      | curl | --connect-timeout | 5 | <%= cb.pod2_ip %>:8080 |
+    Then the step should succeed
+    And the output should contain "Hello OpenShift"
+    When I execute on the "<%= cb.pod1_name %>" pod:
+      | curl | --connect-timeout | 5 | <%= cb.pod3_ip %>:8080 |
+    Then the step should succeed
+    And the output should contain "Hello OpenShift"
+    When I execute on the "<%= cb.pod1_name %>" pod:
+      | curl | --connect-timeout | 5 | <%= cb.pod4_ip %>:8080 |
+    Then the step should succeed
+    And the output should contain "Hello OpenShift"
     
   # @author anusaxen@redhat.com
   # @case_id OCP-25787

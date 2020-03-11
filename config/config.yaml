@@ -85,6 +85,11 @@ environments:
     api_port: 6443
     version: 4.1.0.0 # version not supported on cluster (yet)
   ose: *ocp4
+  ocm_stage:
+    web_console_url: https://cloud.redhat.com/example1/
+    type: OCMEnvironment
+    static_users_map:
+      exampleSymbolicUserName: "user1:password1"
 
 optional_classes:
   tcms_tc_manager:
@@ -97,6 +102,7 @@ optional_classes:
     opts:
       test_suite_class: BushSlicer::PolarShift::TestSuite
       test_suite_opts: {}
+
 services:
   AWS: &AWSBase
     create_opts:

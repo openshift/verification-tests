@@ -2,7 +2,7 @@
 Feature: Elasticsearch related tests
 
   # @author qitang@redhat.com
-  # case_id OCP-21487
+  # @case_id OCP-21487
   @admin
   @destructive
   @commonlogging

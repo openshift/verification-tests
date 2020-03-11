@@ -52,6 +52,14 @@ click_tab:
   - selector:
       xpath: //ul[contains(@class,'nav__menu')]//a[text()='<tab_name>']
     op: click
+click_environment_tab:
+  params:
+    tab_name: Environment
+  action: click_tab
+click_overview_tab:
+  params:
+    tab_name: Overview
+  action: click_tab
 clear_input_value:
   elements:
   - selector:
@@ -72,6 +80,15 @@ check_resources_title_on_page:
   elements:
   - selector:
       xpath: //span[text()='<resource_title>']
+check_item_in_list:
+  element:
+    selector:
+      xpath: //ul[contains(.,'<item>')]
+click_button_by_id:
+  element:
+    selector:
+      xpath: //button[contains(@id,'<button_id>')]
+    op: click
 check_resource_name_and_icon:
   action:
     if_param: service_name

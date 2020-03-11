@@ -78,8 +78,8 @@ module BushSlicer
       end
 
       ## deal with stderr
-      stderr = opts[:stderr].nil? ? :stdin : opts[:stderr]
-      if stderr == :stdin || stderr.equal?(opts[:stdout])
+      stderr = opts[:stderr].nil? ? :stdout : opts[:stderr]
+      if stderr == :stdout || stderr.equal?(opts[:stdout])
         res[:err] = [:child, :out]
       else
         case stderr

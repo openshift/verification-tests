@@ -66,9 +66,11 @@ Feature: buildconfig.feature
   # @author haowang@redhat.com
   Scenario Outline: Build with images pulled from private repositories
     Given I have a project
-    When I run the :new_secret client command with:
-      | secret_name     | pull                                                                 |
-      | credential_file | <%= expand_private_path(conf[:services, :docker_hub, :dockercfg]) %> |
+    When I run the :create_secret client command with:
+     | name        | pull                                                                            |
+     | secret_type | generic                                                                         |
+     | from_file   | .dockercfg=<%= expand_private_path(conf[:services, :docker_hub, :dockercfg]) %> | 
+     | type        | kubernetes.io/dockercfg                                                         |
     Then the step should succeed
     When I run the :create client command with:
       | f | <template> |
@@ -85,9 +87,11 @@ Feature: buildconfig.feature
   # @case_id OCP-12057
   Scenario: Using secret to pull a docker image which be used as source input
     Given I have a project
-    When I run the :new_secret client command with:
-     | secret_name     | pull                                                                 |
-     | credential_file | <%= expand_private_path(conf[:services, :docker_hub, :dockercfg]) %> |
+    When I run the :create_secret client command with:
+     | name        | pull                                                                            |
+     | secret_type | generic                                                                         |
+     | from_file   | .dockercfg=<%= expand_private_path(conf[:services, :docker_hub, :dockercfg]) %> | 
+     | type        | kubernetes.io/dockercfg                                                         |
     Then the step should succeed
     When I run the :new_app client command with:
      | file | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/templates/OCP-12057/application-template-stibuild_pull_private_sourceimage.json |
@@ -101,4 +105,3 @@ Feature: buildconfig.feature
     Then the step should succeed
     And the output should contain:
      | app-root |
-
