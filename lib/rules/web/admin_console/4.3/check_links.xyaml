@@ -1,7 +1,7 @@
 check_doc_get_started_with_cli:
   elements:
   - selector:
-      xpath: //.[contains(@href, "/k8s/cluster/projects")]/button[contains(., "View My Projects")]
+      xpath: //*[contains(@href, "/k8s/cluster/projects")]/button[contains(., "View My Projects")]
 check_header_brand:
   elements:
   - selector:
@@ -125,18 +125,31 @@ check_image_url:
 check_default_oc_download_links:
   params:
     text: Download oc for Linux for x86_64
-    link_url: amd64/linux/oc.tar
+    link_url: <downloads_route>/amd64/linux/oc.tar
   action: check_link_and_text
   params:
+    text: Download oc for Linux for ARM 64
+    link_url: <downloads_route>/arm/linux/oc.tar
+  action: check_link_and_text
+  params:
+    text: Download oc for Linux for IBM Power, little endian
+    link_url: <downloads_route>/ppc64le/linux/oc.tar
+  action: check_link_and_text 
+  params:
+    text: Download oc for Linux for IBM Z
+    link_url: <downloads_route>/s390x/linux/oc.tar
+  action: check_link_and_text 
+  params:
     text: Download oc for Mac
-    link_url: amd64/mac/oc.zip
+    link_url: <downloads_route>/amd64/mac/oc.zip
   action: check_link_and_text
   params:
     text: Download oc for Windows
-    link_url: amd64/windows/oc.zip
+    link_url: <downloads_route>/amd64/windows/oc.zip
   action: check_link_and_text  
+check_default_odo_download_links:
   params:
-    text: Download odo
+    text: odo
     link_url: clients/odo/latest
   action: check_link_and_text
 check_customized_oc_download_links:

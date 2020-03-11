@@ -1,9 +1,7 @@
 require 'openshift/cluster_resource'
 
 module BushSlicer
-
-  class ConsoleExternalLogLinksConsoleOpenshiftIo < ClusterResource
+  class ConsoleExternalLogLinkConsoleOpenshiftIo < ClusterResource
     RESOURCE = 'consoleexternalloglinks.console.openshift.io'
   end
-
 end

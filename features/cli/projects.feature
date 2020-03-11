@@ -103,12 +103,12 @@ Feature: projects related features via cli
   # @case_id OCP-12561
   Scenario: Could remove user and group from the current project
     Given I have a project
-    When I run the :oadm_add_role_to_user client command with:
+    When I run the :oadm_policy_add_role_to_user client command with:
       | role_name        | admin                              |
       | user_name        | <%= user(1, switch: false).name %> |
       | rolebinding_name | admin                              |
     Then the step should succeed
-    When I run the :oadm_add_role_to_group client command with:
+    When I run the :oadm_policy_add_role_to_group client command with:
       | role_name        | admin                                                     |
       | group_name       | system:serviceaccounts:<%= user(1, switch: false).name %> |
       | rolebinding_name | admin                                                     |

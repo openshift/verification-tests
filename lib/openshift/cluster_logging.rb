@@ -1,4 +1,6 @@
 # represent a clusterlogging object
+require 'openshift/project_resource'
+
 module BushSlicer
   class ClusterLogging < ProjectResource
     RESOURCE = "clusterloggings"

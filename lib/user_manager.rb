@@ -134,8 +134,8 @@ module BushSlicer
       @user_specs = spec.split(",").map do |user_symbolic_name|
         if user_symbolic_name.empty?
           raise "empty user specification does not make sense"
-        elsif env.static_user(user_symbolic_name)
-          env.static_user(user_symbolic_name)
+        elsif env.static_user_spec(user_symbolic_name)
+          env.static_user_spec(user_symbolic_name)
         else
           raise "static user '#{user_symbolic_name}' not configured in " +
             "'#{env.key}' environment"
