@@ -117,10 +117,7 @@ expand_filter_dropdown:
 close_filter_dropdown:
     action: expand_filter_dropdown
 expand_actions_behind_create_button:
-    element:
-        selector:
-            xpath: //button[text()='Create cluster']/../../../div[@id='cluster-list-toolbar']//button[@aria-label='Actions']
-        op: click
+    action: click_actions_behind_create_button
     action: actions_behind_create_button_menu_loaded
 close_actions_behind_create_button:
     action: expand_actions_behind_create_button
