@@ -114,3 +114,32 @@ Feature: Machine features testing
     Given I have an IPI deployment
     And evaluation of `BushSlicer::Machine.list(user: admin, project: project('openshift-machine-api'))` is stored in the :machines clipboard
     Then the expression should be true> cb.machines.select{|m|m.instance_state == m.annotation_instance_state}.count == cb.machines.count
+
+  # @author miyadav@redhat.com
+  # @case_id OCP-27609
+  @admin
+  @destructive
+  Scenario: Scaling a machineset with providerSpec.publicIp set to true
+    Given I have an IPI deployment
+    And I clone a machineset named "machineset-clone-publiciptrue"
+
+    Then I run the :get admin command with:
+     | resource      | machineset                    |
+     | resource_name | machineset-clone-publiciptrue |
+     | namespace     | openshift-machine-api         |
+     | o             | yaml                          |
+    And I save the output to file>new_machineset.yaml
+
+    And I replace lines in "new_machineset.yaml":
+     | publicIp: null| publicIp: true |
+    Then the step should succeed
+
+    When I run the :replace admin command with:
+     | f | new_machineset.yaml |
+    And the output should match:
+     | [Rr]eplaced |
+
+    Given I scale the machineset to +2
+    Then the machineset should have expected number of running machines
+
+    
