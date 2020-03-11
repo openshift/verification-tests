@@ -325,7 +325,7 @@ Feature: Pod related networking scenarios
     Then the step should succeed
     #Getting nodeport value
     When I run the :get client command with:
-      | resource | service                                       |
+      | resource | service                                     |
       | output   | jsonpath={.items[*].spec.ports[*].nodePort} |
     Then the step should succeed
     And evaluation of `@result[:response]` is stored in the :nodeport clipboard
@@ -340,10 +340,10 @@ Feature: Pod related networking scenarios
     # 'yes' command will send a character "h" continously for 3 seconds to /dev/udp on listener where the node is listening for udp traffic on exposed nodeport. The 3 seconds mechanism will create an Assured
     #  entry which will give us enough time to validate upcoming steps
     When I run the :exec background client command with:
-      | pod              | <%= cb.client_pod.name %>                              |
-      | oc_opts_end      |                                                        |
-      | exec_command     | bash                                                   |
-      | exec_command_arg | -c                                                     |
+      | pod              | <%= cb.client_pod.name %>                             |
+      | oc_opts_end      |                                                       |
+      | exec_command     | bash                                                  |
+      | exec_command_arg | -c                                                    |
       | exec_command_arg | yes "h">/dev/udp/<%= cb.node_ip %>/<%= cb.nodeport %> |
     Given 3 seconds have passed
     And I terminate last background process
@@ -372,10 +372,10 @@ Feature: Pod related networking scenarios
     # 'yes' command will send a character "h" continously for 3 seconds to /dev/udp on listener where the node is listening for udp traffic on exposed nodeport. The 3 seconds mechanism will create an Assured
     #  entry which will give us enough time to validate upcoming steps
     When I run the :exec background client command with:
-      | pod              | <%= cb.client_pod.name %>                              |
-      | oc_opts_end      |                                                        |
-      | exec_command     | bash                                                   |
-      | exec_command_arg | -c                                                     |
+      | pod              | <%= cb.client_pod.name %>                             |
+      | oc_opts_end      |                                                       |
+      | exec_command     | bash                                                  |
+      | exec_command_arg | -c                                                    |
       | exec_command_arg | yes "h">/dev/udp/<%= cb.node_ip %>/<%= cb.nodeport %> |
     Given 3 seconds have passed
     And I terminate last background process
