@@ -309,17 +309,17 @@ Feature: SDN related networking scenarios
     And I select a random node's host
     #Checking controller iteration 1
     When I run command on the "<%= node.name %>" node's sdn pod:
-      | bash | -c | ovs-appctl -t ovn-controller connection-status |
+      | bash | -c | ovn-appctl -t ovn-controller connection-status |
     Then the step should succeed
     And the output should contain "connected"
     #Checking controller iteration 2
     When I run command on the "<%= node.name %>" node's sdn pod:
-      | bash | -c | ls -l /var/run/openvswitch/ |
+      | bash | -c | ls -l /var/run/ovn/ |
     Then the step should succeed
     And evaluation of `@result[:response].match(/ovn-controller.\d*\.ctl/)[0]` is stored in the :controller_pid_file clipboard
     #Checking controller iteration 3
     When I run command on the "<%= node.name %>" node's sdn pod:
-      | bash | -c | ovs-appctl -t /var/run/openvswitch/<%= cb.controller_pid_file %> connection-status |
+      | bash | -c | ovn-appctl -t /var/run/ovn/<%= cb.controller_pid_file %> connection-status |
     Then the step should succeed
     And the output should contain "connected"
     #Checking controller iteration 4
