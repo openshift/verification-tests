@@ -60,3 +60,29 @@ check_error_message_for_missing_required_name:
   params:
     content: name or generateName is required
   action: check_page_contains
+check_quay_image_security_exists_on_dashboard:
+  element:
+    selector: &quay_image_security
+      xpath: //button[contains(text(),'Quay Image Security')]
+click_quay_image_security_button:
+  element:
+    selector:
+      <<: *quay_image_security
+    op: click
+check_quay_image_security_popup:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'co-overview-status')]/div[text()='Severity']/following-sibling::div[text()='Fixable']
+  - selector:
+      xpath: //div[contains(@class,'co-overview-status__text--bold') and contains(.,'<severity>')]
+  action: check_link_and_text
+check_affected_pods_tab:
+  params:
+    tab_name: Affected Pods
+  action: check_tab
+uninstall_operator_on_console:
+  params:
+    button_text: Uninstall Operator
+  action: click_resource_action_icon
+  action: click_button
+  action: submit_changes

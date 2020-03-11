@@ -37,7 +37,7 @@ click_button:
     op: click
 click_button_text:
   element:
-    selector:
+    selector: &button_with_text
       xpath: //button[text()='<button_text>']
     op: click
 click_button_by_id:
@@ -45,6 +45,11 @@ click_button_by_id:
     selector:
       xpath: //button[contains(@id,'<button_id>')]
     op: click
+check_button_missing:
+  element:
+    selector:
+      <<: *button_with_text
+    missing: true
 check_table_text_data:
   element:
     selector:
@@ -55,7 +60,7 @@ select_resource_item:
 click_on_resource_name:
   element:
     selector:
-      xpath: //a[contains(@class,'co-resource-item__resource-name') and text()='<item>']
+      xpath: //*[contains(@class,'co-resource-item__resource-name') and text()='<item>']
     op: click
 check_button_disabled:
   element:
@@ -71,10 +76,14 @@ check_text_not_a_link:
       xpath: //*[contains(@class,'co-resource-item__resource-name') and text()='<text>' and not(@href)]
 click_tab:
   elements:
-  - selector:
+  - selector: &tab
       xpath: //ul[contains(@class,'nav__menu')]//a[contains(text(), '<tab_name>')]
     op: click
     timeout: 20
+check_tab:
+  element:
+    selector:
+      <<: *tab
 click_environment_tab:
   params:
     tab_name: Environment
@@ -82,6 +91,10 @@ click_environment_tab:
 click_overview_tab:
   params:
     tab_name: Details
+  action: click_tab
+click_yaml_tab:
+  params:
+    tab_name: YAML
   action: click_tab
 click_radio_input:
   element:
@@ -108,6 +121,10 @@ set_label_input:
   - selector:
       <<: *label_input
     op: send_keys <input_value>
+check_editor_is_monaco_editor:
+  element:
+    selector:
+      xpath: //div[@class='yaml-editor']//div[contains(@class,'monaco-editor')]
 check_content_in_yaml_editor:
   element:
     selector:
@@ -168,6 +185,11 @@ check_resources_title_on_page:
   elements:
   - selector:
       xpath: //span[text()='<resource_title>']
+click_kebab_item:
+  element:
+    selector:
+      xpath: //button[contains(@class,'pf-c-dropdown__menu-item') and not(contains(@class,'pf-m-disabled')) and text()='<kebab_item>']
+    op: click
 click_kebab_of_one_resource:
   elements:
   - selector:
@@ -175,7 +197,7 @@ click_kebab_of_one_resource:
     op: click
 click_one_operation_in_kebab:
   action: click_kebab_of_one_resource
-  action: click_button
+  action: click_kebab_item
 check_column_in_table:
   action: wait_box_loaded
   elements:

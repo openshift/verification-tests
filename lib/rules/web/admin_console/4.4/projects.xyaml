@@ -47,3 +47,17 @@ nagivate_to_project_resources_page:
   params:
     tab_name: Workloads
   action: click_tab
+check_resource_data_in_table:
+  element:
+    selector:
+      xpath: (//a[@class='co-resource-item__resource-name' and text()='<resource_name>']/ancestor::tr[@data-test-rows='resource-row'])[last()]//td[contains(.,'<data>')]
+check_memory_data_for_one_project_in_table:
+  params:
+    resource_name: <project_name>
+    data: MiB
+  action: check_resource_data_in_table
+check_cpu_data_for_one_project_in_table:
+  params:
+    resource_name: <project_name>
+    data: cores
+  action: check_resource_data_in_table
