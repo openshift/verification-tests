@@ -46,4 +46,17 @@ input_image:
     input_field_id: catalog-source-image
     input_value: <image>
   action: set_input_value
-
+clear_custom_resource_name_in_form:
+  element:
+    selector:
+      id: metadata.name
+    type: input
+  scripts:
+    - command: |
+        document.querySelector("input[id$='name']").value = '';
+        return document.querySelector("input[id$='name']").value == '';
+      expect_result: true
+check_error_message_for_missing_required_name:
+  params:
+    content: name or generateName is required
+  action: check_page_contains

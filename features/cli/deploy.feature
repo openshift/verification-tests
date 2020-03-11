@@ -666,7 +666,7 @@ Feature: deployment related features
     Then the step should succeed
     Given status becomes :succeeded of exactly 1 pods labeled:
       | name=hello-openshift |
-    When I run the :env client command with:
+    When I run the :set_env client command with:
       | resource | dc/hooks                   |
       | e        | MYSQL_PASSWORD=update12345 |
     Then the step should succeed
@@ -676,9 +676,14 @@ Feature: deployment related features
     Given I wait until number of replicas match "0" for replicationController "hooks-1"
     Then I wait for the "hooks-2" rc to appear
     And I wait until number of replicas match "1" for replicationController "hooks-2"
-    When I get project pod
-    Then the output should match:
-      | hooks-2.*Running |
+    Given I wait up to 60 seconds for the steps to pass:
+    """
+    When I run the :get client command with:
+     | resource | po    |
+    Then the step should succeed
+    And the output should match:
+     | hooks-2.*Running |
+    """
 
   # @author yinzhou@redhat.com
   # @case_id OCP-11326

@@ -1,7 +1,6 @@
 Feature: some storage related scenarios
 
   # @author mcurlej@redhat.com
-  # @case_id none
   @admin
   Scenario: test openstack rest api
     Given I have a project
@@ -19,3 +18,7 @@ Feature: some storage related scenarios
       | all         |     |
     Then the step should succeed
     And I verify that the IAAS volume for the "<%= cb.volume_name%>" PV was deleted
+
+  @admin
+  Scenario: Store PV into clipboard
+    Given admin stores all persistentvolumes to the clipboard

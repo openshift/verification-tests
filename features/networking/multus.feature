@@ -5,7 +5,7 @@ Feature: Multus-CNI related scenarios
   @admin
   Scenario: Create pods with multus-cni - macvlan bridge mode
     # Make sure that the multus is enabled
-    Given the master version >= "4.0"
+    Given the master version >= "4.1"
     And the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard
     And evaluation of `node.name` is stored in the :target_node clipboard
@@ -63,7 +63,7 @@ Feature: Multus-CNI related scenarios
   @admin
   Scenario: Create pods with multus-cni - macvlan private mode
     # Make sure that the multus is enabled
-    Given the master version >= "4.0"
+    Given the master version >= "4.1"
     And the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard
     And evaluation of `node.name` is stored in the :target_node clipboard
@@ -98,29 +98,28 @@ Feature: Multus-CNI related scenarios
 
     # Create the second pod which consumes the macvlan cr
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/1interface-macvlan-private.yaml" replacing paths:
-      | ["spec"]["nodeName"] | "<%= cb.target_node %>" |
+       | ["metadata"]["name"]              | macvlan-private-secondpod   |      
+       | ["spec"]["nodeName"]              | "<%= cb.target_node %>"     |
+       | ["spec"]["containers"][0]["name"] | macvlan-private-secondpod   |
     Then the step should succeed
-    And 2 pods become ready with labels:
-      | name=macvlan-private-pod |
-    And evaluation of `pod(-1).name` is stored in the :pod2 clipboard
+    And the pod named "macvlan-private-secondpod" becomes ready
 
     # Try to access both the cluster ip and macvlan ip on pod1 from pod2
-    When I execute on the "<%= cb.pod2 %>" pod:
+    When I execute on the "macvlan-private-secondpod" pod:
       | curl | --connect-timeout | 5 | <%= cb.pod1_sdn_ip %>:8080 |
     Then the step should succeed
     And the output should contain "Hello OpenShift"
-    When I execute on the "<%= cb.pod2 %>" pod:
+    When I execute on the "macvlan-private-secondpod" pod:
       | curl | --connect-timeout | 5 | <%= cb.pod1_multus_ip %>:8080 |
     Then the step should fail
     And the output should not contain "Hello OpenShift"
-
 
   # @author bmeng@redhat.com
   # @case_id OCP-21496
   @admin
   Scenario: Create pods with multus-cni - macvlan vepa mode
     # Make sure that the multus is enabled
-    Given the master version >= "4.0"
+    Given the master version >= "4.1"
     And the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard
     And evaluation of `node.name` is stored in the :target_node clipboard
@@ -178,7 +177,7 @@ Feature: Multus-CNI related scenarios
   @destructive
   Scenario: Create pods with multus-cni - host-device
     # Make sure that the multus is enabled
-    Given the master version >= "4.0"
+    Given the master version >= "4.1"
     And the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard    
     And evaluation of `node.name` is stored in the :target_node clipboard
@@ -245,7 +244,7 @@ Feature: Multus-CNI related scenarios
   @admin
   Scenario: Create pods with muliple cni plugins via multus-cni - macvlan + macvlan
     # Make sure that the multus is enabled
-    Given the master version >= "4.0"
+    Given the master version >= "4.1"
     And the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard
     And evaluation of `node.name` is stored in the :target_node clipboard    
@@ -289,7 +288,7 @@ Feature: Multus-CNI related scenarios
   @destructive
   Scenario: Create pods with muliple cni plugins via multus-cni - macvlan + host-device
     # Make sure that the multus is enabled
-    Given the master version >= "4.0"
+    Given the master version >= "4.1"
     And the multus is enabled on the cluster
     And an 4 character random string of type :hex is stored into the :nic_name clipboard
     Given the default interface on nodes is stored in the :default_interface clipboard
@@ -350,7 +349,7 @@ Feature: Multus-CNI related scenarios
   @destructive
   Scenario: Create pods with muliple cni plugins via multus-cni - host-device + host-device
     # Make sure that the multus is enabled
-    Given the master version >= "4.0"
+    Given the master version >= "4.1"
     And the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard
     And evaluation of `node.name` is stored in the :target_node clipboard
@@ -446,7 +445,7 @@ Feature: Multus-CNI related scenarios
     Then the step should succeed
     And the output should contain 2 times:
       | 1 PVID   |
-      | untagged |
+      | ntagged |
 
   # @author anusaxen@redhat.com
   # @case_id OCP-24489
@@ -490,12 +489,13 @@ Feature: Multus-CNI related scenarios
   @admin
   @destructive
   Scenario: CNO manager mavlan configured manually with static
-    # Make sure that the multus is Running
     Given the multus is enabled on the cluster
+    And I store all worker nodes to the :nodes clipboard
     Given the default interface on nodes is stored in the :default_interface clipboard 
     #Patching simplemacvlan config in network operator config CRD
+    Given I have a project
     Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
-      | {"spec":{"additionalNetworks":[{"name":"test-macvlan-case3","namespace":"openshift-multus","simpleMacvlanConfig":{"ipamConfig":{"staticIPAMConfig":{"addresses": [{"address":"10.128.2.100/23","gateway":"10.128.2.1"}]},"type":"static"},"master":"<%= cb.default_interface %>","mode":"bridge"},"type":"SimpleMacvlan"}]}} |
+	    | {"spec":{"additionalNetworks":[{"name":"test-macvlan-case3","namespace":"<%= project.name %>","simpleMacvlanConfig":{"ipamConfig":{"staticIPAMConfig":{"addresses": [{"address":"10.128.2.100/23","gateway":"10.128.2.1"}]},"type":"static"},"master":"<%= cb.default_interface %>","mode":"bridge"},"type":"SimpleMacvlan"}]}} |
     #Cleanup for bringing CRD to original
     Given I register clean-up steps:
     """
@@ -506,23 +506,21 @@ Feature: Multus-CNI related scenarios
     And I wait up to 30 seconds for the steps to pass:
     """
     When I run the :get admin command with:
-      | resource | net-attach-def   |
-      | n        | openshift-multus |
+      | resource | net-attach-def      |
+      | n        | <%= project.name %> |
     Then the step should succeed
     And the output should contain:
       | test-macvlan-case3 |
     """
     #Creating pod under openshift-multus project to absorb above net-attach-def
-    Given I switch to cluster admin pseudo user
-    Given I use the "openshift-multus" project
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/1interface-macvlan-bridge.yaml" replacing paths:
-      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | test-macvlan-case3 |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | test-macvlan-case3      |
+      | ["metadata"]["namespace"]                                  | <%= project.name %>     |
+      | ["spec"]["nodeName"]                                       | <%= cb.nodes[0].name %> |
     Then the step should succeed
     And a pod becomes ready with labels:
       | name=macvlan-bridge-pod |
     And evaluation of `pod` is stored in the :pod clipboard
-    And admin ensures "<%= cb.pod.name %>" pod is deleted from the "openshift-multus" project after scenario
-    
     When I execute on the pod:
       | /usr/sbin/ip | -d | link |
     Then the output should contain "net1"
@@ -621,17 +619,11 @@ Feature: Multus-CNI related scenarios
     """
     the bridge interface named "mybridge" is deleted from the "<%= cb.nodes[0].name %>" node
     """  
-    #Labeling a worker node to make sure couple of future pods to be scheduled on this node only
-    Given  label "test=worker1" is added to the "<%= cb.nodes[0].name %>" node
-    
-    #Labeing another worker node to make sure 3rd future pod to be scheduled on this node only
-    Given  label "test=worker2" is added to the "<%= cb.nodes[1].name %>" node
-    
     #Creating first pod in vlan 100
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod_nodeselector.yaml" replacing paths:
-      | ["metadata"]["name"] | pod1-vlan100 |
-      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan100 |
-      | ["spec"]["nodeSelector"]["test"] | worker1 |
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                      | pod1-vlan100            |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan100           |
+      | ["spec"]["nodeName"]                                      | <%= cb.nodes[0].name %> |
     Then the step should succeed
     And the pod named "pod1-vlan100" becomes ready
     And evaluation of `pod.name` is stored in the :pod1 clipboard
@@ -646,10 +638,10 @@ Feature: Multus-CNI related scenarios
     the bridge interface named "mybridge.100" is deleted from the "<%= cb.nodes[0].name %>" node
     """  
     #Creating 2nd pod on same node as first in vlan 100
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod_nodeselector.yaml" replacing paths:
-      | ["metadata"]["name"] | pod2-vlan100 |
-      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan100 |
-      | ["spec"]["nodeSelector"]["test"] | worker1 |
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                      | pod2-vlan100            |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan100           |
+      | ["spec"]["nodeName"]                                      | <%= cb.nodes[0].name %> |
     Then the step should succeed
     And the pod named "pod2-vlan100" becomes ready
     And evaluation of `pod.name` is stored in the :pod2 clipboard
@@ -659,10 +651,10 @@ Feature: Multus-CNI related scenarios
     And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod2_net1_ip clipboard
     
     #Creating 3rd pod on different node in vlan 100
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod_nodeselector.yaml" replacing paths:
-      | ["metadata"]["name"] | pod3-vlan100 |
-      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan100 |
-      | ["spec"]["nodeSelector"]["test"] | worker2 |
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                      | pod3-vlan100            |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan100           |
+      | ["spec"]["nodeName"]                                      | <%= cb.nodes[1].name %> |
     Then the step should succeed
     And the pod named "pod3-vlan100" becomes ready
     And evaluation of `pod.name` is stored in the :pod3 clipboard
@@ -716,14 +708,11 @@ Feature: Multus-CNI related scenarios
       | n | <%= project.name %>                                                                                                                                   |
     Then the step should succeed 
     
-    #Labeing a worker node to make sure all future pods to be scheduled on this node only
-    Given  label "test=worker1" is added to the "<%= cb.nodes[0].name %>" node
-    
     #Creating first pod in vlan 100
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod_nodeselector.yaml" replacing paths:
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
       | ["metadata"]["name"] | pod1-vlan100 |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan100 |
-      | ["spec"]["nodeSelector"]["test"] | worker1 |
+      | ["spec"]["nodeName"]                                       | <%= cb.nodes[0].name %> |
     Then the step should succeed
     And the pod named "pod1-vlan100" becomes ready
     And evaluation of `pod.name` is stored in the :pod1 clipboard
@@ -738,10 +727,10 @@ Feature: Multus-CNI related scenarios
     the bridge interface named "mybridge.100" is deleted from the "<%= cb.nodes[0].name %>" node
     """  
     #Creating 2nd pod on same node as first in vlan 100
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod_nodeselector.yaml" replacing paths:
-      | ["metadata"]["name"] | pod2-vlan100 |
-      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan100 |
-      | ["spec"]["nodeSelector"]["test"] | worker1 |
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                      | pod2-vlan100            |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan100           |
+      | ["spec"]["nodeName"]                                      | <%= cb.nodes[0].name %> |
     Then the step should succeed
     And the pod named "pod2-vlan100" becomes ready
     And evaluation of `pod.name` is stored in the :pod2 clipboard
@@ -751,10 +740,10 @@ Feature: Multus-CNI related scenarios
     And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod2_net1_ip clipboard
     
     #Creating 3rd pod on same node but in vlan 200
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod_nodeselector.yaml" replacing paths:
-      | ["metadata"]["name"] | pod3-vlan200 |
-      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan200 |
-      | ["spec"]["nodeSelector"]["test"] | worker1 |
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                      | pod3-vlan200            |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan200           |
+      | ["spec"]["nodeName"]                                      | <%= cb.nodes[0].name %> |
     Then the step should succeed
     And the pod named "pod3-vlan200" becomes ready
     And evaluation of `pod.name` is stored in the :pod3 clipboard
@@ -826,28 +815,24 @@ Feature: Multus-CNI related scenarios
 
     # Create the net-attach-def via cluster admin
     Given I have a project
-    And evaluation of `project.name` is stored in the :project_name clipboard
     When I run the :create admin command with:
-      | f | https://raw.githubusercontent.com/weliang1/Openshift_Networking/master/Features/multus/runtimeconfig-def-ipandmac.yaml |
-      | n | <%= cb.project_name %>                                                                                                 |
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/runtimeconfig-def-ipandmac.yaml                   |
+      | n | <%= project.name %>   |
     Then the step should succeed
-
-    #Clean-up required to erase above net-attach-def after testing done
-    And admin ensures "runtimeconfig-def" network_attachment_definition is deleted from the "<%= cb.project_name %>" project after scenario
 
     # Create a pod absorbing above net-attach-def
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/weliang1/Openshift_Networking/master/Features/multus/runtimeconfig-pod-ipandmac.yaml |
-      | n | <%= cb.project_name %>                                                                                                 |
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/runtimeconfig-pod-ipandmac.yaml |
+      | n | <%= project.name %>                                                                                                           |
     Then the step should succeed
     And the pod named "runtimeconfig-pod" becomes ready
 
     # Check created pod has correct MAC and IP for interface net1
     When I execute on the pod:
       | /usr/sbin/ip | -d | link |
-    Then the output should contain: 
+    Then the output should contain:
       | net1                 |
-      | macvlan  mode bridge |
+      | macvlan mode bridge  |
     When I execute on the pod:
       | /usr/sbin/ip | a |
     Then the output should contain:
@@ -874,7 +859,7 @@ Feature: Multus-CNI related scenarios
     """
     And admin ensures "bridge-ipam-dhcp" network_attachment_definition is deleted from the "openshift-multus" project after scenario
     #Adding brige interface on target node
-    Given the bridge interface named "testbr1" with address "88.8.8.200/24" is added to the "<%= cb.nodes[0].name %>" node
+    Given the bridge interface named "testbr1" with address "88.8.8.191/24" is added to the "<%= cb.nodes[0].name %>" node
     #Cleanup for deleting testbr1 interface
     Given I register clean-up steps:
     """
@@ -979,3 +964,94 @@ Feature: Multus-CNI related scenarios
     When I execute on the pod:
       | /usr/sbin/ip | a |
     Then the output should contain "192.168.1"
+
+  # @author weliang@redhat.com
+  # @case_id OCP-25909
+  @admin
+  Scenario: Assign static IP address using pod annotation
+    # Make sure that the multus is enabled
+    Given the multus is enabled on the cluster
+
+    # Create the net-attach-def via cluster admin
+    Given I have a project
+    When I run the :create admin command with:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/runtimeconfig-def-ip.yaml                                                                                                                           |
+      | n | <%= project.name %>                                                                                                     |
+    Then the step should succeed
+    
+    # Create a pod absorbing above net-attach-def
+    When I run the :create client command with:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/runtimeconfig-pod-ip.yaml |
+      | n | <%= project.name %>                                                                                                     |
+    Then the step should succeed
+    And the pod named "runtimeconfig-pod-ip" becomes ready
+
+    # Check created pod has correct IP for interface net1
+    When I execute on the pod:
+      | /usr/sbin/ip | -d | link |
+    Then the output should contain:
+      | net1                 |
+      | macvlan mode bridge  |
+    When I execute on the pod:
+      | /usr/sbin/ip | a |
+    Then the output should contain:
+      | 192.168.22.2     |
+
+  # @author weliang@redhat.com
+  # @case_id OCP-25910
+  @admin
+  Scenario: Assign static MAC address using pod annotation
+    # Make sure that the multus is enabled
+    Given the multus is enabled on the cluster
+    # Create the net-attach-def via cluster admin
+    Given I have a project
+    When I run the :create admin command with:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/runtimeconfig-def-mac.yaml |
+      | n | <%= project.name %>                                                                                                                              |
+    Then the step should succeed
+    
+    # Create a pod absorbing above net-attach-def
+    When I run the :create client command with:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/runtimeconfig-pod-mac.yaml |
+      | n | <%= project.name %>                                                                                                      |
+    Then the step should succeed
+    And the pod named "runtimeconfig-pod-mac" becomes ready
+    # Check created pod has correct MAC interface net1
+    When I execute on the pod:
+      | /usr/sbin/ip | -d | link |
+    Then the output should contain:
+      | net1                |
+      | macvlan mode bridge |
+    When I execute on the pod:
+      | /usr/sbin/ip | a  |
+    Then the output should contain:
+      | c2:b0:57:49:47:f1 |
+
+  # @author weliang@redhat.com
+  # @case_id OCP-25915
+  @admin
+  Scenario: Multus default route overwrite
+    # Make sure that the multus is enabled
+    Given the multus is enabled on the cluster
+
+    # Create the net-attach-def via cluster admin
+    Given I have a project
+    When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/ipam-static.yaml" replacing paths:
+      | ["metadata"]["namespace"]  | <%= project.name %> | 
+      | ["metadata"]["name"]       | bridge-static       |
+      | ["spec"]["config"]| '{ "cniVersion": "0.3.0", "type": "bridge", "master": "ens3", "ipam": {"type":"static","addresses": [{"address": "22.2.2.22/24","gateway": "22.2.2.1"}]}}' |
+    Then the step should succeed
+      
+    # Create a pod absorbing above net-attach-def
+    When I run the :create client command with:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/multus-default-route-pod.yaml |
+      | n | <%= project.name %>                                                                                                         |
+    Then the step should succeed
+    And the pod named "multus-default-route-pod" becomes ready
+
+    # Check created pod has correct default route
+    When I execute on the pod:
+      | /usr/sbin/ip | route             |
+    Then the output should contain:
+      | default via 22.2.2.254 dev net1  |
+

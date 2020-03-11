@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 $LOAD_PATH.unshift("#{File.dirname(__FILE__)}/../lib")
+$LOAD_PATH.unshift("#{File.dirname(__FILE__)}/../tools")
 
 """
 Helper utility to interact with AWS services on the command-line

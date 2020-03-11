@@ -348,7 +348,7 @@ Feature: Testing route
     And the output should contain:
       | Hello-OpenShift |
       | HTTP/1.1 302 Found |
-      | Location: https:// |
+      | ocation: https:// |
 
   # @author yadu@redhat.com
   # @case_id OCP-9650
@@ -388,7 +388,6 @@ Feature: Testing route
     Then the step should succeed
     And the output should contain:
       | Hello-OpenShift |
-      | HTTP/1.1 200    |
     And the output should not contain:
       | HTTP/1.1 302 Found |
     When I execute on the pod:
@@ -402,7 +401,6 @@ Feature: Testing route
     Then the step should succeed
     And the output should contain:
       | Hello-OpenShift |
-      | HTTP/1.1 200    |
     And the output should not contain:
       | HTTP/1.1 302 Found |
     And I execute on the pod:
@@ -502,7 +500,7 @@ Feature: Testing route
     And the output should contain:
       | Hello-OpenShift |
       | HTTP/1.1 302 Found |
-      | Location: https:// |
+      | ocation: https:// |
     """
     When I run the :patch client command with:
       | resource      | route              |
@@ -551,7 +549,7 @@ Feature: Testing route
     And the output should contain:
       | Hello-OpenShift |
       | HTTP/1.1 302 Found |
-      | Location: https:// |
+      | ocation: https:// |
     """
     When I run the :patch client command with:
       | resource      | route           |
@@ -638,7 +636,7 @@ Feature: Testing route
     And the output should contain:
       | Hello-OpenShift |
       | HTTP/1.1 302 Found |
-      | Location: https:// |
+      | ocation: https:// |
     And I execute on the pod:
       | cat |
       | /tmp/cookie |
@@ -671,7 +669,7 @@ Feature: Testing route
     And the output should contain:
       | Hello-OpenShift |
       | HTTP/1.1 302 Found |
-      | Location: https:// |
+      | ocation: https:// |
     """
     And I execute on the pod:
       | cat |
@@ -713,7 +711,6 @@ Feature: Testing route
     """
     When I open web server via the route
     Then the step should fail
-    And expression should be true> @result[:exitstatus] == -1
     """
 
     # Add IP whitelist for route

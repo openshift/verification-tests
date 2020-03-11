@@ -2,7 +2,6 @@ Feature: storageClass related feature
 
   # @author lxia@redhat.com
   @admin
-  @destructive
   Scenario Outline: PVC modification after creating storage class
     Given I have a project
     When I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc-without-annotations.json" replacing paths:
@@ -12,30 +11,25 @@ Feature: storageClass related feature
     Given 30 seconds have passed
     And the "mypvc" PVC status is :pending
 
-    When admin creates a StorageClass from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/storageClass.yaml" where:
-      | ["metadata"]["name"]                                                       | sc-<%= project.name %>      |
-      | ["provisioner"]                                                            | kubernetes.io/<provisioner> |
-      | ["metadata"]["annotations"]["storageclass.kubernetes.io/is-default-class"] | true                        |
-    Then the step should succeed
     When I run the :patch client command with:
       | resource      | pvc                                                    |
-      | resource_name | mypvc                                |
+      | resource_name | mypvc                                                  |
       | p             | {"metadata":{"labels":{"<%= project.name %>":"test"}}} |
     Then the step should succeed
     Given 30 seconds have passed
     And the "mypvc" PVC status is :pending
     When I run the :patch client command with:
-      | resource      | pvc                                                                                               |
-      | resource_name | mypvc                                                                           |
-      | p             | {"metadata":{"annotations":{"volume.beta.kubernetes.io/storage-class":"sc-<%= project.name %>"}}} |
+      | resource      | pvc                                                                                             |
+      | resource_name | mypvc                                                                                           |
+      | p             | {"metadata":{"annotations":{"volume.beta.kubernetes.io/storage-class":"<storage-class-name>"}}} |
     Then the expression should be true> @result[:success] == env.version_le("3.5", user: user)
 
     Examples:
-      | provisioner |
-      | gce-pd      | # @case_id OCP-12089
-      | aws-ebs     | # @case_id OCP-12269
-      | cinder      | # @case_id OCP-12272
-      | azure-disk  | # @case_id OCP-13488
+      | storage-class-name |
+      | standard           | # @case_id OCP-12089
+      | gp2                | # @case_id OCP-12269
+      | standard           | # @case_id OCP-12272
+      | managed-premium    | # @case_id OCP-13488
 
   # @author lxia@redhat.com
   @admin
@@ -74,7 +68,6 @@ Feature: storageClass related feature
   # @author lxia@redhat.com
   # @author chaoyang@redhat.com
   @admin
-  @destructive
   Scenario Outline: storage class provisioner
     Given I have a project
     And admin clones storage class "sc-<%= project.name %>" from ":default" with:

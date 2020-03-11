@@ -9,6 +9,11 @@ create_project:
     if_param: discription_name
     ref: set_project_description
   action: submit_changes
+create_project_from_dropdown:
+  params:
+    dropdown_name: namespace-bar
+  action: click_dropdown
+  action: create_project
 set_project_name:
   element:
     selector:

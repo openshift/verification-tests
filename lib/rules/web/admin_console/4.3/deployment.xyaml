@@ -46,3 +46,11 @@ delete_dc_with_dependency_objects:
     button_text: Delete
   action: click_one_dropdown_action
   action: click_button
+check_sections_on_container_details:
+  elements:
+  - selector:
+      xpath: //h2[contains(@class,'co-section-heading') and text()='Container Overview']
+  - selector:
+      xpath: //h2[contains(@class,'co-section-heading') and text()='Image Details']
+  - selector:
+      xpath: //h2[contains(@class,'co-section-heading') and text()='Network']

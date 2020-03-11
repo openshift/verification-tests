@@ -1,3 +1,6 @@
+require 'openshift/project_resource'
+require 'openshift/flakes/service_monitor_endpoint_spec'
+
 module BushSlicer
   class ServiceMonitor < ProjectResource
     RESOURCE = "servicemonitors"
@@ -7,12 +10,24 @@ module BushSlicer
       return rr.dig('spec', 'endpoints')
     end
 
-    def port(user: nil, quiet: false, cached: true)
-      return endpoints(user: user, cached: cached, quiet: quiet).first['port']
+    def service_monitor_endpoints_spec(user: nil, cached: true, quiet: false)
+      specs = []
+      service_monitor_endpoints_spec = endpoints(user: user)
+      service_monitor_endpoints_spec.each do | service_monitor_endpoint_spec |
+        specs.push ServiceMonitorEndpointSpec.new service_monitor_endpoint_spec
+      end
+      return specs
     end
 
-    def path(user: nil, quiet: false, cached: true)
-      return endpoints(user: user, cached: cached, quiet: quiet).first['path']
+    # return the spec for a specific endpoint identified by the param server_name
+    def service_monitor_endpoint_spec(user: nil, server_name:, cached: true, quiet: false)
+      specs = service_monitor_endpoints_spec(user: user, cached: cached, quiet: quiet)
+      target_spec = {}
+      specs.each do | spec |
+        target_spec = spec if spec.server_name == server_name
+      end
+      raise "No endpoint spec found matching '#{server_name}'!" if target_spec.is_a? Hash
+      return target_spec
     end
 
   end

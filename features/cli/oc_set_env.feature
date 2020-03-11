@@ -46,7 +46,7 @@ Feature: oc_set_env.feature
       | key2=value2    |
       | key3=value3    |
     # set invalid enviroment variable
-    When I run the :env client command with:
+    When I run the :set_env client command with:
       | resource | bc/ruby-sample-build |
       | e        | pe#cial%=1234 |
     Then the step should fail

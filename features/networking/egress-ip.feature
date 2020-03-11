@@ -111,3 +111,109 @@ Feature: Egress IP related features
     Then the step should succeed
     And the output should not contain "<%= cb.valid_ip %>"
     """
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-21812 OCP-15473
+  # @bug_id  1609112
+  @admin
+  @destructive
+  Scenario: Should remove the egressIP from the array if it was not being used
+    Given I store a random unused IP address from the reserved range to the clipboard
+    And evaluation of `IPAddr.new("<%= cb.valid_ip %>").to_i + 1 ` is stored in the :newipint clipboard
+    And evaluation of `IPAddr.new(<%= cb.newipint %>, Socket::AF_INET).to_s` is stored in the :newip clipboard
+
+    #Patch egress cidr to the node
+    Given as admin I successfully merge patch resource "hostsubnet/<%= node.name %>" with:
+      | {"egressCIDRs": ["<%= cb.subnet_range %>"] }   |
+    And I register clean-up steps:
+    """
+    as admin I successfully merge patch resource "hostsubnet/<%= node.name %>" with:
+      | {"egressCIDRs":null}   |
+    """
+
+    # Patch egress IP to the project twice
+    Given I have a project
+    And as admin I successfully merge patch resource "netnamespace/<%= project.name %>" with:
+      | {"egressIPs": ["<%= cb.newip %>"]} |
+    And as admin I successfully merge patch resource "netnamespace/<%= project.name %>" with:
+      | {"egressIPs": ["<%= cb.valid_ip %>"]} |
+
+    # Check the egress ip is the last one applied
+    And I wait up to 30 seconds for the steps to pass:
+    """
+    When I run command on the "<%= node.name%>" node's sdn pod:
+      | bash | -c | ip address show <%= cb.interface %> |
+    Then the step should succeed
+    And the output should contain "<%= cb.valid_ip %>"
+    """
+
+    #Check related iptables added
+    When I run command on the "<%= node.name%>" node's sdn pod:
+      | bash | -c | iptables-save \| grep "<%= cb.valid_ip %>" |
+    Then the step should succeed
+    And the output should contain:
+      | OPENSHIFT-MASQUERADE      |
+      | OPENSHIFT-FIREWALL-ALLOW  |
+
+    #check related openflow added
+    When I run command on the "<%= node.name%>" node's sdn pod:
+      | bash | -c | ovs-ofctl dump-flows br0 -O OpenFlow13 \| grep table=100 |
+    Then the step should succeed
+    And the output should contain "reg0=0x"
+
+    #Remove egress ip from namespace
+    Given as admin I successfully merge patch resource "netnamespace/<%= project.name %>" with:
+      | {"egressIPs": null} |
+
+    # Check related iptables and openlows removed
+    And I wait up to 30 seconds for the steps to pass:
+    """
+    When I run command on the "<%= node.name%>" node's sdn pod:
+      | bash | -c | iptables-save \| egrep "OPENSHIFT-FIREWALL-ALLOW\|OPENSHIFT-MASQUERADE" |
+    Then the step should succeed
+    And the output should not contain:
+      |  <%= cb.valid_ip %> |
+    When I run command on the "<%= node.name%>" node's sdn pod:
+      | bash | -c | ovs-ofctl dump-flows br0 -O OpenFlow13 \| grep table=100 |
+    Then the step should succeed
+    And the output should not contain "reg0=0x"
+    """
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-15992
+  @admin
+  @destructive
+  Scenario: The EgressNetworkPolicy should work well with egressIP
+    Given the valid egress IP is added to the node
+    And I have a project
+    And I have a pod-for-ping in the project
+
+    # Create egressnetworkpolicy
+    When I run the :create admin command with:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/egressnetworkpolicy/limit_policy.json |
+      | n | <%= project.name %>                                                                                                 |
+    Then the step should succeed
+
+    # add the egress ip to the project
+    Given as admin I successfully merge patch resource "netnamespace/<%= project.name %>" with:
+      | {"egressIPs": ["<%= cb.valid_ip %>"]} |
+
+    #The traffic should be denied
+    When I execute on the pod:
+      | curl | -s | --connect-timeout | 5 | ifconfig.me |
+    Then the step should fail
+
+    # Update egressnetworkpolicy as Allow
+    When I run the :patch admin command with:
+      | resource      | egressnetworkpolicy                                                       |
+      | resource_name | policy1                                                                   |
+      | p             | {"spec":{"egress":[{"type":"Allow","to":{"cidrSelector": "0.0.0.0/0"}}]}} |
+      | n             | <%= project.name %>                                                       |
+      | type          | merge                                                                     |
+    Then the step should succeed
+
+    # The traffic should be allowed and the source ip is egress ip
+    When I execute on the pod:
+      | curl | -s | --connect-timeout | 5 | ifconfig.me |
+    Then the step should succeed
+    And the output should contain "<%= cb.valid_ip %>"

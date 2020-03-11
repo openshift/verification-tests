@@ -47,8 +47,8 @@ Given /^cluster role #{QUOTED} is (added to|removed from) the #{QUOTED} (user|gr
 
   case type
   when "group"
-    _add_command = :oadm_add_cluster_role_to_group
-    _remove_command = :oadm_remove_cluster_role_from_group
+    _add_command = :oadm_policy_add_cluster_role_to_group
+    _remove_command = :oadm_policy_remove_cluster_role_from_group
     _subject = group(which)
     _subject_name = _subject.name
     _opts = {role_name: role, group_name: _subject.name}
@@ -61,8 +61,8 @@ Given /^cluster role #{QUOTED} is (added to|removed from) the #{QUOTED} (user|gr
       _subject_name = _subject.full_id
     end
 
-    _add_command = :oadm_add_cluster_role_to_user
-    _remove_command = :oadm_remove_cluster_role_from_user
+    _add_command = :oadm_policy_add_cluster_role_to_user
+    _remove_command = :oadm_policy_remove_cluster_role_from_user
     _opts = {role_name: role, user_name: _subject_name}
   else
     raise "what is this subject type #{type}?!"
@@ -127,8 +127,8 @@ end
 Given /^project role #{QUOTED} is (added to|removed from) the #{QUOTED} (user|group|service account)$/ do |role, op, which, type|
   case type
     when "group"
-      _add_command = :oadm_add_role_to_group
-      _remove_command = :oadm_remove_role_from_group
+      _add_command = :oadm_policy_add_role_to_group
+      _remove_command = :oadm_policy_remove_role_from_group
       _opts = {role_name: role, group_name: which}
     when "user", "service account"
       if type == "user"
@@ -136,8 +136,8 @@ Given /^project role #{QUOTED} is (added to|removed from) the #{QUOTED} (user|gr
       else
         _user_name = service_account(which).full_id
       end
-      _add_command = :oadm_add_role_to_user
-      _remove_command = :oadm_remove_role_from_user
+      _add_command = :oadm_policy_add_role_to_user
+      _remove_command = :oadm_policy_remove_role_from_user
       _opts = {role_name: role, user_name: _user_name}
   end
 

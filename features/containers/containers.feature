@@ -14,7 +14,7 @@ Feature: Container test feature
       | id |
     Then the step should succeed
     And the output should match:
-      | uid=\d+\s+gid=0\(root\)\s+groups=0\(root\),\d+ |
+      | uid=\d+(\(\d+\))?\s+gid=0\(root\)\s+groups=0\(root\),\d+ |
     And I execute on the pod:
       | bash | -c | echo redhat \| su - |
     Then the step should fail

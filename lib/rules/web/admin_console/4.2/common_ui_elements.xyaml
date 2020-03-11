@@ -14,6 +14,15 @@ create_resource_by_default_yaml:
         xpath: //a[text()='Edit YAML']
     ref: click_edit_yaml_link
   action: click_create_button
+click_button_by_id:
+  element:
+    selector:
+      xpath: //button[contains(@id,'<button_id>')]
+    op: click
+check_item_in_list:
+  element:
+    selector:
+      xpath: //ul[contains(.,'<item>')]
 click_edit_yaml_link:
   elements:
   - selector:
@@ -33,6 +42,7 @@ click_button:
   element:
     selector:
       xpath: //button[contains(.,'<button_text>')]
+    timeout: 15
     op: click
 click_button_text:
   element:
@@ -56,10 +66,24 @@ click_tab:
   - selector:
       xpath: //ul[contains(@class,'nav__menu')]//a[text()='<tab_name>']
     op: click
+    timeout: 20
+click_environment_tab:
+  params:
+    tab_name: Environment
+  action: click_tab
+click_overview_tab:
+  params:
+    tab_name: Overview
+  action: click_tab
 click_radio_input:
   element:
     selector:
       xpath: //input[@type='radio' and @value='<radio_text>']
+    op: click
+click_on_resource_name:
+  element:
+    selector:
+      xpath: //a[contains(@class,'co-resource-item__resource-name') and text()='<item>']
     op: click
 clear_input_value:
   elements:
@@ -73,6 +97,44 @@ set_input_value:
       xpath: //input[@id='<input_field_id>']
     op: send_keys <input_value>
     type: input
+set_label_input:
+  elements:
+  - selector: &label_input
+      xpath: (//label[contains(text(),'<label_text>')]/following::input[1] | //label[contains(text(),'<label_text>')]//input[1])[1]
+    op: clear
+  - selector:
+      <<: *label_input
+    op: send_keys <input_value>
+check_table_text_data:
+  element:
+    selector:
+      xpath: //td[text()='<text_data>']
+
+# click and check the first item from resource list such as projects, pods, etc.
+click_first_item_from_resource_list_and_check_breadcrumb:
+  action: wait_until_no_loading
+  params:
+    line_index: 1
+  action: click_item_in_resource_list
+  action: check_link_in_breadcrumb
+# click and check the first sub item from a resource such as one of imagestreamtag on imagestream detail page
+click_first_item_from_sub_resource_list_and_check_breadcrumb:
+  action: wait_until_no_loading
+  action: click_first_sub_item_in_resource_detail_list
+  action: check_link_in_breadcrumb
+# click and check the first item from resources listed in grid cell, such as installed operator
+click_first_item_from_gridcell_list_and_check_breadcrumb:
+  action: wait_until_no_loading
+  action: click_first_item_in_grid_cell_list
+  action: check_link_in_breadcrumb
+check_link_in_breadcrumb:
+  element:
+    selector:
+      xpath: //ol[contains(@class, 'breadcrumb')]/li[<layer_number>]/a[contains(@data-test-id,'breadcrumb-link') and contains(@href,'<link>') and translate(normalize-space(text()), ' ','')='<text>']
+check_text_in_breadcrumb:
+  element:
+    selector:
+      xpath: //ol[contains(@class, 'breadcrumb')]/li[<layer_number>][translate(normalize-space(text()), ' ','')='<text>']
 check_row_filter_on_page:
   elements:
   - selector:
@@ -81,6 +143,10 @@ check_resources_title_on_page:
   elements:
   - selector:
       xpath: //span[text()='<resource_title>']
+check_resource_item:
+  elements:
+  - selector:
+      xpath: //span[contains(@class,'co-m-resource-icon') and @title='<resource_type>']/parent::span[@class='co-resource-item']//a[@class='co-resource-item__resource-name' and text()='<resource_name>' and @href='<resource_link>']
 check_resource_name_and_icon:
   action:
     if_param: service_name
@@ -146,6 +212,11 @@ check_service_name_and_icon:
     icon_text: S
     resource_name: <service_name>
   action: check_resource_name_icon_info
+check_templateinstance_name_and_icon:
+  params:
+    icon_text: TI
+    resource_name: <templateinstance_name>
+  action: check_resource_name_icon_info
 check_resource_name_icon_info:
   elements:
   - selector:
@@ -206,15 +277,19 @@ click_link_with_text:
     selector:
       xpath: //a[contains(.,'<text>') and contains(@href,'<link_url>')]
     op: click
+click_kebab_item:
+  element:
+    selector:
+      xpath: //button[contains(@class,'pf-c-dropdown__menu-item') and not(contains(@class,'pf-m-disabled')) and text()='<kebab_item>']
+    op: click
 click_kebab_of_one_resource:
   elements:
   - selector:
       xpath: //*[text()='<resource_name>']//ancestor::tr//td[contains(@class,'dropdown-kebab-pf')]
     op: click
-    timeout: 30
 click_one_operation_in_kebab:
   action: click_kebab_of_one_resource
-  action: click_button
+  action: click_kebab_item
 click_secondary_menu:
   elements:
   - selector:
@@ -223,10 +298,35 @@ click_secondary_menu:
   - selector:
       xpath: //a[@class='pf-c-nav__link' and text()='<secondary_menu>']
     op: click
+click_dropdown:
+  element:
+    selector: &dropdown_name
+      xpath: //div[contains(@data-test-id, '<dropdown_name>')]//button
+    op: click
+check_dropdown_missing:
+  element:
+    selector:
+      <<: *dropdown_name
+    missing: true
 click_dropdown_field:
   elements:
   - selector:
       xpath: //*[(.='<dropdown_field>')]/following-sibling::*//button[contains(@class, 'dropdown__toggle')]
+    op: click
+click_item_in_resource_list:
+  elements:
+  - selector:
+      xpath: //tr[<line_index>]//td[1]//span[@class='co-resource-item']/a
+    op: click
+click_first_sub_item_in_resource_detail_list:
+  elements:
+  - selector:
+      xpath: (//div[@class='co-m-table-grid__body']//a)[1]
+    op: click
+click_first_item_in_grid_cell_list:
+  elements:
+  - selector:
+      xpath: //td[@role='gridcell'][1]
     op: click
 click_one_item:
   elements:
@@ -236,6 +336,13 @@ click_one_item:
 choose_dropdown_item:
   action: click_dropdown_field
   action: click_one_item
+upload_file_for_one_field:
+  elements:
+  - selector:
+      xpath: //input[contains(@aria-describedby, '<field_name>')]/following-sibling::span/input
+    visible: false
+    type: filefield
+    op: set <file_path>
 wait_form_loaded:
   element:
     selector:
@@ -245,6 +352,17 @@ wait_box_loaded:
   element:
     selector:
       css: .loading-box__loaded
+wait_table_loaded:
+  element:
+    selector:
+      xpath: //table//tr
+    timeout: 30
+wait_until_no_loading:
+  element:
+    selector:
+      css: .cos-status-box--loading
+    missing: true
+
 ## -------- check resource key and values pairs ------
 check_resource_details:
   action:
@@ -340,10 +458,25 @@ check_resource_details:
   action:
     if_param: current_configuration
     ref: check_current_configuration
+  action:
+    if_param: kind
+    ref: check_resource_kind
+  action:
+    if_param: api_group
+    ref: check_api_group
+  action:
+    if_param: api_version
+    ref: check_api_version
+  action:
+    if_param: namespaced
+    ref: check_namespaced
+  action:
+    if_param: short_names
+    ref: check_short_names
 check_resource_details_key_and_value:
   element: &key_value
     selector:
-      xpath: //dt[contains(text(),'<key>')]/following-sibling::dd[1][contains(.,'<value>')]
+      xpath: //dt[contains(.,'<key>')]/following-sibling::dd[1][contains(.,'<value>')]
 check_key_and_resource_link:
   element:
     selector:
@@ -514,4 +647,39 @@ check_current_configuration:
   params:
     key: Current Configuration
     value: <current_configuration>
+  action: check_resource_details_key_and_value
+check_min_replicas:
+  params:
+    key: Min Replicas
+    value: <replicas_value>
+  action: check_resource_details_key_and_value
+check_max_replicas:
+  params:
+    key: Max Replicas
+    value: <replicas_value>
+  action: check_resource_details_key_and_value
+check_resource_kind:
+  params:
+    key: Kind
+    value: <kind>
+  action: check_resource_details_key_and_value
+check_api_group:
+  params:
+    key: API Group
+    value: <api_group>
+  action: check_resource_details_key_and_value
+check_api_version:
+  params:
+    key: API Version
+    value: <api_version>
+  action: check_resource_details_key_and_value
+check_namespaced:
+  params:
+    key: Namespaced
+    value: <namespaced>
+  action: check_resource_details_key_and_value
+check_short_names:
+  params:
+    key: Short Names
+    value: <short_names>
   action: check_resource_details_key_and_value

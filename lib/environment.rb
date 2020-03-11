@@ -12,12 +12,65 @@ require 'openshift/node'
 require 'webauto/webconsole_executor'
 
 module BushSlicer
-  # @note this class represents an OpenShift test environment and allows setting it up and in some cases creating and destroying it
+  # @note class represents a generic test environment
   class Environment
     include Common::Helper
 
-    attr_reader :opts, :client_proxy
+    attr_reader :opts
 
+    # @param opts [Hash] initialization options
+    def initialize(**opts)
+      @opts = opts
+    end
+
+    # return environment key, mainly useful for logging purposes
+    def key
+      opts[:key]
+    end
+
+    def client_proxy
+      opts[:client_proxy]
+    end
+
+    # environment may have pre-defined static users used for upgrade testing
+    #   or other special purposes like admin user for example
+    # @return [Hash<Hash>] a hash of user symbolic names pointing at a hash
+    #   of user constructor parameters, e.g.
+    #   {u1: "user1:password1", u2: ":tokenstring"}
+    private def static_users
+      opts[:static_users_map] || {}
+    end
+
+    # @return [Object] static user specification to be parsed by user manager
+    # @see #static_users
+    def static_user_spec(symbolic_name)
+      static_users[symbolic_name.to_sym]
+    end
+
+    def clean_up
+    end
+  end
+
+  class OCMEnvironment < Environment
+    def web_console_url
+      opts[:web_console_url] || raise("web console URL not specified")
+    end
+
+    def static_user(type)
+      user_spec = static_user_spec(type)
+      unless user_spec
+        raise "could not find user type '#{type}' defined"
+      end
+
+      # TODO: create proper ocm user class, but this is enough for a PoC
+      user = OpenStruct.new
+      user.loginname, user.password = user_spec.split(":", 2)
+      return user.freeze
+    end
+  end
+
+  # @note this class represents an OpenShift cluster test environment
+  class OpenShiftEnvironment < Environment
     # :master represents register, scheduler, etc.
     MANDATORY_OPENSHIFT_ROLES = []
     OPENSHIFT_ROLES = MANDATORY_OPENSHIFT_ROLES + [:master, :node, :lb, :etcd, :bastion]
@@ -31,28 +84,8 @@ module BushSlicer
 
     # @param opts [Hash] initialization options
     def initialize(**opts)
-      @opts = opts
+      super
       @hosts = []
-    end
-
-    # return environment key, mainly useful for logging purposes
-    def key
-      opts[:key]
-    end
-
-    # environment may have pre-defined static users used for upgrade testing
-    #   or other special purposes like admin user for example
-    # @return [Hash<Hash>] a hash of user symbolic names pointing at a hash
-    #   of user constructor parameters, e.g.
-    #   {u1: {username: "user1", password: "asdf"}, u2: {token: "..."}}
-    private def static_users
-      opts[:static_users_map] || {}
-    end
-
-    # @return [Hash] user constructor parameters
-    # @see #static_users
-    def static_user(symbolic_name)
-      static_users[symbolic_name.to_sym]
     end
 
     def user_manager
@@ -312,7 +345,7 @@ module BushSlicer
     # obtain router detals like default router subdomain and router IPs
     # @param user [BushSlicer::User]
     # @param project [BushSlicer::project]
-    def get_routing_details(user:, project:)
+    def get_routing_details(user:, project:, obj:)
       service_res = Service.create(by: user, project: project, spec: 'https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/service_with_selector.json')
       raise "cannot create service" unless service_res[:success]
       service = service_res[:resource]
@@ -321,16 +354,18 @@ module BushSlicer
       route = service.expose(user: user)
 
       fqdn = route.dns(by: user)
-      opts[:router_subdomain] = fqdn.split('.',2)[1]
-      opts[:router_ips] = Common::Net.dns_lookup(fqdn, multi: true)
-
+      if obj == 'subdomain'
+        opts[:router_subdomain] = fqdn.split('.',2)[1]
+      else
+        opts[:router_ips] = Common::Net.dns_lookup(fqdn, multi: true)
+      end
       raise unless route.delete(by: user)[:success]
       raise unless service.delete(by: user)[:success]
     end
 
     def router_ips(user:, project:)
       unless opts[:router_ips]
-        get_routing_details(user: user, project: project)
+        get_routing_details(user: user, project: project, obj: 'ips')
       end
 
       return opts[:router_ips]
@@ -338,7 +373,7 @@ module BushSlicer
 
     def router_default_subdomain(user:, project:)
       unless opts[:router_subdomain]
-        get_routing_details(user: user, project: project)
+        get_routing_details(user: user, project: project, obj: 'subdomain')
       end
       return opts[:router_subdomain]
     end
@@ -420,6 +455,7 @@ module BushSlicer
       end
       @cli_executor.clean_up if @cli_executor
       @webconsole_executor.clean_up if @webconsole_executor
+      super
     end
 
     def local_storage_provisioner_project
@@ -442,7 +478,7 @@ module BushSlicer
   end
 
   # a quickly made up environment class for the PoC
-  class StaticEnvironment < Environment
+  class StaticEnvironment < OpenShiftEnvironment
     def initialize(**opts)opts[:masters]
       super
 
@@ -468,6 +504,7 @@ module BushSlicer
 
           # handle client proxy
           proxy_spec = host.roles.find { |r| r.to_s.start_with? "proxy__" }
+
           if proxy_spec
             _role, proto, port, username, password = proxy_spec.to_s.split("__")
             if username
@@ -475,7 +512,7 @@ module BushSlicer
             else
               auth_str = ""
             end
-            @client_proxy = "#{proto}://#{auth_str}#{host.hostname}:#{port}"
+            self.client_proxy = "#{proto}://#{auth_str}#{host.hostname}:#{port}"
           end
         end
 
@@ -487,8 +524,21 @@ module BushSlicer
     end
 
     def client_proxy
-      hosts
-      return @client_proxy
+      if defined? @client_proxy
+        @client_proxy
+      elsif super
+        @client_proxy = super
+      else
+        hosts
+        return @client_proxy
+      end
+    end
+
+    # set proxy URL only if not already set
+    def client_proxy=(url)
+      unless defined? @client_proxy
+        @client_proxy = url
+      end
     end
 
     # add a new host to environment with defaults
