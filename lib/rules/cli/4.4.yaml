@@ -1275,14 +1275,6 @@
     :prune_over_size_limit: --prune-over-size-limit=<value>
     :prune_registry: --prune-registry=<value>
     :registry_url: --registry-url=<value>
-:oadm_registry:
-  :cmd: oc adm registry
-  :options:
-    :daemonset: --daemonset=<value>
-    :images: --images=<value>
-    :mount_host: --mount-host=<value>
-    :ports: --ports=<value>
-    :serviceaccount: --service-account=<value>
 :oadm_router:
   :cmd: oc adm router <name>
   :options:
