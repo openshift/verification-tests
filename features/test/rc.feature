@@ -1,6 +1,7 @@
 Feature: rc related test
   Scenario: test new rc ready method
     Given I have a project
+    Given I store all replicationcontrollers in the project to the clipboard
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json |
     Then the step should succeed
@@ -13,4 +14,3 @@ Feature: rc related test
     And the expression should be true> rc.current_replicas == 2
     And status becomes :running of exactly 2 pods labeled:
       | name=test-pods |
-
