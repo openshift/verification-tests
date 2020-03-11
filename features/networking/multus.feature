@@ -1135,36 +1135,3 @@ Feature: Multus-CNI related scenarios
     And evaluation of `@result[:response].match(/\w{2}:\w{2}:\w{2}:\w{2}:\w{2}:\w{2}/)[0]` is stored in the :pod2_net1_mac clipboard
     And the expression should be true> cb.pod2_net1_mac==cb.default_interface_mac
     And the expression should be true> !(cb.pod2_net1_ip==cb.pod1_net1_ip)
-    
-    #Creating pod3 absorbing above net-attach-def
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
-      | ["metadata"]["name"]                                       | pod3                    |
-      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | myipvlan76              |
-      | ["spec"]["nodeName"]                                       | <%= cb.nodes[0].name %> |
-    Then the step should succeed
-    And the pod named "pod3" becomes ready
-    When I execute on the pod:
-      | /usr/sbin/ifconfig | net1 |
-    Then the step should succeed
-    And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod3_net1_ip clipboard
-    And evaluation of `@result[:response].match(/\w{2}:\w{2}:\w{2}:\w{2}:\w{2}:\w{2}/)[0]` is stored in the :pod3_net1_mac clipboard
-    And the expression should be true> cb.pod3_net1_mac==cb.default_interface_mac
-    And the expression should be true> !(cb.pod3_net1_ip==cb.pod2_net1_ip)
-    And the expression should be true> !(cb.pod3_net1_ip==cb.pod1_net1_ip)
-
-    #Creating pod4 absorbing above net-attach-def
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
-      | ["metadata"]["name"]                                       | pod4                    |
-      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | myipvlan76              |
-      | ["spec"]["nodeName"]                                       | <%= cb.nodes[0].name %> |
-    Then the step should succeed
-    And the pod named "pod4" becomes ready
-    When I execute on the pod:
-      | /usr/sbin/ifconfig | net1 |
-    Then the step should succeed
-    And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod4_net1_ip clipboard
-    And evaluation of `@result[:response].match(/\w{2}:\w{2}:\w{2}:\w{2}:\w{2}:\w{2}/)[0]` is stored in the :pod4_net1_mac clipboard
-    And the expression should be true> cb.pod4_net1_mac==cb.default_interface_mac
-    And the expression should be true> !(cb.pod4_net1_ip==cb.pod3_net1_ip)
-    And the expression should be true> !(cb.pod4_net1_ip==cb.pod2_net1_ip)
-    And the expression should be true> !(cb.pod4_net1_ip==cb.pod1_net1_ip)
