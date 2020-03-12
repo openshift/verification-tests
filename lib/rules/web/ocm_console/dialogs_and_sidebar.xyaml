@@ -189,7 +189,7 @@ click_compute_node_dropdown:
     op: click
 select_compute_node_in_dialog:
   element:
-    selector:
+    selector: 
       xpath: //select[@name='nodes_compute']//option[text()='<compute_node_number>']
     timeout: 50
     op: click
@@ -234,9 +234,25 @@ customer_cloud_subscription_prompt_message_loaded:
         #- selector:
         #    xpath: //div[text()[2]='for more detail around the requirements for Customer Cloud Subscription.']
 close_customer_cloud_subscription_prompt_message:
-    action: customer_cloud_subscription_prompt_message_loaded
-    element:
-        selector:
-            xpath: //button[text()='Close']
-        op: click
-
+  element:
+    selector:
+      xpath: //div[@role='dialog' and @aria-label='Customer Cloud Subscription']//button[text()='Close']
+    op: click
+check_compute_node_count_field_in_scale_dialog:
+  elements:
+  - selector:
+      xpath: //label[@for='nodes_compute']/span[text()='Compute node count']
+  - selector:
+      xpath: //select[@name='nodes_compute']
+check_load_balancers_field_in_scale_dialog:
+  elements:
+  - selector:
+      xpath: //label[@for='load_balancers']/span[text()='Load balancers']
+  - selector:
+      xpath: //select[@name='load_balancers']
+check_persistent_storage_field_in_scale_dialog:
+  elements:
+  - selector:
+      xpath: //label[@for='persistent_storage']/span[text()='Persistent storage']
+  - selector:
+      xpath: //select[@name='persistent_storage']

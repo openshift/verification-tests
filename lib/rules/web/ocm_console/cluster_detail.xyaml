@@ -153,3 +153,7 @@ total_sockets_loaded:
     element:
         selector:
             xpath: //div[@class='pf-l-grid']/div[2]//dt[3][text()='Total Sockets']
+actions_button_disabled_on_cluster_detail_page:
+  element:
+    selector:
+      xpath: //span[@id='cl-details-btns']//button[@class='pf-c-dropdown__toggle' and @disabled]

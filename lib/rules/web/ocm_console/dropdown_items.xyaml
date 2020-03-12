@@ -71,3 +71,8 @@ check_scale_cluster_button_in_dropdown_missing:
     selector:
       xpath: //ul[@role='menu']//li[@role='menuitem']/button[text()='Scale Cluster']
     missing: true
+check_edit_displayname_button_in_dropdown_missing:
+  element:
+    selector:
+      xpath: //ul[@role='menu']//li[@role='menuitem']/button[text()='Edit Display Name']
+    missing: true

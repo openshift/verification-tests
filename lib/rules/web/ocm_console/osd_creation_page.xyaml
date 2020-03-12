@@ -241,3 +241,45 @@ check_non_support_multi_az_region_error_message:
     action: select_region
     action: click_create_button
     action: osd_creation_error_dialog_loaded
+check_persistent_storage_field_in_creation_page:
+  elements:
+  - selector:
+      xpath: //span[text()='Persistent storage']
+  - selector:
+      xpath: //select[@name='persistent_storage']
+  - selector:
+      xpath: //label[@for='persistent_storage']/following-sibling::*[name()='svg']
+check_lb_field_in_creation_page:
+  elements:
+  - selector:
+      xpath: //span[text()='Load balancers']
+  - selector:
+      xpath: //select[@name='load_balancers']
+  - selector:
+      xpath: //label[@for='load_balancers']/following-sibling::*[name()='svg']
+check_persistent_storage_field_in_creation_page_missing:
+  element:
+    selector:
+      xpath: //span[text()='Persistent storage']
+    missing: true
+check_lb_field_in_creation_page_missing:
+  element:
+    selector:
+      xpath: //span[text()='Load balancers']
+    missing: true
+check_persistent_storage_popover_message:
+  element:
+    selector:
+      xpath: //label[@for='persistent_storage']/following-sibling::*[name()='svg']
+    op: click
+  element:
+    selector:
+      xpath: //div[@class='pf-c-popover__body' and text()='The storage quota set on the deployed cluster.']
+check_lb_popover_message:
+  element:
+    selector:
+      xpath: //label[@for='load_balancers']/following-sibling::*[name()='svg']
+    op: click
+  element:
+    selector:
+      xpath: //div[@class='pf-c-popover__body' and text()='The load balancer quota set on the deployed cluster.']
