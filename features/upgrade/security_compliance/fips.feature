@@ -16,6 +16,7 @@ Feature: fips enabled verification for upgrade
     Given I switch to the first user
     When I run the :new_project client command with:
       | project_name | sc-upgrade |
+    Then the step should succeed
     Given I store the masters in the :masters clipboard
     When I run the :debug admin command with:
       | resource | no/<%= cb.masters[0].name %> |
@@ -23,7 +24,7 @@ Feature: fips enabled verification for upgrade
       | o        | yaml                         |
     Then the step should succeed
     And I save the output to file>debug_pod.yaml
-    Given I have a project
+    When I use the "sc-upgrade" project
     And I replace lines in "debug_pod.yaml":
       | /name.*debug/                          | name: mypod           |
       | /namespace: .*/                        | namespace: sc-upgrade |
