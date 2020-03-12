@@ -1084,32 +1084,6 @@
     :invalid_option: <value>   # for negative testing
     :o: -o <value>
     :trigger_only: --trigger-only=<value>
-:oadm_ca_create_key_pair:
-  :cmd: oc adm ca create-key-pair
-  :options:
-    :overwrite: --overwrite=<value>
-    :private_key: --private-key=<value>
-    :public_key: --public-key=<value>
-:oadm_ca_create_master_cert:
-  :cmd: oc adm ca create-master-certs
-  :options:
-    :certificate-authority: --certificate-authority=<value>
-    :cert-dir: --cert-dir=<value>
-    :expire-days: --expire-days=<value>
-    :hostnames: --hostnames=<value>
-    :master: --master=<value>
-    :overwrite: --overwrite=<value>
-    :public-master: --public-master=<value>
-    :signer-expire-days: --signer-expire-days=<value>
-    :signer-name: --signer-name=<value>
-:oadm_ca_create_signer_cert:
-  :cmd: oc adm ca create-signer-cert
-  :options:
-    :cert: --cert=<value>
-    :key: --key=<value>
-    :name: --name=<value>
-    :overwrite: --overwrite=<value>
-    :serial: --serial=<value>
 :oadm_config_view:
   :cmd: oc adm config view
   :options:
