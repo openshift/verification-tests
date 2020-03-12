@@ -166,6 +166,7 @@
   :options:
     :clusterrole: --clusterrole=<value>
     :group: --group=<value>
+    :serviceaccount: --serviceaccount=<value>
 :create_configmap:
   :cmd: oc create configmap
   :options:
@@ -1117,21 +1118,6 @@
     :raw: --raw
 :oadm_cordon_node:
   :cmd: oc adm cordon <node_name>
-:oadm_diagnostics:
-  :cmd: oc adm diagnostics
-  :options:
-    :cluster-context: --cluster-context=<value>
-    :config: --kubeconfig=<value>
-    :context: --context=<value>
-    :diaglevel: --diaglevel=<value>
-    :diagnostics_name: <value>
-    :host: --host=<value>
-    :images: --images=<value>
-    :latest-images: --latest-images=<value>
-    :loglevel: --loglevel=<value>
-    :master-config: --master-config=<value>
-    :node-config: --node-config=<value>
-    :prevent-modification: --prevent-modification=<value>
 :oadm_drain:
   :cmd: oc adm drain
   :options:
@@ -1290,14 +1276,6 @@
     :prune_over_size_limit: --prune-over-size-limit=<value>
     :prune_registry: --prune-registry=<value>
     :registry_url: --registry-url=<value>
-:oadm_registry:
-  :cmd: oc adm registry
-  :options:
-    :daemonset: --daemonset=<value>
-    :images: --images=<value>
-    :mount_host: --mount-host=<value>
-    :ports: --ports=<value>
-    :serviceaccount: --service-account=<value>
 :oadm_router:
   :cmd: oc adm router <name>
   :options:
