@@ -509,7 +509,7 @@ Feature: jenkins.feature
       | x86_64 |
 
   # @author xiuwang@redhat.com
-  # @case_id 25401
+  # @case_id OCP-25401
   Scenario: Create jenkins application directly
     Given I have a project
     When I run the :new_app client command with:

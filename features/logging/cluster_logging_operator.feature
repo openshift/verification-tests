@@ -23,23 +23,17 @@ Feature: cluster-logging-operator related test
   @destructive
   @commonlogging
   Scenario: ServiceMonitor Object for collector is deployed along with cluster logging
-    Given I use the "openshift-monitoring" project
-    And I run the :serviceaccounts_get_token client command with:
-      |serviceaccount_name | prometheus-k8s |
+    Given I wait for the "fluentd" service_monitor to appear
+    Given the expression should be true> service_monitor('fluentd').service_monitor_endpoint_spec(server_name: "fluentd.openshift-logging.svc").port == "metrics"
+    And the expression should be true> service_monitor('fluentd').service_monitor_endpoint_spec(server_name: "fluentd.openshift-logging.svc").path == "/metrics"
+    Given I wait up to 180 seconds for the steps to pass:
+    """
+    When I perform the GET prometheus rest client with:
+      | path  | /api/v1/query?                            |
+      | query | fluentd_output_status_buffer_queue_length |
     Then the step should succeed
-    And evaluation of `@result[:response]` is stored in the :token clipboard
-    Given I use the "openshift-logging" project
-    Given evaluation of `cluster_logging('instance').collection_type` is stored in the :collection_type clipboard
-    Given the expression should be true> service_monitor('<%= cb.collection_type %>').port == "metrics"
-    And the expression should be true> service_monitor('<%= cb.collection_type %>').path == "/metrics"
-    And evaluation of `service('<%= cb.collection_type %>').ip` is stored in the :service_ip clipboard
-
-    Given I run curl command on the fluentd pod to get metrics with:
-      | object     | <%= cb.collection_type %> |
-      | service_ip | <%= cb.service_ip %>      |
-      | token      | <%= cb.token %>           |
-    Then the step should succeed
-    And the expression should be true> @result[:response].include? (cb.collection_type == "fluentd" ? "fluentd_output_status_buffer_total_bytes": "rsyslog_action_processed")
+    And the expression should be true>  @result[:parsed]['data']['result'][0]['value']
+    """
 
   # @author qitang@redhat.com
   # @case_id OCP-21907
@@ -98,3 +92,33 @@ Feature: cluster-logging-operator related test
     And the expression should be true> cb.gen_uuid_2 != nil
     """
     And I wait for the "elasticsearch-cd-<%= cb.gen_uuid_2 %>-1" deployment to appear
+
+  # @author qitang@redhat.com
+  # @case_id OCP-23738
+  @admin
+  @destructive
+  Scenario: Fluentd alert rule: FluentdNodeDown
+    Given the master version >= "4.2"
+    Given I create clusterlogging instance with:
+      | remove_logging_pods | true                                                                                                   |
+      | crd_yaml            | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/example.yaml |
+      | log_collector       | fluentd                                                                                                |
+    Then the step should succeed
+    Given I wait for the "fluentd" prometheus_rule to appear
+    And I wait for the "fluentd" service_monitor to appear
+    # make all fluentd pods down
+    When I run the :patch client command with:
+      | resource      | clusterlogging                                                                        |
+      | resource_name | instance                                                                              |
+      | p             | {"spec": {"collection": {"logs": {"fluentd":{"nodeSelector": {"logging": "test"}}}}}} |
+      | type          | merge                                                                                 |
+    Then the step should succeed
+    And I wait up to 360 seconds for the steps to pass:
+    """
+    When I perform the GET prometheus rest client with:
+      | path  | /api/v1/query?                      |
+      | query | ALERTS{alertname="FluentdNodeDown"} |
+    Then the step should succeed
+    And the output should match:
+      | "alertstate":"pending\|firing" |
+    """ 

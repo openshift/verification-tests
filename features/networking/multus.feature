@@ -5,7 +5,7 @@ Feature: Multus-CNI related scenarios
   @admin
   Scenario: Create pods with multus-cni - macvlan bridge mode
     # Make sure that the multus is enabled
-    Given the master version >= "4.0"
+    Given the master version >= "4.1"
     And the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard
     And evaluation of `node.name` is stored in the :target_node clipboard
@@ -63,7 +63,7 @@ Feature: Multus-CNI related scenarios
   @admin
   Scenario: Create pods with multus-cni - macvlan private mode
     # Make sure that the multus is enabled
-    Given the master version >= "4.0"
+    Given the master version >= "4.1"
     And the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard
     And evaluation of `node.name` is stored in the :target_node clipboard
@@ -98,29 +98,28 @@ Feature: Multus-CNI related scenarios
 
     # Create the second pod which consumes the macvlan cr
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/1interface-macvlan-private.yaml" replacing paths:
-      | ["spec"]["nodeName"] | "<%= cb.target_node %>" |
+       | ["metadata"]["name"]              | macvlan-private-secondpod   |      
+       | ["spec"]["nodeName"]              | "<%= cb.target_node %>"     |
+       | ["spec"]["containers"][0]["name"] | macvlan-private-secondpod   |
     Then the step should succeed
-    And 2 pods become ready with labels:
-      | name=macvlan-private-pod |
-    And evaluation of `pod(-1).name` is stored in the :pod2 clipboard
+    And the pod named "macvlan-private-secondpod" becomes ready
 
     # Try to access both the cluster ip and macvlan ip on pod1 from pod2
-    When I execute on the "<%= cb.pod2 %>" pod:
+    When I execute on the "macvlan-private-secondpod" pod:
       | curl | --connect-timeout | 5 | <%= cb.pod1_sdn_ip %>:8080 |
     Then the step should succeed
     And the output should contain "Hello OpenShift"
-    When I execute on the "<%= cb.pod2 %>" pod:
+    When I execute on the "macvlan-private-secondpod" pod:
       | curl | --connect-timeout | 5 | <%= cb.pod1_multus_ip %>:8080 |
     Then the step should fail
     And the output should not contain "Hello OpenShift"
-
 
   # @author bmeng@redhat.com
   # @case_id OCP-21496
   @admin
   Scenario: Create pods with multus-cni - macvlan vepa mode
     # Make sure that the multus is enabled
-    Given the master version >= "4.0"
+    Given the master version >= "4.1"
     And the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard
     And evaluation of `node.name` is stored in the :target_node clipboard
@@ -178,7 +177,7 @@ Feature: Multus-CNI related scenarios
   @destructive
   Scenario: Create pods with multus-cni - host-device
     # Make sure that the multus is enabled
-    Given the master version >= "4.0"
+    Given the master version >= "4.1"
     And the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard    
     And evaluation of `node.name` is stored in the :target_node clipboard
@@ -245,7 +244,7 @@ Feature: Multus-CNI related scenarios
   @admin
   Scenario: Create pods with muliple cni plugins via multus-cni - macvlan + macvlan
     # Make sure that the multus is enabled
-    Given the master version >= "4.0"
+    Given the master version >= "4.1"
     And the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard
     And evaluation of `node.name` is stored in the :target_node clipboard    
@@ -289,7 +288,7 @@ Feature: Multus-CNI related scenarios
   @destructive
   Scenario: Create pods with muliple cni plugins via multus-cni - macvlan + host-device
     # Make sure that the multus is enabled
-    Given the master version >= "4.0"
+    Given the master version >= "4.1"
     And the multus is enabled on the cluster
     And an 4 character random string of type :hex is stored into the :nic_name clipboard
     Given the default interface on nodes is stored in the :default_interface clipboard
@@ -350,7 +349,7 @@ Feature: Multus-CNI related scenarios
   @destructive
   Scenario: Create pods with muliple cni plugins via multus-cni - host-device + host-device
     # Make sure that the multus is enabled
-    Given the master version >= "4.0"
+    Given the master version >= "4.1"
     And the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard
     And evaluation of `node.name` is stored in the :target_node clipboard

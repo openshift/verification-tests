@@ -3,10 +3,15 @@ require 'thread'
 require 'thwait'
 
 module BushSlicer
+
+  # base class to display a summary of the current running instances.
+  # Currently display ['name', 'uptime', 'flexy_job_id', 'region'] in a
+  # tabulized format
+
   class InstanceSummary
     attr_accessor :jenkins
 
-    def initialize(jenkins: nil)
+    def initialize(jenkins)
       @jenkins = jenkins
     end
 

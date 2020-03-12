@@ -117,7 +117,7 @@ Feature: buildlogic.feature
   Scenario: Build with specified Dockerfile to image with same image name via new-build
     Given I have a project
     When I run the :new_build client command with:
-      | D | FROM centos:7\nRUN yum install -y httpd |
+      | D | FROM centos:7 |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | bc     |
@@ -127,9 +127,9 @@ Feature: buildlogic.feature
       | Output to:\s+ImageStreamTag centos:latest |
     Given the "centos-1" build becomes :complete
     When I run the :new_build client command with:
-      | D    | FROM centos:7\nRUN yum install -y httpd |
-      | to   | centos:7                                |
-      | name | myapp                                   |
+      | D    | FROM centos:7 |
+      | to   | centos:7      |
+      | name | myapp         |
     And I get project bc
     Then the output should contain:
       | myapp |
@@ -153,9 +153,10 @@ Feature: buildlogic.feature
     And I have an ssh-git service in the project
     And the "secret" file is created with the following lines:
       | <%= cb.ssh_private_key.to_pem %> |
-    And I run the :secrets_new_sshauth client command with:
-      | ssh_privatekey | secret   |
-      | secret_name    | mysecret |
+    And I run the :create_secret client command with:
+      | secret_type | generic               | 
+      | name        | mysecret              |
+      | from_file   | ssh-privatekey=secret |
     Then the step should succeed
     When I execute on the pod:
       | bash |
@@ -201,9 +202,11 @@ Feature: buildlogic.feature
     And I have an ssh-git service in the project
     And the "secret" file is created with the following lines:
       | <%= cb.ssh_private_key.to_pem %> |
-    And I run the :secrets_new_sshauth client command with:
-      | ssh_privatekey | secret   |
-      | secret_name    | mysecret |
+    And I run the :create_secret client command with:
+      | secret_type | generic               | 
+      | name        | mysecret              |
+      | from_file   | ssh-privatekey=secret |
+    Then the step should succeed
     When I execute on the pod:
       | bash           |
       | -c             |

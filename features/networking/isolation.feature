@@ -4,7 +4,6 @@ Feature: networking isolation related scenarios
   # @case_id OCP-9565
   @admin
   Scenario: The pods in default namespace can communicate with all the other pods
-    Given the env is using multitenant network
     Given I have a project
     And evaluation of `project.name` is stored in the :u1p1 clipboard
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json" replacing paths:

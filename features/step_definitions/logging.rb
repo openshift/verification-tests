@@ -300,46 +300,6 @@ Given /^I delete the clusterlogging instance$/ do
   step %Q/I wait for the resource "daemonset" named "fluentd" to disappear/
 end
 
-Given /^I run curl command on the (CLO|ES|fluentd) pod to get metrics with:$/ do | pod_type, table |
-  ensure_admin_tagged
-  opts = opts_array_to_hash(table.raw)
-  case pod_type
-  when "CLO"
-    selector = "name=cluster-logging-operator"
-    container_name = "cluster-logging-operator"
-  when "ES"
-    selector = "cluster-name=elasticsearch,component=elasticsearch"
-    container_name = "elasticsearch"
-  when "fluentd"
-    selector = "logging-infra=fluentd"
-    container_name = "fluentd"
-  end
-  step %Q/a pod becomes ready with labels:/, table(%{
-    | #{selector} |
-  })
-
-  query_object = opts[:object]
-  query_opts = "-H \"Authorization: Bearer #{opts[:token]}\" -H \"Content-type: application/json\""
-  case query_object
-  when "rsyslog", "fluentd"
-    query_cmd = "curl -k #{query_opts} https://#{opts[:service_ip]}:24231/metrics"
-  when "elasticsearch"
-    query_cmd = "curl -k #{query_opts} https://#{opts[:service_ip]}:60000/_prometheus/metrics"
-  else
-    raise "Invalid query_object"
-  end
-
-  @result = pod.exec("bash", "-c", query_cmd, as: admin, container: container_name)
-  if @result[:success]
-    @result[:parsed] = YAML.load(@result[:response])
-    if @result[:parsed].is_a? Hash and @result[:parsed].has_key? 'status'
-      @result[:exitstatus] = @result[:parsed]['status']
-    end
-  else
-    raise "Get metrics failed with error, #{@result[:response]}"
-  end
-end
-
 Given /^logging channel name is stored in the#{OPT_SYM} clipboard$/ do | cb_name |
   cb_name = 'logging_channel_name' unless cb_name
   case

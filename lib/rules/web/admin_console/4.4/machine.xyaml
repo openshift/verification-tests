@@ -1,0 +1,9 @@
+check_unhealthy_conditions_table:
+  elements:
+  - selector:
+      xpath: //h2[contains(.,'Unhealthy Conditions')]
+  - selector:
+      xpath: //table//tr[th[contains(text(),'Status')] and th[contains(text(),'Timeout')] and  th[contains(text(),'Type')] ]
+  - selector:
+      xpath: //tbody/tr[td[contains(text(),'<status>')] and td[contains(text(),'<timeout>')] and td[contains(text(),'<type>')]]
+

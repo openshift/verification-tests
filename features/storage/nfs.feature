@@ -1,19 +1,20 @@
 Feature: NFS Persistent Volume
 
   # @author jhou@redhat.com
+  # @author lxia@redhat.com
   # @case_id OCP-9572
   @admin
-  @destructive
   Scenario: Share NFS with multiple pods with ReadWriteMany mode
     Given I have a project
     And I have a NFS service in the project
 
-    # Preparations
-    And admin creates a PV from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/auto/pv-retain.json" where:
-      | ["metadata"]["name"]      | nfs-<%= project.name %>          |
-      | ["spec"]["nfs"]["server"] | <%= service("nfs-service").ip %> |
-    And I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/auto/pvc-rwx.json" replacing paths:
-      | ["spec"]["volumeName"] | <%= pv.name %> |
+    Given admin creates a PV from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/auto/pv-retain.json" where:
+      | ["metadata"]["name"]         | pv-<%= project.name %>           |
+      | ["spec"]["nfs"]["server"]    | <%= service("nfs-service").ip %> |
+      | ["spec"]["storageClassName"] | sc-<%= project.name %>           |
+    And I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/auto/pvc-rwx.json" replacing paths:
+      | ["spec"]["volumeName"]       | <%= pv.name %>         |
+      | ["spec"]["storageClassName"] | sc-<%= project.name %> |
     And the PV becomes :bound
 
     # Create a replication controller
@@ -32,6 +33,9 @@ Feature: NFS Persistent Volume
     When I execute on the "<%= pod(-2).name %>" pod:
       | touch | /mnt/nfs/testfile_2 |
     Then the step should succeed
+
+    # Delete the rc to ensure the data synced to the nfs server
+    Given I ensure "hellopod" replicationcontroller is deleted
 
     # Finally verify both files created by each pod are under the same export dir in the nfs-server pod
     When I execute on the "nfs-server" pod:
@@ -86,9 +90,13 @@ Feature: NFS Persistent Volume
     Given I execute on the pod:
       | touch | /mnt/nfs/nfs_testfile |
     Then the step should succeed
+    # workaround for https://bugzilla.redhat.com/show_bug.cgi?id=1810971
+    Then I wait up to 30 seconds for the steps to pass:
+    """
     When I execute on the pod:
       | ls | -l | /mnt/nfs/nfs_testfile |
     Then the step should succeed
+    """
 
     Examples:
       | nfs-uid-gid   | pv-gid | pod-gid |

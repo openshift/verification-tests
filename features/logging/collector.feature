@@ -64,7 +64,7 @@ Feature: collector related tests
     """
 
   # @author qitang@redhat.com
-  # case_id OCP-25365
+  # @case_id OCP-25365
   @admin @destructive
   @commonlogging
   Scenario: The System Journald log can be collected
