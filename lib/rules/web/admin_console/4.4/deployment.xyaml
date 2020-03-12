@@ -56,8 +56,8 @@ delete_dc_with_dependency_objects:
 check_sections_on_container_details:
   elements:
   - selector:
-      xpath: //h2[contains(@class,'co-section-heading') and text()='Container Details']
+      xpath: //h2[contains(@class,'co-section-heading') and .='Container Details']
   - selector:
-      xpath: //h2[contains(@class,'co-section-heading') and text()='Image Details']
+      xpath: //h2[contains(@class,'co-section-heading') and .='Image Details']
   - selector:
-      xpath: //h2[contains(@class,'co-section-heading') and text()='Network']
+      xpath: //h2[contains(@class,'co-section-heading') and .='Network']
