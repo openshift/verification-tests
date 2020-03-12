@@ -12,9 +12,9 @@ check_cluster_list_page_without_cluster:
         - selector:
             xpath: //div[@class='pf-c-empty-state__body' and contains(., 'create your first cluster')]
         - selector:
-            xpath: //a[contains(@href, '/openshift/register')]/button[@class='pf-c-button pf-m-link' and text()='Register disconnected cluster']
+            xpath: //a[contains(@href, '/openshift/register')]/button[text()='Register cluster']
         - selector:
-            xpath: //a[contains(@href, '/openshift/archived')]/button[@class='pf-c-button pf-m-link' and text()='View archived clusters']
+            xpath: //a[contains(@href, '/openshift/archived')]/button[text()='View archived clusters']
 
 cluster_list_page_loaded:
     action: create_cluster_button_loaded
@@ -71,7 +71,7 @@ check_cluster_list_page:
         - selector:
             xpath: //th[@data-label='Type' and text()='Type']
         - selector:
-            xpath: //th[@data-label='Subscription Status' and text()='Subscription Status']
+            xpath: //th[@data-label='Created' and text()='Created']
         - selector:
             xpath: //th[@data-label='Version' and text()='Version']
         - selector:
@@ -89,6 +89,23 @@ check_clusters_list_info:
             xpath: //a[text()='<cluster_name>']/../../td[@data-label='Status']/span[text()='<cluster_status>']
         - selector:
             xpath: //a[text()='<cluster_name>']/../../td[@data-label='Type']/span[text()='<cluster_type>']
+check_hover_in_cluster_list:
+    elements:
+        - selector:
+            xpath: //td[@data-label='Type']/span[text()='OCP']
+          op: hover
+        - selector:
+            xpath: //div[@class='tippy-popper' and contains(., 'Self-managed')]
+        - selector:
+            xpath: //td[@data-label='Type']/span[text()='OSD']
+          op: hover
+        - selector:
+            xpath: //div[@class='tippy-popper' and contains(., 'Dedicated')]
+        - selector:
+            xpath: //td[@data-label='Name']/a[text()='sdqe-ui-ocp']
+          op: hover
+        - selector:
+            xpath: //div[@class='tippy-popper' and contains(., 'cluster name:')]
 filter_name_or_id:
     action: clear_filter_name_or_id
     element:
@@ -219,7 +236,7 @@ cluster_list_table_columns_loaded:
     - selector:
         xpath: //table/thead//th[text()='Type']
     - selector:
-        xpath: //table/thead//th[text()='Subscription Status']
+        xpath: //table/thead//th[text()='Created']
     - selector:
         xpath: //table/thead//th[text()='Version']
     - selector:
@@ -379,7 +396,7 @@ go_to_access_control_tab:
 click_logout_button:
   element:
     selector:
-      xpath: //div[@class='pf-c-dropdown']/button/span[contains(., 'UItesting')]/../../button
+      xpath: //div[@aria-label='Overflow actions']/button[@class='pf-c-dropdown__toggle pf-m-plain']
     op: click
   element:
     selector:
