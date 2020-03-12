@@ -333,7 +333,7 @@ Feature: Pod related networking scenarios
     And evaluation of `@result[:response]` is stored in the :ovnkube_pod_name clipboard
     And admin ensure "<%= cb.ovnkube_pod_name %>" pod is deleted from the "openshift-ovn-kubernetes" project
     #Waiting up to 60 seconds for new ovnkube pod to get created and running on the same node where it was deleted before
-    And I wait up to 30 seconds for the steps to pass:
+    And I wait up to 60 seconds for the steps to pass:
     """
     When I run the :get admin command with:
       | resource      | pod                                   |
