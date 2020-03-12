@@ -203,6 +203,10 @@ check_column_in_table:
   elements:
   - selector:
       xpath: //th[contains(@data-label,'<field>')]
+check_text_in_same_table_row:
+  elements:
+  - selector:
+      xpath: //tr[@data-test-rows='resource-row' and //*[contains(text(), '<text_anchor>')] and //*[contains(text(), '<text_expect>')]]
 check_resource_name_and_icon:
   action:
     if_param: service_name

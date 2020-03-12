@@ -758,15 +758,3 @@ check_created_at:
   params:
     key: Created At
   action: check_resource_details_key_only
-# --- for 4.4 ---
-check_table_header_by_data_label:
-  elements:
-  - selector:
-      xpath: //tr/th[@data-label='<header_text>']
-
-# xpath: //*[contains(text(),'<text_anchor>')]/ancestor::tr//*[contains(text(), '<text_expect>')]
-check_text_in_same_table_row:
-  elements:
-  - selector:
-      xpath: //tr[@data-test-rows='resource-row' and //*[contains(text(), '<text_anchor>')] and //*[contains(text(), '<text_expect>')]]
-
