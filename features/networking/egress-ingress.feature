@@ -269,4 +269,34 @@ Feature: Egress-ingress related networking scenarios
       | curl | --head | www.baidu.com |
     Then the step should succeed
 
+  # @author huirwang@redhat.com
+  # @case_id OCP-13506
+  @admin
+  Scenario: Update different dnsname in same egress network policy
+    Given I have a project
+    Given I have a pod-for-ping in the project
 
+    # Create egressnetworkpolicy to deny www.test.com
+    Given I switch to cluster admin pseudo user
+    And I use the "<%= project.name %>" project
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/egress-ingress/dns-egresspolicy4.json" replacing paths:
+      | ["spec"]["egress"][0]["to"]["dnsName"] | www.test.com |
+    Then the step should succeed
+
+    # Access to www.test.com fail
+    When I execute on the pod:
+      | curl |  -s | --connect-timeout | 5 | www.test.com |
+    Then the step should fail
+    And admin ensures "policy-test" egress_network_policy is deleted
+
+    # Create egressnetworkpolicy to deny another domain name www.test1.com
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/egress-ingress/dns-egresspolicy4.json" replacing paths:
+      | ["spec"]["egress"][0]["to"]["dnsName"] | www.test1.com |
+    Then the step should succeed
+
+    When I execute on the pod:
+      | curl |  -s | --connect-timeout | 5 | www.test1.com |
+    Then the step should fail
+    When I execute on the pod:
+      | curl | --head | www.test.com |
+    Then the step should succeed
