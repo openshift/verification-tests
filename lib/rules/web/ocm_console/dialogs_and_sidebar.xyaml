@@ -56,7 +56,7 @@ click_archive_button:
 archive_succ_promt_message_displayed:
     element: &archive_succ_promt_message
         selector:
-            xpath: //h4[contains(text(),'has been archived')]
+            xpath: //h4[contains(text(),'Cluster <cluster_name> has been archived')]
         timeout: 120
     action: archive_succ_promt_message_missing
 archive_succ_promt_message_missing:
@@ -84,7 +84,7 @@ click_unarchive_button:
 unarchive_succ_prompt_message_displayed:
     element: &unarchive_succ_prompt_message
         selector:
-            xpath: //*[contains(text(),'has been unarchived')]
+            xpath: //*[contains(text(),'Cluster <cluster_name> has been unarchived')]
         timeout: 60
     action: unarchive_succ_prompt_message_missing
 unarchive_succ_prompt_message_missing:
@@ -177,27 +177,28 @@ close_error_message_dialog:
             type: submit
         op: click
 
-edit_compute_node_in_dialog:
-  action: clear_original_compute_node_in_dialog
-  action: input_compute_node_in_dialog
+choose_compute_node_in_dialog:
+  action: click_compute_node_dropdown
+  action: select_compute_node_in_dialog
   action: click_apply_button
   action: check_dialog_missing
-clear_original_compute_node_in_dialog:
+click_compute_node_dropdown:
   element:
     selector:
-      xpath: //div[@role='dialog' and @aria-label='Scale Cluster']//form/div[@class='form-group']/input[@id='nodes_compute' and @value='<orignal_compute_node_number>']
-    op: clear
-input_compute_node_in_dialog:
+      xpath: //select[@name='nodes_compute']
+    op: click
+select_compute_node_in_dialog:
   element:
     selector:
-      id: nodes_compute
-    type: input
-    op: send_keys <new_compute_nodes_number>
+      xpath: //select[@name='nodes_compute']//option[text()='<compute_node_number>']
+    timeout: 50
+    op: click
 check_dialog_missing:
   element:
     selector:
       xpath: //div[@class='pf-c-backdrop']/div[@class='pf-l-bullseye']
     missing: true
+    timeout: 30
 check_active_add_url_button:
   element: &active_add_url_button
     selector:
@@ -211,11 +212,13 @@ customer_cloud_subscription_prompt_message_loaded:
         - selector:
             xpath: //h1[text()='Customer Cloud Subscription']
         - selector:
-            text: "This billing option will transfer the resources associated with this cluster to your AWS account, allowing you to take advantage of the discounts you have already negotiated with AWS."
+            text: "With this subscription option, the cluster will be provisioned in an AWS account owned by you or your company. This allows you to pay AWS directly for public cloud costs, leveraging your existing relationship."
         - selector:
             xpath: //h3[text()='Important'] 
         - selector:
-            text: "In order for the account transfer to succeed, you must ensure the following:"
+            text: "In order for the cluster provisioning to succeed, you must ensure the following:"
+        - selector:
+            xpath: //*[contains(text(),"Your AWS account has no services deployed in it.")]
         - selector:
             text: "Your AWS account has an Enterprise Support Plan attached."
         - selector:
@@ -230,8 +233,7 @@ customer_cloud_subscription_prompt_message_loaded:
             xpath: //a[@href='https://www.openshift.com/dedicated/byoc' and text()='documentation.']
         - selector:
             xpath: //div[text()[1]='Refer to the']
-        #- selector:
-        #    xpath: //div[text()[2]='for more detail around the requirements for Customer Cloud Subscription.']
+
 close_customer_cloud_subscription_prompt_message:
     action: customer_cloud_subscription_prompt_message_loaded
     element:

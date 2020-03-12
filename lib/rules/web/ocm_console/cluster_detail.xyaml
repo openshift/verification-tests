@@ -106,10 +106,11 @@ check_desired_compute_nodes:
   element:
     selector:
       xpath: //div[@class='pf-c-card__body']//dt[text()='Desired Nodes']/following-sibling::dd[1]/dl/dt[text()='Compute:']/following-sibling::dd[text()='<desired_compute_nodes>']
+    timeout: 50
 scale_cluster_from_cluster_detail_page:
   action: cluster_detail_page_loaded
   action: go_to_scale_cluster_dialog_on_cluster_detail_page
-  action: edit_compute_node_in_dialog
+  action: choose_compute_node_in_dialog
 check_actions_items_of_ready_osd_cluster_on_detail:
   action: check_edit_display_name_button_in_dropdown
   action: check_scale_cluster_button_in_dropdown
@@ -136,8 +137,6 @@ check_disconnected_cluster_overview_information:
             xpath: //div[@class='pf-l-grid']/div[1]//dt[4][text()='Provider']/../dd[4][text()='N/A']
         - selector:
             xpath: //div[@class='pf-l-grid']/div[2]//dt[1][text()='Status']/../dd[1][text()='disconnected']
-        - selector:
-            xpath: //div[@class='pf-l-grid']/div[2]//dt[5][text()='Support Level']/../dd[5][text()='Self-Support']
     action:
         if_param: vcpu_type
         ref: total_vCPU_loaded

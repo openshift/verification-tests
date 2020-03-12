@@ -106,3 +106,20 @@ Feature: Testing registry
     And the "myimage2" image stream was created
     And the "myimage1" image stream becomes ready
     And the "myimage2" image stream becomes ready
+
+  # @author xiuwang@redhat.com
+  # @case_id OCP-18995
+  @admin
+  Scenario: Mirror image to another registry via 'oc image mirror'
+    Given I have a project
+    Given docker config for default image registry is stored to the :dockercfg_file clipboard
+    Then I run the :image_mirror client command with:
+      | source_image | centos/ruby-22-centos7:latest                              |
+      | dest_image   | <%= cb.integrated_reg_ip %>/<%= project.name %>/myimage:v1 |
+      | a            | <%= cb.dockercfg_file %>                                   | 
+      | insecure     | true                                                       |
+    And the step should succeed
+    And the output should match:
+      | Mirroring completed in |
+    Given the "myimage" image stream was created
+    And the "myimage" image stream becomes ready

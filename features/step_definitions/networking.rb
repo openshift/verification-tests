@@ -436,7 +436,7 @@ end
 Given /^the cluster network plugin type and version and stored in the clipboard$/ do
   ensure_admin_tagged
   _host = node.host
-  
+
   step %Q/I run command on the node's sdn pod:/, table([["ovs-ofctl"],["dump-flows"],["br0"],["-O"],["openflow13"]])
   unless @result[:success]
     raise "Unable to execute ovs command successfully. Check your command."
@@ -668,7 +668,7 @@ Given /^I run command on the#{OPT_QUOTED} node's sdn pod:$/ do |node_name, table
   network_cmd = table.raw
   node_name ||= node.name
   _admin = admin
-   @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}") 
+   @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
   if @result[:response] == "OpenShiftSDN"
      sdn_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
        pod.node_name == node_name
@@ -680,11 +680,11 @@ Given /^I run command on the#{OPT_QUOTED} node's sdn pod:$/ do |node_name, table
        pod.node_name == node_name
      }.first
      cache_resources ovnkube_pod
-     @result = ovnkube_pod.exec(network_cmd, as: admin)   
+     @result = ovnkube_pod.exec(network_cmd, as: admin)
    end
   raise "Failed to execute network command!" unless @result[:success]
 end
- 
+
 Given /^I restart the ovs pod on the#{OPT_QUOTED} node$/ do | node_name |
   ensure_admin_tagged
   ensure_destructive_tagged
@@ -714,7 +714,7 @@ Given /^the default interface on nodes is stored in the#{OPT_SYM} clipboard$/ do
     step %Q/I run command on the node's sdn pod:/, table("| bash | -c | ip route show default |")
   else
     raise "unknown networkType"
-  end 
+  end
   cb[cb_name] = @result[:response].split("\n").first.split(/\W+/)[7]
   logger.info "The node's default interface is stored in the #{cb_name} clipboard."
 end
@@ -805,12 +805,13 @@ Given /^a DHCP service is configured for interface "([^"]*)" on "([^"]*)" node w
   host = node.host
   dhcp_status_timeout = 30
   #Following will take dnsmasq backup and append curl contents to the dnsmasq config after
-  @result = host.exec_admin("cp /etc/dnsmasq.conf /etc/dnsmasq.conf.bak;curl https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/dnsmasq_for_testbridge.conf | sed s/testbr1/#{br_inf}/g | sed s/88.8.8.100,88.8.8.110,24h/#{add_lease}/g >> /etc/dnsmasq.conf;systemctl restart dnsmasq --now")
+  @result = host.exec_admin("cp /etc/dnsmasq.conf /etc/dnsmasq.conf.bak;curl https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/dnsmasq_for_testbridge.conf | sed s/testbr1/#{br_inf}/g | sed s/88.8.8.100,88.8.8.110,24h/#{add_lease}/g > /etc/dnsmasq.conf;systemctl restart dnsmasq --now")
   raise "Failed to configure dnsmasq service" unless @result[:success]
   wait_for(dhcp_status_timeout) {
     if host.exec_admin("systemctl status dnsmasq")[:response].include? "running"
       logger.info("dnsmasq service is running fine")
     else
+      host.exec_admin("cp /etc/dnsmasq.conf.bak /etc/dnsmasq.conf && systemctl restart dnsmasq --now")
       raise "Failed to start dnsmasq service. Check you cluster health manually"
     end
   }
@@ -915,9 +916,57 @@ Given /^I store "([^"]*)" node's corresponding default networkType pod name in t
   else
      app="app=ovnkube-node"
      project_name="openshift-ovn-kubernetes"
-  end   
+  end
   cb[cb_pod_name] = BushSlicer::Pod.get_labeled(app, project: project(project_name, switch: false), user: admin) { |pod, hash|
     pod.node_name == node_name
   }.first.name
   logger.info "node's corresponding networkType pod name is stored in the #{cb_pod_name} clipboard."
 end
+
+
+Given /^I store the ovnkube-master#{OPT_QUOTED} leader pod in the#{OPT_SYM} clipboard$/ do |ovndb, cb_leader_name|
+  ensure_admin_tagged
+  cb_leader_name ||= "#{ovndb}_leader"
+  case ovndb
+  when "north"
+    ovsappctl_cmd = %w(ovs-appctl -t /var/run/ovn/ovnnb_db.ctl cluster/status OVN_Northbound)
+  else
+    ovsappctl_cmd = %w(ovs-appctl -t /var/run/ovn/ovnsb_db.ctl cluster/status OVN_Southbound)
+  end
+
+  sdn_pod = BushSlicer::Pod.get_labeled("app=ovnkube-master", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
+    true
+  }.first
+  # do we need to cache this here?
+  cache_resources sdn_pod
+  @result = sdn_pod.exec(*ovsappctl_cmd, as: admin, container: "northd")
+  raise "Failed to execute network command!" unless @result[:success]
+  cluster_state = @result[:response].strip.delete "\r"
+  # for some reason "oc rsh" output contains CR, so we have to remove them
+  leader_id = cluster_state.match(/Leader:\s+(\S+)/)
+  servers = cluster_state.match(/Servers:\n(.*)/m)
+  leader_line = servers[1].lines.find { |line| line.include? "(" + leader_id[1] }
+  splits = leader_line.match(/\((\S+)[^:]+:([^:]+):(\d+)\)/)
+  leader_node = splits.captures[1]
+  leader_pod = BushSlicer::Pod.get_labeled("app=ovnkube-master", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
+    pod.node_name == leader_node || pod.ip == leader_node
+  }.first
+  cache_resources leader_pod
+  cb[cb_leader_name] = leader_pod
+end
+
+
+Given /^the OVN "([^"]*)" database is killed on the "([^"]*)" node$/ do |ovndb, node_name|
+  ensure_admin_tagged
+  node = node(node_name)
+  host = node.host
+  case ovndb
+  when "north"
+    kill_match = "OVN_Northbound"
+  else
+    kill_match = "OVN_Southbound"
+  end
+  @result = host.exec_admin("pkill -f #{kill_match}")
+  raise "Failed to kill the #{ovndb} database daemon" unless @result[:success]
+end
+

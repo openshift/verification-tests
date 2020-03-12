@@ -14,6 +14,8 @@ goto_one_project_page:
   url: k8s/cluster/projects/<project_name>
 goto_one_project_dashboard_page:
   action: goto_one_project_page
+goto_cluster_dashboards_page:
+  url: /dashboards
 
 #api explore
 goto_api_explore_page:
@@ -220,4 +222,12 @@ goto_all_machines_page:
 goto_all_machine_sets_page: 
   url: k8s/all-namespaces/machine.openshift.io~v1beta1~MachineSet
 
+#ImageManifestVuln
+goto_ImageManifestVuln_list_page:
+  url: k8s/ns/<project_name>/secscan.quay.redhat.com~v1alpha1~ImageManifestVuln
+goto_one_ImageManifestVuln_page:
+  url: k8s/ns/<project_name>/secscan.quay.redhat.com~v1alpha1~ImageManifestVuln/<manifest>
 
+# global config
+goto_alertmanagerconfig_page:
+  url: monitoring/alertmanagerconfig
