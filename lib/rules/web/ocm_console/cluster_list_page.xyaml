@@ -12,9 +12,7 @@ check_cluster_list_page_without_cluster:
         - selector:
             xpath: //div[@class='pf-c-empty-state__body' and contains(., 'create your first cluster')]
         - selector:
-            xpath: //a[contains(@href, '/openshift/create')]/button[text()='Create cluster']
-        - selector:
-            xpath: //a[contains(@href, '/openshift/register')]/button[text()='Register cluster']
+            xpath: //a[contains(@href, '/openshift/register')]/button[@class='pf-c-button pf-m-link' and text()='Register disconnected cluster']
         - selector:
             xpath: //a[contains(@href, '/openshift/archived')]/button[text()='View archived clusters']
 
