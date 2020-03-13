@@ -366,7 +366,7 @@ Feature: SDN related networking scenarios
     When I run command on the "<%= node.name %>" node's sdn pod:
       | bash | -c | ovs-ofctl dump-flows br-int \| wc -l |
     Then the step should succeed
-    And the expression should be true> @result[:response].match(/\d*/)[0].to_i> 0
+    And the expression should be true> @result[:response].match(/\d*/)[0].to_i > 0
     #Checking final iteration post all above iterations passed. In this iteration we expect CNi file to be created
     And I run commands on the host:
       | ls /var/run/multus/cni/net.d/ovn-kubernetes.conf |
