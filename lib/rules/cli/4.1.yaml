@@ -155,16 +155,35 @@
     :annotation-selector: --project-annotation-selector=<value>
     :hard: --hard=<value>
     :label-selector: --project-label-selector=<value>
+:create_clusterrole:
+  :cmd: oc create clusterrole <name>
+  :options:
+    :resource: --resource=<value>
+    :resource-name: --resource-name=<value>
+    :verb: --verb=<value>
 :create_clusterrolebinding:
   :cmd: oc create clusterrolebinding <name>
   :options:
     :clusterrole: --clusterrole=<value>
+    :group: --group=<value>
+    :serviceaccount: --serviceaccount=<value>
 :create_configmap:
   :cmd: oc create configmap
   :options:
     :from_file: --from-file=<value>
     :from_literal: --from-literal=<value>
     :name: <value>
+:create_deployment:
+  :cmd: oc create deployment <name>
+  :options:
+    :allow_missing_template_keys: --allow-missing-template-keys=<value>
+    :dry_run: --dry-run=<value>
+    :generator: --generator=<value>
+    :image: --image=<value>
+    :output: --output <value>
+    :save_config: --save-config=<value>
+    :template: --template=<value>
+    :validate: --validate=<value>
 :create_namespace:
   :cmd: oc create namespace <name>
 :create_quota:
@@ -256,6 +275,7 @@
   :cmd: oc debug <global_options>
   :options:
      :c: -c <value>
+     :dry_run: --dry-run
      :exec_command: <value>
      :exec_command_arg: <value>
      :f: -f <value>
@@ -1098,21 +1118,6 @@
     :raw: --raw
 :oadm_cordon_node:
   :cmd: oc adm cordon <node_name>
-:oadm_diagnostics:
-  :cmd: oc adm diagnostics
-  :options:
-    :cluster-context: --cluster-context=<value>
-    :config: --config=<value>
-    :context: --context=<value>
-    :diaglevel: --diaglevel=<value>
-    :diagnostics_name: <value>
-    :host: --host=<value>
-    :images: --images=<value>
-    :latest-images: --latest-images=<value>
-    :loglevel: --loglevel=<value>
-    :master-config: --master-config=<value>
-    :node-config: --node-config=<value>
-    :prevent-modification: --prevent-modification=<value>
 :oadm_drain:
   :cmd: oc adm drain
   :options:
@@ -1166,6 +1171,11 @@
     :description: --description=<value>
     :display_name: --display-name=<value>
     :node_selector: --node-selector=<value>
+:oadm_node_logs:
+  :cmd: oc adm node-logs <options>
+  :options:
+    :path: --path=<value>
+    :role: --role=<value>    
 :oadm_pod_network_join_projects:
   :cmd: oc adm pod-network join-projects
   :options:
@@ -1266,14 +1276,6 @@
     :prune_over_size_limit: --prune-over-size-limit=<value>
     :prune_registry: --prune-registry=<value>
     :registry_url: --registry-url=<value>
-:oadm_registry:
-  :cmd: oc adm registry
-  :options:
-    :daemonset: --daemonset=<value>
-    :images: --images=<value>
-    :mount_host: --mount-host=<value>
-    :ports: --ports=<value>
-    :serviceaccount: --service-account=<value>
 :oadm_router:
   :cmd: oc adm router <name>
   :options:

@@ -1,0 +1,13 @@
+check_openshift_pipeline_release_link:
+  params:
+    text: OpenShift Pipelines based on Tekton
+    link_url: https://openshift.github.io/pipelines-docs/docs/
+  action: check_link_and_text
+check_tutorial_link_of_openshift_pipeline:
+  params:
+    text: Try the OpenShift Pipelines tutorial
+    link_url: https://github.com/openshift/pipelines-tutorial/
+  action: check_link_and_text
+check_links_in_pipeline_deprecation_note:
+  action: check_openshift_pipeline_release_link
+  action: check_tutorial_link_of_openshift_pipeline

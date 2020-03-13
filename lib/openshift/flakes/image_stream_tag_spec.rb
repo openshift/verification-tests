@@ -37,6 +37,10 @@ module BushSlicer
       return @from_ref
     end
 
+    def annotations
+      raw['annotations']
+    end
+
     # @see #from_ref about the special processing we are doing here
     def from
       from_ref.resource(owner)

@@ -1,7 +1,6 @@
 Feature: some storage related scenarios
 
   # @author mcurlej@redhat.com
-  # @case_id none
   @admin
   Scenario: test openstack rest api
     Given I have a project

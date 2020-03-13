@@ -126,12 +126,12 @@ Feature: oc_secrets.feature
     And  the "tmpbar" file is created with the following lines:
       | somecontent |
     Then the step should succeed
-    When I run the :secrets client command with:
-      | action | new                  |
-      | name   | <%= project.name %>1 |
-      | source | tmpfoo               |
-      | source | tmpbar               |
-      | n      | <%= project.name %>  |
+    When I run the :create_secret client command with:
+      | secret_type | generic              |
+      | name        | <%= project.name %>1 |
+      | from_file   |  tmpfoo              |
+      | from_file   |  tmpbar              |
+      | n           | <%= project.name %>  |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | secret               |
@@ -147,12 +147,12 @@ Feature: oc_secrets.feature
     And the "tmpfoler2/tmpfile2" file is created with the following lines:
       | somecontent |
     Then the step should succeed
-    When I run the :secrets client command with:
-      | action | new                  |
-      | name   | <%= project.name %>2 |
-      | source | tmpfoler1            |
-      | source | tmpfoler2            |
-      | n      | <%= project.name %>  |
+    When I run the :create_secret client command with:
+      | secret_type | generic              |
+      | name        | <%= project.name %>2 |
+      | from_file   |  tmpfoler1           |
+      | from_file   |  tmpfoler2           |
+      | n           | <%= project.name %>  |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | secret               |

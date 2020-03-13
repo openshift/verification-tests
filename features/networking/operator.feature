@@ -20,7 +20,7 @@ Feature: Operator related networking scenarios
   @destructive
   Scenario: The clusteroperator should be able to reflect the correct version field post bad network operator config
 
-    Given the master version >= "4.0"
+    Given the master version >= "4.1"
     #Getting OCP version
     Given evaluation of `cluster_version('version').version` is stored in the :ocp_version clipboard
     #Making sure that operator is not Degraded before proceesing further steps
@@ -60,7 +60,7 @@ Feature: Operator related networking scenarios
   # @case_id OCP-22201
   @admin
   Scenario: Should have a clusteroperator object created under config.openshift.io api group for network-operator
-    Given the master version >= "4.0"
+    Given the master version >= "4.1"
     # Check the operator object has version
     Given the expression should be true> cluster_operator('network').versions.length > 0
     # Check the operator object has status for Degraded|Progressing|Available
@@ -74,7 +74,7 @@ Feature: Operator related networking scenarios
   @admin
   @destructive
   Scenario: The clusteroperator should be able to reflect the realtime status of the network when the config has problem
-    Given the master version >= "4.0"
+    Given the master version >= "4.1"
     # Check that the operator is not Degraded
     Given the expression should be true> cluster_operator('network').condition(type: 'Degraded')['status'] == "False"
     # Copy the value of the networktype for backup
@@ -125,7 +125,7 @@ Feature: Operator related networking scenarios
   @admin
   @destructive
   Scenario: The clusteroperator should be able to reflect the realtime status of the network when a new node added
-    Given the master version >= "4.0"
+    Given the master version >= "4.1"
     # Check that the operator is not progressing
     Given the expression should be true> cluster_operator('network').condition(type: 'Progressing')['status'] == "False"
 
@@ -159,6 +159,7 @@ Feature: Operator related networking scenarios
       | replicas | <%= cb.original_replicas %> |
       | n        | openshift-machine-api       |
     Then the step should succeed
+    Then the machineset should have expected number of running machines
     """
 
     # Check that the status of Progressing is truned to True during the new node provisioning

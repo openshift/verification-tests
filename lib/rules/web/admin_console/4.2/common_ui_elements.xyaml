@@ -67,6 +67,14 @@ click_tab:
       xpath: //ul[contains(@class,'nav__menu')]//a[text()='<tab_name>']
     op: click
     timeout: 20
+click_environment_tab:
+  params:
+    tab_name: Environment
+  action: click_tab
+click_overview_tab:
+  params:
+    tab_name: Overview
+  action: click_tab
 click_radio_input:
   element:
     selector:
@@ -269,15 +277,19 @@ click_link_with_text:
     selector:
       xpath: //a[contains(.,'<text>') and contains(@href,'<link_url>')]
     op: click
+click_kebab_item:
+  element:
+    selector:
+      xpath: //button[contains(@class,'pf-c-dropdown__menu-item') and not(contains(@class,'pf-m-disabled')) and text()='<kebab_item>']
+    op: click
 click_kebab_of_one_resource:
   elements:
   - selector:
       xpath: //*[text()='<resource_name>']//ancestor::tr//td[contains(@class,'dropdown-kebab-pf')]
     op: click
-    timeout: 30
 click_one_operation_in_kebab:
   action: click_kebab_of_one_resource
-  action: click_button
+  action: click_kebab_item
 click_secondary_menu:
   elements:
   - selector:
