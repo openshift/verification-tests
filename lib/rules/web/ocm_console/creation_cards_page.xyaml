@@ -15,8 +15,6 @@ check_creation_cards_page:
         - selector:
             xpath: //li[@class='pf-c-breadcrumb__item' and text()='Create']
         - selector:
-            xpath: //img[@class='openshift-logo-page-title' and @alt='OpenShift']
-        - selector:
             xpath: //h1[@class='pf-c-title pf-m-2xl ocm-page-title' and text()='Create a Cluster to Get Started']
         - selector:
             xpath: //a[@class='infra-card pf-c-card create-cluster-card' and contains(@href, '/openshift/install')]
@@ -39,3 +37,11 @@ click_create_ocp_button:
     element:
         selector:
             xpath: //a[@class='infra-card pf-c-card create-cluster-card' and contains(@href, '/openshift/install')]
+
+check_osd_button_disable:
+    elements:
+        - selector:
+            xpath: //article[@class='pf-c-card infra-card create-cluster-card card-disabled']
+          op: hover
+        - selector:
+            xpath: //div[@class='tippy-popper' and contains(., 'You do not have quota for this option.')]

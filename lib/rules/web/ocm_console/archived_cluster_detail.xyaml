@@ -3,7 +3,7 @@ archived_cluster_detail_page_loaded:
         - selector:
             xpath: //a[@class='pf-c-breadcrumb__link' and text()='Clusters']
         - selector:
-            xpath: //a[@class='pf-c-breadcrumb__link' and text()='Archived Clusters']
+            xpath: //a[@class='pf-c-breadcrumb__link' and text()='Archived clusters']
         - selector:
             xpath: //button[@class='pf-c-button pf-m-secondary' and text()='Unarchive']
         - selector:
