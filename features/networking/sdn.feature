@@ -369,5 +369,5 @@ Feature: SDN related networking scenarios
     And the expression should be true> @result[:response].match(/\d*/)[0].to_i > 0
     #Checking final iteration post all above iterations passed. In this iteration we expect CNi file to be created
     And I run commands on the host:
-      | ls /var/run/multus/cni/net.d/ovn-kubernetes.conf |
-    Then the step should succeed
+      | ls -l /var/run/multus/cni/net.d/10-ovn-kubernetes.conf |
+    Then the output should contain "10-ovn-kubernetes.conf"
