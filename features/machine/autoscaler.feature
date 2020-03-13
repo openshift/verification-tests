@@ -11,7 +11,7 @@ Feature: Cluster Autoscaler Tests
     Given I store the number of machines in the :num_to_restore clipboard
     And admin ensures node number is restored to "<%= cb.num_to_restore %>" after scenario
 
-    Given I clone a machineset named "machineset-clone"
+    Given I clone a machineset named "machineset-clone-28108"
 
     # Create clusterautoscaler
     Given I use the "openshift-machine-api" project
@@ -79,7 +79,7 @@ Feature: Cluster Autoscaler Tests
     And admin ensures node number is restored to "<%= cb.num_to_restore %>" after scenario
 
     Given I use the "openshift-machine-api" project
-    Given I clone a machineset named "machineset-clone"
+    Given I clone a machineset named "machineset-clone-21517"
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/cloud/machine-autoscaler.yml" replacing paths:
       | ["metadata"]["name"]               | maotest                 |
       | ["spec"]["minReplicas"]            | 1                       |
@@ -116,62 +116,62 @@ Feature: Cluster Autoscaler Tests
     And admin ensures node number is restored to "<%= cb.num_to_restore %>" after scenario
 
     Given I use the "openshift-machine-api" project
-    Given I clone a machineset named "machineset-clone0"
-    And evaluation of `machine_set.name` is stored in the :machineset_clone0_name clipboard
-    Given I clone a machineset named "machineset-clone1"
-    And evaluation of `machine_set.name` is stored in the :machineset_clone1_name clipboard
+    Given I clone a machineset named "machineset-clone-22102"
+    And evaluation of `machine_set.name` is stored in the :machineset_clone_22102 clipboard
+    Given I clone a machineset named "machineset-clone-22102-2"
+    And evaluation of `machine_set.name` is stored in the :machineset_clone_22102_2 clipboard
 
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/cloud/machine-autoscaler.yml" replacing paths:
       | ["metadata"]["name"]               | maotest0                         |
-      | ["spec"]["scaleTargetRef"]["name"] | <%= cb.machineset_clone0_name %> |
+      | ["spec"]["scaleTargetRef"]["name"] | <%= cb.machineset_clone_22102 %> |
     Then the step should succeed
     And admin ensures "maotest0" machineautoscaler is deleted after scenario
     When I run the :patch admin command with:
-      | resource      | machineautoscaler                                                       |
-      | resource_name | maotest0                                                                |
-      | p             | {"spec":{"scaleTargetRef":{"name":"<%= cb.machineset_clone1_name %>"}}} |
-      | type          | merge                                                                   |
+      | resource      | machineautoscaler                                                         |
+      | resource_name | maotest0                                                                  |
+      | p             | {"spec":{"scaleTargetRef":{"name":"<%= cb.machineset_clone_22102_2 %>"}}} |
+      | type          | merge                                                                     |
     Then the step should succeed
     When I run the :describe admin command with:
       | resource | machineautoscaler |
       | name     | maotest0          |
     Then the step should succeed
-    And the output should match "Name:\s+<%= cb.machineset_clone1_name %>"
+    And the output should match "Name:\s+<%= cb.machineset_clone_22102_2 %>"
     When I run the :describe admin command with:
       | resource | machineset                       |
-      | name     | <%= cb.machineset_clone0_name %> |
+      | name     | <%= cb.machineset_clone_22102 %> |
     Then the step should succeed
     And the output should match "Annotations:\s+<none>"
     When I run the :describe admin command with:
-      | resource | machineset                       |
-      | name     | <%= cb.machineset_clone1_name %> |
+      | resource | machineset                         |
+      | name     | <%= cb.machineset_clone_22102_2 %> |
     Then the step should succeed
     And the output should match "Annotations:\s+autoscaling.openshift.io/machineautoscaler: openshift-machine-api/maotest0"
 
     When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/cloud/machine-autoscaler.yml" replacing paths:
       | ["metadata"]["name"]               | maotest1                         |
-      | ["spec"]["scaleTargetRef"]["name"] | <%= cb.machineset_clone0_name %> |
+      | ["spec"]["scaleTargetRef"]["name"] | <%= cb.machineset_clone_22102 %> |
     Then the step should succeed
     And admin ensures "maotest1" machineautoscaler is deleted after scenario
     When I run the :patch admin command with:
       | resource      | machineautoscaler                                                       |
       | resource_name | maotest0                                                                |
-      | p             | {"spec":{"scaleTargetRef":{"name":"<%= cb.machineset_clone0_name %>"}}} |
+      | p             | {"spec":{"scaleTargetRef":{"name":"<%= cb.machineset_clone_22102 %>"}}} |
       | type          | merge                                                                   |
     Then the step should succeed
     When I run the :describe admin command with:
       | resource | machineautoscaler |
       | name     | maotest0          |
     Then the step should succeed
-    And the output should match "Name:\s+<%= cb.machineset_clone0_name %>"
+    And the output should match "Name:\s+<%= cb.machineset_clone_22102 %>"
     When I run the :describe admin command with:
       | resource | machineset                       |
-      | name     | <%= cb.machineset_clone0_name %> |
+      | name     | <%= cb.machineset_clone_22102 %> |
     Then the step should succeed
     And the output should match "Annotations:\s+autoscaling.openshift.io/machineautoscaler: openshift-machine-api/maotest1"
     When I run the :describe admin command with:
-      | resource | machineset                       |
-      | name     | <%= cb.machineset_clone1_name %> |
+      | resource | machineset                         |
+      | name     | <%= cb.machineset_clone_22102_2 %> |
     Then the step should succeed
     And the output should match "Annotations:\s+<none>"
 

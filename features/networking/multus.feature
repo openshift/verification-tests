@@ -1055,3 +1055,59 @@ Feature: Multus-CNI related scenarios
     Then the output should contain:
       | default via 22.2.2.254 dev net1  |
 
+  # @author weliang@redhat.com
+  # @case_id OCP-25917
+  @admin
+  Scenario: Multus Telemetry Adds capability to track usage of network attachment definitions
+    # Make sure that the multus is enabled
+    Given the multus is enabled on the cluster
+    Given I store the masters in the :master clipboard
+    When I run the :get admin command with:
+      | resource        | pods                                     |
+      | fieldSelector   | spec.nodeName=<%= cb.master[0].name %>   |
+      | n               | openshift-multus                         |
+      | output          | json                                     |
+    Then the step should succeed
+    And evaluation of `@result[:parsed]['items'][0]['metadata']['name']` is stored in the :pod_name clipboard
+
+    When admin executes on the "<%=cb.pod_name%>" pod:
+      | /usr/bin/curl | localhost:9091/metrics |
+    Then the output should contain:
+      | network_attachment_definition_instances{networks="any"} 0 |  
+
+    # Create the net-attach-def via cluster admin
+    Given I have a project
+    And evaluation of `project.name` is stored in the :usr_project clipboard
+
+    When I run the :create admin command with:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/runtimeconfig-def-mac.yaml                      |
+      | n | <%= project.name %> |
+    Then the step should succeed
+
+    # Create a pod absorbing above net-attach-def
+    When I run the :create client command with:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/runtimeconfig-pod-mac.yaml |
+      | n | <%= project.name %>                                                                                                      |
+    Then the step should succeed
+    And the pod named "runtimeconfig-pod-mac" becomes ready
+
+    # Track usage of network attachment definitions
+    Given admin uses the "openshift-multus" project
+    When admin executes on the "<%=cb.pod_name%>" pod:
+      | /usr/bin/curl | localhost:9091/metrics |
+    Then the output should contain:
+      | network_attachment_definition_instances{networks="any"} 1     | 
+      | network_attachment_definition_instances{networks="macvlan"} 1 |
+   
+    # Delete created pod and svc
+    Given I switch to the first user
+    Given I ensure "runtimeconfig-pod-mac" pod is deleted from the "<%= cb.usr_project%>" project
+
+    # Track usage of network attachment definitions
+    Given admin uses the "openshift-multus" project
+    When admin executes on the "<%=cb.pod_name%>" pod:
+      | /usr/bin/curl | localhost:9091/metrics |
+    Then the output should contain:
+      | network_attachment_definition_instances{networks="any"} 0     |
+      | network_attachment_definition_instances{networks="macvlan"} 0 |
+
