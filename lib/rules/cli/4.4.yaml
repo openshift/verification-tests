@@ -166,6 +166,7 @@
   :options:
     :clusterrole: --clusterrole=<value>
     :group: --group=<value>
+    :serviceaccount: --serviceaccount=<value>
 :create_configmap:
   :cmd: oc create configmap
   :options:
