@@ -1059,7 +1059,7 @@ Feature: Multus-CNI related scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-22504
   @admin
-  Scenario: The multus adminssion controller should be able to detect that the pod is using net-attach-def in other namespaces when the isolation is enabled
+  Scenario: The multus admission controller should be able to detect that the pod is using net-attach-def in other namespaces when the isolation is enabled
     Given I create 2 new projects
     # Create the net-attach-def via cluster admin
     When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml" replacing paths:
@@ -1097,8 +1097,9 @@ Feature: Multus-CNI related scenarios
     And I run commands on the host:
       | ip addr show <%= cb.default_interface %> |
     Then the step should succeed
-    And evaluation of `@result[:response].match(/\w{2}:\w{2}:\w{2}:\w{2}:\w{2}:\w{2}/)[0]` is stored in the :default_interface_mac clipboard
+    And evaluation of `@result[:response].match(/\h+:\h+:\h+:\h+:\h+:\h+/)[0]` is stored in the :default_interface_mac clipboard
     # Create the net-attach-def via cluster admin
+    And I pry
     Given I have a project
     When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/ipvlan-host-local.yaml" replacing paths:
       | ["metadata"]["name"]      | myipvlan76 											      								            |
@@ -1115,10 +1116,10 @@ Feature: Multus-CNI related scenarios
     Then the step should succeed
     And the pod named "pod1" becomes ready
     When I execute on the pod:
-      | /usr/sbin/ifconfig | net1 |
+      | bash | -c | ip a show net1 |
     Then the step should succeed
     And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod1_net1_ip clipboard
-    And evaluation of `@result[:response].match(/\w{2}:\w{2}:\w{2}:\w{2}:\w{2}:\w{2}/)[0]` is stored in the :pod1_net1_mac clipboard
+    And evaluation of `@result[:response].match(/\h+:\h+:\h+:\h+:\h+:\h+/)[0]` is stored in the :pod1_net1_mac clipboard
     And the expression should be true> cb.pod1_net1_mac==cb.default_interface_mac
     
     #Creating pod2 absorbing above net-attach-def
@@ -1129,9 +1130,9 @@ Feature: Multus-CNI related scenarios
     Then the step should succeed
     And the pod named "pod2" becomes ready
     When I execute on the pod:
-      | /usr/sbin/ifconfig | net1 |
+      | bash | -c | ip a show net1 |
     Then the step should succeed
     And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod2_net1_ip clipboard
-    And evaluation of `@result[:response].match(/\w{2}:\w{2}:\w{2}:\w{2}:\w{2}:\w{2}/)[0]` is stored in the :pod2_net1_mac clipboard
+    And evaluation of `@result[:response].match(/\h+:\h+:\h+:\h+:\h+:\h+/)[0]` is stored in the :pod2_net1_mac clipboard
     And the expression should be true> cb.pod2_net1_mac==cb.default_interface_mac
     And the expression should be true> !(cb.pod2_net1_ip==cb.pod1_net1_ip)
