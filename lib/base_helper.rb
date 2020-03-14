@@ -243,7 +243,14 @@ module BushSlicer
 
       def last_second_of_month(time=nil)
         time ||= Time.now
-        return (Time.new(time.year, time.month + 1) - 1)
+        if time.month == 12
+          next_month = 1
+          target_year = time.year + 1
+        else
+          next_month = time.month + 1
+          target_year = time.year
+        end
+        return (Time.new(target_year, next_month) - 1)
       end
 
       # supports only sane camel case strings
