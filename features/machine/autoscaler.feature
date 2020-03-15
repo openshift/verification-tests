@@ -35,6 +35,7 @@ Feature: Cluster Autoscaler Tests
     When I run the :create admin command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/cloud/autoscaler-auto-tmpl.yml |
     Then the step should succeed
+    And admin ensures "workload" job is deleted from the "openshift-machine-api" project after scenario
 
     # Verify machineset has scaled
     Given I wait up to 60 seconds for the steps to pass:

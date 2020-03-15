@@ -37,8 +37,8 @@ Then(/^the machineset should have expected number of running machines$/) do
 
     # if machine phase is 'Deleting' then wait for its node to disappear
     if machine.phase == 'Deleting'
-      step %Q{I wait for the resource "node" named "#{machine.node_name}" to disappear within 600 seconds}
-      step %Q{I wait for the resource "machine" named "#{machine.name}" to disappear within 600 seconds}
+      step %Q{I wait for the resource "node" named "#{machine.node_name}" to disappear within 900 seconds}
+      step %Q{I wait for the resource "machine" named "#{machine.name}" to disappear within 900 seconds}
       next
     end
 
