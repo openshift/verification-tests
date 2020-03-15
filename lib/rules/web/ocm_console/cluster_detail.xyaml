@@ -50,7 +50,7 @@ cpu_chart_loaded:
 overview_tab_loaded:
     elements:
         - selector:
-            xpath: //section[@id='overviewTabContent']//h2[@class='pf-c-title pf-m-3xl' and text()='Details']
+            xpath: //section[@id='overviewTabContent']//h2[text()='Details']
 
 monitoring_tab_loaded:
     element:

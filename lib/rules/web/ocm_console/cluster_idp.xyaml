@@ -453,3 +453,228 @@ choose_and_check_ipd_info:
     if_param:
       idp_type: OpenID
     ref: check_openid_idp_info
+configure_fake_idp:
+  action: choose_ipd
+  action:
+    if_param:
+      idp_type: GitHub
+    ref: input_fake_github_idp_info
+
+
+input_fake_github_idp_info:
+  action: input_github_idp_name
+  action: input_github_idp_client_id
+  action: input_github_idp_client_secret
+  action: input_github_organizations
+input_github_idp_name:
+  action: clear_idp_name_field
+  element:
+    <<: *idp_name_input
+    op: send_keys <github_name>
+input_github_idp_client_id:
+  element:
+    <<: *client_id_input
+    op: clear
+  element:
+    <<: *client_id_input
+    op: send_keys <github_client_id>
+input_github_idp_client_secret:
+  element:
+    <<: *client_secret_input
+    op: clear
+  element:
+    <<: *client_secret_input
+    op: send_keys <github_client_secret>
+input_github_organizations:
+  element:
+    selector:
+      xpath: //div[@role='dialog']//input[@id='organizations[0].organizations']
+    op: clear
+  element:
+    selector:
+      xpath: //div[@role='dialog']//input[@id='organizations[0].organizations']
+    op: send_keys <github_organizations>
+click_idp_confirm_button:
+  element:
+    <<: *idp_dialog_conifrm_button
+    op: click
+check_first_idp_item:
+  action: check_idp_items_table_title
+  elements:
+  - selector:
+      xpath: //section[@id='accessControlTabContent']//tr/td[@data-label='Name' and text()='<idp_name>']
+  - selector:
+      xpath: //section[@id='accessControlTabContent']//tr/td[@data-label='Type' and text()='<idp_type>']
+  - selector:
+      xpath: //section[@id='accessControlTabContent']//tr/td[@data-label='Auth Callback URL']/button[text()='Copy URL to clipboard']
+check_idp_items_table_title:
+  elements:
+  - selector:
+      xpath: //section[@id='accessControlTabContent']//tr/th[@data-label='Name' and text()='Name']
+  - selector:
+      xpath: //section[@id='accessControlTabContent']//tr/th[@data-label='Type' and text()='Type']
+  - selector:
+      xpath: //section[@id='accessControlTabContent']//tr/th[@data-label='Auth Callback URL' and text()='Auth Callback URL']
+check_empty_idp_info_in_tab:
+  action: check_add_identity_provider_button
+  elements:
+  - selector:
+      xpath: //section[@id='accessControlTabContent']//h1[text()='Identity Providers']
+  - selector:
+      xpath: //section[@id='accessControlTabContent']//p[text()='Configure identity providers to allow users to log into the cluster.']
+  - selector:
+      xpath: //section[@id='accessControlTabContent']//p/a[@href='https://docs.openshift.com/container-platform/latest/authentication/understanding-identity-provider.html' and text()='Learn more.']
+delete_idp:
+  element:
+    selector:
+      xpath: //section[@id='accessControlTabContent']//tr/td[@data-label='Name' and text()='<idp_name>']/following-sibling::td/div/button
+    op: click
+  element:
+    selector:
+      xpath: //section[@id='accessControlTabContent']//tr/td[@data-label='Name' and text()='<idp_name>']/following-sibling::td/div//li/div[text()='Delete']
+    op: click
+  action: check_remove_idp_dialog
+  action: click_remove_idp_button
+  action: check_the_deleted_idp_missing
+check_remove_idp_dialog:
+  elements:
+  - selector:
+      xpath: //div[@class='pf-c-backdrop']//h1[text()='Remove Identity Provider']
+  - selector:
+      xpath: //div[@class='pf-c-backdrop']//p[contains(.,'about to remove the') and contains(.,'identity provider') and contains(.,'from this cluster.')]/b[contains(.,'<idp_name>')]
+  - selector:
+      xpath: //div[@class='pf-c-backdrop']//p[text()='You may lose access to this cluster if you remove this identity provider. At least one identity provider is required to access the cluster.']
+  element: &remove_idp_button
+    selector:
+      xpath: //div[@class='pf-c-backdrop']//button[text()='Remove']
+  element: &cancel_remove_idp_dialog_button
+    selector:
+      xpath: //div[@class='pf-c-backdrop']//button[text()='Cancel']
+click_remove_idp_button:
+  element:
+    <<: *remove_idp_button
+    op: click
+check_the_deleted_idp_missing:
+  element:
+    selector:
+      xpath: //section[@id='accessControlTabContent']//tr/td[@data-label='Name' and text()='<idp_name>']
+    missing: true
+check_github_idp_validations:
+  action: clear_idp_name_field
+  action: click_idp_confirm_button
+  action: check_idp_name_validation
+  action: check_idp_client_id_validation
+  action: check_idp_client_secret_validation
+  action: check_organizations_field_validation
+  action: click_use_teams
+  action: click_idp_confirm_button
+  action: check_teams_field_validation
+check_idp_name_validation:
+  element:
+    selector:
+      xpath: //div[@role='dialog']//div[@id='name-helper' and contains(.,'Name is required')]
+check_idp_client_id_validation:
+  element:
+    selector:
+      xpath: //div[@role='dialog']//div[@id='client_id-helper' and text()=' Field is required']
+check_idp_client_secret_validation:
+  element:
+    selector:
+      xpath: //div[@role='dialog']//div[@id='client_secret-helper' and text()=' Field is required']
+clear_idp_name_field:
+  element:
+    <<: *idp_name_input
+    op: clear
+check_organizations_field_validation:
+  element:
+    selector:
+      xpath: //div[@role='dialog']//input[@id='organizations[0].organizations']/../../following-sibling::div[2][text()='At least one is required.']
+check_teams_field_validation:
+  element:
+    selector:
+      xpath: //div[@role='dialog']//input[@id='teams[0].teams']/../../following-sibling::div[2][text()='At least one is required.']
+check_google_idp_validations:
+  action: clear_idp_name_field
+  action: click_idp_confirm_button
+  action: check_idp_name_validation
+  action: check_idp_client_id_validation
+  action: check_idp_client_secret_validation
+  action: check_google_hosted_domain_validation
+check_google_hosted_domain_validation:
+  element:
+    selector:
+      xpath: //div[@role='dialog']//div[@id='hosted_domain-helper' and text()='Restrict users to a Google Apps domain Field is required']
+check_openid_idp_validations:
+  action: clear_idp_name_field
+  action: click_idp_confirm_button
+  action: check_idp_name_validation
+  action: check_idp_client_id_validation
+  action: check_idp_client_secret_validation
+  action: check_openid_issuer_url_validation
+  action: check_openid_email_validation
+  action: check_openid_name_validation
+  action: check_openid_preferred_username_validation
+check_openid_issuer_url_validation:
+  element:
+    selector:
+      xpath: //div[@role='dialog']//div[@id='issuer-helper' and contains(.,'Issuer URL is required')]
+check_openid_email_validation:
+  element:
+    selector:
+      xpath: //div[@role='dialog']//div[@id='openid_email-helper' and text()=' At least one claim is required']
+check_openid_name_validation:
+  element:
+    selector:
+      xpath: //div[@role='dialog']//div[@id='openid_name-helper' and text()=' At least one claim is required']
+check_openid_preferred_username_validation:
+  element:
+    selector:
+      xpath: //div[@role='dialog']//div[@id='openid_name-helper' and text()=' At least one claim is required']
+check_ldap_idp_validations:
+  action: clear_idp_name_field
+  action: clear_ldap_id_field
+  action: input_ldap_bind_dn
+  action: click_idp_confirm_button
+  action: check_idp_name_validation
+  action: check_ldap_url_validation
+  action: check_ldap_bind_password_validation
+  action: check_ldap_id_validation
+  action: click_the_advanced_options_button
+  action: click_ldap_insecure_option
+  action: check_ldap_ca_file_validation
+  
+clear_ldap_id_field:
+  element:
+    selector: 
+      xpath: //div[@role='dialog']//input[@id='ldap_id[0].ldap_id']
+    op: clear
+input_ldap_bind_dn:
+  element:
+    <<: *ldap_bind_dn_input
+    op: send_keys <ldap_bind_dn>
+click_ldap_insecure_option:
+  element:
+    selector:
+      xpath: //div[@role='dialog']//input[@id='ldap_insecure']
+    op: click
+check_ldap_url_validation:
+  element:
+    selector:
+      xpath: //div[@role='dialog']//div[@id='ldap_url-helper' and contains(.,'Field is required')]
+check_ldap_bind_password_validation:
+  element:
+    selector:
+      xpath: //div[@role='dialog']//div[@id='bind_password-helper' and text()='Password to bind with during the search phase. Field is required']
+check_ldap_id_validation:
+  element:
+    selector:
+      xpath: //div[@role='dialog']//div[@id='ldap_id[0].ldap_id-helper' and text()=' Field is required']
+check_ldap_ca_file_validation:
+  element:
+    selector:
+      xpath: //div[@role='dialog']//span[text()='Browse…']/input[@disabled]/../../following-sibling::div[@id='ldap_ca-helper' and contains(.,'Cannot be used if insecure is set')]
+check_idp_hint_missing:
+  element:
+    selector:
+      xpath: //div[@id='idpHint']/h4[@class='pf-c-alert__title' and contains(text(),'Missing Identity Providers')]
+    missing: true
