@@ -50,7 +50,7 @@ cpu_chart_loaded:
 overview_tab_loaded:
     elements:
         - selector:
-            xpath: //section[@id='overviewTabContent']//h2[@class='pf-c-title pf-m-3xl' and text()='Details']
+            xpath: //section[@id='overviewTabContent']//h2[@class='pf-c-title card-title' and text()='Details']
 
 monitoring_tab_loaded:
     element:
@@ -186,13 +186,13 @@ check_ocp_tab_in_detail_page:
 check_ocp_usage_in_detail_page:
     elements:
         - selector:
-            xpath: //h2[@class='pf-c-title pf-m-3xl' and text()='Resource Usage']
+            xpath: //h2[@class='pf-c-title card-title' and text()='Resource Usage']
         - selector:
             xpath: //p[text()='The cluster currently does not have any metrics data. Try again later.']
 check_ocp_details_in_detail_page:
     elements:
         - selector:
-            xpath: //h2[@class='pf-c-title pf-m-3xl' and text()='Details']
+            xpath: //h2[@class='pf-c-title card-title' and text()='Details']
         - selector:
             xpath: //dl[@class='cluster-details-item left']/dt[text()='Cluster ID']
         - selector:
@@ -267,7 +267,7 @@ check_osd_tab_in_detail_page:
 check_osd_usage_in_detail_page:
     elements:
         - selector:
-            xpath: //h2[@class='pf-c-title pf-m-3xl' and text()='Resource Usage']
+            xpath: //h2[@class='pf-c-title card-title' and text()='Resource Usage']
         - selector:
             xpath: //h4[@class='pf-c-title pf-m-xl metrics-chart' and text()='vCPU']
         - selector:
@@ -277,7 +277,7 @@ check_osd_usage_in_detail_page:
 check_osd_details_in_detail_page:
     elements:
         - selector:
-            xpath: //h2[@class='pf-c-title pf-m-3xl' and text()='Details']
+            xpath: //h2[@class='pf-c-title card-title' and text()='Details']
         - selector:
             xpath: //dl[@class='cluster-details-item left']/dt[text()='Cluster ID']
         - selector:
@@ -349,3 +349,7 @@ check_osd_actions_behind_open_console_button:
             xpath: //button[text()='Delete Cluster']
 close_actions_behind_open_console_button:
     action: expand_actions_behind_open_console_button
+check_edit_subscription_settings_link:
+    element:
+        selector:
+            xpath: //dl[@class='cluster-details-item left']/dd/button[text()='Edit subscription settings']
