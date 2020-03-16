@@ -12,26 +12,20 @@ check_subscriptions_page:
     action: check_subscriptions_page_title
     elements:
         - selector:
-            xpath: //article[@class='pf-c-card']/div[text()='OpenShift Container Platform']
+            xpath: //div[text()='OpenShift Container Platform now uses Subscription Watch to manage subscriptions.']
         - selector:
-            xpath: //article[@class='pf-c-card']/div[text()='The summary of subscription status for all self-managed clusters. Follow the individual links to see the specific clusters in each of the corresponding status.']
-        - selector:
-            xpath: //article[@class='pf-c-card']//h4[text()='You do not have any clusters']
-        - selector:
-            xpath: //article[@class='pf-c-card']//p[text()='Create a cluster to get started.']
-        - selector:
-            xpath: //article[@class='pf-c-card']//a[contains(@href, '/install')]
+            xpath: //a[contains(@href, '/subscriptions/openshift-sw') and text()='Open Subscription Watch']
     elements:
         - selector:
-            xpath: //article[@class='pf-c-card']/div[text()='OpenShift Dedicated']
+            xpath: //div[text()='OpenShift Dedicated']
         - selector:
-            xpath: //article[@class='pf-c-card']/div[text()='The summary of all subscriptions for OpenShift Dedicated purchased by your organization or granted by Red Hat.']
+            xpath: //div[text()='The summary of all subscriptions for OpenShift Dedicated purchased by your organization or granted by Red Hat.']
         - selector:
-            xpath: //article[@class='pf-c-card']//h4[text()='You do not have any quota']
+            xpath: //h4[text()='You do not have any quota']
         - selector:
-            xpath: //article[@class='pf-c-card']//p/a[@href='https://www.openshift.com/products/dedicated/contact/' and text()='Contact sales']
+            xpath: //a[@href='https://www.openshift.com/products/dedicated/contact/' and text()='Contact sales']
         - selector:
-            xpath: //article[@class='pf-c-card']//p[text()='to get started with OpenShift Dedicated.']
+            xpath: //p[text()='to get started with OpenShift Dedicated.']
 check_subscriptions_page_title:
     scripts:
     - command: return document.title=='Subscriptions | Red Hat OpenShift Cluster Manager'

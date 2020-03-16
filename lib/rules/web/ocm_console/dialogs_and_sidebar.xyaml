@@ -56,7 +56,7 @@ click_archive_button:
 archive_succ_promt_message_displayed:
     element: &archive_succ_promt_message
         selector:
-            xpath: //h4[contains(text(),'has been archived')]
+            xpath: //h4[contains(text(),'Cluster <cluster_name> has been archived')]
         timeout: 120
     action: archive_succ_promt_message_missing
 archive_succ_promt_message_missing:
@@ -84,7 +84,7 @@ click_unarchive_button:
 unarchive_succ_prompt_message_displayed:
     element: &unarchive_succ_prompt_message
         selector:
-            xpath: //*[contains(text(),'has been unarchived')]
+            xpath: //*[contains(text(),'Cluster <cluster_name> has been unarchived')]
         timeout: 60
     action: unarchive_succ_prompt_message_missing
 unarchive_succ_prompt_message_missing:
@@ -212,11 +212,13 @@ customer_cloud_subscription_prompt_message_loaded:
         - selector:
             xpath: //h1[text()='Customer Cloud Subscription']
         - selector:
-            text: "This billing option will transfer the resources associated with this cluster to your AWS account, allowing you to take advantage of the discounts you have already negotiated with AWS."
+            text: "With this subscription option, the cluster will be provisioned in an AWS account owned by you or your company. This allows you to pay AWS directly for public cloud costs, leveraging your existing relationship."
         - selector:
             xpath: //h3[text()='Important'] 
         - selector:
-            text: "In order for the account transfer to succeed, you must ensure the following:"
+            text: "In order for the cluster provisioning to succeed, you must ensure the following:"
+        - selector:
+            xpath: //*[contains(text(),"Your AWS account has no services deployed in it.")]
         - selector:
             text: "Your AWS account has an Enterprise Support Plan attached."
         - selector:
@@ -231,8 +233,7 @@ customer_cloud_subscription_prompt_message_loaded:
             xpath: //a[@href='https://www.openshift.com/dedicated/byoc' and text()='documentation.']
         - selector:
             xpath: //div[text()[1]='Refer to the']
-        #- selector:
-        #    xpath: //div[text()[2]='for more detail around the requirements for Customer Cloud Subscription.']
+
 close_customer_cloud_subscription_prompt_message:
   element:
     selector:

@@ -1,3 +1,4 @@
+---
 # :scroll_strategy: 1
 # :hooks:
 #   :click: |-
@@ -21,4 +22,4 @@
 #         end
 #       end
 #     }
-:size: [1960,1280]
+:size: [1280,1024]
