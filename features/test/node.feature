@@ -13,3 +13,7 @@ Feature: test nodes relates steps
     Then the expression should be true> cb.labels_after['testme'] == 'go'
     Then the expression should be true> project.labels.nil?
 
+  @admin
+  Scenario: fips test
+    Given fips is disabled
+    Given fips is enabled
