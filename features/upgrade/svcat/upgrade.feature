@@ -13,7 +13,6 @@ Feature: Service Catalog related scenarios
     Given the status of condition "Degraded" for "service-catalog-apiserver" operator is: False
     Given the status of condition "Progressing" for "service-catalog-apiserver" operator is: False
     Given the status of condition "Available" for "service-catalog-apiserver" operator is: True
-    Given the status of condition "Upgradeable" for "service-catalog-apiserver" operator is: Unknown
     # Check cluster operator svcat-controller status
     Given the "service-catalog-controller-manager" operator version matchs the current cluster version
     Given the status of condition "Degraded" for "service-catalog-controller-manager" operator is: False
