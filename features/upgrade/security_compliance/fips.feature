@@ -4,16 +4,10 @@ Feature: fips enabled verification for upgrade
   @users=upuser1,upuser2
   @admin
   Scenario: FIPS mode checking command works for a cluster with fip mode on
-    #precondition check
-    When I run the :get admin command with:
-      | resource | mc |
-    Then the step should succeed
-    And the output should contain:
-      | 99-master-fips |
-      | 99-worker-fips |
-    
+    Given fips is enabled 
+
     #check whether fips enabled for master node
-    Given I store the masters in the :masters clipboard
+    When I store the masters in the :masters clipboard
     And I use the "<%= cb.masters[0].name %>" node
     When I run commands on the host:
       | update-crypto-policies --show |
@@ -51,16 +45,10 @@ Feature: fips enabled verification for upgrade
   @users=upuser1,upuser2
   @admin
   Scenario: FIPS mode checking command works for a cluster with fip mode on
-    #precondition check
-    When I run the :get admin command with:
-      | resource | mc |
-    Then the step should succeed
-    And the output should contain:
-      | 99-master-fips |
-      | 99-worker-fips |
+    Given fips is enabled
 
     #check whether fips enabled for master node
-    Given I store the masters in the :masters clipboard
+    When I store the masters in the :masters clipboard
     And I use the "<%= cb.masters[0].name %>" node
     When I run commands on the host:
       | update-crypto-policies --show |
