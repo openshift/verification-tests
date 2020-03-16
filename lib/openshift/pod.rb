@@ -113,6 +113,12 @@ module BushSlicer
     end
 
     # @note call without parameters only when props are loaded
+    def nominated_node_name(user:nil, cached: true, quiet: false)
+      raw_resource(user: user, cached: cached, quiet: quiet).
+        dig("status", "nominatedNodeName")
+    end
+
+    # @note call without parameters only when props are loaded
     def terminating?(user: nil, cached: false, quiet: false)
       status?(user: user, status: :running,
               quiet: quiet, cached: cached)[:success] &&
