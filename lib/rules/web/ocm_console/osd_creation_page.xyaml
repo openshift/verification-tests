@@ -22,8 +22,6 @@ creation_page_navigation_displayed:
 page_title_displayed:
     elements:
         - selector:
-            xpath: //img[@class='openshift-logo-page-title' and @alt='OpenShift']
-        - selector:
             xpath: //h1[contains(@class,'ocm-page-title') and text()='Create an OpenShift Dedicated Cluster']
 cluster_detail_displayed:
     elements:
