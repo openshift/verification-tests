@@ -77,6 +77,9 @@ Given /^I have a browser with:$/ do |table|
   if conf[:browser]
     init_params[:browser_type] ||= conf[:browser].to_sym
   end
+  if conf[:selenium_url]
+    init_params[:selenium_url] ||= conf[:selenium_url]
+  end
   if env.client_proxy
     init_params[:http_proxy] ||= env.client_proxy
   end

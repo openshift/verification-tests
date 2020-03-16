@@ -51,16 +51,23 @@ Also we have `services` to define some third party services options. Access to t
 
 == Web Driver
 
-For tests which require a web driver please install the driver for the browser you would prefer to use.
+For tests which require a web browser:
+
+The typical configuration requires a local "driver" binary to configure and launch a subprocess. Please install the driver for the browser you would prefer to use:
 
 Firefox:
  Please download the server from https://github.com/mozilla/geckodriver/releases and place it somewhere on your PATH.
- See https://developer.mozilla.org/en-US/docs/Mozilla/QA/Marionette/WebDriver for more information
+ See https://developer.mozilla.org/en-US/docs/Mozilla/QA/Marionette/WebDriver for more information. The config defaults to firefox, so you're all set!
 
 Chrome:
- Please download the driver from http://chromedriver.storage.googleapis.com/index.html that matches the version of Chrome you are using, place it somewhere on your PATH and set the following environment variable. 
+ Please download the driver from http://chromedriver.storage.googleapis.com/index.html that matches the version of Chrome you are using, place it somewhere on your PATH and set the following environment variable.
 
 * `export BUSHSLICER_CONFIG='{"global": {"browser": "chrome"}}'`
+
+You may instead specify a remote Selenium URL to connect to, e.g.:
+
+* `export BUSHSLICER_CONFIG='{"global": {"browser": "chrome", "selenium_url": "http://localhost:4444/wd/hub"}}'`
+
 
 == accessing configuration
 
