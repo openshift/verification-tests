@@ -41,9 +41,9 @@ Feature: buildlogic.feature
   Scenario: Create build without output
     Given I have a project
     When I run the :new_build client command with:
-      | app_repo  | centos/ruby-23-centos7~https://github.com/openshift/ruby-hello-world.git |
-      | no-output | true                                                                 |
-      | name      | myapp                                                                |
+      | app_repo  | openshift/ruby~https://github.com/openshift/ruby-hello-world.git |
+      | no-output | true                                                             |
+      | name      | myapp                                                            |
     Then the step should succeed
     And the "myapp-1" build was created
     And the "myapp-1" build completed
