@@ -265,4 +265,82 @@ Feature: Operator related networking scenarios
     | /usr/bin/curl | --connect-timeout | 60 | <%= cb.service_ip %>:27017 |
   Then the step should succeed
   And the output should contain:
-    | Hello OpenShift |
+	  | Hello OpenShift |
+
+  # @author anusaxen@redhat.com
+  # @case_id OCP-25856
+  @admin
+  @destructive
+  Scenario: CNO should delete non-relevant resources	
+    # Make sure that the multus is Running
+    Given the multus is enabled on the cluster
+    Given the default interface on nodes is stored in the :default_interface clipboard
+    #Patching config in network operator config CRD
+    Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
+      | {"spec":{"additionalNetworks": [{"name":"bridge-ipam-dhcp","namespace":"openshift-multus","rawCNIConfig":"{\"name\":\"bridge-ipam-dhcp\",\"cniVersion\":\"0.3.1\",\"type\":\"bridge\",\"master\":\"<%= cb.default_interface %>\",\"ipam\":{\"type\": \"dhcp\"}}","type":"Raw"}]}} |
+    #Cleanup for bringing CRD to original at the end of this scenario
+    Given I register clean-up steps:
+    """
+    as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
+    | {"spec":{"additionalNetworks": null}} |
+    """
+    # Storing multus daemonsets as number of nodes. Number of multus ds corresponds to number of nodes in the cluster
+    When I run the :get admin command with:
+      | resource      | ds               |
+      | namespace     | openshift-multus |
+      | output        | json             |
+    Then the step should succeed
+    And evaluation of `@result[:parsed]['items'][1]['status']['desiredNumberScheduled']` is stored in the :num_of_nodes clipboard
+    
+    #Make sure dhcp daemon pods spun up after patching the CNO above
+    Given I switch to cluster admin pseudo user
+    And I wait up to 60 seconds for the steps to pass:
+    """
+    Given I use the "openshift-multus" project
+    And status becomes :running of exactly <%= cb.num_of_nodes %> pods labeled:
+    | app=dhcp-daemon |
+    """
+
+    # Erase additonalnetworks config from CNO and expect dhcp pods to die
+    Given I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
+    | {"spec":{"additionalNetworks": null}} |
+
+    And I wait up to 60 seconds for the steps to pass:
+    """
+    And all existing pods die with labels:
+    | app=dhcp-daemon |
+    """
+    #Patching config in network operator config CRD again for 2nd iteration check
+    Given I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
+      | {"spec":{"additionalNetworks": [{"name":"bridge-ipam-dhcp","namespace":"openshift-multus","rawCNIConfig":"{\"name\":\"bridge-ipam-dhcp\",\"cniVersion\":\"0.3.1\",\"type\":\"bridge\",\"master\":\"<%= cb.default_interface %>\",\"ipam\":{\"type\": \"dhcp\"}}","type":"Raw"}]}} |
+    
+    # Now scale down CNO pod to 0 and makes sure dhcp pods still running and erase additonalnetworks config from CNO
+    Given I use the "openshift-network-operator" project
+    And I run the :scale client command with:
+      | resource | deployment       |
+      | name     | network-operator |
+      | replicas | 0                |
+    Then the step should succeed
+    And I wait up to 60 seconds for the steps to pass:
+    """
+    Given I use the "openshift-multus" project
+    And status becomes :running of exactly <%= cb.num_of_nodes %> pods labeled:
+    | app=dhcp-daemon |
+    """
+    Given I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
+      | {"spec":{"additionalNetworks": null}} |
+
+    # Now scale up CNO pod back to 1 and expect dhcp pods to disappear
+    Given I use the "openshift-network-operator" project
+    And I run the :scale client command with:
+      | resource | deployment       |
+      | name     | network-operator |
+      | replicas | 1                |
+    Then the step should succeed
+
+    And I wait up to 60 seconds for the steps to pass:
+    """
+    Given I use the "openshift-multus" project
+    And all existing pods die with labels:
+    | app=dhcp-daemon |
+    """
