@@ -101,7 +101,7 @@ click_radio_input:
     selector:
       xpath: //input[@type='radio' and @value='<radio_text>']
     op: click
-click_close_button:
+click_close_icon:
   element:
     selector:
       xpath: //button[contains(@aria-label,'Close')]

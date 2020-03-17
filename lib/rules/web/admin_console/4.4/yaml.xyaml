@@ -1,7 +1,3 @@
-click_yaml_tab:
-  params:
-    tab_name: YAML
-  action: click_tab
 open_view_sidebar:
   params:
     button_text: View sidebar
@@ -9,43 +5,43 @@ open_view_sidebar:
   element:
     selector:
       xpath: //button[contains(.,'Schema')]
-close_breadcrumb_sidebar:
-  action: click_close_button
+close_view_sidebar:
+  action: click_close_icon
   element:
     selector:
       xpath: //button[contains(.,'Schema')]
     missing: true
-view_detail_for_bc_output_name_field:
-  action: click_spec_view_detail
-  action: click_output_view_detail
-  action: click_to_view_detail
+view_schema_definition_of_bc_output_name:
+  action: view_spec_schema_details
+  action: view_output_schema_details
+  action: view_to_schema_details
   element:
     selector:
       xpath: //span[contains(.,'Name of the referent')]
-click_spec_view_detail:
+view_spec_schema_details:
   params:
     field: spec
   action: click_view_detail_button
-click_output_view_detail:
+view_output_schema_details:
   params:
     field: output
   action: click_view_detail_button
-click_to_view_detail:
+view_to_schema_details:
   params:
     field: to
   action: click_view_detail_button
-view_detail_for_build_postcommit_command_field:
-  action: click_spec_view_detail
-  action: click_postCommit_view_detail
+view_schema_definition_of_build_postcommit_command_field:
+  action: view_spec_schema_details
+  action: view_postCommit_schema_detail
   element:
     selector:
       xpath: //span[contains(.,'command is the command to run')]
-click_postCommit_view_detail:
+view_postCommit_schema_detail:
   params:
     field: postCommit
   action: click_view_detail_button
-view_detail_for_replicas_field:
-  action: click_spec_view_detail
+view_schema_definition_of_for_replicas_field:
+  action: view_spec_schema_details
   element:
     selector:
       xpath: //span[contains(.,'Number of desired pods')]
