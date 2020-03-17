@@ -1,6 +1,14 @@
 Feature: Machine-api components upgrade tests
+  @upgrade-prepare
+  Scenario Outline: Cluster operator should be available after upgrade - prepare
+    # According to our upgrade workflow, we need an upgrade-prepare and upgrade-check for each scenario.
+    # But some of them do not need any prepare steps, which lead to errors "can not find scenarios" in the log.
+    # So we just add a simple/useless step here to get rid of the errors in the log.
+    Given the expression should be true> "True" == "True"
+
   # @author jhou@redhat.com
   @upgrade-check
+  @admin
   Scenario Outline: Cluster operator should be available after upgrade
     Given evaluation of `cluster_operator(<cluster_operator>).condition(type: 'Available')` is stored in the :co_available clipboard
     Then the expression should be true> cb.co_available["status"]=="True"
@@ -19,6 +27,11 @@ Feature: Machine-api components upgrade tests
     | "machine-api"        | # @case_id OCP-22712
     | "cluster-autoscaler" | # @case_id OCP-27664
 
+
+  @upgrade-prepare
+  Scenario: There should be no pending or firing alerts for machine-api operators - prepare
+    Given the expression should be true> "True" == "True"
+
   # @author jhou@redhat.com
   # @case_id OCP-22692
   @upgrade-check
@@ -32,6 +45,11 @@ Feature: Machine-api components upgrade tests
     Then the step should succeed
     And the expression should be true> @result[:parsed]["status"] == "success"
     And the expression should be true> @result[:parsed]["data"]["result"].length == 0
+
+
+  @upgrade-prepare
+  Scenario: Scale up and scale down a machineSet after upgrade - prepare
+    Given the expression should be true> "True" == "True"
 
   # @author jhou@redhat.com
   # @case_id OCP-22612
