@@ -297,3 +297,48 @@ Feature: Pod related networking scenarios
       | type          | merge                                                         						   |
     Then the step should fail
     And the output should contain "endpoints "<%= cb.ping_pod.name %>" is forbidden: endpoint port TCP:22623 is not allowed"
+
+  # @author anusaxen@redhat.com
+  # @case_id OCP-21846
+  @admin
+  @destructive
+  Scenario: ovn pod can be scheduled even if the node taint to unschedule
+    Given the env is using "OVNKubernetes" networkType
+    And I store all worker nodes to the :nodes clipboard
+    #Tainting all worker nodes to NoSchedule
+    When I run the :oadm_taint_nodes admin command with:
+      | l         | node-role.kubernetes.io/worker |
+      | key_val   | key21846=value2:NoSchedule     |
+    Then the step should succeed
+    And I register clean-up steps:
+    """
+    I run the :oadm_taint_nodes admin command with:
+      | l         | node-role.kubernetes.io/worker |
+      | key_val   | key21846-                      |
+    Then the step should succeed
+    """
+    Given I have a project
+    #Makng sure test pods can't be scheduled on any of worker node
+    And I run the :create client command with:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/pod-for-ping.json |
+    Then the step should succeed
+    And the pod named "hello-pod" status becomes :pending within 60 seconds
+    #Getting ovnkube pod name from any of worker node
+    When I run the :get admin command with:
+      | resource      | pod                                   |
+      | fieldSelector | spec.nodeName=<%= cb.nodes[0].name %> |
+      | n             | openshift-ovn-kubernetes              |
+      | o             | jsonpath={.items[*].metadata.name}    |
+    Then the step should succeed
+    And evaluation of `@result[:response]` is stored in the :ovnkube_pod_name clipboard
+    And admin ensure "<%= cb.ovnkube_pod_name %>" pod is deleted from the "openshift-ovn-kubernetes" project
+    #Waiting up to 60 seconds for new ovnkube pod to get created and running on the same node where it was deleted before
+    And I wait up to 60 seconds for the steps to pass:
+    """
+    When I run the :get admin command with:
+      | resource      | pod                                   |
+      | fieldSelector | spec.nodeName=<%= cb.nodes[0].name %> |
+      | n             | openshift-ovn-kubernetes              |
+    Then the step should succeed
+    And the output should contain "Running"
+    """

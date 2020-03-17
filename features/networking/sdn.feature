@@ -340,3 +340,34 @@ Feature: SDN related networking scenarios
       | curl | --connect-timeout | 5 | <%= cb.pod4_ip %>:8080 |	
     Then the step should succeed	
     And the output should contain "Hello OpenShift"
+    
+  # @author anusaxen@redhat.com
+  # @case_id OCP-25787
+  @admin
+  Scenario: Don't write CNI configuration file until ovn-controller has done at least one iteration
+    Given the env is using "OVNKubernetes" networkType
+    And I select a random node's host
+    #Checking controller iteration 1
+    When I run command on the "<%= node.name %>" node's sdn pod:
+      | bash | -c | ovn-appctl -t ovn-controller connection-status |
+    Then the step should succeed
+    And the output should contain "connected"
+    #Checking controller iteration 2
+    When I run command on the "<%= node.name %>" node's sdn pod:
+      | bash | -c | ls -l /var/run/ovn/ |
+    Then the step should succeed
+    And evaluation of `@result[:response].match(/ovn-controller.\d*\.ctl/)[0]` is stored in the :controller_pid_file clipboard
+    #Checking controller iteration 3
+    When I run command on the "<%= node.name %>" node's sdn pod:
+      | bash | -c | ovn-appctl -t /var/run/ovn/<%= cb.controller_pid_file %> connection-status |
+    Then the step should succeed
+    And the output should contain "connected"
+    #Checking controller iteration 4
+    When I run command on the "<%= node.name %>" node's sdn pod:
+      | bash | -c | ovs-ofctl dump-flows br-int \| wc -l |
+    Then the step should succeed
+    And the expression should be true> @result[:response].match(/\d*/)[0].to_i > 0
+    #Checking final iteration post all above iterations passed. In this iteration we expect CNi file to be created
+    And I run commands on the host:
+      | ls -l /var/run/multus/cni/net.d/10-ovn-kubernetes.conf |
+    Then the output should contain "10-ovn-kubernetes.conf"
