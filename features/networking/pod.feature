@@ -324,12 +324,7 @@ Feature: Pod related networking scenarios
       | protocol      | UDP                      |
     Then the step should succeed
     #Getting nodeport value
-    When I run the :get client command with:
-      | resource | service                                     |
-      | output   | jsonpath={.items[*].spec.ports[*].nodePort} |
-    Then the step should succeed
-    And evaluation of `@result[:response]` is stored in the :nodeport clipboard
-    
+    And evalation of `service(cb.host_pod1.name).node_port(port: 8080)` is stored in the :nodeport clipboard
     #Creating a simple client pod to generate traffic from it towards the exposed node IP address
     When I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/aosqe-pod-for-ping.json |
