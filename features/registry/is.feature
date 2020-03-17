@@ -134,7 +134,6 @@ Feature: Testing imagestream
   @admin
   Scenario: Do not prune layer of a valid Image due to minimum aging
     Given I have a project
-    And evaluation of `project.name` is stored in the :u1p1 clipboard
     Given I enable image-registry default route
     Given default image registry route is stored in the :registry_hostname clipboard
     Given certification for default image registry is stored to the :reg_crt_name clipboard
@@ -146,7 +145,8 @@ Feature: Testing imagestream
     And the "ruby-ex-1" build completes
     And the "ruby-ex:latest" image stream tag was created
     And evaluation of `image_stream_tag("ruby-ex:latest").digest(user:user)` is stored in the :digest1 clipboard
-    Given 60 seconds have passed
+    Given 120 seconds have passed
+    And the project is deleted
 
     Given I create a new project
     When I run the :new_app client command with:
@@ -157,11 +157,10 @@ Feature: Testing imagestream
     And the "ruby-ex:latest" image stream tag was created
     And evaluation of `image_stream_tag("ruby-ex:latest").digest(user:user)` is stored in the :digest2 clipboard
     Given the project is deleted
-    And the "<%= cb.u1p1 %>" project is deleted
 
     Given cluster role "system:image-pruner" is added to the "first" user
     And I run the :oadm_prune_images client command with:
-      | keep_younger_than | 1m                          |
+      | keep_younger_than | 2m                          |
       | registry_url      | <%= cb.registry_hostname %> |
       | confirm           | true                        |
       | ca                | <%= cb.reg_crt_name %>      |
