@@ -284,23 +284,14 @@ Feature: Operator related networking scenarios
     as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
       | {"spec":{"additionalNetworks": null}} |
     """
-    # Storing multus daemonsets as number of nodes. Number of multus ds corresponds to number of nodes in the cluster
-    When I run the :get admin command with:
-      | resource      | ds               |
-      | namespace     | openshift-multus |
-      | output        | json             |
-    Then the step should succeed
-    And evaluation of `@result[:parsed]['items'][1]['status']['desiredNumberScheduled']` is stored in the :num_of_nodes clipboard
-    
     #Make sure dhcp daemon pods spun up after patching the CNO above
     Given I switch to cluster admin pseudo user
     And I wait up to 60 seconds for the steps to pass:
     """
     Given I use the "openshift-multus" project
-    And status becomes :running of exactly <%= cb.num_of_nodes %> pods labeled:
+    And status becomes :running of exactly <%= cb.desired_multus_replicas %> pods labeled:
       | app=dhcp-daemon |
     """
-
     # Erase additonalnetworks config from CNO and expect dhcp pods to die
     Given I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
       | {"spec":{"additionalNetworks": null}} |
@@ -333,12 +324,12 @@ Feature: Operator related networking scenarios
     And I wait up to 60 seconds for the steps to pass:
     """
     Given I use the "openshift-multus" project
-    And status becomes :running of exactly <%= cb.num_of_nodes %> pods labeled:
+    #The multus enabled on the cluster step used in beginning stores desired_multus_replicas value in cb variable which is being used here
+    And status becomes :running of exactly <%= cb.desired_multus_replicas %> pods labeled:
     | app=dhcp-daemon |
     """
     Given I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
       | {"spec":{"additionalNetworks": null}} |
-
     # Now scale up CNO pod back to 1 and expect dhcp pods to disappear
     Given I use the "openshift-network-operator" project
     And I run the :scale client command with:

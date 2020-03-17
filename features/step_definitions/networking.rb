@@ -639,7 +639,7 @@ Given /^the multus is enabled on the cluster$/ do
 
   desired_multus_replicas = daemon_set('multus', project('openshift-multus')).replica_counters(user: admin)[:desired]
   available_multus_replicas = daemon_set('multus', project('openshift-multus')).replica_counters(user: admin)[:available]
-
+  cb.desired_multus_replicas = desired_multus_replicas
   raise "Multus is not running correctly!" unless desired_multus_replicas == available_multus_replicas && available_multus_replicas != 0
 end
 
