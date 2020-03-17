@@ -1299,6 +1299,7 @@
   :options:
     :all: --all=<value>
     :key_val: <value>
+    :l: -l <value>
     :node_name: <value>
     :output: --output <value>
     :overwrite: --overwrite=<value>

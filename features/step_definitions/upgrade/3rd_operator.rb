@@ -43,7 +43,7 @@ Given /^optional operator "([^"]*)" from channel "([^"]*)" is subscribed in "([^
 
     unless subscription("#{name}").exists?
       # Subscribe etcd operator
-      sub_yaml ||= "https://raw.githubusercontent.com/jianzhangbjz/v3-testfiles/tsb-upgrade/olm/subscription-template.yaml"
+      sub_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/olm/subscription-template.yaml"
       step %Q/I process and create:/, table(%{
         | f | #{sub_yaml}                           |
         | p | NAME=#{name}-sub                      |

@@ -121,44 +121,23 @@ Feature: Operator related networking scenarios
     """
 
   # @author bmeng@redhat.com
+  # @author zzhao@redhat.com
   # @case_id OCP-22202
   @admin
   @destructive
   Scenario: The clusteroperator should be able to reflect the realtime status of the network when a new node added
-    Given the master version >= "4.1"
+    Given I have an IPI deployment
     # Check that the operator is not progressing
     Given the expression should be true> cluster_operator('network').condition(type: 'Progressing')['status'] == "False"
 
     # Record the original machine replica and scale it up to number +1
-    When I run the :get admin command with:
-      | resource | machineset                         |
-      | n        | openshift-machine-api              |
-      | template | {{(index .items 0).metadata.name}} |
-    Then the step should succeed
-    And evaluation of `@result[:stdout]` is stored in the :machineset clipboard
-    When I run the :get admin command with:
-      | resource      | machineset            |
-      | n             | openshift-machine-api |
-      | resource_name | <%= cb.machineset %>  |
-      | template      | {{.spec.replicas}}    |
-    Then the step should succeed
-    And evaluation of `@result[:response].to_i` is stored in the :original_replicas clipboard
-    And evaluation of `@result[:response].to_i + 1` is stored in the :desired_replicas clipboard
-    When I run the :scale admin command with:
-      | resource | machineset                 |
-      | name     | <%= cb.machineset %>       |
-      | replicas | <%= cb.desired_replicas %> |
-      | n        | openshift-machine-api      |
-    Then the step should succeed
+    Given I pick a random machineset to scale
+    And evaluation of `machine_set.available_replicas` is stored in the :replicas_to_restore clipboard
+    Given I scale the machineset to +1
     # Scale down the machine after the scenario
     Given I register clean-up steps:
     """
-    When I run the :scale admin command with:
-      | resource | machineset                  |
-      | name     | <%= cb.machineset %>        |
-      | replicas | <%= cb.original_replicas %> |
-      | n        | openshift-machine-api       |
-    Then the step should succeed
+    When I scale the machineset to <%= cb.replicas_to_restore %>
     Then the machineset should have expected number of running machines
     """
 
@@ -168,16 +147,7 @@ Feature: Operator related networking scenarios
     Given the status of condition "Progressing" for network operator is :True
     """
 
-    And I wait up to 60 seconds for the steps to pass:
-    """
-    When I run the :get admin command with:
-      | resource      | machineset                |
-      | resource_name | <%= cb.machineset %>      |
-      | n             | openshift-machine-api     |
-      | template      | {{.status.readyReplicas}} |
-    Then the expression should be true> @result[:response].to_i == cb.desired_replicas
-    """
-
+    And the machineset should have expected number of running machines
     # Check that the status of Progressing is back to False once the node provision finished
     And I wait up to 120 seconds for the steps to pass:
     """
@@ -266,7 +236,37 @@ Feature: Operator related networking scenarios
   Then the step should succeed
   And the output should contain:
 	  | Hello OpenShift |
-
+    
+  # @author anusaxen@redhat.com
+  # @case_id OCP-21574
+  @admin
+  @destructive
+  Scenario: Should not allow to change the openshift-sdn config	
+  #Trying to change network mode to Subnet or any other
+  Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
+    | {"spec": {"defaultNetwork": {"openshiftSDNConfig": {"mode": "Subnet"}}}} |
+  #Cleanup for bringing CRD to original
+  Given I register clean-up steps:
+    """
+  as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
+    | {"spec": {"defaultNetwork": {"openshiftSDNConfig": null}}} |
+    """ 
+  And 10 seconds have passed
+  #Getting network operator pod name to leverage for its logs collection later
+  Given I switch to cluster admin pseudo user
+  And I use the "openshift-network-operator" project
+  When I run the :get client command with:
+    | resource | pods                               |
+    | o        | jsonpath={.items[*].metadata.name} |
+  Then the step should succeed
+  And evaluation of `@result[:response]` is stored in the :network_operator_pod clipboard
+  When I run the :logs client command with:
+    | resource_name | <%= cb.network_operator_pod %> |
+    | since         | 10s                            |
+  Then the step should succeed
+  And the output should contain:
+    | cannot change openshift-sdn mode |
+    
   # @author anusaxen@redhat.com
   # @case_id OCP-25856
   @admin

@@ -1111,3 +1111,83 @@ Feature: Multus-CNI related scenarios
       | network_attachment_definition_instances{networks="any"} 0     |
       | network_attachment_definition_instances{networks="macvlan"} 0 |
 
+  # @author anusaxen@redhat.com
+  # @case_id OCP-22504
+  @admin
+  Scenario: The multus admission controller should be able to detect that the pod is using net-attach-def in other namespaces when the isolation is enabled
+    Given I create 2 new projects
+    # Create the net-attach-def via cluster admin
+    When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml" replacing paths:
+      | ["metadata"]["name"]      | macvlan-bridge-25657    |
+      | ["metadata"]["namespace"] | <%= project(-1).name %> |    
+    Then the step should succeed
+    Given I use the "<%= project(-2).name %>" project
+    # Create a pod in new project consuming net-attach-def from 1st project
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/1interface-macvlan-bridge.yaml" replacing paths:
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | macvlan-bridge-25657 |
+    Then the step should succeed
+    And evaluation of `@result[:response].match(/pod\/(.*) created/)[1]` is stored in the :pod_name clipboard
+    #making sure the created pod complains about net-attach-def and hence stuck in ContainerCreating state
+    And I wait up to 30 seconds for the steps to pass:
+    """
+    When I run the :describe client command with:
+      | resource | pods               |
+      | name     | <%= cb.pod_name %> |
+    Then the step should succeed
+    And the output should contain:
+      | cannot find get a network-attachment-definition |
+      | ContainerCreating                               |
+    """
+
+  # @author anusaxen@redhat.com
+  # @case_id OCP-24492
+  @admin
+  Scenario: Create pod with Multus ipvlan CNI plugin	
+    # Make sure that the multus is enabled
+    Given the multus is enabled on the cluster
+    And I store all worker nodes to the :nodes clipboard
+    And the default interface on nodes is stored in the :default_interface clipboard
+    #Storing default interface mac address for comparison later with pods macs
+    Given I use the "<%= cb.nodes[0].name %>" node
+    And I run commands on the host:
+      | ip addr show <%= cb.default_interface %> |
+    Then the step should succeed
+    And evaluation of `@result[:response].match(/\h+:\h+:\h+:\h+:\h+:\h+/)[0]` is stored in the :default_interface_mac clipboard
+    # Create the net-attach-def via cluster admin
+    And I pry
+    Given I have a project
+    When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/NetworkAttachmentDefinitions/ipvlan-host-local.yaml" replacing paths:
+      | ["metadata"]["name"]      | myipvlan76 											      								            |
+      | ["metadata"]["namespace"] | <%= project.name %> 															                            |    
+      | ["spec"] ["config"]       | '{ "cniVersion": "0.3.1", "name": "myipvlan76", "type": "ipvlan", "master": "<%= cb.default_interface %>", "ipam": { "type": "host-local", "subnet": "22.2.2.0/24" } }' |
+    Then the step should succeed
+
+    #Creating various pods and making sure their mac matches to default inf and they get unique IPs assigned
+    #Creating pod1 absorbing above net-attach-def
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                       | pod1                    |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | myipvlan76              |
+      | ["spec"]["nodeName"]                                       | <%= cb.nodes[0].name %> |
+    Then the step should succeed
+    And the pod named "pod1" becomes ready
+    When I execute on the pod:
+      | bash | -c | ip a show net1 |
+    Then the step should succeed
+    And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod1_net1_ip clipboard
+    And evaluation of `@result[:response].match(/\h+:\h+:\h+:\h+:\h+:\h+/)[0]` is stored in the :pod1_net1_mac clipboard
+    And the expression should be true> cb.pod1_net1_mac==cb.default_interface_mac
+    
+    #Creating pod2 absorbing above net-attach-def
+    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                       | pod2                    |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | myipvlan76              |
+      | ["spec"]["nodeName"]                                       | <%= cb.nodes[0].name %> |
+    Then the step should succeed
+    And the pod named "pod2" becomes ready
+    When I execute on the pod:
+      | bash | -c | ip a show net1 |
+    Then the step should succeed
+    And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod2_net1_ip clipboard
+    And evaluation of `@result[:response].match(/\h+:\h+:\h+:\h+:\h+:\h+/)[0]` is stored in the :pod2_net1_mac clipboard
+    And the expression should be true> cb.pod2_net1_mac==cb.default_interface_mac
+    And the expression should be true> !(cb.pod2_net1_ip==cb.pod1_net1_ip)
