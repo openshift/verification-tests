@@ -80,6 +80,22 @@ check_affected_pods_tab:
   params:
     tab_name: Affected Pods
   action: check_tab
+check_description_for_market_place:
+  elements:
+  - selector:
+      xpath: //*[@class="co-catalog-page__description" and contains(., "purchase commercial software through")]
+  params:
+    text: Red Hat Marketplace
+    link_url: marketplace.redhat.com
+  action: click_link_with_text
+check_description_for_developer_catalog:
+  elements:
+  - selector:
+      xpath: //*[@class="co-catalog-page__description" and contains(., "After installation, the Operator capabilities will appear")]
+  params:
+    text: Developer Catalog
+    link_url: catalog
+  action: click_link_with_text
 uninstall_operator_on_console:
   params:
     button_text: Uninstall Operator
