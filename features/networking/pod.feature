@@ -214,8 +214,8 @@ Feature: Pod related networking scenarios
     
     #hostnetwork-pod will be a hostnetwork pod
     When I run the :create admin command with:
-      | f | https://raw.githubusercontent.com/anuragthehatter/v3-testfiles/master/networking/hostnetwork-pod.json |
-      | n | <%= project.name %>                                                                                   |
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/hostnetwork-pod.json |
+      | n | <%= project.name %>                                                                                |
     Then the pod named "hostnetwork-pod" becomes ready
     #Pods should not access the MCS port 22623 or 22624 on the master
     When I execute on the pod:
