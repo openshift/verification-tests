@@ -266,3 +266,33 @@ Feature: Operator related networking scenarios
   Then the step should succeed
   And the output should contain:
     | Hello OpenShift |
+    
+  # @author anusaxen@redhat.com
+  # @case_id OCP-21574
+  @admin
+  @destructive
+  Scenario: Should not allow to change the openshift-sdn config	
+  #Trying to change network mode to Subnet or any other
+  Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
+    | {"spec": {"defaultNetwork": {"openshiftSDNConfig": {"mode": "Subnet"}}}} |
+  #Cleanup for bringing CRD to original
+  Given I register clean-up steps:
+    """
+  as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
+    | {"spec": {"defaultNetwork": {"openshiftSDNConfig": null}}} |
+    """ 
+  And 10 seconds have passed
+  #Getting network operator pod name to leverage for its logs collection later
+  Given I switch to cluster admin pseudo user
+  And I use the "openshift-network-operator" project
+  When I run the :get client command with:
+    | resource | pods                               |
+    | o        | jsonpath={.items[*].metadata.name} |
+  Then the step should succeed
+  And evaluation of `@result[:response]` is stored in the :network_operator_pod clipboard
+  When I run the :logs client command with:
+    | resource_name | <%= cb.network_operator_pod %> |
+    | since         | 10s                            |
+  Then the step should succeed
+  And the output should contain:
+    | cannot change openshift-sdn mode |
