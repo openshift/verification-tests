@@ -20,7 +20,7 @@ Feature: Operator related networking scenarios
   @destructive
   Scenario: The clusteroperator should be able to reflect the correct version field post bad network operator config
 
-    Given the master version >= "4.0"
+    Given the master version >= "4.1"
     #Getting OCP version
     Given evaluation of `cluster_version('version').version` is stored in the :ocp_version clipboard
     #Making sure that operator is not Degraded before proceesing further steps
@@ -60,7 +60,7 @@ Feature: Operator related networking scenarios
   # @case_id OCP-22201
   @admin
   Scenario: Should have a clusteroperator object created under config.openshift.io api group for network-operator
-    Given the master version >= "4.0"
+    Given the master version >= "4.1"
     # Check the operator object has version
     Given the expression should be true> cluster_operator('network').versions.length > 0
     # Check the operator object has status for Degraded|Progressing|Available
@@ -74,7 +74,7 @@ Feature: Operator related networking scenarios
   @admin
   @destructive
   Scenario: The clusteroperator should be able to reflect the realtime status of the network when the config has problem
-    Given the master version >= "4.0"
+    Given the master version >= "4.1"
     # Check that the operator is not Degraded
     Given the expression should be true> cluster_operator('network').condition(type: 'Degraded')['status'] == "False"
     # Copy the value of the networktype for backup
@@ -121,44 +121,24 @@ Feature: Operator related networking scenarios
     """
 
   # @author bmeng@redhat.com
+  # @author zzhao@redhat.com
   # @case_id OCP-22202
   @admin
   @destructive
   Scenario: The clusteroperator should be able to reflect the realtime status of the network when a new node added
-    Given the master version >= "4.0"
+    Given I have an IPI deployment
     # Check that the operator is not progressing
     Given the expression should be true> cluster_operator('network').condition(type: 'Progressing')['status'] == "False"
 
     # Record the original machine replica and scale it up to number +1
-    When I run the :get admin command with:
-      | resource | machineset                         |
-      | n        | openshift-machine-api              |
-      | template | {{(index .items 0).metadata.name}} |
-    Then the step should succeed
-    And evaluation of `@result[:stdout]` is stored in the :machineset clipboard
-    When I run the :get admin command with:
-      | resource      | machineset            |
-      | n             | openshift-machine-api |
-      | resource_name | <%= cb.machineset %>  |
-      | template      | {{.spec.replicas}}    |
-    Then the step should succeed
-    And evaluation of `@result[:response].to_i` is stored in the :original_replicas clipboard
-    And evaluation of `@result[:response].to_i + 1` is stored in the :desired_replicas clipboard
-    When I run the :scale admin command with:
-      | resource | machineset                 |
-      | name     | <%= cb.machineset %>       |
-      | replicas | <%= cb.desired_replicas %> |
-      | n        | openshift-machine-api      |
-    Then the step should succeed
+    Given I pick a random machineset to scale
+    And evaluation of `machine_set.available_replicas` is stored in the :replicas_to_restore clipboard
+    Given I scale the machineset to +1
     # Scale down the machine after the scenario
     Given I register clean-up steps:
     """
-    When I run the :scale admin command with:
-      | resource | machineset                  |
-      | name     | <%= cb.machineset %>        |
-      | replicas | <%= cb.original_replicas %> |
-      | n        | openshift-machine-api       |
-    Then the step should succeed
+    When I scale the machineset to <%= cb.replicas_to_restore %>
+    Then the machineset should have expected number of running machines
     """
 
     # Check that the status of Progressing is truned to True during the new node provisioning
@@ -167,16 +147,7 @@ Feature: Operator related networking scenarios
     Given the status of condition "Progressing" for network operator is :True
     """
 
-    And I wait up to 60 seconds for the steps to pass:
-    """
-    When I run the :get admin command with:
-      | resource      | machineset                |
-      | resource_name | <%= cb.machineset %>      |
-      | n             | openshift-machine-api     |
-      | template      | {{.status.readyReplicas}} |
-    Then the expression should be true> @result[:response].to_i == cb.desired_replicas
-    """
-
+    And the machineset should have expected number of running machines
     # Check that the status of Progressing is back to False once the node provision finished
     And I wait up to 120 seconds for the steps to pass:
     """
@@ -186,16 +157,21 @@ Feature: Operator related networking scenarios
     And the output should not contain "NotReady"
     Given the status of condition "Progressing" for network operator is :False
     """
+
   # @author anusaxen@redhat.com
   # @case_id OCP-24918
   @admin
+  @destructive
   Scenario: Service should not get unidle when config flag is disabled under CNO
   Given I have a project
   When I run the :create client command with:
     | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json |
   Then the step should succeed
-  And a pod becomes ready with labels:
+  And 2 pods become ready with labels:
     | name=test-pods |
+    #And evaluation of `pod(0).node_name` is stored in the :node_name clipboard
+  And I store "<%= pod(0).node_name %>" node's corresponding default networkType pod name in the :sdn_pod clipboard
+  
   Given I use the "test-service" service
   And evaluation of `service.ip(user: user)` is stored in the :service_ip clipboard
   # Checking idling unidling manually to make sure it works fine before inducing flag feature
@@ -204,13 +180,15 @@ Feature: Operator related networking scenarios
   Then the step should succeed 
   And the output should contain:
     | The service "<%= project.name %>/test-service" has been marked as idled |
+  
   Given I have a pod-for-ping in the project
   When I execute on the pod:
-    | /usr/bin/curl | --connect-timeout | 5 | <%= cb.service_ip %>:27017 |
+    | /usr/bin/curl | --connect-timeout | 60 | <%= cb.service_ip %>:27017 |
   Then the step should succeed
   And the output should contain:
     | Hello OpenShift |
-  #Inducing flag disablement here an wait 60 seconds for CNO to update it across the nodes
+  
+  #Inducing flag disablement here an polling loop of 300 seconds for CNO to update it across the nodes by checking keywords in sdn logs
   Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
     | {"spec":{"defaultNetwork":{"openshiftSDNConfig":{"enableUnidling" : false}}}} |
   # Cleanup required to move operator config back to normal
@@ -218,8 +196,17 @@ Feature: Operator related networking scenarios
   """
   as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
     | {"spec":{"defaultNetwork":{"openshiftSDNConfig": null}}} |
-  60 seconds have passed
   """
+  And I wait up to 300 seconds for the steps to pass:
+    """
+    When I run the :logs admin command with:
+      | resource_name | <%= cb.sdn_pod %> |
+      | namespace     | openshift-sdn     |
+      | since         | 30s               |
+    Then the step should succeed
+    And the output should not contain:
+      | unidlingProxy |
+    """
   And 60 seconds have passed
   #We are idling service again and making sure it doesn't get unidle due to the above enableUnidling flag set to false
   When I run the :idle client command with:
@@ -228,14 +215,54 @@ Feature: Operator related networking scenarios
   And the output should contain:
     | The service "<%= project.name %>/test-service" has been marked as idled |
   When I execute on the "hello-pod" pod:
-    | /usr/bin/curl | --connect-timeout | 10 | <%= cb.service_ip %>:27017 |
+    | /usr/bin/curl | --connect-timeout | 60 | <%= cb.service_ip %>:27017 |
   Then the step should fail
-  #Moving CNO config back to normal and expect service to unidle then
+  #Moving CNO config back to normal and expect service to unidle by polling loop of 300 seconds for CNO by checking keywords in sdn logs
   Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
     | {"spec":{"defaultNetwork":{"openshiftSDNConfig": null}}} |
+  And I wait up to 300 seconds for the steps to pass:
+    """
+    When I run the :logs admin command with:
+      | resource_name | <%= cb.sdn_pod %> |
+      | namespace     | openshift-sdn     |
+      | since         | 5s                |
+    Then the step should succeed
+    And the output should contain:
+      | unidlingProxy |
+    """
   And 60 seconds have passed
   When I execute on the "hello-pod" pod:
-    | /usr/bin/curl | --connect-timeout | 10 | <%= cb.service_ip %>:27017 |
+    | /usr/bin/curl | --connect-timeout | 60 | <%= cb.service_ip %>:27017 |
   Then the step should succeed
   And the output should contain:
     | Hello OpenShift |
+    
+  # @author anusaxen@redhat.com
+  # @case_id OCP-21574
+  @admin
+  @destructive
+  Scenario: Should not allow to change the openshift-sdn config	
+  #Trying to change network mode to Subnet or any other
+  Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
+    | {"spec": {"defaultNetwork": {"openshiftSDNConfig": {"mode": "Subnet"}}}} |
+  #Cleanup for bringing CRD to original
+  Given I register clean-up steps:
+    """
+  as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
+    | {"spec": {"defaultNetwork": {"openshiftSDNConfig": null}}} |
+    """ 
+  And 10 seconds have passed
+  #Getting network operator pod name to leverage for its logs collection later
+  Given I switch to cluster admin pseudo user
+  And I use the "openshift-network-operator" project
+  When I run the :get client command with:
+    | resource | pods                               |
+    | o        | jsonpath={.items[*].metadata.name} |
+  Then the step should succeed
+  And evaluation of `@result[:response]` is stored in the :network_operator_pod clipboard
+  When I run the :logs client command with:
+    | resource_name | <%= cb.network_operator_pod %> |
+    | since         | 10s                            |
+  Then the step should succeed
+  And the output should contain:
+    | cannot change openshift-sdn mode |

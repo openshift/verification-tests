@@ -1,8 +1,7 @@
 # store here steps that create test services within OpenShift test env
 
 Given /^I have a NFS service in the(?: "([^ ]+?)")? project$/ do |project_name|
-  # at the moment I believe only one such PV we can have without interference
-  #ensure_destructive_tagged
+  ensure_admin_tagged
 
   project(project_name)
   unless project.exists?(user: user)
@@ -316,7 +315,7 @@ Given /^I have a git client pod in the#{OPT_QUOTED} project$/ do |project_name|
 end
 
 # pod-for-ping is a pod that has curl, wget, telnet and ncat
-Given /^I have a pod-for-ping in the(?: "([^ ]+?)")? project$/ do |project_name|
+Given /^I have a pod-for-ping in the#{OPT_QUOTED} project$/ do |project_name|
   project(project_name, switch: true)
   unless project.exists?(user: user)
     raise "project #{project_name} does not exist"
@@ -609,7 +608,7 @@ Given /^I have a registry with htpasswd authentication enabled in my project$/ d
        | deploymentconfig=registry |
   })
   step %Q{I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/registry/htpasswd"}
-  @result = user.cli_exec(:new_secret, secret_name: "htpasswd-secret", credential_file: "./htpasswd", namespace: project.name)
+  @result = user.cli_exec(:create_secret, secret_type: "generic", name: "htpasswd-secret", from_file: "./htpasswd", namespace: project.name)
   step %Q/I run the :set_volume client command with:/, table(%{
     | resource    | dc/registry     |
     | add         | true            |

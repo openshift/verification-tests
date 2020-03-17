@@ -1,0 +1,18 @@
+# BUILDAH_LAYERS=false sudo podman build -f tools/openshift-ci/Dockerfile.installer-example -t aosqe/installer:latest --layers=false .
+# podman run --rm=true --env-file=MY_INSTALL-osp.env -w=/mnt --mount=type=bind,source=installer,destination=/mnt,relabel=shared docker-registry.upshift.redhat.com/aosqe/flexy:poc
+# podman run --rm=true --env-file=MY_INSTALL-osp.env -w=/mnt --mount=type=bind,source=installer,destination=/mnt,relabel=shared docker-registry.upshift.redhat.com/aosqe/flexy:poc destroy
+FROM	aosqe/cucushift-public
+
+LABEL vendor="Red Hat inc."
+LABEL maintainer="AOS QE Team"
+
+USER root
+
+ADD tools/openshift-ci/verification_tests_install_entrypoint.sh /usr/local/bin/
+
+RUN set -x && \
+    yum install -y --setopt=skip_missing_names_on_install=False https://cbs.centos.org/kojifiles/packages/git-crypt/0.6.0/1.el7/x86_64/git-crypt-0.6.0-1.el7.x86_64.rpm
+
+USER 1001
+ENTRYPOINT ["/usr/bin/scl", "enable", "rh-git218", "rh-ruby26", "--", "/usr/local/bin/verification_tests_install_entrypoint.sh"]
+

@@ -1,0 +1,163 @@
+check_doc_get_started_with_cli:
+  elements:
+  - selector:
+      xpath: //*[contains(@href, "/k8s/cluster/projects")]/button[contains(., "View My Projects")]
+check_header_brand:
+  elements:
+  - selector:
+      xpath: //img[contains(@src, '<logo_source>') and @alt='<product_name>']
+check_monitoring_urls:
+  action: click_alert_manager_menu
+  action: check_alert_manager_url
+  action: click_metrics_prometheus_menu
+  action: check_metrics_prometheus_url
+  action: check_dashboards_grafana_menu_url
+click_alert_manager_menu:
+  params:
+    text: Alerting
+    link_url: /monitoring/alerts
+  action: click_link_with_text
+check_alert_manager_url:
+  params:
+    text: Alertmanager UI
+    link_url: https://<alert_ui_route>/#/alerts
+  action: check_link_and_text
+click_metrics_prometheus_menu:
+  params:
+    text: Metrics
+    link_url: /monitoring/query-browser?query0=
+  action: click_link_with_text
+check_metrics_prometheus_url:
+  params:
+    text: Prometheus UI
+    link_url: https://<prometheus_ui_route>
+  action: check_link_and_text
+check_dashboards_grafana_menu_url: {}
+check_mega_menu:
+  params:
+    content: Red Hat Applications
+    text: OpenShift Cluster Manager
+    link_url: https://cloud.redhat.com/openshift/details/
+  elements:
+  - selector:
+      xpath: //button[@aria-label='Application launcher']
+    op: click
+  action: check_page_contains
+  action: check_link_and_text
+navigate_to_dev_console:
+  elements:
+  - selector:
+      xpath: //button[contains(., 'Administrator')]
+    op: click
+  - selector:
+      xpath: //li//h1[contains(., 'Developer')]
+    op: click
+check_external_link:
+  elements:
+  - selector:
+      xpath: //h2[.='Launcher']
+    timeout: 20
+  - selector:
+      xpath: //a[contains(@class,'co-external-link') and text()='<link_text>']
+check_external_log_link:
+  action: check_link_and_text
+# --- links on masthead ---
+browse_to_cli_tools_page:
+  action: click_help_button
+  params:
+    text: Command Line Tools
+    link_url: "#"
+  action: click_link_with_text
+check_consolelink:
+  params:
+    link_url: "#"
+  action:
+    if_param:
+      location: Help menu
+    ref: check_console_link_in_helpmenu
+  action:
+    if_param:
+      location: Application launcher
+    ref: check_console_link_in_applauncher
+  action:
+    if_param:
+      location: User menu
+    ref: check_console_link_in_usermenu
+check_console_link_in_helpmenu:
+  params:
+    link_url: "#"
+  action: click_help_button
+  action: check_link_and_text
+check_console_link_in_applauncher:
+  action: click_application_launcher_button
+  action: check_link_and_text
+  action: check_image_url
+check_console_link_in_usermenu:
+  params:
+    link_url: "#"
+  action: click_user_menu_button
+  action: check_link_and_text
+click_help_button:
+  params:
+    aria_label: Help menu
+  action: click_masthead_button
+click_application_launcher_button:
+  params:
+    aria_label: Application launcher
+  action: click_masthead_button
+click_user_menu_button:
+  params:
+    aria_label: User menu
+  action: click_masthead_button
+click_masthead_button:
+  element:
+    selector:
+      xpath: //button[contains(@aria-label, '<aria_label>')]
+    op: click
+check_image_url:
+  element:
+    selector:
+      xpath: //img[contains(@src,'<image_src>')]
+check_default_oc_download_links:
+  params:
+    text: Download oc for Linux for x86_64
+    link_url: <downloads_route>/amd64/linux/oc.tar
+  action: check_link_and_text
+  params:
+    text: Download oc for Linux for ARM 64
+    link_url: <downloads_route>/arm/linux/oc.tar
+  action: check_link_and_text
+  params:
+    text: Download oc for Linux for IBM Power, little endian
+    link_url: <downloads_route>/ppc64le/linux/oc.tar
+  action: check_link_and_text 
+  params:
+    text: Download oc for Linux for IBM Z
+    link_url: <downloads_route>/s390x/linux/oc.tar
+  action: check_link_and_text 
+  params:
+    text: Download oc for Mac
+    link_url: <downloads_route>/amd64/mac/oc.zip
+  action: check_link_and_text
+  params:
+    text: Download oc for Windows
+    link_url: <downloads_route>/amd64/windows/oc.zip
+  action: check_link_and_text  
+check_default_odo_download_links:
+  params:
+    text: odo
+    link_url: clients/odo/latest
+  action: check_link_and_text
+check_customized_oc_download_links:
+  params:
+    text: Download oc2
+    link_url: mirror.openshift.com/pub/openshift-v4/clients/oc
+  action: check_link_and_text
+  params:
+    text: Download oc3
+    link_url: mirror.openshift.com/pub/openshift-v4/clients/oc
+  action: check_link_and_text
+  params:
+    text: 下载oc命令行
+    link_url: mirror.openshift.com/pub/openshift-v4/clients/oc
+  action: check_link_and_text

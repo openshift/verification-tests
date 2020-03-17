@@ -5,6 +5,24 @@
 #   objects throughout test execution keeping correct status like config file
 #   modification state.
 
+Given /^fips is (enabled|disabled)$/ do |status|
+  ensure_admin_tagged
+  step %Q/I run the :get admin command with:/, table(%{
+    | resource | machineconfigs |
+  })
+  if status == 'enabled'
+    step %Q/the output should contain:/, table(%{
+      | 99-master-fips |
+      | 99-worker-fips |
+    })
+  else
+    step %Q/the output should not contain:/, table(%{
+      | 99-master-fips |
+      | 99-worker-fips |
+    })
+  end
+end
+
 # select a random node from a cluster.
 Given /^I select a random node's host$/ do
   ensure_admin_tagged

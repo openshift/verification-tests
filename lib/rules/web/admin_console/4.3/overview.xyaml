@@ -73,14 +73,10 @@ check_error_icon_for_overview_item:
       css: .project-overview__detail--alert
     timeout: 20
 check_popover_info:
-  elements:
-  - selector:
-      xpath: //button[contains(@class, 'details-popover-button') and contains(text(), '<popover_item>')]
-    op: click
-  - selector:
-      xpath: //.[contains(@id, 'popover')]/div[contains(text(),"<popover_item>")]
+  action: wait_resource_summary_loaded
+  action: click_open_popover
   action:
-    if_param: 
+    if_param:
       popover_item: Run Policy
     ref: check_run_policy_popover_info
   action:
@@ -103,29 +99,92 @@ check_popover_info:
     if_param: 
       popover_item: Service
     ref: check_service_popover_info
+wait_resource_summary_loaded:
+  elements:
+  - selector:
+      xpath: //*[contains(@class,'co-m-pane__details') and @data-test-id='resource-summary']
+    timeout: 20
+click_open_popover:
+  elements:
+  - selector:
+      xpath: //button[contains(@class, 'details-popover-button') and contains(text(), '<popover_item>') and not(@disabled)]
+    op: click
+check_popover_title:
+  elements:
+  - selector:
+      xpath: //*[contains(@id, 'popover')]/div[contains(text(),"<popover_item>")]
 check_run_policy_popover_info:
   params:
     content: RunPolicy describes how the new build created from this build configuration
+  action: check_popover_title
   action: check_page_contains
 check_triggered_by_popover_info:
   params:
     content: triggeredBy describes which triggers started the most recent update to the build configuration
+  action: check_popover_title
   action: check_page_contains
 check_update_strategy_popover_info:
   params:
     content: the name of a deployment strategy
+  action: check_popover_title
   action: check_page_contains
 check_namespace_popover_info:
   params:
     text: docs/user-guide/namespaces
     link_url: docs/user-guide/namespaces
-  action: click_link_with_text
+  action: check_popover_title
+  action: check_link_and_text
 check_label_popover_info:
   params:
     text: docs/user-guide/labels
     link_url: docs/user-guide/labels
-  action: click_link_with_text
+  action: check_popover_title
+  action: check_link_and_text
 check_service_popover_info:
   params:
     content: name of the service/target that is being referred
+  action: check_popover_title
   action: check_page_contains
+click_groupby_dropdown_button:
+  elements:
+  - selector:
+      xpath: //span[contains(@class,'pf-c-dropdown__toggle-text') and contains(.,'Group by')]/parent::button[contains(@class,'pf-c-dropdown__toggle')]
+    op: click
+check_dropdown_menu_item:
+  element:
+    selector: &group_by_dropdown_item
+      xpath: //button[contains(@class,'pf-c-dropdown__menu-item') and text()='<dropdown_menu_item>']
+click_dropdown_menu_item:
+  element:
+    selector:
+      <<: *group_by_dropdown_item
+    op: click
+check_groupby_label_header_missing:
+  element:
+    selector:
+      xpath: //div[@class='dropdown-menu__header' and text()='Label']
+    missing: true
+check_overview_group_heading:
+  element:
+    selector:
+      xpath: //h2[contains(@class,'project-overview__group-heading') and text()='<group_heading_name>']
+check_overview_group_items:
+  elements:
+  - selector:
+      xpath: //h2[contains(@class,'project-overview__group-heading') and text()='<group_heading_name>']/parent::div[contains(@class,'project-overview__group')]//span[contains(@class,'co-m-resource-icon') and @title='<resource_type>']/following-sibling::button[text()='<resource_name>']
+group_by_application:
+  params:
+    dropdown_menu_item: Application
+  action: click_groupby_dropdown_button
+  action: click_dropdown_menu_item
+group_by_resource:
+  params:
+    dropdown_menu_item: Resource
+  action: click_groupby_dropdown_button
+  action: click_dropdown_menu_item
+group_by_label:
+  params:
+    dropdown_menu_item: <label>
+  action: click_groupby_dropdown_button
+  action: click_dropdown_menu_item
+

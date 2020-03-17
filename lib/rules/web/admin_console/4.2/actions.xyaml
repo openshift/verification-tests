@@ -36,6 +36,8 @@ add_label:
 
 # a combined action can be directly used for Edit Annotations
 add_annotation_for_resource:
+  params:
+    item: Edit Annotations
   action: click_one_dropdown_action
   action: add_annotation
   action: submit_changes
@@ -70,3 +72,7 @@ click_not_cancel:
     selector:
       xpath: //button[@data-test-id='modal-cancel-action']
     op: click
+create_autoscaler_action:
+  params:
+    item: Create Autoscaler
+  action: click_one_dropdown_action

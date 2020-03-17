@@ -8,9 +8,9 @@ click_resource_action_button:
     op: click
     timeout: 30
 choose_action_item_from_list:
-  element:
-    selector:
-      xpath: //button[@data-test-action='<item>']
+  elements: 
+  - selector:
+      xpath: //button[@data-test-action='<item>' and not(@disabled)]
     op: click
 choose_item_from_list:
   elements:
@@ -22,7 +22,6 @@ click_resource_action_icon:
   - selector:
       xpath: //a[text()='<resource_name>']/ancestor::span/../div//span[contains(@class,'co-m-cog__icon')]
     op: click
-
 # a combined action can be directly used for Edit Labels
 add_label_for_resource:
   action: click_one_dropdown_action
@@ -41,6 +40,8 @@ add_label:
 
 # a combined action can be directly used for Edit Annotations
 add_annotation_for_resource:
+  params:
+    item: Edit Annotations
   action: click_one_dropdown_action
   action: add_annotation
   action: submit_changes
@@ -75,3 +76,16 @@ click_not_cancel:
     selector:
       xpath: //button[@data-test-id='modal-cancel-action']
     op: click
+create_autoscaler_action:
+  params:
+    item: Create Autoscaler
+  action: click_one_dropdown_action
+click_add_users_action:
+  params:
+    item: Add Users
+  action: click_one_dropdown_action
+click_remove_group_action:
+  params:
+    item: Delete Group
+  action: click_one_dropdown_action
+  action: submit_changes

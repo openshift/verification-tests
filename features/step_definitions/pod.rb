@@ -7,6 +7,7 @@ Given /^a pod becomes ready with labels:$/ do |table|
   if @result[:matching].empty?
     # logger.info("Pod list:\n#{@result[:response]}")
     # logger.error("Waiting for labeled pods futile: #{labels.join(",")}")
+    logger.error(@result[:response])
     raise "See log, timeout waiting for ready pods with " \
       "labels: #{labels.join(',')}"
   end
