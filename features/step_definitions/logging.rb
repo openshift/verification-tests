@@ -274,10 +274,10 @@ Given /^I create clusterlogging instance with:$/ do | table |
     }
   end
   log_collector = opts[:log_collector]
-  step %Q/I wait for the "instance" clusterloggings to appear/
-  step %Q/I wait for the "elasticsearch" elasticsearches to appear/
-  step %Q/I wait for the "kibana" deployment to appear/
-  step %Q/I wait for the "#{log_collector}" daemonset to appear/
+  step %Q/I wait for the "instance" clusterloggings to appear up to 300 seconds/
+  step %Q/I wait for the "elasticsearch" elasticsearches to appear up to 300 seconds/
+  step %Q/I wait for the "kibana" deployment to appear up to 300 seconds/
+  step %Q/I wait for the "#{log_collector}" daemonset to appear up to 300 seconds/
   # to wait for the status informations to show up in the clusterlogging instance
   sleep 10
   step %Q/I wait for clusterlogging with "#{log_collector}" log collector to be functional in the project/
@@ -302,15 +302,10 @@ end
 
 Given /^logging channel name is stored in the#{OPT_SYM} clipboard$/ do | cb_name |
   cb_name = 'logging_channel_name' unless cb_name
-  case
-  when cluster_version('version').version.include?('4.1.')
+  if cluster_version('version').version.include?('4.1.')
     cb[cb_name] = "preview"
-  when cluster_version('version').version.include?('4.2.')
-    cb[cb_name] = "4.2"
-  when cluster_version('version').version.include?('4.3.')
-    cb[cb_name] = "4.3"
-  when cluster_version('version').version.include?('4.4.')
-    cb[cb_name] = "4.4"
+  else
+    cb[cb_name] = cluster_version('version').channel.split('-')[1]
   end
 end
 
