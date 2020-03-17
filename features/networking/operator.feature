@@ -342,5 +342,5 @@ Feature: Operator related networking scenarios
     """
     Given I use the "openshift-multus" project
     And all existing pods die with labels:
-    | app=dhcp-daemon |
+      | app=dhcp-daemon |
     """
