@@ -186,6 +186,19 @@
     :validate: --validate=<value>
 :create_namespace:
   :cmd: oc create namespace <name>
+:create_poddisruptionbudget:
+  :cmd: oc create poddisruptionbudget <name>
+  :options:
+    :allow_missing_template_keys: --allow-missing-template-keys=<value>
+    :dry_run: --dry-run=<value>
+    :generator: --generator=<value>
+    :max_unavailable: --max-unavailable=<value>
+    :min_available: --min-available=<value>
+    :o: -o <value>
+    :save_config: --save-config=<value>
+    :selector: --selector=<value>
+    :template: --template=<value>
+    :validate: --validate=<value>
 :create_quota:
   :cmd: oc create quota <name>
   :options:
