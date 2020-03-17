@@ -326,7 +326,7 @@ Feature: Operator related networking scenarios
     Given I use the "openshift-multus" project
     #The multus enabled on the cluster step used in beginning stores desired_multus_replicas value in cb variable which is being used here
     And status becomes :running of exactly <%= cb.desired_multus_replicas %> pods labeled:
-    | app=dhcp-daemon |
+      | app=dhcp-daemon |
     """
     Given I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
       | {"spec":{"additionalNetworks": null}} |
