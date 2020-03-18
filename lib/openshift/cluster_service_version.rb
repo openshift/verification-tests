@@ -6,7 +6,7 @@ module BushSlicer
 
     # @return [BushSlicer::ResultHash] with :success depending on 
     # status phase=Succeeded and reason=InstallSucceeded;
-    def ready?(user:, quiet: false, cached: false)
+    def ready?(user: user, quiet: false, cached: false)
     	res = get(user: user, quiet: quiet)
     	if res[:success]
     		res[:success] = 
