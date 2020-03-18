@@ -1,0 +1,112 @@
+click_icon_index_button:
+  element:
+    selector:
+      xpath: (//button[@aria-label='<aria_label_text>'])[<index>]
+    op: click
+set_placeholder_input_value:
+  element:
+    selector:
+      xpath: (//input[@placeholder='<placeholder_text>'])[<index>]
+    op: send_keys <input_value>
+    type: input
+clear_label_input_value:
+  elements:
+  - selector:
+      xpath: //label[text()='<label_text>']/..//input
+    op: clear
+    type: input
+set_label_input_value:
+  element:
+    selector:
+      xpath: //label[text()='<label_text>']/..//input
+    op: send_keys <input_value>
+    type: input
+check_div_text:
+  element:
+    selector:
+      xpath: //div[contains(text(),'<text>')]
+
+open_alert_detail:
+  action: click_alert_link_with_text
+silence_alert_from_action:
+  action: click_actions_button
+  action: click_silence_alert_button
+  action: click_create_button
+
+click_alert_link_with_text:
+  element:
+    selector:
+      xpath: //a[text()='<alert_name>']
+    op: click
+    timeout: 60
+click_actions_button:
+  element:
+    selector:
+      xpath: //button[@aria-label='Actions'][@data-test-id='actions-menu-button']
+    op: click
+click_silence_alert_button:
+  params:
+    button_text: Silence Alert
+  action: click_button_text
+
+expire_alert_from_detail: 
+  action: click_first_action_icon
+  action: click_expire_alert_button
+click_first_action_icon:
+  params:
+    aria_label_text: Actions 
+    index: 1
+  action: click_icon_index_button
+click_expire_alert_button:
+  params:
+    button_text: Expire Silence
+  action: click_button_text
+disable_silence_tab:
+  action:
+    if_element:
+      selector:
+        xpath: //a[text()='Silenced'][contains(@class,'_box--active')]
+      timeout: 60
+    ref: click_silenced_tab
+click_silenced_tab:
+  element:
+    selector:
+      xpath: //a[text()='Silenced']
+    op: click
+
+edit_silence_alert:
+  action: click_actions_button
+  action: click_edit_silence_button
+click_edit_silence_button:
+  params:
+    button_text: Edit Silence
+  action: click_button_text
+remove_matcher_silence_alert:
+  params:
+    aria_label_text: Remove matcher
+    index: 1
+  action: click_icon_index_button
+input_matcher_name_silence:
+  params:
+    placeholder_text: name
+    index: 1
+    input_value: alertname
+  action: set_placeholder_input_value
+
+expire_alert_from_actions:
+  action: click_actions_button
+  action: click_expire_silence_button
+click_expire_silence_button:
+  params:
+    button_text: Expire Silence
+  action: click_button_text
+
+set_invalid_end_time_silence:
+  params:
+    label_text: End
+    input_value: 2020/03/05 20:11:44
+  action: clear_label_input_value
+  action: set_label_input_value
+  
+
+
