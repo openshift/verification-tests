@@ -83,7 +83,7 @@ Feature: test logging and metrics related steps
   @destructive
   Scenario: test new inventory loading for metrics
     Given metrics service is installed in the system using:
-      | inventory | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/new_inventory_format/logging_metrics/OCP-12276/inventory |
+      | inventory | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging_metrics/OCP-12276/inventory |
     Then the expression should be true> rc('hawkular-cassandra-1').container_spec(name: 'hawkular-cassandra-1').memory_limit_raw == "1G"
     Then the expression should be true> rc('hawkular-metrics').container_spec(user: user, name: 'hawkular-metrics').cpu_request_raw == "100m"
 
@@ -92,7 +92,7 @@ Feature: test logging and metrics related steps
   Scenario: test new inventory loading for logging
     Given the master version >= "3.4"
     And logging service is installed with ansible using:
-      | inventory | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/new_inventory_format/logging_metrics/OCP-16138/inventory |
+      | inventory | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging_metrics/OCP-16138/inventory |
     Given a pod becomes ready with labels:
       | component=fluentd,logging-infra=fluentd |
     Then the expression should be true> pod.env_var('BUFFER_QUEUE_LIMIT') == "512"
@@ -103,7 +103,7 @@ Feature: test logging and metrics related steps
   Scenario: test new inventory loading for prometheus
     Given the master version >= "3.7"
     And metrics service is installed with ansible using:
-      | inventory | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/new_inventory_format/logging_metrics/OCP-15529/inventory |
+      | inventory | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging_metrics/OCP-15529/inventory |
     And a pod becomes ready with labels:
       | app=prometheus |
     # check the parameter for the 5 containers
