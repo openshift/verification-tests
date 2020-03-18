@@ -421,3 +421,20 @@ Feature: Pod related networking scenarios
       | bash | -c | conntrack -L \| grep "<%= cb.nodeport %>" |
     Then the output should contain "<%= cb.host_pod2.ip %>"
     And the output should not contain "<%= cb.host_pod1.ip %>"
+
+  # @author anusaxen@redhat.com
+  # @case_id OCP-25294
+  @admin
+  Scenario: Pod should be accesible via node ip and host port
+    Given I select a random node's host
+    And I have a project
+    When I run the :create admin command with:
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/pod-for-ping-with-hostport.yml |
+      | n | <%= project.name %>                                                                                          |
+    Then the step should succeed
+    And status becomes :running of exactly 1 pod labeled:
+      | name=hello-pod |
+    When I run commands on all nodes:	    
+      | curl <%= pod.ip %>:9500 |
+    Then the output should contain:
+      | Hello-OpenShift |
