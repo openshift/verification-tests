@@ -43,7 +43,7 @@ perform_cutomer_query:
   action: click_custom_query_button
   action: check_query_input_text_area
   action: set_query_input_text_area
-  
+
 click_metrics_query_dropdown:
   element:
     selector:
@@ -131,8 +131,9 @@ check_metric_query_chart:
   element:
     selector:
       xpath: //div[@class='odc-metrics-chart' ]//div[@class='query-browser__zoom']
-    timeout: 30
+    timeout: 120
 check_metric_query_table_text:
   element:
     selector:
       xpath: //table[@aria-label='query results table']//td[text()='<project_name>']
+    timeout: 120
