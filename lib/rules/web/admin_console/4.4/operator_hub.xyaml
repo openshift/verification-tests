@@ -96,6 +96,25 @@ check_description_for_developer_catalog:
     text: Developer Catalog
     link_url: catalog
   action: click_link_with_text
+check_marketplace_catalog_badge:
+  elements:
+  - selector:
+      xpath: //*[contains(@class, 'pf-c-check__label') and text()='Marketplace']
+    op: click
+  - selector:
+      xpath: //*[contains(@class, 'pf-c-badge') and text()='Marketplace']
+    timeout: 30
+open_first_card_in_overlay:
+  elements:
+  - selector:
+      xpath: //a[contains(@class, 'pf-c-card')]
+    op: click
+check_marketplace_operator_description_on_overlay:
+  action: open_first_card_in_overlay
+  elements:
+  - selector:
+      xpath: //div[contains(@class, 'co-hint-block')][h2[contains(.,'Marketplace Operator')] and div[contains(@class, 'co-hint-block__body') and contains(.,'This Operator is purchased through Red Hat Marketplace')] ]
+    timeout: 30
 uninstall_operator_on_console:
   params:
     button_text: Uninstall Operator
