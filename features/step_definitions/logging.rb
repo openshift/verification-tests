@@ -402,79 +402,88 @@ Given /^I create the resources for the receiver with:$/ do | table |
     @result = user.cli_exec(:create, f: file)
     raise "Unable to create resoure with #{file}" unless @result[:success]
   end
-  @result = user.cli_exec(:expose, name: receiver_name, resource: 'deployment', resource_name: receiver_name, namespace: namespace)
-  raise "Unable to expose the service for #{receiver_name}" unless @result[:success]
+  if receiver_name == "rsyslogserver"
+    svc_file = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/logforwarding/rsyslog/rsyslogserver_svc.yaml"
+    @result = user.cli_exec(:create, f: svc_file)
+    raise "Unable to expose the service for rsyslog server" unless @result[:success]
+  else
+    @result = user.cli_exec(:expose, name: receiver_name, resource: 'deployment', resource_name: receiver_name, namespace: namespace)
+    raise "Unable to expose the service for #{receiver_name}" unless @result[:success]
+  end
   step %Q/a pod becomes ready with labels:/, table(%{
     | #{pod_label} |
   })
+  step %Q/evaluation of `pod` is stored in the :log_receiver clipboard/
 end
 
-Given /^fluentd receiver is deployed as (secure|insecure)(?: in the#{OPT_QUOTED} project)?$/ do | security, project_name |
+Given /^(fluentd|elasticsearch|rsyslog) receiver is deployed as (secure|insecure)(?: in the#{OPT_QUOTED} project)?$/ do | server, security, project_name |
   project_name ||= "openshift-logging"
   org_user = user
   project(project_name)
-  if security == "secure"
-    step %Q/I generate certs for the "fluentdserver" receiver in the "<%= project.name %>" project/
-    step %Q/I ensures "fluentdserver" secret is deleted from the "<%= project.name %>" project after scenario/
-    step %Q/I run the :create_secret client command with:/, table(%{
-      | name         | fluentdserver            |
-      | secret_type  | generic                  |
-      | from_file    | tls.key=logging-es.key   |
-      | from_file    | tls.crt=logging-es.crt   |
-      | from_file    | ca-bundle.crt=ca.crt     |
-      | from_file    | ca.key=ca.key            |
-      | from_literal | shared_key=fluentdserver |
-    })
-    step %Q/the step should succeed/
-    if project_name != "openshift-logging"
-      step %Q/I create pipelinesecret named "fluentdserver" with sharedkey "fluentdserver"/
+  case server
+  when "fluentd"
+    receiver_name = "fluentdserver"
+    pod_label = "logging-infra=fluentdserver"
+    if security == "secure"
+      step %Q/I generate certs for the "fluentdserver" receiver in the "<%= project.name %>" project/
+      step %Q/I ensures "fluentdserver" secret is deleted from the "<%= project.name %>" project after scenario/
+      step %Q/I run the :create_secret client command with:/, table(%{
+        | name         | fluentdserver            |
+        | secret_type  | generic                  |
+        | from_file    | tls.key=logging-es.key   |
+        | from_file    | tls.crt=logging-es.crt   |
+        | from_file    | ca-bundle.crt=ca.crt     |
+        | from_file    | ca.key=ca.key            |
+        | from_literal | shared_key=fluentdserver |
+      })
+      step %Q/the step should succeed/
+      if project_name != "openshift-logging"
+        step %Q/I create pipelinesecret named "fluentdserver" with sharedkey "fluentdserver"/
+      end
+      configmap_file = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/logforwarding/fluentd/secure/configmap.yaml"
+      deployment_file = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/logforwarding/fluentd/secure/fluentdserver_deployment.yaml"
+    else
+      configmap_file = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/logforwarding/fluentd/insecure/configmap.yaml"
+      deployment_file = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/logforwarding/fluentd/insecure/fluentdserver_deployment.yaml"
     end
-    configmap_file = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/logforwarding/fluentd/secure/configmap.yaml"
-    deployment_file = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/logforwarding/fluentd/secure/fluentdserver_deployment.yaml"
-  else
-    configmap_file = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/logforwarding/fluentd/insecure/configmap.yaml"
-    deployment_file = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/logforwarding/fluentd/insecure/fluentdserver_deployment.yaml"
+
+  when "elasticsearch"
+    receiver_name = "elasticsearch-server"
+    pod_label = "app=elasticsearch-server"
+    if security == "secure"
+      step %Q/I generate certs for the "elasticsearch-server" receiver in the "<%= project.name %>" project/
+      step %Q/I ensures "elasticsearch-server" secret is deleted from the "<%= project.name %>" project after scenario/
+      step %Q/I run the :create_secret client command with:/, table(%{
+        | name        | elasticsearch-server                |
+        | secret_type | generic                             |
+        | from_file   | logging-es.key=logging-es.key       |
+        | from_file   | logging-es.crt=logging-es.crt       |
+        | from_file   | elasticsearch.key=elasticsearch.key |
+        | from_file   | elasticsearch.crt=elasticsearch.crt |
+        | from_file   | admin-ca=ca.crt                     |
+      })
+      step %Q/the step should succeed/
+      step %Q/I create pipelinesecret named "piplinesecret"/
+      configmap_file = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/logforwarding/elasticsearch/secure/configmap.yaml"
+      deployment_file = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/logforwarding/elasticsearch/secure/deployment.yaml"
+    else
+      configmap_file = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/logforwarding/elasticsearch/insecure/configmap.yaml"
+      deployment_file = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/logforwarding/elasticsearch/insecure/deployment.yaml"
+    end
+
+  when "rsyslog"
+    receiver_name = "rsyslogserver"
+    pod_label = "component=rsyslogserver"
+    configmap_file = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/logforwarding/rsyslog/insecure/rsyslogserver_configmap.yaml"
+    deployment_file = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/logforwarding/rsyslog/insecure/rsyslogserver_deployment.yaml"
+
   end
 
   step %Q/I create the resources for the receiver with:/, table(%{
-    | namespace       | #{project_name}             |
-    | receiver_name   | fluentdserver               |
-    | configmap_file  | #{configmap_file}           |
-    | deployment_file | #{deployment_file}          |
-    | pod_label       | logging-infra=fluentdserver |
-  })
-end
-
-Given /^elasticsearch receiver is deployed as (secure|insecure)(?: in the#{OPT_QUOTED} project)?$/ do | security, project_name |
-  project_name ||= "openshift-logging"
-  org_user = user
-  project(project_name)
-
-  if security == "secure"
-    step %Q/I generate certs for the "elasticsearch-server" receiver in the "<%= project.name %>" project/
-    step %Q/I ensures "elasticsearch-server" secret is deleted from the "<%= project.name %>" project after scenario/
-    step %Q/I run the :create_secret client command with:/, table(%{
-      | name        | elasticsearch-server                |
-      | secret_type | generic                             |
-      | from_file   | logging-es.key=logging-es.key       |
-      | from_file   | logging-es.crt=logging-es.crt       |
-      | from_file   | elasticsearch.key=elasticsearch.key |
-      | from_file   | elasticsearch.crt=elasticsearch.crt |
-      | from_file   | admin-ca=ca.crt                     |
-    })
-    step %Q/the step should succeed/
-    step %Q/I create pipelinesecret named "piplinesecret"/
-    configmap_file = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/logforwarding/elasticsearch/secure/configmap.yaml"
-    deployment_file = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/logforwarding/elasticsearch/secure/deployment.yaml"
-  else
-    configmap_file = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/logforwarding/elasticsearch/insecure/configmap.yaml"
-    deployment_file = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/logforwarding/elasticsearch/insecure/deployment.yaml"
-  end
-  step %Q/I create the resources for the receiver with:/, table(%{
-    | namespace       | #{project_name}          |
-    | receiver_name   | elasticsearch-server     |
-    | configmap_file  | #{configmap_file}        |
-    | deployment_file | #{deployment_file}       |
-    | pod_label       | app=elasticsearch-server |
+    | namespace       | #{project_name}    |
+    | receiver_name   | #{receiver_name}   |
+    | configmap_file  | #{configmap_file}  |
+    | deployment_file | #{deployment_file} |
+    | pod_label       | #{pod_label}       |
   })
 end
