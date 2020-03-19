@@ -371,3 +371,28 @@ Feature: SDN related networking scenarios
     And I run commands on the host:
       | ls -l /var/run/multus/cni/net.d/10-ovn-kubernetes.conf |
     Then the output should contain "10-ovn-kubernetes.conf"
+  
+  # @author anusaxen@redhat.com
+  # @case_id OCP-25787
+  @admin
+  Scenario: NetworkManager should consider OVS interfaces as unmanaged
+  Given the env is using "OVNKubernetes" networkType
+  And I select a random node's host
+  And the vxlan tunnel name of node "<%= node.name %>" is stored in the :tunnel_inf_name clipboard
+  Given I use the "<%= node.name %>" node
+  #bridge interfaces needs to be unmanaged
+  And I run commands on the host:
+    | nmcli |
+  Then the output should contain:
+    | br-int: unmanaged                    |
+    | br-local: unmanaged                  |
+    | br-nexthop: unmanaged                |
+    | <%= cb.tunnel_inf_name %>: unmanaged |
+  # And veths ovs interfaces also needs to be unmanaged
+  And I run commands on the host:
+    | nmcli device \| grep ethernet \| grep -c unmanaged |
+  And evaluation of `@result[:response].split("\n")[0]` is stored in the :no_of_unmanaged_veths clipboard
+  And I run commands on the host:
+    | nmcli \| grep veth \| wc -l |
+  And evaluation of `@result[:response].split("\n")[0]` is stored in the :no_of_veths clipboard
+  Then the expression should be true> cb.no_of_veths==cb.no_of_unmanaged_veths
