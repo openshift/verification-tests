@@ -426,15 +426,25 @@ Feature: Pod related networking scenarios
   # @case_id OCP-25294
   @admin
   Scenario: Pod should be accesible via node ip and host port
-    Given I select a random node's host
+    Given I store the workers in the :workers clipboard
+    And the Internal IP of node "<%= cb.workers[0].name %>" is stored in the :worker0_ip clipboard
+    And the Internal IP of node "<%= cb.workers[1].name %>" is stored in the :worker1_ip clipboard
     And I have a project
-    When I run the :create admin command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/pod-for-ping-with-hostport.yml |
-      | n | <%= project.name %>                                                                                          |
+    When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/pod-for-ping-with-hostport.yml" replacing paths:
+      | ["metadata"]["namespace"] |  <%= project.name %>       |
+      | ["spec"]["nodeName"]      |  <%= cb.workers[0].name %> |
     Then the step should succeed
-    And status becomes :running of exactly 1 pod labeled:
+    And a pod becomes ready with labels:
       | name=hello-pod |
-    When I run commands on all nodes:	    
-      | curl <%= pod.ip %>:9500 |
+    #Pod should be accesible via node ip and host port from its home node
+    Given I use the "<%= cb.workers[0].name %>" node
+    And I run commands on the host:
+      | curl <%= cb.worker0_ip %>:9500 |
     Then the output should contain:
-      | Hello-OpenShift |
+      | Hello OpenShift |
+    #Pod should be accesible via node ip and host port from another node as well. Remember worker0 is home node for that pod
+    Given I use the "<%= cb.workers[1].name %>" node
+    And I run commands on the host:
+      | curl <%= cb.worker0_ip %>:9500 |
+    Then the output should contain:
+      | Hello OpenShift |
