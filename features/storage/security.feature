@@ -5,16 +5,16 @@ Feature: storage security check
   @admin
   Scenario Outline: [origin_infra_20] volume security testing
     Given I have a project
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/misc/pvc.json" replacing paths:
       | ["metadata"]["name"] | mypvc1 |
     Then the step should succeed
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/misc/pvc.json" replacing paths:
       | ["metadata"]["name"] | mypvc2 |
     Then the step should succeed
 
     Given I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/security/privileged-test.json" replacing paths:
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/security/privileged-test.json" replacing paths:
       | ["metadata"]["name"]                                        | mypod         |
       | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]   | /mnt          |
       | ["spec"]["containers"][0]["image"]                          | aosqe/storage |
@@ -58,7 +58,7 @@ Feature: storage security check
     And the output should contain "Hello OpenShift Storage"
     Given I ensure "mypod" pod is deleted
 
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/security/privileged-test.json" replacing paths:
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/security/privileged-test.json" replacing paths:
       | ["metadata"]["name"]                                        | mypod2        |
       | ["spec"]["containers"][0]["image"]                          | aosqe/storage |
       | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]   | /mnt          |
@@ -113,13 +113,13 @@ Feature: storage security check
   Scenario: secret volume security check
     Given I have a project
     When I run the :create client command with:
-      | filename | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/secret/secret.yaml |
+      | filename | <%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/secret/secret.yaml |
     Then the step should succeed
 
     Given I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
     When I run the :create client command with:
-      | filename | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/secret/secret-pod-test.json |
+      | filename | <%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/secret/secret-pod-test.json |
     Then the step should succeed
 
     Given the pod named "secretpd" becomes ready

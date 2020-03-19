@@ -1,0 +1,64 @@
+{
+    "apiVersion": "v1",
+    "kind": "List",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "kind": "ReplicationController",
+            "metadata": {
+                "labels": {
+                    "name": "test-rc"
+                },
+                "name": "test-rc"
+            },
+            "spec": {
+                "replicas": 2,
+                "template": {
+                    "metadata": {
+                        "labels": {
+                            "name": "test-pods"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "image": "aosqe/pod-for-ping",
+                                "name": "test-pod",
+                                "imagePullPolicy": "IfNotPresent",
+                                "resources":{
+                                  "limits":{
+                                    "memory":"340Mi"
+                                  }
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Service",
+            "metadata": {
+                "labels": {
+                    "name": "test-service"
+                },
+                "name": "test-service"
+            },
+            "spec": {
+                "ports": [
+                    {
+                        "name": "http",
+                        "port": 27017,
+                        "protocol": "TCP",
+                        "targetPort": 8080
+                    }
+                ],
+                "selector": {
+                    "name": "test-pods"
+                }
+            }
+        }
+    ]
+}
+

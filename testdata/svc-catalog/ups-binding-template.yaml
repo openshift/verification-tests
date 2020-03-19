@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: ups-binding
+objects:
+- apiVersion: servicecatalog.k8s.io/v1beta1
+  kind: ServiceBinding
+  metadata:
+    name: ${BINDING_NAME}
+    namespace: ${USER_PROJECT}
+  spec:
+    instanceRef:
+      name: ${INSTANCE_NAME}
+    secretName: ${SECRET_NAME}
+
+parameters:
+- description: Binding name
+  displayname: Binding name
+  name: BINDING_NAME
+  value: ups-binding
+
+- description: User project
+  displayname: User project
+  name: USER_PROJECT
+  value: test-ns
+
+- description: Instance name
+  displayname: Instance name
+  name: INSTANCE_NAME
+  value: ups-instance
+
+- description: Secret name
+  displayname: Secret name
+  name: SECRET_NAME
+  value: my-secret

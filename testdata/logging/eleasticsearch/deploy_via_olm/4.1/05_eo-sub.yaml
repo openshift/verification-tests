@@ -1,0 +1,14 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: "elasticsearch-operator"
+  namespace: "openshift-operators-redhat"
+  labels:
+    csc-owner-name: elasticsearch
+    csc-owner-namespace: openshift-marketplace
+spec:
+  channel: preview
+  installPlanApproval: Automatic
+  source: "elasticsearch"
+  sourceNamespace: "openshift-operators-redhat"
+  name: "elasticsearch-operator"

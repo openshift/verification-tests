@@ -1,0 +1,96 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: hello-openshift
+    name: hello-openshift
+  spec:
+    tags:
+    - annotations:
+        openshift.io/imported-from: openshift/hello-openshift
+      from:
+        kind: DockerImage
+        name: openshift/hello-openshift
+      generation: null
+      importPolicy: {}
+      name: latest
+  status:
+    dockerImageRepository: ""
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: hello-openshift
+    name: hello-openshift
+  spec:
+    replicas: 1
+    selector:
+      app: hello-openshift
+      deploymentconfig: hello-openshift
+    strategy:
+      resources: {}
+    template:
+      metadata:
+        annotations:
+          openshift.io/container.hello-openshift.image.entrypoint: '["/hello-openshift"]'
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: hello-openshift
+          deploymentconfig: hello-openshift
+      spec:
+        containers:
+        - image: openshift/hello-openshift
+          name: hello-openshift
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          - containerPort: 8888
+            protocol: TCP
+          resources: {}
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - hello-openshift
+        from:
+          kind: ImageStreamTag
+          name: hello-openshift:latest
+      type: ImageChange
+  status: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: hello-openshift
+    name: hello-openshift
+  spec:
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    - name: 8888-tcp
+      port: 8888
+      protocol: TCP
+      targetPort: 8888
+    selector:
+      app: hello-openshift
+      deploymentconfig: hello-openshift
+  status:
+    loadBalancer: {}
+kind: List
+metadata: {}

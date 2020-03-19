@@ -5,7 +5,7 @@ Feature: oc import-image related feature
   Scenario: [origin_infrastructure_437] Import new tags to image stream
     Given I have a project
     When I run the :create client command with:
-      | filename | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/templates/tc488870/application-template-stibuild.json |
+      | filename | <%= ENV['BUSHSLICER_HOME'] %>/testdata/templates/tc488870/application-template-stibuild.json |
     Then the step should succeed
     When I run the :new_secret client command with:
       | secret_name     | sec-push                                                             |
@@ -39,7 +39,7 @@ Feature: oc import-image related feature
   Scenario: Do not create tags for ImageStream if image repository does not have tags
     When I have a project
     And I run the :create client command with:
-      | filename | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/image-streams/is_without_tags.json |
+      | filename | <%= ENV['BUSHSLICER_HOME'] %>/testdata/image-streams/is_without_tags.json |
     Then the step should succeed
     When I run the :get client command with:
       | resource      | imagestreams |
@@ -55,7 +55,7 @@ Feature: oc import-image related feature
   Scenario: Could not import the tag when reference is true
     Given I have a project
     When I run the :create client command with:
-      | filename | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/image-streams/tc510523.json |
+      | filename | <%= ENV['BUSHSLICER_HOME'] %>/testdata/image-streams/tc510523.json |
     Then the step should succeed
     Given I wait up to 15 seconds for the steps to pass:
     """
@@ -71,7 +71,7 @@ Feature: oc import-image related feature
   Scenario: Import image when pointing to non-existing docker image
     Given I have a project
     When I run the :create client command with:
-      | filename | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/image-streams/tc510524.json |
+      | filename | <%= ENV['BUSHSLICER_HOME'] %>/testdata/image-streams/tc510524.json |
     Then the step should succeed
     Given I wait up to 10 seconds for the steps to pass:
     """
@@ -86,7 +86,7 @@ Feature: oc import-image related feature
   Scenario: Import image when spec.DockerImageRepository defined without any tags
     Given I have a project
     When I run the :create client command with:
-      | filename | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/image-streams/tc510525.json |
+      | filename | <%= ENV['BUSHSLICER_HOME'] %>/testdata/image-streams/tc510525.json |
     Then the step should succeed
     Given I wait up to 15 seconds for the steps to pass:
     """
@@ -102,7 +102,7 @@ Feature: oc import-image related feature
   Scenario: Import Image when spec.DockerImageRepository not defined
     Given I have a project
     When I run the :create client command with:
-      | filename | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/image-streams/tc510526.json |
+      | filename | <%= ENV['BUSHSLICER_HOME'] %>/testdata/image-streams/tc510526.json |
     Then the step should succeed
     Given I wait up to 15 seconds for the steps to pass:
     """
@@ -120,7 +120,7 @@ Feature: oc import-image related feature
   Scenario: Import image when spec.DockerImageRepository with some tags defined when Kind!=DockerImage
     Given I have a project
     When I run the :create client command with:
-      | filename | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/image-streams/tc510525.json |
+      | filename | <%= ENV['BUSHSLICER_HOME'] %>/testdata/image-streams/tc510525.json |
     Then the step should succeed
     Given I wait up to 15 seconds for the steps to pass:
     """
@@ -131,7 +131,7 @@ Feature: oc import-image related feature
       | aosqeruby:latest |
     """
     When I run the :create client command with:
-      | filename | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/image-streams/tc510527.json |
+      | filename | <%= ENV['BUSHSLICER_HOME'] %>/testdata/image-streams/tc510527.json |
     Then the step should succeed
     Given I wait up to 15 seconds for the steps to pass:
     """
@@ -150,7 +150,7 @@ Feature: oc import-image related feature
   Scenario: Import image when spec.DockerImageRepository with some tags defined when Kind==DockerImage
     Given I have a project
     When I run the :create client command with:
-      | filename | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/image-streams/tc510528.json |
+      | filename | <%= ENV['BUSHSLICER_HOME'] %>/testdata/image-streams/tc510528.json |
     Then the step should succeed
     Given I wait up to 15 seconds for the steps to pass:
     """
@@ -166,7 +166,7 @@ Feature: oc import-image related feature
   Scenario: Import Image without tags and spec.DockerImageRepository set
     Given I have a project
     When I run the :create client command with:
-      | filename | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/image-streams/tc510529.json |
+      | filename | <%= ENV['BUSHSLICER_HOME'] %>/testdata/image-streams/tc510529.json |
     Then the step should succeed
     When I run the :import_image client command with:
       | image_name | tc510529 |
@@ -179,7 +179,7 @@ Feature: oc import-image related feature
   Scenario: Tags should be added to ImageStream if image repository is from an external docker registry
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/image-streams/external.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/image-streams/external.json |
     Then the step should succeed
     And I wait for the steps to pass:
     ## istag will not show promtly as soon as is create, need wait for a few seconds

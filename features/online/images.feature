@@ -71,7 +71,7 @@ Feature: ONLY ONLINE Images related scripts in this file
   Scenario: Verify Mariadb can be connected after admin and user password are changed and re-deployment for persistent storage - marialdb-101-rhel7
     Given I have a project
     And I run the :new_app client command with:
-      | file | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/templates/tc532739/mariadb-persistent.json |
+      | file | <%= ENV['BUSHSLICER_HOME'] %>/testdata/templates/tc532739/mariadb-persistent.json |
     Given a pod becomes ready with labels:
       | deployment=mariadb-1 |
     When I run the :set_env client command with:

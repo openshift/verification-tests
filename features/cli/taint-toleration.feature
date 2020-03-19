@@ -18,7 +18,7 @@ Feature: taint toleration related scenarios
     And the master service is restarted on all master nodes
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/infrastructure/hpa/hello-pod.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/infrastructure/hpa/hello-pod.yaml |
     Then the step should succeed
     Given the pod named "hello-pod" becomes ready
     When I run the :describe client command with:
@@ -29,7 +29,7 @@ Feature: taint toleration related scenarios
       | Tolerations:.*300s |
    
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/tolerations/defaultTolerationSeconds-override.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/pods/tolerations/defaultTolerationSeconds-override.yaml |
     Then the step should succeed
     Given the pod named "mytoleration" becomes ready
     When I run the :describe client command with:
@@ -52,7 +52,7 @@ Feature: taint toleration related scenarios
     """
     And the master service is restarted on all master nodes
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/infrastructure/hpa/hello-pod.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/infrastructure/hpa/hello-pod.yaml |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | pod       |

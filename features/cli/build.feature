@@ -45,7 +45,7 @@ Feature: build 'apps' with CLI
   Scenario Outline: when delete the bc,the builds pending or running should be deleted
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/tc<number>/test-buildconfig.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/tc<number>/test-buildconfig.json |
     Then the step should succeed
     Given the "ruby-sample-build-1" build becomes <build_status>
     Then I run the :delete client command with:
@@ -184,7 +184,7 @@ Feature: build 'apps' with CLI
   Scenario: Add multiple source inputs
     Given I have a project
     When I run the :new_app client command with:
-      | file | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/templates/tc517667/ruby22rhel7-template-sti.json |
+      | file | <%= ENV['BUSHSLICER_HOME'] %>/testdata/templates/tc517667/ruby22rhel7-template-sti.json |
     Given the "ruby-sample-build-1" build completes
     When I run the :get client command with:
       | resource      | buildconfig       |
@@ -207,7 +207,7 @@ Feature: build 'apps' with CLI
   Scenario: Add a image with multiple paths as source input
     Given I have a project
     When I run the :new_app client command with:
-      | file | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/templates/tc517666/ruby22rhel7-template-sti.json |
+      | file | <%= ENV['BUSHSLICER_HOME'] %>/testdata/templates/tc517666/ruby22rhel7-template-sti.json |
     Given the "ruby-sample-build-1" build completes
     When I get project build_config named "ruby-sample-build" as YAML
     Then the output should contain "xiuwangs2i-2"
@@ -245,7 +245,7 @@ Feature: build 'apps' with CLI
     Given I get project builds
     #Create a deploymentconfig to generate pods to test on,
     #Avoids the use of direct docker commands.
-    When I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/templates/tc517670/dc.json"
+    When I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/templates/tc517670/dc.json"
     Then the step should succeed
     Given I replace lines in "dc.json":
       | replaceme | final-app |
@@ -285,10 +285,10 @@ Feature: build 'apps' with CLI
     Given I have a project
     #Reusing similar secrets to TC #519256
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/tc519256/testsecret1.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/secrets/tc519256/testsecret1.json |
     Then the step should succeed
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/tc519256/testsecret2.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/secrets/tc519256/testsecret2.json |
     Then the step should succeed
     When I run the :new_build client command with:
       | image_stream | ruby:latest                                      |
@@ -310,7 +310,7 @@ Feature: build 'apps' with CLI
   Scenario: Using a docker image as source input for docker build
     Given I have a project
     When I run the :new_app client command with:
-      | file | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/templates/tc517668/ruby22rhel7-template-docker.json |
+      | file | <%= ENV['BUSHSLICER_HOME'] %>/testdata/templates/tc517668/ruby22rhel7-template-docker.json |
     Given the "ruby-sample-build-1" build completes
     When I get project build_config named "ruby-sample-build" as YAML
     Then the output should contain "xiuwangtest"
@@ -325,10 +325,10 @@ Feature: build 'apps' with CLI
   Scenario Outline: Do sti/custom build with no inputs in buildconfig
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/tc525736/nosrc-setup.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/tc525736/nosrc-setup.json |
     Then the step should succeed
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/tc525736/nosrc-test.json  |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/tc525736/nosrc-test.json  |
     When I get project bc
     Then the output should contain:
       | <bc_name> |
@@ -354,8 +354,8 @@ Feature: build 'apps' with CLI
 
     Examples:
       | bc_name              | build_name             | file_name                                                                                             |
-      | ruby-sample-build-ns | ruby-sample-build-ns-1 | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/tc525736/Nonesrc-sti.json    | # @case_id OCP-11580
-      | ruby-sample-build-nc | ruby-sample-build-nc-1 | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/tc525735/Nonesrc-docker.json | # @case_id OCP-11268
+      | ruby-sample-build-ns | ruby-sample-build-ns-1 | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/tc525736/Nonesrc-sti.json    | # @case_id OCP-11580
+      | ruby-sample-build-nc | ruby-sample-build-nc-1 | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/tc525735/Nonesrc-docker.json | # @case_id OCP-11268
 
   # @author cryan@redhat.com
   # @case_id OCP-11582
@@ -673,7 +673,7 @@ Feature: build 'apps' with CLI
       | app_repo     | https://github.com/openshift/ruby-hello-world.git |
       | image_stream | ruby:latest                                       |
     Then the step should succeed
-    Given I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/templates/tc539699/build.yaml"
+    Given I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/templates/tc539699/build.yaml"
     And I replace lines in "build.yaml":
       | replacestr/ | <%= product_docker_repo %> |
     When I run the :create client command with:

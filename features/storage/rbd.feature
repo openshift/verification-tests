@@ -16,7 +16,7 @@ Feature: Storage of Ceph plugin testing
     And evaluation of `@result[:parsed]["data"]["key"]` is stored in the :secret_key clipboard
 
     Given I have a project
-    When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/rbd/dynamic-provisioning/claim.yaml" replacing paths:
+    When I create a dynamic pvc from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/rbd/dynamic-provisioning/claim.yaml" replacing paths:
       | ["metadata"]["name"]         | mypvc |
       | ["spec"]["storageClassName"] | cephrbdprovisioner      |
     Then the step should succeed
@@ -25,9 +25,9 @@ Feature: Storage of Ceph plugin testing
     # Switch to admin so as to create pod with desired FSGroup and SElinux levels
     Given I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
-    And I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/rbd/dynamic-provisioning/user_secret.yaml" replacing paths:
+    And I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/rbd/dynamic-provisioning/user_secret.yaml" replacing paths:
       | ["data"]["key"] | <%= cb.secret_key %> |
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/rbd/dynamic-provisioning/pod.json" replacing paths:
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/rbd/dynamic-provisioning/pod.json" replacing paths:
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc |
     Then the step should succeed
     And the pod named "rbdpd" becomes ready
@@ -57,7 +57,7 @@ Feature: Storage of Ceph plugin testing
     And admin checks that the "cephrbd-secret" secret exists in the "default" project
     And I have a project
 
-    When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/rbd/dynamic-provisioning/claim.yaml" replacing paths:
+    When I create a dynamic pvc from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/rbd/dynamic-provisioning/claim.yaml" replacing paths:
       | ["metadata"]["name"]         | mypvc |
       | ["spec"]["storageClassName"] | cephrbdprovisioner      |
       | ["spec"]["resources"]["requests"]["storage"]                           | 9Gi                     |

@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    name: test-setuid
+  name: test-setuid
+spec:
+  containers:
+    -
+      capabilities: {}
+      image: "deshuai/hello-openshift:root"
+      imagePullPolicy: IfNotPresent
+      name: test-setuid
+      ports:
+        -
+          containerPort: 8080
+          protocol: TCP
+      resources: {}
+      securityContext:
+        capabilities: {}
+        privileged: false
+      terminationMessagePath: /dev/termination-log
+      volumeMounts:
+        -
+          mountPath: /tmp
+          name: tmp
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+  volumes:
+    -
+      emptyDir: {}
+      name: tmp

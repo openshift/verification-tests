@@ -88,7 +88,7 @@ Feature: collector related tests
     Given I create a project with non-leading digit name
     Given evaluation of `project` is stored in the :proj clipboard
     When I run the :new_app client command with:
-      | file | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/loggen/container_json_unicode_log_template.json |
+      | file | <%= ENV['BUSHSLICER_HOME'] %>/testdata/logging/loggen/container_json_unicode_log_template.json |
     Then the step should succeed
     And a pod becomes ready with labels:
       | run=centos-logtest,test=centos-logtest |
@@ -122,7 +122,7 @@ Feature: collector related tests
     Given I create a project with non-leading digit name
     Given evaluation of `project` is stored in the :proj clipboard
     When I run the :new_app client command with:
-      | file | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/loggen/container_json_unicode_log_template.json |
+      | file | <%= ENV['BUSHSLICER_HOME'] %>/testdata/logging/loggen/container_json_unicode_log_template.json |
     Then the step should succeed
     And a pod becomes ready with labels:
       | run=centos-logtest,test=centos-logtest |

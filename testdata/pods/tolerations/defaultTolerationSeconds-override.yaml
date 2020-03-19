@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    name: mytoleration
+  name: mytoleration
+spec:
+  containers:
+    - image: "docker.io/ocpqe/hello-pod:latest"
+      imagePullPolicy: IfNotPresent
+      name: mytoleration
+      ports:
+        - containerPort: 8080
+          protocol: TCP
+      resources: {}
+      securityContext:
+        capabilities: {}
+        privileged: false
+      terminationMessagePath: /dev/termination-log
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+  serviceAccount: ""
+  tolerations:
+  - effect: NoExecute
+    key: node.alpha.kubernetes.io/notReady
+    operator: Exists
+    tolerationSeconds: 60
+  - effect: NoExecute
+    key: node.alpha.kubernetes.io/unreachable
+    operator: Exists
+    tolerationSeconds: 60

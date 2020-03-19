@@ -18,14 +18,14 @@ Feature: Testing haproxy router
     #create route and service which has two endpoints
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/caddy-docker.json |
     Then the step should succeed
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker-2.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/caddy-docker-2.json |
     Then the step should succeed
     And all pods in the project are ready
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/unsecure/service_unsecure.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/unsecure/service_unsecure.json |
     Then the step should succeed
     When I expose the "service-unsecure" service
     Then the step should succeed
@@ -71,14 +71,14 @@ Feature: Testing haproxy router
     #create route and service which has two endpoints
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/caddy-docker.json |
     Then the step should succeed
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker-2.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/caddy-docker-2.json |
     Then the step should succeed
     And all pods in the project are ready
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/edge/service_unsecure.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/edge/service_unsecure.json |
     Then the step should succeed
     When I run the :create_route_edge client command with:
       | name | route-edge |
@@ -135,17 +135,17 @@ Feature: Testing haproxy router
     And I have a project
     And I store default router IPs in the :router_ip clipboard
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/caddy-docker.json |
     Then the step should succeed
     And the pod named "caddy-docker" becomes ready
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/unsecure/service_unsecure.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/unsecure/service_unsecure.json |
     Then the step should succeed
     When I expose the "service-unsecure" service
     Then the step should succeed
-    Given I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/edge/route_edge-www.edge.com.crt"
-    And I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/edge/route_edge-www.edge.com.key"
-    And I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/ca.pem"
+    Given I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/edge/route_edge-www.edge.com.crt"
+    And I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/edge/route_edge-www.edge.com.key"
+    And I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/ca.pem"
     When I run the :create_route_edge client command with:
       | name | route-edge |
       | hostname | <%= rand_str(5, :dns) %>-edge.example.com |
@@ -242,7 +242,7 @@ Feature: Testing haproxy router
       | name | router |
       | replicas | 0 |
     Then the step should succeed
-    Given I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/default-router.pem"
+    Given I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/default-router.pem"
     When I run the :oadm_router admin command with:
       | name | ocp-12651|
       | images | <%= cb.default_router_image %> |
@@ -255,12 +255,12 @@ Feature: Testing haproxy router
     Given I switch to the first user
     And I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/caddy-docker.json |
     Then the step should succeed
     And a pod becomes ready with labels:
       | name=caddy-docker |
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/unsecure/service_unsecure.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/unsecure/service_unsecure.json |
     Then the step should succeed
     When I run the :create_route_edge client command with:
       | name | route-edge |
@@ -270,7 +270,7 @@ Feature: Testing haproxy router
     Given I have a pod-for-ping in the project
     When I execute on the pod:
       | wget |
-      | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/default-router.pem |
+      | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/default-router.pem |
       | -O |
       | /tmp/default-router.pem |
       | -T |
@@ -308,10 +308,10 @@ Feature: Testing haproxy router
     And I have a pod-for-ping in the project
     And I store default router IPs in the :router_ip clipboard
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/caddy-docker.json |
     Then the step should succeed
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/edge/service_unsecure.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/edge/service_unsecure.json |
     Then the step should succeed
 
     # create some route and wait for it to be sure we hit a reload point
@@ -391,11 +391,11 @@ Feature: Testing haproxy router
   Scenario: Limit the number of TCP connection per IP in specified time period
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/caddy-docker.json |
     Then the step should succeed
     And the pod named "caddy-docker" becomes ready
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/passthrough/service_secure.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/passthrough/service_secure.json |
     Then the step should succeed
     When I run the :create_route_passthrough client command with:
       | name | route-pass |
@@ -442,7 +442,7 @@ Feature: Testing haproxy router
     Given I switch to the first user
     And I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/list_for_caddy.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/list_for_caddy.json |
     Then the step should succeed
     Given a pod becomes ready with labels:
       | name=caddy-pods |
@@ -480,7 +480,7 @@ Feature: Testing haproxy router
     Given I switch to the first user
     And I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/list_for_caddy.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/list_for_caddy.json |
     Then the step should succeed
     Given a pod becomes ready with labels:
       | name=caddy-pods |
@@ -513,14 +513,14 @@ Feature: Testing haproxy router
     Given I have a project
     And I store an available router IP in the :router_ip clipboard
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/caddy-docker.json |
     Then the step should succeed
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker-2.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/caddy-docker-2.json |
     Then the step should succeed
     And all pods in the project are ready
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/passthrough/service_secure.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/passthrough/service_secure.json |
     Then the step should succeed
     When I run the :create_route_passthrough client command with:
       | name | route-pass |
@@ -560,14 +560,14 @@ Feature: Testing haproxy router
   Scenario: Disable haproxy hash based sticky session for unsecure routes
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/caddy-docker.json |
     Then the step should succeed
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker-2.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/caddy-docker-2.json |
     Then the step should succeed
     And all pods in the project are ready
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/unsecure/service_unsecure.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/unsecure/service_unsecure.json |
     Then the step should succeed
     When I expose the "service-unsecure" service
     Then the step should succeed
@@ -601,11 +601,11 @@ Feature: Testing haproxy router
     Given I have a project
     And evaluation of `project.name` is stored in the :proj_name clipboard
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/caddy-docker.json |
     Then the step should succeed
     And the pod named "caddy-docker" becomes ready
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/edge/service_unsecure.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/edge/service_unsecure.json |
     Then the step should succeed
     When I expose the "service-unsecure" service
     Then the step should succeed
@@ -641,11 +641,11 @@ Feature: Testing haproxy router
     Given I switch to the first user
     And I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/caddy-docker.json |
     Then the step should succeed
     Given the pod named "caddy-docker" becomes ready
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/unsecure/service_unsecure.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/unsecure/service_unsecure.json |
     Then the step should succeed
     When I run the :expose client command with:
       | resource      | service          |
@@ -658,11 +658,11 @@ Feature: Testing haproxy router
     Given I switch to the second user
     And I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/caddy-docker.json |
     Then the step should succeed
     Given the pod named "caddy-docker" becomes ready
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/unsecure/service_unsecure.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/unsecure/service_unsecure.json |
     Then the step should succeed
     When I run the :expose client command with:
       | resource      | service             |
@@ -736,14 +736,14 @@ Feature: Testing haproxy router
     Given the master version >= "3.7"
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/caddy-docker.json |
     Then the step should succeed
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker-2.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/caddy-docker-2.json |
     Then the step should succeed
     And all pods in the project are ready
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/unsecure/service_unsecure.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/unsecure/service_unsecure.json |
     Then the step should succeed
     When I expose the "service-unsecure" service
     Then the step should succeed
@@ -778,14 +778,14 @@ Feature: Testing haproxy router
     Given the master version >= "3.7"
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/caddy-docker.json |
     Then the step should succeed
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker-2.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/caddy-docker-2.json |
     Then the step should succeed
     And all pods in the project are ready
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/edge/service_unsecure.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/edge/service_unsecure.json |
     Then the step should succeed
     When I run the :create_route_edge client command with:
       | name    | edge-route       |
@@ -828,11 +828,11 @@ Feature: Testing haproxy router
     Given I have a project
     And evaluation of `project.name` is stored in the :project_red clipboard
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/caddy-docker.json |
     Then the step should succeed
     And the pod named "caddy-docker" becomes ready
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/unsecure/service_unsecure.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/unsecure/service_unsecure.json |
     Then the step should succeed
     When I expose the "service-unsecure" service
     Then the step should succeed

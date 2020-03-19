@@ -5,7 +5,7 @@ Feature: services related feature on web console
   Scenario: Access service pages from web console
     Given I have a project
     # oc process -f file | oc create -f -
-    When I process and create "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/tc/tc477695/hello.json"
+    When I process and create "<%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/tc/tc477695/hello.json"
     Then the step should succeed
     When I perform the :check_service_list_page web console action with:
       | project_name | <%= project.name %> |
@@ -32,7 +32,7 @@ Feature: services related feature on web console
       | target_port  | 5555                             |
     Then the step should succeed
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/tc/tc477695/new_route.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/tc/tc477695/new_route.json |
     Then the step should succeed
     Given evaluation of `route("hello-route1").dns` is stored in the :dns2 clipboard
     When I perform the :check_one_service_page web console action with:
@@ -76,13 +76,13 @@ Feature: services related feature on web console
     # Given the master version >= "3.4"
     Given I create a new project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/unsecure/service_unsecure.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/unsecure/service_unsecure.json |
     Then the step should succeed
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/unsecure/service_unsecure.json" replacing paths:
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/unsecure/service_unsecure.json" replacing paths:
       | ["metadata"]["name"]           | service-unsecure-1 |
       | ["metadata"]["labels"]["name"] | service-unsecure-1 |
     Then the step should succeed
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/unsecure/service_unsecure.json" replacing paths:
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/unsecure/service_unsecure.json" replacing paths:
       | ["metadata"]["name"]           | service-unsecure-2 |
       | ["metadata"]["labels"]["name"] | service-unsecure-2 |
     Then the step should succeed

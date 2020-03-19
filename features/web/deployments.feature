@@ -7,7 +7,7 @@ Feature: Check deployments function
     Given I have a project
     # create dc
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/cancel-deployment-gracefully.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/deployment/cancel-deployment-gracefully.json |
     Then the step should succeed
     And evaluation of `"hooks"` is stored in the :dc_name clipboard
     When I perform the :wait_latest_deployments_to_deployed web console action with:
@@ -42,7 +42,7 @@ Feature: Check deployments function
   Scenario: Check deployment info on web console
     Given I create a new project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/deployment1.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/deployment/deployment1.json |
     Then the step should succeed
     And I wait until the status of deployment "hooks" becomes :complete
     # check dc detail info
@@ -142,7 +142,7 @@ Feature: Check deployments function
   Scenario: Idled DC handling on web console
     Given I create a new project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/deployment-with-service.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/deployment/deployment-with-service.yaml |
     Then the step should succeed
     Given I wait until the status of deployment "hello-openshift" becomes :complete
     When I run the :idle client command with:
@@ -306,7 +306,7 @@ Feature: Check deployments function
     Given the master version >= "3.4"
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/replicaSet/tc536601/replicaset.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/replicaSet/tc536601/replicaset.yaml |
     Then the step should succeed
     When I perform the :goto_overview_page web console action with:
       | project_name | <%= project.name %> |

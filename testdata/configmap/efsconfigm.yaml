@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: efs-provisioner
+data:
+  file.system.id: fs-c8e05981
+  aws.region: us-east-1
+  provisioner.name: openshift.org/aws-efs

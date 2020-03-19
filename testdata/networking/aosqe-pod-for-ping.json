@@ -1,0 +1,22 @@
+{
+  "kind": "Pod",
+  "apiVersion":"v1",
+  "metadata": {
+        "name": "hello-pod",
+        "labels": {
+                "name": "hello-pod"
+        }
+  },
+  "spec": {
+      "containers": [{
+        "name": "hello-pod",
+        "image": "aosqe/pod-for-ping",
+        "resources":{
+          "limits":{
+            "memory":"340Mi"
+          }
+        }
+      }]
+  }
+}
+

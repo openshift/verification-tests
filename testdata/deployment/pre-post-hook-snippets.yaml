@@ -1,0 +1,30 @@
+spec:
+  strategy:
+    type: Recreate
+    recreateParams:
+      pre:
+        execNewPod: ~
+        tagImages:
+        - containerName: ruby-helloworld-database
+          to:
+            apiVersion: v1
+            kind: ImageStreamTag
+            name: myis:tag1
+        failurePolicy: Abort
+      post:
+        execNewPod:
+          command:
+          - /bin/true
+          - aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+          - bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+          containerName: ruby-helloworld-database
+          env:
+          - name: CUSTOM_VAR1
+            value: custom_value1
+          - name: CUSTOM_VAR2
+            value: custom_value2
+          - name: CUSTOM_VAR3
+            value: custom_value3
+          volumes:
+          - ruby-helloworld-data
+        failurePolicy: Ignore

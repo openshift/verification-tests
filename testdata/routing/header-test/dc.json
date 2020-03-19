@@ -1,0 +1,49 @@
+{
+  "kind": "DeploymentConfig",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "header-test",
+    "labels": {
+      "name": "header-test"
+    }
+  },
+  "spec": {
+    "template": {
+      "metadata": {
+        "labels": {
+          "name": "header-test"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "name": "header-test-container",
+            "image": "aosqe/http-header-test",
+            "ports": [
+              {
+                "containerPort": 8080,
+                "protocol": "TCP"
+              },
+              {
+                "containerPort": 8443,
+                "protocol": "TCP"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "replicas": 1,
+    "selector": {
+      "name": "header-test"
+    },
+    "triggers": [
+      {
+        "type": "ConfigChange"
+      }
+    ],
+    "strategy": {
+      "type": "Rolling"
+    }
+  }
+}

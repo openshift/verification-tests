@@ -1,0 +1,31 @@
+{
+    "apiVersion": "v1",
+    "kind": "Pod",
+    "metadata": {
+        "name": "gce",
+        "labels": {
+            "name": "frontendhttp"
+        }
+    },
+    "spec": {
+        "containers": [{
+            "name": "myfrontend",
+            "image": "aosqe/hello-openshift",
+            "imagePullPolicy": "IfNotPresent",
+            "ports": [{
+                "containerPort": 80,
+                "name": "http-server"
+            }],
+            "volumeMounts": [{
+                "mountPath": "/mnt/gce",
+                "name": "pvol"
+            }]
+        }],
+        "volumes": [{
+            "name": "pvol",
+            "persistentVolumeClaim": {
+                "claimName": "gcec"
+            }
+        }]
+    }
+}

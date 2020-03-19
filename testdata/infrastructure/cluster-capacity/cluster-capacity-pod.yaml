@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: cluster-capacity
+  name: cluster-capacity
+spec:
+  containers:
+  - name: cluster-capacity
+    image: openshift3/ose-cluster-capacity:v<%=env.get_version(user:user).first%>
+    volumeMounts:
+    - mountPath: /test-pod
+      name: test-volume
+    - mountPath: /admin-creds
+      name: admin-creds
+    command:
+    - "/bin/sh"
+    - "-ec"
+    - "sleep inf"
+  volumes:
+  - name: test-volume
+    configMap:
+      name: cluster-capacity-configmap
+  - name: admin-creds
+    secret:
+      secretName: admin-kubeconfig

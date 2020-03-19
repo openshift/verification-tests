@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Template
+metadata:
+  annotations:
+    description: "servicebinding-template"
+  name: servicebinding-template
+objects:
+  -
+    apiVersion: servicecatalog.k8s.io/v1beta1
+    kind: ServiceBinding
+    metadata:
+      name: "${BINDING_NAME}"
+    spec:
+      instanceRef:
+        name: "${INSTANCE_NAME}"
+      secretName: "${SECRET_NAME}"
+parameters:
+  -
+    name: BINDING_NAME
+    description: "servicebinding name"
+    generate: expression
+    value: "rh-postgresql-apb"
+  -
+    name: INSTANCE_NAME
+    description: "serviceinstance name"
+    generate: expression
+    value: "rh-postgresql-apb"
+  -
+    name: SECRET_NAME
+    description: "serviceinstance credentials"
+    generate: expression
+    value: "rh-postgresql-apb-credentials"

@@ -6,13 +6,13 @@ Feature: basic verification for upgrade testing
   Scenario: etcd-operator and cluster works well after upgrade - prepare 
     Given I switch to cluster admin pseudo user		
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/admin/subscription.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/admin/subscription.yaml |
     Then the step should succeed
     When I use the "openshift-operators" project
     Then status becomes :running of exactly 1 pods labeled:
       | name=etcd-operator-alm-owned |
     When I use the "default" project
-    Given I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/admin/etcd-cluster.yaml"
+    Given I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/admin/etcd-cluster.yaml"
     When I run the :create client command with:
       | f | etcd-cluster.yaml |
     Then the step should succeed

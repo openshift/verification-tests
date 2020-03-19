@@ -10,7 +10,7 @@ Feature: Deploy logging operators via console
     Given the logging operators are redeployed after scenario
     Given logging channel name is stored in the :logging_channel clipboard
     Given I run the :create admin command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/deploy_clo_via_olm/01_clo_ns.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/logging/clusterlogging/deploy_clo_via_olm/01_clo_ns.yaml |
     Then the step should succeed
     Given I register clean-up steps:
     """

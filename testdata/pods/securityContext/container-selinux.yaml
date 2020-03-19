@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    name: selinux-container
+  name: selinux-container
+spec:
+  containers:
+    - image: "docker.io/ocpqe/hello-pod:latest"
+      imagePullPolicy: IfNotPresent
+      name: hello-pod
+      ports:
+        - containerPort: 8080
+          protocol: TCP
+      resources: {}
+      securityContext:
+        seLinuxOptions:
+          user: unconfined_u
+          role: unconfined_r
+          level: s0:c25,c968
+        capabilities: {}
+        privileged: false
+      terminationMessagePath: /dev/termination-log
+      volumeMounts:
+        - mountPath: /mnt
+          name: tmp
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+  serviceAccount: ""
+  volumes:
+    - emptyDir: {}
+      name: tmp
+status: {}

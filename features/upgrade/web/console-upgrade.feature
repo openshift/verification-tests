@@ -13,13 +13,13 @@ Feature: web console related upgrade check
       | name         | ruby |
     Then the step should succeed
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/daemon/daemonset.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/daemon/daemonset.yaml |
     Then the step should succeed
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/deployment1.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/deployment/deployment1.json |
     Then the step should succeed
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/hello-deployment-1.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/deployment/hello-deployment-1.yaml |
     Then the step should succeed
     Given I open admin console in a browser
     When I perform the :goto_project_resources_page web action with:

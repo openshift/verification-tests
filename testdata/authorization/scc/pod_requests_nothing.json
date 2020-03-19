@@ -1,0 +1,23 @@
+{
+  "kind": "Pod",
+  "apiVersion":"v1",
+
+  "metadata": {
+        "name": "pod-request-nothing",
+        "labels": {
+                "name": "pod-request-nothing"
+        }
+  },
+
+  "spec": {
+      "containers": [{
+        "name": "pod-request-nothing",
+        "image": "bmeng/hello-openshift",
+        "ports": [
+          {
+            "containerPort": 8080
+          }
+        ]
+      }]
+  }
+}

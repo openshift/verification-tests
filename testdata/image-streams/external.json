@@ -1,0 +1,32 @@
+{
+  "kind": "ImageStreamList",
+  "apiVersion": "v1",
+  "metadata": {},
+  "items": [
+    {
+      "kind": "ImageStream",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "external",
+        "creationTimestamp": null
+      },
+      "spec": {
+        "dockerImageRepository": "jhou/hello-openshift",
+        "tags": [
+          {
+            "name": "latest",
+            "annotations": {
+              "description": "jhou tests",
+              "iconClass": "icon-ruby",
+              "tags": "builder,ruby",
+              "version": "2.0"
+            }
+          }
+        ]
+      },
+      "status": {
+        "dockerImageRepository": ""
+      }
+    }
+  ]
+}

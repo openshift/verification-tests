@@ -1,0 +1,44 @@
+{
+  "apiVersion": "v1",
+  "kind": "List",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "ReplicationController",
+      "metadata": {
+        "labels": {
+          "name": "udp-rc"
+        },
+        "name": "udp-rc"
+      },
+      "spec": {
+        "replicas": 1,
+        "template": {
+          "metadata": {
+            "labels": {
+              "name": "udp-pods"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "command": [
+                  "/usr/bin/ncat",
+                  "-u",
+                  "-l",
+                  "8080",
+                  "--keep-open",
+                  "--exec",
+                  "/bin/cat"
+                ],
+                "name": "udp-pod",
+                "image": "aosqe/pod-for-ping"
+              }
+            ],
+          "nodeName": "node-name"
+          }
+        }
+      }
+    }
+  ]
+}

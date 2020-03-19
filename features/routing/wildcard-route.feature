@@ -11,7 +11,7 @@ Feature: Testing wildcard routes
     And I have a project
     And I store default router IPs in the :router_ip clipboard
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/wildcard_route/caddy-docker.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/wildcard_route/caddy-docker.json |
     Then the step should succeed
     And the pod named "caddy-docker" becomes ready
     When I run the :create client command with:
@@ -45,7 +45,7 @@ Feature: Testing wildcard routes
 
     Examples:
       | route_type | service | route | route-suffix |
-      | edge | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/edge/service_unsecure.json | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/wildcard_route/route_edge.json | edge.example.com | # @case_id OCP-11403
-      | reencrypt | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/reencrypt/service_secure.json | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/wildcard_route/route_reencrypt.json | reen.example.com | # @case_id OCP-11855
-      | passthrough | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/passthrough/service_secure.json | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/wildcard_route/route_pass.json | pass.example.com | # @case_id OCP-11671
+      | edge | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/edge/service_unsecure.json | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/wildcard_route/route_edge.json | edge.example.com | # @case_id OCP-11403
+      | reencrypt | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/reencrypt/service_secure.json | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/wildcard_route/route_reencrypt.json | reen.example.com | # @case_id OCP-11855
+      | passthrough | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/passthrough/service_secure.json | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/wildcard_route/route_pass.json | pass.example.com | # @case_id OCP-11671
 

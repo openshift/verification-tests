@@ -1,0 +1,22 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: localpd
+  labels:
+    name: frontendhttp
+spec:
+  containers:
+    - name: myfrontend
+      image: aosqe/hello-openshift
+      securityContext:
+          privileged: true
+      ports:
+        - containerPort: 80
+          name: "http-server"
+      volumeMounts:
+      - mountPath: "/mnt/local"
+        name: local
+  volumes:
+    - name: local
+      persistentVolumeClaim:
+       claimName: localc

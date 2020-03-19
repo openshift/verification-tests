@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Template
+metadata:
+  annotations:
+    description: "serviceinstance-template"
+  name: serviceinstance-template
+objects:
+  -
+    apiVersion: servicecatalog.k8s.io/v1beta1
+    kind: ServiceInstance
+    metadata:
+      name: "${INSTANCE_NAME}"
+      namespace: "${INSTANCE_NAMESPACE}"
+    spec:
+      clusterServiceClassExternalName: "${CLASS_EXTERNAL_NAME}"
+      clusterServicePlanExternalName: "${PLAN_EXTERNAL_NAME}"
+      parametersFrom:
+      - secretKeyRef:
+          key: parameters
+          name: "${SECRET_NAME}"
+parameters:
+  -
+    name: INSTANCE_NAME
+    description: "serviceinstance name"
+    generate: expression
+    value: "rh-mediawiki-apb"
+  -
+    name: INSTANCE_NAMESPACE
+    description: "serviceinstance namespace"
+    generate: expression
+    value: "auto-asb"
+  -
+    name: CLASS_EXTERNAL_NAME
+    description: "clusterserviceclass external name"
+    generate: expression
+    value: "rh-mediawiki-apb"
+  -
+    name: PLAN_EXTERNAL_NAME
+    description: "clusterserviceplan external plan"
+    generate: expression
+    value: "default"
+  -
+    name: SECRET_NAME
+    description: "serviceinstance parameters"
+    generate: expression
+    value: "rh-mediawiki-apb-parameters"

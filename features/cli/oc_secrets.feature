@@ -58,13 +58,13 @@ Feature: oc_secrets.feature
     Given I have a project
     # 1.1 Create a secret with a non-existing namespace
     When I run the :create client command with:
-      | filename  | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/tc483168/second-secret.json |
+      | filename  | <%= ENV['BUSHSLICER_HOME'] %>/testdata/secrets/tc483168/second-secret.json |
       | namespace | non483167 |
     Then the step should fail
     And the output should match "cannot create secrets in (project|the namespace "non483167").*"
     # 1.2 Create a secret with a correct namespace
     When I run the :create client command with:
-      | filename | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/tc483168/second-secret.json |
+      | filename | <%= ENV['BUSHSLICER_HOME'] %>/testdata/secrets/tc483168/second-secret.json |
     Then the step should succeed
     # 2. Describe a secret
     When I run the :describe client command with:

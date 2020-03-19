@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hello-pod
+  annotations:
+    pod.alpha.kubernetes.io/init-containers: '[
+        {
+            "name": "install",
+            "image": "docker.io/ocpqe/hello-pod:latest",
+            "command": ["/bin/sh", "-c","echo hello init-containers > /work-dir/hello.txt"],
+            "volumeMounts": [
+                {
+                    "name": "workdir",
+                    "mountPath": "/work-dir"
+                }
+            ]
+        }
+    ]'
+spec:
+  containers:
+    - image: "docker.io/ocpqe/hello-pod:latest"
+      imagePullPolicy: IfNotPresent
+      name: hello-pod
+      command: ["/bin/sh", "-c", "while true; do cat /tmp/hello.txt; sleep 5; done"]
+      ports:
+        - containerPort: 8080
+          protocol: TCP
+      resources: {}
+      securityContext:
+        capabilities: {}
+        privileged: false
+      terminationMessagePath: /dev/termination-log
+      volumeMounts:
+        - mountPath: /tmp
+          name: workdir
+  dnsPolicy: ClusterFirst
+  serviceAccount: ""
+  volumes:
+    - emptyDir: {}
+      name: workdir

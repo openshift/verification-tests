@@ -1,0 +1,21 @@
+{
+  "kind": "Pod",
+  "apiVersion":"v1",
+  "metadata": {
+        "name": "iperf-server"
+  },
+  "spec": {
+      "containers": [{
+        "name": "iperf-server",
+        "image": "bmeng/iperf3",
+    	"command": [
+	      "iperf3"
+    	],
+    	"args":[
+    	  "-s"
+    	]
+      }]
+  }
+}
+
+

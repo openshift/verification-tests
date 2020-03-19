@@ -1,0 +1,21 @@
+{
+    "kind": "ImageStream",
+    "apiVersion": "v1",
+    "metadata": {
+       "name": "aosqeruby",
+       "creationTimestamp": null
+    },
+    "spec": {
+       "dockerImageRepository": "aosqe/ruby-20-centos7",
+            "tags":[
+                       { "name": "3.3",
+                           "from":
+                            {
+                                "kind": "DockerImage",
+                                 "name": "aosqe/ruby-20-centos7"
+                            },
+                           "reference":  true
+                         }
+              ]
+         }
+}

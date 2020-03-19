@@ -8,10 +8,10 @@ Feature: check settings page on web console
     # create limit and quota via CLI
     Given I use the "<%= project.name %>" project
     And I run the :create admin command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/quota/quota.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/quota/quota.yaml |
       | n | <%= project.name %> |
     And I run the :create admin command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/quota/limits.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/quota/limits.yaml |
       | n | <%= project.name %> |
     Then the step should succeed
 

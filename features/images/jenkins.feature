@@ -5,7 +5,7 @@ Feature: jenkins.feature
     Given I have a project
     And I have a jenkins v<ver> application
     When I run the :new_app client command with:
-      | file | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/image/language-image-templates/application-template.json |
+      | file | <%= ENV['BUSHSLICER_HOME'] %>/testdata/image/language-image-templates/application-template.json |
     When I give project edit role to the default service account
     Then the step should succeed
     Given a pod becomes ready with labels:
@@ -82,7 +82,7 @@ Feature: jenkins.feature
     And I have a jenkins v<ver> application
     And the "jenkins" PVC becomes :bound within 300 seconds
     When I run the :new_app client command with:
-      | file | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/image/language-image-templates/application-template.json |
+      | file | <%= ENV['BUSHSLICER_HOME'] %>/testdata/image/language-image-templates/application-template.json |
     When I give project edit role to the default service account
     Then the step should succeed
     Given a pod becomes ready with labels:
@@ -189,7 +189,7 @@ Feature: jenkins.feature
     When I perform the :jenkins_create_pipeline_job web action with:
       | job_name | openshifttest |
     Then the step should succeed
-    Given I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/templates/OCP_12075/pipeline_delete_resource.groovy"
+    Given I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/templates/OCP_12075/pipeline_delete_resource.groovy"
     And I replace lines in "pipeline_delete_resource.groovy":
       | <repl_env> | <%= env.api_endpoint_url %> |
       | <repl_ns>  | <%= project.name %>         |
@@ -346,7 +346,7 @@ Feature: jenkins.feature
     Given I have a project
     And I have a jenkins v<version> application
     When I run the :new_app client command with:
-      | file | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/templates/OCP-13259/samplepipeline.yaml |
+      | file | <%= ENV['BUSHSLICER_HOME'] %>/testdata/templates/OCP-13259/samplepipeline.yaml |
     Then the step should succeed
     Given I have a jenkins browser
     And I log in to jenkins

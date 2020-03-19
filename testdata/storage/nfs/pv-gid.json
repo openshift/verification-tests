@@ -1,0 +1,21 @@
+{
+  "apiVersion": "v1",
+  "kind": "PersistentVolume",
+  "metadata": {
+    "name": "nfs",
+    "annotations": {
+     "pv.beta.kubernetes.io/gid": "1234"
+  }
+ },
+  "spec": {
+    "capacity": {
+        "storage": "5Gi"
+    },
+    "accessModes": [ "ReadWriteMany" ],
+    "nfs": {
+        "path": "/nfsshare",
+        "server": "127.0.0.1"
+    },
+    "persistentVolumeReclaimPolicy": "Retain"
+  }
+}

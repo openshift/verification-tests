@@ -11,7 +11,7 @@ Feature: Features about k8s deployments
     When I run the :check_no_dc_to_show web console action
     Then the step should succeed
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/tc536600/hello-deployment-1.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/deployment/tc536600/hello-deployment-1.yaml |
     Then the step should succeed
     And I run the :run client command with:
       | name  | testdc                |

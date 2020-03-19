@@ -1,0 +1,13 @@
+{
+    "apiVersion": "v1",
+    "kind": "Route",
+    "metadata": {
+        "name": "hello-route1"
+    },
+    "spec": {
+        "to": {
+            "kind": "Service",
+            "name": "hello-service"
+        }
+    }
+}

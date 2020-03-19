@@ -5,7 +5,7 @@
 Given /^logging service has been installed successfully$/ do
   ensure_destructive_tagged
   ensure_admin_tagged
-  crd_yaml = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/example.yaml"
+  crd_yaml = "<%= ENV['BUSHSLICER_HOME'] %>/testdata/logging/clusterlogging/example.yaml"
   step %Q/logging operators are installed successfully/
   step %Q/I create clusterlogging instance with:/, table(%{
     | remove_logging_pods | true        |
@@ -32,7 +32,7 @@ Given /^logging operators are installed successfully$/ do
   step %Q/logging channel name is stored in the :channel clipboard/
 
   unless project('openshift-operators-redhat').exists?
-    eo_namespace_yaml = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/eleasticsearch/deploy_via_olm/01_eo-project.yaml"
+    eo_namespace_yaml = "<%= ENV['BUSHSLICER_HOME'] %>/testdata/logging/eleasticsearch/deploy_via_olm/01_eo-project.yaml"
     @result = admin.cli_exec(:create, f: eo_namespace_yaml)
     raise "Error creating namespace" unless @result[:success]
   end
@@ -41,14 +41,14 @@ Given /^logging operators are installed successfully$/ do
   unless deployment('elasticsearch-operator').exists?
     unless operator_group('openshift-operators-redhat').exists?
       # Create operator group in `openshift-operators-redhat` namespace
-      eo_operator_group_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/eleasticsearch/deploy_via_olm/02_eo-og.yaml"
+      eo_operator_group_yaml ||= "<%= ENV['BUSHSLICER_HOME'] %>/testdata/logging/eleasticsearch/deploy_via_olm/02_eo-og.yaml"
       @result = admin.cli_exec(:create, f: eo_operator_group_yaml)
       raise "Error creating operatorgroup" unless @result[:success]
     end
 
     unless role_binding('prometheus-k8s').exists?
       # create RBAC object in `openshift-operators-redhat` namespace
-      operator_group_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/eleasticsearch/deploy_via_olm/03_eo-rbac.yaml"
+      operator_group_yaml ||= "<%= ENV['BUSHSLICER_HOME'] %>/testdata/logging/eleasticsearch/deploy_via_olm/03_eo-rbac.yaml"
       @result = admin.cli_exec(:create, f: operator_group_yaml)
       raise "Error creating rolebinding" unless @result[:success]
     end
@@ -61,15 +61,15 @@ Given /^logging operators are installed successfully$/ do
       step %Q/I use the "openshift-operators-redhat" project/
       if cb.ocp_cluster_version.include? "4.1."
         # create catalogsourceconfig and subscription for elasticsearch-operator
-        catsrc_elasticsearch_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/eleasticsearch/deploy_via_olm/4.1/04_eo-csc.yaml"
+        catsrc_elasticsearch_yaml ||= "<%= ENV['BUSHSLICER_HOME'] %>/testdata/logging/eleasticsearch/deploy_via_olm/4.1/04_eo-csc.yaml"
         @result = admin.cli_exec(:create, f: catsrc_elasticsearch_yaml)
         raise "Error creating catalogsourceconfig for elasticsearch" unless @result[:success]
-        sub_elasticsearch_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/eleasticsearch/deploy_via_olm/4.1/05_eo-sub.yaml"
+        sub_elasticsearch_yaml ||= "<%= ENV['BUSHSLICER_HOME'] %>/testdata/logging/eleasticsearch/deploy_via_olm/4.1/05_eo-sub.yaml"
         @result = admin.cli_exec(:create, f: sub_elasticsearch_yaml)
         raise "Error creating subscription for elasticsearch" unless @result[:success]
       else
         # create subscription in "openshift-operators-redhat" namespace:
-        sub_elasticsearch_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/eleasticsearch/deploy_via_olm/4.2/eo-sub-template.yaml"
+        sub_elasticsearch_yaml ||= "<%= ENV['BUSHSLICER_HOME'] %>/testdata/logging/eleasticsearch/deploy_via_olm/4.2/eo-sub-template.yaml"
         step %Q/I process and create:/, table(%{
           | f | #{sub_elasticsearch_yaml} |
           | p | SOURCE=#{cb.eo_opsrc}     |
@@ -82,7 +82,7 @@ Given /^logging operators are installed successfully$/ do
 
   # Create namespace
   unless project('openshift-logging').exists?
-    namespace_yaml = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/deploy_clo_via_olm/01_clo_ns.yaml"
+    namespace_yaml = "<%= ENV['BUSHSLICER_HOME'] %>/testdata/logging/clusterlogging/deploy_clo_via_olm/01_clo_ns.yaml"
     @result = admin.cli_exec(:create, f: namespace_yaml)
     raise "Error creating namespace" unless @result[:success]
   end
@@ -90,7 +90,7 @@ Given /^logging operators are installed successfully$/ do
   step %Q/I use the "openshift-logging" project/
   unless deployment('cluster-logging-operator').exists?
     unless operator_group('openshift-logging').exists?
-      clo_operator_group_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/deploy_clo_via_olm/02_clo_og.yaml"
+      clo_operator_group_yaml ||= "<%= ENV['BUSHSLICER_HOME'] %>/testdata/logging/clusterlogging/deploy_clo_via_olm/02_clo_og.yaml"
       @result = admin.cli_exec(:create, f: clo_operator_group_yaml)
       raise "Error creating operatorgroup" unless @result[:success]
     end
@@ -103,15 +103,15 @@ Given /^logging operators are installed successfully$/ do
       step %Q/I use the "openshift-logging" project/
       if cb.ocp_cluster_version.include? "4.1."
         # create catalogsourceconfig and subscription for cluster-logging-operator
-        catsrc_logging_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/deploy_clo_via_olm/4.1/03_clo_csc.yaml"
+        catsrc_logging_yaml ||= "<%= ENV['BUSHSLICER_HOME'] %>/testdata/logging/clusterlogging/deploy_clo_via_olm/4.1/03_clo_csc.yaml"
         @result = admin.cli_exec(:create, f: catsrc_logging_yaml)
         raise "Error creating catalogsourceconfig for cluster_logging" unless @result[:success]
-        sub_logging_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/deploy_clo_via_olm/4.1/04_clo_sub.yaml"
+        sub_logging_yaml ||= "<%= ENV['BUSHSLICER_HOME'] %>/testdata/logging/clusterlogging/deploy_clo_via_olm/4.1/04_clo_sub.yaml"
         @result = admin.cli_exec(:create, f: sub_logging_yaml)
         raise "Error creating subscription for cluster_logging" unless @result[:success]
       else
         # create subscription in `openshift-logging` namespace:
-        sub_logging_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/deploy_clo_via_olm/4.2/clo-sub-template.yaml"
+        sub_logging_yaml ||= "<%= ENV['BUSHSLICER_HOME'] %>/testdata/logging/clusterlogging/deploy_clo_via_olm/4.2/clo-sub-template.yaml"
         step %Q/I process and create:/, table(%{
           | f | #{sub_logging_yaml}    |
           | p | SOURCE=#{cb.clo_opsrc} |
@@ -334,7 +334,7 @@ Given /^logging eventrouter is installed in the cluster$/ do
   step %Q/admin ensures "eventrouter" service_account is deleted from the "openshift-logging" project after scenario/
   step %Q/admin ensures "eventrouter" config_map is deleted from the "openshift-logging" project after scenario/
   step %Q/admin ensures "eventrouter" deployment is deleted from the "openshift-logging" project after scenario/
-  @result = admin.cli_exec(:new_app, file: "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/eventrouter/internal_eventrouter.yaml")
+  @result = admin.cli_exec(:new_app, file: "<%= ENV['BUSHSLICER_HOME'] %>/testdata/logging/eventrouter/internal_eventrouter.yaml")
   unless @result[:success]
     raise "Unable to deploy eventrouter"
   end
@@ -344,7 +344,7 @@ Given /^logging eventrouter is installed in the cluster$/ do
 end
 
 Given /^I generate certs for the#{OPT_QUOTED} receiver(?: in the#{OPT_QUOTED} project)?$/ do | receiver_name, project_name |
-  script_file = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/logforwarding/cert_generation.sh"
+  script_file = "<%= ENV['BUSHSLICER_HOME'] %>/testdata/logging/logforwarding/cert_generation.sh"
   project_name ||= "openshift-logging"
   step %Q/I download a file from "#{script_file}"/
   shell_cmd = "sh cert_generation.sh $(pwd) #{project_name} #{receiver_name}"
@@ -403,7 +403,7 @@ Given /^I create the resources for the receiver with:$/ do | table |
     raise "Unable to create resoure with #{file}" unless @result[:success]
   end
   if receiver_name == "rsyslogserver"
-    svc_file = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/logforwarding/rsyslog/rsyslogserver_svc.yaml"
+    svc_file = "<%= ENV['BUSHSLICER_HOME'] %>/testdata/logging/logforwarding/rsyslog/rsyslogserver_svc.yaml"
     @result = user.cli_exec(:create, f: svc_file)
     raise "Unable to expose the service for rsyslog server" unless @result[:success]
   else
@@ -440,11 +440,11 @@ Given /^(fluentd|elasticsearch|rsyslog) receiver is deployed as (secure|insecure
       if project_name != "openshift-logging"
         step %Q/I create pipelinesecret named "fluentdserver" with sharedkey "fluentdserver"/
       end
-      configmap_file = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/logforwarding/fluentd/secure/configmap.yaml"
-      deployment_file = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/logforwarding/fluentd/secure/fluentdserver_deployment.yaml"
+      configmap_file = "<%= ENV['BUSHSLICER_HOME'] %>/testdata/logging/logforwarding/fluentd/secure/configmap.yaml"
+      deployment_file = "<%= ENV['BUSHSLICER_HOME'] %>/testdata/logging/logforwarding/fluentd/secure/fluentdserver_deployment.yaml"
     else
-      configmap_file = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/logforwarding/fluentd/insecure/configmap.yaml"
-      deployment_file = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/logforwarding/fluentd/insecure/fluentdserver_deployment.yaml"
+      configmap_file = "<%= ENV['BUSHSLICER_HOME'] %>/testdata/logging/logforwarding/fluentd/insecure/configmap.yaml"
+      deployment_file = "<%= ENV['BUSHSLICER_HOME'] %>/testdata/logging/logforwarding/fluentd/insecure/fluentdserver_deployment.yaml"
     end
 
   when "elasticsearch"
@@ -464,18 +464,18 @@ Given /^(fluentd|elasticsearch|rsyslog) receiver is deployed as (secure|insecure
       })
       step %Q/the step should succeed/
       step %Q/I create pipelinesecret named "piplinesecret"/
-      configmap_file = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/logforwarding/elasticsearch/secure/configmap.yaml"
-      deployment_file = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/logforwarding/elasticsearch/secure/deployment.yaml"
+      configmap_file = "<%= ENV['BUSHSLICER_HOME'] %>/testdata/logging/logforwarding/elasticsearch/secure/configmap.yaml"
+      deployment_file = "<%= ENV['BUSHSLICER_HOME'] %>/testdata/logging/logforwarding/elasticsearch/secure/deployment.yaml"
     else
-      configmap_file = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/logforwarding/elasticsearch/insecure/configmap.yaml"
-      deployment_file = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/logforwarding/elasticsearch/insecure/deployment.yaml"
+      configmap_file = "<%= ENV['BUSHSLICER_HOME'] %>/testdata/logging/logforwarding/elasticsearch/insecure/configmap.yaml"
+      deployment_file = "<%= ENV['BUSHSLICER_HOME'] %>/testdata/logging/logforwarding/elasticsearch/insecure/deployment.yaml"
     end
 
   when "rsyslog"
     receiver_name = "rsyslogserver"
     pod_label = "component=rsyslogserver"
-    configmap_file = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/logforwarding/rsyslog/insecure/rsyslogserver_configmap.yaml"
-    deployment_file = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/logforwarding/rsyslog/insecure/rsyslogserver_deployment.yaml"
+    configmap_file = "<%= ENV['BUSHSLICER_HOME'] %>/testdata/logging/logforwarding/rsyslog/insecure/rsyslogserver_configmap.yaml"
+    deployment_file = "<%= ENV['BUSHSLICER_HOME'] %>/testdata/logging/logforwarding/rsyslog/insecure/rsyslogserver_deployment.yaml"
 
   end
 
