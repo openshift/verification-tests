@@ -80,41 +80,59 @@ check_affected_pods_tab:
   params:
     tab_name: Affected Pods
   action: check_tab
-check_description_for_market_place:
-  elements:
-  - selector:
-      xpath: //*[@class="co-catalog-page__description" and contains(., "purchase commercial software through")]
+check_link_for_marketplace:
   params:
     text: Red Hat Marketplace
     link_url: marketplace.redhat.com
-  action: click_link_with_text
-check_description_for_developer_catalog:
-  elements:
-  - selector:
-      xpath: //*[@class="co-catalog-page__description" and contains(., "After installation, the Operator capabilities will appear")]
+  action: check_link_and_text
+check_link_for_developer_catalog:
   params:
     text: Developer Catalog
     link_url: catalog
-  action: click_link_with_text
-check_marketplace_catalog_badge:
+  action: check_link_and_text
+check_catalog_badge_by_checkbox:
+  action: click_checkbox_from_provider_type
   elements:
   - selector:
-      xpath: //*[contains(@class, 'pf-c-check__label') and text()='Marketplace']
-    op: click
-  - selector:
-      xpath: //*[contains(@class, 'pf-c-badge') and text()='Marketplace']
+      xpath: //*[contains(@class, 'pf-c-badge') and text()='<text>']
     timeout: 30
+  action: click_checkbox_from_provider_type
+check_marketplace_operator_description_on_overlay:
+  params:
+    name: Marketplace
+    description: This Operator is purchased through Red Hat Marketplace
+  action: check_operator_description_on_overlay
+check_community_operator_description_on_overlay:
+  params:
+    name: Community
+    description: This is a community provided operator
+  action: check_operator_description_on_overlay
+check_operator_description_on_overlay:
+  action: click_checkbox_from_provider_type
+  action: open_first_card_in_overlay
+  elements:
+  - selector:
+      xpath: //div[contains(@class, 'co-hint-block')][h2[contains(.,'<name> Operator')] and div[contains(@class, 'co-hint-block__body') and contains(.,'<description>')] ]
+    timeout: 30
+  action: close_modal
+  action: click_checkbox_from_provider_type
+click_checkbox_from_provider_type:  
+  elements:
+  - selector:
+      xpath:  //form[@data-test-group-name='providerType']
+    timeout: 30
+  - selector:
+      xpath: //*[contains(@class, 'pf-c-check__label') and text()='<text>']
+    op: click
 open_first_card_in_overlay:
   elements:
   - selector:
       xpath: //a[contains(@class, 'pf-c-card')]
-    op: click
-check_marketplace_operator_description_on_overlay:
-  action: open_first_card_in_overlay
-  elements:
-  - selector:
-      xpath: //div[contains(@class, 'co-hint-block')][h2[contains(.,'Marketplace Operator')] and div[contains(@class, 'co-hint-block__body') and contains(.,'This Operator is purchased through Red Hat Marketplace')] ]
-    timeout: 30
+    op: click  
+  action:
+    if_param:
+      text: Community
+    ref: submit_changes
 uninstall_operator_on_console:
   params:
     button_text: Uninstall Operator

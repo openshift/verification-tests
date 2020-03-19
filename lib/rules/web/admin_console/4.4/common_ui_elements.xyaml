@@ -142,6 +142,11 @@ check_sidebar_item:
   element:
     selector:
       xpath: //li[@class='co-resource-sidebar-item']//*[contains(text(),'<sidebar_item>')]
+close_modal:
+  element:
+    selector:
+      xpath: //button[@aria-label='Close']
+    op: click
 click_on_resource_item:
   element:
     selector:
