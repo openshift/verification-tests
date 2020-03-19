@@ -161,8 +161,8 @@ Feature: SDN related networking scenarios
   @admin
   @destructive
   Scenario: The openflow list will be cleaned after deleted the node
-    Given environment has at least 2 nodes
-    And I store the nodes in the :nodes clipboard
+    Given environment has at least 2 schedulable nodes
+    And I store the schedulable workers in the :nodes clipboard
     Given I switch to cluster admin pseudo user
 
     # get node_1's host IP and save to clipboard
@@ -173,9 +173,12 @@ Feature: SDN related networking scenarios
     """
     Given I wait for the networking components of the node to become ready
     """
+    And I store the node "<%= cb.nodes[1].name %>" YAML to the clipboard
     And the node labels are restored after scenario
     And the node service is restarted on the host after scenario
     And evaluation of `host_subnet(cb.nodes[1].name).ip` is stored in the :hostip clipboard
+    # do this first
+    And the node in the clipboard is restored from YAML after scenario
 
     # check ovs rule in node_0
     Given I use the "<%= cb.nodes[0].name %>" node
