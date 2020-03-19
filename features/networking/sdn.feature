@@ -379,9 +379,8 @@ Feature: SDN related networking scenarios
   Given the env is using "OVNKubernetes" networkType
   And I select a random node's host
   And the vxlan tunnel name of node "<%= node.name %>" is stored in the :tunnel_inf_name clipboard
-  Given I use the "<%= node.name %>" node
   #bridge interfaces needs to be unmanaged
-  And I run commands on the host:
+  Given I run commands on the host:
     | nmcli |
   Then the output should contain:
     | br-int: unmanaged                    |
