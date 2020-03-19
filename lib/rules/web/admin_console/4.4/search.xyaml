@@ -1,13 +1,15 @@
 search_by_resource:
+  params:
+    resource_group: ''
   elements:
   - selector: 
       xpath: //button[contains(., 'Resources')]
     op: click
   - selector:
-      xpath: //li//span[text()='<resource_kind>'] | //li//span[text()=<resource_kind>]/following-sibling::span[contains(., '<resource_group>')]
+      xpath: //li//span[text()='<resource_kind>']/following-sibling::span[contains(., '<resource_group>')]
     op: click
     timeout: 15
-clear_search_item:
+clear_one_search_item:
   elements:
   - selector: 
       xpath: //span[contains(., '<search_item>')]/following-sibling::button

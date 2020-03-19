@@ -6,29 +6,6 @@ set_filter_strings:
   - selector:
       <<: *filter_text_ele
     op: send_keys <filter_text>
-click_resource_type_dropdown:
-  elements:
-  - selector:
-      xpath: //button[contains(@class,'pf-c-dropdown__toggle')][contains(.,'Resource')]
-    op: click
-select_resource_type:
-  elements:
-  - selector:
-      xpath: //span[contains(@class,'co-resource-item__resource-name')]/span[normalize-space()='<type>']
-    op: click
-search_by_resource_type:
-  action: click_resource_type_dropdown
-  elements:
-  - selector:
-      xpath: //input[@data-test-id='dropdown-text-filter']
-    op: send_keys <type>
-    type: input
-  action: select_resource_type
-search_by_api_group:
-  params:
-    type: <api_group>
-  action: click_resource_type_dropdown
-  action: select_resource_type
 search_by_event_catagory:
   params:
     catagory: Normal
