@@ -1,7 +1,7 @@
 require 'openshift/project_resource'
 
 module BushSlicer
-  class CustomResourceDefinition < ProjectResource
+  class CustomResourceDefinition < ClusterResource
     RESOURCE = "customresourcedefinitions"
   end
 end
