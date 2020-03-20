@@ -99,23 +99,28 @@ check_catalog_badge_by_checkbox:
   action: click_checkbox_from_provider_type
 check_marketplace_operator_description_on_overlay:
   params:
-    name: Marketplace
+    text: Marketplace
     description: This Operator is purchased through Red Hat Marketplace
-  action: check_operator_description_on_overlay
-check_community_operator_description_on_overlay:
-  params:
-    name: Community
-    description: This is a community provided operator
-  action: check_operator_description_on_overlay
-check_operator_description_on_overlay:
   action: click_checkbox_from_provider_type
   action: open_first_card_in_overlay
+  action: check_operator_description_on_overlay
+  action: click_close_icon
+  action: click_checkbox_from_provider_type
+check_community_operator_description_on_overlay:
+  params:
+    text: Community
+    description: This is a community provided operator
+  action: click_checkbox_from_provider_type
+  action: open_first_card_in_overlay
+  action: submit_changes
+  action: check_operator_description_on_overlay
+  action: click_close_icon
+  action: click_checkbox_from_provider_type
+check_operator_description_on_overlay:
   elements:
   - selector:
-      xpath: //div[contains(@class, 'co-hint-block')][h2[contains(.,'<name> Operator')] and div[contains(@class, 'co-hint-block__body') and contains(.,'<description>')] ]
+      xpath: //div[contains(@class, 'co-hint-block')][h2[contains(.,'<text> Operator')] and div[contains(@class, 'co-hint-block__body') and contains(.,'<description>')] ]
     timeout: 30
-  action: close_modal
-  action: click_checkbox_from_provider_type
 click_checkbox_from_provider_type:  
   elements:
   - selector:
@@ -127,12 +132,8 @@ click_checkbox_from_provider_type:
 open_first_card_in_overlay:
   elements:
   - selector:
-      xpath: //a[contains(@class, 'pf-c-card')]
+      xpath: //a[contains(@class, 'pf-c-card')][1]
     op: click  
-  action:
-    if_param:
-      text: Community
-    ref: submit_changes
 uninstall_operator_on_console:
   params:
     button_text: Uninstall Operator
