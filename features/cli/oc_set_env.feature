@@ -113,7 +113,7 @@ Feature: oc_set_env.feature
       | resource      | dc                 |
       | o             | json               |
     Then the step should succeed
-    When I save the output to file>dc.json
+    When I save the output to file> dc.json
     When I run the :set_env client command with:
       | f        | dc.json   |
       | env_name | FOO- |

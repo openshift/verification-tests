@@ -7,7 +7,7 @@ Feature: dockerbuild.feature
     When I run the :process client command with:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/ruby22rhel7-template-docker-blankrepo.json |
     Then the step should succeed
-    Given I save the output to file>blankrepo.json
+    Given I save the output to file> blankrepo.json
     When I run the :create client command with:
       | f | blankrepo.json |
     Then the step should fail
