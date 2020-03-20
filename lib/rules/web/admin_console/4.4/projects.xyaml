@@ -61,3 +61,11 @@ check_cpu_data_for_one_project_in_table:
     resource_name: <project_name>
     data: cores
   action: check_resource_data_in_table
+switch_to_project:
+  params:
+    dropdown_name: namespace-bar
+  action: click_dropdown
+  element:
+    selector:
+      xpath: //a[text()='<project_name>']
+    op: click
