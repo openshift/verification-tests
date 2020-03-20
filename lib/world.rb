@@ -367,6 +367,7 @@ module BushSlicer
           istag: "imagestreamtags",
           netns: "netnamespaces",
           opsrc: "operatorsources",
+          csc: "catalogsourceconfigs",
           psp: "podsecuritypolicy",
           pv: "persistentvolumes",
           pvc: "persistentvolumeclaims",
