@@ -3,7 +3,7 @@ click_primary_menu_developer_mode:
     selector:
       xpath: //a[text()='<menu_text>']
     op: click
-goto_monitoring_developer_mode:
+goto_monitoring:
   params:
     menu_text: Monitoring 
   action: click_primary_menu_developer_mode
@@ -12,7 +12,6 @@ click_projects_dropdown_developer_mode:
     selector:
       xpath: (//div[@class='co-namespace-bar']//button)[1]
     op: click
-    timeout: 3600
 input_select_project_developer_mode:
   element:
     selector:
@@ -32,11 +31,6 @@ check_tech_preview_badge:
   element:
     selector:
       xpath: //span[text()='Tech Preview']
-click_tab_developer_mode:
-  element:
-    selector:
-      xpath: //a[text()='<tab_name>']
-    op: click
 
 perform_cutomer_query:
   action: click_metrics_query_dropdown
@@ -77,7 +71,7 @@ check_query_input_text_area:
       xpath: //div[@class='co-m-pane__body']//textarea
 click_promql_button:
   element:
-    selector:
+    selector: &promql_button
       xpath: //button[text()='<text>']
     op: click
 click_hide_promql_button:
@@ -89,18 +83,21 @@ click_show_promql_button:
     text: Show PromQL
   action: click_promql_button
 hide_promql_if_exists:
+  params:
+    text: Hide PromQL
   action:
     if_element:
       selector:
-        xpath: //button[text()='Hide PromQL']
+        <<: *promql_button
     ref: click_hide_promql_button
 show_promql_if_exists:
+  params:
+    text: Show PromQL
   action:
     if_element:
       selector:
-        xpath: //button[text()='Show PromQL']
-    ref: click_show_promql_button
-    
+        <<: *promql_button
+    ref: click_show_promql_button    
 
 choose_zoom_value:
   action: click_chart_zoom_dropdown
