@@ -9,7 +9,7 @@ ADD . /verification-tests/
 
 RUN set -x && \
     SCL_BASE_PKGS="centos-release-scl scl-utils-build" && \
-    INSTALL_PKGS="rh-ruby24 rh-ror50-rubygem-nokogiri rh-ruby24-ruby-devel rh-git29 bsdtar" && \
+    INSTALL_PKGS="rh-ruby26 rh-ruby26-ruby-devel rh-git218 bsdtar" && \
     yum -y update && \
     yum install -y --enablerepo=centosplus $SCL_BASE_PKGS && \
     yum install -y --enablerepo=centosplus $INSTALL_PKGS && \
@@ -20,7 +20,7 @@ RUN set -x && \
     curl -sSL https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm -o /tmp/epel-release-latest-7.noarch.rpm && \
     yum install -y /tmp/epel-release-latest-7.noarch.rpm
 
-RUN scl enable rh-ror50 /verification-tests/tools/install_os_deps.sh
-RUN scl enable rh-ror50 /verification-tests/tools/hack_bundle.rb
+RUN scl enable rh-ruby26 /verification-tests/tools/install_os_deps.sh
+RUN scl enable rh-ruby26 /verification-tests/tools/hack_bundle.rb
 
 RUN yum clean all -y && rm -rf /verification-tests /var/cache/yum /tmp/*
