@@ -54,7 +54,7 @@ Feature: deployment related features
     And I check that the "hooks" deployment_config exists in the project
     # Make the edit action
     When I get project dc named "hooks" as JSON
-    And I save the output to file>hooks.json
+    And I save the output to file> hooks.json
     And I replace lines in "hooks.json":
       | Recreate | Rolling |
     When I run the :replace client command with:

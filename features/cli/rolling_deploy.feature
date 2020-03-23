@@ -99,7 +99,7 @@ Feature: rolling deployment related scenarios
     And the output should contain:
       | 201 |
 
-    When I save the output to file>rollback.json
+    When I save the output to file> rollback.json
     And I run the :replace client command with:
       | f | rollback.json |
     Then the step should succeed
@@ -173,7 +173,7 @@ Feature: rolling deployment related scenarios
     Then the step should succeed
     And the output should contain:
       | 201 |
-    When I save the output to file>rollback.json
+    When I save the output to file> rollback.json
     And I run the :replace client command with:
       | f | rollback.json |
     Then the step should succeed

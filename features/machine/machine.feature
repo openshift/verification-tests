@@ -127,7 +127,7 @@ Feature: Machine features testing
      | resource_name | machineset-clone-publiciptrue |
      | namespace     | openshift-machine-api         |
      | o             | yaml                          |
-    And I save the output to file>new_machineset.yaml
+    And I save the output to file> new_machineset.yaml
 
     And I replace lines in "new_machineset.yaml":
      | publicIp: null| publicIp: true |
