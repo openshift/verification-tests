@@ -421,3 +421,62 @@ Feature: Pod related networking scenarios
       | bash | -c | conntrack -L \| grep "<%= cb.nodeport %>" |
     Then the output should contain "<%= cb.host_pod2.ip %>"
     And the output should not contain "<%= cb.host_pod1.ip %>"
+
+  # @author anusaxen@redhat.com
+  # @case_id OCP-25294
+  @admin
+  Scenario: Pod should be accesible via node ip and host port
+    Given I store the workers in the :workers clipboard
+    And the Internal IP of node "<%= cb.workers[0].name %>" is stored in the :worker0_ip clipboard
+    And the Internal IP of node "<%= cb.workers[1].name %>" is stored in the :worker1_ip clipboard
+    And I have a project
+    When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/pod-for-ping-with-hostport.yml" replacing paths:
+      | ["metadata"]["namespace"] |  <%= project.name %>       |
+      | ["spec"]["nodeName"]      |  <%= cb.workers[0].name %> |
+    Then the step should succeed
+    And a pod becomes ready with labels:
+      | name=hello-pod |
+    #Pod should be accesible via node ip and host port from its home node
+    Given I use the "<%= cb.workers[0].name %>" node
+    And I run commands on the host:
+      | curl <%= cb.worker0_ip %>:9500 |
+    Then the output should contain:
+      | Hello OpenShift |
+    #Pod should be accesible via node ip and host port from another node as well. Remember worker0 is home node for that pod
+    Given I use the "<%= cb.workers[1].name %>" node
+    And I run commands on the host:
+      | curl <%= cb.worker0_ip %>:9500 |
+    Then the output should contain:
+      | Hello OpenShift |
+
+  # @author anusaxen@redhat.com
+  # @case_id OCP-26373
+  @admin
+  @destructive  
+  Scenario: Make sure the route to ovn tunnel for Node's Pod CIDR gets created in both hybrid/non-hybrid mode	
+  Given the env is using "OVNKubernetes" networkType
+  And I select a random node's host
+  And the vxlan tunnel name of node "<%= node.name %>" is stored in the :tunnel_inf_name clipboard
+  #Enabling hybrid overlay on the cluster
+  Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
+    | {"spec":{"defaultNetwork":{"ovnKubernetesConfig":{"hybridOverlayConfig":{"hybridClusterNetwork":[{"cidr":"10.132.0.0/14","hostPrefix":23}]}}}}} |
+  #Cleanup for bringing CRD to original
+  Given I register clean-up steps:
+  """
+  as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
+    | {"spec":{"defaultNetwork":{"ovnKubernetesConfig": null}}} |
+  """
+  Given I switch to cluster admin pseudo user
+  And I use the "openshift-ovn-kubernetes" project
+  And all pods in the project are ready
+  #Checking hybrid overlay annotation and fetching Pod subnet CIDR
+  When I run the :describe client command with:
+    | resource | node             |
+    | name     | <%= node.name %> |
+  Then the step should succeed
+  And the output should contain "k8s.ovn.org/hybrid-overlay-node-subnet:"
+  And evaluation of `@result[:response].match(/k8s.ovn.org\/hybrid-overlay-node-subnet: \d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}\/\d{2}/)[0].split(": ")[1]` is stored in the :pod_cidr clipboard
+  And I run commands on the host:
+    | ip route |
+  Then the output should contain:
+    | <%= cb.pod_cidr %> dev <%= cb.tunnel_inf_name %> |
