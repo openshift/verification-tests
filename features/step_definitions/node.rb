@@ -639,13 +639,3 @@ Given /^the node in the#{OPT_SYM} clipboard is restored from YAML after scenario
     raise "cannot restore node '#{cb[cb_name]}'" unless @result[:success]
   }
 end
-
-Given /^I set all worker nodes status to unschedulable$/ do
-  ensure_admin_tagged
-  ensure_destructive_tagged
-  nodes = env.nodes.select { |n| n.is_worker? }
-  nodes.each do |node|
-   opts = { :node_name => node.name}
-   admin.cli_exec(:oadm_cordon_node, opts)
-  end
-end

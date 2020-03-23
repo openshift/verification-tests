@@ -26,3 +26,15 @@ Given /^the #{QUOTED} scheduler CR is restored after scenario$/ do |name|
     raise "Cannot restore scheduler: #{name}" unless @result[:success]
   }
 end
+
+Given /^the #{QUOTED} clusterrole is restored after scenario$/ do |name|
+  ensure_admin_tagged
+  ensure_destructive_tagged
+  patch_json = '[{"op": "remove", "path": "/rules/2/resourceNames/1"}]'
+  _admin = admin
+  teardown_add {
+    opts = {resource: 'clusterrole', resource_name: name, p: patch_json, type: 'json'}
+    @result = _admin.cli_exec(:patch, **opts)
+    raise "Cannot restore clusterrole: #{name}" unless @result[:success]
+  }
+end
