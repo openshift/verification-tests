@@ -141,4 +141,94 @@ Feature: Machine features testing
     Given I scale the machineset to +2
     Then the machineset should have expected number of running machines
 
-    
+  # @author zhsun@redhat.com
+  @admin
+  @destructive
+  Scenario Outline: Machineset should have relevant annotations to support scale from/to zero
+    Given I have an IPI deployment
+    And I switch to cluster admin pseudo user
+    And I use the "openshift-machine-api" project
+    And I pick a random machineset to scale
+
+    Given I run the :get admin command with:
+      | resource      | machineset              |
+      | resource_name | <%= machine_set.name %> |
+      | o             | yaml                    |
+    Then the step should succeed
+    And I save the output to file> machineset.yaml
+
+    # Create a machineset with a valid instanceType
+    And I replace content in "machineset.yaml":
+      | <%= machine_set.name %> | <machineset_name>-valid |
+      | <re_type_field>         | <valid_value>           |
+      | /replicas:.*/           | replicas: 1             |
+
+    When I run the :create admin command with:
+      | f | machineset.yaml |
+    Then the step should succeed
+    And admin ensures "<machineset_name>-valid" machineset is deleted after scenario
+
+    When I run the :annotate admin command with:
+      | resource     | machineset               |
+      | resourcename | <machineset_name>-valid  |
+      | overwrite    | true                     |
+      | keyval       | new=new                  |
+    Then the step should succeed
+
+    When I run the :describe admin command with:
+      | resource | machineset              |
+      | name     | <machineset_name>-valid |
+    Then the step should succeed
+    And the output should contain:
+      | machine.openshift.io/memoryMb: |
+      | machine.openshift.io/vCPU:     |
+      | new:                           |
+
+    # Create a machineset with an invalid instanceType
+    And I replace content in "machineset.yaml":
+      | <%= machine_set.name %> | <machineset_name>-invalid |
+      | <re_type_field>         | <invalid_value>           |
+      | /replicas:.*/           | replicas: 1               |
+
+    When I run the :create admin command with:
+      | f | machineset.yaml |
+    Then the step should succeed
+    And admin ensures "<machineset_name>-invalid" machineset is deleted after scenario
+
+    Given 1 pods become ready with labels:
+      | api=clusterapi,k8s-app=controller |
+    And I wait for the steps to pass:
+    """
+    When I run the :logs admin command with:
+      | resource_name | <%= pod.name %>    | 
+      | c             | machine-controller |
+    Then the step should succeed
+    And the output should match:
+      | <machineset_name>-invalid.*ReconcileError |
+    """
+
+    # Create a machineset with no instanceType set
+    And I replace content in "machineset.yaml":
+      | <%= machine_set.name %> | <machineset_name>-no |
+      | <re_type_field>         | <no_value>           |
+      | /replicas:.*/           | replicas: 1          |
+
+    When I run the :create admin command with:
+      | f | machineset.yaml |
+    Then the step should succeed
+    And admin ensures "<machineset_name>-no" machineset is deleted after scenario
+    And I wait for the steps to pass:
+    """
+    When I run the :logs admin command with:
+      | resource_name | <%= pod.name %>    | 
+      | c             | machine-controller | 
+    Then the step should succeed
+    And the output should match:
+      | <machineset_name>-no.*ReconcileError |
+    """
+
+    Examples:
+      | re_type_field     | valid_value                | invalid_value         | no_value      | machineset_name  |
+      | /machineType:.*/  | machineType: n1-standard-2 | machineType: invalid  | machineType:  | machineset-28778 | # @case_id OCP-28778
+      | /vmSize:.*/       | vmSize: Standard_D2s_v3    | vmSize: invalid       | vmSize:       | machineset-28876 | # @case_id OCP-28876
+      | /instanceType:.*/ | instanceType: m4.large     | instanceType: invalid | instanceType: | machineset-28875 | # @case_id OCP-28875 
