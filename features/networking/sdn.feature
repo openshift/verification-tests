@@ -376,7 +376,7 @@ Feature: SDN related networking scenarios
     Then the output should contain "10-ovn-kubernetes.conf"
   
   # @author anusaxen@redhat.com
-  # @case_id OCP-25787
+  # @case_id OCP-25933
   @admin
   Scenario: NetworkManager should consider OVS interfaces as unmanaged
   Given the env is using "OVNKubernetes" networkType
@@ -389,6 +389,7 @@ Feature: SDN related networking scenarios
     | br-int: unmanaged                    |
     | br-local: unmanaged                  |
     | br-nexthop: unmanaged                |
+    | genev_sys_6081: unmanaged            |
     | <%= cb.tunnel_inf_name %>: unmanaged |
   # And veths ovs interfaces also needs to be unmanaged
   And I run commands on the host:
