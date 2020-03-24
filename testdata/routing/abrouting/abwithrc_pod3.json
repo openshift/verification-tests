@@ -1,0 +1,82 @@
+{
+    "apiVersion": "v1",
+    "kind": "List",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "kind": "ReplicationController",
+            "metadata": {
+                "labels": {
+                    "name": "test-rc"
+                },
+                "name": "test-rc-3"
+            },
+            "spec": {
+                "replicas": 1,
+                "template": {
+                    "metadata": {
+                        "labels": {
+                            "name": "test-pods-3",
+			    "type": "test3"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "image": "aosqe/caddy-docker-3",
+                                "name": "test-pods-3"
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Service",
+            "metadata": {
+                "labels": {
+                    "name": "service-secure-3"
+                },
+                "name": "service-secure-3"
+            },
+            "spec": {
+                "ports": [
+                    {
+                        "name": "https",
+                        "port": 27443,
+                        "protocol": "TCP",
+                        "targetPort": 8443
+                    }
+                ],
+                "selector": {
+                    "type": "test3"
+                }
+            }
+        },
+       {
+            "apiVersion": "v1",
+            "kind": "Service",
+            "metadata": {
+                "labels": {
+                    "name": "service-unsecure-3"
+                },
+                "name": "service-unsecure-3"
+            },
+            "spec": {
+                "ports": [
+                    {
+                        "name": "http",
+                        "port": 27017,
+                        "protocol": "TCP",
+                        "targetPort": 8080
+                    }
+                ],
+                "selector": {
+                    "type": "test3"
+                }
+            }
+        }
+
+    ]
+}

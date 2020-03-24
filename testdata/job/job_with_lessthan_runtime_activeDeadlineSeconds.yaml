@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pi
+spec:
+  manualSelector: true
+  selector:
+    matchLabels:
+      app: pi
+  parallelism: 1
+  completions: 1
+  activeDeadlineSeconds: 10
+  template:
+    metadata:
+      name: pi
+      labels:
+        app: pi
+    spec:
+      containers:
+      - name: pi
+        image: perl
+        command: ["perl",  "-Mbignum=bpi", "-wle", "sleep(15)"]
+      restartPolicy: Never

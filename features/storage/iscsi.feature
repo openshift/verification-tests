@@ -13,7 +13,7 @@ Feature: ISCSI volume plugin testing
       | ["spec"]["iscsi"]["initiatorName"] | iqn.2016-04.test.com:test.img |
       | ["spec"]["storageClassName"]       | sc-<%= project.name %>        |
     Then the step should succeed
-    When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
+    When I create a dynamic pvc from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/misc/pvc.json" replacing paths:
       | ["metadata"]["name"]         | mypvc                  |
       | ["spec"]["volumeName"]       | pv-<%= project.name %> |
       | ["spec"]["storageClassName"] | sc-<%= project.name %> |

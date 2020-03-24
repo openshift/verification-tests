@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dapi-resources-volume-magic-keys-pod-without-limits
+spec:
+  containers:
+    - name: client-container
+      image: gcr.io/google_containers/busybox
+      command: ["sh", "-c","while true; do if [[ -e /etc/labels ]]; then cat /etc/labels; fi; if [[ -e /etc/annotations ]]; then cat /etc/annotations; fi; sleep 5; done"]
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+#        limits:
+#          memory: "128Mi"
+#          cpu: "500m"
+      volumeMounts:
+        - name: podinfo
+          mountPath: /etc/resources
+          readOnly: false
+  volumes:
+    - name: podinfo
+      downwardAPI:
+        items:
+          - path: "cpu_limit"
+            resourceFieldRef:
+              containerName: client-container
+              resource: limits.cpu
+#              divisor: "1m"
+          - path: "cpu_request"
+            resourceFieldRef:
+              containerName: client-container
+              resource: requests.cpu
+              divisor: "1m"
+          - path: "memory_limit"
+            resourceFieldRef:
+              containerName: client-container
+              resource: limits.memory
+              divisor: "1Ki"
+          - path: "memory_request"
+            resourceFieldRef:
+              containerName: client-container
+              resource: requests.memory
+              divisor: "1Mi"

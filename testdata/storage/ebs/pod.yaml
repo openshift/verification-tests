@@ -1,0 +1,20 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: mypod
+  labels:
+    name: frontendhttp
+spec:
+  containers:
+    - name: myfrontend
+      image: aosqe/hello-openshift
+      ports:
+        - containerPort: 80
+          name: "http-server"
+      volumeMounts:
+      - mountPath: "/tmp"
+        name: aws
+  volumes:
+    - name: aws
+      persistentVolumeClaim:
+        claimName: ebsc

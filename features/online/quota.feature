@@ -12,7 +12,7 @@ Feature: ONLY ONLINE Quota related scripts in this file
     And the output should match:
       | create\s*delete\s*get\s*list\s*patch\s*update\s*watch.+resourcequotas |
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/quota/quota.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/quota/quota.yaml |
     Then the step should succeed
     And the output should contain:
       | resourcequota "quota" created |
@@ -107,7 +107,7 @@ Feature: ONLY ONLINE Quota related scripts in this file
     Given I check that the "<%= cb.memory_terminate_crq.name %>" applied_cluster_resource_quota exists
     Then the expression should be true> applied_cluster_resource_quota.total_used.memory_limit_raw == "1Gi"
 
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/online/hello-pod-limit.yaml" replacing paths:
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/online/hello-pod-limit.yaml" replacing paths:
       | ["spec"]["containers"][0]["resources"]["limits"]["memory"] | 2Gi |
     And the step should fail
     And the output should contain "exceeded quota"
@@ -124,6 +124,6 @@ Feature: ONLY ONLINE Quota related scripts in this file
     And the output should contain "exceeded quota"
 
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/online/pvc_storage.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/online/pvc_storage.yaml |
     Then the step should fail
     And the output should contain "exceeded quota"

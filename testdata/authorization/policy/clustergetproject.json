@@ -1,0 +1,12 @@
+{
+    "kind": "ClusterRole",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "viewproject"
+        },
+    "rules":[ {
+        "verbs": ["watch", "list", "get"],
+        "resources": ["projects","namespaces"]
+    }]
+}
+

@@ -1,0 +1,98 @@
+{
+    "kind": "DeploymentConfig",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "hooks",
+        "creationTimestamp": null,
+        "labels": {
+            "name": "hello-openshift"
+        }
+    },
+    "spec": {
+        "strategy": {
+            "type": "Recreate",
+            "recreateParams": {
+            },
+            "resources": {
+                 "limits": {
+                     "cpu": "30m",
+                     "memory": "150Mi"
+                 }
+           }
+        },
+        "triggers": [
+            {
+                "type": "ConfigChange"
+            }
+        ],
+        "replicas": 1,
+        "selector": {
+            "name": "hello-openshift"
+        },
+        "template": {
+            "metadata": {
+                "creationTimestamp": null,
+                "labels": {
+                    "name": "hello-openshift"
+                }
+            },
+            "spec": {
+                "volumes": [
+                    {
+                        "name": "dataem",
+                        "emptyDir": {
+                           "medium": ""
+                        }
+                    }
+                ],
+                "containers": [
+                    {
+                        "name": "hello-openshift",
+                        "image": "openshift/hello-openshift",
+                        "ports": [
+                            {
+                                "containerPort": 8080,
+                                "protocol": "TCP"
+                            }
+                        ],
+                        "env": [
+                            {
+                                "name": "MYSQL_USER",
+                                "value": "user8Y2"
+                            },
+                            {
+                                "name": "MYSQL_PASSWORD",
+                                "value": "Plqe5Wev"
+                            },
+                            {
+                                "name": "MYSQL_DATABASE",
+                                "value": "root"
+                            }
+                        ],
+                        "resources": {
+                            "limits": {
+                                "cpu": "400m",
+                                "memory": "200Mi"
+                            }
+                        },
+                        "volumeMounts": [
+                            {
+                                "name": "dataem",
+                                "mountPath": "/var/lib/etcd"
+                            }
+                        ],
+                        "terminationMessagePath": "/dev/termination-log",
+                        "imagePullPolicy": "Always",
+                        "securityContext": {
+                            "capabilities": {},
+                            "privileged": false
+                        }
+                    }
+                ],
+                "restartPolicy": "Always",
+                "dnsPolicy": "ClusterFirst"
+            }
+        }
+    },
+    "status": {}
+}

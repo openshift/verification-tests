@@ -1,0 +1,73 @@
+{
+  "kind": "DeploymentConfig",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "build-secret"
+  },
+  "spec": {
+    "template": {
+      "metadata": {
+        "labels": {
+          "name": "build-secret"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "name": "helloworld",
+            "image": "build-secret",
+            "ports": [
+              {
+                "containerPort": 8080,
+                "protocol": "TCP"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "replicas": 1,
+    "selector": {
+      "name": "build-secret"
+    },
+    "triggers": [
+      {
+        "type": "ConfigChange"
+      },
+      {
+        "type": "ImageChange",
+        "imageChangeParams": {
+          "automatic": true,
+          "containerNames": [
+            "helloworld"
+          ],
+          "from": {
+            "kind": "ImageStreamTag",
+            "name": "build-secret:latest"
+          }
+        }
+      }
+    ],
+        "strategy": {
+      "type": "Rolling",
+      "rollingParams": {
+        "pre": {
+          "failurePolicy": "Abort",
+          "execNewPod": {
+            "containerName": "helloworld",
+            "command": [
+              "/bin/sh", "-c","while true; do  echo 'running'; sleep 10; done;"
+            ],
+            "env": [
+              {
+                "name": "CUSTOM_VAR1",
+                "value": "custom_value1"
+              }
+            ],
+            "volumes": ["data"]
+          }
+        }
+      }
+    }
+}
+  }

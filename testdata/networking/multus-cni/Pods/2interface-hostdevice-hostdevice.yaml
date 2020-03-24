@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  generateName: two-host-device-pod-
+  labels:
+    name: two-host-device-pod
+  annotations:
+    k8s.v1.cni.cncf.io/networks: host-device-1, host-device-2
+spec:
+  containers:
+  - name: two-host-device-pod
+    image: docker.io/bmeng/centos-network

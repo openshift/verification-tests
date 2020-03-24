@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: runtimeconfig-pod-ip
+  annotations:
+    k8s.v1.cni.cncf.io/networks: '[
+            { "name": "runtimeconfig-def-ip",
+              "ips": [ "192.168.22.2/24" ] }
+    ]'
+spec:
+  containers:
+  - name: runtimeconfig-pod-ip
+    image: docker.io/bmeng/centos-network

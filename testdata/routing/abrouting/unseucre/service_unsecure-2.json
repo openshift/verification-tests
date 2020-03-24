@@ -1,0 +1,21 @@
+{
+    "kind": "Service",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "service-unsecure-2",
+        "labels":{"name":"service-unsecure-2"}
+    },
+    "spec": {
+        "ports": [
+                {
+                        "name": "http",
+                        "protocol": "TCP",
+                        "port": 27017,
+        "targetPort": 8080
+                }
+        ],
+        "selector": {
+                "name": "caddy-docker-2"
+        }
+    }
+}

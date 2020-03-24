@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: allinone-normal
+  labels:
+    region: one
+spec:
+  containers:
+  - name: allinone-normal
+    image: docker.io/ocpqe/hello-pod:latest
+    resources:
+      limits:
+        cpu: "500m"
+        memory: "256Mi"
+    volumeMounts:
+    - name: all-in-one
+      mountPath: "/all-in-one"
+      readOnly: true
+  volumes:
+  - name: all-in-one
+    projected:
+      sources:
+      - secret:
+          name: test-secret
+          items:
+            - key: data-1
+              path: mysecret/my-username
+            - key: data-2
+              path: mysecret/my-passwd
+      - downwardAPI:
+          items:
+            - path: mydapi/labels
+              fieldRef:
+                fieldPath: metadata.labels
+            - path: mydapi/name
+              fieldRef:
+                fieldPath: metadata.name
+            - path: mydapi/cpu_limit
+              resourceFieldRef:
+                containerName: allinone-normal
+                resource: limits.cpu
+                divisor: "1m"
+      - configMap:
+          name: special-config
+          items:
+            - key: special.how
+              path: myconfigmap/shared-config
+            - key: special.type
+              path: myconfigmap/private-config

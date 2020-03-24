@@ -1,0 +1,59 @@
+{
+    "kind": "List",
+    "apiVersion": "v1",
+    "metadata": {},
+    "items": [
+	{
+
+	    "kind": "ImageStream",
+	    "apiVersion": "v1",
+	    "metadata": {
+		"name": "nosrc-extended-test-builder",
+		"creationTimestamp": null
+	    },
+	    "spec": {},
+	    "status": {
+		"dockerImageRepository": ""
+	    }
+
+	},
+	{
+	    "kind": "BuildConfig",
+	    "apiVersion": "v1",
+	    "metadata": {
+		"name": "nosrc-bldr",
+		"creationTimestamp": null,
+		"labels": {
+		    "name": "nosrc-bldr"
+		}
+	    },
+	    "spec": {
+		"triggers": [
+		],
+		"source": {
+		    "type": "Git",
+		    "git": {
+			"uri": "https://github.com/openshift-qe/nosrc-extended-test-bldr.git"
+		    }
+		},
+		"strategy": {
+		    "type": "Source",
+		    "sourceStrategy": {
+                         "from": {
+                           "kind": "ImageStreamTag",
+                           "name": "ruby:latest",
+                           "namespace": "openshift"
+                        },
+                         "scripts": "https://raw.githubusercontent.com/openshift-qe/nosrc-extended-test-bldr/master"
+		    }
+		},
+		"output":{
+		    "to":{
+			"kind":"ImageStreamTag",
+			"name":"nosrc-extended-test-builder:latest"
+		    }
+		}
+	    }
+	}
+    ]
+}

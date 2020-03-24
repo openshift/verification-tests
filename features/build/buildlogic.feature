@@ -17,7 +17,7 @@ Feature: buildlogic.feature
   Scenario: Result image will be tried to push after multi-build
     Given I have a project
     When I run the :new_app client command with:
-      | file |  https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/image/language-image-templates/php-55-rhel7-stibuild.json |
+      | file |  <%= ENV['BUSHSLICER_HOME'] %>/testdata/image/language-image-templates/php-55-rhel7-stibuild.json |
     Then the step should succeed
     # The 1st build should be triggered automatically
     And the "php-sample-build-1" build was created
@@ -72,7 +72,7 @@ Feature: buildlogic.feature
   Scenario: Prevent STI builder images from running as root - using onbuild image
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/tc499516/test-buildconfig-onbuild-user0.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/tc499516/test-buildconfig-onbuild-user0.json |
     Then the step should succeed
     Given the "ruby-sample-build-onbuild-user0-1" build was created
     And the "ruby-sample-build-onbuild-user0-1" build failed
@@ -81,7 +81,7 @@ Feature: buildlogic.feature
     Then the output should contain:
       |  not allowed |
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/tc499516/test-buildconfig-onbuild-userdefault.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/tc499516/test-buildconfig-onbuild-userdefault.json |
     Then the step should succeed
     Given the "ruby-sample-build-onbuild-userdefault-1" build was created
     And the "ruby-sample-build-onbuild-userdefault-1" build failed
@@ -107,10 +107,10 @@ Feature: buildlogic.feature
 
     Examples:
       | template                                                                                                                    |
-      | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/forcePull/buildconfig-docker-ImageStream.json      | # @case_id OCP-10651
-      | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/forcePull/buildconfig-s2i-ImageStream.json         | # @case_id OCP-11148
-      | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/forcePull/buildconfig-docker-dockerimage.json      | # @case_id OCP-10652
-      | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/forcePull/buildconfig-s2i-dockerimage.json         | # @case_id OCP-11149
+      | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/forcePull/buildconfig-docker-ImageStream.json      | # @case_id OCP-10651
+      | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/forcePull/buildconfig-s2i-ImageStream.json         | # @case_id OCP-11148
+      | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/forcePull/buildconfig-docker-dockerimage.json      | # @case_id OCP-10652
+      | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/forcePull/buildconfig-s2i-dockerimage.json         | # @case_id OCP-11149
 
   # @author yantan@redhat.com
   # @case_id OCP-10745
@@ -229,7 +229,7 @@ Feature: buildlogic.feature
   Scenario: Check s2i build substatus and times
     Given I have a project
     When I run the :new_app client command with:
-      | file | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/tc470422/application-template-stibuild.json|
+      | file | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/tc470422/application-template-stibuild.json|
     Then the step should succeed
     Given the "ruby-sample-build-1" build completed
     When I run the :describe client command with:

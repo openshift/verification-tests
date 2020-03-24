@@ -6,7 +6,7 @@ Feature: Scheduler predicates and priority test suites
   Scenario: [origin_runtime_646] Fixed predicates rules testing - MatchNodeSelector
     Given I have a project
     Given I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/scheduler/pod_with_nodeselector.json  |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/scheduler/pod_with_nodeselector.json  |
     Then the step should succeed
     Given I run the :describe client command with:
       | resource  | pods            |

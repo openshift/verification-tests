@@ -1,0 +1,57 @@
+{
+    "kind": "PodSecurityPolicySelfSubjectReview",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "pspsr"
+    },
+    "spec": {
+        "template": {
+            "spec": {
+            "containers": [
+                {
+                    "name": "hello-openshift",
+                    "image": "aosqe/hello-openshift",
+                    "ports": [
+                        {
+                            "containerPort": 8080,
+                            "protocol": "TCP"
+                        }
+                    ],
+                    "resources": {
+
+                    },
+                    "volumeMounts": [
+                        {
+                            "name": "tmp",
+                            "mountPath": "/tmp"
+                        }
+                    ],
+                    "terminationMessagePath": "/dev/termination-log",
+                    "terminationMessagePolicy": "FallbackToLogsOnError",
+                    "imagePullPolicy": "IfNotPresent",
+                    "securityContext": {
+                        "capabilities": {
+
+                        },
+                        "privileged": true
+                    }
+                }
+            ],
+            "volumes": [
+                {
+                    "name": "tmp",
+                    "emptyDir": {
+
+                    }
+                }
+            ],
+            "restartPolicy": "Always",
+            "dnsPolicy": "ClusterFirst",
+            "serviceAccount": "default"
+            }
+        }
+    },
+    "status": {
+
+    }
+}

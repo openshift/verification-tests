@@ -9,7 +9,7 @@ Feature: oc_portforward.feature
     And evaluation of `rand(5000..7999)` is stored in the :portc clipboard
     And evaluation of `rand(5000..7999)` is stored in the :portd clipboard
     And I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/pod_with_two_containers.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/pods/pod_with_two_containers.json |
     Given the pod named "doublecontainers" status becomes :running
     And I run the :port_forward background client command with:
       | pod | doublecontainers |

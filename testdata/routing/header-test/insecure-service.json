@@ -1,0 +1,23 @@
+{
+  "kind": "Service",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "header-test-insecure",
+    "labels": {
+      "name": "header-test-insecure"
+    }
+  },
+  "spec": {
+    "ports": [
+      {
+        "name": "http",
+        "protocol": "TCP",
+        "port": 8080,
+        "targetPort": 8080
+      }
+    ],
+    "selector": {
+      "name": "header-test"
+    }
+  }
+}

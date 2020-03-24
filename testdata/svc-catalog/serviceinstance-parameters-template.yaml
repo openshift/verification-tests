@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Template
+metadata:
+  annotations:
+    description: "serviceinstance-parameters-template"
+  name: serviceinstance-parameters-template
+objects:
+  -
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: "${SECRET_NAME}"
+      ownerReferences:
+      - apiVersion: servicecatalog.k8s.io/v1beta1
+        blockOwnerDeletion: false
+        controller: false
+        kind: ServiceInstance
+        name: "${INSTANCE_NAME}"
+        uid: "${UID}"
+    stringData:
+      parameters: "${PARAMETERS}"
+    type: Opaque
+parameters:
+  -
+    name: SECRET_NAME
+    description: "serviceinstance parameters"
+    generate: expression
+    value: "rh-mediawiki-apb-parameters"
+  -
+    name: INSTANCE_NAME
+    description: "serviceinstance name"
+    generate: expression
+    value: "rh-mediawiki-apb"
+  -
+    name: UID
+    description: "serviceinstance UID"
+    generate: expression
+    value: "bbfd22f5-cffc-11e7-ba17-0a580a800002"
+  -
+    name: PARAMETERS
+    description: "serviceinstance parameters"
+    generate: expression
+    value: '{"mediawiki_admin_user":"admin","mediawiki_db_schema":"mediawiki","mediawiki_site_lang":"en","mediawiki_site_name":"MediaWiki","mediawiki_admin_pass":"test"}'

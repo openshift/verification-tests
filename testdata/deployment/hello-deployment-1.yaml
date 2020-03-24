@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-openshift
+spec:
+  selector:
+    matchLabels:
+      app: hello-openshift
+  replicas: 10
+  template:
+    metadata:
+      labels:
+        app: hello-openshift
+    spec:
+      containers:
+      - name: hello-openshift
+        image: openshift/hello-openshift
+        ports:
+        - containerPort: 80
+  strategy:
+    rollingUpdate:
+      maxSurge: 3
+      maxUnavailable: 2
+    type: RollingUpdate

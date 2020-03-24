@@ -1,0 +1,3 @@
+[OSEv3:vars]
+# Metrics
+openshift_metrics_install_metrics=true

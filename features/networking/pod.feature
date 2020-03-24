@@ -7,7 +7,7 @@ Feature: Pod related networking scenarios
     Given I have a project
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/pod_with_udp_port_4789.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/pod_with_udp_port_4789.json |
     Then the step should succeed
     Given the pod named "hello-pod" status becomes :pending
     And I wait up to 30 seconds for the steps to pass:
@@ -42,7 +42,7 @@ Feature: Pod related networking scenarios
   Scenario: Container could reach the dns server
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/tc528410/tc_528410_pod.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/pods/tc528410/tc_528410_pod.json |
     And the pod named "hello-pod" becomes ready
     And I run the steps 20 times:
     """
@@ -106,7 +106,7 @@ Feature: Pod related networking scenarios
     #Create a normal pod without hostport
     Given I switch to the first user
     And I use the "<%= project.name %>" project
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/scheduler/pod_with_nodename.json" replacing paths:
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/scheduler/pod_with_nodename.json" replacing paths:
       | ["spec"]["nodeName"] | <%= node.name %> |
     Then the step should succeed
     And a pod becomes ready with labels:
@@ -120,7 +120,7 @@ Feature: Pod related networking scenarios
       | -A PREROUTING -m comment --comment "kube hostport portals" -m addrtype --dst-type LOCAL -j KUBE-HOSTPORTS |
       | -A OUTPUT -m comment --comment "kube hostport portals" -m addrtype --dst-type LOCAL -j KUBE-HOSTPORTS     |
       | -A KUBE-HOSTPORTS -p tcp -m tcp --dport 110 -j ACCEPT |
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/nodeport_pod.json" replacing paths:
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/nodeport_pod.json" replacing paths:
       | ["spec"]["template"]["spec"]["nodeName"] | <%= node.name %> |
     Then the step should succeed
     And a pod becomes ready with labels:
@@ -141,13 +141,13 @@ Feature: Pod related networking scenarios
     Given I have a project
     # setup iperf server to receive the traffic
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/egress-ingress/qos/iperf-server.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/egress-ingress/qos/iperf-server.json |
     Then the step should succeed
     And the pod named "iperf-server" becomes ready
     And evaluation of `pod.ip` is stored in the :iperf_server clipboard
 
     # setup iperf client to send traffic to server with qos configured
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/egress-ingress/qos/iperf-rc.json" replacing paths:
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/egress-ingress/qos/iperf-rc.json" replacing paths:
       | ["spec"]["template"]["metadata"]["annotations"]["kubernetes.io/ingress-bandwidth"] | 5M |
       | ["spec"]["template"]["metadata"]["annotations"]["kubernetes.io/egress-bandwidth"] | 2M |
     Then the step should succeed
@@ -214,7 +214,7 @@ Feature: Pod related networking scenarios
     
     #hostnetwork-pod will be a hostnetwork pod
     When I run the :create admin command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/hostnetwork-pod.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/hostnetwork-pod.json |
       | n | <%= project.name %>                                                                                |
     Then the pod named "hostnetwork-pod" becomes ready
     #Pods should not access the MCS port 22623 or 22624 on the master
@@ -320,7 +320,7 @@ Feature: Pod related networking scenarios
     Given I have a project
     #Makng sure test pods can't be scheduled on any of worker node
     And I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/pod-for-ping.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/pod-for-ping.json |
     Then the step should succeed
     And the pod named "hello-pod" status becomes :pending within 60 seconds
     #Getting ovnkube pod name from any of worker node
@@ -352,7 +352,7 @@ Feature: Pod related networking scenarios
     Given I have a project
     #privileges are needed to support network-pod as hostnetwork pod creation later
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/pod_with_udp_port_4789_nodename.json" replacing paths:
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/pod_with_udp_port_4789_nodename.json" replacing paths:
       | ["items"][0]["spec"]["template"]["spec"]["nodeName"] | <%= cb.nodes[0].name %> |
     Then the step should succeed
     Given a pod becomes ready with labels:
@@ -371,7 +371,7 @@ Feature: Pod related networking scenarios
     And evalation of `service(cb.host_pod1.name).node_port(port: 8080)` is stored in the :nodeport clipboard
     #Creating a simple client pod to generate traffic from it towards the exposed node IP address
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/aosqe-pod-for-ping.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/aosqe-pod-for-ping.json |
     Then the step should succeed
     Given a pod becomes ready with labels:
       | name=hello-pod |
@@ -388,7 +388,7 @@ Feature: Pod related networking scenarios
     And I terminate last background process
     
     #Creating network test pod to levearage conntrack tool
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/net_admin_cap_pod.yaml" replacing paths:
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/net_admin_cap_pod.yaml" replacing paths:
       | ["spec"]["nodeName"] | <%= cb.nodes[0].name %> |
     Then the step should succeed
     Given a pod becomes ready with labels:

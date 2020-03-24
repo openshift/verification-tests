@@ -1,0 +1,50 @@
+{
+  "kind": "Pod",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "gce1",
+    "creationTimestamp": null,
+    "labels": {
+      "name": "volume-test"
+    }
+  },
+  "spec": {
+    "containers": [
+      {
+        "name": "gce",
+        "image": "aosqe/hello-openshift",
+        "ports": [
+          {
+            "containerPort": 8080,
+            "protocol": "TCP"
+          }
+        ],
+        "resources": {},
+        "volumeMounts": [
+          {
+            "name":"gcepd",
+            "mountPath":"/mnt/gce"
+          }
+        ],
+        "terminationMessagePath": "/dev/termination-log",
+        "imagePullPolicy": "IfNotPresent",
+        "securityContext": {
+          "privileged": false
+        }
+      }
+    ],
+    "volumes": [
+      {
+          "name": "gcepd",
+          "gcePersistentDisk": {
+              "pdName": "my-data-disk",
+              "fsType": "ext4"
+          }
+      }
+    ],
+    "restartPolicy": "Always",
+    "dnsPolicy": "ClusterFirst",
+    "serviceAccount": ""
+  },
+  "status": {}
+}

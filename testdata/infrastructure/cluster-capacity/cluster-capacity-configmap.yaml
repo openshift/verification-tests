@@ -1,0 +1,75 @@
+apiVersion: v1
+data:
+  pod.yaml: |
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: small-pod
+      namespace: cluster-capacity
+      labels:
+        app: guestbook
+        tier: frontend
+    spec:
+      containers:
+      - name: php-redis
+        image: gcr.io/google-samples/gb-frontend:v4
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: 300m
+            memory: 200Mi
+          requests:
+            cpu: 150m
+            memory: 100Mi
+  pod_with_taint.yaml: |
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: small-pod
+      namespace: cluster-capacity
+      labels:
+        app: guestbook
+        tier: frontend
+    spec:
+      containers:
+      - name: php-redis
+        image: gcr.io/google-samples/gb-frontend:v4
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: 300m
+            memory: 200Mi
+          requests:
+            cpu: 150m
+            memory: 100Mi
+      tolerations:
+      - key: cc
+        value: cc
+        operator: Equal
+        effect: NoSchedule
+  pod_with_nodeSelector.yaml: |
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: small-pod
+      namespace: cluster-capacity
+      labels:
+        app: guestbook
+        tier: frontend
+    spec:
+      containers:
+      - name: php-redis
+        image: gcr.io/google-samples/gb-frontend:v4
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: 300m
+            memory: 200Mi
+          requests:
+            cpu: 150m
+            memory: 100Mi
+      nodeSelector:
+        cc: "true"
+kind: ConfigMap
+metadata:
+  name: cluster-capacity-configmap

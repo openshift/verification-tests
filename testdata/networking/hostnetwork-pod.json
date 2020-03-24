@@ -1,0 +1,18 @@
+{
+  "kind": "Pod",
+  "apiVersion":"v1",
+  "metadata": {
+        "name": "hostnetwork-pod",
+        "labels": {
+                "name": "hostnetwork-pod"
+        }
+  },
+  "spec": {
+      "containers": [{
+        "name": "hostnetwork-pod",
+        "image": "aosqe/pod-for-ping"
+      }],
+      "hostNetwork": true
+  }
+}
+

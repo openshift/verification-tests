@@ -15,7 +15,7 @@ Feature: console test
 
   Scenario: switch-to-window test
     Given I have a project
-    When I process and create "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/ruby20rhel7-template-sti.json"
+    When I process and create "<%= ENV['BUSHSLICER_HOME'] %>/testdata/build/ruby20rhel7-template-sti.json"
     Then the step should succeed
     When I perform the :goto_routes_page web console action with:
       | project_name | <%= project.name %> |
@@ -29,7 +29,7 @@ Feature: console test
 
   Scenario: switch-to-window test for web rules
     Given I have a project
-    When I process and create "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/ruby20rhel7-template-sti.json"
+    When I process and create "<%= ENV['BUSHSLICER_HOME'] %>/testdata/build/ruby20rhel7-template-sti.json"
     Then the step should succeed
     When I perform the :goto_routes_page web console action with:
       | project_name | <%= project.name %> |

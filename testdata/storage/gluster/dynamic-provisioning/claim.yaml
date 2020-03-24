@@ -1,0 +1,23 @@
+{
+   "kind": "PersistentVolumeClaim",
+   "apiVersion": "v1",
+   "metadata": {
+     "name": "glusterc",
+     "annotations": {
+     "volume.beta.kubernetes.io/storage-class": "glusterprovisioner"
+     }
+   },
+   "spec": {
+     "accessModes": [
+       "ReadWriteOnce"
+     ],
+    "proivisionerselector": [
+       "something"
+     ],
+     "resources": {
+       "requests": {
+         "storage": "1Gi"
+       }
+     }
+   }
+}

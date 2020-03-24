@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pi
+spec:
+  manualSelector: true
+  selector:
+    matchLabels:
+      controller-uid: 64e92bd2-078d-11e6-a269-fa163e15bd57
+  template:
+    metadata:
+      labels:
+        controller-uid: 64e92bd2-078d-11e6-a269-fa163e15bd57
+      name: pi
+    spec:
+      containers:
+      - name: pi
+        image: openshift/perl-516-centos7
+        command: ["perl",  "-Mbignum=bpi", "-wle", "print bpi(2000)"]
+      restartPolicy: Never

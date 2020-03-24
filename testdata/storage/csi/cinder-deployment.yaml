@@ -1,0 +1,75 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: cinder-csi-controller
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cinder-csi-controllers
+  template:
+    metadata:
+      labels:
+        app: cinder-csi-controllers
+    spec:
+      serviceAccount: cinder-csi
+      containers:
+        - name: csi-attacher
+          image: registry.access.redhat.com/openshift3/csi-attacher:v3.10
+          args:
+            - "--v=5"
+            - "--csi-address=$(ADDRESS)"
+            - "--leader-election"
+            - "--leader-election-namespace=$(MY_NAMESPACE)"
+            - "--leader-election-identity=$(MY_NAME)"
+          env:
+            - name: MY_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: MY_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: ADDRESS
+              value: /csi/csi.sock
+          volumeMounts:
+            - name: socket-dir
+              mountPath: /csi
+        - name: csi-provisioner
+          image: registry.access.redhat.com/openshift3/csi-provisioner:v3.10
+          args:
+            - "--v=5"
+            - "--provisioner=csi-cinderplugin"
+            - "--csi-address=$(ADDRESS)"
+          env:
+            - name: ADDRESS
+              value: /csi/csi.sock
+          volumeMounts:
+            - name: socket-dir
+              mountPath: /csi
+        - name: cinder-driver
+          image: quay.io/jsafrane/cinder-csi-plugin
+          command: [ "/bin/cinder-csi-plugin" ]
+          args:
+            - "--nodeid=$(NODEID)"
+            - "--endpoint=unix://$(ADDRESS)"
+            - "--cloud-config=/etc/cloudconfig/cloud.conf"
+          env:
+            - name: NODEID
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: ADDRESS
+              value: /csi/csi.sock
+          volumeMounts:
+            - name: socket-dir
+              mountPath: /csi
+            - name: cloudconfig
+              mountPath: /etc/cloudconfig
+      volumes:
+        - name: socket-dir
+          emptyDir:
+        - name: cloudconfig
+          secret:
+            secretName: cloudconfig

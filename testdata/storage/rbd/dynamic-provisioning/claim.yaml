@@ -1,0 +1,20 @@
+{
+   "kind": "PersistentVolumeClaim",
+   "apiVersion": "v1",
+   "metadata": {
+     "name": "rbdc",
+     "annotations": {
+     "volume.beta.kubernetes.io/storage-class": "cephrbdprovisioner"
+     }
+   },
+   "spec": {
+     "accessModes": [
+       "ReadWriteOnce"
+     ],
+     "resources": {
+       "requests": {
+         "storage": "1Gi"
+       }
+     }
+   }
+}

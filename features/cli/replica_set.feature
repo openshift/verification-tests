@@ -6,7 +6,7 @@ Feature: replicaSet related tests
   Scenario: Support endpoints of RS in OpenShift
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/replicaSet/tc533162/rs_endpoints.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/replicaSet/tc533162/rs_endpoints.yaml |
     Then the step should succeed
     And I wait until number of replicas match "3" for replicaSet "frontend"
     When I run the :patch client command with:

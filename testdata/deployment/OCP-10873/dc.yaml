@@ -1,0 +1,34 @@
+# Create configmap and secret first
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    app: hello
+  name: hello
+spec:
+  replicas: 1
+  selector:
+    app: hello
+  template:
+    metadata:
+      labels:
+        app: hello
+    spec:
+      containers:
+      - args:
+        - --conf
+        - /etc/caddy/config/caddyfile.conf
+        image: aosqe/caddy-docker
+        name: hello
+        volumeMounts:
+        - mountPath: /etc/serving-cert
+          name: volume-secret
+        - mountPath: /etc/caddy/config
+          name: volume-cm
+      volumes:
+      - name: volume-secret
+        secret:
+          secretName: ssl-key
+      - configMap:
+          name: default-conf
+        name: volume-cm

@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    name: hello-pod
+  name: hello-pod
+  annotations:
+    pod.alpha.kubernetes.io/init-containers: '[{
+	    "name": "wait",
+	    "image": "centos:centos7",
+	    "command": ["/bin/sh", "-c", "sleep 30"],
+	    "readinessProbe": {
+		    "tcpSocket": {
+			    "port": 8080
+		    }
+	    }
+    }]'
+spec:
+  containers:
+    - image: "docker.io/deshuai/hello-pod:latest"
+      imagePullPolicy: IfNotPresent
+      name: hello-pod
+      ports:
+        - containerPort: 8080
+          protocol: TCP
+      resources: {}
+      securityContext:
+        capabilities: {}
+        privileged: false
+      terminationMessagePath: /dev/termination-log
+      volumeMounts:
+        - mountPath: /tmp
+          name: tmp
+  dnsPolicy: ClusterFirst
+  restartPolicy: Never
+  serviceAccount: ""
+  volumes:
+    - emptyDir: {}
+      name: tmp

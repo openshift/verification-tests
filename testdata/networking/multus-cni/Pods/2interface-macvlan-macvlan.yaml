@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  generateName: two-macvlan-pod-
+  labels:
+    name: two-macvlan-pod
+  annotations:
+    k8s.v1.cni.cncf.io/networks: macvlan-private, macvlan-bridge
+spec:
+  containers:
+  - name: two-macvlan-pod
+    image: docker.io/bmeng/centos-network

@@ -1,0 +1,53 @@
+{
+  "kind": "Pod",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "east",
+    "creationTimestamp": null,
+    "labels": {
+      "name": "hello-openshift"
+    }
+  },
+  "spec": {
+    "nodeSelector": {
+      "region": "east"
+    },
+    "containers": [
+      {
+        "name": "hello-openshift",
+        "image": "jhou/hello-openshift",
+        "ports": [
+          {
+            "hostPort": 6061,
+            "containerPort": 8080,
+            "protocol": "TCP"
+          }
+        ],
+        "resources": {},
+        "volumeMounts": [
+          {
+            "name":"tmp",
+            "mountPath":"/tmp"
+          }
+        ],
+        "terminationMessagePath": "/dev/termination-log",
+        "imagePullPolicy": "IfNotPresent",
+        "capabilities": {},
+        "securityContext": {
+          "capabilities": {},
+          "privileged": false
+        }
+      }
+    ],
+    "volumes": [
+      {
+        "name":"tmp",
+        "emptyDir": {}
+      }
+    ],
+    "restartPolicy": "Always",
+    "dnsPolicy": "ClusterFirst",
+    "serviceAccount": ""
+  },
+  "status": {}
+}

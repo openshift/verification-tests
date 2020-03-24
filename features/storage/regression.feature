@@ -6,13 +6,13 @@ Feature: Regression testing cases
   Scenario: RWO volumes are exclusively mounted on different nodes
     Given I have a project
 
-    Given I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
+    Given I create a dynamic pvc from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/misc/pvc.json" replacing paths:
       | ["metadata"]["name"]                         | ds            |
       | ["spec"]["accessModes"][0]                   | ReadWriteOnce |
       | ["spec"]["resources"]["requests"]["storage"] | 1Gi           |
 
     When I run the :create admin command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/damonset.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/misc/damonset.json |
       | n | <%= project.name %>                                                                           |
     Then the step should succeed
 

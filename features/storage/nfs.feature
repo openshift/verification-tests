@@ -8,18 +8,18 @@ Feature: NFS Persistent Volume
     Given I have a project
     And I have a NFS service in the project
 
-    Given admin creates a PV from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/auto/pv-retain.json" where:
+    Given admin creates a PV from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/nfs/auto/pv-retain.json" where:
       | ["metadata"]["name"]         | pv-<%= project.name %>           |
       | ["spec"]["nfs"]["server"]    | <%= service("nfs-service").ip %> |
       | ["spec"]["storageClassName"] | sc-<%= project.name %>           |
-    And I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/auto/pvc-rwx.json" replacing paths:
+    And I create a dynamic pvc from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/nfs/auto/pvc-rwx.json" replacing paths:
       | ["spec"]["volumeName"]       | <%= pv.name %>         |
       | ["spec"]["storageClassName"] | sc-<%= project.name %> |
     And the PV becomes :bound
 
     # Create a replication controller
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/auto/rc.yml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/nfs/auto/rc.yml |
     Then the step should succeed
 
     # The replication controller creates 2 pods
@@ -57,7 +57,7 @@ Feature: NFS Persistent Volume
       | chmod | -R | 770 | /mnt/data |
     Then the step should succeed
 
-    When admin creates a PV from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/pv-gid.json" where:
+    When admin creates a PV from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/nfs/pv-gid.json" where:
       | ["spec"]["nfs"]["server"]                                | <%= service("nfs-service").ip %> |
       | ["spec"]["nfs"]["path"]                                  | /                                |
       | ["spec"]["capacity"]["storage"]                          | 1Gi                              |
@@ -65,7 +65,7 @@ Feature: NFS Persistent Volume
       | ["metadata"]["annotations"]["pv.beta.kubernetes.io/gid"] | "<pv-gid>"                       |
     Then the step should succeed
 
-    When I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/claim-rwx.json" replacing paths:
+    When I create a manual pvc from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/nfs/claim-rwx.json" replacing paths:
       | ["metadata"]["name"]                         | nfsc |
       | ["spec"]["resources"]["requests"]["storage"] | 1Gi  |
     Then the step should succeed
@@ -73,7 +73,7 @@ Feature: NFS Persistent Volume
 
     Given I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/security/pod-supplementalgroup.json" replacing paths:
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/nfs/security/pod-supplementalgroup.json" replacing paths:
       | ["metadata"]["name"]                                         | nfspd |
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | nfsc  |
     Then the step should succeed
@@ -116,7 +116,7 @@ Feature: NFS Persistent Volume
       | chmod | -R | 770 | /mnt/data |
     Then the step should succeed
 
-    Given admin creates a PV from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/pv-gid.json" where:
+    Given admin creates a PV from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/nfs/pv-gid.json" where:
       | ["spec"]["nfs"]["server"]                                | <%= service("nfs-service").ip %> |
       | ["spec"]["nfs"]["path"]                                  | /                                |
       | ["spec"]["capacity"]["storage"]                          | 1Gi                              |
@@ -124,7 +124,7 @@ Feature: NFS Persistent Volume
       | ["metadata"]["annotations"]["pv.beta.kubernetes.io/gid"] | abc123                           |
     Then the step should succeed
 
-    When I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/claim-rwx.json" replacing paths:
+    When I create a manual pvc from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/nfs/claim-rwx.json" replacing paths:
       | ["metadata"]["name"]                         | mypvc |
       | ["spec"]["resources"]["requests"]["storage"] | 1Gi                      |
     Then the step should succeed
@@ -132,7 +132,7 @@ Feature: NFS Persistent Volume
 
     Given I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/security/pod-supplementalgroup.json" replacing paths:
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/nfs/security/pod-supplementalgroup.json" replacing paths:
       | ["metadata"]["name"]                                         | mypod |
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc  |
     Then the step should succeed

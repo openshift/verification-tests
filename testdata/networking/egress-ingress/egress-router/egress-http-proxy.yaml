@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: egress-http-proxy
+  labels:
+    name: egress-http-proxy
+  annotations:
+    pod.network.openshift.io/assign-macvlan: "true"
+spec:
+  initContainers:
+  - name: egress-init-container
+    image: openshift3/ose-egress-router
+    env:
+    - name: EGRESS_SOURCE
+      value: egress_ip
+    - name: EGRESS_GATEWAY
+      value: egress_gateway
+    - name: EGRESS_ROUTER_MODE
+      value: http-proxy
+    securityContext:
+      privileged: true
+  containers:
+  - name: egress-proxy-container
+    image: openshift3/ose-egress-http-proxy
+    env:
+    - name: EGRESS_HTTP_PROXY_DESTINATION
+      value: |
+        proxy_dest

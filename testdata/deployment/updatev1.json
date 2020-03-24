@@ -1,0 +1,98 @@
+{
+    "kind": "DeploymentConfig",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "hooks",
+        "creationTimestamp": null,
+        "labels": {
+            "name": "hello-openshift"
+        }
+    },
+    "spec": {
+        "strategy": {
+            "type": "Rolling",
+            "rollingParams": {
+                "updatePeriodSeconds": 1,
+                "intervalSeconds": 1,
+                "timeoutSeconds": 120
+            },
+            "resources": {}
+        },
+        "triggers": [
+            {
+                "type": "ImageChange",
+                "imageChangeParams": {
+                    "automatic": true,
+                    "containerNames": [
+                        "hello-openshift"
+                    ],
+                    "from": {
+                        "kind": "ImageStreamTag",
+                        "name": "hello-openshift:latest"
+                    }
+                }
+            }
+        ],
+        "replicas": 2,
+        "selector": {
+            "name": "hello-openshift"
+        },
+        "template": {
+            "metadata": {
+                "creationTimestamp": null,
+                "labels": {
+                    "name": "hello-openshift"
+                }
+            },
+            "spec": {
+                "containers": [
+                    {
+                        "name": "hello-openshift",
+                        "image": "openshift/hello-openshift",
+                        "ports": [
+                            {
+                                "containerPort": 8080,
+                                "protocol": "TCP"
+                            }
+                        ],
+                        "resources": {
+                            "limits": {
+                                "cpu": "120m",
+                                "memory": "256Mi"
+                            },
+                            "requests": {
+                                "cpu": "60m",
+                                "memory": "256Mi"
+                            }
+                        },
+                        "env": [
+                            {
+                                "name": "MYSQL_USER",
+                                "value": "user8Y2"
+                            },
+                            {
+                                "name": "MYSQL_PASSWORD",
+                                "value": "Plqe5Wevchange"
+                            },
+                            {
+                                "name": "MYSQL_DATABASE",
+                                "value": "root"
+                            }
+                        ],
+                        "terminationMessagePath": "/dev/termination-log",
+                        "imagePullPolicy": "Always",
+                        "securityContext": {
+                            "capabilities": {},
+                            "privileged": false
+                        }
+                    }
+                ],
+                "restartPolicy": "Always",
+                "dnsPolicy": "ClusterFirst"
+            }
+        }
+    },
+    "status": {
+        "latestVersion": 2
+   }
+}

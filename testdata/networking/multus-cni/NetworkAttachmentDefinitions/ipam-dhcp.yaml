@@ -1,0 +1,15 @@
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata:
+  name: ipam-name
+spec:
+  config: '{
+      "cniVersion": "0.3.0",
+      "type": "ipam-type",
+      "bridge": "testbr1",
+      "hairpinMode": true,
+      "master": "ens3",
+      "ipam": {
+        "type": "dhcp"
+      }
+    }'

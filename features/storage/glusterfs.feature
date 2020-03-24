@@ -17,13 +17,13 @@ Feature: Storage of GlusterFS plugin testing
       | chmod | -R | 770 | /vol |
     Then the step should succeed
 
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/endpoints.json" replacing paths:
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/gluster/endpoints.json" replacing paths:
       | ["metadata"]["name"]                 | glusterfs-cluster             |
       | ["subsets"][0]["addresses"][0]["ip"] | <%= service("glusterd").ip %> |
       | ["subsets"][0]["ports"][0]["port"]   | 24007                         |
     Then the step should succeed
 
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/security/gluster_pod_sg.json" replacing paths:
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/gluster/security/gluster_pod_sg.json" replacing paths:
       | ["metadata"]["name"] | mypod |
     Then the step should succeed
 
@@ -45,7 +45,7 @@ Feature: Storage of GlusterFS plugin testing
     And the output should contain:
       | Hello OpenShift Storage |
 
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/security/gluster_pod_sg.json" replacing paths:
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/gluster/security/gluster_pod_sg.json" replacing paths:
       | ["metadata"]["name"]                              | glusterpd-negative |
       | ["spec"]["securityContext"]["supplementalGroups"] | [123460]                               |
     Then the step should succeed
@@ -69,7 +69,7 @@ Feature: Storage of GlusterFS plugin testing
     Given I have a StorageClass named "glusterprovisioner"
     And I have a project
 
-    When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/dynamic-provisioning/claim.yaml" replacing paths:
+    When I create a dynamic pvc from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/gluster/dynamic-provisioning/claim.yaml" replacing paths:
       | ["metadata"]["name"]         | pvc1               |
       | ["spec"]["storageClassName"] | glusterprovisioner |
     Then the step should succeed
@@ -79,7 +79,7 @@ Feature: Storage of GlusterFS plugin testing
     # Switch to admin so as to create privileged pod
     Given I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/dynamic-provisioning/pod.json" replacing paths:
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/gluster/dynamic-provisioning/pod.json" replacing paths:
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | pvc1 |
     Then the step should succeed
     And the pod named "gluster" status becomes :running
@@ -109,7 +109,7 @@ Feature: Storage of GlusterFS plugin testing
     Given I have a StorageClass named "glusterprovisioner"
     And I have a project
 
-    When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/dynamic-provisioning/claim.yaml" replacing paths:
+    When I create a dynamic pvc from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/gluster/dynamic-provisioning/claim.yaml" replacing paths:
       | ["metadata"]["name"]         | mypvc |
       | ["spec"]["storageClassName"] | glusterprovisioner      |
     Then the step should succeed
@@ -133,7 +133,7 @@ Feature: Storage of GlusterFS plugin testing
     And admin checks that the "heketi-secret" secret exists in the "default" project
     And I have a project
 
-    When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/dynamic-provisioning/claim.yaml" replacing paths:
+    When I create a dynamic pvc from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/gluster/dynamic-provisioning/claim.yaml" replacing paths:
       | ["metadata"]["name"]         | pvc1                |
       | ["spec"]["storageClassName"] | glusterprovisioner1 |
     Then the step should succeed
@@ -143,7 +143,7 @@ Feature: Storage of GlusterFS plugin testing
     # Switch to admin so as to create privileged pod
     Given I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/dynamic-provisioning/pod.json" replacing paths:
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/gluster/dynamic-provisioning/pod.json" replacing paths:
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | pvc1 |
     Then the step should succeed
     And the pod named "gluster" status becomes :running
@@ -155,13 +155,13 @@ Feature: Storage of GlusterFS plugin testing
     Given I have a StorageClass named "glusterprovisioner"
     And I have a project
 
-    When admin creates a StorageClass from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/dynamic-provisioning/storageclass_using_key.yaml" where:
+    When admin creates a StorageClass from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/gluster/dynamic-provisioning/storageclass_using_key.yaml" where:
       | ["metadata"]["name"]      | storageclass-<%= project.name %>                                 |
       | ["parameters"]["resturl"] | <%= storage_class("glusterprovisioner").rest_url %> |
       | ["parameters"]["gidMin"]  | 3333                                                             |
       | ["parameters"]["gidMax"]  | 33333                                                            |
     Then the step should succeed
-    When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/dynamic-provisioning/claim.yaml" replacing paths:
+    When I create a dynamic pvc from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/gluster/dynamic-provisioning/claim.yaml" replacing paths:
       | ["metadata"]["name"]         | pvc1                             |
       | ["spec"]["storageClassName"] | storageclass-<%= project.name %> |
     Then the step should succeed
@@ -177,7 +177,7 @@ Feature: Storage of GlusterFS plugin testing
       | pv.beta.kubernetes.io/gid: "3333" |
 
     # Verify Pod is assigned gid 3333
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/dynamic-provisioning/pod_gid.json" replacing paths:
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/gluster/dynamic-provisioning/pod_gid.json" replacing paths:
       | ["metadata"]["name"]                                         | mypod |
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | pvc1                    |
     Then the step should succeed
@@ -195,7 +195,7 @@ Feature: Storage of GlusterFS plugin testing
 
     # Pod should work as well having its supplementalGroups set to 3333 explicitly
     Given I ensure "mypod" pod is deleted
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/dynamic-provisioning/pod_gid.json" replacing paths:
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/gluster/dynamic-provisioning/pod_gid.json" replacing paths:
       | ["metadata"]["name"]                                         | mypod1 |
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | pvc1                     |
       | ["spec"]["securityContext"]["supplementalGroups"]            | [3333]                   |
@@ -218,7 +218,7 @@ Feature: Storage of GlusterFS plugin testing
   Scenario: Provisioned GlusterFS volume should be replicated with 3 replicas
     Given I have a StorageClass named "glusterprovisioner"
     And I have a project
-    When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/dynamic-provisioning/claim.yaml" replacing paths:
+    When I create a dynamic pvc from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/gluster/dynamic-provisioning/claim.yaml" replacing paths:
       | ["metadata"]["name"]         | pvc1               |
       | ["spec"]["storageClassName"] | glusterprovisioner |
     Then the step should succeed

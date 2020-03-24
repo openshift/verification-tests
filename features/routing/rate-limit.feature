@@ -12,7 +12,7 @@ Feature: Testing haproxy rate limit related features
     Given I switch to the first user
     And I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/routetimeout/httpbin-pod.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/routetimeout/httpbin-pod.json |
     Then the step should succeed
     And the pod named "httpbin-pod" becomes ready
     And evaluation of `pod.ip` is stored in the :pod_ip clipboard
@@ -41,7 +41,7 @@ Feature: Testing haproxy rate limit related features
 
     Examples:
       | route_type | route_name | service | route | resolve_str | url | pass_num | fail_num |
-      | unsecure | route | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/routetimeout/unsecure/service_unsecure.json | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/unsecure/route_unsecure.json | unsecure.example.com:80 | http://unsecure.example.com | 1 | 3 |
-      | edge | secured-edge-route | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/routetimeout/edge/service_unsecure.json | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/edge/route_edge.json | test-edge.example.com:443 | https://test-edge.example.com | 2 | 2 |
-      | reen | route-reencrypt | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/routetimeout/reencrypt/service_secure.json | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/reencrypt/route_reencrypt.json | test-reen.example.com:443 | https://test-reen.example.com | 3 | 1 |
+      | unsecure | route | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/routetimeout/unsecure/service_unsecure.json | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/unsecure/route_unsecure.json | unsecure.example.com:80 | http://unsecure.example.com | 1 | 3 |
+      | edge | secured-edge-route | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/routetimeout/edge/service_unsecure.json | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/edge/route_edge.json | test-edge.example.com:443 | https://test-edge.example.com | 2 | 2 |
+      | reen | route-reencrypt | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/routetimeout/reencrypt/service_secure.json | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/reencrypt/route_reencrypt.json | test-reen.example.com:443 | https://test-reen.example.com | 3 | 1 |
 

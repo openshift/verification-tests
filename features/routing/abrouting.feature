@@ -12,20 +12,20 @@ Feature: Testing abrouting
     Given I switch to the first user
     And I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/abrouting/caddy-docker.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/abrouting/caddy-docker.json |
     Then the step should succeed
     And the pod named "caddy-docker" becomes ready
     And evaluation of `pod.ip` is stored in the :pod_ip1 clipboard
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/abrouting/caddy-docker-2.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/abrouting/caddy-docker-2.json |
     Then the step should succeed
     And the pod named "caddy-docker-2" becomes ready
     And evaluation of `pod.ip` is stored in the :pod_ip2 clipboard
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/abrouting/unseucre/service_unsecure.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/abrouting/unseucre/service_unsecure.json |
     Then the step should succeed
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/abrouting/unseucre/service_unsecure-2.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/abrouting/unseucre/service_unsecure-2.json |
     Then the step should succeed
     Given I wait for the "service-unsecure" service to become ready
     Given I wait for the "service-unsecure-2" service to become ready
@@ -96,27 +96,27 @@ Feature: Testing abrouting
     Given I switch to the first user
     And I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/abrouting/caddy-docker.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/abrouting/caddy-docker.json |
     Then the step should succeed
     And the pod named "caddy-docker" becomes ready
     And evaluation of `pod.ip` is stored in the :pod_ip1 clipboard
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/abrouting/caddy-docker-2.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/abrouting/caddy-docker-2.json |
     Then the step should succeed
     And the pod named "caddy-docker-2" becomes ready
     And evaluation of `pod.ip` is stored in the :pod_ip2 clipboard
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/abrouting/reencrypt/service_secure.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/abrouting/reencrypt/service_secure.json |
     Then the step should succeed
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/abrouting/reencrypt/service_secure-2.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/abrouting/reencrypt/service_secure-2.json |
     Then the step should succeed
     Given I wait for the "service-secure" service to become ready
     Given I wait for the "service-secure-2" service to become ready
-    Given I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/example_wildcard.pem"
-    And I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/example_wildcard.key"
-    And I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/reencrypt/route_reencrypt.ca"
-    And I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/reencrypt/route_reencrypt_dest.ca"
+    Given I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/example_wildcard.pem"
+    And I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/example_wildcard.key"
+    And I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/reencrypt/route_reencrypt.ca"
+    And I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/reencrypt/route_reencrypt_dest.ca"
     When I run the :create_route_reencrypt client command with:
       | name | route-reencrypt |
       | hostname | <%= rand_str(5, :dns) %>-reen.example.com |
@@ -185,10 +185,10 @@ Feature: Testing abrouting
     #Create pod/service/route
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/abrouting/unseucre/service_unsecure.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/abrouting/unseucre/service_unsecure.json |
     Then the step should succeed
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/abrouting/unseucre/service_unsecure-2.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/abrouting/unseucre/service_unsecure-2.json |
     Then the step should succeed
     When I run the :create_route_edge client command with:
       | name    | edge1            |
@@ -278,10 +278,10 @@ Feature: Testing abrouting
     And I have a project
     # Create pods and services
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/abrouting/abwithrc_pod1.json |
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/abrouting/abwithrc_pod2.json |
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/abrouting/abwithrc_pod3.json |
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/abrouting/abwithrc_pod4.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/abrouting/abwithrc_pod1.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/abrouting/abwithrc_pod2.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/abrouting/abwithrc_pod3.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/abrouting/abwithrc_pod4.json |
     Then the step should succeed
     And a pod becomes ready with labels:
       | type=test1 |
@@ -354,10 +354,10 @@ Feature: Testing abrouting
     And I have a project
     # Create pods and services
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/abrouting/abwithrc_pod1.json |
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/abrouting/abwithrc_pod2.json |
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/abrouting/abwithrc_pod3.json |
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/abrouting/abwithrc_pod4.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/abrouting/abwithrc_pod1.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/abrouting/abwithrc_pod2.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/abrouting/abwithrc_pod3.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/abrouting/abwithrc_pod4.json |
     Then the step should succeed
     And a pod becomes ready with labels:
       | type=test1 |

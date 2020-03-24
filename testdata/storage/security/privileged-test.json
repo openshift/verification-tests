@@ -1,0 +1,55 @@
+{
+  "kind": "Pod",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "mypod",
+    "creationTimestamp": null,
+    "labels": {
+      "name": "volume-test"
+    }
+  },
+  "spec": {
+    "containers": [
+      {
+        "name": "c1",
+        "image": "aosqe/hello-openshift",
+        "ports": [
+          {
+            "containerPort": 8080,
+            "protocol": "TCP"
+          }
+        ],
+        "resources": {},
+        "volumeMounts": [
+          {
+            "name":"myvolume",
+            "mountPath":"/mnt"
+          }
+        ],
+        "terminationMessagePath": "/dev/termination-log",
+        "imagePullPolicy": "IfNotPresent",
+        "securityContext": {
+          "privileged": true
+        }
+      }
+    ],
+    "securityContext": {
+         "fsGroup": 123456,
+         "seLinuxOptions": {
+            "level": "s0:c13,c2"
+         }
+    },
+    "volumes": [
+      {
+          "name": "myvolume",
+          "persistentVolumeClaim": {
+              "claimName": "myclaim"
+          }
+      }
+    ],
+    "restartPolicy": "Always",
+    "dnsPolicy": "ClusterFirst",
+    "serviceAccount": ""
+  },
+  "status": {}
+}

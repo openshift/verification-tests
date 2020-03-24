@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+    name: hellopod
+spec:
+  replicas: 2
+  selector:
+    name: hellopod
+  template:
+    metadata:
+      labels:
+        name: hellopod
+    spec:
+      containers:
+        - image: aosqe/hello-openshift
+          name: hellopod
+          ports:
+            - containerPort: 80
+              name: http-server
+          volumeMounts:
+            - name: pvol
+              mountPath: /mnt/nfs
+      volumes:
+        - name: pvol
+          persistentVolumeClaim:
+           claimName: nfsc

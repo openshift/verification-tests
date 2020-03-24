@@ -7,7 +7,7 @@ Feature: Check status via oc status, wait etc
 
     # Check standalone RC info is dispalyed in oc status output
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/cli/standalone-rc.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/cli/standalone-rc.yaml |
     Then the step should succeed
     And evaluation of `"stdalonerc"` is stored in the :stdrc_name clipboard
     When I run the :status client command
@@ -25,7 +25,7 @@ Feature: Check status via oc status, wait etc
     Given I ensure "<%= cb.stdrc_name %>" rc is deleted
 
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/hello-pod.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/pods/hello-pod.json |
     Then the step should succeed
     When I run the :status client command
     Then the step should succeed
@@ -36,7 +36,7 @@ Feature: Check status via oc status, wait etc
 
     # Check DC,RC info when has missing/bad secret reference
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/cli/application-template-stibuild-with-mount-secret.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/cli/application-template-stibuild-with-mount-secret.json |
     Then the step should succeed
     And evaluation of `"my-secret"` is stored in the :missingscrt_name clipboard
     When I create a new application with:
@@ -51,7 +51,7 @@ Feature: Check status via oc status, wait etc
 
     # Show RCs for services in oc status
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/cli/replication-controller-match-a-service.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/cli/replication-controller-match-a-service.yaml |
     Then the step should succeed
     And evaluation of `"rcmatchse"` is stored in the :matchrc_name clipboard
     Then I run the :describe client command with:

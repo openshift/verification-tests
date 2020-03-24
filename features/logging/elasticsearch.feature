@@ -25,7 +25,7 @@ Feature: Elasticsearch related tests
     Then the step should succeed
     Given I use the "openshift-logging" project
     And I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/example_unmanaged.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/logging/clusterlogging/example_unmanaged.yaml |
     Then the step should succeed
     And I register clean-up steps:
     """

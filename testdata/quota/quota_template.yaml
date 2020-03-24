@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Template
+metadata:
+  annotations:
+    description: "Quota-template"
+  name: quota-template
+objects:
+  -
+    apiVersion: v1
+    kind: ResourceQuota
+    metadata:
+      name: myquota
+    spec:
+      hard:
+        cpu: "${CPU_VALUE}"
+        memory: "${MEM_VALUE}"
+        persistentvolumeclaims: "${PV_VALUE}"
+        pods: "${POD_VALUE}"
+        replicationcontrollers: "${RC_VALUE}"
+        resourcequotas: "${RQ_VALUE}"
+        secrets: "${SECRET_VALUE}"
+        services: "${SVC_VALUE}"
+parameters:
+  -
+    name: CPU_VALUE
+    description: "cpu quota limit"
+    generate: expression
+    value: "30"
+  -
+    name: MEM_VALUE
+    description: "memory quota limit"
+    generate: expression
+    value: "16Gi"
+  -
+    name: PV_VALUE
+    description: "persistentvolumeclaims quota limit"
+    generate: expression
+    value: "20"
+  -
+    name: POD_VALUE
+    description: "pods quota limit"
+    generate: expression
+    value: "20"
+  -
+    name: RC_VALUE
+    description: "replicationcontrollers quota limit"
+    generate: expression
+    value: "30"
+  -
+    name: RQ_VALUE
+    description: "resourcequotas quota limit"
+    generate: expression
+    value: "1"
+  -
+    name: SECRET_VALUE
+    description: "secrets quota limit"
+    generate: expression
+    value: "15"
+  -
+    name: SVC_VALUE
+    description: "services quota limit"
+    generate: expression
+    value: "10"

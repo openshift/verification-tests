@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hello-openshift-invalid
+  labels:
+    app: hello-openshift-invalid
+spec:
+  containers:
+  - name: hello-openshift-invalid
+    image: wrong
+    ports:
+    - containerPort: 80

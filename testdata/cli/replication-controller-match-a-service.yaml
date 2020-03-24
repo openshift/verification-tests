@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  labels:
+    deployment: rcmatchse
+  name: rcmatchse
+spec:
+  replicas: 1
+  selector:
+    name: database
+  template:
+    metadata:
+      labels:
+        name: database
+    spec:
+      containers:
+        - args:
+            - start
+            - master
+            - --config=/config/master-config.yaml
+          image: "openshift/hello-openshift"
+          name: origin
+          ports:
+            - containerPort: 8443
+              name: openshift
+          volumeMounts:
+            - mountPath: /config
+              name: config
+              readOnly: true
+      volumes:
+        - name: config

@@ -10,7 +10,7 @@ Feature: MachineHealthCheck Test Scenarios
 
     Given I clone a machineset named "machineset-25897"
     # Create MHC
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/cloud/mhc/mhc1.yaml" replacing paths:
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/cloud/mhc/mhc1.yaml" replacing paths:
       | n                                                                                  | openshift-machine-api       |
       | ["metadata"]["name"]                                                               | mhc-<%= machine_set.name %> |
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]    | <%= machine_set.cluster %>  |
@@ -36,7 +36,7 @@ Feature: MachineHealthCheck Test Scenarios
     Given I create the 'Ready' unhealthyCondition
 
     # Create MHC
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/cloud/mhc/mhc1.yaml" replacing paths:
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/cloud/mhc/mhc1.yaml" replacing paths:
       | n                                                                                  | openshift-machine-api       |
       | ["metadata"]["name"]                                                               | mhc-<%= machine_set.name %> |
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]    | <%= machine_set.cluster %>  |
@@ -59,7 +59,7 @@ Feature: MachineHealthCheck Test Scenarios
     # Create MHCs
     Given I run the steps 2 times:
     """
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/cloud/mhc/mhc1.yaml" replacing paths:
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/cloud/mhc/mhc1.yaml" replacing paths:
       | n                                                                                  | openshift-machine-api                 |
       | ["metadata"]["name"]                                                               | mhc-<%= machine_set.name %>-#{ cb.i } |
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]    | <%= machine_set.cluster %>            |

@@ -6,7 +6,7 @@ Feature: oc attach related scenarios
     Given I have a project
     And evaluation of `"doublecontainers"` is stored in the :pod_name clipboard
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/pod_with_two_containers.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/pods/pod_with_two_containers.json |
     Then the step should succeed
     Given the pod named "<%= cb.pod_name %>" becomes ready
     When I run the :attach client command

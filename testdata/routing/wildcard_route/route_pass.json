@@ -1,0 +1,19 @@
+{
+    "kind": "Route",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "route-passthrough"
+    },
+    "spec": {
+        "host": "wildcard.pass.example.com",
+        "wildcardPolicy": "Subdomain",
+        "to": {
+            "kind": "Service",
+            "name": "service-secure"
+        },
+        "tls": {
+        "termination": "passthrough"
+        }
+    }
+}
+

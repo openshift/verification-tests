@@ -11,7 +11,7 @@ Feature: project permissions
       | admin         | <%= user.name %>    |
     Then the step should succeed
     When I run the :create admin command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/selector-east.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/pods/selector-east.json |
       | n | <%= cb.proj_name %> |
     Then the step should fail
     And the output should match:
@@ -23,10 +23,10 @@ Feature: project permissions
   Scenario: The job and HPA should be deleted when project has been deleted
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/hpa/hpa.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/hpa/hpa.yaml |
     Then the step should succeed
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/job/job.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/job/job.yaml |
     Then the step should succeed
     Given evaluation of `project.name` is stored in the :saved_name clipboard
     When I delete the project

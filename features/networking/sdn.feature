@@ -271,7 +271,7 @@ Feature: SDN related networking scenarios
     Given I have a project
     And evaluation of `project.name` is stored in the :usr_project clipboard
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/list_for_pods.json |
     Then the step should succeed
     Given 2 pods become ready with labels:
       | name=test-pods |
@@ -311,7 +311,7 @@ Feature: SDN related networking scenarios
   #Test for bug https://bugzilla.redhat.com/show_bug.cgi?id=1800324 and https://bugzilla.redhat.com/show_bug.cgi?id=1796157	
     Given I switch to cluster admin pseudo user	
     And I use the "default" project	
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json" replacing paths:	
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/list_for_pods.json" replacing paths:	
       | ["items"][0]["spec"]["replicas"] | 4 |	
     Then the step should succeed	
     And 4 pods become ready with labels:	
