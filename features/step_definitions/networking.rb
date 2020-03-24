@@ -426,7 +426,7 @@ Given /^the DefaultDeny policy is applied to the "(.+?)" namespace$/ do | projec
       raise "Failed to apply the default deny annotation to specified namespace."
     end
   else
-    @result = admin.cli_exec(:create, n: project_name , f: "<%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/networkpolicy/defaultdeny-v1-semantic.yaml")
+    @result = admin.cli_exec(:create, n: project_name , f: "#{ENV['BUSHSLICER_HOME']}/testdata/networking/networkpolicy/defaultdeny-v1-semantic.yaml")
     unless @result[:success]
       raise "Failed to apply the default deny policy to specified namespace."
     end
@@ -806,7 +806,7 @@ Given /^a DHCP service is configured for interface "([^"]*)" on "([^"]*)" node w
   host = node.host
   dhcp_status_timeout = 30
   #Following will take dnsmasq backup and append curl contents to the dnsmasq config after
-  @result = host.exec_admin("cp /etc/dnsmasq.conf /etc/dnsmasq.conf.bak;curl <%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/multus-cni/dnsmasq_for_testbridge.conf | sed s/testbr1/#{br_inf}/g | sed s/88.8.8.100,88.8.8.110,24h/#{add_lease}/g > /etc/dnsmasq.conf;systemctl restart dnsmasq --now")
+  @result = host.exec_admin("cp /etc/dnsmasq.conf /etc/dnsmasq.conf.bak;curl #{ENV['BUSHSLICER_HOME']}/testdata/networking/multus-cni/dnsmasq_for_testbridge.conf | sed s/testbr1/#{br_inf}/g | sed s/88.8.8.100,88.8.8.110,24h/#{add_lease}/g > /etc/dnsmasq.conf;systemctl restart dnsmasq --now")
   raise "Failed to configure dnsmasq service" unless @result[:success]
   wait_for(dhcp_status_timeout) {
     if host.exec_admin("systemctl status dnsmasq")[:response].include? "running"
