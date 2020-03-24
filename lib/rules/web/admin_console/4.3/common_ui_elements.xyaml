@@ -21,9 +21,14 @@ click_edit_yaml_link:
     op: click
 click_create_button:
   elements:
-  - selector:
+  - selector: &create_button
       xpath: //button[contains(text(),'Create')]
     op: click
+check_create_button_missing:
+  elements:
+  - selector:
+      <<: *create_button
+    missing: true
 click_cancel_button:
   elements:
   - selector:
@@ -75,6 +80,14 @@ click_tab:
       xpath: //ul[contains(@class,'nav__menu')]//a[contains(text(), '<tab_name>')]
     op: click
     timeout: 20
+click_environment_tab:
+  params:
+    tab_name: Environment
+  action: click_tab
+click_overview_tab:
+  params:
+    tab_name: Overview
+  action: click_tab
 click_radio_input:
   element:
     selector:
@@ -160,6 +173,11 @@ check_resources_title_on_page:
   elements:
   - selector:
       xpath: //span[text()='<resource_title>']
+click_kebab_item:
+  element:
+    selector:
+      xpath: //button[contains(@class,'pf-c-dropdown__menu-item') and not(contains(@class,'pf-m-disabled')) and text()='<kebab_item>']
+    op: click
 click_kebab_of_one_resource:
   elements:
   - selector:
@@ -167,7 +185,7 @@ click_kebab_of_one_resource:
     op: click
 click_one_operation_in_kebab:
   action: click_kebab_of_one_resource
-  action: click_button
+  action: click_kebab_item
 check_column_in_table:
   action: wait_box_loaded
   elements:
@@ -264,8 +282,8 @@ check_page_not_match:
     selector: *page_content
     missing: true
 submit_changes:
-  element:
-    selector:
+  elements:
+  - selector:
       xpath: //button[@type='submit' and not(@disabled)]
     op: click
 click_add_more_button:

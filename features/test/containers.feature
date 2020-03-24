@@ -4,7 +4,7 @@ Feature: test container related support
     And I have a pod-for-ping in the project
     And evaluation of `rand project.uid_range(user:user)` is stored in the :scc_uid clipboard
     And evaluation of `project.uid_range(user:user).begin` is stored in the :proj_scc_uid clipboard
-    When I run oc create over ERB URL: https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/authorization/scc/tc511602/pod1.json
+    When I run oc create over ERB URL: <%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/scc/tc511602/pod1.json
     Then the step should succeed
     And the pod named "hello-openshift" status becomes :running
     And evaluation of `pod.containers(user: user, cached: true)` is stored in the :containers clipboard
@@ -44,7 +44,7 @@ Feature: test container related support
 
     # test deployment and replicaset
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/hello-deployment-1.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/deployment/hello-deployment-1.yaml |
     Then the step should succeed
     Given number of replicas of "hello-openshift" deployment becomes:
       | desired   | 10 |

@@ -6,7 +6,7 @@ Feature: Persistent Volume reclaim policy tests
     Given I have a project
     And I have a 1 GB volume and save volume id in the :vid clipboard
 
-    When admin creates a PV from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/<path_to_file>" where:
+    When admin creates a PV from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/<path_to_file>" where:
       | ["metadata"]["name"]                        | pv-<%= project.name %> |
       | ["spec"]["capacity"]["storage"]             | 1Gi                    |
       | ["spec"]["accessModes"][0]                  | ReadWriteOnce          |
@@ -14,14 +14,14 @@ Feature: Persistent Volume reclaim policy tests
       | ["spec"]["persistentVolumeReclaimPolicy"]   | Default                |
       | ["spec"]["storageClassName"]                | sc-<%= project.name %> |
     Then the step should succeed
-    When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
+    When I create a dynamic pvc from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/misc/pvc.json" replacing paths:
       | ["metadata"]["name"]         | mypvc                  |
       | ["spec"]["volumeName"]       | pv-<%= project.name %> |
       | ["spec"]["storageClassName"] | sc-<%= project.name %> |
     Then the step should succeed
     And the "mypvc" PVC becomes bound to the "pv-<%= project.name %>" PV
 
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gce/pod.json" replacing paths:
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/gce/pod.json" replacing paths:
       | ["metadata"]["name"]                                         | mypod |
       | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt  |
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc |
@@ -47,7 +47,7 @@ Feature: Persistent Volume reclaim policy tests
     Given I have a project
     And I have a 1 GB volume and save volume id in the :vid clipboard
 
-    When admin creates a PV from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/<path_to_file>" where:
+    When admin creates a PV from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/<path_to_file>" where:
       | ["metadata"]["name"]                        | pv-<%= project.name %> |
       | ["spec"]["capacity"]["storage"]             | 1Gi                    |
       | ["spec"]["accessModes"][0]                  | ReadWriteOnce          |
@@ -55,14 +55,14 @@ Feature: Persistent Volume reclaim policy tests
       | ["spec"]["persistentVolumeReclaimPolicy"]   | Delete                 |
       | ["spec"]["storageClassName"]                | sc-<%= project.name %> |
     Then the step should succeed
-    When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
+    When I create a dynamic pvc from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/misc/pvc.json" replacing paths:
       | ["metadata"]["name"]         | mypvc                  |
       | ["spec"]["volumeName"]       | pv-<%= project.name %> |
       | ["spec"]["storageClassName"] | sc-<%= project.name %> |
     Then the step should succeed
     And the "mypvc" PVC becomes bound to the "pv-<%= project.name %>" PV
 
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gce/pod.json" replacing paths:
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/gce/pod.json" replacing paths:
       | ["metadata"]["name"]                                         | mypod |
       | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt  |
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc |

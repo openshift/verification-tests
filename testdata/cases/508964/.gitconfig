@@ -1,0 +1,2 @@
+[url "http://openshift:redhat@git:8080/ruby-hello-world.git"]
+        insteadOf ="http://git:8080/ruby-hello-world.git"

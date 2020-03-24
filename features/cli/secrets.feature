@@ -10,7 +10,7 @@ Feature: secrets related scenarios
       | source | /etc/hosts |
     Then the step should succeed
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/tc510612/hook-inheritance-secret-volume.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/deployment/tc510612/hook-inheritance-secret-volume.json |
     Then the step should succeed
   ## mount should be correct to the pod, no-matter if the pod is completed or not, check the case checkpoint
     And I wait for the steps to pass:
@@ -29,7 +29,7 @@ Feature: secrets related scenarios
   # @case_id OCP-12290
   Scenario: Create new secrets for ssh authentication
     Given I have a project
-    When I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/cases/508971/id_rsa"
+    When I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/cases/508971/id_rsa"
     When I run the :secrets_new_sshauth client command with:
       |secret_name    |testsecret |
       |ssh_privatekey |id_rsa     |
@@ -41,7 +41,7 @@ Feature: secrets related scenarios
     Then the step should succeed
     And the output should contain:
       |ssh-privatekey:|
-    When I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/cases/508970/ca.crt"
+    When I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/cases/508970/ca.crt"
     When I run the :secrets_new_sshauth client command with:
       |secret_name    |testsecret2 |
       |ssh_privatekey |id_rsa      |
@@ -62,14 +62,14 @@ Feature: secrets related scenarios
   Scenario: Pods do not have access to each other's secrets in the same namespace
     Given I have a project
     When I run the :create client command with:
-      | filename | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/tc483168/first-secret.json |
+      | filename | <%= ENV['BUSHSLICER_HOME'] %>/testdata/secrets/tc483168/first-secret.json |
     And I run the :create client command with:
-      | filename | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/tc483168/second-secret.json |
+      | filename | <%= ENV['BUSHSLICER_HOME'] %>/testdata/secrets/tc483168/second-secret.json |
     Then the step should succeed
     When I run the :create client command with:
-      | filename | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/tc483168/first-secret-pod.yaml |
+      | filename | <%= ENV['BUSHSLICER_HOME'] %>/testdata/secrets/tc483168/first-secret-pod.yaml |
     And I run the :create client command with:
-      | filename | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/tc483168/second-secret-pod.yaml |
+      | filename | <%= ENV['BUSHSLICER_HOME'] %>/testdata/secrets/tc483168/second-secret-pod.yaml |
     Then the step should succeed
     Given the pod named "first-secret-pod" status becomes :running
     When I run the :exec client command with:
@@ -104,17 +104,17 @@ Feature: secrets related scenarios
     Given I have a project
     Given evaluation of `project.name` is stored in the :project0 clipboard
     When I run the :create client command with:
-      | filename  | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/tc483169/secret1.json |
+      | filename  | <%= ENV['BUSHSLICER_HOME'] %>/testdata/secrets/tc483169/secret1.json |
     And I run the :create client command with:
-      | filename  | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/tc483169/secret-pod-1.yaml |
+      | filename  | <%= ENV['BUSHSLICER_HOME'] %>/testdata/secrets/tc483169/secret-pod-1.yaml |
     Then the step should succeed
     And the pod named "secret-pod-1" status becomes :running
     When I create a new project
     Given evaluation of `project.name` is stored in the :project1 clipboard
     And I run the :create client command with:
-      | filename  | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/tc483169/secret2.json |
+      | filename  | <%= ENV['BUSHSLICER_HOME'] %>/testdata/secrets/tc483169/secret2.json |
     And I run the :create client command with:
-      | filename  | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/tc483169/secret-pod-2.yaml |
+      | filename  | <%= ENV['BUSHSLICER_HOME'] %>/testdata/secrets/tc483169/secret-pod-2.yaml |
     Then the step should succeed
     And the pod named "secret-pod-2" status becomes :running
     When I run the :exec client command with:
@@ -154,7 +154,7 @@ Feature: secrets related scenarios
       | password | <%= cb.pass2 %> |
     Then the step should succeed
     When I run the :new_app client command with:
-      | file | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/templates/tc507415/application-template-custombuild.json |
+      | file | <%= ENV['BUSHSLICER_HOME'] %>/testdata/templates/tc507415/application-template-custombuild.json |
     Then the step should succeed
     Given the pod named "ruby-sample-build-1-build" status becomes :running
     When I run the :get client command with:
@@ -202,10 +202,10 @@ Feature: secrets related scenarios
   Scenario Outline: Insert secret to builder container via oc new-build - source/docker build
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/tc519256/testsecret1.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/secrets/tc519256/testsecret1.json |
     Then the step should succeed
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/tc519256/testsecret2.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/secrets/tc519256/testsecret2.json |
     Then the step should succeed
     When I run the :new_build client command with:
       | docker_image | centos/ruby-22-centos7:latest                |
@@ -215,7 +215,7 @@ Feature: secrets related scenarios
       | build_secret | testsecret2    |
     Then the step should succeed
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/tc519261/test.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/deployment/tc519261/test.json |
     Then the step should succeed
     Given the "build-secret-1" build was created
     And the "build-secret-1" build completed
@@ -243,7 +243,7 @@ Feature: secrets related scenarios
   Scenario: Build from private repo with/without secret of token --persistent gitserver
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/image/gitserver/gitserver-persistent.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/image/gitserver/gitserver-persistent.yaml |
     Then the step should succeed
     And the "git" PVC becomes :bound within 300 seconds
 
@@ -323,9 +323,10 @@ Feature: secrets related scenarios
       | resource | dc/git                    |
       | e        | ALLOW_ANON_GIT_PULL=false |
     Then the step should succeed
-    When I run the :secrets_new_basicauth client command with:
-      |secret_name |mysecret                          |
-      |password    |<%= user.cached_tokens.first %>|
+    When I run the :create_secret client command with:
+      | name         | mysecret                                 |
+      | secret_type  | generic                                  |
+      | from_literal | password=<%= user.cached_tokens.first %> |
     Then the step should succeed
     When I run the :patch client command with:
       | resource      | buildconfig      |
@@ -360,7 +361,7 @@ Feature: secrets related scenarios
   Scenario: Consume the same Secrets as environment variables in multiple pods
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/secret.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/secrets/secret.yaml |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | secret   |
@@ -369,7 +370,7 @@ Feature: secrets related scenarios
       | data-1:\\s+9\\s+bytes  |
       | data-2:\\s+11\\s+bytes |
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/job/job-secret-env.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/job/job-secret-env.yaml |
     Then the step should succeed
     And I wait for the steps to pass:
     """
@@ -408,7 +409,7 @@ Feature: secrets related scenarios
   Scenario: Using Secrets as Environment Variables
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/secret.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/secrets/secret.yaml |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | secret   |
@@ -417,7 +418,7 @@ Feature: secrets related scenarios
       | data-1:\\s+9\\s+bytes  |
       | data-2:\\s+11\\s+bytes |
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/secret-env-pod.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/secrets/secret-env-pod.yaml |
     Then the step should succeed
     And the pod named "secret-env-pod" status becomes :succeeded
     When I run the :logs client command with:
@@ -431,7 +432,7 @@ Feature: secrets related scenarios
   Scenario: Build from private repos with secret of multiple auth methods
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/image/gitserver/gitserver-persistent.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/image/gitserver/gitserver-persistent.yaml |
     Then the step should succeed
     And the "git" PVC becomes :bound within 300 seconds
 
@@ -512,7 +513,7 @@ Feature: secrets related scenarios
       | resource | dc/git                    |
       | e        | ALLOW_ANON_GIT_PULL=false |
     Then the step should succeed
-    When I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/cases/508964/.gitconfig"
+    When I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/cases/508964/.gitconfig"
     When I run the :secrets_new_basicauth client command with:
       |secret_name|mysecret  |
       |username   |openshift |
@@ -581,10 +582,10 @@ Feature: secrets related scenarios
   Scenario: Secret volume should update when secret is updated
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/tc483169/secret1.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/secrets/tc483169/secret1.json |
     Then the step should succeed
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/tc483169/secret-pod-1.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/secrets/tc483169/secret-pod-1.yaml |
     Then the step should succeed
     Given the pod named "secret-pod-1" status becomes :running
     When I run the :exec client command with:
@@ -614,10 +615,10 @@ Feature: secrets related scenarios
   Scenario: Mapping specified secret volume should update when secret is updated
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/tc483169/secret1.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/secrets/tc483169/secret1.json |
     Then the step should succeed
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/mapping-secret-volume-pod.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/secrets/mapping-secret-volume-pod.yaml |
     Then the step should succeed
     Given the pod named "mapping-secret-volume-pod" status becomes :running
     When I execute on the pod:
@@ -644,7 +645,7 @@ Feature: secrets related scenarios
   Scenario: Allow specifying secret data using strings and images
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/secret-datastring-image.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/secrets/secret-datastring-image.json |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | secret                  |
@@ -654,7 +655,7 @@ Feature: secrets related scenarios
       | password:\\s+5\\s+bytes |
       | username:\\s+5\\s+bytes |
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/pod-secret-datastring-image-volume.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/secrets/pod-secret-datastring-image-volume.yaml |
     Then the step should succeed
     Given the pod named "pod-secret-datastring-image-volume" status becomes :running
     When I execute on the pod:
@@ -706,10 +707,11 @@ Feature: secrets related scenarios
     When I run the :new_app client command with:
       | app_repo | ruby~http://<%= cb.git_route %>/ruby-hello-world.git |
     Then the step should succeed
-    When I run the :secrets_new_basicauth client command with:
-      | secret_name | mysecret  |
-      | username    | openshift |
-      | password    | redhat    |
+    When I run the :create_secret client command with:
+      | name         | mysecret           |
+      | secret_type  | generic            |
+      | from_literal | username=openshift |
+      | from_literal | password=redhat    |
     Then the step should succeed
     When I run the :secret_link client command with:
       | secret_name | mysecret  |
@@ -733,9 +735,11 @@ Feature: secrets related scenarios
     When I have an ssh-git service in the project
     And the "secret" file is created with the following lines:
       | <%= cb.ssh_private_key.to_pem %> |
-    And I run the :secrets_new_sshauth client command with:
-      | ssh_privatekey | secret    |
-      | secret_name    | sshsecret |
+    And I run the :create_secret client command with:
+      | secret_type | generic               |   
+      | name        | sshsecret             |   
+      | from_file   | ssh-privatekey=secret |
+    Then the step should succeed
     Then the step should succeed
     When I execute on the pod:
       | bash                                                                                                         |
@@ -780,10 +784,11 @@ Feature: secrets related scenarios
       | -c                                                                                                      |
       | cd /var/lib/git/ && git clone --bare https://github.com/openshift/ruby-hello-world ruby-hello-world.git |
     Then the step should succeed
-    When I run the :secrets_new_basicauth client command with:
-      | secret_name | mysecret  |
-      | username    | openshift |
-      | password    | redhat    |
+    When I run the :create_secret client command with:
+      | name         | mysecret           |
+      | secret_type  | generic            |
+      | from_literal | username=openshift |
+      | from_literal | password=redhat    |
     Then the step should succeed
     When I run the :annotate client command with:
       | resource     | secret                                                                   |
@@ -819,10 +824,11 @@ Feature: secrets related scenarios
       | l           | app=newapp2 |
     Then the step should succeed
 
-    When I run the :secrets_new_basicauth client command with:
-      | secret_name | override  |
-      | username    | openshift |
-      | password    | redhat    |
+    When I run the :create_secret client command with:
+      | name         | override           |
+      | secret_type  | generic            |
+      | from_literal | username=openshift |
+      | from_literal | password=redhat    |
     Then the step should succeed
     When I run the :annotate client command with:
       | resource     | secret                                                                       |

@@ -1,0 +1,23 @@
+{
+    "kind": "EgressNetworkPolicy",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "policy-test"
+    },
+    "spec": {
+        "egress": [
+            {
+                "type": "Deny",
+                "to": {
+                     "dnsName": "pod2.ec2.internal"
+                }
+            },
+            {
+                "type": "Allow",
+                "to": {
+                    "cidrSelector": "0.0.0.0/0"
+                }
+            }
+        ]
+    }
+}

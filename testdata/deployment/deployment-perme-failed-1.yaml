@@ -1,0 +1,24 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: hello-openshift
+spec:
+  progressDeadlineSeconds: 30
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: hello-openshift
+    spec:
+      containers:
+      - name: hello-openshift
+        image: openshift/hello-openshift:123
+        resources:
+          limits:
+            cpu: 120m
+            memory: 256Mi
+          requests:
+            cpu: 60m
+            memory: 256Mi
+        ports:
+        - containerPort: 80

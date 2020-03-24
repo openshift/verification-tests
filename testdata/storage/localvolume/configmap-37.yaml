@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: local-volume-config
+data:
+    "local-fast": |
+      {
+        "hostDir": "/mnt/local-storage/fast",
+        "mountDir": "/mnt/local-storage/fast"
+      }
+    "local-slow": |
+      {
+        "hostDir": "/mnt/local-storage/slow",
+        "mountDir": "/mnt/local-storage/slow"
+      }

@@ -45,7 +45,7 @@ Feature: build related feature on web console
   Scenario: Check build trigger info when the trigger is ImageChange on web
     Given I have a project
     When I run the :create client command with:
-      | f    | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/tc528954/bc_imagechange.yaml |
+      | f    | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/tc528954/bc_imagechange.yaml |
     Then the step should succeed
     Given the "ruby-ex-1" build was created within 120 seconds
     When I perform the :check_build_trigger web console action with:

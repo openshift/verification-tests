@@ -36,7 +36,7 @@ Feature: Egress IP related features
     # create project with pods
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/list_for_pods.json |
     Then the step should succeed
     Given 2 pods become ready with labels:
       | name=test-pods |
@@ -190,7 +190,7 @@ Feature: Egress IP related features
 
     # Create egressnetworkpolicy
     When I run the :create admin command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/egressnetworkpolicy/limit_policy.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/egressnetworkpolicy/limit_policy.json |
       | n | <%= project.name %>                                                                                                 |
     Then the step should succeed
 

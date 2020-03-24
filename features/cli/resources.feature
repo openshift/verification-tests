@@ -20,7 +20,7 @@ Feature: resouces related scenarios
       | o             | yaml     |
       | export        | true     |
     Then the step should succeed
-    Given I save the output to file>svc.yaml
+    Given I save the output to file> svc.yaml
     When I run the :describe client command with:
       | resource     | :false        |
       | name         | :false        |

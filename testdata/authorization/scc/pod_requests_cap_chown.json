@@ -1,0 +1,19 @@
+{
+  "kind": "Pod",
+  "apiVersion":"v1",
+  "metadata": {
+        "name": "pod-add-chown",
+        "labels": {
+                "name": "pod-add-chown"
+        }
+  },
+  "spec": {
+      "containers": [{
+        "name": "pod-add-chown",
+        "image": "bmeng/hello-openshift",
+        "securityContext": {
+                "capabilities": {"add":["CHOWN"]}
+        }
+      }]
+  }
+}

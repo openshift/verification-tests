@@ -1,0 +1,19 @@
+{
+  "kind": "Pod",
+  "apiVersion":"v1",
+  "metadata": {
+        "name": "volumetest"
+  },
+  "spec": {
+      "containers": [{
+        "name": "volumetest",
+        "image": "openshift/mysql-55-centos7:latest",
+        "ports": [
+          {
+            "containerPort": 3306,
+            "protocol": "TCP"
+          }
+        ]
+      }]
+  }
+}

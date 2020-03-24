@@ -96,5 +96,10 @@ module BushSlicer
       return node_port
     end
 
+    def loadbalancer_ingress(user: nil, cached: true, quiet: false)
+      rr = raw_resource(user: user, cached: cached, quiet: quiet)
+      rr.dig('status', 'loadBalancer', 'ingress')
+    end
+
   end
 end

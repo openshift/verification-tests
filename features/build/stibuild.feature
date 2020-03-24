@@ -5,7 +5,7 @@ Feature: stibuild.feature
   Scenario: STI build with invalid context dir
     Given I have a project
     When I run the :new_app client command with:
-      | file | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/image/language-image-templates/python-27-rhel7-errordir-stibuild.json |
+      | file | <%= ENV['BUSHSLICER_HOME'] %>/testdata/image/language-image-templates/python-27-rhel7-errordir-stibuild.json |
     Then the step should succeed
     When I run the :start_build client command with:
       | buildconfig | python-sample-build |
@@ -50,9 +50,9 @@ Feature: stibuild.feature
 
     Examples:
       |template|
-      |https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/templates/tc498848/tc498848-s2i.json   | # @case_id OCP-12041
-      |https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/templates/tc498847/tc498847-docker.json| # @case_id OCP-11911
-      |https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/templates/tc498846/tc498846-custom.json| # @case_id OCP-11739
+      |<%= ENV['BUSHSLICER_HOME'] %>/testdata/templates/tc498848/tc498848-s2i.json   | # @case_id OCP-12041
+      |<%= ENV['BUSHSLICER_HOME'] %>/testdata/templates/tc498847/tc498847-docker.json| # @case_id OCP-11911
+      |<%= ENV['BUSHSLICER_HOME'] %>/testdata/templates/tc498846/tc498846-custom.json| # @case_id OCP-11739
 
   # @author wewang@redhat.com
   # @case_id OCP-15464

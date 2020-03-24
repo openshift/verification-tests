@@ -1,12 +1,11 @@
 Feature: some storage related scenarios
 
   # @author mcurlej@redhat.com
-  # @case_id none
   @admin
   Scenario: test openstack rest api
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/ebs/dynamic-provisioning-pvc.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/ebs/dynamic-provisioning-pvc.json |
     Then the step should succeed
     And the "ebsc" PVC becomes :bound
     And evaluation of `pvc.volume_name(user: user)` is stored in the :volume_name clipboard

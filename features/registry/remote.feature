@@ -75,7 +75,7 @@ Feature: remote registry related scenarios
     Given I have a project
     Given default registry service ip is stored in the :integrated_reg_ip clipboard
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/image-streams/busybox.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/image-streams/busybox.json |
     Then the step should succeed
     And the "busybox" image stream was created
     Given evaluation of `cb.integrated_reg_ip + "/" + project.name + "/busybox:2.0"` is stored in the :my_tag clipboard

@@ -6,7 +6,7 @@ Feature: limit range related scenarios:
   Scenario Outline: Limit range default request tests
     Given I have a project
     Given admin uses the "<%= project.name %>" project
-    When I run oc create as admin over ERB URL: https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/limits/<path>/limit.yaml
+    When I run oc create as admin over ERB URL: <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/<path>/limit.yaml
     Then the step should succeed
     And I run the :describe client command with:
       |resource | namespace |
@@ -31,7 +31,7 @@ Feature: limit range related scenarios:
   Scenario Outline: Limit range invalid values tests
     Given I have a project
     Given admin uses the "<%= project.name %>" project
-    When I run oc create as admin over ERB URL: https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/limits/<path>/limit.yaml
+    When I run oc create as admin over ERB URL: <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/<path>/limit.yaml
     And the step should fail
     And the output should match:
       | LimitRange "limits" is invalid |
@@ -52,7 +52,7 @@ Feature: limit range related scenarios:
   Scenario Outline: Limit range incorrect values
     Given I have a project
     Given admin uses the "<%= project.name %>" project
-    When I run oc create as admin over ERB URL: https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/limits/<path>/limit.yaml
+    When I run oc create as admin over ERB URL: <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/<path>/limit.yaml
     And the step should fail
     And the output should match:
       | min\[memory\].*<expr2> value <expr3> is greater than <expr4> value <expr5> |
@@ -69,7 +69,7 @@ Feature: limit range related scenarios:
   Scenario: Limit range does not allow min > defaultRequest
     Given I have a project
     Given admin uses the "<%= project.name %>" project
-    When I run oc create as admin over ERB URL: https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/limits/tc508046/limit.yaml
+    When I run oc create as admin over ERB URL: <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/tc508046/limit.yaml
     Then the step should fail
     And the output should match:
       | cpu.*min value 400m is greater than default request value 200m    |
@@ -82,7 +82,7 @@ Feature: limit range related scenarios:
   Scenario: Limit range does not allow defaultRequest > default
     Given I have a project
     Given admin uses the "<%= project.name %>" project
-    When I run oc create as admin over ERB URL: https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/limits/tc508042/limit.yaml
+    When I run oc create as admin over ERB URL: <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/tc508042/limit.yaml
     Then the step should fail
     And the output should match:
       | cpu.*default request value 400m is greater than default limit value 200m       |
@@ -95,7 +95,7 @@ Feature: limit range related scenarios:
   Scenario: Limit range does not allow defaultRequest > max
     Given I have a project
     Given admin uses the "<%= project.name %>" project
-    When I run oc create as admin over ERB URL: https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/limits/tc508043/limit.yaml
+    When I run oc create as admin over ERB URL: <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/tc508043/limit.yaml
     Then the step should fail
     And the output should match:
       | cpu.*default request value 400m is greater than max value 200m      |
@@ -108,7 +108,7 @@ Feature: limit range related scenarios:
   Scenario: Limit range does not allow maxLimitRequestRatio > Limit/Request
     Given I have a project
     Given admin uses the "<%= project.name %>" project
-    When I run oc create as admin over ERB URL: https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/limits/tc508044/limit.yaml
+    When I run oc create as admin over ERB URL: <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/tc508044/limit.yaml
     Then the step should succeed
     And I run the :describe client command with:
       |resource | namespace            |
@@ -117,7 +117,7 @@ Feature: limit range related scenarios:
       | Container\\s+cpu\\s+\-\\s+\-\\s+\-\\s+\-\\s+4    |
       | Container\\s+memory\\s+\-\\s+\-\\s+\-\\s+\-\\s+4 |
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/limits/tc508044/pod.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/tc508044/pod.yaml |
     Then the step should fail
     And the output should contain:
       | cpu max limit to request ratio per Container is 4, but provided ratio is 15.000000              |
@@ -129,7 +129,7 @@ Feature: limit range related scenarios:
   Scenario: Limit range with all values set with proper values
     Given I have a project
     Given admin uses the "<%= project.name %>" project
-    When I run oc create as admin over ERB URL: https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/limits/tc508048/limit.yaml
+    When I run oc create as admin over ERB URL: <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/tc508048/limit.yaml
     Then the step should succeed
     And I run the :describe client command with:
       |resource | namespace            |
@@ -140,7 +140,7 @@ Feature: limit range related scenarios:
       | Container\\s+cpu\\s+10m\\s+480m\\s+180m\\s+240m\\s+4       |
       | Container\\s+memory\\s+5Mi\\s+512Mi\\s+128Mi\\s+256Mi\\s+4 |
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/limits/tc508048/pod.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/tc508048/pod.yaml |
       | n | <%= project.name %>  |
     Then the step should succeed
     And I wait for the steps to pass:

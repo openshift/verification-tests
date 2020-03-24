@@ -58,13 +58,13 @@ Feature: oc_secrets.feature
     Given I have a project
     # 1.1 Create a secret with a non-existing namespace
     When I run the :create client command with:
-      | filename  | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/tc483168/second-secret.json |
+      | filename  | <%= ENV['BUSHSLICER_HOME'] %>/testdata/secrets/tc483168/second-secret.json |
       | namespace | non483167 |
     Then the step should fail
     And the output should match "cannot create secrets in (project|the namespace "non483167").*"
     # 1.2 Create a secret with a correct namespace
     When I run the :create client command with:
-      | filename | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/tc483168/second-secret.json |
+      | filename | <%= ENV['BUSHSLICER_HOME'] %>/testdata/secrets/tc483168/second-secret.json |
     Then the step should succeed
     # 2. Describe a secret
     When I run the :describe client command with:
@@ -126,12 +126,12 @@ Feature: oc_secrets.feature
     And  the "tmpbar" file is created with the following lines:
       | somecontent |
     Then the step should succeed
-    When I run the :secrets client command with:
-      | action | new                  |
-      | name   | <%= project.name %>1 |
-      | source | tmpfoo               |
-      | source | tmpbar               |
-      | n      | <%= project.name %>  |
+    When I run the :create_secret client command with:
+      | secret_type | generic              |
+      | name        | <%= project.name %>1 |
+      | from_file   |  tmpfoo              |
+      | from_file   |  tmpbar              |
+      | n           | <%= project.name %>  |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | secret               |
@@ -147,12 +147,12 @@ Feature: oc_secrets.feature
     And the "tmpfoler2/tmpfile2" file is created with the following lines:
       | somecontent |
     Then the step should succeed
-    When I run the :secrets client command with:
-      | action | new                  |
-      | name   | <%= project.name %>2 |
-      | source | tmpfoler1            |
-      | source | tmpfoler2            |
-      | n      | <%= project.name %>  |
+    When I run the :create_secret client command with:
+      | secret_type | generic              |
+      | name        | <%= project.name %>2 |
+      | from_file   |  tmpfoler1           |
+      | from_file   |  tmpfoler2           |
+      | n           | <%= project.name %>  |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | secret               |

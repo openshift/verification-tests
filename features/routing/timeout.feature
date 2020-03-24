@@ -6,12 +6,12 @@ Feature: Testing timeout route
     Given I have a project
     And I store an available router IP in the :router_ip clipboard
     When I run the :create client command with:
-      | f  | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/routetimeout/httpbin-pod-2.json |
+      | f  | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/routetimeout/httpbin-pod-2.json |
     Then the step should succeed
     And a pod becomes ready with labels:
       | name=httpbin-pod |
     When I run the :create client command with:
-      | f  | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/routetimeout/passthough/service_secure.json |
+      | f  | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/routetimeout/passthough/service_secure.json |
     Then the step should succeed
     Given I wait for the "service-secure" service to become ready
     When I run the :create_route_passthrough client command with:

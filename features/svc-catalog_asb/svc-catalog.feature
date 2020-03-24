@@ -21,7 +21,7 @@ Feature: Service-catalog related scenarios
     When I switch to cluster admin pseudo user
     And I use the "<%= cb.ups_broker_project %>" project
     When I process and create:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/ups-broker-template.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/ups-broker-template.yaml |
       | p | UPS_BROKER_PROJECT=<%= cb.ups_broker_project %>                                                         |
     Then the step should succeed
     And I wait up to 360 seconds for the steps to pass:
@@ -39,7 +39,7 @@ Feature: Service-catalog related scenarios
     Given I switch to the first user
     And I use the "<%= cb.user_project %>" project
     When I process and create:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/ups-instance-template.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/ups-instance-template.yaml |
       | p | USER_PROJECT=<%= cb.user_project %>                                                                       |
     Then the step should succeed
     And I wait up to 30 seconds for the steps to pass:
@@ -51,7 +51,7 @@ Feature: Service-catalog related scenarios
 
     # Create servicebinding
     When I process and create:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/ups-binding-template.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/ups-binding-template.yaml |
       | p | USER_PROJECT=<%= cb.user_project %>                                                                      |
     Then the step should succeed
     Given I check that the "my-secret" secret exists
@@ -133,20 +133,17 @@ Feature: Service-catalog related scenarios
   @destructive
   Scenario: Create/get/update/delete for ClusterServiceBroker resource  
     Given I have a project
+    When I run the :get admin command with:
+      | resource | clusterservicebroker |
+    Then the step should succeed  
     And evaluation of `project.name` is stored in the :ups_broker_project clipboard
 
     # Deploy ups broker
-    Given I register clean-up steps:
-    """
-    I run the :delete admin command with:
-      | object_type       | clusterservicebroker |
-      | object_name_or_id | ups-broker           |
-    the step should fail
-    """
+    Given admin ensures "ups-broker" clusterservicebroker is deleted after scenario
     When I switch to cluster admin pseudo user
     And I use the "<%= cb.ups_broker_project %>" project
     When I process and create:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/ups-broker-template.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/ups-broker-template.yaml |
       | p | UPS_BROKER_PROJECT=<%= cb.ups_broker_project %>                                                         |
     Then the step should succeed
     And I wait up to 300 seconds for the steps to pass:
@@ -213,17 +210,21 @@ Feature: Service-catalog related scenarios
   @destructive
   Scenario: Create/get/update/delete for ServiceInstance resource
     Given I have a project
+    When I run the :get admin command with:
+      | resource | clusterservicebroker |
+    Then the step should succeed
     And evaluation of `project.name` is stored in the :ups_broker_project clipboard
     And I create a new project
     And evaluation of `project.name` is stored in the :user_project clipboard
 
     # Deploy ups broker
+    Given admin ensures "ups-broker" clusterservicebroker is deleted after scenario
     Given admin ensures "ups-instance" serviceinstance is deleted
     Given admin ensures "ups-broker" clusterservicebroker is deleted
     When I switch to cluster admin pseudo user
     And I use the "<%= cb.ups_broker_project %>" project
     When I process and create:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/ups-broker-template.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/ups-broker-template.yaml |
       | p | UPS_BROKER_PROJECT=<%= cb.ups_broker_project %>                                                         |
     Then the step should succeed
     And I wait up to 300 seconds for the steps to pass:
@@ -241,7 +242,7 @@ Feature: Service-catalog related scenarios
     Given I switch to the first user
     And I use the "<%= cb.user_project %>" project
     When I process and create:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/ups-instance-template.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/ups-instance-template.yaml |
       | p | USER_PROJECT=<%= cb.user_project %>                                                                       |
     Then the step should succeed
     And I wait up to 30 seconds for the steps to pass:
@@ -268,16 +269,20 @@ Feature: Service-catalog related scenarios
   @destructive
   Scenario: Create/get/update/delete for ServiceBinding resource
     Given I have a project
+    When I run the :get admin command with:
+      | resource | clusterservicebroker |
+    Then the step should succeed
     And evaluation of `project.name` is stored in the :ups_broker_project clipboard
     And I create a new project
     And evaluation of `project.name` is stored in the :user_project clipboard
 
     # Deploy ups broker
+    Given admin ensures "ups-broker" clusterservicebroker is deleted after scenario
     Given admin ensures "ups-broker" clusterservicebroker is deleted
     When I switch to cluster admin pseudo user
     And I use the "<%= cb.ups_broker_project %>" project
     When I process and create:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/ups-broker-template.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/ups-broker-template.yaml |
       | p | UPS_BROKER_PROJECT=<%= cb.ups_broker_project %>                                                         |
     Then the step should succeed
     And I wait up to 300 seconds for the steps to pass:
@@ -295,7 +300,7 @@ Feature: Service-catalog related scenarios
     Given I switch to the first user
     And I use the "<%= cb.user_project %>" project
     When I process and create:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/ups-instance-template.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/ups-instance-template.yaml |
       | p | USER_PROJECT=<%= cb.user_project %>                                                                       |
     Then the step should succeed
     And I wait up to 30 seconds for the steps to pass:
@@ -307,7 +312,7 @@ Feature: Service-catalog related scenarios
 
     # Create servicebinding
     When I process and create:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/ups-binding-template.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/ups-binding-template.yaml |
       | p | USER_PROJECT=<%= cb.user_project %>                                                                      |
     Then the step should succeed
     And I wait up to 10 seconds for the steps to pass:
@@ -337,14 +342,17 @@ Feature: Service-catalog related scenarios
   @destructive
   Scenario: Create/get/update/delete for Clusterserviceclass/Clusterserviceplan resource
     Given I have a project
-
+    When I run the :get admin command with:
+      | resource | clusterservicebroker |
+    Then the step should succeed
+    
     # Deploy ups broker
     Given admin ensures "ups-broker" clusterservicebroker is deleted after scenario
 
     When I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
     When I process and create:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/ups-broker-template.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/ups-broker-template.yaml |
       | p | UPS_BROKER_PROJECT=<%= project.name %>                                                                  |
     Then the step should succeed
     And I wait up to 300 seconds for the steps to pass:

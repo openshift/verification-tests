@@ -99,7 +99,7 @@ Feature: set deployment-hook/build-hook with CLI
       | oc_opts_end      |                             |
       | args             | /bin/true                   |
     Then the step should succeed
-    When I save the output to file>dc.json
+    When I save the output to file> dc.json
     And I run the :set_deployment_hook client command with:
       | mid            |            |
       | f              | dc.json    |

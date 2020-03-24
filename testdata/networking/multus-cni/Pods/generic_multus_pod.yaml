@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pod
+  annotations:
+    k8s.v1.cni.cncf.io/networks: test
+spec:
+  containers:
+  - name: test-pod
+    command: ["/bin/bash", "-c", "sleep 2000000000000"]
+    image: dougbtv/centos-network

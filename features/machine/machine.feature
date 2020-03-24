@@ -29,15 +29,14 @@ Feature: Machine features testing
   @destructive
   Scenario: Scale up and scale down a machineSet
     Given I have an IPI deployment
-    And I pick a random machineset to scale
-    And evaluation of `machine_set.available_replicas` is stored in the :replicas_to_restore clipboard
+    And I switch to cluster admin pseudo user
+
+    Given I store the number of machines in the :num_to_restore clipboard
+    And admin ensures node number is restored to "<%= cb.num_to_restore %>" after scenario
+
+    Given I clone a machineset named "machineset-clone-25436"
 
     Given I scale the machineset to +2
-    And I register clean-up steps:
-    """
-    When I scale the machineset to <%= cb.replicas_to_restore %>
-    Then the machineset should have expected number of running machines
-    """
     Then the step should succeed
     And the machineset should have expected number of running machines
 
@@ -68,3 +67,78 @@ Feature: Machine features testing
       | https://machine-api-operator.openshift-machine-api.svc:8443/metrics          | # @case_id OCP-25652
       | https://cluster-autoscaler-operator.openshift-machine-api.svc:9192/metrics   | # @case_id OCP-26111
       | https://machine-approver.openshift-cluster-machine-approver.svc:9192/metrics | # @case_id OCP-26102
+
+  # @author zhsun@redhat.com
+  # @case_id OCP-25608
+  @admin
+  @destructive
+  Scenario: Machine should have immutable field providerID and nodeRef
+    Given I have an IPI deployment
+    Given I store the last provisioned machine in the :machine clipboard
+    And evaluation of `machine(cb.machine).node_name` is stored in the :nodeRef_name clipboard
+    And evaluation of `machine(cb.machine).provider_id` is stored in the :providerID clipboard
+
+    When I run the :patch admin command with:
+      | resource      | machine                                |
+      | resource_name | <%= cb.machine %>                      |
+      | p             | {"status":{"nodeRef":{"name":"test"}}} |
+      | type          | merge                                  |
+      | n             | openshift-machine-api                  |
+    Then the step should succeed
+    When I run the :describe admin command with:
+      | resource      | machine                                |
+      | name          | <%= cb.machine %>                      |
+      | n             | openshift-machine-api                  |
+    Then the step should succeed
+    And the output should match "Name:\s+<%= cb.nodeRef_name %>"
+
+    When I run the :patch admin command with:
+      | resource      | machine                                |
+      | resource_name | <%= cb.machine %>                      |
+      | p             | {"spec":{"providerID":"invalid"}}      |
+      | type          | merge                                  |
+      | n             | openshift-machine-api                  |
+    Then the step should succeed
+    When I run the :describe admin command with:
+      | resource      | machine                                |
+      | name          | <%= cb.machine %>                      |
+      | n             | openshift-machine-api                  |
+    Then the step should succeed
+    And the output should match "Provider ID:\s+<%= cb.providerID %>"
+
+  # @author miyadav@redhat.com
+  # @case_id OCP-27627
+  @admin
+  Scenario: Verify all machine instance-state should be consistent with their providerStats.instanceState
+    Given I have an IPI deployment
+    And evaluation of `BushSlicer::Machine.list(user: admin, project: project('openshift-machine-api'))` is stored in the :machines clipboard
+    Then the expression should be true> cb.machines.select{|m|m.instance_state == m.annotation_instance_state}.count == cb.machines.count
+
+  # @author miyadav@redhat.com
+  # @case_id OCP-27609
+  @admin
+  @destructive
+  Scenario: Scaling a machineset with providerSpec.publicIp set to true
+    Given I have an IPI deployment
+    And I clone a machineset named "machineset-clone-publiciptrue"
+
+    Then I run the :get admin command with:
+     | resource      | machineset                    |
+     | resource_name | machineset-clone-publiciptrue |
+     | namespace     | openshift-machine-api         |
+     | o             | yaml                          |
+    And I save the output to file> new_machineset.yaml
+
+    And I replace lines in "new_machineset.yaml":
+     | publicIp: null| publicIp: true |
+    Then the step should succeed
+
+    When I run the :replace admin command with:
+     | f | new_machineset.yaml |
+    And the output should match:
+     | [Rr]eplaced |
+
+    Given I scale the machineset to +2
+    Then the machineset should have expected number of running machines
+
+    

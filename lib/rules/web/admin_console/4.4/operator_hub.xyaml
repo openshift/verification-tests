@@ -60,3 +60,83 @@ check_error_message_for_missing_required_name:
   params:
     content: name or generateName is required
   action: check_page_contains
+check_quay_image_security_exists_on_dashboard:
+  element:
+    selector: &quay_image_security
+      xpath: //button[contains(text(),'Quay Image Security')]
+click_quay_image_security_button:
+  element:
+    selector:
+      <<: *quay_image_security
+    op: click
+check_quay_image_security_popup:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'co-overview-status')]/div[text()='Severity']/following-sibling::div[text()='Fixable']
+  - selector:
+      xpath: //div[contains(@class,'co-overview-status__text--bold') and contains(.,'<severity>')]
+  action: check_link_and_text
+check_affected_pods_tab:
+  params:
+    tab_name: Affected Pods
+  action: check_tab
+check_link_for_marketplace:
+  params:
+    text: Red Hat Marketplace
+    link_url: marketplace.redhat.com
+  action: check_link_and_text
+check_link_for_developer_catalog:
+  params:
+    text: Developer Catalog
+    link_url: catalog
+  action: check_link_and_text
+check_catalog_badge_by_checkbox:
+  action: click_checkbox_from_provider_type
+  elements:
+  - selector:
+      xpath: //*[contains(@class, 'pf-c-badge') and text()='<text>']
+    timeout: 30
+  action: click_checkbox_from_provider_type
+check_marketplace_operator_description_on_overlay:
+  params:
+    text: Marketplace
+    description: This Operator is purchased through Red Hat Marketplace
+  action: click_checkbox_from_provider_type
+  action: open_first_card_in_overlay
+  action: check_operator_description_on_overlay
+  action: click_close_icon
+  action: click_checkbox_from_provider_type
+check_community_operator_description_on_overlay:
+  params:
+    text: Community
+    description: This is a community provided operator
+  action: click_checkbox_from_provider_type
+  action: open_first_card_in_overlay
+  action: submit_changes
+  action: check_operator_description_on_overlay
+  action: click_close_icon
+  action: click_checkbox_from_provider_type
+check_operator_description_on_overlay:
+  elements:
+  - selector:
+      xpath: //div[contains(@class, 'co-hint-block')][h2[contains(.,'<text> Operator')] and div[contains(@class, 'co-hint-block__body') and contains(.,'<description>')] ]
+    timeout: 30
+click_checkbox_from_provider_type:  
+  elements:
+  - selector:
+      xpath:  //form[@data-test-group-name='providerType']
+    timeout: 30
+  - selector:
+      xpath: //*[contains(@class, 'pf-c-check__label') and text()='<text>']
+    op: click
+open_first_card_in_overlay:
+  elements:
+  - selector:
+      xpath: //a[contains(@class, 'pf-c-card')][1]
+    op: click  
+uninstall_operator_on_console:
+  params:
+    button_text: Uninstall Operator
+  action: click_resource_action_icon
+  action: click_button
+  action: submit_changes

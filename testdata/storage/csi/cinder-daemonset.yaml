@@ -1,0 +1,81 @@
+kind: DaemonSet
+apiVersion: apps/v1
+metadata:
+  name: cinder-csi-ds
+spec:
+  selector:
+    matchLabels:
+      app: cinder-csi-driver
+  template:
+    metadata:
+      labels:
+        app: cinder-csi-driver
+    spec:
+      serviceAccount: cinder-csi
+      containers:
+        - name: csi-driver-registrar
+          image: registry.access.redhat.com/openshift3/csi-driver-registrar:v3.10
+          securityContext:
+            privileged: true
+          args:
+            - "--v=5"
+            - "--csi-address=$(ADDRESS)"
+          env:
+            - name: ADDRESS
+              value: /csi/csi.sock
+            - name: KUBE_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+          volumeMounts:
+            - name: socket-dir
+              mountPath: /csi
+        - name: cinder-driver
+          securityContext:
+            privileged: true
+            capabilities:
+              add: ["SYS_ADMIN"]
+            allowPrivilegeEscalation: true
+          image: quay.io/jsafrane/cinder-csi-plugin
+          command: [ "/bin/cinder-csi-plugin" ]
+          args:
+            - "--nodeid=$(NODEID)"
+            - "--endpoint=unix://$(ADDRESS)"
+            - "--cloud-config=/etc/cloudconfig/cloud.conf"
+          env:
+            - name: NODEID
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: ADDRESS
+              value: /csi/csi.sock
+          volumeMounts:
+            - name: socket-dir
+              mountPath: /csi
+            - name: cloudconfig
+              mountPath: /etc/cloudconfig
+            - name: mountpoint-dir
+              mountPath: /var/lib/origin/openshift.local.volumes/pods/
+              mountPropagation: "Bidirectional"
+            - name: cloud-metadata
+              mountPath: /var/lib/cloud/data/
+            - name: dev
+              mountPath: /dev
+      volumes:
+        - name: cloud-metadata
+          hostPath:
+            path: /var/lib/cloud/data/
+        - name: socket-dir
+          hostPath:
+            path: /var/lib/kubelet/plugins/csi-cinderplugin
+            type: DirectoryOrCreate
+        - name: mountpoint-dir
+          hostPath:
+            path: /var/lib/origin/openshift.local.volumes/pods/
+            type: Directory
+        - name: cloudconfig
+          secret:
+            secretName: cloudconfig
+        - name: dev
+          hostPath:
+            path: /dev

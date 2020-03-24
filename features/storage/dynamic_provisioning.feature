@@ -4,11 +4,11 @@ Feature: Dynamic provisioning
   @admin
   Scenario Outline: dynamic provisioning
     Given I have a project
-    When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
+    When I create a dynamic pvc from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/misc/pvc.json" replacing paths:
       | ["metadata"]["name"] | mypvc |
     Then the step should succeed
 
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pod.yaml" replacing paths:
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/misc/pod.yaml" replacing paths:
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc                 |
       | ["metadata"]["name"]                                         | mypod                 |
       | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt/<cloud_provider> |
@@ -50,7 +50,7 @@ Feature: Dynamic provisioning
     Given I have a project
     And I run the steps 30 times:
     """
-    When I run oc create over ERB URL: https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc-ERB.json
+    When I run oc create over ERB URL: <%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/misc/pvc-ERB.json
     Then the step should succeed
     """
     Given 30 PVCs become :bound within 600 seconds with labels:
@@ -71,7 +71,7 @@ Feature: Dynamic provisioning
       dynamicProvisioningEnabled: False
     """
     And the master service is restarted on all master nodes
-    When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
+    When I create a dynamic pvc from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/misc/pvc.json" replacing paths:
       | ["metadata"]["name"] | mypvc |
     Then the step should succeed
     When 30 seconds have passed

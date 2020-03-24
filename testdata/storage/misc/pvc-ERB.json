@@ -1,0 +1,21 @@
+{
+  "kind": "PersistentVolumeClaim",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "pvc-<%= rand_str(8, :dns952) %>",
+    "annotations": {},
+    "labels": {
+        "name": "dynamic-pvc-<%= project.name %>"
+    }
+  },
+  "spec": {
+    "accessModes": [
+      "ReadWriteOnce"
+    ],
+    "resources": {
+      "requests": {
+        "storage": "1Gi"
+      }
+    }
+  }
+}

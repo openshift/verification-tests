@@ -1,0 +1,15 @@
+{
+    "apiVersion": "v1",
+    "kind": "PersistentVolumeClaim",
+    "metadata": {
+        "name": "nfsc"
+    },
+    "spec": {
+        "accessModes": [ "ReadOnlyMany" ],
+        "resources": {
+            "requests": {
+                "storage": "5Gi"
+            }
+        }
+    }
+}

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hello-openshift
+labels:
+  name: hello-openshift
+spec:
+ nodeSelector:
+  type: infra
+ containers:
+  - name: hello-openshift
+    image: openshift/hello-openshift
+    imagePullPolicy: Always
+    ports:
+    - containerPort: 8080

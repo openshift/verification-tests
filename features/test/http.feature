@@ -1,11 +1,11 @@
 Feature: Some raw HTTP fetures
 
   Scenario: test download
-    When I open web server via the "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/shared_compressed_files/char_test.txt" url
+    When I open web server via the "<%= ENV['BUSHSLICER_HOME'] %>/testdata/build/shared_compressed_files/char_test.txt" url
     Then the step should succeed
-    When I download a big file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/shared_compressed_files/char_test.tar.gz"
+    When I download a big file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/build/shared_compressed_files/char_test.tar.gz"
     Then the step should succeed
-    When I download a big file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/shared_compressed_files/char_test.txt"
+    When I download a big file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/build/shared_compressed_files/char_test.txt"
     Then the step should succeed
 
   Scenario: Concurrent Get

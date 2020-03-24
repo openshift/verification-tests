@@ -1,0 +1,43 @@
+{
+    "apiVersion": "extensions/v1beta1",
+    "kind": "DaemonSet",
+    "metadata": {
+        "name": "dpod"
+    },
+    "spec": {
+        "selector": {
+            "matchLabels": {
+                "app": "dpod"
+            }
+        },
+        "template":{
+            "metadata": {
+                "name": "dpod",
+                "labels": {
+                    "app": "dpod"
+                }
+            },
+            "spec": {
+                "containers": [{
+                    "name": "myfrontend",
+                    "image": "aosqe/hello-openshift",
+                    "imagePullPolicy": "IfNotPresent",
+                    "ports": [{
+                        "containerPort": 80,
+                        "name": "http-server"
+                    }],
+                    "volumeMounts": [{
+                        "mountPath": "/mnt/ds",
+                        "name": "pvol"
+                    }]
+                }],
+                "volumes": [{
+                    "name": "pvol",
+                    "persistentVolumeClaim": {
+                        "claimName": "ds"
+                    }
+                }]
+            }
+        }
+    }
+}

@@ -26,6 +26,37 @@ Given /^the status of condition "([^"]*)" for "([^"]*)" operator is: (.+)$/ do |
   end
 end
 
+Given /^the status of condition Upgradeable for marketplace operator as expected$/ do
+  ensure_admin_tagged
+  actual_status = cluster_operator('marketplace').condition(type: 'Upgradeable', cached: false)['status']
+  status = 'True'
+  cluster_version = cluster_version('version').channel.split('-')[1]
+  if cluster_version == "4.4"
+    csc_items = Array.new
+    os_items = Array.new
+    if custom_resource_definition('catalogsourceconfigs.operators.coreos.com').exists?
+      @result = admin.cli_exec(:get, resource: 'catalogsourceconfig', all_namespaces: 'true', o: 'yaml')
+      raise "Unable to get CSC resource" unless @result[:success]
+      csc_items = @result[:parsed]['items']
+      logger.info("=== CSC exists in this cluster!")
+    end
+    if custom_resource_definition('operatorsources.operators.coreos.com').exists?
+      @result = admin.cli_exec(:get, resource: 'operatorsource', all_namespaces: 'true', o: 'yaml')
+      raise "Unable to get OperatorSource resource" unless @result[:success]
+      os_items = @result[:parsed]['items']
+      logger.info("=== OperatorSource exists in this cluster! items: #{os_items.count}")
+    end
+
+    if !csc_items.empty? or (os_items.count > 4)
+      status = 'False'
+      logger.info("=== #{cluster_version} cluster. And customize OperatorSource or csc objects exist, change the expected status to False")
+    end
+  end
+  unless status == actual_status
+    raise "status of marketplace condition Upgradeable is #{actual_status}"
+  end
+end
+
 Given /^the "([^"]*)" operator version matchs the current cluster version$/ do | operator |
   ensure_admin_tagged
   @result = admin.cli_exec(:get, resource: "clusteroperators", resource_name: operator, o: "jsonpath={.status.versions[?(.name == \"operator\")].version}")
@@ -49,3 +80,9 @@ Given /^admin updated the operator crd "([^"]*)" managementstate operand to (Man
   })
   step %Q/the step should succeed/
 end
+
+# Get the Major.Minor cluster version
+Given /^the major.minor version of the cluster is stored in the#{OPT_SYM} clipboard$/ do | cb_name |
+  cb_name = 'operator_channel_name' unless cb_name
+  cb[cb_name] = cluster_version('version').channel.split('-')[1]
+end 

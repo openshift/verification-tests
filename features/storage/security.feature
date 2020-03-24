@@ -1,20 +1,27 @@
 Feature: storage security check
 
   # @author lxia@redhat.com
+  # @author piqin@redhat.com
   @admin
   Scenario Outline: [origin_infra_20] volume security testing
     Given I have a project
-    And I have a 1 GB volume and save volume id in the :vid clipboard
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/misc/pvc.json" replacing paths:
+      | ["metadata"]["name"] | mypvc1 |
+    Then the step should succeed
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/misc/pvc.json" replacing paths:
+      | ["metadata"]["name"] | mypvc2 |
+    Then the step should succeed
 
     Given I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/<type>/security/<type>-selinux-fsgroup-test.json" replacing paths:
-      | ["metadata"]["name"]                                      | mypod |
-      | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"] | /mnt                    |
-      | ["spec"]["securityContext"]["seLinuxOptions"]["level"]    | s0:c13,c2               |
-      | ["spec"]["securityContext"]["fsGroup"]                    | 24680                   |
-      | ["spec"]["securityContext"]["runAsUser"]                  | 1000160000              |
-      | ["spec"]["volumes"][0]["<storage_type>"]["<volume_name>"] | <%= cb.vid %>           |
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/security/privileged-test.json" replacing paths:
+      | ["metadata"]["name"]                                        | mypod         |
+      | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]   | /mnt          |
+      | ["spec"]["containers"][0]["image"]                          | aosqe/storage |
+      | ["spec"]["securityContext"]["seLinuxOptions"]["level"]      | s0:c13,c2     |
+      | ["spec"]["securityContext"]["fsGroup"]                      | 24680         |
+      | ["spec"]["securityContext"]["runAsUser"]                    | 1000160000    |
+      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"]| mypvc1        |
     Then the step should succeed
     And the pod named "mypod" becomes ready
     When I execute on the pod:
@@ -51,12 +58,13 @@ Feature: storage security check
     And the output should contain "Hello OpenShift Storage"
     Given I ensure "mypod" pod is deleted
 
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/<type>/security/<type>-privileged-test.json" replacing paths:
-      | ["metadata"]["name"]                                      | mypod2 |
-      | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"] | /mnt                     |
-      | ["spec"]["securityContext"]["seLinuxOptions"]["level"]    | s0:c13,c2                |
-      | ["spec"]["securityContext"]["fsGroup"]                    | 24680                    |
-      | ["spec"]["volumes"][0]["<storage_type>"]["<volume_name>"] | <%= cb.vid %>            |
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/security/privileged-test.json" replacing paths:
+      | ["metadata"]["name"]                                        | mypod2        |
+      | ["spec"]["containers"][0]["image"]                          | aosqe/storage |
+      | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]   | /mnt          |
+      | ["spec"]["securityContext"]["seLinuxOptions"]["level"]      | s0:c13,c2     |
+      | ["spec"]["securityContext"]["fsGroup"]                      | 24680         |
+      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"]| mypvc2        |
     Then the step should succeed
     And the pod named "mypod2" becomes ready
     When I execute on the pod:
@@ -92,6 +100,7 @@ Feature: storage security check
     Then the step should succeed
     And the output should contain "Hello OpenShift Storage"
 
+    # keep the parameters for 3.11 cases can be run.
     Examples:
       | storage_type         | volume_name | type   |
       | gcePersistentDisk    | pdName      | gce    | # @case_id OCP-9700
@@ -104,13 +113,13 @@ Feature: storage security check
   Scenario: secret volume security check
     Given I have a project
     When I run the :create client command with:
-      | filename | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/secret/secret.yaml |
+      | filename | <%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/secret/secret.yaml |
     Then the step should succeed
 
     Given I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
     When I run the :create client command with:
-      | filename | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/secret/secret-pod-test.json |
+      | filename | <%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/secret/secret-pod-test.json |
     Then the step should succeed
 
     Given the pod named "secretpd" becomes ready

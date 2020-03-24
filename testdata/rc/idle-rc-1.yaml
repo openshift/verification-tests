@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: List
+items:
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    labels:
+      name: hello-idle
+    name: hello-idle
+  spec:
+    replicas: 2
+    selector:
+      name: hello-idle
+    template:
+      metadata:
+        labels:
+          name: hello-idle
+      spec:
+          containers:
+          - image: docker.io/ocpqe/hello-pod
+            name: hello-idle
+            ports:
+            - containerPort: 8080
+              protocol: TCP
+            resources:
+              limits:
+                cpu: 200m
+                memory: 256Mi
+              requests:
+                cpu: 100m
+                memory: 256Mi
+            terminationMessagePath: /dev/termination-log
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          securityContext: {}
+          terminationGracePeriodSeconds: 30
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: hello-idle
+  spec:
+    ports:
+    - port: 8000
+      targetPort: 8080
+      protocol: TCP
+    selector:
+      name: hello-idle

@@ -1,0 +1,107 @@
+{
+    "kind": "DeploymentConfig",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "hooks",
+        "creationTimestamp": null,
+        "labels": {
+            "name": "mysql"
+        }
+    },
+    "spec": {
+        "strategy": {
+            "type": "Recreate",
+            "recreateParams": {
+                "pre": {
+                    "failurePolicy": "Retry",
+                    "execNewPod": {
+                        "command": [
+                            "/bin/bash",
+                            "-c",
+                            "/usr/bin/sleep 200"
+                        ],
+                        "env": [
+                            {
+                                "name": "VAR",
+                                "value": "pre-deployment"
+                            }
+                        ],
+                        "volumes": [""],
+                        "containerName": "mysql-55-rhel7"
+                    }
+                },
+                "post": {
+                    "failurePolicy": "Ignore",
+                    "execNewPod": {
+                        "command": [
+                            "/bin/false"
+                        ],
+                        "env": [
+                            {
+                                "name": "VAR",
+                                "value": "post-deployment"
+                            }
+                        ],
+                        "containerName": "mysql-55-rhel7"
+                    }
+                }
+            },
+            "resources": {}
+        },
+        "triggers": [
+            {
+                "type": "ConfigChange"
+            }
+        ],
+        "replicas": 1,
+        "selector": {
+            "name": "mysql"
+        },
+        "template": {
+            "metadata": {
+                "creationTimestamp": null,
+                "labels": {
+                    "name": "mysql"
+                }
+            },
+            "spec": {
+                "containers": [
+                    {
+                        "name": "mysql-55-rhel7",
+                        "image": "openshift3/mysql-55-rhel7:latest",
+                        "ports": [
+                            {
+                                "containerPort": 3306,
+                                "protocol": "TCP"
+                            }
+                        ],
+                        "env": [
+                            {
+                                "name": "MYSQL_USER",
+                                "value": "user8Y2"
+                            },
+                            {
+                                "name": "MYSQL_PASSWORD",
+                                "value": "Plqe5Wev"
+                            },
+                            {
+                                "name": "MYSQL_DATABASE",
+                                "value": "root"
+                            }
+                        ],
+                        "resources": {},
+                        "terminationMessagePath": "/dev/termination-log",
+                        "imagePullPolicy": "Always",
+                        "securityContext": {
+                            "capabilities": {},
+                            "privileged": false
+                        }
+                    }
+                ],
+                "restartPolicy": "Always",
+                "dnsPolicy": "ClusterFirst"
+            }
+        }
+    },
+    "status": {}
+}

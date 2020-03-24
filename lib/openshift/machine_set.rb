@@ -15,10 +15,10 @@ module BushSlicer
       rr.dig('status', 'availableReplicas').to_i
     end
 
-    def ready?(user: nil, cached: false, quiet: false)
+    def ready?(user: nil, quiet: false)
       result = {}
-      result[:success] = (desired_replicas(user: user, cached: cached, quiet: quiet) ==
-        available_replicas(user: user, cached: cached, quiet: quiet))
+      status = raw_resource(user: user, cached: false, quiet: quiet)['status']
+      result[:success] = ([status['availableReplicas'], status['readyReplicas'], status['fullyLabeledReplicas'], status['replicas']].uniq.length == 1)
       return result
     end
 

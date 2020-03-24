@@ -1,0 +1,33 @@
+{
+   "kind":"ReplicationController",
+   "apiVersion":"v1",
+   "metadata":{
+      "name":"rc-test",
+      "labels":{
+         "name":"rc-test"
+      }
+   },
+   "spec":{
+      "replicas":1,
+      "template":{
+         "metadata":{
+            "labels":{
+               "name":"rc-test"
+            }
+         },
+         "spec":{
+            "containers":[
+               {
+                  "name":"port-pod",
+                  "image":"openshift/hello-openshift",
+                  "ports": [{
+                     "hostPort": 6061,
+                     "containerPort": 80
+                  }]
+               }
+            ],
+         "nodeName":"node-name"
+         }
+      }
+   }
+}

@@ -1,0 +1,20 @@
+{
+       "apiVersion": "v1",
+       "kind": "Service",
+       "id": "selector-exsiting",
+       "metadata": {
+           "name": "selector-service"
+        },
+        "spec": {
+            "ports": [
+                {
+                    "port": 21186,
+                    "protocol": "TCP",
+                    "targetPort": 8181
+                 }
+            ],
+            "selector": {
+                "name": "selector-service"
+            }
+        }
+}

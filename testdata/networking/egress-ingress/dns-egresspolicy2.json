@@ -1,0 +1,23 @@
+{
+    "kind": "EgressNetworkPolicy",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "policy-test"
+    },
+    "spec": {
+        "egress": [
+            {
+                "type": "Deny",
+                "to": {
+                    "dnsName": "yahoo.com"
+                }
+            },
+            {
+                "type": "Allow",
+                "to": {
+                  "cidrSelector": "98.138.0.0/16"
+                }
+            }
+        ]
+    }
+}

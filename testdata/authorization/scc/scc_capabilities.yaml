@@ -1,0 +1,15 @@
+allowedCapabilities:
+- FSETID
+- KILL
+runAsUser:
+  type: RunAsAny
+seLinuxContext:
+  type: RunAsAny
+apiVersion: v1
+groups:
+- system:serviceaccounts:default
+kind: SecurityContextConstraints
+metadata:
+  labels:
+    name: scc-cap
+  name: scc-cap

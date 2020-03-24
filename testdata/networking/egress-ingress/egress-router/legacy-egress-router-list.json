@@ -1,0 +1,77 @@
+{
+        "kind": "List",
+        "apiVersion": "v1",
+        "items": [{
+                "kind": "ReplicationController",
+                "apiVersion": "v1",
+                "metadata": {
+                        "labels": {
+                                "name": "egress-rc"
+                        },
+                        "name": "egress-rc"
+                },
+                "spec": {
+                        "template": {
+                                "spec": {
+                                        "containers": [
+                                                {
+                                                        "image": "egress-router-image",
+                                                        "securityContext": {
+                                                                "privileged": true
+                                                        },
+                                                        "name": "egress-router",
+                                                        "env": [
+                                                                {
+                                                                        "name": "EGRESS_SOURCE",
+                                                                        "value": "egress_ip"
+                                                                },
+                                                                {
+                                                                        "name": "EGRESS_GATEWAY",
+                                                                        "value": "egress_gw"
+                                                                },
+                                                                {
+                                                                        "name": "EGRESS_DESTINATION",
+                                                                        "value": "egress_dest"
+                                                                }
+                                                        ]
+                                                }
+                                        ]
+                                },
+                                "metadata": {
+                                        "labels": {
+                                                "name": "egress-router"
+                                        },
+                                        "annotations": {
+                                                "pod.network.openshift.io/assign-macvlan": "true"
+                                        }
+                                }
+                        },
+                        "replicas": 1
+                }
+        },
+        {
+                "kind": "Service",
+                "apiVersion": "v1",
+                "metadata": {
+                        "name": "egress-svc"
+                },
+                "spec": {
+                        "type": "ClusterIP",
+                        "ports": [
+                                {
+                                        "name": "http",
+                                        "port": 80
+                                },
+                                {
+                                        "name": "http2",
+                                        "port": 2015
+                                }
+                        ],
+                        "selector": {
+                                "name": "egress-router"
+                        }
+                }
+        }
+
+        ]
+}

@@ -1,0 +1,28 @@
+{
+    "apiVersion": "v1",
+    "kind": "ReplicationController",
+    "metadata": {
+	"labels": {
+	    "name": "mcast-rc"
+	},
+	"name": "mcast-rc"
+    },
+    "spec": {
+	"replicas": 3,
+	"template": {
+	    "metadata": {
+		"labels": {
+		    "name": "mcast-pods"
+		}
+	    },
+	    "spec": {
+		"containers": [
+		    {
+			"image": "lihongan/mcast-pod",
+			"name": "mcast-pod"
+		    }
+		]
+	    }
+	}
+    }
+}

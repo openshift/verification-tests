@@ -1,0 +1,9 @@
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: storage-resources
+spec:
+  hard:
+    vsphere.storageclass.storage.k8s.io/requests.storage: 10Gi
+    vsphere.storageclass.storage.k8s.io/persistentvolumeclaims: 3

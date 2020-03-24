@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  generateName: macvlan-vepa-pod-
+  labels:
+    name: macvlan-vepa-pod
+  annotations:
+    k8s.v1.cni.cncf.io/networks: macvlan-vepa
+spec:
+  containers:
+  - name: macvlan-vepa-pod
+    image: docker.io/bmeng/centos-network

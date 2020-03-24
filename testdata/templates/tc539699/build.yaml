@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Build
+metadata:
+  name: ruby-hello-world-2
+spec:
+  strategy:
+    sourceStrategy:
+      env:
+      - name: EXAMPLE
+        value: sample-app
+      from:
+        kind: DockerImage
+        name: replacestr/rhscl/ruby-22-rhel7@sha256:35761886745576f644b8597419ae262e4ce3a1a34b6afdbade4d46ccc4d25172
+    type: Source

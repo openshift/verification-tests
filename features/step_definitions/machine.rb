@@ -8,7 +8,7 @@ Given(/^I have an IPI deployment$/) do
   end
 
   machine_sets.each do | machine_set |
-    unless machine_set.ready?
+    unless machine_set.ready?[:success]
       raise "Not an IPI deployment or machineSet #{machine_set.name} not fully scaled, abort test."
     end
   end
@@ -55,4 +55,18 @@ Given(/^I wait for the node of machine(?: named "(.+)")? to appear/) do | machin
   end
 
   cb["new_node"] = node_name
+end
+
+Then(/^admin ensures node number is restored to #{QUOTED} after scenario$/) do | num_expected |
+  ensure_admin_tagged
+
+  teardown_add {
+    num_actual = 0
+
+    success = wait_for(600, interval: 30) {
+      num_actual = BushSlicer::Node.list(user: admin).length
+      num_expected == num_actual.to_s
+    }
+    raise "Failed to restore cluster, expected number of nodes #{num_expected}, got #{num_actual.to_s}" unless success
+  }
 end

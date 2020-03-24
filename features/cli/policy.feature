@@ -52,12 +52,12 @@ Feature: change the policy of user/service account
   @admin
   Scenario: Could get projects for new role which has permission to get projects
     When I run the :create admin command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/authorization/policy/clustergetproject.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/policy/clustergetproject.json |
     Then the step should succeed
     #clean-up clusterrole
     And I register clean-up steps:
       | I run the :delete admin command with: |
-      |   ! f ! https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/authorization/policy/clustergetproject.json ! |
+      |   ! f ! <%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/policy/clustergetproject.json ! |
       | the step should succeed               |
     When admin creates a project
     Then the step should succeed
@@ -75,7 +75,7 @@ Feature: change the policy of user/service account
   # @case_id OCP-11442
   Scenario: [origin_platformexp_214] User can view, add , modify and delete specific role to/from new added project via admin role user
     Given I have a project
-    And I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/authorization/policy/projectviewservice.json"
+    And I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/policy/projectviewservice.json"
     When I run the :create client command with:
       | f            | projectviewservice.json     |
     Then the step should succeed
@@ -129,14 +129,14 @@ Feature: change the policy of user/service account
     Given I have a project
     Given cluster role "sudoer" is added to the "first" user
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/daemon/daemonset.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/daemon/daemonset.yaml |
     Then the step should fail
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/daemon/daemonset.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/daemon/daemonset.yaml |
       | as | system:admin    |
     Then the step should succeed
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/daemon/daemonset.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/daemon/daemonset.yaml |
       | as | <%= user(1, switch: false).name %>    |
     Then the step should fail
 
@@ -147,19 +147,19 @@ Feature: change the policy of user/service account
     Given I have a project
     Given cluster role "sudoer" is added to the "first" user
     When I run the :create client command with:
-      | f  | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/daemon/daemonset-negtive-onfailure.yaml |
+      | f  | <%= ENV['BUSHSLICER_HOME'] %>/testdata/daemon/daemonset-negtive-onfailure.yaml |
       | as | system:admin |
     Then the step should fail
     And the output should match:
       | Unsupported value: "OnFailure": supported values: "?Always"? |
     When I run the :create client command with:
-      | f  | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/daemon/daemonset-negtive-never.yaml |
+      | f  | <%= ENV['BUSHSLICER_HOME'] %>/testdata/daemon/daemonset-negtive-never.yaml |
       | as | system:admin |
     Then the step should fail
     And the output should match:
       | Unsupported value: "Never": supported values: "?Always"? |
     When I run the :create client command with:
-      | f  | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/daemon/daemonset.yaml |
+      | f  | <%= ENV['BUSHSLICER_HOME'] %>/testdata/daemon/daemonset.yaml |
       | as | system:admin |
     Then the step should succeed
 
@@ -199,7 +199,7 @@ Feature: change the policy of user/service account
       | Error.*storageclasses.* at the cluster scope |
 
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/ebs/dynamic-provisioning/storageclass-io1.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/ebs/dynamic-provisioning/storageclass-io1.yaml |
     Then the step should fail
     And the output should match:
       | Error.*storageclasses.* at the cluster scope |
@@ -213,7 +213,7 @@ Feature: change the policy of user/service account
     And admin ensures "sc-<%= project.name %>" storageclasses is deleted after scenario
     Given cluster role "storage-admin" is added to the "first" user
 
-    When I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/ebs/dynamic-provisioning/storageclass-io1.yaml"
+    When I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/ebs/dynamic-provisioning/storageclass-io1.yaml"
     Then I replace lines in "storageclass-io1.yaml":
       | foo | sc-<%= project.name %> |
     Then I run the :create client command with:
@@ -268,7 +268,7 @@ Feature: change the policy of user/service account
     And admin ensures "pv-<%= project.name %>" pv is deleted after scenario
     Given cluster role "storage-admin" is added to the "first" user
 
-    When I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/hostpath/pv-rwx-recycle.yaml"
+    When I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/hostpath/pv-rwx-recycle.yaml"
     Then I replace lines in "pv-rwx-recycle.yaml":
       | local         | pv-<%= project.name %> |
       | ReadWriteMany | ReadWriteOnce          |
@@ -324,7 +324,7 @@ Feature: change the policy of user/service account
     Given I have a project
     And evaluation of `project.name` is stored in the :project clipboard
 
-    When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
+    When I create a dynamic pvc from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/misc/pvc.json" replacing paths:
       | ["metadata"]["name"] | mypvc |
     And the step should succeed
 
@@ -383,7 +383,7 @@ Feature: change the policy of user/service account
   # @case_id OCP-9551
   Scenario: User can know if he can create podspec against the current scc rules via CLI
     Given I have a project
-    When I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/authorization/scc/tc538262/PodSecurityPolicySubjectReview_privileged_false.json"
+    When I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/scc/tc538262/PodSecurityPolicySubjectReview_privileged_false.json"
     Then the step should succeed
     Given I run the :policy_scc_subject_review client command with:
       | f | PodSecurityPolicySubjectReview_privileged_false.json |
@@ -396,7 +396,7 @@ Feature: change the policy of user/service account
     Then the step should succeed
     And the output should match:
       | .*restricted |
-    When I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/authorization/scc/tc538262/PodSecurityPolicySubjectReview_privileged_true.json"
+    When I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/scc/tc538262/PodSecurityPolicySubjectReview_privileged_true.json"
     Then the step should succeed
     Given I run the :policy_scc_subject_review client command with:
       | f | PodSecurityPolicySubjectReview_privileged_true.json |
@@ -415,7 +415,7 @@ Feature: change the policy of user/service account
   @admin
   Scenario: User can know which serviceaccount and SA groups can create the podspec against the current sccs by CLI
     Given I have a project
-    When I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/authorization/scc/tc538264/PodSecurityPolicyReview.json"
+    When I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/scc/tc538264/PodSecurityPolicyReview.json"
     Then the step should succeed
     Given I run the :policy_scc_review client command with:
       | f | PodSecurityPolicyReview.json |
@@ -471,7 +471,7 @@ Feature: change the policy of user/service account
   # @case_id OCP-9553
   Scenario: User can know whether the PodSpec he's describing will actually be allowed by the current SCC rules via CLI
     Given I have a project
-    When I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/authorization/scc/tc538263/PodSecurityPolicySubjectReview.json"
+    When I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/scc/tc538263/PodSecurityPolicySubjectReview.json"
     Then the step should succeed
     Given I run the :policy_scc_subject_review client command with:
       | user          | <%= user.name %>                    |

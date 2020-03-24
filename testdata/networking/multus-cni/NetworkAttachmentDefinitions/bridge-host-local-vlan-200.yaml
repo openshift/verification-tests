@@ -1,0 +1,22 @@
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata:
+  name: bridgevlan200
+spec:
+  config: '{
+          "name": "mybridge",
+          "type": "bridge",
+          "ipMasq": true,
+          "bridge": "mybridge",
+          "ipam": {
+                    "type": "host-local",
+                    "subnet": "22.2.2.0/24",
+                    "rangeStart": "22.2.2.10",
+                    "rangeEnd": "22.2.2.90"
+          },
+          "isDefaultGateway": true,
+          "forceAddress": false,
+          "ipMasq": true,
+          "hairpinMode": true,
+          "vlan": 200
+  }'

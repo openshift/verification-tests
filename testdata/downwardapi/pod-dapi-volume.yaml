@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-dapi-volume
+  labels:
+    region: r1
+    zone: z11
+    rack: a111
+  annotations:
+    build: one
+    builder: qe-one
+spec:
+  containers:
+    - name: client-container
+      image: gcr.io/google_containers/busybox
+      command: ["sh", "-c", "while true; do if [[ -e /var/tmp/podinfo/labels ]]; then cat /var/tmp/podinfo/labels; fi; if [[ -e /var/tmp/podinfo/annotations ]]; then cat /var/tmp/podinfo/annotations; fi; sleep 5; done"]
+      securityContext:
+        privileged: false
+      volumeMounts:
+        - name: podinfo
+          mountPath: /var/tmp/podinfo
+          readOnly: false
+  volumes:
+    - name: podinfo
+      downwardAPI:
+        items:
+          - path: "labels"
+            fieldRef:
+              fieldPath: metadata.labels
+          - path: "annotations"
+            fieldRef:
+              fieldPath: metadata.annotations
+          - path: "name"
+            fieldRef:
+              fieldPath: metadata.name
+          - path: "namespace"
+            fieldRef:
+              fieldPath: metadata.namespace
+

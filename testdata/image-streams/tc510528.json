@@ -1,0 +1,20 @@
+{
+    "kind": "ImageStream",
+    "apiVersion": "v1",
+    "metadata": {
+      "name": "aosqeruby",
+      "creationTimestamp": null
+    },
+    "spec": {
+      "dockerImageRepository": "aosqe/hello-openshift",
+           "tags":[
+                      { "name": "3.3",
+                          "from":
+                           {
+                               "kind": "DockerImage",
+                                "name": "aosqe/ruby-20-centos7:latest"
+                           }
+                        }
+             ]
+       }
+}

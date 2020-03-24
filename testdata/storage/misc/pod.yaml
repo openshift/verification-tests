@@ -1,0 +1,18 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: dynamic
+spec:
+  containers:
+    - name: dynamic
+      image: aosqe/hello-openshift
+      ports:
+        - containerPort: 80
+          name: "http-server"
+      volumeMounts:
+      - mountPath: "/mnt/ocp_pv"
+        name: dynamic
+  volumes:
+    - name: dynamic
+      persistentVolumeClaim:
+        claimName: dynamic

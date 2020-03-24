@@ -1,0 +1,39 @@
+{
+    "apiVersion": "v1",
+    "kind": "ReplicationController",
+    "metadata": {
+        "labels": {
+            "name": "iperf-rc"
+        },
+        "name": "iperf-rc"
+    },
+    "spec": {
+        "replicas": 1,
+        "template": {
+            "metadata": {
+                "labels": {
+                    "name": "iperf-pods"
+                },
+		"annotations": {
+		    "kubernetes.io/ingress-bandwidth": "5M",
+		    "kubernetes.io/egress-bandwidth": "10M"
+		}
+            },
+            "spec": {
+                "containers": [
+                    {
+                        "image": "bmeng/iperf3",
+                        "name": "iperf",
+                        "imagePullPolicy": "IfNotPresent",
+                        "resources":{
+                          "limits":{
+                            "memory":"340Mi"
+                          }
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}
+

@@ -10,7 +10,7 @@ Feature: testing multicast scenarios
     Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multicast-rc.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/multicast-rc.json |
     Then the step should succeed
     Given 3 pods become ready with labels:
       | name=mcast-pods |
@@ -91,7 +91,7 @@ Feature: testing multicast scenarios
     # create multicast testing pods in the project and without multicast enable
     Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multicast-rc.json" replacing paths:
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/multicast-rc.json" replacing paths:
       | ["spec"]["replicas"] | 2 |
     Then the step should succeed
     Given 2 pods become ready with labels:

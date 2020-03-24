@@ -1,0 +1,9 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: glusterprovisioner
+provisioner: kubernetes.io/glusterfs
+parameters:
+  resturl: "http://ec2-54-157-33-85.compute-1.amazonaws.com:9991"
+  restuser: "admin"
+  restuserkey: "test"

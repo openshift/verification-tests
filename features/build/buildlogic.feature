@@ -17,7 +17,7 @@ Feature: buildlogic.feature
   Scenario: Result image will be tried to push after multi-build
     Given I have a project
     When I run the :new_app client command with:
-      | file |  https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/image/language-image-templates/php-55-rhel7-stibuild.json |
+      | file |  <%= ENV['BUSHSLICER_HOME'] %>/testdata/image/language-image-templates/php-55-rhel7-stibuild.json |
     Then the step should succeed
     # The 1st build should be triggered automatically
     And the "php-sample-build-1" build was created
@@ -41,9 +41,9 @@ Feature: buildlogic.feature
   Scenario: Create build without output
     Given I have a project
     When I run the :new_build client command with:
-      | app_repo  | centos/ruby-23-centos7~https://github.com/openshift/ruby-hello-world.git |
-      | no-output | true                                                                 |
-      | name      | myapp                                                                |
+      | app_repo  | openshift/ruby~https://github.com/openshift/ruby-hello-world.git |
+      | no-output | true                                                             |
+      | name      | myapp                                                            |
     Then the step should succeed
     And the "myapp-1" build was created
     And the "myapp-1" build completed
@@ -72,7 +72,7 @@ Feature: buildlogic.feature
   Scenario: Prevent STI builder images from running as root - using onbuild image
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/tc499516/test-buildconfig-onbuild-user0.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/tc499516/test-buildconfig-onbuild-user0.json |
     Then the step should succeed
     Given the "ruby-sample-build-onbuild-user0-1" build was created
     And the "ruby-sample-build-onbuild-user0-1" build failed
@@ -81,7 +81,7 @@ Feature: buildlogic.feature
     Then the output should contain:
       |  not allowed |
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/tc499516/test-buildconfig-onbuild-userdefault.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/tc499516/test-buildconfig-onbuild-userdefault.json |
     Then the step should succeed
     Given the "ruby-sample-build-onbuild-userdefault-1" build was created
     And the "ruby-sample-build-onbuild-userdefault-1" build failed
@@ -107,17 +107,17 @@ Feature: buildlogic.feature
 
     Examples:
       | template                                                                                                                    |
-      | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/forcePull/buildconfig-docker-ImageStream.json      | # @case_id OCP-10651
-      | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/forcePull/buildconfig-s2i-ImageStream.json         | # @case_id OCP-11148
-      | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/forcePull/buildconfig-docker-dockerimage.json      | # @case_id OCP-10652
-      | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/forcePull/buildconfig-s2i-dockerimage.json         | # @case_id OCP-11149
+      | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/forcePull/buildconfig-docker-ImageStream.json      | # @case_id OCP-10651
+      | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/forcePull/buildconfig-s2i-ImageStream.json         | # @case_id OCP-11148
+      | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/forcePull/buildconfig-docker-dockerimage.json      | # @case_id OCP-10652
+      | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/forcePull/buildconfig-s2i-dockerimage.json         | # @case_id OCP-11149
 
   # @author yantan@redhat.com
   # @case_id OCP-10745
   Scenario: Build with specified Dockerfile to image with same image name via new-build
     Given I have a project
     When I run the :new_build client command with:
-      | D | FROM centos:7\nRUN yum install -y httpd |
+      | D | FROM centos:7 |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | bc     |
@@ -127,9 +127,9 @@ Feature: buildlogic.feature
       | Output to:\s+ImageStreamTag centos:latest |
     Given the "centos-1" build becomes :complete
     When I run the :new_build client command with:
-      | D    | FROM centos:7\nRUN yum install -y httpd |
-      | to   | centos:7                                |
-      | name | myapp                                   |
+      | D    | FROM centos:7 |
+      | to   | centos:7      |
+      | name | myapp         |
     And I get project bc
     Then the output should contain:
       | myapp |
@@ -153,9 +153,10 @@ Feature: buildlogic.feature
     And I have an ssh-git service in the project
     And the "secret" file is created with the following lines:
       | <%= cb.ssh_private_key.to_pem %> |
-    And I run the :secrets_new_sshauth client command with:
-      | ssh_privatekey | secret   |
-      | secret_name    | mysecret |
+    And I run the :create_secret client command with:
+      | secret_type | generic               | 
+      | name        | mysecret              |
+      | from_file   | ssh-privatekey=secret |
     Then the step should succeed
     When I execute on the pod:
       | bash |
@@ -201,9 +202,11 @@ Feature: buildlogic.feature
     And I have an ssh-git service in the project
     And the "secret" file is created with the following lines:
       | <%= cb.ssh_private_key.to_pem %> |
-    And I run the :secrets_new_sshauth client command with:
-      | ssh_privatekey | secret   |
-      | secret_name    | mysecret |
+    And I run the :create_secret client command with:
+      | secret_type | generic               | 
+      | name        | mysecret              |
+      | from_file   | ssh-privatekey=secret |
+    Then the step should succeed
     When I execute on the pod:
       | bash           |
       | -c             |
@@ -226,7 +229,7 @@ Feature: buildlogic.feature
   Scenario: Check s2i build substatus and times
     Given I have a project
     When I run the :new_app client command with:
-      | file | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/tc470422/application-template-stibuild.json|
+      | file | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/tc470422/application-template-stibuild.json|
     Then the step should succeed
     Given the "ruby-sample-build-1" build completed
     When I run the :describe client command with:
