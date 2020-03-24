@@ -70,7 +70,7 @@ Feature: Testing registry
       | name     | <%= cb.digest %> |
     And the output should match:
       | Image Size:.* |
-      
+
   # @author xiuwang@redhat.com
   # @case_id OCP-18994
   @admin
