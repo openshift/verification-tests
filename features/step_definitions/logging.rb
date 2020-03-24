@@ -346,8 +346,8 @@ end
 Given /^I generate certs for the#{OPT_QUOTED} receiver(?: in the#{OPT_QUOTED} project)?$/ do | receiver_name, project_name |
   script_file = "#{ENV['BUSHSLICER_HOME']}/testdata/logging/logforwarding/cert_generation.sh"
   project_name ||= "openshift-logging"
-  step %Q/I download a file from "#{script_file}"/
-  shell_cmd = "sh cert_generation.sh $(pwd) #{project_name} #{receiver_name}"
+  #step %Q/I download a file from "#{script_file}"/
+  shell_cmd = "sh #{script_file} $(pwd) #{project_name} #{receiver_name}"
   system(shell_cmd)
 end
 
