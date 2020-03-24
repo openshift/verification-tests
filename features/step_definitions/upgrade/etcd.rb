@@ -21,7 +21,7 @@ Given /^etcd operator "([^"]*)" is installed successfully in "([^"]*)" project$/
     step %Q/I use the "#{proj_name}" project/
     unless operator_group('etcd-og').exists?
       # Create operator group in this namespace
-      operator_group_yaml ||= "<%= ENV['BUSHSLICER_HOME'] %>/testdata/olm/operatorgroup-template.yaml"
+      operator_group_yaml ||= "#{ENV['BUSHSLICER_HOME']}/testdata/olm/operatorgroup-template.yaml"
       step %Q/I process and create:/, table(%{
         | f | #{operator_group_yaml} |
         | p | NAME=etcd-og         |
@@ -33,7 +33,7 @@ Given /^etcd operator "([^"]*)" is installed successfully in "([^"]*)" project$/
 
     unless subscription("#{name}").exists?
       # Subscribe etcd operator
-      sub_etcd_yaml ||= "<%= ENV['BUSHSLICER_HOME'] %>/testdata/olm/etcd-subscription-template.yaml"
+      sub_etcd_yaml ||= "#{ENV['BUSHSLICER_HOME']}/testdata/olm/etcd-subscription-template.yaml"
       step %Q/I process and create:/, table(%{
         | f | #{sub_etcd_yaml}                      |
         | p | NAME=#{name}                          |
@@ -60,7 +60,7 @@ end
 
 Given /^etcdCluster "([^"]*)" is installed successfully in "([^"]*)" project$/ do | name, proj_name|
   step %Q/I use the "#{proj_name}" project/
-  etcdCluster_yaml ||= "<%= ENV['BUSHSLICER_HOME'] %>/testdata/olm/etcd-cluster-template.yaml"
+  etcdCluster_yaml ||= "#{ENV['BUSHSLICER_HOME']}/testdata/olm/etcd-cluster-template.yaml"
   step %Q/I process and create:/, table(%{
     | f | #{etcdCluster_yaml} |
     | p | NAME=#{name}         |

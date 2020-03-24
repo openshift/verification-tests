@@ -49,9 +49,9 @@ end
 # short-hand for the generic uninstall step if we are just using the generic install
 Given /^I remove (logging|metrics|metering) service using ansible$/ do | svc_type |
   if cb.install_prometheus
-    uninstall_inventory = "<%= ENV['BUSHSLICER_HOME'] %>/testdata/logging_metrics/default_inventory_uninstall_prometheus"
+    uninstall_inventory = "#{ENV['BUSHSLICER_HOME']}/testdata/logging_metrics/default_inventory_uninstall_prometheus"
   else
-    uninstall_inventory = "<%= ENV['BUSHSLICER_HOME'] %>/testdata/logging_metrics/generic_uninstall_inventory"
+    uninstall_inventory = "#{ENV['BUSHSLICER_HOME']}/testdata/logging_metrics/generic_uninstall_inventory"
   end
   step %Q/#{svc_type} service is uninstalled with ansible using:/, table(%{
     | inventory     | #{uninstall_inventory}          |
@@ -415,11 +415,11 @@ end
 # 2. extra logging parameters for logging only
 # 3. extra metrics parameters for metrics only
 Given /^I construct the default (install|uninstall) (logging|metrics|prometheus|metering) inventory$/ do |op, svc_type|
-  base_inventory_url = "<%= ENV['BUSHSLICER_HOME'] %>/testdata/logging_metrics/default_base_inventory"
+  base_inventory_url = "#{ENV['BUSHSLICER_HOME']}/testdata/logging_metrics/default_base_inventory"
 
   step %Q/I parse the INI file "<%= "#{base_inventory_url}" %>"/
   # now get the extra parameters for install depending on the svc_type
-  params_inventory_url = "<%= ENV['BUSHSLICER_HOME'] %>/testdata/logging_metrics/default_#{op}_#{svc_type}_params"
+  params_inventory_url = "#{ENV['BUSHSLICER_HOME']}/testdata/logging_metrics/default_#{op}_#{svc_type}_params"
   step %Q/I parse the INI file "<%= "#{params_inventory_url}" %>" to the :params_inventory clipboard/
 
   cb.ini_style_config['OSEv3:vars'].merge!(cb.params_inventory['OSEv3:vars'])
@@ -576,7 +576,7 @@ Given /^(logging|metrics|metering) service is (installed|uninstalled) with ansib
     key_name = "cucushift_custom.key"
     cert_name = "cucushift_custom.crt"
 
-    # base_path corresponds to the inventory, for example <%= ENV['BUSHSLICER_HOME'] %>/testdata/logging_metrics/OCP-12186/inventory
+    # base_path corresponds to the inventory, for example #{ENV['BUSHSLICER_HOME']}/testdata/logging_metrics/OCP-12186/inventory
     base_path = "/tmp/#{File.basename(host.workdir)}/"
     cb.key_path = "#{base_path}/#{key_name}"
     cb.cert_path = "#{base_path}/#{cert_name}"
@@ -690,7 +690,7 @@ Given /^(logging|metrics|metering) service is (installed|uninstalled) with ansib
           logger.warn("Skipping post installation check due to negative test")
         else
           # for metering we need to create the
-          @result = user.cli_exec(:create, f: "<%= ENV['BUSHSLICER_HOME'] %>/testdata/metering/default-storageclass-values.yaml")
+          @result = user.cli_exec(:create, f: "#{ENV['BUSHSLICER_HOME']}/testdata/metering/default-storageclass-values.yaml")
           step %Q/all metering related pods are running in the "#{target_proj}" project/
           step %Q/I wait for the "openshift-metering" metering to appear/
         end
@@ -759,7 +759,7 @@ Given /^logging service is installed in the#{OPT_QUOTED} project using deployer:
     | I remove logging service installed in the project using deployer |
     })
   # create the configmap
-  step %Q|I run oc create over ERB URL: <%= ENV['BUSHSLICER_HOME'] %>/testdata/logging_metrics/logging_deployer_configmap.yaml |
+  step %Q|I run oc create over ERB URL: #{ENV['BUSHSLICER_HOME']}/testdata/logging_metrics/logging_deployer_configmap.yaml |
   step %Q/the step should succeed/
   # must create a label or else installation will fail
   registry_nodes = BushSlicer::Node.get_labeled(["registry"], user: user)
@@ -975,7 +975,7 @@ Given /^I have a pod with openshift-ansible playbook installed$/ do
     logger.info("Proxy set to: #{cb.proxy_value}")
     step %Q/I switch to cluster admin pseudo user/
     step %Q{I use the "<%= cb.org_project_for_ansible.name %>" project}
-    step %Q{I run oc create over ERB URL: <%= ENV['BUSHSLICER_HOME'] %>/testdata/logging_metrics/base_ansible_ose.yaml}
+    step %Q{I run oc create over ERB URL: #{ENV['BUSHSLICER_HOME']}/testdata/logging_metrics/base_ansible_ose.yaml}
     step %Q/the step should succeed/
     step %Q/the pod named "base-ansible-pod" becomes ready/
 
@@ -1010,10 +1010,10 @@ end
 Given /^(logging|metrics|metering) service is installed in the system$/ do | svc |
   if env.version_ge("3.5", user: user)
     param_name = 'inventory'
-    param_value = "<%= ENV['BUSHSLICER_HOME'] %>/testdata/logging_metrics/default_base_inventory"
+    param_value = "#{ENV['BUSHSLICER_HOME']}/testdata/logging_metrics/default_base_inventory"
   else
     param_name = 'deployer_config'
-    param_value = "<%= ENV['BUSHSLICER_HOME'] %>/testdata/logging_metrics/default_deployer.yaml"
+    param_value = "#{ENV['BUSHSLICER_HOME']}/testdata/logging_metrics/default_deployer.yaml"
   end
   step %Q/#{svc} service is installed in the system using:/, table(%{
     | #{param_name} | #{param_value} |
@@ -1223,7 +1223,7 @@ end
 #
 Given /^I generate a basic inventory with cluster hosts information$/ do
   inventory_name = "base_inventory"
-  base_inventory_url = "<%= ENV['BUSHSLICER_HOME'] %>/testdata/logging_metrics/default_base_inventory"
+  base_inventory_url = "#{ENV['BUSHSLICER_HOME']}/testdata/logging_metrics/default_base_inventory"
   step %Q/I parse the INI file "<%= "#{base_inventory_url}" %>"/
   inventory_io = StringIO.new
   # don't double quote values which cause some issues with arrays in openshift-ansible
@@ -1278,7 +1278,7 @@ Given /^I get the #{QUOTED} node's prometheus metrics$/ do |node_name|
   raise "Failed when creating kubelet-key secret" unless res[:success]
 
   # create prom2json pod
-  step %Q{I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/logging_metrics/prom2json_pod.yaml" replacing paths:}, table(%{
+  step %Q{I run oc create over "#{ENV['BUSHSLICER_HOME']}/testdata/logging_metrics/prom2json_pod.yaml" replacing paths:}, table(%{
       | ["metadata"]["name"] | pod-#{project.name} |
   })
   step %Q/the step should succeed/

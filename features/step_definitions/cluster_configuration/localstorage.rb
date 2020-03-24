@@ -18,9 +18,9 @@ Given /^I deploy local storage provisioner(?: with "([^ ]+?)" version)?$/ do |im
   template="local-storage-provisioner"
   image="#{img_registry}/openshift3/local-storage-provisioner:#{img_version}"
   path ||="/mnt/local-storage"
-  cmurl = "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/localvolume/configmap-37.yaml"
+  cmurl = "#{ENV['BUSHSLICER_HOME']}/testdata/storage/localvolume/configmap-37.yaml"
   if env.version_ge("3.10", user: user)
-    cmurl = "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/localvolume/configmap.yaml"
+    cmurl = "#{ENV['BUSHSLICER_HOME']}/testdata/storage/localvolume/configmap.yaml"
   end
 
   project(namespace)
@@ -114,7 +114,7 @@ Given /^I deploy local storage provisioner(?: with "([^ ]+?)" version)?$/ do |im
   ls_sc = storage_class("local-slow")
   ls_sc.ensure_deleted(user: admin)
 
-  step %Q{I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/misc/storageClass.yaml"}
+  step %Q{I download a file from "#{ENV['BUSHSLICER_HOME']}/testdata/storage/misc/storageClass.yaml"}
   sc = YAML.load(@result[:response])
   filepath = @result[:abs_path]
   sc["metadata"]["name"] = "local-fast"
@@ -180,7 +180,7 @@ Given /^I deploy local raw block devices provisioner(?: with "([^ ]+?)" version)
     raise "error preaparing subdirs for local storage provisioner" unless res[:success]
   end
 
-  step %Q{I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/localvolume/configmap.yaml"}
+  step %Q{I download a file from "#{ENV['BUSHSLICER_HOME']}/testdata/storage/localvolume/configmap.yaml"}
   cfm = YAML.load(@result[:response])
   filepath = @result[:abs_path]
   cfm["data"]["storageClassMap"].gsub!(/local-slow\D+/, "")
@@ -201,7 +201,7 @@ Given /^I deploy local raw block devices provisioner(?: with "([^ ]+?)" version)
   step %Q/the step should succeed/
 
   step %Q/I run the :create admin command with:/, table(%{
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/localvolume/local-block-template.yaml |
+      | f | #{ENV['BUSHSLICER_HOME']}/testdata/storage/localvolume/local-block-template.yaml |
       | n | #{namespace}                                                                                                     |
   })
   step %Q/the step should succeed/
@@ -233,7 +233,7 @@ Given /^I deploy local raw block devices provisioner(?: with "([^ ]+?)" version)
   lf_sc = storage_class("block-devices")
   lf_sc.ensure_deleted(user: admin)
 
-  step %Q{I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/misc/storageClass.yaml"}
+  step %Q{I download a file from "#{ENV['BUSHSLICER_HOME']}/testdata/storage/misc/storageClass.yaml"}
   sc = YAML.load(@result[:response])
   filepath = @result[:abs_path]
   sc["metadata"]["name"] = "block-devices"

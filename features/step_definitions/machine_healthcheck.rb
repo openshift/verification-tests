@@ -8,7 +8,7 @@ When(/^I create the 'Ready' unhealthyCondition$/) do
 
   # somtimes PDB may prevent a successful node-drain thus blocks the test
   # annnotate the machine to exclude node-drain so that test does not flake
-  killer_pod_tmpl = "<%= ENV['BUSHSLICER_HOME'] %>/testdata/cloud/mhc/kubelet-killer-pod.yml"
+  killer_pod_tmpl = "#{ENV['BUSHSLICER_HOME']}/testdata/cloud/mhc/kubelet-killer-pod.yml"
 
   # this is no longer needed after 4.4
   if env.version_le("4.3", user: user)
@@ -19,7 +19,7 @@ When(/^I create the 'Ready' unhealthyCondition$/) do
       | overwrite    | true                                        |
       | keyval       | machine.openshift.io/exclude-node-draining= |
     })
-    killer_pod_tmpl = "<%= ENV['BUSHSLICER_HOME'] %>/testdata/cloud/mhc/kubelet-killer-pod-43.yml"
+    killer_pod_tmpl = "#{ENV['BUSHSLICER_HOME']}/testdata/cloud/mhc/kubelet-killer-pod-43.yml"
   end
 
   # create a priviledged pod that kills kubelet on its node
