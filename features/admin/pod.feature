@@ -286,19 +286,16 @@ Feature: pod related features
     Then the output should match:
       | password:\\s+11 bytes |
       | username:\\s+9 bytes  |
-    Given I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/secrets/tc483170/secret-pod-nginx-2.yaml"
-    When I replace lines in "secret-pod-nginx-2.yaml":
-      | HOSTNAME | <%= cb.nodes[0].name %> |
-    Then I run the :create client command with:
-      | f | secret-pod-nginx-2.yaml |
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/secrets/tc483170/secret-pod-nginx-2.yaml" replacing paths:
+      | ["spec"]["nodeName"] | <%= cb.nodes[0].name %> |
     And the step should succeed
     Given the pod named "secret-pod-nginx-2" becomes ready
     When I execute on the pod:
       | cat | /etc/secret-volume-2/password | /etc/secret-volume-2/username |
     Then the step should succeed
     And the output by order should match:
-      | value-2              |
-      | value-1              |
+      | value-2 |
+      | value-1 |
     When I run the :patch client command with:
       | resource      | secret                                                                   |
       | resource_name | secret-nginx-2                                                           |
@@ -318,8 +315,8 @@ Feature: pod related features
       | cat | /etc/secret-volume-2/password | /etc/secret-volume-2/username |
     Then the step should succeed
     And the output by order should match:
-      | value-2              |
-      | value-1              |
+      | value-2 |
+      | value-1 |
     Given I use the "<%= cb.nodes[0].name %>" node
     And the host is rebooted and I wait it up to 600 seconds to become available
     And I wait up to 500 seconds for the steps to pass:
