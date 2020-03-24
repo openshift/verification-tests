@@ -27,10 +27,11 @@ Feature: Marketplace related scenarios
     # Create a new CatalogSourceConfig
     When I process and create:
       | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/olm/csc-template.yaml            |
+      | p | PACKAGES=codeready-toolchain-operator                                                               |
       | p | DISPLAYNAME=CSC Operators                                                                           |
     Then the step should succeed
     # Check if the marketplace works well
-    And I wait up to 180 seconds for the steps to pass:
+    And I wait up to 240 seconds for the steps to pass:
     """
     When I run the :get client command with:
       | resource       | packagemanifest |
@@ -57,7 +58,7 @@ Feature: Marketplace related scenarios
     Given the status of condition Upgradeable for marketplace operator as expected
     Given I switch to cluster admin pseudo user
     # Check if the marketplace works well
-    And I wait up to 180 seconds for the steps to pass:
+    And I wait up to 240 seconds for the steps to pass:
     """
     When I run the :get client command with:
       | resource       | packagemanifest |
