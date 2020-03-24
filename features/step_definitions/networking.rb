@@ -812,7 +812,7 @@ Given /^a DHCP service is configured for interface "([^"]*)" on "([^"]*)" node w
     if host.exec_admin("systemctl status dnsmasq")[:response].include? "running"
       logger.info("dnsmasq service is running fine")
     else
-      host.exec_admin("cp /etc/dnsmasq.conf.bak /etc/dnsmasq.conf && systemctl restart dnsmasq --now")
+      host.exec_admin("arp -a;cp /etc/dnsmasq.conf.bak /etc/dnsmasq.conf && systemctl restart dnsmasq --now")
       raise "Failed to start dnsmasq service. Check you cluster health manually"
     end
   }
