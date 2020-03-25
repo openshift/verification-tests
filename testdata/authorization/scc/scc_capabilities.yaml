@@ -1,6 +1,8 @@
 allowedCapabilities:
 - FSETID
 - KILL
+defaultAddCapabilities: []
+requiredDropCapabilities: []
 runAsUser:
   type: RunAsAny
 seLinuxContext:
