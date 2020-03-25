@@ -430,7 +430,7 @@ Feature: Pod related networking scenarios
     And the Internal IP of node "<%= cb.workers[0].name %>" is stored in the :worker0_ip clipboard
     And the Internal IP of node "<%= cb.workers[1].name %>" is stored in the :worker1_ip clipboard
     And I have a project
-    When I run oc create as admin over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/pod-for-ping-with-hostport.yml" replacing paths:
+    When I run oc create as admin over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/pod-for-ping-with-hostport.yml" replacing paths:
       | ["metadata"]["namespace"] |  <%= project.name %>       |
       | ["spec"]["nodeName"]      |  <%= cb.workers[0].name %> |
     Then the step should succeed

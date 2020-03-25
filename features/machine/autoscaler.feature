@@ -188,7 +188,7 @@ Feature: Cluster Autoscaler Tests
     And admin ensures node number is restored to "<%= cb.num_to_restore %>" after scenario
 
     Given I use the "openshift-machine-api" project
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/cloud/machine-autoscaler.yml" replacing paths:
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/cloud/machine-autoscaler.yml" replacing paths:
       | ["metadata"]["name"]               | maotest |
       | ["spec"]["minReplicas"]            | 1       |
       | ["spec"]["maxReplicas"]            | 3       |

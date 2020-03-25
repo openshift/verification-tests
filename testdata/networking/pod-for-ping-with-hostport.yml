@@ -1,0 +1,13 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: hello-pod
+  labels:
+    name: hello-pod
+spec:
+  containers:
+  - name: hello-pod
+    image: aosqe/hello-openshift
+    ports:
+    - hostPort: 9500
+      containerPort: 8080

@@ -13,7 +13,7 @@ data:
 
     input(type="imptcp" port="514")
     input(type="imudp" port="514")
-    
+
     :programname, contains, "kubernetes.var.log.containers" {
       if $msg contains "namespace_name=openshift" or $msg contains "namespace_name=default" or $msg contains "namespace_name=kube" then /var/log/custom/infra-container.log
       if not ($msg contains "namespace_name=openshift" or $msg contains "namespace_name=default" or $msg contains "namespace_name=kube") then /var/log/custom/app-container.log
