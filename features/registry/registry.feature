@@ -149,22 +149,22 @@ Feature: Testing registry
     When I run the :get admin command with:
       | resource      | configmaps                  |
       | resource_name | image-registry-certificates |
-      | namespace     |  openshift-image-registry   |
+      | namespace     | openshift-image-registry    |
     Then the step should succeed
     When I run the :get admin command with:
       | resource      | secrets                              |
       | resource_name | image-registry-private-configuration |
-      | namespace     |  openshift-image-registry            |
+      | namespace     | openshift-image-registry             |
     Then the step should succeed
     When I run the :get admin command with:
       | resource      | ds                        |
       | resource_name | node-ca                   |
-      | namespace     |  openshift-image-registry |
+      | namespace     | openshift-image-registry  |
     Then the step should succeed
     When I run the :get admin command with:
       | resource      | service                   |
       | resource_name | image-registry            |
-      | namespace     |  openshift-image-registry |
+      | namespace     | openshift-image-registry  |
     Then the step should succeed
     When I run the :get admin command with:
       | resource      | service                   |
