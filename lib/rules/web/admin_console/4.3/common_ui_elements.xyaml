@@ -105,6 +105,20 @@ set_input_value:
       xpath: //input[@id='<input_field_id>']
     op: send_keys <input_value>
     type: input
+set_input_class:
+  element:
+    selector:
+      xpath: //input[contains(@class, '<class_text>')]
+    op: send_keys <input_value>
+    type: input
+set_label_input:
+  elements:
+  - selector: &label_input
+      xpath: (//label[contains(text(),'<label_text>')]/following::input[1] | //label[contains(text(),'<label_text>')]//input[1])[1]
+    op: clear
+  - selector:
+      <<: *label_input
+    op: send_keys <input_value>
 set_label_input:
   elements:
   - selector: &label_input
@@ -320,6 +334,11 @@ click_link_with_text:
   element:
     selector:
       xpath: //a[contains(.,'<text>') and contains(@href,'<link_url>')]
+    op: click
+click_link_with_text_only:
+  element:
+    selector:
+      xpath: //a[text()='<text>']
     op: click
 click_secondary_menu:
   elements:

@@ -127,6 +127,12 @@ set_input_value:
       xpath: //input[@id='<input_field_id>']
     op: send_keys <input_value>
     type: input
+set_input_class:
+  element:
+    selector:
+      xpath: //input[contains(@class, '<class_text>')]
+    op: send_keys <input_value>
+    type: input
 set_label_input:
   elements:
   - selector: &label_input
@@ -135,6 +141,16 @@ set_label_input:
   - selector:
       <<: *label_input
     op: send_keys <input_value>
+set_label_input_simple:
+  elements:
+  - selector: &label_input_value
+      xpath: //label[text()='<label_text>']/..//input
+    op: clear
+    type: input
+  - selector:
+      <<: *label_input_value
+    op: send_keys <input_value>
+    type: input
 check_editor_is_monaco_editor:
   element:
     selector:
@@ -347,6 +363,11 @@ click_link_with_text:
   element:
     selector:
       xpath: //a[contains(.,'<text>') and contains(@href,'<link_url>')]
+    op: click
+click_link_with_text_only:
+  element:
+    selector:
+      xpath: //a[text()='<text>']
     op: click
 click_secondary_menu:
   elements:
