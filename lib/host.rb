@@ -854,20 +854,35 @@ module BushSlicer
         commands = ["chroot", "/host/", "bash", "-c", commands_to_string(commands)]
       end
 
+      if node.env.opts[:host_debug_image] == "multus"
+        @result = node.env.admin.cli_exec(:get, n:"openshift-multus", resource: "pod", l: "app=multus", output: 'jsonpath={.items[0].spec.containers[?(@.name=="kube-multus")].image}')
+        if @result[:success]
+          opts[:image] = @result[:response].strip
+        end
+      end
+
+      exec_opts = {}
+      # override image, arg order matters, image needs to go before --
+      if opts[:image]
+        exec_opts[:image] = opts[:image]
+      end
+      exec_opts.merge!(
+          {
+              resource: "node/#{node.name}",
+              n: service_project.name,
+              oc_opts_end: "",
+              exec_command_arg: commands,
+              _stdin: opts[:stdin],
+              _stdout: opts[:stdout]
+          }
+      )
+
       @exec_lock.synchronize {
         # note this will block until timeout if command does not exist remotely
         # TODO: check debug pod status in the background to avoid freeze (WRKLDS-99)
         # note2: exit status is always 0 (WRKLDS-98)
         # note3: stdin and stderr come together (WRKLDS-110)
-        node.env.admin.cli_exec(
-          :debug,
-          resource: "node/#{node.name}",
-          n: service_project.name,
-          oc_opts_end: "",
-          exec_command_arg: commands,
-          _stdin: opts[:stdin],
-          _stdout: opts[:stdout]
-        )
+        node.env.admin.cli_exec(:debug, **exec_opts)
       }
     end
 
