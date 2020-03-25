@@ -18,17 +18,17 @@ Feature: Marketplace related scenarios
     Given I switch to cluster admin pseudo user
     # Create a new OperatorSource
     When I process and create:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/olm/operatorsource-template.yaml |
-      | p | NAME=test-operators                                                                                 |
-      | p | SECRET=                                                                                             |
-      | p | DISPLAYNAME=Test Operators                                                                          |
-      | p | REGISTRY=jiazha                                                                                     |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/olm/operatorsource-template.yaml |
+      | p | NAME=test-operators                                                     |
+      | p | SECRET=                                                                 |
+      | p | DISPLAYNAME=Test Operators                                              |
+      | p | REGISTRY=jiazha                                                         |
     Then the step should succeed
     # Create a new CatalogSourceConfig
     When I process and create:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/olm/csc-template.yaml            |
-      | p | PACKAGES=codeready-toolchain-operator                                                               |
-      | p | DISPLAYNAME=CSC Operators                                                                           |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/olm/csc-template.yaml            |
+      | p | PACKAGES=codeready-toolchain-operator                                   |
+      | p | DISPLAYNAME=CSC Operators                                               |
     Then the step should succeed
     # Check if the marketplace works well
     And I wait up to 240 seconds for the steps to pass:

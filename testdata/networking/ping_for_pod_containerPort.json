@@ -1,0 +1,23 @@
+{
+  "kind": "Pod",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "hello-pod",
+    "labels": {
+      "app": "hello-pod"
+    }
+  },
+  "spec": {
+    "containers": [
+      {
+        "name": "hello-pod",
+        "image": "openshift/hello-openshift",
+        "ports": [
+          {
+            "containerPort": 8080
+          }
+        ]
+      }
+    ]
+  }
+}

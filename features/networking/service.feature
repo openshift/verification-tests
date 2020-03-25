@@ -414,7 +414,7 @@ Feature: Service related networking scenarios
   Scenario: Create loadbalancer service
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/ping_for_pod_containerPort.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/ping_for_pod_containerPort.json |
     Then the step should succeed
 
     # Create loadbalancer service
@@ -435,7 +435,7 @@ Feature: Service related networking scenarios
     And evaluation of `@result[:response].match(/:(.*)]/)[1]` is stored in the :service_hostname clipboard
 
     # check the external:ip of loadbalancer can be accessed
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json" replacing paths:
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/list_for_pods.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
     Then the step should succeed
     Given 1 pods become ready with labels:

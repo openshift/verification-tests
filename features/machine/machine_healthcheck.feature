@@ -86,7 +86,7 @@ Feature: MachineHealthCheck Test Scenarios
     And I clone a machineset named "machineset-25691"
 
     # Create MHC
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/cloud/mhc/mhc1.yaml" replacing paths:
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/cloud/mhc/mhc1.yaml" replacing paths:
       | n                                                                                  | openshift-machine-api         |
       | ["metadata"]["name"]                                                               | mhc-<%= machine_set.name %>-1 |
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]    | <%= machine_set.cluster %>    |
@@ -94,7 +94,7 @@ Feature: MachineHealthCheck Test Scenarios
       | ["spec"]["maxUnhealthy"]                                                           | 0                             |
     Then the step should succeed
     And I ensure "mhc-<%= machine_set.name %>-1" machinehealthcheck is deleted after scenario
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/cloud/mhc/mhc1.yaml" replacing paths:
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/cloud/mhc/mhc1.yaml" replacing paths:
       | n                                                                                  | openshift-machine-api         |
       | ["metadata"]["name"]                                                               | mhc-<%= machine_set.name %>-2 |
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]    | <%= machine_set.cluster %>    |
