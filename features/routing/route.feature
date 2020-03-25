@@ -571,28 +571,27 @@ Feature: Testing route
   Scenario: The hostname should be converted to available route when met special character
     Given I have a project
     When I run the :create client command with:
-      | f  |   <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/unsecure/service_unsecure.json |
+      | f  | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/unsecure/service_unsecure.json |
     Then the step should succeed
 
     # test those 4 kind of route. When creating route which name have '.', it will be decoded to '-'.
     When I run the :expose client command with:
-      | resource      | service              |
-      | resource_name | service-unsecure     |
-      | name          | unsecure.test        |
+      | resource      | service          |
+      | resource_name | service-unsecure |
+      | name          | unsecure.test    |
     Then the step should succeed
     When I run the :create_route_edge client command with:
-      | name     | edge.test        |
-      | service  | service-unsecure |
+      | name    | edge.test        |
+      | service | service-unsecure |
     Then the step should succeed
     When I run the :create_route_passthrough client command with:
-      | name     | pass.test        |
-      | service  | service-unsecure |
+      | name    | pass.test        |
+      | service | service-unsecure |
     Then the step should succeed
-    When I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/reencrypt/route_reencrypt_dest.ca"
     And I run the :create_route_reencrypt client command with:
-      | name       | reen.test               |
-      | service    | service-unsecure        |
-      | destcacert | route_reencrypt_dest.ca |
+      | name       | reen.test                                                                        |
+      | service    | service-unsecure                                                                 |
+      | destcacert | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/reencrypt/route_reencrypt_dest.ca |
     Then the step should succeed
     When I run the :get client command with:
       | resource | route |
