@@ -673,11 +673,8 @@ Feature: build 'apps' with CLI
       | app_repo     | https://github.com/openshift/ruby-hello-world.git |
       | image_stream | ruby:latest                                       |
     Then the step should succeed
-    Given I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/templates/tc539699/build.yaml"
-    And I replace lines in "build.yaml":
-      | replacestr/ | <%= product_docker_repo %> |
-    When I run the :create client command with:
-      | f | build.yaml |
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/templates/tc539699/build.yaml" replacing paths:
+      | ["spec"]["strategy"]["sourceStrategy"]["from"]["name"] | <%= product_docker_repo %>/rhscl/ruby-22-rhel7@sha256:35761886745576f644b8597419ae262e4ce3a1a34b6afdbade4d46ccc4d25172 |
     Then the step should succeed
     When I run the :start_build client command with:
       | buildconfig | ruby-hello-world |

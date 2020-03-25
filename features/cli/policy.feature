@@ -75,9 +75,8 @@ Feature: change the policy of user/service account
   # @case_id OCP-11442
   Scenario: [origin_platformexp_214] User can view, add , modify and delete specific role to/from new added project via admin role user
     Given I have a project
-    And I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/policy/projectviewservice.json"
     When I run the :create client command with:
-      | f            | projectviewservice.json     |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/policy/projectviewservice.json |
     Then the step should succeed
     And the output should contain:
       | created      |
@@ -383,29 +382,25 @@ Feature: change the policy of user/service account
   # @case_id OCP-9551
   Scenario: User can know if he can create podspec against the current scc rules via CLI
     Given I have a project
-    When I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/scc/tc538262/PodSecurityPolicySubjectReview_privileged_false.json"
-    Then the step should succeed
     Given I run the :policy_scc_subject_review client command with:
-      | f | PodSecurityPolicySubjectReview_privileged_false.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/scc/tc538262/PodSecurityPolicySubjectReview_privileged_false.json |
     Then the step should succeed
     And the output should match:
       | .*restricted |
     Given I run the :policy_scc_subject_review client command with:
-      | f | PodSecurityPolicySubjectReview_privileged_false.json |
-      | n | <%= project.name %>                                  |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/scc/tc538262/PodSecurityPolicySubjectReview_privileged_false.json |
+      | n | <%= project.name %>                                                                                                    |
     Then the step should succeed
     And the output should match:
       | .*restricted |
-    When I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/scc/tc538262/PodSecurityPolicySubjectReview_privileged_true.json"
-    Then the step should succeed
     Given I run the :policy_scc_subject_review client command with:
-      | f | PodSecurityPolicySubjectReview_privileged_true.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/scc/tc538262/PodSecurityPolicySubjectReview_privileged_true.json |
     Then the step should succeed
     And the output should match:
       | <none> |
     Given I run the :policy_scc_subject_review client command with:
-      | f | PodSecurityPolicySubjectReview_privileged_true.json |
-      | n | <%= project.name %>                                 |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/scc/tc538262/PodSecurityPolicySubjectReview_privileged_true.json |
+      | n | <%= project.name %>                                                                                                   |
     Then the step should succeed
     And the output should match:
       | <none> |
@@ -471,33 +466,31 @@ Feature: change the policy of user/service account
   # @case_id OCP-9553
   Scenario: User can know whether the PodSpec he's describing will actually be allowed by the current SCC rules via CLI
     Given I have a project
-    When I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/scc/tc538263/PodSecurityPolicySubjectReview.json"
-    Then the step should succeed
     Given I run the :policy_scc_subject_review client command with:
-      | user          | <%= user.name %>                    |
-      | f             | PodSecurityPolicySubjectReview.json |
+      | user | <%= user.name %>                                                                                      |
+      | f    | <%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/scc/tc538263/PodSecurityPolicySubjectReview.json |
     Then the step should succeed
     And the output should not match:
       | .*restricted |
     Given I run the :policy_scc_subject_review client command with:
-      | user | <%= user.name %>                    |
-      | f    | PodSecurityPolicySubjectReview.json |
-      | n    | <%= project.name %>                 |
+      | user | <%= user.name %>                                                                                      |
+      | f    | <%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/scc/tc538263/PodSecurityPolicySubjectReview.json |
+      | n    | <%= project.name %>                                                                                   |
     Then the step should succeed
     And the output should not match:
       | .*restricted |
     Given I run the :policy_scc_subject_review client command with:
-      | user  | <%= user.name %>                    |
-      | group | system:authenticated                |
-      | f     | PodSecurityPolicySubjectReview.json |
+      | user  | <%= user.name %>                                                                                      |
+      | group | system:authenticated                                                                                  |
+      | f     | <%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/scc/tc538263/PodSecurityPolicySubjectReview.json |
     Then the step should succeed
     And the output should match:
       | .*restricted |
     Given I run the :policy_scc_subject_review client command with:
-      | user  | <%= user.name %>                    |
-      | group | system:authenticated                |
-      | f     | PodSecurityPolicySubjectReview.json |
-      | n     | <%= project.name %>                 |
+      | user  | <%= user.name %>                                                                                      |
+      | group | system:authenticated                                                                                  |
+      | f     | <%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/scc/tc538263/PodSecurityPolicySubjectReview.json |
+      | n     | <%= project.name %>                                                                                   |
     Then the step should succeed
     And the output should match:
       | .*restricted |
