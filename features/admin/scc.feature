@@ -28,20 +28,30 @@ Feature: SCC policy related scenarios
   # @author yinzhou@redhat.com
   # @case_id OCP-11775
   @admin
+  @destructive
   Scenario: Create or update scc with illegal capability name should fail with prompt message
     Given I have a project
-    Given admin ensures "scc-cap" scc is deleted after scenario
-    Given I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/scc/scc_capabilities.yaml"
-    And I replace lines in "scc_capabilities.yaml":
-      |system:serviceaccounts:default|system:serviceaccounts:<%= project.name %>|
-      |scc-cap|<%= rand_str(6, :dns) %>|
-      |KILL|KILLtest|
-    And the following scc policy is created: scc_capabilities.yaml
-    Given I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/scc/pod_requests_cap_chown.json"
-    And I replace lines in "pod_requests_cap_chown.json":
-      |CHOWN|KILLtest|
-    When I run the :create client command with:
-      |f|pod_requests_cap_chown.json|
+    Given I switch to cluster admin pseudo user
+    Given admin ensures "scc-<%= project.name %>" scc is deleted after scenario
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/scc/scc_capabilities.yaml" replacing paths:
+      | ["metadata"]["name"]            | scc-<%= project.name %> |
+      | ["defaultAddCapabilities"][0]   | BLOCK_SUSPEND           |
+      | ["requiredDropCapabilities"][0] | BLOCK_SUSPEND           |
+    Then the step should fail
+    And the output should contain "capability is listed in defaultAddCapabilities and requiredDropCapabilities"
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/scc/scc_capabilities.yaml" replacing paths:
+      | ["metadata"]["name"]            | scc-<%= project.name %> |
+      | ["allowedCapabilities"][0]      | BLOCK_SUSPEND           |
+      | ["requiredDropCapabilities"][0] | BLOCK_SUSPEND           |
+    Then the step should fail
+    And the output should contain "capability is listed in allowedCapabilities and requiredDropCapabilities"
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/scc/scc_capabilities.yaml" replacing paths:
+      | ["metadata"]["name"]       | scc-<%= project.name %>                    |
+      | ["groups"][0]              | system:serviceaccounts:<%= project.name %> |
+      | ["allowedCapabilities"][1] | KILLtest                                   |
+    Then the step should succeed
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/scc/pod_requests_cap_chown.json" replacing paths:
+      | ["spec"]["containers"][0]["securityContext"]["capabilities"]["add"][0] | KILLtest |
     Then the step should succeed
     And I wait for the steps to pass:
     """
@@ -52,17 +62,4 @@ Feature: SCC policy related scenarios
       | [uU]nknown\|invalid capability[ .*to add]? |
       | (?i)CAP_KILLtest                           |
     """
-    Given I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/scc/scc_with_confilict_capabilities.yaml"
-    And I replace lines in "scc_with_confilict_capabilities.yaml":
-      |system:serviceaccounts:default|system:serviceaccounts:<%= project.name %>|
-    When I run the :create admin command with:
-       | f | scc_with_confilict_capabilities.yaml |
-    Then the step should fail
-    And the output should contain "capability is listed in defaultAddCapabilities and requiredDropCapabilities"
-    And I replace lines in "scc_with_confilict_capabilities.yaml":
-      |defaultAddCapabilities:||
-    When I run the :create admin command with:
-      | f | scc_with_confilict_capabilities.yaml |
-    Then the step should fail
-    And the output should contain "capability is listed in allowedCapabilities and requiredDropCapabilities"
 
