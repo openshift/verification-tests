@@ -28,11 +28,6 @@ module BushSlicer
                      'openstack_qeos10'
       opts = default_opts(service_name).merge options
 
-      # for private OSP behind proxy
-      if opts[:proxy]
-        ENV['http_proxy'] = opts[:proxy]
-      end
-
       ## poor's man OSP version detection
       url = opts[:url].match(%r{(^https?://[-:.a-zA-Z0-9]+)(/.*)?$})&.to_a&.fetch(1)
       raise "cannot parse auth URL #{opts[:url].inspect}" unless url
