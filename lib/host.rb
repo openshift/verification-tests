@@ -90,7 +90,7 @@ module BushSlicer
 
     def workdir(**opts)
       unless @workdir_exists
-        mkdir(@workdir, :raw => true)
+        mkdir(@workdir, :raw => true, **opts)
         @workdir_exists = true
       end
       if ! opts[:absolute] || ["/", "\\"].include?(@workdir[0])
@@ -462,7 +462,7 @@ module BushSlicer
       case user
       when nil, self[:user]
         # perform blind exec in workdir
-        return exec_raw("cd '#{workdir}'", commands, **opts)
+        return exec_raw("cd '#{workdir(**opts)}'", commands, **opts)
       when :admin
         # try to use sudo
         # in the future we may use `properties` for different methods
@@ -854,20 +854,28 @@ module BushSlicer
         commands = ["chroot", "/host/", "bash", "-c", commands_to_string(commands)]
       end
 
+      exec_opts = {}
+      # override image, arg order matters, image needs to go before --
+      if opts[:image]
+        exec_opts[:image] = opts[:image]
+      end
+      exec_opts.merge!(
+          {
+              resource: "node/#{node.name}",
+              n: service_project.name,
+              oc_opts_end: "",
+              exec_command_arg: commands,
+              _stdin: opts[:stdin],
+              _stdout: opts[:stdout]
+          }
+      )
+
       @exec_lock.synchronize {
         # note this will block until timeout if command does not exist remotely
         # TODO: check debug pod status in the background to avoid freeze (WRKLDS-99)
         # note2: exit status is always 0 (WRKLDS-98)
         # note3: stdin and stderr come together (WRKLDS-110)
-        node.env.admin.cli_exec(
-          :debug,
-          resource: "node/#{node.name}",
-          n: service_project.name,
-          oc_opts_end: "",
-          exec_command_arg: commands,
-          _stdin: opts[:stdin],
-          _stdout: opts[:stdout]
-        )
+        node.env.admin.cli_exec(:debug, **exec_opts)
       }
     end
 

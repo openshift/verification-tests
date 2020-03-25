@@ -86,11 +86,15 @@ Given /^environment has( at least| at most) (\d+)( schedulable)? nodes?$/ do |cm
 end
 
 # @host from World will be used.
-Given /^I run( background)? commands on the host:$/ do |bg, table|
+Given /^I run( background)? commands on the host(?: using image "(.+?)")?:$/ do |bg, image, table|
   ensure_admin_tagged
 
   raise "You must set a host prior to running this step" unless host
-  @result = host.exec(*table.raw.flatten, background: !!bg)
+  if image
+    @result = host.exec(*table.raw.flatten, background: !!bg, image: image)
+  else
+    @result = host.exec(*table.raw.flatten, background: !!bg)
+  end
 end
 
 Given /^I run commands on the host after scenario:$/ do |table|
