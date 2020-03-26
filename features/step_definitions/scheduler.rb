@@ -38,3 +38,13 @@ Given /^the #{QUOTED} clusterrole is restored after scenario$/ do |name|
     raise "Cannot restore clusterrole: #{name}" unless @result[:success]
   }
 end
+
+Given /^I delete all custom scheduler resources after scenario$/ do
+  ensure_admin_tagged
+  ensure_destructive_tagged
+  teardown_add {
+    step %Q/admin ensures "my-scheduler" deployment is deleted from the "kube-system" project/
+    step %Q/admin ensures "my-scheduler" service_account is deleted from the "kube-system" project/
+    step 'admin ensures "my-scheduler-as-kube-scheduler" clusterrolebinding is deleted'
+  }
+end
