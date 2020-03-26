@@ -7,8 +7,9 @@ Feature: MachineHealthCheck Test Scenarios
   Scenario: Remediation should be applied when the unhealthyCondition 'Ready' is met
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
+    Given I use the "openshift-machine-api" project
+    And I clone a machineset named "machineset-25897"
 
-    Given I clone a machineset named "machineset-25897"
     # Create MHC
     When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/cloud/mhc/mhc1.yaml" replacing paths:
       | n                                                                                  | openshift-machine-api       |
@@ -21,6 +22,16 @@ Feature: MachineHealthCheck Test Scenarios
     # Create unhealthyCondition to trigger machine remediation
     When I create the 'Ready' unhealthyCondition
     Then the machine should be remediated
+
+    # Verify when a machine is deleted, the node is drained(even if it's unreachable)
+    Given a pod becomes ready with labels:
+      | api=clusterapi, k8s-app=controller |
+    When I run the :logs admin command with:
+      | resource_name | <%= pod.name %>    |
+      | c             | machine-controller |
+    Then the output should contain:
+      | Node "<%= machine.node_name %>" is unreachable, draining will wait |
+      | drain successful for machine "<%= machine.name %>"                 |
 
   # @author jhou@redhat.com
   # @case_id OCP-26311
@@ -70,7 +81,6 @@ Feature: MachineHealthCheck Test Scenarios
 
     # Create unhealthyCondition before createing a MHC
     When I create the 'Ready' unhealthyCondition
-
     Then the machine should be remediated
 
   # @author jhou@redhat.com
