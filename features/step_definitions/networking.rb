@@ -806,13 +806,17 @@ Given /^a DHCP service is configured for interface "([^"]*)" on "([^"]*)" node w
   host = node.host
   dhcp_status_timeout = 30
   #Following will take dnsmasq backup and append curl contents to the dnsmasq config after
-  @result = host.exec_admin("cp /etc/dnsmasq.conf /etc/dnsmasq.conf.bak;curl #{ENV['BUSHSLICER_HOME']}/testdata/networking/multus-cni/dnsmasq_for_testbridge.conf | sed s/testbr1/#{br_inf}/g | sed s/88.8.8.100,88.8.8.110,24h/#{add_lease}/g > /etc/dnsmasq.conf;systemctl restart dnsmasq --now")
+  logger.info("Logging ARP entries on dnsmasq.conf node which might help in debugging later if required")
+  host.exec_admin("arp -a")
+  logger.info("Logging last 10 lines of dnsmasq.conf to check if required config is not appended already which might help in debugging later")
+  host.exec_admin("tail -10 /etc/dnsmasq.conf")
+  @result = host.exec_admin("cp /etc/dnsmasq.conf /etc/dnsmasq.conf.bak;curl https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/dnsmasq_for_testbridge.conf | sed s/testbr1/#{br_inf}/g | sed s/88.8.8.100,88.8.8.110,24h/#{add_lease}/g > /etc/dnsmasq.conf;systemctl restart dnsmasq --now")
   raise "Failed to configure dnsmasq service" unless @result[:success]
   wait_for(dhcp_status_timeout) {
     if host.exec_admin("systemctl status dnsmasq")[:response].include? "running"
       logger.info("dnsmasq service is running fine")
     else
-      host.exec_admin("arp -a;cp /etc/dnsmasq.conf.bak /etc/dnsmasq.conf && systemctl restart dnsmasq --now")
+      host.exec_admin("cp /etc/dnsmasq.conf.bak /etc/dnsmasq.conf && systemctl restart dnsmasq --now")
       raise "Failed to start dnsmasq service. Check you cluster health manually"
     end
   }
