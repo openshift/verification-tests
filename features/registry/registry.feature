@@ -106,6 +106,92 @@ Feature: Testing registry
     And the "myimage2" image stream was created
     And the "myimage1" image stream becomes ready
     And the "myimage2" image stream becomes ready
+    
+  # @author wewang@redhat.com
+  # @case_id OCP-23030
+  @admin
+  Scenario: Enable must-gather object refs in image-registry cluster
+    When I run the :get admin command with:
+      | resource      | co             |
+      | resource_name | image-registry |
+      | o             | yaml           |
+    Then the step should succeed
+    And the output should contain:
+      | name: system:registry                      |
+      | resource: clusterroles                     |
+      | name: registry-registry-role               |
+      | resource: clusterrolebindings              |
+      | name: registry                             |       
+      | resource: serviceaccounts                  |
+      | name: image-registry-certificates          |
+      | resource: configmaps                       |
+      | name: image-registry-private-configuration |
+      | resource: secrets                          | 
+      | name: image-registry                       |
+      | resource: services                         |
+      | name: node-ca                              |
+      | resource: daemonsets                       |
+      | name: image-registry                       |
+      | resource: deployments                      |
+    When I run the :get admin command with:
+      | resource      | clusterroles    |
+      | resource_name | system:registry |
+    Then the step should succeed
+    When I run the :get admin command with:
+      | resource      | clusterrolebindings    |
+      | resource_name | registry-registry-role |
+    Then the step should succeed
+    When I run the :get admin command with:
+      | resource      | serviceaccounts          |
+      | resource_name | registry                 |
+      | namespace     | openshift-image-registry |
+    Then the step should succeed
+    When I run the :get admin command with:
+      | resource      | configmaps                  |
+      | resource_name | image-registry-certificates |
+      | namespace     | openshift-image-registry    |
+    Then the step should succeed
+    When I run the :get admin command with:
+      | resource      | secrets                              |
+      | resource_name | image-registry-private-configuration |
+      | namespace     | openshift-image-registry             |
+    Then the step should succeed
+    When I run the :get admin command with:
+      | resource      | ds                        |
+      | resource_name | node-ca                   |
+      | namespace     | openshift-image-registry  |
+    Then the step should succeed
+    When I run the :get admin command with:
+      | resource      | service                   |
+      | resource_name | image-registry            |
+      | namespace     | openshift-image-registry  |
+    Then the step should succeed
+    When I run the :get admin command with:
+      | resource      | service                   |
+      | resource_name | image-registry            |
+      | namespace     | openshift-image-registry  |
+    Then the step should succeed
+    When I run the :get admin command with:
+      | resource      | deployments    |
+      | resource_name | image-registry |
+    Then the step should succeed
+    
+  # @author wewang@redhat.com
+  # @case_id OCP-23063
+  @admin
+  @destructive
+  Scenario: Check the related log from must-gather tool
+    When I run the :delete admin command with:
+      | object_type       | co             |
+      | object_name_or_id | image-registry |
+    Then the step should succeed
+    When I run the :oadm_inspect admin command with:
+      | resource_type | co             |
+      | resource_name | image-registry |
+    Then the step should succeed
+    And the output should match:
+     | Gathering data for ns/openshift-image-registry... |
+     | Wrote inspect data to inspect.local.*             |
 
   # @author xiuwang@redhat.com
   # @case_id OCP-18995
