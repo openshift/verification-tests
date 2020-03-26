@@ -4,10 +4,10 @@ Feature: secrets related scenarios
   # @case_id OCP-10725
   Scenario: deployment hook volume inheritance --with secret volume
     Given I have a project
-    When I run the :secrets client command with:
-      | action | new        |
-      | name   | my-secret  |
-      | source | /etc/hosts |
+    And I run the :create_secret client command with:
+      | secret_type | generic    |   
+      | name        | my-secret  |
+      | from_file   | /etc/hosts |
     Then the step should succeed
     When I run the :create client command with:
       | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/deployment/tc510612/hook-inheritance-secret-volume.json |
