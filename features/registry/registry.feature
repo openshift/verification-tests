@@ -174,7 +174,8 @@ Feature: Testing registry
     When I run the :get admin command with:
       | resource      | deployments    |
       | resource_name | image-registry |
-
+    Then the step should succeed
+    
   # @author wewang@redhat.com
   # @case_id OCP-23063
   @admin
