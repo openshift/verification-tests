@@ -1,0 +1,34 @@
+{
+   "kind":"Policy",
+   "apiVersion":"v1",
+   "predicates":[
+      {
+         "name":"RegionAffinity",
+         "argument":{
+            "serviceAffinity":{
+               "labels":["region"]
+            }
+         }
+      }
+   ],
+   "priorities":[
+      {
+         "name":"ZoneSpread",
+         "weight":1,
+         "argument":{
+            "serviceAntiAffinity":{
+               "label":"zone"
+            }
+         }
+      },
+      {
+         "name":"RackSpread",
+         "weight":1,
+         "argument":{
+            "serviceAntiAffinity":{
+               "label":"rack"
+            }
+         }
+      }
+   ]
+}
