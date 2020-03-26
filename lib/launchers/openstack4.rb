@@ -34,6 +34,8 @@ module BushSlicer
                      'openstack_qeos7'
       @opts = default_opts(service_name).merge options
 
+      @proxy = opts[:proxy] || ENV["http_proxy"]
+
       @os_user = ENV['OPENSTACK_USER'] || opts[:user]
       unless @os_user
         Timeout::timeout(120) do
@@ -66,6 +68,10 @@ module BushSlicer
       self.get_token()
     end
 
+    def proxy_set?()
+        return @proxy ? true : false
+    end
+
     # @return [ResultHash]
     # @yield [req_result] if block is given, it is yielded with the result as
     #   param
@@ -79,12 +85,20 @@ module BushSlicer
         params = params.to_json
       end
 
-      res = Http.request(:url => "#{url}",
-                          :method => method,
-                          :payload => params,
-                          :headers => headers,
-                          :read_timeout => read_timeout,
-                          :open_timeout => open_timeout)
+      req_opts = {
+        :url => "#{url}",
+        :method => method,
+        :payload => params,
+        :headers => headers,
+        :read_timeout => read_timeout,
+        :open_timeout => open_timeout
+      }
+
+      if proxy_set?()
+        req_opts.merge!({ :proxy => @proxy })
+      end
+
+      res = Http.request(**req_opts)
 
       if res[:success]
         if res[:headers] && res[:headers]['content-type']
