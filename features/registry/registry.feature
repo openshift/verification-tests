@@ -179,6 +179,7 @@ Feature: Testing registry
   # @author wewang@redhat.com
   # @case_id OCP-23063
   @admin
+  @destructive
   Scenario: Check the related log from must-gather tool
     When I run the :delete admin command with:
       | object_type       | co             |
