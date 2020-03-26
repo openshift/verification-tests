@@ -810,7 +810,7 @@ Given /^a DHCP service is configured for interface "([^"]*)" on "([^"]*)" node w
   host.exec_admin("arp -a")
   logger.info("Logging last 10 lines of dnsmasq.conf to check if required config is not appended already which might help in debugging later")
   host.exec_admin("tail -10 /etc/dnsmasq.conf")
-  @result = host.exec_admin("cp /etc/dnsmasq.conf /etc/dnsmasq.conf.bak;curl https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/dnsmasq_for_testbridge.conf | sed s/testbr1/#{br_inf}/g | sed s/88.8.8.100,88.8.8.110,24h/#{add_lease}/g > /etc/dnsmasq.conf;systemctl restart dnsmasq --now")
+  @result = host.exec_admin("cp /etc/dnsmasq.conf /etc/dnsmasq.conf.bak;curl https://raw.githubusercontent.com/openshift/verification-tests/master/testdata/networking/multus-cni/dnsmasq_for_testbridge.conf | sed s/testbr1/#{br_inf}/g | sed s/88.8.8.100,88.8.8.110,24h/#{add_lease}/g > /etc/dnsmasq.conf;systemctl restart dnsmasq --now")
   raise "Failed to configure dnsmasq service" unless @result[:success]
   wait_for(dhcp_status_timeout) {
     if host.exec_admin("systemctl status dnsmasq")[:response].include? "running"
