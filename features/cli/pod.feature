@@ -160,9 +160,10 @@ Feature: pods related scenarios
   # @case_id OCP-11055
   Scenario: /dev/shm can be automatically shared among all of a pod's containers
     Given I have a project
-    When I run oc create over ERB URL: <%= ENV['BUSHSLICER_HOME'] %>/testdata/pods/pod_with_two_containers.json
+    When I run the :create client command with:
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/pods/pod_with_two_containers.json |
     Then the step should succeed
-    When the pod named "doublecontainers" becomes ready
+    And the pod named "doublecontainers" becomes ready
     # Enter container 1 and write files
     When I run the :exec client command with:
       | pod              | doublecontainers        |

@@ -50,11 +50,12 @@ Feature: Dynamic provisioning
     Given I have a project
     And I run the steps 30 times:
     """
-    When I run oc create over ERB URL: <%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/misc/pvc-ERB.json
+    When I create a dynamic pvc from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/misc/pvc.json" replacing paths:
+      | ["metadata"]["name"] | mypvc#{cb.i} |
     Then the step should succeed
     """
     Given 30 PVCs become :bound within 600 seconds with labels:
-      | name=dynamic-pvc-<%= project.name %> |
+      | name=dynamic-pvc |
     When I run the :get admin command with:
       | resource | pv |
     Then the output should contain 30 times:
