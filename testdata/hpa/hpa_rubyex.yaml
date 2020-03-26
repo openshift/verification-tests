@@ -1,0 +1,20 @@
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: test-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps.openshift.io/v1
+    kind: DeploymentConfig
+    name: ruby-ex
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:   
+  - type: Resource
+    resource:
+      name: cpu
+      targetAverageUtilization: 1
+  - type: Resource
+    resource:
+      name: memory
+      targetAverageValue: 200Mi
