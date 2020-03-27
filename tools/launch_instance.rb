@@ -397,7 +397,7 @@ module BushSlicer
           create_opts: launch_opts.dup,
           host_opts: host_opts
         )
-      when BushSlicer::OpenStack, BushSlicer::OpenStack4, BushSlicer::OpenStack10
+      when BushSlicer::OpenStack
         create_opts = {}
         res = iaas.launch_instances(
           names: host_names,
