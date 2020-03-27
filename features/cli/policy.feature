@@ -410,54 +410,52 @@ Feature: change the policy of user/service account
   @admin
   Scenario: User can know which serviceaccount and SA groups can create the podspec against the current sccs by CLI
     Given I have a project
-    When I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/scc/tc538264/PodSecurityPolicyReview.json"
-    Then the step should succeed
     Given I run the :policy_scc_review client command with:
-      | f | PodSecurityPolicyReview.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/scc/tc538264/PodSecurityPolicyReview.json |
     Then the step should succeed
     And the output should not match:
       | .*default.*restricted |
     Given I run the :policy_scc_review client command with:
-      | f | PodSecurityPolicyReview.json |
-      | n | <%= project.name %>          |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/scc/tc538264/PodSecurityPolicyReview.json |
+      | n | <%= project.name %>                                                                            |
     Then the step should succeed
     And the output should not match:
       | .*default.*restricted |
     Given I run the :policy_scc_review client command with:
-      | serviceaccount | default                      |
-      | f              | PodSecurityPolicyReview.json |
+      | serviceaccount | default                                                                                        |
+      | f              | <%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/scc/tc538264/PodSecurityPolicyReview.json |
     Then the step should succeed
     And the output should not match:
       | .*default.*restricted |
     Given I run the :policy_scc_review client command with:
-      | serviceaccount | default                      |
-      | f              | PodSecurityPolicyReview.json |
-      | n              | <%= project.name %>          |
+      | serviceaccount | default                                                                                        |
+      | f              | <%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/scc/tc538264/PodSecurityPolicyReview.json |
+      | n              | <%= project.name %>                                                                            |
     Then the step should succeed
     And the output should not match:
       | .*default.*restricted |
     Given SCC "restricted" is added to the "default" service account
     Given I run the :policy_scc_review client command with:
-      | f | PodSecurityPolicyReview.json |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/scc/tc538264/PodSecurityPolicyReview.json |
     Then the step should succeed
     And the output should match:
       | .*default.*restricted |
     Given I run the :policy_scc_review client command with:
-      | f | PodSecurityPolicyReview.json |
-      | n | <%= project.name %>          |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/scc/tc538264/PodSecurityPolicyReview.json |
+      | n | <%= project.name %>                                                                            |
     Then the step should succeed
     And the output should match:
       | .*default.*restricted |
     Given I run the :policy_scc_review client command with:
-      | serviceaccount | default                      |
-      | f              | PodSecurityPolicyReview.json |
+      | serviceaccount | default                                                                                        |
+      | f              | <%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/scc/tc538264/PodSecurityPolicyReview.json |
     Then the step should succeed
     And the output should match:
       | .*default.*restricted |
     Given I run the :policy_scc_review client command with:
-      | serviceaccount | default                      |
-      | f              | PodSecurityPolicyReview.json |
-      | n              | <%= project.name %>          |
+      | serviceaccount | default                                                                                        |
+      | f              | <%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/scc/tc538264/PodSecurityPolicyReview.json |
+      | n              | <%= project.name %>                                                                            |
     Then the step should succeed
     And the output should match:
       | .*default.*restricted |
