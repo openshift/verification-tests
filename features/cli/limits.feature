@@ -5,19 +5,17 @@ Feature: limit range related scenarios:
   @admin
   Scenario Outline: Limit range default request tests
     Given I have a project
-    Given admin uses the "<%= project.name %>" project
-    When I run oc create as admin over ERB URL: <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/<path>/limit.yaml
+    When I run the :create admin command with:
+      | f         | <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/<path>/limit.yaml |
+      | namespace | <%= project.name %>                                             |
     Then the step should succeed
     And I run the :describe client command with:
-      |resource | namespace |
-      | name    | <%= project.name %>     |
+      | resource | namespace           |
+      | name     | <%= project.name %> |
     And the output should match:
       | <expr1> |
       | <expr2> |
-    And I run the :delete admin command with:
-      | object_type | LimitRange |
-      | object_name_or_id | limits |
-    Then the step should succeed
+    And admin ensures "limits" limit_range is deleted from the "<%= project.name %>" project
 
     Examples:
       | path     | expr1                                                 | expr2                                                |
@@ -30,8 +28,9 @@ Feature: limit range related scenarios:
   @admin
   Scenario Outline: Limit range invalid values tests
     Given I have a project
-    Given admin uses the "<%= project.name %>" project
-    When I run oc create as admin over ERB URL: <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/<path>/limit.yaml
+    When I run the :create admin command with:
+      | f         | <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/<path>/limit.yaml |
+      | namespace | <%= project.name %>                                             |
     And the step should fail
     And the output should match:
       | LimitRange "limits" is invalid |
@@ -51,8 +50,9 @@ Feature: limit range related scenarios:
   @admin
   Scenario Outline: Limit range incorrect values
     Given I have a project
-    Given admin uses the "<%= project.name %>" project
-    When I run oc create as admin over ERB URL: <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/<path>/limit.yaml
+    When I run the :create admin command with:
+      | f         | <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/<path>/limit.yaml |
+      | namespace | <%= project.name %>                                             |
     And the step should fail
     And the output should match:
       | min\[memory\].*<expr2> value <expr3> is greater than <expr4> value <expr5> |
@@ -68,12 +68,13 @@ Feature: limit range related scenarios:
   @admin
   Scenario: Limit range does not allow min > defaultRequest
     Given I have a project
-    Given admin uses the "<%= project.name %>" project
-    When I run oc create as admin over ERB URL: <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/tc508046/limit.yaml
+    When I run the :create admin command with:
+      | f         | <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/tc508046/limit.yaml |
+      | namespace | <%= project.name %>                                               |
     Then the step should fail
     And the output should match:
-      | cpu.*min value 400m is greater than default request value 200m    |
-      | memory.*min value 2Gi is greater than default request value 1Gi   |
+      | cpu.*min value 400m is greater than default request value 200m  |
+      | memory.*min value 2Gi is greater than default request value 1Gi |
 
   # @author gpei@redhat.com
   # @author azagayno@redhat.com
@@ -81,12 +82,13 @@ Feature: limit range related scenarios:
   @admin
   Scenario: Limit range does not allow defaultRequest > default
     Given I have a project
-    Given admin uses the "<%= project.name %>" project
-    When I run oc create as admin over ERB URL: <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/tc508042/limit.yaml
+    When I run the :create admin command with:
+      | f         | <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/tc508042/limit.yaml |
+      | namespace | <%= project.name %>                                               |
     Then the step should fail
     And the output should match:
-      | cpu.*default request value 400m is greater than default limit value 200m       |
-      | memory.*default request value 2Gi is greater than default limit value 1Gi      |
+      | cpu.*default request value 400m is greater than default limit value 200m  |
+      | memory.*default request value 2Gi is greater than default limit value 1Gi |
 
   # @author gpei@redhat.com
   # @author azagayno@redhat.com
@@ -94,12 +96,13 @@ Feature: limit range related scenarios:
   @admin
   Scenario: Limit range does not allow defaultRequest > max
     Given I have a project
-    Given admin uses the "<%= project.name %>" project
-    When I run oc create as admin over ERB URL: <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/tc508043/limit.yaml
+    When I run the :create admin command with:
+      | f         | <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/tc508043/limit.yaml |
+      | namespace | <%= project.name %>                                               |
     Then the step should fail
     And the output should match:
-      | cpu.*default request value 400m is greater than max value 200m      |
-      | memory.*default request value 2Gi is greater than max value 1Gi     |
+      | cpu.*default request value 400m is greater than max value 200m  |
+      | memory.*default request value 2Gi is greater than max value 1Gi |
 
   # @author gpei@redhat.com
   # @author azagayno@redhat.com
@@ -107,12 +110,13 @@ Feature: limit range related scenarios:
   @admin
   Scenario: Limit range does not allow maxLimitRequestRatio > Limit/Request
     Given I have a project
-    Given admin uses the "<%= project.name %>" project
-    When I run oc create as admin over ERB URL: <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/tc508044/limit.yaml
+    When I run the :create admin command with:
+      | f         | <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/tc508044/limit.yaml |
+      | namespace | <%= project.name %>                                               |
     Then the step should succeed
     And I run the :describe client command with:
-      |resource | namespace            |
-      | name    | <%= project.name %>  |
+      | resource | namespace           |
+      | name     | <%= project.name %> |
     Then the output should match:
       | Container\\s+cpu\\s+\-\\s+\-\\s+\-\\s+\-\\s+4    |
       | Container\\s+memory\\s+\-\\s+\-\\s+\-\\s+\-\\s+4 |
@@ -120,7 +124,7 @@ Feature: limit range related scenarios:
       | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/tc508044/pod.yaml |
     Then the step should fail
     And the output should contain:
-      | cpu max limit to request ratio per Container is 4, but provided ratio is 15.000000              |
+      | cpu max limit to request ratio per Container is 4, but provided ratio is 15.000000 |
 
   # @author gpei@redhat.com
   # @author azagayno@redhat.com
@@ -128,12 +132,13 @@ Feature: limit range related scenarios:
   @admin
   Scenario: Limit range with all values set with proper values
     Given I have a project
-    Given admin uses the "<%= project.name %>" project
-    When I run oc create as admin over ERB URL: <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/tc508048/limit.yaml
+    When I run the :create admin command with:
+      | f         | <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/tc508048/limit.yaml |
+      | namespace | <%= project.name %>                                               |
     Then the step should succeed
     And I run the :describe client command with:
-      |resource | namespace            |
-      | name    | <%= project.name %>  |
+      | resource | namespace           |
+      | name     | <%= project.name %> |
     Then the output should match:
       | Pod\\s+cpu\\s+20m\\s+960m\\s+\-\\s+\-\\s+\-                |
       | Pod\\s+memory\\s+10Mi\\s+1Gi\\s+\-\\s+\-\\s+\-             |
@@ -141,14 +146,10 @@ Feature: limit range related scenarios:
       | Container\\s+memory\\s+5Mi\\s+512Mi\\s+128Mi\\s+256Mi\\s+4 |
     When I run the :create client command with:
       | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/tc508048/pod.yaml |
-      | n | <%= project.name %>  |
     Then the step should succeed
     And I wait for the steps to pass:
     """
-    When I run the :get client command with:
-      | resource      | pod    |
-      | resource_name | mypod  |
-      | o             | yaml   |
+    When I get project pod named "mypod" as YAML
     Then the output should match:
       | \\s+limits:\n\\s+cpu: 300m\n\\s+memory: 300Mi\n   |
       | \\s+requests:\n\\s+cpu: 100m\n\\s+memory: 100Mi\n |

@@ -6,7 +6,7 @@ Feature: Quota related scenarios
     Given I have a project
     When I run the :create admin command with:
       | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/quota/myquota.yaml |
-      | n | <%= project.name %>                                                                   |
+      | n | <%= project.name %>                                       |
     Then the step should succeed
     And I wait up to 60 seconds for the steps to pass:
     """
@@ -17,7 +17,8 @@ Feature: Quota related scenarios
       | cpu\\s+0\\s+30      |
       |	memory\\s+0\\s+16Gi |
     """
-    When I run oc create over ERB URL: <%= ENV['BUSHSLICER_HOME'] %>/testdata/quota/<path>/<file>
+    When I run the :create client command with:
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/quota/<path>/<file> |
     Then the step should succeed
     And the pod named "<pod_name>" becomes ready
     When I run the :describe client command with:
@@ -51,7 +52,8 @@ Feature: Quota related scenarios
       | cpu\\s+0\\s+30      |
       | memory\\s+0\\s+16Gi |
     """
-    When I run oc create over ERB URL: <%= ENV['BUSHSLICER_HOME'] %>/testdata/quota/tc509096/pod-request-limit-invalid-1.yaml
+    When I run the :create client command with:
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/quota/tc509096/pod-request-limit-invalid-1.yaml |
     Then the step should fail
     And the output should match:
       | (?i)Failed quota: myquota: must specify cpu,memory |
@@ -69,7 +71,7 @@ Feature: Quota related scenarios
     Given I have a project
     When I run the :create admin command with:
       | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/quota/myquota.yaml |
-      | n | <%= project.name %>                                                                   |
+      | n | <%= project.name %>                                       |
     Then the step should succeed
     And I wait up to 60 seconds for the steps to pass:
     """
@@ -80,7 +82,8 @@ Feature: Quota related scenarios
       | cpu\\s+0\\s+30      |
       | memory\\s+0\\s+16Gi |
     """
-    When I run oc create over ERB URL: <%= ENV['BUSHSLICER_HOME'] %>/testdata/quota/tc509095/pod-request-limit-invalid-2.yaml
+    When I run the :create client command with:
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/quota/tc509095/pod-request-limit-invalid-2.yaml |
     Then the step should fail
     And the output should match:
       | Invalid value: "(5\|6)00m": must be (greater\|less) than or equal to( cpu)? (request\|limit)  |
@@ -102,7 +105,7 @@ Feature: Quota related scenarios
     Given I have a project
     When I run the :create admin command with:
       | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/quota/myquota.yaml |
-      | n | <%= project.name %>                                                                   |
+      | n | <%= project.name %>                                       |
     Then the step should succeed
     And I wait up to 60 seconds for the steps to pass:
     """
@@ -113,7 +116,8 @@ Feature: Quota related scenarios
       | cpu\\s+0\\s+30      |
       | memory\\s+0\\s+16Gi |
     """
-    When I run oc create over ERB URL: <%= ENV['BUSHSLICER_HOME'] %>/testdata/quota/tc509094/pod-request-limit-invalid-3.yaml
+    When I run the :create client command with:
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/quota/tc509094/pod-request-limit-invalid-3.yaml |
     Then the step should fail
     And the output should match:
       | Error from server.*forbidden: (?i)Exceeded quota.* |
@@ -131,7 +135,7 @@ Feature: Quota related scenarios
     Given I have a project
     When I run the :create admin command with:
       | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/quota/myquota.yaml |
-      | n | <%= project.name %>                                                                   |
+      | n | <%= project.name %>                                       |
     Then the step should succeed
     When  I run the :describe client command with:
       | resource | quota   |

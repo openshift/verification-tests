@@ -54,13 +54,6 @@ Feature: Testing Admin Scenarios
     Given default docker-registry deployment config is restored after scenario
 
   @admin
-  Scenario: admin use the specific project
-    Given I have a project
-    Given admin uses the "<%= project.name %>" project
-    When I run oc create as admin over ERB URL: <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/tc508038/limit.yaml
-    Then the step should succeed
-
-  @admin
   Scenario: get rpm information from puddle
     Given I save the rpm name matching /openshift-ansible/ from puddle to the :playbook_rpm_name clipboard
     And I download a file from "<%= cb.puddle_url + "/Packages/" + cb.playbook_rpm_name.first %>"
