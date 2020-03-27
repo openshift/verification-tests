@@ -30,7 +30,7 @@ module BushSlicer
         when "azure"
           BushSlicer::Azure.new(service_name: service_name)
         when "openstack"
-          BushSlicer::OpenStack.instance(service_name: service_name)
+          BushSlicer::OpenStack.new(service_name: service_name)
         when "gce"
           BushSlicer::GCE.new(service_name: service_name)
         when "vsphere"
