@@ -99,19 +99,16 @@ Feature: Testing route
     When I run the :create client command with:
       | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/unsecure/service_unsecure.json |
     Then the step should succeed
-    Given I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/edge/route_edge-www.edge.com.crt"
-    And I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/edge/route_edge-www.edge.com.key"
-    And I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/ca.pem"
 
     Given I have a pod-for-ping in the project
     And CA trust is added to the pod-for-ping
     When I run the :create_route_edge client command with:
-      | name | route-edge |
-      | hostname | <%= rand_str(5, :dns) %>-edge.example.com |
-      | service | service-unsecure |
-      | cert | route_edge-www.edge.com.crt |
-      | key | route_edge-www.edge.com.key |
-      | cacert | ca.pem |
+      | name     | route-edge                                                                      |
+      | hostname | <%= rand_str(5, :dns) %>-edge.example.com                                       |
+      | service  | service-unsecure                                                                |
+      | cert     | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/edge/route_edge-www.edge.com.crt |
+      | key      | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/edge/route_edge-www.edge.com.key |
+      | cacert   | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/ca.pem                           |
     Then the step should succeed
     And I wait up to 20 seconds for the steps to pass:
     """
@@ -127,8 +124,7 @@ Feature: Testing route
     Then the output should contain "Hello-OpenShift"
     """
     When I execute on the pod:
-      | cat |
-      | /tmp/cookie.txt |
+      | cat | /tmp/cookie.txt |
     Then the step should succeed
     And the output should not contain "OPENSHIFT"
     And the output should not match "\d+\.\d+\.\d+\.\d+"
@@ -179,21 +175,17 @@ Feature: Testing route
     When I run the :create client command with:
       | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/reencrypt/service_secure.json |
     Then the step should succeed
-    Given I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/reencrypt/route_reencrypt-reen.example.com.crt"
-    And I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/reencrypt/route_reencrypt-reen.example.com.key"
-    And I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/reencrypt/route_reencrypt.ca"
-    And I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/reencrypt/route_reencrypt_dest.ca"
 
     Given I have a pod-for-ping in the project
     And CA trust is added to the pod-for-ping
     When I run the :create_route_reencrypt client command with:
-      | name | route-reencrypt |
-      | hostname | <%= rand_str(5, :dns) %>-reen.example.com |
-      | service | service-secure |
-      | cert | route_reencrypt-reen.example.com.crt |
-      | key | route_reencrypt-reen.example.com.key |
-      | cacert | route_reencrypt.ca |
-      | destcacert | route_reencrypt_dest.ca |
+      | name       | route-reencrypt                                                                               |
+      | hostname   | <%= rand_str(5, :dns) %>-reen.example.com                                                     |
+      | service    | service-secure                                                                                |
+      | cert       | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/reencrypt/route_reencrypt-reen.example.com.crt |
+      | key        | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/reencrypt/route_reencrypt-reen.example.com.key |
+      | cacert     | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/reencrypt/route_reencrypt.ca                   |
+      | destcacert | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/reencrypt/route_reencrypt_dest.ca              |
     Then the step should succeed
     And I wait up to 20 seconds for the steps to pass:
     """
@@ -209,8 +201,7 @@ Feature: Testing route
     Then the output should contain "Hello-OpenShift"
     """
     When I execute on the pod:
-      | cat |
-      | /tmp/cookie.txt |
+      | cat | /tmp/cookie.txt |
     Then the step should succeed
     And the output should not contain "OPENSHIFT"
     And the output should not match "\d+\.\d+\.\d+\.\d+"
@@ -250,8 +241,7 @@ Feature: Testing route
       | -k |
     Then the output should contain "Application is not available"
     When I execute on the pod:
-      | cat |
-      | /tmp/cookie.txt |
+      | cat | /tmp/cookie.txt |
     Then the step should succeed
     And the output should not contain "OPENSHIFT"
     And the output should not match "\d+\.\d+\.\d+\.\d+"
@@ -270,22 +260,18 @@ Feature: Testing route
     When I run the :create client command with:
       | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/reencrypt/service_secure.json |
     Then the step should succeed
-    Given I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/reencrypt/route_reencrypt-reen.example.com.crt"
-    And I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/reencrypt/route_reencrypt-reen.example.com.key"
-    And I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/reencrypt/route_reencrypt.ca"
-    And I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/reencrypt/route_reencrypt_dest.ca"
 
     Given I have a pod-for-ping in the project
     And CA trust is added to the pod-for-ping
     When I run the :create_route_reencrypt client command with:
-      | name | route-recrypt |
-      | hostname | <%= rand_str(5, :dns) %>-reen.example.com |
-      | service | service-secure |
-      | cert | route_reencrypt-reen.example.com.crt |
-      | key | route_reencrypt-reen.example.com.key |
-      | cacert | route_reencrypt.ca |
-      | destcacert | route_reencrypt_dest.ca |
-      | path | /test |
+      | name       | route-recrypt                                                                                 |
+      | hostname   | <%= rand_str(5, :dns) %>-reen.example.com                                                     |
+      | service    | service-secure                                                                                |
+      | cert       | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/reencrypt/route_reencrypt-reen.example.com.crt |
+      | key        | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/reencrypt/route_reencrypt-reen.example.com.key |
+      | cacert     | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/reencrypt/route_reencrypt.ca                   |
+      | destcacert | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/reencrypt/route_reencrypt_dest.ca              |
+      | path       | /test                                                                                         |
     Then the step should succeed
     And I wait up to 20 seconds for the steps to pass:
     """
@@ -404,8 +390,7 @@ Feature: Testing route
     And the output should not contain:
       | HTTP/1.1 302 Found |
     And I execute on the pod:
-      | cat |
-      | /tmp/cookie |
+      | cat | /tmp/cookie |
     Then the step should succeed
     And the output should match:
       | FALSE.*FALSE |
@@ -524,11 +509,10 @@ Feature: Testing route
     Then the step should succeed
 
     #create reencrypt termination route
-    Given I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/reencrypt/route_reencrypt_dest.ca"
     When I run the :create_route_reencrypt client command with:
-      | name       | reen |
-      | service    | service-secure     |
-      | destcacert | route_reencrypt_dest.ca |
+      | name       | reen                                                                             |
+      | service    | service-secure                                                                   |
+      | destcacert | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/reencrypt/route_reencrypt_dest.ca |
     Then the step should succeed
     # Set insecureEdgeTerminationPolicy to Redirect
     When I run the :patch client command with:
@@ -637,8 +621,7 @@ Feature: Testing route
       | HTTP/1.1 302 Found |
       | ocation: https:// |
     And I execute on the pod:
-      | cat |
-      | /tmp/cookie |
+      | cat | /tmp/cookie |
     Then the step should succeed
     And the output should match:
       | FALSE.*TRUE |
@@ -647,12 +630,11 @@ Feature: Testing route
     Given I run the :create client command with:
       | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/passthrough/service_secure.json |
     Then the step should succeed
-    Given I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/reencrypt/route_reencrypt_dest.ca"
     When I run the :create_route_reencrypt client command with:
-      | name       | reen                    |
-      | service    | service-secure          |
-      | destcacert | route_reencrypt_dest.ca |
-      | insecure_policy | Redirect           |
+      | name            | reen                                                                             |
+      | service         | service-secure                                                                   |
+      | destcacert      | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/reencrypt/route_reencrypt_dest.ca |
+      | insecure_policy | Redirect                                                                         |
     Then the step should succeed
     And I wait up to 20 seconds for the steps to pass:
     """
@@ -671,8 +653,7 @@ Feature: Testing route
       | ocation: https:// |
     """
     And I execute on the pod:
-      | cat |
-      | /tmp/cookie-reen |
+      | cat | /tmp/cookie-reen |
     Then the step should succeed
     And the output should match:
       | FALSE.*TRUE |
