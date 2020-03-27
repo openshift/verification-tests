@@ -107,7 +107,7 @@ Feature: MachineHealthCheck Test Scenarios
     Given I create the 'Ready' unhealthyCondition
     Given a pod becomes ready with labels:
       | api=clusterapi, k8s-app=controller |
-    And I wait for the steps to pass:
+    And I wait up to 600 seconds for the steps to pass:
     """
     When I run the :logs admin command with:
       | resource_name | <%= pod.name %>                |
