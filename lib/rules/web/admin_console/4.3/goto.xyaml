@@ -221,4 +221,8 @@ goto_all_machines_page:
 goto_all_machine_sets_page: 
   url: k8s/all-namespaces/machine.openshift.io~v1beta1~MachineSet
 
-
+#hpa
+goto_hpas_page:
+  url: k8s/ns/<project_name>/horizontalpodautoscalers
+goto_one_hpa_page:
+  url: k8s/ns/<project_name>/horizontalpodautoscalers/<hpa_name>

@@ -494,6 +494,21 @@ check_resource_details:
   action:
     if_param: short_names
     ref: check_short_names
+  action:
+    if_param: scale_target
+    ref: check_scale_target
+  action:
+    if_param: min_replicas
+    ref: check_hpa_min_replicas
+  action:
+    if_param: max_replicas
+    ref: check_hpa_max_replicas
+  action:
+    if_param: current_replicas
+    ref: check_current_replicas
+  action:
+    if_param: desired_replicas
+    ref: check_desired_replicas
 check_resource_details_key_and_value:
   element: &key_value
     selector:
@@ -703,4 +718,29 @@ check_short_names:
   params:
     key: Short Names
     value: <short_names>
+  action: check_resource_details_key_and_value
+check_scale_target:
+  params:
+    key: Scale Target
+    value: <scale_target>
+  action: check_resource_details_key_and_value
+check_current_replicas:
+  params:
+    key: Current Replicas
+    value: <current_replicas>
+  action: check_resource_details_key_and_value
+check_desired_replicas:
+  params:
+    key: Desired Replicas
+    value: <desired_replicas>
+  action: check_resource_details_key_and_value
+check_hpa_min_replicas:
+  params:
+    key: Min Replicas
+    value: <min_replicas>
+  action: check_resource_details_key_and_value
+check_hpa_max_replicas:
+  params:
+    key: Max Replicas
+    value: <max_replicas>
   action: check_resource_details_key_and_value
