@@ -94,7 +94,7 @@ Feature: buildlogic.feature
   Scenario Outline: ForcePull image for build
     Given I have a project
     When I run the :create client command with:
-      | f | <template> |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/forcePull/<template> |
     Then the step should succeed
     Given the "ruby-sample-build-1" build was created
     And the "ruby-sample-build-1" build becomes :running
@@ -106,11 +106,11 @@ Feature: buildlogic.feature
       | Force Pull:\s+(true\|yes)|
 
     Examples:
-      | template                                                                                                                    |
-      | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/forcePull/buildconfig-docker-ImageStream.json      | # @case_id OCP-10651
-      | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/forcePull/buildconfig-s2i-ImageStream.json         | # @case_id OCP-11148
-      | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/forcePull/buildconfig-docker-dockerimage.json      | # @case_id OCP-10652
-      | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/forcePull/buildconfig-s2i-dockerimage.json         | # @case_id OCP-11149
+      | template                            |
+      | buildconfig-docker-ImageStream.json | # @case_id OCP-10651
+      | buildconfig-s2i-ImageStream.json    | # @case_id OCP-11148
+      | buildconfig-docker-dockerimage.json | # @case_id OCP-10652
+      | buildconfig-s2i-dockerimage.json    | # @case_id OCP-11149
 
   # @author yantan@redhat.com
   # @case_id OCP-10745

@@ -18,10 +18,10 @@ Feature: Testing haproxy rate limit related features
     And evaluation of `pod.ip` is stored in the :pod_ip clipboard
 
     When I run the :create client command with:
-      | f | <service> |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/routetimeout/<service> |
     Then the step should succeed
     When I run the :create client command with:
-      | f | <route> |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/<route> |
     Then the step should succeed
     When I run the :annotate client command with:
       | resource     | route        |
@@ -40,8 +40,8 @@ Feature: Testing haproxy rate limit related features
     """
 
     Examples:
-      | route_type | route_name | service | route | resolve_str | url | pass_num | fail_num |
-      | unsecure | route | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/routetimeout/unsecure/service_unsecure.json | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/unsecure/route_unsecure.json | unsecure.example.com:80 | http://unsecure.example.com | 1 | 3 |
-      | edge | secured-edge-route | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/routetimeout/edge/service_unsecure.json | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/edge/route_edge.json | test-edge.example.com:443 | https://test-edge.example.com | 2 | 2 |
-      | reen | route-reencrypt | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/routetimeout/reencrypt/service_secure.json | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/reencrypt/route_reencrypt.json | test-reen.example.com:443 | https://test-reen.example.com | 3 | 1 |
+      | route_type | route_name         | service                        | route                          | resolve_str               | url                           | pass_num |
+      | unsecure   | route              | unsecure/service_unsecure.json | unsecure/route_unsecure.json   | unsecure.example.com:80   | http://unsecure.example.com   | 1        |
+      | edge       | secured-edge-route | edge/service_unsecure.json     | edge/route_edge.json           | test-edge.example.com:443 | https://test-edge.example.com | 2        |
+      | reen       | route-reencrypt    | reencrypt/service_secure.json  | reencrypt/route_reencrypt.json | test-reen.example.com:443 | https://test-reen.example.com | 3        |
 

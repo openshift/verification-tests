@@ -15,10 +15,10 @@ Feature: Testing wildcard routes
     Then the step should succeed
     And the pod named "caddy-docker" becomes ready
     When I run the :create client command with:
-      | f | "<service>" |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/<service> |
     Then the step should succeed
     When I run the :create client command with:
-      | f | "<route>" |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/wildcard_route/<route> |
     Then the step should succeed
 
     Given I have a pod-for-ping in the project
@@ -44,8 +44,8 @@ Feature: Testing wildcard routes
     And the output should contain "Hello-OpenShift"
 
     Examples:
-      | route_type | service | route | route-suffix |
-      | edge | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/edge/service_unsecure.json | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/wildcard_route/route_edge.json | edge.example.com | # @case_id OCP-11403
-      | reencrypt | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/reencrypt/service_secure.json | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/wildcard_route/route_reencrypt.json | reen.example.com | # @case_id OCP-11855
-      | passthrough | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/passthrough/service_secure.json | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/wildcard_route/route_pass.json | pass.example.com | # @case_id OCP-11671
+      | route_type  | service                         | route                | route-suffix     |
+      | edge        | edge/service_unsecure.json      | route_edge.json      | edge.example.com | # @case_id OCP-11403
+      | reencrypt   | reencrypt/service_secure.json   | route_reencrypt.json | reen.example.com | # @case_id OCP-11855
+      | passthrough | passthrough/service_secure.json | route_pass.json      | pass.example.com | # @case_id OCP-11671
 
