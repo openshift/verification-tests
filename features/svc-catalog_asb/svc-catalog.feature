@@ -54,7 +54,9 @@ Feature: Service-catalog related scenarios
       | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/ups-binding-template.yaml |
       | p | USER_PROJECT=<%= cb.user_project %>                                                                      |
     Then the step should succeed
-    Given I check that the "my-secret" secret exists
+    #Given I check that the "my-secret" secret exists
+    Given I wait for the "my-secret" secret to appear up to 60 seconds
+
     And I wait up to 10 seconds for the steps to pass:
     """
     When I run the :describe client command with:
@@ -220,7 +222,6 @@ Feature: Service-catalog related scenarios
     # Deploy ups broker
     Given admin ensures "ups-broker" clusterservicebroker is deleted after scenario
     Given admin ensures "ups-instance" serviceinstance is deleted
-    Given admin ensures "ups-broker" clusterservicebroker is deleted
     When I switch to cluster admin pseudo user
     And I use the "<%= cb.ups_broker_project %>" project
     When I process and create:
@@ -277,8 +278,6 @@ Feature: Service-catalog related scenarios
     And evaluation of `project.name` is stored in the :user_project clipboard
 
     # Deploy ups broker
-    Given admin ensures "ups-broker" clusterservicebroker is deleted after scenario
-    Given admin ensures "ups-broker" clusterservicebroker is deleted
     When I switch to cluster admin pseudo user
     And I use the "<%= cb.ups_broker_project %>" project
     When I process and create:
@@ -334,7 +333,8 @@ Feature: Service-catalog related scenarios
 
     # Delete servicebinding
     Given admin ensures "ups-binding" servicebinding is deleted
-    And I wait for the resource "secret" named "my-secret" to disappear within 60 seconds  
+    And I wait for the resource "secret" named "my-secret" to disappear within 60 seconds
+    Given admin ensures "ups-broker" clusterservicebroker is deleted after scenario  
 
   # @author chezhang@redhat.com
   # @case_id OCP-15602
