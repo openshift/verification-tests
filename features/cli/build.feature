@@ -344,7 +344,7 @@ Feature: build 'apps' with CLI
       | object_name_or_id |  <bc_name> |
     Then the step should succeed
     When I run the :create client command with:
-      | f | <file_name> |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/<file_name> |
     When I get project build_config named "<bc_name>"
     Then the step should succeed
     When I run the :start_build client command with:
@@ -353,9 +353,9 @@ Feature: build 'apps' with CLI
     Given the "<build_name>" build becomes :complete
 
     Examples:
-      | bc_name              | build_name             | file_name                                                                                             |
-      | ruby-sample-build-ns | ruby-sample-build-ns-1 | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/tc525736/Nonesrc-sti.json    | # @case_id OCP-11580
-      | ruby-sample-build-nc | ruby-sample-build-nc-1 | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/tc525735/Nonesrc-docker.json | # @case_id OCP-11268
+      | bc_name              | build_name             | file_name                    |
+      | ruby-sample-build-ns | ruby-sample-build-ns-1 | tc525736/Nonesrc-sti.json    | # @case_id OCP-11580
+      | ruby-sample-build-nc | ruby-sample-build-nc-1 | tc525735/Nonesrc-docker.json | # @case_id OCP-11268
 
   # @author cryan@redhat.com
   # @case_id OCP-11582

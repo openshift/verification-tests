@@ -73,15 +73,15 @@ Feature: buildconfig.feature
      | type        | kubernetes.io/dockercfg                                                         |
     Then the step should succeed
     When I run the :create client command with:
-      | f | <template> |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/<template> |
     Then the step should succeed
     And the "ruby-sample-build-1" build was created
     Then the "ruby-sample-build-1" build completes
 
     Examples:
-      | template                                                                                                       |
-      | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/tc479540/test-buildconfig-docker.json | # @case_id OCP-11110
-      | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/tc479541/test-buildconfig-s2i.json    | # @case_id OCP-11474
+      | template                              |
+      | tc479540/test-buildconfig-docker.json | # @case_id OCP-11110
+      | tc479541/test-buildconfig-s2i.json    | # @case_id OCP-11474
 
   # @author xiuwang@redhat.com
   # @case_id OCP-12057

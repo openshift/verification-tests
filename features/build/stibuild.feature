@@ -20,7 +20,7 @@ Feature: stibuild.feature
   Scenario Outline: Trigger s2i/docker/custom build using additional imagestream
     Given I have a project
     And I run the :new_app client command with:
-      | file | <template> |
+      | file | <%= ENV['BUSHSLICER_HOME'] %>/testdata/templates/<template> |
     Then the step should succeed
     And the "sample-build-1" build was created
     When I run the :cancel_build client command with:
@@ -49,10 +49,10 @@ Feature: stibuild.feature
     And the output should not contain "sample-build-4"
 
     Examples:
-      |template|
-      |<%= ENV['BUSHSLICER_HOME'] %>/testdata/templates/tc498848/tc498848-s2i.json   | # @case_id OCP-12041
-      |<%= ENV['BUSHSLICER_HOME'] %>/testdata/templates/tc498847/tc498847-docker.json| # @case_id OCP-11911
-      |<%= ENV['BUSHSLICER_HOME'] %>/testdata/templates/tc498846/tc498846-custom.json| # @case_id OCP-11739
+      | template                      |
+      | tc498848/tc498848-s2i.json    | # @case_id OCP-12041
+      | tc498847/tc498847-docker.json | # @case_id OCP-11911
+      | tc498846/tc498846-custom.json | # @case_id OCP-11739
 
   # @author wewang@redhat.com
   # @case_id OCP-15464
