@@ -1154,7 +1154,6 @@ Feature: Multus-CNI related scenarios
     Then the step should succeed
     And evaluation of `@result[:response].match(/\h+:\h+:\h+:\h+:\h+:\h+/)[0]` is stored in the :default_interface_mac clipboard
     # Create the net-attach-def via cluster admin
-    And I pry
     Given I have a project
     When I run oc create as admin over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/ipvlan-host-local.yaml" replacing paths:
       | ["metadata"]["name"]      | myipvlan76 											      								            |
