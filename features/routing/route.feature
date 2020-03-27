@@ -665,7 +665,6 @@ Feature: Testing route
     When I run the :create client command with:
       | f |  <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/reencrypt/reencrypt-without-all-cert.yaml |
     Then the step should succeed
-    And I pry
     And all pods in the project are ready
     Given I use the "service-secure" service
     When I wait up to 20 seconds for a secure web server to become available via the "route-reencrypt" route
