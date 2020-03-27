@@ -257,7 +257,7 @@ module BushSlicer
     attr_accessor :os
 
     def initialize(jenkins: nil)
-      @os = OpenStack10.new
+      @os = OpenStack.new
       @jenkins = jenkins
     end
 
