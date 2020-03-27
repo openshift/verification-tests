@@ -11,9 +11,9 @@ Before('@commonlogging') do
   step %Q/I use the "openshift-logging" project/
   unless cluster_logging("instance").exists?
     step %Q/I create clusterlogging instance with:/, table(%{
-      | remove_logging_pods | false                                                                                                  |
+      | remove_logging_pods | false                                                                      |
       | crd_yaml            | <%= ENV['BUSHSLICER_HOME'] %>/testdata/logging/clusterlogging/example.yaml |
-      | log_collector       | fluentd                                                                                                |
+      | log_collector       | fluentd                                                                    |
     })
   end
 end
