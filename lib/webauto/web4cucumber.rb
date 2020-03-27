@@ -139,7 +139,7 @@ require_relative 'chrome_extension'
           chrome_caps[:element_scroll_behavior] = @scroll_strategy
         end
         if self.class.container?
-          chrome_switches.concat %w[--no-sandbox --disable-setuid-sandbox --disable-gpu --disable-infobars]
+          chrome_switches.concat %w[--no-sandbox --disable-setuid-sandbox --disable-gpu --disable-infobars --disable-dev-shm-usage]
         end
         # options = Selenium::WebDriver::Chrome::Options.new
         # options.add_extension proxy_chrome_ext_file if proxy_chrome_ext_file
