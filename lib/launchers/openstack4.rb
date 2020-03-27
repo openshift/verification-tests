@@ -94,7 +94,7 @@ module BushSlicer
         :open_timeout => open_timeout
       }
 
-      if proxy_set?()
+      if proxy_set?
         req_opts.merge!({ :proxy => @proxy })
       end
 
