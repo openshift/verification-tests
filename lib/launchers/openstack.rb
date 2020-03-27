@@ -94,6 +94,10 @@ module BushSlicer
         :open_timeout => open_timeout
       }
 
+      if opts.has_key? :proxy
+        req_opts[:proxy] = opts[:proxy]
+      end
+
       case method
       when "GET", "DELETE"
         req_opts[:params] = params
