@@ -48,7 +48,7 @@ Feature: TSB related scenarios
     And the output should contain "No resources found"
     # Create customer resource for the operator
     When I process and create:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/olm/asb-cr-template.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/olm/tsb-cr-template.yaml |
     Then the step should succeed
     And I wait up to 180 seconds for the steps to pass:
     """
@@ -106,7 +106,7 @@ Feature: TSB related scenarios
     """
     # Recreate a TSB
     When I process and create:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/olm/asb-cr-template.yaml |
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/olm/tsb-cr-template.yaml |
     Then the step should succeed
     And I wait up to 180 seconds for the steps to pass:
     """
