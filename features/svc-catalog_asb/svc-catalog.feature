@@ -278,6 +278,7 @@ Feature: Service-catalog related scenarios
     And evaluation of `project.name` is stored in the :user_project clipboard
 
     # Deploy ups broker
+    Given admin ensures "ups-broker" clusterservicebroker is deleted after scenario
     When I switch to cluster admin pseudo user
     And I use the "<%= cb.ups_broker_project %>" project
     When I process and create:
@@ -333,8 +334,7 @@ Feature: Service-catalog related scenarios
 
     # Delete servicebinding
     Given admin ensures "ups-binding" servicebinding is deleted
-    And I wait for the resource "secret" named "my-secret" to disappear within 60 seconds
-    Given admin ensures "ups-broker" clusterservicebroker is deleted after scenario  
+    And I wait for the resource "secret" named "my-secret" to disappear within 60 seconds  
 
   # @author chezhang@redhat.com
   # @case_id OCP-15602
