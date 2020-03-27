@@ -1136,6 +1136,13 @@
     :sync_config: --sync-config=<value>
     :type: --type=<value>
     :whitelist: --whitelist=<value>
+:oadm_inspect:
+  :cmd: oc adm inspect
+  :options:
+    :all_namespaces: --all-namespaces=<value>
+    :dest_dir: --dest-dir=<value>
+    :resource: <value>
+    :resource_name: <value>
 :oadm_new_project:
   :cmd: oc adm new-project <project_name>
   #:expected:
