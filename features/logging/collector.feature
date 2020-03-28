@@ -9,25 +9,36 @@ Feature: collector related tests
   Scenario: All nodes logs are sent to Elasticsearch
     Given the master version == "4.1"
     Given evaluation of `cluster_logging('instance').fluentd_ready_pods.map(&:ip)` is stored in the :collector_pod_ips clipboard
+    #A workaround to https://bugzilla.redhat.com/show_bug.cgi?id=1776594
+    And I wait for the ".operations" index to appear in the ES pod with labels "es-node-master=true"
+    Given I perform the HTTP request on the ES pod with labels "es-node-master=true":
+      | relative_url | .operations.* |
+      | op           | DELETE        |
+    Then the step should succeed
+    Given I perform the HTTP request on the ES pod with labels "es-node-master=true":
+      | relative_url | project.* |
+      | op           | DELETE    |
+    Then the step should succeed
+    #Workaround end
     And I wait for the ".operations" index to appear in the ES pod with labels "es-node-master=true"
     Given I get the ".operations" logging index information from a pod with labels "es-node-master=true"
     And the expression should be true> cb.index_data['docs.count'] > "0"
-    And I perform the HTTP request on the ES pod with labels "es-node-master=true":
+    Given I wait up to 300 seconds for the steps to pass:
+    """
+    Then I perform the HTTP request on the ES pod with labels "es-node-master=true":
       | relative_url | _search?pretty&size=0' -H 'Content-Type: application/json' -d'{"aggs" : {"exists_field_kubernetes" : {"filter": {"exists": {"field":"kubernetes"}},"aggs" : {"distinct_fluentd_ip" : {"terms" : {"field" : "pipeline_metadata.collector.ipaddr4"}}}}}} |
-      | op           | GET                                                                                                                                                                                                                     |
+      | op           | GET     |
     Then the step should succeed
-    Given I repeat the following steps for each :ip in cb.collector_pod_ips:
-    """
-    And the expression should be true> @result[:response].include? cb.ip
-    """
+
+    Given evaluation of `JSON.parse(@result[:response])['aggregations']['exists_field_kubernetes']['distinct_fluentd_ip']['buckets'].map {|furn| furn["key"]}` is stored in the :kuber_ips clipboard
+    And the expression should be true> Set.new(cb.node_ips) == Set.new(cb.kuber_ips)
 
     And I perform the HTTP request on the ES pod with labels "es-node-master=true":
       | relative_url | _search?pretty&size=0' -H 'Content-Type: application/json' -d'{"aggs" : {"exists_field_kubernetes" : {"filter": {"exists": {"field":"systemd"}},"aggs" : {"distinct_fluentd_ip" : {"terms" : {"field" : "pipeline_metadata.collector.ipaddr4"}}}}}} |
-      | op           | GET                                                                                                                                                                                                                     |
+      | op           | GET   |
     Then the step should succeed
-    Given I repeat the following steps for each :ip in cb.collector_pod_ips:
-    """
-    And the expression should be true> @result[:response].include? cb.ip
+    Given evaluation of `JSON.parse(@result[:response])['aggregations']['exists_field_kubernetes']['distinct_fluentd_ip']['buckets'].map {|furn| furn["key"]}` is stored in the :journal_ips clipboard
+    And the expression should be true> Set.new(cb.node_ips) == Set.new(cb.journal_ips)
     """
 
   # @author qitang@redhat.com
@@ -42,25 +53,37 @@ Feature: collector related tests
       | component=<%= cb.collection_type %> |
     And evaluation of `@pods.map {|n| n.node_ip}.uniq` is stored in the :node_ips clipboard
     #And evaluation of `cluster_logging('instance').fluentd_ready_pods.map(&:node_ip)` is stored in the :node_ips clipboard
+    #A workaround to https://bugzilla.redhat.com/show_bug.cgi?id=1776594
     And I wait for the ".operations" index to appear in the ES pod with labels "es-node-master=true"
-    Given I get the ".operations" logging index information from a pod with labels "es-node-master=true"
-    And the expression should be true> cb.index_data['docs.count'] > "0"
-    And I perform the HTTP request on the ES pod with labels "es-node-master=true":
-      | relative_url | _search?pretty&size=0' -H 'Content-Type: application/json' -d'{"aggs" : {"exists_field_kubernetes" : {"filter": {"exists": {"field":"kubernetes"}},"aggs" : {"distinct_node_ip" : {"terms" : {"field" : "pipeline_metadata.collector.ipaddr4"}}}}}} |
-      | op           | GET                                                                                                                                                                                                                     |
+    Given I perform the HTTP request on the ES pod with labels "es-node-master=true":
+      | relative_url | .operations.* |
+      | op           | DELETE        |
     Then the step should succeed
-    Given I repeat the following steps for each :ip in cb.node_ips:
+    Given I perform the HTTP request on the ES pod with labels "es-node-master=true":
+      | relative_url | .project.* |
+      | op           | DELETE     |
+    Then the step should succeed
+    #Workaround end
+    
+    Given I wait for the ".operations" index to appear in the ES pod with labels "es-node-master=true"
+    Then I get the ".operations" logging index information from a pod with labels "es-node-master=true"
+    And the expression should be true> cb.index_data['docs.count'] > "0"
+
+    Given I wait up to 300 seconds for the steps to pass:
     """
-    And the expression should be true> @result[:response].include? cb.ip
-    """
+    Then I perform the HTTP request on the ES pod with labels "es-node-master=true":
+      | relative_url | _search?pretty&size=0' -H 'Content-Type: application/json' -d'{"aggs" : {"exists_field_kubernetes" : {"filter": {"exists": {"field":"kubernetes"}},"aggs" : {"distinct_node_ip" : {"terms" : {"field" : "pipeline_metadata.collector.ipaddr4"}}}}}} |
+      | op           | GET   |
+    Then the step should succeed
+    Given evaluation of `JSON.parse(@result[:response])['aggregations']['exists_field_kubernetes']['distinct_node_ip']['buckets'].map {|furn| furn["key"]}` is stored in the :kuber_ips clipboard
+    And the expression should be true> Set.new(cb.node_ips) == Set.new(cb.kuber_ips)
 
     And I perform the HTTP request on the ES pod with labels "es-node-master=true":
-      | relative_url | _search?pretty&size=0' -H 'Content-Type: application/json' -d'{"aggs" : {"exists_field_kubernetes" : {"filter": {"exists": {"field":"systemd"}},"aggs" : {"distinct_node_ip" : {"terms" : {"field" : "pipeline_metadata.collector.ipaddr4"}}}}}} |
-      | op           | GET                                                                                                                                                                                                                     |
+      | relative_url | _search?pretty&size=0' -H 'Content-Type: application/json' -d'{"aggs" : {"exists_field_systemd" : {"filter": {"exists": {"field":"systemd"}},"aggs" : {"distinct_node_ip" : {"terms" : {"field" : "pipeline_metadata.collector.ipaddr4"}}}}}} |
+      | op           | GET  |
     Then the step should succeed
-    Given I repeat the following steps for each :ip in cb.node_ips:
-    """
-    And the expression should be true> @result[:response].include? cb.ip
+    Given evaluation of `JSON.parse(@result[:response])['aggregations']['exists_field_systemd']['distinct_node_ip']['buckets'].map {|furn| furn["key"]}` is stored in the :journal_ips clipboard
+    And the expression should be true> Set.new(cb.node_ips) == Set.new(cb.journal_ips)
     """
 
   # @author qitang@redhat.com
