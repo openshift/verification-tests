@@ -383,6 +383,11 @@ wait_until_no_loading:
     selector:
       css: .cos-status-box--loading
     missing: true
+check_column_in_table:
+  action: wait_box_loaded
+  elements:
+  - selector:
+      xpath: //th[contains(@data-label,'<field>')]
 
 ## -------- check resource key and values pairs ------
 check_resource_details:
