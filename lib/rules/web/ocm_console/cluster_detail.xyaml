@@ -50,7 +50,7 @@ cpu_chart_loaded:
 overview_tab_loaded:
     elements:
         - selector:
-            xpath: //section[@id='overviewTabContent']//h2[@class='pf-c-title pf-m-3xl' and text()='Details']
+            xpath: //section[@id='overviewTabContent']//h2[text()='Details']
 
 monitoring_tab_loaded:
     element:
@@ -151,6 +151,10 @@ total_sockets_loaded:
     element:
         selector:
             xpath: //div[@class='pf-l-grid']/div[2]//dt[3][text()='Total Sockets']
+actions_button_disabled_on_cluster_detail_page:
+  element:
+    selector:
+      xpath: //span[@id='cl-details-btns']//button[@class='pf-c-dropdown__toggle' and @disabled]
 check_ocp_in_detail_page:
     action: check_ocp_title_in_detail_page
     action: check_ocp_tab_in_detail_page
