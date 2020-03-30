@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: servicebroker-template
+objects:
+- apiVersion: osb.openshift.io/v1
+  kind: TemplateServiceBroker
+  metadata:
+    name: ${NAME}
+    namespace: ${NAMESPACE}
+  spec: {}
+
+parameters:
+- name: NAME
+  value: template-service-broker
+- name: NAMESPACE
+  value: openshift-template-service-broker

@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: servicebroker-template
+objects:
+- apiVersion: osb.openshift.io/v1
+  kind: AutomationBroker
+  metadata:
+    name: ${NAME}
+    namespace: ${NAMESPACE}
+  spec:
+    createBrokerNamespace: 'false'
+    waitForBroker: 'false'
+    registries:
+      - type: local_openshift
+        name: test
+        url:  image-registry.openshift-image-registry.svc:5000
+        tag:  latest
+        images:
+          - openshift/mediawiki-apb
+          - openshift/postgresql-apb
+          - openshift/mariadb-apb
+          - openshift/mysql-apb
+        white_list: [.*-apb$]
+        skip_verify_tls: true
+parameters:
+- name: NAME
+  value: ansible-service-broker
+- name: NAMESPACE
+  value:  openshift-ansible-service-broker
