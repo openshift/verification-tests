@@ -241,6 +241,11 @@ wait_box_loaded:
     selector:
       css: .loading-box__loaded
     timeout: 20
+check_column_in_table:
+  action: wait_box_loaded
+  elements:
+  - selector:
+      xpath: //button[contains(.,'<field>')]
 ## -------- check resource key and values pairs ------
 check_resource_details:
   action:
@@ -526,21 +531,21 @@ check_scale_target:
   action: check_resource_details_key_and_value
 check_current_replicas:
   params:
-    key: Current Replicas
+    key: Current Pods
     value: <current_replicas>
   action: check_resource_details_key_and_value
 check_desired_replicas:
   params:
-    key: Desired Replicas
+    key: Desired Pods
     value: <desired_replicas>
   action: check_resource_details_key_and_value
 check_hpa_min_replicas:
   params:
-    key: Min Replicas
+    key: Min Pods
     value: <min_replicas>
   action: check_resource_details_key_and_value
 check_hpa_max_replicas:
   params:
-    key: Max Replicas
+    key: Max Pods
     value: <max_replicas>
   action: check_resource_details_key_and_value
