@@ -1152,8 +1152,9 @@
 :oadm_inspect:
   :cmd: oc adm inspect <resource_type> <resource_name>
   :options:
-    :A: -all-namespaces=<value>
-    :dest-dir: --dest-dir=<value>
+    :A: --all-namespaces=<value>
+    :all_namespaces: --all-namespaces=<value>
+    :dest_dir: --dest-dir=<value>
 :oadm_new_project:
   :cmd: oc adm new-project <project_name>
   #:expected:
