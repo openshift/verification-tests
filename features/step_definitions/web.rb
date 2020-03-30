@@ -212,9 +212,11 @@ When /^I perform the :(.*?) web( console)? action in "([^"]+)" window with:$/ do
   else
     webexecutor = browser
   end
+
   if webexecutor.browser.window(window_selector).exists?
     webexecutor.browser.window(window_selector).use do
       @result = webexecutor.run_action(action.to_sym, opts_array_to_hash(table.raw))
+      @result[:url] = webexecutor.browser.window(window_selector).url
     end
   else
     for win in webexecutor.browser.windows

@@ -88,6 +88,14 @@ check_console_link_in_helpmenu:
     link_url: "#"
   action: click_help_button
   action: check_link_and_text
+click_console_link_in_helpmenu:
+  params:
+    link_url: "#"
+  action: click_help_button
+  element:
+    selector:
+      xpath: //a[contains(.,'<text>') and contains(@href,'<link_url>')]
+    op: click
 check_console_link_in_applauncher:
   action: click_application_launcher_button
   action: check_link_and_text
