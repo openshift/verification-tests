@@ -265,7 +265,7 @@ Feature: Operator related networking scenarios
     | since         | 10s                            |
   Then the step should succeed
   And the output should contain:
-    | cannot change openshift-sdn mode |
+    | cannot change openshift-sdn |
     
   # @author anusaxen@redhat.com
   # @case_id OCP-25856
