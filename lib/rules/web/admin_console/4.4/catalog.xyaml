@@ -150,4 +150,19 @@ browse_to_install_plan:
       xpath: //a[contains(@href, 'InstallPlan')]
     timeout: 60
     op: click
+click_project_list_dropdown:
+  params:
+    button_id: dropdown-selectbox
+  action: click_button_by_id
+choose_project_from_dropdown_list:
+  element:
+    selector:
+      xpath: //ul//a[@id='<project_name>-Project-link' and contains(@class,'dropdown__menu-item')]
+    op: click
+select_target_namespace:
+  params:
+    install_mode: OwnNamespace
+  action: choose_installmode
+  action: click_project_list_dropdown
+  action: choose_project_from_dropdown_list
 

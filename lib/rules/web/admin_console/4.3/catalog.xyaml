@@ -128,6 +128,21 @@ set_custom_channel_and_subscribe:
   action: wait_box_loaded
   action: choose_update_channel
   action: click_subscribe_button
+click_project_list_dropdown:
+  params:
+    button_id: dropdown-selectbox
+  action: click_button_by_id
+choose_project_from_dropdown_list:
+  element:
+    selector:
+      xpath: //ul//a[@id='<project_name>-Project-link' and contains(@class,'dropdown__menu-item')]
+    op: click
+select_target_namespace:
+  params:
+    install_mode: OwnNamespace
+  action: choose_installmode
+  action: click_project_list_dropdown
+  action: choose_project_from_dropdown_list
 click_image_tag_dropdown:
   params:
     button_id: form-dropdown-image-tag-field
