@@ -95,7 +95,7 @@ filter_by_keyword:
 clear_filter_by_keyword:
   element:
     selector: *filter_by_keyword
-    op: clear
+    op: send_keys :backspace
 click_on_catalog_item:
   element:
     selector:
