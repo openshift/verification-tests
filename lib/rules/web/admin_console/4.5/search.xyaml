@@ -1,0 +1,50 @@
+search_by_resource:
+  params:
+    resource_group: ''
+  elements:
+  - selector: 
+      xpath: //button[contains(., 'Resources')]
+    op: click
+  - selector:
+      xpath: //li//span[text()='<resource_kind>']/following-sibling::span[contains(., '<resource_group>')]
+    op: click
+    timeout: 15
+clear_one_search_item:
+  elements:
+  - selector: 
+      xpath: //span[contains(., '<search_item>')]/following-sibling::button
+    op: click
+check_resource_tile:
+  elements:
+  - selector:
+      xpath: //span[contains(text(), '<resource_kind>')]/span[contains(., '<resource_group>')]
+choose_filter_type_on_search_page:
+  elements:
+  - selector:
+      xpath: //button[@id='toggle-id']
+    op: click
+  - selector:
+      xpath: //li/button[text()='<filter_type>']
+    op: click
+    timeout: 15
+set_filter_content_on_search_page:
+  params:
+    clear_field_id: search-filter-input
+    input_field_id: search-filter-input
+    input_value: <filter_content>
+  action: clear_input_value
+  action: set_input_value
+press_input_enter_on_search_page:
+  params:
+    input_field_id: search-filter-input
+    input_value: <press_enter>
+  action: set_input_value
+clear_resource_filters:
+  params:
+    filter_type: Resource
+  action: clear_one_type_filters
+clear_one_type_filters:
+  elements:
+  - selector:
+      xpath: (//h4[contains(., '<filter_type>')]/following-sibling::ul//button)[last()]
+    op: click
