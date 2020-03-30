@@ -245,7 +245,7 @@ check_column_in_table:
   action: wait_box_loaded
   elements:
   - selector:
-      xpath: //button[contains(.,'<field>')]
+      xpath: //a[contains(.,'<field>')]
 ## -------- check resource key and values pairs ------
 check_resource_details:
   action:
