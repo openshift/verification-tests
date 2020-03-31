@@ -494,10 +494,10 @@ Feature: Pod related networking scenarios
     | l | app=ovnkube-node |
   #Removing CNI config file from container to check readiness probe functionality
   When I run the :exec client command with:
-    | pod              | <%= pod.name %>    		       |
+    | pod              | <%= pod.name %>                       |
     | c                | ovnkube-node                          |
     | oc_opts_end      |                                       |
-    | exec_command     | rm      	                       |
+    | exec_command     | rm                                    |
     | exec_command_arg | /etc/cni/net.d/10-ovn-kubernetes.conf |
   Then the step should succeed
   #Deleting ovnkube-pod will force CNO to rewrite the conf file and bring cluster back to normal after scenario
