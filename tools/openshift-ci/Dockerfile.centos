@@ -22,8 +22,6 @@ RUN set -x && \
     curl -sSL "$GECKODRIVER_DOWNLOAD_URL" | bsdtar -xvf - -C /usr/local/bin && \
     chmod +x /usr/local/bin/geckodriver && \
     rpm -V $INSTALL_PKGS $SCL_BASE_PKGS && \
-    curl -sSL https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm -o /tmp/epel-release-latest-7.noarch.rpm && \
-    yum install -y /tmp/epel-release-latest-7.noarch.rpm
 
 RUN scl enable rh-ruby26 /verification-tests/tools/install_os_deps.sh
 RUN scl enable rh-ruby26 /verification-tests/tools/hack_bundle.rb
