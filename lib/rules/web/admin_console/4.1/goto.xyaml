@@ -120,3 +120,9 @@ goto_machineconfig_pools_page:
 # quota
 goto_quotas_page:
   url: k8s/ns/<project_name>/resourcequotas
+
+#hpa
+goto_hpas_page:
+  url: k8s/ns/<project_name>/horizontalpodautoscalers
+goto_one_hpa_page:
+  url: k8s/ns/<project_name>/horizontalpodautoscalers/<hpa_name>
