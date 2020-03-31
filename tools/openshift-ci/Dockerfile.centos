@@ -11,10 +11,10 @@ RUN set -x && \
     SCL_BASE_PKGS="centos-release-scl scl-utils-build" && \
     INSTALL_PKGS="rh-ruby26 rh-ruby26-ruby-devel rh-git218 bsdtar" && \
     JQ_PKG="jq" && \
+    yum -y update && \
     curl -L https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm -o /tmp/epel-release-latest-7.noarch.rpm && \
     yum install -y /tmp/epel-release-latest-7.noarch.rpm && \
-    yum install -y --setopt=skip_missing_names_on_install=False --enablerepo=centosplus $SCL_BASE_PKGS $JQ_PKG $INSTALL_PKGS && \
-    yum -y update && \
+    yum install -y --enablerepo=centosplus --setopt=skip_missing_names_on_install=False $SCL_BASE_PKGS $JQ_PKG $INSTALL_PKGS && \
 
     GECKODRIVER_DOWNLOAD_URL="$(curl -sSL https://api.github.com/repos/mozilla/geckodriver/releases/latest | jq . | grep -E 'browser_download_url.*linux64' | sed -E 's/.*(https[^"]*).*/\1/')" && \
     curl -sSL "$GECKODRIVER_DOWNLOAD_URL" | bsdtar -xvf - -C /usr/local/bin && \
