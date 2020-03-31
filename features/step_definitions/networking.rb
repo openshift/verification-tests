@@ -975,3 +975,12 @@ Given /^the OVN "([^"]*)" database is killed on the "([^"]*)" node$/ do |ovndb, 
   raise "Failed to kill the #{ovndb} database daemon" unless @result[:success]
 end
 
+Given /^OVN is functional on the cluster$/ do
+  ensure_admin_tagged
+  desired_ovnkube_node_replicas = daemon_set('ovnkube-node', project('openshift-ovn-kubernetes')).replica_counters(user: admin)[:desired]
+  available_ovnkube_node_replicas = daemon_set('ovnkube-node', project('openshift-ovn-kubernetes')).replica_counters(user: admin)[:available]
+  desired_ovnkube_master_replicas = daemon_set('ovnkube-master', project('openshift-ovn-kubernetes')).replica_counters(user: admin)[:desired]
+  available_ovnkube_master_replicas = daemon_set('ovnkube-master', project('openshift-ovn-kubernetes')).replica_counters(user: admin)[:available]
+  raise "OVN is not running correctly! Check one of your ovnkube-node pod" unless desired_ovnkube_node_replicas == available_ovnkube_node_replicas && available_ovnkube_node_replicas != 0
+  raise "OVN is not running correctly! Check one of your ovnkube-master pod" unless desired_ovnkube_master_replicas == available_ovnkube_master_replicas && available_ovnkube_master_replicas != 0
+end
