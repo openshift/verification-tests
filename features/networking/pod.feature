@@ -504,13 +504,15 @@ Feature: Pod related networking scenarios
   And I register clean-up steps:
   """
   admin ensure "<%= pod.name %>" pod is deleted from the "openshift-ovn-kubernetes" project
-  OVN is functional on the cluster
+  And OVN is functional on the cluster
   """
   #Now make sure readiness probe checking above file will cause one of the two ovnkube-node containers to go down
-  Given 30 seconds have passed
+  Given I wait up to 30 seconds for the steps to pass:
+  """
   When I run the :get admin command with:
     | resource      | pod             |
     | resource_name | <%= pod.name %> |
   Then the step should succeed
   And the output should contain: 
     | 1/2 |
+  """
