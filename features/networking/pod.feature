@@ -492,7 +492,7 @@ Feature: Pod related networking scenarios
   And I use the "openshift-ovn-kubernetes" project
   And a pod is present with labels:
     | l | app=ovnkube-node |
-  #Removing CNI config file from container to check readiness probe funtionality
+  #Removing CNI config file from container to check readiness probe functionality
   When I run the :exec client command with:
     | pod              | <%= pod.name %>    		       |
     | c                | ovnkube-node                          |
@@ -506,7 +506,7 @@ Feature: Pod related networking scenarios
   admin ensure "<%= pod.name %>" pod is deleted from the "openshift-ovn-kubernetes" project
   OVN is functional on the cluster
   """
-  #Now make sure readinessprobe checking above file will cause one of the two ovnkube-node containers to go down
+  #Now make sure readiness probe checking above file will cause one of the two ovnkube-node containers to go down
   Given 30 seconds have passed
   When I run the :get admin command with:
     | resource      | pod             |
