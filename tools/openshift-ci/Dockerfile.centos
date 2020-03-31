@@ -13,7 +13,7 @@ RUN set -x && \
     yum -y update && \
     yum install -y --enablerepo=centosplus $SCL_BASE_PKGS && \
     yum install -y --enablerepo=centosplus $INSTALL_PKGS && \
-    GECKODRIVER_DOWNLOAD_URL="$(curl -sSL https://api.github.com/repos/mozilla/geckodriver/releases/latest | grep -E 'browser_download_url.*linux64' | sed -E 's/.*(https[^"]*).*/\1/')" && \
+    GECKODRIVER_DOWNLOAD_URL="$(curl -sSL https://api.github.com/repos/mozilla/geckodriver/releases/latest | jq . | grep -E 'browser_download_url.*linux64' | sed -E 's/.*(https[^"]*).*/\1/')" && \
     curl -sSL "$GECKODRIVER_DOWNLOAD_URL" | bsdtar -xvf - -C /usr/local/bin && \
     chmod +x /usr/local/bin/geckodriver && \
     rpm -V $INSTALL_PKGS $SCL_BASE_PKGS && \
