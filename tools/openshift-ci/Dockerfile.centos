@@ -13,11 +13,9 @@ RUN set -x && \
     JQ_PKG="jq" && \
     curl -L https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm -o /tmp/epel-release-latest-7.noarch.rpm && \
     yum install -y /tmp/epel-release-latest-7.noarch.rpm && \
-    yum install -y $JQ_PKG && \
-
+    yum install -y --setopt=skip_missing_names_on_install=False --enablerepo=centosplus $SCL_BASE_PKGS $JQ_PKG $INSTALL_PKGS && \
     yum -y update && \
-    yum install -y --enablerepo=centosplus $SCL_BASE_PKGS && \
-    yum install -y --enablerepo=centosplus $INSTALL_PKGS && \
+
     GECKODRIVER_DOWNLOAD_URL="$(curl -sSL https://api.github.com/repos/mozilla/geckodriver/releases/latest | jq . | grep -E 'browser_download_url.*linux64' | sed -E 's/.*(https[^"]*).*/\1/')" && \
     curl -sSL "$GECKODRIVER_DOWNLOAD_URL" | bsdtar -xvf - -C /usr/local/bin && \
     chmod +x /usr/local/bin/geckodriver && \
