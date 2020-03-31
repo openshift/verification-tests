@@ -10,7 +10,7 @@ ADD . /verification-tests/
 RUN set -x && \
     SCL_BASE_PKGS="centos-release-scl scl-utils-build" && \
     INSTALL_PKGS="rh-ruby26 rh-ruby26-ruby-devel rh-git218 bsdtar" && \
-    JQ_PKG="jq" &&\
+    JQ_PKG="jq" && \
     curl -L https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm -o /tmp/epel-release-latest-7.noarch.rpm && \
     yum install -y /tmp/epel-release-latest-7.noarch.rpm && \
     yum install -y $JQ_PKG && \
