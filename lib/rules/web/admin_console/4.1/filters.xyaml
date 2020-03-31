@@ -14,7 +14,7 @@ search_by_type:
   - selector:
       xpath: (//span[@class='co-resource-item__resource-name' and text()='<type>'])[position()=1]
     op: click
-search_by_catagory:
+search_by_event_catagory:
   elements:
   - selector:
       xpath: //div[@class='co-m-pane__filter-bar-group']/div[2]
@@ -22,6 +22,10 @@ search_by_catagory:
   - selector:
       xpath: //a[contains(.,'<catagory>')]
     op: click
+search_by_catagory_to_show_build_failures:
+  params:
+    catagory: Error
+  action: search_by_event_catagory
 check_results_contain_correct_strings:
   element:
     selector:
@@ -56,15 +60,19 @@ check_results_contain_correct_type:
         })
         return all_contain
       expect_result: true
-check_result_contain_correct_catagory:
+check_results_contain_correct_build_failures_type:
+# build error events are shown in Error
+  params:
+    catagory: Error
+  action: check_results_contain_correct_catagory
+check_results_contain_correct_catagory:
   element:
     selector:
       css: div.co-sysevent
   scripts:
     - command: |
         // for All and Info, class="co-sysevent slide-entered"
-        // for Error, class="co-sysevent co-sysevent--error slide-entered"
-        // so this rules only appies to Error catagory, All & Info are the same and as default
+        // for Error, class="co-sysevent co-sysevent--error"
         var catagories = document.querySelectorAll('div.co-sysevent');
         var all_contain = true;
         if (catagories.length == 0) {
