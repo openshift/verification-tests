@@ -6,6 +6,11 @@ module BushSlicer
       rr.dig('spec', 'channel')
     end
 
+    def cluster_id(user: nil, cached: true, quiet: false)
+      rr = raw_resource(user: user, cached: cached, quiet: quiet)
+      rr.dig('spec', 'clusterID')
+    end
+
     def upstream(user: nil, cached: true, quiet: false)
       rr = raw_resource(user: user, cached: cached, quiet: quiet)
       rr.dig('spec', 'upstream')
