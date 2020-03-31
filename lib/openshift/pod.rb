@@ -112,6 +112,12 @@ module BushSlicer
       return get_cached_prop(prop: :ip, user: user, cached: cached, quiet: quiet)
     end
 
+    # @return [String] string IP if IPv4 or [IP] if IPv6
+    def ip_url(user: nil, cached: true, quiet: false)
+      raw_ip = ip(user: user, cached: cached, quiet: quiet)
+      raw_ip.include?(":") ? "[#{raw_ip}]" : raw_ip
+    end
+
     # @note call without parameters only when props are loaded
     def nominated_node_name(user:nil, cached: true, quiet: false)
       raw_resource(user: user, cached: cached, quiet: quiet).
