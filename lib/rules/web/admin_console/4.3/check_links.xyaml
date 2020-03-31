@@ -92,6 +92,13 @@ check_console_link_in_helpmenu:
     link_url: "#"
   action: click_help_button
   action: check_link_and_text
+click_report_bug_link_in_helpmenu:
+  action: click_help_button
+  action: click_report_bug_link
+click_report_bug_link:
+  params:
+    text: Report Bug
+  action: click_link_with_text_only
 check_console_link_in_applauncher:
   action: click_application_launcher_button
   action: check_link_and_text
