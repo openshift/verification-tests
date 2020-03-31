@@ -2,7 +2,7 @@
 Feature: ASB related scenarios
     
   # @author chuo@redhat.com
-  # @case_id OCP-16087
+  # @case_id OCP-28919
   @admin
   @upgrade-prepare
   @users=upuser1,upuser2
