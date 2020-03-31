@@ -1,11 +1,34 @@
 search_by_resource:
-  params:
-    resource_group: ''
+  action: click_resource_type_dropdown
+  action: send_type_filter
+  action:
+    if_not_param: resource_group
+    ref: search_resource_kind_only
+  action:
+    if_param: resource_group
+    ref: search_resource_kind_and_api_group
+click_resource_type_dropdown:
   elements:
   - selector:
-      xpath: //button[contains(., 'Resources')]
+      xpath: //div[contains(@class, 'co-type-selector')]//button[contains(@class,'btn-dropdown')]
     op: click
   - selector:
-      xpath: //li//span[text()='<resource_kind>']/div[contains(., '<resource_group>')]
+      xpath: //li//span[contains(@class,'co-resource-item__resource-name')]
+send_type_filter:
+  element:
+    selector:
+      xpath: //input[contains(@class,'dropdown--text-filter')]
+    op: send_keys <resource_kind>
+search_resource_kind_only:
+  elements:
+  - selector:
+      xpath: //li//span[contains(@class,'co-resource-item__resource-name') and text()='<resource_kind>']
     op: click
     timeout: 15
+search_resource_kind_and_api_group:
+  element:
+    selector:
+      xpath: //li//span[contains(@class,'co-resource-item__resource-name') and text()='<resource_kind>']/div[contains(@class,'co-resource-item__resource-api') and contains(.,'<resource_group>')]
+    op: click
+    timeout: 15
+

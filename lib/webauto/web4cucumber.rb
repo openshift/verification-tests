@@ -428,6 +428,16 @@ require_relative 'chrome_extension'
           end
         end
 
+        if action_body[:if_not_param]
+          res_param[:success] = true
+          if action_body[:if_not_param].kind_of? String
+            if user_opts.has_key? action_body[:if_not_param].to_sym
+              res_param[:response] = "parameter '#{action_body[:if_not_param]}' was found in user_opts"
+              return res_param
+            end
+          end
+        end           
+
         res_context ={}
         if action_body[:context]
           res_context[:success], context_elements  = wait_for_elements(
