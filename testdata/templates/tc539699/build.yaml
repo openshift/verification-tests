@@ -10,5 +10,5 @@ spec:
         value: sample-app
       from:
         kind: DockerImage
-        name: replacestr/rhscl/ruby-22-rhel7@sha256:35761886745576f644b8597419ae262e4ce3a1a34b6afdbade4d46ccc4d25172
+        name: docker.io/centos/ruby-22-centos7@sha256:a18c8706118a5c4c9f1adf045024d2abf06ba632b5674b23421019ee4d3edcae 
     type: Source
