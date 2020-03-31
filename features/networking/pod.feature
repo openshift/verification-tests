@@ -506,13 +506,13 @@ Feature: Pod related networking scenarios
   admin ensure "<%= pod.name %>" pod is deleted from the "openshift-ovn-kubernetes" project
   And OVN is functional on the cluster
   """
-  #Now make sure readiness probe checking above file will cause one of the two ovnkube-node containers to go down
+  #Now make sure readiness probe checking above file will cause one of the two ovnkube-node containers to go down and container ready status change to false
   Given I wait up to 30 seconds for the steps to pass:
   """
   When I run the :get admin command with:
-    | resource      | pod             |
-    | resource_name | <%= pod.name %> |
+    | resource      | pod                                             |
+    | resource_name | <%= pod.name %>                                 |
+    | o             | jsonpath='{.status.containerStatuses[1].ready}' |
   Then the step should succeed
-  And the output should contain: 
-    | 1/2 |
+  And the output should contain "false"
   """
