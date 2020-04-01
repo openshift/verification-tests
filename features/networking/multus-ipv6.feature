@@ -11,13 +11,13 @@ Feature: Multus-CNI ipv6 related scenarios
     And evaluation of `node.name` is stored in the :target_node clipboard
     # Create the net-attach-def via cluster admin
     Given I have a project
-    When I run oc create as admin over "https://raw.githubusercontent.com/weliang1/Openshift_Networking/master/Features/multus/IPv6/macvlan-bridge-v6.yaml" replacing paths:
+    When I run oc create as admin over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/IPv6/macvlan-bridge-v6.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %>                                                                                                                                                                                                                             |    
       | ["spec"]["config"]| '{ "cniVersion": "0.3.0", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "bridge", "ipam": { "type": "host-local", "subnet": "fd00::192:168:22:0/112", "rangeStart": "fd00::192:168:22:100", "rangeEnd": "fd00::192:168:22:200"} }' |
     Then the step should succeed
 
     # Create the first pod which consumes the macvlan custom resource
-    When I run oc create over "https://raw.githubusercontent.com/weliang1/Openshift_Networking/master/Features/multus/IPv6/1interface-macvlan-bridge-v6.yaml" replacing paths:
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/multus-cni//Pods/IPv6/1interface-macvlan-bridge-v6.yaml" replacing paths:
       | ["spec"]["nodeName"] | "<%= cb.target_node %>" |
     Then the step should succeed
     And a pod becomes ready with labels:
@@ -38,7 +38,7 @@ Feature: Multus-CNI ipv6 related scenarios
     And evaluation of `@result[:response].chomp` is stored in the :pod1_multus_ipv6 clipboard
   
     # Create the second pod which consumes the macvlan cr
-    When I run oc create over "https://raw.githubusercontent.com/weliang1/Openshift_Networking/master/Features/multus/IPv6/1interface-macvlan-bridge-v6.yaml" replacing paths:
+    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/multus-cni//Pods/IPv6/1interface-macvlan-bridge-v6.yaml" replacing paths:
       | ["spec"]["nodeName"] | "<%= cb.target_node %>" |
     Then the step should succeed
     And 2 pods become ready with labels:
