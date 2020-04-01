@@ -8,7 +8,7 @@ Feature: Service related networking scenarios
     Given the env is using multitenant network
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/list_for_pods.json |
+      | f | <%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json |
     Then the step should succeed
     And a pod becomes ready with labels:
       | name=test-pods |
@@ -20,7 +20,7 @@ Feature: Service related networking scenarios
     Given I switch to the second user
     And I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/list_for_pods.json |
+      | f | <%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json |
     Then the step should succeed
     And a pod becomes ready with labels:
       | name=test-pods |
@@ -57,12 +57,12 @@ Feature: Service related networking scenarios
     And I wait up to 30 seconds for the steps to pass:
     """
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/caddy-docker.json  |
+      | f | <%= BushSlicer::HOME %>/testdata/routing/caddy-docker.json  |
     Then the step should succeed
     """
     And the pod named "caddy-docker" becomes ready
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/externalip_service1.json |
+      | f | <%= BushSlicer::HOME %>/testdata/networking/externalip_service1.json |
     Then the step should succeed
     When I run the :get client command with:
       | resource      | service          |
@@ -86,7 +86,7 @@ Feature: Service related networking scenarios
       | multitenant |
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/unsecure/service_unsecure.json |
+      | f | <%= BushSlicer::HOME %>/testdata/routing/unsecure/service_unsecure.json |
     Then the step should succeed
     Given I use the "service-unsecure" service
     And evaluation of `service.ip(user: user)` is stored in the :service_ip clipboard
@@ -137,7 +137,7 @@ Feature: Service related networking scenarios
   Scenario: The headless service can publish the pods even if they are not ready
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/headless_notreadypod.json |
+      | f | <%= BushSlicer::HOME %>/testdata/networking/headless_notreadypod.json |
     Then the step should succeed
     Given I wait up to 30 seconds for the steps to pass:
     """
@@ -161,7 +161,7 @@ Feature: Service related networking scenarios
     Given I have a project 
     # Create a service with a externalIP
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/externalip_service1.json | 
+      | f | <%= BushSlicer::HOME %>/testdata/networking/externalip_service1.json | 
     Then the step should fail
 
   # @author weliang@redhat.com
@@ -189,14 +189,14 @@ Feature: Service related networking scenarios
     Given I switch to the first user
     And I wait up to 300 seconds for the steps to pass:
     """
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/externalip_service1.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/externalip_service1.json" replacing paths:
       | ["spec"]["externalIPs"][0] | <%= cb.hostip %> |
     Then the step should succeed
     """ 
     
     # Create a pod
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/caddy-docker.json |
+      | f | <%= BushSlicer::HOME %>/testdata/routing/caddy-docker.json |
     Then the step should succeed
     And the pod named "caddy-docker" becomes ready
  
@@ -226,7 +226,7 @@ Feature: Service related networking scenarios
     Given I have a project 
     And I wait up to 300 seconds for the steps to pass:
     """
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/externalip_service1.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/externalip_service1.json" replacing paths:
       | ["spec"]["externalIPs"][0] | 22.2.2.10 |
     Then the step should fail
     """
@@ -234,14 +234,14 @@ Feature: Service related networking scenarios
     # Create a svc with externalIP/22.2.2.130 which is not in 22.2.2.0/25
     And I wait up to 300 seconds for the steps to pass:
     """
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/externalip_service1.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/externalip_service1.json" replacing paths:
       | ["spec"]["externalIPs"][0] | 22.2.2.130 |
     Then the step should succeed
     """
  
     # Create a pod
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/caddy-docker.json |
+      | f | <%= BushSlicer::HOME %>/testdata/routing/caddy-docker.json |
     Then the step should succeed
     And the pod named "caddy-docker" becomes ready
  
@@ -276,7 +276,7 @@ Feature: Service related networking scenarios
     Given I switch to the first user
     And I wait up to 300 seconds for the steps to pass:
     """
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/externalip_service1.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/externalip_service1.json" replacing paths:
       | ["spec"]["externalIPs"][0] | <%= cb.hostip %> |
     Then the step should fail
     """
@@ -301,7 +301,7 @@ Feature: Service related networking scenarios
     Given I have a project 
     And I wait up to 300 seconds for the steps to pass:
     """
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/externalip_service1.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/externalip_service1.json" replacing paths:
       | ["spec"]["externalIPs"][0] | 22.2.2.10 |
     Then the step should fail
     """
@@ -309,7 +309,7 @@ Feature: Service related networking scenarios
     # Create a svc with externalIP/22.2.2.130 which is in rejectedCIDRs
     And I wait up to 300 seconds for the steps to pass:
     """
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/externalip_service1.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/externalip_service1.json" replacing paths:
       | ["spec"]["externalIPs"][0] | 22.2.2.130 |
     Then the step should fail
     """
@@ -340,14 +340,14 @@ Feature: Service related networking scenarios
     Given I switch to the first user
     And I wait up to 300 seconds for the steps to pass:
     """
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/externalip_service1.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/externalip_service1.json" replacing paths:
       | ["spec"]["externalIPs"][0] | <%= cb.host1ip %> |
     Then the step should succeed
     """
 
     # Create a pod
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/caddy-docker.json |
+      | f | <%= BushSlicer::HOME %>/testdata/routing/caddy-docker.json |
     Then the step should succeed
     And the pod named "caddy-docker" becomes ready
  
@@ -366,14 +366,14 @@ Feature: Service related networking scenarios
     # Create a svc with second externalIP
     And I wait up to 300 seconds for the steps to pass:
     """
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/externalip_service1.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/externalip_service1.json" replacing paths:
       | ["spec"]["externalIPs"][0] | <%= cb.host2ip %> |
     Then the step should succeed
     """
     
     # Create a pod
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/caddy-docker.json |
+      | f | <%= BushSlicer::HOME %>/testdata/routing/caddy-docker.json |
     Then the step should succeed
     And the pod named "caddy-docker" becomes ready
  
@@ -390,7 +390,7 @@ Feature: Service related networking scenarios
   Given the env is using "OVNKubernetes" networkType
   And I have a project
   When I run the :create client command with:
-    | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/list_for_pods.json |
+    | f | <%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json |
   Then the step should succeed
   And a pod becomes ready with labels:
     | name=test-pods |
@@ -414,7 +414,7 @@ Feature: Service related networking scenarios
   Scenario: Create loadbalancer service
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/ping_for_pod_containerPort.json |
+      | f | <%= BushSlicer::HOME %>/testdata/networking/ping_for_pod_containerPort.json |
     Then the step should succeed
 
     # Create loadbalancer service
@@ -435,7 +435,7 @@ Feature: Service related networking scenarios
     And evaluation of `@result[:response].match(/:(.*)]/)[1]` is stored in the :service_hostname clipboard
 
     # check the external:ip of loadbalancer can be accessed
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/list_for_pods.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
     Then the step should succeed
     Given 1 pods become ready with labels:

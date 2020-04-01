@@ -12,7 +12,7 @@ Before('@commonlogging') do
   unless cluster_logging("instance").exists?
     step %Q/I create clusterlogging instance with:/, table(%{
       | remove_logging_pods | false                                                                      |
-      | crd_yaml            | <%= ENV['BUSHSLICER_HOME'] %>/testdata/logging/clusterlogging/example.yaml |
+      | crd_yaml            | <%= BushSlicer::HOME %>/testdata/logging/clusterlogging/example.yaml |
       | log_collector       | fluentd                                                                    |
     })
   end

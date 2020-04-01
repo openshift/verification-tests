@@ -50,7 +50,7 @@ Feature: cluster-logging-operator related test
     Given I delete the clusterlogging instance
     Then the step should succeed
     And I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/logging/clusterlogging/scalebase.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/logging/clusterlogging/scalebase.yaml |
     Then the step should succeed
     Given I register clean-up steps:
     """
@@ -101,7 +101,7 @@ Feature: cluster-logging-operator related test
     Given the master version >= "4.2"
     Given I create clusterlogging instance with:
       | remove_logging_pods | true                                                                                                   |
-      | crd_yaml            | <%= ENV['BUSHSLICER_HOME'] %>/testdata/logging/clusterlogging/example.yaml |
+      | crd_yaml            | <%= BushSlicer::HOME %>/testdata/logging/clusterlogging/example.yaml |
       | log_collector       | fluentd                                                                                                |
     Then the step should succeed
     Given I wait for the "fluentd" prometheus_rule to appear

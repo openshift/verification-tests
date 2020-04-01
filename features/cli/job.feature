@@ -5,7 +5,7 @@ Feature: job.feature
   Scenario: Create job with multiple completions
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/templates/tc511597/job.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/templates/tc511597/job.yaml |
     Then the step should succeed
     Given 5 pods become ready with labels:
       | app=pi |
@@ -32,11 +32,11 @@ Feature: job.feature
       | app=pi |
     Then the step should succeed
     And the output should not contain "pi-"
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/templates/tc511597/job.yaml" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/templates/tc511597/job.yaml" replacing paths:
       | ["spec"]["completions"] | -1 |
     Then the step should fail
     And the output should contain "must be greater than or equal to 0"
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/templates/tc511597/job.yaml" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/templates/tc511597/job.yaml" replacing paths:
       | ["spec"]["completions"] | 0.1 |
     Then the step should fail
 
@@ -45,7 +45,7 @@ Feature: job.feature
   Scenario: Go through the job example
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/job/job.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/job/job.yaml |
     Then the step should succeed
     When I get project pods
     Then the output should contain 5 times:
@@ -83,7 +83,7 @@ Feature: job.feature
   # @case_id OCP-11539
   Scenario: Create job with pod parallelism
     Given I have a project
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/job/job_with_0_activeDeadlineSeconds.yaml" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/job/job_with_0_activeDeadlineSeconds.yaml" replacing paths:
       | ["spec"]["parallelism"]           | 1    |
       | ["spec"]["completions"]           | null |
       | ["spec"]["activeDeadlineSeconds"] | null |
@@ -113,7 +113,7 @@ Feature: job.feature
     Then the expression should be true> cb.pods.empty?
     """
     # Create a job with invalid completions valuse
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/job/job_with_0_activeDeadlineSeconds.yaml" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/job/job_with_0_activeDeadlineSeconds.yaml" replacing paths:
       | ["spec"]["parallelism"]           | -1   |
       | ["spec"]["completions"]           | null |
       | ["spec"]["activeDeadlineSeconds"] | null |
@@ -121,13 +121,13 @@ Feature: job.feature
     And the output should contain:
       | spec.parallelism |
       | must be greater than or equal to 0 |
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/job/job_with_0_activeDeadlineSeconds.yaml" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/job/job_with_0_activeDeadlineSeconds.yaml" replacing paths:
       | ["spec"]["parallelism"]           | 0.1  |
       | ["spec"]["completions"]           | null |
       | ["spec"]["activeDeadlineSeconds"] | null |
     Then the step should fail
     # Create a job with both "parallelism" < "completions"
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/job/job_with_0_activeDeadlineSeconds.yaml" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/job/job_with_0_activeDeadlineSeconds.yaml" replacing paths:
       | ["spec"]["parallelism"]           | 2    |
       | ["spec"]["completions"]           | 3    |
       | ["spec"]["activeDeadlineSeconds"] | null |
@@ -153,7 +153,7 @@ Feature: job.feature
       | app=pi |
     Then the expression should be true> cb.pods.empty?
     """
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/job/job_with_0_activeDeadlineSeconds.yaml" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/job/job_with_0_activeDeadlineSeconds.yaml" replacing paths:
       | ["spec"]["parallelism"]           | 3    |
       | ["spec"]["completions"]           | 2    |
       | ["spec"]["activeDeadlineSeconds"] | null |
@@ -174,7 +174,7 @@ Feature: job.feature
   Scenario: Create job with activeDeadlineSeconds
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/job/job_with_lessthan_runtime_activeDeadlineSeconds.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/job/job_with_lessthan_runtime_activeDeadlineSeconds.yaml |
     Then the step should succeed
     When I get project job
     Then the output should match:
@@ -194,13 +194,13 @@ Feature: job.feature
   Scenario: Specifying your own pod selector for job
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/job/job-manualselector.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/job/job-manualselector.yaml |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | job |
       | name     | pi  |
     Then the output should contain "controller-uid=64e92bd2-078d-11e6-a269-fa163e15bd57"
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/job/job_with_0_activeDeadlineSeconds.yaml" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/job/job_with_0_activeDeadlineSeconds.yaml" replacing paths:
       | ["spec"]["manualSelector"] | false |
     Then the step should fail
     And the output should contain:
@@ -210,7 +210,7 @@ Feature: job.feature
   # @case_id OCP-10734
   Scenario: Create job with different pod restartPolicy
     Given I have a project
-    Given I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/job/job-restartpolicy.yaml"
+    Given I download a file from "<%= BushSlicer::HOME %>/testdata/job/job-restartpolicy.yaml"
     # Create job without restartPolicy
     And I replace lines in "job-restartpolicy.yaml":
       | from: Never | from: null |
@@ -318,7 +318,7 @@ Feature: job.feature
   Scenario: Create job with specific deadline
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/job/job_with_0_activeDeadlineSeconds.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/job/job_with_0_activeDeadlineSeconds.yaml |
     Then the step should succeed
     When I run the :get client command with:
       | resource      | job  |
@@ -330,18 +330,18 @@ Feature: job.feature
       | object_name_or_id | zero |
     Then the step should succeed
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/job/job_with_negative_activeDeadlineSeconds.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/job/job_with_negative_activeDeadlineSeconds.yaml |
     Then the step should fail
     And the output should contain:
       | Invalid value: |
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/job/job_with_string_activeDeadlineSeconds.yaml  |
+      | f | <%= BushSlicer::HOME %>/testdata/job/job_with_string_activeDeadlineSeconds.yaml  |
     Then the step should fail
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/job/job_with_float_activeDeadlineSeconds.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/job/job_with_float_activeDeadlineSeconds.yaml |
     Then the step should fail
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/job/job_with_lessthan_runtime_activeDeadlineSeconds.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/job/job_with_lessthan_runtime_activeDeadlineSeconds.yaml |
     Then the step should succeed
     And I wait up to 120 seconds for the steps to pass:
     """
@@ -356,7 +356,7 @@ Feature: job.feature
       | object_name_or_id | pi  |
     Then the step should succeed
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/job/job_with_long_activeDeadlineSeconds.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/job/job_with_long_activeDeadlineSeconds.yaml |
     Then the step should succeed
     And I wait until job "pi" completes
 

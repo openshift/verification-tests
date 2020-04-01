@@ -5,7 +5,7 @@ Feature: deployment related steps
   Scenario: Add perma-failed - Deplyment succeed after change pod template by edit deployment
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/deployment/deployment-perme-failed-1.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/deployment/deployment-perme-failed-1.yaml |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | deployment      |
@@ -78,7 +78,7 @@ Feature: deployment related steps
   Scenario: Add perma-failed - Deployment failed after pausing and resuming
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/deployment/deployment-perme-failed-1.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/deployment/deployment-perme-failed-1.yaml |
     Then the step should succeed
     When I run the :rollout_pause client command with:
       | resource | deployment      |
@@ -170,7 +170,7 @@ Feature: deployment related steps
   Scenario: Add perma-failed - Failing deployment can be rolled back successful
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/deployment/deployment-perme-failed-3.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/deployment/deployment-perme-failed-3.yaml |
     Then the step should succeed
     And I wait for the steps to pass:
     """
@@ -268,7 +268,7 @@ Feature: deployment related steps
   Scenario: Add perma-failed - Rolling back to a failing deployment revision
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/deployment/deployment-perme-failed-3.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/deployment/deployment-perme-failed-3.yaml |
     Then the step should succeed
     And I wait for the steps to pass:
     """
@@ -374,7 +374,7 @@ Feature: deployment related steps
   Scenario: Add perma-failed - Make a change outside pod template for failing deployment
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/deployment/deployment-perme-failed-1.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/deployment/deployment-perme-failed-1.yaml |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | deployment      |
@@ -464,7 +464,7 @@ Feature: deployment related steps
   # @case_id OCP-12009
   Scenario: Add perma-failed - Negative value test of progressDeadlineSeconds in failing deployment
     Given I have a project
-    Given I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/deployment/deployment-perme-failed-2.yaml"
+    Given I download a file from "<%= BushSlicer::HOME %>/testdata/deployment/deployment-perme-failed-2.yaml"
     When I run the :create client command with:
       | f | deployment-perme-failed-2.yaml |
     Then the step should fail

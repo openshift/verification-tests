@@ -5,7 +5,7 @@ Feature: stibuild.feature
   Scenario: STI build with invalid context dir
     Given I have a project
     When I run the :new_app client command with:
-      | file | <%= ENV['BUSHSLICER_HOME'] %>/testdata/image/language-image-templates/python-27-rhel7-errordir-stibuild.json |
+      | file | <%= BushSlicer::HOME %>/testdata/image/language-image-templates/python-27-rhel7-errordir-stibuild.json |
     Then the step should succeed
     When I run the :start_build client command with:
       | buildconfig | python-sample-build |
@@ -20,7 +20,7 @@ Feature: stibuild.feature
   Scenario Outline: Trigger s2i/docker/custom build using additional imagestream
     Given I have a project
     And I run the :new_app client command with:
-      | file | <%= ENV['BUSHSLICER_HOME'] %>/testdata/templates/<template> |
+      | file | <%= BushSlicer::HOME %>/testdata/templates/<template> |
     Then the step should succeed
     And the "sample-build-1" build was created
     When I run the :cancel_build client command with:

@@ -47,7 +47,7 @@ Feature: check page info related
 
     Given I use the "<%= project.name %>" project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/nfs/claim-rwo-ui.json |
+      | f | <%= BushSlicer::HOME %>/testdata/storage/nfs/claim-rwo-ui.json |
     Then the step should succeed
 
     When I get project persistentvolumeclaims as JSON

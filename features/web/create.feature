@@ -20,7 +20,7 @@ Feature: create app on web console related
   Scenario: Create application from template with invalid parameters on web console
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/templates/ui/application-template-stibuild-without-customize-route.json |
+      | f | <%= BushSlicer::HOME %>/testdata/templates/ui/application-template-stibuild-without-customize-route.json |
     Then the step should succeed
     When I perform the :create_app_from_template_with_label web console action with:
       | project_name  | <%= project.name %>    |
@@ -274,7 +274,7 @@ Feature: create app on web console related
       | testname=testvalue  |
 
     # Import YAML/JSON
-    Given I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/templates/ui/application-template-stibuild-without-customize-route.json"
+    Given I download a file from "<%= BushSlicer::HOME %>/testdata/templates/ui/application-template-stibuild-without-customize-route.json"
     Then the step should succeed
     When I run the :goto_home_page web console action
     Then the step should succeed

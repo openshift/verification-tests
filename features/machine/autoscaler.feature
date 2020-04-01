@@ -16,14 +16,14 @@ Feature: Cluster Autoscaler Tests
     # Create clusterautoscaler
     Given I use the "openshift-machine-api" project
     When I run the :create admin command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/cloud/cluster-autoscaler.yml |
+      | f | <%= BushSlicer::HOME %>/testdata/cloud/cluster-autoscaler.yml |
     Then the step should succeed
     And admin ensures "default" clusterautoscaler is deleted after scenario
     And 1 pods become ready with labels:
       | cluster-autoscaler=default,k8s-app=cluster-autoscaler |
 
     # Create machineautoscaler
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/cloud/machine-autoscaler.yml" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/cloud/machine-autoscaler.yml" replacing paths:
       | ["metadata"]["name"]               | maotest                 |
       | ["spec"]["minReplicas"]            | 1                       |
       | ["spec"]["maxReplicas"]            | 3                       |
@@ -33,7 +33,7 @@ Feature: Cluster Autoscaler Tests
 
     # Create workload
     When I run the :create admin command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/cloud/autoscaler-auto-tmpl.yml |
+      | f | <%= BushSlicer::HOME %>/testdata/cloud/autoscaler-auto-tmpl.yml |
     Then the step should succeed
     And admin ensures "workload" job is deleted from the "openshift-machine-api" project after scenario
 
@@ -62,7 +62,7 @@ Feature: Cluster Autoscaler Tests
     And I switch to cluster admin pseudo user
 
     When I run the :create admin command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/cloud/cluster-autoscaler.yml |
+      | f | <%= BushSlicer::HOME %>/testdata/cloud/cluster-autoscaler.yml |
     Then the step should succeed
     And admin ensures "default" clusterautoscaler is deleted after scenario
     And 1 pods become ready with labels:
@@ -81,7 +81,7 @@ Feature: Cluster Autoscaler Tests
 
     Given I use the "openshift-machine-api" project
     Given I clone a machineset named "machineset-clone-21517"
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/cloud/machine-autoscaler.yml" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/cloud/machine-autoscaler.yml" replacing paths:
       | ["metadata"]["name"]               | maotest                 |
       | ["spec"]["minReplicas"]            | 1                       |
       | ["spec"]["maxReplicas"]            | 3                       |
@@ -122,7 +122,7 @@ Feature: Cluster Autoscaler Tests
     Given I clone a machineset named "machineset-clone-22102-2"
     And evaluation of `machine_set.name` is stored in the :machineset_clone_22102_2 clipboard
 
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/cloud/machine-autoscaler.yml" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/cloud/machine-autoscaler.yml" replacing paths:
       | ["metadata"]["name"]               | maotest0                         |
       | ["spec"]["scaleTargetRef"]["name"] | <%= cb.machineset_clone_22102 %> |
     Then the step should succeed
@@ -149,7 +149,7 @@ Feature: Cluster Autoscaler Tests
     Then the step should succeed
     And the output should match "Annotations:\s+autoscaling.openshift.io/machineautoscaler: openshift-machine-api/maotest0"
 
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/cloud/machine-autoscaler.yml" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/cloud/machine-autoscaler.yml" replacing paths:
       | ["metadata"]["name"]               | maotest1                         |
       | ["spec"]["scaleTargetRef"]["name"] | <%= cb.machineset_clone_22102 %> |
     Then the step should succeed
@@ -188,7 +188,7 @@ Feature: Cluster Autoscaler Tests
     And admin ensures node number is restored to "<%= cb.num_to_restore %>" after scenario
 
     Given I use the "openshift-machine-api" project
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/cloud/machine-autoscaler.yml" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/cloud/machine-autoscaler.yml" replacing paths:
       | ["metadata"]["name"]               | maotest |
       | ["spec"]["minReplicas"]            | 1       |
       | ["spec"]["maxReplicas"]            | 3       |

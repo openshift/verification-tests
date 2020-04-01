@@ -1,7 +1,7 @@
 Feature: Some raw HTTP fetures
 
   Scenario: test download
-    When I open web server via the "<%= ENV['BUSHSLICER_HOME'] %>/testdata/build/shared_compressed_files/char_test.txt" url
+    When I open web server via the "<%= BushSlicer::HOME %>/testdata/build/shared_compressed_files/char_test.txt" url
     Then the step should succeed
 
   Scenario: Concurrent Get

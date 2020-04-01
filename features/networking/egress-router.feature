@@ -13,7 +13,7 @@ Feature: Egress router related features
     Given I have a project
     And SCC "privileged" is added to the "default" service account
     And I store a random unused IP address from the reserved range to the :valid_ip clipboard
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/egress-ingress/egress-router/legacy-egress-router-list.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/egress-ingress/egress-router/legacy-egress-router-list.json" replacing paths:
       | ["items"][0]["spec"]["template"]["spec"]["containers"][0]["image"] | <%= cb.router_image.gsub("haproxy","egress") %> |
       | ["items"][0]["spec"]["template"]["spec"]["containers"][0]["env"] | [{"name":"EGRESS_SOURCE","value":"<%= cb.valid_ip %>"},{"name":"EGRESS_GATEWAY","value":"<%= cb.gateway %>"},{"name":"EGRESS_DESTINATION","value":"10.4.205.4"},{"name":"EGRESS_ROUTER_MODE","value":"legacy"}] |
     Then the step should succeed
@@ -47,7 +47,7 @@ Feature: Egress router related features
     And evaluation of `project.name` is stored in the :project clipboard
     And SCC "privileged" is added to the "default" service account
     And I store a random unused IP address from the reserved range to the :valid_ip clipboard
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/egress-ingress/egress-router/egress-http-proxy.yaml" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/egress-ingress/egress-router/egress-http-proxy.yaml" replacing paths:
       | ["spec"]["initContainers"][0]["image"] | <%= cb.router_image.gsub("haproxy","egress") %> |
       | ["spec"]["initContainers"][0]["env"][0]["value"] | <%= cb.valid_ip %> |
       | ["spec"]["initContainers"][0]["env"][1]["value"] | <%= cb.gateway %> |
@@ -90,7 +90,7 @@ Feature: Egress router related features
     And SCC "privileged" is added to the "default" service account
     And I store a random unused IP address from the reserved range to the :valid_ip clipboard
     # IP 5.196.70.86 points to the external web service portquiz.net which is serving on all TCP ports
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/egress-ingress/egress-router/egress-dns-proxy.yaml" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/egress-ingress/egress-router/egress-dns-proxy.yaml" replacing paths:
       | ["spec"]["initContainers"][0]["image"] | <%= cb.router_image.gsub("haproxy","egress") %> |
       | ["spec"]["initContainers"][0]["env"][0]["value"] | <%= cb.valid_ip %> |
       | ["spec"]["initContainers"][0]["env"][1]["value"] | <%= cb.gateway %> |
@@ -158,7 +158,7 @@ Feature: Egress router related features
 
     # Create egress dns proxy with the configmap above
     Given I store a random unused IP address from the reserved range to the :valid_ip clipboard
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/egress-ingress/egress-router/egress-dns-proxy.yaml" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/egress-ingress/egress-router/egress-dns-proxy.yaml" replacing paths:
       | ["spec"]["initContainers"][0]["image"] | <%= cb.router_image.gsub("haproxy","egress") %> |
       | ["spec"]["initContainers"][0]["env"][0]["value"] | <%= cb.valid_ip %> |
       | ["spec"]["initContainers"][0]["env"][1]["value"] | <%= cb.gateway %> |

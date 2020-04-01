@@ -2,7 +2,7 @@ Feature: StorageClass testing scenarios
   @admin
   Scenario: admin creates a StorageClass
     Given I have a project
-    When admin creates a StorageClass from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/misc/storageClass.yaml" where:
+    When admin creates a StorageClass from "<%= BushSlicer::HOME %>/testdata/storage/misc/storageClass.yaml" where:
       | ["metadata"]["name"] | sc-<%= project.name %> |
       | ["provisioner"]      | kubernetes.io/manual   |
     Then the step should succeed

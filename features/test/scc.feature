@@ -18,4 +18,4 @@ Feature: some SCC policy related scenarios
     Given SCC "privileged" is added to the "system:serviceaccounts:<%= user.name %>:aggregated-logging-fluentd" service account
     And cluster role "cluster-reader" is added to the "system:serviceaccounts:<%= user.name %>:aggregated-logging-fluentd" service account
     And cluster role "oauth-editor" is added to the "system:serviceaccounts:<%= user.name %>:logging-deployer" service account
-    Given I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/logging_metrics/logging_deployer_configmap.yaml"
+    Given I download a file from "<%= BushSlicer::HOME %>/testdata/logging_metrics/logging_deployer_configmap.yaml"

@@ -17,7 +17,7 @@ Feature: buildlogic.feature
   Scenario: Result image will be tried to push after multi-build
     Given I have a project
     When I run the :new_app client command with:
-      | file |  <%= ENV['BUSHSLICER_HOME'] %>/testdata/image/language-image-templates/php-55-rhel7-stibuild.json |
+      | file |  <%= BushSlicer::HOME %>/testdata/image/language-image-templates/php-55-rhel7-stibuild.json |
     Then the step should succeed
     # The 1st build should be triggered automatically
     And the "php-sample-build-1" build was created
@@ -72,7 +72,7 @@ Feature: buildlogic.feature
   Scenario: Prevent STI builder images from running as root - using onbuild image
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/tc499516/test-buildconfig-onbuild-user0.json |
+      | f | <%= BushSlicer::HOME %>/testdata/build/tc499516/test-buildconfig-onbuild-user0.json |
     Then the step should succeed
     Given the "ruby-sample-build-onbuild-user0-1" build was created
     And the "ruby-sample-build-onbuild-user0-1" build failed
@@ -81,7 +81,7 @@ Feature: buildlogic.feature
     Then the output should contain:
       |  not allowed |
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/tc499516/test-buildconfig-onbuild-userdefault.json |
+      | f | <%= BushSlicer::HOME %>/testdata/build/tc499516/test-buildconfig-onbuild-userdefault.json |
     Then the step should succeed
     Given the "ruby-sample-build-onbuild-userdefault-1" build was created
     And the "ruby-sample-build-onbuild-userdefault-1" build failed
@@ -94,7 +94,7 @@ Feature: buildlogic.feature
   Scenario Outline: ForcePull image for build
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/forcePull/<template> |
+      | f | <%= BushSlicer::HOME %>/testdata/build/forcePull/<template> |
     Then the step should succeed
     Given the "ruby-sample-build-1" build was created
     And the "ruby-sample-build-1" build becomes :running
@@ -229,7 +229,7 @@ Feature: buildlogic.feature
   Scenario: Check s2i build substatus and times
     Given I have a project
     When I run the :new_app client command with:
-      | file | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/tc470422/application-template-stibuild.json|
+      | file | <%= BushSlicer::HOME %>/testdata/build/tc470422/application-template-stibuild.json|
     Then the step should succeed
     Given the "ruby-sample-build-1" build completed
     When I run the :describe client command with:

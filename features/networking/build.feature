@@ -4,7 +4,7 @@ Feature: Testing the isolation during build scenarios
   # @bug_id 1487652
   Scenario Outline: Build-container is constrained to access other projects pod for multitenant plugin
     Given I have a project
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/list_for_pods.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
     Then the step should succeed
     And a pod becomes ready with labels:
@@ -48,7 +48,7 @@ Feature: Testing the isolation during build scenarios
   # @bug_id 1487652
   Scenario Outline: Build-container is constrained to access other projects pod for networkpolicy plugin
     Given I have a project
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/list_for_pods.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
     Then the step should succeed
     And a pod becomes ready with labels:
@@ -85,7 +85,7 @@ Feature: Testing the isolation during build scenarios
     Given I switch to the first user
     #Create deny policy for project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/networkpolicy/defaultdeny-v1-semantic.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/networking/networkpolicy/defaultdeny-v1-semantic.yaml |
     Then the step should succeed
 
     Given I switch to the second user
