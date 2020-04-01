@@ -11,7 +11,7 @@ Feature: Kibana related features
     Given I create a project with non-leading digit name
     Given evaluation of `project` is stored in the :proj clipboard
     When I run the :new_app client command with:
-      | file | <%= ENV['BUSHSLICER_HOME'] %>/testdata/logging/loggen/container_json_unicode_log_template.json |
+      | file | <%= BushSlicer::HOME %>/testdata/logging/loggen/container_json_unicode_log_template.json |
     Then the step should succeed
     Given a pod becomes ready with labels:
       | run=centos-logtest,test=centos-logtest |

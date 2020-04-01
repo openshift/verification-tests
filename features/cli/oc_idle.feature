@@ -5,10 +5,10 @@ Feature: oc idle
   Scenario: CLI - Idle all the service in the same project
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/rc/idle-rc-1.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/rc/idle-rc-1.yaml |
     Then the step should succeed
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/rc/idle-rc-2.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/rc/idle-rc-2.yaml |
     Then the step should succeed
     Given I wait until replicationController "hello-pod" is ready
     And I wait until number of replicas match "2" for replicationController "hello-pod"
@@ -46,7 +46,7 @@ Feature: oc idle
   Scenario: CLI - Idle service by label
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/rc/idle-rc-2.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/rc/idle-rc-2.yaml |
     Then the step should succeed
     Given I wait until replicationController "hello-pod" is ready
     And I wait until number of replicas match "2" for replicationController "hello-pod"
@@ -81,7 +81,7 @@ Feature: oc idle
   Scenario: CLI - Idle service from file
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/rc/idle-rc-2.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/rc/idle-rc-2.yaml |
     Then the step should succeed
     Given I wait until replicationController "hello-pod" is ready
     And I wait until number of replicas match "2" for replicationController "hello-pod"
@@ -121,7 +121,7 @@ Feature: oc idle
   Scenario: CLI - Idle service with dry-run
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/rc/idle-rc-2.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/rc/idle-rc-2.yaml |
     Then the step should succeed
     Given I wait until replicationController "hello-pod" is ready
     And I wait until number of replicas match "2" for replicationController "hello-pod"
@@ -175,7 +175,7 @@ Feature: oc idle
     Given I use the "idling-echo" service
     And evaluation of `service.ip(user: user)` is stored in the :service_ip clipboard
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/caddy-docker.json |
+      | f | <%= BushSlicer::HOME %>/testdata/routing/caddy-docker.json |
     Then the step should succeed
     And the pod named "caddy-docker" becomes ready
     When I run the :exec client command with:
@@ -215,7 +215,7 @@ Feature: oc idle
   Scenario: Idling service with rc
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/rc/idle-rc-2.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/rc/idle-rc-2.yaml |
     Then the step should succeed
     Given I wait until replicationController "hello-pod" is ready
     And I wait until number of replicas match "2" for replicationController "hello-pod"
@@ -239,7 +239,7 @@ Feature: oc idle
     Given I use the "hello-svc" service
     And evaluation of `service.ip(user: user)` is stored in the :service_ip clipboard
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/caddy-docker.json |
+      | f | <%= BushSlicer::HOME %>/testdata/routing/caddy-docker.json |
     Then the step should succeed
     And the pod named "caddy-docker" becomes ready
     And I wait up to 60 seconds for the steps to pass:

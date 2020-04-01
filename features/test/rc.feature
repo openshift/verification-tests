@@ -3,7 +3,7 @@ Feature: rc related test
     Given I have a project
     Given I store all replicationcontrollers in the project to the clipboard
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/list_for_pods.json |
+      | f | <%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json |
     Then the step should succeed
     And a replicationController becomes ready with labels:
       | name=test-rc |

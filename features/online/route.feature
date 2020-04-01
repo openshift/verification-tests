@@ -5,7 +5,7 @@ Feature: Route test in online environments
   Scenario: Custom hostname is prohibited for passthrough terminated route
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/passthrough/service_secure.json |
+      | f | <%= BushSlicer::HOME %>/testdata/routing/passthrough/service_secure.json |
     Then the step should succeed
     When I run the :create_route_passthrough client command with:
       | name    | passthrough-route-custom |
@@ -24,10 +24,10 @@ Feature: Route test in online environments
   Scenario: Custom hostname is prohibited for unsecure route
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/caddy-docker.json |
+      | f | <%= BushSlicer::HOME %>/testdata/routing/caddy-docker.json |
     Then the step should succeed
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/unsecure/service_unsecure.json |
+      | f | <%= BushSlicer::HOME %>/testdata/routing/unsecure/service_unsecure.json |
     Then the step should succeed
     When I run the :expose client command with:
       | name          | route-unsecure   |
@@ -48,14 +48,14 @@ Feature: Route test in online environments
   Scenario: Custom hostname and cert are prohibited for edge terminated route
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/caddy-docker.json |
+      | f | <%= BushSlicer::HOME %>/testdata/routing/caddy-docker.json |
     Then the step should succeed
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/edge/service_unsecure.json |
+      | f | <%= BushSlicer::HOME %>/testdata/routing/edge/service_unsecure.json |
     Then the step should succeed
-    Given I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/edge/route_edge-www.edge.com.crt"
-    And I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/edge/route_edge-www.edge.com.key"
-    And I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/ca.pem"
+    Given I download a file from "<%= BushSlicer::HOME %>/testdata/routing/edge/route_edge-www.edge.com.crt"
+    And I download a file from "<%= BushSlicer::HOME %>/testdata/routing/edge/route_edge-www.edge.com.key"
+    And I download a file from "<%= BushSlicer::HOME %>/testdata/routing/ca.pem"
     When I run the :create_route_edge client command with:
       | name    | edge-route-custom |
       | service | service-unsecure  |
@@ -92,11 +92,11 @@ Feature: Route test in online environments
   Scenario: Custom hostname and cert are prohibited for reencrypt terminated route
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/reencrypt/reencrypt-without-all-cert.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/routing/reencrypt/reencrypt-without-all-cert.yaml |
     Then the step should succeed
-    Given I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/reencrypt/route_reencrypt-reen.example.com.crt"
-    And I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/reencrypt/route_reencrypt_dest.ca"
-    And I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/reencrypt/route_reencrypt-reen.example.com.key"
+    Given I download a file from "<%= BushSlicer::HOME %>/testdata/routing/reencrypt/route_reencrypt-reen.example.com.crt"
+    And I download a file from "<%= BushSlicer::HOME %>/testdata/routing/reencrypt/route_reencrypt_dest.ca"
+    And I download a file from "<%= BushSlicer::HOME %>/testdata/routing/reencrypt/route_reencrypt-reen.example.com.key"
 
     When I run the :create_route_reencrypt client command with:
       | name     | reen-route-custom1                        |

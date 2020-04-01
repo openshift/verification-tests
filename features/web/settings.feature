@@ -8,10 +8,10 @@ Feature: check settings page on web console
     # create limit and quota via CLI
     Given I use the "<%= project.name %>" project
     And I run the :create admin command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/quota/quota.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/quota/quota.yaml |
       | n | <%= project.name %> |
     And I run the :create admin command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/quota/limits.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/quota/limits.yaml |
       | n | <%= project.name %> |
     Then the step should succeed
 

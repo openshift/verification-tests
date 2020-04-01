@@ -5,7 +5,7 @@ Feature: dockerbuild.feature
   Scenario: Docker build with blank source repo
     Given I have a project
     When I run the :process client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/ruby22rhel7-template-docker-blankrepo.json |
+      | f | <%= BushSlicer::HOME %>/testdata/build/ruby22rhel7-template-docker-blankrepo.json |
     Then the step should succeed
     Given I save the output to file> blankrepo.json
     When I run the :create client command with:
@@ -19,7 +19,7 @@ Feature: dockerbuild.feature
   Scenario: Docker build with both SourceURI and context dir
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/ruby20rhel7-context-docker.json |
+      | f | <%= BushSlicer::HOME %>/testdata/build/ruby20rhel7-context-docker.json |
     Then the step should succeed
     When I run the :new_app client command with:
       | template | ruby-helloworld-sample |
@@ -77,7 +77,7 @@ Feature: dockerbuild.feature
   Scenario: Setting the nocache option in docker build strategy
     Given I have a project
     When I run the :new_app client command with:
-      | file | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/ruby22rhel7-template-docker.json |
+      | file | <%= BushSlicer::HOME %>/testdata/build/ruby22rhel7-template-docker.json |
     Then the step should succeed
     And the "ruby22-sample-build-1" build completed
     When I run the :patch client command with:
@@ -136,7 +136,7 @@ Feature: dockerbuild.feature
   Scenario: Docker build with invalid context dir
     Given I have a project
     When I run the :new_app client command with:
-      | file | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/ruby20rhel7-invalidcontext-docker.json |
+      | file | <%= BushSlicer::HOME %>/testdata/build/ruby20rhel7-invalidcontext-docker.json |
     Then the step should succeed
     When the "ruby20-sample-build-1" build failed
     And I get project build

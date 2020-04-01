@@ -5,10 +5,10 @@ Feature: Routes related features on web console
   Scenario: Create route with invalid name and hostname on web console
     Given I create a new project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/scc/pod_requests_nothing.json |
+      | f | <%= BushSlicer::HOME %>/testdata/authorization/scc/pod_requests_nothing.json |
     Then the step should succeed
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/unsecure/service_unsecure.json |
+      | f | <%= BushSlicer::HOME %>/testdata/routing/unsecure/service_unsecure.json |
     Then the step should succeed
     When I perform the :open_create_route_page_from_service_page web console action with:
       | project_name | <%= project.name%> |
@@ -39,11 +39,11 @@ Feature: Routes related features on web console
 
     # create pod, service and pod used for curl command
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/caddy-docker.json |
+      | f | <%= BushSlicer::HOME %>/testdata/routing/caddy-docker.json |
     Then the step should succeed
     Given the pod named "caddy-docker" becomes ready
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/unsecure/service_unsecure.json |
+      | f | <%= BushSlicer::HOME %>/testdata/routing/unsecure/service_unsecure.json |
     Then the step should succeed
 
     # create edge route with path on web console

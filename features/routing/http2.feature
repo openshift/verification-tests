@@ -14,12 +14,12 @@ Feature: Testing HTTP/2 related scenarios
     Given I switch to the first user
     And I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/routetimeout/httpbin-pod.json |
+      | f | <%= BushSlicer::HOME %>/testdata/routing/routetimeout/httpbin-pod.json |
     Then the step should succeed
     Given a pod becomes ready with labels:
       | name=httpbin-pod |
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/routetimeout/unsecure/service_unsecure.json  |
+      | f | <%= BushSlicer::HOME %>/testdata/routing/routetimeout/unsecure/service_unsecure.json  |
     Then the step should succeed
     When I run the :create_route_edge client command with:
       | name       | edge-route       |
@@ -55,14 +55,14 @@ Feature: Testing HTTP/2 related scenarios
     Given I switch to the first user
     And I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/routetimeout/httpbin-pod.json |
+      | f | <%= BushSlicer::HOME %>/testdata/routing/routetimeout/httpbin-pod.json |
     Then the step should succeed
     Given a pod becomes ready with labels:
       | name=httpbin-pod |
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/routetimeout/reencrypt/service_secure.json |
+      | f | <%= BushSlicer::HOME %>/testdata/routing/routetimeout/reencrypt/service_secure.json |
     Then the step should succeed
-    Given I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/reencrypt/route_reencrypt_dest.ca"
+    Given I download a file from "<%= BushSlicer::HOME %>/testdata/routing/reencrypt/route_reencrypt_dest.ca"
     When I run the :create_route_reencrypt client command with:
       | name       | reen-route              |
       | service    | service-secure          |

@@ -73,7 +73,7 @@ Feature: buildconfig.feature
      | type        | kubernetes.io/dockercfg                                                         |
     Then the step should succeed
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/<template> |
+      | f | <%= BushSlicer::HOME %>/testdata/build/<template> |
     Then the step should succeed
     And the "ruby-sample-build-1" build was created
     Then the "ruby-sample-build-1" build completes
@@ -94,7 +94,7 @@ Feature: buildconfig.feature
      | type        | kubernetes.io/dockercfg                                                         |
     Then the step should succeed
     When I run the :new_app client command with:
-     | file | <%= ENV['BUSHSLICER_HOME'] %>/testdata/templates/OCP-12057/application-template-stibuild_pull_private_sourceimage.json |
+     | file | <%= BushSlicer::HOME %>/testdata/templates/OCP-12057/application-template-stibuild_pull_private_sourceimage.json |
     Then the step should succeed
     And the "ruby-sample-build-1" build was created
     And the "ruby-sample-build-1" build completed

@@ -16,7 +16,7 @@ Feature: Ansible-service-broker related scenarios
 
     # Provision mediawiki apb
     When I process and create:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/serviceinstance-template.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/serviceinstance-template.yaml |
       | p | INSTANCE_NAME=<%= cb.prefix %>-mediawiki-apb          |
       | p | CLASS_EXTERNAL_NAME=<%= cb.prefix %>-mediawiki-apb    |
       | p | SECRET_NAME=<%= cb.prefix %>-mediawiki-apb-parameters |
@@ -24,7 +24,7 @@ Feature: Ansible-service-broker related scenarios
     Then the step should succeed
     And evaluation of `service_instance(cb.prefix + "-mediawiki-apb").uid(user: user)` is stored in the :mediawiki_uid clipboard
     When I process and create:
-      | f  | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/serviceinstance-parameters-template.yaml |
+      | f  | <%= BushSlicer::HOME %>/testdata/svc-catalog/serviceinstance-parameters-template.yaml |
       | p | SECRET_NAME=<%= cb.prefix %>-mediawiki-apb-parameters |
       | p | INSTANCE_NAME=<%= cb.prefix %>-mediawiki-apb          |
       | p | UID=<%= cb.mediawiki_uid %>                           |
@@ -33,7 +33,7 @@ Feature: Ansible-service-broker related scenarios
 
     # Provision DB apb
     When I process and create:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/serviceinstance-template.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/serviceinstance-template.yaml |
       | p | INSTANCE_NAME=<db_name>                               |
       | p | CLASS_EXTERNAL_NAME=<db_name>                         |
       | p | PLAN_EXTERNAL_NAME=<db_plan>                          |
@@ -42,7 +42,7 @@ Feature: Ansible-service-broker related scenarios
     Then the step should succeed
     And evaluation of `service_instance("<db_name>").uid(user: user)` is stored in the :db_uid clipboard
     When I process and create:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/serviceinstance-parameters-template.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/serviceinstance-parameters-template.yaml |
       | p | SECRET_NAME=<db_secret_name>                                                                                            |
       | p | INSTANCE_NAME=<db_name>                                                                                                 |
       | p | PARAMETERS=<db_parameters>                                                                                              |
@@ -72,7 +72,7 @@ Feature: Ansible-service-broker related scenarios
 
     # Create servicebinding of DB apb
     When I process and create:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/servicebinding-template.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/servicebinding-template.yaml |
       | p | BINDING_NAME=<db_name>                                                                                      |
       | p | INSTANCE_NAME=<db_name>                                                                                     |
       | p | SECRET_NAME=<db_credentials>                                                                                |

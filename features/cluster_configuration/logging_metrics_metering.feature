@@ -8,7 +8,7 @@ Feature: logging, metrics, and metering scenarios w/o cleanup
     # test option 'no_cleanup', which means don't register clean-up step in the installation step
     # the service will persists after test exits
     And logging service is installed with ansible using:
-      | inventory  | <%= ENV['BUSHSLICER_HOME'] %>/testdata/logging_metrics/OCP-12377/inventory |
+      | inventory  | <%= BushSlicer::HOME %>/testdata/logging_metrics/OCP-12377/inventory |
       | no_cleanup | true                                                                                                   |
 
   @admin
@@ -17,7 +17,7 @@ Feature: logging, metrics, and metering scenarios w/o cleanup
     Given I create a project with non-leading digit name
     Given the master version >= "3.5"
     And metrics service is installed with ansible using:
-      | inventory  | <%= ENV['BUSHSLICER_HOME'] %>/testdata/logging_metrics/OCP-12234/inventory |
+      | inventory  | <%= BushSlicer::HOME %>/testdata/logging_metrics/OCP-12234/inventory |
       | no_cleanup | true                                                                                                   |
 
   @admin
@@ -27,7 +27,7 @@ Feature: logging, metrics, and metering scenarios w/o cleanup
     Given I create a project with non-leading digit name
     And I store master major version in the clipboard
     And metering service is installed with ansible using:
-      | inventory     | <%= ENV['BUSHSLICER_HOME'] %>/testdata/logging_metrics/default_install_metering_params |
+      | inventory     | <%= BushSlicer::HOME %>/testdata/logging_metrics/default_install_metering_params |
       | playbook_args | -e openshift_image_tag=v<%= cb.master_version %> -e openshift_release=<%= cb.master_version %>                     |
       | no_cleanup    | true                                                                                                               |
 
@@ -37,5 +37,5 @@ Feature: logging, metrics, and metering scenarios w/o cleanup
     Given I create a project with non-leading digit name
     Given the master version >= "3.5"
     And metrics service is installed with ansible using:
-      | inventory  | <%= ENV['BUSHSLICER_HOME'] %>/testdata/logging_metrics/default_inventory_prometheus |
+      | inventory  | <%= BushSlicer::HOME %>/testdata/logging_metrics/default_inventory_prometheus |
       | no_cleanup | true                                                                                                            |

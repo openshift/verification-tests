@@ -27,7 +27,7 @@ Feature: test container related support
 
     # test deployment and replicaset
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/deployment/hello-deployment-1.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/deployment/hello-deployment-1.yaml |
     Then the step should succeed
     Given number of replicas of "hello-openshift" deployment becomes:
       | desired   | 10 |

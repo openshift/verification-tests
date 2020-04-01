@@ -21,7 +21,7 @@ Feature: Service-catalog related scenarios
     When I switch to cluster admin pseudo user
     And I use the "<%= cb.ups_broker_project %>" project
     When I process and create:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/ups-broker-template.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/ups-broker-template.yaml |
       | p | UPS_BROKER_PROJECT=<%= cb.ups_broker_project %>                                                         |
     Then the step should succeed
     And I wait up to 360 seconds for the steps to pass:
@@ -39,7 +39,7 @@ Feature: Service-catalog related scenarios
     Given I switch to the first user
     And I use the "<%= cb.user_project %>" project
     When I process and create:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/ups-instance-template.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/ups-instance-template.yaml |
       | p | USER_PROJECT=<%= cb.user_project %>                                                                       |
     Then the step should succeed
     And I wait up to 30 seconds for the steps to pass:
@@ -51,7 +51,7 @@ Feature: Service-catalog related scenarios
 
     # Create servicebinding
     When I process and create:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/ups-binding-template.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/ups-binding-template.yaml |
       | p | USER_PROJECT=<%= cb.user_project %>                                                                      |
     Then the step should succeed
     Given I wait for the "my-secret" secret to appear up to 60 seconds
@@ -144,7 +144,7 @@ Feature: Service-catalog related scenarios
     When I switch to cluster admin pseudo user
     And I use the "<%= cb.ups_broker_project %>" project
     When I process and create:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/ups-broker-template.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/ups-broker-template.yaml |
       | p | UPS_BROKER_PROJECT=<%= cb.ups_broker_project %>                                                         |
     Then the step should succeed
     And I wait up to 300 seconds for the steps to pass:
@@ -224,7 +224,7 @@ Feature: Service-catalog related scenarios
     When I switch to cluster admin pseudo user
     And I use the "<%= cb.ups_broker_project %>" project
     When I process and create:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/ups-broker-template.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/ups-broker-template.yaml |
       | p | UPS_BROKER_PROJECT=<%= cb.ups_broker_project %>                                                         |
     Then the step should succeed
     And I wait up to 300 seconds for the steps to pass:
@@ -242,7 +242,7 @@ Feature: Service-catalog related scenarios
     Given I switch to the first user
     And I use the "<%= cb.user_project %>" project
     When I process and create:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/ups-instance-template.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/ups-instance-template.yaml |
       | p | USER_PROJECT=<%= cb.user_project %>                                                                       |
     Then the step should succeed
     And I wait up to 30 seconds for the steps to pass:
@@ -281,7 +281,7 @@ Feature: Service-catalog related scenarios
     When I switch to cluster admin pseudo user
     And I use the "<%= cb.ups_broker_project %>" project
     When I process and create:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/ups-broker-template.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/ups-broker-template.yaml |
       | p | UPS_BROKER_PROJECT=<%= cb.ups_broker_project %>                                                         |
     Then the step should succeed
     And I wait up to 300 seconds for the steps to pass:
@@ -299,7 +299,7 @@ Feature: Service-catalog related scenarios
     Given I switch to the first user
     And I use the "<%= cb.user_project %>" project
     When I process and create:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/ups-instance-template.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/ups-instance-template.yaml |
       | p | USER_PROJECT=<%= cb.user_project %>                                                                       |
     Then the step should succeed
     And I wait up to 30 seconds for the steps to pass:
@@ -311,7 +311,7 @@ Feature: Service-catalog related scenarios
 
     # Create servicebinding
     When I process and create:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/ups-binding-template.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/ups-binding-template.yaml |
       | p | USER_PROJECT=<%= cb.user_project %>                                                                      |
     Then the step should succeed
     And I wait up to 10 seconds for the steps to pass:
@@ -351,7 +351,7 @@ Feature: Service-catalog related scenarios
     When I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
     When I process and create:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/ups-broker-template.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/ups-broker-template.yaml |
       | p | UPS_BROKER_PROJECT=<%= project.name %>                                                                  |
     Then the step should succeed
     And I wait up to 300 seconds for the steps to pass:

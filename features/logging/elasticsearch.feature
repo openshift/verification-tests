@@ -35,7 +35,7 @@ Feature: Elasticsearch related tests
     Then the step should succeed
     """
     When I process and create:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/logging/clusterlogging/clusterlogging-storage-template.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/logging/clusterlogging/clusterlogging-storage-template.yaml |
       | p | STORAGE_CLASS=<%= cb.default_sc.name %>                                                            |
       | p | PVC_SIZE=10Gi                                                                                      |
     Then the step should succeed

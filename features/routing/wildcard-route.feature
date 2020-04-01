@@ -11,14 +11,14 @@ Feature: Testing wildcard routes
     And I have a project
     And I store default router IPs in the :router_ip clipboard
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/wildcard_route/caddy-docker.json |
+      | f | <%= BushSlicer::HOME %>/testdata/routing/wildcard_route/caddy-docker.json |
     Then the step should succeed
     And the pod named "caddy-docker" becomes ready
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/<service> |
+      | f | <%= BushSlicer::HOME %>/testdata/routing/<service> |
     Then the step should succeed
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/wildcard_route/<route> |
+      | f | <%= BushSlicer::HOME %>/testdata/routing/wildcard_route/<route> |
     Then the step should succeed
 
     Given I have a pod-for-ping in the project

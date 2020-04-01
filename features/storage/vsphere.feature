@@ -4,11 +4,11 @@ Feature: vSphere test scenarios
   @admin
   Scenario Outline: Dynamically provision a vSphere volume with different disk formats
     Given I have a project
-    When admin creates a StorageClass from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/vsphere/storageclass.yml" where:
+    When admin creates a StorageClass from "<%= BushSlicer::HOME %>/testdata/storage/vsphere/storageclass.yml" where:
       | ["metadata"]["name"]         | storageclass-<%= project.name %> |
       | ["parameters"]["diskformat"] | <disk_format>                    |
     Then the step should succeed
-    When I create a dynamic pvc from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/vsphere/pvc.json" replacing paths:
+    When I create a dynamic pvc from "<%= BushSlicer::HOME %>/testdata/storage/vsphere/pvc.json" replacing paths:
         | ["metadata"]["name"]         | mypvc          |
         | ["spec"]["storageClassName"] | storageclass-<%= project.name %> |
     Then the step should succeed
@@ -17,7 +17,7 @@ Feature: vSphere test scenarios
     # Testing volume mount and read/write
     Given I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/vsphere/pod.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/vsphere/pod.json" replacing paths:
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc |
       | ["metadata"]["name"]                                         | mypod                   |
     Then the step should succeed
@@ -61,12 +61,12 @@ Feature: vSphere test scenarios
   @admin
   Scenario: Dynamically provision a vSphere volume with invalid disk format
     Given I have a project
-    When admin creates a StorageClass from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/vsphere/storageclass.yml" where:
+    When admin creates a StorageClass from "<%= BushSlicer::HOME %>/testdata/storage/vsphere/storageclass.yml" where:
       | ["metadata"]["name"]         | storageclass-<%= project.name %> |
       | ["parameters"]["diskformat"] | newformat                        |
     Then the step should succeed
 
-    Given I create a dynamic pvc from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/vsphere/pvc.json" replacing paths:
+    Given I create a dynamic pvc from "<%= BushSlicer::HOME %>/testdata/storage/vsphere/pvc.json" replacing paths:
       | ["metadata"]["name"]         | mypvc          |
       | ["spec"]["storageClassName"] | storageclass-<%= project.name %> |
     And I wait up to 30 seconds for the steps to pass:

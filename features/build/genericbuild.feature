@@ -4,7 +4,7 @@ Feature: genericbuild.feature
   # @case_id OCP-14373
   Scenario: Support valueFrom with filedRef syntax for pod field
     Given I have a project
-    Given I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/build/tc14373/test-valuefrom.json"
+    Given I download a file from "<%= BushSlicer::HOME %>/testdata/build/tc14373/test-valuefrom.json"
     And I run the :create client command with:
       | f | test-valuefrom.json | 
     Then the step should succeed
@@ -37,7 +37,7 @@ Feature: genericbuild.feature
     Then the output should match:
       | special.how: very |
       | special.type: charm |
-    Given I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/build/tc14381/test-valuefrommap.json"
+    Given I download a file from "<%= BushSlicer::HOME %>/testdata/build/tc14381/test-valuefrommap.json"
     And I run the :create client command with:
       | f | test-valuefrommap.json |
     Then the step should succeed
@@ -77,7 +77,7 @@ Feature: genericbuild.feature
     """
     Given the master service is restarted on all master nodes
     When I run the :new_app client command with:
-      | file | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/ruby22rhel7-template-sti.json |
+      | file | <%= BushSlicer::HOME %>/testdata/build/ruby22rhel7-template-sti.json |
     Then the step should succeed
     And the "ruby22-sample-build-1" build completed
 

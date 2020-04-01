@@ -5,10 +5,10 @@ Feature: Testing websocket features
   Scenario: haproxy router support websocket via unsecure route
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/websocket/pod.json |
+      | f | <%= BushSlicer::HOME %>/testdata/routing/websocket/pod.json |
     Then the step should succeed
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/websocket/service_unsecure.json |
+      | f | <%= BushSlicer::HOME %>/testdata/routing/websocket/service_unsecure.json |
     Then the step should succeed
     When I expose the "ws-unsecure" service
     Then the step should succeed

@@ -275,7 +275,7 @@ Feature: ONLY ONLINE Imagestreams related scripts in this file
     Given I have a project
     And I attempt the registry route based on API url and store it in the :registry_route clipboard  
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/image-streams/<file> |
+      | f | <%= BushSlicer::HOME %>/testdata/image-streams/<file> |
     Then the step should succeed  
     When I have a skopeo pod in the project
     Then the step should succeed  

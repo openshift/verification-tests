@@ -15,7 +15,7 @@ Feature: AWS specific scenarios
       | ["spec"]["storageClassName"] | sc-<%= project.name %>     |
     Then the step should succeed
     And the "mypvc" PVC becomes :bound within 60 seconds
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/ebs/pod.yaml" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/ebs/pod.yaml" replacing paths:
       | ["metadata"]["name"]                                         | mypod1   |
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc |
     Then the step should succeed
@@ -24,7 +24,7 @@ Feature: AWS specific scenarios
       | touch | /tmp/file_pod1 |
     Then the step should succeed
 
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/ebs/pod.yaml" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/ebs/pod.yaml" replacing paths:
       | ["metadata"]["name"]                                         | mypod2   |
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc |
     Then the step should succeed
