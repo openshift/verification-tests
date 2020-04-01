@@ -19,6 +19,9 @@ click_edit_yaml_link:
   - selector:
         xpath: //a[text()='Edit YAML']
     op: click
+  - selector:
+      xpath: //div[contains(@class,'view-lines')]
+    timeout: 20
 click_create_button:
   elements:
   - selector: &create_button
