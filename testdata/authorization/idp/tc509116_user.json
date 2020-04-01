@@ -1,0 +1,5 @@
+{
+    "kind": "User",
+    "apiVersion": "v1",
+    "metadata": {"name": "509116_user"}
+}
