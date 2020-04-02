@@ -1327,3 +1327,13 @@
     :openshift_version: !ruby/regexp '/^openshift v(.+)$/'
     :kubernetes_version: !ruby/regexp '/kubernetes v(.+)$/'
     :etcd_version: !ruby/regexp '/etcd (.+)$/'
+:registry_info:
+  :cmd: oc registry info
+  :options:
+    :internal: --internal=<value>
+    :quiet: --quiet=<value>
+:registry_login:
+  :cmd: oc registry login
+  :options:
+    :skip-check: --skip-check=<value>
+    :z: -z default
