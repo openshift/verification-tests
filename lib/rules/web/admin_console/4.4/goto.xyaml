@@ -1,6 +1,7 @@
 # projects
 goto_projects_list_page:
   url: k8s/cluster/projects
+  action: wait_box_loaded
 goto_project_status:
   url: status/ns/<project>
 goto_resource_page_under_default_project:
@@ -9,6 +10,7 @@ goto_project_resources_page:
   url: k8s/cluster/projects/<project_name>/workloads
 goto_project_details_page:
   url: k8s/cluster/projects/<project_name>/details
+
 # Dashboard renamed to Overview in 4.4, url is same "k8s/cluster/projects/<project_name>"
 goto_one_project_page: 
   url: k8s/cluster/projects/<project_name>
@@ -150,10 +152,8 @@ goto_catalog_page:
   url: catalog/ns/<project_name>
 goto_create_app_from_imagestream_page:
   url: catalog/source-to-image?imagestream=<is_name>&imagestream-ns=openshift&preselected-ns=<project_name>
-  action: wait_form_loaded
 goto_create_app_from_template_page:
   url: catalog/instantiate-template?template==<template_name>&template-ns=openshift&preselected-ns=<project_name>
-  action: wait_form_loaded
 
 # monitoring
 goto_monitoring_metrics_page:
@@ -182,7 +182,6 @@ goto_one_namespace_page:
 # operator hub
 goto_operator_hub_page:
   url: operatorhub/ns/default
-  action: wait_box_loaded
 goto_installed_operators_page:
   url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion
 goto_operator_subscription_page:
