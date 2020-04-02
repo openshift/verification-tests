@@ -911,12 +911,16 @@ module BushSlicer
     # @raise [Error] when any error was detected
     def reboot
       cmd = 'shutdown -r now "BushSlicer triggered reboot"'
+      valid_err_messages = [
+        "connection refused",
+        "watch closed"
+      ]
       res = exec_raw(cmd, timeout: 20)
       if res[:success]
         return nil
       else
-        if res[:response].include? "connection refused"
-          # sometimes reboot is too fast and connection terminates too early
+        if valid_err_messages.any? { |m| res[:response].include? m }
+          # sometimes reboot is too fast and oc gets error managing debug pod
         else
           raise "error rebooting node, see log"
         end
