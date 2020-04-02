@@ -107,3 +107,4 @@ status_specific_silence:
   element:
     selector:
       xpath: //div[@aria-label='Silences']//td[text()='<status>'][1]
+  

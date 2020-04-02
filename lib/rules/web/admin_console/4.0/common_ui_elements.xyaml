@@ -35,6 +35,18 @@ clear_input_value:
       id: <clear_field_id>
     op: clear
     type: input
+clear_input_class:
+  element:
+    selector:
+      xpath: //input[contains(@class, '<class_text>')]
+    op: clear
+    type: input
+set_input_class:
+  element:
+    selector:
+      xpath: //input[contains(@class, '<class_text>')]
+    op: send_keys <input_value>
+    type: input
 check_row_filter_on_page:
   elements:
   - selector:

@@ -97,6 +97,12 @@ set_input_value:
       xpath: //input[@id='<input_field_id>']
     op: send_keys <input_value>
     type: input
+clear_input_class:
+  element:
+    selector:
+      xpath: //input[contains(@class, '<class_text>')]
+    op: clear
+    type: input
 set_input_class:
   element:
     selector:
