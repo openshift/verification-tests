@@ -14,17 +14,10 @@ Feature: Testing registry
       | user name       | system:anonymous |
     Then the step should succeed
 
-    Given I have a skopeo pod in the project
-    And master CA is added to the "skopeo" dc
-    When I execute on the pod:
-      | skopeo                     |
-      | --debug                    |
-      | --insecure-policy          |
-      | copy                       |
-      | --dest-cert-dir            |
-      | /opt/qe/ca                 |
-      | docker://docker.io/aosqe/singlelayer:latest |
-      | docker://<%= cb.registry_ip %>/<%= project.name %>/mystream:latest |
+    When I run the :import_image client command with:
+      | from       | docker.io/library/busybox |
+      | confirm    | true                      |
+      | image_name | mystream                  |
     Then the step should succeed
     And the "mystream:latest" image stream tag was created
     And evaluation of `image_stream_tag("mystream:latest").image_layers(user:user)` is stored in the :layers clipboard
@@ -36,7 +29,6 @@ Feature: Testing registry
       | confirm           | true                  |
       | registry_url      | <%= cb.registry_ip %> |
     Then the step should succeed
-    And all the image layers in the :layers clipboard do not exist in the registry
     When I run the :get client command with:
       | resource | images |
     Then the step should succeed
