@@ -30,9 +30,6 @@ Feature: Multus-CNI ipv6 related scenarios
     Then the output should contain "net1"
     And the output should contain "macvlan mode bridge"
     When I execute on the pod:
-      | bash | -c | /usr/sbin/ip addr |
-    Then the step should succeed
-    When I execute on the pod:
       | bash | -c | /usr/sbin/ip addr show net1 \| grep -Po 'fd00::192:168:22:[0-9a-fA-F]{1,4}' |
     Then the step should succeed
     And evaluation of `@result[:response].chomp` is stored in the :pod1_multus_ipv6 clipboard
@@ -44,9 +41,6 @@ Feature: Multus-CNI ipv6 related scenarios
     And 2 pods become ready with labels:
       | name=macvlan-bridge-pod-v6 |
     And evaluation of `pod(-1).name` is stored in the :pod2 clipboard
-    When I execute on the "<%= cb.pod2 %>" pod:
-      | bash | -c | /usr/sbin/ip addr |
-    Then the step should succeed
 
     # Try to access macvlan ip on pod1 from pod2
     When I execute on the "<%= cb.pod2 %>" pod:
