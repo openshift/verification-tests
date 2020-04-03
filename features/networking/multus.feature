@@ -1201,7 +1201,7 @@ Feature: Multus-CNI related scenarios
     # Create the net-attach-def via cluster admin
     Given I have a project
     When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/whereabouts-macvlan.yaml" replacing paths:
-      | ["metadata"]["namespace"] | <%= project.name %>                                                                                                                                             |    
+      | ["metadata"]["namespace"] | <%= project.name %>          |    
       | ["spec"]["config"]|'{ "cniVersion": "0.3.0", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "bridge", "ipam": { "type": "whereabouts", "range": "192.168.22.100/24"} }' |
     Then the step should succeed
     
@@ -1223,7 +1223,7 @@ Feature: Multus-CNI related scenarios
     When I execute on the "macvlan-bridge-whereabouts-pod1" pod:
       | /usr/sbin/ip | a  |
     Then the output should contain:
-      | 192.168.22.100 |
+      | 192.168.22.100    |
 
     # Create second pod absorbing above net-attach-def
     When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
@@ -1243,4 +1243,4 @@ Feature: Multus-CNI related scenarios
     When I execute on the "macvlan-bridge-whereabouts-pod2" pod:
       | /usr/sbin/ip | a  |
     Then the output should contain:
-      | 192.168.22.101 |
+      | 192.168.22.101    |
