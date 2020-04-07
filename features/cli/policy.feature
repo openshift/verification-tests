@@ -51,21 +51,15 @@ Feature: change the policy of user/service account
   # @case_id OCP-12430
   @admin
   Scenario: Could get projects for new role which has permission to get projects
-    When I run the :create admin command with:
-      | f | <%= BushSlicer::HOME %>/testdata/authorization/policy/clustergetproject.json |
+    Given an 8 characters random string of type :dns is stored into the :random clipboard
+    And admin ensures "clusterrole-12430-<%= cb.random %>" cluster_role is deleted after scenario
+    When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/authorization/policy/clustergetproject.json" replacing paths:
+      | ["metadata"]["name"] | clusterrole-12430-<%= cb.random %> |
     Then the step should succeed
-    #clean-up clusterrole
-    And I register clean-up steps:
-      | I run the :delete admin command with: |
-      |   ! f ! <%= BushSlicer::HOME %>/testdata/authorization/policy/clustergetproject.json ! |
-      | the step should succeed               |
-    When admin creates a project
-    Then the step should succeed
-    When I run the :oadm_policy_add_role_to_user admin command with:
-      | role_name      | viewproject      |
-      | user_name      | <%= user.name %> |
-      | n              | <%= project.name %> |
-    Then the step should succeed
+    Given cluster role "clusterrole-12430-<%= cb.random %>" is added to the "second" user
+
+    Given I have a project
+    And I switch to the second user
     When I run the :get client command with:
       | resource | project |
     Then the output should match:
