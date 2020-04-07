@@ -1,0 +1,243 @@
+# ------------------- The including all of the dialogs defination-------------
+
+deletion_dialog_loaded:
+    elements:
+        - selector:
+            xpath: //button[@class='pf-c-button pf-m-plain' and @aria-label='Close']
+archive_dialog_loaded:
+    elements:
+        - selector:
+            xpath: //div[@class='pf-c-modal-box pf-m-sm' and @aria-label='Archive Cluster']
+        - selector:
+            xpath: //button[@class='pf-c-button pf-m-plain' and @aria-label='Close']
+        - selector:
+            xpath: //h1[@class='pf-c-title pf-m-2xl' and text()='Archive Cluster']
+        - selector:
+            xpath: //form/p[contains(text(), 'Archiving a cluster will remove it from the cluster list and remove the cluster from subscription management.')]
+        - selector:
+            xpath: //form/p[contains(text(),'This action will not delete the cluster, only remove it from OpenShift Cluster Manager.')]
+        - selector:
+            xpath: //form//a[@href='https://access.redhat.com/articles/4397891' and text()='Instructions']
+        - selector:
+            xpath: //form/p[contains(text()[2], 'for deleting a cluster may be found in the knowledge base.')]
+        - selector:
+            xpath: //button[@class='pf-c-button pf-m-secondary' and text()='Cancel']
+        - selector:
+            xpath: //button[@class='pf-c-button pf-m-primary' and text()='Archive cluster']
+check_close_button:
+  element: &close_button_in_dialog
+    selector:
+      xpath: //button[@class='pf-c-button pf-m-plain' and @aria-label='Close']
+click_close_button:
+  element:
+    <<: *close_button_in_dialog
+    op: click
+check_cancel_button:
+  element: &cancel_button_in_dialog
+    selector:
+      xpath: //button[@class='pf-c-button pf-m-secondary' and text()='Cancel']
+click_cancel_button:
+  element:
+    <<: *cancel_button_in_dialog
+    op: click
+check_apply_button:
+  element: &apply_button_in_dialog
+    selector:
+      xpath: //button[@class='pf-c-button pf-m-primary' and @type='submit' and text()='Apply']
+click_apply_button:
+  element:
+    <<: *apply_button_in_dialog
+    op: click
+click_archive_button:
+    element:
+        selector:
+            xpath: //button[@class='pf-c-button pf-m-primary' and text()='Archive cluster']
+        op: click
+archive_succ_promt_message_displayed:
+    element: &archive_succ_promt_message
+        selector:
+            xpath: //h4[contains(text(),'Cluster <cluster_name> has been archived')]
+        timeout: 120
+    action: archive_succ_promt_message_missing
+archive_succ_promt_message_missing:
+    element:
+        <<: *archive_succ_promt_message
+        missing: true
+        
+unarchive_dialog_loaded:
+    elements:
+        - selector:
+            xpath: //button[@class='pf-c-button pf-m-plain' and @aria-label='Close']
+        - selector:
+            xpath: //h1[@class='pf-c-title pf-m-2xl' and text()='Unarchive Cluster']
+        - selector:
+            xpath: //p[text()='Un-archiving a cluster will make it visible in the active (default) cluster list. You may need to manage subscriptions if the cluster is active.']
+        - selector:
+            xpath: //button[@class='pf-c-button pf-m-secondary' and text()='Cancel']
+        - selector:
+            xpath: //button[@class='pf-c-button pf-m-primary' and text()='Unarchive cluster']
+click_unarchive_button:
+    element:
+        selector:
+            xpath: //button[@class='pf-c-button pf-m-primary' and text()='Unarchive cluster']
+        op: click
+unarchive_succ_prompt_message_displayed:
+    element: &unarchive_succ_prompt_message
+        selector:
+            xpath: //*[contains(text(),'Cluster <cluster_name> has been unarchived')]
+        timeout: 60
+    action: unarchive_succ_prompt_message_missing
+unarchive_succ_prompt_message_missing:
+    element:
+        <<: *unarchive_succ_prompt_message
+        missing: true
+        
+check_display_name_dialog_loaded:
+  elements:
+    - selector:
+        xpath: //div[@class='pf-c-backdrop']/div/div/h1[text()='Edit Display Name'] 
+    - selector:
+        xpath: //*[@id='edit-display-name-input' and contains(@value,<original_name>)]
+edit_display_name_in_dialog:
+  elements:
+    - selector:
+        id: edit-display-name-input
+      type: input
+      op: clear
+  elements:
+    - selector:
+        id: edit-display-name-input
+      type: input
+      op: send_keys <new_name>
+  elements:
+    - selector:
+        xpath: //button[@class="pf-c-button pf-m-primary" and @type="submit"]
+      op: click
+delete_cluster_dialog_loaded:
+    elements:
+        - selector:
+            xpath: //h1[text()='Delete Cluster']
+        - selector:
+            xpath: //p[text()='This action cannot be undone. It will uninstall the cluster, and all data will be deleted.']
+        - selector:
+            xpath: //p[text()[1]='Confirm deletion by typing']
+        #- selector:
+        #    xpath: //p[text()[2]='below:']
+        - selector:
+            xpath: //p/span[text()='<cluster_name>']
+        - selector:
+            xpath: //input[@class='pf-c-form-control']
+            type: text
+        - selector:
+            xpath: //button[@aria-label='Close']
+        - selector:
+            xpath: //button[text()='Cancel']
+            type: button
+        - selector:
+            xpath: //button[text()='Delete' and @disabled='']
+            type: submit
+check_delete_button_disabled:
+    element:
+        selector:
+            xpath: //button[text()='Delete' and @disabled='']
+            type: submit
+input_cluster_name_on_deletion_dialog:
+    element:
+        selector:
+            xpath: //input[@class='pf-c-form-control']
+            type: text
+        op: send_keys <input_text>
+click_delete_button_on_deletion_dialog:
+    element:
+        selector:
+            xpath: //button[text()='Delete']
+            type: submit
+        op: click
+osd_creation_error_dialog_loaded:
+    elements:
+        - selector:
+            xpath: //h1[text()='Error Creating Cluster']
+            timeout: 30
+        - selector:
+            xpath: //h1/*[name()='svg']
+            timeout: 30
+        - selector:
+            xpath: //p[contains(text(),"<error_reason>")]
+            timeout: 30
+        - selector:
+            xpath: //p[contains(text(), 'Operation ID')]
+            timeout: 30
+        - selector:
+            xpath: //button[text()='Close']
+            timeout: 30
+close_error_message_dialog:
+    element:
+        selector:
+            xpath: //button[text()='Close']
+            type: submit
+        op: click
+
+choose_compute_node_in_dialog:
+  action: click_compute_node_dropdown
+  action: select_compute_node_in_dialog
+  action: click_apply_button
+  action: check_dialog_missing
+click_compute_node_dropdown:
+  element:
+    selector:
+      xpath: //select[@name='nodes_compute']
+    op: click
+select_compute_node_in_dialog:
+  element:
+    selector:
+      xpath: //select[@name='nodes_compute']//option[text()='<compute_node_number>']
+    timeout: 50
+    op: click
+check_dialog_missing:
+  element:
+    selector:
+      xpath: //div[@class='pf-c-backdrop']/div[@class='pf-l-bullseye']
+    missing: true
+    timeout: 30
+check_active_add_url_button:
+  element: &active_add_url_button
+    selector:
+      xpath: //div[@aria-label='Add Console URL' and @role='dialog']//button[@class='pf-c-button pf-m-primary']
+click_add_url_button:
+  element:
+    <<: *active_add_url_button
+    op: click
+customer_cloud_subscription_prompt_message_loaded:
+    elements:
+        - selector:
+            xpath: //h1[text()='Customer Cloud Subscription']
+        - selector:
+            text: "With this subscription option, the cluster will be provisioned in an AWS account owned by you or your company. This allows you to pay AWS directly for public cloud costs, leveraging your existing relationship."
+        - selector:
+            xpath: //h3[text()='Important'] 
+        - selector:
+            text: "In order for the cluster provisioning to succeed, you must ensure the following:"
+        - selector:
+            xpath: //*[contains(text(),"Your AWS account has no services deployed in it.")]
+        - selector:
+            text: "Your AWS account has an Enterprise Support Plan attached."
+        - selector:
+            xpath: //*[contains(text(),"Your AWS account has the necessary limits to support the desired cluster size.")]
+        - selector:
+            xpath: //a[@href='https://www.openshift.com/dedicated/byoc' and text()=' See resource requirements.']
+        - selector:
+            xpath: //li[contains(text(),'osdCcsAdmin')]
+        - selector:
+            xpath: //li[contains(text(),'An Organization Service Control Policy (SCP) is set up according to the')]
+        - selector:
+            xpath: //a[@href='https://www.openshift.com/dedicated/byoc' and text()='documentation.']
+        - selector:
+            xpath: //div[text()[1]='Refer to the']
+
+close_customer_cloud_subscription_prompt_message:
+    action: customer_cloud_subscription_prompt_message_loaded
+    element:
+        selector:
+            xpath: //button[text()='Close']
+        op: click
+

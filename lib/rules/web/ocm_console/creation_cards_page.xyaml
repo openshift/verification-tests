@@ -1,0 +1,47 @@
+#----------------------- This page is for create cards page ----------------------
+switch_to_creation_cards_page:
+  action: click_create_cluster_button
+  action: creation_cards_page_loaded
+
+creation_cards_page_loaded:
+    element:
+        selector:
+            xpath: //a[@class='infra-card pf-c-card create-cluster-card' and contains(@href, '/openshift/install')]
+
+check_creation_cards_page:
+    elements:
+        - selector:
+            xpath: //a[@class='pf-c-breadcrumb__link' and text()='Clusters']
+        - selector:
+            xpath: //li[@class='pf-c-breadcrumb__item' and text()='Create']
+        - selector:
+            xpath: //h1[@class='pf-c-title pf-m-2xl ocm-page-title' and text()='Create a Cluster to Get Started']
+        - selector:
+            xpath: //a[@class='infra-card pf-c-card create-cluster-card' and contains(@href, '/openshift/install')]
+        - selector:
+            xpath: //img[@alt='OpenShift Container Platform']/../../div[contains(., 'Create an OCP cluster')]
+        - selector:
+            xpath: //img[@alt='OpenShift Dedicated']/../../div[contains(., 'Create a Red Hat-managed cluster (OSD)')]
+
+check_osd_button_enable:
+    element:
+        selector:
+            xpath: //a[@class='infra-card pf-c-card create-cluster-card' and contains(@href, '/openshift/create/osd')]
+
+click_create_osd_button:
+    element:
+        selector:
+            xpath: //a[@class='infra-card pf-c-card create-cluster-card' and contains(@href, '/openshift/create/osd')]
+        op: click
+click_create_ocp_button:
+    element:
+        selector:
+            xpath: //a[@class='infra-card pf-c-card create-cluster-card' and contains(@href, '/openshift/install')]
+
+check_osd_button_disable:
+    elements:
+        - selector:
+            xpath: //article[@class='pf-c-card infra-card create-cluster-card card-disabled']
+          op: hover
+        - selector:
+            xpath: //div[@class='tippy-popper' and contains(., 'You do not have quota for this option.')]

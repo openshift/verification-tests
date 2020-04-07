@@ -1,0 +1,314 @@
+#--------------------- This is for OSD creation page --------------------
+osd_creation_page_loaded:
+    action: creation_page_navigation_displayed
+    action: cluster_detail_displayed
+    action: cluster_scale_displayed
+input_cluster_name_on_osd_creation_page:
+    element:
+        selector:
+            xpath: //input[@id='name']
+        op: send_keys <cluster_name>
+        type: input
+
+creation_page_navigation_displayed:
+    elements:
+    - selector:
+        xpath: //a[@class='pf-c-breadcrumb__link' and text()='Clusters']
+    - selector:
+        xpath: //a[@class='pf-c-breadcrumb__link' and text()='Create']
+    - selector:
+        xpath: //li[@class='pf-c-breadcrumb__item' and text()='OpenShift Dedicated']
+page_title_displayed:
+    elements:
+        - selector:
+            xpath: //img[@class='openshift-logo-page-title' and @alt='OpenShift']
+        - selector:
+            xpath: //h1[contains(@class,'ocm-page-title') and text()='Create an OpenShift Dedicated Cluster']
+cluster_detail_displayed:
+    elements:
+        - selector:
+            xpath: //h3[@class='osd-page-header' and text()='Cluster Details']
+cluster_scale_displayed:
+    elements:
+    - selector:
+        text: Compute node instance type
+    - selector:
+        xpath: //label[@class='pf-c-form__label' and @for='node_type']/span[@class='pf-c-form__label-required']
+    - selector:
+        xpath: //div[@class='flat-radio-buttons-flex-container']
+specified_machine_type_loaded:
+    element: &machine_type_locator
+        selector:
+            xpath: //button[contains(@id,"<machine_type>")]
+select_machine_type:
+    element:
+        <<: *machine_type_locator
+        op: click
+
+hover_machine_type:
+    element:
+        <<: *machine_type_locator
+        op: hover
+
+click_create_button:
+    element:
+        selector:
+            xpath: //button[@type='submit']
+        op: click
+switch_to_osd_creation_page:
+    action: switch_to_creation_cards_page
+    element:
+        selector:
+            xpath: //a[contains(@href,'/openshift/create/osd')]
+        op: click
+    action: osd_creation_page_loaded
+select_advanced_radio_button:
+    element:
+        selector:
+            xpath: //*[@id='network_configuration_toggle-advanced']
+        op: click
+select_basic_radio_button:
+    element:
+        selector:
+            xpath: //*[@id='network_configuration_toggle-basic']
+        op: click
+
+check_networking_configuration:
+    elements:
+        - selector:
+            xpath: //h3[text()='Networking']
+        - selector:
+            xpath: //span[text()='Network configuration']
+        - selector:
+            xpath: //label[text()='Basic']
+        - selector:
+            xpath: //label[text()='Basic']/div[text()='Creates a new VPC for your cluster using default values']
+        - selector:
+            xpath: //label[text()='Advanced']
+        - selector:
+            xpath: //label[text()='Advanced']/div[text()='Allow clusters to use a new VPC with customizable addresses']
+
+check_advanced_elements_loaded:
+    elements:
+        - selector:
+            xpath: //*[@id='network_machine_cidr' and @placeholder='10.0.0.0/16']
+        - selector:
+            xpath: //*[@id='network_service_cidr' and @placeholder='172.30.0.0/16']
+        - selector:
+            xpath: //*[@id='network_pod_cidr' and @placeholder='10.128.0.0/14']
+set_cidr_value:
+    element:
+        selector:
+            xpath: //*[@id='<locator_id>']
+        op: send_keys <cidr_value>
+check_cidr_error_message:
+    action: set_cidr_value
+    action: click_create_button
+    element:
+        selector:
+            xpath: //*[contains(text(),"IP address range '<cidr_value>' isn't valid CIDR notation")]
+    action: clear_input
+
+check_machine_cidr_invalid_range_error_message:
+    params:
+        locator_id: network_machine_cidr
+    action: set_cidr_value
+    action: click_create_button
+    element:
+        selector:
+            xpath: //*[contains(text(),"which provides up to 23 nodes for single-zone clusters or 10 nodes for each zone in a multi-zone clusters")]
+    action: clear_input
+check_service_cidr_invalid_range_error_message:
+    params:
+        locator_id: network_service_cidr
+    action: set_cidr_value
+    action: click_create_button
+    element:
+        selector:
+            xpath: //*[contains(text(),"which provides up to 254 services")]
+    action: clear_input
+check_pod_cidr_invalid_range_error_message:
+    params:
+        locator_id: network_pod_cidr
+    action: set_cidr_value
+    action: click_create_button
+    element:
+        selector:
+            xpath: //*[contains(text(),"which provides up to 32 nodes")]
+    action: clear_input
+
+
+check_host_prefix_lower_range_error_message:
+    params:
+        locator_id: network_host_prefix
+        cidr_value: "/2"
+    action: set_cidr_value
+    action: click_create_button
+    element:
+        selector:
+            xpath: //*[contains(text(),"which provides up to 510 Pod IP addresses")]
+    action: clear_input
+check_host_prefix_higher_range_error_message:
+    params:
+        locator_id: network_host_prefix
+        cidr_value: /29
+    action: set_cidr_value
+    action: click_create_button
+    element:
+        selector:
+            xpath: //*[contains(text(),"which provides up to 62 Pod IP addresses")]
+    action: clear_input
+check_host_prefix_illegal_error_message:
+    params:
+        locator_id: network_host_prefix
+        cidr_value: abcd
+    action: set_cidr_value
+    action: click_create_button
+    element:
+        selector:
+            xpath: //*[contains(text(),"It must follow the RFC-4632 format")]
+    action: clear_input
+
+check_host_prefix_error_messages:
+    action: check_host_prefix_illegal_error_message
+    action: check_host_prefix_lower_range_error_message
+    action: check_host_prefix_higher_range_error_message
+
+check_cidr_invalid_range_error_message:
+    action: check_machine_cidr_invalid_range_error_message
+    action: check_service_cidr_invalid_range_error_message
+    action: check_pod_cidr_invalid_range_error_message
+
+check_machine_cidr_error_message:
+    params:
+        locator_id: network_machine_cidr
+    action: check_cidr_error_message
+check_service_cidr_error_message:
+    params:
+        locator_id: network_service_cidr
+    action: check_cidr_error_message
+check_pod_cidr_error_message:
+    params:
+        locator_id: network_pod_cidr
+    action: check_cidr_error_message
+check_cidr_background_validation_error_message:
+    action: clear_input
+    action: osd_creation_page_loaded
+    action: check_networking_configuration
+    action: check_advanced_elements_loaded
+    action: set_cidr_value
+    action: click_create_button
+    action: osd_creation_error_dialog_loaded
+    action: close_error_message_dialog
+fill_in_required_items_on_osd_creation_page:
+    action: input_cluster_name_on_osd_creation_page
+    action: select_machine_type
+select_multi_az:
+    element:
+        selector:
+            xpath: //input[@id='multi_az-true']
+        op: click
+no_quota_tooltip_displayed:
+    element:
+        selector:
+            xpath: //div[@class='pf-c-tooltip__content' and text()='You do not have quota for this node type. Contact sales to purchase additional quota.']
+check_no_quota_tooltip:
+    action: hover_machine_type
+    action: no_quota_tooltip_displayed
+click_customer_cloud_subscription:
+    element:
+        selector:
+            xpath: //button[@id='customer cloud subscription']
+        op: click
+
+select_byoc_model:
+    action: osd_creation_page_loaded
+    action: click_customer_cloud_subscription
+    action: close_customer_cloud_subscription_prompt_message
+
+check_no_input_errors_to_required_aws_items:
+    action: click_create_button
+    elements:
+        - selector:
+            xpath: //input[@id='account_id']/../div[text()=' Field is required']
+        - selector:
+            xpath: //input[@id='access_key_id']/../div[text()=' Field is required']
+        - selector:
+            xpath: //input[@id='secret_access_key']/../div[text()=' Field is required']
+aws_account_id_textbox_loaded:
+    element: &aws_account_id_textbox
+        selector:
+            xpath: //input[@id='account_id']
+aws_access_key_textbox_loaded:
+    element: &aws_access_key_textbox
+        selector:
+            xpath: //input[@id='access_key_id']
+aws_access_secret_textbox_loaded:
+    element: &aws_secret_key_textbox
+        selector:
+            xpath: //input[@id='secret_access_key']
+input_aws_account_id:
+    element:
+        <<: *aws_account_id_textbox
+        op: send_keys <account_id>
+input_aws_access_key:
+    element:
+        <<: *aws_access_key_textbox
+        op: send_keys <aws_access_key>
+input_aws_secret_key:
+    element:
+        <<: *aws_secret_key_textbox
+        op: send_keys <aws_secret>
+input_aws_credentials:
+    action: input_aws_account_id
+    action: input_aws_access_key
+    action: input_aws_secret_key
+
+check_invalid_aws_credential_error_message:
+    params:
+        account_id: invalidaccountid
+        aws_access_key: invalidaccesskey
+        aws_secret: invalidawssecret
+        error_reason: "The provided AWS credentials are not valid"
+        cluster_name: aws-test
+        machine_type: m5.xlarge
+    action: input_aws_credentials
+    action: fill_in_required_items_on_osd_creation_page
+    action: click_create_button
+    action: osd_creation_error_dialog_loaded
+
+region_dropdown_loaded:
+    element: &region_dropdown
+        selector:
+            xpath: //select[contains(@class, 'cloud-region-combo-box')]
+expand_region_dropdown:
+    element:
+        <<: *region_dropdown
+        op: click
+close_region_dropdown:
+    action: expand_region_dropdown
+
+    
+select_region:
+    action: expand_region_dropdown
+    element:
+        selector:
+            xpath: //option[@value='<region_id>']
+        op: click
+select_region_by_text:
+    action: expand_region_dropdown
+    element:
+        selector:
+            xpath: //option[text()='<region_name>']
+        op: click
+check_non_support_multi_az_region_error_message:
+    params:
+        error_reason: "does not support multiple availability zones"
+        cluster_name: nonmulti-az-test
+    action: osd_creation_page_loaded
+    action: input_cluster_name_on_osd_creation_page
+    action: select_multi_az
+    action: select_region
+    action: click_create_button
+    action: osd_creation_error_dialog_loaded
+    action: close_error_message_dialog

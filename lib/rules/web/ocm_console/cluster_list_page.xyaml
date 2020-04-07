@@ -1,0 +1,409 @@
+create_cluster_button_loaded:
+    element: &create_cluster_button
+        selector:
+            xpath: //a[contains(@href, '/openshift/create')]/button[text()='Create cluster']
+
+
+check_cluster_list_page_without_cluster:
+    action: create_cluster_button_loaded
+    elements:
+        - selector:
+            xpath: //h4[@class='pf-c-title pf-m-2xl' and text()='No OpenShift clusters to display']
+        - selector:
+            xpath: //div[@class='pf-c-empty-state__body' and contains(., 'create your first cluster')]
+        - selector:
+            xpath: //a[contains(@href, '/openshift/register')]/button[text()='Register cluster']
+        - selector:
+            xpath: //a[contains(@href, '/openshift/archived')]/button[text()='View archived clusters']
+
+cluster_list_page_loaded:
+    action: create_cluster_button_loaded
+    elements:
+        - selector:
+            xpath: //h1[text()='Clusters']
+        - selector:
+            xpath: //button[@class='pf-c-button pf-m-plain' and text()='Name']
+check_cluster_list_page:
+    action: create_cluster_button_loaded
+    elements:
+        - selector:
+            css: input.pf-c-form-control.cluster-list-filter
+        - selector:
+            xpath: //div[@class='pf-c-dropdown toolbar-item']/button/span[text()='Filter']
+        - selector:
+            xpath: //button[text()='Create cluster']/../..//button[@aria-label='Actions']
+          op: click
+        - selector:
+            xpath: //a[text()='Register cluster' and contains(@href, '/openshift/register')]
+        - selector:
+            xpath: //a[text()='Show archived clusters' and contains(@href, '/openshift/archived')]
+        - selector:
+            xpath: //button[text()='Create cluster']/../..//button[@aria-label='Actions']
+          op: click
+    elements:
+        - selector:
+            xpath: //div[@id='cluster-list-toolbar']//span[contains(., 'of')]
+        - selector:
+            xpath: //div[@id='cluster-list-toolbar']//button[@id='pagination-options-menu-toggle']
+          op: click
+        - selector:
+            xpath: //ul[@aria-labelledby='pagination-options-menu-toggle']/li/button[@data-action='per-page-10' and text()='10']
+        - selector:
+            xpath: //ul[@aria-labelledby='pagination-options-menu-toggle']/li/button[@data-action='per-page-20' and text()='20']
+        - selector:
+            xpath: //ul[@aria-labelledby='pagination-options-menu-toggle']/li/button[@data-action='per-page-50' and text()='50']
+        - selector:
+            xpath: //ul[@aria-labelledby='pagination-options-menu-toggle']/li/button[@data-action='per-page-100' and text()='100']
+        - selector:
+            xpath: //div[@id='cluster-list-toolbar']//button[@id='pagination-options-menu-toggle']
+          op: click
+        - selector:
+            css: nav.pf-c-pagination__nav
+        - selector:
+            xpath: //button[@aria-label='Refresh']
+    elements:
+        - selector:
+            xpath: //button[@class='pf-c-button pf-m-plain' and text()='Name']
+        - selector:
+            xpath: //span[@class='pf-c-table__sort-indicator']
+        - selector:
+            xpath: //th[@data-label='Status' and text()='Status']
+        - selector:
+            xpath: //th[@data-label='Type' and text()='Type']
+        - selector:
+            xpath: //th[@data-label='Created' and text()='Created']
+        - selector:
+            xpath: //th[@data-label='Version' and text()='Version']
+        - selector:
+            xpath: //th[@data-label='Provider (Location)' and text()='Provider (Location)']
+    elements:
+        - selector:
+            xpath: //div[@class='pf-c-pagination pf-m-footer']//span[contains(., 'of')]
+        - selector:
+            xpath: //div[@class='pf-c-pagination pf-m-footer']//button[@id='pagination-options-menu-toggle']
+check_clusters_list_info:
+    elements:
+        - selector: 
+            xpath: //td[@data-label='Name']/a[text()='<cluster_name>' and contains(@href, '/openshift/details/')]
+        - selector: 
+            xpath: //a[text()='<cluster_name>']/../../td[@data-label='Status']/span[text()='<cluster_status>']
+        - selector:
+            xpath: //a[text()='<cluster_name>']/../../td[@data-label='Type']/span[text()='<cluster_type>']
+check_hover_in_cluster_list:
+    elements:
+        - selector:
+            xpath: //td[@data-label='Type']/span[text()='OCP']
+          op: hover
+        - selector:
+            xpath: //div[@class='tippy-popper' and contains(., 'Self-managed')]
+        - selector:
+            xpath: //td[@data-label='Type']/span[text()='OSD']
+          op: hover
+        - selector:
+            xpath: //div[@class='tippy-popper' and contains(., 'Dedicated')]
+        - selector:
+            xpath: //td[@data-label='Name']/a[text()='sdqe-ui-ocp']
+          op: hover
+        - selector:
+            xpath: //div[@class='tippy-popper' and contains(., 'cluster name:')]
+filter_name_or_id:
+    action: clear_filter_name_or_id
+    element:
+        selector:
+            css: input.pf-c-form-control.cluster-list-filter
+        op: send_keys <filter_keyword>
+        type: input
+clear_filter_name_or_id:
+    element:
+        selector:
+            css: input.pf-c-form-control.cluster-list-filter
+        op: clear
+check_filter_cluster_existed:
+    element:
+        selector:
+            xpath: //tbody/tr[<coloumn_number>]/td/a[contains(text(),'<filter_keyword>')]
+check_filter_no_result_message:
+    element:
+        selector:
+            text: No results match the filter criteria.
+expand_filter_dropdown:
+    element:
+        selector:
+            css: #pf-toggle-id-22
+        op: click
+close_filter_dropdown:
+    action: expand_filter_dropdown
+expand_actions_behind_create_button:
+    action: click_actions_behind_create_button
+    action: actions_behind_create_button_menu_loaded
+close_actions_behind_create_button:
+    action: expand_actions_behind_create_button
+filter_dropdown_menu_loaded:
+    elements:
+    - selector:
+        xpath: //label[@class='pf-c-dropdown__group-title' and text()='Subscription Status']
+    - selector:
+        xpath: //label[@class='pf-c-check__label' and text()='Subscribed']
+    - selector:
+        xpath: //label[@class='pf-c-check__label' and text()='Not Subscribed']
+    - selector:
+        xpath: //label[@class='pf-c-check__label' and text()='Insufficient']
+    - selector:
+        xpath: //label[@class='pf-c-check__label' and text()='Unknown']
+    - selector:
+        xpath: //label[@class='pf-c-dropdown__group-title' and text()='Cluster Type']
+    - selector:
+        xpath: //label[@class='pf-c-check__label' and text()='OSD']
+    - selector:
+        xpath: //label[@class='pf-c-check__label' and text()='OCP']
+select_filter:
+    action:
+        if_param: expand
+        ref: expand_filter_dropdown
+    element:
+        selector:
+            xpath: //label[@class='pf-c-check__label' and text()='<filter_label>']
+        op: click
+click_create_cluster_button:
+    element:
+        <<: *create_cluster_button
+        op: click
+click_actions_behind_create_button:
+    element:
+        selector:
+            xpath: //button[text()='Create cluster']/../../../div[@id='cluster-list-toolbar']//button[@aria-label='Actions']
+        op: click
+actions_behind_create_button_menu_loaded:
+    elements:
+        - selector:
+            xpath: //a[contains(@href,'/openshift/register')]
+        - selector:
+            xpath: //a[contains(@href, '/openshift/archived') and text()='Show archived clusters']
+click_register_cluster_button:
+    element:
+        selector:
+            xpath: //a[contains(@href,'/openshift/register')]
+        op: click
+click_show_archived_cluster_button:
+    element:
+        selector:
+            xpath: //a[contains(@href,'/openshift/archived')]
+        op: click
+expand_paging_dropdown:
+    action: click_paging_options_dropdown
+    action: paging_dropdown_loaded
+click_paging_options_dropdown:
+    element:
+        selector:
+            css: #pagination-options-menu-toggle
+        op: click
+paging_dropdown_loaded:
+    elements:
+    - selector:
+        xpath: //button[@data-action='per-page-10']
+    - selector:
+        xpath: //button[@data-action='per-page-20']
+    - selector:
+        xpath: //button[@data-action='per-page-50']
+    - selector:
+        xpath: //button[@data-action='per-page-100']
+select_what_number_showing_on_page:
+    element:
+        selector:
+            xpath: //button[@data-action='per-page-<show_number>']
+        op: click
+click_first_page_button:
+    element:
+        selector:
+            xpath: //button[@data-action='first']
+        op: click
+click_pre_page_button:
+    element:
+        selector:
+            xpath: //button[@data-action='previous']
+        op: click
+click_refresh_button_on_cluster_list_page:
+    element:
+        selector:
+            xpath: //button[@aria-label='Refresh']
+        op: click
+cluster_list_table_columns_loaded:
+    elements:
+    - selector:
+        xpath: //table/thead//th/button[text()='Name']
+    - selector:
+        xpath: //table/thead//th[text()='Status']
+    - selector:
+        xpath: //table/thead//th[text()='Type']
+    - selector:
+        xpath: //table/thead//th[text()='Created']
+    - selector:
+        xpath: //table/thead//th[text()='Version']
+    - selector:
+        xpath: //table/thead//th[text()='Provider (Location)']
+    - selector:
+        xpath: //table/thead//th[@data-key='6']
+go_to_cluster_detail_page:
+    element:
+        selector:
+            xpath: //td/a[contains(text(),'<cluster_name>')]
+        timeout: 30
+        op: click
+    action: cluster_detail_page_loaded
+expand_cluster_actions_on_cluster_list_page:
+    element:
+        selector:
+            xpath: //td[@data-label='Name']/a[contains(text(),'<cluster_name>')]/../following-sibling::td//button[@aria-label='Actions']
+        op: click
+        timeout: 30
+close_cluster_actions_on_cluster_list_page:
+    action: expand_cluster_actions_on_cluster_list_page
+check_cluster_actions_on_cluster_list_page_all_enabled:
+    action: enabled_launch_console_button_on_cluster_list_page_loaded
+    action: enabled_scale_cluster_button_on_cluster_list_page_loaded
+    action: enabled_delete_cluster_button_on_cluster_list_page_loaded
+    action: enabled_edit_display_name_button_on_cluster_list_page_loaded
+check_cluster_actions_on_cluster_list_page_partial_enabled:
+    action: disabled_launch_console_button_on_cluster_list_page_loaded
+    action: disabled_scale_cluster_button_on_cluster_list_page_loaded
+    action: enabled_delete_cluster_button_on_cluster_list_page_loaded
+    action: enabled_edit_display_name_button_on_cluster_list_page_loaded
+
+click_launch_console_button_on_cluster_list_page:
+    element:
+        selector:
+            xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Launch Console']
+        op: click
+click_edit_display_name_button_on_cluster_list_page:
+    element:
+        selector:
+            xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Edit Display Name']
+        op: click
+click_scale_cluster_button_on_cluster_list_page:
+    element:
+        selector:
+            xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Scale Cluster']
+        op: click
+click_delete_cluster_button_on_cluster_list_page:
+    element:
+        selector:
+            xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Delete Cluster']
+        op: click
+click_clear_filters_button:
+    element:
+        selector:
+            xpath: //button[text()='Clear filters']
+        op: click
+click_more_filters_button:
+    element:
+        selector:
+            xpath: //span[@class='pf-c-chip__text' and contains(text(),'more')]
+        op: click
+click_clear_spec_filter:
+    element:
+        selector:
+            xpath: //span[@class='pf-c-chip__text' and text()='<filter_label>']/..//button[@class='pf-c-button pf-m-plain']
+        op: click
+disabled_launch_console_button_on_cluster_list_page_loaded:
+    element:
+        xpath: //button[@class='pf-m-disabled pf-c-dropdown__menu-item' and text()='Launch Console']
+disabled_scale_cluster_button_on_cluster_list_page_loaded:
+    element:
+        selector:
+            xpath: "//button[@class='pf-c-dropdown__menu-item pf-m-disabled' and text()='Scale Cluster']"
+enabled_delete_cluster_button_on_cluster_list_page_loaded:
+    element:
+        selector:
+            xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Delete Cluster']
+enabled_edit_display_name_button_on_cluster_list_page_loaded:
+    element:
+        selector:
+            xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Edit Display Name']
+enabled_scale_cluster_button_on_cluster_list_page_loaded:
+    element:
+        selector:
+            xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Scale Cluster']
+enabled_launch_console_button_on_cluster_list_page_loaded:
+    element:
+        selector:
+            xpath: //a[@class='pf-c-dropdown__menu-item' and text()='Launch Console']
+click_archive_button_on_cluster_list_page:
+    action: expand_cluster_actions_on_cluster_list_page
+    element:
+        selector:
+            xpath: //button[@class='pf-c-dropdown__menu-item' and text()='Archive Cluster']
+        op: click
+go_to_archived_cluster_page:
+    action: expand_actions_behind_create_button
+    action: actions_behind_create_button_menu_loaded
+    element:
+        selector:
+            xpath: //a[contains(@href,'/openshift/archived')]
+        op: click
+    action: archived_page_loaded
+edit_display_name_on_cluster_list_page:
+  action: click_edit_display_name_button_in_dropdown
+  action: check_display_name_dialog_loaded
+  action: edit_display_name_in_dialog
+  action: check_new_name_in_cluster_list
+check_new_name_in_cluster_list:
+  element:
+    selector:
+      xpath: //td[@data-label='Name']//a[contains(.,'<new_name>')]
+    timeout: 40
+go_to_disconnected_cluster_register_page:
+    action: expand_actions_behind_create_button
+    action: actions_behind_create_button_menu_loaded
+    element:
+        selector:
+            xpath: //a[contains(@href,'/openshift/register')]
+        op: click
+    action: cluster_registration_page_loaded
+click_scale_cluster_in_action_dropdown:
+  element:
+    selector:
+      xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Scale Cluster']
+    op: click
+go_to_scale_cluster_dialog_on_cluster_list_page:
+  action: expand_cluster_actions_on_cluster_list_page
+  action: click_scale_cluster_button_in_dropdown
+check_elements_in_scale_cluster_dialog:
+  action: check_close_button
+  action: check_cancel_button
+  action: check_apply_button
+scale_cluster_from_cluster_list_page:
+  action: go_to_scale_cluster_dialog_on_cluster_list_page
+  action: choose_compute_node_in_dialog
+check_actions_items_of_ready_osd_cluster_on_list:
+  action: check_edit_display_name_button_in_dropdown
+  action: check_scale_cluster_button_in_dropdown
+  action: check_delete_cluster_button_in_dropdown
+  action: check_archive_button_in_dropdown_missing
+  action: check_edit_console_button_in_dropdown_missing
+  action: check_launch_console_button_in_dropdown
+check_actions_items_of_ready_ocp_cluster_on_list:
+  action: check_edit_console_button_in_dropdown
+  action: check_edit_display_name_button_in_dropdown
+  action: check_archive_button_in_dropdown
+  action: check_delete_cluster_button_in_dropdown_missing
+  action: check_scale_cluster_button_in_dropdown_missing
+  action: check_launch_console_button_in_dropdown
+go_to_access_control_tab:
+  action:
+    if_param: cluster_name
+    ref: go_to_cluster_detail_page
+  action: click_access_control_tab
+click_logout_button:
+  element:
+    selector:
+      xpath: //div[@aria-label='Overflow actions']/button[@class='pf-c-dropdown__toggle pf-m-plain']
+    op: click
+  element:
+    selector:
+      xpath: //button[@class='pf-c-dropdown__menu-item' and text()='Logout']
+    op: click
+    timeout: 20
+logout_page_loaded:
+  element:
+    selector:
+      xpath: //button[contains(., 'Log in to your Red Hat account')]
