@@ -150,16 +150,11 @@ Feature: stibuild.feature
       | deploymentconfig=git |
       | deployment=git-2     |
     When I run the :cp client command with:
-      | source | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/httpd-ex | 
-      | dest   | <%= pod.name %>:/var/lib/git/                         |
-    Then the step should succeed
-    And I execute on the pod:
-      | bash                                                       |
-      | -c                                                         |
-      | cd /var/lib/git/ && git clone --bare httpd-ex httpd-ex.git |
+      | source | <%= BushSlicer::HOME %>/testdata/build/httpd-ex.git | 
+      | dest   | <%= pod.name %>:/var/lib/git/                       |
     Then the step should succeed
     When I run the :new_app client command with:
-      | app_repo  | openshift/httpd:latest~http://<%= cb.git_route %>/httpd-ex.git |
+      | app_repo | openshift/httpd:latest~http://<%= cb.git_route %>/httpd-ex.git |
     Then the step should succeed
     Given the "httpd-ex-1" build was created
     And the "httpd-ex-1" build completes
