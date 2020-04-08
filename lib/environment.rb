@@ -278,11 +278,14 @@ module BushSlicer
     # @return [Array<String>] raw version, major and minor number
     def get_version(user:)
       if opts[:version]
-        @major_version, @minor_version = parse_version(opts[:version])
-        return opts[:version], @major_version, @minor_version
+        _version = opts[:version]
+      else
+        _version = admin.cli_exec(:get, resource: "clusterversion", resource_name: "version", o: "jsonpath={.status.desired.version}")
       end
+      @major_version, @minor_version = parse_version(_version)
+      return _version, @major_version, @minor_version
 
-      raise "getting version of cluster as user not possible presently"
+      #raise "getting version of cluster as user not possible presently"
 
       # obtained = user.rest_request(:version)
       # if obtained[:request_opts][:url].include?("/version/openshift") &&
