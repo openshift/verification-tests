@@ -1,0 +1,23 @@
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-from-all-pods
+spec:
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          name: blue
+  - from:
+    - podSelector:
+        matchLabels:
+          name: black
+  - from:
+    - podSelector:
+        matchLabels:
+          name: test-pods
+  podSelector:
+    matchLabels:
+      name: allow-all
+  policyTypes:
+  - Ingress

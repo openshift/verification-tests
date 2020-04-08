@@ -1,0 +1,15 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-black-from-blue
+spec:
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          name: blue
+  podSelector:
+    matchLabels:
+      name: black
+  policyTypes:
+  - Ingress

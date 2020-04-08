@@ -1,0 +1,19 @@
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-testpods-from-blue-black 
+spec:
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          name: blue
+  - from:
+    - podSelector:
+        matchLabels:
+          name: black
+  podSelector:
+    matchLabels:
+      name: test-pods
+  policyTypes:
+  - Ingress
