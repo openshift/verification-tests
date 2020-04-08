@@ -93,7 +93,7 @@ click_report_bug_link_in_helpmenu:
   action: click_report_bug_link
 click_report_bug_link:
   params:
-    text: Report Bug
+    text: Report Bug to Red Hat
   action: click_link_with_text_only
 check_console_link_in_applauncher:
   action: click_application_launcher_button
