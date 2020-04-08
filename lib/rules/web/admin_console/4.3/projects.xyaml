@@ -14,7 +14,7 @@ create_project_from_dropdown:
     dropdown_name: namespace-bar
   action: click_dropdown
   action: create_project
-click_create_project_button：
+click_create_project_button:
   params:
     button_text: Create Project
   action: click_button_text
