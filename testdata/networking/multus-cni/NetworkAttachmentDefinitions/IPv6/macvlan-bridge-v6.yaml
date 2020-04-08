@@ -10,8 +10,6 @@ spec:
       "mode": "bridge",
       "ipam": {
         "type": "host-local",
-        "subnet": "fd00::192:168:22:0/112",
-        "rangeStart": "fd00::192:168:22:100",
-        "rangeEnd": "fd00::192:168:22:200"
+        "subnet": "fd00:dead:beef::/64"
       }
     }'

@@ -12,8 +12,8 @@ Feature: Multus-CNI ipv6 related scenarios
     # Create the net-attach-def via cluster admin
     Given I have a project
     When I run oc create as admin over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/IPv6/macvlan-bridge-v6.yaml" replacing paths:
-      | ["metadata"]["namespace"] | <%= project.name %>                                                                                                                                                                                                                             |    
-      | ["spec"]["config"]| '{ "cniVersion": "0.3.0", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "bridge", "ipam": { "type": "host-local", "subnet": "fd00::192:168:22:0/112", "rangeStart": "fd00::192:168:22:100", "rangeEnd": "fd00::192:168:22:200"} }' |
+      | ["metadata"]["namespace"] | <%= project.name %>            |    
+      | ["spec"]["config"]| '{ "cniVersion": "0.3.0", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "bridge", "ipam": { "type": "host-local", "subnet": "fd00:dead:beef::/64"} }' |
     Then the step should succeed
 
     # Create the first pod which consumes the macvlan custom resource
@@ -30,7 +30,7 @@ Feature: Multus-CNI ipv6 related scenarios
     Then the output should contain "net1"
     And the output should contain "macvlan mode bridge"
     When I execute on the pod:
-      | bash | -c | /usr/sbin/ip addr show net1 \| grep -Po 'fd00::192:168:22:[0-9a-fA-F]{1,4}' |
+      | bash | -c | /usr/sbin/ip addr show net1 \| grep -Po 'fd00:dead:beef::[0-9a-fA-F]{1,4}' | 
     Then the step should succeed
     And evaluation of `@result[:response].chomp` is stored in the :pod1_multus_ipv6 clipboard
   
