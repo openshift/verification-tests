@@ -86,10 +86,6 @@ filter_by_serviceclass_type:
   params:
     type: cluster-service-class
   action: filter_by_type
-filter_by_csv_type:
-  params:
-    type: cluster-service-version
-  action: filter_by_type
 filter_by_template_type:
   params:
     type: template
@@ -169,7 +165,7 @@ select_target_namespace:
   action: choose_installmode
   action: click_project_list_dropdown
   action: choose_project_from_dropdown_list
-click_item_on_catalog_page:
+click_catalog_item:
   elements:
   - selector:
       xpath: //div[contains(@class,'catalog-tile-pf-title') and text()='<catalog_item>']
