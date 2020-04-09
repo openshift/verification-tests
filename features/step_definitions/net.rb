@@ -63,27 +63,36 @@ When /^I open web server via the(?: "(.+?)")? url$/ do |url|
 end
 
 Given /^I download a file from "(.+?)"(?: into the "(.+?)" dir)?$/ do |url, dl_path|
-  retries = 3
-  while true
-    @result = BushSlicer::Http.get(url: url, cookies: cb.http_cookies)
-    if @result[:success]
-      if dl_path
-        file_name = File.join(dl_path, File.basename(URI.parse(url).path))
+  if url.include? '://'
+    retries = 3
+    while true
+      @result = BushSlicer::Http.get(url: url, cookies: cb.http_cookies)
+      if @result[:success]
+        if dl_path
+          file_name = File.join(dl_path, File.basename(URI.parse(url).path))
+        else
+          file_name = File.basename(URI.parse(url).path)
+        end
+        File.open(file_name, 'wb') { |f|
+          f.write(@result[:response])
+        }
+        @result[:file_name] = file_name
+        @result[:abs_path] = File.absolute_path(file_name)
+        break
+      elsif @result[:exitstatus] >= 500 && retries > 0
+        # we will wait for retry
       else
-        file_name = File.basename(URI.parse(url).path)
+        raise "Failed to download file from #{url} with HTTP status #{@result[:exitstatus]}"
       end
-      File.open(file_name, 'wb') { |f|
-        f.write(@result[:response])
-      }
-      @result[:file_name] = file_name
-      @result[:abs_path] = File.absolute_path(file_name)
-      break
-    elsif @result[:exitstatus] >= 500 && retries > 0
-      # we will wait for retry
-    else
-      raise "Failed to download file from #{url} with HTTP status #{@result[:exitstatus]}"
+      retries -= 1
     end
-    retries -= 1
+  else
+    filename = File.basename(url)
+    FileUtils.cp(url,"#{filename}")
+
+    teardown_add {
+      File.delete("#{filename}") if File.exist?("#{filename}")
+    }
   end
 end
 
