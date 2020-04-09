@@ -135,3 +135,26 @@ Feature: stibuild.feature
     And the "eap-app-1" build completed
     Given 1 pods become ready with labels:
       | application=eap-app |
+
+  # @author xiuwang@redhat.com
+  # @case_id OCP-28891
+  Scenario: Test s2i build in disconnect cluster 
+    Given I have a project
+    When I have an http-git service in the project
+    And I run the :set_env client command with:
+      | resource | dc/git               |
+      | e        | REQUIRE_SERVER_AUTH= |
+      | e        | REQUIRE_GIT_AUTH=    |
+    Then the step should succeed
+    When a pod becomes ready with labels:
+      | deploymentconfig=git |
+      | deployment=git-2     |
+    When I run the :cp client command with:
+      | source | <%= BushSlicer::HOME %>/testdata/build/httpd-ex.git | 
+      | dest   | <%= pod.name %>:/var/lib/git/                       |
+    Then the step should succeed
+    When I run the :new_app client command with:
+      | app_repo | openshift/httpd:latest~http://<%= cb.git_route %>/httpd-ex.git |
+    Then the step should succeed
+    Given the "httpd-ex-1" build was created
+    And the "httpd-ex-1" build completes
