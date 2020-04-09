@@ -488,10 +488,15 @@ Feature: Pod related networking scenarios
   Scenario: Pod readiness check for OVN		
   Given the env is using "OVNKubernetes" networkType
   And OVN is functional on the cluster
+  #Need this cleanup to restore cluster to healthy state due to future destructive steps
+  And I register clean-up steps:
+  """
+  And OVN is functional on the cluster
+  """
   Given I switch to cluster admin pseudo user
   And I use the "openshift-ovn-kubernetes" project
   And a pod is present with labels:
-    | l | app=ovnkube-node |
+    | app=ovnkube-node |
   #Removing CNI config file from container to check readiness probe functionality
   When I run the :exec client command with:
     | pod              | <%= pod.name %>                       |
@@ -501,18 +506,14 @@ Feature: Pod related networking scenarios
     | exec_command_arg | /etc/cni/net.d/10-ovn-kubernetes.conf |
   Then the step should succeed
   #Deleting ovnkube-pod will force CNO to rewrite the conf file and bring cluster back to normal after scenario
-  And I register clean-up steps:
-  """
-  admin ensure "<%= pod.name %>" pod is deleted from the "openshift-ovn-kubernetes" project
-  And OVN is functional on the cluster
-  """
+  And admin ensure "<%= pod.name %>" pod is deleted from the "openshift-ovn-kubernetes" project after scenario
   #Now make sure readiness probe checking above file will cause one of the two ovnkube-node containers to go down and container ready status change to false
   Given I wait up to 30 seconds for the steps to pass:
   """
   When I run the :get admin command with:
-    | resource      | pod                                             |
-    | resource_name | <%= pod.name %>                                 |
-    | o             | jsonpath='{.status.containerStatuses[1].ready}' |
+    | resource      | pod                                                                     |
+    | resource_name | <%= pod.name %>                                                         |
+    | o             | jsonpath='{.status.containerStatuses[?(@.name=="ovnkube-node")].ready}' |
   Then the step should succeed
   And the output should contain "false"
   """
