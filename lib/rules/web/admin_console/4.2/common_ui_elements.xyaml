@@ -141,11 +141,6 @@ click_first_item_from_sub_resource_list_and_check_breadcrumb:
   action: wait_until_no_loading
   action: click_first_sub_item_in_resource_detail_list
   action: check_link_in_breadcrumb
-# click and check the first item from resources listed in grid cell, such as installed operator
-click_first_item_from_gridcell_list_and_check_breadcrumb:
-  action: wait_until_no_loading
-  action: click_first_item_in_grid_cell_list
-  action: check_link_in_breadcrumb
 check_link_in_breadcrumb:
   element:
     selector:
