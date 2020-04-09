@@ -34,10 +34,10 @@ Feature: collector related tests
     And the expression should be true> Set.new(cb.node_ips) == Set.new(cb.kuber_ips)
 
     And I perform the HTTP request on the ES pod with labels "es-node-master=true":
-      | relative_url | _search?pretty&size=0' -H 'Content-Type: application/json' -d'{"aggs" : {"exists_field_kubernetes" : {"filter": {"exists": {"field":"systemd"}},"aggs" : {"distinct_fluentd_ip" : {"terms" : {"field" : "pipeline_metadata.collector.ipaddr4"}}}}}} |
+      | relative_url | _search?pretty&size=0' -H 'Content-Type: application/json' -d'{"aggs" : {"exists_field_systemd" : {"filter": {"exists": {"field":"systemd"}},"aggs" : {"distinct_fluentd_ip" : {"terms" : {"field" : "pipeline_metadata.collector.ipaddr4"}}}}}} |
       | op           | GET   |
     Then the step should succeed
-    Given evaluation of `JSON.parse(@result[:response])['aggregations']['exists_field_kubernetes']['distinct_fluentd_ip']['buckets'].map {|furn| furn["key"]}` is stored in the :journal_ips clipboard
+    Given evaluation of `JSON.parse(@result[:response])['aggregations']['exists_field_systemd']['distinct_fluentd_ip']['buckets'].map {|furn| furn["key"]}` is stored in the :journal_ips clipboard
     And the expression should be true> Set.new(cb.node_ips) == Set.new(cb.journal_ips)
     """
 
@@ -60,7 +60,7 @@ Feature: collector related tests
       | op           | DELETE        |
     Then the step should succeed
     Given I perform the HTTP request on the ES pod with labels "es-node-master=true":
-      | relative_url | .project.* |
+      | relative_url | project.* |
       | op           | DELETE     |
     Then the step should succeed
     #Workaround end
