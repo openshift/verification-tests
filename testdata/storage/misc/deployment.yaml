@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-openshift
+  template:
+    metadata:
+      labels:
+        app: hello-openshift
+    spec:
+      containers:
+      - name: hello-openshift
+        image: aosqe/hello-openshift
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: local
+          mountPath: /mnt/storage
+      volumes:
+      - name: local
+        persistentVolumeClaim:
+          claimName: deployment-pvc
