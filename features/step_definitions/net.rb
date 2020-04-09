@@ -78,6 +78,12 @@ Given /^I download a file from "(.+?)"(?: into the "(.+?)" dir)?$/ do |url, dl_p
       @result[:file_name] = file_name
       @result[:abs_path] = File.absolute_path(file_name)
       break
+    elsif File.exist?(url) 
+      file_name = File.basename(url)
+      FileUtils.cp(url,file_name)
+      @result[:file_name] = file_name 
+      @result[:abs_path] = File.absolute_path(file_name)
+      break
     elsif @result[:exitstatus] >= 500 && retries > 0
       # we will wait for retry
     else
