@@ -913,7 +913,8 @@ module BushSlicer
       cmd = 'shutdown -r now "BushSlicer triggered reboot"'
       valid_err_messages = [
         "connection refused",
-        "watch closed"
+        "watch closed",
+        "exit code from debug container"
       ]
       res = exec_raw(cmd, timeout: 20)
       if res[:success]
