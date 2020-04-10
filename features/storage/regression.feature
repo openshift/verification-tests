@@ -13,7 +13,7 @@ Feature: Regression testing cases
 
     When I run the :create admin command with:
       | f | <%= BushSlicer::HOME %>/testdata/storage/misc/damonset.json |
-      | n | <%= project.name %>                                                                           |
+      | n | <%= project.name %>                                         |
     Then the step should succeed
 
     And I wait up to 60 seconds for the steps to pass:
