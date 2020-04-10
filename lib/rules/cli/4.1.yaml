@@ -1157,6 +1157,14 @@
     :dest_dir: --dest-dir=<value>
     :resource_name: <value>
     :resource_type: <value>
+:oadm_must_gather:
+  :cmd: oc adm must-gather
+  :options:
+    :dest_dir: --dest-dir=<value>
+    :image: --image=<value>
+    :image_stream: --image-stream=<value>
+    :node_name: --node-name=<value>
+    :source_dir: --source-dir=<value>
 :oadm_new_project:
   :cmd: oc adm new-project <project_name>
   #:expected:
