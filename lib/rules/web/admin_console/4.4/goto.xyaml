@@ -150,10 +150,12 @@ goto_deploy_image_page:
 #catalog page
 goto_catalog_page:
   url: catalog/ns/<project_name>
+  action: wait_box_loaded
 goto_create_app_from_imagestream_page:
   url: catalog/source-to-image?imagestream=<is_name>&imagestream-ns=openshift&preselected-ns=<project_name>
 goto_create_app_from_template_page:
   url: catalog/instantiate-template?template==<template_name>&template-ns=openshift&preselected-ns=<project_name>
+
 
 # monitoring
 goto_monitoring_metrics_page:
@@ -186,8 +188,12 @@ goto_installed_operators_page:
   url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion
 goto_operator_subscription_page:
   url: operatorhub/subscribe?pkg=<package_name>&catalog=<catalog_name>&catalogNamespace=openshift-marketplace&targetNamespace=<target_namespace>
+  action: wait_box_loaded
 goto_one_project_subscription_page:
   url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~Subscription/<subscription_name>
+goto_csv_detail_page:
+  url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion/<csv_name>
+  action: wait_box_loaded
 
 # machine config
 goto_machineconfigs_page:
