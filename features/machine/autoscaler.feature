@@ -103,7 +103,7 @@ Feature: Cluster Autoscaler Tests
       | resource | machineset              |
       | name     | <%= machine_set.name %> |
     Then the step should succeed
-    And the output should match "Annotations:\s+<none>"
+    And the output should not match "autoscaling.openshift.io/machineautoscaler"
 
   # @author zhsun@redhat.com
   # @case_id OCP-22102
@@ -142,7 +142,7 @@ Feature: Cluster Autoscaler Tests
       | resource | machineset                       |
       | name     | <%= cb.machineset_clone_22102 %> |
     Then the step should succeed
-    And the output should match "Annotations:\s+<none>"
+    And the output should not match "autoscaling.openshift.io/machineautoscaler"
     When I run the :describe admin command with:
       | resource | machineset                         |
       | name     | <%= cb.machineset_clone_22102_2 %> |
@@ -174,7 +174,7 @@ Feature: Cluster Autoscaler Tests
       | resource | machineset                         |
       | name     | <%= cb.machineset_clone_22102_2 %> |
     Then the step should succeed
-    And the output should match "Annotations:\s+<none>"
+    And the output should not match "autoscaling.openshift.io/machineautoscaler"
 
   # @author zhsun@redhat.com
   # @case_id OCP-23745
