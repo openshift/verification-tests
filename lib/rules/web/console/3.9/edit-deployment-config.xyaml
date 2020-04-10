@@ -1,3 +1,0 @@
-#---- check edit/deployment-config page-----
-goto_one_dc_edit_page:
-  url: /console/project/<project_name>/edit/dc/<dc_name>
