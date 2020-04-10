@@ -1,2 +1,0 @@
-check_mount_info_configuration_for_replicaset:
-  action: check_mount_info

@@ -1,9 +1,0 @@
---- # check browse/builds/pipeline page
-goto_pipelines_page:
-  url: /console/project/<project_name>/browse/pipelines
-
-check_pipline_no_permission_page:
-  action: goto_pipelines_page
-  element:
-    selector:
-      xpath: //h1[contains(.,"Pipelines")]
