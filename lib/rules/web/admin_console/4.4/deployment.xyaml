@@ -96,4 +96,11 @@ check_current_cpu_utilization:
   element:
     selector:
       <<: *value
+check_pod_status:
+  params:
+    status_text: <pod_status>
+  action: enable_status_filter
+  elements:
+  - selector:
+      xpath: //tr/td[contains(.,'<pod_name>')]/following-sibling::td[2][contains(.,'<pod_status>')]
 

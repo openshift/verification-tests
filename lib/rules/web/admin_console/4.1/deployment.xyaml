@@ -88,3 +88,4 @@ check_current_cpu_utilization:
   element:
     selector:
       <<: *value
+
