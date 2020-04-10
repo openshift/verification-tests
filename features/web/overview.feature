@@ -166,7 +166,7 @@ Feature: Check overview page
 
     # step 10. Create standalone service and check standalone service info on overview
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/services/standalone-service.json |
+      | f | <%= BushSlicer::HOME %>/testdata/services/standalone-service.json |
       | n | <%= project.name %> |
     Then the step should succeed
     When I perform the :check_page_contain_text web console action with:

@@ -5,7 +5,7 @@ Feature: ConfigMap related features
   Scenario: Edit ConfigMap on web console
     Given the master version >= "3.5"
     Given I have a project
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/configmap/configmap.yaml" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/configmap/configmap.yaml" replacing paths:
       | ["data"]["special.who"] | you |
     Then the step should succeed
     When I perform the :goto_configmaps_page web console action with:
@@ -64,13 +64,13 @@ Feature: ConfigMap related features
     Given the master version >= "3.6"
     Given I have a project
     When I run the :new_app client command with:
-      | app_repo | <%= ENV['BUSHSLICER_HOME'] %>/testdata/templates/ui/application-template-stibuild-without-customize-route.json |
+      | app_repo | <%= BushSlicer::HOME %>/testdata/templates/ui/application-template-stibuild-without-customize-route.json |
     Then the step should succeed
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/deployment/hello-deployment-1.yaml   |
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/replicaSet/tc536589/replica-set.yaml |
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/rc/idle-rc-1.yaml                    |
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/configmap/configmap.yaml             |
+      | f | <%= BushSlicer::HOME %>/testdata/deployment/hello-deployment-1.yaml   |
+      | f | <%= BushSlicer::HOME %>/testdata/replicaSet/tc536589/replica-set.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/rc/idle-rc-1.yaml                    |
+      | f | <%= BushSlicer::HOME %>/testdata/configmap/configmap.yaml             |
     Then the step should succeed
 
     When I perform the :goto_one_dc_environment_tab web console action with:

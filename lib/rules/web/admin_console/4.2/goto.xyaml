@@ -110,6 +110,8 @@ goto_routes_page:
   url: k8s/ns/<project_name>/routes
 goto_one_route_page:
   url: k8s/ns/<project_name>/routes/<route_name>
+goto_route_creation_page:
+  url: k8s/ns/<project_name>/routes/~new/form
 
 #imagestream
 goto_imagestreams_page:

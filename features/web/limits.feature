@@ -7,8 +7,8 @@ Feature: functions about resource limits on pod
     Given I create a new project
     # create limits and DC
     When I run the :create admin command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/518638/limits.yaml |
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/deployment/dc-with-two-containers.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/limits/518638/limits.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/deployment/dc-with-two-containers.yaml |
       | n | <%= project.name %> |
     Then the step should succeed
     # wait #1 deployment complete
@@ -63,7 +63,7 @@ Feature: functions about resource limits on pod
     Then the step should succeed
 
     # create standalone rc with multi containers
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/deployment/rc-with-two-containers.yaml" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/deployment/rc-with-two-containers.yaml" replacing paths:
       | ["spec"]["replicas"] | 0 |
     Then the step should succeed
     # set resource limits for standalone rc

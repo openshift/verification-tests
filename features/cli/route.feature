@@ -30,10 +30,10 @@ Feature: route related features via cli
   Scenario: Be unable to add an existed alias name for service
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/unsecure/route_unsecure.json |
+      | f | <%= BushSlicer::HOME %>/testdata/routing/unsecure/route_unsecure.json |
     Then the step should succeed
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/routing/unsecure/route_unsecure.json |
+      | f | <%= BushSlicer::HOME %>/testdata/routing/unsecure/route_unsecure.json |
     Then the step should fail
     And the output should contain ""route" already exists"
 

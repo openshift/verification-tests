@@ -11,7 +11,7 @@ Feature: MachineHealthCheck Test Scenarios
     And I clone a machineset named "machineset-25897"
 
     # Create MHC
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/cloud/mhc/mhc1.yaml" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/cloud/mhc/mhc1.yaml" replacing paths:
       | n                                                                                  | openshift-machine-api       |
       | ["metadata"]["name"]                                                               | mhc-<%= machine_set.name %> |
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]    | <%= machine_set.cluster %>  |
@@ -47,7 +47,7 @@ Feature: MachineHealthCheck Test Scenarios
     Given I create the 'Ready' unhealthyCondition
 
     # Create MHC
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/cloud/mhc/mhc1.yaml" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/cloud/mhc/mhc1.yaml" replacing paths:
       | n                                                                                  | openshift-machine-api       |
       | ["metadata"]["name"]                                                               | mhc-<%= machine_set.name %> |
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]    | <%= machine_set.cluster %>  |
@@ -70,7 +70,7 @@ Feature: MachineHealthCheck Test Scenarios
     # Create MHCs
     Given I run the steps 2 times:
     """
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/cloud/mhc/mhc1.yaml" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/cloud/mhc/mhc1.yaml" replacing paths:
       | n                                                                                  | openshift-machine-api                 |
       | ["metadata"]["name"]                                                               | mhc-<%= machine_set.name %>-#{ cb.i } |
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]    | <%= machine_set.cluster %>            |
@@ -96,7 +96,7 @@ Feature: MachineHealthCheck Test Scenarios
     And I clone a machineset named "machineset-25691"
 
     # Create MHC
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/cloud/mhc/mhc1.yaml" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/cloud/mhc/mhc1.yaml" replacing paths:
       | n                                                                                  | openshift-machine-api         |
       | ["metadata"]["name"]                                                               | mhc-<%= machine_set.name %>-1 |
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]    | <%= machine_set.cluster %>    |
@@ -104,7 +104,7 @@ Feature: MachineHealthCheck Test Scenarios
       | ["spec"]["maxUnhealthy"]                                                           | 0                             |
     Then the step should succeed
     And I ensure "mhc-<%= machine_set.name %>-1" machinehealthcheck is deleted after scenario
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/cloud/mhc/mhc1.yaml" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/cloud/mhc/mhc1.yaml" replacing paths:
       | n                                                                                  | openshift-machine-api         |
       | ["metadata"]["name"]                                                               | mhc-<%= machine_set.name %>-2 |
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]    | <%= machine_set.cluster %>    |
@@ -117,7 +117,7 @@ Feature: MachineHealthCheck Test Scenarios
     Given I create the 'Ready' unhealthyCondition
     Given a pod becomes ready with labels:
       | api=clusterapi, k8s-app=controller |
-    And I wait for the steps to pass:
+    And I wait up to 600 seconds for the steps to pass:
     """
     When I run the :logs admin command with:
       | resource_name | <%= pod.name %>                |

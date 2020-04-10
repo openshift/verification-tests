@@ -5,7 +5,7 @@ Feature: stibuild.feature
   Scenario: STI build with invalid context dir
     Given I have a project
     When I run the :new_app client command with:
-      | file | <%= ENV['BUSHSLICER_HOME'] %>/testdata/image/language-image-templates/python-27-rhel7-errordir-stibuild.json |
+      | file | <%= BushSlicer::HOME %>/testdata/image/language-image-templates/python-27-rhel7-errordir-stibuild.json |
     Then the step should succeed
     When I run the :start_build client command with:
       | buildconfig | python-sample-build |
@@ -20,7 +20,7 @@ Feature: stibuild.feature
   Scenario Outline: Trigger s2i/docker/custom build using additional imagestream
     Given I have a project
     And I run the :new_app client command with:
-      | file | <%= ENV['BUSHSLICER_HOME'] %>/testdata/templates/<template> |
+      | file | <%= BushSlicer::HOME %>/testdata/templates/<template> |
     Then the step should succeed
     And the "sample-build-1" build was created
     When I run the :cancel_build client command with:
@@ -124,3 +124,37 @@ Feature: stibuild.feature
     Then the step should succeed
     And the output should contain "error"
 
+  # @author wzheng@redhat.com
+  # @case_id OCP-22596
+  Scenario: Create app with template eap72-basic-s2i with jbosseap rhel7 image
+    Given I have a project
+    When I run the :new_app client command with:
+      | template | eap72-basic-s2i |
+    Then the step should succeed
+    Given the "eap-app-1" build was created
+    And the "eap-app-1" build completed
+    Given 1 pods become ready with labels:
+      | application=eap-app |
+
+  # @author xiuwang@redhat.com
+  # @case_id OCP-28891
+  Scenario: Test s2i build in disconnect cluster 
+    Given I have a project
+    When I have an http-git service in the project
+    And I run the :set_env client command with:
+      | resource | dc/git               |
+      | e        | REQUIRE_SERVER_AUTH= |
+      | e        | REQUIRE_GIT_AUTH=    |
+    Then the step should succeed
+    When a pod becomes ready with labels:
+      | deploymentconfig=git |
+      | deployment=git-2     |
+    When I run the :cp client command with:
+      | source | <%= BushSlicer::HOME %>/testdata/build/httpd-ex.git | 
+      | dest   | <%= pod.name %>:/var/lib/git/                       |
+    Then the step should succeed
+    When I run the :new_app client command with:
+      | app_repo | openshift/httpd:latest~http://<%= cb.git_route %>/httpd-ex.git |
+    Then the step should succeed
+    Given the "httpd-ex-1" build was created
+    And the "httpd-ex-1" build completes

@@ -16,5 +16,5 @@ spec:
             cpu: 500m
       restartPolicy: Never
   backoffLimit: 4
-  completions: 50
-  parallelism: 50
+  completions: 100
+  parallelism: 100

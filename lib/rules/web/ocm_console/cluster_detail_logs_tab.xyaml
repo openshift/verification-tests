@@ -1,0 +1,16 @@
+click_logs_tab:
+    element:
+        selector:
+            xpath: //button[@class='pf-c-tabs__button' and text()='Logs']
+        timeout: 30
+        op: click
+    
+check_logs_tab:
+    action: click_logs_tab
+    elements:
+        - selector:
+            xpath: //div[@class='log-window__header' and text()='Last 100 lines']
+            timeout: 30
+        - selector:
+            xpath: //div[@class='log-window__contents__text' and contains(text(), 'time=')]
+            timeout: 30

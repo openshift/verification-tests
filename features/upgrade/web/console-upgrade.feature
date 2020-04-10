@@ -13,13 +13,13 @@ Feature: web console related upgrade check
       | name         | ruby |
     Then the step should succeed
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/daemon/daemonset.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/daemon/daemonset.yaml |
     Then the step should succeed
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/deployment/deployment1.json |
+      | f | <%= BushSlicer::HOME %>/testdata/deployment/deployment1.json |
     Then the step should succeed
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/deployment/hello-deployment-1.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/deployment/hello-deployment-1.yaml |
     Then the step should succeed
     Given I open admin console in a browser
     When I perform the :goto_project_resources_page web action with:

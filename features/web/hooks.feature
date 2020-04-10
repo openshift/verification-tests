@@ -6,9 +6,9 @@ Feature: bc/dc hooks related
     Given the master version > "3.4"
     Given I have a project
     When I run the :new_app client command with:
-      | file | <%= ENV['BUSHSLICER_HOME'] %>/testdata/templates/ui/application-template-stibuild-without-customize-route.json |
+      | file | <%= BushSlicer::HOME %>/testdata/templates/ui/application-template-stibuild-without-customize-route.json |
     Then the step should succeed
-    Given I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/deployment/pre-post-hook-snippets.yaml"
+    Given I download a file from "<%= BushSlicer::HOME %>/testdata/deployment/pre-post-hook-snippets.yaml"
     When I run the :patch client command with:
       | resource      | dc                                              | 
       | resource_name | database                                        |

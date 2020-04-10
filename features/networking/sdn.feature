@@ -271,7 +271,7 @@ Feature: SDN related networking scenarios
     Given I have a project
     And evaluation of `project.name` is stored in the :usr_project clipboard
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/list_for_pods.json |
+      | f | <%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json |
     Then the step should succeed
     Given 2 pods become ready with labels:
       | name=test-pods |
@@ -311,7 +311,7 @@ Feature: SDN related networking scenarios
   #Test for bug https://bugzilla.redhat.com/show_bug.cgi?id=1800324 and https://bugzilla.redhat.com/show_bug.cgi?id=1796157	
     Given I switch to cluster admin pseudo user	
     And I use the "default" project	
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/list_for_pods.json" replacing paths:	
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json" replacing paths:	
       | ["items"][0]["spec"]["replicas"] | 4 |	
     Then the step should succeed	
     And 4 pods become ready with labels:	
@@ -349,32 +349,50 @@ Feature: SDN related networking scenarios
   @admin
   Scenario: Don't write CNI configuration file until ovn-controller has done at least one iteration
     Given the env is using "OVNKubernetes" networkType
-    And I select a random node's host
-    #Checking controller iteration 1
-    When I run command on the "<%= node.name %>" node's sdn pod:
-      | bash | -c | ovn-appctl -t ovn-controller connection-status |
+    And I store the masters in the :master clipboard
+    And I store "<%= cb.master[0].name %>" node's corresponding default networkType pod name in the :ovnkube_pod clipboard
+    Given I switch to cluster admin pseudo user
+    And I use the "openshift-ovn-kubernetes" project
+    #Fetching ovn master pod name to be used later 
+    When I run the :get client command with:
+      | resource      | pods                                   |
+      | fieldSelector | spec.nodeName=<%= cb.master[0].name %> |
+      | l             | app=ovnkube-master                     |
+      | output        | json                                   |
+    Then the step should succeed
+    And evaluation of `@result[:parsed]['items'][0]['metadata']['name']` is stored in the :ovn_master_pod clipboard
+    #Checking controller iteration 1. Need to execute under ovn-contoller container 
+    When I run the :exec client command with:
+      | pod              | <%= cb.ovnkube_pod %> |
+      | c                | ovn-controller        |
+      | oc_opts_end      |                       |
+      | exec_command     | ovn-appctl            |
+      | exec_command_arg | -t                    |
+      | exec_command_arg | ovn-controller        |
+      | exec_command_arg | connection-status     |
     Then the step should succeed
     And the output should contain "connected"
     #Checking controller iteration 2
-    When I run command on the "<%= node.name %>" node's sdn pod:
+    When I execute on the "<%= cb.ovn_master_pod %>" pod:
       | bash | -c | ls -l /var/run/ovn/ |
     Then the step should succeed
     And evaluation of `@result[:response].match(/ovn-controller.\d*\.ctl/)[0]` is stored in the :controller_pid_file clipboard
     #Checking controller iteration 3
-    When I run command on the "<%= node.name %>" node's sdn pod:
+    When I execute on the "<%= cb.ovn_master_pod %>" pod:
       | bash | -c | ovn-appctl -t /var/run/ovn/<%= cb.controller_pid_file %> connection-status |
     Then the step should succeed
     And the output should contain "connected"
     #Checking controller iteration 4
-    When I run command on the "<%= node.name %>" node's sdn pod:
+    When I run command on the "<%= cb.master[0].name %>" node's sdn pod:
       | bash | -c | ovs-ofctl dump-flows br-int \| wc -l |
     Then the step should succeed
     And the expression should be true> @result[:response].match(/\d*/)[0].to_i > 0
-    #Checking final iteration post all above iterations passed. In this iteration we expect CNi file to be created
+    #Checking final iteration post all above iterations passed. In this iteration we expect CNI file to be created
+    Given I use the "<%= cb.master[0].name %>" node
     And I run commands on the host:
       | ls -l /var/run/multus/cni/net.d/10-ovn-kubernetes.conf |
     Then the output should contain "10-ovn-kubernetes.conf"
-  
+
   # @author anusaxen@redhat.com
   # @case_id OCP-25933
   @admin

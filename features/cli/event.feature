@@ -6,7 +6,7 @@ Feature: Event related scenarios
   Scenario: check event compressed in kube
     Given I have a project
     When I run the :new_app admin command with:
-      | file  | <%= ENV['BUSHSLICER_HOME'] %>/testdata/quota/quota_template.yaml |
+      | file  | <%= BushSlicer::HOME %>/testdata/quota/quota_template.yaml |
       | param | CPU_VALUE=20    |
       | param | MEM_VALUE=1Gi   |
       | param | PV_VALUE=10     |
@@ -51,7 +51,7 @@ Feature: Event related scenarios
   Scenario: Check normal and warning information for kubernetes events
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/pods/hello-pod.json |
+      | f | <%= BushSlicer::HOME %>/testdata/pods/hello-pod.json |
     Then the step should succeed
     Given the pod named "hello-openshift" becomes ready
     When I get project events
@@ -69,7 +69,7 @@ Feature: Event related scenarios
       | Normal\\s+Created   |
       | Normal\\s+Started   |
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/pods/pod-invalid.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/pods/pod-invalid.yaml |
     Then the step should succeed
     And I wait up to 240 seconds for the steps to pass:
     """
@@ -92,7 +92,7 @@ Feature: Event related scenarios
   Scenario: Event should show full failed reason when readiness probe failed
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/pods/tc533910/readiness-probe-exec.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/pods/tc533910/readiness-probe-exec.yaml |
     Then the step should succeed
     Given the pod named "hello-pod" status becomes :running
     And I wait up to 120 seconds for the steps to pass:

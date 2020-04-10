@@ -17,8 +17,11 @@ create_resource_by_default_yaml:
 click_edit_yaml_link:
   elements:
   - selector:
-        xpath: //a[text()='Edit YAML']
+      xpath: //a[text()='Edit YAML']
     op: click
+  - selector:
+      xpath: //div[contains(@class,'ace_content')]
+    timeout: 20
 click_create_button:
   elements:
   - selector:
@@ -37,7 +40,7 @@ click_button:
 click_button_text:
   element:
     selector:
-      xpath: //a[text()='<button_text>']
+      xpath: //button[text()='<button_text>']
     op: click
 check_button_disabled:
   element:

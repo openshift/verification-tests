@@ -18,7 +18,7 @@ Feature: Marketplace related scenarios
     Given I switch to cluster admin pseudo user
     # Create a new OperatorSource
     When I process and create:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/olm/operatorsource-template.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/olm/operatorsource-template.yaml |
       | p | NAME=test-operators                                                     |
       | p | SECRET=                                                                 |
       | p | DISPLAYNAME=Test Operators                                              |
@@ -26,7 +26,7 @@ Feature: Marketplace related scenarios
     Then the step should succeed
     # Create a new CatalogSourceConfig
     When I process and create:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/olm/csc-template.yaml            |
+      | f | <%= BushSlicer::HOME %>/testdata/olm/csc-template.yaml            |
       | p | PACKAGES=codeready-toolchain-operator                                   |
       | p | DISPLAYNAME=CSC Operators                                               |
     Then the step should succeed

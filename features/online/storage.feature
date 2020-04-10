@@ -5,7 +5,7 @@ Feature: ONLY ONLINE Storage related scripts in this file
   Scenario: Delete pod with mounting error
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/online/tc526564/pod_volumetest.json |
+      | f | <%= BushSlicer::HOME %>/testdata/online/tc526564/pod_volumetest.json |
     Then the step should succeed
     And I wait for the steps to pass:
     """
@@ -38,7 +38,7 @@ Feature: ONLY ONLINE Storage related scripts in this file
   Scenario: Pod should not create directories within /var/lib/docker/volumes/ on nodes
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/online/tc526564/pod_volumetest.json |
+      | f | <%= BushSlicer::HOME %>/testdata/online/tc526564/pod_volumetest.json |
     Then the step should succeed
     And I wait for the steps to pass:
     """
@@ -59,7 +59,7 @@ Feature: ONLY ONLINE Storage related scripts in this file
   # @case_id OCP-13108
   Scenario: Basic user could not get pv object info
     Given I have a project
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/ebs/claim.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/ebs/claim.json" replacing paths:
       | ["metadata"]["name"]                           | ebsc-<%= project.name %> |
       | ["spec"]["resources"]["requests"]["storage"]   | 1Gi                      |
     And the step should succeed
@@ -100,13 +100,13 @@ Feature: ONLY ONLINE Storage related scripts in this file
   Scenario: Claim requesting to get the maximum capacity
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/online/dynamic_persistent_volumes/pvc-equal.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/online/dynamic_persistent_volumes/pvc-equal.yaml |
     Then the step should succeed
     And the "claim-equal-limit" PVC becomes :bound
     And I ensure "claim-equal-limit" pvc is deleted
 
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/online/dynamic_persistent_volumes/pvc-over.yaml  |
+      | f | <%= BushSlicer::HOME %>/testdata/online/dynamic_persistent_volumes/pvc-over.yaml  |
     Then the step should fail
     And the output should contain:
       | Forbidden                                              |
@@ -114,7 +114,7 @@ Feature: ONLY ONLINE Storage related scripts in this file
       | request is 5Gi                                         |
 
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/online/dynamic_persistent_volumes/pvc-less.yaml  |
+      | f | <%= BushSlicer::HOME %>/testdata/online/dynamic_persistent_volumes/pvc-less.yaml  |
     Then the step should fail
     And the output should contain:
       | Forbidden                                              |
@@ -126,7 +126,7 @@ Feature: ONLY ONLINE Storage related scripts in this file
   Scenario Outline: create pvc with annotation in aws
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/online/dynamic_persistent_volumes/<pvc-name>.json |
+      | f | <%= BushSlicer::HOME %>/testdata/online/dynamic_persistent_volumes/<pvc-name>.json |
     Then the step should succeed
     And the "<pvc-name>" PVC becomes :<status>
     When I run the :describe client command with:
@@ -156,7 +156,7 @@ Feature: ONLY ONLINE Storage related scripts in this file
     And evaluation of `project.supplemental_groups(user: user).begin` is stored in the :supplemental_groups clipboard
     And evaluation of `project.uid_range(user: user).begin` is stored in the :uid_range clipboard
 
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/emptydir/emptydir_pod_selinux_test.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/emptydir/emptydir_pod_selinux_test.json" replacing paths:
       | ["spec"]["containers"][0]["securityContext"]["runAsUser"] | <%= cb.uid_range %>             |
       | ["spec"]["containers"][1]["securityContext"]["runAsUser"] | <%= cb.uid_range %>             |
       | ["spec"]["securityContext"]["fsGroup"]                    | <%= cb.supplemental_groups %>   |

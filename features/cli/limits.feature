@@ -6,7 +6,7 @@ Feature: limit range related scenarios:
   Scenario Outline: Limit range default request tests
     Given I have a project
     When I run the :create admin command with:
-      | f         | <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/<path>/limit.yaml |
+      | f         | <%= BushSlicer::HOME %>/testdata/limits/<path>/limit.yaml |
       | namespace | <%= project.name %>                                             |
     Then the step should succeed
     And I run the :describe client command with:
@@ -29,7 +29,7 @@ Feature: limit range related scenarios:
   Scenario Outline: Limit range invalid values tests
     Given I have a project
     When I run the :create admin command with:
-      | f         | <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/<path>/limit.yaml |
+      | f         | <%= BushSlicer::HOME %>/testdata/limits/<path>/limit.yaml |
       | namespace | <%= project.name %>                                             |
     And the step should fail
     And the output should match:
@@ -51,7 +51,7 @@ Feature: limit range related scenarios:
   Scenario Outline: Limit range incorrect values
     Given I have a project
     When I run the :create admin command with:
-      | f         | <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/<path>/limit.yaml |
+      | f         | <%= BushSlicer::HOME %>/testdata/limits/<path>/limit.yaml |
       | namespace | <%= project.name %>                                             |
     And the step should fail
     And the output should match:
@@ -69,7 +69,7 @@ Feature: limit range related scenarios:
   Scenario: Limit range does not allow min > defaultRequest
     Given I have a project
     When I run the :create admin command with:
-      | f         | <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/tc508046/limit.yaml |
+      | f         | <%= BushSlicer::HOME %>/testdata/limits/tc508046/limit.yaml |
       | namespace | <%= project.name %>                                               |
     Then the step should fail
     And the output should match:
@@ -83,7 +83,7 @@ Feature: limit range related scenarios:
   Scenario: Limit range does not allow defaultRequest > default
     Given I have a project
     When I run the :create admin command with:
-      | f         | <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/tc508042/limit.yaml |
+      | f         | <%= BushSlicer::HOME %>/testdata/limits/tc508042/limit.yaml |
       | namespace | <%= project.name %>                                               |
     Then the step should fail
     And the output should match:
@@ -97,7 +97,7 @@ Feature: limit range related scenarios:
   Scenario: Limit range does not allow defaultRequest > max
     Given I have a project
     When I run the :create admin command with:
-      | f         | <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/tc508043/limit.yaml |
+      | f         | <%= BushSlicer::HOME %>/testdata/limits/tc508043/limit.yaml |
       | namespace | <%= project.name %>                                               |
     Then the step should fail
     And the output should match:
@@ -111,7 +111,7 @@ Feature: limit range related scenarios:
   Scenario: Limit range does not allow maxLimitRequestRatio > Limit/Request
     Given I have a project
     When I run the :create admin command with:
-      | f         | <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/tc508044/limit.yaml |
+      | f         | <%= BushSlicer::HOME %>/testdata/limits/tc508044/limit.yaml |
       | namespace | <%= project.name %>                                               |
     Then the step should succeed
     And I run the :describe client command with:
@@ -121,7 +121,7 @@ Feature: limit range related scenarios:
       | Container\\s+cpu\\s+\-\\s+\-\\s+\-\\s+\-\\s+4    |
       | Container\\s+memory\\s+\-\\s+\-\\s+\-\\s+\-\\s+4 |
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/tc508044/pod.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/limits/tc508044/pod.yaml |
     Then the step should fail
     And the output should contain:
       | cpu max limit to request ratio per Container is 4, but provided ratio is 15.000000 |
@@ -133,7 +133,7 @@ Feature: limit range related scenarios:
   Scenario: Limit range with all values set with proper values
     Given I have a project
     When I run the :create admin command with:
-      | f         | <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/tc508048/limit.yaml |
+      | f         | <%= BushSlicer::HOME %>/testdata/limits/tc508048/limit.yaml |
       | namespace | <%= project.name %>                                               |
     Then the step should succeed
     And I run the :describe client command with:
@@ -145,7 +145,7 @@ Feature: limit range related scenarios:
       | Container\\s+cpu\\s+10m\\s+480m\\s+180m\\s+240m\\s+4       |
       | Container\\s+memory\\s+5Mi\\s+512Mi\\s+128Mi\\s+256Mi\\s+4 |
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/limits/tc508048/pod.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/limits/tc508048/pod.yaml |
     Then the step should succeed
     And I wait for the steps to pass:
     """

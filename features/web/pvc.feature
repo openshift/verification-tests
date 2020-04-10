@@ -9,26 +9,26 @@ Feature: Add pvc to pod from web related
     And I have a NFS service in the project
     And default storage class is patched to non-default
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/deployment/dc-with-two-containers.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/deployment/dc-with-two-containers.yaml |
     Then the step should succeed
 
-    When admin creates a PV from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/nfs/auto/pv-template.json" where:
+    When admin creates a PV from "<%= BushSlicer::HOME %>/testdata/storage/nfs/auto/pv-template.json" where:
       | ["spec"]["nfs"]["server"]  | <%= service("nfs-service").ip %> |
       | ["metadata"]["name"]       | nfs-1-<%= project.name %>         |
     Then the step should succeed
 
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/nfs/auto/pvc-template.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/nfs/auto/pvc-template.json" replacing paths:
       | ["metadata"]["name"]   | nfsc-1-<%= project.name %> |
       | ["spec"]["volumeName"] | nfs-1-<%= project.name %>  |
     Then the step should succeed
     And the "nfsc-1-<%= project.name %>" PVC becomes bound to the "nfs-1-<%= project.name %>" PV
 
-    When admin creates a PV from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/nfs/auto/pv-template.json" where:
+    When admin creates a PV from "<%= BushSlicer::HOME %>/testdata/storage/nfs/auto/pv-template.json" where:
       | ["spec"]["nfs"]["server"]  | <%= service("nfs-service").ip %> |
       | ["metadata"]["name"]       | nfs-2-<%= project.name %>         |
     Then the step should succeed
 
-    When I run oc create over "<%= ENV['BUSHSLICER_HOME'] %>/testdata/storage/nfs/auto/pvc-template.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/nfs/auto/pvc-template.json" replacing paths:
       | ["metadata"]["name"]   | nfsc-2-<%= project.name %> |
       | ["spec"]["volumeName"] | nfs-2-<%= project.name %>  |
     Then the step should succeed

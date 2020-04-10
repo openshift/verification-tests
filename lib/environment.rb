@@ -199,6 +199,17 @@ module BushSlicer
       return @idp
     end
 
+    def ocm_env
+      unless @ocm_env
+        if opts[:ocm_env]
+          @ocm_env = opts[:ocm_env]
+        else
+          @ocm_env = ''
+        end
+      end
+      return @ocm_env
+    end
+
     def authentication_url
       unless @authentication_url
         if opts[:authentication_url]

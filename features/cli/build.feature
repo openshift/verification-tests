@@ -45,7 +45,7 @@ Feature: build 'apps' with CLI
   Scenario Outline: when delete the bc,the builds pending or running should be deleted
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/tc<number>/test-buildconfig.json |
+      | f | <%= BushSlicer::HOME %>/testdata/build/tc<number>/test-buildconfig.json |
     Then the step should succeed
     Given the "ruby-sample-build-1" build becomes <build_status>
     Then I run the :delete client command with:
@@ -184,7 +184,7 @@ Feature: build 'apps' with CLI
   Scenario: Add multiple source inputs
     Given I have a project
     When I run the :new_app client command with:
-      | file | <%= ENV['BUSHSLICER_HOME'] %>/testdata/templates/tc517667/ruby22rhel7-template-sti.json |
+      | file | <%= BushSlicer::HOME %>/testdata/templates/tc517667/ruby22rhel7-template-sti.json |
     Given the "ruby-sample-build-1" build completes
     When I run the :get client command with:
       | resource      | buildconfig       |
@@ -207,7 +207,7 @@ Feature: build 'apps' with CLI
   Scenario: Add a image with multiple paths as source input
     Given I have a project
     When I run the :new_app client command with:
-      | file | <%= ENV['BUSHSLICER_HOME'] %>/testdata/templates/tc517666/ruby22rhel7-template-sti.json |
+      | file | <%= BushSlicer::HOME %>/testdata/templates/tc517666/ruby22rhel7-template-sti.json |
     Given the "ruby-sample-build-1" build completes
     When I get project build_config named "ruby-sample-build" as YAML
     Then the output should contain "xiuwangs2i-2"
@@ -245,7 +245,7 @@ Feature: build 'apps' with CLI
     Given I get project builds
     #Create a deploymentconfig to generate pods to test on,
     #Avoids the use of direct docker commands.
-    When I download a file from "<%= ENV['BUSHSLICER_HOME'] %>/testdata/templates/tc517670/dc.json"
+    When I download a file from "<%= BushSlicer::HOME %>/testdata/templates/tc517670/dc.json"
     Then the step should succeed
     Given I replace lines in "dc.json":
       | replaceme | final-app |
@@ -285,10 +285,10 @@ Feature: build 'apps' with CLI
     Given I have a project
     #Reusing similar secrets to TC #519256
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/secrets/tc519256/testsecret1.json |
+      | f | <%= BushSlicer::HOME %>/testdata/secrets/tc519256/testsecret1.json |
     Then the step should succeed
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/secrets/tc519256/testsecret2.json |
+      | f | <%= BushSlicer::HOME %>/testdata/secrets/tc519256/testsecret2.json |
     Then the step should succeed
     When I run the :new_build client command with:
       | image_stream | ruby:latest                                      |
@@ -310,7 +310,7 @@ Feature: build 'apps' with CLI
   Scenario: Using a docker image as source input for docker build
     Given I have a project
     When I run the :new_app client command with:
-      | file | <%= ENV['BUSHSLICER_HOME'] %>/testdata/templates/tc517668/ruby22rhel7-template-docker.json |
+      | file | <%= BushSlicer::HOME %>/testdata/templates/tc517668/ruby22rhel7-template-docker.json |
     Given the "ruby-sample-build-1" build completes
     When I get project build_config named "ruby-sample-build" as YAML
     Then the output should contain "xiuwangtest"
@@ -325,10 +325,10 @@ Feature: build 'apps' with CLI
   Scenario Outline: Do sti/custom build with no inputs in buildconfig
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/tc525736/nosrc-setup.json |
+      | f | <%= BushSlicer::HOME %>/testdata/build/tc525736/nosrc-setup.json |
     Then the step should succeed
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/tc525736/nosrc-test.json  |
+      | f | <%= BushSlicer::HOME %>/testdata/build/tc525736/nosrc-test.json  |
     When I get project bc
     Then the output should contain:
       | <bc_name> |
@@ -344,7 +344,7 @@ Feature: build 'apps' with CLI
       | object_name_or_id |  <bc_name> |
     Then the step should succeed
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/build/<file_name> |
+      | f | <%= BushSlicer::HOME %>/testdata/build/<file_name> |
     When I get project build_config named "<bc_name>"
     Then the step should succeed
     When I run the :start_build client command with:
@@ -674,7 +674,7 @@ Feature: build 'apps' with CLI
       | image_stream | ruby:latest                                       |
     Then the step should succeed
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/templates/tc539699/build.yaml | 
+      | f | <%= BushSlicer::HOME %>/testdata/templates/tc539699/build.yaml | 
     Then the step should succeed
     When I run the :start_build client command with:
       | buildconfig | ruby-hello-world |

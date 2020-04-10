@@ -191,3 +191,69 @@ check_inputs_for_alternative_services_missing:
   - selector:
       <<: *alternative_service_target
     missing: true
+filter_and_show_accepted_routes:
+  params:
+    status_text: Rejected
+  action: disable_status_filter
+filter_and_show_rejected_routes:
+  params:
+    status_text: Accepted
+  action: disable_status_filter
+disable_status_filter:
+  element:
+    selector:
+      xpath: //a[contains(@class,'row-filter__box--active') and contains(@class,'row-filter__box') and text()='<status_text>']
+    op: click
+enable_status_filter:
+  element:
+    selector:
+      xpath: //a[@class='row-filter__box' and text()='<status_text>']
+    op: click
+select_all_filters:
+  params:
+    button_text: Select all filters
+  action: click_button_text
+check_rejected_icon_and_text:
+  params:
+    icon_text: Rejected
+  action: check_icon_and_text
+check_icon_and_text:
+  element:
+    selector:
+      xpath: //span[@class='co-icon-and-text']/span[text()='<icon_text>']
+check_conditions_table:
+  elements:
+  - selector:
+      xpath: //h3[contains(.,'Conditions')]/following-sibling::div[contains(.,'Type')]/../div[contains(.,'Status')]/../div[contains(.,'Reason')]/../div[contains(.,'Message')]
+  action:
+    if_param: type
+    ref: check_type_in_conditions_table
+  action:
+    if_param: status
+    ref: check_status_in_conditions_table
+  action:
+    if_param: reason
+    ref: check_reason_in_conditions_table
+  action:
+    if_param: message
+    ref: check_message_in_conditions_table
+check_type_in_conditions_table:
+  params:
+    value: <type>
+  action: check_value_in_conditions_table
+check_status_in_conditions_table:
+  params:
+    value: <status>
+  action: check_value_in_conditions_table
+check_reason_in_conditions_table:
+  params:
+    value: <reason>
+  action: check_value_in_conditions_table
+check_message_in_conditions_table:
+  params:
+    value: <message>
+  action: check_value_in_conditions_table
+check_value_in_conditions_table:
+  element:
+    selector:
+      xpath: //div[contains(@class,'row')]//div[contains(.,'<value>')]

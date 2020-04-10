@@ -7,7 +7,7 @@ Feature: Update sql apb related feature
     #provision postgresql
     And I have a project
     When I process and create:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/serviceinstance-template.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/serviceinstance-template.yaml |
       | p | INSTANCE_NAME=<db_name>                                                                                      |
       | p | CLASS_EXTERNAL_NAME=<db_name>                                                                                |
       | p | PLAN_EXTERNAL_NAME=<db_plan_1>                                                                               |
@@ -16,7 +16,7 @@ Feature: Update sql apb related feature
     Then the step should succeed
     And evaluation of `service_instance("<db_name>").uid` is stored in the :db_uid clipboard
     When I process and create:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/serviceinstance-parameters-template.yaml                 |
+      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/serviceinstance-parameters-template.yaml                 |
       | p | SECRET_NAME=<secret_name>                                                                                                               |
       | p | INSTANCE_NAME=<db_name>                                                                                                                 |
       | p | PARAMETERS={"postgresql_database":"admin","postgresql_user":"admin","postgresql_version":"<db_version>","postgresql_password":"test"}   |

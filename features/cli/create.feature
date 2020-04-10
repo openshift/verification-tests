@@ -6,12 +6,12 @@ Feature: creating 'apps' with CLI
   Scenario: Process with special FSGroup id can be ran when using RunAsAny as the RunAsGroupStrategy
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/pods/pod_with_special_fsGroup.json |
+      | f | <%= BushSlicer::HOME %>/testdata/pods/pod_with_special_fsGroup.json |
     Then the step should fail
-    Given the following scc policy is created: <%= ENV['BUSHSLICER_HOME'] %>/testdata/authorization/scc/scc-runasany.yaml
+    Given the following scc policy is created: <%= BushSlicer::HOME %>/testdata/authorization/scc/scc-runasany.yaml
     Then the step should succeed
     When I run the :create admin command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/pods/pod_with_special_fsGroup.json |
+      | f | <%= BushSlicer::HOME %>/testdata/pods/pod_with_special_fsGroup.json |
       | n | <%= project.name %>                                                                                   |
     Then the step should succeed
     When the pod named "hello-openshift" becomes ready
@@ -147,12 +147,12 @@ Feature: creating 'apps' with CLI
     Then the step should fail
     Then the output should match "User "<%=@user.name%>" cannot create resource "imagestreamimports".*in the namespace "noproject""
     Given I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/pods/hello-pod.json |
+      | f | <%= BushSlicer::HOME %>/testdata/pods/hello-pod.json |
       | n | noproject |
     Then the step should fail
     Then the output should match "User "<%=@user.name%>" cannot create resource "pods".*in the namespace "noproject""
     Given I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/deployment/deployment1.json |
+      | f | <%= BushSlicer::HOME %>/testdata/deployment/deployment1.json |
       | n | noproject |
     Then the step should fail
     Then the output should match "User "<%=@user.name%>" cannot create resource "deploymentconfigs".* in the namespace "noproject""

@@ -43,7 +43,7 @@ Feature: ServiceAccount and Policy Managerment
     Then the output should contain:
       | hello-openshift |
     ## this template is to create an application without any build
-    When I process and create "<%= ENV['BUSHSLICER_HOME'] %>/testdata/deployment/deployments_nobc_cpulimit.json"
+    When I process and create "<%= BushSlicer::HOME %>/testdata/deployment/deployments_nobc_cpulimit.json"
     Then the step should succeed
     When I run the :delete client command with:
       | object_type       | svc             |

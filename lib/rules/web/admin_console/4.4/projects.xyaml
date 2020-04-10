@@ -1,6 +1,6 @@
 #---check project related action
 create_project:
-  action: click_create_button
+  action: click_create_project_button
   action: set_project_name
   action: 
     if_param: display_name
@@ -14,6 +14,10 @@ create_project_from_dropdown:
     dropdown_name: namespace-bar
   action: click_dropdown
   action: create_project
+click_create_project_button:
+  params:
+    button_text: Create Project
+  action: click_button_text
 set_project_name:
   element:
     selector:

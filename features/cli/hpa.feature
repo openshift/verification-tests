@@ -5,7 +5,7 @@ Feature: hpa scale
   Scenario: HPA shouldn't scale up target if the replicas of dc is 0
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/hpa/dc-hello-openshift.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/hpa/dc-hello-openshift.yaml |
     Then the step should succeed
     Given a pod becomes ready with labels:
       | deployment=hello-openshift-1 |
@@ -40,7 +40,7 @@ Feature: hpa scale
   Scenario: HPA shouldn't scale up target if the replicas of rc is 0
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/hpa/rc-hello-openshift.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/hpa/rc-hello-openshift.yaml |
     Then the step should succeed
     Given I wait until replicationController "hello-openshift" is ready
     When I run the :autoscale client command with:
@@ -74,7 +74,7 @@ Feature: hpa scale
   Scenario: Creates autoscaler for replication controller by oc autoscale
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/hpa/rc-hello-openshift.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/hpa/rc-hello-openshift.yaml |
     Then the step should succeed
     Given I wait until replicationController "hello-openshift" is ready
     When I run the :autoscale client command with:
@@ -121,7 +121,7 @@ Feature: hpa scale
   Scenario: Creates autoscaler for replication controller with invalid value
     Given I have a project
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/hpa/rc-hello-openshift.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/hpa/rc-hello-openshift.yaml |
     Then the step should succeed
     Given I wait until replicationController "hello-openshift" is ready
     When I run the :autoscale client command with:

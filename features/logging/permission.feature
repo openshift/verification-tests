@@ -11,7 +11,7 @@ Feature: permission related test
     Given I create a project with non-leading digit name
     And evaluation of `project` is stored in the :project clipboard
     When I run the :new_app client command with:
-      | file | <%= ENV['BUSHSLICER_HOME'] %>/testdata/logging/loggen/container_json_log_template.json |
+      | file | <%= BushSlicer::HOME %>/testdata/logging/loggen/container_json_log_template.json |
     Then the step should succeed
     Given I switch to cluster admin pseudo user
     And I use the "openshift-logging" project

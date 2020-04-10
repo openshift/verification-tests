@@ -10,7 +10,7 @@ Feature: env related feature
       | source | /dev/null  |
     Then the step should succeed
     When I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/configmap/configmap-example.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/configmap/configmap-example.yaml |
     Then the step should succeed
     When I run the :run client command with:
       | name   | myrun                 |
