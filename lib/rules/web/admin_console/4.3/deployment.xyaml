@@ -90,10 +90,15 @@ check_current_cpu_utilization:
     selector:
       <<: *value
 check_pod_status:
-  params:
-    status_text: <pod_status>
-  action: enable_status_filter
   elements:
-  - selector:
+  - selector: &status
       xpath: //tr/td[contains(.,'<pod_name>')]/following-sibling::td[2][contains(.,'<pod_status>')]
+check_pod_completed_status:
+  params:
+    pod_status: Completed
+    status_text: Completed
+  action: enable_status_filter
+  element:
+    selector:
+      <<: *status
 
