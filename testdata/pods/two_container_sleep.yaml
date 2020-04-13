@@ -12,4 +12,4 @@ spec:
   - name: container2
     image: docker.io/busybox@sha256:afe605d272837ce1732f390966166c2afff5391208ddd57de10942748694049d
     imagePullPolicy: Always
-    command: ["sleep", "60"]
+    command: ["sleep", "80"]
