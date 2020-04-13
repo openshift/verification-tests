@@ -113,7 +113,7 @@ Feature: Egress IP related features
     """
 
   # @author huirwang@redhat.com
-  # @case_id OCP-21812 OCP-15473
+  # @case_id OCP-21812
   # @bug_id  1609112
   @admin
   @destructive
