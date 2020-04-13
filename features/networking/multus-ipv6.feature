@@ -30,7 +30,7 @@ Feature: Multus-CNI ipv6 related scenarios
     Then the output should contain "net1"
     And the output should contain "macvlan mode bridge"
     When I execute on the pod:
-      | bash | -c | /usr/sbin/ip addr show net1 \| grep -Po 'fd00:dead:beef::[0-9a-fA-F]{1,4}' | 
+      | bash | -c | /usr/sbin/ip addr show net1 \| grep -Po 'fd00:dead:beef::[[:xdigit:]]{1,4}' |
     Then the step should succeed
     And evaluation of `@result[:response].chomp` is stored in the :pod1_multus_ipv6 clipboard
   
