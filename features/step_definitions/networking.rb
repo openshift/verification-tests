@@ -480,6 +480,7 @@ end
 
 Given /^I wait for the networking components of the node to become ready$/ do
   ensure_admin_tagged
+  _admin = admin
 
   if env.version_ge("3.10", user: user)
     sdn_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
@@ -490,14 +491,14 @@ Given /^I wait for the networking components of the node to become ready$/ do
       pod.node_name == node.name
     }.first
 
-    @result = sdn_pod.wait_till_ready(user, 3 * 60)
+    @result = sdn_pod.wait_till_ready(_admin, 3 * 60)
     unless @result[:success]
       logger.error(@result[:response])
       raise "sdn pod on the node did not become ready"
     end
     cb.sdn_pod = sdn_pod
 
-    @result = ovs_pod.wait_till_ready(user, 60)
+    @result = ovs_pod.wait_till_ready(_admin, 60)
     unless @result[:success]
       logger.error(@result[:response])
       raise "ovs pod on the node did not become ready"
