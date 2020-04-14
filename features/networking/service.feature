@@ -399,12 +399,12 @@ Feature: Service related networking scenarios
   # Checking idling unidling manually to make sure it works fine
   When I run the :idle client command with:
     | svc_name | test-service |
-  Then the step should succeed 
+  Then the step should succeed
   And the output should contain:
     | The service "<%= project.name %>/test-service" has been marked as idled |
   Given I have a pod-for-ping in the project
   When I execute on the pod:
-    | /usr/bin/curl | --connect-timeout | 5 | <%= cb.service_ip %>:27017 |
+    | /usr/bin/curl | --connect-timeout | 30 | <%= cb.service_ip %>:27017 |
   Then the step should succeed
   And the output should contain:
     | Hello OpenShift |
