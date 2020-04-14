@@ -115,6 +115,7 @@ goto_one_pod_log_page:
   url: k8s/ns/<project_name>/pods/<pod_name>/logs
 goto_project_pods_list_page:
   url: k8s/ns/<project_name>/pods
+  action: wait_box_loaded
 
 
 goto_cluster_oauth_configuration_page:

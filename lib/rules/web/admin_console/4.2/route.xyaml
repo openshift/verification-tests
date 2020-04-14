@@ -122,7 +122,7 @@ disable_status_filter:
 enable_status_filter:
   element:
     selector:
-      xpath: //a[@class='row-filter__box' and text()='<status_text>']
+      xpath: //a[contains(@class,'row-filter__box') and text()='<status_text>']
     op: click
 select_all_filters:
   params:
