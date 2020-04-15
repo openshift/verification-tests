@@ -70,6 +70,12 @@ goto_one_secret_page:
 #serviceaccounts
 goto_serviceaccounts_page:
   url: k8s/ns/<project_name>/serviceaccounts
+goto_rolebinding_list_page:
+  url: k8s/ns/<project_name>/rolebindings
+  action: wait_box_loaded
+goto_rolebinding_creation_page:
+  url: k8s/cluster/rolebindings/~new
+  action: wait_form_loaded
 
 # storageclass
 goto_storageclass_page:
