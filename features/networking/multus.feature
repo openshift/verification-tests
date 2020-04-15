@@ -1190,3 +1190,57 @@ Feature: Multus-CNI related scenarios
     And evaluation of `@result[:response].match(/\h+:\h+:\h+:\h+:\h+:\h+/)[0]` is stored in the :pod2_net1_mac clipboard
     And the expression should be true> cb.pod2_net1_mac==cb.default_interface_mac
     And the expression should be true> !(cb.pod2_net1_ip==cb.pod1_net1_ip)
+
+  # @author weliang@redhat.com
+  # @case_id OCP-28633
+  @admin
+  Scenario: Dynamic IP address assignment with Whereabouts
+    # Make sure that the multus is enabled
+    Given the multus is enabled on the cluster
+    Given the default interface on nodes is stored in the :default_interface clipboard
+    # Create the net-attach-def via cluster admin
+    Given I have a project
+    When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/whereabouts-macvlan.yaml" replacing paths:
+      | ["metadata"]["namespace"] | <%= project.name %>          |    
+      | ["spec"]["config"]|'{ "cniVersion": "0.3.0", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "bridge", "ipam": { "type": "whereabouts", "range": "192.168.22.100/24"} }' |
+    Then the step should succeed
+    
+    # Create a pod absorbing above net-attach-def
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["name"] | macvlan-bridge-whereabouts-pod1                                   |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | macvlan-bridge-whereabouts  |
+      | ["spec"]["containers"][0]["name"] | macvlan-bridge-whereabouts                           |
+    Then the step should succeed
+    And the pod named "macvlan-bridge-whereabouts-pod1" becomes ready
+
+    # Check created pod has correct macvlan mode on interface net1
+    When I execute on the "macvlan-bridge-whereabouts-pod1" pod:
+      | /usr/sbin/ip | -d | link |
+    Then the output should contain:
+      | net1                |
+      | macvlan mode bridge |
+    # Check created pod has correct ip address on interface net1
+    When I execute on the "macvlan-bridge-whereabouts-pod1" pod:
+      | /usr/sbin/ip | a  |
+    Then the output should contain:
+      | 192.168.22.100    |
+
+    # Create second pod absorbing above net-attach-def
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["name"] | macvlan-bridge-whereabouts-pod2                                   |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | macvlan-bridge-whereabouts  |
+      | ["spec"]["containers"][0]["name"] | macvlan-bridge-whereabouts                           |
+    Then the step should succeed
+    And the pod named "macvlan-bridge-whereabouts-pod2" becomes ready
+
+    # Check created pod has correct macvlan mode on interface net1
+    When I execute on the "macvlan-bridge-whereabouts-pod2" pod:
+      | /usr/sbin/ip | -d | link |
+    Then the output should contain:
+      | net1                |
+      | macvlan mode bridge |
+    # Check created pod has correct ip address on interface net1
+    When I execute on the "macvlan-bridge-whereabouts-pod2" pod:
+      | /usr/sbin/ip | a  |
+    Then the output should contain:
+      | 192.168.22.101    |
