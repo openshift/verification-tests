@@ -1244,3 +1244,33 @@ Feature: Multus-CNI related scenarios
       | /usr/sbin/ip | a  |
     Then the output should contain:
       | 192.168.22.101    |
+
+  # @author weliang@redhat.com
+  # @case_id OCP-28518
+  @admin
+  Scenario: Multus custom route change with route override	
+    # Make sure that the multus is enabled
+    Given the multus is enabled on the cluster
+    Given the default interface on nodes is stored in the :default_interface clipboard
+
+    # Create the net-attach-def via cluster admin
+    Given I have a project
+    When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/route-override.yaml" replacing paths:
+      | ["metadata"]["namespace"]  | <%= project.name %> | 
+      | ["metadata"]["name"]       | route-override      |
+      | ["spec"]["config"] | '{ "cniVersion": "0.3.0", "name" : "mymacvlan", "plugins": [ { "type": "macvlan", "master": "ens3", "mode": "bridge", "ipam": { "type": "static", "addresses": [{"address": "192.168.20.2/24"}] } }, { "type" : "route-override", "addroutes": [ { "dst": "192.168.10.0/24" }] } ] }' |
+    Then the step should succeed
+      
+    # Create a pod absorbing above net-attach-def
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["name"] | route-override                                         |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | route-override   |
+      | ["spec"]["containers"][0]["name"] | route-override                            |
+    Then the step should succeed
+    And the pod named "route-override" becomes ready
+
+    # Check created pod has correct default route
+    When I execute on the "route-override" pod:
+      | /usr/sbin/ip | route         |
+    Then the output should contain:
+      | 192.168.10.0                 |
