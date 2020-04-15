@@ -553,6 +553,9 @@ check_resource_details:
     if_param: machine_config_selector
     ref: check_machine_config_selector
   action:
+    if_param: node_selector
+    ref: check_node_selector
+  action:
     if_param: current_configuration
     ref: check_current_configuration
   action:
@@ -770,6 +773,11 @@ check_machine_config_selector:
   params:
     key: Machine Config Selector
     value: <machine_config_selector>
+  action: check_resource_details_key_and_value
+check_node_selector:
+  params:
+    key: Node Selector
+    value: <node_selector>
   action: check_resource_details_key_and_value
 check_current_configuration:
   params:
