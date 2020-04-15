@@ -14,7 +14,7 @@ Feature: Add, update remove volume to rc/dc and --overwrite option
       | name         | mydb                       |
     Then the step should succeed
     And a pod becomes ready with labels:
-      | app=mydb |
+      | deploymentconfig=mydb |
     # Check oc volume command
     When I run the :set_volume client command with:
       | resource   | dc/mydb  |
@@ -76,7 +76,7 @@ Feature: Add, update remove volume to rc/dc and --overwrite option
       | resource | dc/mydb  |
       | action   | --remove |
       | name     | v1       |
-      | confirm  |          |
+      | confirm  | false    |
     Then the step should succeed
     And I wait for the resource "pod" named "<%= pod.name %>" to disappear
     And a pod becomes ready with labels:
