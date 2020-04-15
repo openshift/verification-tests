@@ -143,16 +143,13 @@ Feature: Testing haproxy router
     Then the step should succeed
     When I expose the "service-unsecure" service
     Then the step should succeed
-    Given I download a file from "<%= BushSlicer::HOME %>/testdata/routing/edge/route_edge-www.edge.com.crt"
-    And I download a file from "<%= BushSlicer::HOME %>/testdata/routing/edge/route_edge-www.edge.com.key"
-    And I download a file from "<%= BushSlicer::HOME %>/testdata/routing/ca.pem"
     When I run the :create_route_edge client command with:
-      | name | route-edge |
-      | hostname | <%= rand_str(5, :dns) %>-edge.example.com |
-      | service | service-unsecure |
-      | cert | route_edge-www.edge.com.crt |
-      | key | route_edge-www.edge.com.key |
-      | cacert | ca.pem |
+      | name     | route-edge                                                                 |
+      | hostname | <%= rand_str(5, :dns) %>-edge.example.com                                  |
+      | service  | service-unsecure                                                           |
+      | cert     | "<%= BushSlicer::HOME %>/testdata/routing/edge/route_edge-www.edge.com.crt |
+      | key      | "<%= BushSlicer::HOME %>/testdata/routing/edge/route_edge-www.edge.com.key |
+      | cacert   | "<%= BushSlicer::HOME %>/testdata/routing/ca.pem                           |
     Then the step should succeed
 
     Given I have a pod-for-ping in the project
@@ -242,12 +239,11 @@ Feature: Testing haproxy router
       | name | router |
       | replicas | 0 |
     Then the step should succeed
-    Given I download a file from "<%= BushSlicer::HOME %>/testdata/routing/default-router.pem"
     When I run the :oadm_router admin command with:
-      | name | ocp-12651|
-      | images | <%= cb.default_router_image %> |
-      | default_cert | default-router.pem |
-      | selector | router=enabled |
+      | name         | ocp-12651                                                    |
+      | images       | <%= cb.default_router_image %>                               |
+      | default_cert | "<%= BushSlicer::HOME %>/testdata/routing/default-router.pem |
+      | selector     | router=enabled                                               |
     And a pod becomes ready with labels:
       | deploymentconfig=ocp-12651|
     And evaluation of `pod.ip` is stored in the :custom_router_ip clipboard
