@@ -28,9 +28,13 @@ end
 
 Given /^the status of condition Upgradeable for marketplace operator as expected$/ do
   ensure_admin_tagged
-  actual_status = cluster_operator('marketplace').condition(type: 'Upgradeable', cached: false)['status']
-  status = 'True'
   cluster_version = cluster_version('version').channel.split('-')[1]
+  if cluster_version == "4.1"
+    actual_status = 'True'
+  else
+    actual_status = cluster_operator('marketplace').condition(type: 'Upgradeable', cached: false)['status']
+  end
+  status = 'True'
   if cluster_version == "4.4"
     csc_items = Array.new
     os_items = Array.new
