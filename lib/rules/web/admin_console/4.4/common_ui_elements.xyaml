@@ -449,6 +449,11 @@ wait_until_no_loading:
       css: .cos-status-box--loading
     missing: true
     timeout: 30
+wait_sidebar_loaded:
+  element:
+    selector:
+      css: .co-p-has-sidebar__sidebar-close
+    timeout: 30
 wait_table_loaded:
   element:
     selector:
