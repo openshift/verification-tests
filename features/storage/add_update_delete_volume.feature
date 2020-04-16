@@ -25,7 +25,7 @@ Feature: Add, update remove volume to rc/dc and --overwrite option
     Then the step should succeed
     And I wait for the resource "pod" named "<%= pod.name %>" to disappear
     And a pod becomes ready with labels:
-      | app=mydb |
+      | deploymentconfig=mydb |
     When I execute on the pod:
       | grep | opt1 | /proc/mounts |
     Then the step should succeed
@@ -37,7 +37,7 @@ Feature: Add, update remove volume to rc/dc and --overwrite option
     Then the step should succeed
     And I wait for the resource "pod" named "<%= pod.name %>" to disappear
     And a pod becomes ready with labels:
-      | app=mydb |
+      | deploymentconfig=mydb |
     When I get project dc named "mydb" as YAML
     Then the step should succeed
     And the output should not contain:
@@ -53,7 +53,7 @@ Feature: Add, update remove volume to rc/dc and --overwrite option
     Then the step should succeed
     And I wait for the resource "pod" named "<%= pod.name %>" to disappear
     And a pod becomes ready with labels:
-      | app=mydb |
+      | deploymentconfig=mydb |
     When I execute on the pod:
       | grep | opt1 | /proc/mounts |
     Then the step should succeed
@@ -68,7 +68,7 @@ Feature: Add, update remove volume to rc/dc and --overwrite option
     Then the step should succeed
     And I wait for the resource "pod" named "<%= pod.name %>" to disappear
     And a pod becomes ready with labels:
-      | app=mydb |
+      | deploymentconfig=mydb |
     When I execute on the pod:
       | grep | opt2 | /proc/mounts |
     Then the step should succeed
@@ -76,11 +76,10 @@ Feature: Add, update remove volume to rc/dc and --overwrite option
       | resource | dc/mydb  |
       | action   | --remove |
       | name     | v1       |
-      | confirm  | false    |
     Then the step should succeed
     And I wait for the resource "pod" named "<%= pod.name %>" to disappear
     And a pod becomes ready with labels:
-      | app=mydb |
+      | deploymentconfig=mydb |
     When I get project dc named "mydb" as YAML
     Then the step should succeed
     And the output should not contain:
