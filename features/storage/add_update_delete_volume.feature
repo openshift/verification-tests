@@ -76,7 +76,6 @@ Feature: Add, update remove volume to rc/dc and --overwrite option
       | resource | dc/mydb  |
       | action   | --remove |
       | name     | v1       |
-      | confirm  | false    |
     Then the step should succeed
     And I wait for the resource "pod" named "<%= pod.name %>" to disappear
     And a pod becomes ready with labels:
