@@ -176,6 +176,9 @@ goto_operator_subscription_page:
   url: operatorhub/subscribe?pkg=<package_name>&catalog=<catalog_name>&catalogNamespace=openshift-marketplace&targetNamespace=<target_namespace>
 goto_one_project_subscription_page:
   url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~Subscription/<subscription_name>
+goto_csv_detail_page:
+  url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion/<csv_name>
+  action: wait_box_loaded
 
 # machine config
 goto_machineconfigs_page:
