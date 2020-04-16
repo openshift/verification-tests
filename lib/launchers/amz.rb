@@ -30,7 +30,7 @@ module BushSlicer
           begin
             cred_file = File.expand_path(cred_file)
             logger.info("Using #{cred_file} credentials file.")
-            awscred = Hash[File.read(cred_file).scan(/(.+?)\s+?=\s+?(.+)/)]
+            awscred = Hash[File.read(cred_file).scan(/(.+?)\s*=\s*(.+)/)]
             break # break if no error was raised above
           rescue
             logger.warn("Problem reading credential file #{cred_file}")
