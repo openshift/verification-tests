@@ -46,5 +46,3 @@ Feature: Storage of Hostpath plugin testing
     Examples:
       | access_mode   | reclaim_policy | pv_status | step_status |
       | ReadWriteOnce | Retain         | released  | succeed     | # @case_id OCP-9639
-      | ReadOnlyMany  | Default        | released  | succeed     | # @case_id OCP-11726
-      | ReadWriteMany | Recycle        | available | fail        | # @case_id OCP-9640
