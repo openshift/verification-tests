@@ -114,13 +114,13 @@ Feature: Testing abrouting
     Given I wait for the "service-secure" service to become ready
     Given I wait for the "service-secure-2" service to become ready
     When I run the :create_route_reencrypt client command with:
-      | name       | route-reencrypt                                                             |
-      | hostname   | <%= rand_str(5, :dns) %>-reen.example.com                                   |
-      | service    | service-secure                                                              |
-      | cert       | "<%= BushSlicer::HOME %>/testdata/routing/example_wildcard.pem              |
-      | key        | "<%= BushSlicer::HOME %>/testdata/routing/example_wildcard.key              |
-      | cacert     | "<%= BushSlicer::HOME %>/testdata/routing/reencrypt/route_reencrypt.ca      |
-      | destcacert | "<%= BushSlicer::HOME %>/testdata/routing/reencrypt/route_reencrypt_dest.ca |
+      | name       | route-reencrypt                                                            |
+      | hostname   | <%= rand_str(5, :dns) %>-reen.example.com                                  |
+      | service    | service-secure                                                             |
+      | cert       | <%= BushSlicer::HOME %>/testdata/routing/example_wildcard.pem              |
+      | key        | <%= BushSlicer::HOME %>/testdata/routing/example_wildcard.key              |
+      | cacert     | <%= BushSlicer::HOME %>/testdata/routing/reencrypt/route_reencrypt.ca      |
+      | destcacert | <%= BushSlicer::HOME %>/testdata/routing/reencrypt/route_reencrypt_dest.ca |
     Then the step should succeed
     When I run the :annotate client command with:
       | resource     | route                                          |
