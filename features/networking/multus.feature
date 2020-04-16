@@ -1263,7 +1263,7 @@ Feature: Multus-CNI related scenarios
     When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing path:
       | ["metadata"]["name"]                                       | route-override   |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | route-override   |
-      | ["spec"]["containers"][0]["name"]                          | route-overrid    |
+      | ["spec"]["containers"][0]["name"]                          | route-override   |
     Then the step should succeed
     And the pod named "route-override" becomes ready
 
