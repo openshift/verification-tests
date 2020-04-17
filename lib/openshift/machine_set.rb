@@ -22,6 +22,15 @@ module BushSlicer
       return result
     end
 
+    def machines(user: nil, cached: true, quiet: true)
+      unless cached && props[:machines]
+        user ||= default_user(user)
+        all_machines = Machine.list(user: user, project: project, get_opts: [[:_quiet, quiet]])
+        props[:machines] = all_machines.select {|m| m.machine_set_name == name}
+      end
+      return props[:machines]
+    end
+
     def cluster(user: nil, cached: true, quiet: false)
       rr = raw_resource(user: user, cached: cached, quiet: quiet)
       rr.dig('spec', 'selector', 'matchLabels', 'machine.openshift.io/cluster-api-cluster')
