@@ -274,7 +274,7 @@ Feature: create app on web console related
       | testname=testvalue  |
 
     # Import YAML/JSON
-    Given I download a file from "<%= BushSlicer::HOME %>/testdata/templates/ui/application-template-stibuild-without-customize-route.json"
+    Given I obtain test data file "templates/ui/application-template-stibuild-without-customize-route.json"
     Then the step should succeed
     When I run the :goto_home_page web console action
     Then the step should succeed

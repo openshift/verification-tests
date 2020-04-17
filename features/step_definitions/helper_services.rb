@@ -81,7 +81,7 @@ Given /^I have a efs-provisioner(?: with fsid "(.+)")?(?: of region "(.+)")? in 
   _deployment = deployment("efs-provisioner", _project)
   _deployment.ensure_deleted(user: admin)
   #Create configmap,secret,sa,deployment
-  step %Q{I download a file from "#{ENV['BUSHSLICER_HOME']}/testdata/configmap/efsconfigm.yaml"}
+  step %Q{I obtain test data file "configmap/efsconfigm.yaml"}
   cm = YAML.load(@result[:response])
   path = @result[:abs_path]
   cm["data"]["file.system.id"] = fsid if fsid

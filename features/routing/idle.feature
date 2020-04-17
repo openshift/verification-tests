@@ -101,7 +101,7 @@ Feature: idle service related scenarios
     And I wait until number of replicas match "1" for replicationController "caddy-rc"
 
     # check reencrypt route
-    Given I download a file from "<%= BushSlicer::HOME %>/testdata/routing/reencrypt/route_reencrypt_dest.ca"
+    Given I obtain test data file "routing/reencrypt/route_reencrypt_dest.ca"
     When I run the :create_route_reencrypt client command with:
       | name       | route-reen              |
       | service    | service-secure          |

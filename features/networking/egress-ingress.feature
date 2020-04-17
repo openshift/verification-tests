@@ -48,7 +48,7 @@ Feature: Egress-ingress related networking scenarios
   
     # Create egress policy in project-1
     And evaluation of `BushSlicer::Common::Net.dns_lookup("yahoo.com")` is stored in the :yahoo_ip clipboard
-    When I download a file from "<%= BushSlicer::HOME %>/testdata/networking/egress-ingress/dns-egresspolicy1.json"
+    When I obtain test data file "networking/egress-ingress/dns-egresspolicy1.json"
     And I replace lines in "dns-egresspolicy1.json":
       | 98.138.0.0/16 | <%= cb.yahoo_ip %>/32 |
     And I run the :create admin command with:
@@ -69,7 +69,7 @@ Feature: Egress-ingress related networking scenarios
     And evaluation of `project.name` is stored in the :proj2 clipboard
  
     # Create different egress policy in project-2
-    When I download a file from "<%= BushSlicer::HOME %>/testdata/networking/egress-ingress/dns-egresspolicy2.json"
+    When I obtain test data file "networking/egress-ingress/dns-egresspolicy2.json"
     And I replace lines in "dns-egresspolicy2.json":
       | 98.138.0.0/16 | <%= cb.yahoo_ip %>/32 |
     And I run the :create admin command with:
@@ -176,7 +176,7 @@ Feature: Egress-ingress related networking scenarios
     And evaluation of `project.name` is stored in the :proj1 clipboard
 
     # Create egress policy to deny www.test.com
-    When I download a file from "<%= BushSlicer::HOME %>/testdata/networking/egress-ingress/dns-egresspolicy2.json"
+    When I obtain test data file "networking/egress-ingress/dns-egresspolicy2.json"
     And I replace lines in "dns-egresspolicy2.json":
       | 98.138.0.0/16 | 0.0.0.0/0 |
       | yahoo.com | www.test.com |
@@ -207,7 +207,7 @@ Feature: Egress-ingress related networking scenarios
       | deleted             |
     
     # Create egress policy to allow www.test.com
-    When I download a file from "<%= BushSlicer::HOME %>/testdata/networking/egress-ingress/dns-egresspolicy2.json"
+    When I obtain test data file "networking/egress-ingress/dns-egresspolicy2.json"
     And I replace lines in "dns-egresspolicy2.json":
       | 98.138.0.0/16 | 0.0.0.0/0 |
     And I run the :create admin command with:
@@ -244,7 +244,7 @@ Feature: Egress-ingress related networking scenarios
 
 
     # Create egress policy to allow www.baidu.com
-    When I download a file from "<%= BushSlicer::HOME %>/testdata/networking/egress-ingress/dns-egresspolicy1.json"
+    When I obtain test data file "networking/egress-ingress/dns-egresspolicy1.json"
     And I replace lines in "dns-egresspolicy1.json":
       | 98.138.0.0/16 | 0.0.0.0/0 |
       | yahoo.com | www.baidu.com |

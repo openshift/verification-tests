@@ -189,7 +189,7 @@ Feature: jenkins.feature
     When I perform the :jenkins_create_pipeline_job web action with:
       | job_name | openshifttest |
     Then the step should succeed
-    Given I download a file from "<%= BushSlicer::HOME %>/testdata/templates/OCP_12075/pipeline_delete_resource.groovy"
+    Given I obtain test data file "templates/OCP_12075/pipeline_delete_resource.groovy"
     And I replace lines in "pipeline_delete_resource.groovy":
       | <repl_env> | <%= env.api_endpoint_url %> |
       | <repl_ns>  | <%= project.name %>         |
