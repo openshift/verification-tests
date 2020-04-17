@@ -1150,7 +1150,7 @@
     :type: --type=<value>
     :whitelist: --whitelist=<value>
 :oadm_inspect:
-  :cmd: oc adm inspect <resource_type> <resource_name>
+  :cmd: oc adm inspect <resource_name>
   :options:
     :A: --all-namespaces=<value>
     :all_namespaces: --all-namespaces=<value>
