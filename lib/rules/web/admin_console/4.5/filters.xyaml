@@ -14,6 +14,18 @@ set_strings_in_dropdown_filter_box:
   - selector:
       <<: *dropdown_filter
     op: send_keys <filter_text>
+set_strings_in_filter_box:
+  elements:
+  - selector: &filter_string
+      xpath: //input[@data-test-id='<test_id_value>']
+    op: clear
+  - selector:
+      <<: *filter_string
+    op: send_keys <filter_text>
+filter_event_by_name_or_message:
+  params:
+    test_id_value: item-filter
+  action: set_strings_in_filter_box
 search_by_event_catagory:
   elements:
   - selector:
