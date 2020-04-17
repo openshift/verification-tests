@@ -129,6 +129,13 @@ click_checkbox_from_provider_type:
   - selector:
       xpath: //*[contains(@class, 'pf-c-check__label') and text()='<text>']
     op: click
+open_first_card_overlay_panel:
+  action:
+    if_element:
+      selector:
+        xpath: //button[@type='submit' and not(@disabled)]
+    ref: submit_changes
+  action: open_first_card_in_overlay
 open_first_card_in_overlay:
   elements:
   - selector:
