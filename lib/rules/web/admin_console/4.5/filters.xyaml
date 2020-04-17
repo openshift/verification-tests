@@ -1,10 +1,18 @@
 set_filter_strings:
   elements:
   - selector: &filter_text_ele
-      css: input[class*='text-filter']
+      xpath: //input[@data-test-id='list-page-search-input']
     op: clear
   - selector:
       <<: *filter_text_ele
+    op: send_keys <filter_text>
+set_strings_in_dropdown_filter_box:
+  elements:
+  - selector: &dropdown_filter
+      xpath: //input[@data-test-id='dropdown-text-filter']
+    op: clear
+  - selector:
+      <<: *dropdown_filter
     op: send_keys <filter_text>
 search_by_event_catagory:
   elements:

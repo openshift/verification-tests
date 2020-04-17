@@ -88,6 +88,11 @@ click_on_resource_name:
     selector:
       xpath: //a[contains(@class,'co-resource-item__resource-name') and text()='<item>']
     op: click
+choose_project_from_dropdown_list:
+  element:
+    selector:
+      xpath: //ul//a[@id='<project_name>-Project-link' and contains(@class,'dropdown__menu-item')]
+    op: click
 clear_input_value:
   elements:
   - selector:
@@ -166,7 +171,7 @@ check_resources_title_on_page:
 check_resource_item:
   elements:
   - selector:
-      xpath: //span[contains(@class,'co-m-resource-icon') and @title='<resource_type>']/parent::span[@class='co-resource-item']//a[@class='co-resource-item__resource-name' and text()='<resource_name>' and @href='<resource_link>']
+      xpath: //span[contains(@class,'co-m-resource-icon') and @title='<resource_type>']/parent::span[contains(@class,'co-resource-item')]//a[@class='co-resource-item__resource-name' and text()='<resource_name>' and @href='<resource_link>']
 check_resource_name_and_icon:
   action:
     if_param: service_name
