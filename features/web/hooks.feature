@@ -8,7 +8,7 @@ Feature: bc/dc hooks related
     When I run the :new_app client command with:
       | file | <%= BushSlicer::HOME %>/testdata/templates/ui/application-template-stibuild-without-customize-route.json |
     Then the step should succeed
-    Given I download a file from "<%= BushSlicer::HOME %>/testdata/deployment/pre-post-hook-snippets.yaml"
+    Given I obtain test data file "deployment/pre-post-hook-snippets.yaml"
     When I run the :patch client command with:
       | resource      | dc                                              | 
       | resource_name | database                                        |

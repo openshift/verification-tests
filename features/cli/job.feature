@@ -210,7 +210,7 @@ Feature: job.feature
   # @case_id OCP-10734
   Scenario: Create job with different pod restartPolicy
     Given I have a project
-    Given I download a file from "<%= BushSlicer::HOME %>/testdata/job/job-restartpolicy.yaml"
+    Given I obtain test data file "job/job-restartpolicy.yaml"
     # Create job without restartPolicy
     And I replace lines in "job-restartpolicy.yaml":
       | from: Never | from: null |

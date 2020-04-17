@@ -53,9 +53,9 @@ Feature: Route test in online environments
     When I run the :create client command with:
       | f | <%= BushSlicer::HOME %>/testdata/routing/edge/service_unsecure.json |
     Then the step should succeed
-    Given I download a file from "<%= BushSlicer::HOME %>/testdata/routing/edge/route_edge-www.edge.com.crt"
-    And I download a file from "<%= BushSlicer::HOME %>/testdata/routing/edge/route_edge-www.edge.com.key"
-    And I download a file from "<%= BushSlicer::HOME %>/testdata/routing/ca.pem"
+    Given I obtain test data file "routing/edge/route_edge-www.edge.com.crt"
+    And I obtain test data file "routing/edge/route_edge-www.edge.com.key"
+    And I obtain test data file "routing/ca.pem"
     When I run the :create_route_edge client command with:
       | name    | edge-route-custom |
       | service | service-unsecure  |
@@ -94,9 +94,9 @@ Feature: Route test in online environments
     When I run the :create client command with:
       | f | <%= BushSlicer::HOME %>/testdata/routing/reencrypt/reencrypt-without-all-cert.yaml |
     Then the step should succeed
-    Given I download a file from "<%= BushSlicer::HOME %>/testdata/routing/reencrypt/route_reencrypt-reen.example.com.crt"
-    And I download a file from "<%= BushSlicer::HOME %>/testdata/routing/reencrypt/route_reencrypt_dest.ca"
-    And I download a file from "<%= BushSlicer::HOME %>/testdata/routing/reencrypt/route_reencrypt-reen.example.com.key"
+    Given I obtain test data file "routing/reencrypt/route_reencrypt-reen.example.com.crt"
+    And I obtain test data file "routing/reencrypt/route_reencrypt_dest.ca"
+    And I obtain test data file "routing/reencrypt/route_reencrypt-reen.example.com.key"
 
     When I run the :create_route_reencrypt client command with:
       | name     | reen-route-custom1                        |

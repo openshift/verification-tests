@@ -464,7 +464,7 @@ Feature: deployment related steps
   # @case_id OCP-12009
   Scenario: Add perma-failed - Negative value test of progressDeadlineSeconds in failing deployment
     Given I have a project
-    Given I download a file from "<%= BushSlicer::HOME %>/testdata/deployment/deployment-perme-failed-2.yaml"
+    Given I obtain test data file "deployment/deployment-perme-failed-2.yaml"
     When I run the :create client command with:
       | f | deployment-perme-failed-2.yaml |
     Then the step should fail

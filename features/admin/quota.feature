@@ -1135,7 +1135,7 @@ Feature: Quota related scenarios
     Then the step should fail
     And the output should contain:
       | insufficient quota to consume: gold.storageclass.storage.k8s.io/requests.storage |
-    Given I download a file from "<%= BushSlicer::HOME %>/testdata/quota/pvc-storage-class.json"
+    Given I obtain test data file "quota/pvc-storage-class.json"
     And I replace lines in "pvc-storage-class.json":
       | pvc-storage-class | pvc-storage-class-1 |
       | gold              | silver              |

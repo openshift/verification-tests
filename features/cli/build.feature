@@ -245,7 +245,7 @@ Feature: build 'apps' with CLI
     Given I get project builds
     #Create a deploymentconfig to generate pods to test on,
     #Avoids the use of direct docker commands.
-    When I download a file from "<%= BushSlicer::HOME %>/testdata/templates/tc517670/dc.json"
+    When I obtain test data file "templates/tc517670/dc.json"
     Then the step should succeed
     Given I replace lines in "dc.json":
       | replaceme | final-app |

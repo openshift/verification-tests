@@ -62,7 +62,7 @@ Feature: Testing HTTP/2 related scenarios
     When I run the :create client command with:
       | f | <%= BushSlicer::HOME %>/testdata/routing/routetimeout/reencrypt/service_secure.json |
     Then the step should succeed
-    Given I download a file from "<%= BushSlicer::HOME %>/testdata/routing/reencrypt/route_reencrypt_dest.ca"
+    Given I obtain test data file "routing/reencrypt/route_reencrypt_dest.ca"
     When I run the :create_route_reencrypt client command with:
       | name       | reen-route              |
       | service    | service-secure          |

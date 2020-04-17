@@ -206,7 +206,7 @@ Feature: change the policy of user/service account
     And admin ensures "sc-<%= project.name %>" storageclasses is deleted after scenario
     Given cluster role "storage-admin" is added to the "first" user
 
-    When I download a file from "<%= BushSlicer::HOME %>/testdata/storage/ebs/dynamic-provisioning/storageclass-io1.yaml"
+    When I obtain test data file "storage/ebs/dynamic-provisioning/storageclass-io1.yaml"
     Then I replace lines in "storageclass-io1.yaml":
       | foo | sc-<%= project.name %> |
     Then I run the :create client command with:
@@ -261,7 +261,7 @@ Feature: change the policy of user/service account
     And admin ensures "pv-<%= project.name %>" pv is deleted after scenario
     Given cluster role "storage-admin" is added to the "first" user
 
-    When I download a file from "<%= BushSlicer::HOME %>/testdata/storage/hostpath/pv-rwx-recycle.yaml"
+    When I obtain test data file "storage/hostpath/pv-rwx-recycle.yaml"
     Then I replace lines in "pv-rwx-recycle.yaml":
       | local         | pv-<%= project.name %> |
       | ReadWriteMany | ReadWriteOnce          |

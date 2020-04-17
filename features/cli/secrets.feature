@@ -29,7 +29,7 @@ Feature: secrets related scenarios
   # @case_id OCP-12290
   Scenario: Create new secrets for ssh authentication
     Given I have a project
-    When I download a file from "<%= BushSlicer::HOME %>/testdata/cases/508971/id_rsa"
+    When I obtain test data file "cases/508971/id_rsa"
     When I run the :secrets_new_sshauth client command with:
       |secret_name    |testsecret |
       |ssh_privatekey |id_rsa     |
@@ -41,7 +41,7 @@ Feature: secrets related scenarios
     Then the step should succeed
     And the output should contain:
       |ssh-privatekey:|
-    When I download a file from "<%= BushSlicer::HOME %>/testdata/cases/508970/ca.crt"
+    When I obtain test data file "cases/508970/ca.crt"
     When I run the :secrets_new_sshauth client command with:
       |secret_name    |testsecret2 |
       |ssh_privatekey |id_rsa      |
@@ -513,7 +513,7 @@ Feature: secrets related scenarios
       | resource | dc/git                    |
       | e        | ALLOW_ANON_GIT_PULL=false |
     Then the step should succeed
-    When I download a file from "<%= BushSlicer::HOME %>/testdata/cases/508964/.gitconfig"
+    When I obtain test data file "cases/508964/.gitconfig"
     When I run the :secrets_new_basicauth client command with:
       |secret_name|mysecret  |
       |username   |openshift |
