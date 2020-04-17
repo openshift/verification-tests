@@ -245,14 +245,8 @@ Feature: build 'apps' with CLI
     Given I get project builds
     #Create a deploymentconfig to generate pods to test on,
     #Avoids the use of direct docker commands.
-    When I download a file from "<%= BushSlicer::HOME %>/testdata/templates/tc517670/dc.json"
-    Then the step should succeed
-    Given I replace lines in "dc.json":
-      | replaceme | final-app |
-    Given I replace lines in "dc.json":
-      | origin-ruby22-sample | final-app |
     When I run the :create client command with:
-      | f | dc.json |
+      | f | <%= BushSlicer::HOME %>/testdata/templates/ocp11943/dc.json |
     Then the step should succeed
     Given a pod becomes ready with labels:
       | name=frontend |
