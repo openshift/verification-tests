@@ -221,6 +221,10 @@ goto_machinehealthcheck_page:
 #user
 goto_users_list_page:
   url: k8s/cluster/user.openshift.io~v1~User
+goto_namespace_role_rolebinding_page:
+  url: k8s/ns/<project_name>/roles/<role_name>/bindings
+goto_cluster_role_rolebinding_page:
+  url: k8s/cluster/clusterroles/<role_name>/bindings
 goto_rolebinding_list_page:
   url: k8s/ns/<project_name>/rolebindings
   action: wait_box_loaded
