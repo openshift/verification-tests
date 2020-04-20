@@ -1,6 +1,7 @@
 # projects
 goto_projects_list_page:
   url: k8s/cluster/projects
+  action: wait_box_loaded
 goto_project_status:
   url: status/ns/<project>
 goto_resource_page_under_default_project:
@@ -88,7 +89,7 @@ goto_deployment_page:
   url: k8s/ns/<project_name>/deployments
 goto_one_deployment_page:
   url: k8s/ns/<project_name>/deployments/<deploy_name>
-
+  action: wait_box_loaded
 
 # deploymentconfig
 goto_dc_page:
@@ -169,6 +170,9 @@ goto_one_group_page:
   url: /k8s/cluster/user.openshift.io~v1~Group/<group_name>
 
 # namespace
+goto_namespace_list_page:
+  url: k8s/cluster/namespaces
+  action: wait_box_loaded
 goto_one_namespace_page:
   url: k8s/cluster/namespaces/<namespace_name>
 
