@@ -45,12 +45,12 @@ send_delete_string:
 create_project_from_get_started_instru:
   params:
     button_text: Create Project
-  action: click_button
   action: create_project
 nagivate_to_project_resources_page:
   params:
     tab_name: Workloads
   action: click_tab
+  action: wait_box_loaded
 check_resource_data_in_table:
   element:
     selector:
