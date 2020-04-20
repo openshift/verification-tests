@@ -1,0 +1,8 @@
+{
+    "kind": "UserIdentityMapping",
+    "apiVersion": "v1",
+    "metadata": {"name": "htpassidp-23517:ocp23517_user"},
+    "identity": {"name": "htpassidp-23517:ocp23517_user"},
+    "user": {"name": "ocp23517_user"}
+}
+

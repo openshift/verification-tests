@@ -1,0 +1,7 @@
+{
+    "kind": "Identity",
+    "apiVersion": "v1",
+    "metadata": {"name": "htpassidp-23517:ocp23517_user"},
+    "providerName": "htpassidp-23517",
+    "providerUserName": "ocp23517_user"
+}

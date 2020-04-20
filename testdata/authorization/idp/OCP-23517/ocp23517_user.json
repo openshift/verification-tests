@@ -1,0 +1,5 @@
+{
+    "kind": "User",
+    "apiVersion": "v1",
+    "metadata": {"name": "ocp23517_user"}
+}
