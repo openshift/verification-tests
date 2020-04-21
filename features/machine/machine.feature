@@ -148,13 +148,10 @@ Feature: Machine features testing
   Scenario: [MAO] Reconciling machine taints with nodes
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
-
-    Given I store the number of machines in the :num_to_restore clipboard
-    And admin ensures node number is restored to "<%= cb.num_to_restore %>" after scenario
-
+    
     Given I clone a machineset named "machineset-24363"
-    When I store the last provisioned machine in the :machine clipboard
-    And evaluation of `machine(cb.machine).node_name` is stored in the :noderef_name clipboard
+    And evaluation of `machine_set.machines.first.node_name` is stored in the :noderef_name clipboard
+    And evaluation of `machine_set.machines.first.name` is stored in the :machine_name clipboard
 
     Given I saved following keys to list in :taintsid clipboard:
       | {"spec":{"taints": [{"effect": "NoExecute","key": "role","value": "master"}]}}  | |
@@ -163,7 +160,7 @@ Feature: Machine features testing
     And I use the "openshift-machine-api" project
     Then I repeat the following steps for each :id in cb.taintsid:
     """
-    Given as admin I successfully merge patch resource "machine/<%= cb.machine %>" with:
+    Given as admin I successfully merge patch resource "machine/<%= cb.machine_name %>" with:
       | #{cb.id} |
     Then the step should succeed
     """
