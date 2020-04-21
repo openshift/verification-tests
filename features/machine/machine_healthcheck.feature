@@ -30,8 +30,7 @@ Feature: MachineHealthCheck Test Scenarios
       | resource_name | <%= pod.name %>    |
       | c             | machine-controller |
     Then the output should contain:
-      | Node "<%= machine.node_name %>" is unreachable, draining will wait |
-      | drain successful for machine "<%= machine.name %>"                 |
+      | drain successful for machine "<%= machine.name %>" |
 
   # @author jhou@redhat.com
   # @case_id OCP-26311
