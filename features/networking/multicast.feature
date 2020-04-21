@@ -138,7 +138,7 @@ Feature: testing multicast scenarios
       | <%= cb.pod1ip %> : joined (S,G) = (*, 232.43.211.234), pinging |
       | <%= cb.pod1ip %> : multicast, xmt/rcv/%loss = 5/0/100%         |
 
-    # @author weliang@redhat.com
+  # @author weliang@redhat.com
   # @case_id OCP-12930
   @admin
   Scenario: Same multicast groups can be created in multiple tenant
