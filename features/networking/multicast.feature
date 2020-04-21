@@ -217,7 +217,8 @@ Feature: testing multicast scenarios
     Then the step should succeed
     And the output should match:
       | eth0\s+1\s+239.255.254.24 |
-    Given 10 seconds have passed
+    And I wait up to 10 seconds for the steps to pass:
+    """
     When I execute on the "<%= cb.proj1pod3 %>" pod:
       | cat | /tmp/proj1pod3.log |
     Then the step should succeed
@@ -226,6 +227,7 @@ Feature: testing multicast scenarios
       | <%= cb.proj1pod2ip %>.*joined \(S,G\) = \(\*, 239.255.254.24\), pinging |
       | <%= cb.proj1pod1ip %>.*multicast, xmt/rcv/%loss = 5/5/0%                |
       | <%= cb.proj1pod2ip %>.*multicast, xmt/rcv/%loss = 5/5/0%                |
+    """
       
     # Check multicast group 239.255.254.24 stream in proj2
     Given I use the "<%= cb.proj2 %>" project
@@ -260,7 +262,8 @@ Feature: testing multicast scenarios
     Then the step should succeed
     And the output should match:
       | eth0\s+1\s+239.255.254.24 |
-    Given 10 seconds have passed
+    And I wait up to 10 seconds for the steps to pass:
+    """
     When I execute on the "<%= cb.proj2pod3 %>" pod:
       | cat | /tmp/proj2pod3.log |
     Then the step should succeed
@@ -269,4 +272,4 @@ Feature: testing multicast scenarios
       | <%= cb.proj2pod2ip %>.*joined \(S,G\) = \(\*, 239.255.254.24\), pinging |
       | <%= cb.proj2pod1ip %>.*multicast, xmt/rcv/%loss = 5/5/0%                |
       | <%= cb.proj2pod2ip %>.*multicast, xmt/rcv/%loss = 5/5/0%                |
-      
+    """
