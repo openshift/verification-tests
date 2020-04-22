@@ -163,7 +163,7 @@ Feature: Ansible-service-broker related scenarios
       | p | SECRET_NAME=<db_secret_name>                                                     |
       | p | INSTANCE_NAMESPACE=<%= project.name %>                                           |
     Then the step should succeed
-    And evaluation of `service_instance("<db_name>").uid(user: user)` is stored in the :uid1 clipboard
+    And evaluation of `service_instance("<db_name>").uid` is stored in the :uid1 clipboard
     When I process and create:
       | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/serviceinstance-parameters-template.yaml |
       | p | SECRET_NAME=<db_secret_name>                                                                |
@@ -190,7 +190,7 @@ Feature: Ansible-service-broker related scenarios
       | p | SECRET_NAME=<db_secret_name>                                                     |
       | p | INSTANCE_NAMESPACE=<%= project.name %>                                           |
     Then the step should succeed
-    And evaluation of `service_instance("<db_name>").uid(user: user)` is stored in the :uid2 clipboard
+    And evaluation of `service_instance("<db_name>").uid` is stored in the :uid2 clipboard
     When I process and create:
       | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/serviceinstance-parameters-template.yaml |
       | p | SECRET_NAME=<db_secret_name>                                                                |
