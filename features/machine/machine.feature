@@ -141,4 +141,33 @@ Feature: Machine features testing
     Given I scale the machineset to +2
     Then the machineset should have expected number of running machines
 
+  # @author miyadav@redhat.com
+  # @case_id OCP-24363
+  @admin
+  @destructive
+  Scenario: [MAO] Reconciling machine taints with nodes
+    Given I have an IPI deployment
+    And I switch to cluster admin pseudo user
     
+    Given I clone a machineset named "machineset-24363"
+    And evaluation of `machine_set.machines.first.node_name` is stored in the :noderef_name clipboard
+    And evaluation of `machine_set.machines.first.name` is stored in the :machine_name clipboard
+
+    Given I saved following keys to list in :taintsid clipboard:
+      | {"spec":{"taints": [{"effect": "NoExecute","key": "role","value": "master"}]}}  | |
+      | {"spec":{"taints": [{"effect": "NoSchedule","key": "role","value": "master"}]}} | |
+
+    And I use the "openshift-machine-api" project
+    Then I repeat the following steps for each :id in cb.taintsid:
+    """
+    Given as admin I successfully merge patch resource "machine/<%= cb.machine_name %>" with:
+      | #{cb.id} |
+    Then the step should succeed
+    """
+    When I run the :describe admin command with:
+      | resource | node                 |
+      | name     |<%= cb.noderef_name %>|
+    Then the output should contain:
+      | role=master:NoExecute |
+      | role=master:NoSchedule|
+
