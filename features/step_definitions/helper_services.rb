@@ -326,7 +326,10 @@ Given /^I have a pod-for-ping in the#{OPT_QUOTED} project$/ do |project_name|
 
   cb.ping_pod = pod("hello-pod")
   @result = pod("hello-pod").wait_till_ready(user, 300)
-  raise "pod-for-ping did not become ready in time" unless @result[:success]
+  unless @result[:success]
+    pod.describe(user, quiet: false)
+    raise "pod-for-ping did not become ready in time"
+  end
 end
 
 # headertest is a service that returns all HTTP request headers used by client
