@@ -72,48 +72,6 @@ Feature: dockerbuild.feature
     And the output should contain "error"
 
 
-  # @author wewang@redhat.com
-  # @case_id OCP-9869
-  Scenario: Setting the nocache option in docker build strategy
-    Given I have a project
-    When I run the :new_app client command with:
-      | file | <%= BushSlicer::HOME %>/testdata/build/ruby22rhel7-template-docker.json |
-    Then the step should succeed
-    And the "ruby22-sample-build-1" build completed
-    When I run the :patch client command with:
-      | resource      | bc                              |
-      | resource_name | ruby22-sample-build             |
-      | p             | {"spec":{"strategy":{"dockerStrategy":{"noCache":true}}}} |
-    Then the step should succeed
-    When I run the :describe client command with:
-      | resource | buildconfig |
-      | name     | ruby22-sample-build |
-    Then the step should succeed
-    Then the output should match "No Cache:\s+true"
-    When I run the :start_build client command with:
-      | buildconfig | ruby22-sample-build |
-    Then the step should succeed
-    And the "ruby22-sample-build-2" build completed
-    When I run the :build_logs client command with:
-      | build_name | ruby22-sample-build-2 |
-    Then the step should succeed
-    Then the output should not contain:
-      | Using cache  |
-    When I run the :patch client command with:
-      | resource      | bc                              |
-      | resource_name | ruby22-sample-build             |
-      | p             | {"spec":{"strategy":{"dockerStrategy":{"noCache":false}}}} |
-    Then the step should succeed
-    When I run the :start_build client command with:
-      | buildconfig | ruby22-sample-build |
-    Then the step should succeed
-    And the "ruby22-sample-build-3" build completed
-    When I run the :build_logs client command with:
-      | build_name | ruby22-sample-build-3 |
-    Then the step should succeed
-    Then the output should contain:
-      | ---> Using cache  |
-
   # @author dyan@redhat.com
   # @case_id OCP-13083
   Scenario: Docker build using Dockerfile with 'FROM scratch'

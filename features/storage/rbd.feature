@@ -47,22 +47,3 @@ Feature: Storage of Ceph plugin testing
       | ls | -l | /mnt/rbd/rbd_testfile |
     Then the output should contain:
       | 123456 |
-
-  # @author jhou@redhat.com
-  # @case_id OCP-10268
-  @admin
-  Scenario: Dynamically provisioned rbd volumes should have correct capacity
-    Given I have a StorageClass named "cephrbdprovisioner"
-    # CephRBD provisioner needs secret, verify secret and StorageClass both exists
-    And admin checks that the "cephrbd-secret" secret exists in the "default" project
-    And I have a project
-
-    When I create a dynamic pvc from "<%= BushSlicer::HOME %>/testdata/storage/rbd/dynamic-provisioning/claim.yaml" replacing paths:
-      | ["metadata"]["name"]         | mypvc |
-      | ["spec"]["storageClassName"] | cephrbdprovisioner      |
-      | ["spec"]["resources"]["requests"]["storage"]                           | 9Gi                     |
-    Then the step should succeed
-    And the "mypvc" PVC becomes :bound within 120 seconds
-
-    And the expression should be true> pvc.capacity == "9Gi"
-

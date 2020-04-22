@@ -27,20 +27,6 @@ Feature: metrics logging and uninstall tests
       | inventory | <%= BushSlicer::HOME %>/testdata/logging_metrics/OCP-12305/inventory |
 
   # @author pruan@redhat.com
-  # @case_id OCP-10214
-  @admin
-  @destructive
-  Scenario: deploy metrics with dynamic volume
-    Given the master version >= "3.5"
-    Given I create a project with non-leading digit name
-    And metrics service is installed with ansible using:
-      | inventory | <%= BushSlicer::HOME %>/testdata/logging_metrics/OCP-10214/inventory |
-    And I switch to first user
-    Given I login via web console
-    And I open metrics console in the browser
-    Given the metrics service status in the metrics web console is "STARTED"
-
-  # @author pruan@redhat.com
   # @case_id OCP-17163
   @admin
   @destructive
