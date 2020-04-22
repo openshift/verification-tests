@@ -63,68 +63,6 @@ Feature: Storage of GlusterFS plugin testing
       | Permission denied  |
 
   # @author jhou@redhat.com
-  # @case_id OCP-10267
-  @admin
-  Scenario: Dynamically provision a GlusterFS volume
-    Given I have a StorageClass named "glusterprovisioner"
-    And I have a project
-
-    When I create a dynamic pvc from "<%= BushSlicer::HOME %>/testdata/storage/gluster/dynamic-provisioning/claim.yaml" replacing paths:
-      | ["metadata"]["name"]         | pvc1               |
-      | ["spec"]["storageClassName"] | glusterprovisioner |
-    Then the step should succeed
-    And the "pvc1" PVC becomes :bound
-    And admin ensures "<%= pvc('pvc1').volume_name %>" pv is deleted after scenario
-
-    # Switch to admin so as to create privileged pod
-    Given I switch to cluster admin pseudo user
-    And I use the "<%= project.name %>" project
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/gluster/dynamic-provisioning/pod.json" replacing paths:
-      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | pvc1 |
-    Then the step should succeed
-    And the pod named "gluster" status becomes :running
-
-    # Test creating files
-    When I execute on the "gluster" pod:
-      | touch | /mnt/gluster/gluster_testfile |
-    Then the step should succeed
-    When I execute on the "gluster" pod:
-      | ls | /mnt/gluster/ |
-    Then the output should contain:
-      | gluster_testfile |
-
-    # Testing execute permission
-    Given I execute on the "gluster" pod:
-      | cp | /hello | /mnt/gluster/hello |
-    When I execute on the "gluster" pod:
-      | /mnt/gluster/hello |
-    Then the step should succeed
-    And the output should contain:
-      | Hello OpenShift Storage |
-
-  # @author jhou@redhat.com
-  # @case_id OCP-10266
-  @admin
-  Scenario: Reclaim a provisioned GlusterFS volume
-    Given I have a StorageClass named "glusterprovisioner"
-    And I have a project
-
-    When I create a dynamic pvc from "<%= BushSlicer::HOME %>/testdata/storage/gluster/dynamic-provisioning/claim.yaml" replacing paths:
-      | ["metadata"]["name"]         | mypvc |
-      | ["spec"]["storageClassName"] | glusterprovisioner      |
-    Then the step should succeed
-    And the "mypvc" PVC becomes :bound within 120 seconds
-
-    And the expression should be true> pv(pvc.volume_name).reclaim_policy == "Delete"
-
-    # Test auto deleting PV
-    Given I run the :delete client command with:
-      | object_type       | pvc                     |
-      | object_name_or_id | mypvc |
-    And I switch to cluster admin pseudo user
-    And I wait for the resource "pv" named "<%= pvc.volume_name %>" to disappear within 60 seconds
-
-  # @author jhou@redhat.com
   # @case_id OCP-10356
   @admin
   Scenario: Dynamically provision a GlusterFS volume using heketi secret

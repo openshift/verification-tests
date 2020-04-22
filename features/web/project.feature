@@ -50,36 +50,3 @@ Feature: projects related features via web
     When I perform the :check_specific_project web console action with:
       | project_name | <%= cb.project3 %> |
     Then the step should fail
-
-  # @author yapei@redhat.com
-  # @case_id OCP-10014
-  Scenario: Delete project from web console
-    # delete project with project name on projects page
-    When I create a project via web with:
-      | display_name | testing project one |
-      | description  ||
-    Then the step should succeed
-    When I perform the :type_project_delete_string web console action with:
-      | project_name | testing project one      |
-      | input_str    | <%= rand_str(7, :dns) %> |
-    Then the step should succeed
-    When I run the :check_delete_button_for_project_deletion web console action
-    Then the step should fail
-    When I perform the :delete_project web console action with:
-      | project_name | testing project one |
-      | input_str    | <%= project.name %> |
-    Then the step should succeed
-    Given I wait for the resource "project" named "<%= project.name %>" to disappear
-    # delete project with project display name
-    When I create a project via cli with:
-      | display_name | testing project two |
-    Then the step should succeed
-    When I perform the :cancel_delete_project web console action with:
-      | project_name | testing project two |
-    Then the step should succeed
-    When I perform the :delete_project web console action with:
-      | project_name | testing project two |
-      | input_str    | testing project two |
-    Then the step should succeed
-    Given I wait for the resource "project" named "<%= project.name %>" to disappear
-
