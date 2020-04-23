@@ -63,30 +63,6 @@ Feature: Storage of GlusterFS plugin testing
       | Permission denied  |
 
   # @author jhou@redhat.com
-  # @case_id OCP-10356
-  @admin
-  Scenario: Dynamically provision a GlusterFS volume using heketi secret
-    # A StorageClass preconfigured on the test env
-    Given I have a StorageClass named "glusterprovisioner1"
-    And admin checks that the "heketi-secret" secret exists in the "default" project
-    And I have a project
-
-    When I create a dynamic pvc from "<%= BushSlicer::HOME %>/testdata/storage/gluster/dynamic-provisioning/claim.yaml" replacing paths:
-      | ["metadata"]["name"]         | pvc1                |
-      | ["spec"]["storageClassName"] | glusterprovisioner1 |
-    Then the step should succeed
-    And the "pvc1" PVC becomes :bound
-    And admin ensures "<%= pvc('pvc1').volume_name %>" pv is deleted after scenario
-
-    # Switch to admin so as to create privileged pod
-    Given I switch to cluster admin pseudo user
-    And I use the "<%= project.name %>" project
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/gluster/dynamic-provisioning/pod.json" replacing paths:
-      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | pvc1 |
-    Then the step should succeed
-    And the pod named "gluster" status becomes :running
-
-  # @author jhou@redhat.com
   # @case_id OCP-10554
   @admin
   Scenario: Pods should be assigned a valid GID using GlusterFS dynamic provisioner
@@ -149,25 +125,3 @@ Feature: Storage of GlusterFS plugin testing
     When I execute on the pod:
       | touch | /mnt/gluster/tc508054 |
     Then the step should succeed
-
-  # @author jhou@redhat.com
-  # @case_id OCP-10354
-  @admin
-  Scenario: Provisioned GlusterFS volume should be replicated with 3 replicas
-    Given I have a StorageClass named "glusterprovisioner"
-    And I have a project
-    When I create a dynamic pvc from "<%= BushSlicer::HOME %>/testdata/storage/gluster/dynamic-provisioning/claim.yaml" replacing paths:
-      | ["metadata"]["name"]         | pvc1               |
-      | ["spec"]["storageClassName"] | glusterprovisioner |
-    Then the step should succeed
-    And the "pvc1" PVC becomes :bound
-    And admin ensures "<%= pvc('pvc1').volume_name %>" pv is deleted after scenario
-
-    # Verify by default it's replicated with 3 replicas
-    Given I save volume id from PV named "<%= pvc('pvc1').volume_name %>" in the :volumeID clipboard
-    And I run commands on the StorageClass "glusterprovisioner" backing host:
-      | heketi-cli --server http://127.0.0.1:9991 --user admin --secret test volume info <%= cb.volumeID %> |
-    Then the output should contain:
-      | Durability Type: replicate |
-      | Distributed+Replica: 3     |
-

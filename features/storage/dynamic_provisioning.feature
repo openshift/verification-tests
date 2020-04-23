@@ -60,28 +60,3 @@ Feature: Dynamic provisioning
       | resource | pv |
     Then the output should contain 30 times:
       | <%= project.name %> |
-
-  # @author jhou@redhat.com
-  @admin
-  @destructive
-  Scenario Outline: No volume and PV provisioned when provisioner is disabled
-    Given I have a project
-    And master config is merged with the following hash:
-    """
-    volumeConfig:
-      dynamicProvisioningEnabled: False
-    """
-    And the master service is restarted on all master nodes
-    When I create a dynamic pvc from "<%= BushSlicer::HOME %>/testdata/storage/misc/pvc.json" replacing paths:
-      | ["metadata"]["name"] | mypvc |
-    Then the step should succeed
-    When 30 seconds have passed
-    Then the "mypvc" PVC status is :pending
-
-    Examples:
-      | provisioner |
-      | aws-ebs     | # @case_id OCP-10360
-      | gce-pd      | # @case_id OCP-10361
-      | cinder      | # @case_id OCP-10362
-      | azure-disk  | # @case_id OCP-13903
-
