@@ -15,7 +15,7 @@ check_pod_detail_page_charts_style:
 check_node_detail_page_charts_style:
   elements:
   - selector:
-      xpath: //*[contains(@class, 'card__title') and contains(text(), 'Utilization')]
+      xpath: //*[contains(@class, 'graph-title') and contains(text(), 'Usage')]
   action: check_chart_using_victory
 check_quota_detail_page_charts_style:
   elements:
