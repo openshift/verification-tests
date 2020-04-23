@@ -18,6 +18,7 @@ goto_one_project_dashboard_page:
   action: goto_one_project_page
 goto_cluster_dashboards_page:
   url: /dashboards
+  action: wait_page_body_loaded
 goto_search_page:
   url: search
 
@@ -170,6 +171,7 @@ goto_node_page:
   url: k8s/cluster/nodes
 goto_one_node_page:
   url: k8s/cluster/nodes/<node_name>
+  action: wait_page_body_loaded
 
 # users
 goto_groups_page:
@@ -225,6 +227,9 @@ goto_catalog_source_page:
 # quota
 goto_quotas_page:
   url: k8s/ns/<project_name>/resourcequotas
+goto_one_quotas_page:
+  url: k8s/ns/<project_name>/resourcequotas/<quota_name>
+  action: wait_box_loaded
 
 # machinehealthcheck
 goto_machinehealthcheck_page:

@@ -449,6 +449,11 @@ wait_box_loaded:
     selector:
       css: .loading-box__loaded
     timeout: 20
+wait_page_body_loaded:
+  element:
+    selector:
+      css: .co-m-page__body
+    timeout: 40
 wait_until_no_loading:
   element:
     selector:
