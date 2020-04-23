@@ -179,3 +179,90 @@ uninstall_operator_on_console:
   action: click_resource_action_icon
   action: click_button
   action: submit_changes
+wait_filter_section_loaded:
+  element:
+    selector:
+      xpath: //form[@data-test-group-name='<filter_type_value>']
+choose_one_checkbox:
+  element:
+    selector:
+      xpath: //input[contains(@class, 'pf-c-check__input') and @title='<checkbox_text>']
+    op: click
+check_label_and_value_in_modal:
+  element:
+    selector:
+      xpath: //h5[contains(@class,'properties-side-panel-pf-property-label') and text()='<label>']/../div[contains(@class,'properties-side-panel-pf-property-value')]/div[text()='<value>']
+check_disconnected_infra_value:
+  params:
+    label: Infrastructure Features
+    value: Disconnected
+  action: check_label_and_value_in_modal
+check_proxy_infra_value:
+  params:
+    label: Infrastructure Features
+    value: Proxy
+  action: check_label_and_value_in_modal
+check_fips_infra_value:
+  params:
+    label: Infrastructure Features
+    value: FIPS Mode
+  action: check_label_and_value_in_modal
+check_3scale_subs_value:
+  params:
+    label: Valid Subscriptions
+    value: 3Scale Commercial License
+  action: check_label_and_value_in_modal
+check_integration_subs_value:
+  params:
+    label: Valid Subscriptions
+    value: Red Hat Managed Integration
+  action: check_label_and_value_in_modal
+click_checkbox_disconnected_from_infrastructure_features:
+  params:
+    filter_type_value: infraFeatures
+    checkbox_text: Disconnected
+  action: wait_filter_section_loaded
+  action: choose_one_checkbox
+click_checkbox_proxy_from_infrastructure_features:
+  params:
+    filter_type_value: infraFeatures
+    checkbox_text: Proxy
+  action: wait_filter_section_loaded
+  action: choose_one_checkbox
+click_checkbox_fips_from_infrastructure_features:
+  params:
+    filter_type_value: infraFeatures
+    checkbox_text: FIPS Mode
+  action: wait_filter_section_loaded
+  action: choose_one_checkbox
+check_disconnected_infra_value_in_operator_modal:
+  action: click_checkbox_disconnected_from_infrastructure_features
+  action: open_first_card_in_overlay
+  action: check_disconnected_infra_value
+  action: click_close_icon
+  action: click_checkbox_disconnected_from_infrastructure_features
+check_proxy_infra_value_in_operator_modal:
+  action: click_checkbox_proxy_from_infrastructure_features
+  action: open_first_card_in_overlay
+  action: check_proxy_infra_value
+  action: click_close_icon
+  action: click_checkbox_proxy_from_infrastructure_features
+check_fips_mode_infras_value_in_operator_modal:
+  action: click_checkbox_fips_from_infrastructure_features
+  action: open_first_card_in_overlay
+  action: check_fips_infra_value
+  action: click_close_icon
+  action: click_checkbox_fips_from_infrastructure_features
+filter_by_keyword_on_catalog_page:
+  elements:
+  - selector:
+      xpath: //input[contains(@class, 'co-catalog-page__input')]
+    op: send_keys :backspace
+  - selector:
+      xpath: //input[contains(@class, 'co-catalog-page__input')]
+    op: send_keys <keyword>
+open_operator_modal:
+  params:
+    keyword: <operator_name>
+  action: filter_by_keyword_on_catalog_page
+  action: open_first_card_in_overlay

@@ -14,5 +14,3 @@ Feature: negative testing
     Examples:
       | file                   | error                                |
       | gce/pv-retain-rwx.json | error querying GCE PD volume         | # @case_id OCP-10310
-      | ebs/pv-invalid.yaml    | volume 'vol-00000123' does not exist | # @case_id OCP-10173
-
