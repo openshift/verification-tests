@@ -76,3 +76,28 @@ Given(/^I clone a machineset named "([^"]*)"$/) do | ms_name |
 
   step %Q{the machineset should have expected number of running machines}
 end
+
+Given(/^I create a spot instance machineset named "([^"]*)" on (aws|gcp|azure)$/) do | ms_name, iaas_type |
+  step %Q{I pick a random machineset to scale}
+
+  ms_yaml = machine_set.raw_resource.to_yaml
+  new_spec = YAML.load ms_yaml
+  new_spec["metadata"]["name"] = ms_name
+  new_spec["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"] = ms_name
+  new_spec["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-machineset"] = ms_name
+  if iaas_type == 'aws'
+    new_spec["spec"]["template"]["spec"]["providerSpec"]["value"]["spotMarketOptions"] = {}
+  else
+    raise "spot instance not supported on #{iaas_type}"
+  end
+  new_spec["spec"]["replicas"] = 1
+  new_spec.delete("status")
+
+  BushSlicer::MachineSet.create(by: admin, project: project("openshift-machine-api"), spec: new_spec)
+  step %Q{admin ensures "#{ms_name}" machineset is deleted after scenario}
+
+  machine_sets = BushSlicer::MachineSet.list(user: admin, project: project("openshift-machine-api"))
+  cache_resources *machine_sets.max_by(&:created_at)
+
+  step %Q{the machineset should have expected number of running machines}
+end
