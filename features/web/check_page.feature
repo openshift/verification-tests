@@ -1,26 +1,4 @@
 Feature: check page info related
-
-  # @author wsun@redhat.com
-  # @case_id OCP-10605
-  @smoke
-  Scenario: Check Events page
-    Given I have a project
-    When I run the :new_app client command with:
-      | image_stream | openshift/nodejs:latest                |
-      | code         | https://github.com/sclorg/nodejs-ex |
-      | name         | nodejs-sample                          |
-    Then the step should succeed
-    When I perform the :create_from_image_complete_info_on_next_page web console action with:
-      | project_name | <%= project.name %> |
-      | image_name   | nodejs              |
-      | image_tag    | 0.10                |
-      | namespace    | openshift           |
-      | app_name     | nodejs-sample       |
-    Then the step should succeed
-    When I perform the :check_events_page web console action with:
-      | project_name | <%= project.name %> |
-    Then the step should succeed
-
   # @author yapei@redhat.com
   # @case_id OCP-12625
   Scenario: Check home page to list user projects

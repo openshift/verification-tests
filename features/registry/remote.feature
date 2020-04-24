@@ -28,47 +28,6 @@ Feature: remote registry related scenarios
     Then the step should succeed
 
   # @author yinzhou@redhat.com
-  # @case_id OCP-10636
-  @admin
-  Scenario: User should be denied pushing when it does not have 'admin' role
-    Given I have a project
-    And default registry service ip is stored in the :integrated_reg_ip clipboard
-    And I give project view role to the second user
-
-    Given I switch to the second user
-    And evaluation of `user.cached_tokens.first` is stored in the :user2_token clipboard
-    And evaluation of `cb.integrated_reg_ip + "/" + project.name + "/tc518930-busybox:local"` is stored in the :my_tag clipboard
-
-    Given I switch to the first user
-    And I have a skopeo pod in the project
-    And master CA is added to the "skopeo" dc
-    When I execute on the pod:
-      | skopeo                     |
-      | --debug                    |
-      | --insecure-policy          |
-      | copy                       |
-      | --dest-cert-dir            |
-      | /opt/qe/ca                 |
-      | --dcreds                   |
-      | dnm:<%= cb.user2_token %>  |
-      | docker://docker.io/busybox |
-      | docker://<%= cb.my_tag %>  |
-    Then the step should fail
-    And the output should contain "not authorized"
-    When I execute on the pod:
-      | skopeo                                 |
-      | --debug                                |
-      | --insecure-policy                      |
-      | copy                                   |
-      | --dest-cert-dir                        |
-      | /opt/qe/ca                             |
-      | --dcreds                               |
-      | dnm:<%= user.cached_tokens.first %>    |
-      | docker://docker.io/busybox             |
-      | docker://<%= cb.my_tag %>              |
-    Then the step should succeed
-
-  # @author yinzhou@redhat.com
   # @case_id OCP-11113
   @admin
   Scenario: Tracking tags with imageStream spec.tag
