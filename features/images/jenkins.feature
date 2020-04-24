@@ -167,7 +167,6 @@ Feature: jenkins.feature
 
     Examples:
       | version |
-      | 1       | # @case_id OCP-10896
       | 2       | # @case_id OCP-10980
 
   # @author cryan@redhat.com

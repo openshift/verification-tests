@@ -138,24 +138,6 @@ Feature: pods related scenarios
     Then the step should fail
     And the output should contain "Invalid value: -5"
 
-  # @author chuyu@redhat.com
-  # @case_id OCP-10986
-  Scenario: Oauth provider info should be consumed in a pod
-    Given the master version >= "3.4"
-    Given I have a project
-    When I run the :new_app client command with:
-      | docker_image 	 | aosqe/ruby-ex	|
-    Then the step should succeed
-    Given a pod becomes ready with labels:
-      | app=ruby-ex      |
-    When I run the :rsh client command with:
-      | pod          | <%= pod.name %> |
-      | _stdin       | curl https://openshift.default.svc/.well-known/oauth-authorization-server -k |
-    Then the step should succeed
-    And the output should contain:
-      | implicit		|
-      | user:list-projects	|
-
   # @author qwang@redhat.com
   # @case_id OCP-11055
   Scenario: /dev/shm can be automatically shared among all of a pod's containers

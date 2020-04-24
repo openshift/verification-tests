@@ -10,39 +10,6 @@ Feature: system metric related tests
     And metrics service is installed with ansible using:
       | inventory | <%= BushSlicer::HOME %>/testdata/logging_metrics/default_inventory_prometheus |
 
-  # @author pruan@redhat.com
-  # @case_id OCP-10927
-  @admin
-  @destructive
-  Scenario: Access the external Hawkular Metrics API interface as cluster-admin
-    Given I have a project
-    Given metrics service is installed in the system using:
-      | inventory       | <%= BushSlicer::HOME %>/testdata/logging_metrics/OCP-11821/inventory              |
-      | deployer_config | <%= BushSlicer::HOME %>/testdata/logging_metrics/OCP-11821/deployer_ocp11821.yaml |
-    And I switch to the first user
-    And evaluation of `user.cached_tokens.first` is stored in the :user_token clipboard
-    Given cluster role "cluster-admin" is added to the "first" user
-    And I wait for the steps to pass:
-    """
-    And I perform the GET metrics rest request with:
-      | project_name | _system              |
-      | path         | /metrics/gauges      |
-      | token        | <%= cb.user_token %> |
-    Then the expression should be true> @result[:exitstatus] == 200
-    """
-    And evaluation of `@result[:parsed].map { |e| e['type'] }.uniq` is stored in the :gauge_result clipboard
-    And the expression should be true> cb.gauge_result == ['gauge']
-    And I wait for the steps to pass:
-    """
-    And I perform the GET metrics rest request with:
-      | project_name | _system              |
-      | path         | /metrics/counters    |
-      | token        | <%= cb.user_token %> |
-    Then the expression should be true> @result[:exitstatus] == 200
-    """
-    And evaluation of `@result[:parsed].map { |e| e['type'] }.uniq` is stored in the :counter_result clipboard
-    And the expression should be true> cb.counter_result == ['counter']
-
   # @author chunchen@redhat.com
   # @case_id OCP-14162
   # @author xiazhao@redhat.com
