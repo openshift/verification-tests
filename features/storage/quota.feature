@@ -22,7 +22,7 @@ Feature: ResourceQuata for storage
       | ["spec"]["resources"]["requests"]["storage"] | 3Gi           |
     Then the step should succeed
 
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/gce/pod.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/misc/pod.yaml" replacing paths:
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | pvc-#{ cb.i }   |
       | ["metadata"]["name"]                                         | mypod-#{ cb.i } |
     Then the step should succeed
@@ -47,7 +47,7 @@ Feature: ResourceQuata for storage
       | ["metadata"]["name"]                         | pvci-#{ cb.i } |
       | ["spec"]["resources"]["requests"]["storage"] | 1Gi            |
     Then the step should succeed
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/gce/pod.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/misc/pod.yaml" replacing paths:
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | pvci-#{ cb.i }   |
       | ["metadata"]["name"]                                         | mypodi-#{ cb.i } |
     Then the step should succeed
