@@ -227,7 +227,7 @@ goto_catalog_source_page:
 # quota
 goto_quotas_page:
   url: k8s/ns/<project_name>/resourcequotas
-goto_one_quotas_page:
+goto_one_quota_page:
   url: k8s/ns/<project_name>/resourcequotas/<quota_name>
   action: wait_box_loaded
 
