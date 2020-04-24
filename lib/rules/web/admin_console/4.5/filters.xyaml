@@ -107,3 +107,10 @@ clear_all_filters:
   - selector:
       xpath: //div/button[starts-with(text(),'Clear')]
     op: click
+
+# Below is PF4 filter bar related rules (since OCP4.5)
+open_filter_dropdown_list:
+  elements:
+  - selector:
+      xpath: //button[@class='pf-c-dropdown__toggle' and @data-test-id='filter-dropdown-toggle']
+    op: click
