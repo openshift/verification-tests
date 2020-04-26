@@ -8,8 +8,13 @@ Given(/^I have an IPI deployment$/) do
   end
 
   machine_sets.each do | machine_set |
-    unless machine_set.ready?[:success]
-      raise "Not an IPI deployment or machineSet #{machine_set.name} not fully scaled, abort test."
+    i = 0
+    if machine_set.ready?[:success]
+       break
+    end
+    i = i + 1
+    if machine_sets.length == i
+       raise "Not an IPI deployment or machineSet #{machine_set.name} not fully scaled, abort test."
     end
   end
 end

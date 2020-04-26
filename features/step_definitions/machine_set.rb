@@ -1,6 +1,7 @@
 Given(/^I pick a random machineset to scale$/) do
   ensure_admin_tagged
   machine_sets = BushSlicer::MachineSet.list(user: admin, project: project("openshift-machine-api"))
+    select { |ms| ms.available_replicas >= 1 }
   cache_resources *machine_sets.shuffle
 end
 
