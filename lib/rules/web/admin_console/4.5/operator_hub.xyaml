@@ -266,15 +266,16 @@ open_operator_modal:
     keyword: <operator_name>
   action: filter_by_keyword_on_catalog_page
   action: open_first_card_in_overlay
-check_default_configuration_view:
+check_default_view_is_form_view:
   params:
-    content: Create by completing the form.
+    content: Create by completing the form
   action: check_page_contains
   element:
     selector:
       xpath: //input[@type='radio' and @value='form' and @checked]
-configure_via_yaml_view:
+switch_to_yaml_view:
   params:
     radio_text: yaml
+    content: Create by manually entering YAML or JSON definitions
   action: click_radio_input
-
+  action: check_page_contains
