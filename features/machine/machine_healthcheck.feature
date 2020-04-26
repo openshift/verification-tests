@@ -7,8 +7,10 @@ Feature: MachineHealthCheck Test Scenarios
   Scenario: Remediation should be applied when the unhealthyCondition 'Ready' is met
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
-    Given I use the "openshift-machine-api" project
-    And I clone a machineset and name it "machineset-25897"
+    And I use the "openshift-machine-api" project
+    And admin ensures machine number is restored after scenario
+
+    Given I clone a machineset and name it "machineset-clone-25897"
 
     # Create MHC
     When I run oc create over "<%= BushSlicer::HOME %>/testdata/cloud/mhc/mhc1.yaml" replacing paths:
@@ -39,8 +41,10 @@ Feature: MachineHealthCheck Test Scenarios
   Scenario: Create a machinehealthcheck when there is already an unhealthy machine
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
+    And I use the "openshift-machine-api" project
+    And admin ensures machine number is restored after scenario
 
-    Given I clone a machineset and name it "machineset-26311"
+    Given I clone a machineset and name it "machineset-clone-26311"
 
     # Create unhealthyCondition before createing a MHC
     Given I create the 'Ready' unhealthyCondition
@@ -63,8 +67,10 @@ Feature: MachineHealthCheck Test Scenarios
   Scenario: Create multiple MHCs to monitor same machineset
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
+    And I use the "openshift-machine-api" project
+    And admin ensures machine number is restored after scenario
 
-    Given I clone a machineset and name it "machineset-25734"
+    Given I clone a machineset and name it "machineset-clone-25734"
 
     # Create MHCs
     Given I run the steps 2 times:
@@ -89,10 +95,9 @@ Feature: MachineHealthCheck Test Scenarios
   Scenario: Use "maxUnhealthy" to prevent automated remediation
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
-    Given I store the number of machines in the :num_to_restore clipboard
-    And admin ensures node number is restored to "<%= cb.num_to_restore %>" after scenario
-    Given I use the "openshift-machine-api" project
-    And I clone a machineset and name it "machineset-25691"
+    And I use the "openshift-machine-api" project
+    And admin ensures machine number is restored after scenario
+    Given I clone a machineset and name it "machineset-clone-25691"
 
     # Create MHC
     When I run oc create over "<%= BushSlicer::HOME %>/testdata/cloud/mhc/mhc1.yaml" replacing paths:

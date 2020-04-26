@@ -1,20 +1,13 @@
 Given(/^I have an IPI deployment$/) do
-  machine_sets = BushSlicer::MachineSet.list(user: admin, project: project("openshift-machine-api"))
-  cache_resources *machine_sets
-
-  # Usually UPI deployments do not have machineSets
-  if machine_sets.length == 0
-    raise "Not an IPI deployment, abort test."
+  # In an IPI deployment, machine number equals to node number
+  machines = BushSlicer::Machine.list(user: admin, project: project("openshift-machine-api"))
+  if machines.length == 0
+    raise "Not an IPI deployment, there are no machines"
   end
 
-  machine_sets.each do | machine_set |
-    i = 0
-    if machine_set.ready?[:success]
-       break
-    end
-    i = i + 1
-    if machine_sets.length == i
-       raise "Not an IPI deployment or machineSet #{machine_set.name} not fully scaled, abort test."
+  machines.each do | machine |
+    if machine.node_name.nil?
+      raise "machine #{machine.name} has no node ref, this is not a ready IPI deployment."
     end
   end
 end
@@ -62,16 +55,25 @@ Given(/^I wait for the node of machine(?: named "(.+)")? to appear/) do | machin
   cb["new_node"] = node_name
 end
 
-Then(/^admin ensures node number is restored to #{QUOTED} after scenario$/) do | num_expected |
+Then(/^admin ensures machine number is restored after scenario$/) do
   ensure_admin_tagged
+  cb.all_machines = BushSlicer::Machine.list(user: admin, project: project("openshift-machine-api"))
+  machine_orig_num = cb.all_machines.length
 
   teardown_add {
-    num_actual = 0
-
-    success = wait_for(900, interval: 20) {
-      num_actual = BushSlicer::Node.list(user: admin).length
-      num_expected == num_actual.to_s
+    machines_waiting_delete = BushSlicer::Machine.list(user: admin, project: project("openshift-machine-api")).select { | machine |
+      machine.deleting?
     }
-    raise "Failed to restore cluster, expected number of nodes #{num_expected}, got #{num_actual.to_s}" unless success
+
+    machines_waiting_delete.each do | machine |
+      step %Q{I use the "openshift-machine-api" project}
+      step %Q{I wait for the resource "machine" named "#{machine.name}" to disappear within 1200 seconds}
+      step %Q{the step should succeed}
+    end
+
+    machines = BushSlicer::Machine.list(user: admin, project: project("openshift-machine-api"))
+    unless machines.length == machine_orig_num
+      raise "Failed to restore cluster, expected number of machines #{machine_orig_num}, got #{machines.length.to_s}"
+    end
   }
 end

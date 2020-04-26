@@ -32,8 +32,8 @@ end
 
 Then(/^the machine should be remediated$/) do
   # unhealthy machine and should be deleted
-  step %Q{I wait for the resource "node" named "<%= machine.node_name %>" to disappear within 900 seconds}
-  step %Q{I wait for the resource "machine" named "<%= machine.name %>" to disappear within 900 seconds}
+  #step %Q{I wait for the resource "node" named "<%= machine.node_name %>" to disappear within 900 seconds}
+  step %Q{I wait for the resource "machine" named "<%= machine.name %>" to disappear within 1200 seconds}
 
   # new machine and node should provisioned
   step %Q{the machineset should have expected number of running machines}
