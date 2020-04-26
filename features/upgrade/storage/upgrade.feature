@@ -139,3 +139,102 @@ Feature: Storage upgrade tests
       | ls | /mnt/storage |
     Then the output should contain:
       | test-upgrade |
+
+  # @author chaoyang@redhat.com
+  #  @upgrade-prepare
+  #@users=upuser1,upuser2
+  @admin
+  Scenario: Snapshot operator should be in available status after upgrade and can created pod with snapshot
+    Given I switch to cluster admin pseudo user		
+    When I run the :create admin command with:
+      | f | <%= BushSlicer::HOME %>/testdata/storage/csi/aws-ebs-with-snapshots.yaml |
+    Then the step should succeed
+    When I use the "kube-system" project
+    And I wait up to 180 seconds for the steps to pass:
+    """
+    When I run the :describe client command with:
+      | resource | deployment         |
+      | name     | ebs-csi-controller |
+    Then the output should match "1 desired.*1 updated.*1 total.*1 available.*0 unavailable"
+    When I run the :describe client command with:
+      | resource | daemonset    |
+      | name     | ebs-csi-node |
+    Then the output should match "0 Waiting.*0 Succeeded.*0 Failed"
+    """
+
+    #Create csi storage class and snapshot class
+    Then I run the :create admin command with:
+      | f | <%= BushSlicer::HOME %>/testdata/storage/csi/storageclass-ebs.yaml |
+    Then the step should succeed
+    Then I run the :create admin command with:
+      | f | <%= BushSlicer::HOME %>/testdata/storage/csi/snapshotclass-ebs.yaml |
+    Then the step should succeed
+
+    #Create pvc, pod
+    When I run the :new_project client command with:
+      | project_name | upgrade-ocp-28630 |
+    Then I use the "upgrade-ocp-28630" project
+    When I create a dynamic pvc from "<%= BushSlicer::HOME %>/testdata/storage/misc/pvc-with-storageClassName.json" replacing paths:
+      | ["metadata"]["name"]         | pvc-ebs |
+      | ["spec"]["storageClassName"] | sc-ebs  |
+    Then the step should succeed
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/misc/pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                         | mypod     |
+      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | pvc-ebs   |
+      | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt/ebs  |
+    Then the step should succeed
+    Given the pod named "mypod" becomes ready
+    
+    When I execute on the pod:
+      | touch | /mnt/ebs/test-before-upgrade |
+    Then the step should succeed
+
+    Then I execute on the pod:
+      | sync |
+    Then the step should succeed
+
+    #Create volumesnapshot
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/csi/snapshot/volumesnapshot.yaml" replacing paths:
+      | ["metadata"]["name"]                            | pvc-ebs-snapshot |
+      | ["spec"]["volumeSnapshotClassName"]             | ebs-snap         |
+      | ["spec"]["source"]["persistentVolumeClaimName"] | pvc-ebs          |
+    Then the step should succeed
+    And I wait up to 180 seconds for the steps to pass:
+    """
+    When I run the :describe client command with:
+      | resource | volumesnapshot   |
+      | name     | pvc-ebs-snapshot |
+    Then the output should match "Ready To Use\:\s+true"
+    """
+
+  # @author chaoyang@redhat.com
+  # @case_id OCP-28630
+  @upgrade-check
+  @admin
+  Scenario: Snapshot operator should be in available status after upgrade and can created pod with snapshot
+    Given I switch to cluster admin pseudo user
+    
+    #Snapshot operator/controller update
+    Given the "csi-snapshot-controller" operator version matchs the current cluster version
+    Given the status of condition "Degraded" for "csi-snapshot-controller" operator is: False
+    Given the status of condition "Progressing" for "csi-snapshot-controller" operator is: False
+    Given the status of condition "Available" for "csi-snapshot-controller" operator is: True
+    Given the status of condition "Upgradeable" for "csi-snapshot-controller" operator is: True
+
+    #Restore works
+    When I use the "upgrade-ocp-28630" project
+    Then I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/csi/snapshot/restorepvc.yaml" replacing paths:
+      | ["spec"]["storageClassName"]   | sc-ebs           |
+      | ["spec"]["dataSource"]["name"] | pvc-ebs-snapshot | 
+    Then the step should succeed
+
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/misc/pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                         | mypod-restore |
+      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | restore-pvc   |
+      | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt/ebs      |
+    Given the pod named "mypod-restore" becomes ready
+
+    When I execute on the pod:
+      | ls | /mnt/ebs |
+    Then the output should contain:
+      | test-before-upgrade |
