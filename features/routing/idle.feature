@@ -5,7 +5,7 @@ Feature: idle service related scenarios
   @smoke
   Scenario: Pod can be changed to un-idle when there is unsecure or edge or passthrough route coming
     Given I have a project
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/list_for_caddy.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/routing/list_for_caddy.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
     Then the step should succeed
     Given I wait until replicationController "caddy-rc" is ready
@@ -94,14 +94,14 @@ Feature: idle service related scenarios
   # @case_id OCP-13837
   Scenario: Pod can be changed to un-idle when there is reencrypt route coming
     Given I have a project
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/list_for_caddy.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/routing/list_for_caddy.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
     Then the step should succeed
     Given I wait until replicationController "caddy-rc" is ready
     And I wait until number of replicas match "1" for replicationController "caddy-rc"
 
     # check reencrypt route
-    Given I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/reencrypt/route_reencrypt_dest.ca"
+    Given I obtain test data file "routing/reencrypt/route_reencrypt_dest.ca"
     When I run the :create_route_reencrypt client command with:
       | name       | route-reen              |
       | service    | service-secure          |

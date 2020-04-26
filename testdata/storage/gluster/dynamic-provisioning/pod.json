@@ -1,0 +1,36 @@
+{
+    "apiVersion": "v1",
+    "kind": "Pod",
+    "metadata": {
+        "name": "gluster",
+        "labels": {
+            "name": "gluster"
+        }
+    },
+    "spec": {
+        "containers": [{
+            "name": "gluster",
+            "image": "aosqe/hello-openshift",
+            "imagePullPolicy": "IfNotPresent",
+            "securityContext": {
+                "privileged": true
+            },
+            "volumeMounts": [{
+                "mountPath": "/mnt/gluster",
+                "name": "gluster"
+            }]
+        }],
+        "securityContext": {
+            "fsGroup": 123456,
+            "seLinuxContext": {
+                 "level": "s0:c13,c12"
+            }
+        },
+        "volumes": [{
+            "name": "gluster",
+            "persistentVolumeClaim": {
+                "claimName": "glusterc"
+            }
+        }]
+    }
+}

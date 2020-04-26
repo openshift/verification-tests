@@ -28,6 +28,9 @@ click_edit_yaml_link:
   - selector:
         xpath: //a[text()='Edit YAML']
     op: click
+  - selector:
+      xpath: //div[contains(@class,'view-lines')]
+    timeout: 20
 click_create_button:
   elements:
   - selector:
@@ -85,6 +88,11 @@ click_on_resource_name:
     selector:
       xpath: //a[contains(@class,'co-resource-item__resource-name') and text()='<item>']
     op: click
+choose_project_from_dropdown_list:
+  element:
+    selector:
+      xpath: //ul//a[@id='<project_name>-Project-link' and contains(@class,'dropdown__menu-item')]
+    op: click
 clear_input_value:
   elements:
   - selector:
@@ -97,6 +105,18 @@ set_input_value:
       xpath: //input[@id='<input_field_id>']
     op: send_keys <input_value>
     type: input
+clear_input_class:
+  element:
+    selector:
+      xpath: //input[contains(@class, '<class_text>')]
+    op: clear
+    type: input
+set_input_class:
+  element:
+    selector:
+      xpath: //input[contains(@class, '<class_text>')]
+    op: send_keys <input_value>
+    type: input
 set_label_input:
   elements:
   - selector: &label_input
@@ -105,6 +125,16 @@ set_label_input:
   - selector:
       <<: *label_input
     op: send_keys <input_value>
+set_label_input_simple:
+  elements:
+  - selector: &label_input_value
+      xpath: //label[text()='<label_text>']/..//input
+    op: clear
+    type: input
+  - selector:
+      <<: *label_input_value
+    op: send_keys <input_value>
+    type: input
 check_table_text_data:
   element:
     selector:
@@ -121,11 +151,6 @@ click_first_item_from_resource_list_and_check_breadcrumb:
 click_first_item_from_sub_resource_list_and_check_breadcrumb:
   action: wait_until_no_loading
   action: click_first_sub_item_in_resource_detail_list
-  action: check_link_in_breadcrumb
-# click and check the first item from resources listed in grid cell, such as installed operator
-click_first_item_from_gridcell_list_and_check_breadcrumb:
-  action: wait_until_no_loading
-  action: click_first_item_in_grid_cell_list
   action: check_link_in_breadcrumb
 check_link_in_breadcrumb:
   element:
@@ -146,7 +171,7 @@ check_resources_title_on_page:
 check_resource_item:
   elements:
   - selector:
-      xpath: //span[contains(@class,'co-m-resource-icon') and @title='<resource_type>']/parent::span[@class='co-resource-item']//a[@class='co-resource-item__resource-name' and text()='<resource_name>' and @href='<resource_link>']
+      xpath: //span[contains(@class,'co-m-resource-icon') and @title='<resource_type>']/parent::span[contains(@class,'co-resource-item')]//a[@class='co-resource-item__resource-name' and text()='<resource_name>' and @href='<resource_link>']
 check_resource_name_and_icon:
   action:
     if_param: service_name
@@ -277,6 +302,11 @@ click_link_with_text:
     selector:
       xpath: //a[contains(.,'<text>') and contains(@href,'<link_url>')]
     op: click
+click_link_with_text_only:
+  element:
+    selector:
+      xpath: //a[text()='<text>']
+    op: click
 click_kebab_item:
   element:
     selector:
@@ -362,6 +392,11 @@ wait_until_no_loading:
     selector:
       css: .cos-status-box--loading
     missing: true
+check_column_in_table:
+  action: wait_box_loaded
+  elements:
+  - selector:
+      xpath: //button[contains(.,'<field>')]
 
 ## -------- check resource key and values pairs ------
 check_resource_details:
@@ -473,6 +508,21 @@ check_resource_details:
   action:
     if_param: short_names
     ref: check_short_names
+  action:
+    if_param: scale_target
+    ref: check_scale_target
+  action:
+    if_param: min_replicas
+    ref: check_hpa_min_replicas
+  action:
+    if_param: max_replicas
+    ref: check_hpa_max_replicas
+  action:
+    if_param: current_replicas
+    ref: check_current_replicas
+  action:
+    if_param: desired_replicas
+    ref: check_desired_replicas
 check_resource_details_key_and_value:
   element: &key_value
     selector:
@@ -682,4 +732,29 @@ check_short_names:
   params:
     key: Short Names
     value: <short_names>
+  action: check_resource_details_key_and_value
+check_scale_target:
+  params:
+    key: Scale Target
+    value: <scale_target>
+  action: check_resource_details_key_and_value
+check_current_replicas:
+  params:
+    key: Current Pods
+    value: <current_replicas>
+  action: check_resource_details_key_and_value
+check_desired_replicas:
+  params:
+    key: Desired Pods
+    value: <desired_replicas>
+  action: check_resource_details_key_and_value
+check_hpa_min_replicas:
+  params:
+    key: Min Pods
+    value: <min_replicas>
+  action: check_resource_details_key_and_value
+check_hpa_max_replicas:
+  params:
+    key: Max Pods
+    value: <max_replicas>
   action: check_resource_details_key_and_value

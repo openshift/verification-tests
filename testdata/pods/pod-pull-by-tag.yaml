@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-pull-by-tag
+  labels:
+    app: pod-pull-by-tag
+spec:
+  containers:
+  - name: hello-pod
+    image: docker.io/ocpqe/hello-pod:latest
+    ports:
+    - containerPort: 80

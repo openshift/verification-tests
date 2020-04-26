@@ -155,7 +155,7 @@ end
 #       | resource      | dc |
 #       | resource_name | hooks |
 #       | o             | yaml |
-#     And I save the output to file>hooks.yaml
+#     And I save the output to file> hooks.yaml
 #     And I replace lines in "hooks.yaml":
 #       | 200 | 10 |
 #       | latestVersion: 1 | latestVersion: 2 |
@@ -176,7 +176,7 @@ Given /^(?:(as admin) )?I replace resource "([^"]+)" named "([^"]+)"(?: saving e
     | o | yaml |
     })
   step %Q/the step should succeed/
-  step %Q/I save the output to file>#{filename}/
+  step %Q/I save the output to file> #{filename}/
   step %Q/I replace content in "#{filename}":/, table
   step %Q/I run the :replace #{as_user} command with:/, table(%{
     | f | #{filename} |

@@ -1,0 +1,38 @@
+apiVersion: v1
+data:
+  logstash-wrapper.sh: |-
+      set -x -e
+      rm -vf "/usr/share/logstash/config/logstash.yml"
+      echo "xpack.monitoring.enabled: false" > "/usr/share/logstash/config/logstash.yml"
+      exec /usr/local/bin/docker-entrypoint "$@"
+  config: |-
+    # from https://kubernetes.io/docs/tasks/debug-application-cluster/audit/#use-logstash-to-collect-and-distribute-audit-events-from-webhook-backend
+    input{
+        http{
+            #TODO, figure out a way to use kubeconfig file to authenticate to logstash
+            #https://www.elastic.co/guide/en/logstash/current/plugins-inputs-http.html#plugins-inputs-http-ssl
+            port=>8888
+            host=>"0.0.0.0"
+        }
+    }
+    filter{
+        split{
+            # Webhook audit backend sends several events together with EventList
+            # split each event here.
+            field=>[items]
+            # We only need event subelement, remove others.
+            remove_field=>[headers, metadata, apiVersion, "@timestamp", kind, "@version", host]
+        }
+        mutate{
+            rename => {items=>event}
+        }
+    }
+    output{
+        file{
+            # Audit events from different users will be saved into different files.
+            path=>"/var/log/kube-audit-%{[event][user][username]}/audit"
+        }
+    }
+kind: ConfigMap
+metadata:
+  name: logstash

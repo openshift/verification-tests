@@ -16,12 +16,12 @@ Feature: Testing HAProxy dynamic configuration manager related scenarios
     Given I switch to the first user
     And I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker.json |
+      | f | <%= BushSlicer::HOME %>/testdata/routing/caddy-docker.json |
     Then the step should succeed
     Given a pod becomes ready with labels:
       | name=caddy-docker |
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/unsecure/service_unsecure.json  |
+      | f | <%= BushSlicer::HOME %>/testdata/routing/unsecure/service_unsecure.json  |
     Then the step should succeed
     When I expose the "service-unsecure" service
     Then the step should succeed
@@ -49,12 +49,12 @@ Feature: Testing HAProxy dynamic configuration manager related scenarios
     Given I switch to the first user
     And I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker.json |
+      | f | <%= BushSlicer::HOME %>/testdata/routing/caddy-docker.json |
     Then the step should succeed
     Given a pod becomes ready with labels:
       | name=caddy-docker |
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/edge/service_unsecure.json  |
+      | f | <%= BushSlicer::HOME %>/testdata/routing/edge/service_unsecure.json  |
     Then the step should succeed
     When I run the :create_route_edge client command with:
       | name    | edge-route       |
@@ -84,12 +84,12 @@ Feature: Testing HAProxy dynamic configuration manager related scenarios
     Given I switch to the first user
     And I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker.json |
+      | f | <%= BushSlicer::HOME %>/testdata/routing/caddy-docker.json |
     Then the step should succeed
     Given a pod becomes ready with labels:
       | name=caddy-docker |
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/passthrough/service_secure.json  |
+      | f | <%= BushSlicer::HOME %>/testdata/routing/passthrough/service_secure.json  |
     Then the step should succeed
     When I run the :create_route_passthrough client command with:
       | name    | pass-route     |

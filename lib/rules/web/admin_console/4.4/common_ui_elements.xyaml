@@ -19,11 +19,19 @@ click_edit_yaml_link:
   - selector:
         xpath: //a[text()='Edit YAML']
     op: click
+  - selector:
+      xpath: //div[contains(@class,'view-lines')]
+    timeout: 20
 click_create_button:
   elements:
-  - selector:
+  - selector: &create_button
       xpath: //button[contains(text(),'Create')]
     op: click
+check_create_button_missing:
+  elements:
+  - selector:
+      <<: *create_button
+    missing: true
 click_cancel_button:
   elements:
   - selector:
@@ -101,6 +109,15 @@ click_radio_input:
     selector:
       xpath: //input[@type='radio' and @value='<radio_text>']
     op: click
+click_close_icon:
+  element:
+    selector:
+      xpath: //button[contains(@aria-label,'Close')]
+    op: click
+click_yaml_create_button:
+  params:
+    button_id: yaml-create
+  action: click_button_by_id
 clear_input_value:
   elements:
   - selector:
@@ -113,6 +130,18 @@ set_input_value:
       xpath: //input[@id='<input_field_id>']
     op: send_keys <input_value>
     type: input
+clear_input_class:
+  element:
+    selector:
+      xpath: //input[contains(@class, '<class_text>')]
+    op: clear
+    type: input
+set_input_class:
+  element:
+    selector:
+      xpath: //input[contains(@class, '<class_text>')]
+    op: send_keys <input_value>
+    type: input
 set_label_input:
   elements:
   - selector: &label_input
@@ -121,6 +150,16 @@ set_label_input:
   - selector:
       <<: *label_input
     op: send_keys <input_value>
+set_label_input_simple:
+  elements:
+  - selector: &label_input_value
+      xpath: //label[text()='<label_text>']/..//input
+    op: clear
+    type: input
+  - selector:
+      <<: *label_input_value
+    op: send_keys <input_value>
+    type: input
 check_editor_is_monaco_editor:
   element:
     selector:
@@ -155,11 +194,6 @@ click_first_item_from_sub_resource_list_and_check_breadcrumb:
   action: wait_until_no_loading
   action: click_first_sub_item_in_resource_detail_list
   action: check_link_in_breadcrumb
-# click and check the first item from resources listed in grid cell, such as installed operator
-click_first_item_from_gridcell_list_and_check_breadcrumb:
-  action: wait_until_no_loading
-  action: click_first_item_in_grid_cell_list
-  action: check_link_in_breadcrumb
 check_link_in_breadcrumb:
   element:
     selector:
@@ -180,7 +214,7 @@ confirm_deletion:
 check_resource_item:
   elements:
   - selector:
-      xpath: //span[contains(@class,'co-m-resource-icon') and @title='<resource_type>']/parent::span[@class='co-resource-item']//a[@class='co-resource-item__resource-name' and text()='<resource_name>' and @href='<resource_link>']
+      xpath: //span[contains(@class,'co-m-resource-icon') and @title='<resource_type>']/parent::span[contains(@class,'co-resource-item')]//a[@class='co-resource-item__resource-name' and text()='<resource_name>' and @href='<resource_link>']
 check_resources_title_on_page:
   elements:
   - selector:
@@ -320,6 +354,12 @@ click_annotation_link:
       xpath: //a[contains(text(), 'Annotation')]
     op: click
     timeout: 20
+click_annotation_edit_link:
+  elements:
+  - selector:
+      xpath: //*[contains(text(), ' Annotations')]
+    op: click
+    timeout: 20
 uncheck_checkbox:
   element:
     selector:
@@ -333,6 +373,11 @@ click_link_with_text:
   element:
     selector:
       xpath: //a[contains(.,'<text>') and contains(@href,'<link_url>')]
+    op: click
+click_link_with_text_only:
+  element:
+    selector:
+      xpath: //a[text()='<text>']
     op: click
 click_secondary_menu:
   elements:
@@ -403,12 +448,22 @@ wait_box_loaded:
   element:
     selector:
       css: .loading-box__loaded
-    timeout: 20
+    timeout: 120
+wait_page_body_loaded:
+  element:
+    selector:
+      css: .co-m-page__body
+    timeout: 40
 wait_until_no_loading:
   element:
     selector:
       css: .cos-status-box--loading
     missing: true
+    timeout: 30
+wait_sidebar_loaded:
+  element:
+    selector:
+      css: .co-p-has-sidebar__sidebar-close
     timeout: 30
 wait_table_loaded:
   element:
@@ -420,6 +475,19 @@ check_item_in_list:
     selector:
       xpath: //ul[contains(.,'<item>')]
     timeout: 20
+check_overlay_edit_modal:
+  action: check_overlay_edit_modal_title
+  elements:
+  - selector:
+      xpath: //*[contains(@class, 'modal-content') and contains(@class, 'modal-content--no-inner-scroll') and not(contains(., 'co-p-new-user-modal'))]
+check_overlay_edit_modal_title:
+  elements:
+  - selector:
+      xpath: //h1[contains(@class, 'pf-c-title') and contains(@class, 'pf-m-2xl') and contains(@data-test-id, 'modal-title')]
+check_side_overlay_dialog_modal:
+  elements:
+  - selector:
+      xpath: //*[contains(@class, 'pf-c-modal-box') and @role='dialog' and not(contains(., 'modal-content'))]
 
 ## -------- check resource key and values pairs ------
 check_resource_details:
@@ -514,6 +582,9 @@ check_resource_details:
     if_param: machine_config_selector
     ref: check_machine_config_selector
   action:
+    if_param: node_selector
+    ref: check_node_selector
+  action:
     if_param: current_configuration
     ref: check_current_configuration
   action:
@@ -543,6 +614,21 @@ check_resource_details:
   action:
     if_param: created_at
     ref: check_created_at
+  action:
+    if_param: scale_target
+    ref: check_scale_target
+  action:
+    if_param: min_replicas
+    ref: check_hpa_min_replicas
+  action:
+    if_param: max_replicas
+    ref: check_hpa_max_replicas
+  action:
+    if_param: current_replicas
+    ref: check_current_replicas
+  action:
+    if_param: desired_replicas
+    ref: check_desired_replicas
 check_resource_details_key_and_value:
   element: &key_value
     selector:
@@ -717,6 +803,11 @@ check_machine_config_selector:
     key: Machine Config Selector
     value: <machine_config_selector>
   action: check_resource_details_key_and_value
+check_node_selector:
+  params:
+    key: Node Selector
+    value: <node_selector>
+  action: check_resource_details_key_and_value
 check_current_configuration:
   params:
     key: Current Configuration
@@ -776,3 +867,29 @@ check_created_at:
   params:
     key: Created At
   action: check_resource_details_key_only
+check_scale_target:
+  params:
+    key: Scale Target
+    value: <scale_target>
+  action: check_resource_details_key_and_value
+check_current_replicas:
+  params:
+    key: Current Replicas
+    value: <current_replicas>
+  action: check_resource_details_key_and_value
+check_desired_replicas:
+  params:
+    key: Desired Replicas
+    value: <desired_replicas>
+  action: check_resource_details_key_and_value
+check_hpa_min_replicas:
+  params:
+    key: Min Replicas
+    value: <min_replicas>
+  action: check_resource_details_key_and_value
+check_hpa_max_replicas:
+  params:
+    key: Max Replicas
+    value: <max_replicas>
+  action: check_resource_details_key_and_value
+

@@ -16,7 +16,7 @@ Feature: Ansible-service-broker related scenarios
 
     # Provision mediawiki apb
     When I process and create:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/serviceinstance-template.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/serviceinstance-template.yaml |
       | p | INSTANCE_NAME=<%= cb.prefix %>-mediawiki-apb          |
       | p | CLASS_EXTERNAL_NAME=<%= cb.prefix %>-mediawiki-apb    |
       | p | SECRET_NAME=<%= cb.prefix %>-mediawiki-apb-parameters |
@@ -24,7 +24,7 @@ Feature: Ansible-service-broker related scenarios
     Then the step should succeed
     And evaluation of `service_instance(cb.prefix + "-mediawiki-apb").uid(user: user)` is stored in the :mediawiki_uid clipboard
     When I process and create:
-      | f  | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/serviceinstance-parameters-template.yaml |
+      | f  | <%= BushSlicer::HOME %>/testdata/svc-catalog/serviceinstance-parameters-template.yaml |
       | p | SECRET_NAME=<%= cb.prefix %>-mediawiki-apb-parameters |
       | p | INSTANCE_NAME=<%= cb.prefix %>-mediawiki-apb          |
       | p | UID=<%= cb.mediawiki_uid %>                           |
@@ -33,7 +33,7 @@ Feature: Ansible-service-broker related scenarios
 
     # Provision DB apb
     When I process and create:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/serviceinstance-template.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/serviceinstance-template.yaml |
       | p | INSTANCE_NAME=<db_name>                               |
       | p | CLASS_EXTERNAL_NAME=<db_name>                         |
       | p | PLAN_EXTERNAL_NAME=<db_plan>                          |
@@ -42,7 +42,7 @@ Feature: Ansible-service-broker related scenarios
     Then the step should succeed
     And evaluation of `service_instance("<db_name>").uid(user: user)` is stored in the :db_uid clipboard
     When I process and create:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/serviceinstance-parameters-template.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/serviceinstance-parameters-template.yaml |
       | p | SECRET_NAME=<db_secret_name>                                                                                            |
       | p | INSTANCE_NAME=<db_name>                                                                                                 |
       | p | PARAMETERS=<db_parameters>                                                                                              |
@@ -72,7 +72,7 @@ Feature: Ansible-service-broker related scenarios
 
     # Create servicebinding of DB apb
     When I process and create:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/servicebinding-template.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/servicebinding-template.yaml |
       | p | BINDING_NAME=<db_name>                                                                                      |
       | p | INSTANCE_NAME=<db_name>                                                                                     |
       | p | SECRET_NAME=<db_credentials>                                                                                |
@@ -141,6 +141,75 @@ Feature: Ansible-service-broker related scenarios
       | <%= cb.prefix %>-mariadb-apb    | <%= cb.prefix %>-mariadb-apb-credentials    |  prod   | <%= cb.prefix %>-mariadb-apb-parameters    | {"mariadb_database":"admin","mariadb_user":"admin","mariadb_version":"10.2","mariadb_root_password":"test","mariadb_password":"test"} | mariadb    | # @case_id OCP-17362
       | <%= cb.prefix %>-mariadb-apb    | <%= cb.prefix %>-mariadb-apb-credentials    |  dev    | <%= cb.prefix %>-mariadb-apb-parameters    | {"mysql_database":"admin","mysql_user":"admin","mariadb_version":"10.2","mysql_root_password":"test","mysql_password":"test"}         | mariadb    | # @case_id OCP-18241
       | <%= cb.prefix %>-mariadb-apb    | <%= cb.prefix %>-mariadb-apb-credentials    |  prod   | <%= cb.prefix %>-mariadb-apb-parameters    | {"mysql_database":"admin","mysql_user":"admin","mariadb_version":"10.2","mysql_root_password":"test","mysql_password":"test"}         | mariadb    | # @case_id OCP-18240
+
+  # @author chezhang@redhat.com
+  @admin
+  Scenario Outline: Multiple Plans support for DB APBs
+    # Get the registry name from the configmap
+    When I switch to cluster admin pseudo user
+    And I use the "openshift-ansible-service-broker" project
+    And I save the first service broker registry prefix to :prefix clipboard
+
+    # Swtich back to normal user and create first project
+    And I switch to the first user
+    Given I have a project
+
+    # Provision DB apb with dev plan
+    When I process and create:
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/serviceinstance-template.yaml |
+      | p | INSTANCE_NAME=<db_name>                                                          |
+      | p | CLASS_EXTERNAL_NAME=<db_name>                                                    |
+      | p | PLAN_EXTERNAL_NAME=dev                                                           |
+      | p | SECRET_NAME=<db_secret_name>                                                     |
+      | p | INSTANCE_NAMESPACE=<%= project.name %>                                           |
+    Then the step should succeed
+    And evaluation of `service_instance("<db_name>").uid` is stored in the :uid1 clipboard
+    When I process and create:
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/serviceinstance-parameters-template.yaml |
+      | p | SECRET_NAME=<db_secret_name>                                                                |
+      | p | INSTANCE_NAME=<db_name>                                                                     |
+      | p | PARAMETERS=<db_parameters>                                                                  |
+      | p | UID=<%= cb.uid1 %>                                                                          |
+      | n | <%= project.name %>                                                                         |
+    Then the step should succeed
+
+    Given I wait for the "<db_name>" service_instance to become ready up to 360 seconds
+    And dc with name matching /<db_pattern>/ are stored in the :db clipboard
+    And a pod becomes ready with labels:
+      | deployment=<%= cb.db.first.name %>-1 |
+
+    # Create another project
+    Given I create a new project
+
+    # Provision DB apb with prod plan
+    When I process and create:
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/serviceinstance-template.yaml |      
+      | p | INSTANCE_NAME=<db_name>                                                          |
+      | p | CLASS_EXTERNAL_NAME=<db_name>                                                    |
+      | p | PLAN_EXTERNAL_NAME=prod                                                          |
+      | p | SECRET_NAME=<db_secret_name>                                                     |
+      | p | INSTANCE_NAMESPACE=<%= project.name %>                                           |
+    Then the step should succeed
+    And evaluation of `service_instance("<db_name>").uid` is stored in the :uid2 clipboard
+    When I process and create:
+      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/serviceinstance-parameters-template.yaml |
+      | p | SECRET_NAME=<db_secret_name>                                                                |
+      | p | INSTANCE_NAME=<db_name>                                                                     |
+      | p | PARAMETERS=<db_parameters>                                                                  |
+      | p | UID=<%= cb.uid2 %>                                                                          |
+      | n | <%= project.name %>                                                                         |
+    Then the step should succeed
+
+    Given I wait for the "<db_name>" service_instance to become ready up to 360 seconds
+    And dc with name matching /<db_pattern>/ are stored in the :db clipboard
+    And a pod becomes ready with labels:
+      | deployment=<%= cb.db.first.name %>-1 |
+
+    Examples:
+      | db_name                         | db_secret_name                             | db_parameters                                                                                                                         | db_pattern |
+      | <%= cb.prefix %>-postgresql-apb | <%= cb.prefix %>-postgresql-apb-parameters | {"postgresql_database":"admin","postgresql_user":"admin","postgresql_version":"9.5","postgresql_password":"test"}                     | postgresql | # @case_id OCP-15328
+      | <%= cb.prefix %>-mariadb-apb    | <%= cb.prefix %>-mariadb-apb-parameters    | {"mariadb_database":"admin","mariadb_user":"admin","mariadb_version":"10.2","mariadb_root_password":"test","mariadb_password":"test"} | mariadb    | # @case_id OCP-16086
+      | <%= cb.prefix %>-mysql-apb      | <%= cb.prefix %>-mysql-apb-parameters      | {"mysql_database":"devel","mysql_user":"devel","mysql_version":"5.7","service_name":"mysql","mysql_password":"test"}                  | mysql      | # @case_id OCP-16087
 
   # @author zitang@redhat.com
   # @case_id OCP-15354

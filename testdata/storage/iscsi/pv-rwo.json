@@ -1,0 +1,22 @@
+{
+  "apiVersion": "v1",
+  "kind": "PersistentVolume",
+  "metadata": {
+    "name": "pv-iscsi"
+  },
+  "spec": {
+    "capacity": {
+        "storage": "5Gi"
+    },
+    "accessModes": [ "ReadWriteOnce" ],
+    "iscsi": {
+        "targetPortal": "172.30.186.41:3260",
+        "iqn": "iqn.2016-04.test.com:storage.target00",
+        "lun": 0,
+        "iface": "default",
+        "fsType": "ext4",
+        "readOnly": false
+    },
+    "persistentVolumeReclaimPolicy": "Retain"
+  }
+}

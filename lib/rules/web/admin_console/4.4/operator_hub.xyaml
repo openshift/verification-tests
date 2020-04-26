@@ -80,6 +80,99 @@ check_affected_pods_tab:
   params:
     tab_name: Affected Pods
   action: check_tab
+check_link_for_marketplace:
+  params:
+    text: Red Hat Marketplace
+    link_url: marketplace.redhat.com
+  action: check_link_and_text
+check_link_for_developer_catalog:
+  params:
+    text: Developer Catalog
+    link_url: catalog
+  action: check_link_and_text
+check_catalog_badge_by_checkbox:
+  action: click_checkbox_from_provider_type
+  elements:
+  - selector:
+      xpath: //*[contains(@class, 'pf-c-badge') and text()='<text>']
+    timeout: 30
+  action: click_checkbox_from_provider_type
+check_marketplace_operator_description_on_overlay:
+  params:
+    text: Marketplace
+    description: This Operator is purchased through Red Hat Marketplace
+  action: click_checkbox_from_provider_type
+  action: open_first_card_in_overlay
+  action: check_operator_description_on_overlay
+  action: click_close_icon
+  action: click_checkbox_from_provider_type
+check_community_operator_description_on_overlay:
+  params:
+    text: Community
+    description: This is a community provided operator
+  action: click_checkbox_from_provider_type
+  action: open_first_card_in_overlay
+  action: submit_changes
+  action: check_operator_description_on_overlay
+  action: click_close_icon
+  action: click_checkbox_from_provider_type
+check_operator_description_on_overlay:
+  elements:
+  - selector:
+      xpath: //div[contains(@class, 'co-hint-block')][h2[contains(.,'<text> Operator')] and div[contains(@class, 'co-hint-block__body') and contains(.,'<description>')] ]
+    timeout: 30
+check_basic_install_capability:
+  params:
+    capability_name: Basic Install
+  action: check_ticked_capability_level
+check_seamless_upgrade_capability:
+  params:
+    capability_name: Seamless Upgrades
+  action: check_ticked_capability_level
+check_full_lifecycle_capability:
+  params:
+    capability_name: Full Lifecycle
+  action: check_ticked_capability_level
+check_deep_insights_capability:
+  params:
+    capability_name: Deep Insights
+  action: check_ticked_capability_level
+check_auto_pilot_capability:
+  params:
+    capability_name: Auto Pilot
+  action: check_ticked_capability_level
+check_ticked_capability_level:
+  elements:
+  - selector:
+      xpath: //li[contains(., '<capability_name>')]/*[name()='svg']
+click_checkbox_from_provider_type:  
+  elements:
+  - selector:
+      xpath:  //form[@data-test-group-name='providerType']
+    timeout: 30
+  - selector:
+      xpath: //*[contains(@class, 'pf-c-check__label') and text()='<text>']
+    op: click
+open_first_card_overlay_panel:
+  action:
+    if_element:
+      selector:
+        xpath: //button[@type='submit' and not(@disabled)]
+    ref: submit_changes
+  action: open_first_card_in_overlay
+click_checkbox_from_capability_level:
+  elements:
+  - selector:
+      xpath:  //form[@data-test-group-name='capabilityLevel']
+    timeout: 30
+  - selector:
+      xpath: //*[contains(@class, 'pf-c-check__label') and text()='<text>']
+    op: click
+open_first_card_in_overlay:
+  elements:
+  - selector:
+      xpath: //a[contains(@class, 'pf-c-card')][1]
+    op: click  
 uninstall_operator_on_console:
   params:
     button_text: Uninstall Operator

@@ -1,0 +1,33 @@
+{
+   "kind":"ReplicationController",
+   "apiVersion":"v1",
+   "metadata":{
+      "name":"rc-test",
+      "labels":{
+         "name":"rc-test"
+      }
+   },
+   "spec":{
+      "replicas":1,
+      "template":{
+         "metadata":{
+            "labels":{
+               "name":"rc-test"
+            }
+         },
+         "spec":{
+            "containers":[
+               {
+                  "name":"port-pod",
+                  "image":"docker.io/aosqe/pod-for-ping@sha256:f61ca8fd1dd7dfb8d403b66df549ed5a94fc4626d3b19e2530af48aefa75e5ea",
+                  "ports": [{
+                     "hostPort": 6061,
+                     "containerPort": 80
+                  }]
+               }
+            ],
+         "nodeName":"node-name"
+         }
+      }
+   }
+}

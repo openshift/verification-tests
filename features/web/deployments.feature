@@ -1,48 +1,10 @@
 Feature: Check deployments function
-
-  # @author yapei@redhat.com
-  # @case_id OCP-10679
-  @smoke
-  Scenario: make deployment from web console
-    Given I have a project
-    # create dc
-    When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/cancel-deployment-gracefully.json |
-    Then the step should succeed
-    And evaluation of `"hooks"` is stored in the :dc_name clipboard
-    When I perform the :wait_latest_deployments_to_deployed web console action with:
-      | project_name | <%= project.name %> |
-      | dc_name      | <%= cb.dc_name %>   |
-    Then the step should succeed
-    Given I wait until the status of deployment "hooks" becomes :complete
-
-    # manually trigger deploy after deployments is "Deployed"
-    When I perform the :manually_deploy web console action with:
-      | project_name | <%= project.name %> |
-      | dc_name      | <%= cb.dc_name %>   |
-    Then the step should succeed
-
-    # sometimes running takes very short time so skip checking disabled deploy button during running, just check running state.
-    # cancel deployments
-    When I perform the :goto_one_standalone_rc_page web console action with:
-      | project_name | <%= project.name %> |
-      | rc_name      | <%= cb.dc_name+"-2" %> |
-    Then the step should succeed
-    # sometimes running takes very short time, just check cancel button, skip to check running status which is already covered by above
-    When I run the :cancel_deployment_on_one_deployment_page web action
-    Then the step should succeed
-    When I perform the :wait_latest_deployments_to_status web console action with:
-      | project_name | <%= project.name %> |
-      | dc_name      | <%= cb.dc_name %>   |
-      | status_name  | Cancelled           |
-    Then the step should succeed
-
   # @author yapei@redhat.com
   # @case_id OCP-12417
   Scenario: Check deployment info on web console
     Given I create a new project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/deployment1.json |
+      | f | <%= BushSlicer::HOME %>/testdata/deployment/deployment1.json |
     Then the step should succeed
     And I wait until the status of deployment "hooks" becomes :complete
     # check dc detail info
@@ -136,64 +98,6 @@ Feature: Check deployments function
       | resource_name    | <%= pod.name %> |
     Then the step should succeed
     And the output should equal "<%= cb.output %>"
-
-  # @author yapei@redhat.com
-  # @case_id OCP-10937
-  Scenario: Idled DC handling on web console
-    Given I create a new project
-    When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/deployment-with-service.yaml |
-    Then the step should succeed
-    Given I wait until the status of deployment "hello-openshift" becomes :complete
-    When I run the :idle client command with:
-      | svc_name | hello-openshift |
-    Then the step should succeed
-    Given I wait until number of replicas match "0" for replicationController "hello-openshift-1"
-    # check replicas after idle
-    When I perform the :check_dc_replicas web console action with:
-      | project_name | <%= project.name %> |
-      | dc_name      | hello-openshift     |
-      | dc_replicas  | 0                   |
-    Then the step should succeed
-    When I perform the :check_deployment_idle_text web console action with:
-      | project_name      | <%= project.name %> |
-      | dc_name           | hello-openshift     |
-      | dc_number         | 1                   |
-      | previous_replicas | 1                   |
-    Then the step should succeed
-    When I perform the :check_dc_idle_text_on_overview web console action with:
-      | project_name      | <%= project.name %> |
-      # parameter dc_name used for v3 only, could be refactored
-      | dc_name           | hello-openshift     |
-      | resource_type     | deployment          |
-      | resource_name     | hello-openshift     |
-      | previous_replicas | 1                   |
-    Then the step should succeed
-    # check_idle_donut_text_on_overview almost duplicate check_dc_idle_text_on_overview for all versions > 3
-    When I perform the :check_idle_donut_text_on_overview web console action with:
-      | project_name  | <%= project.name %> |
-      # parameter dc_name used for v3 only, could be refactored
-      | dc_name       | hello-openshift     |
-      | resource_type | deployment          |
-      | resource_name | hello-openshift     |
-    Then the step should succeed
-    # check replicas after wake up
-    When I perform the :click_wake_up_option_on_overview web console action with:
-      | project_name      | <%= project.name %> |
-      | dc_name           | hello-openshift     |
-      | previous_replicas | 1                   |
-    Then the step should succeed
-    Given I wait until number of replicas match "1" for replicationController "hello-openshift-1"
-    When I perform the :check_dc_replicas web console action with:
-      | project_name | <%= project.name %> |
-      | dc_name      | hello-openshift     |
-      | dc_replicas  | 1                   |
-    Then the step should succeed
-    When I perform the :check_donut_text_on_overview web console action with:
-      | project_name | <%= project.name %> |
-      | dc_name      | hello-openshift     |
-      | donut_text   | 1                   |
-    Then the step should succeed
 
   # @author yapei@redhat.com
   # @case_id OCP-11593
@@ -306,7 +210,7 @@ Feature: Check deployments function
     Given the master version >= "3.4"
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/replicaSet/tc536601/replicaset.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/replicaSet/tc536601/replicaset.yaml |
     Then the step should succeed
     When I perform the :goto_overview_page web console action with:
       | project_name | <%= project.name %> |

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: multus-default-route-pod
+  annotations:
+    k8s.v1.cni.cncf.io/networks: '[{
+      "name": "bridge-static",
+      "default-route": ["22.2.2.254"]
+    }]'
+spec:
+  containers:
+  - name: multus-default-route-pod
+    command: ["/bin/bash", "-c", "sleep 2000000000000"]
+    image: docker.io/aosqe/centos-network@sha256:48da37205f9b43424e0983d4c5e7e07f77b7ba1504bbe35e2f264c75dcb4cd15

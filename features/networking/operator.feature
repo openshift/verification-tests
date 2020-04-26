@@ -121,44 +121,23 @@ Feature: Operator related networking scenarios
     """
 
   # @author bmeng@redhat.com
+  # @author zzhao@redhat.com
   # @case_id OCP-22202
   @admin
   @destructive
   Scenario: The clusteroperator should be able to reflect the realtime status of the network when a new node added
-    Given the master version >= "4.1"
+    Given I have an IPI deployment
     # Check that the operator is not progressing
     Given the expression should be true> cluster_operator('network').condition(type: 'Progressing')['status'] == "False"
 
     # Record the original machine replica and scale it up to number +1
-    When I run the :get admin command with:
-      | resource | machineset                         |
-      | n        | openshift-machine-api              |
-      | template | {{(index .items 0).metadata.name}} |
-    Then the step should succeed
-    And evaluation of `@result[:stdout]` is stored in the :machineset clipboard
-    When I run the :get admin command with:
-      | resource      | machineset            |
-      | n             | openshift-machine-api |
-      | resource_name | <%= cb.machineset %>  |
-      | template      | {{.spec.replicas}}    |
-    Then the step should succeed
-    And evaluation of `@result[:response].to_i` is stored in the :original_replicas clipboard
-    And evaluation of `@result[:response].to_i + 1` is stored in the :desired_replicas clipboard
-    When I run the :scale admin command with:
-      | resource | machineset                 |
-      | name     | <%= cb.machineset %>       |
-      | replicas | <%= cb.desired_replicas %> |
-      | n        | openshift-machine-api      |
-    Then the step should succeed
+    Given I pick a random machineset to scale
+    And evaluation of `machine_set.available_replicas` is stored in the :replicas_to_restore clipboard
+    Given I scale the machineset to +1
     # Scale down the machine after the scenario
     Given I register clean-up steps:
     """
-    When I run the :scale admin command with:
-      | resource | machineset                  |
-      | name     | <%= cb.machineset %>        |
-      | replicas | <%= cb.original_replicas %> |
-      | n        | openshift-machine-api       |
-    Then the step should succeed
+    When I scale the machineset to <%= cb.replicas_to_restore %>
     Then the machineset should have expected number of running machines
     """
 
@@ -168,16 +147,7 @@ Feature: Operator related networking scenarios
     Given the status of condition "Progressing" for network operator is :True
     """
 
-    And I wait up to 60 seconds for the steps to pass:
-    """
-    When I run the :get admin command with:
-      | resource      | machineset                |
-      | resource_name | <%= cb.machineset %>      |
-      | n             | openshift-machine-api     |
-      | template      | {{.status.readyReplicas}} |
-    Then the expression should be true> @result[:response].to_i == cb.desired_replicas
-    """
-
+    And the machineset should have expected number of running machines
     # Check that the status of Progressing is back to False once the node provision finished
     And I wait up to 120 seconds for the steps to pass:
     """
@@ -195,7 +165,7 @@ Feature: Operator related networking scenarios
   Scenario: Service should not get unidle when config flag is disabled under CNO
   Given I have a project
   When I run the :create client command with:
-    | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json |
+    | f | <%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json |
   Then the step should succeed
   And 2 pods become ready with labels:
     | name=test-pods |
@@ -265,4 +235,112 @@ Feature: Operator related networking scenarios
     | /usr/bin/curl | --connect-timeout | 60 | <%= cb.service_ip %>:27017 |
   Then the step should succeed
   And the output should contain:
-    | Hello OpenShift |
+	  | Hello OpenShift |
+    
+  # @author anusaxen@redhat.com
+  # @case_id OCP-21574
+  @admin
+  @destructive
+  Scenario: Should not allow to change the openshift-sdn config	
+  #Trying to change network mode to Subnet or any other
+  Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
+    | {"spec": {"defaultNetwork": {"openshiftSDNConfig": {"mode": "Subnet"}}}} |
+  #Cleanup for bringing CRD to original
+  Given I register clean-up steps:
+    """
+  as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
+    | {"spec": {"defaultNetwork": {"openshiftSDNConfig": null}}} |
+    """ 
+  And 10 seconds have passed
+  #Getting network operator pod name to leverage for its logs collection later
+  Given I switch to cluster admin pseudo user
+  And I use the "openshift-network-operator" project
+  When I run the :get client command with:
+    | resource | pods                               |
+    | o        | jsonpath={.items[*].metadata.name} |
+  Then the step should succeed
+  And evaluation of `@result[:response]` is stored in the :network_operator_pod clipboard
+  When I run the :logs client command with:
+    | resource_name | <%= cb.network_operator_pod %> |
+    | since         | 10s                            |
+  Then the step should succeed
+  And the output should contain:
+    | cannot change openshift-sdn |
+    
+  # @author anusaxen@redhat.com
+  # @case_id OCP-25856
+  @admin
+  @destructive
+  Scenario: CNO should delete non-relevant resources	
+    # Make sure that the multus is Running
+    Given the multus is enabled on the cluster
+    Given the default interface on nodes is stored in the :default_interface clipboard
+    #Patching config in network operator config CRD
+    Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
+      | {"spec":{"additionalNetworks": [{"name":"bridge-ipam-dhcp","namespace":"openshift-multus","rawCNIConfig":"{\"name\":\"bridge-ipam-dhcp\",\"cniVersion\":\"0.3.1\",\"type\":\"bridge\",\"master\":\"<%= cb.default_interface %>\",\"ipam\":{\"type\": \"dhcp\"}}","type":"Raw"}]}} |
+    #Cleanup for bringing CRD to original at the end of this scenario
+    Given I register clean-up steps:
+    """
+    as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
+      | {"spec":{"additionalNetworks": null}} |
+    """
+    #Make sure dhcp daemon pods spun up after patching the CNO above
+    Given I switch to cluster admin pseudo user
+    And I wait up to 60 seconds for the steps to pass:
+    """
+    Given I use the "openshift-multus" project
+    And status becomes :running of exactly <%= cb.desired_multus_replicas %> pods labeled:
+      | app=dhcp-daemon |
+    """
+    # Erase additonalnetworks config from CNO and expect dhcp pods to die
+    Given I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
+      | {"spec":{"additionalNetworks": null}} |
+
+    And I wait up to 60 seconds for the steps to pass:
+    """
+    And all existing pods die with labels:
+      | app=dhcp-daemon |
+    """
+    #Patching config in network operator config CRD again for 2nd iteration check
+    Given I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
+      | {"spec":{"additionalNetworks": [{"name":"bridge-ipam-dhcp","namespace":"openshift-multus","rawCNIConfig":"{\"name\":\"bridge-ipam-dhcp\",\"cniVersion\":\"0.3.1\",\"type\":\"bridge\",\"master\":\"<%= cb.default_interface %>\",\"ipam\":{\"type\": \"dhcp\"}}","type":"Raw"}]}} |
+    
+    # Now scale down CNO pod to 0 and makes sure dhcp pods still running and erase additionalnetworks config from CNO
+    Given I use the "openshift-network-operator" project
+    And I run the :scale client command with:
+      | resource | deployment       |
+      | name     | network-operator |
+      | replicas | 0                |
+    Then the step should succeed
+    Given I register clean-up steps:
+    """
+    Given I use the "openshift-network-operator" project
+    And I run the :scale client command with:
+      | resource | deployment       |
+      | name     | network-operator |
+      | replicas | 1                |
+    Then the step should succeed
+    """
+    And I wait up to 60 seconds for the steps to pass:
+    """
+    Given I use the "openshift-multus" project
+    #The multus enabled on the cluster step used in beginning stores desired_multus_replicas value in cb variable which is being used here
+    And status becomes :running of exactly <%= cb.desired_multus_replicas %> pods labeled:
+      | app=dhcp-daemon |
+    """
+    Given I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
+      | {"spec":{"additionalNetworks": null}} |
+    # Now scale up CNO pod back to 1 and expect dhcp pods to disappear
+    Given I use the "openshift-network-operator" project
+    And I run the :scale client command with:
+      | resource | deployment       |
+      | name     | network-operator |
+      | replicas | 1                |
+    Then the step should succeed
+
+    And I wait up to 60 seconds for the steps to pass:
+    """
+    Given I use the "openshift-multus" project
+    And all existing pods die with labels:
+      | app=dhcp-daemon |
+    """

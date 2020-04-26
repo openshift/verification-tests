@@ -39,7 +39,7 @@ Feature: oc_set_probe.feature
       | open_tcp     | 45          |
       | o            | json        |
     Then the step should succeed
-    When I save the output to file>file.json
+    When I save the output to file> file.json
     And I run the :set_probe client command with:
       | f         | file.json   |
       | readiness |             |

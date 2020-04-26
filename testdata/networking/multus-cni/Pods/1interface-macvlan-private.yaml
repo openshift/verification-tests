@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  generateName: macvlan-private-pod-
+  labels:
+    name: macvlan-private-pod
+  annotations:
+    k8s.v1.cni.cncf.io/networks: macvlan-private
+spec:
+  containers:
+  - name: macvlan-private-pod
+    image: docker.io/aosqe/centos-network@sha256:48da37205f9b43424e0983d4c5e7e07f77b7ba1504bbe35e2f264c75dcb4cd15

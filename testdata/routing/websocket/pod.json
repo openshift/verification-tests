@@ -1,0 +1,26 @@
+{
+  "kind": "Pod",
+  "apiVersion":"v1",
+
+  "metadata": {
+        "name": "websocket",
+        "labels": {
+                "name": "hello-websocket"
+        }
+  },
+
+  "spec": {
+      "containers": [{
+        "name": "hello-websocket",
+        "image": "aosqe/hello-websocket",
+        "ports": [
+          {
+            "containerPort": 9999
+          },
+          {
+            "containerPort": 9443
+          }
+        ]
+      }]
+  }
+}

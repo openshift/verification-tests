@@ -134,7 +134,7 @@ end
 
 Given /^I store an available router IP in the#{OPT_SYM} clipboard$/ do |cb_name|
   step %Q/I run the :create client command with:/, table(%{
-    | f |  https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/service_with_selector.json |
+    | f |  #{ENV['BUSHSLICER_HOME']}/testdata/networking/service_with_selector.json |
   })
   step %Q/I expose the "selector-service" service/
   step %Q/I have a pod-for-ping in the project/

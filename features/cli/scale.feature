@@ -54,7 +54,7 @@ Feature: scaling related scenarios
   Scenario: Scale up/down jobs
     Given I have a project
     And I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/templates/tc511599/job.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/templates/tc511599/job.yaml |
     And I run the :scale client command with:
       | resource | jobs |
       | name     | pi   |

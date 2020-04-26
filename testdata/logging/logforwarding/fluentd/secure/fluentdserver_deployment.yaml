@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "fluentdserver"
+  labels:
+    provider: aosqe
+    component: "fluentd"
+    logging-infra: "fluentdserver"
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      provider: aosqe
+      component: "fluentd"
+      logging-infra: "fluentdserver"
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        logging-infra: "fluentdserver"
+        provider: aosqe
+        component: "fluentd"
+    spec:
+      containers:
+      - name: "fluentd"
+        image: "docker.io/aosqe/fluentd@sha256:7eece00d1bc784ac1e9722b2580911cd3ead5afd740dad6594be945b3b1dd884"
+        imagePullPolicy: "Always"
+        args:
+        - "fluentd"
+        - "-c"
+        - "/fluentd/etc/fluent.conf"
+        ports:
+        - containerPort: 24224
+          name: fluentd
+        securityContext:
+          privileged: true
+          procMount: Default
+        volumeMounts:
+        - mountPath: /fluentd/etc
+          name: config
+          readOnly: true
+        - mountPath: /etc/fluentd/secrets
+          name: certs
+          readOnly: true
+      serviceAccount: fluentdserver
+      serviceAccountName: fluentdserver
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: fluentdserver
+        name: config
+      - name: certs
+        secret:
+          defaultMode: 420
+          secretName: fluentdserver
+

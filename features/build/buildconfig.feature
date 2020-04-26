@@ -73,15 +73,15 @@ Feature: buildconfig.feature
      | type        | kubernetes.io/dockercfg                                                         |
     Then the step should succeed
     When I run the :create client command with:
-      | f | <template> |
+      | f | <%= BushSlicer::HOME %>/testdata/build/<template> |
     Then the step should succeed
     And the "ruby-sample-build-1" build was created
     Then the "ruby-sample-build-1" build completes
 
     Examples:
-      | template                                                                                                       |
-      | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/tc479540/test-buildconfig-docker.json | # @case_id OCP-11110
-      | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/build/tc479541/test-buildconfig-s2i.json    | # @case_id OCP-11474
+      | template                              |
+      | tc479540/test-buildconfig-docker.json | # @case_id OCP-11110
+      | tc479541/test-buildconfig-s2i.json    | # @case_id OCP-11474
 
   # @author xiuwang@redhat.com
   # @case_id OCP-12057
@@ -94,7 +94,7 @@ Feature: buildconfig.feature
      | type        | kubernetes.io/dockercfg                                                         |
     Then the step should succeed
     When I run the :new_app client command with:
-     | file | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/templates/OCP-12057/application-template-stibuild_pull_private_sourceimage.json |
+     | file | <%= BushSlicer::HOME %>/testdata/templates/OCP-12057/application-template-stibuild_pull_private_sourceimage.json |
     Then the step should succeed
     And the "ruby-sample-build-1" build was created
     And the "ruby-sample-build-1" build completed

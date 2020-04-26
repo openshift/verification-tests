@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: runtimeconfig-pod-mac
+  annotations:
+    k8s.v1.cni.cncf.io/networks: '[
+            { "name": "runtimeconfig-def-mac",
+              "mac": "c2:b0:57:49:47:f1" }
+    ]'
+spec:
+  containers:
+  - name: runtimeconfig-pod-mac
+    image: docker.io/aosqe/centos-network@sha256:48da37205f9b43424e0983d4c5e7e07f77b7ba1504bbe35e2f264c75dcb4cd15
+
+

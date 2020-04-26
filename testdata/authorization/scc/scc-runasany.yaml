@@ -1,0 +1,24 @@
+kind: SecurityContextConstraints
+apiVersion: v1
+fsGroup:
+  type: RunAsAny
+groups:
+- system:serviceaccounts
+- system:authenticated
+metadata:
+  labels:
+    name: scc-runasany
+  name: scc-runasany
+runAsUser:
+  type: RunAsAny
+seLinuxContext:
+  type: RunAsAny
+supplementalGroups:
+  type: RunAsAny
+allowHostDirVolumePlugin: false
+allowHostIPC: true
+allowHostNetwork: false
+allowHostPID: false
+allowHostPorts: false
+allowPrivilegedContainer: false
+allowedCapabilities: null

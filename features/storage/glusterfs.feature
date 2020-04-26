@@ -17,13 +17,13 @@ Feature: Storage of GlusterFS plugin testing
       | chmod | -R | 770 | /vol |
     Then the step should succeed
 
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/endpoints.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/gluster/endpoints.json" replacing paths:
       | ["metadata"]["name"]                 | glusterfs-cluster             |
       | ["subsets"][0]["addresses"][0]["ip"] | <%= service("glusterd").ip %> |
       | ["subsets"][0]["ports"][0]["port"]   | 24007                         |
     Then the step should succeed
 
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/security/gluster_pod_sg.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/gluster/security/gluster_pod_sg.json" replacing paths:
       | ["metadata"]["name"] | mypod |
     Then the step should succeed
 
@@ -45,7 +45,7 @@ Feature: Storage of GlusterFS plugin testing
     And the output should contain:
       | Hello OpenShift Storage |
 
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/security/gluster_pod_sg.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/gluster/security/gluster_pod_sg.json" replacing paths:
       | ["metadata"]["name"]                              | glusterpd-negative |
       | ["spec"]["securityContext"]["supplementalGroups"] | [123460]                               |
     Then the step should succeed
@@ -61,175 +61,3 @@ Feature: Storage of GlusterFS plugin testing
     Then the step should fail
     Then the outputs should contain:
       | Permission denied  |
-
-  # @author jhou@redhat.com
-  # @case_id OCP-10267
-  @admin
-  Scenario: Dynamically provision a GlusterFS volume
-    Given I have a StorageClass named "glusterprovisioner"
-    And I have a project
-
-    When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/dynamic-provisioning/claim.yaml" replacing paths:
-      | ["metadata"]["name"]         | pvc1               |
-      | ["spec"]["storageClassName"] | glusterprovisioner |
-    Then the step should succeed
-    And the "pvc1" PVC becomes :bound
-    And admin ensures "<%= pvc('pvc1').volume_name %>" pv is deleted after scenario
-
-    # Switch to admin so as to create privileged pod
-    Given I switch to cluster admin pseudo user
-    And I use the "<%= project.name %>" project
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/dynamic-provisioning/pod.json" replacing paths:
-      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | pvc1 |
-    Then the step should succeed
-    And the pod named "gluster" status becomes :running
-
-    # Test creating files
-    When I execute on the "gluster" pod:
-      | touch | /mnt/gluster/gluster_testfile |
-    Then the step should succeed
-    When I execute on the "gluster" pod:
-      | ls | /mnt/gluster/ |
-    Then the output should contain:
-      | gluster_testfile |
-
-    # Testing execute permission
-    Given I execute on the "gluster" pod:
-      | cp | /hello | /mnt/gluster/hello |
-    When I execute on the "gluster" pod:
-      | /mnt/gluster/hello |
-    Then the step should succeed
-    And the output should contain:
-      | Hello OpenShift Storage |
-
-  # @author jhou@redhat.com
-  # @case_id OCP-10266
-  @admin
-  Scenario: Reclaim a provisioned GlusterFS volume
-    Given I have a StorageClass named "glusterprovisioner"
-    And I have a project
-
-    When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/dynamic-provisioning/claim.yaml" replacing paths:
-      | ["metadata"]["name"]         | mypvc |
-      | ["spec"]["storageClassName"] | glusterprovisioner      |
-    Then the step should succeed
-    And the "mypvc" PVC becomes :bound within 120 seconds
-
-    And the expression should be true> pv(pvc.volume_name).reclaim_policy == "Delete"
-
-    # Test auto deleting PV
-    Given I run the :delete client command with:
-      | object_type       | pvc                     |
-      | object_name_or_id | mypvc |
-    And I switch to cluster admin pseudo user
-    And I wait for the resource "pv" named "<%= pvc.volume_name %>" to disappear within 60 seconds
-
-  # @author jhou@redhat.com
-  # @case_id OCP-10356
-  @admin
-  Scenario: Dynamically provision a GlusterFS volume using heketi secret
-    # A StorageClass preconfigured on the test env
-    Given I have a StorageClass named "glusterprovisioner1"
-    And admin checks that the "heketi-secret" secret exists in the "default" project
-    And I have a project
-
-    When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/dynamic-provisioning/claim.yaml" replacing paths:
-      | ["metadata"]["name"]         | pvc1                |
-      | ["spec"]["storageClassName"] | glusterprovisioner1 |
-    Then the step should succeed
-    And the "pvc1" PVC becomes :bound
-    And admin ensures "<%= pvc('pvc1').volume_name %>" pv is deleted after scenario
-
-    # Switch to admin so as to create privileged pod
-    Given I switch to cluster admin pseudo user
-    And I use the "<%= project.name %>" project
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/dynamic-provisioning/pod.json" replacing paths:
-      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | pvc1 |
-    Then the step should succeed
-    And the pod named "gluster" status becomes :running
-
-  # @author jhou@redhat.com
-  # @case_id OCP-10554
-  @admin
-  Scenario: Pods should be assigned a valid GID using GlusterFS dynamic provisioner
-    Given I have a StorageClass named "glusterprovisioner"
-    And I have a project
-
-    When admin creates a StorageClass from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/dynamic-provisioning/storageclass_using_key.yaml" where:
-      | ["metadata"]["name"]      | storageclass-<%= project.name %>                                 |
-      | ["parameters"]["resturl"] | <%= storage_class("glusterprovisioner").rest_url %> |
-      | ["parameters"]["gidMin"]  | 3333                                                             |
-      | ["parameters"]["gidMax"]  | 33333                                                            |
-    Then the step should succeed
-    When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/dynamic-provisioning/claim.yaml" replacing paths:
-      | ["metadata"]["name"]         | pvc1                             |
-      | ["spec"]["storageClassName"] | storageclass-<%= project.name %> |
-    Then the step should succeed
-    And the "pvc1" PVC becomes :bound
-    And admin ensures "<%= pvc('pvc1').volume_name %>" pv is deleted after scenario
-
-    # Verify PV is annotated with inhitial gidMin 3333
-    When I run the :get admin command with:
-      | resource      | pv                                 |
-      | resource_name | <%= pvc.volume_name %> |
-      | o             | yaml                               |
-    Then the output should contain:
-      | pv.beta.kubernetes.io/gid: "3333" |
-
-    # Verify Pod is assigned gid 3333
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/dynamic-provisioning/pod_gid.json" replacing paths:
-      | ["metadata"]["name"]                                         | mypod |
-      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | pvc1                    |
-    Then the step should succeed
-    Given the pod named "mypod" becomes ready
-    When I execute on the pod:
-      | id | -G |
-    Then the output should contain:
-      | 3333 |
-    When I execute on the pod:
-      | ls | -ld | /mnt/gluster |
-    Then the step should succeed
-    When I execute on the pod:
-      | touch | /mnt/gluster/tc508054 |
-    Then the step should succeed
-
-    # Pod should work as well having its supplementalGroups set to 3333 explicitly
-    Given I ensure "mypod" pod is deleted
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/dynamic-provisioning/pod_gid.json" replacing paths:
-      | ["metadata"]["name"]                                         | mypod1 |
-      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | pvc1                     |
-      | ["spec"]["securityContext"]["supplementalGroups"]            | [3333]                   |
-    Then the step should succeed
-    Given the pod named "mypod1" becomes ready
-    When I execute on the pod:
-      | id | -G |
-    Then the output should contain:
-      | 3333 |
-    When I execute on the pod:
-      | ls | -ld | /mnt/gluster |
-    Then the step should succeed
-    When I execute on the pod:
-      | touch | /mnt/gluster/tc508054 |
-    Then the step should succeed
-
-  # @author jhou@redhat.com
-  # @case_id OCP-10354
-  @admin
-  Scenario: Provisioned GlusterFS volume should be replicated with 3 replicas
-    Given I have a StorageClass named "glusterprovisioner"
-    And I have a project
-    When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/dynamic-provisioning/claim.yaml" replacing paths:
-      | ["metadata"]["name"]         | pvc1               |
-      | ["spec"]["storageClassName"] | glusterprovisioner |
-    Then the step should succeed
-    And the "pvc1" PVC becomes :bound
-    And admin ensures "<%= pvc('pvc1').volume_name %>" pv is deleted after scenario
-
-    # Verify by default it's replicated with 3 replicas
-    Given I save volume id from PV named "<%= pvc('pvc1').volume_name %>" in the :volumeID clipboard
-    And I run commands on the StorageClass "glusterprovisioner" backing host:
-      | heketi-cli --server http://127.0.0.1:9991 --user admin --secret test volume info <%= cb.volumeID %> |
-    Then the output should contain:
-      | Durability Type: replicate |
-      | Distributed+Replica: 3     |
-

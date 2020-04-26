@@ -34,7 +34,7 @@ Feature: Pod related features on web console
 
     #Create a pod with 2 containers
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/pod_with_two_containers.json |
+      | f | <%= BushSlicer::HOME %>/testdata/pods/pod_with_two_containers.json |
     Then the step should succeed
     Given the pod named "doublecontainers" becomes ready
 

@@ -5,7 +5,7 @@ Feature: rolling deployment related scenarios
   Scenario: Rolling-update pods with default value for maxSurge/maxUnavailable
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/rolling.json |
+      | f | <%= BushSlicer::HOME %>/testdata/deployment/rolling.json |
     And I wait for the pod named "hooks-1-deploy" to die
     Then I run the :scale client command with:
       | resource | dc    |
@@ -48,7 +48,7 @@ Feature: rolling deployment related scenarios
   Scenario: [origin_runtime_509]Rollback to two components of previous deployment
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/deployment1.json |
+      | f | <%= BushSlicer::HOME %>/testdata/deployment/deployment1.json |
     Then the step should succeed
 
     When I run the :get client command with:
@@ -68,7 +68,7 @@ Feature: rolling deployment related scenarios
 
     And I wait until the status of deployment "hooks" becomes :complete
     When I run the :replace client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/updatev1.json |
+      | f | <%= BushSlicer::HOME %>/testdata/deployment/updatev1.json |
     Then the step should succeed
 
     When I run the :get client command with:
@@ -99,7 +99,7 @@ Feature: rolling deployment related scenarios
     And the output should contain:
       | 201 |
 
-    When I save the output to file>rollback.json
+    When I save the output to file> rollback.json
     And I run the :replace client command with:
       | f | rollback.json |
     Then the step should succeed
@@ -124,7 +124,7 @@ Feature: rolling deployment related scenarios
   Scenario: [origin_runtime_509]Rollback to all components of previous deployment
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/deployment1.json |
+      | f | <%= BushSlicer::HOME %>/testdata/deployment/deployment1.json |
     Then the step should succeed
     When I run the :get client command with:
       | resource      | dc    |
@@ -143,7 +143,7 @@ Feature: rolling deployment related scenarios
 
     And I wait until the status of deployment "hooks" becomes :complete
     When I run the :replace client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/updatev1.json |
+      | f | <%= BushSlicer::HOME %>/testdata/deployment/updatev1.json |
     Then the step should succeed
 
     When I run the :get client command with:
@@ -173,7 +173,7 @@ Feature: rolling deployment related scenarios
     Then the step should succeed
     And the output should contain:
       | 201 |
-    When I save the output to file>rollback.json
+    When I save the output to file> rollback.json
     And I run the :replace client command with:
       | f | rollback.json |
     Then the step should succeed

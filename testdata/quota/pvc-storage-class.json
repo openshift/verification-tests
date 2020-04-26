@@ -1,0 +1,24 @@
+{
+  "kind": "PersistentVolumeClaim",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "pvc-storage-class",
+    "labels": {
+         "name": "pvc-storage-class"
+     },
+    "annotations": {
+        "volume.beta.kubernetes.io/storage-class": "gold"
+    }
+  },
+  "spec": {
+    "accessModes": [
+      "ReadWriteOnce"
+    ],
+    "resources": {
+      "requests": {
+        "storage": "2Gi"
+      }
+    }
+  }
+}
+

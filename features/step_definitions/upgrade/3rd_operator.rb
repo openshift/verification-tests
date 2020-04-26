@@ -31,7 +31,7 @@ Given /^optional operator "([^"]*)" from channel "([^"]*)" is subscribed in "([^
     step %Q/I use the "#{proj_name}" project/
     unless operator_group('test-og').exists?
       # Create operator group in this namespace
-      operator_group_yaml ||= "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/olm/operatorgroup-template.yaml"
+      operator_group_yaml ||= "#{ENV['BUSHSLICER_HOME']}/testdata/olm/operatorgroup-template.yaml"
       step %Q/I process and create:/, table(%{
         | f | #{operator_group_yaml} |
         | p | NAME=test-og         |
@@ -43,7 +43,7 @@ Given /^optional operator "([^"]*)" from channel "([^"]*)" is subscribed in "([^
 
     unless subscription("#{name}").exists?
       # Subscribe etcd operator
-      sub_yaml ||= "https://raw.githubusercontent.com/jianzhangbjz/v3-testfiles/tsb-upgrade/olm/subscription-template.yaml"
+      sub_yaml ||= "#{ENV['BUSHSLICER_HOME']}/testdata/olm/subscription-template.yaml"
       step %Q/I process and create:/, table(%{
         | f | #{sub_yaml}                           |
         | p | NAME=#{name}-sub                      |

@@ -5,7 +5,7 @@ Feature: pod related features
   Scenario: Endpoints should update in time and no delay
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json |
+      | f | <%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json |
     Then the step should succeed
     When a pod becomes ready with labels:
       | name=test-pods|
@@ -64,7 +64,7 @@ Feature: pod related features
     And evaluation of `pod.node_name` is stored in the :pod_node clipboard
     And evaluation of `pod.ip` is stored in the :pod_ip clipboard
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/pod-pull-by-tag.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/pods/pod-pull-by-tag.yaml |
     Then the step should succeed
     And the pod named "pod-pull-by-tag" status becomes :running
     Given node schedulable status should be restored after scenario
@@ -92,7 +92,7 @@ Feature: pod related features
       | admin         | <%= user.name %>    |
     Then the step should succeed
     When I run the :create admin command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/pod-with-nodeselector.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/pods/pod-with-nodeselector.yaml |
       | n | <%= cb.proj_name %>                                                                                |
     Then the step should fail
     And the output should contain "pod node label selector conflicts with its project node label selector"
@@ -142,7 +142,7 @@ Feature: pod related features
     Then the step should succeed
     Given label "os=fedora" is added to the "<%= cb.nodes[0].name %>" node
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/pod-with-nodeselector.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/pods/pod-with-nodeselector.yaml |
     Then the step should succeed
     And the pod named "hello-pod" status becomes :pending
     When I run the :oadm_uncordon_node admin command with:
@@ -164,7 +164,7 @@ Feature: pod related features
     Given label "daemon=yes" is added to the "<%= cb.nodes[0].name %>" node
     Given cluster role "cluster-admin" is added to the "first" user
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/daemon/daemonset-nodeselector.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/daemon/daemonset-nodeselector.yaml |
     Then the step should succeed
     And I wait up to 120 seconds for the steps to pass:
     """
@@ -192,7 +192,7 @@ Feature: pod related features
     Then the step should succeed
     Given cluster role "cluster-admin" is added to the "first" user
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/daemon/daemonset.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/daemon/daemonset.yaml |
     Then the step should succeed
     Then I wait up to 60 seconds for the steps to pass:
     """
@@ -224,7 +224,7 @@ Feature: pod related features
     Given label "daemon=no" is added to the "<%= cb.nodes[1].name %>" node
     Given cluster role "cluster-admin" is added to the "first" user
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/daemon/daemonset-nodeselector.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/daemon/daemonset-nodeselector.yaml |
     Then the step should succeed
     And I wait for the steps to pass:
     """
@@ -273,7 +273,7 @@ Feature: pod related features
     Given SCC "privileged" is added to the "default" user
     Given I store the schedulable nodes in the :nodes clipboard
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/tc483170/secret-nginx-2.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/secrets/tc483170/secret-nginx-2.yaml |
     Then the step should succeed
     When I run the :get client command with:
       | resource      | secret         |
@@ -286,19 +286,16 @@ Feature: pod related features
     Then the output should match:
       | password:\\s+11 bytes |
       | username:\\s+9 bytes  |
-    Given I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/secrets/tc483170/secret-pod-nginx-2.yaml"
-    When I replace lines in "secret-pod-nginx-2.yaml":
-      | HOSTNAME | <%= cb.nodes[0].name %> |
-    Then I run the :create client command with:
-      | f | secret-pod-nginx-2.yaml |
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/secrets/tc483170/secret-pod-nginx-2.yaml" replacing paths:
+      | ["spec"]["nodeName"] | <%= cb.nodes[0].name %> |
     And the step should succeed
     Given the pod named "secret-pod-nginx-2" becomes ready
     When I execute on the pod:
       | cat | /etc/secret-volume-2/password | /etc/secret-volume-2/username |
     Then the step should succeed
     And the output by order should match:
-      | value-2              |
-      | value-1              |
+      | value-2 |
+      | value-1 |
     When I run the :patch client command with:
       | resource      | secret                                                                   |
       | resource_name | secret-nginx-2                                                           |
@@ -318,8 +315,8 @@ Feature: pod related features
       | cat | /etc/secret-volume-2/password | /etc/secret-volume-2/username |
     Then the step should succeed
     And the output by order should match:
-      | value-2              |
-      | value-1              |
+      | value-2 |
+      | value-1 |
     Given I use the "<%= cb.nodes[0].name %>" node
     And the host is rebooted and I wait it up to 600 seconds to become available
     And I wait up to 500 seconds for the steps to pass:
@@ -379,7 +376,7 @@ Feature: pod related features
     Given I have a project
     Given SCC "privileged" is added to the "default" user
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/securityContext/pod-selinux.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/pods/securityContext/pod-selinux.yaml |
     Then the step should succeed
     Given the pod named "selinux-pod" becomes ready
     When I execute on the pod:
@@ -388,7 +385,7 @@ Feature: pod related features
     And the output should contain:
       | unconfined_u:unconfined_r:svirt_lxc_net_t:s0:c25,c968 |
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/securityContext/container-selinux.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/pods/securityContext/container-selinux.yaml |
     Then the step should succeed
     Given the pod named "selinux-container" becomes ready
     When I execute on the pod:
@@ -397,7 +394,7 @@ Feature: pod related features
     And the output should contain:
       | unconfined_u:unconfined_r:svirt_lxc_net_t:s0:c25,c968 |
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/securityContext/both-level.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/pods/securityContext/both-level.yaml |
     Then the step should succeed
     Given the pod named "both-level-pod" becomes ready
     When I execute on the pod:

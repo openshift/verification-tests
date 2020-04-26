@@ -6,32 +6,17 @@ set_filter_strings:
   - selector:
       <<: *filter_text_ele
     op: send_keys <filter_text>
-click_resource_type_dropdown:
+set_strings_in_dropdown_filter_box:
   elements:
-  - selector:
-      xpath: //button[contains(@class,'pf-c-dropdown__toggle')][contains(.,'Resource')]
-    op: click
-select_resource_type:
-  elements:
-  - selector:
-      xpath: //span[contains(@class,'co-resource-item__resource-name')]/span[normalize-space()='<type>']
-    op: click
-search_by_resource_type:
-  action: click_resource_type_dropdown
-  elements:
-  - selector:
+  - selector: &dropdown_filter
       xpath: //input[@data-test-id='dropdown-text-filter']
-    op: send_keys <type>
-    type: input
-  action: select_resource_type
-search_by_api_group:
-  params:
-    type: <api_group>
-  action: click_resource_type_dropdown
-  action: select_resource_type
+    op: clear
+  - selector:
+      <<: *dropdown_filter
+    op: send_keys <filter_text>
+filter_event_by_name_or_message:
+  action: set_filter_strings
 search_by_event_catagory:
-  params:
-    catagory: Normal
   elements:
   - selector:
       xpath: //button[contains(@class,'pf-c-dropdown__toggle')][contains(.,'All Types')]
@@ -39,6 +24,10 @@ search_by_event_catagory:
   - selector:
       xpath: //li//*[contains(.,'<catagory>')]
     op: click
+search_by_catagory_to_show_build_failures:
+  params:
+    catagory: Normal
+  action: search_by_event_catagory
 check_results_contain_correct_strings:
   element:
     selector:
@@ -73,7 +62,12 @@ check_results_contain_correct_type:
         })
         return all_contain
       expect_result: true
-check_result_not_contain_warning_catagory:
+check_results_contain_correct_build_failures_type:
+# build error events are shown in Warning
+  params:
+    catagory: Warning
+  action: check_results_contain_correct_catagory
+check_results_contain_correct_catagory:
   element:
     selector:
       css: div.co-sysevent
@@ -82,20 +76,24 @@ check_result_not_contain_warning_catagory:
         // since 4.4, the events type are Normal and Warning
         // for Normal, class="co-sysevent slide-entered"
         // for Waring, class="co-sysevent co-sysevent--warning"
-        // so this rules only appies to warning catagory
         var catagories = document.querySelectorAll('div.co-sysevent');
-        var contain = false;
+        var contain = true;
         if (catagories.length == 0) {
           contain = false;
           return contain
         }
         catagories.forEach(function(catagory){
-          contain = catagory.className.includes('warning') || contain
+          contain = catagory.className.includes('<catagory>'.toLowerCase()) || contain
         })
         return contain
-      expect_result: false
+      expect_result: true
 check_item_in_table:
   elements:
   - selector:
       xpath: //tr[@data-test-rows='resource-row']//*[text()='<item>']
-
+    timeout: 15
+clear_all_filters:
+  elements:
+  - selector:
+      xpath: //div/button[starts-with(text(),'Clear')]
+    op: click

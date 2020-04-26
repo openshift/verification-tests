@@ -8,7 +8,7 @@ Feature: metrics logging and uninstall tests
     Given I create a project with non-leading digit name
     Given the master version >= "3.5"
     And metrics service is installed with ansible using:
-      | inventory | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging_metrics/OCP-12234/inventory |
+      | inventory | <%= BushSlicer::HOME %>/testdata/logging_metrics/OCP-12234/inventory |
 
   # @author pruan@redhat.com
   # @case_id OCP-12305
@@ -18,27 +18,13 @@ Feature: metrics logging and uninstall tests
     Given the master version >= "3.5"
     Given I create a project with non-leading digit name
     And metrics service is installed with ansible using:
-      | inventory | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging_metrics/OCP-12305/inventory |
+      | inventory | <%= BushSlicer::HOME %>/testdata/logging_metrics/OCP-12305/inventory |
     Given I remove metrics service using ansible
     And I use the "default" project
     And I wait for the resource "pod" named "base-ansible-pod" to disappear
     # reinstall it again
     And metrics service is installed with ansible using:
-      | inventory | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging_metrics/OCP-12305/inventory |
-
-  # @author pruan@redhat.com
-  # @case_id OCP-10214
-  @admin
-  @destructive
-  Scenario: deploy metrics with dynamic volume
-    Given the master version >= "3.5"
-    Given I create a project with non-leading digit name
-    And metrics service is installed with ansible using:
-      | inventory | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging_metrics/OCP-10214/inventory |
-    And I switch to first user
-    Given I login via web console
-    And I open metrics console in the browser
-    Given the metrics service status in the metrics web console is "STARTED"
+      | inventory | <%= BushSlicer::HOME %>/testdata/logging_metrics/OCP-12305/inventory |
 
   # @author pruan@redhat.com
   # @case_id OCP-17163
@@ -48,7 +34,7 @@ Feature: metrics logging and uninstall tests
     Given the master version >= "3.7"
     Given I create a project with non-leading digit name
     And metrics service is installed in the system using:
-      | inventory | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging_metrics/OCP-17163/inventory |
+      | inventory | <%= BushSlicer::HOME %>/testdata/logging_metrics/OCP-17163/inventory |
     And a pod becomes ready with labels:
       | metrics-infra=hawkular-cassandra |
     # 3 steps to verify hawkular-cassandra pod using mount correctly

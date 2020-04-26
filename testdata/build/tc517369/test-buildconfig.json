@@ -1,0 +1,60 @@
+{
+  "kind": "BuildConfig",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "ruby-sample-build",
+    "creationTimestamp": null,
+    "labels": {
+      "name": "ruby-sample-build"
+    }
+  },
+  "spec": {
+    "triggers": [
+    {
+      "type": "GitHub",
+      "github": {
+        "secret": "secret101"
+      }
+    },
+    {
+      "type": "Generic",
+      "generic": {
+        "secret": "secret101"
+      }
+    },
+      {
+        "type": "ImageChange",
+        "imageChange": {}
+      },
+      {
+        "type": "ConfigChange"
+      }
+    ],
+    "source": {
+      "type": "Git",
+      "git": {
+        "uri": "https://github.com/openshift/ruby-hello-world.git"
+      },
+      "SourceSecret":  { "Name": "mysecret" }
+    },
+    "strategy": {
+      "type": "Source",
+      "sourceStrategy": {
+        "from": {
+          "kind": "DockerImage",
+          "name": "docker.io/centos/ruby-23-centos7:latest"
+        }
+      },
+      "env": [
+      {
+        "name": "EXAMPLE",
+        "value": "sample-app"
+      }
+      ]
+    },
+    "resources": {}
+  },
+  "status": {
+    "lastVersion": 0
+  }
+}

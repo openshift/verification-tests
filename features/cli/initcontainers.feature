@@ -5,7 +5,7 @@ Feature: InitContainers
   Scenario: App container run depends on initContainer results in pod
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/initContainers/init-containers-success.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/pods/initContainers/init-containers-success.yaml |
     Then the step should succeed
     Given the pod named "hello-pod" becomes ready
     Then I run the :describe client command with:
@@ -16,7 +16,7 @@ Feature: InitContainers
       | Ready\\s+True       |
     Given I ensure "hello-pod" pod is deleted
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/initContainers/init-containers-fail.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/pods/initContainers/init-containers-fail.yaml |
     Then the step should succeed
     Given the pod named "hello-pod" status becomes :failed
     When I get project pods
@@ -33,7 +33,7 @@ Feature: InitContainers
   Scenario: Check volume and readiness probe field in initContainer
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/initContainers/volume-init-containers.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/pods/initContainers/volume-init-containers.yaml |
     Then the step should succeed
     Given the pod named "hello-pod" status becomes :running
     Then I run the :describe client command with:
@@ -44,7 +44,7 @@ Feature: InitContainers
       | Ready\\s+True       |
     Given I ensure "hello-pod" pod is deleted
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/initContainers/init-containers-readiness.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/pods/initContainers/init-containers-readiness.yaml |
     Then the step should fail
     And the output should match:
       | spec.initContainers\[0\].readinessProbe: Invalid value.*must not be set for init containers|
@@ -54,7 +54,7 @@ Feature: InitContainers
   Scenario: InitContainer should failed after exceed activeDeadlineSeconds
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/initContainers/init-containers-deadline.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/pods/initContainers/init-containers-deadline.yaml |
     Then the step should succeed
     And I wait up to 120 seconds for the steps to pass:
     """
@@ -66,64 +66,12 @@ Feature: InitContainers
     """
 
   # @author chezhang@redhat.com
-  # @case_id OCP-10908
-  Scenario: Access init container by oc command
-    Given I have a project
-    When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/initContainers/init-containers-sleep.yaml |
-    Then the step should succeed
-    And I wait for the steps to pass:
-    """
-    When I run the :logs client command with:
-      | resource_name | pod/hello-pod |
-      | c             | sleep         |
-    Then the step should succeed
-    And the output should contain:
-      | hello init container |
-    """
-    When I run the :rsh client command with:
-      | c       | sleep            |
-      | pod     | hello-pod        |
-      | command | cat              |
-      | command | /etc/resolv.conf |
-    Then the step should succeed
-    And the output should contain:
-      | options ndots:5 |
-    When I run the :rsync client command with:
-      | source      | hello-pod:/etc/resolv.conf |
-      | destination | <%= localhost.workdir %>   |
-      | c           | sleep                      |
-    Then the step should succeed
-    And the output should contain:
-      | resolv.conf |
-    When I run the :debug client command with:
-      | resource     | pod/hello-pod |
-      | c            | sleep         |
-      | oc_opts_end  |               |
-      | exec_command | /bin/env      |
-    Then the step should succeed
-    And the output should contain:
-      |  Debugging with pod/hello-pod-debug |
-      |  PATH                               |
-      |  HOSTNAME                           |
-      |  KUBERNETES                         |
-      |  HOME                               |
-      |  Removing debug pod                 |
-    When I run the :attach client command with:
-      | pod      | hello-pod |
-      | c        | sleep     |
-      | _timeout | 15        |
-    Then the step should have timed out
-    And the output should contain:
-      | hello init container |
-
-  # @author chezhang@redhat.com
   # @case_id OCP-11975
   @admin
   Scenario: Init containers properly apply to quota and limits
     Given I have a project
     When I run the :create admin command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/initContainers/quota.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/pods/initContainers/quota.yaml |
       | n | <%= project.name %>                                                                               |
     Then the step should succeed
     When  I run the :describe client command with:
@@ -136,7 +84,7 @@ Feature: InitContainers
       | requests.cpu\\s+0\\s+1       |
       | requests.memory\\s+0\\s+1Gi  |
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/initContainers/init-containers-quota-1.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/pods/initContainers/init-containers-quota-1.yaml |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | quota             |
@@ -149,7 +97,7 @@ Feature: InitContainers
       | requests.memory\\s+300Mi\\s+1Gi |
     Given I ensure "hello-pod" pod is deleted
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/initContainers/init-containers-quota-2.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/pods/initContainers/init-containers-quota-2.yaml |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | quota             |
@@ -172,13 +120,13 @@ Feature: InitContainers
   Scenario: SCC rules should apply to init containers
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/initContainers/init-containers-privilege.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/pods/initContainers/init-containers-privilege.yaml |
     Then the step should fail
     And the output should match:
       | forbidden.*unable to validate.**privileged.*Invalid value.*true |
     Given SCC "privileged" is added to the "default" user
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/initContainers/init-containers-privilege.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/pods/initContainers/init-containers-privilege.yaml |
     Then the step should succeed
     And I wait for the steps to pass:
     """

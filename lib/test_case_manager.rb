@@ -88,7 +88,6 @@ module BushSlicer
         @attach_queue << false
         wait_for_attacher
         @artifacts_filer.clean_up if @artifacts_filer
-        # TODO: check `zlib(finalizer): the stream was freed prematurely.`
       end
     end
 

@@ -138,7 +138,7 @@ Feature: projects related features via cli
   Scenario: Process with default FSGroup id can be ran when using the default MustRunAs as the RunAsGroupStrategy
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/hello-pod.json |
+      | f | <%= BushSlicer::HOME %>/testdata/pods/hello-pod.json |
     Then the step should succeed
     And a pod becomes ready with labels:
       | name=hello-openshift |

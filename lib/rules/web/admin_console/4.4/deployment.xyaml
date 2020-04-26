@@ -61,3 +61,51 @@ check_sections_on_container_details:
       xpath: //h2[contains(@class,'co-section-heading') and .='Image Details']
   - selector:
       xpath: //h2[contains(@class,'co-section-heading') and .='Network']
+check_hpa_metrics_table:
+  elements:
+  - selector:
+      xpath: //div/h2[contains(@data-test-section-heading,'Metrics')]/following-sibling::div[contains(.,'Type')]/../div[contains(.,'Current')]/../div[contains(.,'Target')]
+  action:
+    if_param: target_resource_memory
+    ref: check_target_resource_memory
+  action:
+    if_param: target_resource_cpu
+    ref: check_target_resource_cpu
+  action:
+    if_param: current_cpu_utilization
+    ref: check_current_cpu_utilization
+check_value_in_metrics_table:
+  elements:
+  - selector: &value
+      xpath: //div[contains(@class,'row')]//div[contains(.,'<value>')]
+check_target_resource_memory:
+  params:
+    value: <target_resource_memory>
+  element:
+    selector:
+      <<: *value
+check_target_resource_cpu:
+  params:
+    value: <target_resource_cpu>
+  element:
+    selector:
+      <<: *value
+check_current_cpu_utilization:
+  params:
+    value: <current_cpu_utilization>
+  element:
+    selector:
+      <<: *value
+check_pod_status:
+  elements:
+  - selector: &status
+      xpath: //tr/td[contains(.,'<pod_name>')]/following-sibling::td[contains(.,'<pod_status>')]
+check_pod_completed_status:
+  params:
+    pod_status: Completed
+    status_text: Completed
+  action: enable_status_filter
+  element:
+    selector:
+      <<: *status
+

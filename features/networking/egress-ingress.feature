@@ -15,7 +15,7 @@ Feature: Egress-ingress related networking scenarios
     Then the step should succeed
     And the output should contain "HTTP/1.1 200" 
     When I run the :create admin command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/egressnetworkpolicy/limit_policy.json |
+      | f | <%= BushSlicer::HOME %>/testdata/networking/egressnetworkpolicy/limit_policy.json |
       | n | <%= project.name %> |
     Then the step should succeed
     Given I select a random node's host 
@@ -48,7 +48,7 @@ Feature: Egress-ingress related networking scenarios
   
     # Create egress policy in project-1
     And evaluation of `BushSlicer::Common::Net.dns_lookup("yahoo.com")` is stored in the :yahoo_ip clipboard
-    When I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/egress-ingress/dns-egresspolicy1.json"
+    When I obtain test data file "networking/egress-ingress/dns-egresspolicy1.json"
     And I replace lines in "dns-egresspolicy1.json":
       | 98.138.0.0/16 | <%= cb.yahoo_ip %>/32 |
     And I run the :create admin command with:
@@ -69,7 +69,7 @@ Feature: Egress-ingress related networking scenarios
     And evaluation of `project.name` is stored in the :proj2 clipboard
  
     # Create different egress policy in project-2
-    When I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/egress-ingress/dns-egresspolicy2.json"
+    When I obtain test data file "networking/egress-ingress/dns-egresspolicy2.json"
     And I replace lines in "dns-egresspolicy2.json":
       | 98.138.0.0/16 | <%= cb.yahoo_ip %>/32 |
     And I run the :create admin command with:
@@ -110,7 +110,7 @@ Feature: Egress-ingress related networking scenarios
  
     # Create egress policy in project-1
     And I run the :create admin command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/egress-ingress/dns-egresspolicy1.json |
+      | f | <%= BushSlicer::HOME %>/testdata/networking/egress-ingress/dns-egresspolicy1.json |
       | n | <%= cb.proj1 %> |
     Then the step should succeed
  
@@ -151,7 +151,7 @@ Feature: Egress-ingress related networking scenarios
 
     # Create egress policy 
     When I run the :create admin command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/egress-ingress/dns-egresspolicy2.json|
+      | f | <%= BushSlicer::HOME %>/testdata/networking/egress-ingress/dns-egresspolicy2.json|
       | n | <%= cb.proj1 %> |
     Then the step should succeed
  
@@ -176,7 +176,7 @@ Feature: Egress-ingress related networking scenarios
     And evaluation of `project.name` is stored in the :proj1 clipboard
 
     # Create egress policy to deny www.test.com
-    When I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/egress-ingress/dns-egresspolicy2.json"
+    When I obtain test data file "networking/egress-ingress/dns-egresspolicy2.json"
     And I replace lines in "dns-egresspolicy2.json":
       | 98.138.0.0/16 | 0.0.0.0/0 |
       | yahoo.com | www.test.com |
@@ -187,7 +187,7 @@ Feature: Egress-ingress related networking scenarios
     
     # Create a service with a "externalname"
     When I run the :create admin command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/service-externalName.json |
+      | f | <%= BushSlicer::HOME %>/testdata/networking/service-externalName.json |
       | n | <%= cb.proj1 %> |
     Then the step should succeed 
     
@@ -207,7 +207,7 @@ Feature: Egress-ingress related networking scenarios
       | deleted             |
     
     # Create egress policy to allow www.test.com
-    When I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/egress-ingress/dns-egresspolicy2.json"
+    When I obtain test data file "networking/egress-ingress/dns-egresspolicy2.json"
     And I replace lines in "dns-egresspolicy2.json":
       | 98.138.0.0/16 | 0.0.0.0/0 |
     And I run the :create admin command with:
@@ -244,7 +244,7 @@ Feature: Egress-ingress related networking scenarios
 
 
     # Create egress policy to allow www.baidu.com
-    When I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/egress-ingress/dns-egresspolicy1.json"
+    When I obtain test data file "networking/egress-ingress/dns-egresspolicy1.json"
     And I replace lines in "dns-egresspolicy1.json":
       | 98.138.0.0/16 | 0.0.0.0/0 |
       | yahoo.com | www.baidu.com |
@@ -279,7 +279,7 @@ Feature: Egress-ingress related networking scenarios
     # Create egressnetworkpolicy to deny www.test.com
     Given I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/egress-ingress/dns-egresspolicy4.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/egress-ingress/dns-egresspolicy4.json" replacing paths:
       | ["spec"]["egress"][0]["to"]["dnsName"] | www.test.com |
     Then the step should succeed
 
@@ -290,7 +290,7 @@ Feature: Egress-ingress related networking scenarios
     And admin ensures "policy-test" egress_network_policy is deleted
 
     # Create egressnetworkpolicy to deny another domain name www.test1.com
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/egress-ingress/dns-egresspolicy4.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/egress-ingress/dns-egresspolicy4.json" replacing paths:
       | ["spec"]["egress"][0]["to"]["dnsName"] | www.test1.com |
     Then the step should succeed
 

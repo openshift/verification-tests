@@ -1,0 +1,15 @@
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata:
+  name: macvlan-bridge-v6
+spec:
+  config: '{
+      "cniVersion": "0.3.0",
+      "type": "macvlan",
+      "master": "ens3",
+      "mode": "bridge",
+      "ipam": {
+        "type": "host-local",
+        "subnet": "fd00:dead:beef::/64"
+      }
+    }'

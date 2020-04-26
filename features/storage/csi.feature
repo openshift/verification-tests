@@ -13,12 +13,12 @@ Feature: CSI testing related feature
     And I create storage class for "cinder" csi driver
     And I checked "cinder" csi driver is running
     And I have a project
-    When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
+    When I create a dynamic pvc from "<%= BushSlicer::HOME %>/testdata/storage/misc/pvc.json" replacing paths:
       | ["metadata"]["name"]         | mypvc |
       | ["spec"]["storageClassName"] | cinder-csi              |
     Then the step should succeed
     And the "mypvc" PVC becomes :bound
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pod.yaml" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/misc/pod.yaml" replacing paths:
       | ["metadata"]["name"]                                         | mypod |
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc |
       | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt/cinder             |

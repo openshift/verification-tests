@@ -426,11 +426,14 @@ module BushSlicer
     def service_project
       unless @service_project
         project = Project.new(name: "tests-" + EXECUTOR_NAME.downcase, env: self)
-        unless project.exists?
+        unless project.active?
+          project.wait_to_disappear(admin)
           res = project.create(by: admin, clean_up_registered: true)
           unless res[:success]
             raise "failed to create service project #{project.name}, see log"
           end
+          # we must update the cache, since we just waited for the previously active project to disappear
+          project.reload
         end
         @service_project = project
       end

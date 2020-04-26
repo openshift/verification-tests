@@ -1,6 +1,7 @@
 # projects
 goto_projects_list_page:
   url: k8s/cluster/projects
+  action: wait_box_loaded
 goto_project_status:
   url: status/ns/<project>
 goto_resource_page_under_default_project:
@@ -9,6 +10,7 @@ goto_project_resources_page:
   url: k8s/cluster/projects/<project_name>/workloads
 goto_project_details_page:
   url: k8s/cluster/projects/<project_name>/details
+
 # Dashboard renamed to Overview in 4.4, url is same "k8s/cluster/projects/<project_name>"
 goto_one_project_page: 
   url: k8s/cluster/projects/<project_name>
@@ -16,6 +18,9 @@ goto_one_project_dashboard_page:
   action: goto_one_project_page
 goto_cluster_dashboards_page:
   url: /dashboards
+  action: wait_page_body_loaded
+goto_search_page:
+  url: search
 
 #api explore
 goto_api_explore_page:
@@ -30,6 +35,12 @@ goto_builds_page:
   url: k8s/ns/<project_name>/builds
 goto_one_build_page:
   url: k8s/ns/<project_name>/builds/<build_name>
+
+#hpa
+goto_hpas_page:
+  url: k8s/ns/<project_name>/horizontalpodautoscalers
+goto_one_hpa_page:
+  url: k8s/ns/<project_name>/horizontalpodautoscalers/<hpa_name>
 
 # command line tools page
 goto_cli_tools_page:
@@ -86,7 +97,7 @@ goto_deployment_page:
   url: k8s/ns/<project_name>/deployments
 goto_one_deployment_page:
   url: k8s/ns/<project_name>/deployments/<deploy_name>
-
+  action: wait_box_loaded
 
 # deploymentconfig
 goto_dc_page:
@@ -105,7 +116,7 @@ goto_one_pod_log_page:
   url: k8s/ns/<project_name>/pods/<pod_name>/logs
 goto_project_pods_list_page:
   url: k8s/ns/<project_name>/pods
-
+  action: wait_box_loaded
 
 goto_cluster_oauth_configuration_page:
   url: k8s/cluster/config.openshift.io~v1~OAuth/cluster
@@ -140,10 +151,12 @@ goto_deploy_image_page:
 #catalog page
 goto_catalog_page:
   url: catalog/ns/<project_name>
+  action: wait_box_loaded
 goto_create_app_from_imagestream_page:
   url: catalog/source-to-image?imagestream=<is_name>&imagestream-ns=openshift&preselected-ns=<project_name>
 goto_create_app_from_template_page:
   url: catalog/instantiate-template?template==<template_name>&template-ns=openshift&preselected-ns=<project_name>
+
 
 # monitoring
 goto_monitoring_metrics_page:
@@ -158,6 +171,7 @@ goto_node_page:
   url: k8s/cluster/nodes
 goto_one_node_page:
   url: k8s/cluster/nodes/<node_name>
+  action: wait_page_body_loaded
 
 # users
 goto_groups_page:
@@ -168,7 +182,10 @@ goto_one_group_page:
 # namespace
 goto_one_namespace_page:
   url: k8s/cluster/namespaces/<namespace_name>
-
+goto_namespace_list_page:
+  url: k8s/cluster/namespaces
+  action: wait_box_loaded
+  
 # operator hub
 goto_operator_hub_page:
   url: operatorhub/ns/default
@@ -176,8 +193,12 @@ goto_installed_operators_page:
   url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion
 goto_operator_subscription_page:
   url: operatorhub/subscribe?pkg=<package_name>&catalog=<catalog_name>&catalogNamespace=openshift-marketplace&targetNamespace=<target_namespace>
+  action: wait_box_loaded
 goto_one_project_subscription_page:
   url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~Subscription/<subscription_name>
+goto_csv_detail_page:
+  url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion/<csv_name>
+  action: wait_box_loaded
 
 # machine config
 goto_machineconfigs_page:
@@ -206,6 +227,9 @@ goto_catalog_source_page:
 # quota
 goto_quotas_page:
   url: k8s/ns/<project_name>/resourcequotas
+goto_one_quota_page:
+  url: k8s/ns/<project_name>/resourcequotas/<quota_name>
+  action: wait_box_loaded
 
 # machinehealthcheck
 goto_machinehealthcheck_page:
@@ -214,8 +238,18 @@ goto_machinehealthcheck_page:
 #user
 goto_users_list_page:
   url: k8s/cluster/user.openshift.io~v1~User
+goto_namespace_role_rolebinding_page:
+  url: k8s/ns/<project_name>/roles/<role_name>/bindings
+goto_cluster_role_rolebinding_page:
+  url: k8s/cluster/clusterroles/<role_name>/bindings
+goto_rolebinding_list_page:
+  url: k8s/ns/<project_name>/rolebindings
+  action: wait_box_loaded
 goto_rolebinding_page_of_user:
   url: k8s/cluster/user.openshift.io~v1~User/<username>/roles
+goto_rolebinding_creation_page:
+  url: k8s/cluster/rolebindings/~new
+  action: wait_form_loaded
 
 goto_all_machines_page: 
   url: k8s/all-namespaces/machine.openshift.io~v1beta1~Machine

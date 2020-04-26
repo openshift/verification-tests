@@ -6,7 +6,7 @@ Feature: networking isolation related scenarios
   Scenario: The pods in default namespace can communicate with all the other pods
     Given I have a project
     And evaluation of `project.name` is stored in the :u1p1 clipboard
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
     Then the step should succeed
     Given a pod becomes ready with labels:
@@ -17,7 +17,7 @@ Feature: networking isolation related scenarios
 
     Given I create a new project
     And evaluation of `project.name` is stored in the :u1p2 clipboard
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
     Then the step should succeed
     Given a pod becomes ready with labels:
@@ -29,7 +29,7 @@ Feature: networking isolation related scenarios
     Given I switch to cluster admin pseudo user
     And I use the "default" project
     And evaluation of `rand_str(5, :dns952)` is stored in the :default_name clipboard
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
       | ["items"][0]["metadata"]["name"] | <%= cb.default_name %> |
       | ["items"][1]["metadata"]["name"] | <%= cb.default_name %> |
@@ -88,7 +88,7 @@ Feature: networking isolation related scenarios
     Given the env is using multitenant network
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json |
+      | f | <%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json |
     Then the step should succeed
     Given 2 pods become ready with labels:
       | name=test-pods |
@@ -99,7 +99,7 @@ Feature: networking isolation related scenarios
     Given I switch to the second user
     And I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json |
+      | f | <%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json |
     Then the step should succeed
     Given 2 pods become ready with labels:
       | name=test-pods |
@@ -129,7 +129,7 @@ Feature: networking isolation related scenarios
     Given the env is using multitenant network
     Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
       | ["items"][1]["metadata"]["name"] | test-service-1 |
     Then the step should succeed
@@ -141,7 +141,7 @@ Feature: networking isolation related scenarios
 
     Given I create a new project
     And evaluation of `project.name` is stored in the :proj2 clipboard
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
       | ["items"][1]["metadata"]["name"] | test-service-2 |
     Then the step should succeed
@@ -152,7 +152,7 @@ Feature: networking isolation related scenarios
 
     Given I create a new project
     And evaluation of `project.name` is stored in the :proj3 clipboard
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
       | ["items"][1]["metadata"]["name"] | test-service-3 |
     Then the step should succeed
@@ -181,7 +181,7 @@ Feature: networking isolation related scenarios
 
     # Create another new pod and service in each project
     Given I use the "<%= cb.proj1 %>" project
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
       | ["items"][0]["metadata"]["name"] | new-test-rc |
       | ["items"][0]["spec"]["template"]["metadata"]["labels"]["name"] | new-test-pods |
@@ -194,7 +194,7 @@ Feature: networking isolation related scenarios
     And evaluation of `service("new-test-service-1").ip(user: user)` is stored in the :proj1s2 clipboard
 
     Given I use the "<%= cb.proj2 %>" project
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
       | ["items"][0]["metadata"]["name"] | new-test-rc |
       | ["items"][0]["spec"]["template"]["metadata"]["labels"]["name"] | new-test-pods |
@@ -208,7 +208,7 @@ Feature: networking isolation related scenarios
     And evaluation of `service("new-test-service-2").ip(user: user)` is stored in the :proj2s2 clipboard
 
     Given I use the "<%= cb.proj3 %>" project
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
       | ["items"][0]["metadata"]["name"] | new-test-rc |
       | ["items"][0]["spec"]["template"]["metadata"]["labels"]["name"] | new-test-pods |
@@ -279,7 +279,7 @@ Feature: networking isolation related scenarios
     Given the env is using multitenant network
     Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
       | ["items"][1]["metadata"]["name"] | test-service-1 |
     Then the step should succeed
@@ -291,7 +291,7 @@ Feature: networking isolation related scenarios
 
     Given I create a new project
     And evaluation of `project.name` is stored in the :proj2 clipboard
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
       | ["items"][1]["metadata"]["name"] | test-service-2 |
     Then the step should succeed
@@ -302,7 +302,7 @@ Feature: networking isolation related scenarios
 
     Given I create a new project
     And evaluation of `project.name` is stored in the :proj3 clipboard
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
       | ["items"][1]["metadata"]["name"] | test-service-3 |
     Then the step should succeed
@@ -324,7 +324,7 @@ Feature: networking isolation related scenarios
 
     # Create another new pod and service in each project
     Given I use the "<%= cb.proj1 %>" project
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
       | ["items"][0]["metadata"]["name"] | new-test-rc |
       | ["items"][0]["spec"]["template"]["metadata"]["labels"]["name"] | new-test-pods |
@@ -337,7 +337,7 @@ Feature: networking isolation related scenarios
     And evaluation of `service("new-test-service-1").ip(user: user)` is stored in the :proj1s2 clipboard
 
     Given I use the "<%= cb.proj2 %>" project
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
       | ["items"][0]["metadata"]["name"] | new-test-rc |
       | ["items"][0]["spec"]["template"]["metadata"]["labels"]["name"] | new-test-pods |
@@ -351,7 +351,7 @@ Feature: networking isolation related scenarios
     And evaluation of `service("new-test-service-2").ip(user: user)` is stored in the :proj2s2 clipboard
 
     Given I use the "<%= cb.proj3 %>" project
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
       | ["items"][0]["metadata"]["name"] | new-test-rc |
       | ["items"][0]["spec"]["template"]["metadata"]["labels"]["name"] | new-test-pods |
@@ -409,7 +409,7 @@ Feature: networking isolation related scenarios
     Then the step should succeed
 
     Given I use the "<%= cb.proj1 %>" project
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
       | ["items"][1]["metadata"]["name"] | test-service-1 |
     Then the step should succeed
@@ -419,7 +419,7 @@ Feature: networking isolation related scenarios
     And evaluation of `service("test-service-1").ip(user: user)` is stored in the :proj1s1 clipboard
 
     Given I use the "<%= cb.proj2 %>" project
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
       | ["items"][1]["metadata"]["name"] | test-service-2 |
     Then the step should succeed
@@ -444,7 +444,7 @@ Feature: networking isolation related scenarios
     And the expression should be true> @result[:response] != 0
 
     Given I use the "<%= cb.proj1 %>" project
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
       | ["items"][0]["metadata"]["name"] | new-test-rc |
       | ["items"][0]["spec"]["template"]["metadata"]["labels"]["name"] | new-test-pods |
@@ -456,7 +456,7 @@ Feature: networking isolation related scenarios
     And evaluation of `pod.ip` is stored in the :proj1p2 clipboard
 
     Given I use the "<%= cb.proj2 %>" project
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
       | ["items"][0]["metadata"]["name"] | new-test-rc |
       | ["items"][0]["spec"]["template"]["metadata"]["labels"]["name"] | new-test-pods |

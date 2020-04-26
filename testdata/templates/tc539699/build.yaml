@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Build
+metadata:
+  name: ruby-hello-world-2
+spec:
+  strategy:
+    sourceStrategy:
+      env:
+      - name: EXAMPLE
+        value: sample-app
+      from:
+        kind: DockerImage
+        name: docker.io/centos/ruby-22-centos7@sha256:a18c8706118a5c4c9f1adf045024d2abf06ba632b5674b23421019ee4d3edcae 
+    type: Source

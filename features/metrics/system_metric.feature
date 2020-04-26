@@ -8,40 +8,7 @@ Feature: system metric related tests
     Given the master version >= "3.7"
     Given I create a project with non-leading digit name
     And metrics service is installed with ansible using:
-      | inventory | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging_metrics/default_inventory_prometheus |
-
-  # @author pruan@redhat.com
-  # @case_id OCP-10927
-  @admin
-  @destructive
-  Scenario: Access the external Hawkular Metrics API interface as cluster-admin
-    Given I have a project
-    Given metrics service is installed in the system using:
-      | inventory       | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging_metrics/OCP-11821/inventory              |
-      | deployer_config | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging_metrics/OCP-11821/deployer_ocp11821.yaml |
-    And I switch to the first user
-    And evaluation of `user.cached_tokens.first` is stored in the :user_token clipboard
-    Given cluster role "cluster-admin" is added to the "first" user
-    And I wait for the steps to pass:
-    """
-    And I perform the GET metrics rest request with:
-      | project_name | _system              |
-      | path         | /metrics/gauges      |
-      | token        | <%= cb.user_token %> |
-    Then the expression should be true> @result[:exitstatus] == 200
-    """
-    And evaluation of `@result[:parsed].map { |e| e['type'] }.uniq` is stored in the :gauge_result clipboard
-    And the expression should be true> cb.gauge_result == ['gauge']
-    And I wait for the steps to pass:
-    """
-    And I perform the GET metrics rest request with:
-      | project_name | _system              |
-      | path         | /metrics/counters    |
-      | token        | <%= cb.user_token %> |
-    Then the expression should be true> @result[:exitstatus] == 200
-    """
-    And evaluation of `@result[:parsed].map { |e| e['type'] }.uniq` is stored in the :counter_result clipboard
-    And the expression should be true> cb.counter_result == ['counter']
+      | inventory | <%= BushSlicer::HOME %>/testdata/logging_metrics/default_inventory_prometheus |
 
   # @author chunchen@redhat.com
   # @case_id OCP-14162
@@ -54,8 +21,8 @@ Feature: system metric related tests
   Scenario: Access heapster interface,Check jboss wildfly version from hawkular-metrics pod logs
     Given I create a project with non-leading digit name
     Given metrics service is installed in the system using:
-      | inventory       | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging_metrics/OCP-11821/inventory              |
-      | deployer_config | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging_metrics/OCP-11821/deployer_ocp11821.yaml |
+      | inventory       | <%= BushSlicer::HOME %>/testdata/logging_metrics/OCP-11821/inventory              |
+      | deployer_config | <%= BushSlicer::HOME %>/testdata/logging_metrics/OCP-11821/deployer_ocp11821.yaml |
     And I use the "openshift-infra" project
     Given a pod becomes ready with labels:
       | metrics-infra=hawkular-metrics |
@@ -107,7 +74,7 @@ Feature: system metric related tests
     And I switch to the second user
     Given I create a project with non-leading digit name
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/pod_with_two_containers.json |
+      | f | <%= BushSlicer::HOME %>/testdata/pods/pod_with_two_containers.json |
     Then the step should succeed
     And  the pod named "doublecontainers" becomes ready
     Given the second user is cluster-admin

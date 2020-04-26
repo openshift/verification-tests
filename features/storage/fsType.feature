@@ -7,11 +7,11 @@ Feature: testing for parameter fsType
     Given I have a project
     And admin clones storage class "sc-<%= project.name %>" from ":default" with:
       | ["parameters"]["fsType"] | <fsType> |
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc-with-storageClassName.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/misc/pvc-with-storageClassName.json" replacing paths:
       | ["metadata"]["name"]         | mypvc                  |
       | ["spec"]["storageClassName"] | sc-<%= project.name %> |
     Then the step should succeed
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pod.yaml" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/misc/pod.yaml" replacing paths:
       | ["metadata"]["name"]                                         | mypod |
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc |
       | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt  |

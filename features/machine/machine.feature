@@ -113,3 +113,61 @@ Feature: Machine features testing
     Given I have an IPI deployment
     And evaluation of `BushSlicer::Machine.list(user: admin, project: project('openshift-machine-api'))` is stored in the :machines clipboard
     Then the expression should be true> cb.machines.select{|m|m.instance_state == m.annotation_instance_state}.count == cb.machines.count
+
+  # @author miyadav@redhat.com
+  # @case_id OCP-27609
+  @admin
+  @destructive
+  Scenario: Scaling a machineset with providerSpec.publicIp set to true
+    Given I have an IPI deployment
+    And I clone a machineset named "machineset-clone-publiciptrue"
+
+    Then I run the :get admin command with:
+     | resource      | machineset                    |
+     | resource_name | machineset-clone-publiciptrue |
+     | namespace     | openshift-machine-api         |
+     | o             | yaml                          |
+    And I save the output to file> new_machineset.yaml
+
+    And I replace lines in "new_machineset.yaml":
+     | publicIp: null| publicIp: true |
+    Then the step should succeed
+
+    When I run the :replace admin command with:
+     | f | new_machineset.yaml |
+    And the output should match:
+     | [Rr]eplaced |
+
+    Given I scale the machineset to +2
+    Then the machineset should have expected number of running machines
+
+  # @author miyadav@redhat.com
+  # @case_id OCP-24363
+  @admin
+  @destructive
+  Scenario: [MAO] Reconciling machine taints with nodes
+    Given I have an IPI deployment
+    And I switch to cluster admin pseudo user
+    
+    Given I clone a machineset named "machineset-24363"
+    And evaluation of `machine_set.machines.first.node_name` is stored in the :noderef_name clipboard
+    And evaluation of `machine_set.machines.first.name` is stored in the :machine_name clipboard
+
+    Given I saved following keys to list in :taintsid clipboard:
+      | {"spec":{"taints": [{"effect": "NoExecute","key": "role","value": "master"}]}}  | |
+      | {"spec":{"taints": [{"effect": "NoSchedule","key": "role","value": "master"}]}} | |
+
+    And I use the "openshift-machine-api" project
+    Then I repeat the following steps for each :id in cb.taintsid:
+    """
+    Given as admin I successfully merge patch resource "machine/<%= cb.machine_name %>" with:
+      | #{cb.id} |
+    Then the step should succeed
+    """
+    When I run the :describe admin command with:
+      | resource | node                 |
+      | name     |<%= cb.noderef_name %>|
+    Then the output should contain:
+      | role=master:NoExecute |
+      | role=master:NoSchedule|
+

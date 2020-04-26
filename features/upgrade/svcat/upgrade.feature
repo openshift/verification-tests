@@ -13,7 +13,6 @@ Feature: Service Catalog related scenarios
     Given the status of condition "Degraded" for "service-catalog-apiserver" operator is: False
     Given the status of condition "Progressing" for "service-catalog-apiserver" operator is: False
     Given the status of condition "Available" for "service-catalog-apiserver" operator is: True
-    Given the status of condition "Upgradeable" for "service-catalog-apiserver" operator is: Unknown
     # Check cluster operator svcat-controller status
     Given the "service-catalog-controller-manager" operator version matchs the current cluster version
     Given the status of condition "Degraded" for "service-catalog-controller-manager" operator is: False
@@ -61,7 +60,7 @@ Feature: Service Catalog related scenarios
     When I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
     When I process and create:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/ups-broker-template.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/ups-broker-template.yaml |
       | p | UPS_BROKER_PROJECT=<%= project.name %>                                                                  |
     Then the step should succeed
     And I wait up to 300 seconds for the steps to pass:
@@ -78,7 +77,7 @@ Feature: Service Catalog related scenarios
     #Provision a serviceinstance
     Given I switch to the first user
     When I process and create:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/svc-catalog/ups-instance-template.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/ups-instance-template.yaml |
       | p | USER_PROJECT=<%= project.name %>                                                                          |
     Then the step should succeed
     And I wait up to 30 seconds for the steps to pass:

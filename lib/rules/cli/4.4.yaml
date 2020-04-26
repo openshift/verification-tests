@@ -186,6 +186,19 @@
     :validate: --validate=<value>
 :create_namespace:
   :cmd: oc create namespace <name>
+:create_poddisruptionbudget:
+  :cmd: oc create poddisruptionbudget <name>
+  :options:
+    :allow_missing_template_keys: --allow-missing-template-keys=<value>
+    :dry_run: --dry-run=<value>
+    :generator: --generator=<value>
+    :max_unavailable: --max-unavailable=<value>
+    :min_available: --min-available=<value>
+    :o: -o <value>
+    :save_config: --save-config=<value>
+    :selector: --selector=<value>
+    :template: --template=<value>
+    :validate: --validate=<value>
 :create_quota:
   :cmd: oc create quota <name>
   :options:
@@ -525,7 +538,7 @@
   :options:
     :allow_missing_imagestream_tags: --allow-missing-imagestream-tags=<value>
     :app_repo: <value>
-    :binary: --binary <value>
+    :binary: --binary=<value>
     :build_arg: --build-arg=<value>
     :build_config_map: --build-config-map=<value>
     :build_env: --build-env=<value>
@@ -1084,32 +1097,6 @@
     :invalid_option: <value>   # for negative testing
     :o: -o <value>
     :trigger_only: --trigger-only=<value>
-:oadm_ca_create_key_pair:
-  :cmd: oc adm ca create-key-pair
-  :options:
-    :overwrite: --overwrite=<value>
-    :private_key: --private-key=<value>
-    :public_key: --public-key=<value>
-:oadm_ca_create_master_cert:
-  :cmd: oc adm ca create-master-certs
-  :options:
-    :certificate-authority: --certificate-authority=<value>
-    :cert-dir: --cert-dir=<value>
-    :expire-days: --expire-days=<value>
-    :hostnames: --hostnames=<value>
-    :master: --master=<value>
-    :overwrite: --overwrite=<value>
-    :public-master: --public-master=<value>
-    :signer-expire-days: --signer-expire-days=<value>
-    :signer-name: --signer-name=<value>
-:oadm_ca_create_signer_cert:
-  :cmd: oc adm ca create-signer-cert
-  :options:
-    :cert: --cert=<value>
-    :key: --key=<value>
-    :name: --name=<value>
-    :overwrite: --overwrite=<value>
-    :serial: --serial=<value>
 :oadm_config_view:
   :cmd: oc adm config view
   :options:
@@ -1162,6 +1149,22 @@
     :sync_config: --sync-config=<value>
     :type: --type=<value>
     :whitelist: --whitelist=<value>
+:oadm_inspect:
+  :cmd: oc adm inspect
+  :options:
+    :A: --all-namespaces=<value>
+    :all_namespaces: --all-namespaces=<value>
+    :dest_dir: --dest-dir=<value>
+    :resource_name: <value>
+    :resource_type: <value>
+:oadm_must_gather:
+  :cmd: oc adm must-gather
+  :options:
+    :dest_dir: --dest-dir=<value>
+    :image: --image=<value>
+    :image_stream: --image-stream=<value>
+    :node_name: --node-name=<value>
+    :source_dir: --source-dir=<value>
 :oadm_new_project:
   :cmd: oc adm new-project <project_name>
   #:expected:
@@ -1299,6 +1302,7 @@
   :options:
     :all: --all=<value>
     :key_val: <value>
+    :l: -l <value>
     :node_name: <value>
     :output: --output <value>
     :overwrite: --overwrite=<value>

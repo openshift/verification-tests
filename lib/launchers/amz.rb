@@ -20,8 +20,8 @@ module BushSlicer
 
       if access_key && secret_key
         awscred = {
-          "AWSAccessKeyId" => access_key,
-          "AWSSecretKey" => secret_key
+          "aws_access_key_id" => access_key,
+          "aws_secret_access_key" => secret_key
         }
       else
         # try to find a suitable Amazon AWS credentials file
@@ -30,7 +30,7 @@ module BushSlicer
           begin
             cred_file = File.expand_path(cred_file)
             logger.info("Using #{cred_file} credentials file.")
-            awscred = Hash[File.read(cred_file).scan(/(.+?)=(.+)/)]
+            awscred = Hash[File.read(cred_file).scan(/(.+?)\s*=\s*(.+)/)]
             break # break if no error was raised above
           rescue
             logger.warn("Problem reading credential file #{cred_file}")
@@ -42,8 +42,8 @@ module BushSlicer
       raise "no readable credentials file or external credentials config found" unless awscred
       Aws.config.update( config[:config_opts].merge({
         credentials: Aws::Credentials.new(
-          awscred["AWSAccessKeyId"],
-          awscred["AWSSecretKey"]
+          awscred["aws_access_key_id"],
+          awscred["aws_secret_access_key"]
         )
       }) )
       Aws.config.update( config[:config_opts].merge({region: region})) if region

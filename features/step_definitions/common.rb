@@ -268,3 +268,8 @@ Given /^I check feature gate #{QUOTED}(?: with admission #{QUOTED})? is enabled$
     }
   end
 end
+
+Given /^I saved following keys to list in #{SYM} clipboard:$/ do |cbsym, table|
+  options = hash_symkeys(table.rows_hash)
+  cb[cbsym]= options.keys
+end

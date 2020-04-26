@@ -34,7 +34,7 @@ Feature: oc_expose.feature
       | from_file | caddyfile.conf |
     Then the step should succeed
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/OCP-10873/dc.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/deployment/OCP-10873/dc.yaml |
     Then the step should succeed
     And I wait until the status of deployment "hello" becomes :complete
     Given I have a pod-for-ping in the project

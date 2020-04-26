@@ -42,11 +42,11 @@ Given /^I deploy #{QUOTED} driver using csi(?: with "([^ ]+?)" version)?$/ do |d
   step %Q/admin ensures "#{driver}-csi-role" clusterrole is deleted/
   step %Q/admin ensures "#{driver}-csi-role" clusterrolebinding is deleted/
   step %Q/I run the :create admin command with:/, table(%{
-    | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/csi/#{driver}-clusterrole.yaml |
+    | f | #{ENV['BUSHSLICER_HOME']}/testdata/storage/csi/#{driver}-clusterrole.yaml |
   })
   step %Q/the step should succeed/
 
-  step %Q{I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/csi/#{driver}-clusterrolebinding.yaml"}
+  step %Q{I obtain test data file "storage/csi/#{driver}-clusterrolebinding.yaml"}
   crb = YAML.load(@result[:response])
   filepath = @result[:abs_path]
   crb["subjects"][0]["namespace"] = namespace
@@ -56,13 +56,13 @@ Given /^I deploy #{QUOTED} driver using csi(?: with "([^ ]+?)" version)?$/ do |d
 
   # create secret
   step %Q/I run the :create admin command with:/, table(%{
-    | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/csi/#{driver}-secrets.yaml |
+    | f | #{ENV['BUSHSLICER_HOME']}/testdata/storage/csi/#{driver}-secrets.yaml |
     | n | #{namespace}                                                                                          |
   })
   step %Q/the step should succeed/
 
   # create Deployment
-  step %Q{I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/csi/#{driver}-deployment.yaml"}
+  step %Q{I obtain test data file "storage/csi/#{driver}-deployment.yaml"}
   deployment = YAML.load(@result[:response])
   filepath = @result[:abs_path]
   deployment["spec"]["template"]["spec"]["containers"][0]["image"] = "#{attacher_image}"
@@ -72,7 +72,7 @@ Given /^I deploy #{QUOTED} driver using csi(?: with "([^ ]+?)" version)?$/ do |d
   raise "error creating deployment for csi driver #{driver}" unless res[:success]
 
   # create Daemonset
-  step %Q{I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/csi/#{driver}-daemonset.yaml"}
+  step %Q{I obtain test data file "storage/csi/#{driver}-daemonset.yaml"}
   daemonset = YAML.load(@result[:response])
   filepath = @result[:abs_path]
   daemonset["spec"]["template"]["spec"]["containers"][0]["image"] = "#{registrar_image}"
@@ -92,11 +92,11 @@ Given /^I cleanup #{QUOTED} csi driver$/ do |driver|
 
   # delete clusterrole, clusterrolebinding
   step %Q/I run the :delete admin command with:/, table(%{
-    | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/csi/#{driver}-clusterrole.yaml |
+    | f | #{ENV['BUSHSLICER_HOME']}/testdata/storage/csi/#{driver}-clusterrole.yaml |
   })
   step %Q/the step should succeed/
   step %Q/I run the :delete admin command with:/, table(%{
-    | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/csi/#{driver}-clusterrolebinding.yaml |
+    | f | #{ENV['BUSHSLICER_HOME']}/testdata/storage/csi/#{driver}-clusterrolebinding.yaml |
   })
   step %Q/the step should succeed/
 
@@ -106,14 +106,14 @@ Given /^I cleanup #{QUOTED} csi driver$/ do |driver|
 
   # delete storage class
     step %Q/I run the :delete admin command with:/, table(%{
-    | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/csi/#{driver}-storageclass.yaml |
+    | f | #{ENV['BUSHSLICER_HOME']}/testdata/storage/csi/#{driver}-storageclass.yaml |
   })
   step %Q/the step should succeed/
 
 end
 
 Given /^I create (default )?storage class for #{QUOTED} csi driver$/ do |default_sc, driver|
-  step %Q{I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/csi/#{driver}-storageclass.yaml"}
+  step %Q{I obtain test data file "storage/csi/#{driver}-storageclass.yaml"}
   sc = YAML.load(@result[:response])
   filepath = @result[:abs_path]
 
@@ -136,7 +136,7 @@ Given /^I checked #{QUOTED} csi driver is running$/ do |driver|
   step %Q/"#{driver}-csi-ds" daemonset becomes ready in the project/
 
   dynamic_pvc_name = rand_str(8, :dns)
-  step %Q{I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc-with-storageClassName.json" replacing paths:}, table(%{
+  step %Q{I run oc create over "#{ENV['BUSHSLICER_HOME']}/testdata/storage/misc/pvc-with-storageClassName.json" replacing paths:}, table(%{
     | ["metadata"]["name"]         | #{dynamic_pvc_name} |
     | ["spec"]["storageClassName"] | #{driver}-csi       |
   })

@@ -1,0 +1,74 @@
+---
+apiVersion: v1
+items:
+- kind: Route
+  apiVersion: v1
+  metadata:
+    name: route-reencrypt
+  spec:
+    to:
+      kind: Service
+      name: service-secure
+    tls:
+      termination: reencrypt
+- kind: Service
+  apiVersion: v1
+  metadata:
+    name: service-secure
+    annotations:
+      service.alpha.openshift.io/serving-cert-secret-name: serving-cert
+  spec:
+    ports:
+    - name: https
+      protocol: TCP
+      port: 27443
+      targetPort: 8443
+    selector:
+      name: caddy-docker
+- kind: Pod
+  apiVersion: v1
+  metadata:
+    name: caddy-docker
+    labels:
+      name: caddy-docker
+  spec:
+    containers:
+    - name: caddy-docker-pod
+      image: aosqe/caddy-docker
+      command:
+        - /usr/bin/caddy
+      args:
+        - --conf
+        - /etc/caddy/Caddyfile
+      ports:
+      - containerPort: 8080
+      - containerPort: 8443
+      volumeMounts:
+        - name: cert
+          mountPath: /etc/serving-cert
+        - name: conf
+          mountPath: /etc/caddy
+    volumes:
+      - name: conf
+        configMap:
+          name: serving-cert
+      - name: cert
+        secret:
+          secretName: serving-cert
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: serving-cert
+  data:
+    Caddyfile: |
+      :8443 {
+           tls /etc/serving-cert/tls.crt /etc/serving-cert/tls.key
+           root /srv/publics
+            browse /test
+         }
+      :8080 {
+           root /srv/public
+           browse /test
+      }
+
+kind: List

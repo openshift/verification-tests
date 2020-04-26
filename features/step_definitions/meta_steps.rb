@@ -114,7 +114,3 @@ Given /^I repeat the following steps for each #{SYM} in cb\.([\w]+):$/ do |varna
   end
 end
 
-Given /^I saved following keys to list in #{SYM} clipboard:$/ do |cbsym, table|
-  options = hash_symkeys(table.rows_hash)
-  cb[cbsym]= options.keys
-end

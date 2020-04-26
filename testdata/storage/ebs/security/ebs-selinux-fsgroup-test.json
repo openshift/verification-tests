@@ -1,0 +1,56 @@
+{
+  "kind": "Pod",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "awspd",
+    "creationTimestamp": null,
+    "labels": {
+      "name": "volume-test"
+    }
+  },
+  "spec": {
+    "containers": [
+      {
+        "name": "aws",
+        "image": "aosqe/hello-openshift",
+        "ports": [
+          {
+            "containerPort": 8080,
+            "protocol": "TCP"
+          }
+        ],
+        "resources": {},
+        "volumeMounts": [
+          {
+            "name":"ebs",
+            "mountPath":"/mnt/aws"
+          }
+        ],
+        "terminationMessagePath": "/dev/termination-log",
+        "imagePullPolicy": "IfNotPresent",
+        "securityContext": {
+          "privileged": false
+        }
+      }
+    ],
+    "securityContext": {
+         "fsGroup": 123456,
+         "seLinuxOptions": {
+            "level": "s0:c13,c2"
+         }
+    },
+    "volumes": [
+      {
+          "name": "ebs",
+          "awsElasticBlockStore": {
+              "volumeID": "aws://us-east-1c/vol-943fcc74",
+              "fsType": "ext4"
+          }
+      }
+    ],
+    "restartPolicy": "Always",
+    "dnsPolicy": "ClusterFirst",
+    "serviceAccount": ""
+  },
+  "status": {}
+}

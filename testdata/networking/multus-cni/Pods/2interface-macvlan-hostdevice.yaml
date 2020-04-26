@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  generateName: macvlan-hostdevice-pod-
+  labels:
+    name: macvlan-hostdevice-pod
+  annotations:
+    k8s.v1.cni.cncf.io/networks: host-device,  macvlan-bridge
+spec:
+  containers:
+  - name: macvlan-hostdevice-pod
+    image: docker.io/aosqe/centos-network@sha256:48da37205f9b43424e0983d4c5e7e07f77b7ba1504bbe35e2f264c75dcb4cd15

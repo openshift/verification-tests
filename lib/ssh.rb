@@ -257,14 +257,16 @@ module BushSlicer
         @last_accessed = monotonic_seconds
       end
 
-      # rude closing underlying transport
+      # closing underlying transport
+      # @param [Integer] graceful seconds to wait for channels to finish before
+      #   killing the processing thread and close the connection
       # @note that started processes are not killed unless they die because
       #   of stdin/out being closed when ssh connection dies
-      def close
+      def close(graceful: 15)
         # @session.close unless closed?
         unless closed?
+          loop_thread_kill(graceful)
           @session.shutdown!
-          # loop_thread_join
         end
       end
 
@@ -448,7 +450,7 @@ module BushSlicer
       end
 
       private def loop_thread_error
-        # should we protect agains replacing dead treat before error is read?
+        # should we protect agains replacing dead thread before error is read?
         if @loop_thread && !@loop_thread.alive?
           begin
             @loop_thread.join
@@ -458,14 +460,20 @@ module BushSlicer
         end
         return nil
       end
-
-      # private def loop_thread_join(timeout=5)
-      #   if @loop_thread && @loop_thread.alive?
-      #     @loop_thread.join(timeout)
-      #   end
-      # end
-
       alias error loop_thread_error
+
+      private def loop_thread_kill(timeout=15)
+        if @loop_thread && @loop_thread.alive?
+          success = wait_for(timeout) {
+            session.channels.values.none? {|c| c.active?}
+          }
+          unless success
+            logger.warn "Closing some active SSH channels for #{user}@#{host}"
+          end
+          @loop_thread.report_on_exception = false
+          @loop_thread.kill
+        end
+      end
     end
   end
 end

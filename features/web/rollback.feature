@@ -5,7 +5,7 @@ Feature: Deployments rollback features
     Given I have a project
     # create deployment from template on web console
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/deployment1.json |
+      | f | <%= BushSlicer::HOME %>/testdata/deployment/deployment1.json |
     Then the step should succeed
     And evaluation of `"hooks"` is stored in the :dc_name clipboard
     # wait to be deployed on web console
@@ -16,7 +16,7 @@ Feature: Deployments rollback features
     Given I wait until the status of deployment "hooks" becomes :complete
     # replace deploymentconfig
     When I run the :replace client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/updatev1.json |
+      | f | <%= BushSlicer::HOME %>/testdata/deployment/updatev1.json |
     Then the step should succeed
     # wait to be deployed on web console
     When I perform the :wait_latest_deployments_to_deployed web console action with:

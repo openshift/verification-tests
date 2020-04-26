@@ -426,7 +426,7 @@ Given /^the DefaultDeny policy is applied to the "(.+?)" namespace$/ do | projec
       raise "Failed to apply the default deny annotation to specified namespace."
     end
   else
-    @result = admin.cli_exec(:create, n: project_name , f: 'https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/networkpolicy/defaultdeny-v1-semantic.yaml')
+    @result = admin.cli_exec(:create, n: project_name , f: "#{ENV['BUSHSLICER_HOME']}/testdata/networking/networkpolicy/defaultdeny-v1-semantic.yaml")
     unless @result[:success]
       raise "Failed to apply the default deny policy to specified namespace."
     end
@@ -480,6 +480,7 @@ end
 
 Given /^I wait for the networking components of the node to become ready$/ do
   ensure_admin_tagged
+  _admin = admin
 
   if env.version_ge("3.10", user: user)
     sdn_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
@@ -490,14 +491,14 @@ Given /^I wait for the networking components of the node to become ready$/ do
       pod.node_name == node.name
     }.first
 
-    @result = sdn_pod.wait_till_ready(user, 3 * 60)
+    @result = sdn_pod.wait_till_ready(_admin, 3 * 60)
     unless @result[:success]
       logger.error(@result[:response])
       raise "sdn pod on the node did not become ready"
     end
     cb.sdn_pod = sdn_pod
 
-    @result = ovs_pod.wait_till_ready(user, 60)
+    @result = ovs_pod.wait_till_ready(_admin, 60)
     unless @result[:success]
       logger.error(@result[:response])
       raise "ovs pod on the node did not become ready"
@@ -639,7 +640,8 @@ Given /^the multus is enabled on the cluster$/ do
 
   desired_multus_replicas = daemon_set('multus', project('openshift-multus')).replica_counters(user: admin)[:desired]
   available_multus_replicas = daemon_set('multus', project('openshift-multus')).replica_counters(user: admin)[:available]
-
+  #storing desired_multus_replicas value in desired_multus_replicas clipboard variable as well
+  cb.desired_multus_replicas = desired_multus_replicas
   raise "Multus is not running correctly!" unless desired_multus_replicas == available_multus_replicas && available_multus_replicas != 0
 end
 
@@ -805,7 +807,11 @@ Given /^a DHCP service is configured for interface "([^"]*)" on "([^"]*)" node w
   host = node.host
   dhcp_status_timeout = 30
   #Following will take dnsmasq backup and append curl contents to the dnsmasq config after
-  @result = host.exec_admin("cp /etc/dnsmasq.conf /etc/dnsmasq.conf.bak;curl https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/multus-cni/dnsmasq_for_testbridge.conf | sed s/testbr1/#{br_inf}/g | sed s/88.8.8.100,88.8.8.110,24h/#{add_lease}/g > /etc/dnsmasq.conf;systemctl restart dnsmasq --now")
+  logger.info("Logging ARP entries on dnsmasq.conf node which might help in debugging later if required")
+  host.exec_admin("arp -a")
+  logger.info("Logging last 10 lines of dnsmasq.conf to check if required config is not appended already which might help in debugging later")
+  host.exec_admin("tail -10 /etc/dnsmasq.conf")
+  @result = host.exec_admin("cp /etc/dnsmasq.conf /etc/dnsmasq.conf.bak;curl https://raw.githubusercontent.com/openshift/verification-tests/master/testdata/networking/multus-cni/dnsmasq_for_testbridge.conf | sed s/testbr1/#{br_inf}/g | sed s/88.8.8.100,88.8.8.110,24h/#{add_lease}/g > /etc/dnsmasq.conf;systemctl restart dnsmasq --now")
   raise "Failed to configure dnsmasq service" unless @result[:success]
   wait_for(dhcp_status_timeout) {
     if host.exec_admin("systemctl status dnsmasq")[:response].include? "running"

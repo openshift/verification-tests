@@ -8,10 +8,10 @@ Feature: check settings page on web console
     # create limit and quota via CLI
     Given I use the "<%= project.name %>" project
     And I run the :create admin command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/quota/quota.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/quota/quota.yaml |
       | n | <%= project.name %> |
     And I run the :create admin command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/quota/limits.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/quota/limits.yaml |
       | n | <%= project.name %> |
     Then the step should succeed
 
@@ -138,25 +138,6 @@ Feature: check settings page on web console
     When I perform the :check_default_limit web console action with:
       | resource_type   | Container Memory |
       | default_limit   | 100 MiB          |
-    Then the step should succeed
-
-  # @author xxing@redhat.com
-  # @case_id OCP-10351
-  Scenario: Check Openshift Master and Kubernetes Master version on About page
-    Given the master version >= "3.3"
-    When I run the :version client command
-    Then the step should succeed
-    Given evaluation of `@result[:props][:openshift_server_version]` is stored in the :master1 clipboard
-    And evaluation of `@result[:props][:kubernetes_server_version]` is stored in the :kube1 clipboard
-    When I run the :goto_about_page web console action
-    Then the step should succeed
-    When I get the visible text on web html page
-    And evaluation of `@result[:response].scan(/^OpenShift Master:\nv(.+)/)[0][0].split(' ')[0]` is stored in the :master2 clipboard
-    And evaluation of `@result[:response].scan(/^Kubernetes Master:\nv(.+)/)[0][0]` is stored in the :kube2 clipboard
-    Then the expression should be true> cb.master1 == cb.master2
-    Then the expression should be true> cb.kube1 == cb.kube2
-    When I perform the :check_web_console_version web console action with:
-      | web_console_version | <%= cb.master1 %> |
     Then the step should succeed
 
   # @author hasha@redhat.com

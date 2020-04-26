@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    kubelet-killer: ""
+  name: kubelet-killer
+  namespace: openshift-machine-api
+spec:
+  containers:
+  - command:
+    - pkill
+    - -STOP
+    - hyperkube
+    image: busybox
+    imagePullPolicy: Always
+    name: kubelet-killer
+    securityContext:
+      privileged: true
+  enableServiceLinks: true
+  hostPID: true
+  nodeName: $NAME
+  restartPolicy: Never

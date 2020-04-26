@@ -1,0 +1,25 @@
+{
+  "kind": "Pod",
+  "apiVersion":"v1",
+
+  "metadata": {
+        "name": "httpbin-pod",
+        "labels": {
+                "name": "httpbin-pod"
+        }
+  },
+  "spec": {
+      "containers": [{
+        "name": "httpbin-pod",
+        "image": "aosqe/httpbin",
+        "ports": [
+          {
+            "containerPort": 8080
+          },
+          {
+            "containerPort": 8443
+          }
+        ]
+      }]
+  }
+}

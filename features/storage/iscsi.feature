@@ -7,13 +7,13 @@ Feature: ISCSI volume plugin testing
   Scenario: ISCSI volume security test
     Given I have a iSCSI setup in the environment
     And I have a project
-    When admin creates a PV from "https://raw.githubusercontent.com/openshift-qe/docker-iscsi/master/pv-rwo.json" where:
+    When admin creates a PV from "<%= BushSlicer::HOME %>/testdata/storage/iscsi/pv-rwo.json" where:
       | ["metadata"]["name"]               | pv-<%= project.name %>        |
       | ["spec"]["iscsi"]["targetPortal"]  | <%= cb.iscsi_ip %>:3260       |
       | ["spec"]["iscsi"]["initiatorName"] | iqn.2016-04.test.com:test.img |
       | ["spec"]["storageClassName"]       | sc-<%= project.name %>        |
     Then the step should succeed
-    When I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:
+    When I create a dynamic pvc from "<%= BushSlicer::HOME %>/testdata/storage/misc/pvc.json" replacing paths:
       | ["metadata"]["name"]         | mypvc                  |
       | ["spec"]["volumeName"]       | pv-<%= project.name %> |
       | ["spec"]["storageClassName"] | sc-<%= project.name %> |
@@ -23,7 +23,7 @@ Feature: ISCSI volume plugin testing
     # Create tester pod
     Given I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/docker-iscsi/master/pod.json" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/iscsi/pod-security.json" replacing paths:
       | ["metadata"]["name"]                                         | mypod |
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc |
     Then the step should succeed

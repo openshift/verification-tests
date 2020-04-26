@@ -1,0 +1,19 @@
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata:
+  name: bridge3
+spec:
+  config: '{
+          "name": "bridge3",
+          "type": "bridge",
+          "ipMasq": true,
+          "bridge": "bridge3",
+          "ipam": {
+                    "type": "host-local",
+                    "subnet": "22.2.2.0/24"
+          },
+          "isDefaultGateway": true,
+          "forceAddress": false,
+          "ipMasq": true,
+          "hairpinMode": true
+  }'

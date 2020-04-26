@@ -51,13 +51,13 @@ Feature: oc_volume.feature
   Scenario: Add secret volume to dc and rc
     Given I have a project
     When I run the :run client command with:
-      | name   | mydc                 |
-      | image  | <%= project_docker_repo %>openshift/hello-openshift |
+      | name   | mydc                                                                                            |
+      | image  | docker.io/aosqe/storage@sha256:a05b96d373be86f46e76817487027a7f5b8b5f87c0ac18a246b018df11529b40 |
     Then the step should succeed
-    When I run the :secrets client command with:
-      | action | new             |
-      | name   | my-secret       |
-      | source | /etc/hosts      |
+    When I run the :create_secret client command with:
+      | secret_type | generic    |
+      | name        | my-secret  |
+      | from_file   | /etc/hosts |
     Then the step should succeed
 
     Given I wait until replicationController "mydc-1" is ready

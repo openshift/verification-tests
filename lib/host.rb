@@ -561,7 +561,7 @@ module BushSlicer
       cmd = "awk -F . '{print $1}' /proc/uptime"
       res = exec_raw(cmd, timeout: 20)
       if res[:success]
-        return Integer(res[:response])
+        return Integer(res[:stdout])
       else
         raise "failed to get #{self} uptime, see log"
       end
@@ -897,6 +897,35 @@ module BushSlicer
           raise "failed to cat file from node and write locally, see log"
         end
       }
+    end
+
+    def accessible?
+      res = exec_raw("echo Smile more.")
+      unless res[:response].include? "Smile more."
+        res[:success] = false
+      end
+      return res
+    end
+
+    # @return [nil]
+    # @raise [Error] when any error was detected
+    def reboot
+      cmd = 'shutdown -r now "BushSlicer triggered reboot"'
+      valid_err_messages = [
+        "connection refused",
+        "watch closed",
+        "exit code from debug container"
+      ]
+      res = exec_raw(cmd, timeout: 20)
+      if res[:success]
+        return nil
+      else
+        if valid_err_messages.any? { |m| res[:response].include? m }
+          # sometimes reboot is too fast and oc gets error managing debug pod
+        else
+          raise "error rebooting node, see log"
+        end
+      end
     end
 
     def node

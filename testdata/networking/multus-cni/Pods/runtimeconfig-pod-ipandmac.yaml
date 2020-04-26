@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name:  runtimeconfig-pod
+  annotations:
+    k8s.v1.cni.cncf.io/networks: '[
+      {
+        "name": "runtimeconfig-def",
+        "ips": [ "192.168.22.2/24" ],
+        "mac": "CA:FE:C0:FF:EE:00"
+      }
+    ]'
+spec:
+  containers:
+  - name:  runtimeconfig-pod
+    image: docker.io/aosqe/centos-network@sha256:48da37205f9b43424e0983d4c5e7e07f77b7ba1504bbe35e2f264c75dcb4cd15

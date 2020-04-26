@@ -1,0 +1,24 @@
+{
+    "apiVersion": "extensions/v1beta1",
+    "kind": "Ingress",
+    "metadata": {
+        "name": "test-ingress"
+    },
+    "spec": {
+        "rules": [
+            {
+                "host": "foo.bar.com",
+                "http": {
+                    "paths": [
+                        {
+                            "backend": {
+                                "serviceName": "service-unsecure",
+                                "servicePort": 8080
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}

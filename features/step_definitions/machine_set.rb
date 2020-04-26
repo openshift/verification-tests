@@ -35,10 +35,10 @@ Then(/^the machineset should have expected number of running machines$/) do
   machines.each do | machine |
     next if machine.machine_set_name != machine_set.name
 
-    # if machine phase is 'Deleting' then wait for its node to disappear
-    if machine.phase == 'Deleting'
-      step %Q{I wait for the resource "node" named "#{machine.node_name}" to disappear within 600 seconds}
-      step %Q{I wait for the resource "machine" named "#{machine.name}" to disappear within 600 seconds}
+    # if any of the indicators shows machine is deleting, wait for it and its node to disappear
+    if machine.phase == "Deleting" || ! machine.annotation("machine.openshift.io/cluster-api-delete-machine").nil? || machine.annotation("machine.openshift.io/instance-state") == "shutting-down"
+      step %Q{I wait for the resource "node" named "#{machine.node_name}" to disappear within 900 seconds}
+      step %Q{I wait for the resource "machine" named "#{machine.name}" to disappear within 900 seconds}
       next
     end
 

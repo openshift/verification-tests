@@ -5,7 +5,7 @@ Feature: pods related scenarios
   Scenario: kubectl describe pod should show qos tier info when pod without limits and request info
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/hello-pod.json |
+      | f | <%= BushSlicer::HOME %>/testdata/pods/hello-pod.json |
     Then the step should succeed
     Given the pod named "hello-openshift" becomes ready
     When I run the :describe client command with:
@@ -21,10 +21,10 @@ Feature: pods related scenarios
   Scenario: kubectl describe pod should show qos tier info
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/quota/pod-notbesteffort.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/quota/pod-notbesteffort.yaml |
     Then the step should succeed
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/hello-pod-bad.json |
+      | f | <%= BushSlicer::HOME %>/testdata/pods/hello-pod-bad.json |
     Then the step should succeed
     Given the pod named "pod-notbesteffort" becomes ready
     When I run the :describe client command with:
@@ -53,7 +53,7 @@ Feature: pods related scenarios
   Scenario: Implement supplemental groups for pod
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/tc510724/pod-supplementalGroups.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/pods/tc510724/pod-supplementalGroups.yaml |
     Then the step should succeed
     Given the pod named "hello-openshift" becomes ready
     When I run the :exec client command with:
@@ -64,7 +64,7 @@ Feature: pods related scenarios
       | groups=1234,5678, |
     Given I ensure "hello-openshift" pod is deleted
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/tc510724/pod-supplementalGroups-multi-cotainers.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/pods/tc510724/pod-supplementalGroups-multi-cotainers.yaml |
     Then the step should succeed
     Given the pod named "multi-containers" becomes ready
     When I run the :rsh client command with:
@@ -85,7 +85,7 @@ Feature: pods related scenarios
       | groups=1234,5678, |
     Given I ensure "multi-containers" pod is deleted
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/tc510724/pod-supplementalGroups-invalid.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/pods/tc510724/pod-supplementalGroups-invalid.yaml |
     Then the step should fail
     And the output should contain 2 times:
       | nvalid value |
@@ -95,7 +95,7 @@ Feature: pods related scenarios
   Scenario: Pod should be immediately deleted if it's not scheduled even if graceful termination period is set
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/graceful-delete/10.json |
+      | f | <%= BushSlicer::HOME %>/testdata/pods/graceful-delete/10.json |
     Then the step should succeed
     Given the pod named "grace10" becomes ready
     When I run the :delete background client command with:
@@ -111,7 +111,7 @@ Feature: pods related scenarios
   Scenario: Update ActiveDeadlineSeconds for pod
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/tc521546/hello-pod.json |
+      | f | <%= BushSlicer::HOME %>/testdata/pods/tc521546/hello-pod.json |
     Then the step should succeed
     When I run the :patch client command with:
       | resource      | pod                                    |
@@ -138,31 +138,14 @@ Feature: pods related scenarios
     Then the step should fail
     And the output should contain "Invalid value: -5"
 
-  # @author chuyu@redhat.com
-  # @case_id OCP-10986
-  Scenario: Oauth provider info should be consumed in a pod
-    Given the master version >= "3.4"
-    Given I have a project
-    When I run the :new_app client command with:
-      | docker_image 	 | aosqe/ruby-ex	|
-    Then the step should succeed
-    Given a pod becomes ready with labels:
-      | app=ruby-ex      |
-    When I run the :rsh client command with:
-      | pod          | <%= pod.name %> |
-      | _stdin       | curl https://openshift.default.svc/.well-known/oauth-authorization-server -k |
-    Then the step should succeed
-    And the output should contain:
-      | implicit		|
-      | user:list-projects	|
-
   # @author qwang@redhat.com
   # @case_id OCP-11055
   Scenario: /dev/shm can be automatically shared among all of a pod's containers
     Given I have a project
-    When I run oc create over ERB URL: https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/pods/pod_with_two_containers.json
+    When I run the :create client command with:
+      | f | <%= BushSlicer::HOME %>/testdata/pods/pod_with_two_containers.json |
     Then the step should succeed
-    When the pod named "doublecontainers" becomes ready
+    And the pod named "doublecontainers" becomes ready
     # Enter container 1 and write files
     When I run the :exec client command with:
       | pod              | doublecontainers        |

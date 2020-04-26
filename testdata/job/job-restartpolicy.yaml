@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Template
+metadata:
+  annotations:
+    description: "Job only support restartPolicy: OnFailure, Never"
+  name: job-restartpolicy
+objects:
+  -
+    apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: pi-restartpolicy
+    spec:
+      manualSelector: true
+      selector:
+        matchLabels:
+          app: pi-restartpolicy
+      template:
+        metadata:
+          labels:
+            app: pi-restartpolicy
+          name: pi-restartpolicy
+        spec:
+          containers:
+            -
+              command:
+                - perl
+                - "-Mbignum=bpi"
+                - "-wle"
+                - "print bpi(2000)"
+              image: openshift/perl-516-centos7
+              name: pi-restartpolicy
+          restartPolicy: "${RESTART_POLICY}"
+parameters:
+  -
+    description: "pod restart policy"
+    from: Never
+    generate: expression
+    name: RESTART_POLICY

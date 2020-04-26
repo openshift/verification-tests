@@ -2,7 +2,7 @@ Given /^volume snapshot controller and provisioner is deployed$/ do
   ensure_admin_tagged
   ensure_destructive_tagged
 
-  path = "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/snapshot"
+  path = "#{ENV['BUSHSLICER_HOME']}/testdata/storage/snapshot"
   gce_files = [
     "#{path}/deployment-gce.yaml"
   ]

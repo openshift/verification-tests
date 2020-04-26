@@ -26,7 +26,7 @@ Feature: elasticsearch-operator related tests
   Scenario: elasticsearch alerting rules test: ElasticsearchClusterNotHealthy
     Given I create clusterlogging instance with:
       | remove_logging_pods | true                                                                                                   |
-      | crd_yaml            | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/logging/clusterlogging/example.yaml |
+      | crd_yaml            | <%= BushSlicer::HOME %>/testdata/logging/clusterlogging/example.yaml |
       | log_collector       | fluentd                                                                                                |
     Then the step should succeed
     Given I wait for the "elasticsearch-prometheus-rules" prometheus_rule to appear

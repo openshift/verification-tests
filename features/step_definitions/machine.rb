@@ -8,7 +8,7 @@ Given(/^I have an IPI deployment$/) do
   end
 
   machine_sets.each do | machine_set |
-    unless machine_set.ready?
+    unless machine_set.ready?[:success]
       raise "Not an IPI deployment or machineSet #{machine_set.name} not fully scaled, abort test."
     end
   end
@@ -63,7 +63,7 @@ Then(/^admin ensures node number is restored to #{QUOTED} after scenario$/) do |
   teardown_add {
     num_actual = 0
 
-    success = wait_for(600, interval: 30) {
+    success = wait_for(900, interval: 20) {
       num_actual = BushSlicer::Node.list(user: admin).length
       num_expected == num_actual.to_s
     }

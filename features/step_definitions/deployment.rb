@@ -65,3 +65,15 @@ Given /^replica set #{QUOTED} becomes non-current for the #{QUOTED} deployment$/
   end
   raise 'expected replica set name change not reached within timeout' unless success
 end
+
+Given /^#{QUOTED} deployment becomes ready in the#{OPT_QUOTED} project$/ do | d_name, proj_name |
+  proj_name ||= project.name
+  project(proj_name)
+  seconds = 5 * 60
+  success = wait_for(seconds) {
+    desired = deployment(d_name).desired_replicas
+    ready = deployment(d_name).ready_replicas(cached: false)
+    ready == desired
+  }
+  raise "Deployment did not become ready" unless success
+end

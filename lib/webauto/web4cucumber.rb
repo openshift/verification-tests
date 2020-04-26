@@ -139,7 +139,7 @@ require_relative 'chrome_extension'
           chrome_caps[:element_scroll_behavior] = @scroll_strategy
         end
         if self.class.container?
-          chrome_switches.concat %w[--no-sandbox --disable-setuid-sandbox --disable-gpu --disable-infobars]
+          chrome_switches.concat %w[--no-sandbox --disable-setuid-sandbox --disable-gpu --disable-infobars --disable-dev-shm-usage]
         end
         # options = Selenium::WebDriver::Chrome::Options.new
         # options.add_extension proxy_chrome_ext_file if proxy_chrome_ext_file
@@ -427,6 +427,16 @@ require_relative 'chrome_extension'
             end
           end
         end
+
+        if action_body[:if_not_param]
+          res_param[:success] = true
+          if action_body[:if_not_param].kind_of? String
+            if user_opts.has_key? action_body[:if_not_param].to_sym
+              res_param[:response] = "parameter '#{action_body[:if_not_param]}' was found in user_opts"
+              return res_param
+            end
+          end
+        end           
 
         res_context ={}
         if action_body[:context]
