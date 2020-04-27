@@ -23,6 +23,7 @@ click_project_link_developer_mode:
     selector:
       xpath: //a[text()='<project_name>']
     op: click
+    timeout: 20
 choose_project_developer_mode:
   action: click_projects_dropdown_developer_mode
   action: input_select_project_developer_mode
