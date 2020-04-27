@@ -189,7 +189,7 @@ goto_one_namespace_page:
 
 # operator hub
 goto_operator_hub_page:
-  url: operatorhub/ns/default
+  url: operatorhub/all-namespaces
   action: wait_box_loaded
 goto_installed_operators_page:
   url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion
@@ -229,6 +229,7 @@ goto_consoleyamlsample_crd_instances_page:
 # catalog source
 goto_catalog_source_page:
   url: k8s/cluster/config.openshift.io~v1~OperatorHub/cluster/sources
+  action: wait_box_loaded
 
 # quota
 goto_quotas_page:

@@ -208,6 +208,7 @@ goto_consoleyamlsample_crd_instances_page:
 # catalog source
 goto_catalog_source_page:
   url: k8s/cluster/config.openshift.io~v1~OperatorHub/cluster/sources
+  action: wait_box_loaded
 
 # quota
 goto_quotas_page:
