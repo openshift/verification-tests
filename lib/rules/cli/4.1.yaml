@@ -1337,3 +1337,5 @@
     :openshift_version: !ruby/regexp '/^openshift v(.+)$/'
     :kubernetes_version: !ruby/regexp '/kubernetes v(.+)$/'
     :etcd_version: !ruby/regexp '/etcd (.+)$/'
+:oadm_top_node:
+  :cmd: oc adm top node
