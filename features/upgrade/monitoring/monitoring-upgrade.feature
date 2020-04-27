@@ -25,14 +25,16 @@ Feature: cluster monitoring related upgrade check
     Then the expression should be true> cb.status == "Running"
     """
     When I run the :get client command with:
-      | resource | clusteroperator/monitoring |
+      | resource      | clusteroperator |
+      | resource_name | monitoring      |
     And evaluation of `@result[:stdout].split(/\n/)[1].split(/\s+/)[4]` is stored in the :degreaded_status clipboard
     Then the expression should be true> cb.degreaded_status == "False"
 
     #check retention time
     When I run the :get client command with:
-      | resource | prometheus/k8s |
-      | o        | yaml           |
+      | resource      | prometheus |
+      | resource_name | k8s        |
+      | o             | yaml       |
     Then the expression should be true> YAML.load(@result[:stdout])["spec"]["retention"] == "3h"
 
     # get sa/prometheus-k8s token
