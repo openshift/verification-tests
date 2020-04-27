@@ -113,3 +113,16 @@ Given /^the #{QUOTED} path is( recursively)? removed on all masters after scenar
     step %{the "#{path}" path is#{recursively} removed on the host after scenario}
   }
 end
+
+Given /^the master is operational$/ do
+  ensure_admin_tagged
+  success = wait_for(60) {
+    admin.cli_exec(:get, resource_name: "default", resource: "project")[:success]
+  }
+  raise "Timed out waiting for master to become functional." unless success
+end
+
+Given /^the extra image namespace is stored in the#{OPT_SYM} clipboard$/ do |cb_name|
+  ensure_admin_tagged
+  cb[cb_name]=configmap("testbed").valueof('data')
+end
