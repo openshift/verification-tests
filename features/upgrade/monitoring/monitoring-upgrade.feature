@@ -2,7 +2,7 @@ Feature: cluster monitoring related upgrade check
   # @author hongyli@redhat.com
   @upgrade-prepare
   @admin
-  Scenario: cluster monitoring - prepare
+  Scenario: upgrade cluster monitoring along with OCP - prepare
     Given I switch to cluster admin pseudo user
     And I use the "openshift-monitoring" project
     When I run the :apply client command with:
