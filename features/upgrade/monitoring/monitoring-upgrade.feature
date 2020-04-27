@@ -15,7 +15,7 @@ Feature: cluster monitoring related upgrade check
   @upgrade-check
   @admin
   Scenario: upgrade cluster monitoring along with OCP
-    Given the first user is cluster-admin
+    Given I switch to cluster admin pseudo user
     And I use the "openshift-monitoring" project
     When I run the :get client command with:
       | resource | pods |
@@ -24,17 +24,11 @@ Feature: cluster monitoring related upgrade check
     """
     Then the expression should be true> cb.status == "Running"
     """
-    Then the output should contain 21 times:
-      | Running |
-    Then the output should not contain:
-      | Terminating       |
-      | ContainerCreating |
-      | Pending           |
-      | Failed            |
-      | Unknown           |
     When I run the :get client command with:
       | resource | clusteroperator/monitoring |
     And evaluation of `@result[:stdout].split(/\n/)[1].split(/\s+/)[4]` is stored in the :degreaded_status clipboard
+    Then the expression should be true> cb.degreaded_status == "False"
+
     #check retention time
     When I run the :get client command with:
       | resource | prometheus/k8s |
@@ -55,7 +49,6 @@ Feature: cluster monitoring related upgrade check
       | exec_command_arg | curl -k -H "Authorization: Bearer <%= cb.sa_token %>" https://prometheus-k8s.openshift-monitoring.svc:9091/api/v1/query?query=machine_cpu_cores |
     Then the step should succeed
     And the output should contain:
-      | "status":"success"             |
       | "__name__":"machine_cpu_cores" |
 
     # curl -k -H "Authorization: Bearer $token" 'https://alertmanager-main.openshift-monitoring.svc:9094/api/v1/alerts'
@@ -69,7 +62,6 @@ Feature: cluster monitoring related upgrade check
       | exec_command_arg | curl -k -H "Authorization: Bearer <%= cb.sa_token %>" https://alertmanager-main.openshift-monitoring.svc:9094/api/v1/alerts |
     Then the step should succeed
     And the output should contain:
-      | "status":"success"             |
       | "alertname":"Watchdog" |
 
     # curl -k -H "Authorization: Bearer $token" 'https://grafana.openshift-monitoring.svc:3000/api/health
