@@ -1034,13 +1034,12 @@ Feature: Multus-CNI related scenarios
   Scenario: Multus default route overwrite
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
-    Given the default interface on nodes is stored in the :default_interface clipboard
     # Create the net-attach-def via cluster admin
     Given I have a project
     When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/ipam-static.yaml" replacing paths:
       | ["metadata"]["namespace"]  | <%= project.name %> | 
       | ["metadata"]["name"]       | bridge-static       |
-      | ["spec"]["config"]| '{ "cniVersion": "0.3.0", "type": "bridge", "master": "<%= cb.default_interface %>", "ipam": {"type":"static","addresses": [{"address": "22.2.2.22/24","gateway": "22.2.2.1"}]}}' |
+      | ["spec"]["config"]| '{ "cniVersion": "0.3.0", "type": "bridge", "ipam": {"type":"static","addresses": [{"address": "22.2.2.22/24","gateway": "22.2.2.1"}]}}' |
     Then the step should succeed
       
     # Create a pod absorbing above net-attach-def
