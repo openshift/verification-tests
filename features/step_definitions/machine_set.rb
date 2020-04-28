@@ -57,7 +57,7 @@ Then(/^the machineset should have expected number of running machines$/) do
   end
 end
 
-Given(/^I clone a machineset named "([^"]*)"$/) do | ms_name |
+Given(/^I clone a machineset and name it "([^"]*)"$/) do | ms_name |
   step %Q{I pick a random machineset to scale}
 
   ms_yaml = machine_set.raw_resource.to_yaml
