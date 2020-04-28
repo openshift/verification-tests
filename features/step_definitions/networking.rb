@@ -852,8 +852,7 @@ Given /^the vxlan tunnel name of node "([^"]*)" is stored in the#{OPT_SYM} clipb
   end
   case networkType
   when "OVNKubernetes"
-    inf_name = host.exec_admin("ifconfig | egrep -o '^k8[^:]+'")
-    cb[cb_name] = inf_name[:response].split("\n")[0]
+    cb[cb_name]="ovn-k8s-mp0"
   when "OpenShiftSDN"
     cb[cb_name]="tun0"
   else
@@ -873,8 +872,8 @@ Given /^the vxlan tunnel address of node "([^"]*)" is stored in the#{OPT_SYM} cl
   end
   case networkType
   when "OVNKubernetes"
-    inf_name = host.exec_admin("ifconfig | egrep -o '^k8[^:]+'")
-    @result = host.exec_admin("ifconfig #{inf_name[:response].split("\n")[0]}")
+    inf_name="ovn-k8s-mp0" 
+    @result = host.exec_admin("ifconfig #{inf_name.split("\n")[0]}")
     cb[cb_address] = @result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]
   when "OpenShiftSDN"
     @result=host.exec_admin("ifconfig tun0")
