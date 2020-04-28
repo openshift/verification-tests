@@ -72,7 +72,7 @@ check_query_input_text_area:
 click_promql_button:
   element:
     selector: &promql_button
-      xpath: //button[text()='<text>']
+      xpath: //span[text()='<text>']/parent::button
     op: click
 click_hide_promql_button:
   params:
