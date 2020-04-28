@@ -160,6 +160,16 @@ set_label_input_simple:
       <<: *label_input_value
     op: send_keys <input_value>
     type: input
+set_label_textarea:
+  elements:
+  - selector: &label_textarea
+      xpath: //label[text()='<label_text>']/..//textarea
+    op: clear
+    type: textarea
+  - selector:
+      <<: *label_textarea
+    op: send_keys <input_value>
+    type: textarea
 check_editor_is_monaco_editor:
   element:
     selector:
