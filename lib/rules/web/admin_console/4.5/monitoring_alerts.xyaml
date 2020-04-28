@@ -9,23 +9,21 @@ set_placeholder_input_value:
       xpath: (//input[@placeholder='<placeholder_text>'])[<index>]
     op: send_keys <input_value>
     type: input
-### yapei PR is adding: https://github.com/openshift/verification-tests/pull/1005/files
 check_alert_title:
   elements:
   - selector:
-      xpath: //span[contains(@class, 'pf-c-alert__title') and contains(text(), '<title>')]
+      xpath: //*[contains(@class, 'pf-c-alert__title') and contains(text(), '<title>')]
 check_alert_description:
   elements:
   - selector:
-      xpath: //span[contains(@class, 'pf-c-alert__description')]//*[contains(., '<description>')]
+      xpath: //*[contains(@class, 'pf-c-alert__description')]//*[contains(., '<description>')]
 check_alert_message:
   action:
-    if_param: <title>
+    if_param: title
     ref: check_alert_title
   action:
-    if_param: <description>
+    if_param: description
     ref: check_alert_description
-###
 check_alert_warning_for_multiple_receivers:
   params:    
     title: Incomplete Alert Receivers
@@ -36,9 +34,6 @@ check_alert_warning_for_single_receivers:
     title: Incomplete Alert Receivers
     description: Configure this receivers
   action: check_alert_message
-
-  action: check_alert_message
-
 check_div_text:
   element:
     selector:
