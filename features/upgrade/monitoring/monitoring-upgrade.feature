@@ -3,9 +3,9 @@ Feature: cluster monitoring related upgrade check
   @upgrade-prepare
   @admin
   Scenario: upgrade cluster monitoring along with OCP - prepare
-    And I use the "openshift-monitoring" project
+    Given I switch to cluster admin pseudo user
     When I run the :apply client command with:
-      | f          | <%= BushSlicer::HOME %>/features/upgrade/monitoring/cm-monitoring-retention.yaml |
+      | f          | <%= BushSlicer::HOME %>/features/upgrade/monitoring/testdata/cm-monitoring-retention.yaml |
       | overwrite  | true |
     Then the step should succeed
 
