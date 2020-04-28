@@ -35,6 +35,9 @@ goto_builds_page:
   url: k8s/ns/<project_name>/builds
 goto_one_build_page:
   url: k8s/ns/<project_name>/builds/<build_name>
+goto_one_build_environment_page:
+  url: k8s/ns/<project_name>/builds/<build_name>/environment
+  action: wait_box_loaded
 
 #hpa
 goto_hpas_page:
@@ -114,6 +117,9 @@ goto_one_pod_page:
   url: k8s/ns/<project_name>/pods/<resource_name>
 goto_one_pod_log_page:
   url: k8s/ns/<project_name>/pods/<pod_name>/logs
+goto_one_pod_environment_page:
+  url: k8s/ns/<project_name>/pods/<pod_name>/environment
+  action: wait_box_loaded
 goto_project_pods_list_page:
   url: k8s/ns/<project_name>/pods
   action: wait_box_loaded
