@@ -179,7 +179,6 @@ Feature: test logging and metrics related steps
     Given logging operators are installed successfully
     Given I create clusterlogging instance with:
       | crd_yaml            | <%= BushSlicer::HOME %>/testdata/logging/clusterlogging/example.yaml |
-      | remove_logging_pods | true                                                                                                   |
-      | log_collector       | fluentd                                                                                                |
+      | remove_logging_pods | true                                                                 |
 
 

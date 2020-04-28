@@ -47,16 +47,10 @@ Feature: cluster-logging-operator related test
   @admin
   @destructive
   Scenario: Scale Elasticsearch nodes by nodeCount 2->3->4 in clusterlogging
-    Given I delete the clusterlogging instance
-    Then the step should succeed
-    And I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/logging/clusterlogging/scalebase.yaml |
-    Then the step should succeed
-    Given I register clean-up steps:
-    """
-    Given I delete the clusterlogging instance
-    """
-    # Given admin ensures "instance" cluster_logging is deleted from the "openshift-logging" project after scenario
+    Given I create clusterlogging instance with:
+      | remove_logging_pods | true                                                                   |
+      | crd_yaml            | <%= BushSlicer::HOME %>/testdata/logging/clusterlogging/scalebase.yaml |
+      | check_status        | false                                                                  |
     And I wait for the "elasticsearch" elasticsearches to appear
     And the expression should be true> cluster_logging('instance').logstore_node_count == 2
     And the expression should be true> elasticsearch('elasticsearch').nodes[0]['nodeCount'] == 2
@@ -100,9 +94,8 @@ Feature: cluster-logging-operator related test
   Scenario: Fluentd alert rule: FluentdNodeDown
     Given the master version >= "4.2"
     Given I create clusterlogging instance with:
-      | remove_logging_pods | true                                                                                                   |
+      | remove_logging_pods | true                                                                 |
       | crd_yaml            | <%= BushSlicer::HOME %>/testdata/logging/clusterlogging/example.yaml |
-      | log_collector       | fluentd                                                                                                |
     Then the step should succeed
     Given I wait for the "fluentd" prometheus_rule to appear
     And I wait for the "fluentd" service_monitor to appear

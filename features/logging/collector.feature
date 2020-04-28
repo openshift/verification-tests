@@ -88,7 +88,8 @@ Feature: collector related tests
 
   # @author qitang@redhat.com
   # @case_id OCP-25365
-  @admin @destructive
+  @admin
+  @destructive
   @commonlogging
   Scenario: The System Journald log can be collected
     Given evaluation of `cluster_logging('instance').collection_type` is stored in the :collection_type clipboard
@@ -103,7 +104,8 @@ Feature: collector related tests
 
   # @author qitang@redhat.com
   # @case_id OCP-18147
-  @admin @destructive
+  @admin
+  @destructive
   @commonlogging
   Scenario: The Container logs metadata check
     Given the master version == "4.1"
@@ -137,7 +139,8 @@ Feature: collector related tests
 
   # @author qitang@redhat.com
   # @case_id OCP-25768
-  @admin @destructive
+  @admin
+  @destructive
   @commonlogging
   Scenario: The container logs metadata check
     Given the master version >= "4.2"

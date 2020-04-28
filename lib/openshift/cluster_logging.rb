@@ -175,7 +175,7 @@ module BushSlicer
       raw_resource(user: user, cached: cached, quiet: quiet).dig('spec', 'visualization')
     end
 
-    def collection_type(user: nil, quiet: false, cached: false)
+    def collection_type(user: nil, quiet: false, cached: true)
       return collection_spec(user: user, cached: cached, quiet: quiet).dig('logs', 'type')
     end
 

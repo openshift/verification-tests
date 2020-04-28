@@ -10,10 +10,14 @@ Before('@commonlogging') do
   step %Q/I switch to cluster admin pseudo user/
   step %Q/I use the "openshift-logging" project/
   unless cluster_logging("instance").exists?
+    if env.version_cmp('4.5', user: user) < 0
+      example_cr = "<%= BushSlicer::HOME %>/testdata/logging/clusterlogging/example.yaml"
+    else
+      example_cr = "<%= BushSlicer::HOME %>/testdata/logging/clusterlogging/example_indexmanagement.yaml"
+    end
     step %Q/I create clusterlogging instance with:/, table(%{
-      | remove_logging_pods | false                                                                      |
-      | crd_yaml            | <%= BushSlicer::HOME %>/testdata/logging/clusterlogging/example.yaml |
-      | log_collector       | fluentd                                                                    |
+      | remove_logging_pods | false         |
+      | crd_yaml            | #{example_cr} |
     })
   end
 end
