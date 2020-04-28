@@ -9,26 +9,36 @@ set_placeholder_input_value:
       xpath: (//input[@placeholder='<placeholder_text>'])[<index>]
     op: send_keys <input_value>
     type: input
-check_alert_warning_message:
+### yapei PR is adding: https://github.com/openshift/verification-tests/pull/1005/files
+check_alert_title:
   elements:
   - selector:
-      xpath: //*[contains(@class, 'pf-c-alert__title') and contains(text(), '<title>')]
+      xpath: //span[contains(@class, 'pf-c-alert__title') and contains(text(), '<title>')]
+check_alert_description:
+  elements:
   - selector:
-      xpath: //*[contains(@class, 'pf-c-alert__description')]//*[contains(., '<description>')]
+      xpath: //span[contains(@class, 'pf-c-alert__description')]//*[contains(., '<description>')]
+check_alert_message:
+  action:
+    if_param: <title>
+    ref: check_alert_title
+  action:
+    if_param: <description>
+    ref: check_alert_description
+###
 check_alert_warning_for_multiple_receivers:
   params:    
     title: Incomplete Alert Receivers
     description: Configure these receivers
-  action: check_alert_warning_message
+  action: check_alert_message
+check_alert_warning_for_single_receivers:
+  params:    
+    title: Incomplete Alert Receivers
+    description: Configure this receivers
+  action: check_alert_message
 
-check_editing_receiver_browse_from_receivers_list:
-  element:
-    selector:
-      xpath://*[@role='gridcell' and text()='<receiver>']/following-sibling::td//*[text()='Configure']
-    op: click
-  action: click_config_one_receiver
-  action: wait_box_loaded
-  action: check_alert_warning_message
+  action: check_alert_message
+
 check_div_text:
   element:
     selector:
