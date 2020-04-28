@@ -498,7 +498,22 @@ check_side_overlay_dialog_modal:
   elements:
   - selector:
       xpath: //*[contains(@class, 'pf-c-modal-box') and @role='dialog' and not(contains(., 'modal-content'))]
-
+check_alert_title:
+  elements:
+  - selector:
+      xpath: //*[contains(@class, 'pf-c-alert__title') and contains(text(), '<title>')]
+check_alert_description:
+  elements:
+  - selector:
+      xpath: //*[contains(@class, 'pf-c-alert__description')]//*[contains(., '<description>')]
+check_alert_message:
+  action:
+    if_param: title
+    ref: check_alert_title
+  action:
+    if_param: description
+    ref: check_alert_description
+    
 ## -------- check resource key and values pairs ------
 check_resource_details:
   action:
