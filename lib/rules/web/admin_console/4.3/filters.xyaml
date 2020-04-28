@@ -98,3 +98,6 @@ check_item_in_table:
   elements:
   - selector:
       xpath: //tr[@data-test-rows='resource-row']//*[text()='<item>']
+
+# Below is PF4 filter bar related rules (since OCP4.5)
+open_filter_dropdown_list: {}
