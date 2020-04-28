@@ -708,7 +708,7 @@ Given /^I have a cluster-capacity pod in my project$/ do
   })
   step 'the step should succeed'
   # cluster-capacity as a target pod
-  step "I run oc create over ERB URL: #{ENV['BUSHSLICER_HOME']}/testdata/infrastructure/cluster-capacity/cluster-capacity-pod.yaml"
+  step 'I run oc create over ERB test file: "/infrastructure/cluster-capacity/cluster-capacity-pod.yaml"'
   step 'the step should succeed'
   step 'the pod named "cluster-capacity" becomes ready'
 end
