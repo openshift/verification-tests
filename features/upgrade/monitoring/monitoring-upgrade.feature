@@ -3,7 +3,6 @@ Feature: cluster monitoring related upgrade check
   @upgrade-prepare
   @admin
   Scenario: upgrade cluster monitoring along with OCP - prepare
-    Given I switch to cluster admin pseudo user
     And I use the "openshift-monitoring" project
     When I run the :apply client command with:
       | f          | <%= BushSlicer::HOME %>/features/upgrade/monitoring/cm-monitoring-retention.yaml |
