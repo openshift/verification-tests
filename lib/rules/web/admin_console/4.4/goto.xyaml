@@ -271,3 +271,8 @@ goto_one_ImageManifestVuln_page:
 # global config
 goto_alertmanagerconfig_page:
   url: monitoring/alertmanagerconfig
+
+#cluster settings
+goto_cluster_operators:
+  url: settings/cluster/clusteroperators
+  action: wait_box_loaded

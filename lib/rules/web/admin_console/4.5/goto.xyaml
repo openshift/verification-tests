@@ -163,6 +163,9 @@ goto_monitoring_alerts_page:
   url: monitoring/alerts
 goto_monitoring_silences_page:
   url: monitoring/silences
+goto_alertmanagerconfig_page:
+  url: monitoring/alertmanagerconfig
+  action: wait_box_loaded
 
 #node
 goto_node_page:
@@ -265,13 +268,14 @@ goto_ImageManifestVuln_list_page:
 goto_one_ImageManifestVuln_page:
   url: k8s/ns/<project_name>/secscan.quay.redhat.com~v1alpha1~ImageManifestVuln/<manifest>
 
-# global config
-goto_alertmanagerconfig_page:
-  url: monitoring/alertmanagerconfig
-
 #hpa
 goto_hpas_page:
   url: k8s/ns/<project_name>/horizontalpodautoscalers
 goto_one_hpa_page:
   url: k8s/ns/<project_name>/horizontalpodautoscalers/<hpa_name>
 
+#cluster settings
+goto_cluster_operators:
+  url: settings/cluster/clusteroperators
+  action: wait_box_loaded
+  
