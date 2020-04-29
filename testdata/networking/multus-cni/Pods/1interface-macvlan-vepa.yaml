@@ -9,4 +9,4 @@ metadata:
 spec:
   containers:
   - name: macvlan-vepa-pod
-    image: docker.io/aosqe/centos-network@sha256:48da37205f9b43424e0983d4c5e7e07f77b7ba1504bbe35e2f264c75dcb4cd15
+    image: quay.io/openshifttest/centos-network@sha256:48da37205f9b43424e0983d4c5e7e07f77b7ba1504bbe35e2f264c75dcb4cd15
