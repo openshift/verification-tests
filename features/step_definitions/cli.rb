@@ -111,7 +111,7 @@ end
 # 1. download file from URL
 # 2. load it as an ERB file with the cucumber scenario variables binding
 # 3. runs `oc create` command over the resulting file
-When /^I run oc create( as admin)? over ERB test file: #{QUOTED}$/ do |admin, file_path|
+When /^I run oc create( as admin)? over ERB test file: (.*)$/ do |admin, file_path|
   step %Q|I obtain test data file "#{file_path}"|
   file_path = cb.test_file
   # overwrite with ERB loaded content
