@@ -759,7 +759,7 @@ Given /^logging service is installed in the#{OPT_QUOTED} project using deployer:
     | I remove logging service installed in the project using deployer |
     })
   # create the configmap
-  step %Q|I run oc create over ERB test file: /logging_metrics/logging_deployer_configmap.yaml |
+  step %Q|I run oc create over ERB test file: logging_metrics/logging_deployer_configmap.yaml |
   step %Q/the step should succeed/
   # must create a label or else installation will fail
   registry_nodes = BushSlicer::Node.get_labeled(["registry"], user: user)
@@ -975,7 +975,7 @@ Given /^I have a pod with openshift-ansible playbook installed$/ do
     logger.info("Proxy set to: #{cb.proxy_value}")
     step %Q/I switch to cluster admin pseudo user/
     step %Q{I use the "<%= cb.org_project_for_ansible.name %>" project}
-    step %Q{I run oc create over ERB test file: /logging_metrics/base_ansible_ose.yaml}
+    step %Q{I run oc create over ERB test file: logging_metrics/base_ansible_ose.yaml}
     step %Q/the step should succeed/
     step %Q/the pod named "base-ansible-pod" becomes ready/
 
