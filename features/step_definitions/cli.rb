@@ -111,17 +111,17 @@ end
 # 1. download file from URL
 # 2. load it as an ERB file with the cucumber scenario variables binding
 # 3. runs `oc create` command over the resulting file
-When /^I run oc create( as admin)? over ERB URL: #{HTTP_URL}$/ do |admin, url|
-  step %Q|I download a file from "#{url}"|
-
+When /^I run oc create( as admin)? over ERB test file: (.*)$/ do |admin, file_path|
+  step %Q|I obtain test data file "#{file_path}"|
+  file_path = cb.test_file
   # overwrite with ERB loaded content
-  loaded = ERB.new(File.read(@result[:abs_path])).result binding
-  File.write(@result[:abs_path], loaded)
+  loaded = ERB.new(File.read(file_path)).result binding
+  File.write(file_path, loaded)
   if admin
     ensure_admin_tagged
-    @result = self.admin.cli_exec(:create, {f: @result[:abs_path]})
+    @result = self.admin.cli_exec(:create, {f: file_path})
   else
-    @result = user.cli_exec(:create, {f: @result[:abs_path]})
+    @result = user.cli_exec(:create, {f: file_path})
   end
 end
 
