@@ -9,12 +9,12 @@ set_placeholder_input_value:
       xpath: (//input[@placeholder='<placeholder_text>'])[<index>]
     op: send_keys <input_value>
     type: input
-check_alert_warning_for_multiple_receivers:
+check_message_when_multiple_receivers_not_configured:
   params:    
     title: Incomplete Alert Receivers
     description: Configure these receivers
   action: check_alert_message
-check_alert_warning_for_single_receivers:
+check_message_when_single_receiver_not_configured:
   params:    
     title: Incomplete Alert Receiver
     description: Configure this receiver
