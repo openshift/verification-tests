@@ -38,8 +38,13 @@ silence_alert_from_action:
     item_text: Silence Alert
   action: perform_action_item
   action: click_create_button
+check_silence_detail:
+  element:
+    selector:
+      xpath: //span[text()='Silence Details']
 silence_alert_from_detail:
   action: silence_alert_from_action 
+  action: check_silence_detail
 click_alert_link_with_text:
   element:
     selector:

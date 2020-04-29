@@ -42,7 +42,7 @@ perform_silence:
   params:
     button_text: Silence
   action: click_button_text
-check_silence_by:
+check_silence_detail:
   element:
     selector:
       xpath: //span[text()='Silence Details']
@@ -52,7 +52,7 @@ silence_alert_from_detail:
   action: click_silence_alert
   action: input_silence_comments
   action: perform_silence
-  action: check_silence_by
+  action: check_silence_detail
 click_alert_link_with_text:
   element:
     selector:
