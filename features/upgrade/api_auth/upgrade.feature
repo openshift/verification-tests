@@ -122,3 +122,54 @@ Feature: apiserver and auth related upgrade check
       | <%= cb.oas_operator_image %> |
       | <%= cb.kas_image %>          |
       | <%= cb.oas_image %>          |
+
+  # @author kewang@redhat.com
+  @upgrade-prepare
+  @admin
+  Scenario: Default RBAC role, rolebinding, clusterrole and clusterrolebinding without any missing after upgraded - prepare
+    When I run the :get admin command with:
+      | resource | clusterroles.rbac |
+      | o        | yaml              |
+    Then the output should contain:
+      | autoupdate: "true" |
+    And the output should not contain:
+      | autoupdate: "false" |
+    # Make some changes on clusterrole resources before upgrade
+    Given as admin I successfully patch resource "clusterrole.rbac/system:build-strategy-docker" with:
+      | {"rules": [{"apiGroups": ["","build.openshift.io"],"resources": ["builds/docker","builds/optimizeddocker"],"verbs": [ "get" ]}] } |
+    When I run the :get admin command with:
+      | resource      | clusterroles.rbac            |
+      | resource_name | system:build-strategy-docker |
+      | o             | yaml                         |
+    Then the expression should be true> !@result[:parsed]['rules'][0]['verbs'].include? "create"
+    And the expression should be true> @result[:parsed]['rules'][0]['verbs'][0] == "get"
+    Given as admin I successfully patch resource "clusterrolebinding.rbac/system:oauth-token-deleters" with:
+      | {"subjects":[{"apiGroup": "rbac.authorization.k8s.io","kind": "Group","name": "system:authenticated"}]} |
+    When I run the :get admin command with:
+      | resource      | clusterrolebinding.rbac     |
+      | resource_name | system:oauth-token-deleters |
+      | o             | yaml                        |
+    Then the expression should be true> @result[:parsed]['subjects'][0]['name'] == "system:authenticated"
+    And the expression should be true> @result[:parsed]['subjects'][1] == nil
+
+  # @author kewang@redhat.com
+  # @case_id OCP-19470
+  @upgrade-check
+  @admin
+  Scenario: Default RBAC role, rolebinding, clusterrole and clusterrolebinding without any missing after upgraded
+    # Checking original clusterrole resources recovered after upgraded
+    When I run the :get admin command with:
+      | resource      | clusterroles.rbac            |
+      | resource_name | system:build-strategy-docker |
+      | o             | yaml                         |
+    Then the expression should be true> @result[:parsed]['rules'][0]['verbs'][0] == "get"
+    And the expression should be true> @result[:parsed]['rules'][1]['verbs'][0] == "create"
+    And the expression should be true> @result[:parsed]['rules'][2]['verbs'][0] == "create"
+    And the expression should be true> @result[:parsed]['rules'][3]['verbs'][0] == "create"
+    And the expression should be true> @result[:parsed]['rules'][4]['verbs'][0] == "create"
+    When I run the :get admin command with:
+      | resource      | clusterrolebinding.rbac     |
+      | resource_name | system:oauth-token-deleters |
+      | o             | yaml                        |
+    Then the expression should be true> @result[:parsed]['subjects'][0]['name'] == "system:authenticated"
+    And the expression should be true> @result[:parsed]['subjects'][1]['name'] == "system:unauthenticated"
