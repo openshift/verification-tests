@@ -367,6 +367,52 @@ Feature: OVN related networking scenarios
     """
     And admin waits for all pods in the project to become ready up to 120 seconds
 
+  # @author rbrattai@redhat.com
+  # @case_id OCP-26138
+  @admin
+  @destructive
+  Scenario: Inducing Split Brain in the OVN HA cluster
+    Given admin uses the "openshift-ovn-kubernetes" project
+    When I store the ovnkube-master "south" leader pod in the clipboard
+    Then the step should succeed
+
+    Given I store the masters in the clipboard excluding "<%= cb.south_leader.node_name %>"
+    And I use the "<%= cb.nodes[0].name %>" node
+    # make sure to unblock after the test
+    And I register clean-up steps:
+    """
+    When I run commands on the host:
+      | iptables -t filter -D INPUT -s <%= cb.south_leader.ip %> -p tcp --dport 9643:9644 -j DROP |
+    """
+    # don't block all traffic that breaks etcd, just block the OVN ssl ports
+    When I run commands on the host:
+      | iptables -t filter -A INPUT -s <%= cb.south_leader.ip %> -p tcp --dport 9643:9644 -j DROP |
+    Then the step should succeed
+
+    # election timer is 1 second by default but the RAFT JSON-RPC probe might take 5 seconds to notice
+    And I wait up to 40 seconds for the steps to pass:
+    # check the leader on the original leader to ensure it is still the leader and the split node doesn't become leader
+    """
+    When I store the ovnkube-master "south" leader pod in the :original_south_leader clipboard using node "<%= cb.south_leader.node_name %>"
+    Then the step should succeed
+    When I store the ovnkube-master "south" leader pod in the :isolated_south_leader clipboard using node "<%= cb.nodes[0].name %>"
+    Then the step should succeed
+    """
+    # try to get the isolated leader for debug, it might not work
+    When I run commands on the host:
+      | iptables -t filter -D INPUT -s <%= cb.south_leader.ip %> -p tcp --dport 9643:9644 -j DROP |
+    # wait for OVN to reconverge
+    # election timer is 1 second by default but the RAFT JSON-RPC probe might take 5 seconds to notice
+    And I wait up to 40 seconds for the steps to pass:
+    # check the leader on the original leader to ensure it is still the leader and the split node doesn't become leader
+    """
+    When I store the ovnkube-master "south" leader pod in the :after_south_leader clipboard using node "<%= cb.south_leader.node_name %>"
+    Then the step should succeed
+    When I store the ovnkube-master "south" leader pod in the :after_isolated_south_leader clipboard using node "<%= cb.nodes[0].name %>"
+    Then the step should succeed
+    """
+    And admin waits for all pods in the project to become ready up to 120 seconds
+
 
   # @author rbrattai@redhat.com
   # @case_id OCP-26140
