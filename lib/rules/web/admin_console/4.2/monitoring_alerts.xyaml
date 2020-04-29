@@ -38,6 +38,8 @@ silence_alert_from_action:
     item_text: Silence Alert
   action: perform_action_item
   action: click_create_button
+silence_alert_from_detail:
+  action: silence_alert_from_action
 click_alert_link_with_text:
   element:
     selector:
