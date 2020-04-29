@@ -1,4 +1,4 @@
-browse_to_receiver_config_from_receivers_list:
+browse_to_receiver_config:
   element:
     selector:
       xpath: //*[@role='gridcell' and text()='<receiver>']/following-sibling::td//*[text()='Configure']
@@ -13,3 +13,7 @@ config_receiver_type:
       xpath: //*[contains(@class, 'pf-c-dropdown__menu')]
     timeout: 20
   action: click_dropdown_menu_item
+set_pagerduty_key:
+  params:    
+    input_field_id: integration-key
+  action: set_input_value
