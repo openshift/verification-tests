@@ -2,6 +2,7 @@ Feature: oc_portforward.feature
 
   # @author pruan@redhat.com
   # @case_id OCP-11195
+  @admin
   Scenario: Forward multi local ports to a pod
     Given I have a project
     And evaluation of `rand(5000..7999)` is stored in the :porta clipboard
@@ -21,37 +22,25 @@ Feature: oc_portforward.feature
     Then the step should succeed
     And I wait up to 40 seconds for the steps to pass:
     """
-    And I perform the HTTP request:
-      <%= '"""' %>
-      :url: 127.0.0.1:<%= cb[:porta] %>
-      :method: :get
-      <%= '"""' %>
+    Given the expression should be true> @host = localhost
+    And I run commands on the host:
+      | curl http://127.0.0.1:<%= cb[:porta] %> --noproxy "127.0.0.1" |
     Then the step should succeed
     And the output should contain:
       | Hello OpenShift |
+    And I run commands on the host:
+      | curl http://127.0.0.1:<%= cb[:portb] %> --noproxy "127.0.0.1" |
     Then the step should succeed
     And the output should contain:
       | Hello OpenShift |
-    And I perform the HTTP request:
-      <%= '"""' %>
-      :url: 127.0.0.1:<%= cb[:portb] %>
-      :method: :get
-      <%= '"""' %>
+    And I run commands on the host:
+      | curl http://127.0.0.1:<%= cb[:portc] %> --noproxy "127.0.0.1" |
     Then the step should succeed
     And the output should contain:
       | Hello OpenShift |
-    And I perform the HTTP request:
-      <%= '"""' %>
-      :url: 127.0.0.1:<%= cb[:portc] %>
-      :method: :get
-      <%= '"""' %>
+    And I run commands on the host:
+      | curl http://127.0.0.1:<%= cb[:portd] %> --noproxy "127.0.0.1" |
     Then the step should succeed
     And the output should contain:
       | Hello OpenShift |
-    And I perform the HTTP request:
-      <%= '"""' %>
-      :url: 127.0.0.1:<%= cb[:portd] %>
-      :method: :get
-      <%= '"""' %>
     """
-
