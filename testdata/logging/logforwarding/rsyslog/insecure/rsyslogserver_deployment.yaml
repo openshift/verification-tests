@@ -32,7 +32,7 @@ spec:
         - "-n"
         command:
         - "/usr/sbin/rsyslogd"
-        image: docker.io/aosqe/rsyslog@sha256:11a93aa0cd836327f6d22926adf999c726916cdf404c61a7b702f98be4d43d70
+        image: quay.io/openshifttest/rsyslog@sha256:11a93aa0cd836327f6d22926adf999c726916cdf404c61a7b702f98be4d43d70
         imagePullPolicy: IfNotPresent
         securityContext:
           privileged: true
