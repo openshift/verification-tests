@@ -457,13 +457,14 @@ Feature: Multus-CNI related scenarios
     # Create the net-attach-def via cluster admin
     Given I have a project
     When I run the :create admin command with:
-      | f | https://raw.githubusercontent.com/weliang1/Openshift_Networking/master/Features/multus/bridge-host-local-vlan200.yaml |
-      | n | <%= project.name %>                                                                                                |
+      | f | <%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/bridge-host-local-vlan-200.yaml |
+      | n | <%= project.name %>                                                                                                 |
     Then the step should succeed
     #Creating vlan pod absorbing above net-attach-def
-    When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/weliang1/Openshift_Networking/master/Features/multus/pod1-bridge-host-local-vlan200.yaml |
-      | n | <%= project.name %>                                                                                                     |
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                       | pod1-vlan200  |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | bridgevlan200 |
+      | ["spec"]["containers"][0]["name"]                          | pod1-vlan200  |
     Then the step should succeed
     And the pod named "pod1-vlan200" becomes ready
     And evaluation of `pod` is stored in the :pod clipboard
@@ -1033,13 +1034,12 @@ Feature: Multus-CNI related scenarios
   Scenario: Multus default route overwrite
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
-
     # Create the net-attach-def via cluster admin
     Given I have a project
     When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/ipam-static.yaml" replacing paths:
       | ["metadata"]["namespace"]  | <%= project.name %> | 
       | ["metadata"]["name"]       | bridge-static       |
-      | ["spec"]["config"]| '{ "cniVersion": "0.3.0", "type": "bridge", "master": "ens3", "ipam": {"type":"static","addresses": [{"address": "22.2.2.22/24","gateway": "22.2.2.1"}]}}' |
+      | ["spec"]["config"]| '{ "cniVersion": "0.3.0", "type": "bridge", "ipam": {"type":"static","addresses": [{"address": "22.2.2.22/24","gateway": "22.2.2.1"}]}}' |
     Then the step should succeed
       
     # Create a pod absorbing above net-attach-def
@@ -1260,7 +1260,7 @@ Feature: Multus-CNI related scenarios
     Then the step should succeed
       
     # Create a pod absorbing above net-attach-def
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing path:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
       | ["metadata"]["name"]                                       | route-override   |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | route-override   |
       | ["spec"]["containers"][0]["name"]                          | route-override   |
