@@ -31,14 +31,14 @@ Feature: collector related tests
     Then the step should succeed
 
     Given evaluation of `JSON.parse(@result[:response])['aggregations']['exists_field_kubernetes']['distinct_fluentd_ip']['buckets'].map {|furn| furn["key"]}` is stored in the :kuber_ips clipboard
-    And the expression should be true> Set.new(cb.node_ips) == Set.new(cb.kuber_ips)
+    And the expression should be true> Set.new(cb.collector_pod_ips) == Set.new(cb.kuber_ips)
 
     And I perform the HTTP request on the ES pod with labels "es-node-master=true":
       | relative_url | _search?pretty&size=0' -H 'Content-Type: application/json' -d'{"aggs" : {"exists_field_systemd" : {"filter": {"exists": {"field":"systemd"}},"aggs" : {"distinct_fluentd_ip" : {"terms" : {"field" : "pipeline_metadata.collector.ipaddr4"}}}}}} |
       | op           | GET   |
     Then the step should succeed
     Given evaluation of `JSON.parse(@result[:response])['aggregations']['exists_field_systemd']['distinct_fluentd_ip']['buckets'].map {|furn| furn["key"]}` is stored in the :journal_ips clipboard
-    And the expression should be true> Set.new(cb.node_ips) == Set.new(cb.journal_ips)
+    And the expression should be true> Set.new(cb.collector_pod_ips) == Set.new(cb.journal_ips)
     """
 
   # @author qitang@redhat.com
