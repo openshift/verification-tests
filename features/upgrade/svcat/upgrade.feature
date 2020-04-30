@@ -1,6 +1,6 @@
 @svcat
 Feature: Service Catalog related scenarios
-    
+
   # @author jfan@redhat.com
   # @case_id OCP-22621
   @admin
@@ -8,13 +8,13 @@ Feature: Service Catalog related scenarios
   @users=upuser1,upuser2
   Scenario: upgrade svcat - prepare
     # Check SVCAT version
-    Given the "service-catalog-apiserver" operator version matchs the current cluster version
+    Given the "service-catalog-apiserver" operator version matches the current cluster version
     # Check cluster operator svcat-apiserver status
     Given the status of condition "Degraded" for "service-catalog-apiserver" operator is: False
     Given the status of condition "Progressing" for "service-catalog-apiserver" operator is: False
     Given the status of condition "Available" for "service-catalog-apiserver" operator is: True
     # Check cluster operator svcat-controller status
-    Given the "service-catalog-controller-manager" operator version matchs the current cluster version
+    Given the "service-catalog-controller-manager" operator version matches the current cluster version
     Given the status of condition "Degraded" for "service-catalog-controller-manager" operator is: False
     Given the status of condition "Progressing" for "service-catalog-controller-manager" operator is: False
     Given the status of condition "Available" for "service-catalog-controller-manager" operator is: True
@@ -33,29 +33,29 @@ Feature: Service Catalog related scenarios
       | p             | {"spec":{"managementState": "Managed"}} |
       | type          | merge                                   |
     Then the step should succeed
-    
+
   @admin
   @upgrade-check
   @users=upuser1,upuser2
   Scenario: upgrade svcat
     # Check cluster operator svcat-apiserver status
-    Given the "service-catalog-apiserver" operator version matchs the current cluster version
+    Given the "service-catalog-apiserver" operator version matches the current cluster version
     Given the status of condition "Degraded" for "service-catalog-apiserver" operator is: False
     Given the status of condition "Progressing" for "service-catalog-apiserver" operator is: False
     Given the status of condition "Available" for "service-catalog-apiserver" operator is: True
     Given the status of condition "Upgradeable" for "service-catalog-apiserver" operator is: True
     # Check cluster operator svcat-controller status
-    Given the "service-catalog-controller-manager" operator version matchs the current cluster version
+    Given the "service-catalog-controller-manager" operator version matches the current cluster version
     Given the status of condition "Degraded" for "service-catalog-controller-manager" operator is: False
     Given the status of condition "Progressing" for "service-catalog-controller-manager" operator is: False
     Given the status of condition "Available" for "service-catalog-controller-manager" operator is: True
     Given the status of condition "Upgradeable" for "service-catalog-controller-manager" operator is: True
-    
+
     # Deploy ups broker
     When I run the :get admin command with:
       | resource | clusterservicebroker |
     Then the step should succeed
-    Given admin ensures "ups-broker" clusterservicebroker is deleted after scenario  
+    Given admin ensures "ups-broker" clusterservicebroker is deleted after scenario
     Given I have a project
     When I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project

@@ -70,7 +70,7 @@ Feature: Storage upgrade tests
   Scenario: Cluster operator storage should be in correct status and dynamic provisioning should work well after upgrade
     Given I switch to cluster admin pseudo user
     # Check storage operator version after upgraded
-    Given the "storage" operator version matchs the current cluster version
+    Given the "storage" operator version matches the current cluster version
 
     # Check cluster operator storage should be in correct status
     Given the expression should be true> cluster_operator('storage').condition(type: 'Progressing')['status'] == "False"
