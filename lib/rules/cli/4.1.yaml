@@ -65,6 +65,10 @@
     :stdin: --stdin=<value>
     :t: -t
     :tty: --tty=<value>
+:auth_can_i:
+  :cmd: oc auth can-i <verb> <resource>
+  :options:
+    :q: -q
 :autoscale:
   :cmd: oc autoscale <name>
   :options:
@@ -1184,7 +1188,7 @@
   :cmd: oc adm node-logs <options>
   :options:
     :path: --path=<value>
-    :role: --role=<value>    
+    :role: --role=<value>
 :oadm_pod_network_join_projects:
   :cmd: oc adm pod-network join-projects
   :options:

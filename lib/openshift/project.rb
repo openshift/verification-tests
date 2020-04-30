@@ -113,7 +113,7 @@ module BushSlicer
       unless cached && @is_admin_hash&.has_key?(user)
         @is_admin_hash ||= {}
         if env.version_ge("3.3", user: user)
-          res = user.cli_exec(:policy_can_i,
+          res = user.cli_exec(:auth_can_i,
                               verb: "delete",
                               resource: "project",
                               n: self.name,
