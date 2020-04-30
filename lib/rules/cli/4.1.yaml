@@ -391,6 +391,11 @@
     :template: --template=<value>
     :type: --type=<value>
     :wildcardpolicy: --wildcard-policy=<value>
+:exec_extension_oc_cmd:
+  :cmd: oc
+  :options:
+    :arg: <value>
+    :cmd_name: <value>
 :extract:
   :cmd: oc extract
   :options:
