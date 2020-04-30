@@ -15,13 +15,13 @@ Feature: storage security check
     Given I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
     When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/security/privileged-test.json" replacing paths:
-      | ["metadata"]["name"]                                        | mypod         |
-      | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]   | /mnt          |
-      | ["spec"]["containers"][0]["image"]                          | aosqe/storage |
-      | ["spec"]["securityContext"]["seLinuxOptions"]["level"]      | s0:c13,c2     |
-      | ["spec"]["securityContext"]["fsGroup"]                      | 24680         |
-      | ["spec"]["securityContext"]["runAsUser"]                    | 1000160000    |
-      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"]| mypvc1        |
+      | ["metadata"]["name"]                                        | mypod                                                                                                 |
+      | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]   | /mnt                                                                                                  |
+      | ["spec"]["containers"][0]["image"]                          | quay.io/openshifttest/storage@sha256:a05b96d373be86f46e76817487027a7f5b8b5f87c0ac18a246b018df11529b40 |
+      | ["spec"]["securityContext"]["seLinuxOptions"]["level"]      | s0:c13,c2                                                                                             |
+      | ["spec"]["securityContext"]["fsGroup"]                      | 24680                                                                                                 |
+      | ["spec"]["securityContext"]["runAsUser"]                    | 1000160000                                                                                            |
+      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"]| mypvc1                                                                                                |
     Then the step should succeed
     And the pod named "mypod" becomes ready
     When I execute on the pod:
@@ -59,12 +59,12 @@ Feature: storage security check
     Given I ensure "mypod" pod is deleted
 
     When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/security/privileged-test.json" replacing paths:
-      | ["metadata"]["name"]                                        | mypod2        |
-      | ["spec"]["containers"][0]["image"]                          | aosqe/storage |
-      | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]   | /mnt          |
-      | ["spec"]["securityContext"]["seLinuxOptions"]["level"]      | s0:c13,c2     |
-      | ["spec"]["securityContext"]["fsGroup"]                      | 24680         |
-      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"]| mypvc2        |
+      | ["metadata"]["name"]                                        | mypod2                                                                                                |
+      | ["spec"]["containers"][0]["image"]                          | quay.io/openshifttest/storage@sha256:a05b96d373be86f46e76817487027a7f5b8b5f87c0ac18a246b018df11529b40 |
+      | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]   | /mnt                                                                                                  |
+      | ["spec"]["securityContext"]["seLinuxOptions"]["level"]      | s0:c13,c2                                                                                             |
+      | ["spec"]["securityContext"]["fsGroup"]                      | 24680                                                                                                 |
+      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"]| mypvc2                                                                                                |
     Then the step should succeed
     And the pod named "mypod2" becomes ready
     When I execute on the pod:
