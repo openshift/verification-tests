@@ -12,8 +12,8 @@ Feature: Elasticsearch related tests
       | op           | GET                 |
     Then the step should succeed
     And the output should contain:
-      | es_cluster_nodes_number            |
-      | es_cluster_shards_active_percent   |
+      | es_cluster_nodes_number          |
+      | es_cluster_shards_active_percent |
 
   # @author qitang@redhat.com
   # @case_id OCP-22050
