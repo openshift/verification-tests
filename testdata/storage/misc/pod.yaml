@@ -5,7 +5,7 @@ metadata:
 spec:
   containers:
     - name: dynamic
-      image: docker.io/aosqe/storage@sha256:a05b96d373be86f46e76817487027a7f5b8b5f87c0ac18a246b018df11529b40
+      image: quay.io/openshifttest/storage@sha256:a05b96d373be86f46e76817487027a7f5b8b5f87c0ac18a246b018df11529b40
       ports:
         - containerPort: 80
           name: "http-server"
