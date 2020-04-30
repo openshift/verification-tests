@@ -16,13 +16,8 @@ Feature: cluster monitoring related upgrade check
   Scenario: upgrade cluster monitoring along with OCP
     Given I switch to cluster admin pseudo user
     And I use the "openshift-monitoring" project
-    When I run the :get client command with:
-      | resource | pods |
-    Then evaluation of `@result[:stdout].split(/\n/).drop(1).map {|n| n.split(/\s+/)[2]}` is stored in the :pod_status clipboard
-    And I repeat the following steps for each :status in cb.pod_status:
-    """
-    Then the expression should be true> cb.status == "Running"
-    """
+    Given all pods in the project are ready
+    Then Then the step should succeed
     When I run the :get client command with:
       | resource      | clusteroperator |
       | resource_name | monitoring      |
