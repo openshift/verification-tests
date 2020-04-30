@@ -163,7 +163,6 @@ Given /^I wait for clusterlogging(?: named "(.+)")? with #{QUOTED} log collector
     | component=elasticsearch |
   })
   cl.wait_until_es_is_ready
-  # check curator, which is a cronjob with the name curator
 
   logger.info("### checking logging subcomponent status: kibana")
   step %Q/a pod becomes ready with labels:/, table(%{

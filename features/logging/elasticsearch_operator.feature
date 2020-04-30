@@ -20,32 +20,25 @@ Feature: elasticsearch-operator related tests
     """
 
   # @author qitang@redhat.com
-  # @case_id OCP-21530
   @admin
   @destructive
-  Scenario: elasticsearch alerting rules test: ElasticsearchClusterNotHealthy
+  Scenario Outline: elasticsearch alerting rules test: ElasticsearchClusterNotHealthy
     Given I create clusterlogging instance with:
       | remove_logging_pods | true                                                                 |
       | crd_yaml            | <%= BushSlicer::HOME %>/testdata/logging/clusterlogging/example.yaml |
     Then the step should succeed
     Given I wait for the "elasticsearch-prometheus-rules" prometheus_rule to appear
     And I wait for the "monitor-elasticsearch-cluster" service_monitor to appear
-    
-    Given a pod becomes ready with labels:
-      | es-node-master=true |
-    And I execute on the pod:
-      | es_util                                                        |
-      | --query=_cluster/settings                                      |
-      | -XPUT                                                          |
-      | -d                                                             |
-      | {"transient" : {"cluster.routing.allocation.enable" : "none"}} |
+
+    When I perform the HTTP request on the ES pod with labels "es-node-master=true":
+      | relative_url | _cluster/settings' -d '{"transient" : {"cluster.routing.allocation.enable" : "none"}} |
+      | op           | PUT                                                                                   |
     Then the step should succeed
     And the output should contain:
       | "acknowledged":true |
-    When I execute on the pod:
-      | es_util               |
-      | --query=.operations.* |
-      | -XDELETE              |
+    When I perform the HTTP request on the ES pod with labels "es-node-master=true":
+      | relative_url | <index_name>* |
+      | op           | DELETE        |
     Then the step should succeed
     And the output should contain:
       | "acknowledged":true |
@@ -59,3 +52,7 @@ Feature: elasticsearch-operator related tests
     And the output should match:
       | "alertstate":"pending\|firing" |
     """
+    Examples:
+      | index_name  |
+      | .operations | # @case_id OCP-21530
+      | infra       | # @case_id OCP-30092

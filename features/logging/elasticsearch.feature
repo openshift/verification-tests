@@ -7,7 +7,7 @@ Feature: Elasticsearch related tests
   @destructive
   @commonlogging
   Scenario: Elasticsearch Prometheus metrics can be accessed.
-    And I perform the HTTP request on the ES pod with labels "es-node-master=true":
+    When I perform the HTTP request on the ES pod with labels "es-node-master=true":
       | relative_url | _prometheus/metrics |
       | op           | GET                 |
     Then the step should succeed
