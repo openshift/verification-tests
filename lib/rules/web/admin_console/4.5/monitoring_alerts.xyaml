@@ -39,9 +39,7 @@ input_silence_comments:
     input_value: <comment_text>
   action: set_label_textarea
 perform_silence:
-  params:
-    button_text: Silence
-  action: click_button_text
+  action: submit_changes
 check_silence_detail:
   element:
     selector:

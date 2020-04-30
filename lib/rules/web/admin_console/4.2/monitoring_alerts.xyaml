@@ -30,9 +30,7 @@ perform_action_item:
   action: click_actions_button
   action: click_button_text
 perform_silence:
-  params:
-    button_text: Save
-  action: click_button_text
+  action: submit_changes
 silence_alert_from_action:
   params:
     item_text: Silence Alert
