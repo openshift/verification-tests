@@ -34,7 +34,7 @@ Feature: Machine features testing
     Given I store the number of machines in the :num_to_restore clipboard
     And admin ensures node number is restored to "<%= cb.num_to_restore %>" after scenario
 
-    Given I clone a machineset named "machineset-clone-25436"
+    Given I clone a machineset and name it "machineset-clone-25436"
 
     Given I scale the machineset to +2
     Then the step should succeed
@@ -120,13 +120,18 @@ Feature: Machine features testing
   @destructive
   Scenario: Scaling a machineset with providerSpec.publicIp set to true
     Given I have an IPI deployment
-    And I clone a machineset named "machineset-clone-publiciptrue"
+    And I switch to cluster admin pseudo user
+
+    Given I store the number of machines in the :num_to_restore clipboard
+    And admin ensures node number is restored to "<%= cb.num_to_restore %>" after scenario
+
+    And I clone a machineset and name it "machineset-clone-27609"
 
     Then I run the :get admin command with:
-     | resource      | machineset                    |
-     | resource_name | machineset-clone-publiciptrue |
-     | namespace     | openshift-machine-api         |
-     | o             | yaml                          |
+     | resource      | machineset             |
+     | resource_name | machineset-clone-27609 |
+     | namespace     | openshift-machine-api  |
+     | o             | yaml                   |
     And I save the output to file> new_machineset.yaml
 
     And I replace lines in "new_machineset.yaml":
@@ -149,7 +154,7 @@ Feature: Machine features testing
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     
-    Given I clone a machineset named "machineset-24363"
+    Given I clone a machineset and name it "machineset-24363"
     And evaluation of `machine_set.machines.first.node_name` is stored in the :noderef_name clipboard
     And evaluation of `machine_set.machines.first.name` is stored in the :machine_name clipboard
 

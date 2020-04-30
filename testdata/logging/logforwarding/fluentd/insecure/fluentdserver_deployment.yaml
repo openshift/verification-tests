@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
       - name: "fluentd"
-        image: "docker.io/aosqe/fluentd@sha256:7eece00d1bc784ac1e9722b2580911cd3ead5afd740dad6594be945b3b1dd884"
+        image: "quay.io/openshifttest/fluentd@sha256:7eece00d1bc784ac1e9722b2580911cd3ead5afd740dad6594be945b3b1dd884"
         imagePullPolicy: "Always"
         args:
         - "fluentd"

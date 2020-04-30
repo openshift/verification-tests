@@ -1,4 +1,3 @@
----
 :global_options:
   # these are options as seen by `oc options`
   :as: --as=<value>
@@ -285,13 +284,14 @@
      :output: --output=<value>
      :template: --template=<value>
 :debug:
-  :cmd: oc debug <global_options>
+  :cmd: oc debug --image quay.io/openshifttest/storage@sha256:a05b96d373be86f46e76817487027a7f5b8b5f87c0ac18a246b018df11529b40 <global_options>
   :options:
      :c: -c <value>
      :dry_run: --dry-run
      :exec_command: <value>
      :exec_command_arg: <value>
      :f: -f <value>
+     :image: --image=<value>
      :keep_annotations: --keep-annotations
      :keep_init_containers: --keep-init-containers=<value>
      :keep_liveness: --keep-liveness
@@ -391,6 +391,11 @@
     :template: --template=<value>
     :type: --type=<value>
     :wildcardpolicy: --wildcard-policy=<value>
+:exec_extension_oc_cmd:
+  :cmd: oc
+  :options:
+    :arg: <value>
+    :cmd_name: <value>
 :extract:
   :cmd: oc extract
   :options:
@@ -1339,3 +1344,13 @@
     :etcd_version: !ruby/regexp '/etcd (.+)$/'
 :oadm_top_node:
   :cmd: oc adm top node
+:registry_info:
+  :cmd: oc registry info
+  :options:
+    :internal: --internal=<value>
+    :quiet: --quiet=<value>
+:registry_login:
+  :cmd: oc registry login
+  :options:
+    :skip-check: --skip-check=<value>
+    :z: -z default

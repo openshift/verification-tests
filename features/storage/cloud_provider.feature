@@ -29,7 +29,6 @@ Feature: kubelet restart and node restart
 
     Examples:
       | platform       |
-      | aws            | # @case_id OCP-10907
       | azure-disk     | # @case_id OCP-13333
       | cinder         | # @case_id OCP-11317
       | gce            | # @case_id OCP-11613

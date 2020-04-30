@@ -13,8 +13,8 @@ Feature: Testing ingress to route object
     When I run the :create client command with:
       | f | <%= BushSlicer::HOME %>/testdata/routing/unsecure/service_unsecure.json |
     Then the step should succeed
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/routing/ingress/test-ingress.json" replacing paths:
-      | ["spec"]["rules"][0]["http"]["paths"][0]["backend"]["servicePort"] | 27017 |
+    When I run the :create client command with: 
+      | f | <%= BushSlicer::HOME %>/testdata/routing/ingress/test-ingress.json |
     Then the step should succeed
     When I run the :get client command with:
       | resource      | ingress      |

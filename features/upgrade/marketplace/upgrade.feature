@@ -1,6 +1,6 @@
 @marketplace
 Feature: Marketplace related scenarios
-    
+
   # @author jiazha@redhat.com
   # @case_id OCP-22618
   @admin
@@ -8,7 +8,7 @@ Feature: Marketplace related scenarios
   @users=upuser1,upuser2
   Scenario: upgrade Marketplace - prepare
     # Check Marketplace version
-    Given the "marketplace" operator version matchs the current cluster version
+    Given the "marketplace" operator version matches the current cluster version
     # Check cluster operator marketplace status
     Given the status of condition "Degraded" for "marketplace" operator is: False
     Given the status of condition "Progressing" for "marketplace" operator is: False
@@ -43,13 +43,13 @@ Feature: Marketplace related scenarios
       | Test Operators       |
       | CSC Operators        |
     """
-    
+
   @admin
   @upgrade-check
   @users=upuser1,upuser2
   Scenario: upgrade Marketplace
     # Check Marketplace version after upgraded
-    Given the "marketplace" operator version matchs the current cluster version
+    Given the "marketplace" operator version matches the current cluster version
     # Check cluster operator marketplace status
     Given the status of condition "Degraded" for "marketplace" operator is: False
     Given the status of condition "Progressing" for "marketplace" operator is: False

@@ -63,7 +63,7 @@ Feature: Machine-api components upgrade tests
     Given I store the number of machines in the :num_to_restore clipboard
     And admin ensures node number is restored to "<%= cb.num_to_restore %>" after scenario
 
-    Given I clone a machineset named "machineset-clone-22612"
+    Given I clone a machineset and name it "machineset-clone-22612"
 
     Given I scale the machineset to +2
     Then the step should succeed

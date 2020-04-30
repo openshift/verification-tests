@@ -1,6 +1,6 @@
 @olm
 Feature: OLM related scenarios
-    
+
   # @author jiazha@redhat.com
   # @case_id OCP-22615
   @admin
@@ -8,7 +8,7 @@ Feature: OLM related scenarios
   @users=upuser1,upuser2
   Scenario: upgrade OLM - prepare
     # Check OLM version
-    Given the "operator-lifecycle-manager" operator version matchs the current cluster version
+    Given the "operator-lifecycle-manager" operator version matches the current cluster version
     # Check cluster operator OLM status
     Given the status of condition "Degraded" for "operator-lifecycle-manager" operator is: False
     Given the status of condition "Progressing" for "operator-lifecycle-manager" operator is: False
@@ -21,13 +21,13 @@ Feature: OLM related scenarios
     # Given etcd operator "etcd-test" is installed successfully in "olm-upgrade" project
     # # Create customer resource in it
     # Given etcdCluster "sample-cluster" is installed successfully in "olm-upgrade" project
-    
+
   @admin
   @upgrade-check
   @users=upuser1,upuser2
   Scenario: upgrade OLM
     # Check OLM version after upgraded
-    Given the "operator-lifecycle-manager" operator version matchs the current cluster version
+    Given the "operator-lifecycle-manager" operator version matches the current cluster version
     # Check cluster operator OLM status
     Given the status of condition "Degraded" for "operator-lifecycle-manager" operator is: False
     Given the status of condition "Progressing" for "operator-lifecycle-manager" operator is: False
@@ -35,7 +35,7 @@ Feature: OLM related scenarios
     Given the status of condition "Upgradeable" for "operator-lifecycle-manager" operator is: True
     # # Check if this operator works well by changing its customer resource
     # Given I switch to cluster admin pseudo user
-    # And I use the "olm-upgrade" project 
+    # And I use the "olm-upgrade" project
     # When I run the :patch client command with:
     #   | resource      | etcdcluster            |
     #   | resource_name | sample-cluster         |

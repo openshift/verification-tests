@@ -17,6 +17,7 @@ goto_one_project_dashboard_page:
   action: goto_one_project_page
 goto_cluster_dashboards_page:
   url: /dashboards
+  action: wait_page_body_loaded
 goto_search_page:
   url: search
 
@@ -33,6 +34,9 @@ goto_builds_page:
   url: k8s/ns/<project_name>/builds
 goto_one_build_page:
   url: k8s/ns/<project_name>/builds/<build_name>
+goto_one_build_environment_page:
+  url: k8s/ns/<project_name>/builds/<build_name>/environment
+  action: wait_box_loaded
 
 # command line tools page
 goto_cli_tools_page:
@@ -106,6 +110,9 @@ goto_one_pod_page:
   url: k8s/ns/<project_name>/pods/<resource_name>
 goto_one_pod_log_page:
   url: k8s/ns/<project_name>/pods/<pod_name>/logs
+goto_one_pod_environment_page:
+  url: k8s/ns/<project_name>/pods/<pod_name>/environment
+  action: wait_box_loaded
 goto_project_pods_list_page:
   url: k8s/ns/<project_name>/pods
   action: wait_box_loaded
@@ -156,12 +163,16 @@ goto_monitoring_alerts_page:
   url: monitoring/alerts
 goto_monitoring_silences_page:
   url: monitoring/silences
+goto_alertmanagerconfig_page:
+  url: monitoring/alertmanagerconfig
+  action: wait_box_loaded
 
 #node
 goto_node_page:
   url: k8s/cluster/nodes
 goto_one_node_page:
   url: k8s/cluster/nodes/<node_name>
+  action: wait_page_body_loaded
 
 # users
 goto_groups_page:
@@ -190,6 +201,10 @@ goto_one_project_subscription_page:
 goto_csv_detail_page:
   url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion/<csv_name>
   action: wait_box_loaded
+goto_operand_list_page:
+  url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion/<csv_name>/<operand_name>
+  action: wait_box_loaded
+
 
 # machine config
 goto_machineconfigs_page:
@@ -218,6 +233,9 @@ goto_catalog_source_page:
 # quota
 goto_quotas_page:
   url: k8s/ns/<project_name>/resourcequotas
+goto_one_quota_page:
+  url: k8s/ns/<project_name>/resourcequotas/<quota_name>
+  action: wait_box_loaded
 
 # machinehealthcheck
 goto_machinehealthcheck_page:
@@ -250,13 +268,14 @@ goto_ImageManifestVuln_list_page:
 goto_one_ImageManifestVuln_page:
   url: k8s/ns/<project_name>/secscan.quay.redhat.com~v1alpha1~ImageManifestVuln/<manifest>
 
-# global config
-goto_alertmanagerconfig_page:
-  url: monitoring/alertmanagerconfig
-
 #hpa
 goto_hpas_page:
   url: k8s/ns/<project_name>/horizontalpodautoscalers
 goto_one_hpa_page:
   url: k8s/ns/<project_name>/horizontalpodautoscalers/<hpa_name>
 
+#cluster settings
+goto_cluster_operators:
+  url: settings/cluster/clusteroperators
+  action: wait_box_loaded
+  

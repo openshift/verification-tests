@@ -8,7 +8,7 @@ Feature: MachineHealthCheck Test Scenarios
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     Given I use the "openshift-machine-api" project
-    And I clone a machineset named "machineset-25897"
+    And I clone a machineset and name it "machineset-25897"
 
     # Create MHC
     When I run oc create over "<%= BushSlicer::HOME %>/testdata/cloud/mhc/mhc1.yaml" replacing paths:
@@ -40,7 +40,7 @@ Feature: MachineHealthCheck Test Scenarios
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
 
-    Given I clone a machineset named "machineset-26311"
+    Given I clone a machineset and name it "machineset-26311"
 
     # Create unhealthyCondition before createing a MHC
     Given I create the 'Ready' unhealthyCondition
@@ -64,7 +64,7 @@ Feature: MachineHealthCheck Test Scenarios
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
 
-    Given I clone a machineset named "machineset-25734"
+    Given I clone a machineset and name it "machineset-25734"
 
     # Create MHCs
     Given I run the steps 2 times:
@@ -92,7 +92,7 @@ Feature: MachineHealthCheck Test Scenarios
     Given I store the number of machines in the :num_to_restore clipboard
     And admin ensures node number is restored to "<%= cb.num_to_restore %>" after scenario
     Given I use the "openshift-machine-api" project
-    And I clone a machineset named "machineset-25691"
+    And I clone a machineset and name it "machineset-25691"
 
     # Create MHC
     When I run oc create over "<%= BushSlicer::HOME %>/testdata/cloud/mhc/mhc1.yaml" replacing paths:

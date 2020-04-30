@@ -66,58 +66,6 @@ Feature: InitContainers
     """
 
   # @author chezhang@redhat.com
-  # @case_id OCP-10908
-  Scenario: Access init container by oc command
-    Given I have a project
-    When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/pods/initContainers/init-containers-sleep.yaml |
-    Then the step should succeed
-    And I wait for the steps to pass:
-    """
-    When I run the :logs client command with:
-      | resource_name | pod/hello-pod |
-      | c             | sleep         |
-    Then the step should succeed
-    And the output should contain:
-      | hello init container |
-    """
-    When I run the :rsh client command with:
-      | c       | sleep            |
-      | pod     | hello-pod        |
-      | command | cat              |
-      | command | /etc/resolv.conf |
-    Then the step should succeed
-    And the output should contain:
-      | options ndots:5 |
-    When I run the :rsync client command with:
-      | source      | hello-pod:/etc/resolv.conf |
-      | destination | <%= localhost.workdir %>   |
-      | c           | sleep                      |
-    Then the step should succeed
-    And the output should contain:
-      | resolv.conf |
-    When I run the :debug client command with:
-      | resource     | pod/hello-pod |
-      | c            | sleep         |
-      | oc_opts_end  |               |
-      | exec_command | /bin/env      |
-    Then the step should succeed
-    And the output should contain:
-      |  Debugging with pod/hello-pod-debug |
-      |  PATH                               |
-      |  HOSTNAME                           |
-      |  KUBERNETES                         |
-      |  HOME                               |
-      |  Removing debug pod                 |
-    When I run the :attach client command with:
-      | pod      | hello-pod |
-      | c        | sleep     |
-      | _timeout | 15        |
-    Then the step should have timed out
-    And the output should contain:
-      | hello init container |
-
-  # @author chezhang@redhat.com
   # @case_id OCP-11975
   @admin
   Scenario: Init containers properly apply to quota and limits

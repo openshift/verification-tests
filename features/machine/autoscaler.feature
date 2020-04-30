@@ -11,7 +11,7 @@ Feature: Cluster Autoscaler Tests
     Given I store the number of machines in the :num_to_restore clipboard
     And admin ensures node number is restored to "<%= cb.num_to_restore %>" after scenario
 
-    Given I clone a machineset named "machineset-clone-28108"
+    Given I clone a machineset and name it "machineset-clone-28108"
 
     # Create clusterautoscaler
     Given I use the "openshift-machine-api" project
@@ -80,7 +80,7 @@ Feature: Cluster Autoscaler Tests
     And admin ensures node number is restored to "<%= cb.num_to_restore %>" after scenario
 
     Given I use the "openshift-machine-api" project
-    Given I clone a machineset named "machineset-clone-21517"
+    Given I clone a machineset and name it "machineset-clone-21517"
     When I run oc create over "<%= BushSlicer::HOME %>/testdata/cloud/machine-autoscaler.yml" replacing paths:
       | ["metadata"]["name"]               | maotest                 |
       | ["spec"]["minReplicas"]            | 1                       |
@@ -117,9 +117,9 @@ Feature: Cluster Autoscaler Tests
     And admin ensures node number is restored to "<%= cb.num_to_restore %>" after scenario
 
     Given I use the "openshift-machine-api" project
-    Given I clone a machineset named "machineset-clone-22102"
+    Given I clone a machineset and name it "machineset-clone-22102"
     And evaluation of `machine_set.name` is stored in the :machineset_clone_22102 clipboard
-    Given I clone a machineset named "machineset-clone-22102-2"
+    Given I clone a machineset and name it "machineset-clone-22102-2"
     And evaluation of `machine_set.name` is stored in the :machineset_clone_22102_2 clipboard
 
     When I run oc create over "<%= BushSlicer::HOME %>/testdata/cloud/machine-autoscaler.yml" replacing paths:
