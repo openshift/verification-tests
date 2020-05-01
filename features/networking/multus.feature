@@ -574,19 +574,17 @@ Feature: Multus-CNI related scenarios
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin
-    Given I switch to cluster admin pseudo user
-    And I use the "default" project
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml" replacing paths:
-      | ["metadata"]["name"] | macvlan-bridge-21793 |
+    Given I have a project
+    And evaluation of `project.name` is stored in the :project1 clipboard
+    When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml" replacing paths:
+      | ["metadata"]["name"]      | macvlan-bridge-21793 |
+      | ["metadata"]["namespace"] | <%= project.name %>  |
     Then the step should succeed
-    And admin ensures "macvlan-bridge-21793" network_attachment_definition is deleted from the "default" project after scenario
-    # Creating pod in the user's namespace which consumes the net-attach-def created in default namespace 
-    Given I switch to the first user
-    And I create a new project
-    And evaluation of `project.name` is stored in the :project_name clipboard
-
+    
+    # Creating pod in the another namespace which consumes the net-attach-def created in project1 namespace 
+    Given I create a new project
     When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/1interface-macvlan-bridge.yaml" replacing paths:
-      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | default/macvlan-bridge-pod |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | <%= cb.project1 %>/macvlan-bridge-21793 |
     Then the step should succeed
     And evaluation of `@result[:response].match(/pod\/(.*) created/)[1]` is stored in the :pod_name clipboard
     And I wait up to 30 seconds for the steps to pass:
@@ -600,7 +598,7 @@ Feature: Multus-CNI related scenarios
       | namespace isolation |
       | violat              |
     """
- 
+    
   # @author anusaxen@redhat.com
   # @case_id OCP-24490
   @admin
@@ -910,7 +908,7 @@ Feature: Multus-CNI related scenarios
     And I run commands on the host:
       | ip link add mvlanp0 type vxlan id 100 remote <%= cb.mastr_inf_address %> dev <%= cb.workr_inf_name %> dstport 14789 |
       | ip link set up mvlanp0                                                                                              |
-      | ip a add 192.168.1.2/24 dev mvlanp0                                                                                 |
+      | ip a add 87.87.8.20/24 dev mvlanp0                                                                                  |
     Then the step should succeed
     #Cleanup for deleting worker interface
     Given I register clean-up steps:
@@ -922,7 +920,7 @@ Feature: Multus-CNI related scenarios
     And I run commands on the host:
       | ip link add mvlanp0 type vxlan id 100 remote <%= cb.workr_inf_address %> dev <%= cb.mastr_inf_name %> dstport 14789 |
       | ip link set up mvlanp0                                                                                              |
-      | ip a add 192.168.1.1/24 dev mvlanp0                                                                                 |
+      | ip a add 87.87.8.10/24 dev mvlanp0                                                                                  |
     Then the step should succeed
     #Cleanup for deleting master interface
     Given I register clean-up steps:
@@ -931,15 +929,15 @@ Feature: Multus-CNI related scenarios
     """
     #Confirm the link connectivity between master and worker
     When I run commands on the host:
-      | ping -c1 -W2 192.168.1.2 |
+      | ping -c1 -W2 87.87.8.20 |
     Then the step should succeed
     Given I use the "<%= cb.worker[0].name %>" node
     And I run commands on the host:
-      | ping -c1 -W2 192.168.1.1 |
+      | ping -c1 -W2 87.87.8.10 |
     Then the step should succeed
     
     #Configuring DHCP service on master node
-    Given a DHCP service is configured for interface "mvlanp0" on "<%= cb.master[0].name %>" node with address range and lease time as "192.168.1.100,192.168.1.120,24h"
+    Given a DHCP service is configured for interface "mvlanp0" on "<%= cb.master[0].name %>" node with address range and lease time as "87.87.8.100,87.87.8.120,24h"
     #Cleanup for deconfiguring DHCP service on target node
     Given I register clean-up steps:
     """
@@ -964,7 +962,7 @@ Feature: Multus-CNI related scenarios
     And the pod named "test-pod" becomes ready
     When I execute on the pod:
       | /usr/sbin/ip | a |
-    Then the output should contain "192.168.1"
+    Then the output should contain "87.87.8"
 
   # @author weliang@redhat.com
   # @case_id OCP-25909
