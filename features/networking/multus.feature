@@ -702,9 +702,9 @@ Feature: Multus-CNI related scenarios
     
     #Creating first pod in vlan 100
     When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
-      | ["metadata"]["name"] 					  | pod1-vlan100            |
-      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan100           |
-      | ["spec"]["nodeName"]                                      | <%= cb.nodes[0].name %> |
+      | ["metadata"]["name"]                                       | pod1-vlan100            |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | bridgevlan100           |
+      | ["spec"]["nodeName"]                                       | <%= cb.nodes[0].name %> |
     Then the step should succeed
     And the pod named "pod1-vlan100" becomes ready
     And evaluation of `pod.name` is stored in the :pod1 clipboard
