@@ -615,11 +615,6 @@ Feature: Multus-CNI related scenarios
       | n | <%= project.name %>                                                                                                                               |
     Then the step should succeed
     
-    #Clean-up required to erase bridge interfaces created due to above net-attach-def
-    Given I register clean-up steps:
-    """
-    the bridge interface named "mybridge" is deleted from the "<%= cb.nodes[0].name %>" node
-    """  
     #Creating first pod in vlan 100
     When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
       | ["metadata"]["name"]                                      | pod1-vlan100            |
@@ -627,17 +622,18 @@ Feature: Multus-CNI related scenarios
       | ["spec"]["nodeName"]                                      | <%= cb.nodes[0].name %> |
     Then the step should succeed
     And the pod named "pod1-vlan100" becomes ready
+    #Clean-up required to erase bridge interfaces created due to above pod on same node
+    Given I register clean-up steps:
+    """
+    the bridge interface named "mybridge" is deleted from the "<%= cb.nodes[0].name %>" node
+    the bridge interface named "mybridge.100" is deleted from the "<%= cb.nodes[0].name %>" node
+    """  
     And evaluation of `pod.name` is stored in the :pod1 clipboard
     And I execute on the pod:
       | ifconfig | net1 |
     Then the step should succeed
     And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod1_net1_ip clipboard
     
-    #Clean-up required to erase bridge interfaces created due to above pod on same node
-    Given I register clean-up steps:
-    """
-    the bridge interface named "mybridge.100" is deleted from the "<%= cb.nodes[0].name %>" node
-    """  
     #Creating 2nd pod on same node as first in vlan 100
     When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
       | ["metadata"]["name"]                                      | pod2-vlan100            |
@@ -658,18 +654,18 @@ Feature: Multus-CNI related scenarios
       | ["spec"]["nodeName"]                                      | <%= cb.nodes[1].name %> |
     Then the step should succeed
     And the pod named "pod3-vlan100" becomes ready
-    And evaluation of `pod.name` is stored in the :pod3 clipboard
-    And I execute on the pod:
-      | ifconfig | net1 |
-    Then the step should succeed
-    And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod3_net1_ip clipboard
-    
     #Clean-up required to erase bridge interfcaes created on node
     Given I register clean-up steps:
     """
     the bridge interface named "mybridge" is deleted from the "<%= cb.nodes[1].name %>" node
     the bridge interface named "mybridge.100" is deleted from the "<%= cb.nodes[1].name %>" node
     """  
+    And evaluation of `pod.name` is stored in the :pod3 clipboard
+    And I execute on the pod:
+      | ifconfig | net1 |
+    Then the step should succeed
+    And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod3_net1_ip clipboard
+    
     #making sure the pods on same node can ping while pods on diff nodes can't
     When I execute on the "<%= cb.pod1 %>" pod:
       | arping | -I | net1 |-c1 | -w2 | <%= cb.pod2_net1_ip %> |
@@ -698,11 +694,6 @@ Feature: Multus-CNI related scenarios
       | n | <%= project.name %>                                                                                                                               |
     Then the step should succeed 
     
-    #Clean-up required to erase bridge interfcaes created on sam node above due to vlan pods
-    Given I register clean-up steps:
-    """
-    the bridge interface named "mybridge" is deleted from the "<%= cb.nodes[0].name %>" node
-    """  
     # Create the net-attach-def with vlan 200 via cluster admin
     When I run the :create admin command with:
       | f | <%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/bridge-host-local-vlan-200.yaml |
@@ -711,22 +702,23 @@ Feature: Multus-CNI related scenarios
     
     #Creating first pod in vlan 100
     When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
-      | ["metadata"]["name"] | pod1-vlan100 |
-      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan100 |
+      | ["metadata"]["name"]                                       | pod1-vlan100            |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | bridgevlan100           |
       | ["spec"]["nodeName"]                                       | <%= cb.nodes[0].name %> |
     Then the step should succeed
     And the pod named "pod1-vlan100" becomes ready
+    #Clean-up required to erase bridge interfcaes created on same node above due to vlan pods
+    Given I register clean-up steps:
+    """
+    the bridge interface named "mybridge" is deleted from the "<%= cb.nodes[0].name %>" node
+    the bridge interface named "mybridge.100" is deleted from the "<%= cb.nodes[0].name %>" node
+    """  
     And evaluation of `pod.name` is stored in the :pod1 clipboard
     And I execute on the pod:
       | ifconfig | net1 |
     Then the step should succeed
     And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod1_net1_ip clipboard
     
-    #Clean-up required to erase bridge interfcaes created on sam node above due to vlan pods
-    Given I register clean-up steps:
-    """
-    the bridge interface named "mybridge.100" is deleted from the "<%= cb.nodes[0].name %>" node
-    """  
     #Creating 2nd pod on same node as first in vlan 100
     When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
       | ["metadata"]["name"]                                      | pod2-vlan100            |
@@ -747,17 +739,16 @@ Feature: Multus-CNI related scenarios
       | ["spec"]["nodeName"]                                      | <%= cb.nodes[0].name %> |
     Then the step should succeed
     And the pod named "pod3-vlan200" becomes ready
+    #Clean-up required to erase bridge interfcaes created on same node above due to vlan pods
+    Given I register clean-up steps:
+    """
+    the bridge interface named "mybridge.200" is deleted from the "<%= cb.nodes[0].name %>" node
+    """  
     And evaluation of `pod.name` is stored in the :pod3 clipboard
     And I execute on the pod:
       | ifconfig | net1 |
     Then the step should succeed
     And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod3_net1_ip clipboard
-    
-    #Clean-up required to erase bridge interfcaes created on sam node above due to vlan pods
-    Given I register clean-up steps:
-    """
-    the bridge interface named "mybridge.200" is deleted from the "<%= cb.nodes[0].name %>" node
-    """  
     
     #making sure the pods in same vlan can communicate but in different vlans cannot
     When I execute on the "<%= cb.pod1 %>" pod:
