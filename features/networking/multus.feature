@@ -1263,3 +1263,49 @@ Feature: Multus-CNI related scenarios
       | /usr/sbin/ip | route         |
     Then the output should contain:
       | 192.168.10.0                 |
+
+  # @author weliang@redhat.com
+  # @case_id OCP-30054
+  @admin
+  Scenario: Multus namespaceIsolation should allow references to CRD in the default namespace
+    # Make sure that the multus is enabled
+    Given the multus is enabled on the cluster
+    # Create the net-attach-def via cluster admin
+    Given I switch to cluster admin pseudo user
+    And I use the "default" project
+    When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/whereabouts-macvlan.yaml" replacing paths:
+      | ["metadata"]["namespace"] | <%= project.name %>  |     
+      | ["spec"]["config"]|'{ "cniVersion": "0.3.0", "type": "macvlan", "mode": "bridge", "ipam": { "type": "whereabouts", "range": "192.168.22.100/24"} }'|
+    Then the step should succeed
+
+    #Cleanup created net-attach-def from default namespaces
+    Given I register clean-up steps:
+    """
+    I run the :delete admin command with:
+      | object_type       | net-attach-def             |
+      | object_name_or_id | macvlan-bridge-whereabouts |
+    the step should succeed
+    """
+    
+    # Create a pod absorbing above net-attach-def
+    Given I switch to the first user
+    And I create a new project
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["name"] | macvlan-bridge-whereabouts-pod1                                           |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | default/macvlan-bridge-whereabouts  |
+      | ["spec"]["containers"][0]["name"] | macvlan-bridge-whereabouts                                   |
+    Then the step should succeed
+    And the pod named "macvlan-bridge-whereabouts-pod1" becomes ready
+
+    # Check created pod will not has namespace isolation logs
+    And I wait up to 30 seconds for the steps to pass:
+    """
+    When I run the :describe client command with:
+      | resource | events                           |
+      | name     | macvlan-bridge-whereabouts-pod1  |
+      | n        | <%= cb.project_name %>           |
+    Then the step should succeed
+    And the output should not contain:
+      | namespace isolation |
+      | violat              |
+    """
