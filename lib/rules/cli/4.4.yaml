@@ -1,4 +1,3 @@
----
 :global_options:
   # these are options as seen by `oc options`
   :as: --as=<value>
@@ -1347,6 +1346,8 @@
     :openshift_version: !ruby/regexp '/^openshift v(.+)$/'
     :kubernetes_version: !ruby/regexp '/kubernetes v(.+)$/'
     :etcd_version: !ruby/regexp '/etcd (.+)$/'
+:oadm_top_node:
+  :cmd: oc adm top node
 :registry_info:
   :cmd: oc registry info
   :options:
@@ -1357,3 +1358,4 @@
   :options:
     :skip-check: --skip-check=<value>
     :z: -z default
+
