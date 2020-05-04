@@ -29,11 +29,20 @@ perform_action_item:
     button_text: <item_text>
   action: click_actions_button
   action: click_button_text
+perform_silence:
+  action: submit_changes
 silence_alert_from_action:
   params:
     item_text: Silence Alert
   action: perform_action_item
   action: click_create_button
+check_silence_detail:
+  element:
+    selector:
+      xpath: //span[text()='Silence Details']
+silence_alert_from_detail:
+  action: silence_alert_from_action 
+  action: check_silence_detail
 click_alert_link_with_text:
   element:
     selector:

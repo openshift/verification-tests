@@ -23,6 +23,7 @@ click_project_link_developer_mode:
     selector:
       xpath: //a[text()='<project_name>']
     op: click
+    timeout: 20
 choose_project_developer_mode:
   action: click_projects_dropdown_developer_mode
   action: input_select_project_developer_mode
@@ -72,7 +73,7 @@ check_query_input_text_area:
 click_promql_button:
   element:
     selector: &promql_button
-      xpath: //button[text()='<text>']
+      xpath: //span[text()='<text>']/parent::button
     op: click
 click_hide_promql_button:
   params:

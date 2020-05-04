@@ -29,6 +29,8 @@ perform_action_item:
     button_text: <item_text>
   action: click_actions_button
   action: click_button_text
+perform_silence:
+  action: submit_changes
 silence_alert_from_action:
   params:
     item_text: Silence Alert

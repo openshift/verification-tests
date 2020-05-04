@@ -29,11 +29,28 @@ perform_action_item:
     button_text: <item_text>
   action: click_actions_button
   action: click_button_text
-silence_alert_from_action:
+click_silence_alert:
   params:
-    item_text: Silence Alert
-  action: perform_action_item
-  action: click_create_button
+    button_text: Silence Alert
+  action: click_button_text
+input_silence_comments:
+  params:
+    label_text: Comment
+    input_value: <comment_text>
+  action: set_label_textarea
+perform_silence:
+  action: submit_changes
+check_silence_detail:
+  element:
+    selector:
+      xpath: //span[text()='Silence Details']
+silence_alert_from_detail:
+  params:
+    comment_text: silence comments is a must from ocp 4.50
+  action: click_silence_alert
+  action: input_silence_comments
+  action: perform_silence
+  action: check_silence_detail
 click_alert_link_with_text:
   element:
     selector:
@@ -90,11 +107,28 @@ input_matcher_name_silence:
 expire_alert_from_actions:
   action: click_actions_button
   action: click_expire_alert_button
-
+click_duration_dropdown_button:
+  element:
+    selector:
+      xpath: //button[@class='pf-c-dropdown__toggle']
+    op: click
+set_silence_duration:
+  action: click_duration_dropdown_button
+  element:
+    selector:
+      xpath: //ul[@class='pf-c-dropdown__menu']//button[text()='<duration>']
+    op: click
+set_silence_duration_null:
+  action: click_duration_dropdown_button
+  element:
+    selector:
+      xpath: //ul[@class='pf-c-dropdown__menu']//button[text()='-']
+    op: click  
 set_invalid_end_time_silence:
   params:
-    label_text: End
+    label_text: Until...
     input_value: 2020/03/05 20:11:44
+  action: set_silence_duration_null
   action: set_label_input_simple
   
 status_specific_alert:
