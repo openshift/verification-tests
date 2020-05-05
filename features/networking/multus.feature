@@ -12,8 +12,8 @@ Feature: Multus-CNI related scenarios
     # Create the net-attach-def via cluster admin
     Given I have a project
     When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml" replacing paths:
-      | ["metadata"]["namespace"] | <%= project.name %> |    
-      | ["spec"]["config"]| '{ "cniVersion": "0.3.0", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "bridge", "ipam": { "type": "host-local", "subnet": "10.1.1.0/24", "rangeStart": "10.1.1.100", "rangeEnd": "10.1.1.200", "routes": [ { "dst": "0.0.0.0/0" } ], "gateway": "10.1.1.1" } }' |
+      | ["metadata"]["namespace"] | <%= project.name %>  |    
+      | ["spec"]["config"]        | '{ "cniVersion": "0.3.0", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "bridge", "ipam": { "type": "host-local", "subnet": "10.1.1.0/24", "rangeStart": "10.1.1.100", "rangeEnd": "10.1.1.200", "routes": [ { "dst": "0.0.0.0/0" } ], "gateway": "10.1.1.1" } }' |
     Then the step should succeed
 
     # Create the first pod which consumes the macvlan custom resource
@@ -1274,8 +1274,8 @@ Feature: Multus-CNI related scenarios
     Given I switch to cluster admin pseudo user
     And I use the "default" project
     When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/whereabouts-macvlan.yaml" replacing paths:
-      | ["metadata"]["namespace"] | <%= project.name %>  |     
-      | ["spec"]["config"]|'{ "cniVersion": "0.3.0", "type": "macvlan", "mode": "bridge", "ipam": { "type": "whereabouts", "range": "192.168.22.100/24"} }'|
+      | ["metadata"]["namespace"] | <%= project.name %>     |
+      | ["spec"]["config"]        | '{ "cniVersion": "0.3.0", "type": "macvlan", "mode": "bridge", "ipam": { "type": "whereabouts", "range": "192.168.22.100/24"} }'|
     Then the step should succeed
 
     #Cleanup created net-attach-def from default namespaces
