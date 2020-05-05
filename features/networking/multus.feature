@@ -1291,21 +1291,8 @@ Feature: Multus-CNI related scenarios
     Given I switch to the first user
     And I create a new project
     When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
-      | ["metadata"]["name"] | macvlan-bridge-whereabouts-pod1                                           |
+      | ["metadata"]["name"]                                       | macvlan-bridge-whereabouts-pod1     |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | default/macvlan-bridge-whereabouts  |
-      | ["spec"]["containers"][0]["name"] | macvlan-bridge-whereabouts                                   |
+      | ["spec"]["containers"][0]["name"]                          | macvlan-bridge-whereabouts          |
     Then the step should succeed
     And the pod named "macvlan-bridge-whereabouts-pod1" becomes ready
-
-    # Check created pod will not has namespace isolation logs
-    And I wait up to 30 seconds for the steps to pass:
-    """
-    When I run the :describe client command with:
-      | resource | events                           |
-      | name     | macvlan-bridge-whereabouts-pod1  |
-      | n        | <%= cb.project_name %>           |
-    Then the step should succeed
-    And the output should not contain:
-      | namespace isolation |
-      | violat              |
-    """
