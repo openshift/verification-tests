@@ -598,7 +598,7 @@ Feature: Multus-CNI related scenarios
       | namespace isolation |
       | violat              |
     """
-    
+
   # @author anusaxen@redhat.com
   # @case_id OCP-24490
   @admin
@@ -908,7 +908,7 @@ Feature: Multus-CNI related scenarios
     And I run commands on the host:
       | ip link add mvlanp0 type vxlan id 100 remote <%= cb.mastr_inf_address %> dev <%= cb.workr_inf_name %> dstport 14789 |
       | ip link set up mvlanp0                                                                                              |
-      | ip a add 87.87.8.20/24 dev mvlanp0                                                                                  |
+      | ip a add 192.18.0.10/15 dev mvlanp0                                                                                 |
     Then the step should succeed
     #Cleanup for deleting worker interface
     Given I register clean-up steps:
@@ -920,7 +920,7 @@ Feature: Multus-CNI related scenarios
     And I run commands on the host:
       | ip link add mvlanp0 type vxlan id 100 remote <%= cb.workr_inf_address %> dev <%= cb.mastr_inf_name %> dstport 14789 |
       | ip link set up mvlanp0                                                                                              |
-      | ip a add 87.87.8.10/24 dev mvlanp0                                                                                  |
+      | ip a add 192.18.0.20/15 dev mvlanp0                                                                                 |
     Then the step should succeed
     #Cleanup for deleting master interface
     Given I register clean-up steps:
@@ -929,15 +929,15 @@ Feature: Multus-CNI related scenarios
     """
     #Confirm the link connectivity between master and worker
     When I run commands on the host:
-      | ping -c1 -W2 87.87.8.20 |
+      | ping -c1 -W2 192.18.0.20 |
     Then the step should succeed
     Given I use the "<%= cb.worker[0].name %>" node
     And I run commands on the host:
-      | ping -c1 -W2 87.87.8.10 |
+      | ping -c1 -W2 192.18.0.10 |
     Then the step should succeed
     
     #Configuring DHCP service on master node
-    Given a DHCP service is configured for interface "mvlanp0" on "<%= cb.master[0].name %>" node with address range and lease time as "87.87.8.100,87.87.8.120,24h"
+    Given a DHCP service is configured for interface "mvlanp0" on "<%= cb.master[0].name %>" node with address range and lease time as "192.18.0.100,192.18.0.120,24h"
     #Cleanup for deconfiguring DHCP service on target node
     Given I register clean-up steps:
     """
@@ -962,7 +962,7 @@ Feature: Multus-CNI related scenarios
     And the pod named "test-pod" becomes ready
     When I execute on the pod:
       | /usr/sbin/ip | a |
-    Then the output should contain "87.87.8"
+    Then the output should contain "192.18.0"
 
   # @author weliang@redhat.com
   # @case_id OCP-25909
