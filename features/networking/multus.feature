@@ -12,7 +12,7 @@ Feature: Multus-CNI related scenarios
     # Create the net-attach-def via cluster admin
     Given I have a project
     When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml" replacing paths:
-      | ["metadata"]["namespace"] | <%= project.name %>  |    
+      | ["metadata"]["namespace"] | <%= project.name %>                                                                                                                                                                                                                                                                    |    
       | ["spec"]["config"]        | '{ "cniVersion": "0.3.0", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "bridge", "ipam": { "type": "host-local", "subnet": "10.1.1.0/24", "rangeStart": "10.1.1.100", "rangeEnd": "10.1.1.200", "routes": [ { "dst": "0.0.0.0/0" } ], "gateway": "10.1.1.1" } }' |
     Then the step should succeed
 
@@ -1271,21 +1271,13 @@ Feature: Multus-CNI related scenarios
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin
-    Given I switch to cluster admin pseudo user
-    And I use the "default" project
     When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/whereabouts-macvlan.yaml" replacing paths:
-      | ["metadata"]["namespace"] | <%= project.name %>     |
+      | ["metadata"]["namespace"] | default                                                                                                                         |
       | ["spec"]["config"]        | '{ "cniVersion": "0.3.0", "type": "macvlan", "mode": "bridge", "ipam": { "type": "whereabouts", "range": "192.168.22.100/24"} }'|
     Then the step should succeed
 
     #Cleanup created net-attach-def from default namespaces
-    Given I register clean-up steps:
-    """
-    I run the :delete admin command with:
-      | object_type       | net-attach-def             |
-      | object_name_or_id | macvlan-bridge-whereabouts |
-    the step should succeed
-    """
+    And admin ensures "macvlan-bridge-whereabouts" network_attachment_definition is deleted from the "default" project after scenario
     
     # Create a pod absorbing above net-attach-def
     Given I switch to the first user
