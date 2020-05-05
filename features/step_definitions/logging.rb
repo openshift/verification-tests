@@ -348,9 +348,21 @@ Given /^logging eventrouter is installed in the cluster$/ do
   step %Q/admin ensures "eventrouter" service_account is deleted from the "openshift-logging" project after scenario/
   step %Q/admin ensures "eventrouter" config_map is deleted from the "openshift-logging" project after scenario/
   step %Q/admin ensures "eventrouter" deployment is deleted from the "openshift-logging" project after scenario/
-  @result = admin.cli_exec(:new_app, file: "#{ENV['BUSHSLICER_HOME']}/testdata/logging/eventrouter/internal_eventrouter.yaml")
-  unless @result[:success]
-    raise "Unable to deploy eventrouter"
+  # get image registry from CLO
+  image_registry = deployment('cluster-logging-operator').container_spec(name: 'cluster-logging-operator').image
+  image_version = cluster_version('version').channel.split('-')[1]
+  if image_registry.include?('image-registry.openshift-image-registry.svc:5000')
+    step %Q/I process and create:/, table(%{
+      | f | #{ENV['BUSHSLICER_HOME']}/testdata/logging/eventrouter/internal_eventrouter.yaml |
+    })
+    step %Q/the step should succeed/
+  else
+    registry = image_registry.split('@')[0].gsub("cluster-logging-operator", "logging-eventrouter")
+    step %Q/I process and create:/, table(%{
+      | f | #{ENV['BUSHSLICER_HOME']}/testdata/logging/eventrouter/internal_eventrouter.yaml |
+      | p | IMAGE=#{registry}:v#{image_version}   |
+    })
+    step %Q/the step should succeed/
   end
   step %Q/a pod becomes ready with labels:/, table(%{
     | component=eventrouter |

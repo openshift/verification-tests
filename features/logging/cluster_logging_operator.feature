@@ -26,7 +26,7 @@ Feature: cluster-logging-operator related test
     Given I wait for the "fluentd" service_monitor to appear
     Given the expression should be true> service_monitor('fluentd').service_monitor_endpoint_spec(server_name: "fluentd.openshift-logging.svc").port == "metrics"
     And the expression should be true> service_monitor('fluentd').service_monitor_endpoint_spec(server_name: "fluentd.openshift-logging.svc").path == "/metrics"
-    Given I wait up to 180 seconds for the steps to pass:
+    Given I wait up to 360 seconds for the steps to pass:
     """
     When I perform the GET prometheus rest client with:
       | path  | /api/v1/query?                            |

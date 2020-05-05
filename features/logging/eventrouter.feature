@@ -26,7 +26,7 @@ Feature: eventrouter related test
       | "event": |
       | "reason" |
     Given I wait for the ".operations" index to appear in the ES pod with labels "es-node-master=true"
-    And I wait for the steps to pass:
+    And I wait up to 300 seconds for the steps to pass:
     """
     And I perform the HTTP request on the ES pod with labels "es-node-master=true":
       | relative_url | .operations*/_search?pretty' -d '{"_source":["kubernetes.event.*"],"sort": [{"@timestamp": {"order":"desc"}}],"query":{"term":{"kubernetes.container_name":"eventrouter"}}} |
