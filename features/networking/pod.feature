@@ -484,8 +484,8 @@ Feature: Pod related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-26373
   @admin
-  @destructive  
-    Scenario: Pod readiness check for OVN		
+  @destructive
+  Scenario: Pod readiness check for OVN
     Given the env is using "OVNKubernetes" networkType
     And OVN is functional on the cluster
     Given I switch to cluster admin pseudo user
