@@ -1358,4 +1358,7 @@
   :options:
     :skip-check: --skip-check=<value>
     :z: -z default
-
+:oadm_release_info:
+  :cmd: oc adm release info
+  :options:
+    :registry_config: --registry-config=<value>
