@@ -4,15 +4,6 @@ browse_to_receiver_config:
       xpath: //*[@role='gridcell' and text()='<receiver>']/following-sibling::td//*[text()='Configure']
     op: click
   action: wait_box_loaded
-config_receiver_type:
-  elements:
-  - selector:
-      xpath: //button[contains(@data-test-id, 'dropdown-button')]
-    op: click
-  - selector:
-      xpath: //*[contains(@class, 'pf-c-dropdown__menu')]
-    timeout: 20
-  action: click_dropdown_menu_item
 set_pagerduty_key:
   params:    
     input_field_id: integration-key
