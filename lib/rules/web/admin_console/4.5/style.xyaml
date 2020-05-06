@@ -25,4 +25,19 @@ check_list_view_style:
   elements:
   - selector:
       xpath: //table[contains(@class, 'pf-c-table')]
-
+check_catalog_tile_style:
+  elements:
+  - selector:
+      xpath: //a[contains(@class, 'catalog-tile-pf') and contains(@class, 'co-catalog-tile')]
+check_vertical_tabs_style:
+  elements:
+  - selector:
+      xpath: //ul[contains(@class, 'vertical-tabs-pf')]/li[contains(@class, 'vertical-tabs-pf-tab')]
+check_filter_side_panel_style:
+  elements:
+  - selector:
+      xpath: //div[contains(@class, 'properties-side-panel-pf')]/div[contains(@class, 'properties-side-panel-pf-property')]
+check_filter_panel_style:
+  elements:
+  - selector:
+      xpath: //div[contains(@class, 'filter-panel-pf')]/form[contains(@class, 'filter-panel-pf-category')]//div[contains(@class, 'filter-panel-pf-category-item')]
