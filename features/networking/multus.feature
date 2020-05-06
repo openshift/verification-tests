@@ -1270,7 +1270,7 @@ Feature: Multus-CNI related scenarios
   Scenario: Multus namespaceIsolation should allow references to CRD in the default namespace
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
-    # Create the net-attach-def via cluster admin
+    # Create the net-attach-def in default namespace via cluster admin
     When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/whereabouts-macvlan.yaml" replacing paths:
       | ["metadata"]["namespace"] | default                                                                                                                         |
       | ["spec"]["config"]        | '{ "cniVersion": "0.3.0", "type": "macvlan", "mode": "bridge", "ipam": { "type": "whereabouts", "range": "192.168.22.100/24"} }'|
@@ -1279,9 +1279,8 @@ Feature: Multus-CNI related scenarios
     #Cleanup created net-attach-def from default namespaces
     And admin ensures "macvlan-bridge-whereabouts" network_attachment_definition is deleted from the "default" project after scenario
     
-    # Create a pod absorbing above net-attach-def
-    Given I switch to the first user
-    And I create a new project
+    # Create a pod absorbing above net-attach-def defined in default namespace
+    Given I have a project
     When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
       | ["metadata"]["name"]                                       | macvlan-bridge-whereabouts-pod1     |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | default/macvlan-bridge-whereabouts  |
