@@ -83,7 +83,7 @@ environments:
     cli: SharedLocalCliExecutor
     admin_creds: AutoKubeconfigCredentials
     api_port: 6443
-    version: 4.1.0.0 # version not supported on cluster (yet)
+    #version: 4.1.0.0 # version not supported on cluster (yet)
   ose: *ocp4
   ocm_stage:
     web_console_url: https://cloud.redhat.com/example1/
