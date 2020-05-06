@@ -1288,6 +1288,10 @@
     :prune_over_size_limit: --prune-over-size-limit=<value>
     :prune_registry: --prune-registry=<value>
     :registry_url: --registry-url=<value>
+:oadm_release_info:
+  :cmd: oc adm release info
+  :options:
+    :registry_config: --registry-config=<value>
 :oadm_router:
   :cmd: oc adm router <name>
   :options:
@@ -1358,4 +1362,3 @@
   :options:
     :skip-check: --skip-check=<value>
     :z: -z default
-
