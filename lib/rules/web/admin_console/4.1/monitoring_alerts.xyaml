@@ -36,6 +36,13 @@ silence_alert_from_action:
     item_text: Silence Alert
   action: perform_action_item
   action: click_create_button
+check_silence_detail:
+  element:
+    selector:
+      xpath: //h2[text()='Silence Overview']
+silence_alert_from_detail:
+  action: silence_alert_from_action 
+  action: check_silence_detail
 click_alert_link_with_text:
   element:
     selector:
@@ -90,8 +97,9 @@ input_matcher_name_silence:
   action: set_placeholder_input_value
 
 expire_alert_from_actions:
-  action: click_actions_button
-  action: click_expire_alert_button
+  params:
+    item_text: Expire Silence
+  action: perform_action_item
 
 set_invalid_end_time_silence:
   params:
