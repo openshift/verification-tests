@@ -1291,7 +1291,7 @@
 :oadm_release_info:
   :cmd: oc adm release info
   :options:
-    :image-for: --image-for=<value>
+    :image_for: --image-for=<value>
     :image_name: <value>    
     :registry_config: --registry-config=<value>
 :oadm_router:
