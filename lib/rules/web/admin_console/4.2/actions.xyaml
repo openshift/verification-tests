@@ -17,6 +17,11 @@ click_resource_action_icon:
   - selector:
       xpath: //a[text()='<resource_name>']/ancestor::span/../div//span[contains(@class,'co-m-cog__icon')]
     op: click
+edit_pod_count_action:
+  params:
+    item: Edit Count
+  action: click_one_dropdown_action
+
 
 # a combined action can be directly used for Edit Labels
 add_label_for_resource:

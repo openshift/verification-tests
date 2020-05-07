@@ -1,7 +1,7 @@
 click_view_alerts_button:
   params:
     button_text: View alerts
-  action: click_button_text
+  action: click_button
 # grafana dashboards
 check_grafana_dashboard_body_loaded:
   element:
