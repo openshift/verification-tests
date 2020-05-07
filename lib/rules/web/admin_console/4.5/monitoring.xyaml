@@ -24,3 +24,13 @@ check_silences_tab:
   params:
     tab_name: Silences
   action: check_tab
+browse_to_receiver_config:
+  element:
+    selector:
+      xpath: //*[@role='gridcell' and text()='<receiver>']/following-sibling::td//*[text()='Configure']
+    op: click
+  action: wait_box_loaded
+set_pagerduty_key:
+  params:    
+    input_field_id: integration-key
+  action: set_input_value

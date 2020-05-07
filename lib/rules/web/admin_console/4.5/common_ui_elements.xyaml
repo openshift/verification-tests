@@ -442,6 +442,15 @@ click_one_item:
 choose_dropdown_item:
   action: click_dropdown_field
   action: click_one_item
+choose_item_from_dropdown_menu:
+  elements:
+  - selector:
+      xpath: //button[contains(@data-test-id, 'dropdown-button')]
+    op: click
+  - selector:
+      xpath: //*[contains(@class, 'pf-c-dropdown__menu')]
+    timeout: 20
+  action: click_dropdown_menu_item
 upload_file_for_one_field:
   elements:
   - selector:
@@ -498,7 +507,22 @@ check_side_overlay_dialog_modal:
   elements:
   - selector:
       xpath: //*[contains(@class, 'pf-c-modal-box') and @role='dialog' and not(contains(., 'modal-content'))]
-
+check_alert_title:
+  elements:
+  - selector:
+      xpath: //h4[contains(@class, 'pf-c-alert__title') and contains(text(), '<title>')]
+check_alert_description:
+  elements:
+  - selector:
+      xpath: //div[contains(@class, 'pf-c-alert__description')]//*[contains(., '<description>')]
+check_alert_message:
+  action:
+    if_param: title
+    ref: check_alert_title
+  action:
+    if_param: description
+    ref: check_alert_description
+    
 ## -------- check resource key and values pairs ------
 check_resource_details:
   action:
