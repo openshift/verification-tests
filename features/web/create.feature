@@ -1,37 +1,4 @@
 Feature: create app on web console related
-
-  # @author xxing@redhat.com
-  # @case_id OCP-11171
-  @smoke
-  Scenario: Create application from image on web console
-    Given I have a project
-    Given I wait for the :create_app_from_image web console action to succeed with:
-      | project_name | <%= project.name %>                        |
-      | image_name   | python                                     |
-      | image_tag    | latest                                     |
-      | namespace    | openshift                                  |
-      | app_name     | python-sample                              |
-      | source_url   | https://github.com/sclorg/django-ex.git |
-      | git_ref      | v1.0.1                                     |
-    Given the "python-sample-1" build was created
-
-  # @author xxing@redhat.com
-  # @case_id OCP-11445
-  Scenario: Create application from template with invalid parameters on web console
-    Given I have a project
-    When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/templates/ui/application-template-stibuild-without-customize-route.json |
-    Then the step should succeed
-    When I perform the :create_app_from_template_with_label web console action with:
-      | project_name  | <%= project.name %>    |
-      | template_name | ruby-helloworld-sample |
-      | namespace     | <%= project.name %>    |
-      | label_key     | /%^&   |
-      | label_value   | value1 |
-    Then the step should fail
-    When I run the :confirm_errors_with_invalid_template_label web console action
-    Then the step should succeed
-
   # @author wsun@redhat.com
   # @case_id OCP-12596
   Scenario: Create the app with invalid name

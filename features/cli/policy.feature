@@ -115,24 +115,6 @@ Feature: change the policy of user/service account
       | list          |
       | watch         |
 
-  # @author wsun@redhat.com
-  # @case_id OCP-11273
-  @admin
-  Scenario: UserA could impersonate UserB
-    Given I have a project
-    Given cluster role "sudoer" is added to the "first" user
-    When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/daemon/daemonset.yaml |
-    Then the step should fail
-    When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/daemon/daemonset.yaml |
-      | as | system:admin    |
-    Then the step should succeed
-    When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/daemon/daemonset.yaml |
-      | as | <%= user(1, switch: false).name %>    |
-    Then the step should fail
-
   # @author chezhang@redhat.com
   # @case_id OCP-10211
   @admin

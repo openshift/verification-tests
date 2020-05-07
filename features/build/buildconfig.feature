@@ -80,7 +80,6 @@ Feature: buildconfig.feature
 
     Examples:
       | template                              |
-      | tc479540/test-buildconfig-docker.json | # @case_id OCP-11110
       | tc479541/test-buildconfig-s2i.json    | # @case_id OCP-11474
 
   # @author xiuwang@redhat.com

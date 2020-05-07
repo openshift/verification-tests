@@ -13,7 +13,6 @@ Feature: system metric related tests
   # @author chunchen@redhat.com
   # @case_id OCP-14162
   # @author xiazhao@redhat.com
-  # @case_id OCP-11574
   # @author penli@redhat.com
   @admin
   @destructive
