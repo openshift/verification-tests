@@ -39,7 +39,7 @@ silence_alert_from_action:
 check_silence_detail:
   element:
     selector:
-      xpath: //span[text()='Silence Details']
+      xpath: //h2[text()='Silence Overview']
 silence_alert_from_detail:
   action: silence_alert_from_action 
   action: check_silence_detail
