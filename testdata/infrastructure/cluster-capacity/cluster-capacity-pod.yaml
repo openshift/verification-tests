@@ -6,17 +6,14 @@ metadata:
   name: cluster-capacity
 spec:
   containers:
-  - name: cluster-capacity
-    image: openshift3/ose-cluster-capacity:v<%=env.get_version(user:user).first%>
-    volumeMounts:
-    - mountPath: /test-pod
-      name: test-volume
-    - mountPath: /admin-creds
-      name: admin-creds
-    command:
-    - "/bin/sh"
-    - "-ec"
-    - "sleep inf"
+    - name: origin-cluster-capacity
+      image: quay.io/openshift/origin-cluster-capacity:latest
+      command: [ "/bin/bash", "-ce", "tail -f /dev/null" ]
+      volumeMounts:
+      - mountPath: /test-pod
+        name: test-volume
+      - mountPath: /admin-creds
+        name: admin-creds
   volumes:
   - name: test-volume
     configMap:
