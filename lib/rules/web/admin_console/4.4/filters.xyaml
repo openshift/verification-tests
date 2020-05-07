@@ -16,6 +16,8 @@ set_strings_in_dropdown_filter_box:
     op: send_keys <filter_text>
 filter_event_by_name_or_message:
   action: set_filter_strings
+set_filter_strings_on_explore_page:
+  action: set_filter_strings
 search_by_event_catagory:
   elements:
   - selector:
