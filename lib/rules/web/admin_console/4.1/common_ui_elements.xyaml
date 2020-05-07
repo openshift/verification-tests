@@ -225,6 +225,11 @@ click_link_with_text:
     selector:
       <<: *text_link
     op: click
+click_link_with_text_only:
+  element:
+    selector:
+      xpath: //a[text()='<text>']
+    op: click
 click_secondary_menu:
   elements:
   - selector:
