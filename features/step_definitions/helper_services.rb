@@ -9,8 +9,9 @@ Given /^I have a NFS service in the(?: "([^ ]+?)")? project$/ do |project_name|
   end
 
   step %Q/SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group/
+  step 'I obtain test data file "storage/nfs/nfs-server.yaml"'
   step %Q{I run the :create client command with:}, table(%{
-    | f | #{ENV['BUSHSLICER_HOME']}/testdata/storage/nfs/nfs-server.yaml |
+    | f | <%= BushSlicer::HOME %>/testdata/storage/nfs/nfs-server.yaml |
   })
   step %Q/the step should succeed/
 
@@ -484,7 +485,7 @@ Given /^I have a iSCSI setup in the environment$/ do
       res = host.exec_admin(*setup_commands)
       raise "iSCSI initiator setup commands error" unless res[:success]
     end
-    @result = admin.cli_exec(:create, n: _project.name, f: 'https://raw.githubusercontent.com/openshift-qe/docker-iscsi/master/iscsi-target.json')
+    @result = admin.cli_exec(:create, n: _project.name, f: "<%= BushSlicer::HOME %>/testdata/storage/iscsi/iscsi-target.json")
     raise "could not create iSCSI pod" unless @result[:success]
   end
 
