@@ -179,3 +179,7 @@ uninstall_operator_on_console:
   action: click_resource_action_icon
   action: click_button
   action: submit_changes
+open_edit_form_view:
+  params:
+    button_text: Edit Form
+  action: click_button
