@@ -573,7 +573,6 @@ Feature: Multus-CNI related scenarios
   Scenario: User cannot consume the net-attach-def created in other project which is namespace isolated	
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
-    # Create the net-attach-def via cluster admin
     Given I have a project
     And evaluation of `project.name` is stored in the :project1 clipboard
     When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml" replacing paths:
