@@ -16,7 +16,7 @@ check_div_text:
       xpath: //div[contains(text(),'<text>')]
 filter_alert:
   params:    
-    class_text: co-text-filter
+    class_text: text-filter
     input_value: <alert_name>
   action: clear_input_class
   action: set_input_class
@@ -26,9 +26,9 @@ open_alert_detail:
 
 perform_action_item:
   params:
-    button_text: <item_text>
+    text: <item_text>
   action: click_actions_button
-  action: click_button_text
+  action: click_link_with_text_only
 perform_silence:
   action: submit_changes
 silence_alert_from_action:
@@ -36,6 +36,13 @@ silence_alert_from_action:
     item_text: Silence Alert
   action: perform_action_item
   action: click_create_button
+check_silence_detail:
+  element:
+    selector:
+      xpath: //h2[text()='Silence Overview']
+silence_alert_from_detail:
+  action: silence_alert_from_action 
+  action: check_silence_detail
 click_alert_link_with_text:
   element:
     selector:
@@ -45,7 +52,7 @@ click_alert_link_with_text:
 click_actions_button:
   element:
     selector:
-      xpath: //button[@aria-label='Actions'][@data-test-id='actions-menu-button']
+      xpath: //div[@class='co-actions-menu']//button[contains(@class,'btn-dropdown')]
     op: click
 
 expire_alert_from_detail: 
@@ -90,8 +97,9 @@ input_matcher_name_silence:
   action: set_placeholder_input_value
 
 expire_alert_from_actions:
-  action: click_actions_button
-  action: click_expire_alert_button
+  params:
+    item_text: Expire Silence
+  action: perform_action_item
 
 set_invalid_end_time_silence:
   params:
@@ -103,10 +111,10 @@ status_specific_alert:
   action: filter_alert
   element:
     selector:
-      xpath: //div[@aria-label='Alerts']//td[text()='<status>'][1]
+      xpath: //div[text()='<status>'][1]
 status_specific_silence:
   action: filter_alert
   element:
     selector:
-      xpath: //div[@aria-label='Silences']//td[text()='<status>'][1]
+      xpath: //div[text()='<status>'][1]
   

@@ -12,6 +12,10 @@ choose_action_item_from_list:
   - selector:
       xpath: //button[@data-test-action='<item>' and not(@disabled)]
     op: click
+edit_pod_count_action:
+  params:
+    item: Edit Count
+  action: click_one_dropdown_action
 choose_item_from_list:
   elements:
   - selector:

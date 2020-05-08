@@ -26,12 +26,13 @@ Feature: job.feature
       | object_type | job |
       | object_name_or_id | pi |
     Then the step should succeed
-    Given all existing pods die with labels:
-      | app=pi |
+    And I wait for the steps to pass:
+    """
     When I get project pods with labels:
       | app=pi |
     Then the step should succeed
     And the output should not contain "pi-"
+    """
     When I run oc create over "<%= BushSlicer::HOME %>/testdata/templates/tc511597/job.yaml" replacing paths:
       | ["spec"]["completions"] | -1 |
     Then the step should fail

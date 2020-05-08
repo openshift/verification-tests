@@ -6,11 +6,11 @@ wait_overview_items_loaded:
 check_list_heading_shown:
   element:
     selector:
-      xpath: //button[contains(@class,'project-overview__item-heading--name') and text()='<heading>']
+      xpath: //button[contains(@class,'project-overview__item-heading--name') and contains(.,'<heading>')]
 check_list_item:
   elements: 
   - selector: &overview_item
-      xpath: //button[contains(@class,'project-overview__item-heading--name') and text()='<resource_name>']/ancestor::div[contains(@class,'project-overview__item--<resource_kind>')]
+      xpath: //button[contains(@class,'project-overview__item-heading--name') and contains(.,'<resource_name>')]/ancestor::div[contains(@class,'project-overview__item--<resource_kind>')]
     timeout: 30
 check_pod_number:
   element:
@@ -54,7 +54,7 @@ check_dc_available_action_menus:
   - selector: &pause_rollouts
       xpath: //li//button[@data-test-action='Pause Rollouts']      
   - selector: &edit_counts
-      xpath: //li//button[@data-test-action='Edit Count']
+      xpath: //li//button[@data-test-action='Edit Pod Count']
   - selector: &add_storage
       xpath: //li//button[@data-test-action='Add Storage']
   - selector: &edit_app_grouping
@@ -191,7 +191,7 @@ check_overview_group_heading:
 check_overview_group_items:
   elements:
   - selector:
-      xpath: //h2[contains(@class,'project-overview__group-heading') and text()='<group_heading_name>']/parent::div[contains(@class,'project-overview__group')]//span[contains(@class,'co-m-resource-icon') and @title='<resource_type>']/following-sibling::button[text()='<resource_name>']
+      xpath: //h2[contains(@class,'project-overview__group-heading') and contains(.,'<group_heading_name>')]/parent::div[contains(@class,'project-overview__group')]//span[contains(@class,'co-m-resource-icon') and @title='<resource_type>']/following-sibling::button[contains(.,'<resource_name>')]
 group_by_application:
   params:
     dropdown_menu_item: Application

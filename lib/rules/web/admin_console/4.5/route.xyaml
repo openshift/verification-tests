@@ -83,7 +83,7 @@ click_add_alternative_service:
 click_remove_alternative_service:
   params:
     button_text: Remove Alternate Service
-  action: click_button_text
+  action: click_button
 set_weight_for_main_service:
   params:
     label_text: Weight

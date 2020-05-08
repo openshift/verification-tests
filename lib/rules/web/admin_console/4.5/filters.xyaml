@@ -22,6 +22,14 @@ set_strings_in_filter_box:
   - selector:
       <<: *filter_string
     op: send_keys <filter_text>
+set_filter_strings_on_explore_page:
+  elements:
+  - selector: &filter_text_for_explore
+      css: input[class*='text-filter']
+    op: clear
+  - selector:
+      <<: *filter_text_for_explore
+    op: send_keys <filter_text>
 filter_event_by_name_or_message:
   params:
     test_id_value: item-filter

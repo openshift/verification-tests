@@ -31,7 +31,7 @@ search_image:
   action: set_input_value
   elements:
   - selector:
-      xpath: //div[@class='pf-c-radio']
+      xpath: //span[contains(.,'Deploy Image')]
     op: click
 search_nonexisted_image_and_check_message:
   params:
