@@ -145,6 +145,7 @@ Feature: Storage upgrade tests
   #@users=upuser1,upuser2
   @admin
   Scenario: Snapshot operator should be in available status after upgrade and can created pod with snapshot
+    Given the master version >= "4.4"
     Given I switch to cluster admin pseudo user		
     When I run the :create admin command with:
       | f | <%= BushSlicer::HOME %>/testdata/storage/csi/aws-ebs-with-snapshots.yaml |
@@ -212,6 +213,7 @@ Feature: Storage upgrade tests
   @upgrade-check
   @admin
   Scenario: Snapshot operator should be in available status after upgrade and can created pod with snapshot
+    Given the master version >= "4.4"
     Given I switch to cluster admin pseudo user
     
     #Snapshot operator/controller update
