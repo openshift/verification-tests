@@ -377,7 +377,7 @@ module BushSlicer
     end
 
     # can be used to retry a call by given HTTP request string, e.g.
-    #   POST /?AccessKeyId=LTAIs2WYGap0r3FL&Action=DescribeRegions&Format=JSON&RegionId=cn-qingdao&Signature=R8z6MU3MVZa%252Bn4%252BsX%252B9%252FBTIWBq0%253D&SignatureMethod=HMAC-SHA1&SignatureNonce=ffe3fed8b16a4f51b84f1ccc05cc690d&SignatureType=&SignatureVersion=1.0&Timestamp=2018-07-16T20%3A22%3A04Z&Version=2014-05-26
+    #   POST /?AccessKeyId=xxxyyyzzz&Action=DescribeRegions&Format=JSON&RegionId=cn-qingdao&Signature=zzzzz
     #def test_req(params, api: "compute")
     #  if String === params
     #    method, _path = params.split(/\s/)
