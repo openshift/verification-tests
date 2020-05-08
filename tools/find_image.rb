@@ -14,7 +14,7 @@ class QueryPayload
   # include whatever modules you need
 
   def run
-    program :name, 'query_images'
+    program :name, 'find_image'
     program :version, '0.0.1'
     program :description, 'Query the release page to find a matching image based on user defined query parameter'
 
@@ -32,6 +32,7 @@ class QueryPayload
           :build_type => "nightly-",
           :url => "https://openshift-release.svc.ci.openshift.org/"
         raise "missing query string" if options.query.nil?
+        print("Querying #{options.url} against #{options.build_type}\n")
         doc = Nokogiri::HTML(open(options.url).read)
         links = doc.xpath("//a[contains(text(), '#{options.build_type}')]")
 
