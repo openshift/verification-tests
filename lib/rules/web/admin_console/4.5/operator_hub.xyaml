@@ -279,3 +279,4 @@ switch_to_yaml_view:
     content: Create by manually entering YAML or JSON definitions
   action: click_radio_input
   action: check_page_contains
+
