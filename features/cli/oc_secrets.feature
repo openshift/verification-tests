@@ -215,26 +215,3 @@ Feature: oc_secrets.feature
     Then the step should fail
     And the output should match:
       | cannot add key file.json.*another key by that name already exist |
-
-  # @author wjiang@redhat.com
-  # @case_id OCP-11482
-  Scenario: Bundle secret will not load subdir and warning message will be displayed when -q is not present
-    Given I have a project
-    Given a "first/second/test" file is created with the following lines:
-      |second test|
-    Given a "first/test" file is created with the following lines:
-      |first test|
-    When I run the :new_secret client command with:
-      | secret_name     | mysecret|
-      | credential_file | first   |
-    Then the step should succeed
-    Then the output should contain:
-      | Skipping resource first/second |
-    When I run the :new_secret client command with:
-      | secret_name     | mysecret1 |
-      | credential_file | first     |
-      | quiet   | true      |
-    Then the step should succeed
-    Then the output should not contain:
-      | Skipping resource first/second |
-

@@ -519,22 +519,6 @@ Feature: deployment related features
       | post: Success                        |
 
   # @author yinzhou@redhat.com
-  # @case_id OCP-11070
-  Scenario: Trigger info is retained for deployment caused by image changes
-    Given I have a project
-    When I process and create "https://raw.githubusercontent.com/openshift/origin/master/examples/sample-app/application-template-stibuild.json"
-    Then the step should succeed
-    Given the "ruby-sample-build-1" build was created
-    And the "ruby-sample-build-1" build completed
-    Given I wait until the status of deployment "frontend" becomes :complete
-    When I get project dc named "frontend" as YAML
-    Then the output by order should match:
-      | causes:           |
-      | - imageTrigger:   |
-      | from:             |
-      | type: ImageChange |
-
-  # @author yinzhou@redhat.com
   # @case_id OCP-11769
   Scenario: Start new deployment when deployment running
     Given I have a project

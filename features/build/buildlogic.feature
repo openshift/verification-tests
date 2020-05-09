@@ -68,29 +68,6 @@ Feature: buildlogic.feature
     Then the "ruby-hello-world-1" build completed
 
   # @author haowang@redhat.com
-  # @case_id OCP-11740
-  Scenario: Prevent STI builder images from running as root - using onbuild image
-    Given I have a project
-    When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/build/tc499516/test-buildconfig-onbuild-user0.json |
-    Then the step should succeed
-    Given the "ruby-sample-build-onbuild-user0-1" build was created
-    And the "ruby-sample-build-onbuild-user0-1" build failed
-    When I run the :build_logs client command with:
-      | build_name  | ruby-sample-build-onbuild-user0-1 |
-    Then the output should contain:
-      |  not allowed |
-    When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/build/tc499516/test-buildconfig-onbuild-userdefault.json |
-    Then the step should succeed
-    Given the "ruby-sample-build-onbuild-userdefault-1" build was created
-    And the "ruby-sample-build-onbuild-userdefault-1" build failed
-    When I run the :build_logs client command with:
-      | build_name  | ruby-sample-build-onbuild-userdefault-1 |
-    Then the output should contain:
-      |  not allowed |
-
-  # @author haowang@redhat.com
   Scenario Outline: ForcePull image for build
     Given I have a project
     When I run the :create client command with:

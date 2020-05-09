@@ -35,34 +35,6 @@ Feature: Testing registry
     And the output should not contain:
       | <%= cb.digest %> |
 
-  # @author haowang@redhat.com
-  # @case_id OCP-11310
-  @admin
-  Scenario: Have size information for images pushed to internal registry
-    Given I have a project
-    And I find a bearer token of the builder service account
-    And default registry service ip is stored in the :registry_ip clipboard
-    And I have a skopeo pod in the project
-    And master CA is added to the "skopeo" dc
-    When I execute on the pod:
-      | skopeo                     |
-      | --debug                    |
-      | --insecure-policy          |
-      | copy                       |
-      | --dest-cert-dir            |
-      | /opt/qe/ca                 |
-      | --dcreds                   |
-      | dnm:<%= service_account.cached_tokens.first %>  |
-      | docker://docker.io/aosqe/pushwithdocker19:latest |
-      | docker://<%= cb.registry_ip %>/<%= project.name %>/busybox:latest  |
-    Then the step should succeed
-    And evaluation of `image_stream_tag("busybox:latest").digest(user:user)` is stored in the :digest clipboard
-    Then I run the :describe admin command with:
-      | resource | image            |
-      | name     | <%= cb.digest %> |
-    And the output should match:
-      | Image Size:.* |
-
   # @author xiuwang@redhat.com
   # @case_id OCP-18994
   @admin

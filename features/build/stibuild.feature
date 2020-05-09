@@ -1,21 +1,4 @@
 Feature: stibuild.feature
-
-  # @author haowang@redhat.com
-  # @case_id OCP-11099
-  Scenario: STI build with invalid context dir
-    Given I have a project
-    When I run the :new_app client command with:
-      | file | <%= BushSlicer::HOME %>/testdata/image/language-image-templates/python-27-rhel7-errordir-stibuild.json |
-    Then the step should succeed
-    When I run the :start_build client command with:
-      | buildconfig | python-sample-build |
-    And the "python-sample-build-1" build was created
-    And the "python-sample-build-1" build failed
-    When I run the :get client command with:
-      | resource | build |
-    Then the output should contain:
-      | InvalidContextDirectory |
-
   # @author xiuwang@redhat.com
   Scenario Outline: Trigger s2i/docker/custom build using additional imagestream
     Given I have a project
@@ -51,8 +34,6 @@ Feature: stibuild.feature
     Examples:
       | template                      |
       | tc498848/tc498848-s2i.json    | # @case_id OCP-12041
-      | tc498847/tc498847-docker.json | # @case_id OCP-11911
-      | tc498846/tc498846-custom.json | # @case_id OCP-11739
 
   # @author wewang@redhat.com
   # @case_id OCP-15464

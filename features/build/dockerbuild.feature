@@ -1,18 +1,4 @@
 Feature: dockerbuild.feature
-
-  # @author wzheng@redhat.com
-  # @case_id OCP-11078
-  Scenario: Docker build with blank source repo
-    Given I have a project
-    When I run the :process client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/build/ruby22rhel7-template-docker-blankrepo.json |
-    Then the step should succeed
-    Given I save the output to file> blankrepo.json
-    When I run the :create client command with:
-      | f | blankrepo.json |
-    Then the step should fail
-    Then the output should match "spec.source.git.uri: [Rr]equired value"
-
   # @author wzheng@redhat.com
   # @case_id OCP-12115
   @smoke
