@@ -267,8 +267,8 @@ module BushSlicer
     # helper parser
     def parse_version(ver_str)
       ver = ver_str.sub(/(^v|^openshift-clients-)/,"")
-      if ver !~ /^[\d.]+$/
-        raise "version '#{ver}' does not match /^[\d.]+$/"
+      if ver !~ /^\d[.]\d+\b.*$/
+        raise "version '#{ver}' does not match /^\d[.]\d+\b.*$/"
       end
       ver = ver.split(".").reject(&:empty?).map(&:to_i)
       [ver[0], ver[1]].map(&:to_i)
@@ -280,7 +280,8 @@ module BushSlicer
       if opts[:version]
         _version = opts[:version]
       elsif admin?
-        _version = admin.cli_exec(:get, resource: "clusterversion", resource_name: "version", o: "jsonpath={.status.desired.version}")
+        res = admin.cli_exec(:get, resource: "clusterversion", resource_name: "version", o: "jsonpath={.status.desired.version}")
+        _version = res[:response].to_s
       else
         raise "cluster version not set and getting without admin access not possible presently"
       end
