@@ -29,27 +29,6 @@ Feature: apiserver and auth related upgrade check
     Then the step should succeed
     And evaluation of `@result[:response]` is stored in the :auth_operator_image clipboard
     
-    # Not Need for now, commenting out code part
- 
-    # operator pod env value
-    #When I run the :get admin command with:
-    #  | resource  | po                                                     |
-    #  | n         | openshift-authentication-operator                      |
-    #  | o         | jsonpath={.items[0].spec.containers[0].env[0].value}   |
-    #Then the step should succeed
-    #And evaluation of `@result[:response]` is stored in the :auth_operator_env_value clipboard
-
-    # operands pod image 
-    #When I run the :get admin command with:
-    #  | resource  | po                                            |
-    #  | n         | openshift-authentication                      |
-    #  | o         | jsonpath={.items[0].spec.containers[0].image} |
-    #Then the step should succeed
-    #And evaluation of `@result[:response]` is stored in the :auth_image clipboard
-
-    # Check the pod image is the same as the operator specified:
-    #Given the expression should be true> cb.auth_image == cb.auth_operator_env_value
-    
     # Check cluster version
     When I run the :get admin command with:
       | resource | clusterversion/version           |
@@ -61,8 +40,10 @@ Feature: apiserver and auth related upgrade check
     Given evaluation of `"oc adm release info --registry-config=/var/lib/kubelet/config.json <%= cb.payload_image %>"` is stored in the :oc_adm_release_info clipboard
     When I store the ready and schedulable masters in the clipboard
     And I use the "<%= cb.nodes[0].name %>" node
+    
     # due to sensitive, didn't choose to dump and save the config.json file
     # for using the step `I run the :oadm_release_info admin command ...`
+    
     And I run commands on the host:
       | <%= cb.oc_adm_release_info %> --image-for=cluster-authentication-operator      |
     Then the step should succeed
