@@ -1,5 +1,0 @@
-[OSEv3:vars]
-# put any extra metrics related parameters that are not default here
-openshift_metrics_install_metrics=false
-openshift_metrics_project=<%= cb.target_proj %>
-oreg_url=<%= product_docker_repo %>openshift3/ose-${component}:${version}

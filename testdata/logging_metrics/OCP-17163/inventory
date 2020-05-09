@@ -1,5 +1,0 @@
-[OSEv3:vars]
-# Extra_Metrics
-openshift_metrics_storage_kind=dynamic
-openshift_hosted_metrics_storage_kind=dynamic
-openshift_master_dynamic_provisioning_enabled=true

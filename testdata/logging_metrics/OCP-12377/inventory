@@ -1,3 +1,0 @@
-[OSEv3:vars]
-# Logging
-openshift_logging_install_logging=true

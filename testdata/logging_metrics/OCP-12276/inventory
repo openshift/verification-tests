@@ -1,5 +1,0 @@
-[OSEv3:vars]
-
-# Extra_Metrics
-openshift_metrics_cassandra_limits_memory=1G
-openshift_metrics_hawkular_requests_cpu=100m

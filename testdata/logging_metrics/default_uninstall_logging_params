@@ -1,6 +1,0 @@
-# put any extra logging related parameters that are not default here
-[OSEv3:vars]
-openshift_logging_install_logging=false
-openshift_logging_namespace=<%= cb.target_proj %>
-oreg_url=<%= product_docker_repo %>openshift3/ose-${component}:${version}
-
