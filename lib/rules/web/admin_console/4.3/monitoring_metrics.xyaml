@@ -133,5 +133,5 @@ check_metric_query_chart:
 check_metric_query_table_text:
   element:
     selector:
-      xpath: //table[@aria-label='query results table']//td[text()='<project_name>']
+      xpath: //table[@aria-label='query results table']//td[contains(text(),'<table_text>')]
     timeout: 120
