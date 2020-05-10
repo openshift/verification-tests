@@ -187,6 +187,14 @@
     :save_config: --save-config=<value>
     :template: --template=<value>
     :validate: --validate=<value>
+:create_deploymentconfig:
+  :cmd: oc create deploymentconfig <name>
+  :options:
+    :allow_missing_template_keys: --allow-missing-template-keys=<value>
+    :dry_run: --dry-run=<value>
+    :image: --image=<value>
+    :output: --output <value>
+    :template: --template=<value>
 :create_namespace:
   :cmd: oc create namespace <name>
 :create_poddisruptionbudget:
