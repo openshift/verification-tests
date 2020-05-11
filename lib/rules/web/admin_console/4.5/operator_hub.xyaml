@@ -63,7 +63,7 @@ check_error_message_for_missing_required_name:
 check_quay_image_security_exists_on_dashboard:
   element:
     selector: &quay_image_security
-      xpath: //button[contains(text(),'Quay Image Security')]
+      xpath: //button[contains(.,'Quay Image Security')]
 click_quay_image_security_button:
   element:
     selector:
@@ -72,9 +72,9 @@ click_quay_image_security_button:
 check_quay_image_security_popup:
   elements:
   - selector:
-      xpath: //div[contains(@class,'co-overview-status')]/div[text()='Severity']/following-sibling::div[text()='Fixable']
+      xpath: //div[text()='Severity']/following-sibling::div[text()='Fixable']
   - selector:
-      xpath: //div[contains(@class,'co-overview-status__text--bold') and contains(.,'<severity>')]
+      xpath: //div[contains(@class,'co-status-popup__text--bold') and contains(.,'<severity>')]
   action: check_link_and_text
 check_affected_pods_tab:
   params:

@@ -5,5 +5,4 @@ click_logout:
     op: click
   - selector:
       visible_text: !ruby/regexp /Log.*out/
-    type: a
     op: click

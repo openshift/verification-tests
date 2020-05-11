@@ -87,7 +87,7 @@ click_tab:
   - selector: &tab
       xpath: //ul[contains(@class,'nav__menu')]//a[contains(text(), '<tab_name>')]
     op: click
-    timeout: 20
+    timeout: 30
 check_tab:
   element:
     selector:
