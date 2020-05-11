@@ -280,4 +280,46 @@ switch_to_yaml_view:
     content: Create by manually entering YAML or JSON definitions
   action: click_radio_input
   action: check_page_contains
+check_all_namespace_installation_mode:
+  action:
+    if_param: recommended_ns
+    ref: check_all_namespace_installation_mode_with_recommended_ns
+  action:
+    if_not_param: recommended_ns
+    ref: check_all_namespace_installation_mode_without_recommended_ns
+check_specific_namespace_installation_mode:
+  action:
+    if_param: recommended_ns
+    ref: check_specific_namespace_installation_mode_with_recommended_ns
+  action:
+    if_not_param: recommended_ns
+    ref: check_specific_namespace_installation_mode_without_recommended_ns
+check_all_namespace_installation_mode_with_recommended_ns:
+  params:
+    button_text: <recommended_ns>
+  action: check_button_text
+check_all_namespace_installation_mode_without_recommended_ns:
+  params:
+    disabled_radio_text: OwnNamespace
+    checked_radio_text: AllNamespaces
+  action: check_disabled_radio_input
+  action: check_checked_radio_input
+check_specific_namespace_installation_mode_with_recommended_ns:
+  params:
+    disabled_radio_text: AllNamespaces
+    checked_radio_text: <recommended_ns>
+  action: check_disabled_radio_input
+  action: check_checked_radio_input
+check_specific_namespace_installation_mode_without_recommended_ns:
+  params:
+    disabled_radio_text: AllNamespaces
+    checked_radio_text: OwnNamespace
+  action: check_disabled_radio_input
+  action: check_checked_radio_input
+enable_cluster_monitoring:
+  element:
+    selector:
+      xpath: //input[contains(@type,'checkbox') and contains(@id,'enable-monitoring-checkbox')]
+    op: click
+
 
