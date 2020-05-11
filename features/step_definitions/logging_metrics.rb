@@ -63,10 +63,15 @@ end
 # 1. figure out project and route information
 Given /^I login to kibana logging web console$/ do
   cb.logging_console_url = route('kibana', service('kibana',project('openshift-logging', switch: false))).dns(by: admin)
+  base_rules = BushSlicer::WebConsoleExecutor::RULES_DIR + "/base/"
+  snippets_dir = BushSlicer::WebConsoleExecutor::SNIPPETS_DIR
+  version = env.webconsole_executor.get_master_version(user, via_rest: true)
   step %Q/I have a browser with:/, table(%{
-    | rules        | lib/rules/web/images/logging/       |
-    | rules        | lib/rules/web/console/base/         |
-    | base_url     | <%= cb.logging_console_url %>       |
+    | rules        | lib/rules/web/admin_console/#{version}/  |
+    | rules        | #{base_rules}                            |
+    | rules        | lib/rules/web/admin_console/base/        |
+    | snippets_dir | #{snippets_dir}                          |
+    | base_url     | <%= cb.logging_console_url %>            |
     })
   step %Q/I perform the :kibana_login web action with:/, table(%{
     | username   | <%= user.name %>                      |

@@ -1,0 +1,92 @@
+---
+kibana_login:
+  url: <kibana_url>
+  action:
+    if_element:
+      selector:
+        tag_name: button
+        text: Log in with OpenShift
+    ref: click_log_in_with_openshift_button
+  action: login_sequence
+  action: kibana_verify_logged_in
+
+click_log_in_with_openshift_button:
+  element:
+    selector:
+      xpath: //button[text()='Log in with OpenShift']
+    op: click
+
+logout_kibana:
+  url: <kibana_url>
+  elements:
+    - selector:
+        text: Log out
+      op: click
+      type: a
+
+kibana_verify_app_text:
+  elements:
+  - selector:
+      xpath: //table[contains(., '<checktext>')]
+    timeout: <time_out>
+    visible: true
+
+kibana_verify_default_index_pattern:
+  elements:
+  - selector:
+      xpath:  //li[@title=".all"]
+  - selector:
+      xpath:  //li[@title=".operations.*"]
+  - selector:
+      xpath:  //li[@title=" project.*"]
+
+kibana_verify_logged_in:
+  action:
+    if_element:
+      selector:
+        text: Authorize Access
+    ref: kibana_click_approve
+  action: wait_kibana_logged_in
+
+kibana_click_approve:
+  elements:
+  - selector:
+      name: approve
+    op: click
+
+wait_kibana_logged_in:
+  elements:
+  - selector:
+      xpath: //div[@class="global-nav-link__title" and contains(., "Discover")]
+    timeout: 300
+
+kibana_find_index_pattern:
+  elements:
+  - selector:
+      xpath: //h2[contains(@class, "index-pattern-label") and contains(., "<index_pattern_name>")] | //span[contains(., "<index_pattern_name>")]
+
+kibana_click_index:
+  elements:
+  - selector:
+      xpath: //h2[contains(@class, "index-pattern-label") and contains(., "<index_pattern_name>")] | //span[contains(., "<index_pattern_name>")]
+    op: click
+
+kibana_expand_index_patterns:
+  elements:
+  - selector:
+      xpath: //div[contains(@ng-model, "selectedIndexPattern")]
+    op: click
+
+click_kibana_link_in_console:
+  elements:
+  - selector:
+      xpath: //a[@data-component='pf-nav-expandable' and text()='Monitoring']
+    op: click
+  - selector:
+      xpath: //a[@href='<kibana_route>' and text()='Logging']
+    op: click
+
+kibana_check_status:
+  elements:
+  - selector:
+      xpath: //span[contains(@class,'overall_state_color') and contains(., '<state>')]
