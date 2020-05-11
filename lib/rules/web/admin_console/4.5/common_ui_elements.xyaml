@@ -96,6 +96,10 @@ check_button_enabled:
   element:
     selector:
       xpath: //button[contains(., '<button_text>') and not(@disabled)]
+check_button_text:
+  element:
+    selector:
+      xpath: //button[contains(., '<button_text>')]
 check_text_not_a_link:
   element:
     selector:
@@ -127,6 +131,19 @@ click_radio_input:
     selector:
       xpath: //input[@type='radio' and @value='<radio_text>']
     op: click
+click_radio_input_by_text:
+  element:
+    selector:
+      xpath: //label[contains(.,'<text>')]/input[@type='radio']
+    op: click
+check_disabled_radio_input:
+  element:
+    selector:
+      xpath: //input[@type='radio' and @value='<disabled_radio_text>' and @disabled]
+check_checked_radio_input:
+  element:
+    selector:
+      xpath: //input[@type='radio' and @value='<checked_radio_text>' and @checked]
 click_close_icon:
   element:
     selector:
