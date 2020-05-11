@@ -333,4 +333,3 @@ enable_cluster_monitoring:
       xpath: //input[contains(@type,'checkbox') and contains(@id,'enable-monitoring-checkbox')]
     op: click
 
-
