@@ -1,44 +1,4 @@
 Feature: Persistent Volume reclaim policy tests
-
-  # @author lxia@redhat.com
-  @admin
-  Scenario Outline: Persistent disk with RWO access mode and Default policy
-    Given I have a project
-    And I have a 1 GB volume and save volume id in the :vid clipboard
-
-    When admin creates a PV from "<%= BushSlicer::HOME %>/testdata/storage/<path_to_file>" where:
-      | ["metadata"]["name"]                        | pv-<%= project.name %> |
-      | ["spec"]["capacity"]["storage"]             | 1Gi                    |
-      | ["spec"]["accessModes"][0]                  | ReadWriteOnce          |
-      | ["spec"]["<storage_type>"]["<volume_name>"] | <%= cb.vid %>          |
-      | ["spec"]["persistentVolumeReclaimPolicy"]   | Default                |
-      | ["spec"]["storageClassName"]                | sc-<%= project.name %> |
-    Then the step should succeed
-    When I create a dynamic pvc from "<%= BushSlicer::HOME %>/testdata/storage/misc/pvc.json" replacing paths:
-      | ["metadata"]["name"]         | mypvc                  |
-      | ["spec"]["volumeName"]       | pv-<%= project.name %> |
-      | ["spec"]["storageClassName"] | sc-<%= project.name %> |
-    Then the step should succeed
-    And the "mypvc" PVC becomes bound to the "pv-<%= project.name %>" PV
-
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/gce/pod.json" replacing paths:
-      | ["metadata"]["name"]                                         | mypod |
-      | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt  |
-      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc |
-    Then the step should succeed
-    Given the pod named "mypod" becomes ready
-    When I execute on the pod:
-      | touch | /mnt/testfile |
-    Then the step should succeed
-
-    Given I ensure "mypod" pod is deleted
-    And I ensure "mypvc" pvc is deleted
-    And the PV becomes :released
-
-    Examples:
-      | storage_type         | volume_name | path_to_file               |
-      | gcePersistentDisk    | pdName      | gce/pv-default-rwo.json    | # @case_id OCP-12655
-
   # @author lxia@redhat.com
   @admin
   Scenario Outline: Persistent volume with RWO access mode and Delete policy

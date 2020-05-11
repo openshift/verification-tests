@@ -11,46 +11,6 @@ Feature: pod related features
       | name=test-pods|
     Then I wait for the "test-service" endpoint to appear up to 5 seconds
 
-  # @author pruan@redhat.com
-  # @case_id OCP-12432
-  @admin
-  Scenario: Expose shared memory of the pod--Clustered
-    Given I have a project
-    When I run the :new_app client command with:
-      | app_repo | openshift/deployment-example |
-    Then the step should succeed
-    Given a pod becomes ready with labels:
-      | app=deployment-example |
-    Given I use the "<%= pod.node_name %>" node
-    Given the system container id for the pod is stored in the clipboard
-    And evaluation of `pod.container(user: user, name: 'deployment-example').id` is stored in the :container_id clipboard
-    When I run commands on the host:
-      | docker inspect <%= cb.container_id %> \|grep Mode |
-    Then the step should succeed
-    And the output should contain:
-      | "NetworkMode": "container:<%= cb.system_pod_container_id %> |
-      | "IpcMode": "container:<%= cb.system_pod_container_id %>     |
-    When I run commands on the host:
-      | docker inspect <%= cb.container_id %> \|grep Pid |
-    Then the step should succeed
-    And evaluation of `/"Pid":\s+(\d+)/.match(@result[:response])[1]` is stored in the :user_container_pid clipboard
-    When I run commands on the host:
-      | docker inspect <%= cb.system_pod_container_id %> \|grep Pid |
-    Then the step should succeed
-    And evaluation of `/"Pid":\s+(\d+)/.match(@result[:response])[1]` is stored in the :system_container_pid clipboard
-    When I run commands on the host:
-      | ls -l /proc/<%= cb.system_container_pid %>/ns |
-    Then the step should succeed
-    And evaluation of `/ipc:\[(\d+)\]/.match(@result[:response])[1]` is stored in the :system_ipc clipboard
-    And evaluation of `/net:\[(\d+)\]/.match(@result[:response])[1]` is stored in the :system_net clipboard
-    When I run commands on the host:
-      | ls -l /proc/<%= cb.user_container_pid %>/ns |
-    Then the step should succeed
-    And evaluation of `/ipc:\[(\d+)\]/.match(@result[:response])[1]` is stored in the :user_ipc clipboard
-    And evaluation of `/net:\[(\d+)\]/.match(@result[:response])[1]` is stored in the :user_net clipboard
-    Then the expression should be true> cb.system_ipc == cb.user_ipc
-    Then the expression should be true> cb.system_net == cb.user_net
-
   # @author chezhang@redhat.com
   # @case_id OCP-10598
   @admin

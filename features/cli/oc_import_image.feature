@@ -66,19 +66,6 @@ Feature: oc import-image related feature
       | aosqeruby:3.3 |
     """
 
-  # @author wsun@redhat.com
-  # @case_id OCP-12147
-  Scenario: Import Image without tags and spec.DockerImageRepository set
-    Given I have a project
-    When I run the :create client command with:
-      | filename | <%= BushSlicer::HOME %>/testdata/image-streams/tc510529.json |
-    Then the step should succeed
-    When I run the :import_image client command with:
-      | image_name | tc510529 |
-    Then the step should fail
-    And the output should match:
-      | error:.*image stream |
-
   # @author xiaocwan@redhat.com
   # @case_id OCP-11089
   Scenario: Tags should be added to ImageStream if image repository is from an external docker registry
