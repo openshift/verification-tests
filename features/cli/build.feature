@@ -70,10 +70,10 @@ Feature: build 'apps' with CLI
     Given I have a project
     And I git clone the repo "https://github.com/openshift/ruby-hello-world.git"
     When I run the :new_build client command with:
-      | image | openshift/ruby   |
-      | code  | ruby-hello-world |
-      | e     | FOO=bar          |
-      | name  | myruby           |
+      | image_stream | openshift/ruby   |
+      | code         | ruby-hello-world |
+      | e            | FOO=bar          |
+      | name         | myruby           |
     Then the step should succeed
     And the "myruby-1" build was created
     And the "myruby-1" build completed
@@ -360,7 +360,7 @@ Feature: build 'apps' with CLI
     Given I have a project
     When I run the :new_build client command with:
       | code         | https://github.com/openshift/ruby-hello-world |
-      | image        | openshift/ruby                                |
+      | image_stream | openshift/ruby                                |
     Then the step should succeed
     Given I run the steps 3 times:
     """
@@ -435,8 +435,8 @@ Feature: build 'apps' with CLI
   Scenario Outline: Cancel multiple new/pending/running builds
     Given I have a project
     When I run the :new_build client command with:
-      | image    | openshift/ruby:latest                            |
-      | app_repo | http://github.com/openshift/ruby-hello-world.git |
+      | image_stream | openshift/ruby:latest                            |
+      | app_repo     | http://github.com/openshift/ruby-hello-world.git |
     Then the step should succeed
     Given I run the steps 5 times:
     """
