@@ -14,9 +14,6 @@ Feature: quickstarts.feature
 
     Examples: OS Type
       | template                 | buildcfg                 | output      | podno |
-      | django-psql-example      | django-psql-example      | Django      | 2     | # @case_id OCP-12609
-      | dancer-mysql-example     | dancer-mysql-example     | Dancer      | 2     | # @case_id OCP-12606
-      | cakephp-mysql-example    | cakephp-mysql-example    | CakePHP     | 2     | # @case_id OCP-12541
       | rails-postgresql-example | rails-postgresql-example | Rails       | 2     | # @case_id OCP-12296
       | dotnet-example           | dotnet-example           | ASP.NET     | 1     | # @case_id OCP-13749
       | openjdk18-web-basic-s2i  | openjdk-app              | Hello World | 1     | # @case_id OCP-17826
@@ -37,9 +34,6 @@ Feature: quickstarts.feature
 
     Examples: OS Type
       | template                 |pvc       | buildcfg               | output | podno |
-      | django-psql-persistent   |postgresql| django-psql-persistent | Django | 2     | # @case_id OCP-12825
-      | rails-pgsql-persistent   |postgresql| rails-pgsql-persistent | Rails  | 2     | # @case_id OCP-12822
-      | cakephp-mysql-persistent |mysql     |cakephp-mysql-persistent| CakePHP| 2     | # @case_id OCP-12492
       | dancer-mysql-persistent  |database  |dancer-mysql-persistent | Dancer | 2     | # @case_id OCP-13658
       | nodejs-mongo-persistent  |mongodb   |nodejs-mongo-persistent | Node.js| 2     | # @case_id OCP-13574
       | dotnet-pgsql-persistent  |postgresql| musicstore             | ASP.NET| 2     | # @case_id OCP-13751

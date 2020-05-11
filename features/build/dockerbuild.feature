@@ -75,22 +75,6 @@ Feature: dockerbuild.feature
     And the output should not match:
       | [Ee]rror |
 
-  # @author wzheng@redhat.com
-  # @case_id OCP-12762
-  Scenario: Docker build with invalid context dir
-    Given I have a project
-    When I run the :new_app client command with:
-      | file | <%= BushSlicer::HOME %>/testdata/build/ruby20rhel7-invalidcontext-docker.json |
-    Then the step should succeed
-    When the "ruby20-sample-build-1" build failed
-    And I get project build
-    And the output should contain:
-      | InvalidContextDirectory |
-    When I run the :describe client command with:
-      | resource | build |
-    Then the output should contain:
-      | The supplied context directory does not exist |
-
   # @author dyan@redhat.com
   # @case_id OCP-12855
   Scenario: Add ARGs in docker build

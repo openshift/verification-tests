@@ -92,55 +92,6 @@ Feature: jenkins.feature
       | version |
       | 2       | # @case_id OCP-10980
 
-  # @author cryan@redhat.com
-  Scenario Outline: Delete resource using jenkins pipeline DSL
-    Given I have a project
-    And I have a jenkins v<ver> application
-    When I run the :new_app client command with:
-      | file | https://raw.githubusercontent.com/openshift/origin/master/examples/jenkins/application-template.json |
-    Then the step should succeed
-    When I run the :policy_add_role_to_user client command with:
-      | role      | admin                                           |
-      | user_name | system:serviceaccount:<%=project.name%>:default |
-    Then the step should succeed
-    When I run the :start_build client command with:
-      | buildconfig | frontend |
-    Then the step should succeed
-    Given I have a jenkins browser
-    And I log in to jenkins
-    When I perform the :jenkins_create_pipeline_job web action with:
-      | job_name | openshifttest |
-    Then the step should succeed
-    Given I obtain test data file "templates/OCP_12075/pipeline_delete_resource.groovy"
-    And I replace lines in "pipeline_delete_resource.groovy":
-      | <repl_env> | <%= env.api_endpoint_url %> |
-      | <repl_ns>  | <%= project.name %>         |
-    # The use of the 'dump' method in dsl_text escapes the groovy content to be
-    # used by watir/selenium.
-    When I perform the :jenkins_pipeline_insert_script web action with:
-      | job_name        | openshifttest                                            |
-      | editor_position | row: 1, column: 1                                        |
-      | dsl_text        | <%= File.read('pipeline_delete_resource.groovy').dump %> |
-    Then the step should succeed
-    When I perform the :jenkins_build_now web action with:
-      | job_name | openshifttest |
-    Then the step should succeed
-    When I perform the :jenkins_verify_job_success web action with:
-      | job_name   | openshifttest |
-      | job_number | 1             |
-      | time_out   | 60            |
-    Then the step should succeed
-    Given I get project dc named "frontend"
-    Then the output should contain "not found"
-    Given I get project builds
-    Then the output should contain "No resources found"
-    Given I get project is
-    Then the output should not match "origin-nodejs-sample\s+latest"
-    Examples:
-      | ver |
-      | 1   | # @case_id OCP-12075
-      | 2   | # @case_id OCP-12094
-
   # @author xiuwang@redhat.com
   # @case_id OCP-12773
   Scenario: new-app/new-build support for pipeline buildconfigs

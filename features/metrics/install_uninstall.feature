@@ -1,31 +1,4 @@
 Feature: metrics logging and uninstall tests
-
-  # @author pruan@redhat.com
-  # @case_id OCP-12234
-  @admin
-  @destructive
-  Scenario: Metrics Admin Command - fresh deploy with default values
-    Given I create a project with non-leading digit name
-    Given the master version >= "3.5"
-    And metrics service is installed with ansible using:
-      | inventory | <%= BushSlicer::HOME %>/testdata/logging_metrics/OCP-12234/inventory |
-
-  # @author pruan@redhat.com
-  # @case_id OCP-12305
-  @admin
-  @destructive
-  Scenario: Metrics Admin Command - clean and install
-    Given the master version >= "3.5"
-    Given I create a project with non-leading digit name
-    And metrics service is installed with ansible using:
-      | inventory | <%= BushSlicer::HOME %>/testdata/logging_metrics/OCP-12305/inventory |
-    Given I remove metrics service using ansible
-    And I use the "default" project
-    And I wait for the resource "pod" named "base-ansible-pod" to disappear
-    # reinstall it again
-    And metrics service is installed with ansible using:
-      | inventory | <%= BushSlicer::HOME %>/testdata/logging_metrics/OCP-12305/inventory |
-
   # @author pruan@redhat.com
   # @case_id OCP-17163
   @admin

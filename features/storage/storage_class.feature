@@ -60,9 +60,6 @@ Feature: storageClass related feature
 
     Examples:
       | provisioner |
-      | gce-pd      | # @case_id OCP-12090
-      | aws-ebs     | # @case_id OCP-12096
-      | cinder      | # @case_id OCP-12097
       | azure-disk  | # @case_id OCP-13489
 
   # @author lxia@redhat.com
