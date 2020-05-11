@@ -49,7 +49,7 @@ add_user:
 click_add_more_users:
   params:
     button_text: Add More
-  action: click_button_text
+  action: click_button
 remove_user_from_group:
   params:
     kebab_item: Remove User

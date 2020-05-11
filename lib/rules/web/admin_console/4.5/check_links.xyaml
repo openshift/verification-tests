@@ -66,11 +66,9 @@ browse_to_cli_tools_page:
   action: click_help_button
   params:
     text: Command Line Tools
-    link_url: "#"
+    link_url: "command-line-tools"
   action: click_link_with_text
 check_consolelink:
-  params:
-    link_url: "#"
   action:
     if_param:
       location: Help menu
@@ -85,7 +83,7 @@ check_consolelink:
     ref: check_console_link_in_usermenu
 check_console_link_in_helpmenu:
   params:
-    link_url: "#"
+    link_url: "baidu.com"
   action: click_help_button
   action: check_link_and_text
 click_report_bug_link_in_helpmenu:
@@ -101,7 +99,7 @@ check_console_link_in_applauncher:
   action: check_image_url
 check_console_link_in_usermenu:
   params:
-    link_url: "#"
+    link_url: "www.youtube.com"
   action: click_user_menu_button
   action: check_link_and_text
 click_help_button:
