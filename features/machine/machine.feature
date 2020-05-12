@@ -176,3 +176,35 @@ Feature: Machine features testing
       | role=master:NoExecute |
       | role=master:NoSchedule|
 
+  # @author zhsun@redhat.com
+  @admin
+  @destructive
+  Scenario Outline: Required configuration should be added to the ProviderSpec to enable spot instances
+    Given I have an IPI deployment
+    And I switch to cluster admin pseudo user
+
+    Given I store the number of machines in the :num_to_restore clipboard
+    And admin ensures node number is restored to "<%= cb.num_to_restore %>" after scenario
+
+    #Create a spot machineset
+    Given I use the "openshift-machine-api" project
+    Given I create a spot instance machineset named "<machineset_name>" on <iaas_type>
+    And evaluation of `machine_set.machines.first.node_name` is stored in the :noderef_name clipboard
+    And evaluation of `machine_set.machines.first.name` is stored in the :machine_name clipboard
+    
+    #Check machine and node were labelled as an `interruptible-instance`
+    When I run the :describe admin command with:
+      | resource | machine                |
+      | name     | <%= cb.machine_name %> |
+    Then the step should succeed
+    And the output should match "machine.openshift.io/interruptible-instance"
+    When I run the :describe admin command with:
+      | resource | node                   |
+      | name     | <%= cb.noderef_name %> |
+    Then the step should succeed
+    And the output should match "machine.openshift.io/interruptible-instance="
+
+    Examples:
+      | iaas_type | machineset_name  |
+      | aws       | machineset-29199 | # @case_id OCP-29199
+
