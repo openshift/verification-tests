@@ -909,23 +909,10 @@ module BushSlicer
 
     # @return [nil]
     # @raise [Error] when any error was detected
+    # @note we do not check exit status due to the huge variety of possible
+    #   error messages when node reboots while we are in `oc debug node`
     def reboot
-      cmd = 'shutdown -r now "BushSlicer triggered reboot"'
-      valid_err_messages = [
-        "connection refused",
-        "watch closed",
-        "exit code from debug container"
-      ]
-      res = exec_raw(cmd, timeout: 20)
-      if res[:success]
-        return nil
-      else
-        if valid_err_messages.any? { |m| res[:response].include? m }
-          # sometimes reboot is too fast and oc gets error managing debug pod
-        else
-          raise "error rebooting node, see log"
-        end
-      end
+      exec_raw('shutdown -r now "BushSlicer triggered reboot"', timeout: 20)
     end
 
     def node
