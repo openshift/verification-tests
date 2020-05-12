@@ -744,7 +744,7 @@ Feature: build 'apps' with CLI
       | image | <%= cb.user_image %> |
     Then the step should succeed
     Given a pod becomes ready with labels:
-      | deployment=myapp-1 |
+      | run=myapp |
     When I execute on the pod:
       | ls | -l |
     Then the step should succeed
@@ -778,7 +778,7 @@ Feature: build 'apps' with CLI
       | image | <%= cb.user_image %> |
     Then the step should succeed
     Given a pod becomes ready with labels:
-      | deployment=myapp-1 |
+      | run=myapp |
     When I execute on the pod:
       | ls | -al | .m2 |
     Then the step should succeed
@@ -821,7 +821,7 @@ Feature: build 'apps' with CLI
       | image | <%= cb.user_image %> |
     Then the step should succeed
     Given a pod becomes ready with labels:
-      | deployment=myapp-1 |
+      | run=myapp |
     When I execute on the pod:
       | ls | -al | /aoscm/ |
     Then the step should succeed
@@ -868,7 +868,7 @@ Feature: build 'apps' with CLI
       | image | <%= cb.user_image %> |
     Then the step should succeed
     Given a pod becomes ready with labels:
-      | deployment=myapp-1 |
+      | run=myapp |
     When I execute on the pod:
       | ls | -l |
     And the output should match:
@@ -898,9 +898,8 @@ Feature: build 'apps' with CLI
       | image | <%= cb.user_image %> |
     Then the step should succeed
     Given a pod becomes ready with labels:
-      | deployment=myapp-1 |
+      | run=myapp |
     When I execute on the pod:
       | ls | -l | newdir1/newdir2/newdir3|
     And the output should match:
       | -rw-------.*configmap1.test |
-
