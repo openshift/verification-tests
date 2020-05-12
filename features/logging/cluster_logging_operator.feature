@@ -51,12 +51,13 @@ Feature: cluster-logging-operator related test
       | remove_logging_pods | true                                                                   |
       | crd_yaml            | <%= BushSlicer::HOME %>/testdata/logging/clusterlogging/scalebase.yaml |
       | check_status        | false                                                                  |
-    And I wait for the "elasticsearch" elasticsearches to appear
+    Then the step should succeed
+    And I wait for the "elasticsearch" elasticsearches to appear up to 300 seconds
     And the expression should be true> cluster_logging('instance').logstore_node_count == 2
     And the expression should be true> elasticsearch('elasticsearch').nodes[0]['nodeCount'] == 2
     Given evaluation of `elasticsearch('elasticsearch').nodes[0]['genUUID']` is stored in the :gen_uuid_1 clipboard
-    Then I wait for the "elasticsearch-cdm-<%= cb.gen_uuid_1 %>-1" deployment to appear
-    And I wait for the "elasticsearch-cdm-<%= cb.gen_uuid_1 %>-2" deployment to appear
+    Then I wait for the "elasticsearch-cdm-<%= cb.gen_uuid_1 %>-1" deployment to appear up to 300 seconds
+    And I wait for the "elasticsearch-cdm-<%= cb.gen_uuid_1 %>-2" deployment to appear up to 300 seconds
     When I run the :patch client command with:
       | resource      | clusterlogging                                          |
       | resource_name | instance                                                |
@@ -68,7 +69,7 @@ Feature: cluster-logging-operator related test
     """
     And the expression should be true> elasticsearch('elasticsearch').nodes[0]['nodeCount'] == 3
     """
-    And I wait for the "elasticsearch-cdm-<%= cb.gen_uuid_1%>-3" deployment to appear
+    And I wait for the "elasticsearch-cdm-<%= cb.gen_uuid_1%>-3" deployment to appear up to 300 seconds
     When I run the :patch client command with:
       | resource      | clusterlogging                                          |
       | resource_name | instance                                                |
@@ -85,7 +86,7 @@ Feature: cluster-logging-operator related test
     Given evaluation of `elasticsearch('elasticsearch').nodes[1]['genUUID']` is stored in the :gen_uuid_2 clipboard
     And the expression should be true> cb.gen_uuid_2 != nil
     """
-    And I wait for the "elasticsearch-cd-<%= cb.gen_uuid_2 %>-1" deployment to appear
+    And I wait for the "elasticsearch-cd-<%= cb.gen_uuid_2 %>-1" deployment to appear up to 300 seconds
 
   # @author qitang@redhat.com
   # @case_id OCP-23738

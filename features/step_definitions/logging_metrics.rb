@@ -1114,14 +1114,14 @@ Given /^event logs can be found in the ES pod(?: in the#{OPT_QUOTED} project)?/ 
 end
 
 When /^I wait(?: (\d+) seconds)? for the #{QUOTED} index to appear in the ES pod(?: with labels #{QUOTED})?$/ do |seconds, index_name, pod_labels|
-  # pod type check for safeguard
   if pod_labels
-    step %Q/a pod becomes ready with labels:/, table(%{
-      | #{pod_labels} |
-    })
+    labels = pod_labels
   else
-    raise 'Current pod must be of type ES' unless pod.labels.key? 'component' and pod.labels['component'].start_with? 'es'
+    labels = "es-node-master=true"
   end
+  step %Q/a pod becomes ready with labels:/, table(%{
+    | #{labels} |
+  })
 
   seconds = Integer(seconds) unless seconds.nil?
   seconds ||= 10 * 60
@@ -1145,14 +1145,14 @@ end
 # must execute in the es-xxx pod
 # @return stored data into cb.index_data
 When /^I get the #{QUOTED} logging index information(?: from a pod with labels #{QUOTED})?$/ do | index_name, pod_labels |
-  # pod type check for safeguard
   if pod_labels
-    step %Q/a pod becomes ready with labels:/, table(%{
-      | #{pod_labels} |
-    })
+    labels = pod_labels
   else
-    raise 'Current pod must be of type ES' unless pod.labels.key? 'component' and pod.labels['component'].start_with? 'es'
+    labels = "es-node-master=true"
   end
+  step %Q/a pod becomes ready with labels:/, table(%{
+    | #{labels} |
+  })
 
   step %Q/I perform the HTTP request on the ES pod with labels "#{pod_labels}":/, table(%{
     | relative_url | _cat/indices?format=JSON |
@@ -1166,14 +1166,14 @@ end
 # @relative_url: relative url of the query
 # @op: operation we want to perform (GET, POST, DELETE, and etc)
 Given /^I perform the HTTP request on the ES pod(?: with labels #{QUOTED})?:$/ do |pod_labels, table|
-  # pod type check for safeguard
   if pod_labels
-    step %Q/a pod becomes ready with labels:/, table(%{
-      | #{pod_labels} |
-    })
+    labels = pod_labels
   else
-    raise 'Current pod must be of type ES' unless pod.labels.key? 'component' and pod.labels['component'].start_with? 'es'
+    labels = "es-node-master=true"
   end
+  step %Q/a pod becomes ready with labels:/, table(%{
+    | #{labels} |
+  })
   opts = opts_array_to_hash(table.raw)
   # sanity check
   required_params = [:op, :relative_url]
@@ -1185,10 +1185,10 @@ Given /^I perform the HTTP request on the ES pod(?: with labels #{QUOTED})?:$/ d
   if opts[:token]
     #query_opts = "-H \"Authorization: Bearer #{opts[:token]}\""
     query_opts = "-H \"Authorization: Bearer #{opts[:token]}\" -H \"X-Forwarded-For: 127.0.0.1\""
+    query_cmd = "es_util '--query=#{opts[:relative_url]}' -X #{opts[:op]} #{query_opts}"
   else
-    query_opts = "--insecure --cacert /etc/elasticsearch/secret/admin-ca --cert /etc/elasticsearch/secret/admin-cert --key /etc/elasticsearch/secret/admin-key"
+    query_cmd = "es_util '--query=#{opts[:relative_url]}' -X #{opts[:op]}"
   end
-  query_cmd = "curl -sk -X #{opts[:op]} #{query_opts} 'https://localhost:9200/#{opts[:relative_url]}'"
   @result = pod.exec("bash", "-c", query_cmd, as: admin, container: 'elasticsearch')
   if @result[:success]
     @result[:parsed] = YAML.load(@result[:response])

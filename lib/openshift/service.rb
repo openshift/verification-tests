@@ -96,6 +96,16 @@ module BushSlicer
       return node_port
     end
 
+    def port(user: nil, name:, cached: true, quiet: false)
+      port = nil
+      ports = self.ports(user: user, cached: cached, quiet: quiet)
+      ports.each do | p |
+        port = p['port'] if p['name'] == name
+      end
+      raise "Could not find port with name #{name}, does the name really exist?" if port.nil?
+      return port
+    end
+
     def loadbalancer_ingress(user: nil, cached: true, quiet: false)
       rr = raw_resource(user: user, cached: cached, quiet: quiet)
       rr.dig('status', 'loadBalancer', 'ingress')
