@@ -485,7 +485,7 @@ Given /^I have a iSCSI setup in the environment$/ do
       res = host.exec_admin(*setup_commands)
       raise "iSCSI initiator setup commands error" unless res[:success]
     end
-    @result = admin.cli_exec(:create, n: _project.name, f: "<%= BushSlicer::HOME %>/testdata/storage/iscsi/iscsi-target.json")
+    @result = admin.cli_exec(:create, n: _project.name, f: "#{BushSlicer::HOME}/testdata/storage/iscsi/iscsi-target.json")
     raise "could not create iSCSI pod" unless @result[:success]
   end
 
