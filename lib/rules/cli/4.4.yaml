@@ -176,6 +176,18 @@
     :from_file: --from-file=<value>
     :from_literal: --from-literal=<value>
     :name: <value>
+:create_cronjob:
+  :cmd: oc create cronjob <name>
+  :options:
+    :allow_missing_template_keys: --allow-missing-template-keys=<value>
+    :dry_run: --dry-run=<value>
+    :image: --image=<value>
+    :output: --output <value>
+    :restart: --restart=<value>
+    :save_config: --save-config=<value>
+    :schedule: --schedule=<value>
+    :template: --template=<value>
+    :validate: --validate=<value>
 :create_deployment:
   :cmd: oc create deployment <name>
   :options:
@@ -195,6 +207,17 @@
     :image: --image=<value>
     :output: --output <value>
     :template: --template=<value>
+:create_job:
+  :cmd: oc create job <name>
+  :options:
+    :allow_missing_template_keys: --allow-missing-template-keys=<value>
+    :dry_run: --dry-run=<value>
+    :from: --from=<value>
+    :image: --image=<value>
+    :output: --output <value>
+    :save_config: --save-config=<value>
+    :template: --template=<value>
+    :validate: --validate=<value>
 :create_namespace:
   :cmd: oc create namespace <name>
 :create_poddisruptionbudget:
