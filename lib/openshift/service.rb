@@ -102,7 +102,7 @@ module BushSlicer
       ports.each do | p |
         port = p['port'] if p['name'] == name
       end
-      raise "Could not find port with name #{name}, does the name really exist?" unless port != nil
+      raise "Could not find port with name #{name}, does the name really exist?" if port.nil?
       return port
     end
 
