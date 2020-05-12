@@ -1310,7 +1310,7 @@ Feature: Multus-CNI related scenarios
     
     Given I use the "<%= cb.nodes[0].name %>" node
     And I run commands on the host:
-      | journalctl -u crio \| grep verbose |
+      | journalctl -u crio \| grep verbose\| grep macvlan-bridge-whereabouts-pod1 |
     Then the step should succeed
     And the output should contain:
       | <%= project.name %>:macvlan-bridge-whereabouts-pod1:<%= cb.pod_uid %> |
