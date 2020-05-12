@@ -1282,8 +1282,8 @@ Feature: Multus-CNI related scenarios
     # Create the net-attach-def via cluster admin
     Given I have a project
     When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/whereabouts-macvlan.yaml" replacing paths:
-      | ["metadata"]["namespace"] | <%= project.name %>                                                                                                    |    
-      | ["spec"]["config"]|'{ "cniVersion": "0.3.0", "type": "macvlan","mode": "bridge", "ipam": { "type": "whereabouts", "range": "192.168.22.100/24"} }' |
+      | ["metadata"]["namespace"] | <%= project.name %>      |    
+      | ["spec"]["config"]        |'{ "cniVersion": "0.3.0", "type": "macvlan","mode": "bridge", "ipam": { "type": "whereabouts", "range": "192.168.22.100/24"} }' |
     Then the step should succeed
     
     # Create a pod absorbing above net-attach-def
@@ -1312,8 +1312,8 @@ Feature: Multus-CNI related scenarios
     And I run commands on the host:
       | journalctl -u crio \| grep verbose |
     Then the step should succeed
-    And the output should contain "<%= project.name %>:macvlan-bridge-whereabouts-pod1:<%= cb.pod_uid %>"
-    And the output should contain "<%= cb.pod_eth0_ip %>"
-    And the output should contain "<%= cb.pod_net1_ip %>"
-    
+    And the output should contain:
+      | <%= project.name %>:macvlan-bridge-whereabouts-pod1:<%= cb.pod_uid %> |
+      | <%= cb.pod_eth0_ip %>                                                 |
+      | <%= cb.pod_net1_ip %>                                                 |
     
