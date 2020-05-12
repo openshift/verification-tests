@@ -31,7 +31,7 @@ module BushSlicer
     alias exists? visible?
 
     def empty?(user: nil)
-      res = default_user(user).cli_exec(:status, v: true, n: name)
+      res = default_user(user).cli_exec(:status, suggest: true, n: name)
 
       res[:success] = res[:response] =~ /ou have no.+services.+deployment.+configs/
       return res
