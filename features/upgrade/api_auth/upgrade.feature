@@ -20,15 +20,15 @@ Feature: apiserver and auth related upgrade check
     And the expression should be true> cluster_operator('authentication').condition(type: 'Available')['status'] == "True"
     And the expression should be true> cluster_operator('authentication').condition(type: 'Degraded')['status'] == "False"
     And the expression should be true> cluster_operator('authentication').condition(type: 'Upgradeable')['status'] == "True"
-    
+
     # operator pod image
     When I run the :get admin command with:
-      | resource  | po                                            |
-      | n         | openshift-authentication-operator             |
-      | o         | jsonpath={.items[0].spec.containers[0].image} |
+      | resource | po                                            |
+      | n        | openshift-authentication-operator             |
+      | o        | jsonpath={.items[0].spec.containers[0].image} |
     Then the step should succeed
     And evaluation of `@result[:response]` is stored in the :auth_operator_image clipboard
-    
+
     # Check cluster version
     When I run the :get admin command with:
       | resource | clusterversion/version           |
@@ -40,10 +40,10 @@ Feature: apiserver and auth related upgrade check
     Given evaluation of `"oc adm release info --registry-config=/var/lib/kubelet/config.json <%= cb.payload_image %>"` is stored in the :oc_adm_release_info clipboard
     When I store the ready and schedulable masters in the clipboard
     And I use the "<%= cb.nodes[0].name %>" node
-    
+
     # due to sensitive, didn't choose to dump and save the config.json file
     # for using the step `I run the :oadm_release_info admin command ...`
-    
+
     And I run commands on the host:
       | <%= cb.oc_adm_release_info %> --image-for=cluster-authentication-operator |
     Then the step should succeed
@@ -76,28 +76,28 @@ Feature: apiserver and auth related upgrade check
     And the expression should be true> cluster_operator('openshift-apiserver').condition(type: 'Upgradeable')['status'] == "True"
     # operators
     When I run the :get admin command with:
-      | resource  | po                                            |
-      | n         | openshift-kube-apiserver-operator             |
-      | o         | jsonpath={.items[0].spec.containers[0].image} |
+      | resource | po                                            |
+      | n        | openshift-kube-apiserver-operator             |
+      | o        | jsonpath={.items[0].spec.containers[0].image} |
     Then the step should succeed
     And evaluation of `@result[:response]` is stored in the :kas_operator_image clipboard
     When I run the :get admin command with:
-      | resource  | po                                            |
-      | n         | openshift-apiserver-operator                  |
-      | o         | jsonpath={.items[0].spec.containers[0].image} |
+      | resource | po                                            |
+      | n        | openshift-apiserver-operator                  |
+      | o        | jsonpath={.items[0].spec.containers[0].image} |
     Then the step should succeed
     And evaluation of `@result[:response]` is stored in the :oas_operator_image clipboard
     # operands
     When I run the :get admin command with:
-      | resource  | po                                            |
-      | n         | openshift-kube-apiserver                      |
-      | o         | jsonpath={.items[0].spec.containers[0].image} |
+      | resource | po                                            |
+      | n        | openshift-kube-apiserver                      |
+      | o        | jsonpath={.items[0].spec.containers[0].image} |
     Then the step should succeed
     And evaluation of `@result[:response]` is stored in the :kas_image clipboard
     When I run the :get admin command with:
-      | resource  | po                                            |
-      | n         | openshift-apiserver                           |
-      | o         | jsonpath={.items[0].spec.containers[0].image} |
+      | resource | po                                            |
+      | n        | openshift-apiserver                           |
+      | o        | jsonpath={.items[0].spec.containers[0].image} |
     Then the step should succeed
     And evaluation of `@result[:response]` is stored in the :oas_image clipboard
 
