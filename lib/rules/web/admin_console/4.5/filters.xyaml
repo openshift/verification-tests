@@ -1,11 +1,25 @@
 set_filter_strings:
   elements:
   - selector: &filter_text_ele
-      xpath: //input[@data-test-id='list-page-search-input']
+      xpath: //input[@data-test-id='item-filter']
     op: clear
   - selector:
       <<: *filter_text_ele
     op: send_keys <filter_text>
+click_filter_dropdown:
+  elements:
+  - selector:
+      xpath: //button[@data-test-id='filter-dropdown-toggle']
+    op: click
+select_filter:
+  elements:
+  - selector:
+      xpath: //li[@id='<filter>']
+    op: click
+click_clear_all_filters:
+  params:
+    button_text: Clear all filters
+  action: click_button
 set_strings_in_dropdown_filter_box:
   elements:
   - selector: &dropdown_filter
