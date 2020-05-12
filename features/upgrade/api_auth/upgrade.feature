@@ -45,7 +45,7 @@ Feature: apiserver and auth related upgrade check
     # for using the step `I run the :oadm_release_info admin command ...`
     
     And I run commands on the host:
-      | <%= cb.oc_adm_release_info %> --image-for=cluster-authentication-operator      |
+      | <%= cb.oc_adm_release_info %> --image-for=cluster-authentication-operator |
     Then the step should succeed
     And the output should contain:
       | <%= cb.auth_operator_image %> |
