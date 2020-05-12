@@ -291,12 +291,10 @@ module BushSlicer
       # obtained = user.rest_request(:version)
       # if obtained[:request_opts][:url].include?("/version/openshift") &&
       #     !obtained[:success]
-        # seems like pre-3.3 version, lets hardcode to 3.2
-        # After bug 1692670 fix, will recover hardcode to '3.2'.
       #   obtained[:props] = {}
-      #   obtained[:props][:openshift] = "v4.0"
+      #   obtained[:props][:openshift] = "v4.1"
       #   @major_version = obtained[:props][:major] = 4
-      #   @minor_version = obtained[:props][:minor] = 0
+      #   @minor_version = obtained[:props][:minor] = 1
       # elsif obtained[:success]
       #   @major_version = obtained[:props][:major].to_i
       #   @minor_version = obtained[:props][:minor].to_i
@@ -318,22 +316,11 @@ module BushSlicer
 
       major, minor = parse_version(version)
 
-      norm_version = @major_version == '1' ? '3' : @major_version
-      if ( major == '1' )
-        major = '3'
-      end
-
-      # presently handle only major ver `4`, `3`, `1` for OCP and OKD
-      bad_majors = [@major_version, major] - [1, 3, 4]
-      unless bad_majors.empty?
-        raise "do not know how to compare major versions #{bad_majors}"
-      end
-
       # lets compare version
-      if norm_version == major
+      if @major_version == major
         return @minor_version - minor
       else
-        return norm_version - major
+        return @major_version - major
       end
     end
 
