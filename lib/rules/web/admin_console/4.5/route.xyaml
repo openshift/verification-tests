@@ -214,7 +214,7 @@ enable_status_filter:
     op: click
     timeout: 20
 select_all_filters:
-  action: click_clear_all_filters
+  action: clear_all_filters
 check_rejected_icon_and_text:
   params:
     icon_text: Rejected

@@ -16,7 +16,7 @@ select_filter:
   - selector:
       xpath: //li[@id='<filter>']
     op: click
-click_clear_all_filters:
+clear_all_filters:
   params:
     button_text: Clear all filters
   action: click_button
@@ -124,8 +124,4 @@ check_item_in_table:
   - selector:
       xpath: //tr[@data-test-rows='resource-row']//*[text()='<item>']
     timeout: 15
-clear_all_filters:
-  elements:
-  - selector:
-      xpath: //div/button[starts-with(text(),'Clear')]
-    op: click
+
