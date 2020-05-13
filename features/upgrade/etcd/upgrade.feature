@@ -27,7 +27,4 @@ Feature: basic verification for upgrade testing
     When I use the "openshift-operators" project
     Then status becomes :running of exactly 1 pods labeled:
       | name=etcd-operator-alm-owned |
-    When I use the "default" project
-    Then status becomes :running of exactly 3 pods labeled:
-      | etcd_cluster=example |
 
