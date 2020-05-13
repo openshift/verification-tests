@@ -71,7 +71,7 @@ spec:
           value: Plqe5Wev
         - name: MYSQL_DATABASE
           value: root
-        image: openshift/origin
+        image: quay.io/openshifttest/hello-openshift-fedora@sha256:5895ec9bbe97f8ca124a723c51116c9c76c51e4ae421ff1c5634a93b0dd1d357 
         imagePullPolicy: Always
         name: hello-openshift
         ports:
