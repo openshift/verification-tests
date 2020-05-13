@@ -196,10 +196,9 @@ submit_changes:
       xpath: //button[@type='submit']
     op: click
 click_add_more_button:
-  element:
-    selector:
-      xpath: //*[contains(text(),'Add More')]
-    op: click
+  params:
+    button_text: Add More
+  action: click_button
 click_add_dropdown_button:
   element:
     selector:
