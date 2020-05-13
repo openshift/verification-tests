@@ -12,15 +12,16 @@
           logger.warn e.inspect
 
           case e.message
-          when /nav-pf-secondary-nav/, /list-group-item-value/
-            # see https://bugzilla.redhat.com/show_bug.cgi?id=1512539
-            logger.info "Running close_second_level_navigation"
-            run_action(:close_second_level_navigation)
-          when /navbar-pf-vertical/, /project-bar/, /form-group/
-            logger.info "Scrolling element off view"
-            scroll_by = browser.element(css: ".navbar.navbar-pf-vertical").height
-            scroll_by += browser.element(css: ".project-bar").height
-            browser.execute_script("window.scrollBy(0,-#{scroll_by})")
+          when /pf-c-form__actions/
+            logger.info "Scrolling from action button out of view"
+            scroll_by = browser.element(css: ".pf-c-form__actions").height
+            #scroll_by += browser.element(css: ".pf-c-form__group.ocs-radio-group-field").height
+            browser.execute_script("window.scrollBy(0,#{scroll_by})")
+          when /ocs-form-footer/
+            logger.info "Scrolling footer out of view"
+            scroll_by = browser.element(css: ".ocs-form-footer").height
+            #scroll_by += browser.element(css: ".pf-c-form__group.ocs-radio-group-field").height
+            browser.execute_script("window.scrollBy(0,#{scroll_by})")
           else
             # e.g. class="modal-backdrop fade in ng-scope ng-animate ng-leave
             #   ng-leave-active"
