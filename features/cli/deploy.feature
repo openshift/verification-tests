@@ -361,6 +361,7 @@ Feature: deployment related features
       | replicas | 1                |
     Then the step should succeed
     Given I wait until number of replicas match "0" for replicationController "ab-example-b-1"
+    Given I wait until number of replicas match "1" for replicationController "ab-example-a-1"
     When I use the "ab-example" service
     Then I wait for a web server to become available via the "ab-example" route
     And the output should contain "shardA"
