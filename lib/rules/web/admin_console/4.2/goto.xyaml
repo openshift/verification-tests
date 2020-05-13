@@ -61,6 +61,7 @@ goto_project_events:
 # environment page
 goto_resource_environment_page:
   url: k8s/ns/<project_name>/<resource_type>/<resource_name>/environment
+  action: wait_box_loaded
 
 # secrets
 goto_secrets_page:
@@ -75,8 +76,10 @@ goto_serviceaccounts_page:
   url: k8s/ns/<project_name>/serviceaccounts
 goto_namespace_role_rolebinding_page:
   url: k8s/ns/<project_name>/roles/<role_name>/bindings
+  action: wait_box_loaded
 goto_cluster_role_rolebinding_page:
   url: k8s/cluster/clusterroles/<role_name>/bindings
+  action: wait_box_loaded
 goto_rolebinding_list_page:
   url: k8s/ns/<project_name>/rolebindings
   action: wait_box_loaded

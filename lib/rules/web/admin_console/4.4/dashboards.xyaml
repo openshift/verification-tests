@@ -7,7 +7,7 @@ check_grafana_dashboard_body_loaded:
   element:
     selector:
       xpath: //div[contains(@class,'co-dashboard-body')]//*[contains(@class,'monitoring-dashboards')]
-    timeout: 20
+    timeout: 30
 click_dashboard_dropdown:
   params:
     dropdown_field: Dashboard
