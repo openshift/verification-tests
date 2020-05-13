@@ -1,5 +1,0 @@
-[OSEv3:vars]
-# put any extra prometheus related parameters here
-openshift_prometheus_state=absent
-openshift_prometheus_node_exporter_install=false
-oreg_url=<%= product_docker_repo %>openshift3/ose-${component}:${version}
