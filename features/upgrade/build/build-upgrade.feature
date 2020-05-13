@@ -2,7 +2,7 @@ Feature: build related upgrade check
   # @author wewang@redhat.com
   @upgrade-prepare
   @users=upuser1,upuser2
-  Scenario: basic verification for upgrade build test
+  Scenario: Check docker and sti build works well before and after upgrade - prepare
     Given I switch to the first user
     When I run the :new_project client command with:
       | project_name | build-upgrade |
@@ -22,7 +22,7 @@ Feature: build related upgrade check
   # @case_id OCP-13025
   @upgrade-check
   @users=upuser1,upuser2
-  Scenario: Check docker and sti build works well after upgrade
+  Scenario: Check docker and sti build works well before and after upgrade
     Given I switch to the first user
     When I use the "build-upgrade" project
     And status becomes :running of 1 pods labeled:
