@@ -610,6 +610,12 @@ Given /^I store all worker nodes to the#{OPT_SYM} clipboard$/ do |cb_name|
   cb[cb_name] = nodes.select { |n| n.is_worker? }
 end
 
+Given /^I store the number of worker nodes to the#{OPT_SYM} clipboard$/ do |cb_name|
+  nodes = BushSlicer::Node.list(user: admin)
+  worker_nodes = nodes.select { |n| n.is_worker? }
+  cb[cb_name] = worker_nodes.length
+end
+
 Given /^I store the node #{QUOTED} YAML to the#{OPT_SYM} clipboard$/ do |node, cb_name|
   ensure_admin_tagged
 
