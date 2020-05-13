@@ -1,6 +1,5 @@
 # helper step for metering scenarios
 require 'ssl'
-require 'pry-byebug'
 # For metering automation, we just install once and re-use the installation
 # unless the scenarios are for testing installation
 # checks that metering service is already installed
