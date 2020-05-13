@@ -1,5 +1,6 @@
 # helper step for metering scenarios
 require 'ssl'
+require 'pry-byebug'
 # For metering automation, we just install once and re-use the installation
 # unless the scenarios are for testing installation
 # checks that metering service is already installed
@@ -9,24 +10,14 @@ Given /^metering service has been installed successfully(?: using (ansible|shell
   step %Q/I switch to cluster admin pseudo user/
   # NOTE: we need to change project context as admin
   step %Q/I use the "#{namespace}" project/
-  ### XXX: TODO until 4.2 is GAed,
-  if operator_group('metering-operators').exists?
-    cb[:metering_resource_type] = 'meteringconfig'
-  else
-    cb[:metering_resource_type] = 'metering'
-  end
-  # first check if metering service exists, skip installation if already there
-  step %Q/I save the project hosting "#{cb.metering_resource_type}" resource to "metering_namespace" clipboard/
-  unless cb.metering_namespace
+  cb[:metering_resource_type] = "meteringconfig"
+  unless metering_config('operator-metering').exists?
     # default to OLM install
     method ||= "OLM"
     case method
     when "shell script"
       namespace = "metering"
       metering_name = "operator-metering"
-    when "ansible"
-      namespace = "openshift-metering"
-      metering_name = "openshift-metering"
     when "OLM"
       namespace = "openshift-metering"
       metering_name = "operator-metering"
@@ -37,8 +28,8 @@ Given /^metering service has been installed successfully(?: using (ansible|shell
       raise "service openshift-monitoring is a pre-requisite for #{namespace}"
     end
   else
-    @result = admin.cli_exec(:get, namespace: cb.metering_namespace.name, resource: cb.metering_resource_type, o: 'yaml')
-    metering_name = @result[:parsed]['items'].first['metadata']['name']
+    cb[:metering_namespace] = project(namespace)
+    metering_name = metering_config.raw_resource['metadata']['name']
   end
 
   # change project context
@@ -46,9 +37,6 @@ Given /^metering service has been installed successfully(?: using (ansible|shell
     case method
     when "shell script"
       step %Q/metering service is installed using shell script/
-    when "ansible"
-      # install metering using default
-      step %Q/default metering service is installed without cleanup/
     when "OLM"
       step %Q/the metering service is installed using OLM/
     end
