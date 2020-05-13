@@ -186,6 +186,7 @@
     :restart: --restart=<value>
     :save_config: --save-config=<value>
     :schedule: --schedule=<value>
+    :sleep:  -- sleep <value>
     :template: --template=<value>
     :validate: --validate=<value>
 :create_deployment:
