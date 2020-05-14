@@ -341,6 +341,34 @@ Given /^the logging operators are redeployed after scenario$/ do
   }
 end
 
+# from logging 4.5, we don't have index project.$project-name.xxxxx, so we need other ways to check the project logs 
+# es_util --query=*/_count -d '{"query": {"match": {"kubernetes.namespace_name": "project-name"}}}'
+# if count > 0, then the project logs are received
+When /^I wait(?: (\d+) seconds)? for the project #{QUOTED} logs to appear in the ES pod(?: with labels #{QUOTED})?$/ do |seconds, project_name, pod_labels|
+  if pod_labels
+    labels = pod_labels
+  else
+    labels = "es-node-master=true"
+  end
+  step %Q/a pod becomes ready with labels:/, table(%{
+    | #{labels} |
+  })
+
+  seconds = Integer(seconds) unless seconds.nil?
+  seconds ||= 10 * 60
+  success = wait_for(seconds) {
+    step %Q/I perform the HTTP request on the ES pod with labels "#{labels}":/, table(%{
+      | relative_url | */_count?format=JSON' -d '{"query": {"match": {"kubernetes.namespace_name": "#{project_name}"}}} |
+      | op           | GET                                                                                              |
+    })
+    res = @result[:parsed]
+    if res
+      res['count'] > 0
+    end
+  }
+  raise "Project '#{project_name}' logs failed to appear in #{seconds} seconds" unless success
+end
+
 Given /^logging eventrouter is installed in the cluster$/ do
   step %Q/admin ensures "event-reader" cluster_role is deleted after scenario/
   step %Q/admin ensures "event-reader-binding" cluster_role_binding is deleted after scenario/
