@@ -277,6 +277,7 @@ Feature: testing multicast scenarios
   # @author hongli@redhat.com
   # @case_id OCP-12931
   @admin
+  @destructive
   Scenario: pods in default project should not be able to receive multicast traffic from other tenants
     # create multicast testing pod in one project
     Given I have a project
@@ -525,6 +526,7 @@ Feature: testing multicast scenarios
   # @author hongli@redhat.com
   # @case_id OCP-12966
   @admin
+  @destructive
   Scenario: pods in default project should be able to receive multicast traffic from other default project pods
     # enable multicast and create testing pods
     Given I switch to cluster admin pseudo user
@@ -533,6 +535,12 @@ Feature: testing multicast scenarios
       | netnamespace.network.openshift.io/multicast-enabled=true |
     Then the step should succeed
 
+    And I wait up to 120 seconds for the steps to pass:
+    """
+    And all existing pods die with labels:
+    | name=mcast-pods |
+    """
+ 
     Given admin ensures "mcast-rc" rc is deleted after scenario
     When I run the :create client command with:
       | f | <%= BushSlicer::HOME %>/testdata/networking/multicast-rc.json |
