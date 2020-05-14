@@ -17,7 +17,7 @@ Feature: cluster monitoring related upgrade check
     Given I switch to cluster admin pseudo user
     And I use the "openshift-monitoring" project
     Given all pods in the project are ready
-    Then Then the step should succeed
+    Then the step should succeed
     When I run the :get client command with:
       | resource      | clusteroperator |
       | resource_name | monitoring      |
