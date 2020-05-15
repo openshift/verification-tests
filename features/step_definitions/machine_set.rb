@@ -64,6 +64,8 @@ Given(/^I clone a machineset and name it "([^"]*)"$/) do | ms_name |
   new_spec["metadata"]["name"] = ms_name
   new_spec["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"] = ms_name
   new_spec["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-machineset"] = ms_name
+  # Adding taints to machineset so that pods without toleration can not schedule to the nodes we provision
+  new_spec["spec"]["template"]["spec"]["taints"] = [{"effect": "NoSchedule","key": "mapi","value": "mapi_test"}]
   new_spec["spec"]["replicas"] = 1
   new_spec.delete("status")
 
