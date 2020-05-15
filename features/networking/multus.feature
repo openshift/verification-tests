@@ -1186,6 +1186,7 @@ Feature: Multus-CNI related scenarios
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard
+    And evaluation of `node.name` is stored in the :target_node clipboard
     # Create the net-attach-def via cluster admin
     Given I have a project
     When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/whereabouts-macvlan.yaml" replacing paths:
@@ -1198,6 +1199,7 @@ Feature: Multus-CNI related scenarios
       | ["metadata"]["name"] | macvlan-bridge-whereabouts-pod1                                   |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | macvlan-bridge-whereabouts  |
       | ["spec"]["containers"][0]["name"] | macvlan-bridge-whereabouts                           |
+      | ["spec"]["nodeName"] | "<%= cb.target_node %>"                                           |
     Then the step should succeed
     And the pod named "macvlan-bridge-whereabouts-pod1" becomes ready
 
@@ -1218,6 +1220,7 @@ Feature: Multus-CNI related scenarios
       | ["metadata"]["name"] | macvlan-bridge-whereabouts-pod2                                   |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | macvlan-bridge-whereabouts  |
       | ["spec"]["containers"][0]["name"] | macvlan-bridge-whereabouts                           |
+      | ["spec"]["nodeName"] | "<%= cb.target_node %>"                                           |
     Then the step should succeed
     And the pod named "macvlan-bridge-whereabouts-pod2" becomes ready
 
