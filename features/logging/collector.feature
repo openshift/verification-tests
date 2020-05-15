@@ -181,7 +181,7 @@ Feature: collector related tests
   @admin
   @destructive
   @commonlogging
-  Scenario: All nodes logs had sent logs to Elasticsearch
+  Scenario: All nodes logs are collected
     Given the master version >= "4.5"
     Given evaluation of `cluster_logging('instance').collection_type` is stored in the :collection_type clipboard
     Given <%= daemon_set(cb.collection_type).replica_counters[:desired] %> pods become ready with labels:
