@@ -6,6 +6,9 @@ Feature: Service-catalog related scenarios
   @destructive
   Scenario: service-catalog walkthrough example
     Given I have a project
+    When I run the :get admin command with:
+      | resource | clusterservicebroker |
+    Then the step should succeed
     And evaluation of `project.name` is stored in the :ups_broker_project clipboard
     And I create a new project
     And evaluation of `project.name` is stored in the :user_project clipboard
