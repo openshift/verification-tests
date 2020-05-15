@@ -253,7 +253,7 @@ Given /^the#{OPT_QUOTED} metering service is installed(?: to $QUOTED)? using OLM
   @result = user.cli_exec(:create_namespace, name: metering_ns)
   # prep for OLM need to define configs via YAML
   # 1. metering-catalogsourceconfig.yaml
-  catalog_source_config = "https://raw.githubusercontent.com/kube-reporting/metering-operator/master/manifests/deploy/openshift/olm/metering.subscription.yaml"
+  catalog_source_config = "https://raw.githubusercontent.com/operator-framework/operator-metering/master/manifests/deploy/openshift/olm/metering.catalogsourceconfig.yaml"
   # 2. metering-operatorgroup.yaml
   operator_group = "https://raw.githubusercontent.com/operator-framework/operator-metering/master/manifests/deploy/openshift/olm/metering.operatorgroup.yaml"
   # 3. metering-subscription.yaml
