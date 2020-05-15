@@ -1,17 +1,17 @@
 @clusterlogging
-@commonlogging
 Feature: Kibana related features
 
   # @author qitang@redhat.com
   # @case_id OCP-25599
   @admin
   @destructive
+  @commonlogging
   Scenario: Show logs on Kibana web console according to different user role
     Given I switch to the first user
     Given I create a project with non-leading digit name
     Given evaluation of `project` is stored in the :proj clipboard
     When I run the :new_app client command with:
-      | file | <%= BushSlicer::HOME %>/testdata/logging/loggen/container_json_unicode_log_template.json |
+      | file | <%= BushSlicer::HOME %>/testdata/logging/loggen/container_json_log_template.json |
     Then the step should succeed
     Given a pod becomes ready with labels:
       | run=centos-logtest,test=centos-logtest |
@@ -48,3 +48,87 @@ Feature: Kibana related features
       | index_pattern_name | .operations.* |
     Then the step should fail
 
+  # @author qitang@redhat.com
+  # @case_id OCP-30362
+  @admin
+  @destructive
+  Scenario: Normal User can only view logs out of the projects owned by himself --kibana
+    Given I switch to the first user
+    Given I create a project with non-leading digit name
+    Given evaluation of `project` is stored in the :proj clipboard
+    When I run the :new_app client command with:
+      | file | <%= BushSlicer::HOME %>/testdata/logging/loggen/container_json_log_template.json |
+    Then the step should succeed
+    Given a pod becomes ready with labels:
+      | run=centos-logtest,test=centos-logtest |
+    When I create clusterlogging instance with:
+      | remove_logging_pods | true                                                                                 |
+      | crd_yaml            | <%= BushSlicer::HOME %>/testdata/logging/clusterlogging/example_indexmanagement.yaml |
+    Then the step should succeed
+    And I wait for the "kibana" route to appear
+    Given I wait for the "app" index to appear in the ES pod with labels "es-node-master=true"
+    And I wait for the project "<%= cb.proj.name %>" logs to appear in the ES pod
+    Given I switch to the first user
+    When I login to kibana logging web console
+    Then the step should succeed
+    When I perform the :create_index_pattern_in_kibana web action with:
+      | index_pattern_name | app |
+    Then the step should succeed
+    When I run the :go_to_kibana_discover_page web action
+    Then the step should succeed
+    When I perform the :kibana_find_index_pattern web action with:
+      | index_pattern_name | app* |
+    Then the step should succeed
+    # check the log count, wait for the Kibana console to be loaded
+    Given I wait up to 60 seconds for the steps to pass:
+    """
+    When I run the :check_log_count web action
+    Then the step should succeed
+    """
+
+  # @author qitang@redhat.com
+  # @case_id OCP-30361
+  @admin
+  @destructive
+  @commonlogging
+  Scenario: User with cluster-admin role can show logs out of all projects -- kibana
+    Given I switch to the first user
+    Given I create a project with non-leading digit name
+    Given evaluation of `project` is stored in the :proj clipboard
+    When I run the :new_app client command with:
+      | file | <%= BushSlicer::HOME %>/testdata/logging/loggen/container_json_log_template.json |
+    Then the step should succeed
+    Given a pod becomes ready with labels:
+      | run=centos-logtest,test=centos-logtest |
+    And the first user is cluster-admin
+    Given I use the "openshift-logging" project
+    And I wait for the "kibana" route to appear
+    Given I wait for the "app" index to appear in the ES pod with labels "es-node-master=true"
+    Given I wait for the "infra" index to appear in the ES pod with labels "es-node-master=true"
+    And I wait for the project "<%= cb.proj.name %>" logs to appear in the ES pod 
+    When I login to kibana logging web console
+    Then the step should succeed
+    When I perform the :create_index_pattern web action with:
+      | index_pattern_name | app |
+    Then the step should succeed
+    When I perform the :create_index_pattern web action with:
+      | index_pattern_name | infra |
+    Then the step should succeed
+    And I run the :go_to_kibana_discover_page web action
+    When I perform the :kibana_find_index_pattern web action with:
+      | index_pattern_name | app* |
+    Then the step should succeed
+    Given I wait up to 60 seconds for the steps to pass:
+    """
+    When I run the :check_log_count web action
+    Then the step should succeed
+    """
+    When I perform the :kibana_find_index_pattern web action with:
+      | index_pattern_name | infra* |
+    Then the step should succeed
+    Given I wait up to 60 seconds for the steps to pass:
+    """
+    When I run the :check_log_count web action
+    Then the step should succeed
+    """
+ 

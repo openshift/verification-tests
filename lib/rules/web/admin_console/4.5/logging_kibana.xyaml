@@ -1,0 +1,166 @@
+---
+kibana_login:
+  url: <kibana_url>
+  action:
+    if_element:
+      selector:
+        tag_name: button
+        text: Log in with OpenShift
+    ref: click_log_in_with_openshift_button
+  action: login_sequence
+  action: kibana_verify_logged_in
+
+click_log_in_with_openshift_button:
+  element:
+    selector:
+      xpath: //button[text()='Log in with OpenShift']
+    op: click
+
+logout_kibana:
+  url: <kibana_url>
+  elements:
+    - selector:
+        text: Log out
+      op: click
+      type: a
+
+kibana_verify_logged_in:
+  action:
+    if_element:
+      selector:
+        text: Authorize Access
+    ref: kibana_click_approve
+  action: wait_kibana_logged_in
+
+kibana_click_approve:
+  elements:
+  - selector:
+      name: approve
+    op: click
+
+wait_kibana_logged_in:
+  elements:
+  - selector:
+      xpath: //div[@class="kbnGlobalNavLink__title" and contains(., "Discover")]
+    timeout: 600
+
+create_index_pattern_in_kibana:
+  action:
+    if_element:
+      selector:
+        xpath: //button[@type="button" and @data-test-subj="createIndexPatternButton"]
+    ref: create_index_pattern
+
+create_index_pattern:
+  action: go_to_kibana_management_page
+  action: go_to_kibana_create_index_pattern_page
+  action: click_create_index_pattern_button
+  action: set_index_patter_name
+  action: click_create_index_pattern_go_to_step2_button
+  action: create_index_pattern_time_field_select
+  action: click_create_index_pattern_create_button
+
+go_to_kibana_management_page:
+  elements:
+  - selector:
+      xpath: //a[@class="kbnGlobalNavLink__anchor" and @aria-label="Management"]
+    timeout: 20
+    op: click
+  - selector:
+      xpath: //div[@class="kbnGlobalNavLink__title" and contains(., "Management")]
+    op: click
+
+go_to_kibana_discover_page:
+  elements:
+  - selector:
+      xpath: //a[@class="kbnGlobalNavLink__anchor" and @aria-label="Discover"]
+    timeout: 20
+    op: click
+  - selector:
+      xpath: //div[@class="kbnGlobalNavLink__title" and contains(., "Discover")]
+    op: click
+
+go_to_kibana_create_index_pattern_page:
+  element:
+    selector:
+      xpath: //span[@class="euiSideNavItemButton__label" and contains(., "Index Patterns")]
+    op: click 
+
+click_create_index_pattern_button:
+  element:
+    selector:
+      xpath: //button[@type="button" and @data-test-subj="createIndexPatternButton"]
+    timeout: 20
+    op: click
+
+set_index_patter_name:
+  element: 
+    selector:
+      xpath: //input[@type="text" and @name="indexPattern"]
+    timeout: 20
+    op: send_keys <index_pattern_name>
+
+click_create_index_pattern_go_to_step2_button:
+  element:
+    selector:
+      xpath: //button[@type="button" and @data-test-subj="createIndexPatternGoToStep2Button"]
+    timeout: 20
+    op: click
+
+create_index_pattern_time_field_select:
+  elements:
+  - selector:
+      xpath: //select[@name="timeField" and @class="euiSelect" and @data-test-subj="createIndexPatternTimeFieldSelect"]
+    op: click
+  - selector:
+      xpath: //option[@value="@timestamp" and contains(., "@timestamp")]
+    op: click
+
+click_create_index_pattern_create_button:
+  element:
+    selector:
+      xpath: //button[@type="button" and @data-test-subj="createIndexPatternCreateButton"]
+    timeout: 20
+    op: click
+
+kibana_find_index_pattern:
+  elements:
+  - selector:
+      xpath: //h2[@class="index-pattern-label" and @id="index_pattern_id" and contains(., "<index_pattern_name>")] | //span[contains(., "<index_pattern_name>")]
+    timeout: 300
+
+kibana_click_index:
+  elements:
+  - selector:
+      xpath: //h2[contains(@class, "index-pattern-label") and contains(., "<index_pattern_name>")] | //span[contains(., "<index_pattern_name>")]
+    op: click
+
+kibana_expand_index_patterns:
+  elements:
+  - selector:
+      xpath: //div[contains(@ng-model, "selectedIndexPattern")]
+    op: click
+
+click_kibana_link_in_console:
+  elements:
+  - selector:
+      xpath: //a[@data-component='pf-nav-expandable' and text()='Monitoring']
+    op: click
+  - selector:
+      xpath: //a[@href='<kibana_route>' and text()='Logging']
+    op: click
+
+check_log_count:
+  element:
+    selector:
+      xpath: //span[@data-test-subj="discoverQueryHits" and @class="kuiLocalBreadcrumb__emphasis"]
+  scripts:
+  - command: | 
+      var x = document.querySelector("#kui_local_breadcrumb > span:nth-child(2)").textContent;
+      var doc_count = false;
+      if (x > 0) {
+        doc_count = true;
+        return doc_count
+      }
+      return doc_count
+    expect_result: true
