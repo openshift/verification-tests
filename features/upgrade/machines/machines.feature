@@ -59,9 +59,7 @@ Feature: Machine-api components upgrade tests
   Scenario: Scale up and scale down a machineSet after upgrade
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
-
-    Given I store the number of machines in the :num_to_restore clipboard
-    And admin ensures node number is restored to "<%= cb.num_to_restore %>" after scenario
+    And I use the "openshift-machine-api" project
 
     Given I clone a machineset and name it "machineset-clone-22612"
 

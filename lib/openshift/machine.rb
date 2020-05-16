@@ -42,5 +42,10 @@ module BushSlicer
         dig('status','providerStatus','instanceState')
       instance_state == 'running'
     end
+
+    def deleting?(user: nil, cached: true, quiet: false)
+      ! raw_resource(user: user, cached: cached, quiet: quiet).
+          dig('metadata', 'deletionTimestamp').nil?
+    end
   end
 end

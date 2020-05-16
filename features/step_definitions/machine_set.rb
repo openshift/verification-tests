@@ -28,24 +28,22 @@ When(/^I scale the machineset to ([\+\-]?)#{NUMBER}$/) do | op, num |
 end
 
 Then(/^the machineset should have expected number of running machines$/) do
-  machine_set.wait_till_ready(admin, 600)
-
-  machines = BushSlicer::Machine.list(user: admin, project: project("openshift-machine-api"))
+  machine_set.wait_till_ready(admin, 900)
 
   num_running_machines = 0
-  machines.each do | machine |
-    next if machine.machine_set_name != machine_set.name
-
-    # if any of the indicators shows machine is deleting, wait for it and its node to disappear
-    if machine.phase == "Deleting" || ! machine.annotation("machine.openshift.io/cluster-api-delete-machine").nil? || machine.annotation("machine.openshift.io/instance-state") == "shutting-down"
-      step %Q{I wait for the resource "node" named "#{machine.node_name}" to disappear within 900 seconds}
-      step %Q{I wait for the resource "machine" named "#{machine.name}" to disappear within 900 seconds}
+  machine_set.machines.each do | machine |
+    if machine.deleting?
+      step %Q{I wait for the resource "machine" named "#{machine.name}" to disappear within 1200 seconds}
+      step %Q{the step should succeed}
       next
     end
 
     # wait till machine's node is ready
-    machine.get
-    unless node(machine.node_name).ready?[:success]
+    success = wait_for(900, interval: 20) {
+      machine.get if machine.node_name.nil?
+      node(machine.node_name).ready?[:success]
+    }
+    unless success
       raise "Node #{machine.node_name} has not become ready"
     end
 

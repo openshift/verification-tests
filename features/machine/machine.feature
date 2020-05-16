@@ -30,9 +30,8 @@ Feature: Machine features testing
   Scenario: Scale up and scale down a machineSet
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
-
-    Given I store the number of machines in the :num_to_restore clipboard
-    And admin ensures node number is restored to "<%= cb.num_to_restore %>" after scenario
+    And I use the "openshift-machine-api" project
+    And admin ensures machine number is restored after scenario
 
     Given I clone a machineset and name it "machineset-clone-25436"
 
@@ -99,12 +98,15 @@ Feature: Machine features testing
       | type          | merge                                  |
       | n             | openshift-machine-api                  |
     Then the step should succeed
+    And I wait up to 30 seconds for the steps to pass:
+    """
     When I run the :describe admin command with:
       | resource      | machine                                |
       | name          | <%= cb.machine %>                      |
       | n             | openshift-machine-api                  |
     Then the step should succeed
     And the output should match "Provider ID:\s+<%= cb.providerID %>"
+    """
 
   # @author miyadav@redhat.com
   # @case_id OCP-27627
@@ -121,11 +123,10 @@ Feature: Machine features testing
   Scenario: Scaling a machineset with providerSpec.publicIp set to true
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
+    And I use the "openshift-machine-api" project
+    And admin ensures machine number is restored after scenario
 
-    Given I store the number of machines in the :num_to_restore clipboard
-    And admin ensures node number is restored to "<%= cb.num_to_restore %>" after scenario
-
-    And I clone a machineset and name it "machineset-clone-27609"
+    Given I clone a machineset and name it "machineset-clone-27609"
 
     Then I run the :get admin command with:
      | resource      | machineset             |
@@ -153,7 +154,9 @@ Feature: Machine features testing
   Scenario: [MAO] Reconciling machine taints with nodes
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
-    
+    And I use the "openshift-machine-api" project
+    And admin ensures machine number is restored after scenario
+
     Given I clone a machineset and name it "machineset-24363"
     And evaluation of `machine_set.machines.first.node_name` is stored in the :noderef_name clipboard
     And evaluation of `machine_set.machines.first.name` is stored in the :machine_name clipboard
@@ -182,16 +185,14 @@ Feature: Machine features testing
   Scenario Outline: Required configuration should be added to the ProviderSpec to enable spot instances
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
-
-    Given I store the number of machines in the :num_to_restore clipboard
-    And admin ensures node number is restored to "<%= cb.num_to_restore %>" after scenario
+    And admin ensures machine number is restored after scenario
 
     #Create a spot machineset
     Given I use the "openshift-machine-api" project
     Given I create a spot instance machineset named "<machineset_name>" on <iaas_type>
     And evaluation of `machine_set.machines.first.node_name` is stored in the :noderef_name clipboard
     And evaluation of `machine_set.machines.first.name` is stored in the :machine_name clipboard
-    
+
     #Check machine and node were labelled as an `interruptible-instance`
     When I run the :describe admin command with:
       | resource | machine                |
