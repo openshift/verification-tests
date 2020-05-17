@@ -47,3 +47,11 @@ nagivate_to_project_resources_page:
   params:
     tab_name: Workloads
   action: click_tab
+switch_to_project:
+  params:
+    dropdown_name: namespace-bar
+  action: click_dropdown
+  element:
+    selector:
+      xpath: //a[text()='<project_name>']
+    op: click
