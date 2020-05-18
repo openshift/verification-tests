@@ -145,6 +145,17 @@
     :name: <value>
     :from_file: --from-file=<value>
     :from_literal: --from-literal=<value>
+:create_deployment:
+  :cmd: kubectl create deployment <name>
+  :options:
+    :allow_missing_template_keys: --allow-missing-template-keys=<value>
+    :dry_run: --dry-run=<value>
+    :generator: --generator=<value>
+    :image: --image=<value>
+    :output: --output=<value>
+    :save_config: --save-config=<value>
+    :template: --template=<value>
+    :validate: --validate=<value>
 :create_quota:
   :cmd: kubectl create quota <name>
   :options:
