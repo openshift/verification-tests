@@ -71,14 +71,14 @@ check_silence_detail:
       xpath: //span[text()='Silence Details']
 silence_alert_from_detail:
   params:
-    comment_text: silence comments is a must from ocp 4.50
+    comment_text: silence comments is a must from ocp 4.5
   action: click_silence_alert
   action: input_silence_comments
   action: perform_silence
   action: check_silence_detail
 silence_alert_from_detail_check_fields:
   params:
-    comment_text: silence comments is a must from ocp 4.50
+    comment_text: silence comments is a must from ocp 4.5
     duration: 6h
   action: click_silence_alert
   action: set_silence_duration
