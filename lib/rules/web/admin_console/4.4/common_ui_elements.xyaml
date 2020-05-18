@@ -354,9 +354,9 @@ click_annotation_link:
     op: click
     timeout: 20
 click_annotation_edit_link:
-  elements:
-  - selector:
-      xpath: //*[contains(text(), ' Annotations')]
+  element:
+    selector:
+      xpath: //button[contains(@data-test-id,'edit-annotations')]
     op: click
     timeout: 20
 uncheck_checkbox:
