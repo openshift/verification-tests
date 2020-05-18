@@ -733,7 +733,7 @@ Given /^the bridge interface named "([^"]*)" is deleted from the "([^"]*)" node$
   ensure_admin_tagged
   node = node(node_name)
   host = node.host
-  @result = host.exec_admin("/sbin/ip link delete #{bridge_name}")
+  @result = host.exec_admin("if ip addr show  #{bridge_name};then ip link delete #{bridge_name};else echo #{bridge_name} does not exist on this node;fi")
   raise "Failed to delete bridge interface" unless @result[:success]
 end
 
