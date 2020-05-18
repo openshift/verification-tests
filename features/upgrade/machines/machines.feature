@@ -6,6 +6,11 @@ Feature: Machine-api components upgrade tests
     # So we just add a simple/useless step here to get rid of the errors in the log.
     Given the expression should be true> "True" == "True"
 
+  Examples:
+    | cluster_operator     |
+    | "machine-api"        |
+    | "cluster-autoscaler" |
+
   # @author jhou@redhat.com
   @upgrade-check
   @admin
