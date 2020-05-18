@@ -287,38 +287,3 @@ Feature: pod related features
     And the output should match:
       | usernamechanged |
     """
-
-  # @author chezhang@redhat.com
-  # @case_id OCP-13374
-  @admin
-  Scenario: Pod and container level selinuxoptions should both work
-    Given I have a project
-    Given SCC "privileged" is added to the "default" user
-    When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/pods/securityContext/pod-selinux.yaml |
-    Then the step should succeed
-    Given the pod named "selinux-pod" becomes ready
-    When I execute on the pod:
-      | runcon |
-    Then the step should succeed
-    And the output should contain:
-      | unconfined_u:unconfined_r:svirt_lxc_net_t:s0:c25,c968 |
-    When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/pods/securityContext/container-selinux.yaml |
-    Then the step should succeed
-    Given the pod named "selinux-container" becomes ready
-    When I execute on the pod:
-      | runcon |
-    Then the step should succeed
-    And the output should contain:
-      | unconfined_u:unconfined_r:svirt_lxc_net_t:s0:c25,c968 |
-    When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/pods/securityContext/both-level.yaml |
-    Then the step should succeed
-    Given the pod named "both-level-pod" becomes ready
-    When I execute on the pod:
-      | runcon |
-    Then the step should succeed
-    And the output should contain:
-      | system_u:system_r:svirt_lxc_net_t:s0:c24,c965 |
-
