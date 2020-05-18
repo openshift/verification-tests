@@ -20,6 +20,7 @@ Feature: Marketplace related scenarios
     When I process and create:
       | f | <%= BushSlicer::HOME %>/testdata/olm/operatorsource-template.yaml |
       | p | NAME=test-operators                                               |
+      | p | NAMESPACE=openshift-marketplace                                   |
       | p | SECRET=                                                           |
       | p | DISPLAYNAME=Test Operators                                        |
       | p | REGISTRY=jiazha                                                   |
