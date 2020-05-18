@@ -32,37 +32,6 @@ Feature: storageClass related feature
       | managed-premium    | # @case_id OCP-13488
 
   # @author lxia@redhat.com
-  @admin
-  @destructive
-  Scenario Outline: No dynamic provision when no default storage class
-    Given I have a project
-    And default storage class is patched to non-default
-    When admin creates a StorageClass from "<%= BushSlicer::HOME %>/testdata/storage/misc/storageClass.yaml" where:
-      | ["metadata"]["name"] | sc-<%= project.name %>      |
-      | ["provisioner"]      | kubernetes.io/<provisioner> |
-    Then the step should succeed
-    # "oc get storageclass -o yaml"
-    # should contain string 'kind: StorageClass' when there are storageclass
-    # should not contain string 'is-default-class: "true"' when there are no default storageclass
-    When I run the :get admin command with:
-      | resource | storageclass |
-      | o        | yaml         |
-    Then the step should succeed
-    And the output should contain "kind: StorageClass"
-    And the output should not contain:
-      | is-default-class: "true" |
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/misc/pvc-without-annotations.json" replacing paths:
-      | ["metadata"]["name"] | mypvc |
-    Then the step should succeed
-    And the "mypvc" PVC becomes :pending
-    Given 30 seconds have passed
-    And the "mypvc" PVC status is :pending
-
-    Examples:
-      | provisioner |
-      | azure-disk  | # @case_id OCP-13489
-
-  # @author lxia@redhat.com
   # @author chaoyang@redhat.com
   @admin
   Scenario Outline: storage class provisioner
