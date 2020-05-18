@@ -60,10 +60,7 @@ Feature: change the policy of user/service account
 
     Given I have a project
     And I switch to the second user
-    When I run the :get client command with:
-      | resource | project |
-    Then the output should match:
-      | <%= project.name %>.*Active |
+    And the expression should be true> project(project.name).active?
 
   # @author xiaocwan@redhat.com
   # @case_id OCP-11442
