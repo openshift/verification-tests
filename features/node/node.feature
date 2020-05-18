@@ -55,7 +55,7 @@ Feature: Node management
     # Consume less than node allocatable memory, stress --vm 1 --vm-bytes <%= cb.node_allocate_memory %> - 1400*1024*1024 - 1*1024*1024 --timeout 60s
     When I run the :run client command with:
       | name       | pod-stress-bu-less                                             |
-      | image      | docker.io/ocpqe/stress                                         |
+      | image      | quay.io/openshifttest/stress                                   |
       | requests   | cpu=300m,memory=300Mi                                          |
       | restart    | Never                                                          |
       | command    | true                                                           |
@@ -76,7 +76,7 @@ Feature: Node management
     # Consume more than node allocatable memory
     When I run the :run client command with:
       | name       | pod-stress-bu-more                                             |
-      | image      | docker.io/ocpqe/stress                                         |
+      | image      | quay.io/openshifttest/stress                                   |
       | requests   | cpu=300m,memory=300Mi                                          |
       | restart    | Never                                                          |
       | command    | true                                                           |
