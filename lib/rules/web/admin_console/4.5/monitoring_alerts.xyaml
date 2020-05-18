@@ -32,6 +32,9 @@ filter_alert:
 open_alert_detail:
   action: filter_alert
   action: click_alert_link_with_text
+open_alertrules_detail:
+  action: filter_alert
+  action: click_alert_link_with_text
 
 perform_action_item:
   params:
@@ -42,6 +45,19 @@ click_silence_alert:
   params:
     button_text: Silence Alert
   action: click_button_text
+uncheck_start_from_now:
+  element:
+    selector:
+      xpath: //span[text()='Duration']/ancestor::div[@class='co-m-pane__body-group']//input[@type='checkbox']
+    op: click
+ensure_start_from_now_checked:
+  element:
+    selector:
+      xpath: //span[text()='Duration']/ancestor::div[@class='co-m-pane__body-group']//input[@type='checkbox'][@checked]
+check_regular_expression_link:
+  element:
+    selector:
+      xpath: //a[@href='https://github.com/google/re2/wiki/Syntax']
 input_silence_comments:
   params:
     label_text: Comment
@@ -55,8 +71,19 @@ check_silence_detail:
       xpath: //span[text()='Silence Details']
 silence_alert_from_detail:
   params:
-    comment_text: silence comments is a must from ocp 4.50
+    comment_text: silence comments is a must from ocp 4.5
   action: click_silence_alert
+  action: input_silence_comments
+  action: perform_silence
+  action: check_silence_detail
+silence_alert_from_detail_check_fields:
+  params:
+    comment_text: silence comments is a must from ocp 4.5
+    duration: 6h
+  action: click_silence_alert
+  action: set_silence_duration
+  action: uncheck_start_from_now
+  action: check_regular_expression_link
   action: input_silence_comments
   action: perform_silence
   action: check_silence_detail
@@ -101,6 +128,9 @@ edit_silence_alert:
   params:
     item_text: Edit Silence
   action: perform_action_item
+check_silence_fields:
+  action: ensure_start_from_now_checked
+  action: check_silence_duration_null 
 remove_matcher_silence_alert:
   params:
     aria_label_text: Remove matcher
@@ -132,7 +162,11 @@ set_silence_duration_null:
   element:
     selector:
       xpath: //ul[@class='pf-c-dropdown__menu']//button[text()='-']
-    op: click  
+    op: click 
+check_silence_duration_null:
+  element:
+    selector:
+      xpath: //label[text()='For...']/..//span[text()='-'] 
 set_invalid_end_time_silence:
   params:
     label_text: Until...
@@ -150,4 +184,9 @@ status_specific_silence:
   element:
     selector:
       xpath: //div[@aria-label='Silences']//td[text()='<status>'][1]
+click_alertrule_expression:
+  element:
+    selector:
+      xpath: //a[contains(@href, '<expression>')]
+    op: click
   
