@@ -142,6 +142,8 @@ Feature: testing multicast scenarios
   # @case_id OCP-12930
   @admin
   Scenario: Same multicast groups can be created in multiple tenant
+    Given the env is using multitenant or networkpolicy network
+    
     Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard
     When I run the :create client command with:
@@ -279,6 +281,8 @@ Feature: testing multicast scenarios
   @admin
   @destructive
   Scenario: pods in default project should not be able to receive multicast traffic from other tenants
+    Given the env is using multitenant or networkpolicy network
+    
     # create multicast testing pod in one project
     Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard
@@ -356,6 +360,8 @@ Feature: testing multicast scenarios
   # @case_id OCP-12928
   @admin
   Scenario: pods should be able to join multiple multicast groups at same time
+    Given the env is using multitenant or networkpolicy network
+    
     # create some multicast testing pods in the project
     Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard
@@ -449,6 +455,8 @@ Feature: testing multicast scenarios
   # @case_id OCP-12929
   @admin
   Scenario: pods should not be able to receive multicast traffic from other pods in different tenant
+    Given the env is using multitenant or networkpolicy network
+    
     # create some multicast testing pods in one project
     Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard
@@ -528,6 +536,8 @@ Feature: testing multicast scenarios
   @admin
   @destructive
   Scenario: pods in default project should be able to receive multicast traffic from other default project pods
+    Given the env is using multitenant or networkpolicy network
+    
     # enable multicast and create testing pods
     Given I switch to cluster admin pseudo user
     And I use the "default" project
