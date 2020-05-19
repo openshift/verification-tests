@@ -484,7 +484,7 @@ module BushSlicer
 
   # a quickly made up environment class for the PoC
   class StaticEnvironment < OpenShiftEnvironment
-    def initialize(**opts)opts[:masters]
+    def initialize(**opts)
       super
 
       if ! opts[:hosts] || opts[:hosts].empty?

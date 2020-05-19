@@ -37,7 +37,7 @@ module BushSlicer
       raise "no '#{key}' environment configuration found" if ! env_class || env_class.empty?
 
       env_opts[:key] = key # lets have it for a reference
-      return BushSlicer.const_get(env_class).new(env_opts)
+      return BushSlicer.const_get(env_class).new(**env_opts)
     end
 
     def clean_up
