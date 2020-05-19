@@ -3,10 +3,10 @@
 :hooks:
   :click: |-
     # this will execute in the Web4Cucumber instance context
-    proc { |block|
+    proc { |element, *op_call|
       begin
         logger.trace "Clicking web element via hook.."
-        block.call
+        element.send *op_call
       rescue Selenium::WebDriver::Error::UnknownError,Selenium::WebDriver::Error::ElementClickInterceptedError => e
         if e.message.include? "not clickable"
           logger.warn e.inspect
@@ -30,7 +30,7 @@
             sleep 10
           end
 
-          block.call
+          element.send *op_call
         else
           logger.debug "unhandled UnknownError"
           raise
