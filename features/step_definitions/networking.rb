@@ -731,9 +731,13 @@ end
 
 Given /^the bridge interface named "([^"]*)" is deleted from the "([^"]*)" node$/ do |bridge_name, node_name|
   ensure_admin_tagged
+  check_and_delete_inf= %Q(if ip addr show  #{bridge_name};
+                           then 
+                              ip link delete #{bridge_name};
+                           fi)
   node = node(node_name)
   host = node.host
-  @result = host.exec_admin("if ip addr show  #{bridge_name};then ip link delete #{bridge_name};else echo #{bridge_name} does not exist on this node;fi")
+  @result = host.exec_admin(check_and_delete_inf)
   raise "Failed to delete bridge interface" unless @result[:success]
 end
 
