@@ -127,7 +127,7 @@ choose_approval_strategy:
   action: click_radio_input
 click_subscribe_button:
   params:
-    button_text: Subscribe
+    button_text: Install
   action: click_button_text
 subscribe_using_default_params:
   action: wait_box_loaded

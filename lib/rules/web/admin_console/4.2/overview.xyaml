@@ -86,6 +86,18 @@ click_dropdown_menu_item:
     selector:
       <<: *group_by_dropdown_item
     op: click
+check_groupby_application_dropdown:
+  params:
+    dropdown_menu_item: Application
+  action: check_dropdown_menu_item
+check_groupby_resource_dropdown:
+  params:
+    dropdown_menu_item: Resource
+  action: check_dropdown_menu_item
+check_groupby_dropdown_when_no_resources:
+  action: click_groupby_dropdown_button
+  action: check_groupby_application_dropdown
+  action: check_groupby_resource_dropdown
 check_groupby_label_header_missing:
   element:
     selector:

@@ -347,7 +347,7 @@ check_resource_link:
 check_page_contains:
   element:
     selector:
-      xpath: //*[contains(.,'<content>')]
+      xpath: //div[contains(.,'<content>')]
     timeout: 15
 check_page_match:
   element:
