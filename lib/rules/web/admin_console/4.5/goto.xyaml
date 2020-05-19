@@ -99,6 +99,7 @@ goto_one_deployment_page:
 # deploymentconfig
 goto_dc_page:
   url: k8s/ns/<project_name>/deploymentconfigs
+  action: wait_box_loaded
 goto_one_dc_page:
   url: k8s/ns/<project_name>/deploymentconfigs/<dc_name>
 goto_one_rc_page:

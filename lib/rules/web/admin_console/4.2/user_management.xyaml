@@ -88,3 +88,32 @@ check_cluster_role_reference:
     resource_name: <role_name>
     resource_link: /k8s/cluster/clusterroles/<role_name>
   action: check_resource_item
+check_no_create_button_on_list_page:
+  action: goto_project_pods_list_page
+  action: check_yaml_create_button_missing
+  action: goto_deployment_page
+  action: check_yaml_create_button_missing
+  action: goto_serviceaccounts_page
+  action: check_yaml_create_button_missing
+  action: goto_persistentvolumeclaims_page
+  action: check_yaml_create_button_missing
+check_kebab_items_disabled_on_list_page:
+  action: goto_dc_page
+  action: click_kebab_of_one_resource
+  action: check_kebab_items_disabled
+check_no_action_button_on_resource_page:
+  action: goto_one_dc_page
+  action: check_action_button_missing
+check_no_save_button_on_resource_page:
+  action: click_yaml_tab
+  action: check_save_button_missing
+  action: click_environment_tab
+  action: check_save_button_missing
+check_no_edit_links_on_detail_page:
+  action: goto_one_dc_page
+  action: check_no_button_with_link
+check_no_button_with_link:
+  elements:
+  - selector:
+      xpath: //button[contains(@class, 'pf-m-link')]
+    missing: true
