@@ -80,7 +80,7 @@ Feature: change the policy of user/service account
       | get                                |
       | list                               |
       | watch                              |
-
+    Given I obtain test data file "authorization/policy/projectviewservice.json"
     When I delete matching lines from "projectviewservice.json":
       | "get",       |
     Then the step should succeed

@@ -14,6 +14,25 @@ create_resource_by_default_yaml:
         xpath: //a[text()='Edit YAML']
     ref: click_edit_yaml_link
   action: click_create_button
+check_yaml_create_button_missing:
+  elements:
+  - selector:
+      xpath: //button[@id='yaml-create']
+    missing: true
+check_kebab_items_disabled:
+  elements:
+  - selector:
+      xpath: //button[contains(@class, 'pf-c-dropdown__menu-item') and not(contains(@class, 'pf-m-disabled'))]
+    missing: true
+check_action_button_missing:
+  elements:
+  - selector:
+      xpath: //span[contains(text(), 'Actions')]
+    missing: true
+check_save_button_missing:
+  params:
+    button_text: Save
+  action: check_button_missing
 click_button_by_id:
   element:
     selector:
@@ -56,6 +75,11 @@ check_button_text:
   element:
     selector:
       <<: *button_with_text
+check_button_missing:
+  element:
+    selector:
+      <<: *button_with_text
+    missing: true
 check_button_disabled:
   element:
     selector:
@@ -81,6 +105,10 @@ click_environment_tab:
 click_overview_tab:
   params:
     tab_name: Overview
+  action: click_tab
+click_yaml_tab:
+  params:
+    tab_name: YAML
   action: click_tab
 click_radio_input:
   element:

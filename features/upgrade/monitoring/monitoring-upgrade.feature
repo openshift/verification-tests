@@ -58,7 +58,7 @@ Feature: cluster monitoring related upgrade check
       | exec_command_arg | curl -k -H "Authorization: Bearer <%= cb.sa_token %>" https://alertmanager-main.openshift-monitoring.svc:9094/api/v1/alerts |
     Then the step should succeed
     And the output should contain:
-      | "alertname": "Watchdog" |
+      | Watchdog |
 
     # curl -k -H "Authorization: Bearer $token" 'https://grafana.openshift-monitoring.svc:3000/api/search?folderIds=1
     When I run the :exec admin command with:

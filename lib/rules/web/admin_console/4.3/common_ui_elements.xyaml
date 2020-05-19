@@ -32,6 +32,20 @@ check_create_button_missing:
   - selector:
       <<: *create_button
     missing: true
+check_kebab_items_disabled:
+  elements:
+  - selector:
+      xpath: //button[contains(@class, 'pf-c-dropdown__menu-item') and not(contains(@class, 'pf-m-disabled'))]
+    missing: true
+check_action_button_missing:
+  elements:
+  - selector:
+      xpath: //span[contains(text(), 'Actions')]
+    missing: true
+check_save_button_missing:
+  params:
+    button_text: Save
+  action: check_button_missing
 click_cancel_button:
   elements:
   - selector:
@@ -52,6 +66,11 @@ check_button_text:
   element:
     selector:
       <<: *button_with_text
+check_button_missing:
+  element:
+    selector:
+      <<: *button_with_text
+    missing: true
 click_button_by_id:
   element:
     selector:
@@ -113,6 +132,11 @@ click_yaml_create_button:
   params:
     button_id: yaml-create
   action: click_button_by_id
+check_yaml_create_button_missing:
+  elements:
+  - selector:
+      xpath: //button[@id='yaml-create']
+    missing: true
 clear_input_value:
   elements:
   - selector:
