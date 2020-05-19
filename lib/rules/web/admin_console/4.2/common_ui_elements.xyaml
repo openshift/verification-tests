@@ -49,9 +49,13 @@ click_button:
     op: click
 click_button_text:
   element:
-    selector:
+    selector: &button_with_text
       xpath: //button[text()='<button_text>']
     op: click
+check_button_text:
+  element:
+    selector:
+      <<: *button_with_text
 check_button_disabled:
   element:
     selector:

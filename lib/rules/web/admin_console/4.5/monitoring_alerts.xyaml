@@ -92,7 +92,7 @@ click_alert_link_with_text:
     selector:
       xpath: //a[text()='<alert_name>']
     op: click
-    timeout: 60
+    timeout: 120
 click_actions_button:
   element:
     selector:
