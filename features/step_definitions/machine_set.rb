@@ -76,7 +76,7 @@ Given(/^I clone a machineset and name it "([^"]*)"$/) do | ms_name |
   step %Q{the machineset should have expected number of running machines}
 end
 
-Given(/^I create a spot instance machineset named "([^"]*)" on (aws|gcp|azure)$/) do | ms_name, iaas_type |
+Given(/^I create a spot instance machineset and name it "([^"]*)" on (aws|gcp|azure)$/) do | ms_name, iaas_type |
   step %Q{I pick a random machineset to scale}
 
   ms_yaml = machine_set.raw_resource.to_yaml
