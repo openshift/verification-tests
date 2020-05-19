@@ -171,30 +171,30 @@ Feature: Operator related networking scenarios
     | name=test-pods |
     #And evaluation of `pod(0).node_name` is stored in the :node_name clipboard
   And I store "<%= pod(0).node_name %>" node's corresponding default networkType pod name in the :sdn_pod clipboard
-  
+
   Given I use the "test-service" service
   And evaluation of `service.ip(user: user)` is stored in the :service_ip clipboard
   # Checking idling unidling manually to make sure it works fine before inducing flag feature
   When I run the :idle client command with:
     | svc_name | test-service |
-  Then the step should succeed 
+  Then the step should succeed
   And the output should contain:
     | The service "<%= project.name %>/test-service" has been marked as idled |
-  
+
   Given I have a pod-for-ping in the project
   When I execute on the pod:
     | /usr/bin/curl | --connect-timeout | 60 | <%= cb.service_ip %>:27017 |
   Then the step should succeed
   And the output should contain:
     | Hello OpenShift |
-  
+
   #Inducing flag disablement here an polling loop of 300 seconds for CNO to update it across the nodes by checking keywords in sdn logs
-  Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
+  Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
     | {"spec":{"defaultNetwork":{"openshiftSDNConfig":{"enableUnidling" : false}}}} |
   # Cleanup required to move operator config back to normal
   Given I register clean-up steps:
   """
-  as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
+  as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
     | {"spec":{"defaultNetwork":{"openshiftSDNConfig": null}}} |
   """
   And I wait up to 300 seconds for the steps to pass:
@@ -211,14 +211,14 @@ Feature: Operator related networking scenarios
   #We are idling service again and making sure it doesn't get unidle due to the above enableUnidling flag set to false
   When I run the :idle client command with:
     | svc_name | test-service |
-  Then the step should succeed 
+  Then the step should succeed
   And the output should contain:
     | The service "<%= project.name %>/test-service" has been marked as idled |
   When I execute on the "hello-pod" pod:
     | /usr/bin/curl | --connect-timeout | 60 | <%= cb.service_ip %>:27017 |
   Then the step should fail
   #Moving CNO config back to normal and expect service to unidle by polling loop of 300 seconds for CNO by checking keywords in sdn logs
-  Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
+  Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
     | {"spec":{"defaultNetwork":{"openshiftSDNConfig": null}}} |
   And I wait up to 300 seconds for the steps to pass:
     """
@@ -236,21 +236,21 @@ Feature: Operator related networking scenarios
   Then the step should succeed
   And the output should contain:
 	  | Hello OpenShift |
-    
+
   # @author anusaxen@redhat.com
   # @case_id OCP-21574
   @admin
   @destructive
-  Scenario: Should not allow to change the openshift-sdn config	
+  Scenario: Should not allow to change the openshift-sdn config
   #Trying to change network mode to Subnet or any other
   Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
     | {"spec": {"defaultNetwork": {"openshiftSDNConfig": {"mode": "Subnet"}}}} |
   #Cleanup for bringing CRD to original
   Given I register clean-up steps:
     """
-  as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
+  as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
     | {"spec": {"defaultNetwork": {"openshiftSDNConfig": null}}} |
-    """ 
+    """
   And 10 seconds have passed
   #Getting network operator pod name to leverage for its logs collection later
   Given I switch to cluster admin pseudo user
@@ -266,12 +266,12 @@ Feature: Operator related networking scenarios
   Then the step should succeed
   And the output should contain:
     | cannot change openshift-sdn |
-    
+
   # @author anusaxen@redhat.com
   # @case_id OCP-25856
   @admin
   @destructive
-  Scenario: CNO should delete non-relevant resources	
+  Scenario: CNO should delete non-relevant resources
     # Make sure that the multus is Running
     Given the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard
@@ -281,7 +281,7 @@ Feature: Operator related networking scenarios
     #Cleanup for bringing CRD to original at the end of this scenario
     Given I register clean-up steps:
     """
-    as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
+    as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
       | {"spec":{"additionalNetworks": null}} |
     """
     #Make sure dhcp daemon pods spun up after patching the CNO above
@@ -293,7 +293,7 @@ Feature: Operator related networking scenarios
       | app=dhcp-daemon |
     """
     # Erase additonalnetworks config from CNO and expect dhcp pods to die
-    Given I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
+    Given I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
       | {"spec":{"additionalNetworks": null}} |
 
     And I wait up to 60 seconds for the steps to pass:
@@ -304,7 +304,7 @@ Feature: Operator related networking scenarios
     #Patching config in network operator config CRD again for 2nd iteration check
     Given I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
       | {"spec":{"additionalNetworks": [{"name":"bridge-ipam-dhcp","namespace":"openshift-multus","rawCNIConfig":"{\"name\":\"bridge-ipam-dhcp\",\"cniVersion\":\"0.3.1\",\"type\":\"bridge\",\"master\":\"<%= cb.default_interface %>\",\"ipam\":{\"type\": \"dhcp\"}}","type":"Raw"}]}} |
-    
+
     # Now scale down CNO pod to 0 and makes sure dhcp pods still running and erase additionalnetworks config from CNO
     Given I use the "openshift-network-operator" project
     And I run the :scale client command with:
@@ -328,7 +328,7 @@ Feature: Operator related networking scenarios
     And status becomes :running of exactly <%= cb.desired_multus_replicas %> pods labeled:
       | app=dhcp-daemon |
     """
-    Given I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
+    Given I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
       | {"spec":{"additionalNetworks": null}} |
     # Now scale up CNO pod back to 1 and expect dhcp pods to disappear
     Given I use the "openshift-network-operator" project
@@ -344,3 +344,174 @@ Feature: Operator related networking scenarios
     And all existing pods die with labels:
       | app=dhcp-daemon |
     """
+
+  # @author rbrattai@redhat.com
+  @admin
+  Scenario: setting CNO logLevel should not replace SDN env-override ConfigMap LOG_LEVEL
+    Given I switch to cluster admin pseudo user
+    Given the env is using "OpenShiftSDN" networkType
+    When I run the :patch client command with:
+      | resource      | network.config.openshift.io    |
+      | resource_name | cluster                        |
+      | p             | {"spec":{"logLevel": "Debug"}} |
+      | type          | merge                          |
+    Then the step should succeed
+    And I register clean-up steps:
+    """
+    Given I run the :patch client command with:
+      | resource      | network.config.openshift.io |
+      | resource_name | cluster                     |
+      | p             | {"spec":{"logLevel": ""}}   |
+      | type          | merge                       |
+    Then the step should succeed
+    """
+    Given I use the "openshift-sdn" project
+    Given I store in the :sdn_controller_pod clipboard the pods labeled:
+      | app=sdn-controller |
+    Given I store in the :sdn_pod clipboard the pods labeled:
+      | app=sdn |
+
+    # Wait for CNO to do something
+    Given 30 seconds have passed
+    When I run the :exec admin command with:
+      | pod              | <%= cb.sdn_controller_pod[0].name %>   |
+      | oc_opts_end      |                          |
+      | exec_command     | pgrep                    |
+      | exec_command_arg | -af                      |
+      | exec_command_arg | openshift-sdn-controller |
+    Then the step should succeed
+    And the output should contain:
+      | --v=2 |
+    When I run the :exec admin command with:
+      | pod              | <%= cb.sdn_pod[0].name %>   |
+      | oc_opts_end      |                          |
+      | exec_command     | pgrep                    |
+      | exec_command_arg | -af                      |
+      | exec_command_arg | openshift-sdn-node |
+    Then the step should succeed
+    And the output should contain:
+      | --v 2 |
+
+
+  # @author rbrattai@redhat.com
+  @admin
+  Scenario: setting CNO logLevel should not replace OVN env-override ConfigMap LOG_LEVEL
+    Given I switch to cluster admin pseudo user
+    Given the env is using "OVNKubernetes" networkType
+    When I run the :patch client command with:
+      | resource      | network.config.openshift.io    |
+      | resource_name | cluster                        |
+      | p             | {"spec":{"logLevel": "Debug"}} |
+      | type          | merge                          |
+    Then the step should succeed
+    And I register clean-up steps:
+    """
+    Given I run the :patch client command with:
+      | resource      | network.config.openshift.io |
+      | resource_name | cluster                     |
+      | p             | {"spec":{"logLevel": ""}}   |
+      | type          | merge                       |
+    Then the step should succeed
+    """
+    Given I use the "openshift-ovn-kubernetes" project
+    Given I store in the :ovnkube_master_pod clipboard the pods labeled:
+      | app=ovnkube-master |
+    Given I store in the :ovnkube_node_pod clipboard the pods labeled:
+      | app=ovnkube-node |
+
+    # Wait for CNO to do something
+    Given 30 seconds have passed
+    When I run the :exec admin command with:
+      | pod              | <%= cb.ovnkube_master_pod[0].name %> |
+      | c                | northd                               |
+      | oc_opts_end      |                                      |
+      | exec_command     | pgrep                                |
+      | exec_command_arg | -af                                  |
+      | exec_command_arg | ovn-northd                           |
+    Then the step should succeed
+    And the output should contain:
+      | -vconsole:info |
+    When I run the :exec admin command with:
+      | pod              | <%= cb.ovnkube_master_pod[0].name %> |
+      | c                | nbdb                                 |
+      | oc_opts_end      |                                      |
+      | exec_command     | pgrep                                |
+      | exec_command_arg | -af                                  |
+      | exec_command_arg | ovsdb-server                         |
+    Then the step should succeed
+    And the output should contain:
+      | -vconsole:info |
+    When I run the :exec admin command with:
+      | pod              | <%= cb.ovnkube_master_pod[0].name %> |
+      | c                | sbdb                                 |
+      | oc_opts_end      |                                      |
+      | exec_command     | pgrep                                |
+      | exec_command_arg | -af                                  |
+      | exec_command_arg | ovsdb-server                         |
+    Then the step should succeed
+    And the output should contain:
+      | -vconsole:info |
+    When I run the :exec admin command with:
+      | pod              | <%= cb.ovnkube_master_pod[0].name %> |
+      | c                | ovnkube-master                       |
+      | oc_opts_end      |                                      |
+      | exec_command     | pgrep                                |
+      | exec_command_arg | -af                                  |
+      | exec_command_arg | ovnkube                              |
+    Then the step should succeed
+    And the output should contain:
+      | --loglevel 4 |
+    When I run the :exec admin command with:
+      | pod              | <%= cb.ovnkube_node_pod[0].name %> |
+      | c                | ovn-controller                     |
+      | oc_opts_end      |                                    |
+      | exec_command     | pgrep                              |
+      | exec_command_arg | -af                                |
+      | exec_command_arg | ovn-controller                     |
+    Then the step should succeed
+    And the output should contain:
+      | -vconsole:info |
+    When I run the :exec admin command with:
+      | pod              | <%= cb.ovnkube_node_pod[0].name %> |
+      | c                | ovnkube-node                       |
+      | oc_opts_end      |                                    |
+      | exec_command     | pgrep                              |
+      | exec_command_arg | -af                                |
+      | exec_command_arg | ovnkube                            |
+    Then the step should succeed
+    And the output should contain:
+      | --loglevel 4 |
+
+
+  # @author rbrattai@redhat.com
+  @admin
+  Scenario: setting CNO operatorLogLevel should configure logLevel for CNO only
+    Given I switch to cluster admin pseudo user
+    And I store "<%= pod(0).node_name %>" node's corresponding default networkType pod name in the :sdn_pod clipboard
+    When I run the :patch client command with:
+      | resource      | network.config.openshift.io            |
+      | resource_name | cluster                                |
+      | p             | {"spec":{"operatorLogLevel": "Debug"}} |
+      | type          | merge                                  |
+    Then the step should succeed
+    And I register clean-up steps:
+    """
+    Given I run the :patch client command with:
+      | resource      | network.config.openshift.io       |
+      | resource_name | cluster                           |
+      | p             | {"spec":{"operatorLogLevel": ""}} |
+      | type          | merge                             |
+    Then the step should succeed
+    """
+    And I use the "openshift-network-operator" project
+    When I run the :get client command with:
+      | resource | pods                               |
+      | o        | jsonpath={.items[*].metadata.name} |
+    Then the step should succeed
+    And evaluation of `@result[:response]` is stored in the :network_operator_pod clipboard
+    When I run the :logs client command with:
+      | resource_name | <%= cb.network_operator_pod %> |
+      | since         | 10s                            |
+    Then the step should succeed
+    And the output should contain:
+      | DEBUG |
