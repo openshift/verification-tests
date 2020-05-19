@@ -78,62 +78,6 @@ Feature: Pod related networking scenarios
       | <%=cb.pod_ip %> |
     """
 
-  # @author yadu@redhat.com
-  # @case_id OCP-16729
-  @admin
-  @destructive
-  Scenario: KUBE-HOSTPORTS chain rules won't be flushing when there is no pod with hostPort
-    Given I have a project
-    And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
-    Given I store the schedulable nodes in the :nodes clipboard
-    Given I select a random node's host
-    # Add a fake rule
-    Given I register clean-up steps:
-    """
-    When I run commands on the host:
-      | iptables -t nat -D KUBE-HOSTPORTS -p tcp --dport 110 -j ACCEPT |
-    """
-    When I run commands on the host:
-      | iptables -t nat -A KUBE-HOSTPORTS -p tcp --dport 110 -j ACCEPT |
-    Then the step should succeed
-    When I run commands on the host:
-      | iptables-save \| grep HOSTPORT |
-    Then the step should succeed
-    And the output should contain:
-      | -A PREROUTING -m comment --comment "kube hostport portals" -m addrtype --dst-type LOCAL -j KUBE-HOSTPORTS |
-      | -A OUTPUT -m comment --comment "kube hostport portals" -m addrtype --dst-type LOCAL -j KUBE-HOSTPORTS     |
-      | -A KUBE-HOSTPORTS -p tcp -m tcp --dport 110 -j ACCEPT |
-    #Create a normal pod without hostport
-    Given I switch to the first user
-    And I use the "<%= project.name %>" project
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/scheduler/pod_with_nodename.json" replacing paths:
-      | ["spec"]["nodeName"] | <%= node.name %> |
-    Then the step should succeed
-    And a pod becomes ready with labels:
-      | name=nodename-pod |
-    Given 30 seconds have passed
-    When I run commands on the host:
-      | iptables-save \| grep HOSTPORT |
-    Then the step should succeed
-    #The rule won't be flushing when there is no pod with hostport
-    And the output should contain:
-      | -A PREROUTING -m comment --comment "kube hostport portals" -m addrtype --dst-type LOCAL -j KUBE-HOSTPORTS |
-      | -A OUTPUT -m comment --comment "kube hostport portals" -m addrtype --dst-type LOCAL -j KUBE-HOSTPORTS     |
-      | -A KUBE-HOSTPORTS -p tcp -m tcp --dport 110 -j ACCEPT |
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/nodeport_pod.json" replacing paths:
-      | ["spec"]["template"]["spec"]["nodeName"] | <%= node.name %> |
-    Then the step should succeed
-    And a pod becomes ready with labels:
-      | name=rc-test |
-    When I run commands on the host:
-      | iptables-save \| grep HOSTPORT |
-    Then the step should succeed
-    And the output should contain:
-      | hostport 6061" -m tcp --dport 6061 |
-    # The fake rule disappeared after creating a pod with hostport
-    And the output should not contain:
-      | -A KUBE-HOSTPORTS -p tcp --dport 110 -j ACCEPT |
-
   # @author bmeng@redhat.com
   # @case_id OCP-10817
   @admin

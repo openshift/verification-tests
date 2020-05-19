@@ -117,68 +117,6 @@ Feature: dockerbuild.feature
       | name:\\s+ARG       |
       | value:\\s+NEWVALUE |
 
-  # @author wewang@redhat.com
-  # @case_id OCP-15461
-  Scenario: Allow nocache to be specified on docker build request
-    Given I have a project
-    When I run the :new_app client command with:
-      | file | https://raw.githubusercontent.com/openshift/origin/master/examples/sample-app/application-template-dockerbuild.json |
-    Then the step should succeed
-    And the "ruby-sample-build-1" build was created
-    And the "ruby-sample-build-1" build completed
-    When I run the :start_build client command with:
-      | buildconfig | ruby-sample-build |
-      | no-cache    | true              |
-    Then the step should succeed
-    And the "ruby-sample-build-2" build completed
-    When I run the :logs client command with:
-      | resource_name | build/ruby-sample-build-2 |
-    Then the output should not contain:
-      | Using cache |
-    When I run the :describe client command with:
-      | resource    | build               |
-      | name        | ruby-sample-build-2 |
-    Then the step should succeed
-    Then the output should match "No Cache:\s+true"
-    When I run the :start_build client command with:
-      | buildconfig | ruby-sample-build |
-      | no-cache    | false             |
-    Then the step should succeed
-    And the "ruby-sample-build-3" build completed
-    When I run the :logs client command with:
-      | resource_name | build/ruby-sample-build-3 |
-    Then the output should contain:
-      | Using cache                               |
-
-  # @author wewang@redhat.com
-  # @case_id OCP-15462
-  Scenario: Override nocache setting using --no-cache flag when docker build request
-    Given I have a project
-    When I run the :new_app client command with:
-      | file | https://raw.githubusercontent.com/openshift/origin/master/examples/sample-app/application-template-dockerbuild.json |
-    Then the step should succeed
-    And the "ruby-sample-build-1" build was created
-    And the "ruby-sample-build-1" build completed
-    When I run the :patch client command with:
-      | resource      | bc                                                        |
-      | resource_name | ruby-sample-build                                         |
-      | p             | {"spec":{"strategy":{"dockerStrategy":{"noCache":true}}}} |
-    Then the step should succeed
-    When I run the :describe client command with:
-      | resource | buildconfig                    |
-      | name     | ruby-sample-build              |
-    Then the step should succeed
-    Then the output should match "No Cache:\s+true"
-    When I run the :start_build client command with:
-      | buildconfig | ruby-sample-build           |
-      | no-cache    | false                       |
-    Then the step should succeed
-    And the "ruby-sample-build-2" build completed
-    When I run the :logs client command with:
-      | resource_name | build/ruby-sample-build-2 |
-    Then the output should contain:
-      | Using cache                               |
-
   # @author wzheng@redhat.com
   # @case_id OCP-18501
   Scenario: Support additional EXPOSE values in new-app

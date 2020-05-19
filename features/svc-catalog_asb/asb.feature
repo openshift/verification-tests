@@ -139,8 +139,6 @@ Feature: Ansible-service-broker related scenarios
       | <%= cb.prefix %>-mysql-apb      | <%= cb.prefix %>-mysql-apb-credentials      |  prod   | <%= cb.prefix %>-mysql-apb-parameters      | {"mysql_database":"devel","mysql_user":"devel","mysql_version":"5.7","service_name":"mysql","mysql_password":"test"}                  | mysql      | # @case_id OCP-17361
       | <%= cb.prefix %>-mariadb-apb    | <%= cb.prefix %>-mariadb-apb-credentials    |  dev    | <%= cb.prefix %>-mariadb-apb-parameters    | {"mariadb_database":"admin","mariadb_user":"admin","mariadb_version":"10.2","mariadb_root_password":"test","mariadb_password":"test"} | mariadb    | # @case_id OCP-15350
       | <%= cb.prefix %>-mariadb-apb    | <%= cb.prefix %>-mariadb-apb-credentials    |  prod   | <%= cb.prefix %>-mariadb-apb-parameters    | {"mariadb_database":"admin","mariadb_user":"admin","mariadb_version":"10.2","mariadb_root_password":"test","mariadb_password":"test"} | mariadb    | # @case_id OCP-17362
-      | <%= cb.prefix %>-mariadb-apb    | <%= cb.prefix %>-mariadb-apb-credentials    |  dev    | <%= cb.prefix %>-mariadb-apb-parameters    | {"mysql_database":"admin","mysql_user":"admin","mariadb_version":"10.2","mysql_root_password":"test","mysql_password":"test"}         | mariadb    | # @case_id OCP-18241
-      | <%= cb.prefix %>-mariadb-apb    | <%= cb.prefix %>-mariadb-apb-credentials    |  prod   | <%= cb.prefix %>-mariadb-apb-parameters    | {"mysql_database":"admin","mysql_user":"admin","mariadb_version":"10.2","mysql_root_password":"test","mysql_password":"test"}         | mariadb    | # @case_id OCP-18240
 
   # @author chezhang@redhat.com
   @admin
