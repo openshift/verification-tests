@@ -129,6 +129,7 @@ Given /^I check the #{QUOTED} prometheus rule in the #{QUOTED} project on the pr
     | n                | openshift-monitoring                                                                          |
     | container        | prometheus                                                                                    |
     | pod              | prometheus-k8s-0                                                                              |
+    | oc_opts_end      |                                                                                               |
     | exec_command     | cat                                                                                           |
     | exec_command_arg | /etc/prometheus/rules/prometheus-k8s-rulefiles-0/#{project_name}-#{prometheus_rule_name}.yaml |
   })
