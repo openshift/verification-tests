@@ -170,11 +170,20 @@ click_checkbox_from_capability_level:
   - selector:
       xpath: //*[contains(@class, 'pf-c-check__label') and text()='<text>']
     op: click
+click_continue_button:
+  params:
+    button_text: Continue
+  action: click_button_text
 open_first_card_in_overlay:
   elements:
   - selector:
       xpath: //a[contains(@class, 'pf-c-card')][1]
-    op: click  
+    op: click
+  action:
+    if_element:
+      selector:
+        xpath: //button[text()='Continue']
+    ref: click_continue_button
 uninstall_operator_on_console:
   params:
     button_text: Uninstall Operator
@@ -270,7 +279,7 @@ open_operator_modal:
   action: open_first_card_in_overlay
 check_default_view_is_form_view:
   params:
-    content: Create by completing the form
+    content: Some fields may not be represented in this form
   action: check_page_contains
   element:
     selector:

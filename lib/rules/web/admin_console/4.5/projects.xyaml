@@ -44,9 +44,10 @@ send_delete_string:
     op: send_keys <resource_name>
 create_project_from_get_started_instru:
   params:
-    button_text: Create Project
+    button_text: Create a new project
   action: click_button
-  action: create_project
+  action: set_project_name
+  action: submit_changes
 nagivate_to_project_resources_page:
   params:
     tab_name: Workloads
