@@ -34,7 +34,7 @@ Given /^the pod(?: named "(.+)")? is ready$/ do |name|
 end
 
 Given /^the pod(?: named "(.+)")? becomes terminating$/ do |name|
-  ready_timeout = 30
+  ready_timeout = 60
   @result = pod(name).wait_till_terminating(user, ready_timeout)
 
   unless @result[:success]
