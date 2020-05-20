@@ -145,38 +145,7 @@ Feature: Egress IP related features
       | bash | -c | ip address show <%= cb.interface %> |
     Then the step should succeed
     And the output should contain "<%= cb.valid_ip %>"
-    """
-
-    #Check related iptables added
-    When I run command on the "<%= node.name%>" node's sdn pod:
-      | bash | -c | iptables-save \| grep "<%= cb.valid_ip %>" |
-    Then the step should succeed
-    And the output should contain:
-      | OPENSHIFT-MASQUERADE      |
-      | OPENSHIFT-FIREWALL-ALLOW  |
-
-    #check related openflow added
-    When I run command on the "<%= node.name%>" node's sdn pod:
-      | bash | -c | ovs-ofctl dump-flows br0 -O OpenFlow13 \| grep table=100 |
-    Then the step should succeed
-    And the output should contain "reg0=0x"
-
-    #Remove egress ip from namespace
-    Given as admin I successfully merge patch resource "netnamespace/<%= project.name %>" with:
-      | {"egressIPs": null} |
-
-    # Check related iptables and openlows removed
-    And I wait up to 30 seconds for the steps to pass:
-    """
-    When I run command on the "<%= node.name%>" node's sdn pod:
-      | bash | -c | iptables-save \| egrep "OPENSHIFT-FIREWALL-ALLOW\|OPENSHIFT-MASQUERADE" |
-    Then the step should succeed
-    And the output should not contain:
-      |  <%= cb.valid_ip %> |
-    When I run command on the "<%= node.name%>" node's sdn pod:
-      | bash | -c | ovs-ofctl dump-flows br0 -O OpenFlow13 \| grep table=100 |
-    Then the step should succeed
-    And the output should not contain "reg0=0x"
+    And the output should not contain "<%= cb.newip %>"
     """
 
   # @author huirwang@redhat.com
@@ -217,3 +186,47 @@ Feature: Egress IP related features
       | curl | -s | --connect-timeout | 5 | ifconfig.me |
     Then the step should succeed
     And the output should contain "<%= cb.valid_ip %>"
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-15473
+  @admin
+  @destructive
+  Scenario: The related iptables/openflow rules will be removed once the egressIP gets removed from netnamespace
+    Given the valid egress IP is added to the node
+    And I have a project
+
+    # add the egress ip to the project
+    Given as admin I successfully merge patch resource "netnamespace/<%= project.name %>" with:
+      | {"egressIPs": ["<%= cb.valid_ip %>"]} |
+
+    #Check related iptables added
+    When I run command on the "<%= node.name%>" node's sdn pod:
+      | bash | -c | iptables-save \| grep "<%= cb.valid_ip %>" |
+    Then the step should succeed
+    And the output should contain:
+      | OPENSHIFT-MASQUERADE      |
+      | OPENSHIFT-FIREWALL-ALLOW  |
+
+    #check related openflow added
+    When I run command on the "<%= node.name%>" node's sdn pod:
+      | bash | -c | ovs-ofctl dump-flows br0 -O OpenFlow13 \| grep table=100 |
+    Then the step should succeed
+    And the output should contain "reg0=0x"
+
+    #Remove egress ip from namespace
+    Given as admin I successfully merge patch resource "netnamespace/<%= project.name %>" with:
+      | {"egressIPs": null} |
+
+    # Check related iptables and openlows removed
+    And I wait up to 30 seconds for the steps to pass:
+    """
+    When I run command on the "<%= node.name%>" node's sdn pod:
+      | bash | -c | iptables-save \| egrep "OPENSHIFT-FIREWALL-ALLOW\|OPENSHIFT-MASQUERADE" |
+    Then the step should succeed
+    And the output should not contain:
+      |  <%= cb.valid_ip %> |
+    When I run command on the "<%= node.name%>" node's sdn pod:
+      | bash | -c | ovs-ofctl dump-flows br0 -O OpenFlow13 \| grep table=100 |
+    Then the step should succeed
+    And the output should not contain "reg0=0x"
+    """
