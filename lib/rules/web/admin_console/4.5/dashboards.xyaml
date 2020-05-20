@@ -69,3 +69,206 @@ check_dashboard_dropdown_items:
   action: check_dashboard_prometheus
   action: check_dashboard_use_method_cluster
   action: check_dashboard_use_method_node
+# cluster dashboards
+check_cluster_utilization_items:
+  elements:
+  - selector:
+      xpath: //h2[contains(@class,'co-dashboard-card__title') and text()='Cluster Utilization'] 
+  - selector:
+      xpath: //div[contains(@class,'co-utilization-card__item')]//h4[text()='CPU']
+  - selector:
+      xpath: //div[contains(@class,'co-utilization-card__item')]//h4[text()='Memory']
+  - selector:
+      xpath: //div[contains(@class,'co-utilization-card__item')]//h4[text()='Filesystem']
+  - selector:
+      xpath: //div[contains(@class,'co-utilization-card__item')]//h4[text()='Network Transfer']
+  - selector:
+      xpath: //div[contains(@class,'co-utilization-card__item')]//h4[text()='Pod count']
+click_pod_count_data:
+  element:
+    selector:
+      xpath: //h4[text()='Pod count']/..//button[contains(@class,'co-dashboard-card__button-link')]
+    op: click
+click_network_in_data:
+  element:
+    selector:
+      xpath: //h4[text()='Network Transfer']/..//button[contains(@class,'co-dashboard-card__button-link')][1]
+    op: click
+click_network_out_data:
+  element:
+    selector:
+      xpath: //h4[text()='Network Transfer']/..//button[contains(@class,'co-dashboard-card__button-link')][2]
+    op: click
+wait_for_consumer_lists_loaded:
+  elements:
+  - selector:
+      css: li.skeleton-consumer
+    missing: true
+    timeout: 30
+  - selector:
+      css: li.co-utilization-card-popover__consumer-item
+    timeout: 30
+check_has_5_top_consumers:
+  scripts:
+    - command: return document.querySelectorAll("li.co-utilization-card-popover__consumer-item").length == 5
+      expect_result: true
+check_consumer_link_to_node:
+  element:
+    selector:
+      xpath: //a[contains(@class,'co-utilization-card-popover__consumer-name') and starts-with(@href,'/k8s/cluster/nodes/')]
+check_consumer_link_to_project:
+  element:
+    selector:
+      xpath: //a[contains(@class,'co-utilization-card-popover__consumer-name') and starts-with(@href,'/k8s/cluster/projects/')]
+check_consumer_link_to_pod:
+  element:
+    selector:
+      xpath: //a[contains(@class,'co-utilization-card-popover__consumer-name') and starts-with(@href,'/k8s/ns/') and contains(@href,'/pods/')]
+click_view_more_link:
+  params:
+    text: View more
+  action: click_link_with_text_only
+check_on_monitoring_metrics_page:
+  elements:
+  - selector:
+      xpath: //button[text()='Add Query']
+  - selector:
+      xpath: //button[text()='Run Queries']
+  - selector:
+      xpath: //div[contains(@class,'query-browser__graph-container')]
+check_metrics_query_pod_count_by_node:
+  element:
+    selector:
+      xpath: //textarea[contains(text(),'topk(25, sort_desc(sum(avg_over_time(kube_pod_info[5m])) BY (node)))')]
+check_metrics_query_pod_count_by_project:
+  element:
+    selector:
+      xpath: //textarea[contains(text(),'topk(25, sort_desc(sum(avg_over_time(kube_pod_info[5m])) BY (namespace)))')]
+check_metrics_query_network_in_by_node:
+  scripts:
+  - command:
+      return /topk.*container_network_receive_bytes_total.*BY.*node/.test(document.querySelector('textarea.query-browser__query-input').innerHTML)
+    expect_result: true
+check_metrics_query_network_in_by_project:
+  scripts:
+  - command:
+      return /topk.*container_network_receive_bytes_total.*BY.*namespace/.test(document.querySelector('textarea.query-browser__query-input').innerHTML)
+    expect_result: true
+check_metrics_query_network_in_by_pod:
+  scripts:
+  - command:
+      return /topk.*container_network_receive_bytes_total.*BY.*namespace, pod/.test(document.querySelector('textarea.query-browser__query-input').innerHTML)
+    expect_result: true
+check_metrics_query_network_out_by_node:
+  scripts:
+  - command:
+      return /topk.*container_network_transmit_bytes_total.*BY.*node/.test(document.querySelector('textarea.query-browser__query-input').innerHTML)
+    expect_result: true
+check_metrics_query_network_out_by_project:
+  scripts:
+  - command:
+      return /topk.*container_network_transmit_bytes_total.*BY.*namespace/.test(document.querySelector('textarea.query-browser__query-input').innerHTML)
+    expect_result: true
+check_metrics_query_network_out_by_pod:
+  scripts:
+  - command:
+      return /topk.*container_network_transmit_bytes_total.*BY.*namespace, pod/.test(document.querySelector('textarea.query-browser__query-input').innerHTML)
+    expect_result: true
+close_breakdown_modal:
+  action: click_close_icon
+check_pod_count_breakdown_info_when_filter_by_node:
+  params:
+    dropdown_menu_item: By Node
+  action: goto_cluster_dashboards_page
+  action: click_pod_count_data
+  action: choose_item_from_dropdown_menu
+  action: wait_for_consumer_lists_loaded
+  action: check_has_5_top_consumers  
+  action: check_consumer_link_to_node
+  action: click_view_more_link
+  action: check_on_monitoring_metrics_page
+  action: check_metrics_query_pod_count_by_node
+check_pod_count_breakdown_info_when_filter_by_project:
+  params:
+    dropdown_menu_item: By Project
+  action: goto_cluster_dashboards_page
+  action: click_pod_count_data
+  action: choose_item_from_dropdown_menu
+  action: wait_for_consumer_lists_loaded
+  action: check_has_5_top_consumers  
+  action: check_consumer_link_to_project
+  action: click_view_more_link
+  action: check_on_monitoring_metrics_page
+  action: check_metrics_query_pod_count_by_project
+check_network_in_breakdown_info_when_filter_by_node:
+  params:
+    dropdown_menu_item: By Node
+  action: goto_cluster_dashboards_page
+  action: click_network_in_data
+  action: choose_item_from_dropdown_menu
+  action: wait_for_consumer_lists_loaded
+  action: check_has_5_top_consumers  
+  action: check_consumer_link_to_node
+  action: click_view_more_link
+  action: check_on_monitoring_metrics_page
+  action: check_metrics_query_network_in_by_node
+check_network_in_breakdown_info_when_filter_by_project:
+  params:
+    dropdown_menu_item: By Project
+  action: goto_cluster_dashboards_page
+  action: click_network_in_data
+  action: choose_item_from_dropdown_menu
+  action: wait_for_consumer_lists_loaded
+  action: check_has_5_top_consumers  
+  action: check_consumer_link_to_project
+  action: click_view_more_link
+  action: check_on_monitoring_metrics_page
+  action: check_metrics_query_network_in_by_project
+check_network_in_breakdown_info_when_filter_by_pod:
+  params:
+    dropdown_menu_item: By Pod
+  action: goto_cluster_dashboards_page
+  action: click_network_in_data
+  action: choose_item_from_dropdown_menu
+  action: wait_for_consumer_lists_loaded
+  action: check_has_5_top_consumers  
+  action: check_consumer_link_to_pod
+  action: click_view_more_link
+  action: check_on_monitoring_metrics_page
+  action: check_metrics_query_network_in_by_pod   
+check_network_out_breakdown_info_when_filter_by_node:
+  params:
+    dropdown_menu_item: By Node
+  action: goto_cluster_dashboards_page
+  action: click_network_out_data
+  action: choose_item_from_dropdown_menu
+  action: wait_for_consumer_lists_loaded
+  action: check_has_5_top_consumers  
+  action: check_consumer_link_to_node
+  action: click_view_more_link
+  action: check_on_monitoring_metrics_page
+  action: check_metrics_query_network_out_by_node
+check_network_out_breakdown_info_when_filter_by_project:
+  params:
+    dropdown_menu_item: By Project
+  action: goto_cluster_dashboards_page
+  action: click_network_out_data
+  action: choose_item_from_dropdown_menu
+  action: wait_for_consumer_lists_loaded
+  action: check_has_5_top_consumers  
+  action: check_consumer_link_to_project
+  action: click_view_more_link
+  action: check_on_monitoring_metrics_page
+  action: check_metrics_query_network_out_by_project
+check_network_out_breakdown_info_when_filter_by_pod:
+  params:
+    dropdown_menu_item: By Pod
+  action: goto_cluster_dashboards_page
+  action: click_network_out_data
+  action: choose_item_from_dropdown_menu
+  action: wait_for_consumer_lists_loaded
+  action: check_has_5_top_consumers  
+  action: check_consumer_link_to_pod
+  action: click_view_more_link
+  action: check_on_monitoring_metrics_page
+  action: check_metrics_query_network_out_by_pod
