@@ -1,0 +1,4 @@
+check_master_version_on_cluster_detail_page:
+  action: goto_cluster_detail_page
+  action: check_page_contains
+ 
