@@ -1135,9 +1135,9 @@ Feature: Multus-CNI related scenarios
     Given the multus is enabled on the cluster
     And I store all worker nodes to the :nodes clipboard
     And the default interface on nodes is stored in the :default_interface clipboard
+    And evaluation of `node.name` is stored in the :target_node clipboard
     #Storing default interface mac address for comparison later with pods macs
-    Given I use the "<%= cb.nodes[0].name %>" node
-    And I run commands on the host:
+    Given I run commands on the host:
       | ip addr show <%= cb.default_interface %> |
     Then the step should succeed
     And evaluation of `@result[:response].match(/\h+:\h+:\h+:\h+:\h+:\h+/)[0]` is stored in the :default_interface_mac clipboard
@@ -1154,7 +1154,7 @@ Feature: Multus-CNI related scenarios
     When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
       | ["metadata"]["name"]                                       | pod1                    |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | myipvlan76              |
-      | ["spec"]["nodeName"]                                       | <%= cb.nodes[0].name %> |
+      | ["spec"]["nodeName"]                                       | "<%= cb.target_node %>" |
     Then the step should succeed
     And the pod named "pod1" becomes ready
     When I execute on the pod:
@@ -1168,7 +1168,7 @@ Feature: Multus-CNI related scenarios
     When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
       | ["metadata"]["name"]                                       | pod2                    |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | myipvlan76              |
-      | ["spec"]["nodeName"]                                       | <%= cb.nodes[0].name %> |
+      | ["spec"]["nodeName"]                                       | "<%= cb.target_node %>" |
     Then the step should succeed
     And the pod named "pod2" becomes ready
     When I execute on the pod:
@@ -1178,7 +1178,7 @@ Feature: Multus-CNI related scenarios
     And evaluation of `@result[:response].match(/\h+:\h+:\h+:\h+:\h+:\h+/)[0]` is stored in the :pod2_net1_mac clipboard
     And the expression should be true> cb.pod2_net1_mac==cb.default_interface_mac
     And the expression should be true> !(cb.pod2_net1_ip==cb.pod1_net1_ip)
-
+    
   # @author weliang@redhat.com
   # @case_id OCP-28633
   @admin
