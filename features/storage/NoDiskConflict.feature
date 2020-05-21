@@ -42,6 +42,5 @@ Feature: NoDiskConflict
 
     Examples:
       | storage_type         | volume_name | path_to_file |
-      | gcePersistentDisk    | pdName      | gce/pod-NoDiskConflict-1.json              | # @case_id OCP-9927
       | awsElasticBlockStore | volumeID    | ebs/security/ebs-selinux-fsgroup-test.json | # @case_id OCP-9929
 

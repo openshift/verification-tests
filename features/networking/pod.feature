@@ -17,25 +17,6 @@ Feature: Pod related networking scenarios
     Then the output should contain "address already in use"
     """
 
-  # @author bmeng@redhat.com
-  # @case_id OCP-9802
-  @admin
-  Scenario: The user created docker container in openshift cluster should have outside network access
-    Given I select a random node's host
-    And I run commands on the host:
-      | docker run -td --name=test-container bmeng/hello-openshift |
-    Then the step should succeed
-    And I register clean-up steps:
-    """
-    I run commands on the host:
-      | docker rm -f test-container |
-    the step should succeed
-    """
-    When I run commands on the host:
-      | docker exec test-container curl -sIL www.redhat.com |
-    Then the step should succeed
-    And the output should contain "HTTP/1.1 200 OK"
-
   # @author yadu@redhat.com
   # @case_id OCP-10031
   @smoke
