@@ -1144,8 +1144,8 @@ Feature: Multus-CNI related scenarios
     # Create the net-attach-def via cluster admin
     Given I have a project
     When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/ipvlan-host-local.yaml" replacing paths:
-      | ["metadata"]["name"]      | myipvlan76 											      								            |
-      | ["metadata"]["namespace"] | <%= project.name %> 															                            |    
+      | ["metadata"]["name"]      | myipvlan76                                                                                                                                                              |
+      | ["metadata"]["namespace"] | <%= project.name %>                                                                                                                                                     |
       | ["spec"] ["config"]       | '{ "cniVersion": "0.3.1", "name": "myipvlan76", "type": "ipvlan", "master": "<%= cb.default_interface %>", "ipam": { "type": "host-local", "subnet": "22.2.2.0/24" } }' |
     Then the step should succeed
 
