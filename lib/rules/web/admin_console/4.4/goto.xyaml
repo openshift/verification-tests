@@ -292,6 +292,9 @@ goto_alertmanagerconfig_page:
   url: monitoring/alertmanagerconfig
 
 #cluster settings
+goto_cluster_detail_page:
+  url: settings/cluster
+  action: wait_box_loaded
 goto_cluster_operators:
   url: settings/cluster/clusteroperators
   action: wait_box_loaded
