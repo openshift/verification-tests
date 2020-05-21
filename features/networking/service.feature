@@ -42,42 +42,6 @@ Feature: Service related networking scenarios
       | Hello OpenShift |
 
   # @author yadu@redhat.com
-  # @case_id OCP-9977
-  @admin
-  @destructive
-  Scenario: Create service with external IP
-    Given master config is merged with the following hash:
-    """
-    networkConfig:
-      externalIPNetworkCIDRs:
-      - 10.5.0.0/24
-    """
-    And the master service is restarted on all master nodes
-    Given I have a project
-    And I wait up to 30 seconds for the steps to pass:
-    """
-    When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/caddy-docker.json  |
-    Then the step should succeed
-    """
-    And the pod named "caddy-docker" becomes ready
-    When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/externalip_service1.json |
-    Then the step should succeed
-    When I run the :get client command with:
-      | resource      | service          |
-      | resource_name | service-unsecure |
-    Then the step should succeed
-    And the output should contain:
-      | 10.5.0.1 |
-    Given I have a pod-for-ping in the project
-    When I execute on the pod:
-      | /usr/bin/curl | --connect-timeout | 4 | 10.5.0.1:27017 |
-    Then the step should succeed
-    And the output should contain:
-      | Hello-OpenShift |
-
-  # @author yadu@redhat.com
   # @case_id OCP-15032
   @admin
   Scenario: The openflow list will be cleaned after delete the services

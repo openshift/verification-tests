@@ -1,16 +1,4 @@
 Feature: Testing haproxy router
-
-  # @author zzhao@redhat.com
-  # @case_id OCP-9736
-  @admin
-  Scenario: HTTP response header should return for default haproxy 503
-    Given I switch to cluster admin pseudo user
-    And I use the router project
-    And all default router pods become ready
-    When I execute on the pod:
-      | /usr/bin/curl | -v  | 127.0.0.1:80 |
-    Then the output should contain "HTTP/1.0 503 Service Unavailable"
-
   # @author bmeng@redhat.com
   # @case_id OCP-11903
   @smoke

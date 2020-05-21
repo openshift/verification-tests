@@ -139,20 +139,6 @@ Feature: Testing for pv and pvc pre-bind feature
 
   # @author chaoyang@redhat.com
   # @author lxia@redhat.com
-  # @case_id OCP-9939
-  @admin
-  Scenario: PVC is bond to PV successfully when pvc is created first
-    Given I have a project
-    Then I create a dynamic pvc from "<%= BushSlicer::HOME %>/testdata/storage/nfs/claim-rwo.json" replacing paths:
-      | ["metadata"]["name"]         | mypvc                  |
-      | ["spec"]["storageClassName"] | sc-<%= project.name %> |
-    Then admin creates a PV from "<%= BushSlicer::HOME %>/testdata/storage/nfs/nfs-recycle-rwo.json" where:
-      | ["metadata"]["name"]         | pv-<%= project.name %> |
-      | ["spec"]["storageClassName"] | sc-<%= project.name %> |
-    And the "mypvc" PVC becomes bound to the "pv-<%= project.name %>" PV within 60 seconds
-
-  # @author chaoyang@redhat.com
-  # @author lxia@redhat.com
   @admin
   Scenario Outline: Prebound pv/pvc is availabe/pending due to requested pvc/pv prebound to other pv/pvc
     Given I have a project
