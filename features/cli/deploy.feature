@@ -242,9 +242,9 @@ Feature: deployment related features
   # @case_id OCP-10648
   Scenario: Rollback via CLI when previous version failed
     Given I have a project
-    When I run the :new_app client command with:
-      | app_repo | aosqe/hello-openshift |
-      | name     | mydc                  |
+    When I run the :create_deploymentconfig client command with:
+      | image | aosqe/hello-openshift |
+      | name  | mydc                  |
     Then the step should succeed
     And I wait until the status of deployment "mydc" becomes :complete
 
@@ -626,8 +626,9 @@ Feature: deployment related features
   # @case_id OCP-11221
   Scenario: Scale up when deployment running
     Given I have a project
-    When I run the :new_app client command with:
-      | docker_image   | <%= project_docker_repo %>openshift/deployment-example |
+    When I run the :create_deploymentconfig client command with:
+      | image | <%= project_docker_repo %>openshift/deployment-example |
+      | name  | deployment-example                                     |
     Then the step should succeed
     And I wait until the status of deployment "deployment-example" becomes :complete
     When I run the :rollout_latest client command with:
