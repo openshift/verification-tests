@@ -60,7 +60,7 @@ Feature: cluster monitoring related upgrade check
     And the output should contain:
       | Watchdog |
 
-    # curl -k -H "Authorization: Bearer $token" 'https://grafana.openshift-monitoring.svc:3000/api/search?folderIds=1
+    # curl -k -H "Authorization: Bearer $token" https://grafana.openshift-monitoring.svc:3000/api/health
     When I run the :exec admin command with:
       | n                | openshift-monitoring |
       | pod              | prometheus-k8s-0     |
@@ -68,10 +68,10 @@ Feature: cluster monitoring related upgrade check
       | oc_opts_end      |                      |
       | exec_command     | sh                   |
       | exec_command_arg | -c                   |
-      | exec_command_arg | curl -k -H "Authorization: Bearer <%= cb.sa_token %>" https://grafana.openshift-monitoring.svc:3000/api/search?folderIds=1 |
+      | exec_command_arg | curl -k -H "Authorization: Bearer <%= cb.sa_token %>" https://grafana.openshift-monitoring.svc:3000/api/health |
     Then the step should succeed
     And the output should contain:
-      | "title": "Prometheus" |
+      | ok |
     When I run the :oadm_top_node admin command
     Then the output should contain:
       | CPU(cores) |
