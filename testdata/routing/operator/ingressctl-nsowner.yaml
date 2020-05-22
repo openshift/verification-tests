@@ -1,0 +1,21 @@
+kind: IngressController
+apiVersion: operator.openshift.io/v1
+metadata:
+  name: nsowner
+  namespace: openshift-ingress-operator
+spec:
+  defaultCertificate:
+    name: router-certs-default
+  domain: nsowner.example.com
+  replicas: 1
+  endpointPublishingStrategy:
+    type: HostNetwork
+  routeAdmission:
+    namespaceOwnership: InterNamespaceAllowed
+  nodePlacement:
+    nodeSelector:
+      matchLabels:
+        beta.kubernetes.io/os: linux
+    tolerations:
+    - effect: NoSchedule
+      operator: Exists
