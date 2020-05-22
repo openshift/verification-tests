@@ -127,10 +127,37 @@ check_metric_query_result:
 check_metric_query_chart:
   element:
     selector:
-      xpath: //div[@class='odc-metrics-chart' ]//div[@class='query-browser__zoom']
+      xpath: //div[@class='query-browser__zoom']
     timeout: 120
 check_metric_query_table_text:
   element:
     selector:
       xpath: //table[@aria-label='query results table']//td[contains(text(),'<table_text>')]
     timeout: 120
+
+perform_metric_query_drop_down_admin:
+  action: click_metrics_query_dropdown_admin
+  action: choose_metrics_query
+  action: submit_changes
+click_metrics_query_dropdown_admin:
+  element:
+    selector:
+      xpath: //button[@id='metrics-dropdown']
+    op: click
+perform_metric_query_textarea:
+  params:
+    metrics: <metrics_name>
+  action: click_clear_query_button
+  action: set_query_input_text_area_only
+  action: submit_changes
+set_query_input_text_area_only:
+  elements:
+  - selector: 
+      xpath: //div[@class='co-m-pane__body']//textarea
+    op: send_keys <metrics>
+    type: textarea
+click_clear_query_button:
+  element:
+    selector:
+      xpath: //button[@aria-label='Clear Query']
+    op: click
