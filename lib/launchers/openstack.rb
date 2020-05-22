@@ -801,6 +801,17 @@ module BushSlicer
       return res[:parsed]["network"]
     end
 
+    # for example, update the name:
+    # update_network("<network_id>", name; "xxx")
+    def update_network(network_id, **kargs)
+      payload = {
+        network: kargs
+      }
+      res = self.rest_run(self.os_network_url + "/v2.0/networks/" + network_id, "PUT", payload, self.os_token)
+      raise res[:response] unless res[:success]
+      return res
+    end
+
     def delete_network(network_id)
       res = self.rest_run(self.os_network_url + "/v2.0/networks/" + network_id, "DELETE", {}, self.os_token)
       raise res[:response] unless res[:success]
@@ -818,6 +829,17 @@ module BushSlicer
       res = self.rest_run(self.os_network_url + "/v2.0/subnets", "POST", payload, self.os_token)
       raise res[:response] unless res[:success]
       return res[:parsed]["subnet"]
+    end
+
+    # for example, update the name:
+    # update_subnet("<network_id>", name: "xxx")
+    def update_subnet(subnet_id, **kargs)
+      payload = {
+        subnet: kargs
+      }
+      res = self.rest_run(self.os_network_url + "/v2.0/subnets/" + subnet_id, "PUT", payload, self.os_token)
+      raise res[:response] unless res[:success]
+      return res
     end
 
     def delete_subnet(subnet_id)
