@@ -225,7 +225,7 @@ check_extendedValidationFailed_in_conditions_table:
   params:
     status: Failed
     reason: ExtendedValidationFailed
-    message: "certificate signed by unknown"
+    message: "failed to parse CA certificate"
   action: check_conditions_table
 check_conditions_table:
   elements:

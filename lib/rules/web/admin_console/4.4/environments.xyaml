@@ -91,8 +91,6 @@ check_env_editor_disabled:
       xpath: //div[contains(@class,'pairs-list__name-field')]/input[@disabled]
   - selector:
       xpath: //div[contains(@class,'pairs-list__value-field')]/input[@disabled]
-  - selector:
-      xpath: //div[contains(@class,'pairs-list__value-ro-field')]/input[@disabled]
 check_alert_title:
   element:
     selector:
