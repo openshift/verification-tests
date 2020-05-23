@@ -19,7 +19,7 @@ Feature: dockerbuild.feature
     And the output should contain "ContextDir:"
 
   # @author wzheng@redhat.com
-  # @case_id OCP-11109
+  # @case_id OCP-30854
   Scenario: Docker build with dockerImage with specified tag
     Given I have a project
     When I run the :new_app client command with:
