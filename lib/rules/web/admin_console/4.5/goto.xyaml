@@ -299,9 +299,6 @@ goto_one_hpa_page:
   url: k8s/ns/<project_name>/horizontalpodautoscalers/<hpa_name>
 
 #cluster settings
-goto_cluster_detail_page:
-  url: settings/cluster
-  action: wait_box_loaded
 goto_cluster_operators:
   url: settings/cluster/clusteroperators
   action: wait_box_loaded
