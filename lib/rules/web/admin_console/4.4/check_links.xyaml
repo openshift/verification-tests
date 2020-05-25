@@ -27,10 +27,11 @@ check_logo_in_about_modal:
   action: click_about_button
   action: check_brand_in_modal
 click_about_button:
-  params:
-    button_text: About
   action: click_help_button
-  action: click_button_text
+  element:
+    selector:
+      xpath: //a[contains(.,'About')]
+    op: click
 check_dedicated_logo:
   params:
     logo_source: static/assets/openshift-dedicated-logo.svg
