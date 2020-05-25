@@ -2,6 +2,21 @@ click_view_alerts_button:
   params:
     button_text: View alerts
   action: click_button
+check_cluster_version_in_details_card:
+  params:
+    key: version
+    value: <version>
+  action: check_resource_details_key_and_value
+check_cluster_api_in_details_card:
+  params:
+    key: API
+    value: <api>
+  action: check_resource_details_key_and_value
+check_cluster_provider_in_details_card:
+  params:
+    key: Provider
+    value: <provider>
+  action: check_resource_details_key_and_value
 # grafana dashboards
 check_grafana_dashboard_body_loaded:
   element:
