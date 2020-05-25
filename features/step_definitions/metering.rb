@@ -1,23 +1,27 @@
 # helper step for metering scenarios
 require 'ssl'
+
 # For metering automation, we just install once and re-use the installation
 # unless the scenarios are for testing installation
 # checks that metering service is already installed
-Given /^metering service has been installed successfully(?: using (ansible|shell script|OLM))?$/ do |method|
+# shell => ./bin/hack.sh
+# OLM   => ./bin/deploy-metering
+# OperatorHub => Openshift Webconsole  <<  default method
+Given /^metering service has been installed successfully(?: using (OLM|OperatorHub))?$/ do |method|
   ensure_admin_tagged
+  method ||= 'OperatorHub'
   namespace = "openshift-metering"  # set it as default
   step %Q/I switch to cluster admin pseudo user/
+  user.cli_exec(:create_namespace, name: namespace)
   # NOTE: we need to change project context as admin
   step %Q/I use the "#{namespace}" project/
   cb[:metering_resource_type] = "meteringconfig"
-  unless metering_config('operator-metering').exists?
+  cb[:metering_namespace] = project(namespace)
+  unless metering_config('openshift-metering').exists?
     # default to OLM install
-    method ||= "OLM"
+    method ||= "OperatorHub"
     case method
-    when "shell script"
-      namespace = "metering"
-      metering_name = "operator-metering"
-    when "OLM"
+    when "OperatorHub", "OLM"
       namespace = "openshift-metering"
       metering_name = "operator-metering"
     end
@@ -27,19 +31,17 @@ Given /^metering service has been installed successfully(?: using (ansible|shell
       raise "service openshift-monitoring is a pre-requisite for #{namespace}"
     end
   else
-    cb[:metering_namespace] = project(namespace)
     metering_name = metering_config.raw_resource['metadata']['name']
   end
 
   # change project context
-  unless cb.metering_namespace
+  unless metering_config(namespace).exists?
     case method
     when "shell script"
       step %Q/metering service is installed using shell script/
-    when "OLM"
+    when "OLM", "OperatorHub"
       step %Q/the metering service is installed using OLM/
     end
-    cb.metering_namespace = project(namespace)
   end
   step %Q/all metering related pods are running in the "#{cb.metering_namespace.name}" project/
   step %Q/I wait for the "#{metering_name}" #{cb.metering_resource_type} to appear/
@@ -241,37 +243,35 @@ Given /^metering service is (installed|uninstalled) using shell script$/ do | op
   raise "#{cb.metering_namespace} #{op} unsuccessfully" unless res[:success]
 end
 
-# install metering via OLM,
-Given /^the#{OPT_QUOTED} metering service is installed(?: to $QUOTED)? using OLM$/ do | metering_ns |
+# install metering via OLM (via OperatorHub)
+Given /^the metering service is installed(?: to #{OPT_QUOTED})? using OLM$/ do | metering_ns |
   ensure_admin_tagged
   ensure_destructive_tagged
-
   # 1. create the metering namespace
   metering_ns ||= "openshift-metering"
-  project(metering_ns)
   step %Q/I switch to cluster admin pseudo user/
   @result = user.cli_exec(:create_namespace, name: metering_ns)
-  # prep for OLM need to define configs via YAML
-  # 1. metering-catalogsourceconfig.yaml
-  catalog_source_config = "https://raw.githubusercontent.com/operator-framework/operator-metering/master/manifests/deploy/openshift/olm/metering.catalogsourceconfig.yaml"
-  # 2. metering-operatorgroup.yaml
-  operator_group = "https://raw.githubusercontent.com/operator-framework/operator-metering/master/manifests/deploy/openshift/olm/metering.operatorgroup.yaml"
-  # 3. metering-subscription.yaml
-  subscription = "https://raw.githubusercontent.com/operator-framework/operator-metering/master/manifests/deploy/openshift/olm/metering.subscription.yaml"
-  # XXX: this will need to be updted after 4.2 is released to the wild
-  metering_crd = "https://raw.githubusercontent.com/operator-framework/operator-metering/release-4.1/manifests/metering-config/default.yaml"
-
-  # should really get the namespace dynamically
-  @result = user.cli_exec(:apply, f: catalog_source_config, n: 'openshift-marketplace')
-  @result = user.cli_exec(:apply, f: operator_group, n: project.name)
-  @result = user.cli_exec(:apply, f: subscription, n: project.name)
-  # wait for initial metering pod to become running first and then apply CRD
+  step %Q(I set operator channel)
+  cb['metering_namespace'] = project(metering_ns)
+  step %Q(the first user is cluster-admin)
+  step %Q(I switch to the first user)
+  step %Q(I open admin console in a browser)
+  step %Q/I perform the :goto_operator_subscription_page web action with:/, table(%{
+    | package_name     | metering-ocp        |
+    | catalog_name     | qe-app-registry     |
+    | target_namespace | <%= project.name %> |
+  })
+  step %Q/I perform the :set_custom_channel_and_subscribe web action with:/, table(%{
+    | update_channel    | <%= cb.channel %> |
+    | install_mode      | OwnNamespace      |
+    | approval_strategy | Automatic         |
+  })
   step %Q/a pod becomes ready with labels:/, table(%{
     | app=metering-operator |
   })
-
-  @result = user.cli_exec(:apply, f: metering_crd, n: project.name)
-  raise "OLM install of metering failed" unless @result[:success]
+  step %Q(I run oc create as admin over ERB test file: metering/configs/meteringconfig_hdfs.yaml)
+  step %Q/all metering related pods are running in the project/
+  step %Q/all reportdatasources are importing from Prometheus/
 end
 
 # XXX: currently OLM uninstall is TBD, we uninstall by removing the namespace
@@ -292,7 +292,7 @@ Given /^all reportdatasources are importing from Prometheus$/ do
   data_sources  = BushSlicer::ReportDataSource.list(user: user, project: project)
   # valid reportdatasources are those with a prometheusMetricsImporter query statement
   dlist = data_sources.select{ |d| d.prometheus_metrics_importer_query}
-  seconds = 240   # after initial installation it takes about 2-3 minutes to initiate Prometheus sync
+  seconds = 600   # after initial installation it takes about 2-3 minutes to initiate Prometheus sync
   success = wait_for(seconds) {
     dlist.all? { |ds| report_data_source(ds.name).last_import_time(cached: false) }
   }
@@ -411,3 +411,65 @@ When /^I generate a metering report with:$/ do |table|
     report(name).wait_till_running(user: user)
   end
 end
+
+# verify all metering pods are in the RUNNING state
+# expected pods are listed here:
+# https://raw.githubusercontent.com/openshift-qe/output_references/master/metering/pod_labels.out
+# the longest chain of deps is metering -> presto -> hive & storage (hdfs, s3, nooba, etc.)
+# so metering can't be ready until presto is ready
+# presto can't be ready until hive is ready
+# and metering can't be ready until presto can write to storage.
+#
+Given /^all metering related pods are running in the#{OPT_QUOTED} project$/ do | proj_name |
+  ensure_destructive_tagged
+  target_proj = proj_name.nil? ? "openshift-metering" : proj_name
+  step %Q/I switch to cluster admin pseudo user/
+  project(target_proj)
+  step %Q/a pod becomes ready with labels:/, table(%{
+    | app=metering-operator |
+  })
+
+  if metering_config('openshift-metering').hive_type == 'hdfs'
+    step %Q/a pod becomes ready with labels:/, table(%{
+      | hdfs=datanode,statefulset.kubernetes.io/pod-name=hdfs-datanode-0 |
+    })
+    step %Q/a pod becomes ready with labels:/, table(%{
+      | hdfs=datanode,statefulset.kubernetes.io/pod-name=hdfs-datanode-1 |
+    })
+    step %Q/a pod becomes ready with labels:/, table(%{
+      | hdfs=datanode,statefulset.kubernetes.io/pod-name=hdfs-datanode-2 |
+    })
+  end
+
+  step %Q/a pod becomes ready with labels:/, table(%{
+    | hive=metastore,statefulset.kubernetes.io/pod-name=hive-metastore-0 |
+  })
+
+  step %Q/a pod becomes ready with labels:/, table(%{
+    | hive=server,statefulset.kubernetes.io/pod-name=hive-server-0 |
+  })
+
+  step %Q/a pod becomes ready with labels:/, table(%{
+    | app=presto |
+  })
+  step %Q/a pod becomes ready with labels:/, table(%{
+    | app=reporting-operator |
+  })
+
+end
+
+# allow user to override the operator channel by setting clipboard cb.channel
+# @return cb.channel set by priority
+# 1. in the step  2. environment OPERATOR_CHANNEL
+# 3. cluster_version('version')
+And /^I set operator channel(?: to#{OPT_QUOTED})?$/ do | channel |
+  if channel
+    cb.channel = channel
+  elsif ENV['OPERATOR_CHANNEL']
+    cb.channel = ENV['OPERATOR_CHANNEL']
+  else
+    cb.channel = cluster_version('version').version.split('-').first.to_f
+  end
+  logger.info("Using operator channel: #{cb.channel}")
+end
+
