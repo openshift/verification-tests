@@ -6,7 +6,7 @@ metadata:
   name: hello-pod
 spec:
   containers:
-    - image: "docker.io/deshuai/hello-pod:latest"
+    - image: "quay.io/openshifttest/hello-pod:latest"
       imagePullPolicy: IfNotPresent
       name: hello-pod
       ports:
