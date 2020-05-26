@@ -114,7 +114,6 @@ check_community_operator_description_on_overlay:
     description: This is a community provided operator
   action: click_checkbox_from_provider_type
   action: open_first_card_in_overlay
-  action: submit_changes
   action: check_operator_description_on_overlay
   action: click_close_icon
   action: click_checkbox_from_provider_type
