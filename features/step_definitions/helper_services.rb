@@ -177,7 +177,7 @@ Given /^I have an ssh-git service in the(?: "([^ ]+?)")? project$/ do |project_n
     raise "project #{project_name} does not exist"
   end
 
-  @result = user.cli_exec(:run, name: "git-server", image: "aosqe/ssh-git-server-openshift")
+  @result = user.cli_exec(:create, f: "#{ENV['BUSHSLICER_HOME']}/testdata/templates/ssh-git/ssh-git-dc.yaml")
   raise "cannot run the ssh-git-server pod" unless @result[:success]
 
   @result = user.cli_exec(:set_probe, resource: "dc/git-server", readiness: true, open_tcp: "2022")
@@ -188,7 +188,7 @@ Given /^I have an ssh-git service in the(?: "([^ ]+?)")? project$/ do |project_n
 
   # wait to become available
   @result = BushSlicer::Pod.wait_for_labeled("deployment-config=git-server",
-                                            "run=git-server",
+                                            "name=git-server",
                                             count: 1,
                                             user: user,
                                             project: project,
