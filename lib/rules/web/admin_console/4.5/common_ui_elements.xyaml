@@ -96,7 +96,7 @@ check_button_enabled:
   element:
     selector:
       xpath: //button[contains(., '<button_text>') and not(@disabled)]
-check_button_text:
+check_button_contains_text:
   element:
     selector:
       xpath: //button[contains(., '<button_text>')]

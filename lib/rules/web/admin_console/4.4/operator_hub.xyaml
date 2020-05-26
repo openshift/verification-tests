@@ -183,3 +183,38 @@ open_edit_form_view:
   params:
     button_text: Edit Form
   action: click_button
+select_installed_namespace:
+  action: click_project_list_dropdown
+  action: choose_project_from_dropdown_list
+check_all_namespace_installation_mode_with_recommended_ns:
+  params:
+    button_text: <recommended_ns>
+  action: check_button_contains_text
+check_all_namespace_installation_mode_without_recommended_ns:
+  params:
+    disabled_radio_text: OwnNamespace
+    checked_radio_text: AllNamespaces
+  action: check_disabled_radio_input
+  action: check_checked_radio_input
+check_specific_namespace_installation_mode_with_recommended_ns:
+  params:
+    disabled_radio_text: AllNamespaces
+    checked_radio_text: <recommended_ns>
+  action: check_disabled_radio_input
+  action: check_checked_radio_input
+check_specific_namespace_installation_mode_without_recommended_ns:
+  params:
+    disabled_radio_text: AllNamespaces
+    checked_radio_text: OwnNamespace
+  action: check_disabled_radio_input
+  action: check_checked_radio_input
+enable_cluster_monitoring:
+  element:
+    selector:
+      xpath: //input[contains(@type,'checkbox') and contains(@id,'enable-monitoring-checkbox')]
+    op: click
+click_radio_to_pick_ns:
+  params:
+    text: Pick an existing namespace
+  action: click_radio_input_by_text
+
