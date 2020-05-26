@@ -104,11 +104,10 @@ Given /^I perform the HTTP request on the ES pod(?: with labels #{QUOTED})?:$/ d
     raise "Missing parameter '#{param}'" unless opts[param]
   end
   # if user specify token, curl command should use it instead of usering the system cert
-
   if opts[:token]
-    #query_opts = "-H \"Authorization: Bearer #{opts[:token]}\""
-    query_opts = "-H \"Authorization: Bearer #{opts[:token]}\" -H \"X-Forwarded-For: 127.0.0.1\""
-    query_cmd = "curl -sk -X  #{opts[:op]} #{query_opts} 'https://localhost:9200/#{opts[:relative_url]}'"
+    query_url = service('elasticsearch').url
+    query_opts = "-H \"Authorization: Bearer #{opts[:token]}\" -H \"Content-Type: application/json\""
+    query_cmd = "curl -sk #{query_opts} 'https://#{query_url}/#{opts[:relative_url]}' -X #{opts[:op]}"
   else
     query_cmd = "es_util '--query=#{opts[:relative_url]}' -X #{opts[:op]}"
   end
