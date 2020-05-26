@@ -71,7 +71,7 @@ module BushSlicer
     end
 
     def self.init_gce(env)
-      token_json = env.nodes[0].host.exec_admin("curl -sS 'http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token' -H 'Metadata-Flavor: Google'")[:response]
+      token_json = env.nodes[0].host.exec_admin("curl -sS 'http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token' -H 'Metadata-Flavor: Google'")[:stdout]
 
       return GCE.new(:token_json => token_json, :auth_type => "token")
     end
