@@ -797,3 +797,56 @@ Feature: deployment related features
       | - type: ConfigChange   |
       | message: config change |
 
+  # @author yinzhou@redhat.com
+  # @case_id OCP-31200
+  Scenario: A/B Deployment
+    Given the master version >= "4.5"
+    Given I have a project
+    When I run the :new_app client command with:
+      | docker_image         | <%= project_docker_repo %>openshift/deployment-example |
+      | name                 | ab-example-a                                           |
+      | as_deployment_config | true                                                   |
+      | l                    | ab-example=true                                        |
+      | env                  | SUBTITLE=shardA                                        |
+    Then the step should succeed
+    When I run the :expose client command with:
+      | resource      | deploymentconfig |
+      | resource_name | ab-example-a     |
+      | name          | ab-example       |
+      | selector      | ab-example=true  |
+    Then the step should succeed
+    When I expose the "ab-example" service
+    Then I wait for a web server to become available via the "ab-example" route
+    And the output should contain "shardA"
+    When I run the :new_app client command with:
+      | docker_image         | <%= project_docker_repo %>openshift/deployment-example |
+      | name                 | ab-example-b                                           |
+      | as_deployment_config | true                                                   |
+      | l                    | ab-example=true                                        |
+      | env                  | SUBTITLE=shardB                                        |
+    Then the step should succeed
+    Then I run the :scale client command with:
+      | resource | deploymentconfig |
+      | name     | ab-example-a     |
+      | replicas | 0                |
+    Then the step should succeed
+    Given I wait until number of replicas match "0" for replicationController "ab-example-a-1"
+    When I use the "ab-example" service
+    Then I wait for a web server to become available via the "ab-example" route
+    And the output should contain "shardB"
+    Then I run the :scale client command with:
+      | resource | deploymentconfig |
+      | name     | ab-example-b     |
+      | replicas | 0                |
+    Then the step should succeed
+    Then I run the :scale client command with:
+      | resource | deploymentconfig |
+      | name     | ab-example-a     |
+      | replicas | 1                |
+    Then the step should succeed
+    Given I wait until number of replicas match "0" for replicationController "ab-example-b-1"
+    Given I wait until number of replicas match "1" for replicationController "ab-example-a-1"
+    When I use the "ab-example" service
+    Then I wait for a web server to become available via the "ab-example" route
+    And the output should contain "shardA"
+
