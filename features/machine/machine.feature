@@ -128,7 +128,7 @@ Feature: Machine features testing
 
     Given I clone a machineset and name it "machineset-clone-27609"
     Then as admin I successfully merge patch resource "machineset/machineset-clone-27609" with:
-      | {"spec":{"template": {"spec":{"providerSpec":{"value":{"publicIP": "true"}}}}}} |
+      | {"spec":{"template": {"spec":{"providerSpec":{"value":{"publicIP": true}}}}}} |
     And I scale the machineset to +2
     Then the machineset should have expected number of running machines
 
