@@ -1133,28 +1133,26 @@ Feature: Multus-CNI related scenarios
   Scenario: Create pod with Multus ipvlan CNI plugin	
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
-    And I store all worker nodes to the :nodes clipboard
     And the default interface on nodes is stored in the :default_interface clipboard
     #Storing default interface mac address for comparison later with pods macs
-    Given I use the "<%= cb.nodes[0].name %>" node
-    And I run commands on the host:
+    Given I run commands on the host:
       | ip addr show <%= cb.default_interface %> |
     Then the step should succeed
     And evaluation of `@result[:response].match(/\h+:\h+:\h+:\h+:\h+:\h+/)[0]` is stored in the :default_interface_mac clipboard
     # Create the net-attach-def via cluster admin
     Given I have a project
     When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/ipvlan-host-local.yaml" replacing paths:
-      | ["metadata"]["name"]      | myipvlan76 											      								            |
-      | ["metadata"]["namespace"] | <%= project.name %> 															                            |    
+      | ["metadata"]["name"]      | myipvlan76                                                                                                                                                              |
+      | ["metadata"]["namespace"] | <%= project.name %>                                                                                                                                                     |
       | ["spec"] ["config"]       | '{ "cniVersion": "0.3.1", "name": "myipvlan76", "type": "ipvlan", "master": "<%= cb.default_interface %>", "ipam": { "type": "host-local", "subnet": "22.2.2.0/24" } }' |
     Then the step should succeed
 
     #Creating various pods and making sure their mac matches to default inf and they get unique IPs assigned
     #Creating pod1 absorbing above net-attach-def
     When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
-      | ["metadata"]["name"]                                       | pod1                    |
-      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | myipvlan76              |
-      | ["spec"]["nodeName"]                                       | <%= cb.nodes[0].name %> |
+      | ["metadata"]["name"]                                       | pod1             |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | myipvlan76       |
+      | ["spec"]["nodeName"]                                       | <%= node.name %> |
     Then the step should succeed
     And the pod named "pod1" becomes ready
     When I execute on the pod:
@@ -1166,9 +1164,9 @@ Feature: Multus-CNI related scenarios
     
     #Creating pod2 absorbing above net-attach-def
     When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
-      | ["metadata"]["name"]                                       | pod2                    |
-      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | myipvlan76              |
-      | ["spec"]["nodeName"]                                       | <%= cb.nodes[0].name %> |
+      | ["metadata"]["name"]                                       | pod2             |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | myipvlan76       |
+      | ["spec"]["nodeName"]                                       | <%= node.name %> |
     Then the step should succeed
     And the pod named "pod2" becomes ready
     When I execute on the pod:
