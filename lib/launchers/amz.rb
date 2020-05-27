@@ -13,7 +13,7 @@ module BushSlicer
 
     attr_reader :config
 
-    def initialize(access_key: nil, secret_key: nil, service_name: nil)
+    def initialize(access_key: nil, secret_key: nil, service_name: nil, region: nil)
       service_name ||= :AWS
       @config = conf[:services, service_name]
       @can_terminate = true
@@ -40,13 +40,13 @@ module BushSlicer
       end
 
       raise "no readable credentials file or external credentials config found" unless awscred
-
       Aws.config.update( config[:config_opts].merge({
         credentials: Aws::Credentials.new(
           awscred["AWSAccessKeyId"],
           awscred["AWSSecretKey"]
         )
       }) )
+      Aws.config.update( config[:config_opts].merge({region: region})) if region
     end
 
     private def client_ec2
@@ -281,6 +281,17 @@ module BushSlicer
       }).to_a
     end
 
+    # @return [Array<Instance>]
+    def get_instances_by_status(status)
+      res = ec2.instances({
+        filters: [
+          {
+            name: "instance-state-name",
+            values: [status]
+          },
+        ]
+      }).to_a
+    end
     # @param [String] ami_id the EC2 AMI-ID
     # @return [Array<String>, Array<Object>] the array of IP address with array of instances object
     def get_instance_ip_by_ami_id(ami_id)
@@ -443,6 +454,25 @@ module BushSlicer
         return volume.state
     end
 
+    # @return [Array <Region>]
+    def get_regions
+      client_ec2.describe_regions.to_a[0][0]
+    end
+
+    def instance_uptime(instance)
+      ((Time.now.utc - instance.launch_time) / (60 * 60)).round(2)
+    end
+
+    def instance_name(instance)
+      instance.tags.select { |i| i['value'] if i['key'] == "Name" }.first['value']
+    end
+    # @return group of instances that belong to the same `owned`
+    def instance_owned(instance)
+      res = instance.tags.select { |i| i['key'] if i['value'] == "owned" }
+      if res.count > 0
+        res.first['key'].split('/').last
+      end
+    end
 
     # returns ssh connection
     def get_host(instance, host_opts={}, wait: false)

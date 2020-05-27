@@ -1,19 +1,31 @@
 Given /^the azure file secret name and key are stored to the clipboard$/ do
   ensure_admin_tagged
-  cb.dynamic_pvc_name = rand_str(8, :dns)
-  cb.storage_class_name = rand_str(8, :dns)
-  azsac = conf[:services, :azure, :pv_storage_account]
-  step %Q{admin creates a StorageClass from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/azure-file/azfsc-ACONLY.yaml" where:}, table(%{
-    | ["metadata"]["name"]             | <%= cb.storage_class_name %> |
-    | ["parameters"]["storageAccount"] | #{azsac}                     |
+  random_name = rand_str(8, :dns)
+  step %Q{admin creates a StorageClass from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/azure-file/azfsc-NOPAR.yaml" where:}, table(%{
+    | ["metadata"]["name"]  | sc-#{random_name} |
+    | ["volumeBindingMode"] | Immediate         |
     })
   step %Q/the step should succeed/
-  step %Q{I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/azure/azpvc-sc.yaml" replacing paths:}, table(%{
-    | ["metadata"]["name"]         | <%= cb.dynamic_pvc_name %>   |
-    | ["spec"]["storageClassName"] | <%= cb.storage_class_name %> |
+  step %Q/I ensure "pvc-#{random_name}" pvc is deleted after scenario/
+  step %Q{I create a dynamic pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pvc.json" replacing paths:}, table(%{
+    | ["metadata"]["name"]         | pvc-#{random_name} |
+    | ["spec"]["storageClassName"] | sc-#{random_name}  |
     })
   step %Q/the step should succeed/
-  step %Q/the "<%= cb.dynamic_pvc_name %>" PVC becomes :bound within 120 seconds/
-  cb['asan'] = secret("azure-storage-account-#{azsac}-secret").raw_value_of("azurestorageaccountname")
-  cb['asak'] = secret("azure-storage-account-#{azsac}-secret").raw_value_of("azurestorageaccountkey")
+  step %Q/the "pvc-#{random_name}" PVC becomes :bound/
+
+  step %Q{I run the :get admin command with:}, table(%{
+    | resource      | pv                             |
+    | resource_name | <%= pvc.volume_name %>         |
+    | template      | {{.spec.azureFile.secretName}} |
+  })
+  step %Q/the step should succeed/
+  step %Q/evaluation of `@result[:response]` is stored in the :secretName clipboard/
+  step %Q{I run the :get admin command with:}, table(%{
+    | resource      | pv                            |
+    | resource_name | <%= pvc.volume_name %>        |
+    | template      | {{.spec.azureFile.shareName}} |
+  })
+  step %Q/the step should succeed/
+  step %Q/evaluation of `@result[:response]` is stored in the :shareName clipboard/
 end

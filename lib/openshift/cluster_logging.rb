@@ -1,4 +1,6 @@
 # represent a clusterlogging object
+require 'openshift/project_resource'
+
 module BushSlicer
   class ClusterLogging < ProjectResource
     RESOURCE = "clusterloggings"
@@ -157,9 +159,24 @@ module BushSlicer
       end
     end
 
+    private def collection_spec(user: nil, quiet: false, cached: false)
+      raw_resource(user: user, cached: cached, quiet: quiet).dig('spec', 'collection')
+    end
+
+    private def log_store_spec(user: nil, quiet: false, cached: false)
+      raw_resource(user: user, cached: cached, quiet: quiet).dig('spec', 'logStore')
+    end
+
+    private def curation_spec(user: nil, quiet: false, cached: false)
+      raw_resource(user: user, cached: cached, quiet: quiet).dig('spec', 'curation')
+    end
+
+    private def visualization_spec(user: nil, quiet: false, cached: false)
+      raw_resource(user: user, cached: cached, quiet: quiet).dig('spec', 'visualization')
+    end
+
     def collection_type(user: nil, quiet: false, cached: false)
-      rr = raw_resource(user: user, cached: cached, quiet: quiet)
-      return rr.dig('spec', 'collection', 'logs', 'type')
+      return collection_spec(user: user, cached: cached, quiet: quiet).dig('logs', 'type')
     end
 
     def management_state(user: nil, quiet: false, cached: false)
@@ -168,13 +185,11 @@ module BushSlicer
     end
 
     def redundancy_policy(user: nil, quiet: false, cached: false)
-      rr = raw_resource(user: user, cached: cached, quiet: quiet)
-      return rr.dig('spec', 'logStore', 'elasticsearch', 'redundancyPolicy')
+      return log_store_spec(user: user, cached: cached, quiet: quiet).dig('elasticsearch', 'redundancyPolicy')
     end
 
     def logstore_storage(user: nil, quiet: false, cached: false)
-      rr = raw_resource(user: user, cached: cached, quiet: quiet)
-      return rr.dig('spec', 'logStore', 'elasticsearch', 'storage')
+      return log_store_spec(user: user, cached: cached, quiet: quiet).dig('elasticsearch', 'storage')
     end
 
     def logstore_storage_class_name(user: nil, cached: false, quiet: false)
@@ -186,8 +201,11 @@ module BushSlicer
     end
 
     def logstore_node_count(user: nil, cached: false, quiet: false)
-      rr = raw_resource(user: user, cached: cached, quiet: quiet)
-      return rr.dig('spec', 'logStore', 'elasticsearch', 'nodeCount')
+      return log_store_spec(user: user, cached: cached, quiet: quiet).dig('elasticsearch', 'nodeCount')
+    end
+
+    def curation_schedule(user: nil, cached: false, quiet: true)
+      return curation_spec(user: user, cached: cached, quiet: quiet).dig('curator', 'schedule')
     end
 
   end

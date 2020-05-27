@@ -1,0 +1,88 @@
+create_custom_resource:
+  params:
+    button_text: Create
+  action: click_provided_apis_of_operators
+  action: click_button
+click_provided_apis_of_operators:
+  element:
+    selector:
+      xpath: //a[contains(.,'<api>')]
+    op: click
+    timeout: 60
+create_catalog_source:
+  params:
+    button_text: Create Catalog Source
+    button_id: catalog-source-namespace
+    radio_text: 1
+  action: goto_catalog_source_page
+  action: click_button
+  action: input_catalog_source_name
+  action: input_display_name
+  action: input_publisher_name
+  action: input_image
+  action:
+    if_param: item
+    ref:
+    - click_radio_input
+    - select_resource_item
+  action: submit_changes
+input_catalog_source_name:
+  params:
+    input_field_id: catalog-source-name
+    input_value: <catalog_source_name>
+  action: set_input_value
+input_display_name:
+  params:
+    input_field_id: catalog-source-display-name
+    input_value: <display_name>
+  action: set_input_value
+input_publisher_name:
+  params:
+    input_field_id: catalog-source-publisher
+    input_value: <publisher_name>
+  action: set_input_value
+input_image:
+  params:
+    input_field_id: catalog-source-image
+    input_value: <image>
+  action: set_input_value
+clear_custom_resource_name_in_form:
+  element:
+    selector:
+      id: metadata.name
+    type: input
+  scripts:
+    - command: |
+        document.querySelector("input[id$='name']").value = '';
+        return document.querySelector("input[id$='name']").value == '';
+      expect_result: true
+check_error_message_for_missing_required_name:
+  params:
+    content: name or generateName is required
+  action: check_page_contains
+check_quay_image_security_exists_on_dashboard:
+  element:
+    selector: &quay_image_security
+      xpath: //button[contains(text(),'Quay Image Security')]
+click_quay_image_security_button:
+  element:
+    selector:
+      <<: *quay_image_security
+    op: click
+check_quay_image_security_popup:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'co-overview-status')]/div[text()='Severity']/following-sibling::div[text()='Fixable']
+  - selector:
+      xpath: //div[contains(@class,'co-overview-status__text--bold') and contains(.,'<severity>')]
+  action: check_link_and_text
+check_affected_pods_tab:
+  params:
+    tab_name: Affected Pods
+  action: check_tab
+uninstall_operator_on_console:
+  params:
+    button_text: Uninstall Operator
+  action: click_resource_action_icon
+  action: click_button
+  action: submit_changes

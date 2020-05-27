@@ -1,16 +1,14 @@
-login_uhc_console:
-  url: /beta/openshift
-  action: login_uhc_sequence
-login_uhc_sequence:
-  action: login_uhc_page_loaded
-  action: login_uhc_portal
+--- # log in the ocm portal
+login_ocm_sequence:
+  action: login_ocm_page_loaded
+  action: login_ocm_portal
 
-login_uhc_page_loaded:
+login_ocm_page_loaded:
   element:
     selector:
       css: "#kc-form-login, #password, #username"
     timeout: 30
-login_uhc_portal:
+login_ocm_portal:
   elements:
     - selector:
         id: username

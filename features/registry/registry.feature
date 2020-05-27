@@ -6,7 +6,8 @@ Feature: Testing registry
   @destructive
   Scenario: Prune images by command oadm_prune_images
     Given cluster role "system:image-pruner" is added to the "first" user
-    And default registry service ip is stored in the :registry_ip clipboard
+    Given I enable image-registry default route
+    Given default image registry route is stored in the :registry_ip clipboard
     And I have a project
     When I run the :policy_add_role_to_user client command with:
       | role            | registry-admin   |
@@ -70,3 +71,55 @@ Feature: Testing registry
     And the output should match:
       | Image Size:.* |
 
+  # @author xiuwang@redhat.com
+  # @case_id OCP-18994
+  @admin
+  Scenario: Copy image to another tag via 'oc image mirror'
+    Given I have a project
+    Given docker config for default image registry is stored to the :dockercfg_file clipboard
+    Then I run the :image_mirror client command with:
+      | source_image | <%= cb.integrated_reg_ip %>/openshift/ruby:2.5                 |
+      | dest_image   | <%= cb.integrated_reg_ip %>/<%= project.name %>/myimage:latest |
+      | a            | <%= cb.dockercfg_file %>                                       |
+      | insecure     | true                                                           |
+    And the step should succeed
+    And the output should match:
+      | Mirroring completed in |
+    Given the "myimage" image stream was created
+    And the "myimage" image stream becomes ready
+
+  # @author xiuwang@redhat.com
+  # @case_id OCP-18998
+  @admin
+  Scenario: Mirror multiple locations to another registry via 'oc image mirror'
+    Given I have a project
+    Given docker config for default image registry is stored to the :dockercfg_file clipboard
+    Then I run the :image_mirror client command with:
+      | source_image | docker.io/library/busybox:latest=<%= cb.integrated_reg_ip %>/<%= project.name %>/myimage1:v1 |
+      | dest_image   | centos/ruby-25-centos7:latest=<%= cb.integrated_reg_ip %>/<%= project.name %>/myimage2:v1    |
+      | a            | <%= cb.dockercfg_file %>                                                                     |
+      | insecure     | true                                                                                         |
+    And the step should succeed
+    And the output should match:
+      | Mirroring completed in |
+    Given the "myimage1" image stream was created
+    And the "myimage2" image stream was created
+    And the "myimage1" image stream becomes ready
+    And the "myimage2" image stream becomes ready
+
+  # @author xiuwang@redhat.com
+  # @case_id OCP-18995
+  @admin
+  Scenario: Mirror image to another registry via 'oc image mirror'
+    Given I have a project
+    Given docker config for default image registry is stored to the :dockercfg_file clipboard
+    Then I run the :image_mirror client command with:
+      | source_image | centos/ruby-22-centos7:latest                              |
+      | dest_image   | <%= cb.integrated_reg_ip %>/<%= project.name %>/myimage:v1 |
+      | a            | <%= cb.dockercfg_file %>                                   | 
+      | insecure     | true                                                       |
+    And the step should succeed
+    And the output should match:
+      | Mirroring completed in |
+    Given the "myimage" image stream was created
+    And the "myimage" image stream becomes ready

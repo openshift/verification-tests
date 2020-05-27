@@ -1,3 +1,12 @@
+create_app_from_template:
+  action: goto_create_app_from_template_page
+  action: wait_form_loaded
+  action: click_create_button
+delete_template_instance_action:
+  params:
+    item: Delete Template Instance
+  action: click_one_dropdown_action
+  action: submit_changes
 create_app_from_imagestream:
   action: goto_create_app_from_imagestream_page
   action: click_try_sample
@@ -8,6 +17,10 @@ create_app_from_imagestream:
 click_try_sample:
   params:
     button_text: Try Sample
+  action: click_button
+open_env_edit_for_dc:
+  params:
+    button_text: Deployment Configuration
   action: click_button
 set_label:
   params:
@@ -41,6 +54,10 @@ filter_by_sourcetoimage_type:
 filter_by_serviceclass_type:
   params:
     type: cluster-service-class
+  action: filter_by_type
+filter_by_template_type:
+  params:
+    type: template
   action: filter_by_type
 filter_by_type:
   element:
@@ -88,3 +105,18 @@ set_custom_channel_and_subscribe:
   action: wait_box_loaded
   action: choose_update_channel
   action: click_subscribe_button
+click_image_tag_dropdown:
+  params:
+    button_id: form-dropdown-image-tag-field
+  action: click_button_by_id
+browse_to_install_plan:
+  elements:
+  - selector:
+      xpath: //ul[contains(@class,'nav__menu')]//a[contains(text(), 'Subscription')]
+    timeout: 60
+    op: click
+  - selector:
+      xpath: //a[contains(@href, 'InstallPlan')]
+    timeout: 60
+    op: click
+

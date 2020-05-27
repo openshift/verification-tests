@@ -1,0 +1,140 @@
+check_access_control_tab:
+  element: &access_control_tab
+    selector:
+      xpath: //section[@id='clusterdetails-content']//div[@class='pf-c-tabs']/ul[@class='pf-c-tabs__list']//li/button[@class='pf-c-tabs__button' and text()='Access Control']
+click_access_control_tab:
+  element:
+    <<: *access_control_tab
+    op: click
+check_elements_on_user_card:
+  action: check_user_card_title
+  action: check_user_card_description
+  action: check_add_user_field
+check_user_card_title:
+  element:
+    selector:
+      xpath: //section[@id='accessControlTabContent']/div[@class='cluster-details-user-tab-contents']/article/div[@class='pf-c-card__body']/h3[text()='Cluster Administrative Users']
+check_user_card_description:
+  element:
+    selector:
+      xpath: //section[@id='accessControlTabContent']/div[@class='cluster-details-user-tab-contents']/article/div[@class='pf-c-card__body']/p[text()='Grant permission to manage this cluster to users defined in your identity provider.']/a[@href='https://docs.openshift.com/dedicated/4/administering_a_cluster/dedicated-admin-role.html' and text()='Learn more.']
+check_add_user_field:
+  action: check_user_input_field
+  action: check_users_group_select
+  action: check_add_button_in_user_tab_disabled
+check_user_input_field:
+  elements:
+  - selector:
+      xpath: //section[@id='accessControlTabContent']/div[@class='cluster-details-user-tab-contents']/article/div[@class='pf-c-card__body']/h3[text()='Add user:']
+  element: &user_input_field
+    selector:
+      xpath: //section[@id='accessControlTabContent']/div[@class='cluster-details-user-tab-contents']/article/div[@class='pf-c-card__body']//input[@id='edit-user-id-input' and @placeholder='Enter a user name or user ID']
+check_users_group_select:
+  element: &users_group_select_button
+    selector: 
+      xpath: //section[@id='accessControlTabContent']/div[@class='cluster-details-user-tab-contents']/article/div[@class='pf-c-card__body']//button[@class='pf-c-select__toggle']
+  element:
+    selector:
+      xpath: //section[@id='accessControlTabContent']/div[@class='cluster-details-user-tab-contents']/article/div[@class='pf-c-card__body']//button[@class='pf-c-select__toggle']//div/span[@class='pf-c-select__toggle-text' and text()='dedicated-admins']
+click_users_group_select:
+  element:
+    <<: *users_group_select_button
+    op: click
+check_user_groups_in_select:
+  elements:
+  - selector:
+      xpath: //button[@class='pf-c-select__toggle']/following-sibling::ul/li/button[@role='option' and text()='<user_group>']
+check_user_groups:
+  action: click_users_group_select
+  action: check_user_groups_in_select
+check_add_button_in_user_tab:
+  element: &add_button_in_user_tab
+    selector:
+      xpath: //button[@class='pf-c-button pf-m-primary' and text()='Add']
+click_add_button_in_user_tab:
+  element:
+    <<: *add_button_in_user_tab
+    op: click
+check_add_button_in_user_tab_disabled:
+  element:
+    selector:
+      xpath: //button[@class='pf-c-button pf-m-primary' and @disabled and text()='Add']
+input_user_in_tab:
+  element:
+    <<: *user_input_field
+    op: clear
+  element:
+    <<: *user_input_field
+    op: send_keys <user_id>
+check_user_validation_message:
+  element:
+    selector: 
+      xpath: //input/following-sibling::div[@class='pf-c-form__helper-text pf-m-error' and 'edit-user-id-input-helper' and contains(.,'<validation_error_message>') and contains(.,'<validated_charactor>')]
+add_user:
+  action: input_user_in_tab
+  action: choose_user_group
+  action: click_add_button_in_user_tab
+check_user_added:
+  action: check_the_user_table_header
+  action: check_popover_content_for_user_id
+  action: check_popover_content_for_user_group
+  action: check_the_user_list_item
+check_the_user_table_header:
+  element: &user_id_helper_button
+    selector:
+      xpath: //section[@id='accessControlTabContent']/div[@class='cluster-details-user-tab-contents']//div[@class='pf-c-card__body']//table[@role='grid']//thead/tr/th[text()='User ID']/button[@class='pf-c-button pf-m-plain']
+  element: &user_group_helper_button
+    selector:
+      xpath: //section[@id='accessControlTabContent']/div[@class='cluster-details-user-tab-contents']//div[@class='pf-c-card__body']//table[@role='grid']//thead/tr/th[text()='Group']/button[@class='pf-c-button pf-m-plain']
+check_popover_content_for_user_id:
+  element:
+    <<: *user_id_helper_button
+    op: click
+  elements:
+  - selector:
+      xpath: //div[@class='tippy-content']//div[@aria-label='User IDs']/div[@class='pf-c-popover__content']//p[contains(.,'User IDs are matched by the cluster')]
+  - selector:
+      xpath: //div[@class='tippy-content']//div[@aria-label='User IDs']/div[@class='pf-c-popover__content']//button[@aria-label='Close']
+check_popover_content_for_user_group:
+  element:
+    <<: *user_group_helper_button
+    op: click
+  elements:
+  - selector:
+      xpath: //div[@class='tippy-content']//div[@aria-label='Groups']/div[@class='pf-c-popover__content']//p[text()='Groups are mapped to role bindings on the cluster.']/a[text()='OpenShift 4 documentation']
+  - selector:
+      xpath: //div[@class='tippy-content']//div[@aria-label='Groups']/div[@class='pf-c-popover__content']//button[@aria-label='Close']
+check_the_user_list_item:
+  elements:
+  - selector:
+      xpath: //section[@id='accessControlTabContent']/div[@class='cluster-details-user-tab-contents']//div[@class='pf-c-card__body']//table[@role='grid']//tbody/tr/td[text()='<user_id>']
+  - selector:
+      xpath: //section[@id='accessControlTabContent']/div[@class='cluster-details-user-tab-contents']//div[@class='pf-c-card__body']//table[@role='grid']//tbody/tr/td[text()='<user_group>']
+  element: &user_option_dropdowm_button
+    selector:
+      xpath: //section[@id='accessControlTabContent']/div[@class='cluster-details-user-tab-contents']//div[@class='pf-c-card__body']//table[@role='grid']//tbody/tr/td[text()='<user_id>']/following-sibling::td/div/button[@class='pf-c-dropdown__toggle pf-m-plain']
+choose_user_group:
+  action: click_users_group_select
+  element:
+    selector:
+      xpath: //div[@class='pf-l-grid pf-m-gutter']//div[@class='pf-l-grid__item pf-m-2-col-on-sm']/div[@class='pf-c-select pf-m-expanded']/ul[@class='pf-c-select__menu']/li/button[@class='pf-c-select__menu-item' and text()='<user_group>']
+    op: click 
+delete_user:
+  element:
+    <<: *user_option_dropdowm_button
+    op: click
+  element:
+    selector:
+      xpath: //section[@id='accessControlTabContent']/div[@class='cluster-details-user-tab-contents']//div[@class='pf-c-card__body']//table[@role='grid']//tbody/tr/td[text()='<user_id>']/following-sibling::td/div/ul[@role='menu']/li[@role='menuitem']/div[text()='Delete']
+    op: click
+check_danger_alert_box_in_user_tab:
+  elements:
+  - selector:
+      xpath: //div[@class='pf-c-alert pf-m-inline pf-m-danger error-box' and @aria-label='Danger Alert']/div[@class='pf-c-alert__icon']/*[name()='svg']
+    timeout: 300
+  - selector:
+      xpath:  //div[@class='pf-c-alert pf-m-inline pf-m-danger error-box' and @aria-label='Danger Alert']/h4[@class='pf-c-alert__title' and text()='Error adding user']
+  - selector:
+      xpath: //div[@class='pf-c-alert pf-m-inline pf-m-danger error-box' and @aria-label='Danger Alert']/div[@class='pf-c-alert__description']/span[contains(.,'<error_massage>')]
+  - selector:
+      xpath: //div[@class='pf-c-alert pf-m-inline pf-m-danger error-box' and @aria-label='Danger Alert']/div[@class='pf-c-alert__description']/span[contains(.,'Operation ID')]

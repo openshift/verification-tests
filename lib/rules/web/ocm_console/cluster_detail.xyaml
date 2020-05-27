@@ -1,0 +1,361 @@
+#------------------------------ This file is used for cluster detail defination -------------------
+cluster_detail_page_loaded:
+    action: overview_tab_loaded
+    action: monitoring_tab_loaded
+add_console_url_button_on_cluster_detail_page_loaded:
+    element: &add_console_url_on_detail_page
+        selector:
+            xpath: //button[@class='pf-c-button pf-m-primary' and text()='Add Console URL']
+cluster_genera_info_loaded:
+    action:
+        if_param: cluster_name
+        ref: cluster_name_loaded
+    elements:
+        - selector:
+            xpath: //span[@id='cl-details-btns']//button[text()='Launch Console']
+        - selector:
+            xpath: //button[@class='pf-c-dropdown__toggle']/span[text()='Actions']
+        - selector:
+            xpath: //button[@class='pf-c-button pf-m-plain' and @aria-label='Refresh']
+cluster_name_loaded:
+    element:
+        selector:
+            xpath: //h1[@class='pf-c-title pf-m-4xl vertical-align' and text()='<cluster_name>']
+        timeout: 20
+expand_actions_on_cluster_detail_page:
+    element:
+        selector:
+            xpath: //span[@id='cl-details-btns']//button[@class='pf-c-dropdown__toggle']
+        op: click
+
+close_actions_on_cluster_detail_page:
+    action: expand_actions_on_cluster_detail_page
+
+disabled_launch_console_button_on_cluster_detail_page_loaded:
+    element:
+        selector:
+            xpath: "//button[@class='pf-c-button pf-m-primary pf-m-disabled' and text()='Launch Console']"
+check_cluster_status:
+    element:
+        selector:
+            xpath: "//dd[@style='text-transform: capitalize;' and text()='<expect_status>']"
+        timeout: 300
+resource_usage_loaded:
+    action: cpu_chart_loaded
+cpu_chart_loaded:
+    elements:
+        - selector:
+            xpath: //section[@id='overviewTabContent']//h4[@class='pf-c-title pf-m-xl metrics-chart' and text()='vCPU']
+
+overview_tab_loaded:
+    elements:
+        - selector:
+            xpath: //section[@id='overviewTabContent']//h2[text()='Details']
+
+monitoring_tab_loaded:
+    element:
+        selector:
+            xpath: //button[@class='pf-c-tabs__button' and text()='Monitoring']
+        timeout: 30
+
+check_actions_on_cluster_detail_page_partial_enabled:
+    action: detail_launch_console_disabled
+    action: scale_cluster_button_disabled
+    action: delete_cluster_button_enabled
+    action: edit_display_name_enabled
+click_clusters_url:
+    element:
+        selector:
+            xpath: //a[@class='pf-c-breadcrumb__link' and text()='Clusters']
+        op: click
+click_archive_button_on_cluster_detail_page:
+    element:
+        selector:
+            xpath: //button[@class='pf-c-dropdown__menu-item' and text()='Archive Cluster']
+        op: click
+click_delete_button_on_cluster_detail_page:
+    element:
+        selector:
+            xpath: //button[@class='pf-c-dropdown__menu-item' and text()='Delete Cluster']
+        op: click
+click_edit_display_name_button_on_cluster_detail_page:
+    element:
+        selector:
+            xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Edit Display Name']
+        op: click
+edit_display_name_on_cluster_detail_page:
+  action: click_edit_display_name_button_in_dropdown
+  action: check_display_name_dialog_loaded
+  action: edit_display_name_in_dialog
+  action: check_new_name_in_cluster_detail
+check_new_name_in_cluster_detail:
+  element:
+     selector:
+       xpath: //div[@id='cl-details-top']/div/div/h1[text()='<new_name>']
+wait_cluster_status_on_detail_page:
+    element:
+        selector:
+            xpath: //div[@class='pf-l-grid__item pf-m-6-col-on-sm']/dl/dd[text()='<cluster_status>']
+go_to_scale_cluster_dialog_on_cluster_detail_page:
+  action: expand_actions_on_cluster_detail_page
+  action: click_scale_cluster_button_in_dropdown
+check_scale_result_on_detail_page:
+  action: check_cluster_status
+  action: check_desired_compute_nodes
+check_desired_compute_nodes:
+  element:
+    selector:
+      xpath: //div[@class='pf-c-card__body']//dt[text()='Desired Nodes']/following-sibling::dd[1]/dl/dt[text()='Compute:']/following-sibling::dd[text()='<desired_compute_nodes>']
+    timeout: 50
+scale_cluster_from_cluster_detail_page:
+  action: cluster_detail_page_loaded
+  action: go_to_scale_cluster_dialog_on_cluster_detail_page
+  action: choose_compute_node_in_dialog
+check_actions_items_of_ready_osd_cluster_on_detail:
+  action: check_edit_display_name_button_in_dropdown
+  action: check_scale_cluster_button_in_dropdown
+  action: check_delete_cluster_button_in_dropdown
+  action: check_archive_button_in_dropdown_missing
+  action: check_edit_console_button_in_dropdown_missing
+  action: check_launch_console_button_in_dropdown_missing
+check_actions_items_of_ready_ocp_cluster_on_detail:
+  action: check_edit_console_button_in_dropdown
+  action: check_edit_display_name_button_in_dropdown
+  action: check_archive_button_in_dropdown
+  action: check_delete_cluster_button_in_dropdown_missing
+  action: check_scale_cluster_button_in_dropdown_missing
+  action: check_launch_console_button_in_dropdown_missing
+check_disconnected_cluster_overview_information:
+    elements:
+        - selector:
+            xpath: //div[@class='pf-l-grid']/div[1]//dt[6][text()='Operating system']/../dd[6][text()='<operating_system>']
+        - selector:
+            xpath: //div[@class='pf-l-grid']/div[1]//dt[2][text()='Type']/../dd[2][text()='OCP']
+        - selector:
+            xpath: //div[@class='pf-l-grid']/div[1]//dt[3][text()='Location']/../dd[3][text()='N/A']
+        - selector:
+            xpath: //div[@class='pf-l-grid']/div[1]//dt[4][text()='Provider']/../dd[4][text()='N/A']
+        - selector:
+            xpath: //div[@class='pf-l-grid']/div[2]//dt[1][text()='Status']/../dd[1][text()='disconnected']
+    action:
+        if_param: vcpu_type
+        ref: total_vCPU_loaded
+    action:
+        if_param: sockets_type
+        ref: total_sockets_loaded
+total_vCPU_loaded:
+    element:
+        selector:
+            xpath: //div[@class='pf-l-grid']/div[2]//dt[2][text()='Total vCPU']/../dd[2][contains(.,'vCPU')]
+total_sockets_loaded:
+    element:
+        selector:
+            xpath: //div[@class='pf-l-grid']/div[2]//dt[3][text()='Total Sockets']
+actions_button_disabled_on_cluster_detail_page:
+  element:
+    selector:
+      xpath: //span[@id='cl-details-btns']//button[@class='pf-c-dropdown__toggle' and @disabled]
+check_ocp_in_detail_page:
+    action: check_ocp_title_in_detail_page
+    action: check_ocp_tab_in_detail_page
+    action: check_ocp_usage_in_detail_page
+    action: check_ocp_details_in_detail_page
+    action: check_ocp_subscription_settings_in_detail_page
+check_osd_in_detail_page:
+    action: check_osd_title_in_detail_page
+    action: check_osd_tab_in_detail_page
+    action: check_osd_usage_in_detail_page
+    action: check_osd_details_in_detail_page
+check_ocp_title_in_detail_page:
+    action: expand_actions_behind_open_console_button
+    action: check_ocp_actions_behind_open_console_button
+    action: close_actions_behind_open_console_button
+    elements:
+        - selector:
+            xpath: //a[contains(@href, 'openshift') and text()='Clusters']
+        - selector:
+            xpath: //li[@class='pf-c-breadcrumb__item' and text()='<cluster_name>']
+        - selector:
+            xpath: //h1[@class='pf-c-title pf-m-4xl vertical-align' and text()='<cluster_name>']
+        - selector:
+            xpath: //button[@class='pf-c-button pf-m-primary' and text()='Open Console']
+        - selector:
+            xpath: //button[@aria-label='Refresh']
+check_ocp_tab_in_detail_page:
+    elements:
+        - selector:
+            xpath: //button[@class='pf-c-tabs__button' and contains(., 'Overview')]
+        - selector:
+            xpath: //button[@class='pf-c-tabs__button' and contains(., 'Monitoring')]
+check_ocp_usage_in_detail_page:
+    elements:
+        - selector:
+            xpath: //h2[@class='pf-c-title card-title' and text()='Resource Usage']
+        - selector:
+            xpath: //p[text()='The cluster currently does not have any metrics data. Try again later.']
+check_ocp_details_in_detail_page:
+    elements:
+        - selector:
+            xpath: //h2[@class='pf-c-title card-title' and text()='Details']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dt[text()='Cluster ID']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dt[text()='Type']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dd[text()='OCP']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dt[text()='Location']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dt[text()='Provider']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dt[text()='Version']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dt[text()='Operating system']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dt[text()='Created at']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dt[text()='Owner']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dt[text()='Status']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dt[text()='Total vCPU']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dt[text()='Total Memory']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dt[text()='Nodes']
+        - selector:
+            xpath: //dl[@class='cluster-details-item-list left']/dt[text()='Master:']
+        - selector:
+            xpath: //dl[@class='cluster-details-item-list left']/dt[text()='Compute:']
+check_ocp_subscription_settings_in_detail_page:
+    elements:
+        - selector:
+            xpath: //h2[@class='pf-c-title pf-m-3xl' and text()='Subscription Settings']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dt[text()='SLA']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dt[text()='Production status']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dt[text()='Service level']
+        - selector:
+            xpath: //dl[@class='cluster-details-item right']/dt[text()='Subscription units']
+        - selector:
+            xpath: //dl[@class='cluster-details-item right']/dt[text()='Subscription obligation']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dd/button[text()='Edit subscription settings']
+check_osd_title_in_detail_page:
+    action: expand_actions_behind_open_console_button
+    action: check_osd_actions_behind_open_console_button
+    action: close_actions_behind_open_console_button
+    elements:
+        - selector:
+            xpath: //a[@class='pf-c-breadcrumb__link' and contains(@href, 'openshift') and text()='Clusters']
+        - selector:
+            xpath: //li[@class='pf-c-breadcrumb__item' and text()='<cluster_name>']
+        - selector:
+            xpath: //h1[@class='pf-c-title pf-m-4xl vertical-align' and text()='<cluster_name>']
+        - selector:
+            xpath: //button[@class='pf-c-button pf-m-primary' and text()='Open Console']
+        - selector:
+            xpath: //button[@aria-label='Refresh']
+check_osd_tab_in_detail_page:
+    elements:
+        - selector:
+            xpath: //button[@class='pf-c-tabs__button' and contains(., 'Overview')]
+        - selector:
+            xpath: //button[@class='pf-c-tabs__button' and contains(., 'Monitoring')]
+        - selector:
+            xpath: //button[@class='pf-c-tabs__button' and contains(., 'Access Control')]
+        - selector:
+            xpath: //button[@class='pf-c-tabs__button' and contains(., 'Add-ons')]
+check_osd_usage_in_detail_page:
+    elements:
+        - selector:
+            xpath: //h2[@class='pf-c-title card-title' and text()='Resource Usage']
+        - selector:
+            xpath: //h4[@class='pf-c-title pf-m-xl metrics-chart' and text()='vCPU']
+        - selector:
+            xpath: //h4[@class='pf-c-title pf-m-xl metrics-chart' and text()='Memory']
+        - selector:
+            xpath: //div[@class='metrics-chart']
+check_osd_details_in_detail_page:
+    elements:
+        - selector:
+            xpath: //h2[@class='pf-c-title card-title' and text()='Details']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dt[text()='Cluster ID']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dt[text()='Type']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dd[text()='OSD']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dt[text()='Location']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dt[text()='Provider']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dt[text()='Version']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dt[text()='Operating system']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dt[text()='Created at']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dt[text()='Owner']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dt[text()='Billing Model']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dd[text()='Standard']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dt[text()='Status']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dt[text()='Total vCPU']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dt[text()='Total Memory']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dt[text()='Load Balancers']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dt[text()='Persistent Storage']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dt[text()='Desired Nodes']
+        - selector:
+            xpath: //dl[@class='cluster-details-item-list left']/dt[text()='Master:']
+        - selector:
+            xpath: //dl[@class='cluster-details-item-list left']/dt[text()='Infra:']
+        - selector:
+            xpath: //dl[@class='cluster-details-item-list left']/dt[text()='Compute:']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dt[text()='Actual Nodes']
+        - selector:
+            xpath: //dl[@class='cluster-details-item left']/dt[text()='Network']
+expand_actions_behind_open_console_button:
+    element:
+        selector:
+            xpath: //span[@class='pf-c-dropdown__toggle-text' and text()='Actions']/../../button
+        op: click
+check_ocp_actions_behind_open_console_button:
+    elements:
+        - selector:
+            xpath: //button[text()='Edit Display Name']
+        - selector:
+            xpath: //button[text()='Edit Console URL']
+        - selector:
+            xpath: //button[text()='Archive Cluster']
+        - selector:
+            xpath: //button[text()='Edit Cluster Registration']
+        - selector:
+            xpath: //button[text()='Edit Subscription Settings']
+check_osd_actions_behind_open_console_button:
+    elements:
+        - selector:
+            xpath: //button[text()='Edit Display Name']
+        - selector:
+            xpath: //button[text()='Scale Cluster']
+        - selector:
+            xpath: //button[text()='Delete Cluster']
+close_actions_behind_open_console_button:
+    action: expand_actions_behind_open_console_button
+
+check_edit_subscription_settings_link:
+    element:
+        selector:
+            xpath: //dl[@class='cluster-details-item left']/dd/button[text()='Edit subscription settings']
+

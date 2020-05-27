@@ -1,0 +1,36 @@
+archived_cluster_detail_page_loaded:
+    elements:
+        - selector:
+            xpath: //a[@class='pf-c-breadcrumb__link' and text()='Clusters']
+        - selector:
+            xpath: //a[@class='pf-c-breadcrumb__link' and text()='Archived clusters']
+        - selector:
+            xpath: //button[@class='pf-c-button pf-m-secondary' and text()='Unarchive']
+        - selector:
+            xpath: //button[@aria-controls='overviewTabContent' and text()='Overview']
+        - selector:
+            xpath: //h2[text()='Resource Usage']
+        - selector:
+            xpath: //p[text()='The cluster has been archived and does not have any metrics data.']
+        - selector:
+            xpath: //h2[text()='Details']
+        - selector:
+            xpath: //dt[text()='Status']/../dd[text()='Archived']
+click_detail_page_unarchive_cluster_button:
+    element:
+        selector:
+            xpath: //button[@class='pf-c-button pf-m-secondary' and text()='Unarchive']
+        op: click
+    action: unarchive_dialog_loaded
+go_to_archived_clusters_from_archived_cluster_detail_page:
+    element:
+        selector:
+            xpath: //li[contains(@href,'/openshift/archived')]
+            xpath: //nav/ol/li[2]
+        op: click
+    action: archived_page_loaded
+check_archived_cluster_detail_page:
+    action: archived_cluster_detail_page_loaded
+    elements:
+        - selector:
+            xpath: //h1[text()='<cluster_name>']

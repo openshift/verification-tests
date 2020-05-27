@@ -4,6 +4,8 @@ require 'uri'
 require 'watir'
 require "base64"
 
+require_relative 'chrome_extension'
+
   class Web4Cucumber
     attr_reader :browser_type, :logger, :rules
     attr_accessor :base_url
@@ -48,7 +50,8 @@ require "base64"
         browser: nil,
         scroll_strategy: nil,
         size: nil,
-        hooks: nil
+        hooks: nil,
+        http_proxy: nil
       )
       @browser_type = browser_type
       @rules = Web4Cucumber.load_rules [rules]
@@ -58,6 +61,7 @@ require "base64"
       @logger = logger
       @scroll_strategy = scroll_strategy
       @size = size
+      @http_proxy = http_proxy
       set_hooks(hooks)
     end
 
@@ -71,12 +75,33 @@ require "base64"
       chrome_caps = Selenium::WebDriver::Remote::Capabilities.chrome()
       safari_caps = Selenium::WebDriver::Remote::Capabilities.safari()
       chrome_switches = []
-      if ENV.has_key? "http_proxy"
-        proxy = ENV["http_proxy"].scan(/[\w\.\d\_\-]+\:\d+/)[0] # to get rid of the heading "http://" that breaks the profile
-        firefox_profile.proxy = chrome_caps.proxy = safari_caps.proxy = Selenium::WebDriver::Proxy.new({:http => proxy, :ssl => proxy})
-        firefox_profile['network.proxy.no_proxies_on'] = "localhost, 127.0.0.1"
-        chrome_switches.concat %w[--proxy-bypass-list=127.0.0.1]
-        ENV['no_proxy'] = '127.0.0.1'
+      if ENV.has_key?("http_proxy") || @http_proxy
+        # get rid of the heading "http://" that breaks the profile
+        proxy_raw = @http_proxy || ENV["http_proxy"]
+        proxy = proxy_raw.sub(%r{^.+?://}, "")
+        proxy_bypass = "localhost,127.0.0.1"
+        firefox_profile.proxy = chrome_caps.proxy = safari_caps.proxy = Selenium::WebDriver::Proxy.new({:http => proxy.sub(%r{^.+?@}, ""), :ssl => proxy.sub(%r{^.+?@}, "")})
+        firefox_profile['network.proxy.no_proxies_on'] = proxy_bypass
+        chrome_switches << "--proxy-bypass-list=#{proxy_bypass}"
+        if proxy.include? "@"
+          # Generic solution for auth proxy support not available yet. Hope is:
+          #   https://github.com/w3c/webdriver/issues/385
+
+          # For firefox current status is that a custom profile with saved
+          #   password is needed and autologin setting
+          # firefox_profile["network.http.phishy-userpass-length"] = 255
+          # firefox_profile["signon.autologin.proxy"] = true
+
+          proxy_proto, proxy_user, proxy_pass, proxy_host, proxy_port =
+            proxy_raw.scan(%r{^(?:(.+?)://)?(.+?):(.+)@(.+?):([\d]+)$}).first
+          proxy_proto ||= "http"
+          proxy_chrome_ext_file = File.expand_path("chrome-proxy.crx")
+          ChromeExtension.pack_extension(
+            file: proxy_chrome_ext_file,
+            dir: File.dirname(__FILE__) + "/resource/chrome_proxy",
+            erb_binding: binding
+          )
+        end
       end
       client = Selenium::WebDriver::Remote::Http::Default.new
       client.open_timeout = 180
@@ -85,6 +110,7 @@ require "base64"
       # Selenium::WebDriver.logger.level = :debug
       if @browser_type == :firefox
         logger.info "Launching Firefox Marionette/Geckodriver"
+        raise "auth proxy not implemented for Firefox" if proxy_pass
         caps = Selenium::WebDriver::Remote::Capabilities.firefox accept_insecure_certs: true
         if Integer === @scroll_strategy
           caps[:element_scroll_behavior] = @scroll_strategy
@@ -106,15 +132,26 @@ require "base64"
         end
       elsif @browser_type == :chrome
         logger.info "Launching Chrome"
+
+	      #https://bugs.chromium.org/p/chromium/issues/detail?id=1056073
+	      chrome_caps[:acceptInsecureCerts] = true
         if Integer === @scroll_strategy
           chrome_caps[:element_scroll_behavior] = @scroll_strategy
         end
         if self.class.container?
           chrome_switches.concat %w[--no-sandbox --disable-setuid-sandbox --disable-gpu --disable-infobars]
         end
-        @browser = Watir::Browser.new :chrome, desired_capabilities: chrome_caps, switches: chrome_switches
+        # options = Selenium::WebDriver::Chrome::Options.new
+        # options.add_extension proxy_chrome_ext_file if proxy_chrome_ext_file
+        options = {}
+        options[:extensions] = [proxy_chrome_ext_file] if proxy_chrome_ext_file
+        @browser = Watir::Browser.new :chrome, desired_capabilities: chrome_caps, switches: chrome_switches, options: options
+        if @size
+          browser.window.resize_to(*@size)
+        end
       elsif @browser_type == :safari
         logger.info "Launching Safari"
+        raise "auth proxy not implemented for Safari" if proxy_pass
         safari_caps[:accept_insecure_certs] = true
         if Integer === @scroll_strategy
           safari_caps[:element_scroll_behavior] = @scroll_strategy
@@ -122,7 +159,7 @@ require "base64"
         driver = Selenium::WebDriver.for :safari, desired_capabilities: safari_caps
         @browser = Watir::Browser.new driver
       else
-        raise "Not implemented yet"
+        raise "Web4Cucumber: browser type '#{@browser_type}' not supported"
       end
       @browser
     end

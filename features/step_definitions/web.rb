@@ -77,6 +77,9 @@ Given /^I have a browser with:$/ do |table|
   if conf[:browser]
     init_params[:browser_type] ||= conf[:browser].to_sym
   end
+  if env.client_proxy
+    init_params[:http_proxy] ||= env.client_proxy
+  end
   init_params[:logger] = logger
   browser = Web4Cucumber.new(**init_params)
   cache_browser(browser)
@@ -225,4 +228,9 @@ end
 Given /^I open metrics console in the browser$/ do
   metrics_url = env.metrics_console_url + "/metrics"
   step %Q/I access the "#{metrics_url}" url in the web browser/
+end
+
+# close out current browser to conserve system memory during test
+Given /^I close the current browser$/ do
+  browser.finalize
 end

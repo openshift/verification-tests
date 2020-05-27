@@ -15,7 +15,7 @@ Feature: oc_env.feature
       | name=cakephp-mysql-example |
     Given I store in the clipboard the pods labeled:
       | name=cakephp-mysql-example |
-    When I run the :env client command with:
+    When I run the :set_env client command with:
       | resource | pods/<%= cb.pods[0].name%> |
       | list     | true                       |
     And the output should contain:

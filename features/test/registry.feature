@@ -75,39 +75,3 @@ Feature: registry related test scenario
     Given I have a project
     Given I obtain default registry IP HOSTNAME by a dummy build in the project
     Then the expression should be true> cb.int_reg_ip.to_s =~ /\d+\.\d+\.\d+\.\d+/
-  
-  @admin
-  @destructive
-  Scenario: Secure newly created default docker registry
-    Given I switch to cluster admin pseudo user
-    Then default registry is verified using a pod in a project after scenario
-    And the master service is restarted on all master nodes after scenario
-    And default docker-registry dc is deleted
-    And default docker-registry service is deleted
-    When I run the :oadm_registry admin command with:
-      | namespace | default |
-    And a pod becomes ready with labels:
-      | deploymentconfig=docker-registry |
-    Then the step should succeed
-    When I secure the default docker registry
-    Then the master service is restarted on all master nodes
-    And default registry is verified using a pod in a project
-
-  @admin
-  @destructive
-  Scenario: Secure newly created default docker registry deployed via daemon set
-    Given I switch to cluster admin pseudo user
-    Then default registry is verified using a pod in a project after scenario
-    And the master service is restarted on all master nodes after scenario
-    And default docker-registry dc is deleted
-    And default docker-registry service is deleted
-    And admin ensures "docker-registry" daemonset is deleted from the "default" project after scenario
-    When I run the :oadm_registry admin command with:
-      | namespace | default |
-      | daemonset | true    |
-    And <%= daemon_set("docker-registry").desired_number_scheduled(user: admin) %> pods become ready with labels:
-      | docker-registry=default |
-    Then the step should succeed
-    When I secure the default docker daemon set registry
-    Then the master service is restarted on all master nodes
-    And default registry is verified using a pod in a project

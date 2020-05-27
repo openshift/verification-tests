@@ -11,15 +11,15 @@ module BushSlicer
     def initialize(spec, owner)
       @raw = spec
       @name = spec["name"]
-      unless Pod === owner
-        raise "owner should be a Pod but it is: #{owner.inspect}"
+      unless Pod === owner ||  PodReplicator === owner
+        raise "owner should be a Pod or a PodReplicator but it is: #{owner.inspect}"
       end
       @owner = owner
     end
 
     # generate a volume spec object of approppriate class
     # @param spec [Hash] the tag specification hash
-    # @param owner [Pod] the pod with this volume specification
+    # @param owner [Pod, PodReplicator] the pod with this volume specification
     # @return [PodVolumeSpec] when volume type is not supported, returns a
     #   subtype of [UnknownPodVolumeSpec]
     def self.from_spec(spec, owner)

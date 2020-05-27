@@ -212,7 +212,7 @@ Feature: pods related scenarios
       | docker_image     | aosqe/ruby-ex        |
     Then the step should succeed
     Given a pod becomes ready with labels:
-      | app=ruby-ex      |
+      | deploymentconfig=ruby-ex      |
     When I run the :rsh client command with:
       | pod          | <%= pod.name %> |
       | _stdin       | curl https://kubernetes.default.svc/.well-known/oauth-authorization-server -k |

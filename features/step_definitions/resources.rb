@@ -205,3 +205,15 @@ Given /^#{WORD}( in the#{OPT_QUOTED} project)? with name matching #{RE} are stor
   cache_resources *list
   cache_resources cb[cb_name].first if cb[cb_name].first
 end
+
+Given /^(I|admin) stores? all (\w+)( in the#{OPT_QUOTED} project)? to the#{OPT_SYM} clipboard$/ do |who, type, in_project, namespace, cb_name|
+  cb_name ||= :resources
+  _user = who == "admin" ? admin : user
+
+  clazz = resource_class(type)
+  if in_project && BushSlicer::ProjectResource > clazz
+    cb[cb_name] = clazz.list(user: _user, project: project(namespace))
+  else
+    cb[cb_name] = clazz.list(user: _user)
+  end
+end
