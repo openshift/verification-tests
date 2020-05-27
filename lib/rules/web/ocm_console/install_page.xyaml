@@ -22,6 +22,10 @@ go_to_codeready_install_page:
     url: /openshift/install/crc/installer-provisioned
 go_to_pre_release_page:
     url: /openshift/install/pre-release
+go_to_aro_pull_secret_page:
+    url: /openshift/install/azure/aro-provisioned
+go_to_pull_secret_page:
+    url: /openshift/install/pull-secret
 
 check_breadcrumbs_in_install_page:
     elements:
@@ -579,3 +583,21 @@ check_pre_release_page_title:
     scripts:
     - command: return document.title=='Install OpenShift 4 | Experimental Developer Preview Builds'
       expect_result: true
+check_aro_pull_secret_page:
+    action: click_copyPullSecret_button
+    elements:
+        - selector:
+            xpath: //h1[text()='Azure Red Hat Openshift']
+        - selector:
+            xpath: //h3[text()='Red Hat content access']
+        - selector:
+            xpath: //h4[text()='Azure Red Hat OpenShift clusters do not connect to OpenShift Cluster Manager at this time. OpenShift Cluster Manager integration may be offered in a future release.']
+check_pull_secret_page:
+    action: click_copyPullSecret_button
+    elements:
+        - selector:
+            xpath: //h1[text()='Install OpenShift Container Platform 4']
+        - selector:
+            xpath: //h3[text()='Pull secret']
+        - selector:
+            xpath: //a[contains(@href, '/latest/support/remote_health_monitoring/about-remote-health-monitoring.html') and contains(., 'Learn more')]
