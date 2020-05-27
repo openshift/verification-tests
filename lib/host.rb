@@ -857,6 +857,7 @@ module BushSlicer
       exec_opts = {}
 
       # override image, arg order matters, image needs to go before --
+      # needed until https://bugzilla.redhat.com/show_bug.cgi?id=1728135 is fixed
       unless node.env.opts[:host_debug_image]
            mpods = Pod.get_labeled("app=multus", user: node.env.admin, project: Project.new(name: "openshift-multus", env: node.env), quiet: true)
            exec_opts[:image] = mpods.first.container(name: "kube-multus").spec.image
