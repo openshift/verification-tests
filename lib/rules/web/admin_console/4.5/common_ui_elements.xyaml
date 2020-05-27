@@ -553,7 +553,7 @@ check_alert_title:
 check_alert_description:
   elements:
   - selector:
-      xpath: //div[contains(@class, 'pf-c-alert__description') and contains(.,'View environment for resource ')]
+      xpath: //div[contains(@class, 'pf-c-alert__description') and contains(.,'<description>')]
 check_alert_message:
   action:
     if_param: title
