@@ -580,6 +580,14 @@
     :source_spec: <value>
     :strategy: --strategy=<value>
     :template: --template=<value>
+:new_app_as_dc:
+  :cmd: oc new-app
+  :options:
+    :app_repo: <value>
+    :code: --code=<value>
+    :image_stream: --image-stream=<value>
+    :name: --name=<value>
+    :source_spec: <value>
 :new_build:
   :cmd: oc new-build
   :options:
