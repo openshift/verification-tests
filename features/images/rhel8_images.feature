@@ -159,3 +159,40 @@ Feature: rhel8images.feature
     Then the output should contain:
       | name      |
       | openshift |
+
+  # @author xiuwang@redhat.com
+  # @case_id OCP-31249
+  @admin
+  Scenario: Using new-app cmd to create app with ruby rhel8 image test
+    Given I have a project
+    When I run the :tag admin command with:
+      | source           | registry.redhat.io/rhel8/ruby-25:latest |
+      | dest             | qe-ruby-25-rhel8:latest                 |
+      | reference_policy | local                                   |
+      | n                | openshift                               |
+    Then the step should succeed
+    When I run the :new_app client command with:
+      | image_stream | openshift/qe-ruby-25-rhel8                   |
+      | app_repo     | https://github.com/sclorg/s2i-ruby-container |
+      | context_dir  | 2.5/test/puma-test-app                       |
+      | name         | ruby25rhel8                                  |
+    Then the step should succeed
+    And the "ruby25rhel8-1" build completed
+    And a pod becomes ready with labels:
+      | deployment=ruby25rhel8 |
+    When I run the :logs client command with:
+      | resource_name | <%= pod.name %> |
+    Then the output should contain:
+      | Min threads: 0, max threads: 16 |
+    When I run the :set_env client command with:
+      | e        | PUMA_MIN_THREADS=1  |
+      | e        | PUMA_MAX_THREADS=12 |
+      | e        | PUMA_WORKERS=5      |
+      | resource | dc/ruby25rhel8      |
+    And a pod becomes ready with labels:
+      | deployment=ruby25rhel8 |
+    When I run the :logs client command with:
+      | resource_name | <%= pod.name %> |
+    Then the output should contain:
+      | Process workers: 5              |
+      | Min threads: 1, max threads: 12 |
