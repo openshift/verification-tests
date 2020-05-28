@@ -818,7 +818,7 @@
     :command: --command=<value>
     :dry_run: --dry-run
     :env: --env=<value>
-    :generator: --generator=<value>
+    :generator: --v=0
     :image: --image=<value>
     :limits: --limits=<value>
     :oc_opt_end: --
