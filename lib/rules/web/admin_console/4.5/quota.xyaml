@@ -65,4 +65,4 @@ check_chart_with_red_color:
 check_resource_chart_color:
   elements:
   - selector:
-      xpath: //div[contains(., '<quota_name>')]/following-sibling::div[@class='co-resource-quota-chart-row']//h5[contains(text(), '<graph_title>')]/following-sibling::div[@class='pf-c-chart']/*[name()='svg']/*[name()='g'][2]/*[name()='path' and contains(@style, '<rgb_value>')] 
+      xpath: //div[contains(., '<quota_name>')]/following-sibling::div[@class='co-resource-quota-chart-row']//h5[contains(text(), '<graph_title>')]/following-sibling::div[@class='pf-c-chart']/*[name()='svg']/*[name()='g'][2]/*[name()='path' and contains(@style, '<rgb_value>')]

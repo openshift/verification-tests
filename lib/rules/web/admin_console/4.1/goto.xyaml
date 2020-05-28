@@ -98,6 +98,7 @@ goto_route_creation_page:
 #catalog page
 goto_catalog_page:
   url: catalog/ns/<project_name>
+  action: wait_box_loaded
 goto_create_app_from_imagestream_page:
   url: catalog/source-to-image?imagestream=<is_name>&imagestream-ns=openshift&preselected-ns=<project_name>
 
