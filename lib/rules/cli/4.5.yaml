@@ -545,6 +545,7 @@
     :allow_missing_images: --allow-missing-images=<value>
     :allow_missing_imagestream_tags: --allow-missing-imagestream-tags=<value>
     :app_repo: <value>
+    :as_deployment_config: --as-deployment-config=<value>
     :as_test: --as-test=<value>
     :build_env: --build-env=<value>
     :build_env_file: --build-env-file=<value>
