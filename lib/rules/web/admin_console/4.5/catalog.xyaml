@@ -13,7 +13,7 @@ create_app_from_imagestream:
   action: click_try_sample
   action: choose_dc_type
   action:
-    if_param:
+    if_param: 
       deploy_type: "k8s"
     ref: choose_k8s_type
   action:
@@ -135,17 +135,13 @@ click_subscribe_button:
   params:
     button_text: Install
   action: click_button_text
-click_install_button:
-  params:
-    button_text: Install
-  action: click_button_text
 subscribe_using_default_params:
   action: wait_box_loaded
   action: click_subscribe_button
 set_custom_channel_and_subscribe:
   action: wait_box_loaded
   action: choose_update_channel
-  action: click_install_button
+  action: click_subscribe_button
 click_image_tag_dropdown:
   params:
     button_id: form-dropdown-image-tag-field
