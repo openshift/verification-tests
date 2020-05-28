@@ -27,3 +27,6 @@ parameters:
 
 - name: DISPLAYNAME
   value: OpenShift QE
+
+- name: PUBLISHER
+  value: OpenShift UI QE

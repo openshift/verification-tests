@@ -854,20 +854,32 @@ module BushSlicer
         commands = ["chroot", "/host/", "bash", "-c", commands_to_string(commands)]
       end
 
+      exec_opts = {}
+
+      # override image, arg order matters, image needs to go before --
+      # needed until https://bugzilla.redhat.com/show_bug.cgi?id=1728135 is fixed
+      unless node.env.opts[:host_debug_image]
+           mpods = Pod.get_labeled("app=multus", user: node.env.admin, project: Project.new(name: "openshift-multus", env: node.env), quiet: true)
+           exec_opts[:image] = mpods.first.container(name: "kube-multus").spec.image
+      end
+
+      exec_opts.merge!(
+          {
+              resource: "node/#{node.name}",
+              n: service_project.name,
+              oc_opts_end: "",
+              exec_command_arg: commands,
+              _stdin: opts[:stdin],
+              _stdout: opts[:stdout]
+          }
+      )
+
       @exec_lock.synchronize {
         # note this will block until timeout if command does not exist remotely
         # TODO: check debug pod status in the background to avoid freeze (WRKLDS-99)
         # note2: exit status is always 0 (WRKLDS-98)
         # note3: stdin and stderr come together (WRKLDS-110)
-        node.env.admin.cli_exec(
-          :debug,
-          resource: "node/#{node.name}",
-          n: service_project.name,
-          oc_opts_end: "",
-          exec_command_arg: commands,
-          _stdin: opts[:stdin],
-          _stdout: opts[:stdout]
-        )
+        node.env.admin.cli_exec(:debug, **exec_opts)
       }
     end
 

@@ -120,19 +120,32 @@ end
 #save the service ip and port of the proxy pod for later use in the scenario.
 Given /^I have a(n authenticated)? proxy configured in the project$/ do |use_auth|
   if use_auth
-    step %Q/I run the :new_app client command with:/, table(%{
-      | docker_image | aosqe/squid-proxy  |
-      | env          | USE_AUTH=1         |
+    step %Q/I run the :create_deploymentconfig client command with:/, table(%{
+      | image | aosqe/squid-proxy  |
+      | name  | squid-proxy        |
+      })
+    step %Q/I wait until the status of deployment "squid-proxy" becomes :running/
+    step %Q/I run the :set_env client command with:/, table(%{
+      | resource | deploymentconfig/squid-proxy |
+      | e        | USE_AUTH=1                   |
+      })
+    step %Q/a pod becomes ready with labels:/, table(%{
+      | deployment=squid-proxy-2 |
       })
   else
-    step %Q/I run the :new_app client command with:/, table(%{
-      | docker_image | aosqe/squid-proxy  |
+    step %Q/I run the :create_deployment client command with:/, table(%{
+      | image | aosqe/squid-proxy  |
+      | name  | squid-proxy        |
+      })
+    step %Q/a pod becomes ready with labels:/, table(%{
+      | deployment=squid-proxy-1 |
       })
   end
   step %Q/the step should succeed/
-  step %Q/a pod becomes ready with labels:/, table(%{
-    | deployment=squid-proxy-1 |
-    })
+  @result = user.cli_exec(:expose, resource: "deploymentconfig", resource_name: "squid-proxy", port: "3128")
+  unless @result[:success]
+    raise "could not create squid-proxy service, see log"
+  end
   step %Q/I wait for the "squid-proxy" service to become ready/
   step %Q/evaluation of `service.ip` is stored in the :proxy_ip clipboard/
   step %Q/evaluation of `service.ports[0].dig('port')` is stored in the :proxy_port clipboard/
@@ -177,7 +190,7 @@ Given /^I have an ssh-git service in the(?: "([^ ]+?)")? project$/ do |project_n
     raise "project #{project_name} does not exist"
   end
 
-  @result = user.cli_exec(:run, name: "git-server", image: "aosqe/ssh-git-server-openshift")
+  @result = user.cli_exec(:create, f: "#{ENV['BUSHSLICER_HOME']}/testdata/templates/ssh-git/ssh-git-dc.yaml")
   raise "cannot run the ssh-git-server pod" unless @result[:success]
 
   @result = user.cli_exec(:set_probe, resource: "dc/git-server", readiness: true, open_tcp: "2022")
@@ -188,7 +201,7 @@ Given /^I have an ssh-git service in the(?: "([^ ]+?)")? project$/ do |project_n
 
   # wait to become available
   @result = BushSlicer::Pod.wait_for_labeled("deployment-config=git-server",
-                                            "run=git-server",
+                                            "name=git-server",
                                             count: 1,
                                             user: user,
                                             project: project,

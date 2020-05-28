@@ -114,7 +114,6 @@ check_community_operator_description_on_overlay:
     description: This is a community provided operator
   action: click_checkbox_from_provider_type
   action: open_first_card_in_overlay
-  action: submit_changes
   action: check_operator_description_on_overlay
   action: click_close_icon
   action: click_checkbox_from_provider_type
@@ -170,11 +169,20 @@ click_checkbox_from_capability_level:
   - selector:
       xpath: //*[contains(@class, 'pf-c-check__label') and text()='<text>']
     op: click
+click_continue_button:
+  params:
+    button_text: Continue
+  action: click_button_text
 open_first_card_in_overlay:
   elements:
   - selector:
       xpath: //a[contains(@class, 'pf-c-card')][1]
-    op: click  
+    op: click
+  action:
+    if_element:
+      selector:
+        xpath: //button[text()='Continue']
+    ref: click_continue_button
 uninstall_operator_on_console:
   params:
     button_text: Uninstall Operator
@@ -270,7 +278,7 @@ open_operator_modal:
   action: open_first_card_in_overlay
 check_default_view_is_form_view:
   params:
-    content: Create by completing the form
+    content: Some fields may not be represented in this form
   action: check_page_contains
   element:
     selector:
@@ -282,4 +290,37 @@ switch_to_yaml_view:
     content: Create by manually entering YAML or JSON definitions
   action: click_radio_input
   action: check_page_contains
-
+select_installed_namespace:
+  action: click_project_list_dropdown
+  action: choose_project_from_dropdown_list
+check_all_namespace_installation_mode_with_recommended_ns:
+  params:
+    button_text: <recommended_ns>
+  action: check_button_contains_text
+check_all_namespace_installation_mode_without_recommended_ns:
+  params:
+    disabled_radio_text: OwnNamespace
+    checked_radio_text: AllNamespaces
+  action: check_disabled_radio_input
+  action: check_checked_radio_input
+check_specific_namespace_installation_mode_with_recommended_ns:
+  params:
+    disabled_radio_text: AllNamespaces
+    checked_radio_text: <recommended_ns>
+  action: check_disabled_radio_input
+  action: check_checked_radio_input
+check_specific_namespace_installation_mode_without_recommended_ns:
+  params:
+    disabled_radio_text: AllNamespaces
+    checked_radio_text: OwnNamespace
+  action: check_disabled_radio_input
+  action: check_checked_radio_input
+enable_cluster_monitoring:
+  element:
+    selector:
+      xpath: //input[contains(@type,'checkbox') and contains(@id,'enable-monitoring-checkbox')]
+    op: click
+click_radio_to_pick_ns:
+  params:
+    text: Pick an existing namespace
+  action: click_radio_input_by_text

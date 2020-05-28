@@ -127,24 +127,9 @@ Feature: Machine features testing
     And admin ensures machine number is restored after scenario
 
     Given I clone a machineset and name it "machineset-clone-27609"
-
-    Then I run the :get admin command with:
-     | resource      | machineset             |
-     | resource_name | machineset-clone-27609 |
-     | namespace     | openshift-machine-api  |
-     | o             | yaml                   |
-    And I save the output to file> new_machineset.yaml
-
-    And I replace lines in "new_machineset.yaml":
-     | publicIp: null| publicIp: true |
-    Then the step should succeed
-
-    When I run the :replace admin command with:
-     | f | new_machineset.yaml |
-    And the output should match:
-     | [Rr]eplaced |
-
-    Given I scale the machineset to +2
+    Then as admin I successfully merge patch resource "machineset/machineset-clone-27609" with:
+      | {"spec":{"template": {"spec":{"providerSpec":{"value":{"publicIP": true}}}}}} |
+    And I scale the machineset to +2
     Then the machineset should have expected number of running machines
 
   # @author miyadav@redhat.com
@@ -189,7 +174,7 @@ Feature: Machine features testing
 
     #Create a spot machineset
     Given I use the "openshift-machine-api" project
-    Given I create a spot instance machineset named "<machineset_name>" on <iaas_type>
+    Given I create a spot instance machineset and name it "<machineset_name>" on <iaas_type>
     And evaluation of `machine_set.machines.first.node_name` is stored in the :noderef_name clipboard
     And evaluation of `machine_set.machines.first.name` is stored in the :machine_name clipboard
 
@@ -204,6 +189,9 @@ Feature: Machine features testing
       | name     | <%= cb.noderef_name %> |
     Then the step should succeed
     And the output should match "machine.openshift.io/interruptible-instance="
+    And "machine-api-termination-handler" daemonset becomes ready in the "openshift-machine-api" project
+    And 1 pods become ready with labels:
+      | k8s-app=termination-handler |
 
     Examples:
       | iaas_type | machineset_name  |

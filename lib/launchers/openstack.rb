@@ -790,6 +790,111 @@ module BushSlicer
       end
     end
 
+    def create_network(network_name)
+      payload = {
+        network: {
+          name: network_name
+        }
+      }
+      res = self.rest_run(self.os_network_url + "/v2.0/networks", "POST", payload, self.os_token)
+      raise res[:response] unless res[:success]
+      return res[:parsed]["network"]
+    end
+
+    # for example, update the name:
+    # update_network("<network_id>", name; "xxx")
+    def update_network(network_id, **kargs)
+      payload = {
+        network: kargs
+      }
+      res = self.rest_run(self.os_network_url + "/v2.0/networks/" + network_id, "PUT", payload, self.os_token)
+      raise res[:response] unless res[:success]
+      return res
+    end
+
+    def delete_network(network_id)
+      res = self.rest_run(self.os_network_url + "/v2.0/networks/" + network_id, "DELETE", {}, self.os_token)
+      raise res[:response] unless res[:success]
+      return res
+    end
+
+    def create_subnet(network_id, cidr)
+      payload = {
+        subnet: {
+          cidr: cidr,
+          ip_version: 4,
+          network_id: network_id
+        }
+      }
+      res = self.rest_run(self.os_network_url + "/v2.0/subnets", "POST", payload, self.os_token)
+      raise res[:response] unless res[:success]
+      return res[:parsed]["subnet"]
+    end
+
+    # for example, update the name:
+    # update_subnet("<network_id>", name: "xxx")
+    def update_subnet(subnet_id, **kargs)
+      payload = {
+        subnet: kargs
+      }
+      res = self.rest_run(self.os_network_url + "/v2.0/subnets/" + subnet_id, "PUT", payload, self.os_token)
+      raise res[:response] unless res[:success]
+      return res
+    end
+
+    def delete_subnet(subnet_id)
+      res = self.rest_run(self.os_network_url + "/v2.0/subnets/" + subnet_id, "DELETE", {}, self.os_token)
+      raise res[:response] unless res[:success]
+      return res
+    end
+
+    # external_gateway_info have three fields
+    # {
+    #   network_id: "xxx",
+    #   "enable_snat": true,
+    #   external_fixed_ips: [
+    #     {
+    #       ip_address: "xxx",
+    #       subnet_id: "xxx"
+    #     }
+    #   ]
+    # }
+    def create_router(router_name, external_gateway_info)
+      payload = {
+        router: {
+          name: router_name,
+          external_gateway_info: external_gateway_info
+        }
+      }
+      res = self.rest_run(self.os_network_url + "/v2.0/routers", "POST", payload, self.os_token)
+      raise res[:response] unless res[:success]
+      return res[:parsed]["router"]
+    end
+
+    def delete_router(router_id)
+      res = self.rest_run(self.os_network_url + "/v2.0/routers/" + router_id, "DELETE", {}, self.os_token)
+      raise res[:response] unless res[:success]
+      return res
+    end
+
+    def link_subnet_to_router(router_id, subnet_id)
+      payload = {
+        subnet_id: subnet_id
+      }
+      res = self.rest_run(self.os_network_url + "/v2.0/routers/" + router_id + "/add_router_interface", "PUT", payload, self.os_token)
+      raise res[:response] unless res[:success]
+      return res[:parsed]
+    end
+
+    def unlink_subnet_from_router(router_id, subnet_id)
+      payload = {
+        subnet_id: subnet_id
+      }
+      res = self.rest_run(self.os_network_url + "/v2.0/routers/" + router_id + "/remove_router_interface", "PUT", payload, self.os_token)
+      raise res[:response] unless res[:success]
+      return res[:parsed]
+    end
+
     def get_networks
       res = self.rest_run(self.os_network_url + "/v2.0/networks", "GET", {}, self.os_token)
       raise res[:response] unless res[:success]

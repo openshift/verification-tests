@@ -36,7 +36,7 @@ Feature: stibuild.feature
       | tc498848/tc498848-s2i.json    | # @case_id OCP-12041
 
   # @author wzheng@redhat.com
-  # @case_id OCP-11120
+  # @case_id OCP-30858
   Scenario: STI build with dockerImage with specified tag
     Given I have a project
     When I run the :new_app client command with:

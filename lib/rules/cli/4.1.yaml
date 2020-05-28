@@ -177,11 +177,14 @@
     :from_literal: --from-literal=<value>
     :name: <value>
 :create_cronjob:
-  :cmd: oc create cronjob <name>
+  :cmd: oc create cronjob <name> <global_options> <options>
   :options:
     :allow_missing_template_keys: --allow-missing-template-keys=<value>
     :dry_run: --dry-run=<value>
+    :exec_command: <value>
+    :exec_command_arg: <value>
     :image: --image=<value>
+    :oc_opts_end: --
     :output: --output <value>
     :restart: --restart=<value>
     :save_config: --save-config=<value>
@@ -208,12 +211,15 @@
     :output: --output <value>
     :template: --template=<value>
 :create_job:
-  :cmd: oc create job <name>
+  :cmd: oc create job <name> <global_options> <options>
   :options:
     :allow_missing_template_keys: --allow-missing-template-keys=<value>
+    :exec_command: <value>
+    :exec_command_arg: <value>
     :dry_run: --dry-run=<value>
     :from: --from=<value>
     :image: --image=<value>
+    :oc_opts_end: --
     :output: --output <value>
     :save_config: --save-config=<value>
     :template: --template=<value>
@@ -319,7 +325,7 @@
      :output: --output=<value>
      :template: --template=<value>
 :debug:
-  :cmd: oc debug --image=quay.io/openshifttest/storage@sha256:a05b96d373be86f46e76817487027a7f5b8b5f87c0ac18a246b018df11529b40 <global_options>
+  :cmd: oc debug <global_options>
   :options:
      :c: -c <value>
      :dry_run: --dry-run
@@ -573,6 +579,14 @@
     :source_spec: <value>
     :strategy: --strategy=<value>
     :template: --template=<value>
+:new_app_as_dc:
+  :cmd: oc new-app
+  :options:
+    :app_repo: <value>
+    :code: --code=<value>
+    :image_stream: --image-stream=<value>
+    :name: --name=<value>
+    :source_spec: <value>
 :new_build:
   :cmd: oc new-build
   :options:
@@ -1323,7 +1337,7 @@
   :cmd: oc adm release info
   :options:
     :image_for: --image-for=<value>
-    :image_name: <value>    
+    :image_name: <value>
     :registry_config: --registry-config=<value>
 :oadm_router:
   :cmd: oc adm router <name>

@@ -436,7 +436,7 @@ require_relative 'chrome_extension'
               return res_param
             end
           end
-        end           
+        end
 
         res_context ={}
         if action_body[:context]
@@ -595,12 +595,12 @@ require_relative 'chrome_extension'
         case op
         when "click", "hover"
           if val.empty?
-            with_hook(:click) { element.send(op.to_sym) }
+            with_hook(:click, element, op.to_sym)
           else
             # click an element with several modifier keys pressed
             # op: "click - :control\n- :shift"
             keys = Psych.load val
-            with_hook(:click) { element.send(op.to_sym, *keys) }
+            with_hook(:click, element, op.to_sym, *keys)
           end
         when "clear"
           raise "cannot #{op} with a value" unless val.empty?
@@ -626,7 +626,7 @@ require_relative 'chrome_extension'
           end
 
           if element.respond_to? op.to_sym
-            with_hook(hook) { element.send(op.to_sym, val) }
+            with_hook(hook, element, op.to_sym, val)
           else
             raise "element type #{element.class} does not support #{op}"
           end
@@ -822,11 +822,11 @@ require_relative 'chrome_extension'
     end
 
     # execute some code block wrapped by a hook if provided by user
-    def with_hook(hook, &block)
+    def with_hook(hook, element, *op_call)
       if @hooks&.fetch(hook, false)
-        @hooks[hook].call(block)
+        @hooks[hook].call(element, *op_call)
       else
-        block.call
+        element.send *op_call
       end
     end
 
