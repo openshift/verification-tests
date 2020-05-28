@@ -603,6 +603,11 @@ Given /^ssh key for accessing nodes is copied to(?: the #{QUOTED} directory in)?
   raise "Error syncing files over to '#{pod.name}' pod '#{@result[:stderr]}'" unless @result[:success]
 end
 
+Given /^I store all master nodes to the#{OPT_SYM} clipboard$/ do |cb_name|
+  cb_name ||= :master_nodes
+  nodes = BushSlicer::Node.list(user: admin)
+  cb[cb_name] = nodes.select { |n| n.is_master? }
+end
 
 Given /^I store all worker nodes to the#{OPT_SYM} clipboard$/ do |cb_name|
   cb_name ||= :worker_nodes
