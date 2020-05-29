@@ -65,6 +65,7 @@ input_silence_comments:
   action: set_label_textarea
 perform_silence:
   action: submit_changes
+  action: check_silence_detail
 check_silence_detail:
   element:
     selector:
@@ -75,7 +76,6 @@ silence_alert_from_detail:
   action: click_silence_alert
   action: input_silence_comments
   action: perform_silence
-  action: check_silence_detail
 silence_alert_from_detail_check_fields:
   params:
     comment_text: silence comments is a must from ocp 4.5
@@ -86,7 +86,6 @@ silence_alert_from_detail_check_fields:
   action: check_regular_expression_link
   action: input_silence_comments
   action: perform_silence
-  action: check_silence_detail
 click_alert_link_with_text:
   element:
     selector:
@@ -189,4 +188,44 @@ click_alertrule_expression:
     selector:
       xpath: //a[contains(@href, '<expression>')]
     op: click
-  
+
+set_alert_label_invalid:
+  action: set_label_name_alert_name
+  action: set_label_value_watchdog_reg
+set_label_name_alert_name:
+  params:
+    label_text: Label name
+    input_value: alertname
+  action: set_label_input_simple
+set_label_value_watchdog_reg:
+  params:
+    label_text: Label value
+    input_value: Watchdo.*
+  action: set_label_input_simple
+silence_alert_from_create_button:
+  params:
+    comment_text: silence comments is a must from ocp 4.5
+  action: input_silence_comments
+  action: perform_silence
+check_use_regular:
+  element:
+    selector:
+      xpath: //span[text()='Alert Labels']/ancestor::div[@class='co-m-pane__body-group']//input[@type='checkbox']
+    op: click
+check_info_of_silence_detail_reg:
+  params:
+    silence_name: Watchdo.*
+    alert_name: Watchdog
+  action: check_silence_name
+  action: check_silenced_alert_name
+check_silence_name:
+  element:
+    selector:
+      xpath: //span[text()='Silence Details']/ancestor::div[@class='co-m-pane__body']//dd[contains(text(), '<silence_name>')]
+check_silenced_alert_name:
+  element:
+    selector:
+      xpath: //span[text()='Firing Alerts']/ancestor::div[@class='co-m-pane__body-group']//a[contains(text(), '<alert_name>')]
+expire_alert_from_cog_menu: 
+  action: click_first_action_icon
+  action: click_expire_alert_button  
