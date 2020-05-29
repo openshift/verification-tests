@@ -581,6 +581,7 @@
     :image_stream: --image-stream=<value>
     :name: --name=<value>
     :source_spec: <value>
+    :strategy: --strategy=<value>
 :new_build:
   :cmd: oc new-build
   :options:
