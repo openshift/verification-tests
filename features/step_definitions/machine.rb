@@ -57,23 +57,24 @@ end
 
 Then(/^admin ensures machine number is restored after scenario$/) do
   ensure_admin_tagged
-  cb.all_machines = BushSlicer::Machine.list(user: admin, project: project("openshift-machine-api"))
-  machine_orig_num = cb.all_machines.length
+  machine_names_orig = BushSlicer::Machine.list(user: admin, project: project("openshift-machine-api")).map { | m | m.name }
 
   teardown_add {
-    machines_waiting_delete = BushSlicer::Machine.list(user: admin, project: project("openshift-machine-api")).select { | machine |
-      machine.deleting?
-    }
+    machines = BushSlicer::Machine.list(user: admin, project: project("openshift-machine-api"))
 
-    machines_waiting_delete.each do | machine |
-      step %Q{I use the "openshift-machine-api" project}
-      step %Q{I wait for the resource "machine" named "#{machine.name}" to disappear within 1200 seconds}
-      step %Q{the step should succeed}
+    # compare current macine names and original machine names, new names are waiting delete
+    machine_names_current = machines.map { | m | m.name }
+    machine_names_waiting_del = machine_names_current - machine_names_orig
+    return if machine_names_waiting_del.empty?
+
+    machines_waiting_delete = []
+    machines.each do | machine |
+      machines_waiting_delete << machine if machine_names_waiting_del.include?(machine.name)
     end
 
-    machines = BushSlicer::Machine.list(user: admin, project: project("openshift-machine-api"))
-    unless machines.length == machine_orig_num
-      raise "Failed to restore cluster, expected number of machines #{machine_orig_num}, got #{machines.length.to_s}"
+    machines_waiting_delete.each do | machine |
+      machine.ensure_deleted(user: user, wait: 1200)
+      raise "Unable to delete machine #{machine.name}" if machine.exists?(user: user)
     end
   }
 end
