@@ -215,3 +215,8 @@ goto_hpas_page:
   url: k8s/ns/<project_name>/horizontalpodautoscalers
 goto_one_hpa_page:
   url: k8s/ns/<project_name>/horizontalpodautoscalers/<hpa_name>
+
+#cluster settings
+goto_global_configuration_page:
+  url: settings/cluster/globalconfig
+  action: wait_box_loaded 
