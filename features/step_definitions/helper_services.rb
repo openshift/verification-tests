@@ -132,17 +132,18 @@ Given /^I have a(n authenticated)? proxy configured in the project$/ do |use_aut
     step %Q/a pod becomes ready with labels:/, table(%{
       | deployment=squid-proxy-2 |
       })
+    @result = user.cli_exec(:expose, resource: "deploymentconfig", resource_name: "squid-proxy", port: "3128")
   else
     step %Q/I run the :create_deployment client command with:/, table(%{
       | image | aosqe/squid-proxy  |
       | name  | squid-proxy        |
       })
     step %Q/a pod becomes ready with labels:/, table(%{
-      | deployment=squid-proxy-1 |
+      | app=squid-proxy |
       })
+    @result = user.cli_exec(:expose, resource: "deployment", resource_name: "squid-proxy", port: "3128")
   end
   step %Q/the step should succeed/
-  @result = user.cli_exec(:expose, resource: "deploymentconfig", resource_name: "squid-proxy", port: "3128")
   unless @result[:success]
     raise "could not create squid-proxy service, see log"
   end
