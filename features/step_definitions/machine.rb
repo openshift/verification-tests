@@ -57,21 +57,19 @@ end
 
 Then(/^admin ensures machine number is restored after scenario$/) do
   ensure_admin_tagged
-  machine_names_orig = BushSlicer::Machine.list(user: admin, project: project("openshift-machine-api")).map { | m | m.name }
+  machine_names_orig = BushSlicer::Machine.list(user: admin, project: project("openshift-machine-api")).map(&:name)
 
   teardown_add {
     machines = BushSlicer::Machine.list(user: admin, project: project("openshift-machine-api"))
-
-    # compare current macine names and original machine names, new names are waiting delete
-    machine_names_current = machines.map { | m | m.name }
+    machine_names_current = machines.map(&:name)
     machine_names_waiting_del = machine_names_current - machine_names_orig
-    return if machine_names_waiting_del.empty?
+    machine_names_missing = machine_names_orig - machine_names_current
+    machines_waiting_delete = machines.select { |m| machine_names_waiting_del.include?(m.name) }
 
-    machines_waiting_delete = []
-    machines.each do | machine |
-      machines_waiting_delete << machine if machine_names_waiting_del.include?(machine.name)
+    unless machine_names_missing.empty?
+      raise "Machines deleted but never restored: #{machine_names_missing}."
     end
-
+    
     machines_waiting_delete.each do | machine |
       machine.ensure_deleted(user: user, wait: 1200)
       raise "Unable to delete machine #{machine.name}" if machine.exists?(user: user)
