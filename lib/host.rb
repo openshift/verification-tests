@@ -523,14 +523,15 @@ module BushSlicer
         file = '~/' + file
       end
       if opts[:raw]
-        exec_raw("rm #{r} -f -- #{file}", opts)
-        opts[:quiet] = true
-        res = exec_raw("ls -d -- #{file}", opts)
+        exec_method = :exec_raw
+      elsif opts[:admin]
+        exec_method = :exec_admin
       else
-        exec("rm #{r} -f -- #{file}", opts)
-        opts[:quiet] = true
-        res = exec("ls -d -- #{file}", opts)
+        exec_method = :exec
       end
+      public_send(exec_method, "rm #{r} -f -- #{file}", **opts)
+      opts[:quiet] = true
+      res = public_send(exec_method, "ls -d -- #{file}", **opts)
 
       return ! res[:success]
     end
