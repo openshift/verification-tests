@@ -167,6 +167,11 @@ module BushSlicer
           end
         end
       end
+
+      # ensure Hash#transform_values method exists
+      if !::Hash.instance_methods.include?(:transform_values)
+        require 'active_support/core_ext/hash/transform_values.rb'
+      end
     end
 
     module Setup
