@@ -1,11 +1,9 @@
 Feature: basic verification for upgrade testing
   # @author weinliu@redhat.com
   @upgrade-prepare
-  @users=upuser1
   @admin
   Scenario: Upgrade - Make sure multiple resources work well after upgrade - prepare
-    Given I switch to the first user
-    # Given I switch to cluster admin pseudo user
+    Given I switch to cluster admin pseudo user
     When I run the :new_project client command with:
       | project_name | node-upgrade |
     And I use the "node-upgrade" project
@@ -41,11 +39,9 @@ Feature: basic verification for upgrade testing
   # @author weinliu@redhat.com
   # @case_id OCP-13016
   @upgrade-check
-  @users=upuser1
   @admin
   Scenario: Upgrade - Make sure multiple resources work well after upgrade
-    Given I switch to the first user
-    # Given I switch to cluster admin pseudo user
+    Given I switch to cluster admin pseudo user
     When I use the "node-upgrade" project
     And admin ensures "node-upgrade" namespace is deleted after scenario
     When I run the :create client command with:
