@@ -217,4 +217,9 @@ click_radio_to_pick_ns:
   params:
     text: Pick an existing namespace
   action: click_radio_input_by_text
+check_Hazelcast_default_action_and_remote_workflow:
+  params:
+    text: Purchase
+    link_url: https://marketplace.redhat.com/en-us/operators/hazelcast-enterprise-certified-rhmp/pricing
+  action: check_link_and_text
 
