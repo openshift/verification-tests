@@ -197,3 +197,22 @@ Feature: Machine features testing
       | iaas_type | machineset_name  |
       | aws       | machineset-29199 | # @case_id OCP-29199
 
+  # @author miyadav@redhat.com
+  # @case_id OCP29344
+  @admin
+  Scenario: [BZ1817860] Validation of `oc adm inspect co/xx` command
+    Given I switch to cluster admin pseudo user
+    Then I saved following keys to list in :resourcesid clipboard:
+      | machine-api        | |
+      | cluster-autoscaler | |
+
+    And I use the "openshift-machine-api" project
+    Then I repeat the following steps for each :id in cb.resourcesid:
+    """
+    When I run the :oadm_inspect admin command with:
+      | resource_type | co       |
+      | resource_name | #{cb.id} |
+    Then the output should contain "Wrote inspect data to inspect.local"
+    And the step should succeed
+    """
+    
