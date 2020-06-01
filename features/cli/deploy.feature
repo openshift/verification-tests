@@ -799,7 +799,7 @@ Feature: deployment related features
 
   # @author yinzhou@redhat.com
   # @case_id OCP-31200
-  Scenario: A/B Deployment
+  Scenario: A/B Deployment for OCP 4.5 or greater
     Given the master version >= "4.5"
     Given I have a project
     When I run the :new_app client command with:
