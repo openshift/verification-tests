@@ -139,3 +139,32 @@ Feature: Storage upgrade tests
       | ls | /mnt/storage |
     Then the output should contain:
       | test-upgrade |
+
+  # @author wduan@redhat.com
+  # @case_id OCP-31331
+  @upgrade-prepare
+  @users=upuser1,upuser2
+  @admin
+  Scenario: Cluster operator storage should be in correct status after upgrade - prepare
+    Given I switch to cluster admin pseudo user
+    # Check cluster operator storage should be in correct status
+    Given the expression should be true> cluster_operator('storage').condition(type: 'Progressing')['status'] == "False"
+    Given the expression should be true> cluster_operator('storage').condition(type: 'Available')['status'] == "True"
+    Given the expression should be true> cluster_operator('storage').condition(type: 'Degraded')['status'] == "False"
+    Given the expression should be true> cluster_operator('storage').condition(type: 'Upgradeable')['status'] == "True"
+
+  # @author wduan@redhat.com
+  @upgrade-check
+  @users=upuser1,upuser2
+  @admin
+  Scenario: Cluster operator storage should be in correct status after upgrade
+    Given I switch to cluster admin pseudo user
+    # Check storage operator version after upgraded
+    Given the "storage" operator version matches the current cluster version
+
+    # Check cluster operator storage should be in correct status
+    Given the expression should be true> cluster_operator('storage').condition(type: 'Progressing')['status'] == "False"
+    Given the expression should be true> cluster_operator('storage').condition(type: 'Available')['status'] == "True"
+    Given the expression should be true> cluster_operator('storage').condition(type: 'Degraded')['status'] == "False"
+    Given the expression should be true> cluster_operator('storage').condition(type: 'Upgradeable')['status'] == "True"
+
