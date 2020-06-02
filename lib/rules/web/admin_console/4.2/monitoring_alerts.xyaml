@@ -67,6 +67,10 @@ click_expire_alert_button:
   params:
     button_text: Expire Silence
   action: click_button_text
+click_expirt_link_text:
+  params:
+    text: Expire Silence
+  action: click_link_with_text_only
 disable_silence_tab:
   action:
     if_element:
@@ -122,23 +126,23 @@ set_alert_label_invalid:
   action: set_label_value_watchdog_reg
 set_label_name_alert_name:
   params:
-    label_text: Label name
+    name: Name
     input_value: alertname
-  action: set_label_input_simple
+  action: set_placeholder_input
 set_label_value_watchdog_reg:
   params:
-    label_text: Label value
+    name: Value
     input_value: Watchdo.*
-  action: set_label_input_simple
+  action: set_placeholder_input
 silence_alert_from_create_button:
   params:
-    comment_text: silence comments is a must from ocp 4.5
-  action: input_silence_comments
+    silence_name: Watchdo.*
   action: perform_silence
+  action: check_silence_name
 check_use_regular:
   element:
     selector:
-      xpath: //span[text()='Alert Labels']/ancestor::div[@class='co-m-pane__body-group']//input[@type='checkbox']
+      xpath: //input[@type='checkbox']
     op: click
 check_info_of_silence_detail_reg:
   params:
@@ -149,14 +153,15 @@ check_info_of_silence_detail_reg:
 check_silence_name:
   element:
     selector:
-      xpath: //span[text()='Silence Details']/ancestor::div[@class='co-m-pane__body']//dd[contains(text(), '<silence_name>')]
+      xpath: //dd[contains(text(), '<silence_name>')]
+    timeout: 20  
 check_silenced_alert_name:
   element:
     selector:
-      xpath: //span[text()='Firing Alerts']/ancestor::div[@class='co-m-pane__body-group']//a[contains(text(), '<alert_name>')]
+      xpath: //a[contains(text(), '<alert_name>')]
 expire_alert_from_cog_menu: 
   action: click_first_action_icon
-  action: click_expire_alert_button  
+  action: click_expire_alert_button 
 
 open_alert_rule_from_detail:
   params:

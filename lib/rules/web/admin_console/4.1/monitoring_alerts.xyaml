@@ -63,10 +63,19 @@ click_first_action_icon:
     aria_label_text: Actions 
     index: 1
   action: click_icon_index_button
+click_second_action_icon:
+  params:
+    aria_label_text: Actions 
+    index: 2
+  action: click_icon_index_button
 click_expire_alert_button:
   params:
     button_text: Expire Silence
   action: click_button_text
+click_expirt_link_text:
+  params:
+    text: Expire Silence
+  action: click_link_with_text_only
 disable_silence_tab:
   action:
     if_element:
@@ -123,23 +132,23 @@ set_alert_label_invalid:
   action: set_label_value_watchdog_reg
 set_label_name_alert_name:
   params:
-    label_text: Label name
+    name: Name
     input_value: alertname
-  action: set_label_input_simple
+  action: set_placeholder_input
 set_label_value_watchdog_reg:
   params:
-    label_text: Label value
+    name: Value
     input_value: Watchdo.*
-  action: set_label_input_simple
+  action: set_placeholder_input
 silence_alert_from_create_button:
   params:
-    comment_text: silence comments is a must from ocp 4.5
-  action: input_silence_comments
+    silence_name: Watchdo.*
   action: perform_silence
+  action: check_silence_name
 check_use_regular:
   element:
     selector:
-      xpath: //span[text()='Alert Labels']/ancestor::div[@class='co-m-pane__body-group']//input[@type='checkbox']
+      xpath: //input[@type='checkbox']
     op: click
 check_info_of_silence_detail_reg:
   params:
@@ -150,15 +159,14 @@ check_info_of_silence_detail_reg:
 check_silence_name:
   element:
     selector:
-      xpath: //span[text()='Silence Details']/ancestor::div[@class='co-m-pane__body']//dd[contains(text(), '<silence_name>')]
+      xpath: //dd[contains(text(), '<silence_name>')]
 check_silenced_alert_name:
   element:
     selector:
-      xpath: //span[text()='Firing Alerts']/ancestor::div[@class='co-m-pane__body-group']//a[contains(text(), '<alert_name>')]
+      xpath: //a[contains(text(), '<alert_name>')]
 expire_alert_from_cog_menu: 
-  action: click_first_action_icon
-  action: click_expire_alert_button 
-
+  action: click_second_action_icon
+  action: click_expirt_link_text
 open_alert_rule_from_detail:
   params:
     text: Watchdog 
@@ -170,10 +178,7 @@ open_alert_rule_from_detail:
 check_alert_rule_details:
   params:
     rule_name: Watchdog
-    expression: vector(1)
-    link: /monitoring/query-browser?query0=vector(1)
   action: check_rule_name
-  action: check_ruel_expression
   action: check_active_alerts
 check_rule_name:
   element:
@@ -185,12 +190,12 @@ check_ruel_expression:
     link_url: <link>
   action: check_link_and_text
 check_active_alerts:
-  action: check_view_metrics
+  action: check_view_prometheus
   action: check_alert_description_on_rule_detail
-check_view_metrics:
+check_view_prometheus:
   params:
-    text: View in Metrics
-    link_url: /monitoring/query-browser?query0=vector(1)
+    text: View in
+    link_url: vector(1)
   action: check_link_and_text
 check_alert_description_on_rule_detail:
   params:
