@@ -7,11 +7,11 @@ Feature: oc_volume.feature
   Scenario: Create a pod that consumes the secret in a volume
     Given I have a project
     Given I run the :create client command with:
-          | f | <%= BushSlicer::HOME %>/testdata/pods/allinone-volume/secret.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/pods/allinone-volume/secret.yaml |
     Then the step should succeed
     When I run the :secret_link client command with:
-          | secret_name | test-secret |
-          | sa_name     | default     |
+      | secret_name | test-secret |
+      | sa_name     | default     |
     Then the step should succeed
     When I run the :run client command with:
       | name         | mydc                                                                                                          |
