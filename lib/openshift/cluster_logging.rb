@@ -83,8 +83,8 @@ module BushSlicer
       log_store_raw(user: user, cached: cached, quiet: quiet)['elasticsearchStatus']
     end
 
-    private def es_cluster_health(user: nil, cached: true, quiet: false)
-      es_status_raw(user: user, cached: cached, quiet: quiet).first['clusterHealth'] ||
+    def es_cluster_health(user: nil, cached: true, quiet: false)
+      return es_status_raw(user: user, cached: cached, quiet: quiet).first['clusterHealth'] ||
         es_status_raw(user: user, cached: true, quiet: quiet).first['cluster']['status']
     end
 
@@ -202,6 +202,22 @@ module BushSlicer
 
     def logstore_node_count(user: nil, cached: false, quiet: false)
       return log_store_spec(user: user, cached: cached, quiet: quiet).dig('elasticsearch', 'nodeCount')
+    end
+
+    def retention_policy(user: nil, cached: false, quiet: true)
+      return log_store_spec(user: user, cached: cached, quiet: quiet).dig('retentionPolicy')
+    end
+
+    def application_max_age(user: nil, cached: false, quiet: true)
+      return retention_policys(user: user, cached: cached, quiet: quiet).dig('application', 'maxAge')
+    end
+
+    def audit_max_age(user: nil, cached: false, quiet: true)
+      return retention_policys(user: user, cached: cached, quiet: quiet).dig('audit', 'maxAge')
+    end
+
+    def infra_max_age(user: nil, cached: false, quiet: true)
+      return retention_policys(user: user, cached: cached, quiet: quiet).dig('infra', 'maxAge')
     end
 
     def curation_schedule(user: nil, cached: false, quiet: true)
