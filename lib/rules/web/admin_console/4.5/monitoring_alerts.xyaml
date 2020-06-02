@@ -194,14 +194,14 @@ set_alert_label_invalid:
   action: set_label_value_watchdog_reg
 set_label_name_alert_name:
   params:
-    label_text: Label name
+    name: Name
     input_value: alertname
-  action: set_label_input_simple
+  action: set_placeholder_input
 set_label_value_watchdog_reg:
   params:
-    label_text: Label value
+    name: Value
     input_value: Watchdo.*
-  action: set_label_input_simple
+  action: set_placeholder_input
 silence_alert_from_create_button:
   params:
     comment_text: silence comments is a must from ocp 4.5
