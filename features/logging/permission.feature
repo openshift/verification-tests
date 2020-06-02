@@ -44,3 +44,81 @@ Feature: permission related test
     Then the step should succeed
     Then the expression should be true> @result[:parsed]['count'] > 0
     """
+
+  # @author qitang@redhat.com
+  # @case_id OCP-30356
+  @admin
+  @destructive
+  @commonlogging
+  Scenario: Normal User can only view project owned by himself
+    Given I switch to the first user
+    And evaluation of `user.cached_tokens.first` is stored in the :user_token clipboard
+    Given I create a project with non-leading digit name
+    And evaluation of `project` is stored in the :proj_1 clipboard
+    When I run the :new_app client command with:
+      | file | <%= BushSlicer::HOME %>/testdata/logging/loggen/container_json_log_template.json |
+    Then the step should succeed
+    Given I switch to the second user
+    Given I create a project with non-leading digit name
+    And evaluation of `project` is stored in the :proj_2 clipboard
+    When I run the :new_app client command with:
+      | file | <%= BushSlicer::HOME %>/testdata/logging/loggen/container_json_log_template.json |
+    Then the step should succeed
+    Given I switch to cluster admin pseudo user
+    And I use the "openshift-logging" project
+    And I wait for the project "<%= cb.proj_1.name %>" logs to appear in the ES pod
+    And I wait for the project "<%= cb.proj_2.name %>" logs to appear in the ES pod
+    When I perform the HTTP request on the ES pod with labels "es-node-master=true":
+      | relative_url | app*/_count?format=JSON' -d '{"query": {"match": {"kubernetes.namespace_name": "<%= cb.proj_1.name %>"}}} |
+      | op           | GET                                                                                                       |
+      | token        | <%= cb.user_token %>                                                                                      |
+    Then the step should succeed
+    And the expression should be true> @result[:parsed]['count'] > 0
+    When I perform the HTTP request on the ES pod with labels "es-node-master=true":
+      | relative_url | app*/_count?format=JSON' -d '{"query": {"match": {"kubernetes.namespace_name": "<%= cb.proj_2.name %>"}}} |
+      | op           | GET                                                                                                       |
+      | token        | <%= cb.user_token %>                                                                                      |
+    Then the step should succeed
+    And the expression should be true> @result[:parsed]['count'] = 0
+    When I perform the HTTP request on the ES pod with labels "es-node-master=true":
+      | relative_url | infra*/_count?format=JSON |
+      | op           | GET                       |
+      | token        | <%= cb.user_token %>      |
+    Then the step should succeed
+    And the expression should be true> [401, 403].include? @result[:exitstatus]
+
+  # @author qitang@redhat.com
+  # @case_id OCP-30359
+  @admin
+  @destructive
+  @commonlogging
+  Scenario: cluster-admin view all projects
+    Given I switch to the first user
+    Given I create a project with non-leading digit name
+    And evaluation of `project` is stored in the :proj clipboard
+    When I run the :new_app client command with:
+      | file | <%= BushSlicer::HOME %>/testdata/logging/loggen/container_json_log_template.json |
+    Then the step should succeed
+    Given I switch to the second user
+    And the second user is cluster-admin
+    Given evaluation of `user.cached_tokens.first` is stored in the :user_token clipboard
+    And I use the "openshift-logging" project
+    And I wait for the project "<%= cb.proj.name %>" logs to appear in the ES pod
+    When I perform the HTTP request on the ES pod with labels "es-node-master=true":
+      | relative_url | app*/_count?format=JSON' -d '{"query": {"match": {"kubernetes.namespace_name": "<%= cb.proj.name %>"}}} |
+      | op           | GET                                                                                                     |
+      | token        | <%= cb.user_token %>                                                                                    |
+    Then the step should succeed
+    And the expression should be true> @result[:parsed]['count'] > 0
+    When I perform the HTTP request on the ES pod with labels "es-node-master=true":
+      | relative_url | infra*/_count?format=JSON |
+      | op           | GET                       |
+      | token        | <%= cb.user_token %>      |
+    Then the step should succeed
+    And the expression should be true> @result[:parsed]['count'] > 0
+    When I perform the HTTP request on the ES pod with labels "es-node-master=true":
+      | relative_url | app*/_count?format=JSON |
+      | op           | GET                     |
+      | token        | <%= cb.user_token %>    |
+    Then the step should succeed
+    And the expression should be true> @result[:parsed]['count'] > 0
