@@ -371,6 +371,9 @@ check_elements_in_scale_cluster_dialog:
   action: check_close_button
   action: check_cancel_button
   action: check_apply_button
+  action: check_compute_node_count_field_in_scale_dialog
+  action: check_load_balancers_field_in_scale_dialog
+  action: check_persistent_storage_field_in_scale_dialog
 scale_cluster_from_cluster_list_page:
   action: go_to_scale_cluster_dialog_on_cluster_list_page
   action: choose_compute_node_in_dialog
@@ -407,3 +410,7 @@ logout_page_loaded:
   element:
     selector:
       xpath: //button[contains(., 'Log in to your Red Hat account')]
+go_to_osd_cluster_creation_page:
+  action: click_create_cluster_button
+  action: click_create_osd_button
+  action: osd_creation_page_loaded
