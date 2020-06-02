@@ -217,4 +217,22 @@ click_radio_to_pick_ns:
   params:
     text: Pick an existing namespace
   action: click_radio_input_by_text
+check_Hazelcastjet_default_action_and_remote_workflow:
+  params:
+    text: Purchase
+    link_url: https://marketplace.redhat.com/en-us/operators/hazelcast-jet-enterprise-operator-rhmp/pricing
+  action: check_link_and_text
+filter_by_keyword_on_catalog_page:
+  elements:
+  - selector:
+      xpath: //input[contains(@class, 'co-catalog-page__input')]
+    op: send_keys :backspace
+  - selector:
+      xpath: //input[contains(@class, 'co-catalog-page__input')]
+    op: send_keys <keyword>
+open_operator_modal:
+  params:
+    keyword: <operator_name>
+  action: filter_by_keyword_on_catalog_page
+  action: open_first_card_in_overlay
 
