@@ -225,7 +225,7 @@ check_silence_name:
 check_silenced_alert_name:
   element:
     selector:
-      xpath: //span[text()='Firing Alerts']/ancestor::div[@class='co-m-pane__body-group']//a[contains(text(), '<alert_name>')]
+      xpath: //a[contains(text(), '<alert_name>')]
 expire_alert_from_cog_menu: 
   action: click_first_action_icon
   action: click_expire_alert_button  
