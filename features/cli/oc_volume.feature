@@ -1,24 +1,21 @@
 Feature: oc_volume.feature
 
   # @author xxia@redhat.com
+  # @author weinliu@redhat.com
   # @case_id OCP-12194
   @smoke
   Scenario: Create a pod that consumes the secret in a volume
     Given I have a project
-    When I run the :secrets client command with:
-      | action         | new-basicauth     |
-      | name           | basicsecret       |
-      | username       | user-1            |
-      | password       | pass-1            |
+    Given I run the :create client command with:
+      | f | <%= BushSlicer::HOME %>/testdata/pods/allinone-volume/secret.yaml |
     Then the step should succeed
-    When I run the :secrets client command with:
-      | action         | add                    |
-      | serviceaccount | serviceaccount/default |
-      | secrets_name   | secret/basicsecret     |
+    When I run the :secret_link client command with:
+      | secret_name | test-secret |
+      | sa_name     | default     |
     Then the step should succeed
     When I run the :run client command with:
-      | name         | mydc                  |
-      | image        | <%= project_docker_repo %>aosqe/hello-openshift |
+      | name         | mydc                                                                                                          |
+      | image        | quay.io/openshifttest/hello-openshift@sha256:424e57db1f2e8e8ac9087d2f5e8faea6d73811f0b6f96301bc94293680897073 |
     Then the step should succeed
     Given a pod becomes ready with labels:
       | deployment=mydc-1 |
@@ -28,22 +25,21 @@ Feature: oc_volume.feature
       | action        | --add                  |
       | name          | secret-volume          |
       | type          | secret                 |
-      | secret-name   | basicsecret            |
+      | secret-name   | test-secret            |
       | mount-path    | /etc/secret-volume-dir |
     Then the step should succeed
-
     Given a pod becomes ready with labels:
       | deployment=mydc-2 |
     When I execute on the pod:
-      | cat | /etc/secret-volume-dir/username |
+      | cat | /etc/secret-volume-dir/data-1 |
     Then the step should succeed
     And the output by order should contain:
-      | user-1 |
+      | value-1 |
     When I execute on the pod:
-      | cat | /etc/secret-volume-dir/password |
+      | cat | /etc/secret-volume-dir/data-2 |
     Then the step should succeed
     And the output by order should contain:
-      | pass-1 |
+      | value-2 |
 
   # @author xxia@redhat.com
   # @case_id OCP-11906
