@@ -91,7 +91,7 @@ check_input_toolbar_style:
   elements:
     - selector: 
         xpath: //div[@class='pf-c-data-toolbar']//input[contains(@class,'pf-c-form-control')]
-check_seach_tool_bar_style:
+check_search_tool_bar_style:
   action: check_filter_toolbar_style
   action: check_filter_dropdown_style
   action: check_input_toolbar_style
@@ -100,12 +100,6 @@ check_remove_style_and_remove:
     - selector: 
         xpath: //ul[contains(@class,'pf-c-chip-group')]//button[@aria-label='Close chip group']
       op: click
-check_clear_all_filters:
-  elements:
-    - selector: 
-        xpath: //span[contains(text(),'Clear all filters')]
-      op: click
-
 check_filtered_style:
   elements:
     - selector: 
