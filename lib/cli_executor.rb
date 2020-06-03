@@ -121,6 +121,8 @@ module BushSlicer
         raise "setting context failed, see log" unless res[:success]
         res = executor.run(:config_use_context, name: default_context_name, **opts)
         raise "using context failed, see log" unless res[:success]
+        # Show the config to help debug 'namespaces "aos-qe-ci" not found'
+        res = executor.run(:config_view, **opts)
       else
         raise "no idea how to prepare kubeconfig for api accessor without a " \
           "token or client certificate"
