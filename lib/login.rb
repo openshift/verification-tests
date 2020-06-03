@@ -11,15 +11,6 @@ module BushSlicer
     # @param [String] user the username we want token for
     # @return [String]
     def new_token_by_password(user:, password:, env:)
-      # just print HTTP GET result of console route for further debugging
-      # should check if console route accessible when reporting "Error getting bearer token"
-      # if console_url is accessible then it is likely Auth issue
-      # if console_url is inaccessible then likely network related issue including ingress, snd or platform flake
-      console_url = env.api_endpoint_url.delete_suffix(':6443').gsub(/api/, 'console-openshift-console.apps')
-      opts = {:url => console_url, :method => "GET" }
-      opts[:proxy] = env.client_proxy if env.client_proxy
-      debug_res = Http.request(**opts)
-
       # try challenging client auth
       res = oauth_bearer_token_challenge(
         server_url: env.api_endpoint_url,
@@ -38,17 +29,32 @@ module BushSlicer
       end
 
       unless res[:success]
-        msg = "Error getting bearer token, see log"
-        if res[:error]
-          raise res[:error] rescue raise msg rescue e=$!
-        else
-          raise msg rescue e=$!
+        begin
+          msg = "Error getting bearer token, see log"
+          if res[:error]
+            raise res[:error] rescue raise msg rescue e=$!
+          else
+            raise msg rescue e=$!
+          end
+          Http.logger.error(e) # default error printing exclude cause
+          raise e
+        ensure
+          debug_try_get_console(env: env)
         end
-        Http.logger.error(e) # default error printing exclude cause
-        raise e
       end
 
       return res[:token], res[:valid_until]
+    end
+
+
+    # Try HTTP GET console route for debugging when Auth error
+    # if console_url is accessible then it is likely Auth issue
+    # if console_url is inaccessible as well then likely network related issue including ingress, snd or platform glitch
+    def debug_try_get_console(env:)
+      console_url = env.opts[:admin_console_url] || env.api_endpoint_url.delete_suffix(':6443').gsub(/api/, 'console-openshift-console.apps')
+      opts = {}
+      opts[:proxy] = env.client_proxy if env.client_proxy
+      Http.get(url: console_url, **opts)
     end
 
     # try to obtain token via web login with the supplied user's name and
