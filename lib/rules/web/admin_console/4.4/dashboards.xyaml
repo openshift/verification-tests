@@ -1,3 +1,8 @@
+browse_to_view_settings:
+  params:
+    button_text: View settings
+  action: click_button
+  action: wait_box_loaded
 click_view_alerts_button:
   params:
     button_text: View alerts
@@ -16,6 +21,16 @@ check_cluster_provider_in_details_card:
   params:
     key: Provider
     value: <provider>
+  action: check_resource_details_key_and_value
+check_update_channel_in_details_card:
+  params:
+    key: Update channel
+    value: <update_channel>
+  action: check_resource_details_key_and_value
+check_cluster_id_in_details_card:
+  params:
+    key: Cluster ID
+    value: <cluster_id>
   action: check_resource_details_key_and_value
 # grafana dashboards
 check_grafana_dashboard_body_loaded:
