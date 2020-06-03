@@ -243,7 +243,7 @@ Feature: deployment related features
   Scenario: Rollback via CLI when previous version failed
     Given I have a project
     When I run the :create_deploymentconfig client command with:
-      | image | aosqe/hello-openshift |
+      | image | quay.io/openshifttest/hello-openshift@sha256:424e57db1f2e8e8ac9087d2f5e8faea6d73811f0b6f96301bc94293680897073 |
       | name  | mydc                  |
     Then the step should succeed
     And I wait until the status of deployment "mydc" becomes :complete
@@ -321,10 +321,10 @@ Feature: deployment related features
   Scenario: A/B Deployment
     Given I have a project
     When I run the :new_app client command with:
-      | docker_image | <%= project_docker_repo %>openshift/deployment-example |
-      | name         | ab-example-a                                           |
-      | l            | ab-example=true                                        |
-      | env          | SUBTITLE=shardA                                        |
+      | docker_image | quay.io/openshifttest/deployment-example@sha256:97adb15f1238c4c9216c1e6bf3986e2468d0709fc5c3625e96d463c81240f652 |
+      | name         | ab-example-a                                                                                                     |
+      | l            | ab-example=true                                                                                                  |
+      | env          | SUBTITLE=shardA                                                                                                  |
     Then the step should succeed
     When I run the :expose client command with:
       | resource      | deploymentconfig |
@@ -336,10 +336,10 @@ Feature: deployment related features
     Then I wait for a web server to become available via the "ab-example" route
     And the output should contain "shardA"
     When I run the :new_app client command with:
-      | docker_image | <%= project_docker_repo %>openshift/deployment-example |
-      | name         | ab-example-b                                           |
-      | l            | ab-example=true                                        |
-      | env          | SUBTITLE=shardB                                        |
+      | docker_image | quay.io/openshifttest/deployment-example@sha256:97adb15f1238c4c9216c1e6bf3986e2468d0709fc5c3625e96d463c81240f652 |
+      | name         | ab-example-b                                                                                                     |
+      | l            | ab-example=true                                                                                                  |
+      | env          | SUBTITLE=shardB                                                                                                  |
     Then the step should succeed
     Then I run the :scale client command with:
       | resource | deploymentconfig |
@@ -627,8 +627,8 @@ Feature: deployment related features
   Scenario: Scale up when deployment running
     Given I have a project
     When I run the :create_deploymentconfig client command with:
-      | image | <%= project_docker_repo %>openshift/deployment-example |
-      | name  | deployment-example                                     |
+      | image | quay.io/openshifttest/deployment-example@sha256:97adb15f1238c4c9216c1e6bf3986e2468d0709fc5c3625e96d463c81240f652 |
+      | name  | deployment-example                                                                                               |
     Then the step should succeed
     And I wait until the status of deployment "deployment-example" becomes :complete
     When I run the :rollout_latest client command with:
