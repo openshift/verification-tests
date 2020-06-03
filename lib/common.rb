@@ -109,11 +109,10 @@ module BushSlicer
       def add_proxy_env_opt(env, opts)
         if env.client_proxy
           opts_env_pair = opts.find{ |k,v| k == :_env }
-          opts_env = opts_env_pair&.last
-          unless opts_env&.dig(:http_proxy) || opts_env&.dig("http_proxy") ||
-              opts_env&.dig(:https_proxy) || opts_env&.dig("https_proxy")
+          opts_env = Collections.to_env_hash( opts_env_pair&.last || {} )
+          unless opts_env[:http_proxy] || opts_env["http_proxy"] ||
+              opts_env[:https_proxy] || opts_env["https_proxy"]
 
-            opts_env ||= {}
             opts_env = opts_env.merge({
               "http_proxy" => env.client_proxy,
               "https_proxy" => env.client_proxy,
@@ -166,6 +165,11 @@ module BushSlicer
             return val
           end
         end
+      end
+
+      # ensure Hash#transform_values method exists
+      if !::Hash.instance_methods.include?(:transform_values)
+        require 'active_support/core_ext/hash/transform_values.rb'
       end
     end
 
