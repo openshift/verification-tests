@@ -300,3 +300,49 @@ Feature: Egress-ingress related networking scenarios
     When I execute on the pod:
       | curl | --head | www.test.com |
     Then the step should succeed
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-19615
+  @admin
+  Scenario: Iptables should be updated with correct endpoints when egress DNS policy was used
+    Given I have a project
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json" replacing paths:
+      | ["items"][0]["spec"]["replicas"] | 1 |
+    Then the step should succeed
+    And 1 pods become ready with labels:
+      | name=test-pods |
+    And evaluation of `service("test-service").url` is stored in the :service_url clipboard
+    And I wait for the "test-service" service to become ready
+
+    # Create egress network policy
+    When I run the :create admin command with:
+      | f | <%= BushSlicer::HOME %>/testdata/networking/egress-ingress/dns-egresspolicy1.json|
+      | n | <%= project.name %>                                                              |
+    Then the step should succeed
+
+    #Update egress network policy for more than one time
+    Given I switch to cluster admin pseudo user
+    And I use the "<%= project.name %>" project
+    And as admin I successfully merge patch resource "egressnetworkpolicy.network.openshift.io/policy-test" with:
+      |{"spec":{"egress":[{"type":"Allow","to":{"dnsName":"test1.com"}}]}}|
+    And as admin I successfully merge patch resource "egressnetworkpolicy.network.openshift.io/policy-test" with:
+      |{"spec":{"egress":[{"type":"Allow","to":{"dnsName":"test2.com"}}]}}|
+
+    #recreate the pods
+    When I run the :scale client command with:
+      | resource | replicationcontrollers |
+      | name     | test-rc                |
+      | replicas | 0                      |
+    And I wait until number of replicas match "0" for replicationController "test-rc"
+    When I run the :scale client command with:
+      | resource | replicationcontrollers |
+      | name     | test-rc                |
+      | replicas | 1                      |
+    And I wait until number of replicas match "1" for replicationController "test-rc"
+
+    #Curl the service should be successful
+    Given I have a pod-for-ping in the project
+    When I execute on the pod:
+      | /usr/bin/curl | -k | <%= cb.service_url %> |
+    Then the output should contain:
+      | Hello OpenShift |
