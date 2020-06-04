@@ -4,7 +4,6 @@ require 'ssl'
 # For metering automation, we just install once and re-use the installation
 # unless the scenarios are for testing installation
 # checks that metering service is already installed
-# shell => ./bin/hack.sh
 # OLM   => ./bin/deploy-metering
 # OperatorHub => Openshift Webconsole  <<  default method
 Given /^metering service has been installed successfully(?: using (OLM|OperatorHub))?$/ do |method|
