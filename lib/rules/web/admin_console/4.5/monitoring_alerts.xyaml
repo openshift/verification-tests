@@ -189,7 +189,7 @@ click_alertrule_expression:
       xpath: //a[contains(@href, '<expression>')]
     op: click
 
-set_alert_label_invalid:
+set_alert_label:
   action: set_label_name_alert_name
   action: set_label_value_watchdog_reg
 set_label_name_alert_name:
@@ -200,7 +200,7 @@ set_label_name_alert_name:
 set_label_value_watchdog_reg:
   params:
     name: Value
-    input_value: Watchdo.*
+    input_value: <label_value>
   action: set_placeholder_input
 silence_alert_from_create_button:
   params:
@@ -227,6 +227,7 @@ check_silenced_alert_name:
     selector:
       xpath: //a[contains(text(), '<alert_name>')]
 expire_alert_from_cog_menu: 
+  action: filter_alert
   action: click_first_action_icon
   action: click_expire_alert_button  
 
