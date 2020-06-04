@@ -8,7 +8,6 @@ switch_to_container:
   params:
     dropdown_item: <container_name>
   action: click_dropdown_button
-  action: wait_dropdown_loaded
   action: click_one_item
 wait_log_window_loaded:
   elements:
@@ -17,6 +16,9 @@ wait_log_window_loaded:
     timeout: 30
   - selector:
       xpath: //div[contains(@class,'log-window')]/div[contains(@class,'log-window__body')]
+    timeout: 30
+  - selector:
+      xpath: //div[contains(@class,'log-window__contents__text')]
     timeout: 30
 check_log_content_contains:
   element:
@@ -48,7 +50,7 @@ check_required_context_shown_in_collapsed_log_view:
   - selector:
       xpath: //ul[contains(@class,'nav__menu')]//a[contains(text(), 'Logs')]
   - selector:
-      xpath: //ul[contains(@class,'nav__menu')]//a[contains(text(), 'Details')]
+      xpath: //ul[contains(@class,'nav__menu')]//a[contains(text(), 'Overview')]
 check_some_context_missing_in_collapsed_log_view:
   elements:
   - selector:
@@ -62,16 +64,6 @@ collapse_log:
   element:
     selector:
       <<: *collapse_button
-    op: click
-pause_log_streaming:
-  element:
-    selector:
-      xpath: //button[@aria-label='Pause event streaming']
-    op: click
-resume_log_streaming:
-  element:
-    selector:
-      xpath: //button[@aria-label='Start streaming events']
     op: click
 check_log_streaming_is_paused:
   elements:
@@ -87,3 +79,13 @@ check_log_streaming_is_ended:
   elements:
   - selector:
       xpath: //div[contains(@class,'co-toolbar__item') and contains(.,'Log stream ended')]
+pause_log_streaming:
+  element:
+    selector:
+      xpath: //div[contains(@class,'co-toolbar__item') and contains(.,'Log streaming')]/button[contains(@class,'co-toggle-play')]
+    op: click
+resume_log_streaming:
+  element:
+    selector:
+      xpath: //div[contains(@class,'co-toolbar__item') and contains(.,'Log stream paused')]/button[contains(@class,'co-toggle-play')]
+    op: click
