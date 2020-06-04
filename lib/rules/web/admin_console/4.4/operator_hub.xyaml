@@ -235,4 +235,16 @@ open_operator_modal:
     keyword: <operator_name>
   action: filter_by_keyword_on_catalog_page
   action: open_first_card_in_overlay
+check_phase_status:
+  element:
+    selector:
+      xpath: //td/span[contains(.,'Phase')]/span[contains(.,'<status>')]
+check_state_status:
+  element:
+    selector:
+      xpath: //span[contains(.,'State') and contains(.,'<status>')]
+check_condition_status:
+  element:
+    selector:
+      xpath: //span[contains(.,'Conditions') and contains(.,'<status>')]
 

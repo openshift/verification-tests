@@ -329,4 +329,16 @@ check_Hazelcastjet_default_action_and_remote_workflow:
     text: Purchase
     link_url: https://marketplace.redhat.com/en-us/operators/hazelcast-jet-enterprise-operator-rhmp/pricing
   action: check_link_and_text
+check_phase_status:
+  element:
+    selector:
+      xpath: //td/span[contains(.,'Phase')]/span[contains(.,'<status>')]
+check_state_status:
+  element:
+    selector:
+      xpath: //span[contains(.,'State') and contains(.,'<status>')]
+check_condition_status:
+  element:
+    selector:
+      xpath: //span[contains(.,'Conditions') and contains(.,'<status>')]
 
