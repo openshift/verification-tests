@@ -1,4 +1,4 @@
-browse_to_view_settings:
+view_all_settings:
   params:
     button_text: View settings
   action: click_button
