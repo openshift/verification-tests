@@ -36,8 +36,6 @@ Given /^metering service has been installed successfully(?: using (OLM|OperatorH
   # change project context
   unless metering_config(namespace).exists?
     case method
-    when "shell script"
-      step %Q/metering service is installed using shell script/
     when "OLM", "OperatorHub"
       step %Q/the metering service is installed using OLM/
     end
@@ -221,26 +219,6 @@ Given /^I disable route for#{OPT_QUOTED} metering service$/ do | metering_name |
   step %Q/I wait for the resource "route" named "metering" to disappear/
 end
 
-# use the hack/openshift-install.sh shell script to install metering.  NOTE, metering
-# for shell-script installation, the default namespace is 'metering' which differs
-# from ansible install.  We set the cb['metering_namespace'] to it.
-Given /^metering service is (installed|uninstalled) using shell script$/ do | op |
-  step %Q/I use the first master host/
-  metering_repo='https://github.com/operator-framework/operator-metering.git'
-  # install git
-  install_git_via_yum = "yum -y install git"
-  host.exec(install_git_via_yum)
-  git_clone_cmd = "git clone #{metering_repo}"
-  res = host.exec(git_clone_cmd)
-  cb[:metering_namespace] = 'metering'
-  if op == 'installed'
-    shell_cmd = "./operator-metering/hack/openshift-install.sh"
-  else
-    shell_cmd = "./operator-metering/hack/openshift-uninstall.sh"
-  end
-  res = host.exec(shell_cmd)
-  raise "#{cb.metering_namespace} #{op} unsuccessfully" unless res[:success]
-end
 
 # install metering via OLM (via OperatorHub)
 Given /^the metering service is installed(?: to #{OPT_QUOTED})? using OLM$/ do | metering_ns |
