@@ -96,7 +96,7 @@ Feature: oc import-image related feature
       | dest        | deployment-example:latest    |
     Then the step should succeed
     And the "deployment-example" image stream becomes ready
-    When I run the :new_app client command with:
+    When I run the :new_app_as_dc client command with:
       | image_stream | deployment-example:latest   |
     Then the output should match:
       | .*[Ss]uccess.*|
@@ -129,7 +129,7 @@ Feature: oc import-image related feature
       | reference_policy | local                        |
     Then the step should succeed
     And the "deployment-example" image stream becomes ready
-    When I run the :new_app client command with:
+    When I run the :new_app_as_dc client command with:
       | image_stream | deployment-example:latest   |
     Then the output should match:
       | .*[Ss]uccess.* |
