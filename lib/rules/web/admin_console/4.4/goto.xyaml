@@ -133,6 +133,7 @@ goto_one_pod_page:
   url: k8s/ns/<project_name>/pods/<resource_name>
 goto_one_pod_log_page:
   url: k8s/ns/<project_name>/pods/<pod_name>/logs
+  action: wait_log_window_loaded
 goto_one_pod_environment_page:
   url: k8s/ns/<project_name>/pods/<pod_name>/environment
   action: wait_box_loaded

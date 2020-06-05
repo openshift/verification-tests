@@ -230,7 +230,7 @@ click_on_resource_item:
 wait_dropdown_loaded:
   element:
     selector:
-      xpath: //*[contains(@class, 'dropdown-menu--text-wrap')]
+      xpath: //ul[contains(@class, 'dropdown__menu')]
     timeout: 20
 # click and check the first item from resource list such as projects, pods, etc.
 click_first_item_from_resource_list_and_check_breadcrumb:
