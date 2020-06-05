@@ -173,3 +173,30 @@ Feature: Testing registry
       | Mirroring completed in |
     Given the "myimage" image stream was created
     And the "myimage" image stream becomes ready
+
+  # @author xiuwang@redhat.com
+  # @case_id OCP-29696 
+  Scenario: Use node credentials in imagestream import
+    Given I have a project
+    When I run the :tag client command with:
+      | source           | registry.redhat.io/rhscl/mysql-80-rhel7:latest | 
+      | dest             | mysql:8.0                                      |
+      | reference_policy | local                                          |
+    Then the step should succeed
+    When I run the :new_app client command with:
+      | template | mysql-persistent              |
+      | p        | NAMESPACE=<%= project.name %> |
+    Then the step should succeed
+    When a pod becomes ready with labels:
+      | deployment=mysql-1 |
+    When I run the :describe client command with:
+      | resource | pod                | 
+      | l        | deployment=mysql-1 |
+    And the output should match:
+      | Successfully pulled image "image-registry.openshift-image-registry.svc:5000/<%= project.name %>/mysql | 
+    When I run the :new_app client command with:
+      | docker_image | registry.redhat.io/rhscl/ruby-25-rhel7:latest     | 
+      | code         | https://github.com/openshift/ruby-hello-world.git |
+    Then the step should succeed
+    And the "ruby-hello-world-1" build was created
+    And the "ruby-hello-world-1" build completed
