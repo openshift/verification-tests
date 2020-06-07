@@ -66,8 +66,9 @@ module BushSlicer
     # @note call without parameters only when props are loaded
     def url(user: nil, cached: true, quiet: false)
       ip = self.ip(user: user, cached: cached, quiet: quiet)
-      port = self.ports(user: user, cached: true, quiet: quiet)
-      return "#{ip}:#{ports[0]["port"]}"
+      ip = ip.include?(":") ? "[#{ip}]" : ip
+      port = self.ports(user: user, cached: true, quiet: quiet)[0]["port"]
+      "#{ip}:#{port}"
     end
 
     def hostname
