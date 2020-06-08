@@ -57,8 +57,6 @@ check_dc_available_action_menus:
       xpath: //li//button[@data-test-action='Edit Pod Count']
   - selector: &add_storage
       xpath: //li//button[@data-test-action='Add Storage']
-  - selector: &edit_app_grouping
-      xpath: //li//button[@data-test-action='Edit Application Grouping']
   - selector: &edit_labels
       xpath: //li//button[@data-test-action='Edit Labels']
   - selector: &edit_annotations
@@ -76,8 +74,6 @@ check_deployment_availble_action_menus:
       <<: *edit_counts    
   - selector:
       <<: *add_storage
-  - selector:
-      <<: *edit_app_grouping
   - selector:
       <<: *edit_labels
   - selector:
