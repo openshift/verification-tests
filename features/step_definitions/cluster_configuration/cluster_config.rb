@@ -21,7 +21,7 @@ Given /^I enable autoscaling for my cluster$/ do
     }
   }
   # first create cluster autoscaler
-  cluster_autoscaler_yaml = "#{ENV['BUSHSLICER_HOME']}/testdata/metering/cluster-autoscaler.yaml"
+  cluster_autoscaler_yaml = "#{BushSlicer::HOME}/testdata/metering/cluster-autoscaler.yaml"
   admin.cli_exec(:create, f: cluster_autoscaler_yaml)
   step %Q/I store all machinesets in the "openshift-machine-api" project to the :machinesets clipboard/
   cb.machinesets.each do | machineset |

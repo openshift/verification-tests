@@ -50,7 +50,7 @@ Given /^default metering service is installed without cleanup$/ do
   step %Q/I create a project with non-leading digit name/
   step %Q/I store master major version in the clipboard/
   step %Q/metering service is installed with ansible using:/, table(%{
-    | inventory     | #{ENV['BUSHSLICER_HOME']}/testdata/logging_metrics/default_install_metering_params |
+    | inventory     | #{BushSlicer::HOME}/testdata/logging_metrics/default_install_metering_params |
     | playbook_args | -e openshift_image_tag=v<%= cb.master_version %> -e openshift_release=<%= cb.master_version %>                     |
     | no_cleanup    | true                                                                                                               |
   })

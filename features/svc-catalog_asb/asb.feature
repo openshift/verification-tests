@@ -154,7 +154,7 @@ Feature: Ansible-service-broker related scenarios
 
     # Provision DB apb with dev plan
     When I process and create:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/serviceinstance-template.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/serviceinstance-template.yaml |
       | p | INSTANCE_NAME=<db_name>                                                          |
       | p | CLASS_EXTERNAL_NAME=<db_name>                                                    |
       | p | PLAN_EXTERNAL_NAME=dev                                                           |
@@ -163,7 +163,7 @@ Feature: Ansible-service-broker related scenarios
     Then the step should succeed
     And evaluation of `service_instance("<db_name>").uid` is stored in the :uid1 clipboard
     When I process and create:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/serviceinstance-parameters-template.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/serviceinstance-parameters-template.yaml |
       | p | SECRET_NAME=<db_secret_name>                                                                |
       | p | INSTANCE_NAME=<db_name>                                                                     |
       | p | PARAMETERS=<db_parameters>                                                                  |
@@ -181,7 +181,7 @@ Feature: Ansible-service-broker related scenarios
 
     # Provision DB apb with prod plan
     When I process and create:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/serviceinstance-template.yaml |      
+      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/serviceinstance-template.yaml |      
       | p | INSTANCE_NAME=<db_name>                                                          |
       | p | CLASS_EXTERNAL_NAME=<db_name>                                                    |
       | p | PLAN_EXTERNAL_NAME=prod                                                          |
@@ -190,7 +190,7 @@ Feature: Ansible-service-broker related scenarios
     Then the step should succeed
     And evaluation of `service_instance("<db_name>").uid` is stored in the :uid2 clipboard
     When I process and create:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/serviceinstance-parameters-template.yaml |
+      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/serviceinstance-parameters-template.yaml |
       | p | SECRET_NAME=<db_secret_name>                                                                |
       | p | INSTANCE_NAME=<db_name>                                                                     |
       | p | PARAMETERS=<db_parameters>                                                                  |

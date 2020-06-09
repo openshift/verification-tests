@@ -426,7 +426,7 @@ Given /^the DefaultDeny policy is applied to the "(.+?)" namespace$/ do | projec
       raise "Failed to apply the default deny annotation to specified namespace."
     end
   else
-    @result = admin.cli_exec(:create, n: project_name , f: "#{ENV['BUSHSLICER_HOME']}/testdata/networking/networkpolicy/defaultdeny-v1-semantic.yaml")
+    @result = admin.cli_exec(:create, n: project_name , f: "#{BushSlicer::HOME}/testdata/networking/networkpolicy/defaultdeny-v1-semantic.yaml")
     unless @result[:success]
       raise "Failed to apply the default deny policy to specified namespace."
     end

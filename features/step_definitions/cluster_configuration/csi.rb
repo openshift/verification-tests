@@ -42,7 +42,7 @@ Given /^I deploy #{QUOTED} driver using csi(?: with "([^ ]+?)" version)?$/ do |d
   step %Q/admin ensures "#{driver}-csi-role" clusterrole is deleted/
   step %Q/admin ensures "#{driver}-csi-role" clusterrolebinding is deleted/
   step %Q/I run the :create admin command with:/, table(%{
-    | f | #{ENV['BUSHSLICER_HOME']}/testdata/storage/csi/#{driver}-clusterrole.yaml |
+    | f | #{BushSlicer::HOME}/testdata/storage/csi/#{driver}-clusterrole.yaml |
   })
   step %Q/the step should succeed/
 
@@ -56,7 +56,7 @@ Given /^I deploy #{QUOTED} driver using csi(?: with "([^ ]+?)" version)?$/ do |d
 
   # create secret
   step %Q/I run the :create admin command with:/, table(%{
-    | f | #{ENV['BUSHSLICER_HOME']}/testdata/storage/csi/#{driver}-secrets.yaml |
+    | f | #{BushSlicer::HOME}/testdata/storage/csi/#{driver}-secrets.yaml |
     | n | #{namespace}                                                                                          |
   })
   step %Q/the step should succeed/
@@ -92,11 +92,11 @@ Given /^I cleanup #{QUOTED} csi driver$/ do |driver|
 
   # delete clusterrole, clusterrolebinding
   step %Q/I run the :delete admin command with:/, table(%{
-    | f | #{ENV['BUSHSLICER_HOME']}/testdata/storage/csi/#{driver}-clusterrole.yaml |
+    | f | #{BushSlicer::HOME}/testdata/storage/csi/#{driver}-clusterrole.yaml |
   })
   step %Q/the step should succeed/
   step %Q/I run the :delete admin command with:/, table(%{
-    | f | #{ENV['BUSHSLICER_HOME']}/testdata/storage/csi/#{driver}-clusterrolebinding.yaml |
+    | f | #{BushSlicer::HOME}/testdata/storage/csi/#{driver}-clusterrolebinding.yaml |
   })
   step %Q/the step should succeed/
 
@@ -106,7 +106,7 @@ Given /^I cleanup #{QUOTED} csi driver$/ do |driver|
 
   # delete storage class
     step %Q/I run the :delete admin command with:/, table(%{
-    | f | #{ENV['BUSHSLICER_HOME']}/testdata/storage/csi/#{driver}-storageclass.yaml |
+    | f | #{BushSlicer::HOME}/testdata/storage/csi/#{driver}-storageclass.yaml |
   })
   step %Q/the step should succeed/
 
@@ -136,7 +136,7 @@ Given /^I checked #{QUOTED} csi driver is running$/ do |driver|
   step %Q/"#{driver}-csi-ds" daemonset becomes ready in the project/
 
   dynamic_pvc_name = rand_str(8, :dns)
-  step %Q{I run oc create over "#{ENV['BUSHSLICER_HOME']}/testdata/storage/misc/pvc-with-storageClassName.json" replacing paths:}, table(%{
+  step %Q{I run oc create over "#{BushSlicer::HOME}/testdata/storage/misc/pvc-with-storageClassName.json" replacing paths:}, table(%{
     | ["metadata"]["name"]         | #{dynamic_pvc_name} |
     | ["spec"]["storageClassName"] | #{driver}-csi       |
   })

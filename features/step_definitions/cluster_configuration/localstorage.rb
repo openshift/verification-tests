@@ -18,9 +18,9 @@ Given /^I deploy local storage provisioner(?: with "([^ ]+?)" version)?$/ do |im
   template="local-storage-provisioner"
   image="#{img_registry}/openshift3/local-storage-provisioner:#{img_version}"
   path ||="/mnt/local-storage"
-  cmurl = "#{ENV['BUSHSLICER_HOME']}/testdata/storage/localvolume/configmap-37.yaml"
+  cmurl = "#{BushSlicer::HOME}/testdata/storage/localvolume/configmap-37.yaml"
   if env.version_ge("3.10", user: user)
-    cmurl = "#{ENV['BUSHSLICER_HOME']}/testdata/storage/localvolume/configmap.yaml"
+    cmurl = "#{BushSlicer::HOME}/testdata/storage/localvolume/configmap.yaml"
   end
 
   project(namespace)
@@ -201,7 +201,7 @@ Given /^I deploy local raw block devices provisioner(?: with "([^ ]+?)" version)
   step %Q/the step should succeed/
 
   step %Q/I run the :create admin command with:/, table(%{
-      | f | #{ENV['BUSHSLICER_HOME']}/testdata/storage/localvolume/local-block-template.yaml |
+      | f | #{BushSlicer::HOME}/testdata/storage/localvolume/local-block-template.yaml |
       | n | #{namespace}                                                                                                     |
   })
   step %Q/the step should succeed/
