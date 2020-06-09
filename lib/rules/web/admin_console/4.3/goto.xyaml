@@ -235,6 +235,7 @@ goto_cluster_role_rolebinding_page:
   action: wait_box_loaded
 goto_rolebinding_page_of_user:
   url: k8s/cluster/user.openshift.io~v1~User/<username>/roles
+  action: wait_box_loaded
 goto_rolebinding_list_page:
   url: k8s/ns/<project_name>/rolebindings
   action: wait_box_loaded

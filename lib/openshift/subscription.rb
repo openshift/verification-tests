@@ -8,7 +8,7 @@ module BushSlicer
     end
 
     def ready?(user:, quiet: false, cached: false)
-       res = get(user: user, quiet: quiet)
+       res = get(user: user, cached: cached, quiet: quiet)
        if res[:success]
          res[:success] =
            res[:parsed]["status"]["state"] == "AtLatestKnown"
