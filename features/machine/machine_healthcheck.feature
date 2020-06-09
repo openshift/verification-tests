@@ -167,7 +167,6 @@ Feature: MachineHealthCheck Test Scenarios
     """
    Then the machine should be remediated
 
-   
   # @author jhou@redhat.com
   # @case_id OCP-25727
   @admin
@@ -192,3 +191,30 @@ Feature: MachineHealthCheck Test Scenarios
     Given I store the last provisioned machine in the :new_machine clipboard
     Given admin ensures "<%= machine(cb.new_machine).node_name %>" node is deleted
     Then the machine named "<%= cb.new_machine %>" should be remediated
+
+  # @author miyadav@redhat.com
+  # @case_id OCP-29857
+  @admin
+  Scenario: [MHC] MaxUnhealthy should not allow malformed values
+    Given I have an IPI deployment
+    And I switch to cluster admin pseudo user
+    Then I use the "openshift-machine-api" project
+    And evaluation of `BushSlicer::Machine.list(user: admin, project: project('openshift-machine-api'))` is stored in the :machines clipboard
+
+    # Create MHC with malformed unhealthy nodes value and empty selectors
+    Given I obtain test data file "cloud/mhc/mhc_malformed.yaml"
+    When I run oc create over "mhc_malformed.yaml" replacing paths:
+      | n  | openshift-machine-api |
+    Then the step should succeed
+    And I ensure "mhc-malformed" machinehealthcheck is deleted after scenario
+
+    Then a pod becomes ready with labels:
+      | api=clusterapi, k8s-app=controller |
+
+    When I run the :logs admin command with:
+      | resource_name | <%= pod.name %>                |
+      | c             | machine-healthcheck-controller |
+    Then the output should contain:
+      | remediation won't be allowed: invalid value for IntOrString  |
+      | total targets: <%= cb.machines.count %>                      | #This covers OCP-29062 - empty selectors watches all machines in cluster
+    
