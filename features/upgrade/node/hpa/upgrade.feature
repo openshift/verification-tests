@@ -89,8 +89,12 @@ Feature: basic verification for upgrade testing
     Then the output should match:
       | special.how  |
       | special.type |
+    When I run the :create client command with:
+          | f | <%= BushSlicer::HOME %>/testdata/configmap/pod-configmap-volume2.yaml |
+    Then the step should succeed
+    And the pod named "dapi-test-pod-2" status becomes :succeeded
     When I run the :logs client command with:
-      | resource_name | dapi-test-pod-1 |
+      | resource_name | dapi-test-pod-2 |
     Then the step should succeed
     And the output should contain:
-      | very |
+      | charm |
