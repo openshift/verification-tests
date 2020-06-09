@@ -415,6 +415,9 @@ uncheck_checkbox:
       xpath: //input[contains(@type,'checkbox')]
     op: click
 check_link_and_text:
+  element:
+    selector:
+      xpath: //a[contains(.,'<text>')]
   scripts: 
     - command: |
         var decodedhref = document.querySelector("a[data-test-id='<text>']").href
