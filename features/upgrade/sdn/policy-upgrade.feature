@@ -37,7 +37,7 @@ Feature: SDN compoment upgrade testing
     Then the step should succeed
     When I use the "policy-upgrade" project      
     And I run the :create client command with:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/networking/list_for_pods.json |
+      | f | <%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json |
     Then the step should succeed
     Given 2 pods become ready with labels:
       | name=test-pods |
