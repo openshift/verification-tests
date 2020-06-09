@@ -420,8 +420,8 @@ check_link_and_text:
       xpath: //a[contains(.,'<text>')]
   scripts: 
     - command: |
-        var decodedhref = document.querySelector("a[data-test-id='<text>']").href
-        return decodeURIComponent(decodedhref).endsWith("<link_url>")
+        var encodedhref = document.querySelector("a[data-test-id='<text>']").href
+        return decodeURIComponent(encodedhref).endsWith("<link_url>")
       expect_result: true
 click_link_with_text:
   element:
