@@ -35,5 +35,10 @@ module BushSlicer
       rr = raw_resource(user: user, cached: cached, quiet: quiet)
       rr.dig('spec', 'selector', 'matchLabels', 'machine.openshift.io/cluster-api-cluster')
     end
+
+    def taints(user: nil, cached: true, quiet: false)
+      raw_resource(user: user, cached: cached, quiet: quiet).
+        dig('spec', 'taints')
+    end
   end
 end
