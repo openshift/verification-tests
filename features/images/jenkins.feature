@@ -87,7 +87,7 @@ Feature: jenkins.feature
       | buildconfig | openshift-jee-sample |
     Then the step should succeed
     Given a pod becomes ready with labels:
-      | jenkins/maven=true |
+      | jenkins=slave |
     Given the "openshift-jee-sample-1" build completes
 
     Examples:
