@@ -204,7 +204,7 @@ Feature: MachineHealthCheck Test Scenarios
     Given I store the last provisioned machine in the :machine clipboard
 
     # Create MHC
-    When I run oc create over "<%= BushSlicer::HOME %>/features/tierN/testdata/cloud/mhc/mhc-master.yaml" replacing paths:
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/cloud/mhc/mhc-master.yaml" replacing paths:
       | ["metadata"]["name"]                                                            | mhc-master-machine-28956 |
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"] | <%= machine.cluster %>   |
     Then the step should succeed
