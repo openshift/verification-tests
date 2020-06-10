@@ -4,8 +4,9 @@ Feature: rolling deployment related scenarios
   # @case_id OCP-12359
   Scenario: Rolling-update pods with default value for maxSurge/maxUnavailable
     Given I have a project
+    Given I obtain test data file "deployment/rolling.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/deployment/rolling.json |
+      | f | rolling.json |
     And I wait for the pod named "hooks-1-deploy" to die
     Then I run the :scale client command with:
       | resource | dc    |

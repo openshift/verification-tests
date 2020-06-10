@@ -11,16 +11,18 @@ Feature: Ansible-service-broker related scenarios
     # need to swtich back to normal user mode
     And I switch to the first user
     And I use the "<%= cb.org_proj_name %>" project
+    Given I obtain test data file "svc-catalog/serviceinstance-template.yaml"
     When I run the :new_app client command with:
-      | file  | <%= BushSlicer::HOME %>/testdata/svc-catalog/serviceinstance-template.yaml |
+      | file  | serviceinstance-template.yaml |
       | param | INSTANCE_NAME=<%= cb.prefix %>-mediawiki-apb          |
       | param | CLASS_EXTERNAL_NAME=<%= cb.prefix %>-mediawiki-apb    |
       | param | SECRET_NAME=<%= cb.prefix %>-mediawiki-apb-parameters |
       | param | INSTANCE_NAMESPACE=<%= project.name %>                |
     Then the step should succeed
     And evaluation of `service_instance('<%= cb.prefix %>-mediawiki-apb').uid` is stored in the :mediawiki_uid clipboard
+    Given I obtain test data file "svc-catalog/serviceinstance-parameters-template.yaml"
     When I run the :new_app client command with:
-      | file  | <%= BushSlicer::HOME %>/testdata/svc-catalog/serviceinstance-parameters-template.yaml |
+      | file  | serviceinstance-parameters-template.yaml |
       | param | SECRET_NAME=<%= cb.prefix %>-mediawiki-apb-parameters |
       | param | INSTANCE_NAME=<%= cb.prefix %>-mediawiki-apb          |
       | param | UID=<%= cb.mediawiki_uid %>                           |

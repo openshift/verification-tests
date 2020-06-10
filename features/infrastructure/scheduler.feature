@@ -5,8 +5,9 @@ Feature: Scheduler predicates and priority test suites
   @admin
   Scenario: [origin_runtime_646] Fixed predicates rules testing - MatchNodeSelector
     Given I have a project
+    Given I obtain test data file "scheduler/pod_with_nodeselector.json"
     Given I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/scheduler/pod_with_nodeselector.json  |
+      | f | pod_with_nodeselector.json  |
     Then the step should succeed
     Given I run the :describe client command with:
       | resource  | pods            |

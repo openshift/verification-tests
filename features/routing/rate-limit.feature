@@ -11,17 +11,20 @@ Feature: Testing haproxy rate limit related features
 
     Given I switch to the first user
     And I have a project
+    Given I obtain test data file "routing/routetimeout/httpbin-pod.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/routetimeout/httpbin-pod.json |
+      | f | httpbin-pod.json |
     Then the step should succeed
     And the pod named "httpbin-pod" becomes ready
     And evaluation of `pod.ip` is stored in the :pod_ip clipboard
 
+    Given I obtain test data file "routing/routetimeout/<service>"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/routetimeout/<service> |
+      | f | <service> |
     Then the step should succeed
+    Given I obtain test data file "routing/<route>"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/<route> |
+      | f | <route> |
     Then the step should succeed
     When I run the :annotate client command with:
       | resource     | route        |

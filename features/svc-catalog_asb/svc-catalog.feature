@@ -18,8 +18,9 @@ Feature: Service-catalog related scenarios
     Given admin ensures "ups-broker" clusterservicebroker is deleted after scenario
     When I switch to cluster admin pseudo user
     And I use the "<%= cb.ups_broker_project %>" project
+    Given I obtain test data file "svc-catalog/ups-broker-template.yaml"
     When I process and create:
-      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/ups-broker-template.yaml |
+      | f | ups-broker-template.yaml |
       | p | UPS_BROKER_PROJECT=<%= cb.ups_broker_project %>                                                         |
     Then the step should succeed
     And I wait up to 360 seconds for the steps to pass:
@@ -36,8 +37,9 @@ Feature: Service-catalog related scenarios
     #Provision a serviceinstance
     Given I switch to the first user
     And I use the "<%= cb.user_project %>" project
+    Given I obtain test data file "svc-catalog/ups-instance-template.yaml"
     When I process and create:
-      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/ups-instance-template.yaml |
+      | f | ups-instance-template.yaml |
       | p | USER_PROJECT=<%= cb.user_project %>                                                                       |
     Then the step should succeed
     And I wait up to 30 seconds for the steps to pass:
@@ -48,8 +50,9 @@ Feature: Service-catalog related scenarios
     """
 
     # Create servicebinding
+    Given I obtain test data file "svc-catalog/ups-binding-template.yaml"
     When I process and create:
-      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/ups-binding-template.yaml |
+      | f | ups-binding-template.yaml |
       | p | USER_PROJECT=<%= cb.user_project %>                                                                      |
     Then the step should succeed
     Given I wait for the "my-secret" secret to appear up to 60 seconds
@@ -103,8 +106,9 @@ Feature: Service-catalog related scenarios
     Given admin ensures "ups-broker" clusterservicebroker is deleted after scenario
     When I switch to cluster admin pseudo user
     And I use the "<%= cb.ups_broker_project %>" project
+    Given I obtain test data file "svc-catalog/ups-broker-template.yaml"
     When I process and create:
-      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/ups-broker-template.yaml |
+      | f | ups-broker-template.yaml |
       | p | UPS_BROKER_PROJECT=<%= cb.ups_broker_project %>                                                         |
     Then the step should succeed
     And I wait up to 300 seconds for the steps to pass:
@@ -183,8 +187,9 @@ Feature: Service-catalog related scenarios
     Given admin ensures "ups-instance" serviceinstance is deleted
     When I switch to cluster admin pseudo user
     And I use the "<%= cb.ups_broker_project %>" project
+    Given I obtain test data file "svc-catalog/ups-broker-template.yaml"
     When I process and create:
-      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/ups-broker-template.yaml |
+      | f | ups-broker-template.yaml |
       | p | UPS_BROKER_PROJECT=<%= cb.ups_broker_project %>                                                         |
     Then the step should succeed
     And I wait up to 300 seconds for the steps to pass:
@@ -201,8 +206,9 @@ Feature: Service-catalog related scenarios
     #Provision a serviceinstance
     Given I switch to the first user
     And I use the "<%= cb.user_project %>" project
+    Given I obtain test data file "svc-catalog/ups-instance-template.yaml"
     When I process and create:
-      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/ups-instance-template.yaml |
+      | f | ups-instance-template.yaml |
       | p | USER_PROJECT=<%= cb.user_project %>                                                                       |
     Then the step should succeed
     And I wait up to 30 seconds for the steps to pass:
@@ -240,8 +246,9 @@ Feature: Service-catalog related scenarios
     Given admin ensures "ups-broker" clusterservicebroker is deleted after scenario
     When I switch to cluster admin pseudo user
     And I use the "<%= cb.ups_broker_project %>" project
+    Given I obtain test data file "svc-catalog/ups-broker-template.yaml"
     When I process and create:
-      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/ups-broker-template.yaml |
+      | f | ups-broker-template.yaml |
       | p | UPS_BROKER_PROJECT=<%= cb.ups_broker_project %>                                                         |
     Then the step should succeed
     And I wait up to 300 seconds for the steps to pass:
@@ -258,8 +265,9 @@ Feature: Service-catalog related scenarios
     #Provision a serviceinstance
     Given I switch to the first user
     And I use the "<%= cb.user_project %>" project
+    Given I obtain test data file "svc-catalog/ups-instance-template.yaml"
     When I process and create:
-      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/ups-instance-template.yaml |
+      | f | ups-instance-template.yaml |
       | p | USER_PROJECT=<%= cb.user_project %>                                                                       |
     Then the step should succeed
     And I wait up to 30 seconds for the steps to pass:
@@ -270,8 +278,9 @@ Feature: Service-catalog related scenarios
     """
 
     # Create servicebinding
+    Given I obtain test data file "svc-catalog/ups-binding-template.yaml"
     When I process and create:
-      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/ups-binding-template.yaml |
+      | f | ups-binding-template.yaml |
       | p | USER_PROJECT=<%= cb.user_project %>                                                                      |
     Then the step should succeed
     And I wait up to 10 seconds for the steps to pass:
@@ -310,8 +319,9 @@ Feature: Service-catalog related scenarios
 
     When I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
+    Given I obtain test data file "svc-catalog/ups-broker-template.yaml"
     When I process and create:
-      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/ups-broker-template.yaml |
+      | f | ups-broker-template.yaml |
       | p | UPS_BROKER_PROJECT=<%= project.name %>                                                                  |
     Then the step should succeed
     And I wait up to 300 seconds for the steps to pass:

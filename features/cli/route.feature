@@ -29,11 +29,13 @@ Feature: route related features via cli
   # @case_id OCP-12022
   Scenario: Be unable to add an existed alias name for service
     Given I have a project
+    Given I obtain test data file "routing/unsecure/route_unsecure.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/unsecure/route_unsecure.json |
+      | f | route_unsecure.json |
     Then the step should succeed
+    Given I obtain test data file "routing/unsecure/route_unsecure.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/unsecure/route_unsecure.json |
+      | f | route_unsecure.json |
     Then the step should fail
     And the output should contain ""route" already exists"
 

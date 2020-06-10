@@ -5,15 +5,18 @@ Feature: Testing haproxy router
   Scenario: haproxy cookies based sticky session for unsecure routes
     #create route and service which has two endpoints
     Given I have a project
+    Given I obtain test data file "routing/caddy-docker.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/caddy-docker.json |
+      | f | caddy-docker.json |
     Then the step should succeed
+    Given I obtain test data file "routing/caddy-docker-2.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/caddy-docker-2.json |
+      | f | caddy-docker-2.json |
     Then the step should succeed
     And all pods in the project are ready
+    Given I obtain test data file "routing/unsecure/service_unsecure.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/unsecure/service_unsecure.json |
+      | f | service_unsecure.json |
     Then the step should succeed
     When I expose the "service-unsecure" service
     Then the step should succeed
@@ -58,15 +61,18 @@ Feature: Testing haproxy router
   Scenario: haproxy cookies based sticky session for edge termination routes
     #create route and service which has two endpoints
     Given I have a project
+    Given I obtain test data file "routing/caddy-docker.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/caddy-docker.json |
+      | f | caddy-docker.json |
     Then the step should succeed
+    Given I obtain test data file "routing/caddy-docker-2.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/caddy-docker-2.json |
+      | f | caddy-docker-2.json |
     Then the step should succeed
     And all pods in the project are ready
+    Given I obtain test data file "routing/edge/service_unsecure.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/edge/service_unsecure.json |
+      | f | service_unsecure.json |
     Then the step should succeed
     When I run the :create_route_edge client command with:
       | name | route-edge |
@@ -115,12 +121,14 @@ Feature: Testing haproxy router
   # @case_id OCP-11619
   Scenario: Limit the number of TCP connection per IP in specified time period
     Given I have a project
+    Given I obtain test data file "routing/caddy-docker.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/caddy-docker.json |
+      | f | caddy-docker.json |
     Then the step should succeed
     And the pod named "caddy-docker" becomes ready
+    Given I obtain test data file "routing/passthrough/service_secure.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/passthrough/service_secure.json |
+      | f | service_secure.json |
     Then the step should succeed
     When I run the :create_route_passthrough client command with:
       | name | route-pass |
@@ -166,8 +174,9 @@ Feature: Testing haproxy router
 
     Given I switch to the first user
     And I have a project
+    Given I obtain test data file "routing/list_for_caddy.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/list_for_caddy.json |
+      | f | list_for_caddy.json |
     Then the step should succeed
     Given a pod becomes ready with labels:
       | name=caddy-pods |
@@ -204,8 +213,9 @@ Feature: Testing haproxy router
 
     Given I switch to the first user
     And I have a project
+    Given I obtain test data file "routing/list_for_caddy.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/list_for_caddy.json |
+      | f | list_for_caddy.json |
     Then the step should succeed
     Given a pod becomes ready with labels:
       | name=caddy-pods |
@@ -237,15 +247,18 @@ Feature: Testing haproxy router
   Scenario: Set balance leastconn for passthrough routes
     Given I have a project
     And I store an available router IP in the :router_ip clipboard
+    Given I obtain test data file "routing/caddy-docker.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/caddy-docker.json |
+      | f | caddy-docker.json |
     Then the step should succeed
+    Given I obtain test data file "routing/caddy-docker-2.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/caddy-docker-2.json |
+      | f | caddy-docker-2.json |
     Then the step should succeed
     And all pods in the project are ready
+    Given I obtain test data file "routing/passthrough/service_secure.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/passthrough/service_secure.json |
+      | f | service_secure.json |
     Then the step should succeed
     When I run the :create_route_passthrough client command with:
       | name | route-pass |
@@ -284,15 +297,18 @@ Feature: Testing haproxy router
   # @case_id OCP-11679
   Scenario: Disable haproxy hash based sticky session for unsecure routes
     Given I have a project
+    Given I obtain test data file "routing/caddy-docker.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/caddy-docker.json |
+      | f | caddy-docker.json |
     Then the step should succeed
+    Given I obtain test data file "routing/caddy-docker-2.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/caddy-docker-2.json |
+      | f | caddy-docker-2.json |
     Then the step should succeed
     And all pods in the project are ready
+    Given I obtain test data file "routing/unsecure/service_unsecure.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/unsecure/service_unsecure.json |
+      | f | service_unsecure.json |
     Then the step should succeed
     When I expose the "service-unsecure" service
     Then the step should succeed
@@ -324,15 +340,18 @@ Feature: Testing haproxy router
     #create route and service which has two endpoints
     Given the master version >= "3.7"
     Given I have a project
+    Given I obtain test data file "routing/caddy-docker.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/caddy-docker.json |
+      | f | caddy-docker.json |
     Then the step should succeed
+    Given I obtain test data file "routing/caddy-docker-2.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/caddy-docker-2.json |
+      | f | caddy-docker-2.json |
     Then the step should succeed
     And all pods in the project are ready
+    Given I obtain test data file "routing/unsecure/service_unsecure.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/unsecure/service_unsecure.json |
+      | f | service_unsecure.json |
     Then the step should succeed
     When I expose the "service-unsecure" service
     Then the step should succeed
@@ -366,15 +385,18 @@ Feature: Testing haproxy router
     #create route and service which has two endpoints
     Given the master version >= "3.7"
     Given I have a project
+    Given I obtain test data file "routing/caddy-docker.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/caddy-docker.json |
+      | f | caddy-docker.json |
     Then the step should succeed
+    Given I obtain test data file "routing/caddy-docker-2.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/caddy-docker-2.json |
+      | f | caddy-docker-2.json |
     Then the step should succeed
     And all pods in the project are ready
+    Given I obtain test data file "routing/edge/service_unsecure.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/edge/service_unsecure.json |
+      | f | service_unsecure.json |
     Then the step should succeed
     When I run the :create_route_edge client command with:
       | name    | edge-route       |

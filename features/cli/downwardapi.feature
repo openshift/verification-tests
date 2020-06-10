@@ -4,8 +4,9 @@ Feature: Downward API
   # @case_id OCP-10707
   Scenario: Pods can get IPs via downward API under race condition
     Given I have a project
+    Given I obtain test data file "downwardapi/tc509097/pod-downwardapi-env.yaml"
     When I run the :create client command with:
-      | filename  | <%= BushSlicer::HOME %>/testdata/downwardapi/tc509097/pod-downwardapi-env.yaml |
+      | filename  | pod-downwardapi-env.yaml |
     Then the step should succeed
     Given the pod named "downwardapi-env" becomes ready
     When I execute on the pod:
@@ -17,8 +18,9 @@ Feature: Downward API
   @smoke
   Scenario: downward api pod name and pod namespace as env variables
     Given I have a project
+    Given I obtain test data file "downwardapi/tc483203/downward-example.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/downwardapi/tc483203/downward-example.yaml |
+      | f | downward-example.yaml |
     Then the step should succeed
     And the pod named "dapi-test-pod" status becomes :succeeded
     When I run the :logs client command with:
@@ -33,8 +35,9 @@ Feature: Downward API
   @smoke
   Scenario: Container consume infomation from the downward API using a volume plugin
     Given I have a project
+    Given I obtain test data file "downwardapi/pod-dapi-volume.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/downwardapi/pod-dapi-volume.yaml |
+      | f | pod-dapi-volume.yaml |
     Then the step should succeed
     Given the pod named "pod-dapi-volume" becomes ready
     When I execute on the pod:
@@ -98,8 +101,9 @@ Feature: Downward API
   @admin
   Scenario: Using resources downward API via volume plugin should be compatible with metadata downward API
     Given I have a project
+    Given I obtain test data file "downwardapi/dapi-resources-metadata-volume-pod.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/downwardapi/dapi-resources-metadata-volume-pod.yaml |
+      | f | dapi-resources-metadata-volume-pod.yaml |
     Then the step should succeed
     Given the pod named "dapi-resources-metadata-volume-pod" becomes ready
     When I execute on the pod:
@@ -138,8 +142,9 @@ Feature: Downward API
       | kubernetes.io/config.seen=        |
     # Test file without requests, use limits as requests by default
     Given I ensure "dapi-resources-metadata-volume-pod" pod is deleted
+    Given I obtain test data file "downwardapi/dapi-resources-metadata-volume-pod-without-requests.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/downwardapi/dapi-resources-metadata-volume-pod-without-requests.yaml |
+      | f | dapi-resources-metadata-volume-pod-without-requests.yaml |
     Then the step should succeed
     Given the pod named "dapi-resources-metadata-volume-pod-without-requests" becomes ready
     When I execute on the pod:
@@ -148,8 +153,9 @@ Feature: Downward API
     And the output should contain "5001128134217728"
     # Test file without limits, use node allocatable as limits by default
     Given I ensure "dapi-resources-metadata-volume-pod-without-requests" pod is deleted
+    Given I obtain test data file "downwardapi/dapi-resources-metadata-volume-pod-without-limits.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/downwardapi/dapi-resources-metadata-volume-pod-without-limits.yaml |
+      | f | dapi-resources-metadata-volume-pod-without-limits.yaml |
     Then the step should succeed
     Given the pod named "dapi-resources-metadata-volume-pod-without-limits" becomes ready
     When I execute on the pod:
@@ -180,8 +186,9 @@ Feature: Downward API
   @admin
   Scenario: Could expose resouces limits and requests via volume plugin from Downward APIs with magics keys
     Given I have a project
+    Given I obtain test data file "downwardapi/dapi-resources-volume-magic-keys-pod.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/downwardapi/dapi-resources-volume-magic-keys-pod.yaml |
+      | f | dapi-resources-volume-magic-keys-pod.yaml |
     Then the step should succeed
     Given the pod named "dapi-resources-volume-magic-keys-pod" becomes ready
     When I execute on the pod:
@@ -190,8 +197,9 @@ Feature: Downward API
     And the output should contain "500164134217728"
     # Test file without requests, use limits as requests by default
     Given I ensure "dapi-resources-volume-magic-keys-pod" pod is deleted
+    Given I obtain test data file "downwardapi/dapi-resources-volume-magic-keys-pod-without-requests.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/downwardapi/dapi-resources-volume-magic-keys-pod-without-requests.yaml |
+      | f | dapi-resources-volume-magic-keys-pod-without-requests.yaml |
     Then the step should succeed
     Given the pod named "dapi-resources-volume-magic-keys-pod-without-requests" becomes ready
     When I execute on the pod:
@@ -200,8 +208,9 @@ Feature: Downward API
     And the output should contain "5001128134217728"
     # Test file without limits, use node allocatable as limits by default
     Given I ensure "dapi-resources-volume-magic-keys-pod-without-requests" pod is deleted
+    Given I obtain test data file "downwardapi/dapi-resources-volume-magic-keys-pod-without-limits.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/downwardapi/dapi-resources-volume-magic-keys-pod-without-limits.yaml |
+      | f | dapi-resources-volume-magic-keys-pod-without-limits.yaml |
     Then the step should succeed
     Given the pod named "dapi-resources-volume-magic-keys-pod-without-limits" becomes ready
     When I execute on the pod:
@@ -230,8 +239,9 @@ Feature: Downward API
   @admin
   Scenario: Using resources downward API via ENV should be compatible with metadata downward API
     Given I have a project
+    Given I obtain test data file "downwardapi/dapi-resources-metadata-env-pod.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/downwardapi/dapi-resources-metadata-env-pod.yaml |
+      | f | dapi-resources-metadata-env-pod.yaml |
     Then the step should succeed
     And the pod named "dapi-resources-metadata-env-pod" status becomes :succeeded
     When I run the :logs client command with:
@@ -244,8 +254,9 @@ Feature: Downward API
       | MY_CPU_REQUEST=1      |
     # Test file without requests, use limits as requests by default
     Given I ensure "dapi-resources-metadata-env-pod" pod is deleted
+    Given I obtain test data file "downwardapi/dapi-resources-metadata-env-pod-without-requests.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/downwardapi/dapi-resources-metadata-env-pod-without-requests.yaml |
+      | f | dapi-resources-metadata-env-pod-without-requests.yaml |
     Then the step should succeed
     And the pod named "dapi-resources-metadata-env-pod-without-requests" status becomes :succeeded
     When I run the :logs client command with:
@@ -258,8 +269,9 @@ Feature: Downward API
       | MY_CPU_REQUEST=1      |
     # Test file without limits, use node allocatable as limits by default
     Given I ensure "dapi-resources-metadata-env-pod-without-requests" pod is deleted
+    Given I obtain test data file "downwardapi/dapi-resources-metadata-env-pod-without-limits.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/downwardapi/dapi-resources-metadata-env-pod-without-limits.yaml |
+      | f | dapi-resources-metadata-env-pod-without-limits.yaml |
     Then the step should succeed
     And the pod named "dapi-resources-metadata-env-pod-without-limits" status becomes :succeeded
     Given evaluation of `pod("dapi-resources-metadata-env-pod-without-limits").node_name(user: user)` is stored in the :node clipboard

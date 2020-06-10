@@ -17,8 +17,9 @@ Feature: Marketplace related scenarios
     Given the status of condition Upgradeable for marketplace operator as expected
     Given I switch to cluster admin pseudo user
     # Create a new OperatorSource
+    Given I obtain test data file "olm/operatorsource-template.yaml"
     When I process and create:
-      | f | <%= BushSlicer::HOME %>/testdata/olm/operatorsource-template.yaml |
+      | f | operatorsource-template.yaml |
       | p | NAME=test-operators                                               |
       | p | NAMESPACE=openshift-marketplace                                   |
       | p | SECRET=                                                           |
@@ -26,8 +27,9 @@ Feature: Marketplace related scenarios
       | p | REGISTRY=jiazha                                                   |
     Then the step should succeed
     # Create a new CatalogSourceConfig
+    Given I obtain test data file "olm/csc-template.yaml"
     When I process and create:
-      | f | <%= BushSlicer::HOME %>/testdata/olm/csc-template.yaml            |
+      | f | csc-template.yaml            |
       | p | PACKAGES=codeready-toolchain-operator                             |
       | p | DISPLAYNAME=CSC Operators                                         |
     Then the step should succeed

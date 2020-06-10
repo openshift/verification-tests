@@ -17,13 +17,15 @@ Feature: TSB related scenarios
 
     # Install the art or aopqe4 OperatorSource. 
     # TODO: it's better to set the below steps in CI post action.
+    # Given I obtain test data file "olm/art-secret-template.yaml"
     # When I process and create:
-    #   | f | <%= BushSlicer::HOME %>/testdata/olm/art-secret-template.yaml |
+    #   | f | art-secret-template.yaml |
     #   | p | NAME=aosqe4-secret                                                                              |
     #   | p | TOKEN=<your quay token>                                                                         |
     # Then the step should succeed
+    # Given I obtain test data file "olm/operatorsource-template.yaml"
     # When I process and create:
-    #   | f | <%= BushSlicer::HOME %>/testdata/olm/operatorsource-template.yaml |
+    #   | f | operatorsource-template.yaml |
     #   | p | NAME=aosqe4-operators                                                                               |
     #   | p | SECRET=aosqe4-secret                                                                                |
     #   | p | REGISTRY=aosqe4                                                                                     |
@@ -47,8 +49,9 @@ Feature: TSB related scenarios
       | resource | templateservicebroker |
     And the output should contain "No resources found"
     # Create customer resource for the operator
+    Given I obtain test data file "olm/tsb-cr-template.yaml"
     When I process and create:
-      | f | <%= BushSlicer::HOME %>/testdata/olm/tsb-cr-template.yaml |
+      | f | tsb-cr-template.yaml |
     Then the step should succeed
     And I wait up to 180 seconds for the steps to pass:
     """
@@ -105,8 +108,9 @@ Feature: TSB related scenarios
     And the output should contain "No resources found"
     """
     # Recreate a TSB
+    Given I obtain test data file "olm/tsb-cr-template.yaml"
     When I process and create:
-      | f | <%= BushSlicer::HOME %>/testdata/olm/tsb-cr-template.yaml |
+      | f | tsb-cr-template.yaml |
     Then the step should succeed
     And I wait up to 180 seconds for the steps to pass:
     """

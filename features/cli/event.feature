@@ -5,8 +5,9 @@ Feature: Event related scenarios
   @admin
   Scenario: check event compressed in kube
     Given I have a project
+    Given I obtain test data file "quota/quota_template.yaml"
     When I run the :new_app admin command with:
-      | file  | <%= BushSlicer::HOME %>/testdata/quota/quota_template.yaml |
+      | file  | quota_template.yaml |
       | param | CPU_VALUE=20    |
       | param | MEM_VALUE=1Gi   |
       | param | PV_VALUE=10     |
@@ -50,8 +51,9 @@ Feature: Event related scenarios
   # @case_id OCP-10750
   Scenario: Check normal and warning information for kubernetes events
     Given I have a project
+    Given I obtain test data file "pods/hello-pod.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/pods/hello-pod.json |
+      | f | hello-pod.json |
     Then the step should succeed
     Given the pod named "hello-openshift" becomes ready
     When I get project events
@@ -68,8 +70,9 @@ Feature: Event related scenarios
       | Normal\\s+Pulled    |
       | Normal\\s+Created   |
       | Normal\\s+Started   |
+    Given I obtain test data file "pods/pod-invalid.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/pods/pod-invalid.yaml |
+      | f | pod-invalid.yaml |
     Then the step should succeed
     And I wait up to 240 seconds for the steps to pass:
     """
@@ -91,8 +94,9 @@ Feature: Event related scenarios
   # @case_id OCP-10208
   Scenario: Event should show full failed reason when readiness probe failed
     Given I have a project
+    Given I obtain test data file "pods/tc533910/readiness-probe-exec.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/pods/tc533910/readiness-probe-exec.yaml |
+      | f | readiness-probe-exec.yaml |
     Then the step should succeed
     Given the pod named "hello-pod" status becomes :running
     And I wait up to 120 seconds for the steps to pass:

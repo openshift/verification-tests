@@ -8,18 +8,21 @@ Feature: NFS Persistent Volume
     Given I have a project
     And I have a NFS service in the project
 
-    Given admin creates a PV from "<%= BushSlicer::HOME %>/testdata/storage/nfs/auto/pv-retain.json" where:
+    Given I obtain test data file "storage/nfs/auto/pv-retain.json"
+    Given admin creates a PV from "pv-retain.json" where:
       | ["metadata"]["name"]         | pv-<%= project.name %>           |
       | ["spec"]["nfs"]["server"]    | <%= service("nfs-service").ip %> |
       | ["spec"]["storageClassName"] | sc-<%= project.name %>           |
-    And I create a dynamic pvc from "<%= BushSlicer::HOME %>/testdata/storage/nfs/auto/pvc-rwx.json" replacing paths:
+    Given I obtain test data file "storage/nfs/auto/pvc-rwx.json"
+    And I create a dynamic pvc from "pvc-rwx.json" replacing paths:
       | ["spec"]["volumeName"]       | <%= pv.name %>         |
       | ["spec"]["storageClassName"] | sc-<%= project.name %> |
     And the PV becomes :bound
 
     # Create a replication controller
+    Given I obtain test data file "storage/nfs/auto/rc.yml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/storage/nfs/auto/rc.yml |
+      | f | rc.yml |
     Then the step should succeed
 
     # The replication controller creates 2 pods
@@ -57,7 +60,8 @@ Feature: NFS Persistent Volume
       | chmod | -R | 770 | /mnt/data |
     Then the step should succeed
 
-    When admin creates a PV from "<%= BushSlicer::HOME %>/testdata/storage/nfs/pv-gid.json" where:
+    Given I obtain test data file "storage/nfs/pv-gid.json"
+    When admin creates a PV from "pv-gid.json" where:
       | ["spec"]["nfs"]["server"]                                | <%= service("nfs-service").ip %> |
       | ["spec"]["nfs"]["path"]                                  | /                                |
       | ["spec"]["capacity"]["storage"]                          | 1Gi                              |
@@ -65,7 +69,8 @@ Feature: NFS Persistent Volume
       | ["metadata"]["annotations"]["pv.beta.kubernetes.io/gid"] | "<pv-gid>"                       |
     Then the step should succeed
 
-    When I create a manual pvc from "<%= BushSlicer::HOME %>/testdata/storage/nfs/claim-rwx.json" replacing paths:
+    Given I obtain test data file "storage/nfs/claim-rwx.json"
+    When I create a manual pvc from "claim-rwx.json" replacing paths:
       | ["metadata"]["name"]                         | nfsc |
       | ["spec"]["resources"]["requests"]["storage"] | 1Gi  |
     Then the step should succeed
@@ -73,7 +78,8 @@ Feature: NFS Persistent Volume
 
     Given I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/nfs/security/pod-supplementalgroup.json" replacing paths:
+    Given I obtain test data file "storage/nfs/security/pod-supplementalgroup.json"
+    When I run oc create over "pod-supplementalgroup.json" replacing paths:
       | ["metadata"]["name"]                                         | nfspd |
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | nfsc  |
     Then the step should succeed
@@ -116,7 +122,8 @@ Feature: NFS Persistent Volume
       | chmod | -R | 770 | /mnt/data |
     Then the step should succeed
 
-    Given admin creates a PV from "<%= BushSlicer::HOME %>/testdata/storage/nfs/pv-gid.json" where:
+    Given I obtain test data file "storage/nfs/pv-gid.json"
+    Given admin creates a PV from "pv-gid.json" where:
       | ["spec"]["nfs"]["server"]                                | <%= service("nfs-service").ip %> |
       | ["spec"]["nfs"]["path"]                                  | /                                |
       | ["spec"]["capacity"]["storage"]                          | 1Gi                              |
@@ -124,7 +131,8 @@ Feature: NFS Persistent Volume
       | ["metadata"]["annotations"]["pv.beta.kubernetes.io/gid"] | abc123                           |
     Then the step should succeed
 
-    When I create a manual pvc from "<%= BushSlicer::HOME %>/testdata/storage/nfs/claim-rwx.json" replacing paths:
+    Given I obtain test data file "storage/nfs/claim-rwx.json"
+    When I create a manual pvc from "claim-rwx.json" replacing paths:
       | ["metadata"]["name"]                         | mypvc |
       | ["spec"]["resources"]["requests"]["storage"] | 1Gi                      |
     Then the step should succeed
@@ -132,7 +140,8 @@ Feature: NFS Persistent Volume
 
     Given I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/nfs/security/pod-supplementalgroup.json" replacing paths:
+    Given I obtain test data file "storage/nfs/security/pod-supplementalgroup.json"
+    When I run oc create over "pod-supplementalgroup.json" replacing paths:
       | ["metadata"]["name"]                                         | mypod |
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc  |
     Then the step should succeed

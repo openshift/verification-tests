@@ -15,7 +15,8 @@ Feature: console test
 
   Scenario: switch-to-window test
     Given I have a project
-    When I process and create "<%= BushSlicer::HOME %>/testdata/build/ruby20rhel7-template-sti.json"
+    Given I obtain test data file "build/ruby20rhel7-template-sti.json"
+    When I process and create "ruby20rhel7-template-sti.json"
     Then the step should succeed
     When I perform the :goto_routes_page web console action with:
       | project_name | <%= project.name %> |
@@ -29,7 +30,8 @@ Feature: console test
 
   Scenario: switch-to-window test for web rules
     Given I have a project
-    When I process and create "<%= BushSlicer::HOME %>/testdata/build/ruby20rhel7-template-sti.json"
+    Given I obtain test data file "build/ruby20rhel7-template-sti.json"
+    When I process and create "ruby20rhel7-template-sti.json"
     Then the step should succeed
     When I perform the :goto_routes_page web console action with:
       | project_name | <%= project.name %> |

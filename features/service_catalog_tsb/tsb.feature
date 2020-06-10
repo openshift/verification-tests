@@ -19,16 +19,18 @@ Feature: Template service broker related features
   Scenario: Provision a templateinstance 
     Given I have a project
     # Provision jenkins instance
+    Given I obtain test data file "svc-catalog/serviceinstance-template.yaml"
     When I process and create:
-      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/serviceinstance-template.yaml |
+      | f | serviceinstance-template.yaml |
       | p | INSTANCE_NAME=jenkins-ephemeral          |
       | p | CLASS_EXTERNAL_NAME=jenkins-ephemeral    |
       | p | SECRET_NAME=jenkins-ephemeral-parameters |
       | p | INSTANCE_NAMESPACE=<%= project.name %>   |
     Then the step should succeed
     And evaluation of `service_instance("jenkins-ephemeral").uid(user: user)` is stored in the :jenkins_uid clipboard
+    Given I obtain test data file "svc-catalog/serviceinstance-parameters-template.yaml"
     When I process and create:
-      | f  | <%= BushSlicer::HOME %>/testdata/svc-catalog/serviceinstance-parameters-template.yaml |
+      | f  | serviceinstance-parameters-template.yaml |
       | p | SECRET_NAME=jenkins-ephemeral-parameters |
       | p | INSTANCE_NAME=jenkins-ephemeral          |
       | p | PARAMETERS={"DISABLE_ADMINISTRATIVE_MONITORS":"false","ENABLE_OAUTH":"true","JENKINS_IMAGE_STREAM_TAG":"jenkins:2","JENKINS_SERVICE_NAME":"jenkins","JNLP_SERVICE_NAME":"jenkins-jnlp","MEMORY_LIMIT":"512Mi","NAMESPACE":"openshift"} |
@@ -40,8 +42,9 @@ Feature: Template service broker related features
       | deploymentconfig=jenkins |
 
     # Create servicebinding of DB apb
+    Given I obtain test data file "svc-catalog/servicebinding-template.yaml"
     When I process and create:
-      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/servicebinding-template.yaml |
+      | f | servicebinding-template.yaml |
       | p | BINDING_NAME=jenkins-binding               |
       | p | INSTANCE_NAME=jenkins-ephemeral            |
       | p | SECRET_NAME=jenkins-ephemeral-credentials  |

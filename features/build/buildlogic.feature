@@ -16,8 +16,9 @@ Feature: buildlogic.feature
   # @case_id OCP-11170
   Scenario: Result image will be tried to push after multi-build
     Given I have a project
+    Given I obtain test data file "image/language-image-templates/php-55-rhel7-stibuild.json"
     When I run the :new_app client command with:
-      | file |  <%= BushSlicer::HOME %>/testdata/image/language-image-templates/php-55-rhel7-stibuild.json |
+      | file |  php-55-rhel7-stibuild.json |
     Then the step should succeed
     # The 1st build should be triggered automatically
     And the "php-sample-build-1" build was created
@@ -70,8 +71,9 @@ Feature: buildlogic.feature
   # @author haowang@redhat.com
   Scenario Outline: ForcePull image for build
     Given I have a project
+    Given I obtain test data file "build/forcePull/<template>"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/build/forcePull/<template> |
+      | f | <template> |
     Then the step should succeed
     Given the "ruby-sample-build-1" build was created
     And the "ruby-sample-build-1" build becomes :running
@@ -205,8 +207,9 @@ Feature: buildlogic.feature
   # @case_id OCP-13683
   Scenario: Check s2i build substatus and times
     Given I have a project
+    Given I obtain test data file "build/tc470422/application-template-stibuild.json|"
     When I run the :new_app client command with:
-      | file | <%= BushSlicer::HOME %>/testdata/build/tc470422/application-template-stibuild.json|
+      | file | application-template-stibuild.json|
     Then the step should succeed
     Given the "ruby-sample-build-1" build completed
     When I run the :describe client command with:

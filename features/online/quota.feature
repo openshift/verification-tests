@@ -11,8 +11,9 @@ Feature: ONLY ONLINE Quota related scripts in this file
     Then the step should succeed
     And the output should match:
       | create\s*delete\s*get\s*list\s*patch\s*update\s*watch.+resourcequotas |
+    Given I obtain test data file "quota/quota.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/quota.yaml |
+      | f | quota.yaml |
     Then the step should succeed
     And the output should contain:
       | resourcequota "quota" created |
@@ -107,7 +108,8 @@ Feature: ONLY ONLINE Quota related scripts in this file
     Given I check that the "<%= cb.memory_terminate_crq.name %>" applied_cluster_resource_quota exists
     Then the expression should be true> applied_cluster_resource_quota.total_used.memory_limit_raw == "1Gi"
 
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/online/hello-pod-limit.yaml" replacing paths:
+    Given I obtain test data file "online/hello-pod-limit.yaml"
+    When I run oc create over "hello-pod-limit.yaml" replacing paths:
       | ["spec"]["containers"][0]["resources"]["limits"]["memory"] | 2Gi |
     And the step should fail
     And the output should contain "exceeded quota"
@@ -123,7 +125,8 @@ Feature: ONLY ONLINE Quota related scripts in this file
     Then the step should fail
     And the output should contain "exceeded quota"
 
+    Given I obtain test data file "online/pvc_storage.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/online/pvc_storage.yaml |
+      | f | pvc_storage.yaml |
     Then the step should fail
     And the output should contain "exceeded quota"

@@ -5,13 +5,16 @@ Feature: creating 'apps' with CLI
   @admin
   Scenario: Process with special FSGroup id can be ran when using RunAsAny as the RunAsGroupStrategy
     Given I have a project
+    Given I obtain test data file "pods/pod_with_special_fsGroup.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/pods/pod_with_special_fsGroup.json |
+      | f | pod_with_special_fsGroup.json |
     Then the step should fail
-    Given the following scc policy is created: <%= BushSlicer::HOME %>/testdata/authorization/scc/scc-runasany.yaml
+    Given I obtain test data file "authorization/scc/scc-runasany.yaml"
+    Given the following scc policy is created: scc-runasany.yaml
     Then the step should succeed
+    Given I obtain test data file "pods/pod_with_special_fsGroup.json"
     When I run the :create admin command with:
-      | f | <%= BushSlicer::HOME %>/testdata/pods/pod_with_special_fsGroup.json |
+      | f | pod_with_special_fsGroup.json |
       | n | <%= project.name %>                                                                                   |
     Then the step should succeed
     When the pod named "hello-openshift" becomes ready
@@ -146,13 +149,15 @@ Feature: creating 'apps' with CLI
       | n            | noproject      |
     Then the step should fail
     Then the output should match "User "<%=@user.name%>" cannot create resource "imagestreamimports".*in the namespace "noproject""
+    Given I obtain test data file "pods/hello-pod.json"
     Given I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/pods/hello-pod.json |
+      | f | hello-pod.json |
       | n | noproject |
     Then the step should fail
     Then the output should match "User "<%=@user.name%>" cannot create resource "pods".*in the namespace "noproject""
+    Given I obtain test data file "deployment/deployment1.json"
     Given I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/deployment/deployment1.json |
+      | f | deployment1.json |
       | n | noproject |
     Then the step should fail
     Then the output should match "User "<%=@user.name%>" cannot create resource "deploymentconfigs".* in the namespace "noproject""

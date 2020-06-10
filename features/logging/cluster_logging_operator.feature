@@ -47,9 +47,10 @@ Feature: cluster-logging-operator related test
   @admin
   @destructive
   Scenario: Scale Elasticsearch nodes by nodeCount 2->3->4 in clusterlogging
+    Given I obtain test data file "logging/clusterlogging/scalebase.yaml"
     Given I create clusterlogging instance with:
       | remove_logging_pods | true                                                                   |
-      | crd_yaml            | <%= BushSlicer::HOME %>/testdata/logging/clusterlogging/scalebase.yaml |
+      | crd_yaml            | scalebase.yaml |
       | check_status        | false                                                                  |
     Then the step should succeed
     And I wait for the "elasticsearch" elasticsearches to appear up to 300 seconds
@@ -94,9 +95,10 @@ Feature: cluster-logging-operator related test
   @destructive
   Scenario: Fluentd alert rule: FluentdNodeDown
     Given the master version >= "4.2"
+    Given I obtain test data file "logging/clusterlogging/example.yaml"
     Given I create clusterlogging instance with:
       | remove_logging_pods | true                                                                 |
-      | crd_yaml            | <%= BushSlicer::HOME %>/testdata/logging/clusterlogging/example.yaml |
+      | crd_yaml            | example.yaml |
     Then the step should succeed
     Given I wait for the "fluentd" prometheus_rule to appear
     And I wait for the "fluentd" service_monitor to appear
@@ -122,9 +124,10 @@ Feature: cluster-logging-operator related test
   @admin
   @destructive
   Scenario: CLO should generate Elasticsearch Index Management
+    Given I obtain test data file "logging/clusterlogging/example_indexmanagement.yaml"
     Given I create clusterlogging instance with:
       | remove_logging_pods | true                                                                                 |
-      | crd_yaml            | <%= BushSlicer::HOME %>/testdata/logging/clusterlogging/example_indexmanagement.yaml |
+      | crd_yaml            | example_indexmanagement.yaml |
     Then the step should succeed
     Given I wait for the "indexmanagement-scripts" config_map to appear
     And evaluation of `["elasticsearch-delete-app", "elasticsearch-delete-audit", "elasticsearch-delete-infra", "elasticsearch-rollover-app", "elasticsearch-rollover-infra", "elasticsearch-rollover-audit"]` is stored in the :cj_names clipboard

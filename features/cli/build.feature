@@ -44,8 +44,9 @@ Feature: build 'apps' with CLI
   # @author pruan@redhat.com
   Scenario Outline: when delete the bc,the builds pending or running should be deleted
     Given I have a project
+    Given I obtain test data file "build/tc<number>/test-buildconfig.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/build/tc<number>/test-buildconfig.json |
+      | f | test-buildconfig.json |
     Then the step should succeed
     Given the "ruby-sample-build-1" build becomes <build_status>
     Then I run the :delete client command with:
@@ -181,8 +182,9 @@ Feature: build 'apps' with CLI
   # @case_id OCP-11227
   Scenario: Add multiple source inputs
     Given I have a project
+    Given I obtain test data file "templates/tc517667/ruby22rhel7-template-sti.json"
     When I run the :new_app client command with:
-      | file | <%= BushSlicer::HOME %>/testdata/templates/tc517667/ruby22rhel7-template-sti.json |
+      | file | ruby22rhel7-template-sti.json |
     Given the "ruby-sample-build-1" build completes
     When I run the :get client command with:
       | resource      | buildconfig       |
@@ -204,8 +206,9 @@ Feature: build 'apps' with CLI
   # @case_id OCP-10771
   Scenario: Add a image with multiple paths as source input
     Given I have a project
+    Given I obtain test data file "templates/tc517666/ruby22rhel7-template-sti.json"
     When I run the :new_app client command with:
-      | file | <%= BushSlicer::HOME %>/testdata/templates/tc517666/ruby22rhel7-template-sti.json |
+      | file | ruby22rhel7-template-sti.json |
     Given the "ruby-sample-build-1" build completes
     When I get project build_config named "ruby-sample-build" as YAML
     Then the output should contain "xiuwangs2i-2"
@@ -282,11 +285,13 @@ Feature: build 'apps' with CLI
   Scenario: Cannot create secret from local file and with same name via oc new-build
     Given I have a project
     #Reusing similar secrets to TC #519256
+    Given I obtain test data file "secrets/tc519256/testsecret1.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/secrets/tc519256/testsecret1.json |
+      | f | testsecret1.json |
     Then the step should succeed
+    Given I obtain test data file "secrets/tc519256/testsecret2.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/secrets/tc519256/testsecret2.json |
+      | f | testsecret2.json |
     Then the step should succeed
     When I run the :new_build client command with:
       | image_stream | ruby:latest                                      |
@@ -307,8 +312,9 @@ Feature: build 'apps' with CLI
   # @case_id OCP-11552
   Scenario: Using a docker image as source input for docker build
     Given I have a project
+    Given I obtain test data file "templates/tc517668/ruby22rhel7-template-docker.json"
     When I run the :new_app client command with:
-      | file | <%= BushSlicer::HOME %>/testdata/templates/tc517668/ruby22rhel7-template-docker.json |
+      | file | ruby22rhel7-template-docker.json |
     Given the "ruby-sample-build-1" build completes
     When I get project build_config named "ruby-sample-build" as YAML
     Then the output should contain "xiuwangtest"
@@ -322,11 +328,13 @@ Feature: build 'apps' with CLI
   @admin
   Scenario Outline: Do sti/custom build with no inputs in buildconfig
     Given I have a project
+    Given I obtain test data file "build/tc525736/nosrc-setup.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/build/tc525736/nosrc-setup.json |
+      | f | nosrc-setup.json |
     Then the step should succeed
+    Given I obtain test data file "build/tc525736/nosrc-test.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/build/tc525736/nosrc-test.json  |
+      | f | nosrc-test.json  |
     When I get project bc
     Then the output should contain:
       | <bc_name> |
@@ -342,7 +350,8 @@ Feature: build 'apps' with CLI
       | object_name_or_id |  <bc_name> |
     Then the step should succeed
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/build/<file_name> |
+    Given I obtain test data file "build/<file_name>"
+      | f | <file_name> |
     When I get project build_config named "<bc_name>"
     Then the step should succeed
     When I run the :start_build client command with:
@@ -669,8 +678,9 @@ Feature: build 'apps' with CLI
       | app_repo     | https://github.com/openshift/ruby-hello-world.git |
       | image_stream | ruby:latest                                       |
     Then the step should succeed
+    Given I obtain test data file "templates/tc539699/build.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/templates/tc539699/build.yaml | 
+      | f | build.yaml | 
     Then the step should succeed
     When I run the :start_build client command with:
       | buildconfig | ruby-hello-world |

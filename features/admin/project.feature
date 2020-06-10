@@ -10,8 +10,9 @@ Feature: project permissions
       | node_selector | region=west         |
       | admin         | <%= user.name %>    |
     Then the step should succeed
+    Given I obtain test data file "pods/selector-east.json"
     When I run the :create admin command with:
-      | f | <%= BushSlicer::HOME %>/testdata/pods/selector-east.json |
+      | f | selector-east.json |
       | n | <%= cb.proj_name %> |
     Then the step should fail
     And the output should match:
@@ -22,11 +23,13 @@ Feature: project permissions
   @admin
   Scenario: The job and HPA should be deleted when project has been deleted
     Given I have a project
+    Given I obtain test data file "hpa/hpa.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/hpa/hpa.yaml |
+      | f | hpa.yaml |
     Then the step should succeed
+    Given I obtain test data file "job/job.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/job/job.yaml |
+      | f | job.yaml |
     Then the step should succeed
     Given evaluation of `project.name` is stored in the :saved_name clipboard
     When I delete the project

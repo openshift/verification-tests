@@ -4,8 +4,9 @@ Feature: pod related features
   # @case_id OCP-15808
   Scenario: Endpoints should update in time and no delay
     Given I have a project
+    Given I obtain test data file "networking/list_for_pods.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json |
+      | f | list_for_pods.json |
     Then the step should succeed
     When a pod becomes ready with labels:
       | name=test-pods|
@@ -23,8 +24,9 @@ Feature: pod related features
     And the pod named "hello-openshift" status becomes :running
     And evaluation of `pod.node_name` is stored in the :pod_node clipboard
     And evaluation of `pod.ip` is stored in the :pod_ip clipboard
+    Given I obtain test data file "pods/pod-pull-by-tag.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/pods/pod-pull-by-tag.yaml |
+      | f | pod-pull-by-tag.yaml |
     Then the step should succeed
     And the pod named "pod-pull-by-tag" status becomes :running
     Given node schedulable status should be restored after scenario
@@ -51,8 +53,9 @@ Feature: pod related features
       | node_selector | os=rhel             |
       | admin         | <%= user.name %>    |
     Then the step should succeed
+    Given I obtain test data file "pods/pod-with-nodeselector.yaml"
     When I run the :create admin command with:
-      | f | <%= BushSlicer::HOME %>/testdata/pods/pod-with-nodeselector.yaml |
+      | f | pod-with-nodeselector.yaml |
       | n | <%= cb.proj_name %>                                                                                |
     Then the step should fail
     And the output should contain "pod node label selector conflicts with its project node label selector"
@@ -101,8 +104,9 @@ Feature: pod related features
       | node_name | <%= cb.nodes[0].name %> |
     Then the step should succeed
     Given label "os=fedora" is added to the "<%= cb.nodes[0].name %>" node
+    Given I obtain test data file "pods/pod-with-nodeselector.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/pods/pod-with-nodeselector.yaml |
+      | f | pod-with-nodeselector.yaml |
     Then the step should succeed
     And the pod named "hello-pod" status becomes :pending
     When I run the :oadm_uncordon_node admin command with:
@@ -123,8 +127,9 @@ Feature: pod related features
     Given I store the schedulable nodes in the :nodes clipboard
     Given label "daemon=yes" is added to the "<%= cb.nodes[0].name %>" node
     Given cluster role "cluster-admin" is added to the "first" user
+    Given I obtain test data file "daemon/daemonset-nodeselector.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/daemon/daemonset-nodeselector.yaml |
+      | f | daemonset-nodeselector.yaml |
     Then the step should succeed
     And I wait up to 120 seconds for the steps to pass:
     """
@@ -151,8 +156,9 @@ Feature: pod related features
       | node_name | <%= cb.nodes[0].name %> |
     Then the step should succeed
     Given cluster role "cluster-admin" is added to the "first" user
+    Given I obtain test data file "daemon/daemonset.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/daemon/daemonset.yaml |
+      | f | daemonset.yaml |
     Then the step should succeed
     Then I wait up to 60 seconds for the steps to pass:
     """
@@ -183,8 +189,9 @@ Feature: pod related features
     Given label "daemon=yes" is added to the "<%= cb.nodes[0].name %>" node
     Given label "daemon=no" is added to the "<%= cb.nodes[1].name %>" node
     Given cluster role "cluster-admin" is added to the "first" user
+    Given I obtain test data file "daemon/daemonset-nodeselector.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/daemon/daemonset-nodeselector.yaml |
+      | f | daemonset-nodeselector.yaml |
     Then the step should succeed
     And I wait for the steps to pass:
     """
@@ -232,8 +239,9 @@ Feature: pod related features
     Then the step should succeed
     Given SCC "privileged" is added to the "default" user
     Given I store the schedulable nodes in the :nodes clipboard
+    Given I obtain test data file "secrets/tc483170/secret-nginx-2.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/secrets/tc483170/secret-nginx-2.yaml |
+      | f | secret-nginx-2.yaml |
     Then the step should succeed
     When I run the :get client command with:
       | resource      | secret         |
@@ -246,7 +254,8 @@ Feature: pod related features
     Then the output should match:
       | password:\\s+11 bytes |
       | username:\\s+9 bytes  |
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/secrets/tc483170/secret-pod-nginx-2.yaml" replacing paths:
+    Given I obtain test data file "secrets/tc483170/secret-pod-nginx-2.yaml"
+    When I run oc create over "secret-pod-nginx-2.yaml" replacing paths:
       | ["spec"]["nodeName"] | <%= cb.nodes[0].name %> |
     And the step should succeed
     Given the pod named "secret-pod-nginx-2" becomes ready

@@ -13,7 +13,8 @@ Feature: MachineHealthCheck Test Scenarios
     Given I clone a machineset and name it "machineset-clone-25897"
 
     # Create MHC
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/cloud/mhc/mhc1.yaml" replacing paths:
+    Given I obtain test data file "cloud/mhc/mhc1.yaml"
+    When I run oc create over "mhc1.yaml" replacing paths:
       | n                                                                                  | openshift-machine-api       |
       | ["metadata"]["name"]                                                               | mhc-<%= machine_set.name %> |
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]    | <%= machine_set.cluster %>  |
@@ -50,7 +51,8 @@ Feature: MachineHealthCheck Test Scenarios
     Given I create the 'Ready' unhealthyCondition
 
     # Create MHC
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/cloud/mhc/mhc1.yaml" replacing paths:
+    Given I obtain test data file "cloud/mhc/mhc1.yaml"
+    When I run oc create over "mhc1.yaml" replacing paths:
       | n                                                                                  | openshift-machine-api       |
       | ["metadata"]["name"]                                                               | mhc-<%= machine_set.name %> |
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]    | <%= machine_set.cluster %>  |
@@ -75,7 +77,8 @@ Feature: MachineHealthCheck Test Scenarios
     # Create MHCs
     Given I run the steps 2 times:
     """
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/cloud/mhc/mhc1.yaml" replacing paths:
+    Given I obtain test data file "cloud/mhc/mhc1.yaml"
+    When I run oc create over "mhc1.yaml" replacing paths:
       | n                                                                                  | openshift-machine-api                 |
       | ["metadata"]["name"]                                                               | mhc-<%= machine_set.name %>-#{ cb.i } |
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]    | <%= machine_set.cluster %>            |
@@ -100,7 +103,8 @@ Feature: MachineHealthCheck Test Scenarios
     Given I clone a machineset and name it "machineset-clone-25691"
 
     # Create MHC
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/cloud/mhc/mhc1.yaml" replacing paths:
+    Given I obtain test data file "cloud/mhc/mhc1.yaml"
+    When I run oc create over "mhc1.yaml" replacing paths:
       | n                                                                                  | openshift-machine-api         |
       | ["metadata"]["name"]                                                               | mhc-<%= machine_set.name %>-1 |
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]    | <%= machine_set.cluster %>    |
@@ -108,7 +112,8 @@ Feature: MachineHealthCheck Test Scenarios
       | ["spec"]["maxUnhealthy"]                                                           | 0                             |
     Then the step should succeed
     And I ensure "mhc-<%= machine_set.name %>-1" machinehealthcheck is deleted after scenario
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/cloud/mhc/mhc1.yaml" replacing paths:
+    Given I obtain test data file "cloud/mhc/mhc1.yaml"
+    When I run oc create over "mhc1.yaml" replacing paths:
       | n                                                                                  | openshift-machine-api         |
       | ["metadata"]["name"]                                                               | mhc-<%= machine_set.name %>-2 |
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]    | <%= machine_set.cluster %>    |
@@ -144,7 +149,8 @@ Feature: MachineHealthCheck Test Scenarios
     Given I clone a machineset and name it "machineset-clone-28718"
 
     # Create MHC with configurable node startup timeout
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/cloud/mhc/mhc_configurabletimeout.yaml" replacing paths:
+    Given I obtain test data file "cloud/mhc/mhc_configurabletimeout.yaml"
+    When I run oc create over "mhc_configurabletimeout.yaml" replacing paths:
       | n                                                                                  | openshift-machine-api       |
       | ["metadata"]["name"]                                                               | mhc-<%= machine_set.name %> |
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]    | <%= machine_set.cluster %>  |
