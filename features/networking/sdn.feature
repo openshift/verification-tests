@@ -256,10 +256,10 @@ Feature: SDN related networking scenarios
     And 4 pods become ready with labels:	
       | name=test-pods |	
     And evaluation of `pod(0).name` is stored in the :pod1_name clipboard	
-    And evaluation of `pod(0).ip` is stored in the :pod1_ip clipboard	
-    And evaluation of `pod(1).ip` is stored in the :pod2_ip clipboard	
-    And evaluation of `pod(2).ip` is stored in the :pod3_ip clipboard	
-    And evaluation of `pod(3).ip` is stored in the :pod4_ip clipboard	
+    And evaluation of `pod(0).ip_url` is stored in the :pod1_ip clipboard	
+    And evaluation of `pod(1).ip_url` is stored in the :pod2_ip clipboard	
+    And evaluation of `pod(2).ip_url` is stored in the :pod3_ip clipboard	
+    And evaluation of `pod(3).ip_url` is stored in the :pod4_ip clipboard	
     And I register clean-up steps:	
     """	
     Given I ensure "test-rc" replicationcontroller is deleted	
