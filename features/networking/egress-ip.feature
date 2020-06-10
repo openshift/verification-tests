@@ -35,8 +35,9 @@ Feature: Egress IP related features
     Given I select a random node's host
     # create project with pods
     Given I have a project
+    Given I obtain test data file "networking/list_for_pods.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json |
+      | f | list_for_pods.json |
     Then the step should succeed
     Given 2 pods become ready with labels:
       | name=test-pods |
@@ -158,8 +159,9 @@ Feature: Egress IP related features
     And I have a pod-for-ping in the project
 
     # Create egressnetworkpolicy
+    Given I obtain test data file "networking/egressnetworkpolicy/limit_policy.json"
     When I run the :create admin command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/egressnetworkpolicy/limit_policy.json |
+      | f | limit_policy.json |
       | n | <%= project.name %>                                                                                                 |
     Then the step should succeed
 

@@ -23,9 +23,10 @@ Feature: elasticsearch-operator related tests
   @admin
   @destructive
   Scenario Outline: elasticsearch alerting rules test: ElasticsearchClusterNotHealthy
+    Given I obtain test data file "logging/clusterlogging/example.yaml"
     Given I create clusterlogging instance with:
       | remove_logging_pods | true                                                                 |
-      | crd_yaml            | <%= BushSlicer::HOME %>/testdata/logging/clusterlogging/example.yaml |
+      | crd_yaml            | example.yaml |
     Then the step should succeed
     Given I wait for the "elasticsearch-prometheus-rules" prometheus_rule to appear
     And I wait for the "monitor-elasticsearch-cluster" service_monitor to appear

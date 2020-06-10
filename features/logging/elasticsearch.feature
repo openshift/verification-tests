@@ -34,8 +34,9 @@ Feature: Elasticsearch related tests
       | n           | openshift-logging |
     Then the step should succeed
     """
+    Given I obtain test data file "logging/clusterlogging/clusterlogging-storage-template.yaml"
     When I process and create:
-      | f | <%= BushSlicer::HOME %>/testdata/logging/clusterlogging/clusterlogging-storage-template.yaml |
+      | f | clusterlogging-storage-template.yaml |
       | p | STORAGE_CLASS=<%= cb.default_sc.name %>                                                      |
       | p | PVC_SIZE=10Gi                                                                                |
     Then the step should succeed
@@ -59,8 +60,9 @@ Feature: Elasticsearch related tests
     Given I switch to the first user
     And I create a project with non-leading digit name
     And evaluation of `project` is stored in the :proj clipboard
+    Given I obtain test data file "logging/loggen/container_json_log_template.json"
     When I run the :new_app client command with:
-      | file | <%= BushSlicer::HOME %>/testdata/logging/loggen/container_json_log_template.json |
+      | file | container_json_log_template.json |
     Then the step should succeed
     Given a pod becomes ready with labels:
       | run=centos-logtest,test=centos-logtest |

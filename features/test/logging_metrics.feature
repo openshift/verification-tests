@@ -8,6 +8,7 @@ Feature: test logging and metrics related steps
   @destructive
   Scenario: install logging with user parameters
     Given logging operators are installed successfully
+    Given I obtain test data file "logging/clusterlogging/example.yaml"
     Given I create clusterlogging instance with:
-      | crd_yaml            | <%= BushSlicer::HOME %>/testdata/logging/clusterlogging/example.yaml |
+      | crd_yaml            | example.yaml |
       | remove_logging_pods | true                                                                 |

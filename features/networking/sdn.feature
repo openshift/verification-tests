@@ -209,8 +209,9 @@ Feature: SDN related networking scenarios
   Scenario: Killing ovs process should not put sdn and ovs pods in bad shape
     Given I have a project
     And evaluation of `project.name` is stored in the :usr_project clipboard
+    Given I obtain test data file "networking/list_for_pods.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json |
+      | f | list_for_pods.json |
     Then the step should succeed
     Given 2 pods become ready with labels:
       | name=test-pods |
@@ -250,7 +251,8 @@ Feature: SDN related networking scenarios
   #Test for bug https://bugzilla.redhat.com/show_bug.cgi?id=1800324 and https://bugzilla.redhat.com/show_bug.cgi?id=1796157	
     Given I switch to cluster admin pseudo user	
     And I use the "default" project	
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json" replacing paths:	
+    Given I obtain test data file "networking/list_for_pods.json"
+    When I run oc create over "list_for_pods.json" replacing paths:	
       | ["items"][0]["spec"]["replicas"] | 4 |	
     Then the step should succeed	
     And 4 pods become ready with labels:	

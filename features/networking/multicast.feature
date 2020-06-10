@@ -9,8 +9,9 @@ Feature: testing multicast scenarios
     # create some multicast testing pods
     Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard
+    Given I obtain test data file "networking/multicast-rc.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/multicast-rc.json |
+      | f | multicast-rc.json |
     Then the step should succeed
     Given 3 pods become ready with labels:
       | name=mcast-pods |
@@ -91,7 +92,8 @@ Feature: testing multicast scenarios
     # create multicast testing pods in the project and without multicast enable
     Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multicast-rc.json" replacing paths:
+    Given I obtain test data file "networking/multicast-rc.json"
+    When I run oc create over "multicast-rc.json" replacing paths:
       | ["spec"]["replicas"] | 2 |
     Then the step should succeed
     Given 2 pods become ready with labels:
@@ -144,8 +146,9 @@ Feature: testing multicast scenarios
   Scenario: Same multicast groups can be created in multiple tenant
     Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard
+    Given I obtain test data file "networking/multicast-rc.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/multicast-rc.json |
+      | f | multicast-rc.json |
     Then the step should succeed
     Given 3 pods become ready with labels:
       | name=mcast-pods |
@@ -165,8 +168,9 @@ Feature: testing multicast scenarios
     
     Given I create a new project
     And evaluation of `project.name` is stored in the :proj2 clipboard
+    Given I obtain test data file "networking/multicast-rc.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/multicast-rc.json |
+      | f | multicast-rc.json |
     Then the step should succeed
     Given 3 pods become ready with labels:
       | name=mcast-pods |

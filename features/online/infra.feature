@@ -4,8 +4,9 @@ Feature: ONLY ONLINE Infra related scripts in this file
   # @case_id OCP-10142
   Scenario: User cannot deploy a pod to an infra node
     Given I have a project
+    Given I obtain test data file "pods/tc532324/pod_nodeSelector_infra.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/pods/tc532324/pod_nodeSelector_infra.yaml |
+      | f | pod_nodeSelector_infra.yaml |
     Then the step should fail
     And the output should contain:
       | pod node label selector conflicts with its project node label selector |

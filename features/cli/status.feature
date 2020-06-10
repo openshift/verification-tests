@@ -6,8 +6,9 @@ Feature: Check status via oc status, wait etc
     Given I have a project
 
     # Check standalone RC info is dispalyed in oc status output
+    Given I obtain test data file "cli/standalone-rc.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/cli/standalone-rc.yaml |
+      | f | standalone-rc.yaml |
     Then the step should succeed
     And evaluation of `"stdalonerc"` is stored in the :stdrc_name clipboard
     When I run the :status client command
@@ -24,8 +25,9 @@ Feature: Check status via oc status, wait etc
     # Clear out memory and cpu usage to fit into online quota limits
     Given I ensure "<%= cb.stdrc_name %>" rc is deleted
 
+    Given I obtain test data file "pods/hello-pod.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/pods/hello-pod.json |
+      | f | hello-pod.json |
     Then the step should succeed
     When I run the :status client command
     Then the step should succeed
@@ -35,8 +37,9 @@ Feature: Check status via oc status, wait etc
     And I ensure "hello-openshift" pod is deleted
 
     # Check DC,RC info when has missing/bad secret reference
+    Given I obtain test data file "cli/application-template-stibuild-with-mount-secret.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/cli/application-template-stibuild-with-mount-secret.json |
+      | f | application-template-stibuild-with-mount-secret.json |
     Then the step should succeed
     And evaluation of `"my-secret"` is stored in the :missingscrt_name clipboard
     When I create a new application with:
@@ -50,8 +53,9 @@ Feature: Check status via oc status, wait etc
       | dc/frontend is attempting to mount a missing secret secret/<%= cb.missingscrt_name %> |
 
     # Show RCs for services in oc status
+    Given I obtain test data file "cli/replication-controller-match-a-service.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/cli/replication-controller-match-a-service.yaml |
+      | f | replication-controller-match-a-service.yaml |
     Then the step should succeed
     And evaluation of `"rcmatchse"` is stored in the :matchrc_name clipboard
     Then I run the :describe client command with:

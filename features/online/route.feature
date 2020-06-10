@@ -4,8 +4,9 @@ Feature: Route test in online environments
   # @case_id OCP-16320
   Scenario: Custom hostname is prohibited for passthrough terminated route
     Given I have a project
+    Given I obtain test data file "routing/passthrough/service_secure.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/passthrough/service_secure.json |
+      | f | service_secure.json |
     Then the step should succeed
     When I run the :create_route_passthrough client command with:
       | name    | passthrough-route-custom |
@@ -23,11 +24,13 @@ Feature: Route test in online environments
   # @case_id OCP-16318
   Scenario: Custom hostname is prohibited for unsecure route
     Given I have a project
+    Given I obtain test data file "routing/caddy-docker.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/caddy-docker.json |
+      | f | caddy-docker.json |
     Then the step should succeed
+    Given I obtain test data file "routing/unsecure/service_unsecure.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/unsecure/service_unsecure.json |
+      | f | service_unsecure.json |
     Then the step should succeed
     When I run the :expose client command with:
       | name          | route-unsecure   |
@@ -47,11 +50,13 @@ Feature: Route test in online environments
   # @case_id OCP-16319
   Scenario: Custom hostname and cert are prohibited for edge terminated route
     Given I have a project
+    Given I obtain test data file "routing/caddy-docker.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/caddy-docker.json |
+      | f | caddy-docker.json |
     Then the step should succeed
+    Given I obtain test data file "routing/edge/service_unsecure.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/edge/service_unsecure.json |
+      | f | service_unsecure.json |
     Then the step should succeed
     Given I obtain test data file "routing/edge/route_edge-www.edge.com.crt"
     And I obtain test data file "routing/edge/route_edge-www.edge.com.key"
@@ -91,8 +96,9 @@ Feature: Route test in online environments
   # @case_id OCP-16321
   Scenario: Custom hostname and cert are prohibited for reencrypt terminated route
     Given I have a project
+    Given I obtain test data file "routing/reencrypt/reencrypt-without-all-cert.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/reencrypt/reencrypt-without-all-cert.yaml |
+      | f | reencrypt-without-all-cert.yaml |
     Then the step should succeed
     Given I obtain test data file "routing/reencrypt/route_reencrypt-reen.example.com.crt"
     And I obtain test data file "routing/reencrypt/route_reencrypt_dest.ca"

@@ -4,8 +4,9 @@ Feature: pods related scenarios
   # @case_id OCP-11218
   Scenario: kubectl describe pod should show qos tier info when pod without limits and request info
     Given I have a project
+    Given I obtain test data file "pods/hello-pod.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/pods/hello-pod.json |
+      | f | hello-pod.json |
     Then the step should succeed
     Given the pod named "hello-openshift" becomes ready
     When I run the :describe client command with:
@@ -20,11 +21,13 @@ Feature: pods related scenarios
   # @case_id OCP-11527
   Scenario: kubectl describe pod should show qos tier info
     Given I have a project
+    Given I obtain test data file "quota/pod-notbesteffort.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/pod-notbesteffort.yaml |
+      | f | pod-notbesteffort.yaml |
     Then the step should succeed
+    Given I obtain test data file "pods/hello-pod-bad.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/pods/hello-pod-bad.json |
+      | f | hello-pod-bad.json |
     Then the step should succeed
     Given the pod named "pod-notbesteffort" becomes ready
     When I run the :describe client command with:
@@ -52,8 +55,9 @@ Feature: pods related scenarios
   # @case_id OCP-10729
   Scenario: Implement supplemental groups for pod
     Given I have a project
+    Given I obtain test data file "pods/tc510724/pod-supplementalGroups.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/pods/tc510724/pod-supplementalGroups.yaml |
+      | f | pod-supplementalGroups.yaml |
     Then the step should succeed
     Given the pod named "hello-openshift" becomes ready
     When I run the :exec client command with:
@@ -63,8 +67,9 @@ Feature: pods related scenarios
     And the output should contain:
       | groups=1234,5678, |
     Given I ensure "hello-openshift" pod is deleted
+    Given I obtain test data file "pods/tc510724/pod-supplementalGroups-multi-cotainers.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/pods/tc510724/pod-supplementalGroups-multi-cotainers.yaml |
+      | f | pod-supplementalGroups-multi-cotainers.yaml |
     Then the step should succeed
     Given the pod named "multi-containers" becomes ready
     When I run the :rsh client command with:
@@ -84,8 +89,9 @@ Feature: pods related scenarios
     And the output should contain:
       | groups=1234,5678, |
     Given I ensure "multi-containers" pod is deleted
+    Given I obtain test data file "pods/tc510724/pod-supplementalGroups-invalid.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/pods/tc510724/pod-supplementalGroups-invalid.yaml |
+      | f | pod-supplementalGroups-invalid.yaml |
     Then the step should fail
     And the output should contain 2 times:
       | nvalid value |
@@ -94,8 +100,9 @@ Feature: pods related scenarios
   # @case_id OCP-11753
   Scenario: Pod should be immediately deleted if it's not scheduled even if graceful termination period is set
     Given I have a project
+    Given I obtain test data file "pods/graceful-delete/10.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/pods/graceful-delete/10.json |
+      | f | 10.json |
     Then the step should succeed
     Given the pod named "grace10" becomes ready
     When I run the :delete background client command with:
@@ -110,8 +117,9 @@ Feature: pods related scenarios
   # @bug_id 1324396
   Scenario: Update ActiveDeadlineSeconds for pod
     Given I have a project
+    Given I obtain test data file "pods/tc521546/hello-pod.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/pods/tc521546/hello-pod.json |
+      | f | hello-pod.json |
     Then the step should succeed
     When I run the :patch client command with:
       | resource      | pod                                    |
@@ -142,8 +150,9 @@ Feature: pods related scenarios
   # @case_id OCP-11055
   Scenario: /dev/shm can be automatically shared among all of a pod's containers
     Given I have a project
+    Given I obtain test data file "pods/pod_with_two_containers.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/pods/pod_with_two_containers.json |
+      | f | pod_with_two_containers.json |
     Then the step should succeed
     And the pod named "doublecontainers" becomes ready
     # Enter container 1 and write files

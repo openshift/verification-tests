@@ -4,8 +4,9 @@ Feature: cluster monitoring related upgrade check
   @admin
   Scenario: upgrade cluster monitoring along with OCP - prepare
     Given I switch to cluster admin pseudo user
+    Given I obtain test data file "monitoring/upgrade/cm-monitoring-retention.yaml"
     When I run the :apply client command with:
-      | f         | <%= BushSlicer::HOME %>/testdata/monitoring/upgrade/cm-monitoring-retention.yaml |
+      | f         | cm-monitoring-retention.yaml |
       | overwrite | true |
     Then the step should succeed
 

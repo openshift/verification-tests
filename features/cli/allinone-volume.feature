@@ -4,15 +4,18 @@ Feature: All in one volume
   # @case_id OCP-11683
   Scenario: Project secrets, configmap and downward API into the same volume with normal keys and path
     Given I have a project
+    Given I obtain test data file "pods/allinone-volume/configmap.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/pods/allinone-volume/configmap.yaml |
+      | f | configmap.yaml |
     Then the step should succeed
+    Given I obtain test data file "pods/allinone-volume/secret.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/pods/allinone-volume/secret.yaml |
+      | f | secret.yaml |
     Then the step should succeed
 
+    Given I obtain test data file "pods/allinone-volume/allinone-normal-pod.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/pods/allinone-volume/allinone-normal-pod.yaml |
+      | f | allinone-normal-pod.yaml |
     Then the step should succeed
     Given the pod named "allinone-normal" becomes ready
     When I execute on the pod:

@@ -10,8 +10,9 @@ Feature: permission related test
     Given I switch to the first user
     Given I create a project with non-leading digit name
     And evaluation of `project` is stored in the :project clipboard
+    Given I obtain test data file "logging/loggen/container_json_log_template.json"
     When I run the :new_app client command with:
-      | file | <%= BushSlicer::HOME %>/testdata/logging/loggen/container_json_log_template.json |
+      | file | container_json_log_template.json |
     Then the step should succeed
     Given I switch to cluster admin pseudo user
     And I use the "openshift-logging" project
@@ -55,14 +56,16 @@ Feature: permission related test
     And evaluation of `user.cached_tokens.first` is stored in the :user_token clipboard
     Given I create a project with non-leading digit name
     And evaluation of `project` is stored in the :proj_1 clipboard
+    Given I obtain test data file "logging/loggen/container_json_log_template.json"
     When I run the :new_app client command with:
-      | file | <%= BushSlicer::HOME %>/testdata/logging/loggen/container_json_log_template.json |
+      | file | container_json_log_template.json |
     Then the step should succeed
     Given I switch to the second user
     Given I create a project with non-leading digit name
     And evaluation of `project` is stored in the :proj_2 clipboard
+    Given I obtain test data file "logging/loggen/container_json_log_template.json"
     When I run the :new_app client command with:
-      | file | <%= BushSlicer::HOME %>/testdata/logging/loggen/container_json_log_template.json |
+      | file | container_json_log_template.json |
     Then the step should succeed
     Given I switch to cluster admin pseudo user
     And I use the "openshift-logging" project
@@ -96,8 +99,9 @@ Feature: permission related test
     Given I switch to the first user
     Given I create a project with non-leading digit name
     And evaluation of `project` is stored in the :proj clipboard
+    Given I obtain test data file "logging/loggen/container_json_log_template.json"
     When I run the :new_app client command with:
-      | file | <%= BushSlicer::HOME %>/testdata/logging/loggen/container_json_log_template.json |
+      | file | container_json_log_template.json |
     Then the step should succeed
     Given I switch to the second user
     And the second user is cluster-admin

@@ -5,15 +5,17 @@ Feature: basic verification for upgrade testing
   @admin
   Scenario: etcd-operator and cluster works well after upgrade - prepare 
     Given I switch to cluster admin pseudo user		
+    Given I obtain test data file "admin/subscription.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/admin/subscription.yaml |
+      | f | subscription.yaml |
     Then the step should succeed
     When I use the "openshift-operators" project
     Then status becomes :running of exactly 1 pods labeled:
       | name=etcd-operator-alm-owned |
     When I use the "default" project
+    Given I obtain test data file "admin/etcd-cluster.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/admin/etcd-cluster.yaml |
+      | f | etcd-cluster.yaml |
     Then the step should succeed
     Then status becomes :running of exactly 3 pods labeled:
       | etcd_cluster=example |

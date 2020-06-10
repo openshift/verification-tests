@@ -9,8 +9,9 @@ Feature: Node components upgrade tests
       | name     | master                    |
       | key_val  | custom-kubelet=small-pods |
     Then the step should succeed
+    Given I obtain test data file "customresource/custom_kubelet.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/customresource/custom_kubelet.yaml |
+      | f | custom_kubelet.yaml |
     Then the step should succeed
     And I wait up to 30 seconds for the steps to pass:
     """

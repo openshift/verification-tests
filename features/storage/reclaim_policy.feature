@@ -5,7 +5,8 @@ Feature: Persistent Volume reclaim policy tests
     Given I have a project
     And I have a 1 GB volume and save volume id in the :vid clipboard
 
-    When admin creates a PV from "<%= BushSlicer::HOME %>/testdata/storage/<path_to_file>" where:
+    Given I obtain test data file "storage/<path_to_file>"
+    When admin creates a PV from "<path_to_file>" where:
       | ["metadata"]["name"]                        | pv-<%= project.name %> |
       | ["spec"]["capacity"]["storage"]             | 1Gi                    |
       | ["spec"]["accessModes"][0]                  | ReadWriteOnce          |
@@ -13,14 +14,16 @@ Feature: Persistent Volume reclaim policy tests
       | ["spec"]["persistentVolumeReclaimPolicy"]   | Delete                 |
       | ["spec"]["storageClassName"]                | sc-<%= project.name %> |
     Then the step should succeed
-    When I create a dynamic pvc from "<%= BushSlicer::HOME %>/testdata/storage/misc/pvc.json" replacing paths:
+    Given I obtain test data file "storage/misc/pvc.json"
+    When I create a dynamic pvc from "pvc.json" replacing paths:
       | ["metadata"]["name"]         | mypvc                  |
       | ["spec"]["volumeName"]       | pv-<%= project.name %> |
       | ["spec"]["storageClassName"] | sc-<%= project.name %> |
     Then the step should succeed
     And the "mypvc" PVC becomes bound to the "pv-<%= project.name %>" PV
 
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/gce/pod.json" replacing paths:
+    Given I obtain test data file "storage/gce/pod.json"
+    When I run oc create over "pod.json" replacing paths:
       | ["metadata"]["name"]                                         | mypod |
       | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt  |
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc |

@@ -9,8 +9,9 @@ Feature: secrets related scenarios
       | name        | my-secret  |
       | from_file   | /etc/hosts |
     Then the step should succeed
+    Given I obtain test data file "deployment/tc510612/hook-inheritance-secret-volume.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/deployment/tc510612/hook-inheritance-secret-volume.json |
+      | f | hook-inheritance-secret-volume.json |
     Then the step should succeed
   ## mount should be correct to the pod, no-matter if the pod is completed or not, check the case checkpoint
     And I wait for the steps to pass:
@@ -30,15 +31,19 @@ Feature: secrets related scenarios
   @smoke
   Scenario: Pods do not have access to each other's secrets in the same namespace
     Given I have a project
+    Given I obtain test data file "secrets/tc483168/first-secret.json"
     When I run the :create client command with:
-      | filename | <%= BushSlicer::HOME %>/testdata/secrets/tc483168/first-secret.json |
+      | filename | first-secret.json |
+    Given I obtain test data file "secrets/tc483168/second-secret.json"
     And I run the :create client command with:
-      | filename | <%= BushSlicer::HOME %>/testdata/secrets/tc483168/second-secret.json |
+      | filename | second-secret.json |
     Then the step should succeed
+    Given I obtain test data file "secrets/tc483168/first-secret-pod.yaml"
     When I run the :create client command with:
-      | filename | <%= BushSlicer::HOME %>/testdata/secrets/tc483168/first-secret-pod.yaml |
+      | filename | first-secret-pod.yaml |
+    Given I obtain test data file "secrets/tc483168/second-secret-pod.yaml"
     And I run the :create client command with:
-      | filename | <%= BushSlicer::HOME %>/testdata/secrets/tc483168/second-secret-pod.yaml |
+      | filename | second-secret-pod.yaml |
     Then the step should succeed
     Given the pod named "first-secret-pod" status becomes :running
     When I run the :exec client command with:
@@ -72,18 +77,22 @@ Feature: secrets related scenarios
   Scenario: Pods do not have access to each other's secrets with the same secret name in different namespaces
     Given I have a project
     Given evaluation of `project.name` is stored in the :project0 clipboard
+    Given I obtain test data file "secrets/tc483169/secret1.json"
     When I run the :create client command with:
-      | filename  | <%= BushSlicer::HOME %>/testdata/secrets/tc483169/secret1.json |
+      | filename  | secret1.json |
+    Given I obtain test data file "secrets/tc483169/secret-pod-1.yaml"
     And I run the :create client command with:
-      | filename  | <%= BushSlicer::HOME %>/testdata/secrets/tc483169/secret-pod-1.yaml |
+      | filename  | secret-pod-1.yaml |
     Then the step should succeed
     And the pod named "secret-pod-1" status becomes :running
     When I create a new project
     Given evaluation of `project.name` is stored in the :project1 clipboard
+    Given I obtain test data file "secrets/tc483169/secret2.json"
     And I run the :create client command with:
-      | filename  | <%= BushSlicer::HOME %>/testdata/secrets/tc483169/secret2.json |
+      | filename  | secret2.json |
+    Given I obtain test data file "secrets/tc483169/secret-pod-2.yaml"
     And I run the :create client command with:
-      | filename  | <%= BushSlicer::HOME %>/testdata/secrets/tc483169/secret-pod-2.yaml |
+      | filename  | secret-pod-2.yaml |
     Then the step should succeed
     And the pod named "secret-pod-2" status becomes :running
     When I run the :exec client command with:
@@ -105,11 +114,13 @@ Feature: secrets related scenarios
   # @author yantan@redhat.com
   Scenario Outline: Insert secret to builder container via oc new-build - source/docker build
     Given I have a project
+    Given I obtain test data file "secrets/tc519256/testsecret1.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/secrets/tc519256/testsecret1.json |
+      | f | testsecret1.json |
     Then the step should succeed
+    Given I obtain test data file "secrets/tc519256/testsecret2.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/secrets/tc519256/testsecret2.json |
+      | f | testsecret2.json |
     Then the step should succeed
     When I run the :new_build client command with:
       | docker_image | centos/ruby-22-centos7:latest                |
@@ -118,8 +129,9 @@ Feature: secrets related scenarios
       | build_secret | <build_secret> |
       | build_secret | testsecret2    |
     Then the step should succeed
+    Given I obtain test data file "deployment/tc519261/test.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/deployment/tc519261/test.json |
+      | f | test.json |
     Then the step should succeed
     Given the "build-secret-1" build was created
     And the "build-secret-1" build completed
@@ -146,8 +158,9 @@ Feature: secrets related scenarios
   @smoke
   Scenario: Consume the same Secrets as environment variables in multiple pods
     Given I have a project
+    Given I obtain test data file "secrets/secret.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/secrets/secret.yaml |
+      | f | secret.yaml |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | secret   |
@@ -155,8 +168,9 @@ Feature: secrets related scenarios
     Then the output should match:
       | data-1:\\s+9\\s+bytes  |
       | data-2:\\s+11\\s+bytes |
+    Given I obtain test data file "job/job-secret-env.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/job/job-secret-env.yaml |
+      | f | job-secret-env.yaml |
     Then the step should succeed
     And I wait for the steps to pass:
     """
@@ -194,8 +208,9 @@ Feature: secrets related scenarios
   @smoke
   Scenario: Using Secrets as Environment Variables
     Given I have a project
+    Given I obtain test data file "secrets/secret.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/secrets/secret.yaml |
+      | f | secret.yaml |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | secret   |
@@ -203,8 +218,9 @@ Feature: secrets related scenarios
     Then the output should match:
       | data-1:\\s+9\\s+bytes  |
       | data-2:\\s+11\\s+bytes |
+    Given I obtain test data file "secrets/secret-env-pod.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/secrets/secret-env-pod.yaml |
+      | f | secret-env-pod.yaml |
     Then the step should succeed
     And the pod named "secret-env-pod" status becomes :succeeded
     When I run the :logs client command with:
@@ -218,11 +234,13 @@ Feature: secrets related scenarios
   @smoke
   Scenario: Secret volume should update when secret is updated
     Given I have a project
+    Given I obtain test data file "secrets/tc483169/secret1.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/secrets/tc483169/secret1.json |
+      | f | secret1.json |
     Then the step should succeed
+    Given I obtain test data file "secrets/tc483169/secret-pod-1.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/secrets/tc483169/secret-pod-1.yaml |
+      | f | secret-pod-1.yaml |
     Then the step should succeed
     Given the pod named "secret-pod-1" status becomes :running
     When I run the :exec client command with:
@@ -251,11 +269,13 @@ Feature: secrets related scenarios
   # @case_id OCP-10899
   Scenario: Mapping specified secret volume should update when secret is updated
     Given I have a project
+    Given I obtain test data file "secrets/tc483169/secret1.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/secrets/tc483169/secret1.json |
+      | f | secret1.json |
     Then the step should succeed
+    Given I obtain test data file "secrets/mapping-secret-volume-pod.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/secrets/mapping-secret-volume-pod.yaml |
+      | f | mapping-secret-volume-pod.yaml |
     Then the step should succeed
     Given the pod named "mapping-secret-volume-pod" status becomes :running
     When I execute on the pod:
@@ -281,8 +301,9 @@ Feature: secrets related scenarios
   # @case_id OCP-10569
   Scenario: Allow specifying secret data using strings and images
     Given I have a project
+    Given I obtain test data file "secrets/secret-datastring-image.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/secrets/secret-datastring-image.json |
+      | f | secret-datastring-image.json |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | secret                  |
@@ -291,8 +312,9 @@ Feature: secrets related scenarios
       | image:\\s+7059\\s+bytes |
       | password:\\s+5\\s+bytes |
       | username:\\s+5\\s+bytes |
+    Given I obtain test data file "secrets/pod-secret-datastring-image-volume.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/secrets/pod-secret-datastring-image-volume.yaml |
+      | f | pod-secret-datastring-image-volume.yaml |
     Then the step should succeed
     Given the pod named "pod-secret-datastring-image-volume" status becomes :running
     When I execute on the pod:

@@ -33,8 +33,9 @@ Feature: oc_expose.feature
       | name      | default-conf   |
       | from_file | caddyfile.conf |
     Then the step should succeed
+    Given I obtain test data file "deployment/OCP-10873/dc.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/deployment/OCP-10873/dc.yaml |
+      | f | dc.yaml |
     Then the step should succeed
     And I wait until the status of deployment "hello" becomes :complete
     Given I have a pod-for-ping in the project

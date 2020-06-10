@@ -5,7 +5,8 @@ Feature: idle service related scenarios
   @smoke
   Scenario: Pod can be changed to un-idle when there is unsecure or edge or passthrough route coming
     Given I have a project
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/routing/list_for_caddy.json" replacing paths:
+    Given I obtain test data file "routing/list_for_caddy.json"
+    When I run oc create over "list_for_caddy.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
     Then the step should succeed
     Given I wait until replicationController "caddy-rc" is ready
@@ -94,7 +95,8 @@ Feature: idle service related scenarios
   # @case_id OCP-13837
   Scenario: Pod can be changed to un-idle when there is reencrypt route coming
     Given I have a project
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/routing/list_for_caddy.json" replacing paths:
+    Given I obtain test data file "routing/list_for_caddy.json"
+    When I run oc create over "list_for_caddy.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
     Then the step should succeed
     Given I wait until replicationController "caddy-rc" is ready

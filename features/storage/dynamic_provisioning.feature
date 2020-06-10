@@ -4,11 +4,13 @@ Feature: Dynamic provisioning
   @admin
   Scenario Outline: dynamic provisioning
     Given I have a project
-    When I create a dynamic pvc from "<%= BushSlicer::HOME %>/testdata/storage/misc/pvc.json" replacing paths:
+    Given I obtain test data file "storage/misc/pvc.json"
+    When I create a dynamic pvc from "pvc.json" replacing paths:
       | ["metadata"]["name"] | mypvc |
     Then the step should succeed
 
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/misc/pod.yaml" replacing paths:
+    Given I obtain test data file "storage/misc/pod.yaml"
+    When I run oc create over "pod.yaml" replacing paths:
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc                 |
       | ["metadata"]["name"]                                         | mypod                 |
       | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt/<cloud_provider> |
