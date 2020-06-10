@@ -51,6 +51,17 @@ Feature: Cluster Autoscaler Tests
     """
     Then the machineset should have expected number of running machines
 
+    # Check autoscaler taints are deleted when min node is reached
+    Given I store the last provisioned machine in the :machine clipboard
+    And evaluation of `machine(cb.machine).node_name` is stored in the :noderef_name clipboard
+    When I run the :describe admin command with:
+      | resource | node                  |
+      | name     | <%= cb.noderef_name%> |
+    Then the step should succeed
+    And the output should not contain:
+      | DeletionCandidateOfClusterAutoscaler |
+      | ToBeDeletedByClusterAutoscaler       |
+
   # @author zhsun@redhat.com
   # @case_id OCP-21516
   @admin
