@@ -47,5 +47,10 @@ module BushSlicer
       ! raw_resource(user: user, cached: cached, quiet: quiet).
           dig('metadata', 'deletionTimestamp').nil?
     end
+    def cluster(user: nil, cached: true, quiet: false)
+      rr = raw_resource(user: user, cached: cached, quiet: quiet)
+      rr.dig('metadata', 'labels', 'machine.openshift.io/cluster-api-cluster')
+    end
+
   end
 end

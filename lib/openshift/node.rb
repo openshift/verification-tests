@@ -234,6 +234,11 @@ module BushSlicer
       }
     end
 
+    def machine_name(user: nil, cached: true, quiet: false)
+      obj = raw_resource(user: user, cached: cached, quiet: quiet)
+      return obj.dig("metadata", "annotations", "machine.openshift.io/machine").split('/')[1]
+    end
+
     # calculate how many pods can be schedulable on the node
     # based on resources requested
     private def max_pod_count_capacity(user: nil, cached: true, quiet: false, **pod_requests)

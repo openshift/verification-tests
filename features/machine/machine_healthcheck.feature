@@ -167,4 +167,72 @@ Feature: MachineHealthCheck Test Scenarios
     """
    Then the machine should be remediated
 
-   
+  # @author zhsun@redhat.com
+  # @case_id OCP-28956
+  @admin
+  @destructive
+  Scenario: Remediation should be skipped on master machine
+    Given I have an IPI deployment
+    And I switch to cluster admin pseudo user
+    And I use the "openshift-machine-api" project
+    And admin ensures machine number is restored after scenario
+
+    # Clone a master machine
+    Given I store the masters in the :masters clipboard
+    And evaluation of `node(cb.masters[0].name).machine_name` is stored in the :machineref_name clipboard
+
+    Given I run the :get admin command with:
+      | resource      | machine                   |
+      | resource_name | <%= cb.machineref_name %> |
+      | o             | yaml                      |
+    Then the step should succeed
+    And I save the output to file> master-machine-28956.yaml
+    And I replace content in "master-machine-28956.yaml":
+      | name: <%= cb.machineref_name %>  | name: master-machine-28956 |
+      | /providerID:.*/                  |                            |
+
+    When I run the :create admin command with:
+      | f | master-machine-28956.yaml |
+    Then the step should succeed
+    And admin ensures "master-machine-28956" machine is deleted after scenario
+    And I wait for the node of machine named "master-machine-28956" to appear
+    And I wait up to 200 seconds for the steps to pass:
+    """
+    And evaluation of `machine("master-machine-28956").node_name` is stored in the :noderef_name clipboard
+    Then the expression should be true> node(cb.noderef_name).ready?[:success] == true
+    """
+    Given I store the last provisioned machine in the :machine clipboard
+
+    # Create MHC
+    When I run oc create over "<%= BushSlicer::HOME %>/features/tierN/testdata/cloud/mhc/mhc-master.yaml" replacing paths:
+      | ["metadata"]["name"]                                                            | mhc-master-machine-28956 |
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"] | <%= machine.cluster %>   |
+    Then the step should succeed
+    And I ensure "mhc-master-machine-28956" machinehealthcheck is deleted after scenario
+
+    # Create unhealthyCondition to check if trigger machine remediation
+    When I run oc create over "<%= BushSlicer::HOME %>/testdata/cloud/mhc/kubelet-killer-pod.yml" replacing paths:
+      | ["spec"]["nodeName"] | <%= machine.node_name %> |
+    Then the step should succeed
+    #And I ensure "kubelet-killer" pod is deleted after scenario
+    And I register clean-up steps:
+    """
+    When I run the :delete admin command with:
+      | object_type  | po              |
+      | l            | kubelet-killer= |
+      | force        | true            |
+      | grace_period | 0               |
+    Then the step should succeed
+    """
+
+    Then a pod becomes ready with labels:
+     | api=clusterapi, k8s-app=controller |
+
+    And I wait up to 900 seconds for the steps to pass:
+    """
+     When I run the :logs admin command with:
+     | resource_name | <%= pod.name %>                |
+     | c             | machine-healthcheck-controller |
+    Then the output should match:
+     | no controller owner, skipping remediation |
+    """
