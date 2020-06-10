@@ -19,13 +19,13 @@ require 'text-table'
 # GCE specific
 require 'google/apis/compute_v1'
 require 'googleauth'
-require 'launchers/openstack10'
+require 'launchers/openstack'
 # user libs
 require 'instance_summary'
 require 'jenkins'
 
 module BushSlicer
-  class CloudCop
+  class CloudUsage
     include Commander::Methods
     include Common::Helper
     include Common::CloudHelper
@@ -39,7 +39,7 @@ module BushSlicer
     end
 
     def run
-      program :name, 'CloudCop'
+      program :name, 'CloudUsage'
       program :version, '0.0.1'
       program :description, 'Helper utility to display summary of running instances in supported cloud platforms'
 
@@ -91,5 +91,5 @@ module BushSlicer
 end
 
 if __FILE__ == $0
-  BushSlicer::CloudCop.new.run
+  BushSlicer::CloudUsage.new.run
 end

@@ -37,8 +37,8 @@ module BushSlicer
       bd['actions'].each do |action|
         action.each do |a|
           if a.include? "hudson.model.ParametersAction"
-          	instance_name_prefix = action['parameters'].map { |p| p['value'] if p['name']== "INSTANCE_NAME_PREFIX" }.compact.first
-          	break
+            instance_name_prefix = action['parameters'].map { |p| p['value'] if p['name']== "INSTANCE_NAME_PREFIX" }.compact.first
+            break
           end
         end
       end
@@ -52,11 +52,14 @@ module BushSlicer
       builds = get_builds('Launch Environment Flexy')
       build_map = {}
       builds.each_slice(thread_count) do | build |
-        threads << Thread.new(build) do |b|
-          instance_build_prefix = get_instance_prefix_from_build(build_id: build['number'])
-          build_map[instance_build_prefix] = build['number']
+        threads << Thread.new(build) do |b_list|
+          b_list.each do | b|
+            instance_build_prefix = get_instance_prefix_from_build(build_id: b['number'])
+            build_map[instance_build_prefix] = b['number']
+          end
         end
       end
+      threads.each { |thr| thr.join }
       self.build_map = build_map
       return build_map
     end
