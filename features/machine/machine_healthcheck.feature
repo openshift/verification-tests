@@ -168,3 +168,27 @@ Feature: MachineHealthCheck Test Scenarios
    Then the machine should be remediated
 
    
+  # @author jhou@redhat.com
+  # @case_id OCP-25727
+  @admin
+  @destructive
+  Scenario: Remediation should be applied when machine has nodeRef but node is deleted
+    Given I have an IPI deployment
+    And I switch to cluster admin pseudo user
+    And I use the "openshift-machine-api" project
+    And admin ensures machine number is restored after scenario
+
+    Given I clone a machineset and name it "machineset-clone-25727"
+
+    Given I obtain test data file "cloud/mhc/mhc1.yaml"
+    When I run oc create over "mhc1.yaml" replacing paths:
+      | n                                                                                  | openshift-machine-api       |
+      | ["metadata"]["name"]                                                               | mhc-<%= machine_set.name %> |
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]    | <%= machine_set.cluster %>  |
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"] | <%= machine_set.name %>     |
+    Then the step should succeed
+    And I ensure "mhc-<%= machine_set.name %>" machinehealthcheck is deleted after scenario
+
+    Given I store the last provisioned machine in the :new_machine clipboard
+    Given admin ensures "<%= machine(cb.new_machine).node_name %>" node is deleted
+    Then the machine named "<%= cb.new_machine %>" should be remediated
