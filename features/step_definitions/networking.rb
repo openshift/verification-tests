@@ -783,7 +783,7 @@ Given /^the subnet for primary interface on node is stored in the#{OPT_SYM} clip
 
   step "the default interface on nodes is stored in the clipboard"
   step "I run command on the node's sdn pod:", table(
-    "| bash | -c | ip a show \"<%= cb.interface %>\" \\| grep inet \\| grep -v inet6  \\| awk '{print $2}' |"
+    "| bash | -c | ip -4 -brief a show \"<%= cb.interface %>\" \\| awk '{print $3}' |"
   )
   raise "Failed to get the subnet range for the primary interface on the node" unless @result[:success]
   cb[cb_name] = @result[:response].chomp
