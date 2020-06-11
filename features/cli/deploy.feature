@@ -166,9 +166,12 @@ Feature: deployment related features
       | "replicas": 1          |
       | "value": "Plqe5Wev"    |
     Given I obtain test data file "deployment/updatev1.json"
+    And I wait up to 60 seconds for the steps to pass:
+    """
     When I run the :replace client command with:
       | f | updatev1.json |
     Then the step should succeed
+    """
     When I get project dc named "hooks" as JSON
     Then the output should contain:
       | "type": "Rolling"         |
