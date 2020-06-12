@@ -302,3 +302,43 @@ check_network_out_breakdown_info_when_filter_by_pod:
   action: click_view_more_link
   action: check_on_monitoring_metrics_page
   action: check_metrics_query_network_out_by_pod
+# status card
+click_operator_status:
+  elements:
+  - selector:
+      xpath: //div[@class='co-status-card__health-item']/div[@class='co-dashboard-icon']/following-sibling::div[contains(., 'Operators')]
+    op: click
+    timeout: 60
+check_operator_status:
+  elements:
+  - selector:
+      xpath: //div[contains(., '<operator_type>')]/following-sibling::div[*[contains(., '<operator_name>')] and *[contains(., '<status>')]]
+check_view_all_for_operators:
+  params:
+    text: View all
+    link_url: k8s/all-namespaces/operators.coreos.com~v1alpha1~ClusterServiceVersion
+    content: Installed Operators
+  action: goto_cluster_dashboards_page
+  action: click_operator_status
+  action: click_link_with_text
+  action: check_page_contains
+check_view_all_for_cluster_operators:
+  params:
+    text: View all
+    link_url: settings/cluster/clusteroperators
+    content: Cluster Settings
+  action: goto_cluster_dashboards_page
+  action: click_operator_status
+  action: click_link_with_text
+  action: check_page_contains
+check_cluster_operator_status_on_status_card:
+  params:
+    operator_type: Cluster operators
+  action: check_operator_status_on_status_card
+check_operator_status_on_status_card:
+  params:
+    text: <operator_name>
+  action: goto_cluster_dashboards_page
+  action: click_operator_status
+  action: check_operator_status
+  action: click_link_with_text_only
