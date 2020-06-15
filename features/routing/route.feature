@@ -85,10 +85,13 @@ Feature: Testing route
     When I run the :create client command with:
       | f |  route_unsecure.json  |
     Then the step should succeed
+    And I wait up to 30 seconds for the steps to pass:
+    """
     When I run the :get client command with:
       | resource      | route  |
       | resource_name | route  |
     Then the output should contain "HostAlreadyClaimed"
+    """
 
   # @author zzhao@redhat.com
   # @case_id OCP-12562
