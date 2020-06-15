@@ -427,11 +427,12 @@ uncheck_checkbox:
 check_link_and_text:
   element:
     selector:
-      xpath: //a[contains(.,'<text>')]
+      xpath: //a[@class='co-resource-item__resource-name' and contains(.,'<text>')]
   scripts: 
     - command: |
-        var encodedhref = document.querySelector("a[data-test-id='<text>']").href
-        return decodeURIComponent(encodedhref).endsWith("<link_url>")
+        var x = document.querySelector("a[class='co-resource-item__resource-name']")
+        var encodedhref = (x.innerHTML =="<text>" && x.href)
+        return decodeURIComponent(encodedhref).includes("<link_url>")
       expect_result: true
 click_link_with_text:
   element:
