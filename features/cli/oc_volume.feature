@@ -79,17 +79,15 @@ Feature: oc_volume.feature
     Then the step should succeed
 
     When I run the :get client command with:
-      | resource       | :false                                                    |
-      | resource_name  | dc/mydc                                                   |
-      | o              | jsonpath={.spec.template.spec.containers[*].volumeMounts} |
+      | resource | dc/mydc                                                   |
+      | o        | jsonpath={.spec.template.spec.containers[*].volumeMounts} |
     Then the step should succeed
     And the output should contain 1 times:
       | name:secret |
 
     When I run the :get client command with:
-      | resource       | :false                                                    |
-      | resource_name  | rc/mydc-1                                                 |
-      | o              | jsonpath={.spec.template.spec.containers[*].volumeMounts} |
+      | resource | rc/mydc-1                                                 |
+      | o        | jsonpath={.spec.template.spec.containers[*].volumeMounts} |
     Then the step should succeed
     And the output should contain 1 times:
       | name:secret |
