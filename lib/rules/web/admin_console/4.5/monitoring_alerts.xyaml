@@ -208,6 +208,7 @@ silence_alert_from_create_button:
     comment_text: silence comments is a must from ocp 4.5
   action: input_silence_comments
   action: perform_silence
+  action: check_silence_detail
 check_use_regular:
   element:
     selector:

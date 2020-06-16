@@ -166,8 +166,6 @@ expire_alert_from_cog_menu:
 
 open_alert_rule_from_detail:
   params:
-    text: Watchdog 
-  params:
     text: Watchdog
     link_url: /monitoring/alertrules
   action: check_link_and_text

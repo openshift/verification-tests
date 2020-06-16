@@ -76,6 +76,16 @@ click_button_by_id:
     selector:
       xpath: //button[contains(@id,'<button_id>')]
     op: click
+click_button_title:
+  element:
+    selector:
+      xpath: //button[@title='<button_title>']
+    op: click
+check_button_title:
+  element:
+    selector:
+      xpath: //button[@title='<button_title>']
+    op: click
 check_table_text_data:
   element:
     selector:
@@ -100,6 +110,10 @@ check_text_not_a_link:
   element:
     selector:
       xpath: //*[contains(@class,'co-resource-item__resource-name') and text()='<text>' and not(@href)]
+check_text_on_page:
+  element:
+    selector:
+      xpath: //*[contains(text(), '<text>')]
 click_tab:
   elements:
   - selector:
