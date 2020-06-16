@@ -300,8 +300,13 @@ check_column_in_table:
 check_column_header:
   action: wait_box_loaded
   elements:
-  - selector: 
+  - selector:
       xpath: //button[contains(@class, 'pf-c-button') and contains(text(),'<column_name>')]
+check_column_header_missing:
+  element:
+    selector:
+      xpath: //button[contains(@class, 'pf-c-button') and text()='<column_name>']
+    missing: true
 check_resource_name_and_icon:
   action:
     if_param: service_name

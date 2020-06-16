@@ -329,6 +329,7 @@ check_Hazelcastjet_default_action_and_remote_workflow:
     text: Purchase
     link_url: https://marketplace.redhat.com/en-us/operators/hazelcast-jet-enterprise-operator-rhmp/pricing
   action: check_link_and_text
+<<<<<<< HEAD
 check_phase_status:
   element:
     selector:
@@ -342,21 +343,29 @@ check_condition_status:
     selector:
       xpath: //span[contains(.,'Conditions') and contains(.,'<status>')]
 
+=======
+## project selector: one project
+>>>>>>> update rules
 check_column_header_for_one_namespace:
-  params: 
-    column_name: Managed Namespaces
-  action: check_column_header
-  elements:
-  - selector: 
-      xpath: //button[contains(@class, 'pf-c-button') and text()='Namespace']
-    missing: true
+  action: check_managed_namespace_column_header
+  action: check_namesapce_column_header_missing
+## project selector: all projects
 check_column_header_for_all_namespace:
-  params: 
+  action: check_managed_namespace_column_header
+  action: check_namesapce_column_header
+  
+check_managed_namespace_column_header:
+  params:
     column_name: Managed Namespaces
   action: check_column_header
-  elements:
-  - selector: 
-      xpath: //button[contains(@class, 'pf-c-button') and text()='Namespace']
+check_namesapce_column_header:
+  params:
+    column_name: Namespace
+  action: check_column_header
+check_namesapce_column_header_missing:
+  params:
+    column_name: Namespace
+  action: check_column_header_missing
 ## project selector: one project
 #check column: Managed Namespaces
 check_managed_namespace_column_installed_for_one_ns:
