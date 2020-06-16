@@ -1,4 +1,4 @@
-Given /^I obtain test data file #{QUOTED}$/ do |path|
+Given /^I obtain test data (file|dir) #{QUOTED}$/ do |type, path|
   accepted_roots = [
     "#{BushSlicer::HOME}/testdata",
     "#{BushSlicer::HOME}/features/tierN/testdata",
@@ -8,8 +8,13 @@ Given /^I obtain test data file #{QUOTED}$/ do |path|
     test_file = "#{root}/#{path}"
     tried_paths << test_file
     if File.exist? test_file
-      FileUtils.cp(test_file, File.basename(path))
-      cb.test_file = File.absolute_path(File.basename(path))
+      if type == "dir"
+        FileUtils.cp_r(test_file, File.basename(path))
+        cb.test_file = File.absolute_path(File.basename(path))
+      else 
+        FileUtils.cp(test_file, File.basename(path))
+        cb.test_file = File.absolute_path(File.basename(path))
+      end
     end
   end
   raise "could not find test file in '#{tried_paths}'" unless found
