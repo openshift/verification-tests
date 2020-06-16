@@ -60,6 +60,13 @@ wait_kibana_logged_in:
       xpath: //div[@class="global-nav-link__title" and contains(., "Discover")]
     timeout: 300
 
+check_kibana_status:
+  elements:
+  - selector:
+      xpath: //div[@data-test-subj="statusPageContainer"]
+    missing: true
+    timeout: 30
+
 kibana_find_index_pattern:
   elements:
   - selector:
