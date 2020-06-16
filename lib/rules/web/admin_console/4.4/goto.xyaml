@@ -222,6 +222,13 @@ goto_one_project_subscription_page:
 goto_csv_detail_page:
   url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion/<csv_name>
   action: wait_box_loaded
+goto_operand_list_page:
+  url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion/<csv_name>/<operand_name>
+  action: wait_box_loaded
+goto_operator_all_instance_page:
+  url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion/<csv_name>/instances
+  action: wait_box_loaded
+
 
 # machine config
 goto_machineconfigs_page:
