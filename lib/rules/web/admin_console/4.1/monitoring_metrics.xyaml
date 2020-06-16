@@ -122,7 +122,6 @@ check_zoom_value:
     selector:
       xpath: //div[@class='odc-metrics-chart' ]//input[@value='<zoom_value>']
 
-
 check_metric_query_result:
   action: check_metric_query_chart
   action: check_metric_query_table_text
