@@ -95,9 +95,37 @@ module BushSlicer
       return status.dig('cluster')
     end
 
-    def cluster_health(user: nil, cached: true, quiet: false)
+    def cluster_health(user: nil, cached: false, quiet: false)
       return cluster_status(user: user, cached: true, quiet: quiet).dig('status') || 
         status(user: user, cached: cached, quiet: quiet).dig('clusterHealth')   
+    end
+
+    def active_primary_shards(user: nil, cached: false, quiet: false)
+      return cluster_status.dig('activePrimaryShards')
+    end
+
+    def active_shards(user: nil, cached: false, quiet: false)
+      return cluster_status.dig('activeShards')
+    end
+
+    def initializing_shards(user: nil, cached: false, quiet: false)
+      return cluster_status.dig('initializingShards')
+    end
+
+    def num_data_nodes(user: nil, cached: false, quiet: false)
+      return cluster_status.dig('numDataNodes')
+    end
+
+    def num_nodes(user: nil, cached: false, quiet: false)
+      return cluster_status.dig('numNodes')
+    end
+
+    def relocating_shards(user: nil, cached: false, quiet: false)
+      return cluster_status.dig('relocatingShards')
+    end
+
+    def unassigned_shards(user: nil, cached: false, quiet: false)
+      return cluster_status.dig('unassignedShards')
     end
 
   end

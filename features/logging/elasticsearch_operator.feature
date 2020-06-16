@@ -25,21 +25,32 @@ Feature: elasticsearch-operator related tests
   Scenario Outline: elasticsearch alerting rules test: ElasticsearchClusterNotHealthy
     Given I obtain test data file "logging/clusterlogging/example.yaml"
     Given I create clusterlogging instance with:
-      | remove_logging_pods | true                                                                 |
+      | remove_logging_pods | true         |
       | crd_yaml            | example.yaml |
     Then the step should succeed
     Given I wait for the "elasticsearch-prometheus-rules" prometheus_rule to appear
     And I wait for the "monitor-elasticsearch-cluster" service_monitor to appear
-
+    When I run the :patch client command with:
+      | resource      | clusterlogging                             |
+      | resource_name | instance                                   |
+      | p             | {"spec": {"managementState": "Unmanaged"}} |
+      | type          | merge                                      |
+    Then the step should succeed
+    When I run the :patch client command with:
+      | resource      | elasticsearch                              |
+      | resource_name | elasticsearch                              |
+      | p             | {"spec": {"managementState": "Unmanaged"}} |
+      | type          | merge                                      |
+    Then the step should succeed
     When I perform the HTTP request on the ES pod with labels "es-node-master=true":
-      | relative_url | _cluster/settings' -d '{"transient" : {"cluster.routing.allocation.enable" : "none"}} |
-      | op           | PUT                                                                                   |
+      | relative_url | _cluster/settings' -d '{"<cluster_setting>" : {"cluster.routing.allocation.enable" : "none"}} |
+      | op           | PUT                                                                                           |
     Then the step should succeed
     And the output should contain:
       | "acknowledged":true |
     When I perform the HTTP request on the ES pod with labels "es-node-master=true":
-      | relative_url | <index_name>* |
-      | op           | DELETE        |
+      | relative_url | test-index-001 |
+      | op           | PUT            |
     Then the step should succeed
     And the output should contain:
       | "acknowledged":true |
@@ -54,6 +65,6 @@ Feature: elasticsearch-operator related tests
       | "alertstate":"pending\|firing" |
     """
     Examples:
-      | index_name  |
-      | .operations | # @case_id OCP-21530
-      | infra       | # @case_id OCP-30092
+      | cluster_setting |
+      | transient       | # @case_id OCP-21530
+      | persistent      | # @case_id OCP-30092
