@@ -7,8 +7,8 @@ module BushSlicer
       return rr.dig('status', 'currentCSV')
     end
 
-    def ready?(user:, quiet: false, cached: false)
-       res = get(user: user, cached: cached, quiet: quiet)
+    def ready?(user:, quiet: false)
+       res = get(user: user, quiet: quiet)
        if res[:success]
          res[:success] =
            res[:parsed]["status"]["state"] == "AtLatestKnown"
