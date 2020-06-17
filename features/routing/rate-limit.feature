@@ -22,7 +22,7 @@ Feature: Testing haproxy rate limit related features
     When I run the :create client command with:
       | f | <service> |
     Then the step should succeed
-    Given I obtain test data file "routing/<route>"
+    Given I obtain test data file "routing/routetimeout/<route>"
     When I run the :create client command with:
       | f | <route> |
     Then the step should succeed
@@ -44,7 +44,7 @@ Feature: Testing haproxy rate limit related features
 
     Examples:
       | route_type | route_name         | service                        | route                          | resolve_str               | url                           | pass_num |
-      | unsecure   | route              | unsecure/service_unsecure.json | unsecure/route_unsecure.json   | unsecure.example.com:80   | http://unsecure.example.com   | 1        |
-      | edge       | secured-edge-route | edge/service_unsecure.json     | edge/route_edge.json           | test-edge.example.com:443 | https://test-edge.example.com | 2        |
-      | reen       | route-reencrypt    | reencrypt/service_secure.json  | reencrypt/route_reencrypt.json | test-reen.example.com:443 | https://test-reen.example.com | 3        |
+      | unsecure   | route              | unsecure-service_unsecure.json | unsecure-route_unsecure.json   | unsecure.example.com:80   | http://unsecure.example.com   | 1        |
+      | edge       | secured-edge-route | edge-service_unsecure.json     | edge-route_edge.json           | test-edge.example.com:443 | https://test-edge.example.com | 2        |
+      | reen       | route-reencrypt    | reencrypt-service_secure.json  | reencrypt-route_reencrypt.json | test-reen.example.com:443 | https://test-reen.example.com | 3        |
 
