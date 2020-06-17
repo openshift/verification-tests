@@ -47,7 +47,7 @@ Feature: OVN related networking scenarios
   @destructive
   Scenario: OVN DB should be updated correctly if a resource only exist in Kube API but not in OVN NB db
     Given the env is using "OVNKubernetes" networkType
-    # Now scale down CNO pod to 0 and makes sure dhcp pods still running and erase additionalnetworks config from CNO
+    # Now scale down CNO pod to 0
     Given admin uses the "openshift-network-operator" project
     And I run the :scale admin command with:
       | resource | deployment       |
@@ -79,8 +79,8 @@ Feature: OVN related networking scenarios
       | name     | network-operator |
       | replicas | 1                |
     Then the step should succeed
-    #A minimum wait for 10 seconds is tested to reflect CNO deployment to be effective which will then re-spawn ovn pods
-    Given 10 seconds have passed
+    #A minimum wait for 30 seconds is tested to reflect CNO deployment to be effective which will then re-spawn ovn pods
+    Given 30 seconds have passed
     And admin waits for all pods in the "openshift-ovn-kubernetes" project to become ready up to 60 seconds
     #Checking whether Kube API data is synced on OVN NB db which in this case is a test-pod created in earlier steps
     Given I store the ovnkube-master "north" leader pod in the clipboard
@@ -88,4 +88,60 @@ Feature: OVN related networking scenarios
       | bash | -c | ovn-nbctl list logical_switch_port |
     Then the step should succeed
     And the output should contain:
+      | hello-pod |
+  
+  # @author anusaxen@redhat.com
+  # @case_id OCP-30057
+  @admin
+  @destructive
+  Scenario: OVN DB should be updated correctly if a resource only exist in NB db but not in Kube API	
+    Given the env is using "OVNKubernetes" networkType
+    Given I have a project
+    And evaluation of `project.name` is stored in the :hello_pod_project clipboard
+    And I have a pod-for-ping in the project
+    #Checking whether Kube API data is synced on OVN NB db which in this case is a hello-pod created in earlier steps
+    Given I store the ovnkube-master "north" leader pod in the clipboard
+    And admin executes on the pod:
+      | bash | -c | ovn-nbctl list logical_switch_port |
+    Then the step should succeed
+    And the output should contain:
+      | hello-pod |
+    # Now scale down CNO pod to 0
+    Given admin uses the "openshift-network-operator" project
+    And I run the :scale admin command with:
+      | resource | deployment       |
+      | name     | network-operator |
+      | replicas | 0                |
+    Then the step should succeed
+    Given I register clean-up steps:
+    """
+    Given admin uses the "openshift-network-operator" project
+    And I run the :scale admin command with:
+      | resource | deployment       |
+      | name     | network-operator |
+      | replicas | 1                |
+    Then the step should succeed
+    """
+    When I run the :delete admin command with:
+      | object_type       | ds                       |
+      | object_name_or_id | ovnkube-master           |
+      | n                 | openshift-ovn-kubernetes |
+    Then the step should succeed
+    And I ensures "hello-pod" pod is deleted from the "<%= cb.hello_pod_project %>" project
+    #Now scale down CNO pod to 1 and check whether hello-pod status is synced to NB db means it should not present in the DB
+    Given admin uses the "openshift-network-operator" project
+    Given I run the :scale admin command with:
+      | resource | deployment       |
+      | name     | network-operator |
+      | replicas | 1                |
+    Then the step should succeed
+    #A recommended wait for 30 seconds is tested to reflect CNO deployment to be in effect which will then re-spawn ovn pods
+    Given 30 seconds have passed
+    And admin waits for all pods in the "openshift-ovn-kubernetes" project to become ready up to 60 seconds
+    Given I store the ovnkube-master "north" leader pod in the clipboard
+    And admin executes on the pod:
+      | bash | -c | ovn-nbctl list logical_switch_port |
+    Then the step should succeed
+    #making sure here that hello-pod absense is properly synced
+    And the output should not contain:
       | hello-pod |
