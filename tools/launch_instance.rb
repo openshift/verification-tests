@@ -632,8 +632,7 @@ module BushSlicer
       when "playbook"
         inventory_erb = ERB.new(
           readfile(task[:inventory], template_dir),
-          nil,
-          "<"
+          nil
         )
         inventory_erb.filename = task[:inventory]
         inventory_str = inventory_erb.result(erb_binding)
@@ -701,8 +700,7 @@ module BushSlicer
       config_dir = dirname_path_or_url(file_details[:location])
       template = ERB.new(
         readfile(vars[:template], config_dir, details: file_details),
-        nil,
-        "<"
+        nil
       )
       template.filename = file_details[:location]
       erb_binding = Common::BaseHelper.binding_from_hash(launcher_binding,
@@ -714,7 +712,7 @@ module BushSlicer
       # see https://stackoverflow.com/questions/53886078
       erb_binding.local_variable_set :include_erb, lambda { |path, indent=0|
         t = ERB.new(
-          readfile(path, template_dir), nil, "<", rand_str(10, :ruby_variable)
+          readfile(path, template_dir), nil, nil, rand_str(10, :ruby_variable)
         )
         t.filename = path
         t.result(erb_binding).gsub(/^/, " "*indent)
