@@ -1348,3 +1348,50 @@ Feature: Multus-CNI related scenarios
       | ["spec"]["containers"][0]["name"]                          | macvlan-bridge-whereabouts          |
     Then the step should succeed
     And the pod named "macvlan-bridge-whereabouts-pod1" becomes ready
+    
+  # @author weliang@redhat.com
+  # @case_id OCP-29742
+  @admin
+  Scenario: Log pod IP and pod UUID when pod start	
+    Given the multus is enabled on the cluster
+    And I store all worker nodes to the :nodes clipboard
+    # Create the net-attach-def via cluster admin
+    Given I have a project
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/whereabouts-macvlan.yaml"
+    When I run oc create as admin over "whereabouts-macvlan.yaml" replacing paths:
+      | ["metadata"]["namespace"] | <%= project.name %>      |    
+      | ["spec"]["config"]        |'{ "cniVersion": "0.3.0", "type": "macvlan","mode": "bridge", "ipam": { "type": "whereabouts", "range": "192.168.22.100/24"} }' |
+    Then the step should succeed
+    
+    # Create a pod absorbing above net-attach-def
+    Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
+    When I run oc create over "generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                       | macvlan-bridge-whereabouts-pod1  |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | macvlan-bridge-whereabouts       |
+      | ["spec"]["containers"][0]["name"]                          | macvlan-bridge-whereabouts       |
+      | ["spec"]["nodeName"]                                       | <%= cb.nodes[0].name %>          |
+    Then the step should succeed
+    And the pod named "macvlan-bridge-whereabouts-pod1" becomes ready
+    And evaluation of `pod.ip` is stored in the :pod_eth0_ip clipboard
+
+    When I run the :get admin command with:
+      | resource      | pod                                |
+      | n             | <%= project.name %>                |
+      | o             | jsonpath={.items[*].metadata.uid}  |
+    Then the step should succeed
+    And evaluation of `@result[:response]` is stored in the :pod_uid clipboard
+   
+    And I execute on the "macvlan-bridge-whereabouts-pod1" pod:
+      | bash | -c | /usr/sbin/ip addr show net1 |
+    Then the step should succeed
+    And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod_net1_ip clipboard
+    
+    Given I use the "<%= cb.nodes[0].name %>" node
+    And I run commands on the host:
+      | journalctl -u crio \| grep verbose.*macvlan-bridge-whereabouts-pod1 |
+    Then the step should succeed
+    And the output should contain:
+      | <%= project.name %>:macvlan-bridge-whereabouts-pod1:<%= cb.pod_uid %> |
+      | <%= cb.pod_eth0_ip %>                                                 |
+      | <%= cb.pod_net1_ip %>                                                 |
+
