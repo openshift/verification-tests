@@ -171,3 +171,56 @@ Feature: apiserver and auth related upgrade check
       | o             | yaml                        |
     Then the expression should be true> @result[:parsed]['subjects'][0]['name'] == "system:authenticated"
     And the expression should be true> @result[:parsed]['subjects'][1]['name'] == "system:unauthenticated"
+
+  # @author scheng@redhat.com
+  # @case_id OCP-29741
+  @upgrade-prepare
+  @admin
+  @destructive
+  Scenario: After cluster upgrade,the changes to the default SCCs should not be stomped by CVO - prepare
+    Given as admin I successfully merge patch resource "scc/anyuid" with:
+      | {"users": ["system:serviceaccount:test-scc:test-scc"]} |
+    Given as admin I successfully merge patch resource "scc/privileged" with:
+      | {"users": ["system:admin","system:serviceaccount:openshift-infra:build-controller","system:serviceaccount:test-scc:test-scc"]} |
+    When I run the :get admin command with:
+      | resource      | scc               |
+      | resource_name | anyuid            |
+      | o             | jsonpath={.users} |
+    And the output should match:
+      | system:serviceaccount:test-scc:test-scc |
+    When I run the :get admin command with:
+      | resource      | scc               |
+      | resource_name | privileged        |
+      | o             | jsonpath={.users} |
+    And the output should match:
+      | system:serviceaccount:test-scc:test-scc |
+
+  # @author scheng@redhat.com
+  # @case_id OCP-29741
+  @upgrade-check
+  @admin
+  @destructive
+  Scenario: Check the default SCCs should not be stomped by CVO
+    Given the "kube-apiserver" operator version matches the current cluster version
+    And the "openshift-apiserver" operator version matches the current cluster version
+    Given the expression should be true> cluster_operator('kube-apiserver').condition(type: 'Progressing')['status'] == "False"
+    And the expression should be true> cluster_operator('kube-apiserver').condition(type: 'Available')['status'] == "True"
+    And the expression should be true> cluster_operator('kube-apiserver').condition(type: 'Degraded')['status'] == "False"
+    And the expression should be true> cluster_operator('kube-apiserver').condition(type: 'Upgradeable')['status'] == "True"
+    Given the expression should be true> cluster_operator('openshift-apiserver').condition(type: 'Progressing')['status'] == "False"
+    And the expression should be true> cluster_operator('openshift-apiserver').condition(type: 'Available')['status'] == "True"
+    And the expression should be true> cluster_operator('openshift-apiserver').condition(type: 'Degraded')['status'] == "False"
+    And the expression should be true> cluster_operator('openshift-apiserver').condition(type: 'Upgradeable')['status'] == "True"
+    When I run the :get admin command with:
+      | resource      | scc               |
+      | resource_name | anyuid            |
+      | o             | jsonpath={.users} |
+    And the output should match:
+      | system:serviceaccount:test-scc:test-scc |
+    When I run the :get admin command with:
+      | resource      | scc               |
+      | resource_name | privileged        |
+      | o             | jsonpath={.users} |
+    And the output should match:
+      | system:serviceaccount:test-scc:test-scc |
+
