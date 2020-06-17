@@ -181,11 +181,11 @@ Feature: deployment related features
     When I run the :rollback client command with:
       | deployment_name         | hooks-1 |
     Then the output should contain:
-      | #3 rolled back to hooks-1                                      |
-      | Warning: the following images triggers were disabled           |
+      | #3 rolled back to hooks-1                            |
+      | Warning: the following images triggers were disabled |
       | You can re-enable them with |
     And the pod named "hooks-3-deploy" becomes ready
-    Given I wait for the pod named "hooks-3-deploy" to die
+    Given I wait for the "hooks-3-deploy" pod to die
     When I get project pod
     Then the output should match:
       | READY\\s+STATUS |
