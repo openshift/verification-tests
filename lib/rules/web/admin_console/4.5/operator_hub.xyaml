@@ -329,6 +329,7 @@ check_Hazelcastjet_default_action_and_remote_workflow:
     text: Purchase
     link_url: https://marketplace.redhat.com/en-us/operators/hazelcast-jet-enterprise-operator-rhmp/pricing
   action: check_link_and_text
+
 check_phase_status:
   element:
     selector:
@@ -342,3 +343,63 @@ check_condition_status:
     selector:
       xpath: //span[contains(.,'Conditions') and contains(.,'<status>')]
 
+## project selector: one project
+check_column_header_for_one_namespace:
+  action: check_managed_namespace_column_header
+  action: check_namesapce_column_header_missing
+## project selector: all projects
+check_column_header_for_all_namespace:
+  action: check_managed_namespace_column_header
+  action: check_namesapce_column_header
+  
+check_managed_namespace_column_header:
+  params:
+    column_name: Managed Namespaces
+  action: check_column_header
+check_namesapce_column_header:
+  params:
+    column_name: Namespace
+  action: check_column_header
+check_namesapce_column_header_missing:
+  params:
+    column_name: Namespace
+  action: check_column_header_missing
+## project selector: one project
+#check column: Managed Namespaces
+check_managed_namespace_column_installed_for_one_ns:
+  params:
+    col_index: 2
+  action: check_operator_column_one_namespace 
+check_managed_namespace_column_installed_for_all_ns:
+  params:
+    col_index: 2
+  action: check_operator_column_all_namespace
+## project selector: all projects
+#check column: Namespace
+check_namespace_column_installed_for_one_ns_under_all_projects:
+  params:
+    col_index: 2
+  action: check_operator_column_one_namespace 
+check_namespace_column_installed_for_all_ns_under_all_projects:
+  params:
+    col_index: 2
+    project_name: openshift-operators
+  action: check_operator_column_one_namespace
+#check column: Managed Namespaces
+check_managed_namespace_column_installed_for_one_ns_under_all_projects:
+  params:
+    col_index: 3
+  action: check_operator_column_one_namespace 
+check_managed_namespace_column_installed_for_all_ns_under_all_projects:
+  params:
+    col_index: 3
+  action: check_operator_column_all_namespace
+
+check_operator_column_one_namespace:
+  elements:
+  - selector: 
+      xpath: //h1[contains(text(),'<operator_name>')]//ancestor::tr[@data-test-rows='resource-row']/td[<col_index>]//a[contains(text(),'<project_name>') and @href='/k8s/cluster/namespaces/<project_name>']
+check_operator_column_all_namespace:
+  elements:
+  - selector: 
+      xpath: //h1[contains(text(),'<operator_name>')]//ancestor::tr[@data-test-rows='resource-row']/td[<col_index>][contains(text(),'All Namespaces')]

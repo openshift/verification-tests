@@ -297,6 +297,16 @@ check_column_in_table:
   elements:
   - selector:
       xpath: //th[contains(@data-label,'<field>')]
+check_column_header:
+  action: wait_box_loaded
+  elements:
+  - selector:
+      xpath: //button[contains(@class, 'pf-c-button') and contains(text(),'<column_name>')]
+check_column_header_missing:
+  element:
+    selector:
+      xpath: //button[contains(@class, 'pf-c-button') and text()='<column_name>']
+    missing: true
 check_resource_name_and_icon:
   action:
     if_param: service_name
@@ -584,6 +594,9 @@ check_resource_details:
     if_param: namespace
     ref: check_resource_namespace
   action:
+    if_param: managed_namespace
+    ref: check_resource_managed_namespace
+  action:
     if_param: labels
     ref: check_resource_labels
   action:
@@ -830,6 +843,11 @@ check_resource_namespace:
   params:
     key: Namespace
     value: <namespace>
+  action: check_resource_details_key_and_value
+check_resource_managed_namespace:
+  params:
+    key: Managed Namespace
+    value: <managed_namespace>
   action: check_resource_details_key_and_value
 check_resource_git_repository:
   params:
