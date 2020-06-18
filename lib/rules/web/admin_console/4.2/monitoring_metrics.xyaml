@@ -175,9 +175,11 @@ click_clear_query_button:
     op: click
     
 check_result_page:
-  element:
-    selector:
-      xpath: //nav//span[contains(text(),'of')]
+  params:
+    button_text: Name
+    time: 20
+  action: click_button_text
+  action: check_metric_query_table_text
 
 perform_filter_query:
   params:
