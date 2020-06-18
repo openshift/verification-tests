@@ -5,8 +5,8 @@ Feature: Persistent Volume reclaim policy tests
     Given I have a project
     And I have a 1 GB volume and save volume id in the :vid clipboard
 
-    Given I obtain test data file "storage/<path_to_file>"
-    When admin creates a PV from "<path_to_file>" where:
+    Given I obtain test data file "storage/<path>/<file>"
+    When admin creates a PV from "<file>" where:
       | ["metadata"]["name"]                        | pv-<%= project.name %> |
       | ["spec"]["capacity"]["storage"]             | 1Gi                    |
       | ["spec"]["accessModes"][0]                  | ReadWriteOnce          |
@@ -39,8 +39,8 @@ Feature: Persistent Volume reclaim policy tests
     And I wait for the resource "pv" named "<%= pv.name %>" to disappear within 1200 seconds
 
     Examples:
-      | storage_type         | volume_name | path_to_file               |
-      | gcePersistentDisk    | pdName      | gce/pv-default-rwo.json    | # @case_id OCP-9949
-      | awsElasticBlockStore | volumeID    | ebs/pv-rwo.yaml            | # @case_id OCP-9943
-      | cinder               | volumeID    | cinder/pv-rwx-default.json | # @case_id OCP-9944
+      | storage_type         | volume_name | path   | file                |
+      | gcePersistentDisk    | pdName      | gce    | pv-default-rwo.json | # @case_id OCP-9949
+      | awsElasticBlockStore | volumeID    | ebs    | pv-rwo.yaml         | # @case_id OCP-9943
+      | cinder               | volumeID    | cinder | pv-rwx-default.json | # @case_id OCP-9944
 
