@@ -159,14 +159,9 @@ Feature: testing multicast scenarios
     And evaluation of `pod(2).ip` is stored in the :proj1pod3ip clipboard
     And evaluation of `pod(2).name` is stored in the :proj1pod3 clipboard
     # Enable multicast in proj1
-    Given I store multicast keyval according to the networktype in the :keyval clipboard
-    Given I store multicast namespace according to the networktype in the :namespace clipboard
-    When I run the :annotate admin command with:
-      | resource     | <%= cb.namespace %>   |
-      | resourcename | <%= cb.proj1 %>       |
-      | keyval       | <%= cb.keyval %>      |
-    Then the step should succeed
- 
+    Given I enable multicast for the "<%= cb.proj1 %>" namespace 
+
+    # Create second project
     Given I create a new project
     And evaluation of `project.name` is stored in the :proj2 clipboard
     Given I obtain test data file "networking/multicast-rc.json"
@@ -182,13 +177,7 @@ Feature: testing multicast scenarios
     And evaluation of `pod(5).ip` is stored in the :proj2pod3ip clipboard
     And evaluation of `pod(5).name` is stored in the :proj2pod3 clipboard
     # Enable multicast in proj2
-    Given I store multicast keyval according to the networktype in the :keyval clipboard
-    Given I store multicast namespace according to the networktype in the :namespace clipboard
-    When I run the :annotate admin command with:
-      | resource     | <%= cb.namespace %>   |
-      | resourcename | <%= cb.proj2 %>       |
-      | keyval       | <%= cb.keyval %>      |
-    Then the step should succeed
+    Given I enable multicast for the "<%= cb.proj2 %>" namespace 
 
     # Check multicast group 239.255.254.24 stream in proj1
     Given I use the "<%= cb.proj1 %>" project
@@ -279,5 +268,3 @@ Feature: testing multicast scenarios
       | <%= cb.proj2pod1ip %>.*multicast, xmt/rcv/%loss = 5/5/0%                |
       | <%= cb.proj2pod2ip %>.*multicast, xmt/rcv/%loss = 5/5/0%                |
     """
-
-

@@ -990,30 +990,21 @@ Given /^OVN is functional on the cluster$/ do
   raise "OVN is not running correctly! Check one of your ovnkube-master pod" unless desired_ovnkube_master_replicas == available_ovnkube_master_replicas && available_ovnkube_master_replicas != 0
 end
 
-Given /^I store multicast keyval according to the networktype in the#{OPT_SYM} clipboard$/ do |cb_keyval|
+Given /^I enable multicast for the "(.+?)" namespace$/ do | project_name |
   ensure_admin_tagged
   _admin = admin
-  cb_name ||= "keyval_value"
   @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
   raise "Unable to find corresponding networkType pod name" unless @result[:success]
   if @result[:response] == "OpenShiftSDN"
-     cb[cb_keyval] = "netnamespace.network.openshift.io/multicast-enabled=true"
+     @result = admin.cli_exec(:annotate, resource: "netnamespace", resourcename: project_name , keyval: 'netnamespace.network.openshift.io/multicast-enabled=true')
+     unless @result[:success]
+       raise "Failed to apply the default deny annotation to specified namespace."
+     end
   else
-     cb[cb_keyval] = "k8s.ovn.org/multicast-enabled=true"
+     @result = admin.cli_exec(:annotate, resource: "namespace", resourcename: project_name , keyval: 'k8s.ovn.org/multicast-enabled=true')
+     unless @result[:success]
+       raise "Failed to apply the default deny annotation to specified namespace."
+     end
   end  
-  logger.info "The corresponding networktype multicast keyval is stored in the #{cb_keyval} clipboard."
-end
-
-Given /^I store multicast namespace according to the networktype in the#{OPT_SYM} clipboard$/ do |cb_namespace|
-  ensure_admin_tagged
-  _admin = admin
-  cb_name ||= "keyval_value"
-  @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
-  raise "Unable to find corresponding networkType pod name" unless @result[:success]
-  if @result[:response] == "OpenShiftSDN"
-     cb[cb_namespace] = "netnamespace"
-  else
-     cb[cb_namespace] = "namespace"
-  end  
-  logger.info "The corresponding networktype multicast namespace is stored in the #{cb_namespace} clipboard."
+  logger.info "The multicast namespace is enable in the project"
 end
