@@ -181,7 +181,11 @@ check_table_text_data:
   element:
     selector:
       xpath: //td[text()='<text_data>']
-
+check_table_line_count:
+  action: wait_table_loaded
+  scripts:
+  - command: return document.querySelectorAll("tbody tr").length == <line_count>
+    expect_result: true
 # click and check the first item from resource list such as projects, pods, etc.
 click_first_item_from_resource_list_and_check_breadcrumb:
   action: wait_until_no_loading
