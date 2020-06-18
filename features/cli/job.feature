@@ -54,7 +54,7 @@ Feature: job.feature
       | ["spec"]["completions"]           | null |
       | ["spec"]["activeDeadlineSeconds"] | null |
     Then the step should succeed
-    Given 1 pods become ready with labels:
+    Given a pod becomes ready with labels:
       | app=pi |
     When I get project pods with labels:
       | app=pi |
