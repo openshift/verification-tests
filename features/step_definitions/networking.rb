@@ -996,15 +996,15 @@ Given /^I enable multicast for the "(.+?)" namespace$/ do | project_name |
   @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
   raise "Unable to find corresponding networkType pod name" unless @result[:success]
   if @result[:response] == "OpenShiftSDN"
-     @result = admin.cli_exec(:annotate, resource: "netnamespace", resourcename: project_name , keyval: 'netnamespace.network.openshift.io/multicast-enabled=true')
-     unless @result[:success]
-       raise "Failed to apply the default deny annotation to specified namespace."
-     end
+    annotation = 'netnamespace.network.openshift.io/multicast-enabled=true'
+    space = 'netnamespace'
   else
-     @result = admin.cli_exec(:annotate, resource: "namespace", resourcename: project_name , keyval: 'k8s.ovn.org/multicast-enabled=true')
-     unless @result[:success]
-       raise "Failed to apply the default deny annotation to specified namespace."
-     end
-  end  
-  logger.info "The multicast namespace is enable in the project"
+    annotation = 'k8s.ovn.org/multicast-enabled=true'
+    space = 'namespace'
+  end
+  @result = admin.cli_exec(:annotate, resource: space, resourcename: project_name , keyval: annotation)
+  unless @result[:success]
+    raise "Failed to apply the default deny annotation to specified namespace."
+  end 
+  logger.info "The multicast is enable in the project"
 end
