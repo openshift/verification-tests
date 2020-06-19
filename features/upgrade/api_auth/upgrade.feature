@@ -173,7 +173,6 @@ Feature: apiserver and auth related upgrade check
     And the expression should be true> @result[:parsed]['subjects'][1]['name'] == "system:unauthenticated"
 
   # @author scheng@redhat.com
-  # @case_id OCP-29741
   @upgrade-prepare
   @admin
   @destructive
