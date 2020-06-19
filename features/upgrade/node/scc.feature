@@ -1,7 +1,6 @@
 Feature: Seccomp part of SCC policy should be kept and working after upgrade	
 
   # @author sunilc@redhat.com
-  # @case_id OCP-13065
   @upgrade-prepare
   @admin
   Scenario: Upgrade - Seccomp part of SCC policy should be kept and working after upgrade - prepare
