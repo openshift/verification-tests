@@ -62,6 +62,7 @@ Feature: image-registry operator upgrade tests
   @admin
   Scenario: OpenShift can upgrade when image-registry/sample operator is unmanaged
     Given I switch to cluster admin pseudo user
+    Given I use the "default" project
     When I get project config_imageregistry_operator_openshift_io named "cluster" as YAML
     Then the output should contain:
       | Unmanaged |
