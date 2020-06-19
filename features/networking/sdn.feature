@@ -224,7 +224,7 @@ Feature: SDN related networking scenarios
       | bash | -c | pgrep ovs-vswitchd |
     Then the step should succeed
     When I run command on the "<%= cb.node_name %>" node's sdn pod:
-      | bash | -c | pgrep ovs-vswitchd \| xargs kill -9 |
+      | bash | -c | pkill ovs-vswitchd |
     Then the step should succeed
     And I wait up to 60 seconds for the steps to pass:
     """
