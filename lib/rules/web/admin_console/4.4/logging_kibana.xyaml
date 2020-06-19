@@ -1,6 +1,9 @@
 ---
 kibana_login:
   url: <kibana_url>
+  action: login_kibana
+
+login_kibana:
   action:
     if_element:
       selector:
@@ -22,6 +25,7 @@ logout_kibana:
     - selector:
         text: Log out
       op: click
+      timeout: 30
       type: a
 
 kibana_verify_app_text:
