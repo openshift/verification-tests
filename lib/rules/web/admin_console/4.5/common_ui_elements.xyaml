@@ -62,6 +62,15 @@ check_button_missing:
     selector:
       <<: *button_with_text
     missing: true
+click_button_title:
+  element:
+    selector:
+      xpath: //button[@title='<button_title>']
+    op: click
+check_button_title:
+  element:
+    selector:
+      xpath: //button[@title='<button_title>']
 check_kebab_items_disabled:
   elements: 
   - selector:
