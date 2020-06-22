@@ -70,7 +70,6 @@ check_button_title:
   element:
     selector:
       xpath: //button[@title='<button_title>']
-    op: click
 click_radio_input_by_text:
   element:
     selector:

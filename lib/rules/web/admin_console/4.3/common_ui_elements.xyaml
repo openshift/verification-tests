@@ -85,7 +85,6 @@ check_button_title:
   element:
     selector:
       xpath: //button[@title='<button_title>']
-    op: click
 check_table_text_data:
   element:
     selector:
