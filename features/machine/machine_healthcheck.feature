@@ -223,4 +223,40 @@ Feature: MachineHealthCheck Test Scenarios
     Then the output should contain:
       | remediation won't be allowed: invalid value for IntOrString  |
       | total targets: <%= cb.machines.count %>                      | #This covers OCP-29062 - empty selectors watches all machines in cluster
-    
+
+  # @author miyadav@redhat.com
+  # @case_id OCP-28859
+  @admin
+  @destructive
+  Scenario: MHC MaxUnhealthy string value should be checked for '%' symbol
+    Given I have an IPI deployment
+    And I switch to cluster admin pseudo user
+    And I use the "openshift-machine-api" project
+    And admin ensures machine number is restored after scenario
+
+    Given I clone a machineset and name it "machineset-clone-28859"
+
+    # Create MHC
+    Given I obtain test data file "cloud/mhc/mhc1.yaml"
+    When I run oc create over "mhc1.yaml" replacing paths:
+      | n                                                                                  | openshift-machine-api       |
+      | ["metadata"]["name"]                                                               | mhc-<%= machine_set.name %> |
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]    | <%= machine_set.cluster %>  |
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"] | <%= machine_set.name %>     |
+      | ["spec"]["maxUnhealthy"]                                                           | "1%"                        |
+    Then the step should succeed
+    And I ensure "mhc-<%= machine_set.name %>" machinehealthcheck is deleted after scenario
+
+    Then a pod becomes ready with labels:
+      | api=clusterapi, k8s-app=controller |
+
+    Given I create the 'Ready' unhealthyCondition
+
+    When I run the :logs admin command with:
+      | resource_name | <%= pod.name %>                |
+      | c             | machine-healthcheck-controller |
+    Then the output should match:
+      | maxUnhealthy: 1%             |
+      | Short-circuiting remediation |
+
+
