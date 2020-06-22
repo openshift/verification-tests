@@ -102,10 +102,6 @@ check_text_not_a_link:
   element:
     selector:
       xpath: //*[contains(@class,'co-resource-item__resource-name') and text()='<text>' and not(@href)]
-check_text_on_page:
-  element:
-    selector:
-      xpath: //*[contains(text(), '<text>')]
 click_tab:
   elements:
   - selector:
