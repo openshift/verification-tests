@@ -162,7 +162,7 @@ end
 # Called without the 'regardless...' parameter ir checks that pod reaches a
 #   ready status, then somehow dies. With the parameter it just makes sure
 #   pod os not there regardless of its current status.
-Given /^I wait for the#{OPT_QUOTED} pod to die( regardless of current status)?$/ do |name, ignore_status|
+Given /^I wait for the pod(?: named #{QUOTED})? to die( regardless of current status)?$/ do |name, ignore_status|
   ready_timeout = 15 * 60
   @result = pod(name).wait_till_ready(user, ready_timeout) unless ignore_status
   if ignore_status || @result[:success]
