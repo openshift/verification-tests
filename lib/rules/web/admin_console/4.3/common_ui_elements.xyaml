@@ -132,6 +132,11 @@ click_yaml_tab:
   params:
     tab_name: YAML
   action: click_tab
+check_edit_yaml_enabled:
+  params:
+    button_text: Save
+  action: click_yaml_tab
+  action: check_button_enabled
 click_radio_input:
   element:
     selector:

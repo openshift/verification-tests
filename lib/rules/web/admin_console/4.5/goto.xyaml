@@ -313,4 +313,6 @@ goto_one_hpa_page:
 goto_cluster_operators:
   url: settings/cluster/clusteroperators
   action: wait_box_loaded
-  
+goto_global_configuration_page:
+  url: settings/cluster/globalconfig
+  action: wait_box_loaded 
