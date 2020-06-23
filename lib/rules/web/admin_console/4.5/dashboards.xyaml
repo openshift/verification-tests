@@ -132,12 +132,8 @@ click_network_out_data:
 wait_for_consumer_lists_loaded:
   elements:
   - selector:
-      css: li.skeleton-consumer
-    missing: true
-    timeout: 30
-  - selector:
       css: li.co-utilization-card-popover__consumer-item
-    timeout: 30
+    timeout: 60
 check_has_5_top_consumers:
   scripts:
     - command: return document.querySelectorAll("li.co-utilization-card-popover__consumer-item").length == 5
