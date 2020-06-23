@@ -8,4 +8,4 @@ NUMBER = '([0-9]+|<%=.+?%>)'
 WORD = '(\w+|<%=.+?%>)'
 OPT_WORD = "(?: #{WORD})?"
 # use for regular expression
-RE='/(.+?)/'
+RE='/([^/\n]+)/'
