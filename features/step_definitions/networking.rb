@@ -487,7 +487,7 @@ Given /^I restart the network components on the node( after scenario)?$/ do |aft
   end
 end
 
-Given /^I get the networking components logs of the node since "(.+)" ago$/ do | duration |
+Given /^I get the networking components logs of the node since #{QUOTED} ago$/ do | duration |
   ensure_admin_tagged
   _admin = admin
 

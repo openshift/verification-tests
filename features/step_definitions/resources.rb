@@ -164,7 +164,7 @@ end
 
 # When applying "oc delete" on one resource, the resource may take some time to
 # terminate, so use this step to wait for its dispapearing.
-Given /^I wait for the resource "(.+)" named "(.+)" to disappear(?: within (\d+) seconds)?$/ do |resource_type, resource_name, timeout|
+Given /^I wait for the resource #{QUOTED} named #{QUOTED} to disappear(?: within (\d+) seconds)?$/ do |resource_type, resource_name, timeout|
   opts = {resource_name: resource_name, resource: resource_type}
   res = {}
   # just put a timeout so we don't hang there indefintely

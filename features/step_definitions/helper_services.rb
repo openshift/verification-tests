@@ -73,7 +73,7 @@ Given /^I have a nfs-provisioner (pod|service) in the(?: "([^ ]+?)")? project$/ 
 end
 
 #This is a step to create efs-provisioner service in the project
-Given /^I have a efs-provisioner(?: with fsid "(.+)")?(?: of region "(.+)")? in the(?: "([^ ]+?)")? project$/ do |fsid, region, project_name|
+Given /^I have a efs-provisioner(?: with fsid #{QUOTED})?(?: of region #{QUOTED})? in the(?: "([^ ]+?)")? project$/ do |fsid, region, project_name|
   ensure_admin_tagged
   _project = project(project_name)
   unless project.exists?(user: user)

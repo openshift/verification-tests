@@ -129,7 +129,7 @@ end
 
 ## To check cluserlogging is working correctly, we check all of the subcomponents' status
 #  The list of components currently are: ["collection", "curation", "logStore",  "visualization"]
-Given /^I wait for clusterlogging(?: named "(.+)")? with #{QUOTED} log collector to be functional in the#{OPT_QUOTED} project$/ do | logging_name, log_collector, proj_name |
+Given /^I wait for clusterlogging(?: named #{QUOTED})? with #{QUOTED} log collector to be functional in the#{OPT_QUOTED} project$/ do | logging_name, log_collector, proj_name |
   ensure_admin_tagged
   cb.target_proj ||= 'openshift-logging'
   proj_name = cb.target_proj if proj_name.nil?
@@ -167,7 +167,7 @@ Given /^I wait for clusterlogging(?: named "(.+)")? with #{QUOTED} log collector
     | component=kibana |
   })
   cl.wait_until_kibana_is_ready
-  # lastly check the cronjob. 
+  # lastly check the cronjob.
   if env.version_cmp('4.5', user: user) < 0
     raise "Failed to find cronjob for curator" if cron_job('curator').schedule.nil?
   else
@@ -210,23 +210,23 @@ Given /^logging service is removed successfully$/ do
   end
 end
 
-Given /^I wait until #{QUOTED} log collector is ready$/ do | log_collector |  
+Given /^I wait until #{QUOTED} log collector is ready$/ do | log_collector |
   step %Q/#{daemon_set(log_collector).replica_counters[:desired]} pods become ready with labels:/, table(%{
     | logging-infra=#{log_collector} |
-  }) 
+  })
 end
 
 Given /^I wait until ES cluster is ready$/ do
   step %Q/#{cluster_logging('instance').logstore_node_count.to_i} pods become ready with labels:/, table(%{
     | cluster-name=elasticsearch,component=elasticsearch |
-  }) 
+  })
   cluster_logging('instance').wait_until_es_is_ready
 end
 
-Given /^I wait until kibana is ready$/ do 
+Given /^I wait until kibana is ready$/ do
   step %Q/#{deployment('kibana').replica_counters[:desired]} pods become ready with labels:/, table(%{
     | component=kibana |
-  }) 
+  })
 end
 
 Given /^cluster logging operator is ready$/ do
@@ -237,7 +237,7 @@ Given /^cluster logging operator is ready$/ do
   })
 end
 
-Given /^elasticsearch operator is ready(?: in the "(.+)" namespace)?$/ do | proj_name |
+Given /^elasticsearch operator is ready(?: in the #{QUOTED} namespace)?$/ do | proj_name |
   ensure_admin_tagged
   if proj_name
     target_namespace = proj_name
@@ -339,7 +339,7 @@ Given /^the logging operators are redeployed after scenario$/ do
   }
 end
 
-# from logging 4.5, we don't have index project.$project-name.xxxxx, so we need other ways to check the project logs 
+# from logging 4.5, we don't have index project.$project-name.xxxxx, so we need other ways to check the project logs
 # es_util --query=*/_count -d '{"query": {"match": {"kubernetes.namespace_name": "project-name"}}}'
 # if count > 0, then the project logs are received
 When /^I wait(?: (\d+) seconds)? for the project #{QUOTED} logs to appear in the ES pod(?: with labels #{QUOTED})?$/ do |seconds, project_name, pod_labels|

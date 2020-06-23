@@ -2,7 +2,7 @@
 
 require 'active_support/core_ext/hash/slice.rb'
 
-Given /^I wait until the status of deployment "(.+)" becomes :(.+)$/ do |resource_name, status|
+Given /^I wait until the status of deployment #{QUOTED} becomes :(.+)$/ do |resource_name, status|
   ready_timeout = 10 * 60
   @result = dc(resource_name).wait_till_status(status.to_sym, user, ready_timeout)
   unless @result[:success]

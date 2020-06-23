@@ -28,7 +28,7 @@ end
 # This step is used to delete lines from file. If multiline match is needed,
 #   then write another step. If pattern starts with '/' or '%r{' treat as RE.
 #   Relative paths are considered inside workdir.
-Given /^I delete matching lines from "(.+)":$/ do |file, table|
+Given /^I delete matching lines from #{QUOTED}:$/ do |file, table|
 
   # deal with relative file names
   if !file.start_with?("/")
@@ -61,7 +61,7 @@ end
 
 # This step is used to replace strings and patterns in file. If pattern starts
 #   with '/' or '%r{' treat as RE. Relative paths are considered inside workdir.
-Given /^I replace (lines|content) in "(.+)":$/ do |mode, file, table|
+Given /^I replace (lines|content) in #{QUOTED}:$/ do |mode, file, table|
 
   # deal with relative file names
   if !file.start_with?("/")
@@ -116,7 +116,7 @@ end
 #
 #    Given I backup the "/home/gusun/test/file" file
 #
-Given(/^I backup the file "(.+)"$/) do |file|
+Given(/^I backup the file #{QUOTED}$/) do |file|
   file.strip!
   filename = File.basename(file)
 
@@ -137,7 +137,7 @@ end
 #
 #    Given I restore the "/home/gusun/test/file" file
 #
-Given /^I restore the file "(.+)"$/ do |file|
+Given /^I restore the file #{QUOTED}$/ do |file|
   file.strip!
   filename = File.basename(file)
 

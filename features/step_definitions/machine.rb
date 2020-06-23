@@ -49,7 +49,7 @@ Given(/^I store the last provisioned machine in the#{OPT_SYM} clipboard$/) do | 
   cb[cb_name] = machines.max_by(&:created_at).name
 end
 
-Given(/^I wait for the node of machine(?: named "(.+)")? to appear/) do | machine_name |
+Given(/^I wait for the node of machine(?: named #{QUOTED})? to appear/) do | machine_name |
   machines = BushSlicer::Machine.list(user: admin, project: project("openshift-machine-api"))
   cache_resources *machines
 
@@ -83,7 +83,7 @@ Then(/^admin ensures machine number is restored after scenario$/) do
     unless machine_names_missing.empty?
       raise "Machines deleted but never restored: #{machine_names_missing}."
     end
-    
+
     machines_waiting_delete.each do | machine |
       machine.ensure_deleted(user: user, wait: 1200)
       raise "Unable to delete machine #{machine.name}" if machine.exists?(user: user)

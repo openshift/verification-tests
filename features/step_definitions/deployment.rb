@@ -4,7 +4,7 @@ require 'active_support/core_ext/hash/slice.rb'
 
 ### Deployment related steps
 
-Given /^I wait until number of replicas match "(\d+)" for deployment "(.+)"$/ do |number, d_name|
+Given /^I wait until number of replicas match "(\d+)" for deployment #{QUOTED}$/ do |number, d_name|
   ready_timeout = 300
   matched = deployment(d_name).wait_till_replica_counters_match(
     user:          user,

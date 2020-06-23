@@ -4,7 +4,7 @@ require 'active_support/core_ext/hash/slice.rb'
 
 ### replicaSet related steps
 
-Given /^I wait until number of replicas match "(\d+)" for replicaSet "(.+)"$/ do |number, rs_name|
+Given /^I wait until number of replicas match "(\d+)" for replicaSet #{QUOTED}$/ do |number, rs_name|
   ready_timeout = 300
   matched = rs(rs_name).wait_till_replica_counters_match(
     user: user,

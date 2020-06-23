@@ -30,7 +30,7 @@ When(/^I create the 'Ready' unhealthyCondition$/) do
   step %Q{the step should succeed}
 end
 
- Then(/^the machine(?: named "(.+)")? should be remediated$/) do | machine_name |
+ Then(/^the machine(?: named #{QUOTED})? should be remediated$/) do | machine_name |
    machine_name = machine.name if machine_name.nil?
    # unhealthy machine and should be deleted
    step %Q{I wait for the resource "machine" named "#{machine_name}" to disappear within 1200 seconds}

@@ -110,7 +110,7 @@ end
 # @param [Table] Array of the strings we are searching for
 # @note Checks whether the output contains/(does not contain) any of the
 # strings or regular expressions listed in the given table
-Then /^(the|all)? outputs?( by order)? should( not)? (contain|match) "(.+)"(?: (\d+) times)?$/ do |all, in_order, negative, match_type, pattern, times|
+Then /^(the|all)? outputs?( by order)? should( not)? (contain|match) #{QUOTED}(?: (\d+) times)?$/ do |all, in_order, negative, match_type, pattern, times|
   step "#{all} output#{in_order} should#{negative} #{match_type}#{times}:",
     table([[pattern]])
 end
@@ -156,7 +156,7 @@ Given /^the output is parsed as (YAML|JSON)$/ do |format|
   end
 end
 
-Given /^feature gate "(.+)" is (enabled|disabled)(?: with admission#{OPT_QUOTED} (enabled|disabled)?)?$/ do |fg, fgen, adm, admen|
+Given /^feature gate #{QUOTED} is (enabled|disabled)(?: with admission#{OPT_QUOTED} (enabled|disabled)?)?$/ do |fg, fgen, adm, admen|
   ensure_destructive_tagged
   fg_en = (fgen == "enabled")
   env.master_services.each { |service|

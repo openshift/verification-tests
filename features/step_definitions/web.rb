@@ -192,7 +192,7 @@ Given /^I wait(?: (\d+) seconds)? for the :(.+?) web( console)? action to succee
 end
 
 # @precondition a `browser` object
-Given /^I wait(?: (\d+) seconds)? for the title of the web browser to match "(.+)"$/ do |time, pattern|
+Given /^I wait(?: (\d+) seconds)? for the title of the web browser to match #{QUOTED}$/ do |time, pattern|
   time = time ? time.to_i : 10
   reg = Regexp.new(pattern)
   success = wait_for(time) {

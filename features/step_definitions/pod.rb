@@ -15,7 +15,7 @@ Given /^a pod becomes ready with labels:$/ do |table|
   cache_pods(*@result[:matching])
 end
 
-Given /^the pod(?: named "(.+)")? becomes ready$/ do |name|
+Given /^the pod(?: named #{QUOTED})? becomes ready$/ do |name|
   ready_timeout = 15 * 60
   @result = pod(name).wait_till_ready(user, ready_timeout)
 
@@ -25,7 +25,7 @@ Given /^the pod(?: named "(.+)")? becomes ready$/ do |name|
   end
 end
 
-Given /^the pod(?: named "(.+)")? is ready$/ do |name|
+Given /^the pod(?: named #{QUOTED})? is ready$/ do |name|
   @result = pod(name).ready?(user: user, cached: false)
 
   unless @result[:success]
@@ -33,7 +33,7 @@ Given /^the pod(?: named "(.+)")? is ready$/ do |name|
   end
 end
 
-Given /^the pod(?: named "(.+)")? becomes terminating$/ do |name|
+Given /^the pod(?: named #{QUOTED})? becomes terminating$/ do |name|
   ready_timeout = 60
   @result = pod(name).wait_till_terminating(user, ready_timeout)
 
@@ -43,7 +43,7 @@ Given /^the pod(?: named "(.+)")? becomes terminating$/ do |name|
 end
 
 
-Given /^the pod(?: named "(.+)")? becomes present$/ do |name|
+Given /^the pod(?: named #{QUOTED})? becomes present$/ do |name|
   present_timeout = 5 * 60
   @result = pod(name).wait_to_appear(user, present_timeout)
 
@@ -74,7 +74,7 @@ Given /^I store in the#{OPT_SYM} clipboard the pods labeled:$/ do |cbn, labels|
                                        user: user)
 end
 
-Given /^the pod(?: named "(.+)")? status becomes :([^\s]*?)(?: within #{NUMBER} seconds)?$/ do |name, status, timeout|
+Given /^the pod(?: named #{QUOTED})? status becomes :([^\s]*?)(?: within #{NUMBER} seconds)?$/ do |name, status, timeout|
   timeout = timeout ? Integer(timeout) : 15 * 60
   @result = pod(name).wait_till_status(status.to_sym, user, timeout)
 
@@ -229,7 +229,7 @@ end
 # wrapper around  oc logs, keep executing the command until we have an non-empty response
 # There are few occassion that the 'oc logs' cmd returned empty response
 #   this step should address those situations
-Given /^I collect the deployment log for pod "(.+)" until it disappears$/ do |pod_name|
+Given /^I collect the deployment log for pod #{QUOTED} until it disappears$/ do |pod_name|
   opts = {resource_name: pod_name}
   res_cache = {}
   res = {}
