@@ -136,26 +136,6 @@ Given /^the subnet from the clusternetwork resource is stored in the clipboard$/
 end
 
 
-Given /^the iptables partial deletion check should have succeeded depending on version$/ do
-  ensure_admin_tagged
-  if env.version_ge("4.3", user: user)
-    # we expect the check to fail on 4.4 and above, because we only detect full flush
-    # it looks like 4.3 was fixed as well, so maybe only 4.2 will fail
-    if @result[:success]
-      raise "sync check should not have succeded"
-    else
-      logger.info("sync check failed as expected: #{@result[:message]}")
-    end
-  else
-    if @result[:success]
-      logger.info("sync check succedded as expected")
-    else
-      raise "sync check failed #{@result[:message]}"
-    end
-  end
-
-end
-
 Given /^the#{OPT_QUOTED} node iptables config is checked$/ do |node_name|
   ensure_admin_tagged
   _node = node(node_name)

@@ -38,7 +38,9 @@ Feature: SDN related networking scenarios
   @admin
   @destructive
   Scenario: iptables rules will be repaired automatically once it gets destroyed
-    Given the master version >= "4.1"
+    # we do not detect incomplete rule removal since ~4.3, BZ-1810316
+    # so only test on >= 4.3
+    Given the master version >= "4.3"
     Given I select a random node's host
     And the node iptables config is checked
     And the step succeeded
@@ -52,8 +54,10 @@ Feature: SDN related networking scenarios
     When the node standard iptables rules are removed
     And 35 seconds have passed
     When the node iptables config is checked
-    # we do not detect incomplete rule removal since ~4.3, BZ-1810316
-    Then the iptables partial deletion check should have succeeded depending on version
+    # Removing individual rules will not trigger automatic repair on < 4.3
+    # the check should fail
+    Then the step failed
+    # >= 4.3 we have to flush all the rules and tables to trigger a repair
     When the node standard iptables rules are completely flushed
     And 35 seconds have passed
     Then the node iptables config is checked
