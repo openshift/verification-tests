@@ -30,7 +30,8 @@ Given /^the azure file secret name and key are stored to the clipboard$/ do
   step %Q/evaluation of `@result[:response]` is stored in the :shareName clipboard/
 end
 
-# return the metadata information for the `oc get secret <secret_name>`  the secret_n
+# return the metadata information for the `oc get secret <secret_name>`  the secret_name varies 
+# depending on the cluster platform
 Given /^admin obtains the cloudcredentials from cluster and store them to the#{OPT_QUOTED} clipboard$/ do |cb_name|
   cb_name ||= :cloud_creds
   platform = infrastructure('cluster').platform
