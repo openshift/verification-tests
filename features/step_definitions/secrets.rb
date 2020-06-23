@@ -29,3 +29,25 @@ Given /^the azure file secret name and key are stored to the clipboard$/ do
   step %Q/the step should succeed/
   step %Q/evaluation of `@result[:response]` is stored in the :shareName clipboard/
 end
+
+# return the metadata information for the `oc get secret <secret_name>`  the secret_n
+Given /^admin obtains the cloudcredentials from cluster and store them to the#{OPT_QUOTED} clipboard$/ do |cb_name|
+  cb_name ||= :cloud_creds
+  platform = infrastructure('cluster').platform
+  case platform
+  when 'Azure'
+    secret_name = 'azure-credentials'
+  when 'AWS'
+    secret_name = 'aws-creds'
+  when 'GCP' 
+    secret_name = 'gcp-credentials'
+  when 'OpenStack'
+    secret_name = 'openstack-credentials'
+  else
+    raise "Unsupported platform `#{platform}`"
+  end
+  cloud_cred = secret(secret_name, project('kube-system'))
+  data = cloud_cred.raw_resource.dig('data')
+  cb[cb_name] = data
+end
+  
