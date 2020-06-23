@@ -73,7 +73,7 @@ Feature: OVN related networking scenarios
     When I run the :create client command with:
       | f | pod-for-ping.json |
     Then the step should succeed
-    #Now scale down CNO pod to 1 and check whether hello-pod is synced to NB db
+    #Now scale up CNO pod to 1 and check whether hello-pod is synced to NB db
     Given I run the :scale admin command with:
       | resource | deployment       |
       | name     | network-operator |
@@ -128,7 +128,7 @@ Feature: OVN related networking scenarios
       | n                 | openshift-ovn-kubernetes |
     Then the step should succeed
     And I ensures "hello-pod" pod is deleted from the "<%= cb.hello_pod_project %>" project
-    #Now scale down CNO pod to 1 and check whether hello-pod status is synced to NB db means it should not present in the DB
+    #Now scale up CNO pod to 1 and check whether hello-pod status is synced to NB db means it should not present in the DB
     Given admin uses the "openshift-network-operator" project
     Given I run the :scale admin command with:
       | resource | deployment       |
