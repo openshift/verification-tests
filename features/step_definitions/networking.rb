@@ -124,7 +124,7 @@ Given /^the#{OPT_QUOTED} node network is verified$/ do |node_name|
 end
 
 
-Given /^The subnet from the clusternetwork resource is stored in the clipboard$/ do
+Given /^the subnet from the clusternetwork resource is stored in the clipboard$/ do
   ensure_admin_tagged
   _admin = admin
   @result = _admin.cli_exec(:get, resource: "clusternetwork", resource_name: "default", template: '{{index .clusterNetworks 0 "CIDR"}}')
@@ -162,7 +162,7 @@ Given /^the#{OPT_QUOTED} node iptables config is checked$/ do |node_name|
   _host = _node.host
   _admin = admin
 
-  step "The subnet from the clusternetwork resource is stored in the clipboard"
+  step "the subnet from the clusternetwork resource is stored in the clipboard"
   subnet = cb.clusternetwork
 
   plugin_type = ""
@@ -229,7 +229,7 @@ Given /^the#{OPT_QUOTED} node standard iptables rules are removed$/ do |node_nam
   _host = _node.host
   _admin = admin
 
-  step "The subnet from the clusternetwork resource is stored in the clipboard"
+  step "the subnet from the clusternetwork resource is stored in the clipboard"
   subnet = cb.clusternetwork
 
   @result = _host.exec('iptables -D OPENSHIFT-FIREWALL-ALLOW -p udp -m udp --dport 4789 -m comment --comment "VXLAN incoming" -j ACCEPT')
