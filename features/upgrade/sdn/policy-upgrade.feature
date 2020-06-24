@@ -54,10 +54,14 @@ Feature: SDN compoment upgrade testing
     Then the step should succeed
 
     When I use the "policy-upgrade" project
+
+    And I wait up to 10 seconds for the steps to pass:
+    """
     Then I execute on the "<%= cb.pod1 %>" pod:
       | curl | -s | --connect-timeout | 5 | <%= cb.pod2ip %>:8080 |
     And the step should fail
     And the output should not contain "Hello"
+    """
 
   # @author zzhao@redhat.com
   # @case_id OCP-22735
