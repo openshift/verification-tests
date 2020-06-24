@@ -1,11 +1,11 @@
 Feature: fips enabled verification for upgrade
+
   # @author xiyuan@redhat.com
   @upgrade-prepare
   @users=upuser1,upuser2
   @admin
   Scenario: FIPS mode checking command works for a cluster with fip mode on - prepare
-    Given fips is enabled 
-
+    Given fips is enabled
     #check whether fips enabled for master node
     When I store the masters in the :masters clipboard
     And I use the "<%= cb.masters[0].name %>" node
@@ -15,7 +15,7 @@ Feature: fips enabled verification for upgrade
     And the output should match:
       | FIPS |
     When I run commands on the host:
-      | sysctl crypto.fips_enabled | 
+      | sysctl crypto.fips_enabled |
     Then the step should succeed
     And the output should match:
       | crypto.fips_enabled = 1 |
@@ -24,12 +24,11 @@ Feature: fips enabled verification for upgrade
     Then the step should succeed
     And the output should contain:
       | RHCOS FIPS mode installation complete |
-
     # check whether fips mode enabled or not for worker node
     Given I store the workers in the :workers clipboard
     And I use the "<%= cb.workers[0].name %>" node
     When I run commands on the host:
-      | sysctl crypto.fips_enabled |  
+      | sysctl crypto.fips_enabled |
     Then the step should succeed
     And the output should match:
       | crypto.fips_enabled = 1 |
@@ -46,7 +45,6 @@ Feature: fips enabled verification for upgrade
   @admin
   Scenario: FIPS mode checking command works for a cluster with fip mode on
     Given fips is enabled
-
     #check whether fips enabled for master node
     When I store the masters in the :masters clipboard
     And I use the "<%= cb.masters[0].name %>" node
@@ -56,7 +54,7 @@ Feature: fips enabled verification for upgrade
     And the output should match:
       | FIPS |
     When I run commands on the host:
-      | sysctl crypto.fips_enabled |                 
+      | sysctl crypto.fips_enabled |
     Then the step should succeed
     And the output should match:
       | crypto.fips_enabled = 1 |
@@ -65,7 +63,6 @@ Feature: fips enabled verification for upgrade
     Then the step should succeed
     And the output should contain:
       | RHCOS FIPS mode installation complete |
-
     # check whether fips mode enabled or not for worker node
     Given I store the workers in the :workers clipboard
     And I use the "<%= cb.workers[0].name %>" node

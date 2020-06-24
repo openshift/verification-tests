@@ -19,8 +19,8 @@ Feature: oc_secrets.feature
       | name     | default        |
     Then the step should succeed
     And the output should contain:
-      |Mountable secrets|
-      |test|
+      | Mountable secrets |
+      | test              |
     When I run the :secrets client command with:
       | action         | add                    |
       | serviceaccount | serviceaccount/default |
@@ -33,8 +33,8 @@ Feature: oc_secrets.feature
       | o             | json           |
     Then the step should succeed
     And the output should contain:
-      |"imagePullSecrets"|
-      |"name": "test"    |
+      | "imagePullSecrets" |
+      | "name": "test"     |
     When I run the :secrets client command with:
       | action         | add                    |
       | serviceaccount | serviceaccount/default |
@@ -47,9 +47,9 @@ Feature: oc_secrets.feature
       | o             | json           |
     Then the step should succeed
     And the output should contain:
-      |"imagePullSecrets"|
+      | "imagePullSecrets" |
     And the output should contain 2 times:
-      |"name": "test" |
+      | "name": "test" |
 
   # @author xiaocwan@redhat.com
   # @case_id OCP-10631
@@ -57,14 +57,14 @@ Feature: oc_secrets.feature
     Given I have a project
     When the "tmpfoo" file is created with the following lines:
       | somecontent |
-    And  the "tmpbar" file is created with the following lines:
+    And the "tmpbar" file is created with the following lines:
       | somecontent |
     Then the step should succeed
     When I run the :create_secret client command with:
       | secret_type | generic              |
       | name        | <%= project.name %>1 |
-      | from_file   |  tmpfoo              |
-      | from_file   |  tmpbar              |
+      | from_file   | tmpfoo               |
+      | from_file   | tmpbar               |
       | n           | <%= project.name %>  |
     Then the step should succeed
     When I run the :describe client command with:
@@ -75,7 +75,6 @@ Feature: oc_secrets.feature
     And the output should contain:
       | tmpfoo |
       | tmpbar |
-
     When the "tmpfoler1/tmpfile1" file is created with the following lines:
       | somecontent |
     And the "tmpfoler2/tmpfile2" file is created with the following lines:
@@ -84,8 +83,8 @@ Feature: oc_secrets.feature
     When I run the :create_secret client command with:
       | secret_type | generic              |
       | name        | <%= project.name %>2 |
-      | from_file   |  tmpfoler1           |
-      | from_file   |  tmpfoler2           |
+      | from_file   | tmpfoler1            |
+      | from_file   | tmpfoler2            |
       | n           | <%= project.name %>  |
     Then the step should succeed
     When I run the :describe client command with:
@@ -102,15 +101,14 @@ Feature: oc_secrets.feature
   Scenario: Check name requirements for oc secret
     Given I have a project
     And I run the :get client command with:
-      | resource      | project |
+      | resource      | project             |
       | resource_name | <%= project.name %> |
-      | o             | json    |
+      | o             | json                |
     Then the step should succeed
     # Prepare filenames
     Then I save the output to file> file-1234567890.com.json
     And I save the output to file> file.json
     And I save the output to file> file!@#$.json
-
     When I run the :secrets client command with:
       | action | new           |
       | name   | mysecret1     |
@@ -118,28 +116,24 @@ Feature: oc_secrets.feature
     Then the step should fail
     And the output should match:
       | [Ee]rror |
-      | valid |
-
+      | valid    |
     When I run the :secrets client command with:
-      | action | new           |
-      | name   | mysecret1     |
+      | action | new                      |
+      | name   | mysecret1                |
       | source | file-1234567890.com.json |
     Then the step should succeed
-
     When I run the :secrets client command with:
-      | action | new           |
-      | name   | mysecret!@#$  |
-      | source | file.json |
+      | action | new          |
+      | name   | mysecret!@#$ |
+      | source | file.json    |
     Then the step should fail
     And the output should match:
-      | [Ii]nvalid     |
-
+      | [Ii]nvalid |
     When I run the :secrets client command with:
-      | action | new       |
-      | name   | mysecret-1234567890.com  |
-      | source | file.json |
+      | action | new                     |
+      | name   | mysecret-1234567890.com |
+      | source | file.json               |
     Then the step should succeed
-
     # Same filenames
     When I run the :secrets client command with:
       | action | new       |

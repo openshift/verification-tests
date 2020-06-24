@@ -15,13 +15,13 @@ Feature: oc idle
     Given I wait until replicationController "hello-pod" is ready
     And I wait until number of replicas match "2" for replicationController "hello-pod"
     Given 2 pods become ready with labels:
-      | name=hello-pod  |
+      | name=hello-pod |
     Given I wait until replicationController "hello-idle" is ready
     And I wait until number of replicas match "2" for replicationController "hello-idle"
     Given 2 pods become ready with labels:
       | name=hello-idle |
     When I run the :idle client command with:
-      | all | true      |
+      | all | true |
     Then the step should succeed
     And the output should match:
       | ReplicationController.*hello-idle |
@@ -38,10 +38,10 @@ Feature: oc idle
       | hello-svc.*none  |
     When I get project rc named "hello-pod" as YAML
     Then the output should match:
-      | idling.*openshift.io/idled-at  |
+      | idling.*openshift.io/idled-at |
     When I get project rc named "hello-idle" as YAML
     Then the output should match:
-      | idling.*openshift.io/idled-at  |
+      | idling.*openshift.io/idled-at |
 
   # @author chezhang@redhat.com
   # @case_id OCP-11980
@@ -64,11 +64,11 @@ Feature: oc idle
     Then the step should succeed
     And I wait until number of replicas match "2" for replicationController "hello-pod"
     When I run the :idle client command with:
-      | l | idle=true  |
+      | l | idle=true |
     Then the step should succeed
     And the output should match:
-      | ReplicationController.*hello-pod  |
-      | (?i)idled |
+      | ReplicationController.*hello-pod |
+      | (?i)idled                        |
     And I wait until number of replicas match "0" for replicationController "hello-pod"
     When I run the :get client command with:
       | resource | endpoints |
@@ -93,18 +93,18 @@ Feature: oc idle
       | name=hello-pod |
     Given a "idle1.txt" file is created with the following lines:
     """
-    hello-svc
+      hello-svc
     """
     Given a "idle2.txt" file is created with the following lines:
     """
-    noexist-svc
+      noexist-svc
     """
     When I run the :idle client command with:
       | resource-names-file | idle1.txt |
     Then the step should succeed
     And the output should match:
       | ReplicationController.*hello-pod |
-      | (?i)idled |
+      | (?i)idled                        |
     And I wait until number of replicas match "0" for replicationController "hello-pod"
     When I run the :get client command with:
       | resource | endpoints |
@@ -113,7 +113,7 @@ Feature: oc idle
       | hello-svc.*none |
     When I get project rc named "hello-pod" as YAML
     Then the output should match:
-      | idling.*openshift.io/idled-at   |
+      | idling.*openshift.io/idled-at |
     When I run the :idle client command with:
       | resource-names-file | idle2.txt |
     Then the step should fail
@@ -138,10 +138,10 @@ Feature: oc idle
     Then the step should succeed
     And the output should match:
       | ReplicationController.*hello-pod |
-      | (?i)idled |
+      | (?i)idled                        |
     And I wait until number of replicas match "2" for replicationController "hello-pod"
     And 2 pods become ready with labels:
-      | name=hello-pod  |
+      | name=hello-pod |
     When I run the :get client command with:
       | resource | endpoints |
     Then the step should succeed
@@ -166,8 +166,8 @@ Feature: oc idle
       | svc_name | idling-echo |
     Then the step should succeed
     And the output should match:
-      | DeploymentConfig.*idling-echo  |
-      | (?i)idled |
+      | DeploymentConfig.*idling-echo |
+      | (?i)idled                     |
     And I wait until number of replicas match "0" for replicationController "idling-echo-1"
     When I run the :get client command with:
       | resource | endpoints |
@@ -195,7 +195,7 @@ Feature: oc idle
       | resource | endpoints |
     Then the step should succeed
     And the output should match:
-      | idling-echo.*\d+.\d+.\d+.\d+:3090,\d+.\d+.\d+.\d+:3090,\d+.\d+.\d+.\d+:8675 |
+      | idling-echo.*\\d+.\\d+.\\d+.\\d+:3090,\\d+.\\d+.\\d+.\\d+:3090,\\d+.\\d+.\\d+.\\d+:8675 |
     Given 2 pods become ready with labels:
       | app=idling-echo |
     When I run the :idle client command with:
@@ -214,7 +214,7 @@ Feature: oc idle
       | resource | endpoints |
     Then the step should succeed
     And the output should match:
-      | idling-echo.*\d+.\d+.\d+.\d+:3090,\d+.\d+.\d+.\d+:3090,\d+.\d+.\d+.\d+:8675 |
+      | idling-echo.*\\d+.\\d+.\\d+.\\d+:3090,\\d+.\\d+.\\d+.\\d+:3090,\\d+.\\d+.\\d+.\\d+:8675 |
 
   # @author chezhang@redhat.com
   # @case_id OCP-11345
@@ -232,8 +232,8 @@ Feature: oc idle
       | svc_name | hello-svc |
     Then the step should succeed
     And the output should match:
-      | ReplicationController.*hello-pod  |
-      | (?i)idled |
+      | ReplicationController.*hello-pod |
+      | (?i)idled                        |
     And I wait until number of replicas match "0" for replicationController "hello-pod"
     When I run the :get client command with:
       | resource | endpoints |
@@ -262,5 +262,4 @@ Feature: oc idle
       | resource | endpoints |
     Then the step should succeed
     And the output should match:
-      | hello-svc.*\d+.\d+.\d+.\d+:8080,\d+.\d+.\d+.\d+:8080 |
-
+      | hello-svc.*\\d+.\\d+.\\d+.\\d+:8080,\\d+.\\d+.\\d+.\\d+:8080 |

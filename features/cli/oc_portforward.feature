@@ -14,12 +14,12 @@ Feature: oc_portforward.feature
       | f | pod_with_two_containers.json |
     Given the pod named "doublecontainers" status becomes :running
     And I run the :port_forward background client command with:
-      | pod | doublecontainers |
-      | port_spec | <%= cb[:porta] %>:8080  |
-      | port_spec | <%= cb[:portb] %>:8081  |
-      | port_spec | <%= cb[:portc] %>:8080  |
-      | port_spec | <%= cb[:portd] %>:8081  |
-      | _timeout | 40 |
+      | pod       | doublecontainers       |
+      | port_spec | <%= cb[:porta] %>:8080 |
+      | port_spec | <%= cb[:portb] %>:8081 |
+      | port_spec | <%= cb[:portc] %>:8080 |
+      | port_spec | <%= cb[:portd] %>:8081 |
+      | _timeout  | 40                     |
     Then the step should succeed
     And I wait up to 40 seconds for the steps to pass:
     """

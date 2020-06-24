@@ -7,17 +7,17 @@ Feature: Testing route
     Given I have a project
     Given I obtain test data file "routing/header-test/dc.json"
     When I run the :create client command with:
-      | f  |   dc.json  |
+      | f | dc.json |
     Then the step should succeed
     Given I obtain test data file "routing/header-test/insecure-service.json"
     When I run the :create client command with:
-      | f  |   insecure-service.json |
+      | f | insecure-service.json |
     Then the step should succeed
     When I expose the "header-test-insecure" service
     Then the step should succeed
     Then I wait for a web server to become available via the "header-test-insecure" route
     When I run the :delete client command with:
-      | object_type | route |
+      | object_type       | route                |
       | object_name_or_id | header-test-insecure |
     Then I wait for the resource "route" named "header-test-insecure" to disappear
     Then I wait up to 20 seconds for the steps to pass:
@@ -38,7 +38,6 @@ Feature: Testing route
     Given a pod becomes ready with labels:
       | name=test-pods |
     And evaluation of `pod.name` is stored in the :pod_name clipboard
-
     When I run the :get client command with:
       | resource | endpoints |
     Then the output should contain:
@@ -57,7 +56,6 @@ Feature: Testing route
     Then the output should contain:
       | test-service |
       | none         |
-
     When I run the :scale client command with:
       | resource | replicationcontrollers |
       | name     | <%= cb.rc_name %>      |
@@ -78,12 +76,12 @@ Feature: Testing route
     Given I have a project
     Given I obtain test data file "routing/unsecure/route_unsecure.json"
     When I run the :create client command with:
-      | f |  route_unsecure.json  |
+      | f | route_unsecure.json |
     Then the step should succeed
     Given I create a new project
     Given I obtain test data file "routing/unsecure/route_unsecure.json"
     When I run the :create client command with:
-      | f |  route_unsecure.json  |
+      | f | route_unsecure.json |
     Then the step should succeed
     And I wait up to 30 seconds for the steps to pass:
     """
@@ -107,12 +105,11 @@ Feature: Testing route
     When I run the :create client command with:
       | f | service_unsecure.json |
     Then the step should succeed
-
     Given I have a pod-for-ping in the project
     When I run the :create_route_edge client command with:
-      | name | edge-route |
+      | name    | edge-route       |
       | service | service-unsecure |
-      | path| /test |
+      | path    | /test            |
     Then the step should succeed
     And I wait up to 20 seconds for the steps to pass:
     """
@@ -125,9 +122,9 @@ Feature: Testing route
     Then the output should contain "Hello-OpenShift-Path-Test"
     """
     When I execute on the pod:
-      | curl |
+      | curl                                                                     |
       | https://<%= route("edge-route", service("edge-route")).dns(by: user) %>/ |
-      | -k |
+      | -k                                                                       |
     Then the output should contain "Application is not available"
     When I execute on the pod:
       | cat | /tmp/cookie.txt |
@@ -151,7 +148,6 @@ Feature: Testing route
     When I run the :create client command with:
       | f | service_secure.json |
     Then the step should succeed
-
     Given I have a pod-for-ping in the project
     And CA trust is added to the pod-for-ping
     Given I obtain test data file "routing/reencrypt/route_reencrypt-reen.example.com.crt"
@@ -159,14 +155,14 @@ Feature: Testing route
     Given I obtain test data file "routing/reencrypt/route_reencrypt.ca"
     Given I obtain test data file "routing/reencrypt/route_reencrypt_dest.ca"
     When I run the :create_route_reencrypt client command with:
-      | name       | route-recrypt                                                                                 |
-      | hostname   | <%= rand_str(5, :dns) %>-reen.example.com                                                     |
-      | service    | service-secure                                                                                |
-      | cert       | route_reencrypt-reen.example.com.crt |
-      | key        | route_reencrypt-reen.example.com.key |
-      | cacert     | route_reencrypt.ca                   |
-      | destcacert | route_reencrypt_dest.ca              |
-      | path       | /test                                                                                         |
+      | name       | route-recrypt                             |
+      | hostname   | <%= rand_str(5, :dns) %>-reen.example.com |
+      | service    | service-secure                            |
+      | cert       | route_reencrypt-reen.example.com.crt      |
+      | key        | route_reencrypt-reen.example.com.key      |
+      | cacert     | route_reencrypt.ca                        |
+      | destcacert | route_reencrypt_dest.ca                   |
+      | path       | /test                                     |
     Then the step should succeed
     And I wait up to 20 seconds for the steps to pass:
     """
@@ -180,12 +176,12 @@ Feature: Testing route
     Then the output should contain "Hello-OpenShift-Path-Test"
     """
     When I execute on the pod:
-      | curl |
-      | --resolve |
+      | curl                                                                                             |
+      | --resolve                                                                                        |
       | <%= route("route-recrypt", service("route-recrypt")).dns(by: user) %>:443:<%= cb.router_ip[0] %> |
-      | https://<%= route("route-recrypt", service("route-recrypt")).dns(by: user) %>/ |
-      | --cacert |
-      | /tmp/ca.pem |
+      | https://<%= route("route-recrypt", service("route-recrypt")).dns(by: user) %>/                   |
+      | --cacert                                                                                         |
+      | /tmp/ca.pem                                                                                      |
     Then the output should contain "Application is not available"
 
   # @author yadu@redhat.com
@@ -205,13 +201,13 @@ Feature: Testing route
     Then the step should succeed
     # Create edge termination route
     When I run the :create_route_edge client command with:
-      | name     | myroute |
-      | service  | service-unsecure     |
+      | name    | myroute          |
+      | service | service-unsecure |
     Then the step should succeed
     # Set insecureEdgeTerminationPolicy to Redirect
     When I run the :patch client command with:
-      | resource      | route              |
-      | resource_name | myroute            |
+      | resource      | route                                                         |
+      | resource_name | myroute                                                       |
       | p             | {"spec":{"tls":{"insecureEdgeTerminationPolicy":"Redirect"}}} |
     Then the step should succeed
     When I run the :get client command with:
@@ -222,16 +218,16 @@ Feature: Testing route
     # Acess the route
     Given I have a pod-for-ping in the project
     When I execute on the pod:
-      | curl |
-      | -v |
-      | -L |
+      | curl                                                                       |
+      | -v                                                                         |
+      | -L                                                                         |
       | http://<%= route("myroute", service("service-unsecure")).dns(by: user) %>/ |
-      | -k |
+      | -k                                                                         |
     Then the step should succeed
     And the output should contain:
-      | Hello-OpenShift |
+      | Hello-OpenShift    |
       | HTTP/1.1 302 Found |
-      | ocation: https:// |
+      | ocation: https://  |
 
   # @author yadu@redhat.com
   # @case_id OCP-9650
@@ -249,12 +245,12 @@ Feature: Testing route
       | f | service_unsecure.json |
     Then the step should succeed
     When I run the :create_route_edge client command with:
-      | name     | myroute          |
-      | service  | service-unsecure |
+      | name    | myroute          |
+      | service | service-unsecure |
     Then the step should succeed
     When I run the :patch client command with:
-      | resource      | route   |
-      | resource_name | myroute |
+      | resource      | route                                                      |
+      | resource_name | myroute                                                    |
       | p             | {"spec":{"tls":{"insecureEdgeTerminationPolicy":"Allow"}}} |
     Then the step should succeed
     When I run the :get client command with:
@@ -327,13 +323,13 @@ Feature: Testing route
     Then the step should succeed
     # Create passthrough termination route
     When I run the :create_route_passthrough client command with:
-      | name     | myroute |
-      | service  | service-secure     |
+      | name    | myroute        |
+      | service | service-secure |
     Then the step should succeed
     # Set insecureEdgeTerminationPolicy to Redirect
     When I run the :patch client command with:
-      | resource      | route              |
-      | resource_name | myroute            |
+      | resource      | route                                                         |
+      | resource_name | myroute                                                       |
       | p             | {"spec":{"tls":{"insecureEdgeTerminationPolicy":"Redirect"}}} |
     Then the step should succeed
     # Acess the route
@@ -353,8 +349,8 @@ Feature: Testing route
       | ocation: https:// |
     """
     When I run the :patch client command with:
-      | resource      | route              |
-      | resource_name | myroute            |
+      | resource      | route                                                      |
+      | resource_name | myroute                                                    |
       | p             | {"spec":{"tls":{"insecureEdgeTerminationPolicy":"Allow"}}} |
     Then the step should fail
     And the output should contain "acceptable values are None, Redirect, or empty"
@@ -374,18 +370,17 @@ Feature: Testing route
     When I run the :create client command with:
       | f | service_secure.json |
     Then the step should succeed
-
     #create reencrypt termination route
     Given I obtain test data file "routing/reencrypt/route_reencrypt_dest.ca"
     When I run the :create_route_reencrypt client command with:
-      | name       | reen                                                                             |
-      | service    | service-secure                                                                   |
+      | name       | reen                    |
+      | service    | service-secure          |
       | destcacert | route_reencrypt_dest.ca |
     Then the step should succeed
     # Set insecureEdgeTerminationPolicy to Redirect
     When I run the :patch client command with:
-      | resource      | route           |
-      | resource_name | reen            |
+      | resource      | route                                                         |
+      | resource_name | reen                                                          |
       | p             | {"spec":{"tls":{"insecureEdgeTerminationPolicy":"Redirect"}}} |
     Then the step should succeed
     # Acess the route
@@ -404,8 +399,8 @@ Feature: Testing route
       | ocation: https:// |
     """
     When I run the :patch client command with:
-      | resource      | route           |
-      | resource_name | reen            |
+      | resource      | route                                                      |
+      | resource_name | reen                                                       |
       | p             | {"spec":{"tls":{"insecureEdgeTerminationPolicy":"Allow"}}} |
     Then the step should succeed
     # Acess the route
@@ -424,9 +419,8 @@ Feature: Testing route
     Given I have a project
     Given I obtain test data file "routing/unsecure/service_unsecure.json"
     When I run the :create client command with:
-      | f  | service_unsecure.json |
+      | f | service_unsecure.json |
     Then the step should succeed
-
     # test those 4 kind of route. When creating route which name have '.', it will be decoded to '-'.
     When I run the :expose client command with:
       | resource      | service          |
@@ -443,8 +437,8 @@ Feature: Testing route
     Then the step should succeed
     Given I obtain test data file "routing/reencrypt/route_reencrypt_dest.ca"
     And I run the :create_route_reencrypt client command with:
-      | name       | reen.test                                                                        |
-      | service    | service-unsecure                                                                 |
+      | name       | reen.test               |
+      | service    | service-unsecure        |
       | destcacert | route_reencrypt_dest.ca |
     Then the step should succeed
     When I run the :get client command with:
@@ -473,31 +467,29 @@ Feature: Testing route
     Then the step should succeed
     # Create edge termination route
     When I run the :create_route_edge client command with:
-      | name     | myroute           |
-      | service  | service-unsecure  |
-      | insecure_policy | Redirect   |
+      | name            | myroute          |
+      | service         | service-unsecure |
+      | insecure_policy | Redirect         |
     Then the step should succeed
-
     Given I have a pod-for-ping in the project
     When I execute on the pod:
-      | curl |
-      | -v |
-      | -L |
+      | curl                                                                       |
+      | -v                                                                         |
+      | -L                                                                         |
       | http://<%= route("myroute", service("service-unsecure")).dns(by: user) %>/ |
-      | -k |
-      | -c |
-      | /tmp/cookie |
+      | -k                                                                         |
+      | -c                                                                         |
+      | /tmp/cookie                                                                |
     Then the step should succeed
     And the output should contain:
-      | Hello-OpenShift |
+      | Hello-OpenShift    |
       | HTTP/1.1 302 Found |
-      | ocation: https:// |
+      | ocation: https://  |
     And I execute on the pod:
       | cat | /tmp/cookie |
     Then the step should succeed
     And the output should match:
       | FALSE.*TRUE |
-
     #create reencrypt termination route
     Given I obtain test data file "routing/passthrough/service_secure.json"
     Given I run the :create client command with:
@@ -505,10 +497,10 @@ Feature: Testing route
     Then the step should succeed
     Given I obtain test data file "routing/reencrypt/route_reencrypt_dest.ca"
     When I run the :create_route_reencrypt client command with:
-      | name            | reen                                                                             |
-      | service         | service-secure                                                                   |
+      | name            | reen                    |
+      | service         | service-secure          |
       | destcacert      | route_reencrypt_dest.ca |
-      | insecure_policy | Redirect                                                                         |
+      | insecure_policy | Redirect                |
     Then the step should succeed
     And I wait up to 20 seconds for the steps to pass:
     """
@@ -538,7 +530,7 @@ Feature: Testing route
     Given I have a project
     Given I obtain test data file "routing/reencrypt/reencrypt-without-all-cert.yaml"
     When I run the :create client command with:
-      | f |  reencrypt-without-all-cert.yaml |
+      | f | reencrypt-without-all-cert.yaml |
     Then the step should succeed
     And all pods in the project are ready
     Given I use the "service-secure" service
@@ -551,7 +543,6 @@ Feature: Testing route
     Given I have a project
     And I have a header test service in the project
     And evaluation of `"haproxy.router.openshift.io/ip_whitelist=#{cb.req_headers["x-forwarded-for"]}"` is stored in the :my_whitelist clipboard
-
     # Add another IP whitelist for route
     When I run the :annotate client command with:
       | resource     | route                                            |
@@ -559,14 +550,12 @@ Feature: Testing route
       | keyval       | haproxy.router.openshift.io/ip_whitelist=8.8.8.8 |
       | overwrite    | true                                             |
     Then the step should succeed
-
     # Access the route again waiting for the whitelist to apply
     Then I wait up to 20 seconds for the steps to pass:
     """
     When I open web server via the route
     Then the step should fail
     """
-
     # Add IP whitelist for route
     When I run the :annotate client command with:
       | resource     | route                          |
@@ -574,7 +563,6 @@ Feature: Testing route
       | keyval       | <%= cb.my_whitelist %>         |
       | overwrite    | true                           |
     Then the step should succeed
-
     # Access the route
     When I wait for a web server to become available via the route
     Then the output should contain "x-forwarded-for"
@@ -594,8 +582,8 @@ Feature: Testing route
       | f | service_unsecure.json |
     Then the step should succeed
     When I run the :create_route_edge client command with:
-      | name     | myroute          |
-      | service  | service-unsecure |
+      | name    | myroute          |
+      | service | service-unsecure |
     Then the step should succeed
     When I run the :annotate client command with:
       | resource     | route                                                    |
@@ -621,7 +609,6 @@ Feature: Testing route
     And the output should contain "Hello-OpenShift"
     And the expression should be true> @result[:headers]["strict-transport-security"] == ["max-age=31536000;includeSubDomains"]
     """
-
     When I run the :annotate client command with:
       | resource     | route                                                                         |
       | resourcename | myroute                                                                       |
@@ -645,9 +632,7 @@ Feature: Testing route
       | ["items"][0]["metadata"]["annotations"] | { haproxy.router.openshift.io/hsts_header: "max-age=100;includeSubDomains;preload" } |
     Then the step should succeed
     And all pods in the project are ready
-
     Given I use the "service-secure" service
     And I wait up to 20 seconds for a secure web server to become available via the "route-reencrypt" route
     Then the output should contain "Hello-OpenShift"
     And the expression should be true> @result[:headers]["strict-transport-security"] == ["max-age=100;includeSubDomains;preload"]
-

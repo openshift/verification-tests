@@ -67,10 +67,10 @@ Feature: buildconfig.feature
   Scenario Outline: Build with images pulled from private repositories
     Given I have a project
     When I run the :create_secret client command with:
-     | name        | pull                                                                            |
-     | secret_type | generic                                                                         |
-     | from_file   | .dockercfg=<%= expand_private_path(conf[:services, :docker_hub, :dockercfg]) %> | 
-     | type        | kubernetes.io/dockercfg                                                         |
+      | name        | pull                                                                            |
+      | secret_type | generic                                                                         |
+      | from_file   | .dockercfg=<%= expand_private_path(conf[:services, :docker_hub, :dockercfg]) %> |
+      | type        | kubernetes.io/dockercfg                                                         |
     Then the step should succeed
     Given I obtain test data file "build/<template>"
     When I run the :create client command with:
@@ -88,21 +88,21 @@ Feature: buildconfig.feature
   Scenario: Using secret to pull a docker image which be used as source input
     Given I have a project
     When I run the :create_secret client command with:
-     | name        | pull                                                                            |
-     | secret_type | generic                                                                         |
-     | from_file   | .dockercfg=<%= expand_private_path(conf[:services, :docker_hub, :dockercfg]) %> | 
-     | type        | kubernetes.io/dockercfg                                                         |
+      | name        | pull                                                                            |
+      | secret_type | generic                                                                         |
+      | from_file   | .dockercfg=<%= expand_private_path(conf[:services, :docker_hub, :dockercfg]) %> |
+      | type        | kubernetes.io/dockercfg                                                         |
     Then the step should succeed
     Given I obtain test data file "templates/OCP-12057/application-template-stibuild_pull_private_sourceimage.json"
     When I run the :new_app client command with:
-     | file | application-template-stibuild_pull_private_sourceimage.json |
+      | file | application-template-stibuild_pull_private_sourceimage.json |
     Then the step should succeed
     And the "ruby-sample-build-1" build was created
     And the "ruby-sample-build-1" build completed
     Given a pod becomes ready with labels:
-     | name=frontend |
+      | name=frontend |
     When I execute on the pod:
-     | ls | openshiftqedir |
+      | ls | openshiftqedir |
     Then the step should succeed
     And the output should contain:
-     | app-root |
+      | app-root |

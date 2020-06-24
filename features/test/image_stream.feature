@@ -6,5 +6,5 @@ Feature: image stream related code test
       | file | https://raw.githubusercontent.com/openshift/origin/master/examples/sample-app/application-template-stibuild.json |
     Given the "ruby-22-centos7" image stream becomes ready
     When I run the :start_build client command with:
-      | buildconfig |  ruby-sample-build |
+      | buildconfig | ruby-sample-build |
     Then the step should succeed

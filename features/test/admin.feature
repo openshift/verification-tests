@@ -1,4 +1,5 @@
 Feature: Testing Admin Scenarios
+
   @admin
   Scenario: simple create project admin scenario
     When I run the :oadm_new_project admin command with:
@@ -12,7 +13,7 @@ Feature: Testing Admin Scenarios
     Then the step should succeed
     And the output should contain:
       | OpenShift 3 Demo |
-      | Active |
+      | Active           |
 
   @admin
   Scenario: exec in defailt repo pod
@@ -21,13 +22,13 @@ Feature: Testing Admin Scenarios
     And a pod becomes ready with labels:
       | docker-registry=default |
     When I execute on the pod:
-      | find            |
-      | /registry       |
-      | -type           |
-      | f               |
+      | find      |
+      | /registry |
+      | -type     |
+      | f         |
     Then the step should succeed
     And the output should contain:
-      |blobs/sha|
+      | blobs/sha |
 
   @admin
   Scenario: test registry restoration

@@ -2,8 +2,8 @@ Feature: console test
 
   Scenario: new project via console test
     When I perform the :new_project web console action with:
-      |project_name|<%= rand_str(5, :dns) %>|
-      |description| sadfsdf is |
+      | project_name | <%= rand_str(5, :dns) %> |
+      | description  | sadfsdf is               |
     Then the step should succeed
     When I create a new project via web
     Then the step should succeed
@@ -54,9 +54,9 @@ Feature: console test
     Given I open admin console in a browser
     Given the first user is cluster-admin
     When I perform the :goto_operator_subscription_page web action with:
-      | package_name     | cluster-logging       |
-      | catalog_name     | redhat-operators      |
-      | target_namespace | openshift-logging     |
+      | package_name     | cluster-logging   |
+      | catalog_name     | redhat-operators  |
+      | target_namespace | openshift-logging |
     Then the step should succeed
     When I run the :subscribe_using_default_params web action
     Then the step should succeed

@@ -1,4 +1,5 @@
 Feature: basic verification for upgrade oc client testing
+
   # @author yinzhou@redhat.com
   @upgrade-prepare
   @users=upuser1,upuser2

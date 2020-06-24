@@ -189,7 +189,7 @@ Feature: Ansible-service-broker related scenarios
     # Provision DB apb with prod plan
     Given I obtain test data file "svc-catalog/serviceinstance-template.yaml"
     When I process and create:
-      | f | serviceinstance-template.yaml |      
+      | f | serviceinstance-template.yaml |
       | p | INSTANCE_NAME=<db_name>                                                          |
       | p | CLASS_EXTERNAL_NAME=<db_name>                                                    |
       | p | PLAN_EXTERNAL_NAME=prod                                                          |

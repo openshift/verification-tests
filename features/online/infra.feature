@@ -47,4 +47,3 @@ Feature: ONLY ONLINE Infra related scripts in this file
       | o             | yaml                           |
     Then the output should contain:
       | activeDeadlineSeconds: 3600 |
-

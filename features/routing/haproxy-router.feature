@@ -1,4 +1,5 @@
 Feature: Testing haproxy router
+
   # @author bmeng@redhat.com
   # @case_id OCP-11903
   @smoke
@@ -20,15 +21,14 @@ Feature: Testing haproxy router
     Then the step should succeed
     When I expose the "service-unsecure" service
     Then the step should succeed
-
     Given I have a pod-for-ping in the project
     #access the route without cookies
     When I execute on the pod:
-      | curl |
-      | -sS |
+      | curl                                                                                |
+      | -sS                                                                                 |
       | http://<%= route("service-unsecure", service("service-unsecure")).dns(by: user) %>/ |
-      | -c |
-      | /tmp/cookies |
+      | -c                                                                                  |
+      | /tmp/cookies                                                                        |
     Then the step should succeed
     And the output should contain "Hello-OpenShift"
     And evaluation of `@result[:response]` is stored in the :first_access clipboard
@@ -75,19 +75,18 @@ Feature: Testing haproxy router
       | f | service_unsecure.json |
     Then the step should succeed
     When I run the :create_route_edge client command with:
-      | name | route-edge |
+      | name    | route-edge       |
       | service | service-unsecure |
     Then the step should succeed
-
     Given I have a pod-for-ping in the project
     #access the route without cookies
     When I execute on the pod:
-      | curl |
-      | -sS |
+      | curl                                                                     |
+      | -sS                                                                      |
       | https://<%= route("route-edge", service("route-edge")).dns(by: user) %>/ |
-      | -k |
-      | -c |
-      | /tmp/cookies |
+      | -k                                                                       |
+      | -c                                                                       |
+      | /tmp/cookies                                                             |
     Then the step should succeed
     And the output should contain "Hello-OpenShift"
     And evaluation of `@result[:response]` is stored in the :first_access clipboard
@@ -131,37 +130,33 @@ Feature: Testing haproxy router
       | f | service_secure.json |
     Then the step should succeed
     When I run the :create_route_passthrough client command with:
-      | name | route-pass |
+      | name    | route-pass     |
       | service | service-secure |
     Then the step should succeed
-
     Given I have a pod-for-ping in the project
     When I execute on the pod:
       | bash | -c | for i in {1..20} ; do curl -ksS https://<%= route("route-pass", service("route-pass")).dns(by: user) %>/ ; done |
     Then the output should contain 20 times:
       | Hello-OpenShift |
     And the output should not contain "(35)"
-
     When I run the :annotate client command with:
-      | resource | route |
-      | resourcename | route-pass |
-      | keyval | haproxy.router.openshift.io/rate-limit-connections=true |
-      | keyval | haproxy.router.openshift.io/rate-limit-connections.rate-tcp=5 |
+      | resource     | route                                                         |
+      | resourcename | route-pass                                                    |
+      | keyval       | haproxy.router.openshift.io/rate-limit-connections=true       |
+      | keyval       | haproxy.router.openshift.io/rate-limit-connections.rate-tcp=5 |
     Then the step should succeed
-
     Given 10 seconds have passed
     When I execute on the pod:
       | bash | -c | for i in {1..20} ; do curl -ksS https://<%= route("route-pass", service("route-pass")).dns(by: user) %>/ ; done |
     Then the output should contain:
       | Hello-OpenShift |
-      | (35) |
-
+      | (35)            |
     Given 6 seconds have passed
     When I execute on the pod:
       | bash | -c | for i in {1..20} ; do curl -ksS https://<%= route("route-pass", service("route-pass")).dns(by: user) %>/ ; done |
     Then the output should contain:
       | Hello-OpenShift |
-      | (35) |
+      | (35)            |
 
   # @author hongli@redhat.com
   # @case_id OCP-15044
@@ -171,7 +166,6 @@ Feature: Testing haproxy router
     And I use the router project
     Given all default router pods become ready
     Then evaluation of `pod.name` is stored in the :router_pod clipboard
-
     Given I switch to the first user
     And I have a project
     Given I obtain test data file "routing/list_for_caddy.json"
@@ -181,7 +175,6 @@ Feature: Testing haproxy router
     Given a pod becomes ready with labels:
       | name=caddy-pods |
     Then evaluation of `pod.ip` is stored in the :pod_ip clipboard
-
     # create unsecure route
     When I expose the "service-unsecure" service
     Then the step should succeed
@@ -191,7 +184,6 @@ Feature: Testing haproxy router
       | overwrite    | true                                                    |
       | keyval       | router.openshift.io/haproxy.health.check.interval=200ms |
     Then the step should succeed
-
     Given I switch to cluster admin pseudo user
     And I use the router project
     And I wait up to 30 seconds for the steps to pass:
@@ -210,7 +202,6 @@ Feature: Testing haproxy router
     And I use the router project
     Given all default router pods become ready
     Then evaluation of `pod.name` is stored in the :router_pod clipboard
-
     Given I switch to the first user
     And I have a project
     Given I obtain test data file "routing/list_for_caddy.json"
@@ -220,7 +211,6 @@ Feature: Testing haproxy router
     Given a pod becomes ready with labels:
       | name=caddy-pods |
     Then evaluation of `pod.ip` is stored in the :pod_ip clipboard
-
     When I run the :create_route_edge client command with:
       | name    | edge-route       |
       | service | service-unsecure |
@@ -231,7 +221,6 @@ Feature: Testing haproxy router
       | overwrite    | true                                                    |
       | keyval       | router.openshift.io/haproxy.health.check.interval=300ms |
     Then the step should succeed
-
     Given I switch to cluster admin pseudo user
     And I use the router project
     And I wait up to 30 seconds for the steps to pass:
@@ -261,34 +250,32 @@ Feature: Testing haproxy router
       | f | service_secure.json |
     Then the step should succeed
     When I run the :create_route_passthrough client command with:
-      | name | route-pass |
+      | name    | route-pass     |
       | service | service-secure |
     Then the step should succeed
-
     When I run the :annotate client command with:
-      | resource | route |
-      | resourcename | route-pass |
-      | keyval | haproxy.router.openshift.io/balance=leastconn |
-      | overwrite | true |
+      | resource     | route                                         |
+      | resourcename | route-pass                                    |
+      | keyval       | haproxy.router.openshift.io/balance=leastconn |
+      | overwrite    | true                                          |
     Then the step should succeed
-
     Given I have a pod-for-ping in the project
     And I use the "service-secure" service
     When I execute on the pod:
-      | curl                                                   |
-      | -ksS                                                   |
-      | --resolve                                              |
+      | curl                                                                |
+      | -ksS                                                                |
+      | --resolve                                                           |
       | <%= route("route-pass").dns(by: user) %>:443:<%= cb.router_ip[0] %> |
-      | https://<%= route("route-pass").dns(by: user) %> |
+      | https://<%= route("route-pass").dns(by: user) %>                    |
     Then the step should succeed
     And the output should contain "Hello-OpenShift"
     And evaluation of `@result[:response]` is stored in the :first_access clipboard
     When I execute on the pod:
-      | curl                                                   |
-      | -ksS                                                   |
-      | --resolve                                              |
+      | curl                                                                |
+      | -ksS                                                                |
+      | --resolve                                                           |
       | <%= route("route-pass").dns(by: user) %>:443:<%= cb.router_ip[0] %> |
-      | https://<%= route("route-pass").dns(by: user) %> |
+      | https://<%= route("route-pass").dns(by: user) %>                    |
     Then the step should succeed
     And the output should contain "Hello-OpenShift"
     And the expression should be true> cb.first_access != @result[:response]
@@ -320,11 +307,11 @@ Feature: Testing haproxy router
     Then the step should succeed
     Given I have a pod-for-ping in the project
     When I execute on the pod:
-      | curl |
-      | -sS |
+      | curl                                                                                |
+      | -sS                                                                                 |
       | http://<%= route("service-unsecure", service("service-unsecure")).dns(by: user) %>/ |
-      | -c |
-      | /tmp/cookies |
+      | -c                                                                                  |
+      | /tmp/cookies                                                                        |
     Then the step should succeed
     And the output should contain "Hello-OpenShift"
     When I execute on the pod:
@@ -355,14 +342,12 @@ Feature: Testing haproxy router
     Then the step should succeed
     When I expose the "service-unsecure" service
     Then the step should succeed
-
     When I run the :annotate client command with:
       | resource     | route                                             |
       | resourcename | service-unsecure                                  |
       | overwrite    | true                                              |
       | keyval       | router.openshift.io/cookie_name=unsecure-cookie_1 |
     Then the step should succeed
-
     Given I wait up to 30 seconds for the steps to pass:
     """
     When I open web server via the "service-unsecure" route
@@ -370,7 +355,6 @@ Feature: Testing haproxy router
     And the expression should be true> @result[:cookies].any? {|c| c.name == "unsecure-cookie_1"}
     """
     And evaluation of `@result[:response]` is stored in the :first_access clipboard
-
     #access the route with cookies
     Given HTTP cookies from result are used in further request
     Given I run the steps 6 times:
@@ -402,14 +386,12 @@ Feature: Testing haproxy router
       | name    | edge-route       |
       | service | service-unsecure |
     Then the step should succeed
-
     When I run the :annotate client command with:
       | resource     | route                                         |
       | resourcename | edge-route                                    |
       | overwrite    | true                                          |
       | keyval       | router.openshift.io/cookie_name=2-edge_cookie |
     Then the step should succeed
-
     When I use the "service-unsecure" service
     And I wait up to 30 seconds for the steps to pass:
     """
@@ -418,7 +400,6 @@ Feature: Testing haproxy router
     And the expression should be true> @result[:cookies].any? {|c| c.name == "2-edge_cookie"}
     """
     And evaluation of `@result[:response]` is stored in the :first_access clipboard
-
     #access the route with cookies
     Given HTTP cookies from result are used in further request
     Given I run the steps 6 times:

@@ -18,13 +18,12 @@ Feature: SDN related networking scenarios
     When I get the networking components logs of the node since "90s" ago
     And the output should contain "Using iptables Proxier"
     """
-
     Given I restart the network components on the node after scenario
     Given node config is merged with the following hash:
     """
-    proxyArguments:
-      proxy-mode:
-         - userspace
+      proxyArguments:
+        proxy-mode:
+           - userspace
     """
     Given I restart the network components on the node
     And I wait up to 120 seconds for the steps to pass:
@@ -41,7 +40,6 @@ Feature: SDN related networking scenarios
     Given I select a random node's host
     And the node iptables config is verified
     And the node service is restarted on the host after scenario
-
     Given the node standard iptables rules are removed
     Given 35 seconds have passed
     Given the node iptables config is verified
@@ -54,12 +52,11 @@ Feature: SDN related networking scenarios
     Given I have a project
     Given I have a pod-for-ping in the project
     Then evaluation of `pod.node_name` is stored in the :node_name clipboard
-
     When I run command on the "<%= cb.node_name %>" node's sdn pod:
       | iptables | -S | -t | filter |
     Then the step should succeed
     And the output should contain:
-      | -N OPENSHIFT-ADMIN-OUTPUT-RULES |
+      | -N OPENSHIFT-ADMIN-OUTPUT-RULES                                                                             |
       | -A FORWARD -i tun0 ! -o tun0 -m comment --comment "administrator overrides" -j OPENSHIFT-ADMIN-OUTPUT-RULES |
 
   # @author yadu@redhat.com
@@ -84,7 +81,6 @@ Feature: SDN related networking scenarios
       | sysctl -w net.ipv4.ip_forward=1 |
     Then the step should succeed
     """
-
     When I run commands on the host:
       | sysctl -w net.ipv4.ip_forward=0 |
     Then the step should succeed
@@ -103,7 +99,6 @@ Feature: SDN related networking scenarios
     Given environment has at least 2 schedulable nodes
     And I store the schedulable workers in the :nodes clipboard
     Given I switch to cluster admin pseudo user
-
     # get node_1's host IP and save to clipboard
     Given I use the "<%= cb.nodes[1].name %>" node
     And the node network is verified
@@ -118,18 +113,16 @@ Feature: SDN related networking scenarios
     And evaluation of `host_subnet(cb.nodes[1].name).ip` is stored in the :hostip clipboard
     # do this first
     And the node in the clipboard is restored from YAML after scenario
-
     # check ovs rule in node_0
     Given I use the "<%= cb.nodes[0].name %>" node
     When I run the ovs commands on the host:
       | ovs-ofctl dump-flows br0 -O openflow13 2>/dev/null \| grep <%= cb.hostip %> |
     Then the step should succeed
     And the output should match:
-      | table=10,.*tun_src=<%= cb.hostip %> actions=goto_table:30 |
-      | table=50,.*arp,.*set_field:<%= cb.hostip %>->tun_dst |
-      | table=90,.*ip,.*set_field:<%= cb.hostip %>->tun_dst |
+      | table=10,.*tun_src=<%= cb.hostip %> actions=goto_table:30        |
+      | table=50,.*arp,.*set_field:<%= cb.hostip %>->tun_dst             |
+      | table=90,.*ip,.*set_field:<%= cb.hostip %>->tun_dst              |
       | table=111,.*set_field:<%= cb.hostip %>->tun_dst,.*goto_table:120 |
-
     # delete the node_1
     Given I use the "<%= cb.nodes[1].name %>" node
     When I run the :delete admin command with:
@@ -137,7 +130,6 @@ Feature: SDN related networking scenarios
       | object_name_or_id | <%= cb.nodes[1].name %> |
     Then the step should succeed
     Given I wait for the networking components of the node to be terminated
-
     # again, check ovs rule in node_0
     Given I use the "<%= cb.nodes[0].name %>" node
     When I run the ovs commands on the host:
@@ -177,7 +169,6 @@ Feature: SDN related networking scenarios
     Then the step should succeed
     And evaluation of `@result[:response].scan(/\d\.\d.\d/)` is stored in the :iptables_version_pod clipboard
     Then the expression should be true> cb.iptables_version_host==cb.iptables_version_pod
-
     When I run commands on the host:
       | iptables -S \| wc -l |
     Then the step should succeed
@@ -188,7 +179,7 @@ Feature: SDN related networking scenarios
     Then the step should succeed
     And evaluation of `@result[:response].split("\n")[0]` is stored in the :sdn_pod_rules clipboard
     Then the expression should be true> cb.host_rules==cb.sdn_pod_rules
-    
+
   # @author huirwang@redhat.com
   # @case_id OCP-25707
   @admin
@@ -218,7 +209,6 @@ Feature: SDN related networking scenarios
     And evaluation of `pod(0).node_name` is stored in the :node_name clipboard
     And evaluation of `pod(0).ip` is stored in the :pod1_ip clipboard
     And evaluation of `pod(1).name` is stored in the :pod2_name clipboard
-
     # Kill ovs process
     When I run command on the "<%= cb.node_name %>" node's sdn pod:
       | bash | -c | pgrep ovs-vswitchd |
@@ -232,7 +222,6 @@ Feature: SDN related networking scenarios
     And I use the "openshift-sdn" project
     And all pods in the project are ready
     """
-
     #Check sdn works
     Given I switch to the first user
     And I use the "<%= cb.usr_project%>" project
@@ -243,48 +232,47 @@ Feature: SDN related networking scenarios
     Then the step should succeed
     And the output should contain "Hello OpenShift"
     """
-    
-  # @author weliang@redhat.com	
-  # @case_id OCP-27655	
-  @admin	
-  Scenario: Networking should work on default namespace		
-  #Test for bug https://bugzilla.redhat.com/show_bug.cgi?id=1800324 and https://bugzilla.redhat.com/show_bug.cgi?id=1796157	
-    Given I switch to cluster admin pseudo user	
-    And I use the "default" project	
+
+  # @author weliang@redhat.com
+  # @case_id OCP-27655
+  @admin
+  Scenario: Networking should work on default namespace
+    #Test for bug https://bugzilla.redhat.com/show_bug.cgi?id=1800324 and https://bugzilla.redhat.com/show_bug.cgi?id=1796157
+    Given I switch to cluster admin pseudo user
+    And I use the "default" project
     Given I obtain test data file "networking/list_for_pods.json"
-    When I run oc create over "list_for_pods.json" replacing paths:	
-      | ["items"][0]["spec"]["replicas"] | 4 |	
-    Then the step should succeed	
-    And 4 pods become ready with labels:	
-      | name=test-pods |	
-    And evaluation of `pod(0).name` is stored in the :pod1_name clipboard	
-    And evaluation of `pod(0).ip_url` is stored in the :pod1_ip clipboard	
-    And evaluation of `pod(1).ip_url` is stored in the :pod2_ip clipboard	
-    And evaluation of `pod(2).ip_url` is stored in the :pod3_ip clipboard	
-    And evaluation of `pod(3).ip_url` is stored in the :pod4_ip clipboard	
-    And I register clean-up steps:	
-    """	
+    When I run oc create over "list_for_pods.json" replacing paths:
+      | ["items"][0]["spec"]["replicas"] | 4 |
+    Then the step should succeed
+    And 4 pods become ready with labels:
+      | name=test-pods |
+    And evaluation of `pod(0).name` is stored in the :pod1_name clipboard
+    And evaluation of `pod(0).ip_url` is stored in the :pod1_ip clipboard
+    And evaluation of `pod(1).ip_url` is stored in the :pod2_ip clipboard
+    And evaluation of `pod(2).ip_url` is stored in the :pod3_ip clipboard
+    And evaluation of `pod(3).ip_url` is stored in the :pod4_ip clipboard
+    And I register clean-up steps:
+    """
     Given I ensure "test-rc" replicationcontroller is deleted	
     Given I ensure "test-service" service is deleted	
-    """	
-
-    When I execute on the "<%= cb.pod1_name %>" pod:	
-      | curl | --connect-timeout | 5 | <%= cb.pod1_ip %>:8080 |	
-    Then the step should succeed	
-    And the output should contain "Hello OpenShift"	
-    When I execute on the "<%= cb.pod1_name %>" pod:	
-      | curl | --connect-timeout | 5 | <%= cb.pod2_ip %>:8080 |	
-    Then the step should succeed	
-    And the output should contain "Hello OpenShift"	
-    When I execute on the "<%= cb.pod1_name %>" pod:	
-      | curl | --connect-timeout | 5 | <%= cb.pod3_ip %>:8080 |	
-    Then the step should succeed	
-    And the output should contain "Hello OpenShift"	
-    When I execute on the "<%= cb.pod1_name %>" pod:	
-      | curl | --connect-timeout | 5 | <%= cb.pod4_ip %>:8080 |	
-    Then the step should succeed	
+    """
+    When I execute on the "<%= cb.pod1_name %>" pod:
+      | curl | --connect-timeout | 5 | <%= cb.pod1_ip %>:8080 |
+    Then the step should succeed
     And the output should contain "Hello OpenShift"
-    
+    When I execute on the "<%= cb.pod1_name %>" pod:
+      | curl | --connect-timeout | 5 | <%= cb.pod2_ip %>:8080 |
+    Then the step should succeed
+    And the output should contain "Hello OpenShift"
+    When I execute on the "<%= cb.pod1_name %>" pod:
+      | curl | --connect-timeout | 5 | <%= cb.pod3_ip %>:8080 |
+    Then the step should succeed
+    And the output should contain "Hello OpenShift"
+    When I execute on the "<%= cb.pod1_name %>" pod:
+      | curl | --connect-timeout | 5 | <%= cb.pod4_ip %>:8080 |
+    Then the step should succeed
+    And the output should contain "Hello OpenShift"
+
   # @author anusaxen@redhat.com
   # @case_id OCP-25787
   @admin
@@ -294,7 +282,7 @@ Feature: SDN related networking scenarios
     And I store "<%= cb.master[0].name %>" node's corresponding default networkType pod name in the :ovnkube_pod clipboard
     Given I switch to cluster admin pseudo user
     And I use the "openshift-ovn-kubernetes" project
-    #Fetching ovn master pod name to be used later 
+    #Fetching ovn master pod name to be used later
     When I run the :get client command with:
       | resource      | pods                                   |
       | fieldSelector | spec.nodeName=<%= cb.master[0].name %> |
@@ -302,7 +290,7 @@ Feature: SDN related networking scenarios
       | output        | json                                   |
     Then the step should succeed
     And evaluation of `@result[:parsed]['items'][0]['metadata']['name']` is stored in the :ovn_master_pod clipboard
-    #Checking controller iteration 1. Need to execute under ovn-contoller container 
+    #Checking controller iteration 1. Need to execute under ovn-contoller container
     When I run the :exec client command with:
       | pod              | <%= cb.ovnkube_pod %> |
       | c                | ovn-controller        |
@@ -338,23 +326,23 @@ Feature: SDN related networking scenarios
   # @case_id OCP-25933
   @admin
   Scenario: NetworkManager should consider OVS interfaces as unmanaged
-  Given the env is using "OVNKubernetes" networkType
-  And I select a random node's host
-  And the vxlan tunnel name of node "<%= node.name %>" is stored in the :tunnel_inf_name clipboard
-  #bridge interfaces needs to be unmanaged
-  Given I run commands on the host:
-    | nmcli |
-  Then the output should contain:
-    | br-int: unmanaged                    |
-    | br-local: unmanaged                  |
-    | ovn-k8s-gw0: unmanaged               |
-    | genev_sys_6081: unmanaged            |
-    | <%= cb.tunnel_inf_name %>: unmanaged |
-  # And veths ovs interfaces also needs to be unmanaged
-  And I run commands on the host:
-    | nmcli device \| grep ethernet \| grep -c unmanaged |
-  And evaluation of `@result[:response].split("\n")[0]` is stored in the :no_of_unmanaged_veths clipboard
-  And I run commands on the host:
-    | nmcli \| grep veth \| wc -l |
-  And evaluation of `@result[:response].split("\n")[0]` is stored in the :no_of_veths clipboard
-  Then the expression should be true> cb.no_of_veths==cb.no_of_unmanaged_veths
+    Given the env is using "OVNKubernetes" networkType
+    And I select a random node's host
+    And the vxlan tunnel name of node "<%= node.name %>" is stored in the :tunnel_inf_name clipboard
+    #bridge interfaces needs to be unmanaged
+    Given I run commands on the host:
+      | nmcli |
+    Then the output should contain:
+      | br-int: unmanaged                    |
+      | br-local: unmanaged                  |
+      | ovn-k8s-gw0: unmanaged               |
+      | genev_sys_6081: unmanaged            |
+      | <%= cb.tunnel_inf_name %>: unmanaged |
+    # And veths ovs interfaces also needs to be unmanaged
+    And I run commands on the host:
+      | nmcli device \| grep ethernet \| grep -c unmanaged |
+    And evaluation of `@result[:response].split("\n")[0]` is stored in the :no_of_unmanaged_veths clipboard
+    And I run commands on the host:
+      | nmcli \| grep veth \| wc -l |
+    And evaluation of `@result[:response].split("\n")[0]` is stored in the :no_of_veths clipboard
+    Then the expression should be true> cb.no_of_veths==cb.no_of_unmanaged_veths

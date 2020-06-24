@@ -10,10 +10,9 @@ Feature: Testing registry
     Given default image registry route is stored in the :registry_ip clipboard
     And I have a project
     When I run the :policy_add_role_to_user client command with:
-      | role            | registry-admin   |
-      | user name       | system:anonymous |
+      | role      | registry-admin   |
+      | user name | system:anonymous |
     Then the step should succeed
-
     When I run the :import_image client command with:
       | from       | docker.io/library/busybox |
       | confirm    | true                      |
@@ -70,7 +69,7 @@ Feature: Testing registry
     And the "myimage2" image stream was created
     And the "myimage1" image stream becomes ready
     And the "myimage2" image stream becomes ready
-    
+
   # @author wewang@redhat.com
   # @case_id OCP-23030
   @admin
@@ -85,12 +84,12 @@ Feature: Testing registry
       | resource: clusterroles                        |
       | name: registry-registry-role                  |
       | resource: clusterrolebindings                 |
-      | (name: registry)?                             |       
+      | (name: registry)?                             |
       | (resource: serviceaccounts)?                  |
       | (name: image-registry-certificates)?          |
       | (resource: configmaps)?                       |
       | (name: image-registry-private-configuration)? |
-      | (resource: secrets)?                          | 
+      | (resource: secrets)?                          |
       | (name: image-registry)?                       |
       | (resource: services)?                         |
       | (name: node-ca)?                              |
@@ -120,26 +119,26 @@ Feature: Testing registry
       | namespace     | openshift-image-registry             |
     Then the step should succeed
     When I run the :get admin command with:
-      | resource      | ds                        |
-      | resource_name | node-ca                   |
-      | namespace     | openshift-image-registry  |
+      | resource      | ds                       |
+      | resource_name | node-ca                  |
+      | namespace     | openshift-image-registry |
     Then the step should succeed
     When I run the :get admin command with:
-      | resource      | service                   |
-      | resource_name | image-registry            |
-      | namespace     | openshift-image-registry  |
+      | resource      | service                  |
+      | resource_name | image-registry           |
+      | namespace     | openshift-image-registry |
     Then the step should succeed
     When I run the :get admin command with:
-      | resource      | service                   |
-      | resource_name | image-registry            |
-      | namespace     | openshift-image-registry  |
+      | resource      | service                  |
+      | resource_name | image-registry           |
+      | namespace     | openshift-image-registry |
     Then the step should succeed
     When I run the :get admin command with:
-      | resource      | deployments               |
-      | resource_name | image-registry            |
-      | namespace     | openshift-image-registry  |
+      | resource      | deployments              |
+      | resource_name | image-registry           |
+      | namespace     | openshift-image-registry |
     Then the step should succeed
-    
+
   # @author wewang@redhat.com
   # @case_id OCP-23063
   @admin
@@ -154,7 +153,7 @@ Feature: Testing registry
       | resource_name | image-registry |
     Then the step should succeed
     And the output should match:
-      | Gathering data for ns/openshift-image-registry... | 
+      | Gathering data for ns/openshift-image-registry... |
       | Wrote inspect data to inspect.local.*             |
 
   # @author xiuwang@redhat.com
@@ -166,7 +165,7 @@ Feature: Testing registry
     Then I run the :image_mirror client command with:
       | source_image | centos/ruby-22-centos7:latest                              |
       | dest_image   | <%= cb.integrated_reg_ip %>/<%= project.name %>/myimage:v1 |
-      | a            | <%= cb.dockercfg_file %>                                   | 
+      | a            | <%= cb.dockercfg_file %>                                   |
       | insecure     | true                                                       |
     And the step should succeed
     And the output should match:
@@ -175,11 +174,11 @@ Feature: Testing registry
     And the "myimage" image stream becomes ready
 
   # @author xiuwang@redhat.com
-  # @case_id OCP-29696 
+  # @case_id OCP-29696
   Scenario: Use node credentials in imagestream import
     Given I have a project
     When I run the :tag client command with:
-      | source           | registry.redhat.io/rhscl/mysql-80-rhel7:latest | 
+      | source           | registry.redhat.io/rhscl/mysql-80-rhel7:latest |
       | dest             | mysql:8.0                                      |
       | reference_policy | local                                          |
     Then the step should succeed
@@ -190,12 +189,12 @@ Feature: Testing registry
     When a pod becomes ready with labels:
       | deployment=mysql-1 |
     When I run the :describe client command with:
-      | resource | pod                | 
+      | resource | pod                |
       | l        | deployment=mysql-1 |
     And the output should match:
-      | Successfully pulled image "image-registry.openshift-image-registry.svc:5000/<%= project.name %>/mysql | 
+      | Successfully pulled image "image-registry.openshift-image-registry.svc:5000/<%= project.name %>/mysql |
     When I run the :new_app client command with:
-      | docker_image | registry.redhat.io/rhscl/ruby-25-rhel7:latest     | 
+      | docker_image | registry.redhat.io/rhscl/ruby-25-rhel7:latest     |
       | code         | https://github.com/openshift/ruby-hello-world.git |
     Then the step should succeed
     And the "ruby-hello-world-1" build was created
@@ -208,7 +207,7 @@ Feature: Testing registry
     Given I have a project
     And evaluation of `image_content_source_policy('image-policy-aosqe').mirror_registry(cached: false)` is stored in the :mirror_registry clipboard
     When I run the :tag client command with:
-      | source           | <%= cb.mirror_registry %>rhscl/mysql-80-rhel7:latest | 
+      | source           | <%= cb.mirror_registry %>rhscl/mysql-80-rhel7:latest |
       | dest             | mysql:8.0                                            |
       | reference_policy | local                                                |
     Then the step should succeed
@@ -219,7 +218,7 @@ Feature: Testing registry
     When a pod becomes ready with labels:
       | deployment=mysql-1 |
     When I run the :describe client command with:
-      | resource | pod                | 
+      | resource | pod                |
       | l        | deployment=mysql-1 |
     And the output should match:
       | Successfully pulled image "image-registry.openshift-image-registry.svc:5000/<%= project.name %>/mysql |
@@ -230,13 +229,13 @@ Feature: Testing registry
     Then the step should succeed
 
   # @author xiuwang@redhat.com
-  # @case_id OCP-29706 
+  # @case_id OCP-29706
   @admin
   Scenario: Node secret takes effect when common secret is removed
     Given I have a project
     When I run the :extract admin command with:
       | resource  | secret/pull-secret |
-      | namespace | openshift-config   | 
+      | namespace | openshift-config   |
       | to        | /tmp               |
       | confirm   | true               |
     Then the step should succeed
@@ -246,7 +245,7 @@ Feature: Testing registry
       | from_file   | /tmp/.dockerconfigjson |
     Then the step should succeed
     When I run the :tag client command with:
-      | source | registry.redhat.io/rhscl/mysql-80-rhel7:latest | 
+      | source | registry.redhat.io/rhscl/mysql-80-rhel7:latest |
       | dest   | mysql:8.0                                      |
     Then the step should succeed
     When I run the :new_app client command with:

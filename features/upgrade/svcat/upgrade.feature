@@ -50,7 +50,6 @@ Feature: Service Catalog related scenarios
     Given the status of condition "Progressing" for "service-catalog-controller-manager" operator is: False
     Given the status of condition "Available" for "service-catalog-controller-manager" operator is: True
     Given the status of condition "Upgradeable" for "service-catalog-controller-manager" operator is: True
-
     # Deploy ups broker
     When I run the :get admin command with:
       | resource | clusterservicebroker |
@@ -61,8 +60,8 @@ Feature: Service Catalog related scenarios
     And I use the "<%= project.name %>" project
     Given I obtain test data file "svc-catalog/ups-broker-template.yaml"
     When I process and create:
-      | f | ups-broker-template.yaml |
-      | p | UPS_BROKER_PROJECT=<%= project.name %>                                                                  |
+      | f | ups-broker-template.yaml               |
+      | p | UPS_BROKER_PROJECT=<%= project.name %> |
     Then the step should succeed
     And I wait up to 300 seconds for the steps to pass:
     """
@@ -71,16 +70,15 @@ Feature: Service Catalog related scenarios
     Then the output should contain "Successfully fetched catalog entries from broker"
     """
     When I run the :get client command with:
-      | resource | clusterserviceclass                                                       |
-      | o        | custom-columns=CLASSNAME:.metadata.name,EXTERNAL\ NAME:.spec.externalName |
+      | resource | clusterserviceclass                                                        |
+      | o        | custom-columns=CLASSNAME:.metadata.name,EXTERNAL\\ NAME:.spec.externalName |
     Then the output should contain "user-provided"
-
     #Provision a serviceinstance
     Given I switch to the first user
     Given I obtain test data file "svc-catalog/ups-instance-template.yaml"
     When I process and create:
-      | f | ups-instance-template.yaml |
-      | p | USER_PROJECT=<%= project.name %>                                                                          |
+      | f | ups-instance-template.yaml       |
+      | p | USER_PROJECT=<%= project.name %> |
     Then the step should succeed
     And I wait up to 30 seconds for the steps to pass:
     """

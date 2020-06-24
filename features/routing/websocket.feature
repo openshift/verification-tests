@@ -14,7 +14,6 @@ Feature: Testing websocket features
     Then the step should succeed
     When I expose the "ws-unsecure" service
     Then the step should succeed
-
     Given I have a pod-for-ping in the project
     And I wait up to 30 seconds for the steps to pass:
     """
@@ -23,4 +22,3 @@ Feature: Testing websocket features
     Then the step should succeed
     And the output should contain "< WebsocketTesting"
     """
-

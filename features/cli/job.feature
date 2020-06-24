@@ -14,7 +14,7 @@ Feature: job.feature
       | app=pi |
     Then the step should succeed
     And the output should contain 5 times:
-      |  pi- |
+      | pi- |
     Given 5 pods become ready with labels:
       | app=pi |
     Given evaluation of `@pods[0].name` is stored in the :pilog clipboard
@@ -24,8 +24,8 @@ Feature: job.feature
     Then the step should succeed
     And the output should contain "3.14159"
     When I run the :delete client command with:
-      | object_type | job |
-      | object_name_or_id | pi |
+      | object_type       | job |
+      | object_name_or_id | pi  |
     Then the step should succeed
     And I wait for the steps to pass:
     """
@@ -59,7 +59,7 @@ Feature: job.feature
     When I get project pods with labels:
       | app=pi |
     Then the output should contain 1 times:
-      |  zero- |
+      | zero- |
     # Check job-pod log
     Given evaluation of `@pods[0].name` is stored in the :pilog clipboard
     Given the pod named "<%= cb.pilog %>" status becomes :succeeded
@@ -86,7 +86,7 @@ Feature: job.feature
       | ["spec"]["activeDeadlineSeconds"] | null |
     Then the step should fail
     And the output should contain:
-      | spec.parallelism |
+      | spec.parallelism                   |
       | must be greater than or equal to 0 |
     Given I obtain test data file "job/job_with_0_activeDeadlineSeconds.yaml"
     When I run oc create over "job_with_0_activeDeadlineSeconds.yaml" replacing paths:
@@ -104,13 +104,13 @@ Feature: job.feature
     When I get project pods with labels:
       | app=pi |
     Then the output should contain 2 times:
-      |  zero- |
+      | zero- |
     Given 3 pods become ready with labels:
       | app=pi |
     When I get project pods with labels:
       | app=pi |
     Then the output should contain 3 times:
-      |  zero- |
+      | zero- |
     # Create a job with both "parallelism" > "completions"
     When I run the :delete client command with:
       | object_type       | job  |
@@ -131,13 +131,13 @@ Feature: job.feature
     When I get project pods with labels:
       | app=pi |
     Then the output should contain 2 times:
-      |  zero- |
+      | zero- |
     Given 2 pods become ready with labels:
       | app=pi |
     When I get project pods with labels:
       | app=pi |
     Then the output should contain 2 times:
-      |  zero- |
+      | zero- |
 
   # @author qwang@redhat.com
   # @case_id OCP-9948
@@ -191,7 +191,7 @@ Feature: job.feature
       | f | job-restartpolicy.yaml |
     Then the step should fail
     And the output should match:
-      | Unsupported value:\s+"Always":\s+supported values:\s+"?OnFailure"?,\s+"?Never"? |
+      | Unsupported value:\\s+"Always":\\s+supported values:\\s+"?OnFailure"?,\\s+"?Never"? |
     # Create job with restartPolicy=Never
     Given I replace lines in "job-restartpolicy.yaml":
       | from: null | from: Never |
@@ -215,7 +215,7 @@ Feature: job.feature
     And I replace lines in "job-restartpolicy.yaml":
       | from: Never | from: OnFailure |
     When I process and create:
-      | f | job-restartpolicy.yaml   |
+      | f | job-restartpolicy.yaml |
     Then the step should succeed
     And I wait until job "pi-restartpolicy" completes
     When I get project pods
@@ -260,7 +260,7 @@ Feature: job.feature
     And I replace lines in "job-restartpolicy.yaml":
       | from: Never | from: OnFailure |
     When I process and create:
-      | f | job-restartpolicy.yaml   |
+      | f | job-restartpolicy.yaml |
     Then the step should succeed
     When I wait up to 300 seconds for the steps to pass:
     """
@@ -284,7 +284,7 @@ Feature: job.feature
       | f | job-restartpolicy.yaml |
     Then the step should fail
     And the output should match:
-      | Unsupported value:\s+"Always":\s+supported values:\s+"?OnFailure"?,\s+"?Never"? |
+      | Unsupported value:\\s+"Always":\\s+supported values:\\s+"?OnFailure"?,\\s+"?Never"? |
 
   # @author yinzhou@redhat.com
   # @case_id OCP-10781
@@ -297,7 +297,7 @@ Feature: job.feature
     When I run the :get client command with:
       | resource      | job  |
       | resource_name | zero |
-      |  o            | yaml |
+      | o             | yaml |
     And the expression should be true> @result[:parsed]['status']['conditions'][0]['reason'] == "DeadlineExceeded"
     When I run the :delete client command with:
       | object_type       | job  |
@@ -311,7 +311,7 @@ Feature: job.feature
       | Invalid value: |
     Given I obtain test data file "job/job_with_string_activeDeadlineSeconds.yaml"
     When I run the :create client command with:
-      | f | job_with_string_activeDeadlineSeconds.yaml  |
+      | f | job_with_string_activeDeadlineSeconds.yaml |
     Then the step should fail
     Given I obtain test data file "job/job_with_float_activeDeadlineSeconds.yaml"
     When I run the :create client command with:
@@ -344,208 +344,207 @@ Feature: job.feature
   Scenario: User can schedule a Cronjob execution with cron format time
     Given I have a project
     When I run the :create_cronjob client command with:
-       | name             | sj3       |
-       | image            | busybox   |
-       | restart          | Never     |
-       | schedule         | * * * * * |
-       | oc_opts_end      |           |
-       | exec_command     | sleep     |
-       | exec_command_arg | 300       |
+      | name             | sj3       |
+      | image            | busybox   |
+      | restart          | Never     |
+      | schedule         | * * * * * |
+      | oc_opts_end      |           |
+      | exec_command     | sleep     |
+      | exec_command_arg | 300       |
     Then the step should succeed
     When I run the :get client command with:
-       | resource | cronjob |
+      | resource | cronjob |
     Then the step should succeed
     And the output should contain:
-       | NAME     | sj3        |
-       | SCHEDULE | * * * * *  |
+      | NAME     | sj3       |
+      | SCHEDULE | * * * * * |
     When I run the :create_cronjob client command with:
-       | name             | sj4       |
-       | image            | busybox   |
-       | restart          | Never     |
-       | schedule         | 0 * * * * |
-       | oc_opts_end      |           |
-       | exec_command     | sleep     |
-       | exec_command_arg | 300       |
+      | name             | sj4       |
+      | image            | busybox   |
+      | restart          | Never     |
+      | schedule         | 0 * * * * |
+      | oc_opts_end      |           |
+      | exec_command     | sleep     |
+      | exec_command_arg | 300       |
     Then the step should succeed
     When I run the :get client command with:
-       | resource | cronjob |
+      | resource | cronjob |
     Then the step should succeed
     And the output should contain:
-       | NAME     | sj4       |
-       | SCHEDULE | 0 * * * * |
+      | NAME     | sj4       |
+      | SCHEDULE | 0 * * * * |
     When I run the :create_cronjob client command with:
-       | name             | sj5        |
-       | image            | busybox    |
-       | restart          | Never      |
-       | schedule         | * 12 * * * |
-       | oc_opts_end      |            |
-       | exec_command     | sleep      |
-       | exec_command_arg | 300        |
+      | name             | sj5        |
+      | image            | busybox    |
+      | restart          | Never      |
+      | schedule         | * 12 * * * |
+      | oc_opts_end      |            |
+      | exec_command     | sleep      |
+      | exec_command_arg | 300        |
     Then the step should succeed
     When I run the :get client command with:
-       | resource | cronjob |
+      | resource | cronjob |
     Then the step should succeed
     And the output should contain:
-       | NAME     | sj5        |
-       | SCHEDULE | * 12 * * * |
+      | NAME     | sj5        |
+      | SCHEDULE | * 12 * * * |
     When I run the :create_cronjob client command with:
-       | name             | sj6       |
-       | image            | busybox   |
-       | restart          | Never     |
-       | schedule         | * * 1 * * |
-       | oc_opts_end      |           |
-       | exec_command     | sleep     |
-       | exec_command_arg | 300       |
+      | name             | sj6       |
+      | image            | busybox   |
+      | restart          | Never     |
+      | schedule         | * * 1 * * |
+      | oc_opts_end      |           |
+      | exec_command     | sleep     |
+      | exec_command_arg | 300       |
     Then the step should succeed
     When I run the :get client command with:
-       | resource | cronjob |
+      | resource | cronjob |
     Then the step should succeed
     And the output should contain:
-       | NAME     | sj6       |
-       | SCHEDULE | * * 1 * * |
+      | NAME     | sj6       |
+      | SCHEDULE | * * 1 * * |
     When I run the :create_cronjob client command with:
-       | name             | sj7       |
-       | image            | busybox   |
-       | restart          | Never     |
-       | schedule         | * * * 4 * |
-       | oc_opts_end      |           |
-       | exec_command     | sleep     |
-       | exec_command_arg | 300       |
+      | name             | sj7       |
+      | image            | busybox   |
+      | restart          | Never     |
+      | schedule         | * * * 4 * |
+      | oc_opts_end      |           |
+      | exec_command     | sleep     |
+      | exec_command_arg | 300       |
     Then the step should succeed
     When I run the :get client command with:
-       | resource | cronjob |
+      | resource | cronjob |
     Then the step should succeed
     And the output should contain:
-       | NAME     | sj7       |
-       | SCHEDULE | * * * 4 * |
+      | NAME     | sj7       |
+      | SCHEDULE | * * * 4 * |
     When I run the :create_cronjob client command with:
-       | name             | sj8       |
-       | image            | busybox   |
-       | restart          | Never     |
-       | schedule         | * * * * 3 |
-       | oc_opts_end      |           |
-       | exec_command     | sleep     |
-       | exec_command_arg | 300       |
+      | name             | sj8       |
+      | image            | busybox   |
+      | restart          | Never     |
+      | schedule         | * * * * 3 |
+      | oc_opts_end      |           |
+      | exec_command     | sleep     |
+      | exec_command_arg | 300       |
     Then the step should succeed
     When I run the :get client command with:
-       | resource | cronjob |
+      | resource | cronjob |
     Then the step should succeed
     And the output should contain:
-       | NAME     | sj8       |
-       | SCHEDULE | * * * * 3 |
+      | NAME     | sj8       |
+      | SCHEDULE | * * * * 3 |
     When I run the :create_cronjob client command with:
-       | name             | sja        |
-       | image            | busybox    |
-       | restart          | Never      |
-       | schedule         | 0 12 * * * |
-       | oc_opts_end      |            |
-       | exec_command     | sleep      |
-       | exec_command_arg | 300        |
+      | name             | sja        |
+      | image            | busybox    |
+      | restart          | Never      |
+      | schedule         | 0 12 * * * |
+      | oc_opts_end      |            |
+      | exec_command     | sleep      |
+      | exec_command_arg | 300        |
     Then the step should succeed
     When I run the :get client command with:
-       | resource | cronjob |
+      | resource | cronjob |
     Then the step should succeed
     And the output should contain:
-       | NAME     | sja        |
-       | SCHEDULE | 0 12 * * * |
+      | NAME     | sja        |
+      | SCHEDULE | 0 12 * * * |
     When I run the :create_cronjob client command with:
-       | name             | sjb          |
-       | image            | busybox      |
-       | restart          | Never        |
-       | schedule         | 0 12 15 11 3 |
-       | oc_opts_end      |              |
-       | exec_command     | sleep        |
-       | exec_command_arg | 300          |
+      | name             | sjb          |
+      | image            | busybox      |
+      | restart          | Never        |
+      | schedule         | 0 12 15 11 3 |
+      | oc_opts_end      |              |
+      | exec_command     | sleep        |
+      | exec_command_arg | 300          |
     Then the step should succeed
     When I run the :get client command with:
-       | resource | cronjob |
+      | resource | cronjob |
     Then the step should succeed
     And the output should contain:
-       | NAME     | sjb          |
-       | SCHEDULE | 0 12 15 11 3 |
+      | NAME     | sjb          |
+      | SCHEDULE | 0 12 15 11 3 |
     When I run the :create_cronjob client command with:
-       | name             | sjc           |
-       | image            | busybox       |
-       | restart          | Never         |
-       | schedule         | 70 12 15 11 3 |
-       | oc_opts_end      |               |
-       | exec_command     | sleep         |
-       | exec_command_arg | 300           |
+      | name             | sjc           |
+      | image            | busybox       |
+      | restart          | Never         |
+      | schedule         | 70 12 15 11 3 |
+      | oc_opts_end      |               |
+      | exec_command     | sleep         |
+      | exec_command_arg | 300           |
     Then the step should fail
     And the output should contain:
-       | Invalid value: "70 12 15 11 3": End of range (70) above maximum (59): 70 |
+      | Invalid value: "70 12 15 11 3": End of range (70) above maximum (59): 70 |
     When I run the :create_cronjob client command with:
-       | name             | sjc          |
-       | image            | busybox      |
-       | restart          | Never        |
-       | schedule         | 30 25 15 1 3 |
-       | oc_opts_end      |              |
-       | exec_command     | sleep        |
-       | exec_command_arg | 300          |
-    Then the step should fail
-    And the output should contain: 
-       | Invalid value: "30 25 15 1 3": End of range (25) above maximum (23): 25 |
-    When I run the :create_cronjob client command with:
-       | name             | sjc          |
-       | image            | busybox      |
-       | restart          | Never        |
-       | schedule         | 30 8 35 11 3 |
-       | oc_opts_end      |              |
-       | exec_command     | sleep        |
-       | exec_command_arg | 300          |
+      | name             | sjc          |
+      | image            | busybox      |
+      | restart          | Never        |
+      | schedule         | 30 25 15 1 3 |
+      | oc_opts_end      |              |
+      | exec_command     | sleep        |
+      | exec_command_arg | 300          |
     Then the step should fail
     And the output should contain:
-       | Invalid value: "30 8 35 11 3": End of range (35) above maximum (31): 35 |
+      | Invalid value: "30 25 15 1 3": End of range (25) above maximum (23): 25 |
     When I run the :create_cronjob client command with:
-       | name             | sjc         |
-       | image            | busybox     |
-       | restart          | Never       |
-       | schedule         | 30 8 1 13 3 |
-       | oc_opts_end      |             |
-       | exec_command     | sleep       |
-       | exec_command_arg | 300         |
+      | name             | sjc          |
+      | image            | busybox      |
+      | restart          | Never        |
+      | schedule         | 30 8 35 11 3 |
+      | oc_opts_end      |              |
+      | exec_command     | sleep        |
+      | exec_command_arg | 300          |
     Then the step should fail
     And the output should contain:
-       | Invalid value: "30 8 1 13 3": End of range (13) above maximum (12): 13 |
+      | Invalid value: "30 8 35 11 3": End of range (35) above maximum (31): 35 |
     When I run the :create_cronjob client command with:
-       | name             | sjc        |
-       | image            | busybox    |
-       | restart          | Never      |
-       | schedule         | 30 8 1 8 7 |
-       | oc_opts_end      |            |
-       | exec_command     | sleep      |
-       | exec_command_arg | 300        |
+      | name             | sjc         |
+      | image            | busybox     |
+      | restart          | Never       |
+      | schedule         | 30 8 1 13 3 |
+      | oc_opts_end      |             |
+      | exec_command     | sleep       |
+      | exec_command_arg | 300         |
     Then the step should fail
     And the output should contain:
-       | Invalid value: "30 8 1 8 7": End of range (7) above maximum (6): 7 |
+      | Invalid value: "30 8 1 13 3": End of range (13) above maximum (12): 13 |
     When I run the :create_cronjob client command with:
-       | name             | sjd       |
-       | image            | busybox   |
-       | restart          | Never     |
-       | schedule         | @every 5m |
-       | oc_opts_end      |           |
-       | exec_command     | sleep     |
-       | exec_command_arg | 300       |
+      | name             | sjc        |
+      | image            | busybox    |
+      | restart          | Never      |
+      | schedule         | 30 8 1 8 7 |
+      | oc_opts_end      |            |
+      | exec_command     | sleep      |
+      | exec_command_arg | 300        |
+    Then the step should fail
+    And the output should contain:
+      | Invalid value: "30 8 1 8 7": End of range (7) above maximum (6): 7 |
+    When I run the :create_cronjob client command with:
+      | name             | sjd       |
+      | image            | busybox   |
+      | restart          | Never     |
+      | schedule         | @every 5m |
+      | oc_opts_end      |           |
+      | exec_command     | sleep     |
+      | exec_command_arg | 300       |
     Then the step should succeed
     When I run the :get client command with:
-       | resource | cronjob |
+      | resource | cronjob |
     Then the step should succeed
     And the output should contain:
-       | NAME     | sjd       |
-       | SCHEDULE | @every 5m |
+      | NAME     | sjd       |
+      | SCHEDULE | @every 5m |
     When I run the :create_cronjob client command with:
-       | name             | sje     |
-       | image            | busybox |
-       | restart          | Never   |
-       | schedule         | @daily  |
-       | oc_opts_end      |         |
-       | exec_command     | sleep   |
-       | exec_command_arg | 300     |
+      | name             | sje     |
+      | image            | busybox |
+      | restart          | Never   |
+      | schedule         | @daily  |
+      | oc_opts_end      |         |
+      | exec_command     | sleep   |
+      | exec_command_arg | 300     |
     Then the step should succeed
     When I run the :get client command with:
-       | resource | cronjob |
+      | resource | cronjob |
     Then the step should succeed
     And the output should contain:
-       | NAME     | sjd    |
-       | SCHEDULE | @daily |
-
+      | NAME     | sjd    |
+      | SCHEDULE | @daily |

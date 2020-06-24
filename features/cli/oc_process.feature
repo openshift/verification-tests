@@ -6,25 +6,25 @@ Feature: oc_process.feature
     Given I have a project
     Given a "test1.env" file is created with the following lines:
     """
-    MYSQL_DATABASE='test'
+      MYSQL_DATABASE='test'
     """
     Given a "test2.env" file is created with the following lines:
     """
-    APPLE=CLEMENTINE
+      APPLE=CLEMENTINE
     """
     Given a "test3.env" file is created with the following lines:
     """
-    APPLE=BANANA
+      APPLE=BANANA
     """
     Given a "test4.env" file is created with the following lines:
     """
-    MYSQL_DATABASE='abc'
+      MYSQL_DATABASE='abc'
     """
     #1
     Given I obtain test data file "build/tc470422/application-template-stibuild.json"
     When I run the :new_app client command with:
       | app_repo   | application-template-stibuild.json |
-      | param_file | test1.env              |
+      | param_file | test1.env                          |
     Then the step should succeed
     Given the "ruby-sample-build-1" build was created
     And the "ruby-sample-build-1" build completes
@@ -46,13 +46,13 @@ Feature: oc_process.feature
     #2
     Given I obtain test data file "build/tc470422/application-template-stibuild.json"
     When I run the :new_app client command with:
-      | app_repo   | application-template-stibuild.json |
-      | env_file   | test2.env              |
+      | app_repo | application-template-stibuild.json |
+      | env_file | test2.env                          |
     Then the step should succeed
     Given the "ruby-sample-build-1" build was created
     And the "ruby-sample-build-1" build completes
     Given a pod becomes ready with labels:
-      | deployment=frontend-1      |
+      | deployment=frontend-1 |
     When I run the :set_env client command with:
       | resource | pods/<%= pod.name %> |
       | list     | true                 |
@@ -70,13 +70,13 @@ Feature: oc_process.feature
     Given I obtain test data file "build/tc470422/application-template-stibuild.json"
     When I run the :new_app client command with:
       | app_repo   | application-template-stibuild.json |
-      | param_file | test4.env                     |
-      | env_file   | test1.env                     |
+      | param_file | test4.env                          |
+      | env_file   | test1.env                          |
     Then the step should succeed
     Given the "ruby-sample-build-1" build was created
     And the "ruby-sample-build-1" build completes
     Given a pod becomes ready with labels:
-      | deployment=frontend-1      |
+      | deployment=frontend-1 |
     When I run the :set_env client command with:
       | resource | pods/<%= pod.name %> |
       | list     | true                 |
@@ -93,20 +93,19 @@ Feature: oc_process.feature
     #4
     Given I obtain test data file "build/tc470422/application-template-stibuild.json"
     When I run the :new_app client command with:
-      | app_repo   | application-template-stibuild.json | 
-      | param_file | test1.env                     |
-      | env_file   | test2.env                     |
-      | param      | MYSQL_DATABASE=APPLE          |
-      | env        | APPLE=PEAR                    |
+      | app_repo   | application-template-stibuild.json |
+      | param_file | test1.env                          |
+      | env_file   | test2.env                          |
+      | param      | MYSQL_DATABASE=APPLE               |
+      | env        | APPLE=PEAR                         |
     Then the step should succeed
     Given the "ruby-sample-build-1" build was created
     And the "ruby-sample-build-1" build completes
     Given a pod becomes ready with labels:
-      | deployment=frontend-1      |
+      | deployment=frontend-1 |
     When I run the :set_env client command with:
       | resource | pods/<%= pod.name %> |
       | list     | true                 |
     And the output should contain:
       | APPLE=PEAR           |
       | MYSQL_DATABASE=APPLE |
-

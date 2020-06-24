@@ -133,7 +133,7 @@ Feature: buildlogic.feature
     And the "secret" file is created with the following lines:
       | <%= cb.ssh_private_key.to_pem %> |
     And I run the :create_secret client command with:
-      | secret_type | generic               | 
+      | secret_type | generic               |
       | name        | mysecret              |
       | from_file   | ssh-privatekey=secret |
     Then the step should succeed
@@ -182,7 +182,7 @@ Feature: buildlogic.feature
     And the "secret" file is created with the following lines:
       | <%= cb.ssh_private_key.to_pem %> |
     And I run the :create_secret client command with:
-      | secret_type | generic               | 
+      | secret_type | generic               |
       | name        | mysecret              |
       | from_file   | ssh-privatekey=secret |
     Then the step should succeed
@@ -329,7 +329,7 @@ Feature: buildlogic.feature
   Scenario: Should prune errored builds based on the failedBuildsHistoryLimit setting
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift/origin/master/test/extended/testdata/builds/build-pruning/errored-build-config.yaml |                                              
+      | f | https://raw.githubusercontent.com/openshift/origin/master/test/extended/testdata/builds/build-pruning/errored-build-config.yaml |
     Then the step should succeed
     Given I run the steps 4 times:
     """
@@ -348,7 +348,7 @@ Feature: buildlogic.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-24158
-  Scenario: Should prune builds after a buildConfig change 
+  Scenario: Should prune builds after a buildConfig change
     Given I have a project
     When I run the :new_app client command with:
       | image_stream | ruby                                              |

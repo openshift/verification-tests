@@ -39,7 +39,6 @@ Feature: Kibana related features
     """
     Then I log out kibana logging web console
     And cluster role "cluster-admin" is removed from the "first" user
-
     And I login to kibana logging web console
     And I perform the :kibana_find_index_pattern web action with:
       | index_pattern_name | project.<%= cb.proj.name %>.<%= cb.proj.uid %>.* |
@@ -109,7 +108,7 @@ Feature: Kibana related features
     And I use the "openshift-logging" project
     Given I wait for the "app" index to appear in the ES pod with labels "es-node-master=true"
     Given I wait for the "infra" index to appear in the ES pod with labels "es-node-master=true"
-    And I wait for the project "<%= cb.proj.name %>" logs to appear in the ES pod 
+    And I wait for the project "<%= cb.proj.name %>" logs to appear in the ES pod
     When I login to kibana logging web console
     Then the step should succeed
     When I perform the :create_index_pattern_in_kibana web action with:
@@ -123,7 +122,6 @@ Feature: Kibana related features
     And I run the :go_to_kibana_discover_page web action
     Then the step should succeed
     """
-
     When I perform the :kibana_find_index_pattern web action with:
       | index_pattern_name | app* |
     Then the step should succeed

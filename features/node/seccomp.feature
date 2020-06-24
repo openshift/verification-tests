@@ -6,7 +6,7 @@ Feature: Seccomp
     Given I have a project
     Given I obtain test data file "pods/hello-pod.json"
     When I run the :create client command with:
-      | filename  | hello-pod.json |
+      | filename | hello-pod.json |
     Then the step should succeed
     Given the pod named "hello-openshift" becomes ready
     When I execute on the pod:
@@ -15,4 +15,3 @@ Feature: Seccomp
       | 0 |
     And the output should not contain:
       | 2 |
-

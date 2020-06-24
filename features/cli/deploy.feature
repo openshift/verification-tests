@@ -567,7 +567,7 @@ Feature: deployment related features
     When I run the :create client command with:
       | f | deployment1.json |
     Given a pod becomes ready with labels:
-    | deployment=hooks-1 |
+      | deployment=hooks-1 |
     Then I run the :scale client command with:
       | resource | deploymentconfig |
       | name     | hooks            |
@@ -691,10 +691,10 @@ Feature: deployment related features
     Given I wait up to 60 seconds for the steps to pass:
     """
     When I run the :get client command with:
-     | resource | po    |
+      | resource | po    |
     Then the step should succeed
     And the output should match:
-     | hooks-2.*Running |
+      | hooks-2.*Running |
     """
 
   # @author yinzhou@redhat.com

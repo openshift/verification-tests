@@ -5,7 +5,6 @@ Feature: testing multicast scenarios
   @admin
   Scenario: pods should be able to subscribe send and receive multicast traffic
     Given the env is using multitenant or networkpolicy network
-
     # create some multicast testing pods
     Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard
@@ -21,15 +20,13 @@ Feature: testing multicast scenarios
     And evaluation of `pod(1).name` is stored in the :pod2 clipboard
     And evaluation of `pod(2).ip` is stored in the :pod3ip clipboard
     And evaluation of `pod(2).name` is stored in the :pod3 clipboard
-
     # enable multicast for the netnamespace
     When I run the :annotate admin command with:
-      | resource     | netnamespace    |
-      | resourcename | <%= cb.proj1 %> |
-      | overwrite    | true            |
+      | resource     | netnamespace                                             |
+      | resourcename | <%= cb.proj1 %>                                          |
+      | overwrite    | true                                                     |
       | keyval       | netnamespace.network.openshift.io/multicast-enabled=true |
     Then the step should succeed
-    
     # run omping as background on first and second pods
     When I run the :exec background client command with:
       | pod              | <%= cb.pod1 %>   |
@@ -43,7 +40,6 @@ Feature: testing multicast scenarios
       | exec_command_arg | <%= cb.pod2ip %> |
       | exec_command_arg | <%= cb.pod3ip %> |
     Then the step should succeed
-
     When I run the :exec background client command with:
       | pod              | <%= cb.pod2 %>   |
       | oc_opts_end      |                  |
@@ -56,39 +52,35 @@ Feature: testing multicast scenarios
       | exec_command_arg | <%= cb.pod2ip %> |
       | exec_command_arg | <%= cb.pod3ip %> |
     Then the step should succeed
-
     # check the omping result on third pod
     When I run the :exec background client command with:
-      | pod              | <%= cb.pod3 %> |
-      | oc_opts_end      |                |
-      | exec_command     | sh             |
-      | exec_command_arg | -c             |
+      | pod              | <%= cb.pod3 %>                                                                     |
+      | oc_opts_end      |                                                                                    |
+      | exec_command     | sh                                                                                 |
+      | exec_command_arg | -c                                                                                 |
       | exec_command_arg | omping -c 5 -T 10 <%= cb.pod1ip %> <%= cb.pod2ip %> <%= cb.pod3ip %> > /tmp/p3.log |
     Then the step should succeed
-
     # ensure interface join to the multicast group
     When I execute on the "<%= cb.pod3 %>" pod:
       | netstat | -ng |
     Then the step should succeed
     And the output should match:
-      | eth0\s+1\s+232.43.211.234 |
-
+      | eth0\\s+1\\s+232.43.211.234 |
     Given 10 seconds have passed
     When I execute on the "<%= cb.pod3 %>" pod:
       | cat | /tmp/p3.log |
     Then the step should succeed
     And the output should match:
-      | <%= cb.pod1ip %>.*joined \(S,G\) = \(\*, 232.43.211.234\), pinging |
-      | <%= cb.pod2ip %>.*joined \(S,G\) = \(\*, 232.43.211.234\), pinging |
-      | <%= cb.pod1ip %>.*multicast, xmt/rcv/%loss = 5/5/0% |
-      | <%= cb.pod2ip %>.*multicast, xmt/rcv/%loss = 5/5/0% |
+      | <%= cb.pod1ip %>.*joined \\(S,G\\) = \\(\\*, 232.43.211.234\\), pinging |
+      | <%= cb.pod2ip %>.*joined \\(S,G\\) = \\(\\*, 232.43.211.234\\), pinging |
+      | <%= cb.pod1ip %>.*multicast, xmt/rcv/%loss = 5/5/0%                     |
+      | <%= cb.pod2ip %>.*multicast, xmt/rcv/%loss = 5/5/0%                     |
 
   # @author hongli@redhat.com
   # @case_id OCP-12977
   @admin
   Scenario: multicast is disabled by default if not annotate the netnamespace
     Given the env is using multitenant or networkpolicy network
-
     # create multicast testing pods in the project and without multicast enable
     Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard
@@ -102,7 +94,6 @@ Feature: testing multicast scenarios
     And evaluation of `pod(0).name` is stored in the :pod1 clipboard
     And evaluation of `pod(1).ip` is stored in the :pod2ip clipboard
     And evaluation of `pod(1).name` is stored in the :pod2 clipboard
-
     # run omping as background on the pods
     When I run the :exec background client command with:
       | pod              | <%= cb.pod1 %>   |
@@ -115,22 +106,19 @@ Feature: testing multicast scenarios
       | exec_command_arg | <%= cb.pod1ip %> |
       | exec_command_arg | <%= cb.pod2ip %> |
     Then the step should succeed
-
     When I run the :exec background client command with:
-      | pod              | <%= cb.pod2 %> |
-      | oc_opts_end      |                |
-      | exec_command     | sh             |
-      | exec_command_arg | -c             |
+      | pod              | <%= cb.pod2 %>                                                            |
+      | oc_opts_end      |                                                                           |
+      | exec_command     | sh                                                                        |
+      | exec_command_arg | -c                                                                        |
       | exec_command_arg | omping -c 5 -T 10 <%= cb.pod1ip %> <%= cb.pod2ip %> > /tmp/p2-disable.log |
     Then the step should succeed
-
     # ensure interface join to the multicast group
     When I execute on the "<%= cb.pod2 %>" pod:
       | netstat | -ng |
     Then the step should succeed
     And the output should match:
-      | eth0\s+1\s+232.43.211.234 |
-
+      | eth0\\s+1\\s+232.43.211.234 |
     # check the result and should received 0 multicast packet
     Given 10 seconds have passed
     When I execute on the "<%= cb.pod2 %>" pod:
@@ -165,7 +153,6 @@ Feature: testing multicast scenarios
       | overwrite    | true                                                     |
       | keyval       | netnamespace.network.openshift.io/multicast-enabled=true |
     Then the step should succeed
-    
     Given I create a new project
     And evaluation of `project.name` is stored in the :proj2 clipboard
     Given I obtain test data file "networking/multicast-rc.json"
@@ -187,7 +174,6 @@ Feature: testing multicast scenarios
       | overwrite    | true                                                     |
       | keyval       | netnamespace.network.openshift.io/multicast-enabled=true |
     Then the step should succeed
-    
     # Check multicast group 239.255.254.24 stream in proj1
     Given I use the "<%= cb.proj1 %>" project
     # Enable multicast group 239.255.254.24 stream proj1pod1
@@ -196,7 +182,7 @@ Feature: testing multicast scenarios
       | oc_opts_end      |                                                                                                       |
       | exec_command     | sh                                                                                                    |
       | exec_command_arg | -c                                                                                                    |
-      | exec_command     | omping -m 239.255.254.24 -c 5 -T 10 <%= cb.proj1pod1ip %> <%= cb.proj1pod2ip %> <%= cb.proj1pod3ip %> |     
+      | exec_command     | omping -m 239.255.254.24 -c 5 -T 10 <%= cb.proj1pod1ip %> <%= cb.proj1pod2ip %> <%= cb.proj1pod3ip %> |
     Then the step should succeed
     # Enable multicast group 239.255.254.24 stream proj1pod2
     When I run the :exec background client command with:
@@ -204,23 +190,22 @@ Feature: testing multicast scenarios
       | oc_opts_end      |                                                                                                       |
       | exec_command     | sh                                                                                                    |
       | exec_command_arg | -c                                                                                                    |
-      | exec_command     | omping -m 239.255.254.24 -c 5 -T 10 <%= cb.proj1pod1ip %> <%= cb.proj1pod2ip %> <%= cb.proj1pod3ip %> |    
+      | exec_command     | omping -m 239.255.254.24 -c 5 -T 10 <%= cb.proj1pod1ip %> <%= cb.proj1pod2ip %> <%= cb.proj1pod3ip %> |
     Then the step should succeed
     # Enable multicast group 239.255.254.24 stream proj1pod3
     When I run the :exec background client command with:
-      | pod              | <%= cb.proj1pod3 %>  |
-      | oc_opts_end      |                      |
-      | exec_command     | sh                   |
-      | exec_command_arg | -c                   |
+      | pod              | <%= cb.proj1pod3 %>                                                                                                        |
+      | oc_opts_end      |                                                                                                                            |
+      | exec_command     | sh                                                                                                                         |
+      | exec_command_arg | -c                                                                                                                         |
       | exec_command_arg | omping -m 239.255.254.24 -c 5 -T 10 <%= cb.proj1pod1ip %> <%= cb.proj1pod2ip %> <%= cb.proj1pod3ip %> > /tmp/proj1pod3.log |
     Then the step should succeed
-
     # Ensure proj1pod3 interface join to the multicast group 239.255.254.24
     When I execute on the "<%= cb.proj1pod3 %>" pod:
       | netstat | -ng |
     Then the step should succeed
     And the output should match:
-      | eth0\s+1\s+239.255.254.24 |
+      | eth0\\s+1\\s+239.255.254.24 |
     And I wait up to 10 seconds for the steps to pass:
     """
     When I execute on the "<%= cb.proj1pod3 %>" pod:
@@ -232,7 +217,6 @@ Feature: testing multicast scenarios
       | <%= cb.proj1pod1ip %>.*multicast, xmt/rcv/%loss = 5/5/0%                |
       | <%= cb.proj1pod2ip %>.*multicast, xmt/rcv/%loss = 5/5/0%                |
     """
-      
     # Check multicast group 239.255.254.24 stream in proj2
     Given I use the "<%= cb.proj2 %>" project
     # Enable multicast group 239.255.254.24 stream proj2pod1
@@ -241,7 +225,7 @@ Feature: testing multicast scenarios
       | oc_opts_end      |                                                                                                       |
       | exec_command     | sh                                                                                                    |
       | exec_command_arg | -c                                                                                                    |
-      | exec_command     | omping -m 239.255.254.24 -c 5 -T 10 <%= cb.proj2pod1ip %> <%= cb.proj2pod2ip %> <%= cb.proj2pod3ip %> |     
+      | exec_command     | omping -m 239.255.254.24 -c 5 -T 10 <%= cb.proj2pod1ip %> <%= cb.proj2pod2ip %> <%= cb.proj2pod3ip %> |
     Then the step should succeed
     # Enable multicast group 239.255.254.24 stream proj2pod2
     When I run the :exec background client command with:
@@ -249,23 +233,22 @@ Feature: testing multicast scenarios
       | oc_opts_end      |                                                                                                       |
       | exec_command     | sh                                                                                                    |
       | exec_command_arg | -c                                                                                                    |
-      | exec_command     | omping -m 239.255.254.24 -c 5 -T 10 <%= cb.proj2pod1ip %> <%= cb.proj2pod2ip %> <%= cb.proj2pod3ip %> |    
+      | exec_command     | omping -m 239.255.254.24 -c 5 -T 10 <%= cb.proj2pod1ip %> <%= cb.proj2pod2ip %> <%= cb.proj2pod3ip %> |
     Then the step should succeed
     # Enable multicast group 239.255.254.24 stream proj2pod3
     When I run the :exec background client command with:
-      | pod              | <%= cb.proj2pod3 %> |
-      | oc_opts_end      |                     |
-      | exec_command     | sh                  |
-      | exec_command_arg | -c                  |
+      | pod              | <%= cb.proj2pod3 %>                                                                                                        |
+      | oc_opts_end      |                                                                                                                            |
+      | exec_command     | sh                                                                                                                         |
+      | exec_command_arg | -c                                                                                                                         |
       | exec_command_arg | omping -m 239.255.254.24 -c 5 -T 10 <%= cb.proj2pod1ip %> <%= cb.proj2pod2ip %> <%= cb.proj2pod3ip %> > /tmp/proj2pod3.log |
     Then the step should succeed
-
     # Ensure proj2pod3 interface join to the multicast group 239.255.254.24
     When I execute on the "<%= cb.proj2pod3 %>" pod:
       | netstat | -ng |
     Then the step should succeed
     And the output should match:
-      | eth0\s+1\s+239.255.254.24 |
+      | eth0\\s+1\\s+239.255.254.24 |
     And I wait up to 10 seconds for the steps to pass:
     """
     When I execute on the "<%= cb.proj2pod3 %>" pod:

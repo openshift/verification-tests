@@ -139,7 +139,7 @@ Feature: ONLY ONLINE Images related scripts in this file
     Then the step should succeed
     When I perform the :set_resource_limit_single web console action with:
       | resource_type   | memory |
-      | limit_type      | |
+      | limit_type      |        |
       | amount_unit     | MiB    |
       | resource_amount | 400    |
     Then the step should succeed
@@ -156,4 +156,3 @@ Feature: ONLY ONLINE Images related scripts in this file
       | innodb_buffer_pool_size = 200M |
       | innodb_log_file_size = 60M     |
       | innodb_log_buffer_size = 60M   |
-

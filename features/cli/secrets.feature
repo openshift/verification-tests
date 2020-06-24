@@ -5,7 +5,7 @@ Feature: secrets related scenarios
   Scenario: deployment hook volume inheritance --with secret volume
     Given I have a project
     And I run the :create_secret client command with:
-      | secret_type | generic    |   
+      | secret_type | generic    |
       | name        | my-secret  |
       | from_file   | /etc/hosts |
     Then the step should succeed
@@ -395,8 +395,8 @@ Feature: secrets related scenarios
     And the "secret" file is created with the following lines:
       | <%= cb.ssh_private_key.to_pem %> |
     And I run the :create_secret client command with:
-      | secret_type | generic               |   
-      | name        | sshsecret             |   
+      | secret_type | generic               |
+      | name        | sshsecret             |
       | from_file   | ssh-privatekey=secret |
     Then the step should succeed
     Then the step should succeed

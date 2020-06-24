@@ -64,7 +64,7 @@ Feature: collector related tests
       | op           | DELETE     |
     Then the step should succeed
     #Workaround end
-    
+
     Given I wait for the ".operations" index to appear in the ES pod with labels "es-node-master=true"
     Then I get the ".operations" logging index information from a pod with labels "es-node-master=true"
     And the expression should be true> cb.index_data['docs.count'] > "0"

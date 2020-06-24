@@ -12,11 +12,10 @@ Feature: Route test in online environments
       | name    | passthrough-route-custom |
       | service | service-secure           |
     Then the step should succeed
-
     When I run the :create_route_passthrough client command with:
-      | name     | passthrough-route-custom1 |
+      | name     | passthrough-route-custom1                 |
       | hostname | <%= rand_str(5, :dns) %>-pass.example.com |
-      | service  | service-secure |
+      | service  | service-secure                            |
     Then the step should fail
     And the output should contain "Error from server: admission webhook "validate.route.create" denied the request: Routes with custom-host prohibited on this cluster"
 
@@ -37,7 +36,6 @@ Feature: Route test in online environments
       | resource      | service          |
       | resource_name | service-unsecure |
     Then the step should succeed
-
     When I run the :expose client command with:
       | name          | route-unsecure1                           |
       | hostname      | <%= rand_str(5, :dns) %>-unse.example.com |
@@ -65,14 +63,12 @@ Feature: Route test in online environments
       | name    | edge-route-custom |
       | service | service-unsecure  |
     Then the step should succeed
-
     When I run the :create_route_edge client command with:
       | name     | edge-route-custom1                        |
       | hostname | <%= rand_str(5, :dns) %>-edge.example.com |
       | service  | service-unsecure                          |
     Then the step should fail
     And the output should contain "Error from server: admission webhook "validate.route.create" denied the request: Routes with custom-host prohibited on this cluster"
-
     When I run the :create_route_edge client command with:
       | name    | edge-route-custom2          |
       | service | service-unsecure            |
@@ -81,7 +77,6 @@ Feature: Route test in online environments
       | cacert  | ca.pem                      |
     Then the step should fail
     And the output should contain "Error from server: admission webhook "validate.route.create" denied the request: Routes with custom-host prohibited on this cluster"
-
     When I run the :create_route_edge client command with:
       | name     | edge-route-custom3                        |
       | hostname | <%= rand_str(5, :dns) %>-edge.example.com |
@@ -103,27 +98,23 @@ Feature: Route test in online environments
     Given I obtain test data file "routing/reencrypt/route_reencrypt-reen.example.com.crt"
     And I obtain test data file "routing/reencrypt/route_reencrypt_dest.ca"
     And I obtain test data file "routing/reencrypt/route_reencrypt-reen.example.com.key"
-
     When I run the :create_route_reencrypt client command with:
       | name     | reen-route-custom1                        |
       | hostname | <%= rand_str(5, :dns) %>-edge.example.com |
       | service  | service-secure                            |
     Then the step should fail
     And the output should contain "Error from server: admission webhook "validate.route.create" denied the request: Routes with custom-host prohibited on this cluster"
-
     When I run the :create_route_reencrypt client command with:
       | name       | reen-route-custom2      |
       | destcacert | route_reencrypt_dest.ca |
       | service    | service-secure          |
     Then the step should fail
     And the output should contain "Error from server: admission webhook "validate.route.create" denied the request: Routes with custom-host prohibited on this cluster"
-
     When I run the :create_route_reencrypt client command with:
-      | name    | reen-route-custom3                         |
-      | service | service-secure                             |
-      | cert    | route_reencrypt-reen.example.com.crt       |
-      | key     | route_reencrypt-reen.example.com.key       |
+      | name     | reen-route-custom3                        |
+      | service  | service-secure                            |
+      | cert     | route_reencrypt-reen.example.com.crt      |
+      | key      | route_reencrypt-reen.example.com.key      |
       | hostname | <%= rand_str(5, :dns) %>-reen.example.com |
     Then the step should fail
     And the output should contain "Error from server: admission webhook "validate.route.create" denied the request: Routes with custom-host prohibited on this cluster"
-

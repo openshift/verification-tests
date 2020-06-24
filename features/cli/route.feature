@@ -5,10 +5,10 @@ Feature: route related features via cli
   Scenario: Expose routes from services
     Given I have a project
     When I run the :new_app client command with:
-      | code | https://github.com/sclorg/s2i-perl-container |
-      | l | app=test-perl|
-      | context_dir | 5.20/test/sample-test-app/ |
-      | name | myapp |
+      | code        | https://github.com/sclorg/s2i-perl-container |
+      | l           | app=test-perl                                |
+      | context_dir | 5.20/test/sample-test-app/                   |
+      | name        | myapp                                        |
     Then the step should succeed
     And the "myapp-1" build completed
     Given I wait for the "myapp" service to become ready up to 300 seconds
@@ -16,7 +16,7 @@ Feature: route related features via cli
     Then the step should succeed
     Given I get project routes
     And the output should match:
-      | myapp .* 8080    |
+      | myapp .* 8080 |
     When I run the :describe client command with:
       | resource | route |
       | name     | myapp |
@@ -38,4 +38,3 @@ Feature: route related features via cli
       | f | route_unsecure.json |
     Then the step should fail
     And the output should contain ""route" already exists"
-

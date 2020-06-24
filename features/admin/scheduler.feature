@@ -15,4 +15,3 @@ Feature: Scheduler related scenarios
     Then the output should match:
       | Status:\\s+Running |
       | default-scheduler  |
-

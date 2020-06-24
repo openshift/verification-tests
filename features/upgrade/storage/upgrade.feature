@@ -1,4 +1,5 @@
 Feature: Storage upgrade tests
+
   # @author wduan@redhat.com
   # @case_id OCP-23501
   @upgrade-prepare
@@ -11,7 +12,6 @@ Feature: Storage upgrade tests
     Given the expression should be true> cluster_operator('storage').condition(type: 'Available')['status'] == "True"
     Given the expression should be true> cluster_operator('storage').condition(type: 'Degraded')['status'] == "False"
     Given the expression should be true> cluster_operator('storage').condition(type: 'Upgradeable')['status'] == "True"
-
     # There should be one and only one default storage class
     When I run the :get client command with:
       | resource      | clusteroperator                                                         |
@@ -19,7 +19,7 @@ Feature: Storage upgrade tests
       | o             | jsonpath={.status.relatedObjects[?(@.resource=="storageclasses")].name} |
     And evaluation of `@result[:response]` is stored in the :default_sc clipboard
     When I log the messages:
-      | <%= cb.default_sc %> (default)  |
+      | <%= cb.default_sc %> (default) |
     When I run the :get client command with:
       | resource | storageclass |
     Then the step should succeed
@@ -40,7 +40,6 @@ Feature: Storage upgrade tests
     Then the step should succeed
     And the output should contain:
       | is-default-class: "true" |
-
     # Create deployment with default storage class
     When I run the :new_project client command with:
       | project_name | upgrade-ocp-23501 |
@@ -73,13 +72,11 @@ Feature: Storage upgrade tests
     Given I switch to cluster admin pseudo user
     # Check storage operator version after upgraded
     Given the "storage" operator version matches the current cluster version
-
     # Check cluster operator storage should be in correct status
     Given the expression should be true> cluster_operator('storage').condition(type: 'Progressing')['status'] == "False"
     Given the expression should be true> cluster_operator('storage').condition(type: 'Available')['status'] == "True"
     Given the expression should be true> cluster_operator('storage').condition(type: 'Degraded')['status'] == "False"
     Given the expression should be true> cluster_operator('storage').condition(type: 'Upgradeable')['status'] == "True"
-
     # There should be one and only one default storage class
     When I run the :get client command with:
       | resource      | clusteroperator                                                         |
@@ -87,7 +84,7 @@ Feature: Storage upgrade tests
       | o             | jsonpath={.status.relatedObjects[?(@.resource=="storageclasses")].name} |
     And evaluation of `@result[:response]` is stored in the :default_sc clipboard
     When I log the messages:
-      | <%= cb.default_sc %> (default)  |
+      | <%= cb.default_sc %> (default) |
     When I run the :get client command with:
       | resource | storageclass |
     Then the step should succeed
@@ -108,7 +105,6 @@ Feature: Storage upgrade tests
     Then the step should succeed
     And the output should contain:
       | is-default-class: "true" |
-
     # Check deployment and data before upgrade
     When I use the "upgrade-ocp-23501" project
     Then the step should succeed
@@ -122,7 +118,6 @@ Feature: Storage upgrade tests
     Then the output should contain:
       | test-before-upgrade |
       | test-after-upgrade  |
-
     # Create deployment with default storage class
     Given I obtain test data file "storage/misc/pvc.json"
     When I create a dynamic pvc from "pvc.json" replacing paths:
@@ -165,10 +160,8 @@ Feature: Storage upgrade tests
     Given I switch to cluster admin pseudo user
     # Check storage operator version after upgraded
     Given the "storage" operator version matches the current cluster version
-
     # Check cluster operator storage should be in correct status
     Given the expression should be true> cluster_operator('storage').condition(type: 'Progressing')['status'] == "False"
     Given the expression should be true> cluster_operator('storage').condition(type: 'Available')['status'] == "True"
     Given the expression should be true> cluster_operator('storage').condition(type: 'Degraded')['status'] == "False"
     Given the expression should be true> cluster_operator('storage').condition(type: 'Upgradeable')['status'] == "True"
-

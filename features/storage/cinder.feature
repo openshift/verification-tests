@@ -6,7 +6,6 @@ Feature: Cinder Persistent Volume
   Scenario: Persistent Volume with cinder volume plugin
     Given I have a project
     And I have a 1 GB volume and save volume id in the :vid clipboard
-
     #create test pod
     And I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
@@ -15,7 +14,6 @@ Feature: Cinder Persistent Volume
       | ['spec']['volumes'][0]['cinder']['volumeID'] | <%= cb.vid %> |
     Then the step should succeed
     And the pod named "cinder" becomes ready
-
     #create test file
     Given I execute on the "cinder" pod:
       | touch | /mnt/cinderfile |
@@ -23,4 +21,3 @@ Feature: Cinder Persistent Volume
     When I execute on the "cinder" pod:
       | ls | -l | /mnt/cinderfile |
     Then the step should succeed
-

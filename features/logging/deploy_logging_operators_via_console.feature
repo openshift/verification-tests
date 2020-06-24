@@ -58,7 +58,6 @@ Feature: Deploy logging operators via console
       | install_mode      | AllNamespace              |
       | approval_strategy | Automatic                 |
     Then the step should succeed
-
     Given I use the "openshift-operators" project
     Given I wait for the "elasticsearch-operator" subscriptions to appear
     And evaluation of `subscription("elasticsearch-operator").current_csv` is stored in the :eo_csv clipboard

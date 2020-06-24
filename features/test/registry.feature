@@ -58,7 +58,7 @@ Feature: registry related test scenario
     When I docker push on the node to the registry the following images:
       | docker.io/busybox:latest | busybox:latest |
     Then the step should succeed
-  
+
   @admin
   @destructive
   Scenario: Fail to push to auth registry without login

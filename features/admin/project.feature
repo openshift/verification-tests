@@ -12,7 +12,7 @@ Feature: project permissions
     Then the step should succeed
     Given I obtain test data file "pods/selector-east.json"
     When I run the :create admin command with:
-      | f | selector-east.json |
+      | f | selector-east.json  |
       | n | <%= cb.proj_name %> |
     Then the step should fail
     And the output should match:
@@ -45,10 +45,9 @@ Feature: project permissions
     Then the output should contain:
       | not found |
     When I run the :get client command with:
-      | resource      | job                 |
-      | resource_name | pi                  |
+      | resource      | job                  |
+      | resource_name | pi                   |
       | n             | <%= cb.saved_name %> |
     Then the step should fail
     Then the output should contain:
       | not found |
-

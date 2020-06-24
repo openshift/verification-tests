@@ -11,8 +11,8 @@ Feature: vSphere test scenarios
     Then the step should succeed
     Given I obtain test data file "storage/vsphere/pvc.json"
     When I create a dynamic pvc from "pvc.json" replacing paths:
-        | ["metadata"]["name"]         | mypvc          |
-        | ["spec"]["storageClassName"] | storageclass-<%= project.name %> |
+      | ["metadata"]["name"]         | mypvc          |
+      | ["spec"]["storageClassName"] | storageclass-<%= project.name %> |
     Then the step should succeed
     And the "mypvc" PVC becomes :bound
 

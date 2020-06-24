@@ -15,7 +15,7 @@ Feature: creating 'apps' with CLI
     Given I obtain test data file "pods/pod_with_special_fsGroup.json"
     When I run the :create admin command with:
       | f | pod_with_special_fsGroup.json |
-      | n | <%= project.name %>                                                                                   |
+      | n | <%= project.name %>           |
     Then the step should succeed
     When the pod named "hello-openshift" becomes ready
     When I get project pod named "hello-openshift" as YAML
@@ -34,7 +34,7 @@ Feature: creating 'apps' with CLI
       | app_repo     | ruby-hello-world         |
       | image_stream | openshift/ruby:latest    |
       | name         | <%= cb.appname %>        |
-      | env          | MYSQL_ROOT_PASSWORD=test | 
+      | env          | MYSQL_ROOT_PASSWORD=test |
     Given the "<%= cb.appname %>-1" build completes
     Given 1 pods become ready with labels:
       | deployment=<%= cb.appname %>-1 |
@@ -52,7 +52,7 @@ Feature: creating 'apps' with CLI
       | code         | https://github.com/openshift/ruby-hello-world |
       | image_stream | openshift/ruby                                |
       | name         | <%= cb.appname1 %>                            |
-      | env          | MYSQL_ROOT_PASSWORD=test                      | 
+      | env          | MYSQL_ROOT_PASSWORD=test                      |
     Given the "<%= cb.appname1 %>-1" build completes
     Given 1 pods become ready with labels:
       | deployment=<%= cb.appname1 %>-1 |
@@ -70,7 +70,7 @@ Feature: creating 'apps' with CLI
       | code         | http://github.com/openshift/ruby-hello-world |
       | image_stream | openshift/ruby:2.5                           |
       | name         | <%= cb.appname2 %>                           |
-      | env          | MYSQL_ROOT_PASSWORD=test                     | 
+      | env          | MYSQL_ROOT_PASSWORD=test                     |
     Given the "<%= cb.appname2 %>-1" build completes
     Given 1 pods become ready with labels:
       | deployment=<%= cb.appname2 %>-1 |
@@ -88,7 +88,7 @@ Feature: creating 'apps' with CLI
       | code         | git://github.com/openshift/ruby-hello-world |
       | image_stream | openshift/ruby                              |
       | name         | <%= cb.appname3 %>                          |
-      | env          | MYSQL_ROOT_PASSWORD=test                    | 
+      | env          | MYSQL_ROOT_PASSWORD=test                    |
     Given the "<%= cb.appname3 %>-1" build completes
     Given 1 pods become ready with labels:
       | deployment=<%= cb.appname3 %>-1 |
@@ -106,10 +106,10 @@ Feature: creating 'apps' with CLI
       | code         | https://github.com/openshift/ruby-hello-world#master |
       | image_stream | openshift/ruby                                       |
       | name         | <%= cb.appname4 %>                                   |
-      | env          | MYSQL_ROOT_PASSWORD=test                             | 
+      | env          | MYSQL_ROOT_PASSWORD=test                             |
     When I run the :describe client command with:
-      | resource | buildconfig |
-      | name | <%= cb.appname4 %> |
+      | resource | buildconfig        |
+      | name     | <%= cb.appname4 %> |
     Then the output should match "Ref:\s+master"
     And I delete all resources from the project
     #Check invalid branch
@@ -118,25 +118,25 @@ Feature: creating 'apps' with CLI
       | code         | https://github.com/openshift/ruby-hello-world#invalid |
       | image_stream | openshift/ruby                                        |
       | name         | <%= cb.appname5 %>                                    |
-      | env          | MYSQL_ROOT_PASSWORD=test                              | 
+      | env          | MYSQL_ROOT_PASSWORD=test                              |
     Then the output should contain "error"
     And I delete all resources from the project
     #Check non-master branch
     Given an 8 character random string of type :dns952 is stored into the :appname6 clipboard
     When I run the :new_app client command with:
-      | code 	     | https://github.com/openshift/ruby-hello-world#beta4 |
-      | image_stream | openshift/ruby 	                                   |
+      | code         | https://github.com/openshift/ruby-hello-world#beta4 |
+      | image_stream | openshift/ruby                                      |
       | name         | <%= cb.appname6 %>                                  |
-      | env          | MYSQL_ROOT_PASSWORD=test                            | 
+      | env          | MYSQL_ROOT_PASSWORD=test                            |
     When I run the :describe client command with:
-      | resource | buildconfig |
-      | name | <%= cb.appname6 %> |
+      | resource | buildconfig        |
+      | name     | <%= cb.appname6 %> |
     Then the output should match "Ref:\s+beta4"
     And I delete all resources from the project
     #Check non-existing docker file
     Then I run the :new_app client command with:
       | app_repo | https://github.com/openshift-qe/sample-php |
-      | strategy | docker |
+      | strategy | docker                                     |
     Then the step should fail
     And the output should contain "No Dockerfile"
 
@@ -145,30 +145,30 @@ Feature: creating 'apps' with CLI
   Scenario: 4.x Could not create any context in non-existent project
     Given I create a new application with:
       | docker image | openshift/ruby-20-centos7~https://github.com/openshift/ruby-hello-world |
-      | name         | myapp          |
-      | n            | noproject      |
+      | name         | myapp                                                                   |
+      | n            | noproject                                                               |
     Then the step should fail
     Then the output should match "User "<%=@user.name%>" cannot create resource "imagestreamimports".*in the namespace "noproject""
     Given I obtain test data file "pods/hello-pod.json"
     Given I run the :create client command with:
       | f | hello-pod.json |
-      | n | noproject |
+      | n | noproject      |
     Then the step should fail
     Then the output should match "User "<%=@user.name%>" cannot create resource "pods".*in the namespace "noproject""
     Given I obtain test data file "deployment/deployment1.json"
     Given I run the :create client command with:
       | f | deployment1.json |
-      | n | noproject |
+      | n | noproject        |
     Then the step should fail
     Then the output should match "User "<%=@user.name%>" cannot create resource "deploymentconfigs".* in the namespace "noproject""
     Given I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift/origin/master/examples/image-streams/image-streams-centos7.json |
-      | n | noproject |
+      | n | noproject                                                                                                   |
     Then the step should fail
     Then the output should match "User "<%=@user.name%>" cannot create resource "imagestreams".* in the namespace "noproject""
     Given I run the :create client command with:
       | f | https://raw.githubusercontent.com/openshift/origin/master/examples/sample-app/application-template-stibuild.json |
-      | n | noproject |
+      | n | noproject                                                                                                        |
     Then the step should fail
     Then the output should match "User "<%=@user.name%>" cannot create resource "templates".* in the namespace "noproject""
 
@@ -257,8 +257,8 @@ Feature: creating 'apps' with CLI
       | name         | <%= cb.appname4 %>                                   |
       | env          | MYSQL_ROOT_PASSWORD=test                             |
     When I run the :describe client command with:
-      | resource | buildconfig |
-      | name | <%= cb.appname4 %> |
+      | resource | buildconfig        |
+      | name     | <%= cb.appname4 %> |
     Then the output should match "Ref:\s+master"
     And I delete all resources from the project
     #Check invalid branch
@@ -273,8 +273,8 @@ Feature: creating 'apps' with CLI
     #Check non-master branch
     Given an 8 character random string of type :dns952 is stored into the :appname6 clipboard
     When I run the :new_app client command with:
-      | code  	     | https://github.com/openshift/ruby-hello-world#beta4 |
-      | image_stream | openshift/ruby 	                                   |
+      | code         | https://github.com/openshift/ruby-hello-world#beta4 |
+      | image_stream | openshift/ruby                                      |
       | name         | <%= cb.appname6 %>                                  |
       | env          | MYSQL_ROOT_PASSWORD=test                            |
     When I run the :describe client command with:

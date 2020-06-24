@@ -25,7 +25,7 @@ Feature: rhel8images.feature
     Then the output should contain:
       | Min threads: 0, max threads: 16 |
     When I run the :set_env client command with:
-      | e        | PUMA_MIN_THREADS=1  | 
+      | e        | PUMA_MIN_THREADS=1  |
       | e        | PUMA_MAX_THREADS=12 |
       | e        | PUMA_WORKERS=5      |
       | resource | dc/ruby25rhel8      |
@@ -49,15 +49,15 @@ Feature: rhel8images.feature
       | n                | openshift                               |
     Then the step should succeed
     When I run the :new_app client command with:
-      | image_stream | openshit/qe-ruby-25-rhel8                            |
-      | app_repo     | https://github.com/openshift-qe/hot-deploy-ruby.git  |
-      | env          | RACK_ENV=development                                 |
-      | name         | hotdeploy                                            |
+      | image_stream | openshit/qe-ruby-25-rhel8                           |
+      | app_repo     | https://github.com/openshift-qe/hot-deploy-ruby.git |
+      | env          | RACK_ENV=development                                |
+      | name         | hotdeploy                                           |
     Then the step should succeed
     And a pod becomes ready with labels:
       | deployment=hotdeploy-1 |
     When I execute on the pod:
-      | sed | -i | s/Hello/hotdeploy_test/g  | app.rb |
+      | sed | -i | s/Hello/hotdeploy_test/g | app.rb |
     Then the step should succeed
     When I expose the "hotdeploy" service
     Then I wait for a web server to become available via the "hotdeploy" route
@@ -70,23 +70,23 @@ Feature: rhel8images.feature
     Given I have a project
     When I run the :tag admin command with:
       | source           | registry.redhat.io/rhel8/mysql-80:latest |
-      | dest             | qe-mysql-80-rhel8:latest                 | 
+      | dest             | qe-mysql-80-rhel8:latest                 |
       | reference_policy | local                                    |
       | n                | openshift                                |
     Then the step should succeed
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift/origin/master/examples/db-templates/mysql-persistent-template.json | 
+      | f | https://raw.githubusercontent.com/openshift/origin/master/examples/db-templates/mysql-persistent-template.json |
     Then the step should succeed
     Given I replace resource "template" named "mysql-persistent" saving edit to "tmp-out.json":
       | mysql:${MYSQL_VERSION} | qe-mysql-80-rhel8:latest |
     When I run the :new_app client command with:
       | template | <%= project.name %>/mysql-persistent |
       | param    | MYSQL_USER=user                      |
-      | param    | MYSQL_PASSWORD=user          	|
+      | param    | MYSQL_PASSWORD=user                  |
     Then the step should succeed
     And the "mysql" PVC becomes :bound within 300 seconds
     And a pod becomes ready with labels:
-      | name=mysql|
+      | name=mysql |
     And I wait up to 60 seconds for the steps to pass:
     """
     When I execute on the pod:
@@ -143,18 +143,18 @@ Feature: rhel8images.feature
     """
     Then the output should contain "db"
     When I execute on the pod:
-      | bash |
-      | -c   |
+      | bash                                                                                                      |
+      | -c                                                                                                        |
       | mysql -h $QE_MYSQL_80_RHEL8_SERVICE_HOST -uuser -ppass   -e "use db;create table test (name VARCHAR(20))" |
     Then the step should succeed
     When I execute on the pod:
-      | bash |
-      | -c   |
+      | bash                                                                                                      |
+      | -c                                                                                                        |
       | mysql -h $QE_MYSQL_80_RHEL8_SERVICE_HOST -uuser -ppass   -e "use db;insert into test VALUES('openshift')" |
     Then the step should succeed
     When I execute on the pod:
-      | bash |
-      | -c   |
+      | bash                                                                                   |
+      | -c                                                                                     |
       | mysql -h $QE_MYSQL_80_RHEL8_SERVICE_HOST -uuser -ppass  -e "use db;select * from test" |
     Then the output should contain:
       | name      |

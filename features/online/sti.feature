@@ -63,7 +63,7 @@ Feature: ONLY ONLINE STI related scripts in this file
     # @case_id OCP-10088
     Examples: Ruby
       | image | image_tag | env_name       | env_value                    | error_message              |
-      # ruby 2.0 has no environment variable for mirror url.
+    # ruby 2.0 has no environment variable for mirror url.
       | ruby | 2.2 | RUBYGEM_MIRROR | https://gems.ruby-china.com/ | Could not fetch specs from |
       | ruby | 2.3 | RUBYGEM_MIRROR | https://gems.ruby-china.com/ | Could not fetch specs from |
 

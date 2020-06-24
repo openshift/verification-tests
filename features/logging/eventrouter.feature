@@ -39,6 +39,6 @@ Feature: eventrouter related test
     """
 
     Examples:
-    | index_name  |
-    | .operations | # @case_id OCP-25899
-    | infra       | # @case_id OCP-29738
+      | index_name  |
+      | .operations | # @case_id OCP-25899
+      | infra       | # @case_id OCP-29738

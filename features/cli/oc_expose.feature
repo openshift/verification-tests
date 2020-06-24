@@ -7,20 +7,20 @@ Feature: oc_expose.feature
     Given I have a project
     Given a "caddyfile.conf" file is created with the following lines:
     """
-    :8443 {
-      tls /etc/serving-cert/tls.crt /etc/serving-cert/tls.key
-      root /srv/publics
-      browse /test
-    }
-    :8080 {
-      root /srv/public
-      browse /test
-    }
+      :8443 {
+        tls /etc/serving-cert/tls.crt /etc/serving-cert/tls.key
+        root /srv/publics
+        browse /test
+      }
+      :8080 {
+        root /srv/public
+        browse /test
+      }
     """
     When I run the :create_service client command with:
-      | createservice_type  | clusterip |
-      | name                | hello     |
-      | tcp                 | 443:8443  |
+      | createservice_type | clusterip |
+      | name               | hello     |
+      | tcp                | 443:8443  |
     Then the step should succeed
     And I run the :annotate client command with:
       | resource     | svc                                                         |
@@ -44,26 +44,25 @@ Feature: oc_expose.feature
     Then the step should succeed
     And the output should contain:
       | Hello-OpenShift-1 https-8443 |
-
     # Below checkpoint is in later version
     Given the master version >= "3.5"
     When I run the :extract client command with:
-      | resource | secret/ssl-key   |
+      | resource | secret/ssl-key |
     Then the step should succeed
     Given evaluation of `File.read("tls.crt")` is stored in the :crt clipboard
     And evaluation of `v = secret('ssl-key').created; (v.is_a? Time) ? v : Time.parse(v)` is stored in the :birth clipboard
     And evaluation of `Time.now` is stored in the :t2 clipboard
     And evaluation of `(cb.birth + (cb.t2 - cb.t1) + 3600 + 60).utc.strftime "%Y-%m-%dT%H:%M:%SZ"` is stored in the :newexpiry clipboard
     When I run the :annotate client command with:
-      | resource     | secret/ssl-key                                          |
-      | keyval       | service.alpha.openshift.io/expiry=<%= cb.newexpiry %>   |
-      | keyval       | service.beta.openshift.io/expiry=<%= cb.newexpiry %>    |
-      | overwrite    | true                                                    |
+      | resource  | secret/ssl-key                                        |
+      | keyval    | service.alpha.openshift.io/expiry=<%= cb.newexpiry %> |
+      | keyval    | service.beta.openshift.io/expiry=<%= cb.newexpiry %>  |
+      | overwrite | true                                                  |
     Then the step should succeed
     Given 30 seconds have passed
     When I run the :extract client command with:
-      | resource | secret/ssl-key   |
-      | confirm  | true             |
+      | resource | secret/ssl-key |
+      | confirm  | true           |
     Then the step should succeed
     # When the expiry time has more than 3600s left, the cert will not regenerate
     And the expression should be true> File.read("tls.crt") == cb.crt
@@ -82,4 +81,3 @@ Feature: oc_expose.feature
     Then the step should succeed
     And the output should contain:
       | Hello-OpenShift-1 https-8443 |
-

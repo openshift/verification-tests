@@ -1,6 +1,6 @@
 @tsb
 Feature: TSB related scenarios
-    
+
   # @author jiazha@redhat.com
   # @case_id OCP-20584
   @admin
@@ -14,8 +14,7 @@ Feature: TSB related scenarios
     When I run the :oadm_new_project client command with:
       | project_name | openshift-template-service-broker |
     Then the step should succeed
-
-    # Install the art or aopqe4 OperatorSource. 
+    # Install the art or aopqe4 OperatorSource.
     # TODO: it's better to set the below steps in CI post action.
     # Given I obtain test data file "olm/art-secret-template.yaml"
     # When I process and create:
@@ -34,7 +33,6 @@ Feature: TSB related scenarios
     Given enable service catalog
     # Get the cluster version: oc get clusterversion version -o=jsonpath='{.spec.channel}' | tr -d 'stable-'
     Given the major.minor version of the cluster is stored in the clipboard
-
     # This step will install the OperatorGroup, operator. Please use your operator Package name in here.
     Given optional operator "openshifttemplateservicebroker" from channel "<%= cb.operator_channel_name %>" is subscribed in "openshift-template-service-broker" project
     # Check the pods of the operator
@@ -42,7 +40,7 @@ Feature: TSB related scenarios
     And I wait up to 180 seconds for the steps to pass:
     """
     And a pod becomes ready with labels:
-        | name=openshift-template-service-broker-operator |
+      | name=openshift-template-service-broker-operator |
     """
     # Check if the corresponding CRD is ready
     Then I run the :get client command with:
@@ -56,9 +54,9 @@ Feature: TSB related scenarios
     And I wait up to 180 seconds for the steps to pass:
     """
     And a pod becomes ready with labels:
-        | app=template-service-broker |
+      | app=template-service-broker |
     """
-    
+
   @admin
   @upgrade-check
   @users=upuser1,upuser2
@@ -67,12 +65,11 @@ Feature: TSB related scenarios
     And I use the "openshift-template-service-broker" project
     # Check if the previous TSB works works well.
     When I run the :describe client command with:
-      | resource           | clusterservicebroker    |
-      | name               | template-service-broker |
+      | resource | clusterservicebroker    |
+      | name     | template-service-broker |
     And the output should match:
       | Reason:\\s+FetchedCatalog |
       | Status:\\s+True           |
-
     # Update TSB operator to the new version
     Given the major.minor version of the cluster is stored in the clipboard
     When I run the :patch client command with:
@@ -81,7 +78,6 @@ Feature: TSB related scenarios
       | p             | {"spec": {"channel": "<%= cb.operator_channel_name %>" }} |
       | type          | merge                                                     |
     Then the step should succeed
-
     And I wait up to 360 seconds for the steps to pass:
     """
     When I run the :get client command with:
@@ -93,13 +89,13 @@ Feature: TSB related scenarios
     And I wait up to 180 seconds for the steps to pass:
     """
     And a pod becomes ready with labels:
-        | name=openshift-template-service-broker-operator |
+      | name=openshift-template-service-broker-operator |
     """
     # Check if the TSB operator works well, if yes, the TSB can be removed successfully
     When I run the :delete client command with:
-      | object_type        | templateservicebroker             |
-      | object_name_or_id  | template-service-broker           |
-      | n                  | openshift-template-service-broker |
+      | object_type       | templateservicebroker             |
+      | object_name_or_id | template-service-broker           |
+      | n                 | openshift-template-service-broker |
     Then the step should succeed
     And I wait up to 240 seconds for the steps to pass:
     """

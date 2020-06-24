@@ -1,4 +1,5 @@
 Feature: web console related upgrade check
+
   # @author yanpzhan@redhat.com
   @upgrade-prepare
   @users=upuser1,upuser2
@@ -10,7 +11,7 @@ Feature: web console related upgrade check
     When I run the :new_app client command with:
       | image_stream | openshift/ruby:latest                         |
       | app_repo     | https://github.com/openshift/ruby-hello-world |
-      | name         | ruby |
+      | name         | ruby                                          |
     Then the step should succeed
     Given I obtain test data file "daemon/daemonset.yaml"
     When I run the :create client command with:
@@ -50,7 +51,7 @@ Feature: web console related upgrade check
   @admin
   @users=upuser1,upuser2
   Scenario: check console accessibility
-    Given the first user is cluster-admin    
+    Given the first user is cluster-admin
     Given I open admin console in a browser
     When I perform the :create_app_from_imagestream web action with:
       | project_name | ui-upgrade |
@@ -65,7 +66,7 @@ Feature: web console related upgrade check
     When I perform the :click_list_item web action with:
       | resource_kind | DaemonSet       |
       | resource_name | hello-daemonset |
-    Then the step should succeed         
+    Then the step should succeed
     When I perform the :click_list_item web action with:
       | resource_kind | Deployment      |
       | resource_name | hello-openshift |

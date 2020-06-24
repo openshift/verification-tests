@@ -14,8 +14,8 @@ Feature: test master config related steps
   Scenario: master config change with multipline parameter
     Given master config is merged with the following hash:
     """
-    volumeConfig:
-      dynamicProvisioningEnabled: False
+      volumeConfig:
+        dynamicProvisioningEnabled: False
     """
     Given the master service is restarted on all master nodes
 
@@ -24,14 +24,13 @@ Feature: test master config related steps
   Scenario: master config will be modified multiple times
     Given master config is merged with the following hash:
     """
-    volumeConfig:
-      dynamicProvisioningEnabled: False
+      volumeConfig:
+        dynamicProvisioningEnabled: False
     """
-
     Given master config is merged with the following hash:
     """
-    volumeConfig:
-      dynamicProvisioningEnabled: BadValue
+      volumeConfig:
+        dynamicProvisioningEnabled: BadValue
     """
 
   @admin
@@ -39,8 +38,8 @@ Feature: test master config related steps
   Scenario: the master service will fail to restart and return result
     Given master config is merged with the following hash:
     """
-    volumeConfig:
-      dynamicProvisioningEnabled: BadValue
+      volumeConfig:
+        dynamicProvisioningEnabled: BadValue
     """
     And I try to restart the master service on all master nodes
     Then the step should fail
@@ -51,16 +50,13 @@ Feature: test master config related steps
     Given the value with path " " in master config is stored into the :fullcfg clipboard
     And master config is merged with the following hash:
     """
-    volumeConfig:
-      dynamicProvisioningEnabled: BadValue
+      volumeConfig:
+        dynamicProvisioningEnabled: BadValue
     """
-
     Given the value with path " " in master config is stored into the :changedcfg clipboard
     Then the expression should be true> cb.fullcfg != cb.changedcfg
-
     When master config is restored from backup
     Then the step should succeed
-
     Given the value with path " " in master config is stored into the :changedcfg clipboard
     Then the expression should be true> cb.fullcfg == cb.changedcfg
 

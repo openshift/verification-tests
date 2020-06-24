@@ -11,7 +11,7 @@ Feature: env.feature
     And the "ruby-hello-world-1" build was created
     Given the "ruby-hello-world-1" build completed
     Given a pod becomes ready with labels:
-      |deployment=ruby-hello-world-1|
+      | deployment=ruby-hello-world-1 |
     When I run the :set_env client command with:
       | resource | pods |
       | list     | true |
@@ -25,7 +25,7 @@ Feature: env.feature
     And the "ruby-hello-world-1" build was created
     Given the "ruby-hello-world-1" build completed
     Given a pod becomes ready with labels:
-      |deployment=ruby-hello-world-1|
+      | deployment=ruby-hello-world-1 |
     When I run the :set_env client command with:
       | resource | pods |
       | list     | true |
@@ -34,7 +34,7 @@ Feature: env.feature
     And I delete all resources from the project
     Given a "test" file is created with the following lines:
     """
-    DB_USER=test
+      DB_USER=test
     """
     When I run the :new_app client command with:
       | app_repo | ruby:2.5~https://github.com/openshift/ruby-hello-world |
@@ -43,7 +43,7 @@ Feature: env.feature
     And the "ruby-hello-world-1" build was created
     Given the "ruby-hello-world-1" build completed
     Given a pod becomes ready with labels:
-      |deployment=ruby-hello-world-1|
+      | deployment=ruby-hello-world-1 |
     When I run the :set_env client command with:
       | resource | pods |
       | list     | true |
@@ -52,7 +52,7 @@ Feature: env.feature
     And I delete all resources from the project
     Given a "test" file is created with the following lines:
     """
-    RACK_ENV=development
+      RACK_ENV=development
     """
     When I run the :new_app client command with:
       | app_repo | ruby:2.5~https://github.com/openshift/ruby-hello-world |
@@ -61,7 +61,7 @@ Feature: env.feature
     And the "ruby-hello-world-1" build was created
     Given the "ruby-hello-world-1" build completed
     Given a pod becomes ready with labels:
-      |deployment=ruby-hello-world-1|
+      | deployment=ruby-hello-world-1 |
     When I run the :set_env client command with:
       | resource | pods |
       | list     | true |
@@ -102,7 +102,7 @@ Feature: env.feature
     And I delete all resources from the project
     Given a "test" file is created with the following lines:
     """
-    DB_USER=test
+      DB_USER=test
     """
     When I run the :new_app client command with:
       | app_repo | ruby:2.5~https://github.com/openshift/ruby-hello-world |
@@ -120,7 +120,7 @@ Feature: env.feature
     And I delete all resources from the project
     Given a "test" file is created with the following lines:
     """
-    RACK_ENV=development
+      RACK_ENV=development
     """
     When I run the :new_app client command with:
       | app_repo | ruby:2.5~https://github.com/openshift/ruby-hello-world |

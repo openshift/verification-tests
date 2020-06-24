@@ -13,9 +13,9 @@ Feature: pods related scenarios
       | resource | pods            |
       | name     | hello-openshift |
     Then the output should match:
-      | Status:\\s+Running    |
-      | BestEffort            |
-      | State:\\s+Running     |
+      | Status:\\s+Running |
+      | BestEffort         |
+      | State:\\s+Running  |
 
   # @author chezhang@redhat.com
   # @case_id OCP-11527
@@ -44,8 +44,8 @@ Feature: pods related scenarios
       | memory:\\s+256Mi   |
       | State:\\s+Running  |
     When I run the :describe client command with:
-      | resource | pods              |
-      | name     | hello-openshift   |
+      | resource | pods            |
+      | name     | hello-openshift |
     Then the output should match:
       | Status:\\s+Pending |
       | BestEffort         |
@@ -73,18 +73,18 @@ Feature: pods related scenarios
     Then the step should succeed
     Given the pod named "multi-containers" becomes ready
     When I run the :rsh client command with:
-      | c        | hello-openshift     |
-      | pod      | multi-containers    |
-      | command  | id                  |
-      | _timeout | 20                  |
+      | c        | hello-openshift  |
+      | pod      | multi-containers |
+      | command  | id               |
+      | _timeout | 20               |
     Then the step should succeed
     And the output should contain:
       | groups=1234,5678, |
     When I run the :rsh client command with:
-      | c        | nfs-server          |
-      | pod      | multi-containers    |
-      | command  | id                  |
-      | _timeout | 20                  |
+      | c        | nfs-server       |
+      | pod      | multi-containers |
+      | command  | id               |
+      | _timeout | 20               |
     Then the step should succeed
     And the output should contain:
       | groups=1234,5678, |
@@ -128,9 +128,9 @@ Feature: pods related scenarios
     Then the step should fail
     And the output should contain "must be less than or equal to previous value"
     When I run the :patch client command with:
-      | resource      | pod                                    |
-      | resource_name | hello-openshift                        |
-      | p             | {"spec":{"activeDeadlineSeconds":0}}   |
+      | resource      | pod                                  |
+      | resource_name | hello-openshift                      |
+      | p             | {"spec":{"activeDeadlineSeconds":0}} |
     Then the step should fail
     And the output should contain "Invalid value: 0"
     When I run the :patch client command with:
@@ -140,9 +140,9 @@ Feature: pods related scenarios
     Then the step should fail
     And the output should match "(fractional integer|cannot convert float64 to int64)"
     When I run the :patch client command with:
-      | resource      | pod                                    |
-      | resource_name | hello-openshift                        |
-      | p             | {"spec":{"activeDeadlineSeconds":-5}}  |
+      | resource      | pod                                   |
+      | resource_name | hello-openshift                       |
+      | p             | {"spec":{"activeDeadlineSeconds":-5}} |
     Then the step should fail
     And the output should contain "Invalid value: -5"
 
@@ -201,15 +201,14 @@ Feature: pods related scenarios
   Scenario: 4.0 Oauth provider info should be consumed in a pod
     Given I have a project
     When I run the :new_app client command with:
-      | docker_image     | aosqe/ruby-ex        |
+      | docker_image | aosqe/ruby-ex |
     Then the step should succeed
     Given a pod becomes ready with labels:
-      | deploymentconfig=ruby-ex      |
+      | deploymentconfig=ruby-ex |
     When I run the :rsh client command with:
-      | pod          | <%= pod.name %> |
-      | _stdin       | curl https://kubernetes.default.svc/.well-known/oauth-authorization-server -k |
+      | pod    | <%= pod.name %>                                                               |
+      | _stdin | curl https://kubernetes.default.svc/.well-known/oauth-authorization-server -k |
     Then the step should succeed
     And the output should contain:
-      | implicit                |
-      | user:list-projects      |
-
+      | implicit           |
+      | user:list-projects |

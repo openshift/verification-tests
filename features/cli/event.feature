@@ -8,19 +8,19 @@ Feature: Event related scenarios
     Given I obtain test data file "quota/quota_template.yaml"
     When I run the :new_app admin command with:
       | file  | quota_template.yaml |
-      | param | CPU_VALUE=20    |
-      | param | MEM_VALUE=1Gi   |
-      | param | PV_VALUE=10     |
-      | param | POD_VALUE=10    |
-      | param | RC_VALUE=20     |
-      | param | RQ_VALUE=1      |
-      | param | SECRET_VALUE=10 |
-      | param | SVC_VALUE=5     |
-      | n     | <%= project.name %>            |
+      | param | CPU_VALUE=20        |
+      | param | MEM_VALUE=1Gi       |
+      | param | PV_VALUE=10         |
+      | param | POD_VALUE=10        |
+      | param | RC_VALUE=20         |
+      | param | RQ_VALUE=1          |
+      | param | SECRET_VALUE=10     |
+      | param | SVC_VALUE=5         |
+      | n     | <%= project.name %> |
     Then the step should succeed
-    When  I run the :describe client command with:
-      | resource  | quota   |
-      | name      | myquota |
+    When I run the :describe client command with:
+      | resource | quota   |
+      | name     | myquota |
     Then the output should match:
       | cpu\\s+0\\s+20                    |
       | memory\\s+0\\s+1Gi                |
@@ -31,9 +31,9 @@ Feature: Event related scenarios
       | secrets\\s+9\\s+10                |
       | services\\s+0\\s+5                |
     When I run the :run client command with:
-      | name      | nginx   |
-      | image     | nginx   |
-      | replicas  | 1       |
+      | name     | nginx |
+      | image    | nginx |
+      | replicas | 1     |
     Then the step should succeed
     Given I wait for the steps to pass:
     """
@@ -41,9 +41,9 @@ Feature: Event related scenarios
     Then the output should match:
       | forbidden.*quota.*must specify cpu,memory |
     """
-    When  I run the :describe client command with:
-      | resource  | dc      |
-      | name      | nginx   |
+    When I run the :describe client command with:
+      | resource | dc    |
+      | name     | nginx |
     Then the output should match:
       | forbidden.*quota.*must specify cpu,memory |
 
@@ -62,9 +62,9 @@ Feature: Event related scenarios
       | hello-openshift.*Normal\\s+Pulled    |
       | hello-openshift.*Normal\\s+Created   |
       | hello-openshift.*Normal\\s+Started   |
-    When  I run the :describe client command with:
-      | resource  | pods             |
-      | name      | hello-openshift  |
+    When I run the :describe client command with:
+      | resource | pods            |
+      | name     | hello-openshift |
     Then the output should match:
       | Normal\\s+Scheduled |
       | Normal\\s+Pulled    |
@@ -82,13 +82,13 @@ Feature: Event related scenarios
       | hello-openshift-invalid.*Normal\\s+BackOff     |
       | hello-openshift-invalid.*Warning\\s+Failed     |
     """
-    When  I run the :describe client command with:
-      | resource  | pods                    |
-      | name      | hello-openshift-invalid |
+    When I run the :describe client command with:
+      | resource | pods                    |
+      | name     | hello-openshift-invalid |
     Then the output should match:
-      | Normal\\s+Scheduled   |
-      | Normal\\s+BackOff     |
-      | Warning\\s+Failed     |
+      | Normal\\s+Scheduled |
+      | Normal\\s+BackOff   |
+      | Warning\\s+Failed   |
 
   # @author dma@redhat.com
   # @case_id OCP-10208
@@ -107,4 +107,3 @@ Feature: Event related scenarios
     Then the output should match:
       | Unhealthy.*Readiness probe (failed\|errored):.*exec failed.*\\/bin\\/hello:\\s+no such file or directory |
     """
-

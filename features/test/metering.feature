@@ -1,4 +1,5 @@
 Feature: test metering related steps
+
   @admin
   @destructive
   Scenario: test metering install
@@ -7,8 +8,8 @@ Feature: test metering related steps
     And I store master major version in the clipboard
     Given I obtain test data file "logging_metrics/default_install_metering_params"
     And metering service is installed with ansible using:
-      | inventory     | default_install_metering_params |
-      | playbook_args | -e openshift_image_tag=v<%= cb.master_version %> -e openshift_release=<%= cb.master_version %>                     |
+      | inventory     | default_install_metering_params                                                                |
+      | playbook_args | -e openshift_image_tag=v<%= cb.master_version %> -e openshift_release=<%= cb.master_version %> |
 
   # assume we have metering service already installed
   @admin
@@ -19,8 +20,8 @@ Feature: test metering related steps
     And I use the "<%= cb.metering_namespace.name %>" project
     Given I select a random node's host
     Given I get the "node-cpu-capacity" report and store it in the clipboard using:
-      | run_immediately | true               |
-      | query_type      | node-cpu-capacity   |
+      | run_immediately | true              |
+      | query_type      | node-cpu-capacity |
     Given I get the "node-memory-capacity-test" report and store it in the clipboard using:
       | query_type      | node-memory-capacity                              |
       | run_immediately | false                                             |
@@ -61,7 +62,6 @@ Feature: test metering related steps
   Scenario: test report generation step
     Given I switch to cluster admin pseudo user
     Given I use the "openshift-metering" project
-
     Then I generate a metering report with:
       | metadata_name | test                     |
       | query_type    | namespace-memory-request |
@@ -72,5 +72,3 @@ Feature: test metering related steps
     And I use the "openshift-metering" project
     And evaluation of `"openshift-metering"` is stored in the :metering_namespace clipboard
     And I enable route for metering service
-
-

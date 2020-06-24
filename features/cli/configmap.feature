@@ -7,8 +7,8 @@ Feature: configMap
     Given I have a project
     Given I obtain test data file "configmap/configmap.yaml"
     When I run the :create client command with:
-      | f | configmap.yaml |
-      | n | <%= project.name %>                                                                   |
+      | f | configmap.yaml      |
+      | n | <%= project.name %> |
     Then the step should succeed
     When I run the :get client command with:
       | resource | configmap |
@@ -40,8 +40,8 @@ Feature: configMap
     Given I have a project
     Given I obtain test data file "configmap/configmap.yaml"
     When I run the :create client command with:
-      | f | configmap.yaml |
-      | n | <%= project.name %>                                                                   |
+      | f | configmap.yaml      |
+      | n | <%= project.name %> |
     Then the step should succeed
     When I run the :get client command with:
       | resource | configmap |
@@ -82,7 +82,7 @@ Feature: configMap
     Given I obtain test data file "configmap/configmap-example.yaml"
     When I run the :create client command with:
       | f | configmap-example.yaml |
-      | n | <%= project.name %>                                                                   |
+      | n | <%= project.name %>    |
     Then the step should succeed
     When I run the :get client command with:
       | resource | configmap |
@@ -97,9 +97,9 @@ Feature: configMap
       | example.property.1    |
       | example.property.2    |
     When I run the :patch client command with:
-      | resource | configmap |
-      | resource_name | example-config |
-      | p | {"data":{"example.property.1":"hello_configmap_update"}} |
+      | resource      | configmap                                                |
+      | resource_name | example-config                                           |
+      | p             | {"data":{"example.property.1":"hello_configmap_update"}} |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | configmap      |
@@ -109,7 +109,7 @@ Feature: configMap
       | example.property.1    |
       | example.property.2    |
     When I run the :delete client command with:
-      | object_type | configmap         |
+      | object_type       | configmap      |
       | object_name_or_id | example-config |
     Then the step should succeed
     And the output should match:
@@ -122,8 +122,8 @@ Feature: configMap
     Given I have a project
     Given I obtain test data file "configmap/configmap.yaml"
     When I run the :create client command with:
-      | f | configmap.yaml |
-      | n | <%= project.name %>                                                                   |
+      | f | configmap.yaml      |
+      | n | <%= project.name %> |
     Then the step should succeed
     When I run the :get client command with:
       | resource | configmap |
@@ -153,16 +153,16 @@ Feature: configMap
     Given I have a project
     Given a "redis-config" file is created with the following lines:
     """
-    maxmemory 2mb
-    maxmemory-policy allkeys-lru
+      maxmemory 2mb
+      maxmemory-policy allkeys-lru
     """
     When I run the :create_configmap client command with:
       | name      | example-redis-config |
       | from_file | redis-config         |
     Then the step should succeed
     When I run the :describe client command with:
-      | resource  | configmap            |
-      | name      | example-redis-config |
+      | resource | configmap            |
+      | name     | example-redis-config |
     Then the output should match:
       | Name.*example-redis-config |
       | redis-config               |
@@ -190,28 +190,28 @@ Feature: configMap
     Given I create the "configmap-test" directory
     Given a "configmap-test/game.properties" file is created with the following lines:
     """
-    enemies=aliens
-    lives=3
-    enemies.cheat=true
-    enemies.cheat.level=noGoodRotten
-    secret.code.passphrase=UUDDLRLRBABAS
-    secret.code.allowed=true
-    secret.code.lives=30
+      enemies=aliens
+      lives=3
+      enemies.cheat=true
+      enemies.cheat.level=noGoodRotten
+      secret.code.passphrase=UUDDLRLRBABAS
+      secret.code.allowed=true
+      secret.code.lives=30
     """
     Given a "configmap-test/ui.properties" file is created with the following lines:
     """
-    color.good=purple
-    color.bad=yellow
-    allow.textmode=true
-    how.nice.to.look=fairlyNice
+      color.good=purple
+      color.bad=yellow
+      allow.textmode=true
+      how.nice.to.look=fairlyNice
     """
     When I run the :create_configmap client command with:
       | name      | game-config-1                  |
       | from_file | configmap-test/game.properties |
     Then the step should succeed
     When I run the :describe client command with:
-      | resource  | configmap     |
-      | name      | game-config-1 |
+      | resource | configmap     |
+      | name     | game-config-1 |
     Then the output should match:
       | Name.*game-config-1 |
       | game.properties     |
@@ -232,8 +232,8 @@ Feature: configMap
       | from_file | configmap-test/ui.properties   |
     Then the step should succeed
     When I run the :describe client command with:
-      | resource  | configmap     |
-      | name      | game-config-2 |
+      | resource | configmap     |
+      | name     | game-config-2 |
     Then the output should match:
       | Name.*game-config-2 |
       | game.properties     |
@@ -286,8 +286,8 @@ Feature: configMap
       | from_literal | special.type=charm |
     Then the step should succeed
     When I run the :describe client command with:
-      | resource  | configmap      |
-      | name      | special-config |
+      | resource | configmap      |
+      | name     | special-config |
     Then the output should match:
       | Name.*special-config |
       | special.how          |
@@ -306,28 +306,28 @@ Feature: configMap
     Given I create the "configmap-test" directory
     Given a "configmap-test/game.properties" file is created with the following lines:
     """
-    enemies=aliens
-    lives=3
-    enemies.cheat=true
-    enemies.cheat.level=noGoodRotten
-    secret.code.passphrase=UUDDLRLRBABAS
-    secret.code.allowed=true
-    secret.code.lives=30
+      enemies=aliens
+      lives=3
+      enemies.cheat=true
+      enemies.cheat.level=noGoodRotten
+      secret.code.passphrase=UUDDLRLRBABAS
+      secret.code.allowed=true
+      secret.code.lives=30
     """
     Given a "configmap-test/ui.properties" file is created with the following lines:
     """
-    color.good=purple
-    color.bad=yellow
-    allow.textmode=true
-    how.nice.to.look=fairlyNice
+      color.good=purple
+      color.bad=yellow
+      allow.textmode=true
+      how.nice.to.look=fairlyNice
     """
     When I run the :create_configmap client command with:
       | name      | game-config    |
       | from_file | configmap-test |
     Then the step should succeed
     When I run the :describe client command with:
-      | resource  | configmap   |
-      | name      | game-config |
+      | resource | configmap   |
+      | name     | game-config |
     Then the output should match:
       | Name.*game-config |
       | game.properties   |
@@ -351,7 +351,7 @@ Feature: configMap
 
   # @author xiuli@redhat.com
   # @case_id OCP-16721
-  Scenario: Changes to ConfigMap should be auto-updated into container	
+  Scenario: Changes to ConfigMap should be auto-updated into container
     Given I have a project
     Given I obtain test data file "configmap/configmap.json"
     When I run the :create client command with:
@@ -380,4 +380,3 @@ Feature: configMap
       | well |
     """
     Then the step should succeed
-

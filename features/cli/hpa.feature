@@ -11,9 +11,9 @@ Feature: hpa scale
     Given a pod becomes ready with labels:
       | deployment=hello-openshift-1 |
     When I run the :autoscale client command with:
-      | name | dc/hello-openshift    |
-      | min  | 2                     |
-      | max  | 10                    |
+      | name | dc/hello-openshift |
+      | min  | 2                  |
+      | max  | 10                 |
     Then the step should succeed
     When I get project hpa
     Then the output should match:
@@ -22,9 +22,9 @@ Feature: hpa scale
     Given 2 pods become ready with labels:
       | deployment=hello-openshift-1 |
     When I run the :scale client command with:
-      | resource | deploymentconfig  |
-      | name     | hello-openshift   |
-      | replicas | 0                 |
+      | resource | deploymentconfig |
+      | name     | hello-openshift  |
+      | replicas | 0                |
     Then the step should succeed
     And I wait until number of replicas match "0" for replicationController "hello-openshift-1"
     Given 35 seconds have passed
@@ -52,10 +52,10 @@ Feature: hpa scale
     Then the step should succeed
     When I get project hpa
     Then the output should match:
-      | hello-openshift.*80%.*2\\s+10     |
+      | hello-openshift.*80%.*2\\s+10 |
     And I wait until number of replicas match "2" for replicationController "hello-openshift"
     Given 2 pods become ready with labels:
-      | run=hello-openshift               |
+      | run=hello-openshift |
     When I run the :scale client command with:
       | resource | replicationcontrollers |
       | name     | hello-openshift        |
@@ -100,9 +100,9 @@ Feature: hpa scale
     Then the step should succeed
     When I get project hpa
     Then the output should match:
-      | hello-openshift.*30%.*1\\s+5  |
+      | hello-openshift.*30%.*1\\s+5 |
     And a pod becomes ready with labels:
-      | run=hello-openshift           |
+      | run=hello-openshift |
     When I run the :delete client command with:
       | object_type       | hpa             |
       | object_name_or_id | hello-openshift |
@@ -115,9 +115,9 @@ Feature: hpa scale
     Then the step should succeed
     When I get project hpa
     Then the output should match:
-      | hello-openshift.*80%.*1\\s+5  |
+      | hello-openshift.*80%.*1\\s+5 |
     And a pod becomes ready with labels:
-      | run=hello-openshift           |
+      | run=hello-openshift |
 
   # @author chezhang@redhat.com
   # @case_id OCP-11576
@@ -139,14 +139,13 @@ Feature: hpa scale
       | name | rc/hello-openshift |
       | max  | 0                  |
       | max  | 0                  |
-     Then the step should fail
+    Then the step should fail
     And the output should match:
       | MAXPODS is required and must be at least 1 |
     When I run the :autoscale client command with:
       | name | rc/hello-openshift |
       | min  | -2                 |
       | max  | -5                 |
-     Then the step should fail
+    Then the step should fail
     And the output should match:
       | MAXPODS is required and must be at least 1 |
-

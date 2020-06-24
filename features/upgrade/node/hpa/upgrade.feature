@@ -1,4 +1,5 @@
 Feature: basic verification for upgrade testing
+
   # @author weinliu@redhat.com
   @upgrade-prepare
   @admin
@@ -31,15 +32,14 @@ Feature: basic verification for upgrade testing
     Then the step should succeed
     Given I obtain test data file "configmap/configmap.yaml"
     When I run the :create client command with:
-      | f | configmap.yaml |
-      | n | <%= project.name %>                                       |
-    Then the step should succeed	
+      | f | configmap.yaml      |
+      | n | <%= project.name %> |
+    Then the step should succeed
     Given I obtain test data file "configmap/pod-configmap-volume1.yaml"
     When I run the :create client command with:
       | f | pod-configmap-volume1.yaml |
-    Then the step should succeed	
+    Then the step should succeed
     And the pod named "dapi-test-pod-1" status becomes :succeeded
- 
 
   # @author weinliu@redhat.com
   # @case_id OCP-13016
@@ -97,7 +97,7 @@ Feature: basic verification for upgrade testing
       | special.type |
     Given I obtain test data file "configmap/pod-configmap-volume2.yaml"
     When I run the :create client command with:
-          | f | pod-configmap-volume2.yaml |
+      | f | pod-configmap-volume2.yaml |
     Then the step should succeed
     And the pod named "dapi-test-pod-2" status becomes :succeeded
     When I run the :logs client command with:

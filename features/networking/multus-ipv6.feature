@@ -1,5 +1,5 @@
-Feature: Multus-CNI ipv6 related scenarios  
-  
+Feature: Multus-CNI ipv6 related scenarios
+
   # @author weliang@redhat.com
   # @case_id OCP-28968
   @admin
@@ -13,10 +13,9 @@ Feature: Multus-CNI ipv6 related scenarios
     Given I have a project
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/IPv6/macvlan-bridge-v6.yaml"
     When I run oc create as admin over "macvlan-bridge-v6.yaml" replacing paths:
-      | ["metadata"]["namespace"] | <%= project.name %>            |    
-      | ["spec"]["config"]| '{ "cniVersion": "0.3.0", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "bridge", "ipam": { "type": "host-local", "subnet": "fd00:dead:beef::/64"} }' |
+      | ["metadata"]["namespace"] | <%= project.name %>                                                                                                                                                        |
+      | ["spec"]["config"]        | '{ "cniVersion": "0.3.0", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "bridge", "ipam": { "type": "host-local", "subnet": "fd00:dead:beef::/64"} }' |
     Then the step should succeed
-
     # Create the first pod which consumes the macvlan custom resource
     Given I obtain test data file "networking/multus-cni//Pods/IPv6/1interface-macvlan-bridge-v6.yaml"
     When I run oc create over "1interface-macvlan-bridge-v6.yaml" replacing paths:
@@ -25,7 +24,6 @@ Feature: Multus-CNI ipv6 related scenarios
     And a pod becomes ready with labels:
       | name=macvlan-bridge-pod-v6 |
     And evaluation of `pod.node_name` is stored in the :pod_node clipboard
-
     # Check that the macvlan with mode bridge is added to the pod
     When I execute on the pod:
       | /usr/sbin/ip | -d | link |
@@ -35,7 +33,6 @@ Feature: Multus-CNI ipv6 related scenarios
       | bash | -c | /usr/sbin/ip addr show net1 \| grep -Po 'fd00:dead:beef::[[:xdigit:]]{1,4}' |
     Then the step should succeed
     And evaluation of `@result[:response].chomp` is stored in the :pod1_multus_ipv6 clipboard
-  
     # Create the second pod which consumes the macvlan cr
     Given I obtain test data file "networking/multus-cni//Pods/IPv6/1interface-macvlan-bridge-v6.yaml"
     When I run oc create over "1interface-macvlan-bridge-v6.yaml" replacing paths:
@@ -44,7 +41,6 @@ Feature: Multus-CNI ipv6 related scenarios
     And 2 pods become ready with labels:
       | name=macvlan-bridge-pod-v6 |
     And evaluation of `pod(-1).name` is stored in the :pod2 clipboard
-
     # Try to access macvlan ip on pod1 from pod2
     When I execute on the "<%= cb.pod2 %>" pod:
       | curl | -g | -6 | --connect-timeout | 5 | [<%= cb.pod1_multus_ipv6 %>]:8080 |

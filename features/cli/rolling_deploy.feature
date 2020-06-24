@@ -34,7 +34,7 @@ Feature: rolling deployment related scenarios
       | keep 3 pods available, don't exceed 4 pods |
     And I replace resource "dc" named "hooks":
       | maxUnavailable: 25% | maxUnavailable: 1 |
-      | maxSurge: 25% | maxSurge: 2             |
+      | maxSurge: 25%       | maxSurge: 2       |
     Then the step should succeed
     When I run the :rollout_latest client command with:
       | resource | dc/hooks |

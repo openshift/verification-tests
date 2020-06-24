@@ -8,7 +8,6 @@ Feature: Testing abrouting
     And I use the router project
     Given all default router pods become ready
     Then evaluation of `pod.name` is stored in the :router_pod clipboard
-
     Given I switch to the first user
     And I have a project
     Given I obtain test data file "routing/abrouting/caddy-docker.json"
@@ -47,12 +46,11 @@ Feature: Testing abrouting
       | service   | service-unsecure-2=80 |
     Then the step should succeed
     When I run the :set_backends client command with:
-      | routename | service-unsecure      |
+      | routename | service-unsecure |
     Then the step should succeed
     Then the output should contain 1 times:
       | (20%) |
       | (80%) |
-
     Given I switch to cluster admin pseudo user
     And I use the router project
     And I wait up to 30 seconds for the steps to pass:
@@ -63,7 +61,6 @@ Feature: Testing abrouting
       | <%= cb.pod_ip1 %>.* weight 64  |
       | <%= cb.pod_ip2 %>.* weight 256 |
     """
-
     Given I switch to the first user
     When I run the :set_backends client command with:
       | routename | service-unsecure      |
@@ -71,12 +68,11 @@ Feature: Testing abrouting
       | service   | service-unsecure=-10% |
     Then the step should succeed
     When I run the :set_backends client command with:
-      | routename | service-unsecure      |
+      | routename | service-unsecure |
     Then the step should succeed
     Then the output should contain 1 times:
       | (10%) |
       | (90%) |
-
     Given I switch to cluster admin pseudo user
     And I use the router project
     And I wait up to 30 seconds for the steps to pass:
@@ -96,7 +92,6 @@ Feature: Testing abrouting
     And I use the router project
     Given all default router pods become ready
     Then evaluation of `pod.name` is stored in the :router_pod clipboard
-
     Given I switch to the first user
     And I have a project
     Given I obtain test data file "routing/abrouting/caddy-docker.json"
@@ -126,13 +121,13 @@ Feature: Testing abrouting
     Given I obtain test data file "routing/reencrypt/route_reencrypt.ca"
     Given I obtain test data file "routing/reencrypt/route_reencrypt_dest.ca"
     When I run the :create_route_reencrypt client command with:
-      | name       | route-reencrypt                                                            |
-      | hostname   | <%= rand_str(5, :dns) %>-reen.example.com                                  |
-      | service    | service-secure                                                             |
-      | cert       | example_wildcard.pem              |
-      | key        | example_wildcard.key              |
-      | cacert     | route_reencrypt.ca      |
-      | destcacert | route_reencrypt_dest.ca |
+      | name       | route-reencrypt                           |
+      | hostname   | <%= rand_str(5, :dns) %>-reen.example.com |
+      | service    | service-secure                            |
+      | cert       | example_wildcard.pem                      |
+      | key        | example_wildcard.key                      |
+      | cacert     | route_reencrypt.ca                        |
+      | destcacert | route_reencrypt_dest.ca                   |
     Then the step should succeed
     When I run the :annotate client command with:
       | resource     | route                                          |
@@ -141,9 +136,9 @@ Feature: Testing abrouting
       | keyval       | haproxy.router.openshift.io/balance=roundrobin |
     Then the step should succeed
     When I run the :set_backends client command with:
-      | routename | route-reencrypt     |
-      | service   | service-secure=3    |
-      | service   | service-secure-2=7  |
+      | routename | route-reencrypt    |
+      | service   | service-secure=3   |
+      | service   | service-secure-2=7 |
     Then the step should succeed
     When I run the :set_backends client command with:
       | routename | route-reencrypt |
@@ -151,7 +146,6 @@ Feature: Testing abrouting
     Then the output should contain 1 times:
       | (30%) |
       | (70%) |
-
     Given I switch to cluster admin pseudo user
     And I use the router project
     And I wait up to 30 seconds for the steps to pass:
@@ -162,19 +156,17 @@ Feature: Testing abrouting
       | <%= cb.pod_ip1 %>.* weight 109 |
       | <%= cb.pod_ip2 %>.* weight 256 |
     """
-
     Given I switch to the first user
     When I run the :set_backends client command with:
-      | routename | route-reencrypt        |
-      | adjust    | true                   |
-      | service   | service-secure=-20%  |
+      | routename | route-reencrypt     |
+      | adjust    | true                |
+      | service   | service-secure=-20% |
     When I run the :set_backends client command with:
       | routename | route-reencrypt |
     Then the step should succeed
     Then the output should contain 1 times:
       | (10%) |
       | (90%) |
-
     Given I switch to cluster admin pseudo user
     And I use the router project
     And I wait up to 30 seconds for the steps to pass:
@@ -226,7 +218,6 @@ Feature: Testing abrouting
       | service   | service-unsecure=1   |
       | service   | service-unsecure-2=9 |
     Then the step should succeed
-
     Given I switch to cluster admin pseudo user
     And I wait up to 30 seconds for the steps to pass:
     """
@@ -283,7 +274,6 @@ Feature: Testing abrouting
     And I use the router project
     Given all default router pods become ready
     Then evaluation of `pod.name` is stored in the :router_pod clipboard
-
     Given I switch to the first user
     And I have a project
     # Create pods and services
@@ -311,7 +301,7 @@ Feature: Testing abrouting
       | service   | service-unsecure-4=40 |
     Then the step should succeed
     When I run the :set_backends client command with:
-      | routename | service-unsecure  |
+      | routename | service-unsecure |
     Then the step should succeed
     Then the output should contain:
       | 20% |
@@ -335,7 +325,6 @@ Feature: Testing abrouting
       | replicas | 3                      |
     Then the step should succeed
     And all pods in the project are ready
-
     Given I switch to cluster admin pseudo user
     And I use the router project
     And I wait up to 30 seconds for the steps to pass:
@@ -363,7 +352,6 @@ Feature: Testing abrouting
     And I use the router project
     Given all default router pods become ready
     Then evaluation of `pod.name` is stored in the :router_pod clipboard
-
     Given I switch to the first user
     And I have a project
     # Create pods and services
@@ -386,14 +374,14 @@ Feature: Testing abrouting
       | service | service-secure |
     Then the step should succeed
     When I run the :set_backends client command with:
-      | routename | route-pass            |
+      | routename | route-pass          |
       | service   | service-secure=20   |
       | service   | service-secure-2=10 |
       | service   | service-secure-3=30 |
       | service   | service-secure-4=40 |
     Then the step should succeed
     When I run the :set_backends client command with:
-      | routename | route-pass            |
+      | routename | route-pass |
     Then the step should succeed
     Then the output should contain:
       | 20% |
@@ -417,7 +405,6 @@ Feature: Testing abrouting
       | replicas | 3                      |
     Then the step should succeed
     And all pods in the project are ready
-
     Given I switch to cluster admin pseudo user
     And I use the router project
     And I wait up to 30 seconds for the steps to pass:

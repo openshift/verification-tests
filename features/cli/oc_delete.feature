@@ -9,14 +9,14 @@ Feature: oc_delete.feature
       | f | 10.json |
     Given the pod named "grace10" becomes ready
     When I run the :get client command with:
-      | resource | pods |
+      | resource      | pods    |
       | resource_name | grace10 |
-      | o | yaml |
+      | o             | yaml    |
     Then the output should contain "terminationGracePeriodSeconds"
     When I run the :delete background client command with:
-      | object_type | pod |
-      | l | name=graceful |
-      | grace_period | 20 |
+      | object_type  | pod           |
+      | l            | name=graceful |
+      | grace_period | 20            |
     Then the step should succeed
     Given 10 seconds have passed
     When I get project pods
@@ -33,14 +33,14 @@ Feature: oc_delete.feature
       | f | 10.json |
     Given the pod named "grace10" becomes ready
     When I run the :get client command with:
-      | resource | pods |
+      | resource      | pods    |
       | resource_name | grace10 |
-      | o | yaml |
+      | o             | yaml    |
     Then the output should contain "terminationGracePeriodSeconds"
     When I run the :delete client command with:
-      | object_type | pod |
-      | l | name=graceful |
-      | grace_period | 0 |
+      | object_type  | pod           |
+      | l            | name=graceful |
+      | grace_period | 0             |
     Then the step should succeed
     When I get project pods
     Then the step should succeed
@@ -70,7 +70,7 @@ Feature: oc_delete.feature
     #as noted in the @bug_id above.
     Then the output should match "<%= cb.prj1 %>\s+Terminating"
     When I run the :get admin command with:
-      | resource | pods |
+      | resource       | pods |
       | all_namespaces | true |
     And the output should match "<%= cb.pod %>.*Terminating"
     Given I wait for the steps to pass:
@@ -91,13 +91,13 @@ Feature: oc_delete.feature
       | f | default.json |
     Given the pod named "grace-default" becomes ready
     When I run the :get client command with:
-      | resource | pods |
+      | resource      | pods          |
       | resource_name | grace-default |
-      | o | yaml |
+      | o             | yaml          |
     Then the output should contain "terminationGracePeriodSeconds: 30"
     When I run the :delete background client command with:
-      | object_type | pod |
-      | l | name=graceful |
+      | object_type | pod           |
+      | l           | name=graceful |
     Then the step should succeed
     Given 20 seconds have passed
     When I get project pods
@@ -118,13 +118,13 @@ Feature: oc_delete.feature
       | f | 10.json |
     Given the pod named "grace10" becomes ready
     When I run the :get client command with:
-      | resource | pods |
+      | resource      | pods    |
       | resource_name | grace10 |
-      | o | yaml |
+      | o             | yaml    |
     Then the output should contain "terminationGracePeriodSeconds: 10"
     When I run the :delete background client command with:
-      | object_type | pod |
-      | l | name=graceful |
+      | object_type | pod           |
+      | l           | name=graceful |
     Then the step should succeed
     When I get project pods
     Then the step should succeed
@@ -144,16 +144,15 @@ Feature: oc_delete.feature
       | f | 0.json |
     Given the pod named "grace0" becomes ready
     When I run the :get client command with:
-      | resource | pods |
+      | resource      | pods   |
       | resource_name | grace0 |
-      | o | yaml |
+      | o             | yaml   |
     Then the output should contain "terminationGracePeriodSeconds: 0"
     When I run the :delete client command with:
-      | object_type | pod |
-      | l | name=graceful |
+      | object_type | pod           |
+      | l           | name=graceful |
     Then the step should succeed
     When I get project pods
     Then the step should succeed
     And the output should not contain "Terminating"
     And the output should not contain "Running"
-

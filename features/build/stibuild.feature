@@ -84,7 +84,7 @@ Feature: stibuild.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-28891
-  Scenario: Test s2i build in disconnect cluster 
+  Scenario: Test s2i build in disconnect cluster
     Given I have a project
     When I have an http-git service in the project
     And I run the :set_env client command with:
@@ -97,7 +97,7 @@ Feature: stibuild.feature
       | deployment=git-2     |
     Given I obtain test data file "build/httpd-ex.git"
     When I run the :cp client command with:
-      | source | httpd-ex.git | 
+      | source | httpd-ex.git |
       | dest   | <%= pod.name %>:/var/lib/git/                       |
     Then the step should succeed
     When I run the :new_app client command with:

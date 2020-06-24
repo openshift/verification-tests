@@ -1,11 +1,12 @@
 Feature: test container related support
+
   @admin
   @destructive
   Scenario: test methods for getting containers spec
     Given I create a project with non-leading digit name
     And logging service is installed in the system
     Given a pod becomes ready with labels:
-      |  component=kibana,deployment=logging-kibana-1,deploymentconfig=logging-kibana,logging-infra=kibana,provider=openshift |
+      | component=kibana,deployment=logging-kibana-1,deploymentconfig=logging-kibana,logging-infra=kibana,provider=openshift |
     # check kibana pods settings
     And evaluation of `pod.container(user: user, name: 'kibana').spec.memory_limit_raw` is stored in the :kibana_container_res_limit clipboard
     And evaluation of `pod.container(user: user, name: 'kibana-proxy').spec.memory_limit_raw` is stored in the :kibana_proxy_container_res_limit clipboard
@@ -24,7 +25,6 @@ Feature: test container related support
     # check daemonset
     Then the expression should be true> daemon_set('logging-fluentd').container_spec(user: user, name: 'fluentd-elasticsearch').memory_limit_raw == "512Mi"
     And evaluation of `daemon_set('logging-fluentd').containers_spec(user: user)` is stored in the :specs clipboard
-
     # test deployment and replicaset
     Given I obtain test data file "deployment/hello-deployment-1.yaml"
     When I run the :create client command with:
@@ -36,8 +36,8 @@ Feature: test container related support
       | updated   | 10 |
       | available | 10 |
     Given number of replicas of the current replica set for the "hello-openshift" deployment becomes:
-      | desired  | 10 |
-      | current  | 10 |
-      | ready    | 10 |
+      | desired | 10 |
+      | current | 10 |
+      | ready   | 10 |
     And the expression should be true> deployment.container_spec(user: user, name: 'hello-openshift').image_pull_policy == 'Always'
     And the expression should be true> deployment.container_spec(user: user, name: 'hello-openshift').termination_message_path == '/dev/termination-log'

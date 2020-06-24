@@ -65,7 +65,6 @@ Feature: Storage object in use protection
       | ["spec"]["volumeName"] | pv-<%= project.name %> |
     Then the step should succeed
     And the "mypvc" PVC becomes bound to the "pv-<%= project.name %>" PV
-
     When I run the :delete admin command with:
       | object_type       | pv                     |
       | object_name_or_id | pv-<%= project.name %> |
@@ -80,4 +79,3 @@ Feature: Storage object in use protection
     Given I ensure "mypvc" pvc is deleted
     And I switch to cluster admin pseudo user
     Then I wait for the resource "pv" named "pv-<%= project.name %>" to disappear within 30 seconds
-

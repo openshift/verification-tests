@@ -9,29 +9,29 @@ Feature: projects related features via cli
     Then the step should succeed
     # TODO: yapei, this is a work around for AEP, please add step `the step should succeed` according to latest good solution
     When I create a new application with:
-      | docker image | openshift/mysql-55-centos7 |
+      | docker image | openshift/mysql-55-centos7                    |
       | code         | https://github.com/openshift/ruby-hello-world |
-      | n            | <%= cb.prj_name %>           |
+      | n            | <%= cb.prj_name %>                            |
     And the output should contain:
       | mysql-55-centos7 |
       | ruby-hello-world |
     ### get project resource
     When I run the :get client command with:
-      | resource | deploymentconfigs |
-      | n        | <%= cb.prj_name %>  |
-    Then the step should succeed
-    And the output should contain:
-      | mysql-55-centos7 |
-      | ruby-hello-world |
-    When I run the :get client command with:
-      | resource | services |
+      | resource | deploymentconfigs  |
       | n        | <%= cb.prj_name %> |
     Then the step should succeed
     And the output should contain:
       | mysql-55-centos7 |
       | ruby-hello-world |
     When I run the :get client command with:
-      | resource | is |
+      | resource | services           |
+      | n        | <%= cb.prj_name %> |
+    Then the step should succeed
+    And the output should contain:
+      | mysql-55-centos7 |
+      | ruby-hello-world |
+    When I run the :get client command with:
+      | resource | is                 |
       | n        | <%= cb.prj_name %> |
     Then the step should succeed
     And the output should contain:
@@ -41,26 +41,25 @@ Feature: projects related features via cli
     Given the "<%= cb.prj_name %>" project is deleted
     ### get project resource after project is deleted
     When I run the :get client command with:
-      | resource | deploymentconfigs |
-      | n        | <%= cb.prj_name %>  |
-    Then the step should fail
-    And the output should not contain:
-      | mysql-55-centos7 |
-      | ruby-hello-world |
-    When I run the :get client command with:
-      | resource | services |
+      | resource | deploymentconfigs  |
       | n        | <%= cb.prj_name %> |
     Then the step should fail
     And the output should not contain:
       | mysql-55-centos7 |
       | ruby-hello-world |
     When I run the :get client command with:
-      | resource | pods  |
+      | resource | services           |
+      | n        | <%= cb.prj_name %> |
+    Then the step should fail
+    And the output should not contain:
+      | mysql-55-centos7 |
+      | ruby-hello-world |
+    When I run the :get client command with:
+      | resource | pods               |
       | n        | <%= cb.prj_name %> |
     Then the step should fail
     And the output should not contain:
       | mysql-55-centos7-1-deploy |
-
     ### create a project with same name, no context for this new one
     And I wait for the steps to pass:
     """
@@ -76,26 +75,26 @@ Feature: projects related features via cli
   # @case_id OCP-12193
   @admin
   Scenario: User can get node selector from a project
-    Given  an 8 character random string of type :dns is stored into the :oadmproj1 clipboard
-    Given  an 8 character random string of type :dns is stored into the :oadmproj2 clipboard
+    Given an 8 character random string of type :dns is stored into the :oadmproj1 clipboard
+    Given an 8 character random string of type :dns is stored into the :oadmproj2 clipboard
     When admin creates a project with:
       | project_name | <%= cb.oadmproj1 %> |
-      | admin | <%= user.name %> |
+      | admin        | <%= user.name %>    |
     Then the step should succeed
     When admin creates a project with:
-      | project_name | <%= cb.oadmproj2 %> |
-      | node_selector | env=qa |
-      | description | testnodeselector |
-      | admin | <%= user.name %> |
+      | project_name  | <%= cb.oadmproj2 %> |
+      | node_selector | env=qa              |
+      | description   | testnodeselector    |
+      | admin         | <%= user.name %>    |
     Then the step should succeed
     When I run the :describe client command with:
-      | resource | project |
-      | name | <%= cb.oadmproj1 %> |
+      | resource | project             |
+      | name     | <%= cb.oadmproj1 %> |
     Then the step should succeed
     And the output should match "Node Selector:\s+<none>"
     When I run the :describe client command with:
-      | resource | project |
-      | name | <%= cb.oadmproj2 %> |
+      | resource | project             |
+      | name     | <%= cb.oadmproj2 %> |
     Then the step should succeed
     And the output should match "Node Selector:\s+env=qa"
 
@@ -144,4 +143,3 @@ Feature: projects related features via cli
     And a pod becomes ready with labels:
       | name=hello-openshift |
     Then the expression should be true> project.uid_range(user:user).begin == pod.fs_group(user:user)
-

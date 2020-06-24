@@ -1,4 +1,5 @@
 Feature: apiserver and auth related upgrade check
+
   # @author pmali@redhat.com
   # @case_id OCP-22734
   @upgrade-prepare
@@ -14,13 +15,11 @@ Feature: apiserver and auth related upgrade check
   @admin
   Scenario: Check Authentication operators and operands are upgraded correctly
     Given the "authentication" operator version matches the current cluster version
-
     # Check cluster operators should be in correct status
     Given the expression should be true> cluster_operator('authentication').condition(type: 'Progressing')['status'] == "False"
     And the expression should be true> cluster_operator('authentication').condition(type: 'Available')['status'] == "True"
     And the expression should be true> cluster_operator('authentication').condition(type: 'Degraded')['status'] == "False"
     And the expression should be true> cluster_operator('authentication').condition(type: 'Upgradeable')['status'] == "True"
-
     # operator pod image
     When I run the :get admin command with:
       | resource | po                                            |
@@ -28,22 +27,18 @@ Feature: apiserver and auth related upgrade check
       | o        | jsonpath={.items[0].spec.containers[0].image} |
     Then the step should succeed
     And evaluation of `@result[:response]` is stored in the :auth_operator_image clipboard
-
     # Check cluster version
     When I run the :get admin command with:
       | resource | clusterversion/version           |
       | o        | jsonpath={.status.desired.image} |
     Then the step should succeed
     And evaluation of `@result[:response]` is stored in the :payload_image clipboard
-
     # Check the payload info
     Given evaluation of `"oc adm release info --registry-config=/var/lib/kubelet/config.json <%= cb.payload_image %>"` is stored in the :oc_adm_release_info clipboard
     When I store the ready and schedulable masters in the clipboard
     And I use the "<%= cb.nodes[0].name %>" node
-
     # due to sensitive, didn't choose to dump and save the config.json file
     # for using the step `I run the :oadm_release_info admin command ...`
-
     And I run commands on the host:
       | <%= cb.oc_adm_release_info %> --image-for=cluster-authentication-operator |
     Then the step should succeed
@@ -100,7 +95,6 @@ Feature: apiserver and auth related upgrade check
       | o        | jsonpath={.items[0].spec.containers[0].image} |
     Then the step should succeed
     And evaluation of `@result[:response]` is stored in the :oas_image clipboard
-
     When I run the :get admin command with:
       | resource | clusterversion/version           |
       | o        | jsonpath={.status.desired.image} |
@@ -222,4 +216,3 @@ Feature: apiserver and auth related upgrade check
       | o             | jsonpath={.users} |
     And the output should match:
       | system:serviceaccount:test-scc:test-scc |
-

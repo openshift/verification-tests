@@ -7,7 +7,7 @@ Feature: ONLY ONLINE Deployment related scripts in this file
     Given I obtain test data file "deployment/dc-with-two-containers.yaml"
     When I run the :create client command with:
       | f | dc-with-two-containers.yaml |
-      | n | <%= project.name %>                                                                                       |
+      | n | <%= project.name %>         |
     Then the step should succeed
     And I wait until the status of deployment "dctest" becomes :complete
     Given I perform the :goto_set_resource_limits_for_dc web console action with:
@@ -57,11 +57,11 @@ Feature: ONLY ONLINE Deployment related scripts in this file
     And a pod becomes ready with labels:
       | deployment=dctest-2 |
     When I perform the :check_limits_on_pod_page web console action with:
-      | project_name   | <%= project.name %>  |
-      | pod_name       | <%= pod.name %>      |
-      | container_name | dctest-1             |
-      | cpu_range      | 9 millicores to 498  |
-      | memory_range   | 127 MiB to 255 MiB   |
+      | project_name   | <%= project.name %> |
+      | pod_name       | <%= pod.name %>     |
+      | container_name | dctest-1            |
+      | cpu_range      | 9 millicores to 498 |
+      | memory_range   | 127 MiB to 255 MiB  |
     Then the step should succeed
     When I perform the :check_limits_on_pod_page web console action with:
       | project_name   | <%= project.name %>  |
@@ -73,7 +73,7 @@ Feature: ONLY ONLINE Deployment related scripts in this file
     Given I obtain test data file "deployment/rc-with-two-containers.yaml"
     When I run the :create client command with:
       | f | rc-with-two-containers.yaml |
-      | n | <%= project.name %>                                                                                       |
+      | n | <%= project.name %>         |
     Then the step should succeed
     When I perform the :goto_set_resource_limits_for_rc web console action with:
       | project_name | <%= project.name %> |
@@ -132,13 +132,13 @@ Feature: ONLY ONLINE Deployment related scripts in this file
       | replicas | 1                      |
     Then the step should succeed
     Given a pod becomes ready with labels:
-      | run=rctest  |
+      | run=rctest |
     When I perform the :check_limits_on_pod_page web console action with:
-      | project_name   | <%= project.name %>  |
-      | pod_name       | <%= pod.name %>      |
-      | container_name | hello-openshift      |
-      | cpu_range      | 9 millicores to 498  |
-      | memory_range   | 127 MiB to 255 MiB   |
+      | project_name   | <%= project.name %> |
+      | pod_name       | <%= pod.name %>     |
+      | container_name | hello-openshift     |
+      | cpu_range      | 9 millicores to 498 |
+      | memory_range   | 127 MiB to 255 MiB  |
     Then the step should succeed
     When I perform the :check_limits_on_pod_page web console action with:
       | project_name   | <%= project.name %>    |
@@ -155,7 +155,7 @@ Feature: ONLY ONLINE Deployment related scripts in this file
     Given I obtain test data file "deployment/dc-with-two-containers.yaml"
     When I run the :create client command with:
       | f | dc-with-two-containers.yaml |
-      | n | <%= project.name %>                                                                                       |
+      | n | <%= project.name %>         |
     Then the step should succeed
     And I wait until the status of deployment "dctest" becomes :complete
     Given I perform the :goto_set_resource_limits_for_dc web console action with:
@@ -221,7 +221,7 @@ Feature: ONLY ONLINE Deployment related scripts in this file
     Given I obtain test data file "deployment/rc-with-two-containers.yaml"
     When I run the :create client command with:
       | f | rc-with-two-containers.yaml |
-      | n | <%= project.name %>                                                                                       |
+      | n | <%= project.name %>         |
     Then the step should succeed
     When I perform the :goto_set_resource_limits_for_rc web console action with:
       | project_name | <%= project.name %> |
@@ -280,7 +280,7 @@ Feature: ONLY ONLINE Deployment related scripts in this file
       | replicas | 1                      |
     Then the step should succeed
     Given a pod becomes ready with labels:
-      | run=rctest  |
+      | run=rctest |
     When I perform the :check_limits_on_pod_page web console action with:
       | project_name   | <%= project.name %>  |
       | pod_name       | <%= pod.name %>      |
@@ -295,4 +295,3 @@ Feature: ONLY ONLINE Deployment related scripts in this file
       | cpu_range      | 40 millicores to 500   |
       | memory_range   | 204 MiB to 256 MiB     |
     Then the step should succeed
-

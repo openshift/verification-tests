@@ -1,4 +1,5 @@
 Feature: Output inspections
+
   Scenario: the output by order should contain/match
     When I log the messages:
       | string 1 |

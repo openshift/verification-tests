@@ -1,4 +1,5 @@
 Feature: test node config related steps
+
   Background:
     Given I select a random node's host
     And the value with path " " in node config is stored into the :original_cfg clipboard
@@ -14,7 +15,7 @@ Feature: test node config related steps
   Scenario: node config change with multipline parameter
     Given config of all nodes is merged with the following hash:
     """
-    iptablesSyncPeriod: "35s"
+      iptablesSyncPeriod: "35s"
     """
     And the node service is restarted on all nodes
 
@@ -23,12 +24,11 @@ Feature: test node config related steps
   Scenario: node config will be modified multiple times
     Given config of all nodes is merged with the following hash:
     """
-    iptablesSyncPeriod: "35s"
+      iptablesSyncPeriod: "35s"
     """
-
     Given config of all nodes is merged with the following hash:
     """
-    iptablesSyncPeriod: "40s"
+      iptablesSyncPeriod: "40s"
     """
 
   @admin
@@ -36,7 +36,7 @@ Feature: test node config related steps
   Scenario: the node service will fail to restart and return result
     Given config of all schedulable nodes is merged with the following hash:
     """
-    apiVersion: BadValue
+      apiVersion: BadValue
     """
     And I try to restart the node service on all schedulable nodes
     Then the step should fail
@@ -46,7 +46,7 @@ Feature: test node config related steps
   Scenario: restore node config file before automatic restore
     Given config of all nodes is merged with the following hash:
     """
-    iptablesSyncPeriod: "35s"
+      iptablesSyncPeriod: "35s"
     """
     And the value with path " " in node config is stored into the :changedcfg clipboard
     Then the expression should be true> cb.original_cfg != cb.changedcfg

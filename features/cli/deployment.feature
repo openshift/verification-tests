@@ -18,14 +18,14 @@ Feature: deployment related steps
       | resource | deployment |
       | o        | yaml       |
     Then the output by order should match:
-      | Deployment does not have minimum availability  |
-      | MinimumReplicasUnavailable                     |
-      | status: "False"                                |
-      | type: Available                                |
-      | "hello-openshift.*" is progressing             |
-      | ReplicaSetUpdated                              |
-      | status: "True"                                 |
-      | type: Progressing                              |
+      | Deployment does not have minimum availability |
+      | MinimumReplicasUnavailable                    |
+      | status: "False"                               |
+      | type: Available                               |
+      | "hello-openshift.*" is progressing            |
+      | ReplicaSetUpdated                             |
+      | status: "True"                                |
+      | type: Progressing                             |
     And I wait up to 60 seconds for the steps to pass:
     """
     When I run the :describe client command with:
@@ -197,8 +197,8 @@ Feature: deployment related steps
       | type: Progressing                                           |
     """
     When I run the :patch client command with:
-      | resource      | deployment                                                                                                     |
-      | resource_name | hello-openshift                                                                                                |
+      | resource      | deployment                                                                                                             |
+      | resource_name | hello-openshift                                                                                                        |
       | p             | {"spec":{"template":{"spec":{"containers":[{"name":"hello-openshift","image":"openshift/hello-openshift-noexist"}]}}}} |
     Then the step should succeed
     When I run the :describe client command with:
@@ -211,14 +211,14 @@ Feature: deployment related steps
       | resource | deployment |
       | o        | yaml       |
     Then the output by order should match:
-      | Deployment has minimum availability            |
-      | MinimumReplicasAvailable                       |
-      | status: "True"                                 |
-      | type: Available                                |
-      | "hello-openshift.*" is progressing             |
-      | ReplicaSetUpdated                              |
-      | status: "True"                                 |
-      | type: Progressing                              |
+      | Deployment has minimum availability |
+      | MinimumReplicasAvailable            |
+      | status: "True"                      |
+      | type: Available                     |
+      | "hello-openshift.*" is progressing  |
+      | ReplicaSetUpdated                   |
+      | status: "True"                      |
+      | type: Progressing                   |
     And I wait up to 60 seconds for the steps to pass:
     """
     When I run the :describe client command with:
@@ -391,14 +391,14 @@ Feature: deployment related steps
       | resource | deployment |
       | o        | yaml       |
     Then the output by order should match:
-      | Deployment does not have minimum availability  |
-      | MinimumReplicasUnavailable                     |
-      | status: "False"                                |
-      | type: Available                                |
-      | "hello-openshift.*" is progressing             |
-      | ReplicaSetUpdated                              |
-      | status: "True"                                 |
-      | type: Progressing                              |
+      | Deployment does not have minimum availability |
+      | MinimumReplicasUnavailable                    |
+      | status: "False"                               |
+      | type: Available                               |
+      | "hello-openshift.*" is progressing            |
+      | ReplicaSetUpdated                             |
+      | status: "True"                                |
+      | type: Progressing                             |
     And I wait up to 60 seconds for the steps to pass:
     """
     When I run the :describe client command with:
@@ -421,8 +421,8 @@ Feature: deployment related steps
       | type: Progressing                                         |
     """
     When I run the :patch client command with:
-      | resource      | deployment                                                                                                     |
-      | resource_name | hello-openshift                                                                                                |
+      | resource      | deployment              |
+      | resource_name | hello-openshift         |
       | p             | {"spec":{"replicas":3}} |
     Then the step should succeed
     When I run the :describe client command with:
@@ -435,14 +435,14 @@ Feature: deployment related steps
       | resource | deployment |
       | o        | yaml       |
     Then the output by order should match:
-      | Deployment does not have minimum availability  |
-      | MinimumReplicasUnavailable                     |
-      | status: "False"                                |
-      | type: Available                                |
-      | "hello-openshift.*" is progressing             |
-      | ReplicaSetUpdated                              |
-      | status: "True"                                 |
-      | type: Progressing                              |
+      | Deployment does not have minimum availability |
+      | MinimumReplicasUnavailable                    |
+      | status: "False"                               |
+      | type: Available                               |
+      | "hello-openshift.*" is progressing            |
+      | ReplicaSetUpdated                             |
+      | status: "True"                                |
+      | type: Progressing                             |
     And I wait up to 60 seconds for the steps to pass:
     """
     When I run the :describe client command with:
@@ -474,14 +474,14 @@ Feature: deployment related steps
       | f | deployment-perme-failed-2.yaml |
     Then the step should fail
     And the output should match:
-     | spec.progressDeadlineSeconds: Invalid value.*must be greater than minReadySeconds |
+      | spec.progressDeadlineSeconds: Invalid value.*must be greater than minReadySeconds |
     When I replace lines in "deployment-perme-failed-2.yaml":
       | progressDeadlineSeconds: 0 | progressDeadlineSeconds: -1 |
     Then I run the :create client command with:
       | f | deployment-perme-failed-2.yaml |
     And the step should fail
     And the output should match:
-      | spec.progressDeadlineSeconds: Invalid value.*must be greater than or equal to 0 |
+      | spec.progressDeadlineSeconds: Invalid value.*must be greater than or equal to 0   |
       | spec.progressDeadlineSeconds: Invalid value.*must be greater than minReadySeconds |
     When I replace lines in "deployment-perme-failed-2.yaml":
       | progressDeadlineSeconds: -1 | progressDeadlineSeconds: ab |
@@ -493,4 +493,3 @@ Feature: deployment related steps
     Then I run the :create client command with:
       | f | deployment-perme-failed-2.yaml |
     And the step should fail
-

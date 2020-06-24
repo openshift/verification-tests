@@ -30,7 +30,7 @@ Feature: change the policy of user/service account
     """
     Given I switch to the first user
     When I run the :oadm_policy_remove_role_from_user client command with:
-      | role_name | admin            |
+      | role_name | admin                              |
       | user_name | <%= user(1, switch: false).name %> |
     Then the step should succeed
     When I run the :get client command with:
@@ -58,7 +58,6 @@ Feature: change the policy of user/service account
       | ["metadata"]["name"] | clusterrole-12430-<%= cb.random %> |
     Then the step should succeed
     Given cluster role "clusterrole-12430-<%= cb.random %>" is added to the "second" user
-
     Given I have a project
     And I switch to the second user
     And the expression should be true> project(project.name).active?
@@ -72,47 +71,46 @@ Feature: change the policy of user/service account
       | f | projectviewservice.json |
     Then the step should succeed
     And the output should contain:
-      | created      |
+      | created |
     When I run the :describe client command with:
-      | namespace    | <%= project.name %> |
-      | resource     | role                |
-      | name         | viewservices        |
+      | namespace | <%= project.name %> |
+      | resource  | role                |
+      | name      | viewservices        |
     Then the step should succeed
     And the output should contain:
-      | get                                |
-      | list                               |
-      | watch                              |
+      | get   |
+      | list  |
+      | watch |
     Given I obtain test data file "authorization/policy/projectviewservice.json"
     When I delete matching lines from "projectviewservice.json":
-      | "get",       |
+      | "get", |
     Then the step should succeed
     When I run the :replace client command with:
-      | f            | projectviewservice.json      |
+      | f | projectviewservice.json |
     Then the step should succeed
     And the output should contain:
-      | replaced     |
+      | replaced |
     When I run the :describe client command with:
-      | namespace    | <%= project.name %> |
-      | resource     | role                |
-      | name         | viewservices        |
+      | namespace | <%= project.name %> |
+      | resource  | role                |
+      | name      | viewservices        |
     Then the step should succeed
     And the output should not contain:
-      | get          |
-
+      | get |
     When I run the :delete client command with:
-      | object_type       | role                    |
-      | object_name_or_id | viewservices            |
+      | object_type       | role         |
+      | object_name_or_id | viewservices |
     Then the step should succeed
     And the output should contain:
-      | deleted          |
+      | deleted |
     When I run the :describe client command with:
-      | namespace    | <%= project.name %>          |
-      | resource     | role                       |
-      | name         | viewservices                      |
+      | namespace | <%= project.name %> |
+      | resource  | role                |
+      | name      | viewservices        |
     Then the step should fail
     And the output should not contain:
-      | list          |
-      | watch         |
+      | list  |
+      | watch |
 
   # @author chezhang@redhat.com
   # @case_id OCP-10211
@@ -123,21 +121,21 @@ Feature: change the policy of user/service account
     Given I obtain test data file "daemon/daemonset-negtive-onfailure.yaml"
     When I run the :create client command with:
       | f  | daemonset-negtive-onfailure.yaml |
-      | as | system:admin |
+      | as | system:admin                     |
     Then the step should fail
     And the output should match:
       | Unsupported value: "OnFailure": supported values: "?Always"? |
     Given I obtain test data file "daemon/daemonset-negtive-never.yaml"
     When I run the :create client command with:
       | f  | daemonset-negtive-never.yaml |
-      | as | system:admin |
+      | as | system:admin                 |
     Then the step should fail
     And the output should match:
       | Unsupported value: "Never": supported values: "?Always"? |
     Given I obtain test data file "daemon/daemonset.yaml"
     When I run the :create client command with:
       | f  | daemonset.yaml |
-      | as | system:admin |
+      | as | system:admin   |
     Then the step should succeed
 
   # @author chaoyang@redhat.com
@@ -149,39 +147,33 @@ Feature: change the policy of user/service account
       | o        | yaml         |
     Then the step should succeed
     And I save the output to file> sc_names.yaml
-
     When I run the :get client command with:
       | resource      | :false        |
       | resource_name | :false        |
       | f             | sc_names.yaml |
       | o             | yaml          |
     Then the step should succeed
-
     When I run the :get client command with:
       | resource | storageclass |
       | o        | yaml         |
     Then the step should succeed
-
     When I run the :describe client command with:
       | resource | :false        |
       | name     | :false        |
       | f        | sc_names.yaml |
     Then the step should succeed
-
     When I run the :delete client command with:
       | object_type       | :false        |
       | object_name_or_id | :false        |
       | f                 | sc_names.yaml |
     And the output should match:
       | Error.*storageclasses.* at the cluster scope |
-
     Given I obtain test data file "storage/ebs/dynamic-provisioning/storageclass-io1.yaml"
     When I run the :create client command with:
       | f | storageclass-io1.yaml |
     Then the step should fail
     And the output should match:
       | Error.*storageclasses.* at the cluster scope |
-
 
   # @author chaoyang@redhat.com
   # @case_id OCP-10448
@@ -190,47 +182,39 @@ Feature: change the policy of user/service account
     Given I have a project
     And admin ensures "sc-<%= project.name %>" storageclasses is deleted after scenario
     Given cluster role "storage-admin" is added to the "first" user
-
     When I obtain test data file "storage/ebs/dynamic-provisioning/storageclass-io1.yaml"
     Then I replace lines in "storageclass-io1.yaml":
       | foo | sc-<%= project.name %> |
     Then I run the :create client command with:
       | f | storageclass-io1.yaml |
     Then the step should succeed
-
     When I run the :get client command with:
       | resource | storageclass |
     Then the step should succeed
     And the output should contain:
       | sc-<%= project.name %> |
-
     When I run the :get client command with:
       | resource      | storageclass           |
       | resource_name | sc-<%= project.name %> |
       | o             | yaml                   |
     Then the step should succeed
-
     When I run the :describe client command with:
       | resource | storageclass           |
       | name     | sc-<%= project.name %> |
     Then the step should succeed
-
     # Update storageclass
     Then I replace lines in "storageclass-io1.yaml":
       | 25 | 30 |
-
     Then I run the :replace client command with:
       | f     | storageclass-io1.yaml |
       | force | true                  |
     And the step should succeed
-
     When I run the :describe client command with:
       | resource | storageclass           |
       | name     | sc-<%= project.name %> |
     Then the step should succeed
     And the output should contain:
       | iopsPerGB=30 |
-
     # Delete storageclass
     When I run the :delete client command with:
       | object_type       | storageclass           |
@@ -245,7 +229,6 @@ Feature: change the policy of user/service account
     Given I have a project
     And admin ensures "pv-<%= project.name %>" pv is deleted after scenario
     Given cluster role "storage-admin" is added to the "first" user
-
     When I obtain test data file "storage/hostpath/pv-rwx-recycle.yaml"
     Then I replace lines in "pv-rwx-recycle.yaml":
       | local         | pv-<%= project.name %> |
@@ -253,32 +236,26 @@ Feature: change the policy of user/service account
     Then I run the :create client command with:
       | f | pv-rwx-recycle.yaml |
     And the step should succeed
-
     When I run the :get client command with:
       | resource | pv |
     Then the step should succeed
     And the output should contain:
       | pv-<%= project.name %> |
-
     When I run the :get client command with:
       | resource      | pv                     |
       | resource_name | pv-<%= project.name %> |
       | o             | yaml                   |
     Then the step should succeed
-
     When I run the :describe client command with:
       | resource | pv                     |
       | name     | pv-<%= project.name %> |
     Then the step should succeed
-
     Then I replace lines in "pv-rwx-recycle.yaml":
       | ReadWriteOnce | ReadWriteMany |
-
     When I run the :replace client command with:
       | f     | pv-rwx-recycle.yaml |
       | force | true                |
     And the step should succeed
-
     When I run the :describe client command with:
       | resource | pv                     |
       | name     | pv-<%= project.name %> |
@@ -287,7 +264,6 @@ Feature: change the policy of user/service account
       | RWX |
     And the output should not contain:
       | RWO |
-
     When I run the :delete client command with:
       | object_type       | pv                    |
       | object_name_or_id | pv-<%=project.name %> |
@@ -301,12 +277,10 @@ Feature: change the policy of user/service account
   Scenario: User with role storage-admin can get pvc object info
     Given I have a project
     And evaluation of `project.name` is stored in the :project clipboard
-
     Given I obtain test data file "storage/misc/pvc.json"
     When I create a dynamic pvc from "pvc.json" replacing paths:
       | ["metadata"]["name"] | mypvc |
     And the step should succeed
-
     Given I switch to the second user
     And cluster role "storage-admin" is added to the "second" user
     When I run the :get client command with:
@@ -315,22 +289,18 @@ Feature: change the policy of user/service account
       | n        | <%= cb.project %> |
     And the step should succeed
     And I save the output to file> pvc.yaml
-
     When I run the :describe client command with:
       | resource | pvc/mypvc         |
       | n        | <%= cb.project %> |
     Then the step should succeed
-
     And I replace lines in "pvc.yaml":
       | ReadWriteOnce | ReadWriteMany |
-
     When I run the :replace client command with:
       | f     | pvc.yaml          |
       | force | true              |
       | n     | <%= cb.project %> |
     And the step should fail
     And the output should contain "forbidden"
-
     When I run the :delete client command with:
       | object_type       | pvc                   |
       | object_name_or_id | pvc-<%= cb.project %> |
@@ -346,12 +316,10 @@ Feature: change the policy of user/service account
       | resource | pv |
     And the step should fail
     And the output should contain "forbidden"
-
     When I run the :describe client command with:
       | resource | pv |
     And the step should fail
     And the output should contain "forbidden"
-
     When I run the :delete client command with:
       | object_type | pv |
       | all         |    |
@@ -371,7 +339,7 @@ Feature: change the policy of user/service account
     Given I obtain test data file "authorization/scc/tc538262/PodSecurityPolicySubjectReview_privileged_false.json"
     Given I run the :policy_scc_subject_review client command with:
       | f | PodSecurityPolicySubjectReview_privileged_false.json |
-      | n | <%= project.name %>                                                                                                    |
+      | n | <%= project.name %>                                  |
     Then the step should succeed
     And the output should match:
       | .*restricted |
@@ -384,7 +352,7 @@ Feature: change the policy of user/service account
     Given I obtain test data file "authorization/scc/tc538262/PodSecurityPolicySubjectReview_privileged_true.json"
     Given I run the :policy_scc_subject_review client command with:
       | f | PodSecurityPolicySubjectReview_privileged_true.json |
-      | n | <%= project.name %>                                                                                                   |
+      | n | <%= project.name %>                                 |
     Then the step should succeed
     And the output should match:
       | <none> |
@@ -403,22 +371,22 @@ Feature: change the policy of user/service account
     Given I obtain test data file "authorization/scc/tc538264/PodSecurityPolicyReview.json"
     Given I run the :policy_scc_review client command with:
       | f | PodSecurityPolicyReview.json |
-      | n | <%= project.name %>                                                                            |
+      | n | <%= project.name %>          |
     Then the step should succeed
     And the output should not match:
       | .*default.*restricted |
     Given I obtain test data file "authorization/scc/tc538264/PodSecurityPolicyReview.json"
     Given I run the :policy_scc_review client command with:
-      | serviceaccount | default                                                                                        |
+      | serviceaccount | default                      |
       | f              | PodSecurityPolicyReview.json |
     Then the step should succeed
     And the output should not match:
       | .*default.*restricted |
     Given I obtain test data file "authorization/scc/tc538264/PodSecurityPolicyReview.json"
     Given I run the :policy_scc_review client command with:
-      | serviceaccount | default                                                                                        |
+      | serviceaccount | default                      |
       | f              | PodSecurityPolicyReview.json |
-      | n              | <%= project.name %>                                                                            |
+      | n              | <%= project.name %>          |
     Then the step should succeed
     And the output should not match:
       | .*default.*restricted |
@@ -432,22 +400,22 @@ Feature: change the policy of user/service account
     Given I obtain test data file "authorization/scc/tc538264/PodSecurityPolicyReview.json"
     Given I run the :policy_scc_review client command with:
       | f | PodSecurityPolicyReview.json |
-      | n | <%= project.name %>                                                                            |
+      | n | <%= project.name %>          |
     Then the step should succeed
     And the output should match:
       | .*default.*restricted |
     Given I obtain test data file "authorization/scc/tc538264/PodSecurityPolicyReview.json"
     Given I run the :policy_scc_review client command with:
-      | serviceaccount | default                                                                                        |
+      | serviceaccount | default                      |
       | f              | PodSecurityPolicyReview.json |
     Then the step should succeed
     And the output should match:
       | .*default.*restricted |
     Given I obtain test data file "authorization/scc/tc538264/PodSecurityPolicyReview.json"
     Given I run the :policy_scc_review client command with:
-      | serviceaccount | default                                                                                        |
+      | serviceaccount | default                      |
       | f              | PodSecurityPolicyReview.json |
-      | n              | <%= project.name %>                                                                            |
+      | n              | <%= project.name %>          |
     Then the step should succeed
     And the output should match:
       | .*default.*restricted |
@@ -458,34 +426,33 @@ Feature: change the policy of user/service account
     Given I have a project
     Given I obtain test data file "authorization/scc/tc538263/PodSecurityPolicySubjectReview.json"
     Given I run the :policy_scc_subject_review client command with:
-      | user | <%= user.name %>                                                                                      |
+      | user | <%= user.name %>                    |
       | f    | PodSecurityPolicySubjectReview.json |
     Then the step should succeed
     And the output should not match:
       | .*restricted |
     Given I obtain test data file "authorization/scc/tc538263/PodSecurityPolicySubjectReview.json"
     Given I run the :policy_scc_subject_review client command with:
-      | user | <%= user.name %>                                                                                      |
+      | user | <%= user.name %>                    |
       | f    | PodSecurityPolicySubjectReview.json |
-      | n    | <%= project.name %>                                                                                   |
+      | n    | <%= project.name %>                 |
     Then the step should succeed
     And the output should not match:
       | .*restricted |
     Given I obtain test data file "authorization/scc/tc538263/PodSecurityPolicySubjectReview.json"
     Given I run the :policy_scc_subject_review client command with:
-      | user  | <%= user.name %>                                                                                      |
-      | group | system:authenticated                                                                                  |
+      | user  | <%= user.name %>                    |
+      | group | system:authenticated                |
       | f     | PodSecurityPolicySubjectReview.json |
     Then the step should succeed
     And the output should match:
       | .*restricted |
     Given I obtain test data file "authorization/scc/tc538263/PodSecurityPolicySubjectReview.json"
     Given I run the :policy_scc_subject_review client command with:
-      | user  | <%= user.name %>                                                                                      |
-      | group | system:authenticated                                                                                  |
+      | user  | <%= user.name %>                    |
+      | group | system:authenticated                |
       | f     | PodSecurityPolicySubjectReview.json |
-      | n     | <%= project.name %>                                                                                   |
+      | n     | <%= project.name %>                 |
     Then the step should succeed
     And the output should match:
       | .*restricted |
-

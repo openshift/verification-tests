@@ -6,7 +6,7 @@ Feature: Downward API
     Given I have a project
     Given I obtain test data file "downwardapi/tc509097/pod-downwardapi-env.yaml"
     When I run the :create client command with:
-      | filename  | pod-downwardapi-env.yaml |
+      | filename | pod-downwardapi-env.yaml |
     Then the step should succeed
     Given the pod named "downwardapi-env" becomes ready
     When I execute on the pod:
@@ -27,7 +27,7 @@ Feature: Downward API
       | resource_name | dapi-test-pod |
     Then the step should succeed
     And the output should contain:
-      | POD_NAME=dapi-test-pod |
+      | POD_NAME=dapi-test-pod            |
       | POD_NAMESPACE=<%= project.name %> |
 
   # @author qwang@redhat.com
@@ -43,10 +43,10 @@ Feature: Downward API
     When I execute on the pod:
       | ls | -laR | /var/tmp/podinfo |
     Then the output should match:
-      | annotations -> \.\.[a-z]+/annotations |
-      | labels -> \.\.[a-z]+/labels           |
-      | name -> \.\.[a-z]+/name               |
-      | namespace -> \.\.[a-z]+/namespace     |
+      | annotations -> \\.\\.[a-z]+/annotations |
+      | labels -> \\.\\.[a-z]+/labels           |
+      | name -> \\.\\.[a-z]+/name               |
+      | namespace -> \\.\\.[a-z]+/namespace     |
     When I execute on the pod:
       | cat | /var/tmp/podinfo/name |
     Then the output should contain:
@@ -68,8 +68,8 @@ Feature: Downward API
       | builder="qe-one" |
     # Change the value of annotations
     When I run the :patch client command with:
-      | resource      | pod |
-      | resource_name | pod-dapi-volume |
+      | resource      | pod                                          |
+      | resource_name | pod-dapi-volume                              |
       | p             | {"metadata":{"annotations":{"build":"two"}}} |
     And I wait up to 120 seconds for the steps to pass:
     """
@@ -291,12 +291,11 @@ Feature: Downward API
       | MY_MEM_LIMIT=<%= cb.nodememorylimit.to_i*1024 %> |
       | MY_CPU_LIMIT=<%= cb.nodecpulimit %>              |
     When I run the :describe client command with:
-      | resource | pod                                              |
+      | resource | pod                                            |
       | name     | dapi-resources-metadata-env-pod-without-limits |
     Then the step should succeed
     And the output should match:
-      | MY_CPU_REQUEST:\\s+1 \(requests.cpu\)               |
-      | MY_CPU_LIMIT:\\s+node allocatable \(limits.cpu\)    |
-      | MY_MEM_REQUEST:\\s+32 \(requests.memory\)           |
-      | MY_MEM_LIMIT:\\s+node allocatable \(limits.memory\) |
-
+      | MY_CPU_REQUEST:\\s+1 \\(requests.cpu\\)               |
+      | MY_CPU_LIMIT:\\s+node allocatable \\(limits.cpu\\)    |
+      | MY_MEM_REQUEST:\\s+32 \\(requests.memory\\)           |
+      | MY_MEM_LIMIT:\\s+node allocatable \\(limits.memory\\) |

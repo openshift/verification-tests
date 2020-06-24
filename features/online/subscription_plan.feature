@@ -46,8 +46,8 @@ Feature: ONLY ONLINE subscription plan related scripts in this file
     Then the step should succeed
     When I perform the :check_addon_slider_of_resource web action with:
       | resource  | <resource>  |
-      | max_value | <max_value> | 
-    Then the step should succeed 
+      | max_value | <max_value> |
+    Then the step should succeed
     When I perform the :check_addon_input_field_of_resource web action with:
       | resource  | <resource>  |
       | max_value | <max_value> |
@@ -58,8 +58,8 @@ Feature: ONLY ONLINE subscription plan related scripts in this file
     Then the step should succeed
 
     Examples: Check elements on Manage add-on Page - UI
-    | resource           | resource_title     | max_value |
-    | memory             | memory             | 46        | # @case_id OCP-12753
-    | terminating_memory | terminating memory | 18        | # @case_id OCP-14276
-    | storage            | persistent storage | 148       | # @case_id OCP-14893
+      | resource           | resource_title     | max_value |
+      | memory             | memory             | 46        | # @case_id OCP-12753
+      | terminating_memory | terminating memory | 18        | # @case_id OCP-14276
+      | storage            | persistent storage | 148       | # @case_id OCP-14893
 

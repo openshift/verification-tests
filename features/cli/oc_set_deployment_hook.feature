@@ -30,17 +30,17 @@ Feature: set deployment-hook/build-hook with CLI
       | args             | /bin/true                   |
     Then the step should succeed
     When I run the :describe client command with:
-      | resource | dc |
+      | resource | dc                       |
       | name     | rails-postgresql-example |
     Then the step should succeed
     And the output should match:
-      | [Pp]re-deployment hook    |
-      | failure policy: [Rr]etry  |
+      | [Pp]re-deployment hook                   |
+      | failure policy: [Rr]etry                 |
       | /bin/bash -c bundle exec rake db:migrate |
-      | FOO1=BAR1                 |
-      | [Pp]ost-deployment hook   |
-      | failure policy: [Ii]gnore |
-      | /bin/true                 |
+      | FOO1=BAR1                                |
+      | [Pp]ost-deployment hook                  |
+      | failure policy: [Ii]gnore                |
+      | /bin/true                                |
     Given I wait until the status of deployment "rails-postgresql-example" becomes :complete
     When I run the :rollout_latest client command with:
       | resource | dc/rails-postgresql-example |
@@ -56,14 +56,14 @@ Feature: set deployment-hook/build-hook with CLI
       | args             | ./migrate-database.sh       |
     Then the step should succeed
     When I run the :describe client command with:
-      | resource | dc |
+      | resource | dc                       |
       | name     | rails-postgresql-example |
     Then the step should succeed
     And the output should match:
       | [Pp]re-deployment hook   |
       | failure policy: [Rr]etry |
       | ./migrate-database.sh    |
-    Given I wait until the status of deployment "rails-postgresql-example" becomes :complete    
+    Given I wait until the status of deployment "rails-postgresql-example" becomes :complete
     When I run the :rollout_latest client command with:
       | resource | dc/rails-postgresql-example |
     Then the step should succeed
@@ -76,7 +76,7 @@ Feature: set deployment-hook/build-hook with CLI
       | post             |                             |
     Then the step should succeed
     When I run the :describe client command with:
-      | resource | dc |
+      | resource | dc                       |
       | name     | rails-postgresql-example |
     Then the step should succeed
     And the output should not match:
@@ -108,7 +108,7 @@ Feature: set deployment-hook/build-hook with CLI
       | args           | /bin/false |
     Then the step should succeed
     When I run the :describe client command with:
-      | resource | dc |
+      | resource | dc                       |
       | name     | rails-postgresql-example |
     Then the step should succeed
     And the output should match:
@@ -120,4 +120,3 @@ Feature: set deployment-hook/build-hook with CLI
       | resource | dc/rails-postgresql-example |
     Then the step should succeed
     And I wait until the status of deployment "rails-postgresql-example" becomes :failed
-

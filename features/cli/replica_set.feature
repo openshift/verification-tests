@@ -27,4 +27,3 @@ Feature: replicaSet related tests
     Then the step should not succeed
     And the output should contain:
       | "frontend" not found |
-

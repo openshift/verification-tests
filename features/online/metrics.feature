@@ -13,4 +13,3 @@ Feature: Online metrics related tests
       | project_name | <%= project.name %> |
       | pod_name     | <%= pod.name %>     |
     Then the step should succeed
-

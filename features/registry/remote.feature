@@ -1,12 +1,13 @@
 Feature: remote registry related scenarios
+
   # @author yinzhou@redhat.com
   # @case_id OCP-10904
   Scenario: Support unauthenticated with registry-admin role
     Given I have a project
     Given I find a bearer token of the default service account
     When I run the :policy_add_role_to_user client command with:
-      | role            | registry-admin   |
-      | user name       | system:anonymous |
+      | role      | registry-admin   |
+      | user name | system:anonymous |
     Then the step should succeed
     When I run the :new_build client command with:
       | app_repo | ruby~https://github.com/sclorg/ruby-ex.git |
@@ -16,25 +17,25 @@ Feature: remote registry related scenarios
     Given default registry service ip is stored in the :integrated_reg_ip clipboard
     And I have a skopeo pod in the project
     When I execute on the pod:
-      | skopeo                     |
-      | --debug                    |
-      | --insecure-policy          |
-      | inspect                    |
-      | --tls-verify=false         |
-      | --creds                    |
+      | skopeo                                                                  |
+      | --debug                                                                 |
+      | --insecure-policy                                                       |
+      | inspect                                                                 |
+      | --tls-verify=false                                                      |
+      | --creds                                                                 |
       | <%= service_account.cached_tokens.first %>                              |
       | docker://<%= cb.integrated_reg_ip %>/<%= project.name %>/ruby-ex:latest |
     Then the step should succeed
     When I execute on the pod:
-      | skopeo                     |
-      | --debug                    |
-      | --insecure-policy          |
-      | copy                       |
-      | --dest-tls-verify=false    |
-      | --dcreds                   |
-      | <%= service_account.cached_tokens.first %>                                |
-      | docker://docker.io/busybox                                                |
-      | docker://<%= cb.integrated_reg_ip %>/<%= project.name %>/mystream:latest  |
+      | skopeo                                                                   |
+      | --debug                                                                  |
+      | --insecure-policy                                                        |
+      | copy                                                                     |
+      | --dest-tls-verify=false                                                  |
+      | --dcreds                                                                 |
+      | <%= service_account.cached_tokens.first %>                               |
+      | docker://docker.io/busybox                                               |
+      | docker://<%= cb.integrated_reg_ip %>/<%= project.name %>/mystream:latest |
     Then the step should succeed
     Given I create a new project
     And evaluation of `project.name` is stored in the :u1p2 clipboard
@@ -44,24 +45,24 @@ Feature: remote registry related scenarios
     And the "ruby-ex-1" build was created
     Then the "ruby-ex-1" build completes
     When I execute on the pod:
-      | skopeo                     |
-      | --debug                    |
-      | --insecure-policy          |
-      | inspect                    |
-      | --tls-verify=false         |
-      | --creds                    |
+      | skopeo                                                             |
+      | --debug                                                            |
+      | --insecure-policy                                                  |
+      | inspect                                                            |
+      | --tls-verify=false                                                 |
+      | --creds                                                            |
       | <%= service_account.cached_tokens.first %>                         |
       | docker://<%= cb.integrated_reg_ip %>/<%= cb.u1p2 %>/ruby-ex:latest |
     Then the step should fail
     And the output should contain:
       | unauthorized |
     When I execute on the pod:
-      | skopeo                     |
-      | --debug                    |
-      | --insecure-policy          |
-      | copy                       |
-      | --dest-tls-verify=false    |
-      | <%= service_account.cached_tokens.first %>                           |
-      | docker://docker.io/busybox                                           |
-      | docker://<%= cb.integrated_reg_ip %>/<%= cb.u1p2 %>/mystream:latest  |
+      | skopeo                                                              |
+      | --debug                                                             |
+      | --insecure-policy                                                   |
+      | copy                                                                |
+      | --dest-tls-verify=false                                             |
+      | <%= service_account.cached_tokens.first %>                          |
+      | docker://docker.io/busybox                                          |
+      | docker://<%= cb.integrated_reg_ip %>/<%= cb.u1p2 %>/mystream:latest |
     Then the step should fail

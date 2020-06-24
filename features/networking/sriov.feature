@@ -7,10 +7,10 @@ Feature: Sriov related scenarios
     Given I switch to cluster admin pseudo user
     And I use the "openshift-sriov-network-operator" project
     And all existing pods are ready with labels:
-      | app=network-resources-injector  |
+      | app=network-resources-injector |
     And all existing pods are ready with labels:
-      | app=operator-webhook            |
+      | app=operator-webhook |
     And all existing pods are ready with labels:
       | app=sriov-network-config-daemon |
     And status becomes :running of exactly 1 pods labeled:
-      | name=sriov-network-operator     |
+      | name=sriov-network-operator |

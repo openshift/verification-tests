@@ -7,9 +7,9 @@ Feature: Machine-api components upgrade tests
     Given the expression should be true> "True" == "True"
 
   Examples:
-    | cluster_operator     |
-    | "machine-api"        |
-    | "cluster-autoscaler" |
+      | cluster_operator     |
+      | "machine-api"        |
+      | "cluster-autoscaler" |
 
   # @author jhou@redhat.com
   @upgrade-check
@@ -28,9 +28,9 @@ Feature: Machine-api components upgrade tests
     Then the expression should be true> cb.co_progressing["status"]=="False"
 
   Examples:
-    | cluster_operator     |
-    | "machine-api"        | # @case_id OCP-22712
-    | "cluster-autoscaler" | # @case_id OCP-27664
+      | cluster_operator     |
+      | "machine-api"        | # @case_id OCP-22712
+      | "cluster-autoscaler" | # @case_id OCP-27664
 
 
   @upgrade-prepare

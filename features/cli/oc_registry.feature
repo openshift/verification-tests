@@ -21,7 +21,7 @@ Feature: oc registry command scenarios
     And the output should contain:
       | invalid |
     When I run the :registry_info client command with:
-      | quiet  | 123 |
+      | quiet | 123 |
     Then the step should fail
     And the output should contain:
       | invalid |
@@ -37,4 +37,3 @@ Feature: oc registry command scenarios
     Then the step should fail
     And the output should contain:
       | invalid |
-    

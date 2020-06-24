@@ -1,4 +1,5 @@
 Feature: auto scaling related scenarios
+
   @admin
   @destructive
   Scenario: setup autoscaling

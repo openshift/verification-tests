@@ -5,11 +5,11 @@ Feature: oc_env.feature
   Scenario: Set environment variables when creating application using non-DeploymentConfig template
     Given I have a project
     When I run the :new_app client command with:
-      | template | cakephp-mysql-example |
-      | env | OPCACHE_REVALIDATE_FREQ=3  |
-      | env | APPLE1=apple               |
-      | env | APPLE2=tesla               |
-      | env | APPLE3=linux               |
+      | template | cakephp-mysql-example     |
+      | env      | OPCACHE_REVALIDATE_FREQ=3 |
+      | env      | APPLE1=apple              |
+      | env      | APPLE2=tesla              |
+      | env      | APPLE3=linux              |
     Then the step should succeed
     And a pod becomes ready with labels:
       | name=cakephp-mysql-example |
@@ -23,4 +23,3 @@ Feature: oc_env.feature
       | APPLE1=apple              |
       | APPLE2=tesla              |
       | APPLE3=linux              |
-

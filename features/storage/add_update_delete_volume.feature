@@ -84,4 +84,3 @@ Feature: Add, update remove volume to rc/dc and --overwrite option
     Then the step should succeed
     And the output should not contain:
       | name: v1 |
-

@@ -30,16 +30,16 @@ Feature: Update sql apb related feature
     And a pod becomes ready with labels:
       | deploymentconfig=<%= cb.dc_1.first.name %> |
 
-    # update instance 
-     When I run the :patch client command with:
+    # update instance
+    When I run the :patch client command with:
       | resource  | serviceinstance/<db_name>      |
       | p         |{                                                     |
       |           | "spec": {                                            |
-      |           |    "clusterServicePlanExternalName": "<db_plan_2>"   | 
+      |           |    "clusterServicePlanExternalName": "<db_plan_2>"   |
       |           |  }                                                   |
       |           |}                                                     |
     Then the step should succeed
-    #checking the old dc is deleted, new dc is created   
+    #checking the old dc is deleted, new dc is created
     Given I wait for the resource "dc" named "<%= cb.dc_1.first.name %>" to disappear within 240 seconds
     Given I wait for the "<db_name>" service_instance to become ready up to 240 seconds
     When I run the :describe client command with:
@@ -52,7 +52,7 @@ Feature: Update sql apb related feature
     And dc with name matching /postgresql/ are stored in the :dc_2 clipboard
     And a pod becomes ready with labels:
       | deploymentconfig=<%= cb.dc_2.first.name %> |
-    
+
      Examples:
       |db_name                         |db_plan_1 |db_plan_2 |secret_name                                |db_version |
       |<%= cb.prefix %>-postgresql-apb |prod      |dev       |<%= cb.prefix %>-postgresql-apb-parameters |9.5        | # @case_id OCP-16151

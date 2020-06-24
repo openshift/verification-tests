@@ -44,7 +44,7 @@ Feature: Pod related networking scenarios
     Then evaluation of `pod.node_name` is stored in the :node_name clipboard
     Then evaluation of `pod.ip` is stored in the :pod_ip clipboard
     When I run command on the "<%= cb.node_name %>" node's sdn pod:
-      | ovs-ofctl| -O | openflow13 | dump-flows | br0 |
+      | ovs-ofctl | -O | openflow13 | dump-flows | br0 |
     Then the step should succeed
     And the output should contain:
       | <%=cb.pod_ip %> |
@@ -73,18 +73,16 @@ Feature: Pod related networking scenarios
     Then the step should succeed
     And the pod named "iperf-server" becomes ready
     And evaluation of `pod.ip` is stored in the :iperf_server clipboard
-
     # setup iperf client to send traffic to server with qos configured
     Given I obtain test data file "networking/egress-ingress/qos/iperf-rc.json"
     When I run oc create over "iperf-rc.json" replacing paths:
       | ["spec"]["template"]["metadata"]["annotations"]["kubernetes.io/ingress-bandwidth"] | 5M |
-      | ["spec"]["template"]["metadata"]["annotations"]["kubernetes.io/egress-bandwidth"] | 2M |
+      | ["spec"]["template"]["metadata"]["annotations"]["kubernetes.io/egress-bandwidth"]  | 2M |
     Then the step should succeed
     And a pod becomes ready with labels:
       | name=iperf-pods |
     And evaluation of `pod.name` is stored in the :iperf_client clipboard
     And evaluation of `pod.node_name` is stored in the :node_name clipboard
-
     # check the ovs port and interface for the qos availibility
     When I run command on the "<%= cb.node_name %>" node's sdn pod:
       | ovs-vsctl | list | qos |
@@ -94,7 +92,6 @@ Feature: Pod related networking scenarios
       | ovs-vsctl | list | interface |
     Then the step should succeed
     And the output should contain "ingress_policing_rate: 1953"
-
     # test the bandwidth limit with qos for egress
     When I execute on the "<%= cb.iperf_client %>" pod:
       | sh | -c | iperf3 -c <%= cb.iperf_server %> -i 1 -t 12s |
@@ -105,14 +102,12 @@ Feature: Pod related networking scenarios
       | sh | -c | iperf3 -c <%= cb.iperf_server %> -i 1 -t 12s -R |
     Then the step should succeed
     And the expression should be true> @result[:response].scan(/[45].[0-9][0-9] Mbits/).size >= 10
-
     # remove the qos pod and check if the ovs qos configurations are removed
     When I run the :delete client command with:
-      | object_type | replicationcontrollers |
-      | object_name_or_id | iperf-rc |
+      | object_type       | replicationcontrollers |
+      | object_name_or_id | iperf-rc               |
     Then the step should succeed
     And I wait for the resource "pod" named "<%= cb.iperf_client %>" to disappear
-
     When I run command on the "<%= cb.node_name %>" node's sdn pod:
       | ovs-vsctl | list | qos |
     Then the step should succeed
@@ -133,19 +128,17 @@ Feature: Pod related networking scenarios
     #pod-for-ping will be a non-hostnetwork pod
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
     And I have a pod-for-ping in the project
-
     When I execute on the pod:
       | curl | -I | https://<%= cb.master_ip %>:22623/config/master | -k |
     Then the output should contain "Connection refused"
     When I execute on the pod:
       | curl | -I | https://<%= cb.master_ip %>:22624/config/master | -k |
     Then the output should contain "Connection refused"
-    
     #hostnetwork-pod will be a hostnetwork pod
     Given I obtain test data file "networking/hostnetwork-pod.json"
     When I run the :create admin command with:
       | f | hostnetwork-pod.json |
-      | n | <%= project.name %>                                                                                |
+      | n | <%= project.name %>  |
     Then the pod named "hostnetwork-pod" becomes ready
     #Pods should not access the MCS port 22623 or 22624 on the master
     When I execute on the pod:
@@ -160,7 +153,7 @@ Feature: Pod related networking scenarios
   @admin
   Scenario: A pod cannot access the MCS port 22623 or 22624 via the SDN/tun0 address of the master
     Given I store the masters in the :masters clipboard
-    And the vxlan tunnel address of node "<%= cb.masters[0].name %>" is stored in the :master_tunnel_address clipboard		
+    And the vxlan tunnel address of node "<%= cb.masters[0].name %>" is stored in the :master_tunnel_address clipboard
     Given I select a random node's host
     And I have a project
     #pod-for-ping will be a non-hostnetwork pod
@@ -187,14 +180,13 @@ Feature: Pod related networking scenarios
     And evaluation of `project.name` is stored in the clipboard
     # add the egress ip to the project
     When I run the :patch admin command with:
-    | resource      | netnamespace                         |
-    | resource_name | <%= project.name %>                    |
-    | p             | {"egressIPs":["<%= cb.valid_ip %>"]} |
-    | type          | merge                                |
+      | resource      | netnamespace                         |
+      | resource_name | <%= project.name %>                  |
+      | p             | {"egressIPs":["<%= cb.valid_ip %>"]} |
+      | type          | merge                                |
     Then the step should succeed
     #pod-for-ping will be a non-hostnetwork pod
     And I have a pod-for-ping in the project
-    
     #Pod cannot access MCS
     When I execute on the pod:
       | curl | -I | https://<%= cb.master_ip %>:22623/config/master | -k |
@@ -221,10 +213,10 @@ Feature: Pod related networking scenarios
     Then the step should succeed
     # Editing endpoint created above during expose to point to master ip and the step should fail
     When I run the :patch client command with:
-      | resource      | ep                                                            						   |
-      | resource_name | <%= cb.ping_pod.name %>                                       						   |
+      | resource      | ep                                                                                                         |
+      | resource_name | <%= cb.ping_pod.name %>                                                                                    |
       | p             | {"subsets": [{"addresses": [{"ip": "<%= cb.master_ip %>"}],"ports": [{"port": 22623,"protocol": "TCP"}]}]} |
-      | type          | merge                                                         						   |
+      | type          | merge                                                                                                      |
     Then the step should fail
     And the output should contain "endpoints "<%= cb.ping_pod.name %>" is forbidden: endpoint port TCP:22623 is not allowed"
 
@@ -237,12 +229,12 @@ Feature: Pod related networking scenarios
     And I store all worker nodes to the :nodes clipboard
     #Tainting all worker nodes to NoSchedule
     When I run the :oadm_taint_nodes admin command with:
-      | l         | node-role.kubernetes.io/worker |
-      | key_val   | key21846=value2:NoSchedule     |
+      | l       | node-role.kubernetes.io/worker |
+      | key_val | key21846=value2:NoSchedule     |
     Then the step should succeed
     And I register clean-up steps:
     """
-    I run the :oadm_taint_nodes admin command with:
+      I run the :oadm_taint_nodes admin command with:
       | l         | node-role.kubernetes.io/worker |
       | key_val   | key21846-                      |
     Then the step should succeed
@@ -290,7 +282,6 @@ Feature: Pod related networking scenarios
     Given a pod becomes ready with labels:
       | name=udp-pods |
     And evaluation of `pod` is stored in the :host_pod1 clipboard
-
     #Using node port to expose the service on port 8080 on the node IP address
     When I run the :expose client command with:
       | resource      | pod                      |
@@ -319,7 +310,6 @@ Feature: Pod related networking scenarios
       | exec_command_arg | yes "h">/dev/udp/<%= cb.node_ip %>/<%= cb.nodeport %> |
     Given 3 seconds have passed
     And I terminate last background process
-    
     #Creating network test pod to levearage conntrack tool
     Given I obtain test data file "networking/net_admin_cap_pod.yaml"
     When I run oc create over "net_admin_cap_pod.yaml" replacing paths:
@@ -332,14 +322,12 @@ Feature: Pod related networking scenarios
       | bash | -c | conntrack -L \| grep "<%= cb.nodeport %>" |
     Then the step should succeed
     And the output should contain:
-      |<%= cb.host_pod1.ip %>|
-
+      | <%= cb.host_pod1.ip %> |
     #Deleting the udp listener pod which will trigger a new udp listener pod with new IP
     Given I ensure "<%= cb.host_pod1.name %>" pod is deleted
     And a pod becomes ready with labels:
       | name=udp-pods |
     And evaluation of `pod` is stored in the :host_pod2 clipboard
-
     # 'yes' command will send a character "h" continously for 3 seconds to /dev/udp on listener where the node is listening for udp traffic on exposed nodeport. The 3 seconds mechanism will create an Assured
     #  entry which will give us enough time to validate upcoming steps
     When I run the :exec background client command with:
@@ -366,8 +354,8 @@ Feature: Pod related networking scenarios
     And I have a project
     Given I obtain test data file "networking/pod-for-ping-with-hostport.yml"
     When I run oc create as admin over "pod-for-ping-with-hostport.yml" replacing paths:
-      | ["metadata"]["namespace"] |  <%= project.name %>       |
-      | ["spec"]["nodeName"]      |  <%= cb.workers[0].name %> |
+      | ["metadata"]["namespace"] | <%= project.name %>       |
+      | ["spec"]["nodeName"]      | <%= cb.workers[0].name %> |
     Then the step should succeed
     And a pod becomes ready with labels:
       | name=hello-pod |
@@ -387,35 +375,35 @@ Feature: Pod related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-26373
   @admin
-  @destructive  
-  Scenario: Make sure the route to ovn tunnel for Node's Pod CIDR gets created in both hybrid/non-hybrid mode	
-  Given the env is using "OVNKubernetes" networkType
-  And I select a random node's host
-  And the vxlan tunnel name of node "<%= node.name %>" is stored in the :tunnel_inf_name clipboard
-  #Enabling hybrid overlay on the cluster
-  Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
-    | {"spec":{"defaultNetwork":{"ovnKubernetesConfig":{"hybridOverlayConfig":{"hybridClusterNetwork":[{"cidr":"10.132.0.0/14","hostPrefix":23}]}}}}} |
-  #Cleanup for bringing CRD to original
-  Given I register clean-up steps:
-  """
-  as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
-    | {"spec":{"defaultNetwork":{"ovnKubernetesConfig": null}}} |
-  """
-  Given I switch to cluster admin pseudo user
-  And I use the "openshift-ovn-kubernetes" project
-  And all pods in the project are ready
-  #Checking hybrid overlay annotation and fetching Pod subnet CIDR
-  When I run the :describe client command with:
-    | resource | node             |
-    | name     | <%= node.name %> |
-  Then the step should succeed
-  And the output should contain "k8s.ovn.org/hybrid-overlay-node-subnet:"
-  And evaluation of `@result[:response].match(/k8s.ovn.org\/hybrid-overlay-node-subnet: \d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}\/\d{2}/)[0].split(": ")[1]` is stored in the :pod_cidr clipboard
-  And I run commands on the host:
-    | ip route |
-  Then the output should contain:
-    | <%= cb.pod_cidr %> dev <%= cb.tunnel_inf_name %> |
-    
+  @destructive
+  Scenario: Make sure the route to ovn tunnel for Node's Pod CIDR gets created in both hybrid/non-hybrid mode
+    Given the env is using "OVNKubernetes" networkType
+    And I select a random node's host
+    And the vxlan tunnel name of node "<%= node.name %>" is stored in the :tunnel_inf_name clipboard
+    #Enabling hybrid overlay on the cluster
+    Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
+      | {"spec":{"defaultNetwork":{"ovnKubernetesConfig":{"hybridOverlayConfig":{"hybridClusterNetwork":[{"cidr":"10.132.0.0/14","hostPrefix":23}]}}}}} |
+    #Cleanup for bringing CRD to original
+    Given I register clean-up steps:
+    """
+      as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
+      | {"spec":{"defaultNetwork":{"ovnKubernetesConfig": null}}} |
+    """
+    Given I switch to cluster admin pseudo user
+    And I use the "openshift-ovn-kubernetes" project
+    And all pods in the project are ready
+    #Checking hybrid overlay annotation and fetching Pod subnet CIDR
+    When I run the :describe client command with:
+      | resource | node             |
+      | name     | <%= node.name %> |
+    Then the step should succeed
+    And the output should contain "k8s.ovn.org/hybrid-overlay-node-subnet:"
+    And evaluation of `@result[:response].match(/k8s.ovn.org\/hybrid-overlay-node-subnet: \d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}\/\d{2}/)[0].split(": ")[1]` is stored in the :pod_cidr clipboard
+    And I run commands on the host:
+      | ip route |
+    Then the output should contain:
+      | <%= cb.pod_cidr %> dev <%= cb.tunnel_inf_name %> |
+
   # @author anusaxen@redhat.com
   # @case_id OCP-26373
   @admin
@@ -450,5 +438,5 @@ Feature: Pod related networking scenarios
     #Making sure the cluster is in good state before exiting from this scenario
     And I wait up to 60 seconds for the steps to pass:
     """
-    OVN is functional on the cluster
+      OVN is functional on the cluster
     """

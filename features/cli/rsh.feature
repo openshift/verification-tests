@@ -39,4 +39,3 @@ Feature: rsh.feature
       | command_arg | my_test_string      |
     Then the step should succeed
     And the output should contain "my_test_string"
-

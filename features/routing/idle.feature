@@ -21,7 +21,7 @@ Feature: idle service related scenarios
       | resource | endpoints |
     Then the step should succeed
     And the output should match:
-      | service-secure.*none |
+      | service-secure.*none   |
       | service-unsecure.*none |
     Then I wait up to 60 seconds for a web server to become available via the "service-unsecure" route
     Given I wait until number of replicas match "1" for replicationController "caddy-rc"
@@ -32,12 +32,11 @@ Feature: idle service related scenarios
       | resource | endpoints |
     Then the step should succeed
     And the output should match:
-      | service-secure.*<%= cb.pod_ip %>:8443 |
+      | service-secure.*<%= cb.pod_ip %>:8443   |
       | service-unsecure.*<%= cb.pod_ip %>:8080 |
-
     # check edge route
     When I run the :create_route_edge client command with:
-      | name | edge-route |
+      | name    | edge-route       |
       | service | service-unsecure |
     Then the step should succeed
     When I run the :idle client command with:
@@ -48,7 +47,7 @@ Feature: idle service related scenarios
       | resource | endpoints |
     Then the step should succeed
     And the output should match:
-      | service-secure.*none |
+      | service-secure.*none   |
       | service-unsecure.*none |
     Given I use the "edge-route" service
     Then I wait up to 60 seconds for a secure web server to become available via the "edge-route" route
@@ -60,9 +59,8 @@ Feature: idle service related scenarios
       | resource | endpoints |
     Then the step should succeed
     And the output should match:
-      | service-secure.*<%= cb.pod_ip %>:8443 |
+      | service-secure.*<%= cb.pod_ip %>:8443   |
       | service-unsecure.*<%= cb.pod_ip %>:8080 |
-
     # check passthrough route
     When I run the :create_route_passthrough client command with:
       | name    | route-pass     |
@@ -76,7 +74,7 @@ Feature: idle service related scenarios
       | resource | endpoints |
     Then the step should succeed
     And the output should match:
-      | service-secure.*none |
+      | service-secure.*none   |
       | service-unsecure.*none |
     Given I use the "route-pass" service
     Then I wait up to 60 seconds for a secure web server to become available via the "route-pass" route
@@ -88,7 +86,7 @@ Feature: idle service related scenarios
       | resource | endpoints |
     Then the step should succeed
     And the output should match:
-      | service-secure.*<%= cb.pod_ip %>:8443 |
+      | service-secure.*<%= cb.pod_ip %>:8443   |
       | service-unsecure.*<%= cb.pod_ip %>:8080 |
 
   # @author hongli@redhat.com
@@ -101,7 +99,6 @@ Feature: idle service related scenarios
     Then the step should succeed
     Given I wait until replicationController "caddy-rc" is ready
     And I wait until number of replicas match "1" for replicationController "caddy-rc"
-
     # check reencrypt route
     Given I obtain test data file "routing/reencrypt/route_reencrypt_dest.ca"
     When I run the :create_route_reencrypt client command with:
@@ -117,7 +114,7 @@ Feature: idle service related scenarios
       | resource | endpoints |
     Then the step should succeed
     And the output should match:
-      | service-secure.*none |
+      | service-secure.*none   |
       | service-unsecure.*none |
     Given I use the "route-reen" service
     Then I wait up to 60 seconds for a secure web server to become available via the "route-reen" route
@@ -129,6 +126,5 @@ Feature: idle service related scenarios
       | resource | endpoints |
     Then the step should succeed
     And the output should match:
-      | service-secure.*<%= cb.pod_ip %>:8443 |
+      | service-secure.*<%= cb.pod_ip %>:8443   |
       | service-unsecure.*<%= cb.pod_ip %>:8080 |
-

@@ -15,10 +15,10 @@ Feature: SCC policy related scenarios
       | f | tc_dc.json |
     And I register clean-up steps:
     """
-    I run the :delete admin command with:
+      I run the :delete admin command with:
       | object_type       | scc         |
       | object_name_or_id | scc-hostdir |
-    the step should succeed
+      the step should succeed
     """
     And the pod named "hooks-1-deploy" status becomes :running
     And the pod named "hooks-1-hook-pre" status becomes :running
@@ -68,4 +68,3 @@ Feature: SCC policy related scenarios
       | [uU]nknown\|invalid capability[ .*to add]? |
       | (?i)CAP_KILLtest                           |
     """
-

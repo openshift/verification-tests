@@ -1,4 +1,5 @@
 Feature: image-registry operator upgrade tests
+
   # @author xiuwang@redhat.com
   @upgrade-prepare
   @users=upuser1,upuser2
@@ -33,7 +34,7 @@ Feature: image-registry operator upgrade tests
     # Check cluster operator image-registry should be in correct status
     Given the expression should be true> cluster_operator('image-registry').condition(type: 'Available')['status'] == "True"
     Given the expression should be true> cluster_operator('image-registry').condition(type: 'Progressing')['status'] == "False"
-    Given the expression should be true> cluster_operator('image-registry').condition(type: 'Degraded')['status'] == "False" 
+    Given the expression should be true> cluster_operator('image-registry').condition(type: 'Degraded')['status'] == "False"
 
   # @author xiuwang@redhat.com
   # @case_id OCP-22678

@@ -1,4 +1,5 @@
 Feature: build related upgrade check
+
   # @author wewang@redhat.com
   @upgrade-prepare
   @users=upuser1,upuser2

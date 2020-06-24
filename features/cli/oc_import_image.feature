@@ -1,4 +1,5 @@
 Feature: oc import-image related feature
+
   # @author chaoyang@redhat.com
   # @case_id OCP-10585
   Scenario: Do not create tags for ImageStream if image repository does not have tags
@@ -8,12 +9,12 @@ Feature: oc import-image related feature
       | filename | is_without_tags.json |
     Then the step should succeed
     When I run the :get client command with:
-      | resource      | imagestreams |
+      | resource | imagestreams |
     Then the output should contain "hello-world"
     When I run the :get client command with:
-      | resource_name   | hello-world  |
-      | resource        | imagestreams     |
-      | o               | yaml             |
+      | resource_name | hello-world  |
+      | resource      | imagestreams |
+      | o             | yaml         |
     And the output should not contain "tags"
 
   # @author wjiang@redhat.com
@@ -79,7 +80,6 @@ Feature: oc import-image related feature
       | f | external.json |
     Then the step should succeed
     And I wait for the steps to pass:
-    ## istag will not show promtly as soon as is create, need wait for a few seconds
     """
     When I run the :get client command with:
       | resource | imageStreams |
@@ -102,19 +102,19 @@ Feature: oc import-image related feature
     Then the step should succeed
     And the "deployment-example" image stream becomes ready
     When I run the :new_app_as_dc client command with:
-      | image_stream | deployment-example:latest   |
+      | image_stream | deployment-example:latest |
     Then the output should match:
-      | .*[Ss]uccess.*|
+      | .*[Ss]uccess.* |
     When I run the :get client command with:
-      | resource        | imagestreams |
+      | resource | imagestreams |
     Then the output should match:
       | .*deployment-example.* |
     When I run the :get client command with:
-      | resource_name   | deployment-example |
-      | resource        | dc                 |
-      | o               | yaml               |
+      | resource_name | deployment-example |
+      | resource      | dc                 |
+      | o             | yaml               |
     Then the output should match:
-      |[Ll]astTriggeredImage.*deployment-example@sha256.*|
+      | [Ll]astTriggeredImage.*deployment-example@sha256.* |
     When I run the :delete client command with:
       | object_type | dc |
       | all         |    |
@@ -135,19 +135,19 @@ Feature: oc import-image related feature
     Then the step should succeed
     And the "deployment-example" image stream becomes ready
     When I run the :new_app_as_dc client command with:
-      | image_stream | deployment-example:latest   |
+      | image_stream | deployment-example:latest |
     Then the output should match:
       | .*[Ss]uccess.* |
     When I run the :get client command with:
-      | resource        | imagestreams |
+      | resource | imagestreams |
     Then the output should match:
       | .*deployment-example.* |
     When I run the :get client command with:
-      | resource_name   | deployment-example |
-      | resource        | dc                 |
-      | o               | yaml               |
+      | resource_name | deployment-example |
+      | resource      | dc                 |
+      | o             | yaml               |
     Then the output should match:
-      | [Ll]astTriggeredImage.*:.*<%= project.name %>\/deployment-example@sha256.*|
+      | [Ll]astTriggeredImage.*:.*<%= project.name %>\\/deployment-example@sha256.* |
 
   # @author geliu@redhat.com
   # @case_id OCP-12766
@@ -159,13 +159,13 @@ Feature: oc import-image related feature
       | image_name | ruby-25-centos7:latest |
     Then the step should succeed
     When I run the :new_build client command with:
-      | image_stream | ruby-25-centos7                          |
+      | image_stream | ruby-25-centos7                       |
       | code         | https://github.com/sclorg/ruby-ex.git |
     Then the step should succeed
     When I run the :get client command with:
-      | resource_name   | ruby-ex |
-      | resource        | bc      |
-      | o               | yaml    |
+      | resource_name | ruby-ex |
+      | resource      | bc      |
+      | o             | yaml    |
     Then the expression should be true> @result[:parsed]['spec']['triggers'][3]['imageChange']['lastTriggeredImageID'].include? 'centos/ruby-25-centos7'
     When I run the :delete client command with:
       | object_type | bc |
@@ -176,18 +176,17 @@ Feature: oc import-image related feature
       | all         |    |
     Then the step should succeed
     When I run the :import_image client command with:
-      | from            | centos/ruby-25-centos7 |
-      | confirm         | true                   |
-      | image_name      | ruby-25-centos7:latest |
-      | reference-policy| local                  |
+      | from             | centos/ruby-25-centos7 |
+      | confirm          | true                   |
+      | image_name       | ruby-25-centos7:latest |
+      | reference-policy | local                  |
     Then the step should succeed
     When I run the :new_build client command with:
-      | image_stream | ruby-25-centos7                          |
+      | image_stream | ruby-25-centos7                       |
       | code         | https://github.com/sclorg/ruby-ex.git |
     Then the step should succeed
     When I run the :get client command with:
-      | resource_name   | ruby-ex |
-      | resource        | bc      |
-      | o               | yaml    |
+      | resource_name | ruby-ex |
+      | resource      | bc      |
+      | o             | yaml    |
     Then the expression should be true> @result[:parsed]['spec']['triggers'][3]['imageChange']['lastTriggeredImageID'].include? '<%= project.name %>/ruby-25-centos7'
-

@@ -14,7 +14,6 @@ Feature: Testing Ingress Operator related scenarios
       | ["metadata"]["name"] | test-27594                                    |
       | ["spec"]["domain"]   | <%= cb.subdomain.gsub("apps","test-27594") %> |
     Then the step should succeed
-
     # check the env in the router pod
     Given I use the "openshift-ingress" project
     And a pod becomes ready with labels:
@@ -27,7 +26,6 @@ Feature: Testing Ingress Operator related scenarios
     Then the output should contain:
       | ROUTER_DISABLE_NAMESPACE_OWNERSHIP_CHECK=true |
     """
-
     # create route in the first namespace
     Given I switch to the first user
     And I have a project
@@ -46,7 +44,6 @@ Feature: Testing Ingress Operator related scenarios
       | path          | /test            |
     Then the step should succeed
     Given evaluation of `route("service-unsecure", service("service-unsecure")).dns(by: user)` is stored in the :unsecure clipboard
-
     # switch to another user/namespace and create one same hostname with different path
     Given I switch to the second user
     And I have a project
@@ -66,7 +63,6 @@ Feature: Testing Ingress Operator related scenarios
       | hostname      | <%= cb.unsecure %> |
       | path          | /path/second       |
     Then the step should succeed
-
     # ensure the second route is admitted
     Given I switch to cluster admin pseudo user
     And I use the "openshift-ingress" project
@@ -76,4 +72,3 @@ Feature: Testing Ingress Operator related scenarios
       | grep | <%= cb.pod_ip %> |/var/lib/haproxy/conf/haproxy.config |
     Then the step should succeed
     """
-

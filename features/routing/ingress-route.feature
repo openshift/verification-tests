@@ -2,7 +2,7 @@ Feature: Testing ingress to route object
 
   # @author zzhao@redhat.com
   # @case_id OCP-18789
-  Scenario: Ingress generic support 
+  Scenario: Ingress generic support
     Given the master version >= "3.10"
     Given I have a project
     And I store an available router IP in the :router_ip clipboard
@@ -16,7 +16,7 @@ Feature: Testing ingress to route object
       | f | service_unsecure.json |
     Then the step should succeed
     Given I obtain test data file "routing/ingress/test-ingress.json"
-    When I run the :create client command with: 
+    When I run the :create client command with:
       | f | test-ingress.json |
     Then the step should succeed
     When I run the :get client command with:
@@ -24,20 +24,18 @@ Feature: Testing ingress to route object
       | resource_name | test-ingress |
     Then the step should succeed
     And the output should contain "foo.bar.com"
-
     Given I have a pod-for-ping in the project
     When I execute on the "hello-pod" pod:
-      | curl |
-      | --resolve |
+      | curl                                  |
+      | --resolve                             |
       | foo.bar.com:80:<%= cb.router_ip[0] %> |
-      | http://foo.bar.com/ |
+      | http://foo.bar.com/                   |
     Then the step should succeed
     And the output should contain "Hello-OpenShift-1"
     When I execute on the "hello-pod" pod:
-      | curl |
-      | --resolve |
+      | curl                                  |
+      | --resolve                             |
       | foo.bar.com:80:<%= cb.router_ip[0] %> |
-      | http://foo.bar.com/test/ |
+      | http://foo.bar.com/test/              |
     Then the step should succeed
     And the output should contain "Hello-OpenShift-Path-Test"
-

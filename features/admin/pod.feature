@@ -9,7 +9,7 @@ Feature: pod related features
       | f | list_for_pods.json |
     Then the step should succeed
     When a pod becomes ready with labels:
-      | name=test-pods|
+      | name=test-pods |
     Then I wait for the "test-service" endpoint to appear up to 5 seconds
 
   # @author chezhang@redhat.com
@@ -34,8 +34,8 @@ Feature: pod related features
       | node_name | <%= cb.pod_node %> |
     Then the step should succeed
     When I execute on the pod:
-      | bash |
-      | -c   |
+      | bash                              |
+      | -c                                |
       | curl http://<%= cb.pod_ip %>:8080 |
     Then the step should succeed
     And the output should contain:
@@ -56,7 +56,7 @@ Feature: pod related features
     Given I obtain test data file "pods/pod-with-nodeselector.yaml"
     When I run the :create admin command with:
       | f | pod-with-nodeselector.yaml |
-      | n | <%= cb.proj_name %>                                                                                |
+      | n | <%= cb.proj_name %>        |
     Then the step should fail
     And the output should contain "pod node label selector conflicts with its project node label selector"
 
@@ -85,7 +85,7 @@ Feature: pod related features
     """
     When I get project events
     Then the output should match:
-      | hello-openshift.*(no nodes available to schedule pods\|0/[\d] nodes are available) |
+      | hello-openshift.*(no nodes available to schedule pods\|0/[\\d] nodes are available) |
 
   # @author chezhang@redhat.com
   # @case_id OCP-11466
@@ -94,9 +94,9 @@ Feature: pod related features
   Scenario: Recovering an unschedulable node
     Given I have a project
     Given I run the :patch admin command with:
-      | resource | namespace |
-      | resource_name | <%=project.name%> |
-      | p | {"metadata":{"annotations": {"openshift.io/node-selector": ""}}}|
+      | resource      | namespace                                                        |
+      | resource_name | <%=project.name%>                                                |
+      | p             | {"metadata":{"annotations": {"openshift.io/node-selector": ""}}} |
     Then the step should succeed
     Given I store the schedulable nodes in the :nodes clipboard
     Given node schedulable status should be restored after scenario
@@ -120,9 +120,9 @@ Feature: pod related features
   Scenario: Pod will not be copied to nodes which does not match it's node selector
     Given I have a project
     Given I run the :patch admin command with:
-      | resource | namespace |
-      | resource_name | <%=project.name%> |
-      | p | {"metadata":{"annotations": {"openshift.io/node-selector": ""}}}|
+      | resource      | namespace                                                        |
+      | resource_name | <%=project.name%>                                                |
+      | p             | {"metadata":{"annotations": {"openshift.io/node-selector": ""}}} |
     Then the step should succeed
     Given I store the schedulable nodes in the :nodes clipboard
     Given label "daemon=yes" is added to the "<%= cb.nodes[0].name %>" node
@@ -180,9 +180,9 @@ Feature: pod related features
   Scenario: When node labels change, DaemonSet will add pods to newly matching nodes and delete pods from not-matching nodes
     Given I have a project
     Given I run the :patch admin command with:
-      | resource | namespace |
-      | resource_name | <%=project.name%> |
-      | p | {"metadata":{"annotations": {"openshift.io/node-selector": ""}}}|
+      | resource      | namespace                                                        |
+      | resource_name | <%=project.name%>                                                |
+      | p             | {"metadata":{"annotations": {"openshift.io/node-selector": ""}}} |
     Then the step should succeed
     Given I store the schedulable workers in the :nodes clipboard
     Given environment has at least 2 schedulable nodes
@@ -233,9 +233,9 @@ Feature: pod related features
   Scenario: Secret is valid after node reboot
     Given I have a project
     Given I run the :patch admin command with:
-      | resource | namespace |
-      | resource_name | <%=project.name%> |
-      | p | {"metadata":{"annotations": {"openshift.io/node-selector": ""}}}|
+      | resource      | namespace                                                        |
+      | resource_name | <%=project.name%>                                                |
+      | p             | {"metadata":{"annotations": {"openshift.io/node-selector": ""}}} |
     Then the step should succeed
     Given SCC "privileged" is added to the "default" user
     Given I store the schedulable nodes in the :nodes clipboard
@@ -247,7 +247,7 @@ Feature: pod related features
       | resource      | secret         |
       | resource_name | secret-nginx-2 |
     Then the output should match:
-      | secret-nginx-2\\s+Opaque\\s+2  |
+      | secret-nginx-2\\s+Opaque\\s+2 |
     When I run the :describe client command with:
       | resource | secret         |
       | name     | secret-nginx-2 |
@@ -274,7 +274,7 @@ Feature: pod related features
       | resource      | secret         |
       | resource_name | secret-nginx-2 |
     Then the output should match:
-      | secret-nginx-2\\s+Opaque\\s+1  |
+      | secret-nginx-2\\s+Opaque\\s+1 |
     When I run the :describe client command with:
       | resource | secret         |
       | name     | secret-nginx-2 |

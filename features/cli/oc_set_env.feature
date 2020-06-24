@@ -11,47 +11,47 @@ Feature: oc_set_env.feature
     # set one enviroment variable
     When I run the :set_env client command with:
       | resource | bc/ruby-sample-build |
-      | e        | key=value     |
+      | e        | key=value            |
     Then the step should succeed
     When I run the :set_env client command with:
       | resource | bc/ruby-sample-build |
-      | list     | true |
+      | list     | true                 |
     Then the step should succeed
     And the output should contain:
-      | key=value      |
+      | key=value |
     When I run the :set_env client command with:
-      | resource | bc/ruby-sample-build |
+      | resource | bc/ruby-sample-build              |
       | e        | key=value,key1=value1,key2=value2 |
     Then the step should succeed
     When I run the :set_env client command with:
       | resource | bc/ruby-sample-build |
-      | list     | true |
+      | list     | true                 |
     Then the step should succeed
     And the output should contain:
-      | key=value      |
-      | key1=value1    |
-      | key2=value2    |
+      | key=value   |
+      | key1=value1 |
+      | key2=value2 |
     # set enviroment variable via STDIN
     When I run the :set_env client command with:
-      | resource |  bc/ruby-sample-build  |
-      | e        | -             |
-      | _stdin   | key3=value3   |
+      | resource | bc/ruby-sample-build |
+      | e        | -                    |
+      | _stdin   | key3=value3          |
     Then the step should succeed
     When I run the :set_env client command with:
       | resource | bc/ruby-sample-build |
-      | list     | true |
+      | list     | true                 |
     Then the step should succeed
     And the output should contain:
-      | key=value      |
-      | key1=value1    |
-      | key2=value2    |
-      | key3=value3    |
+      | key=value   |
+      | key1=value1 |
+      | key2=value2 |
+      | key3=value3 |
     # set invalid enviroment variable
     When I run the :set_env client command with:
       | resource | bc/ruby-sample-build |
-      | e        | pe#cial%=1234 |
+      | e        | pe#cial%=1234        |
     Then the step should fail
-   And the output should contain:
+    And the output should contain:
       | error |
 
   # @author wewang@redhat.com
@@ -65,25 +65,25 @@ Feature: oc_set_env.feature
     # set environment variables
     When I run the :set_env client command with:
       | resource | bc/ruby-sample-build |
-      | all      | true       |
-      | e        |  FOO=bar   |
+      | all      | true                 |
+      | e        | FOO=bar              |
     Then the step succeeded
     # list environment variables
     When I run the :set_env client command with:
       | resource | bc/ruby-sample-build |
-      | list     | true        |
+      | list     | true                 |
     Then the step should succeed
     And the output should contain:
       | FOO=bar |
     # remove environment variables
     When I run the :set_env client command with:
-      | resource | bc/ruby-sample-build  |
-      | env_name | FOO-       |
+      | resource | bc/ruby-sample-build |
+      | env_name | FOO-                 |
     Then the step succeeded
     # list environment variables
     When I run the :set_env client command with:
       | resource | bc/ruby-sample-build |
-      | list     | true        |
+      | list     | true                 |
     Then the step should succeed
     And the output should not contain:
       | FOO=bar |
@@ -96,8 +96,8 @@ Feature: oc_set_env.feature
     Given evaluation of `@result[:parsed]['items'][1]['metadata']['name']` is stored in the :dc_two clipboard
     # set environment variables
     When I run the :set_env client command with:
-      | resource | dc   |
-      | all      | true |
+      | resource | dc      |
+      | all      | true    |
       | e        | FOO=bar |
     Then the step succeeded
     When I run the :set_env client command with:
@@ -107,18 +107,18 @@ Feature: oc_set_env.feature
     Then the step should succeed
     And the output by order should match:
       | deploymentconfigs.*<%= cb.dc_one %> |
-      | FOO=bar |
+      | FOO=bar                             |
       | deploymentconfigs.*<%= cb.dc_two %> |
-      | FOO=bar |
+      | FOO=bar                             |
     #remove env from json and update service
     And I run the :get client command with:
-      | resource      | dc                 |
-      | o             | json               |
+      | resource | dc   |
+      | o        | json |
     Then the step should succeed
     When I save the output to file> dc.json
     When I run the :set_env client command with:
-      | f        | dc.json   |
-      | env_name | FOO- |
+      | f        | dc.json |
+      | env_name | FOO-    |
     Then the step should succeed
     When I run the :set_env client command with:
       | resource | dc   |
@@ -126,15 +126,14 @@ Feature: oc_set_env.feature
       | all      | true |
     And the output by order should not match:
       | deploymentconfigs.*<%= cb.dc_one %> |
-      | FOO=bar |
+      | FOO=bar                             |
       | deploymentconfigs.*<%= cb.dc_two %> |
-      | FOO=bar |
+      | FOO=bar                             |
     #Remove the environment variable ENV from container in all deployment configs
     When I run the :set_env client command with:
-      | resource | dc/frontend |
+      | resource | dc/frontend     |
       | c        | ruby-helloworld |
-      | env_name | MYSQL_USER- |
+      | env_name | MYSQL_USER-     |
     Then the step should succeed
     And the output should not contain:
       | MYSQL_USER= |
-

@@ -12,38 +12,38 @@ Feature: oc_set_probe.feature
     Then the step should succeed
     Given I wait until the status of deployment "mysql" becomes :complete
     When I run the :set_probe client command with:
-      | resource     | dc/mysql     |
-      | readiness    |              |
-      | open_tcp     | 3306         |
-      | failure_threshold | 2          |
-      | initial_delay_seconds | 10     |
-      | period_seconds | 10            |
-      | success_threshold | 3          |
+      | resource              | dc/mysql |
+      | readiness             |          |
+      | open_tcp              | 3306     |
+      | failure_threshold     | 2        |
+      | initial_delay_seconds | 10       |
+      | period_seconds        | 10       |
+      | success_threshold     | 3        |
     Then the step should succeed
     Given I wait until the status of deployment "mysql" becomes :complete
     And a pod becomes ready with labels:
       | deployment=mysql-2 |
     When I run the :describe client command with:
-      | resource | pod |
-      | l    | deployment=mysql-2 |
+      | resource | pod                |
+      | l        | deployment=mysql-2 |
     Then the output should match:
-      | Readiness |
+      | Readiness        |
       | tcp-socket :3306 |
-      | delay=10s |
-      | period=10s |
-      | success=3 |
-      | failure=2 |
+      | delay=10s        |
+      | period=10s       |
+      | success=3        |
+      | failure=2        |
     When I run the :set_probe client command with:
-      | resource     | dc/mysql    |
-      | readiness    |             |
-      | open_tcp     | 45          |
-      | o            | json        |
+      | resource  | dc/mysql |
+      | readiness |          |
+      | open_tcp  | 45       |
+      | o         | json     |
     Then the step should succeed
     When I save the output to file> file.json
     And I run the :set_probe client command with:
-      | f         | file.json   |
-      | readiness |             |
-      | open_tcp  | 33          |
+      | f         | file.json |
+      | readiness |           |
+      | open_tcp  | 33        |
     Then the step should succeed
     When I wait until the status of deployment "mysql" becomes :running
     And I wait up to 60 seconds for the steps to pass:
@@ -69,11 +69,11 @@ Feature: oc_set_probe.feature
     Then the step should succeed
     Given I wait until the status of deployment "mysql" becomes :complete
     When I run the :set_probe client command with:
-      | resource     | dc/mysql  |
-      | c            | mysql     |
-      | readiness    |           |
-      | get_url      | http://:8080/opt |
-      | timeout_seconds | 30     |
+      | resource        | dc/mysql         |
+      | c               | mysql            |
+      | readiness       |                  |
+      | get_url         | http://:8080/opt |
+      | timeout_seconds | 30               |
     Then the step should succeed
     Given I wait until the status of deployment "mysql" becomes :running
     When I wait up to 30 seconds for the steps to pass:
@@ -87,8 +87,8 @@ Feature: oc_set_probe.feature
       | timeout=30s |
     """
     When I run the :set_probe client command with:
-      | resource  | dc/mysql     |
-      | readiness |              |
+      | resource  | dc/mysql                     |
+      | readiness |                              |
       | get_url   | https://127.0.0.1:1936/stats |
     Then the step should succeed
     Given I wait until the status of deployment "mysql" becomes :running
@@ -123,11 +123,11 @@ Feature: oc_set_probe.feature
     And a pod becomes ready with labels:
       | deployment=mysql-2 |
     When I run the :describe client command with:
-      | resource | pod |
-      | l    | deployment=mysql-2 |
+      | resource | pod                |
+      | l        | deployment=mysql-2 |
     Then the output should contain:
-      | Liveness     |
-      | true         |
+      | Liveness |
+      | true     |
     When I run the :set_probe client command with:
       | resource     | dc/mysql |
       | liveness     |          |
@@ -138,11 +138,11 @@ Feature: oc_set_probe.feature
     And a pod becomes ready with labels:
       | deployment=mysql-3 |
     When I run the :describe client command with:
-      | resource | pod |
-      | l    | deployment=mysql-3 |
+      | resource | pod                |
+      | l        | deployment=mysql-3 |
     Then the output should contain:
-      | Liveness     |
-      | false        |
+      | Liveness |
+      | false    |
 
   # @author wewang@redhat.com
   # @case_id OCP-31241
@@ -178,16 +178,16 @@ Feature: oc_set_probe.feature
       | success=3        |
       | failure=2        |
     When I run the :set_probe client command with:
-      | resource     | deployment/mysql |
-      | readiness    |                  |
-      | open_tcp     | 45               |
-      | o            | json             |
+      | resource  | deployment/mysql |
+      | readiness |                  |
+      | open_tcp  | 45               |
+      | o         | json             |
     Then the step should succeed
     When I save the output to file> file.json
     And I run the :set_probe client command with:
-      | f         | file.json   |
-      | readiness |             |
-      | open_tcp  | 33          |
+      | f         | file.json |
+      | readiness |           |
+      | open_tcp  | 33        |
     Then the step should succeed
     Given "mysql" deployment becomes ready in the "<%= project.name %>" project
     And I wait up to 60 seconds for the steps to pass:
@@ -285,5 +285,5 @@ Feature: oc_set_probe.feature
       | resource | pod              |
       | l        | deployment=mysql |
     Then the output should contain:
-      | Liveness     |
-      | false        |
+      | Liveness |
+      | false    |

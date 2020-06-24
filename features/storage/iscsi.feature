@@ -21,7 +21,6 @@ Feature: ISCSI volume plugin testing
       | ["spec"]["storageClassName"] | sc-<%= project.name %> |
     Then the step should succeed
     And the "mypvc" PVC becomes bound to the "pv-<%= project.name %>" PV
-
     # Create tester pod
     Given I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
@@ -31,7 +30,6 @@ Feature: ISCSI volume plugin testing
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc |
     Then the step should succeed
     And the pod named "mypod" becomes ready
-
     # Verify uid and gid are correct
     When I execute on the pod:
       | id | -u |
@@ -41,7 +39,6 @@ Feature: ISCSI volume plugin testing
       | id | -G |
     Then the output should contain:
       | 123456 |
-
     # Verify mount directory has supplemental groups set properly
     # Verify SELinux context is set properly
     When I execute on the pod:
@@ -50,7 +47,6 @@ Feature: ISCSI volume plugin testing
       | 123456                                   |
       | (svirt_sandbox_file_t\|container_file_t) |
       | s0:c2,c13                                |
-
     # Verify created file belongs to supplemental group
     Given I execute on the pod:
       | touch | /mnt/iscsi/iscsi_testfile |

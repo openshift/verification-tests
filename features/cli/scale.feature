@@ -39,7 +39,6 @@ Feature: scaling related scenarios
       | replicas | 0                 |
     Then the step should succeed
     And I wait until number of replicas match "0" for replicationController "<%= cb.rc_name %>"
-
     Then I run the :scale client command with:
       | resource | deploymentconfig  |
       | name     | <%= cb.dc_name %> |

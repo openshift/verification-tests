@@ -10,6 +10,7 @@ Feature: Some basic project related tests
     """
     When I create a new project
     """
+
   Scenario: test special project step
     Given I create a project with non-leading digit name
     And the expression should be true> project.name.match(/^(\d)/).nil?

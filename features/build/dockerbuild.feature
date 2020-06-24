@@ -1,4 +1,5 @@
 Feature: dockerbuild.feature
+
   # @author wzheng@redhat.com
   # @case_id OCP-12115
   @smoke
@@ -57,7 +58,6 @@ Feature: dockerbuild.feature
       | name     | ruby-hello-world-3 |
     Then the step should succeed
     And the output should contain "error"
-
 
   # @author dyan@redhat.com
   # @case_id OCP-13083
@@ -126,6 +126,5 @@ Feature: dockerbuild.feature
       | code | https://github.com/openshift-qe/oc_newapp_expose |
     Then the step should succeed
     And the output should contain:
-      | invalid ports in EXPOSE instruction |
+      | invalid ports in EXPOSE instruction                                                                                                    |
       | Ports 8080/tcp, 8081/tcp, 8083/tcp, 8084/tcp, 8085/tcp, 8087/tcp, 8090/tcp, 8091/tcp, 8092/tcp, 8093/tcp, 8094/tcp, 8100/udp, 8101/udp |
-

@@ -15,8 +15,8 @@ Feature: oc_volume.feature
       | sa_name     | default     |
     Then the step should succeed
     When I run the :run client command with:
-      | name         | mydc                                                                                                          |
-      | image        | quay.io/openshifttest/hello-openshift@sha256:424e57db1f2e8e8ac9087d2f5e8faea6d73811f0b6f96301bc94293680897073 |
+      | name  | mydc                                                                                                          |
+      | image | quay.io/openshifttest/hello-openshift@sha256:424e57db1f2e8e8ac9087d2f5e8faea6d73811f0b6f96301bc94293680897073 |
     Then the step should succeed
     Given a pod becomes ready with labels:
       | deployment=mydc-1 |
@@ -56,35 +56,31 @@ Feature: oc_volume.feature
       | name        | my-secret  |
       | from_file   | /etc/hosts |
     Then the step should succeed
-
     Given I wait until replicationController "mydc-1" is ready
     When I run the :set_volume client command with:
-      | resource      | rc                |
-      | resource_name | mydc-1            |
-      | action        | --add             |
-      | name          | secret            |
-      | type          | secret            |
-      | secret-name   | my-secret         |
-      | mount-path    | /etc              |
+      | resource      | rc        |
+      | resource_name | mydc-1    |
+      | action        | --add     |
+      | name          | secret    |
+      | type          | secret    |
+      | secret-name   | my-secret |
+      | mount-path    | /etc      |
     Then the step should succeed
-
     When I run the :set_volume client command with:
-      | resource      | dc                |
-      | resource_name | mydc              |
-      | action        | --add             |
-      | name          | secret            |
-      | type          | secret            |
-      | secret-name   | my-secret         |
-      | mount-path    | /etc              |
+      | resource      | dc        |
+      | resource_name | mydc      |
+      | action        | --add     |
+      | name          | secret    |
+      | type          | secret    |
+      | secret-name   | my-secret |
+      | mount-path    | /etc      |
     Then the step should succeed
-
     When I run the :get client command with:
       | resource | dc/mydc                                                   |
       | o        | jsonpath={.spec.template.spec.containers[*].volumeMounts} |
     Then the step should succeed
     And the output should contain 1 times:
       | name:secret |
-
     When I run the :get client command with:
       | resource | rc/mydc-1                                                 |
       | o        | jsonpath={.spec.template.spec.containers[*].volumeMounts} |
