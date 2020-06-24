@@ -76,10 +76,24 @@ click_button_by_id:
     selector:
       xpath: //button[contains(@id,'<button_id>')]
     op: click
+click_button_title:
+  element:
+    selector:
+      xpath: //button[@title='<button_title>']
+    op: click
+check_button_title:
+  element:
+    selector:
+      xpath: //button[@title='<button_title>']
 check_table_text_data:
   element:
     selector:
       xpath: //td[text()='<text_data>']
+check_table_line_count:
+  action: wait_table_loaded
+  scripts:
+  - command: return document.querySelectorAll("tbody tr").length == '<line_count>'
+    expect_result: true
 select_resource_item:
   action: click_button_by_id
   action: click_on_resource_name
@@ -118,6 +132,11 @@ click_yaml_tab:
   params:
     tab_name: YAML
   action: click_tab
+check_edit_yaml_enabled:
+  params:
+    button_text: Save
+  action: click_yaml_tab
+  action: check_button_enabled
 click_radio_input:
   element:
     selector:
@@ -177,6 +196,16 @@ set_label_input_simple:
     type: input
   - selector:
       <<: *label_input_value
+    op: send_keys <input_value>
+    type: input
+set_placeholder_input:
+  elements:
+  - selector: &placeholder_input
+      xpath: //input[@placeholder='<name>']
+    op: clear
+    type: input
+  - selector:
+      <<: *placeholder_input
     op: send_keys <input_value>
     type: input
 check_content_in_yaml_editor:

@@ -62,6 +62,15 @@ check_button_missing:
     selector:
       <<: *button_with_text
     missing: true
+click_button_title:
+  element:
+    selector:
+      xpath: //button[@title='<button_title>']
+    op: click
+check_button_title:
+  element:
+    selector:
+      xpath: //button[@title='<button_title>']
 check_kebab_items_disabled:
   elements: 
   - selector:
@@ -80,6 +89,11 @@ check_table_text_data:
   element:
     selector:
       xpath: //td[text()='<text_data>']
+check_table_line_count:
+  action: wait_table_loaded
+  scripts:
+  - command: return document.querySelectorAll("tbody tr").length == '<line_count>'
+    expect_result: true
 select_resource_item:
   action: click_button_by_id
   action: click_on_resource_name
@@ -126,6 +140,11 @@ click_yaml_tab:
   params:
     tab_name: YAML
   action: click_tab
+check_edit_yaml_enabled:
+  params:
+    button_text: Save
+  action: click_yaml_tab
+  action: check_button_enabled
 click_radio_input:
   element:
     selector:
@@ -200,6 +219,16 @@ set_label_input_simple:
       <<: *label_input_value
     op: send_keys <input_value>
     type: input
+set_placeholder_input:
+  elements:
+  - selector: &placeholder_input
+      xpath: //input[@placeholder='<name>']
+    op: clear
+    type: input
+  - selector:
+      <<: *placeholder_input
+    op: send_keys <input_value>
+    type: input
 set_label_textarea:
   elements:
   - selector: &label_textarea
@@ -230,7 +259,7 @@ click_on_resource_item:
 wait_dropdown_loaded:
   element:
     selector:
-      xpath: //*[contains(@class, 'dropdown-menu--text-wrap')]
+      xpath: //ul[contains(@class, 'dropdown__menu')]
     timeout: 20
 # click and check the first item from resource list such as projects, pods, etc.
 click_first_item_from_resource_list_and_check_breadcrumb:
@@ -287,6 +316,16 @@ check_column_in_table:
   elements:
   - selector:
       xpath: //th[contains(@data-label,'<field>')]
+check_column_header:
+  action: wait_box_loaded
+  elements:
+  - selector:
+      xpath: //button[contains(@class, 'pf-c-button') and contains(text(),'<column_name>')]
+check_column_header_missing:
+  element:
+    selector:
+      xpath: //button[contains(@class, 'pf-c-button') and text()='<column_name>']
+    missing: true
 check_resource_name_and_icon:
   action:
     if_param: service_name
@@ -574,6 +613,9 @@ check_resource_details:
     if_param: namespace
     ref: check_resource_namespace
   action:
+    if_param: managed_namespace
+    ref: check_resource_managed_namespace
+  action:
     if_param: labels
     ref: check_resource_labels
   action:
@@ -820,6 +862,11 @@ check_resource_namespace:
   params:
     key: Namespace
     value: <namespace>
+  action: check_resource_details_key_and_value
+check_resource_managed_namespace:
+  params:
+    key: Managed Namespace
+    value: <managed_namespace>
   action: check_resource_details_key_and_value
 check_resource_git_repository:
   params:

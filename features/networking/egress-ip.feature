@@ -35,8 +35,9 @@ Feature: Egress IP related features
     Given I select a random node's host
     # create project with pods
     Given I have a project
+    Given I obtain test data file "networking/list_for_pods.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json |
+      | f | list_for_pods.json |
     Then the step should succeed
     Given 2 pods become ready with labels:
       | name=test-pods |
@@ -145,7 +146,60 @@ Feature: Egress IP related features
       | bash | -c | ip address show <%= cb.interface %> |
     Then the step should succeed
     And the output should contain "<%= cb.valid_ip %>"
+    And the output should not contain "<%= cb.newip %>"
     """
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-15992
+  @admin
+  @destructive
+  Scenario: The EgressNetworkPolicy should work well with egressIP
+    Given the valid egress IP is added to the node
+    And I have a project
+    And I have a pod-for-ping in the project
+
+    # Create egressnetworkpolicy
+    Given I obtain test data file "networking/egressnetworkpolicy/limit_policy.json"
+    When I run the :create admin command with:
+      | f | limit_policy.json |
+      | n | <%= project.name %>                                                                                                 |
+    Then the step should succeed
+
+    # add the egress ip to the project
+    Given as admin I successfully merge patch resource "netnamespace/<%= project.name %>" with:
+      | {"egressIPs": ["<%= cb.valid_ip %>"]} |
+
+    #The traffic should be denied
+    When I execute on the pod:
+      | curl | -s | --connect-timeout | 5 | ifconfig.me |
+    Then the step should fail
+
+    # Update egressnetworkpolicy as Allow
+    When I run the :patch admin command with:
+      | resource      | egressnetworkpolicy                                                       |
+      | resource_name | policy1                                                                   |
+      | p             | {"spec":{"egress":[{"type":"Allow","to":{"cidrSelector": "0.0.0.0/0"}}]}} |
+      | n             | <%= project.name %>                                                       |
+      | type          | merge                                                                     |
+    Then the step should succeed
+
+    # The traffic should be allowed and the source ip is egress ip
+    When I execute on the pod:
+      | curl | -s | --connect-timeout | 5 | ifconfig.me |
+    Then the step should succeed
+    And the output should contain "<%= cb.valid_ip %>"
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-15473
+  @admin
+  @destructive
+  Scenario: The related iptables/openflow rules will be removed once the egressIP gets removed from netnamespace
+    Given the valid egress IP is added to the node
+    And I have a project
+
+    # add the egress ip to the project
+    Given as admin I successfully merge patch resource "netnamespace/<%= project.name %>" with:
+      | {"egressIPs": ["<%= cb.valid_ip %>"]} |
 
     #Check related iptables added
     When I run command on the "<%= node.name%>" node's sdn pod:
@@ -178,42 +232,3 @@ Feature: Egress IP related features
     Then the step should succeed
     And the output should not contain "reg0=0x"
     """
-
-  # @author huirwang@redhat.com
-  # @case_id OCP-15992
-  @admin
-  @destructive
-  Scenario: The EgressNetworkPolicy should work well with egressIP
-    Given the valid egress IP is added to the node
-    And I have a project
-    And I have a pod-for-ping in the project
-
-    # Create egressnetworkpolicy
-    When I run the :create admin command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/egressnetworkpolicy/limit_policy.json |
-      | n | <%= project.name %>                                                                                                 |
-    Then the step should succeed
-
-    # add the egress ip to the project
-    Given as admin I successfully merge patch resource "netnamespace/<%= project.name %>" with:
-      | {"egressIPs": ["<%= cb.valid_ip %>"]} |
-
-    #The traffic should be denied
-    When I execute on the pod:
-      | curl | -s | --connect-timeout | 5 | ifconfig.me |
-    Then the step should fail
-
-    # Update egressnetworkpolicy as Allow
-    When I run the :patch admin command with:
-      | resource      | egressnetworkpolicy                                                       |
-      | resource_name | policy1                                                                   |
-      | p             | {"spec":{"egress":[{"type":"Allow","to":{"cidrSelector": "0.0.0.0/0"}}]}} |
-      | n             | <%= project.name %>                                                       |
-      | type          | merge                                                                     |
-    Then the step should succeed
-
-    # The traffic should be allowed and the source ip is egress ip
-    When I execute on the pod:
-      | curl | -s | --connect-timeout | 5 | ifconfig.me |
-    Then the step should succeed
-    And the output should contain "<%= cb.valid_ip %>"

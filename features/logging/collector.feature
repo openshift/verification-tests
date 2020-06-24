@@ -94,13 +94,15 @@ Feature: collector related tests
     Given evaluation of `cluster_logging('instance').collection_type` is stored in the :collection_type clipboard
     And I wait for the "<index_name>" index to appear in the ES pod with labels "es-node-master=true"
     Then the step should succeed
+    Given I wait up to 300 seconds for the steps to pass:
+    """
     When I perform the HTTP request on the ES pod with labels "es-node-master=true":
       | relative_url | <index_name>*/_search?pretty'  -d '{"query": {"exists": {"field": "systemd"}}} |
       | op           | GET                                                                            |
     Then the step should succeed
     And the expression should be true> @result[:parsed]['hits']['hits'][0]['_source']['pipeline_metadata']['collector']['name'] == cb.collection_type
     And the expression should be true> @result[:parsed]['hits']['hits'][0]['_source']['pipeline_metadata']['collector']['inputname'] == (cb.collection_type == "fluentd" ? "fluent-plugin-systemd" : "imfile")
-
+    """
     Examples:
       | index_name  |
       | .operations | # @case_id OCP-25365
@@ -116,8 +118,9 @@ Feature: collector related tests
     Given I switch to the first user
     Given I create a project with non-leading digit name
     Given evaluation of `project` is stored in the :proj clipboard
+    Given I obtain test data file "logging/loggen/container_json_unicode_log_template.json"
     When I run the :new_app client command with:
-      | file | <%= BushSlicer::HOME %>/testdata/logging/loggen/container_json_unicode_log_template.json |
+      | file | container_json_unicode_log_template.json |
     Then the step should succeed
     And a pod becomes ready with labels:
       | run=centos-logtest,test=centos-logtest |
@@ -151,8 +154,9 @@ Feature: collector related tests
     Given I switch to the first user
     Given I create a project with non-leading digit name
     Given evaluation of `project` is stored in the :proj clipboard
+    Given I obtain test data file "logging/loggen/container_json_unicode_log_template.json"
     When I run the :new_app client command with:
-      | file | <%= BushSlicer::HOME %>/testdata/logging/loggen/container_json_unicode_log_template.json |
+      | file | container_json_unicode_log_template.json |
     Then the step should succeed
     And a pod becomes ready with labels:
       | run=centos-logtest,test=centos-logtest |

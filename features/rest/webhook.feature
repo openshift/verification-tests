@@ -3,7 +3,8 @@ Feature: Webhook REST Related Tests
   # @author cryan@redhat.com
   Scenario Outline: Trigger build with webhook
     Given I have a project
-    And I process and create "<%= BushSlicer::HOME %>/testdata/build/ruby20rhel7-template-sti.json"
+    Given I obtain test data file "build/ruby20rhel7-template-sti.json"
+    And I process and create "ruby20rhel7-template-sti.json"
     Given the "ruby-sample-build-1" build completes
     When I run the :patch client command with:
       | resource | buildconfig |

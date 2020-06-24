@@ -13,7 +13,7 @@ archived_cluster_detail_page_loaded:
         - selector:
             xpath: //p[text()='The cluster has been archived and does not have any metrics data.']
         - selector:
-            xpath: //h2[@class='pf-c-title pf-m-3xl' and text()='Details']
+            xpath: //h2[text()='Details']
         - selector:
             xpath: //dt[text()='Status']/../dd[text()='Archived']
 click_detail_page_unarchive_cluster_button:

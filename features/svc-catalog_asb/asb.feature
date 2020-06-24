@@ -15,16 +15,18 @@ Feature: Ansible-service-broker related scenarios
     And I use the "<%= cb.org_proj_name %>" project
 
     # Provision mediawiki apb
+    Given I obtain test data file "svc-catalog/serviceinstance-template.yaml"
     When I process and create:
-      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/serviceinstance-template.yaml |
+      | f | serviceinstance-template.yaml |
       | p | INSTANCE_NAME=<%= cb.prefix %>-mediawiki-apb          |
       | p | CLASS_EXTERNAL_NAME=<%= cb.prefix %>-mediawiki-apb    |
       | p | SECRET_NAME=<%= cb.prefix %>-mediawiki-apb-parameters |
       | p | INSTANCE_NAMESPACE=<%= project.name %>                |
     Then the step should succeed
     And evaluation of `service_instance(cb.prefix + "-mediawiki-apb").uid(user: user)` is stored in the :mediawiki_uid clipboard
+    Given I obtain test data file "svc-catalog/serviceinstance-parameters-template.yaml"
     When I process and create:
-      | f  | <%= BushSlicer::HOME %>/testdata/svc-catalog/serviceinstance-parameters-template.yaml |
+      | f  | serviceinstance-parameters-template.yaml |
       | p | SECRET_NAME=<%= cb.prefix %>-mediawiki-apb-parameters |
       | p | INSTANCE_NAME=<%= cb.prefix %>-mediawiki-apb          |
       | p | UID=<%= cb.mediawiki_uid %>                           |
@@ -32,8 +34,9 @@ Feature: Ansible-service-broker related scenarios
     Then the step should succeed
 
     # Provision DB apb
+    Given I obtain test data file "svc-catalog/serviceinstance-template.yaml"
     When I process and create:
-      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/serviceinstance-template.yaml |
+      | f | serviceinstance-template.yaml |
       | p | INSTANCE_NAME=<db_name>                               |
       | p | CLASS_EXTERNAL_NAME=<db_name>                         |
       | p | PLAN_EXTERNAL_NAME=<db_plan>                          |
@@ -41,8 +44,9 @@ Feature: Ansible-service-broker related scenarios
       | p | INSTANCE_NAMESPACE=<%= project.name %>                |
     Then the step should succeed
     And evaluation of `service_instance("<db_name>").uid(user: user)` is stored in the :db_uid clipboard
+    Given I obtain test data file "svc-catalog/serviceinstance-parameters-template.yaml"
     When I process and create:
-      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/serviceinstance-parameters-template.yaml |
+      | f | serviceinstance-parameters-template.yaml |
       | p | SECRET_NAME=<db_secret_name>                                                                                            |
       | p | INSTANCE_NAME=<db_name>                                                                                                 |
       | p | PARAMETERS=<db_parameters>                                                                                              |
@@ -71,8 +75,9 @@ Feature: Ansible-service-broker related scenarios
     """
 
     # Create servicebinding of DB apb
+    Given I obtain test data file "svc-catalog/servicebinding-template.yaml"
     When I process and create:
-      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/servicebinding-template.yaml |
+      | f | servicebinding-template.yaml |
       | p | BINDING_NAME=<db_name>                                                                                      |
       | p | INSTANCE_NAME=<db_name>                                                                                     |
       | p | SECRET_NAME=<db_credentials>                                                                                |
@@ -153,8 +158,9 @@ Feature: Ansible-service-broker related scenarios
     Given I have a project
 
     # Provision DB apb with dev plan
+    Given I obtain test data file "svc-catalog/serviceinstance-template.yaml"
     When I process and create:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/serviceinstance-template.yaml |
+      | f | serviceinstance-template.yaml |
       | p | INSTANCE_NAME=<db_name>                                                          |
       | p | CLASS_EXTERNAL_NAME=<db_name>                                                    |
       | p | PLAN_EXTERNAL_NAME=dev                                                           |
@@ -162,8 +168,9 @@ Feature: Ansible-service-broker related scenarios
       | p | INSTANCE_NAMESPACE=<%= project.name %>                                           |
     Then the step should succeed
     And evaluation of `service_instance("<db_name>").uid` is stored in the :uid1 clipboard
+    Given I obtain test data file "svc-catalog/serviceinstance-parameters-template.yaml"
     When I process and create:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/serviceinstance-parameters-template.yaml |
+      | f | serviceinstance-parameters-template.yaml |
       | p | SECRET_NAME=<db_secret_name>                                                                |
       | p | INSTANCE_NAME=<db_name>                                                                     |
       | p | PARAMETERS=<db_parameters>                                                                  |
@@ -180,8 +187,9 @@ Feature: Ansible-service-broker related scenarios
     Given I create a new project
 
     # Provision DB apb with prod plan
+    Given I obtain test data file "svc-catalog/serviceinstance-template.yaml"
     When I process and create:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/serviceinstance-template.yaml |      
+      | f | serviceinstance-template.yaml |      
       | p | INSTANCE_NAME=<db_name>                                                          |
       | p | CLASS_EXTERNAL_NAME=<db_name>                                                    |
       | p | PLAN_EXTERNAL_NAME=prod                                                          |
@@ -189,8 +197,9 @@ Feature: Ansible-service-broker related scenarios
       | p | INSTANCE_NAMESPACE=<%= project.name %>                                           |
     Then the step should succeed
     And evaluation of `service_instance("<db_name>").uid` is stored in the :uid2 clipboard
+    Given I obtain test data file "svc-catalog/serviceinstance-parameters-template.yaml"
     When I process and create:
-      | f | <%= ENV['BUSHSLICER_HOME'] %>/testdata/svc-catalog/serviceinstance-parameters-template.yaml |
+      | f | serviceinstance-parameters-template.yaml |
       | p | SECRET_NAME=<db_secret_name>                                                                |
       | p | INSTANCE_NAME=<db_name>                                                                     |
       | p | PARAMETERS=<db_parameters>                                                                  |

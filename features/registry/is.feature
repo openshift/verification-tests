@@ -95,7 +95,7 @@ Feature: Testing imagestream
     Given I enable image-registry default route
     Given default image registry route is stored in the :registry_hostname clipboard
     Given certification for default image registry is stored to the :reg_crt_name clipboard
-    When I run the :new_app client command with:
+    When I run the :new_app_as_dc client command with:
       | app_repo | ruby~https://github.com/sclorg/ruby-ex.git |
     Then the step should succeed
     And the "ruby-ex-1" build was created

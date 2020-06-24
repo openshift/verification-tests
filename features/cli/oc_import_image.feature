@@ -3,8 +3,9 @@ Feature: oc import-image related feature
   # @case_id OCP-10585
   Scenario: Do not create tags for ImageStream if image repository does not have tags
     When I have a project
+    Given I obtain test data file "image-streams/is_without_tags.json"
     And I run the :create client command with:
-      | filename | <%= BushSlicer::HOME %>/testdata/image-streams/is_without_tags.json |
+      | filename | is_without_tags.json |
     Then the step should succeed
     When I run the :get client command with:
       | resource      | imagestreams |
@@ -19,8 +20,9 @@ Feature: oc import-image related feature
   # @case_id OCP-10721
   Scenario: Could not import the tag when reference is true
     Given I have a project
+    Given I obtain test data file "image-streams/tc510523.json"
     When I run the :create client command with:
-      | filename | <%= BushSlicer::HOME %>/testdata/image-streams/tc510523.json |
+      | filename | tc510523.json |
     Then the step should succeed
     Given I wait up to 15 seconds for the steps to pass:
     """
@@ -35,8 +37,9 @@ Feature: oc import-image related feature
   # @case_id OCP-11760
   Scenario: Import Image when spec.DockerImageRepository not defined
     Given I have a project
+    Given I obtain test data file "image-streams/tc510526.json"
     When I run the :create client command with:
-      | filename | <%= BushSlicer::HOME %>/testdata/image-streams/tc510526.json |
+      | filename | tc510526.json |
     Then the step should succeed
     Given I wait up to 15 seconds for the steps to pass:
     """
@@ -54,8 +57,9 @@ Feature: oc import-image related feature
   @smoke
   Scenario: Import image when spec.DockerImageRepository with some tags defined when Kind==DockerImage
     Given I have a project
+    Given I obtain test data file "image-streams/tc510528.json"
     When I run the :create client command with:
-      | filename | <%= BushSlicer::HOME %>/testdata/image-streams/tc510528.json |
+      | filename | tc510528.json |
     Then the step should succeed
     Given I wait up to 15 seconds for the steps to pass:
     """
@@ -70,8 +74,9 @@ Feature: oc import-image related feature
   # @case_id OCP-11089
   Scenario: Tags should be added to ImageStream if image repository is from an external docker registry
     Given I have a project
+    Given I obtain test data file "image-streams/external.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/image-streams/external.json |
+      | f | external.json |
     Then the step should succeed
     And I wait for the steps to pass:
     ## istag will not show promtly as soon as is create, need wait for a few seconds
@@ -96,7 +101,7 @@ Feature: oc import-image related feature
       | dest        | deployment-example:latest    |
     Then the step should succeed
     And the "deployment-example" image stream becomes ready
-    When I run the :new_app client command with:
+    When I run the :new_app_as_dc client command with:
       | image_stream | deployment-example:latest   |
     Then the output should match:
       | .*[Ss]uccess.*|
@@ -129,7 +134,7 @@ Feature: oc import-image related feature
       | reference_policy | local                        |
     Then the step should succeed
     And the "deployment-example" image stream becomes ready
-    When I run the :new_app client command with:
+    When I run the :new_app_as_dc client command with:
       | image_stream | deployment-example:latest   |
     Then the output should match:
       | .*[Ss]uccess.* |

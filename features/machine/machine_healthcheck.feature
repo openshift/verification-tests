@@ -13,7 +13,8 @@ Feature: MachineHealthCheck Test Scenarios
     Given I clone a machineset and name it "machineset-clone-25897"
 
     # Create MHC
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/cloud/mhc/mhc1.yaml" replacing paths:
+    Given I obtain test data file "cloud/mhc/mhc1.yaml"
+    When I run oc create over "mhc1.yaml" replacing paths:
       | n                                                                                  | openshift-machine-api       |
       | ["metadata"]["name"]                                                               | mhc-<%= machine_set.name %> |
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]    | <%= machine_set.cluster %>  |
@@ -50,7 +51,8 @@ Feature: MachineHealthCheck Test Scenarios
     Given I create the 'Ready' unhealthyCondition
 
     # Create MHC
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/cloud/mhc/mhc1.yaml" replacing paths:
+    Given I obtain test data file "cloud/mhc/mhc1.yaml"
+    When I run oc create over "mhc1.yaml" replacing paths:
       | n                                                                                  | openshift-machine-api       |
       | ["metadata"]["name"]                                                               | mhc-<%= machine_set.name %> |
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]    | <%= machine_set.cluster %>  |
@@ -75,7 +77,8 @@ Feature: MachineHealthCheck Test Scenarios
     # Create MHCs
     Given I run the steps 2 times:
     """
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/cloud/mhc/mhc1.yaml" replacing paths:
+    Given I obtain test data file "cloud/mhc/mhc1.yaml"
+    When I run oc create over "mhc1.yaml" replacing paths:
       | n                                                                                  | openshift-machine-api                 |
       | ["metadata"]["name"]                                                               | mhc-<%= machine_set.name %>-#{ cb.i } |
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]    | <%= machine_set.cluster %>            |
@@ -100,7 +103,8 @@ Feature: MachineHealthCheck Test Scenarios
     Given I clone a machineset and name it "machineset-clone-25691"
 
     # Create MHC
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/cloud/mhc/mhc1.yaml" replacing paths:
+    Given I obtain test data file "cloud/mhc/mhc1.yaml"
+    When I run oc create over "mhc1.yaml" replacing paths:
       | n                                                                                  | openshift-machine-api         |
       | ["metadata"]["name"]                                                               | mhc-<%= machine_set.name %>-1 |
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]    | <%= machine_set.cluster %>    |
@@ -108,7 +112,8 @@ Feature: MachineHealthCheck Test Scenarios
       | ["spec"]["maxUnhealthy"]                                                           | 0                             |
     Then the step should succeed
     And I ensure "mhc-<%= machine_set.name %>-1" machinehealthcheck is deleted after scenario
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/cloud/mhc/mhc1.yaml" replacing paths:
+    Given I obtain test data file "cloud/mhc/mhc1.yaml"
+    When I run oc create over "mhc1.yaml" replacing paths:
       | n                                                                                  | openshift-machine-api         |
       | ["metadata"]["name"]                                                               | mhc-<%= machine_set.name %>-2 |
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]    | <%= machine_set.cluster %>    |
@@ -144,7 +149,8 @@ Feature: MachineHealthCheck Test Scenarios
     Given I clone a machineset and name it "machineset-clone-28718"
 
     # Create MHC with configurable node startup timeout
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/cloud/mhc/mhc_configurabletimeout.yaml" replacing paths:
+    Given I obtain test data file "cloud/mhc/mhc_configurabletimeout.yaml"
+    When I run oc create over "mhc_configurabletimeout.yaml" replacing paths:
       | n                                                                                  | openshift-machine-api       |
       | ["metadata"]["name"]                                                               | mhc-<%= machine_set.name %> |
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]    | <%= machine_set.cluster %>  |
@@ -167,4 +173,90 @@ Feature: MachineHealthCheck Test Scenarios
     """
    Then the machine should be remediated
 
-   
+  # @author jhou@redhat.com
+  # @case_id OCP-25727
+  @admin
+  @destructive
+  Scenario: Remediation should be applied when machine has nodeRef but node is deleted
+    Given I have an IPI deployment
+    And I switch to cluster admin pseudo user
+    And I use the "openshift-machine-api" project
+    And admin ensures machine number is restored after scenario
+
+    Given I clone a machineset and name it "machineset-clone-25727"
+
+    Given I obtain test data file "cloud/mhc/mhc1.yaml"
+    When I run oc create over "mhc1.yaml" replacing paths:
+      | n                                                                                  | openshift-machine-api       |
+      | ["metadata"]["name"]                                                               | mhc-<%= machine_set.name %> |
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]    | <%= machine_set.cluster %>  |
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"] | <%= machine_set.name %>     |
+    Then the step should succeed
+    And I ensure "mhc-<%= machine_set.name %>" machinehealthcheck is deleted after scenario
+
+    Given I store the last provisioned machine in the :new_machine clipboard
+    Given admin ensures "<%= machine(cb.new_machine).node_name %>" node is deleted
+    Then the machine named "<%= cb.new_machine %>" should be remediated
+
+  # @author miyadav@redhat.com
+  # @case_id OCP-29857
+  @admin
+  Scenario: [MHC] MaxUnhealthy should not allow malformed values
+    Given I have an IPI deployment
+    And I switch to cluster admin pseudo user
+    Then I use the "openshift-machine-api" project
+    And evaluation of `BushSlicer::Machine.list(user: admin, project: project('openshift-machine-api'))` is stored in the :machines clipboard
+
+    # Create MHC with malformed unhealthy nodes value and empty selectors
+    Given I obtain test data file "cloud/mhc/mhc_malformed.yaml"
+    When I run oc create over "mhc_malformed.yaml" replacing paths:
+      | n  | openshift-machine-api |
+    Then the step should succeed
+    And I ensure "mhc-malformed" machinehealthcheck is deleted after scenario
+
+    Then a pod becomes ready with labels:
+      | api=clusterapi, k8s-app=controller |
+
+    When I run the :logs admin command with:
+      | resource_name | <%= pod.name %>                |
+      | c             | machine-healthcheck-controller |
+    Then the output should contain:
+      | remediation won't be allowed: invalid value for IntOrString  |
+      | total targets: <%= cb.machines.count %>                      | #This covers OCP-29062 - empty selectors watches all machines in cluster
+
+  # @author miyadav@redhat.com
+  # @case_id OCP-28859
+  @admin
+  @destructive
+  Scenario: MHC MaxUnhealthy string value should be checked for '%' symbol
+    Given I have an IPI deployment
+    And I switch to cluster admin pseudo user
+    And I use the "openshift-machine-api" project
+    And admin ensures machine number is restored after scenario
+
+    Given I clone a machineset and name it "machineset-clone-28859"
+
+    # Create MHC
+    Given I obtain test data file "cloud/mhc/mhc1.yaml"
+    When I run oc create over "mhc1.yaml" replacing paths:
+      | n                                                                                  | openshift-machine-api       |
+      | ["metadata"]["name"]                                                               | mhc-<%= machine_set.name %> |
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]    | <%= machine_set.cluster %>  |
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"] | <%= machine_set.name %>     |
+      | ["spec"]["maxUnhealthy"]                                                           | "1%"                        |
+    Then the step should succeed
+    And I ensure "mhc-<%= machine_set.name %>" machinehealthcheck is deleted after scenario
+
+    Then a pod becomes ready with labels:
+      | api=clusterapi, k8s-app=controller |
+
+    Given I create the 'Ready' unhealthyCondition
+
+    When I run the :logs admin command with:
+      | resource_name | <%= pod.name %>                |
+      | c             | machine-healthcheck-controller |
+    Then the output should match:
+      | maxUnhealthy: 1%             |
+      | Short-circuiting remediation |
+
+

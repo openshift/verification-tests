@@ -7,13 +7,15 @@ Feature: ISCSI volume plugin testing
   Scenario: ISCSI volume security test
     Given I have a iSCSI setup in the environment
     And I have a project
-    When admin creates a PV from "<%= BushSlicer::HOME %>/testdata/storage/iscsi/pv-rwo.json" where:
+    Given I obtain test data file "storage/iscsi/pv-rwo.json"
+    When admin creates a PV from "pv-rwo.json" where:
       | ["metadata"]["name"]               | pv-<%= project.name %>        |
       | ["spec"]["iscsi"]["targetPortal"]  | <%= cb.iscsi_ip %>:3260       |
       | ["spec"]["iscsi"]["initiatorName"] | iqn.2016-04.test.com:test.img |
       | ["spec"]["storageClassName"]       | sc-<%= project.name %>        |
     Then the step should succeed
-    When I create a dynamic pvc from "<%= BushSlicer::HOME %>/testdata/storage/misc/pvc.json" replacing paths:
+    Given I obtain test data file "storage/misc/pvc.json"
+    When I create a dynamic pvc from "pvc.json" replacing paths:
       | ["metadata"]["name"]         | mypvc                  |
       | ["spec"]["volumeName"]       | pv-<%= project.name %> |
       | ["spec"]["storageClassName"] | sc-<%= project.name %> |
@@ -23,7 +25,8 @@ Feature: ISCSI volume plugin testing
     # Create tester pod
     Given I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/iscsi/pod-security.json" replacing paths:
+    Given I obtain test data file "storage/iscsi/pod-security.json"
+    When I run oc create over "pod-security.json" replacing paths:
       | ["metadata"]["name"]                                         | mypod |
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc |
     Then the step should succeed

@@ -2,8 +2,9 @@ Feature: stibuild.feature
   # @author xiuwang@redhat.com
   Scenario Outline: Trigger s2i/docker/custom build using additional imagestream
     Given I have a project
+    Given I obtain test data file "templates/<template>"
     And I run the :new_app client command with:
-      | file | <%= BushSlicer::HOME %>/testdata/templates/<template> |
+      | file | <template> |
     Then the step should succeed
     And the "sample-build-1" build was created
     When I run the :cancel_build client command with:
@@ -94,8 +95,9 @@ Feature: stibuild.feature
     When a pod becomes ready with labels:
       | deploymentconfig=git |
       | deployment=git-2     |
+    Given I obtain test data file "build/httpd-ex.git"
     When I run the :cp client command with:
-      | source | <%= BushSlicer::HOME %>/testdata/build/httpd-ex.git | 
+      | source | httpd-ex.git | 
       | dest   | <%= pod.name %>:/var/lib/git/                       |
     Then the step should succeed
     When I run the :new_app client command with:

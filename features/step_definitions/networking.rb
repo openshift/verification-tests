@@ -426,7 +426,7 @@ Given /^the DefaultDeny policy is applied to the "(.+?)" namespace$/ do | projec
       raise "Failed to apply the default deny annotation to specified namespace."
     end
   else
-    @result = admin.cli_exec(:create, n: project_name , f: "#{ENV['BUSHSLICER_HOME']}/testdata/networking/networkpolicy/defaultdeny-v1-semantic.yaml")
+    @result = admin.cli_exec(:create, n: project_name , f: "#{BushSlicer::HOME}/testdata/networking/networkpolicy/defaultdeny-v1-semantic.yaml")
     unless @result[:success]
       raise "Failed to apply the default deny policy to specified namespace."
     end
@@ -783,7 +783,7 @@ Given /^the subnet for primary interface on node is stored in the#{OPT_SYM} clip
 
   step "the default interface on nodes is stored in the clipboard"
   step "I run command on the node's sdn pod:", table(
-    "| bash | -c | ip a show \"<%= cb.interface %>\" \\| grep inet \\| grep -v inet6  \\| awk '{print $2}' |"
+    "| bash | -c | ip -4 -brief a show \"<%= cb.interface %>\" \\| awk '{print $3}' |"
   )
   raise "Failed to get the subnet range for the primary interface on the node" unless @result[:success]
   cb[cb_name] = @result[:response].chomp

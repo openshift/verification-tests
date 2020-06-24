@@ -5,16 +5,19 @@ Feature: storage security check
   @admin
   Scenario Outline: [origin_infra_20] volume security testing
     Given I have a project
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/misc/pvc.json" replacing paths:
+    Given I obtain test data file "storage/misc/pvc.json"
+    When I run oc create over "pvc.json" replacing paths:
       | ["metadata"]["name"] | mypvc1 |
     Then the step should succeed
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/misc/pvc.json" replacing paths:
+    Given I obtain test data file "storage/misc/pvc.json"
+    When I run oc create over "pvc.json" replacing paths:
       | ["metadata"]["name"] | mypvc2 |
     Then the step should succeed
 
     Given I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/security/privileged-test.json" replacing paths:
+    Given I obtain test data file "storage/security/privileged-test.json"
+    When I run oc create over "privileged-test.json" replacing paths:
       | ["metadata"]["name"]                                        | mypod                                                                                                 |
       | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]   | /mnt                                                                                                  |
       | ["spec"]["containers"][0]["image"]                          | quay.io/openshifttest/storage@sha256:a05b96d373be86f46e76817487027a7f5b8b5f87c0ac18a246b018df11529b40 |
@@ -58,7 +61,8 @@ Feature: storage security check
     And the output should contain "Hello OpenShift Storage"
     Given I ensure "mypod" pod is deleted
 
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/security/privileged-test.json" replacing paths:
+    Given I obtain test data file "storage/security/privileged-test.json"
+    When I run oc create over "privileged-test.json" replacing paths:
       | ["metadata"]["name"]                                        | mypod2                                                                                                |
       | ["spec"]["containers"][0]["image"]                          | quay.io/openshifttest/storage@sha256:a05b96d373be86f46e76817487027a7f5b8b5f87c0ac18a246b018df11529b40 |
       | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]   | /mnt                                                                                                  |
@@ -112,14 +116,16 @@ Feature: storage security check
   @admin
   Scenario: secret volume security check
     Given I have a project
+    Given I obtain test data file "storage/secret/secret.yaml"
     When I run the :create client command with:
-      | filename | <%= BushSlicer::HOME %>/testdata/storage/secret/secret.yaml |
+      | filename | secret.yaml |
     Then the step should succeed
 
     Given I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
+    Given I obtain test data file "storage/secret/secret-pod-test.json"
     When I run the :create client command with:
-      | filename | <%= BushSlicer::HOME %>/testdata/storage/secret/secret-pod-test.json |
+      | filename | secret-pod-test.json |
     Then the step should succeed
 
     Given the pod named "secretpd" becomes ready

@@ -4,11 +4,13 @@ Feature: oc idle
   # @case_id OCP-11633
   Scenario: CLI - Idle all the service in the same project
     Given I have a project
+    Given I obtain test data file "rc/idle-rc-1.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/rc/idle-rc-1.yaml |
+      | f | idle-rc-1.yaml |
     Then the step should succeed
+    Given I obtain test data file "rc/idle-rc-2.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/rc/idle-rc-2.yaml |
+      | f | idle-rc-2.yaml |
     Then the step should succeed
     Given I wait until replicationController "hello-pod" is ready
     And I wait until number of replicas match "2" for replicationController "hello-pod"
@@ -45,8 +47,9 @@ Feature: oc idle
   # @case_id OCP-11980
   Scenario: CLI - Idle service by label
     Given I have a project
+    Given I obtain test data file "rc/idle-rc-2.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/rc/idle-rc-2.yaml |
+      | f | idle-rc-2.yaml |
     Then the step should succeed
     Given I wait until replicationController "hello-pod" is ready
     And I wait until number of replicas match "2" for replicationController "hello-pod"
@@ -80,8 +83,9 @@ Feature: oc idle
   # @case_id OCP-12085
   Scenario: CLI - Idle service from file
     Given I have a project
+    Given I obtain test data file "rc/idle-rc-2.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/rc/idle-rc-2.yaml |
+      | f | idle-rc-2.yaml |
     Then the step should succeed
     Given I wait until replicationController "hello-pod" is ready
     And I wait until number of replicas match "2" for replicationController "hello-pod"
@@ -120,8 +124,9 @@ Feature: oc idle
   # @case_id OCP-12169
   Scenario: CLI - Idle service with dry-run
     Given I have a project
+    Given I obtain test data file "rc/idle-rc-2.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/rc/idle-rc-2.yaml |
+      | f | idle-rc-2.yaml |
     Then the step should succeed
     Given I wait until replicationController "hello-pod" is ready
     And I wait until number of replicas match "2" for replicationController "hello-pod"
@@ -174,8 +179,9 @@ Feature: oc idle
       | idling.*openshift.io/idled-at |
     Given I use the "idling-echo" service
     And evaluation of `service.ip(user: user)` is stored in the :service_ip clipboard
+    Given I obtain test data file "routing/caddy-docker.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/caddy-docker.json |
+      | f | caddy-docker.json |
     Then the step should succeed
     And the pod named "caddy-docker" becomes ready
     When I run the :exec client command with:
@@ -214,8 +220,9 @@ Feature: oc idle
   # @case_id OCP-11345
   Scenario: Idling service with rc
     Given I have a project
+    Given I obtain test data file "rc/idle-rc-2.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/rc/idle-rc-2.yaml |
+      | f | idle-rc-2.yaml |
     Then the step should succeed
     Given I wait until replicationController "hello-pod" is ready
     And I wait until number of replicas match "2" for replicationController "hello-pod"
@@ -238,8 +245,9 @@ Feature: oc idle
       | idling.*openshift.io/idled-at |
     Given I use the "hello-svc" service
     And evaluation of `service.ip(user: user)` is stored in the :service_ip clipboard
+    Given I obtain test data file "routing/caddy-docker.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/caddy-docker.json |
+      | f | caddy-docker.json |
     Then the step should succeed
     And the pod named "caddy-docker" becomes ready
     And I wait up to 60 seconds for the steps to pass:

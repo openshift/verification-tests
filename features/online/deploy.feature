@@ -4,8 +4,9 @@ Feature: ONLY ONLINE Deployment related scripts in this file
   # @case_id OCP-10075
   Scenario: OSO Starter Specify resource constraints for standalone dc and rc in web console with project limits already set
     Given I have a project
+    Given I obtain test data file "deployment/dc-with-two-containers.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/deployment/dc-with-two-containers.yaml |
+      | f | dc-with-two-containers.yaml |
       | n | <%= project.name %>                                                                                       |
     Then the step should succeed
     And I wait until the status of deployment "dctest" becomes :complete
@@ -69,8 +70,9 @@ Feature: ONLY ONLINE Deployment related scripts in this file
       | cpu_range      | 10 millicores to 500 |
       | memory_range   | 128 MiB to 256 MiB   |
     Then the step should succeed
+    Given I obtain test data file "deployment/rc-with-two-containers.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/deployment/rc-with-two-containers.yaml |
+      | f | rc-with-two-containers.yaml |
       | n | <%= project.name %>                                                                                       |
     Then the step should succeed
     When I perform the :goto_set_resource_limits_for_rc web console action with:
@@ -150,8 +152,9 @@ Feature: ONLY ONLINE Deployment related scripts in this file
   # @case_id OCP-14969
   Scenario: OSO Pro Specify resource constraints for standalone dc and rc in web console with project limits already set
     Given I have a project
+    Given I obtain test data file "deployment/dc-with-two-containers.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/deployment/dc-with-two-containers.yaml |
+      | f | dc-with-two-containers.yaml |
       | n | <%= project.name %>                                                                                       |
     Then the step should succeed
     And I wait until the status of deployment "dctest" becomes :complete
@@ -215,8 +218,9 @@ Feature: ONLY ONLINE Deployment related scripts in this file
       | cpu_range      | 40 millicores to 500 |
       | memory_range   | 204 MiB to 256 MiB   |
     Then the step should succeed
+    Given I obtain test data file "deployment/rc-with-two-containers.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/deployment/rc-with-two-containers.yaml |
+      | f | rc-with-two-containers.yaml |
       | n | <%= project.name %>                                                                                       |
     Then the step should succeed
     When I perform the :goto_set_resource_limits_for_rc web console action with:

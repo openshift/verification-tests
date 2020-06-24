@@ -5,13 +5,15 @@ Feature: Testing timeout route
   Scenario: Set timeout server for passthough route
     Given I have a project
     And I store an available router IP in the :router_ip clipboard
+    Given I obtain test data file "routing/routetimeout/httpbin-pod-2.json"
     When I run the :create client command with:
-      | f  | <%= BushSlicer::HOME %>/testdata/routing/routetimeout/httpbin-pod-2.json |
+      | f  | httpbin-pod-2.json |
     Then the step should succeed
     And a pod becomes ready with labels:
       | name=httpbin-pod |
+    Given I obtain test data file "routing/routetimeout/passthough/service_secure.json"
     When I run the :create client command with:
-      | f  | <%= BushSlicer::HOME %>/testdata/routing/routetimeout/passthough/service_secure.json |
+      | f  | service_secure.json |
     Then the step should succeed
     Given I wait for the "service-secure" service to become ready
     When I run the :create_route_passthrough client command with:

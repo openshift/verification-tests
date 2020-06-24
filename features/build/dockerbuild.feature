@@ -4,8 +4,9 @@ Feature: dockerbuild.feature
   @smoke
   Scenario: Docker build with both SourceURI and context dir
     Given I have a project
+    Given I obtain test data file "build/ruby20rhel7-context-docker.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/build/ruby20rhel7-context-docker.json |
+      | f | ruby20rhel7-context-docker.json |
     Then the step should succeed
     When I run the :new_app client command with:
       | template | ruby-helloworld-sample |

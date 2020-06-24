@@ -5,8 +5,9 @@ Feature: jenkins.feature
     Given I have a project
     And I have a jenkins v<ver> application
     And the "jenkins" PVC becomes :bound within 300 seconds
+    Given I obtain test data file "image/language-image-templates/application-template.json"
     When I run the :new_app client command with:
-      | file | <%= BushSlicer::HOME %>/testdata/image/language-image-templates/application-template.json |
+      | file | application-template.json |
     When I give project edit role to the default service account
     Then the step should succeed
     Given a pod becomes ready with labels:
@@ -87,7 +88,7 @@ Feature: jenkins.feature
       | buildconfig | openshift-jee-sample |
     Then the step should succeed
     Given a pod becomes ready with labels:
-      | jenkins/maven=true |
+      | jenkins=slave |
     Given the "openshift-jee-sample-1" build completes
 
     Examples:
@@ -220,8 +221,9 @@ Feature: jenkins.feature
   Scenario Outline: Add/update env vars to pipeline buildconfigs using jenkinsfile field
     Given I have a project
     And I have a jenkins v<version> application
+    Given I obtain test data file "templates/OCP-13259/samplepipeline.yaml"
     When I run the :new_app client command with:
-      | file | <%= BushSlicer::HOME %>/testdata/templates/OCP-13259/samplepipeline.yaml |
+      | file | samplepipeline.yaml |
     Then the step should succeed
     Given I have a jenkins browser
     And I log in to jenkins

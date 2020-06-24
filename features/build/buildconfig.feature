@@ -72,8 +72,9 @@ Feature: buildconfig.feature
      | from_file   | .dockercfg=<%= expand_private_path(conf[:services, :docker_hub, :dockercfg]) %> | 
      | type        | kubernetes.io/dockercfg                                                         |
     Then the step should succeed
+    Given I obtain test data file "build/<template>"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/build/<template> |
+      | f | <template> |
     Then the step should succeed
     And the "ruby-sample-build-1" build was created
     Then the "ruby-sample-build-1" build completes
@@ -92,8 +93,9 @@ Feature: buildconfig.feature
      | from_file   | .dockercfg=<%= expand_private_path(conf[:services, :docker_hub, :dockercfg]) %> | 
      | type        | kubernetes.io/dockercfg                                                         |
     Then the step should succeed
+    Given I obtain test data file "templates/OCP-12057/application-template-stibuild_pull_private_sourceimage.json"
     When I run the :new_app client command with:
-     | file | <%= BushSlicer::HOME %>/testdata/templates/OCP-12057/application-template-stibuild_pull_private_sourceimage.json |
+     | file | application-template-stibuild_pull_private_sourceimage.json |
     Then the step should succeed
     And the "ruby-sample-build-1" build was created
     And the "ruby-sample-build-1" build completed

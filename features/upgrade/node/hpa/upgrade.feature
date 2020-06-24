@@ -7,13 +7,15 @@ Feature: basic verification for upgrade testing
     When I run the :new_project client command with:
       | project_name | node-upgrade |
     And I use the "node-upgrade" project
+    Given I obtain test data file "infrastructure/hpa/hpa-v2beta1-rc.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/features/tierN/testdata/infrastructure/hpa/hpa-v2beta1-rc.yaml |
+      | f | hpa-v2beta1-rc.yaml |
     Then the step should succeed
     Given 1 pods become ready with labels:
       | run=hello-openshift |
+    Given I obtain test data file "infrastructure/hpa/resource-metrics-cpu.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/features/tierN/testdata/infrastructure/hpa/resource-metrics-cpu.yaml |
+      | f | resource-metrics-cpu.yaml |
     Then the step should succeed
     Given I wait up to 300 seconds for the steps to pass:
     """
@@ -23,15 +25,18 @@ Feature: basic verification for upgrade testing
     And expression should be true> hpa.target_cpu_utilization_percentage == 20
     And expression should be true> hpa.current_replicas == 2
     """
+    Given I obtain test data file "daemon/daemonset.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/daemon/daemonset.yaml |
+      | f | daemonset.yaml |
     Then the step should succeed
+    Given I obtain test data file "configmap/configmap.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/configmap/configmap.yaml |
+      | f | configmap.yaml |
       | n | <%= project.name %>                                       |
     Then the step should succeed	
+    Given I obtain test data file "configmap/pod-configmap-volume1.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/configmap/pod-configmap-volume1.yaml |
+      | f | pod-configmap-volume1.yaml |
     Then the step should succeed	
     And the pod named "dapi-test-pod-1" status becomes :succeeded
  
@@ -44,8 +49,9 @@ Feature: basic verification for upgrade testing
     Given I switch to cluster admin pseudo user
     When I use the "node-upgrade" project
     And admin ensures "node-upgrade" namespace is deleted after scenario
+    Given I obtain test data file "infrastructure/hpa/hello-pod.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/features/tierN/testdata/infrastructure/hpa/hello-pod.yaml |
+      | f | hello-pod.yaml |
     Then the step should succeed
     Given the pod named "hello-pod" status becomes :running within 60 seconds
     When I run the :expose client command with:
@@ -89,8 +95,13 @@ Feature: basic verification for upgrade testing
     Then the output should match:
       | special.how  |
       | special.type |
+    Given I obtain test data file "configmap/pod-configmap-volume2.yaml"
+    When I run the :create client command with:
+          | f | pod-configmap-volume2.yaml |
+    Then the step should succeed
+    And the pod named "dapi-test-pod-2" status becomes :succeeded
     When I run the :logs client command with:
-      | resource_name | dapi-test-pod-1 |
+      | resource_name | dapi-test-pod-2 |
     Then the step should succeed
     And the output should contain:
-      | very |
+      | charm |

@@ -164,8 +164,9 @@ Feature: Operator related networking scenarios
   @destructive
   Scenario: Service should not get unidle when config flag is disabled under CNO
   Given I have a project
+    Given I obtain test data file "networking/list_for_pods.json"
   When I run the :create client command with:
-    | f | <%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json |
+    | f | list_for_pods.json |
   Then the step should succeed
   And 2 pods become ready with labels:
     | name=test-pods |

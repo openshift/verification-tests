@@ -2,8 +2,9 @@ Feature: rc related test
   Scenario: test new rc ready method
     Given I have a project
     Given I store all replicationcontrollers in the project to the clipboard
+    Given I obtain test data file "networking/list_for_pods.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json |
+      | f | list_for_pods.json |
     Then the step should succeed
     And a replicationController becomes ready with labels:
       | name=test-rc |

@@ -6,11 +6,13 @@ Feature: SCC policy related scenarios
   Scenario: deployment hook volume inheritance with hostPath volume
     Given I have a project
     # Create hostdir pod again with new SCC
+    Given I obtain test data file "authorization/scc/tc510609/scc_hostdir.yaml"
     When I run the :create admin command with:
-      | f | <%= BushSlicer::HOME %>/testdata/authorization/scc/tc510609/scc_hostdir.yaml |
+      | f | scc_hostdir.yaml |
     Then the step should succeed
+    Given I obtain test data file "authorization/scc/tc510609/tc_dc.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/authorization/scc/tc510609/tc_dc.json |
+      | f | tc_dc.json |
     And I register clean-up steps:
     """
     I run the :delete admin command with:
@@ -33,24 +35,28 @@ Feature: SCC policy related scenarios
     Given I have a project
     Given I switch to cluster admin pseudo user
     Given admin ensures "scc-<%= project.name %>" scc is deleted after scenario
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/authorization/scc/scc_capabilities.yaml" replacing paths:
+    Given I obtain test data file "authorization/scc/scc_capabilities.yaml"
+    When I run oc create over "scc_capabilities.yaml" replacing paths:
       | ["metadata"]["name"]            | scc-<%= project.name %> |
       | ["defaultAddCapabilities"][0]   | BLOCK_SUSPEND           |
       | ["requiredDropCapabilities"][0] | BLOCK_SUSPEND           |
     Then the step should fail
     And the output should contain "capability is listed in defaultAddCapabilities and requiredDropCapabilities"
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/authorization/scc/scc_capabilities.yaml" replacing paths:
+    Given I obtain test data file "authorization/scc/scc_capabilities.yaml"
+    When I run oc create over "scc_capabilities.yaml" replacing paths:
       | ["metadata"]["name"]            | scc-<%= project.name %> |
       | ["allowedCapabilities"][0]      | BLOCK_SUSPEND           |
       | ["requiredDropCapabilities"][0] | BLOCK_SUSPEND           |
     Then the step should fail
     And the output should contain "capability is listed in allowedCapabilities and requiredDropCapabilities"
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/authorization/scc/scc_capabilities.yaml" replacing paths:
+    Given I obtain test data file "authorization/scc/scc_capabilities.yaml"
+    When I run oc create over "scc_capabilities.yaml" replacing paths:
       | ["metadata"]["name"]       | scc-<%= project.name %>                    |
       | ["groups"][0]              | system:serviceaccounts:<%= project.name %> |
       | ["allowedCapabilities"][1] | KILLtest                                   |
     Then the step should succeed
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/authorization/scc/pod_requests_cap_chown.json" replacing paths:
+    Given I obtain test data file "authorization/scc/pod_requests_cap_chown.json"
+    When I run oc create over "pod_requests_cap_chown.json" replacing paths:
       | ["spec"]["containers"][0]["securityContext"]["capabilities"]["add"][0] | KILLtest |
     Then the step should succeed
     And I wait for the steps to pass:

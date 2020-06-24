@@ -4,11 +4,13 @@ Feature: Testing websocket features
   # @case_id OCP-17145
   Scenario: haproxy router support websocket via unsecure route
     Given I have a project
+    Given I obtain test data file "routing/websocket/pod.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/websocket/pod.json |
+      | f | pod.json |
     Then the step should succeed
+    Given I obtain test data file "routing/websocket/service_unsecure.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/websocket/service_unsecure.json |
+      | f | service_unsecure.json |
     Then the step should succeed
     When I expose the "ws-unsecure" service
     Then the step should succeed

@@ -9,8 +9,9 @@ Feature: oc_portforward.feature
     And evaluation of `rand(5000..7999)` is stored in the :portb clipboard
     And evaluation of `rand(5000..7999)` is stored in the :portc clipboard
     And evaluation of `rand(5000..7999)` is stored in the :portd clipboard
+    Given I obtain test data file "pods/pod_with_two_containers.json"
     And I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/pods/pod_with_two_containers.json |
+      | f | pod_with_two_containers.json |
     Given the pod named "doublecontainers" status becomes :running
     And I run the :port_forward background client command with:
       | pod | doublecontainers |

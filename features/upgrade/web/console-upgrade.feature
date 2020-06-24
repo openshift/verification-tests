@@ -12,14 +12,17 @@ Feature: web console related upgrade check
       | app_repo     | https://github.com/openshift/ruby-hello-world |
       | name         | ruby |
     Then the step should succeed
+    Given I obtain test data file "daemon/daemonset.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/daemon/daemonset.yaml |
+      | f | daemonset.yaml |
     Then the step should succeed
+    Given I obtain test data file "deployment/deployment1.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/deployment/deployment1.json |
+      | f | deployment1.json |
     Then the step should succeed
+    Given I obtain test data file "deployment/hello-deployment-1.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/deployment/hello-deployment-1.yaml |
+      | f | hello-deployment-1.yaml |
     Then the step should succeed
     Given I open admin console in a browser
     When I perform the :goto_project_resources_page web action with:

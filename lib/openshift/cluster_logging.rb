@@ -204,20 +204,20 @@ module BushSlicer
       return log_store_spec(user: user, cached: cached, quiet: quiet).dig('elasticsearch', 'nodeCount')
     end
 
-    def retention_policy(user: nil, cached: false, quiet: true)
+    def retention_policy(user: nil, cached: true, quiet: true)
       return log_store_spec(user: user, cached: cached, quiet: quiet).dig('retentionPolicy')
     end
 
-    def application_max_age(user: nil, cached: false, quiet: true)
-      return retention_policys(user: user, cached: cached, quiet: quiet).dig('application', 'maxAge')
+    def application_max_age(user: nil, cached: true, quiet: true)
+      return retention_policy(user: user, cached: cached, quiet: quiet).dig('application', 'maxAge')
     end
 
-    def audit_max_age(user: nil, cached: false, quiet: true)
-      return retention_policys(user: user, cached: cached, quiet: quiet).dig('audit', 'maxAge')
+    def audit_max_age(user: nil, cached: true, quiet: true)
+      return retention_policy(user: user, cached: cached, quiet: quiet).dig('audit', 'maxAge')
     end
 
-    def infra_max_age(user: nil, cached: false, quiet: true)
-      return retention_policys(user: user, cached: cached, quiet: quiet).dig('infra', 'maxAge')
+    def infra_max_age(user: nil, cached: true, quiet: true)
+      return retention_policy(user: user, cached: cached, quiet: quiet).dig('infra', 'maxAge')
     end
 
     def curation_schedule(user: nil, cached: false, quiet: true)

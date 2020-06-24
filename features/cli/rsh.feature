@@ -5,8 +5,9 @@ Feature: rsh.feature
   Scenario: Check oc rsh for simpler access to a remote shell
     Given I have a project
     Then evaluation of `project.name` is stored in the :proj_name clipboard
+    Given I obtain test data file "pods/pod_with_two_containers.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/pods/pod_with_two_containers.json |
+      | f | pod_with_two_containers.json |
     Then the step should succeed
     Given the pod named "doublecontainers" becomes ready
     When I run the :rsh client command with:

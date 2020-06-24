@@ -5,8 +5,9 @@ Feature: test metering related steps
     Given the master version >= "3.10"
     Given I create a project with non-leading digit name
     And I store master major version in the clipboard
+    Given I obtain test data file "logging_metrics/default_install_metering_params"
     And metering service is installed with ansible using:
-      | inventory     | <%= BushSlicer::HOME %>/testdata/logging_metrics/default_install_metering_params |
+      | inventory     | default_install_metering_params |
       | playbook_args | -e openshift_image_tag=v<%= cb.master_version %> -e openshift_release=<%= cb.master_version %>                     |
 
   # assume we have metering service already installed

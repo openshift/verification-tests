@@ -6,8 +6,9 @@ Feature: oc_volume.feature
   @smoke
   Scenario: Create a pod that consumes the secret in a volume
     Given I have a project
+    Given I obtain test data file "pods/allinone-volume/secret.yaml"
     Given I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/pods/allinone-volume/secret.yaml |
+      | f | secret.yaml |
     Then the step should succeed
     When I run the :secret_link client command with:
       | secret_name | test-secret |
@@ -46,9 +47,9 @@ Feature: oc_volume.feature
   @smoke
   Scenario: Add secret volume to dc and rc
     Given I have a project
-    When I run the :run client command with:
-      | name   | mydc                                                                                                  |
-      | image  | quay.io/openshifttest/storage@sha256:a05b96d373be86f46e76817487027a7f5b8b5f87c0ac18a246b018df11529b40 |
+    When I run the :new_app_as_dc client command with:
+      | docker_image | quay.io/openshifttest/storage@sha256:a05b96d373be86f46e76817487027a7f5b8b5f87c0ac18a246b018df11529b40 |
+      | name         | mydc                                                                                                  |
     Then the step should succeed
     When I run the :create_secret client command with:
       | secret_type | generic    |
@@ -78,18 +79,15 @@ Feature: oc_volume.feature
     Then the step should succeed
 
     When I run the :get client command with:
-      | resource       | :false    |
-      | resource_name  | dc/mydc   |
-      | resource_name  | rc/mydc-1 |
-      | o              | yaml      |
+      | resource | dc/mydc                                                   |
+      | o        | jsonpath={.spec.template.spec.containers[*].volumeMounts} |
     Then the step should succeed
-    # The output has "name: secret" prefixed with both "  " (2 spaces) and "- " ("-" and 1 space).
-    # Using <%= "  name: secret" %> can reduce script lines. Otherwise, would contain 4 times of it
-    And the output should contain 2 times:
-      |   volumeMounts:            |
-      |   - mountPath: /etc        |
-      | <%= "  name: secret" %>    |
-      | volumes:                   |
-      | - name: secret             |
-      |   secret:                  |
-      |     secretName: my-secret  |
+    And the output should contain 1 times:
+      | name:secret |
+
+    When I run the :get client command with:
+      | resource | rc/mydc-1                                                 |
+      | o        | jsonpath={.spec.template.spec.containers[*].volumeMounts} |
+    Then the step should succeed
+    And the output should contain 1 times:
+      | name:secret |

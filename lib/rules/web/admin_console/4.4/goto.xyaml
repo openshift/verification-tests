@@ -133,6 +133,7 @@ goto_one_pod_page:
   url: k8s/ns/<project_name>/pods/<resource_name>
 goto_one_pod_log_page:
   url: k8s/ns/<project_name>/pods/<pod_name>/logs
+  action: wait_log_window_loaded
 goto_one_pod_environment_page:
   url: k8s/ns/<project_name>/pods/<pod_name>/environment
   action: wait_box_loaded
@@ -221,6 +222,13 @@ goto_one_project_subscription_page:
 goto_csv_detail_page:
   url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion/<csv_name>
   action: wait_box_loaded
+goto_operand_list_page:
+  url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion/<csv_name>/<operand_name>
+  action: wait_box_loaded
+goto_operator_all_instance_page:
+  url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion/<csv_name>/instances
+  action: wait_box_loaded
+
 
 # machine config
 goto_machineconfigs_page:
@@ -272,6 +280,7 @@ goto_rolebinding_list_page:
   action: wait_box_loaded
 goto_rolebinding_page_of_user:
   url: k8s/cluster/user.openshift.io~v1~User/<username>/roles
+  action: wait_box_loaded
 goto_rolebinding_creation_page:
   url: k8s/cluster/rolebindings/~new
   action: wait_form_loaded
@@ -295,3 +304,6 @@ goto_alertmanagerconfig_page:
 goto_cluster_operators:
   url: settings/cluster/clusteroperators
   action: wait_box_loaded
+goto_global_configuration_page:
+  url: settings/cluster/globalconfig
+  action: wait_box_loaded 

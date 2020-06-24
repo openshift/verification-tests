@@ -80,6 +80,15 @@ check_button_missing:
     selector:
       <<: *button_with_text
     missing: true
+click_button_title:
+  element:
+    selector:
+      xpath: //button[@title='<button_title>']
+    op: click
+check_button_title:
+  element:
+    selector:
+      xpath: //button[@title='<button_title>']
 check_button_disabled:
   element:
     selector:
@@ -110,6 +119,11 @@ click_yaml_tab:
   params:
     tab_name: YAML
   action: click_tab
+check_edit_yaml_enabled:
+  params:
+    button_text: Save
+  action: click_yaml_tab
+  action: check_button_enabled
 click_radio_input:
   element:
     selector:
@@ -167,11 +181,25 @@ set_label_input_simple:
       <<: *label_input_value
     op: send_keys <input_value>
     type: input
+set_placeholder_input:
+  elements:
+  - selector: &placeholder_input
+      xpath: //input[@placeholder='<name>']
+    op: clear
+    type: input
+  - selector:
+      <<: *placeholder_input
+    op: send_keys <input_value>
+    type: input
 check_table_text_data:
   element:
     selector:
       xpath: //td[text()='<text_data>']
-
+check_table_line_count:
+  action: wait_table_loaded
+  scripts:
+  - command: return document.querySelectorAll("tbody tr").length == <line_count>
+    expect_result: true
 # click and check the first item from resource list such as projects, pods, etc.
 click_first_item_from_resource_list_and_check_breadcrumb:
   action: wait_until_no_loading

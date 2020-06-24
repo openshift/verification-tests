@@ -21,8 +21,9 @@ Feature: oc_process.feature
     MYSQL_DATABASE='abc'
     """
     #1
+    Given I obtain test data file "build/tc470422/application-template-stibuild.json"
     When I run the :new_app client command with:
-      | app_repo   | <%= BushSlicer::HOME %>/testdata/build/tc470422/application-template-stibuild.json |
+      | app_repo   | application-template-stibuild.json |
       | param_file | test1.env              |
     Then the step should succeed
     Given the "ruby-sample-build-1" build was created
@@ -43,8 +44,9 @@ Feature: oc_process.feature
       | object_name_or_id | dbsecret |
     Then the step should succeed
     #2
+    Given I obtain test data file "build/tc470422/application-template-stibuild.json"
     When I run the :new_app client command with:
-      | app_repo   | <%= BushSlicer::HOME %>/testdata/build/tc470422/application-template-stibuild.json |
+      | app_repo   | application-template-stibuild.json |
       | env_file   | test2.env              |
     Then the step should succeed
     Given the "ruby-sample-build-1" build was created
@@ -65,8 +67,9 @@ Feature: oc_process.feature
       | object_name_or_id | dbsecret |
     Then the step should succeed
     #3
+    Given I obtain test data file "build/tc470422/application-template-stibuild.json"
     When I run the :new_app client command with:
-      | app_repo   | <%= BushSlicer::HOME %>/testdata/build/tc470422/application-template-stibuild.json |
+      | app_repo   | application-template-stibuild.json |
       | param_file | test4.env                     |
       | env_file   | test1.env                     |
     Then the step should succeed
@@ -88,8 +91,9 @@ Feature: oc_process.feature
       | object_name_or_id | dbsecret |
     Then the step should succeed
     #4
+    Given I obtain test data file "build/tc470422/application-template-stibuild.json"
     When I run the :new_app client command with:
-      | app_repo   | <%= BushSlicer::HOME %>/testdata/build/tc470422/application-template-stibuild.json | 
+      | app_repo   | application-template-stibuild.json | 
       | param_file | test1.env                     |
       | env_file   | test2.env                     |
       | param      | MYSQL_DATABASE=APPLE          |

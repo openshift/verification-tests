@@ -47,9 +47,10 @@ Feature: cluster-logging-operator related test
   @admin
   @destructive
   Scenario: Scale Elasticsearch nodes by nodeCount 2->3->4 in clusterlogging
+    Given I obtain test data file "logging/clusterlogging/scalebase.yaml"
     Given I create clusterlogging instance with:
       | remove_logging_pods | true                                                                   |
-      | crd_yaml            | <%= BushSlicer::HOME %>/testdata/logging/clusterlogging/scalebase.yaml |
+      | crd_yaml            | scalebase.yaml |
       | check_status        | false                                                                  |
     Then the step should succeed
     And I wait for the "elasticsearch" elasticsearches to appear up to 300 seconds
@@ -94,9 +95,10 @@ Feature: cluster-logging-operator related test
   @destructive
   Scenario: Fluentd alert rule: FluentdNodeDown
     Given the master version >= "4.2"
+    Given I obtain test data file "logging/clusterlogging/example.yaml"
     Given I create clusterlogging instance with:
       | remove_logging_pods | true                                                                 |
-      | crd_yaml            | <%= BushSlicer::HOME %>/testdata/logging/clusterlogging/example.yaml |
+      | crd_yaml            | example.yaml |
     Then the step should succeed
     Given I wait for the "fluentd" prometheus_rule to appear
     And I wait for the "fluentd" service_monitor to appear
@@ -116,3 +118,30 @@ Feature: cluster-logging-operator related test
     And the output should match:
       | "alertstate":"pending\|firing" |
     """ 
+
+  # @author qitang@redhat.com
+  # @case_id OCP-28131
+  @admin
+  @destructive
+  Scenario: CLO should generate Elasticsearch Index Management
+    Given I obtain test data file "logging/clusterlogging/example_indexmanagement.yaml"
+    Given I create clusterlogging instance with:
+      | remove_logging_pods | true                                                                                 |
+      | crd_yaml            | example_indexmanagement.yaml |
+    Then the step should succeed
+    Given I wait for the "indexmanagement-scripts" config_map to appear
+    And evaluation of `["elasticsearch-delete-app", "elasticsearch-delete-audit", "elasticsearch-delete-infra", "elasticsearch-rollover-app", "elasticsearch-rollover-infra", "elasticsearch-rollover-audit"]` is stored in the :cj_names clipboard
+    Given I repeat the following steps for each :name in cb.cj_names:
+    """
+      Given I wait for the "#{cb.name}" cron_job to appear
+      And the expression should be true> cron_job('#{cb.name}').schedule == "*/15 * * * *"
+    """
+    And the expression should be true> elasticsearch('elasticsearch').policy_ref(name: 'app') == "app-policy"
+    And the expression should be true> elasticsearch('elasticsearch').delete_min_age(name: "app-policy") == cluster_logging('instance').application_max_age
+    And the expression should be true> elasticsearch('elasticsearch').rollover_max_age(name: "app-policy") == "1h"
+    And the expression should be true> elasticsearch('elasticsearch').policy_ref(name: 'infra') == "infra-policy"
+    And the expression should be true> elasticsearch('elasticsearch').delete_min_age(name: "infra-policy") == cluster_logging('instance').infra_max_age
+    And the expression should be true> elasticsearch('elasticsearch').rollover_max_age(name: "infra-policy") == "8h"
+    And the expression should be true> elasticsearch('elasticsearch').policy_ref(name: 'audit') == "audit-policy"
+    And the expression should be true> elasticsearch('elasticsearch').delete_min_age(name: "audit-policy") == cluster_logging('instance').audit_max_age
+    And the expression should be true> elasticsearch('elasticsearch').rollover_max_age(name: "audit-policy") == "1h"

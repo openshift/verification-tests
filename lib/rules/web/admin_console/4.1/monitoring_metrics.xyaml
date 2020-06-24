@@ -52,12 +52,12 @@ click_custom_query_button:
     op: click
 set_query_input_text_area:
   elements:
-  - selector: 
+  - selector: &query_input_text_area
       xpath: //div[@class='co-m-pane__body']//textarea
     op: send_keys <metrics>
     type: textarea
   - selector: 
-      xpath: //div[@class='co-m-pane__body']//textarea
+      <<: *query_input_text_area
     op: send_keys <press_enter>
     type: textarea 
 
@@ -69,7 +69,7 @@ choose_metrics_query:
 check_query_input_text_area:
   element:
     selector: 
-      xpath: //div[@class='co-m-pane__body']//textarea
+      <<: *query_input_text_area
 click_promql_button:
   element:
     selector: &promql_button

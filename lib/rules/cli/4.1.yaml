@@ -586,6 +586,7 @@
     :code: --code=<value>
     :docker_image: --docker-image=<value>
     :image_stream: --image-stream=<value>
+    :labels: --labels=<value>
     :name: --name=<value>
     :source_spec: <value>
     :strategy: --strategy=<value>

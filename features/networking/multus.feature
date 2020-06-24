@@ -11,13 +11,15 @@ Feature: Multus-CNI related scenarios
     And evaluation of `node.name` is stored in the :target_node clipboard
     # Create the net-attach-def via cluster admin
     Given I have a project
-    When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml"
+    When I run oc create as admin over "macvlan-bridge.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %>                                                                                                                                                                                                                                                                    |    
       | ["spec"]["config"]        | '{ "cniVersion": "0.3.0", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "bridge", "ipam": { "type": "host-local", "subnet": "10.1.1.0/24", "rangeStart": "10.1.1.100", "rangeEnd": "10.1.1.200", "routes": [ { "dst": "0.0.0.0/0" } ], "gateway": "10.1.1.1" } }' |
     Then the step should succeed
 
     # Create the first pod which consumes the macvlan custom resource
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/1interface-macvlan-bridge.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/Pods/1interface-macvlan-bridge.yaml"
+    When I run oc create over "1interface-macvlan-bridge.yaml" replacing paths:
       | ["spec"]["nodeName"] | "<%= cb.target_node %>" |
     Then the step should succeed
     And a pod becomes ready with labels:
@@ -40,7 +42,8 @@ Feature: Multus-CNI related scenarios
     And evaluation of `@result[:response].chomp` is stored in the :pod1_sdn_ip clipboard
 
     # Create the second pod which consumes the macvlan cr
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/1interface-macvlan-bridge.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/Pods/1interface-macvlan-bridge.yaml"
+    When I run oc create over "1interface-macvlan-bridge.yaml" replacing paths:
       | ["spec"]["nodeName"] | "<%= cb.target_node %>" |
     Then the step should succeed
     And 2 pods become ready with labels:
@@ -69,13 +72,15 @@ Feature: Multus-CNI related scenarios
     And evaluation of `node.name` is stored in the :target_node clipboard
     # Create the net-attach-def via cluster admin
     Given I have a project
-    When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-private.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/macvlan-private.yaml"
+    When I run oc create as admin over "macvlan-private.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %> |
       | ["spec"]["config"]| '{ "cniVersion": "0.3.0", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "private", "ipam": { "type": "host-local", "subnet": "10.1.1.0/24", "rangeStart": "10.1.1.100", "rangeEnd": "10.1.1.200", "routes": [ { "dst": "0.0.0.0/0" } ], "gateway": "10.1.1.1" } }' |    
     Then the step should succeed
 
     # Create the first pod which consumes the macvlan custom resource
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/1interface-macvlan-private.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/Pods/1interface-macvlan-private.yaml"
+    When I run oc create over "1interface-macvlan-private.yaml" replacing paths:
       | ["spec"]["nodeName"] | "<%= cb.target_node %>" |
     Then the step should succeed
     And a pod becomes ready with labels:
@@ -97,7 +102,8 @@ Feature: Multus-CNI related scenarios
     And evaluation of `@result[:response].chomp` is stored in the :pod1_sdn_ip clipboard
 
     # Create the second pod which consumes the macvlan cr
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/1interface-macvlan-private.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/Pods/1interface-macvlan-private.yaml"
+    When I run oc create over "1interface-macvlan-private.yaml" replacing paths:
        | ["metadata"]["name"]              | macvlan-private-secondpod   |      
        | ["spec"]["nodeName"]              | "<%= cb.target_node %>"     |
        | ["spec"]["containers"][0]["name"] | macvlan-private-secondpod   |
@@ -125,13 +131,15 @@ Feature: Multus-CNI related scenarios
     And evaluation of `node.name` is stored in the :target_node clipboard
     # Create the net-attach-def via cluster admin
     Given I have a project
-    When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-vepa.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/macvlan-vepa.yaml"
+    When I run oc create as admin over "macvlan-vepa.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %> |
       | ["spec"]["config"]| '{ "cniVersion": "0.3.0", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "vepa", "ipam": { "type": "host-local", "subnet": "10.1.1.0/24", "rangeStart": "10.1.1.100", "rangeEnd": "10.1.1.200", "routes": [ { "dst": "0.0.0.0/0" } ], "gateway": "10.1.1.1" } }' |      
     Then the step should succeed
 
     # Create the first pod which consumes the macvlan custom resource
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/1interface-macvlan-vepa.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/Pods/1interface-macvlan-vepa.yaml"
+    When I run oc create over "1interface-macvlan-vepa.yaml" replacing paths:
       | ["spec"]["nodeName"] | "<%= cb.target_node %>" |
     Then the step should succeed
     And a pod becomes ready with labels:
@@ -153,7 +161,8 @@ Feature: Multus-CNI related scenarios
     And evaluation of `@result[:response].chomp` is stored in the :pod1_sdn_ip clipboard
 
     # Create the second pod which consumes the macvlan cr
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/1interface-macvlan-vepa.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/Pods/1interface-macvlan-vepa.yaml"
+    When I run oc create over "1interface-macvlan-vepa.yaml" replacing paths:
       | ["spec"]["nodeName"] | "<%= cb.target_node %>" |
     Then the step should succeed
     And 2 pods become ready with labels:
@@ -196,12 +205,14 @@ Feature: Multus-CNI related scenarios
 
     # Create the net-attach-def via cluster admin
     Given I have a project
-    When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/host-device.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/host-device.yaml"
+    When I run oc create as admin over "host-device.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %> |
       | ["spec"]["config"]        | '{"cniVersion": "0.3.0", "type": "host-device", "device": "<%= cb.nic_name %>"}' |
     Then the step should succeed
     # Create the first pod which consumes the host-device custom resource
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/1interface-host-device.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/Pods/1interface-host-device.yaml"
+    When I run oc create over "1interface-host-device.yaml" replacing paths:
       | ["spec"]["nodeName"] | "<%= cb.target_node %>" |
     Then the step should succeed
     And a pod becomes ready with labels:
@@ -250,13 +261,15 @@ Feature: Multus-CNI related scenarios
     And evaluation of `node.name` is stored in the :target_node clipboard    
     # Create the net-attach-def via cluster admin
     Given I have a project
-    When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml"
+    When I run oc create as admin over "macvlan-bridge.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %> |
       | ["spec"]["config"]| '{ "cniVersion": "0.3.0", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "bridge", "ipam": { "type": "host-local", "subnet": "10.1.1.0/24", "rangeStart": "10.1.1.100", "rangeEnd": "10.1.1.200", "routes": [ { "dst": "0.0.0.0/0" } ], "gateway": "10.1.1.1" } }' |      
     Then the step should succeed
 
     # Create the pod which consumes multiple macvlan custom resources
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/2interface-macvlan-macvlan.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/Pods/2interface-macvlan-macvlan.yaml"
+    When I run oc create over "2interface-macvlan-macvlan.yaml" replacing paths:
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | macvlan-bridge, macvlan-bridge |
       | ["spec"]["nodeName"] | "<%= cb.target_node %>" |
     Then the step should succeed
@@ -295,11 +308,13 @@ Feature: Multus-CNI related scenarios
     And evaluation of `node.name` is stored in the :target_node clipboard
     # Create the net-attach-def via cluster admin
     Given I have a project
-    When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml"
+    When I run oc create as admin over "macvlan-bridge.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %> |
       | ["spec"]["config"]| '{ "cniVersion": "0.3.0", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "bridge", "ipam": { "type": "host-local", "subnet": "10.1.1.0/24", "rangeStart": "10.1.1.100", "rangeEnd": "10.1.1.200", "routes": [ { "dst": "0.0.0.0/0" } ], "gateway": "10.1.1.1" } }' |    
     Then the step should succeed
-    When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/host-device.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/host-device.yaml"
+    When I run oc create as admin over "host-device.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %> |
       | ["spec"]["config"]        | '{"cniVersion": "0.3.0", "type": "host-device", "device": "<%= cb.nic_name %>"}' |
     Then the step should succeed
@@ -316,7 +331,8 @@ Feature: Multus-CNI related scenarios
     """
 
     # Create the pod which consumes both hostdev and macvlan custom resources
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/2interface-macvlan-hostdevice.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/Pods/2interface-macvlan-hostdevice.yaml"
+    When I run oc create over "2interface-macvlan-hostdevice.yaml" replacing paths:
       | ["spec"]["nodeName"] | "<%= cb.target_node %>" |
     Then the step should succeed
     Given I register clean-up steps:
@@ -358,12 +374,14 @@ Feature: Multus-CNI related scenarios
 
     # Create the net-attach-def via cluster admin
     Given I have a project
-    When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/host-device.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/host-device.yaml"
+    When I run oc create as admin over "host-device.yaml" replacing paths:
       | ["metadata"]["name"]      | host-device       |
       | ["spec"]["config"]        | '{"cniVersion": "0.3.0", "type": "host-device", "device": "<%= cb.nic_name1%>"}' |
       | ["metadata"]["namespace"] | <%= project.name %> |
     Then the step should succeed
-    When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/host-device.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/host-device.yaml"
+    When I run oc create as admin over "host-device.yaml" replacing paths:
       | ["metadata"]["name"]      | host-device-2       |
       | ["spec"]["config"]        | '{"cniVersion": "0.3.0", "type": "host-device", "device": "<%= cb.nic_name2%>"}' |
       | ["metadata"]["namespace"] | <%= project.name %> |
@@ -387,7 +405,8 @@ Feature: Multus-CNI related scenarios
     """
 
     # Create the pod which consumes two hostdev custom resources
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/2interface-hostdevice-hostdevice.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/Pods/2interface-hostdevice-hostdevice.yaml"
+    When I run oc create over "2interface-hostdevice-hostdevice.yaml" replacing paths:
       | ["spec"]["nodeName"] | "<%= cb.target_node %>" |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | host-device, host-device-2 |
     Then the step should succeed
@@ -419,12 +438,14 @@ Feature: Multus-CNI related scenarios
     Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin
     Given I have a project
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/bridge-host-local-novlan.yaml"
     When I run the :create admin command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/bridge-host-local-novlan.yaml |
+      | f | bridge-host-local-novlan.yaml |
       | n | <%= project.name %>                                                                                                                              |
     Then the step should succeed
     #Creating no-vlan pod absorbing above net-attach-def
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
+    When I run oc create over "generic_multus_pod.yaml" replacing paths:
       | ["metadata"]["name"] | pod-novlan |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | bridge3    |
       | ["spec"]["containers"][0]["name"] | pod-novlan |
@@ -456,12 +477,14 @@ Feature: Multus-CNI related scenarios
     Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin
     Given I have a project
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/bridge-host-local-vlan-200.yaml"
     When I run the :create admin command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/bridge-host-local-vlan-200.yaml |
+      | f | bridge-host-local-vlan-200.yaml |
       | n | <%= project.name %>                                                                                                 |
     Then the step should succeed
     #Creating vlan pod absorbing above net-attach-def
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
+    When I run oc create over "generic_multus_pod.yaml" replacing paths:
       | ["metadata"]["name"]                                       | pod1-vlan200  |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | bridgevlan200 |
       | ["spec"]["containers"][0]["name"]                          | pod1-vlan200  |
@@ -514,7 +537,8 @@ Feature: Multus-CNI related scenarios
       | test-macvlan-case3 |
     """
     #Creating pod under openshift-multus project to absorb above net-attach-def
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/1interface-macvlan-bridge.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/Pods/1interface-macvlan-bridge.yaml"
+    When I run oc create over "1interface-macvlan-bridge.yaml" replacing paths:
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | test-macvlan-case3      |
       | ["metadata"]["namespace"]                                  | <%= project.name %>     |
       | ["spec"]["nodeName"]                                       | <%= cb.nodes[0].name %> |
@@ -534,14 +558,16 @@ Feature: Multus-CNI related scenarios
     Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin and simulating syntax errors
     Given I have a project
-    When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml"
+    When I run oc create as admin over "macvlan-bridge.yaml" replacing paths:
       | ["metadata"]["name"] | macvlan-bridge-21756 |
       | ["spec"]["config"]   | 'asdf'               |
     Then the step should fail
     And the output should contain:
       | admission webhook "multus-validating-config.k8s.io" denied the request|
     And admin ensures "macvlan-bridge-21756" network_attachment_definition is deleted from the "default" project after scenario
-    When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml"
+    When I run oc create as admin over "macvlan-bridge.yaml" replacing paths:
       | ["metadata"]["name"] | macvlan-bridge@$ |
     Then the step should fail
     And the output should contain:
@@ -556,12 +582,14 @@ Feature: Multus-CNI related scenarios
     Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin
     Given I have a project
-    When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml"" replacing paths:
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml"
+    When I run oc create as admin over "macvlan-bridge.yaml"" replacing paths:
       | ["metadata"]["name"] | macvlan-bridge-21456 |
     Then the step should succeed 
     And admin ensures "macvlan-bridge-21456" network_attachment_definition is deleted from the "default" project after scenario
     # Create a pod consuming net-attach-def simulating wrong syntax in name
-    When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/1interface-macvlan-bridge.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/Pods/1interface-macvlan-bridge.yaml"
+    When I run oc create as admin over "1interface-macvlan-bridge.yaml" replacing paths:
       | ["metadata"]["generateName"] | macvlan-bridge-pod-$@ |
     Then the step should fail
     And the output should contain:
@@ -575,14 +603,16 @@ Feature: Multus-CNI related scenarios
     Given the multus is enabled on the cluster
     Given I have a project
     And evaluation of `project.name` is stored in the :project1 clipboard
-    When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml"
+    When I run oc create as admin over "macvlan-bridge.yaml" replacing paths:
       | ["metadata"]["name"]      | macvlan-bridge-21793 |
       | ["metadata"]["namespace"] | <%= project.name %>  |
     Then the step should succeed
     
     # Creating pod in the another namespace which consumes the net-attach-def created in project1 namespace 
     Given I create a new project
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/1interface-macvlan-bridge.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/Pods/1interface-macvlan-bridge.yaml"
+    When I run oc create over "1interface-macvlan-bridge.yaml" replacing paths:
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | <%= cb.project1 %>/macvlan-bridge-21793 |
     Then the step should succeed
     And evaluation of `@result[:response].match(/pod\/(.*) created/)[1]` is stored in the :pod_name clipboard
@@ -607,13 +637,15 @@ Feature: Multus-CNI related scenarios
     Given the multus is enabled on the cluster
     And I store all worker nodes to the :nodes clipboard
     Given I have a project
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/bridge-host-local-vlan.yaml"
     When I run the :create admin command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/bridge-host-local-vlan.yaml |
+      | f | bridge-host-local-vlan.yaml |
       | n | <%= project.name %>                                                                                                                               |
     Then the step should succeed
     
     #Creating first pod in vlan 100
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
+    When I run oc create over "generic_multus_pod.yaml" replacing paths:
       | ["metadata"]["name"]                                      | pod1-vlan100            |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan100           |
       | ["spec"]["nodeName"]                                      | <%= cb.nodes[0].name %> |
@@ -632,7 +664,8 @@ Feature: Multus-CNI related scenarios
     And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod1_net1_ip clipboard
     
     #Creating 2nd pod on same node as first in vlan 100
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
+    When I run oc create over "generic_multus_pod.yaml" replacing paths:
       | ["metadata"]["name"]                                      | pod2-vlan100            |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan100           |
       | ["spec"]["nodeName"]                                      | <%= cb.nodes[0].name %> |
@@ -645,7 +678,8 @@ Feature: Multus-CNI related scenarios
     And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod2_net1_ip clipboard
     
     #Creating 3rd pod on different node in vlan 100
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
+    When I run oc create over "generic_multus_pod.yaml" replacing paths:
       | ["metadata"]["name"]                                      | pod3-vlan100            |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan100           |
       | ["spec"]["nodeName"]                                      | <%= cb.nodes[1].name %> |
@@ -686,19 +720,22 @@ Feature: Multus-CNI related scenarios
     And I store all worker nodes to the :nodes clipboard
     # Create the net-attach-def with vlan 100 via cluster admin
     Given I have a project
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/bridge-host-local-vlan.yaml"
     When I run the :create admin command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/bridge-host-local-vlan.yaml |
+      | f | bridge-host-local-vlan.yaml |
       | n | <%= project.name %>                                                                                                                               |
     Then the step should succeed 
     
     # Create the net-attach-def with vlan 200 via cluster admin
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/bridge-host-local-vlan-200.yaml"
     When I run the :create admin command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/bridge-host-local-vlan-200.yaml |
+      | f | bridge-host-local-vlan-200.yaml |
       | n | <%= project.name %>                                                                                                                                   |
     Then the step should succeed 
     
     #Creating first pod in vlan 100
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
+    When I run oc create over "generic_multus_pod.yaml" replacing paths:
       | ["metadata"]["name"]                                       | pod1-vlan100            |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | bridgevlan100           |
       | ["spec"]["nodeName"]                                       | <%= cb.nodes[0].name %> |
@@ -717,7 +754,8 @@ Feature: Multus-CNI related scenarios
     And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod1_net1_ip clipboard
     
     #Creating 2nd pod on same node as first in vlan 100
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
+    When I run oc create over "generic_multus_pod.yaml" replacing paths:
       | ["metadata"]["name"]                                      | pod2-vlan100            |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan100           |
       | ["spec"]["nodeName"]                                      | <%= cb.nodes[0].name %> |
@@ -730,7 +768,8 @@ Feature: Multus-CNI related scenarios
     And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod2_net1_ip clipboard
     
     #Creating 3rd pod on same node but in vlan 200
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
+    When I run oc create over "generic_multus_pod.yaml" replacing paths:
       | ["metadata"]["name"]                                      | pod3-vlan200            |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"]| bridgevlan200           |
       | ["spec"]["nodeName"]                                      | <%= cb.nodes[0].name %> |
@@ -780,13 +819,15 @@ Feature: Multus-CNI related scenarios
     Given the multus is enabled on the cluster
     # Create the net-attach-def without master pmtr via cluster admin
     Given I have a project
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/macvlan-conf-without-master.yaml"
     When I run the :create admin command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-conf-without-master.yaml |
+      | f | macvlan-conf-without-master.yaml |
       | n | <%= project.name %>                                                                                                                                    |
     Then the step should succeed
 
     #Creating a pod absorbing above net-attach-def
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
+    When I run oc create over "generic_multus_pod.yaml" replacing paths:
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | macvlan-conf |
     Then the step should succeed
     And the pod named "test-pod" becomes ready
@@ -804,14 +845,16 @@ Feature: Multus-CNI related scenarios
 
     # Create the net-attach-def via cluster admin
     Given I have a project
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/runtimeconfig-def-ipandmac.yaml"
     When I run the :create admin command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/runtimeconfig-def-ipandmac.yaml                   |
+      | f | runtimeconfig-def-ipandmac.yaml                   |
       | n | <%= project.name %>   |
     Then the step should succeed
 
     # Create a pod absorbing above net-attach-def
+    Given I obtain test data file "networking/multus-cni/Pods/runtimeconfig-pod-ipandmac.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/runtimeconfig-pod-ipandmac.yaml |
+      | f | runtimeconfig-pod-ipandmac.yaml |
       | n | <%= project.name %>                                                                                                           |
     Then the step should succeed
     And the pod named "runtimeconfig-pod" becomes ready
@@ -863,14 +906,16 @@ Feature: Multus-CNI related scenarios
     """
     #Creating ipam type net-attach-def
     Given I have a project
-    When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/ipam-dhcp.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/ipam-dhcp.yaml"
+    When I run oc create as admin over "ipam-dhcp.yaml" replacing paths:
       | ["metadata"]["name"]      | bridge-dhcp                                                                                                                                               |
       | ["metadata"]["namespace"] | <%= project.name %>                                                                                                                                       |
       | ["spec"]["config"]        | '{ "cniVersion": "0.3.0", "type": "bridge", "bridge": "testbr1", "hairpinMode": true, "master": "<%= cb.default_interface %>", "ipam": {"type": "dhcp"}}' |
     Then the step should succeed
 
     #Creating dhcp pod absorbing above net-attach-def
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
+    When I run oc create over "generic_multus_pod.yaml" replacing paths:
       | ["metadata"]["namespace"]                                  | <%= project.name %>     |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | bridge-dhcp             |
       | ["spec"]["nodeName"]                                       | <%= cb.nodes[0].name %> |
@@ -944,7 +989,8 @@ Feature: Multus-CNI related scenarios
     | {"spec":{"additionalNetworks": null}} |
     """
     #Creating pod under test project to absorb above net-attach-def
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
+    When I run oc create over "generic_multus_pod.yaml" replacing paths:
       | ["metadata"]["namespace"]                                  | <%= project.name %>      |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | testmacvlan              |
       | ["spec"]["nodeName"]                                       | <%= cb.worker[0].name %> |
@@ -963,14 +1009,16 @@ Feature: Multus-CNI related scenarios
 
     # Create the net-attach-def via cluster admin
     Given I have a project
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/runtimeconfig-def-ip.yaml"
     When I run the :create admin command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/runtimeconfig-def-ip.yaml                                                                                                                           |
+      | f | runtimeconfig-def-ip.yaml                                                                                                                           |
       | n | <%= project.name %>                                                                                                     |
     Then the step should succeed
     
     # Create a pod absorbing above net-attach-def
+    Given I obtain test data file "networking/multus-cni/Pods/runtimeconfig-pod-ip.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/runtimeconfig-pod-ip.yaml |
+      | f | runtimeconfig-pod-ip.yaml |
       | n | <%= project.name %>                                                                                                     |
     Then the step should succeed
     And the pod named "runtimeconfig-pod-ip" becomes ready
@@ -994,14 +1042,16 @@ Feature: Multus-CNI related scenarios
     Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin
     Given I have a project
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/runtimeconfig-def-mac.yaml"
     When I run the :create admin command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/runtimeconfig-def-mac.yaml |
+      | f | runtimeconfig-def-mac.yaml |
       | n | <%= project.name %>                                                                                                                              |
     Then the step should succeed
     
     # Create a pod absorbing above net-attach-def
+    Given I obtain test data file "networking/multus-cni/Pods/runtimeconfig-pod-mac.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/runtimeconfig-pod-mac.yaml |
+      | f | runtimeconfig-pod-mac.yaml |
       | n | <%= project.name %>                                                                                                      |
     Then the step should succeed
     And the pod named "runtimeconfig-pod-mac" becomes ready
@@ -1024,15 +1074,17 @@ Feature: Multus-CNI related scenarios
     Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin
     Given I have a project
-    When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/ipam-static.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/ipam-static.yaml"
+    When I run oc create as admin over "ipam-static.yaml" replacing paths:
       | ["metadata"]["namespace"]  | <%= project.name %> | 
       | ["metadata"]["name"]       | bridge-static       |
       | ["spec"]["config"]| '{ "cniVersion": "0.3.0", "type": "bridge", "ipam": {"type":"static","addresses": [{"address": "22.2.2.22/24","gateway": "22.2.2.1"}]}}' |
     Then the step should succeed
       
     # Create a pod absorbing above net-attach-def
+    Given I obtain test data file "networking/multus-cni/Pods/multus-default-route-pod.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/multus-default-route-pod.yaml |
+      | f | multus-default-route-pod.yaml |
       | n | <%= project.name %>                                                                                                         |
     Then the step should succeed
     And the pod named "multus-default-route-pod" becomes ready
@@ -1067,14 +1119,16 @@ Feature: Multus-CNI related scenarios
     Given I have a project
     And evaluation of `project.name` is stored in the :usr_project clipboard
 
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/runtimeconfig-def-mac.yaml"
     When I run the :create admin command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/runtimeconfig-def-mac.yaml                      |
+      | f | runtimeconfig-def-mac.yaml                      |
       | n | <%= project.name %> |
     Then the step should succeed
 
     # Create a pod absorbing above net-attach-def
+    Given I obtain test data file "networking/multus-cni/Pods/runtimeconfig-pod-mac.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/runtimeconfig-pod-mac.yaml |
+      | f | runtimeconfig-pod-mac.yaml |
       | n | <%= project.name %>                                                                                                      |
     Then the step should succeed
     And the pod named "runtimeconfig-pod-mac" becomes ready
@@ -1105,13 +1159,15 @@ Feature: Multus-CNI related scenarios
   Scenario: The multus admission controller should be able to detect that the pod is using net-attach-def in other namespaces when the isolation is enabled
     Given I create 2 new projects
     # Create the net-attach-def via cluster admin
-    When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml"
+    When I run oc create as admin over "macvlan-bridge.yaml" replacing paths:
       | ["metadata"]["name"]      | macvlan-bridge-25657    |
       | ["metadata"]["namespace"] | <%= project(-1).name %> |    
     Then the step should succeed
     Given I use the "<%= project(-2).name %>" project
     # Create a pod in new project consuming net-attach-def from 1st project
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/1interface-macvlan-bridge.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/Pods/1interface-macvlan-bridge.yaml"
+    When I run oc create over "1interface-macvlan-bridge.yaml" replacing paths:
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | macvlan-bridge-25657 |
     Then the step should succeed
     And evaluation of `@result[:response].match(/pod\/(.*) created/)[1]` is stored in the :pod_name clipboard
@@ -1141,7 +1197,8 @@ Feature: Multus-CNI related scenarios
     And evaluation of `@result[:response].match(/\h+:\h+:\h+:\h+:\h+:\h+/)[0]` is stored in the :default_interface_mac clipboard
     # Create the net-attach-def via cluster admin
     Given I have a project
-    When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/ipvlan-host-local.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/ipvlan-host-local.yaml"
+    When I run oc create as admin over "ipvlan-host-local.yaml" replacing paths:
       | ["metadata"]["name"]      | myipvlan76                                                                                                                                                              |
       | ["metadata"]["namespace"] | <%= project.name %>                                                                                                                                                     |
       | ["spec"] ["config"]       | '{ "cniVersion": "0.3.1", "name": "myipvlan76", "type": "ipvlan", "master": "<%= cb.default_interface %>", "ipam": { "type": "host-local", "subnet": "22.2.2.0/24" } }' |
@@ -1149,7 +1206,8 @@ Feature: Multus-CNI related scenarios
 
     #Creating various pods and making sure their mac matches to default inf and they get unique IPs assigned
     #Creating pod1 absorbing above net-attach-def
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
+    When I run oc create over "generic_multus_pod.yaml" replacing paths:
       | ["metadata"]["name"]                                       | pod1             |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | myipvlan76       |
       | ["spec"]["nodeName"]                                       | <%= node.name %> |
@@ -1163,7 +1221,8 @@ Feature: Multus-CNI related scenarios
     And the expression should be true> cb.pod1_net1_mac==cb.default_interface_mac
     
     #Creating pod2 absorbing above net-attach-def
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
+    When I run oc create over "generic_multus_pod.yaml" replacing paths:
       | ["metadata"]["name"]                                       | pod2             |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | myipvlan76       |
       | ["spec"]["nodeName"]                                       | <%= node.name %> |
@@ -1186,13 +1245,15 @@ Feature: Multus-CNI related scenarios
     Given the default interface on nodes is stored in the :default_interface clipboard
     # Create the net-attach-def via cluster admin
     Given I have a project
-    When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/whereabouts-macvlan.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/whereabouts-macvlan.yaml"
+    When I run oc create as admin over "whereabouts-macvlan.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %>          |    
       | ["spec"]["config"]|'{ "cniVersion": "0.3.0", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "bridge", "ipam": { "type": "whereabouts", "range": "192.168.22.100/24"} }' |
     Then the step should succeed
     
     # Create a pod absorbing above net-attach-def
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
+    When I run oc create over "generic_multus_pod.yaml" replacing paths:
       | ["metadata"]["name"] | macvlan-bridge-whereabouts-pod1                                   |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | macvlan-bridge-whereabouts  |
       | ["spec"]["containers"][0]["name"] | macvlan-bridge-whereabouts                           |
@@ -1212,7 +1273,8 @@ Feature: Multus-CNI related scenarios
       | 192.168.22.100    |
 
     # Create second pod absorbing above net-attach-def
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
+    When I run oc create over "generic_multus_pod.yaml" replacing paths:
       | ["metadata"]["name"] | macvlan-bridge-whereabouts-pod2                                   |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | macvlan-bridge-whereabouts  |
       | ["spec"]["containers"][0]["name"] | macvlan-bridge-whereabouts                           |
@@ -1239,14 +1301,16 @@ Feature: Multus-CNI related scenarios
     Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin
     Given I have a project
-    When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/route-override.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/route-override.yaml"
+    When I run oc create as admin over "route-override.yaml" replacing paths:
       | ["metadata"]["namespace"]  | <%= project.name %> | 
       | ["metadata"]["name"]       | route-override      |
       | ["spec"]["config"]         | '{ "cniVersion": "0.3.0", "name" : "mymacvlan", "plugins": [ { "type": "macvlan", "mode": "bridge", "ipam": { "type": "static", "addresses": [{"address": "192.168.20.2/24"}] } }, { "type" : "route-override", "addroutes": [ { "dst": "192.168.10.0/24" }] } ] }' |
     Then the step should succeed
       
     # Create a pod absorbing above net-attach-def
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
+    When I run oc create over "generic_multus_pod.yaml" replacing paths:
       | ["metadata"]["name"]                                       | route-override   |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | route-override   |
       | ["spec"]["containers"][0]["name"]                          | route-override   |
@@ -1266,7 +1330,8 @@ Feature: Multus-CNI related scenarios
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     # Create the net-attach-def in default namespace via cluster admin
-    When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/NetworkAttachmentDefinitions/whereabouts-macvlan.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/whereabouts-macvlan.yaml"
+    When I run oc create as admin over "whereabouts-macvlan.yaml" replacing paths:
       | ["metadata"]["namespace"] | default                                                                                                                         |
       | ["spec"]["config"]        | '{ "cniVersion": "0.3.0", "type": "macvlan", "mode": "bridge", "ipam": { "type": "whereabouts", "range": "192.168.22.100/24"} }'|
     Then the step should succeed
@@ -1276,9 +1341,57 @@ Feature: Multus-CNI related scenarios
     
     # Create a pod absorbing above net-attach-def defined in default namespace
     Given I have a project
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/multus-cni/Pods/generic_multus_pod.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
+    When I run oc create over "generic_multus_pod.yaml" replacing paths:
       | ["metadata"]["name"]                                       | macvlan-bridge-whereabouts-pod1     |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | default/macvlan-bridge-whereabouts  |
       | ["spec"]["containers"][0]["name"]                          | macvlan-bridge-whereabouts          |
     Then the step should succeed
     And the pod named "macvlan-bridge-whereabouts-pod1" becomes ready
+    
+  # @author weliang@redhat.com
+  # @case_id OCP-29742
+  @admin
+  Scenario: Log pod IP and pod UUID when pod start	
+    Given the multus is enabled on the cluster
+    And I store all worker nodes to the :nodes clipboard
+    # Create the net-attach-def via cluster admin
+    Given I have a project
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/whereabouts-macvlan.yaml"
+    When I run oc create as admin over "whereabouts-macvlan.yaml" replacing paths:
+      | ["metadata"]["namespace"] | <%= project.name %>      |    
+      | ["spec"]["config"]        |'{ "cniVersion": "0.3.0", "type": "macvlan","mode": "bridge", "ipam": { "type": "whereabouts", "range": "192.168.22.100/24"} }' |
+    Then the step should succeed
+    
+    # Create a pod absorbing above net-attach-def
+    Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
+    When I run oc create over "generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                       | macvlan-bridge-whereabouts-pod1  |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | macvlan-bridge-whereabouts       |
+      | ["spec"]["containers"][0]["name"]                          | macvlan-bridge-whereabouts       |
+      | ["spec"]["nodeName"]                                       | <%= cb.nodes[0].name %>          |
+    Then the step should succeed
+    And the pod named "macvlan-bridge-whereabouts-pod1" becomes ready
+    And evaluation of `pod.ip` is stored in the :pod_eth0_ip clipboard
+
+    When I run the :get admin command with:
+      | resource      | pod                                |
+      | n             | <%= project.name %>                |
+      | o             | jsonpath={.items[*].metadata.uid}  |
+    Then the step should succeed
+    And evaluation of `@result[:response]` is stored in the :pod_uid clipboard
+   
+    And I execute on the "macvlan-bridge-whereabouts-pod1" pod:
+      | bash | -c | /usr/sbin/ip addr show net1 |
+    Then the step should succeed
+    And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod_net1_ip clipboard
+    
+    Given I use the "<%= cb.nodes[0].name %>" node
+    And I run commands on the host:
+      | journalctl -u crio \| grep verbose.*macvlan-bridge-whereabouts-pod1 |
+    Then the step should succeed
+    And the output should contain:
+      | <%= project.name %>:macvlan-bridge-whereabouts-pod1:<%= cb.pod_uid %> |
+      | <%= cb.pod_eth0_ip %>                                                 |
+      | <%= cb.pod_net1_ip %>                                                 |
+

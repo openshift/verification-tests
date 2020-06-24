@@ -4,8 +4,9 @@ Feature: Quota related scenarios
   @admin
   Scenario Outline: The quota usage should be incremented if meet the following requirement
     Given I have a project
+    Given I obtain test data file "quota/myquota.yaml"
     When I run the :create admin command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/myquota.yaml |
+      | f | myquota.yaml |
       | n | <%= project.name %>                                       |
     Then the step should succeed
     And I wait up to 60 seconds for the steps to pass:
@@ -17,8 +18,9 @@ Feature: Quota related scenarios
       | cpu\\s+0\\s+30      |
       |	memory\\s+0\\s+16Gi |
     """
+    Given I obtain test data file "quota/<path>/<file>"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/<path>/<file> |
+      | f | <file> |
     Then the step should succeed
     And the pod named "<pod_name>" becomes ready
     When I run the :describe client command with:
@@ -39,8 +41,9 @@ Feature: Quota related scenarios
   @admin
   Scenario: The quota usage should NOT be incremented if Requests and Limits aren't specified
     Given I have a project
+    Given I obtain test data file "quota/myquota.yaml"
     When I run the :create admin command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/myquota.yaml |
+      | f | myquota.yaml |
       | n | <%= project.name %>                                                                   |
     Then the step should succeed
     And I wait up to 60 seconds for the steps to pass:
@@ -52,8 +55,9 @@ Feature: Quota related scenarios
       | cpu\\s+0\\s+30      |
       | memory\\s+0\\s+16Gi |
     """
+    Given I obtain test data file "quota/tc509096/pod-request-limit-invalid-1.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/tc509096/pod-request-limit-invalid-1.yaml |
+      | f | pod-request-limit-invalid-1.yaml |
     Then the step should fail
     And the output should match:
       | (?i)Failed quota: myquota: must specify cpu,memory |
@@ -69,8 +73,9 @@ Feature: Quota related scenarios
   @admin
   Scenario: The quota usage should NOT be incremented if Requests > Limits
     Given I have a project
+    Given I obtain test data file "quota/myquota.yaml"
     When I run the :create admin command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/myquota.yaml |
+      | f | myquota.yaml |
       | n | <%= project.name %>                                       |
     Then the step should succeed
     And I wait up to 60 seconds for the steps to pass:
@@ -82,8 +87,9 @@ Feature: Quota related scenarios
       | cpu\\s+0\\s+30      |
       | memory\\s+0\\s+16Gi |
     """
+    Given I obtain test data file "quota/tc509095/pod-request-limit-invalid-2.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/tc509095/pod-request-limit-invalid-2.yaml |
+      | f | pod-request-limit-invalid-2.yaml |
     Then the step should fail
     And the output should match:
       | Invalid value: "(5\|6)00m": must be (greater\|less) than or equal to( cpu)? (request\|limit)  |
@@ -103,8 +109,9 @@ Feature: Quota related scenarios
   @admin
   Scenario: The quota usage should NOT be incremented if Requests = Limits but exceeding hard quota
     Given I have a project
+    Given I obtain test data file "quota/myquota.yaml"
     When I run the :create admin command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/myquota.yaml |
+      | f | myquota.yaml |
       | n | <%= project.name %>                                       |
     Then the step should succeed
     And I wait up to 60 seconds for the steps to pass:
@@ -116,8 +123,9 @@ Feature: Quota related scenarios
       | cpu\\s+0\\s+30      |
       | memory\\s+0\\s+16Gi |
     """
+    Given I obtain test data file "quota/tc509094/pod-request-limit-invalid-3.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/tc509094/pod-request-limit-invalid-3.yaml |
+      | f | pod-request-limit-invalid-3.yaml |
     Then the step should fail
     And the output should match:
       | Error from server.*forbidden: (?i)Exceeded quota.* |
@@ -133,8 +141,9 @@ Feature: Quota related scenarios
   @admin
   Scenario: The quota status is calculated ASAP when editing its quota spec
     Given I have a project
+    Given I obtain test data file "quota/myquota.yaml"
     When I run the :create admin command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/myquota.yaml |
+      | f | myquota.yaml |
       | n | <%= project.name %>                                       |
     Then the step should succeed
     When  I run the :describe client command with:
@@ -188,8 +197,9 @@ Feature: Quota related scenarios
   @admin
   Scenario: Check BestEffort scope of resourcequota
     Given I have a project
+    Given I obtain test data file "quota/quota-besteffort.yaml"
     When I run the :create admin command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/quota-besteffort.yaml |
+      | f | quota-besteffort.yaml |
       | n | <%= project.name %> |
     Then the step should succeed
     When  I run the :describe client command with:
@@ -199,8 +209,9 @@ Feature: Quota related scenarios
       | Scopes:\\s+BestEffort |
       | pods\\s+0\\s+2        |
     # For BestEffort pod
+    Given I obtain test data file "quota/pod-besteffort.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/pod-besteffort.yaml |
+      | f | pod-besteffort.yaml |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | quota            |
@@ -218,8 +229,9 @@ Feature: Quota related scenarios
       | pods\\s+0\\s+2 |
     """
     # For Bustable pod
+    Given I obtain test data file "quota/pod-notbesteffort.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/pod-notbesteffort.yaml |
+      | f | pod-notbesteffort.yaml |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | quota            |
@@ -238,8 +250,9 @@ Feature: Quota related scenarios
   @admin
   Scenario: Check NotBestEffort scope of resourcequota
     Given I have a project
+    Given I obtain test data file "quota/quota-notbesteffort.yaml"
     When I run the :create admin command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/quota-notbesteffort.yaml |
+      | f | quota-notbesteffort.yaml |
       | n | <%= project.name %> |
     Then the step should succeed
     When I run the :describe client command with:
@@ -253,8 +266,9 @@ Feature: Quota related scenarios
       | requests.cpu\\s+0\\s+2      |
       | requests.memory\\s+0\\s+1Gi |
     # For Bustable pod
+    Given I obtain test data file "quota/pod-notbesteffort.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/pod-notbesteffort.yaml |
+      | f | pod-notbesteffort.yaml |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | quota               |
@@ -280,8 +294,9 @@ Feature: Quota related scenarios
       | requests.memory\\s+0\\s+1Gi |
     """
     # For BestEffort pod
+    Given I obtain test data file "quota/pod-besteffort.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/pod-besteffort.yaml |
+      | f | pod-besteffort.yaml |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | quota               |
@@ -308,8 +323,9 @@ Feature: Quota related scenarios
   @admin
   Scenario: Check NotTerminating scope of resourcequota
     Given I have a project
+    Given I obtain test data file "quota/quota-notterminating.yaml"
     When I run the :create admin command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/quota-notterminating.yaml |
+      | f | quota-notterminating.yaml |
       | n | <%= project.name %> |
     Then the step should succeed
     When I run the :describe client command with:
@@ -324,8 +340,9 @@ Feature: Quota related scenarios
       | requests.cpu\\s+0\\s+2        |
       | requests.memory\\s+0\\s+1Gi   |
     # For NotTerminating pod
+    Given I obtain test data file "quota/pod-notterminating.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/pod-notterminating.yaml |
+      | f | pod-notterminating.yaml |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | quota                |
@@ -351,8 +368,9 @@ Feature: Quota related scenarios
       | requests.memory\\s+0\\s+1Gi |
     """
     # For Terminating pod
+    Given I obtain test data file "quota/pod-terminating.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/pod-terminating.yaml |
+      | f | pod-terminating.yaml |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | quota                |
@@ -379,8 +397,9 @@ Feature: Quota related scenarios
   @admin
   Scenario: Check Terminating scope of resourcequota
     Given I have a project
+    Given I obtain test data file "quota/quota-terminating.yaml"
     When I run the :create admin command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/quota-terminating.yaml |
+      | f | quota-terminating.yaml |
       | n | <%= project.name %> |
     Then the step should succeed
     When I run the :describe client command with:
@@ -395,8 +414,9 @@ Feature: Quota related scenarios
       | requests.cpu\\s+0\\s+1         |
       | requests.memory\\s+0\\s+1Gi    |
     # For Terminating pod
+    Given I obtain test data file "quota/pod-terminating.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/pod-terminating.yaml |
+      | f | pod-terminating.yaml |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | quota             |
@@ -431,8 +451,9 @@ Feature: Quota related scenarios
       | requests.cpu\\s+0\\s+1      |
       | requests.memory\\s+0\\s+1Gi |
     # For NotTerminating pod
+    Given I obtain test data file "quota/pod-notterminating.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/pod-notterminating.yaml |
+      | f | pod-notterminating.yaml |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | quota             |
@@ -459,8 +480,9 @@ Feature: Quota related scenarios
   @admin
   Scenario: Could create quota if existing resources exceed to the hard quota but prevent to create further resources
     Given I have a project
+    Given I obtain test data file "quota/quota_template.yaml"
     When I run the :new_app admin command with:
-      | file  | <%= BushSlicer::HOME %>/testdata/quota/quota_template.yaml |
+      | file  | quota_template.yaml |
       | param | CPU_VALUE=0.2  |
       | param | MEM_VALUE=1Gi  |
       | param | PV_VALUE=1     |
@@ -483,8 +505,9 @@ Feature: Quota related scenarios
       | resourcequotas\\s+1\\s+3         |
       | secrets\\s+9\\s+5                |
       | services\\s+0\\s+5               |
+    Given I obtain test data file "quota/tc509087/mysecret.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/tc509087/mysecret.json |
+      | f | mysecret.json |
     Then the step should fail
     And the output should match:
       | Error from server.*forbidden: (?i)Exceeded quota.* |
@@ -506,8 +529,9 @@ Feature: Quota related scenarios
       | resourcequotas\\s+1\\s+3         |
       | secrets\\s+9\\s+15               |
       | services\\s+0\\s+5               |
+    Given I obtain test data file "quota/tc509087/mysecret.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/tc509087/mysecret.json |
+      | f | mysecret.json |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | quota   |
@@ -527,8 +551,9 @@ Feature: Quota related scenarios
   @admin
   Scenario: The usage for cpu/mem/pod counts are fixed up ASAP if delete a pod
     Given I have a project
+    Given I obtain test data file "quota/myquota.yaml"
     When I run the :create admin command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/myquota.yaml |
+      | f | myquota.yaml |
       | n | <%= project.name %>    |
     Then the step should succeed
     When  I run the :describe client command with:
@@ -543,8 +568,9 @@ Feature: Quota related scenarios
       | resourcequotas\\s+1\\s+1          |
       | secrets\\s+9\\s+15                |
       | services\\s+0\\s+10               |
+    Given I obtain test data file "quota/tc519922/pod-request-limit-valid-4.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/tc519922/pod-request-limit-valid-4.yaml |
+      | f | pod-request-limit-valid-4.yaml |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | quota   |
@@ -581,11 +607,13 @@ Feature: Quota related scenarios
   @admin
   Scenario: Quota events for compute resource failures shouldn't be redundant
     Given I have a project
+    Given I obtain test data file "templates/tc528448/quota.yaml"
     When I run the :create admin command with:
-      | f | <%= BushSlicer::HOME %>/testdata/templates/tc528448/quota.yaml |
+      | f | quota.yaml |
       | n | <%= project.name %>                                                                              |
     Then the step should succeed
-    Given I process and create "<%= BushSlicer::HOME %>/testdata/templates/tc528448/sample-app-database-dc-resources-large-invalid.json"
+    Given I obtain test data file "templates/tc528448/sample-app-database-dc-resources-large-invalid.json"
+    Given I process and create "sample-app-database-dc-resources-large-invalid.json"
     Then the step should succeed
     Given I wait until the status of deployment "database" becomes :failed
     When I run the :get client command with:
@@ -605,8 +633,9 @@ Feature: Quota related scenarios
   @admin
   Scenario: The current quota usage is calculated ASAP when adding a quota
     Given I have a project
+    Given I obtain test data file "quota/myquota.yaml"
     When I run the :create admin command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/myquota.yaml |
+      | f | myquota.yaml |
       | n | <%= project.name %>    |
     Then the step should succeed
     When  I run the :describe client command with:
@@ -649,8 +678,9 @@ Feature: Quota related scenarios
   @admin
   Scenario: The quota usage should be incremented if Requests = Limits and in the range of hard quota but exceed the real node available resources
     Given I have a project
+    Given I obtain test data file "quota/myquota.yaml"
     When I run the :create admin command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/myquota.yaml |
+      | f | myquota.yaml |
       | n | <%= project.name %>    |
     Then the step should succeed
     When  I run the :describe client command with:
@@ -665,8 +695,9 @@ Feature: Quota related scenarios
       | resourcequotas\\s+1\\s+1          |
       | secrets\\s+9\\s+15                |
       | services\\s+0\\s+10               |
+    Given I obtain test data file "quota/tc509091/pod-request-limit-valid-4.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/tc509091/pod-request-limit-valid-4.yaml |
+      | f | pod-request-limit-valid-4.yaml |
     Then the step should succeed
     Given the pod named "pod-request-limit-valid-4" status becomes :pending
     When I run the :describe client command with:
@@ -699,8 +730,9 @@ Feature: Quota related scenarios
       | cpu\\s+0\\s+30      |
       | memory\\s+0\\s+16Gi |
       | pods\\s+0\\s+20     |
+    Given I obtain test data file "quota/pod-completed.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/pod-completed.yaml |
+      | f | pod-completed.yaml |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | quota    |
@@ -744,16 +776,18 @@ Feature: Quota related scenarios
       | quota-notbesteffort |
       | NotBestEffort       |
       | pods\\s+0\\s+5      |
+    Given I obtain test data file "quota/pod-besteffort.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/pod-besteffort.yaml |
+      | f | pod-besteffort.yaml |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | quota    |
     Then the output by order should match:
       | pods\\s+1\\s+10     |
       | pods\\s+0\\s+5      |
+    Given I obtain test data file "quota/pod-notbesteffort.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/pod-notbesteffort.yaml |
+      | f | pod-notbesteffort.yaml |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | quota    |
@@ -793,16 +827,18 @@ Feature: Quota related scenarios
       | quota-terminating    |
       | Terminating          |
       | pods\\s+0\\s+10      |
+    Given I obtain test data file "quota/pod-terminating.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/pod-terminating.yaml |
+      | f | pod-terminating.yaml |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | quota |
     Then the output by order should match:
       | pods\\s+0\\s+5   |
       | pods\\s+1\\s+10  |
+    Given I obtain test data file "quota/pod-notterminating.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/pod-notterminating.yaml |
+      | f | pod-notterminating.yaml |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | quota |
@@ -866,8 +902,9 @@ Feature: Quota related scenarios
       | quota-notterminating                 |
       | NotTerminating                       |
       | pods\\s+0\\s+5                       |
+    Given I obtain test data file "quota/pod-notbesteffort.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/pod-notbesteffort.yaml |
+      | f | pod-notbesteffort.yaml |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | quota |
@@ -876,8 +913,9 @@ Feature: Quota related scenarios
       | pods\\s+0\\s+8 |
       | pods\s+1\\s+10 |
       | pods\\s+1\\s+5 |
+    Given I obtain test data file "quota/pod-besteffort.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/pod-besteffort.yaml |
+      | f | pod-besteffort.yaml |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | quota |
@@ -886,8 +924,9 @@ Feature: Quota related scenarios
       | pods\\s+0\\s+8 |
       | pods\s+1\\s+10 |
       | pods\\s+2\\s+5 |
+    Given I obtain test data file "quota/pod-besteffort-terminating.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/quota/pod-besteffort-terminating.yaml |
+      | f | pod-besteffort-terminating.yaml |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | quota |
@@ -1014,8 +1053,9 @@ Feature: Quota related scenarios
   @admin
   Scenario: Quota requests.storage with PVC existing
     Given I have a project
+    Given I obtain test data file "storage/nfs/claim-rox.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/storage/nfs/claim-rox.json |
+      | f | claim-rox.json |
       | n | <%= project.name %>                                                                                      |
     Then the step should succeed
     # Create requests.storage of quota < existing PVC capacity
@@ -1030,7 +1070,8 @@ Feature: Quota related scenarios
       | n        | <%= project.name %> |
     Then the output should match:
       | requests.storage\\s+5Gi\\s+2Gi    |
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/nfs/claim-rox.json" replacing paths:
+    Given I obtain test data file "storage/nfs/claim-rox.json"
+    When I run oc create over "claim-rox.json" replacing paths:
       | ["metadata"]["name"] | pvc-2 |
     Then the step should fail
     And the output should contain:
@@ -1069,8 +1110,9 @@ Feature: Quota related scenarios
       | n    | <%= project.name %>  |
     Then the step should succeed
     # Create PVC (here request 5Gi storage)
+    Given I obtain test data file "storage/nfs/claim-rox.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/storage/nfs/claim-rox.json |
+      | f | claim-rox.json |
       | n | <%= project.name %>                                                                                      |
     Then the step should fail
     And the output should contain:
@@ -1092,8 +1134,9 @@ Feature: Quota related scenarios
       | n    | <%= project.name %>                            |
     Then the step should succeed
     # Create PVC (here request 5Gi storage)
+    Given I obtain test data file "storage/nfs/claim-rox.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/storage/nfs/claim-rox.json |
+      | f | claim-rox.json |
       | n | <%= project.name %>                                                                                      |
     Then the step should succeed
     When I run the :describe client command with:
@@ -1103,7 +1146,8 @@ Feature: Quota related scenarios
       | persistentvolumeclaims\\s+1\\s+50 |
       | requests.storage\\s+5Gi\\s+8Gi    |
     # Create PVC again (here request 5Gi storage > avaliable quota 3Gi)
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/nfs/claim-rox.json" replacing paths:
+    Given I obtain test data file "storage/nfs/claim-rox.json"
+    When I run oc create over "claim-rox.json" replacing paths:
       | ["metadata"]["name"] | pvc-2 |
     Then the step should fail
     And the output should contain:

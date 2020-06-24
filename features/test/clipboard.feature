@@ -14,7 +14,8 @@ Feature: Clipboard testing scenarios
   @admin
   Scenario: save volumed id from resource to clipboard
     Given I have a project
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/misc/pvc.json" replacing paths:
+    Given I obtain test data file "storage/misc/pvc.json"
+    When I run oc create over "pvc.json" replacing paths:
       | ["metadata"]["name"]                         | dynamic-pvc1-<%= project.name %> |
       | ["spec"]["accessModes"][0]                   | ReadWriteOnce                    |
       | ["spec"]["resources"]["requests"]["storage"] | 1Gi                              |

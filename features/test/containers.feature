@@ -26,8 +26,9 @@ Feature: test container related support
     And evaluation of `daemon_set('logging-fluentd').containers_spec(user: user)` is stored in the :specs clipboard
 
     # test deployment and replicaset
+    Given I obtain test data file "deployment/hello-deployment-1.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/deployment/hello-deployment-1.yaml |
+      | f | hello-deployment-1.yaml |
     Then the step should succeed
     Given number of replicas of "hello-openshift" deployment becomes:
       | desired   | 10 |

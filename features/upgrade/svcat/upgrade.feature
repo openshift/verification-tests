@@ -59,8 +59,9 @@ Feature: Service Catalog related scenarios
     Given I have a project
     When I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
+    Given I obtain test data file "svc-catalog/ups-broker-template.yaml"
     When I process and create:
-      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/ups-broker-template.yaml |
+      | f | ups-broker-template.yaml |
       | p | UPS_BROKER_PROJECT=<%= project.name %>                                                                  |
     Then the step should succeed
     And I wait up to 300 seconds for the steps to pass:
@@ -76,8 +77,9 @@ Feature: Service Catalog related scenarios
 
     #Provision a serviceinstance
     Given I switch to the first user
+    Given I obtain test data file "svc-catalog/ups-instance-template.yaml"
     When I process and create:
-      | f | <%= BushSlicer::HOME %>/testdata/svc-catalog/ups-instance-template.yaml |
+      | f | ups-instance-template.yaml |
       | p | USER_PROJECT=<%= project.name %>                                                                          |
     Then the step should succeed
     And I wait up to 30 seconds for the steps to pass:
