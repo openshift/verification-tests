@@ -21,6 +21,11 @@ module BushSlicer
         host.exec_admin("systemctl is-active '#{service_name}'")[:success]
       end
 
+      def self.enabled?(service_name, host)
+        result = host.exec_admin("systemctl is-enabled '#{service_name}'")
+        result[:success] && (result[:stdout].to_s.include? "enabled")
+      end
+
       def status(quiet: false)
         statuses = {
           active: "active",
