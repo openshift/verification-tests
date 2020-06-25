@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-<%= project.name %>
+spec:
+  storageClassName: <%= cb.sc_name %>
+  capacity:
+    storage: 5Gi
+  accessModes:
+  - ReadWriteMany
+  nfs:
+    path: "/"
+    server: "<%= cb.nfs_svc_ip %>"
+  persistentVolumeReclaimPolicy: Delete
