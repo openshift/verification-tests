@@ -10,5 +10,9 @@ module BushSlicer
       raw_resource(user: user, cached: cached, quiet: quiet).dig('spec', 'storage', 'hive', 'type')
     end
 
+    def namespace(user: nil, cached: true, quiet: false)
+      raw_resource(user: user, cached: cached, quiet: quiet).dig('metadata', 'namespace')
+    end
+
   end
 end

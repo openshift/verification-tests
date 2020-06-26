@@ -14,7 +14,8 @@ Given /^metering service has been installed successfully(?: using (OLM|OperatorH
   step %/I setup a metering project/
   cb[:metering_resource_type] = "meteringconfig"
   cb[:metering_namespace] = project
-  unless metering_config('openshift-metering').exists?
+  meteringconfigs = BushSlicer::MeteringConfig.list(user: admin, project: project)
+  if meteringconfigs.count == 0
     namespace = "openshift-metering"
     metering_name = "operator-metering"
     # a pre-req is that openshift-monitoring is installed in the system, w/o it
@@ -23,15 +24,26 @@ Given /^metering service has been installed successfully(?: using (OLM|OperatorH
       raise "service openshift-monitoring is a pre-requisite for #{namespace}"
     end
     project(namespace)
+    if method == 'OLM'
+      via_method = 'CLI'
+    else
+      via_method = 'GUI'
+    end
+    step %Q"the metering service is installed using OLM #{via_method}"
   else
-    metering_name = metering_config.raw_resource['metadata']['name']
+    # there's an existing meteringconfig in the project.  Check if there are
+    # subscription and operatorgroup
+    mconfig = meteringconfigs.first
+    cb.metering_namespace = project(mconfig.namespace)
+    metering_name = mconfig.name
+    subs = BushSlicer::Subscription.list(user: admin, project: project)
+    ogs = BushSlicer::OperatorGroup.list(user: admin)
+    if (subs.count < 1) and (ogs.count < 1)
+      logger.info("There are not subscription or operatorgroup, reinstalling them...")
+      step %Q"the metering service is installed using OLM"
+    end
   end
-  if method == 'OLM'
-    via_method = 'CLI'
-  else
-    via_method = 'GUI'
-  end
-  step %Q"the metering service is installed using OLM #{via_method}"
+
   step %Q/all metering related pods are running in the "#{cb.metering_namespace.name}" project/
   # added check for datasource to make sure promethues imports are working
   step %Q/all reportdatasources are importing from Prometheus/
