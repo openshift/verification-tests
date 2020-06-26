@@ -3,6 +3,9 @@ Given(/^I have an IPI deployment$/) do
   machines = BushSlicer::Machine.list(user: admin, project: project("openshift-machine-api"))
   if machines.length == 0
     raise "Not an IPI deployment, there are no machines"
+ #TODO
+    #Exit gracefully without giving RuntimeError like below
+    #Not an IPI deployment, there are no machines (RuntimeError)
   end
 
   machines.each do | machine |
