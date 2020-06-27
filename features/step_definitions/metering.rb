@@ -39,7 +39,7 @@ Given /^metering service has been installed successfully(?: using (OLM|OperatorH
     subs = BushSlicer::Subscription.list(user: admin, project: project)
     ogs = BushSlicer::OperatorGroup.list(user: admin)
     if (subs.count < 1) and (ogs.count < 1)
-      logger.info("There are not subscription or operatorgroup, reinstalling them...")
+      logger.info("Missing Subscription and Operatorgroup for metering, reinstalling them...")
       step %Q"the metering service is installed using OLM"
     end
   end
