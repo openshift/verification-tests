@@ -4,61 +4,71 @@ require 'ssl'
 # For metering automation, we just install once and re-use the installation
 # unless the scenarios are for testing installation
 # checks that metering service is already installed
-# OLM   => ./bin/deploy-metering
+# helper binary  => ./bin/deploy-metering
+# OLM (CLI)  => deploy via OLM from the CLI.
 # OperatorHub => Openshift Webconsole  <<  default method
 Given /^metering service has been installed successfully(?: using (OLM|OperatorHub))?$/ do |method|
   ensure_admin_tagged
-  method ||= 'OperatorHub'
-  namespace = "openshift-metering"  # set it as default
-  step %Q/I switch to cluster admin pseudo user/
-  user.cli_exec(:create_namespace, name: namespace)
-  # NOTE: we need to change project context as admin
-  step %Q/I use the "#{namespace}" project/
+  # default to OLM install
+  method ||= 'OLM'
+  step %/I setup a metering project/
   cb[:metering_resource_type] = "meteringconfig"
-  cb[:metering_namespace] = project(namespace)
-  unless metering_config('openshift-metering').exists?
-    # default to OLM install
-    method ||= "OperatorHub"
-    case method
-    when "OperatorHub", "OLM"
-      namespace = "openshift-metering"
-      metering_name = "operator-metering"
-    end
+  cb[:metering_namespace] = project
+  meteringconfigs = BushSlicer::MeteringConfig.list(user: admin, project: project)
+  if meteringconfigs.count == 0
+    namespace = "openshift-metering"
+    metering_name = "operator-metering"
     # a pre-req is that openshift-monitoring is installed in the system, w/o it
     # the openshift-metering won't function correctly
     unless project('openshift-monitoring').exists?
       raise "service openshift-monitoring is a pre-requisite for #{namespace}"
     end
+    project(namespace)
+    if method == 'OLM'
+      via_method = 'CLI'
+    else
+      via_method = 'GUI'
+    end
+    step %Q"the metering service is installed using OLM #{via_method}"
   else
-    metering_name = metering_config.raw_resource['metadata']['name']
-  end
-
-  # change project context
-  unless metering_config(namespace).exists?
-    case method
-    when "OLM", "OperatorHub"
-      step %Q/the metering service is installed using OLM/
+    # there's an existing meteringconfig in the project.  Check if there are
+    # subscription and operatorgroup
+    mconfig = meteringconfigs.first
+    cb.metering_namespace = project(mconfig.namespace)
+    metering_name = mconfig.name
+    subs = BushSlicer::Subscription.list(user: admin, project: project)
+    ogs = BushSlicer::OperatorGroup.list(user: admin)
+    if (subs.count < 1) and (ogs.count < 1)
+      logger.info("Missing Subscription and Operatorgroup for metering, reinstalling them...")
+      step %Q"the metering service is installed using OLM"
     end
   end
+
   step %Q/all metering related pods are running in the "#{cb.metering_namespace.name}" project/
-  step %Q/I wait for the "#{metering_name}" #{cb.metering_resource_type} to appear/
   # added check for datasource to make sure promethues imports are working
   step %Q/all reportdatasources are importing from Prometheus/
 end
 
-Given /^default metering service is installed without cleanup$/ do
-  step %Q/I create a project with non-leading digit name/
-  step %Q/I store master major version in the clipboard/
-  step %Q/metering service is installed with ansible using:/, table(%{
-    | inventory     | #{BushSlicer::HOME}/testdata/logging_metrics/default_install_metering_params |
-    | playbook_args | -e openshift_image_tag=v<%= cb.master_version %> -e openshift_release=<%= cb.master_version %>                     |
-    | no_cleanup    | true                                                                                                               |
-  })
-  # step %Q/I switch to cluster admin pseudo user/
-  # step %Q/I use the "openshift-metering" project/
+# allow user to specify the meteringconfig
+Given /^I install metering service using:$/ do | table |
+  ensure_admin_tagged
+  opts = opts_array_to_hash(table.raw)
+  storage_type = opts[:storage_type]
+  metering_config = opts[:meteringconfig]
+  step %Q(I setup a metering project)
+  step %Q(I prepare OLM via CLI)
+  case storage_type
+  when "sharedPVC"
+    step %Q(I set up environment for metering sharedPVC)
+    metering_config ||= "metering/configs/meteringconfig_sharedPVC.yaml"
+  when "HDFS"
+    metering_config ||= "metering/configs/meteringconfig_hdfs.yaml"
+  end
+  step %Q(I run oc create as admin over ERB test file: #{metering_config})
+  step %Q(all metering related pods are running in the project)
 end
 
-# multiple steps are involved in generating a metering report
+# multiple steps are involved in generating /a metering report
 # 1. Writing a report: metering Report object is created with user providing
 # => a. ReportGenerationQuery
 # => b. reportingStart
@@ -219,49 +229,57 @@ Given /^I disable route for#{OPT_QUOTED} metering service$/ do | metering_name |
   step %Q/I wait for the resource "route" named "metering" to disappear/
 end
 
-
 # install metering via OLM (via OperatorHub)
-Given /^the metering service is installed(?: to #{OPT_QUOTED})? using OLM$/ do | metering_ns |
+Given /^the metering service is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|GUI))?$/ do | metering_ns, method |
   ensure_admin_tagged
   ensure_destructive_tagged
-  # 1. create the metering namespace
+  install_method ||= 'CLI'
   metering_ns ||= "openshift-metering"
-  step %Q/I switch to cluster admin pseudo user/
-  @result = user.cli_exec(:create_namespace, name: metering_ns)
-  step %Q(I set operator channel)
-  cb['metering_namespace'] = project(metering_ns)
-  step %Q(the first user is cluster-admin)
-  step %Q(I switch to the first user)
-  step %Q(I open admin console in a browser)
-  step %Q/I perform the :goto_operator_subscription_page web action with:/, table(%{
-    | package_name     | metering-ocp        |
-    | catalog_name     | qe-app-registry     |
-    | target_namespace | <%= project.name %> |
-  })
-  step %Q/I perform the :set_custom_channel_and_subscribe web action with:/, table(%{
-    | update_channel    | <%= cb.channel %> |
-    | install_mode      | OwnNamespace      |
-    | approval_strategy | Automatic         |
-  })
-  step %Q/a pod becomes ready with labels:/, table(%{
-    | app=metering-operator |
-  })
-  step %Q(I run oc create as admin over ERB test file: metering/configs/meteringconfig_hdfs.yaml)
+  step %Q"I setup a metering project named #{metering_ns}" unless cb.metering_project_setup_done
+  if install_method == 'CLI'
+    step %Q/I prepare OLM via CLI/
+  elsif install_method == 'GUI'
+    step %Q(I set operator channel)
+    cb['metering_namespace'] = project(metering_ns)
+    step %Q(the first user is cluster-admin)
+    step %Q(I switch to the first user)
+    step %Q(I open admin console in a browser)
+    step %Q/I perform the :goto_operator_subscription_page web action with:/, table(%{
+      | package_name     | metering-ocp        |
+      | catalog_name     | qe-app-registry     |
+      | target_namespace | <%= project.name %> |
+    })
+    step %Q/I perform the :set_custom_channel_and_subscribe web action with:/, table(%{
+      | update_channel    | <%= cb.channel %> |
+      | install_mode      | OwnNamespace      |
+      | approval_strategy | Automatic         |
+    })
+    step %Q/a pod becomes ready with labels:/, table(%{
+      | app=metering-operator |
+    })
+  else
+    raise "Unsupport installation method #{install_method}"
+  end
+  # default to use sharedPVC
+  step %Q(I set up environment for metering sharedPVC)
+  step %Q(I run oc create as admin over ERB test file: metering/configs/meteringconfig_sharedPVC.yaml)
   step %Q/all metering related pods are running in the project/
   step %Q/all reportdatasources are importing from Prometheus/
 end
 
-# XXX: currently OLM uninstall is TBD, we uninstall by removing the namespace
+# we uninstall by removing the following
+# 1. metertingconfig  2. subscription  3. operatorgroup
+# 4. the namespace
 Given /^the#{OPT_QUOTED} metering service is uninstalled using OLM$/ do | metering_ns |
   ensure_admin_tagged
   ensure_destructive_tagged
   metering_ns ||= "openshift-metering"
   step %Q/I switch to cluster admin pseudo user/ unless env.is_admin? user
   project(metering_ns)
-  # step %Q/I use the "#{metering_ns}" project/ unless project.name == metering_ns
+  step %Q(I ensure "openshift-metering" meteringconfig is deleted)
+  step %Q(I ensure "metering-ocp-sub" subscription is deleted)
+  step %Q(I ensure "metering-ocp-og" subscription is deleted)
   step %Q/I ensure "#{metering_ns}" project is deleted/
-  project("openshift-marketplace")
-  step %Q/I ensure "metering-operators" catalogsourceconfig is deleted/
 end
 
 Given /^all reportdatasources are importing from Prometheus$/ do
@@ -270,6 +288,7 @@ Given /^all reportdatasources are importing from Prometheus$/ do
   # valid reportdatasources are those with a prometheusMetricsImporter query statement
   dlist = data_sources.select{ |d| d.prometheus_metrics_importer_query}
   seconds = 600   # after initial installation it takes about 2-3 minutes to initiate Prometheus sync
+  logger.info("*** waiting for Prometheus to initiate sync...")
   success = wait_for(seconds) {
     dlist.all? { |ds| report_data_source(ds.name).last_import_time(cached: false) }
   }
@@ -448,5 +467,65 @@ And /^I set operator channel(?: to#{OPT_QUOTED})?$/ do | channel |
     cb.channel = cluster_version('version').version.split('-').first.to_f
   end
   logger.info("Using operator channel: #{cb.channel}")
+end
+
+# setup env for sharedPVC
+# 1. setup nfs service
+# 2. create storage class
+# 3. create PV
+# @return clipboard with :default_sc, :nfs_svc_ip, :sc
+Given /^I set up environment for metering sharedPVC$/ do
+  step %Q(I use the "#{project.name}" project)
+  step %Q(I have a NFS service in the project) unless service('nfs-service').exists?
+  cb[:nfs_svc_ip] = service('nfs-service').ip
+  #step %Q(I obtain test data file "metering/configs/sc_metering.yaml")
+  step %Q(admin clones storage class "sc-<%= project.name %>" from ":default" with:), table(%{
+    | ["metadata"]["name"] | sc-<%= project.name %> |
+  })
+  step %Q(the step should succeed)
+  cb[:sc] = storage_class(project.name)
+  cb[:sc_name] = "sc-" + project.name
+  # need to delete if there's an existing pv created by the nfs yaml with matching name
+  pv_name = "pv-" + project.name
+  if pv(pv_name).exists?
+    step %Q(I ensure "#{pv_name}" pv is deleted)
+  end
+  step %Q(I run oc create as admin over ERB test file: metering/configs/pv_metering.yaml)
+  step %Q(the step should succeed)
+end
+
+# @return set cb.metering_project_setup_done to be DRY
+Given /^I setup a metering project(?: named #{QUOTED})?$/ do | metering_ns |
+  ensure_admin_tagged
+      # 1. create the metering namespace
+  metering_ns ||= "openshift-metering"
+  step %Q/I switch to cluster admin pseudo user/
+  unless namespace(metering_ns).exists?
+    @result = user.cli_exec(:create_namespace, name: metering_ns)
+    raise "Failed to create namespace #{metering_ns}" unless @result[:success]
+  end
+  step %Q/I use the "#{metering_ns}" project/
+  cb.metering_ns = project.name
+  cb.metering_project_setup_done = true
+end
+
+Given /^I prepare OLM via CLI$/ do
+  ensure_admin_tagged
+  project_name_org = project.name
+  # check if qe-app-registry exists
+  logger.info("Checking for OLM pre-requisites...")
+  req_registry = 'qe-app-registry'
+  req_packagemanifest = 'metering-ocp'
+  raise "required CatalogSource '#{req_registry}' is not found" unless catalog_source(req_registry, project('openshift-marketplace')).exists?
+  raise "required PackageManifest '#{req_packagemanifest}' is not found" unless package_manifest(req_packagemanifest).exists?
+  step %Q(I use the "#{project_name_org}" project)
+  # need to change context back
+  cb[:default_channel] = package_manifest(req_packagemanifest).default_channel
+  # 2. create operatorgroup
+  step %Q(I run oc create as admin over ERB test file: metering/configs/metering_operatorgroup.yaml)
+  #step %Q/the step should succeed/
+  # 3. create subscription
+  step %Q(I run oc create as admin over ERB test file: metering/configs/metering_subscription.yaml)
+  #step %Q/the step should succeed/
 end
 

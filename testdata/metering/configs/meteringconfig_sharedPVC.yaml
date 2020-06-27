@@ -1,0 +1,20 @@
+apiVersion: metering.openshift.io/v1
+kind: MeteringConfig
+metadata:
+  name: openshift-metering
+  namespace: openshift-metering
+spec:
+  storage:
+    hive:
+      type: "sharedPVC"
+      sharedPVC:
+        createPVC: true
+        storageClass: "<%= cb.sc_name %>"
+        size: "5Gi"
+    type: hive
+  hive:
+    spec:
+      metastore:
+        storage:
+          class: "<%= cb.sc_name %>"
+          size: "5Gi"
