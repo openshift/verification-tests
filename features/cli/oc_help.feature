@@ -27,9 +27,9 @@ Feature: oc related features
     And the output should contain:
       | Options:             |
       | --dry-run=           |
+      | --from-env-file=     |
       | --from-file=         |
       | --from-literal=      |
-      | --generator=         |
       | -o, --output=        |
       | --save-config=       |
       | --template=          |
