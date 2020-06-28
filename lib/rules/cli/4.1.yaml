@@ -588,6 +588,7 @@
     :image_stream: --image-stream=<value>
     :labels: --labels=<value>
     :name: --name=<value>
+    :source_secret: --source-secret=<value>
     :source_spec: <value>
     :strategy: --strategy=<value>
 :new_build:

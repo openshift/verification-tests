@@ -201,7 +201,7 @@ Given /^I have an ssh-git service in the(?: "([^ ]+?)")? project$/ do |project_n
   raise "cannot create git-server service" unless @result[:success]
 
   # wait to become available
-  @result = BushSlicer::Pod.wait_for_labeled("deployment-config=git-server",
+  @result = BushSlicer::Pod.wait_for_labeled("deploymentconfig=git-server",
                                             "name=git-server",
                                             count: 1,
                                             user: user,
