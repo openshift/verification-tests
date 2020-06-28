@@ -54,6 +54,11 @@ check_button_enabled:
   element:
     selector:
       xpath: //button[contains(., '<button_text>') and not(@disabled)]
+click_button_label:
+  element:
+    selector:
+      xpath: //label[text()='<label_text>']/..//button
+    op: click  
 click_tab:
   elements:
   - selector:
