@@ -1411,9 +1411,9 @@ Feature: Multus-CNI related scenarios
     # Create a pod absorbing above net-attach-def
     Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
     When I run oc create over "generic_multus_pod.yaml" replacing paths:
-      | ["metadata"]["name"] | macvlan-bridge-whereabouts-pod1                              |
-      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | whereabouts-excludeip  |
-      | ["spec"]["containers"][0]["name"] | whereabouts-excludeip                           |
+      | ["metadata"]["name"]                                       | macvlan-bridge-whereabouts-pod1 |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | whereabouts-excludeip           |
+      | ["spec"]["containers"][0]["name"]                          | whereabouts-excludeip           |
     Then the step should succeed
     And the pod named "macvlan-bridge-whereabouts-pod1" becomes ready
     # Check the created pod has correct ip 
@@ -1425,9 +1425,9 @@ Feature: Multus-CNI related scenarios
     # Create second pod absorbing above net-attach-def
     Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
     When I run oc create over "generic_multus_pod.yaml" replacing paths:
-      | ["metadata"]["name"] | macvlan-bridge-whereabouts-pod2                              |
-      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | whereabouts-excludeip  |
-      | ["spec"]["containers"][0]["name"] | whereabouts-excludeip                           |
+      | ["metadata"]["name"]                                       | macvlan-bridge-whereabouts-pod2 |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | whereabouts-excludeip           |
+      | ["spec"]["containers"][0]["name"]                          | whereabouts-excludeip           |
     Then the step should succeed
     And the pod named "macvlan-bridge-whereabouts-pod2" becomes ready
     # Check the created pod has correct ip 
@@ -1439,9 +1439,9 @@ Feature: Multus-CNI related scenarios
     # Create third pod absorbing above net-attach-def
     Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
     When I run oc create over "generic_multus_pod.yaml" replacing paths:
-      | ["metadata"]["name"] | macvlan-bridge-whereabouts-pod3                              |
-      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | whereabouts-excludeip  |
-      | ["spec"]["containers"][0]["name"] | whereabouts-excludeip                           |
+      | ["metadata"]["name"]                                       | macvlan-bridge-whereabouts-pod3 |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | whereabouts-excludeip           |
+      | ["spec"]["containers"][0]["name"]                          | whereabouts-excludeip           |
     Then the step should succeed
     And the pod named "macvlan-bridge-whereabouts-pod3" status becomes :pending within 60 seconds
     
