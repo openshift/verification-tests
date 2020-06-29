@@ -1006,5 +1006,5 @@ Given /^I enable multicast for the "(.+?)" namespace$/ do | project_name |
   unless @result[:success]
     raise "Failed to apply the default deny annotation to specified namespace."
   end 
-  logger.info "The multicast is enable in the project"
+  logger.info "The multicast is enable in the #{project_name} project"
 end
