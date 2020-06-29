@@ -358,3 +358,37 @@ Feature: SDN related networking scenarios
     | nmcli \| grep veth \| wc -l |
   And evaluation of `@result[:response].split("\n")[0]` is stored in the :no_of_veths clipboard
   Then the expression should be true> cb.no_of_veths==cb.no_of_unmanaged_veths
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-29299
+  @admin
+  @destructive
+  Scenario: Without allow the migration operation, migration cannot be executed
+    When I run the :annotate client command with:
+       | resource     | network.operator.openshift.io                       |
+       | resourcename | cluster                                             |
+       | keyval       | networkoperator.openshift.io/network-migration=true |
+    Then the step should fail
+    And the output should contain:
+      | networks.operator.openshift.io "cluster" is forbidden |
+    Given I switch to cluster admin pseudo user
+    And as admin I successfully merge patch resource "network.config.openshift.io/cluster" with:
+      | {"spec":{"networkType":"OVNKubernetes"}}  |
+    Given I register clean-up steps:
+    """
+    Given as admin I successfully merge patch resource "network.config.openshift.io/cluster" with:
+      | {"spec":{"networkType":"OpenShiftSDN"}}  |
+    """
+
+    # Check the network operator logs
+    Given I use the "openshift-network-operator" project
+    When I run the :get client command with:
+      | resource | pods                               |
+      | o        | jsonpath={.items[*].metadata.name} |
+    Then the step should succeed
+    And evaluation of `@result[:response]` is stored in the :network_operator_pod clipboard
+    When I run the :logs client command with:
+      | resource_name | <%= cb.network_operator_pod %> |
+      | since         | 30s                            |
+    And the output should contain:
+      | Not applying unsafe change: invalid configuration |
