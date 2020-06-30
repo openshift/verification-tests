@@ -128,6 +128,13 @@ check_tab:
   element:
     selector:
       <<: *tab
+check_terminal_tab:
+  params:
+    tab_name: Terminal
+    text: Terminal
+    link_url: terminal
+  action: check_tab
+  action: check_link_and_text
 click_environment_tab:
   params:
     tab_name: Environment
@@ -326,6 +333,14 @@ check_column_header_missing:
     selector:
       xpath: //button[contains(@class, 'pf-c-button') and text()='<column_name>']
     missing: true
+check_name_column_header:
+  params:
+    column_name: Name
+  action: check_column_header
+check_status_column_header:
+  params:
+    column_name: Name
+  action: check_column_header
 check_resource_name_and_icon:
   action:
     if_param: service_name
