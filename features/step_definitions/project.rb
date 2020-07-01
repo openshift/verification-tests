@@ -164,7 +164,8 @@ Given /^admin creates a project with a random schedulable node selector$/ do
     | project_name  | #{project_name}       |
     | node_selector | #{project_name}=label |
     })
-  step %Q/I select a random node's host/
+  step %Q/I store the ready and schedulable workers in the :nodes clipboard/
+  step %Q/I use the "<%= cb.nodes[0].name %>" node/
   step %Q/label "<%= project.name %>=label" is added to the "<%= node.name %>" node/
   step %Q/I switch to cluster admin pseudo user/
   step %Q/I use the "<%= project.name %>" project/
