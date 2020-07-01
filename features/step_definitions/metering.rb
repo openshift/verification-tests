@@ -14,7 +14,11 @@ Given /^metering service has been installed successfully(?: using (OLM|OperatorH
   step %/I setup a metering project/
   cb[:metering_resource_type] = "meteringconfig"
   cb[:metering_namespace] = project
-  meteringconfigs = BushSlicer::MeteringConfig.list(user: admin, project: project)
+  begin
+    meteringconfigs = BushSlicer::MeteringConfig.list(user: admin, project: project)
+  rescue
+    meteringconfigs = []
+  end
   if meteringconfigs.count == 0
     namespace = "openshift-metering"
     metering_name = "operator-metering"
