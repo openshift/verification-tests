@@ -364,7 +364,7 @@ check_matched_number_of_pvcs:
   action: check_matched_number_of_resource
 check_matched_number_of_storageclasses:
   params:
-    resource_type: storage classes
+    resource_type: storage class
     number_of_resource: <number_of_storageclasses>
   action: check_matched_number_of_resource  
 check_matched_number_of_resource:
