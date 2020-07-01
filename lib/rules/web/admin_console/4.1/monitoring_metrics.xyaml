@@ -1,0 +1,164 @@
+click_primary_menu_developer_mode:
+  element:
+    selector:
+      xpath: //a[text()='<menu_text>']
+    op: click
+goto_monitoring:
+  params:
+    menu_text: Monitoring 
+  action: click_primary_menu_developer_mode
+click_projects_dropdown_developer_mode:
+  element:
+    selector:
+      xpath: (//div[@class='co-namespace-bar']//button)[1]
+    op: click
+input_select_project_developer_mode:
+  element:
+    selector:
+      xpath: //div[@class='co-namespace-selector']//input[@placeholder='Select project...']
+    op: send_keys <project_name>
+    type: input
+click_project_link_developer_mode:
+  element:
+    selector:
+      xpath: //a[text()='<project_name>']
+    op: click
+    timeout: 20
+choose_project_developer_mode:
+  action: click_projects_dropdown_developer_mode
+  action: input_select_project_developer_mode
+  action: click_project_link_developer_mode
+check_tech_preview_badge:
+  element:
+    selector:
+      xpath: //span[text()='Tech Preview']
+
+perform_cutomer_query:
+  action: click_metrics_query_dropdown
+  action: click_custom_query_button
+  action: check_query_input_text_area
+  action: set_query_input_text_area
+
+click_metrics_query_dropdown:
+  element:
+    selector:
+      xpath: //div[@class='co-m-pane__body' ]//div[contains(@class, 'odc-metrics-query-input')]//button
+    op: click
+
+click_custom_query_button:
+  element:
+    selector:
+      xpath: //button[text()='Custom Query']
+    op: click
+set_query_input_text_area:
+  elements:
+  - selector: &query_input_text_area
+      xpath: //div[@class='co-m-pane__body']//textarea
+    op: send_keys <metrics>
+    type: textarea
+  - selector: 
+      <<: *query_input_text_area
+    op: send_keys <press_enter>
+    type: textarea 
+
+choose_metrics_query:
+  element:
+    selector:
+      xpath: //a[text()='<metrics_name>']
+    op: click
+check_query_input_text_area:
+  element:
+    selector: 
+      <<: *query_input_text_area
+click_promql_button:
+  element:
+    selector: &promql_button
+      xpath: //button[text()='<text>']
+    op: click
+click_hide_promql_button:
+  params:
+    text: Hide PromQL 
+  action: click_promql_button
+click_show_promql_button:
+  params:
+    text: Show PromQL
+  action: click_promql_button
+hide_promql_if_exists:
+  params:
+    text: Hide PromQL
+  action:
+    if_element:
+      selector:
+        <<: *promql_button
+    ref: click_hide_promql_button
+show_promql_if_exists:
+  params:
+    text: Show PromQL
+  action:
+    if_element:
+      selector:
+        <<: *promql_button
+    ref: click_show_promql_button    
+
+choose_zoom_value:
+  action: click_chart_zoom_dropdown
+  action: click_zoom_value_button
+click_chart_zoom_dropdown:
+  element:
+    selector:
+      xpath: //div[@class='odc-metrics-chart' ]//button[@data-test-id='dropdown-button']
+    op: click
+click_zoom_value_button:
+  element:
+    selector:
+      xpath: //div[@class='odc-metrics-chart' ]//button[text()='<zoom_value>']
+    op: click
+click_reset_zoom_button:
+  params:
+    zoom_value: Reset Zoom 
+  action: click_zoom_value_button
+check_zoom_value:
+  element:
+    selector:
+      xpath: //div[@class='odc-metrics-chart' ]//input[@value='<zoom_value>']
+
+check_metric_query_result:
+  action: check_metric_query_chart
+  action: check_metric_query_table_text
+check_metric_query_chart:
+  element:
+    selector:
+      xpath: //div[@class='query-browser__zoom']
+    timeout: 120
+check_metric_query_table_text:
+  element:
+    selector:
+      xpath: //table[@aria-label='query results table']//td[contains(text(),'<table_text>')]
+    timeout: 120
+
+perform_metric_query_drop_down_admin:
+  action: click_metrics_query_dropdown_admin
+  action: choose_metrics_query
+  action: submit_changes
+click_metrics_query_dropdown_admin:
+  element:
+    selector:
+      xpath: //button[@id='metrics-dropdown']
+    op: click
+perform_metric_query_textarea:
+  params:
+    metrics: <metrics_name>
+  action: click_clear_query_button
+  action: set_query_input_text_area_only
+  action: submit_changes
+set_query_input_text_area_only:
+  elements:
+  - selector: 
+      xpath: //div[@class='co-m-pane__body']//textarea
+    op: send_keys <metrics>
+    type: textarea
+click_clear_query_button:
+  element:
+    selector:
+      xpath: //button[@aria-label='Clear Query']
+    op: click

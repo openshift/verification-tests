@@ -14,6 +14,25 @@ create_resource_by_default_yaml:
         xpath: //a[text()='Edit YAML']
     ref: click_edit_yaml_link
   action: click_create_button
+check_yaml_create_button_missing:
+  elements:
+  - selector:
+      xpath: //button[@id='yaml-create']
+    missing: true
+check_kebab_items_disabled:
+  elements:
+  - selector:
+      xpath: //button[contains(@class, 'pf-c-dropdown__menu-item') and not(contains(@class, 'pf-m-disabled'))]
+    missing: true
+check_action_button_missing:
+  elements:
+  - selector:
+      xpath: //span[contains(text(), 'Actions')]
+    missing: true
+check_save_button_missing:
+  params:
+    button_text: Save
+  action: check_button_missing
 click_button_by_id:
   element:
     selector:
@@ -49,9 +68,27 @@ click_button:
     op: click
 click_button_text:
   element:
-    selector:
+    selector: &button_with_text
       xpath: //button[text()='<button_text>']
     op: click
+check_button_text:
+  element:
+    selector:
+      <<: *button_with_text
+check_button_missing:
+  element:
+    selector:
+      <<: *button_with_text
+    missing: true
+click_button_title:
+  element:
+    selector:
+      xpath: //button[@title='<button_title>']
+    op: click
+check_button_title:
+  element:
+    selector:
+      xpath: //button[@title='<button_title>']
 check_button_disabled:
   element:
     selector:
@@ -78,6 +115,15 @@ click_overview_tab:
   params:
     tab_name: Overview
   action: click_tab
+click_yaml_tab:
+  params:
+    tab_name: YAML
+  action: click_tab
+check_edit_yaml_enabled:
+  params:
+    button_text: Save
+  action: click_yaml_tab
+  action: check_button_enabled
 click_radio_input:
   element:
     selector:
@@ -87,6 +133,11 @@ click_on_resource_name:
   element:
     selector:
       xpath: //a[contains(@class,'co-resource-item__resource-name') and text()='<item>']
+    op: click
+choose_project_from_dropdown_list:
+  element:
+    selector:
+      xpath: //ul//a[@id='<project_name>-Project-link' and contains(@class,'dropdown__menu-item')]
     op: click
 clear_input_value:
   elements:
@@ -99,6 +150,12 @@ set_input_value:
     selector:
       xpath: //input[@id='<input_field_id>']
     op: send_keys <input_value>
+    type: input
+clear_input_class:
+  element:
+    selector:
+      xpath: //input[contains(@class, '<class_text>')]
+    op: clear
     type: input
 set_input_class:
   element:
@@ -124,11 +181,25 @@ set_label_input_simple:
       <<: *label_input_value
     op: send_keys <input_value>
     type: input
+set_placeholder_input:
+  elements:
+  - selector: &placeholder_input
+      xpath: //input[@placeholder='<name>']
+    op: clear
+    type: input
+  - selector:
+      <<: *placeholder_input
+    op: send_keys <input_value>
+    type: input
 check_table_text_data:
   element:
     selector:
       xpath: //td[text()='<text_data>']
-
+check_table_line_count:
+  action: wait_table_loaded
+  scripts:
+  - command: return document.querySelectorAll("tbody tr").length == <line_count>
+    expect_result: true
 # click and check the first item from resource list such as projects, pods, etc.
 click_first_item_from_resource_list_and_check_breadcrumb:
   action: wait_until_no_loading
@@ -140,11 +211,6 @@ click_first_item_from_resource_list_and_check_breadcrumb:
 click_first_item_from_sub_resource_list_and_check_breadcrumb:
   action: wait_until_no_loading
   action: click_first_sub_item_in_resource_detail_list
-  action: check_link_in_breadcrumb
-# click and check the first item from resources listed in grid cell, such as installed operator
-click_first_item_from_gridcell_list_and_check_breadcrumb:
-  action: wait_until_no_loading
-  action: click_first_item_in_grid_cell_list
   action: check_link_in_breadcrumb
 check_link_in_breadcrumb:
   element:
@@ -165,7 +231,7 @@ check_resources_title_on_page:
 check_resource_item:
   elements:
   - selector:
-      xpath: //span[contains(@class,'co-m-resource-icon') and @title='<resource_type>']/parent::span[@class='co-resource-item']//a[@class='co-resource-item__resource-name' and text()='<resource_name>' and @href='<resource_link>']
+      xpath: //span[contains(@class,'co-m-resource-icon') and @title='<resource_type>']/parent::span[contains(@class,'co-resource-item')]//a[@class='co-resource-item__resource-name' and text()='<resource_name>' and @href='<resource_link>']
 check_resource_name_and_icon:
   action:
     if_param: service_name
@@ -262,10 +328,9 @@ submit_changes:
       xpath: //button[@type='submit']
     op: click
 click_add_more_button:
-  element:
-    selector:
-      xpath: //*[contains(text(),'Add More')]
-    op: click
+  params:
+    button_text: Add More
+  action: click_button
 click_add_dropdown_button:
   element:
     selector:

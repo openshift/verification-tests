@@ -17,7 +17,7 @@ items:
           name: hello-pod
       spec:
           containers:
-          - image: docker.io/ocpqe/hello-pod
+          - image: quay.io/openshifttest/hello-pod@sha256:04b6af86b03c1836211be2589db870dba09b7811c197c47c07fbbe33c7f80ef7 
             name: hello-pod
             ports:
             - containerPort: 8080

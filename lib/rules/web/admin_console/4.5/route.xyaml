@@ -83,7 +83,7 @@ click_add_alternative_service:
 click_remove_alternative_service:
   params:
     button_text: Remove Alternate Service
-  action: click_button_text
+  action: click_button
 set_weight_for_main_service:
   params:
     label_text: Weight
@@ -193,12 +193,14 @@ check_inputs_for_alternative_services_missing:
     missing: true
 filter_and_show_accepted_routes:
   params:
-    status_text: Rejected
-  action: disable_status_filter
+    filter: Accepted
+  action: click_filter_dropdown
+  action: select_filter
 filter_and_show_rejected_routes:
   params:
-    status_text: Accepted
-  action: disable_status_filter
+    filter: Rejected
+  action: click_filter_dropdown
+  action: select_filter
 disable_status_filter:
   element:
     selector:
@@ -208,13 +210,11 @@ disable_status_filter:
 enable_status_filter:
   element:
     selector:
-      xpath: //a[@class='row-filter__box' and text()='<status_text>']
+      xpath: //a[contains(@class,'row-filter__box') and text()='<status_text>']
     op: click
     timeout: 20
 select_all_filters:
-  params:
-    button_text: Select all filters
-  action: click_button_text
+  action: clear_all_filters
 check_rejected_icon_and_text:
   params:
     icon_text: Rejected
@@ -223,6 +223,12 @@ check_icon_and_text:
   element:
     selector:
       xpath: //span[@class='co-icon-and-text']/span[text()='<icon_text>']
+check_extendedValidationFailed_in_conditions_table:
+  params:
+    status: Failed
+    reason: ExtendedValidationFailed
+    message: "failed to parse CA certificate"
+  action: check_conditions_table
 check_conditions_table:
   elements:
   - selector:

@@ -83,6 +83,9 @@ goto_deploy_image_page:
 #pod
 goto_one_pod_page:
   url: k8s/ns/<project_name>/pods/<resource_name>
+goto_one_pod_log_page:
+  url: k8s/ns/<project_name>/pods/<pod_name>/logs
+  action: wait_log_window_loaded
 
 goto_cluster_oauth_configuration_page:
   url: k8s/cluster/config.openshift.io~v1~OAuth/cluster
@@ -98,6 +101,7 @@ goto_route_creation_page:
 #catalog page
 goto_catalog_page:
   url: catalog/ns/<project_name>
+  action: wait_box_loaded
 goto_create_app_from_imagestream_page:
   url: catalog/source-to-image?imagestream=<is_name>&imagestream-ns=openshift&preselected-ns=<project_name>
 

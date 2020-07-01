@@ -1,25 +1,12 @@
 Feature: dockerbuild.feature
-
-  # @author wzheng@redhat.com
-  # @case_id OCP-11078
-  Scenario: Docker build with blank source repo
-    Given I have a project
-    When I run the :process client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/build/ruby22rhel7-template-docker-blankrepo.json |
-    Then the step should succeed
-    Given I save the output to file> blankrepo.json
-    When I run the :create client command with:
-      | f | blankrepo.json |
-    Then the step should fail
-    Then the output should match "spec.source.git.uri: [Rr]equired value"
-
   # @author wzheng@redhat.com
   # @case_id OCP-12115
   @smoke
   Scenario: Docker build with both SourceURI and context dir
     Given I have a project
+    Given I obtain test data file "build/ruby20rhel7-context-docker.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/build/ruby20rhel7-context-docker.json |
+      | f | ruby20rhel7-context-docker.json |
     Then the step should succeed
     When I run the :new_app client command with:
       | template | ruby-helloworld-sample |
@@ -33,7 +20,7 @@ Feature: dockerbuild.feature
     And the output should contain "ContextDir:"
 
   # @author wzheng@redhat.com
-  # @case_id OCP-11109
+  # @case_id OCP-30854
   Scenario: Docker build with dockerImage with specified tag
     Given I have a project
     When I run the :new_app client command with:
@@ -72,48 +59,6 @@ Feature: dockerbuild.feature
     And the output should contain "error"
 
 
-  # @author wewang@redhat.com
-  # @case_id OCP-9869
-  Scenario: Setting the nocache option in docker build strategy
-    Given I have a project
-    When I run the :new_app client command with:
-      | file | <%= BushSlicer::HOME %>/testdata/build/ruby22rhel7-template-docker.json |
-    Then the step should succeed
-    And the "ruby22-sample-build-1" build completed
-    When I run the :patch client command with:
-      | resource      | bc                              |
-      | resource_name | ruby22-sample-build             |
-      | p             | {"spec":{"strategy":{"dockerStrategy":{"noCache":true}}}} |
-    Then the step should succeed
-    When I run the :describe client command with:
-      | resource | buildconfig |
-      | name     | ruby22-sample-build |
-    Then the step should succeed
-    Then the output should match "No Cache:\s+true"
-    When I run the :start_build client command with:
-      | buildconfig | ruby22-sample-build |
-    Then the step should succeed
-    And the "ruby22-sample-build-2" build completed
-    When I run the :build_logs client command with:
-      | build_name | ruby22-sample-build-2 |
-    Then the step should succeed
-    Then the output should not contain:
-      | Using cache  |
-    When I run the :patch client command with:
-      | resource      | bc                              |
-      | resource_name | ruby22-sample-build             |
-      | p             | {"spec":{"strategy":{"dockerStrategy":{"noCache":false}}}} |
-    Then the step should succeed
-    When I run the :start_build client command with:
-      | buildconfig | ruby22-sample-build |
-    Then the step should succeed
-    And the "ruby22-sample-build-3" build completed
-    When I run the :build_logs client command with:
-      | build_name | ruby22-sample-build-3 |
-    Then the step should succeed
-    Then the output should contain:
-      | ---> Using cache  |
-
   # @author dyan@redhat.com
   # @case_id OCP-13083
   Scenario: Docker build using Dockerfile with 'FROM scratch'
@@ -130,22 +75,6 @@ Feature: dockerbuild.feature
       | FROM scratch |
     And the output should not match:
       | [Ee]rror |
-
-  # @author wzheng@redhat.com
-  # @case_id OCP-12762
-  Scenario: Docker build with invalid context dir
-    Given I have a project
-    When I run the :new_app client command with:
-      | file | <%= BushSlicer::HOME %>/testdata/build/ruby20rhel7-invalidcontext-docker.json |
-    Then the step should succeed
-    When the "ruby20-sample-build-1" build failed
-    And I get project build
-    And the output should contain:
-      | InvalidContextDirectory |
-    When I run the :describe client command with:
-      | resource | build |
-    Then the output should contain:
-      | The supplied context directory does not exist |
 
   # @author dyan@redhat.com
   # @case_id OCP-12855
@@ -188,68 +117,6 @@ Feature: dockerbuild.feature
     And the output should match:
       | name:\\s+ARG       |
       | value:\\s+NEWVALUE |
-
-  # @author wewang@redhat.com
-  # @case_id OCP-15461
-  Scenario: Allow nocache to be specified on docker build request
-    Given I have a project
-    When I run the :new_app client command with:
-      | file | https://raw.githubusercontent.com/openshift/origin/master/examples/sample-app/application-template-dockerbuild.json |
-    Then the step should succeed
-    And the "ruby-sample-build-1" build was created
-    And the "ruby-sample-build-1" build completed
-    When I run the :start_build client command with:
-      | buildconfig | ruby-sample-build |
-      | no-cache    | true              |
-    Then the step should succeed
-    And the "ruby-sample-build-2" build completed
-    When I run the :logs client command with:
-      | resource_name | build/ruby-sample-build-2 |
-    Then the output should not contain:
-      | Using cache |
-    When I run the :describe client command with:
-      | resource    | build               |
-      | name        | ruby-sample-build-2 |
-    Then the step should succeed
-    Then the output should match "No Cache:\s+true"
-    When I run the :start_build client command with:
-      | buildconfig | ruby-sample-build |
-      | no-cache    | false             |
-    Then the step should succeed
-    And the "ruby-sample-build-3" build completed
-    When I run the :logs client command with:
-      | resource_name | build/ruby-sample-build-3 |
-    Then the output should contain:
-      | Using cache                               |
-
-  # @author wewang@redhat.com
-  # @case_id OCP-15462
-  Scenario: Override nocache setting using --no-cache flag when docker build request
-    Given I have a project
-    When I run the :new_app client command with:
-      | file | https://raw.githubusercontent.com/openshift/origin/master/examples/sample-app/application-template-dockerbuild.json |
-    Then the step should succeed
-    And the "ruby-sample-build-1" build was created
-    And the "ruby-sample-build-1" build completed
-    When I run the :patch client command with:
-      | resource      | bc                                                        |
-      | resource_name | ruby-sample-build                                         |
-      | p             | {"spec":{"strategy":{"dockerStrategy":{"noCache":true}}}} |
-    Then the step should succeed
-    When I run the :describe client command with:
-      | resource | buildconfig                    |
-      | name     | ruby-sample-build              |
-    Then the step should succeed
-    Then the output should match "No Cache:\s+true"
-    When I run the :start_build client command with:
-      | buildconfig | ruby-sample-build           |
-      | no-cache    | false                       |
-    Then the step should succeed
-    And the "ruby-sample-build-2" build completed
-    When I run the :logs client command with:
-      | resource_name | build/ruby-sample-build-2 |
-    Then the output should contain:
-      | Using cache                               |
 
   # @author wzheng@redhat.com
   # @case_id OCP-18501

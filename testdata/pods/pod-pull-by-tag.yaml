@@ -7,6 +7,6 @@ metadata:
 spec:
   containers:
   - name: hello-pod
-    image: docker.io/ocpqe/hello-pod:latest
+    image: quay.io/openshifttest/hello-pod:latest
     ports:
     - containerPort: 80

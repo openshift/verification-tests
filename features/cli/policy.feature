@@ -53,24 +53,23 @@ Feature: change the policy of user/service account
   Scenario: Could get projects for new role which has permission to get projects
     Given an 8 characters random string of type :dns is stored into the :random clipboard
     And admin ensures "clusterrole-12430-<%= cb.random %>" cluster_role is deleted after scenario
-    When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/authorization/policy/clustergetproject.json" replacing paths:
+    Given I obtain test data file "authorization/policy/clustergetproject.json"
+    When I run oc create as admin over "clustergetproject.json" replacing paths:
       | ["metadata"]["name"] | clusterrole-12430-<%= cb.random %> |
     Then the step should succeed
     Given cluster role "clusterrole-12430-<%= cb.random %>" is added to the "second" user
 
     Given I have a project
     And I switch to the second user
-    When I run the :get client command with:
-      | resource | project |
-    Then the output should match:
-      | <%= project.name %>.*Active |
+    And the expression should be true> project(project.name).active?
 
   # @author xiaocwan@redhat.com
   # @case_id OCP-11442
   Scenario: [origin_platformexp_214] User can view, add , modify and delete specific role to/from new added project via admin role user
     Given I have a project
+    Given I obtain test data file "authorization/policy/projectviewservice.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/authorization/policy/projectviewservice.json |
+      | f | projectviewservice.json |
     Then the step should succeed
     And the output should contain:
       | created      |
@@ -83,7 +82,7 @@ Feature: change the policy of user/service account
       | get                                |
       | list                               |
       | watch                              |
-
+    Given I obtain test data file "authorization/policy/projectviewservice.json"
     When I delete matching lines from "projectviewservice.json":
       | "get",       |
     Then the step should succeed
@@ -115,44 +114,29 @@ Feature: change the policy of user/service account
       | list          |
       | watch         |
 
-  # @author wsun@redhat.com
-  # @case_id OCP-11273
-  @admin
-  Scenario: UserA could impersonate UserB
-    Given I have a project
-    Given cluster role "sudoer" is added to the "first" user
-    When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/daemon/daemonset.yaml |
-    Then the step should fail
-    When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/daemon/daemonset.yaml |
-      | as | system:admin    |
-    Then the step should succeed
-    When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/daemon/daemonset.yaml |
-      | as | <%= user(1, switch: false).name %>    |
-    Then the step should fail
-
   # @author chezhang@redhat.com
   # @case_id OCP-10211
   @admin
   Scenario: DaemonSet only support Always restartPolicy
     Given I have a project
     Given cluster role "sudoer" is added to the "first" user
+    Given I obtain test data file "daemon/daemonset-negtive-onfailure.yaml"
     When I run the :create client command with:
-      | f  | <%= BushSlicer::HOME %>/testdata/daemon/daemonset-negtive-onfailure.yaml |
+      | f  | daemonset-negtive-onfailure.yaml |
       | as | system:admin |
     Then the step should fail
     And the output should match:
       | Unsupported value: "OnFailure": supported values: "?Always"? |
+    Given I obtain test data file "daemon/daemonset-negtive-never.yaml"
     When I run the :create client command with:
-      | f  | <%= BushSlicer::HOME %>/testdata/daemon/daemonset-negtive-never.yaml |
+      | f  | daemonset-negtive-never.yaml |
       | as | system:admin |
     Then the step should fail
     And the output should match:
       | Unsupported value: "Never": supported values: "?Always"? |
+    Given I obtain test data file "daemon/daemonset.yaml"
     When I run the :create client command with:
-      | f  | <%= BushSlicer::HOME %>/testdata/daemon/daemonset.yaml |
+      | f  | daemonset.yaml |
       | as | system:admin |
     Then the step should succeed
 
@@ -191,8 +175,9 @@ Feature: change the policy of user/service account
     And the output should match:
       | Error.*storageclasses.* at the cluster scope |
 
+    Given I obtain test data file "storage/ebs/dynamic-provisioning/storageclass-io1.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/storage/ebs/dynamic-provisioning/storageclass-io1.yaml |
+      | f | storageclass-io1.yaml |
     Then the step should fail
     And the output should match:
       | Error.*storageclasses.* at the cluster scope |
@@ -206,7 +191,7 @@ Feature: change the policy of user/service account
     And admin ensures "sc-<%= project.name %>" storageclasses is deleted after scenario
     Given cluster role "storage-admin" is added to the "first" user
 
-    When I download a file from "<%= BushSlicer::HOME %>/testdata/storage/ebs/dynamic-provisioning/storageclass-io1.yaml"
+    When I obtain test data file "storage/ebs/dynamic-provisioning/storageclass-io1.yaml"
     Then I replace lines in "storageclass-io1.yaml":
       | foo | sc-<%= project.name %> |
     Then I run the :create client command with:
@@ -261,7 +246,7 @@ Feature: change the policy of user/service account
     And admin ensures "pv-<%= project.name %>" pv is deleted after scenario
     Given cluster role "storage-admin" is added to the "first" user
 
-    When I download a file from "<%= BushSlicer::HOME %>/testdata/storage/hostpath/pv-rwx-recycle.yaml"
+    When I obtain test data file "storage/hostpath/pv-rwx-recycle.yaml"
     Then I replace lines in "pv-rwx-recycle.yaml":
       | local         | pv-<%= project.name %> |
       | ReadWriteMany | ReadWriteOnce          |
@@ -317,7 +302,8 @@ Feature: change the policy of user/service account
     Given I have a project
     And evaluation of `project.name` is stored in the :project clipboard
 
-    When I create a dynamic pvc from "<%= BushSlicer::HOME %>/testdata/storage/misc/pvc.json" replacing paths:
+    Given I obtain test data file "storage/misc/pvc.json"
+    When I create a dynamic pvc from "pvc.json" replacing paths:
       | ["metadata"]["name"] | mypvc |
     And the step should succeed
 
@@ -376,24 +362,28 @@ Feature: change the policy of user/service account
   # @case_id OCP-9551
   Scenario: User can know if he can create podspec against the current scc rules via CLI
     Given I have a project
+    Given I obtain test data file "authorization/scc/tc538262/PodSecurityPolicySubjectReview_privileged_false.json"
     Given I run the :policy_scc_subject_review client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/authorization/scc/tc538262/PodSecurityPolicySubjectReview_privileged_false.json |
+      | f | PodSecurityPolicySubjectReview_privileged_false.json |
     Then the step should succeed
     And the output should match:
       | .*restricted |
+    Given I obtain test data file "authorization/scc/tc538262/PodSecurityPolicySubjectReview_privileged_false.json"
     Given I run the :policy_scc_subject_review client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/authorization/scc/tc538262/PodSecurityPolicySubjectReview_privileged_false.json |
+      | f | PodSecurityPolicySubjectReview_privileged_false.json |
       | n | <%= project.name %>                                                                                                    |
     Then the step should succeed
     And the output should match:
       | .*restricted |
+    Given I obtain test data file "authorization/scc/tc538262/PodSecurityPolicySubjectReview_privileged_true.json"
     Given I run the :policy_scc_subject_review client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/authorization/scc/tc538262/PodSecurityPolicySubjectReview_privileged_true.json |
+      | f | PodSecurityPolicySubjectReview_privileged_true.json |
     Then the step should succeed
     And the output should match:
       | <none> |
+    Given I obtain test data file "authorization/scc/tc538262/PodSecurityPolicySubjectReview_privileged_true.json"
     Given I run the :policy_scc_subject_review client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/authorization/scc/tc538262/PodSecurityPolicySubjectReview_privileged_true.json |
+      | f | PodSecurityPolicySubjectReview_privileged_true.json |
       | n | <%= project.name %>                                                                                                   |
     Then the step should succeed
     And the output should match:
@@ -404,51 +394,59 @@ Feature: change the policy of user/service account
   @admin
   Scenario: User can know which serviceaccount and SA groups can create the podspec against the current sccs by CLI
     Given I have a project
+    Given I obtain test data file "authorization/scc/tc538264/PodSecurityPolicyReview.json"
     Given I run the :policy_scc_review client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/authorization/scc/tc538264/PodSecurityPolicyReview.json |
+      | f | PodSecurityPolicyReview.json |
     Then the step should succeed
     And the output should not match:
       | .*default.*restricted |
+    Given I obtain test data file "authorization/scc/tc538264/PodSecurityPolicyReview.json"
     Given I run the :policy_scc_review client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/authorization/scc/tc538264/PodSecurityPolicyReview.json |
+      | f | PodSecurityPolicyReview.json |
       | n | <%= project.name %>                                                                            |
     Then the step should succeed
     And the output should not match:
       | .*default.*restricted |
+    Given I obtain test data file "authorization/scc/tc538264/PodSecurityPolicyReview.json"
     Given I run the :policy_scc_review client command with:
       | serviceaccount | default                                                                                        |
-      | f              | <%= BushSlicer::HOME %>/testdata/authorization/scc/tc538264/PodSecurityPolicyReview.json |
+      | f              | PodSecurityPolicyReview.json |
     Then the step should succeed
     And the output should not match:
       | .*default.*restricted |
+    Given I obtain test data file "authorization/scc/tc538264/PodSecurityPolicyReview.json"
     Given I run the :policy_scc_review client command with:
       | serviceaccount | default                                                                                        |
-      | f              | <%= BushSlicer::HOME %>/testdata/authorization/scc/tc538264/PodSecurityPolicyReview.json |
+      | f              | PodSecurityPolicyReview.json |
       | n              | <%= project.name %>                                                                            |
     Then the step should succeed
     And the output should not match:
       | .*default.*restricted |
     Given SCC "restricted" is added to the "default" service account
+    Given I obtain test data file "authorization/scc/tc538264/PodSecurityPolicyReview.json"
     Given I run the :policy_scc_review client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/authorization/scc/tc538264/PodSecurityPolicyReview.json |
+      | f | PodSecurityPolicyReview.json |
     Then the step should succeed
     And the output should match:
       | .*default.*restricted |
+    Given I obtain test data file "authorization/scc/tc538264/PodSecurityPolicyReview.json"
     Given I run the :policy_scc_review client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/authorization/scc/tc538264/PodSecurityPolicyReview.json |
+      | f | PodSecurityPolicyReview.json |
       | n | <%= project.name %>                                                                            |
     Then the step should succeed
     And the output should match:
       | .*default.*restricted |
+    Given I obtain test data file "authorization/scc/tc538264/PodSecurityPolicyReview.json"
     Given I run the :policy_scc_review client command with:
       | serviceaccount | default                                                                                        |
-      | f              | <%= BushSlicer::HOME %>/testdata/authorization/scc/tc538264/PodSecurityPolicyReview.json |
+      | f              | PodSecurityPolicyReview.json |
     Then the step should succeed
     And the output should match:
       | .*default.*restricted |
+    Given I obtain test data file "authorization/scc/tc538264/PodSecurityPolicyReview.json"
     Given I run the :policy_scc_review client command with:
       | serviceaccount | default                                                                                        |
-      | f              | <%= BushSlicer::HOME %>/testdata/authorization/scc/tc538264/PodSecurityPolicyReview.json |
+      | f              | PodSecurityPolicyReview.json |
       | n              | <%= project.name %>                                                                            |
     Then the step should succeed
     And the output should match:
@@ -458,30 +456,34 @@ Feature: change the policy of user/service account
   # @case_id OCP-9553
   Scenario: User can know whether the PodSpec he's describing will actually be allowed by the current SCC rules via CLI
     Given I have a project
+    Given I obtain test data file "authorization/scc/tc538263/PodSecurityPolicySubjectReview.json"
     Given I run the :policy_scc_subject_review client command with:
       | user | <%= user.name %>                                                                                      |
-      | f    | <%= BushSlicer::HOME %>/testdata/authorization/scc/tc538263/PodSecurityPolicySubjectReview.json |
+      | f    | PodSecurityPolicySubjectReview.json |
     Then the step should succeed
     And the output should not match:
       | .*restricted |
+    Given I obtain test data file "authorization/scc/tc538263/PodSecurityPolicySubjectReview.json"
     Given I run the :policy_scc_subject_review client command with:
       | user | <%= user.name %>                                                                                      |
-      | f    | <%= BushSlicer::HOME %>/testdata/authorization/scc/tc538263/PodSecurityPolicySubjectReview.json |
+      | f    | PodSecurityPolicySubjectReview.json |
       | n    | <%= project.name %>                                                                                   |
     Then the step should succeed
     And the output should not match:
       | .*restricted |
+    Given I obtain test data file "authorization/scc/tc538263/PodSecurityPolicySubjectReview.json"
     Given I run the :policy_scc_subject_review client command with:
       | user  | <%= user.name %>                                                                                      |
       | group | system:authenticated                                                                                  |
-      | f     | <%= BushSlicer::HOME %>/testdata/authorization/scc/tc538263/PodSecurityPolicySubjectReview.json |
+      | f     | PodSecurityPolicySubjectReview.json |
     Then the step should succeed
     And the output should match:
       | .*restricted |
+    Given I obtain test data file "authorization/scc/tc538263/PodSecurityPolicySubjectReview.json"
     Given I run the :policy_scc_subject_review client command with:
       | user  | <%= user.name %>                                                                                      |
       | group | system:authenticated                                                                                  |
-      | f     | <%= BushSlicer::HOME %>/testdata/authorization/scc/tc538263/PodSecurityPolicySubjectReview.json |
+      | f     | PodSecurityPolicySubjectReview.json |
       | n     | <%= project.name %>                                                                                   |
     Then the step should succeed
     And the output should match:

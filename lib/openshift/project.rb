@@ -31,7 +31,7 @@ module BushSlicer
     alias exists? visible?
 
     def empty?(user: nil)
-      res = default_user(user).cli_exec(:status, v: true, n: name)
+      res = default_user(user).cli_exec(:status, suggest: true, n: name)
 
       res[:success] = res[:response] =~ /ou have no.+services.+deployment.+configs/
       return res
@@ -113,7 +113,7 @@ module BushSlicer
       unless cached && @is_admin_hash&.has_key?(user)
         @is_admin_hash ||= {}
         if env.version_ge("3.3", user: user)
-          res = user.cli_exec(:policy_can_i,
+          res = user.cli_exec(:auth_can_i,
                               verb: "delete",
                               resource: "project",
                               n: self.name,

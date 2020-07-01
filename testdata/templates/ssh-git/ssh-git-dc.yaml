@@ -1,0 +1,27 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: git-server
+spec:
+  replicas: 1
+  selector:
+    name: git-server
+  strategy:
+    type: Rolling
+  template:
+    metadata:
+      labels:
+        name: git-server
+      name: git-server
+    spec:
+      containers:
+      - image: aosqe/ssh-git-server-openshift
+        imagePullPolicy: IfNotPresent 
+        name: git-server
+        resources: {}
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+  triggers:
+  - type: ConfigChange

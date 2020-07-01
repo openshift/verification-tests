@@ -6,8 +6,9 @@ Feature: Pod related networking scenarios
   Scenario: Pod cannot claim UDP port 4789 on the node as part of a port mapping
     Given I have a project
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
+    Given I obtain test data file "networking/pod_with_udp_port_4789.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/pod_with_udp_port_4789.json |
+      | f | pod_with_udp_port_4789.json |
     Then the step should succeed
     Given the pod named "hello-pod" status becomes :pending
     And I wait up to 30 seconds for the steps to pass:
@@ -17,32 +18,14 @@ Feature: Pod related networking scenarios
     Then the output should contain "address already in use"
     """
 
-  # @author bmeng@redhat.com
-  # @case_id OCP-9802
-  @admin
-  Scenario: The user created docker container in openshift cluster should have outside network access
-    Given I select a random node's host
-    And I run commands on the host:
-      | docker run -td --name=test-container bmeng/hello-openshift |
-    Then the step should succeed
-    And I register clean-up steps:
-    """
-    I run commands on the host:
-      | docker rm -f test-container |
-    the step should succeed
-    """
-    When I run commands on the host:
-      | docker exec test-container curl -sIL www.redhat.com |
-    Then the step should succeed
-    And the output should contain "HTTP/1.1 200 OK"
-
   # @author yadu@redhat.com
   # @case_id OCP-10031
   @smoke
   Scenario: Container could reach the dns server
     Given I have a project
+    Given I obtain test data file "pods/tc528410/tc_528410_pod.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/pods/tc528410/tc_528410_pod.json |
+      | f | tc_528410_pod.json |
     And the pod named "hello-pod" becomes ready
     And I run the steps 20 times:
     """
@@ -78,76 +61,22 @@ Feature: Pod related networking scenarios
       | <%=cb.pod_ip %> |
     """
 
-  # @author yadu@redhat.com
-  # @case_id OCP-16729
-  @admin
-  @destructive
-  Scenario: KUBE-HOSTPORTS chain rules won't be flushing when there is no pod with hostPort
-    Given I have a project
-    And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
-    Given I store the schedulable nodes in the :nodes clipboard
-    Given I select a random node's host
-    # Add a fake rule
-    Given I register clean-up steps:
-    """
-    When I run commands on the host:
-      | iptables -t nat -D KUBE-HOSTPORTS -p tcp --dport 110 -j ACCEPT |
-    """
-    When I run commands on the host:
-      | iptables -t nat -A KUBE-HOSTPORTS -p tcp --dport 110 -j ACCEPT |
-    Then the step should succeed
-    When I run commands on the host:
-      | iptables-save \| grep HOSTPORT |
-    Then the step should succeed
-    And the output should contain:
-      | -A PREROUTING -m comment --comment "kube hostport portals" -m addrtype --dst-type LOCAL -j KUBE-HOSTPORTS |
-      | -A OUTPUT -m comment --comment "kube hostport portals" -m addrtype --dst-type LOCAL -j KUBE-HOSTPORTS     |
-      | -A KUBE-HOSTPORTS -p tcp -m tcp --dport 110 -j ACCEPT |
-    #Create a normal pod without hostport
-    Given I switch to the first user
-    And I use the "<%= project.name %>" project
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/scheduler/pod_with_nodename.json" replacing paths:
-      | ["spec"]["nodeName"] | <%= node.name %> |
-    Then the step should succeed
-    And a pod becomes ready with labels:
-      | name=nodename-pod |
-    Given 30 seconds have passed
-    When I run commands on the host:
-      | iptables-save \| grep HOSTPORT |
-    Then the step should succeed
-    #The rule won't be flushing when there is no pod with hostport
-    And the output should contain:
-      | -A PREROUTING -m comment --comment "kube hostport portals" -m addrtype --dst-type LOCAL -j KUBE-HOSTPORTS |
-      | -A OUTPUT -m comment --comment "kube hostport portals" -m addrtype --dst-type LOCAL -j KUBE-HOSTPORTS     |
-      | -A KUBE-HOSTPORTS -p tcp -m tcp --dport 110 -j ACCEPT |
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/nodeport_pod.json" replacing paths:
-      | ["spec"]["template"]["spec"]["nodeName"] | <%= node.name %> |
-    Then the step should succeed
-    And a pod becomes ready with labels:
-      | name=rc-test |
-    When I run commands on the host:
-      | iptables-save \| grep HOSTPORT |
-    Then the step should succeed
-    And the output should contain:
-      | hostport 6061" -m tcp --dport 6061 |
-    # The fake rule disappeared after creating a pod with hostport
-    And the output should not contain:
-      | -A KUBE-HOSTPORTS -p tcp --dport 110 -j ACCEPT |
-
   # @author bmeng@redhat.com
   # @case_id OCP-10817
   @admin
   Scenario: Check QoS after creating pod
     Given I have a project
     # setup iperf server to receive the traffic
+    Given I obtain test data file "networking/egress-ingress/qos/iperf-server.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/egress-ingress/qos/iperf-server.json |
+      | f | iperf-server.json |
     Then the step should succeed
     And the pod named "iperf-server" becomes ready
     And evaluation of `pod.ip` is stored in the :iperf_server clipboard
 
     # setup iperf client to send traffic to server with qos configured
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/egress-ingress/qos/iperf-rc.json" replacing paths:
+    Given I obtain test data file "networking/egress-ingress/qos/iperf-rc.json"
+    When I run oc create over "iperf-rc.json" replacing paths:
       | ["spec"]["template"]["metadata"]["annotations"]["kubernetes.io/ingress-bandwidth"] | 5M |
       | ["spec"]["template"]["metadata"]["annotations"]["kubernetes.io/egress-bandwidth"] | 2M |
     Then the step should succeed
@@ -213,8 +142,9 @@ Feature: Pod related networking scenarios
     Then the output should contain "Connection refused"
     
     #hostnetwork-pod will be a hostnetwork pod
+    Given I obtain test data file "networking/hostnetwork-pod.json"
     When I run the :create admin command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/hostnetwork-pod.json |
+      | f | hostnetwork-pod.json |
       | n | <%= project.name %>                                                                                |
     Then the pod named "hostnetwork-pod" becomes ready
     #Pods should not access the MCS port 22623 or 22624 on the master
@@ -319,8 +249,9 @@ Feature: Pod related networking scenarios
     """
     Given I have a project
     #Makng sure test pods can't be scheduled on any of worker node
+    Given I obtain test data file "networking/pod-for-ping.json"
     And I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/pod-for-ping.json |
+      | f | pod-for-ping.json |
     Then the step should succeed
     And the pod named "hello-pod" status becomes :pending within 60 seconds
     #Getting ovnkube pod name from any of worker node
@@ -352,7 +283,8 @@ Feature: Pod related networking scenarios
     Given I have a project
     #privileges are needed to support network-pod as hostnetwork pod creation later
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/pod_with_udp_port_4789_nodename.json" replacing paths:
+    Given I obtain test data file "networking/pod_with_udp_port_4789_nodename.json"
+    When I run oc create over "pod_with_udp_port_4789_nodename.json" replacing paths:
       | ["items"][0]["spec"]["template"]["spec"]["nodeName"] | <%= cb.nodes[0].name %> |
     Then the step should succeed
     Given a pod becomes ready with labels:
@@ -370,8 +302,9 @@ Feature: Pod related networking scenarios
     #Getting nodeport value
     And evalation of `service(cb.host_pod1.name).node_port(port: 8080)` is stored in the :nodeport clipboard
     #Creating a simple client pod to generate traffic from it towards the exposed node IP address
+    Given I obtain test data file "networking/aosqe-pod-for-ping.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/aosqe-pod-for-ping.json |
+      | f | aosqe-pod-for-ping.json |
     Then the step should succeed
     Given a pod becomes ready with labels:
       | name=hello-pod |
@@ -388,7 +321,8 @@ Feature: Pod related networking scenarios
     And I terminate last background process
     
     #Creating network test pod to levearage conntrack tool
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/net_admin_cap_pod.yaml" replacing paths:
+    Given I obtain test data file "networking/net_admin_cap_pod.yaml"
+    When I run oc create over "net_admin_cap_pod.yaml" replacing paths:
       | ["spec"]["nodeName"] | <%= cb.nodes[0].name %> |
     Then the step should succeed
     Given a pod becomes ready with labels:
@@ -430,7 +364,8 @@ Feature: Pod related networking scenarios
     And the Internal IP of node "<%= cb.workers[0].name %>" is stored in the :worker0_ip clipboard
     And the Internal IP of node "<%= cb.workers[1].name %>" is stored in the :worker1_ip clipboard
     And I have a project
-    When I run oc create as admin over "<%= BushSlicer::HOME %>/testdata/networking/pod-for-ping-with-hostport.yml" replacing paths:
+    Given I obtain test data file "networking/pod-for-ping-with-hostport.yml"
+    When I run oc create as admin over "pod-for-ping-with-hostport.yml" replacing paths:
       | ["metadata"]["namespace"] |  <%= project.name %>       |
       | ["spec"]["nodeName"]      |  <%= cb.workers[0].name %> |
     Then the step should succeed
@@ -480,3 +415,40 @@ Feature: Pod related networking scenarios
     | ip route |
   Then the output should contain:
     | <%= cb.pod_cidr %> dev <%= cb.tunnel_inf_name %> |
+    
+  # @author anusaxen@redhat.com
+  # @case_id OCP-26373
+  @admin
+  @destructive
+  Scenario: Pod readiness check for OVN
+    Given the env is using "OVNKubernetes" networkType
+    And OVN is functional on the cluster
+    Given I switch to cluster admin pseudo user
+    And I use the "openshift-ovn-kubernetes" project
+    And a pod is present with labels:
+      | app=ovnkube-node |
+    #Removing CNI config file from container to check readiness probe functionality
+    When I run the :exec client command with:
+      | pod              | <%= pod.name %>                       |
+      | c                | ovnkube-node                          |
+      | oc_opts_end      |                                       |
+      | exec_command     | rm                                    |
+      | exec_command_arg | /etc/cni/net.d/10-ovn-kubernetes.conf |
+    Then the step should succeed
+    #Deleting ovnkube-pod will force CNO to rewrite the conf file and bring cluster back to normal after scenario
+    And admin ensure "<%= pod.name %>" pod is deleted from the "openshift-ovn-kubernetes" project after scenario
+    #Now make sure readiness probe checking above file will cause one of the two ovnkube-node containers to go down and container ready status change to false
+    Given I wait up to 30 seconds for the steps to pass:
+    """
+    When I run the :get admin command with:
+      | resource      | pod                                                                     |
+      | resource_name | <%= pod.name %>                                                         |
+      | o             | jsonpath='{.status.containerStatuses[?(@.name=="ovnkube-node")].ready}' |
+    Then the step should succeed
+    And the output should contain "false"
+    """
+    #Making sure the cluster is in good state before exiting from this scenario
+    And I wait up to 60 seconds for the steps to pass:
+    """
+    OVN is functional on the cluster
+    """

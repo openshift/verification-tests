@@ -4,11 +4,13 @@ Feature: Dynamic provisioning
   @admin
   Scenario Outline: dynamic provisioning
     Given I have a project
-    When I create a dynamic pvc from "<%= BushSlicer::HOME %>/testdata/storage/misc/pvc.json" replacing paths:
+    Given I obtain test data file "storage/misc/pvc.json"
+    When I create a dynamic pvc from "pvc.json" replacing paths:
       | ["metadata"]["name"] | mypvc |
     Then the step should succeed
 
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/misc/pod.yaml" replacing paths:
+    Given I obtain test data file "storage/misc/pod.yaml"
+    When I run oc create over "pod.yaml" replacing paths:
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc                 |
       | ["metadata"]["name"]                                         | mypod                 |
       | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt/<cloud_provider> |
@@ -41,47 +43,3 @@ Feature: Dynamic provisioning
       | ebs            | # @case_id OCP-9685
       | gce            | # @case_id OCP-12665
       | azure          | # @case_id OCP-13787
-
-
-  # @author lxia@redhat.com
-  # @case_id OCP-10790
-  @admin
-  Scenario: Check only one pv created for one pvc for dynamic provisioner
-    Given I have a project
-    And I run the steps 30 times:
-    """
-    When I create a dynamic pvc from "<%= BushSlicer::HOME %>/testdata/storage/misc/pvc.json" replacing paths:
-      | ["metadata"]["name"] | mypvc#{cb.i} |
-    Then the step should succeed
-    """
-    Given 30 PVCs become :bound within 600 seconds with labels:
-      | name=dynamic-pvc |
-    When I run the :get admin command with:
-      | resource | pv |
-    Then the output should contain 30 times:
-      | <%= project.name %> |
-
-  # @author jhou@redhat.com
-  @admin
-  @destructive
-  Scenario Outline: No volume and PV provisioned when provisioner is disabled
-    Given I have a project
-    And master config is merged with the following hash:
-    """
-    volumeConfig:
-      dynamicProvisioningEnabled: False
-    """
-    And the master service is restarted on all master nodes
-    When I create a dynamic pvc from "<%= BushSlicer::HOME %>/testdata/storage/misc/pvc.json" replacing paths:
-      | ["metadata"]["name"] | mypvc |
-    Then the step should succeed
-    When 30 seconds have passed
-    Then the "mypvc" PVC status is :pending
-
-    Examples:
-      | provisioner |
-      | aws-ebs     | # @case_id OCP-10360
-      | gce-pd      | # @case_id OCP-10361
-      | cinder      | # @case_id OCP-10362
-      | azure-disk  | # @case_id OCP-13903
-

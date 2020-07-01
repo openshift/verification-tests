@@ -9,8 +9,9 @@ Feature: secrets related scenarios
       | name        | my-secret  |
       | from_file   | /etc/hosts |
     Then the step should succeed
+    Given I obtain test data file "deployment/tc510612/hook-inheritance-secret-volume.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/deployment/tc510612/hook-inheritance-secret-volume.json |
+      | f | hook-inheritance-secret-volume.json |
     Then the step should succeed
   ## mount should be correct to the pod, no-matter if the pod is completed or not, check the case checkpoint
     And I wait for the steps to pass:
@@ -25,51 +26,24 @@ Feature: secrets related scenarios
       | secretName: my-secret |
     """
 
-  # @author xiuwang@redhat.com
-  # @case_id OCP-12290
-  Scenario: Create new secrets for ssh authentication
-    Given I have a project
-    When I download a file from "<%= BushSlicer::HOME %>/testdata/cases/508971/id_rsa"
-    When I run the :secrets_new_sshauth client command with:
-      |secret_name    |testsecret |
-      |ssh_privatekey |id_rsa     |
-    Then the step should succeed
-    When I run the :get client command with:
-      |resource      |secrets    |
-      |resource_name |testsecret |
-      |o             |yaml       |
-    Then the step should succeed
-    And the output should contain:
-      |ssh-privatekey:|
-    When I download a file from "<%= BushSlicer::HOME %>/testdata/cases/508970/ca.crt"
-    When I run the :secrets_new_sshauth client command with:
-      |secret_name    |testsecret2 |
-      |ssh_privatekey |id_rsa      |
-      |cafile         |ca.crt      |
-    Then the step should succeed
-    When I run the :get client command with:
-      |resource      |secrets     |
-      |resource_name |testsecret2 |
-      |o             |yaml        |
-    Then the step should succeed
-    And the output should contain:
-      |ssh-privatekey:|
-      |ca.crt:        |
-
   # @author qwang@redhat.com
   # @case_id OCP-12281
   @smoke
   Scenario: Pods do not have access to each other's secrets in the same namespace
     Given I have a project
+    Given I obtain test data file "secrets/tc483168/first-secret.json"
     When I run the :create client command with:
-      | filename | <%= BushSlicer::HOME %>/testdata/secrets/tc483168/first-secret.json |
+      | filename | first-secret.json |
+    Given I obtain test data file "secrets/tc483168/second-secret.json"
     And I run the :create client command with:
-      | filename | <%= BushSlicer::HOME %>/testdata/secrets/tc483168/second-secret.json |
+      | filename | second-secret.json |
     Then the step should succeed
+    Given I obtain test data file "secrets/tc483168/first-secret-pod.yaml"
     When I run the :create client command with:
-      | filename | <%= BushSlicer::HOME %>/testdata/secrets/tc483168/first-secret-pod.yaml |
+      | filename | first-secret-pod.yaml |
+    Given I obtain test data file "secrets/tc483168/second-secret-pod.yaml"
     And I run the :create client command with:
-      | filename | <%= BushSlicer::HOME %>/testdata/secrets/tc483168/second-secret-pod.yaml |
+      | filename | second-secret-pod.yaml |
     Then the step should succeed
     Given the pod named "first-secret-pod" status becomes :running
     When I run the :exec client command with:
@@ -103,18 +77,22 @@ Feature: secrets related scenarios
   Scenario: Pods do not have access to each other's secrets with the same secret name in different namespaces
     Given I have a project
     Given evaluation of `project.name` is stored in the :project0 clipboard
+    Given I obtain test data file "secrets/tc483169/secret1.json"
     When I run the :create client command with:
-      | filename  | <%= BushSlicer::HOME %>/testdata/secrets/tc483169/secret1.json |
+      | filename  | secret1.json |
+    Given I obtain test data file "secrets/tc483169/secret-pod-1.yaml"
     And I run the :create client command with:
-      | filename  | <%= BushSlicer::HOME %>/testdata/secrets/tc483169/secret-pod-1.yaml |
+      | filename  | secret-pod-1.yaml |
     Then the step should succeed
     And the pod named "secret-pod-1" status becomes :running
     When I create a new project
     Given evaluation of `project.name` is stored in the :project1 clipboard
+    Given I obtain test data file "secrets/tc483169/secret2.json"
     And I run the :create client command with:
-      | filename  | <%= BushSlicer::HOME %>/testdata/secrets/tc483169/secret2.json |
+      | filename  | secret2.json |
+    Given I obtain test data file "secrets/tc483169/secret-pod-2.yaml"
     And I run the :create client command with:
-      | filename  | <%= BushSlicer::HOME %>/testdata/secrets/tc483169/secret-pod-2.yaml |
+      | filename  | secret-pod-2.yaml |
     Then the step should succeed
     And the pod named "secret-pod-2" status becomes :running
     When I run the :exec client command with:
@@ -133,79 +111,16 @@ Feature: secrets related scenarios
     Then the output should contain:
       | first-username |
 
-  # @author cryan@redhat.com
-  # @case_id OCP-10690
-  Scenario: Add an arbitrary list of secrets to custom builds
-    Given I have a project
-    Given an 8 characters random string of type :dns is stored into the :pass1 clipboard
-    Given an 8 characters random string of type :dns is stored into the :pass2 clipboard
-    Given project role "system:build-strategy-custom" is added to the "first" user
-    Then the step should succeed
-    When I run the :secrets client command with:
-      | action   | new-basicauth   |
-      | name     | secret1         |
-      | username | testuser1       |
-      | password | <%= cb.pass1 %> |
-    Then the step should succeed
-    When I run the :secrets client command with:
-      | action   | new-basicauth   |
-      | name     | secret2         |
-      | username | testuser2       |
-      | password | <%= cb.pass2 %> |
-    Then the step should succeed
-    When I run the :new_app client command with:
-      | file | <%= BushSlicer::HOME %>/testdata/templates/tc507415/application-template-custombuild.json |
-    Then the step should succeed
-    Given the pod named "ruby-sample-build-1-build" status becomes :running
-    When I run the :get client command with:
-      | resource      | buildconfig       |
-      | resource_name | ruby-sample-build |
-      | o             | json              |
-    Then the step should succeed
-    And the output should contain:
-      | secret1 |
-      | secret2 |
-    When I run the :exec admin command with:
-      | pod              | ruby-sample-build-1-build |
-      | n                | <%= project.name %>       |
-      | exec_command     | ls                        |
-      | exec_command_arg | /tmp                      |
-    Then the output should contain:
-      | secret1 |
-      | secret2 |
-    When I run the :exec admin command with:
-      | pod              | ruby-sample-build-1-build |
-      | n                | <%= project.name %>       |
-      | exec_command     | cat                       |
-      | exec_command_arg | /tmp/secret1/username     |
-    Then the output should contain "testuser1"
-    When I run the :exec admin command with:
-      | pod              | ruby-sample-build-1-build |
-      | n                | <%= project.name %>       |
-      | exec_command     | cat                       |
-      | exec_command_arg | /tmp/secret1/password     |
-    Then the output should contain "<%= cb.pass1 %>"
-    When I run the :exec admin command with:
-      | pod              | ruby-sample-build-1-build |
-      | n                | <%= project.name %>       |
-      | exec_command     | cat                       |
-      | exec_command_arg | /tmp/secret2/username     |
-    Then the output should contain "testuser2"
-    When I run the :exec admin command with:
-      | pod              | ruby-sample-build-1-build |
-      | n                | <%= project.name %>       |
-      | exec_command     | cat                       |
-      | exec_command_arg | /tmp/secret2/password     |
-    Then the output should contain "<%= cb.pass2 %>"
-
   # @author yantan@redhat.com
   Scenario Outline: Insert secret to builder container via oc new-build - source/docker build
     Given I have a project
+    Given I obtain test data file "secrets/tc519256/testsecret1.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/secrets/tc519256/testsecret1.json |
+      | f | testsecret1.json |
     Then the step should succeed
+    Given I obtain test data file "secrets/tc519256/testsecret2.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/secrets/tc519256/testsecret2.json |
+      | f | testsecret2.json |
     Then the step should succeed
     When I run the :new_build client command with:
       | docker_image | centos/ruby-22-centos7:latest                |
@@ -214,8 +129,9 @@ Feature: secrets related scenarios
       | build_secret | <build_secret> |
       | build_secret | testsecret2    |
     Then the step should succeed
+    Given I obtain test data file "deployment/tc519261/test.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/deployment/tc519261/test.json |
+      | f | test.json |
     Then the step should succeed
     Given the "build-secret-1" build was created
     And the "build-secret-1" build completed
@@ -235,133 +151,16 @@ Feature: secrets related scenarios
 
     Examples:
       | type   | build_secret         | path      | command | expression               |
-      | source | testsecret1:/tmp     | /tmp      | cat     | @result[:response] == "" | # @case_id OCP-12061
       | docker | testsecret1:mysecret1| mysecret1 | ls      | true                     | # @case_id OCP-11947
-
-  # @author xiuwang@redhat.com
-  # @case_id OCP-10851
-  Scenario: Build from private repo with/without secret of token --persistent gitserver
-    Given I have a project
-    When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/image/gitserver/gitserver-persistent.yaml |
-    Then the step should succeed
-    And the "git" PVC becomes :bound within 300 seconds
-
-    When I run the :run client command with:
-      | name  | gitserver                  |
-      | image | openshift/origin-gitserver |
-      | env   | GIT_HOME=/var/lib/git      |
-    Then the step should succeed
-    When I run the :policy_add_role_to_user client command with:
-      | role          | edit    |
-      | serviceaccount| git     |
-      | serviceaccount| default |
-    Then the step should succeed
-    When I run the :set_volume client command with:
-      | resource    | dc/gitserver |
-      | type        | emptyDir     |
-      | action      | --add        |
-      | mount-path  | /var/lib/git |
-      | name        | 528228pv     |
-    Then the step should succeed
-    And evaluation of `route("git", service("git")).dns(by: user)` is stored in the :git_route clipboard
-    When I run the :set_env client command with:
-      | resource | dc/git                |
-      | e        | BUILD_STRATEGY=source |
-    Then the step should succeed
-
-
-    #Create app when push code to initial repo
-    Given a pod becomes ready with labels:
-      | deploymentconfig=git |
-      | deployment=git-2     |
-    And a pod becomes ready with labels:
-      | run=gitserver|
-      | deployment=gitserver-2|
-    And I wait for the steps to pass:
-    """
-    When I execute on the pod:
-      |bash|
-      |-c  |
-      |sed -i '1,2d' /var/lib/gitconfig/.gitconfig|
-    Then the step should succeed
-    """
-    When I execute on the pod:
-      |bash|
-      |-c  |
-      |git config --global credential.http://<%= cb.git_route%>.helper '!f() { echo "username=<%= @user.name %>"; echo "password=<%= user.cached_tokens.first %>"; }; f'|
-    Then the step should succeed
-    When I execute on the pod:
-      |bash|
-      |-c  |
-      |cd /tmp/ ;git clone https://github.com/openshift/ruby-hello-world.git|
-    Then the step should succeed
-    When I execute on the pod:
-      |bash|
-      |-c  |
-      |cd /tmp/ruby-hello-world/;git remote add openshift http://<%= cb.git_route%>/ruby-hello-world.git|
-    Then the step should succeed
-    When I execute on the pod:
-      |bash|
-      |-c  |
-      |cd /tmp/ruby-hello-world/;git push openshift master|
-    Then the step should succeed
-    And the output should contain:
-      |buildconfig "ruby-hello-world" created|
-    When I run the :get client command with:
-      | resource | buildconfig |
-      | resource_name | ruby-hello-world |
-      | o | json |
-    Then the output should contain "sourceStrategy"
-    Then I run the :delete client command with:
-      | object_type       | builds             |
-      | object_name_or_id | ruby-hello-world-1 |
-    Then the step should succeed
-
-    #Disable anonymous cloning
-    When I run the :set_env client command with:
-      | resource | dc/git                    |
-      | e        | ALLOW_ANON_GIT_PULL=false |
-    Then the step should succeed
-    When I run the :create_secret client command with:
-      | name         | mysecret                                 |
-      | secret_type  | generic                                  |
-      | from_literal | password=<%= user.cached_tokens.first %> |
-    Then the step should succeed
-    When I run the :patch client command with:
-      | resource      | buildconfig      |
-      | resource_name | ruby-hello-world |
-      | p | {"spec": {"source": {"sourceSecret": {"name": "mysecret"}}}} |
-    Then the step should succeed
-
-    #Trigger second build automaticlly with secret
-    And a pod becomes ready with labels:
-      | deploymentconfig=git |
-      | deployment=git-3     |
-    And a pod becomes ready with labels:
-      | run=gitserver|
-      | deployment=gitserver-2|
-    And I wait for the steps to pass:
-    """
-    When I execute on the pod:
-      |bash|
-      |-c  |
-      |cd /tmp/ruby-hello-world/;touch testfile;git add .;git commit -amp;git push openshift master|
-    """
-    Then the step should succeed
-    And the output should contain:
-      |started on build configuration 'ruby-hello-world'|
-    Given I get project builds
-    Then the output should contain "ruby-hello-world-2"
-    Given the "ruby-hello-world-2" build completes
 
   # @author chezhang@redhat.com
   # @case_id OCP-10814
   @smoke
   Scenario: Consume the same Secrets as environment variables in multiple pods
     Given I have a project
+    Given I obtain test data file "secrets/secret.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/secrets/secret.yaml |
+      | f | secret.yaml |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | secret   |
@@ -369,8 +168,9 @@ Feature: secrets related scenarios
     Then the output should match:
       | data-1:\\s+9\\s+bytes  |
       | data-2:\\s+11\\s+bytes |
+    Given I obtain test data file "job/job-secret-env.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/job/job-secret-env.yaml |
+      | f | job-secret-env.yaml |
     Then the step should succeed
     And I wait for the steps to pass:
     """
@@ -408,8 +208,9 @@ Feature: secrets related scenarios
   @smoke
   Scenario: Using Secrets as Environment Variables
     Given I have a project
+    Given I obtain test data file "secrets/secret.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/secrets/secret.yaml |
+      | f | secret.yaml |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | secret   |
@@ -417,8 +218,9 @@ Feature: secrets related scenarios
     Then the output should match:
       | data-1:\\s+9\\s+bytes  |
       | data-2:\\s+11\\s+bytes |
+    Given I obtain test data file "secrets/secret-env-pod.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/secrets/secret-env-pod.yaml |
+      | f | secret-env-pod.yaml |
     Then the step should succeed
     And the pod named "secret-env-pod" status becomes :succeeded
     When I run the :logs client command with:
@@ -427,165 +229,18 @@ Feature: secrets related scenarios
     And the output should contain:
       | MY_SECRET_DATA=value-1 |
 
-  # @author xiuwang@redhat.com
-  # @case_id OCP-12204
-  Scenario: Build from private repos with secret of multiple auth methods
-    Given I have a project
-    When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/image/gitserver/gitserver-persistent.yaml |
-    Then the step should succeed
-    And the "git" PVC becomes :bound within 300 seconds
-
-    When I run the :run client command with:
-      | name  | gitserver                  |
-      | image | openshift/origin-gitserver |
-      | env   | GIT_HOME=/var/lib/git      |
-    Then the step should succeed
-    When I run the :policy_add_role_to_user client command with:
-      | role          | edit    |
-      | serviceaccount| git     |
-      | serviceaccount| default |
-    Then the step should succeed
-    When I run the :set_volume client command with:
-      | resource    | dc/gitserver |
-      | type        | emptyDir     |
-      | action      | --add        |
-      | mount-path  | /var/lib/git |
-      | name        | 508969pv     |
-    Then the step should succeed
-    And evaluation of `route("git", service("git")).dns(by: user)` is stored in the :git_route clipboard
-    When I run the :set_env client command with:
-      | resource | dc/git                |
-      | e        | REQUIRE_SERVER_AUTH=  |
-      | e        | REQUIRE_GIT_AUTH=openshift:redhat |
-      | e        | BUILD_STRATEGY=source |
-    Then the step should succeed
-
-    #Create app when push code to initial repo
-    Given a pod becomes ready with labels:
-      | deploymentconfig=git |
-      | deployment=git-2     |
-    And a pod becomes ready with labels:
-      | run=gitserver|
-      | deployment=gitserver-2|
-    And I wait for the steps to pass:
-    """
-    When I execute on the pod:
-      |bash|
-      |-c  |
-      |sed -i '1,2d' /var/lib/gitconfig/.gitconfig|
-    Then the step should succeed
-    """
-    When I execute on the pod:
-      |bash|
-      |-c  |
-      |git config --global credential.http://<%= cb.git_route%>.helper '!f() { echo "username=openshift"; echo "password=redhat"; }; f'|
-    Then the step should succeed
-    When I execute on the pod:
-      |bash|
-      |-c  |
-      |cd /tmp/ ;git clone https://github.com/openshift/ruby-hello-world.git|
-    Then the step should succeed
-    When I execute on the pod:
-      |bash|
-      |-c  |
-      |cd /tmp/ruby-hello-world/;git remote add openshift http://<%= cb.git_route%>/ruby-hello-world.git|
-    Then the step should succeed
-    When I execute on the pod:
-      |bash|
-      |-c  |
-      |cd /tmp/ruby-hello-world/;git push openshift master|
-    Then the step should succeed
-    And the output should contain:
-      |buildconfig "ruby-hello-world" created|
-    When I run the :get client command with:
-      | resource | buildconfig |
-      | resource_name | ruby-hello-world |
-      | o | json |
-    Then the output should contain "sourceStrategy"
-    Then I run the :delete client command with:
-      | object_type       | builds             |
-      | object_name_or_id | ruby-hello-world-1 |
-    Then the step should succeed
-
-    #Disable anonymous cloning
-    When I run the :set_env client command with:
-      | resource | dc/git                    |
-      | e        | ALLOW_ANON_GIT_PULL=false |
-    Then the step should succeed
-    When I download a file from "<%= BushSlicer::HOME %>/testdata/cases/508964/.gitconfig"
-    When I run the :secrets_new_basicauth client command with:
-      |secret_name|mysecret  |
-      |username   |openshift |
-      |password   |redhat    |
-      |gitconfig  |.gitconfig|
-    Then the step should succeed
-    When I run the :patch client command with:
-      | resource      | buildconfig      |
-      | resource_name | ruby-hello-world |
-      | p | {"spec": {"source": {"sourceSecret": {"name": "mysecret"}}}} |
-    Then the step should succeed
-
-    #Trigger second build automaticlly with secret which contain multiple pairs secrets
-    And a pod becomes ready with labels:
-      | deploymentconfig=git |
-      | deployment=git-3     |
-    And a pod becomes ready with labels:
-      | run=gitserver|
-      | deployment=gitserver-2|
-    And I wait for the steps to pass:
-    """
-    When I execute on the pod:
-      |bash|
-      |-c  |
-      |cd /tmp/ruby-hello-world/;touch testfile;git add .;git commit -amp;git push openshift master|
-    """
-    Then the step should succeed
-    And the output should contain:
-      |started on build configuration 'ruby-hello-world'|
-    Given I get project builds
-    Then the output should contain "ruby-hello-world-2"
-    Given the "ruby-hello-world-2" build completes
-
-    #Trigger third build automaticlly with secret which only contain a pair correct secret
-    When I run the :secrets_new_basicauth client command with:
-      |secret_name|mysecret1 |
-      |username   |invaild   |
-      |password   |invaild   |
-      |gitconfig  |.gitconfig|
-    Then the step should succeed
-    When I run the :patch client command with:
-      | resource      | buildconfig      |
-      | resource_name | ruby-hello-world |
-      | p | {"spec": {"source": {"sourceSecret": {"name": "mysecret1"}}}} |
-    Then the step should succeed
-    And a pod becomes ready with labels:
-      | run=gitserver|
-      | deployment=gitserver-2|
-    And I wait for the steps to pass:
-    """
-    When I execute on the pod:
-      |bash|
-      |-c  |
-      |cd /tmp/ruby-hello-world/;touch testfile1;git add .;git commit -amp;git push openshift master|
-    """
-    Then the step should succeed
-    And the output should contain:
-      |started on build configuration 'ruby-hello-world'|
-    Given I get project builds
-    Then the output should contain "ruby-hello-world-3"
-    Given the "ruby-hello-world-3" build completes
-
   # @author qwang@redhat.com
   # @case_id OCP-11311
   @smoke
   Scenario: Secret volume should update when secret is updated
     Given I have a project
+    Given I obtain test data file "secrets/tc483169/secret1.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/secrets/tc483169/secret1.json |
+      | f | secret1.json |
     Then the step should succeed
+    Given I obtain test data file "secrets/tc483169/secret-pod-1.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/secrets/tc483169/secret-pod-1.yaml |
+      | f | secret-pod-1.yaml |
     Then the step should succeed
     Given the pod named "secret-pod-1" status becomes :running
     When I run the :exec client command with:
@@ -614,11 +269,13 @@ Feature: secrets related scenarios
   # @case_id OCP-10899
   Scenario: Mapping specified secret volume should update when secret is updated
     Given I have a project
+    Given I obtain test data file "secrets/tc483169/secret1.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/secrets/tc483169/secret1.json |
+      | f | secret1.json |
     Then the step should succeed
+    Given I obtain test data file "secrets/mapping-secret-volume-pod.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/secrets/mapping-secret-volume-pod.yaml |
+      | f | mapping-secret-volume-pod.yaml |
     Then the step should succeed
     Given the pod named "mapping-secret-volume-pod" status becomes :running
     When I execute on the pod:
@@ -644,8 +301,9 @@ Feature: secrets related scenarios
   # @case_id OCP-10569
   Scenario: Allow specifying secret data using strings and images
     Given I have a project
+    Given I obtain test data file "secrets/secret-datastring-image.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/secrets/secret-datastring-image.json |
+      | f | secret-datastring-image.json |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | secret                  |
@@ -654,8 +312,9 @@ Feature: secrets related scenarios
       | image:\\s+7059\\s+bytes |
       | password:\\s+5\\s+bytes |
       | username:\\s+5\\s+bytes |
+    Given I obtain test data file "secrets/pod-secret-datastring-image-volume.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/secrets/pod-secret-datastring-image-volume.yaml |
+      | f | pod-secret-datastring-image-volume.yaml |
     Then the step should succeed
     Given the pod named "pod-secret-datastring-image-volume" status becomes :running
     When I execute on the pod:

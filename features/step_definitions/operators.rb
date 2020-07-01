@@ -26,12 +26,44 @@ Given /^the status of condition "([^"]*)" for "([^"]*)" operator is: (.+)$/ do |
   end
 end
 
+Given /^the marketplace works well$/ do
+  ensure_admin_tagged
+  if env.version_lt("4.5", user: user)
+    step %Q/I run the :get admin command with:/, table(%{
+      | resource       | packagemanifest |
+      | all_namespaces | true            |
+    })
+    step %Q/the output should contain:/, table(%{
+      | Community Operators  |
+      | Red Hat Operators    |
+      | Certified Operators  |
+      | Test Operators       |
+      | CSC Operators        |
+    })
+  else
+    step %Q/I run the :get client command with:/, table(%{
+      | resource       | packagemanifest |
+      | all_namespaces | true            |
+    })
+    step %Q/the output should contain:/, table(%{
+      | Community Operators  |
+      | Red Hat Operators    |
+      | Certified Operators  |
+      | Test Operators       |
+    })
+  end
+
+end
+
 Given /^the status of condition Upgradeable for marketplace operator as expected$/ do
   ensure_admin_tagged
-  actual_status = cluster_operator('marketplace').condition(type: 'Upgradeable', cached: false)['status']
+  if env.version_eq("4.1", user: user)
+    actual_status = 'True'
+  else
+    actual_status = cluster_operator('marketplace').condition(type: 'Upgradeable', cached: false)['status']
+  end
   status = 'True'
-  cluster_version = cluster_version('version').channel.split('-')[1]
-  if cluster_version == "4.4"
+  if env.version_ge("4.4", user: user)
     csc_items = Array.new
     os_items = Array.new
     if custom_resource_definition('catalogsourceconfigs.operators.coreos.com').exists?
@@ -49,6 +81,8 @@ Given /^the status of condition Upgradeable for marketplace operator as expected
 
     if !csc_items.empty? or (os_items.count > 4)
       status = 'False'
+      @result = admin.cli_exec(:get, resource: "clusterversion", resource_name: "version", o: "jsonpath={.status.desired.version}")
+      cluster_version = @result[:response]
       logger.info("=== #{cluster_version} cluster. And customize OperatorSource or csc objects exist, change the expected status to False")
     end
   end
@@ -57,7 +91,7 @@ Given /^the status of condition Upgradeable for marketplace operator as expected
   end
 end
 
-Given /^the "([^"]*)" operator version matchs the current cluster version$/ do | operator |
+Given /^the "([^"]*)" operator version matches the current cluster version$/ do | operator |
   ensure_admin_tagged
   @result = admin.cli_exec(:get, resource: "clusteroperators", resource_name: operator, o: "jsonpath={.status.versions[?(.name == \"operator\")].version}")
   operator_version = @result[:response]
@@ -85,4 +119,4 @@ end
 Given /^the major.minor version of the cluster is stored in the#{OPT_SYM} clipboard$/ do | cb_name |
   cb_name = 'operator_channel_name' unless cb_name
   cb[cb_name] = cluster_version('version').channel.split('-')[1]
-end 
+end

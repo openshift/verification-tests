@@ -2,17 +2,17 @@
 :hooks:
   :click: |-
     # this will execute in the Web4Cucumber instance context
-    proc { |block|
+    proc { |element, *op_call|
       begin
         logger.trace "Clicking web element via hook.."
-        block.call
+        element.send *op_call
       rescue Selenium::WebDriver::Error::ElementClickInterceptedError => e
         if e.message.include? "not clickable"
           logger.warn e.inspect
           logger.info "Scrolling element off view"
           scroll_by = browser.element(css: "#bottom-sticker").height
           browser.execute_script("window.scrollBy(0,#{scroll_by})")
-          block.call
+          element.send *op_call
         else
           logger.debug "unhandled UnknownError"
           raise

@@ -29,7 +29,7 @@ elif [ "$(os_type)" == "rhel7" ] || [ "$(os_type)" == "centos7" ]; then
     additional_deps=install_rvm_if_ruby_is_outdated
     need_bundler_from_gem=1
 elif [ "$(os_type)" == "rhel8" ] || [ "$(os_type)" == "centos8" ]; then
-    cmd="yum install -y --setopt=skip_missing_names_on_install=False"
+    cmd="dnf install -y --setopt=skip_missing_names_on_install=False"
     file="deps.yum.RHEL8"
     additional_deps=install_rvm_if_ruby_is_outdated
     # need_bundler_from_gem=1

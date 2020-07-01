@@ -1,4 +1,3 @@
----
 :global_options:
   # these are options as seen by `oc options`
   :as: --as=<value>
@@ -65,6 +64,10 @@
     :stdin: --stdin=<value>
     :t: -t
     :tty: --tty=<value>
+:auth_can_i:
+  :cmd: oc auth can-i <verb> <resource>
+  :options:
+    :q: -q
 :autoscale:
   :cmd: oc autoscale <name>
   :options:
@@ -173,6 +176,21 @@
     :from_file: --from-file=<value>
     :from_literal: --from-literal=<value>
     :name: <value>
+:create_cronjob:
+  :cmd: oc create cronjob <name> <global_options> <options>
+  :options:
+    :allow_missing_template_keys: --allow-missing-template-keys=<value>
+    :dry_run: --dry-run=<value>
+    :exec_command: <value>
+    :exec_command_arg: <value>
+    :image: --image=<value>
+    :oc_opts_end: --
+    :output: --output <value>
+    :restart: --restart=<value>
+    :save_config: --save-config=<value>
+    :schedule: --schedule=<value>
+    :template: --template=<value>
+    :validate: --validate=<value>
 :create_deployment:
   :cmd: oc create deployment <name>
   :options:
@@ -180,6 +198,28 @@
     :dry_run: --dry-run=<value>
     :generator: --generator=<value>
     :image: --image=<value>
+    :output: --output <value>
+    :save_config: --save-config=<value>
+    :template: --template=<value>
+    :validate: --validate=<value>
+:create_deploymentconfig:
+  :cmd: oc create deploymentconfig <name>
+  :options:
+    :allow_missing_template_keys: --allow-missing-template-keys=<value>
+    :dry_run: --dry-run=<value>
+    :image: --image=<value>
+    :output: --output <value>
+    :template: --template=<value>
+:create_job:
+  :cmd: oc create job <name> <global_options> <options>
+  :options:
+    :allow_missing_template_keys: --allow-missing-template-keys=<value>
+    :exec_command: <value>
+    :exec_command_arg: <value>
+    :dry_run: --dry-run=<value>
+    :from: --from=<value>
+    :image: --image=<value>
+    :oc_opts_end: --
     :output: --output <value>
     :save_config: --save-config=<value>
     :template: --template=<value>
@@ -292,6 +332,7 @@
      :exec_command: <value>
      :exec_command_arg: <value>
      :f: -f <value>
+     :image: --image=<value>
      :keep_annotations: --keep-annotations
      :keep_init_containers: --keep-init-containers=<value>
      :keep_liveness: --keep-liveness
@@ -391,6 +432,11 @@
     :template: --template=<value>
     :type: --type=<value>
     :wildcardpolicy: --wildcard-policy=<value>
+:exec_extension_oc_cmd:
+  :cmd: oc
+  :options:
+    :arg: <value>
+    :cmd_name: <value>
 :extract:
   :cmd: oc extract
   :options:
@@ -533,12 +579,24 @@
     :source_spec: <value>
     :strategy: --strategy=<value>
     :template: --template=<value>
+:new_app_as_dc:
+  :cmd: oc new-app
+  :options:
+    :app_repo: <value>
+    :code: --code=<value>
+    :docker_image: --docker-image=<value>
+    :image_stream: --image-stream=<value>
+    :labels: --labels=<value>
+    :name: --name=<value>
+    :source_secret: --source-secret=<value>
+    :source_spec: <value>
+    :strategy: --strategy=<value>
 :new_build:
   :cmd: oc new-build
   :options:
     :allow_missing_imagestream_tags: --allow-missing-imagestream-tags=<value>
     :app_repo: <value>
-    :binary: --binary <value>
+    :binary: --binary=<value>
     :build_arg: --build-arg=<value>
     :build_config_map: --build-config-map=<value>
     :build_env: --build-env=<value>
@@ -1150,11 +1208,21 @@
     :type: --type=<value>
     :whitelist: --whitelist=<value>
 :oadm_inspect:
-  :cmd: oc adm inspect <resource_type> <resource_name>
+  :cmd: oc adm inspect
   :options:
     :A: --all-namespaces=<value>
     :all_namespaces: --all-namespaces=<value>
     :dest_dir: --dest-dir=<value>
+    :resource_name: <value>
+    :resource_type: <value>
+:oadm_must_gather:
+  :cmd: oc adm must-gather
+  :options:
+    :dest_dir: --dest-dir=<value>
+    :image: --image=<value>
+    :image_stream: --image-stream=<value>
+    :node_name: --node-name=<value>
+    :source_dir: --source-dir=<value>
 :oadm_new_project:
   :cmd: oc adm new-project <project_name>
   #:expected:
@@ -1168,7 +1236,7 @@
   :cmd: oc adm node-logs <options>
   :options:
     :path: --path=<value>
-    :role: --role=<value>    
+    :role: --role=<value>
 :oadm_pod_network_join_projects:
   :cmd: oc adm pod-network join-projects
   :options:
@@ -1269,6 +1337,12 @@
     :prune_over_size_limit: --prune-over-size-limit=<value>
     :prune_registry: --prune-registry=<value>
     :registry_url: --registry-url=<value>
+:oadm_release_info:
+  :cmd: oc adm release info
+  :options:
+    :image_for: --image-for=<value>
+    :image_name: <value>
+    :registry_config: --registry-config=<value>
 :oadm_router:
   :cmd: oc adm router <name>
   :options:
@@ -1327,3 +1401,15 @@
     :openshift_version: !ruby/regexp '/^openshift v(.+)$/'
     :kubernetes_version: !ruby/regexp '/kubernetes v(.+)$/'
     :etcd_version: !ruby/regexp '/etcd (.+)$/'
+:oadm_top_node:
+  :cmd: oc adm top node
+:registry_info:
+  :cmd: oc registry info
+  :options:
+    :internal: --internal=<value>
+    :quiet: --quiet=<value>
+:registry_login:
+  :cmd: oc registry login
+  :options:
+    :skip-check: --skip-check=<value>
+    :z: -z default

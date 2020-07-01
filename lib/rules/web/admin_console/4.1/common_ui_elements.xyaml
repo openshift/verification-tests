@@ -39,9 +39,13 @@ click_button:
     op: click
 click_button_text:
   element:
-    selector:
+    selector: &button_with_text
       xpath: //button[text()='<button_text>']
     op: click
+check_button_text:
+  element:
+    selector:
+      <<: *button_with_text
 check_button_disabled:
   element:
     selector:
@@ -73,6 +77,56 @@ set_input_value:
   element:
     selector:
       xpath: //input[@id='<input_field_id>']
+    op: send_keys <input_value>
+    type: input
+set_label_input:
+  elements:
+  - selector: &label_input
+      xpath: (//label[contains(text(),'<label_text>')]/following::input[1] | //label[contains(text(),'<label_text>')]//input[1])[1]
+    op: clear
+  - selector:
+      <<: *label_input
+    op: send_keys <input_value>
+set_label_input_simple:
+  elements:
+  - selector: &label_input_value
+      xpath: //label[text()='<label_text>']/..//input
+    op: clear
+    type: input
+  - selector:
+      <<: *label_input_value
+    op: send_keys <input_value>
+    type: input
+set_placeholder_input:
+  elements:
+  - selector: &placeholder_input
+      xpath: //input[@placeholder='<name>']
+    op: clear
+    type: input
+  - selector:
+      <<: *placeholder_input
+    op: send_keys <input_value>
+    type: input
+set_label_textarea:
+  elements:
+  - selector: &label_textarea
+      xpath: //label[text()='<label_text>']/..//textarea
+    op: clear
+    type: textarea
+  - selector:
+      <<: *label_textarea
+    op: send_keys <input_value>
+    type: textarea
+clear_input_class:
+  element:
+    selector:
+      xpath: //input[contains(@class, '<class_text>')]
+    op: clear
+    type: input
+set_input_class:
+  element:
+    selector:
+      xpath: //input[contains(@class, '<class_text>')]
     op: send_keys <input_value>
     type: input
 check_row_filter_on_page:
@@ -184,10 +238,9 @@ submit_changes:
       xpath: //button[@type='submit']
     op: click
 click_add_more_button:
-  element:
-    selector:
-      xpath: //*[contains(text(),'Add More')]
-    op: click
+  params:
+    button_text: Add More
+  action: click_button
 click_add_dropdown_button:
   element:
     selector:
@@ -212,6 +265,11 @@ click_link_with_text:
   element:
     selector:
       <<: *text_link
+    op: click
+click_link_with_text_only:
+  element:
+    selector:
+      xpath: //a[text()='<text>']
     op: click
 click_secondary_menu:
   elements:

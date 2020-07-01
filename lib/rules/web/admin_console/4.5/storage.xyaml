@@ -115,7 +115,7 @@ attach_storage_to_container:
 check_volume_on_workload_page:
   elements:
   - selector: &volume_info
-      xpath: //h2[contains(., Volumes)]/following-sibling::div//tr[td[@data-test-id='name' and contains(., '<volume_name>')] and td[@data-test-id='path' and contains(., '<mount_path>')] and td[contains(., '<pvc_name>')] and td[contains(., '<container_name>')]]
+      xpath: //h2[contains(., Volumes)]/following-sibling::div//tr[td[@data-label='Name' and contains(., '<volume_name>')] and td[@data-label='Mount Path' and contains(., '<mount_path>')] and td[contains(., '<pvc_name>')] and td[contains(., '<container_name>')]]
 check_volume_missing_on_workload_page:
   element:
     selector: *volume_info
@@ -123,7 +123,7 @@ check_volume_missing_on_workload_page:
 remove_volume_from_container:
   elements:
   - selector:
-      xpath: //h2[contains(., Volumes)]/following-sibling::div//tr[td[@data-test-id='name' and contains(., '<volume_name>')] and td[contains(., '<container_name>')]]//button[@data-test-id='kebab-button']
+      xpath: //h2[contains(., Volumes)]/following-sibling::div//tr[td[@data-label='Name' and contains(., '<volume_name>')] and td[contains(., '<container_name>')]]//button[@data-test-id='kebab-button']
     op: click
   - selector:
       xpath: //button[@data-test-action='Remove Volume']

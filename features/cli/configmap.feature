@@ -5,8 +5,9 @@ Feature: configMap
   @smoke
   Scenario: Consume ConfigMap in environment variables
     Given I have a project
+    Given I obtain test data file "configmap/configmap.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/configmap/configmap.yaml |
+      | f | configmap.yaml |
       | n | <%= project.name %>                                                                   |
     Then the step should succeed
     When I run the :get client command with:
@@ -20,8 +21,9 @@ Feature: configMap
     Then the output should match:
       | special.how  |
       | special.type |
+    Given I obtain test data file "configmap/pod-configmap-env.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/configmap/pod-configmap-env.yaml |
+      | f | pod-configmap-env.yaml |
     Then the step should succeed
     And the pod named "dapi-test-pod" status becomes :succeeded
     When I run the :logs client command with:
@@ -36,8 +38,9 @@ Feature: configMap
   @smoke
   Scenario: Consume ConfigMap via volume plugin
     Given I have a project
+    Given I obtain test data file "configmap/configmap.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/configmap/configmap.yaml |
+      | f | configmap.yaml |
       | n | <%= project.name %>                                                                   |
     Then the step should succeed
     When I run the :get client command with:
@@ -51,8 +54,9 @@ Feature: configMap
     Then the output should match:
       | special.how  |
       | special.type |
+    Given I obtain test data file "configmap/pod-configmap-volume1.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/configmap/pod-configmap-volume1.yaml |
+      | f | pod-configmap-volume1.yaml |
     Then the step should succeed
     And the pod named "dapi-test-pod-1" status becomes :succeeded
     When I run the :logs client command with:
@@ -60,8 +64,9 @@ Feature: configMap
     Then the step should succeed
     And the output should contain:
       | very |
+    Given I obtain test data file "configmap/pod-configmap-volume2.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/configmap/pod-configmap-volume2.yaml |
+      | f | pod-configmap-volume2.yaml |
     Then the step should succeed
     And the pod named "dapi-test-pod-2" status becomes :succeeded
     When I run the :logs client command with:
@@ -74,8 +79,9 @@ Feature: configMap
   # @case_id OCP-11572
   Scenario: Perform CRUD operations against a ConfigMap resource
     Given I have a project
+    Given I obtain test data file "configmap/configmap-example.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/configmap/configmap-example.yaml |
+      | f | configmap-example.yaml |
       | n | <%= project.name %>                                                                   |
     Then the step should succeed
     When I run the :get client command with:
@@ -114,8 +120,9 @@ Feature: configMap
   @smoke
   Scenario: Set command-line arguments with ConfigMap
     Given I have a project
+    Given I obtain test data file "configmap/configmap.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/configmap/configmap.yaml |
+      | f | configmap.yaml |
       | n | <%= project.name %>                                                                   |
     Then the step should succeed
     When I run the :get client command with:
@@ -129,8 +136,9 @@ Feature: configMap
     Then the output should match:
       | special.how  |
       | special.type |
+    Given I obtain test data file "configmap/pod-configmap-command.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/configmap/pod-configmap-command.yaml |
+      | f | pod-configmap-command.yaml |
     Then the step should succeed
     And the pod named "dapi-test-pod" status becomes :succeeded
     When I run the :logs client command with:
@@ -158,8 +166,9 @@ Feature: configMap
     Then the output should match:
       | Name.*example-redis-config |
       | redis-config               |
+    Given I obtain test data file "configmap/pod-configmap-redis.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/configmap/pod-configmap-redis.yaml |
+      | f | pod-configmap-redis.yaml |
     Then the step should succeed
     Given the pod named "redis" becomes ready
     When I execute on the pod:
@@ -344,11 +353,13 @@ Feature: configMap
   # @case_id OCP-16721
   Scenario: Changes to ConfigMap should be auto-updated into container	
     Given I have a project
+    Given I obtain test data file "configmap/configmap.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/configmap/configmap.json |
+      | f | configmap.json |
     Then the step should succeed
+    Given I obtain test data file "configmap/pod-configmap-volume3.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/configmap/pod-configmap-volume3.yaml |
+      | f | pod-configmap-volume3.yaml |
     Then the step should succeed
     Given the pod named "dapi-test-pod-1" status becomes :running
     When I execute on the pod:

@@ -1,0 +1,19 @@
+click_machine_tab:
+  params:
+    tab_name: Machines
+  action: click_tab
+check_desired_count_on_machineset_page:
+  params:
+    key: Desired Count
+    value: <machine_count>
+  action: check_resource_details_key_and_value
+edit_machine_count:
+  params:
+    item: Edit Count
+  action: click_one_dropdown_action
+  action: update_resource_count
+delete_machineset_from_action:
+  params:
+    item: Delete Machine Set
+  action: click_one_dropdown_action
+  action: submit_changes

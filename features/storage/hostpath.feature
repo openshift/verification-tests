@@ -5,7 +5,8 @@ Feature: Storage of Hostpath plugin testing
   @admin
   Scenario Outline: Create hostpath pv with access mode and reclaim policy
     Given I have a project
-    When admin creates a PV from "<%= BushSlicer::HOME %>/testdata/storage/hostpath/local.yaml" where:
+    Given I obtain test data file "storage/hostpath/local.yaml"
+    When admin creates a PV from "local.yaml" where:
       | ["metadata"]["name"]                      | pv-<%= project.name %>                   |
       | ["spec"]["hostPath"]["path"]              | /etc/origin/hostpath/<%= project.name %> |
       | ["spec"]["hostPath"]["type"]              | DirectoryOrCreate                        |
@@ -13,7 +14,8 @@ Feature: Storage of Hostpath plugin testing
       | ["spec"]["storageClassName"]              | sc-<%= project.name %>                   |
       | ["spec"]["persistentVolumeReclaimPolicy"] | <reclaim_policy>                         |
     Then the step should succeed
-    When I create a dynamic pvc from "<%= BushSlicer::HOME %>/testdata/storage/hostpath/claim.yaml" replacing paths:
+    Given I obtain test data file "storage/hostpath/claim.yaml"
+    When I create a dynamic pvc from "claim.yaml" replacing paths:
       | ["metadata"]["name"]         | mypvc                  |
       | ["spec"]["volumeName"]       | pv-<%= project.name %> |
       | ["spec"]["accessModes"][0]   | <access_mode>          |
@@ -23,7 +25,8 @@ Feature: Storage of Hostpath plugin testing
 
     Given I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/hostpath/pod.yaml" replacing paths:
+    Given I obtain test data file "storage/hostpath/pod.yaml"
+    When I run oc create over "pod.yaml" replacing paths:
       | ["metadata"]["name"]                                         | mypod |
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc |
     Then the step should succeed
@@ -46,5 +49,3 @@ Feature: Storage of Hostpath plugin testing
     Examples:
       | access_mode   | reclaim_policy | pv_status | step_status |
       | ReadWriteOnce | Retain         | released  | succeed     | # @case_id OCP-9639
-      | ReadOnlyMany  | Default        | released  | succeed     | # @case_id OCP-11726
-      | ReadWriteMany | Recycle        | available | fail        | # @case_id OCP-9640

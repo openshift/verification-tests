@@ -7,8 +7,9 @@ Feature: Service related networking scenarios
     # create pod and service in project1
     Given the env is using multitenant network
     Given I have a project
+    Given I obtain test data file "networking/list_for_pods.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json |
+      | f | list_for_pods.json |
     Then the step should succeed
     And a pod becomes ready with labels:
       | name=test-pods |
@@ -19,8 +20,9 @@ Feature: Service related networking scenarios
     # create pod and service in project2
     Given I switch to the second user
     And I have a project
+    Given I obtain test data file "networking/list_for_pods.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json |
+      | f | list_for_pods.json |
     Then the step should succeed
     And a pod becomes ready with labels:
       | name=test-pods |
@@ -42,42 +44,6 @@ Feature: Service related networking scenarios
       | Hello OpenShift |
 
   # @author yadu@redhat.com
-  # @case_id OCP-9977
-  @admin
-  @destructive
-  Scenario: Create service with external IP
-    Given master config is merged with the following hash:
-    """
-    networkConfig:
-      externalIPNetworkCIDRs:
-      - 10.5.0.0/24
-    """
-    And the master service is restarted on all master nodes
-    Given I have a project
-    And I wait up to 30 seconds for the steps to pass:
-    """
-    When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/caddy-docker.json  |
-    Then the step should succeed
-    """
-    And the pod named "caddy-docker" becomes ready
-    When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/externalip_service1.json |
-    Then the step should succeed
-    When I run the :get client command with:
-      | resource      | service          |
-      | resource_name | service-unsecure |
-    Then the step should succeed
-    And the output should contain:
-      | 10.5.0.1 |
-    Given I have a pod-for-ping in the project
-    When I execute on the pod:
-      | /usr/bin/curl | --connect-timeout | 4 | 10.5.0.1:27017 |
-    Then the step should succeed
-    And the output should contain:
-      | Hello-OpenShift |
-
-  # @author yadu@redhat.com
   # @case_id OCP-15032
   @admin
   Scenario: The openflow list will be cleaned after delete the services
@@ -85,8 +51,9 @@ Feature: Service related networking scenarios
       | subnet      |
       | multitenant |
     Given I have a project
+    Given I obtain test data file "routing/unsecure/service_unsecure.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/unsecure/service_unsecure.json |
+      | f | service_unsecure.json |
     Then the step should succeed
     Given I use the "service-unsecure" service
     And evaluation of `service.ip(user: user)` is stored in the :service_ip clipboard
@@ -136,8 +103,9 @@ Feature: Service related networking scenarios
   @admin
   Scenario: The headless service can publish the pods even if they are not ready
     Given I have a project
+    Given I obtain test data file "networking/headless_notreadypod.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/headless_notreadypod.json |
+      | f | headless_notreadypod.json |
     Then the step should succeed
     Given I wait up to 30 seconds for the steps to pass:
     """
@@ -160,8 +128,9 @@ Feature: Service related networking scenarios
   Scenario: externalIP defined in service but no spec.externalIP defined	
     Given I have a project 
     # Create a service with a externalIP
+    Given I obtain test data file "networking/externalip_service1.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/externalip_service1.json | 
+      | f | externalip_service1.json | 
     Then the step should fail
 
   # @author weliang@redhat.com
@@ -187,16 +156,18 @@ Feature: Service related networking scenarios
 
     # Create a svc with externalIP
     Given I switch to the first user
+    Given I obtain test data file "networking/externalip_service1.json"
     And I wait up to 300 seconds for the steps to pass:
     """
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/externalip_service1.json" replacing paths:
+    When I run oc create over "externalip_service1.json" replacing paths:
       | ["spec"]["externalIPs"][0] | <%= cb.hostip %> |
     Then the step should succeed
     """ 
     
     # Create a pod
+    Given I obtain test data file "routing/caddy-docker.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/caddy-docker.json |
+      | f | caddy-docker.json |
     Then the step should succeed
     And the pod named "caddy-docker" becomes ready
  
@@ -224,24 +195,27 @@ Feature: Service related networking scenarios
 
     # Create a svc with externalIP/22.2.2.10 which is in 22.2.2.0/25
     Given I have a project 
+    Given I obtain test data file "networking/externalip_service1.json"
     And I wait up to 300 seconds for the steps to pass:
     """
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/externalip_service1.json" replacing paths:
+    When I run oc create over "externalip_service1.json" replacing paths:
       | ["spec"]["externalIPs"][0] | 22.2.2.10 |
     Then the step should fail
     """
 
     # Create a svc with externalIP/22.2.2.130 which is not in 22.2.2.0/25
+    Given I obtain test data file "networking/externalip_service1.json"
     And I wait up to 300 seconds for the steps to pass:
     """
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/externalip_service1.json" replacing paths:
+    When I run oc create over "externalip_service1.json" replacing paths:
       | ["spec"]["externalIPs"][0] | 22.2.2.130 |
     Then the step should succeed
     """
  
     # Create a pod
+    Given I obtain test data file "routing/caddy-docker.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/caddy-docker.json |
+      | f | caddy-docker.json |
     Then the step should succeed
     And the pod named "caddy-docker" becomes ready
  
@@ -274,9 +248,10 @@ Feature: Service related networking scenarios
 
     # Create a svc with externalIP
     Given I switch to the first user
+    Given I obtain test data file "networking/externalip_service1.json"
     And I wait up to 300 seconds for the steps to pass:
     """
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/externalip_service1.json" replacing paths:
+    When I run oc create over "externalip_service1.json" replacing paths:
       | ["spec"]["externalIPs"][0] | <%= cb.hostip %> |
     Then the step should fail
     """
@@ -299,17 +274,19 @@ Feature: Service related networking scenarios
 
     # Create a svc with externalIP/22.2.2.10 which is in rejectedCIDRs
     Given I have a project 
+    Given I obtain test data file "networking/externalip_service1.json"
     And I wait up to 300 seconds for the steps to pass:
     """
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/externalip_service1.json" replacing paths:
+    When I run oc create over "externalip_service1.json" replacing paths:
       | ["spec"]["externalIPs"][0] | 22.2.2.10 |
     Then the step should fail
     """
 
     # Create a svc with externalIP/22.2.2.130 which is in rejectedCIDRs
+    Given I obtain test data file "networking/externalip_service1.json"
     And I wait up to 300 seconds for the steps to pass:
     """
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/externalip_service1.json" replacing paths:
+    When I run oc create over "externalip_service1.json" replacing paths:
       | ["spec"]["externalIPs"][0] | 22.2.2.130 |
     Then the step should fail
     """
@@ -338,16 +315,18 @@ Feature: Service related networking scenarios
     
     # Create a svc with externalIP
     Given I switch to the first user
+    Given I obtain test data file "networking/externalip_service1.json"
     And I wait up to 300 seconds for the steps to pass:
     """
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/externalip_service1.json" replacing paths:
+    When I run oc create over "externalip_service1.json" replacing paths:
       | ["spec"]["externalIPs"][0] | <%= cb.host1ip %> |
     Then the step should succeed
     """
 
     # Create a pod
+    Given I obtain test data file "routing/caddy-docker.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/caddy-docker.json |
+      | f | caddy-docker.json |
     Then the step should succeed
     And the pod named "caddy-docker" becomes ready
  
@@ -364,16 +343,18 @@ Feature: Service related networking scenarios
     Then the step should succeed
 
     # Create a svc with second externalIP
+    Given I obtain test data file "networking/externalip_service1.json"
     And I wait up to 300 seconds for the steps to pass:
     """
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/externalip_service1.json" replacing paths:
+    When I run oc create over "externalip_service1.json" replacing paths:
       | ["spec"]["externalIPs"][0] | <%= cb.host2ip %> |
     Then the step should succeed
     """
     
     # Create a pod
+    Given I obtain test data file "routing/caddy-docker.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/caddy-docker.json |
+      | f | caddy-docker.json |
     Then the step should succeed
     And the pod named "caddy-docker" becomes ready
  
@@ -389,8 +370,9 @@ Feature: Service related networking scenarios
   Scenario: Idling/Unidling services on OVN
   Given the env is using "OVNKubernetes" networkType
   And I have a project
+    Given I obtain test data file "networking/list_for_pods.json"
   When I run the :create client command with:
-    | f | <%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json |
+    | f | list_for_pods.json |
   Then the step should succeed
   And a pod becomes ready with labels:
     | name=test-pods |
@@ -399,12 +381,12 @@ Feature: Service related networking scenarios
   # Checking idling unidling manually to make sure it works fine
   When I run the :idle client command with:
     | svc_name | test-service |
-  Then the step should succeed 
+  Then the step should succeed
   And the output should contain:
     | The service "<%= project.name %>/test-service" has been marked as idled |
   Given I have a pod-for-ping in the project
   When I execute on the pod:
-    | /usr/bin/curl | --connect-timeout | 5 | <%= cb.service_ip %>:27017 |
+    | /usr/bin/curl | --connect-timeout | 30 | <%= cb.service_ip %>:27017 |
   Then the step should succeed
   And the output should contain:
     | Hello OpenShift |
@@ -413,8 +395,9 @@ Feature: Service related networking scenarios
   # @case_id OCP-11645
   Scenario: Create loadbalancer service
     Given I have a project
+    Given I obtain test data file "networking/ping_for_pod_containerPort.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/ping_for_pod_containerPort.json |
+      | f | ping_for_pod_containerPort.json |
     Then the step should succeed
 
     # Create loadbalancer service
@@ -435,7 +418,8 @@ Feature: Service related networking scenarios
     And evaluation of `@result[:response].match(/:(.*)]/)[1]` is stored in the :service_hostname clipboard
 
     # check the external:ip of loadbalancer can be accessed
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json" replacing paths:
+    Given I obtain test data file "networking/list_for_pods.json"
+    When I run oc create over "list_for_pods.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
     Then the step should succeed
     Given 1 pods become ready with labels:

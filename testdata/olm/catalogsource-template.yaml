@@ -1,0 +1,32 @@
+---
+apiVersion: v1
+kind: Template
+metadata:
+  name: customcatalogsource
+objects:
+- apiVersion: operators.coreos.com/v1alpha1
+  kind: CatalogSource
+  metadata:
+    name: ${NAME}
+    namespace: ${NAMESPACE}
+  spec:
+    sourceType: grpc
+    image: ${IMAGE}
+    displayName: ${DISPLAYNAME}
+    publisher: ${PUBLISHER}
+
+parameters:
+- name: NAME
+  value: auto-custom-catalog-source
+
+- name: NAMESPACE
+  value: openshift-marketplace
+
+- name: IMAGE
+  value: quay.io/openshifttest/testoperators:latest
+
+- name: DISPLAYNAME
+  value: OpenShift QE
+
+- name: PUBLISHER
+  value: OpenShift UI QE

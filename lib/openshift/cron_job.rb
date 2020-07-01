@@ -17,7 +17,7 @@ module BushSlicer
 
     def containers_spec(user: nil, cached: true, quiet: false)
       specs = []
-      containers_spec = template(user: user)['spec']['containers']
+      containers_spec = template(user: user, cached: cached, quiet: quiet)['spec']['containers']
       containers_spec.each do | container_spec |
         specs.push ContainerSpec.new container_spec
       end

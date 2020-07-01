@@ -6,6 +6,8 @@ set_filter_strings:
   - selector:
       <<: *filter_text_ele
     op: send_keys <filter_text>
+filter_event_by_name_or_message:
+  action: set_filter_strings
 search_by_type:
   elements:
   - selector:

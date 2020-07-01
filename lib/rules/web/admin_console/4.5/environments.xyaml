@@ -1,8 +1,7 @@
 click_add_value_from_configmap_or_secret:
-  element:
-    selector:
-      xpath: //*[contains(normalize-space(text()),'Add from Config Map or Secret')]
-    op: click
+  params:
+    button_text: Add from Config Map or Secret
+  action: click_button
 check_env_editor_loaded:
   element:
     selector:
@@ -86,4 +85,20 @@ remove_env_vars:
   - selector: *env_var_delete_icon
     type: js
     op: click
-
+check_env_editor_disabled:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'pairs-list__name-field')]/input[@disabled]
+  - selector:
+      xpath: //div[contains(@class,'pairs-list__value-field')]/input[@disabled]
+check_link_to_parent_resource:
+  element:
+    selector:
+      xpath: //div[contains(@class,'pf-c-alert__description')]/span[contains(@class,'co-resource-item')][//span[@title='<parent_resource_type>'] and //a[text()='<parent_resource_name>']]
+check_info_and_link_to_parent_resource:
+  params:
+    title: Environment variables set from parent
+    description: View environment for resource
+  action: check_alert_title
+  action: check_alert_description
+  action: check_link_to_parent_resource

@@ -1,7 +1,8 @@
 Feature: Some raw HTTP fetures
 
   Scenario: test download
-    When I open web server via the "<%= BushSlicer::HOME %>/testdata/build/shared_compressed_files/char_test.txt" url
+    Given I obtain test data file "build/shared_compressed_files/char_test.txt"
+    When I open web server via the "char_test.txt" url
     Then the step should succeed
 
   Scenario: Concurrent Get

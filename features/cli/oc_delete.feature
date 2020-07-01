@@ -4,8 +4,9 @@ Feature: oc_delete.feature
   # @case_id OCP-11184
   Scenario: Gracefully delete a pod with '--grace-period' option
     Given I have a project
+    Given I obtain test data file "pods/graceful-delete/10.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/pods/graceful-delete/10.json |
+      | f | 10.json |
     Given the pod named "grace10" becomes ready
     When I run the :get client command with:
       | resource | pods |
@@ -27,8 +28,9 @@ Feature: oc_delete.feature
     Then the step should succeed
     And the output should not contain "Terminating"
     And the output should not contain "Running"
+    Given I obtain test data file "pods/graceful-delete/10.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/pods/graceful-delete/10.json |
+      | f | 10.json |
     Given the pod named "grace10" becomes ready
     When I run the :get client command with:
       | resource | pods |
@@ -52,8 +54,9 @@ Feature: oc_delete.feature
   Scenario: The namespace will not be deleted until all pods gracefully terminate
     Given I have a project
     And evaluation of `project.name` is stored in the :prj1 clipboard
+    Given I obtain test data file "pods/graceful-delete/40.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/pods/graceful-delete/40.json |
+      | f | 40.json |
     And a pod becomes ready with labels:
       | name=graceful |
     And evaluation of `pod.name` is stored in the :pod clipboard
@@ -83,8 +86,9 @@ Feature: oc_delete.feature
   # @case_id OCP-10705
   Scenario: Default termination grace period is 30s if it's not set
     Given I have a project
+    Given I obtain test data file "pods/graceful-delete/default.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/pods/graceful-delete/default.json |
+      | f | default.json |
     Given the pod named "grace-default" becomes ready
     When I run the :get client command with:
       | resource | pods |
@@ -109,8 +113,9 @@ Feature: oc_delete.feature
   # @case_id OCP-12144
   Scenario: Verify pod is gracefully deleted when DeletionGracePeriodSeconds is specified.
     Given I have a project
+    Given I obtain test data file "pods/graceful-delete/10.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/pods/graceful-delete/10.json |
+      | f | 10.json |
     Given the pod named "grace10" becomes ready
     When I run the :get client command with:
       | resource | pods |
@@ -134,8 +139,9 @@ Feature: oc_delete.feature
   # @case_id OCP-11526
   Scenario: Pod should be immediately deleted if TerminationGracePeriodSeconds is 0
     Given I have a project
+    Given I obtain test data file "pods/graceful-delete/0.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/pods/graceful-delete/0.json |
+      | f | 0.json |
     Given the pod named "grace0" becomes ready
     When I run the :get client command with:
       | resource | pods |

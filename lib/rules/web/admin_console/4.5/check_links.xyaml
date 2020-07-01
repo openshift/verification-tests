@@ -2,10 +2,50 @@ check_doc_get_started_with_cli:
   elements:
   - selector:
       xpath: //*[contains(@href, "/k8s/cluster/projects")]/button[contains(., "View My Projects")]
-check_header_brand:
+check_brand:
   elements:
   - selector:
       xpath: //img[contains(@src, '<logo_source>') and @alt='<product_name>']
+check_brand_in_modal:
+  elements:
+  - selector:
+      xpath: //div[contains(@role,'dialog')]//img[contains(@src, '<logo_source>') and @alt='<product_name>']
+check_logo_in_masthead:
+  params:
+    logo_source: static/assets/openshift-platform-logo.svg
+    product_name: Red Hat OpenShift Container Platform
+  action: check_brand
+check_logo_in_app_launcher:
+  params:
+    image_src: static/assets/redhat.svg
+  action: click_application_launcher_button
+  action: check_image_url
+check_logo_in_about_modal:
+  params:
+    logo_source: static/assets/openshift-platform-logo.svg
+    product_name: Red Hat OpenShift Container Platform
+  action: click_about_button
+  action: check_brand_in_modal
+click_about_button:
+  params:
+    button_text: About
+  action: click_help_button
+  action: click_button_text
+check_dedicated_logo:
+  params:
+    logo_source: static/assets/openshift-dedicated-logo.svg
+    product_name: Red Hat OpenShift Dedicated
+  action: check_brand
+check_online_logo:
+  params:
+    logo_source: static/assets/openshift-online-logo.svg
+    product_name: Red Hat OpenShift Online
+  action: check_brand
+check_azure_logo:
+  params:
+    logo_source: static/assets/openshift-logo.svg
+    product_name: Azure Red Hat OpenShift
+  action: check_brand
 check_monitoring_urls:
   action: click_alert_manager_menu
   action: check_alert_manager_url
@@ -66,11 +106,9 @@ browse_to_cli_tools_page:
   action: click_help_button
   params:
     text: Command Line Tools
-    link_url: "#"
+    link_url: "command-line-tools"
   action: click_link_with_text
 check_consolelink:
-  params:
-    link_url: "#"
   action:
     if_param:
       location: Help menu
@@ -85,7 +123,13 @@ check_consolelink:
     ref: check_console_link_in_usermenu
 check_console_link_in_helpmenu:
   params:
-    link_url: "#"
+    link_url: "baidu.com"
+  action: click_help_button
+  action: check_link_and_text
+check_documentation_link_in_helpmenu:
+  params:
+    text: Documentation
+    link_url: https://docs.openshift.com/container-platform/<version>
   action: click_help_button
   action: check_link_and_text
 click_report_bug_link_in_helpmenu:
@@ -93,7 +137,7 @@ click_report_bug_link_in_helpmenu:
   action: click_report_bug_link
 click_report_bug_link:
   params:
-    text: Report Bug
+    text: Report Bug to Red Hat
   action: click_link_with_text_only
 check_console_link_in_applauncher:
   action: click_application_launcher_button
@@ -101,7 +145,7 @@ check_console_link_in_applauncher:
   action: check_image_url
 check_console_link_in_usermenu:
   params:
-    link_url: "#"
+    link_url: "www.youtube.com"
   action: click_user_menu_button
   action: check_link_and_text
 click_help_button:

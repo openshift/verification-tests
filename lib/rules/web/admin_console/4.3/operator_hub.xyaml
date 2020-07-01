@@ -60,3 +60,7 @@ check_error_message_for_missing_required_name:
   params:
     content: name or generateName is required
   action: check_page_contains
+open_edit_form_view:
+  params:
+    button_text: Edit Form
+  action: click_button

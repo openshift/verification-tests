@@ -48,20 +48,69 @@ click_button_text:
     selector: &button_with_text
       xpath: //button[text()='<button_text>']
     op: click
+check_button_text:
+  element:
+    selector:
+      <<: *button_with_text
 click_button_by_id:
   element:
     selector:
       xpath: //button[contains(@id,'<button_id>')]
     op: click
+check_button_contains_text:
+  element:
+    selector:
+      xpath: //button[contains(., '<button_text>')]
+click_button_title:
+  element:
+    selector:
+      xpath: //button[@title='<button_title>']
+    op: click
+check_button_title:
+  element:
+    selector:
+      xpath: //button[@title='<button_title>']
+click_radio_input_by_text:
+  element:
+    selector:
+      xpath: //label[contains(.,'<text>')]/input[@type='radio']
+    op: click
+check_disabled_radio_input:
+  element:
+    selector:
+      xpath: //input[@type='radio' and @value='<disabled_radio_text>' and @disabled]
+check_checked_radio_input:
+  element:
+    selector:
+      xpath: //input[@type='radio' and @value='<checked_radio_text>' and @checked]
 check_button_missing:
   element:
     selector:
       <<: *button_with_text
     missing: true
+check_kebab_items_disabled:
+  elements:
+  - selector:
+      xpath: //button[contains(@class, 'pf-c-dropdown__menu-item') and not(contains(@class, 'pf-m-disabled'))]
+    missing: true
+check_action_button_missing:
+  elements:
+  - selector:
+      xpath: //span[contains(text(), 'Actions')]
+    missing: true
+check_save_button_missing:
+  params:
+    button_text: Save
+  action: check_button_missing
 check_table_text_data:
   element:
     selector:
       xpath: //td[text()='<text_data>']
+check_table_line_count:
+  action: wait_table_loaded
+  scripts:
+  - command: return document.querySelectorAll("tbody tr").length == '<line_count>'
+    expect_result: true
 select_resource_item:
   action: click_button_by_id
   action: click_on_resource_name
@@ -104,6 +153,11 @@ click_yaml_tab:
   params:
     tab_name: YAML
   action: click_tab
+check_edit_yaml_enabled:
+  params:
+    button_text: Save
+  action: click_yaml_tab
+  action: check_button_enabled
 click_radio_input:
   element:
     selector:
@@ -118,6 +172,11 @@ click_yaml_create_button:
   params:
     button_id: yaml-create
   action: click_button_by_id
+check_yaml_create_button_missing:
+  elements:
+  - selector:
+      xpath: //button[@id='yaml-create']
+    missing: true
 clear_input_value:
   elements:
   - selector:
@@ -129,6 +188,12 @@ set_input_value:
     selector:
       xpath: //input[@id='<input_field_id>']
     op: send_keys <input_value>
+    type: input
+clear_input_class:
+  element:
+    selector:
+      xpath: //input[contains(@class, '<class_text>')]
+    op: clear
     type: input
 set_input_class:
   element:
@@ -152,6 +217,16 @@ set_label_input_simple:
     type: input
   - selector:
       <<: *label_input_value
+    op: send_keys <input_value>
+    type: input
+set_placeholder_input:
+  elements:
+  - selector: &placeholder_input
+      xpath: //input[@placeholder='<name>']
+    op: clear
+    type: input
+  - selector:
+      <<: *placeholder_input
     op: send_keys <input_value>
     type: input
 check_editor_is_monaco_editor:
@@ -188,11 +263,6 @@ click_first_item_from_sub_resource_list_and_check_breadcrumb:
   action: wait_until_no_loading
   action: click_first_sub_item_in_resource_detail_list
   action: check_link_in_breadcrumb
-# click and check the first item from resources listed in grid cell, such as installed operator
-click_first_item_from_gridcell_list_and_check_breadcrumb:
-  action: wait_until_no_loading
-  action: click_first_item_in_grid_cell_list
-  action: check_link_in_breadcrumb
 check_link_in_breadcrumb:
   element:
     selector:
@@ -213,7 +283,7 @@ confirm_deletion:
 check_resource_item:
   elements:
   - selector:
-      xpath: //span[contains(@class,'co-m-resource-icon') and @title='<resource_type>']/parent::span[@class='co-resource-item']//a[@class='co-resource-item__resource-name' and text()='<resource_name>' and @href='<resource_link>']
+      xpath: //span[contains(@class,'co-m-resource-icon') and @title='<resource_type>']/parent::span[contains(@class,'co-resource-item')]//a[@class='co-resource-item__resource-name' and text()='<resource_name>' and @href='<resource_link>']
 check_resources_title_on_page:
   elements:
   - selector:
@@ -333,10 +403,9 @@ submit_changes:
       xpath: //button[@type='submit' and not(@disabled)]
     op: click
 click_add_more_button:
-  element:
-    selector:
-      xpath: //*[contains(text(),'Add More')]
-    op: click
+  params:
+    button_text: Add More
+  action: click_button
 click_add_dropdown_button:
   element:
     selector:
@@ -351,6 +420,12 @@ click_annotation_link:
   elements:
   - selector:
       xpath: //a[contains(text(), 'Annotation')]
+    op: click
+    timeout: 20
+click_annotation_edit_link:
+  element:
+    selector:
+      xpath: //button[contains(@data-test-id,'edit-annotations')]
     op: click
     timeout: 20
 uncheck_checkbox:
@@ -425,6 +500,15 @@ click_one_item:
 choose_dropdown_item:
   action: click_dropdown_field
   action: click_one_item
+choose_item_from_dropdown_menu:
+  elements:
+  - selector:
+      xpath: //button[contains(@data-test-id, 'dropdown-button')]
+    op: click
+  - selector:
+      xpath: //ul[contains(@class, 'pf-c-dropdown__menu')]
+    timeout: 20
+  action: click_dropdown_menu_item
 upload_file_for_one_field:
   elements:
   - selector:
@@ -441,12 +525,22 @@ wait_box_loaded:
   element:
     selector:
       css: .loading-box__loaded
-    timeout: 20
+    timeout: 120
+wait_page_body_loaded:
+  element:
+    selector:
+      css: .co-m-page__body
+    timeout: 40
 wait_until_no_loading:
   element:
     selector:
       css: .cos-status-box--loading
     missing: true
+    timeout: 30
+wait_sidebar_loaded:
+  element:
+    selector:
+      css: .co-p-has-sidebar__sidebar-close
     timeout: 30
 wait_table_loaded:
   element:
@@ -458,6 +552,19 @@ check_item_in_list:
     selector:
       xpath: //ul[contains(.,'<item>')]
     timeout: 20
+check_overlay_edit_modal:
+  action: check_overlay_edit_modal_title
+  elements:
+  - selector:
+      xpath: //*[contains(@class, 'modal-content') and contains(@class, 'modal-content--no-inner-scroll') and not(contains(., 'co-p-new-user-modal'))]
+check_overlay_edit_modal_title:
+  elements:
+  - selector:
+      xpath: //h1[contains(@class, 'pf-c-title') and contains(@class, 'pf-m-2xl') and contains(@data-test-id, 'modal-title')]
+check_side_overlay_dialog_modal:
+  elements:
+  - selector:
+      xpath: //*[contains(@class, 'pf-c-modal-box') and @role='dialog' and not(contains(., 'modal-content'))]
 
 ## -------- check resource key and values pairs ------
 check_resource_details:
@@ -551,6 +658,9 @@ check_resource_details:
   action:
     if_param: machine_config_selector
     ref: check_machine_config_selector
+  action:
+    if_param: node_selector
+    ref: check_node_selector
   action:
     if_param: current_configuration
     ref: check_current_configuration
@@ -769,6 +879,11 @@ check_machine_config_selector:
   params:
     key: Machine Config Selector
     value: <machine_config_selector>
+  action: check_resource_details_key_and_value
+check_node_selector:
+  params:
+    key: Node Selector
+    value: <node_selector>
   action: check_resource_details_key_and_value
 check_current_configuration:
   params:

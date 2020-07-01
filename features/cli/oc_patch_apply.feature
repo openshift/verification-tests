@@ -5,11 +5,10 @@ Feature: oc patch/apply related scenarios
   @smoke
   Scenario: oc patch can update one or more fields of rescource
     Given I have a project
-    And I run the :run client command with:
-      | name      | hello             |
-      | image     | <%= project_docker_repo %>openshift/hello-openshift |
+    And I run the :create_deploymentconfig client command with:
+      | name  | hello                                               |
+      | image | quay.io/openshifttest/hello-openshift@sha256:424e57db1f2e8e8ac9087d2f5e8faea6d73811f0b6f96301bc94293680897073 |
     Then the step should succeed
-    Given I wait until the status of deployment "hello" becomes :running
     When I run the :patch client command with:
       | resource      | dc              |
       | resource_name | hello           |
@@ -38,4 +37,3 @@ Feature: oc patch/apply related scenarios
     Then the step should succeed
     And the output should contain "newtemp value1 3"
     """
-

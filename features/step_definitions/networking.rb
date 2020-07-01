@@ -426,7 +426,7 @@ Given /^the DefaultDeny policy is applied to the "(.+?)" namespace$/ do | projec
       raise "Failed to apply the default deny annotation to specified namespace."
     end
   else
-    @result = admin.cli_exec(:create, n: project_name , f: "#{ENV['BUSHSLICER_HOME']}/testdata/networking/networkpolicy/defaultdeny-v1-semantic.yaml")
+    @result = admin.cli_exec(:create, n: project_name , f: "#{BushSlicer::HOME}/testdata/networking/networkpolicy/defaultdeny-v1-semantic.yaml")
     unless @result[:success]
       raise "Failed to apply the default deny policy to specified namespace."
     end
@@ -480,6 +480,7 @@ end
 
 Given /^I wait for the networking components of the node to become ready$/ do
   ensure_admin_tagged
+  _admin = admin
 
   if env.version_ge("3.10", user: user)
     sdn_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
@@ -490,14 +491,14 @@ Given /^I wait for the networking components of the node to become ready$/ do
       pod.node_name == node.name
     }.first
 
-    @result = sdn_pod.wait_till_ready(user, 3 * 60)
+    @result = sdn_pod.wait_till_ready(_admin, 3 * 60)
     unless @result[:success]
       logger.error(@result[:response])
       raise "sdn pod on the node did not become ready"
     end
     cb.sdn_pod = sdn_pod
 
-    @result = ovs_pod.wait_till_ready(user, 60)
+    @result = ovs_pod.wait_till_ready(_admin, 60)
     unless @result[:success]
       logger.error(@result[:response])
       raise "ovs pod on the node did not become ready"
@@ -730,9 +731,13 @@ end
 
 Given /^the bridge interface named "([^"]*)" is deleted from the "([^"]*)" node$/ do |bridge_name, node_name|
   ensure_admin_tagged
+  check_and_delete_inf= %Q(if ip addr show  #{bridge_name};
+                           then 
+                              ip link delete #{bridge_name};
+                           fi)
   node = node(node_name)
   host = node.host
-  @result = host.exec_admin("/sbin/ip link delete #{bridge_name}")
+  @result = host.exec_admin(check_and_delete_inf)
   raise "Failed to delete bridge interface" unless @result[:success]
 end
 
@@ -778,7 +783,7 @@ Given /^the subnet for primary interface on node is stored in the#{OPT_SYM} clip
 
   step "the default interface on nodes is stored in the clipboard"
   step "I run command on the node's sdn pod:", table(
-    "| bash | -c | ip a show \"<%= cb.interface %>\" \\| grep inet \\| grep -v inet6  \\| awk '{print $2}' |"
+    "| bash | -c | ip -4 -brief a show \"<%= cb.interface %>\" \\| awk '{print $3}' |"
   )
   raise "Failed to get the subnet range for the primary interface on the node" unless @result[:success]
   cb[cb_name] = @result[:response].chomp
@@ -851,8 +856,7 @@ Given /^the vxlan tunnel name of node "([^"]*)" is stored in the#{OPT_SYM} clipb
   end
   case networkType
   when "OVNKubernetes"
-    inf_name = host.exec_admin("ifconfig | egrep -o '^k8[^:]+'")
-    cb[cb_name] = inf_name[:response].split("\n")[0]
+    cb[cb_name]="ovn-k8s-mp0"
   when "OpenShiftSDN"
     cb[cb_name]="tun0"
   else
@@ -872,8 +876,8 @@ Given /^the vxlan tunnel address of node "([^"]*)" is stored in the#{OPT_SYM} cl
   end
   case networkType
   when "OVNKubernetes"
-    inf_name = host.exec_admin("ifconfig | egrep -o '^k8[^:]+'")
-    @result = host.exec_admin("ifconfig #{inf_name[:response].split("\n")[0]}")
+    inf_name="ovn-k8s-mp0" 
+    @result = host.exec_admin("ifconfig #{inf_name.split("\n")[0]}")
     cb[cb_address] = @result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]
   when "OpenShiftSDN"
     @result=host.exec_admin("ifconfig tun0")
@@ -975,3 +979,13 @@ Given /^the OVN "([^"]*)" database is killed on the "([^"]*)" node$/ do |ovndb, 
   raise "Failed to kill the #{ovndb} database daemon" unless @result[:success]
 end
 
+Given /^OVN is functional on the cluster$/ do
+  ensure_admin_tagged
+  ovnkube_node_ds = daemon_set('ovnkube-node', project('openshift-ovn-kubernetes')).replica_counters(user: admin,cached: false)
+  ovnkube_master_ds = daemon_set('ovnkube-master', project('openshift-ovn-kubernetes')).replica_counters(user: admin,cached: false)
+  desired_ovnkube_node_replicas, available_ovnkube_node_replicas = ovnkube_node_ds.values_at(:desired, :available)
+  desired_ovnkube_master_replicas, available_ovnkube_master_replicas = ovnkube_master_ds.values_at(:desired, :available)
+  
+  raise "OVN is not running correctly! Check one of your ovnkube-node pod" unless desired_ovnkube_node_replicas == available_ovnkube_node_replicas && available_ovnkube_node_replicas != 0
+  raise "OVN is not running correctly! Check one of your ovnkube-master pod" unless desired_ovnkube_master_replicas == available_ovnkube_master_replicas && available_ovnkube_master_replicas != 0
+end

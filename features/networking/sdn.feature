@@ -62,67 +62,6 @@ Feature: SDN related networking scenarios
       | -N OPENSHIFT-ADMIN-OUTPUT-RULES |
       | -A FORWARD -i tun0 ! -o tun0 -m comment --comment "administrator overrides" -j OPENSHIFT-ADMIN-OUTPUT-RULES |
 
-  # @author bmeng@redhat.com
-  # @case_id OCP-16217
-  @admin
-  @destructive
-  Scenario: SDN will detect the version and plugin type mismatch in openflow and restart node automatically
-    Given I select a random node's host
-    And evaluation of `node.name` is stored in the :node_name clipboard
-
-    #Below step will save plugin type and version value in net_plugin variable
-    Given the cluster network plugin type and version and stored in the clipboard 
-    #Changing plugin version to some arbitary value ff
-    When I run command on the "<%= cb.node_name %>" node's sdn pod: 
-      | ovs-ofctl| -O | openflow13 | mod-flows | br0 | table=253, actions=note:<%= cb.net_plugin[:type] %>.ff |
-    Then the step should succeed
-    #Expecting sdn pod to be restarted due to vesion value change
-    And I wait up to 60 seconds for the steps to pass:
-    """
-    When I run the :logs admin command with:
-      | resource_name | <%= pod.name %> |
-      | namespace     | openshift-sdn     |
-      | since         | 30s               |
-    Then the step should succeed
-    And the output should contain:
-      | full SDN setup required (plugin is not setup) |
-      | Starting openshift-sdn network plugin         |
-    
-    """
-    # Expecting sdn pod to come back to default version the cluser was on initially
-    Given I wait up to 60 seconds for the steps to pass:
-    """
-    When I run command on the "<%= cb.node_name %>" node's sdn pod: 
-      | ovs-ofctl| -O | openflow13 | dump-flows | br0 |
-    Then the step should succeed
-    Then the output should contain "<%= cb.net_plugin[:type] %>.<%= cb.net_plugin[:version] %>"
-    """
-    #Changing plugin type to some arbitary value 99
-    When I run command on the "<%= cb.node_name %>" node's sdn pod: 
-      | ovs-ofctl| -O | openflow13 | mod-flows | br0 | table=253, actions=note:99.<%= cb.net_plugin[:version] %> |
-    Then the step should succeed
-    #Expecting sdn pod to be restarted due to plugin type value change
-    And I wait up to 60 seconds for the steps to pass:
-    """
-    When I run the :logs admin command with:
-      | resource_name | <%= pod.name %> |
-      | namespace     | openshift-sdn     |
-      | since         | 30s               |
-    Then the step should succeed
-    And the output should contain:
-      | full SDN setup required (plugin is not setup) |
-      | Starting openshift-sdn network plugin         |
-    
-    """
-    # Expecting sdn pod to come back to default type the cluster was on initially
-    Given I wait up to 60 seconds for the steps to pass:
-    """
-    When I run command on the "<%= cb.node_name %>" node's sdn pod: 
-      | ovs-ofctl| -O | openflow13 | dump-flows | br0 |
-    Then the step should succeed
-    Then the output should contain "<%= cb.net_plugin[:type] %>.<%= cb.net_plugin[:version] %>"
-    """
-
   # @author yadu@redhat.com
   # @case_id OCP-15251
   @admin
@@ -270,8 +209,9 @@ Feature: SDN related networking scenarios
   Scenario: Killing ovs process should not put sdn and ovs pods in bad shape
     Given I have a project
     And evaluation of `project.name` is stored in the :usr_project clipboard
+    Given I obtain test data file "networking/list_for_pods.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json |
+      | f | list_for_pods.json |
     Then the step should succeed
     Given 2 pods become ready with labels:
       | name=test-pods |
@@ -284,7 +224,7 @@ Feature: SDN related networking scenarios
       | bash | -c | pgrep ovs-vswitchd |
     Then the step should succeed
     When I run command on the "<%= cb.node_name %>" node's sdn pod:
-      | bash | -c | pgrep ovs-vswitchd \| xargs kill -9 |
+      | bash | -c | pkill ovs-vswitchd |
     Then the step should succeed
     And I wait up to 60 seconds for the steps to pass:
     """
@@ -311,16 +251,17 @@ Feature: SDN related networking scenarios
   #Test for bug https://bugzilla.redhat.com/show_bug.cgi?id=1800324 and https://bugzilla.redhat.com/show_bug.cgi?id=1796157	
     Given I switch to cluster admin pseudo user	
     And I use the "default" project	
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/networking/list_for_pods.json" replacing paths:	
+    Given I obtain test data file "networking/list_for_pods.json"
+    When I run oc create over "list_for_pods.json" replacing paths:	
       | ["items"][0]["spec"]["replicas"] | 4 |	
     Then the step should succeed	
     And 4 pods become ready with labels:	
       | name=test-pods |	
     And evaluation of `pod(0).name` is stored in the :pod1_name clipboard	
-    And evaluation of `pod(0).ip` is stored in the :pod1_ip clipboard	
-    And evaluation of `pod(1).ip` is stored in the :pod2_ip clipboard	
-    And evaluation of `pod(2).ip` is stored in the :pod3_ip clipboard	
-    And evaluation of `pod(3).ip` is stored in the :pod4_ip clipboard	
+    And evaluation of `pod(0).ip_url` is stored in the :pod1_ip clipboard	
+    And evaluation of `pod(1).ip_url` is stored in the :pod2_ip clipboard	
+    And evaluation of `pod(2).ip_url` is stored in the :pod3_ip clipboard	
+    And evaluation of `pod(3).ip_url` is stored in the :pod4_ip clipboard	
     And I register clean-up steps:	
     """	
     Given I ensure "test-rc" replicationcontroller is deleted	
@@ -349,32 +290,50 @@ Feature: SDN related networking scenarios
   @admin
   Scenario: Don't write CNI configuration file until ovn-controller has done at least one iteration
     Given the env is using "OVNKubernetes" networkType
-    And I select a random node's host
-    #Checking controller iteration 1
-    When I run command on the "<%= node.name %>" node's sdn pod:
-      | bash | -c | ovn-appctl -t ovn-controller connection-status |
+    And I store the masters in the :master clipboard
+    And I store "<%= cb.master[0].name %>" node's corresponding default networkType pod name in the :ovnkube_pod clipboard
+    Given I switch to cluster admin pseudo user
+    And I use the "openshift-ovn-kubernetes" project
+    #Fetching ovn master pod name to be used later 
+    When I run the :get client command with:
+      | resource      | pods                                   |
+      | fieldSelector | spec.nodeName=<%= cb.master[0].name %> |
+      | l             | app=ovnkube-master                     |
+      | output        | json                                   |
+    Then the step should succeed
+    And evaluation of `@result[:parsed]['items'][0]['metadata']['name']` is stored in the :ovn_master_pod clipboard
+    #Checking controller iteration 1. Need to execute under ovn-contoller container 
+    When I run the :exec client command with:
+      | pod              | <%= cb.ovnkube_pod %> |
+      | c                | ovn-controller        |
+      | oc_opts_end      |                       |
+      | exec_command     | ovn-appctl            |
+      | exec_command_arg | -t                    |
+      | exec_command_arg | ovn-controller        |
+      | exec_command_arg | connection-status     |
     Then the step should succeed
     And the output should contain "connected"
     #Checking controller iteration 2
-    When I run command on the "<%= node.name %>" node's sdn pod:
+    When I execute on the "<%= cb.ovn_master_pod %>" pod:
       | bash | -c | ls -l /var/run/ovn/ |
     Then the step should succeed
     And evaluation of `@result[:response].match(/ovn-controller.\d*\.ctl/)[0]` is stored in the :controller_pid_file clipboard
     #Checking controller iteration 3
-    When I run command on the "<%= node.name %>" node's sdn pod:
+    When I execute on the "<%= cb.ovn_master_pod %>" pod:
       | bash | -c | ovn-appctl -t /var/run/ovn/<%= cb.controller_pid_file %> connection-status |
     Then the step should succeed
     And the output should contain "connected"
     #Checking controller iteration 4
-    When I run command on the "<%= node.name %>" node's sdn pod:
+    When I run command on the "<%= cb.master[0].name %>" node's sdn pod:
       | bash | -c | ovs-ofctl dump-flows br-int \| wc -l |
     Then the step should succeed
     And the expression should be true> @result[:response].match(/\d*/)[0].to_i > 0
-    #Checking final iteration post all above iterations passed. In this iteration we expect CNi file to be created
+    #Checking final iteration post all above iterations passed. In this iteration we expect CNI file to be created
+    Given I use the "<%= cb.master[0].name %>" node
     And I run commands on the host:
       | ls -l /var/run/multus/cni/net.d/10-ovn-kubernetes.conf |
     Then the output should contain "10-ovn-kubernetes.conf"
-  
+
   # @author anusaxen@redhat.com
   # @case_id OCP-25933
   @admin
@@ -388,7 +347,7 @@ Feature: SDN related networking scenarios
   Then the output should contain:
     | br-int: unmanaged                    |
     | br-local: unmanaged                  |
-    | br-nexthop: unmanaged                |
+    | ovn-k8s-gw0: unmanaged               |
     | genev_sys_6081: unmanaged            |
     | <%= cb.tunnel_inf_name %>: unmanaged |
   # And veths ovs interfaces also needs to be unmanaged

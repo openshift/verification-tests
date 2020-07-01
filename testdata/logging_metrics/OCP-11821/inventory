@@ -1,3 +1,0 @@
-[OSEv3:vars]
-# Extra_Metrics
-openshift_metrics_hawkular_user_write_access=true

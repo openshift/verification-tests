@@ -6,15 +6,18 @@ Feature: Testing ingress to route object
     Given the master version >= "3.10"
     Given I have a project
     And I store an available router IP in the :router_ip clipboard
+    Given I obtain test data file "routing/caddy-docker.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/caddy-docker.json |
+      | f | caddy-docker.json |
     Then the step should succeed
     And the pod named "caddy-docker" becomes ready
+    Given I obtain test data file "routing/unsecure/service_unsecure.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/routing/unsecure/service_unsecure.json |
+      | f | service_unsecure.json |
     Then the step should succeed
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/routing/ingress/test-ingress.json" replacing paths:
-      | ["spec"]["rules"][0]["http"]["paths"][0]["backend"]["servicePort"] | 27017 |
+    Given I obtain test data file "routing/ingress/test-ingress.json"
+    When I run the :create client command with: 
+      | f | test-ingress.json |
     Then the step should succeed
     When I run the :get client command with:
       | resource      | ingress      |

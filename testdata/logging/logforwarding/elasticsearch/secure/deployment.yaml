@@ -26,7 +26,7 @@ spec:
         app: elasticsearch-server
     spec:
       containers:
-      - image: docker.io/aosqe/elasticsearch@sha256:87538ba78df48470563796df1dbbf2e7bf407e97542830bfd395f912b15c07f0
+      - image: quay.io/openshifttest/elasticsearch@sha256:87538ba78df48470563796df1dbbf2e7bf407e97542830bfd395f912b15c07f0
         imagePullPolicy: IfNotPresent
         name: elasticsearch-server
         ports:

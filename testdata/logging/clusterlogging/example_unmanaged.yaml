@@ -11,8 +11,8 @@ spec:
       nodeCount: 1
       resources:
         requests:
-          cpu: 200m
-          memory: 2Gi
+          cpu: 100m
+          memory: 1Gi
       storage:
         storageClassName: "gp2"
         size: "10Gi"

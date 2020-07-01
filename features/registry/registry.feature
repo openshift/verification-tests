@@ -35,34 +35,6 @@ Feature: Testing registry
     And the output should not contain:
       | <%= cb.digest %> |
 
-  # @author haowang@redhat.com
-  # @case_id OCP-11310
-  @admin
-  Scenario: Have size information for images pushed to internal registry
-    Given I have a project
-    And I find a bearer token of the builder service account
-    And default registry service ip is stored in the :registry_ip clipboard
-    And I have a skopeo pod in the project
-    And master CA is added to the "skopeo" dc
-    When I execute on the pod:
-      | skopeo                     |
-      | --debug                    |
-      | --insecure-policy          |
-      | copy                       |
-      | --dest-cert-dir            |
-      | /opt/qe/ca                 |
-      | --dcreds                   |
-      | dnm:<%= service_account.cached_tokens.first %>  |
-      | docker://docker.io/aosqe/pushwithdocker19:latest |
-      | docker://<%= cb.registry_ip %>/<%= project.name %>/busybox:latest  |
-    Then the step should succeed
-    And evaluation of `image_stream_tag("busybox:latest").digest(user:user)` is stored in the :digest clipboard
-    Then I run the :describe admin command with:
-      | resource | image            |
-      | name     | <%= cb.digest %> |
-    And the output should match:
-      | Image Size:.* |
-
   # @author xiuwang@redhat.com
   # @case_id OCP-18994
   @admin
@@ -108,23 +80,22 @@ Feature: Testing registry
       | resource_name | image-registry |
       | o             | yaml           |
     Then the step should succeed
-    And the output should contain:
-      | name: system:registry                      |
-      | resource: clusterroles                     |
-      | name: registry-registry-role               |
-      | resource: clusterrolebindings              |
-      | name: registry                             |       
-      | resource: serviceaccounts                  |
-      | name: image-registry-certificates          |
-      | resource: configmaps                       |
-      | name: image-registry-private-configuration |
-      | resource: secrets                          | 
-      | name: image-registry                       |
-      | resource: services                         |
-      | name: node-ca                              |
-      | resource: daemonsets                       |
-      | name: image-registry                       |
-      | resource: deployments                      |
+    And the output should match:
+      | name: system:registry                         |
+      | resource: clusterroles                        |
+      | name: registry-registry-role                  |
+      | resource: clusterrolebindings                 |
+      | (name: registry)?                             |       
+      | (resource: serviceaccounts)?                  |
+      | (name: image-registry-certificates)?          |
+      | (resource: configmaps)?                       |
+      | (name: image-registry-private-configuration)? |
+      | (resource: secrets)?                          | 
+      | (name: image-registry)?                       |
+      | (resource: services)?                         |
+      | (name: node-ca)?                              |
+      | (resource: daemonsets)?                       |
+      | (resource: deployments)?                      |
     When I run the :get admin command with:
       | resource      | clusterroles    |
       | resource_name | system:registry |
@@ -183,8 +154,8 @@ Feature: Testing registry
       | resource_name | image-registry |
     Then the step should succeed
     And the output should match:
-     | Gathering data for ns/openshift-image-registry... |
-     | Wrote inspect data to inspect.local.*             |
+      | Gathering data for ns/openshift-image-registry... | 
+      | Wrote inspect data to inspect.local.*             |
 
   # @author xiuwang@redhat.com
   # @case_id OCP-18995
@@ -202,3 +173,95 @@ Feature: Testing registry
       | Mirroring completed in |
     Given the "myimage" image stream was created
     And the "myimage" image stream becomes ready
+
+  # @author xiuwang@redhat.com
+  # @case_id OCP-29696 
+  Scenario: Use node credentials in imagestream import
+    Given I have a project
+    When I run the :tag client command with:
+      | source           | registry.redhat.io/rhscl/mysql-80-rhel7:latest | 
+      | dest             | mysql:8.0                                      |
+      | reference_policy | local                                          |
+    Then the step should succeed
+    When I run the :new_app client command with:
+      | template | mysql-persistent              |
+      | p        | NAMESPACE=<%= project.name %> |
+    Then the step should succeed
+    When a pod becomes ready with labels:
+      | deployment=mysql-1 |
+    When I run the :describe client command with:
+      | resource | pod                | 
+      | l        | deployment=mysql-1 |
+    And the output should match:
+      | Successfully pulled image "image-registry.openshift-image-registry.svc:5000/<%= project.name %>/mysql | 
+    When I run the :new_app client command with:
+      | docker_image | registry.redhat.io/rhscl/ruby-25-rhel7:latest     | 
+      | code         | https://github.com/openshift/ruby-hello-world.git |
+    Then the step should succeed
+    And the "ruby-hello-world-1" build was created
+    And the "ruby-hello-world-1" build completed
+
+  # @author xiuwang@redhat.com
+  # @case_id OCP-29693
+  @admin
+  Scenario: [Disconnect]Import image from a secure registry using node credentials
+    Given I have a project
+    And evaluation of `image_content_source_policy('image-policy-aosqe').mirror_registry(cached: false)` is stored in the :mirror_registry clipboard
+    When I run the :tag client command with:
+      | source           | <%= cb.mirror_registry %>rhscl/mysql-80-rhel7:latest | 
+      | dest             | mysql:8.0                                            |
+      | reference_policy | local                                                |
+    Then the step should succeed
+    When I run the :new_app client command with:
+      | template | mysql-persistent              |
+      | p        | NAMESPACE=<%= project.name %> |
+    Then the step should succeed
+    When a pod becomes ready with labels:
+      | deployment=mysql-1 |
+    When I run the :describe client command with:
+      | resource | pod                | 
+      | l        | deployment=mysql-1 |
+    And the output should match:
+      | Successfully pulled image "image-registry.openshift-image-registry.svc:5000/<%= project.name %>/mysql |
+    When I run the :import_image client command with:
+      | from       | <%= cb.mirror_registry %>rhscl/ruby-25-rhel7:latest |
+      | confirm    | true                                                |
+      | image_name | ruby-25-rhel7:latest                                |
+    Then the step should succeed
+
+  # @author xiuwang@redhat.com
+  # @case_id OCP-29706 
+  @admin
+  Scenario: Node secret takes effect when common secret is removed
+    Given I have a project
+    When I run the :extract admin command with:
+      | resource  | secret/pull-secret |
+      | namespace | openshift-config   | 
+      | to        | /tmp               |
+      | confirm   | true               |
+    Then the step should succeed
+    When I run the :create_secret client command with:
+      | secret_type | generic                |
+      | name        | pj-secret              |
+      | from_file   | /tmp/.dockerconfigjson |
+    Then the step should succeed
+    When I run the :tag client command with:
+      | source | registry.redhat.io/rhscl/mysql-80-rhel7:latest | 
+      | dest   | mysql:8.0                                      |
+    Then the step should succeed
+    When I run the :new_app client command with:
+      | template | mysql-persistent              |
+      | p        | NAMESPACE=<%= project.name %> |
+    Then the step should succeed
+    When a pod becomes ready with labels:
+      | deployment=mysql-1 |
+    When I run the :delete client command with:
+      | object_type       | secret    |
+      | object_name_or_id | pj-secret |
+    Then the step should succeed
+    When I run the :import_image client command with:
+      | from             | registry.redhat.io/rhscl/ruby-25-rhel7:latest |
+      | confirm          | true                                          |
+      | image_name       | ruby-25-rhel7:latest                          |
+      | reference-policy | local                                         |
+    Then the step should succeed

@@ -11,6 +11,15 @@ module BushSlicer
     # @param [String] user the username we want token for
     # @return [String]
     def new_token_by_password(user:, password:, env:)
+      # just print HTTP GET result of console route for further debugging
+      # should check if console route accessible when reporting "Error getting bearer token"
+      # if console_url is accessible then it is likely Auth issue
+      # if console_url is inaccessible then likely network related issue including ingress, snd or platform flake
+      console_url = env.api_endpoint_url.delete_suffix(':6443').gsub(/api/, 'console-openshift-console.apps')
+      opts = {:url => console_url, :method => "GET" }
+      opts[:proxy] = env.client_proxy if env.client_proxy
+      debug_res = Http.request(**opts)
+
       # try challenging client auth
       res = oauth_bearer_token_challenge(
         server_url: env.api_endpoint_url,

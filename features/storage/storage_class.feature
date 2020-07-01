@@ -4,7 +4,8 @@ Feature: storageClass related feature
   @admin
   Scenario Outline: PVC modification after creating storage class
     Given I have a project
-    When I create a manual pvc from "<%= BushSlicer::HOME %>/testdata/storage/misc/pvc-without-annotations.json" replacing paths:
+    Given I obtain test data file "storage/misc/pvc-without-annotations.json"
+    When I create a manual pvc from "pvc-without-annotations.json" replacing paths:
       | ["metadata"]["name"] | mypvc |
     Then the step should succeed
     And the "mypvc" PVC becomes :pending
@@ -32,40 +33,6 @@ Feature: storageClass related feature
       | managed-premium    | # @case_id OCP-13488
 
   # @author lxia@redhat.com
-  @admin
-  @destructive
-  Scenario Outline: No dynamic provision when no default storage class
-    Given I have a project
-    And default storage class is patched to non-default
-    When admin creates a StorageClass from "<%= BushSlicer::HOME %>/testdata/storage/misc/storageClass.yaml" where:
-      | ["metadata"]["name"] | sc-<%= project.name %>      |
-      | ["provisioner"]      | kubernetes.io/<provisioner> |
-    Then the step should succeed
-    # "oc get storageclass -o yaml"
-    # should contain string 'kind: StorageClass' when there are storageclass
-    # should not contain string 'is-default-class: "true"' when there are no default storageclass
-    When I run the :get admin command with:
-      | resource | storageclass |
-      | o        | yaml         |
-    Then the step should succeed
-    And the output should contain "kind: StorageClass"
-    And the output should not contain:
-      | is-default-class: "true" |
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/misc/pvc-without-annotations.json" replacing paths:
-      | ["metadata"]["name"] | mypvc |
-    Then the step should succeed
-    And the "mypvc" PVC becomes :pending
-    Given 30 seconds have passed
-    And the "mypvc" PVC status is :pending
-
-    Examples:
-      | provisioner |
-      | gce-pd      | # @case_id OCP-12090
-      | aws-ebs     | # @case_id OCP-12096
-      | cinder      | # @case_id OCP-12097
-      | azure-disk  | # @case_id OCP-13489
-
-  # @author lxia@redhat.com
   # @author chaoyang@redhat.com
   @admin
   Scenario Outline: storage class provisioner
@@ -73,14 +40,16 @@ Feature: storageClass related feature
     And admin clones storage class "sc-<%= project.name %>" from ":default" with:
       | ["parameters"]["type"] | <type> |
 
-    When I create a dynamic pvc from "<%= BushSlicer::HOME %>/testdata/storage/misc/pvc.json" replacing paths:
+    Given I obtain test data file "storage/misc/pvc.json"
+    When I create a dynamic pvc from "pvc.json" replacing paths:
       | ["metadata"]["name"]                         | mypvc                   |
       | ["spec"]["accessModes"][0]                   | ReadWriteOnce           |
       | ["spec"]["resources"]["requests"]["storage"] | <size>                  |
       | ["spec"]["storageClassName"]                 | sc-<%= project.name %>  |
     Then the step should succeed
 
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/misc/pod.yaml" replacing paths:
+    Given I obtain test data file "storage/misc/pod.yaml"
+    When I run oc create over "pod.yaml" replacing paths:
       | ["metadata"]["name"]                                         | mypod     |
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc     |
       | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt/iaas |
@@ -114,28 +83,33 @@ Feature: storageClass related feature
   @destructive
   Scenario Outline: New creation PVC failed when multiple classes are set as default
     Given I have a project
-    When admin creates a StorageClass from "<%= BushSlicer::HOME %>/testdata/storage/misc/storageClass.yaml" where:
+    Given I obtain test data file "storage/misc/storageClass.yaml"
+    When admin creates a StorageClass from "storageClass.yaml" where:
       | ["metadata"]["name"]                                                       | sc1-<%= project.name %>     |
       | ["provisioner"]                                                            | kubernetes.io/<provisioner> |
       | ["metadata"]["annotations"]["storageclass.kubernetes.io/is-default-class"] | true                        |
     Then the step should succeed
-    When admin creates a StorageClass from "<%= BushSlicer::HOME %>/testdata/storage/misc/storageClass.yaml" where:
+    Given I obtain test data file "storage/misc/storageClass.yaml"
+    When admin creates a StorageClass from "storageClass.yaml" where:
       | ["metadata"]["name"]                                                       | sc2-<%= project.name %>     |
       | ["provisioner"]                                                            | kubernetes.io/<provisioner> |
       | ["metadata"]["annotations"]["storageclass.kubernetes.io/is-default-class"] | true                        |
     Then the step should succeed
 
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/misc/pvc-without-annotations.json" replacing paths:
+    Given I obtain test data file "storage/misc/pvc-without-annotations.json"
+    When I run oc create over "pvc-without-annotations.json" replacing paths:
       | ["metadata"]["name"] | should-fail |
     Then the step should fail
     And the output should match:
       | Internal error occurred |
       | ([2-9]\|[1-9][0-9]+) default StorageClasses were found |
-    When I create a dynamic pvc from "<%= BushSlicer::HOME %>/testdata/storage/misc/pvc.json" replacing paths:
+    Given I obtain test data file "storage/misc/pvc.json"
+    When I create a dynamic pvc from "pvc.json" replacing paths:
       | ["metadata"]["name"]         | mypvc1 |
       | ["spec"]["storageClassName"] | sc1-<%= project.name %>  |
     Then the step should succeed
-    When I create a dynamic pvc from "<%= BushSlicer::HOME %>/testdata/storage/misc/pvc.json" replacing paths:
+    Given I obtain test data file "storage/misc/pvc.json"
+    When I create a dynamic pvc from "pvc.json" replacing paths:
       | ["metadata"]["name"]         | mypvc2 |
       | ["spec"]["storageClassName"] | sc2-<%= project.name %>  |
     Then the step should succeed
@@ -153,7 +127,8 @@ Feature: storageClass related feature
   # @author lxia@redhat.com
   Scenario Outline: New created PVC without specifying storage class use default class when only one class is marked as default
     Given I have a project
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/misc/pvc-without-annotations.json" replacing paths:
+    Given I obtain test data file "storage/misc/pvc-without-annotations.json"
+    When I run oc create over "pvc-without-annotations.json" replacing paths:
       | ["metadata"]["name"] | mypvc |
     Then the step should succeed
     And the expression should be true> pvc("mypvc").storage_class == "<default-storage-class-name>"
@@ -170,11 +145,13 @@ Feature: storageClass related feature
   @admin
   Scenario Outline: PVC with storage class will provision pv with io1 type and 100/20000 iops ebs volume
     Given I have a project
-    When admin creates a StorageClass from "<%= BushSlicer::HOME %>/testdata/storage/ebs/dynamic-provisioning/storageclass-io1.yaml" where:
+    Given I obtain test data file "storage/ebs/dynamic-provisioning/storageclass-io1.yaml"
+    When admin creates a StorageClass from "storageclass-io1.yaml" where:
       | ["metadata"]["name"] | sc-<%= project.name %> |
     Then the step should succeed
 
-    When I create a dynamic pvc from "<%= BushSlicer::HOME %>/testdata/storage/misc/pvc.json" replacing paths:
+    Given I obtain test data file "storage/misc/pvc.json"
+    When I create a dynamic pvc from "pvc.json" replacing paths:
       | ["metadata"]["name"]                         | mypvc |
       | ["spec"]["accessModes"][0]                   | ReadWriteOnce           |
       | ["spec"]["resources"]["requests"]["storage"] | <size>                  |
@@ -185,7 +162,8 @@ Feature: storageClass related feature
     And the expression should be true> pvc.access_modes[0] == "ReadWriteOnce"
     And the expression should be true> pv(pvc.volume_name).reclaim_policy == "Delete"
 
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/misc/pod.yaml" replacing paths:
+    Given I obtain test data file "storage/misc/pod.yaml"
+    When I run oc create over "pod.yaml" replacing paths:
       | ["metadata"]["name"]                                         | mypod |
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc |
       | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt/iaas               |
@@ -211,13 +189,15 @@ Feature: storageClass related feature
   @admin
   Scenario Outline: PVC with storage class will not provision pv with st1/sc1 type ebs volume if request size is wrong
     Given I have a project
-    When admin creates a StorageClass from "<%= BushSlicer::HOME %>/testdata/storage/ebs/dynamic-provisioning/storageclass.yaml" where:
+    Given I obtain test data file "storage/ebs/dynamic-provisioning/storageclass.yaml"
+    When admin creates a StorageClass from "storageclass.yaml" where:
       | ["metadata"]["name"]   | sc-<%= project.name %> |
       | ["provisioner"]        | kubernetes.io/aws-ebs  |
       | ["parameters"]["type"] | <type>                 |
     Then the step should succeed
 
-    When I create a dynamic pvc from "<%= BushSlicer::HOME %>/testdata/storage/misc/pvc.json" replacing paths:
+    Given I obtain test data file "storage/misc/pvc.json"
+    When I create a dynamic pvc from "pvc.json" replacing paths:
       | ["metadata"]["name"]                         | mypvc |
       | ["spec"]["accessModes"][0]                   | ReadWriteOnce           |
       | ["spec"]["resources"]["requests"]["storage"] | <size>                  |
@@ -244,7 +224,8 @@ Feature: storageClass related feature
   Scenario: PVC with storage class won't provisioned pv if no storage class or wrong storage class object
     Given I have a project
     # No sc exists
-    When I create a dynamic pvc from "<%= BushSlicer::HOME %>/testdata/storage/misc/pvc.json" replacing paths:
+    Given I obtain test data file "storage/misc/pvc.json"
+    When I create a dynamic pvc from "pvc.json" replacing paths:
       | ["metadata"]["name"]                         | mypvc |
       | ["spec"]["accessModes"][0]                   | ReadWriteOnce            |
       | ["spec"]["resources"]["requests"]["storage"] | 1Gi                      |
@@ -263,12 +244,14 @@ Feature: storageClass related feature
   # @case_id OCP-10228
   Scenario: AWS ebs volume is dynamic provisioned with default storageclass
     Given I have a project
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/ebs/pvc-retain.json" replacing paths:
+    Given I obtain test data file "storage/ebs/pvc-retain.json"
+    When I run oc create over "pvc-retain.json" replacing paths:
       | ["metadata"]["name"]                         | mypvc |
       | ["spec"]["resources"]["requests"]["storage"] | 1Gi                     |
     Then the step should succeed
 
-    When I run oc create over "<%= BushSlicer::HOME %>/testdata/storage/misc/pod.yaml" replacing paths:
+    Given I obtain test data file "storage/misc/pod.yaml"
+    When I run oc create over "pod.yaml" replacing paths:
       | ["metadata"]["name"]                                         | mypod |
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc |
       | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt/iaas               |

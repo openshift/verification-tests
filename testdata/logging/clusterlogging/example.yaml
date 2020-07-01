@@ -13,8 +13,8 @@ spec:
         limits:
           memory: 2Gi
         requests:
-          cpu: 200m
-          memory: 2Gi
+          cpu: 100m
+          memory: 1Gi
       storage: {}
       redundancyPolicy: "ZeroRedundancy"
   visualization:

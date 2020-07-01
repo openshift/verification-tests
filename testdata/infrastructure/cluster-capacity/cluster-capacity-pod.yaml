@@ -7,7 +7,7 @@ metadata:
 spec:
   containers:
   - name: cluster-capacity
-    image: openshift3/ose-cluster-capacity:v<%=env.get_version(user:user).first%>
+    image: quay.io/openshift/origin-cluster-capacity:latest
     volumeMounts:
     - mountPath: /test-pod
       name: test-volume

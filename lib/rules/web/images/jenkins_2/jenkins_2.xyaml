@@ -619,7 +619,7 @@ jenkins_multi_oauth_login:
     op: send_keys <password>
     type: input
   - selector:
-      text: Log In
+      visible_text: !ruby/regexp /Log in/i
     op: click
     type: button
   scripts:

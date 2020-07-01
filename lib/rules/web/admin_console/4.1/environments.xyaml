@@ -1,8 +1,7 @@
 click_add_value_from_configmap_or_secret:
-  element:
-    selector:
-      xpath: //*[contains(normalize-space(text()),'Add from Config Map or Secret')]
-    op: click
+  params:
+    button_text: Add from Config Map or Secret
+  action: click_button
 check_env_editor_loaded:
   element:
     selector:

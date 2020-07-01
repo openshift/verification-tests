@@ -8,7 +8,7 @@ When(/^I create the 'Ready' unhealthyCondition$/) do
 
   # somtimes PDB may prevent a successful node-drain thus blocks the test
   # annnotate the machine to exclude node-drain so that test does not flake
-  killer_pod_tmpl = "#{ENV['BUSHSLICER_HOME']}/testdata/cloud/mhc/kubelet-killer-pod.yml"
+  killer_pod_tmpl = "#{BushSlicer::HOME}/testdata/cloud/mhc/kubelet-killer-pod.yml"
 
   # this is no longer needed after 4.4
   if env.version_le("4.3", user: user)
@@ -19,7 +19,7 @@ When(/^I create the 'Ready' unhealthyCondition$/) do
       | overwrite    | true                                        |
       | keyval       | machine.openshift.io/exclude-node-draining= |
     })
-    killer_pod_tmpl = "#{ENV['BUSHSLICER_HOME']}/testdata/cloud/mhc/kubelet-killer-pod-43.yml"
+    killer_pod_tmpl = "#{BushSlicer::HOME}/testdata/cloud/mhc/kubelet-killer-pod-43.yml"
   end
 
   # create a priviledged pod that kills kubelet on its node
@@ -30,11 +30,10 @@ When(/^I create the 'Ready' unhealthyCondition$/) do
   step %Q{the step should succeed}
 end
 
-Then(/^the machine should be remediated$/) do
-  # unhealthy machine and should be deleted
-  step %Q{I wait for the resource "node" named "<%= machine.node_name %>" to disappear within 900 seconds}
-  step %Q{I wait for the resource "machine" named "<%= machine.name %>" to disappear within 900 seconds}
-
-  # new machine and node should provisioned
-  step %Q{the machineset should have expected number of running machines}
-end
+ Then(/^the machine(?: named "(.+)")? should be remediated$/) do | machine_name |
+   machine_name = machine.name if machine_name.nil?
+   # unhealthy machine and should be deleted
+   step %Q{I wait for the resource "machine" named "#{machine_name}" to disappear within 1200 seconds}
+   # new machine and node should provisioned
+   step %Q{the machineset should have expected number of running machines}
+ end

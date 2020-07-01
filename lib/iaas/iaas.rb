@@ -4,32 +4,29 @@ module BushSlicer
   module IAAS
     # will select the configured iaas provider and create the required iaas object to query the API
     def self.select_provider(env)
-      master_config = env.master_services[0].config.as_hash()
+      provider_name = Infrastructure.new(name: "cluster", env: env).platform
 
-      api_server_args = master_config["kubernetesMasterConfig"]["apiServerArguments"]
-
-      if api_server_args && api_server_args["cloud-provider"][0]
-        iaas_provider_name = api_server_args["cloud-provider"][0]
-
-        case iaas_provider_name
+      if provider_name
+        case provider_name
         when "openstack"
           return {:type => "openstack", :provider => self.init_openstack(env, api_server_args)}
         when "aws"
           return {:type => "aws", :provider => self.init_aws(env)}
-        when "gce"
+        when "GCP"
           return {:type => "gce", :provider => self.init_gce(env)}
         else
-          raise "The IAAS provider #{iaas_provider_name} does not exist or is currently not supported by BushSlicer!"
+          raise "The IAAS provider #{provider_name} is currently not supported by test framework!"
         end
       end
-      raise "There is no IAAS provider configured for this instance of Openshift!"
+      raise "There is no IAAS provider configured for this instance of OpenShift!"
     end
 
 
     def self.init_openstack(env, api_server_args)
       # get the config of the IAAS instance
+      raise "getting IAAS config for OpenStack unimplemented"
       iaas_conf_path = api_server_args["cloud-config"][0]
-      iaas_conf = env.master_hosts[0].exec_admin("cat #{iaas_conf_path} | grep =")[:response].split("\n")
+      iaas_conf = env.nodes[0].host.exec_admin("cat #{iaas_conf_path} | grep =")[:response].split("\n")
       iaas_conf_params = {}
 
       iaas_conf.each do |line|
@@ -57,7 +54,7 @@ module BushSlicer
           cat /etc/sysconfig/atomic-openshift-node | grep AWS_
         fi
       }
-      conn_cred = env.master_hosts[0].exec_admin(search_command, quiet: true)[:response].split("\n")
+      conn_cred = env.nodes[0].host.exec_admin(search_command, quiet: true)[:response].split("\n")
 
       key, skey = nil
       conn_cred.each { |c|
@@ -74,7 +71,7 @@ module BushSlicer
     end
 
     def self.init_gce(env)
-      token_json = env.master_hosts[0].exec_admin("curl -sS 'http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token' -H 'Metadata-Flavor: Google'")[:response]
+      token_json = env.nodes[0].host.exec_admin("curl -sS 'http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token' -H 'Metadata-Flavor: Google'")[:stdout]
 
       return GCE.new(:token_json => token_json, :auth_type => "token")
     end

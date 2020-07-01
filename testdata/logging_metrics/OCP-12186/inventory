@@ -1,5 +1,0 @@
-[OSEv3:vars]
-# Extra_Metrics
-openshift_metrics_hawkular_cert=<%= cb.cert_path %>
-openshift_metrics_hawkular_key=<%= cb.key_path %>
-openshift_metrics_hawkular_ca=<%= cb.ca_crt_path %>

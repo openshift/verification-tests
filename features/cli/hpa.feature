@@ -4,8 +4,9 @@ Feature: hpa scale
   # @case_id OCP-10931
   Scenario: HPA shouldn't scale up target if the replicas of dc is 0
     Given I have a project
+    Given I obtain test data file "hpa/dc-hello-openshift.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/hpa/dc-hello-openshift.yaml |
+      | f | dc-hello-openshift.yaml |
     Then the step should succeed
     Given a pod becomes ready with labels:
       | deployment=hello-openshift-1 |
@@ -39,8 +40,9 @@ Feature: hpa scale
   # @case_id OCP-11338
   Scenario: HPA shouldn't scale up target if the replicas of rc is 0
     Given I have a project
+    Given I obtain test data file "hpa/rc-hello-openshift.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/hpa/rc-hello-openshift.yaml |
+      | f | rc-hello-openshift.yaml |
     Then the step should succeed
     Given I wait until replicationController "hello-openshift" is ready
     When I run the :autoscale client command with:
@@ -73,8 +75,9 @@ Feature: hpa scale
   @smoke
   Scenario: Creates autoscaler for replication controller by oc autoscale
     Given I have a project
+    Given I obtain test data file "hpa/rc-hello-openshift.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/hpa/rc-hello-openshift.yaml |
+      | f | rc-hello-openshift.yaml |
     Then the step should succeed
     Given I wait until replicationController "hello-openshift" is ready
     When I run the :autoscale client command with:
@@ -120,8 +123,9 @@ Feature: hpa scale
   # @case_id OCP-11576
   Scenario: Creates autoscaler for replication controller with invalid value
     Given I have a project
+    Given I obtain test data file "hpa/rc-hello-openshift.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/hpa/rc-hello-openshift.yaml |
+      | f | rc-hello-openshift.yaml |
     Then the step should succeed
     Given I wait until replicationController "hello-openshift" is ready
     When I run the :autoscale client command with:

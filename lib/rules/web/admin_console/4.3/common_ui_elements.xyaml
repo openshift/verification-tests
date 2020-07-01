@@ -32,6 +32,20 @@ check_create_button_missing:
   - selector:
       <<: *create_button
     missing: true
+check_kebab_items_disabled:
+  elements:
+  - selector:
+      xpath: //button[contains(@class, 'pf-c-dropdown__menu-item') and not(contains(@class, 'pf-m-disabled'))]
+    missing: true
+check_action_button_missing:
+  elements:
+  - selector:
+      xpath: //span[contains(text(), 'Actions')]
+    missing: true
+check_save_button_missing:
+  params:
+    button_text: Save
+  action: check_button_missing
 click_cancel_button:
   elements:
   - selector:
@@ -45,18 +59,41 @@ click_button:
     op: click
 click_button_text:
   element:
-    selector:
+    selector: &button_with_text
       xpath: //button[text()='<button_text>']
     op: click
+check_button_text:
+  element:
+    selector:
+      <<: *button_with_text
+check_button_missing:
+  element:
+    selector:
+      <<: *button_with_text
+    missing: true
 click_button_by_id:
   element:
     selector:
       xpath: //button[contains(@id,'<button_id>')]
     op: click
+click_button_title:
+  element:
+    selector:
+      xpath: //button[@title='<button_title>']
+    op: click
+check_button_title:
+  element:
+    selector:
+      xpath: //button[@title='<button_title>']
 check_table_text_data:
   element:
     selector:
       xpath: //td[text()='<text_data>']
+check_table_line_count:
+  action: wait_table_loaded
+  scripts:
+  - command: return document.querySelectorAll("tbody tr").length == '<line_count>'
+    expect_result: true
 select_resource_item:
   action: click_button_by_id
   action: click_on_resource_name
@@ -95,6 +132,11 @@ click_yaml_tab:
   params:
     tab_name: YAML
   action: click_tab
+check_edit_yaml_enabled:
+  params:
+    button_text: Save
+  action: click_yaml_tab
+  action: check_button_enabled
 click_radio_input:
   element:
     selector:
@@ -109,6 +151,11 @@ click_yaml_create_button:
   params:
     button_id: yaml-create
   action: click_button_by_id
+check_yaml_create_button_missing:
+  elements:
+  - selector:
+      xpath: //button[@id='yaml-create']
+    missing: true
 clear_input_value:
   elements:
   - selector:
@@ -120,6 +167,12 @@ set_input_value:
     selector:
       xpath: //input[@id='<input_field_id>']
     op: send_keys <input_value>
+    type: input
+clear_input_class:
+  element:
+    selector:
+      xpath: //input[contains(@class, '<class_text>')]
+    op: clear
     type: input
 set_input_class:
   element:
@@ -143,6 +196,16 @@ set_label_input_simple:
     type: input
   - selector:
       <<: *label_input_value
+    op: send_keys <input_value>
+    type: input
+set_placeholder_input:
+  elements:
+  - selector: &placeholder_input
+      xpath: //input[@placeholder='<name>']
+    op: clear
+    type: input
+  - selector:
+      <<: *placeholder_input
     op: send_keys <input_value>
     type: input
 check_content_in_yaml_editor:
@@ -175,11 +238,6 @@ click_first_item_from_sub_resource_list_and_check_breadcrumb:
   action: wait_until_no_loading
   action: click_first_sub_item_in_resource_detail_list
   action: check_link_in_breadcrumb
-# click and check the first item from resources listed in grid cell, such as installed operator
-click_first_item_from_gridcell_list_and_check_breadcrumb:
-  action: wait_until_no_loading
-  action: click_first_item_in_grid_cell_list
-  action: check_link_in_breadcrumb
 check_link_in_breadcrumb:
   element:
     selector:
@@ -200,7 +258,7 @@ confirm_deletion:
 check_resource_item:
   elements:
   - selector:
-      xpath: //span[contains(@class,'co-m-resource-icon') and @title='<resource_type>']/parent::span[@class='co-resource-item']//a[@class='co-resource-item__resource-name' and text()='<resource_name>' and @href='<resource_link>']
+      xpath: //span[contains(@class,'co-m-resource-icon') and @title='<resource_type>']/parent::span[contains(@class,'co-resource-item')]//a[@class='co-resource-item__resource-name' and text()='<resource_name>' and @href='<resource_link>']
 check_resources_title_on_page:
   elements:
   - selector:
@@ -319,10 +377,9 @@ submit_changes:
       xpath: //button[@type='submit' and not(@disabled)]
     op: click
 click_add_more_button:
-  element:
-    selector:
-      xpath: //*[contains(text(),'Add More')]
-    op: click
+  params:
+    button_text: Add More
+  action: click_button
 click_add_dropdown_button:
   element:
     selector:
@@ -433,6 +490,11 @@ wait_until_no_loading:
     selector:
       css: .cos-status-box--loading
     missing: true
+    timeout: 30
+wait_sidebar_loaded:
+  element:
+    selector:
+      css: .co-p-has-sidebar__sidebar-close
     timeout: 30
 wait_table_loaded:
   element:

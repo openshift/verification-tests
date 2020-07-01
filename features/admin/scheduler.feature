@@ -4,8 +4,9 @@ Feature: Scheduler related scenarios
   # @case_id OCP-14582
   Scenario: When no scheduler name is supplied, the pod is automatically scheduled using the default-scheduler
     Given I have a project
+    Given I obtain test data file "scheduler/multiple-schedulers/pod-no-scheduler.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/scheduler/multiple-schedulers/pod-no-scheduler.yaml |
+      | f | pod-no-scheduler.yaml |
     Then the step should succeed
     Given the pod named "no-scheduler" becomes ready
     When I run the :describe client command with:

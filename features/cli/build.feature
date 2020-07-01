@@ -44,8 +44,9 @@ Feature: build 'apps' with CLI
   # @author pruan@redhat.com
   Scenario Outline: when delete the bc,the builds pending or running should be deleted
     Given I have a project
+    Given I obtain test data file "build/tc<number>/test-buildconfig.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/build/tc<number>/test-buildconfig.json |
+      | f | test-buildconfig.json |
     Then the step should succeed
     Given the "ruby-sample-build-1" build becomes <build_status>
     Then I run the :delete client command with:
@@ -61,8 +62,6 @@ Feature: build 'apps' with CLI
 
     Examples:
       | number | build_status |
-      | 517369 | :pending     | # @case_id OCP-11770
-      | 517370 | :running     | # @case_id OCP-11942
       | 517367 | :complete    | # @case_id OCP-11224
       | 517368 | :failed      | # @case_id OCP-11550
 
@@ -72,10 +71,10 @@ Feature: build 'apps' with CLI
     Given I have a project
     And I git clone the repo "https://github.com/openshift/ruby-hello-world.git"
     When I run the :new_build client command with:
-      | image | openshift/ruby   |
-      | code  | ruby-hello-world |
-      | e     | FOO=bar          |
-      | name  | myruby           |
+      | image_stream | openshift/ruby   |
+      | code         | ruby-hello-world |
+      | e            | FOO=bar          |
+      | name         | myruby           |
     Then the step should succeed
     And the "myruby-1" build was created
     And the "myruby-1" build completed
@@ -183,8 +182,9 @@ Feature: build 'apps' with CLI
   # @case_id OCP-11227
   Scenario: Add multiple source inputs
     Given I have a project
+    Given I obtain test data file "templates/tc517667/ruby22rhel7-template-sti.json"
     When I run the :new_app client command with:
-      | file | <%= BushSlicer::HOME %>/testdata/templates/tc517667/ruby22rhel7-template-sti.json |
+      | file | ruby22rhel7-template-sti.json |
     Given the "ruby-sample-build-1" build completes
     When I run the :get client command with:
       | resource      | buildconfig       |
@@ -206,8 +206,9 @@ Feature: build 'apps' with CLI
   # @case_id OCP-10771
   Scenario: Add a image with multiple paths as source input
     Given I have a project
+    Given I obtain test data file "templates/tc517666/ruby22rhel7-template-sti.json"
     When I run the :new_app client command with:
-      | file | <%= BushSlicer::HOME %>/testdata/templates/tc517666/ruby22rhel7-template-sti.json |
+      | file | ruby22rhel7-template-sti.json |
     Given the "ruby-sample-build-1" build completes
     When I get project build_config named "ruby-sample-build" as YAML
     Then the output should contain "xiuwangs2i-2"
@@ -245,7 +246,7 @@ Feature: build 'apps' with CLI
     Given I get project builds
     #Create a deploymentconfig to generate pods to test on,
     #Avoids the use of direct docker commands.
-    When I download a file from "<%= BushSlicer::HOME %>/testdata/templates/tc517670/dc.json"
+    When I obtain test data file "templates/tc517670/dc.json"
     Then the step should succeed
     Given I replace lines in "dc.json":
       | replaceme | final-app |
@@ -284,11 +285,13 @@ Feature: build 'apps' with CLI
   Scenario: Cannot create secret from local file and with same name via oc new-build
     Given I have a project
     #Reusing similar secrets to TC #519256
+    Given I obtain test data file "secrets/tc519256/testsecret1.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/secrets/tc519256/testsecret1.json |
+      | f | testsecret1.json |
     Then the step should succeed
+    Given I obtain test data file "secrets/tc519256/testsecret2.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/secrets/tc519256/testsecret2.json |
+      | f | testsecret2.json |
     Then the step should succeed
     When I run the :new_build client command with:
       | image_stream | ruby:latest                                      |
@@ -309,8 +312,9 @@ Feature: build 'apps' with CLI
   # @case_id OCP-11552
   Scenario: Using a docker image as source input for docker build
     Given I have a project
+    Given I obtain test data file "templates/tc517668/ruby22rhel7-template-docker.json"
     When I run the :new_app client command with:
-      | file | <%= BushSlicer::HOME %>/testdata/templates/tc517668/ruby22rhel7-template-docker.json |
+      | file | ruby22rhel7-template-docker.json |
     Given the "ruby-sample-build-1" build completes
     When I get project build_config named "ruby-sample-build" as YAML
     Then the output should contain "xiuwangtest"
@@ -324,11 +328,13 @@ Feature: build 'apps' with CLI
   @admin
   Scenario Outline: Do sti/custom build with no inputs in buildconfig
     Given I have a project
+    Given I obtain test data file "build/tc525736/nosrc-setup.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/build/tc525736/nosrc-setup.json |
+      | f | nosrc-setup.json |
     Then the step should succeed
+    Given I obtain test data file "build/tc525736/nosrc-test.json"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/build/tc525736/nosrc-test.json  |
+      | f | nosrc-test.json  |
     When I get project bc
     Then the output should contain:
       | <bc_name> |
@@ -344,7 +350,8 @@ Feature: build 'apps' with CLI
       | object_name_or_id |  <bc_name> |
     Then the step should succeed
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/build/<file_name> |
+    Given I obtain test data file "build/<file_name>"
+      | f | <file_name> |
     When I get project build_config named "<bc_name>"
     Then the step should succeed
     When I run the :start_build client command with:
@@ -355,7 +362,6 @@ Feature: build 'apps' with CLI
     Examples:
       | bc_name              | build_name             | file_name                    |
       | ruby-sample-build-ns | ruby-sample-build-ns-1 | tc525736/Nonesrc-sti.json    | # @case_id OCP-11580
-      | ruby-sample-build-nc | ruby-sample-build-nc-1 | tc525735/Nonesrc-docker.json | # @case_id OCP-11268
 
   # @author cryan@redhat.com
   # @case_id OCP-11582
@@ -363,7 +369,7 @@ Feature: build 'apps' with CLI
     Given I have a project
     When I run the :new_build client command with:
       | code         | https://github.com/openshift/ruby-hello-world |
-      | image        | openshift/ruby                                |
+      | image_stream | openshift/ruby                                |
     Then the step should succeed
     Given I run the steps 3 times:
     """
@@ -438,8 +444,8 @@ Feature: build 'apps' with CLI
   Scenario Outline: Cancel multiple new/pending/running builds
     Given I have a project
     When I run the :new_build client command with:
-      | image    | openshift/ruby:latest                            |
-      | app_repo | http://github.com/openshift/ruby-hello-world.git |
+      | image_stream | openshift/ruby:latest                            |
+      | app_repo     | http://github.com/openshift/ruby-hello-world.git |
     Then the step should succeed
     Given I run the steps 5 times:
     """
@@ -573,7 +579,6 @@ Feature: build 'apps' with CLI
 
     Examples:
       | num1 | num2 | num3 | num4 | num5 |
-      | 7    | 10   | 13   | 16   | 19   | # @case_id OCP-11272
       | 5    | 5    | 5    | 5    | 5    | # @case_id OCP-15019
 
   # @author haowang@redhat.com
@@ -673,8 +678,9 @@ Feature: build 'apps' with CLI
       | app_repo     | https://github.com/openshift/ruby-hello-world.git |
       | image_stream | ruby:latest                                       |
     Then the step should succeed
+    Given I obtain test data file "templates/tc539699/build.yaml"
     When I run the :create client command with:
-      | f | <%= BushSlicer::HOME %>/testdata/templates/tc539699/build.yaml | 
+      | f | build.yaml | 
     Then the step should succeed
     When I run the :start_build client command with:
       | buildconfig | ruby-hello-world |
@@ -686,29 +692,6 @@ Feature: build 'apps' with CLI
       | buildconfig | ruby-hello-world |
     Then the step should succeed
     Given the "ruby-hello-world-3" build was created
-
-  # @author xiuwang@redhat.com
-  # @case_id OCP-10942
-  Scenario: Build env vars are set correctly for Extended build
-    Given I have a project
-    When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/test-for-s2i-extendbuild/master/extended-bc-scripts-in-repo.json |
-    Then the step should succeed
-    When I run the :start_build client command with:
-      | buildconfig | extended-build-from-repo |
-    Then the step should succeed
-    And the "extended-build-from-repo-1" build completed
-    Then evaluation of `image_stream("extended-repo").docker_image_repository(user: user)` is stored in the :user_image clipboard
-    When I run the :run client command with:
-      | name  | myapp                |
-      | image | <%= cb.user_image %> |
-    Then the step should succeed
-    Given a pod becomes ready with labels:
-      | deployment=myapp-1 |
-    And I execute on the pod:
-      | env |
-    Then the output should contain:
-      | S2I_TEST_FOO=bar |
 
   # @author wzheng@redhat.com
   # @case_id OCP-17523
@@ -771,7 +754,7 @@ Feature: build 'apps' with CLI
       | image | <%= cb.user_image %> |
     Then the step should succeed
     Given a pod becomes ready with labels:
-      | deployment=myapp-1 |
+      | run=myapp |
     When I execute on the pod:
       | ls | -l |
     Then the step should succeed
@@ -805,7 +788,7 @@ Feature: build 'apps' with CLI
       | image | <%= cb.user_image %> |
     Then the step should succeed
     Given a pod becomes ready with labels:
-      | deployment=myapp-1 |
+      | run=myapp |
     When I execute on the pod:
       | ls | -al | .m2 |
     Then the step should succeed
@@ -848,7 +831,7 @@ Feature: build 'apps' with CLI
       | image | <%= cb.user_image %> |
     Then the step should succeed
     Given a pod becomes ready with labels:
-      | deployment=myapp-1 |
+      | run=myapp |
     When I execute on the pod:
       | ls | -al | /aoscm/ |
     Then the step should succeed
@@ -895,7 +878,7 @@ Feature: build 'apps' with CLI
       | image | <%= cb.user_image %> |
     Then the step should succeed
     Given a pod becomes ready with labels:
-      | deployment=myapp-1 |
+      | run=myapp |
     When I execute on the pod:
       | ls | -l |
     And the output should match:
@@ -925,9 +908,8 @@ Feature: build 'apps' with CLI
       | image | <%= cb.user_image %> |
     Then the step should succeed
     Given a pod becomes ready with labels:
-      | deployment=myapp-1 |
+      | run=myapp |
     When I execute on the pod:
       | ls | -l | newdir1/newdir2/newdir3|
     And the output should match:
       | -rw-------.*configmap1.test |
-

@@ -1,11 +1,53 @@
 set_filter_strings:
   elements:
   - selector: &filter_text_ele
-      css: input[class*='text-filter']
+      xpath: //input[contains(@class,'text-filter')]
     op: clear
   - selector:
       <<: *filter_text_ele
     op: send_keys <filter_text>
+click_filter_dropdown:
+  elements:
+  - selector:
+      xpath: //button[@data-test-id='filter-dropdown-toggle']
+    op: click
+select_filter:
+  elements:
+  - selector:
+      xpath: //li[@id='<filter>']
+    op: click
+clear_all_filters:
+  params:
+    button_text: Clear all filters
+  action: click_button
+set_strings_in_dropdown_filter_box:
+  elements:
+  - selector: &dropdown_filter
+      xpath: //input[@data-test-id='dropdown-text-filter']
+    op: clear
+  - selector:
+      <<: *dropdown_filter
+    op: send_keys <filter_text>
+set_strings_in_filter_box:
+  elements:
+  - selector: &filter_string
+      xpath: //input[@data-test-id='<test_id_value>']
+    op: clear
+  - selector:
+      <<: *filter_string
+    op: send_keys <filter_text>
+set_filter_strings_on_explore_page:
+  elements:
+  - selector: &filter_text_for_explore
+      css: input[class*='text-filter']
+    op: clear
+  - selector:
+      <<: *filter_text_for_explore
+    op: send_keys <filter_text>
+filter_event_by_name_or_message:
+  params:
+    test_id_value: item-filter
+  action: set_strings_in_filter_box
 search_by_event_catagory:
   elements:
   - selector:
@@ -82,8 +124,4 @@ check_item_in_table:
   - selector:
       xpath: //tr[@data-test-rows='resource-row']//*[text()='<item>']
     timeout: 15
-clear_all_filters:
-  elements:
-  - selector:
-      xpath: //div/button[starts-with(text(),'Clear')]
-    op: click
+

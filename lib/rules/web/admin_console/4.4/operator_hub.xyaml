@@ -121,10 +121,49 @@ check_operator_description_on_overlay:
   - selector:
       xpath: //div[contains(@class, 'co-hint-block')][h2[contains(.,'<text> Operator')] and div[contains(@class, 'co-hint-block__body') and contains(.,'<description>')] ]
     timeout: 30
+check_basic_install_capability:
+  params:
+    capability_name: Basic Install
+  action: check_ticked_capability_level
+check_seamless_upgrade_capability:
+  params:
+    capability_name: Seamless Upgrades
+  action: check_ticked_capability_level
+check_full_lifecycle_capability:
+  params:
+    capability_name: Full Lifecycle
+  action: check_ticked_capability_level
+check_deep_insights_capability:
+  params:
+    capability_name: Deep Insights
+  action: check_ticked_capability_level
+check_auto_pilot_capability:
+  params:
+    capability_name: Auto Pilot
+  action: check_ticked_capability_level
+check_ticked_capability_level:
+  elements:
+  - selector:
+      xpath: //li[contains(., '<capability_name>')]/*[name()='svg']
 click_checkbox_from_provider_type:  
   elements:
   - selector:
       xpath:  //form[@data-test-group-name='providerType']
+    timeout: 30
+  - selector:
+      xpath: //*[contains(@class, 'pf-c-check__label') and text()='<text>']
+    op: click
+open_first_card_overlay_panel:
+  action:
+    if_element:
+      selector:
+        xpath: //button[@type='submit' and not(@disabled)]
+    ref: submit_changes
+  action: open_first_card_in_overlay
+click_checkbox_from_capability_level:
+  elements:
+  - selector:
+      xpath:  //form[@data-test-group-name='capabilityLevel']
     timeout: 30
   - selector:
       xpath: //*[contains(@class, 'pf-c-check__label') and text()='<text>']
@@ -140,3 +179,72 @@ uninstall_operator_on_console:
   action: click_resource_action_icon
   action: click_button
   action: submit_changes
+open_edit_form_view:
+  params:
+    button_text: Edit Form
+  action: click_button
+select_installed_namespace:
+  action: click_project_list_dropdown
+  action: choose_project_from_dropdown_list
+check_all_namespace_installation_mode_with_recommended_ns:
+  params:
+    button_text: <recommended_ns>
+  action: check_button_contains_text
+check_all_namespace_installation_mode_without_recommended_ns:
+  params:
+    disabled_radio_text: OwnNamespace
+    checked_radio_text: AllNamespaces
+  action: check_disabled_radio_input
+  action: check_checked_radio_input
+check_specific_namespace_installation_mode_with_recommended_ns:
+  params:
+    disabled_radio_text: AllNamespaces
+    checked_radio_text: <recommended_ns>
+  action: check_disabled_radio_input
+  action: check_checked_radio_input
+check_specific_namespace_installation_mode_without_recommended_ns:
+  params:
+    disabled_radio_text: AllNamespaces
+    checked_radio_text: OwnNamespace
+  action: check_disabled_radio_input
+  action: check_checked_radio_input
+enable_cluster_monitoring:
+  element:
+    selector:
+      xpath: //input[contains(@type,'checkbox') and contains(@id,'enable-monitoring-checkbox')]
+    op: click
+click_radio_to_pick_ns:
+  params:
+    text: Pick an existing namespace
+  action: click_radio_input_by_text
+check_Hazelcastjet_default_action_and_remote_workflow:
+  params:
+    text: Purchase
+    link_url: https://marketplace.redhat.com/en-us/operators/hazelcast-jet-enterprise-operator-rhmp/pricing
+  action: check_link_and_text
+filter_by_keyword_on_catalog_page:
+  elements:
+  - selector:
+      xpath: //input[contains(@class, 'co-catalog-page__input')]
+    op: send_keys :backspace
+  - selector:
+      xpath: //input[contains(@class, 'co-catalog-page__input')]
+    op: send_keys <keyword>
+open_operator_modal:
+  params:
+    keyword: <operator_name>
+  action: filter_by_keyword_on_catalog_page
+  action: open_first_card_in_overlay
+check_phase_status:
+  element:
+    selector:
+      xpath: //td/span[contains(.,'Phase')]/span[contains(.,'<status>')]
+check_state_status:
+  element:
+    selector:
+      xpath: //span[contains(.,'State') and contains(.,'<status>')]
+check_condition_status:
+  element:
+    selector:
+      xpath: //span[contains(.,'Conditions') and contains(.,'<status>')]
+

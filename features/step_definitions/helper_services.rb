@@ -9,8 +9,9 @@ Given /^I have a NFS service in the(?: "([^ ]+?)")? project$/ do |project_name|
   end
 
   step %Q/SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group/
+  step 'I obtain test data file "storage/nfs/nfs-server.yaml"'
   step %Q{I run the :create client command with:}, table(%{
-    | f | #{ENV['BUSHSLICER_HOME']}/testdata/storage/nfs/nfs-server.yaml |
+    | f | <%= BushSlicer::HOME %>/testdata/storage/nfs/nfs-server.yaml |
   })
   step %Q/the step should succeed/
 
@@ -81,7 +82,7 @@ Given /^I have a efs-provisioner(?: with fsid "(.+)")?(?: of region "(.+)")? in 
   _deployment = deployment("efs-provisioner", _project)
   _deployment.ensure_deleted(user: admin)
   #Create configmap,secret,sa,deployment
-  step %Q{I download a file from "#{ENV['BUSHSLICER_HOME']}/testdata/configmap/efsconfigm.yaml"}
+  step %Q{I obtain test data file "configmap/efsconfigm.yaml"}
   cm = YAML.load(@result[:response])
   path = @result[:abs_path]
   cm["data"]["file.system.id"] = fsid if fsid
@@ -119,19 +120,33 @@ end
 #save the service ip and port of the proxy pod for later use in the scenario.
 Given /^I have a(n authenticated)? proxy configured in the project$/ do |use_auth|
   if use_auth
-    step %Q/I run the :new_app client command with:/, table(%{
-      | docker_image | aosqe/squid-proxy  |
-      | env          | USE_AUTH=1         |
+    step %Q/I run the :create_deploymentconfig client command with:/, table(%{
+      | image | aosqe/squid-proxy  |
+      | name  | squid-proxy        |
       })
+    step %Q/I wait until the status of deployment "squid-proxy" becomes :running/
+    step %Q/I run the :set_env client command with:/, table(%{
+      | resource | deploymentconfig/squid-proxy |
+      | e        | USE_AUTH=1                   |
+      })
+    step %Q/a pod becomes ready with labels:/, table(%{
+      | deployment=squid-proxy-2 |
+      })
+    @result = user.cli_exec(:expose, resource: "deploymentconfig", resource_name: "squid-proxy", port: "3128")
   else
-    step %Q/I run the :new_app client command with:/, table(%{
-      | docker_image | aosqe/squid-proxy  |
+    step %Q/I run the :create_deployment client command with:/, table(%{
+      | image | aosqe/squid-proxy  |
+      | name  | squid-proxy        |
       })
+    step %Q/a pod becomes ready with labels:/, table(%{
+      | app=squid-proxy |
+      })
+    @result = user.cli_exec(:expose, resource: "deployment", resource_name: "squid-proxy", port: "3128")
   end
   step %Q/the step should succeed/
-  step %Q/a pod becomes ready with labels:/, table(%{
-    | deployment=squid-proxy-1 |
-    })
+  unless @result[:success]
+    raise "could not create squid-proxy service, see log"
+  end
   step %Q/I wait for the "squid-proxy" service to become ready/
   step %Q/evaluation of `service.ip` is stored in the :proxy_ip clipboard/
   step %Q/evaluation of `service.ports[0].dig('port')` is stored in the :proxy_port clipboard/
@@ -176,7 +191,7 @@ Given /^I have an ssh-git service in the(?: "([^ ]+?)")? project$/ do |project_n
     raise "project #{project_name} does not exist"
   end
 
-  @result = user.cli_exec(:run, name: "git-server", image: "aosqe/ssh-git-server-openshift")
+  @result = user.cli_exec(:create, f: "#{BushSlicer::HOME}/testdata/templates/ssh-git/ssh-git-dc.yaml")
   raise "cannot run the ssh-git-server pod" unless @result[:success]
 
   @result = user.cli_exec(:set_probe, resource: "dc/git-server", readiness: true, open_tcp: "2022")
@@ -186,8 +201,8 @@ Given /^I have an ssh-git service in the(?: "([^ ]+?)")? project$/ do |project_n
   raise "cannot create git-server service" unless @result[:success]
 
   # wait to become available
-  @result = BushSlicer::Pod.wait_for_labeled("deployment-config=git-server",
-                                            "run=git-server",
+  @result = BushSlicer::Pod.wait_for_labeled("deploymentconfig=git-server",
+                                            "name=git-server",
                                             count: 1,
                                             user: user,
                                             project: project,
@@ -240,7 +255,7 @@ Given /^I have an http-git service in the(?: "([^ ]+?)")? project$/ do |project_
     raise "project #{project_name} does not exist"
   end
 
-  @result = user.cli_exec(:create, f: "#{ENV['BUSHSLICER_HOME']}/testdata/image/gitserver/gitserver-ephemeral.yaml")
+  @result = user.cli_exec(:create, f: "#{BushSlicer::HOME}/testdata/image/gitserver/gitserver-ephemeral.yaml")
   # @result = user.cli_exec(:run, name: "gitserver", image: "openshift/origin-gitserver", env: 'GIT_HOME=/var/lib/git')
   raise "could not create the http-git-server" unless @result[:success]
 
@@ -321,12 +336,15 @@ Given /^I have a pod-for-ping in the#{OPT_QUOTED} project$/ do |project_name|
     raise "project #{project_name} does not exist"
   end
 
-  @result = user.cli_exec(:create, f: "#{ENV['BUSHSLICER_HOME']}/testdata/networking/aosqe-pod-for-ping.json")
+  @result = user.cli_exec(:create, f: "#{BushSlicer::HOME}/testdata/networking/aosqe-pod-for-ping.json")
   raise "could not create a pod-for-ping" unless @result[:success]
 
   cb.ping_pod = pod("hello-pod")
   @result = pod("hello-pod").wait_till_ready(user, 300)
-  raise "pod-for-ping did not become ready in time" unless @result[:success]
+  unless @result[:success]
+    pod.describe(user, quiet: false)
+    raise "pod-for-ping did not become ready in time"
+  end
 end
 
 # headertest is a service that returns all HTTP request headers used by client
@@ -336,11 +354,11 @@ Given /^I have a header test service in the#{OPT_QUOTED} project$/ do |project_n
     raise "project #{project_name} does not exist"
   end
 
-  @result = user.cli_exec(:create, f: "#{ENV['BUSHSLICER_HOME']}/testdata/routing/header-test/dc.json")
+  @result = user.cli_exec(:create, f: "#{BushSlicer::HOME}/testdata/routing/header-test/dc.json")
   raise "could not create header test dc" unless @result[:success]
   cb.header_test_dc = dc("header-test")
 
-  @result = user.cli_exec(:create, f: "#{ENV['BUSHSLICER_HOME']}/testdata/routing/header-test/insecure-service.json")
+  @result = user.cli_exec(:create, f: "#{BushSlicer::HOME}/testdata/routing/header-test/insecure-service.json")
   raise "could not create header test svc" unless @result[:success]
   cb.header_test_svc = service("header-test-insecure")
 
@@ -371,7 +389,7 @@ Given /^I have a skopeo pod in the(?: "([^ ]+?)")? project$/ do |project_name|
     raise "project #{project_name} does not exist"
   end
 
-  @result = user.cli_exec(:create, f: "#{ENV['BUSHSLICER_HOME']}/testdata/deployment/skopeo-deployment.json")
+  @result = user.cli_exec(:create, f: "#{BushSlicer::HOME}/testdata/deployment/skopeo-deployment.json")
   raise "could not create a skopeo" unless @result[:success]
 
   step %Q/a pod becomes ready with labels:/, table(%{
@@ -484,7 +502,7 @@ Given /^I have a iSCSI setup in the environment$/ do
       res = host.exec_admin(*setup_commands)
       raise "iSCSI initiator setup commands error" unless res[:success]
     end
-    @result = admin.cli_exec(:create, n: _project.name, f: 'https://raw.githubusercontent.com/openshift-qe/docker-iscsi/master/iscsi-target.json')
+    @result = admin.cli_exec(:create, n: _project.name, f: "#{BushSlicer::HOME}/testdata/storage/iscsi/iscsi-target.json")
     raise "could not create iSCSI pod" unless @result[:success]
   end
 
@@ -607,7 +625,7 @@ Given /^I have a registry with htpasswd authentication enabled in my project$/ d
   step %Q/a pod becomes ready with labels:/, table(%{
        | deploymentconfig=registry |
   })
-  @result = user.cli_exec(:create_secret, secret_type: "generic", name: "htpasswd-secret", from_file: "#{ENV['BUSHSLICER_HOME']}/testdata/registry/htpasswd", namespace: project.name)
+  @result = user.cli_exec(:create_secret, secret_type: "generic", name: "htpasswd-secret", from_file: "#{BushSlicer::HOME}/testdata/registry/htpasswd", namespace: project.name)
   step %Q/I run the :set_volume client command with:/, table(%{
     | resource    | dc/registry     |
     | add         | true            |
@@ -647,7 +665,7 @@ end
 
 Given /^I have a logstash service in the project for kubernetes audit$/ do
   cb.logstash = OpenStruct.new
-  @result = user.cli_exec(:create, f: "#{ENV['BUSHSLICER_HOME']}/testdata/audit/configmap-simple-logstash.yml")
+  @result = user.cli_exec(:create, f: "#{BushSlicer::HOME}/testdata/audit/configmap-simple-logstash.yml")
   unless @result[:success]
     raise "could not create logstash config map, see log"
   end
@@ -703,12 +721,12 @@ Given /^I have a cluster-capacity pod in my project$/ do
   step 'a secret is created for admin kubeconfig in current project'
   # tested pod yaml files
   step %Q/I run the :create client command with:/, table(%{
-    | f         | #{ENV['BUSHSLICER_HOME']}/testdata/infrastructure/cluster-capacity/cluster-capacity-configmap.yaml  |
+    | f         | #{BushSlicer::HOME}/testdata/infrastructure/cluster-capacity/cluster-capacity-configmap.yaml  |
     | namespace | #{project.name} |
   })
   step 'the step should succeed'
   # cluster-capacity as a target pod
-  step "I run oc create over ERB URL: #{ENV['BUSHSLICER_HOME']}/testdata/infrastructure/cluster-capacity/cluster-capacity-pod.yaml"
+  step 'I run oc create over ERB test file: infrastructure/cluster-capacity/cluster-capacity-pod.yaml'
   step 'the step should succeed'
   step 'the pod named "cluster-capacity" becomes ready'
 end

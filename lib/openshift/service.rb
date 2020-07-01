@@ -66,8 +66,9 @@ module BushSlicer
     # @note call without parameters only when props are loaded
     def url(user: nil, cached: true, quiet: false)
       ip = self.ip(user: user, cached: cached, quiet: quiet)
-      port = self.ports(user: user, cached: true, quiet: quiet)
-      return "#{ip}:#{ports[0]["port"]}"
+      ip = ip.include?(":") ? "[#{ip}]" : ip
+      port = self.ports(user: user, cached: true, quiet: quiet)[0]["port"]
+      "#{ip}:#{port}"
     end
 
     def hostname
@@ -94,6 +95,16 @@ module BushSlicer
         node_port = p['nodePort'] if p['port'] == port
       end
       return node_port
+    end
+
+    def port(user: nil, name:, cached: true, quiet: false)
+      port = nil
+      ports = self.ports(user: user, cached: cached, quiet: quiet)
+      ports.each do | p |
+        port = p['port'] if p['name'] == name
+      end
+      raise "Could not find port with name #{name}, does the name really exist?" if port.nil?
+      return port
     end
 
     def loadbalancer_ingress(user: nil, cached: true, quiet: false)

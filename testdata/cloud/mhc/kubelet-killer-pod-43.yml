@@ -20,3 +20,7 @@ spec:
   hostPID: true
   nodeName: $NAME
   restartPolicy: Never
+  tolerations:
+  - key: mapi
+    value: mapi_test
+    effect: NoSchedule

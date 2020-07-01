@@ -83,8 +83,8 @@ module BushSlicer
       log_store_raw(user: user, cached: cached, quiet: quiet)['elasticsearchStatus']
     end
 
-    private def es_cluster_health(user: nil, cached: true, quiet: false)
-      es_status_raw(user: user, cached: cached, quiet: quiet).first['clusterHealth'] ||
+    def es_cluster_health(user: nil, cached: true, quiet: false)
+      return es_status_raw(user: user, cached: cached, quiet: quiet).first['clusterHealth'] ||
         es_status_raw(user: user, cached: true, quiet: quiet).first['cluster']['status']
     end
 
@@ -175,7 +175,7 @@ module BushSlicer
       raw_resource(user: user, cached: cached, quiet: quiet).dig('spec', 'visualization')
     end
 
-    def collection_type(user: nil, quiet: false, cached: false)
+    def collection_type(user: nil, quiet: false, cached: true)
       return collection_spec(user: user, cached: cached, quiet: quiet).dig('logs', 'type')
     end
 
@@ -204,8 +204,40 @@ module BushSlicer
       return log_store_spec(user: user, cached: cached, quiet: quiet).dig('elasticsearch', 'nodeCount')
     end
 
+    def retention_policy(user: nil, cached: true, quiet: true)
+      return log_store_spec(user: user, cached: cached, quiet: quiet).dig('retentionPolicy')
+    end
+
+    def application_max_age(user: nil, cached: true, quiet: true)
+      return retention_policy(user: user, cached: cached, quiet: quiet).dig('application', 'maxAge')
+    end
+
+    def audit_max_age(user: nil, cached: true, quiet: true)
+      return retention_policy(user: user, cached: cached, quiet: quiet).dig('audit', 'maxAge')
+    end
+
+    def infra_max_age(user: nil, cached: true, quiet: true)
+      return retention_policy(user: user, cached: cached, quiet: quiet).dig('infra', 'maxAge')
+    end
+
     def curation_schedule(user: nil, cached: false, quiet: true)
       return curation_spec(user: user, cached: cached, quiet: quiet).dig('curator', 'schedule')
+    end
+
+    def es_node_conditions(user: nil, cached: false, quiet: true)
+      return es_status_raw(user: user, cached: cached, quiet: quiet).first['nodeConditions']
+    end
+
+    def es_cluster_conditions(user: nil, cached: false, quiet: true)
+      return es_status_raw(user: user, cached: cached, quiet: quiet).first['clusterConditions']
+    end
+
+    def kibana_cluster_condition(user: nil, cached: false, quiet: true)
+      return kibana_status(user: user, cached: cached, quiet: quiet).first['clusterCondition']
+    end
+
+    def fluentd_cluster_condition(user: nil, cached: false, quiet: true)
+      return fluentd_status_raw(user: user, cached: cached, quiet: quiet).dig('clusterCondition')
     end
 
   end

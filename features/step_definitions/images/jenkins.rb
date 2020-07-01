@@ -93,9 +93,9 @@ end
 Given /^I log in to jenkins$/ do
   if env.version_gt("3.11", user: user) && user.password?
     step %Q/I perform the :jenkins_multi_oauth_login web action with:/, table(%{
-      | username | <%= user.name %>     |
-      | password | <%= user.password %> |
-      | idp      | <%= env.idp %>       |
+      | username | <%= user.name %>        |
+      | password | <%= user.password %>    |
+      | idp      | flexy-htpasswd-provider |
       })
   elsif !user.password?
     step %Q/I perform the :jenkins_standard_login web action with:/, table(%{

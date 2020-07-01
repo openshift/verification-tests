@@ -122,7 +122,7 @@ disable_status_filter:
 enable_status_filter:
   element:
     selector:
-      xpath: //a[@class='row-filter__box' and text()='<status_text>']
+      xpath: //a[contains(@class,'row-filter__box') and text()='<status_text>']
     op: click
 select_all_filters:
   params:
@@ -136,6 +136,12 @@ check_icon_and_text:
   element:
     selector:
       xpath: //span[@class='co-icon-and-text' and text()='<icon_text>']
+check_extendedValidationFailed_in_conditions_table:
+  params:
+    status: Failed
+    reason: ExtendedValidationFailed
+    message: "certificate signed by unknown"
+  action: check_conditions_table
 check_conditions_table:
   elements:
   - selector:

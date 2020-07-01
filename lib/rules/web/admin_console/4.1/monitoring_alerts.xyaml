@@ -1,0 +1,204 @@
+click_icon_index_button:
+  element:
+    selector:
+      xpath: (//button[@aria-label='<aria_label_text>'])[<index>]
+    op: click
+set_placeholder_input_value:
+  element:
+    selector:
+      xpath: (//input[@placeholder='<placeholder_text>'])[<index>]
+    op: send_keys <input_value>
+    type: input
+  
+check_div_text:
+  element:
+    selector:
+      xpath: //div[contains(text(),'<text>')]
+filter_alert:
+  params:    
+    class_text: text-filter
+    input_value: <alert_name>
+  action: clear_input_class
+  action: set_input_class
+open_alert_detail:
+  action: filter_alert
+  action: click_alert_link_with_text
+
+perform_action_item:
+  params:
+    text: <item_text>
+  action: click_actions_button
+  action: click_link_with_text_only
+perform_silence:
+  action: submit_changes
+silence_alert_from_action:
+  params:
+    item_text: Silence Alert
+  action: perform_action_item
+  action: click_create_button
+check_silence_detail:
+  element:
+    selector:
+      xpath: //h2[text()='Silence Overview']
+silence_alert_from_detail:
+  action: silence_alert_from_action 
+  action: check_silence_detail
+click_alert_link_with_text:
+  element:
+    selector:
+      xpath: //a[text()='<alert_name>']
+    op: click
+    timeout: 60
+click_actions_button:
+  element:
+    selector:
+      xpath: //div[@class='co-actions-menu']//button[contains(@class,'btn-dropdown')]
+    op: click
+
+expire_alert_from_detail: 
+  action: click_first_action_icon
+  action: click_expire_alert_button
+click_first_action_icon:
+  params:
+    aria_label_text: Actions 
+    index: 1
+  action: click_icon_index_button
+click_second_action_icon:
+  params:
+    aria_label_text: Actions 
+    index: 2
+  action: click_icon_index_button
+click_expire_alert_button:
+  params:
+    button_text: Expire Silence
+  action: click_button_text
+click_expirt_link_text:
+  params:
+    text: Expire Silence
+  action: click_link_with_text_only
+disable_silence_tab:
+  action:
+    if_element:
+      selector:
+        xpath: //a[text()='Silenced'][contains(@class,'_box--active')]
+      timeout: 60
+    ref: click_silenced_tab
+click_silenced_tab:
+  element:
+    selector:
+      xpath: //a[text()='Silenced']
+    op: click
+
+edit_silence_alert:
+  params:
+    item_text: Edit Silence
+  action: perform_action_item
+remove_matcher_silence_alert:
+  params:
+    aria_label_text: Remove matcher
+    index: 1
+  action: click_icon_index_button
+input_matcher_name_silence:
+  params:
+    placeholder_text: name
+    index: 1
+    input_value: alertname
+  action: set_placeholder_input_value
+
+expire_alert_from_actions:
+  params:
+    item_text: Expire Silence
+  action: perform_action_item
+
+set_invalid_end_time_silence:
+  params:
+    label_text: End
+    input_value: 2020/03/05 20:11:44
+  action: set_label_input_simple
+  
+status_specific_alert:
+  action: filter_alert
+  element:
+    selector:
+      xpath: //div[text()='<status>'][1]
+status_specific_silence:
+  action: filter_alert
+  element:
+    selector:
+      xpath: //div[text()='<status>'][1]
+
+set_alert_label:
+  action: set_label_name_alert_name
+  action: set_label_value_watchdog_reg
+set_label_name_alert_name:
+  params:
+    name: Name
+    input_value: alertname
+  action: set_placeholder_input
+set_label_value_watchdog_reg:
+  params:
+    name: Value
+    input_value: <label_value>
+  action: set_placeholder_input
+silence_alert_from_create_button:
+  params:
+    silence_name: Watchdo.*
+  action: perform_silence
+  action: check_silence_name
+check_use_regular:
+  element:
+    selector:
+      xpath: //input[@type='checkbox']
+    op: click
+check_info_of_silence_detail_reg:
+  params:
+    silence_name: Watchdo.*
+    alert_name: Watchdog
+  action: check_silence_name
+  action: check_silenced_alert_name
+check_silence_name:
+  element:
+    selector:
+      xpath: //dd[contains(text(), '<silence_name>')]
+check_silenced_alert_name:
+  element:
+    selector:
+      xpath: //a[contains(text(), '<alert_name>')]
+expire_alert_from_cog_menu: 
+  action: filter_alert
+  action: click_second_action_icon
+  action: click_expirt_link_text
+open_alert_rule_from_detail:
+  params:
+    text: Watchdog
+    link_url: /monitoring/alertrules
+  action: check_link_and_text
+  action: click_link_with_text
+check_alert_rule_details:
+  params:
+    rule_name: Watchdog
+  action: check_rule_name
+  action: check_active_alerts
+check_rule_name:
+  element:
+    selector:
+      xpath: //dd[contains(text(), '<rule_name>')]
+check_ruel_expression:
+  params:
+    text: <expression>
+    link_url: <link>
+  action: check_link_and_text
+check_active_alerts:
+  action: check_view_prometheus
+  action: check_alert_description_on_rule_detail
+check_view_prometheus:
+  params:
+    text: View in
+    link_url: vector(1)
+  action: check_link_and_text
+check_alert_description_on_rule_detail:
+  params:
+    text: This is an alert meant to ensure that the entire alerting pipeline is functional
+    link_url: /monitoring/alerts
+  action: check_link_and_text
+  

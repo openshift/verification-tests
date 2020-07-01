@@ -1,0 +1,49 @@
+{
+    "apiVersion": "v1",
+    "kind": "Pod",
+    "metadata": {
+        "name": "iscsi-target",
+        "labels": {
+            "storage": "iscsi-target"
+        },
+	"annotations": {
+	    "openshift.io/description": "iscsi target"
+	}
+    },
+    "spec": {
+        "selector": {
+            "role": "iscsi-target"
+        },
+        "containers": [
+            {
+                "name": "iscsi-target",
+                "image": "quay.io/openshifttest/iscsi@sha256:70c2506a99d0ae08a79628f10d88114be30634095efad245a1a942c7c1195bee",
+                "securityContext": {
+                    "privileged": true
+                },
+                "volumeMounts": [{
+                    "mountPath": "/lib/modules",
+                    "name": "kernel"
+                }],
+                "imagePullPolicy": "IfNotPresent",
+                "readinessProbe": {
+                    "exec": {
+                        "command": [
+                            "targetcli",
+                            "ls",
+                            "/iscsi/iqn.2016-04.test.com:storage.target00/tpg1"
+                        ]
+                    },
+                    "initialDelaySeconds": 30,
+                    "timeoutSeconds": 1
+                }
+            }
+        ],
+        "volumes": [{
+            "name": "kernel",
+            "hostPath": {
+                "path": "/lib/modules"
+            }
+        }]
+    }
+}

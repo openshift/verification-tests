@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-storage
+  template:
+    metadata:
+      labels:
+        app: hello-storage
+    spec:
+      containers:
+      - name: hello-storage
+        image: quay.io/openshifttest/storage@sha256:a05b96d373be86f46e76817487027a7f5b8b5f87c0ac18a246b018df11529b40
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: local
+          mountPath: /mnt/storage
+      volumes:
+      - name: local
+        persistentVolumeClaim:
+          claimName: deployment-pvc

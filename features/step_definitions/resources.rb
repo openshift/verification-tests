@@ -211,8 +211,12 @@ Given /^(I|admin) stores? all (\w+)( in the#{OPT_QUOTED} project)? to the#{OPT_S
   _user = who == "admin" ? admin : user
 
   clazz = resource_class(type)
-  if in_project && BushSlicer::ProjectResource > clazz
-    cb[cb_name] = clazz.list(user: _user, project: project(namespace))
+  if BushSlicer::ProjectResource > clazz
+    if in_project
+      cb[cb_name] = clazz.list(user: _user, project: project(namespace))
+    else
+      cb[cb_name] = clazz.list(user: _user, project: :all)
+    end
   else
     cb[cb_name] = clazz.list(user: _user)
   end

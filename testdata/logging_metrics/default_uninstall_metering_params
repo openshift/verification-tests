@@ -1,5 +1,0 @@
-[OSEv3:vars]
-# put any extra metering related parameters that are not default here
-openshift_metering_install=false
-openshift_metering_project=<%= cb.target_proj %>
-oreg_url=<%= product_docker_repo %>openshift3/ose-${component}:${version}
