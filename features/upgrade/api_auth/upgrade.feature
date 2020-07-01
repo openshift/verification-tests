@@ -176,7 +176,7 @@ Feature: apiserver and auth related upgrade check
   @upgrade-prepare
   @admin
   @destructive
-  Scenario: After cluster upgrade,the changes to the default SCCs should not be stomped by CVO - prepare
+  Scenario: Check the default SCCs should not be stomped by CVO - prepare
     Given as admin I successfully merge patch resource "scc/anyuid" with:
       | {"users": ["system:serviceaccount:test-scc:test-scc"]} |
     Given as admin I successfully merge patch resource "scc/privileged" with:
