@@ -224,5 +224,21 @@ module BushSlicer
       return curation_spec(user: user, cached: cached, quiet: quiet).dig('curator', 'schedule')
     end
 
+    def es_node_conditions(user: nil, cached: false, quiet: true)
+      return es_status_raw(user: user, cached: cached, quiet: quiet).first['nodeConditions']
+    end
+
+    def es_cluster_conditions(user: nil, cached: false, quiet: true)
+      return es_status_raw(user: user, cached: cached, quiet: quiet).first['clusterConditions']
+    end
+
+    def kibana_cluster_condition(user: nil, cached: false, quiet: true)
+      return kibana_status(user: user, cached: cached, quiet: quiet).first['clusterCondition']
+    end
+
+    def fluentd_cluster_condition(user: nil, cached: false, quiet: true)
+      return fluentd_status_raw(user: user, cached: cached, quiet: quiet).dig('clusterCondition')
+    end
+
   end
 end
