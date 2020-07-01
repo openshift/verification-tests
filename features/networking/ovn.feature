@@ -63,12 +63,7 @@ Feature: OVN related networking scenarios
       | replicas | 1                |
     Then the step should succeed
     """
-    When I run the :delete admin command with:
-      | object_type       | ds                       |
-      | object_name_or_id | ovnkube-master           |
-      | n                 | openshift-ovn-kubernetes |
-    Then the step should succeed
-    Given admin uses the "openshift-ovn-kubernetes" project
+    And admin ensures "ovnkube-master" ds is deleted from the "openshift-ovn-kubernetes" project
     And admin executes existing pods die with labels:
       | app=ovnkube-master | 
     Given I have a project
@@ -126,13 +121,9 @@ Feature: OVN related networking scenarios
       | replicas | 1                |
     Then the step should succeed
     """
-    When I run the :delete admin command with:
-      | object_type       | ds                       |
-      | object_name_or_id | ovnkube-master           |
-      | n                 | openshift-ovn-kubernetes |
-    Then the step should succeed
+    And admin ensures "ovnkube-master" ds is deleted from the "openshift-ovn-kubernetes" project
     And admin executes existing pods die with labels:
-      | app=ovnkube-master | 
+      | app=ovnkube-master |
     And I ensures "hello-pod" pod is deleted from the "<%= cb.hello_pod_project %>" project
     #Now scale up CNO pod to 1 and check whether hello-pod status is synced to NB db means it should not present in the DB
     Given admin uses the "openshift-network-operator" project
