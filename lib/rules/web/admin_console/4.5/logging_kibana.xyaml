@@ -44,6 +44,13 @@ wait_kibana_logged_in:
       xpath: //div[@class="kbnGlobalNavLink__title" and contains(., "Discover")]
     timeout: 600
 
+check_kibana_status:
+  elements:
+  - selector:
+      xpath: //div[@id="createStatusPageReact"]
+    missing: true
+    timeout: 30
+  
 create_index_pattern_in_kibana:
   action:
     if_element:
