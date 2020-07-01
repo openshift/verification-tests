@@ -68,6 +68,9 @@ Feature: OVN related networking scenarios
       | object_name_or_id | ovnkube-master           |
       | n                 | openshift-ovn-kubernetes |
     Then the step should succeed
+    Given admin uses the "openshift-ovn-kubernetes" project
+    And admin executes existing pods die with labels:
+      | app=ovnkube-master | 
     Given I have a project
     And I obtain test data file "networking/pod-for-ping.json"
     When I run the :create client command with:
@@ -75,9 +78,10 @@ Feature: OVN related networking scenarios
     Then the step should succeed
     #Now scale up CNO pod to 1 and check whether hello-pod is synced to NB db
     Given I run the :scale admin command with:
-      | resource | deployment       |
-      | name     | network-operator |
-      | replicas | 1                |
+      | resource | deployment                 |
+      | name     | network-operator           |
+      | replicas | 1                          |
+      | n        | openshift-network-operator |
     Then the step should succeed
     #A minimum wait for 30 seconds is tested to reflect CNO deployment to be effective which will then re-spawn ovn pods
     Given 30 seconds have passed
@@ -127,13 +131,16 @@ Feature: OVN related networking scenarios
       | object_name_or_id | ovnkube-master           |
       | n                 | openshift-ovn-kubernetes |
     Then the step should succeed
+    And admin executes existing pods die with labels:
+      | app=ovnkube-master | 
     And I ensures "hello-pod" pod is deleted from the "<%= cb.hello_pod_project %>" project
     #Now scale up CNO pod to 1 and check whether hello-pod status is synced to NB db means it should not present in the DB
     Given admin uses the "openshift-network-operator" project
     Given I run the :scale admin command with:
-      | resource | deployment       |
-      | name     | network-operator |
-      | replicas | 1                |
+      | resource | deployment                 |
+      | name     | network-operator           |
+      | replicas | 1                          |
+      | n        | openshift-network-operator |
     Then the step should succeed
     #A recommended wait for 30 seconds is tested to reflect CNO deployment to be in effect which will then re-spawn ovn pods
     Given 30 seconds have passed
