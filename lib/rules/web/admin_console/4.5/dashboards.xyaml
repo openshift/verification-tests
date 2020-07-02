@@ -7,6 +7,23 @@ click_view_alerts_button:
   params:
     button_text: View alerts
   action: click_button
+click_view_events_button:
+  params:
+    button_text: View events
+  action: click_button
+click_events_pause_button:
+  params:
+    button_text: Pause
+  action: click_button
+click_events_resume_button:
+  params:
+    button_text: Resume
+  action: click_button
+check_event_message_on_dashboard_page:
+  element:
+    selector:
+      xpath: //div[contains(@class, 'co-recent-item__title-message-text') and contains(., '<event_message>')]
+    timeout: 30
 check_cluster_version_in_details_card:
   params:
     key: version
