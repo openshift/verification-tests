@@ -511,7 +511,7 @@ Given /^I restart the openvswitch service on the node$/ do
   _host = node.host
   _admin = admin
 
-  # For 3.10 version, should delete the ovs container to restart service
+  # For 3.10 version, should delete the ovs container to restart service 
   if env.version_ge("3.10", user: user)
     logger.info("OCP version >= 3.10")
     ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
@@ -533,16 +533,22 @@ Given /^I restart the network components on the node( after scenario)?$/ do |aft
   _node = node
 
   restart_network = proc {
-    # For 3.10 version, should delete the sdn pod to restart network components
-    if env.version_ge("3.10", user: user)
-      logger.info("OCP version >= 3.10")
-      sdn_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: _admin) { |pod, hash|
-        pod.node_name == _node.name
-      }.first
-      @result = sdn_pod.ensure_deleted(user: _admin)
-    else
-      step "the node service is restarted on the host"
-    end
+  @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
+  raise "Unable to find corresponding networkType pod name" unless @result[:success]
+  if @result[:response] == "OpenShiftSDN"
+     app="app=sdn"
+     project_name="openshift-sdn"
+  else
+     app="app=ovnkube-node"
+     project_name="openshift-ovn-kubernetes"
+  end
+    sdn_pod = BushSlicer::Pod.get_labeled(app, project: project(project_name, switch: false), user: admin) { |pod, hash|
+      pod.node_name == node.name
+    }.first
+    @result = sdn_pod.ensure_deleted(user: _admin)
+  unless @result[:success]
+    raise "Fail to delete sdn/ovn pod"
+  end
   }
 
   if after
@@ -690,11 +696,22 @@ end
 Given /^I restart the ovs pod on the#{OPT_QUOTED} node$/ do | node_name |
   ensure_admin_tagged
   ensure_destructive_tagged
-
-  ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
-    pod.node_name == node_name
-  }.first
-  @result = ovs_pod.ensure_deleted(user: admin)
+  node = node(node_name)
+  host = node.host
+  
+  @result = admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
+  raise "Unable to find corresponding networkType pod name" unless @result[:success]
+  if @result[:response] == "OpenShiftSDN"
+     app="app=ovs"
+     project_name="openshift-sdn"
+  else
+     app="app=ovs-node"
+     project_name="openshift-ovn-kubernetes"
+  end
+    ovs_pod = BushSlicer::Pod.get_labeled(app, project: project(project_name, switch: false), user: admin) { |pod, hash|
+      pod.node_name == node.name
+    }.first
+    @result = ovs_pod.ensure_deleted(user: admin)
   unless @result[:success]
     raise "Fail to delete the ovs pod"
   end
