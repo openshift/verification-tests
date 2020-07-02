@@ -424,25 +424,34 @@ Feature: change the policy of user/service account
       | .*default.*restricted |
     Given SCC "restricted" is added to the "default" service account
     Given I obtain test data file "authorization/scc/tc538264/PodSecurityPolicyReview.json"
+    And I wait for the steps to pass:
+    """
     Given I run the :policy_scc_review client command with:
       | f | PodSecurityPolicyReview.json |
     Then the step should succeed
     And the output should match:
       | .*default.*restricted |
+    """
     Given I obtain test data file "authorization/scc/tc538264/PodSecurityPolicyReview.json"
+    And I wait for the steps to pass:
+    """
     Given I run the :policy_scc_review client command with:
       | f | PodSecurityPolicyReview.json |
       | n | <%= project.name %>                                                                            |
     Then the step should succeed
     And the output should match:
       | .*default.*restricted |
+    """
     Given I obtain test data file "authorization/scc/tc538264/PodSecurityPolicyReview.json"
+    And I wait for the steps to pass:
+    """
     Given I run the :policy_scc_review client command with:
       | serviceaccount | default                                                                                        |
       | f              | PodSecurityPolicyReview.json |
     Then the step should succeed
     And the output should match:
       | .*default.*restricted |
+    """
     Given I obtain test data file "authorization/scc/tc538264/PodSecurityPolicyReview.json"
     Given I run the :policy_scc_review client command with:
       | serviceaccount | default                                                                                        |
