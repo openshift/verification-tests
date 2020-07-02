@@ -145,3 +145,40 @@ Feature: Kibana related features
     When I run the :check_log_count web action
     Then the step should succeed
     """
+
+  # @author qitang@redhat.com
+  # @case_id OCP-32002
+  @admin
+  @destructive
+  @commonlogging
+  Scenario: Kibana logout function should log off user
+    Given the master version < "4.5"
+    Given I switch to the first user
+    Given I create a project with non-leading digit name
+    Given evaluation of `project.name` is stored in the :proj_name clipboard
+    Given I obtain test data file "logging/loggen/container_json_log_template.json"
+    When I run the :new_app client command with:
+      | file | container_json_log_template.json |
+    Then the step should succeed
+    Given a pod becomes ready with labels:
+      | run=centos-logtest,test=centos-logtest |
+    Given the first user is cluster-admin
+    And I use the "openshift-logging" project
+    And I wait for the "project.<%= cb.proj_name %>" index to appear in the ES pod with labels "es-node-master=true"
+    And evaluation of `route('kibana', service('kibana',project('openshift-logging', switch: false))).dns(by: admin)` is stored in the :kibana_url clipboard
+    When I login to kibana logging web console
+    Then the step should succeed
+    And I perform the :kibana_find_index_pattern web action with:
+      | index_pattern_name | .operations.* |
+    Then the step should succeed
+    When I perform the :logout_kibana web action with:
+      | kibana_url | https://<%= cb.kibana_url %> |
+    Then the step should succeed
+    Given 10 seconds have passed
+    When I access the "https://<%= cb.kibana_url %>" url in the web browser
+    Then the step should succeed
+    When I perform the :login_kibana web action with:
+      | username   | <%= user.name %>             |
+      | password   | <%= user.password %>         |
+      | idp        | <%= env.idp %>               |
+    Then the step should succeed
