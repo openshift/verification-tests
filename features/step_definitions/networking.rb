@@ -542,10 +542,10 @@ Given /^I restart the network components on the node( after scenario)?$/ do |aft
      app="app=ovnkube-node"
      project_name="openshift-ovn-kubernetes"
   end
-    sdn_pod = BushSlicer::Pod.get_labeled(app, project: project(project_name, switch: false), user: admin) { |pod, hash|
-      pod.node_name == node.name
-    }.first
-    @result = sdn_pod.ensure_deleted(user: _admin)
+  sdn_pod = BushSlicer::Pod.get_labeled(app, project: project(project_name, switch: false), user: admin) { |pod, hash|
+    pod.node_name == node.name
+  }.first
+  @result = sdn_pod.ensure_deleted(user: _admin)
   unless @result[:success]
     raise "Fail to delete sdn/ovn pod"
   end
@@ -696,6 +696,7 @@ end
 Given /^I restart the ovs pod on the#{OPT_QUOTED} node$/ do | node_name |
   ensure_admin_tagged
   ensure_destructive_tagged
+  node_name ||= node.name
   node = node(node_name)
   host = node.host
   
@@ -708,10 +709,10 @@ Given /^I restart the ovs pod on the#{OPT_QUOTED} node$/ do | node_name |
      app="app=ovs-node"
      project_name="openshift-ovn-kubernetes"
   end
-    ovs_pod = BushSlicer::Pod.get_labeled(app, project: project(project_name, switch: false), user: admin) { |pod, hash|
-      pod.node_name == node.name
-    }.first
-    @result = ovs_pod.ensure_deleted(user: admin)
+  ovs_pod = BushSlicer::Pod.get_labeled(app, project: project(project_name, switch: false), user: admin) { |pod, hash|
+    pod.node_name == node.name
+  }.first
+  @result = ovs_pod.ensure_deleted(user: admin)
   unless @result[:success]
     raise "Fail to delete the ovs pod"
   end
