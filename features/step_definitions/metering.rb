@@ -33,6 +33,7 @@ Given /^metering service has been installed successfully(?: using (OLM|OperatorH
     else
       via_method = 'GUI'
     end
+    cb.metering_namespace = project
     step %Q"the metering service is installed using OLM #{via_method}"
   else
     # there's an existing meteringconfig in the project.  Check if there are
@@ -70,6 +71,7 @@ Given /^I install metering service using:$/ do | table |
   end
   step %Q(I run oc create as admin over ERB test file: #{metering_config})
   step %Q(all metering related pods are running in the project)
+  step %Q/all reportdatasources are importing from Prometheus/
 end
 
 # multiple steps are involved in generating /a metering report
@@ -287,7 +289,7 @@ Given /^the#{OPT_QUOTED} metering service is uninstalled using OLM$/ do | meteri
 end
 
 Given /^all reportdatasources are importing from Prometheus$/ do
-  project ||= project(cb.metering_namespace.name)
+  project ||= project(cb.metering_ns)
   data_sources  = BushSlicer::ReportDataSource.list(user: user, project: project)
   # valid reportdatasources are those with a prometheusMetricsImporter query statement
   dlist = data_sources.select{ |d| d.prometheus_metrics_importer_query}
@@ -320,10 +322,10 @@ When /^I perform the GET metering rest request with:$/ do | table |
   url_path ||= opts[:custom_url]
   # v2
   if opts[:api_version] == 'v2'
-    url_path ||= "/api/v2/reports/#{cb.metering_namespace.name}/#{report_name}/table?format=json"
+    url_path ||= "/api/v2/reports/#{project.name}/#{report_name}/table?format=json"
   else
     # v1
-    url_path ||= "/api/v1/reports/get?name=#{report_name}&namespace=#{cb.metering_namespace.name}&format=json"
+    url_path ||= "/api/v1/reports/get?name=#{report_name}&namespace=#{project.name}&format=json"
   end
 
   report_query_url = route.dns + url_path
