@@ -1394,4 +1394,61 @@ Feature: Multus-CNI related scenarios
       | <%= project.name %>:macvlan-bridge-whereabouts-pod1:<%= cb.pod_uid %> |
       | <%= cb.pod_eth0_ip %>                                                 |
       | <%= cb.pod_net1_ip %>                                                 |
+      
+  # @author weliang@redhat.com
+  # @case_id OCP-31999
+  @admin
+  Scenario: Whereabouts with exclude IP address	
+    # Make sure that the multus is enabled
+    Given the multus is enabled on the cluster
+    # Create the net-attach-def via cluster admin
+    Given I have a project
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/whereabouts-excludeIP.yaml"
+    When I run oc create as admin over "whereabouts-excludeIP.yaml" replacing paths:
+      | ["metadata"]["namespace"] | <%= project.name %> |
+    Then the step should succeed
+    
+    # Create a pod absorbing above net-attach-def
+    Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
+    When I run oc create over "generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                       | macvlan-bridge-whereabouts-pod1 |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | whereabouts-excludeip           |
+      | ["spec"]["containers"][0]["name"]                          | whereabouts-excludeip           |
+    Then the step should succeed
+    And the pod named "macvlan-bridge-whereabouts-pod1" becomes ready
+    # Check the created pod has correct ip 
+    When I execute on the "macvlan-bridge-whereabouts-pod1" pod:
+      | bash | -c | /usr/sbin/ip -4 -brief a |
+    Then the output should contain:
+      | 192.168.10.4 |
+
+    # Create second pod absorbing above net-attach-def
+    Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
+    When I run oc create over "generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                       | macvlan-bridge-whereabouts-pod2 |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | whereabouts-excludeip           |
+      | ["spec"]["containers"][0]["name"]                          | whereabouts-excludeip           |
+    Then the step should succeed
+    And the pod named "macvlan-bridge-whereabouts-pod2" becomes ready
+    # Check the created pod has correct ip 
+    When I execute on the "macvlan-bridge-whereabouts-pod2" pod:
+      | bash | -c | /usr/sbin/ip -4 -brief a |
+    Then the output should contain:
+      | 192.168.10.5 |
+      
+    # Create third pod absorbing above net-attach-def
+    Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
+    When I run oc create over "generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                       | macvlan-bridge-whereabouts-pod3 |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | whereabouts-excludeip           |
+      | ["spec"]["containers"][0]["name"]                          | whereabouts-excludeip           |
+    Then the step should succeed
+    And the pod named "macvlan-bridge-whereabouts-pod3" status becomes :pending within 60 seconds
+    Given I wait up to 30 seconds for the steps to pass:
+    """
+    When I run the :describe client command with:
+      | resource | pod                             |
+      | name     | macvlan-bridge-whereabouts-pod3 |
+    Then the output should contain "Could not allocate IP in range"
+    """
 
