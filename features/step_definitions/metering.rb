@@ -526,7 +526,8 @@ Given /^I prepare OLM via CLI$/ do
   raise "required PackageManifest '#{req_packagemanifest}' is not found" unless package_manifest(req_packagemanifest).exists?
   step %Q(I use the "#{project_name_org}" project)
   # need to change context back
-  cb[:default_channel] = package_manifest(req_packagemanifest).default_channel
+  step %Q(I set operator channel)
+  cb[:default_channel] = cb.channel
   # 2. create operatorgroup
   step %Q(I run oc create as admin over ERB test file: metering/configs/metering_operatorgroup.yaml)
   #step %Q/the step should succeed/
