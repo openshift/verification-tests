@@ -209,6 +209,7 @@
     :dry_run: --dry-run=<value>
     :image: --image=<value>
     :output: --output <value>
+    :o: -o <value>
     :template: --template=<value>
 :create_job:
   :cmd: oc create job <name> <global_options> <options>
