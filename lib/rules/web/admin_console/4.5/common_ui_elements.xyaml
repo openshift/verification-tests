@@ -128,13 +128,6 @@ check_tab:
   element:
     selector:
       <<: *tab
-check_terminal_tab:
-  params:
-    tab_name: Terminal
-    text: Terminal
-    link_url: terminal
-  action: check_tab
-  action: check_link_and_text
 click_environment_tab:
   params:
     tab_name: Environment
@@ -143,6 +136,11 @@ click_overview_tab:
   params:
     tab_name: Details
   action: click_tab
+click_terminal_tab:
+  params:
+    tab_name: Terminal
+  action: click_tab
+  action: wait_box_loaded
 click_yaml_tab:
   params:
     tab_name: YAML

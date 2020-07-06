@@ -29,6 +29,13 @@ check_role_column_header:
   params:
     column_name: Role
   action: check_column_header
+check_terminal_tab_on_node_page:
+  action: click_terminal_tab
+  action: check_use_host_binaries_message
+check_use_host_binaries_message:
+  element:
+    selector:
+      xpath: //p[contains(text(), 'To use host binaries, run')]/code[contains(text(), 'chroot /host')]
 remove_tolerations_from_pod:
   action:
     if_param: dc_name
