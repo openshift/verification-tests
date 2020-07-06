@@ -319,7 +319,7 @@ Given /^logging channel name is stored in the#{OPT_SYM} clipboard$/ do | cb_name
   if cluster_version('version').version.include?('4.1.')
     cb[cb_name] = "preview"
   else
-    cb[cb_name] = cluster_version('version').channel.split('-')[1]
+    cb[cb_name] = cluster_version('version').version.split('-')[0].split('.').take(2).join('.')
   end
 end
 

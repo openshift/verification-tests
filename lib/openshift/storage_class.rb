@@ -37,5 +37,10 @@ module BushSlicer
       rr = raw_resource(user: user, cached: cached, quiet: quiet)
       rr.dig('parameters', 'monitors')
     end
+
+    def type(user: nil, cached: true, quiet: false)
+      rr = raw_resource(user: user, cached: cached, quiet: quiet)
+      rr.dig('parameters', 'type')
+    end
   end
 end

@@ -209,6 +209,7 @@
     :dry_run: --dry-run=<value>
     :image: --image=<value>
     :output: --output <value>
+    :o: -o <value>
     :template: --template=<value>
 :create_job:
   :cmd: oc create job <name> <global_options> <options>
@@ -588,6 +589,7 @@
     :image_stream: --image-stream=<value>
     :labels: --labels=<value>
     :name: --name=<value>
+    :source_secret: --source-secret=<value>
     :source_spec: <value>
     :strategy: --strategy=<value>
 :new_build:

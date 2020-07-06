@@ -155,6 +155,7 @@ Given /^#{NUMBER} pods become ready with labels:$/ do |count, table|
     @result = pod.wait_till_status(BushSlicer::Pod::SUCCESS_STATUSES, user, ready_timeout)
 
     unless @result[:success]
+      pod.describe(user, quiet: false)
       raise "pod #{pod.name} did not reach expected status"
     end
   end

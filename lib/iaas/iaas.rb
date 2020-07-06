@@ -8,12 +8,14 @@ module BushSlicer
 
       if provider_name
         case provider_name
-        when "openstack"
+        when "OpenStack"
           return {:type => "openstack", :provider => self.init_openstack(env, api_server_args)}
-        when "aws"
+        when "AWS"
           return {:type => "aws", :provider => self.init_aws(env)}
         when "GCP"
-          return {:type => "gce", :provider => self.init_gce(env)}
+          return {:type => "gcp", :provider => self.init_gcp(env)}
+        when "Azure"
+          return {:type => "azure", :provider => self.init_azure(env)}
         else
           raise "The IAAS provider #{provider_name} is currently not supported by test framework!"
         end
@@ -23,6 +25,7 @@ module BushSlicer
 
 
     def self.init_openstack(env, api_server_args)
+      #secret = Secret.new(name: "openstack-credentials", project: project('kube-system'))
       # get the config of the IAAS instance
       raise "getting IAAS config for OpenStack unimplemented"
       iaas_conf_path = api_server_args["cloud-config"][0]
@@ -43,6 +46,7 @@ module BushSlicer
     end
 
     def self.init_aws(env)
+      #secret = Secret.new(name: "aws-creds", project: project('kube-system'))
       aws_cred = {}
 
       search_command = %{
@@ -70,10 +74,20 @@ module BushSlicer
       return Amz_EC2.new(access_key: key, secret_key: skey)
     end
 
-    def self.init_gce(env)
-      token_json = env.nodes[0].host.exec_admin("curl -sS 'http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token' -H 'Metadata-Flavor: Google'")[:stdout]
+    def self.init_gcp(env)
+      secret = Secret.new(name: "gcp-credentials", project: Project.new(name: 'kube-system', env: env))
+      auth_json = secret.value_of("service_account.json", user: :admin)
+      # type token is for bearer token downloaded from instance metadata
+      # return GCE.new(:token_json => token_json, :auth_type => "token")
+      json_file = Tempfile.new("json_cred_", Host.localhost.workdir)
+      json_file.write(auth_json)
+      json_file.close
+      return GCE.new(:json_cred => json_file.path, :auth_type => "json")
+    end
 
-      return GCE.new(:token_json => token_json, :auth_type => "token")
+    def self.init_azure(env)
+      # secret = Secret.new(name: "azure-credentials", project: project('kube-system'))
+      raise "TODO init azure"
     end
   end
 end

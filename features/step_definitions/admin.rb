@@ -12,9 +12,10 @@ Given /^a secret is created for admin kubeconfig in current project$/ do
     f.write(@result[:response])
     f.close
     # secret name `admin-kubeconfig` must match template of e2e tests
-    @result = admin.cli_exec(:secret_new,
-                             secret_name: "admin-kubeconfig",
-                             source: "admin.kubeconfig=#{f.path}",
+    @result = admin.cli_exec(:create_secret,
+                             secret_type: "generic",
+                             name: "admin-kubeconfig",
+                             from_file: "admin.kubeconfig=#{f.path}",
                              n: project.name)
   end
 

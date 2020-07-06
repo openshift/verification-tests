@@ -989,3 +989,22 @@ Given /^OVN is functional on the cluster$/ do
   raise "OVN is not running correctly! Check one of your ovnkube-node pod" unless desired_ovnkube_node_replicas == available_ovnkube_node_replicas && available_ovnkube_node_replicas != 0
   raise "OVN is not running correctly! Check one of your ovnkube-master pod" unless desired_ovnkube_master_replicas == available_ovnkube_master_replicas && available_ovnkube_master_replicas != 0
 end
+
+Given /^I enable multicast for the "(.+?)" namespace$/ do | project_name |
+  ensure_admin_tagged
+  _admin = admin
+  @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
+  raise "Unable to find corresponding networkType pod name" unless @result[:success]
+  if @result[:response] == "OpenShiftSDN"
+    annotation = 'netnamespace.network.openshift.io/multicast-enabled=true'
+    space = 'netnamespace'
+  else
+    annotation = 'k8s.ovn.org/multicast-enabled=true'
+    space = 'namespace'
+  end
+  @result = admin.cli_exec(:annotate, resource: space, resourcename: project_name, keyval: annotation)
+  unless @result[:success]
+    raise "Failed to apply the default deny annotation to specified namespace."
+  end 
+  logger.info "The multicast is enable in the #{project_name} project"
+end

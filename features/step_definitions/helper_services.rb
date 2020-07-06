@@ -201,7 +201,7 @@ Given /^I have an ssh-git service in the(?: "([^ ]+?)")? project$/ do |project_n
   raise "cannot create git-server service" unless @result[:success]
 
   # wait to become available
-  @result = BushSlicer::Pod.wait_for_labeled("deployment-config=git-server",
+  @result = BushSlicer::Pod.wait_for_labeled("deploymentconfig=git-server",
                                             "name=git-server",
                                             count: 1,
                                             user: user,
@@ -341,7 +341,10 @@ Given /^I have a pod-for-ping in the#{OPT_QUOTED} project$/ do |project_name|
 
   cb.ping_pod = pod("hello-pod")
   @result = pod("hello-pod").wait_till_ready(user, 300)
-  raise "pod-for-ping did not become ready in time" unless @result[:success]
+  unless @result[:success]
+    pod.describe(user, quiet: false)
+    raise "pod-for-ping did not become ready in time"
+  end
 end
 
 # headertest is a service that returns all HTTP request headers used by client

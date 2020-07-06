@@ -7,6 +7,23 @@ click_view_alerts_button:
   params:
     button_text: View alerts
   action: click_button
+click_view_events_button:
+  params:
+    button_text: View events
+  action: click_button
+click_events_pause_button:
+  params:
+    button_text: Pause
+  action: click_button
+click_events_resume_button:
+  params:
+    button_text: Resume
+  action: click_button
+check_event_message_on_dashboard_page:
+  element:
+    selector:
+      xpath: //div[contains(@class, 'co-recent-item__title-message-text') and contains(., '<event_message>')]
+    timeout: 30
 check_cluster_version_in_details_card:
   params:
     key: version
@@ -338,3 +355,57 @@ check_operator_status_on_status_card:
   action: click_operator_status
   action: check_operator_status
   action: click_link_with_text_only
+
+# cluster inventory
+check_cluster_inventory_items:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'co-dashboard-card__header')]/*[text()='Cluster Inventory']
+  - selector:
+      xpath: //div[contains(@class,'co-inventory-card__item')]//a[contains(text(),'Nodes')]
+  - selector:
+      xpath: //div[contains(@class,'co-inventory-card__item')]//a[contains(text(),'Pods')]
+  - selector:
+      xpath: //div[contains(@class,'co-inventory-card__item')]//a[contains(text(),'Storage Class')]
+  - selector:
+      xpath: //div[contains(@class,'co-inventory-card__item')]//a[contains(text(),'PVCs')]
+check_matched_number_of_nodes:
+  params:
+    resource_type: nodes
+    number_of_resource: <number_of_nodes>
+  action: check_matched_number_of_resource
+check_matched_number_of_pvcs:
+  params:
+    resource_type: pvcs
+    number_of_resource: <number_of_pvcs>
+  action: check_matched_number_of_resource
+check_matched_number_of_storageclasses:
+  params:
+    resource_type: storage class
+    number_of_resource: <number_of_storageclasses>
+  action: check_matched_number_of_resource  
+check_matched_number_of_resource:
+  element:
+    selector:
+      xpath: //div[contains(@class,'co-inventory-card__item-title')]/a[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'<resource_type>')]
+  scripts:
+  - command:
+      var all_links = document.querySelectorAll("div.co-inventory-card__item-title>a");
+      for (var i=0; i < all_links.length; i++){
+        if (all_links[i].innerText.toLowerCase().endsWith('<resource_type>')) {
+          expected_link = all_links[i];
+        }
+      }
+      var num = expected_link.innerText.toLowerCase().replace(' <resource_type>', '');
+      return num == <number_of_resource>
+    expect_result: true
+click_failed_icon_link_in_cluster_inventory:
+  element:
+    selector:
+      xpath: //div[contains(@class,'co-inventory-card__status')]//a[contains(@href,'rowFilter-pod-status=CrashLoopBackOff%2CFailed')]
+    op: click
+click_progressing_icon_link_in_cluster_inventory:
+  element:
+    selector:
+      xpath: //div[contains(@class,'co-inventory-card__status')]//a[contains(@href,'rowFilter-pod-status=Terminating%2CPending')]
+    op: click

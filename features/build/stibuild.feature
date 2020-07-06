@@ -4,7 +4,7 @@ Feature: stibuild.feature
     Given I have a project
     Given I obtain test data file "templates/<template>"
     And I run the :new_app client command with:
-      | file | <template> |
+      | file | tc498848-s2i.json |
     Then the step should succeed
     And the "sample-build-1" build was created
     When I run the :cancel_build client command with:
@@ -95,7 +95,7 @@ Feature: stibuild.feature
     When a pod becomes ready with labels:
       | deploymentconfig=git |
       | deployment=git-2     |
-    Given I obtain test data file "build/httpd-ex.git"
+    Given I obtain test data dir "build/httpd-ex.git"
     When I run the :cp client command with:
       | source | httpd-ex.git | 
       | dest   | <%= pod.name %>:/var/lib/git/                       |
