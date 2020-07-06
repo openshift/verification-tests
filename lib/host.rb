@@ -848,9 +848,19 @@ module BushSlicer
       node.env.service_project
     end
 
+    def remove_bash_c(*commands)
+      flat = commands.flatten
+      flat.reject.with_index { |c, i|
+        (flat[i] == "bash" and (flat.length >= i + 1) and flat[i + 1] == "-c") or
+            (flat[i] == "-c" and (i - 1 >= 0) and flat[i - 1] == "bash")
+      }
+    end
+
     # @note execute commands without special setup
     def exec_raw(*commands, **opts)
       unless opts[:single]
+        # remove prepended `bash -c` because we already have a 'bash -c'
+        commands = remove_bash_c(*commands)
         commands = ["chroot", "/host/", "bash", "-c", commands_to_string(commands)]
       end
 
