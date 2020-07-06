@@ -1,3 +1,9 @@
+browse_to_nodes_page:
+  params:
+    primary_menu: Compute
+    secondary_menu: Nodes
+  action: click_secondary_menu
+  action: wait_box_loaded
 add_taint_to_node:
   action: goto_one_node_page
   action: click_key_and_action_link
@@ -15,6 +21,15 @@ add_tolerations_to_pod:
   action: click_add_more_button
   action: add_tolerations
   action: submit_changes
+check_node_list_column_headers:
+  action: check_name_column_header
+  action: check_status_column_header
+  action: check_role_column_header
+check_role_column_header:
+  params:
+    column_name: Role
+  action: check_column_header
+check_terminal_tab_on_node_page: {}
 remove_tolerations_from_pod:
   action:
     if_param: dc_name

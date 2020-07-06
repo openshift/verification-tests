@@ -136,6 +136,11 @@ click_overview_tab:
   params:
     tab_name: Details
   action: click_tab
+click_terminal_tab:
+  params:
+    tab_name: Terminal
+  action: click_tab
+  action: wait_box_loaded
 click_yaml_tab:
   params:
     tab_name: YAML
@@ -326,6 +331,14 @@ check_column_header_missing:
     selector:
       xpath: //button[contains(@class, 'pf-c-button') and text()='<column_name>']
     missing: true
+check_name_column_header:
+  params:
+    column_name: Name
+  action: check_column_header
+check_status_column_header:
+  params:
+    column_name: Name
+  action: check_column_header
 check_resource_name_and_icon:
   action:
     if_param: service_name
