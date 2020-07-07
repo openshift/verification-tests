@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'commander'
-require 'open_uri_redirections'
+require 'open-uri'
 require 'nokogiri'
 require 'thread'
 
@@ -33,14 +33,14 @@ class QueryPayload
           :url => "https://openshift-release.svc.ci.openshift.org/"
         raise "missing query string" if options.query.nil?
         print("Querying #{options.url} against #{options.build_type}\n")
-        doc = Nokogiri::HTML(open(options.url, :allow_redirections => :all).read)
+        doc = Nokogiri::HTML(open(options.url).read)
         links = doc.xpath("//a[contains(text(), '#{options.build_type}')]")
 
         target_links = links.map { |l|  options.url + l.attributes['href'].value }
         threads = []
         target_links.each do |link|
           threads << Thread.new(link) do |i|
-            doc = Nokogiri::HTML(open(link, :allow_redirections => :all).read)
+            doc = Nokogiri::HTML(open(link).read)
               if doc.to_s.include? options.query
                 puts "Pattern '#{options.query}' found in payload: #{link}"
               end
