@@ -515,9 +515,17 @@ click_one_item:
   - selector:
       xpath: //li//*[@id='<dropdown_item>-link']
     op: click
+click_one_item_text:
+  elements:
+  - selector:
+      xpath: //li//*[text()='<dropdown_item>']
+    op: click
 choose_dropdown_item:
   action: click_dropdown_field
   action: click_one_item
+choose_dropdown_item_text:
+  action: click_dropdown_field
+  action: click_one_item_text
 choose_item_from_dropdown_menu:
   elements:
   - selector:
