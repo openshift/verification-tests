@@ -152,7 +152,7 @@ Feature: Egress-ingress related networking scenarios
     Then the expression should be true> cb.yahoo.size >= 3
 
     # Create egress policy 
-    Given I obtain test data file "networking/egress-ingress/dns-egresspolicy2.json|"
+    Given I obtain test data file "networking/egress-ingress/dns-egresspolicy2.json"
     When I run the :create admin command with:
       | f | dns-egresspolicy2.json|
       | n | <%= cb.proj1 %> |
@@ -322,7 +322,7 @@ Feature: Egress-ingress related networking scenarios
     And I wait for the "test-service" service to become ready
 
     # Create egress network policy
-    Given I obtain test data file "networking/egress-ingress/dns-egresspolicy1.json|"
+    Given I obtain test data file "networking/egress-ingress/dns-egresspolicy1.json"
     When I run the :create admin command with:
       | f | dns-egresspolicy1.json|
       | n | <%= project.name %>                                                              |
