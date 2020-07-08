@@ -470,7 +470,9 @@ And /^I set operator channel(?: to#{OPT_QUOTED})?$/ do | channel |
   elsif ENV['OPERATOR_CHANNEL']
     cb.channel = ENV['OPERATOR_CHANNEL']
   else
-    # if not
+    # if the default channel is less than master node, then use the value from
+    # packagemanifest
+    cb.pm_default_channel ||= package_manifest('metering-ocp').default_channel.to_f
     cluster_ver = cluster_version('version').version.split('-').first.to_f
     cb.channel = cb.pm_default_channel >= cluster_ver ? cluster_ver : cb.pm_default_channel
   end

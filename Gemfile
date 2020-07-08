@@ -41,8 +41,8 @@ gem 'protobuf'
 ## Debugging
 gem 'pry'
 # https://github.com/deivid-rodriguez/pry-byebug/issues/71
-# gem 'pry-byebug', :require => false
-gem 'byebug'
+gem 'pry-byebug', :require => false
+#gem 'byebug'
 gem 'jira-ruby'
 ### XXX 0.1.7 is breaking things need to investigate further, patch this for now
 #gem 'configparser', '0.1.6'
