@@ -43,7 +43,7 @@ Feature: Secure Computing Test Scenarios
     Then the step should succeed
     And admin ensures "nostat" pod is deleted after scenario
     # Verify sure container can not run 'ls'
-    Given I wait up to 120 seconds for the steps to pass:
+    Given I wait up to 300 seconds for the steps to pass:
     """
     When I run the :get admin command with:
       | resource      | pod    |
