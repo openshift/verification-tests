@@ -118,6 +118,7 @@ module BushSlicer
       # @raise on unknown errors
       def update_to!(new_state)
         raise "cannot update virtual test record" if virtual?
+        logger.info "PolarShift updating #{test_case_id}: #{new_state}"
         res = request.update_caseruns(project_id, run_id, {
           "id" => test_case_id,
           "current" => {
