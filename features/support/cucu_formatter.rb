@@ -213,7 +213,7 @@ class CucuFormatter
         @scenario[:steps].unshift(
           { :status=>:failed,
             :name=>'<div class="step_name step_fail">After hook failed</div>',
-            :messages=>["[42:42:42] ERROR> See console log for actual errors"]
+            :messages=>[]
           }
         )
       else
