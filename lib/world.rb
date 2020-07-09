@@ -427,13 +427,6 @@ module BushSlicer
       @teardown.reverse_each { |f| f.call }
     end
 
-    def hook_error!(err)
-      if err
-        quit_cucumber
-        raise err
-      end
-    end
-
     # @return the desired base docker image tag prefix based on
     #   PRODUCT_DOCKER_REPO env variable
     def product_docker_repo(environment = env)
