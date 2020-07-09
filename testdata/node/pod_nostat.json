@@ -1,0 +1,26 @@
+{
+  "kind": "Pod",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "nostat",
+    "annotations": {
+        "seccomp.security.alpha.kubernetes.io/pod": "localhost/seccomp-nostat.json"
+    }
+  },
+  "spec": {
+    "containers": [
+      {
+        "name": "seccomptest",
+        "image": "quay.io/openshifttest/busybox:latest",
+        "command": ["/bin/ls", "/"],
+        "resources": {},
+        "terminationMessagePath": "/dev/termination-log",
+        "imagePullPolicy": "IfNotPresent",
+        "securityContext": {
+          "capabilities": {},
+          "privileged": false
+        }
+      }
+    ]
+  }
+}

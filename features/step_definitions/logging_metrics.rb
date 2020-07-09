@@ -28,14 +28,6 @@ Given /^I login to kibana logging web console$/ do
   browser.base_url = cb.logging_console_url
 end
 
-Given /^I log out kibana logging web console$/ do
-  cb.logging_console_url = route('kibana', service('kibana',project('openshift-logging', switch: false))).dns(by: admin)
-  step %Q/I perform the :logout_kibana web action with:/, table(%{
-    | kibana_url | https://<%= cb.logging_console_url %> |
-  })
-  browser.finalize
-end
-
 When /^I wait(?: (\d+) seconds)? for the #{QUOTED} index to appear in the ES pod(?: with labels #{QUOTED})?$/ do |seconds, index_name, pod_labels|
   if pod_labels
     labels = pod_labels

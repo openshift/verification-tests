@@ -195,8 +195,23 @@ check_view_metrics:
     text: View in Metrics
     link_url: /monitoring/query-browser?query0=vector(1)
   action: check_link_and_text
+click_view_metrics:
+  params:
+    text: View in Metrics
+    link_url: /monitoring/query-browser?query0=vector(1)
+  action: click_link_with_text
 check_alert_description_on_rule_detail:
   params:
     text: This is an alert meant to ensure that the entire alerting pipeline is functional
     link_url: /monitoring/alerts
   action: check_link_and_text
+
+hide_alert_graph:
+  action: hide_show_alert_graph_button
+show_alert_graph:
+  action: hide_show_alert_graph_button
+hide_show_alert_graph_button:
+  element:
+    selector:
+      xpath: //span[@class='pf-c-button__text']/parent::button
+    op: click 

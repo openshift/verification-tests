@@ -144,6 +144,13 @@ Given /^I wait for clusterlogging(?: named "(.+)")? with #{QUOTED} log collector
   cl = cb.cluster_logging
   logger.info("### checking logging subcomponent status")
 
+  # check elasticsearch subcomponent is ready
+  logger.info("### checking logging subcomponent status: elasticsearch")
+  step %Q/a pod becomes ready with labels:/, table(%{
+    | component=elasticsearch |
+  })
+  cl.wait_until_es_is_ready
+
   # check log collector is ready.
   logger.info("### checking logging subcomponent status: log collector")
   if log_collector == "fluentd" then
@@ -157,12 +164,6 @@ Given /^I wait for clusterlogging(?: named "(.+)")? with #{QUOTED} log collector
     })
     cl.wait_until_rsyslog_is_ready
   end
-  # check elasticsearch subcomponent is ready
-  logger.info("### checking logging subcomponent status: elasticsearch")
-  step %Q/a pod becomes ready with labels:/, table(%{
-    | component=elasticsearch |
-  })
-  cl.wait_until_es_is_ready
 
   logger.info("### checking logging subcomponent status: kibana")
   step %Q/a pod becomes ready with labels:/, table(%{
@@ -285,8 +286,8 @@ Given /^I create clusterlogging instance with:$/ do | table |
     # to wait for the status informations to show up in the clusterlogging instance
     #sleep 10
     #step %Q/I wait for clusterlogging with "#{log_collector}" log collector to be functional in the project/
-    step %Q/I wait until "#{log_collector}" log collector is ready/
     step %Q/I wait until ES cluster is ready/
+    step %Q/I wait until "#{log_collector}" log collector is ready/
     step %Q/I wait until kibana is ready/
   end
 end

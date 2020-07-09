@@ -128,6 +128,11 @@ click_overview_tab:
   params:
     tab_name: Overview
   action: click_tab
+click_terminal_tab:
+  params:
+    tab_name: Terminal
+  action: click_tab
+  action: wait_box_loaded
 click_yaml_tab:
   params:
     tab_name: YAML
@@ -281,6 +286,19 @@ check_column_in_table:
   elements:
   - selector:
       xpath: //th[contains(@data-label,'<field>')]
+check_column_header:
+  action: wait_box_loaded
+  elements:
+  - selector:
+      xpath: //button[contains(@class, 'pf-c-button') and contains(text(),'<column_name>')]
+check_name_column_header:
+  params:
+    column_name: Name
+  action: check_column_header
+check_status_column_header:
+  params:
+    column_name: Name
+  action: check_column_header
 check_resource_name_and_icon:
   action:
     if_param: service_name
@@ -465,9 +483,17 @@ click_one_item:
   - selector:
       xpath: //li//*[@id='<dropdown_item>-link']
     op: click
+click_one_item_text:
+  elements:
+  - selector:
+      xpath: //li//*[text()='<dropdown_item>']
+    op: click
 choose_dropdown_item:
   action: click_dropdown_field
   action: click_one_item
+choose_dropdown_item_text:
+  action: click_dropdown_field
+  action: click_one_item_text
 upload_file_for_one_field:
   elements:
   - selector:

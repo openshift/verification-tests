@@ -241,7 +241,7 @@ Given /^the metering service is installed(?: to #{OPT_QUOTED})? using OLM(?: (CL
   ensure_destructive_tagged
   install_method ||= 'CLI'
   metering_ns ||= "openshift-metering"
-  step %Q"I setup a metering project named #{metering_ns}" unless cb.metering_project_setup_done
+  step %Q/I setup a metering project named "#{metering_ns}"/ unless cb.metering_project_setup_done
   if install_method == 'CLI'
     step %Q/I prepare OLM via CLI/
   elsif install_method == 'GUI'
@@ -470,7 +470,11 @@ And /^I set operator channel(?: to#{OPT_QUOTED})?$/ do | channel |
   elsif ENV['OPERATOR_CHANNEL']
     cb.channel = ENV['OPERATOR_CHANNEL']
   else
-    cb.channel = cluster_version('version').version.split('-').first.to_f
+    # if the default channel is less than master node, then use the value from
+    # packagemanifest
+    cb.pm_default_channel ||= package_manifest('metering-ocp').default_channel.to_f
+    cluster_ver = cluster_version('version').version.split('-').first.to_f
+    cb.channel = cb.pm_default_channel >= cluster_ver ? cluster_ver : cb.pm_default_channel
   end
   logger.info("Using operator channel: #{cb.channel}")
 end
@@ -524,8 +528,10 @@ Given /^I prepare OLM via CLI$/ do
   req_packagemanifest = 'metering-ocp'
   raise "required CatalogSource '#{req_registry}' is not found" unless catalog_source(req_registry, project('openshift-marketplace')).exists?
   raise "required PackageManifest '#{req_packagemanifest}' is not found" unless package_manifest(req_packagemanifest).exists?
-  step %Q(I use the "#{project_name_org}" project)
   # need to change context back
+  step %Q(I use the "#{project_name_org}" project)
+  # save the default channel from packagemanifest to be referenced in the `I set operator channel` step
+  cb.pm_default_channel = package_manifest(req_packagemanifest).default_channel.to_f
   step %Q(I set operator channel)
   cb[:default_channel] = cb.channel
   # 2. create operatorgroup
