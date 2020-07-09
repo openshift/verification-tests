@@ -288,6 +288,10 @@ Given /^the#{OPT_QUOTED} metering service is uninstalled using OLM$/ do | meteri
   step %Q/I ensure "#{metering_ns}" project is deleted/
 end
 
+Given /^I remove metering service from the #{QUOTED} project$/ do | metering_ns |
+  step %Q/the "#{metering_ns}" metering service is uninstalled using OLM/
+end
+
 Given /^all reportdatasources are importing from Prometheus$/ do
   project ||= project(cb.metering_ns)
   data_sources  = BushSlicer::ReportDataSource.list(user: user, project: project)
