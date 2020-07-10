@@ -252,11 +252,11 @@ Feature: MachineHealthCheck Test Scenarios
 
     Given I create the 'Ready' unhealthyCondition
 
+    And I wait up to 600 seconds for the steps to pass:
+    """
     When I run the :logs admin command with:
       | resource_name | <%= pod.name %>                |
       | c             | machine-healthcheck-controller |
-    Then the output should match:
-      | maxUnhealthy: 1%             |
-      | Short-circuiting remediation |
-
-
+    Then the output should contain:
+      | mhc-<%= machine_set.name %>: total targets: 1,  maxUnhealthy: 1%, unhealthy: 1. Short-circuiting remediation |
+    """
