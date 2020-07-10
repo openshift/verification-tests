@@ -71,8 +71,10 @@ Then(/^admin ensures machine number is restored after scenario$/) do
     end
     
     machines_waiting_delete.each do | machine |
+      step %Q/I successfully merge patch resource "machine\/#{machine.name}" with:/, table(%{
+         | {"metadata":{"finalizers":[]}} |
+      })
       machine.ensure_deleted(user: user, wait: 1200)
-      raise "Unable to delete machine #{machine.name}" if machine.exists?(user: user)
     end
   }
 end
