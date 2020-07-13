@@ -1,0 +1,43 @@
+check_software_info:
+  elements:
+  - selector:
+      xpath: //*[contains(.,'Software Info')]/.[contains(.,'Kubernetes') and contains(.,'OpenShift Container Platform')] 
+check_software_info_versions:
+  action: check_software_info
+  elements:
+  - selector:
+      xpath: //div[contains(.,'Software Info') and contains(., 'Kubernetes') and contains(., '<k8s_version>')]
+  - selector:
+      xpath: //div[contains(.,'Software Info') and contains(., 'OpenShift Container Platform') and contains(., '<openshift_version>')]
+check_additional_support:
+  elements:
+  - selector:
+      xpath: //*[contains(.,'Additional Support')]
+  - selector:
+      xpath: //*[@href='https://learn.openshift.com' and contains(.,'Interactive Learning Portal' )]
+check_getting_started:
+  elements:
+  - selector:
+      xpath: //h2[contains(.,'Getting Started')]
+  - selector:
+      xpath: //button[contains(.,'Create a new project')]
+check_dim_resource_list:
+  elements:
+  - selector:
+      xpath: //div[@class='co-disabled']//div[contains(.,'No <resource_singular>s Found')]
+check_user_starter_guide_message_when_no_projects:
+  elements:
+  - selector:
+      visible_text: !ruby/regexp /Create a project/i
+check_get_started_message_when_no_resources:
+  elements:
+  - selector:
+      xpath: //a[.='Import YAML']
+  - selector:
+      xpath: //a[.='add other content']
+check_message_and_doc_for_new_user:
+  elements:
+  - selector:
+      xpath: //p[contains(., 'To learn more, visit the OpenShift')]/a[contains(@href, 'docs.openshift.com/container-platform')]
+  - selector:
+      xpath: //a[contains(@href, '/command-line-tools') and contains(., 'command-line tools')]
