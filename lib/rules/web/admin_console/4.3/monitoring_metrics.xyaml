@@ -179,6 +179,11 @@ check_result_page:
     button_text: Name
     time: 20
   action: click_button_text
+  action:
+    if_element:
+      selector:
+        xpath: //th[@aria-sort='descending']
+    ref: click_button_text   
   action: check_metric_query_table_text
 
 perform_filter_query:
@@ -250,3 +255,13 @@ check_all_series_show:
   params:
     button_title: Show series
   action: check_button_title  
+
+click_pod_chart_link:
+  element:
+    selector: 
+      xpath: //h5[text()='<chart_name>']/../a
+    op: click
+check_data_diplayed_db:
+  element:
+    selector:
+      xpath: //h2[text()='<data_name>']/../..//*[contains(text(), '<legend_name>')]

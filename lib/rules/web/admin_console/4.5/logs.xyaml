@@ -22,6 +22,7 @@ check_log_content_contains:
   element:
     selector:
       xpath: //div[contains(@class,'log-window__contents__text') and contains(.,'<log_content>')]
+    timeout: 30
 check_some_context_missing_in_expanded_log_view:
   elements:
   - selector: &expand_button

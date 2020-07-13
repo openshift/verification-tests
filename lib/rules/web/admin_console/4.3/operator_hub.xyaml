@@ -64,3 +64,9 @@ open_edit_form_view:
   params:
     button_text: Edit Form
   action: click_button
+uninstall_operator_on_console:
+  params:
+    button_text: Uninstall Operator
+  action: click_resource_action_icon
+  action: click_button
+  action: submit_changes

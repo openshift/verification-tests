@@ -1,4 +1,4 @@
-Feature: Seccomp
+Feature: Secure Computing Test Scenarios
 
   # @author wmeng@redhat.com
   # @case_id OCP-10483
@@ -16,3 +16,42 @@ Feature: Seccomp
     And the output should not contain:
       | 2 |
 
+  # @author jhou@redhat.com
+  # @case_id OCP-32065
+  @admin
+  Scenario: Using Secure Computing Profiles with Pod Annotations
+    # Create custom machine config that contains the seccomp
+    Given I switch to cluster admin pseudo user
+    And I obtain test data file "node/machineconfig_nostat.yaml"
+    When I run the :create admin command with:
+      | f | machineconfig_nostat.yaml |
+    Then the step should succeed
+    And admin ensures "custom-seccomp" machineconfig is deleted after scenario
+
+    # Wait for machineconfigpool to process the new config
+    Given I wait up to 600 seconds for the steps to pass:
+    """
+    Given evaluation of `machine_config_pool('worker').condition(type: 'Updating', cached: false)` is stored in the :mcp clipboard
+    Then the expression should be true> cb.mcp["status"] == "False"
+    """
+
+    # Create a Pod with seccomp annotaiton
+    And I use the "default" project
+    Given I obtain test data file "node/pod_nostat.json"
+    When I run the :create admin command with:
+      | f | pod_nostat.json |
+    Then the step should succeed
+    And admin ensures "nostat" pod is deleted after scenario
+    # Verify sure container can not run 'ls'
+    Given I wait up to 300 seconds for the steps to pass:
+    """
+    When I run the :get admin command with:
+      | resource      | pod    |
+      | resource_name | nostat |
+    Then the output should contain "CrashLoopBackOff"
+    """
+    When I run the :logs admin command with:
+      | resource_name | nostat  |
+    Then the output should contain:
+      | ls                      |
+      | Operation not permitted |

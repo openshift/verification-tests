@@ -56,7 +56,11 @@ Feature: cluster-logging-operator related test
     And I wait for the "elasticsearch" elasticsearches to appear up to 300 seconds
     And the expression should be true> cluster_logging('instance').logstore_node_count == 2
     And the expression should be true> elasticsearch('elasticsearch').nodes[0]['nodeCount'] == 2
+    Given I wait up to 300 seconds for the steps to pass:
+    """
     Given evaluation of `elasticsearch('elasticsearch').nodes[0]['genUUID']` is stored in the :gen_uuid_1 clipboard
+    And the expression should be true> cb.gen_uuid_1 != nil
+    """
     Then I wait for the "elasticsearch-cdm-<%= cb.gen_uuid_1 %>-1" deployment to appear up to 300 seconds
     And I wait for the "elasticsearch-cdm-<%= cb.gen_uuid_1 %>-2" deployment to appear up to 300 seconds
     When I run the :patch client command with:

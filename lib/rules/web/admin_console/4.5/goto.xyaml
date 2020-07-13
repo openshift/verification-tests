@@ -188,6 +188,8 @@ goto_monitoring_alertrules_page:
 goto_alertmanagerconfig_page:
   url: monitoring/alertmanagerconfig
   action: wait_box_loaded
+goto_monitoring_db_k8s_resource_pod:
+  url: monitoring/dashboards/grafana-dashboard-k8s-resources-pod
 
 #node
 goto_node_page:

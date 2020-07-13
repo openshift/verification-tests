@@ -120,10 +120,10 @@ Feature: rhel8images.feature
   Scenario: Create mysql service from imagestream via oc new-app mysql-rhel8 image
     Given I have a project
     When I run the :tag admin command with:
-      | source           | registry.redhat.io/rhel8/mysql-80 |
-      | dest             | qe-mysql-80-rhel8:latest          |
-      | reference_policy | local                             |
-      | n                | openshift                         |
+      | source           | registry.redhat.io/rhel8/mysql-80:latest |
+      | dest             | qe-mysql-80-rhel8:latest                 |
+      | reference_policy | local                                    |
+      | n                | openshift                                |
     Then the step should succeed
     When I run the :new_app client command with:
       | image_stream | openshift/qe-mysql-80-rhel8 |

@@ -1,6 +1,9 @@
 ---
 kibana_login:
   url: <kibana_url>
+  action: login_kibana
+
+login_kibana:
   action:
     if_element:
       selector:
@@ -15,14 +18,6 @@ click_log_in_with_openshift_button:
     selector:
       xpath: //button[text()='Log in with OpenShift']
     op: click
-
-logout_kibana:
-  url: <kibana_url>
-  elements:
-    - selector:
-        text: Log out
-      op: click
-      type: a
 
 kibana_verify_logged_in:
   action:
@@ -44,6 +39,13 @@ wait_kibana_logged_in:
       xpath: //div[@class="kbnGlobalNavLink__title" and contains(., "Discover")]
     timeout: 600
 
+check_kibana_status:
+  elements:
+  - selector:
+      xpath: //div[@id="createStatusPageReact"]
+    missing: true
+    timeout: 30
+  
 create_index_pattern_in_kibana:
   action:
     if_element:

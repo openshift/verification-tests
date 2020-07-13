@@ -140,7 +140,7 @@ Feature: Pod related networking scenarios
     When I execute on the pod:
       | curl | -I | https://<%= cb.master_ip %>:22624/config/master | -k |
     Then the output should contain "Connection refused"
-    
+
     #hostnetwork-pod will be a hostnetwork pod
     Given I obtain test data file "networking/hostnetwork-pod.json"
     When I run the :create admin command with:
@@ -194,7 +194,7 @@ Feature: Pod related networking scenarios
     Then the step should succeed
     #pod-for-ping will be a non-hostnetwork pod
     And I have a pod-for-ping in the project
-    
+
     #Pod cannot access MCS
     When I execute on the pod:
       | curl | -I | https://<%= cb.master_ip %>:22623/config/master | -k |
@@ -319,7 +319,7 @@ Feature: Pod related networking scenarios
       | exec_command_arg | yes "h">/dev/udp/<%= cb.node_ip %>/<%= cb.nodeport %> |
     Given 3 seconds have passed
     And I terminate last background process
-    
+
     #Creating network test pod to levearage conntrack tool
     Given I obtain test data file "networking/net_admin_cap_pod.yaml"
     When I run oc create over "net_admin_cap_pod.yaml" replacing paths:
@@ -415,9 +415,9 @@ Feature: Pod related networking scenarios
     | ip route |
   Then the output should contain:
     | <%= cb.pod_cidr %> dev <%= cb.tunnel_inf_name %> |
-    
+
   # @author anusaxen@redhat.com
-  # @case_id OCP-26373
+  # @case_id OCP-26014
   @admin
   @destructive
   Scenario: Pod readiness check for OVN

@@ -1,6 +1,9 @@
 ---
 kibana_login:
   url: <kibana_url>
+  action: login_kibana
+
+login_kibana:
   action:
     if_element:
       selector:
@@ -17,11 +20,11 @@ click_log_in_with_openshift_button:
     op: click
 
 logout_kibana:
-  url: <kibana_url>
   elements:
     - selector:
         text: Log out
       op: click
+      timeout: 30
       type: a
 
 kibana_verify_app_text:
@@ -59,6 +62,13 @@ wait_kibana_logged_in:
   - selector:
       xpath: //div[@class="global-nav-link__title" and contains(., "Discover")]
     timeout: 300
+
+check_kibana_status:
+  elements:
+  - selector:
+      xpath: //div[@data-test-subj="statusPageContainer"]
+    missing: true
+    timeout: 30
 
 kibana_find_index_pattern:
   elements:
