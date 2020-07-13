@@ -194,6 +194,7 @@ Feature: Machine features testing
       | k8s-app=termination-handler |
 
     Examples:
-      | iaas_type | machineset_name  |
-      | aws       | machineset-29199 | # @case_id OCP-29199
+      | iaas_type | machineset_name        |
+      | aws       | machineset-clone-29199 | # @case_id OCP-29199
+      | gcp       | machineset-clone-32126 | # @case_id OCP-32126
 
