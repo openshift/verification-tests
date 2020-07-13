@@ -220,3 +220,10 @@ goto_one_hpa_page:
 goto_global_configuration_page:
   url: settings/cluster/globalconfig
   action: wait_box_loaded 
+
+goto_command_line_tools:
+  url: command-line-tools
+  element:
+    selector:
+      xpath: //div[contains(text(), "Command Line Tools")]
+    timeout: 15
