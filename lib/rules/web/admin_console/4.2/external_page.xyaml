@@ -11,5 +11,4 @@ browse_to_copy_login_command:
     link_text: Copy Login Command
   action: click_external_link
 display_token:
-  action: wait_form_loaded
   action: click_button
