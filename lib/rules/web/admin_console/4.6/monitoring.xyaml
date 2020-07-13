@@ -1,0 +1,36 @@
+send_metrics_query:
+  elements:
+  - selector: &metrics_query_input
+      xpath: //textarea[contains(@class,'query-browser__query-input')]
+    op: clear
+  - selector:
+      <<: *metrics_query_input
+    op: send_keys <metrics_name>
+query_metrics:
+  params:
+    button_text: Run Queries
+  action: send_metrics_query
+  action: click_button_text
+check_metrics_query_result:
+  elements:
+  - selector:
+      xpath: //td[@class='query-browser__table-cell' and text()='<metrics_name>']
+    timeout: 20
+check_alerts_tab:
+  params:
+    tab_name: Alerts
+  action: check_tab
+check_silences_tab:
+  params:
+    tab_name: Silences
+  action: check_tab
+browse_to_receiver_config:
+  element:
+    selector:
+      xpath: //*[@role='gridcell' and text()='<receiver>']/following-sibling::td//*[text()='Configure']
+    op: click
+  action: wait_box_loaded
+set_pagerduty_key:
+  params:    
+    input_field_id: integration-key
+  action: set_input_value
