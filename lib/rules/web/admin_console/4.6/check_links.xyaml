@@ -90,7 +90,7 @@ navigate_to_dev_console:
       xpath: //button[contains(., 'Administrator')]
     op: click
   - selector:
-      xpath: //li//h1[contains(., 'Developer')]
+      xpath: //li//h2[contains(., 'Developer')]
     op: click
 check_external_link:
   elements:
