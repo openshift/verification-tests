@@ -87,6 +87,8 @@ goto_resource_environment_page:
 # secrets
 goto_secrets_page:
   url: k8s/ns/<project_name>/secrets
+  action: wait_box_loaded
+
 goto_secrets_creation_page:
   url: k8s/ns/<project_name>/secrets/~new/<secret_type>
 goto_one_secret_page:
@@ -107,6 +109,7 @@ goto_one_pvc_page:
 # deployment
 goto_deployment_page:
   url: k8s/ns/<project_name>/deployments
+  action: wait_box_loaded
 goto_one_deployment_page:
   url: k8s/ns/<project_name>/deployments/<deploy_name>
   action: wait_box_loaded

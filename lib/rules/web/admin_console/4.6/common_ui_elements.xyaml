@@ -483,7 +483,7 @@ click_link_with_text_only:
 click_secondary_menu:
   elements:
   - selector:
-      xpath: //a[@data-component='pf-nav-expandable' and text()='<primary_menu>']
+      xpath: //a[@class='pf-c-nav__link' and text()='<primary_menu>']
     op: click
   - selector: &secondary_menu
       xpath: //a[contains(@class,'pf-c-nav__link') and text()='<secondary_menu>']
