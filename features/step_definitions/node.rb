@@ -630,12 +630,12 @@ Given /^I store the node #{QUOTED} YAML to the#{OPT_SYM} clipboard$/ do |node, c
   cb[cb_name] = @result[:response]
 end
 
-Given /^the node in the#{OPT_SYM} clipboard is restored from YAML after scenario$/ do |cb_name|
+Given /^the node in the#{OPT_SYM} clipboard is restored from YAML( after scenario)?$/ do |cb_name, after|
   ensure_admin_tagged
 
   cb_name ||= :deleted_node
   _admin = admin
-  teardown_add {
+  _op = proc {
     @result = _admin.cli_exec(
         :create,
         f: "-",
@@ -644,6 +644,11 @@ Given /^the node in the#{OPT_SYM} clipboard is restored from YAML after scenario
     # print the whole thing in case we fail
     raise "cannot restore node '#{cb[cb_name]}'" unless @result[:success]
   }
+  if after
+    teardown_add _op
+  else
+    _op.call
+  end
 end
 
 Given /^I set all worker nodes status to unschedulable$/ do
