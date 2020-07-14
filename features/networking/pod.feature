@@ -300,7 +300,7 @@ Feature: Pod related networking scenarios
       | protocol      | UDP                      |
     Then the step should succeed
     #Getting nodeport value
-    And evalation of `service(cb.host_pod1.name).node_port(port: 8080)` is stored in the :nodeport clipboard
+    And evaluation of `service(cb.host_pod1.name).node_port(port: 8080)` is stored in the :nodeport clipboard
     #Creating a simple client pod to generate traffic from it towards the exposed node IP address
     Given I obtain test data file "networking/aosqe-pod-for-ping.json"
     When I run the :create client command with:

@@ -797,6 +797,21 @@ Given /^the env is using "([^"]*)" networkType$/ do |network_type|
   raise "the networkType is not #{network_type}" unless @result[:response] == network_type
 end
 
+Given /^the env is using windows container$/ do
+  ensure_admin_tagged
+  _admin = admin
+  @result = _admin.cli_exec(:get, resource: "nodes",show_label:true)
+  raise "env doesn't have any windows container" unless @result[:response].include? "kubernetes.io/os=windows"
+end
+
+Given /^the env has hybridOverlayConfig enabled$/ do
+  ensure_admin_tagged
+  _admin = admin
+  @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.ovnKubernetesConfig}")
+  raise "env doesn't have hybridOverlayConfig enabled" unless @result[:response].include? "hybridOverlayConfig"
+end
+
+
 Given /^the bridge interface named "([^"]*)" with address "([^"]*)" is added to the "([^"]*)" node$/ do |bridge_name,address,node_name|
   ensure_admin_tagged
   node = node(node_name)
