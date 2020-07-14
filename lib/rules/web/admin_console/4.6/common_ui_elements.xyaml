@@ -325,7 +325,7 @@ check_column_header:
   action: wait_box_loaded
   elements:
   - selector:
-      xpath: //button[contains(@class, 'pf-c-button') and contains(text(),'<column_name>')]
+      xpath: //button[contains(@class, 'pf-c-table') and contains(.,'<column_name>')]
 check_column_header_missing:
   element:
     selector:
@@ -435,6 +435,7 @@ submit_changes:
   - selector:
       xpath: //button[@type='submit' and not(@disabled)]
     op: click
+    timeout: 15
 click_add_more_button:
   params:
     button_text: Add More
@@ -776,11 +777,11 @@ check_resource_details_key_only:
 check_key_and_resource_link:
   element:
     selector:
-      xpath: //button[(text()='<key>')]/parent::dt/following-sibling::dd[1]//a[contains(@href,'<resource_link>')] | //dt[contains(text(),'<key>')]/following-sibling::dd[1]//a[contains(@href,'<resource_link>')]
+      xpath: //button[(text()='<key>')]/parent::dt/following-sibling::dd[1]//a[contains(@href,'<resource_link>')] | //dt[contains(.,'<key>')]/following-sibling::dd[1]//a[contains(@href,'<resource_link>')]
 check_key_and_action_link:
   element: &key_action
     selector:
-      xpath: //dt[contains(text(),'<key>')]/following-sibling::dd[1]//button | //button[(text()='<key>')]/parent::dt/following-sibling::dd[1]//button
+      xpath: //dt[contains(text(),'<key>')]/following-sibling::dd[1]//button | //dt[contains(., '<key>')]/following-sibling::dd[1]//button
 click_value_on_resource_detail:
   element:
     <<: *key_value
