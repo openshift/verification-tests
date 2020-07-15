@@ -3,7 +3,7 @@ Feature: OVNKubernetes Windows Container related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-26360
   @admin
-  Scenario: Ensure linux and window pod comunication on Hybrid cluster with window container
+  Scenario: Ensure Pods and Service communication across window and linux nodes
     Given the env has hybridOverlayConfig enabled
     And the env is using windows container
     Given I have a project
