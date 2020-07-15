@@ -160,26 +160,21 @@ end
 # 2, Port forward the ldap server pod to the jenkins slave.
 # So take the second one since this one can be implemented currently
 ###
-Given /^I have LDAP service in my project with clusterversion "([^"]*)"$/ do |clusterversion|
-  if clusterversion.to_f >= 4.5
-    step 'I obtain test data file "groups/replicacontroller.yaml"'
-    step %Q/I run the :create admin command with:/, table(%{
-      | f         | replicacontroller.yaml |
-      | namespace | #{project.name}        |
-      })
+Given /^I have LDAP service in my project$/ do 
     step %Q/I run the :run client command with:/, table(%{
       | name  |ldapserver                             |
       | image |openshift/openldap-2441-centos7:latest |
       })
     step %Q/the step should succeed/
-    step %Q/the pod named "ldapserver" becomes ready/
-
+    step %Q/a pod becomes ready with labels:/, table(%{
+      | run=ldapserver |
+      })
+    
     cb.ldap_pod = BushSlicer::Pod.get_labeled(["run", "ldapserver"], user: user, project: project).first
     cb.ldap_pod_name = cb.ldap_pod.name
     cache_pods cb.ldap_pod
-
     # Init the test data in ldap server.
-    @result = cb.ldap_pod.exec("bash", "-c", "curl -Ss https://raw.githubusercontent.com/openshift/origin/master/images/openldap/contrib/init.ldif | ldapadd -x -h 127.0.0.1 -p 389 -D cn=Manager,dc=example,dc=com -w admin", as: user)
+    @result = pod.exec("bash", "-c", "curl -Ss https://raw.githubusercontent.com/openshift/origin/master/images/openldap/contrib/init.ldif | ldapadd -x -h 127.0.0.1 -p 389 -D cn=Manager,dc=example,dc=com -w admin", as: user)
     step %Q/the step should succeed/
 
     # Port forword ldapserver to local
@@ -189,31 +184,7 @@ Given /^I have LDAP service in my project with clusterversion "([^"]*)"$/ do |cl
       | port_spec | <%= cb.ldap_port %>:389 |
       })
     step %Q/the step should succeed/
-   else
-     step %Q/I run the :run client command with:/, table(%{
-      | name  |ldapserver                             |
-      | image |openshift/openldap-2441-centos7:latest |
-      })
-    step %Q/the step should succeed/
-    step %Q/I wait until replicationController "ldapserver-1" is ready/
-
-    cb.ldap_pod = BushSlicer::Pod.get_labeled(["run", "ldapserver"], user: user, project: project).first
-    cb.ldap_pod_name = cb.ldap_pod.name
-    cache_pods cb.ldap_pod
-
-    # Init the test data in ldap server.
-    @result = cb.ldap_pod.exec("bash", "-c", "curl -Ss https://raw.githubusercontent.com/openshift/origin/master/images/openldap/contrib/init.ldif | ldapadd -x -h 127.0.0.1 -p 389 -D cn=Manager,dc=example,dc=com -w admin", as: user)
-    step %Q/the step should succeed/
-
-    # Port forword ldapserver to local
-    step %Q/evaluation of `rand(32000...65536)` is stored in the :ldap_port clipboard/
-    step %Q/I run the :port_forward background client command with:/, table(%{
-      | pod       | <%= cb.ldap_pod_name %> |
-      | port_spec | <%= cb.ldap_port %>:389 |
-      })
-    step %Q/the step should succeed/
-   end
-end
+end  
 
 Given /^I have an ssh-git service in the(?: "([^ ]+?)")? project$/ do |project_name|
   project(project_name, switch: true)
