@@ -196,9 +196,8 @@ Feature: oc_set_probe.feature
       | resource | pod              |
       | l        | deployment=mysql |
     Then the output should match:
-      | Readiness      |
-      | tcp-socket :33 |
-      | probe failed   |
+      | Readiness       |
+      | tcp-socket :33  |
     """
 
   # @author wewang@redhat.com
