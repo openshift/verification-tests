@@ -161,12 +161,12 @@ end
 # So take the second one since this one can be implemented currently
 ###
 Given /^I have LDAP service in my project with clusterversion "([^"]*)"$/ do |clusterversion|
-  if clusterversion == '4.5' || '4.6'
+  if clusterversion.to_f >= 4.5
     step 'I obtain test data file "groups/replicacontroller.yaml"'
     step %Q/I run the :create admin command with:/, table(%{
-            | f         | replicacontroller.yaml |
-            | namespace | #{project.name} |
-          })
+      | f         | replicacontroller.yaml |
+      | namespace | #{project.name}        |
+      })
     step %Q/I run the :run client command with:/, table(%{
       | name  |ldapserver                             |
       | image |openshift/openldap-2441-centos7:latest |
