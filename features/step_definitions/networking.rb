@@ -797,11 +797,11 @@ Given /^the env is using "([^"]*)" networkType$/ do |network_type|
   raise "the networkType is not #{network_type}" unless @result[:response] == network_type
 end
 
-Given /^the env is using windows container$/ do
+Given /^the env is using windows node$/ do
   ensure_admin_tagged
   _admin = admin
-  @result = _admin.cli_exec(:get, resource: "nodes",show_label:true)
-  raise "env doesn't have any windows container" unless @result[:response].include? "kubernetes.io/os=windows"
+  @result = _admin.cli_exec(:get, resource: "nodes", show_label:true)
+  raise "env doesn't have any windows node" unless @result[:response].include? "kubernetes.io/os=windows"
 end
 
 Given /^the env has hybridOverlayConfig enabled$/ do
