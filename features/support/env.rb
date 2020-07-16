@@ -37,19 +37,20 @@ Before do |_scenario|
   localhost.chdir
   self.scenario = _scenario
 
-  ## raise inside block only if error can affect scenarios execution ##
-  no_err, val = capture_error {
+  begin
+    ## raise inside block only if error can affect scenarios execution ##
     # put other calls here to setup world according to tags, etc.
     prepare_scenario_users
-  }
-  err = no_err ? nil : val
-
-  manager.test_case_manager.signal(:finish_before_hook, scenario, err)
-  hook_error!(err)
-  logger.info("=== End Before Scenario: #{_scenario.name} ===")
-  # dedup at these hooks broken as log goes to the next step and in Outlines
-  #   it even ends up under one and the same step. Need to fix hooks somehow.
-  # logger.dedup_start
+  rescue => err
+    logger.error err
+    quit_cucumber
+    raise err
+  ensure
+    manager.test_case_manager.signal(:finish_before_hook, scenario, err)
+    logger.info("=== End Before Scenario: #{_scenario.name} ===")
+    # dedup from before to after hook is tricky, leaving for later
+    # logger.dedup_start
+  end
 end
 
 ## while we can move everything inside World, lets try to outline here the
@@ -61,17 +62,19 @@ After do |_scenario|
 
   debug_in_after_hook
 
-  ## raise inside block only if error can affect next scenarios execution ##
-  no_err, val = capture_error {
+  begin
+    ## raise inside block only if error can affect next scenarios execution ##
     # Manager will call clean-up including self.after_scenario
     manager.after_scenario
-  }
-  err = no_err ? nil : val
-
-  manager.test_case_manager.signal(:finish_after_hook, scenario, err)
-  hook_error!(err)
-  logger.info("=== End After Scenario: #{_scenario.name} ===")
-  BushSlicer::Logger.reset_runtime # otherwise we lose output from test case mgmt
+  rescue => err
+    logger.error err # make sure we capture it with the custom HTTP logger
+    quit_cucumber
+    raise err
+  ensure
+    logger.info("=== End After Scenario: #{_scenario.name} ===")
+    BushSlicer::Logger.reset_runtime # avoid losing output from test case mngr
+    manager.test_case_manager.signal(:finish_after_hook, scenario, err)
+  end
 end
 
 AfterStep do |scenario|

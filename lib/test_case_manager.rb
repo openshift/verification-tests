@@ -19,7 +19,7 @@ module BushSlicer
       @opts = opts
 
       @test_suite = BushSlicer.const_get(opts[:test_suite_class]).
-                                            new(opts[:test_suite_opts])
+                                            new(**opts[:test_suite_opts])
 
       @attach_queue = Queue.new
       @attacher = Thread.new do
