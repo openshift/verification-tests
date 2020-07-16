@@ -335,9 +335,37 @@ check_name_column_header:
   params:
     column_name: Name
   action: check_column_header
+check_namespace_column_header:
+  params:
+    column_name: Namespace
+  action: check_column_header
 check_status_column_header:
   params:
-    column_name: Name
+    column_name: Status
+  action: check_column_header
+check_ready_column_header:
+  params:
+    column_name: Ready
+  action: check_column_header
+check_restarts_column_header:
+  params:
+    column_name: Restarts
+  action: check_column_header
+check_owner_column_header:
+  params:
+    column_name: Owner
+  action: check_column_header
+check_memory_column_header:
+  params:
+    column_name: Memory
+  action: check_column_header
+check_created_column_header:
+  params:
+    column_name: Created
+  action: check_column_header
+check_cpu_column_header:
+  params:
+    column_name: CPU
   action: check_column_header
 check_resource_name_and_icon:
   action:
