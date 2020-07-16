@@ -405,7 +405,7 @@ module BushSlicer
 
         background = opts.delete(:background)
 
-        cmd = Command.new(command, self, opts)
+        cmd = Command.new(command, self, **opts)
         loop_thread!
         cmd.wait_exec
 
