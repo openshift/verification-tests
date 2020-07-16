@@ -5,7 +5,7 @@ Feature: OVNKubernetes Windows Container related networking scenarios
   @admin
   Scenario: Ensure Pods and Service communication across window and linux nodes
     Given the env has hybridOverlayConfig enabled
-    And the env is using windows node
+    And the env is using windows nodes
     Given I have a project
     And I obtain test data file "networking/list_for_pods.json"
     When I run the :create client command with:

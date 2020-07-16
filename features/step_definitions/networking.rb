@@ -797,7 +797,7 @@ Given /^the env is using "([^"]*)" networkType$/ do |network_type|
   raise "the networkType is not #{network_type}" unless @result[:response] == network_type
 end
 
-Given /^the env is using windows node$/ do
+Given /^the env is using windows nodes$/ do
   ensure_admin_tagged
   _admin = admin
   @result = _admin.cli_exec(:get, resource: "nodes", show_label:true)
