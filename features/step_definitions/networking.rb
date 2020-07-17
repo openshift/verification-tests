@@ -947,7 +947,6 @@ Given /^I store "([^"]*)" node's corresponding default networkType pod name in t
   logger.info "node's corresponding networkType pod name is stored in the #{cb_pod_name} clipboard."
 end
 
-
 Given /^I store the ovnkube-master#{OPT_QUOTED} leader pod in the#{OPT_SYM} clipboard$/ do |ovndb, cb_leader_name|
   ensure_admin_tagged
   cb_leader_name ||= "#{ovndb}_leader"
@@ -1022,4 +1021,26 @@ Given /^I enable multicast for the "(.+?)" namespace$/ do | project_name |
     raise "Failed to apply the default deny annotation to specified namespace."
   end 
   logger.info "The multicast is enable in the #{project_name} project"
+end
+
+Given /^the mtu value "([^"]*)" is patched in CNO config according to the networkType$/ do | mtu_value |
+  ensure_admin_tagged
+  mtu_value ||= "mtu_value"
+  @result = admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
+  if @result[:response] == "OVNKubernetes"
+     @result = admin.cli_exec(:patch, resource: "network.operator", resource_name: "cluster", p: "{\"spec\":{\"defaultNetwork\":{\"ovnKubernetesConfig\":{\"mtu\": #{mtu_value}}}}}", type: "merge")
+  else
+     @result = admin.cli_exec(:patch, resource: "network.operator", resource_name: "cluster", p: "{\"spec\":{\"defaultNetwork\":{\"openshiftSDNConfig\":{\"mtu\": #{mtu_value}}}}}", type: "merge")
+  end
+  raise "Failed to patch CNO!" unless @result[:success]
+  
+  teardown_add {
+    @result = admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
+    if @result[:response] == "OVNKubernetes"
+      @result = admin.cli_exec(:patch, resource: "network.operator", resource_name: "cluster", p: "{\"spec\":{\"defaultNetwork\":{\"ovnKubernetesConfig\":{\"mtu\": null}}}}", type: "merge")
+    else
+      @result = admin.cli_exec(:patch, resource: "network.operator", resource_name: "cluster", p: "{\"spec\":{\"defaultNetwork\":{\"openshiftSDNConfig\":{\"mtu\": null}}}}", type: "merge")
+    end
+    raise "Failed to clear mtu field from CNO" unless @result[:success]
+  }
 end

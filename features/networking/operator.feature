@@ -46,6 +46,7 @@ Feature: Operator related networking scenarios
       | p             | {"spec":{"networkType":"OpenShiftSDN"}} |
       | type          | merge                                   |
     Then the step should succeed
+    And I pry
     20 seconds have passed
     evaluation of `cluster_operator('network').condition(type: 'Degraded',cached: false)` is stored in the :degraded_status clipboard
     the expression should be true> cb.degraded_status["status"]=="False"
@@ -345,3 +346,26 @@ Feature: Operator related networking scenarios
     And all existing pods die with labels:
       | app=dhcp-daemon |
     """
+
+  # @author anusaxen@redhat.com
+  # @case_id OCP-27333
+  @admin
+  @destructive
+  Scenario: Changing mtu in CNO should not be allowed
+  Given the mtu value "1750" is patched in CNO config according to the networkType
+  Given I switch to cluster admin pseudo user
+  And I use the "openshift-network-operator" project
+  When I run the :get client command with:
+    | resource | pods                               |
+    | o        | jsonpath={.items[*].metadata.name} |
+  Then the step should succeed
+  And evaluation of `@result[:response]` is stored in the :network_operator_pod clipboard
+  And I wait up to 60 seconds for the steps to pass:
+  """
+  When I run the :logs admin command with:
+    | resource_name | <%= cb.network_operator_pod %> |
+    | since         | 30s                            |
+  Then the step should succeed
+  And the output should contain:
+    | cannot change ovn-kubernetes MTU |
+  """ 
