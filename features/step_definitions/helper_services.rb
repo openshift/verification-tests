@@ -184,7 +184,7 @@ Given /^I have LDAP service in my project$/ do
       | port_spec | <%= cb.ldap_port %>:389 |
       })
     step %Q/the step should succeed/
-end 
+end
 
 Given /^I have an ssh-git service in the(?: "([^ ]+?)")? project$/ do |project_name|
   project(project_name, switch: true)
