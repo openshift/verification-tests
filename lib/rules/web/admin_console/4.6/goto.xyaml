@@ -127,6 +127,9 @@ goto_rc_list_page:
   url: k8s/ns/<project_name>/replicationcontrollers
 
 #pod
+goto_all_projects_pods_list:
+  url: k8s/all-namespaces/pods
+  action: wait_box_loaded
 goto_one_pod_page:
   url: k8s/ns/<project_name>/pods/<resource_name>
 goto_one_pod_log_page:
