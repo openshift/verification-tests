@@ -46,7 +46,6 @@ Feature: Operator related networking scenarios
       | p             | {"spec":{"networkType":"OpenShiftSDN"}} |
       | type          | merge                                   |
     Then the step should succeed
-    And I pry
     20 seconds have passed
     evaluation of `cluster_operator('network').condition(type: 'Degraded',cached: false)` is stored in the :degraded_status clipboard
     the expression should be true> cb.degraded_status["status"]=="False"
