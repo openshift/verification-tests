@@ -352,9 +352,8 @@ Feature: Operator related networking scenarios
   @destructive
   Scenario: Changing mtu in CNO should not be allowed
   Given the mtu value "1750" is patched in CNO config according to the networkType
-  Given I switch to cluster admin pseudo user
-  And I use the "openshift-network-operator" project
-  When I run the :get client command with:
+  And admin uses the "openshift-network-operator" project
+  When I run the :get admin command with:
     | resource | pods                               |
     | o        | jsonpath={.items[*].metadata.name} |
   Then the step should succeed

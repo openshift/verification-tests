@@ -1028,19 +1028,15 @@ Given /^the mtu value "([^"]*)" is patched in CNO config according to the networ
   mtu_value ||= "mtu_value"
   @result = admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
   if @result[:response] == "OVNKubernetes"
-     @result = admin.cli_exec(:patch, resource: "network.operator", resource_name: "cluster", p: "{\"spec\":{\"defaultNetwork\":{\"ovnKubernetesConfig\":{\"mtu\": #{mtu_value}}}}}", type: "merge")
+     config_var = "ovnKubernetesConfig"
   else
-     @result = admin.cli_exec(:patch, resource: "network.operator", resource_name: "cluster", p: "{\"spec\":{\"defaultNetwork\":{\"openshiftSDNConfig\":{\"mtu\": #{mtu_value}}}}}", type: "merge")
+     config_var = "openshiftSDNConfig"
   end
+  @result = admin.cli_exec(:patch, resource: "network.operator", resource_name: "cluster", p: "{\"spec\":{\"defaultNetwork\":{\"#{config_var}\":{\"mtu\": #{mtu_value}}}}}", type: "merge")
   raise "Failed to patch CNO!" unless @result[:success]
   
   teardown_add {
-    @result = admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
-    if @result[:response] == "OVNKubernetes"
       @result = admin.cli_exec(:patch, resource: "network.operator", resource_name: "cluster", p: "{\"spec\":{\"defaultNetwork\":{\"ovnKubernetesConfig\":{\"mtu\": null}}}}", type: "merge")
-    else
-      @result = admin.cli_exec(:patch, resource: "network.operator", resource_name: "cluster", p: "{\"spec\":{\"defaultNetwork\":{\"openshiftSDNConfig\":{\"mtu\": null}}}}", type: "merge")
-    end
-    raise "Failed to clear mtu field from CNO" unless @result[:success]
+      raise "Failed to clear mtu field from CNO" unless @result[:success]
   }
 end
