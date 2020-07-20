@@ -587,6 +587,7 @@
     :app_repo: <value>
     :code: --code=<value>
     :docker_image: --docker-image=<value>
+    :env: --env=<value>
     :image_stream: --image-stream=<value>
     :labels: --labels=<value>
     :name: --name=<value>
