@@ -87,10 +87,18 @@ check_mega_menu:
 navigate_to_dev_console:
   elements:
   - selector:
-      xpath: //button[contains(., 'Administrator')]
+      xpath: //button[@data-test-id='perspective-switcher-toggle']
     op: click
   - selector:
       xpath: //li//h2[contains(., 'Developer')]
+    op: click
+navigate_to_admin_console:
+  elements:
+  - selector:
+      xpath: //button[@data-test-id='perspective-switcher-toggle']
+    op: click
+  - selector:
+      xpath: //li//h2[contains(., 'Administrator')]
     op: click
 check_external_link:
   elements:
