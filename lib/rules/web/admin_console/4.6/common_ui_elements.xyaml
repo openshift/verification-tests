@@ -482,11 +482,14 @@ click_link_with_text_only:
     selector:
       xpath: //a[text()='<text>']
     op: click
-click_secondary_menu:
+click_primary_menu:
   elements:
   - selector:
       xpath: //a[@class='pf-c-nav__link' and text()='<primary_menu>']
     op: click
+click_secondary_menu:
+  action: click_first_menu
+  elements:
   - selector: &secondary_menu
       xpath: //a[contains(@class,'pf-c-nav__link') and text()='<secondary_menu>']
     op: click
