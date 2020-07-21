@@ -52,6 +52,8 @@ Feature: SDN related networking scenarios
     """
 
     When the node standard iptables rules are removed
+    # wait full iptablesSyncPeriod, which is 30 seconds by default
+    # This step is a negative check, so we have to wait the full period to make sure the rules were not restored.
     And 35 seconds have passed
     When the node iptables config is checked
     # Removing individual rules will not trigger automatic repair on < 4.3
@@ -59,9 +61,11 @@ Feature: SDN related networking scenarios
     Then the step failed
     # >= 4.3 we have to flush all the rules and tables to trigger a repair
     When the node standard iptables rules are completely flushed
-    And 35 seconds have passed
-    Then the node iptables config is checked
+    And I wait up to 60 seconds for the steps to pass:
+    """
+    Given the node iptables config is checked
     Then the step succeeded
+    """
 
 
   # @author hongli@redhat.com
