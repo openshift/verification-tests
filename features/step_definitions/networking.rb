@@ -790,6 +790,25 @@ Given /^the subnet for primary interface on node is stored in the#{OPT_SYM} clip
   logger.info "Subnet range for the primary interface on the node is stored in the #{cb_name} clipboard."
 end
 
+Given /^the node's MTU value is stored in the#{OPT_SYM} clipboard$/ do |cb_node_mtu|
+  ensure_admin_tagged
+  cb_node_mtu = "mtu" unless cb_node_mtu
+  @result = admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
+  if @result[:success] then
+     networkType = @result[:response].strip
+  end
+  raise "Failed to get networkType" unless @result[:success]
+  if @result[:response] == "OVNKubernetes"
+     step %Q/I run command on the node's ovnkube pod:/, table("| bash | -c | ip route show default |")
+  else
+     step %Q/I run command on the node's sdn pod:/, table("| bash | -c | ip route show default |")
+  end
+  inf_name = @result[:response].split("\n").first.split(/\W+/)[7]
+  @result = host.exec_admin("ip a show #{inf_name}")
+  cb[cb_node_mtu] = @result[:response].split(/mtu /)[1][0,4]
+  logger.info "Node's MTU value is stored in the #{cb_node_mtu} clipboard."
+end
+
 Given /^the env is using "([^"]*)" networkType$/ do |network_type|
   ensure_admin_tagged
   _admin = admin
@@ -941,6 +960,7 @@ Given /^I store "([^"]*)" node's corresponding default networkType pod name in t
      app="app=ovnkube-node"
      project_name="openshift-ovn-kubernetes"
   end
+  cb.network_project_name = project_name
   cb[cb_pod_name] = BushSlicer::Pod.get_labeled(app, project: project(project_name, switch: false), user: admin) { |pod, hash|
     pod.node_name == node_name
   }.first.name
