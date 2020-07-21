@@ -25,7 +25,7 @@ check_div_text:
       xpath: //div[contains(text(),'<text>')]
 filter_alert:
   params: 
-    class_text: co-text-filter   
+    class_text: co-text-filter
     input_value: <alert_name>
   action: clear_name_filter_if_exists
   action: set_input_class
