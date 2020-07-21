@@ -82,7 +82,8 @@ module BushSlicer
       json_file = Tempfile.new("json_cred_", Host.localhost.workdir)
       json_file.write(auth_json)
       json_file.close
-      return GCE.new(:json_cred => json_file.path, :auth_type => "json")
+      return GCE.new(:json_cred => json_file.path, :auth_type => "json",
+                     :avoid_garbage_collection => json_file)
     end
 
     def self.init_azure(env)
