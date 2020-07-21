@@ -8,12 +8,12 @@ Given /^the sriov operator is running well$/ do
     if cb.ocp_cluster_version.include? "4.[34]."
       # create 4.3/4.4 namespaces
       step %Q{I obtain test data file "networking/sriov/namespace/43/ns.yaml"}
-      @result = admin.cli_exec(:create, f: ns.yaml)
+      @result = admin.cli_exec(:create, f: "ns.yaml")
       raise "Error creating namespace for openshift-sriov-network-operator" unless @result[:success]
     else
       # Create namespace for 4.5 and later
       step %Q{I obtain test data file "networking/sriov/namespace/45/ns45.yaml"}
-      @result = admin.cli_exec(:create, f: ns45.yaml)
+      @result = admin.cli_exec(:create, f: "ns45.yaml")
       raise "Error creating namespace for openshift-sriov-network-operator" unless @result[:success]
     end
     
@@ -21,7 +21,7 @@ Given /^the sriov operator is running well$/ do
   step %Q/I use the "openshift-sriov-network-operator" project/
   unless operator_group('sriov-network-operators').exists?
     step %Q{I obtain test data file "networking/sriov/og/og.yaml"}
-    @result = admin.cli_exec(:create, f: og.yaml)
+    @result = admin.cli_exec(:create, f: "og.yaml")
     raise "Error creating og for openshift-sriov-network-operator" unless @result[:success]
   end
   
