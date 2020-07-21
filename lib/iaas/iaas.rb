@@ -49,27 +49,9 @@ module BushSlicer
       #secret = Secret.new(name: "aws-creds", project: project('kube-system'))
       aws_cred = {}
 
-      search_command = %{
-        if [ -f /etc/origin/master/master.env ] ; then
-          cat /etc/origin/master/master.env | grep AWS_
-        elif [ -f /etc/sysconfig/atomic-openshift-master ] ; then
-          cat /etc/sysconfig/atomic-openshift-master | grep AWS_
-        elif [ -f /etc/sysconfig/atomic-openshift-node ] ; then
-          cat /etc/sysconfig/atomic-openshift-node | grep AWS_
-        fi
-      }
-      conn_cred = env.nodes[0].host.exec_admin(search_command, quiet: true)[:response].split("\n")
-
-      key, skey = nil
-      conn_cred.each { |c|
-        cred = c.split("=")
-        case cred[0].strip
-        when "AWS_ACCESS_KEY_ID"
-          key = cred[1].strip
-        when "AWS_SECRET_ACCESS_KEY"
-          skey = cred[1].strip
-        end
-      }
+      secret = Secret.new(name: "aws-creds", project: Project.new(name: 'kube-system', env: env))
+      key = secret.value_of("aws_access_key_id", user: :admin)
+      skey = secret.value_of("aws_secret_access_key", user: :admin)
 
       return Amz_EC2.new(access_key: key, secret_key: skey)
     end
