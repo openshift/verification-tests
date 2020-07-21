@@ -1451,10 +1451,3 @@ Feature: Multus-CNI related scenarios
       | name     | macvlan-bridge-whereabouts-pod3 |
     Then the output should contain "Could not allocate IP in range"
     """
-  
-  # @author weliang@redhat.com
-  # @case_id OCP-31999
-  @admin
-  Scenario: Whereabouts with exclude IP address	
-  Given the subnet for primary interface on node is stored in the :subnet clipboard
-  And I pry
