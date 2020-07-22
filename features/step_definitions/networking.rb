@@ -589,7 +589,7 @@ Given /^I store a random unused IP address from the reserved range to the#{OPT_S
 
   validate_ip = IPAddr.new(reserved_range).to_range.to_a.shuffle.each { |ip|
     @result = step "I run command on the node's ovs pod:", table(
-      "| ping | -c1 | -W2 | #{ip} |"
+      "| ping | -c4 | -W2 | #{ip} |"
     )
     if @result[:exitstatus] == 0
       logger.info "The IP is in use."
