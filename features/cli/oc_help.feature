@@ -1,6 +1,7 @@
 Feature: oc related features
 
   # @author chezhang@redhat.com
+  # @author weinliu@redhat.com
   # @case_id OCP-11565
   Scenario: kubectl secret subcommand - help
     Given I have a project
@@ -44,7 +45,6 @@ Feature: oc related features
       | --dry-run=           |
       | --from-file=         |
       | --from-literal=      |
-      | --generator=         |
       | -o, --output=        |
       | --save-config=       |
       | --template=          |
@@ -61,7 +61,6 @@ Feature: oc related features
       | --docker-server=     |
       | --docker-username=   |
       | --dry-run=           |
-      | --generator=         |
       | -o, --output=        |
       | --save-config=       |
       | --template=          |
@@ -77,7 +76,6 @@ Feature: oc related features
       | --docker-server=     |
       | --docker-username=   |
       | --dry-run=           |
-      | --generator=         |
       | -o, --output=        |
       | --save-config=       |
       | --template=          |
