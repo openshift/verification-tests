@@ -35,6 +35,7 @@ Given /^the sriov operator is running well$/ do
   end
   
   step %Q/sriov operator is ready/
+  step %Q/configDaemonNodeSelector set to true in sriovoperatorconfig/
   step %Q/sriov config daemon is ready/
 end
 
@@ -52,6 +53,30 @@ Given /^sriov config daemon is ready$/ do
   step %Q/a pod becomes ready with labels:/, table(%{
     | app=sriov-network-config-daemon |
   })
+end
+
+Given /^configDaemonNodeSelector set to true in sriovoperatorconfig$/ do
+  ensure_admin_tagged
+  project("openshift-sriov-network-operator")
+  step %Q/I run the :patch admin command with:/, table(%{
+     | resource      | sriovoperatorconfigs.sriovnetwork.openshift.io                                             |
+     | resource_name | default                                                                                    |
+     | p             | {"spec":{"configDaemonNodeSelector":{"feature.node.kubernetes.io/sriov-capable": "true"}}} |
+     | type          | merge                                                                                      |
+   })  
+  step %Q{the step should succeed}
+end
+
+Given /^configDaemonNodeSelector set to false in sriovoperatorconfig$/ do
+  ensure_admin_tagged
+  project("openshift-sriov-network-operator")
+  step %Q/I run the :patch admin command with:/, table(%{
+     | resource      | sriovoperatorconfigs.sriovnetwork.openshift.io                                              |
+     | resource_name | default                                                                                     |
+     | p             | {"spec":{"configDaemonNodeSelector":{"feature.node.kubernetes.io/sriov-capable": "false"}}} |
+     | type          | merge                                                                                       |
+   })
+  step %Q{the step should succeed}
 end
 
 Given /^I create sriov resource with following:$/ do | table |
@@ -83,13 +108,11 @@ Given /^I create sriov resource with following:$/ do | table |
        step %Q/I delete the "#{cr_name}" sriovnetwork/
     end
 
-    #@result = admin.cli_exec(:create, f: resource_yaml, n: sriov_ns)
-     step %Q/I process and create:/, table(%{
-          | f | #{resource_yaml}      |
-          | p | default=#{cr_project} |
-     })
+    step %Q/I run oc create over "#{resource_yaml}" replacing paths:/,table(%{
+      | ["spec"]["networkNamespace"] | "#{cr_project}" |
+    })
     
-    raise "Unable to create sriovnetwork" unless @result[:success]
+    step %Q{the step should succeed}
     teardown_add {
       step %Q/I delete the "#{cr_name}" sriovnetwork/
     }
