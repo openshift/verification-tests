@@ -471,8 +471,11 @@ Feature: Service related networking scenarios
       | pkill openshift-sdn |
     Then the step should succeed
     #Check if node has removed the taint
+    Given I wait up to 30 seconds for the steps to pass:
+    """
     Given I run the :describe admin command with:
       | resource | node                   |
       | name     | <%= cb.subject_node %> |
     Then the step should succeed
     And the output should not contain "mtu-too-small"
+    """
