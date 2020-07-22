@@ -8,7 +8,7 @@ Feature: set deployment-hook/build-hook with CLI
       | file | https://raw.githubusercontent.com/openshift/rails-ex/master/openshift/templates/rails-postgresql.json |
     Then the step should succeed
     Given a pod becomes ready with labels:
-      | deployment=rails-postgresql-example-1 |
+      | openshift.io/build.name=rails-postgresql-example-1 |
     When I run the :set_deployment_hook client command with:
       | deploymentconfig | dc/rails-postgresql-example |
       | pre              |                             |
@@ -30,7 +30,7 @@ Feature: set deployment-hook/build-hook with CLI
       | args             | /bin/true                   |
     Then the step should succeed
     When I run the :describe client command with:
-      | resource | dc |
+      | resource | dc                       |
       | name     | rails-postgresql-example |
     Then the step should succeed
     And the output should match:
@@ -46,7 +46,7 @@ Feature: set deployment-hook/build-hook with CLI
       | resource | dc/rails-postgresql-example |
     Then the step should succeed
     Given a pod becomes ready with labels:
-      | deployment=rails-postgresql-example-2 |
+      | deployment=rails-postgresql-example-1 |
     When I run the :set_deployment_hook client command with:
       | deploymentconfig | dc/rails-postgresql-example |
       | pre              |                             |
@@ -68,7 +68,7 @@ Feature: set deployment-hook/build-hook with CLI
       | resource | dc/rails-postgresql-example |
     Then the step should succeed
     Given a pod becomes ready with labels:
-      | deployment=rails-postgresql-example-3 |
+      | deployment=rails-postgresql-example-2 |
     When I run the :set_deployment_hook client command with:
       | deploymentconfig | dc/rails-postgresql-example |
       | remove           |                             |
