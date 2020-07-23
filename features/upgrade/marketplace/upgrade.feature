@@ -4,8 +4,8 @@ Feature: Marketplace related scenarios
   # @author jiazha@redhat.com
   # @case_id OCP-22618
   @admin
-  @upgrade-prepare
-  @users=upuser1,upuser2
+#  @upgrade-prepare
+#  @users=upuser1,upuser2
   Scenario: upgrade Marketplace - prepare
     # Check Marketplace version
     Given the "marketplace" operator version matches the current cluster version
@@ -26,13 +26,8 @@ Feature: Marketplace related scenarios
       | p | DISPLAYNAME=Test Operators   |
       | p | REGISTRY=jiazha              |
     Then the step should succeed
-    # Create a new CatalogSourceConfig
-    Given I obtain test data file "olm/csc-template.yaml"
-    When I process and create:
-      | f | csc-template.yaml                     |
-      | p | PACKAGES=codeready-toolchain-operator |
-      | p | DISPLAYNAME=CSC Operators             |
-    Then the step should succeed
+    # In 4.5-, Create a new CatalogSourceConfig. In 4.5 and 4.5+, there are no CatalogSourceConfig
+    Given I create a new CatalogSourceConfig
     # Check if the marketplace works well
     And I wait up to 360 seconds for the steps to pass:
     """
@@ -40,8 +35,8 @@ Feature: Marketplace related scenarios
     """
 
   @admin
-  @upgrade-check
-  @users=upuser1,upuser2
+#  @upgrade-check
+#  @users=upuser1,upuser2
   Scenario: upgrade Marketplace
     # Check Marketplace version after upgraded
     Given the "marketplace" operator version matches the current cluster version
