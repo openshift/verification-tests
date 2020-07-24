@@ -1,0 +1,112 @@
+apiVersion: machine.openshift.io/v1beta1
+kind: MachineSet
+metadata:
+  annotations:
+    machine.openshift.io/memoryMb: "15360"
+    machine.openshift.io/vCPU: "4"
+  creationTimestamp: "2020-07-06T04:32:32Z"
+  generation: 1
+  labels:
+    machine.openshift.io/cluster-api-cluster:
+  managedFields:
+  - apiVersion: machine.openshift.io/v1beta1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:labels:
+          .: {}
+          f:machine.openshift.io/cluster-api-cluster: {}
+      f:spec:
+        .: {}
+        f:replicas: {}
+        f:selector:
+          .: {}
+          f:matchLabels:
+            .: {}
+            f:machine.openshift.io/cluster-api-cluster: {}
+            f:machine.openshift.io/cluster-api-machineset: {}
+        f:template:
+          .: {}
+          f:metadata:
+            .: {}
+            f:labels:
+              .: {}
+              f:machine.openshift.io/cluster-api-cluster: {}
+              f:machine.openshift.io/cluster-api-machine-role: {}
+              f:machine.openshift.io/cluster-api-machine-type: {}
+              f:machine.openshift.io/cluster-api-machineset: {}
+          f:spec:
+            .: {}
+            f:metadata: {}
+            f:providerSpec:
+              .: {}
+              f:value:
+                .: {}
+                f:apiVersion: {}
+                f:canIPForward: {}
+                f:credentialsSecret: {}
+                f:deletionProtection: {}
+                f:disks: {}
+                f:kind: {}
+                f:machineType: {}
+                f:metadata: {}
+                f:networkInterfaces: {}
+                f:projectID: {}
+                f:region: {}
+                f:serviceAccounts: {}
+                f:tags: {}
+                f:userDataSecret: {}
+                f:zone: {}
+      f:status: {}
+    manager: cluster-bootstrap
+    operation: Update
+    time: "2020-07-06T04:32:32Z"
+  - apiVersion: machine.openshift.io/v1beta1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:machine.openshift.io/memoryMb: {}
+          f:machine.openshift.io/vCPU: {}
+    manager: machine-controller-manager
+    operation: Update
+    time: "2020-07-06T04:58:24Z"
+  - apiVersion: machine.openshift.io/v1beta1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:status:
+        f:availableReplicas: {}
+        f:fullyLabeledReplicas: {}
+        f:observedGeneration: {}
+        f:readyReplicas: {}
+        f:replicas: {}
+    manager: machineset-controller
+    operation: Update
+    time: "2020-07-06T05:02:11Z"
+  name: default-valued-33056
+  namespace: openshift-machine-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      machine.openshift.io/cluster-api-cluster:
+      machine.openshift.io/cluster-api-machineset:
+  template:
+    metadata:
+      labels:
+        machine.openshift.io/cluster-api-cluster:
+        machine.openshift.io/cluster-api-machine-role: worker
+        machine.openshift.io/cluster-api-machine-type: worker
+        machine.openshift.io/cluster-api-machineset:
+    spec:
+      metadata: {}
+      taints:
+      - effect: "NoSchedule"
+        key: "mapi"
+        value: "mapi_test"
+      providerSpec:
+        value:
+          region: 
+          zone: 
+
