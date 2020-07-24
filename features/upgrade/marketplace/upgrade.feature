@@ -4,8 +4,8 @@ Feature: Marketplace related scenarios
   # @author jiazha@redhat.com
   # @case_id OCP-22618
   @admin
-  @upgrade-prepare
-  @users=upuser1,upuser2
+#  @upgrade-prepare
+#  @users=upuser1,upuser2
   Scenario: upgrade Marketplace - prepare
     # Check Marketplace version
     Given the "marketplace" operator version matches the current cluster version
@@ -35,8 +35,8 @@ Feature: Marketplace related scenarios
     """
 
   @admin
-  @upgrade-check
-  @users=upuser1,upuser2
+#  @upgrade-check
+#  @users=upuser1,upuser2
   Scenario: upgrade Marketplace
     # Check Marketplace version after upgraded
     Given the "marketplace" operator version matches the current cluster version
