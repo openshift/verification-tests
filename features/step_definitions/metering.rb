@@ -69,6 +69,13 @@ Given /^I install metering service using:$/ do | table |
   when "HDFS"
     metering_config ||= "metering/configs/meteringconfig_hdfs.yaml"
   end
+  # if we have an existing metering installation and the meteringconfig hive
+  # storage type is different, then we delete the existing meteringconfig
+  if metering_config(cb.metering_ns).exists?
+    if metering_config(cb.metering_ns).hive_type != storage_type
+      step %Q(I ensure "<%= cb.metering_ns %>" meteringconfig is deleted)
+    end
+  end
   step %Q(I run oc create as admin over ERB test file: #{metering_config})
   step %Q(all metering related pods are running in the project)
   step %Q/all reportdatasources are importing from Prometheus/
