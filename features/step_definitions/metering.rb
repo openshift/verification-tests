@@ -288,11 +288,12 @@ Given /^the#{OPT_QUOTED} metering service is uninstalled using OLM$/ do | meteri
   ensure_destructive_tagged
   metering_ns ||= "openshift-metering"
   step %Q/I switch to cluster admin pseudo user/ unless env.is_admin? user
-  project(metering_ns)
-  step %Q(I ensure "openshift-metering" meteringconfig is deleted)
-  step %Q(I ensure "metering-ocp-sub" subscription is deleted)
-  step %Q(I ensure "metering-ocp-og" subscription is deleted)
-  step %Q/I ensure "#{metering_ns}" project is deleted/
+  if project(metering_ns).exists?
+    step %Q(I ensure "openshift-metering" meteringconfig is deleted)
+    step %Q(I ensure "metering-ocp-sub" subscription is deleted)
+    step %Q(I ensure "metering-ocp-og" subscription is deleted)
+    step %Q/I ensure "#{metering_ns}" project is deleted/
+  end
 end
 
 Given /^I remove metering service from the #{QUOTED} project$/ do | metering_ns |
