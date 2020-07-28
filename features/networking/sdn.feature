@@ -392,3 +392,31 @@ Feature: SDN related networking scenarios
       | since         | 30s                            |
     And the output should contain:
       | Not applying unsafe change: invalid configuration |
+
+
+  # @author zzhao@redhat.com
+  # @case_id OCP-33206
+  @admin
+  Scenario: sdn metrics should be using https scheme
+    Given the master version >= "4.6"
+    Given I switch to cluster admin pseudo user
+    When I use the "openshift-sdn" project
+    Then the expression should be true> service_monitor('monitor-sdn').service_monitor_endpoints_spec.first.scheme == 'https'
+
+    When evaluation of `endpoints('sdn-metrics').subsets.first.addresses.first.ip.to_s` is stored in the :sdn_metri_ip clipboard
+    And evaluation of `endpoints('sdn-metrics').subsets.first.ports.first.port.to_s` is stored in the :sdn_metri_port clipboard
+    And evaluation of `cb.sdn_metri_ip + ':' +cb.sdn_metri_port` is stored in the :sdn_metri_endpoint clipboard
+
+    And I use the "openshift-monitoring" project
+    When evaluation of `secret(service_account('prometheus-k8s').get_secret_names.find {|s| s.match('token')}).token` is stored in the :sa_token clipboard
+    When I run the :exec admin command with:
+      | n                | openshift-monitoring |
+      | pod              | prometheus-k8s-0     |
+      | c                | prometheus           |
+      | oc_opts_end      |                      |
+      | exec_command     | sh                   |
+      | exec_command_arg | -c                   |
+      | exec_command_arg | curl -k -H "Authorization: Bearer <%= cb.sa_token %>" https://<%= cb.sdn_metri_endpoint %>/metrics |
+    Then the step should succeed
+    And the output should contain:
+      | openshift_sdn_ovs_flows |
