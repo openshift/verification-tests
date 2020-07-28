@@ -77,7 +77,7 @@ Feature: deployment related features
       | f | deployment1.json |
     Then the step should succeed
     Given I obtain test data file "deployment/updatev1.json"
-    And I wait up to 60 seconds for the steps to pass:
+    And I wait up to 30 seconds for the steps to pass:
     """
     When I run the :replace client command with:
       | f | updatev1.json |
