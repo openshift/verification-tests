@@ -1,0 +1,10 @@
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: local-storage
+  namespace: local-storage
+  labels:
+    og_label: local-storage
+spec:
+  targetNamespaces:
+  - local-storage

@@ -1,245 +1,95 @@
-# OCP supports fileystem local storage provisioner from 3.7
-# For some OCP versions, before depolying local storage provisoner,
-# we need enable some feature gates first.
-# ref: doc/storage_automation_spec.adoc
-
-Given /^I deploy local storage provisioner(?: with "([^ ]+?)" version)?$/ do |img_version|
+Given /^local storage operator has been installed successfully$/ do
   ensure_admin_tagged
-  ensure_destructive_tagged
+  namespace = "openshift-local-storage"
+  name = "local-storage"
 
-  namespace = env.local_storage_provisioner_project.name
-  config_hash = env.master_services[0].config.as_hash()
-  imgformat = config_hash["imageConfig"]["format"]
-  img_registry = imgformat.split("\/")[0]
-  ose_version = env.get_version(user: admin)
-  img_version = "v#{ose_version[0]}" unless img_version
-  serviceaccount="local-storage-admin"
-  configmap="local-volume-config"
-  template="local-storage-provisioner"
-  image="#{img_registry}/openshift3/local-storage-provisioner:#{img_version}"
-  path ||="/mnt/local-storage"
-  cmurl = "#{BushSlicer::HOME}/testdata/storage/localvolume/configmap-37.yaml"
-  if env.version_ge("3.10", user: user)
-    cmurl = "#{BushSlicer::HOME}/testdata/storage/localvolume/configmap.yaml"
+  # create namespace
+  unless project(namespace).exists?
+    step %Q/I run the :oadm_new_project admin command with:/, table(%{
+      | project_name  | #{namespace} |
+    })
+    step %Q/the step should succeed/
   end
 
-  project(namespace)
-  # if project exists, delete project and pvs created by local storage provisioner
-  if project.exists?(user: admin)
-    project.delete(by: admin)
-    project.wait_to_disappear(admin)
-
-    BushSlicer::PersistentVolume.list(user: admin).each { |pv|
-      pv.delete(by: admin) if pv.name.start_with?("local-pv-") && (pv.local_path&.start_with?("#{path}/fast") || pv.local_path&.start_with?("#{path}/slow"))
-    }
+  # create operator group
+  step %Q/I use the "#{namespace}" project/
+  unless operator_group(name).exists?
+    step %Q/I obtain test data file "storage\/localvolume\/operatorgroup.yaml"/
+    step %Q/I run oc create over "operatorgroup.yaml" replacing paths:/, table(%{
+      | ["metadata"]["name"]           | #{name}      |
+      | ["metadata"]["namespace"]      | #{namespace} |
+      | ["spec"]["targetNamespaces"][0]| #{namespace} |
+    })
+    raise "Create OperatorGroup #{name} failed" unless @result[:success]
   end
 
-  ns_cmd = "oc adm new-project #{namespace} --node-selector=''"
-  @result = env.master_hosts.first.exec(ns_cmd)
-  step %Q/the step should succeed/
+  # get channel
+  step %Q/evaluation of `cluster_version('version').channel.split('-')[1]` is stored in the :channel clipboard/
 
-  env.hosts.each do |host|
-    setup_commands = [
-      "mkdir -p #{path}/fast/vol1",
-      "mount -t tmpfs fvol1 #{path}/fast/vol1",
-      "mkdir -p #{path}/fast/vol2",
-      "mount -t tmpfs fvol2 #{path}/fast/vol2",
-      "mkdir -p #{path}/slow/vol1",
-      "mount -t tmpfs svol1 #{path}/slow/vol1",
-      "mkdir -p #{path}/slow/vol2",
-      "mount -t tmpfs svol2 #{path}/slow/vol2",
-      "chcon -R unconfined_u:object_r:svirt_sandbox_file_t:s0 #{path}"
-    ]
-    res = host.exec_admin(*setup_commands)
-    raise "error preaparing subdirs for local storage provisioner" unless res[:success]
+  # create subscription
+  unless subscription("#{name}").exists?
+    step %Q/I obtain test data file "storage\/localvolume\/sub.yaml"/
+    step %Q/I run oc create over "sub.yaml" replacing paths:/, table(%{
+      | ["metadata"]["name"] | #{name}         |
+      | ["spec"]["channel"]  | "#{cb.channel}" |
+    })
+    raise "Create subscription #{name} failied" unless @result[:success]
   end
 
-  step %Q/I download a file from "#{cmurl}"/
-  cfm = YAML.load(@result[:response])
-  filepath = @result[:abs_path]
-  if env.version_ge("3.10", user: user)
-    cfm["data"]["storageClassMap"].gsub!("/mnt/local-storage", path)
-  else
-    cfm["data"]["local-fast"].gsub!("/mnt/local-storage", path)
-    cfm["data"]["local-slow"].gsub!("/mnt/local-storage", path)
-  end
-  File.write(filepath, cfm.to_yaml)
-  res = admin.cli_exec(:create, n: namespace, f: filepath)
-  raise "error creating configmap for local storage provisioner" unless res[:success]
-
-  step %Q/I switch to cluster admin pseudo user/
-  sa = service_account(serviceaccount)
-  @result =  sa.create(by: admin)
-  step %Q/the step should succeed/
-
-  _opts = {scc: "privileged", user_name: "system:serviceaccount:#{namespace}:#{serviceaccount}"}
-  add_command = :oadm_policy_add_scc_to_user
-  @result = admin.cli_exec(add_command, **_opts)
-  step %Q/the step should succeed/
-
-  step %Q/I run the :create admin command with:/, table(%{
-      | f | https://raw.githubusercontent.com/openshift/origin/release-3.9/examples/storage-examples/local-examples/local-storage-provisioner-template.yaml |
-      | n | #{namespace}                                                                                                                                    |
+  # check status
+  step %Q/a pod becomes ready with labels:/, table(%{
+    | name=local-storage-operator |
   })
-  step %Q/the step should succeed/
+  raise "No pod is running for local storage operator" unless @result[:success]
 
-  step 'admin ensures "local-storage:provisioner-node-binding" clusterrolebinding is deleted'
-  step 'admin ensures "local-storage:provisioner-pv-binding" clusterrolebinding is deleted'
-  step %Q/I run the :new_app admin command with:/, table(%{
-      | param    | CONFIGMAP=#{configmap}            |
-      | param    | SERVICE_ACCOUNT=#{serviceaccount} |
-      | param    | NAMESPACE=#{namespace}            |
-      | param    | PROVISIONER_IMAGE=#{image}        |
-      | template | #{template}                       |
-      | n        | #{namespace}                      |
-  })
-  step %Q/the step should succeed/
-
-  nodes = env.nodes.select { |n| n.schedulable? }
-  step %/#{nodes.size} pods become ready with labels:/, table(%{
-      | app=local-volume-provisioner|
-  })
-
-  pv_count = 0
-  BushSlicer::PersistentVolume.list(user: admin).each { |pv|
-    if pv.name.start_with?("local-pv-") && (pv.local_path&.start_with?("#{path}/fast") || pv.local_path&.start_with?("#{path}/slow"))
-      pv_count += 1
-    end
-  }
-
-  raise "error creating PVs with local storage provisioner" unless (pv_count == nodes.size * 4)
-
-  lf_sc = storage_class("local-fast")
-  lf_sc.ensure_deleted(user: admin)
-  ls_sc = storage_class("local-slow")
-  ls_sc.ensure_deleted(user: admin)
-
-  step %Q{I obtain test data file "storage/misc/storageClass.yaml"}
-  sc = YAML.load(@result[:response])
-  filepath = @result[:abs_path]
-  sc["metadata"]["name"] = "local-fast"
-  sc["provisioner"] = "kubernetes.io/no-provisioner"
-  sc["volumeBindingMode"] = "Immediate"
-  File.write(filepath, sc.to_yaml)
-  @result = admin.cli_exec(:create, f: filepath)
-  step %Q/the step should succeed/
-
-  sc["metadata"]["name"] = "local-slow"
-  File.write(filepath, sc.to_yaml)
-  @result = admin.cli_exec(:create, f: filepath)
-  step %Q/the step should succeed/
+  logger.info(" local storage operator is installed successfully in #{namespace} namespace")
 end
 
-# local raw block devices provisioner is supported from OCP 3.10
-# Before deploy this provisioner, feature gate "BlockVolume" needs enable first.
-Given /^I deploy local raw block devices provisioner(?: with "([^ ]+?)" version)?$/ do |img_version|
+Given /^local storage provisioner has been installed successfully$/ do
   ensure_admin_tagged
-  ensure_destructive_tagged
+  namespace = "openshift-local-storage"
+  name = "local-storage"
 
-  namespace = "#{env.local_storage_provisioner_project.name}-block"
-  config_hash = env.master_services[0].config.as_hash()
-  imgformat = config_hash["imageConfig"]["format"]
-  img_registry = imgformat.split("\/")[0]
-  ose_version = env.get_version(user: admin)
-  img_version = "v#{ose_version[0]}" unless img_version
-  serviceaccount="local-storage-admin"
-  configmap="local-volume-config"
-  template="local-storage-provisioner"
-  image="#{img_registry}/openshift3/local-storage-provisioner:#{img_version}"
-  path ||="/mnt/local-storage"
-
-  project(namespace)
-  # if project exists, delete project and pvs created by local storage provisioner
-  if project.exists?(user: admin)
-    project.delete(by: admin)
-
-    BushSlicer::PersistentVolume.list(user: admin).each { |pv|
-      pv.delete(by: admin) if pv.name.start_with?("local-pv-") && pv.local_path&.start_with?("#{path}/block-devices")
-    }
+  step %Q/I use the "#{namespace}" project/
+  # create localvolume
+  unless local_volume("#{name}").exists?
+    step %Q/I obtain test data file "storage\/localvolume\/localvolume.yaml"/
+    step %Q/I run oc create over "localvolume.yaml" replacing paths:/, table(%{
+      | ["metadata"]["name"]                                   | #{name}      |
+      | ["metadata"]["namespace"]                              | #{namespace} |
+      | ["spec"]["storageClassDevices"][0]["storageClassName"] | #{name}      |
+    })
+    raise "Create localvolume #{name} failied" unless @result[:success]
   end
 
-  ns_cmd = "oc adm new-project #{namespace} --node-selector=''"
-  @result = env.master_hosts.first.exec(ns_cmd)
-  step %Q/the step should succeed/
+  # check ds status
+  step %Q/I store the nodes in the :nodes clipboard/
+  step %Q/#{cb.nodes.count} pods become ready with labels:/, table(%{
+      | app=local-volume-diskmaker-local-storage |
+  })
+  step %Q/#{cb.nodes.count} pods become ready with labels:/, table(%{
+      | app=local-volume-provisioner-local-storage |
+  })
 
-  env.hosts.each do |host|
-    setup_commands = [
-      "losetup -d /dev/loop23 /dev/loop24",
-      "rm -rf #{path}/block-devices",
-      "mkdir -p #{path}/block-devices",
-      "dd if=/dev/zero of=#{path}/block-devices/dev1 bs=1M count=100",
-      "dd if=/dev/zero of=#{path}/block-devices/dev2 bs=1M count=100",
-      "losetup /dev/loop23 --show #{path}/block-devices/dev1",
-      "losetup /dev/loop24 --show #{path}/block-devices/dev2",
-      "ln -s /dev/loop23 #{path}/block-devices/ldev1",
-      "ln -s /dev/loop24 #{path}/block-devices/ldev2",
-      "chcon -R unconfined_u:object_r:svirt_sandbox_file_t:s0 /dev/loop23 /dev/loop24",
-      "chcon -R unconfined_u:object_r:svirt_sandbox_file_t:s0 #{path}"
-    ]
-    res = host.exec_admin(*setup_commands)
-    raise "error preaparing subdirs for local storage provisioner" unless res[:success]
+  unless storage_class("#{name}").exists?
+    raise "Create storageclass #{name} failed"
+  end
+end
+
+Given /^some local storage PVs are created successfully$/ do
+  ensure_admin_tagged
+
+  step %Q/I store the schedulable workers in the :nodes clipboard/
+  step %Q/I run commands on the nodes in the :nodes clipboard:/, table(%{
+      | mkdir -p /srv/block-devices                                                                                         |
+      | if [ ! -e /srv/block-devices/dev1 ]; then dd if=/dev/zero of=/srv/block-devices/dev1 bs=1M count=100 seek=30000; fi |
+      | if [ ! -e /dev/loop23 ]; then losetup /dev/loop23 --show /srv/block-devices/dev1; fi                                |
+  })
+
+  # check PVs are created
+  @result = BushSlicer::PersistentVolume.wait_for_labeled("storage.openshift.com/local-volume-owner-name=local-storage", user: admin, seconds: 2 * 60)
+  if @result[:matching].count != cb.nodes.count
+    raise "Create PVs failed"
   end
 
-  step %Q{I obtain test data file "storage/localvolume/configmap.yaml"}
-  cfm = YAML.load(@result[:response])
-  filepath = @result[:abs_path]
-  cfm["data"]["storageClassMap"].gsub!(/local-slow\D+/, "")
-  cfm["data"]["storageClassMap"].gsub!(/local-fast/, "block-devices")
-  cfm["data"]["storageClassMap"].gsub!(/\/mnt\/local-storage\S+/, "#{path}/block-devices")
-  File.write(filepath, cfm.to_yaml)
-  res = admin.cli_exec(:create, n: namespace, f: filepath)
-  raise "error creating configmap for local raw block devices storage provisioner" unless res[:success]
-
-  step %Q/I switch to cluster admin pseudo user/
-  sa = service_account(serviceaccount)
-  @result =  sa.create(by: admin)
-  step %Q/the step should succeed/
-
-  _opts = {scc: "privileged", user_name: "system:serviceaccount:#{namespace}:#{serviceaccount}"}
-  add_command = :oadm_policy_add_scc_to_user
-  @result = admin.cli_exec(add_command, **_opts)
-  step %Q/the step should succeed/
-
-  step %Q/I run the :create admin command with:/, table(%{
-      | f | #{BushSlicer::HOME}/testdata/storage/localvolume/local-block-template.yaml |
-      | n | #{namespace}                                                                                                     |
-  })
-  step %Q/the step should succeed/
-
-  step 'admin ensures "local-block:provisioner-node-binding" clusterrolebinding is deleted'
-  step 'admin ensures "local-block:provisioner-pv-binding" clusterrolebinding is deleted'
-  step %Q/I run the :new_app admin command with:/, table(%{
-      | param    | CONFIGMAP=#{configmap}            |
-      | param    | SERVICE_ACCOUNT=#{serviceaccount} |
-      | param    | NAMESPACE=#{namespace}            |
-      | param    | PROVISIONER_IMAGE=#{image}        |
-      | template | #{template}                       |
-      | n        | #{namespace}                      |
-  })
-  step %Q/the step should succeed/
-
-  nodes = env.nodes.select { |n| n.schedulable? }
-  step %/#{nodes.size} pods become ready with labels:/, table(%{
-      | app=local-volume-provisioner|
-  })
-
-  pv_count = 0
-  BushSlicer::PersistentVolume.list(user: admin).each { |pv|
-    pv_count += 1 if pv.name.start_with?("local-pv-") && (pv.local_path&.start_with?("#{path}/block-devices"))
-  }
-
-  raise "error creating PVs with local raw block devices storage provisioner" unless (pv_count == nodes.size * 2)
-
-  lf_sc = storage_class("block-devices")
-  lf_sc.ensure_deleted(user: admin)
-
-  step %Q{I obtain test data file "storage/misc/storageClass.yaml"}
-  sc = YAML.load(@result[:response])
-  filepath = @result[:abs_path]
-  sc["metadata"]["name"] = "block-devices"
-  sc["provisioner"] = "kubernetes.io/no-provisioner"
-  sc["volumeBindingMode"] = "WaitForFirstConsumer"
-  File.write(filepath, sc.to_yaml)
-  @result = admin.cli_exec(:create, f: filepath)
-  step %Q/the step should succeed/
 end

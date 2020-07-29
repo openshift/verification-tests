@@ -23,3 +23,10 @@ Feature: some storage related scenarios
   @admin
   Scenario: Store PV into clipboard
     Given admin stores all persistentvolumes to the clipboard
+
+  @admin
+  Scenario: install lso
+    Given I switch to cluster admin pseudo user
+    And local storage operator has been installed successfully
+    And local storage provisioner has been installed successfully
+    And some local storage PVs are created successfully

@@ -1,0 +1,16 @@
+apiVersion: local.storage.openshift.io/v1
+kind: LocalVolume
+metadata:
+  name: local-disks
+  namespace: local-storage
+spec:
+  tolerations:
+  - key: "node-role.kubernetes.io/master"
+    operator: "Equal"
+    effect: "NoSchedule"
+  storageClassDevices:
+    - storageClassName: local
+      fsType: xfs
+      accessMode: ReadWriteOnce
+      devicePaths:
+        - /dev/loop23
