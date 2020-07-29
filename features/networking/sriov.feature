@@ -36,6 +36,7 @@ Feature: Sriov related scenarios
       | o           | yaml                             |
     Then the step should succeed
     And the output should contain "intel-netdevice"
+    And the output should contain "syncStatus: Succeeded"
     And the output should contain "vfID: 4"
     """
     Given I switch to the first user
@@ -90,6 +91,7 @@ Feature: Sriov related scenarios
       | o           | yaml                             |
     Then the step should succeed
     And the output should contain "intel-netdevice"
+    And the output should contain "syncStatus: Succeeded"
     And the output should contain "vfID: 4"
     """
     Given I switch to the first user
@@ -200,6 +202,7 @@ Feature: Sriov related scenarios
       | o           | yaml                             |
     Then the step should succeed
     And the output should contain "mlx277-netdevice"
+    And the output should contain "syncStatus: Succeeded"
     And the output should contain "vfID: 1"
     """
     Given I switch to the first user
@@ -321,3 +324,94 @@ Feature: Sriov related scenarios
     Given configDaemonNodeSelector set to true in sriovoperatorconfig
     Then all existing pods are ready with labels:
       | app=sriov-network-config-daemon |
+
+  # @author zzhao@redhat.com
+  # @case_id OCP-26134
+  @admin
+  @destructive
+  Scenario: sriov can be shown in Metrics and telemetry
+    Given the sriov operator is running well
+    Given I obtain test data file "networking/sriov/sriovnetworkpolicy/mlx277-netdevice.yaml"
+    Given I create sriov resource with following:
+       | cr_yaml       | mlx277-netdevice.yaml    |
+       | cr_name       | mlx277-netdevice         |
+       | resource_type | sriovnetworknodepolicies |
+    Then the step should succeed
+    And I wait up to 500 seconds for the steps to pass:
+    """
+    When I run the :get admin command with:
+      | resource    | sriovnetworknodestates           |
+      | namespace   | openshift-sriov-network-operator |
+      | o           | yaml                             |
+    Then the step should succeed
+    And the output should contain "mlx277-netdevice"
+    And the output should contain "syncStatus: Succeeded"
+    And the output should contain "vfID: 1"
+    """
+    Given I switch to the first user
+    And I have a project
+    And evaluation of `project.name` is stored in the :usr_project clipboard
+    Given I obtain test data file "networking/sriov/sriovnetwork/mlx277netdevice.yaml"
+    Given I create sriov resource with following:
+       | cr_yaml       | mlx277netdevice.yaml |
+       | cr_name       | mlx277-netdevice     |
+       | resource_type | sriovnetwork         |
+       | project       | <%= cb.usr_project%> |
+    Then the step should succeed
+
+    And I wait up to 30 seconds for the steps to pass:
+    """
+    When I run the :get admin command with:
+      | resource  | net-attach-def        |
+      | namespace | <%= cb.usr_project%>  |
+    Then the step should succeed
+    And the output should contain "mlx277-netdevice"
+    """
+    Given I switch to the first user
+    And I use the "<%= cb.usr_project%>" project
+    Given I obtain test data file "networking/sriov/pod/sriov-macvlan.yaml"
+    When I run oc create over "sriov-macvlan.yaml" replacing paths:
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | mlx277-netdevice |
+    Then the step should succeed
+    And a pod becomes ready with labels:
+      | name=sriov-macvlan |
+    And evaluation of `pod.name` is stored in the :pod_name clipboard
+
+    Given I switch to cluster admin pseudo user
+    Given admin uses the "openshift-multus" project
+    When evaluation of `endpoints('multus-admission-controller').subsets.first.addresses.first.ip.to_s` is stored in the :mac_ip clipboard
+    Given admin uses the "openshift-monitoring" project
+    When evaluation of `secret(service_account('prometheus-k8s').get_secret_names.find {|s| s.match('token')}).token` is stored in the :sa_token clipboard
+
+    When I run the :exec admin command with:
+      | n                | openshift-monitoring |
+      | pod              | prometheus-k8s-0     |
+      | c                | prometheus           |
+      | oc_opts_end      |                      |
+      | exec_command     | sh                   |
+      | exec_command_arg | -c                   |
+      | exec_command_arg | curl -k -H "Authorization: Bearer <%= cb.sa_token %>" https://<%= cb.mac_ip %>:8443/metrics |
+    Then the step should succeed
+    And the output should contain:
+      | network_attachment_definition_enabled_instance_up{networks="any"} 1   |
+      | network_attachment_definition_enabled_instance_up{networks="sriov"} 1 |
+      | network_attachment_definition_instances{networks="any"} 1             |
+      | network_attachment_definition_instances{networks="sriov"} 1           |
+
+    Given I switch to the first user
+    Given I ensure "<%= cb.pod_name%>" pod is deleted from the "<%= cb.usr_project%>" project
+
+    When I run the :exec admin command with:
+      | n                | openshift-monitoring |
+      | pod              | prometheus-k8s-0     |
+      | c                | prometheus           |
+      | oc_opts_end      |                      |
+      | exec_command     | sh                   |
+      | exec_command_arg | -c                   |
+      | exec_command_arg | curl -k -H "Authorization: Bearer <%= cb.sa_token %>" https://<%= cb.mac_ip %>:8443/metrics |
+    Then the step should succeed
+    And the output should contain:
+      | network_attachment_definition_enabled_instance_up{networks="any"} 0   |
+      | network_attachment_definition_enabled_instance_up{networks="sriov"} 0 |
+      | network_attachment_definition_instances{networks="any"} 0             |
+      | network_attachment_definition_instances{networks="sriov"} 0           |
