@@ -557,7 +557,7 @@ check_matched_number_of_nodes:
   action: check_matched_number_of_resource
 check_matched_number_of_pvcs:
   params:
-    resource_type: pvcs
+    resource_type: pvc
     number_of_resource: <number_of_pvcs>
   action: check_matched_number_of_resource
 check_matched_number_of_storageclasses:
@@ -573,11 +573,11 @@ check_matched_number_of_resource:
   - command:
       var all_links = document.querySelectorAll("div.co-inventory-card__item-title>a");
       for (var i=0; i < all_links.length; i++){
-        if (all_links[i].innerText.toLowerCase().endsWith('<resource_type>')) {
+        if (all_links[i].innerText.toLowerCase().includes('<resource_type>')) {
           expected_link = all_links[i];
         }
       }
-      var num = expected_link.innerText.toLowerCase().replace(' <resource_type>', '');
+      var num = expected_link.innerText.toLowerCase().split(" ")[0];
       return num == <number_of_resource>
     expect_result: true
 click_failed_icon_link_in_cluster_inventory:

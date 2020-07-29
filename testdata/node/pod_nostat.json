@@ -11,7 +11,7 @@
     "containers": [
       {
         "name": "seccomptest",
-        "image": "quay.io/openshifttest/busybox:latest",
+        "image": "quay.io/openshifttest/busybox@sha256:afe605d272837ce1732f390966166c2afff5391208ddd57de10942748694049d",
         "command": ["/bin/ls", "/"],
         "resources": {},
         "terminationMessagePath": "/dev/termination-log",

@@ -326,6 +326,7 @@ check_column_header:
   elements:
   - selector:
       xpath: //button[contains(@class, 'pf-c-table') and contains(.,'<column_name>')]
+    timeout: 15
 check_column_header_missing:
   element:
     selector:
@@ -335,9 +336,37 @@ check_name_column_header:
   params:
     column_name: Name
   action: check_column_header
+check_namespace_column_header:
+  params:
+    column_name: Namespace
+  action: check_column_header
 check_status_column_header:
   params:
-    column_name: Name
+    column_name: Status
+  action: check_column_header
+check_ready_column_header:
+  params:
+    column_name: Ready
+  action: check_column_header
+check_restarts_column_header:
+  params:
+    column_name: Restarts
+  action: check_column_header
+check_owner_column_header:
+  params:
+    column_name: Owner
+  action: check_column_header
+check_memory_column_header:
+  params:
+    column_name: Memory
+  action: check_column_header
+check_created_column_header:
+  params:
+    column_name: Created
+  action: check_column_header
+check_cpu_column_header:
+  params:
+    column_name: CPU
   action: check_column_header
 check_resource_name_and_icon:
   action:
@@ -481,11 +510,14 @@ click_link_with_text_only:
     selector:
       xpath: //a[text()='<text>']
     op: click
-click_secondary_menu:
+click_primary_menu:
   elements:
   - selector:
       xpath: //a[@class='pf-c-nav__link' and text()='<primary_menu>']
     op: click
+click_secondary_menu:
+  action: click_first_menu
+  elements:
   - selector: &secondary_menu
       xpath: //a[contains(@class,'pf-c-nav__link') and text()='<secondary_menu>']
     op: click
@@ -496,6 +528,10 @@ check_secondary_menu_missing:
   element:
     selector: *secondary_menu
     missing: true
+check_secondary_menu_link:
+  element:
+    selector: *secondary_menu
+  action: check_link_and_text
 click_dropdown:
   element:
     selector: &dropdown_name
@@ -505,6 +541,15 @@ check_dropdown_missing:
   element:
     selector:
       <<: *dropdown_name
+    missing: true
+check_dropdown_selected_item:
+  elements:
+  - selector: &selected_item
+      xpath: //div[contains(@data-test-id, '<dropdown_name>')]//span[contains(., '<selection_text>')]
+check_dropdown_not_selected_item:
+  element:
+    selector:
+      <<: *selected_item
     missing: true
 click_dropdown_field:
   elements:
@@ -522,6 +567,7 @@ click_first_sub_item_in_resource_detail_list:
       xpath: (//div[@class='co-m-table-grid__body']//a)[1]
     op: click
 click_first_item_in_grid_cell_list:
+  action: check_name_column_header
   elements:
   - selector:
       xpath: (//td[@role='gridcell'][1])[1]
