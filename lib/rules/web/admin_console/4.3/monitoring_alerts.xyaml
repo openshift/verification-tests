@@ -208,5 +208,5 @@ show_alert_graph:
 hide_show_alert_graph_button:
   element:
     selector:
-      xpath: //span[@class='pf-c-button__text']/parent::button
+      xpath: //*[text()='Alert Overview']/../../button
     op: click 
