@@ -1,0 +1,405 @@
+create_custom_resource:
+  params:
+    button_text: Create
+  action: click_provided_apis_of_operators
+  action: click_button
+click_provided_apis_of_operators:
+  element:
+    selector:
+      xpath: //a[contains(.,'<api>')]
+    op: click
+    timeout: 60
+create_catalog_source:
+  params:
+    button_text: Create Catalog Source
+    button_id: catalog-source-namespace
+    radio_text: 1
+  action: goto_catalog_source_page
+  action: click_button
+  action: input_catalog_source_name
+  action: input_display_name
+  action: input_publisher_name
+  action: input_image
+  action:
+    if_param: item
+    ref:
+    - click_radio_input
+    - select_resource_item
+  action: submit_changes
+input_catalog_source_name:
+  params:
+    input_field_id: catalog-source-name
+    input_value: <catalog_source_name>
+  action: set_input_value
+input_display_name:
+  params:
+    input_field_id: catalog-source-display-name
+    input_value: <display_name>
+  action: set_input_value
+input_publisher_name:
+  params:
+    input_field_id: catalog-source-publisher
+    input_value: <publisher_name>
+  action: set_input_value
+input_image:
+  params:
+    input_field_id: catalog-source-image
+    input_value: <image>
+  action: set_input_value
+clear_custom_resource_name_in_form:
+  element:
+    selector:
+      id: metadata.name
+    type: input
+  scripts:
+    - command: |
+        document.querySelector("input[id$='name']").value = '';
+        return document.querySelector("input[id$='name']").value == '';
+      expect_result: true
+check_error_message_for_missing_required_name:
+  params:
+    content: name or generateName is required
+  action: check_page_contains
+check_quay_image_security_exists_on_dashboard:
+  element:
+    selector: &quay_image_security
+      xpath: //button[contains(.,'Image Vulnerabilities')]
+    timeout: 40
+click_quay_image_security_button:
+  element:
+    selector:
+      <<: *quay_image_security
+    op: click
+check_quay_image_security_popup:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'co-status-popup') and contains(.,'Impact') and contains(.,'Vulnerabilities')]
+  - selector:
+      xpath: //div[contains(@class,'co-status-popup') and contains(.,'<severity>')]
+    timeout: 40
+  action: check_link_and_text
+check_affected_pods_tab:
+  params:
+    tab_name: Affected Pods
+  action: check_tab
+check_link_for_marketplace:
+  params:
+    text: Red Hat Marketplace
+    link_url: marketplace.redhat.com
+  action: check_link_and_text
+check_link_for_developer_catalog:
+  params:
+    text: Developer Catalog
+    link_url: catalog
+  action: check_link_and_text
+check_catalog_badge_by_checkbox:
+  action: click_checkbox_from_provider_type
+  elements:
+  - selector:
+      xpath: //*[contains(@class, 'pf-c-badge') and text()='<text>']
+    timeout: 30
+  action: click_checkbox_from_provider_type
+check_marketplace_operator_description_on_overlay:
+  params:
+    text: Marketplace
+    description: This Operator is purchased through Red Hat Marketplace
+  action: click_checkbox_from_provider_type
+  action: open_first_card_in_overlay
+  action: check_operator_description_on_overlay
+  action: click_close_icon
+  action: click_checkbox_from_provider_type
+check_community_operator_description_on_overlay:
+  params:
+    text: Community
+    description: This is a community provided operator
+  action: click_checkbox_from_provider_type
+  action: open_first_card_in_overlay
+  action: check_operator_description_on_overlay
+  action: click_close_icon
+  action: click_checkbox_from_provider_type
+check_operator_description_on_overlay:
+  elements:
+  - selector:
+      xpath: //div[contains(@class, 'co-hint-block')][h2[contains(.,'<text> Operator')] and div[contains(@class, 'co-hint-block__body') and contains(.,'<description>')] ]
+    timeout: 30
+check_basic_install_capability:
+  params:
+    capability_name: Basic Install
+  action: check_ticked_capability_level
+check_seamless_upgrade_capability:
+  params:
+    capability_name: Seamless Upgrades
+  action: check_ticked_capability_level
+check_full_lifecycle_capability:
+  params:
+    capability_name: Full Lifecycle
+  action: check_ticked_capability_level
+check_deep_insights_capability:
+  params:
+    capability_name: Deep Insights
+  action: check_ticked_capability_level
+check_auto_pilot_capability:
+  params:
+    capability_name: Auto Pilot
+  action: check_ticked_capability_level
+check_ticked_capability_level:
+  elements:
+  - selector:
+      xpath: //li[contains(., '<capability_name>')]/*[name()='svg']
+click_checkbox_from_provider_type:  
+  elements:
+  - selector:
+      xpath:  //form[@data-test-group-name='providerType']
+    timeout: 30
+  - selector:
+      xpath: //*[contains(@class, 'pf-c-check__label') and text()='<text>']
+    op: click
+open_first_card_overlay_panel:
+  action:
+    if_element:
+      selector:
+        xpath: //button[@type='submit' and not(@disabled)]
+    ref: submit_changes
+  action: open_first_card_in_overlay
+click_checkbox_from_capability_level:
+  elements:
+  - selector:
+      xpath:  //form[@data-test-group-name='capabilityLevel']
+    timeout: 30
+  - selector:
+      xpath: //*[contains(@class, 'pf-c-check__label') and text()='<text>']
+    op: click
+click_continue_button:
+  params:
+    button_text: Continue
+  action: click_button_text
+open_first_card_in_overlay:
+  elements:
+  - selector:
+      xpath: //a[contains(@class, 'pf-c-card')][1]
+    op: click
+  action:
+    if_element:
+      selector:
+        xpath: //button[text()='Continue']
+    ref: click_continue_button
+uninstall_operator_on_console:
+  params:
+    button_text: Uninstall Operator
+  action: click_resource_action_icon
+  action: click_button
+  action: submit_changes
+wait_filter_section_loaded:
+  element:
+    selector:
+      xpath: //form[@data-test-group-name='<filter_type_value>']
+choose_one_checkbox:
+  element:
+    selector:
+      xpath: //input[contains(@class, 'pf-c-check__input') and @title='<checkbox_text>']
+    op: click
+check_label_and_value_in_modal:
+  element:
+    selector:
+      xpath: //h5[contains(@class,'properties-side-panel-pf-property-label') and text()='<label>']/../div[contains(@class,'properties-side-panel-pf-property-value')]/div[text()='<value>']
+check_disconnected_infra_value:
+  params:
+    label: Infrastructure Features
+    value: Disconnected
+  action: check_label_and_value_in_modal
+check_proxy_infra_value:
+  params:
+    label: Infrastructure Features
+    value: Proxy
+  action: check_label_and_value_in_modal
+check_fips_infra_value:
+  params:
+    label: Infrastructure Features
+    value: FIPS Mode
+  action: check_label_and_value_in_modal
+check_3scale_subs_value:
+  params:
+    label: Valid Subscriptions
+    value: 3Scale Commercial License
+  action: check_label_and_value_in_modal
+check_integration_subs_value:
+  params:
+    label: Valid Subscriptions
+    value: Red Hat Managed Integration
+  action: check_label_and_value_in_modal
+click_checkbox_disconnected_from_infrastructure_features:
+  params:
+    filter_type_value: infraFeatures
+    checkbox_text: Disconnected
+  action: wait_filter_section_loaded
+  action: choose_one_checkbox
+click_checkbox_proxy_from_infrastructure_features:
+  params:
+    filter_type_value: infraFeatures
+    checkbox_text: Proxy
+  action: wait_filter_section_loaded
+  action: choose_one_checkbox
+click_checkbox_fips_from_infrastructure_features:
+  params:
+    filter_type_value: infraFeatures
+    checkbox_text: FIPS Mode
+  action: wait_filter_section_loaded
+  action: choose_one_checkbox
+check_disconnected_infra_value_in_operator_modal:
+  action: click_checkbox_disconnected_from_infrastructure_features
+  action: open_first_card_in_overlay
+  action: check_disconnected_infra_value
+  action: click_close_icon
+  action: click_checkbox_disconnected_from_infrastructure_features
+check_proxy_infra_value_in_operator_modal:
+  action: click_checkbox_proxy_from_infrastructure_features
+  action: open_first_card_in_overlay
+  action: check_proxy_infra_value
+  action: click_close_icon
+  action: click_checkbox_proxy_from_infrastructure_features
+check_fips_mode_infras_value_in_operator_modal:
+  action: click_checkbox_fips_from_infrastructure_features
+  action: open_first_card_in_overlay
+  action: check_fips_infra_value
+  action: click_close_icon
+  action: click_checkbox_fips_from_infrastructure_features
+filter_by_keyword_on_catalog_page:
+  elements:
+  - selector:
+      xpath: //input[contains(@class, 'co-catalog-page__input')]
+    op: send_keys :backspace
+  - selector:
+      xpath: //input[contains(@class, 'co-catalog-page__input')]
+    op: send_keys <keyword>
+open_operator_modal:
+  params:
+    keyword: <operator_name>
+  action: filter_by_keyword_on_catalog_page
+  action: open_first_card_in_overlay
+check_default_view_is_form_view:
+  params:
+    content: Some fields may not be represented in this form
+  action: check_page_contains
+  element:
+    selector:
+      xpath: //input[@type='radio' and @value='form' and @checked]
+open_edit_form_view: {}
+switch_to_yaml_view:
+  params:
+    radio_text: yaml
+    content: Create by manually entering YAML or JSON definitions
+  action: click_radio_input
+  action: check_page_contains
+select_installed_namespace:
+  action: click_project_list_dropdown
+  action: choose_project_from_dropdown_list
+check_all_namespace_installation_mode_with_recommended_ns:
+  params:
+    button_text: <recommended_ns>
+  action: check_button_contains_text
+check_all_namespace_installation_mode_without_recommended_ns:
+  params:
+    disabled_radio_text: OwnNamespace
+    checked_radio_text: AllNamespaces
+  action: check_disabled_radio_input
+  action: check_checked_radio_input
+check_specific_namespace_installation_mode_with_recommended_ns:
+  params:
+    disabled_radio_text: AllNamespaces
+    checked_radio_text: <recommended_ns>
+  action: check_disabled_radio_input
+  action: check_checked_radio_input
+check_specific_namespace_installation_mode_without_recommended_ns:
+  params:
+    disabled_radio_text: AllNamespaces
+    checked_radio_text: OwnNamespace
+  action: check_disabled_radio_input
+  action: check_checked_radio_input
+enable_cluster_monitoring:
+  element:
+    selector:
+      xpath: //input[contains(@type,'checkbox') and contains(@id,'enable-monitoring-checkbox')]
+    op: click
+click_radio_to_pick_ns:
+  params:
+    text: Pick an existing namespace
+  action: click_radio_input_by_text
+check_Hazelcastjet_default_action_and_remote_workflow:
+  params:
+    text: Purchase
+    link_url: https://marketplace.redhat.com/en-us/operators/hazelcast-jet-enterprise-operator-rhmp/pricing
+  action: check_link_and_text
+
+check_phase_status:
+  element:
+    selector:
+      xpath: //td/span[contains(.,'Phase')]/span[contains(.,'<status>')]
+check_state_status:
+  element:
+    selector:
+      xpath: //span[contains(.,'State') and contains(.,'<status>')]
+check_condition_status:
+  element:
+    selector:
+      xpath: //span[contains(.,'Conditions') and contains(.,'<status>')]
+
+## project selector: one project
+check_column_header_for_one_namespace:
+  action: check_managed_namespace_column_header
+  action: check_namesapce_column_header_missing
+## project selector: all projects
+check_column_header_for_all_namespace:
+  action: check_managed_namespace_column_header
+  action: check_namesapce_column_header
+  
+check_managed_namespace_column_header:
+  params:
+    column_name: Managed Namespaces
+  action: check_column_header
+check_namesapce_column_header:
+  params:
+    column_name: Namespace
+  action: check_column_header
+check_namesapce_column_header_missing:
+  params:
+    column_name: Namespace
+  action: check_column_header_missing
+## project selector: one project
+#check column: Managed Namespaces
+check_managed_namespace_column_installed_for_one_ns:
+  params:
+    col_index: 2
+  action: check_operator_column_one_namespace 
+check_managed_namespace_column_installed_for_all_ns:
+  params:
+    col_index: 2
+  action: check_operator_column_all_namespace
+## project selector: all projects
+#check column: Namespace
+check_namespace_column_installed_for_one_ns_under_all_projects:
+  params:
+    col_index: 2
+  action: check_operator_column_one_namespace 
+check_namespace_column_installed_for_all_ns_under_all_projects:
+  params:
+    col_index: 2
+    project_name: openshift-operators
+  action: check_operator_column_one_namespace
+#check column: Managed Namespaces
+check_managed_namespace_column_installed_for_one_ns_under_all_projects:
+  params:
+    col_index: 3
+  action: check_operator_column_one_namespace 
+check_managed_namespace_column_installed_for_all_ns_under_all_projects:
+  params:
+    col_index: 3
+  action: check_operator_column_all_namespace
+
+check_operator_column_one_namespace:
+  elements:
+  - selector: 
+      xpath: //h1[contains(text(),'<operator_name>')]//ancestor::tr[@data-test-rows='resource-row']/td[<col_index>]//a[contains(text(),'<project_name>') and @href='/k8s/cluster/namespaces/<project_name>']
+check_operator_column_all_namespace:
+  elements:
+  - selector: 
+      xpath: //h1[contains(text(),'<operator_name>')]//ancestor::tr[@data-test-rows='resource-row']/td[<col_index>][contains(text(),'All Namespaces')]

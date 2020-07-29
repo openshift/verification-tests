@@ -143,6 +143,10 @@ goto_one_imagestream_page:
 goto_all_imagestreams_list:
   url: k8s/all-namespaces/imagestreams
 
+#templateinstance
+goto_one_templateinstance_page:
+  url: k8s/ns/<project_name>/templateinstances/<templateinstance_name>
+
 #deploy image
 goto_deploy_image_page:
   url: deploy-image/ns/<project_name>?preselected-ns=<project_name>
@@ -220,3 +224,10 @@ goto_one_hpa_page:
 goto_global_configuration_page:
   url: settings/cluster/globalconfig
   action: wait_box_loaded 
+
+goto_command_line_tools:
+  url: command-line-tools
+  element:
+    selector:
+      xpath: //div[contains(text(), "Command Line Tools")]
+    timeout: 15

@@ -194,6 +194,34 @@ Feature: Machine features testing
       | k8s-app=termination-handler |
 
     Examples:
-      | iaas_type | machineset_name  |
-      | aws       | machineset-29199 | # @case_id OCP-29199
+      | iaas_type | machineset_name        |
+      | aws       | machineset-clone-29199 | # @case_id OCP-29199
+      | gcp       | machineset-clone-32126 | # @case_id OCP-32126
 
+  # @author zhsun@redhat.com
+  # @case_id OCP-32620
+  @admin
+  @destructive
+  Scenario: Labels specified in a machineset should propagate to nodes
+    Given I have an IPI deployment
+    And I switch to cluster admin pseudo user
+    And I use the "openshift-machine-api" project
+    And admin ensures machine number is restored after scenario
+
+    Given I clone a machineset and name it "machineset-clone-32620"
+    Given as admin I successfully merge patch resource "machineset/machineset-clone-32620" with:
+      | {"spec":{"template":{"spec":{"metadata":{"labels":{"node-role.kubernetes.io/infra": ""}}}}}} |
+    Then the step should succeed
+
+    Given I scale the machineset to +1
+    Then the step should succeed
+    And the machineset should have expected number of running machines
+
+    #Check labels are propagate to nodes
+    Given I store the last provisioned machine in the :machine clipboard
+    And evaluation of `machine(cb.machine).node_name` is stored in the :noderef_name clipboard
+    When I run the :describe admin command with:
+      | resource | node                   |
+      | name     | <%= cb.noderef_name %> |
+    Then the step should succeed
+    And the output should match "node-role.kubernetes.io/infra="

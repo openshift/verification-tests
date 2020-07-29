@@ -250,7 +250,7 @@ module BushSlicer
     # returns the cache array for the given resource class
     # @param clazz [Class] the resource class we are interested in
     private def resource_cache(clazz)
-      var = "@#{clazz::RESOURCE}"
+      var = "@#{clazz::RESOURCE}".tr(".","_")
       return instance_variable_get(var) || instance_variable_set(var, [])
     end
 
@@ -300,31 +300,29 @@ module BushSlicer
     def cluster_resource(clazz, name = nil, env = nil, switch: nil)
       env ||= self.env
 
-      varname = "@#{clazz::RESOURCE}".tr(".","_")
       clazzname = clazz.shortclass
-      var = instance_variable_get(varname) ||
-              instance_variable_set(varname, [])
+      cache = resource_cache(clazz)
 
       if Integer === name
         # using integer index does not trigger reorder of list
-        return var[name] || raise("no #{clazzname} with index #{name}")
+        return cache[name] || raise("no #{clazzname} with index #{name}")
       elsif name
         switch = true if switch.nil?
-        r = var.find {|r| r.name == name && r.env == env}
+        r = cache.find {|r| r.name == name && r.env == env}
         if r
-          var << var.delete(r) if switch
+          cache << cache.delete(r) if switch
           return r
         else
           # create new BushSlicer::ClusterResource object with specified name
-          var << clazz.new(name: name, env: env)
-          return var.last
+          cache << clazz.new(name: name, env: env)
+          return cache.last
         end
-      elsif var.empty?
+      elsif cache.empty?
         # we do not create a random PV like with projects because that
         #   would rarely make sense
         raise "what #{clazzname} are you talking about?"
       else
-        return var.last
+        return cache.last
       end
     end
 
@@ -430,13 +428,6 @@ module BushSlicer
       # call all teardown lambdas and procs; see [#teardown_add]
       # run last registered teardown routines first
       @teardown.reverse_each { |f| f.call }
-    end
-
-    def hook_error!(err)
-      if err
-        quit_cucumber
-        raise err
-      end
     end
 
     # @return the desired base docker image tag prefix based on

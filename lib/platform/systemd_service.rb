@@ -111,6 +111,8 @@ module BushSlicer
         result = host.exec_admin("systemctl restart #{name}")
         results.push(result)
         unless result[:success]
+          # we should always check status if restart fails
+          host.exec_admin("systemctl status -l #{name}", quiet: false)
           if opts[:raise]
             raise "could not restart service #{name} on #{host.hostname}"
           end

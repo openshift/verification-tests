@@ -589,7 +589,7 @@ Given /^I store a random unused IP address from the reserved range to the#{OPT_S
 
   validate_ip = IPAddr.new(reserved_range).to_range.to_a.shuffle.each { |ip|
     @result = step "I run command on the node's ovs pod:", table(
-      "| ping | -c1 | -W2 | #{ip} |"
+      "| ping | -c4 | -W2 | #{ip} |"
     )
     if @result[:exitstatus] == 0
       logger.info "The IP is in use."
@@ -796,6 +796,21 @@ Given /^the env is using "([^"]*)" networkType$/ do |network_type|
   @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
   raise "the networkType is not #{network_type}" unless @result[:response] == network_type
 end
+
+Given /^the env is using windows nodes$/ do
+  ensure_admin_tagged
+  _admin = admin
+  @result = _admin.cli_exec(:get, resource: "nodes", show_label:true)
+  raise "env doesn't have any windows node" unless @result[:response].include? "kubernetes.io/os=windows"
+end
+
+Given /^the env has hybridOverlayConfig enabled$/ do
+  ensure_admin_tagged
+  _admin = admin
+  @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.ovnKubernetesConfig}")
+  raise "env doesn't have hybridOverlayConfig enabled" unless @result[:response].include? "hybridOverlayConfig"
+end
+
 
 Given /^the bridge interface named "([^"]*)" with address "([^"]*)" is added to the "([^"]*)" node$/ do |bridge_name,address,node_name|
   ensure_admin_tagged

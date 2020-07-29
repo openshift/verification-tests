@@ -49,7 +49,13 @@ module BushSlicer
       # @compute.client_options.proxy_url = ENV['http_proxy'] if ENV['http_proxy']
 
       if config[:json_cred] && (config[:auth_type].nil? || config[:auth_type] == "json")
-        File.open(expand_private_path(config[:json_cred]), "r") do |json_io|
+        begin
+          json_cred_abs_path = expand_private_path(config[:json_cred])
+        rescue
+          logger.error "Possible issue OCPQE-240, tempfile: #{config[:avoid_garbage_collection]&.inspect}"
+          raise
+        end
+        File.open(json_cred_abs_path, "r") do |json_io|
           @compute.authorization = Google::Auth::DefaultCredentials.make_creds(
               scope: config[:scopes],
               json_key_io: json_io

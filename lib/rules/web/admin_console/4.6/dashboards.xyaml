@@ -1,0 +1,592 @@
+view_all_settings:
+  params:
+    button_text: View settings
+  action: click_button
+  action: wait_box_loaded
+click_view_alerts_button:
+  params:
+    button_text: View alerts
+  action: click_button
+click_view_events_button:
+  params:
+    button_text: View events
+  action: click_button
+click_events_pause_button:
+  params:
+    button_text: Pause
+  action: click_button
+click_events_resume_button:
+  params:
+    button_text: Resume
+  action: click_button
+check_event_message_on_dashboard_page:
+  element:
+    selector:
+      xpath: //div[contains(@class, 'co-recent-item__title-message-text') and contains(., '<event_message>')]
+    timeout: 30
+check_cluster_version_in_details_card:
+  params:
+    key: version
+    value: <version>
+  action: check_resource_details_key_and_value
+check_cluster_api_in_details_card:
+  params:
+    key: API
+    value: <api>
+  action: check_resource_details_key_and_value
+check_cluster_provider_in_details_card:
+  params:
+    key: Provider
+    value: <provider>
+  action: check_resource_details_key_and_value
+check_update_channel_in_details_card:
+  params:
+    key: Update channel
+    value: <update_channel>
+  action: check_resource_details_key_and_value
+check_cluster_id_in_details_card:
+  params:
+    key: Cluster ID
+    value: <cluster_id>
+  action: check_resource_details_key_and_value
+# grafana dashboards
+check_grafana_dashboard_body_loaded:
+  element:
+    selector:
+      xpath: //div[contains(@class,'co-dashboard-body')]//*[contains(@class,'monitoring-dashboards')]
+    timeout: 30
+click_dashboard_dropdown:
+  params:
+    dropdown_field: Dashboard
+  action: click_dropdown_field
+check_dashboard_etcd:
+  params:
+    dropdown_menu_item: etcd
+  action: check_dropdown_menu_item
+check_dashboard_kubernetes_compute_resources_cluster:
+  params:
+    dropdown_menu_item: Kubernetes / Compute Resources / Cluster
+  action: check_dropdown_menu_item
+check_dashboard_kubernetes_compute_resources_namespace_pods:
+  params:
+    dropdown_menu_item: Kubernetes / Compute Resources / Namespace (Pods)
+  action: check_dropdown_menu_item
+check_dashboard_kubernetes_compute_resources_namespace_workloads:
+  params:
+    dropdown_menu_item: Kubernetes / Compute Resources / Namespace (Workloads)
+  action: check_dropdown_menu_item
+check_dashboard_kubernetes_compute_resources_namespace_node_pods:
+  params:
+    dropdown_menu_item: Kubernetes / Compute Resources / Node (Pods)
+  action: check_dropdown_menu_item
+check_dashboard_kubernetes_compute_resources_pod:
+  params:
+    dropdown_menu_item: Kubernetes / Compute Resources / Pod
+  action: check_dropdown_menu_item
+check_dashboard_kubernetes_compute_resources_workload:
+  params:
+    dropdown_menu_item: Kubernetes / Compute Resources / Workload
+  action: check_dropdown_menu_item
+check_dashboard_kubernetes_networking_cluster:
+  params:
+    dropdown_menu_item: Kubernetes / Networking / Cluster
+  action: check_dropdown_menu_item
+check_dashboard_prometheus:
+  params:
+    dropdown_menu_item: Prometheus Overview
+  action: check_dropdown_menu_item
+check_dashboard_use_method_cluster:
+  params:
+    dropdown_menu_item: USE Method / Cluster
+  action: check_dropdown_menu_item
+check_dashboard_use_method_node:
+  params:
+    dropdown_menu_item: USE Method / Node
+  action: check_dropdown_menu_item
+check_dashboard_dropdown_items:
+  action: click_dashboard_dropdown
+  action: check_dashboard_etcd
+  action: check_dashboard_kubernetes_compute_resources_cluster
+  action: check_dashboard_kubernetes_compute_resources_namespace_pods
+  action: check_dashboard_kubernetes_compute_resources_namespace_workloads
+  action: check_dashboard_kubernetes_compute_resources_namespace_node_pods
+  action: check_dashboard_kubernetes_compute_resources_pod
+  action: check_dashboard_kubernetes_compute_resources_workload
+  action: check_dashboard_kubernetes_networking_cluster
+  action: check_dashboard_prometheus
+  action: check_dashboard_use_method_cluster
+  action: check_dashboard_use_method_node
+# cluster dashboards
+check_cluster_utilization_items:
+  elements:
+  - selector:
+      xpath: //h2[contains(@class,'co-dashboard-card__title') and text()='Cluster Utilization'] 
+  - selector:
+      xpath: //div[contains(@class,'co-utilization-card__item')]//h4[text()='CPU']
+  - selector:
+      xpath: //div[contains(@class,'co-utilization-card__item')]//h4[text()='Memory']
+  - selector:
+      xpath: //div[contains(@class,'co-utilization-card__item')]//h4[text()='Filesystem']
+  - selector:
+      xpath: //div[contains(@class,'co-utilization-card__item')]//h4[text()='Network Transfer']
+  - selector:
+      xpath: //div[contains(@class,'co-utilization-card__item')]//h4[text()='Pod count']
+click_cpu_data:
+  element:
+    selector:
+      xpath: //h4[text()='CPU']/..//button[contains(@class,'co-dashboard-card__button-link')]
+    op: click
+click_memory_data:
+  element:
+    selector:
+      xpath: //h4[text()='Memory']/..//button[contains(@class,'co-dashboard-card__button-link')]
+    op: click
+click_filesystem_data:
+  element:
+    selector:
+      xpath: //h4[text()='Filesystem']/..//button[contains(@class,'co-dashboard-card__button-link')]
+    op: click
+click_pod_count_data:
+  element:
+    selector:
+      xpath: //h4[text()='Pod count']/..//button[contains(@class,'co-dashboard-card__button-link')]
+    op: click
+click_network_in_data:
+  element:
+    selector:
+      xpath: //h4[text()='Network Transfer']/..//button[contains(@class,'co-dashboard-card__button-link')][1]
+    op: click
+click_network_out_data:
+  element:
+    selector:
+      xpath: //h4[text()='Network Transfer']/..//button[contains(@class,'co-dashboard-card__button-link')][2]
+    op: click
+wait_for_consumer_lists_loaded:
+  elements:
+  - selector:
+      css: li.co-utilization-card-popover__consumer-item
+    timeout: 60
+check_has_5_top_consumers:
+  scripts:
+    - command: return document.querySelectorAll("li.co-utilization-card-popover__consumer-item").length == 5
+      expect_result: true
+check_consumer_link_to_node:
+  element:
+    selector:
+      xpath: //a[contains(@class,'co-utilization-card-popover__consumer-name') and starts-with(@href,'/k8s/cluster/nodes/')]
+check_consumer_link_to_project:
+  element:
+    selector:
+      xpath: //a[contains(@class,'co-utilization-card-popover__consumer-name') and starts-with(@href,'/k8s/cluster/projects/')]
+check_consumer_link_to_pod:
+  element:
+    selector:
+      xpath: //a[contains(@class,'co-utilization-card-popover__consumer-name') and starts-with(@href,'/k8s/ns/') and contains(@href,'/pods/')]
+click_view_more_link:
+  params:
+    text: View more
+  action: click_link_with_text_only
+check_on_monitoring_metrics_page:
+  elements:
+  - selector:
+      xpath: //button[text()='Add Query']
+  - selector:
+      xpath: //button[text()='Run Queries']
+  - selector:
+      xpath: //div[contains(@class,'query-browser__graph-container')]
+check_textarea:
+  element:
+    selector:
+      xpath: //textarea[contains(@class,'query-browser__query-input')]
+check_metrics_query_cpu_by_node:
+  element:
+    selector:
+      xpath: //textarea[contains(text(),'topk(25, sort_desc(avg_over_time(instance:node_cpu:rate:sum[5m])))')]
+check_metrics_query_cpu_by_project:
+  action: check_textarea
+  scripts:
+  - command:
+      return /topk.*pod:container_cpu_usage.*BY.*namespace/.test(document.querySelector('textarea.query-browser__query-input').innerHTML)
+    expect_result: true
+check_metrics_query_cpu_by_pod:
+  action: check_textarea
+  scripts:
+  - command:
+      return /topk.*pod:container_cpu_usage.*BY.*pod, namespace/.test(document.querySelector('textarea.query-browser__query-input').innerHTML)
+    expect_result: true
+check_metrics_query_memory_by_node:
+  element:
+    selector:
+      xpath: //textarea[contains(text(),'topk(25, sort_desc(node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes))')]
+check_metrics_query_memory_by_project:
+  action: check_textarea
+  scripts:
+  - command:
+      return /topk.*container_memory_working_set_bytes.*BY.*namespace/.test(document.querySelector('textarea.query-browser__query-input').innerHTML)
+    expect_result: true
+check_metrics_query_memory_by_pod:
+  action: check_textarea
+  scripts:
+  - command:
+      return /topk.*container_memory_working_set_bytes.*BY.*pod, namespace/.test(document.querySelector('textarea.query-browser__query-input').innerHTML)
+    expect_result: true
+check_metrics_query_filesystem_by_node:
+  element:
+    selector:
+      xpath: //textarea[contains(text(),'topk(25, sort_desc(avg_over_time(instance:node_filesystem_usage:sum[5m])))')]
+check_metrics_query_filesystem_by_project:
+  action: check_textarea
+  scripts:
+  - command:
+      return /topk.*pod:container_fs_usage_bytes.*BY.*namespace/.test(document.querySelector('textarea.query-browser__query-input').innerHTML)
+    expect_result: true
+check_metrics_query_filesystem_by_pod:
+  action: check_textarea
+  scripts:
+  - command:
+      return /topk.*pod:container_fs_usage_bytes.*BY.*pod, namespace/.test(document.querySelector('textarea.query-browser__query-input').innerHTML)
+    expect_result: true
+check_metrics_query_pod_count_by_node:
+  element:
+    selector:
+      xpath: //textarea[contains(text(),'topk(25, sort_desc(sum(avg_over_time(kube_pod_info[5m])) BY (node)))')]
+check_metrics_query_pod_count_by_project:
+  element:
+    selector:
+      xpath: //textarea[contains(text(),'topk(25, sort_desc(sum(avg_over_time(kube_pod_info[5m])) BY (namespace)))')]
+check_metrics_query_network_in_by_node:
+  action: check_textarea
+  scripts:
+  - command:
+      return /topk.*container_network_receive_bytes_total.*BY.*node/.test(document.querySelector('textarea.query-browser__query-input').innerHTML)
+    expect_result: true
+check_metrics_query_network_in_by_project:
+  action: check_textarea
+  scripts:
+  - command:
+      return /topk.*container_network_receive_bytes_total.*BY.*namespace/.test(document.querySelector('textarea.query-browser__query-input').innerHTML)
+    expect_result: true
+check_metrics_query_network_in_by_pod:
+  action: check_textarea
+  scripts:
+  - command:
+      return /topk.*container_network_receive_bytes_total.*BY.*namespace, pod/.test(document.querySelector('textarea.query-browser__query-input').innerHTML)
+    expect_result: true
+check_metrics_query_network_out_by_node:
+  action: check_textarea
+  scripts:
+  - command:
+      return /topk.*container_network_transmit_bytes_total.*BY.*node/.test(document.querySelector('textarea.query-browser__query-input').innerHTML)
+    expect_result: true
+check_metrics_query_network_out_by_project:
+  action: check_textarea
+  scripts:
+  - command:
+      return /topk.*container_network_transmit_bytes_total.*BY.*namespace/.test(document.querySelector('textarea.query-browser__query-input').innerHTML)
+    expect_result: true
+check_metrics_query_network_out_by_pod:
+  action: check_textarea
+  scripts:
+  - command:
+      return /topk.*container_network_transmit_bytes_total.*BY.*namespace, pod/.test(document.querySelector('textarea.query-browser__query-input').innerHTML)
+    expect_result: true
+close_breakdown_modal:
+  action: click_close_icon
+check_cpu_breakdown_info_when_filter_by_node:
+  params:
+    dropdown_menu_item: By Node
+  action: goto_cluster_dashboards_page
+  action: click_cpu_data
+  action: choose_item_from_dropdown_menu
+  action: wait_for_consumer_lists_loaded
+  action: check_has_5_top_consumers
+  action: check_consumer_link_to_node
+  action: click_view_more_link
+  action: check_on_monitoring_metrics_page
+  action: check_metrics_query_cpu_by_node
+check_cpu_breakdown_info_when_filter_by_project:
+  params:
+    dropdown_menu_item: By Project
+  action: goto_cluster_dashboards_page
+  action: click_cpu_data
+  action: choose_item_from_dropdown_menu
+  action: wait_for_consumer_lists_loaded
+  action: check_has_5_top_consumers
+  action: check_consumer_link_to_project
+  action: click_view_more_link
+  action: check_on_monitoring_metrics_page
+  action: check_metrics_query_cpu_by_project
+check_cpu_breakdown_info_when_filter_by_pod:
+  params:
+    dropdown_menu_item: By Pod
+  action: goto_cluster_dashboards_page
+  action: click_cpu_data
+  action: choose_item_from_dropdown_menu
+  action: wait_for_consumer_lists_loaded
+  action: check_has_5_top_consumers
+  action: check_consumer_link_to_pod
+  action: click_view_more_link
+  action: check_on_monitoring_metrics_page
+  action: check_metrics_query_cpu_by_pod
+check_memory_breakdown_info_when_filter_by_node:
+  params:
+    dropdown_menu_item: By Node
+  action: goto_cluster_dashboards_page
+  action: click_memory_data
+  action: choose_item_from_dropdown_menu
+  action: wait_for_consumer_lists_loaded
+  action: check_has_5_top_consumers
+  action: check_consumer_link_to_node
+  action: click_view_more_link
+  action: check_on_monitoring_metrics_page
+  action: check_metrics_query_memory_by_node
+check_memory_breakdown_info_when_filter_by_project:
+  params:
+    dropdown_menu_item: By Project
+  action: goto_cluster_dashboards_page
+  action: click_memory_data
+  action: choose_item_from_dropdown_menu
+  action: wait_for_consumer_lists_loaded
+  action: check_has_5_top_consumers
+  action: check_consumer_link_to_project
+  action: click_view_more_link
+  action: check_on_monitoring_metrics_page
+  action: check_metrics_query_memory_by_project
+check_memory_breakdown_info_when_filter_by_pod:
+  params:
+    dropdown_menu_item: By Pod
+  action: goto_cluster_dashboards_page
+  action: click_memory_data
+  action: choose_item_from_dropdown_menu
+  action: wait_for_consumer_lists_loaded
+  action: check_has_5_top_consumers
+  action: check_consumer_link_to_pod
+  action: click_view_more_link
+  action: check_on_monitoring_metrics_page
+  action: check_metrics_query_memory_by_pod
+check_filesystem_breakdown_info_when_filter_by_node:
+  params:
+    dropdown_menu_item: By Node
+  action: goto_cluster_dashboards_page
+  action: click_filesystem_data
+  action: choose_item_from_dropdown_menu
+  action: wait_for_consumer_lists_loaded
+  action: check_has_5_top_consumers
+  action: check_consumer_link_to_node
+  action: click_view_more_link
+  action: check_on_monitoring_metrics_page
+  action: check_metrics_query_filesystem_by_node
+check_filesystem_breakdown_info_when_filter_by_project:
+  params:
+    dropdown_menu_item: By Project
+  action: goto_cluster_dashboards_page
+  action: click_filesystem_data
+  action: choose_item_from_dropdown_menu
+  action: wait_for_consumer_lists_loaded
+  action: check_has_5_top_consumers
+  action: check_consumer_link_to_project
+  action: click_view_more_link
+  action: check_on_monitoring_metrics_page
+  action: check_metrics_query_filesystem_by_project
+check_filesystem_breakdown_info_when_filter_by_pod:
+  params:
+    dropdown_menu_item: By Pod
+  action: goto_cluster_dashboards_page
+  action: click_filesystem_data
+  action: choose_item_from_dropdown_menu
+  action: wait_for_consumer_lists_loaded
+  action: check_has_5_top_consumers
+  action: check_consumer_link_to_pod
+  action: click_view_more_link
+  action: check_on_monitoring_metrics_page
+  action: check_metrics_query_filesystem_by_pod
+check_pod_count_breakdown_info_when_filter_by_node:
+  params:
+    dropdown_menu_item: By Node
+  action: goto_cluster_dashboards_page
+  action: click_pod_count_data
+  action: choose_item_from_dropdown_menu
+  action: wait_for_consumer_lists_loaded
+  action: check_has_5_top_consumers
+  action: check_consumer_link_to_node
+  action: click_view_more_link
+  action: check_on_monitoring_metrics_page
+  action: check_metrics_query_pod_count_by_node
+check_pod_count_breakdown_info_when_filter_by_project:
+  params:
+    dropdown_menu_item: By Project
+  action: goto_cluster_dashboards_page
+  action: click_pod_count_data
+  action: choose_item_from_dropdown_menu
+  action: wait_for_consumer_lists_loaded
+  action: check_has_5_top_consumers  
+  action: check_consumer_link_to_project
+  action: click_view_more_link
+  action: check_on_monitoring_metrics_page
+  action: check_metrics_query_pod_count_by_project
+check_network_in_breakdown_info_when_filter_by_node:
+  params:
+    dropdown_menu_item: By Node
+  action: goto_cluster_dashboards_page
+  action: click_network_in_data
+  action: choose_item_from_dropdown_menu
+  action: wait_for_consumer_lists_loaded
+  action: check_has_5_top_consumers  
+  action: check_consumer_link_to_node
+  action: click_view_more_link
+  action: check_on_monitoring_metrics_page
+  action: check_metrics_query_network_in_by_node
+check_network_in_breakdown_info_when_filter_by_project:
+  params:
+    dropdown_menu_item: By Project
+  action: goto_cluster_dashboards_page
+  action: click_network_in_data
+  action: choose_item_from_dropdown_menu
+  action: wait_for_consumer_lists_loaded
+  action: check_has_5_top_consumers  
+  action: check_consumer_link_to_project
+  action: click_view_more_link
+  action: check_on_monitoring_metrics_page
+  action: check_metrics_query_network_in_by_project
+check_network_in_breakdown_info_when_filter_by_pod:
+  params:
+    dropdown_menu_item: By Pod
+  action: goto_cluster_dashboards_page
+  action: click_network_in_data
+  action: choose_item_from_dropdown_menu
+  action: wait_for_consumer_lists_loaded
+  action: check_has_5_top_consumers  
+  action: check_consumer_link_to_pod
+  action: click_view_more_link
+  action: check_on_monitoring_metrics_page
+  action: check_metrics_query_network_in_by_pod   
+check_network_out_breakdown_info_when_filter_by_node:
+  params:
+    dropdown_menu_item: By Node
+  action: goto_cluster_dashboards_page
+  action: click_network_out_data
+  action: choose_item_from_dropdown_menu
+  action: wait_for_consumer_lists_loaded
+  action: check_has_5_top_consumers  
+  action: check_consumer_link_to_node
+  action: click_view_more_link
+  action: check_on_monitoring_metrics_page
+  action: check_metrics_query_network_out_by_node
+check_network_out_breakdown_info_when_filter_by_project:
+  params:
+    dropdown_menu_item: By Project
+  action: goto_cluster_dashboards_page
+  action: click_network_out_data
+  action: choose_item_from_dropdown_menu
+  action: wait_for_consumer_lists_loaded
+  action: check_has_5_top_consumers  
+  action: check_consumer_link_to_project
+  action: click_view_more_link
+  action: check_on_monitoring_metrics_page
+  action: check_metrics_query_network_out_by_project
+check_network_out_breakdown_info_when_filter_by_pod:
+  params:
+    dropdown_menu_item: By Pod
+  action: goto_cluster_dashboards_page
+  action: click_network_out_data
+  action: choose_item_from_dropdown_menu
+  action: wait_for_consumer_lists_loaded
+  action: check_has_5_top_consumers  
+  action: check_consumer_link_to_pod
+  action: click_view_more_link
+  action: check_on_monitoring_metrics_page
+  action: check_metrics_query_network_out_by_pod
+# status card
+click_operator_status:
+  elements:
+  - selector:
+      xpath: //div[@class='co-status-card__health-item']/div[@class='co-dashboard-icon']/following-sibling::div[contains(., 'Operators')]
+    op: click
+    timeout: 60
+check_operator_status:
+  elements:
+  - selector:
+      xpath: //div[contains(., '<operator_type>')]/following-sibling::div[*[contains(., '<operator_name>')] and *[contains(., '<status>')]]
+check_view_all_for_operators:
+  params:
+    text: View all
+    link_url: k8s/all-namespaces/operators.coreos.com~v1alpha1~ClusterServiceVersion
+    content: Installed Operators
+  action: goto_cluster_dashboards_page
+  action: click_operator_status
+  action: click_link_with_text
+  action: check_page_contains
+check_view_all_for_cluster_operators:
+  params:
+    text: View all
+    link_url: settings/cluster/clusteroperators
+    content: Cluster Settings
+  action: goto_cluster_dashboards_page
+  action: click_operator_status
+  action: click_link_with_text
+  action: check_page_contains
+check_cluster_operator_status_on_status_card:
+  params:
+    operator_type: Cluster operators
+  action: check_operator_status_on_status_card
+check_operator_status_on_status_card:
+  params:
+    text: <operator_name>
+  action: goto_cluster_dashboards_page
+  action: click_operator_status
+  action: check_operator_status
+  action: click_link_with_text_only
+
+# cluster inventory
+check_cluster_inventory_items:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'co-dashboard-card__header')]/*[text()='Cluster Inventory']
+  - selector:
+      xpath: //div[contains(@class,'co-inventory-card__item')]//a[contains(text(),'Nodes')]
+  - selector:
+      xpath: //div[contains(@class,'co-inventory-card__item')]//a[contains(text(),'Pods')]
+  - selector:
+      xpath: //div[contains(@class,'co-inventory-card__item')]//a[contains(text(),'Storage Class')]
+  - selector:
+      xpath: //div[contains(@class,'co-inventory-card__item')]//a[contains(text(),'PVCs')]
+check_matched_number_of_nodes:
+  params:
+    resource_type: nodes
+    number_of_resource: <number_of_nodes>
+  action: check_matched_number_of_resource
+check_matched_number_of_pvcs:
+  params:
+    resource_type: pvc
+    number_of_resource: <number_of_pvcs>
+  action: check_matched_number_of_resource
+check_matched_number_of_storageclasses:
+  params:
+    resource_type: storage class
+    number_of_resource: <number_of_storageclasses>
+  action: check_matched_number_of_resource  
+check_matched_number_of_resource:
+  element:
+    selector:
+      xpath: //div[contains(@class,'co-inventory-card__item-title')]/a[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'<resource_type>')]
+  scripts:
+  - command:
+      var all_links = document.querySelectorAll("div.co-inventory-card__item-title>a");
+      for (var i=0; i < all_links.length; i++){
+        if (all_links[i].innerText.toLowerCase().includes('<resource_type>')) {
+          expected_link = all_links[i];
+        }
+      }
+      var num = expected_link.innerText.toLowerCase().split(" ")[0];
+      return num == <number_of_resource>
+    expect_result: true
+click_failed_icon_link_in_cluster_inventory:
+  element:
+    selector:
+      xpath: //div[contains(@class,'co-inventory-card__status')]//a[contains(@href,'rowFilter-pod-status=CrashLoopBackOff%2CFailed')]
+    op: click
+click_progressing_icon_link_in_cluster_inventory:
+  element:
+    selector:
+      xpath: //div[contains(@class,'co-inventory-card__status')]//a[contains(@href,'rowFilter-pod-status=Terminating%2CPending')]
+    op: click

@@ -72,7 +72,7 @@ Feature: buildconfig.feature
      | from_file   | .dockercfg=<%= expand_private_path(conf[:services, :docker_hub, :dockercfg]) %> | 
      | type        | kubernetes.io/dockercfg                                                         |
     Then the step should succeed
-    Given I obtain test data file "build/<template>"
+    Given I obtain test data file "build/tc479541/<template>"
     When I run the :create client command with:
       | f | <template> |
     Then the step should succeed
@@ -80,8 +80,8 @@ Feature: buildconfig.feature
     Then the "ruby-sample-build-1" build completes
 
     Examples:
-      | template                              |
-      | tc479541/test-buildconfig-s2i.json    | # @case_id OCP-11474
+      | template                  |
+      | test-buildconfig-s2i.json | # @case_id OCP-11474
 
   # @author xiuwang@redhat.com
   # @case_id OCP-12057
