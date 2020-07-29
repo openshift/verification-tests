@@ -1,0 +1,383 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: csi-hostpath-provisioner 
+  labels:
+    app: csi-hostpath-provisioner 
+spec:
+  selector:
+    app: csi-hostpath-provisioner 
+  ports:
+    - name: dummy
+      port: 12345
+
+---
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: csi-hostpath-provisioner
+spec:
+  serviceName: "csi-hostpath-provisioner"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: csi-hostpath-provisioner
+  template:
+    metadata:
+      labels:
+        app: csi-hostpath-provisioner
+    spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - csi-hostpathplugin
+            topologyKey: kubernetes.io/hostname
+      serviceAccountName: csi-provisioner
+      containers:
+        - name: csi-provisioner
+          image: quay.io/openshift-qe-optional-operators/ose-csi-external-provisioner-rhel7:latest
+          args:
+            - -v=5
+            - --csi-address=/csi/csi.sock
+            - --feature-gates=Topology=true
+          securityContext:
+            # This is necessary only for systems with SELinux, where
+            # non-privileged sidecar containers cannot access unix domain socket
+            # created by privileged CSI driver container.
+            privileged: true
+          volumeMounts:
+            - mountPath: /csi
+              name: socket-dir
+      volumes:
+        - hostPath:
+            path: /var/lib/kubelet/plugins/csi-hostpath
+            type: DirectoryOrCreate
+          name: socket-dir
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: csi-hostpath-attacher
+  labels:
+    app: csi-hostpath-attacher
+spec:
+  selector:
+    app: csi-hostpath-attacher
+  ports:
+    - name: dummy
+      port: 12345
+
+---
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: csi-hostpath-attacher
+spec:
+  serviceName: "csi-hostpath-attacher"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: csi-hostpath-attacher
+  template:
+    metadata:
+      labels:
+        app: csi-hostpath-attacher
+    spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - csi-hostpathplugin
+            topologyKey: kubernetes.io/hostname
+      serviceAccountName: csi-attacher
+      containers:
+        - name: csi-attacher
+          image: quay.io/openshift-qe-optional-operators/ose-csi-external-attacher:latest
+          args:
+            - --v=5
+            - --csi-address=/csi/csi.sock
+          securityContext:
+            privileged: true
+          volumeMounts:
+          - mountPath: /csi
+            name: socket-dir
+
+      volumes:
+        - hostPath:
+            path: /var/lib/kubelet/plugins/csi-hostpath
+            type: DirectoryOrCreate
+          name: socket-dir
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: csi-hostpath-resizer
+  labels:
+    app: csi-hostpath-resizer
+spec:
+  selector:
+    app: csi-hostpath-resizer
+  ports:
+    - name: dummy
+      port: 12345
+---
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: csi-hostpath-resizer
+spec:
+  serviceName: "csi-hostpath-resizer"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: csi-hostpath-resizer
+  template:
+    metadata:
+      labels:
+        app: csi-hostpath-resizer
+    spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - csi-hostpathplugin
+            topologyKey: kubernetes.io/hostname
+      serviceAccountName: csi-resizer
+      containers:
+        - name: csi-resizer
+          image: quay.io/openshift-qe-optional-operators/ose-csi-external-resizer-rhel7:latest
+          args:
+            - -v=5
+            - -csi-address=/csi/csi.sock
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - mountPath: /csi
+              name: socket-dir
+      volumes:
+        - hostPath:
+            path: /var/lib/kubelet/plugins/csi-hostpath
+            type: DirectoryOrCreate
+          name: socket-dir
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: csi-hostpath-snapshotter
+  labels:
+    app: csi-hostpath-snapshotter
+spec:
+  selector:
+    app: csi-hostpath-snapshotter
+  ports:
+    - name: dummy
+      port: 12345
+---
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: csi-hostpath-snapshotter
+spec:
+  serviceName: "csi-hostpath-snapshotter"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: csi-hostpath-snapshotter
+  template:
+    metadata:
+      labels:
+        app: csi-hostpath-snapshotter
+    spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - csi-hostpathplugin
+            topologyKey: kubernetes.io/hostname
+      serviceAccount: csi-snapshotter
+      containers:
+        - name: csi-snapshotter
+          image: quay.io/openshift-qe-optional-operators/ose-csi-external-snapshotter-rhel7:latest
+          args:
+            - -v=5
+            - --csi-address=/csi/csi.sock
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - mountPath: /csi
+              name: socket-dir
+      volumes:
+        - hostPath:
+            path: /var/lib/kubelet/plugins/csi-hostpath
+            type: DirectoryOrCreate
+          name: socket-dir
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: csi-hostpathplugin
+  labels:
+    app: csi-hostpathplugin
+spec:
+  selector:
+    app: csi-hostpathplugin
+  ports:
+    - name: dummy
+      port: 12345
+---
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: csi-hostpathplugin
+spec:
+  serviceName: "csi-hostpathplugin"
+  # One replica only:
+  # Host path driver only works when everything runs
+  # on a single node. We achieve that by starting it once and then
+  # co-locate all other pods via inter-pod affinity
+  replicas: 1
+  selector:
+    matchLabels:
+      app: csi-hostpathplugin
+  template:
+    metadata:
+      labels:
+        app: csi-hostpathplugin
+    spec:
+      serviceAccountName: csi-plugin
+      containers:
+        - name: node-driver-registrar
+          image: quay.io/openshift-qe-optional-operators/ose-csi-node-driver-registrar:latest
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "rm -rf /registration/csi-hostpath /registration/csi-hostpath-reg.sock"]
+          args:
+            - --v=5
+            - --csi-address=/csi/csi.sock
+            - --kubelet-registration-path=/var/lib/kubelet/plugins/csi-hostpath/csi.sock
+          securityContext:
+            privileged: true
+          env:
+            - name: KUBE_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: spec.nodeName
+          volumeMounts:
+          - mountPath: /csi
+            name: socket-dir
+          - mountPath: /registration
+            name: registration-dir
+          - mountPath: /csi-data-dir
+            name: csi-data-dir
+
+        - name: hostpath
+          image: quay.io/openshift-qe-optional-operators/hostpathplugin@sha256:aa223f9df8c1d477a9f2a4a2a7d104561e6d365e54671aacbc770dffcc0683ad
+          args:
+            - "--drivername=hostpath.csi.k8s.io"
+            - "--v=5"
+            - "--endpoint=$(CSI_ENDPOINT)"
+            - "--nodeid=$(KUBE_NODE_NAME)"
+          env:
+            - name: CSI_ENDPOINT
+              value: unix:///csi/csi.sock
+            - name: KUBE_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: spec.nodeName
+          securityContext:
+            privileged: true
+          ports:
+          - containerPort: 9898
+            name: healthz
+            protocol: TCP
+          livenessProbe:
+            failureThreshold: 5
+            httpGet:
+              path: /healthz
+              port: healthz
+            initialDelaySeconds: 10
+            timeoutSeconds: 3
+            periodSeconds: 2
+          volumeMounts:
+            - mountPath: /csi
+              name: socket-dir
+            - mountPath: /var/lib/kubelet/pods
+              mountPropagation: Bidirectional
+              name: mountpoint-dir
+            - mountPath: /var/lib/kubelet/plugins
+              mountPropagation: Bidirectional
+              name: plugins-dir
+            - mountPath: /csi-data-dir
+              name: csi-data-dir
+            - mountPath: /dev
+              name: dev-dir
+        - name: liveness-probe
+          volumeMounts:
+          - mountPath: /csi
+            name: socket-dir
+          image: quay.io/openshift-qe-optional-operators/ose-csi-livenessprobe:latest
+          args:
+          - --csi-address=/csi/csi.sock
+          - --health-port=9898
+      volumes:
+        - hostPath:
+            path: /var/lib/kubelet/plugins/csi-hostpath
+            type: DirectoryOrCreate
+          name: socket-dir
+        - hostPath:
+            path: /var/lib/kubelet/pods
+            type: DirectoryOrCreate
+          name: mountpoint-dir
+        - hostPath:
+            path: /var/lib/kubelet/plugins_registry
+            type: Directory
+          name: registration-dir
+        - hostPath:
+            path: /var/lib/kubelet/plugins
+            type: Directory
+          name: plugins-dir
+        - hostPath:
+            # 'path' is where PV data is persisted on host.
+            # using /tmp is also possible while the PVs will not available after plugin container recreation or host reboot
+            path: /var/lib/csi-hostpath-data/
+            type: DirectoryOrCreate
+          name: csi-data-dir
+        - hostPath:
+            path: /dev
+            type: Directory
+          name: dev-dir
+---
+apiVersion: storage.k8s.io/v1beta1
+kind: CSIDriver
+metadata:
+  name: hostpath.csi.k8s.io
+spec:
+  # Supports persistent and ephemeral inline volumes.
+  volumeLifecycleModes:
+  - Persistent
+  - Ephemeral
+  # To determine at runtime which mode a volume uses, pod info and its
+  # "csi.storage.k8s.io/ephemeral" entry are needed.
+  podInfoOnMount: true
+
