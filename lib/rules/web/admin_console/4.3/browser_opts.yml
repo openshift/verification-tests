@@ -10,26 +10,11 @@
       rescue Selenium::WebDriver::Error::UnknownError,Selenium::WebDriver::Error::ElementClickInterceptedError => e
         if e.message.include? "not clickable"
           logger.warn e.inspect
-
-          case e.message
-          when /nav-pf-secondary-nav/, /list-group-item-value/
-            # see https://bugzilla.redhat.com/show_bug.cgi?id=1512539
-            logger.info "Running close_second_level_navigation"
-            run_action(:close_second_level_navigation)
-          when /navbar-pf-vertical/, /project-bar/, /form-group/
-            logger.info "Scrolling element off view"
-            scroll_by = browser.element(css: ".navbar.navbar-pf-vertical").height
-            scroll_by += browser.element(css: ".project-bar").height
-            browser.execute_script("window.scrollBy(0,-#{scroll_by})")
-          else
-            # e.g. class="modal-backdrop fade in ng-scope ng-animate ng-leave
-            #   ng-leave-active"
-            # we just wait repeat operation hoping the modal has fade out or
-            #   possibly some unknown issue fixed itself
-            logger.info "Sleeping 10 seconds when meeting other cases of the not clickable issue"
-            sleep 10
-          end
-
+          # element.scroll_into_view
+          # list of keys http://watir.com/guides/special-keys/
+          element.send_keys(:page_down)
+          sleep 5 # allow time for scrolling to be performed
+          #repeat op
           element.send *op_call
         else
           logger.debug "unhandled UnknownError"
