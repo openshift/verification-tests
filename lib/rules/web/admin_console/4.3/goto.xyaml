@@ -32,6 +32,19 @@ goto_one_build_environment_page:
   url: k8s/ns/<project_name>/builds/<build_name>/environment
   action: wait_box_loaded
 
+goto_pipelines_list_page:
+  url: k8s/ns/<project_name>/tekton.dev~v1beta1~Pipeline
+  action: wait_box_loaded
+goto_pipeline_resources_list_page:
+  url: k8s/ns/<project_name>/tekton.dev~v1alpha1~PipelineResource
+  action: wait_box_loaded
+goto_tasks_list_page:
+  url: k8s/ns/<project_name>/tekton.dev~v1beta1~Task
+  action: wait_box_loaded
+goto_cluster_tasks_list_page:
+  url: k8s/cluster/tekton.dev~v1beta1~ClusterTask
+  action: wait_box_loaded
+
 # command line tools page
 goto_cli_tools_page:
   url: command-line-tools
