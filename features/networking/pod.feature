@@ -303,8 +303,8 @@ Feature: Pod related networking scenarios
     And evaluation of `service(cb.host_pod1.name).node_port(port: 8080)` is stored in the :nodeport clipboard
     #Creating a simple client pod to generate traffic from it towards the exposed node IP address
     Given I obtain test data file "networking/aosqe-pod-for-ping.json"
-    When I run the :create client command with:
-      | f | aosqe-pod-for-ping.json |
+    When I run oc create over "aosqe-pod-for-ping.json" replacing paths:
+      | ["spec"]["nodeName"] | <%= cb.nodes[0].name %> |
     Then the step should succeed
     Given a pod becomes ready with labels:
       | name=hello-pod |
