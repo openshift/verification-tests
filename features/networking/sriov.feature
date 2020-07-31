@@ -417,3 +417,63 @@ Feature: Sriov related scenarios
       | network_attachment_definition_enabled_instance_up{networks="sriov"} 0 |
       | network_attachment_definition_instances{networks="any"} 0             |
       | network_attachment_definition_instances{networks="sriov"} 0           |
+
+
+  # @author zzhao@redhat.com
+  # @case_id OCP-33454
+  @destructive
+  @admin
+  Scenario:  VF mac can be set with container mac address
+    Given the sriov operator is running well
+    Given I obtain test data file "networking/sriov/sriovnetworkpolicy/mlx277-netdevice.yaml"
+    Given I create sriov resource with following:
+       | cr_yaml       | mlx277-netdevice.yaml    |
+       | cr_name       | mlx277-netdevice         |
+       | resource_type | sriovnetworknodepolicies |
+    Then the step should succeed
+    And I wait up to 500 seconds for the steps to pass:
+    """
+    When I run the :get admin command with:
+      | resource    | sriovnetworknodestates           |
+      | namespace   | openshift-sriov-network-operator |
+      | o           | yaml                             |
+    Then the step should succeed
+    And the output should contain "mlx277-netdevice"
+    And the output should contain "syncStatus: Succeeded"
+    And the output should contain "vfID: 1"
+    """
+    Given I switch to the first user
+    And I have a project
+    And evaluation of `project.name` is stored in the :usr_project clipboard
+    Given I obtain test data file "networking/sriov/sriovnetwork/mlx277netdevice.yaml"
+    Given I create sriov resource with following:
+       | cr_yaml       | mlx277netdevice.yaml |
+       | cr_name       | mlx277-netdevice     |
+       | resource_type | sriovnetwork         |
+       | project       | <%= cb.usr_project%> |
+    Then the step should succeed
+
+    And I wait up to 30 seconds for the steps to pass:
+    """
+    When I run the :get admin command with:
+      | resource  | net-attach-def        |
+      | namespace | <%= cb.usr_project%>  |
+    Then the step should succeed
+    And the output should contain "mlx277-netdevice"
+    """
+    And I use the "<%= cb.usr_project%>" project
+    Given I obtain test data file "networking/sriov/pod/sriov-macvlan.yaml"
+    When I run oc create over "sriov-macvlan.yaml" replacing paths:
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | mlx277-netdevice |
+    Then the step should succeed
+    And a pod becomes ready with labels:
+      | name=sriov-macvlan |
+    When I execute on the pod:
+      | bash | -c | ip a show net1 |
+    Then the step should succeed
+    And evaluation of `@result[:response].match(/\h+:\h+:\h+:\h+:\h+:\h+/)[0]` is stored in the :pod1_net1_mac clipboard
+    Given I use the "<%= pod.node_name %>" node
+    And I run commands on the host:
+      | ip link show ens2f0 |
+    Then the step should succeed
+    And the output should contain "<%= cb.pod1_net1_mac%>"
