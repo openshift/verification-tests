@@ -36,7 +36,11 @@ Given /^the sriov operator is running well$/ do
   
   step %Q/sriov operator is ready/
   step %Q/configDaemonNodeSelector set to true in sriovoperatorconfig/
+  step %Q/SR-IOV resource injector is enabled/
+  step %Q/Admission webhook is enabled/
   step %Q/sriov config daemon is ready/
+  step %Q/network-resources-injector daemon is ready/
+  step %Q/admission webhook daemon is ready/
 end
 
 Given /^sriov operator is ready$/ do
@@ -55,27 +59,31 @@ Given /^sriov config daemon is ready$/ do
   })
 end
 
-Given /^configDaemonNodeSelector set to true in sriovoperatorconfig$/ do
+Given /^network-resources-injector daemon is ready$/ do
   ensure_admin_tagged
   project("openshift-sriov-network-operator")
-  step %Q/I run the :patch admin command with:/, table(%{
-     | resource      | sriovoperatorconfigs.sriovnetwork.openshift.io                                             |
-     | resource_name | default                                                                                    |
-     | p             | {"spec":{"configDaemonNodeSelector":{"feature.node.kubernetes.io/sriov-capable": "true"}}} |
-     | type          | merge                                                                                      |
-   })  
-  step %Q{the step should succeed}
+  step %Q/3 pods become ready with labels:/, table(%{
+    | app=network-resources-injector |
+  })
 end
 
-Given /^configDaemonNodeSelector set to false in sriovoperatorconfig$/ do
+Given /^admission webhook daemon is ready$/ do
+  ensure_admin_tagged
+  project("openshift-sriov-network-operator")
+  step %Q/3 pods become ready with labels:/, table(%{
+    | app=operator-webhook |
+  })
+end
+
+Given /^configDaemonNodeSelector set to (true|false) in sriovoperatorconfig$/ do | status |
   ensure_admin_tagged
   project("openshift-sriov-network-operator")
   step %Q/I run the :patch admin command with:/, table(%{
-     | resource      | sriovoperatorconfigs.sriovnetwork.openshift.io                                              |
-     | resource_name | default                                                                                     |
-     | p             | {"spec":{"configDaemonNodeSelector":{"feature.node.kubernetes.io/sriov-capable": "false"}}} |
-     | type          | merge                                                                                       |
-   })
+     | resource      | sriovoperatorconfigs.sriovnetwork.openshift.io                                                  |
+     | resource_name | default                                                                                         |
+     | p             | {"spec":{"configDaemonNodeSelector":{"feature.node.kubernetes.io/sriov-capable": "#{status}"}}} |
+     | type          | merge                                                                                           |
+   })  
   step %Q{the step should succeed}
 end
 
@@ -143,3 +151,26 @@ Given /^I delete the #{QUOTED} sriovnetwork$/ do | cr_name |
     raise "Unable to delete the sriovnetwork" unless @result[:success]
   end
 end
+
+Given /^(SR-IOV resource injector|Admission webhook) is (enabled|disabled)$/ do | feature, status |
+  ensure_admin_tagged
+  project("openshift-sriov-network-operator")
+  if feature.strip == 'SR-IOV resource injector'
+     testfeature = 'enableInjector'
+  else
+     testfeature = 'enableOperatorWebhook'
+  end
+  if status.strip == 'enabled'
+     feature_status = true
+  else
+     feature_status = false
+  end
+  step %Q/I run the :patch admin command with:/, table(%{
+     | resource      | sriovoperatorconfigs.sriovnetwork.openshift.io |
+     | resource_name | default                                        |
+     | p             | {"spec":{"#{testfeature}": #{feature_status}}} |
+     | type          | merge                                          |
+   })
+  step %Q{the step should succeed}
+end
+

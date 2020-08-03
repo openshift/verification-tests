@@ -318,6 +318,7 @@ Feature: Sriov related scenarios
   # @author zzhao@redhat.com
   # @case_id OCP-25790
   @admin  
+  @destructive
   Scenario: SR-IOV network config daemon can be set by nodeselector
     Given the sriov operator is running well
     And all existing pods are ready with labels:
@@ -423,7 +424,7 @@ Feature: Sriov related scenarios
   # @case_id OCP-33454
   @destructive
   @admin
-  Scenario:  VF mac can be set with container mac address
+  Scenario: VF mac can be set with container mac address
     Given the sriov operator is running well
     Given I obtain test data file "networking/sriov/sriovnetworkpolicy/mlx277-netdevice.yaml"
     Given I create sriov resource with following:
@@ -477,3 +478,186 @@ Feature: Sriov related scenarios
       | ip link show ens2f0 |
     Then the step should succeed
     And the output should contain "<%= cb.pod1_net1_mac%>"
+
+  # @author zzhao@redhat.com
+  # @case_id OCP-24776
+  @destructive
+  @admin
+  Scenario: The default sriov networkpolicy should be able to restore by sriov operator when it was deleted	
+    Given the sriov operator is running well
+    When I run the :delete admin command with:
+      | object_type       | sriovnetworknodepolicies |
+      | object_name_or_id | default                  |
+    Then the step should succeed
+    When I run the :get admin command with:
+      | resource    |  sriovnetworknodepolicies |
+    Then the step should succeed
+    And the output should contain "default"        
+    Given I obtain test data file "networking/sriov/sriovnetworkpolicy/mlx277-netdevice.yaml"
+    Given I create sriov resource with following:
+       | cr_yaml       | mlx277-netdevice.yaml    |
+       | cr_name       | mlx277-netdevice         |
+       | resource_type | sriovnetworknodepolicies |
+    Then the step should succeed
+    And I wait up to 500 seconds for the steps to pass:
+    """
+    When I run the :get admin command with:
+      | resource    | sriovnetworknodestates           |
+      | namespace   | openshift-sriov-network-operator |
+      | o           | yaml                             |
+    Then the step should succeed
+    And the output should contain "mlx277-netdevice"
+    And the output should contain "syncStatus: Succeeded"
+    And the output should contain "vfID: 1"
+    """
+
+  # @author zzhao@redhat.com
+  @destructive
+  @admin
+  Scenario Outline: SR-IOV resource can be disable by edit SR-IOV Operator Config
+    Given the sriov operator is running well
+    Given <sriov-feature> is disabled
+    #check the related resource should be removed
+    And I wait up to 30 seconds for the steps to pass:
+    """
+    When I run the :get admin command with:
+      | resource    | ds |
+    Then the step should succeed
+    And the output should not contain "<keyword>"    
+    When I run the :get admin command with:
+      | resource    | sa |
+    Then the step should succeed
+    And the output should not contain "<keyword>"
+    When I run the :get admin command with:
+      | resource    | svc |
+    Then the step should succeed
+    And the output should not contain "<keyword>"
+    When I run the :get admin command with:
+      | resource    | clusterrole |
+    Then the step should succeed
+    And the output should not contain "<keyword>"
+    When I run the :get admin command with:
+      | resource    | MutatingWebhookConfiguration |
+    Then the step should succeed
+    And the output should not contain "<keyword>"
+    When I run the :get admin command with:
+      | resource    | cm |
+    Then the step should succeed
+    And the output should not contain "<keyword>"
+    When I run the :get admin command with:
+      | resource    | clusterrolebinding |
+    Then the step should succeed
+    And the output should not contain "<keyword>"
+    """
+
+    Examples:
+      | sriov-feature             | keyword           |
+      | SR-IOV resource injector  | injector          |  # @case_id OCP-25814
+      | Admission webhook         | operator-webhook  |  # @case_id OCP-25847
+
+  # @author zzhao@redhat.com
+  # @case_id OCP-25835
+  @destructive
+  @admin
+  Scenario: SR-IOV resource injector should not overwrite the request memory and cpu
+    Given the sriov operator is running well
+    Given I obtain test data file "networking/sriov/sriovnetworkpolicy/mlx277-netdevice.yaml"
+    Given I create sriov resource with following:
+       | cr_yaml       | mlx277-netdevice.yaml    |
+       | cr_name       | mlx277-netdevice         |
+       | resource_type | sriovnetworknodepolicies |
+    Then the step should succeed
+    And I wait up to 500 seconds for the steps to pass:
+    """
+    When I run the :get admin command with:
+      | resource    | sriovnetworknodestates           |
+      | namespace   | openshift-sriov-network-operator |
+      | o           | yaml                             |
+    Then the step should succeed
+    And the output should contain "mlx277-netdevice"
+    And the output should contain "syncStatus: Succeeded"
+    And the output should contain "vfID: 1"
+    """
+    Given I switch to the first user
+    And I have a project
+    And evaluation of `project.name` is stored in the :usr_project clipboard
+    Given I obtain test data file "networking/sriov/sriovnetwork/mlx277netdevice.yaml"
+    Given I create sriov resource with following:
+       | cr_yaml       | mlx277netdevice.yaml |
+       | cr_name       | mlx277-netdevice     |
+       | resource_type | sriovnetwork         |
+       | project       | <%= cb.usr_project%> |
+    Then the step should succeed
+
+    And I wait up to 30 seconds for the steps to pass:
+    """
+    When I run the :get admin command with:
+      | resource  | net-attach-def        |
+      | namespace | <%= cb.usr_project%>  |
+    Then the step should succeed
+    And the output should contain "mlx277-netdevice"
+    """
+    And I use the "<%= cb.usr_project%>" project
+    Given I obtain test data file "networking/sriov/pod/sriov-specified-cpu.yaml"
+    When I run the :create client command with:
+      | f | sriov-specified-cpu.yaml |
+    Then the step should succeed
+    And a pod becomes ready with labels:
+      | name=sriov-specified-cpu |
+    When I run the :get client command with:
+      | resource      | pod             |
+      | resource_name | <%= pod.name %> |
+      | o             | yaml            |
+    Then the step should succeed
+    And the output should contain "cpu: 333"
+    And the output should contain "memory: 345"
+
+  # @author zzhao@redhat.com
+  # @case_id OCP-25844
+  @destructive
+  @admin
+  Scenario Outline: Admission webhook can validate the data of sriovnetworknodepolicies
+    Given the sriov operator is running well
+    Given I obtain test data file "networking/sriov/sriovnetworkpolicy/wrong/<file>"
+    When I run the :create client command with:
+      | f | <file> |
+    Then the step should fail
+    And the output should contain "<Error message>"
+
+    Examples:
+      | file              | Error message                |
+      | invalidname.yaml  | invalid characters           |
+      | non-deviceid      | no supported NIC             |        
+      | non-vondor        | vendor 15b4 is not supported |
+      | vfnum0            | numVfs(0) in CR              |
+
+
+  # @author zzhao@redhat.com
+  # @case_id OCP-28076
+  @destructive
+  @admin
+  Scenario: vf range should be correct if create sriovnetworkpolicy without pfNames
+    Given the sriov operator is running well
+    Given I obtain test data file "networking/sriov/sriovnetworkpolicy/intel-netdevice-without-pf.yaml"
+    Given I create sriov resource with following:
+       | cr_yaml       | intel-netdevice-without-pf.yaml |
+       | cr_name       | intel-netdevice                 |
+       | resource_type | sriovnetworknodepolicies        |
+    Then the step should succeed
+    And I wait up to 300 seconds for the steps to pass:
+    """
+    When I run the :get admin command with:
+      | resource    | sriovnetworknodestates           |
+      | namespace   | openshift-sriov-network-operator |
+      | o           | yaml                             |
+    Then the step should succeed
+    And the output should contain "intel-netdevice"
+    And the output should contain "syncStatus: Succeeded"
+    And the output should contain "vfID: 4"
+    """
+    When I run the :get admin command with:
+      | resource      | node                                          |
+      | l             | feature.node.kubernetes.io/sriov-capable=true |
+      | o             | yaml                                          |
+    Then the step should succeed
+    And the output should contain "openshift.io/intelnetdevice: "5""
