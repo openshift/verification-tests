@@ -1024,3 +1024,71 @@ Given /^I enable multicast for the "(.+?)" namespace$/ do | project_name |
   end
   logger.info "The multicast is enable in the #{project_name} project"
 end
+
+Given /^I get the ptp logs of the "([^"]*)" node since "(.+)" ago$/ do | node_name, duration |
+  ensure_admin_tagged
+  node_name ||= node.name
+
+  # Only return logs newer than a relative duration like 5s, 2m, or 3h.
+  ptp_pod = BushSlicer::Pod.get_labeled("app=linuxptp-daemon", project: project("openshift-ptp", switch: false), user: admin) { |pod, hash|
+    pod.node_name == node_name
+  }.first
+  @result = admin.cli_exec(:logs, resource_name: ptp_pod.name, n: "openshift-ptp", since: duration)
+end
+
+Given /^the ptp operator is running well$/ do
+  ensure_admin_tagged
+  step %Q/I switch to cluster admin pseudo user/
+
+  unless project('openshift-ptp').exists?
+    if env.version_eq("4.3", user: user) || env.version_eq("4.4", user: user)
+      ns = "ns43.yaml"
+      dr = "43"
+    elsif env.version_ge("4.5", user: user)
+      ns = "ns45.yaml"
+      dr = "45"
+    end
+    step %Q{I obtain test data file "networking/ptp/namespace/#{dr}/#{ns}"}
+    step %Q/I run the :create admin command with:/,table(%{
+      | f | #{ns} |
+    })
+    step %Q{the step should succeed}
+  end
+
+  step %Q/I use the "openshift-ptp" project/
+  unless operator_group('ptp-operators').exists?
+    step %Q{I obtain test data file "networking/ptp/og/og.yaml"}
+    step %Q/I run the :create admin command with:/,table(%{
+      | f | og.yaml |
+    })
+    step %Q{the step should succeed}
+  end
+
+  unless subscription('openshift-ptp').exists?
+    step %Q/evaluation of `cluster_version('version').channel.split('-')[1]` is stored in the :ocp_cluster_version clipboard/
+    step %Q{I obtain test data file "networking/ptp/subscription/sub.yaml"}
+    step %Q/I run oc create over "sub.yaml" replacing paths:/,table(%{
+      | ["spec"]["channel"] | "#{cb.ocp_cluster_version}" |
+    })
+    step %Q{the step should succeed}
+  end
+
+  step %Q/ptp operator is ready/
+  step %Q/ptp config daemon is ready/
+end
+
+Given /^ptp operator is ready$/ do
+  ensure_admin_tagged
+  project("openshift-ptp")
+  step %Q/a pod becomes ready with labels:/, table(%{
+    | name=ptp-operator |
+  })
+end
+
+Given /^ptp config daemon is ready$/ do
+  ensure_admin_tagged
+  project("openshift-ptp")
+  step %Q/a pod becomes ready with labels:/, table(%{
+    | app=linuxptp-daemon |
+  })
+end
