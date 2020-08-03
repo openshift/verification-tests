@@ -1,6 +1,5 @@
 check_column_header_items_on_pods_list_page:
   action: check_name_column_header
-  action: check_namespace_column_header
   action: check_status_column_header
   action: check_ready_column_header
   action: check_restarts_column_header
