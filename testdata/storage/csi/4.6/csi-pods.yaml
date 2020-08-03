@@ -25,6 +25,7 @@ spec:
   template:
     metadata:
       labels:
+        test: csi-test
         app: csi-hostpath-provisioner
     spec:
       affinity:
@@ -87,6 +88,7 @@ spec:
   template:
     metadata:
       labels:
+        test: csi-test
         app: csi-hostpath-attacher
     spec:
       affinity:
@@ -144,6 +146,7 @@ spec:
   template:
     metadata:
       labels:
+        test: csi-test
         app: csi-hostpath-resizer
     spec:
       affinity:
@@ -200,6 +203,7 @@ spec:
   template:
     metadata:
       labels:
+        test: csi-test
         app: csi-hostpath-snapshotter
     spec:
       affinity:
@@ -260,6 +264,7 @@ spec:
   template:
     metadata:
       labels:
+        test: csi-test
         app: csi-hostpathplugin
     spec:
       serviceAccountName: csi-plugin
