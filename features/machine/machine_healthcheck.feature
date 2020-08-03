@@ -211,19 +211,9 @@ Feature: MachineHealthCheck Test Scenarios
     Given I obtain test data file "cloud/mhc/mhc_malformed.yaml"
     When I run oc create over "mhc_malformed.yaml" replacing paths:
       | n  | openshift-machine-api |
-    Then the step should succeed
-    And I ensure "mhc-malformed" machinehealthcheck is deleted after scenario
-
-    Then a pod becomes ready with labels:
-      | api=clusterapi, k8s-app=controller |
-
-    When I run the :logs admin command with:
-      | resource_name | <%= pod.name %>                |
-      | c             | machine-healthcheck-controller |
     Then the output should contain:
-      | remediation won't be allowed: invalid value for IntOrString  |
-      | total targets: <%= cb.machines.count %>                      | #This covers OCP-29062 - empty selectors watches all machines in cluster
-
+      | The MachineHealthCheck "mhc-malformed" is invalid: spec.maxUnhealthy: Invalid value: "": spec.maxUnhealthy in body should match '^((100|[0-9]{1,2})%|[0-9]+)$'|
+      
   # @author miyadav@redhat.com
   # @case_id OCP-28859
   @admin
