@@ -32,7 +32,7 @@ Feature: SCTP related scenarios
     And the pod named "sctpclient" becomes ready
    
     # sctpserver pod start to wait for sctp traffic
-    When I run the :exec background admin command with:
+    When I run the :exec background client command with:
       | pod              | sctpserver          |
       | namespace        | <%= project.name %> |
       | oc_opts_end      |                     |
@@ -42,7 +42,7 @@ Feature: SCTP related scenarios
     Then the step should succeed
 
     # sctpclient pod start to send sctp traffic
-    When I run the :exec background admin command with:
+    When I run the :exec client command with:
       | pod              | sctpclient                                                       |
       | namespace        | <%= project.name %>                                              |
       | oc_opts_end      |                                                                  |
