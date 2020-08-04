@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sctpservice
+  labels:
+    app: sctpserver
+spec:
+  selector:
+    app: sctpserver
+  ports:
+    - name: sctpservice
+      protocol: SCTP
+      port: 30102
+      targetPort: 'sctpserver'
+  type: NodePort
