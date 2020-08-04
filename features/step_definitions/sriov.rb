@@ -174,3 +174,13 @@ Given /^(SR-IOV resource injector|Admission webhook) is (enabled|disabled)$/ do 
   step %Q{the step should succeed}
 end
 
+Given /^I patch the sriov logs to "(.+?)"$/ do | loglevel |
+  ensure_admin_tagged
+  project("openshift-sriov-network-operator")
+  step %Q/I run the :patch admin command with:/, table(%{
+     | resource      | sriovoperatorconfigs.sriovnetwork.openshift.io |
+     | resource_name | default                                        |
+     | p             | {"spec":{"logLevel": #{loglevel}}}             |  
+     | type          | merge                                          |
+  })
+end  

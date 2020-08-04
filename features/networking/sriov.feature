@@ -661,3 +661,52 @@ Feature: Sriov related scenarios
       | o             | yaml                                          |
     Then the step should succeed
     And the output should contain "openshift.io/intelnetdevice: "5""
+
+  # @author zzhao@redhat.com
+  # @case_id OCP-30268
+  @destructive
+  @admin
+  Scenario: user can set the loglevel for sriov config daemon
+    Given the sriov operator is running well
+    Given sriov config daemon is ready
+    Given I patch the sriov logs to "0"
+    Then the step should succeed
+    Given 10 seconds have passed
+    When I run the :logs admin command with:
+      | resource_name | <%= pod.name %> |
+      | since         | 10s             |
+    Then the step should succeed
+    And the output should not contain "nodeUpdateHandler"
+    Given I patch the sriov logs to "2"
+    Then the step should succeed 
+    Given 10 seconds have passed
+    When I run the :logs admin command with:
+      | resource_name | <%= pod.name %> |
+      | since         | 10s             |
+    Then the step should succeed
+    And the output should contain "nodeUpdateHandler"
+
+  # @author zzhao@redhat.com
+  # @case_id OCP-30269
+  @destructive
+  @admin
+  Scenario: Negtive testing for loglevel for sriov config daemon
+    Given the sriov operator is running well
+    Given sriov config daemon is ready
+    Given I patch the sriov logs to "3"
+    Then the step should fail
+    And the output should contain "logLevel in body should be less than or equal to 2"
+    Given I patch the sriov logs to "-1"
+    Then the step should fail
+    And the output should contain "logLevel in body should be greater than or equal to 0"
+
+  # @author zzhao@redhat.com
+  # @case_id OCP-30277
+  @destructive
+  @admin
+  Scenario: Loglevel value should be explain in CRD
+    Given the sriov operator is running well
+    When I run the :explain client command with:
+      | resource | sriovoperatorconfigs.spec.logLevel |
+    Then the step should succeed
+    And the output should contain "Flag to control the log verbose level of the operator"
