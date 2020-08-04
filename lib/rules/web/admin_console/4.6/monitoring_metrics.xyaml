@@ -1,3 +1,7 @@
+check_sample_query_area:
+  element:
+    selector:
+      xpath: //textarea[contains(text(),'sum_over_time')]
 click_primary_menu_developer_mode:
   element:
     selector:
@@ -73,7 +77,7 @@ check_query_input_text_area:
 click_promql_button:
   element:
     selector: &promql_button
-      xpath: //span[text()='<text>']/parent::button
+      xpath: //button[text()='<text>']
     op: click
 click_hide_promql_button:
   params:

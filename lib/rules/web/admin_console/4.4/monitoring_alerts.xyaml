@@ -23,7 +23,10 @@ filter_alert:
 open_alert_detail:
   action: filter_alert
   action: click_alert_link_with_text
-
+check_alert_detail:
+  params:
+    content: alertname=Watchdog
+  action: check_page_contains
 perform_action_item:
   params:
     button_text: <item_text>

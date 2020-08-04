@@ -30,8 +30,18 @@ filter_alert:
   action: clear_name_filter_if_exists
   action: set_input_class
 open_alert_detail:
+  action: Disable_all_filters
   action: filter_alert
   action: click_alert_link_with_text
+check_alert_detail:
+  params:
+    content: alertname=Watchdog
+  action: check_page_contains
+  action: check_alert_breadcrumb
+check_alert_breadcrumb:
+  params:
+    text: Alerts
+    link_url: /monitoring/alerts
 open_alertrules_detail:
   action: filter_alert
   action: click_alert_link_with_text
@@ -227,6 +237,7 @@ check_info_of_silence_detail_reg:
     alert_name: Watchdog
   action: check_silence_name
   action: check_silenced_alert_name
+  action: check_silence_breadcrumb
 check_silence_name:
   element:
     selector:
@@ -235,6 +246,11 @@ check_silenced_alert_name:
   element:
     selector:
       xpath: //a[contains(text(), '<alert_name>')]
+check_silence_breadcrumb:
+  params:
+    text: Silences
+    link_url: /monitoring/silences
+  action: check_link_and_text
 expire_alert_from_cog_menu: 
   action: filter_alert
   action: click_first_action_icon
@@ -249,23 +265,27 @@ open_alert_rule_from_detail:
 check_alert_rule_details:
   params:
     rule_name: Watchdog
-    expression: vector(1)
-    link: /monitoring/query-browser?query0=vector(1)
   action: check_rule_name
   action: check_ruel_expression
   action: check_active_alerts
+  action: check_rule_breadcrumb
 check_rule_name:
   element:
     selector:
       xpath: //dd[contains(text(), '<rule_name>')]
 check_ruel_expression:
   params:
-    text: <expression>
-    link_url: <link>
+    text: vector(1)
+    link_url: /monitoring/query-browser?query0=vector(1)
   action: check_link_and_text
 check_active_alerts:
   action: check_view_metrics
   action: check_alert_description_on_rule_detail
+check_rule_breadcrumb:
+  params:
+    text: Alerting Rules
+    link_url: /monitoring/alertrules
+  action: check_link_and_text
 check_view_metrics:
   params:
     text: View in Metrics
