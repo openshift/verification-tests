@@ -710,3 +710,136 @@ Feature: Sriov related scenarios
       | resource | sriovoperatorconfigs.spec.logLevel |
     Then the step should succeed
     And the output should contain "Flag to control the log verbose level of the operator"
+
+  # @author zzhao@redhat.com
+  # @case_id OCP-32642
+  @destructive
+  @admin
+  Scenario: MTU can be set according to policy is specified
+    Given the sriov operator is running well
+    Given I obtain test data file "networking/sriov/sriovnetworkpolicy/mlx277-netdevice.yaml"
+    Given I create sriov resource with following:
+       | cr_yaml       | mlx277-netdevice.yaml    |
+       | cr_name       | mlx277-netdevice         |
+       | resource_type | sriovnetworknodepolicies |
+    Then the step should succeed
+    And I wait up to 500 seconds for the steps to pass:
+    """
+    When I run the :get admin command with:
+      | resource    | sriovnetworknodestates           |
+      | namespace   | openshift-sriov-network-operator |
+      | o           | yaml                             |
+    Then the step should succeed
+    And the output should contain "mlx277-netdevice"
+    And the output should contain "syncStatus: Succeeded"
+    And the output should contain "mtu: 1800"
+    And the output should contain "vfID: 1"
+    """
+    Given I switch to the first user
+    And I have a project
+    And evaluation of `project.name` is stored in the :usr_project clipboard
+    Given I obtain test data file "networking/sriov/sriovnetwork/mlx277netdevice.yaml"
+    Given I create sriov resource with following:
+       | cr_yaml       | mlx277netdevice.yaml |
+       | cr_name       | mlx277-netdevice     |
+       | resource_type | sriovnetwork         |
+       | project       | <%= cb.usr_project%> |
+    Then the step should succeed
+
+    And I wait up to 30 seconds for the steps to pass:
+    """
+    When I run the :get admin command with:
+      | resource  | net-attach-def        |
+      | namespace | <%= cb.usr_project%>  |
+    Then the step should succeed
+    And the output should contain "mlx277-netdevice"
+    """
+    And I use the "<%= cb.usr_project%>" project
+    Given I obtain test data file "networking/sriov/pod/sriov-macvlan.yaml"
+    When I run oc create over "sriov-macvlan.yaml" replacing paths:
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | mlx277-netdevice |
+    Then the step should succeed
+    And a pod becomes ready with labels:
+      | name=sriov-macvlan |
+    When I execute on the pod:
+      | bash | -c | ip a show net1 |
+    Then the step should succeed
+    And the output should contain "mtu 1800"
+    And evaluation of `pod.node_name` is stored in the :pod_node clipboard    
+    #Delete the networkpolicy, the PF Mtu should rollback to origin value.
+    Given I delete the "mlx277-netdevice" sriov networkpolicy
+    And I wait up to 500 seconds for the steps to pass:
+    """
+    When I run the :get admin command with:
+      | resource    | sriovnetworknodestates           |
+      | namespace   | openshift-sriov-network-operator |
+      | o           | yaml                             |
+    Then the step should succeed
+    And the output should not contain "ens2f0v0"
+    And the output should not contain "mlx277-netdevice"
+    And the output should contain "syncStatus: Succeeded"
+    """
+    Given I use the "<%= cb.pod_node %>" node
+    And I run commands on the host:
+      | ip link show ens2f0 |
+    Then the step should succeed
+    And the output should contain "mtu 1500"
+
+  # @author zzhao@redhat.com
+  # @case_id OCP-32641
+  @destructive
+  @admin
+  Scenario: MTU can be set according the PF when policy is not specified
+    Given the sriov operator is running well
+    Given sriov config daemon is ready
+    And I use the "<%= pod.node_name %>" node
+    And I run commands on the host:
+      | ip link set dev ens2f0 mtu 2020 |
+    Then the step should succeed
+    Given I obtain test data file "networking/sriov/sriovnetworkpolicy/mlx277-netdevice-without-mtu.yaml"
+    Given I create sriov resource with following:
+       | cr_yaml       | mlx277-netdevice-without-mtu.yaml    |
+       | cr_name       | mlx277-netdevice-without-mtu         |
+       | resource_type | sriovnetworknodepolicies             |
+    Then the step should succeed
+    And I wait up to 500 seconds for the steps to pass:
+    """
+    When I run the :get admin command with:
+      | resource    | sriovnetworknodestates           |
+      | namespace   | openshift-sriov-network-operator |
+      | o           | yaml                             |
+    Then the step should succeed
+    And the output should contain "mlx277-netdevice-without-mtu"
+    And the output should contain "syncStatus: Succeeded"
+    And the output should contain "vfID: 1"
+    """
+    Given I switch to the first user
+    And I have a project
+    And evaluation of `project.name` is stored in the :usr_project clipboard
+    Given I obtain test data file "networking/sriov/sriovnetwork/mlx277netdevice.yaml"
+    Given I create sriov resource with following:
+       | cr_yaml       | mlx277netdevice.yaml |
+       | cr_name       | mlx277-netdevice     |
+       | resource_type | sriovnetwork         |
+       | project       | <%= cb.usr_project%> |
+    Then the step should succeed
+
+    And I wait up to 30 seconds for the steps to pass:
+    """
+    When I run the :get admin command with:
+      | resource  | net-attach-def        |
+      | namespace | <%= cb.usr_project%>  |
+    Then the step should succeed
+    And the output should contain "mlx277-netdevice"
+    """
+    And I use the "<%= cb.usr_project%>" project
+    Given I obtain test data file "networking/sriov/pod/sriov-macvlan.yaml"
+    When I run oc create over "sriov-macvlan.yaml" replacing paths:
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | mlx277-netdevice |
+    Then the step should succeed
+    And a pod becomes ready with labels:
+      | name=sriov-macvlan |
+    When I execute on the pod:
+      | bash | -c | ip a show net1 |
+    Then the step should succeed
+    And the output should contain "mtu 2020"

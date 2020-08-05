@@ -1,0 +1,16 @@
+apiVersion: sriovnetwork.openshift.io/v1
+kind: SriovNetworkNodePolicy
+metadata:
+  name: mlx277-netdevice-without-mtu
+  namespace: openshift-sriov-network-operator
+spec:
+  nicSelector:
+    pfNames:
+      - ens2f0
+    rootDevices:
+      - '0000:60:00.0'
+    vendor: '15b3'
+  nodeSelector:
+    feature.node.kubernetes.io/sriov-capable: 'true'
+  numVfs: 2
+  resourceName: mlx277netdevice
