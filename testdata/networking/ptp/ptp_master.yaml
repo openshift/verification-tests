@@ -1,0 +1,16 @@
+apiVersion: ptp.openshift.io/v1
+kind: PtpConfig
+metadata:
+  name: ptpconfig-master
+  namespace: openshift-ptp
+spec:
+  profile:
+  - name: "ptp-master-profile"
+    interface: "eno2"
+    ptp4lOpts: "-2"
+    phc2sysOpts: "-a -r"
+  recommend:
+  - profile: "ptp-master-profile"
+    priority: 99
+    match:
+    - nodeName: "example.com"

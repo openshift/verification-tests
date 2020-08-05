@@ -15,36 +15,21 @@ check_pipelines_sub_menu:
   params:
     secondary_menu: Pipelines
   action: check_secondary_menu
-check_pipeline_runs_sub_menu:
-  params:
-    secondary_menu: Pipeline Runs
-  action: check_secondary_menu
-check_pipeline_resources_sub_menu:
-  params:
-    secondary_menu: Pipeline Resources
-  action: check_secondary_menu
 check_tasks_sub_menu:
   params:
     secondary_menu: Tasks
   action: check_secondary_menu
-check_task_runs_sub_menu:
+check_triggers_sub_menu:
   params:
-    secondary_menu: Task Runs
-  action: check_secondary_menu
-check_cluster_tasks_sub_menu:
-  params:
-    secondary_menu: Cluster Tasks
+    secondary_menu: Triggers
   action: check_secondary_menu
 check_pipeline_related_menus:
   params:
     primary_menu: Pipelines
   action: expand_primary_menu
   action: check_pipelines_sub_menu
-  action: check_pipeline_runs_sub_menu
-  action: check_pipeline_resources_sub_menu
   action: check_tasks_sub_menu
-  action: check_task_runs_sub_menu
-  action: check_cluster_tasks_sub_menu
+  action: check_triggers_sub_menu
 check_pipeline_resource_item:
   params:
     resource_type: Pipeline

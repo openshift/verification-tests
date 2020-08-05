@@ -41,16 +41,16 @@ goto_one_build_environment_page:
   action: wait_box_loaded
 
 goto_pipelines_list_page:
-  url: k8s/ns/<project_name>/tekton.dev~v1beta1~Pipeline
+  url: pipelines/ns/<project_name>
   action: wait_box_loaded
 goto_pipeline_resources_list_page:
-  url: k8s/ns/<project_name>/tekton.dev~v1alpha1~PipelineResource
+  url: pipelines/ns/<project_name>/pipeline-resources
   action: wait_box_loaded
 goto_tasks_list_page:
-  url: k8s/ns/<project_name>/tekton.dev~v1beta1~Task
+  url: tasks/ns/<project_name>
   action: wait_box_loaded
 goto_cluster_tasks_list_page:
-  url: k8s/cluster/tekton.dev~v1beta1~ClusterTask
+  url: tasks/ns/<project_name>/cluster-tasks
   action: wait_box_loaded
   
 # command line tools page
@@ -127,6 +127,9 @@ goto_rc_list_page:
   url: k8s/ns/<project_name>/replicationcontrollers
 
 #pod
+goto_all_projects_pods_list:
+  url: k8s/all-namespaces/pods
+  action: wait_box_loaded
 goto_one_pod_page:
   url: k8s/ns/<project_name>/pods/<resource_name>
 goto_one_pod_log_page:
