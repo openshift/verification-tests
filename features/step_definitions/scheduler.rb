@@ -24,5 +24,30 @@ Given /^the #{QUOTED} scheduler CR is restored after scenario$/ do |name|
     opts = {resource: 'scheduler', resource_name: name, p: patch_json, type: 'merge' }
     @result = _admin.cli_exec(:patch, **opts)
     raise "Cannot restore scheduler: #{name}" unless @result[:success]
+    timeout = 300
+    wait_for(timeout) do
+      @result = admin.cli_exec(:get, resource: "clusteroperators", resource_name: "kube-scheduler", o: "jsonpath={.status.conditions[?(.type == \"Progressing\")].status}")
+      if @result[:response] == "True"
+        break
+      end
+    end
+    wait_for(timeout) do
+      @result = admin.cli_exec(:get, resource: "clusteroperators", resource_name: "kube-scheduler", o: "jsonpath={.status.conditions[?(.type == \"Progressing\")].status}")
+      if @result[:response] == "False"
+        break
+      end
+    end
+    wait_for(timeout) do
+      @result = admin.cli_exec(:get, resource: "clusteroperators", resource_name: "kube-scheduler", o: "jsonpath={.status.conditions[?(.type == \"Degraded\")].status}")
+      if @result[:response] == "False"
+        break
+      end
+    end
+    wait_for(timeout) do
+      @result = admin.cli_exec(:get, resource: "clusteroperators", resource_name: "kube-scheduler", o: "jsonpath={.status.conditions[?(.type == \"Available\")].status}")
+      if @result[:response] == "True"
+        break
+      end
+    end
   }
 end

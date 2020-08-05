@@ -9,7 +9,7 @@ module BushSlicer
       if provider_name
         case provider_name
         when "OpenStack"
-          return {:type => "openstack", :provider => self.init_openstack(env, api_server_args)}
+          return {:type => "openstack", :provider => self.init_openstack(env)}
         when "AWS"
           return {:type => "aws", :provider => self.init_aws(env)}
         when "GCP"
@@ -24,21 +24,22 @@ module BushSlicer
     end
 
 
-    def self.init_openstack(env, api_server_args)
-      #secret = Secret.new(name: "openstack-credentials", project: project('kube-system'))
+    def self.init_openstack(env)
       # get the config of the IAAS instance
-      raise "getting IAAS config for OpenStack unimplemented"
-      iaas_conf_path = api_server_args["cloud-config"][0]
-      iaas_conf = env.nodes[0].host.exec_admin("cat #{iaas_conf_path} | grep =")[:response].split("\n")
+      secret = Secret.new(name: "openstack-credentials", project: Project.new(name: 'kube-system', env: env))
+      iaas_conf = secret.value_of("clouds.conf", user: :admin).split("\n")
       iaas_conf_params = {}
 
       iaas_conf.each do |line|
         params = line.split("=")
-        iaas_conf_params[params[0].strip] = params[1].strip
+        if params.length < 2
+          next
+        end
+        iaas_conf_params[params[0].strip] = params[1].strip.gsub('"', '')
       end
 
       return BushSlicer::OpenStack.new(
-        :url => iaas_conf_params['auth-url'] + "auth/tokens",
+        :url => iaas_conf_params['auth-url'] + "/auth/tokens",
         :user => iaas_conf_params["username"],
         :password => iaas_conf_params["password"],
         :tenant_id => iaas_conf_params["tenant-id"]
@@ -46,30 +47,11 @@ module BushSlicer
     end
 
     def self.init_aws(env)
-      #secret = Secret.new(name: "aws-creds", project: project('kube-system'))
       aws_cred = {}
 
-      search_command = %{
-        if [ -f /etc/origin/master/master.env ] ; then
-          cat /etc/origin/master/master.env | grep AWS_
-        elif [ -f /etc/sysconfig/atomic-openshift-master ] ; then
-          cat /etc/sysconfig/atomic-openshift-master | grep AWS_
-        elif [ -f /etc/sysconfig/atomic-openshift-node ] ; then
-          cat /etc/sysconfig/atomic-openshift-node | grep AWS_
-        fi
-      }
-      conn_cred = env.nodes[0].host.exec_admin(search_command, quiet: true)[:response].split("\n")
-
-      key, skey = nil
-      conn_cred.each { |c|
-        cred = c.split("=")
-        case cred[0].strip
-        when "AWS_ACCESS_KEY_ID"
-          key = cred[1].strip
-        when "AWS_SECRET_ACCESS_KEY"
-          skey = cred[1].strip
-        end
-      }
+      secret = Secret.new(name: "aws-creds", project: Project.new(name: 'kube-system', env: env))
+      key = secret.value_of("aws_access_key_id", user: :admin)
+      skey = secret.value_of("aws_secret_access_key", user: :admin)
 
       return Amz_EC2.new(access_key: key, secret_key: skey)
     end
@@ -82,7 +64,8 @@ module BushSlicer
       json_file = Tempfile.new("json_cred_", Host.localhost.workdir)
       json_file.write(auth_json)
       json_file.close
-      return GCE.new(:json_cred => json_file.path, :auth_type => "json")
+      return GCE.new(:json_cred => json_file.path, :auth_type => "json",
+                     :avoid_garbage_collection => json_file)
     end
 
     def self.init_azure(env)

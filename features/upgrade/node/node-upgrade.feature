@@ -16,16 +16,18 @@ Feature: Node components upgrade tests
     And I wait up to 30 seconds for the steps to pass:
     """
     When I run the :get client command with:
-      | resource | machineconfigpool |
+      | resource      | machineconfigpool |
+      | resource_name | master            |
     Then the output should match:
-      | master.*False\\s+True\\s+False |
+      | .*False\\s+True\\s+False |
     """
-    And I wait up to 1200 seconds for the steps to pass:
+    And I wait up to 1980 seconds for the steps to pass:
     """
     When I run the :get client command with:
-      | resource | machineconfigpool |
+      | resource      | machineconfigpool |
+      | resource_name | master            |
     Then the output should match:
-      | master.*True\\s+False\\s+False |
+      | .*True\\s+False\\s+False |
     """
     Given I store the masters in the :masters clipboard
     And I use the "<%= cb.masters[0].name %>" node

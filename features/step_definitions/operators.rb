@@ -26,6 +26,20 @@ Given /^the status of condition "([^"]*)" for "([^"]*)" operator is: (.+)$/ do |
   end
 end
 
+Given /^I create a new CatalogSourceConfig$/ do
+  ensure_admin_tagged
+  # Create CatalogSourceConfig in 4.5-
+  if env.version_lt("4.5", user: user)
+    csc_yaml ||= "#{BushSlicer::HOME}/testdata/olm/csc-template.yaml"
+    step %Q/I process and create:/, table(%{
+      | f | #{csc_yaml}                 |
+      | p | PACKAGES=codeready-toolchain-operator     |
+      | p | DISPLAYNAME=CSC Operators                 |
+    })
+    raise "Error creating CatalogSourceConfig" unless @result[:success]
+  end
+end
+
 Given /^the marketplace works well$/ do
   ensure_admin_tagged
   if env.version_lt("4.5", user: user)

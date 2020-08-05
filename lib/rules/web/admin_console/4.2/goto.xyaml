@@ -143,6 +143,10 @@ goto_one_imagestream_page:
 goto_all_imagestreams_list:
   url: k8s/all-namespaces/imagestreams
 
+#templateinstance
+goto_one_templateinstance_page:
+  url: k8s/ns/<project_name>/templateinstances/<templateinstance_name>
+
 #deploy image
 goto_deploy_image_page:
   url: deploy-image/ns/<project_name>?preselected-ns=<project_name>

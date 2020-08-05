@@ -29,13 +29,23 @@ check_role_column_header:
   params:
     column_name: Role
   action: check_column_header
+select_default_namespace_on_node_teminal:
+  elements:
+  - selector:
+      xpath: //button[@id='dropdown-selectbox']
+    op: click
+  - selector:
+      xpath: //span[text()='default']
+    op: click
 check_terminal_tab_on_node_page:
   action: click_terminal_tab
+  action: select_default_namespace_on_node_teminal
   action: check_use_host_binaries_message
 check_use_host_binaries_message:
   element:
     selector:
       xpath: //p[contains(text(), 'To use host binaries, run')]/code[contains(text(), 'chroot /host')]
+    timeout: 30
 remove_tolerations_from_pod:
   action:
     if_param: dc_name
@@ -110,6 +120,7 @@ click_to_machines_page:
   params:
     primary_menu: Compute
     secondary_menu: Machines
+  action: navigate_to_admin_console
   action: click_secondary_menu
 set_minimum_replicas:
   params:

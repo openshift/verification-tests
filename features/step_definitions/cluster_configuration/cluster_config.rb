@@ -12,7 +12,7 @@ Given /^I enable autoscaling for my cluster$/ do
       "namespace" => "openshift-machine-api"
     },
     "spec" => {
-      "minReplicas" => 1,
+      "minReplicas" => 4,
       "maxReplicas" => 10,
       "scaleTargetRef" => {
         "apiVersion" => "machine.openshift.io/v1beta1",

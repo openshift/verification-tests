@@ -60,7 +60,7 @@ module BushSlicer
       fake_config = Tempfile.new("kubeconfig")
       fake_config.close
 
-      res = host.exec_as(user, "oc version -o yaml --kubeconfig=#{fake_config.path}")
+      res = host.exec_as(user, "oc version -o yaml --client --kubeconfig=#{fake_config.path}")
 
       fake_config.unlink
 

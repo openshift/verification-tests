@@ -173,5 +173,5 @@ check_no_edit_links_on_detail_page:
 check_no_button_with_link:
   elements: 
   - selector:
-      xpath: //button[contains(@class, 'pf-m-link')]
+      xpath: //button[contains(@class, 'pf-m-link pf-m-inline')]
     missing: true
