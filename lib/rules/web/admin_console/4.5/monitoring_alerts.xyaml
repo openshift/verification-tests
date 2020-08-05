@@ -282,6 +282,6 @@ show_alert_graph:
 hide_show_alert_graph_button:
   element:
     selector:
-      xpath: //span[@class='pf-c-button__text']/parent::button
+      xpath: //h2[@class='co-section-heading']/../button
     op: click 
  

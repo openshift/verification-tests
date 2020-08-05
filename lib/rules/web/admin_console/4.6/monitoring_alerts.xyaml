@@ -133,7 +133,7 @@ check_silence_fields:
   action: check_silence_duration_null 
 remove_matcher_silence_alert:
   params:
-    aria_label_text: Remove matcher
+    aria_label_text: Remove
     index: 1
   action: click_icon_index_button
 input_matcher_name_silence:
@@ -174,7 +174,13 @@ set_invalid_end_time_silence:
   action: set_silence_duration_null
   action: set_label_input_simple
   
+status_specific_alert_no_clear:
+  action: filter_alert
+  element:
+    selector:
+      xpath: //div[@aria-label='Alerts']//td[text()='<status>'][1]
 status_specific_alert:
+  action: Disable_all_filters
   action: filter_alert
   element:
     selector:
@@ -184,7 +190,11 @@ status_specific_silence:
   element:
     selector:
       xpath: //div[@aria-label='Silences']//td[text()='<status>'][1]
+status_specific_alert_rule_no_clear:
+  action: filter_alert
+  action: check_specific_alert
 status_specific_alert_rule:
+  action: Disable_all_filters
   action: filter_alert
   action: check_specific_alert
 check_specific_alert:
@@ -289,7 +299,7 @@ show_alert_graph:
 hide_show_alert_graph_button:
   element:
     selector:
-      xpath: //span[@class='pf-c-button__text']/parent::button
+      xpath: //h2[@class='co-section-heading']/../button
     op: click 
  
 Disable_all_filters:
