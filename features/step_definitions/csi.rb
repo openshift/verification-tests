@@ -4,9 +4,10 @@ Given /^CSI hostpath driver has been installed successfully$/ do
   ensure_admin_tagged
   namespace = "csihostpath"
   cb.version = cluster_version('version').channel.split('-')[1]
+
   unless project(namespace).exists?
-  step %Q/I run the :oadm_new_project admin command with:/, table(%{
-    | project_name  | #{namespace} |
+  step %Q/admin creates a project with:/, table(%{
+    | project_name | #{namespace} |
   })
   end
 
@@ -41,11 +42,14 @@ Given /^CSI hostpath driver has been installed successfully$/ do
   step %Q/#{pod_num} pods become ready with labels:/, table(%{
       | test=csi-test |
   })
+
+  step %Q|I obtain test data file "storage/csi/csi-storageclass.yaml"|
+  step %Q/I run the :apply client command with:/, table(%{
+      | f | csi-storageclass.yaml |
+  })
+  step %Q/the step should succeed/
+
+  src_sc = storage_class("csi-hostpath-sc")
+  src_sc.ensure_deleted(user: admin)
+
 end
-
-  
-
-
-
-
-
