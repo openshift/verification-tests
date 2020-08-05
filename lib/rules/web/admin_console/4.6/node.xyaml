@@ -45,7 +45,7 @@ check_use_host_binaries_message:
   element:
     selector:
       xpath: //p[contains(text(), 'To use host binaries, run')]/code[contains(text(), 'chroot /host')]
-    timeout: 20
+    timeout: 30
 remove_tolerations_from_pod:
   action:
     if_param: dc_name

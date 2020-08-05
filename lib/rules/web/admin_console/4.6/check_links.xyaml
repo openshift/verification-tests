@@ -230,6 +230,7 @@ check_customized_oc_download_links:
 check_administration_menu_for_normal_user:
   params:
     primary_menu: Administration
+  action: navigate_to_admin_console
   action: expand_primary_menu
   action: check_crd_sub_menu_missing
   action: check_namespaces_menu_missing
