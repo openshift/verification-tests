@@ -211,5 +211,5 @@ show_alert_graph:
 hide_show_alert_graph_button:
   element:
     selector:
-      xpath: //*[text()='Alert Details']/../../button
+      xpath: //h2[@class='co-section-heading']/../button
     op: click 
