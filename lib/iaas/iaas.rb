@@ -78,8 +78,8 @@ module BushSlicer
       return BushSlicer::Azure.new(
         :location => secret.value_of("azure_region", user: :admin),
         :subscription_id => secret.value_of("azure_subscription_id", user: :admin),
-	:auth => auth,
-	:resource_group => secret.value_of("azure_resourcegroup", user: :admin)
+        :auth => auth,
+        :resource_group => secret.value_of("azure_resourcegroup", user: :admin)
       )
     end
   end

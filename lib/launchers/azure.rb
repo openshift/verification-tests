@@ -212,12 +212,14 @@ module BushSlicer
     # @raise on communication error
     def get_volume_by_id(id)
       name = id.split("/")[-1]
-      res = "exist"
+      res = "volume " + id + " exists"
       begin
       compute_client.disks.get(azure_config[:resource_group], name)
       rescue MsRestAzure::AzureOperationError => e
-	if e.response.status == 404
+        if e.response.status == 404
           res = nil
+        else
+          res = e.response
         end
       end
       return res
