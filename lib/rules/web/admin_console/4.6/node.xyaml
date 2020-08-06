@@ -137,8 +137,6 @@ check_machineautoscaler_list_table_struc:
   - selector:
       xpath: //th[@data-label='Name']
   - selector:
-      xpath: //th[@data-label='Namespace']
-  - selector:
       xpath: //th[@data-label='Scale Target']
   - selector:
       xpath: //th[@data-label='Min']
