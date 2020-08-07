@@ -578,6 +578,14 @@ choose_item_from_dropdown_menu:
       xpath: //ul[contains(@class, 'pf-c-dropdown__menu')]
     timeout: 20
   action: click_dropdown_menu_item
+navigate_to_admin_console:
+  elements:
+  - selector:
+      xpath: //button[@data-test-id='perspective-switcher-toggle']
+    op: click
+  - selector:
+      xpath: //li//h1[contains(., 'Administrator')]
+    op: click
 upload_file_for_one_field:
   elements:
   - selector:
