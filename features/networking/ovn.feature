@@ -14,7 +14,7 @@ Feature: OVN related networking scenarios
       | ["spec"]["replicas"]                     | 5                       |
       | ["spec"]["template"]["spec"]["nodeName"] | <%= cb.nodes[0].name %> |
     Then the step should succeed
-    And 25 pods become ready with labels:
+    And 5 pods become ready with labels:
       | name=test-pods |
     Given I run the :delete client command with:
       | object_type       | rc      |
