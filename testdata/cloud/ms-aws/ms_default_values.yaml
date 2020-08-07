@@ -1,92 +1,9 @@
 apiVersion: machine.openshift.io/v1beta1
 kind: MachineSet
 metadata:
-  annotations:
-    machine.openshift.io/GPU: "0"
-    machine.openshift.io/memoryMb: "8192"
-    machine.openshift.io/vCPU: "2"
-  creationTimestamp: "2020-07-13T06:01:25Z"
-  generation: 1
   labels:
     machine.openshift.io/cluster-api-cluster:
-  managedFields:
-  - apiVersion: machine.openshift.io/v1beta1
-    fieldsType: FieldsV1
-    fieldsV1:
-      f:metadata:
-        f:labels:
-          .: {}
-          f:machine.openshift.io/cluster-api-cluster: {}
-      f:spec:
-        .: {}
-        f:replicas: {}
-        f:selector:
-          .: {}
-          f:matchLabels:
-            .: {}
-            f:machine.openshift.io/cluster-api-cluster: {}
-            f:machine.openshift.io/cluster-api-machineset: {}
-        f:template:
-          .: {}
-          f:metadata:
-            .: {}
-            f:labels:
-              .: {}
-              f:machine.openshift.io/cluster-api-cluster: {}
-              f:machine.openshift.io/cluster-api-machine-role: {}
-              f:machine.openshift.io/cluster-api-machine-type: {}
-              f:machine.openshift.io/cluster-api-machineset: {}
-          f:spec:
-            .: {}
-            f:metadata: {}
-            f:providerSpec:
-              .: {}
-              f:value:
-                .: {}
-                f:ami: {}
-                f:apiVersion: {}
-                f:blockDevices: {}
-                f:credentialsSecret: {}
-                f:deviceIndex: {}
-                f:iamInstanceProfile: {}
-                f:instanceType: {}
-                f:kind: {}
-                f:metadata: {}
-                f:placement: {}
-                f:securityGroups: {}
-                f:subnet: {}
-                f:tags: {}
-                f:userDataSecret: {}
-      f:status: {}
-    manager: cluster-bootstrap
-    operation: Update
-    time: "2020-07-13T06:01:25Z"
-  - apiVersion: machine.openshift.io/v1beta1
-    fieldsType: FieldsV1
-    fieldsV1:
-      f:metadata:
-        f:annotations:
-          .: {}
-          f:machine.openshift.io/GPU: {}
-          f:machine.openshift.io/memoryMb: {}
-          f:machine.openshift.io/vCPU: {}
-    manager: machine-controller-manager
-    operation: Update
-    time: "2020-07-13T06:13:06Z"
-  - apiVersion: machine.openshift.io/v1beta1
-    fieldsType: FieldsV1
-    fieldsV1:
-      f:status:
-        f:availableReplicas: {}
-        f:fullyLabeledReplicas: {}
-        f:observedGeneration: {}
-        f:readyReplicas: {}
-        f:replicas: {}
-    manager: machineset-controller
-    operation: Update
-    time: "2020-07-13T06:16:40Z"
-  name: default-valued-32269
-  namespace: openshift-machine-api
+  name: default-valued-32269           
 spec:
   replicas: 1
   selector:
