@@ -712,13 +712,15 @@ Given /^the default interface on nodes is stored in the#{OPT_SYM} clipboard$/ do
   end
   case networkType
   when "OVNKubernetes"
-    step %Q/I run command on the node's ovnkube pod:/, table("| bash | -c | ip route show default |")
+    # use -4 to limit output to just `default` interface, fixed in later iproute2 versions
+    step %Q/I run command on the node's ovnkube pod:/, table("| ip | -4 | route | show | default |")
   when "OpenShiftSDN"
-    step %Q/I run command on the node's sdn pod:/, table("| bash | -c | ip route show default |")
+    step %Q/I run command on the node's sdn pod:/, table("| ip | -4 | route | show | default |")
   else
     raise "unknown networkType"
   end
-  cb[cb_name] = @result[:response].split("\n").first.split(/\W+/)[7]
+  # OVN uses `br-ex` and `-` is not a word char, so we have to split on whitespace
+  cb[cb_name] = @result[:response].split("\n").first.split[4]
   logger.info "The node's default interface is stored in the #{cb_name} clipboard."
 end
 
@@ -915,15 +917,17 @@ Given /^the Internal IP of node "([^"]*)" is stored in the#{OPT_SYM} clipboard$/
   end
   case networkType
   when "OVNKubernetes"
-    step %Q/I run command on the node's ovnkube pod:/, table("| bash | -c | ip route show default |")
+    # use -4 to limit output to just `default` interface, fixed in later iproute2 versions
+    step %Q/I run command on the node's ovnkube pod:/, table("| ip | -4 | route | show | default |")
   when "OpenShiftSDN"
-    step %Q/I run command on the node's sdn pod:/, table("| bash | -c | ip route show default |")
+    step %Q/I run command on the node's sdn pod:/, table("| ip | -4 | route | show | default |")
   else
     raise "unknown networkType"
   end
-  def_inf = @result[:response].split("\n").first.split(/\W+/)[7]
+  # OVN uses `br-ex` and `-` is not a word char, so we have to split on whitespace
+  def_inf = @result[:response].split("\n").first.split[4]
   logger.info "The node's default interface is #{def_inf}"
-  @result = host.exec_admin("ifconfig #{def_inf}")
+  @result = host.exec_admin("ip -4 -brief addr show #{def_inf}")
   cb[cb_ipaddr]=@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]
   logger.info "The Internal IP of node is stored in the #{cb_ipaddr} clipboard."
 end
