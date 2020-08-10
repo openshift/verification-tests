@@ -2,7 +2,7 @@ create_cluster_button_loaded:
     element: &create_cluster_button
         selector:
             xpath: //a[contains(@href, '/openshift/create')]/button[text()='Create cluster']
-
+        timeout: 10
 
 check_cluster_list_page_without_cluster:
     action: create_cluster_button_loaded
@@ -21,30 +21,32 @@ cluster_list_page_loaded:
     elements:
         - selector:
             xpath: //h1[text()='Clusters']
+          timeout: 10
         - selector:
-            xpath: //button[@class='pf-c-button pf-m-plain' and text()='Name']
+            xpath: //button[contains(.,'Name')]
+          timeout: 10
 check_cluster_list_page:
     action: create_cluster_button_loaded
     elements:
         - selector:
             css: input.pf-c-form-control.cluster-list-filter
         - selector:
-            xpath: //div[@class='pf-c-dropdown toolbar-item']/button/span[text()='Filter']
+            xpath: //span[text()='Filter']
         - selector:
-            xpath: //button[text()='Create cluster']/../..//button[@aria-label='Actions']
+            xpath: //button[text()='Create cluster']/../../..//button[@aria-label='Actions']
           op: click
         - selector:
             xpath: //a[text()='Register cluster' and contains(@href, '/openshift/register')]
         - selector:
             xpath: //a[text()='Show archived clusters' and contains(@href, '/openshift/archived')]
         - selector:
-            xpath: //button[text()='Create cluster']/../..//button[@aria-label='Actions']
+            xpath: //button[text()='Create cluster']/../../..//button[@aria-label='Actions']
           op: click
     elements:
         - selector:
             xpath: //div[@id='cluster-list-toolbar']//span[contains(., 'of')]
         - selector:
-            xpath: //div[@id='cluster-list-toolbar']//button[@id='pagination-options-menu-toggle']
+            xpath: //button[@id='pagination-options-menu-toggle-2']
           op: click
         - selector:
             xpath: //ul[@aria-labelledby='pagination-options-menu-toggle']/li/button[@data-action='per-page-10' and text()='10']
@@ -55,7 +57,7 @@ check_cluster_list_page:
         - selector:
             xpath: //ul[@aria-labelledby='pagination-options-menu-toggle']/li/button[@data-action='per-page-100' and text()='100']
         - selector:
-            xpath: //div[@id='cluster-list-toolbar']//button[@id='pagination-options-menu-toggle']
+            xpath: //button[@id='pagination-options-menu-toggle-4']
           op: click
         - selector:
             css: nav.pf-c-pagination__nav
@@ -63,7 +65,7 @@ check_cluster_list_page:
             xpath: //button[@aria-label='Refresh']
     elements:
         - selector:
-            xpath: //button[@class='pf-c-button pf-m-plain' and text()='Name']
+            xpath: //span[text()='Name']
         - selector:
             xpath: //span[@class='pf-c-table__sort-indicator']
         - selector:
@@ -78,9 +80,9 @@ check_cluster_list_page:
             xpath: //th[@data-label='Provider (Location)' and text()='Provider (Location)']
     elements:
         - selector:
-            xpath: //div[@class='pf-c-pagination pf-m-footer']//span[contains(., 'of')]
+            xpath: //div[@class='pf-c-pagination pf-m-bottom']//span[contains(., 'of')]
         - selector:
-            xpath: //div[@class='pf-c-pagination pf-m-footer']//button[@id='pagination-options-menu-toggle']
+            xpath: //button[@id='pagination-options-menu-toggle-3']
 check_clusters_list_info:
     elements:
         - selector: 
@@ -89,6 +91,11 @@ check_clusters_list_info:
             xpath: //a[text()='<cluster_name>']/../../td[@data-label='Status']/span[text()='<cluster_status>']
         - selector:
             xpath: //a[text()='<cluster_name>']/../../td[@data-label='Type']/span[text()='<cluster_type>']
+check_clusters_list_info_include_provider:
+    action: check_clusters_list_info
+    element:
+        selector:
+            xpath: //a[text()='<cluster_name>']/../../td[@data-label='Provider (Location)' and text()='<provider>' and contains(., '<location>')]
 check_hover_in_cluster_list:
     elements:
         - selector:
@@ -102,7 +109,7 @@ check_hover_in_cluster_list:
         - selector:
             xpath: //div[@class='tippy-popper' and contains(., 'Dedicated')]
         - selector:
-            xpath: //td[@data-label='Name']/a[text()='sdqe-ui-ocp']
+            xpath: //tr[1]/td[@data-label='Name']/a
           op: hover
         - selector:
             xpath: //div[@class='tippy-popper' and contains(., 'cluster name:')]
@@ -151,7 +158,7 @@ filter_dropdown_menu_loaded:
     - selector:
         xpath: //label[@class='pf-c-check__label' and text()='Unknown']
     - selector:
-        xpath: //label[@class='pf-c-dropdown__group-title' and text()='Cluster Type']
+        xpath: //label[@class='pf-c-dropdown__group-title' and text()='Cluster type']
     - selector:
         xpath: //label[@class='pf-c-check__label' and text()='OSD']
     - selector:
@@ -171,7 +178,7 @@ click_create_cluster_button:
 click_actions_behind_create_button:
     element:
         selector:
-            xpath: //button[text()='Create cluster']/../../../div[@id='cluster-list-toolbar']//button[@aria-label='Actions']
+            xpath: //button[text()='Create cluster']/../../../div//button[@aria-label='Actions']
         op: click
 actions_behind_create_button_menu_loaded:
     elements:
@@ -255,7 +262,6 @@ expand_cluster_actions_on_cluster_list_page:
         selector:
             xpath: //td[@data-label='Name']/a[contains(text(),'<cluster_name>')]/../following-sibling::td//button[@aria-label='Actions']
         op: click
-        timeout: 30
 close_cluster_actions_on_cluster_list_page:
     action: expand_cluster_actions_on_cluster_list_page
 check_cluster_actions_on_cluster_list_page_all_enabled:
@@ -272,22 +278,22 @@ check_cluster_actions_on_cluster_list_page_partial_enabled:
 click_launch_console_button_on_cluster_list_page:
     element:
         selector:
-            xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Launch Console']
+            xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Open console']
         op: click
 click_edit_display_name_button_on_cluster_list_page:
     element:
         selector:
-            xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Edit Display Name']
+            xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Edit display name']
         op: click
 click_scale_cluster_button_on_cluster_list_page:
     element:
         selector:
-            xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Scale Cluster']
+            xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Scale cluster']
         op: click
 click_delete_cluster_button_on_cluster_list_page:
     element:
         selector:
-            xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Delete Cluster']
+            xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Delete cluster']
         op: click
 click_clear_filters_button:
     element:
@@ -306,32 +312,32 @@ click_clear_spec_filter:
         op: click
 disabled_launch_console_button_on_cluster_list_page_loaded:
     element:
-        xpath: //button[@class='pf-m-disabled pf-c-dropdown__menu-item' and text()='Launch Console']
+        xpath: //button[@class='pf-m-disabled pf-c-dropdown__menu-item' and text()='Open console']
 disabled_scale_cluster_button_on_cluster_list_page_loaded:
     element:
         selector:
-            xpath: "//button[@class='pf-c-dropdown__menu-item pf-m-disabled' and text()='Scale Cluster']"
+            xpath: "//button[@class='pf-c-dropdown__menu-item pf-m-disabled' and text()='Scale cluster']"
 enabled_delete_cluster_button_on_cluster_list_page_loaded:
     element:
         selector:
-            xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Delete Cluster']
+            xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Delete cluster']
 enabled_edit_display_name_button_on_cluster_list_page_loaded:
     element:
         selector:
-            xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Edit Display Name']
+            xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Edit display name']
 enabled_scale_cluster_button_on_cluster_list_page_loaded:
     element:
         selector:
-            xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Scale Cluster']
+            xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Scale cluster']
 enabled_launch_console_button_on_cluster_list_page_loaded:
     element:
         selector:
-            xpath: //a[@class='pf-c-dropdown__menu-item' and text()='Launch Console']
+            xpath: //a[@class='pf-c-dropdown__menu-item' and text()='Open console']
 click_archive_button_on_cluster_list_page:
     action: expand_cluster_actions_on_cluster_list_page
     element:
         selector:
-            xpath: //button[@class='pf-c-dropdown__menu-item' and text()='Archive Cluster']
+            xpath: //button[text()='Archive cluster']
         op: click
 go_to_archived_cluster_page:
     action: expand_actions_behind_create_button
@@ -362,7 +368,7 @@ go_to_disconnected_cluster_register_page:
 click_scale_cluster_in_action_dropdown:
   element:
     selector:
-      xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Scale Cluster']
+      xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Scale cluster']
     op: click
 go_to_scale_cluster_dialog_on_cluster_list_page:
   action: expand_cluster_actions_on_cluster_list_page
@@ -399,18 +405,20 @@ go_to_access_control_tab:
 click_logout_button:
   element:
     selector:
-      xpath: //div[@aria-label='Overflow actions']/button[@class='pf-c-dropdown__toggle pf-m-plain']
+      xpath: //div[@aria-label='Overflow actions']/button
     op: click
   element:
     selector:
-      xpath: //button[@class='pf-c-dropdown__menu-item' and text()='Logout']
+      xpath: //button[@class='pf-c-dropdown__menu-item' and (text()='Logout' or text()='Log out')]
     op: click
     timeout: 20
 logout_page_loaded:
   element:
     selector:
       xpath: //button[contains(., 'Log in to your Red Hat account')]
-go_to_osd_cluster_creation_page:
-  action: click_create_cluster_button
-  action: click_create_osd_button
-  action: osd_creation_page_loaded
+scale_loadbalancer_from_cluster_list_page:
+  action: go_to_scale_cluster_dialog_on_cluster_list_page
+  action: choose_loadbalancer_in_dialog
+scale_persistent_quota_from_cluster_list_page:
+  action: go_to_scale_cluster_dialog_on_cluster_list_page
+  action: choose_persistent_quota_in_dialog
