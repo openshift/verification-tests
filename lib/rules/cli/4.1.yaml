@@ -1405,8 +1405,8 @@
     :etcd_version: !ruby/regexp '/etcd (.+)$/'
 :oadm_top_node:
   :cmd: oc adm top node
-:oadm_top_specific_node:
-  :cmd: oc adm top node <node_name>
+  :options:
+    :node_name: <value>
 :registry_info:
   :cmd: oc registry info
   :options:

@@ -1408,8 +1408,6 @@
   :cmd: oc adm top node
   :options:
     :node_name: <value>
-:oadm_top_specific_node:
-  :cmd: oc adm top node <node_name>
 :registry_info:
   :cmd: oc registry info
   :options:
