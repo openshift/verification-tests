@@ -43,6 +43,31 @@ module BushSlicer
       instance_state == 'running'
     end
 
+    def azure_location(user: nil, cached: true, quiet: false)
+       raw_resource(user: user, cached: cached ,quiet: quiet).
+         dig('spec', 'providerSpec', 'value', 'location')
+    end
+
+    def gcp_region(user: nil, cached: true, quiet: false)
+       raw_resource(user: user, cached: cached ,quiet: quiet).
+         dig('spec', 'providerSpec', 'value', 'region')
+    end
+
+    def gcp_zone(user: nil, cached: true, quiet: false)
+       raw_resource(user: user, cached: cached ,quiet: quiet).
+         dig('spec', 'providerSpec', 'value', 'zone')
+    end
+
+    def aws_ami_id(user: nil, cached: true, quiet: false)
+       raw_resource(user: user, cached: cached ,quiet: quiet).
+         dig('spec', 'providerSpec', 'value', 'ami','id')
+    end
+
+    def aws_availability_zone(user: nil, cached: true, quiet: false)
+       raw_resource(user: user, cached: cached ,quiet: quiet).
+         dig('spec', 'providerSpec', 'value', 'placement','availabilityZone')
+    end
+
     def deleting?(user: nil, cached: true, quiet: false)
       ! raw_resource(user: user, cached: cached, quiet: quiet).
           dig('metadata', 'deletionTimestamp').nil?
