@@ -62,7 +62,7 @@ Given /^scc policy #{QUOTED} is restored after scenario$/ do |policy|
   }
 end
 
-Given /^SCC #{QUOTED} is (added to|removed from) the #{QUOTED} (user|group|service account)$/ do |scc, op, which, type|
+Given /^SCC #{QUOTED} is (added to|removed from) the #{QUOTED} (user|group|service account)( without teardown)?$/ do |scc, op, which, type, no_teardown|
   ensure_admin_tagged
   _admin = admin
 
@@ -105,7 +105,7 @@ Given /^SCC #{QUOTED} is (added to|removed from) the #{QUOTED} (user|group|servi
     @result = _admin.cli_exec(_command, **_opts)
     @result[:success]
   }
-  if @result[:success]
+  if @result[:success] && !no_teardown
     teardown_add {
       _res = nil
       wait_for(60, interval: 5) {
