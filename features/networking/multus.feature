@@ -1485,7 +1485,7 @@ Feature: Multus-CNI related scenarios
       | ["metadata"]["namespace"] | <%= project.name %>    |
       | ["metadata"]["name"]      | whereabouts-largerange |
       | ["spec"]["config"]        |'{ "cniVersion": "0.3.0", "type": "macvlan","mode": "bridge", "ipam": { "type": "whereabouts", "range": "192.168.42.0/24"} }' |
-      Then the step should succeed
+    Then the step should succeed
     
     # Create a pod absorbing above net-attach-def
     When I run oc create over "generic_multus_pod.yaml" replacing paths:
