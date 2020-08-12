@@ -213,7 +213,7 @@ Feature: Testing registry
       | reference_policy | local                                                |
     Then the step should succeed
     When I run the :new_app client command with:
-      | template | mysql-persistent              |
+      | template | mysql-ephemeral               | 
       | p        | NAMESPACE=<%= project.name %> |
     Then the step should succeed
     When a pod becomes ready with labels:

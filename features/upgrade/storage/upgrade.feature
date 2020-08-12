@@ -172,3 +172,139 @@ Feature: Storage upgrade tests
     Given the expression should be true> cluster_operator('storage').condition(type: 'Degraded')['status'] == "False"
     Given the expression should be true> cluster_operator('storage').condition(type: 'Upgradeable')['status'] == "True"
 
+  # @author chaoyang@redhat.com
+  # @case_id OCP-28630
+  @upgrade-prepare
+  @users=upuser1,upuser2
+  @admin
+  Scenario: Snapshot operator should be in available status after upgrade and can created pod with snapshot - prepare
+    Given the master version >= "4.4"
+ 
+    #Deploy csi hostpath driver 
+    When I run the :new_project client command with:
+      | project_name | csihostpath |
+    
+    Given I switch to cluster admin pseudo user		
+    When I use the "csihostpath" project
+
+    Given I obtain test data file "storage/csi/csi-rbac.yaml"   
+    When I run the :apply client command with:
+      | f | csi-rbac.yaml | 
+    Then the step should succeed
+    Given SCC "privileged" is added to the "csi-provisioner" service account
+    Given SCC "privileged" is added to the "csi-attacher" service account
+    Given SCC "privileged" is added to the "csi-snapshotter" service account
+    Given SCC "privileged" is added to the "csi-plugin" service account
+
+    Given I obtain test data file "storage/csi/csi-hostpath-attacher.yaml"
+    When I run the :apply client command with:
+      | f | csi-hostpath-attacher.yaml |
+    Then the step should succeed
+
+    Given I obtain test data file "storage/csi/csi-hostpath-driverinfo.yaml"
+    When I run the :apply client command with:
+      | f | csi-hostpath-driverinfo.yaml |
+    Then the step should succeed
+
+    Given I obtain test data file "storage/csi/csi-hostpath-plugin.yaml"
+    When I run the :apply client command with:
+      | f | csi-hostpath-plugin.yaml |
+    Then the step should succeed
+
+    Given I obtain test data file "storage/csi/csi-hostpath-provisioner.yaml"
+    When I run the :apply client command with:
+      | f | csi-hostpath-provisioner.yaml |
+    Then the step should succeed
+
+    Given I obtain test data file "storage/csi/csi-hostpath-snapshotter.yaml"
+    When I run the :apply client command with:
+      | f | csi-hostpath-snapshotter.yaml |
+    Then the step should succeed
+
+    And I wait up to 360 seconds for the steps to pass:
+    """
+    Given the pod named "csi-hostpath-attacher-0" is ready
+    Given the pod named "csi-hostpath-provisioner-0" is ready
+    Given the pod named "csi-hostpath-snapshotter-0" is ready
+    Given the pod named "csi-hostpathplugin-0" is ready
+    """
+    
+    #Create storageclass volumesnapshotclass
+    Given I obtain test data file "storage/csi/csi-storageclass.yaml"
+    When I run the :apply client command with:
+      | f | csi-storageclass.yaml |
+    Then the step should succeed
+
+    Given I obtain test data file "storage/csi/snapshotclass.yaml"
+    When I run the :apply client command with:
+      | f | snapshotclass.yaml |
+    Then the step should succeed
+
+    #Create pvc/pod/volumesnapshot
+    Given I obtain test data file "storage/misc/pvc-with-storageClassName.json"
+    When I run oc create over "pvc-with-storageClassName.json" replacing paths:
+      | ["metadata"]["name"]         | pvc-hostpath    |
+      | ["spec"]["storageClassName"] | csi-hostpath-sc |
+
+    Given I obtain test data file "storage/misc/pod.yaml"
+    When I run oc create over "pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                         | mypod         |
+      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | pvc-hostpath  |
+      | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt/hostpath |
+    Then the step should succeed
+    Given the pod named "mypod" becomes ready
+
+    When I execute on the pod:
+      | touch | /mnt/hostpath/test-before-upgrade |
+    Then the step should succeed
+
+    Given I ensure "mypod" pod is deleted
+
+    #Create volumesnapshot
+    Given I obtain test data file "storage/csi/volumesnapshot.yaml"
+    When I run oc create over "volumesnapshot.yaml" replacing paths:
+      | ["metadata"]["name"]                            | pvc-hostpath-snapshot  |
+      | ["spec"]["volumeSnapshotClassName"]             | csi-hostpath-snapclass |
+      | ["spec"]["source"]["persistentVolumeClaimName"] | pvc-hostpath           |
+    Then the step should succeed
+    And I wait up to 180 seconds for the steps to pass:
+    """
+    When I run the :describe client command with:
+      | resource | volumesnapshot        |
+      | name     | pvc-hostpath-snapshot |
+    Then the output should match "Ready To Use\:\s+true"
+    """
+
+  # @author chaoyang@redhat.com
+  @upgrade-check
+  @admin
+  Scenario: Snapshot operator should be in available status after upgrade and can created pod with snapshot
+    Given I switch to cluster admin pseudo user
+
+    #Snapshot operator/controller status checking
+    Given the "csi-snapshot-controller" operator version matches the current cluster version
+
+    Given the status of condition "Degraded" for "csi-snapshot-controller" operator is: False
+    Given the status of condition "Progressing" for "csi-snapshot-controller" operator is: False
+    Given the status of condition "Available" for "csi-snapshot-controller" operator is: True
+    Given the status of condition "Upgradeable" for "csi-snapshot-controller" operator is: True
+
+    #Restore works
+    When I use the "csihostpath" project
+    Given I obtain test data file "storage/csi/restorepvc.yaml"
+    Then I run oc create over "restorepvc.yaml" replacing paths:
+      | ["spec"]["storageClassName"]   | csi-hostpath-sc       |
+      | ["spec"]["dataSource"]["name"] | pvc-hostpath-snapshot | 
+    Then the step should succeed
+
+    Given I obtain test data file "storage/misc/pod.yaml"
+    When I run oc create over "pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                         | mypod-restore |
+      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | restore-pvc   |
+      | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt/hostpath |
+    Given the pod named "mypod-restore" becomes ready
+
+    When I execute on the pod:
+      | ls | /mnt/hostpath |
+    Then the output should contain:
+      | test-before-upgrade |      

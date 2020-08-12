@@ -335,9 +335,37 @@ check_name_column_header:
   params:
     column_name: Name
   action: check_column_header
+check_namespace_column_header:
+  params:
+    column_name: Namespace
+  action: check_column_header
 check_status_column_header:
   params:
-    column_name: Name
+    column_name: Status
+  action: check_column_header
+check_ready_column_header:
+  params:
+    column_name: Ready
+  action: check_column_header
+check_restarts_column_header:
+  params:
+    column_name: Restarts
+  action: check_column_header
+check_owner_column_header:
+  params:
+    column_name: Owner
+  action: check_column_header
+check_memory_column_header:
+  params:
+    column_name: Memory
+  action: check_column_header
+check_cpu_column_header:
+  params:
+    column_name: CPU
+  action: check_column_header
+check_created_column_header:
+  params:
+    column_name: Created
   action: check_column_header
 check_resource_name_and_icon:
   action:
@@ -550,6 +578,14 @@ choose_item_from_dropdown_menu:
       xpath: //ul[contains(@class, 'pf-c-dropdown__menu')]
     timeout: 20
   action: click_dropdown_menu_item
+navigate_to_admin_console:
+  elements:
+  - selector:
+      xpath: //button[@data-test-id='perspective-switcher-toggle']
+    op: click
+  - selector:
+      xpath: //li//h1[contains(., 'Administrator')]
+    op: click
 upload_file_for_one_field:
   elements:
   - selector:

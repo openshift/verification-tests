@@ -116,24 +116,20 @@ Feature: oc_delete.feature
     Given I obtain test data file "pods/graceful-delete/10.json"
     When I run the :create client command with:
       | f | 10.json |
+    Then the step should succeed
     Given the pod named "grace10" becomes ready
     When I run the :get client command with:
-      | resource | pods |
+      | resource      | pods    |
       | resource_name | grace10 |
-      | o | yaml |
+      | o             | yaml    |
     Then the output should contain "terminationGracePeriodSeconds: 10"
     When I run the :delete background client command with:
-      | object_type | pod |
-      | l | name=graceful |
+      | object_type | pod           |
+      | l           | name=graceful |
     Then the step should succeed
     When I get project pods
-    Then the step should succeed
-    And the output should contain "Terminating"
-    Given 25 seconds have passed
-    When I get project pods
-    Then the step should succeed
-    And the output should not contain "Terminating"
-    And the output should not contain "Running"
+    Then the output should contain "Terminating"
+    And I wait for the resource "pod" named "grace10" to disappear within 120 seconds
 
   # @author cryan@redhat.com
   # @case_id OCP-11526

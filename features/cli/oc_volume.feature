@@ -14,9 +14,9 @@ Feature: oc_volume.feature
       | secret_name | test-secret |
       | sa_name     | default     |
     Then the step should succeed
-    When I run the :run client command with:
-      | name         | mydc                                                                                                          |
-      | image        | quay.io/openshifttest/hello-openshift@sha256:424e57db1f2e8e8ac9087d2f5e8faea6d73811f0b6f96301bc94293680897073 |
+    When I run the :new_app_as_dc client command with:
+      | docker_image | quay.io/openshifttest/storage@sha256:a05b96d373be86f46e76817487027a7f5b8b5f87c0ac18a246b018df11529b40 |
+      | name         | mydc                                                                                                  |
     Then the step should succeed
     Given a pod becomes ready with labels:
       | deployment=mydc-1 |
@@ -79,15 +79,15 @@ Feature: oc_volume.feature
     Then the step should succeed
 
     When I run the :get client command with:
-      | resource | dc/mydc                                                   |
-      | o        | jsonpath={.spec.template.spec.containers[*].volumeMounts} |
+      | resource | dc/mydc                              |
+      | o        | custom-columns=volume:..volumeMounts |
     Then the step should succeed
     And the output should contain 1 times:
       | name:secret |
 
     When I run the :get client command with:
-      | resource | rc/mydc-1                                                 |
-      | o        | jsonpath={.spec.template.spec.containers[*].volumeMounts} |
+      | resource | rc/mydc-1                            |
+      | o        | custom-columns=volume:..volumeMounts |
     Then the step should succeed
     And the output should contain 1 times:
       | name:secret |

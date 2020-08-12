@@ -11,3 +11,55 @@ check_tutorial_link_of_openshift_pipeline:
 check_links_in_pipeline_deprecation_note:
   action: check_openshift_pipeline_release_link
   action: check_tutorial_link_of_openshift_pipeline
+check_pipelines_sub_menu:
+  params:
+    secondary_menu: Pipelines
+  action: check_secondary_menu
+check_pipeline_runs_sub_menu:
+  params:
+    secondary_menu: Pipeline Runs
+  action: check_secondary_menu
+check_pipeline_resources_sub_menu:
+  params:
+    secondary_menu: Pipeline Resources
+  action: check_secondary_menu
+check_tasks_sub_menu:
+  params:
+    secondary_menu: Tasks
+  action: check_secondary_menu
+check_task_runs_sub_menu:
+  params:
+    secondary_menu: Task Runs
+  action: check_secondary_menu
+check_cluster_tasks_sub_menu:
+  params:
+    secondary_menu: Cluster Tasks
+  action: check_secondary_menu
+check_pipeline_related_menus:
+  params:
+    primary_menu: Pipelines
+  action: expand_primary_menu
+  action: check_pipelines_sub_menu
+  action: check_pipeline_runs_sub_menu
+  action: check_pipeline_resources_sub_menu
+  action: check_tasks_sub_menu
+  action: check_task_runs_sub_menu
+  action: check_cluster_tasks_sub_menu
+check_pipeline_resource_item:
+  params:
+    resource_type: Pipeline
+    resource_name: <pipeline_name>
+    resource_link: /k8s/ns/<project_name>/tekton.dev~v1beta1~Pipeline/<pipeline_name>
+  action: check_resource_item
+check_pipeline_resources_resource_item:
+  params:
+    resource_type: PipelineResource
+    resource_name: <pipelineresource_name>
+    resource_link: /k8s/ns/<project_name>/tekton.dev~v1alpha1~PipelineResource/<pipelineresource_name>
+  action: check_resource_item
+check_task_resource_item:
+  params:
+    resource_type: Task
+    resource_name: <task_name>
+    resource_link: /k8s/ns/<project_name>/tekton.dev~v1beta1~Task/<task_name>
+  action: check_resource_item

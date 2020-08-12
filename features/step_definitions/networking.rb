@@ -49,8 +49,9 @@ Given /^the env is using one of the listed network plugins:$/ do |table|
   _admin = admin
 
   @result = _admin.cli_exec(:get, resource: "clusternetwork", resource_name: "default", template: '{{.pluginName}}')
-  if @result[:success] then
-    plugin_name = @result[:response].split("-").last
+  if @result[:success]
+    # only check stdout because stderr can contain "-" and cause the split to fail
+    plugin_name = @result[:stdout].to_s.split("-").last
     unless plugin_list.include? plugin_name
       raise "the env network plugin is #{plugin_name} but expecting #{plugin_list}."
     end
@@ -589,7 +590,7 @@ Given /^I store a random unused IP address from the reserved range to the#{OPT_S
 
   validate_ip = IPAddr.new(reserved_range).to_range.to_a.shuffle.each { |ip|
     @result = step "I run command on the node's ovs pod:", table(
-      "| ping | -c1 | -W2 | #{ip} |"
+      "| ping | -c4 | -W2 | #{ip} |"
     )
     if @result[:exitstatus] == 0
       logger.info "The IP is in use."
@@ -711,13 +712,15 @@ Given /^the default interface on nodes is stored in the#{OPT_SYM} clipboard$/ do
   end
   case networkType
   when "OVNKubernetes"
-    step %Q/I run command on the node's ovnkube pod:/, table("| bash | -c | ip route show default |")
+    # use -4 to limit output to just `default` interface, fixed in later iproute2 versions
+    step %Q/I run command on the node's ovnkube pod:/, table("| ip | -4 | route | show | default |")
   when "OpenShiftSDN"
-    step %Q/I run command on the node's sdn pod:/, table("| bash | -c | ip route show default |")
+    step %Q/I run command on the node's sdn pod:/, table("| ip | -4 | route | show | default |")
   else
     raise "unknown networkType"
   end
-  cb[cb_name] = @result[:response].split("\n").first.split(/\W+/)[7]
+  # OVN uses `br-ex` and `-` is not a word char, so we have to split on whitespace
+  cb[cb_name] = @result[:response].split("\n").first.split[4]
   logger.info "The node's default interface is stored in the #{cb_name} clipboard."
 end
 
@@ -732,7 +735,7 @@ end
 Given /^the bridge interface named "([^"]*)" is deleted from the "([^"]*)" node$/ do |bridge_name, node_name|
   ensure_admin_tagged
   check_and_delete_inf= %Q(if ip addr show  #{bridge_name};
-                           then 
+                           then
                               ip link delete #{bridge_name};
                            fi)
   node = node(node_name)
@@ -796,6 +799,21 @@ Given /^the env is using "([^"]*)" networkType$/ do |network_type|
   @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
   raise "the networkType is not #{network_type}" unless @result[:response] == network_type
 end
+
+Given /^the env is using windows nodes$/ do
+  ensure_admin_tagged
+  _admin = admin
+  @result = _admin.cli_exec(:get, resource: "nodes", show_label:true)
+  raise "env doesn't have any windows node" unless @result[:response].include? "kubernetes.io/os=windows"
+end
+
+Given /^the env has hybridOverlayConfig enabled$/ do
+  ensure_admin_tagged
+  _admin = admin
+  @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.ovnKubernetesConfig}")
+  raise "env doesn't have hybridOverlayConfig enabled" unless @result[:response].include? "hybridOverlayConfig"
+end
+
 
 Given /^the bridge interface named "([^"]*)" with address "([^"]*)" is added to the "([^"]*)" node$/ do |bridge_name,address,node_name|
   ensure_admin_tagged
@@ -876,7 +894,7 @@ Given /^the vxlan tunnel address of node "([^"]*)" is stored in the#{OPT_SYM} cl
   end
   case networkType
   when "OVNKubernetes"
-    inf_name="ovn-k8s-mp0" 
+    inf_name="ovn-k8s-mp0"
     @result = host.exec_admin("ifconfig #{inf_name.split("\n")[0]}")
     cb[cb_address] = @result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]
   when "OpenShiftSDN"
@@ -899,15 +917,17 @@ Given /^the Internal IP of node "([^"]*)" is stored in the#{OPT_SYM} clipboard$/
   end
   case networkType
   when "OVNKubernetes"
-    step %Q/I run command on the node's ovnkube pod:/, table("| bash | -c | ip route show default |")
+    # use -4 to limit output to just `default` interface, fixed in later iproute2 versions
+    step %Q/I run command on the node's ovnkube pod:/, table("| ip | -4 | route | show | default |")
   when "OpenShiftSDN"
-    step %Q/I run command on the node's sdn pod:/, table("| bash | -c | ip route show default |")
+    step %Q/I run command on the node's sdn pod:/, table("| ip | -4 | route | show | default |")
   else
     raise "unknown networkType"
   end
-  def_inf = @result[:response].split("\n").first.split(/\W+/)[7]
+  # OVN uses `br-ex` and `-` is not a word char, so we have to split on whitespace
+  def_inf = @result[:response].split("\n").first.split[4]
   logger.info "The node's default interface is #{def_inf}"
-  @result = host.exec_admin("ifconfig #{def_inf}")
+  @result = host.exec_admin("ip -4 -brief addr show #{def_inf}")
   cb[cb_ipaddr]=@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]
   logger.info "The Internal IP of node is stored in the #{cb_ipaddr} clipboard."
 end
@@ -985,7 +1005,7 @@ Given /^OVN is functional on the cluster$/ do
   ovnkube_master_ds = daemon_set('ovnkube-master', project('openshift-ovn-kubernetes')).replica_counters(user: admin,cached: false)
   desired_ovnkube_node_replicas, available_ovnkube_node_replicas = ovnkube_node_ds.values_at(:desired, :available)
   desired_ovnkube_master_replicas, available_ovnkube_master_replicas = ovnkube_master_ds.values_at(:desired, :available)
-  
+
   raise "OVN is not running correctly! Check one of your ovnkube-node pod" unless desired_ovnkube_node_replicas == available_ovnkube_node_replicas && available_ovnkube_node_replicas != 0
   raise "OVN is not running correctly! Check one of your ovnkube-master pod" unless desired_ovnkube_master_replicas == available_ovnkube_master_replicas && available_ovnkube_master_replicas != 0
 end
@@ -1005,6 +1025,74 @@ Given /^I enable multicast for the "(.+?)" namespace$/ do | project_name |
   @result = admin.cli_exec(:annotate, resource: space, resourcename: project_name, keyval: annotation)
   unless @result[:success]
     raise "Failed to apply the default deny annotation to specified namespace."
-  end 
+  end
   logger.info "The multicast is enable in the #{project_name} project"
+end
+
+Given /^I get the ptp logs of the "([^"]*)" node since "(.+)" ago$/ do | node_name, duration |
+  ensure_admin_tagged
+  node_name ||= node.name
+
+  # Only return logs newer than a relative duration like 5s, 2m, or 3h.
+  ptp_pod = BushSlicer::Pod.get_labeled("app=linuxptp-daemon", project: project("openshift-ptp", switch: false), user: admin) { |pod, hash|
+    pod.node_name == node_name
+  }.first
+  @result = admin.cli_exec(:logs, resource_name: ptp_pod.name, n: "openshift-ptp", since: duration)
+end
+
+Given /^the ptp operator is running well$/ do
+  ensure_admin_tagged
+  step %Q/I switch to cluster admin pseudo user/
+
+  unless project('openshift-ptp').exists?
+    if env.version_eq("4.3", user: user) || env.version_eq("4.4", user: user)
+      ns = "ns43.yaml"
+      dr = "43"
+    elsif env.version_ge("4.5", user: user)
+      ns = "ns45.yaml"
+      dr = "45"
+    end
+    step %Q{I obtain test data file "networking/ptp/namespace/#{dr}/#{ns}"}
+    step %Q/I run the :create admin command with:/,table(%{
+      | f | #{ns} |
+    })
+    step %Q{the step should succeed}
+  end
+
+  step %Q/I use the "openshift-ptp" project/
+  unless operator_group('ptp-operators').exists?
+    step %Q{I obtain test data file "networking/ptp/og/og.yaml"}
+    step %Q/I run the :create admin command with:/,table(%{
+      | f | og.yaml |
+    })
+    step %Q{the step should succeed}
+  end
+
+  unless subscription('openshift-ptp').exists?
+    step %Q/evaluation of `cluster_version('version').channel.split('-')[1]` is stored in the :ocp_cluster_version clipboard/
+    step %Q{I obtain test data file "networking/ptp/subscription/sub.yaml"}
+    step %Q/I run oc create over "sub.yaml" replacing paths:/,table(%{
+      | ["spec"]["channel"] | "#{cb.ocp_cluster_version}" |
+    })
+    step %Q{the step should succeed}
+  end
+
+  step %Q/ptp operator is ready/
+  step %Q/ptp config daemon is ready/
+end
+
+Given /^ptp operator is ready$/ do
+  ensure_admin_tagged
+  project("openshift-ptp")
+  step %Q/a pod becomes ready with labels:/, table(%{
+    | name=ptp-operator |
+  })
+end
+
+Given /^ptp config daemon is ready$/ do
+  ensure_admin_tagged
+  project("openshift-ptp")
+  step %Q/a pod becomes ready with labels:/, table(%{
+    | app=linuxptp-daemon |
+  })
 end

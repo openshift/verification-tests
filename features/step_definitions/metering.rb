@@ -69,6 +69,13 @@ Given /^I install metering service using:$/ do | table |
   when "HDFS"
     metering_config ||= "metering/configs/meteringconfig_hdfs.yaml"
   end
+  # if we have an existing metering installation and the meteringconfig hive
+  # storage type is different, then we delete the existing meteringconfig
+  if metering_config(cb.metering_ns).exists?
+    if metering_config(cb.metering_ns).hive_type != storage_type
+      step %Q(I ensure "<%= cb.metering_ns %>" meteringconfig is deleted)
+    end
+  end
   step %Q(I run oc create as admin over ERB test file: #{metering_config})
   step %Q(all metering related pods are running in the project)
   step %Q/all reportdatasources are importing from Prometheus/
@@ -281,11 +288,16 @@ Given /^the#{OPT_QUOTED} metering service is uninstalled using OLM$/ do | meteri
   ensure_destructive_tagged
   metering_ns ||= "openshift-metering"
   step %Q/I switch to cluster admin pseudo user/ unless env.is_admin? user
-  project(metering_ns)
-  step %Q(I ensure "openshift-metering" meteringconfig is deleted)
-  step %Q(I ensure "metering-ocp-sub" subscription is deleted)
-  step %Q(I ensure "metering-ocp-og" subscription is deleted)
-  step %Q/I ensure "#{metering_ns}" project is deleted/
+  if project(metering_ns).exists?
+    step %Q(I ensure "openshift-metering" meteringconfig is deleted)
+    step %Q(I ensure "metering-ocp-sub" subscription is deleted)
+    step %Q(I ensure "metering-ocp-og" subscription is deleted)
+    step %Q/I ensure "#{metering_ns}" project is deleted/
+  end
+end
+
+Given /^I remove metering service from the #{QUOTED} project$/ do | metering_ns |
+  step %Q/the "#{metering_ns}" metering service is uninstalled using OLM/
 end
 
 Given /^all reportdatasources are importing from Prometheus$/ do

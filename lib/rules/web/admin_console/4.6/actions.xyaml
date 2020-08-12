@@ -1,0 +1,103 @@
+click_one_dropdown_action:
+  action: click_resource_action_button
+  action: choose_action_item_from_list
+click_resource_action_button:
+  elements:
+  - selector:
+      xpath: //button[contains(.,'Actions')]
+    op: click
+    timeout: 30
+click_resource_action_button_on_sidebar:
+  elements:
+  - selector:
+      xpath: //div[contains(@class, 'overview__sidebar-pane')]//button[contains(.,'Actions')]
+    op: click
+    timeout: 30
+choose_action_item_from_list:
+  elements:
+  - selector:
+      xpath: //*[@data-test-id="action-items"]
+  - selector:
+      xpath: //button[@data-test-action='<item>' and not(@disabled)]
+    op: click
+edit_pod_count_action:
+  params:
+    item: Edit Pod Count
+  action: click_one_dropdown_action
+choose_item_from_list:
+  elements:
+  - selector:
+      xpath: //li//*[@id='<item>-link']
+    op: click
+click_resource_action_icon:
+  elements:
+  - selector:
+      xpath: //h1[text()='<resource_name>']/ancestor::tr//td/div[contains(@class,'dropdown')]
+    op: click
+# a combined action can be directly used for Edit Labels
+add_label_for_resource:
+  action: click_one_dropdown_action
+  action: add_label
+  action: submit_changes
+add_label:
+  elements:
+  - selector:
+      id: tags-input
+    type: input
+    op: send_keys <new_label>
+  - selector:
+      id: tags-input
+    type: input
+    op: send_keys <press_enter>
+
+# a combined action can be directly used for Edit Annotations
+add_annotation_for_resource:
+  params:
+    item: Edit Annotations
+  action: click_one_dropdown_action
+  action: add_annotation
+  action: submit_changes
+add_annotation:
+  action: click_add_more_button
+  elements:
+  - selector:
+      xpath: //input[contains(@placeholder,'key')]
+    op: send_keys <annotation_key>
+  - selector:
+      xpath: //input[contains(@placeholder,'value')]
+    op: send_keys <annotation_value>
+
+# Delete <Resource Type>
+delete_resource_panel:
+  action:
+    if_param:
+      cascade: 'false'
+    ref: uncheck_checkbox
+  action: submit_changes
+confirm_cancel_action:
+  action:
+    if_param:
+      cancel: 'true'
+    ref: submit_changes
+  action:
+    if_param:
+      cancel: 'false'
+    ref: click_not_cancel
+click_not_cancel:
+  element:
+    selector:
+      xpath: //button[@data-test-id='modal-cancel-action']
+    op: click
+create_autoscaler_action:
+  params:
+    item: Create Autoscaler
+  action: click_one_dropdown_action
+click_add_users_action:
+  params:
+    item: Add Users
+  action: click_one_dropdown_action
+click_remove_group_action:
+  params:
+    item: Delete Group
+  action: click_one_dropdown_action
+  action: submit_changes

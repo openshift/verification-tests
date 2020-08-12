@@ -15,7 +15,7 @@ check_creation_cards_page:
         - selector:
             xpath: //li[@class='pf-c-breadcrumb__item' and text()='Create']
         - selector:
-            xpath: //h1[@class='pf-c-title pf-m-2xl ocm-page-title' and text()='Create a Cluster to Get Started']
+            xpath: //h1[@class='pf-c-title pf-m-2xl ocm-page-title' and text()='Create a cluster to get started']
         - selector:
             xpath: //a[@class='infra-card pf-c-card create-cluster-card' and contains(@href, '/openshift/install')]
         - selector:
@@ -33,10 +33,16 @@ click_create_osd_button:
         selector:
             xpath: //a[@class='infra-card pf-c-card create-cluster-card' and contains(@href, '/openshift/create/osd')]
         op: click
+select_cluster_product_type:
+    element:
+        selector:
+            xpath: //a[@class='infra-card pf-c-card create-cluster-card' and contains(@href, '/openshift/create/<product_id>')]
+        op: click
 click_create_ocp_button:
     element:
         selector:
             xpath: //a[@class='infra-card pf-c-card create-cluster-card' and contains(@href, '/openshift/install')]
+        op: click
 
 check_osd_button_disable:
     elements:
@@ -45,3 +51,15 @@ check_osd_button_disable:
           op: hover
         - selector:
             xpath: //div[@class='tippy-popper' and contains(., 'You do not have quota for this option.')]
+
+check_cloud_provider_selection_page:
+    elements:
+        - selector:
+            xpath: //a[@href='/openshift/create/osd/aws']//h5[text()='Run on Amazon Web Services']
+        - selector:
+            xpath: //a[@href='/openshift/create/osd/gcp']//h5[text()='Run on Google Cloud Platform']
+select_cloud_provider:
+    element:
+        selector:
+            xpath: //a[@href='/openshift/create/osd/<cloud_provider>']
+        op: click

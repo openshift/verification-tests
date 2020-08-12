@@ -586,6 +586,7 @@
     :app_repo: <value>
     :code: --code=<value>
     :docker_image: --docker-image=<value>
+    :env: --env=<value>
     :image_stream: --image-stream=<value>
     :labels: --labels=<value>
     :name: --name=<value>
@@ -1404,6 +1405,8 @@
     :etcd_version: !ruby/regexp '/etcd (.+)$/'
 :oadm_top_node:
   :cmd: oc adm top node
+  :options:
+    :node_name: <value>
 :registry_info:
   :cmd: oc registry info
   :options:

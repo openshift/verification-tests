@@ -24,3 +24,4 @@ spec:
   - name: admin-creds
     secret:
       secretName: admin-kubeconfig
+  serviceAccountName: cluster-capacity-sa

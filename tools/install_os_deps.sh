@@ -24,7 +24,7 @@ elif [ "$(os_type)" == "rhel6" ]; then
     additional_deps=install_rvm_if_ruby_is_outdated
     need_bundler_from_gem=1
 elif [ "$(os_type)" == "rhel7" ] || [ "$(os_type)" == "centos7" ]; then
-    cmd="yum install -y --setopt=skip_missing_names_on_install=False"
+    cmd="yum install -y --setopt=skip_missing_names_on_install=False,tsflags=nodocs"
     file="deps.yum.RHEL7"
     additional_deps=install_rvm_if_ruby_is_outdated
     need_bundler_from_gem=1
