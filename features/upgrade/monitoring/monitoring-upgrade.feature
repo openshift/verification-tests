@@ -46,7 +46,7 @@ Feature: cluster monitoring related upgrade check
       | exec_command_arg | curl -k -H "Authorization: Bearer <%= cb.sa_token %>" https://prometheus-k8s.openshift-monitoring.svc:9091/api/v1/query?query=machine_cpu_cores |
     Then the step should succeed
     And the output should contain:
-      | "__name__":"machine_cpu_cores" |
+      | "__name__":"cluster_installer" |
 
     # curl -k -H "Authorization: Bearer $token" 'https://alertmanager-main.openshift-monitoring.svc:9094/api/v1/alerts'
     When I run the :exec admin command with:
