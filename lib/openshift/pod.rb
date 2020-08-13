@@ -21,6 +21,7 @@ module BushSlicer
       super
 
       m = pod_hash["metadata"]
+      props[:resourceVersion] = m["resourceVersion"]
       props[:generateName] = m["generateName"]
       props[:labels] = m["labels"]
       props[:created] = m["creationTimestamp"] # already [Time]
@@ -200,6 +201,11 @@ module BushSlicer
     # @note call without parameters only when props are loaded
     def node_name(user: nil, cached: true, quiet: false)
       return get_cached_prop(prop: :node_name, user: user, cached: cached, quiet: quiet)
+    end
+
+    # @note call without parameters only when props are loaded
+    def resourceVersion(user: nil, cached: true, quiet: false)
+      return get_cached_prop(prop: :resourceVersion, user: user, cached: cached, quiet: quiet)
     end
 
     def nodeselector(user: nil, cached: true, quiet: false)
