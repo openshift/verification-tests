@@ -843,3 +843,17 @@ Feature: Sriov related scenarios
       | bash | -c | ip a show net1 |
     Then the step should succeed
     And the output should contain "mtu 2020"
+
+  # @author zzhao@redhat.com
+  # @case_id OCP-34092
+  @destructive
+  @admin
+  Scenario: sriov-device-plugin can be scheduled on any node
+    Given the sriov operator is running well
+    When I run the :get admin command with:
+      | resource  | ds/sriov-device-plugin            |
+      | namespace | openshift-sriov-network-operator  |
+      | o         | yaml                              |
+    Then the step should succeed
+    And the output should contain "operator: Exists"
+    And the output should not contain "NoSchedule"
