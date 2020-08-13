@@ -193,10 +193,10 @@ Feature: Storage upgrade tests
     When I run the :apply client command with:
       | f | csi-rbac.yaml | 
     Then the step should succeed
-    Given SCC "privileged" is added to the "csi-provisioner" service account
-    Given SCC "privileged" is added to the "csi-attacher" service account
-    Given SCC "privileged" is added to the "csi-snapshotter" service account
-    Given SCC "privileged" is added to the "csi-plugin" service account
+    Given SCC "privileged" is added to the "csi-provisioner" service account without teardown
+    Given SCC "privileged" is added to the "csi-attacher" service account without teardown
+    Given SCC "privileged" is added to the "csi-snapshotter" service account without teardown
+    Given SCC "privileged" is added to the "csi-plugin" service account without teardown
 
     Given I obtain test data file "storage/csi/csi-hostpath-attacher.yaml"
     When I run the :apply client command with:
