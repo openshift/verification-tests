@@ -1096,3 +1096,30 @@ Given /^ptp config daemon is ready$/ do
     | app=linuxptp-daemon |
   })
 end
+
+Given /^I install machineconfigs load-sctp-module$/ do
+  ensure_admin_tagged
+  _admin = admin
+  @result = _admin.cli_exec(:get, resource: "machineconfigs", output: 'jsonpath={.items[?(@.metadata.name=="load-sctp-module")].metadata.name}')
+  if @result[:response] != "load-sctp-module"
+    @result = _admin.cli_exec(:create, f: "#{BushSlicer::HOME}/testdata/networking/sctp/load-sctp-module.yaml")
+    raise "Failed to install load-sctp-module" unless @result[:success]
+  end
+end
+
+Given /^I check load-sctp-module in #{NUMBER} workers$/ do | workers_num |
+  ensure_admin_tagged
+  _admin = admin
+  $i = 0
+  $num = Integer(workers_num)
+  while $i < $num  do
+    step %Q{I run the :debug admin command with:}, table(%{
+      | resource     | node/<%= cb.workers[#$i].name %> |
+      | oc_opts_end  |                                  |
+      | exec_command | lsmod                            |
+    })
+    step %Q/the step should succeed/
+    step %Q/the outputs should contain "sctp"/
+    $i +=1
+  end
+end
