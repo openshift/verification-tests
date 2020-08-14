@@ -7,32 +7,24 @@ Feature: projects related features via cli
     When I run the :new_project client command with:
       | project_name | <%= cb.prj_name %> |
     Then the step should succeed
-    # TODO: yapei, this is a work around for AEP, please add step `the step should succeed` according to latest good solution
     When I create a new application with:
-      | docker image | openshift/mysql-55-centos7 |
+      | docker image | openshift/mysql-55-centos7                    |
       | code         | https://github.com/openshift/ruby-hello-world |
-      | n            | <%= cb.prj_name %>           |
-    And the output should contain:
-      | mysql-55-centos7 |
-      | ruby-hello-world |
     ### get project resource
     When I run the :get client command with:
-      | resource | deploymentconfigs |
-      | n        | <%= cb.prj_name %>  |
+      | resource | dc,deployment |
     Then the step should succeed
     And the output should contain:
       | mysql-55-centos7 |
       | ruby-hello-world |
     When I run the :get client command with:
       | resource | services |
-      | n        | <%= cb.prj_name %> |
     Then the step should succeed
     And the output should contain:
       | mysql-55-centos7 |
       | ruby-hello-world |
     When I run the :get client command with:
       | resource | is |
-      | n        | <%= cb.prj_name %> |
     Then the step should succeed
     And the output should contain:
       | mysql-55-centos7 |
@@ -41,25 +33,25 @@ Feature: projects related features via cli
     Given the "<%= cb.prj_name %>" project is deleted
     ### get project resource after project is deleted
     When I run the :get client command with:
-      | resource | deploymentconfigs |
+      | resource | dc,deployment       |
       | n        | <%= cb.prj_name %>  |
     Then the step should fail
     And the output should not contain:
       | mysql-55-centos7 |
       | ruby-hello-world |
     When I run the :get client command with:
-      | resource | services |
+      | resource | services           |
       | n        | <%= cb.prj_name %> |
     Then the step should fail
     And the output should not contain:
       | mysql-55-centos7 |
       | ruby-hello-world |
     When I run the :get client command with:
-      | resource | pods  |
+      | resource | pods               |
       | n        | <%= cb.prj_name %> |
     Then the step should fail
     And the output should not contain:
-      | mysql-55-centos7-1-deploy |
+      | mysql-55-centos7 |
 
     ### create a project with same name, no context for this new one
     And I wait for the steps to pass:
@@ -70,7 +62,7 @@ Feature: projects related features via cli
     """
     Then I run the :status client command
     And the output should contain:
-      | no services, deployment configs |
+      | no services, deployment |
 
   # @author cryan@redhat.com
   # @case_id OCP-12193
