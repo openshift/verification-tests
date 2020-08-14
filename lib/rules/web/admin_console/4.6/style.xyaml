@@ -1,7 +1,7 @@
 check_chart_using_victory:
   elements:
   - selector:
-      xpath: //*[contains(@aria-labelledby, 'victory-container')]
+      xpath: //div[contains(@class, 'pf-c-chart')]
 check_cluster_utilization_charts_style:
   elements:
   - selector:
@@ -20,7 +20,7 @@ check_node_detail_page_charts_style:
 check_quota_detail_page_charts_style:
   elements:
   - selector:
-      xpath: //*[contains(@class, 'gauge-chart')]//*[contains(@aria-labelledby, 'victory-container')]
+      xpath: //*[contains(@class, 'gauge-chart')]//div[contains(@class, 'pf-c-chart')]
 check_list_view_style:
   elements:
   - selector:
