@@ -62,12 +62,20 @@ module BushSlicer
       scenario_tags.include? '@destructive'
     end
 
+    def tagged_upgrade_prepare?
+      scenario_tags.include? '@upgrade-prepare'
+    end
+
     def ensure_admin_tagged
       raise 'tag scenario @admin as you use admin access' unless tagged_admin?
     end
 
     def ensure_destructive_tagged
       raise 'tag scenario @admin and @destructive as you use admin access and failure to restore can have adverse effects to following scenarios' unless tagged_admin? && tagged_destructive?
+    end
+
+    def ensure_upgrade_prepare_tagged
+      raise 'tag scenario @upgrade-prepare as you update cluster without teardown' unless tagged_upgrade_prepare?
     end
 
     # prepares environments' user managers based on @users tag

@@ -64,6 +64,9 @@ end
 
 Given /^SCC #{QUOTED} is (added to|removed from) the #{QUOTED} (user|group|service account)( without teardown)?$/ do |scc, op, which, type, no_teardown|
   ensure_admin_tagged
+  if no_teardown
+    ensure_upgrade_prepare_tagged
+  end
   _admin = admin
 
   case type
