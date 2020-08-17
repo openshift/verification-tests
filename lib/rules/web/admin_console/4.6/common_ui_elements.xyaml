@@ -259,9 +259,14 @@ check_sidebar_item:
       xpath: //li[@class='co-resource-sidebar-item']//*[contains(text(),'<sidebar_item>')]
 click_on_resource_item:
   element:
-    selector:
+    selector: &data_test_id
       xpath: //a[@class='co-resource-item__resource-name' and @data-test-id='<resource_name>']
     op: click
+check_resource_item_name:
+  element:
+    selector:
+      <<: *data_test_id 
+    timeout: 20
 wait_dropdown_loaded:
   element:
     selector:
