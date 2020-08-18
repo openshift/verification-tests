@@ -403,3 +403,4 @@ check_operator_column_all_namespace:
   elements:
   - selector: 
       xpath: //h1[contains(text(),'<operator_name>')]//ancestor::tr[@data-test-rows='resource-row']/td[<col_index>][contains(text(),'All Namespaces')]
+check_logging_operator_filtered_out: {}
