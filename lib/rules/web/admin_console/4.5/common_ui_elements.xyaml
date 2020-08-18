@@ -261,6 +261,7 @@ click_on_resource_item:
     selector:
       xpath: //a[@class='co-resource-item__resource-name' and @data-test-id='<resource_name>']
     op: click
+check_resource_item_name: {}
 wait_dropdown_loaded:
   element:
     selector:
