@@ -1180,3 +1180,35 @@ Given /^the mtu value "([^"]*)" is patched in CNO config according to the networ
       raise "Failed to clear mtu field from CNO" unless @result[:success]
   }
 end
+
+Given /^I save egress data file directory to the#{OPT_SYM} clipboard$/ do | cb_name |
+  ensure_admin_tagged
+  cb_name = "cb_egress_directory" unless cb_name
+  network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
+  network_type = network_operator.network_type(user: admin)
+  case network_type
+  when "OVNKubernetes"
+    cb[cb_name]="ovn-egressfirewall"
+  when "OpenShiftSDN"
+    cb[cb_name]="egressnetworkpolicy"
+  else
+    raise "unknown network_type"
+  end
+  logger.info "The egressfirewall file directory path is stored to the #{cb_name} clipboard."
+end
+
+Given /^I save egress type to the#{OPT_SYM} clipboard$/ do | cb_name |
+  ensure_admin_tagged
+  cb_name = "cb_egress_type" unless cb_name
+  network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
+  network_type = network_operator.network_type(user: admin)
+  case network_type
+  when "OVNKubernetes"
+    cb[cb_name] = "egressfirewall"
+  when "OpenShiftSDN"
+    cb[cb_name] = "egressnetworkpolicy"
+  else
+    raise "unknown network_type"
+  end
+  logger.info "The egressfirewall type is stored to the #{cb_name} clipboard."
+end
