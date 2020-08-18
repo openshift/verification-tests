@@ -202,9 +202,10 @@ Feature: pods related scenarios
     Given I have a project
     When I run the :new_app client command with:
       | docker_image | aosqe/ruby-ex |
+      | l            | app=ruby-ex   |
     Then the step should succeed
     Given a pod becomes ready with labels:
-      | deployment=ruby-ex |
+      | app=ruby-ex |
     When I run the :rsh client command with:
       | pod    | <%= pod.name %>                                                               |
       | _stdin | curl https://kubernetes.default.svc/.well-known/oauth-authorization-server -k |
