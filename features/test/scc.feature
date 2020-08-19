@@ -18,4 +18,16 @@ Feature: some SCC policy related scenarios
     Given SCC "privileged" is added to the "system:serviceaccounts:<%= user.name %>:aggregated-logging-fluentd" service account
     And cluster role "cluster-reader" is added to the "system:serviceaccounts:<%= user.name %>:aggregated-logging-fluentd" service account
     And cluster role "oauth-editor" is added to the "system:serviceaccounts:<%= user.name %>:logging-deployer" service account
-    Given I obtain test data file "logging_metrics/logging_deployer_configmap.yaml"
+
+  @admin
+  Scenario: test scc with teardown
+    Given I have a project
+    Given I create the serviceaccount "test1"
+    Given SCC "privileged" is added to the "test1" service account
+
+  @admin
+  @upgrade-prepare
+  Scenario: test scc without teardown
+    Given I have a project
+    Given I create the serviceaccount "test2"
+    Given SCC "privileged" is added to the "test2" service account without teardown
