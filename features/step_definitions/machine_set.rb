@@ -90,6 +90,8 @@ Given(/^I create a spot instance machineset and name it "([^"]*)" on (aws|gcp|az
     new_spec["spec"]["template"]["spec"]["providerSpec"]["value"]["spotMarketOptions"] = {}
   elsif iaas_type == 'gcp'
     new_spec["spec"]["template"]["spec"]["providerSpec"]["value"]["preemptible"] = true
+  elsif iaas_type == 'azure'
+    new_spec["spec"]["template"]["spec"]["providerSpec"]["value"]["spotVMOptions"] = {}
   else
     raise "spot instance not supported on #{iaas_type}"
   end
