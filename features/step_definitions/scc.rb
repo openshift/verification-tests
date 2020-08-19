@@ -108,15 +108,19 @@ Given /^SCC #{QUOTED} is (added to|removed from) the #{QUOTED} (user|group|servi
     @result = _admin.cli_exec(_command, **_opts)
     @result[:success]
   }
-  if @result[:success] && !no_teardown
-    teardown_add {
-      _res = nil
-      wait_for(60, interval: 5) {
-        _res = _admin.cli_exec(_teardown_command, **_opts)
-        _res[:success]
+  if @result[:success]
+    if no_teardown
+      logger.warn "No teardown to restore SCC of #{which} #{type}"
+    else
+      teardown_add {
+        _res = nil
+        wait_for(60, interval: 5) {
+          _res = _admin.cli_exec(_teardown_command, **_opts)
+          _res[:success]
+        }
+        raise "could not restore SCC of #{which} #{type}" unless _res[:success]
       }
-      raise "could not restore SCC of #{which} #{type}" unless _res[:success]
-    }
+    end
   else
     raise "could not give #{which} #{type} the #{scc} scc"
   end
