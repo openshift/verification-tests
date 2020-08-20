@@ -65,6 +65,7 @@ Feature: Machine-api components upgrade tests
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
+    And admin ensures machine number is restored after scenario
 
     Given I clone a machineset and name it "machineset-clone-22612"
 

@@ -712,13 +712,15 @@ Given /^the default interface on nodes is stored in the#{OPT_SYM} clipboard$/ do
   end
   case networkType
   when "OVNKubernetes"
-    step %Q/I run command on the node's ovnkube pod:/, table("| bash | -c | ip route show default |")
+    # use -4 to limit output to just `default` interface, fixed in later iproute2 versions
+    step %Q/I run command on the node's ovnkube pod:/, table("| ip | -4 | route | show | default |")
   when "OpenShiftSDN"
-    step %Q/I run command on the node's sdn pod:/, table("| bash | -c | ip route show default |")
+    step %Q/I run command on the node's sdn pod:/, table("| ip | -4 | route | show | default |")
   else
     raise "unknown networkType"
   end
-  cb[cb_name] = @result[:response].split("\n").first.split(/\W+/)[7]
+  # OVN uses `br-ex` and `-` is not a word char, so we have to split on whitespace
+  cb[cb_name] = @result[:response].split("\n").first.split[4]
   logger.info "The node's default interface is stored in the #{cb_name} clipboard."
 end
 
@@ -915,15 +917,17 @@ Given /^the Internal IP of node "([^"]*)" is stored in the#{OPT_SYM} clipboard$/
   end
   case networkType
   when "OVNKubernetes"
-    step %Q/I run command on the node's ovnkube pod:/, table("| bash | -c | ip route show default |")
+    # use -4 to limit output to just `default` interface, fixed in later iproute2 versions
+    step %Q/I run command on the node's ovnkube pod:/, table("| ip | -4 | route | show | default |")
   when "OpenShiftSDN"
-    step %Q/I run command on the node's sdn pod:/, table("| bash | -c | ip route show default |")
+    step %Q/I run command on the node's sdn pod:/, table("| ip | -4 | route | show | default |")
   else
     raise "unknown networkType"
   end
-  def_inf = @result[:response].split("\n").first.split(/\W+/)[7]
+  # OVN uses `br-ex` and `-` is not a word char, so we have to split on whitespace
+  def_inf = @result[:response].split("\n").first.split[4]
   logger.info "The node's default interface is #{def_inf}"
-  @result = host.exec_admin("ifconfig #{def_inf}")
+  @result = host.exec_admin("ip -4 -brief addr show #{def_inf}")
   cb[cb_ipaddr]=@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]
   logger.info "The Internal IP of node is stored in the #{cb_ipaddr} clipboard."
 end
@@ -1091,6 +1095,33 @@ Given /^ptp config daemon is ready$/ do
   step %Q/a pod becomes ready with labels:/, table(%{
     | app=linuxptp-daemon |
   })
+end
+
+Given /^I install machineconfigs load-sctp-module$/ do
+  ensure_admin_tagged
+  _admin = admin
+  @result = _admin.cli_exec(:get, resource: "machineconfigs", output: 'jsonpath={.items[?(@.metadata.name=="load-sctp-module")].metadata.name}')
+  if @result[:response] != "load-sctp-module"
+    @result = _admin.cli_exec(:create, f: "#{BushSlicer::HOME}/testdata/networking/sctp/load-sctp-module.yaml")
+    raise "Failed to install load-sctp-module" unless @result[:success]
+  end
+end
+
+Given /^I check load-sctp-module in #{NUMBER} workers$/ do | workers_num |
+  ensure_admin_tagged
+  _admin = admin
+  $i = 0
+  $num = Integer(workers_num)
+  while $i < $num  do
+    step %Q{I run the :debug admin command with:}, table(%{
+      | resource     | node/<%= cb.workers[#$i].name %> |
+      | oc_opts_end  |                                  |
+      | exec_command | lsmod                            |
+    })
+    step %Q/the step should succeed/
+    step %Q/the outputs should contain "sctp"/
+    $i +=1
+  end
 end
 
 Given /^the node's MTU value is stored in the#{OPT_SYM} clipboard$/ do |cb_node_mtu|

@@ -18,7 +18,6 @@ Feature: resouces related scenarios
       | resource      | svc      |
       | resource_name | database |
       | o             | yaml     |
-      | export        | true     |
     Then the step should succeed
     Given I save the output to file> svc.yaml
     When I run the :describe client command with:

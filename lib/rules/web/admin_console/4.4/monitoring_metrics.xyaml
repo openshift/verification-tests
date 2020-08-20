@@ -1,3 +1,7 @@
+check_sample_query_area:
+  element:
+    selector:
+      xpath: //textarea[contains(text(),'sum_over_time')]
 click_primary_menu_developer_mode:
   element:
     selector:

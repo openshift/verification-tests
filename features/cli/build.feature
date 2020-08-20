@@ -346,11 +346,11 @@ Feature: build 'apps' with CLI
       | buildconfig | <bc_name> |
     Given the "<build_name>" build becomes :complete
     When I run the :delete client command with:
-      | object_type       | bc         |
-      | object_name_or_id |  <bc_name> |
+      | object_type       | bc        |
+      | object_name_or_id | <bc_name> |
     Then the step should succeed
+    Given I obtain test data file "build/tc525736/<file_name>"
     When I run the :create client command with:
-    Given I obtain test data file "build/<file_name>"
       | f | <file_name> |
     When I get project build_config named "<bc_name>"
     Then the step should succeed
@@ -360,8 +360,8 @@ Feature: build 'apps' with CLI
     Given the "<build_name>" build becomes :complete
 
     Examples:
-      | bc_name              | build_name             | file_name                    |
-      | ruby-sample-build-ns | ruby-sample-build-ns-1 | tc525736/Nonesrc-sti.json    | # @case_id OCP-11580
+      | bc_name              | build_name             | file_name        |
+      | ruby-sample-build-ns | ruby-sample-build-ns-1 | Nonesrc-sti.json | # @case_id OCP-11580
 
   # @author cryan@redhat.com
   # @case_id OCP-11582
@@ -680,7 +680,7 @@ Feature: build 'apps' with CLI
     Then the step should succeed
     Given I obtain test data file "templates/tc539699/build.yaml"
     When I run the :create client command with:
-      | f | build.yaml | 
+      | f | build.yaml |
     Then the step should succeed
     When I run the :start_build client command with:
       | buildconfig | ruby-hello-world |
@@ -706,7 +706,7 @@ Feature: build 'apps' with CLI
       | resource | imagestreamtag |
     Then the output should contain:
       | io.openshift.build.commit.ref=beta4 |
-      | OPENSHIFT_BUILD_REFERENCE=beta4     | 
+      | OPENSHIFT_BUILD_REFERENCE=beta4     |
 
   # @author xiuwang@redhat.com
   # @case_id OCP-19631
@@ -746,7 +746,7 @@ Feature: build 'apps' with CLI
       | resource_name | ruby-hello-world-1-build |
       | o             | yaml                     |
     Then the output should match:
-      | mountPath: /var/run/secrets/openshift.io/build/secrettest | 
+      | mountPath: /var/run/secrets/openshift.io/build/secrettest |
 
     Then evaluation of `image_stream("ruby-hello-world").docker_image_repository` is stored in the :user_image clipboard
     When I run the :run client command with:
@@ -870,7 +870,7 @@ Feature: build 'apps' with CLI
       | resource | bc               |
       | name     | ruby-hello-world |
     Then the output should match:
-      | Build ConfigMaps:\s+cmtest1->.,cmtest2->newdir | 
+      | Build ConfigMaps:\s+cmtest1->.,cmtest2->newdir |
     And the "ruby-hello-world-1" build completed
     Then evaluation of `image_stream("ruby-hello-world").docker_image_repository` is stored in the :user_image clipboard
     When I run the :run client command with:
@@ -900,7 +900,7 @@ Feature: build 'apps' with CLI
       | resource | bc               |
       | name     | ruby-hello-world |
     Then the output should match:
-      | Build ConfigMaps:\s+cmtest1->newdir1/newdir2/newdir3 | 
+      | Build ConfigMaps:\s+cmtest1->newdir1/newdir2/newdir3 |
     And the "ruby-hello-world-1" build completed
     Then evaluation of `image_stream("ruby-hello-world").docker_image_repository` is stored in the :user_image clipboard
     When I run the :run client command with:
