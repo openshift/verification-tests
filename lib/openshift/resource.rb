@@ -43,7 +43,7 @@ module BushSlicer
       result.clear.merge!(get(user: user, quiet: quiet))
       if result[:success]
         return true
-      elsif result[:response] =~ /not found/
+      elsif result[:response] =~ /not found/ or result[:response] =~ /doesn't have/
         return false
       else
         # e.g. when called by user without rights to list Resource
