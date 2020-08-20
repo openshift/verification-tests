@@ -30,7 +30,7 @@ class QueryPayload
       c.action do |args, options|
         options.default \
           :build_type => "nightly-",
-          :url => "https://openshift-release.apps.ci.l2s4.p1.openshiftapps.com/"
+          :url => "https://openshift-release.svc.ci.openshift.org/"
         raise "missing query string" if options.query.nil?
         print("Querying #{options.url} against #{options.build_type}\n")
         doc = Nokogiri::HTML(open(options.url).read)
