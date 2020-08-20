@@ -590,3 +590,48 @@ click_progressing_icon_link_in_cluster_inventory:
     selector:
       xpath: //div[contains(@class,'co-inventory-card__status')]//a[contains(@href,'rowFilter-pod-status=Terminating%2CPending')]
     op: click
+check_charts_in_project_utilization:
+  elements:
+  - selector:
+      xpath: //h4[text()='CPU']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'co-utilization-card__item-chart')]
+  - selector:
+      xpath: //h4[text()='Memory']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'co-utilization-card__item-chart')]
+  - selector: &filesystem_chart
+      xpath: //h4[text()='Filesystem']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'co-utilization-card__item-chart')]
+  - selector:
+      xpath: //h4[text()='Network Transfer']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'co-utilization-card__item-chart')]
+  - selector:
+      xpath: //h4[text()='Pod count']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'co-utilization-card__item-chart')]
+click_filesystem_chart:
+  element:
+    selector:
+      <<: *filesystem_chart
+    op: click
+check_charts_on_pod_page:
+  elements:
+  - selector: &memory_usage_chart
+      xpath: //h5[text()='Memory Usage']/ancestor::div[contains(@class, 'col-')]//div[contains(@class,'pf-c-chart')]
+  - selector:
+      xpath: //h5[text()='CPU Usage']/ancestor::div[contains(@class, 'col-')]//div[contains(@class,'pf-c-chart')]
+  - selector:
+      xpath: //h5[text()='Filesystem']/ancestor::div[contains(@class, 'col-')]//div[contains(@class,'pf-c-chart')]
+  - selector:
+      xpath: //h5[text()='Network In']/ancestor::div[contains(@class, 'col-')]//div[contains(@class,'pf-c-chart')]
+  - selector:
+      xpath: //h5[text()='Network Out']/ancestor::div[contains(@class, 'col-')]//div[contains(@class,'pf-c-chart')]
+click_memory_usage_chart:
+  element:
+    selector:
+      <<: *memory_usage_chart
+    op: click
+check_on_dev_monitoring_page:
+  elements:
+  - selector:
+      xpath: //a[contains(@href,'/dev-monitoring/ns/<project_name>/metrics') and text()='Metrics']
+  - selector:
+      xpath: //div[contains(@class,'query-browser__graph-container') and contains(@class,'pf-c-chart')]
+check_no_errors_in_charts:
+  elements:
+  - selector:
+      xpath: //div[contains(text(),'No datapoints found')]
+    missing: true
