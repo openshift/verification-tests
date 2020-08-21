@@ -260,7 +260,6 @@ Feature: MachineHealthCheck Test Scenarios
     Then the output should contain:
       | mhc-<%= machine_set.name %>: total targets: 1,  maxUnhealthy: 1%, unhealthy: 1. Short-circuiting remediation |
     """
-    
   # @author miyadav@redhat.com
   # @case_id OCP-33714
   @admin
@@ -273,7 +272,7 @@ Feature: MachineHealthCheck Test Scenarios
     When I run oc create over "mhc_validations.yaml" replacing paths:
       | ["spec"]["maxUnhealthy"] | <maxUnhealthy> |
     Then the output should contain:
-      | maxUnhealthy: Invalid value: "": spec.maxUnhealthy in body should match '^((100|[0-9]{1,2})%|[0-9]+)$ |
+      | maxUnhealthy: Invalid value: "": spec.maxUnhealthy |
 
    Examples:
       | maxUnhealthy |
@@ -294,7 +293,7 @@ Feature: MachineHealthCheck Test Scenarios
     When I run oc create over "mhc_validations.yaml" replacing paths:
       | ["spec"]["unhealthyConditions"][0]["timeout"] | <timeout> |
     Then the output should contain:
-      | timeout: Invalid value: "": spec.unhealthyConditions.timeout in body should match '^([0-9]+(\.[0-9]+)?(ns|us|µs|ms|s|m|h))+$'|
+      | timeout: Invalid value: "": spec.unhealthyConditions.timeout |
 
    Examples:
       | timeout |
