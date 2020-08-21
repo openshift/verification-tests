@@ -68,5 +68,5 @@ clear_resource_filters:
 clear_one_type_filters:
   elements:
   - selector:
-      xpath: (//h4[contains(., '<filter_type>')]/following-sibling::ul//button)[last()]
+      xpath: (//*[contains(., '<filter_type>')]/following-sibling::ul//button)[last()]
     op: click

@@ -557,7 +557,7 @@ check_matched_number_of_nodes:
   action: check_matched_number_of_resource
 check_matched_number_of_pvcs:
   params:
-    resource_type: pvcs
+    resource_type: pvc
     number_of_resource: <number_of_pvcs>
   action: check_matched_number_of_resource
 check_matched_number_of_storageclasses:
@@ -573,11 +573,11 @@ check_matched_number_of_resource:
   - command:
       var all_links = document.querySelectorAll("div.co-inventory-card__item-title>a");
       for (var i=0; i < all_links.length; i++){
-        if (all_links[i].innerText.toLowerCase().endsWith('<resource_type>')) {
+        if (all_links[i].innerText.toLowerCase().includes('<resource_type>')) {
           expected_link = all_links[i];
         }
       }
-      var num = expected_link.innerText.toLowerCase().replace(' <resource_type>', '');
+      var num = expected_link.innerText.toLowerCase().split(" ")[0];
       return num == <number_of_resource>
     expect_result: true
 click_failed_icon_link_in_cluster_inventory:
@@ -590,3 +590,48 @@ click_progressing_icon_link_in_cluster_inventory:
     selector:
       xpath: //div[contains(@class,'co-inventory-card__status')]//a[contains(@href,'rowFilter-pod-status=Terminating%2CPending')]
     op: click
+check_charts_in_project_utilization:
+  elements:
+  - selector:
+      xpath: //h4[text()='CPU']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'co-utilization-card__item-chart')]
+  - selector:
+      xpath: //h4[text()='Memory']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'co-utilization-card__item-chart')]
+  - selector: &filesystem_chart
+      xpath: //h4[text()='Filesystem']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'co-utilization-card__item-chart')]
+  - selector:
+      xpath: //h4[text()='Network Transfer']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'co-utilization-card__item-chart')]
+  - selector:
+      xpath: //h4[text()='Pod count']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'co-utilization-card__item-chart')]
+click_filesystem_chart:
+  element:
+    selector:
+      <<: *filesystem_chart
+    op: click
+check_charts_on_pod_page:
+  elements:
+  - selector: &memory_usage_chart
+      xpath: //h5[text()='Memory Usage']/ancestor::div[contains(@class, 'col-')]//div[contains(@class,'pf-c-chart')]
+  - selector:
+      xpath: //h5[text()='CPU Usage']/ancestor::div[contains(@class, 'col-')]//div[contains(@class,'pf-c-chart')]
+  - selector:
+      xpath: //h5[text()='Filesystem']/ancestor::div[contains(@class, 'col-')]//div[contains(@class,'pf-c-chart')]
+  - selector:
+      xpath: //h5[text()='Network In']/ancestor::div[contains(@class, 'col-')]//div[contains(@class,'pf-c-chart')]
+  - selector:
+      xpath: //h5[text()='Network Out']/ancestor::div[contains(@class, 'col-')]//div[contains(@class,'pf-c-chart')]
+click_memory_usage_chart:
+  element:
+    selector:
+      <<: *memory_usage_chart
+    op: click
+check_on_dev_monitoring_page:
+  elements:
+  - selector:
+      xpath: //a[contains(@href,'/dev-monitoring/ns/<project_name>/metrics') and text()='Metrics']
+  - selector:
+      xpath: //div[contains(@class,'query-browser__graph-container') and contains(@class,'pf-c-chart')]
+check_no_errors_in_charts:
+  elements:
+  - selector:
+      xpath: //div[contains(text(),'No datapoints found')]
+    missing: true

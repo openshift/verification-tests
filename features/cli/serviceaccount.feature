@@ -23,7 +23,7 @@ Feature: ServiceAccount and Policy Managerment
     And I wait for the steps to pass:
     """
     When I run the :get client command with:
-      | resource | deployment |
+      | resource | all |
     Then the output should contain:
       | myapp   |
     """

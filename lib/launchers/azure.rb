@@ -211,7 +211,18 @@ module BushSlicer
     # @return [TODO, nil] returns nil when not found
     # @raise on communication error
     def get_volume_by_id(id)
-      TODO
+      name = id.split("/")[-1]
+      res = "volume " + id + " exists"
+      begin
+      compute_client.disks.get(azure_config[:resource_group], name)
+      rescue MsRestAzure::AzureOperationError => e
+        if e.response.status == 404
+          res = nil
+        else
+          res = e.response
+        end
+      end
+      return res
     end
 
     # @param names [String, Array<String>] one or more names to launch

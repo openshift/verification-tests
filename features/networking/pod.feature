@@ -300,11 +300,11 @@ Feature: Pod related networking scenarios
       | protocol      | UDP                      |
     Then the step should succeed
     #Getting nodeport value
-    And evalation of `service(cb.host_pod1.name).node_port(port: 8080)` is stored in the :nodeport clipboard
+    And evaluation of `service(cb.host_pod1.name).node_port(port: 8080)` is stored in the :nodeport clipboard
     #Creating a simple client pod to generate traffic from it towards the exposed node IP address
     Given I obtain test data file "networking/aosqe-pod-for-ping.json"
-    When I run the :create client command with:
-      | f | aosqe-pod-for-ping.json |
+    When I run oc create over "aosqe-pod-for-ping.json" replacing paths:
+      | ["spec"]["nodeName"] | <%= cb.nodes[0].name %> |
     Then the step should succeed
     Given a pod becomes ready with labels:
       | name=hello-pod |
@@ -452,3 +452,56 @@ Feature: Pod related networking scenarios
     """
     OVN is functional on the cluster
     """
+  # @author anusaxen@redhat.com
+  # @case_id OCP-33413
+  @admin
+  @destructive
+  Scenario: xt_u32 kernel module functionality check from NET_ADMIN pods
+    Given I have a project
+    And I have a pod-for-ping in the project
+    Then evaluation of `pod.name` is stored in the :client_pod clipboard
+    Given I select a random node's host
+    #Making sure the iptables on latest centos are actually nf_tables as the xt_u32 is only supported with that
+    When I run commands on the host:
+      | iptables --version |
+    Then the step should succeed
+    Then the output should contain "nf_tables"
+
+    Given I obtain test data file "networking/centos_latest_admin.yaml"
+    When I run oc create as admin over "centos_latest_admin.yaml" replacing paths:
+      | ["metadata"]["name"]      | server-pod          |
+      | ["metadata"]["namespace"] | <%= project.name %> |
+    Then the step should succeed
+    And a pod becomes ready with labels:
+      | name=centos-pod |
+    Then evaluation of `pod` is stored in the :server_pod clipboard
+    Given I use the "<%= cb.server_pod.node_name %>" node
+    #Enabling XT_u32 module on server pod's node
+    And I run commands on the host:
+      | modprobe xt_u32 |
+    Then the step should succeed
+
+    #Checking whether server pod also has nf_tables version installed
+    When admin executes on the "<%= cb.server_pod.name %>" pod:
+      | bash | -c | iptables --version |
+    Then the step should succeed
+    And the output should contain "nf_tables"
+
+    #Creating iptable rule on server pod with module u32 and Successful pings will represent a successful xt_u32 match
+    Given admin executes on the "<%= cb.server_pod.name %>" pod:
+      | bash | -c | iptables -t filter -A INPUT -i eth0 -m u32 --u32 '6 & 0xFF = 1 && 4 & 0x3FFF = 0 && 0 >> 22 & 0x3C @ 0 >> 24 = 8' |
+    Then the step should succeed
+    When I execute on the "<%= cb.client_pod %>" pod:
+      | ping |-s 2000 | -c1 | <%= cb.server_pod.ip %> |
+    Then the step should succeed 
+
+    #Successful pings will represent a successful xt_u32 match. Here we allow ping for less than 256 bytes packet else Reject
+    Given admin executes on the "<%= cb.server_pod.name %>" pod:
+      | bash | -c | iptables -t filter -A INPUT -i eth0 -m u32 --u32 '0 & 0xFFFF = 0x100:0xFFFF' -j REJECT |
+    Then the step should succeed
+    When I execute on the "<%= cb.client_pod %>" pod:
+      | ping | -s 64 |-c1 | <%= cb.server_pod.ip %> |
+    Then the step should succeed 
+    Given I execute on the "<%= cb.client_pod %>" pod:
+      | ping | -s 256 |-c1 | <%= cb.server_pod.ip %> |
+    Then the step should fail

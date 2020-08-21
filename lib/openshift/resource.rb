@@ -43,7 +43,7 @@ module BushSlicer
       result.clear.merge!(get(user: user, quiet: quiet))
       if result[:success]
         return true
-      elsif result[:response] =~ /not found/
+      elsif result[:response] =~ /not found/ or result[:response] =~ /doesn't have/
         return false
       else
         # e.g. when called by user without rights to list Resource
@@ -175,9 +175,13 @@ module BushSlicer
       end
 
       if self.respond_to?(:delete_deps, true) && exists?(user: user, quiet: true)
-        delete_deps(user: user, cached: false, quiet: true)&.each { |r|
-          r.ensure_deleted(user: user, wait: wait)
-        }
+        begin
+          delete_deps(user: user, cached: false, quiet: true)&.each { |r|
+            r.ensure_deleted(user: user, wait: wait)
+          }
+        rescue ResourceNotFoundError
+          # most likely resource disappeared in the mean time
+        end
       end
 
       unless disappeared?(user, wait)

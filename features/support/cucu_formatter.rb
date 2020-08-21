@@ -213,7 +213,7 @@ class CucuFormatter
         @scenario[:steps].unshift(
           { :status=>:failed,
             :name=>'<div class="step_name step_fail">After hook failed</div>',
-            :messages=>["[42:42:42] ERROR> See console log for actual errors"]
+            :messages=>[]
           }
         )
       else
@@ -245,14 +245,16 @@ class CucuFormatter
     return %Q[<div class="step_name #{css_class}">#{keyword}#{step_name} ==>@&nbsp; #{gen_repo_link(file_colon_line)}</div>]
   end
 
-  # TODO: change this to find out if file is part of HOME of PRIVATE_DIR and
-  #   generate appropriate links
+  # TODO: change this to check whether file is part of HOME, PRIVATE_DIR or
+  #       tierN repo to generate appropriate links
   def gen_repo_url(file_colon_line)
     file, none, line = file_colon_line.rpartition(":")
     url = conf[:git_repo_url].dup
     url << "/blob/"
     url << GIT_HASH == :unknown ? conf(:git_repo_default_branch) : GIT_HASH
     url << "/" << file
+    # need to escape file path above because encode/escape method is deprecated
+    # see https://bugs.ruby-lang.org/issues/4167
     url = URI.encode(url)
     url << '#L' << line
     return url

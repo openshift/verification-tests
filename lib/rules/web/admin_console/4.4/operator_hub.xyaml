@@ -247,4 +247,4 @@ check_condition_status:
   element:
     selector:
       xpath: //span[contains(.,'Conditions') and contains(.,'<status>')]
-
+check_logging_operator_filtered_out: {}

@@ -88,14 +88,14 @@ module BushSlicer
       # overal scenario execution result
       def result
         case
-        when scenarios.all? { |s| s.passed? }
-          "Passed"
         when scenarios.any? { |s| s.error? }
           "Blocked"
         when scenarios.any? { |s| s.failed? }
           "Failed"
-        when scenarios.any { |s| s.pending? || s.in_progress? }
+        when scenarios.any? { |s| s.pending? || s.in_progress? }
           "Running"
+        when scenarios.all? { |s| s.passed? }
+          "Passed"
         else
           "Waiting"
         end

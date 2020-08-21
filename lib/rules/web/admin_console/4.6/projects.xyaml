@@ -9,6 +9,16 @@ create_project:
     if_param: discription_name
     ref: set_project_description
   action: submit_changes
+check_project_dropdown_selected_all_projects:
+  params:
+    dropdown_name: namespace-bar-dropdown
+    selection_text: all projects
+  action: check_dropdown_selected_item
+check_project_dropdown_not_selected_all_projects:
+  params:
+    dropdown_name: namespace-bar-dropdown
+    selection_text: all projects
+  action: check_dropdown_not_selected_item
 create_project_from_dropdown:
   params:
     dropdown_name: namespace-bar

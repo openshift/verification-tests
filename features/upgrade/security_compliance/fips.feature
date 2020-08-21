@@ -22,8 +22,8 @@ Feature: fips enabled verification for upgrade
     When I run commands on the host:
       | cat /etc/system-fips |
     Then the step should succeed
-    And the output should contain:
-      | RHCOS FIPS mode installation complete |
+    And the output should match:
+      | FIPS mod.*installation complete |
 
     # check whether fips mode enabled or not for worker node
     Given I store the workers in the :workers clipboard
@@ -63,8 +63,8 @@ Feature: fips enabled verification for upgrade
     When I run commands on the host:
       | cat /etc/system-fips |
     Then the step should succeed
-    And the output should contain:
-      | RHCOS FIPS mode installation complete |
+    And the output should match:
+      | FIPS mod.*installation complete |
 
     # check whether fips mode enabled or not for worker node
     Given I store the workers in the :workers clipboard

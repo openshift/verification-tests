@@ -152,7 +152,7 @@ click_checkbox_from_provider_type:
       xpath:  //form[@data-test-group-name='providerType']
     timeout: 30
   - selector:
-      xpath: //*[contains(@class, 'pf-c-check__label') and text()='<text>']
+      xpath: //form[@data-test-group-name='providerType']//*[contains(@class, 'pf-c-check__label') and contains(text(), '<text>')]
     op: click
 open_first_card_overlay_panel:
   action:
@@ -403,3 +403,7 @@ check_operator_column_all_namespace:
   elements:
   - selector: 
       xpath: //h1[contains(text(),'<operator_name>')]//ancestor::tr[@data-test-rows='resource-row']/td[<col_index>][contains(text(),'All Namespaces')]
+check_logging_operator_filtered_out:
+  elements:
+  - selector:
+      xpath: //div[contains(@class, 'catalog-tile-pf-title') and text()='Cluster Logging']
