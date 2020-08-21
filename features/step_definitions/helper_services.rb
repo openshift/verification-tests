@@ -153,14 +153,14 @@ Given /^I have a(n authenticated)? proxy configured in the project$/ do |use_aut
   step %Q/evaluation of `pod` is stored in the :proxy_pod clipboard/
 end
 
-###
-# The original idea is trying to put ldap server in the openshift to make this flexy.
-# Since we run the scenario in jenkins slave which is not in sdn, then two choices come to me:
-# 1, Create a route for the ldapserver pod, but blocked by this us https://trello.com/c/9TXvMeS2 is done.
-# 2, Port forward the ldap server pod to the jenkins slave.
-# So take the second one since this one can be implemented currently
-###
-Given /^I have LDAP service in my project$/ do 
+Given /^I have LDAP service in my project$/ do
+    ###
+    # The original idea is trying to put ldap server in the openshift to make this flexy.
+    # Since we run the scenario in jenkins agent which is not in sdn, then two choices come to me:
+    # 1, Create a route for the ldapserver pod, but blocked by this us https://trello.com/c/9TXvMeS2 is done.
+    # 2, Port forward the ldap server pod to the jenkins agent.
+    # So take the second one since this one can be implemented currently
+    ###
     step %Q/I run the :run client command with:/, table(%{
       | name  |ldapserver                             |
       | image |openshift/openldap-2441-centos7:latest |
@@ -169,19 +169,20 @@ Given /^I have LDAP service in my project$/ do
     step %Q/a pod becomes ready with labels:/, table(%{
       | run=ldapserver |
       })
-    
+
     cb.ldap_pod = BushSlicer::Pod.get_labeled(["run", "ldapserver"], user: user, project: project).first
     cb.ldap_pod_name = cb.ldap_pod.name
     cache_pods cb.ldap_pod
+ 
     # Init the test data in ldap server.
-    @result = pod.exec("bash", "-c", "curl -Ss https://raw.githubusercontent.com/openshift/origin/master/images/openldap/contrib/init.ldif | ldapadd -x -h 127.0.0.1 -p 389 -D cn=Manager,dc=example,dc=com -w admin", as: user)
+    @result = pod.exec("bash", "-c", "curl -Ss https://raw.githubusercontent.com/openshift/cucushift/master/testdata/authorization/idp/init.ldif?token=ANVZSVHHHB7VSWHR3XMXHTK7JCIM2 | ldapadd -x -h 127.0.0.1 -p 389 -D cn=Manager,dc=example,dc=com -w admin", as: user)
     step %Q/the step should succeed/
 
     # Port forword ldapserver to local
     step %Q/evaluation of `rand(32000...65536)` is stored in the :ldap_port clipboard/
     step %Q/I run the :port_forward background client command with:/, table(%{
-      | pod       | <%= cb.ldap_pod_name %> |
-      | port_spec | <%= cb.ldap_port %>:389 |
+       | pod       | <%= pod.name %>        |
+       | port_spec | <%= cb.ldap_port %>:389  |
       })
     step %Q/the step should succeed/
 end
