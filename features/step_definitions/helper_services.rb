@@ -155,7 +155,6 @@ end
 
 Given /^I have LDAP service in my project$/ do
     ###
-    # The original idea is trying to put ldap server in the openshift to make this flexy.
     # Since we run the scenario in jenkins agent which is not in sdn, then two choices come to me:
     # 1, Create a route for the ldapserver pod, but blocked by this us https://trello.com/c/9TXvMeS2 is done.
     # 2, Port forward the ldap server pod to the jenkins agent.
