@@ -35,7 +35,7 @@ Feature: cluster monitoring related upgrade check
     # get sa/prometheus-k8s token
     When evaluation of `secret(service_account('prometheus-k8s').get_secret_names.find {|s| s.match('token')}).token` is stored in the :sa_token clipboard
 
-    # curl -k -H "Authorization: Bearer $token" 'https://prometheus-k8s.openshift-monitoring.svc:9091/api/v1/query?query=machine_cpu_cores'
+    # curl -k -H "Authorization: Bearer $token" 'https://prometheus-k8s.openshift-monitoring.svc:9091/api/v1/query?query=cluster_installer'
     When I run the :exec admin command with:
       | n                | openshift-monitoring |
       | pod              | prometheus-k8s-0     |
@@ -43,10 +43,10 @@ Feature: cluster monitoring related upgrade check
       | oc_opts_end      |                      |
       | exec_command     | sh                   |
       | exec_command_arg | -c                   |
-      | exec_command_arg | curl -k -H "Authorization: Bearer <%= cb.sa_token %>" https://prometheus-k8s.openshift-monitoring.svc:9091/api/v1/query?query=machine_cpu_cores |
+      | exec_command_arg | curl -k -H "Authorization: Bearer <%= cb.sa_token %>" https://prometheus-k8s.openshift-monitoring.svc:9091/api/v1/query?query=cluster_installer |
     Then the step should succeed
     And the output should contain:
-      | "__name__":"machine_cpu_cores" |
+      | "__name__":"cluster_installer" |
 
     # curl -k -H "Authorization: Bearer $token" 'https://alertmanager-main.openshift-monitoring.svc:9094/api/v1/alerts'
     When I run the :exec admin command with:

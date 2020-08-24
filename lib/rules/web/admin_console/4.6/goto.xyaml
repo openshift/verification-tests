@@ -158,6 +158,7 @@ goto_routes_page:
   action: wait_box_loaded
 goto_one_route_page:
   url: k8s/ns/<project_name>/routes/<route_name>
+  action: wait_box_loaded
 goto_route_creation_page:
   url: k8s/ns/<project_name>/routes/~new/form
 

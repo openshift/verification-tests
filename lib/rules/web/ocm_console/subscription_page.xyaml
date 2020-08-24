@@ -30,3 +30,4 @@ check_subscriptions_page_title:
     scripts:
     - command: return document.title=='Subscriptions | Red Hat OpenShift Cluster Manager'
       expect_result: true
+      

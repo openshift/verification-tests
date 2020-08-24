@@ -197,6 +197,7 @@ Feature: Machine features testing
       | iaas_type | machineset_name        |
       | aws       | machineset-clone-29199 | # @case_id OCP-29199
       | gcp       | machineset-clone-32126 | # @case_id OCP-32126
+      | azure     | machineset-clone-33040 | # @case_id OCP-33040
 
   # @author zhsun@redhat.com
   # @case_id OCP-32620
@@ -225,3 +226,81 @@ Feature: Machine features testing
       | name     | <%= cb.noderef_name %> |
     Then the step should succeed
     And the output should match "node-role.kubernetes.io/infra="
+
+  # @author miyadav@redhat.com
+  # @case_id OCP-32269
+  @admin
+  @destructive
+  Scenario: Implement defaulting machineset values for AWS
+    Given I have an IPI deployment
+    And I switch to cluster admin pseudo user
+    And I use the "openshift-machine-api" project
+    Then admin ensures machine number is restored after scenario
+
+    Given I store the last provisioned machine in the :machine clipboard
+    When evaluation of `machine(cb.machine).aws_ami_id` is stored in the :default_ami_id clipboard
+    And evaluation of `machine(cb.machine).aws_availability_zone` is stored in the :default_availability_zone clipboard
+    Then admin ensures "default-valued-32269" machineset is deleted after scenario
+
+    Given I obtain test data file "cloud/ms-aws/ms_default_values.yaml"
+    When I run oc create over "ms_default_values.yaml" replacing paths:
+      | n                                                                                         | openshift-machine-api                           |
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]           | <%= infrastructure("cluster").infra_name %>     |
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"]        | default-valued-32269                            |
+      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-cluster"]    | <%= infrastructure("cluster").infra_name %>     |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["ami"]["id"]                        | <%= cb.default_ami_id %>                        |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["placement"]["availabilityZone"]    | <%= cb.default_availability_zone %>             |
+      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-machineset"] | default-valued-32269                            |
+    Then the step should succeed
+
+  # @author miyadav@redhat.com
+  # @case_id OCP-33056
+  @admin
+  @destructive
+  Scenario: Implement defaulting machineset values for GCP
+    Given I have an IPI deployment
+    And I switch to cluster admin pseudo user
+    And I use the "openshift-machine-api" project
+    Then admin ensures machine number is restored after scenario
+   
+    Given I store the last provisioned machine in the :machine clipboard
+    When evaluation of `machine(cb.machine).gcp_region` is stored in the :default_region clipboard
+    And evaluation of `machine(cb.machine).gcp_zone` is stored in the :default_zone clipboard
+    Then admin ensures "default-valued-33056" machineset is deleted after scenario
+   
+    Given I obtain test data file "cloud/ms-gcp/ms_default_values.yaml"
+    When I run oc create over "ms_default_values.yaml" replacing paths:
+      | n                                                                                         | openshift-machine-api                           |
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]           | <%= infrastructure("cluster").infra_name %>     |
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"]        | default-valued-33056                            |
+      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-cluster"]    | <%= infrastructure("cluster").infra_name %>     |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["region"]                           | <%= cb.default_region %>                        |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["zone"]                             | <%= cb.default_zone %>                          |
+      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-machineset"] | default-valued-33056                            |
+    Then the step should succeed
+
+  # @author miyadav@redhat.com
+  # @case_id OCP-33058
+  @admin
+  @destructive
+  Scenario: Implement defaulting machineset values for azure 
+    Given I have an IPI deployment
+    And I switch to cluster admin pseudo user
+    And I use the "openshift-machine-api" project
+    Then admin ensures machine number is restored after scenario
+
+    Given I store the last provisioned machine in the :machine clipboard
+    Then evaluation of `machine(cb.machine).azure_location` is stored in the :default_location clipboard
+    And admin ensures "default-valued-33058" machineset is deleted after scenario
+
+    Given I obtain test data file "cloud/ms-azure/ms_default_values.yaml"
+    When I run oc create over "ms_default_values.yaml" replacing paths:
+      | n                                                                                         | openshift-machine-api                           |
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]           | <%= infrastructure("cluster").infra_name %>     |
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"]        | default-valued-33058                            |
+      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-cluster"]    | <%= infrastructure("cluster").infra_name %>     |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["location"]                         | <%= cb.default_location %>                      |
+      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-machineset"] | default-valued-33058                            |
+    Then the step should succeed
+
+

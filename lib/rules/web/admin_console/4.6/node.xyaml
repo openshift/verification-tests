@@ -5,7 +5,10 @@ browse_to_nodes_page:
   action: click_secondary_menu
   action: wait_box_loaded
 add_taint_to_node:
+  params:
+    tab_name: Details
   action: goto_one_node_page
+  action: click_tab
   action: click_key_and_action_link
   action: click_add_more_button
   action: add_taint
@@ -57,7 +60,10 @@ remove_tolerations_from_pod:
   action: delete_node_affinity
   action: submit_changes
 remove_taint_from_node:
+  params:
+    tab_name: Details
   action: goto_one_node_page
+  action: click_tab
   action: click_key_and_action_link
   action: delete_node_affinity
   action: submit_changes
@@ -136,8 +142,6 @@ check_machineautoscaler_list_table_struc:
   elements:
   - selector:
       xpath: //th[@data-label='Name']
-  - selector:
-      xpath: //th[@data-label='Namespace']
   - selector:
       xpath: //th[@data-label='Scale Target']
   - selector:

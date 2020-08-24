@@ -10,7 +10,7 @@ check_column_header_items_on_pods_list_page:
 check_ready_count_items_on_pods_list_page:
   elements:
   - selector: 
-      xpath: //tbody/tr/td[4][contains(., '<ready_count>')]
+      xpath: //tbody/tr/td[3][contains(., '<ready_count>')]
 check_memory_descending_sorted_on_pods_list_page:
   action: click_memory_button
   action: click_memory_button
@@ -22,7 +22,7 @@ click_memory_button:
 check_memory_descending order_result:
   scripts:
   - command: |
-             var list = document.querySelectorAll("tbody tr td:nth-of-type(7)");
+             var list = document.querySelectorAll("tbody tr td:nth-of-type(6)");
              for (var i = 0; i < list.length-1; ++i) {
                var item1 = Number(list[i].innerText.split(" ")[0].replace(",", ""));
                var item2 = Number(list[i+1].innerText.split(" ")[0].replace(",", ""));

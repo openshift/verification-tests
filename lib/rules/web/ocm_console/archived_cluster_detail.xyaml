@@ -5,11 +5,11 @@ archived_cluster_detail_page_loaded:
         - selector:
             xpath: //a[@class='pf-c-breadcrumb__link' and text()='Archived clusters']
         - selector:
-            xpath: //button[@class='pf-c-button pf-m-secondary' and text()='Unarchive']
+            xpath: //button[text()='Unarchive']
         - selector:
-            xpath: //button[@aria-controls='overviewTabContent' and text()='Overview']
+            xpath: //button[@aria-controls='overviewTabContent' and contains(.,'Overview')]
         - selector:
-            xpath: //h2[text()='Resource Usage']
+            xpath: //h2[text()='Resource usage']
         - selector:
             xpath: //p[text()='The cluster has been archived and does not have any metrics data.']
         - selector:
@@ -19,7 +19,7 @@ archived_cluster_detail_page_loaded:
 click_detail_page_unarchive_cluster_button:
     element:
         selector:
-            xpath: //button[@class='pf-c-button pf-m-secondary' and text()='Unarchive']
+            xpath: //button[text()='Unarchive']
         op: click
     action: unarchive_dialog_loaded
 go_to_archived_clusters_from_archived_cluster_detail_page:

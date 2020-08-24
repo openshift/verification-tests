@@ -259,9 +259,14 @@ check_sidebar_item:
       xpath: //li[@class='co-resource-sidebar-item']//*[contains(text(),'<sidebar_item>')]
 click_on_resource_item:
   element:
-    selector:
+    selector: &data_test_id
       xpath: //a[@class='co-resource-item__resource-name' and @data-test-id='<resource_name>']
     op: click
+check_resource_item_name:
+  element:
+    selector:
+      <<: *data_test_id 
+    timeout: 20
 wait_dropdown_loaded:
   element:
     selector:
@@ -636,6 +641,14 @@ wait_table_loaded:
     selector:
       xpath: //table//tr
     timeout: 30
+skip_dev_perspective_tour:
+  elements:
+  - selector:
+      xpath: //button[@id='tour-step-footer-secondary' and text()='Skip tour']
+    op: click
+  - selector:
+      xpath: //button[@id='tour-step-footer-primary' and text()='Close']
+    op: click
 check_item_in_list:
   element:
     selector:

@@ -1451,4 +1451,76 @@ Feature: Multus-CNI related scenarios
       | name     | macvlan-bridge-whereabouts-pod3 |
     Then the output should contain "Could not allocate IP in range"
     """
+    
+  # @author weliang@redhat.com
+  # @case_id OCP-33579
+  @admin
+  Scenario: Additional network IPAM should support changes in range and overlapping ranges
+    # Make sure that the multus is enabled
+    Given the multus is enabled on the cluster
+    # Create the net-attach-def with whereabouts-shortrange
+    Given I have a project
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/whereabouts-overlapping.yaml"
+    When I run oc create as admin over "whereabouts-overlapping.yaml" replacing paths:
+      | ["metadata"]["namespace"] | <%= project.name %>    |
+      | ["metadata"]["name"]      | whereabouts-shortrange |
+    Then the step should succeed
+    
+    # Create a pod absorbing above net-attach-def
+    Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
+    When I run oc create over "generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                       | whereabouts-shortrange-pod1 |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | whereabouts-shortrange      |
+      | ["spec"]["containers"][0]["name"]                          | whereabouts-shortrange      |
+    Then the step should succeed
+    And the pod named "whereabouts-shortrange-pod1" becomes ready
+    # Check the created pod which has correct ip
+    When I execute on the "whereabouts-shortrange-pod1" pod:
+      | bash | -c | /usr/sbin/ip -4 -brief a |
+    Then the output should contain:
+      | 192.168.42.1 |
 
+    # Create the net-attach-def with whereabouts-largerange
+    When I run oc create as admin over "whereabouts-overlapping.yaml" replacing paths:
+      | ["metadata"]["namespace"] | <%= project.name %>    |
+      | ["metadata"]["name"]      | whereabouts-largerange |
+      | ["spec"]["config"]        |'{ "cniVersion": "0.3.0", "type": "macvlan","mode": "bridge", "ipam": { "type": "whereabouts", "range": "192.168.42.0/24"} }' |
+    Then the step should succeed
+    
+    # Create a pod absorbing above net-attach-def
+    When I run oc create over "generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                       | whereabouts-largerange-pod1 |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | whereabouts-largerange      |
+      | ["spec"]["containers"][0]["name"]                          | whereabouts-largerange      |
+    Then the step should succeed
+    And the pod named "whereabouts-largerange-pod1" becomes ready
+    # Check the created pod which has correct ip
+    When I execute on the "whereabouts-largerange-pod1" pod:
+      | bash | -c | /usr/sbin/ip -4 -brief a |
+    Then the output should contain:
+      | 192.168.42.2 |
+
+    # Create third and fourth pods to absorbing above two net-attach-def
+    When I run oc create over "generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                       | whereabouts-shortrange-pod2 |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | whereabouts-shortrange      |
+      | ["spec"]["containers"][0]["name"]                          | whereabouts-shortrange      |
+    Then the step should succeed
+    And the pod named "whereabouts-shortrange-pod2" becomes ready
+    When I run oc create over "generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                       | whereabouts-largerange-pod2 |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | whereabouts-largerange      |
+      | ["spec"]["containers"][0]["name"]                          | whereabouts-largerange      |
+    Then the step should succeed
+    And the pod named "whereabouts-largerange-pod2" becomes ready
+ 
+    # Check third pod which has correct ip
+    When I execute on the "whereabouts-shortrange-pod2" pod:
+      | bash | -c | /usr/sbin/ip -4 -brief a |
+    Then the output should contain:
+      | 192.168.42.3 |
+    # Check fourth pod which has correct ip
+    When I execute on the "whereabouts-largerange-pod2" pod:
+      | bash | -c | /usr/sbin/ip -4 -brief a |
+    Then the output should contain:
+      | 192.168.42.4 |

@@ -1,7 +1,7 @@
 check_access_control_tab:
   element: &access_control_tab
     selector:
-      xpath: //section[@id='clusterdetails-content']//div[@class='pf-c-tabs']/ul[@class='pf-c-tabs__list']//li/button[@class='pf-c-tabs__button' and text()='Access Control']
+      xpath: //section[@id='clusterdetails-content']//div[@class='pf-c-tabs']/ul[@class='pf-c-tabs__list']//li/button/span[text()='Access control']
 click_access_control_tab:
   element:
     <<: *access_control_tab
@@ -13,7 +13,7 @@ check_elements_on_user_card:
 check_user_card_title:
   element:
     selector:
-      xpath: //section[@id='accessControlTabContent']/div[@class='cluster-details-user-tab-contents']/article/div[@class='pf-c-card__body']/h3[text()='Cluster Administrative Users']
+      xpath: //section[@id='accessControlTabContent']/div[@class='cluster-details-user-tab-contents']/article/div[@class='pf-c-card__body']/h3[text()='Cluster administrative users']
 check_user_card_description:
   element:
     selector:
@@ -47,18 +47,36 @@ check_user_groups_in_select:
 check_user_groups:
   action: click_users_group_select
   action: check_user_groups_in_select
-check_add_button_in_user_tab:
-  element: &add_button_in_user_tab
-    selector:
-      xpath: //button[@class='pf-c-button pf-m-primary' and text()='Add']
-click_add_button_in_user_tab:
-  element:
-    <<: *add_button_in_user_tab
-    op: click
 check_add_button_in_user_tab_disabled:
   element:
     selector:
       xpath: //button[@class='pf-c-button pf-m-primary' and @disabled and text()='Add']
+check_elements_on_add_user_dialog:
+  element: &user_input_field
+    selector:
+      xpath: //input[@id='user-id']
+  element: &add_user_button
+    selector:
+      xpath: //h1[text()='Add cluster user']/../..//button[text()='Add user']
+  element: &cancel_add_user_button
+    selector:
+      xpath: //h1[text()='Add cluster user']/../..//button[text()='Cancel']
+  element: &dedicated_admin_group
+    selector:
+      xpath: //div/input[@id='dedicated-admins']/following-sibling::label[@for='dedicated-admins']
+  elements:
+  - selector:
+      xpath: //button[@aria-label='Close']
+  - selector:
+      xpath: //h1[text()='Add cluster user']
+  - selector:
+      xpath: //label[@for='user-id']/span[text()='User ID']/following-sibling::span[text()='*']
+  - selector:
+      xpath: //h3[text()='Group']/following-sibling::div//label/div[contains(.,'Grants standard administrative privileges for OpenShift Dedicated')]/a[@href='https://docs.openshift.com/dedicated/4/administering_a_cluster/dedicated-admin-role.html']
+click_add_user_button_in_dialog:
+  element:
+    <<: *add_user_button
+    op: click
 input_user_in_tab:
   element:
     <<: *user_input_field
@@ -73,7 +91,7 @@ check_user_validation_message:
 add_user:
   action: input_user_in_tab
   action: choose_user_group
-  action: click_add_button_in_user_tab
+  action: click_add_user_button_in_dialog
 check_user_added:
   action: check_the_user_table_header
   action: check_popover_content_for_user_id
@@ -114,10 +132,8 @@ check_the_user_list_item:
     selector:
       xpath: //section[@id='accessControlTabContent']/div[@class='cluster-details-user-tab-contents']//div[@class='pf-c-card__body']//table[@role='grid']//tbody/tr/td[text()='<user_id>']/following-sibling::td/div/button[@class='pf-c-dropdown__toggle pf-m-plain']
 choose_user_group:
-  action: click_users_group_select
   element:
-    selector:
-      xpath: //div[@class='pf-l-grid pf-m-gutter']//div[@class='pf-l-grid__item pf-m-2-col-on-sm']/div[@class='pf-c-select pf-m-expanded']/ul[@class='pf-c-select__menu']/li/button[@class='pf-c-select__menu-item' and text()='<user_group>']
+    <<: *dedicated_admin_group
     op: click 
 delete_user:
   element:
@@ -125,7 +141,7 @@ delete_user:
     op: click
   element:
     selector:
-      xpath: //section[@id='accessControlTabContent']/div[@class='cluster-details-user-tab-contents']//div[@class='pf-c-card__body']//table[@role='grid']//tbody/tr/td[text()='<user_id>']/following-sibling::td/div/ul[@role='menu']/li[@role='menuitem']/div[text()='Delete']
+      xpath: //section[@id='accessControlTabContent']/div[@class='cluster-details-user-tab-contents']//div[@class='pf-c-card__body']//table[@role='grid']//tbody/tr/td[text()='test_user_1']/following-sibling::td/div/ul[@role='menu']/li/button[text()='Delete']
     op: click
 check_danger_alert_box_in_user_tab:
   elements:
@@ -138,3 +154,12 @@ check_danger_alert_box_in_user_tab:
       xpath: //div[@class='pf-c-alert pf-m-inline pf-m-danger error-box' and @aria-label='Danger Alert']/div[@class='pf-c-alert__description']/span[contains(.,'<error_massage>')]
   - selector:
       xpath: //div[@class='pf-c-alert pf-m-inline pf-m-danger error-box' and @aria-label='Danger Alert']/div[@class='pf-c-alert__description']/span[contains(.,'Operation ID')]
+click_add_user_button_on_page:
+   element:
+     selector:
+       xpath: //div[@class='cluster-details-user-tab-contents']//button[text()='Add user']
+     op: click
+click_cancel_add_user_button:
+  element:
+    <<: *cancel_add_user_button
+    op: click
