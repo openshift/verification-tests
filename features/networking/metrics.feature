@@ -16,12 +16,12 @@ Feature: SDN/OVN metrics related networking scenarios
     Given I use the "openshift-monitoring" project
     And evaluation of `secret(service_account('prometheus-k8s').get_secret_names.find {|s| s.match('token')}).token` is stored in the :sa_token clipboard
     When I run the :exec admin command with:
-      | n                | openshift-monitoring                                                                                 |
-      | pod              | prometheus-k8s-0                                                                                     |
-      | c                | prometheus                                                                                           |
-      | oc_opts_end      |                                                                                                      |
-      | exec_command     | sh                                                                                                   |
-      | exec_command_arg | -c                                                                                                   |
+      | n                | openshift-monitoring                                                                      |
+      | pod              | prometheus-k8s-0                                                                          |
+      | c                | prometheus                                                                                |
+      | oc_opts_end      |                                                                                           |
+      | exec_command     | sh                                                                                        |
+      | exec_command_arg | -c                                                                                        |
       | exec_command_arg | curl -k -H "Authorization: Bearer <%= cb.sa_token %>" http://<%= cb.metrics_ep %>/metrics |
     Then the step should succeed
     #The idea is to check whether these metrics are being relayed on the port 9101
@@ -45,12 +45,12 @@ Feature: SDN/OVN metrics related networking scenarios
     Given I use the "openshift-monitoring" project
     And evaluation of `secret(service_account('prometheus-k8s').get_secret_names.find {|s| s.match('token')}).token` is stored in the :sa_token clipboard
     When I run the :exec admin command with:
-      | n                | openshift-monitoring                                                                              |
-      | pod              | prometheus-k8s-0                                                                                  |
-      | c                | prometheus                                                                                        |
-      | oc_opts_end      |                                                                                                   |
-      | exec_command     | sh                                                                                                |
-      | exec_command_arg | -c                                                                                                |
+      | n                | openshift-monitoring                                                                      |
+      | pod              | prometheus-k8s-0                                                                          |
+      | c                | prometheus                                                                                |
+      | oc_opts_end      |                                                                                           |
+      | exec_command     | sh                                                                                        |
+      | exec_command_arg | -c                                                                                        |
       | exec_command_arg | curl -k -H "Authorization: Bearer <%= cb.sa_token %>" http://<%= cb.metrics_ep %>/metrics |
     Then the step should succeed
     #The idea is to check whether these metrics are being relayed on the port 9101
