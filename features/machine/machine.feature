@@ -197,6 +197,7 @@ Feature: Machine features testing
       | iaas_type | machineset_name        |
       | aws       | machineset-clone-29199 | # @case_id OCP-29199
       | gcp       | machineset-clone-32126 | # @case_id OCP-32126
+      | azure     | machineset-clone-33040 | # @case_id OCP-33040
 
   # @author zhsun@redhat.com
   # @case_id OCP-32620
