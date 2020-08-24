@@ -29,11 +29,11 @@ Feature: Secure Computing Test Scenarios
     Then the step should succeed
     And admin ensures "custom-seccomp" machineconfig is deleted after scenario
 
-    # Wait for machineconfigpool to process the new config
-    Given I wait up to 600 seconds for the steps to pass:
+    # Wait for machineconfigpool to roll out the new machineconfig
+    Given I wait up to 900 seconds for the steps to pass:
     """
-    Given evaluation of `machine_config_pool('worker').condition(type: 'Updating', cached: false)` is stored in the :mcp clipboard
-    Then the expression should be true> cb.mcp["status"] == "False"
+    Then the expression should be true> machine_config_pool('worker').raw_resource(cached: false).dig('status', 'configuration', 'source').select { |c| c['name'] == 'custom-seccomp' }.empty? == false
+    Then the expression should be true> machine_config_pool('worker').condition(type: 'Updating', cached: false)["status"] == "False"
     """
 
     # Create a Pod with seccomp annotaiton
@@ -49,7 +49,7 @@ Feature: Secure Computing Test Scenarios
     When I run the :get admin command with:
       | resource      | pod    |
       | resource_name | nostat |
-    Then the output should contain "CrashLoopBackOff"
+    Then the output should contain "Error"
     """
     When I run the :logs admin command with:
       | resource_name | nostat  |
