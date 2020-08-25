@@ -44,12 +44,12 @@ Feature: SCTP related scenarios
     And I wait up to 60 seconds for the steps to pass:
     """"
     When I run the :exec client command with:
-      | pod              | sctpclient                                                               |
-      | namespace        | <%= project.name %>                                                      |
-      | oc_opts_end      |                                                                          |
-      | exec_command     | sh                                                                       |
-      | exec_command_arg | -c                                                                       |
-      | exec_command_arg | /usr/bin/nc -v <%= cb.serverpod_ip %> 30102 --sctp  <<< 'test-openshift' |
+      | pod              | sctpclient                                                                |
+      | namespace        | <%= project.name %>                                                       |
+      | oc_opts_end      |                                                                           |
+      | exec_command     | sh                                                                        |
+      | exec_command_arg | -c                                                                        |
+      | exec_command_arg | echo test-openshift \| /usr/bin/nc -v <%= cb.serverpod_ip %> 30102 --sctp |
     Then the step should succeed
     And the output should contain:
       | Connected to <%= cb.serverpod_ip %>:30102 |
@@ -106,12 +106,12 @@ Feature: SCTP related scenarios
     And I wait up to 60 seconds for the steps to pass:
     """"
     When I run the :exec client command with:
-      | pod              | sctpclient                                                             |
-      | namespace        | <%= project.name %>                                                    |
-      | oc_opts_end      |                                                                        |
-      | exec_command     | sh                                                                     |
-      | exec_command_arg | -c                                                                     |
-      | exec_command_arg | /usr/bin/nc -v <%= cb.service_ip %> 30102 --sctp  <<< 'test-openshift' |
+      | pod              | sctpclient                                                              |
+      | namespace        | <%= project.name %>                                                     |
+      | oc_opts_end      |                                                                         |
+      | exec_command     | sh                                                                      |
+      | exec_command_arg | -c                                                                      |
+      | exec_command_arg | echo test-openshift \| /usr/bin/nc -v <%= cb.service_ip %> 30102 --sctp |
     Then the step should succeed
     And the output should contain:
       | Connected to <%= cb.service_ip %>:30102 |
@@ -169,12 +169,12 @@ Feature: SCTP related scenarios
     And I wait up to 60 seconds for the steps to pass:
     """"
     When I run the :exec client command with:
-      | pod              | sctpclient                                                                           |
-      | namespace        | <%= project.name %>                                                                  |
-      | oc_opts_end      |                                                                                      |
-      | exec_command     | sh                                                                                   |
-      | exec_command_arg | -c                                                                                   |
-      | exec_command_arg | /usr/bin/nc -v <%= cb.worker1_ip %> <%= cb.nodeport %>  --sctp  <<< 'test-openshift' |
+      | pod              | sctpclient                                                                            |
+      | namespace        | <%= project.name %>                                                                   |
+      | oc_opts_end      |                                                                                       |
+      | exec_command     | sh                                                                                    |
+      | exec_command_arg | -c                                                                                    |
+      | exec_command_arg | echo test-openshift \| /usr/bin/nc -v <%= cb.worker1_ip %> <%= cb.nodeport %>  --sctp |
     Then the step should succeed
     And the output should contain:
       | Connected to <%= cb.worker1_ip %>:<%= cb.nodeport %> |
@@ -225,12 +225,12 @@ Feature: SCTP related scenarios
     And I wait up to 60 seconds for the steps to pass:
     """"
     When I run the :exec client command with:
-      | pod              | sctpclient                                                               |
-      | namespace        | <%= project.name %>                                                      |
-      | oc_opts_end      |                                                                          |
-      | exec_command     | sh                                                                       |
-      | exec_command_arg | -c                                                                       |
-      | exec_command_arg | /usr/bin/nc -v <%= cb.serverpod_ip %> 30102 --sctp  <<< 'test-openshift' | 
+      | pod              | sctpclient                                                                |
+      | namespace        | <%= project.name %>                                                       |
+      | oc_opts_end      |                                                                           |
+      | exec_command     | sh                                                                        |
+      | exec_command_arg | -c                                                                        |
+      | exec_command_arg | echo test-openshift \| /usr/bin/nc -v <%= cb.serverpod_ip %> 30102 --sctp | 
     Then the step should succeed
     And the output should contain:
       | Connected to <%= cb.serverpod_ip %> |
@@ -246,12 +246,12 @@ Feature: SCTP related scenarios
 
     # sctpclient pod start to send sctp traffic
     When I run the :exec client command with:
-      | pod              | sctpclient                                                               |
-      | namespace        | <%= project.name %>                                                      |
-      | oc_opts_end      |                                                                          |
-      | exec_command     | sh                                                                       |
-      | exec_command_arg | -c                                                                       |
-      | exec_command_arg | /usr/bin/nc -v <%= cb.serverpod_ip %> 30102 --sctp  <<< 'test-openshift' |
+      | pod              | sctpclient                                                                |
+      | namespace        | <%= project.name %>                                                       |
+      | oc_opts_end      |                                                                           |
+      | exec_command     | sh                                                                        |
+      | exec_command_arg | -c                                                                        |
+      | exec_command_arg | echo test-openshift \| /usr/bin/nc -v <%= cb.serverpod_ip %> 30102 --sctp |
     Then the step should fail
    
     # Define a networkpolicy to allow sctpclient to sctpserver
@@ -275,12 +275,12 @@ Feature: SCTP related scenarios
     And I wait up to 60 seconds for the steps to pass:
     """"
     When I run the :exec client command with:
-      | pod              | sctpclient                                                               |
-      | namespace        | <%= project.name %>                                                      |
-      | oc_opts_end      |                                                                          |
-      | exec_command     | sh                                                                       |
-      | exec_command_arg | -c                                                                       |
-      | exec_command_arg | /usr/bin/nc -v <%= cb.serverpod_ip %> 30102 --sctp  <<< 'test-openshift' |
+      | pod              | sctpclient                                                                |
+      | namespace        | <%= project.name %>                                                       |
+      | oc_opts_end      |                                                                           |
+      | exec_command     | sh                                                                        |
+      | exec_command_arg | -c                                                                        |
+      | exec_command_arg | echo test-openshift \| /usr/bin/nc -v <%= cb.serverpod_ip %> 30102 --sctp |
     Then the step should succeed
     And the output should contain:
       | Connected to <%= cb.serverpod_ip %> |
