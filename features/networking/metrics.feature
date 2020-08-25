@@ -14,7 +14,6 @@ Feature: SDN/OVN metrics related networking scenarios
     And evaluation of `@result[:parsed]['items'][0]['subsets'][0]['ports'][0]['port'].to_s` is stored in the :metrics_ep_port clipboard
     And evaluation of `cb.metrics_ep_ip + ':' +cb.metrics_ep_port` is stored in the :metrics_ep clipboard
     Given I use the "openshift-monitoring" project
-    And evaluation of `secret(service_account('prometheus-k8s').get_secret_names.find {|s| s.match('token')}).token` is stored in the :sa_token clipboard
     When I run the :exec admin command with:
       | n                | openshift-monitoring                                                                      |
       | pod              | prometheus-k8s-0                                                                          |
@@ -22,7 +21,7 @@ Feature: SDN/OVN metrics related networking scenarios
       | oc_opts_end      |                                                                                           |
       | exec_command     | bash                                                                                      |
       | exec_command_arg | -c                                                                                        |
-      | exec_command_arg | curl -k -H "Authorization: Bearer <%= cb.sa_token %>" http://<%= cb.metrics_ep %>/metrics |
+      | exec_command_arg | curl -k http://<%= cb.metrics_ep %>/metrics                                               |
     Then the step should succeed
     #The idea is to check whether these metrics are being relayed on the port 9101
     And the output should contain:
@@ -43,7 +42,6 @@ Feature: SDN/OVN metrics related networking scenarios
     And evaluation of `@result[:parsed]['items'][0]['subsets'][0]['ports'][0]['port'].to_s` is stored in the :metrics_ep_port clipboard
     And evaluation of `cb.metrics_ep_ip + ':' +cb.metrics_ep_port` is stored in the :metrics_ep clipboard
     Given I use the "openshift-monitoring" project
-    And evaluation of `secret(service_account('prometheus-k8s').get_secret_names.find {|s| s.match('token')}).token` is stored in the :sa_token clipboard
     When I run the :exec admin command with:
       | n                | openshift-monitoring                                                                      |
       | pod              | prometheus-k8s-0                                                                          |
@@ -51,7 +49,7 @@ Feature: SDN/OVN metrics related networking scenarios
       | oc_opts_end      |                                                                                           |
       | exec_command     | bash                                                                                      |
       | exec_command_arg | -c                                                                                        |
-      | exec_command_arg | curl -k -H "Authorization: Bearer <%= cb.sa_token %>" http://<%= cb.metrics_ep %>/metrics |
+      | exec_command_arg | curl -k http://<%= cb.metrics_ep %>/metrics                                               |
     Then the step should succeed
     #The idea is to check whether these metrics are being relayed on the port 9101
     And the output should contain:
