@@ -8,5 +8,10 @@ module BushSlicer
       rr = raw_resource(user: user, cached: cached, quiet: quiet).dig("spec")
       MachineConfigPoolSpec.new rr
     end
+
+    def machineconfig(mc_name, user: nil, cached: true, quiet: false)
+      rr = raw_resource(user: user, cached: cached, quiet: quiet).dig('status', 'configuration', 'source')
+      rr.select { |c| c["name"] == mc_name }
+    end
   end
 end
