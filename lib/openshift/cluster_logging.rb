@@ -29,32 +29,12 @@ module BushSlicer
       collection_raw(user: user, cached: cached, quiet: quiet)['logs']
     end
 
-    private def rsyslog_status_raw(user: nil, cached: true, quiet: false)
-      collection_status_raw(user: user, cached: cached, quiet: quiet)['rsyslogStatus']
-    end
-
     private def fluentd_status_raw(user: nil, cached: true, quiet: false)
       collection_status_raw(user: user, cached: cached, quiet: quiet)['fluentdStatus']
     end
 
     private def curator_status_raw(user: nil, cached: true, quiet: false)
       self.curation(user: user, cached: cached, quiet: quiet)['curatorStatus']
-    end
-
-    private def rsyslog_pods(user: nil, cached: true, quiet: false)
-      rsyslog_status_raw(user: user, cached: cached, quiet: quiet)['pods']
-    end
-
-    private def rsyslog_ready_pod_names(user: nil, cached: true, quiet: false)
-      rsyslog_pods(user: user, cached: cached, quiet: quiet)['ready']
-    end
-
-    private def rsyslog_failed_pod_names(user: nil, cached: true, quiet: false)
-      rsyslog_pods(user: user, cached: cached, quiet: quiet)['failed']
-    end
-
-    private def rsyslog_notready_pod_names(user: nil, cached: true, quiet: false)
-      rsyslog_pods(user: user, cached: cached, quiet: quiet)['notReady']
     end
 
     private def fluentd_pods(user: nil, cached: true, quiet: false)
@@ -100,24 +80,9 @@ module BushSlicer
       kibana_status(user: user, cached: cached, quiet: quiet).first['pods']
     end
 
-    # higher level methods
-    def rsyslog_ready?(user: nil, cached: true, quiet: false)
-      rsyslog_nodes = rsyslog_status_raw(user: user, cached: cached, quiet: quiet)['Nodes'].keys.sort
-      rsyslog_nodes == rsyslog_ready_pod_names && rsyslog_failed_pod_names.count == 0 && rsyslog_notready_pod_names.count == 0
-    end
-
     def fluentd_ready?(user: nil, cached: true, quiet: false)
       fluentd_nodes = fluentd_status_raw(user: user, cached: cached, quiet: quiet)['nodes'].keys.sort
-      fluentd_nodes == fluentd_ready_pod_names && fluentd_failed_pod_names.count == 0 && fluentd_notready_pod_names.count == 0
-    end
-
-    def wait_until_rsyslog_is_ready(user: nil, quiet: false, timeout: 5*60)
-      success = wait_for(timeout) {
-        rsyslog_ready?(user: user, cached: false, quiet: quiet)
-      }
-      unless success
-        raise "rsyslog did not become ready within #{timeout} seconds"
-      end
+      fluentd_nodes == fluentd_ready_pod_names.sort && fluentd_failed_pod_names.count == 0 && fluentd_notready_pod_names.count == 0
     end
 
     def wait_until_fluentd_is_ready(user: nil, quiet: false, timeout: 5*60)
