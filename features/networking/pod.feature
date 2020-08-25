@@ -309,8 +309,7 @@ Feature: Pod related networking scenarios
     Given a pod becomes ready with labels:
       | name=hello-pod |
     And evaluation of `pod` is stored in the :client_pod clipboard
-    # 'yes' command will send a character "h" continously for 3 seconds to /dev/udp on listener where the node is listening for udp traffic on exposed nodeport. The 3 seconds mechanism will create an Assured
-    #  entry which will give us enough time to validate upcoming steps
+    # The 3 seconds mechanism via for loop will create an Assured conntrack entry which will give us enough time to validate upcoming steps
     When I run the :exec background client command with:
       | pod              | <%= cb.client_pod.name %>                                                                |
       | oc_opts_end      |                                                                                          |
@@ -339,8 +338,7 @@ Feature: Pod related networking scenarios
       | name=udp-pods |
     And evaluation of `pod` is stored in the :host_pod2 clipboard
 
-    # 'yes' command will send a character "h" continously for 3 seconds to /dev/udp on listener where the node is listening for udp traffic on exposed nodeport. The 3 seconds mechanism will create an Assured
-    #  entry which will give us enough time to validate upcoming steps
+    # The 3 seconds mechanism via for loop will create an Assured conntrack entry which will give us enough time to validate upcoming steps
     When I run the :exec background client command with:
       | pod              | <%= cb.client_pod.name %>                                                                |
       | oc_opts_end      |                                                                                          |
