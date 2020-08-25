@@ -221,6 +221,7 @@ goto_operator_hub_page:
   action: wait_box_loaded
 goto_installed_operators_page:
   url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion
+  action: wait_box_loaded
 goto_all_installed_operators_page:
   url: k8s/all-namespaces/operators.coreos.com~v1alpha1~ClusterServiceVersion
 goto_operator_subscription_page:

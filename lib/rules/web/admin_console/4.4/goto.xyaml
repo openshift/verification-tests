@@ -220,6 +220,7 @@ goto_operator_hub_page:
   url: operatorhub/ns/default
 goto_installed_operators_page:
   url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion
+  action: wait_box_loaded
 goto_operator_subscription_page:
   url: operatorhub/subscribe?pkg=<package_name>&catalog=<catalog_name>&catalogNamespace=openshift-marketplace&targetNamespace=<target_namespace>
   action: wait_box_loaded
