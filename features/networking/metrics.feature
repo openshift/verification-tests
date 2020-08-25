@@ -20,7 +20,7 @@ Feature: SDN/OVN metrics related networking scenarios
       | pod              | prometheus-k8s-0                                                                          |
       | c                | prometheus                                                                                |
       | oc_opts_end      |                                                                                           |
-      | exec_command     | sh                                                                                        |
+      | exec_command     | bash                                                                                      |
       | exec_command_arg | -c                                                                                        |
       | exec_command_arg | curl -k -H "Authorization: Bearer <%= cb.sa_token %>" http://<%= cb.metrics_ep %>/metrics |
     Then the step should succeed
@@ -49,7 +49,7 @@ Feature: SDN/OVN metrics related networking scenarios
       | pod              | prometheus-k8s-0                                                                          |
       | c                | prometheus                                                                                |
       | oc_opts_end      |                                                                                           |
-      | exec_command     | sh                                                                                        |
+      | exec_command     | bash                                                                                      |
       | exec_command_arg | -c                                                                                        |
       | exec_command_arg | curl -k -H "Authorization: Bearer <%= cb.sa_token %>" http://<%= cb.metrics_ep %>/metrics |
     Then the step should succeed
