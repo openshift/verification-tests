@@ -1,20 +1,29 @@
-Given /^I obtain test data (file|dir) #{QUOTED}$/ do |type, path|
-  accepted_roots = [
-    "#{BushSlicer::HOME}/testdata",
-    "#{BushSlicer::HOME}/features/tierN/testdata",
-  ]
+Given /^I obtain test data (file|dir) #{QUOTED}(?: into the #{QUOTED} dir)?$/ do |type, path, dest_dir|
+  if path.include?("../") || (dest_dir && dest_dir.include?("../"))
+    # prevent escape, e.g. "../../../../../../../../../etc/passwd"
+    raise "invalid relative path access"
+  end
+  accepted_roots = %W[#{BushSlicer::HOME}/testdata #{BushSlicer::HOME}/features/tierN/testdata]
   tried_paths = []
   found = accepted_roots.any? do |root|
-    test_file = "#{root}/#{path}"
-    tried_paths << test_file
-    if File.exist? test_file
-      if type == "dir"
-        FileUtils.cp_r(test_file, File.basename(path))
-        cb.test_file = File.absolute_path(File.basename(path))
-      else 
-        FileUtils.cp(test_file, File.basename(path))
-        cb.test_file = File.absolute_path(File.basename(path))
+    src = "#{root}/#{path}"
+    tried_paths << src
+    if File.exist? src
+      dest = File.basename(path)
+      if dest_dir
+        # cp_r does not do a mkdir
+        # mkdir_p to prevent errors when EEXIST
+        FileUtils.mkdir_p(dest_dir)
+        dest = File.join(dest_dir, dest)
       end
+      if type == "dir" or File.directory?(src)
+        # copy the contents not the dir by appending '/.'
+        # without this if the dest dir already exists (e.g. if we run the step twice)
+        # cp_r('src', 'dest') will copy src/x -> dest/src/x when instead we want src/x -> dest/x
+        src += "/."
+      end
+      FileUtils.cp_r(src, dest)
+      cb.test_file = File.absolute_path(dest)
     end
   end
   raise "could not find test file in '#{tried_paths}'" unless found
