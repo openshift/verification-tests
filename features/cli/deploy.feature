@@ -546,9 +546,9 @@ Feature: deployment related features
   # @case_id OCP-11769
   Scenario: Start new deployment when deployment running
     Given I have a project
-    Given I obtain test data file "deployment/testhook.json"
+    Given I obtain test data file "deployment/dc-with-pre-mid-post.yaml"
     When I run the :create client command with:
-      | f | testhook.json |
+      | f | dc-with-pre-mid-post.yaml |
     Then the step should succeed
     Given I wait until the status of deployment "hooks" becomes :running
     And I replace resource "dc" named "hooks":
