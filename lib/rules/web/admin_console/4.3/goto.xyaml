@@ -12,6 +12,7 @@ goto_project_details_page:
   url: k8s/cluster/projects/<project_name>/overview
 goto_one_project_page:
   url: k8s/cluster/projects/<project_name>
+  action: wait_box_loaded
 goto_one_project_dashboard_page:
   action: goto_one_project_page
 
