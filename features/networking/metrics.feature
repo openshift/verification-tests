@@ -15,13 +15,13 @@ Feature: SDN/OVN metrics related networking scenarios
     And evaluation of `cb.metrics_ep_ip + ':' +cb.metrics_ep_port` is stored in the :metrics_ep clipboard
     Given I use the "openshift-monitoring" project
     When I run the :exec admin command with:
-      | n                | openshift-monitoring                                                                      |
-      | pod              | prometheus-k8s-0                                                                          |
-      | c                | prometheus                                                                                |
-      | oc_opts_end      |                                                                                           |
-      | exec_command     | bash                                                                                      |
-      | exec_command_arg | -c                                                                                        |
-      | exec_command_arg | curl -k http://<%= cb.metrics_ep %>/metrics                                               |
+      | n                | openshift-monitoring                |
+      | pod              | prometheus-k8s-0                    |
+      | c                | prometheus                          |
+      | oc_opts_end      |                                     |
+      | exec_command     | curl                                |
+      | exec_command_arg | -k                                  |
+      | exec_command_arg | http://<%= cb.metrics_ep %>/metrics |
     Then the step should succeed
     #The idea is to check whether these metrics are being relayed on the port 9101
     And the output should contain:
@@ -43,13 +43,13 @@ Feature: SDN/OVN metrics related networking scenarios
     And evaluation of `cb.metrics_ep_ip + ':' +cb.metrics_ep_port` is stored in the :metrics_ep clipboard
     Given I use the "openshift-monitoring" project
     When I run the :exec admin command with:
-      | n                | openshift-monitoring                                                                      |
-      | pod              | prometheus-k8s-0                                                                          |
-      | c                | prometheus                                                                                |
-      | oc_opts_end      |                                                                                           |
-      | exec_command     | bash                                                                                      |
-      | exec_command_arg | -c                                                                                        |
-      | exec_command_arg | curl -k http://<%= cb.metrics_ep %>/metrics                                               |
+      | n                | openshift-monitoring                |
+      | pod              | prometheus-k8s-0                    |
+      | c                | prometheus                          |
+      | oc_opts_end      |                                     |
+      | exec_command     | curl                                |
+      | exec_command_arg | -k                                  |
+      | exec_command_arg | http://<%= cb.metrics_ep %>/metrics |
     Then the step should succeed
     #The idea is to check whether these metrics are being relayed on the port 9101
     And the output should contain:
