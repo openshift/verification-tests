@@ -30,7 +30,7 @@ Feature: Secure Computing Test Scenarios
     And admin ensures "custom-seccomp" machineconfig is deleted after scenario
 
     # Wait for machineconfigpool to roll out the new machineconfig
-    Given I wait up to 900 seconds for the steps to pass:
+    Given I wait up to 1200 seconds for the steps to pass:
     """
     Then the expression should be true> machine_config_pool('worker').raw_resource(cached: false).dig('status', 'configuration', 'source').select { |c| c['name'] == 'custom-seccomp' }.empty? == false
     Then the expression should be true> machine_config_pool('worker').condition(type: 'Updating', cached: false)["status"] == "False"
