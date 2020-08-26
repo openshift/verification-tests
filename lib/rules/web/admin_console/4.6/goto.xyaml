@@ -330,6 +330,9 @@ goto_cluster_operators:
 goto_global_configuration_page:
   url: settings/cluster/globalconfig
   action: wait_box_loaded 
+goto_cluster_settings_details_page:
+  url: settings/cluster
+  action: wait_box_loaded
 
 goto_command_line_tools:
   url: command-line-tools
