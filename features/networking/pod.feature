@@ -309,16 +309,14 @@ Feature: Pod related networking scenarios
     Given a pod becomes ready with labels:
       | name=hello-pod |
     And evaluation of `pod` is stored in the :client_pod clipboard
-    # 'yes' command will send a character "h" continously for 3 seconds to /dev/udp on listener where the node is listening for udp traffic on exposed nodeport. The 3 seconds mechanism will create an Assured
-    #  entry which will give us enough time to validate upcoming steps
+    # The 3 seconds mechanism via for loop will create an Assured conntrack entry which will give us enough time to validate upcoming steps
     When I run the :exec background client command with:
-      | pod              | <%= cb.client_pod.name %>                             |
-      | oc_opts_end      |                                                       |
-      | exec_command     | bash                                                  |
-      | exec_command_arg | -c                                                    |
-      | exec_command_arg | yes "h">/dev/udp/<%= cb.node_ip %>/<%= cb.nodeport %> |
-    Given 3 seconds have passed
-    And I terminate last background process
+      | pod              | <%= cb.client_pod.name %>                                                                |
+      | oc_opts_end      |                                                                                          |
+      | exec_command     | bash                                                                                     |
+      | exec_command_arg | -c                                                                                       |
+      | exec_command_arg | for n in {1..3}; do echo $n; sleep 1; done>/dev/udp/<%= cb.node_ip %>/<%= cb.nodeport %> |
+    Then the step should succeed
 
     #Creating network test pod to levearage conntrack tool
     Given I obtain test data file "networking/net_admin_cap_pod.yaml"
@@ -340,16 +338,14 @@ Feature: Pod related networking scenarios
       | name=udp-pods |
     And evaluation of `pod` is stored in the :host_pod2 clipboard
 
-    # 'yes' command will send a character "h" continously for 3 seconds to /dev/udp on listener where the node is listening for udp traffic on exposed nodeport. The 3 seconds mechanism will create an Assured
-    #  entry which will give us enough time to validate upcoming steps
+    # The 3 seconds mechanism via for loop will create an Assured conntrack entry which will give us enough time to validate upcoming steps
     When I run the :exec background client command with:
-      | pod              | <%= cb.client_pod.name %>                             |
-      | oc_opts_end      |                                                       |
-      | exec_command     | bash                                                  |
-      | exec_command_arg | -c                                                    |
-      | exec_command_arg | yes "h">/dev/udp/<%= cb.node_ip %>/<%= cb.nodeport %> |
-    Given 3 seconds have passed
-    And I terminate last background process
+      | pod              | <%= cb.client_pod.name %>                                                                |
+      | oc_opts_end      |                                                                                          |
+      | exec_command     | bash                                                                                     |
+      | exec_command_arg | -c                                                                                       |
+      | exec_command_arg | for n in {1..3}; do echo $n; sleep 1; done>/dev/udp/<%= cb.node_ip %>/<%= cb.nodeport %> |
+    Then the step should succeed
     #Making sure that the conntrack table should not contain old deleted udp listener pod IP entries but new pod one's
     When I execute on the "<%= cb.network_pod %>" pod:
       | bash | -c | conntrack -L \| grep "<%= cb.nodeport %>" |
