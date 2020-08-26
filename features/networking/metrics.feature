@@ -15,7 +15,7 @@ Feature: SDN/OVN metrics related networking scenarios
     And evaluation of `secret(service_account('prometheus-k8s').get_secret_names.find {|s| s.match('token')}).token` is stored in the :sa_token clipboard
     
     #Running curl -k http://<%= cb.metrics_ep %>/metrics if version is < 4.6
-    #Running url -k -H "Authorization: Bearer <%= cb.sa_token %>" <%= cb.access_protocol %>://<%= cb.metrics_ep %>/metrics if version is > 4.5 as sdn mmetric should be usin https scheme
+    #Running curl -k -H "Authorization: Bearer <%= cb.sa_token %>" <%= cb.access_protocol %>://<%= cb.metrics_ep %>/metrics if version is > 4.5 as sdn mmetric should be usin https scheme
     Given evaluation of `env.version_le("4.5", user: user) ? "curl -k http://<%= cb.metrics_ep %>/metrics" : "curl -k -H \"Authorization: Bearer <%= cb.sa_token %>\" https://<%= cb.metrics_ep %>/metrics"` is stored in the :curl_query clipboard
     When I run the :exec admin command with:
       | n                | openshift-monitoring |
@@ -46,7 +46,7 @@ Feature: SDN/OVN metrics related networking scenarios
     And evaluation of `secret(service_account('prometheus-k8s').get_secret_names.find {|s| s.match('token')}).token` is stored in the :sa_token clipboard
     
     #Running curl -k http://<%= cb.metrics_ep %>/metrics if version is < 4.6
-    #Running url -k -H "Authorization: Bearer <%= cb.sa_token %>" <%= cb.access_protocol %>://<%= cb.metrics_ep %>/metrics if version is > 4.5 as sdn mmetric should be usin https scheme
+    #Running curl -k -H "Authorization: Bearer <%= cb.sa_token %>" <%= cb.access_protocol %>://<%= cb.metrics_ep %>/metrics if version is > 4.5 as sdn mmetric should be usin https scheme
     Given evaluation of `env.version_le("4.5", user: user) ? "curl -k http://<%= cb.metrics_ep %>/metrics" : "curl -k -H \"Authorization: Bearer <%= cb.sa_token %>\" https://<%= cb.metrics_ep %>/metrics"` is stored in the :curl_query clipboard
     When I run the :exec admin command with:
       | n                | openshift-monitoring |
