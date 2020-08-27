@@ -188,7 +188,7 @@ Feature: deployment related features
       | Warning: the following images triggers were disabled |
       | You can re-enable them with |
     And the pod named "hooks-3-deploy" becomes ready
-    Given I wait for the "hooks-3-deploy" pod to die
+    Given I wait for the pod named "hooks-3-deploy" to die
     When I get project pod
     Then the output should match:
       | READY\\s+STATUS |
