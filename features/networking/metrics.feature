@@ -15,7 +15,7 @@ Feature: SDN/OVN metrics related networking scenarios
     And evaluation of `secret(service_account('prometheus-k8s').get_secret_names.find {|s| s.match('token')}).token` is stored in the :sa_token clipboard
 
     #Running curl -k http://<%= cb.metrics_ep %>/metrics if version is < 4.6
-    #Running curl -k -H "Authorization: Bearer <%= cb.sa_token %>" https://<%= cb.metrics_ep %>/metrics if version is > 4.5 as sdn mmetric should be usin https scheme
+    #Running curl -k -H "Authorization: Bearer <%= cb.sa_token %>" https://<%= cb.metrics_ep %>/metrics if version is > 4.5 as sdn mmetrics should be using https scheme
     Given evaluation of `%Q{curl -k http://<%= cb.metrics_ep %>/metrics}` is stored in the :curl_query_le_4_5 clipboard
     Given evaluation of `%Q{curl -k -H \"Authorization: Bearer <%= cb.sa_token %>\" https://<%= cb.metrics_ep %>/metrics}` is stored in the :curl_query_ge_4_6 clipboard
     Given evaluation of `env.version_le("4.5", user: user) ? "#{cb.curl_query_le_4_5}" : "#{cb.curl_query_ge_4_6}"` is stored in the :curl_query clipboard
@@ -48,7 +48,7 @@ Feature: SDN/OVN metrics related networking scenarios
     And evaluation of `secret(service_account('prometheus-k8s').get_secret_names.find {|s| s.match('token')}).token` is stored in the :sa_token clipboard
     
     #Running curl -k http://<%= cb.metrics_ep %>/metrics if version is < 4.6
-    #Running curl -k -H "Authorization: Bearer <%= cb.sa_token %>" https://<%= cb.metrics_ep %>/metrics if version is > 4.5 as sdn mmetric should be usin https scheme
+    #Running curl -k -H "Authorization: Bearer <%= cb.sa_token %>" https://<%= cb.metrics_ep %>/metrics if version is > 4.5 as sdn metrics should be using https scheme
     Given evaluation of `%Q{curl -k http://<%= cb.metrics_ep %>/metrics}` is stored in the :curl_query_le_4_5 clipboard
     Given evaluation of `%Q{curl -k -H \"Authorization: Bearer <%= cb.sa_token %>\" https://<%= cb.metrics_ep %>/metrics}` is stored in the :curl_query_ge_4_6 clipboard
     Given evaluation of `env.version_le("4.5", user: user) ? "#{cb.curl_query_le_4_5}" : "#{cb.curl_query_ge_4_6}"` is stored in the :curl_query clipboard
