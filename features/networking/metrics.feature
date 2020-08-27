@@ -10,13 +10,15 @@ Feature: SDN/OVN metrics related networking scenarios
     And evaluation of `endpoints(cb.sdn_label).subsets.first.addresses.first.ip.to_s` is stored in the :metrics_ep_ip clipboard
     And evaluation of `endpoints(cb.sdn_label).subsets.first.ports.first.port.to_s` is stored in the :metrics_ep_port clipboard
     And evaluation of `cb.metrics_ep_ip + ':' +cb.metrics_ep_port` is stored in the :metrics_ep clipboard
-    
+     
     Given I use the "openshift-monitoring" project
     And evaluation of `secret(service_account('prometheus-k8s').get_secret_names.find {|s| s.match('token')}).token` is stored in the :sa_token clipboard
-    
+
     #Running curl -k http://<%= cb.metrics_ep %>/metrics if version is < 4.6
     #Running curl -k -H "Authorization: Bearer <%= cb.sa_token %>" https://<%= cb.metrics_ep %>/metrics if version is > 4.5 as sdn mmetric should be usin https scheme
-    Given evaluation of `env.version_le("4.5", user: user) ? "curl -k http://<%= cb.metrics_ep %>/metrics" : "curl -k -H \"Authorization: Bearer <%= cb.sa_token %>\" https://<%= cb.metrics_ep %>/metrics"` is stored in the :curl_query clipboard
+    Given evaluation of `%Q{curl -k http://<%= cb.metrics_ep %>/metrics}` is stored in the :curl_query_le_4_5 clipboard
+    Given evaluation of `%Q{curl -k -H \"Authorization: Bearer <%= cb.sa_token %>\" https://<%= cb.metrics_ep %>/metrics}` is stored in the :curl_query_ge_4_6 clipboard
+    Given evaluation of `env.version_le("4.5", user: user) ? "#{cb.curl_query_le_4_5}" : "#{cb.curl_query_ge_4_6}"` is stored in the :curl_query clipboard
     When I run the :exec admin command with:
       | n                | openshift-monitoring |
       | pod              | prometheus-k8s-0     |
@@ -47,7 +49,9 @@ Feature: SDN/OVN metrics related networking scenarios
     
     #Running curl -k http://<%= cb.metrics_ep %>/metrics if version is < 4.6
     #Running curl -k -H "Authorization: Bearer <%= cb.sa_token %>" https://<%= cb.metrics_ep %>/metrics if version is > 4.5 as sdn mmetric should be usin https scheme
-    Given evaluation of `env.version_le("4.5", user: user) ? "curl -k http://<%= cb.metrics_ep %>/metrics" : "curl -k -H \"Authorization: Bearer <%= cb.sa_token %>\" https://<%= cb.metrics_ep %>/metrics"` is stored in the :curl_query clipboard
+    Given evaluation of `%Q{curl -k http://<%= cb.metrics_ep %>/metrics}` is stored in the :curl_query_le_4_5 clipboard
+    Given evaluation of `%Q{curl -k -H \"Authorization: Bearer <%= cb.sa_token %>\" https://<%= cb.metrics_ep %>/metrics}` is stored in the :curl_query_ge_4_6 clipboard
+    Given evaluation of `env.version_le("4.5", user: user) ? "#{cb.curl_query_le_4_5}" : "#{cb.curl_query_ge_4_6}"` is stored in the :curl_query clipboard
     When I run the :exec admin command with:
       | n                | openshift-monitoring |
       | pod              | prometheus-k8s-0     |
