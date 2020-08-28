@@ -511,10 +511,9 @@ module BushSlicer
         if bad_files.include? file
           raise "should not remove file named '#{file}'"
         end
-
-        r = "-r"
+        meth = :rm
       else
-        r = ""
+        meth = :remove
       end
       file = shell_escape file
       if opts[:home] && ! file.start_with?('/','\\')
@@ -522,20 +521,14 @@ module BushSlicer
         # relies strongly on bad_files checking above
         file = '~/' + file
       end
-      if opts[:raw]
-        exec_method = :exec_raw
-      elsif opts[:admin]
-        exec_method = :exec_admin
+      if File.file? file
+        FileUtils.public_send(method, file, force: true)
+        check_cmd = File.file? file
       else
-        exec_method = :exec
+        FileUtils.public_send(:remove_dir, file, force: true)
+        check_cmd = File.directory? file
       end
-      public_send(exec_method, "rm #{r} -f -- #{file}", **opts)
-      opts[:quiet] = true
-      res = public_send(exec_method, "ls -d -- #{file}", **opts)
-
-      # OCDebugAccessibleHost does not return exit status of executed command
-      # return ! res[:success]
-      return res[:response].include? "No such"
+      return !check_cmd
     end
 
     # wait until one file in the list is found and returns its name
