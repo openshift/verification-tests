@@ -397,6 +397,50 @@ module BushSlicer
       self.class.shortclass
     end
 
+    # @return [String] the resource name without the API name, e.g.
+    #   for `configs.samples.operator.openshift.io` it will return `configs`
+    def self.resource_link_element
+      @resource_link_element ||= self::RESOURCE[/^[^.]*/].freeze
+    end
+
+    # @return [String] the type of resource as would appear in YAML output
+    # @note we need to handle resources where api name part is significant and
+    #   RESOURCE contains dots
+    def self.kind
+      unless @kind
+        if self::RESOURCE.count(".").zero?
+          # old style, missing api name
+          @kind = shortclass
+        elsif shortclass.size <= resource_link_element.size + 2
+          # class name doesn't contain API name but RESOURCE does
+
+          # Class name is always singular, `resource_link_element` is always
+          # plural. I found only one plural word that is 2 chars shorter than
+          # singular but in RESOURCE containing API name, there is at least
+          # one dot + some characters. I think there can't be any API name
+          # with less than 2 characters, so the above check should cover all
+          # practical cases.
+          # In the unlikely case some resource doesn't fit this check,
+          # one can override this method for it.
+          @kind = shortclass
+        else
+          # full API name in RESOURCE, class name also include api name
+          resource_without_dots = self::RESOURCE.gsub(".", "")
+          api_name_no_dots = resource_without_dots[resource_link_element.size..-1]
+          @kind = shortclass[/.*?(?=#{api_name_no_dots}\z)/i]
+          if @kind.nil?
+            raise "#{shortclass}: error in class definition, RESOURCE and class name mismatch"
+          end
+        end
+      end
+
+      return @kind
+    end
+
+    def kind
+      self.class.kind
+    end
+
     def self.struct_iso8601_time(struct)
       Collections.deep_map_hash(struct) do |k, v|
         case v
