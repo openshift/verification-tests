@@ -260,19 +260,43 @@ Feature: MachineHealthCheck Test Scenarios
     Then the output should contain:
       | mhc-<%= machine_set.name %>: total targets: 1,  maxUnhealthy: 1%, unhealthy: 1. Short-circuiting remediation |
     """
-
   # @author miyadav@redhat.com
   # @case_id OCP-33714
   @admin
-  Scenario: Leverage OpenAPI validation within MHC
+  Scenario Outline: Leverage OpenAPI validation within MHC
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     Then I use the "openshift-machine-api" project
 
-    # Create MHC with malformed unhealthy nodes value and empty selectors
-    Given I obtain test data file "cloud/mhc/mhc_malformed.yaml"
-    When I run the :create client command with:
-      | f | mhc_malformed.yaml | 
+    Given I obtain test data file "cloud/mhc/mhc_validations.yaml"
+    When I run oc create over "mhc_validations.yaml" replacing paths:
+      | ["spec"]["maxUnhealthy"] | <maxUnhealthy> |
     Then the output should contain:
-      | The MachineHealthCheck "mhc-malformed" is invalid: |
+      | maxUnhealthy: Invalid value: "": spec.maxUnhealthy |
 
+   Examples:
+      | maxUnhealthy |
+      |  -2a         |
+      | "10t%"       |
+      | "-2%"        |
+      |  -2%         |
+
+  # @author miyadav@redhat.com
+  # @case_id OCP-34095
+  @admin
+  Scenario Outline: [mhc] timeout field without units(h,m,s) shoud not be allowed to be stored
+    Given I have an IPI deployment
+    And I switch to cluster admin pseudo user
+    Then I use the "openshift-machine-api" project
+
+    Given I obtain test data file "cloud/mhc/mhc_validations.yaml"
+    When I run oc create over "mhc_validations.yaml" replacing paths:
+      | ["spec"]["unhealthyConditions"][0]["timeout"] | <timeout> |
+    Then the output should contain:
+      | timeout: Invalid value: "": spec.unhealthyConditions.timeout |
+
+   Examples:
+      | timeout |
+      | "3"     |
+      | "3t"    |
+ 

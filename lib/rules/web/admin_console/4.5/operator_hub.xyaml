@@ -331,16 +331,25 @@ check_Hazelcastjet_default_action_and_remote_workflow:
   action: check_link_and_text
 
 check_phase_status:
-  element:
-    selector:
+  elements:
+  - selector:
+      xpath: //table
+    timeout: 20
+  - selector:
       xpath: //td/span[contains(.,'Phase')]/span[contains(.,'<status>')]
 check_state_status:
-  element:
-    selector:
+  elements:
+  - selector:
+      xpath: //table
+    timeout: 20
+  - selector:
       xpath: //span[contains(.,'State') and contains(.,'<status>')]
 check_condition_status:
-  element:
-    selector:
+  elements:
+  - selector:
+      xpath: //table
+    timeout: 20
+  - selector:
       xpath: //span[contains(.,'Conditions') and contains(.,'<status>')]
 
 ## project selector: one project
@@ -403,3 +412,4 @@ check_operator_column_all_namespace:
   elements:
   - selector: 
       xpath: //h1[contains(text(),'<operator_name>')]//ancestor::tr[@data-test-rows='resource-row']/td[<col_index>][contains(text(),'All Namespaces')]
+check_logging_operator_filtered_out: {}

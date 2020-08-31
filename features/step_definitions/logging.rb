@@ -159,10 +159,7 @@ Given /^I wait for clusterlogging(?: named "(.+)")? with #{QUOTED} log collector
     })
     cl.wait_until_fluentd_is_ready
   else
-    step %Q/a pod becomes ready with labels:/, table(%{
-      | component=rsyslog |
-    })
-    cl.wait_until_rsyslog_is_ready
+    raise "unknow log collector"
   end
 
   logger.info("### checking logging subcomponent status: kibana")
@@ -305,7 +302,6 @@ Given /^I delete the clusterlogging instance$/ do
   step %Q/I wait for the resource "deployment" named "kibana" to disappear/
   step %Q/I wait for the resource "elasticsearch" named "elasticsearch" to disappear/
   step %Q/I wait for the resource "cronjob" named "curator" to disappear/
-  step %Q/I wait for the resource "daemonset" named "rsyslog" to disappear/
   step %Q/I wait for the resource "daemonset" named "fluentd" to disappear/
   step %Q/all existing pods die with labels:/, table(%{
     | component=elasticsearch |
