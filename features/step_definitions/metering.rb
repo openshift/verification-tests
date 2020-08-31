@@ -76,6 +76,8 @@ Given /^I install metering service using:$/ do | table |
       step %Q(I ensure "<%= cb.metering_ns %>" meteringconfig is deleted)
     end
   end
+  # it takes time for OLM to create the CRD,
+  step %Q(I wait for the "meteringconfigs.metering.openshift.io" custom_resource_definition to appear up to 60 seconds)
   step %Q(I run oc create as admin over ERB test file: #{metering_config})
   step %Q(all metering related pods are running in the project)
   step %Q/all reportdatasources are importing from Prometheus/
