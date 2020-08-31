@@ -2,7 +2,7 @@ require 'openshift/cluster_resource'
 
 module BushSlicer
   class ValidatingWebhookConfiguration < ClusterResource
-    RESOURCE = "ValidatingWebhookConfiguration"
+    RESOURCE = "validatingwebhookconfigurations.admissionregistration.k8s.io"
 
     def output_to_ref(user: nil, cached: true, quiet: false)
       unless cached && props[:output_to_ref]
