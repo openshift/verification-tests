@@ -635,7 +635,6 @@ click_memory_usage_chart:
       <<: *memory_usage_chart
     op: click
 check_on_dev_monitoring_page:
-  action: wait_box_loaded
   elements:
   - selector:
       xpath: //a[contains(@href,'/dev-monitoring/ns/<project_name>/metrics') and text()='Metrics']
