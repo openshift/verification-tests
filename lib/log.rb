@@ -222,7 +222,7 @@ module BushSlicer
           # We don't need to save exact character sequence, only length.
           #   Saving it for safety check.
           # StringScanner.matched_size is byte based, for UTF we need
-          #   `matched.size`
+          #   `matched.size`, see https://bugs.ruby-lang.org/issues/17139
           res << [ss[1], ss.matched.size/ss[1].size]
         end
 
