@@ -32,6 +32,22 @@ When /^I run the :([a-z_]*?)( background)? admin command with:$/ do |yaml_key, b
   ensure_admin_tagged
   opts = table.raw == [["dummy"]] ? [] : opts_array_process(table.raw)
 
+  if yaml_key == "oadm_policy_add_role_to_user"
+
+    teardown_add {
+      yaml_del_key="oadm_policy_remove_role_from_user"
+      if background
+        @result = env.admin.cli_exec(
+          yaml_del_key.to_sym,
+          opts << [ :_background, true ]
+        )
+        @bg_rulesresults << @result
+        @bg_processes << @result[:process_object]
+      else
+        @result = env.admin.cli_exec(yaml_del_key.to_sym, opts)
+      end
+    }
+  end
   if background
     @result = env.admin.cli_exec(
       yaml_key.to_sym,
