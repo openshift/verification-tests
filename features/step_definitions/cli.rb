@@ -33,7 +33,6 @@ When /^I run the :([a-z_]*?)( background)? admin command with:$/ do |yaml_key, b
   opts = table.raw == [["dummy"]] ? [] : opts_array_process(table.raw)
 
   if yaml_key == "oadm_policy_add_role_to_user"
-
     teardown_add {
       yaml_del_key="oadm_policy_remove_role_from_user"
       if background
