@@ -10,6 +10,7 @@ click_primary_menu_developer_mode:
 goto_monitoring:
   params:
     menu_text: Monitoring 
+  action: skip_dev_perspective_tour
   action: click_primary_menu_developer_mode
 click_projects_dropdown_developer_mode:
   element:
