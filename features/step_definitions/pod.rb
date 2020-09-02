@@ -177,17 +177,18 @@ Given /^I wait for the pod(?: named #{QUOTED})? to die( regardless of current st
   end
 end
 
-Given /^all existing pods die with labels:$/ do |table|
+Given /^(admin executes|all) existing pods die with labels:$/ do |by,table|
+  _user = by.split.first == "admin" ? admin : user
   labels = table.raw.flatten # dimensions irrelevant
   timeout = 10 * 60
   start_time = monotonic_seconds
 
-  current_pods = BushSlicer::Pod.get_matching(user: user, project: project,
+  current_pods = BushSlicer::Pod.get_matching(user: _user, project: project,
                                              get_opts: {l: selector_to_label_arr(*labels)})
 
   current_pods.each do |pod|
     @result =
-        pod.wait_till_status(BushSlicer::Pod::TERMINAL_STATUSES, user,
+        pod.wait_till_status(BushSlicer::Pod::TERMINAL_STATUSES, _user,
                              timeout - monotonic_seconds + start_time)
     unless @result[:success]
       raise "pod #{pod.name} did not die within allowed time"
