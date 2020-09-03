@@ -73,6 +73,14 @@ clear_input_value:
       id: <clear_field_id>
     op: clear
     type: input
+navigate_to_admin_console:
+  elements:
+  - selector:
+      xpath: //button[@data-test-id='perspective-switcher-toggle']
+    op: click
+  - selector:
+      xpath: //li//h1[contains(., 'Administrator')]
+    op: click
 set_input_value:
   element:
     selector:

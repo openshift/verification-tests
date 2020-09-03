@@ -8,21 +8,39 @@ Feature: Dynamic provisioning
     When I create a dynamic pvc from "pvc.json" replacing paths:
       | ["metadata"]["name"] | mypvc |
     Then the step should succeed
-
-    Given I obtain test data file "storage/misc/pod.yaml"
-    When I run oc create over "pod.yaml" replacing paths:
-      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc                 |
-      | ["metadata"]["name"]                                         | mypod                 |
-      | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt/<cloud_provider> |
+    Given I obtain test data file "storage/misc/deployment.yaml"
+    When I run oc create over "deployment.yaml" replacing paths:
+      | ["metadata"]["name"]                                                             | mydep                 |
+      | ["spec"]["template"]["metadata"]["labels"]["action"]                             | storage               |
+      | ["spec"]["template"]["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc                 |
+      | ["spec"]["template"]["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt/<cloud_provider> |
     Then the step should succeed
-    And the pod named "mypod" becomes ready
+    And a pod becomes ready with labels:
+      | action=storage |
     And the "mypvc" PVC becomes :bound
     And I save volume id from PV named "<%= pvc.volume_name %>" in the :volumeID clipboard
     When I execute on the pod:
       | touch | /mnt/<cloud_provider>/testfile_1 |
     Then the step should succeed
 
-    Given I ensure "<%= pod.name %>" pod is deleted
+    When I run the :scale client command with:
+      | resource | deployment |
+      | name     | mydep      |
+      | replicas | 0          |
+    Then the step should succeed
+    And I wait for the resource "pod" named "<%= pod.name %>" to disappear
+    When I run the :scale client command with:
+      | resource | deployment |
+      | name     | mydep      |
+      | replicas | 1          |
+    Then the step should succeed
+    And a pod becomes ready with labels:
+      | action=storage |
+    When I execute on the pod:
+      | ls | -l | /mnt/<cloud_provider>/testfile_1 |
+    Then the step should succeed
+
+    Given I ensure "mydep" deployment is deleted
     And I ensure "<%= pvc.name %>" pvc is deleted
 
     Given I switch to cluster admin pseudo user

@@ -25,7 +25,9 @@ Feature: Kibana related features
     And I perform the :kibana_find_index_pattern web action with:
       | index_pattern_name | project.<%= cb.proj.name %>.<%= cb.proj.uid %>.* |
     Then the step should succeed
-    And I log out kibana logging web console
+    When I run the :logout_kibana web action
+    Then the step should succeed
+    And I close the current browser
     Given cluster role "cluster-admin" is added to the "first" user
     Then I login to kibana logging web console
     Given evaluation of `[".operations.*", ".all", ".orphaned", "project.*"]` is stored in the :indices clipboard
@@ -37,7 +39,9 @@ Feature: Kibana related features
       | index_pattern_name | #{cb.index_name} |
     Then the step should succeed
     """
-    Then I log out kibana logging web console
+    When I run the :logout_kibana web action
+    Then the step should succeed
+    And I close the current browser
     And cluster role "cluster-admin" is removed from the "first" user
 
     And I login to kibana logging web console
@@ -145,3 +149,47 @@ Feature: Kibana related features
     When I run the :check_log_count web action
     Then the step should succeed
     """
+
+  # @author qitang@redhat.com
+  # @case_id OCP-32002
+  @admin
+  @destructive
+  @commonlogging
+  Scenario: Kibana logout function should log off user
+    Given the master version < "4.5"
+    Given I switch to the first user
+    Given I create a project with non-leading digit name
+    Given evaluation of `project.name` is stored in the :proj_name clipboard
+    Given I obtain test data file "logging/loggen/container_json_log_template.json"
+    When I run the :new_app client command with:
+      | file | container_json_log_template.json |
+    Then the step should succeed
+    Given a pod becomes ready with labels:
+      | run=centos-logtest,test=centos-logtest |
+    Given the first user is cluster-admin
+    And I use the "openshift-logging" project
+    And I wait for the "project.<%= cb.proj_name %>" index to appear in the ES pod with labels "es-node-master=true"
+    And evaluation of `route('kibana', service('kibana',project('openshift-logging', switch: false))).dns(by: admin)` is stored in the :kibana_url clipboard
+    When I login to kibana logging web console
+    Then the step should succeed
+    And I perform the :kibana_find_index_pattern web action with:
+      | index_pattern_name | .operations.* |
+    Then the step should succeed
+    When I run the :logout_kibana web action
+    Then the step should succeed
+    Given 10 seconds have passed
+    When I access the "https://<%= cb.kibana_url %>" url in the web browser
+    Then the step should succeed
+    When I perform the :login_kibana web action with:
+      | username   | <%= user.name %>             |
+      | password   | <%= user.password %>         |
+      | idp        | <%= env.idp %>               |
+    Then the step should succeed
+    # click `Log in with OpenShift` button and login again
+    When I run the :logout_kibana web action 
+    Then the step should succeed
+    When I perform the :login_kibana web action with:
+      | username   | <%= user.name %>             |
+      | password   | <%= user.password %>         |
+      | idp        | <%= env.idp %>               |
+    Then the step should succeed

@@ -19,9 +19,7 @@ module BushSlicer
     Compute = Google::Apis::ComputeV1 # Alias the module
 
     def initialize(**opts)
-      @config = conf[:services, opts.delete(:service_name) || :GCE]
-      @auth_type = opts[:auth_type]
-      @token_json = opts[:token_json] if opts[:token_json]
+      @config = conf[:services, opts.delete(:service_name) || :GCE].merge opts
     end
 
     # if we care about a specific project, we could in the future use:
@@ -50,19 +48,25 @@ module BushSlicer
       @compute.client_options.application_version = GIT_HASH
       # @compute.client_options.proxy_url = ENV['http_proxy'] if ENV['http_proxy']
 
-      if config[:json_cred] && (@auth_type.nil? || @auth_type == "json")
-        File.open(expand_private_path(config[:json_cred]), "r") do |json_io|
+      if config[:json_cred] && (config[:auth_type].nil? || config[:auth_type] == "json")
+        begin
+          json_cred_abs_path = expand_private_path(config[:json_cred])
+        rescue
+          logger.error "Possible issue OCPQE-240, tempfile: #{config[:avoid_garbage_collection]&.inspect}"
+          raise
+        end
+        File.open(json_cred_abs_path, "r") do |json_io|
           @compute.authorization = Google::Auth::DefaultCredentials.make_creds(
               scope: config[:scopes],
               json_key_io: json_io
           )
         end
-      elsif config[:signet_opts] && (@auth_type.nil? || @auth_type == "signet")
+      elsif config[:signet_opts] && (config[:auth_type].nil? || config[:auth_type] == "signet")
         aopts = config[:signet_opts].dup
         aopts[:signing_key] = OpenSSL::PKey::RSA.new(aopts[:signing_key])
         @compute.authorization = Signet::OAuth2::Client.new(**aopts)
-      elsif @token_json && @auth_type == "token"
-        token_hash = Signet::OAuth2.parse_credentials(@token_json, "application/json")
+      elsif config[:token_json] && (config[:auth_type].nil? || config[:auth_type] == "token")
+        token_hash = Signet::OAuth2.parse_credentials(config[:token_json], "application/json")
         @compute.authorization = Signet::OAuth2::Client.new(token_hash)
       else
         # try to use default auth from environment see:

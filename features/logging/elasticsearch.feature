@@ -44,8 +44,15 @@ Feature: Elasticsearch related tests
     And the expression should be true> cluster_logging('instance').logstore_storage_class_name == cb.default_sc.name
     Given I wait for the "elasticsearch" elasticsearches to appear
     And the expression should be true> elasticsearch('elasticsearch').nodes[0]['storage']['storageClassName'] == cb.default_sc.name
-    Given I wait for clusterlogging with "fluentd" log collector to be functional in the project
-    And evaluation of `elasticsearch('elasticsearch').nodes[0]["genUUID"]` is stored in the :gen_uuid clipboard
+    #Given I wait for clusterlogging with "fluentd" log collector to be functional in the project
+    Given I wait until ES cluster is ready
+    And I wait until "fluentd" log collector is ready
+    And I wait until kibana is ready
+    Given I wait up to 300 seconds for the steps to pass:
+    """
+    Given evaluation of `elasticsearch('elasticsearch').nodes[0]['genUUID']` is stored in the :gen_uuid clipboard
+    And the expression should be true> cb.gen_uuid != nil
+    """
     Given a pod becomes ready with labels:
       | component=elasticsearch |
     And the expression should be true> pod.volume_claims.first.name.include? "elasticsearch-elasticsearch-cdm" and pod.volume_claims.first.name.include? cb.gen_uuid

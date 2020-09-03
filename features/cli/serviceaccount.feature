@@ -20,10 +20,13 @@ Feature: ServiceAccount and Policy Managerment
       | admin.*(demo)? |
     Given I find a bearer token of the demo service account
     And I switch to the demo service account
+    And I wait for the steps to pass:
+    """
     When I run the :get client command with:
-      | resource | dc        |
+      | resource | all |
     Then the output should contain:
       | myapp   |
+    """
 
   # @author xiaocwan@redhat.com
   # @case_id OCP-11494

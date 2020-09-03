@@ -183,7 +183,6 @@ Given(/^admin clones storage class #{QUOTED} from #{QUOTED} with:$/) do |target_
     | resource      | StorageClass |
     | resource_name | #{src_sc}    |
     | o             | yaml         |
-    | export        | true         |
   })
   sc_hash = YAML.load @result[:stdout]
 

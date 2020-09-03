@@ -159,13 +159,9 @@ Feature: testing multicast scenarios
     And evaluation of `pod(2).ip` is stored in the :proj1pod3ip clipboard
     And evaluation of `pod(2).name` is stored in the :proj1pod3 clipboard
     # Enable multicast in proj1
-    When I run the :annotate admin command with:
-      | resource     | netnamespace                                             |
-      | resourcename | <%= cb.proj1 %>                                          |
-      | overwrite    | true                                                     |
-      | keyval       | netnamespace.network.openshift.io/multicast-enabled=true |
-    Then the step should succeed
-    
+    Given I enable multicast for the "<%= cb.proj1 %>" namespace 
+
+    # Create second project
     Given I create a new project
     And evaluation of `project.name` is stored in the :proj2 clipboard
     Given I obtain test data file "networking/multicast-rc.json"
@@ -181,13 +177,8 @@ Feature: testing multicast scenarios
     And evaluation of `pod(5).ip` is stored in the :proj2pod3ip clipboard
     And evaluation of `pod(5).name` is stored in the :proj2pod3 clipboard
     # Enable multicast in proj2
-    When I run the :annotate admin command with:
-      | resource     | netnamespace                                             |
-      | resourcename | <%= cb.proj2 %>                                          |
-      | overwrite    | true                                                     |
-      | keyval       | netnamespace.network.openshift.io/multicast-enabled=true |
-    Then the step should succeed
-    
+    Given I enable multicast for the "<%= cb.proj2 %>" namespace 
+
     # Check multicast group 239.255.254.24 stream in proj1
     Given I use the "<%= cb.proj1 %>" project
     # Enable multicast group 239.255.254.24 stream proj1pod1

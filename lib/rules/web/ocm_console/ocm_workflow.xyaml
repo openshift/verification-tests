@@ -2,12 +2,40 @@ create_osd_cluster:
     action: switch_to_osd_creation_page
     action: input_cluster_name_on_osd_creation_page
     action:
+        if_param: region_id
+        ref: select_region
+    action:
+        if_param: multi_az
+        ref: select_multi_az
+    action:
         if_param: machine_type
         ref: select_machine_type
     action:
-        if_param: region_id
-        ref: select_region
+        if_param: node_number
+        ref: select_compute_node_count_on_creation_page
+    action:
+        if_param: storage_quota
+        ref: select_persisten_storage_on_creation_page
+    action:
+        if_param: lb_quota
+        ref: select_lb_on_creation_page
+    action:
+        if_param: machine_cidr
+        ref: set_machine_cidr_value
+    action:
+        if_param: service_cidr
+        ref: set_service_cidr_value
+    action:
+        if_param: pod_cidr
+        ref: set_pod_cidr_value
+    action:
+        if_param: host_prefix
+        ref: set_host_prefix_value
+    action:
+        if_param: listening
+        ref: select_privacy
     action: click_create_button
+    action: check_creation_pending_message
     action: cluster_detail_page_loaded
     action: overview_tab_loaded
 delete_osd_cluster_from_detail_page:
@@ -51,7 +79,7 @@ unarchive_cluster_from_cluster_detail_page:
     action: click_unarchive_button
     action: unarchive_succ_prompt_message_displayed
     action: cluster_detail_page_loaded
-go_to_cluster_list_page:
+go_to_cluster_list_page_by_navigator_link:
     element:
         selector:
             xpath: //a[@class='pf-c-breadcrumb__link' and text()='Clusters']

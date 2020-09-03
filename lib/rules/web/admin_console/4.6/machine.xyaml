@@ -1,0 +1,27 @@
+check_unhealthy_conditions_table:
+  elements:
+  - selector:
+      xpath: //h2[contains(.,'Unhealthy Conditions')]
+  - selector:
+      xpath: //table//tr[th[contains(text(),'Status')] and th[contains(text(),'Timeout')] and  th[contains(text(),'Type')] ]
+  - selector:
+      xpath: //tbody/tr[td[contains(text(),'<status>')] and td[contains(text(),'<timeout>')] and td[contains(text(),'<type>')]]
+click_machine_tab:
+  params:
+    tab_name: Machines
+  action: click_tab
+check_desired_count_on_machineset_page:
+  params:
+    key: Desired Count
+    value: <machine_count>
+  action: check_resource_details_key_and_value
+edit_machine_count:
+  params:
+    item: Edit Machine Count
+  action: click_one_dropdown_action
+  action: update_resource_count
+delete_machineset_from_action:
+  params:
+    item: Delete Machine Set
+  action: click_one_dropdown_action
+  action: submit_changes

@@ -56,6 +56,18 @@ navigate_to_dev_console:
   - selector:
       xpath: //li//h1[contains(., 'Developer')]
     op: click
+check_external_link:
+  elements:
+  - selector:
+      xpath: //h2[.='Launcher']
+    timeout: 20
+  - selector: &external_link
+      xpath: //a[contains(@class,'co-external-link') and text()='<link_text>']
+click_external_link:
+  elements:
+  - selector:
+      <<: *external_link
+    op: click
 check_external_log_link:
   action: check_link_and_text
 # --- links on masthead ---

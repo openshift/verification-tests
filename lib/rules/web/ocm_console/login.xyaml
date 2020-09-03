@@ -6,8 +6,8 @@ login_ocm_sequence:
 login_ocm_page_loaded:
   element:
     selector:
-      css: "#kc-form-login, #password, #username"
-    timeout: 30
+      css: "#kc-form-login, #username, #login-show-step2"
+    timeout: 60
 login_ocm_portal:
   elements:
     - selector:
@@ -15,11 +15,15 @@ login_ocm_portal:
       op: send_keys <username>
       type: input
     - selector:
+        id: login-show-step2
+      type: button
+      op: click
+  elements:
+    - selector:
         id: password
       op: send_keys <password>
       type: input
-  elements:
     - selector:
-        id: _eventId_submit
+        id: kc-login
       type: button
       op: click

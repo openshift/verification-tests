@@ -1,0 +1,39 @@
+click_add_ons_tab_button:
+    element:
+        selector:
+            xpath: //button[contains(.,'Add-ons')]
+        op: click
+
+addon_install_button_missing:
+    element:
+        selector:
+            xpath: //div[text()='<addon_name>']/../div/button[@aria-label='Install' and text()='Install']
+        missing: true
+install_addon:
+    action: click_add_ons_tab_button
+    elements:
+        - selector:
+            xpath: //div[text()='<addon_name>']/../div/button[@aria-label='Install' and text()='Install']
+          op: click
+        - selector:
+            xpath: //div[text()='<addon_name>']/../div/div//span[text()='Installing']
+    action: addon_install_button_missing
+    action: 
+        if_param: wait_status
+        ref: wait_for_addon_to_status
+
+wait_for_addon_to_status:
+    elements:
+        - selector:
+            xpath: //div[text()='<addon_name>']/../div/div//span[text()='<wait_status>']
+          timeout: 1200
+        - selector:
+            xpath: //div[text()='<addon_name>']/../div/a/button[text()='View in console']
+        
+check_addons_tab:
+    action: click_add_ons_tab_button
+    elements:
+        - selector:
+            xpath: //article[@class='pf-c-card']
+        - selector:
+            xpath: //article[@class='pf-c-card']/div/button[text()='Install']

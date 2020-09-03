@@ -9,7 +9,8 @@ Feature: Node operations test scenarios
 
     # Create a deployment config
     When I run the :new_app client command with:
-      | template | jenkins-persistent |
+      | docker_image | quay.io/openshifttest/storage@sha256:a05b96d373be86f46e76817487027a7f5b8b5f87c0ac18a246b018df11529b40 |
+      | labels       | name=jenkins                                                                                          |
     Then the step should succeed
     And a pod becomes ready with labels:
       | name=jenkins |

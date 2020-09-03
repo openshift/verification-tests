@@ -63,7 +63,7 @@ module BushSlicer
       end
 
       def passed?
-        self.class.running_test_case?(test_case) && test_case.passed?
+        !error? && self.class.running_test_case?(test_case) && test_case.passed?
       end
 
       def error?

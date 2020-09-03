@@ -257,9 +257,12 @@ module BushSlicer
       return @os_volumes_url if @os_volumes_url
       for service in os_service_catalog
         if service['type'] == "volumev2"
-          @os_volumes_url = service['endpoints'][0]['publicURL'] ||
-            service['endpoints'][0]['url']
-          return @os_volumes_url
+          for item in service['endpoints']
+            if item['interface'] == 'public'
+              @os_volumes_url = item['url']
+              return @os_volumes_url
+            end
+          end
         end
       end
       raise "could not find volumes API URL in service catalog:\n#{os_service_catalog.to_yaml}"
