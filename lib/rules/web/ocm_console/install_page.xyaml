@@ -497,7 +497,7 @@ check_bare_metal_install_page:
             xpath: //a[contains(@href, 'https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/latest/latest/') and text()='Download RHCOS']
 check_bare_metal_page_title:
     scripts:
-    - command: return document.title=='Install OpenShift 4 | Red Hat OpenShift Cluster Manager | Bare Metal'
+    - command: return document.title=='Install OpenShift 4 | Red Hat OpenShift Cluster Manager | Bare Metal User-Provisioned Infrastructure'
       expect_result: true
 
 check_ibm_z_install_page:
