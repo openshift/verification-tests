@@ -43,7 +43,7 @@ module BushSlicer
       result.clear.merge!(get(user: user, quiet: quiet))
       if result[:success]
         return true
-      elsif result[:response] =~ /not found/
+      elsif result[:response] =~ /not found/ or result[:response] =~ /doesn't have/
         return false
       else
         # e.g. when called by user without rights to list Resource
@@ -175,9 +175,13 @@ module BushSlicer
       end
 
       if self.respond_to?(:delete_deps, true) && exists?(user: user, quiet: true)
-        delete_deps(user: user, cached: false, quiet: true)&.each { |r|
-          r.ensure_deleted(user: user, wait: wait)
-        }
+        begin
+          delete_deps(user: user, cached: false, quiet: true)&.each { |r|
+            r.ensure_deleted(user: user, wait: wait)
+          }
+        rescue ResourceNotFoundError
+          # most likely resource disappeared in the mean time
+        end
       end
 
       unless disappeared?(user, wait)
@@ -418,9 +422,30 @@ module BushSlicer
     #   RESOURCE contains dots
     def self.kind
       unless @kind
-        resource_without_dots = self::RESOURCE.gsub(".", "")
-        api_name_no_dots = resource_without_dots[resource_link_element.size..-1]
-        @kind = shortclass[/.*?(?=#{api_name_no_dots}\z)/i]
+        if self::RESOURCE.count(".").zero?
+          # old style, missing api name
+          @kind = shortclass
+        elsif shortclass.size <= resource_link_element.size + 2
+          # class name doesn't contain API name but RESOURCE does
+
+          # Class name is always singular, `resource_link_element` is always
+          # plural. I found only one plural word that is 2 chars shorter than
+          # singular but in RESOURCE containing API name, there is at least
+          # one dot + some characters. I think there can't be any API name
+          # with less than 2 characters, so the above check should cover all
+          # practical cases.
+          # In the unlikely case some resource doesn't fit this check,
+          # one can override this method for it.
+          @kind = shortclass
+        else
+          # full API name in RESOURCE, class name also include api name
+          resource_without_dots = self::RESOURCE.gsub(".", "")
+          api_name_no_dots = resource_without_dots[resource_link_element.size..-1]
+          @kind = shortclass[/.*?(?=#{api_name_no_dots}\z)/i]
+          if @kind.nil?
+            raise "#{shortclass}: error in class definition, RESOURCE and class name mismatch"
+          end
+        end
       end
 
       return @kind

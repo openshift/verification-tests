@@ -8,7 +8,7 @@ click_resource_action_button:
     op: click
     timeout: 30
 choose_action_item_from_list:
-  elements: 
+  elements:
   - selector:
       xpath: //button[@data-test-action='<item>' and not(@disabled)]
     op: click
@@ -24,7 +24,7 @@ choose_item_from_list:
 click_resource_action_icon:
   elements:
   - selector:
-      xpath: //a[text()='<resource_name>']/ancestor::span/../div//span[contains(@class,'co-m-cog__icon')]
+      xpath: //h1[text()='<resource_name>']/ancestor::tr//td/div[contains(@class,'dropdown')]
     op: click
 # a combined action can be directly used for Edit Labels
 add_label_for_resource:

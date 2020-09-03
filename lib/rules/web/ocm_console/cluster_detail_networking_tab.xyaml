@@ -1,0 +1,188 @@
+#------------------------------This file is used for cluster detail networking tab definition-----------
+click_networking_tab:
+    element:
+        selector:
+            xpath: //button[contains(.,'Networking')]
+        timeout: 300
+        op: click
+networking_tab_loaded:
+    elements:
+        - selector:
+            xpath: //h2[text()='Master endpoint API']
+        - selector:
+            xpath: //label[text()='Make API private']
+        - selector:
+            xpath: //h2[text()='Default application router']
+        - selector:
+            xpath: //label[text()='Make router private']
+        - selector:
+            xpath: //input[contains(@value,'https://api.<trimed_cluster_name>.')]
+        - selector:
+            xpath: //input[contains(@value,':6443')]
+        - selector:
+            xpath: //input[contains(@value,'https://apps.<trimed_cluster_name>.')]
+        - selector:
+            xpath: //h2[text()='Additional application router']
+
+check_network_configuration:
+    action: click_networking_tab
+    elements:
+        - selector:
+            xpath: //h2[text()='Network configuration']
+        - selector:
+            xpath: //dl/dt[1][text()='Machine CIDR']
+        - selector:
+            xpath: //dl/dt[2][text()='Service CIDR']
+        - selector:
+            xpath: //dl/dt[3][text()='Pod CIDR']
+        - selector:
+            xpath: //dl/dt[4][text()='Host prefix']
+        - selector:
+            xpath: //dl/dd[1][text()='<machine_cidr>']
+        - selector:
+            xpath: //dl/dd[2][text()='<service_cidr>']
+        - selector:
+            xpath: //dl/dd[3][text()='<pod_cidr>']
+        - selector:
+            xpath: //dl/dd[4][text()='<host_prefix>']
+    action: cancel_button_disabled
+    action: change_settings_button_disabled
+    action: click_enable_additional_route
+    action: additional_route_loaded
+    action: check_enabled_route_copy_buttons_tooltip
+    action: check_enabled_route_copy_buttons_copied_tooltip
+    action: click_unenable_additional_route
+    action: additional_route_missing
+    action: click_enable_additional_route
+
+check_enabled_route_copy_buttons_tooltip:
+    elements:
+        - selector:
+            xpath: //input[contains(@value,'https://api.<trimed_cluster_name>')]/../button[@aria-label='Copy to clipboard']
+          op: hover
+        - selector:
+            xpath: //div[text()='Copy to clipboard']
+        - selector:
+            xpath: //input[contains(@value,'https://apps.<trimed_cluster_name>')]/../button[@aria-label='Copy to clipboard']
+          op: hover
+        - selector:
+            xpath: //div[text()='Copy to clipboard']
+        - selector:
+            xpath: //input[contains(@value,'https://apps2.<trimed_cluster_name>')]/../button[@aria-label='Copy to clipboard']
+          op: hover
+        - selector:
+            xpath: //div[text()='Copy to clipboard']
+check_enabled_route_copy_buttons_copied_tooltip:
+    elements:
+        - selector:
+            xpath: //input[contains(@value,'https://api.<trimed_cluster_name>')]/../button[@aria-label='Copy to clipboard']
+          op: click
+        - selector:
+            xpath: //div[text()='Successfully copied to clipboard!']
+        - selector:
+            xpath: //input[contains(@value,'https://apps.<trimed_cluster_name>')]/../button[@aria-label='Copy to clipboard']
+          op: click
+        - selector:
+            xpath: //div[text()='Successfully copied to clipboard!']
+        - selector:
+            xpath: //input[contains(@value,'https://apps2.<trimed_cluster_name>')]/../button[@aria-label='Copy to clipboard']
+          op: click
+        - selector:
+            xpath: //div[text()='Successfully copied to clipboard!']
+click_api_private_checkbox:
+    element: &api_private_checkbox
+        selector:
+            xpath: //input[@id='private_api']
+        op: click
+click_default_route_private_checkbox:
+    element: &default_route_private_checkbox
+        selector:
+            xpath: //input[@id='private_default_router']
+        op: click
+click_additional_route_private_checkbox:
+    element: &additional_route_private_checkbox
+        selector:
+            xpath: //input[@id='private_additional_router']
+        op: click
+click_enable_additional_route:
+    element: &enable_additional_route_button
+        selector:
+            xpath: //span[@id='enable_additional_router-off' and text()='Not enabled']
+        op: click
+click_unenable_additional_route:
+    element: &unenable_additional_route_button
+        selector:
+            xpath: //span[@id='enable_additional_router-on' and text()='Enabled']
+        op: click
+additional_route_loaded:
+    elements:
+        - selector:
+            xpath: //input[contains(@value,'https://apps2.<trimed_cluster_name>.')]
+        - selector:
+            xpath: //span[text()='Label match for additional router (optional)']
+        - selector:
+            xpath: //div[text()='Comma separated pairs in key=value format. If no label is specified, all routes will be exposed on both routers.']
+additional_route_missing:
+    element:
+        selector:
+            xpath: //input[contains(@value,'https://apps2.<trimed_cluster_name>.')]
+        missing: true
+input_additional_route_label:
+    params:
+        locator_id: labels_additional_router
+    action: clear_input
+    element:
+        selector:
+            xpath: //input[@id='labels_additional_router']
+        op: send_keys <label>
+
+
+change_settings_button_disabled:
+    element:
+        selector:
+            xpath: //button[text()='Change settings' and @disabled='']
+click_change_settings_button_on_page:
+    element:
+        selector:
+            xpath: //button[text()='Change settings' and @type='button']
+        op: click
+cancel_button_disabled:
+    element:
+        selector:
+            xpath: //button[text()='Cancel' and @disabled='']
+check_invalid_label_error_message:
+    action: input_additional_route_label
+    element:
+        selector:
+            xpath: //div[@id='labels_additional_router-helper' and contains(text(), "<error_message>")]
+check_disabled_buttons_on_networking_tab:
+    action: networking_tab_loaded
+    action: cancel_button_disabled
+    action: change_settings_button_disabled
+    elements:
+        - selector:
+            xpath: //input[@id='private_api' and @disabled='']
+        - selector:
+            xpath: //input[@id='private_default_router' and @disabled='']
+    #   - selector:
+    #        xpath: //label[@for='enable_additional_router']/input[@disabled]
+change_additional_router:
+    action: click_networking_tab
+    action: networking_tab_loaded
+    action:
+        if_param: enable_additional_router
+        ref: click_enable_additional_route
+    action:
+        if_param: disable_additional_router
+        ref: click_unenable_additional_route
+    action: click_change_settings_button_on_page
+    action: check_change_cluster_privacy_settings_dialog
+    action: click_change_settings_button_on_dialog
+    action:
+        if_param: enable_additional_router
+        ref: additional_route_loaded
+    action:
+        if_param: disable_additional_router
+        ref: additional_route_missing
+    action: change_settings_button_disabled
+

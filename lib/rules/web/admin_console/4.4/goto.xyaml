@@ -15,6 +15,7 @@ goto_project_details_page:
 # Dashboard renamed to Overview in 4.4, url is same "k8s/cluster/projects/<project_name>"
 goto_one_project_page: 
   url: k8s/cluster/projects/<project_name>
+  action: wait_box_loaded
 goto_one_project_dashboard_page:
   action: goto_one_project_page
 goto_cluster_dashboards_page:
@@ -167,6 +168,10 @@ goto_imagestreams_page:
 goto_one_imagestream_page:
   url: k8s/ns/<project_name>/imagestreams/<imagestream_name>
 
+#templateinstance
+goto_one_templateinstance_page:
+  url: k8s/ns/<project_name>/templateinstances/<templateinstance_name>
+
 #deploy image
 goto_deploy_image_page:
   url: deploy-image/ns/<project_name>?preselected-ns=<project_name>
@@ -188,7 +193,9 @@ goto_monitoring_alerts_page:
   url: monitoring/alerts
 goto_monitoring_silences_page:
   url: monitoring/silences
-
+goto_monitoring_db_k8s_resource_pod:
+  url: monitoring/dashboards/grafana-dashboard-k8s-resources-pod
+  
 #node
 goto_node_page:
   url: k8s/cluster/nodes
@@ -214,6 +221,7 @@ goto_operator_hub_page:
   url: operatorhub/ns/default
 goto_installed_operators_page:
   url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion
+  action: wait_box_loaded
 goto_operator_subscription_page:
   url: operatorhub/subscribe?pkg=<package_name>&catalog=<catalog_name>&catalogNamespace=openshift-marketplace&targetNamespace=<target_namespace>
   action: wait_box_loaded
@@ -307,3 +315,11 @@ goto_cluster_operators:
 goto_global_configuration_page:
   url: settings/cluster/globalconfig
   action: wait_box_loaded 
+
+goto_command_line_tools:
+  url: command-line-tools
+  element:
+    selector:
+      xpath: //div[contains(text(), "Command Line Tools")]
+    timeout: 15
+    

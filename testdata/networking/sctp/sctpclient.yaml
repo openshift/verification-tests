@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sctpclient
+  labels:
+    app: sctpclient
+spec:
+  containers:
+    - name: sctpclient
+      image: quay.io/openshifttest/ubi@sha256:cd014e94a9a2af4946fc1697be604feb97313a3ceb5b4d821253fcdb6b6159ee 
+      command: ["/bin/sh", "-c"]
+      args:
+        ["dnf install -y nc && sleep inf"]

@@ -12,14 +12,13 @@ module BushSlicer
     include Common::Helper
     include Common::Hacks
 
-    attr_accessor :current_test_case
     attr_reader :opts, :test_suite
 
     def initialize(**opts)
       @opts = opts
 
       @test_suite = BushSlicer.const_get(opts[:test_suite_class]).
-                                            new(opts[:test_suite_opts])
+                                            new(**opts[:test_suite_opts])
 
       @attach_queue = Queue.new
       @attacher = Thread.new do
@@ -198,6 +197,13 @@ module BushSlicer
         dir = formatter.process_scenario_log(after_failed: after_failed?,
                                              before_failed: before_failed?)
         urls.concat artifacts_urls(dir)
+        if urls.empty?
+          if Dir.empty?(dir)
+            logger.warn "Formatter artifacts dir empty '#{dir}'."
+          else
+            logger.warn "Failed to obtain artifact URLs from dir '#{dir}'."
+          end
+        end
         @attach_queue << dir
         # to test attach in main thread use this:
         # handle_attach(dir)

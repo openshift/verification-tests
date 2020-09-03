@@ -422,9 +422,25 @@ click_one_item:
   - selector:
       xpath: //li//*[@id='<dropdown_item>-link']
     op: click
+click_one_item_text:
+  elements:
+  - selector:
+      xpath: //li//*[text()='<dropdown_item>']
+    op: click
 choose_dropdown_item:
   action: click_dropdown_field
   action: click_one_item
+choose_dropdown_item_text:
+  action: click_dropdown_field
+  action: click_one_item_text
+navigate_to_admin_console:
+  elements:
+  - selector:
+      xpath: //button[@data-test-id='perspective-switcher-toggle']
+    op: click
+  - selector:
+      xpath: //li//h1[contains(., 'Administrator')]
+    op: click
 upload_file_for_one_field:
   elements:
   - selector:

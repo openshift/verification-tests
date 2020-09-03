@@ -1,0 +1,19 @@
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata: 
+  name: whereabouts-excludeip
+spec: 
+  config: '{
+      "cniVersion": "0.3.0",
+      "name": "whereabouts",
+      "type": "macvlan",
+      "mode": "bridge",
+      "ipam": {
+        "type": "whereabouts", 
+        "range": "192.168.10.0/29", 
+        "exclude": [ 
+          "192.168.10.0/30",
+          "192.168.10.6/32"
+        ]
+   }
+}'

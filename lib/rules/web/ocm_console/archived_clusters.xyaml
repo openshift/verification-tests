@@ -7,7 +7,7 @@ archived_page_loaded:
         - selector:
             xpath: //a[contains(@href,'/openshift/') and text()='Show active clusters']
         - selector:
-            xpath: //button[@id='pagination-options-menu-toggle']
+            xpath: //div[contains(@id,'pagination-options-menu')]
         - selector:
             xpath: //nav[@class='pf-c-pagination__nav' and @aria-label='Pagination']
         - selector:
@@ -16,6 +16,7 @@ empty_table_loaded:
     element:
         selector:
             xpath: //p[@class='notfound' and text()='No results match the filter criteria.']
+        timeout: 30
 archived_cluster_list_table_loaded:
     elements:
         - selector:
@@ -23,7 +24,7 @@ archived_cluster_list_table_loaded:
         - selector:
             xpath: //table[@class='pf-c-table pf-m-grid-md']
         - selector:
-            xpath: //button[text()='Name']/span[@class='pf-c-table__sort-indicator']
+            xpath: //button[contains(., "Name")]
         
 check_archived_cluster_list_page:
     action: archived_page_loaded

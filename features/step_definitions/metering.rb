@@ -14,7 +14,11 @@ Given /^metering service has been installed successfully(?: using (OLM|OperatorH
   step %/I setup a metering project/
   cb[:metering_resource_type] = "meteringconfig"
   cb[:metering_namespace] = project
-  meteringconfigs = BushSlicer::MeteringConfig.list(user: admin, project: project)
+  begin
+    meteringconfigs = BushSlicer::MeteringConfig.list(user: admin, project: project)
+  rescue
+    meteringconfigs = []
+  end
   if meteringconfigs.count == 0
     namespace = "openshift-metering"
     metering_name = "operator-metering"
@@ -29,12 +33,13 @@ Given /^metering service has been installed successfully(?: using (OLM|OperatorH
     else
       via_method = 'GUI'
     end
+    cb.metering_namespace = project
     step %Q"the metering service is installed using OLM #{via_method}"
   else
     # there's an existing meteringconfig in the project.  Check if there are
     # subscription and operatorgroup
     mconfig = meteringconfigs.first
-    cb.metering_namespace = project(mconfig.namespace)
+    cb.metering_namespace = project(mconfig.name)
     metering_name = mconfig.name
     subs = BushSlicer::Subscription.list(user: admin, project: project)
     ogs = BushSlicer::OperatorGroup.list(user: admin)
@@ -64,8 +69,16 @@ Given /^I install metering service using:$/ do | table |
   when "HDFS"
     metering_config ||= "metering/configs/meteringconfig_hdfs.yaml"
   end
+  # if we have an existing metering installation and the meteringconfig hive
+  # storage type is different, then we delete the existing meteringconfig
+  if metering_config(cb.metering_ns).exists?
+    if metering_config(cb.metering_ns).hive_type != storage_type
+      step %Q(I ensure "<%= cb.metering_ns %>" meteringconfig is deleted)
+    end
+  end
   step %Q(I run oc create as admin over ERB test file: #{metering_config})
   step %Q(all metering related pods are running in the project)
+  step %Q/all reportdatasources are importing from Prometheus/
 end
 
 # multiple steps are involved in generating /a metering report
@@ -235,7 +248,7 @@ Given /^the metering service is installed(?: to #{OPT_QUOTED})? using OLM(?: (CL
   ensure_destructive_tagged
   install_method ||= 'CLI'
   metering_ns ||= "openshift-metering"
-  step %Q"I setup a metering project named #{metering_ns}" unless cb.metering_project_setup_done
+  step %Q/I setup a metering project named "#{metering_ns}"/ unless cb.metering_project_setup_done
   if install_method == 'CLI'
     step %Q/I prepare OLM via CLI/
   elsif install_method == 'GUI'
@@ -275,15 +288,20 @@ Given /^the#{OPT_QUOTED} metering service is uninstalled using OLM$/ do | meteri
   ensure_destructive_tagged
   metering_ns ||= "openshift-metering"
   step %Q/I switch to cluster admin pseudo user/ unless env.is_admin? user
-  project(metering_ns)
-  step %Q(I ensure "openshift-metering" meteringconfig is deleted)
-  step %Q(I ensure "metering-ocp-sub" subscription is deleted)
-  step %Q(I ensure "metering-ocp-og" subscription is deleted)
-  step %Q/I ensure "#{metering_ns}" project is deleted/
+  if project(metering_ns).exists?
+    step %Q(I ensure "openshift-metering" meteringconfig is deleted)
+    step %Q(I ensure "metering-ocp-sub" subscription is deleted)
+    step %Q(I ensure "metering-ocp-og" subscription is deleted)
+    step %Q/I ensure "#{metering_ns}" project is deleted/
+  end
+end
+
+Given /^I remove metering service from the #{QUOTED} project$/ do | metering_ns |
+  step %Q/the "#{metering_ns}" metering service is uninstalled using OLM/
 end
 
 Given /^all reportdatasources are importing from Prometheus$/ do
-  project ||= project(cb.metering_namespace.name)
+  project ||= project(cb.metering_ns)
   data_sources  = BushSlicer::ReportDataSource.list(user: user, project: project)
   # valid reportdatasources are those with a prometheusMetricsImporter query statement
   dlist = data_sources.select{ |d| d.prometheus_metrics_importer_query}
@@ -316,10 +334,10 @@ When /^I perform the GET metering rest request with:$/ do | table |
   url_path ||= opts[:custom_url]
   # v2
   if opts[:api_version] == 'v2'
-    url_path ||= "/api/v2/reports/#{cb.metering_namespace.name}/#{report_name}/table?format=json"
+    url_path ||= "/api/v2/reports/#{project.name}/#{report_name}/table?format=json"
   else
     # v1
-    url_path ||= "/api/v1/reports/get?name=#{report_name}&namespace=#{cb.metering_namespace.name}&format=json"
+    url_path ||= "/api/v1/reports/get?name=#{report_name}&namespace=#{project.name}&format=json"
   end
 
   report_query_url = route.dns + url_path
@@ -464,7 +482,11 @@ And /^I set operator channel(?: to#{OPT_QUOTED})?$/ do | channel |
   elsif ENV['OPERATOR_CHANNEL']
     cb.channel = ENV['OPERATOR_CHANNEL']
   else
-    cb.channel = cluster_version('version').version.split('-').first.to_f
+    # if the default channel is less than master node, then use the value from
+    # packagemanifest
+    cb.pm_default_channel ||= package_manifest('metering-ocp').default_channel.to_f
+    cluster_ver = cluster_version('version').version.split('-').first.to_f
+    cb.channel = cb.pm_default_channel >= cluster_ver ? cluster_ver : cb.pm_default_channel
   end
   logger.info("Using operator channel: #{cb.channel}")
 end
@@ -518,9 +540,12 @@ Given /^I prepare OLM via CLI$/ do
   req_packagemanifest = 'metering-ocp'
   raise "required CatalogSource '#{req_registry}' is not found" unless catalog_source(req_registry, project('openshift-marketplace')).exists?
   raise "required PackageManifest '#{req_packagemanifest}' is not found" unless package_manifest(req_packagemanifest).exists?
-  step %Q(I use the "#{project_name_org}" project)
   # need to change context back
-  cb[:default_channel] = package_manifest(req_packagemanifest).default_channel
+  step %Q(I use the "#{project_name_org}" project)
+  # save the default channel from packagemanifest to be referenced in the `I set operator channel` step
+  cb.pm_default_channel = package_manifest(req_packagemanifest).default_channel.to_f
+  step %Q(I set operator channel)
+  cb[:default_channel] = cb.channel
   # 2. create operatorgroup
   step %Q(I run oc create as admin over ERB test file: metering/configs/metering_operatorgroup.yaml)
   #step %Q/the step should succeed/

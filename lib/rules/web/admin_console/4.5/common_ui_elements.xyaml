@@ -136,6 +136,11 @@ click_overview_tab:
   params:
     tab_name: Details
   action: click_tab
+click_terminal_tab:
+  params:
+    tab_name: Terminal
+  action: click_tab
+  action: wait_box_loaded
 click_yaml_tab:
   params:
     tab_name: YAML
@@ -256,6 +261,7 @@ click_on_resource_item:
     selector:
       xpath: //a[@class='co-resource-item__resource-name' and @data-test-id='<resource_name>']
     op: click
+check_resource_item_name: {}
 wait_dropdown_loaded:
   element:
     selector:
@@ -326,6 +332,42 @@ check_column_header_missing:
     selector:
       xpath: //button[contains(@class, 'pf-c-button') and text()='<column_name>']
     missing: true
+check_name_column_header:
+  params:
+    column_name: Name
+  action: check_column_header
+check_namespace_column_header:
+  params:
+    column_name: Namespace
+  action: check_column_header
+check_status_column_header:
+  params:
+    column_name: Status
+  action: check_column_header
+check_ready_column_header:
+  params:
+    column_name: Ready
+  action: check_column_header
+check_restarts_column_header:
+  params:
+    column_name: Restarts
+  action: check_column_header
+check_owner_column_header:
+  params:
+    column_name: Owner
+  action: check_column_header
+check_memory_column_header:
+  params:
+    column_name: Memory
+  action: check_column_header
+check_cpu_column_header:
+  params:
+    column_name: CPU
+  action: check_column_header
+check_created_column_header:
+  params:
+    column_name: Created
+  action: check_column_header
 check_resource_name_and_icon:
   action:
     if_param: service_name
@@ -517,9 +559,17 @@ click_one_item:
   - selector:
       xpath: //li//*[@id='<dropdown_item>-link']
     op: click
+click_one_item_text:
+  elements:
+  - selector:
+      xpath: //li//*[text()='<dropdown_item>']
+    op: click
 choose_dropdown_item:
   action: click_dropdown_field
   action: click_one_item
+choose_dropdown_item_text:
+  action: click_dropdown_field
+  action: click_one_item_text
 choose_item_from_dropdown_menu:
   elements:
   - selector:
@@ -529,6 +579,14 @@ choose_item_from_dropdown_menu:
       xpath: //ul[contains(@class, 'pf-c-dropdown__menu')]
     timeout: 20
   action: click_dropdown_menu_item
+navigate_to_admin_console:
+  elements:
+  - selector:
+      xpath: //button[@data-test-id='perspective-switcher-toggle']
+    op: click
+  - selector:
+      xpath: //li//h1[contains(., 'Administrator')]
+    op: click
 upload_file_for_one_field:
   elements:
   - selector:

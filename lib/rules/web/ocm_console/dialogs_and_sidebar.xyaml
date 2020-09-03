@@ -7,11 +7,11 @@ deletion_dialog_loaded:
 archive_dialog_loaded:
     elements:
         - selector:
-            xpath: //div[@class='pf-c-modal-box pf-m-sm' and @aria-label='Archive Cluster']
+            xpath: //div[@role='dialog']
         - selector:
             xpath: //button[@class='pf-c-button pf-m-plain' and @aria-label='Close']
         - selector:
-            xpath: //h1[@class='pf-c-title pf-m-2xl' and text()='Archive Cluster']
+            xpath: //h1[text()='Archive cluster']
         - selector:
             xpath: //form/p[contains(text(), 'Archiving a cluster will remove it from the cluster list and remove the cluster from subscription management.')]
         - selector:
@@ -43,7 +43,7 @@ click_cancel_button:
 check_apply_button:
   element: &apply_button_in_dialog
     selector:
-      xpath: //button[@class='pf-c-button pf-m-primary' and @type='submit' and text()='Apply']
+      xpath: //button[text()='Apply']
 click_apply_button:
   element:
     <<: *apply_button_in_dialog
@@ -57,19 +57,22 @@ archive_succ_promt_message_displayed:
     element: &archive_succ_promt_message
         selector:
             xpath: //h4[contains(text(),'Cluster <cluster_name> has been archived')]
-        timeout: 120
-    action: archive_succ_promt_message_missing
+        timeout: 5
+    action:
+        if_param: wait_missing
+        ref: archive_succ_promt_message_missing
 archive_succ_promt_message_missing:
     element:
         <<: *archive_succ_promt_message
         missing: true
+        timeout: 20
         
 unarchive_dialog_loaded:
     elements:
         - selector:
             xpath: //button[@class='pf-c-button pf-m-plain' and @aria-label='Close']
         - selector:
-            xpath: //h1[@class='pf-c-title pf-m-2xl' and text()='Unarchive Cluster']
+            xpath: //h1[text()='Unarchive cluster']
         - selector:
             xpath: //p[text()='Un-archiving a cluster will make it visible in the active (default) cluster list. You may need to manage subscriptions if the cluster is active.']
         - selector:
@@ -86,16 +89,36 @@ unarchive_succ_prompt_message_displayed:
         selector:
             xpath: //*[contains(text(),'Cluster <cluster_name> has been unarchived')]
         timeout: 60
-    action: unarchive_succ_prompt_message_missing
+    action: 
+        if_param: wait_missing
+        ref: unarchive_succ_prompt_message_missing
 unarchive_succ_prompt_message_missing:
     element:
         <<: *unarchive_succ_prompt_message
         missing: true
-        
+hover_unarchive_succ_prompt_message:
+    element: 
+        <<: *unarchive_succ_prompt_message
+        op: hover
+
+hover_archive_succ_promt_message:
+    element:
+        <<: *archive_succ_promt_message
+        op: hover
+uninstall_succ_prompt_message_displayed:
+    element: &uninstall_succ_prompt_message
+        selector:
+            xpath: //*[text()='Successfully uninstalled cluster <cluster_name>']
+        timeout: 1800
+uninstall_succ_prompt_message_missing:
+    element:
+        <<: *uninstall_succ_prompt_message
+        missing: true
+        timeout: 10
 check_display_name_dialog_loaded:
   elements:
     - selector:
-        xpath: //div[@class='pf-c-backdrop']/div/div/h1[text()='Edit Display Name'] 
+        xpath: //div[@class='pf-c-backdrop']//h1[text()='Edit display name'] 
     - selector:
         xpath: //*[@id='edit-display-name-input' and contains(@value,<original_name>)]
 edit_display_name_in_dialog:
@@ -116,7 +139,7 @@ edit_display_name_in_dialog:
 delete_cluster_dialog_loaded:
     elements:
         - selector:
-            xpath: //h1[text()='Delete Cluster']
+            xpath: //h1[text()='Delete cluster']
         - selector:
             xpath: //p[text()='This action cannot be undone. It will uninstall the cluster, and all data will be deleted.']
         - selector:
@@ -156,10 +179,10 @@ click_delete_button_on_deletion_dialog:
 osd_creation_error_dialog_loaded:
     elements:
         - selector:
-            xpath: //h1[text()='Error Creating Cluster']
+            xpath: //h2[text()='Error creating cluster']
             timeout: 30
         - selector:
-            xpath: //h1/*[name()='svg']
+            xpath: //h2/*[name()='svg']
             timeout: 30
         - selector:
             xpath: //p[contains(text(),"<error_reason>")]
@@ -210,7 +233,7 @@ click_add_url_button:
 customer_cloud_subscription_prompt_message_loaded:
     elements:
         - selector:
-            xpath: //h1[text()='Customer Cloud Subscription']
+            xpath: //h1[text()='Customer cloud subscription']
         - selector:
             text: "With this subscription option, the cluster will be provisioned in an AWS account owned by you or your company. This allows you to pay AWS directly for public cloud costs, leveraging your existing relationship."
         - selector:
@@ -220,25 +243,172 @@ customer_cloud_subscription_prompt_message_loaded:
         - selector:
             xpath: //*[contains(text(),"Your AWS account has no services deployed in it.")]
         - selector:
-            text: "Your AWS account has an Enterprise Support Plan attached."
+            text: "Your AWS account has no services deployed in it."
         - selector:
             xpath: //*[contains(text(),"Your AWS account has the necessary limits to support the desired cluster size.")]
         - selector:
-            xpath: //a[@href='https://www.openshift.com/dedicated/byoc' and text()=' See resource requirements.']
+            xpath: //a[@href='https://www.openshift.com/dedicated/ccs' and text()=' See resource requirements.']
         - selector:
             xpath: //li[contains(text(),'osdCcsAdmin')]
         - selector:
             xpath: //li[contains(text(),'An Organization Service Control Policy (SCP) is set up according to the')]
         - selector:
-            xpath: //a[@href='https://www.openshift.com/dedicated/byoc' and text()='documentation.']
+            xpath: //a[@href='https://www.openshift.com/dedicated/ccs' and text()='documentation.']
         - selector:
-            xpath: //div[text()[1]='Refer to the']
+            xpath: //div[contains(text()[1],'Refer to the')]
 
 close_customer_cloud_subscription_prompt_message:
-  element:
-    selector:
-      xpath: //div[@role='dialog' and @aria-label='Customer Cloud Subscription']//button[text()='Close']
-    op: click
+    action: customer_cloud_subscription_prompt_message_loaded
+    element:
+        selector:
+            xpath: //button[text()='Close']
+        op: click
+go_to_cluster_list_page:
+    element:
+        selector:
+            xpath: //a[contains(@href, '/openshift/') and text()='Clusters']
+        op: click
+    action: cluster_list_page_loaded
+open_cluster_registration_dialog_from_cluster_list_page:
+    action: expand_cluster_actions_on_cluster_list_page
+    action: click_edit_cluster_registration_button_in_dropdown
+    action: edit_cluster_registration_dialog_loaded
+edit_cluster_registration_dialog_loaded:
+    action: memory_text_box_loaded
+    action: compute_node_number_text_box_loaded
+check_cluster_registration_dialog:
+    action:
+        if_param: sockets_type
+        ref: sockets_text_box_loaded
+    action:
+        if_param: vcpu_type
+        ref: vcpu_text_box_loaded
+    action: memory_text_box_loaded
+    action: compute_node_number_text_box_loaded
+    action: save_button_loaded
+    action: check_cancel_button
+    elements:
+        - selector:
+            text: "Memory capacity (GiB)"
+        - selector:
+            text: Number of compute nodes
+check_cluster_registration_dialog_default_value:
+    action:
+        if_param: default_vcpu_value
+        ref: check_vcpu_text_box_default_value
+    action:
+        if_param: default_sockets_value
+        ref: check_sockets_text_box_default_value
+    action: check_memory_text_box_default_value
+    action: check_compute_node_number_text_box_default_value
+sockets_text_box_loaded:
+    element: &sockets_text_box
+        selector:
+            xpath: //input[@id='sockets']
+    action: sockets_text_loaded
+edit_sockets_value:
+    params:
+        locator_id: sockets
+    action: clear_input
+    element:
+        <<: *sockets_text_box
+        op: send_keys <sockets_value>
+check_sockets_text_box_default_value:
+    element:
+        selector:
+            xpath: //input[@id='sockets' and @value='<default_sockets_value>']
+memory_text_box_loaded:
+    element: &memory_text_box
+        selector:
+            xpath: //input[@id='memoryCapacity']
+edit_memory_value:
+    params:
+        locator_id: memoryCapacity
+    action: clear_input
+    element:
+        <<: *memory_text_box
+        op: send_keys <memory_value>
+check_memory_text_box_default_value:
+    element:
+        selector:
+            xpath: //input[@id='memoryCapacity' and @value='<default_memory_value>']
+compute_node_number_text_box_loaded:
+    element: &compute_node_number_text_box
+        selector:
+            xpath: //input[@id='computeNodes']
+edit_compute_node_value:
+    params:
+        locator_id: computeNodes
+    action: clear_input
+    element:
+        <<: *compute_node_number_text_box
+        op: send_keys <node_value>
+check_compute_node_number_text_box_default_value:
+    element:
+        selector:
+            xpath: //input[@id='computeNodes' and @value='<default_node_value>']
+vcpu_text_box_loaded:
+    element: &vcpu_text_box
+        selector:
+            xpath: //input[@id='vCPUs']
+    action: vcpu_text_loaded
+edit_vcpu_value:
+    params:
+        locator_id: vCPUs
+    action: clear_input
+    element:
+        <<: *vcpu_text_box
+        op: send_keys <vcpu_value>
+check_vcpu_text_box_default_value:
+    element:
+        selector:
+            xpath: //input[@id='vCPUs' and @value='<default_vcpu_value>']
+vcpu_text_loaded:
+    elements:
+        - selector:
+            text: Number of vCPUs
+        - selector:
+            xpath: //span[text()='Number of vCPUs']/../span[text()='*']
+sockets_text_loaded:
+    elements:
+        - selector:
+            text: Number of sockets or LPARs
+        - selector:
+            xpath: //span[text()='Number of sockets or LPARs']/../span[text()='*']
+save_button_loaded:
+    element: &save_button
+        selector:
+            xpath: //button[@type='submit' and text()='Save']
+click_save_button:
+    element:
+        <<: *save_button
+        op: click
+edit_cluster_registration:
+    action:
+        if_param: vcpu_value
+        ref: edit_vcpu_value
+    action:
+        if_param: sockets_value
+        ref: edit_sockets_value
+    action:
+        if_param: memory_value
+        ref: edit_memory_value
+    action:
+        if_param: node_value
+        ref: edit_compute_node_value
+    action:
+        if_param: save
+        ref: click_save_button
+    action:
+        if_param: cancel
+        ref: click_cancel_button
+    action: edit_cluster_registration_dialog_missing
+edit_cluster_registration_dialog_missing:
+    element:
+        selector:
+            xpath: //div[@role='dialog' and @aria-label='Edit cluster registration']
+        missing: true
+        timeout: 10
 check_compute_node_count_field_in_scale_dialog:
   elements:
   - selector:
@@ -257,3 +427,83 @@ check_persistent_storage_field_in_scale_dialog:
       xpath: //label[@for='persistent_storage']/span[text()='Persistent storage']
   - selector:
       xpath: //select[@name='persistent_storage']
+
+choose_loadbalancer_in_dialog:
+  action: click_loadbalancer_dropdown
+  action: select_loadbalancer_in_dialog
+  action: click_apply_button
+  action: check_dialog_missing
+click_loadbalancer_dropdown:
+  element:
+    selector:
+      xpath: //select[@name='load_balancers']
+    op: click
+select_loadbalancer_in_dialog:
+  element:
+    selector: 
+      xpath: //select[@name='load_balancers']//option[text()='<load_balancers_number>']
+    op: click
+choose_persistent_quota_in_dialog:
+  action: click_persistent_quota_dropdown
+  action: select_persistent_quota_in_dialog
+  action: click_apply_button
+  action: check_dialog_missing
+click_persistent_quota_dropdown:
+  element:
+    selector:
+      xpath: //select[@name='persistent_storage']
+    op: click
+select_persistent_quota_in_dialog:
+  element:
+    selector: 
+      xpath: //select[@name='persistent_storage']//option[text()='<persistent_storage_number>']
+    op: click
+check_persistent_storage_scaledown_warning_message:
+  elements:
+  - selector:
+      xpath: //select[@name='persistent_storage']/../../../following-sibling::div/h4[text()='Scaling below the current limit can cause problems in your environment']
+  - selector:
+      xpath: //select[@name='persistent_storage']/../../../following-sibling::div/div//a[text()='Check your usage']
+check_persistent_storage_scaledown_warning_message_missing:
+  element:
+    selector:
+      xpath: //select[@name='persistent_storage']/../../../following-sibling::div[@aria-label='Warning Alert']
+    missing: true
+check_loadbalancer_scaledown_warning_message:
+  elements:
+  - selector:
+      xpath: //select[@name='load_balancers']/../../../following-sibling::div/h4[text()='Scaling below the current limit can cause problems in your environment']
+  - selector:
+      xpath: //select[@name='load_balancers']/../../../following-sibling::div/div//a[text()='Check your usage']
+check_loadbalancer_scaledown_warning_message_missing:
+  element:
+    selector:
+      xpath: //select[@name='load_balancers']/../../../following-sibling::div[@aria-label='Warning Alert']
+    missing: true
+change_settings_button_on_dialog_enabled:
+    element: &change_settings_button_on_dialog
+        selector:
+            xpath: //button[text()='Change settings' and @type='submit']
+click_change_settings_button_on_dialog:
+    element:
+        <<: *change_settings_button_on_dialog
+        op: click
+check_change_cluster_privacy_settings_dialog:
+    elements:
+        - selector:
+            xpath: //h1[text()='Change cluster privacy settings?']
+        - selector:
+            xpath: //div[contains(.,'Changes may be required in AWS to maintain access. It may take up to one hour for the settings to become effective.')]
+        - selector:
+            xpath: //a[@href='https://docs.openshift.com/dedicated/4/cloud_infrastructure_access/dedicated-aws-private-cluster.html' and text()='Learn more']
+    action: change_settings_button_on_dialog_enabled
+    action:
+        if_param: cancel_dialog
+        ref: click_cancel_button
+
+check_change_cluster_privacy_settings_with_warning_dialog:
+    element:
+        selector:
+            xpath: //h4[text()='All routers will be exposed publicly because there is no label match on the additional application router. This is a potential security risk.']
+    action: check_change_cluster_privacy_settings_dialog
+    

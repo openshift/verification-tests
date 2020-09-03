@@ -140,7 +140,7 @@ Feature: Pod related networking scenarios
     When I execute on the pod:
       | curl | -I | https://<%= cb.master_ip %>:22624/config/master | -k |
     Then the output should contain "Connection refused"
-    
+
     #hostnetwork-pod will be a hostnetwork pod
     Given I obtain test data file "networking/hostnetwork-pod.json"
     When I run the :create admin command with:
@@ -194,7 +194,7 @@ Feature: Pod related networking scenarios
     Then the step should succeed
     #pod-for-ping will be a non-hostnetwork pod
     And I have a pod-for-ping in the project
-    
+
     #Pod cannot access MCS
     When I execute on the pod:
       | curl | -I | https://<%= cb.master_ip %>:22623/config/master | -k |
@@ -303,23 +303,21 @@ Feature: Pod related networking scenarios
     And evaluation of `service(cb.host_pod1.name).node_port(port: 8080)` is stored in the :nodeport clipboard
     #Creating a simple client pod to generate traffic from it towards the exposed node IP address
     Given I obtain test data file "networking/aosqe-pod-for-ping.json"
-    When I run the :create client command with:
-      | f | aosqe-pod-for-ping.json |
+    When I run oc create over "aosqe-pod-for-ping.json" replacing paths:
+      | ["spec"]["nodeName"] | <%= cb.nodes[0].name %> |
     Then the step should succeed
     Given a pod becomes ready with labels:
       | name=hello-pod |
     And evaluation of `pod` is stored in the :client_pod clipboard
-    # 'yes' command will send a character "h" continously for 3 seconds to /dev/udp on listener where the node is listening for udp traffic on exposed nodeport. The 3 seconds mechanism will create an Assured
-    #  entry which will give us enough time to validate upcoming steps
+    # The 3 seconds mechanism via for loop will create an Assured conntrack entry which will give us enough time to validate upcoming steps
     When I run the :exec background client command with:
-      | pod              | <%= cb.client_pod.name %>                             |
-      | oc_opts_end      |                                                       |
-      | exec_command     | bash                                                  |
-      | exec_command_arg | -c                                                    |
-      | exec_command_arg | yes "h">/dev/udp/<%= cb.node_ip %>/<%= cb.nodeport %> |
-    Given 3 seconds have passed
-    And I terminate last background process
-    
+      | pod              | <%= cb.client_pod.name %>                                                                |
+      | oc_opts_end      |                                                                                          |
+      | exec_command     | bash                                                                                     |
+      | exec_command_arg | -c                                                                                       |
+      | exec_command_arg | for n in {1..3}; do echo $n; sleep 1; done>/dev/udp/<%= cb.node_ip %>/<%= cb.nodeport %> |
+    Then the step should succeed
+
     #Creating network test pod to levearage conntrack tool
     Given I obtain test data file "networking/net_admin_cap_pod.yaml"
     When I run oc create over "net_admin_cap_pod.yaml" replacing paths:
@@ -340,16 +338,14 @@ Feature: Pod related networking scenarios
       | name=udp-pods |
     And evaluation of `pod` is stored in the :host_pod2 clipboard
 
-    # 'yes' command will send a character "h" continously for 3 seconds to /dev/udp on listener where the node is listening for udp traffic on exposed nodeport. The 3 seconds mechanism will create an Assured
-    #  entry which will give us enough time to validate upcoming steps
+    # The 3 seconds mechanism via for loop will create an Assured conntrack entry which will give us enough time to validate upcoming steps
     When I run the :exec background client command with:
-      | pod              | <%= cb.client_pod.name %>                             |
-      | oc_opts_end      |                                                       |
-      | exec_command     | bash                                                  |
-      | exec_command_arg | -c                                                    |
-      | exec_command_arg | yes "h">/dev/udp/<%= cb.node_ip %>/<%= cb.nodeport %> |
-    Given 3 seconds have passed
-    And I terminate last background process
+      | pod              | <%= cb.client_pod.name %>                                                                |
+      | oc_opts_end      |                                                                                          |
+      | exec_command     | bash                                                                                     |
+      | exec_command_arg | -c                                                                                       |
+      | exec_command_arg | for n in {1..3}; do echo $n; sleep 1; done>/dev/udp/<%= cb.node_ip %>/<%= cb.nodeport %> |
+    Then the step should succeed
     #Making sure that the conntrack table should not contain old deleted udp listener pod IP entries but new pod one's
     When I execute on the "<%= cb.network_pod %>" pod:
       | bash | -c | conntrack -L \| grep "<%= cb.nodeport %>" |
@@ -415,9 +411,9 @@ Feature: Pod related networking scenarios
     | ip route |
   Then the output should contain:
     | <%= cb.pod_cidr %> dev <%= cb.tunnel_inf_name %> |
-    
+
   # @author anusaxen@redhat.com
-  # @case_id OCP-26373
+  # @case_id OCP-26014
   @admin
   @destructive
   Scenario: Pod readiness check for OVN
@@ -452,3 +448,56 @@ Feature: Pod related networking scenarios
     """
     OVN is functional on the cluster
     """
+  # @author anusaxen@redhat.com
+  # @case_id OCP-33413
+  @admin
+  @destructive
+  Scenario: xt_u32 kernel module functionality check from NET_ADMIN pods
+    Given I have a project
+    And I have a pod-for-ping in the project
+    Then evaluation of `pod.name` is stored in the :client_pod clipboard
+    Given I select a random node's host
+    #Making sure the iptables on latest centos are actually nf_tables as the xt_u32 is only supported with that
+    When I run commands on the host:
+      | iptables --version |
+    Then the step should succeed
+    Then the output should contain "nf_tables"
+
+    Given I obtain test data file "networking/centos_latest_admin.yaml"
+    When I run oc create as admin over "centos_latest_admin.yaml" replacing paths:
+      | ["metadata"]["name"]      | server-pod          |
+      | ["metadata"]["namespace"] | <%= project.name %> |
+    Then the step should succeed
+    And a pod becomes ready with labels:
+      | name=centos-pod |
+    Then evaluation of `pod` is stored in the :server_pod clipboard
+    Given I use the "<%= cb.server_pod.node_name %>" node
+    #Enabling XT_u32 module on server pod's node
+    And I run commands on the host:
+      | modprobe xt_u32 |
+    Then the step should succeed
+
+    #Checking whether server pod also has nf_tables version installed
+    When admin executes on the "<%= cb.server_pod.name %>" pod:
+      | bash | -c | iptables --version |
+    Then the step should succeed
+    And the output should contain "nf_tables"
+
+    #Creating iptable rule on server pod with module u32 and Successful pings will represent a successful xt_u32 match
+    Given admin executes on the "<%= cb.server_pod.name %>" pod:
+      | bash | -c | iptables -t filter -A INPUT -i eth0 -m u32 --u32 '6 & 0xFF = 1 && 4 & 0x3FFF = 0 && 0 >> 22 & 0x3C @ 0 >> 24 = 8' |
+    Then the step should succeed
+    When I execute on the "<%= cb.client_pod %>" pod:
+      | ping |-s 2000 | -c1 | <%= cb.server_pod.ip %> |
+    Then the step should succeed 
+
+    #Successful pings will represent a successful xt_u32 match. Here we allow ping for less than 256 bytes packet else Reject
+    Given admin executes on the "<%= cb.server_pod.name %>" pod:
+      | bash | -c | iptables -t filter -A INPUT -i eth0 -m u32 --u32 '0 & 0xFFFF = 0x100:0xFFFF' -j REJECT |
+    Then the step should succeed
+    When I execute on the "<%= cb.client_pod %>" pod:
+      | ping | -s 64 |-c1 | <%= cb.server_pod.ip %> |
+    Then the step should succeed 
+    Given I execute on the "<%= cb.client_pod %>" pod:
+      | ping | -s 256 |-c1 | <%= cb.server_pod.ip %> |
+    Then the step should fail

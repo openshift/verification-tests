@@ -1,0 +1,16 @@
+apiVersion: ptp.openshift.io/v1
+kind: PtpConfig
+metadata:
+  name: ptpconfig-slave
+  namespace: openshift-ptp
+spec:
+  profile:
+  - name: "ptp-slave-profile"
+    interface: "eno2"
+    ptp4lOpts: "-s -2"
+    phc2sysOpts: "-a -r"
+  recommend:
+  - profile: "ptp-slave-profile"
+    priority: 99
+    match:
+    - nodeName: "example.com"

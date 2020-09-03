@@ -8,12 +8,14 @@ module BushSlicer
 
       if provider_name
         case provider_name
-        when "openstack"
-          return {:type => "openstack", :provider => self.init_openstack(env, api_server_args)}
-        when "aws"
+        when "OpenStack"
+          return {:type => "openstack", :provider => self.init_openstack(env)}
+        when "AWS"
           return {:type => "aws", :provider => self.init_aws(env)}
         when "GCP"
-          return {:type => "gce", :provider => self.init_gce(env)}
+          return {:type => "gcp", :provider => self.init_gcp(env)}
+        when "Azure"
+          return {:type => "azure", :provider => self.init_azure(env)}
         else
           raise "The IAAS provider #{provider_name} is currently not supported by test framework!"
         end
@@ -22,20 +24,22 @@ module BushSlicer
     end
 
 
-    def self.init_openstack(env, api_server_args)
+    def self.init_openstack(env)
       # get the config of the IAAS instance
-      raise "getting IAAS config for OpenStack unimplemented"
-      iaas_conf_path = api_server_args["cloud-config"][0]
-      iaas_conf = env.nodes[0].host.exec_admin("cat #{iaas_conf_path} | grep =")[:response].split("\n")
+      secret = Secret.new(name: "openstack-credentials", project: Project.new(name: 'kube-system', env: env))
+      iaas_conf = secret.value_of("clouds.conf", user: :admin).split("\n")
       iaas_conf_params = {}
 
       iaas_conf.each do |line|
         params = line.split("=")
-        iaas_conf_params[params[0].strip] = params[1].strip
+        if params.length < 2
+          next
+        end
+        iaas_conf_params[params[0].strip] = params[1].strip.gsub('"', '')
       end
 
       return BushSlicer::OpenStack.new(
-        :url => iaas_conf_params['auth-url'] + "auth/tokens",
+        :url => iaas_conf_params['auth-url'] + "/auth/tokens",
         :user => iaas_conf_params["username"],
         :password => iaas_conf_params["password"],
         :tenant_id => iaas_conf_params["tenant-id"]
@@ -45,35 +49,38 @@ module BushSlicer
     def self.init_aws(env)
       aws_cred = {}
 
-      search_command = %{
-        if [ -f /etc/origin/master/master.env ] ; then
-          cat /etc/origin/master/master.env | grep AWS_
-        elif [ -f /etc/sysconfig/atomic-openshift-master ] ; then
-          cat /etc/sysconfig/atomic-openshift-master | grep AWS_
-        elif [ -f /etc/sysconfig/atomic-openshift-node ] ; then
-          cat /etc/sysconfig/atomic-openshift-node | grep AWS_
-        fi
-      }
-      conn_cred = env.nodes[0].host.exec_admin(search_command, quiet: true)[:response].split("\n")
-
-      key, skey = nil
-      conn_cred.each { |c|
-        cred = c.split("=")
-        case cred[0].strip
-        when "AWS_ACCESS_KEY_ID"
-          key = cred[1].strip
-        when "AWS_SECRET_ACCESS_KEY"
-          skey = cred[1].strip
-        end
-      }
+      secret = Secret.new(name: "aws-creds", project: Project.new(name: 'kube-system', env: env))
+      key = secret.value_of("aws_access_key_id", user: :admin)
+      skey = secret.value_of("aws_secret_access_key", user: :admin)
 
       return Amz_EC2.new(access_key: key, secret_key: skey)
     end
 
-    def self.init_gce(env)
-      token_json = env.nodes[0].host.exec_admin("curl -sS 'http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token' -H 'Metadata-Flavor: Google'")[:stdout]
+    def self.init_gcp(env)
+      secret = Secret.new(name: "gcp-credentials", project: Project.new(name: 'kube-system', env: env))
+      auth_json = secret.value_of("service_account.json", user: :admin)
+      # type token is for bearer token downloaded from instance metadata
+      # return GCE.new(:token_json => token_json, :auth_type => "token")
+      json_file = Tempfile.new("json_cred_", Host.localhost.workdir)
+      json_file.write(auth_json)
+      json_file.close
+      return GCE.new(:json_cred => json_file.path, :auth_type => "json",
+                     :avoid_garbage_collection => json_file)
+    end
 
-      return GCE.new(:token_json => token_json, :auth_type => "token")
+    def self.init_azure(env)
+      secret = Secret.new(name: "azure-credentials", project: Project.new(name: 'kube-system', env: env))
+      auth = {}
+      auth[:tenant_id] = secret.value_of("azure_tenant_id", user: :admin)
+      auth[:client_id] = secret.value_of("azure_client_id", user: :admin)
+      auth[:client_secret] = secret.value_of("azure_client_secret", user: :admin)
+
+      return BushSlicer::Azure.new(
+        :location => secret.value_of("azure_region", user: :admin),
+        :subscription_id => secret.value_of("azure_subscription_id", user: :admin),
+        :auth => auth,
+        :resource_group => secret.value_of("azure_resourcegroup", user: :admin)
+      )
     end
   end
 end

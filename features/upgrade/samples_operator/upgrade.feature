@@ -22,7 +22,8 @@ Feature: image-registry operator upgrade tests
   @upgrade-prepare
   @users=upuser1,upuser2
   @admin
-  Scenario: OpenShift can upgrade when image-registry/sample operator is unmanaged - preapare
+  @destructive
+  Scenario: OpenShift can upgrade when image-registry/sample operator is unmanaged - prepare
     Given I switch to cluster admin pseudo user
     Given admin updated the operator crd "configs.imageregistry" managementstate operand to Unmanaged
     Given admin updated the operator crd "config.samples" managementstate operand to Unmanaged
