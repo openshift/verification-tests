@@ -30,8 +30,21 @@ filter_alert:
   action: clear_name_filter_if_exists
   action: set_input_class
 open_alert_detail:
+  action: Disable_all_filters
   action: filter_alert
   action: click_alert_link_with_text
+open_silence_detail:
+  action: filter_alert
+  action: click_alert_link_with_text
+check_alert_detail:
+  params:
+    content: alertname=Watchdog
+  action: check_page_contains
+  action: check_alert_breadcrumb
+check_alert_breadcrumb:
+  params:
+    text: Alerts
+    link_url: /monitoring/alerts
 open_alertrules_detail:
   action: filter_alert
   action: click_alert_link_with_text
@@ -133,7 +146,7 @@ check_silence_fields:
   action: check_silence_duration_null 
 remove_matcher_silence_alert:
   params:
-    aria_label_text: Remove matcher
+    aria_label_text: Remove
     index: 1
   action: click_icon_index_button
 input_matcher_name_silence:
@@ -174,7 +187,13 @@ set_invalid_end_time_silence:
   action: set_silence_duration_null
   action: set_label_input_simple
   
+status_specific_alert_no_clear:
+  action: filter_alert
+  element:
+    selector:
+      xpath: //div[@aria-label='Alerts']//td[text()='<status>'][1]
 status_specific_alert:
+  action: Disable_all_filters
   action: filter_alert
   element:
     selector:
@@ -184,7 +203,11 @@ status_specific_silence:
   element:
     selector:
       xpath: //div[@aria-label='Silences']//td[text()='<status>'][1]
+status_specific_alert_rule_no_clear:
+  action: filter_alert
+  action: check_specific_alert
 status_specific_alert_rule:
+  action: Disable_all_filters
   action: filter_alert
   action: check_specific_alert
 check_specific_alert:
@@ -227,6 +250,7 @@ check_info_of_silence_detail_reg:
     alert_name: Watchdog
   action: check_silence_name
   action: check_silenced_alert_name
+  action: check_silence_breadcrumb
 check_silence_name:
   element:
     selector:
@@ -235,6 +259,11 @@ check_silenced_alert_name:
   element:
     selector:
       xpath: //a[contains(text(), '<alert_name>')]
+check_silence_breadcrumb:
+  params:
+    text: Silences
+    link_url: /monitoring/silences
+  action: check_link_and_text
 expire_alert_from_cog_menu: 
   action: filter_alert
   action: click_first_action_icon
@@ -249,23 +278,27 @@ open_alert_rule_from_detail:
 check_alert_rule_details:
   params:
     rule_name: Watchdog
-    expression: vector(1)
-    link: /monitoring/query-browser?query0=vector(1)
   action: check_rule_name
   action: check_ruel_expression
   action: check_active_alerts
+  action: check_rule_breadcrumb
 check_rule_name:
   element:
     selector:
       xpath: //dd[contains(text(), '<rule_name>')]
 check_ruel_expression:
   params:
-    text: <expression>
-    link_url: <link>
+    text: vector(1)
+    link_url: /monitoring/query-browser?query0=vector(1)
   action: check_link_and_text
 check_active_alerts:
   action: check_view_metrics
   action: check_alert_description_on_rule_detail
+check_rule_breadcrumb:
+  params:
+    text: Alerting Rules
+    link_url: /monitoring/alertrules
+  action: check_link_and_text
 check_view_metrics:
   params:
     text: View in Metrics
@@ -289,7 +322,7 @@ show_alert_graph:
 hide_show_alert_graph_button:
   element:
     selector:
-      xpath: //span[@class='pf-c-button__text']/parent::button
+      xpath: //h2[@class='co-section-heading']/../button
     op: click 
  
 Disable_all_filters:

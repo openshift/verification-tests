@@ -189,6 +189,7 @@ module BushSlicer
         @messages = []
       end
 
+      # Check if we already have this line and assign index
       def push(msg)
         msg_idx = strings.find_index(msg[:msg])
         unless msg_idx
@@ -218,16 +219,20 @@ module BushSlicer
           pre_match_size = matched_pos - lastpos
           res << [strlog[lastpos...matched_pos], 1] if pre_match_size > 0
           lastpos = ss.pos
-          # after the fact I figured we don't need exact sequences, only length
-          #   but leaving it like that for the time being
-          res << [ss[1], ss.matched_size/ss[1].size]
+          # We don't need to save exact character sequence, only length.
+          #   Saving it for safety check.
+          # StringScanner.matched_size is byte based, for UTF we need
+          #   `matched.size`
+          res << [ss[1], ss.matched.size/ss[1].size]
         end
 
         res << [ss.rest, 1] if ss.rest?
 
         ## safety check
         processed = res.reduce(0) {|sum, seq| sum + seq[0].size * seq[1]}
-        raise "tokanized #{processed} but had #{strlog.size}" if processed != strlog.size
+        if processed != strlog.size
+          raise "deduplicated as #{processed} messages but raw input had #{strlog.size}"
+        end
 
         return res
       end

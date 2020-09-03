@@ -15,6 +15,7 @@ goto_project_details_page:
 # Dashboard renamed to Overview in 4.4, url is same "k8s/cluster/projects/<project_name>"
 goto_one_project_page: 
   url: k8s/cluster/projects/<project_name>
+  action: wait_box_loaded
 goto_one_project_dashboard_page:
   action: goto_one_project_page
 goto_cluster_dashboards_page:
@@ -221,6 +222,7 @@ goto_operator_hub_page:
   action: wait_box_loaded
 goto_installed_operators_page:
   url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion
+  action: wait_box_loaded
 goto_all_installed_operators_page:
   url: k8s/all-namespaces/operators.coreos.com~v1alpha1~ClusterServiceVersion
 goto_operator_subscription_page:

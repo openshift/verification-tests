@@ -1,3 +1,7 @@
+check_sample_query_area:
+  element:
+    selector:
+      xpath: //textarea[contains(text(),'sum_over_time')]
 click_primary_menu_developer_mode:
   element:
     selector:
@@ -73,7 +77,7 @@ check_query_input_text_area:
 click_promql_button:
   element:
     selector: &promql_button
-      xpath: //span[text()='<text>']/parent::button
+      xpath: //button[text()='<text>']
     op: click
 click_hide_promql_button:
   params:
@@ -173,16 +177,22 @@ click_clear_query_button:
     selector:
       xpath: //button[@aria-label='Clear Query']
     op: click
+order_metrics_data:
+  element:
+    selector:
+      xpath: //span[text()='<metric_column>']/ancestor::button
+    op: click
+    timeout: <time>
 check_result_page:
   params:
-    button_text: Name
+    metric_column: Name
     time: 20
-  action: click_button_text
+  action: order_metrics_data
   action:
     if_element:
       selector:
         xpath: //th[@aria-sort='descending']
-    ref: click_button_text  
+    ref: order_metrics_data  
   action: check_metric_query_table_text
 
 perform_filter_query:

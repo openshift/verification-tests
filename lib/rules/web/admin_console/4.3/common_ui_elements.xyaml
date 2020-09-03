@@ -226,6 +226,7 @@ click_on_resource_item:
     selector:
       xpath: //a[@class='co-resource-item__resource-name' and @data-test-id='<resource_name>']
     op: click
+check_resource_item_name: {}
 wait_dropdown_loaded:
   element:
     selector:
@@ -494,6 +495,14 @@ choose_dropdown_item:
 choose_dropdown_item_text:
   action: click_dropdown_field
   action: click_one_item_text
+navigate_to_admin_console:
+  elements:
+  - selector:
+      xpath: //button[@data-test-id='perspective-switcher-toggle']
+    op: click
+  - selector:
+      xpath: //li//h1[contains(., 'Administrator')]
+    op: click
 upload_file_for_one_field:
   elements:
   - selector:

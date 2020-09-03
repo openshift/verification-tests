@@ -23,7 +23,13 @@ filter_alert:
 open_alert_detail:
   action: filter_alert
   action: click_alert_link_with_text
-
+open_silence_detail:
+  action: filter_alert
+  action: click_alert_link_with_text
+check_alert_detail:
+  params:
+    content: alertname=Watchdog
+  action: check_page_contains
 perform_action_item:
   params:
     button_text: <item_text>
@@ -208,5 +214,5 @@ show_alert_graph:
 hide_show_alert_graph_button:
   element:
     selector:
-      xpath: //*[text()='Alert Details']/../../button
+      xpath: //h2[@class='co-section-heading']/../button
     op: click 

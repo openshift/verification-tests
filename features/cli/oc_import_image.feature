@@ -159,7 +159,7 @@ Feature: oc import-image related feature
       | image_name | ruby-25-centos7:latest |
     Then the step should succeed
     When I run the :new_build client command with:
-      | image_stream | ruby-25-centos7                          |
+      | image_stream | ruby-25-centos7                       |
       | code         | https://github.com/sclorg/ruby-ex.git |
     Then the step should succeed
     When I run the :get client command with:
@@ -182,7 +182,7 @@ Feature: oc import-image related feature
       | reference-policy| local                  |
     Then the step should succeed
     When I run the :new_build client command with:
-      | image_stream | ruby-25-centos7                          |
+      | image_stream | ruby-25-centos7                       |
       | code         | https://github.com/sclorg/ruby-ex.git |
     Then the step should succeed
     When I run the :get client command with:

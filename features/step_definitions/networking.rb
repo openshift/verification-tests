@@ -49,8 +49,9 @@ Given /^the env is using one of the listed network plugins:$/ do |table|
   _admin = admin
 
   @result = _admin.cli_exec(:get, resource: "clusternetwork", resource_name: "default", template: '{{.pluginName}}')
-  if @result[:success] then
-    plugin_name = @result[:response].split("-").last
+  if @result[:success]
+    # only check stdout because stderr can contain "-" and cause the split to fail
+    plugin_name = @result[:stdout].to_s.split("-").last
     unless plugin_list.include? plugin_name
       raise "the env network plugin is #{plugin_name} but expecting #{plugin_list}."
     end
@@ -122,212 +123,84 @@ Given /^the#{OPT_QUOTED} node network is verified$/ do |node_name|
   teardown_add net_verify
 end
 
-Given /^the#{OPT_QUOTED} node iptables config is verified$/ do |node_name|
+
+Given /^the subnet from the clusternetwork resource is stored in the clipboard$/ do
+  ensure_admin_tagged
+  _admin = admin
+  @result = _admin.cli_exec(:get, resource: "clusternetwork", resource_name: "default", template: '{{index .clusterNetworks 0 "CIDR"}}')
+  unless @result[:success]
+    raise "Can not get clusternetwork resource!"
+  end
+  cb.clusternetwork = @result[:response].chomp
+  logger.info "Cluster network #{cb.clusternetwork} saved into the :clusternetwork clipboard"
+end
+
+
+Given /^the#{OPT_QUOTED} node iptables config is checked$/ do |node_name|
   ensure_admin_tagged
   _node = node(node_name)
   _host = _node.host
   _admin = admin
 
-  if env.version_lt("3.7", user: user)
-    @result = _admin.cli_exec(:get, resource: "clusternetwork", resource_name: "default", template: "{{.network}}")
-  else
-    @result = _admin.cli_exec(:get, resource: "clusternetwork", resource_name: "default", template: '{{index .clusterNetworks 0 "CIDR"}}')
-  end
-  unless @result[:success]
-    raise "Can not get clusternetwork resource!"
-  end
+  step "the subnet from the clusternetwork resource is stored in the clipboard"
+  subnet = cb.clusternetwork
 
-  subnet = @result[:response]
-  cb.clusternetwork = subnet
-
+  plugin_type = ""
   @result = _admin.cli_exec(:get, resource: "clusternetwork", resource_name: "default")
   if @result[:success]
     plugin_type = @result[:response]
   end
 
-  if env.version_ge("3.9", user: user) && plugin_type.include?("openshift-ovs-networkpolicy")
-    puts "OpenShift version >= 3.9 and uses networkpolicy plugin."
-    filter_matches = [
-      'INPUT -m comment --comment "Ensure that non-local NodePort traffic can flow" -j KUBE-NODEPORT-NON-LOCAL',
-      'INPUT -m conntrack --ctstate NEW -m comment --comment "kubernetes externally-visible service portals" -j KUBE-EXTERNAL-SERVICES',
-      'INPUT -m comment --comment "firewall overrides" -j OPENSHIFT-FIREWALL-ALLOW',
-      'FORWARD -m comment --comment "firewall overrides" -j OPENSHIFT-FIREWALL-FORWARD',
-      'FORWARD -i tun0 ! -o tun0 -m comment --comment "administrator overrides" -j OPENSHIFT-ADMIN-OUTPUT-RULES',
-      'OPENSHIFT-FIREWALL-ALLOW -p udp -m udp --dport 4789 -m comment --comment "VXLAN incoming" -j ACCEPT',
-      'OPENSHIFT-FIREWALL-ALLOW -i tun0 -m comment --comment "from SDN to localhost" -j ACCEPT',
-      'OPENSHIFT-FIREWALL-ALLOW -i docker0 -m comment --comment "from docker to localhost" -j ACCEPT',
-      "OPENSHIFT-FIREWALL-FORWARD -s #{subnet} -m comment --comment \"attempted resend after connection close\" -m conntrack --ctstate INVALID -j DROP",
-      "OPENSHIFT-FIREWALL-FORWARD -d #{subnet} -m comment --comment \"forward traffic from SDN\" -j ACCEPT",
-      "OPENSHIFT-FIREWALL-FORWARD -s #{subnet} -m comment --comment \"forward traffic to SDN\" -j ACCEPT"
-    ]
-    nat_matches = [
-      "PREROUTING -m comment --comment \".*\" -j KUBE-SERVICES",
-      "OUTPUT -m comment --comment \"kubernetes service portals\" -j KUBE-SERVICES",
-      "POSTROUTING -m comment --comment \"rules for masquerading OpenShift traffic\" -j OPENSHIFT-MASQUERADE",
-      "OPENSHIFT-MASQUERADE -s #{subnet} -m comment --comment \"masquerade .* traffic\" -j OPENSHIFT-MASQUERADE-2",
-      "OPENSHIFT-MASQUERADE-2 -d #{subnet} -m comment --comment \"masquerade pod-to-external traffic\" -j RETURN",
-      "OPENSHIFT-MASQUERADE-2 -j MASQUERADE"
-    ]
-  elsif env.version_ge("3.9", user: user)
-    puts "OpenShift version >= 3.9 and uses multitenant or subnet plugin."
-    filter_matches = [
-      'INPUT -m comment --comment "Ensure that non-local NodePort traffic can flow" -j KUBE-NODEPORT-NON-LOCAL',
-      'INPUT -m conntrack --ctstate NEW -m comment --comment "kubernetes externally-visible service portals" -j KUBE-EXTERNAL-SERVICES',
-      'INPUT -m comment --comment "firewall overrides" -j OPENSHIFT-FIREWALL-ALLOW',
-      'FORWARD -m comment --comment "firewall overrides" -j OPENSHIFT-FIREWALL-FORWARD',
-      'FORWARD -i tun0 ! -o tun0 -m comment --comment "administrator overrides" -j OPENSHIFT-ADMIN-OUTPUT-RULES',
-      'OPENSHIFT-FIREWALL-ALLOW -p udp -m udp --dport 4789 -m comment --comment "VXLAN incoming" -j ACCEPT',
-      'OPENSHIFT-FIREWALL-ALLOW -i tun0 -m comment --comment "from SDN to localhost" -j ACCEPT',
-      'OPENSHIFT-FIREWALL-ALLOW -i docker0 -m comment --comment "from docker to localhost" -j ACCEPT',
-      "OPENSHIFT-FIREWALL-FORWARD -s #{subnet} -m comment --comment \"attempted resend after connection close\" -m conntrack --ctstate INVALID -j DROP",
-      "OPENSHIFT-FIREWALL-FORWARD -d #{subnet} -m comment --comment \"forward traffic from SDN\" -j ACCEPT",
-      "OPENSHIFT-FIREWALL-FORWARD -s #{subnet} -m comment --comment \"forward traffic to SDN\" -j ACCEPT"
-    ]
-    nat_matches = [
-      "PREROUTING -m comment --comment \".*\" -j KUBE-SERVICES",
-      "OUTPUT -m comment --comment \"kubernetes service portals\" -j KUBE-SERVICES",
-      "POSTROUTING -m comment --comment \"rules for masquerading OpenShift traffic\" -j OPENSHIFT-MASQUERADE",
-      "OPENSHIFT-MASQUERADE -s #{subnet} -m comment --comment \"masquerade .* traffic\" -j MASQUERADE",
-    ]
-  elsif env.version_ge("3.7", user: user) && plugin_type.include?("openshift-ovs-networkpolicy")
-    puts "OpenShift version >= 3.7 and uses networkpolicy plugin."
-    filter_matches = [
-      'INPUT -m comment --comment "Ensure that non-local NodePort traffic can flow" -j KUBE-NODEPORT-NON-LOCAL',
-      'INPUT -m comment --comment "kubernetes service portals" -j KUBE-SERVICES',
-      'INPUT -m comment --comment "firewall overrides" -j OPENSHIFT-FIREWALL-ALLOW',
-      'FORWARD -m comment --comment "firewall overrides" -j OPENSHIFT-FIREWALL-FORWARD',
-      'FORWARD -i tun0 ! -o tun0 -m comment --comment "administrator overrides" -j OPENSHIFT-ADMIN-OUTPUT-RULES',
-      'OPENSHIFT-FIREWALL-ALLOW -p udp -m udp --dport 4789 -m comment --comment "VXLAN incoming" -j ACCEPT',
-      'OPENSHIFT-FIREWALL-ALLOW -i tun0 -m comment --comment "from SDN to localhost" -j ACCEPT',
-      'OPENSHIFT-FIREWALL-ALLOW -i docker0 -m comment --comment "from docker to localhost" -j ACCEPT',
-      "OPENSHIFT-FIREWALL-FORWARD -s #{subnet} -m comment --comment \"attempted resend after connection close\" -m conntrack --ctstate INVALID -j DROP",
-      "OPENSHIFT-FIREWALL-FORWARD -d #{subnet} -m comment --comment \"forward traffic from SDN\" -j ACCEPT",
-      "OPENSHIFT-FIREWALL-FORWARD -s #{subnet} -m comment --comment \"forward traffic to SDN\" -j ACCEPT"
-    ]
-    nat_matches = [
-      "PREROUTING -m comment --comment \".*\" -j KUBE-SERVICES",
-      "OUTPUT -m comment --comment \"kubernetes service portals\" -j KUBE-SERVICES",
-      "POSTROUTING -m comment --comment \"rules for masquerading OpenShift traffic\" -j OPENSHIFT-MASQUERADE",
-      "OPENSHIFT-MASQUERADE -s #{subnet} -m comment --comment \"masquerade .* traffic\" -j OPENSHIFT-MASQUERADE-2",
-      "OPENSHIFT-MASQUERADE-2 -d #{subnet} -m comment --comment \"masquerade pod-to-external traffic\" -j RETURN",
-      "OPENSHIFT-MASQUERADE-2 -j MASQUERADE"
-    ]
-  elsif env.version_ge("3.7", user: user)
-    puts "OpenShift version >= 3.7 and uses multitenant or subnet plugin."
-    filter_matches = [
-      'INPUT -m comment --comment "Ensure that non-local NodePort traffic can flow" -j KUBE-NODEPORT-NON-LOCAL',
-      'INPUT -m comment --comment "kubernetes service portals" -j KUBE-SERVICES',
-      'INPUT -m comment --comment "firewall overrides" -j OPENSHIFT-FIREWALL-ALLOW',
-      'FORWARD -m comment --comment "firewall overrides" -j OPENSHIFT-FIREWALL-FORWARD',
-      'FORWARD -i tun0 ! -o tun0 -m comment --comment "administrator overrides" -j OPENSHIFT-ADMIN-OUTPUT-RULES',
-      'OPENSHIFT-FIREWALL-ALLOW -p udp -m udp --dport 4789 -m comment --comment "VXLAN incoming" -j ACCEPT',
-      'OPENSHIFT-FIREWALL-ALLOW -i tun0 -m comment --comment "from SDN to localhost" -j ACCEPT',
-      'OPENSHIFT-FIREWALL-ALLOW -i docker0 -m comment --comment "from docker to localhost" -j ACCEPT',
-      "OPENSHIFT-FIREWALL-FORWARD -s #{subnet} -m comment --comment \"attempted resend after connection close\" -m conntrack --ctstate INVALID -j DROP",
-      "OPENSHIFT-FIREWALL-FORWARD -d #{subnet} -m comment --comment \"forward traffic from SDN\" -j ACCEPT",
-      "OPENSHIFT-FIREWALL-FORWARD -s #{subnet} -m comment --comment \"forward traffic to SDN\" -j ACCEPT"
-    ]
-    nat_matches = [
-      "PREROUTING -m comment --comment \".*\" -j KUBE-SERVICES",
-      "OUTPUT -m comment --comment \"kubernetes service portals\" -j KUBE-SERVICES",
-      "POSTROUTING -m comment --comment \"rules for masquerading OpenShift traffic\" -j OPENSHIFT-MASQUERADE",
-      "OPENSHIFT-MASQUERADE -s #{subnet} -m comment --comment \"masquerade .* traffic\" -j MASQUERADE",
-    ]
-  elsif env.version_eq("3.6", user: user)
-    puts "OpenShift version is 3.6"
-    filter_matches = [
-      'INPUT -m comment --comment "Ensure that non-local NodePort traffic can flow" -j KUBE-NODEPORT-NON-LOCAL',
-      'INPUT -m comment --comment "firewall overrides" -j OPENSHIFT-FIREWALL-ALLOW',
-      'OUTPUT -m comment --comment "kubernetes service portals" -j KUBE-SERVICES',
-      'FORWARD -m comment --comment "firewall overrides" -j OPENSHIFT-FIREWALL-FORWARD',
-      'FORWARD -i tun0 ! -o tun0 -m comment --comment "administrator overrides" -j OPENSHIFT-ADMIN-OUTPUT-RULES',
-      'OPENSHIFT-FIREWALL-ALLOW -p udp -m udp --dport 4789 -m comment --comment "VXLAN incoming" -j ACCEPT',
-      'OPENSHIFT-FIREWALL-ALLOW -i tun0 -m comment --comment "from SDN to localhost" -j ACCEPT',
-      'OPENSHIFT-FIREWALL-ALLOW -i docker0 -m comment --comment "from docker to localhost" -j ACCEPT',
-      "OPENSHIFT-FIREWALL-FORWARD -s #{subnet} -m comment --comment \"attempted resend after connection close\" -m conntrack --ctstate INVALID -j DROP",
-      "OPENSHIFT-FIREWALL-FORWARD -d #{subnet} -m comment --comment \"forward traffic from SDN\" -j ACCEPT",
-      "OPENSHIFT-FIREWALL-FORWARD -s #{subnet} -m comment --comment \"forward traffic to SDN\" -j ACCEPT"
-    ]
-    # different MASQUERADE rules for networkpolicy plugin and multitenant/subnet plugin, for example:
-    #   with networkpolicy plugin it should be:
-    #   "OPENSHIFT-MASQUERADE -s #{subnet} ! -d #{subnet} -m comment --comment "masquerade pod-to-external traffic" -j MASQUERADE"
-    #   with multitenant or subnet plugin it should be:
-    #   "OPENSHIFT-MASQUERADE -s #{subnet} -m comment --comment "masquerade pod-to-service and pod-to-external traffic" -j MASQUERADE"
-    #   so use fuzzy matching in nat_matches.
-    nat_matches = [
-      'PREROUTING -m comment --comment "kubernetes service portals" -j KUBE-SERVICES',
-      "OUTPUT -m comment --comment \"kubernetes service portals\" -j KUBE-SERVICES",
-      'POSTROUTING -m comment --comment "kubernetes postrouting rules" -j KUBE-POSTROUTING',
-      "OPENSHIFT-MASQUERADE -s #{subnet} .*--comment \"masquerade .*pod-to-external traffic\" -j MASQUERADE"
-    ]
-  else
-    puts "OpenShift version < 3.6"
-    filter_matches = [
-      'INPUT -i tun0 -m comment --comment "traffic from(.*)" -j ACCEPT',
-      'INPUT -p udp -m multiport --dports 4789 -m comment --comment "001 vxlan incoming" -j ACCEPT',
-      'OUTPUT -m comment --comment "kubernetes service portals" -j KUBE-SERVICES',
-      "FORWARD -s #{subnet} -j ACCEPT",
-      "FORWARD -d #{subnet} -j ACCEPT"
-    ]
-    nat_matches = [
-      'PREROUTING -m comment --comment "kubernetes service portals" -j KUBE-SERVICES',
-      'POSTROUTING -m comment --comment "kubernetes postrouting rules" -j KUBE-POSTROUTING',
-      "POSTROUTING -s #{subnet} -j MASQUERADE"
-    ]
+  unless plugin_type.include?("openshift-ovs-networkpolicy")
+    raise "#{plugin_type} != openshift-ovs-networkpolicy.  This is unsupported?"
   end
 
-  iptables_verify = proc {
-    @result = _host.exec_admin("systemctl status iptables")
-    unless @result[:success] && @result[:response] =~ /Active:\s+?active/
-      raise "The iptables deamon verification failed. The deamon is not active!"
-    end
+  puts "OpenShift version >= 3.9 and uses networkpolicy plugin."
+  filter_matches = [
+    'INPUT -m comment --comment "Ensure that non-local NodePort traffic can flow" -j KUBE-NODEPORT-NON-LOCAL',
+    'INPUT -m conntrack --ctstate NEW -m comment --comment "kubernetes externally-visible service portals" -j KUBE-EXTERNAL-SERVICES',
+    'INPUT -m comment --comment "firewall overrides" -j OPENSHIFT-FIREWALL-ALLOW',
+    'FORWARD -m comment --comment "firewall overrides" -j OPENSHIFT-FIREWALL-FORWARD',
+    'FORWARD -i tun0 ! -o tun0 -m comment --comment "administrator overrides" -j OPENSHIFT-ADMIN-OUTPUT-RULES',
+    'OPENSHIFT-FIREWALL-ALLOW -p udp -m udp --dport 4789 -m comment --comment "VXLAN incoming" -j ACCEPT',
+    'OPENSHIFT-FIREWALL-ALLOW -i tun0 -m comment --comment "from SDN to localhost" -j ACCEPT',
+    'OPENSHIFT-FIREWALL-ALLOW -i docker0 -m comment --comment "from docker to localhost" -j ACCEPT',
+    "OPENSHIFT-FIREWALL-FORWARD -s #{subnet} -m comment --comment \"attempted resend after connection close\" -m conntrack --ctstate INVALID -j DROP",
+    "OPENSHIFT-FIREWALL-FORWARD -d #{subnet} -m comment --comment \"forward traffic from SDN\" -j ACCEPT",
+    "OPENSHIFT-FIREWALL-FORWARD -s #{subnet} -m comment --comment \"forward traffic to SDN\" -j ACCEPT"
+  ]
+  nat_matches = [
+    "PREROUTING -m comment --comment \".*\" -j KUBE-SERVICES",
+    "OUTPUT -m comment --comment \"kubernetes service portals\" -j KUBE-SERVICES",
+    "POSTROUTING -m comment --comment \"rules for masquerading OpenShift traffic\" -j OPENSHIFT-MASQUERADE",
+    "OPENSHIFT-MASQUERADE -s #{subnet} -m comment --comment \"masquerade .* traffic\" -j OPENSHIFT-MASQUERADE-2",
+    "OPENSHIFT-MASQUERADE-2 -d #{subnet} -m comment --comment \"masquerade pod-to-external traffic\" -j RETURN",
+    "OPENSHIFT-MASQUERADE-2 -j MASQUERADE"
+  ]
 
+  # use a lambda so we can exit early
+  iptables_verify = -> {
     @result = _host.exec_admin("iptables-save -t filter")
     filter_matches.each { |match|
       unless @result[:success] && @result[:response] =~ /#{match}/
-        raise "The filter table verification failed!"
+        @result[:success] = false
+        @result[:message] = "The filter table verification failed, missing [#{match}]"
+        return
       end
     }
 
     @result = _host.exec_admin("iptables-save -t nat")
     nat_matches.each { |match|
       unless @result[:success] && @result[:response] =~ /#{match}/
-        raise "The nat table verification failed!"
+        @result[:success] = false
+        @result[:message] = "The nat table verification failed, missing [#{match}]"
+        return
       end
     }
   }
 
-  firewalld_verify = proc {
-    @result = _host.exec_admin("systemctl status firewalld")
-    unless @result[:success] && @result[:response] =~ /Active:\s+?active/
-      raise "The firewalld deamon verification failed. The deamon is not active!"
-    end
+  iptables_verify.call
 
-    @result = _host.exec_admin("iptables-save -t filter")
-    filter_matches.each { |match|
-      unless @result[:success] && @result[:response] =~ /#{match}/
-        raise "The filter table verification failed!"
-      end
-    }
-
-    @result = _host.exec_admin("iptables-save -t nat")
-    nat_matches.each { |match|
-      unless @result[:success] && @result[:response] =~ /#{match}/
-        raise "The nat table verification failed!"
-      end
-    }
-  }
-
-  @result = _host.exec_admin("firewall-cmd --state")
-  if @result[:success] && @result[:response] =~ /running/
-    firewalld_verify.call
-    logger.info "Cluster network #{subnet} saved into the :clusternetwork clipboard"
-    teardown_add firewalld_verify
-  else
-    iptables_verify.call
-    logger.info "Cluster network #{subnet} saved into the :clusternetwork clipboard"
-    teardown_add iptables_verify
-  end
 end
 
 Given /^the#{OPT_QUOTED} node standard iptables rules are removed$/ do |node_name|
@@ -336,46 +209,45 @@ Given /^the#{OPT_QUOTED} node standard iptables rules are removed$/ do |node_nam
   _host = _node.host
   _admin = admin
 
-  if env.version_lt("3.7", user: user)
-    @result = _admin.cli_exec(:get, resource: "clusternetwork", resource_name: "default", template: "{{.network}}")
-  else
-    @result = _admin.cli_exec(:get, resource: "clusternetwork", resource_name: "default", template: '{{index .clusterNetworks 0 "CIDR"}}')
-  end
-  unless @result[:success]
-    raise "Can not get clusternetwork resource!"
-  end
+  step "the subnet from the clusternetwork resource is stored in the clipboard"
+  subnet = cb.clusternetwork
 
-  subnet = @result[:response]
+  @result = _host.exec('iptables -D OPENSHIFT-FIREWALL-ALLOW -p udp -m udp --dport 4789 -m comment --comment "VXLAN incoming" -j ACCEPT')
+  raise "failed to delete iptables rule #1" unless @result[:success]
+  @result = _host.exec('iptables -D OPENSHIFT-FIREWALL-ALLOW -i tun0 -m comment --comment "from SDN to localhost" -j ACCEPT')
+  raise "failed to delete iptables rule #2" unless @result[:success]
+  @result = _host.exec("iptables -D OPENSHIFT-FIREWALL-FORWARD -d #{subnet} -m comment --comment \"forward traffic from SDN\" -j ACCEPT")
+  raise "failed to delete iptables rule #3" unless @result[:success]
+  @result = _host.exec("iptables -D OPENSHIFT-FIREWALL-FORWARD -s #{subnet} -m comment --comment \"forward traffic to SDN\" -j ACCEPT")
+  raise "failed to delete iptables rule #4" unless @result[:success]
 
-  if env.version_lt("3.6", user: user)
-    @result = _host.exec('iptables -D INPUT -p udp -m multiport --dports 4789 -m comment --comment "001 vxlan incoming" -j ACCEPT')
-    raise "failed to delete iptables rule #1" unless @result[:success]
-    @result = _host.exec('iptables -D INPUT -i tun0 -m comment --comment "traffic from SDN" -j ACCEPT')
-    raise "failed to delete iptables rule #2" unless @result[:success]
-    @result = _host.exec("iptables -D FORWARD -d #{subnet} -j ACCEPT")
-    raise "failed to delete iptables rule #3" unless @result[:success]
-    @result = _host.exec("iptables -D FORWARD -s #{subnet} -j ACCEPT")
-    raise "failed to delete iptables rule #4" unless @result[:success]
-    @result = _host.exec("iptables -t nat -D POSTROUTING -s #{subnet} -j MASQUERADE")
-    raise "failed to delete iptables nat rule" unless @result[:success]
-  else
-    @resule = _host.exec('iptables -D OPENSHIFT-FIREWALL-ALLOW -p udp -m udp --dport 4789 -m comment --comment "VXLAN incoming" -j ACCEPT')
-    raise "failed to delete iptables rule #1" unless @result[:success]
-    @resule = _host.exec('iptables -D OPENSHIFT-FIREWALL-ALLOW -i tun0 -m comment --comment "from SDN to localhost" -j ACCEPT')
-    raise "failed to delete iptables rule #2" unless @result[:success]
-    @resule = _host.exec("iptables -D OPENSHIFT-FIREWALL-FORWARD -d #{subnet} -m comment --comment \"forward traffic from SDN\" -j ACCEPT")
-    raise "failed to delete iptables rule #3" unless @result[:success]
-    @resule = _host.exec("iptables -D OPENSHIFT-FIREWALL-FORWARD -s #{subnet} -m comment --comment \"forward traffic to SDN\" -j ACCEPT")
-    raise "failed to delete iptables rule #4" unless @result[:success]
+  # compatible with different network plugin
+  # limit the match to the main OPENSHIFT-MASQUERADE rule
+  @result = _host.exec("iptables -S -t nat \| grep -e 'OPENSHIFT-MASQUERADE -s #{subnet}' \| cut -d ' ' -f 2-")
+  raise "failed to grep rule from the iptables nat table!" unless @result[:success]
+  # don't use :response because for oc debug :response includes STDERR appended
+  nat_rule = @result[:stdout].to_s
 
-    # compatible with different network plugin
-    @result = _host.exec("iptables -S -t nat \| grep '#{subnet}' \| cut -d ' ' -f 2-")
-    raise "failed to grep rule from the iptables nat table!" unless @result[:success]
-    nat_rule = @result[:response]
+  @result = _host.exec("iptables -t nat -D #{nat_rule}")
+  raise "failed to delete iptables nat rule" unless @result[:success]
+end
 
-    @resule = _host.exec("iptables -t nat -D #{nat_rule}")
-    raise "failed to delete iptables nat rule" unless @result[:success]
-  end
+Given /^the#{OPT_QUOTED} node standard iptables rules are completely flushed$/ do |node_name|
+  ensure_admin_tagged
+  _node = node(node_name)
+  _host = _node.host
+  _admin = admin
+
+  tables = %w(filter mangle nat raw security)
+  tables.each { |table|
+
+    @result = _host.exec("iptables -t #{table} -F")
+    raise "failed to flush iptables table #{table}" unless @result[:success]
+    @result = _host.exec("iptables -t #{table} -X")
+    # ignore any chain delete errors for now and just see if it triggers the iptableSync
+    # raise "failed to delete iptables chain #{table}" unless @result[:success]
+    # iptables v1.8.4 (nf_tables):  CHAIN_USER_DEL failed (Device or resource busy): chain KUBE-MARK-MASQ
+  }
 end
 
 Given /^admin adds( and overwrites)? following annotations to the "(.+?)" netnamespace:$/ do |overwrite, netnamespace, table|
@@ -711,13 +583,15 @@ Given /^the default interface on nodes is stored in the#{OPT_SYM} clipboard$/ do
   end
   case networkType
   when "OVNKubernetes"
-    step %Q/I run command on the node's ovnkube pod:/, table("| bash | -c | ip route show default |")
+    # use -4 to limit output to just `default` interface, fixed in later iproute2 versions
+    step %Q/I run command on the node's ovnkube pod:/, table("| ip | -4 | route | show | default |")
   when "OpenShiftSDN"
-    step %Q/I run command on the node's sdn pod:/, table("| bash | -c | ip route show default |")
+    step %Q/I run command on the node's sdn pod:/, table("| ip | -4 | route | show | default |")
   else
     raise "unknown networkType"
   end
-  cb[cb_name] = @result[:response].split("\n").first.split(/\W+/)[7]
+  # OVN uses `br-ex` and `-` is not a word char, so we have to split on whitespace
+  cb[cb_name] = @result[:response].split("\n").first.split[4]
   logger.info "The node's default interface is stored in the #{cb_name} clipboard."
 end
 
@@ -732,7 +606,7 @@ end
 Given /^the bridge interface named "([^"]*)" is deleted from the "([^"]*)" node$/ do |bridge_name, node_name|
   ensure_admin_tagged
   check_and_delete_inf= %Q(if ip addr show  #{bridge_name};
-                           then 
+                           then
                               ip link delete #{bridge_name};
                            fi)
   node = node(node_name)
@@ -891,7 +765,7 @@ Given /^the vxlan tunnel address of node "([^"]*)" is stored in the#{OPT_SYM} cl
   end
   case networkType
   when "OVNKubernetes"
-    inf_name="ovn-k8s-mp0" 
+    inf_name="ovn-k8s-mp0"
     @result = host.exec_admin("ifconfig #{inf_name.split("\n")[0]}")
     cb[cb_address] = @result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]
   when "OpenShiftSDN"
@@ -914,15 +788,17 @@ Given /^the Internal IP of node "([^"]*)" is stored in the#{OPT_SYM} clipboard$/
   end
   case networkType
   when "OVNKubernetes"
-    step %Q/I run command on the node's ovnkube pod:/, table("| bash | -c | ip route show default |")
+    # use -4 to limit output to just `default` interface, fixed in later iproute2 versions
+    step %Q/I run command on the node's ovnkube pod:/, table("| ip | -4 | route | show | default |")
   when "OpenShiftSDN"
-    step %Q/I run command on the node's sdn pod:/, table("| bash | -c | ip route show default |")
+    step %Q/I run command on the node's sdn pod:/, table("| ip | -4 | route | show | default |")
   else
     raise "unknown networkType"
   end
-  def_inf = @result[:response].split("\n").first.split(/\W+/)[7]
+  # OVN uses `br-ex` and `-` is not a word char, so we have to split on whitespace
+  def_inf = @result[:response].split("\n").first.split[4]
   logger.info "The node's default interface is #{def_inf}"
-  @result = host.exec_admin("ifconfig #{def_inf}")
+  @result = host.exec_admin("ip -4 -brief addr show #{def_inf}")
   cb[cb_ipaddr]=@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]
   logger.info "The Internal IP of node is stored in the #{cb_ipaddr} clipboard."
 end
@@ -941,12 +817,12 @@ Given /^I store "([^"]*)" node's corresponding default networkType pod name in t
      app="app=ovnkube-node"
      project_name="openshift-ovn-kubernetes"
   end
+  cb.network_project_name = project_name
   cb[cb_pod_name] = BushSlicer::Pod.get_labeled(app, project: project(project_name, switch: false), user: admin) { |pod, hash|
     pod.node_name == node_name
   }.first.name
   logger.info "node's corresponding networkType pod name is stored in the #{cb_pod_name} clipboard."
 end
-
 
 Given /^I store the ovnkube-master#{OPT_QUOTED} leader pod in the#{OPT_SYM} clipboard$/ do |ovndb, cb_leader_name|
   ensure_admin_tagged
@@ -1000,7 +876,7 @@ Given /^OVN is functional on the cluster$/ do
   ovnkube_master_ds = daemon_set('ovnkube-master', project('openshift-ovn-kubernetes')).replica_counters(user: admin,cached: false)
   desired_ovnkube_node_replicas, available_ovnkube_node_replicas = ovnkube_node_ds.values_at(:desired, :available)
   desired_ovnkube_master_replicas, available_ovnkube_master_replicas = ovnkube_master_ds.values_at(:desired, :available)
-  
+
   raise "OVN is not running correctly! Check one of your ovnkube-node pod" unless desired_ovnkube_node_replicas == available_ovnkube_node_replicas && available_ovnkube_node_replicas != 0
   raise "OVN is not running correctly! Check one of your ovnkube-master pod" unless desired_ovnkube_master_replicas == available_ovnkube_master_replicas && available_ovnkube_master_replicas != 0
 end
@@ -1020,6 +896,138 @@ Given /^I enable multicast for the "(.+?)" namespace$/ do | project_name |
   @result = admin.cli_exec(:annotate, resource: space, resourcename: project_name, keyval: annotation)
   unless @result[:success]
     raise "Failed to apply the default deny annotation to specified namespace."
-  end 
+  end
   logger.info "The multicast is enable in the #{project_name} project"
+end
+
+Given /^I get the ptp logs of the "([^"]*)" node since "(.+)" ago$/ do | node_name, duration |
+  ensure_admin_tagged
+  node_name ||= node.name
+
+  # Only return logs newer than a relative duration like 5s, 2m, or 3h.
+  ptp_pod = BushSlicer::Pod.get_labeled("app=linuxptp-daemon", project: project("openshift-ptp", switch: false), user: admin) { |pod, hash|
+    pod.node_name == node_name
+  }.first
+  @result = admin.cli_exec(:logs, resource_name: ptp_pod.name, n: "openshift-ptp", since: duration)
+end
+
+Given /^the ptp operator is running well$/ do
+  ensure_admin_tagged
+  step %Q/I switch to cluster admin pseudo user/
+
+  unless project('openshift-ptp').exists?
+    if env.version_eq("4.3", user: user) || env.version_eq("4.4", user: user)
+      ns = "ns43.yaml"
+      dr = "43"
+    elsif env.version_ge("4.5", user: user)
+      ns = "ns45.yaml"
+      dr = "45"
+    end
+    step %Q{I obtain test data file "networking/ptp/namespace/#{dr}/#{ns}"}
+    step %Q/I run the :create admin command with:/,table(%{
+      | f | #{ns} |
+    })
+    step %Q{the step should succeed}
+  end
+
+  step %Q/I use the "openshift-ptp" project/
+  unless operator_group('ptp-operators').exists?
+    step %Q{I obtain test data file "networking/ptp/og/og.yaml"}
+    step %Q/I run the :create admin command with:/,table(%{
+      | f | og.yaml |
+    })
+    step %Q{the step should succeed}
+  end
+
+  unless subscription('openshift-ptp').exists?
+    step %Q/evaluation of `cluster_version('version').channel.split('-')[1]` is stored in the :ocp_cluster_version clipboard/
+    step %Q{I obtain test data file "networking/ptp/subscription/sub.yaml"}
+    step %Q/I run oc create over "sub.yaml" replacing paths:/,table(%{
+      | ["spec"]["channel"] | "#{cb.ocp_cluster_version}" |
+    })
+    step %Q{the step should succeed}
+  end
+
+  step %Q/ptp operator is ready/
+  step %Q/ptp config daemon is ready/
+end
+
+Given /^ptp operator is ready$/ do
+  ensure_admin_tagged
+  project("openshift-ptp")
+  step %Q/a pod becomes ready with labels:/, table(%{
+    | name=ptp-operator |
+  })
+end
+
+Given /^ptp config daemon is ready$/ do
+  ensure_admin_tagged
+  project("openshift-ptp")
+  step %Q/a pod becomes ready with labels:/, table(%{
+    | app=linuxptp-daemon |
+  })
+end
+
+Given /^I install machineconfigs load-sctp-module$/ do
+  ensure_admin_tagged
+  _admin = admin
+  @result = _admin.cli_exec(:get, resource: "machineconfigs", output: 'jsonpath={.items[?(@.metadata.name=="load-sctp-module")].metadata.name}')
+  if @result[:response] != "load-sctp-module"
+    @result = _admin.cli_exec(:create, f: "#{BushSlicer::HOME}/testdata/networking/sctp/load-sctp-module.yaml")
+    raise "Failed to install load-sctp-module" unless @result[:success]
+  end
+end
+
+Given /^I check load-sctp-module in #{NUMBER} workers$/ do | workers_num |
+  ensure_admin_tagged
+  _admin = admin
+  $i = 0
+  $num = Integer(workers_num)
+  while $i < $num  do
+    step %Q{I run the :debug admin command with:}, table(%{
+      | resource     | node/<%= cb.workers[#$i].name %> |
+      | oc_opts_end  |                                  |
+      | exec_command | lsmod                            |
+    })
+    step %Q/the step should succeed/
+    step %Q/the outputs should contain "sctp"/
+    $i +=1
+  end
+end
+
+Given /^the node's MTU value is stored in the#{OPT_SYM} clipboard$/ do |cb_node_mtu|
+  ensure_admin_tagged
+  cb_node_mtu = "mtu" unless cb_node_mtu
+  @result = admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
+  if @result[:success] then
+     networkType = @result[:response].strip
+  end
+  raise "Failed to get networkType" unless @result[:success]
+  if @result[:response] == "OVNKubernetes"
+     step %Q/I run command on the node's ovnkube pod:/, table("| bash | -c | ip route show default |")
+  else
+     step %Q/I run command on the node's sdn pod:/, table("| bash | -c | ip route show default |")
+  end
+  inf_name = @result[:response].split("\n").first.split(/\W+/)[7]
+  @result = host.exec_admin("ip a show #{inf_name}")
+  cb[cb_node_mtu] = @result[:response].split(/mtu /)[1][0,4]
+  logger.info "Node's MTU value is stored in the #{cb_node_mtu} clipboard."
+end
+
+Given /^the mtu value "([^"]*)" is patched in CNO config according to the networkType$/ do | mtu_value |
+  ensure_admin_tagged
+  mtu_value ||= "mtu_value"
+  @result = admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
+  if @result[:response] == "OVNKubernetes"
+     config_var = "ovnKubernetesConfig"
+  else
+     config_var = "openshiftSDNConfig"
+  end
+  @result = admin.cli_exec(:patch, resource: "network.operator", resource_name: "cluster", p: "{\"spec\":{\"defaultNetwork\":{\"#{config_var}\":{\"mtu\": #{mtu_value}}}}}", type: "merge")
+  raise "Failed to patch CNO!" unless @result[:success]
+  
+  teardown_add {
+      @result = admin.cli_exec(:patch, resource: "network.operator", resource_name: "cluster", p: "{\"spec\":{\"defaultNetwork\":{\"ovnKubernetesConfig\":{\"mtu\": null}}}}", type: "merge")
+      raise "Failed to clear mtu field from CNO" unless @result[:success]
+  }
 end

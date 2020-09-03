@@ -1,7 +1,7 @@
 expand_primary_menu:
   elements:
   - selector:
-      xpath: //*[contains(@data-component, 'pf-nav-expandable') and contains(text(), '<primary_menu>')]
+      xpath: //li[contains(@class, 'pf-m-expandable') and contains(@class,'pf-c-nav__item')]/*[contains(@class,'pf-c-nav__link') and contains(text(), '<primary_menu>')]
     op: click
 create_resource_by_default_yaml:
   elements:
@@ -27,6 +27,7 @@ click_create_button:
   - selector: &create_button
       xpath: //button[contains(text(),'Create')]
     op: click
+    timeout: 20
 check_create_button_missing:
   elements:
   - selector:
@@ -258,9 +259,14 @@ check_sidebar_item:
       xpath: //li[@class='co-resource-sidebar-item']//*[contains(text(),'<sidebar_item>')]
 click_on_resource_item:
   element:
-    selector:
+    selector: &data_test_id
       xpath: //a[@class='co-resource-item__resource-name' and @data-test-id='<resource_name>']
     op: click
+check_resource_item_name:
+  element:
+    selector:
+      <<: *data_test_id 
+    timeout: 20
 wait_dropdown_loaded:
   element:
     selector:
@@ -467,7 +473,7 @@ submit_changes:
     timeout: 15
 click_add_more_button:
   params:
-    button_text: Add More
+    button_text: Add
   action: click_button
 click_add_dropdown_button:
   element:
@@ -513,13 +519,13 @@ click_link_with_text_only:
 click_primary_menu:
   elements:
   - selector:
-      xpath: //a[@class='pf-c-nav__link' and text()='<primary_menu>']
+      xpath: //*[@class='pf-c-nav__link' and text()='<primary_menu>']
     op: click
 click_secondary_menu:
-  action: click_first_menu
+  action: click_primary_menu
   elements:
   - selector: &secondary_menu
-      xpath: //a[contains(@class,'pf-c-nav__link') and text()='<secondary_menu>']
+      xpath: //li[contains(@class, 'pf-m-expandable')]/section[contains(@class,'pf-c-nav__subnav')]//a[contains(@class,'pf-c-nav__link') and text()='<secondary_menu>']
     op: click
 check_secondary_menu:
   element:
@@ -635,6 +641,14 @@ wait_table_loaded:
     selector:
       xpath: //table//tr
     timeout: 30
+skip_dev_perspective_tour:
+  elements:
+  - selector:
+      xpath: //button[@id='tour-step-footer-secondary' and text()='Skip tour']
+    op: click
+  - selector:
+      xpath: //button[@id='tour-step-footer-primary' and text()='Close']
+    op: click
 check_item_in_list:
   element:
     selector:

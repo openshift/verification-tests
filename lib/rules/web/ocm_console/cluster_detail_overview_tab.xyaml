@@ -1,3 +1,50 @@
 go_to_overview_tab:
     element:
         xpath: //button[@class='pf-c-tabs__button' and text()='Overview']
+
+check_installation_logs_tab:
+    elements:
+        - selector:
+            xpath: //h2[text()='Installation logs']
+        - selector:
+            xpath: //p[text()='Cluster installation has started. Installation log will appear here once it becomes available.']
+        - selector:
+            xpath: //div[@class='log-window__header' and contains(.,'lines')]
+          timeout: 600
+        - selector:
+            xpath: //div[@class='log-window__contents__text' and contains(text(), 'time=')]
+          timeout: 30
+
+check_uninstallation_logs_tab:
+    elements:
+        - selector:
+            xpath: //h2[text()='Uninstallation logs']
+        - selector:
+            xpath: //p[text()='Cluster uninstallation has started. Uninstallation log will appear here once it becomes available.']
+        - selector:
+            xpath: //div[@class='log-window__header' and contains(.,'lines')]
+          timeout: 600
+        - selector:
+            xpath: //div[@class='log-window__contents__text' and contains(text(), 'time=')]
+          timeout: 30
+check_cluster_logs:
+    action:
+        if_param: installation
+        ref: check_installation_logs_tab
+    action:
+        if_param: uninstallation
+        ref: check_uninstallation_logs_tab
+    action: click_expand_button
+    action: exit_full_log_screen
+
+click_expand_button:
+    element:
+        selector:
+            xpath: //button[text()='Expand']
+        op: click
+
+exit_full_log_screen:
+    element:
+        selector:
+            xpath: //button[text()='Exit fullscreen']
+        op: click

@@ -13,11 +13,11 @@ input_cluster_name_on_osd_creation_page:
 creation_page_navigation_displayed:
     elements:
     - selector:
-        xpath: //a[@class='pf-c-breadcrumb__link' and text()='Clusters']
+        xpath: //a[@href='/openshift' and text()='Clusters']
     - selector:
-        xpath: //a[@class='pf-c-breadcrumb__link' and text()='Create']
+        xpath: //a[@href='/openshift/create' and text()='Create']
     - selector:
-        xpath: //li[@class='pf-c-breadcrumb__item' and text()='OpenShift Dedicated']
+        xpath: //a[@href='/openshift/create/osd' and text()='OpenShift Dedicated']
 page_title_displayed:
     elements:
         - selector:
@@ -25,7 +25,7 @@ page_title_displayed:
 cluster_detail_displayed:
     elements:
         - selector:
-            xpath: //h3[@class='osd-page-header' and text()='Cluster Details']
+            xpath: //h3[@class='osd-page-header' and text()='Cluster details']
 cluster_scale_displayed:
     elements:
     - selector:
@@ -34,6 +34,15 @@ cluster_scale_displayed:
         xpath: //label[@class='pf-c-form__label' and @for='node_type']/span[@class='pf-c-form__label-required']
     - selector:
         xpath: //div[@class='flat-radio-buttons-flex-container']
+
+select_compute_node_count_on_creation_page:
+    elements:
+        - selector:
+            xpath: //select[@aria-label='Compute nodes' and @name='nodes_compute']
+          op: click
+        - selector:
+            xpath: //option[text()='<node_number>']
+
 specified_machine_type_loaded:
     element: &machine_type_locator
         selector:
@@ -55,10 +64,9 @@ click_create_button:
         op: click
 switch_to_osd_creation_page:
     action: switch_to_creation_cards_page
-    element:
-        selector:
-            xpath: //a[contains(@href,'/openshift/create/osd')]
-        op: click
+    action: select_cluster_product_type
+    action: check_cloud_provider_selection_page
+    action: select_cloud_provider
     action: osd_creation_page_loaded
 select_advanced_radio_button:
     element:
@@ -74,142 +82,249 @@ select_basic_radio_button:
 check_networking_configuration:
     elements:
         - selector:
-            xpath: //h3[text()='Networking']
+            xpath: //h4[text()='Networking']
         - selector:
             xpath: //span[text()='Network configuration']
         - selector:
             xpath: //label[text()='Basic']
         - selector:
-            xpath: //label[text()='Basic']/div[text()='Creates a new VPC for your cluster using default values']
+            xpath: //label[text()='Basic']/div[text()='Creates a new VPC for your cluster using default values.']
         - selector:
             xpath: //label[text()='Advanced']
         - selector:
-            xpath: //label[text()='Advanced']/div[text()='Allow clusters to use a new VPC with customizable addresses']
+            xpath: //label[text()='Advanced']/div[text()='Choose this option if you will ever need direct, private network connectivity to your cluster, e.g. VPN or VPC peering.']
 
 check_advanced_elements_loaded:
+    action: 
+        if_param: aws
+        ref: check_aws_advanced_elements_loaded
+    action:
+        if_param: gcp
+        ref: check_gcp_advanced_elements_loaded
     elements:
+        - selector:
+            xpath: //h4[text()='CIDR ranges may not be changed once the cluster has been created.']
         - selector:
             xpath: //*[@id='network_machine_cidr' and @placeholder='10.0.0.0/16']
         - selector:
             xpath: //*[@id='network_service_cidr' and @placeholder='172.30.0.0/16']
         - selector:
+            xpath: //*[@id='network_host_prefix' and @placeholder='/23']
+        - selector:
+            xpath: //div[@id='network_host_prefix-helper' and text()='Must be between /23 and /26.']
+        
+check_advanced_privacy_loaded:
+    elements:
+        - selector:
+            xpath: //h4[text()='Cluster privacy']
+        - selector:
+            xpath: //p[text()='Clusters may be created initially with master API endpoint and application routes being all public or all private. More options are available after the initial installation.']
+        - selector:
+            xpath: //label[text()='Public (recommended)']
+        - selector:
+            xpath: //div[text()='Master API endpoint and application routes are accessible from the internet.']
+        - selector:
+            xpath: //label[text()='Private']
+        - selector:
+            xpath: //div[text()='Master API endpoint and application routes are restricted to direct, private connectivity.']
+check_aws_advanced_elements_loaded:
+    elements:
+        - selector:
+            xpath: //div[@id='network_machine_cidr-helper' and text()='Subnet mask must be between /16 and <max_machinecidr_range>.']
+        - selector:
+            xpath: //div[@id='network_service_cidr-helper' and text()='Subnet mask must be at most /24.']
+        - selector:
+            xpath: //div[@id='network_pod_cidr-helper' and text()='Subnet mask must allow for at least 32 nodes.']
+        - selector:
+            xpath: //*[@id='network_pod_cidr' and @placeholder='10.128.0.0/16']
+    action: check_advanced_privacy_loaded
+check_gcp_advanced_elements_loaded:
+    elements:
+        - selector:
+            xpath: //h4[text()='CIDR ranges may not be changed once the cluster has been created.']
+        - selector:
+            xpath: //div[text()='The machine, service and pod ranges may not overlap. The addresses must specify a range, and correspond to the first IP address in their subnet.']
+        - selector:
+            xpath: //span[text()='All addresses must be private IPv4 addresses, and belong to one of the following ranges:']
+        - selector:
+            xpath: //li[text()='10.0.0.0 – 10.255.255.255']
+        - selector:
+            xpath: //li[text()='172.16.0.0 – 172.31.255.255']
+        - selector:
+            xpath: //li[text()='192.168.0.0 – 192.168.255.255']
+        - selector:
+            xpath: //div[@id='network_machine_cidr-helper' and text()='Range must be private. Subnet mask must be at most /23.']
+        - selector:
+            xpath: //div[@id='network_service_cidr-helper' and text()='Range must be private. Subnet mask must be at most /24.']
+        - selector:
+            xpath: //div[@id='network_pod_cidr-helper' and text()='Range must be private. Subnet mask must allow for at least 32 nodes.']
+        - selector:
             xpath: //*[@id='network_pod_cidr' and @placeholder='10.128.0.0/14']
-set_cidr_value:
-    element:
-        selector:
-            xpath: //*[@id='<locator_id>']
-        op: send_keys <cidr_value>
-check_cidr_error_message:
-    action: set_cidr_value
-    action: click_create_button
-    element:
-        selector:
-            xpath: //*[contains(text(),"IP address range '<cidr_value>' isn't valid CIDR notation")]
-    action: clear_input
 
-check_machine_cidr_invalid_range_error_message:
+set_machine_cidr_value:
     params:
         locator_id: network_machine_cidr
-    action: set_cidr_value
-    action: click_create_button
+    action: select_advanced_radio_button
+    action: clear_input
     element:
         selector:
-            xpath: //*[contains(text(),"which provides up to 23 nodes for single-zone clusters or 10 nodes for each zone in a multi-zone clusters")]
-    action: clear_input
-check_service_cidr_invalid_range_error_message:
+            xpath: //*[@id='network_machine_cidr']
+        op: clear
+        op: send_keys <machine_cidr>
+
+set_service_cidr_value:
     params:
         locator_id: network_service_cidr
-    action: set_cidr_value
-    action: click_create_button
+    action: select_advanced_radio_button
+    action: clear_input
     element:
         selector:
-            xpath: //*[contains(text(),"which provides up to 254 services")]
-    action: clear_input
-check_pod_cidr_invalid_range_error_message:
+            xpath: //*[@id='network_service_cidr']
+        op: clear
+        op: send_keys <service_cidr>
+set_pod_cidr_value:
     params:
         locator_id: network_pod_cidr
-    action: set_cidr_value
-    action: click_create_button
+    action: select_advanced_radio_button
+    action: clear_input
     element:
         selector:
-            xpath: //*[contains(text(),"which provides up to 32 nodes")]
-    action: clear_input
+            xpath: //*[@id='network_pod_cidr']
+        op: send_keys <pod_cidr>
 
-
-check_host_prefix_lower_range_error_message:
+set_host_prefix_value:
     params:
         locator_id: network_host_prefix
-        cidr_value: "/2"
-    action: set_cidr_value
-    action: click_create_button
+    action: select_advanced_radio_button
+    action: clear_input
     element:
         selector:
-            xpath: //*[contains(text(),"which provides up to 510 Pod IP addresses")]
-    action: clear_input
-check_host_prefix_higher_range_error_message:
-    params:
-        locator_id: network_host_prefix
-        cidr_value: /29
-    action: set_cidr_value
-    action: click_create_button
+            xpath: //*[@id='network_host_prefix']
+        op: clear
+        op: send_keys <host_prefix>
+
+select_privacy:
+    action: select_advanced_radio_button
     element:
         selector:
-            xpath: //*[contains(text(),"which provides up to 62 Pod IP addresses")]
-    action: clear_input
-check_host_prefix_illegal_error_message:
-    params:
-        locator_id: network_host_prefix
-        cidr_value: abcd
-    action: set_cidr_value
-    action: click_create_button
+            xpath: //input[@id='cluster_privacy-<listening>']
+        op: click
+
+error_information_loaded:
     element:
         selector:
-            xpath: //*[contains(text(),"It must follow the RFC-4632 format")]
-    action: clear_input
-
-check_host_prefix_error_messages:
-    action: check_host_prefix_illegal_error_message
-    action: check_host_prefix_lower_range_error_message
-    action: check_host_prefix_higher_range_error_message
-
-check_cidr_invalid_range_error_message:
-    action: check_machine_cidr_invalid_range_error_message
-    action: check_service_cidr_invalid_range_error_message
-    action: check_pod_cidr_invalid_range_error_message
-
+            xpath: //*[@id='<error_message_locator>' and contains(text(),"<error_reason>")]
 check_machine_cidr_error_message:
     params:
         locator_id: network_machine_cidr
-    action: check_cidr_error_message
+        error_message_locator: network_machine_cidr-helper
+    action: set_machine_cidr_value
+    action: click_create_button
+    action: error_information_loaded
+    action: clear_input
+
 check_service_cidr_error_message:
     params:
         locator_id: network_service_cidr
-    action: check_cidr_error_message
+        error_message_locator: network_service_cidr-helper
+    action: set_service_cidr_value
+    action: click_create_button
+    action: error_information_loaded
+    action: clear_input
+
 check_pod_cidr_error_message:
     params:
         locator_id: network_pod_cidr
-    action: check_cidr_error_message
+        error_message_locator: network_pod_cidr-helper
+    action: set_pod_cidr_value
+    action: click_create_button
+    action: error_information_loaded
+    action: clear_input
+
+check_overlap_subnet_error_message:
+    action: set_machine_cidr_value
+    action: set_service_cidr_value
+    elements:
+        - selector:
+            text: "This subnet overlaps with the subnet in the Machine CIDR field."
+        - selector:
+            text: "This subnet overlaps with the subnet in the Service CIDR field."
+    action: set_pod_cidr_value
+    elements:
+        - selector:
+            text: "This subnet overlaps with the subnets in the Service CIDR, Pod CIDR fields."
+        - selector:
+            text: "This subnet overlaps with the subnets in the Machine CIDR, Pod CIDR fields."
+        - selector:
+            text: "This subnet overlaps with the subnets in the Machine CIDR, Service CIDR fields."
+
+check_host_prefix_error_message:
+    params:
+        locator_id: network_host_prefix
+        error_message_locator: network_host_prefix-helper
+    action: set_host_prefix_value
+    action: click_create_button
+    element:
+        selector:
+            xpath: //*[contains(text(),"<error_reason>")]
+    action: clear_input
+
 check_cidr_background_validation_error_message:
     action: clear_input
     action: osd_creation_page_loaded
     action: check_networking_configuration
     action: check_advanced_elements_loaded
-    action: set_cidr_value
+    action: set_machine_cidr_value
     action: click_create_button
     action: osd_creation_error_dialog_loaded
     action: close_error_message_dialog
+    action: clear_input
+
 fill_in_required_items_on_osd_creation_page:
     action: input_cluster_name_on_osd_creation_page
     action: select_machine_type
-select_multi_az:
-    element:
+multi_az_radio_button_loaded:
+    element: &multi_az_radio_button
         selector:
             xpath: //input[@id='multi_az-true']
+select_multi_az:
+    element:
+        <<: *multi_az_radio_button
         op: click
+check_disabled_single_zone:
+    element:
+        selector:
+            xpath: //div[@class='pf-c-radio radio-az-disabled']/*[@id="multi_az-false"]
+        op: hover
+    action: no_option_quota_tooltip_displayed
+check_disabled_multi_zone:
+    element:
+        selector:
+            xpath: //div[@class='pf-c-radio radio-az-disabled']/*[@id="multi_az-true"]
+        op: hover
+    action: no_option_quota_tooltip_displayed
+check_disabled_standard_card:
+    element:
+        selector:
+            xpath: //div[@class='ocm-flat-radio-button-disabled']/button[@id='standard']
+        op: hover
+    action: no_option_quota_tooltip_displayed
+
+check_disabled_byoc_card:
+    element:
+        selector:
+            xpath: //div[@class='ocm-flat-radio-button-disabled']/button[@id='customer cloud subscription']
+        op: hover
+    action: no_option_quota_tooltip_displayed
+
 no_quota_tooltip_displayed:
     element:
         selector:
             xpath: //div[@class='pf-c-tooltip__content' and text()='You do not have quota for this node type. Contact sales to purchase additional quota.']
+no_option_quota_tooltip_displayed:
+    element:
+        selector:
+            xpath: //div[@class='pf-c-tooltip__content' and text()='You do not have quota for this option. Contact sales to purchase additional quota.']
 check_no_quota_tooltip:
     action: hover_machine_type
     action: no_quota_tooltip_displayed
@@ -317,7 +432,15 @@ check_persistent_storage_field_in_creation_page:
   - selector:
       xpath: //select[@name='persistent_storage']
   - selector:
-      xpath: //label[@for='persistent_storage']/following-sibling::*[name()='svg']
+      xpath: //label[@for='persistent_storage']/following-sibling::span/*[name()='svg']
+select_persisten_storage_on_creation_page:
+    elements:
+        - selector:
+            xpath: //select[@aria-label='Persistent Storage' and @name='persistent_storage']
+          op: click
+        - selector:
+            xpath: //option[text()='<storage_quota>']
+          op: click
 check_lb_field_in_creation_page:
   elements:
   - selector:
@@ -325,7 +448,15 @@ check_lb_field_in_creation_page:
   - selector:
       xpath: //select[@name='load_balancers']
   - selector:
-      xpath: //label[@for='load_balancers']/following-sibling::*[name()='svg']
+      xpath: //label[@for='load_balancers']/following-sibling::span/*[name()='svg']
+select_lb_on_creation_page:
+    elements:
+        - selector:
+            xpath: //select[@name='load_balancers' and @aria-label='Load Balancers']
+          op: click
+        - selector:
+            xpath: //option[text()='<lb_quota>']
+          op: click
 check_persistent_storage_field_in_creation_page_missing:
   element:
     selector:
@@ -339,7 +470,7 @@ check_lb_field_in_creation_page_missing:
 check_persistent_storage_popover_message:
   element:
     selector:
-      xpath: //label[@for='persistent_storage']/following-sibling::*[name()='svg']
+      xpath: //label[@for='persistent_storage']/following-sibling::span/*[name()='svg']
     op: click
   element:
     selector:
@@ -347,8 +478,118 @@ check_persistent_storage_popover_message:
 check_lb_popover_message:
   element:
     selector:
-      xpath: //label[@for='load_balancers']/following-sibling::*[name()='svg']
+      xpath: //label[@for='load_balancers']/following-sibling::span/*[name()='svg']
     op: click
   element:
     selector:
       xpath: //div[@class='pf-c-popover__body' and text()='The load balancer quota set on the deployed cluster.']
+byoc_page_loaded:
+    elements:
+        - selector:
+            xpath: //*[text()='Revoking these credentials in AWS will result in a loss of access to any cluster created with these credentials.']
+        - selector:
+            xpath: //h3[text()='AWS account details']
+        - selector:
+            xpath: //span[text()='AWS account ID']/../span[text()='*']
+        - selector:
+            xpath: //h4[text()='AWS IAM user credentials']
+        - selector:
+            xpath: //span[text()='AWS access key ID']/../span[text()='*']
+        - selector:
+            xpath: //span[text()='AWS secret access key']/../span[text()='*']
+    action: aws_account_id_textbox_loaded
+    action: aws_access_key_textbox_loaded
+    action: aws_access_secret_textbox_loaded
+
+check_byoc_creation_page:
+    action: byoc_page_loaded
+    action: check_lb_field_in_creation_page_missing
+    action: check_persistent_storage_field_in_creation_page_missing
+    action: cluster_detail_displayed
+    action: cluster_scale_displayed
+    action: check_networking_configuration
+    action: select_advanced_radio_button
+    action: multi_az_radio_button_loaded
+    action: region_dropdown_loaded
+check_creation_pending_message:
+    elements:
+        - selector:
+            xpath: //button[@type='submit' and @disabled='' and text()='Create cluster']
+        - selector:
+            xpath: //span[text()='Do not refresh this page. This request may take a moment...']
+
+check_podcidr_hostprefix_invalid_message:
+    action: set_pod_cidr_value
+    action: set_host_prefix_value
+    action: click_create_button
+    element:
+        selector:
+            xpath: //*[@id='network_pod_cidr-helper'and contains(.,'does not allow for enough nodes. Try changing the host prefix or the pod subnet range.')]
+check_aws_compute_node_instances_type:
+    elements:
+        - selector:
+            xpath: //h4[text()='4 vCPU 16 GiB RAM']/../../div/div[text()='m5.xlarge']
+        - selector:
+            xpath: //h4[text()='4 vCPU 16 GiB RAM']/../../div/div[text()='General purpose']
+        - selector:
+            xpath: //h4[text()='8 vCPU 32 GiB RAM']/../../div/div[text()='m5.2xlarge']
+        - selector:
+            xpath: //h4[text()='8 vCPU 32 GiB RAM']/../../div/div[text()='General purpose']
+        - selector:
+            xpath: //h4[text()='16 vCPU 64 GiB RAM']/../../div/div[text()='m5.4xlarge']
+        - selector:
+            xpath: //h4[text()='16 vCPU 64 GiB RAM']/../../div/div[text()='General purpose']
+        - selector:
+            xpath: //h4[text()='4 vCPU 32 GiB RAM']/../../div/div[text()='r5.xlarge']
+        - selector:
+            xpath: //h4[text()='4 vCPU 32 GiB RAM']/../../div/div[text()='Memory optimized']
+        - selector:
+            xpath: //h4[text()='8 vCPU 64 GiB RAM']/../../div/div[text()='r5.2xlarge']
+        - selector:
+            xpath: //h4[text()='8 vCPU 64 GiB RAM']/../../div/div[text()='Memory optimized']
+        - selector:
+            xpath: //h4[text()='16 vCPU 128 GiB RAM']/../../div/div[text()='r5.4xlarge']
+        - selector:
+            xpath: //h4[text()='16 vCPU 128 GiB RAM']/../../div/div[text()='Memory optimized']
+        - selector:
+            xpath: //h4[text()='8 vCPU 16 GiB RAM']/../../div/div[text()='c5.2xlarge']
+        - selector:
+            xpath: //h4[text()='8 vCPU 16 GiB RAM']/../../div/div[text()='Compute optimized']
+        - selector:
+            xpath: //h4[text()='16 vCPU 32 GiB RAM']/../../div/div[text()='c5.4xlarge']
+        - selector:
+            xpath: //h4[text()='16 vCPU 32 GiB RAM']/../../div/div[text()='Compute optimized']
+check_gcp_compute_node_instances_type:
+    elements:
+        - selector:
+            xpath: //h4[text()='4 vCPU 16 GiB RAM']/../../div/div[text()='custom-4-16384']
+        - selector:
+            xpath: //h4[text()='4 vCPU 16 GiB RAM']/../../div/div[text()='General purpose']
+        - selector:
+            xpath: //h4[text()='8 vCPU 32 GiB RAM']/../../div/div[text()='custom-8-32768']
+        - selector:
+            xpath: //h4[text()='8 vCPU 32 GiB RAM']/../../div/div[text()='General purpose']
+        - selector:
+            xpath: //h4[text()='16 vCPU 64 GiB RAM']/../../div/div[text()='custom-16-65536']
+        - selector:
+            xpath: //h4[text()='16 vCPU 64 GiB RAM']/../../div/div[text()='General purpose']
+        - selector:
+            xpath: //h4[text()='4 vCPU 32 GiB RAM']/../../div/div[text()='custom-4-32768-ext']
+        - selector:
+            xpath: //h4[text()='4 vCPU 32 GiB RAM']/../../div/div[text()='Memory optimized']
+        - selector:
+            xpath: //h4[text()='8 vCPU 64 GiB RAM']/../../div/div[text()='custom-8-65536-ext']
+        - selector:
+            xpath: //h4[text()='8 vCPU 64 GiB RAM']/../../div/div[text()='Memory optimized']
+        - selector:
+            xpath: //h4[text()='16 vCPU 128 GiB RAM']/../../div/div[text()='custom-16-131072-ext']
+        - selector:
+            xpath: //h4[text()='16 vCPU 128 GiB RAM']/../../div/div[text()='Memory optimized']
+        - selector:
+            xpath: //h4[text()='8 vCPU 16 GiB RAM']/../../div/div[text()='custom-8-16384']
+        - selector:
+            xpath: //h4[text()='8 vCPU 16 GiB RAM']/../../div/div[text()='Compute optimized']
+        - selector:
+            xpath: //h4[text()='16 vCPU 32 GiB RAM']/../../div/div[text()='custom-16-32768']
+        - selector:
+            xpath: //h4[text()='16 vCPU 32 GiB RAM']/../../div/div[text()='Compute optimized']

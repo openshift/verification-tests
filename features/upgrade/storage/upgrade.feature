@@ -13,33 +13,34 @@ Feature: Storage upgrade tests
     Given the expression should be true> cluster_operator('storage').condition(type: 'Upgradeable')['status'] == "True"
 
     # There should be one and only one default storage class
-    When I run the :get client command with:
-      | resource      | clusteroperator                                                         |
-      | resource_name | storage                                                                 |
-      | o             | jsonpath={.status.relatedObjects[?(@.resource=="storageclasses")].name} |
-    And evaluation of `@result[:response]` is stored in the :default_sc clipboard
-    When I log the messages:
-      | <%= cb.default_sc %> (default)  |
+    # Comment out the step of get default SC from co storage due to BUG 1868424, not deleting them as we will add them back after bug fixed
+    #When I run the :get client command with:
+    #  | resource      | clusteroperator                                                         |
+    #  | resource_name | storage                                                                 |
+    #  | o             | jsonpath={.status.relatedObjects[?(@.resource=="storageclasses")].name} |
+    #And evaluation of `@result[:response]` is stored in the :default_sc clipboard
+    #When I log the messages:
+    #  | <%= cb.default_sc %> (default)  |
     When I run the :get client command with:
       | resource | storageclass |
     Then the step should succeed
     And the output should contain 1 times:
       | (default) |
-    And the output should contain 1 times:
-      | <%= cb.default_sc %> (default) |
+    #And the output should contain 1 times:
+    #  | <%= cb.default_sc %> (default) |
     When I run the :get client command with:
       | resource | storageclass |
       | o        | yaml         |
     Then the step should succeed
     And the output should contain 1 times:
       | is-default-class: "true" |
-    When I run the :get client command with:
-      | resource      | storageclass         |
-      | resource_name | <%= cb.default_sc %> |
-      | o             | yaml                 |
-    Then the step should succeed
-    And the output should contain:
-      | is-default-class: "true" |
+    #When I run the :get client command with:
+    #  | resource      | storageclass         |
+    #  | resource_name | <%= cb.default_sc %> |
+    #  | o             | yaml                 |
+    #Then the step should succeed
+    #And the output should contain:
+    #  | is-default-class: "true" |
 
     # Create deployment with default storage class
     When I run the :new_project client command with:
@@ -81,33 +82,34 @@ Feature: Storage upgrade tests
     Given the expression should be true> cluster_operator('storage').condition(type: 'Upgradeable')['status'] == "True"
 
     # There should be one and only one default storage class
-    When I run the :get client command with:
-      | resource      | clusteroperator                                                         |
-      | resource_name | storage                                                                 |
-      | o             | jsonpath={.status.relatedObjects[?(@.resource=="storageclasses")].name} |
-    And evaluation of `@result[:response]` is stored in the :default_sc clipboard
-    When I log the messages:
-      | <%= cb.default_sc %> (default)  |
+    # Comment out the step of get default SC from co storage due to BUG 1868424, not deleting them as we will add them back after bug fixed
+    #When I run the :get client command with:
+    #  | resource      | clusteroperator                                                         |
+    #  | resource_name | storage                                                                 |
+    #  | o             | jsonpath={.status.relatedObjects[?(@.resource=="storageclasses")].name} |
+    #And evaluation of `@result[:response]` is stored in the :default_sc clipboard
+    #When I log the messages:
+    #  | <%= cb.default_sc %> (default)  |
     When I run the :get client command with:
       | resource | storageclass |
     Then the step should succeed
     And the output should contain 1 times:
       | (default) |
-    And the output should contain 1 times:
-      | <%= cb.default_sc %> (default) |
+    #And the output should contain 1 times:
+    #  | <%= cb.default_sc %> (default) |
     When I run the :get client command with:
       | resource | storageclass |
       | o        | yaml         |
     Then the step should succeed
     And the output should contain 1 times:
       | is-default-class: "true" |
-    When I run the :get client command with:
-      | resource      | storageclass         |
-      | resource_name | <%= cb.default_sc %> |
-      | o             | yaml                 |
-    Then the step should succeed
-    And the output should contain:
-      | is-default-class: "true" |
+    #When I run the :get client command with:
+    #  | resource      | storageclass         |
+    #  | resource_name | <%= cb.default_sc %> |
+    #  | o             | yaml                 |
+    #Then the step should succeed
+    #And the output should contain:
+    #  | is-default-class: "true" |
 
     # Check deployment and data before upgrade
     When I use the "upgrade-ocp-23501" project
@@ -191,10 +193,10 @@ Feature: Storage upgrade tests
     When I run the :apply client command with:
       | f | csi-rbac.yaml | 
     Then the step should succeed
-    Given SCC "privileged" is added to the "csi-provisioner" service account
-    Given SCC "privileged" is added to the "csi-attacher" service account
-    Given SCC "privileged" is added to the "csi-snapshotter" service account
-    Given SCC "privileged" is added to the "csi-plugin" service account
+    Given SCC "privileged" is added to the "csi-provisioner" service account without teardown
+    Given SCC "privileged" is added to the "csi-attacher" service account without teardown
+    Given SCC "privileged" is added to the "csi-snapshotter" service account without teardown
+    Given SCC "privileged" is added to the "csi-plugin" service account without teardown
 
     Given I obtain test data file "storage/csi/csi-hostpath-attacher.yaml"
     When I run the :apply client command with:

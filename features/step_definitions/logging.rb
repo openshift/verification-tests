@@ -159,10 +159,7 @@ Given /^I wait for clusterlogging(?: named "(.+)")? with #{QUOTED} log collector
     })
     cl.wait_until_fluentd_is_ready
   else
-    step %Q/a pod becomes ready with labels:/, table(%{
-      | component=rsyslog |
-    })
-    cl.wait_until_rsyslog_is_ready
+    raise "unknow log collector"
   end
 
   logger.info("### checking logging subcomponent status: kibana")
@@ -223,7 +220,8 @@ Given /^I wait until ES cluster is ready$/ do
   step %Q/#{cluster_logging('instance').logstore_node_count.to_i} pods become ready with labels:/, table(%{
     | cluster-name=elasticsearch,component=elasticsearch |
   }) 
-  cluster_logging('instance').wait_until_es_is_ready
+  # due to https://bugzilla.redhat.com/show_bug.cgi?id=1874746, remove this step, once the bug is fixed, will revert the change
+  #cluster_logging('instance').wait_until_es_is_ready
 end
 
 Given /^I wait until kibana is ready$/ do 
@@ -305,7 +303,6 @@ Given /^I delete the clusterlogging instance$/ do
   step %Q/I wait for the resource "deployment" named "kibana" to disappear/
   step %Q/I wait for the resource "elasticsearch" named "elasticsearch" to disappear/
   step %Q/I wait for the resource "cronjob" named "curator" to disappear/
-  step %Q/I wait for the resource "daemonset" named "rsyslog" to disappear/
   step %Q/I wait for the resource "daemonset" named "fluentd" to disappear/
   step %Q/all existing pods die with labels:/, table(%{
     | component=elasticsearch |
