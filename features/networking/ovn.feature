@@ -32,7 +32,6 @@ Feature: OVN related networking scenarios
     And admin waits for all pods in the "openshift-ovn-kubernetes" project to become ready up to 120 seconds
     #Making sure the pod entries are synced again when NB db is re-created
     Given I store the ovnkube-master "north" leader pod in the clipboard
-    And evaluation of `pod.ip_url` is stored in the :new_ovn_nb_leader_ip clipboard
     Given admin executes on the pod:
       | bash | -c | ovn-nbctl list logical_switch_port |
     Then the step should succeed
