@@ -817,12 +817,12 @@ Given /^I store "([^"]*)" node's corresponding default networkType pod name in t
      app="app=ovnkube-node"
      project_name="openshift-ovn-kubernetes"
   end
+  cb.network_project_name = project_name
   cb[cb_pod_name] = BushSlicer::Pod.get_labeled(app, project: project(project_name, switch: false), user: admin) { |pod, hash|
     pod.node_name == node_name
   }.first.name
   logger.info "node's corresponding networkType pod name is stored in the #{cb_pod_name} clipboard."
 end
-
 
 Given /^I store the ovnkube-master#{OPT_QUOTED} leader pod in the#{OPT_SYM} clipboard$/ do |ovndb, cb_leader_name|
   ensure_admin_tagged
@@ -993,4 +993,41 @@ Given /^I check load-sctp-module in #{NUMBER} workers$/ do | workers_num |
     step %Q/the outputs should contain "sctp"/
     $i +=1
   end
+end
+
+Given /^the node's MTU value is stored in the#{OPT_SYM} clipboard$/ do |cb_node_mtu|
+  ensure_admin_tagged
+  cb_node_mtu = "mtu" unless cb_node_mtu
+  @result = admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
+  if @result[:success] then
+     networkType = @result[:response].strip
+  end
+  raise "Failed to get networkType" unless @result[:success]
+  if @result[:response] == "OVNKubernetes"
+     step %Q/I run command on the node's ovnkube pod:/, table("| bash | -c | ip route show default |")
+  else
+     step %Q/I run command on the node's sdn pod:/, table("| bash | -c | ip route show default |")
+  end
+  inf_name = @result[:response].split("\n").first.split(/\W+/)[7]
+  @result = host.exec_admin("ip a show #{inf_name}")
+  cb[cb_node_mtu] = @result[:response].split(/mtu /)[1][0,4]
+  logger.info "Node's MTU value is stored in the #{cb_node_mtu} clipboard."
+end
+
+Given /^the mtu value "([^"]*)" is patched in CNO config according to the networkType$/ do | mtu_value |
+  ensure_admin_tagged
+  mtu_value ||= "mtu_value"
+  @result = admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
+  if @result[:response] == "OVNKubernetes"
+     config_var = "ovnKubernetesConfig"
+  else
+     config_var = "openshiftSDNConfig"
+  end
+  @result = admin.cli_exec(:patch, resource: "network.operator", resource_name: "cluster", p: "{\"spec\":{\"defaultNetwork\":{\"#{config_var}\":{\"mtu\": #{mtu_value}}}}}", type: "merge")
+  raise "Failed to patch CNO!" unless @result[:success]
+  
+  teardown_add {
+      @result = admin.cli_exec(:patch, resource: "network.operator", resource_name: "cluster", p: "{\"spec\":{\"defaultNetwork\":{\"ovnKubernetesConfig\":{\"mtu\": null}}}}", type: "merge")
+      raise "Failed to clear mtu field from CNO" unless @result[:success]
+  }
 end
