@@ -45,7 +45,7 @@ check_charts_in_project_utilization:
       xpath: //h4[text()='Filesystem']/ancestor::div[contains(@class,'co-utilization-card__item')]//div[contains(@class,'pf-c-chart')]
     timeout: 40
   - selector:
-      xpath: //h4[text()='Network Transfer']/ancestor::div[contains(@class,'co-utilization-card__item')]//div[contains(@class,'pf-c-chart')]
+      xpath: //h4[contains(text(),'Network Transfer')]/ancestor::div[contains(@class,'co-utilization-card__item')]//div[contains(@class,'pf-c-chart')]
     timeout: 40
   - selector:
       xpath: //h4[text()='Pod count']/ancestor::div[contains(@class,'co-utilization-card__item')]//div[contains(@class,'pf-c-chart')]
@@ -78,7 +78,6 @@ click_memory_usage_chart:
       <<: *memory_usage_chart
     op: click
 check_on_dev_monitoring_page:
-  action: wait_box_loaded
   elements:
   - selector:
       xpath: //a[contains(@href,'/dev-monitoring/ns/<project_name>/metrics') and text()='Metrics']

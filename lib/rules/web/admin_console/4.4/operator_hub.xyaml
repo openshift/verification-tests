@@ -255,5 +255,5 @@ check_condition_status:
       xpath: //table
     timeout: 20
   - selector:
-      xpath: //span[contains(.,'Conditions') and contains(.,'<status>')]
+      xpath: //span[contains(.,'Condition') and contains(.,'<status>')]
 check_logging_operator_filtered_out: {}
