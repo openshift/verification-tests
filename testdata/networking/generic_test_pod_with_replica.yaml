@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: test-rc
+spec:
+  replicas: 10
+  template:
+    metadata:
+      labels:
+        name: test-pods
+    spec:
+      containers:
+      - image: quay.io/openshifttest/pod-for-ping@sha256:f61ca8fd1dd7dfb8d403b66df549ed5a94fc4626d3b19e2530af48aefa75e5ea
+        name: test-pod
+      restartPolicy: Always
