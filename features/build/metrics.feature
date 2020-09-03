@@ -6,11 +6,11 @@ Feature: Builds and samples related metrics test
   @destructive
   Scenario: Alerts on imagestream import retries 
     When as admin I successfully merge patch resource "config.samples.operator.openshift.io/cluster" with:
-     | {"spec":{"samplesRegistry":"registry.unconnected.redhat.com"}} |
+      | {"spec":{"samplesRegistry":"registry.unconnected.redhat.com"}} |
     And I register clean-up steps:
     """
     Given as admin I successfully merge patch resource "config.samples.operator.openshift.io/cluster" with:
-     | {"spec":{"samplesRegistry": null}} |
+      | {"spec":{"samplesRegistry": null}} |
     """
     Then I wait up to 120 seconds for the steps to pass:
     """
@@ -178,11 +178,11 @@ Feature: Builds and samples related metrics test
   @destructive
   Scenario: Monitoring, Alerting, and Degraded Status Reporting-Samples-operator 
     When as admin I successfully merge patch resource "config.samples.operator.openshift.io/cluster" with:
-     | {"spec":{"samplesRegistry":"registry.unconnected.redhat.com"}} |
+      | {"spec":{"samplesRegistry":"registry.unconnected.redhat.com"}} |
     And I register clean-up steps:
     """
     Given as admin I successfully merge patch resource "config.samples.operator.openshift.io/cluster" with:
-     | {"spec":{"samplesRegistry": null}} |
+      | {"spec":{"samplesRegistry": null}} |
     """
 
     And I switch to cluster admin pseudo user
