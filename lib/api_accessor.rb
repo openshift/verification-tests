@@ -97,7 +97,12 @@ module BushSlicer
     # @param [Boolean] uncache remove token from user object cache regardless of
     #   success
     def invalidate_token
-      rest_request(:delete_oauthaccesstoken, token_to_delete: token)
+      token_name = token
+      if token.include? "sha256~"
+         token_name = token.gsub("sha256~","")
+         token_name = "sha256~" + Base64.urlsafe_encode64(OpenSSL::Digest::SHA256.digest(token_name),padding: false)
+      end
+      rest_request(:delete_oauthaccesstoken, token_to_delete: token_name)
     end
 
     def clean_up
