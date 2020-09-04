@@ -22,6 +22,10 @@ module BushSlicer
         return struct['image']
       end
 
+      def args
+        return struct['args']
+      end
+
       def image_pull_policy
         return struct['imagePullPolicy']
       end
