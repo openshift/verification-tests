@@ -31,7 +31,7 @@ end
 When /^I run the :([a-z_]*?)( background)? admin command with:$/ do |yaml_key, background, table|
   ensure_admin_tagged
   opts = table.raw == [["dummy"]] ? [] : opts_array_process(table.raw)
-  
+
   if background
     @result = env.admin.cli_exec(
       yaml_key.to_sym,
