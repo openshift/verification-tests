@@ -1,0 +1,18 @@
+apiVersion: cloudcredential.openshift.io/v1
+kind: CredentialsRequest
+metadata:
+  name: my-cred-request
+  namespace: openshift-cloud-credential-operator
+spec:
+  secretRef:
+    name: my-cred-request-secret
+    namespace: openshift-cloud-credential-operator
+  providerSpec:
+    apiVersion: cloudcredential.openshift.io/v1
+    kind: AWSProviderSpec
+    statementEntries:
+    - action:
+      - s3:CreateBucket
+      - s3:DeleteBucke
+      effect: Allow
+      resource: '*'
