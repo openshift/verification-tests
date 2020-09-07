@@ -795,7 +795,12 @@ Feature: deployment related features
   Scenario: Trigger info is retained for deployment caused by image changes 37 new feature
     Given the master version >= "3.7"
     Given I have a project
-    When I process and create "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/OCP-11384/application-template-stibuild.json"
+    And I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/deployment/OCP-11384/application-template-stibuild.json"
+    And I replace lines in "application-template-stibuild.json":
+      | "name": "ruby-22-centos7"                         | "name": "ruby-25-centos7"                         |
+      | "dockerImageRepository": "centos/ruby-22-centos7" | "dockerImageRepository": "centos/ruby-25-centos7" |
+      | "name": "ruby-22-centos7:latest"                  | "name": "ruby-25-centos7:latest"                  |
+    When I process and create "application-template-stibuild.json"
     Then the step should succeed
     Given the "ruby-sample-build-1" build was created
     And the "ruby-sample-build-1" build completed
@@ -805,4 +810,3 @@ Feature: deployment related features
       | causes:                |
       | - type: ConfigChange   |
       | message: config change |
-
