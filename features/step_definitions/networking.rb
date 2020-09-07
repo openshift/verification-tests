@@ -41,8 +41,9 @@ Given /^the env is using one of the listed network plugins:$/ do |table|
   _admin = admin
 
   @result = _admin.cli_exec(:get, resource: "clusternetwork", resource_name: "default", template: '{{.pluginName}}')
-  if @result[:success] then
-    plugin_name = @result[:response].split("-").last
+  if @result[:success]
+    # only check stdout because stderr can contain "-" and cause the split to fail
+    plugin_name = @result[:stdout].to_s.split("-").last
     unless plugin_list.include? plugin_name
       raise "the env network plugin is #{plugin_name} but expecting #{plugin_list}."
     end
