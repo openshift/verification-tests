@@ -57,7 +57,7 @@ module BushSlicer
         schedule["cron"] = {"expression" => opts[:expression] } if opts[:period] == "cron"
       end
       report_hash = {
-        "apiVersion" => "metering.openshift.io/v1alpha1",
+        "apiVersion" => "metering.openshift.io/v1",
         "kind" => 'Report',
         "metadata" => {
           "name" => opts[:metadata_name]
