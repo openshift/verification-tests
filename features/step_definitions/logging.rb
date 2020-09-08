@@ -516,7 +516,7 @@ Given /^(fluentd|elasticsearch|rsyslog) receiver is deployed as (secure|insecure
         | n           | #{project_name}                     |
       })
       step %Q/the step should succeed/
-      step %Q/I create pipelinesecret named "piplinesecret"/
+      step %Q/I create pipelinesecret named "pipelinesecret"/
       configmap_file = "#{BushSlicer::HOME}/testdata/logging/logforwarding/elasticsearch/secure/configmap.yaml"
       deployment_file = "#{BushSlicer::HOME}/testdata/logging/logforwarding/elasticsearch/secure/deployment.yaml"
     else
