@@ -249,7 +249,7 @@ click_copyPullSecret_button:
         op: click
     element:
         selector:
-            xpath: //button[@id='copyPullSecret']/../../span[contains(., 'Copied!')]
+            xpath: //div[text()='Copied!']
 check_pull_secret_part_in_install_page:
     action: click_copyPullSecret_button
     elements:
