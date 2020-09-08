@@ -1,0 +1,52 @@
+= Reviewer's Guide
+
+== Overview
+
+Basically check that new code and scenarios follow the
+link:coding_guide.adoc[Coding Guide]. But bellow you can find some rules of
+thumb to help you quickly identify places to improve.
+
+== scenario needs to be readable ideally without comments
+
+Often times operations in scenario do not show intention of them being
+One common example is like this:
+
+----
+When I run the :get client command with:
+  | resource      | ValidatingWebhookConfiguration |
+  | resource_name | prometheusrules.openshift.io   |
+Then the step should succeed
+And the output should contain:
+  | prometheusrules.openshift.io |
+----
+
+After some consideration we can conclude this sequence of steps is used to
+check whether resource kind `ValidatingWebhookConfiguration` with name
+`prometheusrules.openshift.io` exists.
+
+In such cases we recommend to use proper step with a meaningful name, e.g.
+
+----
+/^(I|admin) checks? that the #{QUOTED} (\w+) exists(?: in the#{OPT_QUOTED} project)?$/
+----
+
+It may not be always possible to use one clear step to achieve desired ends.
+In such situations we may request author to put a comment above a sequence
+of steps to clarify **why** we perform them.
+
+== Using :get or :describe client command
+
+This is the most common issue with new scenarios to review. We have a lot
+of steps that check a resource is there or is not there or is in some
+particular state. Checking pods by label, etc.
+
+One caveat is that we need to have a class defined for such objects. This is
+very simple though. Give examples for an empty class depending on whether
+we work with a namespaced or non-namespaced object.
+
+* `lib/openshift/proxy.rb` - for empty non-namespaced object
+* `lib/openshift/etcd_cluster.rb` - for empty namespaced objects
+* `lib/openshift/config_imageregistry_operator_openshift_io.rb` - for objects without unique name and you need full qualified name
+
+Give example of existing method in another class how to access object
+properties. e.g. `Deployment#generation_number`

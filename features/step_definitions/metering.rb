@@ -108,6 +108,7 @@ Given /^I get the #{QUOTED} report and store it in the#{OPT_SYM} clipboard using
   required_params.each do |param|
     raise "Missing parameter '#{param}'" unless opts[param]
   end
+  opts[:query_type] = name if opts[:query_type] = ""
   opts[:start_time] ||= default_start_time
   opts[:end_time] ||= default_end_time
   opts[:run_immediately] = to_bool(opts[:run_immediately])
@@ -552,5 +553,28 @@ Given /^I prepare OLM via CLI$/ do
   # 3. create subscription
   step %Q(I run oc create as admin over ERB test file: metering/configs/metering_subscription.yaml)
   #step %Q/the step should succeed/
+end
+
+Given /^I save all valid (ReportDataSources|ReportQuerys) to the#{OPT_SYM} clipboard$/ do | resource_type, cb_name |
+  cb_name ||= :valid_resource
+  if resource_type == 'ReportDataSources'
+    res = BushSlicer::ReportDataSource.list(user: user, project: project)
+  else
+    res = BushSlicer::ReportQuery.list(user: user, project: project)
+  end
+  rds = res.reject {|r| r.name.end_with? '-raw'}
+  cb[cb_name] = rds.map { |r| r.name }
+end
+
+Given /^all reports can be generated via reportquery$/ do
+  res = BushSlicer::ReportQuery.list(user: user, project: project)
+  rds = res.reject {|r| r.name.end_with? '-raw'}
+  res = rds.map { |r| r.name }
+  res.each do | report_name |
+    step %Q/I get the "#{report_name}" report and store it in the clipboard using:/, table(%{
+      | query_type      | #{report_name} |
+      | run_immediately | true           |
+    })
+  end
 end
 

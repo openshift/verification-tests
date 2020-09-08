@@ -15,6 +15,7 @@ goto_project_details_page:
 # Dashboard renamed to Overview in 4.4, url is same "k8s/cluster/projects/<project_name>"
 goto_one_project_page: 
   url: k8s/cluster/projects/<project_name>
+  action: wait_box_loaded
 goto_one_project_dashboard_page:
   action: goto_one_project_page
 goto_cluster_dashboards_page:

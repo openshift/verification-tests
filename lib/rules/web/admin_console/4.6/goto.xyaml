@@ -15,6 +15,7 @@ goto_project_details_page:
 # Dashboard renamed to Overview in 4.4, url is same "k8s/cluster/projects/<project_name>"
 goto_one_project_page: 
   url: k8s/cluster/projects/<project_name>
+  action: wait_box_loaded
 goto_one_project_dashboard_page:
   action: goto_one_project_page
 goto_cluster_dashboards_page:
@@ -330,6 +331,9 @@ goto_cluster_operators:
 goto_global_configuration_page:
   url: settings/cluster/globalconfig
   action: wait_box_loaded 
+goto_cluster_settings_details_page:
+  url: settings/cluster
+  action: wait_box_loaded
 
 goto_command_line_tools:
   url: command-line-tools

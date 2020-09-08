@@ -503,8 +503,8 @@ Given /^the taints of the nodes in the#{OPT_SYM} clipboard are restored after sc
       [node, _current_taints[node] - _original_taints[node]]
     end.reject {|node, diff_taints| diff_taints.empty?}
     unless _diff_taints.empty?
-      raise "nodes didn't have taints properly restored: " \
-        "#{_diff_taints.map(&:first).map(&:name).join(", ")}"
+      raise "nodes didn't have taints properly restored:\n" \
+        "#{_diff_taints.map{ |n,t| "#{n.name}:#{t}" }.join("\n")}"
     end
   }
 end
