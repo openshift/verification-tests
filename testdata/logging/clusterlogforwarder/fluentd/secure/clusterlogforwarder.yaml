@@ -1,0 +1,22 @@
+apiVersion: logging.openshift.io/v1
+kind: ClusterLogForwarder
+metadata:
+  name: instance
+  namespace: openshift-logging
+spec:
+  outputs:
+  - name: fluentd-created-by-user
+    type: fluentdForward
+    url: 'tls://fluentdserver.openshift-logging.svc:24224'
+    secret:
+       name: 'fluentdserver'
+  pipelines:
+  - name: forward-to-fluentd-server
+    inputRefs:
+    - infrastructure
+    - application
+    - audit
+    labels:
+      forward-with-labels: test-labels
+    outputRefs:
+    - fluentd-created-by-user
