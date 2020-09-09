@@ -6,9 +6,8 @@ Feature: SDN/OVN metrics related networking scenarios
   Scenario: Prometheus should be able to monitor kubeproxy metrics
     Given I switch to cluster admin pseudo user
     And I use the "openshift-sdn" project
-    Given evaluation of `env.version_le("4.5", user: user) ? "sdn" : "sdn-metrics"` is stored in the :sdn_label clipboard
-    And evaluation of `endpoints(cb.sdn_label).subsets.first.addresses.first.ip.to_s` is stored in the :metrics_ep_ip clipboard
-    And evaluation of `endpoints(cb.sdn_label).subsets.first.ports.first.port.to_s` is stored in the :metrics_ep_port clipboard
+    And evaluation of `endpoints('sdn').subsets.first.addresses.first.ip.to_s` is stored in the :metrics_ep_ip clipboard
+    And evaluation of `endpoints('sdn').subsets.first.ports.first.port.to_s` is stored in the :metrics_ep_port clipboard
     And evaluation of `cb.metrics_ep_ip + ':' +cb.metrics_ep_port` is stored in the :metrics_ep clipboard
      
     Given I use the "openshift-monitoring" project
@@ -39,9 +38,8 @@ Feature: SDN/OVN metrics related networking scenarios
   Scenario: Should be able to monitor the openshift-sdn related metrics by prometheus
     Given I switch to cluster admin pseudo user
     And I use the "openshift-sdn" project
-    Given evaluation of `env.version_le("4.5", user: user) ? "sdn" : "sdn-metrics"` is stored in the :sdn_label clipboard
-    And evaluation of `endpoints(cb.sdn_label).subsets.first.addresses.first.ip.to_s` is stored in the :metrics_ep_ip clipboard
-    And evaluation of `endpoints(cb.sdn_label).subsets.first.ports.first.port.to_s` is stored in the :metrics_ep_port clipboard
+    And evaluation of `endpoints('sdn').subsets.first.addresses.first.ip.to_s` is stored in the :metrics_ep_ip clipboard
+    And evaluation of `endpoints('sdn').subsets.first.ports.first.port.to_s` is stored in the :metrics_ep_port clipboard
     And evaluation of `cb.metrics_ep_ip + ':' +cb.metrics_ep_port` is stored in the :metrics_ep clipboard
     
     Given I use the "openshift-monitoring" project
