@@ -212,13 +212,11 @@ module BushSlicer
       def tokenize(strlog)
         ss = StringScanner.new(strlog)
         res = []
-        lastpos = 0
 
-        while ss.skip_until(RE)
-          matched_pos = ss.pos - ss.matched_size
-          pre_match_size = matched_pos - lastpos
-          res << [strlog[lastpos...matched_pos], 1] if pre_match_size > 0
-          lastpos = ss.pos
+        while covered_string = ss.scan_until(RE)
+          if covered_string.size > ss.matched.size
+            res << [covered_string[0...-ss.matched.size], 1]
+          end
           # We don't need to save exact character sequence, only length.
           #   Saving it for safety check.
           # StringScanner.matched_size is byte based, for UTF we need
