@@ -30,3 +30,17 @@ click_update_channel_button:
   - selector:
       xpath: //button[@data-test-id='current-channel-update-link']
     op: click
+click_channels_drop_down:
+  elements:
+  - selector:
+      xpath: //button[@data-test-id='dropdown-button']
+    op: click
+check_drop_down_items: {}
+check_list_of_channels_in_channel_modal:
+  params:
+    menu_item_1: stable-<product_version>
+    menu_item_2: fast-<product_version>
+    menu_item_3: candidate-<product_version>
+  action: click_update_channel_button
+  action: click_channels_drop_down
+  action: check_drop_down_items
