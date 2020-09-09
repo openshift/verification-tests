@@ -327,9 +327,8 @@ click_radio_to_pick_ns:
 check_Hazelcastjet_default_action_and_remote_workflow:
   params:
     text: Purchase
-    link_url: https://marketplace.redhat.com/en-us/operators/hazelcast-jet-enterprise-operator-rhmp/pricing
+    link_url: https://test-remote-workflow/pricing
   action: check_link_and_text
-
 check_phase_status:
   elements:
   - selector:
