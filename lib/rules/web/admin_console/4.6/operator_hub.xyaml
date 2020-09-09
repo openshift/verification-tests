@@ -324,12 +324,11 @@ click_radio_to_pick_ns:
   params:
     text: Pick an existing namespace
   action: click_radio_input_by_text
-check_Hazelcastjet_default_action_and_remote_workflow:
+check_operator_purchase_link:
   params:
     text: Purchase
-    link_url: https://marketplace.redhat.com/en-us/operators/hazelcast-jet-enterprise-operator-rhmp/pricing
+    link_url: https://test-remote-workflow/pricing
   action: check_link_and_text
-
 check_phase_status:
   elements:
   - selector:
