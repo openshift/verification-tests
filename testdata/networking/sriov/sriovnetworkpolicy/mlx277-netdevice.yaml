@@ -6,6 +6,7 @@ metadata:
 spec:
   mtu: 1800
   nicSelector:
+    deviceID: '1015'
     pfNames:
       - ens2f0
     rootDevices:

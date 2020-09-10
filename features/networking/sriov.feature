@@ -24,9 +24,9 @@ Feature: Sriov related scenarios
     Given the sriov operator is running well
     Given I obtain test data file "networking/sriov/sriovnetworkpolicy/intel-netdevice.yaml"
     Given I create sriov resource with following:
-       | cr_yaml       | intel-netdevice.yaml     |
-       | cr_name       | intel-netdevice          |
-       | resource_type | sriovnetworknodepolicies |
+      | cr_yaml       | intel-netdevice.yaml     |
+      | cr_name       | intel-netdevice          |
+      | resource_type | sriovnetworknodepolicies |
     Then the step should succeed
     And I wait up to 300 seconds for the steps to pass:
     """
@@ -35,29 +35,23 @@ Feature: Sriov related scenarios
       | namespace   | openshift-sriov-network-operator |
       | o           | yaml                             |
     Then the step should succeed
-    And the output should contain "intel-netdevice"
-    And the output should contain "syncStatus: Succeeded"
-    And the output should contain "vfID: 4"
+    And the output should contain: 
+      | intel-netdevice       |
+      | syncStatus: Succeeded |
+      | vfID: 4               |
     """
     Given I switch to the first user
     And I have a project
     And evaluation of `project.name` is stored in the :usr_project clipboard
     Given I obtain test data file "networking/sriov/sriovnetwork/static-sriovnetwork.yaml"
     Given I create sriov resource with following:
-       | cr_yaml       | static-sriovnetwork.yaml |
-       | cr_name       | static-sriovnetwork      |
-       | resource_type | sriovnetwork             |
-       | project       | <%= cb.usr_project%>     |
+      | cr_yaml       | static-sriovnetwork.yaml |
+      | cr_name       | static-sriovnetwork      |
+      | resource_type | sriovnetwork             |
+      | project       | <%= cb.usr_project%>     |
     Then the step should succeed
 
-    And I wait up to 30 seconds for the steps to pass:
-    """
-    When I run the :get admin command with:
-      | resource  | net-attach-def        |
-      | namespace | <%= cb.usr_project%>  |
-    Then the step should succeed
-    And the output should contain "static-sriovnetwork"
-    """ 
+    And admin checks that the "static-sriovnetwork" network_attachment_definition exists in the "<%= cb.usr_project%>" project
     Given I switch to the first user
     And I use the "<%= cb.usr_project%>" project
     Given I obtain test data file "networking/sriov/pod/sriov-without-resource-static.yaml"
@@ -68,8 +62,9 @@ Feature: Sriov related scenarios
       | name=sriov-static |
     When I execute on the pod:
       | bash | -c | /usr/sbin/ip addr show net1 |
-    Then the output should contain "192.168.2.206"
-    And the output should contain "2001::2/64"
+    Then the output should contain:
+      | 192.168.2.206 |
+      | 2001::2/64    |
 
   # @author zzhao@redhat.com
   # @case_id OCP-21364
@@ -79,9 +74,9 @@ Feature: Sriov related scenarios
     Given the sriov operator is running well
     Given I obtain test data file "networking/sriov/sriovnetworkpolicy/intel-netdevice.yaml"
     Given I create sriov resource with following:
-       | cr_yaml       | intel-netdevice.yaml     |
-       | cr_name       | intel-netdevice          |
-       | resource_type | sriovnetworknodepolicies |
+      | cr_yaml       | intel-netdevice.yaml     |
+      | cr_name       | intel-netdevice          |
+      | resource_type | sriovnetworknodepolicies |
     Then the step should succeed
     And I wait up to 300 seconds for the steps to pass:
     """
@@ -90,29 +85,23 @@ Feature: Sriov related scenarios
       | namespace   | openshift-sriov-network-operator |
       | o           | yaml                             |
     Then the step should succeed
-    And the output should contain "intel-netdevice"
-    And the output should contain "syncStatus: Succeeded"
-    And the output should contain "vfID: 4"
+    And the output should contain: 
+      | intel-netdevice       |
+      | syncStatus: Succeeded |
+      | vfID: 4               |
     """
     Given I switch to the first user
     And I have a project
     And evaluation of `project.name` is stored in the :usr_project clipboard
     Given I obtain test data file "networking/sriov/sriovnetwork/intelnetdevice.yaml"
     Given I create sriov resource with following:
-       | cr_yaml       | intelnetdevice.yaml   |
-       | cr_name       | intel-netdevice-rhcos |
-       | resource_type | sriovnetwork          |
-       | project       | <%= cb.usr_project%>  |
+      | cr_yaml       | intelnetdevice.yaml   |
+      | cr_name       | intel-netdevice-rhcos |
+      | resource_type | sriovnetwork          |
+      | project       | <%= cb.usr_project%>  |
     Then the step should succeed
 
-    And I wait up to 30 seconds for the steps to pass:
-    """
-    When I run the :get admin command with:
-      | resource  | net-attach-def        |
-      | namespace | <%= cb.usr_project%>  |
-    Then the step should succeed
-    And the output should contain "intel-netdevice-rhcos"
-    """
+    And admin checks that the "intel-netdevice-rhcos" network_attachment_definition exists in the "<%= cb.usr_project%>" project
     And I use the "<%= cb.usr_project%>" project
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/macvlan-conf-without-master.yaml"
     When I run the :create admin command with:
@@ -127,8 +116,9 @@ Feature: Sriov related scenarios
       | name=sriov-macvlan |
     When I execute on the pod:
       | /usr/sbin/ip | -d | link |
-    Then the output should contain "net1"
-    Then the output should contain "net2"
+    Then the output should contain:
+      | net1 |
+      | net2 |
     When I execute on the pod:
       | bash | -c | /usr/sbin/ip addr show net1 |
     Then the output should contain "10.56.217"
@@ -147,20 +137,13 @@ Feature: Sriov related scenarios
     And evaluation of `project.name` is stored in the :usr_project1 clipboard
     Given I obtain test data file "networking/sriov/sriovnetwork/intelnetdevice.yaml"
     Given I create sriov resource with following:
-       | cr_yaml       | intelnetdevice.yaml   |
-       | cr_name       | intel-netdevice-rhcos |
-       | resource_type | sriovnetwork          |
-       | project       | <%= cb.usr_project1%> |
+      | cr_yaml       | intelnetdevice.yaml   |
+      | cr_name       | intel-netdevice-rhcos |
+      | resource_type | sriovnetwork          |
+      | project       | <%= cb.usr_project1%> |
     Then the step should succeed
 
-    And I wait up to 30 seconds for the steps to pass:
-    """
-    When I run the :get admin command with:
-      | resource  | net-attach-def        |
-      | namespace | <%= cb.usr_project1%> |
-    Then the step should succeed
-    And the output should contain "intel-netdevice-rhcos"
-    """
+    And admin checks that the "intel-netdevice-rhcos" network_attachment_definition exists in the "<%= cb.usr_project1%>" project
     Given I switch to the first user
     Given I create a new project
     And evaluation of `project.name` is stored in the :usr_project2 clipboard
@@ -170,19 +153,8 @@ Feature: Sriov related scenarios
       | p             | {"spec":{"networkNamespace":"<%= cb.usr_project2%>"}} |
       | type          | merge                                                 |
     Then the step should succeed
-    And I wait up to 30 seconds for the steps to pass:
-    """
-    When I run the :get admin command with:
-      | resource  | net-attach-def        |
-      | namespace | <%= cb.usr_project1%> |
-    Then the step should succeed
-    And the output should not contain "intel-netdevice-rhcos"
-    When I run the :get admin command with:
-      | resource  | net-attach-def        |
-      | namespace | <%= cb.usr_project2%> |
-    Then the step should succeed
-    And the output should contain "intel-netdevice-rhcos"
-    """
+    And admin checks that there are no network_attachment_definition in the "<%= cb.usr_project1%>" project
+    And admin checks that the "intel-netdevice-rhcos" network_attachment_definition exists in the "<%= cb.usr_project2 %>" project
 
   # @author zzhao@redhat.com
   @destructive
@@ -191,9 +163,9 @@ Feature: Sriov related scenarios
     Given the sriov operator is running well
     Given I obtain test data file "networking/sriov/sriovnetworkpolicy/<cardname>-netdevice.yaml"
     Given I create sriov resource with following:
-       | cr_yaml       | <cardname>-netdevice.yaml    |
-       | cr_name       | <cardname>-netdevice         |
-       | resource_type | sriovnetworknodepolicies     |
+      | cr_yaml       | <cardname>-netdevice.yaml    |
+      | cr_name       | <cardname>-netdevice         |
+      | resource_type | sriovnetworknodepolicies     |
     Then the step should succeed
     And I wait up to 500 seconds for the steps to pass:
     """
@@ -202,28 +174,22 @@ Feature: Sriov related scenarios
       | namespace   | openshift-sriov-network-operator |
       | o           | yaml                             |
     Then the step should succeed
-    And the output should contain "<cardname>-netdevice"
-    And the output should contain "syncStatus: Succeeded"
+    And the output should contain:
+      | <cardname>-netdevice  |
+      | syncStatus: Succeeded |
     """
     Given I switch to the first user
     And I have a project
     And evaluation of `project.name` is stored in the :usr_project clipboard
     Given I obtain test data file "networking/sriov/sriovnetwork/<cardname>netdevice.yaml"
     Given I create sriov resource with following:
-       | cr_yaml       | <cardname>netdevice.yaml |
-       | cr_name       | <cardname>-netdevice     |
-       | resource_type | sriovnetwork             |
-       | project       | <%= cb.usr_project%>     |
+      | cr_yaml       | <cardname>netdevice.yaml |
+      | cr_name       | <cardname>-netdevice     |
+      | resource_type | sriovnetwork             |
+      | project       | <%= cb.usr_project%>     |
     Then the step should succeed
 
-    And I wait up to 30 seconds for the steps to pass:
-    """
-    When I run the :get admin command with:
-      | resource  | net-attach-def        |
-      | namespace | <%= cb.usr_project%>  |
-    Then the step should succeed
-    And the output should contain "<cardname>-netdevice"
-    """
+    And admin checks that the "<cardname>-netdevice" network_attachment_definition exists in the "<%= cb.usr_project %>" project
     And I use the "<%= cb.usr_project%>" project
     Given I obtain test data file "networking/sriov/pod/sriov-macvlan.yaml"
     When I run oc create over "sriov-macvlan.yaml" replacing paths:
@@ -252,29 +218,15 @@ Feature: Sriov related scenarios
     And evaluation of `project.name` is stored in the :usr_project1 clipboard
     Given I obtain test data file "networking/sriov/sriovnetwork/intelnetdevice.yaml"
     Given I create sriov resource with following:
-       | cr_yaml       | intelnetdevice.yaml   |
-       | cr_name       | intel-netdevice-rhcos |
-       | resource_type | sriovnetwork          |
-       | project       | <%= cb.usr_project1%> |
+      | cr_yaml       | intelnetdevice.yaml   |
+      | cr_name       | intel-netdevice-rhcos |
+      | resource_type | sriovnetwork          |
+      | project       | <%= cb.usr_project1%> |
     Then the step should succeed
 
-    And I wait up to 30 seconds for the steps to pass:
-    """
-    When I run the :get admin command with:
-      | resource  | net-attach-def        |
-      | namespace | <%= cb.usr_project1%> |
-    Then the step should succeed
-    And the output should contain "intel-netdevice-rhcos"
-    """
+    And admin checks that the "intel-netdevice-rhcos" network_attachment_definition exists in the "<%= cb.usr_project %>" project
     Given I delete the "intel-netdevice-rhcos" sriovnetwork
-    And I wait up to 30 seconds for the steps to pass:
-    """
-    When I run the :get admin command with:
-      | resource  | net-attach-def        |
-      | namespace | <%= cb.usr_project1%> |
-    Then the step should succeed
-    And the output should not contain "intel-netdevice-rhcos"
-    """
+    And admin checks that there are no network_attachment_definition in the "<%= cb.usr_project %>" project
 
   # @author zzhao@redhat.com
   # @case_id OCP-25287
@@ -284,23 +236,16 @@ Feature: Sriov related scenarios
     Given the sriov operator is running well
     Given I switch to the first user
     And I have a project
-    And evaluation of `project.name` is stored in the :usr_project1 clipboard
+    And evaluation of `project.name` is stored in the :usr_project clipboard
     Given I obtain test data file "networking/sriov/sriovnetwork/intelnetdevice.yaml"
     Given I create sriov resource with following:
-       | cr_yaml       | intelnetdevice.yaml   |
-       | cr_name       | intel-netdevice-rhcos |
-       | resource_type | sriovnetwork          |
-       | project       | <%= cb.usr_project1%> |
+      | cr_yaml       | intelnetdevice.yaml   |
+      | cr_name       | intel-netdevice-rhcos |
+      | resource_type | sriovnetwork          |
+      | project       | <%= cb.usr_project1%> |
     Then the step should succeed
 
-    And I wait up to 30 seconds for the steps to pass:
-    """
-    When I run the :get admin command with:
-      | resource  | net-attach-def        |
-      | namespace | <%= cb.usr_project1%> |
-    Then the step should succeed
-    And the output should contain "intel-netdevice-rhcos"
-    """
+    And admin checks that the "intel-netdevice-rhcos" network_attachment_definition exists in the "<%= cb.usr_project %>" project
     When I run the :delete admin command with:
       | object_type       | net-attach-def        |
       | object_name_or_id | intel-netdevice-rhcos |
@@ -308,11 +253,7 @@ Feature: Sriov related scenarios
     Then the step should succeed
     And I wait up to 30 seconds for the steps to pass:
     """
-    When I run the :get admin command with:
-      | resource  | net-attach-def        |
-      | namespace | <%= cb.usr_project1%> |
-    Then the step should succeed
-    And the output should contain "intel-netdevice-rhcos"
+    And admin checks that the "intel-netdevice-rhcos" network_attachment_definition exists in the "<%= cb.usr_project %>" project
     """
 
   # @author zzhao@redhat.com
@@ -335,11 +276,11 @@ Feature: Sriov related scenarios
   @admin
   Scenario: sriov can be shown in Metrics and telemetry
     Given the sriov operator is running well
-    Given I obtain test data file "networking/sriov/sriovnetworkpolicy/mlx277-netdevice.yaml"
+    Given I obtain test data file "networking/sriov/sriovnetworkpolicy/mlx278-netdevice.yaml"
     Given I create sriov resource with following:
-       | cr_yaml       | mlx277-netdevice.yaml    |
-       | cr_name       | mlx277-netdevice         |
-       | resource_type | sriovnetworknodepolicies |
+      | cr_yaml       | mlx278-netdevice.yaml    |
+      | cr_name       | mlx278-netdevice         |
+      | resource_type | sriovnetworknodepolicies |
     Then the step should succeed
     And I wait up to 500 seconds for the steps to pass:
     """
@@ -348,33 +289,27 @@ Feature: Sriov related scenarios
       | namespace   | openshift-sriov-network-operator |
       | o           | yaml                             |
     Then the step should succeed
-    And the output should contain "mlx277-netdevice"
-    And the output should contain "syncStatus: Succeeded"
-    And the output should contain "vfID: 1"
+    And the output should contain:
+      | mlx278-netdevice      |
+      | syncStatus: Succeeded |
+      | vfID: 0               |
     """
     Given I switch to the first user
     And I have a project
     And evaluation of `project.name` is stored in the :usr_project clipboard
-    Given I obtain test data file "networking/sriov/sriovnetwork/mlx277netdevice.yaml"
+    Given I obtain test data file "networking/sriov/sriovnetwork/mlx278netdevice.yaml"
     Given I create sriov resource with following:
-       | cr_yaml       | mlx277netdevice.yaml |
-       | cr_name       | mlx277-netdevice     |
-       | resource_type | sriovnetwork         |
-       | project       | <%= cb.usr_project%> |
+      | cr_yaml       | mlx278netdevice.yaml |
+      | cr_name       | mlx278-netdevice     |
+      | resource_type | sriovnetwork         |
+      | project       | <%= cb.usr_project%> |
     Then the step should succeed
 
-    And I wait up to 30 seconds for the steps to pass:
-    """
-    When I run the :get admin command with:
-      | resource  | net-attach-def        |
-      | namespace | <%= cb.usr_project%>  |
-    Then the step should succeed
-    And the output should contain "mlx277-netdevice"
-    """
+    And admin checks that the "mlx278-netdevice" network_attachment_definition exists in the "<%= cb.usr_project %>" project
     And I use the "<%= cb.usr_project%>" project
     Given I obtain test data file "networking/sriov/pod/sriov-macvlan.yaml"
     When I run oc create over "sriov-macvlan.yaml" replacing paths:
-      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | mlx277-netdevice |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | mlx278-netdevice |
     Then the step should succeed
     And a pod becomes ready with labels:
       | name=sriov-macvlan |
@@ -426,11 +361,11 @@ Feature: Sriov related scenarios
   @admin
   Scenario: VF mac can be set with container mac address
     Given the sriov operator is running well
-    Given I obtain test data file "networking/sriov/sriovnetworkpolicy/mlx277-netdevice.yaml"
+    Given I obtain test data file "networking/sriov/sriovnetworkpolicy/mlx278-netdevice.yaml"
     Given I create sriov resource with following:
-       | cr_yaml       | mlx277-netdevice.yaml    |
-       | cr_name       | mlx277-netdevice         |
-       | resource_type | sriovnetworknodepolicies |
+      | cr_yaml       | mlx278-netdevice.yaml    |
+      | cr_name       | mlx278-netdevice         |
+      | resource_type | sriovnetworknodepolicies |
     Then the step should succeed
     And I wait up to 500 seconds for the steps to pass:
     """
@@ -439,45 +374,39 @@ Feature: Sriov related scenarios
       | namespace   | openshift-sriov-network-operator |
       | o           | yaml                             |
     Then the step should succeed
-    And the output should contain "mlx277-netdevice"
-    And the output should contain "syncStatus: Succeeded"
-    And the output should contain "vfID: 1"
+    And the output should contain:
+      | mlx278-netdevice      |
+      | syncStatus: Succeeded |
+      | vfID: 0               |
     """
     Given I switch to the first user
     And I have a project
     And evaluation of `project.name` is stored in the :usr_project clipboard
-    Given I obtain test data file "networking/sriov/sriovnetwork/mlx277netdevice.yaml"
+    Given I obtain test data file "networking/sriov/sriovnetwork/mlx278netdevice.yaml"
     Given I create sriov resource with following:
-       | cr_yaml       | mlx277netdevice.yaml |
-       | cr_name       | mlx277-netdevice     |
-       | resource_type | sriovnetwork         |
-       | project       | <%= cb.usr_project%> |
+      | cr_yaml       | mlx278netdevice.yaml |
+      | cr_name       | mlx278-netdevice     |
+      | resource_type | sriovnetwork         |
+      | project       | <%= cb.usr_project%> |
     Then the step should succeed
 
-    And I wait up to 30 seconds for the steps to pass:
-    """
-    When I run the :get admin command with:
-      | resource  | net-attach-def        |
-      | namespace | <%= cb.usr_project%>  |
-    Then the step should succeed
-    And the output should contain "mlx277-netdevice"
-    """
+    And admin checks that the "mlx278-netdevice" network_attachment_definition exists in the "<%= cb.usr_project %>" project
     And I use the "<%= cb.usr_project%>" project
     Given I obtain test data file "networking/sriov/pod/sriov-macvlan.yaml"
     When I run oc create over "sriov-macvlan.yaml" replacing paths:
-      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | mlx277-netdevice |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | mlx278-netdevice |
     Then the step should succeed
     And a pod becomes ready with labels:
       | name=sriov-macvlan |
     When I execute on the pod:
-      | bash | -c | ip a show net1 |
+      | bash | -c | cat /sys/class/net/net1/address |
     Then the step should succeed
-    And evaluation of `@result[:response].match(/\h+:\h+:\h+:\h+:\h+:\h+/)[0]` is stored in the :pod1_net1_mac clipboard
+    And evaluation of `@result[:response].strip` is stored in the :pod1_net1_mac clipboard
     Given I use the "<%= pod.node_name %>" node
     And I run commands on the host:
-      | ip link show ens2f0 |
+      | ip link show ens3f0 |
     Then the step should succeed
-    And the output should contain "<%= cb.pod1_net1_mac%>"
+    And the output should contain "<%= cb.pod1_net1_mac %>"
 
   # @author zzhao@redhat.com
   # @case_id OCP-24776
@@ -493,11 +422,11 @@ Feature: Sriov related scenarios
       | resource    |  sriovnetworknodepolicies |
     Then the step should succeed
     And the output should contain "default"        
-    Given I obtain test data file "networking/sriov/sriovnetworkpolicy/mlx277-netdevice.yaml"
+    Given I obtain test data file "networking/sriov/sriovnetworkpolicy/mlx278-netdevice.yaml"
     Given I create sriov resource with following:
-       | cr_yaml       | mlx277-netdevice.yaml    |
-       | cr_name       | mlx277-netdevice         |
-       | resource_type | sriovnetworknodepolicies |
+      | cr_yaml       | mlx278-netdevice.yaml    |
+      | cr_name       | mlx278-netdevice         |
+      | resource_type | sriovnetworknodepolicies |
     Then the step should succeed
     And I wait up to 500 seconds for the steps to pass:
     """
@@ -506,9 +435,10 @@ Feature: Sriov related scenarios
       | namespace   | openshift-sriov-network-operator |
       | o           | yaml                             |
     Then the step should succeed
-    And the output should contain "mlx277-netdevice"
-    And the output should contain "syncStatus: Succeeded"
-    And the output should contain "vfID: 1"
+    And the output should contain:
+      | mlx278-netdevice      |
+      | syncStatus: Succeeded |
+      | vfID: 0               |
     """
 
   # @author zzhao@redhat.com
@@ -561,11 +491,11 @@ Feature: Sriov related scenarios
   @admin
   Scenario: SR-IOV resource injector should not overwrite the request memory and cpu
     Given the sriov operator is running well
-    Given I obtain test data file "networking/sriov/sriovnetworkpolicy/mlx277-netdevice.yaml"
+    Given I obtain test data file "networking/sriov/sriovnetworkpolicy/mlx278-netdevice.yaml"
     Given I create sriov resource with following:
-       | cr_yaml       | mlx277-netdevice.yaml    |
-       | cr_name       | mlx277-netdevice         |
-       | resource_type | sriovnetworknodepolicies |
+      | cr_yaml       | mlx278-netdevice.yaml    |
+      | cr_name       | mlx278-netdevice         |
+      | resource_type | sriovnetworknodepolicies |
     Then the step should succeed
     And I wait up to 500 seconds for the steps to pass:
     """
@@ -574,29 +504,23 @@ Feature: Sriov related scenarios
       | namespace   | openshift-sriov-network-operator |
       | o           | yaml                             |
     Then the step should succeed
-    And the output should contain "mlx277-netdevice"
-    And the output should contain "syncStatus: Succeeded"
-    And the output should contain "vfID: 1"
+    And the output should contain:
+      | mlx278-netdevice      |
+      | syncStatus: Succeeded |
+      | vfID: 0               |
     """
     Given I switch to the first user
     And I have a project
     And evaluation of `project.name` is stored in the :usr_project clipboard
-    Given I obtain test data file "networking/sriov/sriovnetwork/mlx277netdevice.yaml"
+    Given I obtain test data file "networking/sriov/sriovnetwork/mlx278netdevice.yaml"
     Given I create sriov resource with following:
-       | cr_yaml       | mlx277netdevice.yaml |
-       | cr_name       | mlx277-netdevice     |
-       | resource_type | sriovnetwork         |
-       | project       | <%= cb.usr_project%> |
+      | cr_yaml       | mlx278netdevice.yaml |
+      | cr_name       | mlx278-netdevice     |
+      | resource_type | sriovnetwork         |
+      | project       | <%= cb.usr_project%> |
     Then the step should succeed
 
-    And I wait up to 30 seconds for the steps to pass:
-    """
-    When I run the :get admin command with:
-      | resource  | net-attach-def        |
-      | namespace | <%= cb.usr_project%>  |
-    Then the step should succeed
-    And the output should contain "mlx277-netdevice"
-    """
+    And admin checks that the "mlx278-netdevice" network_attachment_definition exists in the "<%= cb.usr_project %>" project
     And I use the "<%= cb.usr_project%>" project
     Given I obtain test data file "networking/sriov/pod/sriov-specified-cpu.yaml"
     When I run the :create client command with:
@@ -604,13 +528,10 @@ Feature: Sriov related scenarios
     Then the step should succeed
     And a pod becomes ready with labels:
       | name=sriov-specified-cpu |
-    When I run the :get client command with:
-      | resource      | pod             |
-      | resource_name | <%= pod.name %> |
-      | o             | yaml            |
-    Then the step should succeed
-    And the output should contain "cpu: 333"
-    And the output should contain "memory: 345"
+    Given I get project pod named "<%= pod.name %>" as YAML
+    And the output should contain:
+      | cpu: 333    |
+      | memory: 345 |
 
   # @author zzhao@redhat.com
   # @case_id OCP-25844
@@ -640,9 +561,9 @@ Feature: Sriov related scenarios
     Given the sriov operator is running well
     Given I obtain test data file "networking/sriov/sriovnetworkpolicy/intel-netdevice-without-pf.yaml"
     Given I create sriov resource with following:
-       | cr_yaml       | intel-netdevice-without-pf.yaml |
-       | cr_name       | intel-netdevice                 |
-       | resource_type | sriovnetworknodepolicies        |
+      | cr_yaml       | intel-netdevice-without-pf.yaml |
+      | cr_name       | intel-netdevice                 |
+      | resource_type | sriovnetworknodepolicies        |
     Then the step should succeed
     And I wait up to 300 seconds for the steps to pass:
     """
@@ -651,9 +572,10 @@ Feature: Sriov related scenarios
       | namespace   | openshift-sriov-network-operator |
       | o           | yaml                             |
     Then the step should succeed
-    And the output should contain "intel-netdevice"
-    And the output should contain "syncStatus: Succeeded"
-    And the output should contain "vfID: 4"
+    And the output should contain:
+      | intel-netdevice       |
+      | syncStatus: Succeeded |
+      | vfID: 4               |
     """
     When I run the :get admin command with:
       | resource      | node                                          |
@@ -717,11 +639,11 @@ Feature: Sriov related scenarios
   @admin
   Scenario: MTU can be set according to policy is specified
     Given the sriov operator is running well
-    Given I obtain test data file "networking/sriov/sriovnetworkpolicy/mlx277-netdevice.yaml"
+    Given I obtain test data file "networking/sriov/sriovnetworkpolicy/mlx278-netdevice.yaml"
     Given I create sriov resource with following:
-       | cr_yaml       | mlx277-netdevice.yaml    |
-       | cr_name       | mlx277-netdevice         |
-       | resource_type | sriovnetworknodepolicies |
+      | cr_yaml       | mlx278-netdevice.yaml    |
+      | cr_name       | mlx278-netdevice         |
+      | resource_type | sriovnetworknodepolicies |
     Then the step should succeed
     And I wait up to 500 seconds for the steps to pass:
     """
@@ -730,34 +652,28 @@ Feature: Sriov related scenarios
       | namespace   | openshift-sriov-network-operator |
       | o           | yaml                             |
     Then the step should succeed
-    And the output should contain "mlx277-netdevice"
-    And the output should contain "syncStatus: Succeeded"
-    And the output should contain "mtu: 1800"
-    And the output should contain "vfID: 1"
+    And the output should contain:
+      | mlx278-netdevice      |
+      | syncStatus: Succeeded |
+      | mtu: 1800             |
+      | vfID: 0               |
     """
     Given I switch to the first user
     And I have a project
     And evaluation of `project.name` is stored in the :usr_project clipboard
-    Given I obtain test data file "networking/sriov/sriovnetwork/mlx277netdevice.yaml"
+    Given I obtain test data file "networking/sriov/sriovnetwork/mlx278netdevice.yaml"
     Given I create sriov resource with following:
-       | cr_yaml       | mlx277netdevice.yaml |
-       | cr_name       | mlx277-netdevice     |
-       | resource_type | sriovnetwork         |
-       | project       | <%= cb.usr_project%> |
+      | cr_yaml       | mlx278netdevice.yaml |
+      | cr_name       | mlx278-netdevice     |
+      | resource_type | sriovnetwork         |
+      | project       | <%= cb.usr_project%> |
     Then the step should succeed
 
-    And I wait up to 30 seconds for the steps to pass:
-    """
-    When I run the :get admin command with:
-      | resource  | net-attach-def        |
-      | namespace | <%= cb.usr_project%>  |
-    Then the step should succeed
-    And the output should contain "mlx277-netdevice"
-    """
+    And admin checks that the "mlx278-netdevice" network_attachment_definition exists in the "<%= cb.usr_project%>" project
     And I use the "<%= cb.usr_project%>" project
     Given I obtain test data file "networking/sriov/pod/sriov-macvlan.yaml"
     When I run oc create over "sriov-macvlan.yaml" replacing paths:
-      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | mlx277-netdevice |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | mlx278-netdevice |
     Then the step should succeed
     And a pod becomes ready with labels:
       | name=sriov-macvlan |
@@ -767,7 +683,7 @@ Feature: Sriov related scenarios
     And the output should contain "mtu 1800"
     And evaluation of `pod.node_name` is stored in the :pod_node clipboard    
     #Delete the networkpolicy, the PF Mtu should rollback to origin value.
-    Given I delete the "mlx277-netdevice" sriov networkpolicy
+    Given I delete the "mlx278-netdevice" sriov networkpolicy
     And I wait up to 500 seconds for the steps to pass:
     """
     When I run the :get admin command with:
@@ -775,15 +691,16 @@ Feature: Sriov related scenarios
       | namespace   | openshift-sriov-network-operator |
       | o           | yaml                             |
     Then the step should succeed
-    And the output should not contain "ens2f0v0"
-    And the output should not contain "mlx277-netdevice"
-    And the output should contain "syncStatus: Succeeded"
+    And the output should not contain:
+      | ens3f0v0              |
+      | mlx278-netdevice      |
+      | syncStatus: Succeeded |
     """
     Given I use the "<%= cb.pod_node %>" node
     And I run commands on the host:
-      | ip link show ens2f0 |
+      | ip link show ens3f0 |
     Then the step should succeed
-    And the output should contain "mtu 1500"
+    And the output should contain "mtu 1800"
 
   # @author zzhao@redhat.com
   # @case_id OCP-32641
@@ -798,9 +715,9 @@ Feature: Sriov related scenarios
     Then the step should succeed
     Given I obtain test data file "networking/sriov/sriovnetworkpolicy/mlx277-netdevice-without-mtu.yaml"
     Given I create sriov resource with following:
-       | cr_yaml       | mlx277-netdevice-without-mtu.yaml    |
-       | cr_name       | mlx277-netdevice-without-mtu         |
-       | resource_type | sriovnetworknodepolicies             |
+      | cr_yaml       | mlx277-netdevice-without-mtu.yaml    |
+      | cr_name       | mlx277-netdevice-without-mtu         |
+      | resource_type | sriovnetworknodepolicies             |
     Then the step should succeed
     And I wait up to 500 seconds for the steps to pass:
     """
@@ -809,29 +726,23 @@ Feature: Sriov related scenarios
       | namespace   | openshift-sriov-network-operator |
       | o           | yaml                             |
     Then the step should succeed
-    And the output should contain "mlx277-netdevice-without-mtu"
-    And the output should contain "syncStatus: Succeeded"
-    And the output should contain "vfID: 1"
+    And the output should contain:
+      | mlx277-netdevice-without-mtu |
+      | syncStatus: Succeeded        |
+      | vfID: 1                      |
     """
     Given I switch to the first user
     And I have a project
     And evaluation of `project.name` is stored in the :usr_project clipboard
     Given I obtain test data file "networking/sriov/sriovnetwork/mlx277netdevice.yaml"
     Given I create sriov resource with following:
-       | cr_yaml       | mlx277netdevice.yaml |
-       | cr_name       | mlx277-netdevice     |
-       | resource_type | sriovnetwork         |
-       | project       | <%= cb.usr_project%> |
+      | cr_yaml       | mlx277netdevice.yaml |
+      | cr_name       | mlx277-netdevice     |
+      | resource_type | sriovnetwork         |
+      | project       | <%= cb.usr_project%> |
     Then the step should succeed
 
-    And I wait up to 30 seconds for the steps to pass:
-    """
-    When I run the :get admin command with:
-      | resource  | net-attach-def        |
-      | namespace | <%= cb.usr_project%>  |
-    Then the step should succeed
-    And the output should contain "mlx277-netdevice"
-    """
+    And admin checks that the "mlx277-netdevice" network_attachment_definition exists in the "<%= cb.usr_project %>" project
     And I use the "<%= cb.usr_project%>" project
     Given I obtain test data file "networking/sriov/pod/sriov-macvlan.yaml"
     When I run oc create over "sriov-macvlan.yaml" replacing paths:

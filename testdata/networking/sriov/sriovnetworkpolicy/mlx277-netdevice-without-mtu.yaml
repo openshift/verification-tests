@@ -5,6 +5,7 @@ metadata:
   namespace: openshift-sriov-network-operator
 spec:
   nicSelector:
+    deviceID: '1015'
     pfNames:
       - ens2f0
     rootDevices:
