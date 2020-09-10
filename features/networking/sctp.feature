@@ -9,12 +9,11 @@ Feature: SCTP related scenarios
     And I store the number of worker nodes to the :num_workers clipboard
     
     Given I install machineconfigs load-sctp-module
+    Given I have a project
     And I wait up to 800 seconds for the steps to pass:
     """
     Given I check load-sctp-module in <%= cb.num_workers %> workers
     """
-    
-    Given I have a project
     Given I obtain test data file "networking/sctp/sctpserver.yaml"
     When I run oc create as admin over "sctpserver.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %>       |
@@ -65,12 +64,11 @@ Feature: SCTP related scenarios
     And I store the number of worker nodes to the :num_workers clipboard
     
     Given I install machineconfigs load-sctp-module
+    Given I have a project
     And I wait up to 800 seconds for the steps to pass:
     """
     Given I check load-sctp-module in <%= cb.num_workers %> workers
     """
-    
-    Given I have a project
     Given I obtain test data file "networking/sctp/sctpserver.yaml"
     When I run oc create as admin over "sctpserver.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %>       |
@@ -128,12 +126,11 @@ Feature: SCTP related scenarios
     And the Internal IP of node "<%= cb.workers[1].name %>" is stored in the :worker1_ip clipboard
     
     Given I install machineconfigs load-sctp-module
+    Given I have a project
     And I wait up to 800 seconds for the steps to pass:
     """
     Given I check load-sctp-module in <%= cb.num_workers %> workers
     """
-    
-    Given I have a project
     Given I obtain test data file "networking/sctp/sctpserver.yaml"
     When I run oc create as admin over "sctpserver.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %>       |
@@ -190,12 +187,11 @@ Feature: SCTP related scenarios
     And I store the number of worker nodes to the :num_workers clipboard
     
     Given I install machineconfigs load-sctp-module
+    Given I have a project
     And I wait up to 800 seconds for the steps to pass:
     """
     Given I check load-sctp-module in <%= cb.num_workers %> workers
     """
-    
-    Given I have a project
     Given I obtain test data file "networking/sctp/sctpserver.yaml"
     When I run oc create as admin over "sctpserver.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %>       |
