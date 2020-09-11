@@ -492,7 +492,7 @@ Given /^I get the networking components logs of the node since "(.+)" ago$/ do |
     sdn_pod = cb.sdn_pod || BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
       pod.node_name == node.name
     }.first
-    @result = admin.cli_exec(:logs, resource_name: sdn_pod.name, n: "openshift-sdn", since: duration)
+    @result = admin.cli_exec(:logs, resource_name: sdn_pod.name, n: "openshift-sdn", c: "sdn", since: duration)
   when "OVNKubernetes"
     ovnkube_pod = cb.ovnkube_pod || BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
       pod.node_name == node_name
