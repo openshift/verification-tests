@@ -2,9 +2,9 @@ apiVersion: operators.coreos.com/v1
 kind: OperatorGroup
 metadata:
   name: metering-ocp-og
-  namespace: <%= project.name %>
+  namespace: <%= cb.metering_ns %>
   labels:
     app: metering-operatorgroup
 spec:
   targetNamespaces:
-  - <%= project.name %>
+  - <%= cb.metering_ns %>

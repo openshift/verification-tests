@@ -1,8 +1,8 @@
 apiVersion: metering.openshift.io/v1
 kind: MeteringConfig
 metadata:
-  name: openshift-metering
-  namespace: openshift-metering
+  name: <%= cb.metering_ns %>
+  namespace: <%= cb.metering_ns %>
 spec:
   storage:
     hive:
