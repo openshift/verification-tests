@@ -689,7 +689,7 @@ module BushSlicer
           raise "LAUNCHER_VARS not a mapping but #{launcher_vars.inspect}"
         end
       end
-      vars = Collections.deep_hash_symkeys vars
+      vars = Collections.hash_symkeys vars
       vars[:instances_name_prefix] = launched_instances_name_prefix
       vars[:variables_file] = config
       vars[:hosts] = hosts
