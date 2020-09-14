@@ -31,16 +31,22 @@ Given /^I select a random node's host$/ do
   @host = node.host
 end
 
-Given /^I store the( schedulable| ready and schedulable)? (node|master|worker)s in the#{OPT_SYM} clipboard$/ do |state, role, cbname|
+Given /^I store the( schedulable| ready and schedulable)? (node|master|worker)s in the#{OPT_SYM} clipboard(?: excluding #{QUOTED})?$/ do |state, role, cbname, exclude|
   ensure_admin_tagged
   cbname = 'nodes' unless cbname
 
-  if !state
-    cb[cbname] = env.nodes.dup
-  elsif state.strip == "schedulable"
-    cb[cbname] = env.nodes.select { |n| n.schedulable? }
+  if exclude
+    nodes = env.nodes.select { |n| n.name != exclude }
   else
-    cb[cbname] = env.nodes.select { |n| n.ready? && n.schedulable? }
+    nodes = env.nodes.dup
+  end
+
+  if !state
+    cb[cbname] = nodes
+  elsif state.strip == "schedulable"
+    cb[cbname] = nodes.select { |n| n.schedulable? }
+  else
+    cb[cbname] = nodes.select { |n| n.ready? && n.schedulable? }
   end
 
   if role == "worker"
