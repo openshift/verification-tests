@@ -231,15 +231,22 @@ Given /^the#{OPT_QUOTED} node standard iptables rules are completely flushed$/ d
   _admin = admin
 
   tables = %w(filter mangle nat raw security)
-  tables.each { |table|
 
-    @result = _host.exec("iptables -t #{table} -F")
-    raise "failed to flush iptables table #{table}" unless @result[:success]
-    @result = _host.exec("iptables -t #{table} -X")
-    # ignore any chain delete errors for now and just see if it triggers the iptableSync
-    # raise "failed to delete iptables chain #{table}" unless @result[:success]
-    # iptables v1.8.4 (nf_tables):  CHAIN_USER_DEL failed (Device or resource busy): chain KUBE-MARK-MASQ
-  }
+  # try to batch all the changes to make it atomic to try to prevent network issues with debug node
+  flush_chain = tables.map { |table|
+    "iptables -t #{table} -F"
+  }.join(" ; ")
+  # Flush all the chains first, then delete to prevent reference issues
+  # There must be no references to the chain.
+  # If there are, you must delete or replace the referring rules before the chain can be deleted.
+  # The chain must be empty, i.e. not contain any rules.
+  delete_chain = tables.map { |table|
+    "iptables -t #{table} -X"
+  }.join(" ; ")
+  @result = _host.exec(flush_chain + " ; " + delete_chain)
+  # ignore any chain delete errors for now and just see if it triggers the iptableSync, e.g.
+  # iptables v1.8.4 (nf_tables):  CHAIN_USER_DEL failed (Device or resource busy): chain KUBE-MARK-MASQ
+  raise "failed to flush iptables chains" unless @result[:success]
 end
 
 Given /^admin adds( and overwrites)? following annotations to the "(.+?)" netnamespace:$/ do |overwrite, netnamespace, table|
@@ -1167,7 +1174,7 @@ Given /^the mtu value "([^"]*)" is patched in CNO config according to the networ
   end
   @result = admin.cli_exec(:patch, resource: "network.operator", resource_name: "cluster", p: "{\"spec\":{\"defaultNetwork\":{\"#{config_var}\":{\"mtu\": #{mtu_value}}}}}", type: "merge")
   raise "Failed to patch CNO!" unless @result[:success]
-  
+
   teardown_add {
       @result = admin.cli_exec(:patch, resource: "network.operator", resource_name: "cluster", p: "{\"spec\":{\"defaultNetwork\":{\"ovnKubernetesConfig\":{\"mtu\": null}}}}", type: "merge")
       raise "Failed to clear mtu field from CNO" unless @result[:success]
