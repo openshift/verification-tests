@@ -1,0 +1,67 @@
+{
+  "apiVersion": "v1",
+  "kind": "List",
+  "items": [
+    {
+      "kind": "Pod",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "iperf-server",
+        "labels": {
+          "name": "iperf-server"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "name": "iperf-server",
+            "image": "quay.io/openshifttest/iperf3@sha256:440c59251338e9fcf0a00d822878862038d3b2e2403c67c940c7781297953614",
+            "ports": [
+              {
+                "containerPort": 5201
+              }
+            ],
+            "command": [
+              "iperf3"
+            ],
+            "args": [
+              "-s",
+              "-J"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "kind": "Service",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "iperf-server",
+        "labels": {
+          "name": "iperf-server"
+        }
+      },
+      "spec": {
+        "ports": [
+          {
+            "name": "iperf-tcp",
+            "protocol": "TCP",
+            "port": 5201,
+            "targetPort": 5201
+          },
+          {
+            "name": "iperf-udp",
+            "protocol": "UDP",
+            "port": 5201,
+            "targetPort": 5201
+          }
+        ],
+        "type": "NodePort",
+        "selector": {
+          "name": "iperf-server"
+        }
+      }
+    }
+  ]
+}
+
