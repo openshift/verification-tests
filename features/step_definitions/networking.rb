@@ -330,8 +330,6 @@ Given /^I wait for the networking components of the node to be terminated$/ do
 
   network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
   network_type = network_operator.network_type(user: admin)
-
-
   case network_type
   when "OpenShiftSDN"
     ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
@@ -744,6 +742,8 @@ Given /^I run cmds on all ovs pods:$/ do | table |
     end
   end
   unless host_ovs
+    network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
+    network_type = network_operator.network_type(user: admin)
     case network_type
     when "OpenShiftSDN"
       ovs_pods = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin)
