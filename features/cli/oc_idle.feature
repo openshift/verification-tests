@@ -155,8 +155,9 @@ Feature: oc idle
   # @case_id OCP-10941
   Scenario: Idling service with dc
     Given I have a project
+    Given I obtain test data file "rc/idling-echo-server.yaml"
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift/origin/master/test/extended/testdata/idling-echo-server.yaml |
+      | f | idling-echo-server.yaml |
     Then the step should succeed
     Given I wait until replicationController "idling-echo-1" is ready
     And I wait until number of replicas match "2" for replicationController "idling-echo-1"

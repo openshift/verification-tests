@@ -69,7 +69,7 @@ Feature: Builds and samples related metrics test
     When I run the :new_app client command with:
       | template | jenkins-ephemeral | 
     Then the step should succeed
-    Given 1 pods become ready with labels:
+    Given 1 pod becomes ready with labels:
       | deployment=jenkins-1 | 
     When I run the :new_app client command with:
       | file | https://raw.githubusercontent.com/openshift/origin/master/examples/jenkins/pipeline/samplepipeline.yaml |

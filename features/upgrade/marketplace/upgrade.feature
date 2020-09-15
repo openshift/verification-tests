@@ -16,17 +16,9 @@ Feature: Marketplace related scenarios
     # In 4.4+, if exists csc or cutomize operatorsource objects, the status should be `False`
     Given the status of condition Upgradeable for marketplace operator as expected
     Given I switch to cluster admin pseudo user
-    # Create a new OperatorSource
-    Given I obtain test data file "olm/operatorsource-template.yaml"
-    And I use the "openshift-marketplace" project
-    When I process and create:
-      | f | operatorsource-template.yaml |
-      | p | NAME=test-operators          |
-      | p | SECRET=                      |
-      | p | DISPLAYNAME=Test Operators   |
-      | p | REGISTRY=jiazha              |
-    Then the step should succeed
-    # In 4.5-, Create a new CatalogSourceConfig. In 4.5 and 4.5+, there are no CatalogSourceConfig
+    # In 4.6-, Create a new OperatorSource. In 4.6 and 4.6+, there is no OperatorSource.
+    Given I create a new OperatorSource
+    # In 4.5-, Create a new CatalogSourceConfig. In 4.5 and 4.5+, there is no CatalogSourceConfig
     Given I create a new CatalogSourceConfig
     # Check if the marketplace works well
     And I wait up to 360 seconds for the steps to pass:

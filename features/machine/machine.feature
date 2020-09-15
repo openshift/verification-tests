@@ -190,7 +190,7 @@ Feature: Machine features testing
     Then the step should succeed
     And the output should match "machine.openshift.io/interruptible-instance="
     And "machine-api-termination-handler" daemonset becomes ready in the "openshift-machine-api" project
-    And 1 pods become ready with labels:
+    And 1 pod becomes ready with labels:
       | k8s-app=termination-handler |
 
     Examples:
@@ -303,4 +303,28 @@ Feature: Machine features testing
       | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-machineset"] | default-valued-33058                            |
     Then the step should succeed
 
+  # @author miyadav@redhat.com
+  # @case_id OCP-33455
+  @admin
+  Scenario: Run machine api Controllers using leader election
+    Given I have an IPI deployment
+    And I switch to cluster admin pseudo user
+    And I use the "openshift-machine-api" project
+
+    Given a pod becomes ready with labels:
+      | api=clusterapi, k8s-app=controller |
+
+    And I saved following keys to list in :containers clipboard:
+      | machine-controller     | |
+      | machineset-controller  | |
+      | nodelink-controller    | |
+
+    Then I repeat the following steps for each :id in cb.containers:
+    """
+    When I run the :logs admin command with:
+      | resource_name | <%= pod.name %> |
+      | c             | #{cb.id}        |
+    Then the output should contain:
+      | attempting to acquire leader lease  openshift-machine-api/cluster-api-provider |
+    """
 

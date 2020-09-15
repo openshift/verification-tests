@@ -88,7 +88,7 @@ Feature: Machine-api components upgrade tests
     When I run the :create admin command with:
       | f | cluster-autoscaler.yml |
     Then the step should succeed
-    And 1 pods become ready with labels:
+    And 1 pod becomes ready with labels:
       | cluster-autoscaler=default,k8s-app=cluster-autoscaler |
 
   # @author jhou@redhat.com

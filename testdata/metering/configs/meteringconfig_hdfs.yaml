@@ -1,8 +1,8 @@
 apiVersion: metering.openshift.io/v1
 kind: MeteringConfig
 metadata:
-  name: "<%= project.name %>"
-  namespace: "<%= project.name %>"
+  name: "<%= cb.metering_ns %>"
+  namespace: "<%= cb.metering_ns %>"
 spec:
   unsupportedFeatures:
     enableHDFS: true
