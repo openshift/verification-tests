@@ -317,7 +317,7 @@ Given /^I secure the default docker(?: (daemon set))? registry$/ do |deployment_
   # to become available with label.
   # NOTE: If the system will react slower, there is a possibility
   # that the below step will catch the old pod as ready as it has the same labels
-    step %Q/1 pods become ready with labels:/, table(%{
+    step %Q/1 pod becomes ready with labels:/, table(%{
          | deploymentconfig=docker-registry |
     })
   end

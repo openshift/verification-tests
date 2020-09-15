@@ -79,7 +79,7 @@ Feature: stibuild.feature
     Then the step should succeed
     Given the "eap-app-1" build was created
     And the "eap-app-1" build completed
-    Given 1 pods become ready with labels:
+    Given 1 pod becomes ready with labels:
       | application=eap-app |
 
   # @author xiuwang@redhat.com
