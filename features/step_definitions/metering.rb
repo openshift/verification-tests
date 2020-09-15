@@ -296,10 +296,19 @@ Given /^the#{OPT_QUOTED} metering service is uninstalled using OLM$/ do | meteri
   step %Q/I switch to cluster admin pseudo user/ unless env.is_admin? user
   if project(metering_ns).exists?
     step %Q(I ensure "#{metering_ns}" meteringconfig is deleted)
+    # need to remove CRDs as well.
+    step %Q(I remove all metering CRDs with label "operators.coreos.com/metering-ocp.openshift-metering=")
+    step %Q(I ensure "openshift-metering" meteringconfig is deleted)
     step %Q(I ensure "metering-ocp-sub" subscription is deleted)
     step %Q(I ensure "metering-ocp-og" subscription is deleted)
     step %Q/I ensure "#{metering_ns}" project is deleted/
   end
+end
+
+Given /^I remove all metering CRDs with label #{QUOTED}$/ do | label |
+  step %Q/I remove all CRDs with labels:/, table(%{
+    | #{label} |
+    })
 end
 
 Given /^I remove metering service from the #{QUOTED} project$/ do | metering_ns |
