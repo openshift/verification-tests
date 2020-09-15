@@ -5,31 +5,30 @@ Feature: Egress-ingress related networking scenarios
   @admin
   @destructive
   Scenario: EgressNetworkPolicy will not take effect after delete it
-    Given the env is using multitenant or networkpolicy network
     Given I have a project
     Given I have a pod-for-ping in the project
+    Given I save egress data file directory to the clipboard
+    And I save egress type to the clipboard
     When I execute on the pod:
       | curl           |
       | --head         |
       | www.google.com | 
     Then the step should succeed
     And the output should contain "HTTP/1.1 200" 
-    Given I obtain test data file "networking/egressnetworkpolicy/limit_policy.json"
+    Given I obtain test data file "networking/<%= cb.cb_egress_directory %>/limit_policy.json"
     When I run the :create admin command with:
       | f | limit_policy.json |
       | n | <%= project.name %> |
     Then the step should succeed
-    Given I select a random node's host 
     When I use the "<%= project.name %>" project
     When I execute on the pod:
       | curl | --connect-timeout | 5 | --head | www.google.com |
     Then the step should fail
     When I run the :delete admin command with:
-      | object_type       | egressnetworkpolicy |
-      | object_name_or_id | policy1             |
-      | n                 | <%= project.name %> |
+      | object_type       | <%= cb.cb_egress_type %> |
+      | object_name_or_id | --all                    |
+      | n                 | <%= project.name %>      |
     Then the step should succeed
-    Given I select a random node's host 
     When I use the "<%= project.name %>" project
     When I execute on the pod:
       | curl           |
