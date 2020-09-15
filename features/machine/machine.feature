@@ -190,7 +190,7 @@ Feature: Machine features testing
     Then the step should succeed
     And the output should match "machine.openshift.io/interruptible-instance="
     And "machine-api-termination-handler" daemonset becomes ready in the "openshift-machine-api" project
-    And 1 pods become ready with labels:
+    And 1 pod becomes ready with labels:
       | k8s-app=termination-handler |
 
     Examples:

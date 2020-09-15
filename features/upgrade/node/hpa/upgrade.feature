@@ -11,7 +11,7 @@ Feature: basic verification for upgrade testing
     When I run the :create client command with:
       | f | hpa-v2beta1-rc.yaml |
     Then the step should succeed
-    Given 1 pods become ready with labels:
+    Given 1 pod becomes ready with labels:
       | run=hello-openshift |
     Given I obtain test data file "infrastructure/hpa/resource-metrics-cpu.yaml"
     When I run the :create client command with:

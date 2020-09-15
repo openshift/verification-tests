@@ -315,7 +315,7 @@ Feature: Egress-ingress related networking scenarios
     When I run oc create over "list_for_pods.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
     Then the step should succeed
-    And 1 pods become ready with labels:
+    And 1 pod becomes ready with labels:
       | name=test-pods |
     And evaluation of `service("test-service").url` is stored in the :service_url clipboard
     And I wait for the "test-service" service to become ready

@@ -36,7 +36,7 @@ Feature: creating 'apps' with CLI
       | name         | <%= cb.appname %>        |
       | env          | MYSQL_ROOT_PASSWORD=test | 
     Given the "<%= cb.appname %>-1" build completes
-    Given 1 pods become ready with labels:
+    Given 1 pod becomes ready with labels:
       | deployment=<%= cb.appname %>-1 |
     And I wait for the steps to pass:
     """
@@ -54,7 +54,7 @@ Feature: creating 'apps' with CLI
       | name         | <%= cb.appname1 %>                            |
       | env          | MYSQL_ROOT_PASSWORD=test                      | 
     Given the "<%= cb.appname1 %>-1" build completes
-    Given 1 pods become ready with labels:
+    Given 1 pod becomes ready with labels:
       | deployment=<%= cb.appname1 %>-1 |
     And I wait for the steps to pass:
     """
@@ -72,7 +72,7 @@ Feature: creating 'apps' with CLI
       | name         | <%= cb.appname2 %>                           |
       | env          | MYSQL_ROOT_PASSWORD=test                     | 
     Given the "<%= cb.appname2 %>-1" build completes
-    Given 1 pods become ready with labels:
+    Given 1 pod becomes ready with labels:
       | deployment=<%= cb.appname2 %>-1 |
     And I wait for the steps to pass:
     """
@@ -90,7 +90,7 @@ Feature: creating 'apps' with CLI
       | name         | <%= cb.appname3 %>                          |
       | env          | MYSQL_ROOT_PASSWORD=test                    | 
     Given the "<%= cb.appname3 %>-1" build completes
-    Given 1 pods become ready with labels:
+    Given 1 pod becomes ready with labels:
       | deployment=<%= cb.appname3 %>-1 |
     And I wait for the steps to pass:
     """
@@ -185,7 +185,7 @@ Feature: creating 'apps' with CLI
       | name         | <%= cb.appname %>        |
       | env          | MYSQL_ROOT_PASSWORD=test |
     Given the "<%= cb.appname %>-1" build completes
-    Given 1 pods become ready with labels:
+    Given 1 pod becomes ready with labels:
       | deployment=<%= cb.appname %> |
     And I wait for the steps to pass:
     """
@@ -203,7 +203,7 @@ Feature: creating 'apps' with CLI
       | name         | <%= cb.appname1 %>                            |
       | env          | MYSQL_ROOT_PASSWORD=test                      |
     Given the "<%= cb.appname1 %>-1" build completes
-    Given 1 pods become ready with labels:
+    Given 1 pod becomes ready with labels:
       | deployment=<%= cb.appname1 %> |
     And I wait for the steps to pass:
     """
@@ -221,7 +221,7 @@ Feature: creating 'apps' with CLI
       | name         | <%= cb.appname2 %>                           |
       | env          | MYSQL_ROOT_PASSWORD=test                     |
     Given the "<%= cb.appname2 %>-1" build completes
-    Given 1 pods become ready with labels:
+    Given 1 pod becomes ready with labels:
       | deployment=<%= cb.appname2 %> |
     And I wait for the steps to pass:
     """
@@ -239,7 +239,7 @@ Feature: creating 'apps' with CLI
       | name         | <%= cb.appname3 %>                          |
       | env          | MYSQL_ROOT_PASSWORD=test                    |
     Given the "<%= cb.appname3 %>-1" build completes
-    Given 1 pods become ready with labels:
+    Given 1 pod becomes ready with labels:
       | deployment=<%= cb.appname3 %> |
     And I wait for the steps to pass:
     """
