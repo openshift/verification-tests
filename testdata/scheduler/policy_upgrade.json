@@ -1,0 +1,29 @@
+{
+        "kind" : "Policy",
+        "apiVersion" : "v1",
+        "predicates" : [
+                {"name" : "MaxGCEPDVolumeCount"},
+                {"name" : "GeneralPredicates"}, 
+                {"name" : "MaxAzureDiskVolumeCount"},
+                {"name" : "MaxCSIVolumeCountPred"},
+                {"name" : "CheckVolumeBinding"},
+                {"name" : "MaxEBSVolumeCount"},
+                {"name" : "MatchInterPodAffinity"},
+                {"name" : "CheckNodeUnschedulable"},
+                {"name" : "NoDiskConflict"},
+                {"name" : "NoVolumeZoneConflict"},
+                {"name" : "PodToleratesNodeTaints"}
+                ],
+        "priorities" : [
+                {"name" : "LeastRequestedPriority", "weight" : 1},
+                {"name" : "BalancedResourceAllocation", "weight" : 1},
+                {"name" : "ServiceSpreadingPriority", "weight" : 1},
+                {"name" : "NodePreferAvoidPodsPriority", "weight" : 1},
+                {"name" : "NodeAffinityPriority", "weight" : 1},
+                {"name" : "TaintTolerationPriority", "weight" : 1},
+                {"name" : "ImageLocalityPriority", "weight" : 1},
+                {"name" : "SelectorSpreadPriority", "weight" : 1},
+                {"name" : "InterPodAffinityPriority", "weight" : 1},
+                {"name" : "EqualPriority", "weight" : 1}
+                ]
+}
