@@ -252,6 +252,7 @@ Feature: Testing registry
     When I run the :new_app client command with:
       | template | mysql-ephemeral               |
       | p        | NAMESPACE=<%= project.name %> |
+      | p        | MYSQL_VERSION=8.0             |
     Then the step should succeed
     When a pod becomes ready with labels:
       | deployment=mysql-1 |

@@ -20,7 +20,7 @@ Feature: Builds and samples related metrics test
       | namespace| openshift   |
     Then the step should succeed
     And the output should contain:
-      | no such host |
+      | Import failed | 
     """
 
     And I switch to cluster admin pseudo user
@@ -205,7 +205,6 @@ Feature: Builds and samples related metrics test
       | openshift_samples_failed_imagestream_import_info |
       | openshift_samples_invalidconfig_info             | 
       | openshift_samples_invalidsecret_info             | 
-      | openshift_samples_tbr_inaccessible_info          |
     """
     And I wait up to 240 seconds for the steps to pass:
     """
