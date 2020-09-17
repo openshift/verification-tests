@@ -422,7 +422,7 @@ Feature: Service related networking scenarios
     When I run oc create over "list_for_pods.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
     Then the step should succeed
-    Given 1 pods become ready with labels:
+    Given 1 pod becomes ready with labels:
       | name=test-pods |
     And I wait up to 90 seconds for the steps to pass:
     """
@@ -479,3 +479,53 @@ Feature: Service related networking scenarios
     Then the step should succeed
     And the output should not contain "mtu-too-small"
     """
+
+  # @author zzhao@redhat.com
+  # @case_id OCP-33848
+  @admin
+  @destructive
+  Scenario: User can expand the nodePort range by patch the serviceNodePortRange in network
+    Given I have a project
+    And evaluation of `rand(32676..33000)` is stored in the :port clipboard
+    Given as admin I successfully merge patch resource "networks.config.openshift.io/cluster" with:
+      | {"spec":{"serviceNodePortRange": "30000-33000"}} |
+    When I obtain test data file "networking/nodeport_service.json"
+    And I wait up to 120 seconds for the steps to pass:
+    """    
+    When I run oc create over "nodeport_service.json" replacing paths:
+      | ["items"][1]["spec"]["ports"][0]["nodePort"] | <%= cb.port %> |
+    Then the step should succeed
+    """
+    Given the pod named "hello-pod" becomes ready
+    And evaluation of `pod.node_ip` is stored in the :hostip clipboard
+
+    Given I obtain test data file "networking/list_for_pods.json"
+    When I run oc create over "list_for_pods.json" replacing paths:
+      | ["items"][0]["spec"]["replicas"] | 1 |
+    Then the step should succeed
+    And a pod becomes ready with labels:
+      | name=test-pods |
+    When I execute on the pod:
+      | curl | <%= cb.hostip %>:<%= cb.port %> |
+    Then the step should succeed
+    And the output should contain:
+      | Hello OpenShift! |
+    Given I ensure "hello-pod" service is deleted
+    When I execute on the pod:
+      | curl | <%= cb.hostip %>:<%= cb.port %> |
+    Then the step should fail
+    And the output should not contain:
+      | Hello OpenShift! |
+
+  # @author zzhao@redhat.com
+  # @case_id OCP-33850
+  @admin
+  @destructive
+  Scenario: User cannot decrease the nodePort range in post action
+    When I run the :patch admin command with:
+      | resource      | networks.config.openshift.io                     |
+      | resource_name | cluster                                          |
+      | p             | {"spec":{"serviceNodePortRange": "30000-31000"}} |
+      | type          | merge                                            |
+    Then the step should fail
+    And the output should contain "does not completely cover the previous range"

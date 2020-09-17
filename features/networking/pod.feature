@@ -501,3 +501,20 @@ Feature: Pod related networking scenarios
     Given I execute on the "<%= cb.client_pod %>" pod:
       | ping | -s 256 |-c1 | <%= cb.server_pod.ip %> |
     Then the step should fail
+
+  # @author zzhao@redhat.com
+  # @case_id OCP-22034
+  @admin
+  @destructive
+  Scenario: Check the unused ip are released after node reboot
+    Given I store the workers in the :workers clipboard
+    Given I use the "<%= cb.workers[0].name %>" node
+    And I run commands on the host:
+      | touch /var/lib/cni/networks/openshift-sdn/10.132.2.200 &&  ls /var/lib/cni/networks/openshift-sdn/10.132.2.200 |
+    Then the step should succeed
+    And the output should contain "10.132.2.200"
+    Given the host is rebooted and I wait it up to 600 seconds to become available
+    And I run commands on the host:
+      | ls /var/lib/cni/networks/openshift-sdn/ |
+    Then the step should succeed
+    And the output should not contain "10.132.2.200"

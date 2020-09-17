@@ -42,6 +42,7 @@ end
 
 Given /^I create a new OperatorSource$/ do
   ensure_admin_tagged
+  step %Q/I use the "openshift-marketplace" project/
   # Create OperatorSource in 4.6-
   if env.version_lt("4.6", user: user)
     os_yaml ||= "#{BushSlicer::HOME}/testdata/olm/operatorsource-template.yaml"

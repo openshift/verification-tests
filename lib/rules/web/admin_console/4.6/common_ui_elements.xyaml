@@ -252,7 +252,7 @@ check_editor_is_monaco_editor:
 check_content_in_yaml_editor:
   element:
     selector:
-      xpath: //*[contains(@class,'react-monaco-editor-container')]//*[contains(text(),'<yaml_content>')]
+      xpath: //div[contains(@class,'react-monaco-editor-container')]//span[contains(text(),'<yaml_content>')]
 check_sidebar_item:
   element:
     selector:
@@ -514,7 +514,7 @@ click_link_with_text:
 click_link_with_text_only:
   element:
     selector:
-      xpath: //a[text()='<text>']
+      xpath: //a[contains(text(),'<text>')]
     op: click
 click_primary_menu:
   elements:

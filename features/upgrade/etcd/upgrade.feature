@@ -29,4 +29,26 @@ Feature: basic verification for upgrade testing
     When I use the "openshift-operators" project
     Then status becomes :running of exactly 1 pods labeled:
       | name=etcd-operator-alm-owned |
-
+	    
+  # @author knarra@redhat.com
+  # @case_id OCP-22665
+  @upgrade-check
+  @admin
+  Scenario: Check etcd image have been udpated to target release value after upgrade
+    # operands
+    Given I switch to cluster admin pseudo user
+    And I use the "openshift-etcd" project
+    And a pod becomes ready with labels:
+      | app=etcd,etcd=true |
+    And evaluation of `pod.container_specs.first.image` is stored in the :etcd_image clipboard
+    And evaluation of `cluster_version('version').image` is stored in the :payload_image clipboard
+    Given evaluation of `"oc adm release info --registry-config=/var/lib/kubelet/config.json <%= cb.payload_image %>"` is stored in the :oc_adm_release_info clipboard
+    When I store the ready and schedulable masters in the clipboard
+    And I use the "<%= cb.nodes[0].name %>" node
+    # due to sensitive, didn't choose to dump and save the config.json file
+    # for using the step `I run the :oadm_release_info admin command ...`
+    And I run commands on the host:
+      | <%= cb.oc_adm_release_info %> --image-for=etcd |
+    Then the step should succeed
+    And the output should contain:
+      | <%= cb.etcd_image %> |
