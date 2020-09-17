@@ -298,7 +298,7 @@ check_cluster_settings_menu:
   action: check_secondary_menu
 
 # --- links on oc download route ---
-check_oc_downloads_for_os:
+check_items_on_downloads_route_page:
   elements:
   - selector:
       xpath: //li/a[@href="amd64/linux/oc" and contains(text(), "amd64 linux")]
