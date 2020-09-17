@@ -293,6 +293,28 @@ Feature: Storage upgrade tests
 
     #Restore works
     When I use the "csihostpath" project
+    
+    #Test case OCP-29741 with cmd oc patch scc privileged -p {} --type merged will cause existed serviceaccount lost priviled scc in pre-action, so add scc back in post-action as a WA.
+
+    Given SCC "privileged" is added to the "csi-provisioner" service account 
+    Given SCC "privileged" is added to the "csi-attacher" service account
+    Given SCC "privileged" is added to the "csi-snapshotter" service account 
+    Given SCC "privileged" is added to the "csi-plugin" service account 
+
+    Given I ensures "csi-hostpath-attacher-0" pod is deleted
+    Given I ensures "csi-hostpath-provisioner-0" pod is deleted
+    Given I ensures "csi-hostpath-snapshotter-0" pod is deleted
+    Given I ensures "csi-hostpathplugin-0" pod is deleted
+
+    And I wait up to 360 seconds for the steps to pass:
+    """
+    Given the pod named "csi-hostpath-attacher-0" is ready
+    Given the pod named "csi-hostpath-provisioner-0" is ready
+    Given the pod named "csi-hostpath-snapshotter-0" is ready
+    Given the pod named "csi-hostpathplugin-0" is ready
+    """
+    #End of WA
+
     Given I obtain test data file "storage/csi/restorepvc.yaml"
     Then I run oc create over "restorepvc.yaml" replacing paths:
       | ["spec"]["storageClassName"]   | csi-hostpath-sc       |
