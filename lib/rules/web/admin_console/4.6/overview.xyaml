@@ -3,6 +3,16 @@ wait_overview_items_loaded:
   - selector:
       css: .project-overview__list
     timeout: 30
+wait_pane_body_loaded:
+  elements:
+  - selector:
+      xpath: //div[@class='co-m-page__body co-m-Project']
+    timeout: 10
+wait_side_bar_loaded:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'shown in')]
+    timeout: 10
 check_list_heading_shown:
   element:
     selector:
@@ -229,7 +239,7 @@ send_key_to_workloads:
 check_workload_selected:
   elements:
   - selector:
-      xpath: //div[@class='list-group-item project-overview__item project-overview__item--<workload> project-overview__item--selected']
+      xpath: //li[contains(@class,'pf-c-data-list__item') and contains(@class,'pf-m-selected')]
 click_workload_details:
   element:
     selector:
@@ -239,8 +249,6 @@ check_workload_name:
   elements:
   - selector:
       xpath: //div[@class='resource-overview__summary']//button[text()='Name']
-  - selector:
-      xpath: //div[@class='resource-overview__summary']//dd[text()='<workload_name>']
 check_hint_missing_on_filter:
   elements:
   - selector:
@@ -257,14 +265,17 @@ check_shortcuts_on_workloads:
     workload_name: <workload_name>
     keys: <key>
   action: click_workloads_tab
+  action: wait_pane_body_loaded
   action: send_key_to_workloads
   action: check_workload_selected
   action: click_workload_details
   action: check_workload_name
+  action: send_key_to_workloads
 check_escape_on_workloads:
   params:
     keys: <key>
   action: click_workloads_tab
+  action: wait_pane_body_loaded
   action: send_key_to_workloads
   action: check_workload_sidebar_missing
 check_filter_on_workloads:
@@ -274,5 +285,6 @@ check_filter_on_workloads:
     workload_name: <missing_workload_name>
     keys: <key>
   action: click_workloads_tab
+  action: wait_pane_body_loaded
   action: send_key_to_workloads
   action: check_hint_missing_on_filter
