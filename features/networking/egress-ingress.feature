@@ -423,7 +423,7 @@ Feature: Egress-ingress related networking scenarios
     When I run oc create over "list_for_pods.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
     Then the step should succeed
-    Given 1 pod become ready with labels:
+    Given 1 pod becomes ready with labels:
       | name=test-pods |
     And evaluation of `service("test-service").url` is stored in the :svc_url clipboard
     And evaluation of `pod(0).ip_url` is stored in the :pod_ip clipboard
