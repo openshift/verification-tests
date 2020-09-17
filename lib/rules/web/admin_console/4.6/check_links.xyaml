@@ -297,3 +297,61 @@ check_cluster_settings_menu:
     secondary_menu: Cluster Settings
   action: check_secondary_menu
 
+# --- links on oc download route ---
+check_oc_downloads_for_all_os:
+  action: check_oc_download_for_amd64_linux
+  action: check_oc_download_for_amd64_mac
+  action: check_oc_download_for_amd64_windows
+  action: check_oc_download_for_arm64_linux
+  action: check_oc_download_for_ppc64le_linux
+  action: check_oc_download_for_s390x_linux
+  params:
+    text: license
+    link_url: oc-license
+  action: check_link_and_text
+
+check_oc_download_for_amd64_linux:
+  params:
+    oc_download_base_url: amd64/linux
+    oc_download_text: amd64 linux
+  action: check_oc_download_for_one_os
+check_oc_download_for_amd64_mac:
+  params:
+    oc_download_base_url: amd64/mac
+    oc_download_text: amd64 mac
+  action: check_oc_download_for_one_os
+check_oc_download_for_amd64_windows:
+  elements:
+  - selector:
+      xpath: //li/a[@href="amd64/windows/oc.exe" and contains(text(), "amd64 windows")]
+  - selector:
+      xpath: //li/a[@href="amd64/windows/oc.exe.tar" and contains(text(), "tar")]
+  - selector:
+      xpath: //li/a[@href="amd64/windows/oc.exe.zip" and contains(text(), "zip")]
+check_oc_download_for_arm64_linux:
+  params:
+    oc_download_base_url: arm64/linux
+    oc_download_text: arm64 linux
+  action: check_oc_download_for_one_os
+check_oc_download_for_ppc64le_linux:
+  params:
+    oc_download_base_url: ppc64le/linux
+    oc_download_text: ppc64le linux
+  action: check_oc_download_for_one_os
+check_oc_download_for_s390x_linux:
+  params:
+    oc_download_base_url: s390x/linux
+    oc_download_text: s390x linux
+  action: check_oc_download_for_one_os
+
+check_oc_download_for_one_os:
+  element:
+    selector:
+      xpath: //li/a[@href="<oc_download_base_url>/oc" and contains(text(), "<oc_download_text>")]
+  action: check_tar_and_zip
+check_tar_and_zip:
+  elements:
+  - selector:
+      xpath: //li/a[@href="<oc_download_base_url>/oc.tar" and contains(text(), "tar")]
+  - selector:
+      xpath: //li/a[@href="<oc_download_base_url>/oc.zip" and contains(text(), "zip")]
