@@ -10,7 +10,7 @@ check_list_heading_shown:
 check_list_item:
   elements: 
   - selector: &overview_item
-      xpath: //button[contains(@class,'project-overview__item-heading--name') and contains(.,'<resource_name>')]/ancestor::div[contains(@class,'project-overview__item--<resource_kind>')]
+      xpath: //div[contains(.,'<resource_name>') and span[contains(., '<resource_kind>')]]
     timeout: 30
 check_pod_number:
   element:

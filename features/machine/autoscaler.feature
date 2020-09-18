@@ -18,7 +18,7 @@ Feature: Cluster Autoscaler Tests
       | f | cluster-autoscaler.yml |
     Then the step should succeed
     And admin ensures "default" clusterautoscaler is deleted after scenario
-    And 1 pods become ready with labels:
+    And 1 pod becomes ready with labels:
       | cluster-autoscaler=default,k8s-app=cluster-autoscaler |
 
     # Create machineautoscaler
@@ -79,7 +79,7 @@ Feature: Cluster Autoscaler Tests
       | f | cluster-autoscaler.yml |
     Then the step should succeed
     And admin ensures "default" clusterautoscaler is deleted after scenario
-    And 1 pods become ready with labels:
+    And 1 pod becomes ready with labels:
       | cluster-autoscaler=default,k8s-app=cluster-autoscaler |
 
   # @author zhsun@redhat.com

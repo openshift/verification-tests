@@ -1,16 +1,19 @@
 view_all_settings:
-  params:
-    button_text: View settings
-  action: click_button
+  element:
+    selector:
+      xpath: //a[contains(.,'View settings')]
+    op: click
   action: wait_box_loaded
 click_view_alerts_button:
-  params:
-    button_text: View alerts
-  action: click_button
+  element:
+    selector:
+      xpath: //a[contains(.,'View alerts')]
+    op: click
 click_view_events_button:
-  params:
-    button_text: View events
-  action: click_button
+  element:
+    selector:
+      xpath: //a[contains(.,'View events')]
+    op: click
 click_events_pause_button:
   params:
     button_text: Pause

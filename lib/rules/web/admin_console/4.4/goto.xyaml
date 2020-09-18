@@ -13,7 +13,7 @@ goto_project_details_page:
   url: k8s/cluster/projects/<project_name>/details
 
 # Dashboard renamed to Overview in 4.4, url is same "k8s/cluster/projects/<project_name>"
-goto_one_project_page: 
+goto_one_project_page:
   url: k8s/cluster/projects/<project_name>
   action: wait_box_loaded
 goto_one_project_dashboard_page:
@@ -81,7 +81,7 @@ goto_jobs_page:
   url: k8s/ns/<project_name>/jobs
 goto_one_job_page:
   url: k8s/ns/<project_name>/jobs/<job_name>
-          
+
 # events
 goto_project_events:
   url: k8s/ns/<project_name>/events
@@ -123,6 +123,7 @@ goto_dc_page:
   url: k8s/ns/<project_name>/deploymentconfigs
 goto_one_dc_page:
   url: k8s/ns/<project_name>/deploymentconfigs/<dc_name>
+  action: wait_box_loaded
 goto_one_rc_page:
   url: k8s/ns/<project_name>/replicationcontrollers/<rc_name>
   action: wait_box_loaded
@@ -183,8 +184,9 @@ goto_catalog_page:
 goto_create_app_from_imagestream_page:
   url: catalog/source-to-image?imagestream=<is_name>&imagestream-ns=openshift&preselected-ns=<project_name>
 goto_create_app_from_template_page:
-  url: catalog/instantiate-template?template==<template_name>&template-ns=openshift&preselected-ns=<project_name>
-
+  params:
+    template_namespace: openshift
+  url: catalog/instantiate-template?template==<template_name>&template-ns=<template_namespace>&preselected-ns=<project_name>
 
 # monitoring
 goto_monitoring_metrics_page:
@@ -195,7 +197,7 @@ goto_monitoring_silences_page:
   url: monitoring/silences
 goto_monitoring_db_k8s_resource_pod:
   url: monitoring/dashboards/grafana-dashboard-k8s-resources-pod
-  
+
 #node
 goto_node_page:
   url: k8s/cluster/nodes
@@ -215,7 +217,7 @@ goto_one_namespace_page:
 goto_namespace_list_page:
   url: k8s/cluster/namespaces
   action: wait_box_loaded
-  
+
 # operator hub
 goto_operator_hub_page:
   url: operatorhub/ns/default
@@ -286,6 +288,9 @@ goto_cluster_role_rolebinding_page:
 goto_rolebinding_list_page:
   url: k8s/ns/<project_name>/rolebindings
   action: wait_box_loaded
+goto_allnamespaces_rolebinding_list_page:
+  url: k8s/all-namespaces/rolebindings
+  action: wait_box_loaded
 goto_rolebinding_page_of_user:
   url: k8s/cluster/user.openshift.io~v1~User/<username>/roles
   action: wait_box_loaded
@@ -293,9 +298,9 @@ goto_rolebinding_creation_page:
   url: k8s/cluster/rolebindings/~new
   action: wait_form_loaded
 
-goto_all_machines_page: 
+goto_all_machines_page:
   url: k8s/all-namespaces/machine.openshift.io~v1beta1~Machine
-goto_all_machine_sets_page: 
+goto_all_machine_sets_page:
   url: k8s/all-namespaces/machine.openshift.io~v1beta1~MachineSet
 
 #ImageManifestVuln
@@ -314,7 +319,10 @@ goto_cluster_operators:
   action: wait_box_loaded
 goto_global_configuration_page:
   url: settings/cluster/globalconfig
-  action: wait_box_loaded 
+  action: wait_box_loaded
+goto_cluster_settings_details_page:
+  url: settings/cluster
+  action: wait_box_loaded
 
 goto_command_line_tools:
   url: command-line-tools
@@ -322,4 +330,4 @@ goto_command_line_tools:
     selector:
       xpath: //div[contains(text(), "Command Line Tools")]
     timeout: 15
-    
+
