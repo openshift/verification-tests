@@ -309,16 +309,14 @@ Feature: Pod related networking scenarios
     Given a pod becomes ready with labels:
       | name=hello-pod |
     And evaluation of `pod` is stored in the :client_pod clipboard
-    # 'yes' command will send a character "h" continously for 3 seconds to /dev/udp on listener where the node is listening for udp traffic on exposed nodeport. The 3 seconds mechanism will create an Assured
-    #  entry which will give us enough time to validate upcoming steps
+    # The 3 seconds mechanism via for loop will create an Assured conntrack entry which will give us enough time to validate upcoming steps
     When I run the :exec background client command with:
-      | pod              | <%= cb.client_pod.name %>                             |
-      | oc_opts_end      |                                                       |
-      | exec_command     | bash                                                  |
-      | exec_command_arg | -c                                                    |
-      | exec_command_arg | yes "h">/dev/udp/<%= cb.node_ip %>/<%= cb.nodeport %> |
-    Given 3 seconds have passed
-    And I terminate last background process
+      | pod              | <%= cb.client_pod.name %>                                                                |
+      | oc_opts_end      |                                                                                          |
+      | exec_command     | bash                                                                                     |
+      | exec_command_arg | -c                                                                                       |
+      | exec_command_arg | for n in {1..3}; do echo $n; sleep 1; done>/dev/udp/<%= cb.node_ip %>/<%= cb.nodeport %> |
+    Then the step should succeed
 
     #Creating network test pod to levearage conntrack tool
     Given I obtain test data file "networking/net_admin_cap_pod.yaml"
@@ -340,16 +338,14 @@ Feature: Pod related networking scenarios
       | name=udp-pods |
     And evaluation of `pod` is stored in the :host_pod2 clipboard
 
-    # 'yes' command will send a character "h" continously for 3 seconds to /dev/udp on listener where the node is listening for udp traffic on exposed nodeport. The 3 seconds mechanism will create an Assured
-    #  entry which will give us enough time to validate upcoming steps
+    # The 3 seconds mechanism via for loop will create an Assured conntrack entry which will give us enough time to validate upcoming steps
     When I run the :exec background client command with:
-      | pod              | <%= cb.client_pod.name %>                             |
-      | oc_opts_end      |                                                       |
-      | exec_command     | bash                                                  |
-      | exec_command_arg | -c                                                    |
-      | exec_command_arg | yes "h">/dev/udp/<%= cb.node_ip %>/<%= cb.nodeport %> |
-    Given 3 seconds have passed
-    And I terminate last background process
+      | pod              | <%= cb.client_pod.name %>                                                                |
+      | oc_opts_end      |                                                                                          |
+      | exec_command     | bash                                                                                     |
+      | exec_command_arg | -c                                                                                       |
+      | exec_command_arg | for n in {1..3}; do echo $n; sleep 1; done>/dev/udp/<%= cb.node_ip %>/<%= cb.nodeport %> |
+    Then the step should succeed
     #Making sure that the conntrack table should not contain old deleted udp listener pod IP entries but new pod one's
     When I execute on the "<%= cb.network_pod %>" pod:
       | bash | -c | conntrack -L \| grep "<%= cb.nodeport %>" |
@@ -460,7 +456,8 @@ Feature: Pod related networking scenarios
     Given I have a project
     And I have a pod-for-ping in the project
     Then evaluation of `pod.name` is stored in the :client_pod clipboard
-    Given I select a random node's host
+    Given I store the masters in the :masters clipboard
+    And I use the "<%= cb.masters[0].name %>" node
     #Making sure the iptables on latest centos are actually nf_tables as the xt_u32 is only supported with that
     When I run commands on the host:
       | iptables --version |
@@ -469,13 +466,13 @@ Feature: Pod related networking scenarios
 
     Given I obtain test data file "networking/centos_latest_admin.yaml"
     When I run oc create as admin over "centos_latest_admin.yaml" replacing paths:
-      | ["metadata"]["name"]      | server-pod          |
-      | ["metadata"]["namespace"] | <%= project.name %> |
+      | ["metadata"]["name"]      | server-pod                |
+      | ["metadata"]["namespace"] | <%= project.name %>       |
+      | ["spec"]["nodeName"]      | <%= cb.masters[0].name %> |
     Then the step should succeed
     And a pod becomes ready with labels:
       | name=centos-pod |
     Then evaluation of `pod` is stored in the :server_pod clipboard
-    Given I use the "<%= cb.server_pod.node_name %>" node
     #Enabling XT_u32 module on server pod's node
     And I run commands on the host:
       | modprobe xt_u32 |
@@ -505,3 +502,20 @@ Feature: Pod related networking scenarios
     Given I execute on the "<%= cb.client_pod %>" pod:
       | ping | -s 256 |-c1 | <%= cb.server_pod.ip %> |
     Then the step should fail
+
+  # @author zzhao@redhat.com
+  # @case_id OCP-22034
+  @admin
+  @destructive
+  Scenario: Check the unused ip are released after node reboot
+    Given I store the workers in the :workers clipboard
+    Given I use the "<%= cb.workers[0].name %>" node
+    And I run commands on the host:
+      | touch /var/lib/cni/networks/openshift-sdn/10.132.2.200 &&  ls /var/lib/cni/networks/openshift-sdn/10.132.2.200 |
+    Then the step should succeed
+    And the output should contain "10.132.2.200"
+    Given the host is rebooted and I wait it up to 600 seconds to become available
+    And I run commands on the host:
+      | ls /var/lib/cni/networks/openshift-sdn/ |
+    Then the step should succeed
+    And the output should not contain "10.132.2.200"

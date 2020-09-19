@@ -324,24 +324,33 @@ click_radio_to_pick_ns:
   params:
     text: Pick an existing namespace
   action: click_radio_input_by_text
-check_Hazelcastjet_default_action_and_remote_workflow:
+check_operator_purchase_link:
   params:
     text: Purchase
     link_url: https://marketplace.redhat.com/en-us/operators/hazelcast-jet-enterprise-operator-rhmp/pricing
   action: check_link_and_text
 
 check_phase_status:
-  element:
-    selector:
+  elements:
+  - selector:
+      xpath: //table
+    timeout: 20
+  - selector:
       xpath: //td/span[contains(.,'Phase')]/span[contains(.,'<status>')]
 check_state_status:
-  element:
-    selector:
+  elements:
+  - selector:
+      xpath: //table
+    timeout: 20
+  - selector:
       xpath: //span[contains(.,'State') and contains(.,'<status>')]
 check_condition_status:
-  element:
-    selector:
-      xpath: //span[contains(.,'Conditions') and contains(.,'<status>')]
+  elements:
+  - selector:
+      xpath: //table
+    timeout: 20
+  - selector:
+      xpath: //span[contains(.,'Condition') and contains(.,'<status>')]
 
 ## project selector: one project
 check_column_header_for_one_namespace:

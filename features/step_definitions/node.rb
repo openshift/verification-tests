@@ -31,16 +31,22 @@ Given /^I select a random node's host$/ do
   @host = node.host
 end
 
-Given /^I store the( schedulable| ready and schedulable)? (node|master|worker)s in the#{OPT_SYM} clipboard$/ do |state, role, cbname|
+Given /^I store the( schedulable| ready and schedulable)? (node|master|worker)s in the#{OPT_SYM} clipboard(?: excluding #{QUOTED})?$/ do |state, role, cbname, exclude|
   ensure_admin_tagged
   cbname = 'nodes' unless cbname
 
-  if !state
-    cb[cbname] = env.nodes.dup
-  elsif state.strip == "schedulable"
-    cb[cbname] = env.nodes.select { |n| n.schedulable? }
+  if exclude
+    nodes = env.nodes.select { |n| n.name != exclude }
   else
-    cb[cbname] = env.nodes.select { |n| n.ready? && n.schedulable? }
+    nodes = env.nodes.dup
+  end
+
+  if !state
+    cb[cbname] = nodes
+  elsif state.strip == "schedulable"
+    cb[cbname] = nodes.select { |n| n.schedulable? }
+  else
+    cb[cbname] = nodes.select { |n| n.ready? && n.schedulable? }
   end
 
   if role == "worker"
@@ -503,8 +509,8 @@ Given /^the taints of the nodes in the#{OPT_SYM} clipboard are restored after sc
       [node, _current_taints[node] - _original_taints[node]]
     end.reject {|node, diff_taints| diff_taints.empty?}
     unless _diff_taints.empty?
-      raise "nodes didn't have taints properly restored: " \
-        "#{_diff_taints.map(&:first).map(&:name).join(", ")}"
+      raise "nodes didn't have taints properly restored:\n" \
+        "#{_diff_taints.map{ |n,t| "#{n.name}:#{t}" }.join("\n")}"
     end
   }
 end

@@ -192,7 +192,7 @@ Feature: build 'apps' with CLI
       | o             | yaml              |
     Then the output should match "xiuwangs2i-2$"
     And the output should not match "xiuwangs2i$"
-    Given 1 pods become ready with labels:
+    Given 1 pod becomes ready with labels:
       | deploymentconfig=frontend |
     When I execute on the pod:
       | ls | xiuwangs2i |
@@ -212,7 +212,7 @@ Feature: build 'apps' with CLI
     Given the "ruby-sample-build-1" build completes
     When I get project build_config named "ruby-sample-build" as YAML
     Then the output should contain "xiuwangs2i-2"
-    Given 1 pods become ready with labels:
+    Given 1 pod becomes ready with labels:
       | deploymentconfig=frontend |
     When I execute on the pod:
       | ls | -al | xiuwangs2i-2 |

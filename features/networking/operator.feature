@@ -345,3 +345,25 @@ Feature: Operator related networking scenarios
     And all existing pods die with labels:
       | app=dhcp-daemon |
     """
+
+  # @author anusaxen@redhat.com
+  # @case_id OCP-27333
+  @admin
+  @destructive
+  Scenario: Changing mtu in CNO should not be allowed
+    Given the mtu value "1750" is patched in CNO config according to the networkType
+    And admin uses the "openshift-network-operator" project
+    When I run the :get admin command with:
+      | resource | pods                               |
+      | o        | jsonpath={.items[*].metadata.name} |
+    Then the step should succeed
+    And evaluation of `@result[:response]` is stored in the :network_operator_pod clipboard
+    And I wait up to 60 seconds for the steps to pass:
+    """
+    When I run the :logs admin command with:
+      | resource_name | <%= cb.network_operator_pod %> |
+      | since         | 30s                            |
+    Then the step should succeed
+    And the output should contain:
+      | cannot change ovn-kubernetes MTU |
+    """

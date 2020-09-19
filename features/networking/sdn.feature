@@ -122,6 +122,7 @@ Feature: SDN related networking scenarios
   @admin
   @destructive
   Scenario: The openflow list will be cleaned after deleted the node
+    Given the env is using "OpenShiftSDN" networkType
     Given environment has at least 2 schedulable nodes
     And I store the schedulable workers in the :nodes clipboard
     Given I switch to cluster admin pseudo user
@@ -216,11 +217,8 @@ Feature: SDN related networking scenarios
   @admin
   Scenario: ovs-vswitchd process must be running on all ovs pods
     Given I switch to cluster admin pseudo user
-    And I use the "openshift-sdn" project
-    And all existing pods are ready with labels:
-      | app=ovs |
     When I run cmds on all ovs pods:
-      | bash | -c | pgrep ovs-vswitchd |
+      | pgrep ovs-vswitchd |
     Then the step should succeed
 
   # @author huirwang@redhat.com
@@ -242,11 +240,11 @@ Feature: SDN related networking scenarios
     And evaluation of `pod(1).name` is stored in the :pod2_name clipboard
 
     # Kill ovs process
-    When I run command on the "<%= cb.node_name %>" node's sdn pod:
-      | bash | -c | pgrep ovs-vswitchd |
+    When I run command on the "<%= cb.node_name %>" node's ovs pod:
+      | pgrep | ovs-vswitchd |
     Then the step should succeed
-    When I run command on the "<%= cb.node_name %>" node's sdn pod:
-      | bash | -c | pkill ovs-vswitchd |
+    When I run command on the "<%= cb.node_name %>" node's ovs pod:
+      | pkill | ovs-vswitchd |
     Then the step should succeed
     And I wait up to 60 seconds for the steps to pass:
     """
@@ -337,12 +335,12 @@ Feature: SDN related networking scenarios
     And the output should contain "connected"
     #Checking controller iteration 2
     When I execute on the "<%= cb.ovn_master_pod %>" pod:
-      | bash | -c | ls -l /var/run/ovn/ |
+      | ls -l /var/run/ovn/ |
     Then the step should succeed
     And evaluation of `@result[:response].match(/ovn-controller.\d*\.ctl/)[0]` is stored in the :controller_pid_file clipboard
     #Checking controller iteration 3
     When I execute on the "<%= cb.ovn_master_pod %>" pod:
-      | bash | -c | ovn-appctl -t /var/run/ovn/<%= cb.controller_pid_file %> connection-status |
+      | ovn-appctl -t /var/run/ovn/<%= cb.controller_pid_file %> connection-status |
     Then the step should succeed
     And the output should contain "connected"
     #Checking controller iteration 4

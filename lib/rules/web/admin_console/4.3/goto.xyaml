@@ -12,6 +12,7 @@ goto_project_details_page:
   url: k8s/cluster/projects/<project_name>/overview
 goto_one_project_page:
   url: k8s/cluster/projects/<project_name>
+  action: wait_box_loaded
 goto_one_project_dashboard_page:
   action: goto_one_project_page
 
@@ -108,6 +109,7 @@ goto_dc_page:
   url: k8s/ns/<project_name>/deploymentconfigs
 goto_one_dc_page:
   url: k8s/ns/<project_name>/deploymentconfigs/<dc_name>
+  action: wait_box_loaded
 goto_one_rc_page:
   url: k8s/ns/<project_name>/replicationcontrollers/<rc_name>
   action: wait_box_loaded
@@ -168,7 +170,9 @@ goto_catalog_page:
 goto_create_app_from_imagestream_page:
   url: catalog/source-to-image?imagestream=<is_name>&imagestream-ns=openshift&preselected-ns=<project_name>
 goto_create_app_from_template_page:
-  url: catalog/instantiate-template?template==<template_name>&template-ns=openshift&preselected-ns=<project_name>
+  params:
+    template_namespace: openshift
+  url: catalog/instantiate-template?template==<template_name>&template-ns=<template_namespace>&preselected-ns=<project_name>
 
 # monitoring
 goto_monitoring_metrics_page:
@@ -199,6 +203,7 @@ goto_operator_hub_page:
   url: operatorhub/ns/default
 goto_installed_operators_page:
   url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion
+  action: wait_box_loaded
 goto_operator_subscription_page:
   url: operatorhub/subscribe?pkg=<package_name>&catalog=<catalog_name>&catalogNamespace=openshift-marketplace&targetNamespace=<target_namespace>
   action: wait_box_loaded
@@ -255,6 +260,9 @@ goto_rolebinding_page_of_user:
   action: wait_box_loaded
 goto_rolebinding_list_page:
   url: k8s/ns/<project_name>/rolebindings
+  action: wait_box_loaded
+goto_allnamespaces_rolebinding_list_page:
+  url: k8s/all-namespaces/rolebindings
   action: wait_box_loaded
 goto_rolebinding_creation_page:
   url: k8s/cluster/rolebindings/~new

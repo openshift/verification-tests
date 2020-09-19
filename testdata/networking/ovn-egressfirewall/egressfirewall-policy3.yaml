@@ -1,0 +1,17 @@
+kind: EgressFirewall
+apiVersion: k8s.ovn.org/v1
+metadata:
+  name: default
+spec:
+  egress:
+  - type: Allow
+    to:
+      cidrSelector: 172.217.0.0/16
+    ports:
+      - protocol: TCP
+        port: 80
+      - protocol: TCP
+        port: 443
+  - type: Deny
+    to:
+      cidrSelector: 0.0.0.0/0

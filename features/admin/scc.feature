@@ -33,7 +33,7 @@ Feature: SCC policy related scenarios
   @destructive
   Scenario: Create or update scc with illegal capability name should fail with prompt message
     Given I have a project
-    Given I switch to cluster admin pseudo user
+    Given cluster role "cluster-admin" is added to the "first" user
     Given admin ensures "scc-<%= project.name %>" scc is deleted after scenario
     Given I obtain test data file "authorization/scc/scc_capabilities.yaml"
     When I run oc create over "scc_capabilities.yaml" replacing paths:

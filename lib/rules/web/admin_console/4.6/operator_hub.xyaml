@@ -324,24 +324,32 @@ click_radio_to_pick_ns:
   params:
     text: Pick an existing namespace
   action: click_radio_input_by_text
-check_Hazelcastjet_default_action_and_remote_workflow:
+check_operator_purchase_link:
   params:
     text: Purchase
-    link_url: https://marketplace.redhat.com/en-us/operators/hazelcast-jet-enterprise-operator-rhmp/pricing
+    link_url: https://test-remote-workflow/pricing
   action: check_link_and_text
-
 check_phase_status:
-  element:
-    selector:
+  elements:
+  - selector:
+      xpath: //table
+    timeout: 20
+  - selector:
       xpath: //td/span[contains(.,'Phase')]/span[contains(.,'<status>')]
 check_state_status:
-  element:
-    selector:
+  elements:
+  - selector:
+      xpath: //table
+    timeout: 20
+  - selector:
       xpath: //span[contains(.,'State') and contains(.,'<status>')]
 check_condition_status:
-  element:
-    selector:
-      xpath: //span[contains(.,'Conditions') and contains(.,'<status>')]
+  elements:
+  - selector:
+      xpath: //table
+    timeout: 20
+  - selector:
+      xpath: //span[contains(.,'Condition') and contains(.,'<status>')]
 
 ## project selector: one project
 check_column_header_for_one_namespace:
@@ -407,3 +415,50 @@ check_logging_operator_filtered_out:
   elements:
   - selector:
       xpath: //div[contains(@class, 'catalog-tile-pf-title') and text()='Cluster Logging']
+click_create_mockk8sdropdownresouce:
+  params:
+    button_text: Create MockK8sDropdownResource
+  action: click_button
+open_k8sresource_dropdown:
+  element:
+    selector:
+      id: root_spec_k8sResourcePrefix
+    type: button
+    op: click
+check_k8sresource_dropdown_items:
+  element:
+    selector:
+      xpath: //li//span[contains(@class,'co-resource-item__resource-name') and contains(text(),'<item>')]
+check_required_badge_on_operator_installation_page:
+  elements:
+  - selector:
+      xpath: //span[contains(@class,'co-resource-item')]//span[contains(@class,'co-resource-item__resource-name') and text()='Storage Cluster']
+  - selector:
+      xpath: //span[contains(@class,'co-resource-item')]//span[contains(@class,'co-icon-and-text')]//span[text()='Required']
+check_required_badge_during_installation:
+  elements:
+  - selector:
+      xpath: //span[contains(@class,'co-resource-item')]//span[contains(@class,'co-resource-item__resource-name') and text()='StorageCluster']
+  - selector:
+      xpath: //span[contains(@class,'co-resource-item')]//span[contains(@class,'co-icon-and-text')]//span[text()='Required']
+check_create_operand_button_and_requied_badge_when_ready:
+  elements:
+  - selector:
+      xpath: //h2[contains(@class,'co-clusterserviceversion-install__heading') and contains(.,'Installed operator') and contains(.,'operand required')]
+    timeout: 60
+  - selector: &create_operand_button
+      xpath: //button[contains(.,'Create') and contains(.,'StorageCluster') and not(disabled)]
+check_create_operand_button_and_requied_badge_on_csv_details:
+  elements:
+  - selector:
+      xpath: //h4[contains(@class,'pf-c-alert__title') and contains(.,'StorageCluster Required')]
+  action: check_operand_button_link
+check_operand_button_link:
+  element:
+    selector:
+      xpath: //button[contains(.,'Create') and contains(.,'StorageCluster') and not(disabled)]/parent::a[contains(@href,'/k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion/portworx-essentials.v1.3.4/core.libopenstorage.org~v1alpha1~StorageCluster/~new')]
+click_create_storagecluster_button:
+  element:
+    selector:
+      <<: *create_operand_button
+    op: click

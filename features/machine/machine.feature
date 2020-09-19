@@ -190,13 +190,14 @@ Feature: Machine features testing
     Then the step should succeed
     And the output should match "machine.openshift.io/interruptible-instance="
     And "machine-api-termination-handler" daemonset becomes ready in the "openshift-machine-api" project
-    And 1 pods become ready with labels:
+    And 1 pod becomes ready with labels:
       | k8s-app=termination-handler |
 
     Examples:
       | iaas_type | machineset_name        |
       | aws       | machineset-clone-29199 | # @case_id OCP-29199
       | gcp       | machineset-clone-32126 | # @case_id OCP-32126
+      | azure     | machineset-clone-33040 | # @case_id OCP-33040
 
   # @author zhsun@redhat.com
   # @case_id OCP-32620
@@ -302,4 +303,57 @@ Feature: Machine features testing
       | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-machineset"] | default-valued-33058                            |
     Then the step should succeed
 
+  # @author miyadav@redhat.com
+  # @case_id OCP-33455
+  @admin
+  Scenario: Run machine api Controllers using leader election
+    Given I have an IPI deployment
+    And I switch to cluster admin pseudo user
+    And I use the "openshift-machine-api" project
 
+    Given a pod becomes ready with labels:
+      | api=clusterapi, k8s-app=controller |
+
+    And I saved following keys to list in :containers clipboard:
+      | machine-controller     | |
+      | machineset-controller  | |
+      | nodelink-controller    | |
+
+    Then I repeat the following steps for each :id in cb.containers:
+    """
+    When I run the :logs admin command with:
+      | resource_name | <%= pod.name %> |
+      | c             | #{cb.id}        |
+    Then the output should contain:
+      | attempting to acquire leader lease  openshift-machine-api/cluster-api-provider |
+    """
+
+  # @author zhsun@redhat.com
+  # @case_id OCP-34718
+  @admin
+  Scenario: Node labels and Affinity definition in PV should match	
+    Given I have a project
+
+    # Create a pvc
+    Given I obtain test data file "cloud/pvc-34718.yml"
+    When I run the :create client command with:
+      | f | pvc-34718.yml |
+    Then the step should succeed
+
+    # Create a pod
+    Given I obtain test data file "cloud/pod-34718.yml"
+    When I run the :create client command with:
+      | f | pod-34718.yml |
+    Then the step should succeed
+
+    #Check node labels and affinity definition in PV are match
+    Given the pod named "task-pv-pod" becomes ready
+    And I use the "<%= pod.node_name %>" node
+    And evaluation of `node.region` is stored in the :default_region clipboard
+    And evaluation of `node.zone` is stored in the :default_zone clipboard
+    When I run the :describe admin command with:
+      | resource | pv |
+    Then the step should succeed
+    And the output should contain:
+      | failure-domain.beta.kubernetes.io/zone in [<%= cb.default_zone %>]     |
+      | failure-domain.beta.kubernetes.io/region in [<%= cb.default_region %>] |

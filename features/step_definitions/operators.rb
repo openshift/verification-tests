@@ -40,6 +40,23 @@ Given /^I create a new CatalogSourceConfig$/ do
   end
 end
 
+Given /^I create a new OperatorSource$/ do
+  ensure_admin_tagged
+  step %Q/I use the "openshift-marketplace" project/
+  # Create OperatorSource in 4.6-
+  if env.version_lt("4.6", user: user)
+    os_yaml ||= "#{BushSlicer::HOME}/testdata/olm/operatorsource-template.yaml"
+    step %Q/I process and create:/, table(%{
+      | f | #{os_yaml}                 |
+      | p | NAME=test-operators          |
+      | p | SECRET=                      |
+      | p | DISPLAYNAME=Test Operators   |
+      | p | REGISTRY=jiazha              |
+    })
+    raise "Error creating OperatorSource" unless @result[:success]
+  end
+end
+
 Given /^the marketplace works well$/ do
   ensure_admin_tagged
   if env.version_lt("4.5", user: user)
@@ -54,7 +71,7 @@ Given /^the marketplace works well$/ do
       | Test Operators       |
       | CSC Operators        |
     })
-  else
+  elif env.version_eq("4.5", user: user)
     step %Q/I run the :get client command with:/, table(%{
       | resource       | packagemanifest |
       | all_namespaces | true            |
@@ -65,19 +82,28 @@ Given /^the marketplace works well$/ do
       | Certified Operators  |
       | Test Operators       |
     })
+  else
+    step %Q/I run the :get client command with:/, table(%{
+      | resource       | packagemanifest |
+      | all_namespaces | true            |
+    })
+    step %Q/the output should contain:/, table(%{
+      | Community Operators  |
+      | Red Hat Operators    |
+      | Certified Operators  |
+    })
   end
-
 end
 
 Given /^the status of condition Upgradeable for marketplace operator as expected$/ do
   ensure_admin_tagged
-  if env.version_eq("4.1", user: user)
+  if env.version_eq("4.1", user: user) || env.version_ge("4.6", user: user)
     actual_status = 'True'
   else
     actual_status = cluster_operator('marketplace').condition(type: 'Upgradeable', cached: false)['status']
   end
   status = 'True'
-  if env.version_ge("4.4", user: user)
+  if env.version_eq("4.4", user: user) || env.version_eq("4.5", user: user)
     csc_items = Array.new
     os_items = Array.new
     if custom_resource_definition('catalogsourceconfigs.operators.coreos.com').exists?

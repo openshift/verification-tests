@@ -371,3 +371,201 @@ Feature: Egress IP related features
       | /usr/bin/curl | --connect-timeout | 10 | <%= cb.hostip %>:27017 |
     Then the output should contain:
       | Hello-OpenShift-1 http-8080 |
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-18316
+  @admin
+  @destructive
+  Scenario: The egressIPs should work well when re-using the egressIP which is holding by a deleted project
+    Given I store the schedulable workers in the :nodes clipboard
+    And the valid egress IP is added to the "<%= cb.nodes[0].name %>" node
+    And I have a project
+
+    # add the egress ip to the project
+    Given as admin I successfully merge patch resource "netnamespace/<%= project.name %>" with:
+      | {"egressIPs": ["<%= cb.valid_ip %>"]} |
+
+    # delete the project
+    Given admin ensures "<%= project.name %>" project is deleted
+
+    #create a new project
+    Given I create a new project
+    And I have a pod-for-ping in the project
+    Given as admin I successfully merge patch resource "netnamespace/<%= project.name %>" with:
+      | {"egressIPs": ["<%= cb.valid_ip %>"]} |
+
+    # The traffic should be allowed and the source ip is egress ip
+    When I execute on the pod:
+      | curl | -s | --connect-timeout | 5 | ifconfig.me |
+    Then the step should succeed
+    And the output should contain "<%= cb.valid_ip %>"
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-18315
+  @admin
+  @destructive
+  Scenario: Add the removed egressIP back to the netnamespace would work well
+    Given I store the schedulable workers in the :nodes clipboard
+    And the valid egress IP is added to the "<%= cb.nodes[0].name %>" node
+    And I have a project
+    And I have a pod-for-ping in the project
+
+    # add the egress ip to the project
+    Given as admin I successfully merge patch resource "netnamespace/<%= project.name %>" with:
+      | {"egressIPs": ["<%= cb.valid_ip %>"]} |
+
+    #Remove the egress ip from the project
+    Given as admin I successfully merge patch resource "netnamespace/<%= project.name %>" with:
+      | {"egressIPs": null } |
+
+    # The traffic should be allowed and the source ip is not egress ip
+    When I execute on the pod:
+      | curl | -s | --connect-timeout | 10 | ifconfig.io |
+    Then the step should succeed
+    And the output should not contain "<%= cb.valid_ip %>"
+
+    # add the egress ip to the project again
+    Given as admin I successfully merge patch resource "netnamespace/<%= project.name %>" with:
+      | {"egressIPs": ["<%= cb.valid_ip %>"]} |
+
+    # The traffic should be allowed and the source ip is egress ip
+    When I execute on the pod:
+      | curl | -s | --connect-timeout | 10 | ifconfig.io |
+    Then the step should succeed
+    And the output should contain "<%= cb.valid_ip %>"
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-19785
+  @admin
+  @destructive
+  Scenario: The pod should be able to access outside with the node source IP after the egressIP removed
+    Given I store the schedulable workers in the :nodes clipboard
+    And the valid egress IP is added to the "<%= cb.nodes[0].name %>" node
+    Given I have a project
+    And I have a pod-for-ping in the project
+    And evaluation of `pod.name` is stored in the :hello_pod clipboard
+    And the Internal IP of node "<%= pod.node_name %>" is stored in the :node_ip clipboard
+
+    # add the egress ip to the project
+    Given as admin I successfully merge patch resource "netnamespace/<%= project.name %>" with:
+      | {"egressIPs": ["<%= cb.valid_ip %>"]} |
+
+    # The traffic should be allowed and the source ip is egress ip
+    When I execute on the "<%= cb.hello_pod %>" pod:
+      | curl | -s | --connect-timeout | 10 | ifconfig.io |
+    Then the step should succeed
+    And the output should contain "<%= cb.valid_ip %>"
+
+    #Remove the egress ip from the project
+    Given as admin I successfully merge patch resource "netnamespace/<%= project.name %>" with:
+      | {"egressIPs": null } |
+
+    # The traffic should be allowed and the source ip is node ip
+    When I execute on the pod:
+      | curl | -s | --connect-timeout | 10 | ifconfig.io |
+    Then the step should succeed
+    And the output should contain "<%= cb.node_ip %>"
+
+    #Remove the egress ip from the node
+    Given as admin I successfully merge patch resource "hostsubnet/<%= cb.nodes[0].name %>" with:
+      | {"egressIPs": null } |
+
+    # The traffic should be allowed and the source ip is node ip
+    When I execute on the pod:
+      | curl | -s | --connect-timeout | 10 | ifconfig.io |
+    Then the step should succeed
+    And the output should contain "<%= cb.node_ip %>"
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-15989
+  @admin
+  @destructive
+  Scenario: Pods will not be affected by the egressIP set on other netnamespace
+    # create project with pods
+    Given I have a project
+    And evaluation of `project.name` is stored in the :proj1 clipboard
+
+    # add the egress ip to the hostsubnet
+    Given I store the schedulable workers in the :nodes clipboard
+    And the valid egress IP is added to the "<%= cb.nodes[0].name %>" node
+
+    # add the egress ip to the project
+    Given as admin I successfully merge patch resource "netnamespace/<%= cb.proj1 %>" with:
+      | {"egressIPs": ["<%= cb.valid_ip %>"]} |
+
+    # Create a new project
+    Given I create a new project
+    And I have a pod-for-ping in the project
+
+    # access external network via pod from project without egress ip
+    When I execute on the pod:
+      | curl | --connect-timeout | 10 | ifconfig.io |
+    Then the step should succeed
+    And the output should not contain "<%= cb.valid_ip %>"
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-15987
+  @admin
+  @destructive
+  Scenario: The egressIP will be unavailable if it was set to multiple hostsubnets
+    Given I store the schedulable workers in the :nodes clipboard
+    And the valid egress IP is added to the "<%= cb.nodes[0].name %>" node
+    Given as admin I successfully merge patch resource "hostsubnet/<%= cb.nodes[1].name %>" with:
+      | {"egressIPs": ["<%= cb.valid_ip %>"] }   |
+    And I register clean-up steps:
+    """
+    as admin I successfully merge patch resource "hostsubnet/<%= cb.nodes[1].name %>" with:
+      | {"egressIPs":null}   |
+    """
+
+    # Patch egress IP to the project
+    Given I have a project
+    And as admin I successfully merge patch resource "netnamespace/<%= project.name %>" with:
+      | {"egressIPs": ["<%= cb.valid_ip %>"]} |
+
+    # Check each NIC on the nodes, the egressIP should not be there
+    When I run command on the "<%= cb.nodes[0].name %>" node's sdn pod:
+      | bash | -c | ip -4 -brief a show <%= cb.interface %> |
+    Then the step should succeed
+    And the output should not contain "<%= cb.valid_ip %>"
+    When I run command on the "<%= cb.nodes[1].name %>" node's sdn pod:
+      | bash | -c | ip -4 -brief a show <%= cb.interface %> |
+    Then the step should succeed
+    And the output should not contain "<%= cb.valid_ip %>"
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-18586
+  @admin
+  @destructive
+  Scenario: The same egressIP will not be assigned to different netnamespace
+    Given I store the schedulable workers in the :nodes clipboard
+    Given I store a random unused IP address from the reserved range to the clipboard
+
+    #Patch egress cidr to the node
+    Given as admin I successfully merge patch resource "hostsubnet/<%= cb.nodes[0].name %>" with:
+      | {"egressCIDRs": ["<%= cb.subnet_range %>"] }   |
+    And I register clean-up steps:
+    """
+    as admin I successfully merge patch resource "hostsubnet/<%= cb.nodes[0].name %>" with:
+      | {"egressCIDRs":null}   |
+    """
+
+    # Patch same egress IP to different project
+    Given I have a project
+    And as admin I successfully merge patch resource "netnamespace/<%= project.name %>" with:
+      | {"egressIPs": ["<%= cb.valid_ip %>"]} |
+    Given I create a new project
+    And I have a pod-for-ping in the project
+    And as admin I successfully merge patch resource "netnamespace/<%= project.name %>" with:
+      | {"egressIPs": ["<%= cb.valid_ip %>"]} |
+
+    #The project will lose the external access
+    When I execute on the pod:
+      | curl | --connect-timeout | 10 | ifconfig.io |
+    Then the step should fail
+
+    # The egress IP was not assiged to the node
+    When I run command on the "<%= cb.nodes[0].name %>" node's sdn pod:
+      | bash | -c | ip -4 -brief a show <%= cb.interface %> |
+    Then the step should succeed
+    And the output should not contain "<%= cb.valid_ip %>"

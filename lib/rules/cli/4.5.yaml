@@ -537,10 +537,12 @@
 :logs:
   :cmd: oc logs <resource_name>
   :options:
+    :all_containers: --all-containers=<value>
     :c: -c <value>
     :f: -f
     :limit-bytes: --limit-bytes <value>
     :p: -p
+    :prefix: --prefix=<value>
     :since: --since <value>
     :since-time: --since-time <value>
     :tail: --tail <value>
@@ -1219,13 +1221,16 @@
     :resource_name: <value>
     :resource_type: <value>
 :oadm_must_gather:
-  :cmd: oc adm must-gather
+  :cmd: oc adm must-gather <global_options> <options>
   :options:
     :dest_dir: --dest-dir=<value>
     :image: --image=<value>
     :image_stream: --image-stream=<value>
     :node_name: --node-name=<value>
     :source_dir: --source-dir=<value>
+    :oc_opts_end: --
+    :exec_command: <value>
+    :exec_command_arg: <value>
 :oadm_new_project:
   :cmd: oc adm new-project <project_name>
   #:expected:

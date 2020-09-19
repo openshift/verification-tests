@@ -422,7 +422,7 @@ Feature: Service related networking scenarios
     When I run oc create over "list_for_pods.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
     Then the step should succeed
-    Given 1 pods become ready with labels:
+    Given 1 pod becomes ready with labels:
       | name=test-pods |
     And I wait up to 90 seconds for the steps to pass:
     """
@@ -431,3 +431,101 @@ Feature: Service related networking scenarios
     Then the step should succeed
     And the output should contain "Hello OpenShift"
     """
+
+  # @author anusaxen@redhat.com
+  # @case_id OCP-24694
+  @admin
+  @destructive
+  Scenario: Taint node with too small MTU value
+    Given the default interface on nodes is stored in the :default_interface clipboard
+    And the node's MTU value is stored in the :mtu_actual clipboard
+    And evaluation of `node.name` is stored in the :subject_node clipboard
+    And I run commands on the host:
+      | systemctl stop NetworkManager                        |
+      | ip link set mtu 1300 dev <%= cb.default_interface %> |
+    Then the step should succeed
+    Given I register clean-up steps:
+    """
+    Given I use the "<%= cb.subject_node %>" node
+    And I run commands on the host:
+      | systemctl start NetworkManager |
+    Then the step should succeed
+    """
+    #This def will also store network project name in network_project_name variable
+    Given I store "<%= cb.subject_node %>" node's corresponding default networkType pod name in the :subject_node_network_pod clipboard
+    And admin ensure "<%= cb.subject_node_network_pod %>" pod is deleted from the "<%= cb.network_project_name %>" project
+    When I run the :describe admin command with:
+      | resource | node                   |
+      | name     | <%= cb.subject_node %> |
+    Then the step should succeed
+    And the output should contain "mtu-too-small"
+    #Starting NetworkManager to roll out original system MTU 
+    Given I use the "<%= cb.subject_node %>" node
+    And I run commands on the host:
+      | systemctl start NetworkManager |
+    Then the step should succeed
+    And the node's MTU value is stored in the :mtu_actual_redeployed clipboard
+    And the expression should be true> cb.mtu_actual == cb.mtu_actual_redeployed
+    #The node should get un-taint post this step in few seconds
+    And I run commands on the host:
+      | pkill openshift-sdn |
+    Then the step should succeed
+    #Check if node has removed the taint
+    Given I wait up to 30 seconds for the steps to pass:
+    """
+    Given I run the :describe admin command with:
+      | resource | node                   |
+      | name     | <%= cb.subject_node %> |
+    Then the step should succeed
+    And the output should not contain "mtu-too-small"
+    """
+
+  # @author zzhao@redhat.com
+  # @case_id OCP-33848
+  @admin
+  @destructive
+  Scenario: User can expand the nodePort range by patch the serviceNodePortRange in network
+    Given I have a project
+    And evaluation of `rand(32676..33000)` is stored in the :port clipboard
+    Given as admin I successfully merge patch resource "networks.config.openshift.io/cluster" with:
+      | {"spec":{"serviceNodePortRange": "30000-33000"}} |
+    When I obtain test data file "networking/nodeport_service.json"
+    And I wait up to 120 seconds for the steps to pass:
+    """    
+    When I run oc create over "nodeport_service.json" replacing paths:
+      | ["items"][1]["spec"]["ports"][0]["nodePort"] | <%= cb.port %> |
+    Then the step should succeed
+    """
+    Given the pod named "hello-pod" becomes ready
+    And evaluation of `pod.node_ip` is stored in the :hostip clipboard
+
+    Given I obtain test data file "networking/list_for_pods.json"
+    When I run oc create over "list_for_pods.json" replacing paths:
+      | ["items"][0]["spec"]["replicas"] | 1 |
+    Then the step should succeed
+    And a pod becomes ready with labels:
+      | name=test-pods |
+    When I execute on the pod:
+      | curl | <%= cb.hostip %>:<%= cb.port %> |
+    Then the step should succeed
+    And the output should contain:
+      | Hello OpenShift! |
+    Given I ensure "hello-pod" service is deleted
+    When I execute on the pod:
+      | curl | <%= cb.hostip %>:<%= cb.port %> |
+    Then the step should fail
+    And the output should not contain:
+      | Hello OpenShift! |
+
+  # @author zzhao@redhat.com
+  # @case_id OCP-33850
+  @admin
+  @destructive
+  Scenario: User cannot decrease the nodePort range in post action
+    When I run the :patch admin command with:
+      | resource      | networks.config.openshift.io                     |
+      | resource_name | cluster                                          |
+      | p             | {"spec":{"serviceNodePortRange": "30000-31000"}} |
+      | type          | merge                                            |
+    Then the step should fail
+    And the output should contain "does not completely cover the previous range"

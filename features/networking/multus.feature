@@ -1101,14 +1101,11 @@ Feature: Multus-CNI related scenarios
   Scenario: Multus Telemetry Adds capability to track usage of network attachment definitions
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
-    Given I store the masters in the :master clipboard
-    When I run the :get admin command with:
-      | resource        | pods                                     |
-      | fieldSelector   | spec.nodeName=<%= cb.master[0].name %>   |
-      | n               | openshift-multus                         |
-      | output          | json                                     |
-    Then the step should succeed
-    And evaluation of `@result[:parsed]['items'][0]['metadata']['name']` is stored in the :pod_name clipboard
+    Given I switch to cluster admin pseudo user
+    Given admin uses the "openshift-multus" project
+    Then a pod is present with labels:
+      | app=multus-admission-controller |
+    And evaluation of `@pods[0].name` is stored in the :pod_name clipboard
 
     When admin executes on the "<%=cb.pod_name%>" pod:
       | /usr/bin/curl | localhost:9091/metrics |
@@ -1116,6 +1113,7 @@ Feature: Multus-CNI related scenarios
       | network_attachment_definition_instances{networks="any"} 0 |  
 
     # Create the net-attach-def via cluster admin
+    Given I switch to the first user
     Given I have a project
     And evaluation of `project.name` is stored in the :usr_project clipboard
 
@@ -1451,7 +1449,7 @@ Feature: Multus-CNI related scenarios
       | name     | macvlan-bridge-whereabouts-pod3 |
     Then the output should contain "Could not allocate IP in range"
     """
-    
+
   # @author weliang@redhat.com
   # @case_id OCP-33579
   @admin

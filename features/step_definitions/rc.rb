@@ -16,7 +16,7 @@ end
 # end
 
 Given /^I wait until number of(?: "(.*?)")? replicas match "(\d+)" for replicationController "(.+)"$/ do |state, number, rc_name|
-ready_timeout = 300
+  ready_timeout = 300
   state = :running if state.nil?
   @result = rc(rc_name).wait_till_replica_counters_match(
     user: user,

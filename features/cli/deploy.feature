@@ -188,7 +188,7 @@ Feature: deployment related features
       | Warning: the following images triggers were disabled |
       | You can re-enable them with |
     And the pod named "hooks-3-deploy" becomes ready
-    Given I wait for the "hooks-3-deploy" pod to die
+    Given I wait for the pod named "hooks-3-deploy" to die
     When I get project pod
     Then the output should match:
       | READY\\s+STATUS |
@@ -546,9 +546,9 @@ Feature: deployment related features
   # @case_id OCP-11769
   Scenario: Start new deployment when deployment running
     Given I have a project
-    Given I obtain test data file "deployment/testhook.json"
+    Given I obtain test data file "deployment/dc-with-pre-mid-post.yaml"
     When I run the :create client command with:
-      | f | testhook.json |
+      | f | dc-with-pre-mid-post.yaml |
     Then the step should succeed
     Given I wait until the status of deployment "hooks" becomes :running
     And I replace resource "dc" named "hooks":

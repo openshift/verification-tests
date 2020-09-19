@@ -217,7 +217,7 @@ click_radio_to_pick_ns:
   params:
     text: Pick an existing namespace
   action: click_radio_input_by_text
-check_Hazelcastjet_default_action_and_remote_workflow:
+check_operator_purchase_link:
   params:
     text: Purchase
     link_url: https://marketplace.redhat.com/en-us/operators/hazelcast-jet-enterprise-operator-rhmp/pricing
@@ -236,15 +236,24 @@ open_operator_modal:
   action: filter_by_keyword_on_catalog_page
   action: open_first_card_in_overlay
 check_phase_status:
-  element:
-    selector:
+  elements:
+  - selector:
+      xpath: //table
+    timeout: 20
+  - selector:
       xpath: //td/span[contains(.,'Phase')]/span[contains(.,'<status>')]
 check_state_status:
-  element:
-    selector:
+  elements:
+  - selector:
+      xpath: //table
+    timeout: 20
+  - selector:
       xpath: //span[contains(.,'State') and contains(.,'<status>')]
 check_condition_status:
-  element:
-    selector:
-      xpath: //span[contains(.,'Conditions') and contains(.,'<status>')]
+  elements:
+  - selector:
+      xpath: //table
+    timeout: 20
+  - selector:
+      xpath: //span[contains(.,'Condition') and contains(.,'<status>')]
 check_logging_operator_filtered_out: {}
