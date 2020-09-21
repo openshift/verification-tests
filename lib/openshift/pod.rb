@@ -298,6 +298,7 @@ module BushSlicer
 
       default_user(as).cli_exec(:exec, pod: name, n: project.name,
                container: container,
+               i: !!stdin,
                oc_opts_end: true,
                exec_command: command,
                exec_command_arg: args,
