@@ -8,7 +8,7 @@ Feature: custombuild.feature
     Then the step should succeed
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift/origin/master/examples/sample-app/application-template-custombuild.json |
+      | f | https://raw.githubusercontent.com/openshift/origin/release-3.11/examples/sample-app/application-template-custombuild.json |
     Then the step should succeed
     And I create a new application with:
       | template | ruby-helloworld-sample |
