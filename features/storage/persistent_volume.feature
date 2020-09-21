@@ -31,6 +31,8 @@ Feature: Persistent Volume Claim binding policies
     # Second PV can not bound
     And the "nfs1-<%= project.name %>" PV status is :available
 
+    Given I ensure "nfsc" pvc is deleted
+
     Examples:
       | accessMode1   | accessMode2   | accessMode3   |
       | ReadOnlyMany  | ReadWriteMany | ReadWriteOnce | # @case_id OCP-9702

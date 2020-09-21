@@ -33,12 +33,16 @@ Feature: NFS Persistent Volume
       | touch | /mnt/nfs/testfile_2 |
     Then the step should succeed
 
+    Given I ensure "hellopod" replicationcontroller is deleted
+
     # Finally verify both files created by each pod are under the same export dir in the nfs-server pod
     When I execute on the "nfs-server" pod:
       | ls | /mnt/data |
     Then the output should contain:
       | testfile_1 |
       | testfile_2 |
+
+    Given I ensure "nfsc" pvc is deleted
 
   # @author chaoyang@redhat.com
   @admin
@@ -135,3 +139,5 @@ Feature: NFS Persistent Volume
     And the output should contain:
       | Permission denied |
 
+   Given I ensure "nfspd-<%= project.name %>" pod is deleted
+   And I ensure "nfsc-<%= project.name %>" pvc is deleted
