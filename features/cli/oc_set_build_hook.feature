@@ -5,7 +5,8 @@ Feature: oc_set_build_hook
   # @bug_id 1351797
   Scenario: Set post-build-commit on buildconfig via oc set build-hook
     Given I have a project
-    When I process and create "https://raw.githubusercontent.com/openshift/rails-ex/master/openshift/templates/rails-postgresql.json"
+    When I run the :new_app client command with:
+      | template | rails-postgresql-example |
     Then the step should succeed
     #cancel first build to speed up process, as it's irrelevant to the test
     Given the "rails-postgresql-example-1" build was created
