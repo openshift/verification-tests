@@ -134,7 +134,7 @@ Feature: build 'apps' with CLI
     When I run the :new_app client command with:
       | image_stream      | openshift/mongodb:2.6                               |
       | image_stream      | openshift/mysql                                     |
-      | docker_image      | <%= product_docker_repo %>rhscl/postgresql-94-rhel7 |
+      | docker_image      | registry.access.redhat.com/rhscl/postgresql-94-rhel7|
       | env               | MONGODB_USER=test                                   |
       | env               | MONGODB_PASSWORD=test                               |
       | env               | MONGODB_DATABASE=test                               |
@@ -666,11 +666,8 @@ Feature: build 'apps' with CLI
       | app_repo     | https://github.com/openshift/ruby-hello-world.git |
       | image_stream | ruby:latest                                       |
     Then the step should succeed
-    Given I download a file from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/templates/tc539699/build.yaml"
-    And I replace lines in "build.yaml":
-      | replacestr/ | <%= product_docker_repo %> |
     When I run the :create client command with:
-      | f | build.yaml |
+      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/templates/tc539699/build.yaml | 
     Then the step should succeed
     When I run the :start_build client command with:
       | buildconfig | ruby-hello-world |
