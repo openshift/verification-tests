@@ -36,28 +36,28 @@ Feature: dockerbuild.feature
   Scenario Outline: Docker and STI build with dockerImage with specified tag
     Given I have a project
     When I run oc create over "<template>" replacing paths:
-      | ["spec"]["strategy"]["<strategy>"]["from"]["name"] | <%= product_docker_repo %>rhscl/ruby-22-rhel7:latest |
+      | ["spec"]["strategy"]["<strategy>"]["from"]["name"] | docker.io/centos/ruby-22-centos7 | 
     Then the step should succeed
     Given the "ruby-sample-build-1" build completed
     When I run the :describe client command with:
-      | resource | build |
-      | name | ruby-sample-build-1 |
+      | resource | build               |
+      | name     | ruby-sample-build-1 |
     Then the output should contain:
-      | DockerImage <%= product_docker_repo %>rhscl/ruby-22-rhel7:latest |
+      | DockerImage docker.io/centos/ruby-22-centos7 |
     When I run the :patch client command with:
-      | resource      | bc              |
-      | resource_name | ruby-sample-build |
-      | p             | {"spec":{"strategy":{"<strategy>":{"from":{"name":"<%= product_docker_repo %>rhscl/ruby-22-rhel7:incorrect"}}}}} |
+      | resource      | bc                                                                                                  |
+      | resource_name | ruby-sample-build                                                                                   |
+      | p             | {"spec":{"strategy":{"<strategy>":{"from":{"name":"docker.io/centos/ruby-22-centos7:incorrect"}}}}} |
     Then the step should succeed
     Given I run the :start_build client command with:
       | buildconfig | ruby-sample-build |
     And the "ruby-sample-build-2" build failed
     When I run the :describe client command with:
-      | resource | build |
-      | name | ruby-sample-build-2 |
+      | resource | build               |
+      | name     | ruby-sample-build-2 |
     Then the output should contain:
-      | Failed |
-      | DockerImage <%= product_docker_repo %>rhscl/ruby-22-rhel7:incorrect |
+      | Failed                                                              |
+      | DockerImage docker.io/centos/ruby-22-centos7:incorrect |
 
     Examples:
       | template | strategy |
