@@ -155,10 +155,9 @@ end
 
 Given /^I have LDAP service in my project$/ do
     ###
-    # The original idea is trying to put ldap server in the openshift to make this flexy.
-    # Since we run the scenario in jenkins slave which is not in sdn, then two choices come to me:
+    # Since we run the scenario in jenkins agent which is not in sdn, then two choices come to me:
     # 1, Create a route for the ldapserver pod, but blocked by this us https://trello.com/c/9TXvMeS2 is done.
-    # 2, Port forward the ldap server pod to the jenkins slave.
+    # 2, Port forward the ldap server pod to the jenkins agent.
     # So take the second one since this one can be implemented currently
     ###
     step %Q/I run the :run client command with:/, table(%{
@@ -166,20 +165,25 @@ Given /^I have LDAP service in my project$/ do
       | image |openshift/openldap-2441-centos7:latest |
       })
     step %Q/the step should succeed/
-    step %Q/I wait until replicationController "ldapserver-1" is ready/
+    step %Q/a pod becomes ready with labels:/, table(%{
+      | run=ldapserver |
+      })
 
     cb.ldap_pod = BushSlicer::Pod.get_labeled(["run", "ldapserver"], user: user, project: project).first
     cb.ldap_pod_name = cb.ldap_pod.name
     cache_pods cb.ldap_pod
 
+    step 'I obtain test data file "authorization/init.ldif"'
+    step %Q/the step should succeed/
+ 
     # Init the test data in ldap server.
-    @result = cb.ldap_pod.exec("bash", "-c", "curl -Ss https://raw.githubusercontent.com/openshift/origin/master/images/openldap/contrib/init.ldif | ldapadd -x -h 127.0.0.1 -p 389 -D cn=Manager,dc=example,dc=com -w admin", as: user)
+    @result = pod.exec("ldapadd", "-x", "-h", "127.0.0.1", "-p", "389", "-D", "cn=Manager,dc=example,dc=com", "-w", "admin", stdin: File.read(cb.test_file), as: user)
     step %Q/the step should succeed/
 
     # Port forword ldapserver to local
     step %Q/evaluation of `rand(32000...65536)` is stored in the :ldap_port clipboard/
     step %Q/I run the :port_forward background client command with:/, table(%{
-      | pod       | <%= cb.ldap_pod_name %> |
+      | pod       | <%= pod.name %>         |
       | port_spec | <%= cb.ldap_port %>:389 |
       })
     step %Q/the step should succeed/
