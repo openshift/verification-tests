@@ -172,16 +172,19 @@ Given /^I have LDAP service in my project$/ do
     cb.ldap_pod = BushSlicer::Pod.get_labeled(["run", "ldapserver"], user: user, project: project).first
     cb.ldap_pod_name = cb.ldap_pod.name
     cache_pods cb.ldap_pod
+
+    step 'I obtain test data file "authorization/init.ldif"'
+    step %Q/the step should succeed/
  
     # Init the test data in ldap server.
-    @result = pod.exec("bash", "-c", "curl -Ss https://raw.githubusercontent.com/openshift/cucushift/master/testdata/authorization/idp/init.ldif?token=ANVZSVHHHB7VSWHR3XMXHTK7JCIM2 | ldapadd -x -h 127.0.0.1 -p 389 -D cn=Manager,dc=example,dc=com -w admin", as: user)
+    @result = pod.exec("ldapadd", "-x", "-h", "127.0.0.1", "-p", "389", "-D", "cn=Manager,dc=example,dc=com", "-w", "admin", stdin: File.read(cb.test_file), as: user)
     step %Q/the step should succeed/
 
     # Port forword ldapserver to local
     step %Q/evaluation of `rand(32000...65536)` is stored in the :ldap_port clipboard/
     step %Q/I run the :port_forward background client command with:/, table(%{
-       | pod       | <%= pod.name %>        |
-       | port_spec | <%= cb.ldap_port %>:389  |
+      | pod       | <%= pod.name %>        |
+      | port_spec | <%= cb.ldap_port %>:389  |
       })
     step %Q/the step should succeed/
 end
