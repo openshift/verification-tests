@@ -50,6 +50,11 @@ check_page_match:
   element:
     selector:
       visible_text: !ruby/regexp /<content>/i
+submit_changes:
+  element:
+    selector:
+      xpath: //button[@type='submit']
+    op: click
 click_resource_action_button:
   elements:
   - selector:
@@ -112,6 +117,15 @@ add_label:
       id: tags-input
     type: input
     op: send_keys <press_enter>
+check_link_and_text:
+  element:
+    selector:
+      xpath: //a[contains(text(),'<text>') and @href='<link_url>']
+wait_box_loaded:
+  element:
+    selector:
+      css: .loading-box__loaded
+    timeout: 20
 ## -------- check resource key and values pairs ------
 check_resource_details:
   action:
