@@ -13,5 +13,5 @@ Given(/^admin creates "([^"]*)" catalog source with image "([^"]*)"$/) do |cs_na
   step %Q/a pod becomes ready with labels:/, table(%{
     | olm.catalogSource=#{cs_name} |
   })
-  step %Q/I wait for the "#{cs_name}" catalog_source to become ready up to 300 seconds/
+  step %Q/I wait for the "#{cs_name}" catalog_source to become ready up to 600 seconds/
 end
