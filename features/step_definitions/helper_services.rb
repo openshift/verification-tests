@@ -183,8 +183,8 @@ Given /^I have LDAP service in my project$/ do
     # Port forword ldapserver to local
     step %Q/evaluation of `rand(32000...65536)` is stored in the :ldap_port clipboard/
     step %Q/I run the :port_forward background client command with:/, table(%{
-      | pod       | <%= pod.name %>        |
-      | port_spec | <%= cb.ldap_port %>:389  |
+      | pod       | <%= pod.name %>         |
+      | port_spec | <%= cb.ldap_port %>:389 |
       })
     step %Q/the step should succeed/
 end
