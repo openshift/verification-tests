@@ -63,3 +63,26 @@ select_cloud_provider:
         selector:
             xpath: //a[@href='/openshift/create/osd/<cloud_provider>']
         op: click
+
+go_to_aws_creation_page_directly:
+    url: /openshift/create/osd/aws
+go_to_gcp_creation_page_directly:
+    url: /openshift/create/osd/gcp
+go_to_osd_cards_page_directly:
+    url: /openshift/create/osd
+check_cloud_provider_selection_page_title:
+    scripts:
+    - command: return document.title=='Create an OpenShift Dedicated cluster | Red Hat OpenShift Cluster Manager | Choose your cloud provider'
+      expect_result: true
+check_osd_aws_creation_page_title:
+    scripts:
+    - command: return document.title=='Create an OpenShift Dedicated cluster | Red Hat OpenShift Cluster Manager | OpenShift Dedicated on AWS'
+      expect_result: true
+check_osd_gcp_creation_page_title:
+    scripts:
+    - command: return document.title=='Create an OpenShift Dedicated cluster | Red Hat OpenShift Cluster Manager | OpenShift Dedicated on GCP'
+      expect_result: true
+check_creation_cards_page_title:
+    scripts:
+    - command: return document.title=='Create an OpenShift cluster | Red Hat OpenShift Cluster Manager'
+      expect_result: true
