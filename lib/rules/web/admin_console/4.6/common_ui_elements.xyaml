@@ -245,6 +245,11 @@ set_label_textarea:
       <<: *label_textarea
     op: send_keys <input_value>
     type: textarea
+click_label_dropdown_button:
+  element:
+    selector:
+      xpath: //label[contains(text(),'<label_text>')]/following::button[1][contains(@class,'dropdown')]
+    op: click
 check_editor_is_monaco_editor:
   element:
     selector:
