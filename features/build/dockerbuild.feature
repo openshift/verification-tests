@@ -102,9 +102,10 @@ Feature: dockerbuild.feature
     And the "ruby22-sample-build-3" build completed
     When I run the :build_logs client command with:
       | build_name | ruby22-sample-build-3 |
+      | loglevel   | 6                     |
     Then the step should succeed
     Then the output should contain:
-      | ---> Using cache  |
+      | Using cache |
 
   # @author dyan@redhat.com
   # @case_id OCP-13083
