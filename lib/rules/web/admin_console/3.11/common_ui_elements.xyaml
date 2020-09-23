@@ -184,8 +184,9 @@ check_resource_details_key_and_value:
     selector:
       xpath: //dt[contains(text(),'<key>')]/following-sibling::dd[1][contains(.,'<value>')]
 click_value_on_resource_detail:
-  element:
-    <<: *key_value
+  element: 
+    selector:
+      xpath: //dt[contains(text(),'<key>')]/following-sibling::dd[1][contains(.,'<value>')]//a[1]
     op: click
 check_resource_name:
   params:
