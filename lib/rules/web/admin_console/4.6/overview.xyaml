@@ -226,11 +226,6 @@ group_by_label:
     dropdown_menu_item: <label>
   action: click_groupby_dropdown_button
   action: click_dropdown_menu_item
-click_workloads_tab:
-  element:
-    selector:
-      xpath: //a[contains(text(),'Workloads')]
-    op: click
 send_key_to_workloads:
   element:
     selector:
@@ -240,11 +235,6 @@ check_workload_selected:
   elements:
   - selector:
       xpath: //li[contains(@class,'pf-c-data-list__item') and contains(@class,'pf-m-selected')]
-click_workload_details:
-  element:
-    selector:
-      xpath: //button[contains(text(),'Details')]
-    op: click
 check_workload_name:
   elements:
   - selector:

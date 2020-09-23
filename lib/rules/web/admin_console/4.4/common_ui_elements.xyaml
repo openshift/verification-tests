@@ -356,7 +356,7 @@ check_created_column_header:
 check_resource_name_and_icon:
   action:
     if_param: service_name
-    ref: check_service_name_and_icon 
+    ref: check_service_name_and_icon
   action:
     if_param: buildconfig_name
     ref: check_buildconfig_name_and_icon
@@ -1032,4 +1032,12 @@ check_hpa_max_replicas:
     key: Max Replicas
     value: <max_replicas>
   action: check_resource_details_key_and_value
+click_workloads_tab:
+  params:
+    tab_name: Workloads
+  action: click_tab
+click_workload_details:
+  params:
+    button_text: Details
+  action: click_button_text
 
