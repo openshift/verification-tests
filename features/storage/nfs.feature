@@ -12,6 +12,7 @@ Feature: NFS Persistent Volume
     And admin creates a PV from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/auto/pv-retain.json" where:
       | ["metadata"]["name"]      | nfs-<%= project.name %>          |
       | ["spec"]["nfs"]["server"] | <%= service("nfs-service").ip %> |
+    Given I ensure "nfsc" pvc is deleted after scenario
     And I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/auto/pvc-rwx.json" replacing paths:
       | ["spec"]["volumeName"] | <%= pv.name %> |
     And the PV becomes :bound
@@ -42,7 +43,6 @@ Feature: NFS Persistent Volume
       | testfile_1 |
       | testfile_2 |
 
-    Given I ensure "nfsc" pvc is deleted
 
   # @author chaoyang@redhat.com
   @admin
@@ -119,6 +119,7 @@ Feature: NFS Persistent Volume
       | ["metadata"]["annotations"]["pv.beta.kubernetes.io/gid"] | abc123                           |
     Then the step should succeed
 
+    And I ensure "nfsc-<%= project.name %>" pvc is deleted after scenario
     When I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/claim-rwx.json" replacing paths:
       | ["metadata"]["name"]                         | nfsc-<%= project.name %> |
       | ["spec"]["resources"]["requests"]["storage"] | 1Gi                      |
@@ -139,5 +140,4 @@ Feature: NFS Persistent Volume
     And the output should contain:
       | Permission denied |
 
-   Given I ensure "nfspd-<%= project.name %>" pod is deleted
-   And I ensure "nfsc-<%= project.name %>" pvc is deleted
+    Given I ensure "nfspd-<%= project.name %>" pod is deleted

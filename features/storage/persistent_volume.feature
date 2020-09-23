@@ -22,6 +22,7 @@ Feature: Persistent Volume Claim binding policies
     Then the step should succeed
 
     # Create PVC with accessMode3
+    Given I ensure "nfsc" pvc is deleted after scenario
     When I create a manual pvc from "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/claim-rwo.json" replacing paths:
       | ["spec"]["accessModes"][0] | <accessMode3> |
     Then the step should succeed
@@ -31,7 +32,6 @@ Feature: Persistent Volume Claim binding policies
     # Second PV can not bound
     And the "nfs1-<%= project.name %>" PV status is :available
 
-    Given I ensure "nfsc" pvc is deleted
 
     Examples:
       | accessMode1   | accessMode2   | accessMode3   |
