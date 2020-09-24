@@ -66,7 +66,7 @@ spec:
             name: csi-data-dir
 
         - name: hostpath
-          image: quay.io/openshift-qe-optional-operators/hostpathplugin@sha256:aa223f9df8c1d477a9f2a4a2a7d104561e6d365e54671aacbc770dffcc0683ad
+          image: quay.io/openshift-qe-optional-operators/hostpathplugin@sha256:1c9e80d87a3b4bd52a3bd025dfae8b11bc23829cc6d16f52bd3d586b7573c987
           args:
             - "--drivername=hostpath.csi.k8s.io"
             - "--v=5"
