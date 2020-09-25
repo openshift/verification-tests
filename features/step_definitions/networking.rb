@@ -1157,20 +1157,14 @@ Given /^I install machineconfigs load-sctp-module$/ do
   end
 end
 
-Given /^I check load-sctp-module in #{NUMBER} workers$/ do | workers_num |
+Given /^I check load-sctp-module in all nodes$/ do 
   ensure_admin_tagged
   _admin = admin
-  $i = 0
-  $num = Integer(workers_num)
-  while $i < $num  do
-    step %Q{I run the :debug admin command with:}, table(%{
-      | resource     | node/<%= cb.workers[#$i].name %> |
-      | oc_opts_end  |                                  |
-      | exec_command | lsmod                            |
-    })
-    step %Q/the step should succeed/
-    step %Q/the outputs should contain "sctp"/
-    $i +=1
+  env.nodes.each do |node|
+    @result = node.host.exec_admin("lsmod \| grep sctp")
+    unless @result[:response].include? "sctp"
+      raise "no sctp module"
+    end
   end
 end
 
