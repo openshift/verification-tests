@@ -343,7 +343,7 @@ check_no_input_errors_to_required_aws_items:
     action: click_create_button
     elements:
         - selector:
-            xpath: //input[@id='account_id']/../div[text()=' Field is required']
+            xpath: //input[@id='account_id']/../div[text()=' AWS account ID is required.']
         - selector:
             xpath: //input[@id='access_key_id']/../div[text()=' Field is required']
         - selector:
@@ -378,17 +378,11 @@ input_aws_credentials:
     action: input_aws_secret_key
 
 check_invalid_aws_credential_error_message:
-    params:
-        account_id: invalidaccountid
-        aws_access_key: invalidaccesskey
-        aws_secret: invalidawssecret
-        error_reason: "The provided AWS credentials are not valid"
-        cluster_name: aws-test
-        machine_type: m5.xlarge
     action: input_aws_credentials
     action: fill_in_required_items_on_osd_creation_page
     action: click_create_button
     action: osd_creation_error_dialog_loaded
+    action: close_error_message_dialog
 
 region_dropdown_loaded:
     element: &region_dropdown
@@ -421,10 +415,19 @@ check_non_support_multi_az_region_error_message:
     action: osd_creation_page_loaded
     action: input_cluster_name_on_osd_creation_page
     action: select_multi_az
-    action: select_region
-    action: click_create_button
-    action: osd_creation_error_dialog_loaded
-    action: close_error_message_dialog
+    action: 
+        if_not_param: no_regions
+        ref: select_region
+    action: 
+        if_not_param: no_regions
+        ref: click_create_button
+    action:
+        if_not_param: no_regions
+        ref: osd_creation_error_dialog_loaded
+    action:
+        if_not_param: no_regions
+        ref: close_error_message_dialog
+
 check_persistent_storage_field_in_creation_page:
   elements:
   - selector:
@@ -593,3 +596,13 @@ check_gcp_compute_node_instances_type:
             xpath: //h4[text()='16 vCPU 32 GiB RAM']/../../div/div[text()='custom-16-32768']
         - selector:
             xpath: //h4[text()='16 vCPU 32 GiB RAM']/../../div/div[text()='Compute optimized']
+
+check_aws_account_id_error_message:
+    params:
+        locator_id: account_id
+    action: input_aws_account_id 
+    action: click_create_button
+    element:
+        selector:
+            xpath: //div[contains(text(), '<error_message>')]
+    action: clear_input

@@ -154,6 +154,10 @@ click_checkbox_from_provider_type:
   - selector:
       xpath: //form[@data-test-group-name='providerType']//*[contains(@class, 'pf-c-check__label') and contains(text(), '<text>')]
     op: click
+click_qe_customized_provider:
+  params:
+    text: OpenShift QE
+  action: click_checkbox_from_provider_type
 open_first_card_overlay_panel:
   action:
     if_element:
@@ -324,7 +328,7 @@ click_radio_to_pick_ns:
   params:
     text: Pick an existing namespace
   action: click_radio_input_by_text
-check_operator_purchase_link:
+check_customized_operator_purchase_link:
   params:
     text: Purchase
     link_url: https://test-remote-workflow/pricing

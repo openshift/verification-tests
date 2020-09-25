@@ -330,8 +330,6 @@ Given /^I wait for the networking components of the node to be terminated$/ do
 
   network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
   network_type = network_operator.network_type(user: admin)
-
-
   case network_type
   when "OpenShiftSDN"
     ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
@@ -623,7 +621,7 @@ Given /^I run command on the#{OPT_QUOTED} node's sdn pod:$/ do |node_name, table
       pod.node_name == node_name
     }.first
     cache_resources sdn_pod
-    @result = sdn_pod.exec(network_cmd, as: admin)
+    @result = sdn_pod.exec(network_cmd, container: "sdn", as: admin)
   when "OVNKubernetes"
     ovnkube_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
       pod.node_name == node_name
@@ -744,6 +742,8 @@ Given /^I run cmds on all ovs pods:$/ do | table |
     end
   end
   unless host_ovs
+    network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
+    network_type = network_operator.network_type(user: admin)
     case network_type
     when "OpenShiftSDN"
       ovs_pods = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin)

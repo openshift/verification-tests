@@ -102,7 +102,7 @@ check_popover_info:
 wait_resource_summary_loaded:
   elements:
   - selector:
-      xpath: //*[contains(@class,'co-m-pane__details') and @data-test-id='resource-summary']
+      xpath: //dl[contains(@class,'co-m-pane__details') and @data-test-id='resource-summary']
     timeout: 20
 click_open_popover:
   elements:

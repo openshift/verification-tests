@@ -190,6 +190,12 @@ check_customized_oc_download_links:
     text: 下载oc命令行
     link_url: mirror.openshift.com/pub/openshift-v4/clients/oc
   action: check_link_and_text
+check_customized_documentation_link_in_helpmenu:
+  params:
+    text: Documentation
+    link_url: <link_url>
+  action: click_help_button
+  action: check_link_and_text
 
 # --- links on navigator menu ---
 check_administration_menu_for_normal_user:

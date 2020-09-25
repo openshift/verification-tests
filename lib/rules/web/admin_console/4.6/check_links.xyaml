@@ -297,3 +297,16 @@ check_cluster_settings_menu:
     secondary_menu: Cluster Settings
   action: check_secondary_menu
 
+# --- links on oc download route ---
+check_items_on_downloads_route_page:
+  elements:
+  - selector:
+      xpath: //li/a[@href="amd64/linux/oc" and contains(text(), "amd64 linux")]
+  - selector:
+      xpath: //li/a[@href="amd64/mac/oc" and contains(text(), "amd64 mac")]
+  - selector:
+      xpath: //li/a[@href="amd64/mac/oc.zip" and contains(text(), "zip")]
+  - selector:
+      xpath: //li/a[@href="amd64/windows/oc.exe" and contains(text(), "amd64 windows")]
+  - selector:
+      xpath: //li/a[@href="amd64/windows/oc.exe.tar" and contains(text(), "tar")]

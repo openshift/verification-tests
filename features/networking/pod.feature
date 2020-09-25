@@ -456,7 +456,8 @@ Feature: Pod related networking scenarios
     Given I have a project
     And I have a pod-for-ping in the project
     Then evaluation of `pod.name` is stored in the :client_pod clipboard
-    Given I select a random node's host
+    Given I store the masters in the :masters clipboard
+    And I use the "<%= cb.masters[0].name %>" node
     #Making sure the iptables on latest centos are actually nf_tables as the xt_u32 is only supported with that
     When I run commands on the host:
       | iptables --version |
@@ -465,13 +466,13 @@ Feature: Pod related networking scenarios
 
     Given I obtain test data file "networking/centos_latest_admin.yaml"
     When I run oc create as admin over "centos_latest_admin.yaml" replacing paths:
-      | ["metadata"]["name"]      | server-pod          |
-      | ["metadata"]["namespace"] | <%= project.name %> |
+      | ["metadata"]["name"]      | server-pod                |
+      | ["metadata"]["namespace"] | <%= project.name %>       |
+      | ["spec"]["nodeName"]      | <%= cb.masters[0].name %> |
     Then the step should succeed
     And a pod becomes ready with labels:
       | name=centos-pod |
     Then evaluation of `pod` is stored in the :server_pod clipboard
-    Given I use the "<%= cb.server_pod.node_name %>" node
     #Enabling XT_u32 module on server pod's node
     And I run commands on the host:
       | modprobe xt_u32 |

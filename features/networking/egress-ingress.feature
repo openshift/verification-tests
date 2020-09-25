@@ -353,3 +353,114 @@ Feature: Egress-ingress related networking scenarios
       | /usr/bin/curl | -k | <%= cb.service_url %> |
     Then the output should contain:
       | Hello OpenShift |
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-33530
+  @admin
+  Scenario: [SDN-682] EgressFirewall allows traffic to destination ports
+    Given I have a project
+    Given I have a pod-for-ping in the project
+
+    And evaluation of `BushSlicer::Common::Net.dns_lookup("yahoo.com")` is stored in the :yahoo_ip clipboard
+    And evaluation of `BushSlicer::Common::Net.dns_lookup("www.google.com")` is stored in the :google_ip clipboard
+    And evaluation of `IPAddr.new("<%= cb.google_ip %>/24")` is stored in the :google_base_network clipboard
+    When I obtain test data file "networking/ovn-egressfirewall/egressfirewall-policy1.yaml"
+    When I run oc create as admin over "egressfirewall-policy1.yaml" replacing paths:
+      | ["spec"]["egress"][0]["to"]["cidrSelector"] | <%= cb.yahoo_ip %>/32            |
+      | ["spec"]["egress"][1]["to"]["cidrSelector"] | <%= cb.google_base_network %>/24 |
+      | ["metadata"]["namespace"]                   | <%= project.name %>              |
+    Then the step should succeed
+
+    # Check curl from pod
+    When I execute on the pod:
+      | curl | --connect-timeout | 5 | --head | <%= cb.yahoo_ip %>:80 |
+    Then the step should succeed
+    When I execute on the pod:
+      | curl | -k | --connect-timeout | 5 | --head | https://<%= cb.yahoo_ip %>:443 |
+    Then the step should succeed
+    When I execute on the pod:
+      | curl | --connect-timeout | 5 | --head | <%= cb.google_ip %>:80 |
+    Then the step should succeed
+    When I execute on the pod:
+      | curl | -k | --connect-timeout | 5 | --head | https://<%= cb.google_ip %>:443 |
+    Then the step should fail
+    When I execute on the pod:
+      | curl | --connect-timeout | 5 | --head | www.test.com |
+    Then the step should fail
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-33531
+  @admin
+  Scenario:  [SDN-682] EgressFirewall rules take effect in order
+    Given I have a project
+    Given I have a pod-for-ping in the project
+
+    And evaluation of `BushSlicer::Common::Net.dns_lookup("yahoo.com")` is stored in the :yahoo_ip clipboard
+    When I obtain test data file "networking/ovn-egressfirewall/egressfirewall-policy2.yaml"
+    When I run oc create as admin over "egressfirewall-policy2.yaml" replacing paths:
+      | ["spec"]["egress"][1]["to"]["cidrSelector"] | <%= cb.yahoo_ip %>/32 |
+      | ["metadata"]["namespace"]                   | <%= project.name %>   |
+    Then the step should succeed
+
+    # Check curl from pod
+    When I execute on the pod:
+      | curl | --connect-timeout | 5 | --head | <%= cb.yahoo_ip %>:80 |
+    Then the step should fail
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-33539
+  @admin
+  Scenario:  [SDN-682] EgressFirewall policy should not take effect for traffic between pods and pods to service
+    Given I have a project
+    # Create EgressFirewall policy to deny all outbound traffic
+    When I obtain test data file "networking/ovn-egressfirewall/limit_policy.json"
+    And I run the :create admin command with:
+      | f | limit_policy.json   |
+      | n | <%= project.name %> |
+
+    # Create svc/pods
+    Given I obtain test data file "networking/list_for_pods.json"
+    When I run oc create over "list_for_pods.json" replacing paths:
+      | ["items"][0]["spec"]["replicas"] | 1 |
+    Then the step should succeed
+    Given 1 pod becomes ready with labels:
+      | name=test-pods |
+    And evaluation of `service("test-service").url` is stored in the :svc_url clipboard
+    And evaluation of `pod(0).ip_url` is stored in the :pod_ip clipboard
+
+    #The connection between pods and pods to svc should succeed
+    Given I have a pod-for-ping in the project
+    When I execute on the pod:
+      | /usr/bin/curl | -k | <%= cb.svc_url %> |
+    Then the output should contain:
+      | Hello OpenShift |
+    When I execute on the pod:
+      | /usr/bin/curl | --connect-timeout | 5 | <%= cb.pod_ip %>:8080 |
+    Then the output should contain:
+      | Hello OpenShift |
+
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-33565
+  @admin
+  Scenario: [SDN-682] EgressFirewall policy take effect for multiple port
+    Given I have a project
+    Given I have a pod-for-ping in the project
+
+    And evaluation of `BushSlicer::Common::Net.dns_lookup("yahoo.com")` is stored in the :yahoo_ip clipboard
+    When I obtain test data file "networking/ovn-egressfirewall/egressfirewall-policy3.yaml"
+    When I run oc create as admin over "egressfirewall-policy3.yaml" replacing paths:
+      | ["spec"]["egress"][0]["to"]["cidrSelector"] | <%= cb.yahoo_ip %>/32 |
+      | ["metadata"]["namespace"]                   | <%= project.name %>   |
+    Then the step should succeed
+
+    # Check curl from pod
+    When I execute on the pod:
+      | curl | --connect-timeout | 5 | --head | <%= cb.yahoo_ip %>:80 |
+    Then the step should succeed
+    When I execute on the pod:
+      | curl | -k | --connect-timeout | 5 | --head | https://<%= cb.yahoo_ip %>:443 |
+    Then the step should succeed
+    When I execute on the pod:
+      | curl | --connect-timeout | 5 | --head | www.test.com |
+    Then the step should fail

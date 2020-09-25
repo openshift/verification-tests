@@ -234,6 +234,11 @@ set_placeholder_input:
       <<: *placeholder_input
     op: send_keys <input_value>
     type: input
+click_label_dropdown_button:
+  element:
+    selector:
+      xpath: //label[contains(text(),'<label_text>')]/following::button[1][contains(@class,'dropdown')]
+    op: click
 check_editor_is_monaco_editor:
   element:
     selector:
@@ -298,6 +303,7 @@ click_kebab_item:
   element:
     selector:
       xpath: //button[contains(@class,'pf-c-dropdown__menu-item') and not(contains(@class,'pf-m-disabled')) and text()='<kebab_item>']
+    timeout: 20
     op: click
 click_kebab_of_one_resource:
   elements:

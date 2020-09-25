@@ -173,6 +173,16 @@ module BushSlicer
       raw_resource(user: user, cached: cached, quiet: quiet).dig('spec', 'externalID')
     end
 
+    def region(user: nil, cached: true, quiet: false)
+      raw_resource(user: user, cached: cached, quiet: quiet).
+        dig('metadata', 'labels', 'failure-domain.beta.kubernetes.io/region')
+    end
+
+    def zone(user: nil, cached: true, quiet: false)
+      raw_resource(user: user, cached: cached, quiet: quiet).
+        dig('metadata', 'labels', 'failure-domain.beta.kubernetes.io/zone')
+    end
+
     def pods(user: nil, cached: true, quiet: false)
       unless cached && props[:pods]
         get_opts = {

@@ -328,3 +328,32 @@ Feature: Machine features testing
       | attempting to acquire leader lease  openshift-machine-api/cluster-api-provider |
     """
 
+  # @author zhsun@redhat.com
+  # @case_id OCP-34718
+  @admin
+  Scenario: Node labels and Affinity definition in PV should match	
+    Given I have a project
+
+    # Create a pvc
+    Given I obtain test data file "cloud/pvc-34718.yml"
+    When I run the :create client command with:
+      | f | pvc-34718.yml |
+    Then the step should succeed
+
+    # Create a pod
+    Given I obtain test data file "cloud/pod-34718.yml"
+    When I run the :create client command with:
+      | f | pod-34718.yml |
+    Then the step should succeed
+
+    #Check node labels and affinity definition in PV are match
+    Given the pod named "task-pv-pod" becomes ready
+    And I use the "<%= pod.node_name %>" node
+    And evaluation of `node.region` is stored in the :default_region clipboard
+    And evaluation of `node.zone` is stored in the :default_zone clipboard
+    When I run the :describe admin command with:
+      | resource | pv |
+    Then the step should succeed
+    And the output should contain:
+      | failure-domain.beta.kubernetes.io/zone in [<%= cb.default_zone %>]     |
+      | failure-domain.beta.kubernetes.io/region in [<%= cb.default_region %>] |
