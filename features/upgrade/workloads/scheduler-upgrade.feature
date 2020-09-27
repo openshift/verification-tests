@@ -35,9 +35,9 @@ Feature: scheduler with custom policy upgrade check
     Given evaluation of `@pods[0].name` is stored in the :schedulerpod clipboard
     When I run the :logs client command with:
       | resource_name | pod/<%=cb.schedulerpod %> |
+      | c             | kube-scheduler            |
     And the output should contain:
       | map[CheckNodeUnschedulable:{} CheckVolumeBinding:{} GeneralPredicates:{} MatchInterPodAffinity:{} MaxAzureDiskVolumeCount:{} MaxCSIVolumeCountPred:{} MaxEBSVolumeCount:{} MaxGCEPDVolumeCount:{} NoDiskConflict:{} NoVolumeZoneConflict:{} PodToleratesNodeTaints:{}] |
-      | map[BalancedResourceAllocation:1 ImageLocalityPriority:1 InterPodAffinityPriority:1 LeastRequestedPriority:1 NodeAffinityPriority:1 NodePreferAvoidPodsPriority:1 SelectorSpreadPriority:1 TaintTolerationPriority:1]                                                  |
 
 
   # @author knarra@redhat.com
@@ -64,6 +64,6 @@ Feature: scheduler with custom policy upgrade check
     Given evaluation of `@pods[0].name` is stored in the :schedulerpod clipboard
     When I run the :logs client command with:
       | resource_name | pod/<%=cb.schedulerpod %> |
+      | c             | kube-scheduler            |
     And the output should contain:
       | map[CheckNodeUnschedulable:{} CheckVolumeBinding:{} GeneralPredicates:{} MatchInterPodAffinity:{} MaxAzureDiskVolumeCount:{} MaxCSIVolumeCountPred:{} MaxEBSVolumeCount:{} MaxGCEPDVolumeCount:{} NoDiskConflict:{} NoVolumeZoneConflict:{} PodToleratesNodeTaints:{}] |
-      | map[BalancedResourceAllocation:1 ImageLocalityPriority:1 InterPodAffinityPriority:1 LeastRequestedPriority:1 NodeAffinityPriority:1 NodePreferAvoidPodsPriority:1 SelectorSpreadPriority:1 TaintTolerationPriority:1]                                                  |
