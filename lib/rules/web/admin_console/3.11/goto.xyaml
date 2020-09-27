@@ -9,7 +9,9 @@ goto_resource_page_under_default_project:
 # builds
 goto_one_buildconfig_page:
   url: k8s/ns/<project_name>/buildconfigs/<bc_name>
-
+goto_one_build_page:
+  url: k8s/ns/<project_name>/builds/<build_name>
+  
 # configmaps
 goto_configmaps_page:
   url: k8s/ns/<project_name>/configmaps
@@ -49,7 +51,9 @@ goto_storageclass_page:
 # deployment
 goto_deployment_page:
   url: k8s/ns/<project_name>/deployments
+  action: wait_box_loaded
 goto_one_deployment_page:
   url: k8s/ns/<project_name>/deployments/<deploy_name>
+  action: wait_box_loaded
 goto_one_dc_page:
   url: k8s/ns/<project_name>/deploymentconfigs/<dc_name>
