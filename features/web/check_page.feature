@@ -31,11 +31,9 @@ Feature: check page info related
     When I run the :new_project client command with:
       | project_name | <%= cb.prj_name %> |
     Then the step should succeed
-    When I run the :check_project_list web console action
+    When I perform the :check_specific_project web console action with:
+      | project_name | <%= cb.prj_name %> |
     Then the step should succeed
-    When I get the html of the web page
-    Then the output should contain:
-      | <%= cb.prj_name %> |
 
   # @author yanpzhan@redhat.com
   # @case_id OCP-11219
