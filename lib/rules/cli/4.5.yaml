@@ -447,6 +447,8 @@
     :keys: --keys=<value>
     :resource: <value>
     :to: --to=<value>
+:get_raw:
+  :cmd: oc get --raw <resource>
 :get:
   :cmd: oc get <resource>
   :options:
