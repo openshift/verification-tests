@@ -8,7 +8,7 @@ check_list_heading_shown:
     selector:
       xpath: //button[contains(@class,'co-resource-item__resource-name') and text()='<heading>']
 check_list_item:
-  elements: 
+  elements:
   - selector: &overview_item
       xpath: //button[contains(@class,'co-resource-item__resource-name') and text()='<resource_name>']/ancestor::div[contains(@class,'project-overview__item--<resource_kind>')]
 check_pod_number:
@@ -51,7 +51,7 @@ check_dc_available_action_menus:
   - selector:
       xpath: //li//button[@data-test-action='Start Rollout']
   - selector:
-      xpath: //li//button[@data-test-action='Pause Rollouts']      
+      xpath: //li//button[@data-test-action='Pause Rollouts']
   - selector:
       xpath: //li//button[@data-test-action='Edit Count']
   - selector:
@@ -126,3 +126,53 @@ group_by_label:
     dropdown_menu_item: <label>
   action: click_groupby_dropdown_button
   action: click_dropdown_menu_item
+send_key_to_workloads:
+  element:
+    selector:
+      xpath: //a[contains(text(),'Workloads')]
+    op: send_keys <key>
+check_workload_selected:
+  elements:
+  - selector:
+      xpath: //div[@class='list-group-item project-overview__item project-overview__item--<workload> project-overview__item--selected']
+check_workload_name:
+  elements:
+  - selector:
+      xpath: //div[@class='resource-overview__summary']//dt[text()='Name']
+  - selector:
+      xpath: //div[@class='resource-overview__summary']//dd[text()='<workload_name>']
+check_hint_missing_on_filter:
+  elements:
+  - selector:
+      xpath: //span[@class='form-control-feedback form-control-feedback--keyboard-hint']//kbd
+    missing: true
+check_workload_sidebar_missing:
+  elements:
+  - selector:
+      xpath: //div[@class='overview__sidebar overview__sidebar-enter-done']
+    missing: true
+check_shortcuts_on_workloads:
+  params:
+    workload: <workload>
+    workload_name: <workload_name>
+    keys: <key>
+  action: click_workloads_tab
+  action: send_key_to_workloads
+  action: check_workload_selected
+  action: click_workload_details
+  action: check_workload_name
+check_escape_on_workloads:
+  params:
+    keys: <key>
+  action: click_workloads_tab
+  action: send_key_to_workloads
+  action: check_workload_sidebar_missing
+check_filter_on_workloads:
+  params:
+    workload: <workload>
+    workload_name: <workload_name>
+    workload_name: <missing_workload_name>
+    keys: <key>
+  action: click_workloads_tab
+  action: send_key_to_workloads
+  action: check_hint_missing_on_filter
