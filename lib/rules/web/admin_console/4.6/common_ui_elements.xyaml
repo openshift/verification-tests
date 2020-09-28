@@ -73,7 +73,7 @@ check_button_title:
     selector:
       xpath: //button[@title='<button_title>']
 check_kebab_items_disabled:
-  elements: 
+  elements:
   - selector:
       xpath: //button[contains(@class, 'pf-c-dropdown__menu-item') and not(contains(@class, 'pf-m-disabled'))]
     missing: true
@@ -270,7 +270,7 @@ click_on_resource_item:
 check_resource_item_name:
   element:
     selector:
-      <<: *data_test_id 
+      <<: *data_test_id
     timeout: 20
 wait_dropdown_loaded:
   element:
@@ -383,7 +383,7 @@ check_cpu_column_header:
 check_resource_name_and_icon:
   action:
     if_param: service_name
-    ref: check_service_name_and_icon 
+    ref: check_service_name_and_icon
   action:
     if_param: buildconfig_name
     ref: check_buildconfig_name_and_icon
@@ -688,7 +688,7 @@ check_alert_message:
   action:
     if_param: description
     ref: check_alert_description
-    
+
 ## -------- check resource key and values pairs ------
 check_resource_details:
   action:
@@ -1100,3 +1100,11 @@ check_hpa_max_replicas:
     key: Max Replicas
     value: <max_replicas>
   action: check_resource_details_key_and_value
+click_workloads_tab:
+  params:
+    tab_name: Workloads
+  action: click_tab
+click_workload_details:
+  params:
+    button_text: Details
+  action: click_button_text
