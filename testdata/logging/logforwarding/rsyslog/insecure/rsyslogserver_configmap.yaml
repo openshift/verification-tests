@@ -18,4 +18,5 @@ data:
       if $msg contains "namespace_name=openshift" or $msg contains "namespace_name=default" or $msg contains "namespace_name=kube" then /var/log/custom/infra-container.log
       if not ($msg contains "namespace_name=openshift" or $msg contains "namespace_name=default" or $msg contains "namespace_name=kube") then /var/log/custom/app-container.log
     }
-    :programname, !contains, "kubernetes.var.log.containers" /var/log/custom/infra.log
+    :programname, contains, "journal.system" /var/log/custom/infra.log
+    :programname, contains, "k8s-audit.log" /var/log/custom/audit.log

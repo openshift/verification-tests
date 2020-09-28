@@ -2,25 +2,17 @@ Given /^I run the ovs commands on the host:$/ do | table |
   ensure_admin_tagged
   _host = node.host
   ovs_cmd = table.raw.flatten.join
-  if _host.exec_admin("ovs-vsctl --version")[:response].include? "Open vSwitch"
-    logger.info("environment using rpm to launch openvswitch")
-  elsif _host.exec_admin("docker ps")[:response].include? "openvswitch"
-    logger.info("environment using docker to launch openvswith")
-    container_id = _host.exec_admin("docker ps | grep openvswitch | cut -d' ' -f1")[:response].chomp
-    ovs_cmd = "docker exec #{container_id} " + ovs_cmd
-  elsif _host.exec_admin("runc list")[:response].include? "openvswitch"
-    logger.info("environment using runc to launch openvswith")
-    ovs_cmd = "runc exec openvswitch " + ovs_cmd
-  # For 3.10 and runc env, should get containerID from the pod which landed on the node
-  elsif env.version_ge("3.10", user: user)
+  # check if the service is enabled and not if it is active, because it might be failed
+  if BushSlicer::Platform::SystemdService.enabled?("openvswitch.service", _host)
+    logger.info("environment using systemd to launch openvswitch")
+  else
+    # For >=3.10 and runc env, should get containerID from the pod which landed on the node
     logger.info("OCP version >= 3.10 and environment may using runc to launch openvswith")
     ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
       pod.node_name == node.name
     }.first
     container_id = ovs_pod.containers.first.id
     ovs_cmd = "runc exec #{container_id} " + ovs_cmd
-  else
-    raise "Cannot find the ovs command"
   end
   @result = _host.exec_admin(ovs_cmd)
 end
@@ -92,7 +84,7 @@ Given /^the network plugin is switched on the#{OPT_QUOTED} node$/ do |node_name|
   ensure_admin_tagged
 
   node_config = node(node_name).service.config
-  config_hash = node_config.as_hash()
+  config_hash = node_config.as_hash
   if config_hash["networkConfig"]["networkPluginName"].include?("subnet")
     config_hash["networkConfig"]["networkPluginName"] = "redhat/openshift-ovs-multitenant"
     logger.info "Switch plguin to multitenant from subnet"
@@ -112,8 +104,8 @@ Given /^the#{OPT_QUOTED} node network is verified$/ do |node_name|
   net_verify = proc {
     # to simplify the process, ping all node's tun0 IP including the node itself, even test env has only one node
     hostsubnet = BushSlicer::HostSubnet.list(user: admin)
-    hostsubnet.each do | hostsubnet |
-      dest_ip = IPAddr.new(hostsubnet.subnet).succ
+    hostsubnet.each do |hs|
+      dest_ip = IPAddr.new(hs.subnet).succ
       @result = _host.exec("ping -c 2 -W 2 #{dest_ip}")
       raise "failed to ping tun0 IP: #{dest_ip}" unless @result[:success]
     end
@@ -239,15 +231,22 @@ Given /^the#{OPT_QUOTED} node standard iptables rules are completely flushed$/ d
   _admin = admin
 
   tables = %w(filter mangle nat raw security)
-  tables.each { |table|
 
-    @result = _host.exec("iptables -t #{table} -F")
-    raise "failed to flush iptables table #{table}" unless @result[:success]
-    @result = _host.exec("iptables -t #{table} -X")
-    # ignore any chain delete errors for now and just see if it triggers the iptableSync
-    # raise "failed to delete iptables chain #{table}" unless @result[:success]
-    # iptables v1.8.4 (nf_tables):  CHAIN_USER_DEL failed (Device or resource busy): chain KUBE-MARK-MASQ
-  }
+  # try to batch all the changes to make it atomic to try to prevent network issues with debug node
+  flush_chain = tables.map { |table|
+    "iptables -t #{table} -F"
+  }.join(" ; ")
+  # Flush all the chains first, then delete to prevent reference issues
+  # There must be no references to the chain.
+  # If there are, you must delete or replace the referring rules before the chain can be deleted.
+  # The chain must be empty, i.e. not contain any rules.
+  delete_chain = tables.map { |table|
+    "iptables -t #{table} -X"
+  }.join(" ; ")
+  @result = _host.exec(flush_chain + " ; " + delete_chain)
+  # ignore any chain delete errors for now and just see if it triggers the iptableSync, e.g.
+  # iptables v1.8.4 (nf_tables):  CHAIN_USER_DEL failed (Device or resource busy): chain KUBE-MARK-MASQ
+  raise "failed to flush iptables chains" unless @result[:success]
 end
 
 Given /^admin adds( and overwrites)? following annotations to the "(.+?)" netnamespace:$/ do |overwrite, netnamespace, table|
@@ -309,6 +308,7 @@ Given /^the cluster network plugin type and version and stored in the clipboard$
   ensure_admin_tagged
   _host = node.host
 
+  # TODO: this should be run OVS command
   step %Q/I run command on the node's sdn pod:/, table([["ovs-ofctl"],["dump-flows"],["br0"],["-O"],["openflow13"]])
   unless @result[:success]
     raise "Unable to execute ovs command successfully. Check your command."
@@ -322,44 +322,79 @@ end
 
 Given /^I wait for the networking components of the node to be terminated$/ do
   ensure_admin_tagged
+  _host = node.host
+  _admin = admin
 
-  if env.version_ge("3.10", user: user)
-    sdn_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
-      pod.node_name == node.name
-    }.first
+  # This step is used when deleteing a node to make sure the Pods are deleted
+  # A deleted node does not affect the host OVS state, so we don't do anything with host OVS
 
+  network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
+  network_type = network_operator.network_type(user: admin)
+  case network_type
+  when "OpenShiftSDN"
     ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
       pod.node_name == node.name
     }.first
+    net_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: _admin) { |pod, hash|
+      pod.node_name == node.name
+    }.first
+  when "OVNKubernetes"
+    ovs_pod = BushSlicer::Pod.get_labeled("app=ovs-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
+      pod.node_name == node.name
+    }.first
+    net_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
+      pod.node_name == node.name
+    }.first
+  else
+    raise "unknown network_type"
+  end
 
-    unless sdn_pod.nil?
-      @result = sdn_pod.wait_till_not_ready(user, 3 * 60)
-      unless @result[:success]
-        logger.error(@result[:response])
-        raise "sdn pod on the node did not die"
-      end
-    end
-
-    unless ovs_pod.nil?
-      @result = ovs_pod.wait_till_not_ready(user, 60)
-      unless @result[:success]
-        logger.error(@result[:response])
-        raise "ovs pod on the node did not die"
-      end
+  unless ovs_pod.nil?
+    # for host OVS deleteing the OVS pods has no effect.
+    @result = ovs_pod.wait_till_not_ready(user, 60)
+    unless @result[:success]
+      logger.error(@result[:response])
+      raise "ovs pod on the node did not die"
     end
   end
+
+  unless net_pod.nil?
+    @result = net_pod.wait_till_not_ready(user, 3 * 60)
+    unless @result[:success]
+      logger.error(@result[:response])
+      raise "#{net_pod.name} pod on the node did not die"
+    end
+  end
+
 end
 
 Given /^I wait for the networking components of the node to become ready$/ do
   ensure_admin_tagged
   _admin = admin
 
-  if env.version_ge("3.10", user: user)
-    sdn_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
-      pod.node_name == node.name
-    }.first
+  _host = node.host
+  if BushSlicer::Platform::SystemdService.enabled?("openvswitch.service", _host)
+    logger.info("environment using systemd to launch openvswitch")
+    BushSlicer::Platform::SystemdService.new("openvswitch.service", _host).start
+    BushSlicer::Platform::SystemdService.new("ovsdb-server.service", _host).status[:success]
+  else
 
     ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
+      pod.node_name == node.name
+    }.first
+    @result = ovs_pod.wait_till_ready(_admin, 60)
+    unless @result[:success]
+      logger.error(@result[:response])
+      raise "ovs pod on the node did not become ready"
+    end
+  end
+
+  network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
+  network_type = network_operator.network_type(user: admin)
+  case network_type
+  when "OpenShiftSDN"
+
+    sdn_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
       pod.node_name == node.name
     }.first
 
@@ -368,14 +403,24 @@ Given /^I wait for the networking components of the node to become ready$/ do
       logger.error(@result[:response])
       raise "sdn pod on the node did not become ready"
     end
+    cache_resources sdn_pod
     cb.sdn_pod = sdn_pod
-
-    @result = ovs_pod.wait_till_ready(_admin, 60)
+  when "OVNKubernetes"
+    ovnkube_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
+      pod.node_name == node.name
+    }.first
+    cache_resources ovnkube_pod
+    @result = ovnkube_pod.wait_till_ready(_admin, 3 * 60)
     unless @result[:success]
       logger.error(@result[:response])
-      raise "ovs pod on the node did not become ready"
+      raise "ovnkube pod on the node did not become ready"
     end
+    cache_resources ovnkube_pod
+    cb.ovnkube_pod = ovnkube_pod
+  else
+    raise "unknown network_type"
   end
+
 end
 
 Given /^I restart the openvswitch service on the node$/ do
@@ -383,15 +428,26 @@ Given /^I restart the openvswitch service on the node$/ do
   _host = node.host
   _admin = admin
 
-  # For 3.10 version, should delete the ovs container to restart service
-  if env.version_ge("3.10", user: user)
-    logger.info("OCP version >= 3.10")
-    ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
-      pod.node_name == node.name
-    }.first
-    @result = ovs_pod.ensure_deleted(user: _admin)
+  if BushSlicer::Platform::SystemdService.new("openvswitch.service", _host).enabled?
+    logger.info("environment using systemd to launch openvswitch")
+    # restarting openvswitch will restart the dependent services ovsdb-server and ovs-vswitchd
+    BushSlicer::Platform::SystemdService.new("openvswitch.service", _host).restart
   else
-    @result = _host.exec_admin("systemctl restart openvswitch")
+    network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
+    network_type = network_operator.network_type(user: admin)
+    case network_type
+    when "OpenShiftSDN"
+      ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
+        pod.node_name == node.name
+      }.first
+    when "OVNKubernetes"
+      ovs_pod = BushSlicer::Pod.get_labeled("app=ovs-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
+        pod.node_name == node.name
+      }.first
+    else
+      raise "unknown network_type"
+    end
+    @result = ovs_pod.ensure_deleted(user: _admin)
   end
 
   unless @result[:success]
@@ -405,16 +461,21 @@ Given /^I restart the network components on the node( after scenario)?$/ do |aft
   _node = node
 
   restart_network = proc {
-    # For 3.10 version, should delete the sdn pod to restart network components
-    if env.version_ge("3.10", user: user)
-      logger.info("OCP version >= 3.10")
-      sdn_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: _admin) { |pod, hash|
-        pod.node_name == _node.name
-      }.first
-      @result = sdn_pod.ensure_deleted(user: _admin)
-    else
-      step "the node service is restarted on the host"
-    end
+      network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
+      network_type = network_operator.network_type(user: _admin)
+      case network_type
+      when "OpenShiftSDN"
+        net_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: _admin) { |pod, hash|
+          pod.node_name == _node.name
+        }.first
+      when "OVNKubernetes"
+        net_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
+          pod.node_name == _node.name
+        }.first
+      else
+        raise "unknown network_type"
+      end
+      @result = net_pod.ensure_deleted(user: _admin)
   }
 
   if after
@@ -427,14 +488,23 @@ end
 
 Given /^I get the networking components logs of the node since "(.+)" ago$/ do | duration |
   ensure_admin_tagged
+  _admin = admin
 
-  if env.version_ge("3.10", user: user)
+  network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
+  network_type = network_operator.network_type(user: admin)
+  case network_type
+  when "OpenShiftSDN"
     sdn_pod = cb.sdn_pod || BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
       pod.node_name == node.name
     }.first
-    @result = admin.cli_exec(:logs, resource_name: sdn_pod.name, n: "openshift-sdn", since: duration)
+    @result = admin.cli_exec(:logs, resource_name: sdn_pod.name, n: "openshift-sdn", c: "sdn", since: duration)
+  when "OVNKubernetes"
+    ovnkube_pod = cb.ovnkube_pod || BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
+      pod.node_name == node_name
+    }.first
+    @result = admin.cli_exec(:logs, resource_name: ovnkube_pod.name, n: "openshift-ovn-kubernetes", since: duration)
   else
-    @result = node.host.exec_admin("journalctl -l -u kubelet --since \"#{duration} ago\" \| grep -E 'controller.go\|network.go'")
+    raise "unknown network_type"
   end
 end
 
@@ -459,8 +529,9 @@ Given /^I store a random unused IP address from the reserved range to the#{OPT_S
 
   reserved_range = "#{cb.subnet_range}"
 
-  validate_ip = IPAddr.new(reserved_range).to_range.to_a.shuffle.each { |ip|
-    @result = step "I run command on the node's ovs pod:", table(
+  # use the sdn pod instead of the ovs pod since we have switched to host OVS
+  IPAddr.new(reserved_range).to_range.to_a.shuffle.each { |ip|
+    @result = step "I run command on the node's sdn pod:", table(
       "| ping | -c4 | -W2 | #{ip} |"
     )
     if @result[:exitstatus] == 0
@@ -542,34 +613,64 @@ Given /^I run command on the#{OPT_QUOTED} node's sdn pod:$/ do |node_name, table
   network_cmd = table.raw
   node_name ||= node.name
   _admin = admin
-   @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
-  if @result[:response] == "OpenShiftSDN"
-     sdn_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
-       pod.node_name == node_name
-     }.first
-     cache_resources sdn_pod
-     @result = sdn_pod.exec(network_cmd, as: admin)
+  network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
+  network_type = network_operator.network_type(user: admin)
+  case network_type
+  when "OpenShiftSDN"
+    sdn_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
+      pod.node_name == node_name
+    }.first
+    cache_resources sdn_pod
+    @result = sdn_pod.exec(network_cmd, container: "sdn", as: admin)
+  when "OVNKubernetes"
+    ovnkube_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
+      pod.node_name == node_name
+    }.first
+    cache_resources ovnkube_pod
+    @result = ovnkube_pod.exec(network_cmd, as: admin)
   else
-     ovnkube_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
-       pod.node_name == node_name
-     }.first
-     cache_resources ovnkube_pod
-     @result = ovnkube_pod.exec(network_cmd, as: admin)
-   end
-  raise "Failed to execute network command!" unless @result[:success]
+    raise "unknown network_type"
+  end
+  # Don't check success here, let the testcase do thad
 end
 
 Given /^I restart the ovs pod on the#{OPT_QUOTED} node$/ do | node_name |
   ensure_admin_tagged
   ensure_destructive_tagged
+  node_name ||= node.name
+  _host = node(node_name).host
+  _admin = admin
 
-  ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
-    pod.node_name == node_name
-  }.first
-  @result = ovs_pod.ensure_deleted(user: admin)
-  unless @result[:success]
-    raise "Fail to delete the ovs pod"
+  # OVS is now running on the host, we have to restart OVS on the host
+  if BushSlicer::Platform::SystemdService.enabled?("openvswitch.service", _host)
+    logger.info("environment using systemd to launch openvswitch")
+    # restarting openvswitch will restart the dependent services ovsdb-server and ovs-vswitchd
+    @result = BushSlicer::Platform::SystemdService.new("openvswitch.service", _host).restart
+    unless @result[:success]
+      raise "Failed to restart the openvswitch service"
+    end
+  else
+    # if we have host openvswitch don't delete the pods because they might fail if ovsdb-server is not active yet
+    network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
+    network_type = network_operator.network_type(user: admin)
+    case network_type
+    when "OpenShiftSDN"
+      ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
+        pod.node_name == node_name
+      }.first
+    when "OVNKubernetes"
+      ovs_pod = BushSlicer::Pod.get_labeled("app=ovs-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
+        pod.node_name == node_name
+      }.first
+    else
+      raise "unknown network_type"
+    end
+    @result = ovs_pod.ensure_deleted(user: _admin)
+    unless @result[:success]
+      raise "Failed to delete the ovs pod"
+    end
   end
+
 end
 
 Given /^the default interface on nodes is stored in the#{OPT_SYM} clipboard$/ do |cb_name|
@@ -577,18 +678,16 @@ Given /^the default interface on nodes is stored in the#{OPT_SYM} clipboard$/ do
   _admin = admin
   step "I select a random node's host"
   cb_name ||= "interface"
-  @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
-  if @result[:success] then
-     networkType = @result[:response].strip
-  end
-  case networkType
+  network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
+  network_type = network_operator.network_type(user: admin)
+  case network_type
   when "OVNKubernetes"
     # use -4 to limit output to just `default` interface, fixed in later iproute2 versions
     step %Q/I run command on the node's ovnkube pod:/, table("| ip | -4 | route | show | default |")
   when "OpenShiftSDN"
     step %Q/I run command on the node's sdn pod:/, table("| ip | -4 | route | show | default |")
   else
-    raise "unknown networkType"
+    raise "unknown network_type"
   end
   # OVN uses `br-ex` and `-` is not a word char, so we have to split on whitespace
   cb[cb_name] = @result[:response].split("\n").first.split[4]
@@ -632,23 +731,66 @@ Given /^I run cmds on all ovs pods:$/ do | table |
   ensure_admin_tagged
   network_cmd = table.raw
 
-  ovs_pods = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin)
-  ovs_pods.each do |pod|
-    @result = pod.exec(network_cmd, as: admin)
-    raise "Failed to execute network command!" unless @result[:success]
+  # If we have host ovs don't use the pods
+  host_ovs = false
+  env.nodes.each do |n|
+    if BushSlicer::Platform::SystemdService.enabled?("openvswitch.service", n.host)
+      logger.info("environment using systemd to launch openvswitch")
+      host_ovs ||= true
+      @result = n.host.exec_admin(network_cmd.flatten.join(" "))
+      raise "Failed to execute network command!" unless @result[:success]
+    end
+  end
+  unless host_ovs
+    network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
+    network_type = network_operator.network_type(user: admin)
+    case network_type
+    when "OpenShiftSDN"
+      ovs_pods = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin)
+    when "OVNKubernetes"
+      ovs_pods = BushSlicer::Pod.get_labeled("app=ovs-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin)
+    else
+      raise "unknown network_type"
+    end
+    ovs_pods.each do |pod|
+      @result = pod.exec(network_cmd, as: admin)
+      raise "Failed to execute network command!" unless @result[:success]
+    end
   end
 end
 
+# WARNING: Starting in 4.6 OVS runs on the host.  This step will detect automatically
 Given /^I run command on the#{OPT_QUOTED} node's ovs pod:$/ do |node_name, table|
   ensure_admin_tagged
   network_cmd = table.raw
   node_name ||= node.name
 
-  ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
-     pod.node_name == node_name
-   }.first
-  cache_resources ovs_pod
-  @result = ovs_pod.exec(network_cmd, as: admin)
+  _admin = admin
+  _host = node(node_name).host
+  # OVS is now running on the host, we have to restart OVS on the host
+  if BushSlicer::Platform::SystemdService.enabled?("openvswitch.service",_host)
+    logger.info("environment using systemd to launch openvswitch")
+    @result = _host.exec_admin(network_cmd.flatten.join(" "))
+  else
+    # if we have host openvswitch don't delete the pods because they might fail if ovsdb-server is not active yet
+    network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
+    network_type = network_operator.network_type(user: admin)
+    case network_type
+    when "OpenShiftSDN"
+      ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
+        pod.node_name == node_name
+      }.first
+    when "OVNKubernetes"
+      ovs_pod = BushSlicer::Pod.get_labeled("app=ovs-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
+        pod.node_name == node_name
+      }.first
+    else
+      raise "unknown network_type"
+    end
+    cache_resources ovs_pod
+    @result = ovs_pod.exec(network_cmd, as: admin)
+  end
+  # Don't check success here, let the testcase do thad
 end
 
 Given /^the subnet for primary interface on node is stored in the#{OPT_SYM} clipboard$/ do |cb_name|
@@ -667,8 +809,8 @@ end
 Given /^the env is using "([^"]*)" networkType$/ do |network_type|
   ensure_admin_tagged
   _admin = admin
-  @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
-  raise "the networkType is not #{network_type}" unless @result[:response] == network_type
+  network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
+  raise "the networkType is not #{network_type}" unless network_operator.network_type(user: _admin) == network_type
 end
 
 Given /^the env is using windows nodes$/ do
@@ -734,42 +876,37 @@ Given /^a DHCP service is deconfigured on the "([^"]*)" node$/ do |node_name|
   }
 end
 
-Given /^the vxlan tunnel name of node "([^"]*)" is stored in the#{OPT_SYM} clipboard$/ do |node_name,cb_name|
+Given /^the vxlan tunnel name of node "([^"]*)" is stored in the#{OPT_SYM} clipboard$/ do |node_name, cb_name|
   ensure_admin_tagged
-  node = node(node_name)
-  host = node.host
   cb_name ||= "interface_name"
-  @result = admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
-  if @result[:success] then
-     networkType = @result[:response].strip
-  end
-  case networkType
+
+  network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
+  network_type = network_operator.network_type(user: admin)
+  case network_type
   when "OVNKubernetes"
-    cb[cb_name]="ovn-k8s-mp0"
+    cb[cb_name] = "ovn-k8s-mp0"
   when "OpenShiftSDN"
-    cb[cb_name]="tun0"
+    cb[cb_name] = "tun0"
   else
     raise "unable to find interface name or networkType"
   end
   logger.info "The tunnel interface name is stored in the #{cb_name} clipboard."
 end
 
-Given /^the vxlan tunnel address of node "([^"]*)" is stored in the#{OPT_SYM} clipboard$/ do |node_name,cb_address|
+Given /^the vxlan tunnel address of node "([^"]*)" is stored in the#{OPT_SYM} clipboard$/ do |node_name, cb_address|
   ensure_admin_tagged
   node = node(node_name)
   host = node.host
-  cb_name ||= "interface_address"
-  @result = admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
-  if @result[:success] then
-     networkType = @result[:response].strip
-  end
-  case networkType
+  cb_address ||= "interface_address"
+  network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
+  network_type = network_operator.network_type(user: admin)
+  case network_type
   when "OVNKubernetes"
     inf_name="ovn-k8s-mp0"
     @result = host.exec_admin("ifconfig #{inf_name.split("\n")[0]}")
     cb[cb_address] = @result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]
   when "OpenShiftSDN"
-    @result=host.exec_admin("ifconfig tun0")
+    @result = host.exec_admin("ifconfig tun0")
     cb[cb_address] = @result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]
   else
     raise "unable to find interface address or networkType"
@@ -777,16 +914,14 @@ Given /^the vxlan tunnel address of node "([^"]*)" is stored in the#{OPT_SYM} cl
   logger.info "The tunnel interface address is stored in the #{cb_address} clipboard."
 end
 
-Given /^the Internal IP of node "([^"]*)" is stored in the#{OPT_SYM} clipboard$/ do |node_name,cb_ipaddr|
+Given /^the Internal IP of node "([^"]*)" is stored in the#{OPT_SYM} clipboard$/ do |node_name, cb_ipaddr|
   ensure_admin_tagged
   node = node(node_name)
   host = node.host
   cb_ipaddr ||= "ip_address"
-  @result = admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
-  if @result[:success] then
-     networkType = @result[:response].strip
-  end
-  case networkType
+  network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
+  network_type = network_operator.network_type(user: admin)
+  case network_type
   when "OVNKubernetes"
     # use -4 to limit output to just `default` interface, fixed in later iproute2 versions
     step %Q/I run command on the node's ovnkube pod:/, table("| ip | -4 | route | show | default |")
@@ -803,7 +938,7 @@ Given /^the Internal IP of node "([^"]*)" is stored in the#{OPT_SYM} clipboard$/
   logger.info "The Internal IP of node is stored in the #{cb_ipaddr} clipboard."
 end
 
-Given /^I store "([^"]*)" node's corresponding default networkType pod name in the#{OPT_SYM} clipboard$/ do |node_name,cb_pod_name|
+Given /^I store "([^"]*)" node's corresponding default networkType pod name in the#{OPT_SYM} clipboard$/ do |node_name, cb_pod_name|
   ensure_admin_tagged
   node_name ||= node.name
   _admin = admin
@@ -824,7 +959,7 @@ Given /^I store "([^"]*)" node's corresponding default networkType pod name in t
   logger.info "node's corresponding networkType pod name is stored in the #{cb_pod_name} clipboard."
 end
 
-Given /^I store the ovnkube-master#{OPT_QUOTED} leader pod in the#{OPT_SYM} clipboard$/ do |ovndb, cb_leader_name|
+Given /^I store the ovnkube-master#{OPT_QUOTED} leader pod in the#{OPT_SYM} clipboard(?: using node #{QUOTED})?$/ do |ovndb, cb_leader_name, node_name|
   ensure_admin_tagged
   cb_leader_name ||= "#{ovndb}_leader"
   case ovndb
@@ -834,27 +969,71 @@ Given /^I store the ovnkube-master#{OPT_QUOTED} leader pod in the#{OPT_SYM} clip
     ovsappctl_cmd = %w(ovs-appctl -t /var/run/ovn/ovnsb_db.ctl cluster/status OVN_Southbound)
   end
 
-  sdn_pod = BushSlicer::Pod.get_labeled("app=ovnkube-master", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
-    true
-  }.first
-  # do we need to cache this here?
-  cache_resources sdn_pod
-  @result = sdn_pod.exec(*ovsappctl_cmd, as: admin, container: "northd")
-  raise "Failed to execute network command!" unless @result[:success]
-  cluster_state = @result[:response].strip.delete "\r"
+  if node_name == nil
+    # if we don't specify a node pick the oldest pod to check leader status
+    ovn_pods = BushSlicer::Pod.get_labeled("app=ovnkube-master", project: project("openshift-ovn-kubernetes", switch: false),
+                                           user: admin, quiet: true) { |pod, hash|
+      # make sure we pick a Running master
+      pod.ready?(user: admin, cached: false, quiet: true)
+    }
+    # use the oldest ovn_pod, hoping that it is the master
+    ovn_pods.sort!{ |a,b| a.props[:created] <=> b.props[:created]}
+
+  else
+    ovn_pods = BushSlicer::Pod.get_labeled("app=ovnkube-master", project: project("openshift-ovn-kubernetes", switch: false),
+                                           user: admin, quiet: true) { |pod, hash|
+      # always make sure it is ready
+      pod.node_name == node_name && pod.ready?(user: admin, cached: false, quiet: true)
+    }
+    # there should be only one pod.
+  end
+
+  cluster_state = nil
+  ovn_pods.each{ |ovn_pod|
+    @result = ovn_pod.exec(*ovsappctl_cmd, as: admin, container: "northd")
+    if @result[:success]
+      cluster_state = @result[:response].strip
+      break
+    end
+  }
+  raise "Failed to execute network command!" unless cluster_state != nil
   # for some reason "oc rsh" output contains CR, so we have to remove them
   leader_id = cluster_state.match(/Leader:\s+(\S+)/)
+  if leader_id[1] == "unknown"
+    raise "Unknown leader"
+  end
   servers = cluster_state.match(/Servers:\n(.*)/m)
   leader_line = servers[1].lines.find { |line| line.include? "(" + leader_id[1] }
+  unless leader_line
+    raise "Unable to find leader #{leader_id[1]}"
+  end
   splits = leader_line.match(/\((\S+)[^:]+:([^:]+):(\d+)\)/)
   leader_node = splits.captures[1]
-  leader_pod = BushSlicer::Pod.get_labeled("app=ovnkube-master", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
+  leader_pod = BushSlicer::Pod.get_labeled("app=ovnkube-master", project: project("openshift-ovn-kubernetes", switch: false),
+                                           user: admin, quiet: true) { |pod, hash|
     pod.node_name == leader_node || pod.ip == leader_node
   }.first
+  # update the cache so we can execute on the pod without specify the name
   cache_resources leader_pod
   cb[cb_leader_name] = leader_pod
+  logger.info "cb.#{cb_leader_name}.name = #{leader_pod.name}"
+  logger.info "cb.#{cb_leader_name}.node_name = #{leader_pod.node_name}"
 end
 
+# work-around nested clipboard Transform <% cb.south_leader.name %> issues by combining this step
+Given /^admin deletes the ovnkube-master#{OPT_QUOTED} leader$/ do |ovndb|
+  ensure_admin_tagged
+
+  cb_leader_name ||= "#{ovndb}_leader"
+  if cb[cb_leader_name] == nil
+    step %Q/I store the ovnkube-master "#{ovndb}" leader pod in the :#{cb_leader_name} clipboard/
+  end
+  leader_pod_name = cb[cb_leader_name].name
+  # this doens't work for some reason, can't find the dynamic step
+  # step %Q/Given admin ensures "#{leader_pod_name}" pod is deleted from the "openshift-ovn-kubernetes" project/
+
+  @result = resource(leader_pod_name, "pod", project_name: "openshift-ovn-kubernetes").ensure_deleted(user: admin, wait: 300)
+end
 
 Given /^the OVN "([^"]*)" database is killed on the "([^"]*)" node$/ do |ovndb, node_name|
   ensure_admin_tagged
@@ -872,8 +1051,8 @@ end
 
 Given /^OVN is functional on the cluster$/ do
   ensure_admin_tagged
-  ovnkube_node_ds = daemon_set('ovnkube-node', project('openshift-ovn-kubernetes')).replica_counters(user: admin,cached: false)
-  ovnkube_master_ds = daemon_set('ovnkube-master', project('openshift-ovn-kubernetes')).replica_counters(user: admin,cached: false)
+  ovnkube_node_ds = daemon_set('ovnkube-node', project('openshift-ovn-kubernetes')).replica_counters(user: admin, cached: false)
+  ovnkube_master_ds = daemon_set('ovnkube-master', project('openshift-ovn-kubernetes')).replica_counters(user: admin, cached: false)
   desired_ovnkube_node_replicas, available_ovnkube_node_replicas = ovnkube_node_ds.values_at(:desired, :available)
   desired_ovnkube_master_replicas, available_ovnkube_master_replicas = ovnkube_master_ds.values_at(:desired, :available)
 
@@ -978,20 +1157,14 @@ Given /^I install machineconfigs load-sctp-module$/ do
   end
 end
 
-Given /^I check load-sctp-module in #{NUMBER} workers$/ do | workers_num |
+Given /^I check load-sctp-module in all nodes$/ do 
   ensure_admin_tagged
   _admin = admin
-  $i = 0
-  $num = Integer(workers_num)
-  while $i < $num  do
-    step %Q{I run the :debug admin command with:}, table(%{
-      | resource     | node/<%= cb.workers[#$i].name %> |
-      | oc_opts_end  |                                  |
-      | exec_command | lsmod                            |
-    })
-    step %Q/the step should succeed/
-    step %Q/the outputs should contain "sctp"/
-    $i +=1
+  env.nodes.each do |node|
+    @result = node.host.exec_admin("lsmod \| grep sctp")
+    unless @result[:response].include? "sctp"
+      raise "no sctp module"
+    end
   end
 end
 
@@ -1025,9 +1198,41 @@ Given /^the mtu value "([^"]*)" is patched in CNO config according to the networ
   end
   @result = admin.cli_exec(:patch, resource: "network.operator", resource_name: "cluster", p: "{\"spec\":{\"defaultNetwork\":{\"#{config_var}\":{\"mtu\": #{mtu_value}}}}}", type: "merge")
   raise "Failed to patch CNO!" unless @result[:success]
-  
+
   teardown_add {
       @result = admin.cli_exec(:patch, resource: "network.operator", resource_name: "cluster", p: "{\"spec\":{\"defaultNetwork\":{\"ovnKubernetesConfig\":{\"mtu\": null}}}}", type: "merge")
       raise "Failed to clear mtu field from CNO" unless @result[:success]
   }
+end
+
+Given /^I save egress data file directory to the#{OPT_SYM} clipboard$/ do | cb_name |
+  ensure_admin_tagged
+  cb_name = "cb_egress_directory" unless cb_name
+  network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
+  network_type = network_operator.network_type(user: admin)
+  case network_type
+  when "OVNKubernetes"
+    cb[cb_name]="ovn-egressfirewall"
+  when "OpenShiftSDN"
+    cb[cb_name]="egressnetworkpolicy"
+  else
+    raise "unknown network_type"
+  end
+  logger.info "The egressfirewall file directory path is stored to the #{cb_name} clipboard."
+end
+
+Given /^I save egress type to the#{OPT_SYM} clipboard$/ do | cb_name |
+  ensure_admin_tagged
+  cb_name = "cb_egress_type" unless cb_name
+  network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
+  network_type = network_operator.network_type(user: admin)
+  case network_type
+  when "OVNKubernetes"
+    cb[cb_name] = "egressfirewall"
+  when "OpenShiftSDN"
+    cb[cb_name] = "egressnetworkpolicy"
+  else
+    raise "unknown network_type"
+  end
+  logger.info "The egressfirewall type is stored to the #{cb_name} clipboard."
 end

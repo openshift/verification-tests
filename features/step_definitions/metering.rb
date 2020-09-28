@@ -19,8 +19,9 @@ Given /^metering service has been installed successfully(?: using (OLM|OperatorH
   rescue
     meteringconfigs = []
   end
+
   if meteringconfigs.count == 0
-    namespace = "openshift-metering"
+    namespace = cb.metering_ns
     metering_name = "operator-metering"
     # a pre-req is that openshift-monitoring is installed in the system, w/o it
     # the openshift-metering won't function correctly
@@ -48,7 +49,6 @@ Given /^metering service has been installed successfully(?: using (OLM|OperatorH
       step %Q"the metering service is installed using OLM"
     end
   end
-
   step %Q/all metering related pods are running in the "#{cb.metering_namespace.name}" project/
   # added check for datasource to make sure promethues imports are working
   step %Q/all reportdatasources are importing from Prometheus/
@@ -108,6 +108,7 @@ Given /^I get the #{QUOTED} report and store it in the#{OPT_SYM} clipboard using
   required_params.each do |param|
     raise "Missing parameter '#{param}'" unless opts[param]
   end
+  opts[:query_type] = name if opts[:query_type] = ""
   opts[:start_time] ||= default_start_time
   opts[:end_time] ||= default_end_time
   opts[:run_immediately] = to_bool(opts[:run_immediately])
@@ -247,6 +248,7 @@ Given /^the metering service is installed(?: to #{OPT_QUOTED})? using OLM(?: (CL
   ensure_admin_tagged
   ensure_destructive_tagged
   install_method ||= 'CLI'
+  metering_ns ||= ENV['METERING_NAMESPACE']
   metering_ns ||= "openshift-metering"
   step %Q/I setup a metering project named "#{metering_ns}"/ unless cb.metering_project_setup_done
   if install_method == 'CLI'
@@ -286,10 +288,12 @@ end
 Given /^the#{OPT_QUOTED} metering service is uninstalled using OLM$/ do | metering_ns |
   ensure_admin_tagged
   ensure_destructive_tagged
+  metering_ns ||= ENV['METERING_NAMESPACE']
   metering_ns ||= "openshift-metering"
+  cb.metering_ns = metering_ns
   step %Q/I switch to cluster admin pseudo user/ unless env.is_admin? user
   if project(metering_ns).exists?
-    step %Q(I ensure "openshift-metering" meteringconfig is deleted)
+    step %Q(I ensure "#{metering_ns}" meteringconfig is deleted)
     step %Q(I ensure "metering-ocp-sub" subscription is deleted)
     step %Q(I ensure "metering-ocp-og" subscription is deleted)
     step %Q/I ensure "#{metering_ns}" project is deleted/
@@ -436,6 +440,7 @@ end
 #
 Given /^all metering related pods are running in the#{OPT_QUOTED} project$/ do | proj_name |
   ensure_destructive_tagged
+  proj_name ||= cb.metering_ns
   target_proj = proj_name.nil? ? "openshift-metering" : proj_name
   step %Q/I switch to cluster admin pseudo user/
   project(target_proj)
@@ -443,7 +448,7 @@ Given /^all metering related pods are running in the#{OPT_QUOTED} project$/ do |
     | app=metering-operator |
   })
 
-  if metering_config('openshift-metering').hive_type == 'hdfs'
+  if metering_config(cb.metering_ns).hive_type == 'hdfs'
     step %Q/a pod becomes ready with labels:/, table(%{
       | hdfs=datanode,statefulset.kubernetes.io/pod-name=hdfs-datanode-0 |
     })
@@ -519,7 +524,8 @@ end
 # @return set cb.metering_project_setup_done to be DRY
 Given /^I setup a metering project(?: named #{QUOTED})?$/ do | metering_ns |
   ensure_admin_tagged
-      # 1. create the metering namespace
+  # 1. create the metering namespace
+  metering_ns ||= ENV['METERING_NAMESPACE']
   metering_ns ||= "openshift-metering"
   step %Q/I switch to cluster admin pseudo user/
   unless namespace(metering_ns).exists?
@@ -552,5 +558,28 @@ Given /^I prepare OLM via CLI$/ do
   # 3. create subscription
   step %Q(I run oc create as admin over ERB test file: metering/configs/metering_subscription.yaml)
   #step %Q/the step should succeed/
+end
+
+Given /^I save all valid (ReportDataSources|ReportQuerys) to the#{OPT_SYM} clipboard$/ do | resource_type, cb_name |
+  cb_name ||= :valid_resource
+  if resource_type == 'ReportDataSources'
+    res = BushSlicer::ReportDataSource.list(user: user, project: project)
+  else
+    res = BushSlicer::ReportQuery.list(user: user, project: project)
+  end
+  rds = res.reject {|r| r.name.end_with? '-raw'}
+  cb[cb_name] = rds.map { |r| r.name }
+end
+
+Given /^all reports can be generated via reportquery$/ do
+  res = BushSlicer::ReportQuery.list(user: user, project: project)
+  rds = res.reject {|r| r.name.end_with? '-raw'}
+  res = rds.map { |r| r.name }
+  res.each do | report_name |
+    step %Q/I get the "#{report_name}" report and store it in the clipboard using:/, table(%{
+      | query_type      | #{report_name} |
+      | run_immediately | true           |
+    })
+  end
 end
 

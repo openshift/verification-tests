@@ -537,10 +537,12 @@
 :logs:
   :cmd: oc logs <resource_name>
   :options:
+    :all_containers: --all-containers=<value>
     :c: -c <value>
     :f: -f
     :limit-bytes: --limit-bytes <value>
     :p: -p
+    :prefix: --prefix=<value>
     :since: --since <value>
     :since-time: --since-time <value>
     :tail: --tail <value>

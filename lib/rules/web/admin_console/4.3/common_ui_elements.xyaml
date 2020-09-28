@@ -273,6 +273,7 @@ click_kebab_item:
   element:
     selector:
       xpath: //button[contains(@class,'pf-c-dropdown__menu-item') and not(contains(@class,'pf-m-disabled')) and text()='<kebab_item>']
+    timeout: 20
     op: click
 click_kebab_of_one_resource:
   elements:
@@ -303,7 +304,7 @@ check_status_column_header:
 check_resource_name_and_icon:
   action:
     if_param: service_name
-    ref: check_service_name_and_icon 
+    ref: check_service_name_and_icon
   action:
     if_param: buildconfig_name
     ref: check_buildconfig_name_and_icon
@@ -937,3 +938,11 @@ check_hpa_max_replicas:
     key: Max Replicas
     value: <max_replicas>
   action: check_resource_details_key_and_value
+click_workloads_tab:
+  params:
+    tab_name: Workloads
+  action: click_tab
+click_workload_details:
+  params:
+    button_text: Overview
+  action: click_button_text

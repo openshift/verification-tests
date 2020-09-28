@@ -9,6 +9,18 @@ click_provided_apis_of_operators:
       xpath: //a[contains(.,'<api>')]
     op: click
     timeout: 60
+click_create_operand_button:
+  element:
+    selector:
+      xpath: //button[contains(.,'Create') and contains(.,'<operand_api>') and not(disabled)]
+    op: click
+create_operand:
+  params:
+    tab_name: <operand_api>
+  action: goto_csv_detail_page
+  action: click_tab
+  action: click_create_operand_button
+  action: submit_changes
 create_catalog_source:
   params:
     button_text: Create Catalog Source
@@ -26,6 +38,12 @@ create_catalog_source:
     - click_radio_input
     - select_resource_item
   action: submit_changes
+subscribe_operator_to_namespace:
+  params:
+    project_name: <target_namespace>
+  action: goto_operator_subscription_page
+  action: select_target_namespace
+  action: click_subscribe_button
 input_catalog_source_name:
   params:
     input_field_id: catalog-source-name
@@ -154,6 +172,10 @@ click_checkbox_from_provider_type:
   - selector:
       xpath: //form[@data-test-group-name='providerType']//*[contains(@class, 'pf-c-check__label') and contains(text(), '<text>')]
     op: click
+click_qe_customized_provider:
+  params:
+    text: OpenShift QE
+  action: click_checkbox_from_provider_type
 open_first_card_overlay_panel:
   action:
     if_element:
@@ -324,12 +346,11 @@ click_radio_to_pick_ns:
   params:
     text: Pick an existing namespace
   action: click_radio_input_by_text
-check_Hazelcastjet_default_action_and_remote_workflow:
+check_customized_operator_purchase_link:
   params:
     text: Purchase
-    link_url: https://marketplace.redhat.com/en-us/operators/hazelcast-jet-enterprise-operator-rhmp/pricing
+    link_url: https://test-remote-workflow/pricing
   action: check_link_and_text
-
 check_phase_status:
   elements:
   - selector:
@@ -430,3 +451,112 @@ check_k8sresource_dropdown_items:
   element:
     selector:
       xpath: //li//span[contains(@class,'co-resource-item__resource-name') and contains(text(),'<item>')]
+check_required_badge_on_operator_installation_page:
+  elements:
+  - selector:
+      xpath: //span[contains(@class,'co-resource-item')]//span[contains(@class,'co-resource-item__resource-name') and text()='Storage Cluster']
+  - selector:
+      xpath: //span[contains(@class,'co-resource-item')]//span[contains(@class,'co-icon-and-text')]//span[text()='Required']
+check_required_badge_during_installation:
+  elements:
+  - selector:
+      xpath: //span[contains(@class,'co-resource-item')]//span[contains(@class,'co-resource-item__resource-name') and text()='StorageCluster']
+  - selector:
+      xpath: //span[contains(@class,'co-resource-item')]//span[contains(@class,'co-icon-and-text')]//span[text()='Required']
+check_create_operand_button_and_requied_badge_when_ready:
+  elements:
+  - selector:
+      xpath: //h2[contains(@class,'co-clusterserviceversion-install__heading') and contains(.,'Installed operator') and contains(.,'operand required')]
+    timeout: 60
+  - selector: &create_operand_button
+      xpath: //button[contains(.,'Create') and contains(.,'StorageCluster') and not(disabled)]
+check_create_operand_button_and_requied_badge_on_csv_details:
+  elements:
+  - selector:
+      xpath: //h4[contains(@class,'pf-c-alert__title') and contains(.,'StorageCluster Required')]
+  action: check_operand_button_link
+check_operand_button_link:
+  element:
+    selector:
+      xpath: //button[contains(.,'Create') and contains(.,'StorageCluster') and not(disabled)]/parent::a[contains(@href,'/k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion/portworx-essentials.v1.3.4/core.libopenstorage.org~v1alpha1~StorageCluster/~new')]
+click_create_storagecluster_button:
+  element:
+    selector:
+      <<: *create_operand_button
+    op: click
+check_status_descriptor_grouping:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'co-operand-details__section')]//dl[@data-test-id='resource-summary']//button[contains(text(),'Namespace')]
+  - selector:
+      xpath: //div[contains(@class,'co-operand-details__section')]//dl[@data-test-id='resource-summary']//button[contains(text(),'Labels')]      
+  - selector:
+      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--status')]//button[contains(text(),'Phase')]
+  - selector:
+      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--status')]//button[contains(text(),'Server')]
+check_spec_descriptor_grouping:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--spec')]//button[contains(text(),'Version')]
+  - selector: &grafana_fieldgroup
+      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--spec')]//button[contains(text(),'Grafana')]
+  - selector:
+      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--spec')]//button[contains(text(),'Prometheus')]
+click_field_resource_limits_edit_button:
+  elements:
+  - selector:
+      xpath: //dd[@data-test-selector='details-item-value__<field_group_name>']//dd[@data-test-selector='details-item-value__Resource Requirements']//dt[text()='Resource Limits']/following::button[1]
+    op: click
+click_field_resource_requests_edit_button:
+  elements:
+  - selector:
+      xpath: //dd[@data-test-selector='details-item-value__<field_group_name>']//dd[@data-test-selector='details-item-value__Resource Requirements']//dt[text()='Resource Requests']/following::button[1]
+    op: click
+set_cpu_cores_value:
+  params:
+    label_text: CPU cores
+    input_value: <cpu_cores_value>
+  action: set_label_input_simple
+set_memory_value:
+  params:
+    label_text: Memory
+    input_value: <memory_value>
+  action: set_label_input_simple
+set_storage_value:
+  params:
+    label_text: Storage
+    input_value: <storage_value>
+  action: set_label_input_simple
+set_field_resource_limits:
+  action: click_field_resource_limits_edit_button
+  action: set_cpu_cores_value
+  action: set_memory_value
+  action: set_storage_value
+  action: submit_changes
+set_field_resource_requests:
+  action: click_field_resource_requests_edit_button
+  action: set_cpu_cores_value
+  action: set_memory_value
+  action: set_storage_value
+  action: submit_changes
+set_controller_group_resource_limits:
+  params:
+    field_group_name: Controller
+  action: set_field_resource_limits
+set_controller_group_resource_requests:
+  params:
+    field_group_name: Controller
+  action: set_field_resource_requests
+check_resource_requirement_values:
+  elements:
+  - selector:
+      xpath: //button[contains(@class,'pf-m-inline') and contains(.,'CPU')]
+  scripts:
+  - command: |
+      var all_buttons = document.querySelectorAll('button[class*="pf-m-inline"]')
+      var contains = false
+      for (var i = 0; i < all_buttons.length; i++){
+        contains = contains || all_buttons[i].innerText.indexOf('CPU: <cpu_cores_value>, Memory: <memory_value>, Storage: <storage_value>') != -1 ? true : false
+      }
+      return contains
+    expect_result: true

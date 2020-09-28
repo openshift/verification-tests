@@ -112,5 +112,11 @@ module BushSlicer
       rr.dig('status', 'loadBalancer', 'ingress')
     end
 
+    # @return [String] string IP if IPv4 or [IP] if IPv6
+    def ip_url(user: nil, cached: true, quiet: false)
+      raw_ip = ip(user: user, cached: cached, quiet: quiet)
+      return raw_ip.include?(":") ? "[#{raw_ip}]" : raw_ip
+    end
+
   end
 end

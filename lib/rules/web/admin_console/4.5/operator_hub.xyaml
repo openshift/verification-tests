@@ -154,6 +154,10 @@ click_checkbox_from_provider_type:
   - selector:
       xpath: //*[contains(@class, 'pf-c-check__label') and text()='<text>']
     op: click
+click_qe_customized_provider:
+  params:
+    text: OpenShift QE
+  action: click_checkbox_from_provider_type
 open_first_card_overlay_panel:
   action:
     if_element:
@@ -324,10 +328,10 @@ click_radio_to_pick_ns:
   params:
     text: Pick an existing namespace
   action: click_radio_input_by_text
-check_Hazelcastjet_default_action_and_remote_workflow:
+check_customized_operator_purchase_link:
   params:
     text: Purchase
-    link_url: https://marketplace.redhat.com/en-us/operators/hazelcast-jet-enterprise-operator-rhmp/pricing
+    link_url: https://test-remote-workflow/pricing
   action: check_link_and_text
 
 check_phase_status:

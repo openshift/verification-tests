@@ -1,16 +1,19 @@
 view_all_settings:
-  params:
-    button_text: View settings
-  action: click_button
+  element:
+    selector:
+      xpath: //a[contains(.,'View settings')]
+    op: click
   action: wait_box_loaded
 click_view_alerts_button:
-  params:
-    button_text: View alerts
-  action: click_button
+  element:
+    selector:
+      xpath: //a[contains(.,'View alerts')]
+    op: click
 click_view_events_button:
-  params:
-    button_text: View events
-  action: click_button
+  element:
+    selector:
+      xpath: //a[contains(.,'View events')]
+    op: click
 click_events_pause_button:
   params:
     button_text: Pause
@@ -50,6 +53,12 @@ check_cluster_id_in_details_card:
     value: <cluster_id>
   action: check_resource_details_key_and_value
 # grafana dashboards
+nagivate_to_monitoring_dashboards_page:
+  params:
+    primary_menu: Monitoring
+    secondary_menu: Dashboards
+  action: click_secondary_menu
+  action: check_grafana_dashboard_body_loaded
 check_grafana_dashboard_body_loaded:
   element:
     selector:
@@ -57,8 +66,8 @@ check_grafana_dashboard_body_loaded:
     timeout: 30
 click_dashboard_dropdown:
   params:
-    dropdown_field: Dashboard
-  action: click_dropdown_field
+    label_text: Dashboard
+  action: click_label_dropdown_button
 check_dashboard_etcd:
   params:
     dropdown_menu_item: etcd
@@ -103,6 +112,26 @@ check_dashboard_use_method_node:
   params:
     dropdown_menu_item: USE Method / Node
   action: check_dropdown_menu_item
+check_table_loaded:
+  elements:
+  - selector:
+      xpath: //table[contains(@class,'monitoring-dashboards__table')]
+check_chart_loaded:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'pf-c-chart')]
+change_namespace:
+  params:
+    label_text: namespace
+    button_text: <namespace>
+  action: click_label_dropdown_button
+  action: click_button_text
+change_workload:
+  params:
+    label_text: workload
+    button_text: <workload>
+  action: click_label_dropdown_button
+  action: click_button_text
 check_dashboard_dropdown_items:
   action: click_dashboard_dropdown
   action: check_dashboard_etcd
@@ -116,6 +145,25 @@ check_dashboard_dropdown_items:
   action: check_dashboard_prometheus
   action: check_dashboard_use_method_cluster
   action: check_dashboard_use_method_node
+  action: click_dashboard_dropdown
+check_resources_workloads_dashboard:
+  params:
+    dropdown_menu_item: Kubernetes / Compute Resources / Workload
+  action: click_dashboard_dropdown
+  action: click_dropdown_menu_item
+  action: change_namespace
+  action: change_workload
+  action: check_table_loaded
+  action: check_chart_loaded
+  action: check_no_errors_in_charts
+check_resources_pod_dashboard:
+  params:
+    dropdown_menu_item: Kubernetes / Compute Resources / Pod
+  action: click_dashboard_dropdown
+  action: click_dropdown_menu_item
+  action: change_namespace
+  action: check_table_loaded
+  action: check_chart_loaded  
 # cluster dashboards
 check_cluster_utilization_items:
   elements:

@@ -10,9 +10,9 @@ Feature: NFS Persistent Volume
 
     Given I obtain test data file "storage/nfs/auto/pv-retain.json"
     Given admin creates a PV from "pv-retain.json" where:
-      | ["metadata"]["name"]         | pv-<%= project.name %>           |
-      | ["spec"]["nfs"]["server"]    | <%= service("nfs-service").ip %> |
-      | ["spec"]["storageClassName"] | sc-<%= project.name %>           |
+      | ["metadata"]["name"]         | pv-<%= project.name %>                 |
+      | ["spec"]["nfs"]["server"]    | "<%= service("nfs-service").ip_url %>" |
+      | ["spec"]["storageClassName"] | sc-<%= project.name %>                 |
     Given I obtain test data file "storage/nfs/auto/pvc-rwx.json"
     And I create a dynamic pvc from "pvc-rwx.json" replacing paths:
       | ["spec"]["volumeName"]       | <%= pv.name %>         |
@@ -62,11 +62,11 @@ Feature: NFS Persistent Volume
 
     Given I obtain test data file "storage/nfs/pv-gid.json"
     When admin creates a PV from "pv-gid.json" where:
-      | ["spec"]["nfs"]["server"]                                | <%= service("nfs-service").ip %> |
-      | ["spec"]["nfs"]["path"]                                  | /                                |
-      | ["spec"]["capacity"]["storage"]                          | 1Gi                              |
-      | ["metadata"]["name"]                                     | nfs-<%= project.name %>          |
-      | ["metadata"]["annotations"]["pv.beta.kubernetes.io/gid"] | "<pv-gid>"                       |
+      | ["spec"]["nfs"]["server"]                                | "<%= service("nfs-service").ip_url %>" |
+      | ["spec"]["nfs"]["path"]                                  | /                                      |
+      | ["spec"]["capacity"]["storage"]                          | 1Gi                                    |
+      | ["metadata"]["name"]                                     | nfs-<%= project.name %>                |
+      | ["metadata"]["annotations"]["pv.beta.kubernetes.io/gid"] | "<pv-gid>"                             |
     Then the step should succeed
 
     Given I obtain test data file "storage/nfs/claim-rwx.json"
@@ -124,17 +124,17 @@ Feature: NFS Persistent Volume
 
     Given I obtain test data file "storage/nfs/pv-gid.json"
     Given admin creates a PV from "pv-gid.json" where:
-      | ["spec"]["nfs"]["server"]                                | <%= service("nfs-service").ip %> |
-      | ["spec"]["nfs"]["path"]                                  | /                                |
-      | ["spec"]["capacity"]["storage"]                          | 1Gi                              |
-      | ["metadata"]["name"]                                     | nfs-<%= project.name %>          |
-      | ["metadata"]["annotations"]["pv.beta.kubernetes.io/gid"] | abc123                           |
+      | ["spec"]["nfs"]["server"]                                | "<%= service("nfs-service").ip_url %>" |
+      | ["spec"]["nfs"]["path"]                                  | /                                      |
+      | ["spec"]["capacity"]["storage"]                          | 1Gi                                    |
+      | ["metadata"]["name"]                                     | nfs-<%= project.name %>                |
+      | ["metadata"]["annotations"]["pv.beta.kubernetes.io/gid"] | abc123                                 |
     Then the step should succeed
 
     Given I obtain test data file "storage/nfs/claim-rwx.json"
     When I create a manual pvc from "claim-rwx.json" replacing paths:
       | ["metadata"]["name"]                         | mypvc |
-      | ["spec"]["resources"]["requests"]["storage"] | 1Gi                      |
+      | ["spec"]["resources"]["requests"]["storage"] | 1Gi   |
     Then the step should succeed
     And the "mypvc" PVC becomes bound to the "nfs-<%= project.name %>" PV
 
@@ -143,7 +143,7 @@ Feature: NFS Persistent Volume
     Given I obtain test data file "storage/nfs/security/pod-supplementalgroup.json"
     When I run oc create over "pod-supplementalgroup.json" replacing paths:
       | ["metadata"]["name"]                                         | mypod |
-      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc  |
+      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc |
     Then the step should succeed
     And the pod named "mypod" becomes ready
 

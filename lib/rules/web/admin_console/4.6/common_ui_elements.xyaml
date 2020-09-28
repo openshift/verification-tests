@@ -73,7 +73,7 @@ check_button_title:
     selector:
       xpath: //button[@title='<button_title>']
 check_kebab_items_disabled:
-  elements: 
+  elements:
   - selector:
       xpath: //button[contains(@class, 'pf-c-dropdown__menu-item') and not(contains(@class, 'pf-m-disabled'))]
     missing: true
@@ -245,6 +245,11 @@ set_label_textarea:
       <<: *label_textarea
     op: send_keys <input_value>
     type: textarea
+click_label_dropdown_button:
+  element:
+    selector:
+      xpath: //label[contains(text(),'<label_text>')]/following::button[1][contains(@class,'dropdown')]
+    op: click
 check_editor_is_monaco_editor:
   element:
     selector:
@@ -252,7 +257,7 @@ check_editor_is_monaco_editor:
 check_content_in_yaml_editor:
   element:
     selector:
-      xpath: //*[contains(@class,'react-monaco-editor-container')]//*[contains(text(),'<yaml_content>')]
+      xpath: //div[contains(@class,'react-monaco-editor-container')]//span[contains(text(),'<yaml_content>')]
 check_sidebar_item:
   element:
     selector:
@@ -265,7 +270,7 @@ click_on_resource_item:
 check_resource_item_name:
   element:
     selector:
-      <<: *data_test_id 
+      <<: *data_test_id
     timeout: 20
 wait_dropdown_loaded:
   element:
@@ -313,6 +318,7 @@ click_kebab_item:
   element:
     selector:
       xpath: //button[contains(@class,'pf-c-dropdown__menu-item') and not(contains(@class,'pf-m-disabled')) and text()='<kebab_item>']
+    timeout: 20
     op: click
 click_kebab_of_one_resource:
   elements:
@@ -377,7 +383,7 @@ check_cpu_column_header:
 check_resource_name_and_icon:
   action:
     if_param: service_name
-    ref: check_service_name_and_icon 
+    ref: check_service_name_and_icon
   action:
     if_param: buildconfig_name
     ref: check_buildconfig_name_and_icon
@@ -514,7 +520,7 @@ click_link_with_text:
 click_link_with_text_only:
   element:
     selector:
-      xpath: //a[text()='<text>']
+      xpath: //a[contains(text(),'<text>')]
     op: click
 click_primary_menu:
   elements:
@@ -647,8 +653,8 @@ skip_dev_perspective_tour:
       xpath: //button[@id='tour-step-footer-secondary' and text()='Skip tour']
     op: click
   - selector:
-      xpath: //button[@id='tour-step-footer-primary' and text()='Close']
-    op: click
+      xpath: //b[contains(text(), 'Welcome to Dev')]
+    missing: true
 check_item_in_list:
   element:
     selector:
@@ -682,7 +688,7 @@ check_alert_message:
   action:
     if_param: description
     ref: check_alert_description
-    
+
 ## -------- check resource key and values pairs ------
 check_resource_details:
   action:
@@ -1094,3 +1100,11 @@ check_hpa_max_replicas:
     key: Max Replicas
     value: <max_replicas>
   action: check_resource_details_key_and_value
+click_workloads_tab:
+  params:
+    tab_name: Workloads
+  action: click_tab
+click_workload_details:
+  params:
+    button_text: Details
+  action: click_button_text
