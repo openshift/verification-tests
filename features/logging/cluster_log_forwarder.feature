@@ -110,27 +110,6 @@ Feature: cluster log forwarder features
     Then the step should succeed
     And the expression should be true> @result[:parsed]['count'] > 0
     """
-    When I perform the HTTP request on the ES pod with labels "es-node-master=true":
-      | relative_url | app*/_search?format=JSON' -d '{"size": 2, "sort": [{"@timestamp": {"order":"desc"}}]} |
-      | op           | GET                 |
-    Then the step should succeed
-    And the expression should be true> JSON.parse(@result[:response])['hits']['hits'][0]['_source']['openshift']['labels'] == cluster_log_forwarder('instance').output_labels(name: 'forward-app-logs', cached: false)
-    When I perform the HTTP request on the ES pod with labels "es-node-master=true":
-      | relative_url | infra*/_search?format=JSON' -d '{"size": 2, "sort": [{"@timestamp": {"order":"desc"}}], "query": {"exists": {"field": "systemd"}}} |
-      | op           | GET                 |
-    Then the step should succeed
-    And the expression should be true> JSON.parse(@result[:response])['hits']['hits'][0]['_source']['openshift']['labels'] == cluster_log_forwarder('instance').output_labels(name: 'forward-infra-logs', cached: false)
-    When I perform the HTTP request on the ES pod with labels "es-node-master=true":
-      | relative_url | infra*/_search?format=JSON' -d '{"size": 2, "sort": [{"@timestamp": {"order":"desc"}}], "query": {"regexp": {"kubernetes.namespace_name": "openshift@"}}} |
-      | op           | GET                 |
-    Then the step should succeed
-    And the expression should be true> JSON.parse(@result[:response])['hits']['hits'][0]['_source']['openshift']['labels'] == cluster_log_forwarder('instance').output_labels(name: 'forward-infra-logs', cached: false)
-    When I perform the HTTP request on the ES pod with labels "es-node-master=true":
-      | relative_url | audit*/_search?format=JSON' -d '{"size": 2, "sort": [{"@timestamp": {"order":"desc"}}]} |
-      | op           | GET                 |
-    Then the step should succeed
-    And the expression should be true> JSON.parse(@result[:response])['hits']['hits'][0]['_source']['openshift']['labels'] == cluster_log_forwarder('instance').output_labels(name: 'forward-audit-logs', cached: false)
-
     When I run the :delete client command with:
       | object_type       | pod                         |
       | object_name_or_id | <%= cb.log_receiver.name %> |
@@ -254,25 +233,65 @@ Feature: cluster log forwarder features
     Then the step should succeed
     And the expression should be true> JSON.parse(@result[:response])['count'] > 0
     """
-    # check tags
-    When I execute on the "<%= cb.log_receiver.name %>" pod:
-      | curl | -sk | -XGET | <url>/*/_search?format=JSON | -H | Content-Type: application/json | -d | {"size": 2, "sort": [{"@timestamp": {"order":"desc"}}], "query": {"match": {"kubernetes.namespace_name": "<%= cb.proj.name %>"}}} |
+
+    Examples:
+      | security | url                    |
+      | insecure | http://localhost:9200  | # @case_id OCP-29846
+      | secure   | https://localhost:9200 | # @case_id OCP-29845
+
+  # @author qitang@redhat.com
+  @admin
+  @destructive
+  Scenario Outline: Forward logs with tags
+    Given I switch to the first user
+    And I create a project with non-leading digit name
+    And evaluation of `project` is stored in the :proj clipboard
+    Given I obtain test data file "logging/loggen/container_json_log_template.json"
+    When I run the :new_app client command with:
+      | file | container_json_log_template.json |
+    Then the step should succeed
+
+    Given I switch to cluster admin pseudo user
+    And I use the "openshift-logging" project
+    Given I obtain test data file "logging/clusterlogforwarder/<file>"
+    And admin ensures "instance" cluster_log_forwarder is deleted after scenario
+    When I run the :create client command with:
+      | f | <file> |
+    Then the step should succeed
+    And I wait for the "instance" cluster_log_forwarder to appear
+    Given I obtain test data file "logging/clusterlogging/example_indexmanagement.yaml"
+    When I create clusterlogging instance with:
+      | remove_logging_pods | true                         |
+      | crd_yaml            | example_indexmanagement.yaml |
+    Then the step should succeed
+    Given I wait for the "app" index to appear in the ES pod with labels "es-node-master=true"
+    And I wait for the project "<%= cb.proj.name %>" logs to appear in the ES pod
+    And I wait for the "audit" index to appear in the ES pod
+    And I wait up to 300 seconds for the steps to pass:
+    """
+    When I perform the HTTP request on the ES pod with labels "es-node-master=true":
+      | relative_url | app*/_search?format=JSON' -d '{"size": 2, "sort": [{"@timestamp": {"order":"desc"}}]} |
+      | op           | GET                 |
     Then the step should succeed
     And the expression should be true> JSON.parse(@result[:response])['hits']['hits'][0]['_source']['openshift']['labels'] == cluster_log_forwarder('instance').output_labels(name: '<app_pipeline_name>')
-    When I execute on the "<%= cb.log_receiver.name %>" pod:
-      | curl | -sk | -XGET | <url>/*/_search?format=JSON | -H | Content-Type: application/json | -d | {"size": 2, "sort": [{"@timestamp": {"order":"desc"}}], "query": {"exists": {"field": "systemd"}}} |
+    When I perform the HTTP request on the ES pod with labels "es-node-master=true":
+      | relative_url | infra*/_search?format=JSON' -d '{"size": 2, "sort": [{"@timestamp": {"order":"desc"}}], "query": {"exists": {"field": "systemd"}}} |
+      | op           | GET                 |
     Then the step should succeed
     And the expression should be true> JSON.parse(@result[:response])['hits']['hits'][0]['_source']['openshift']['labels'] == cluster_log_forwarder('instance').output_labels(name: '<infra_pipeline_name>')
-    When I execute on the "<%= cb.log_receiver.name %>" pod:
-      | curl | -sk | -XGET | <url>/*/_search?format=JSON | -H | Content-Type: application/json | -d | {"size": 2, "sort": [{"@timestamp": {"order":"desc"}}], "query": {"regexp": {"kubernetes.namespace_name": "openshift@"}}} |
+    When I perform the HTTP request on the ES pod with labels "es-node-master=true":
+      | relative_url | infra*/_search?format=JSON' -d '{"size": 2, "sort": [{"@timestamp": {"order":"desc"}}], "query": {"regexp": {"kubernetes.namespace_name": "openshift@"}}} |
+      | op           | GET                 |
     Then the step should succeed
     And the expression should be true> JSON.parse(@result[:response])['hits']['hits'][0]['_source']['openshift']['labels'] == cluster_log_forwarder('instance').output_labels(name: '<infra_pipeline_name>')
-    When I execute on the "<%= cb.log_receiver.name %>" pod:
-      | curl | -sk | -XGET | <url>/*/_search?format=JSON | -H | Content-Type: application/json | -d | {"size": 2, "sort": [{"@timestamp": {"order":"desc"}}], "query": {"exists": {"field": "auditID"}}} |
+    When I perform the HTTP request on the ES pod with labels "es-node-master=true":
+      | relative_url | audit*/_search?format=JSON' -d '{"size": 2, "sort": [{"@timestamp": {"order":"desc"}}]} |
+      | op           | GET                 |
     Then the step should succeed
-    And the expression should be true> JSON.parse(@result[:response])['hits']['hits'][0]['_source']['openshift']['labels'] == cluster_log_forwarder('instance').output_labels(name: '<audit_pipeline_name>')
-    
+    And the expression should be true> JSON.parse(@result[:response])['hits']['hits'][0]['_source']['openshift']['labels'] == cluster_log_forwarder('instance').output_labels(name: '<audit_pipeline_name>')    
+    """
+
     Examples:
-      | security | url                    | app_pipeline_name      | infra_pipeline_name    | audit_pipeline_name    |
-      | insecure | http://localhost:9200  | forward-to-external-es | forward-to-external-es | forward-to-external-es | # @case_id OCP-29846
-      | secure   | https://localhost:9200 | forward-app-logs       | forward-infra-logs     | forward-audit-logs     | # @case_id OCP-29845
+      | file                                 | app_pipeline_name     | infra_pipeline_name   | audit_pipeline_name   |
+      | clf-forward-with-same-tag.yaml       | forward-to-default-es | forward-to-default-es | forward-to-default-es | # @case_id OCP-33750
+      | clf-forward-with-different-tags.yaml | forward-app-logs      | forward-infra-logs    | forward-audit-logs    | # @case_id OCP-33893

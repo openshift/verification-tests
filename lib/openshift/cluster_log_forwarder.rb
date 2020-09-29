@@ -60,6 +60,17 @@ module BushSlicer
         return raw_resource(user: user, cached: cached, quiet: quiet).dig('status')
     end
 
+    def outputs_status(user: nil, quiet: false, cached: true)
+        return status_raw(user: user, cached: cached, quiet: quiet).dig("outputs")
+    end
+
+    def inputs_status(user: nil, quiet: false, cached: true)
+        return status_raw(user: user, cached: cached, quiet: quiet).dig("inputs")
+    end
+
+    def pipelines_status(user: nil, quiet: false, cached: true)
+        return status_raw(user: user, cached: cached, quiet: quiet).dig("pipelines")
+    end
 
   end
 end
