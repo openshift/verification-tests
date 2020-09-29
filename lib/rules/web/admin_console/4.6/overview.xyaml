@@ -1,7 +1,7 @@
 wait_overview_items_loaded:
   elements:
   - selector:
-      css: .project-overview__list
+      css: .odc-topology-list-view
     timeout: 30
 wait_pane_body_loaded:
   elements:
@@ -97,7 +97,7 @@ check_error_icon_for_overview_item:
   action: wait_overview_items_loaded
   element:
     selector:
-      css: .project-overview__detail--alert
+      css: .odc-topology-list-view__alert-cell
     timeout: 20
 check_popover_info:
   action: wait_resource_summary_loaded

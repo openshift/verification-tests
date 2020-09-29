@@ -311,7 +311,7 @@ check_metrics_query_filesystem_by_pod:
 check_metrics_query_pod_count_by_node:
   scripts:
   - command:
-      return /topk.*kube_pod_info.*BY.*node/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href))
+      return /topk.*kubelet_running_pods.*BY.*node/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href))
     expect_result: true
 check_metrics_query_pod_count_by_project:
   scripts:
