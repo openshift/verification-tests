@@ -1,8 +1,11 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: hello-openshift
 spec:
+  selector:
+    matchLabels:
+      app: hello-openshift
   replicas: 3
   template:
     metadata:
@@ -11,6 +14,4 @@ spec:
     spec:
       containers:
       - name: hello-openshift
-        image: openshift/hello-openshift
-        ports:
-        - containerPort: 8080
+        image: quay.io/openshifttest/hello-openshift@sha256:424e57db1f2e8e8ac9087d2f5e8faea6d73811f0b6f96301bc94293680897073
