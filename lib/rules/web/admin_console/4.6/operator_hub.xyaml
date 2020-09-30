@@ -12,11 +12,11 @@ click_provided_apis_of_operators:
 click_create_operand_button:
   element:
     selector:
-      xpath: //button[contains(.,'Create') and contains(.,'<operand_api>') and not(disabled)]
+      xpath: //button[contains(.,'Create') and contains(.,'<operand_kind>') and not(disabled)]
     op: click
 create_operand:
   params:
-    tab_name: <operand_api>
+    tab_name: <operand_kind>
   action: goto_csv_detail_page
   action: click_tab
   action: click_create_operand_button

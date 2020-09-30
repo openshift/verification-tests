@@ -251,7 +251,10 @@ goto_operand_list_page:
   url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion/<csv_name>/<operand_name>
   action: wait_box_loaded
 goto_operand_details_page:
-  url: /k8s/ns/<project_name>/clusterserviceversions/<csv_name>/<operand_group_version_kind>/<operand_name>
+  url: /k8s/ns/<project_name>/clusterserviceversions/<csv_name>/<operand_group>~<operand_version>~<operand_kind>/<operand_name>
+  action: wait_box_loaded
+goto_operand_resources_page:
+  url: /k8s/ns/<project_name>/clusterserviceversions/<csv_name>/<operand_group>~<operand_version>~<operand_kind>/<operand_name>/resources
   action: wait_box_loaded
 goto_operator_all_instance_page:
   url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion/<csv_name>/instances
