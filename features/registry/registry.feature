@@ -250,8 +250,9 @@ Feature: Testing registry
       | dest   | mysql:8.0                                      |
     Then the step should succeed
     When I run the :new_app client command with:
-      | template | mysql-persistent              |
+      | template | mysql-ephemeral               |
       | p        | NAMESPACE=<%= project.name %> |
+      | p        | MYSQL_VERSION=8.0             |
     Then the step should succeed
     When a pod becomes ready with labels:
       | deployment=mysql-1 |
