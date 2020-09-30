@@ -208,6 +208,7 @@ click_network_out_data:
     selector:
       xpath: //h4[text()='Network Transfer']/..//button[contains(@class,'co-dashboard-card__button-link')][2]
     op: click
+    timeout: 60
 choose_consumer_measure:
   elements:
   - selector:
