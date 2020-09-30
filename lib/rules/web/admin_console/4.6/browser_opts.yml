@@ -7,8 +7,8 @@
       begin
         logger.trace "Clicking web element via hook.."
         element.send *op_call
-      rescue Selenium::WebDriver::Error::UnknownError,Selenium::WebDriver::Error::ElementClickInterceptedError => e
-        if e.message.include? "not clickable"
+      rescue Selenium::WebDriver::Error::UnknownError,Selenium::WebDriver::Error::ElementClickInterceptedError,Selenium::WebDriver::Error::ElementNotInteractableError,Selenium::WebDriver::Error::ElementNotVisibleError => e
+        if e.message.include? "not clickable" or e.message.include? "element located"
           logger.warn e.inspect
           # element.scroll_into_view
           # list of keys http://watir.com/guides/special-keys/
