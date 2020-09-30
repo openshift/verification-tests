@@ -364,8 +364,6 @@ check_osd_ocp_comman_details_in_detail_page:
         - selector:
             xpath: //dl[1]/dt[text()='Version']
         - selector:
-            xpath: //dl[1]/dt[text()='Operating system']
-        - selector:
             xpath: //dl[1]/dt[text()='Created at']
         - selector:
             xpath: //dl[1]/dt[text()='Owner']
