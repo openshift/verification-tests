@@ -42,7 +42,7 @@ When /^I wait(?: (\d+) seconds)? for the #{QUOTED} index to appear in the ES pod
   seconds ||= 10 * 60
   index_data = nil
   success = wait_for(seconds) {
-    step %Q/I get the "#{index_name}" logging index information from a pod with labels "#{pod_labels}"/
+    step %Q/I get the "#{index_name}" logging index information from a pod with labels "#{labels}"/
     res = cb.index_data
     if res
       index_data = res
