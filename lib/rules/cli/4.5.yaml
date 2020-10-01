@@ -372,6 +372,12 @@
     :l: -l <value>
     :name: <value>
     :selector: --selector=<value>
+:diff:
+  :cmd: oc diff
+  :options:
+    :f: -f <value>
+    :force-conflicts: --force-conflicts=<value>
+    :l: -l <value>
 :edit:
   :cmd: oc edit
   :options:
