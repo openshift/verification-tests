@@ -262,6 +262,16 @@ check_shortcuts_on_workloads:
   action: click_workload_details
   action: check_workload_name
   action: send_key_to_workloads
+check_next_shortcut_on_workloads:
+  params:
+    workload: <workload>
+    workload_name: <workload_name>
+    keys: <key>
+  action: send_key_to_workloads
+  action: check_workload_selected
+  action: click_workload_details
+  action: check_workload_name
+  action: send_key_to_workloads
 check_escape_on_workloads:
   params:
     keys: <key>
