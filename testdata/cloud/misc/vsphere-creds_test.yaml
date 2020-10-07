@@ -1,0 +1,16 @@
+apiVersion: v1
+data:
+  vcsa2-qe.vmware.devcluster.openshift.com.password: CWdycjRiQFhqpjA2
+  vcsa2-qe.vmware.devcluster.openshift.com.username: QSRtbW4pc1RyYXRvckBlMmUdvG9jZWw=
+kind: Secret
+metadata:
+  annotations:
+    cloudcredential.openshift.io/mode: passthrough
+    manager: cluster-bootstrap
+    operation: Update
+    manager: cloud-credential-operator
+    operation: Update
+  name: vsphere-creds
+  namespace: kube-system
+type: Opaque
+
