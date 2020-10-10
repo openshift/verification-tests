@@ -254,7 +254,7 @@ Feature: cluster log forwarder features
     Given I switch to cluster admin pseudo user
     And I use the "openshift-logging" project
     Given I obtain test data file "logging/clusterlogforwarder/<file>"
-    And admin ensures "instance" cluster_log_forwarder is deleted after scenario
+    And admin ensures "instance" cluster_log_forwarder is deleted from the "openshift-logging" project after scenario
     When I run the :create client command with:
       | f | <file> |
     Then the step should succeed
