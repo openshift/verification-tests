@@ -932,6 +932,16 @@ check_resource_owner:
     key: Owner
     value: <owner>
   action: check_resource_details_key_and_value
+check_resource_owner_type_and_link:
+  params:
+    resource_type: <resource_kind>
+  elements:
+  - selector:
+      xpath: //dt[contains(.,'Owner')]/following-sibling::dd[1]/span[contains(@class,'co-resource-item')]/span[@title='<resource_type>']
+    timeout: 20
+  - selector:
+      xpath: //dt[contains(.,'Owner')]/following-sibling::dd[1]/span[contains(@class,'co-resource-item')]/a[@href='/k8s/ns/<project_name>/<resource_group>~<resource_version>~<resource_type>/<resource_name>' and text()='<resource_name>']
+    timeout: 20
 check_resource_desired_completions:
   params:
     key: Desired Completions
@@ -1109,3 +1119,11 @@ click_workload_details:
   params:
     button_text: Details
   action: click_button_text
+check_managed_by_badge:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'co-m-pane__heading-owner') and contains(.,'Managed by')]/span[contains(@class,'co-resource-item')]/span[@title='<operand_kind>']
+    timeout: 20
+  - selector:
+      xpath: //div[contains(@class,'co-m-pane__heading-owner') and contains(.,'Managed by')]/span[contains(@class,'co-resource-item')]/a[@href='/k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion/<csv_name>/<operand_group>~<operand_version>~<operand_kind>/<operand_name>' and text()='<operand_name>']
+    timeout: 20
