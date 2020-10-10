@@ -21,7 +21,7 @@ wait_log_window_loaded:
 check_log_content_contains:
   element:
     selector:
-      xpath: //div[contains(@class,'log-window__contents__text') and contains(.,'<log_content>')]
+      xpath: //div[contains(@class,'log-window__lines') and contains(.,'<log_content>')]
     timeout: 30
 check_some_context_missing_in_expanded_log_view:
   elements:
@@ -31,7 +31,7 @@ check_some_context_missing_in_expanded_log_view:
 check_required_context_shown_in_expanded_log_view:
   elements:
   - selector: &download_button
-      xpath: //button[contains(.,'Download')]
+      xpath: //a[contains(.,'Download')]
   - selector: &collapse_button
       xpath: //button[contains(.,'Collapse')]
   - selector: &toggle_steaming_paused_button

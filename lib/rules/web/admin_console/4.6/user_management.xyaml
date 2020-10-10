@@ -161,7 +161,7 @@ check_kebab_items_disabled_on_list_page:
   action: check_kebab_items_disabled
 check_no_action_button_on_resource_page:
   action: goto_one_dc_page
-  action: check_action_button_missing
+  action: check_kebab_items_disabled
 check_no_save_button_on_resource_page:
   action: click_yaml_tab
   action: check_save_button_missing

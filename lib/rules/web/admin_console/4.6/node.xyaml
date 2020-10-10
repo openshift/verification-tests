@@ -32,17 +32,8 @@ check_role_column_header:
   params:
     column_name: Role
   action: check_column_header
-select_default_namespace_on_node_teminal:
-  elements:
-  - selector:
-      xpath: //button[@id='dropdown-selectbox']
-    op: click
-  - selector:
-      xpath: //span[text()='default']
-    op: click
 check_terminal_tab_on_node_page:
   action: click_terminal_tab
-  action: select_default_namespace_on_node_teminal
   action: check_use_host_binaries_message
 check_use_host_binaries_message:
   element:
