@@ -497,25 +497,16 @@ Feature: Service related networking scenarios
     Then the step should succeed
     """
     Given the pod named "hello-pod" becomes ready
-    And evaluation of `pod.node_ip` is stored in the :hostip clipboard
-
-    Given I obtain test data file "networking/list_for_pods.json"
-    When I run oc create over "list_for_pods.json" replacing paths:
-      | ["items"][0]["spec"]["replicas"] | 1 |
-    Then the step should succeed
-    And a pod becomes ready with labels:
-      | name=test-pods |
-    When I execute on the pod:
-      | curl | <%= cb.hostip %>:<%= cb.port %> |
+    Given I select a random node's host
+    When I run commands on the host:    
+      | curl --connect-timeout 5 localhost:<%= cb.port %> |
     Then the step should succeed
     And the output should contain:
       | Hello OpenShift! |
     Given I ensure "hello-pod" service is deleted
-    When I execute on the pod:
-      | curl | <%= cb.hostip %>:<%= cb.port %> |
+    When I run commands on the host:    
+      | curl --connect-timeout 5 localhost:<%= cb.port %> |
     Then the step should fail
-    And the output should not contain:
-      | Hello OpenShift! |
 
   # @author zzhao@redhat.com
   # @case_id OCP-33850
