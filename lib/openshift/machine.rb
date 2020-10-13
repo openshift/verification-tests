@@ -68,6 +68,46 @@ module BushSlicer
          dig('spec', 'providerSpec', 'value', 'placement','availabilityZone')
     end
 
+    def vsphere_datacenter(user: nil, cached: true, quiet: false)
+       raw_resource(user: user, cached: cached ,quiet: quiet).
+         dig('spec', 'providerSpec', 'value', 'workspace', 'datacenter')
+    end
+
+    def vsphere_datastore(user: nil, cached: true, quiet: false)
+       raw_resource(user: user, cached: cached ,quiet: quiet).
+         dig('spec', 'providerSpec', 'value', 'workspace', 'datastore')
+    end
+
+    def vsphere_folder(user: nil, cached: true, quiet: false)
+       raw_resource(user: user, cached: cached ,quiet: quiet).
+         dig('spec', 'providerSpec', 'value', 'workspace', 'folder')
+    end
+
+    def vsphere_resourcePool(user: nil, cached: true, quiet: false)
+       raw_resource(user: user, cached: cached ,quiet: quiet).
+         dig('spec', 'providerSpec', 'value', 'workspace', 'resourcePool')
+    end
+
+    def vsphere_server(user: nil, cached: true, quiet: false)
+       raw_resource(user: user, cached: cached ,quiet: quiet).
+         dig('spec', 'providerSpec', 'value', 'workspace', 'server')
+    end
+
+    def vsphere_diskGiB(user: nil, cached: true, quiet: false)
+       raw_resource(user: user, cached: cached ,quiet: quiet).
+         dig('spec', 'providerSpec', 'value', 'diskGiB')
+    end
+
+    def vsphere_memoryMiB(user: nil, cached: true, quiet: false)
+       raw_resource(user: user, cached: cached ,quiet: quiet).
+         dig('spec', 'providerSpec', 'value', 'memoryMiB')
+    end
+    
+    def vsphere_template(user: nil, cached: true, quiet: false)
+       raw_resource(user: user, cached: cached ,quiet: quiet).
+         dig('spec', 'providerSpec', 'value', 'template')
+    end
+
     def deleting?(user: nil, cached: true, quiet: false)
       ! raw_resource(user: user, cached: cached, quiet: quiet).
           dig('metadata', 'deletionTimestamp').nil?
