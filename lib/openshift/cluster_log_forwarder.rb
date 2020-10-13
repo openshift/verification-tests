@@ -1,8 +1,8 @@
 # represent a clusterlogforwarder object
-require 'openshift/cluster_resource'
+require 'openshift/project_resource'
 
 module BushSlicer
-  class ClusterLogForwarder < ClusterResource
+  class ClusterLogForwarder < ProjectResource
     RESOURCE = "clusterlogforwarders"
     
     def spec_raw(user: nil, quiet: false, cached: true)
