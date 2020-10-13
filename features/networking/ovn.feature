@@ -48,22 +48,22 @@ Feature: OVN related networking scenarios
   @destructive
   Scenario: OVN DB should be updated correctly if a resource only exist in Kube API but not in OVN NB db
     Given the env is using "OVNKubernetes" networkType
-    # Now scale down CNO pod to 0
-    Given admin uses the "openshift-network-operator" project
-    And I run the :scale admin command with:
-      | resource | deployment       |
-      | name     | network-operator |
-      | replicas | 0                |
-    Then the step should succeed
     Given I register clean-up steps:
     """
-    Given admin uses the "openshift-network-operator" project
     And I run the :scale admin command with:
-      | resource | deployment       |
-      | name     | network-operator |
-      | replicas | 1                |
+      | resource | deployment                 |
+      | name     | network-operator           |
+      | replicas | 1                          |
+      | n        | openshift-network-operator |
     Then the step should succeed
     """
+    # Now scale down CNO pod to 0
+    And I run the :scale admin command with:
+      | resource | deployment                 |
+      | name     | network-operator           |
+      | replicas | 0                          |
+      | n        | openshift-network-operator |
+    Then the step should succeed
     And admin ensures "ovnkube-master" ds is deleted from the "openshift-ovn-kubernetes" project
     And admin executes existing pods die with labels:
       | app=ovnkube-master |
@@ -110,32 +110,32 @@ Feature: OVN related networking scenarios
     And the output should contain:
       | hello-pod |
     # Now scale down CNO pod to 0
-    Given admin uses the "openshift-network-operator" project
-    And I run the :scale admin command with:
-      | resource | deployment       |
-      | name     | network-operator |
-      | replicas | 0                |
-    Then the step should succeed
     Given I register clean-up steps:
     """
-    Given admin uses the "openshift-network-operator" project
     And I run the :scale admin command with:
-      | resource | deployment       |
-      | name     | network-operator |
-      | replicas | 1                |
+      | resource | deployment                 |
+      | name     | network-operator           |
+      | replicas | 1                          |
+      | n        | openshift-network-operator |
     Then the step should succeed
     """
+    And I run the :scale admin command with:
+      | resource  | deployment                 |
+      | name      | network-operator           |
+      | replicas  | 0                          |
+      | n         | openshift-network-operator |
+    Then the step should succeed
     And admin ensures "ovnkube-master" ds is deleted from the "openshift-ovn-kubernetes" project
     And admin executes existing pods die with labels:
       | app=ovnkube-master |
     And I ensures "hello-pod" pod is deleted from the "<%= cb.hello_pod_project %>" project
     # Now scale up CNO pod to 1 and check whether hello-pod status is synced to NB db means it should not present in the DB
-    Given admin uses the "openshift-network-operator" project
     Given I run the :scale admin command with:
-      | resource | deployment                 |
-      | name     | network-operator           |
-      | replicas | 1                          |
-      | n        | openshift-network-operator |
+      | namespace | openshift-network-operator |
+      | resource  | deployment                 |
+      | name      | network-operator           |
+      | replicas  | 1                          |
+      | n         | openshift-network-operator |
     Then the step should succeed
     # A recommended wait for 30 seconds is tested to reflect CNO deployment to be in effect which will then re-spawn ovn pods
     Given 30 seconds have passed
@@ -143,10 +143,11 @@ Feature: OVN related networking scenarios
     And admin waits for all pods in the "openshift-ovn-kubernetes" project to become ready up to 120 seconds
     Given I store the ovnkube-master "north" leader pod in the clipboard
     # too much output, if we don't filter server-side this always fails
+    # making sure here that hello-pod absense is properly synced
     And admin executes on the pod "northd" container:
       | bash | -c | ovn-nbctl list logical_switch_port \| grep hello-pod |
-    Then the step should succeed
-    # making sure here that hello-pod absense is properly synced
+    # fail because the grep won't match anything
+    Then the step should fail
     And the output should not contain:
       | hello-pod |
 
@@ -235,10 +236,12 @@ Feature: OVN related networking scenarios
     Then the step should succeed
     Given 2 pods become ready with labels:
       | name=test-pods |
+    And I store in the :test_pods clipboard the pods labeled:
+      | name=test-pods |
 
     # Check pod works
-    When I execute on the "<%= pod(1).name %>" pod:
-      | curl | -s | --connect-timeout | 60 | <%= pod(0).ip_url %>:8080 |
+    When I execute on the "<%= cb.test_pods[1].name %>" pod:
+      | curl | -s | --connect-timeout | 60 | <%= cb.test_pods[0].ip_url %>:8080 |
     Then the step should succeed
     And the output should contain "Hello OpenShift"
 
@@ -252,8 +255,8 @@ Feature: OVN related networking scenarios
 
     # Check pod works
     Given I use the "<%= cb.usr_project%>" project
-    When I execute on the "<%= pod(1).name %>" pod:
-      | curl | -s | --connect-timeout | 60 | <%= pod(0).ip_url %>:8080 |
+    When I execute on the "<%= cb.test_pods[1].name %>" pod:
+      | curl | -s | --connect-timeout | 60 | <%= cb.test_pods[0].ip_url %>:8080 |
     Then the step should succeed
     And the output should contain "Hello OpenShift"
 
