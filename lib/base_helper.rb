@@ -138,20 +138,32 @@ module BushSlicer
       # @param seconds [Numeric] the max number of seconds to try operation to
       #   succeed
       # @param interval [Numeric] the interval to wait between attempts
+      # @param stats [Hash] collect stats
+      # @param jitter_multiplier [Numeric] (value >= 1) used to generate
+      #   random jitter in the wait interval using the decorrelated jitter
+      #   algorithm from https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/
+      #   Jitter helps reduce contention between simultaneous clients
       # @yield block the block will be yielded until it returns true or timeout
       #   is reached
-      def wait_for(seconds, interval: 1, stats: nil)
-        if seconds > 60
-          Kernel.puts("waiting for operation up to #{seconds} seconds..")
-        end
+      def wait_for(seconds, interval: 1, stats: nil, jitter_multiplier: 3)
         iterations = 0
-
         start = monotonic_seconds
+        # pre-compute deadline
+        deadline = start + seconds
         success = false
-        until monotonic_seconds - start > seconds
-          iterations += 1
-          success = yield and break
+        base_interval = interval
+        until monotonic_seconds > deadline
+          (success = yield) and break
+          # only print if we actually have to wait
+          if iterations == 0
+            Kernel.puts("waiting for operation up to #{seconds} seconds..")
+          end
+          if jitter_multiplier >= 1
+            # cap max wait at seconds remaining (deadline - monotonic_seconds)
+            interval = [(deadline - monotonic_seconds), rand(base_interval...(jitter_multiplier * interval))].min
+          end
           sleep interval
+          iterations += 1
         end
 
         return success
