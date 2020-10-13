@@ -121,6 +121,28 @@ Then /^the output should equal #{QUOTED}$/ do |value|
   end
 end
 
+Given /^we wait using exponential backoff with jitter(?: using #{SYM} clipboard)?$/ do |cb_name|
+  # https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/
+  max_wait = 120
+  base_wait_seconds = 1
+  cb_name = 'backoff' unless cb_name
+  cb[cb_name] ||= 1
+  tmp = [max_wait, (base_wait_seconds*(2**cb[cb_name]))].min
+  s = rand(0...tmp)
+  sleep(s)
+  cb[cb_name] += 1
+end
+
+Given /^we wait using decorrelated jitter(?: using #{SYM} clipboard)?$/ do |cb_name|
+  # https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/
+  max_wait = 120
+  base_wait_seconds = 1
+  cb_name = 'backoff' unless cb_name
+  cb[cb_name] ||= 1
+  cb[cb_name] = [max_wait, rand(base_wait_seconds...(3*cb[cb_name]))].min
+  sleep(cb[cb_name])
+end
+
 Given /^([0-9]+?) seconds have passed$/ do |num|
   sleep(num.to_i)
 end
