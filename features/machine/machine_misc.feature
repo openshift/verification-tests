@@ -14,8 +14,8 @@ Feature: Machine misc features testing
       | n             | kube-system   |
       | o             | yaml          |
    And I save the output to file> vsphere-creds_original.yaml
-   Then admin ensures the changed secret "vsphere-creds" is restored in "kube-system" project after scenario
-
+   Then the "vsphere-creds" secret is recreated by admin in the "kube-system" project after scenario
+   
    Given I obtain test data file "cloud/misc/vsphere-creds_test.yaml"
    Then I run the :replace admin command with:
       | _tool | oc                       |
