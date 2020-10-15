@@ -699,15 +699,15 @@ Feature: Multus-CNI related scenarios
     
     #making sure the pods on same node can ping while pods on diff nodes can't
     When I execute on the "<%= cb.pod1 %>" pod:
-      | arping | -I | net1 |-c1 | -w2 | <%= cb.pod2_net1_ip %> |
+      | ping | -c1 | -w2 | <%= cb.pod2_net1_ip %> |
     Then the step should succeed
 
     When I execute on the "<%= cb.pod3 %>" pod:
-      | arping | -I | net1 |-c1 | -w2 | <%= cb.pod1_net1_ip %> |
+      | ping | -c1 | -w2 | <%= cb.pod1_net1_ip %> |
     Then the step should fail
     
     When I execute on the "<%= cb.pod3 %>" pod:
-      | arping | -I | net1 |-c1 | -w2 | <%= cb.pod2_net1_ip %> |
+      | ping | -c1 | -w2 | <%= cb.pod2_net1_ip %> |
     Then the step should fail
     
   # @author anusaxen@redhat.com
