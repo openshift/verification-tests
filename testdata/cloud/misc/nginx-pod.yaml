@@ -1,0 +1,25 @@
+apiVersion: "v1"
+kind: "Pod"
+metadata:
+  name: "mypod"
+  labels:
+    name: "frontendhttp"
+spec:
+  containers:
+    -
+      name: "myfrontend"
+      image: "nginx"
+      ports:
+        -
+          containerPort: 80
+          name: "http-server"
+      volumeMounts:
+        -
+          mountPath: "/var/www/html"
+          name: "pvol"
+  volumes:
+    -
+      name: "pvol"
+      persistentVolumeClaim:
+        claimName: "pvc"
+
