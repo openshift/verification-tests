@@ -94,6 +94,7 @@ goto_secrets_creation_page:
   url: k8s/ns/<project_name>/secrets/~new/<secret_type>
 goto_one_secret_page:
   url: k8s/ns/<project_name>/secrets/<secret_name>
+  action: wait_box_loaded
 
 #serviceaccounts
 goto_serviceaccounts_page:
@@ -248,6 +249,12 @@ goto_csv_subscription_page:
   action: wait_box_loaded
 goto_operand_list_page:
   url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion/<csv_name>/<operand_name>
+  action: wait_box_loaded
+goto_operand_details_page:
+  url: /k8s/ns/<project_name>/clusterserviceversions/<csv_name>/<operand_group>~<operand_version>~<operand_kind>/<operand_name>
+  action: wait_box_loaded
+goto_operand_resources_page:
+  url: /k8s/ns/<project_name>/clusterserviceversions/<csv_name>/<operand_group>~<operand_version>~<operand_kind>/<operand_name>/resources
   action: wait_box_loaded
 goto_operator_all_instance_page:
   url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion/<csv_name>/instances

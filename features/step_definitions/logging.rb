@@ -220,8 +220,7 @@ Given /^I wait until ES cluster is ready$/ do
   step %Q/#{cluster_logging('instance').logstore_node_count.to_i} pods become ready with labels:/, table(%{
     | cluster-name=elasticsearch,component=elasticsearch |
   }) 
-  # due to https://bugzilla.redhat.com/show_bug.cgi?id=1874746, remove this step, once the bug is fixed, will revert the change
-  #cluster_logging('instance').wait_until_es_is_ready
+  cluster_logging('instance').wait_until_es_is_ready
 end
 
 Given /^I wait until kibana is ready$/ do 

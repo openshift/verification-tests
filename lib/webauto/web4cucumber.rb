@@ -47,6 +47,7 @@ require_relative 'chrome_extension'
         snippets_dir: "",
         logger: SimpleLogger.new,
         browser_type: :firefox,
+        selenium_url: nil,
         browser: nil,
         scroll_strategy: nil,
         size: nil,
@@ -54,6 +55,7 @@ require_relative 'chrome_extension'
         http_proxy: nil
       )
       @browser_type = browser_type
+      @selenium_url = selenium_url
       @rules = Web4Cucumber.load_rules [rules]
       @snippets_dir = snippets_dir
       @base_url = base_url
@@ -126,7 +128,7 @@ require_relative 'chrome_extension'
         # this also needs debug webdriver logging enabled above to work
         # options.log_level = 'trace'
 
-        @browser = Watir::Browser.new :firefox, :http_client=>client, desired_capabilities: caps, options: options
+        @browser = Watir::Browser.new :firefox, :http_client=>client, desired_capabilities: caps, options: options, url: @selenium_url
         if @size
           browser.window.resize_to(*@size)
         end
@@ -145,7 +147,8 @@ require_relative 'chrome_extension'
         # options.add_extension proxy_chrome_ext_file if proxy_chrome_ext_file
         options = {}
         options[:extensions] = [proxy_chrome_ext_file] if proxy_chrome_ext_file
-        @browser = Watir::Browser.new :chrome, desired_capabilities: chrome_caps, switches: chrome_switches, options: options
+        url_or_switches = @selenium_url ? {url: @selenium_url} : {switches: chrome_switches}
+        @browser = Watir::Browser.new :chrome, desired_capabilities: chrome_caps, options: options, **url_or_switches
         if @size
           browser.window.resize_to(*@size)
         end
@@ -156,7 +159,7 @@ require_relative 'chrome_extension'
         if Integer === @scroll_strategy
           safari_caps[:element_scroll_behavior] = @scroll_strategy
         end
-        driver = Selenium::WebDriver.for :safari, desired_capabilities: safari_caps
+        driver = Selenium::WebDriver.for :safari, desired_capabilities: safari_caps, url: @selenium_url
         @browser = Watir::Browser.new driver
       else
         raise "Web4Cucumber: browser type '#{@browser_type}' not supported"
@@ -164,10 +167,12 @@ require_relative 'chrome_extension'
       @browser
     end
 
-    # start a new headless session if we don't have a GUI environment already;
+    # start a new headless session if we're responsible for launching
+    #   a browser and don't have a GUI environment already;
     #   that means no windows, no mac, and no DISPLAY env variable;
     #   if you want to force headless on linux, just `unset DISPLAY` prior run
     def headless
+      return if @selenium_url
       if self.class.linux?
         if !ENV["DISPLAY"] && !@@headless
           require 'headless'

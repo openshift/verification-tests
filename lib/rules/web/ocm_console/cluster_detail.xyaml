@@ -133,15 +133,15 @@ check_actions_items_of_ready_ocp_cluster_on_detail:
 check_disconnected_cluster_overview_information:
     elements:
         - selector:
-            xpath: //div[@class='pf-l-grid']/div[1]//dt[6][text()='Operating system']/../dd[6][text()='<operating_system>']
+            xpath: //div[@class='pf-l-grid']//div//dt[6][text()='Operating system']/../dd[6][text()='<operating_system>']
         - selector:
-            xpath: //div[@class='pf-l-grid']/div[1]//dt[2][text()='Type']/../dd[2][text()='OCP']
+            xpath: //div[@class='pf-l-grid']//div//dt[2][text()='Type']/../dd[2]/*[text()='OCP']
         - selector:
-            xpath: //div[@class='pf-l-grid']/div[1]//dt[3][text()='Location']/../dd[3][text()='N/A']
+            xpath: //div[@class='pf-l-grid']/div//dt[3][text()='Location']/../dd[3][text()='N/A']
         - selector:
-            xpath: //div[@class='pf-l-grid']/div[1]//dt[4][text()='Provider']/../dd[4][text()='N/A']
+            xpath: //div[@class='pf-l-grid']//div//dt[4][text()='Provider']/../dd[4][text()='N/A']
         - selector:
-            xpath: //div[@class='pf-l-grid']/div[2]//dt[1][text()='Status']/../dd[1][text()='disconnected']
+            xpath: //div[@class='pf-l-grid']//div//dt[1][text()='Status']/../dd[1][text()='disconnected']
     action:
         if_param: vcpu_type
         ref: total_vCPU_loaded
@@ -149,13 +149,17 @@ check_disconnected_cluster_overview_information:
         if_param: sockets_type
         ref: total_sockets_loaded
 total_vCPU_loaded:
-    element:
-        selector:
+    elements:
+        - selector:
             xpath: //div[@class='pf-l-grid']/div[2]//dt[2][text()='Total vCPU']/../dd[2][contains(.,'vCPU')]
+        - selector:
+            xpath: //dt[text()='Subscription units']/../dd[1][text()='Cores/vCPU']
 total_sockets_loaded:
-    element:
-        selector:
+    elements:
+        - selector:
             xpath: //div[@class='pf-l-grid']/div[2]//dt[3][text()='Total sockets']
+        - selector:
+            xpath: //dt[text()='Subscription units']/../dd[1][text()='Sockets']
 check_total_vcpu_value:
     element:
         selector:
@@ -359,8 +363,6 @@ check_osd_ocp_comman_details_in_detail_page:
             xpath: //dl[1]/dt[text()='Provider']
         - selector:
             xpath: //dl[1]/dt[text()='Version']
-        - selector:
-            xpath: //dl[1]/dt[text()='Operating system']
         - selector:
             xpath: //dl[1]/dt[text()='Created at']
         - selector:

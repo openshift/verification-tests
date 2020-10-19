@@ -269,3 +269,27 @@ check_data_diplayed_db:
   element:
     selector:
       xpath: //h2[text()='<data_name>']/../..//*[contains(text(), '<legend_name>')] 
+
+click_utilization_graph_link:
+  element:
+    selector:
+      xpath: //div[@class='co-utilization-card__item-chart']//a[contains(@href, '<metric_kind>')]
+    timeout: 120
+    op: click
+click_uitilization_description:
+  element:
+    selector:
+      xpath: //*[text()='<metric_kind>']/ancestor::div[@class='co-utilization-card__item-description']//button
+    timeout: 120
+    op: click
+click_link_from_uitilization_description:
+  params:
+    metric_kind: <metric_kind> 
+    text: <link_text>
+  action: click_uitilization_description 
+  action: click_link_with_text_only
+check_pod_detail:
+  params:
+    content: Memory Usage
+  action: check_page_contains 
+  action: check_pod_detail_page_charts_style

@@ -5,14 +5,12 @@ Feature: SCTP related scenarios
   @admin
   @destructive
   Scenario: Establish pod to pod SCTP connections
-    Given I store the workers in the :workers clipboard
-    And I store the number of worker nodes to the :num_workers clipboard
-    
+    Given I store the workers in the :workers clipboard    
     Given I install machineconfigs load-sctp-module
     Given I have a project
     And I wait up to 800 seconds for the steps to pass:
     """
-    Given I check load-sctp-module in <%= cb.num_workers %> workers
+    Given I check load-sctp-module in all nodes
     """
     Given I obtain test data file "networking/sctp/sctpserver.yaml"
     When I run oc create as admin over "sctpserver.yaml" replacing paths:
@@ -60,14 +58,12 @@ Feature: SCTP related scenarios
   @admin
   @destructive
   Scenario: Expose SCTP ClusterIP Services
-    Given I store the workers in the :workers clipboard
-    And I store the number of worker nodes to the :num_workers clipboard
-    
+    Given I store the workers in the :workers clipboard    
     Given I install machineconfigs load-sctp-module
     Given I have a project
     And I wait up to 800 seconds for the steps to pass:
     """
-    Given I check load-sctp-module in <%= cb.num_workers %> workers
+    Given I check load-sctp-module in all nodes
     """
     Given I obtain test data file "networking/sctp/sctpserver.yaml"
     When I run oc create as admin over "sctpserver.yaml" replacing paths:
@@ -122,14 +118,12 @@ Feature: SCTP related scenarios
   @destructive
   Scenario: Expose SCTP NodePort Services
     Given I store the workers in the :workers clipboard
-    And I store the number of worker nodes to the :num_workers clipboard
-    And the Internal IP of node "<%= cb.workers[1].name %>" is stored in the :worker1_ip clipboard
-    
+    And the Internal IP of node "<%= cb.workers[1].name %>" is stored in the :worker1_ip clipboard  
     Given I install machineconfigs load-sctp-module
     Given I have a project
     And I wait up to 800 seconds for the steps to pass:
     """
-    Given I check load-sctp-module in <%= cb.num_workers %> workers
+    Given I check load-sctp-module in all nodes
     """
     Given I obtain test data file "networking/sctp/sctpserver.yaml"
     When I run oc create as admin over "sctpserver.yaml" replacing paths:
@@ -183,14 +177,12 @@ Feature: SCTP related scenarios
   @admin
   @destructive
   Scenario: Networkpolicy allow SCTP Client
-    Given I store the workers in the :workers clipboard
-    And I store the number of worker nodes to the :num_workers clipboard
-    
+    Given I store the workers in the :workers clipboard    
     Given I install machineconfigs load-sctp-module
     Given I have a project
     And I wait up to 800 seconds for the steps to pass:
     """
-    Given I check load-sctp-module in <%= cb.num_workers %> workers
+    Given I check load-sctp-module in all nodes
     """
     Given I obtain test data file "networking/sctp/sctpserver.yaml"
     When I run oc create as admin over "sctpserver.yaml" replacing paths:

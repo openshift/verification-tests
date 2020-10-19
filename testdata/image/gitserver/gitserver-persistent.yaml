@@ -13,7 +13,7 @@ items:
       app: git
   spec:
     strategy:
-      type: Recreate
+      type: Rolling
     replicas: 1 # the git server is not HA and should not be scaled past 1
     selector:
       run-container: git
@@ -25,7 +25,8 @@ items:
         serviceAccountName: git
         containers:
         - name: git
-          image: openshift/origin-gitserver:latest
+          image: quay.io/openshifttest/origin-gitserver@sha256:8062457c330f0da521b340f2dceb13c4852d46ec58e45a9ef276a5ec639a328c
+          imagePullPolicy: IfNotPresent
           ports:
           - containerPort: 8080
           readinessProbe:

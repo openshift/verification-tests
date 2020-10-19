@@ -152,6 +152,7 @@ Feature: oc idle
       | idling.*openshift.io/idled-at |
 
   # @author chezhang@redhat.com
+  # @author minmli@redhat.com
   # @case_id OCP-10941
   Scenario: Idling service with dc
     Given I have a project
@@ -196,7 +197,7 @@ Feature: oc idle
       | resource | endpoints |
     Then the step should succeed
     And the output should match:
-      | idling-echo.*\d+.\d+.\d+.\d+:3090,\d+.\d+.\d+.\d+:3090,\d+.\d+.\d+.\d+:8675 |
+      | idling-echo.*\d+.\d+.\d+.\d+:(3090\|8675),\d+.\d+.\d+.\d+:(3090\|8675),\d+.\d+.\d+.\d+:(8675\|3090) |
     Given 2 pods become ready with labels:
       | app=idling-echo |
     When I run the :idle client command with:
@@ -215,7 +216,7 @@ Feature: oc idle
       | resource | endpoints |
     Then the step should succeed
     And the output should match:
-      | idling-echo.*\d+.\d+.\d+.\d+:3090,\d+.\d+.\d+.\d+:3090,\d+.\d+.\d+.\d+:8675 |
+      | idling-echo.*\d+.\d+.\d+.\d+:(3090\|8675),\d+.\d+.\d+.\d+:(3090\|8675),\d+.\d+.\d+.\d+:(8675\|3090) |
 
   # @author chezhang@redhat.com
   # @case_id OCP-11345

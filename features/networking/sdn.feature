@@ -218,7 +218,7 @@ Feature: SDN related networking scenarios
   Scenario: ovs-vswitchd process must be running on all ovs pods
     Given I switch to cluster admin pseudo user
     When I run cmds on all ovs pods:
-      | pgrep ovs-vswitchd |
+      | pgrep | ovs-vswitchd |
     Then the step should succeed
 
   # @author huirwang@redhat.com
