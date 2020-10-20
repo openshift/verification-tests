@@ -45,6 +45,14 @@ delete_osd_cluster_from_detail_page:
     action: input_cluster_name_on_deletion_dialog
     action: click_delete_button_on_deletion_dialog
     action: cluster_list_page_loaded
+
+delete_cluster_from_cluster_list_page:
+    action: expand_cluster_actions_on_cluster_list_page
+    action: click_delete_cluster_button_on_cluster_list_page
+    action: delete_cluster_dialog_loaded
+    action: input_cluster_name_on_deletion_dialog
+    action: click_delete_button_on_deletion_dialog
+    action: cluster_list_page_loaded
 archive_cluster_from_cluster_list_page:
     action: cluster_list_page_loaded
     action: click_archive_button_on_cluster_list_page

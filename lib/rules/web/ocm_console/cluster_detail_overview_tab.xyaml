@@ -5,15 +5,39 @@ go_to_overview_tab:
 check_installation_logs_tab:
     elements:
         - selector:
-            xpath: //h2[text()='Installation logs']
+            xpath: //span[text()='View logs']
+          op: click
         - selector:
             xpath: //p[text()='Cluster installation has started. Installation log will appear here once it becomes available.']
+        - selector:
+            xpath: //span[text()='Hide logs']
         - selector:
             xpath: //div[@class='log-window__header' and contains(.,'lines')]
           timeout: 600
         - selector:
             xpath: //div[@class='log-window__contents__text' and contains(text(), 'time=')]
           timeout: 30
+
+expand_logs_view:
+    element:
+        selector:
+            xpath: //span[text()='View logs']
+        op: click
+
+hide_logs_view:
+    elements:
+        - selector:
+            xpath: //span[text()='Hide logs']
+          op: click
+        - selector:
+            xpath: //p[text()='Cluster installation has started. Installation log will appear here once it becomes available.']
+          missing: true
+        - selector:
+            xpath: //div[@class='log-window__header' and contains(.,'lines')]
+          missing: true
+        - selector:
+            xpath: //span[text()='View logs']
+        
 
 check_uninstallation_logs_tab:
     elements:
@@ -36,15 +60,18 @@ check_cluster_logs:
         ref: check_uninstallation_logs_tab
     action: click_expand_button
     action: exit_full_log_screen
+    action:
+        if_param: installation
+        ref: hide_logs_view
 
 click_expand_button:
     element:
         selector:
-            xpath: //button[text()='Expand']
+            xpath: //button[text()='Full screen']
         op: click
 
 exit_full_log_screen:
     element:
         selector:
-            xpath: //button[text()='Exit fullscreen']
+            xpath: //button[text()='Exit full screen']
         op: click
