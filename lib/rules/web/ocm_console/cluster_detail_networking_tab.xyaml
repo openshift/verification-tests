@@ -1,10 +1,11 @@
 #------------------------------This file is used for cluster detail networking tab definition-----------
 click_networking_tab:
-    element:
+    element: &networking_tab_button
         selector:
             xpath: //button[contains(.,'Networking')]
-        timeout: 300
         op: click
+        timeout: <timeout>
+
 networking_tab_loaded:
     elements:
         - selector:

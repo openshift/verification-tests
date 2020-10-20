@@ -295,6 +295,7 @@ click_delete_cluster_button_on_cluster_list_page:
         selector:
             xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Delete cluster']
         op: click
+
 click_clear_filters_button:
     element:
         selector:
