@@ -133,8 +133,6 @@ check_actions_items_of_ready_ocp_cluster_on_detail:
 check_disconnected_cluster_overview_information:
     elements:
         - selector:
-            xpath: //div[@class='pf-l-grid']//div//dt[6][text()='Operating system']/../dd[6][text()='<operating_system>']
-        - selector:
             xpath: //div[@class='pf-l-grid']//div//dt[2][text()='Type']/../dd[2]/*[text()='OCP']
         - selector:
             xpath: //div[@class='pf-l-grid']/div//dt[3][text()='Location']/../dd[3][text()='N/A']
