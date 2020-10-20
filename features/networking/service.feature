@@ -490,7 +490,7 @@ Feature: Service related networking scenarios
     Given as admin I successfully merge patch resource "networks.config.openshift.io/cluster" with:
       | {"spec":{"serviceNodePortRange": "30000-33000"}} |
     When I obtain test data file "networking/nodeport_service.json"
-    And I wait up to 300 seconds for the steps to pass:
+    And I wait up to 600 seconds for the steps to pass:
     """    
     When I run oc create over "nodeport_service.json" replacing paths:
       | ["items"][1]["spec"]["ports"][0]["nodePort"] | <%= cb.port %> |
