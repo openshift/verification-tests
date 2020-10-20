@@ -499,3 +499,52 @@ select_cluster_history_by_severity:
           op: click
         - selector:
             xpath: //td[text()='<result_keyword>']
+transfer_cluster_ownership:
+    action: expand_actions_on_cluster_detail_page
+    action: click_transfer_cluster_ownership_button
+    action: check_transfer_cluster_ownership_dialog
+    action: click_initiate_transfer_button
+    action: check_transfer_cluster_ownership_notification
+click_transfer_cluster_ownership_button:
+    element:
+        selector:
+            xpath: //button[@class='pf-c-dropdown__menu-item' and text()='Transfer cluster ownership']
+        op: click
+check_transfer_cluster_ownership_dialog:
+    elements:
+        - selector:
+            xpath: //h1[text()='Transfer cluster ownership']
+        - selector:
+            xpath: //p[text()='Transferring cluster ownership will allow another individual to manage this cluster. The steps for transferring cluster ownership are:']
+        - selector:
+            xpath: //a[@href='https://access.redhat.com/solutions/4902871' and text()='Change the cluster's pull secret']
+        - selector:
+            xpath: //p[text()='The transfer is complete when OpenShift Cluster Manager receives telemetry data from the cluster with the new pull secret.']
+        - selector:
+            xpath: //h4[text()='If the transfer is not completed within 5 days, the procedure must be restarted.']
+click_initiate_transfer_button:
+    element:
+        selector:
+            xpath: //button[text()='Initiate transfer']            
+        op: click
+check_transfer_cluster_ownership_notification:
+    elements:
+        -selector:
+            xpath: //h4[text()='Cluster ownership transfer initiated']
+        - selector:
+            xpath: //div[text()='The transfer process will complete once the pull secret has been changed in the cluster. See']
+        - selector:
+            xpath: //a[@href='https://access.redhat.com/solutions/4902871' and text()='this knowledgebase article']
+cancel_transfer_cluster_ownership:
+    action: expand_actions_on_cluster_detail_page
+    action: click_cancel_transfer_cluster_ownership_button
+    action: check_cancel_transfer_cluster_ownership_notification
+click_cancel_transfer_cluster_ownership_button:
+    element:
+        selector:
+            xpath: //button[text()='Cancel ownership transfer']            
+        op: click
+check_cancel_transfer_cluster_ownership_notification:
+    element:
+        selector:
+            xpath: //span[text()='Cluster ownership transfer canceled']
