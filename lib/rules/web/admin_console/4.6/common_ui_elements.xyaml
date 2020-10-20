@@ -450,6 +450,11 @@ check_templateinstance_name_and_icon:
     icon_text: TI
     resource_name: <templateinstance_name>
   action: check_resource_name_icon_info
+check_catalogsource_name_and_icon:
+  params:
+    icon_text: CS
+    resource_name: <catalogsource_name>
+  action: check_resource_name_icon_info
 check_resource_name_icon_info:
   elements:
   - selector:
@@ -1122,8 +1127,11 @@ click_workload_details:
 check_managed_by_badge:
   elements:
   - selector:
-      xpath: //div[contains(@class,'co-m-pane__heading-owner') and contains(.,'Managed by')]/span[contains(@class,'co-resource-item')]/span[@title='<operand_kind>']
-    timeout: 20
-  - selector:
       xpath: //div[contains(@class,'co-m-pane__heading-owner') and contains(.,'Managed by')]/span[contains(@class,'co-resource-item')]/a[@href='/k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion/<csv_name>/<operand_group>~<operand_version>~<operand_kind>/<operand_name>' and text()='<operand_name>']
     timeout: 20
+check_owner_reference:
+  params:
+    resource_type: <owner_resource_kind>
+    resource_name: <owner_resource_name>
+    resource_link: /k8s/ns/<owner_resource_namespace>/<owner_resource_group>~<owner_resource_version>~<owner_resource_kind>/<owner_resource_name>
+  action: check_resource_item

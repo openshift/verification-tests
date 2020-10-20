@@ -199,6 +199,17 @@ goto_monitoring_silences_page:
 goto_monitoring_db_k8s_resource_pod:
   url: monitoring/dashboards/grafana-dashboard-k8s-resources-pod
 
+# metering
+goto_chargeback_reports_page:
+  url: k8s/ns/<namespace>/metering.openshift.io~v1~Report
+  action: wait_box_loaded
+goto_one_reportquery_page:
+  url: /k8s/ns/<namespace>/metering.openshift.io~v1~ReportQuery/<reportquery_name>
+  action: wait_box_loaded
+goto_one_report_page:
+  url: /k8s/ns/<namespace>/metering.openshift.io~v1~Report/<report_name>
+  action: wait_box_loaded
+
 #node
 goto_node_page:
   url: k8s/cluster/nodes
