@@ -114,7 +114,7 @@ Feature: oc import-image related feature
       | resource        | dc                 |
       | o               | yaml               |
     Then the output should match:
-      |[Ll]astTriggeredImage.*deployment-example@sha256.*|
+      | openshift/deployment-example@sha256 |
     When I run the :delete client command with:
       | object_type | dc |
       | all         |    |
@@ -147,7 +147,7 @@ Feature: oc import-image related feature
       | resource        | dc                 |
       | o               | yaml               |
     Then the output should match:
-      | [Ll]astTriggeredImage.*:.*<%= project.name %>\/deployment-example@sha256.*|
+      | <%= project.name %>\/deployment-example@sha256 |
 
   # @author geliu@redhat.com
   # @case_id OCP-12766
