@@ -1,7 +1,7 @@
 require 'openshift/project_resource'
 
 module BushSlicer
-  class CredentialRequest < ProjectResource
+  class CredentialsRequest < ProjectResource
     RESOURCE = "credentialsrequest"
   end
 end
