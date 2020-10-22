@@ -322,5 +322,10 @@ module BushSlicer
                exec_command_arg: args,
                _stdin: stdin)
     end
+
+    def tolerations(user: nil, cached: true, quiet: false)
+      raw_resource(user: user, cached: cached, quiet: quiet).dig('spec', 'tolerations')
+    end
+
   end
 end
