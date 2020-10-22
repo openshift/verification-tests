@@ -67,6 +67,34 @@ Feature: scheduler with custom policy upgrade check
       | map[CheckNodeUnschedulable:{} CheckVolumeBinding:{} GeneralPredicates:{} MatchInterPodAffinity:{} MaxAzureDiskVolumeCount:{} MaxCSIVolumeCountPred:{} MaxEBSVolumeCount:{} MaxGCEPDVolumeCount:{} NoDiskConflict:{} NoVolumeZoneConflict:{} PodToleratesNodeTaints:{}] |
 
   # @author knarra@redhat.com
+  # @case_id OCP-35956
+  @upgrade-check
+  @admin
+  @destructive
+  Scenario: Upgrading cluster when using a custom policy for kube-scheduler should work fine
+    Given the "kube-scheduler" operator version matches the current cluster version
+    Given the expression should be true> cluster_operator('kube-scheduler').condition(type: 'Progressing')['status'] == "False"
+    And the expression should be true> cluster_operator('kube-scheduler').condition(type: 'Available')['status'] == "True"
+    And the expression should be true> cluster_operator('kube-scheduler').condition(type: 'Degraded')['status'] == "False"
+    And the expression should be true> cluster_operator('kube-scheduler').condition(type: 'Upgradeable')['status'] == "True"
+    When I run the :get admin command with:
+      | resource      | scheduler |
+      | resource_name | cluster   |
+      | o             | yaml      |
+    Then the step should succeed
+    And the output should contain "scheduler-policy"
+    Given I switch to cluster admin pseudo user
+    When I use the "openshift-kube-scheduler" project
+    And status becomes :running of 3 pods labeled:
+      | app=openshift-kube-scheduler |
+    Given evaluation of `@pods[0].name` is stored in the :schedulerpod clipboard
+    When I run the :logs client command with:
+      | resource_name | pod/<%=cb.schedulerpod %> |
+      | c             | kube-scheduler            |
+    And the output should contain:
+      | map[CheckNodeUnschedulable:{} CheckVolumeBinding:{} GeneralPredicates:{} MatchInterPodAffinity:{} MaxAzureDiskVolumeCount:{} MaxCSIVolumeCountPred:{} MaxEBSVolumeCount:{} MaxGCEPDVolumeCount:{} NoDiskConflict:{} NoVolumeZoneConflict:{} PodToleratesNodeTaints:{}] |
+
+  # @author knarra@redhat.com
   @upgrade-prepare
   @admin
   @destructive
