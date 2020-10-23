@@ -1,3 +1,4 @@
+
 Given /^I run the ovs commands on the host:$/ do | table |
   ensure_admin_tagged
   _host = node.host
@@ -696,10 +697,26 @@ end
 
 Given /^CNI vlan info is obtained on the#{OPT_QUOTED} node$/ do | node_name |
   ensure_admin_tagged
-  node = node(node_name)
-  host = node.host
-  @result = host.exec_admin("/sbin/bridge vlan show")
+  @result = node(node_name).host.exec_admin("/sbin/bridge -j vlan show")
   raise "Failed to execute bridge vlan show command" unless @result[:success]
+  @result[:parsed] = YAML.load @result[:stdout]
+end
+
+Given /^the number of bridge PVID (\d+) VLANs matching #{QUOTED} added between the #{SYM} and #{SYM} clipboards is (\d+)$/ do |pvid, mode, clip_a, clip_b, expected_vlans|
+  pvid = pvid.to_i
+  added_bridges = cb[clip_b] - cb[clip_a]
+  logger.info("added_bridges: #{added_bridges}")
+  mode = Regexp.new(mode)
+  num_vlans = added_bridges.count { |b|
+    c = b["vlans"].count { |v|
+      v["vlan"] == pvid && v["flags"].include?("PVID") && v["flags"].any?(mode)
+    }
+    c > 0
+  }
+  if num_vlans != expected_vlans.to_i
+    raise "Found #{num_vlans} bridge VLANS of #{pvid} and mode #{mode}, expected #{expected_vlans}"
+  end
+
 end
 
 Given /^the bridge interface named "([^"]*)" is deleted from the "([^"]*)" node$/ do |bridge_name, node_name|
@@ -1157,7 +1174,7 @@ Given /^I install machineconfigs load-sctp-module$/ do
   end
 end
 
-Given /^I check load-sctp-module in all nodes$/ do 
+Given /^I check load-sctp-module in all nodes$/ do
   ensure_admin_tagged
   _admin = admin
   env.nodes.each do |node|
