@@ -1,0 +1,13 @@
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: hello-pod
+  labels:
+    name: hello-pod
+spec:
+  containers:
+  - name: hello-pod
+    image: quay.io/openshifttest/hello-openshift@sha256:aaea76ff622d2f8bcb32e538e7b3cd0ef6d291953f3e7c9f556c1ba5baf47e2e
+    ports:
+    - containerPort: 8081

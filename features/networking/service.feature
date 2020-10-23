@@ -488,27 +488,33 @@ Feature: Service related networking scenarios
   @admin
   @destructive
   Scenario: User can expand the nodePort range by patch the serviceNodePortRange in network
+    Given I store the workers in the :workers clipboard
+    And the Internal IP of node "<%= cb.workers[0].name %>" is stored in the :worker0_ip clipboard
     Given I have a project
     And evaluation of `rand(32676..33000)` is stored in the :port clipboard
     Given as admin I successfully merge patch resource "networks.config.openshift.io/cluster" with:
       | {"spec":{"serviceNodePortRange": "30000-33000"}} |
-    When I obtain test data file "networking/nodeport_service.json"
+    Given I obtain test data file "networking/nodeport_test_pod.yaml"
+    When I run the :create client command with:
+      | f | nodeport_test_pod.yaml |
+    Then the step should succeed
+    When I obtain test data file "networking/nodeport_test_service.yaml"
     And I wait up to 600 seconds for the steps to pass:
     """    
-    When I run oc create over "nodeport_service.json" replacing paths:
-      | ["items"][1]["spec"]["ports"][0]["nodePort"] | <%= cb.port %> |
+    When I run oc create over "nodeport_test_service.yaml" replacing paths:
+      | ["spec"]["ports"][0]["nodePort"] | <%= cb.port %> |
     Then the step should succeed
     """
     Given the pod named "hello-pod" becomes ready
-    Given I select a random node's host
-    When I run commands on the host:    
-      | curl --connect-timeout 5 localhost:<%= cb.port %> |
+    Given I use the "<%= cb.workers[0].name %>" node
+    When I run commands on the host:
+      | curl --connect-timeout 5 <%= cb.worker0_ip %>:<%= cb.port %> |
     Then the step should succeed
     And the output should contain:
       | Hello OpenShift! |
     Given I ensure "hello-pod" service is deleted
-    When I run commands on the host:    
-      | curl --connect-timeout 5 localhost:<%= cb.port %> |
+    When I run commands on the host:
+      | curl --connect-timeout 5 <%= cb.worker0_ip %>:<%= cb.port %> |
     Then the step should fail
 
   # @author zzhao@redhat.com

@@ -1,0 +1,17 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: hello-pod
+  labels:
+    name: hello-pod
+spec:
+  ports:
+  - name: http
+    protocol: TCP
+    port: 27017
+    nodePort: 32998
+    targetPort: 8080
+  type: NodePort
+  selector:
+    name: hello-pod
