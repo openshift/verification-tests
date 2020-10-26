@@ -704,11 +704,19 @@ end
 
 Given /^the number of bridge PVID (\d+) VLANs matching #{QUOTED} added between the #{SYM} and #{SYM} clipboards is (\d+)$/ do |pvid, mode, clip_a, clip_b, expected_vlans|
   pvid = pvid.to_i
-  added_bridges = cb[clip_b] - cb[clip_a]
+  # RHCOS is Array of VLANs, RHEL7 is a Hash, always convert to Set so we can compare
+  added_bridges = cb[clip_b].to_set - cb[clip_a].to_set
   logger.info("added_bridges: #{added_bridges}")
   mode = Regexp.new(mode)
   num_vlans = added_bridges.count { |b|
-    c = b["vlans"].count { |v|
+    # handle old RHEL7 bridge JSON and current RHCOS bridge JSON output
+    # RHCOS:
+    # [{"ifname":"bridge3","vlans":[{"vlan":1,"flags":["PVID","Egress Untagged"]}]},{"ifname":"veth66451995","vlans":[{"vlan":1,"flags":["PVID","Egress Untagged"]}]}]
+    # RHEL7
+    # {"bridge3":[{"vlan":1,"flags":["PVID","EgressUntagged"]}],"vethb26eb609":[{"vlan":1,"flags":["PVID","EgressUntagged"]}]}
+    # try b[1] first else cneck for the "vlans" key
+    vlans = b[1] || b["vlans"]
+    c = vlans.count { |v|
       v["vlan"] == pvid && v["flags"].include?("PVID") && v["flags"].any?(mode)
     }
     c > 0
