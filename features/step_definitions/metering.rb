@@ -40,6 +40,7 @@ Given /^metering service has been installed successfully(?: using (OLM|OperatorH
     # there's an existing meteringconfig in the project.  Check if there are
     # subscription and operatorgroup
     mconfig = meteringconfigs.first
+    cb[:meteringconfig_name] = mconfig.name
     cb.metering_namespace = project(mconfig.name)
     metering_name = mconfig.name
     subs = BushSlicer::Subscription.list(user: admin, project: project)
