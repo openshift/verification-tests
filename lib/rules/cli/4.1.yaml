@@ -830,12 +830,12 @@
     :command: --command=<value>
     :dry_run: --dry-run
     :env: --env=<value>
+    :exec_command: <value>
+    :exec_command_arg: <value>
     :generator: --generator=<value>
     :image: --image=<value>
     :limits: --limits=<value>
     :oc_opt_end: --
-    :exec_command: <value>
-    :exec_command_arg: <value>
     :overrides: --overrides=<value>
     :port: --port <value>
     :replicas: --replicas <value>
