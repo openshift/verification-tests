@@ -21,6 +21,14 @@ create_operand:
   action: click_tab
   action: click_create_operand_button
   action: submit_changes
+check_operand_des_during_creating_operand:
+  params:
+    tab_name: <operand_kind>
+  action: goto_csv_detail_page
+  action: click_tab
+  action: click_create_operand_button
+  action: check_complete_description
+  action: submit_changes
 create_catalog_source:
   params:
     button_text: Create Catalog Source
@@ -43,6 +51,13 @@ subscribe_operator_to_namespace:
     project_name: <target_namespace>
   action: goto_operator_subscription_page
   action: select_target_namespace
+  action: click_subscribe_button
+check_operand_des_during_operator_subscription:
+  params:
+    project_name: <target_namespace>
+  action: goto_operator_subscription_page
+  action: select_target_namespace
+  action: check_truncated_description
   action: click_subscribe_button
 input_catalog_source_name:
   params:
@@ -596,3 +611,36 @@ check_resource_requirement_values:
       }
       return contains
     expect_result: true
+check_truncated_description:
+  params:
+    operand_kind: Application
+    operand_description: longlonglongveryveryverylong…
+  action: check_operand_description
+check_complete_description:
+  params:
+    operand_kind: Application
+    operand_description: veryverylongAn Application is a group of Kubernetes resources as defined by a manifest
+  action: check_operand_description
+check_operand_description:
+  element:
+    selector:
+      xpath: //span[text()='<operand_kind>']/ancestor::article//iframe | //h1[text()='<operand_kind>']/ancestor::div//iframe
+    timeout: 20
+  scripts:
+  - command: |
+      var all_operands_iframs = document.querySelectorAll('iframe')
+      var contains = false
+      for (var i = 0; i < all_operands_iframs.length; i++) {
+        contains = contains || all_operands_iframs[i].getAttribute('srcDoc').indexOf('<operand_description>') != -1 ? true : false
+      }
+      return contains
+    expect_result: true
+check_operator_subscription_details:
+  params:
+    tab_name: Subscription
+    name: <subscription_name>
+    catalogsource_name: <catalogsource_name>
+  action: click_tab
+  action: check_resource_name
+  action: check_catalogsource_name_and_icon
+  action: check_healthy_icon_and_text

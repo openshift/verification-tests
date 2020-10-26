@@ -219,6 +219,10 @@ check_rejected_icon_and_text:
   params:
     icon_text: Rejected
   action: check_icon_and_text
+check_healthy_icon_and_text:
+  params:
+    icon_text: Healthy
+  action: check_icon_and_text
 check_icon_and_text:
   element:
     selector:
