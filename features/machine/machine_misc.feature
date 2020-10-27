@@ -53,4 +53,57 @@ Feature: Machine misc features testing
    Then I get project events
    And the output should match:
      | Successfully provisioned volume |
+     
+  # @author miyadav@redhat.com
+  # @case_id OCP-35454
+  @admin
+  @destructive
+  Scenario: Reconciliation of MutatingWebhookConfiguration values should happen
+    Given I have an IPI deployment
+    Then I switch to cluster admin pseudo user
 
+    Given I use the "openshift-cluster-version" project
+    Then I run the :scale admin command with:
+      | resource | deployment               |
+      | name     | cluster-version-operator |
+      | replicas | 0                        |
+    And the step should succeed
+    And admin ensures the deployment replicas is restored to "1" in "openshift-cluster-version" for "cluster-version-operator" after scenario
+
+    Given I use the "openshift-machine-api" project
+    Then I run the :scale admin command with:
+      | resource | deployment           |
+      | name     | machine-api-operator |
+      | replicas | 0                    |
+    And the step should succeed
+    And admin ensures the deployment replicas is restored to "1" in "openshift-machine-api" for "machine-api-operator" after scenario
+
+    When I run the :patch admin command with:
+      | resource      | MutatingWebhookConfiguration                                                      |
+      | resource_name | machine-api                                                                       |
+      | p             | [{"op": "replace", "path": "/webhooks/0/clientConfig/service/port", "value":444}] |
+      | type          | json                                                                              |
+    And the step should succeed
+
+    Given I use the "openshift-cluster-version" project
+    Then I run the :scale admin command with:
+      | resource | deployment               |
+      | name     | cluster-version-operator |
+      | replicas | 1                        |
+    And the step should succeed
+
+    Given I use the "openshift-machine-api" project
+    Then I run the :scale admin command with:
+      | resource | deployment           |
+      | name     | machine-api-operator |
+      | replicas | 1                    |
+    And the step should succeed
+
+    Given I wait up to 180 seconds for the steps to pass:
+    """
+    And I run the :get admin command with:
+      | resource      | MutatingWebhookConfiguration |
+      | resource_name | machine-api                  |
+      | o             | json                         |
+    Then the expression should be true>  @result[:parsed]['webhooks'][0]['clientConfig']['service']['port'] == 443
+    """
