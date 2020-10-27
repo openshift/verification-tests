@@ -29,18 +29,3 @@ Given /^the #{QUOTED} #{QUOTED} CR is restored after scenario$/ do |name, crd|
     raise "Cannot restore #{crd}: #{name}" unless @result[:success]
   }
 end
-
-Given /^I remove all CRDs with labels:$/ do | table |
-  ensure_admin_tagged
-  ensure_destructive_tagged
-  labels = table.raw.flatten
-  timeout = 60
-  res = BushSlicer::CustomResourceDefinition.wait_for_labeled(*labels, user: user, seconds: timeout)
-  if res[:success]
-    crd_names = res[:parsed]['items'].map { |r| r['metadata']['name'] }
-    crd_names.each do | crd |
-      step %Q/I ensure "#{crd}" custom_resource_definition is deleted/
-    end
-  end
-end
-
