@@ -9,6 +9,11 @@ click_provided_apis_of_operators:
       xpath: //a[contains(.,'<api>')]
     op: click
     timeout: 60
+click_create_operand_button:
+  element:
+    selector:
+      xpath: //button[contains(.,'Create') and contains(.,'<operand_kind>') and not(disabled)]
+    op: click
 create_catalog_source:
   params:
     button_text: Create Catalog Source
@@ -56,6 +61,140 @@ clear_custom_resource_name_in_form:
         document.querySelector("input[id$='name']").value = '';
         return document.querySelector("input[id$='name']").value == '';
       expect_result: true
+set_operand_name:
+  params:
+    label_text: Name
+    input_value: <operand_name>
+  action: set_label_input_simple
+remove_operand_label:
+  elements:
+  - selector:
+      xpath: //tags-input//a[contains(@class,'remove-button')]
+    op: click
+set_selector_value:
+  params:
+    label_text: Select
+    button_text: <selector_value>
+  action: click_label_dropdown_button
+  action: click_button_text
+set_password:
+  params:
+    label_text: Password
+    input_value: <password>
+  action: set_label_input_simple
+set_k8s_resource:
+  params:
+    label_text: K8s Resource Prefix
+    project_name: <k8s_resource>
+  action: click_label_dropdown_button
+  action: choose_project_from_dropdown_list
+set_pod_count:
+  params:
+    label_text: Pod Count
+    input_value: <pod_count>
+  action: set_label_input_simple
+increase_pod_count:
+  element:
+    selector:
+      xpath: //button[contains(@class,'co-m-number-spinner__button') and @aria-label='Increment']
+    op: click
+decrease_pod_count:
+  element:
+    selector:
+      xpath: //button[contains(@class,'co-m-number-spinner__button') and @aria-label='Decrement']
+    op: click
+toggle_boolean_switch:
+  params:
+    label_text: Boolean Switch
+  action: toggle_label_input
+toggle_checkbox:
+  params:
+    label_text: Checkbox
+  action: toggle_label_input
+set_image_pull_policy:
+  params:
+    label_text: Image Pull Policy
+    radio_input_value: <image_pull_policy>
+  action: set_label_radio_input
+set_update_strategy:
+  elements:
+  - selector:
+      xpath: //div[@id='root_spec_updateStrategy_field']//input[@type='radio' and @value='<update_strategy>']
+    op: click
+set_simple_text:
+  params:
+    label_text: Text
+    input_value: <simple_text>
+  action: set_label_input_simple
+set_simple_number:
+  params:
+    label_text: Number
+    input_value: <simple_number>
+  action: set_label_input_simple
+set_field_group:
+  elements:
+  - selector:
+      xpath: //button[@id='root_spec_fieldGroup_accordion-toggle']
+    op: click
+  - selector: &field_group_item_one_input
+      xpath: //div[@id='root_spec_fieldGroup_itemOne_field']//input
+    op: send_keys :backspace
+  - selector:
+      <<: *field_group_item_one_input
+    op: send_keys <field_group_value_one>
+  - selector: &field_group_item_two_input
+      xpath: //div[@id='root_spec_fieldGroup_itemTwo_field']//input
+    op: send_keys :backspace
+  - selector:
+      <<: *field_group_item_two_input
+    op: send_keys <field_group_value_two>
+set_array_field_group:
+  elements:
+  - selector:
+      xpath: //button[@id='root_spec_arrayFieldGroup_accordion-toggle']
+    op: click
+  - selector:
+      xpath: //div[contains(@class,'co-dynamic-form__array-field-group-remove')]/button
+    op: click
+  - selector: &add_item_button
+      xpath: //button[@id='root_spec_arrayFieldGroup_add-btn']
+    op: click
+  - selector: &array_field_group_0_item_one_input
+      xpath: //div[@id='root_spec_arrayFieldGroup_0_itemOne_field']//input
+    op: send_keys :backspace
+  - selector:
+      <<: *array_field_group_0_item_one_input
+    op: send_keys <array_field_group_value_one>
+  - selector: &array_field_group_0_item_two_input
+      xpath: //div[@id='root_spec_arrayFieldGroup_0_itemTwo_field']//input
+    op: send_keys :backspace
+  - selector:
+      <<: *array_field_group_0_item_two_input
+    op: send_keys <array_field_group_value_two>
+  - selector:
+      <<: *add_item_button
+    op: click
+  - selector: &array_field_group_1_item_one_input
+      xpath: //div[@id='root_spec_arrayFieldGroup_1_itemOne_field']//input
+    op: send_keys :backspace
+  - selector:
+      <<: *array_field_group_1_item_one_input
+    op: send_keys <additional_array_field_group_value_one>
+  - selector: &array_field_group_1_item_two_input
+      xpath: //div[@id='root_spec_arrayFieldGroup_1_itemTwo_field']//input
+    op: send_keys :backspace
+  - selector:
+      <<: *array_field_group_1_item_two_input
+    op: send_keys <additional_array_field_group_value_two>
+set_advanced_configuration:
+  elements:
+  - selector:
+      xpath: //span[contains(.,'Advanced Configuration')]
+    op: click
+  params:
+    label_text: Advanced
+    input_value: <advanced_text>
+  action: set_label_input_simple
 check_error_message_for_missing_required_name:
   params:
     content: name or generateName is required
@@ -187,6 +326,13 @@ open_edit_form_view:
   params:
     button_text: Edit Form
   action: click_button
+switch_to_yaml_view:
+  params:
+    radio_text: yaml
+    content: Create by manually entering YAML or JSON definitions
+  action: click_radio_input
+  action: check_page_contains
+  action: wait_box_loaded
 select_installed_namespace:
   action: click_project_list_dropdown
   action: choose_project_from_dropdown_list
