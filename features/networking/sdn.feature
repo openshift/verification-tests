@@ -335,12 +335,12 @@ Feature: SDN related networking scenarios
     And the output should contain "connected"
     #Checking controller iteration 2
     When I execute on the "<%= cb.ovn_master_pod %>" pod:
-      | ls -l /var/run/ovn/ |
+      | bash | -c | ls -l /var/run/ovn/ |
     Then the step should succeed
     And evaluation of `@result[:response].match(/ovn-controller.\d*\.ctl/)[0]` is stored in the :controller_pid_file clipboard
     #Checking controller iteration 3
     When I execute on the "<%= cb.ovn_master_pod %>" pod:
-      | ovn-appctl -t /var/run/ovn/<%= cb.controller_pid_file %> connection-status |
+      | bash | -c | ovn-appctl -t /var/run/ovn/<%= cb.controller_pid_file %> connection-status |
     Then the step should succeed
     And the output should contain "connected"
     #Checking controller iteration 4
