@@ -628,7 +628,7 @@ Given /^I run command on the#{OPT_QUOTED} node's sdn pod:$/ do |node_name, table
       pod.node_name == node_name
     }.first
     cache_resources ovnkube_pod
-    @result = ovnkube_pod.exec(network_cmd, as: admin)
+    @result = ovnkube_pod.exec(network_cmd, container: "ovn-controller", as: admin)
   else
     raise "unknown network_type"
   end
@@ -1252,4 +1252,11 @@ Given /^I save egress type to the#{OPT_SYM} clipboard$/ do | cb_name |
     raise "unknown network_type"
   end
   logger.info "The egressfirewall type is stored to the #{cb_name} clipboard."
+end
+
+Given /^I save ipecho url to the#{OPT_SYM} clipboard$/ do | cb_name |
+  ensure_admin_tagged
+  cb_name = "ipecho_url" unless cb_name
+  cb[cb_name]="172.31.249.80:9095"
+  logger.info "The ipecho service url #{cb[cb_name]} is stored to the #{cb_name} clipboard."
 end
