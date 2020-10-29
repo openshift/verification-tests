@@ -1182,13 +1182,13 @@ Given /^I install machineconfigs load-sctp-module$/ do
   end
 end
 
-Given /^I check load-sctp-module in all nodes$/ do
+Given /^I check load-sctp-module in all workers$/ do
   ensure_admin_tagged
   _admin = admin
-  env.nodes.each do |node|
-    @result = node.host.exec_admin("lsmod \| grep sctp")
-    unless @result[:response].include? "sctp"
-      raise "no sctp module"
+  cb.workers.each do |workers|
+    @result = workers.host.exec_admin("cat /sys/module/sctp/initstate")
+    unless @result[:response].include? "live"
+      raise "No sctp module installed"
     end
   end
 end
