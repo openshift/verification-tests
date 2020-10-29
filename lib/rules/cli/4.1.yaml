@@ -830,6 +830,8 @@
     :command: --command=<value>
     :dry_run: --dry-run
     :env: --env=<value>
+    :exec_command: <value>
+    :exec_command_arg: <value>
     :generator: --generator=<value>
     :image: --image=<value>
     :limits: --limits=<value>
