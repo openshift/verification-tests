@@ -293,6 +293,7 @@ goto_one_machineautoscaler_page:
 #crd
 goto_crds_page:
   url: k8s/cluster/customresourcedefinitions
+  action: wait_box_loaded
 goto_crd_instances_page:
   url: k8s/cluster/customresourcedefinitions/<crd_definition>/instances
 goto_consoleyamlsample_crd_instances_page:
