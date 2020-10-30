@@ -22,6 +22,10 @@ click_edit_yaml_link:
   - selector:
       xpath: //div[contains(@class,'view-lines')]
     timeout: 20
+check_yaml_line_content:
+  element:
+    selector:
+      xpath: //div[contains(@class,'view-line') and contains(.,'<key>') and contains(.,'<value>')]
 click_create_button:
   elements:
   - selector: &create_button
@@ -218,7 +222,7 @@ set_label_input:
 set_label_input_simple:
   elements:
   - selector: &label_input_value
-      xpath: //label[text()='<label_text>']/..//input
+      xpath: //label[contains(text(),'<label_text>')]/..//input
     op: clear
     type: input
   - selector:
@@ -249,6 +253,16 @@ click_label_dropdown_button:
   element:
     selector:
       xpath: //label[contains(text(),'<label_text>')]/following::button[1][contains(@class,'dropdown')]
+    op: click
+toggle_label_input:
+  element:
+    selector:
+      xpath: (//label[contains(.,'<label_text>')]/following::label[contains(@class,'pf-c-switch')]//span[contains(@class,'pf-c-switch__toggle')])[1]
+    op: click
+set_label_radio_input:
+  element:
+    selector:
+      xpath: //label[contains(.,'<label_text>')]/following::div[contains(@class,'co-radio-group')]//input[@type='radio' and @value='<radio_input_value>']
     op: click
 check_editor_is_monaco_editor:
   element:
