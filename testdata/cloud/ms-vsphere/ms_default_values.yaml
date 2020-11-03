@@ -5,7 +5,7 @@ metadata:
     machine.openshift.io/cluster-api-cluster:
     machine.openshift.io/cluster-api-machine-role: worker
     machine.openshift.io/cluster-api-machine-type: worker
-  name: default-valued-33380
+  name: 
 spec:
   replicas: 1
   selector:
@@ -29,7 +29,7 @@ spec:
         value:
            network:
               devices:
-              - networkName: VM Network
+              - networkName: qe-segment 
            template:
            diskGiB:
            memoryMiB:

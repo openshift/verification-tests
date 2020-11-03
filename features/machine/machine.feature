@@ -359,10 +359,9 @@ Feature: Machine features testing
       | failure-domain.beta.kubernetes.io/region in [<%= cb.default_region %>] |
 
   # @author miyadav@redhat.com
-  # @case_id OCP-33380
   @admin
   @destructive
-  Scenario: Implement defaulting machineset values for vsphere
+  Scenario Outline: Implement defaulting machineset values for vsphere
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
@@ -377,22 +376,38 @@ Feature: Machine features testing
     And evaluation of `machine(cb.machine).vsphere_diskGiB` is stored in the :diskGiB clipboard
     And evaluation of `machine(cb.machine).vsphere_memoryMiB` is stored in the :memoryMiB clipboard
     And evaluation of `machine(cb.machine).vsphere_template` is stored in the :template clipboard
-    Then admin ensures "default-valued-33380" machineset is deleted after scenario
+    Then admin ensures "<name>" machineset is deleted after scenario
 
     Given I obtain test data file "cloud/ms-vsphere/ms_default_values.yaml"
     When I run oc create over "ms_default_values.yaml" replacing paths:
-      | n                                                                                         | openshift-machine-api                           |
-      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]           | <%= infrastructure("cluster").infra_name %>     |
-      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"]        | default-valued-33380                            |
-      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-cluster"]    | <%= infrastructure("cluster").infra_name %>     |
-      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["workspace"]["datacenter"]          | <%= cb.datacenter %>                            |
-      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["workspace"]["datastore"]           | <%= cb.datastore %>                             |
-      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["workspace"]["folder"]              | <%= cb.folder %>                                |
-      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["workspace"]["resourcePool"]        | <%= cb.resourcePool %>                          |
-      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["workspace"]["server"]              | <%= cb.server %>                                |
-      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["diskGiB"]                          | <%= cb.diskGiB %>                               |
-      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["memoryMiB"]                        | <%= cb.memoryMiB %>                             |
-      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["template"]                         | <%= cb.template %>                              |
-      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-machineset"] | default-valued-33380                            |
+      | n                                                                                         | openshift-machine-api                       |
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]           | <%= infrastructure("cluster").infra_name %> |
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"]        | <name>                                      |
+      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-cluster"]    | <%= infrastructure("cluster").infra_name %> |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["workspace"]["datacenter"]          | <%= cb.datacenter %>                        |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["workspace"]["datastore"]           | <%= cb.datastore %>                         |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["workspace"]["folder"]              | <%= cb.folder %>                            |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["workspace"]["resourcePool"]        | <%= cb.resourcePool %>                      |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["workspace"]["server"]              | <%= cb.server %>                            |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["diskGiB"]                          | <diskGiB>                                   |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["memoryMiB"]                        | <%= cb.memoryMiB %>                         |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["template"]                         | <template>                                  |
+      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-machineset"] | <name>                                      |
+      | ["metadata"]["name"]                                                                      | <name>                                      |
     Then the step should succeed
-     
+
+    And I wait up to 120 seconds for the steps to pass:
+    """
+    When I run the :get admin command with:
+      | resource | machine |
+    Then the step should succeed
+    And the output should contain:
+      | Provisioned  |
+    """
+ 
+    Examples:
+      | name                         | template                                  | diskGiB           |
+      | default-valued-33380         | <%= cb.template %>                        | <%= cb.diskGiB %> | # @case_id OCP-33380
+      | default-valued-windows-35421 | 1909-template-docker-ssh-upgraded-vmtools | 135               | # @case_id OCP-35421
+
+
