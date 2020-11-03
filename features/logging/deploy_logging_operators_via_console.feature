@@ -18,7 +18,7 @@ Feature: Deploy logging operators via console
     Given logging service is removed successfully
     Then the step should succeed
     """
-    Given "cluster-logging" packagemanifest's operator source name is stored in the :clo_opsrc clipboard
+    Given "cluster-logging" packagemanifest's catalog source name is stored in the :clo_opsrc clipboard
     Given I switch to the first user
     Given the first user is cluster-admin
     Given I open admin console in a browser
@@ -43,7 +43,7 @@ Feature: Deploy logging operators via console
     Given logging service is removed successfully
     Given the logging operators are redeployed after scenario
     Given logging channel name is stored in the :logging_channel clipboard
-    Given "elasticsearch-operator" packagemanifest's operator source name is stored in the :eo_opsrc clipboard
+    Given "elasticsearch-operator" packagemanifest's catalog source name is stored in the :eo_opsrc clipboard
     Given I switch to the first user
     Given the first user is cluster-admin
     Given admin ensures "elasticsearch-operator" subscriptions is deleted from the "openshift-operators" project after scenario

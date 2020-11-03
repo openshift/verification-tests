@@ -59,7 +59,7 @@ Given /^logging operators are installed successfully$/ do
       step %Q/I use the "openshift-marketplace" project/
       # first check packagemanifest exists for elasticsearch-operator
       raise "Required packagemanifest 'elasticsearch-operator' no found!" unless package_manifest('elasticsearch-operator').exists?
-      step %Q/"elasticsearch-operator" packagemanifest's operator source name is stored in the :eo_opsrc clipboard/
+      step %Q/"elasticsearch-operator" packagemanifest's catalog source name is stored in the :eo_catsrc clipboard/
       step %Q/I use the "openshift-operators-redhat" project/
       if cb.ocp_cluster_version.include? "4.1."
         # create catalogsourceconfig and subscription for elasticsearch-operator
@@ -74,7 +74,7 @@ Given /^logging operators are installed successfully$/ do
         sub_elasticsearch_yaml ||= "#{BushSlicer::HOME}/testdata/logging/eleasticsearch/deploy_via_olm/4.2/eo-sub-template.yaml"
         step %Q/I process and create:/, table(%{
           | f | #{sub_elasticsearch_yaml} |
-          | p | SOURCE=#{cb.eo_opsrc}     |
+          | p | SOURCE=#{cb.eo_catsrc}    |
           | p | CHANNEL=#{cb.channel}     |
         })
         raise "Error creating subscription for elasticsearch" unless @result[:success]
@@ -102,7 +102,7 @@ Given /^logging operators are installed successfully$/ do
       step %Q/I use the "openshift-marketplace" project/
       # first check packagemanifest exists for cluster-logging
       raise "Required packagemanifest 'cluster-logging' no found!" unless package_manifest('cluster-logging').exists?
-      step %Q/"cluster-logging" packagemanifest's operator source name is stored in the :clo_opsrc clipboard/
+      step %Q/"cluster-logging" packagemanifest's catalog source name is stored in the :clo_catsrc clipboard/
       step %Q/I use the "openshift-logging" project/
       if cb.ocp_cluster_version.include? "4.1."
         # create catalogsourceconfig and subscription for cluster-logging-operator
@@ -116,9 +116,9 @@ Given /^logging operators are installed successfully$/ do
         # create subscription in `openshift-logging` namespace:
         sub_logging_yaml ||= "#{BushSlicer::HOME}/testdata/logging/clusterlogging/deploy_clo_via_olm/4.2/clo-sub-template.yaml"
         step %Q/I process and create:/, table(%{
-          | f | #{sub_logging_yaml}    |
-          | p | SOURCE=#{cb.clo_opsrc} |
-          | p | CHANNEL=#{cb.channel}  |
+          | f | #{sub_logging_yaml}     |
+          | p | SOURCE=#{cb.clo_catsrc} |
+          | p | CHANNEL=#{cb.channel}   |
         })
         raise "Error creating subscription for cluster_logging" unless @result[:success]
       end
@@ -320,14 +320,14 @@ Given /^logging channel name is stored in the#{OPT_SYM} clipboard$/ do | cb_name
   end
 end
 
-Given /^#{QUOTED} packagemanifest's operator source name is stored in the#{OPT_SYM} clipboard$/ do |packagemanifest, cb_name|
-  cb_name = "opsrc_name" unless cb_name
+Given /^#{QUOTED} packagemanifest's catalog source name is stored in the#{OPT_SYM} clipboard$/ do |packagemanifest, cb_name|
+  cb_name = "catsrc_name" unless cb_name
   project("openshift-marketplace")
   if catalog_source("qe-app-registry").exists?
     cb[cb_name] = "qe-app-registry"
   else
     @result = admin.cli_exec(:get, resource: 'packagemanifest', resource_name: packagemanifest, n: 'openshift-marketplace', o: 'yaml')
-    raise "Unable to get opsrc name" unless @result[:success]
+    raise "Unable to get catalog source name" unless @result[:success]
     cb[cb_name] = @result[:parsed]['status']['catalogSource']
   end
 end
@@ -364,7 +364,8 @@ When /^I wait(?: (\d+) seconds)? for the project #{QUOTED} logs to appear in the
       res['count'] > 0
     end
   }
-  raise "Project '#{project_name}' logs failed to appear in #{seconds} seconds" unless success
+  cb.doc_count = @result[:parsed]['count']
+  raise "Can't find logs from project '#{project_name}' in #{seconds} seconds" unless success
 end
 
 Given /^logging eventrouter is installed in the cluster$/ do
@@ -538,4 +539,169 @@ Given /^(fluentd|elasticsearch|rsyslog) receiver is deployed as (secure|insecure
     | deployment_file | #{deployment_file} |
     | pod_label       | #{pod_label}       |
   })
+end
+
+# upgrade operator and check the EFK pods status
+Given /^I upgrade the operator with:$/ do | table |
+  opts = opts_array_to_hash(table.raw)
+  subscription = opts[:subscription]
+  channel = opts[:channel]
+  catsrc = opts[:catsrc]
+  namespace = opts[:namespace]
+  project(namespace)
+
+  # upgrade operator
+  patch_json = {"spec": {"channel": "#{channel}", "source": "#{catsrc}"}}
+  patch_opts = {resource: "subscription", resource_name: subscription, p: patch_json.to_json, n: namespace, type: "merge"}
+  @result = admin.cli_exec(:patch, **patch_opts)
+  raise "Patch failed with #{@result[:response]}" unless @result[:success]
+  # wait till new csv to be installed
+  success = wait_for(180, interval: 10) {
+    subscription(subscription).installplan_csv.include? cb.channel
+  }
+  raise "the new CSV can't be installed" unless success
+  # wait till new csv is ready
+  success = wait_for(600, interval: 10) {
+    new_csv = subscription(subscription).current_csv(cached: false)
+    cluster_service_version(new_csv).ready?[:success]
+  }
+  raise "can't upgrade operator #{subscription}" unless success
+
+  #check if the EFK pods could be upgraded successfully
+  project("openshift-logging")
+  if subscription == "elasticsearch-operator"
+    # check if the ES cluster could be upgraded
+    success = wait_for(300, interval: 10) {
+      elasticsearch('elasticsearch').nodes_status[0]["upgradeStatus"]["scheduledUpgrade"]
+    }
+    raise "Can't upgrade the ES cluster" unless success
+  end
+  # wait for the ES cluster to be ready
+  success = wait_for(600, interval: 10) {
+    elasticsearch('elasticsearch').cluster_health == "green" && 
+    (elasticsearch('elasticsearch').nodes_status.last["upgradeStatus"].empty? || 
+    elasticsearch('elasticsearch').nodes_status.last["upgradeStatus"]["scheduledUpgrade"].nil?)
+  }
+  raise "ES cluster isn't in a good status" unless success
+  # check pvc count
+  unless BushSlicer::PersistentVolumeClaim.list(user: user, project: project).count == cluster_logging('instance').logstore_node_count
+    raise "The PVC count doesn't match the ES node count"
+  end
+
+  # check the kibana status
+  success = wait_for(300, interval: 10) {
+    (deployment('kibana').replica_counters(cached: false)[:desired] == deployment('kibana').replica_counters(cached: false)[:updated]) &&
+    (deployment('kibana').replica_counters(cached: false)[:desired] == deployment('kibana').replica_counters(cached: false)[:available])
+  }
+  raise "Kibana isn't in a good status" unless success
+  # check fluentd status
+  success = wait_for(300, interval: 10) {
+    (daemon_set('fluentd').replica_counters(cached: false)[:desired] == daemon_set('fluentd').replica_counters(cached: false)[:updated_scheduled]) &&
+    (daemon_set('fluentd').replica_counters(cached: false)[:desired] == daemon_set('fluentd').replica_counters(cached: false)[:available])
+  }
+  raise "Fluentd isn't in a good status" unless success
+end
+
+# only check the major version, such as 4.4, 4.5, 4.6, don't care about versions like 4.6.0-2020xxxxxxxx
+Given /^I make sure the logging operators match the cluster version$/ do
+  step %Q/I switch to cluster admin pseudo user/
+  step %Q/logging channel name is stored in the :channel clipboard/
+  cv = cluster_version('version').version.split('-')[0].split('.').take(2).join('.')
+  # check EO
+  project("openshift-operators-redhat")
+  eo_csv_version = subscription("elasticsearch-operator").current_csv(cached: false).match(/elasticsearch-operator\.(.*)/)[1].split('-')[0].split('.').take(2).join('.')
+  if eo_csv_version != cv
+    upgrade_eo = true
+    step %Q/"elasticsearch-operator" packagemanifest's catalog source name is stored in the :catsrc clipboard/
+    step %Q/I upgrade the operator with:/, table(%{
+      | namespace    | openshift-operators-redhat |
+      | subscription | elasticsearch-operator     |
+      | channel      | #{cb.channel}              |
+      | catsrc       | #{cb.catsrc}               |
+    })
+    step %Q/the step should succeed/
+  else
+    upgrade_eo = false
+  end
+  # check CLO
+  project("openshift-logging")
+  clo_csv_version = subscription("cluster-logging").current_csv(cached: false).match(/clusterlogging\.(.*)/)[1].split('-')[0].split('.').take(2).join('.')
+  if clo_csv_version != cv
+    upgrade_clo = true
+    step %Q/"cluster-logging" packagemanifest's catalog source name is stored in the :catsrc clipboard/
+    step %Q/I upgrade the operator with:/, table(%{
+      | namespace    | openshift-logging |
+      | subscription | cluster-logging   |
+      | channel      | #{cb.channel}     |
+      | catsrc       | #{cb.catsrc}      |
+    })
+    step %Q/the step should succeed/
+  else
+    upgrade_clo = false
+  end
+  # check cronjobs if the CLO or/and EO is upgraded
+  if upgrade_eo || upgrade_clo
+    step %Q/I check the cronjob status/
+    step %Q/the step should succeed/
+  end
+end
+
+# check cronjob status
+# delete all the jobs, and wait up to 15min to check the jobs status
+Given /^I check the cronjob status$/ do
+  # check logging version
+  project("openshift-operators-redhat")
+  eo_version = subscription("elasticsearch-operator").current_csv(cached: false).match(/elasticsearch-operator\.(.*)/)[1].split('-')[0]
+  project("openshift-logging")
+  clo_version = subscription("cluster-logging").current_csv(cached: false).match(/clusterlogging\.(.*)/)[1].split('-')[0]
+  if clo_version != eo_version
+    raise "CLO and EO version mismatch"
+  else
+    #csv version >= 4.5, check rollover/delete cronjobs, csv < 4.5, only check curator cronjob
+    if ["4.0", "4.1", "4.2", "4.3", "4.4"].include? clo_version.split('.').take(2).join('.')
+      if cron_job('curator').exists?
+        # remove all the old jobs
+        @result = admin.cli_exec(:delete, object_type: 'job', l: 'component=curator', n: 'openshift-logging')
+        # wait up to 6 minutes for the cronjob to be recreated
+        success = wait_for(360, interval: 10) {
+          BushSlicer::Job.list(user: user, project: project).count > 0
+        }
+        raise "can't recreate cronjobs" unless success
+      else
+        raise "cronjob curator doesn't exist"
+      end
+    else
+      cj_names = ["elasticsearch-delete-app", "elasticsearch-delete-infra", "elasticsearch-delete-audit", "elasticsearch-rollover-audit", "elasticsearch-rollover-app", "elasticsearch-rollover-infra"]
+      for cj_name in cj_names do
+        raise "cronjob #{cj_name} doesn't exist" unless cron_job(cj_name).exists?
+      end
+      # remove all the old jobs
+      @result = admin.cli_exec(:delete, object_type: 'job', l: 'component=indexManagement', n: 'openshift-logging')
+      if cron_job('curator').exists?
+        @result = admin.cli_exec(:delete, object_type: 'job', l: 'component=curator', n: 'openshift-logging')
+        # wait up to 16 minutes for the cronjob to be recreated
+        success = wait_for(960, interval: 10) {
+          BushSlicer::Job.list(user: user, project: project).count == 8 || (BushSlicer::Job.list(user: user, project: project).count == 7)
+        }
+        raise "can't recreate cronjobs" unless success
+      else
+        # wait up to 16 minutes for the cronjob to be recreated
+        success = wait_for(960, interval: 10) {
+          BushSlicer::Job.list(user: user, project: project).count == 6
+        }
+        raise "can't recreate cronjobs" unless success
+      end
+    end
+    
+    # check the new jobs could be successfully
+    # wait up to 1 minute for the jobs to complete
+    jobs = BushSlicer::Job.list(user: user, project: project)
+    job_names = jobs.map(&:name)
+    for job_name in job_names
+      success = wait_for(60, interval: 5) {
+        job(job_name).succeeded == 1
+      }
+      raise "#{job_name} failed to complete" unless success
+    end
+  end
 end

@@ -60,7 +60,7 @@ kibana_click_approve:
 wait_kibana_logged_in:
   elements:
   - selector:
-      xpath: //div[@class="global-nav-link__title" and contains(., "Discover")]
+      xpath: //div[@class="global-nav-link__title" and contains(., "Discover")] | //a[@class="kbnGlobalNavLink__anchor" and @aria-label="Discover"]
     timeout: 300
 
 check_kibana_status:
