@@ -1,4 +1,5 @@
-Given(/^admin creates "([^"]*)" catalog source with image "([^"]*)"$/) do |cs_name, cs_image|
+Given(/^admin creates "([^"]*)" catalog source with image "([^"]*)"(?: with display name "([^"]*)")?$/) do |cs_name, cs_image, cs_displayname|
+  cs_displayname ||= 'OpenShift QE'
   ensure_admin_tagged
   step %Q/I switch to cluster admin pseudo user/
   step %Q/I use the "openshift-marketplace" project/
@@ -8,6 +9,7 @@ Given(/^admin creates "([^"]*)" catalog source with image "([^"]*)"$/) do |cs_na
     | f | #{BushSlicer::HOME}/testdata/olm/catalogsource-template.yaml |
     | p | NAME=#{cs_name}                                              |
     | p | IMAGE=#{cs_image}                                            |
+    | p | DISPLAYNAME=#{cs_displayname}                                |
   })
   raise "Error creating catalogsource" unless @result[:success]
   step %Q/a pod becomes ready with labels:/, table(%{

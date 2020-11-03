@@ -779,3 +779,12 @@ check_operator_subscription_details:
   action: check_resource_name
   action: check_catalogsource_name_and_icon
   action: check_healthy_icon_and_text
+check_operator_hidden_on_operatorhub_page:
+  action: goto_operator_hub_page
+  action: click_checkbox_from_provider_type
+  action: filter_by_keyword
+  action: check_no_result_on_operatorhub_page
+check_no_result_on_operatorhub_page:
+  elements:
+  - selector:
+      xpath: //h2[contains(., 'No Results Match the Filter Criteria')]
