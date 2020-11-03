@@ -714,7 +714,7 @@ Given /^the number of bridge PVID (\d+) VLANs matching #{QUOTED} added between t
     # [{"ifname":"bridge3","vlans":[{"vlan":1,"flags":["PVID","Egress Untagged"]}]},{"ifname":"veth66451995","vlans":[{"vlan":1,"flags":["PVID","Egress Untagged"]}]}]
     # RHEL7
     # {"bridge3":[{"vlan":1,"flags":["PVID","EgressUntagged"]}],"vethb26eb609":[{"vlan":1,"flags":["PVID","EgressUntagged"]}]}
-    # try b[1] first else cneck for the "vlans" key
+    # try b[1] first else check for the "vlans" key
     vlans = b[1] || b["vlans"]
     c = vlans.count { |v|
       v["vlan"] == pvid && v["flags"].include?("PVID") && v["flags"].any?(mode)
