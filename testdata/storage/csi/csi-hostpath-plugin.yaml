@@ -34,6 +34,16 @@ spec:
       labels:
         app: csi-hostpathplugin
     spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - csi-hostpathplugin
+            topologyKey: kubernetes.io/hostname
       serviceAccountName: csi-plugin
       containers:
         - name: node-driver-registrar
