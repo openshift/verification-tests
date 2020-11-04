@@ -77,6 +77,8 @@ Given /^I install metering service using:$/ do | table |
       step %Q(I ensure "<%= cb.metering_ns %>" meteringconfig is deleted)
     end
   end
+  # it takes time for OLM to create the CRD,
+  step %Q(I wait for the "meteringconfigs.metering.openshift.io" custom_resource_definition to appear up to 200 seconds)
   step %Q(I run oc create as admin over ERB test file: #{metering_config})
   step %Q(all metering related pods are running in the project)
   step %Q/all reportdatasources are importing from Prometheus/
@@ -295,8 +297,10 @@ Given /^the#{OPT_QUOTED} metering service is uninstalled using OLM$/ do | meteri
   step %Q/I switch to cluster admin pseudo user/ unless env.is_admin? user
   if project(metering_ns).exists?
     step %Q(I ensure "#{metering_ns}" meteringconfig is deleted)
-    step %Q(I ensure "metering-ocp-sub" subscription is deleted)
-    step %Q(I ensure "metering-ocp-og" subscription is deleted)
+    # need to remove CRDs as well.
+    step %Q(I remove all custom_resource_definition in the project with labels:), table(%{
+      | operators.coreos.com/metering-ocp.openshift-metering= |
+      })
     step %Q/I ensure "#{metering_ns}" project is deleted/
   end
 end
