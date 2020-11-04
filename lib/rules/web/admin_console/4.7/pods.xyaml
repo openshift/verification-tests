@@ -1,0 +1,35 @@
+check_column_header_items_on_pods_list_page:
+  action: check_name_column_header
+  action: check_status_column_header
+  action: check_ready_column_header
+  action: check_restarts_column_header
+  action: check_owner_column_header
+  action: check_memory_column_header
+  action: check_cpu_column_header
+  action: check_created_column_header
+check_ready_count_items_on_pods_list_page:
+  elements:
+  - selector: 
+      xpath: //tbody/tr/td[3][contains(., '<ready_count>')]
+check_memory_descending_sorted_on_pods_list_page:
+  action: click_memory_button
+  action: click_memory_button
+  action: check_memory_descending order_result
+click_memory_button:
+  params:
+    button_text: Memory
+  action: click_button
+check_memory_descending order_result:
+  scripts:
+  - command: |
+             var list = document.querySelectorAll("tbody tr td:nth-of-type(6)");
+             for (var i = 0; i < list.length-1; ++i) {
+               var item1 = Number(list[i].innerText.split(" ")[0].replace(",", ""));
+               var item2 = Number(list[i+1].innerText.split(" ")[0].replace(",", ""));
+               if (item1 < item2) {
+                 console.log("item1 is not greater than item2");
+                 return false;
+               }
+             }
+             return true
+    expect_result: true
