@@ -43,7 +43,7 @@ Feature: scheduler with custom policy upgrade check
   @upgrade-check
   @admin
   @destructive
-  Scenario: Upgrading cluster when using a custom policy for kube-scheduler should work fine
+  Scenario: Upgrading cluster when using a custom policy for kube-scheduler should work fine ocp43
     Given the "kube-scheduler" operator version matches the current cluster version
     Given the expression should be true> cluster_operator('kube-scheduler').condition(type: 'Progressing')['status'] == "False"
     And the expression should be true> cluster_operator('kube-scheduler').condition(type: 'Available')['status'] == "True"
