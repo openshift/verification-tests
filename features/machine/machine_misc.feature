@@ -59,8 +59,7 @@ Feature: Machine misc features testing
   @admin
   @destructive
   Scenario: Reconciliation of MutatingWebhookConfiguration values should happen
-    Given I have an IPI deployment
-    Then I switch to cluster admin pseudo user
+    Given I switch to cluster admin pseudo user
 
     Given I use the "openshift-cluster-version" project
     Then I run the :scale admin command with:
