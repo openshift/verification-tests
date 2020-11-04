@@ -223,8 +223,6 @@ Given /^(I|admin) stores? all (\w+)( in the#{OPT_QUOTED} project)? to the#{OPT_S
 end
 
 Given /^I remove all #{WORD}(?: in the#{OPT_QUOTED} project) with labels:$/ do | resource_type, namespace, table |
-  ensure_admin_tagged
-  ensure_destructive_tagged
   labels = table.raw.flatten
   namespace ||= project.name
   clazz = resource_class(resource_type)
