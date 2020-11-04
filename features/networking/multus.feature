@@ -653,11 +653,12 @@ Feature: Multus-CNI related scenarios
     Then the step should succeed
 
     #Creating first pod in vlan 100
-    Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
-    When I run oc create over "generic_multus_pod.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod_net_raw.yaml"
+    When I run oc create as admin over "generic_multus_pod_net_raw.yaml" replacing paths:
       | ["metadata"]["name"]                                       | pod1-vlan100            |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | bridgevlan100           |
       | ["spec"]["nodeName"]                                       | <%= cb.nodes[0].name %> |
+      | ["metadata"]["namespace"]                                  | <%= project.name %>     |
     Then the step should succeed
     And the pod named "pod1-vlan100" becomes ready
     #Clean-up required to erase bridge interfaces created due to above pod on same node
@@ -667,31 +668,33 @@ Feature: Multus-CNI related scenarios
     the bridge interface named "mybridge.100" is deleted from the "<%= cb.nodes[0].name %>" node
     """
     And evaluation of `pod.name` is stored in the :pod1 clipboard
-    And I execute on the pod:
+    And admin executes on the pod:
       | ifconfig | net1 |
     Then the step should succeed
     And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod1_net1_ip clipboard
 
     #Creating 2nd pod on same node as first in vlan 100
-    Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
-    When I run oc create over "generic_multus_pod.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod_net_raw.yaml"
+    When I run oc create as admin over "generic_multus_pod_net_raw.yaml" replacing paths:
       | ["metadata"]["name"]                                       | pod2-vlan100            |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | bridgevlan100           |
       | ["spec"]["nodeName"]                                       | <%= cb.nodes[0].name %> |
+      | ["metadata"]["namespace"]                                  | <%= project.name %>     |
     Then the step should succeed
     And the pod named "pod2-vlan100" becomes ready
     And evaluation of `pod.name` is stored in the :pod2 clipboard
-    And I execute on the pod:
+    And admin executes on the pod:
       | ifconfig | net1 |
     Then the step should succeed
     And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod2_net1_ip clipboard
 
     #Creating 3rd pod on different node in vlan 100
-    Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
-    When I run oc create over "generic_multus_pod.yaml" replacing paths:
+    Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod_net_raw.yaml"
+    When I run oc create as admin over "generic_multus_pod_net_raw.yaml" replacing paths:
       | ["metadata"]["name"]                                       | pod3-vlan100            |
       | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | bridgevlan100           |
       | ["spec"]["nodeName"]                                       | <%= cb.nodes[1].name %> |
+      | ["metadata"]["namespace"]                                  | <%= project.name %>     |
     Then the step should succeed
     And the pod named "pod3-vlan100" becomes ready
     #Clean-up required to erase bridge interfcaes created on node
@@ -701,21 +704,21 @@ Feature: Multus-CNI related scenarios
     the bridge interface named "mybridge.100" is deleted from the "<%= cb.nodes[1].name %>" node
     """
     And evaluation of `pod.name` is stored in the :pod3 clipboard
-    And I execute on the pod:
+    And admin executes on the pod:
       | ifconfig | net1 |
     Then the step should succeed
     And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod3_net1_ip clipboard
 
     #making sure the pods on same node can ping while pods on diff nodes can't
-    When I execute on the "<%= cb.pod1 %>" pod:
+    When admin executes on the "<%= cb.pod1 %>" pod:
       | arping | -I | net1 | -c1 | -w2 | <%= cb.pod2_net1_ip %> |
     Then the step should succeed
 
-    When I execute on the "<%= cb.pod3 %>" pod:
+    When admin executes on the "<%= cb.pod3 %>" pod:
       | arping | -I | net1 | -c1 | -w2 | <%= cb.pod1_net1_ip %> |
     Then the step should fail
 
-    When I execute on the "<%= cb.pod3 %>" pod:
+    When admin executes on the "<%= cb.pod3 %>" pod:
       | arping | -I | net1 | -c1 | -w2 | <%= cb.pod2_net1_ip %> |
     Then the step should fail
 
