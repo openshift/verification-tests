@@ -8,7 +8,9 @@ module BushSlicer
     # status phase=Succeeded and reason=InstallSucceeded;
     def ready?(user: nil, quiet: false, cached: false)
       res = get(user: user, quiet: quiet)
-      res[:success] = res[:parsed]["status"]["phase"] == "Succeeded" && res[:parsed]["status"]["reason"] == "InstallSucceeded" if res[:success]
+      if res[:success]
+        res[:success] = res[:parsed]["status"]["phase"] == "Succeeded" && res[:parsed]["status"]["reason"] == "InstallSucceeded"
+      end
       return res
     end
   end
