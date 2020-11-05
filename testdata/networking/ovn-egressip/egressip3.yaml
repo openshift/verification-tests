@@ -1,0 +1,13 @@
+apiVersion: k8s.ovn.org/v1
+kind: EgressIP
+metadata:
+  name: egressip3
+spec:
+  egressIPs:
+  - 172.31.249.227 
+  podSelector:
+    matchLabels:
+      team: blue
+  namespaceSelector:
+    matchLabels:
+      og: qe

@@ -1,0 +1,11 @@
+apiVersion: k8s.ovn.org/v1
+kind: EgressIP
+metadata:
+  name: egressip2
+spec:
+  egressIPs:
+  -  172.31.249.227
+  -  172.31.249.228
+  namespaceSelector:
+    matchLabels:
+      og: qe
