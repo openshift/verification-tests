@@ -176,7 +176,7 @@ Feature: Testing route
       | <%= route("route-recrypt", service("route-recrypt")).dns(by: user) %>:443:<%= cb.router_ip[0] %> |
       | https://<%= route("route-recrypt", service("route-recrypt")).dns(by: user) %>/test/ |
       | --cacert |
-      | /tmp/ca.pem |
+      | /tmp/ca-test.pem |
     Then the output should contain "Hello-OpenShift-Path-Test"
     """
     When I execute on the pod:
@@ -185,7 +185,7 @@ Feature: Testing route
       | <%= route("route-recrypt", service("route-recrypt")).dns(by: user) %>:443:<%= cb.router_ip[0] %> |
       | https://<%= route("route-recrypt", service("route-recrypt")).dns(by: user) %>/ |
       | --cacert |
-      | /tmp/ca.pem |
+      | /tmp/ca-test.pem |
     Then the output should contain "Application is not available"
 
   # @author yadu@redhat.com
