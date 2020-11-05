@@ -4,15 +4,14 @@ module BushSlicer
   class ClusterServiceVersion < ProjectResource
     RESOURCE = "clusterserviceversions"
 
-    # @return [BushSlicer::ResultHash] with :success depending on 
+    # @return [BushSlicer::ResultHash] with :success depending on
     # status phase=Succeeded and reason=InstallSucceeded;
-    def ready?(user: user, quiet: false, cached: false)
-    	res = get(user: user, quiet: quiet)
-    	if res[:success]
-    		res[:success] = 
-    			res[:parsed]["status"]["phase"] == "Succeeded" && res[:parsed]["status"]["reason"] == "InstallSucceeded"
-    	end
-    	return res
+    def ready?(user: nil, quiet: false, cached: false)
+      res = get(user: user, quiet: quiet)
+      if res[:success]
+        res[:success] = res[:parsed]["status"]["phase"] == "Succeeded" && res[:parsed]["status"]["reason"] == "InstallSucceeded"
+      end
+      return res
     end
   end
 end

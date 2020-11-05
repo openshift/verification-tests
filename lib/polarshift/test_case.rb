@@ -130,7 +130,7 @@ module BushSlicer
           return false # no need for expensive checks once we are complete
         else
           scenario = ScenarioWrapper.new(test_case)
-          if automation_file == scenario.file &&
+          if File.absolute_path(scenario.file) == File.join(BushSlicer::HOME, automation_file) &&
              automation_scenario == scenario.name
             if automation_args && !scenario.example?
               logger.error "case #{id} mismatch with scenario type, will never run"
