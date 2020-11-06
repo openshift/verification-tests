@@ -513,7 +513,7 @@ Given /^the node's default gateway is stored in the#{OPT_SYM} clipboard$/ do |cb
   ensure_admin_tagged
   step "I select a random node's host"
   cb_name = "gateway" unless cb_name
-  @result = host.exec_admin("/sbin/ip route show default | awk '/default/ {print $3}'")
+  @result = host.exec_admin("ip route show default | awk '/default/ {print $3}'")
 
   cb[cb_name] = @result[:response].chomp
   unless IPAddr.new(cb[cb_name])

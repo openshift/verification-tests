@@ -61,7 +61,7 @@ Feature: Sriov related scenarios
     And a pod becomes ready with labels:
       | name=sriov-static |
     When I execute on the pod:
-      | bash | -c | /usr/sbin/ip addr show net1 |
+      | bash | -c | ip addr show net1 |
     Then the output should contain:
       | 192.168.2.206 |
       | 2001::2/64    |
@@ -115,15 +115,15 @@ Feature: Sriov related scenarios
     And a pod becomes ready with labels:
       | name=sriov-macvlan |
     When I execute on the pod:
-      | /usr/sbin/ip | -d | link |
+      | ip | -d | link |
     Then the output should contain:
       | net1 |
       | net2 |
     When I execute on the pod:
-      | bash | -c | /usr/sbin/ip addr show net1 |
+      | bash | -c | ip addr show net1 |
     Then the output should contain "10.56.217"
     When I execute on the pod:
-      | bash | -c | /usr/sbin/ip addr show net2 |
+      | bash | -c | ip addr show net2 |
     Then the output should contain "192.168.1"  
 
   # @author zzhao@redhat.com
@@ -198,7 +198,7 @@ Feature: Sriov related scenarios
     And a pod becomes ready with labels:
       | name=sriov-macvlan |
     When I execute on the pod:
-      | /usr/sbin/ip | a |
+      | ip | a |
     Then the output should contain:
       | 10.56.217 |
 

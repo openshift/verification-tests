@@ -28,18 +28,17 @@ Feature: Multus-CNI related scenarios
 
     # Check that the macvlan with mode bridge is added to the pod
     When I execute on the pod:
-      | /usr/sbin/ip | -d | link |
+      | ip | -d | link |
     Then the output should contain "net1"
     And the output should contain "macvlan mode bridge"
     When I execute on the pod:
-      | bash | -c | /usr/sbin/ip -f inet addr show net1 \| grep -Po 'inet \K[\d.]+' |
+      | bash | -c | ip -f inet addr show net1 |
     Then the output should match "10.1.1.\d{1,3}"
-    And the expression should be true> IPAddr.new(@result[:response].chomp)
-    And evaluation of `@result[:response].chomp` is stored in the :pod1_multus_ip clipboard
+    And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod1_multus_ip clipboard
     When I execute on the pod:
-      | bash | -c | /usr/sbin/ip -f inet addr show eth0 \| grep -Po 'inet \K[\d.]+' |
+      | bash | -c | ip -f inet addr show eth0 |
     Then the step should succeed
-    And evaluation of `@result[:response].chomp` is stored in the :pod1_sdn_ip clipboard
+    And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod1_sdn_ip clipboard
 
     # Create the second pod which consumes the macvlan cr
     Given I obtain test data file "networking/multus-cni/Pods/1interface-macvlan-bridge.yaml"
@@ -88,18 +87,17 @@ Feature: Multus-CNI related scenarios
 
     # Check that the macvlan with mode private is added to the pod
     When I execute on the pod:
-      | /usr/sbin/ip | -d | link |
+      | ip | -d | link |
     Then the output should contain "net1"
     And the output should contain "macvlan mode private"
     When I execute on the pod:
-      | bash | -c | /usr/sbin/ip -f inet addr show net1 \| grep -Po 'inet \K[\d.]+' |
+      | bash | -c | ip -f inet addr show net1 |
     Then the output should match "10.1.1.\d{1,3}"
-    And the expression should be true> IPAddr.new(@result[:response].chomp)
-    And evaluation of `@result[:response].chomp` is stored in the :pod1_multus_ip clipboard
+    And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod1_multus_ip clipboard
     When I execute on the pod:
-      | bash | -c | /usr/sbin/ip -f inet addr show eth0 \| grep -Po 'inet \K[\d.]+' |
+      | bash | -c | ip -f inet addr show eth0 |
     Then the step should succeed
-    And evaluation of `@result[:response].chomp` is stored in the :pod1_sdn_ip clipboard
+    And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod1_sdn_ip clipboard
 
     # Create the second pod which consumes the macvlan cr
     Given I obtain test data file "networking/multus-cni/Pods/1interface-macvlan-private.yaml"
@@ -147,18 +145,17 @@ Feature: Multus-CNI related scenarios
 
     # Check that the macvlan with mode vepa is added to the pod
     When I execute on the pod:
-      | /usr/sbin/ip | -d | link |
+      | ip | -d | link |
     Then the output should contain "net1"
     And the output should contain "macvlan mode vepa"
     When I execute on the pod:
-      | bash | -c | /usr/sbin/ip -f inet addr show net1 \| grep -Po 'inet \K[\d.]+' |
+      | bash | -c | ip -f inet addr show net1 |
     Then the output should match "10.1.1.\d{1,3}"
-    And the expression should be true> IPAddr.new(@result[:response].chomp)
-    And evaluation of `@result[:response].chomp` is stored in the :pod1_multus_ip clipboard
+    And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod1_multus_ip clipboard
     When I execute on the pod:
-      | bash | -c | /usr/sbin/ip -f inet addr show eth0 \| grep -Po 'inet \K[\d.]+' |
+      | bash | -c | ip -f inet addr show eth0 |
     Then the step should succeed
-    And evaluation of `@result[:response].chomp` is stored in the :pod1_sdn_ip clipboard
+    And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod1_sdn_ip clipboard
 
     # Create the second pod which consumes the macvlan cr
     Given I obtain test data file "networking/multus-cni/Pods/1interface-macvlan-vepa.yaml"
@@ -221,7 +218,7 @@ Feature: Multus-CNI related scenarios
 
     # Check that the host-device is added to the pod
     When I execute on the pod:
-      | /usr/sbin/ip | -d | link |
+      | ip | -d | link |
     Then the output should contain "net1"
     And the output should contain "macvlan mode bridge"
 
@@ -278,21 +275,19 @@ Feature: Multus-CNI related scenarios
 
     # Check that there are two additional interfaces attached to the pod
     When I execute on the pod:
-      | /usr/sbin/ip | -d | link |
+      | ip | -d | link |
     Then the output should contain "net1"
     Then the output should contain "net2"
     And the output should contain 2 times:
       | macvlan mode bridge |
     When I execute on the pod:
-      | bash | -c | /usr/sbin/ip -f inet addr show net1 \| grep -Po 'inet \K[\d.]+' |
+      | bash | -c | ip -f inet addr show net1 |
     Then the output should match "10.1.1.\d{1,3}"
-    And the expression should be true> IPAddr.new(@result[:response].chomp)
-    And evaluation of `@result[:response].chomp` is stored in the :pod_multus_ip1 clipboard
+    And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod_multus_ip1 clipboard
     When I execute on the pod:
-      | bash | -c | /usr/sbin/ip -f inet addr show net2 \| grep -Po 'inet \K[\d.]+' |
+      | bash | -c | ip -f inet addr show net2 |
     Then the output should match "10.1.1.\d{1,3}"
-    And the expression should be true> IPAddr.new(@result[:response].chomp)
-    And evaluation of `@result[:response].chomp` is stored in the :pod_multus_ip2 clipboard
+    And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod_multus_ip2 clipboard
     And the expression should be true> cb.pod_multus_ip1 != cb.pod_multus_ip2
 
   # @author bmeng@redhat.com
@@ -349,15 +344,15 @@ Feature: Multus-CNI related scenarios
 
     # Check that there are two additional interfaces attached to the pod
     When I execute on the pod:
-      | /usr/sbin/ip | -d | link |
+      | ip | -d | link |
     Then the output should contain "net1"
     And the output should contain "net2"
     And the output should contain "macvlan mode bridge"
     And the output should contain "macvlan mode private"
     When I execute on the pod:
-      | bash | -c | /usr/sbin/ip -f inet addr show net2 \| grep -Po 'inet \K[\d.]+' |
+      | bash | -c | ip -f inet addr show net2 |
     Then the output should match "10.1.1.\d{1,3}"
-    And the expression should be true> IPAddr.new(@result[:response].chomp)
+    And the expression should be true> IPAddr.new(@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0])
 
   # @author bmeng@redhat.com
   # @case_id OCP-21859
@@ -424,7 +419,7 @@ Feature: Multus-CNI related scenarios
 
     # Check that there are two additional interfaces attached to the pod
     When I execute on the pod:
-      | /usr/sbin/ip | -d | link |
+      | ip | -d | link |
     Then the output should contain "net1"
     And the output should contain "net2"
     And the output should contain 2 times:
@@ -464,7 +459,7 @@ Feature: Multus-CNI related scenarios
     the bridge interface named "bridge3" is deleted from the "<%= cb.pod.node_name %>" node
     """
     When I execute on the pod:
-      | /usr/sbin/ip | -d | link |
+      | ip | -d | link |
     Then the output should contain "net1"
     #Entering into corresponding no eot make sure No VLAN ID information shown for secondary interface
     Given CNI vlan info is obtained on the "<%= cb.pod.node_name %>" node
@@ -508,7 +503,7 @@ Feature: Multus-CNI related scenarios
     the bridge interface named "mybridge.200" is deleted from the "<%= cb.pod.node_name %>" node
     """
     When I execute on the pod:
-      | /usr/sbin/ip | -d | link |
+      | ip | -d | link |
     Then the output should contain:
       | net1 |
     #Entering into corresponding node to make sure VLAN ID information shown for interfaces
@@ -556,7 +551,7 @@ Feature: Multus-CNI related scenarios
       | name=macvlan-bridge-pod |
     And evaluation of `pod` is stored in the :pod clipboard
     When I execute on the pod:
-      | /usr/sbin/ip | -d | link |
+      | ip | -d | link |
     Then the output should contain "net1"
 
   # @author anusaxen@redhat.com
@@ -845,7 +840,7 @@ Feature: Multus-CNI related scenarios
     And the pod named "test-pod" becomes ready
     And evaluation of `pod` is stored in the :pod clipboard
     When I execute on the pod:
-      | /usr/sbin/ip | -d | link |
+      | ip | -d | link |
     Then the output should contain "net1"
 
   # @author weliang@redhat.com
@@ -873,12 +868,12 @@ Feature: Multus-CNI related scenarios
 
     # Check created pod has correct MAC and IP for interface net1
     When I execute on the pod:
-      | /usr/sbin/ip | -d | link |
+      | ip | -d | link |
     Then the output should contain:
       | net1                |
       | macvlan mode bridge |
     When I execute on the pod:
-      | /usr/sbin/ip | a |
+      | ip | a |
     Then the output should contain:
       | 192.168.22.2      |
       | ca:fe:c0:ff:ee:00 |
@@ -934,7 +929,7 @@ Feature: Multus-CNI related scenarios
     Then the step should succeed
     And the pod named "test-pod" becomes ready
     When I execute on the pod:
-      | /usr/sbin/ip | a |
+      | ip | a |
     Then the output should contain "88.8.8"
 
   # @author anusaxen@redhat.com
@@ -1009,7 +1004,7 @@ Feature: Multus-CNI related scenarios
     Then the step should succeed
     And the pod named "test-pod" becomes ready
     When I execute on the pod:
-      | /usr/sbin/ip | a |
+      | ip | a |
     Then the output should contain "192.18.0"
 
   # @author weliang@redhat.com
@@ -1037,12 +1032,12 @@ Feature: Multus-CNI related scenarios
 
     # Check created pod has correct IP for interface net1
     When I execute on the pod:
-      | /usr/sbin/ip | -d | link |
+      | ip | -d | link |
     Then the output should contain:
       | net1                |
       | macvlan mode bridge |
     When I execute on the pod:
-      | /usr/sbin/ip | a |
+      | ip | a |
     Then the output should contain:
       | 192.168.22.2 |
 
@@ -1069,12 +1064,12 @@ Feature: Multus-CNI related scenarios
     And the pod named "runtimeconfig-pod-mac" becomes ready
     # Check created pod has correct MAC interface net1
     When I execute on the pod:
-      | /usr/sbin/ip | -d | link |
+      | ip | -d | link |
     Then the output should contain:
       | net1                |
       | macvlan mode bridge |
     When I execute on the pod:
-      | /usr/sbin/ip | a |
+      | ip | a |
     Then the output should contain:
       | c2:b0:57:49:47:f1 |
 
@@ -1103,7 +1098,7 @@ Feature: Multus-CNI related scenarios
 
     # Check created pod has correct default route
     When I execute on the pod:
-      | /usr/sbin/ip | route |
+      | ip | route |
     Then the output should contain:
       | default via 22.2.2.254 dev net1 |
 
@@ -1272,13 +1267,13 @@ Feature: Multus-CNI related scenarios
 
     # Check created pod has correct macvlan mode on interface net1
     When I execute on the "macvlan-bridge-whereabouts-pod1" pod:
-      | /usr/sbin/ip | -d | link |
+      | ip | -d | link |
     Then the output should contain:
       | net1                |
       | macvlan mode bridge |
     # Check created pod has correct ip address on interface net1
     When I execute on the "macvlan-bridge-whereabouts-pod1" pod:
-      | /usr/sbin/ip | a |
+      | ip | a |
     Then the output should contain:
       | 192.168.22.101 |
 
@@ -1293,13 +1288,13 @@ Feature: Multus-CNI related scenarios
 
     # Check created pod has correct macvlan mode on interface net1
     When I execute on the "macvlan-bridge-whereabouts-pod2" pod:
-      | /usr/sbin/ip | -d | link |
+      | ip | -d | link |
     Then the output should contain:
       | net1                |
       | macvlan mode bridge |
     # Check created pod has correct ip address on interface net1
     When I execute on the "macvlan-bridge-whereabouts-pod2" pod:
-      | /usr/sbin/ip | a |
+      | ip | a |
     Then the output should contain:
       | 192.168.22.102 |
 
@@ -1329,7 +1324,7 @@ Feature: Multus-CNI related scenarios
 
     # Check created pod has correct default route
     When I execute on the "route-override" pod:
-      | /usr/sbin/ip | route |
+      | ip | route |
     Then the output should contain:
       | 192.168.10.0 |
 
@@ -1392,7 +1387,7 @@ Feature: Multus-CNI related scenarios
     And evaluation of `@result[:response]` is stored in the :pod_uid clipboard
 
     And I execute on the "macvlan-bridge-whereabouts-pod1" pod:
-      | bash | -c | /usr/sbin/ip addr show net1 |
+      | bash | -c | ip addr show net1 |
     Then the step should succeed
     And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod_net1_ip clipboard
 
@@ -1428,7 +1423,7 @@ Feature: Multus-CNI related scenarios
     And the pod named "macvlan-bridge-whereabouts-pod1" becomes ready
     # Check the created pod has correct ip
     When I execute on the "macvlan-bridge-whereabouts-pod1" pod:
-      | bash | -c | /usr/sbin/ip -4 -brief a |
+      | bash | -c | ip -4 -brief a |
     Then the output should contain:
       | 192.168.10.4 |
 
@@ -1442,7 +1437,7 @@ Feature: Multus-CNI related scenarios
     And the pod named "macvlan-bridge-whereabouts-pod2" becomes ready
     # Check the created pod has correct ip
     When I execute on the "macvlan-bridge-whereabouts-pod2" pod:
-      | bash | -c | /usr/sbin/ip -4 -brief a |
+      | bash | -c | ip -4 -brief a |
     Then the output should contain:
       | 192.168.10.5 |
 
@@ -1486,7 +1481,7 @@ Feature: Multus-CNI related scenarios
     And the pod named "whereabouts-shortrange-pod1" becomes ready
     # Check the created pod which has correct ip
     When I execute on the "whereabouts-shortrange-pod1" pod:
-      | bash | -c | /usr/sbin/ip -4 -brief a |
+      | bash | -c | ip -4 -brief a |
     Then the output should contain:
       | 192.168.42.1 |
 
@@ -1506,7 +1501,7 @@ Feature: Multus-CNI related scenarios
     And the pod named "whereabouts-largerange-pod1" becomes ready
     # Check the created pod which has correct ip
     When I execute on the "whereabouts-largerange-pod1" pod:
-      | bash | -c | /usr/sbin/ip -4 -brief a |
+      | bash | -c | ip -4 -brief a |
     Then the output should contain:
       | 192.168.42.2 |
 
@@ -1526,11 +1521,11 @@ Feature: Multus-CNI related scenarios
 
     # Check third pod which has correct ip
     When I execute on the "whereabouts-shortrange-pod2" pod:
-      | bash | -c | /usr/sbin/ip -4 -brief a |
+      | bash | -c | ip -4 -brief a |
     Then the output should contain:
       | 192.168.42.3 |
     # Check fourth pod which has correct ip
     When I execute on the "whereabouts-largerange-pod2" pod:
-      | bash | -c | /usr/sbin/ip -4 -brief a |
+      | bash | -c | ip -4 -brief a |
     Then the output should contain:
       | 192.168.42.4 |
