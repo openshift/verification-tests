@@ -464,3 +464,24 @@ Feature: Egress-ingress related networking scenarios
     When I execute on the pod:
       | curl | --connect-timeout | 5 | --head | www.test.com |
     Then the step should fail
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-35341
+  @admin
+  Scenario: EgressNetworkPolicy maxItems is 1000
+    Given I have a project
+    Given I obtain test data file "networking/egressnetworkpolicy/egressnetworkpolicy_1000.yaml"
+    When I run the :create admin command with:
+      | f | egressnetworkpolicy_1000.yaml |
+      | n | <%= project.name %>           |
+    Then the step should succeed
+    And the output should contain:
+      | egressnetworkpolicy.network.openshift.io/default created |
+    And admin ensures "default" egress_network_policy is deleted
+    Given I obtain test data file "networking/egressnetworkpolicy/egressnetworkpolicy_1001.yaml"
+    When I run the :create admin command with:
+      | f | egressnetworkpolicy_1001.yaml |
+      | n | <%= project.name %>           |
+    Then the step should fail
+    And the output should contain:
+      | spec.egress in body should have at most 1000 items |
