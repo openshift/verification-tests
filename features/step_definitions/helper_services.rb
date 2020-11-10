@@ -179,13 +179,22 @@ Given /^I have LDAP service in my project$/ do
     # Init the test data in ldap server.
     @result = pod.exec("ldapadd", "-x", "-h", "127.0.0.1", "-p", "389", "-D", "cn=Manager,dc=example,dc=com", "-w", "admin", stdin: File.read(cb.test_file), as: user)
     step %Q/the step should succeed/
-
+    
     # Port forword ldapserver to local
     step %Q/evaluation of `rand(32000...65536)` is stored in the :ldap_port clipboard/
     step %Q/I run the :port_forward background client command with:/, table(%{
       | pod       | <%= pod.name %>         |
       | port_spec | <%= cb.ldap_port %>:389 |
       })
+    step %Q/the step should succeed/
+
+    @result = BushSlicer::Common::Net.wait_for_tcp(host: "localhost", port: cb.ldap_port, timeout: 60)
+    stats = @result[:props][:stats]
+    logger.info "after #{stats[:seconds]} seconds and #{stats[:iterations]} " <<
+      "iterations, localhost is: " <<
+      "#{@result[:success] ? "accessible" : @result[:error].inspect}"
+
+    raise "port forwarding is not yet ready" unless @result[:success]
     step %Q/the step should succeed/
 end
 
