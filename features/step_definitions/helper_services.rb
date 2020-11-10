@@ -187,6 +187,12 @@ Given /^I have LDAP service in my project$/ do
       | port_spec | <%= cb.ldap_port %>:389 |
       })
     step %Q/the step should succeed/
+    @result = BushSlicer::Common::Net.wait_for_tcp(host: "localhost", port: cb.ldap_port, timeout: 60)
+    stats = @result[:props][:stats]
+    logger.info "after #{stats[:seconds]} seconds and #{stats[:iterations]} " <<
+      "iterations, localhost is: " <<
+      "#{@result[:success] ? "accessible" : @result[:error].inspect}"
+    raise "port forwarding is not yet ready" unless @result[:success]
 end
 
 Given /^I have an ssh-git service in the(?: "([^ ]+?)")? project$/ do |project_name|
