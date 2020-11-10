@@ -221,3 +221,16 @@ Given /^(I|admin) stores? all (\w+)( in the#{OPT_QUOTED} project)? to the#{OPT_S
     cb[cb_name] = clazz.list(user: _user)
   end
 end
+
+Given /^I remove all #{WORD}(?: in the#{OPT_QUOTED} project) with labels:$/ do | resource_type, namespace, table |
+  labels = table.raw.flatten
+  namespace ||= project.name
+  clazz = resource_class(resource_type)
+  if BushSlicer::ProjectResource > clazz
+    list = clazz.get_labeled(*labels, user: user, project: project(namespace))
+  else
+    ensure_destructive_tagged
+    list = clazz.get_labeled(*labels, user: user)
+  end
+  list.each { |r| r.ensure_deleted }
+end

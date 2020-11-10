@@ -10,7 +10,7 @@ Feature: SCTP related scenarios
     Given I have a project
     And I wait up to 800 seconds for the steps to pass:
     """
-    Given I check load-sctp-module in all nodes
+    Given I check load-sctp-module in all workers
     """
     Given I obtain test data file "networking/sctp/sctpserver.yaml"
     When I run oc create as admin over "sctpserver.yaml" replacing paths:
@@ -63,7 +63,7 @@ Feature: SCTP related scenarios
     Given I have a project
     And I wait up to 800 seconds for the steps to pass:
     """
-    Given I check load-sctp-module in all nodes
+    Given I check load-sctp-module in all workers
     """
     Given I obtain test data file "networking/sctp/sctpserver.yaml"
     When I run oc create as admin over "sctpserver.yaml" replacing paths:
@@ -123,7 +123,7 @@ Feature: SCTP related scenarios
     Given I have a project
     And I wait up to 800 seconds for the steps to pass:
     """
-    Given I check load-sctp-module in all nodes
+    Given I check load-sctp-module in all workers
     """
     Given I obtain test data file "networking/sctp/sctpserver.yaml"
     When I run oc create as admin over "sctpserver.yaml" replacing paths:
@@ -182,7 +182,7 @@ Feature: SCTP related scenarios
     Given I have a project
     And I wait up to 800 seconds for the steps to pass:
     """
-    Given I check load-sctp-module in all nodes
+    Given I check load-sctp-module in all workers
     """
     Given I obtain test data file "networking/sctp/sctpserver.yaml"
     When I run oc create as admin over "sctpserver.yaml" replacing paths:

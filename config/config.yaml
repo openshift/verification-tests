@@ -45,6 +45,10 @@ global:
   # browser: chrome
   # browser: firefox_marionette
 
+  # Optional: remote selenium URL to connect to.
+  # Leave unset for default of launching local browser via geckodriver etc.
+  # selenium_url: http://example.com:4444/wd/hub
+
 environments:
   online_starter:
     hosts: api.starter-us-east-1.openshift.com:etcd:master:node

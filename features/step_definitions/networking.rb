@@ -1,3 +1,4 @@
+
 Given /^I run the ovs commands on the host:$/ do | table |
   ensure_admin_tagged
   _host = node.host
@@ -512,7 +513,7 @@ Given /^the node's default gateway is stored in the#{OPT_SYM} clipboard$/ do |cb
   ensure_admin_tagged
   step "I select a random node's host"
   cb_name = "gateway" unless cb_name
-  @result = host.exec_admin("/sbin/ip route show default | awk '/default/ {print $3}'")
+  @result = host.exec_admin("ip route show default | awk '/default/ {print $3}'")
 
   cb[cb_name] = @result[:response].chomp
   unless IPAddr.new(cb[cb_name])
@@ -627,7 +628,7 @@ Given /^I run command on the#{OPT_QUOTED} node's sdn pod:$/ do |node_name, table
       pod.node_name == node_name
     }.first
     cache_resources ovnkube_pod
-    @result = ovnkube_pod.exec(network_cmd, as: admin)
+    @result = ovnkube_pod.exec(network_cmd, container: "ovn-controller", as: admin)
   else
     raise "unknown network_type"
   end
@@ -696,10 +697,34 @@ end
 
 Given /^CNI vlan info is obtained on the#{OPT_QUOTED} node$/ do | node_name |
   ensure_admin_tagged
-  node = node(node_name)
-  host = node.host
-  @result = host.exec_admin("/sbin/bridge vlan show")
+  @result = node(node_name).host.exec_admin("/sbin/bridge -j vlan show")
   raise "Failed to execute bridge vlan show command" unless @result[:success]
+  @result[:parsed] = YAML.load @result[:stdout]
+end
+
+Given /^the number of bridge PVID (\d+) VLANs matching #{QUOTED} added between the #{SYM} and #{SYM} clipboards is (\d+)$/ do |pvid, mode, clip_a, clip_b, expected_vlans|
+  pvid = pvid.to_i
+  # RHCOS is Array of VLANs, RHEL7 is a Hash, always convert to Set so we can compare
+  added_bridges = cb[clip_b].to_set - cb[clip_a].to_set
+  logger.info("added_bridges: #{added_bridges}")
+  mode = Regexp.new(mode)
+  num_vlans = added_bridges.count { |b|
+    # handle old RHEL7 bridge JSON and current RHCOS bridge JSON output
+    # RHCOS:
+    # [{"ifname":"bridge3","vlans":[{"vlan":1,"flags":["PVID","Egress Untagged"]}]},{"ifname":"veth66451995","vlans":[{"vlan":1,"flags":["PVID","Egress Untagged"]}]}]
+    # RHEL7
+    # {"bridge3":[{"vlan":1,"flags":["PVID","EgressUntagged"]}],"vethb26eb609":[{"vlan":1,"flags":["PVID","EgressUntagged"]}]}
+    # try b[1] first else check for the "vlans" key
+    vlans = b[1] || b["vlans"]
+    c = vlans.count { |v|
+      v["vlan"] == pvid && v["flags"].include?("PVID") && v["flags"].any?(mode)
+    }
+    c > 0
+  }
+  if num_vlans != expected_vlans.to_i
+    raise "Found #{num_vlans} bridge VLANS of #{pvid} and mode #{mode}, expected #{expected_vlans}"
+  end
+
 end
 
 Given /^the bridge interface named "([^"]*)" is deleted from the "([^"]*)" node$/ do |bridge_name, node_name|
@@ -1157,13 +1182,13 @@ Given /^I install machineconfigs load-sctp-module$/ do
   end
 end
 
-Given /^I check load-sctp-module in all nodes$/ do 
+Given /^I check load-sctp-module in all workers$/ do
   ensure_admin_tagged
   _admin = admin
-  env.nodes.each do |node|
-    @result = node.host.exec_admin("lsmod \| grep sctp")
-    unless @result[:response].include? "sctp"
-      raise "no sctp module"
+  cb.workers.each do |workers|
+    @result = workers.host.exec_admin("cat /sys/module/sctp/initstate")
+    unless @result[:response].include? "live"
+      raise "No sctp module installed"
     end
   end
 end
@@ -1235,4 +1260,11 @@ Given /^I save egress type to the#{OPT_SYM} clipboard$/ do | cb_name |
     raise "unknown network_type"
   end
   logger.info "The egressfirewall type is stored to the #{cb_name} clipboard."
+end
+
+Given /^I save ipecho url to the#{OPT_SYM} clipboard$/ do | cb_name |
+  ensure_admin_tagged
+  cb_name = "ipecho_url" unless cb_name
+  cb[cb_name]="172.31.249.80:9095"
+  logger.info "The ipecho service url #{cb[cb_name]} is stored to the #{cb_name} clipboard."
 end

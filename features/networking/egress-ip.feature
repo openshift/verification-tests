@@ -32,6 +32,7 @@ Feature: Egress IP related features
   # @case_id OCP-15471
   @admin
   Scenario: All the pods egress connection will get out through the egress IP if the egress IP is set to netns and egress node can host the IP
+    Given I save ipecho url to the clipboard
     Given I select a random node's host
     # create project with pods
     Given I have a project
@@ -65,19 +66,19 @@ Feature: Egress IP related features
     # try to access the receiver service to get the source IP
 
     When I execute on the "<%= cb.pod1 %>" pod:
-      | curl | -s | --connect-timeout | 5 | ifconfig.me |
+      | curl | -s | --connect-timeout | 5 | <%= cb.ipecho_url %> |
     Then the step should succeed
     And the output should contain "<%= cb.valid_ip %>"
     When I execute on the "<%= cb.pod2 %>" pod:
-      | curl | -s | --connect-timeout | 5 | ifconfig.me |
+      | curl | -s | --connect-timeout | 5 | <%= cb.ipecho_url %> |
     Then the step should succeed
     And the output should contain "<%= cb.valid_ip %>"
     When I execute on the "<%= cb.pod3 %>" pod:
-      | curl | -s | --connect-timeout | 5 | ifconfig.me |
+      | curl | -s | --connect-timeout | 5 | <%= cb.ipecho_url %> |
     Then the step should succeed
     And the output should contain "<%= cb.valid_ip %>"
     When I execute on the "<%= cb.pod4 %>" pod:
-      | curl | -s | --connect-timeout | 5 | ifconfig.me |
+      | curl | -s | --connect-timeout | 5 | <%= cb.ipecho_url %> |
     Then the step should succeed
     And the output should contain "<%= cb.valid_ip %>"
 
@@ -154,6 +155,7 @@ Feature: Egress IP related features
   @admin
   @destructive
   Scenario: The EgressNetworkPolicy should work well with egressIP
+    Given I save ipecho url to the clipboard
     Given the valid egress IP is added to the node
     And I have a project
     And I have a pod-for-ping in the project
@@ -171,7 +173,7 @@ Feature: Egress IP related features
 
     #The traffic should be denied
     When I execute on the pod:
-      | curl | -s | --connect-timeout | 5 | ifconfig.me |
+      | curl | -s | --connect-timeout | 5 | <%= cb.ipecho_url %> |
     Then the step should fail
 
     # Update egressnetworkpolicy as Allow
@@ -185,7 +187,7 @@ Feature: Egress IP related features
 
     # The traffic should be allowed and the source ip is egress ip
     When I execute on the pod:
-      | curl | -s | --connect-timeout | 5 | ifconfig.me |
+      | curl | -s | --connect-timeout | 5 | <%= cb.ipecho_url %> |
     Then the step should succeed
     And the output should contain "<%= cb.valid_ip %>"
 
@@ -238,6 +240,7 @@ Feature: Egress IP related features
   @admin
   @destructive
   Scenario: The egressIP should still work fine after the node or network service restarted
+    Given I save ipecho url to the clipboard
     Given the valid egress IP is added to the node
     And I have a project
     And I have a pod-for-ping in the project
@@ -247,7 +250,7 @@ Feature: Egress IP related features
       | {"egressIPs": ["<%= cb.valid_ip %>"]} |
 
     When I execute on the pod:
-      | curl | -s | --connect-timeout | 5 | ifconfig.me |
+      | curl | -s | --connect-timeout | 5 | <%= cb.ipecho_url %> |
     Then the step should succeed
     And the output should contain "<%= cb.valid_ip %>"
 
@@ -256,7 +259,7 @@ Feature: Egress IP related features
     And I wait up to 120 seconds for the steps to pass:
     """
     When I execute on the pod:
-      | curl | -s | --connect-timeout | 5 | ifconfig.me |
+      | curl | -s | --connect-timeout | 5 | <%= cb.ipecho_url %> |
     Then the step should succeed
     And the output should contain "<%= cb.valid_ip %>"
     """
@@ -264,7 +267,7 @@ Feature: Egress IP related features
     # Reboot the node which patched egressIP
     Given the host is rebooted and I wait it up to 600 seconds to become available
     When I execute on the pod:
-      | curl | -s | --connect-timeout | 5 | ifconfig.me |
+      | curl | -s | --connect-timeout | 5 | <%= cb.ipecho_url %> |
     Then the step should succeed
     And the output should contain "<%= cb.valid_ip %>"
 
@@ -377,6 +380,7 @@ Feature: Egress IP related features
   @admin
   @destructive
   Scenario: The egressIPs should work well when re-using the egressIP which is holding by a deleted project
+    Given I save ipecho url to the clipboard
     Given I store the schedulable workers in the :nodes clipboard
     And the valid egress IP is added to the "<%= cb.nodes[0].name %>" node
     And I have a project
@@ -396,7 +400,7 @@ Feature: Egress IP related features
 
     # The traffic should be allowed and the source ip is egress ip
     When I execute on the pod:
-      | curl | -s | --connect-timeout | 5 | ifconfig.me |
+      | curl | -s | --connect-timeout | 5 | <%= cb.ipecho_url %> |
     Then the step should succeed
     And the output should contain "<%= cb.valid_ip %>"
 
@@ -405,6 +409,7 @@ Feature: Egress IP related features
   @admin
   @destructive
   Scenario: Add the removed egressIP back to the netnamespace would work well
+    Given I save ipecho url to the clipboard
     Given I store the schedulable workers in the :nodes clipboard
     And the valid egress IP is added to the "<%= cb.nodes[0].name %>" node
     And I have a project
@@ -420,7 +425,7 @@ Feature: Egress IP related features
 
     # The traffic should be allowed and the source ip is not egress ip
     When I execute on the pod:
-      | curl | -s | --connect-timeout | 10 | ifconfig.io |
+      | curl | -s | --connect-timeout | 10 | <%= cb.ipecho_url %> |
     Then the step should succeed
     And the output should not contain "<%= cb.valid_ip %>"
 
@@ -430,7 +435,7 @@ Feature: Egress IP related features
 
     # The traffic should be allowed and the source ip is egress ip
     When I execute on the pod:
-      | curl | -s | --connect-timeout | 10 | ifconfig.io |
+      | curl | -s | --connect-timeout | 10 | <%= cb.ipecho_url %> |
     Then the step should succeed
     And the output should contain "<%= cb.valid_ip %>"
 
@@ -439,6 +444,7 @@ Feature: Egress IP related features
   @admin
   @destructive
   Scenario: The pod should be able to access outside with the node source IP after the egressIP removed
+    Given I save ipecho url to the clipboard
     Given I store the schedulable workers in the :nodes clipboard
     And the valid egress IP is added to the "<%= cb.nodes[0].name %>" node
     Given I have a project
@@ -452,7 +458,7 @@ Feature: Egress IP related features
 
     # The traffic should be allowed and the source ip is egress ip
     When I execute on the "<%= cb.hello_pod %>" pod:
-      | curl | -s | --connect-timeout | 10 | ifconfig.io |
+      | curl | -s | --connect-timeout | 10 | <%= cb.ipecho_url %> |
     Then the step should succeed
     And the output should contain "<%= cb.valid_ip %>"
 
@@ -462,7 +468,7 @@ Feature: Egress IP related features
 
     # The traffic should be allowed and the source ip is node ip
     When I execute on the pod:
-      | curl | -s | --connect-timeout | 10 | ifconfig.io |
+      | curl | -s | --connect-timeout | 10 | <%= cb.ipecho_url %> |
     Then the step should succeed
     And the output should contain "<%= cb.node_ip %>"
 
@@ -472,7 +478,7 @@ Feature: Egress IP related features
 
     # The traffic should be allowed and the source ip is node ip
     When I execute on the pod:
-      | curl | -s | --connect-timeout | 10 | ifconfig.io |
+      | curl | -s | --connect-timeout | 10 | <%= cb.ipecho_url %> |
     Then the step should succeed
     And the output should contain "<%= cb.node_ip %>"
 
@@ -481,6 +487,7 @@ Feature: Egress IP related features
   @admin
   @destructive
   Scenario: Pods will not be affected by the egressIP set on other netnamespace
+    Given I save ipecho url to the clipboard
     # create project with pods
     Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard
@@ -499,7 +506,7 @@ Feature: Egress IP related features
 
     # access external network via pod from project without egress ip
     When I execute on the pod:
-      | curl | --connect-timeout | 10 | ifconfig.io |
+      | curl | --connect-timeout | 10 | <%= cb.ipecho_url %> |
     Then the step should succeed
     And the output should not contain "<%= cb.valid_ip %>"
 
@@ -538,6 +545,7 @@ Feature: Egress IP related features
   @admin
   @destructive
   Scenario: The same egressIP will not be assigned to different netnamespace
+    Given I save ipecho url to the clipboard
     Given I store the schedulable workers in the :nodes clipboard
     Given I store a random unused IP address from the reserved range to the clipboard
 
@@ -561,7 +569,7 @@ Feature: Egress IP related features
 
     #The project will lose the external access
     When I execute on the pod:
-      | curl | --connect-timeout | 10 | ifconfig.io |
+      | curl | --connect-timeout | 10 | <%= cb.ipecho_url %> |
     Then the step should fail
 
     # The egress IP was not assiged to the node

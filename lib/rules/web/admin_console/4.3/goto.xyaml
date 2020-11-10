@@ -183,6 +183,17 @@ goto_monitoring_alerts_page:
 goto_monitoring_silences_page:
   url: monitoring/silences
 
+# metering
+goto_chargeback_reports_page:
+  url: k8s/ns/<namespace>/metering.openshift.io~v1~Report
+  action: wait_box_loaded
+goto_one_reportquery_page:
+  url: /k8s/ns/<namespace>/metering.openshift.io~v1~ReportQuery/<reportquery_name>
+  action: wait_box_loaded
+goto_one_report_page:
+  url: /k8s/ns/<namespace>/metering.openshift.io~v1~Report/<report_name>
+  action: wait_box_loaded
+
 #node
 goto_node_page:
   url: k8s/cluster/nodes

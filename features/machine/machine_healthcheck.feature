@@ -20,7 +20,7 @@ Feature: MachineHealthCheck Test Scenarios
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]    | <%= machine_set.cluster %>  |
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"] | <%= machine_set.name %>     |
     Then the step should succeed
-    And I ensure "mhc-<%= machine_set.name %>" machinehealthcheck is deleted after scenario
+    And I ensure "mhc-<%= machine_set.name %>" machine_health_check is deleted after scenario
 
     # Create unhealthyCondition to trigger machine remediation
     When I create the 'Ready' unhealthyCondition
@@ -58,7 +58,7 @@ Feature: MachineHealthCheck Test Scenarios
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]    | <%= machine_set.cluster %>  |
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"] | <%= machine_set.name %>     |
     Then the step should succeed
-    And I ensure "mhc-<%= machine_set.name %>" machinehealthcheck is deleted after scenario
+    And I ensure "mhc-<%= machine_set.name %>" machine_health_check is deleted after scenario
 
     Then the machine should be remediated
 
@@ -84,7 +84,7 @@ Feature: MachineHealthCheck Test Scenarios
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]    | <%= machine_set.cluster %>            |
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"] | <%= machine_set.name %>               |
     Then the step should succeed
-    And I ensure "mhc-<%= machine_set.name %>-#{ cb.i }" machinehealthcheck is deleted after scenario
+    And I ensure "mhc-<%= machine_set.name %>-#{ cb.i }" machine_health_check is deleted after scenario
     """
 
     # Create unhealthyCondition before createing a MHC
@@ -111,7 +111,7 @@ Feature: MachineHealthCheck Test Scenarios
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"] | <%= machine_set.name %>       |
       | ["spec"]["maxUnhealthy"]                                                           | 0                             |
     Then the step should succeed
-    And I ensure "mhc-<%= machine_set.name %>-1" machinehealthcheck is deleted after scenario
+    And I ensure "mhc-<%= machine_set.name %>-1" machine_health_check is deleted after scenario
     Given I obtain test data file "cloud/mhc/mhc1.yaml"
     When I run oc create over "mhc1.yaml" replacing paths:
       | n                                                                                  | openshift-machine-api         |
@@ -120,7 +120,7 @@ Feature: MachineHealthCheck Test Scenarios
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"] | <%= machine_set.name %>       |
       | ["spec"]["maxUnhealthy"]                                                           | 90%                           |
     Then the step should succeed
-    And I ensure "mhc-<%= machine_set.name %>-2" machinehealthcheck is deleted after scenario
+    And I ensure "mhc-<%= machine_set.name %>-2" machine_health_check is deleted after scenario
 
     # Create unhealthyCondition to trigger machine remediation
     Given I create the 'Ready' unhealthyCondition
@@ -157,7 +157,7 @@ Feature: MachineHealthCheck Test Scenarios
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"] | <%= machine_set.name %>     |
       | ["spec"]["nodeStartupTimeout" ]                                                    | 15m                         |
     Then the step should succeed
-    And I ensure "mhc-<%= machine_set.name %>" machinehealthcheck is deleted after scenario
+    And I ensure "mhc-<%= machine_set.name %>" machine_health_check is deleted after scenario
     
     Given I create the 'Ready' unhealthyCondition
     Then a pod becomes ready with labels:
@@ -192,7 +192,7 @@ Feature: MachineHealthCheck Test Scenarios
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]    | <%= machine_set.cluster %>  |
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"] | <%= machine_set.name %>     |
     Then the step should succeed
-    And I ensure "mhc-<%= machine_set.name %>" machinehealthcheck is deleted after scenario
+    And I ensure "mhc-<%= machine_set.name %>" machine_health_check is deleted after scenario
 
     Given I store the last provisioned machine in the :new_machine clipboard
     Given admin ensures "<%= machine(cb.new_machine).node_name %>" node is deleted
@@ -212,7 +212,7 @@ Feature: MachineHealthCheck Test Scenarios
     When I run oc create over "mhc_malformed.yaml" replacing paths:
       | n  | openshift-machine-api |
     Then the step should succeed
-    And I ensure "mhc-malformed" machinehealthcheck is deleted after scenario
+    And I ensure "mhc-malformed" machine_health_check is deleted after scenario
 
     Then a pod becomes ready with labels:
       | api=clusterapi, k8s-app=controller |
@@ -245,7 +245,7 @@ Feature: MachineHealthCheck Test Scenarios
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"] | <%= machine_set.name %>     |
       | ["spec"]["maxUnhealthy"]                                                           | "1%"                        |
     Then the step should succeed
-    And I ensure "mhc-<%= machine_set.name %>" machinehealthcheck is deleted after scenario
+    And I ensure "mhc-<%= machine_set.name %>" machine_health_check is deleted after scenario
 
     Then a pod becomes ready with labels:
       | api=clusterapi, k8s-app=controller |

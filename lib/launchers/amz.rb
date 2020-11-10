@@ -61,12 +61,24 @@ module BushSlicer
       @client_sts ||= Aws::STS::Client.new
     end
 
+    private def client_iam
+      @client_sts ||= Aws::IAM::Client.new
+    end
+
     private def ec2
       @ec2 ||= Aws::EC2::Resource.new(client: client_ec2)
     end
 
     private def s3
       @s3 ||= Aws::S3::Resource.new(client: client_s3)
+    end
+
+    private def current_user
+      @current_user ||= Aws::IAM::CurrentUser.new(client: client_iam)
+    end
+
+    def arn
+      current_user.arn
     end
 
     # @param ecoded_message [String]

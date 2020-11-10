@@ -1,6 +1,6 @@
 Feature: Testing route
 
-  # @author zzhao@redhat.com
+  # @author hongli@redhat.com
   # @case_id OCP-12122
   @smoke
   Scenario: Alias will be invalid after removing it
@@ -26,7 +26,7 @@ Feature: Testing route
     Then the step should fail
     """
 
-  # @author yadu@redhat.com
+  # @author hongli@redhat.com
   # @case_id OCP-10660
   @smoke
   Scenario: Service endpoint can be work well if the mapping pod ip is updated
@@ -71,7 +71,7 @@ Feature: Testing route
       | test-service |
       | :8080        |
 
-  # @author zzhao@redhat.com
+  # @author hongli@redhat.com
   # @case_id OCP-12652
   @smoke
   Scenario: The later route should be HostAlreadyClaimed when there is a same host exist
@@ -93,8 +93,9 @@ Feature: Testing route
     Then the output should contain "HostAlreadyClaimed"
     """
 
-  # @author zzhao@redhat.com
+  # @author hongli@redhat.com
   # @case_id OCP-12562
+  @smoke
   Scenario: The path specified in route can work well for edge terminated
     Given I have a project
     Given I obtain test data file "routing/caddy-docker.json"
@@ -137,7 +138,6 @@ Feature: Testing route
 
   # @author zzhao@redhat.com
   # @case_id OCP-12564
-  @smoke
   Scenario: The path specified in route can work well for reencrypt terminated
     Given I have a project
     And I store an available router IP in the :router_ip clipboard
@@ -176,7 +176,7 @@ Feature: Testing route
       | <%= route("route-recrypt", service("route-recrypt")).dns(by: user) %>:443:<%= cb.router_ip[0] %> |
       | https://<%= route("route-recrypt", service("route-recrypt")).dns(by: user) %>/test/ |
       | --cacert |
-      | /tmp/ca.pem |
+      | /tmp/ca-test.pem |
     Then the output should contain "Hello-OpenShift-Path-Test"
     """
     When I execute on the pod:
@@ -185,7 +185,7 @@ Feature: Testing route
       | <%= route("route-recrypt", service("route-recrypt")).dns(by: user) %>:443:<%= cb.router_ip[0] %> |
       | https://<%= route("route-recrypt", service("route-recrypt")).dns(by: user) %>/ |
       | --cacert |
-      | /tmp/ca.pem |
+      | /tmp/ca-test.pem |
     Then the output should contain "Application is not available"
 
   # @author yadu@redhat.com
@@ -294,7 +294,7 @@ Feature: Testing route
     And the output should match:
       | FALSE.*FALSE |
 
-  # @author yadu@redhat.com
+  # @author hongli@redhat.com
   # @case_id OCP-10024
   @smoke
   Scenario: Route could NOT be updated after created

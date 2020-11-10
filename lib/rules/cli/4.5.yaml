@@ -372,6 +372,12 @@
     :l: -l <value>
     :name: <value>
     :selector: --selector=<value>
+:diff:
+  :cmd: oc diff
+  :options:
+    :f: -f <value>
+    :force-conflicts: --force-conflicts=<value>
+    :l: -l <value>
 :edit:
   :cmd: oc edit
   :options:
@@ -833,6 +839,8 @@
     :command: --command=<value>
     :dry_run: --dry-run
     :env: --env=<value>
+    :exec_command: <value>
+    :exec_command_arg: <value>
     :generator: --v=0
     :image: --image=<value>
     :limits: --limits=<value>

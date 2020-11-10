@@ -1,5 +1,5 @@
 Feature: Testing haproxy router
-  # @author bmeng@redhat.com
+  # @author hongli@redhat.com
   # @case_id OCP-11903
   @smoke
   Scenario: haproxy cookies based sticky session for unsecure routes
@@ -336,6 +336,7 @@ Feature: Testing haproxy router
 
   # @author hongli@redhat.com
   # @case_id OCP-15872
+  @smoke
   Scenario: can set cookie name for unsecure routes by annotation
     #create route and service which has two endpoints
     Given the master version >= "3.7"

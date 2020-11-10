@@ -18,7 +18,7 @@
 	    "spec": {
 		"containers": [
 		    {
-			"image": "lihongan/mcast-pod",
+			"image": "quay.io/openshifttest/mcast-pod@sha256:d2497c6fe5226daf05f2a606fadb03d540cce8d0b49d5616440629ba939239ef",
 			"name": "mcast-pod"
 		    }
 		]

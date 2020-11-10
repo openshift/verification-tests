@@ -21,12 +21,17 @@ module BushSlicer
       debug_res = Http.request(**opts)
 
       # try challenging client auth
-      res = oauth_bearer_token_challenge(
-        server_url: env.api_endpoint_url,
-        user: user,
-        password: password,
-        proxy: env.client_proxy
-      )
+      res = {}
+      (1..3).each { |seconds|
+        res = oauth_bearer_token_challenge(
+          server_url: env.api_endpoint_url,
+          user: user,
+          password: password,
+          proxy: env.client_proxy
+        )
+        break if res[:success]
+        sleep (seconds * 30)
+      }
 
       if res[:exitstatus] == 401 && res[:headers]["link"]
         # looks like we are directed at using web auth of some sort

@@ -20,3 +20,4 @@ data:
     }
     :programname, contains, "journal.system" /var/log/custom/infra.log
     :programname, contains, "k8s-audit.log" /var/log/custom/audit.log
+    :programname, contains, "openshift-audit.log" /var/log/custom/audit.log
