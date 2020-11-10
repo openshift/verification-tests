@@ -290,7 +290,6 @@ Feature: Storage upgrade tests
   # @author chaoyang@redhat.com
   @upgrade-check
   @admin
-  @destructive
   Scenario: Snapshot operator should be in available status after upgrade and can created pod with snapshot
     Given I switch to cluster admin pseudo user
 
