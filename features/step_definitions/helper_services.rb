@@ -179,7 +179,7 @@ Given /^I have LDAP service in my project$/ do
     # Init the test data in ldap server.
     @result = pod.exec("ldapadd", "-x", "-h", "127.0.0.1", "-p", "389", "-D", "cn=Manager,dc=example,dc=com", "-w", "admin", stdin: File.read(cb.test_file), as: user)
     step %Q/the step should succeed/
-    
+
     # Port forword ldapserver to local
     step %Q/evaluation of `rand(32000...65536)` is stored in the :ldap_port clipboard/
     step %Q/I run the :port_forward background client command with:/, table(%{
