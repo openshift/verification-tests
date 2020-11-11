@@ -4,9 +4,9 @@ metadata:
   name: amq-sub-template
   annotations:
     description: "Deploy AMQ "
-    tags: "amq"
+    tags: "amq-aosqe"
 objects:
-  apiVersion: operators.coreos.com/v1alpha1
+- apiVersion: operators.coreos.com/v1alpha1
   kind: Subscription
   metadata:
     name: amq-streams
@@ -17,3 +17,6 @@ objects:
     name: amq-streams
     source: redhat-operators
     sourceNamespace: openshift-marketplace
+parameters:
+  - name: AMQ_NAMESPACE
+    value: "amq-aosqe"

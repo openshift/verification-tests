@@ -705,3 +705,134 @@ Given /^I check the cronjob status$/ do
     end
   end
 end
+
+# This step will deploy one kafka cluster and create 4 topics(topic-logging-all,topic-logging-infra,topic-logging-app,topic-logging-audit) in this kafka
+Given /^I deployed kafka in the #{QUOTED} project via amqstream operator$/ do | project_name|
+  ensure_admin_tagged
+  step %Q/I switch to cluster admin pseudo user/
+  step %Q/I use the "#{project_name}" project/
+  step %Q/I process and create:/, table(%{
+    | f | #{BushSlicer::HOME}/testdata/logging/clusterlogforwarder/kafka/amq/02_og_amqstreams_template.yaml |
+    | p | AMQ_NAMESPACE=#{project_name} |
+  })
+  raise "Error create operatorgroup" unless @result[:success]
+
+  step %Q/I process and create:/, table(%{
+    | f | #{BushSlicer::HOME}/testdata/logging/clusterlogforwarder/kafka/amq/03_sub_amqstreams_template.yaml |
+    | p | AMQ_NAMESPACE=#{project_name} |
+  })
+  raise "Error subscript amqstreams" unless @result[:success]
+
+  step %Q/a pod becomes ready with labels:/, table(%{
+    | name=amq-streams-cluster-operator |
+  })
+
+  step %Q/I process and create:/, table(%{
+    | f | #{BushSlicer::HOME}/testdata/logging/clusterlogforwarder/kafka/amq/04_kafka_my-cluster_amqstreams_template.yaml |
+    | p | AMQ_NAMESPACE=#{project_name} |
+  })
+  raise "Error create kafka" unless @result[:success]
+
+  @result = admin.cli_exec(:create, f: "#{BushSlicer::HOME}/testdata/logging/clusterlogforwarder/kafka/amq/05_kafkatopics_amqstreams.yaml")
+  raise "Error create kafka topics" unless @result[:success]
+
+  step %Q/3 pods becomes ready with labels:/, table(%{
+    | strimzi.io/name=my-cluster-kafka |
+  })
+  raise "Error kafka cluster not ready" unless @result[:success]
+end
+
+# Get some records from a kafka topic 
+# https://datacadamia.com/dit/kafka/kafka-console-consumer
+  #oc run kafka-consumer -ti --image=registry.redhat.io/amq7/amq-streams-kafka-25-rhel7:1.5.0 --rm=true --restart=Never -- bin/kafka-console-consumer.sh --bootstrap-server my-cluster-kafka-bootstrap:9092 --topic topic-logging-app --max-messages 10 --from-beginning
+  #step %Q/I run the :run client command with:/,table(%{
+  #    | name    | kafka-consumer |
+  #    | image   | #{kafka_image} |
+  #    | restart | Never |
+  #    | command | true  |
+  #    | cmd     | bin/kafka-console-consumer.sh  |
+  #    | cmd     | --bootstrap-server my-cluster-kafka-bootstrap:9092  |
+  #    | cmd     | --topic #{topic_name}   |
+  #    | cmd     | --from-beginning  |
+  #    | cmd     | --max-messages #{record_num} |
+  #    | cmd     | --timeout-ms=300000  |
+  #})
+
+Given /^I get(?: (\d+))? records from the #{QUOTED} kafka topic$/ do | record_num, topic_name|
+  record_num = record_num ? record_num.to_str : "10"
+  job_name=topic_name
+  kafka_image=stateful_set('my-cluster-kafka').containers_spec(user: user)[0].image
+  retries = 3
+  while true
+    step %Q/I process and create:/,table(%{
+      | f | #{BushSlicer::HOME}/testdata/logging/clusterlogforwarder/kafka/amq/21_job_topic_consumer_from_beginning_template.yaml |
+      | p | KAFKA_IMAGE=#{kafka_image} |
+      | p | KAFKA_TOPIC=#{topic_name}  |
+      | p | MAX_MESSAGES=#{record_num} |
+      | p | JOB_NAME=#{job_name} |
+    })
+    step %Q/a pod becomes ready with labels:/, table(%{
+      | job-name=#{job_name}|
+    })
+    sleep 30
+    step %Q/I run the :logs client command with:/, table(%{
+      | resource_name | #{ pod.name} |
+    })
+
+    admin.cli_exec(:delete, object_type: 'job', object_name_or_id: job_name, n: cb.kafka_project.name)
+    if @result[:response].match("pipeline_metadata")
+      @result[:success] = true
+      break
+    elsif retries == 0
+      @result[:success] = false
+      break
+    end
+    sleep 30
+    retries -= 1
+  end
+end
+
+# Registered an topic consumer to listen the topic. Later, we can check the topic records by view the pod logs
+Given /^I listen on the #{QUOTED} kakafa topic using the #{QUOTED} job$/ do | topic_name, job_name |
+  kafka_image=statefulset('my-cluster-kafka').containers_spec(user: user)[0].image
+  step %Q/I process and create:/,table(%{
+    | f | "#{BushSlicer::HOME}/testdata/logging/clusterlogforwarder/kafka/amq/21_job_topic_consumer_from_latest_template.yaml" |
+    | p | KAFKA_IMAGE=#{kafka_image} |
+    | p | KAFKA_TOPIC=#{topic_name} |
+    | p | MAX_MESSAGES=#{record_num} |
+    | p | JOB_NAME=#{job_name} |
+  })
+end
+
+Given /^I get(?: (\d+))? logs from the #{QUOTED} kafka consumer job$/ do | record_num, job_name |
+  record_num = record_num ? record_num.to_i : 0
+  step %Q/a pod becomes ready with labels:/, table(%{
+    | job-name=#{job_name}|
+  })
+  retries = 3
+  while true
+    step %Q/I process and create:/,table(%{
+      | f | #{BushSlicer::HOME}/testdata/logging/clusterlogforwarder/kafka/amq/21_job_topic_consumer_from_beginning_template.yaml |
+      | p | KAFKA_IMAGE=#{kafka_image} |
+      | p | KAFKA_TOPIC=#{topic_name}  |
+      | p | MAX_MESSAGES=#{record_num} |
+      | p | JOB_NAME=#{job_name} |
+    })
+    step %Q/a pod becomes ready with labels:/, table(%{
+      | job-name=#{job_name}|
+    })
+    sleep 30
+    step %Q/I run the :logs client command with:/, table(%{
+      | resource_name | #{ pod.name} |
+    })
+
+    admin.cli_exec(:delete, object_type: 'job', object_name_or_id: job_name, n: cb.kafka_project.name)
+    if @result[:response].match("pipeline_metadata")
+      @result[:success] = true
+      break
+    elsif retries == 0
+      @result[:success] = false
+      break
+    end
+  end
+end

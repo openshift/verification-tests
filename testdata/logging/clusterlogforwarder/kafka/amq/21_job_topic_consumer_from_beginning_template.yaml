@@ -1,0 +1,30 @@
+kind: Template
+apiVersion: v1
+metadata:
+  name: amq-consumer
+  annotations:
+    description: "Deploy AMQ "
+    tags: "amq-aosqe"
+objects:
+- apiVersion: batch/v1
+  kind: Job
+  metadata:
+    name: ${JOB_NAME}
+  spec:
+    ttlSecondsAfterFinished: 60
+    template:
+      spec:
+        containers:
+        - name: kakfa-consumer
+          image: ${KAFKA_IMAGE}
+          command: ["bin/kafka-console-consumer.sh","--bootstrap-server=my-cluster-kafka-bootstrap:9092", "--topic=${KAFKA_TOPIC}", "--max-messages=${MAX_MESSAGES}", "--from-beginning", "--timeout-ms=300000"]
+        restartPolicy: Never
+parameters:
+  - name: KAFKA_IMAGE
+    value: "registry.redhat.io/amq7/amq-streams-kafka-25-rhel7@sha256:e719f662bd4d6b8c54b1ee2e47c51f8d75a27a238a51d9ee38007187b3a627a4"
+  - name: KAFKA_TOPIC
+    value: "topic-logging-app"
+  - name: MAX_MESSAGES
+    value: "10"
+  - name: JOB_NAME
+    value: "topic-logging-app"

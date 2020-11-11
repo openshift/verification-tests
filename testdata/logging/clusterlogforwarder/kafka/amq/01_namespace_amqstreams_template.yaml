@@ -4,9 +4,9 @@ metadata:
   name: amq-namespace-template
   annotations:
     description: "Deploy AMQ "
-    tags: "amq"
+    tags: "amq-aosqe"
 objects:
-  apiVersion: v1
+- apiVersion: v1
   kind: Namespace
   metadata:
     annotations:
@@ -16,3 +16,6 @@ objects:
   spec:
     finalizers:
     - kubernetes
+parameters:
+  - name: AMQ_NAMESPACE
+    value: "amq-aosqe"

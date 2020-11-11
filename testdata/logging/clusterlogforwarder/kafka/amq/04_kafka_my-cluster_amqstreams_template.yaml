@@ -4,13 +4,13 @@ metadata:
   name: amq-cr-template
   annotations:
     description: "Deploy AMQ "
-    tags: "amq"
+    tags: "amq-aosqe"
 objects:
-  apiVersion: kafka.strimzi.io/v1beta1
+- apiVersion: kafka.strimzi.io/v1beta1
   kind: Kafka
   metadata:
     name: my-cluster
-    namespace: amq
+    namespace: ${AMQ_NAMESPACE}
   spec:
     entityOperator:
       topicOperator:
@@ -39,3 +39,9 @@ objects:
       replicas: 3
       storage:
         type: ephemeral
+parameters:
+  - name: AMQ_NAMESPACE
+    value: "amq-aosqe"
+  - name: STORAGE_TYPE
+    value: "ephemeral"
+

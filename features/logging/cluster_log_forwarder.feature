@@ -344,7 +344,6 @@ Feature: cluster log forwarder features
     Given I wait for the "fluentd" daemon_set to appear up to 300 seconds
     And <%= daemon_set('fluentd').replica_counters[:desired] %> pods become ready with labels:
       | logging-infra=fluentd |
-        
     Given I wait up to 300 seconds for the steps to pass:
     """
     And I execute on the "<%= cb.log_receiver.name %>" pod:
@@ -361,3 +360,47 @@ Feature: cluster log forwarder features
       | rsys_clf_RFC3164.yaml | # @case_id OCP-32643
       | rsys_clf_RFC5424.yaml | # @case_id OCP-32967
       | rsys_clf_default.yaml | # @case_id OCP-32864
+
+  # @author anli@redhat.com
+  # @case_id OCP-32697
+  @admin
+  @destructive
+  Scenario: Forward logs to different kafka topics
+    Given I switch to the first user
+    And I create a project with non-leading digit name
+    And evaluation of `project` is stored in the :kafka_project clipboard
+    Given I deployed kafka in the "<%= cb.kafka_project.name %>" project via amqstream operator
+    And I run the :extract client command with:
+      | resource | secret/my-cluster-cluster-ca-cert  |
+    Then the step should succeed
+    Given I use the "openshift-logging" project
+    Given admin ensures "instance" cluster_log_forwarder is deleted from the "openshift-logging" project after scenario
+    Given admin ensures "kafka-fluent" secret is deleted from the "openshift-logging" project after scenario
+    When I run the :create_secret client command with:
+      | secret_type | generic    |
+      | name        | kafka-fluent |
+      | from_file   | ca-bundle.crt=ca.crt  |
+    Then the step should succeed
+    Given I obtain test data file "logging/clusterlogforwarder/kafka/amq/13_ClusterLogForwarder_to_kafka_template.yaml"
+    Given I obtain test data file "logging/clusterlogging/fluentd_only.yaml"
+    When I process and create:
+      | f | 13_ClusterLogForwarder_to_kafka_template.yaml |
+      | p | AMQ_NAMESPACE=<%= cb.kafka_project.name %> |
+    Then the step should succeed
+    When I create clusterlogging instance with:
+      | remove_logging_pods | true              |
+      | crd_yaml            | fluentd_only.yaml |
+      | check_status        | false             |
+    Then the step should succeed
+    Given I wait for the "fluentd" daemon_set to appear up to 300 seconds
+    And <%= daemon_set('fluentd').replica_counters[:desired] %> pods become ready with labels:
+      | logging-infra=fluentd |
+    Given I switch to the first user
+    And I use the "<%= cb.kafka_project.name %>" project 
+    Given 60 seconds have passed
+    When I get records from the "topic-logging-infra" kafka topic
+    Then the step should succeed
+    When I get records from the "topic-logging-app" kafka topic
+    Then the step should succeed
+    When I get records from the "topic-logging-audit" kafka topic
+    Then the step should succeed

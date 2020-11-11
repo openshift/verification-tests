@@ -4,9 +4,9 @@ metadata:
   name: amq-og-template
   annotations:
     description: "Deploy AMQ "
-    tags: "amq"
+    tags: "amq-aosqe"
 objects:
-  apiVersion: operators.coreos.com/v1
+- apiVersion: operators.coreos.com/v1
   kind: OperatorGroup
   metadata:
     namespace: "${AMQ_NAMESPACE}"
@@ -16,3 +16,6 @@ objects:
   spec:
     targetNamespaces:
     -  "${AMQ_NAMESPACE}"
+parameters:
+  - name: AMQ_NAMESPACE
+    value: "amq-aosqe"
