@@ -165,7 +165,7 @@ check_operand_des_during_creating_operand:
   action: submit_changes
 create_catalog_source:
   params:
-    button_text: Create Catalog Source
+    button_text: Create CatalogSource
     button_id: catalog-source-namespace
     radio_text: 1
   action: goto_catalog_source_page
