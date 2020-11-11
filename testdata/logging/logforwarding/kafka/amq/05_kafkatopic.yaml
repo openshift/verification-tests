@@ -1,0 +1,60 @@
+kind: Template
+apiVersion: v1
+metadata:
+  name: amq-topic-template
+  annotations:
+    description: "Deploy AMQ "
+    tags: "amq"
+objects:
+  apiVersion: kafka.strimzi.io/v1beta1
+  kind: KafkaTopic 
+  metadata:
+    name: topic-logging-all
+    namespace:  "${AMQ_NAMESPACE}"
+    labels:
+      strimzi.io/cluster: my-cluster 
+  spec: 
+    partitions: 1
+    replicas: 1
+    config:
+      retention.ms: 300000
+      segment.bytes: 1073741824
+  apiVersion: kafka.strimzi.io/v1beta1
+  kind: KafkaTopic 
+  metadata:
+    name: topic-logging-app
+    namespace:  "${AMQ_NAMESPACE}"
+    labels:
+      strimzi.io/cluster: my-cluster 
+  spec: 
+    partitions: 1
+    replicas: 1
+    config:
+      retention.ms: 300000
+      segment.bytes: 1073741824
+  apiVersion: kafka.strimzi.io/v1beta1
+  kind: KafkaTopic 
+  metadata:
+    name: topic-logging-audit
+    namespace:  "${AMQ_NAMESPACE}"
+    labels:
+      strimzi.io/cluster: my-cluster 
+  spec: 
+    partitions: 1
+    replicas: 1
+    config:
+      retention.ms: 300000
+      segment.bytes: 1073741824
+  apiVersion: kafka.strimzi.io/v1beta1
+  kind: KafkaTopic 
+  metadata:
+    name: topic-logging-infra
+    namespace: "${AMQ_NAMESPACE}"
+  labels:
+    strimzi.io/cluster: my-cluster 
+  spec: 
+    partitions: 1
+    replicas: 1
+    config:
+      retention.ms: 300000
+      segment.bytes: 1073741824

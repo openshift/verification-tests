@@ -1,0 +1,18 @@
+kind: Template
+apiVersion: v1
+metadata:
+  name: amq-namespace-template
+  annotations:
+    description: "Deploy AMQ "
+    tags: "amq"
+objects:
+  apiVersion: v1
+  kind: Namespace
+  metadata:
+    annotations:
+      openshift.io/description: ""
+      openshift.io/display-name: ""
+    name: "${AMQ_NAMESPACE}"
+  spec:
+    finalizers:
+    - kubernetes
