@@ -412,3 +412,18 @@ Feature: SDN related networking scenarios
       | since         | 30s                            |
     And the output should contain:
       | Not applying unsafe change: invalid configuration |
+
+  # @author zzhao@redhat.com
+  # @case_id OCP-36287
+  @admin
+  @destructive
+  Scenario: Netnamespace should be recreated after deleting it before the project is deleted
+    Given the env is using "OpenShiftSDN" networkType
+    Given I have a project
+    And admin checks that the "<%= project.name %>" net_namespace exists
+    Given admin ensures "<%= project.name %>" netnamespace is deleted
+    And admin ensures "<%= project.name %>" project is deleted
+    When I run the :new_project client command with:
+      | project_name | <%= project.name %> |
+    Then the step should succeed
+    And admin checks that the "<%= project.name %>" net_namespace exists
