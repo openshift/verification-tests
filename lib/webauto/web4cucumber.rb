@@ -132,6 +132,7 @@ require_relative 'chrome_extension'
         end
       elsif @browser_type == :chrome
         logger.info "Launching Chrome"
+        chrome_caps[:accept_insecure_certs] = true
         if Integer === @scroll_strategy
           chrome_caps[:element_scroll_behavior] = @scroll_strategy
         end
