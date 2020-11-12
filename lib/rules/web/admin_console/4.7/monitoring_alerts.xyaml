@@ -11,12 +11,12 @@ set_placeholder_input_value:
     type: input
 check_message_when_multiple_receivers_not_configured:
   params:    
-    title: Incomplete Alert Receivers
+    title: Incomplete alert receivers
     description: Configure these receivers
   action: check_alert_message
 check_message_when_single_receiver_not_configured:
   params:    
-    title: Incomplete Alert Receiver
+    title: Incomplete alert receiver
     description: Configure this receiver
   action: check_alert_message
 check_div_text:
