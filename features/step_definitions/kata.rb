@@ -1,6 +1,4 @@
-require 'pry-byebug'
 Given /^kata container has been installed successfully(?: in the #{QUOTED} project)?$/ do |ns|
-  binding.pry
   kata_ns ||= "kata-operator"
   step %Q/I switch to cluster admin pseudo user/
   unless namespace(kata_ns).exists?
@@ -8,9 +6,83 @@ Given /^kata container has been installed successfully(?: in the #{QUOTED} proje
     raise "Failed to create namespace #{kata_ns}" unless @result[:success]
   end
   project(kata_ns)
-  # setup service account
-  role_yaml = "https://raw.githubusercontent.com/openshift/kata-operator/release-4.6/deploy/role.yaml"
-  role_binding_yaml = "https://raw.githubusercontent.com/openshift/kata-operator/release-4.6/deploy/role_binding.yaml"
-  sa_yaml = "https://raw.githubusercontent.com/openshift/kata-operator/release-4.6/deploy/service_account.yaml"
+  iaas_type = env.iaas[:type] rescue nil
+  raise "Kata installation only supports GCE platform currently." if iaas_type != 'gcp'
+  # check to see if kata already exists
+  unless kata_config('example-kataconfig').exists?
+    # setup service account
+    role_yaml = "https://raw.githubusercontent.com/openshift/kata-operator/release-4.6/deploy/role.yaml"
+    role_binding_yaml = "https://raw.githubusercontent.com/openshift/kata-operator/release-4.6/deploy/role_binding.yaml"
+    sa_yaml = "https://raw.githubusercontent.com/openshift/kata-operator/release-4.6/deploy/service_account.yaml"
+    kataconfigs_crd_yaml = "https://raw.githubusercontent.com/openshift/kata-operator/release-4.6/deploy/crds/kataconfiguration.openshift.io_kataconfigs_crd.yaml"
+    kata_operator_yaml = "https://raw.githubusercontent.com/openshift/kata-operator/release-4.6/deploy/operator.yaml"
+    @result = user.cli_exec(:apply, f: role_yaml)
+    @result = user.cli_exec(:apply, f: role_binding_yaml)
+    @result = user.cli_exec(:apply, f: sa_yaml)
+    step %Q/SCC "privileged" is added to the "#{ns}" service account without teardown/
+    # step %Q/ give project privileged role to the kata-operator service account/
+    # create a custom resource to install the Kata Runtime on all workers
+    @result = user.cli_exec(:apply, f: kataconfigs_crd_yaml)
+    #raise "Error when creating kataconfig_crd." unless $result[:success]
+    @result = user.cli_exec(:create, f: kata_operator_yaml)
+    #raise "Error when creating kata operator." unless $esult[:success]
+    step %Q/a pod becomes ready with labels:/, table(%{
+      | name=kata-operator |
+    })
+    # install the Kata Runtime on all workers
+    kataconfig_yaml = "https://raw.githubusercontent.com/openshift/kata-operator/release-4.6/deploy/crds/kataconfiguration.openshift.io_v1alpha1_kataconfig_cr.yaml"
+    @result = user.cli_exec(:apply, f: kataconfig_yaml)
+    raise "Failed to apply kataconfig" unless @result[:success]
+    step %Q/I store all worker nodes to the :nodes clipboard/
+    step %Q/I wait until number of completed kata runtime nodes match "<%= cb.nodes.count %>" for "example-kataconfig"/
+  end
+end
 
+
+Given /^I wait until number of completed kata runtime nodes match #{QUOTED} for #{QUOTED}$/ do |number, kc_name|
+  ready_timeout = 900
+  matched = kata_config(kc_name).wait_till_installed_counter_match(
+    user: user, seconds: ready_timeout, count: number.to_i)
+  unless matched[:success]
+    raise "Kata runtime did not install into all worker nodes!"
+  end
+end
+
+Given /^I remove kata operator from #{QUOTED} namespace$/ do | kata_ns |
+  # 1. remove kataconfig first
+  project(kata_ns)
+  kataconfig_name = BushSlicer::KataConfig.list(user: admin).first.name
+  step %Q/I ensure "#{kataconfig_name}" kata_config is deleted/
+  # 2. remove namespace
+  step %Q/I ensure "#{kata_ns}" project is deleted/
+end
+# # assumption that
+And /^I verify kata container runtime is installed into the a worker node$/ do
+  # create a project and install sample app has
+  org_user = user
+  step %Q/I switch to the first user/
+  step %Q/I create a new project/
+  cb.test_project_name = project.name
+  step %Q(I run oc create over ERB test file: kata/release-4.6/example-fedora.yaml)
+  raise "Example kata pod creation failed" unless @result[:success]
+
+  # 1. check pod's spec to make sure the runtimeClassName is 'kata'
+  pod_runtime_class_name = pod('example-fedora').raw_resource['spec']['runtimeClassName']
+  if pod_runtime_class_name != 'kata'
+    raise "Pod's runtimeclass name #{pod_runtime_class_name} should be `kata`"
+  end
+  step %Q/a pod becomes ready with labels:/, table(%{
+    | app=example-kata-fedora-app |
+  })
+  # 2. check there's a process with the pod name `qemu`
+  step %Q/I switch to cluster admin pseudo user/
+  # node_cmd = "ps aux"
+  step %Q/I run the :debug client command with:/, table(%{
+    | resource     | node/<%= pod.node_name %> |
+    | oc_opts_end  |                           |
+    | exec_command | ps                        |
+    | exec_command | aux                       |
+  })
+
+  raise "No qemu process detected inside pod node" unless @result[:response].include? 'qemu'
 end
