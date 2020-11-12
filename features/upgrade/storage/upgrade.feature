@@ -311,10 +311,10 @@ Feature: Storage upgrade tests
     Given SCC "privileged" is added to the "csi-snapshotter" service account 
     Given SCC "privileged" is added to the "csi-plugin" service account 
 
-    Given I ensures "csi-hostpath-attacher-0" pod is deleted
-    Given I ensures "csi-hostpath-provisioner-0" pod is deleted
-    Given I ensures "csi-hostpath-snapshotter-0" pod is deleted
-    Given I ensures "csi-hostpathplugin-0" pod is deleted
+    Given I ensure "csi-hostpath-attacher-0" pod is deleted
+    Given I ensure "csi-hostpath-provisioner-0" pod is deleted
+    Given I ensure "csi-hostpath-snapshotter-0" pod is deleted
+    Given I ensure "csi-hostpathplugin-0" pod is deleted
 
     And I wait up to 360 seconds for the steps to pass:
     """

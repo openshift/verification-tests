@@ -22,7 +22,7 @@ Feature: Testing registry
     And the "mystream:latest" image stream tag was created
     And evaluation of `image_stream_tag("mystream:latest").image_layers(user:user)` is stored in the :layers clipboard
     And evaluation of `image_stream_tag("mystream:latest").digest(user:user)` is stored in the :digest clipboard
-    And I ensures "mystream" imagestream is deleted
+    And I ensure "mystream" imagestream is deleted
     Given I delete the project
     And I run the :oadm_prune_images client command with:
       | keep_younger_than | 0                     |

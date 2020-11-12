@@ -369,9 +369,9 @@ Feature: Service-catalog related scenarios
       | {"metadata":{"labels":{"app":"test-plan"}}} |
 
     # Delete the clusterserviceclass/clusterserviceplan/clusterservicebroker
-    Given I ensures "<%= cb.class_id %>" clusterserviceclasses is deleted
-    And I ensures "<%= cb.plan_id %>" clusterserviceplans is deleted
-    And I ensures "ups-broker" clusterservicebroker is deleted
+    Given I ensure "<%= cb.class_id %>" clusterserviceclasses is deleted
+    And I ensure "<%= cb.plan_id %>" clusterserviceplans is deleted
+    And I ensure "ups-broker" clusterservicebroker is deleted
     When I run the :get client command with:
       | resource | clusterserviceclass                                        |
       | o        | custom-columns=BROKER\ NAME:.spec.clusterServiceBrokerName |

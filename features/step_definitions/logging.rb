@@ -441,14 +441,14 @@ Given /^I create the resources for the receiver with:$/ do | table |
   pod_label = opts[:pod_label]
   project(namespace)
 
-  step %Q/I ensures "#{receiver_name}" service_account is deleted from the "#{namespace}" project after scenario/
+  step %Q/I ensure "#{receiver_name}" service_account is deleted from the "#{namespace}" project after scenario/
   @result = user.cli_exec(:create_serviceaccount, serviceaccount_name: receiver_name, n: namespace)
   raise "Unable to create serviceaccout #{receiver_name}" unless @result[:success]
   step %Q/SCC "privileged" is added to the "system:serviceaccount:<%= project.name %>:#{receiver_name}" service account/
 
-  step %Q/I ensures "#{receiver_name}" config_map is deleted from the "#{namespace}" project after scenario/
-  step %Q/I ensures "#{receiver_name}" deployment is deleted from the "#{namespace}" project after scenario/
-  step %Q/I ensures "#{receiver_name}" service is deleted from the "#{namespace}" project after scenario/
+  step %Q/I ensure "#{receiver_name}" config_map is deleted from the "#{namespace}" project after scenario/
+  step %Q/I ensure "#{receiver_name}" deployment is deleted from the "#{namespace}" project after scenario/
+  step %Q/I ensure "#{receiver_name}" service is deleted from the "#{namespace}" project after scenario/
   files = [configmap_file, deployment_file]
   for file in files do
     @result = user.cli_exec(:create, f: file, n: namespace)
@@ -477,7 +477,7 @@ Given /^(fluentd|elasticsearch|rsyslog) receiver is deployed as (secure|insecure
     pod_label = "logging-infra=fluentdserver"
     if security == "secure"
       step %Q/I generate certs for the "fluentdserver" receiver in the "<%= project.name %>" project/
-      step %Q/I ensures "fluentdserver" secret is deleted from the "<%= project.name %>" project after scenario/
+      step %Q/I ensure "fluentdserver" secret is deleted from the "<%= project.name %>" project after scenario/
       step %Q/I run the :create_secret client command with:/, table(%{
         | name         | fluentdserver            |
         | secret_type  | generic                  |
@@ -504,7 +504,7 @@ Given /^(fluentd|elasticsearch|rsyslog) receiver is deployed as (secure|insecure
     pod_label = "app=elasticsearch-server"
     if security == "secure"
       step %Q/I generate certs for the "elasticsearch-server" receiver in the "<%= project.name %>" project/
-      step %Q/I ensures "elasticsearch-server" secret is deleted from the "<%= project.name %>" project after scenario/
+      step %Q/I ensure "elasticsearch-server" secret is deleted from the "<%= project.name %>" project after scenario/
       step %Q/I run the :create_secret client command with:/, table(%{
         | name        | elasticsearch-server                |
         | secret_type | generic                             |

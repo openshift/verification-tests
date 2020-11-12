@@ -456,7 +456,7 @@ Feature: Service related networking scenarios
     """
     #This def will also store network project name in network_project_name variable
     Given I store "<%= cb.subject_node %>" node's corresponding default networkType pod name in the :subject_node_network_pod clipboard
-    And admin ensure "<%= cb.subject_node_network_pod %>" pod is deleted from the "<%= cb.network_project_name %>" project
+    And admin ensures "<%= cb.subject_node_network_pod %>" pod is deleted from the "<%= cb.network_project_name %>" project
     Given I wait up to 30 seconds for the steps to pass:
     """
     When I run the :describe admin command with:

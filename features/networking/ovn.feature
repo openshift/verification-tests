@@ -128,7 +128,7 @@ Feature: OVN related networking scenarios
     And admin ensures "ovnkube-master" ds is deleted from the "openshift-ovn-kubernetes" project
     And admin executes existing pods die with labels:
       | app=ovnkube-master |
-    And I ensures "hello-pod" pod is deleted from the "<%= cb.hello_pod_project %>" project
+    And I ensure "hello-pod" pod is deleted from the "<%= cb.hello_pod_project %>" project
     # Now scale up CNO pod to 1 and check whether hello-pod status is synced to NB db means it should not present in the DB
     Given I run the :scale admin command with:
       | namespace | openshift-network-operator |
