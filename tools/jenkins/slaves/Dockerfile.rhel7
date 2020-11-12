@@ -18,6 +18,7 @@ RUN set -x && \
     yum install -y --setopt=skip_missing_names_on_install=False,tsflags=nodocs $SCL_BASE_PKGS && \
     yum install -y --setopt=skip_missing_names_on_install=False,tsflags=nodocs $INSTALL_PKGS && \
     yum install -y --setopt=tsflags=nodocs https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm && \
+    yum-config-manager --save --setopt=google-chrome.skip_if_unavailable=true && \
     CHROMEDRIVER_URL="https://chromedriver.storage.googleapis.com" && \
     CHROMEDRIVER_VERSION=$(curl -sSL "$CHROMEDRIVER_URL/LATEST_RELEASE") && \
     curl -sSL "$CHROMEDRIVER_URL/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip" | bsdtar --no-same-owner --no-same-permissions -xvf - -C /usr/local/bin && \
