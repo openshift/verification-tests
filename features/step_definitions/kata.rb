@@ -5,17 +5,19 @@ Given /^kata container has been installed successfully(?: in the #{QUOTED} proje
     @result = user.cli_exec(:create_namespace, name: kata_ns)
     raise "Failed to create namespace #{kata_ns}" unless @result[:success]
   end
+  step %Q/I store master major version in the :master_version clipboard/
   project(kata_ns)
   iaas_type = env.iaas[:type] rescue nil
-  raise "Kata installation only supports GCE platform currently." if iaas_type != 'gcp'
+  accepted_platforms = ['gcp', 'azure']
+  raise "Kata installation only supports GCE platform currently." unless accepted_platforms.include? iaas_type
   # check to see if kata already exists
   unless kata_config('example-kataconfig').exists?
     # setup service account
-    role_yaml = "https://raw.githubusercontent.com/openshift/kata-operator/release-4.6/deploy/role.yaml"
-    role_binding_yaml = "https://raw.githubusercontent.com/openshift/kata-operator/release-4.6/deploy/role_binding.yaml"
-    sa_yaml = "https://raw.githubusercontent.com/openshift/kata-operator/release-4.6/deploy/service_account.yaml"
-    kataconfigs_crd_yaml = "https://raw.githubusercontent.com/openshift/kata-operator/release-4.6/deploy/crds/kataconfiguration.openshift.io_kataconfigs_crd.yaml"
-    kata_operator_yaml = "https://raw.githubusercontent.com/openshift/kata-operator/release-4.6/deploy/operator.yaml"
+    role_yaml = "https://raw.githubusercontent.com/openshift/kata-operator/release-#{cb.master_version}/deploy/role.yaml"
+    role_binding_yaml = "https://raw.githubusercontent.com/openshift/kata-operator/release-#{cb.master_version}/deploy/role_binding.yaml"
+    sa_yaml = "https://raw.githubusercontent.com/openshift/kata-operator/release-#{cb.master_version}/deploy/service_account.yaml"
+    kataconfigs_crd_yaml = "https://raw.githubusercontent.com/openshift/kata-operator/release-#{cb.master_version}/deploy/crds/kataconfiguration.openshift.io_kataconfigs_crd.yaml"
+    kata_operator_yaml = "https://raw.githubusercontent.com/openshift/kata-operator/release-#{cb.master_version}/deploy/operator.yaml"
     @result = user.cli_exec(:apply, f: role_yaml)
     @result = user.cli_exec(:apply, f: role_binding_yaml)
     @result = user.cli_exec(:apply, f: sa_yaml)
@@ -30,7 +32,7 @@ Given /^kata container has been installed successfully(?: in the #{QUOTED} proje
       | name=kata-operator |
     })
     # install the Kata Runtime on all workers
-    kataconfig_yaml = "https://raw.githubusercontent.com/openshift/kata-operator/release-4.6/deploy/crds/kataconfiguration.openshift.io_v1alpha1_kataconfig_cr.yaml"
+    kataconfig_yaml = "https://raw.githubusercontent.com/openshift/kata-operator/release-#{cb.master_version}/deploy/crds/kataconfiguration.openshift.io_v1alpha1_kataconfig_cr.yaml"
     @result = user.cli_exec(:apply, f: kataconfig_yaml)
     raise "Failed to apply kataconfig" unless @result[:success]
     step %Q/I store all worker nodes to the :nodes clipboard/
@@ -63,7 +65,8 @@ And /^I verify kata container runtime is installed into the a worker node$/ do
   step %Q/I switch to the first user/
   step %Q/I create a new project/
   cb.test_project_name = project.name
-  step %Q(I run oc create over ERB test file: kata/release-4.6/example-fedora.yaml)
+  file_path = "kata/release-#{cb.master_version}/example-fedora.yaml"
+  step %Q(I run oc create over ERB test file: #{file_path})
   raise "Example kata pod creation failed" unless @result[:success]
 
   # 1. check pod's spec to make sure the runtimeClassName is 'kata'
