@@ -22,7 +22,7 @@ Feature: SCTP related scenarios
     """
     When I execute on the "sctpserver" pod:
       | bash | -c | which nc    |
-    Then the output should contain "/usr/bin/nc"
+    Then the step should succeed
     """
 
     Then evaluation of `pod.ip` is stored in the :serverpod_ip clipboard
@@ -37,7 +37,7 @@ Feature: SCTP related scenarios
     """
     When I execute on the "sctpclient" pod:
       | bash | -c | which nc    |
-    Then the output should contain "/usr/bin/nc"
+    Then the step should succeed
     """
    
     # sctpserver pod start to wait for sctp traffic
@@ -47,7 +47,7 @@ Feature: SCTP related scenarios
       | oc_opts_end      |                                           |
       | exec_command     | sh                                        |
       | exec_command_arg | -c                                        |
-      | exec_command_arg | /usr/bin/nc -l 30102 --sctp -k -m 5 -w 60 |
+      | exec_command_arg | nc -l 30102 --sctp -k -m 5 -w 60 |
     Then the step should succeed
 
     # sctpclient pod start to send sctp traffic
@@ -59,7 +59,7 @@ Feature: SCTP related scenarios
       | oc_opts_end      |                                                                           |
       | exec_command     | sh                                                                        |
       | exec_command_arg | -c                                                                        |
-      | exec_command_arg | echo test-openshift \| /usr/bin/nc -v <%= cb.serverpod_ip %> 30102 --sctp |
+      | exec_command_arg | echo test-openshift \| nc -v <%= cb.serverpod_ip %> 30102 --sctp |
     Then the step should succeed
     And the output should contain:
       | Connected to <%= cb.serverpod_ip %>:30102 |
@@ -88,7 +88,7 @@ Feature: SCTP related scenarios
     """
     When I execute on the "sctpserver" pod:
       | bash | -c | which nc    |
-    Then the output should contain "/usr/bin/nc"
+    Then the step should succeed
     """
 
     Given I obtain test data file "networking/sctp/sctpclient.yaml"
@@ -101,7 +101,7 @@ Feature: SCTP related scenarios
     """
     When I execute on the "sctpclient" pod:
       | bash | -c | which nc    |
-    Then the output should contain "/usr/bin/nc"
+    Then the step should succeed
     """
    
     Given I obtain test data file "networking/sctp/sctpservice.yaml"
@@ -118,7 +118,7 @@ Feature: SCTP related scenarios
       | oc_opts_end      |                                           |
       | exec_command     | sh                                        |
       | exec_command_arg | -c                                        |
-      | exec_command_arg | /usr/bin/nc -l 30102 --sctp -k -m 5 -w 60 |
+      | exec_command_arg | nc -l 30102 --sctp -k -m 5 -w 60 |
     Then the step should succeed
 
     # sctpclient pod start to send sctp traffic
@@ -130,7 +130,7 @@ Feature: SCTP related scenarios
       | oc_opts_end      |                                                                         |
       | exec_command     | sh                                                                      |
       | exec_command_arg | -c                                                                      |
-      | exec_command_arg | echo test-openshift \| /usr/bin/nc -v <%= cb.service_ip %> 30102 --sctp |
+      | exec_command_arg | echo test-openshift \| nc -v <%= cb.service_ip %> 30102 --sctp |
     Then the step should succeed
     And the output should contain:
       | Connected to <%= cb.service_ip %>:30102 |
@@ -160,7 +160,7 @@ Feature: SCTP related scenarios
     """
     When I execute on the "sctpserver" pod:
       | bash | -c | which nc    |
-    Then the output should contain "/usr/bin/nc"
+    Then the step should succeed
     """
 
     Given I obtain test data file "networking/sctp/sctpclient.yaml"
@@ -173,7 +173,7 @@ Feature: SCTP related scenarios
     """
     When I execute on the "sctpclient" pod:
       | bash | -c | which nc    |
-    Then the output should contain "/usr/bin/nc"
+    Then the step should succeed
     """
    
     Given I obtain test data file "networking/sctp/sctpservice.yaml"
@@ -190,7 +190,7 @@ Feature: SCTP related scenarios
       | oc_opts_end      |                                           |
       | exec_command     | sh                                        |
       | exec_command_arg | -c                                        |
-      | exec_command_arg | /usr/bin/nc -l 30102 --sctp -k -m 5 -w 60 |
+      | exec_command_arg | nc -l 30102 --sctp -k -m 5 -w 60 |
     Then the step should succeed
 
     # sctpclient pod start to send sctp traffic on worknode:port
@@ -202,7 +202,7 @@ Feature: SCTP related scenarios
       | oc_opts_end      |                                                                                       |
       | exec_command     | sh                                                                                    |
       | exec_command_arg | -c                                                                                    |
-      | exec_command_arg | echo test-openshift \| /usr/bin/nc -v <%= cb.worker1_ip %> <%= cb.nodeport %>  --sctp |
+      | exec_command_arg | echo test-openshift \| nc -v <%= cb.worker1_ip %> <%= cb.nodeport %>  --sctp |
     Then the step should succeed
     And the output should contain:
       | Connected to <%= cb.worker1_ip %>:<%= cb.nodeport %> |
@@ -231,7 +231,7 @@ Feature: SCTP related scenarios
     """
     When I execute on the "sctpserver" pod:
       | bash | -c | which nc    |
-    Then the output should contain "/usr/bin/nc"
+    Then the step should succeed
     """
     Then evaluation of `pod.ip` is stored in the :serverpod_ip clipboard
 
@@ -245,7 +245,7 @@ Feature: SCTP related scenarios
     """
     When I execute on the "sctpclient" pod:
       | bash | -c | which nc    |
-    Then the output should contain "/usr/bin/nc"
+    Then the step should succeed
     """
    
     # sctpserver pod start to wait for sctp traffic
@@ -255,7 +255,7 @@ Feature: SCTP related scenarios
       | oc_opts_end      |                                           |
       | exec_command     | sh                                        |
       | exec_command_arg | -c                                        |
-      | exec_command_arg | /usr/bin/nc -l 30102 --sctp -k -m 5 -w 90 |
+      | exec_command_arg | nc -l 30102 --sctp -k -m 5 -w 90 |
     Then the step should succeed
 
     # sctpclient pod start to send sctp traffic
@@ -267,7 +267,7 @@ Feature: SCTP related scenarios
       | oc_opts_end      |                                                                           |
       | exec_command     | sh                                                                        |
       | exec_command_arg | -c                                                                        |
-      | exec_command_arg | echo test-openshift \| /usr/bin/nc -v <%= cb.serverpod_ip %> 30102 --sctp | 
+      | exec_command_arg | echo test-openshift \| nc -v <%= cb.serverpod_ip %> 30102 --sctp | 
     Then the step should succeed
     And the output should contain:
       | Connected to <%= cb.serverpod_ip %> |
@@ -288,7 +288,7 @@ Feature: SCTP related scenarios
       | oc_opts_end      |                                                                           |
       | exec_command     | sh                                                                        |
       | exec_command_arg | -c                                                                        |
-      | exec_command_arg | echo test-openshift \| /usr/bin/nc -v <%= cb.serverpod_ip %> 30102 --sctp |
+      | exec_command_arg | echo test-openshift \| nc -v <%= cb.serverpod_ip %> 30102 --sctp |
     Then the step should fail
    
     # Define a networkpolicy to allow sctpclient to sctpserver
@@ -305,7 +305,7 @@ Feature: SCTP related scenarios
       | oc_opts_end      |                                           |
       | exec_command     | sh                                        |
       | exec_command_arg | -c                                        |
-      | exec_command_arg | /usr/bin/nc -l 30102 --sctp -k -m 5 -w 60 |
+      | exec_command_arg | nc -l 30102 --sctp -k -m 5 -w 60 |
     Then the step should succeed
 
     # sctpclient pod start to send sctp traffic
@@ -317,7 +317,7 @@ Feature: SCTP related scenarios
       | oc_opts_end      |                                                                           |
       | exec_command     | sh                                                                        |
       | exec_command_arg | -c                                                                        |
-      | exec_command_arg | echo test-openshift \| /usr/bin/nc -v <%= cb.serverpod_ip %> 30102 --sctp |
+      | exec_command_arg | echo test-openshift \| nc -v <%= cb.serverpod_ip %> 30102 --sctp |
     Then the step should succeed
     And the output should contain:
       | Connected to <%= cb.serverpod_ip %> |
