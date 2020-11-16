@@ -14,6 +14,10 @@ check_edit_console_button_in_dropdown:
   element: &edit_console_button_in_dropdown
     selector:
       xpath: //ul[@role='menu']//li[@role='menuitem']/button[text()='Edit console URL' and not(@disabled)]
+click_edit_console_url_button:
+  element:
+    <<: *edit_console_button_in_dropdown
+    op: click
 check_scale_cluster_button_in_dropdown:
   element: &scale_cluster_button_in_dropdown
     selector:

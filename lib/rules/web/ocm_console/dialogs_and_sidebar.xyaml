@@ -199,10 +199,11 @@ close_error_message_dialog:
             xpath: //button[text()='Close']
             type: submit
         op: click
-
-choose_compute_node_in_dialog:
+select_compute_node_in_dropdown:
   action: click_compute_node_dropdown
   action: select_compute_node_in_dialog
+choose_compute_node_in_dialog:
+  action: select_compute_node_in_dropdown
   action: click_apply_button
   action: check_dialog_missing
 click_compute_node_dropdown:
@@ -506,4 +507,41 @@ check_change_cluster_privacy_settings_with_warning_dialog:
         selector:
             xpath: //h4[text()='All routers will be exposed publicly because there is no label match on the additional application router. This is a potential security risk.']
     action: check_change_cluster_privacy_settings_dialog
-    
+check_master_resize_alert:
+  element: &master_resize_alert
+    selector:
+      xpath: //div[@aria-label='Warning Alert']/h4[@class='pf-c-alert__title']/following-sibling::div[@class='pf-c-alert__description']/div/p[contains(.,'master nodes have to be manually resized by a Red Hat SRE. This process will take about 24 hours')]
+    timeout: 100
+check_master_resize_alert_missing:
+  element:
+    <<: *master_resize_alert
+    missing: true
+check_elements_on_edit_console_url_dialog:
+  element: &console_url_input_field
+    selector:
+      xpath: //input[@id='edit-console-url-input']
+  element:
+    <<: *save_button
+  element:
+    <<: *cancel_button_in_dialog
+  element:
+    selector:
+      xpath: //header/h1[text()='Edit console URL']
+  element:
+    selector:
+      xpath: //div/label/span[text()='Web console URL']
+input_console_url_in_dialog:
+  element:
+    <<: *console_url_input_field
+    op: clear
+  element:
+    <<: *console_url_input_field
+    op: send_keys <console_url>
+check_console_url_in_dialog:
+  element:
+    selector:
+      xpath: //input[@value='<console_url>']
+check_error_msg_in_edit_console_dialog:
+  element:
+    selector:
+      xpath: //div[@id='edit-console-url-input-helper' and text()='<error_msg>']

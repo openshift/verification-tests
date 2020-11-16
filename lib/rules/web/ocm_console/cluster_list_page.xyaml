@@ -422,3 +422,16 @@ scale_loadbalancer_from_cluster_list_page:
 scale_persistent_quota_from_cluster_list_page:
   action: go_to_scale_cluster_dialog_on_cluster_list_page
   action: choose_persistent_quota_in_dialog
+go_to_edit_console_dialog_on_cluster_list_page:
+  action: expand_cluster_actions_on_cluster_list_page
+  action: click_edit_console_url_button
+edit_console_url_from_cluster_list_page:
+  action: go_to_edit_console_dialog_on_cluster_list_page
+  action: input_console_url_in_dialog
+  action: click_save_button
+  action: check_dialog_missing
+  action: check_console_url_from_cluster_list_page
+check_console_url_from_cluster_list_page:
+  action: go_to_edit_console_dialog_on_cluster_list_page
+  action: check_console_url_in_dialog
+  action: click_cancel_button

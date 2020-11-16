@@ -497,3 +497,11 @@ select_cluster_history_by_severity:
           op: click
         - selector:
             xpath: //td[text()='<result_keyword>']
+check_insight_tab:
+  element: &insight_tab
+    selector:
+      xpath: //button[contains(.,'Insight')]
+check_insight_tab_missing:
+  element:
+    <<: *insight_tab
+    missing: true
