@@ -18,6 +18,13 @@ Feature: SCTP related scenarios
       | ["spec"]["nodeName"]      | <%= cb.workers[0].name %> |
     Then the step should succeed
     And the pod named "sctpserver" becomes ready
+    And I wait up to 20 seconds for the steps to pass:
+    """
+    When I execute on the "sctpserver" pod:
+      | bash | -c | which nc    |
+    Then the output should contain "/usr/bin/nc"
+    """
+
     Then evaluation of `pod.ip` is stored in the :serverpod_ip clipboard
 
     Given I obtain test data file "networking/sctp/sctpclient.yaml"
@@ -26,6 +33,12 @@ Feature: SCTP related scenarios
       | ["spec"]["nodeName"]      | <%= cb.workers[1].name %> |
     Then the step should succeed
     And the pod named "sctpclient" becomes ready
+    And I wait up to 20 seconds for the steps to pass:
+    """
+    When I execute on the "sctpclient" pod:
+      | bash | -c | which nc    |
+    Then the output should contain "/usr/bin/nc"
+    """
    
     # sctpserver pod start to wait for sctp traffic
     When I run the :exec background client command with:
@@ -71,6 +84,12 @@ Feature: SCTP related scenarios
       | ["spec"]["nodeName"]      | <%= cb.workers[0].name %> |
     Then the step should succeed
     And the pod named "sctpserver" becomes ready
+    And I wait up to 20 seconds for the steps to pass:
+    """
+    When I execute on the "sctpserver" pod:
+      | bash | -c | which nc    |
+    Then the output should contain "/usr/bin/nc"
+    """
 
     Given I obtain test data file "networking/sctp/sctpclient.yaml"
     When I run oc create as admin over "sctpclient.yaml" replacing paths:
@@ -78,6 +97,12 @@ Feature: SCTP related scenarios
       | ["spec"]["nodeName"]      | <%= cb.workers[1].name %> |
     Then the step should succeed
     And the pod named "sctpclient" becomes ready
+    And I wait up to 20 seconds for the steps to pass:
+    """
+    When I execute on the "sctpclient" pod:
+      | bash | -c | which nc    |
+    Then the output should contain "/usr/bin/nc"
+    """
    
     Given I obtain test data file "networking/sctp/sctpservice.yaml"
     When I run oc create as admin over "sctpservice.yaml" replacing paths:
@@ -131,6 +156,12 @@ Feature: SCTP related scenarios
       | ["spec"]["nodeName"]      | <%= cb.workers[0].name %> |
     Then the step should succeed
     And the pod named "sctpserver" becomes ready
+    And I wait up to 20 seconds for the steps to pass:
+    """
+    When I execute on the "sctpserver" pod:
+      | bash | -c | which nc    |
+    Then the output should contain "/usr/bin/nc"
+    """
 
     Given I obtain test data file "networking/sctp/sctpclient.yaml"
     When I run oc create as admin over "sctpclient.yaml" replacing paths:
@@ -138,6 +169,12 @@ Feature: SCTP related scenarios
       | ["spec"]["nodeName"]      | <%= cb.workers[1].name %> |
     Then the step should succeed
     And the pod named "sctpclient" becomes ready
+    And I wait up to 20 seconds for the steps to pass:
+    """
+    When I execute on the "sctpclient" pod:
+      | bash | -c | which nc    |
+    Then the output should contain "/usr/bin/nc"
+    """
    
     Given I obtain test data file "networking/sctp/sctpservice.yaml"
     When I run oc create as admin over "sctpservice.yaml" replacing paths:
@@ -190,6 +227,12 @@ Feature: SCTP related scenarios
       | ["spec"]["nodeName"]      | <%= cb.workers[0].name %> |
     Then the step should succeed
     And the pod named "sctpserver" becomes ready
+    And I wait up to 20 seconds for the steps to pass:
+    """
+    When I execute on the "sctpserver" pod:
+      | bash | -c | which nc    |
+    Then the output should contain "/usr/bin/nc"
+    """
     Then evaluation of `pod.ip` is stored in the :serverpod_ip clipboard
 
     Given I obtain test data file "networking/sctp/sctpclient.yaml"
@@ -198,6 +241,12 @@ Feature: SCTP related scenarios
       | ["spec"]["nodeName"]      | <%= cb.workers[1].name %> |
     Then the step should succeed
     And the pod named "sctpclient" becomes ready
+    And I wait up to 20 seconds for the steps to pass:
+    """
+    When I execute on the "sctpclient" pod:
+      | bash | -c | which nc    |
+    Then the output should contain "/usr/bin/nc"
+    """
    
     # sctpserver pod start to wait for sctp traffic
      When I run the :exec background client command with:
