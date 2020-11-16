@@ -1,0 +1,41 @@
+click_support_tab:
+    element:
+        selector:
+            xpath: //button[contains(.,'Support')]
+        op: click
+check_support_tab_first_section:
+    action: check_add_notification_contact_button
+    elements:
+        - selector:
+            xpath: //h2[text()='Notification contacts']
+        - selector:
+            xpath: //div[text()='Add users to be contacted in the event of notifications about this cluster.']
+        - selector:
+            xpath: //div[text()='The cluster owner will always receive notifications, at email address <']
+        - selector:
+            xpath: //div[contains(., '<owner_email>')]
+check_add_notification_contact_button:
+    element:
+        selector:
+            xpath: //button[text()='Add notification contact']
+        timeout: 10
+check_add_notification_contact_button_disabled:
+    element:
+        selector:
+            xpath: //button[text()='Add notification contact' and @aria-disabled='true']
+        timeout: 10
+check_support_tab_second_section:
+    action: check_open_support_case_button
+    elements:
+        - selector:
+            xpath: //h2[text()='Support cases']
+        - selector:
+            xpath: //table[@aria-label='Support Cases']
+check_open_support_case_button:
+    element:
+        selector:
+            xpath: //button[text()='Open support case']
+check_support_tab:
+    action: click_support_tab
+    action: check_support_tab_first_section
+    action: check_support_tab_second_section
