@@ -21,7 +21,7 @@ Feature: SCTP related scenarios
     And I wait up to 20 seconds for the steps to pass:
     """
     When I execute on the "sctpserver" pod:
-      | bash | -c | which nc    |
+      | bash | -c | which nc |
     Then the step should succeed
     """
 
@@ -36,7 +36,7 @@ Feature: SCTP related scenarios
     And I wait up to 20 seconds for the steps to pass:
     """
     When I execute on the "sctpclient" pod:
-      | bash | -c | which nc    |
+      | bash | -c | which nc |
     Then the step should succeed
     """
    
@@ -87,7 +87,7 @@ Feature: SCTP related scenarios
     And I wait up to 20 seconds for the steps to pass:
     """
     When I execute on the "sctpserver" pod:
-      | bash | -c | which nc    |
+      | bash | -c | which nc |
     Then the step should succeed
     """
 
@@ -100,7 +100,7 @@ Feature: SCTP related scenarios
     And I wait up to 20 seconds for the steps to pass:
     """
     When I execute on the "sctpclient" pod:
-      | bash | -c | which nc    |
+      | bash | -c | which nc |
     Then the step should succeed
     """
    
@@ -159,7 +159,7 @@ Feature: SCTP related scenarios
     And I wait up to 20 seconds for the steps to pass:
     """
     When I execute on the "sctpserver" pod:
-      | bash | -c | which nc    |
+      | bash | -c | which nc |
     Then the step should succeed
     """
 
@@ -172,7 +172,7 @@ Feature: SCTP related scenarios
     And I wait up to 20 seconds for the steps to pass:
     """
     When I execute on the "sctpclient" pod:
-      | bash | -c | which nc    |
+      | bash | -c | which nc |
     Then the step should succeed
     """
    
@@ -230,7 +230,7 @@ Feature: SCTP related scenarios
     And I wait up to 20 seconds for the steps to pass:
     """
     When I execute on the "sctpserver" pod:
-      | bash | -c | which nc    |
+      | bash | -c | which nc |
     Then the step should succeed
     """
     Then evaluation of `pod.ip` is stored in the :serverpod_ip clipboard
@@ -244,7 +244,7 @@ Feature: SCTP related scenarios
     And I wait up to 20 seconds for the steps to pass:
     """
     When I execute on the "sctpclient" pod:
-      | bash | -c | which nc    |
+      | bash | -c | which nc |
     Then the step should succeed
     """
    
