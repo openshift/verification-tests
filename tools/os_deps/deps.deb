@@ -7,6 +7,7 @@ firefox
 git
 gnupg2
 libcurl4-openssl-dev
+libcurl-dev
 libffi-dev
 libssl-dev
 libtool
