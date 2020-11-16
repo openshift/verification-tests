@@ -7,6 +7,10 @@ update_resource_count:
       <<: *modal_count
     op: send_keys <resource_count>
   action: submit_changes
+click_edit_update_strategy:
+  params:
+    item: Edit Update Strategy
+  action: click_one_dropdown_action
 update_rollout_strategy:
   elements:
   - selector:
@@ -18,6 +22,10 @@ click_initcontainer_in_detail_page:
     selector:
       xpath: //h2[contains(.,'Init Containers')]/..//span[contains(.,'<container_name>')]
     op: click
+click_cancel_rollout:
+  params:
+    item: Cancel Rollout
+  action: click_one_dropdown_action
 confirm_cancel_rollout:
   params:
     button_text: Yes, cancel

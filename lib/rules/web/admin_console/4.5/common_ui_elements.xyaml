@@ -388,6 +388,18 @@ check_created_column_header:
   params:
     column_name: Created
   action: check_column_header
+check_scale_target_column_in_table:
+  params:
+    field: Scale Target
+  action: check_column_in_table
+check_min_pods_column_in_table:
+  params:
+    field: Min Pods
+  action: check_column_in_table
+check_max_pods_column_in_table:
+  params:
+    field: Max Pods
+  action: check_column_in_table
 check_resource_name_and_icon:
   action:
     if_param: service_name
@@ -846,6 +858,10 @@ click_key_and_action_link:
    element:
      <<: *key_action
      op: click
+click_pod_selector_value:
+  params:
+    key: Pod Selector
+  action: click_value_on_resource_detail
 check_resource_name:
   params:
     key: Name
@@ -860,6 +876,16 @@ check_resource_labels:
   params:
     key: Labels
     value: <labels>
+  action: check_resource_details_key_and_value
+check_resource_status:
+  params:
+    key: Status
+    value: <status>
+  action: check_resource_details_key_and_value
+check_resource_phase:
+  params:
+    key: Phase
+    value: <phase>
   action: check_resource_details_key_and_value
 check_resource_annotations:
   params:
@@ -1029,12 +1055,12 @@ check_current_healthy:
 check_min_replicas:
   params:
     key: Min Replicas
-    value: <replicas_value>
+    value: <min_replicas>
   action: check_resource_details_key_and_value
 check_max_replicas:
   params:
     key: Max Replicas
-    value: <replicas_value>
+    value: <max_replicas>
   action: check_resource_details_key_and_value
 check_resource_kind:
   params:

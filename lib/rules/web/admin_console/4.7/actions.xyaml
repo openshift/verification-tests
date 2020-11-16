@@ -24,6 +24,10 @@ edit_pod_count_action:
   params:
     item: Edit Pod Count
   action: click_one_dropdown_action
+click_start_build_action:
+  element:
+    selector:
+      xpath: //button[text()='Start build']
 choose_item_from_list:
   elements:
   - selector:

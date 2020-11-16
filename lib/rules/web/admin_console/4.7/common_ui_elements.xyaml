@@ -394,6 +394,18 @@ check_cpu_column_header:
   params:
     column_name: CPU
   action: check_column_header
+check_scale_target_column_in_table:
+  params:
+    field: Scale target
+  action: check_column_in_table
+check_min_pods_column_in_table:
+  params:
+    field: Min pods
+  action: check_column_in_table
+check_max_pods_column_in_table:
+  params:
+    field: Max pods
+  action: check_column_in_table
 check_resource_name_and_icon:
   action:
     if_param: service_name
@@ -842,10 +854,10 @@ check_resource_details:
     ref: check_scale_target
   action:
     if_param: min_replicas
-    ref: check_hpa_min_replicas
+    ref: check_min_replicas
   action:
     if_param: max_replicas
-    ref: check_hpa_max_replicas
+    ref: check_max_replicas
   action:
     if_param: current_replicas
     ref: check_current_replicas
@@ -876,6 +888,10 @@ click_key_and_action_link:
    element:
      <<: *key_action
      op: click
+click_pod_selector_value:
+  params:
+    key: Pod selector
+  action: click_value_on_resource_detail
 check_resource_name:
   params:
     key: Name
@@ -883,13 +899,23 @@ check_resource_name:
   action: check_resource_details_key_and_value
 check_resource_display_name:
   params:
-    key: Display Name
+    key: Display name
     value: <display_name>
   action: check_resource_details_key_and_value
 check_resource_labels:
   params:
     key: Labels
     value: <labels>
+  action: check_resource_details_key_and_value
+check_resource_status:
+  params:
+    key: Status
+    value: <status>
+  action: check_resource_details_key_and_value
+check_resource_phase:
+  params:
+    key: Phase
+    value: <phase>
   action: check_resource_details_key_and_value
 check_resource_annotations:
   params:
@@ -903,32 +929,32 @@ check_resource_provisioner:
   action: check_resource_details_key_and_value
 check_resource_reclaim_policy:
   params:
-    key: Reclaim Policy
+    key: Reclaim policy
     value: <reclaim_policy>
   action: check_resource_details_key_and_value
 check_resource_default_class:
   params:
-    key: Default Class
+    key: Default class
     value: <default_class>
   action: check_resource_details_key_and_value
 check_resource_pod_selector:
   params:
-    key: Pod Selector
+    key: Pod selector
     value: <pod_selector>
   action: check_resource_details_key_and_value
 check_resource_update_strategy:
   params:
-    key: Update Strategy
+    key: Update strategy
     value: <update_strategy>
   action: check_resource_details_key_and_value
 check_resource_max_unavailable:
   params:
-    key: Max Unavailable
+    key: Max unavailable
     value: <max_unavailable>
   action: check_resource_details_key_and_value
 check_resource_max_surge:
   params:
-    key: Max Surge
+    key: Max surge
     value: <max_surge>
   action: check_resource_details_key_and_value
 check_resource_schedule:
@@ -938,12 +964,12 @@ check_resource_schedule:
   action: check_resource_details_key_and_value
 check_resource_concurrency_policy:
   params:
-    key: Concurrency Policy
+    key: Concurrency policy
     value: <concurrency_policy>
   action: check_resource_details_key_and_value
 check_resource_last_schedule_time:
   params:
-    key: Last Schedule Time
+    key: Last schedule time
     value: <last_schedule_time>
   action: check_resource_details_key_and_value
 check_resource_owner:
@@ -963,7 +989,7 @@ check_resource_owner_type_and_link:
     timeout: 20
 check_resource_desired_completions:
   params:
-    key: Desired Completions
+    key: Desired completions
     value: <desired_completions>
   action: check_resource_details_key_and_value
 check_resource_parallelism:
@@ -983,42 +1009,42 @@ check_resource_namespace:
   action: check_resource_details_key_and_value
 check_resource_managed_namespace:
   params:
-    key: Managed Namespace
+    key: Managed namespace
     value: <managed_namespace>
   action: check_resource_details_key_and_value
 check_resource_git_repository:
   params:
-    key: Git Repository
+    key: Git repository
     value: <git_repo>
   action: check_resource_details_key_and_value
 check_builder_image:
   params:
-    key: Build From
+    key: Build from
     value: <builder_image>
   action: check_resource_details_key_and_value
 check_output_to_image:
   params:
-    key: Output To
+    key: Output to
     value: <output_image>
   action: check_resource_details_key_and_value
 check_run_policy:
   params:
-    key: Run Policy
+    key: Run policy
     value: <run_policy>
   action: check_resource_details_key_and_value
 check_triggered_by:
   params:
-    key: Triggered By
+    key: Triggered by
     value: <triggered_by>
   action: check_resource_details_key_and_value
 check_termination_type:
   params:
-    key: Termination Type
+    key: Termination type
     value: <termination_type>
   action: check_resource_details_key_and_value
 check_insecure_traffic:
   params:
-    key: Insecure Traffic
+    key: Insecure traffic
     value: <insecure_traffic>
   action: check_resource_details_key_and_value
 check_route_hostname:
@@ -1033,48 +1059,48 @@ check_route_path:
   action: check_resource_details_key_and_value
 check_route_canonical_hostname:
   params:
-    key: Router Canonical Hostname
+    key: Router canonical hostname
     value: <canonical_hostname>
   action: check_resource_details_key_and_value
 check_machine_config_selector:
   params:
-    key: Machine Config Selector
+    key: Machine config selector
     value: <machine_config_selector>
   action: check_resource_details_key_and_value
 check_node_selector:
   params:
-    key: Node Selector
+    key: Node selector
     value: <node_selector>
   action: check_resource_details_key_and_value
 check_current_configuration:
   params:
-    key: Current Configuration
+    key: Current configuration
     value: <current_configuration>
   action: check_resource_details_key_and_value
 check_max_unhealthy:
   params:
-    key: Max Unhealthy
+    key: Max unhealthy
     value: <max_unhealthy>
   action: check_resource_details_key_and_value
 check_expected_machines:
   params:
-    key: Expected Machines
+    key: Expected machines
     value: <expected_machines>
   action: check_resource_details_key_and_value
 check_current_healthy:
   params:
-    key: Current Healthy
+    key: Current healthy
     value: <current_healthy>
   action: check_resource_details_key_and_value
 check_min_replicas:
   params:
-    key: Min Replicas
-    value: <replicas_value>
+    key: Min replicas
+    value: <min_replicas>
   action: check_resource_details_key_and_value
 check_max_replicas:
   params:
-    key: Max Replicas
-    value: <replicas_value>
+    key: Max replicas
+    value: <max_replicas>
   action: check_resource_details_key_and_value
 check_resource_kind:
   params:
@@ -1083,12 +1109,12 @@ check_resource_kind:
   action: check_resource_details_key_and_value
 check_api_group:
   params:
-    key: API Group
+    key: API group
     value: <api_group>
   action: check_resource_details_key_and_value
 check_api_version:
   params:
-    key: API Version
+    key: API version
     value: <api_version>
   action: check_resource_details_key_and_value
 check_namespaced:
@@ -1098,37 +1124,27 @@ check_namespaced:
   action: check_resource_details_key_and_value
 check_short_names:
   params:
-    key: Short Names
+    key: Short names
     value: <short_names>
   action: check_resource_details_key_and_value
 check_created_at:
   params:
-    key: Created At
+    key: Created at
   action: check_resource_details_key_only
 check_scale_target:
   params:
-    key: Scale Target
+    key: Scale target
     value: <scale_target>
   action: check_resource_details_key_and_value
 check_current_replicas:
   params:
-    key: Current Replicas
+    key: Current replicas
     value: <current_replicas>
   action: check_resource_details_key_and_value
 check_desired_replicas:
   params:
-    key: Desired Replicas
+    key: Desired replicas
     value: <desired_replicas>
-  action: check_resource_details_key_and_value
-check_hpa_min_replicas:
-  params:
-    key: Min Replicas
-    value: <min_replicas>
-  action: check_resource_details_key_and_value
-check_hpa_max_replicas:
-  params:
-    key: Max Replicas
-    value: <max_replicas>
   action: check_resource_details_key_and_value
 click_workloads_tab:
   params:

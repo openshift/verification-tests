@@ -61,9 +61,9 @@ click_sidebar_resources_tab:
 check_dc_available_action_menus:
   elements:
   - selector:
-      xpath: //li//button[@data-test-action='Start Rollout']
+      xpath: //li//button[text()='Start rollout']
   - selector: &pause_rollouts
-      xpath: //li//button[@data-test-action='Pause Rollouts']
+      xpath: //li//button[text()='Pause rollouts']
   - selector: &edit_counts
       xpath: //li//button[@data-test-action='Edit Pod Count']
   - selector: &add_storage
