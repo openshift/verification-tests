@@ -6,8 +6,10 @@ firefox
 gcc-c++
 git
 jq
+libcurl-devel
 libffi-devel
 libtool
+libxml2-devel
 make
 openssl-devel
 patch
@@ -16,6 +18,7 @@ readline-devel
 redhat-rpm-config
 ruby-devel
 rubygem-bundler
+rubygem-ovirt-engine-sdk4
 skopeo
 sqlite-devel
 which

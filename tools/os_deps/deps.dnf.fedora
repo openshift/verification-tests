@@ -10,5 +10,6 @@ ruby
 ruby-devel
 rubygem-bundler
 rubygem-nokogiri
+rubygem-ovirt-engine-sdk4
 which
 Xvfb

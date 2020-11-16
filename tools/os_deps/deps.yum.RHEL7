@@ -18,6 +18,7 @@ patch
 pyOpenSSL
 readline
 readline-devel
+rubygem-ovirt-engine-sdk4
 skopeo
 sqlite-devel
 which
