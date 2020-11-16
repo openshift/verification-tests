@@ -1,5 +1,5 @@
-apiVersion: v1
 kind: ConfigMap
+apiVersion: v1
 metadata:
   name: rsyslogserver
   labels:
@@ -18,11 +18,6 @@ data:
       if $msg contains "namespace_name=openshift" or $msg contains "namespace_name=default" or $msg contains "namespace_name=kube" then /var/log/custom/infra-container.log
       if not ($msg contains "namespace_name=openshift" or $msg contains "namespace_name=default" or $msg contains "namespace_name=kube") then /var/log/custom/app-container.log
     }
-    :programname, !contains, "kubernetes.var.log.containers" /var/log/custom/infra.log
-
-    :msg, contains, "docker"{
-      if $msg contains "viaq_index_name:infra-write" then /var/log/custom/infra-container.log
-      if $msg contains "viaq_index_name:app-write" then /var/log/custom/app-container.log
-    }
-    :msg, contains, "_STREAM_ID" /var/log/custom/infra.log
-    :msg, contains, "auditID" /var/log/custom/audit.log
+    :programname, contains, "journal.system" /var/log/custom/infra.log
+    :programname, contains, "k8s-audit.log" /var/log/custom/audit.log
+    :programname, contains, "openshift-audit.log" /var/log/custom/audit.log
