@@ -123,6 +123,8 @@ check_text_not_a_link:
   element:
     selector:
       xpath: //*[contains(@class,'co-resource-item__resource-name') and text()='<text>' and not(@href)]
+
+# tabs related
 click_tab:
   elements:
   - selector: &tab
@@ -149,6 +151,38 @@ click_terminal_tab:
 click_yaml_tab:
   params:
     tab_name: YAML
+  action: click_tab
+click_history_tab:
+  params:
+    tab_name: History
+  action: click_tab
+click_events_tab:
+  params:
+    tab_name: Events
+  action: click_tab
+click_replication_controllers_tab:
+  params:
+    tab_name: Replication Controllers
+  action: click_tab
+click_replica_sets_tab:
+  params:
+    tab_name: Replica Sets
+  action: click_tab
+click_instances_tab:
+  params:
+    tab_name: Instances
+  action: click_tab
+click_access_review_tab:
+  params:
+    tab_name: Access Review
+  action: click_tab
+click_schema_tab:
+  params:
+    tab_name: Schema
+  action: click_tab
+click_machine_configs_tab:
+  params:
+    tab_name: Machine Configs
   action: click_tab
 check_edit_yaml_enabled:
   params:
