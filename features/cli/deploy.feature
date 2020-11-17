@@ -86,6 +86,12 @@ Feature: deployment related features
     When I get project dc named "hooks"
     Then the output should match:
       | hooks.*|
+    And I wait up to 60 seconds for the steps to pass:
+    """
+    When I get project dc named "hooks" as JSON
+    Then the output should contain:
+      | "latestVersion": 2 |
+    """
     When I run the :rollback client command with:
       | deployment_name         | hooks-1 |
       | output                  | json    |
