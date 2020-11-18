@@ -183,6 +183,16 @@ Given /^(?:(as admin) )?I replace resource "([^"]+)" named "([^"]+)"(?: saving e
     })
 end
 
+Given /^I wait(?: up to #{NUMBER} seconds)? for the last background process to finish$/ do |seconds|
+  seconds = Integer(seconds) rescue 60
+  success = wait_for(seconds) {
+    if @bg_processes.last.finished?
+      true
+    end
+  }
+  raise "last process did not finish within #{seconds} seconds" unless success
+end
+
 Given /^I terminate last background process$/ do
   if @bg_processes.last.finished?
     raise "last process already finished: #{@bg_processes.last}"
