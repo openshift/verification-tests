@@ -24,6 +24,74 @@ edit_pod_count_action:
   params:
     item: Edit Count
   action: click_one_dropdown_action
+start_build_action:
+  params:
+    item: Start Build
+  action: click_one_dropdown_action
+delete_buildconfig_action:
+  params:
+    item: Delete Build Config
+  action: click_one_dropdown_action
+cancel_build_action:
+  params:
+    item: Cancel Build
+  action: click_one_dropdown_action
+rebuild_action:
+  params:
+    item: Rebuild
+  action: click_one_dropdown_action
+delete_project_action:
+  params:
+    item: Delete Project
+  action: click_one_dropdown_action
+delete_serviceaccount_action:
+  params:
+    item: Delete Service Account
+  action: click_one_dropdown_action
+edit_parallelism_action:
+  params:
+    item: Edit Parallelism
+  action: click_one_dropdown_action
+delete_cronjob_action:
+  params:
+    item: Delete Cron Job
+  action: click_one_dropdown_action
+edit_update_strategy_action:
+  params:
+    item: Edit Update Strategy
+  action: click_one_dropdown_action
+delete_deployment_action:
+  params:
+    item: Delete Deployment
+  action: click_one_dropdown_action
+pause_rollouts_action:
+  params:
+    item: Pause Rollouts
+  action: click_one_dropdown_action
+start_rollout_action:
+  params:
+    item: Start Rollout
+  action: click_one_dropdown_action
+resume_rollouts_action:
+  params:
+    item: Resume Rollouts
+  action: click_one_dropdown_action
+cancel_rollout_action:
+  params:
+    item: Cancel Rollout
+  action: click_one_dropdown_action
+delete_configmap_action:
+  params:
+    item: Delete Config Map
+  action: click_one_dropdown_action
+expand_pvc_action:
+  params:
+    item: Expand PVC
+  action: click_one_dropdown_action
+edit_secret_action:
+  params:
+    item: Edit Secret
+  action: click_one_dropdown_action
 choose_item_from_list:
   elements:
   - selector:
