@@ -1018,6 +1018,33 @@ check_resource_details:
   action:
     if_param: desired_replicas
     ref: check_desired_replicas
+  action:
+    if_param: size
+    ref: check_size
+  action:
+    if_param: source
+    ref: check_source
+  action:
+    if_param: driver
+    ref: check_sc_driver
+  action:
+    if_param: deletion_policy
+    ref: check_deletion_policy
+  action:
+    if_param: snapshot_handle
+    ref: check_snapshot_handle
+  action:
+    if_param: volume_snapshot
+    ref: check_volume_snapshot
+  action:
+    if_param: volume_snapshot_content
+    ref: check_volume_snapshot_content
+  action:
+    if_param: volume_snapshot_class
+    ref: check_volume_snapshot_class
+  action:
+    if_param: volume_snapshot_class_name
+    ref: check_volume_snapshot_class_name
 check_resource_details_key_and_value:
   element: &key_value
     selector:
@@ -1309,6 +1336,51 @@ check_hpa_max_replicas:
   params:
     key: Max Replicas
     value: <max_replicas>
+  action: check_resource_details_key_and_value
+check_size:
+  params:
+    key: Size
+    value: <size>
+  action: check_resource_details_key_and_value
+check_source:
+  params:
+    key: Source
+    value: <source>
+  action: check_resource_details_key_and_value
+check_sc_driver:
+  params:
+    key: Driver
+    value: <driver>
+  action: check_resource_details_key_and_value
+check_deletion_policy:
+  params:
+    key: Deletion Policy
+    value: <deletion_policy>
+  action: check_resource_details_key_and_value
+check_snapshot_handle:
+  params:
+    key: Snapshot Handle
+    value: <snapshot_handle>
+  action: check_resource_details_key_and_value
+check_volume_snapshot:
+  params:
+    key: Volume Snapshot
+    value: <volume_snapshot>
+  action: check_resource_details_key_and_value
+check_volume_snapshot_content:
+  params:
+    key: Volume Snapshot Content
+    value: <volume_snapshot_content>
+  action: check_resource_details_key_and_value
+check_volume_snapshot_class:
+  params:
+    key: Volume Snapshot Class
+    value: <volume_snapshot_class>
+  action: check_resource_details_key_and_value
+check_volume_snapshot_class_name:
+  params:
+    key: Volume Snapshot Class
+    value: <volume_snapshot_class_name>
   action: check_resource_details_key_and_value
 click_workloads_tab:
   params:

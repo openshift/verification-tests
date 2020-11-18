@@ -116,6 +116,13 @@ goto_persistentvolumeclaims_page:
   url: k8s/ns/<project_name>/persistentvolumeclaims
 goto_one_pvc_page:
   url: k8s/ns/<project_name>/persistentvolumeclaims/<pvc_name>
+goto_volumesnapshots_page:
+  url: k8s/ns/<project_name>/snapshot.storage.k8s.io~v1~VolumeSnapshot
+goto_one_volumesnapshot_page:
+  url: k8s/ns/<project_name>/snapshot.storage.k8s.io~v1~VolumeSnapshot/<volumesnapshot_name>
+  action: wait_box_loaded
+goto_volumesnapshotcontents_page:
+  url: k8s/cluster/snapshot.storage.k8s.io~v1~VolumeSnapshotContent
 
 # deployment
 goto_deployment_page:
