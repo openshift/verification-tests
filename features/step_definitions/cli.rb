@@ -185,11 +185,7 @@ end
 
 Given /^I wait(?: up to #{NUMBER} seconds)? for the last background process to finish$/ do |seconds|
   seconds = Integer(seconds) rescue 60
-  success = wait_for(seconds) {
-    if @bg_processes.last.finished?
-      true
-    end
-  }
+  success = wait_for(seconds) { @bg_processes.last.finished? }
   raise "last process did not finish within #{seconds} seconds" unless success
 end
 
