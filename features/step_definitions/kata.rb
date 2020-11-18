@@ -79,13 +79,7 @@ And /^I verify kata container runtime is installed into the a worker node$/ do
   })
   # 2. check there's a process with the pod name `qemu`
   step %Q/I switch to cluster admin pseudo user/
-  # node_cmd = "ps aux"
-  step %Q/I run the :debug client command with:/, table(%{
-    | resource     | node/<%= pod.node_name %> |
-    | oc_opts_end  |                           |
-    | exec_command | ps                        |
-    | exec_command | aux                       |
-  })
-
+  node_cmd = "ps aux | grep qemu"
+  @result = node(pod.node_name).host.exec_admin(node_cmd)
   raise "No qemu process detected inside pod node" unless @result[:response].include? 'qemu'
 end
