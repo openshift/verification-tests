@@ -129,6 +129,7 @@ check_filter_cluster_existed:
     element:
         selector:
             xpath: //tbody/tr[<coloumn_number>]/td/a[contains(text(),'<filter_keyword>')]
+        timeout: 10
 check_filter_no_result_message:
     element:
         selector:

@@ -336,15 +336,13 @@ check_osd_details_in_detail_page:
         - selector:
             xpath: //dl[1]/dt[text()='Persistent storage']
         - selector:
-            xpath: //dl[1]/dt[text()='Desired nodes']
+            xpath: //dl[1]/dt[text()='Nodes']
         - selector:
             xpath: //dl[1]/dt[text()='Master:']
         - selector:
             xpath: //dl[2]/dt[text()='Infra:']
         - selector:
             xpath: //dl[3]/dt[text()='Compute:']
-        - selector:
-            xpath: //dl[1]/dt[text()='Actual nodes']
         - selector:
             xpath: //dl[1]/dt[text()='Network']
 check_osd_ocp_comman_details_in_detail_page:
@@ -384,12 +382,16 @@ check_ocp_actions_behind_open_console_button:
             xpath: //button[text()='Archive cluster']
         - selector:
             xpath: //button[text()='Edit subscription settings']
+        - selector:
+            xpath: //button[text()='Transfer cluster ownership']
 check_osd_actions_behind_open_console_button:
     elements:
         - selector:
             xpath: //button[text()='Edit display name']
         - selector:
-            xpath: //button[text()='Scale cluster']
+            xpath: //button[text()='Edit load balancers and persistent storage']
+        - selector:
+            xpath: //button[text()='Edit node count']
         - selector:
             xpath: //button[text()='Delete cluster']
 close_actions_behind_open_console_button:
@@ -452,7 +454,7 @@ check_cluster_history_section_common_part:
 check_default_osd_cluster_history:
     elements:
         - selector:
-            xpath: //td[@data-label='Description' and text()='Cluster installed and registered successfully']
+            xpath: //td[@data-label='Description' and text()='Cluster registered successfully']
         - selector:
             xpath: //td[@data-label='Severity' and text()='Info']
 input_description_for_cluster_history:
@@ -497,3 +499,52 @@ select_cluster_history_by_severity:
           op: click
         - selector:
             xpath: //td[text()='<result_keyword>']
+transfer_cluster_ownership:
+    action: expand_actions_on_cluster_detail_page
+    action: click_transfer_cluster_ownership_button
+    action: check_transfer_cluster_ownership_dialog
+    action: click_initiate_transfer_button
+    action: check_transfer_cluster_ownership_notification
+click_transfer_cluster_ownership_button:
+    element:
+        selector:
+            xpath: //button[@class='pf-c-dropdown__menu-item' and text()='Transfer cluster ownership']
+        op: click
+check_transfer_cluster_ownership_dialog:
+    elements:
+        - selector:
+            xpath: //h1[text()='Transfer cluster ownership']
+        - selector:
+            xpath: //p[text()='Transferring cluster ownership will allow another individual to manage this cluster. The steps for transferring cluster ownership are:']
+        - selector:
+            xpath: //a[@href='https://access.redhat.com/solutions/4902871' and contains(., 'pull secret')]
+        - selector:
+            xpath: //p[text()='The transfer is complete when OpenShift Cluster Manager receives telemetry data from the cluster with the new pull secret.']
+        - selector:
+            xpath: //h4[text()='If the transfer is not completed within 5 days, the procedure must be restarted.']
+click_initiate_transfer_button:
+    element:
+        selector:
+            xpath: //button[text()='Initiate transfer']            
+        op: click
+check_transfer_cluster_ownership_notification:
+    elements:
+        - selector:
+            xpath: //h4[text()='Cluster ownership transfer initiated']
+        - selector:
+            xpath: //div[text()='The transfer process will complete once the pull secret has been changed in the cluster. See']
+        - selector:
+            xpath: //a[@href='https://access.redhat.com/solutions/4902871' and contains(., 'this knowledgebase article')]
+cancel_transfer_cluster_ownership:
+    action: expand_actions_on_cluster_detail_page
+    action: click_cancel_transfer_cluster_ownership_button
+    action: check_cancel_transfer_cluster_ownership_notification
+click_cancel_transfer_cluster_ownership_button:
+    element:
+        selector:
+            xpath: //button[text()='Cancel ownership transfer']            
+        op: click
+check_cancel_transfer_cluster_ownership_notification:
+    element:
+        selector:
+            xpath: //h4[text()='Cluster ownership transfer canceled']

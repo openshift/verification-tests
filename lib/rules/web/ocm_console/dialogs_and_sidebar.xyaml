@@ -241,10 +241,6 @@ customer_cloud_subscription_prompt_message_loaded:
         - selector:
             text: "In order for the cluster provisioning to succeed, you must ensure the following:"
         - selector:
-            xpath: //*[contains(text(),"Your AWS account has no services deployed in it.")]
-        - selector:
-            text: "Your AWS account has no services deployed in it."
-        - selector:
             xpath: //*[contains(text(),"Your AWS account has the necessary limits to support the desired cluster size.")]
         - selector:
             xpath: //a[@href='https://www.openshift.com/dedicated/ccs' and text()=' See resource requirements.']
