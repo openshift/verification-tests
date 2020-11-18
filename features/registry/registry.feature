@@ -175,7 +175,7 @@ Feature: Testing registry
     And the "myimage" image stream becomes ready
 
   # @author xiuwang@redhat.com
-  # @case_id OCP-29696 
+  # @case_id OCP-29696
   Scenario: Use node credentials in imagestream import
     Given I have a project
     When I run the :tag client command with:
@@ -232,7 +232,7 @@ Feature: Testing registry
     Then the step should succeed
 
   # @author xiuwang@redhat.com
-  # @case_id OCP-29706 
+  # @case_id OCP-29706
   @admin
   Scenario: Node secret takes effect when common secret is removed
     Given I have a project
