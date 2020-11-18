@@ -358,6 +358,7 @@ click_kebab_of_one_resource:
   - selector:
       xpath: //*[text()='<resource_name>']//ancestor::tr//button[@data-test-id='kebab-button']
     op: click
+    timeout: 20
 click_one_operation_in_kebab:
   action: click_kebab_of_one_resource
   action: click_kebab_item
