@@ -165,7 +165,7 @@ module BushSlicer
         Http.request(
           method: :post,
           url: "#{base_url}project/#{project_id}/run",
-          payload: create_opts,
+          payload: create_opts.to_json,
           raise_on_error: false,
           **common_opts
         )
@@ -213,7 +213,7 @@ module BushSlicer
         Http.request(
           method: :post,
           url: "#{base_url}project/#{project_id}/test-cases/query",
-          payload: create_opts,
+          payload: create_opts.to_json,
           raise_on_error: false,
           **common_opts
         )
