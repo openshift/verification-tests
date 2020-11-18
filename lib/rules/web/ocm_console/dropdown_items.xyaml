@@ -14,10 +14,10 @@ check_edit_console_button_in_dropdown:
   element: &edit_console_button_in_dropdown
     selector:
       xpath: //ul[@role='menu']//li[@role='menuitem']/button[text()='Edit console URL' and not(@disabled)]
-check_scale_cluster_button_in_dropdown:
-  element: &scale_cluster_button_in_dropdown
+check_edit_node_count_button_in_dropdown:
+  element: &edit_node_count_button_in_dropdown
     selector:
-      xpath: //ul[@role='menu']//li[@role='menuitem']/button[text()='Scale cluster' and not(@disabled)]
+      xpath: //button[text()='Edit node count']
 check_delete_cluster_button_in_dropdown:
   element: &delete_cluster_button_in_dropdown
     selector:
@@ -30,6 +30,14 @@ check_add_console_url_button_in_dropdown:
   element: &add_console_url
     selector:
       xpath: //ul[@role='menu']//li[@role='menuitem']/button[text()='Add console URL']
+check_edit_subscription_settings_button_in_dropdown:
+  element: &edit_subscription_settings_button
+    selector:
+      xpath: //ul[@role='menu']//button[text()='Edit subscription settings']
+check_transfer_cluster_ownership_button_in_dropdown:
+  element: &transfer_cluster_ownership_button
+    selector:
+      xpath: //ul[@role='menu']//button[text()='Transfer cluster ownership']
 click_edit_cluster_registration_button_in_dropdown:
   element:
     <<: *edit_cluster_registration
@@ -50,9 +58,9 @@ click_edit_console_button_in_dropdown:
   element:
     <<: *edit_console_button_in_dropdown
     op: click
-click_scale_cluster_button_in_dropdown:
+click_edit_node_count_button_in_dropdown:
   element:
-    <<: *scale_cluster_button_in_dropdown
+    <<: *edit_node_count_button_in_dropdown
     op: click
     timeout: 60
 click_delete_cluster_button_in_dropdown:
@@ -79,10 +87,10 @@ check_delete_cluster_button_in_dropdown_missing:
     selector:
       xpath: //ul[@role='menu']//li[@role='menuitem']/button[text()='Delete cluster']
     missing: true
-check_scale_cluster_button_in_dropdown_missing:
+check_edit_node_count_button_in_dropdown_missing:
   element:
     selector:
-      xpath: //ul[@role='menu']//li[@role='menuitem']/button[text()='Scale cluster']
+      xpath: //ul[@role='menu']//button[text()='Edit node count']
     missing: true
 check_edit_cluster_registration_button_in_dropdown_missing:
   element:

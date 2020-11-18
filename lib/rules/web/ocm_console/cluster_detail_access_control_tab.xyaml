@@ -110,18 +110,18 @@ check_popover_content_for_user_id:
     op: click
   elements:
   - selector:
-      xpath: //div[@class='tippy-content']//div[@aria-label='User IDs']/div[@class='pf-c-popover__content']//p[contains(.,'User IDs are matched by the cluster')]
+      xpath: //div[@aria-label='User IDs']/div[@class='pf-c-popover__content']//p[contains(.,'User IDs are matched by the cluster')]
   - selector:
-      xpath: //div[@class='tippy-content']//div[@aria-label='User IDs']/div[@class='pf-c-popover__content']//button[@aria-label='Close']
+      xpath: //div[@aria-label='User IDs']/div[@class='pf-c-popover__content']//button[@aria-label='Close']
 check_popover_content_for_user_group:
   element:
     <<: *user_group_helper_button
     op: click
   elements:
   - selector:
-      xpath: //div[@class='tippy-content']//div[@aria-label='Groups']/div[@class='pf-c-popover__content']//p[text()='Groups are mapped to role bindings on the cluster.']/a[text()='OpenShift 4 documentation']
+      xpath: //div[@aria-label='Groups']/div[@class='pf-c-popover__content']//p[text()='Groups are mapped to role bindings on the cluster.']/a[text()='OpenShift 4 documentation']
   - selector:
-      xpath: //div[@class='tippy-content']//div[@aria-label='Groups']/div[@class='pf-c-popover__content']//button[@aria-label='Close']
+      xpath: //div[@aria-label='Groups']/div[@class='pf-c-popover__content']//button[@aria-label='Close']
 check_the_user_list_item:
   elements:
   - selector:
