@@ -111,7 +111,7 @@ check_desired_compute_nodes:
   element:
     selector:
       xpath: //div[@class='pf-c-card__body']//dt[text()='Nodes']/following-sibling::dd[1]/dl/dt[text()='Compute:']/following-sibling::dd[contains(.,<desired_compute_nodes>)]
-    timeout: 50
+    timeout: 1000
 scale_cluster_from_cluster_detail_page:
   action: cluster_detail_page_loaded
   action: go_to_edit_node_count_dialog_on_cluster_detail_page
@@ -402,13 +402,13 @@ check_load_balancer_on_detail_page:
   element:
     selector:
       xpath: //div[@class='pf-c-card__body']//dt[text()='Load balancers']/following-sibling::dd[text()='<load_balancer_value>']
-    timeout: 50
+    timeout: 1000
     
 check_persistent_storage_on_detail_page:
   element:
     selector:
       xpath: //div[@class='pf-c-card__body']//dt[text()='Persistent storage']/following-sibling::dd[text()='<persistent_storage_value>']
-    timeout: 50
+    timeout: 1000
 scale_load_balancer_from_cluster_detail_page:
   action: cluster_detail_page_loaded
   action: go_to_edit_loadbalancers_and_storage_dialog_on_cluster_detail_page
