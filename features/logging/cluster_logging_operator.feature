@@ -2,22 +2,6 @@
 Feature: cluster-logging-operator related test
 
   # @author qitang@redhat.com
-  # @case_id OCP-19875
-  @admin
-  @destructive
-  @commonlogging
-  Scenario: Fluentd provide Prometheus metrics
-    Given evaluation of `cluster_logging('instance').collection_type` is stored in the :collection_type clipboard
-    Given a pod becomes ready with labels:
-      | component=<%= cb.collection_type %> |
-    And I execute on the pod:
-      | bash                                    |
-      | -c                                      |
-      | curl -k https://localhost:24231/metrics |
-    Then the step should succeed
-    And the expression should be true> @result[:response].include? (cb.collection_type == "fluentd" ? "fluentd_output_status_buffer_total_bytes": "rsyslog_action_processed")
-
-  # @author qitang@redhat.com
   # @case_id OCP-21333
   @admin
   @destructive
