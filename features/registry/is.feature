@@ -118,7 +118,7 @@ Feature: Testing imagestream
       | ca                 | <%= cb.reg_crt_name %>      |
     Then the step should fail
     And the output should contain:
-      | invalid container image reference |
+      | invalid |
     And I run the :oadm_prune_images client command with:
       | keep_tag_revisions  | 1                           |
       | keep_younger_than   | 0                           |

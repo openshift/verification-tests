@@ -105,6 +105,8 @@ Feature: oc import-image related feature
       | image_stream | deployment-example:latest   |
     Then the output should match:
       | .*[Ss]uccess.*|
+    And a pod becomes ready with labels:
+      | deploymentconfig=deployment-example |
     When I run the :get client command with:
       | resource        | imagestreams |
     Then the output should match:
@@ -138,6 +140,8 @@ Feature: oc import-image related feature
       | image_stream | deployment-example:latest   |
     Then the output should match:
       | .*[Ss]uccess.* |
+    And a pod becomes ready with labels:
+      | deploymentconfig=deployment-example |
     When I run the :get client command with:
       | resource        | imagestreams |
     Then the output should match:
