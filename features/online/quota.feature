@@ -1,7 +1,6 @@
 Feature: ONLY ONLINE Quota related scripts in this file
 
   # @author bingli@redhat.com
-  # @case_id OCP-13171
   # @case_id OCP-12700
   Scenario: CRUD operation to the resource quota as project owner
     Given I have a project
