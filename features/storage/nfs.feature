@@ -48,68 +48,6 @@ Feature: NFS Persistent Volume
       | testfile_2 |
 
   # @author chaoyang@redhat.com
-  @admin
-  @destructive
-  Scenario Outline: Check GIDs specified in a PV's annotations to pod's supplemental groups
-    Given I have a project
-    And I have a NFS service in the project
-    When I execute on the pod:
-      | chown | <nfs-uid-gid> | /mnt/data |
-    Then the step should succeed
-    When I execute on the pod:
-      | chmod | -R | 770 | /mnt/data |
-    Then the step should succeed
-
-    Given I obtain test data file "storage/nfs/pv-gid.json"
-    When admin creates a PV from "pv-gid.json" where:
-      | ["spec"]["nfs"]["server"]                                | "<%= service("nfs-service").ip_url %>" |
-      | ["spec"]["nfs"]["path"]                                  | /                                      |
-      | ["spec"]["capacity"]["storage"]                          | 1Gi                                    |
-      | ["metadata"]["name"]                                     | nfs-<%= project.name %>                |
-      | ["metadata"]["annotations"]["pv.beta.kubernetes.io/gid"] | "<pv-gid>"                             |
-    Then the step should succeed
-
-    Given I obtain test data file "storage/nfs/claim-rwx.json"
-    When I create a manual pvc from "claim-rwx.json" replacing paths:
-      | ["metadata"]["name"]                         | nfsc |
-      | ["spec"]["resources"]["requests"]["storage"] | 1Gi  |
-    Then the step should succeed
-    And the "nfsc" PVC becomes bound to the "nfs-<%= project.name %>" PV
-
-    Given I switch to cluster admin pseudo user
-    And I use the "<%= project.name %>" project
-    Given I obtain test data file "storage/nfs/security/pod-supplementalgroup.json"
-    When I run oc create over "pod-supplementalgroup.json" replacing paths:
-      | ["metadata"]["name"]                                         | nfspd |
-      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | nfsc  |
-    Then the step should succeed
-    And the pod named "nfspd" becomes ready
-
-    When I execute on the pod:
-      | id | -u |
-    Then the output should contain:
-      | 101 |
-    When I execute on the pod:
-      | id | -G |
-    Then the output should contain 1 times:
-      | <pod-gid> |
-    Given I execute on the pod:
-      | touch | /mnt/nfs/nfs_testfile |
-    Then the step should succeed
-    # workaround for https://bugzilla.redhat.com/show_bug.cgi?id=1810971
-    Then I wait up to 30 seconds for the steps to pass:
-    """
-    When I execute on the pod:
-      | ls | -l | /mnt/nfs/nfs_testfile |
-    Then the step should succeed
-    """
-
-    Examples:
-      | nfs-uid-gid   | pv-gid | pod-gid |
-      | 1234:1234     | 1234   | 1234    | # @case_id OCP-10930
-      | 111111:111111 | 111111 | 111111  | # @case_id OCP-10282
-
-  # @author chaoyang@redhat.com
   # @case_id OCP-10281
   @admin
   Scenario: Permission denied when nfs pv annotaion is not right
