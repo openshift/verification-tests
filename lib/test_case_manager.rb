@@ -79,7 +79,7 @@ module BushSlicer
             Kernel.puts("#{job.human_id} - not runnable")
           end
           test_suite.pending.each do |job|
-            Kernel.puts("#{job.case_id} - process quit before we executed")
+            Kernel.puts("#{job.test_case_id} - process quit before we executed")
           end
         end
 
