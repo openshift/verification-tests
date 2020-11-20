@@ -1,0 +1,83 @@
+{
+    "apiVersion": "apps/v1",
+    "kind": "DaemonSet",
+    "metadata": {
+        "labels": {
+            "component": "collector-clean",
+            "logging-infra": "collector-clean",
+            "provider": "aosqe"
+        },
+        "name": "collector-clean"
+    },
+    "spec": {
+        "selector": {
+            "matchLabels": {
+                "component": "collector-clean",
+                "logging-infra": "collector-clean",
+                "provider": "aosqe"
+            }
+        },
+        "template": {
+            "metadata": {
+                "labels": {
+                    "component": "collector-clean",
+                    "logging-infra": "collector-clean",
+                    "provider": "aosqe"
+                },
+                "name": "collector-clean"
+            },
+            "spec": {
+                "containers": [
+                    {
+                        "image": "quay.io/openshifttest/busybox@sha256:afe605d272837ce1732f390966166c2afff5391208ddd57de10942748694049d",
+                        "imagePullPolicy": "IfNotPresent",
+                        "name": "collector-clean",
+                        "securityContext": {
+                            "privileged": true
+                        },
+                        "command": ["/bin/sh"],
+                        "args": ["-c","rm -rf /var/lib/fluentd/*; sleep 2m"],
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "File",
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/var/log",
+                                "name": "varlog"
+                            },
+                            {
+                                "mountPath": "/var/lib/fluentd",
+                                "name": "filebufferstorage"
+                            }
+                        ]
+                    }
+                ],
+                "dnsPolicy": "ClusterFirst",
+                "nodeSelector": {
+                    "kubernetes.io/os": "linux"
+                },
+                "restartPolicy": "Always",
+                "schedulerName": "default-scheduler",
+                "securityContext": {},
+                "serviceAccount": "collectclear",
+                "serviceAccountName": "collectclear",
+                "terminationGracePeriodSeconds": 10,
+                "volumes": [
+                    {
+                        "hostPath": {
+                            "path": "/var/log",
+                            "type": ""
+                        },
+                        "name": "varlog"
+                    },
+                    {
+                        "hostPath": {
+                            "path": "/var/lib/fluentd",
+                            "type": ""
+                        },
+                        "name": "filebufferstorage"
+                    }
+                ]
+            }
+        }
+    }
+}
