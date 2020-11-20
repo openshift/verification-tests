@@ -23,9 +23,9 @@ Feature: Pod related networking scenarios
   @smoke
   Scenario: Container could reach the dns server
     Given I have a project
-    Given I obtain test data file "pods/tc528410/tc_528410_pod.json"
+    Given I obtain test data file "pods/ocp10031/pod.json"
     When I run the :create client command with:
-      | f | tc_528410_pod.json |
+      | f | pod.json |
     And the pod named "hello-pod" becomes ready
     And I run the steps 20 times:
     """
