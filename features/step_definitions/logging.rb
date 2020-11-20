@@ -705,3 +705,37 @@ Given /^I check the cronjob status$/ do
     end
   end
 end
+
+# Delete the fluentd buffer files in nodes. the fluentd must be deleted before running this step.
+Given /^logging collector bufferfiles are cleared on all nodes$/ do
+  ensure_admin_tagged
+  serviceaccount="collector-clean"
+  ds_name="collector-clean"
+  user(0)
+  step %Q/I have a project/
+
+  fluentd_pods = BushSlicer::Pod.get_labeled("logging-infra=fluentd", project: project("openshift-logging", switch: false), user: admin)
+  if(fluentd_pods.length()>0)
+    puts("The fluetnd pods is still running")
+    @result[":success"] = false
+  else
+    sa = service_account("#{serviceaccount}")
+    @result =  sa.create(by: admin)
+    step %Q/the step should succeed/
+
+    _opts = {scc: "privileged", user_name: "system:serviceaccount:#{project.name}:#{serviceaccount}"}
+    @result = admin.cli_exec(:oadm_policy_add_scc_to_user, **_opts)
+    step %Q/the step should succeed/
+    @result = user.cli_exec(:create, {f: "#{BushSlicer::HOME}/testdata/logging/collecter/collector_clear.json"})
+    step %Q/the step should succeed/
+    
+    pod_num=daemon_set(ds_name).replica_counters[:desired]
+    step %Q/#{pod_num} pods become ready with labels:/, table(%{
+      | logging-infra=#{ds_name} |
+    })
+
+    admin.cli_exec(:delete, object_type: 'daemonset', object_name_or_id: ds_name, n: project.name)
+    admin.cli_exec(:delete, object_type: 'sa', object_name_or_id: serviceaccount, n: project.name)
+    @result[":success"] = true
+  end
+end
