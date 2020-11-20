@@ -55,7 +55,7 @@ Feature: pods related scenarios
   # @case_id OCP-10729
   Scenario: Implement supplemental groups for pod
     Given I have a project
-    Given I obtain test data file "pods/tc510724/pod-supplementalGroups.yaml"
+    Given I obtain test data file "pods/ocp10729/pod-supplementalGroups.yaml"
     When I run the :create client command with:
       | f | pod-supplementalGroups.yaml |
     Then the step should succeed
@@ -67,7 +67,7 @@ Feature: pods related scenarios
     And the output should contain:
       | groups=1234,5678, |
     Given I ensure "hello-openshift" pod is deleted
-    Given I obtain test data file "pods/tc510724/pod-supplementalGroups-multi-cotainers.yaml"
+    Given I obtain test data file "pods/ocp10729/pod-supplementalGroups-multi-cotainers.yaml"
     When I run the :create client command with:
       | f | pod-supplementalGroups-multi-cotainers.yaml |
     Then the step should succeed
@@ -89,7 +89,7 @@ Feature: pods related scenarios
     And the output should contain:
       | groups=1234,5678, |
     Given I ensure "multi-containers" pod is deleted
-    Given I obtain test data file "pods/tc510724/pod-supplementalGroups-invalid.yaml"
+    Given I obtain test data file "pods/ocp10729/pod-supplementalGroups-invalid.yaml"
     When I run the :create client command with:
       | f | pod-supplementalGroups-invalid.yaml |
     Then the step should fail
@@ -117,7 +117,7 @@ Feature: pods related scenarios
   # @bug_id 1324396
   Scenario: Update ActiveDeadlineSeconds for pod
     Given I have a project
-    Given I obtain test data file "pods/tc521546/hello-pod.json"
+    Given I obtain test data file "pods/ocp10813/hello-pod.json"
     When I run the :create client command with:
       | f | hello-pod.json |
     Then the step should succeed
