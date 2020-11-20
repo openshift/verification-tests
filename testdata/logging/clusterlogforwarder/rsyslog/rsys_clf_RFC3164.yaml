@@ -6,6 +6,11 @@ metadata:
 spec:      
   outputs:      
     - name: rsyslog-created-by-user
+<<<<<<< HEAD
+=======
+      secret:
+        name: rsyslogserver  
+>>>>>>> 6819f4e4ee3be4f659cee01cdc39ccf3fdcc03ca
       type: syslog      
       syslog:      
         facility: local0
