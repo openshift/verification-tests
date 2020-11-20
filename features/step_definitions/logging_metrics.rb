@@ -68,13 +68,18 @@ When /^I get the #{QUOTED} logging index information(?: from a pod with labels #
   step %Q/a pod becomes ready with labels:/, table(%{
     | #{labels} |
   })
-
   step %Q/I perform the HTTP request on the ES pod with labels "#{labels}":/, table(%{
     | relative_url | _cat/indices?format=JSON |
     | op           | GET                      |
   })
-  res = @result[:parsed].find {|e| e['index'].start_with? index_name}
-  cb.index_data = res
+  res_indices = @result[:parsed].find_all{|e| e['index'].start_with? index_name}
+  if res_indices.length() > 0
+    cb.index_data=res_indices.sort_by{|e| e['index']}.reverse()[0]
+    true
+  else
+    cb.index_data=nil
+    false
+  end 
 end
 
 # just do the query, check result outside of the step.

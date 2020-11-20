@@ -1217,3 +1217,84 @@ Given /^logging collector name is stored in the#{OPT_SYM} clipboard$/ do | colle
   end
   cb[collector_name] = fluentd_component_label
 end
+
+# Delete the fluentd buffer files on nodes
+Given /^logging collector buffer files are cleaned out$/ do
+  ensure_admin_tagged
+  serviceaccount="privileged-sa"
+  clean_ds_name="collector-buffer-clean"
+  disabled_collector_ds=false
+
+  step %Q/I switch to cluster admin pseudo user/
+  step %Q/I use the "openshift-logging" project/
+  step %Q/logging collector name is stored in the :collector_name clipboard/
+
+  #Disable logging daemon_set
+  if daemon_set("#{cb.collector_name}").exists?
+    disabled_collector_ds=true
+    step %Q/I run the :patch client command with:/, table(%{
+      | resource      | clusterlogging                             |
+      | resource_name | instance                                   |
+      | p             | {"spec": {"managementState": "Unmanaged"}} |
+      | type          | merge                                      |
+    })
+    step 'the step should succeed'
+    teardown_add {
+      step %Q/I run the :patch client command with:/, table(%{
+        | resource      | clusterlogging                           |
+        | resource_name | instance                                 |
+        | p             | {"spec": {"managementState": "Managed"}} |
+        | type          | merge                                    |
+      })
+    }
+    step %Q/I run the :delete client command with:/, table(%{
+      | object_type       | daemonset            |
+      | object_name_or_id | #{cb.collector_name} |
+    })
+    step %Q/I wait for the resource "daemonset" named "#{cb.collector_name}" to disappear/
+    step 'the step should succeed'
+  end
+
+  #Create privileged daemon_set to delete buffers
+  step %Q/I create the serviceaccount "#{serviceaccount}"/
+  teardown_add {
+    step %Q/I run the :delete client command with:/, table(%{
+      | object_type       |  serviceaccount   |
+      | object_name_or_id | #{serviceaccount} |
+    })
+  }
+  step %Q/SCC "privileged" is added to the "#{serviceaccount}" service account/
+  step %Q|I obtain test data file "logging/collecter/collector_buffer_clean.json"|
+  step %Q/I run the :create client command with:/,table(%{
+    | f | collector_buffer_clean.json |
+  })
+  teardown_add {
+    step %Q/I run the :delete client command with:/, table(%{
+      | object_type       | daemonset        |
+      | object_name_or_id | #{clean_ds_name} |
+    })
+  }
+
+  step %Q/<%= daemon_set("#{clean_ds_name}").replica_counters[:desired] %> pods become ready with labels:/, table(%{
+    | logging-infra=#{clean_ds_name} |
+  })
+  log("Warning: some buffer_clean isn't ready, the buffer may not be clean out") unless @result[:success]
+
+  # Remove the daemonset collector-buffer-clean. We can wait until teardown. As the daemonset restart will trigger a new clean up.
+  step %Q/I run the :delete client command with:/, table(%{
+    | object_type       | daemonset        |
+    | object_name_or_id | #{clean_ds_name} |
+  })
+  # set clusterlogging back to Manage to bump up daemonset collector
+  if(disabled_collector_ds)
+    step %Q/I run the :patch client command with:/, table(%{
+      | resource      | clusterlogging                           |
+      | resource_name | instance                                 |
+      | p             | {"spec": {"managementState": "Managed"}} |
+      | type          | merge                                    |
+    })
+    step 'the step should succeed'
+    step %Q/I wait until fluentd is ready/
+    raise "Failed to set clusterlogging back to Managed" unless @result[:success]
+  end
+end

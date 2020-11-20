@@ -21,4 +21,10 @@ Before('@commonlogging') do
       | crd_yaml            | #{example_cr} |
     })
   end
+  step %Q/I run the :patch client command with:/, table(%{
+    | resource      | clusterlogging                             |
+    | resource_name | instance                                   |
+    | p             | {"spec": {"managementState": "Managed"}}   |
+    | type          | merge                                      |
+  })
 end

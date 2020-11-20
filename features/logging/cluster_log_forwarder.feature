@@ -44,7 +44,7 @@ Feature: cluster log forwarder features
     Then the step should succeed
     And I wait for the "instance" cluster_log_forwarder to appear
     Given 10 seconds have passed
-    And <%= daemon_set("<%= cb.collector_name %>").replica_counters[:desired] %> pods become ready with labels:
+    And <%= daemon_set(cb.collector_name).replica_counters[:desired] %> pods become ready with labels:
       | logging-infra=<%= cb.collector_name %> |
     Given I wait up to 300 seconds for the steps to pass:
     """
@@ -56,8 +56,7 @@ Feature: cluster log forwarder features
       | infra.log           |
       | infra-container.log |
     """
-    # the ES should not receive new logs(may have some cache in the fluentd)
-
+    Given logging collector buffer files are cleaned out
     Given I wait up to 600 seconds for the steps to pass:
     """
     When I perform the HTTP request on the ES pod with labels "es-node-master=true":
@@ -93,7 +92,7 @@ Feature: cluster log forwarder features
       | f | clusterlogforwarder.yaml |
     Then the step should succeed
     Given 10 seconds have passed
-    And <%= daemon_set("<%= cb.collector_name %>").replica_counters[:desired] %> pods become ready with labels:
+    And <%= daemon_set(cb.collector_name).replica_counters[:desired] %> pods become ready with labels:
       | logging-infra=<%= cb.collector_name %> |
     Given I wait up to 300 seconds for the steps to pass:
     """
