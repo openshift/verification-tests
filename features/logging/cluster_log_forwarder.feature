@@ -369,7 +369,8 @@ Feature: cluster log forwarder features
     Given I switch to the first user
     And I create a project with non-leading digit name
     And evaluation of `project` is stored in the :kafka_project clipboard
-    Given I deployed kafka in the "<%= cb.kafka_project.name %>" project via amqstream operator
+    # The following step will create 4 topics(topic-logging-all,topic-logging-infra,topic-logging-app,topic-logging-audit)
+    Given I deploy kafka in the "<%= cb.kafka_project.name %>" project via amqstream operator
     And I run the :extract client command with:
       | resource | secret/my-cluster-cluster-ca-cert  |
     Then the step should succeed
@@ -383,6 +384,7 @@ Feature: cluster log forwarder features
     Then the step should succeed
     Given I obtain test data file "logging/clusterlogforwarder/kafka/amq/13_ClusterLogForwarder_to_kafka_template.yaml"
     Given I obtain test data file "logging/clusterlogging/fluentd_only.yaml"
+    # The following step will send logs to topic-logging-infra,topic-logging-app,topic-logging-audit
     When I process and create:
       | f | 13_ClusterLogForwarder_to_kafka_template.yaml |
       | p | AMQ_NAMESPACE=<%= cb.kafka_project.name %> |
@@ -396,11 +398,13 @@ Feature: cluster log forwarder features
     And <%= daemon_set('fluentd').replica_counters[:desired] %> pods become ready with labels:
       | logging-infra=fluentd |
     Given I switch to the first user
-    And I use the "<%= cb.kafka_project.name %>" project 
-    Given 60 seconds have passed
-    When I get records from the "topic-logging-infra" kafka topic
+    Given I create the "xyz" consumer job to the "topic-logging-infra" kafka topic in the "<%= cb.kafka_project.name %>" project
+    When I get 2 logs from the "xyz" kafka consumer job in the "<%= cb.kafka_project.name %>" project
     Then the step should succeed
-    When I get records from the "topic-logging-app" kafka topic
+    When I get records from the "topic-logging-infra" kafka topic in the "<%= cb.kafka_project.name %>" project
     Then the step should succeed
-    When I get records from the "topic-logging-audit" kafka topic
+    When I get records from the "topic-logging-app" kafka topic in the "<%= cb.kafka_project.name %>" project
     Then the step should succeed
+    When I get records from the "topic-logging-audit" kafka topic in the "<%= cb.kafka_project.name %>" project
+    Then the step should succeed
+

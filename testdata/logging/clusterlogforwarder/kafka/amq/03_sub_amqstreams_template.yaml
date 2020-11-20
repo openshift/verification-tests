@@ -15,8 +15,10 @@ objects:
     channel: stable
     installPlanApproval: Automatic
     name: amq-streams
-    source: redhat-operators
+    source: "${AMQ_CATALOGSOURCE}"
     sourceNamespace: openshift-marketplace
 parameters:
   - name: AMQ_NAMESPACE
     value: "amq-aosqe"
+  - name: AMQ_CATALOGSOURCE
+    value: "redhat-operators"

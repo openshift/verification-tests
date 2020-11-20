@@ -1,7 +1,7 @@
 kind: Template
 apiVersion: v1
 metadata:
-  name: amq-consumer
+  name: amq-consumer1
   annotations:
     description: "Deploy AMQ "
     tags: "amq-aosqe"

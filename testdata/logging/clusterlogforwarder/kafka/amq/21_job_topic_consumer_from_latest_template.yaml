@@ -1,8 +1,7 @@
-#https://datacadamia.com/dit/kafka/kafka-console-consumer
 kind: Template
 apiVersion: v1
 metadata:
-  name: amq-consumer
+  name: amq-consumer2
   annotations:
     description: "Deploy AMQ "
     tags: "amq-aosqe"
