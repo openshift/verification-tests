@@ -327,10 +327,10 @@ Feature: cluster log forwarder features
     Given I switch to cluster admin pseudo user
     And I use the "openshift-logging" project
 
-    Given I obtain test data file "logging/clusterlogging/example.yaml"
+    Given I obtain test data file "logging/clusterlogging/example_indexmanagement.yaml"
     When I create clusterlogging instance with:
       | remove_logging_pods | true         |
-      | crd_yaml            | example.yaml |
+      | crd_yaml            | example_indexmanagement.yaml |
     Then the step should succeed
 
     Given I wait for the "app" index to appear in the ES pod with labels "es-node-master=true"
@@ -362,9 +362,9 @@ Feature: cluster log forwarder features
     Given I wait up to 300 seconds for the steps to pass:
     """
     And I execute on the "<%= cb.log_receiver.name %>" pod:
-      | ls | -l | /var/log/custom/ |
+      | ls | -l | /var/log/clf/ |
     Then the output should contain:
-      | app.log             |
+      | app-container.log   |
       | audit.log           |
       | infra.log           |
       | infra-container.log |

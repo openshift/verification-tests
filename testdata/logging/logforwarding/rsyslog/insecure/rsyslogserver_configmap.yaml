@@ -10,19 +10,18 @@ data:
     global(processInternalMessages="on")
     module(load="imptcp")
     module(load="imudp" TimeRequery="500")
-
     input(type="imptcp" port="514")
     input(type="imudp" port="514")
-
     :programname, contains, "kubernetes.var.log.containers" {
       if $msg contains "namespace_name=openshift" or $msg contains "namespace_name=default" or $msg contains "namespace_name=kube" then /var/log/custom/infra-container.log
       if not ($msg contains "namespace_name=openshift" or $msg contains "namespace_name=default" or $msg contains "namespace_name=kube") then /var/log/custom/app-container.log
     }
-    :programname, !contains, "kubernetes.var.log.containers" /var/log/custom/infra.log
-
+    :programname, contains, "journal.system" /var/log/custom/infra.log
+    :programname, contains, "k8s-audit.log" /var/log/custom/audit.log
+    :programname, contains, "openshift-audit.log" /var/log/custom/audit.log 
     :msg, contains, "docker"{
-      if $msg contains "viaq_index_name:infra-write" then /var/log/custom/infra-container.log
-      if $msg contains "viaq_index_name:app-write" then /var/log/custom/app-container.log
+      if $msg contains "viaq_index_name:infra-write" then /var/log/clf/infra-container.log
+      if $msg contains "viaq_index_name:app-write" then /var/log/clf/app-container.log
     }
-    :msg, contains, "_STREAM_ID" /var/log/custom/infra.log
-    :msg, contains, "auditID" /var/log/custom/audit.log
+    :msg, contains, "_STREAM_ID" /var/log/clf/infra.log
+    :msg, contains, "auditID" /var/log/clf/audit.log
