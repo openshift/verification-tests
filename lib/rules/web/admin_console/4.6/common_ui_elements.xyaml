@@ -376,6 +376,22 @@ click_kebab_of_one_resource:
 click_one_operation_in_kebab:
   action: click_kebab_of_one_resource
   action: click_kebab_item
+cancel_build_kebab_operation:
+  params:
+    kebab_item: Cancel Build
+  action: click_one_operation_in_kebab
+edit_receiver_kebab_operation:
+  params:
+    kebab_item: Edit Receiver
+  action: click_one_operation_in_kebab
+delete_machinehealthcheck_kabab_operation:
+  params:
+    kebab_item: Delete Machine Health Check
+  action: click_one_operation_in_kebab
+delete_catalogsource_kabab_operation:
+  params:
+    kebab_item: Delete CatalogSource
+  action: click_one_operation_in_kebab
 check_column_in_table:
   action: wait_box_loaded
   elements:
@@ -761,6 +777,12 @@ check_resource_details:
     if_param: labels
     ref: check_resource_labels
   action:
+    if_param: status
+    ref: check_resource_status
+  action:
+    if_param: phase
+    ref: check_resource_phase
+  action:
     if_param: annotations
     ref: check_resource_annotations
   action:
@@ -924,6 +946,16 @@ check_resource_labels:
   params:
     key: Labels
     value: <labels>
+  action: check_resource_details_key_and_value
+check_resource_status:
+  params:
+    key: Status
+    value: <status>
+  action: check_resource_details_key_and_value
+check_resource_phase:
+  params:
+    key: Phase
+    value: <phase>
   action: check_resource_details_key_and_value
 check_resource_annotations:
   params:
