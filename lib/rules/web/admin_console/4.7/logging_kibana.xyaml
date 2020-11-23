@@ -178,3 +178,9 @@ check_log_count:
       }
       return doc_count
     expect_result: true
+
+click_refresh_button_in_kibana:
+  element:
+    selector:
+      xpath: //span[contains(@class, "euiButton__text euiSuperUpdateButton__text") and contains(., "Refresh")]
+    op: click
