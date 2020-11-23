@@ -398,9 +398,9 @@ Feature: cluster log forwarder features
     And <%= daemon_set('fluentd').replica_counters[:desired] %> pods become ready with labels:
       | logging-infra=fluentd |
     Given I switch to the first user
-    Given I create the "xyz" consumer job to the "topic-logging-infra" kafka topic in the "<%= cb.kafka_project.name %>" project
-    When I get 2 logs from the "xyz" kafka consumer job in the "<%= cb.kafka_project.name %>" project
-    Then the step should succeed
+    #Given I create the "xyz" consumer job to the "topic-logging-infra" kafka topic in the "<%= cb.kafka_project.name %>" project
+    #When I get 2 logs from the "xyz" kafka consumer job in the "<%= cb.kafka_project.name %>" project
+    #Then the step should succeed
     When I get records from the "topic-logging-infra" kafka topic in the "<%= cb.kafka_project.name %>" project
     Then the step should succeed
     When I get records from the "topic-logging-app" kafka topic in the "<%= cb.kafka_project.name %>" project
