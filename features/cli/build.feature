@@ -44,7 +44,7 @@ Feature: build 'apps' with CLI
   # @author pruan@redhat.com
   Scenario Outline: when delete the bc,the builds pending or running should be deleted
     Given I have a project
-    Given I obtain test data file "build/tc<number>/test-buildconfig.json"
+    Given I obtain test data file "build/<number>/test-buildconfig.json"
     When I run the :create client command with:
       | f | test-buildconfig.json |
     Then the step should succeed
@@ -61,9 +61,9 @@ Feature: build 'apps' with CLI
       | ruby-sample-build |
 
     Examples:
-      | number | build_status |
-      | 517367 | :complete    | # @case_id OCP-11224
-      | 517368 | :failed      | # @case_id OCP-11550
+      | number   | build_status |
+      | ocp11224 | :complete    | # @case_id OCP-11224
+      | ocp11550 | :failed      | # @case_id OCP-11550
 
   # @author xiuwang@redhat.com
   # @case_id OCP-11133
