@@ -707,7 +707,7 @@ Given /^I check the cronjob status$/ do
 end
 
 # Delete the fluentd buffer files in nodes. the fluentd must be deleted before running this step.
-Given /^logging collector bufferfiles are cleared on all nodes$/ do
+Given /^I clear all logging collector buffer files all nodes$/ do
   ensure_admin_tagged
   serviceaccount="collector-clean"
   ds_name="collector-clean"
@@ -736,6 +736,5 @@ Given /^logging collector bufferfiles are cleared on all nodes$/ do
 
     admin.cli_exec(:delete, object_type: 'daemonset', object_name_or_id: ds_name, n: project.name)
     admin.cli_exec(:delete, object_type: 'sa', object_name_or_id: serviceaccount, n: project.name)
-    @result[":success"] = true
   end
 end
