@@ -378,16 +378,16 @@ Feature: cluster log forwarder features
     Given admin ensures "instance" cluster_log_forwarder is deleted from the "openshift-logging" project after scenario
     Given admin ensures "kafka-fluent" secret is deleted from the "openshift-logging" project after scenario
     When I run the :create_secret client command with:
-      | secret_type | generic    |
-      | name        | kafka-fluent |
-      | from_file   | ca-bundle.crt=ca.crt  |
+      | secret_type | generic              |
+      | name        | kafka-fluent         |
+      | from_file   | ca-bundle.crt=ca.crt |
     Then the step should succeed
     Given I obtain test data file "logging/clusterlogforwarder/kafka/amq/13_ClusterLogForwarder_to_kafka_template.yaml"
     Given I obtain test data file "logging/clusterlogging/fluentd_only.yaml"
     # The following step will send logs to topic-logging-infra,topic-logging-app,topic-logging-audit
     When I process and create:
       | f | 13_ClusterLogForwarder_to_kafka_template.yaml |
-      | p | AMQ_NAMESPACE=<%= cb.kafka_project.name %> |
+      | p | AMQ_NAMESPACE=<%= cb.kafka_project.name %>    |
     Then the step should succeed
     When I create clusterlogging instance with:
       | remove_logging_pods | true              |
@@ -407,4 +407,3 @@ Feature: cluster log forwarder features
     Then the step should succeed
     When I get records from the "topic-logging-audit" kafka topic in the "<%= cb.kafka_project.name %>" project
     Then the step should succeed
-
