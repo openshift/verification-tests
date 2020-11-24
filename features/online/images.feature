@@ -70,7 +70,7 @@ Feature: ONLY ONLINE Images related scripts in this file
   @smoke
   Scenario: Verify Mariadb can be connected after admin and user password are changed and re-deployment for persistent storage - marialdb-101-rhel7
     Given I have a project
-    Given I obtain test data file "templates/tc532739/mariadb-persistent.json"
+    Given I obtain test data file "templates/ocp10147/mariadb-persistent.json"
     And I run the :new_app client command with:
       | file | mariadb-persistent.json |
     Given a pod becomes ready with labels:

@@ -4,7 +4,7 @@ Feature: job.feature
   # @case_id OCP-11206
   Scenario: Create job with multiple completions
     Given I have a project
-    Given I obtain test data file "templates/tc511597/job.yaml"
+    Given I obtain test data file "templates/ocp11206/job.yaml"
     When I run the :create client command with:
       | f | job.yaml |
     Then the step should succeed
@@ -34,12 +34,12 @@ Feature: job.feature
     Then the step should succeed
     And the output should not contain "pi-"
     """
-    Given I obtain test data file "templates/tc511597/job.yaml"
+    Given I obtain test data file "templates/ocp11206/job.yaml"
     When I run oc create over "job.yaml" replacing paths:
       | ["spec"]["completions"] | -1 |
     Then the step should fail
     And the output should contain "must be greater than or equal to 0"
-    Given I obtain test data file "templates/tc511597/job.yaml"
+    Given I obtain test data file "templates/ocp11206/job.yaml"
     When I run oc create over "job.yaml" replacing paths:
       | ["spec"]["completions"] | 0.1 |
     Then the step should fail

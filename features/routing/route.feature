@@ -299,7 +299,7 @@ Feature: Testing route
   @smoke
   Scenario: Route could NOT be updated after created
     Given I have a project
-    Given I obtain test data file "routing/tc/tc470732/route_withouthost1.json"
+    Given I obtain test data file "routing/route_withouthost1.json"
     When I run the :create client command with:
       | f | route_withouthost1.json |
     Then the step should succeed

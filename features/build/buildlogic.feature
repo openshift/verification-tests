@@ -207,7 +207,7 @@ Feature: buildlogic.feature
   # @case_id OCP-13683
   Scenario: Check s2i build substatus and times
     Given I have a project
-    Given I obtain test data file "build/tc470422/application-template-stibuild.json"
+    Given I obtain test data file "build/application-template-stibuild.json"
     When I run the :new_app client command with:
       | file | application-template-stibuild.json |
     Then the step should succeed

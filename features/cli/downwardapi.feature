@@ -4,7 +4,7 @@ Feature: Downward API
   # @case_id OCP-10707
   Scenario: Pods can get IPs via downward API under race condition
     Given I have a project
-    Given I obtain test data file "downwardapi/tc509097/pod-downwardapi-env.yaml"
+    Given I obtain test data file "downwardapi/ocp10707/pod-downwardapi-env.yaml"
     When I run the :create client command with:
       | filename  | pod-downwardapi-env.yaml |
     Then the step should succeed
@@ -18,7 +18,7 @@ Feature: Downward API
   @smoke
   Scenario: downward api pod name and pod namespace as env variables
     Given I have a project
-    Given I obtain test data file "downwardapi/tc483203/downward-example.yaml"
+    Given I obtain test data file "downwardapi/ocp10628/downward-example.yaml"
     When I run the :create client command with:
       | f | downward-example.yaml |
     Then the step should succeed
