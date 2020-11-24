@@ -19,10 +19,10 @@ Feature: limit range related scenarios:
     And admin ensures "limits" limit_range is deleted from the "<%= project.name %>" project
 
     Examples:
-      | path     | expr1                                                 | expr2                                                |
-      | tc508038 | Container\\s+cpu\\s+\-\\s+\-\\s+200m\\s+200m\\s+\-    | Container\\s+memory\\s+\-\\s+\-\\s+1Gi\\s+1Gi\\s+\-  | # @case_id OCP-10697
-      | tc508039 | Container\\s+cpu\\s+200m\\s+\-\\s+200m\\s+\-\\s+\-    | Container\\s+memory\\s+1Gi\\s+\-\\s+1Gi\\s+\-\\s+\-  | # @case_id OCP-11175
-      | tc508040 | Container\\s+cpu\\s+\-\\s+200m\\s+200m\\s+200m\\s+\-  | Container\\s+memory\\s+\-\\s+1Gi\\s+1Gi\\s+1Gi\\s+\- | # @case_id OCP-11519
+      | path     | expr1                                                | expr2                                                |
+      | ocp10697 | Container\\s+cpu\\s+\-\\s+\-\\s+200m\\s+200m\\s+\-   | Container\\s+memory\\s+\-\\s+\-\\s+1Gi\\s+1Gi\\s+\-  | # @case_id OCP-10697
+      | ocp11175 | Container\\s+cpu\\s+200m\\s+\-\\s+200m\\s+\-\\s+\-   | Container\\s+memory\\s+1Gi\\s+\-\\s+1Gi\\s+\-\\s+\-  | # @case_id OCP-11175
+      | ocp11519 | Container\\s+cpu\\s+\-\\s+200m\\s+200m\\s+200m\\s+\- | Container\\s+memory\\s+\-\\s+1Gi\\s+1Gi\\s+1Gi\\s+\- | # @case_id OCP-11519
 
   # @author pruan@redhat.com
   # @author azagayno@redhat.com
@@ -43,8 +43,8 @@ Feature: limit range related scenarios:
 
     Examples:
       | path | expr1 | expr2 | expr3 | expr4 | expr5 | expr6 | expr7 | expr8 | expr9 | expr10 | expr11 |expr12 | expr13| expr14 | expr15 | expr16 | expr17 | expr18 | expr19| expr20 |
-      | tc508041 | 400m | default request | 400m | max | 200m | 200m | default | 400m | max | 200m | 2Gi | default request | 2Gi | max | 1Gi | 1Gi | default | 2Gi  | max   | 1Gi    | # @case_id OCP-11745
-      | tc508045 | 200m | min | 400m | default request | 200m | 400m | min | 400m | default | 200m | 1Gi | min | 2Gi | default request | 1Gi | 2Gi | min | 2Gi  | default   | 1Gi    | # @case_id OCP-12200
+      | ocp11745 | 400m | default request | 400m | max | 200m | 200m | default | 400m | max | 200m | 2Gi | default request | 2Gi | max | 1Gi | 1Gi | default | 2Gi  | max   | 1Gi    | # @case_id OCP-11745
+      | ocp12200 | 200m | min | 400m | default request | 200m | 400m | min | 400m | default | 200m | 1Gi | min | 2Gi | default request | 1Gi | 2Gi | min | 2Gi  | default   | 1Gi    | # @case_id OCP-12200
 
   # @author pruan@redhat.com
   # @author azagayno@redhat.com
@@ -63,7 +63,7 @@ Feature: limit range related scenarios:
 
     Examples:
       | path | expr1 | expr2 | expr3 | expr4 | expr5 | expr6 | expr7 | expr8 | expr9 | expr10 |
-      | tc508047 | 2Gi | min | 2Gi | max | 1Gi | 400m | min | 400m | max | 200m |
+      | ocp12286 | 2Gi | min | 2Gi | max | 1Gi | 400m | min | 400m | max | 200m |
 
   # @author pruan@redhat.com
   # @author azagayno@redhat.com
@@ -71,7 +71,7 @@ Feature: limit range related scenarios:
   @admin
   Scenario: Limit range does not allow min > defaultRequest
     Given I have a project
-    Given I obtain test data file "limits/tc508046/limit.yaml"
+    Given I obtain test data file "limits/ocp12250/limit.yaml"
     When I run the :create admin command with:
       | f         | limit.yaml |
       | namespace | <%= project.name %>                                               |
@@ -86,7 +86,7 @@ Feature: limit range related scenarios:
   @admin
   Scenario: Limit range does not allow defaultRequest > default
     Given I have a project
-    Given I obtain test data file "limits/tc508042/limit.yaml"
+    Given I obtain test data file "limits/ocp11918/limit.yaml"
     When I run the :create admin command with:
       | f         | limit.yaml |
       | namespace | <%= project.name %>                                               |
@@ -101,7 +101,7 @@ Feature: limit range related scenarios:
   @admin
   Scenario: Limit range does not allow defaultRequest > max
     Given I have a project
-    Given I obtain test data file "limits/tc508043/limit.yaml"
+    Given I obtain test data file "limits/ocp12043/limit.yaml"
     When I run the :create admin command with:
       | f         | limit.yaml |
       | namespace | <%= project.name %>                                               |
@@ -116,7 +116,7 @@ Feature: limit range related scenarios:
   @admin
   Scenario: Limit range does not allow maxLimitRequestRatio > Limit/Request
     Given I have a project
-    Given I obtain test data file "limits/tc508044/limit.yaml"
+    Given I obtain test data file "limits/ocp12139/limit.yaml"
     When I run the :create admin command with:
       | f         | limit.yaml |
       | namespace | <%= project.name %>                                               |
@@ -127,7 +127,7 @@ Feature: limit range related scenarios:
     Then the output should match:
       | Container\\s+cpu\\s+\-\\s+\-\\s+\-\\s+\-\\s+4    |
       | Container\\s+memory\\s+\-\\s+\-\\s+\-\\s+\-\\s+4 |
-    Given I obtain test data file "limits/tc508044/pod.yaml"
+    Given I obtain test data file "limits/ocp12139/pod.yaml"
     When I run the :create client command with:
       | f | pod.yaml |
     Then the step should fail
@@ -140,7 +140,7 @@ Feature: limit range related scenarios:
   @admin
   Scenario: Limit range with all values set with proper values
     Given I have a project
-    Given I obtain test data file "limits/tc508048/limit.yaml"
+    Given I obtain test data file "limits/ocp12315/limit.yaml"
     When I run the :create admin command with:
       | f         | limit.yaml |
       | namespace | <%= project.name %>                                               |
@@ -153,7 +153,7 @@ Feature: limit range related scenarios:
       | Pod\\s+memory\\s+10Mi\\s+1Gi\\s+\-\\s+\-\\s+\-             |
       | Container\\s+cpu\\s+10m\\s+480m\\s+180m\\s+240m\\s+4       |
       | Container\\s+memory\\s+5Mi\\s+512Mi\\s+128Mi\\s+256Mi\\s+4 |
-    Given I obtain test data file "limits/tc508048/pod.yaml"
+    Given I obtain test data file "limits/ocp12315/pod.yaml"
     When I run the :create client command with:
       | f | pod.yaml |
     Then the step should succeed
@@ -164,4 +164,3 @@ Feature: limit range related scenarios:
       | \\s+limits:\n\\s+cpu: 300m\n\\s+memory: 300Mi\n   |
       | \\s+requests:\n\\s+cpu: 100m\n\\s+memory: 100Mi\n |
     """
-

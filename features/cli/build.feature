@@ -284,12 +284,11 @@ Feature: build 'apps' with CLI
   # @case_id OCP-11776
   Scenario: Cannot create secret from local file and with same name via oc new-build
     Given I have a project
-    #Reusing similar secrets to TC #519256
-    Given I obtain test data file "secrets/tc519256/testsecret1.json"
+    Given I obtain test data file "secrets/testsecret1.json"
     When I run the :create client command with:
       | f | testsecret1.json |
     Then the step should succeed
-    Given I obtain test data file "secrets/tc519256/testsecret2.json"
+    Given I obtain test data file "secrets/testsecret2.json"
     When I run the :create client command with:
       | f | testsecret2.json |
     Then the step should succeed
@@ -328,11 +327,11 @@ Feature: build 'apps' with CLI
   @admin
   Scenario Outline: Do sti/custom build with no inputs in buildconfig
     Given I have a project
-    Given I obtain test data file "build/tc525736/nosrc-setup.json"
+    Given I obtain test data file "build/ocp11580/nosrc-setup.json"
     When I run the :create client command with:
       | f | nosrc-setup.json |
     Then the step should succeed
-    Given I obtain test data file "build/tc525736/nosrc-test.json"
+    Given I obtain test data file "build/ocp11580/nosrc-test.json"
     When I run the :create client command with:
       | f | nosrc-test.json  |
     When I get project bc
@@ -349,7 +348,7 @@ Feature: build 'apps' with CLI
       | object_type       | bc        |
       | object_name_or_id | <bc_name> |
     Then the step should succeed
-    Given I obtain test data file "build/tc525736/<file_name>"
+    Given I obtain test data file "build/ocp11580/<file_name>"
     When I run the :create client command with:
       | f | <file_name> |
     When I get project build_config named "<bc_name>"

@@ -9,7 +9,7 @@ Feature: secrets related scenarios
       | name        | my-secret  |
       | from_file   | /etc/hosts |
     Then the step should succeed
-    Given I obtain test data file "deployment/tc510612/hook-inheritance-secret-volume.json"
+    Given I obtain test data file "deployment/ocp10725/hook-inheritance-secret-volume.json"
     When I run the :create client command with:
       | f | hook-inheritance-secret-volume.json |
     Then the step should succeed
@@ -77,20 +77,20 @@ Feature: secrets related scenarios
   Scenario: Pods do not have access to each other's secrets with the same secret name in different namespaces
     Given I have a project
     Given evaluation of `project.name` is stored in the :project0 clipboard
-    Given I obtain test data file "secrets/tc483169/secret1.json"
+    Given I obtain test data file "secrets/secret1.json"
     When I run the :create client command with:
       | filename  | secret1.json |
-    Given I obtain test data file "secrets/tc483169/secret-pod-1.yaml"
+    Given I obtain test data file "secrets/secret-pod-1.yaml"
     And I run the :create client command with:
       | filename  | secret-pod-1.yaml |
     Then the step should succeed
     And the pod named "secret-pod-1" status becomes :running
     When I create a new project
     Given evaluation of `project.name` is stored in the :project1 clipboard
-    Given I obtain test data file "secrets/tc483169/secret2.json"
+    Given I obtain test data file "secrets/secret2.json"
     And I run the :create client command with:
       | filename  | secret2.json |
-    Given I obtain test data file "secrets/tc483169/secret-pod-2.yaml"
+    Given I obtain test data file "secrets/secret-pod-2.yaml"
     And I run the :create client command with:
       | filename  | secret-pod-2.yaml |
     Then the step should succeed
@@ -114,11 +114,11 @@ Feature: secrets related scenarios
   # @author yantan@redhat.com
   Scenario Outline: Insert secret to builder container via oc new-build - source/docker build
     Given I have a project
-    Given I obtain test data file "secrets/tc519256/testsecret1.json"
+    Given I obtain test data file "secrets/testsecret1.json"
     When I run the :create client command with:
       | f | testsecret1.json |
     Then the step should succeed
-    Given I obtain test data file "secrets/tc519256/testsecret2.json"
+    Given I obtain test data file "secrets/testsecret2.json"
     When I run the :create client command with:
       | f | testsecret2.json |
     Then the step should succeed
@@ -129,7 +129,7 @@ Feature: secrets related scenarios
       | build_secret | <build_secret> |
       | build_secret | testsecret2    |
     Then the step should succeed
-    Given I obtain test data file "deployment/tc519261/test.json"
+    Given I obtain test data file "deployment/ocp11947/test.json"
     When I run the :create client command with:
       | f | test.json |
     Then the step should succeed
@@ -234,11 +234,11 @@ Feature: secrets related scenarios
   @smoke
   Scenario: Secret volume should update when secret is updated
     Given I have a project
-    Given I obtain test data file "secrets/tc483169/secret1.json"
+    Given I obtain test data file "secrets/secret1.json"
     When I run the :create client command with:
       | f | secret1.json |
     Then the step should succeed
-    Given I obtain test data file "secrets/tc483169/secret-pod-1.yaml"
+    Given I obtain test data file "secrets/secret-pod-1.yaml"
     When I run the :create client command with:
       | f | secret-pod-1.yaml |
     Then the step should succeed
@@ -269,7 +269,7 @@ Feature: secrets related scenarios
   # @case_id OCP-10899
   Scenario: Mapping specified secret volume should update when secret is updated
     Given I have a project
-    Given I obtain test data file "secrets/tc483169/secret1.json"
+    Given I obtain test data file "secrets/secret1.json"
     When I run the :create client command with:
       | f | secret1.json |
     Then the step should succeed

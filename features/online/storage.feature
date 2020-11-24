@@ -4,7 +4,7 @@ Feature: ONLY ONLINE Storage related scripts in this file
   # @case_id OCP-9967
   Scenario: Delete pod with mounting error
     Given I have a project
-    Given I obtain test data file "online/tc526564/pod_volumetest.json"
+    Given I obtain test data file "online/pod_volumetest.json"
     When I run the :create client command with:
       | f | pod_volumetest.json |
     Then the step should succeed
@@ -38,7 +38,7 @@ Feature: ONLY ONLINE Storage related scripts in this file
   # @case_id OCP-9809
   Scenario: Pod should not create directories within /var/lib/docker/volumes/ on nodes
     Given I have a project
-    Given I obtain test data file "online/tc526564/pod_volumetest.json"
+    Given I obtain test data file "online/pod_volumetest.json"
     When I run the :create client command with:
       | f | pod_volumetest.json |
     Then the step should succeed

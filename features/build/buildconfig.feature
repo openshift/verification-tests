@@ -72,7 +72,7 @@ Feature: buildconfig.feature
      | from_file   | .dockercfg=<%= expand_private_path(conf[:services, :docker_hub, :dockercfg]) %> | 
      | type        | kubernetes.io/dockercfg                                                         |
     Then the step should succeed
-    Given I obtain test data file "build/tc479541/<template>"
+    Given I obtain test data file "build/ocp11474/<template>"
     When I run the :create client command with:
       | f | <template> |
     Then the step should succeed
