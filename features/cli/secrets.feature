@@ -31,17 +31,17 @@ Feature: secrets related scenarios
   @smoke
   Scenario: Pods do not have access to each other's secrets in the same namespace
     Given I have a project
-    Given I obtain test data file "secrets/tc483168/first-secret.json"
+    Given I obtain test data file "secrets/ocp12281/first-secret.json"
     When I run the :create client command with:
       | filename | first-secret.json |
-    Given I obtain test data file "secrets/tc483168/second-secret.json"
+    Given I obtain test data file "secrets/ocp12281/second-secret.json"
     And I run the :create client command with:
       | filename | second-secret.json |
     Then the step should succeed
-    Given I obtain test data file "secrets/tc483168/first-secret-pod.yaml"
+    Given I obtain test data file "secrets/ocp12281/first-secret-pod.yaml"
     When I run the :create client command with:
       | filename | first-secret-pod.yaml |
-    Given I obtain test data file "secrets/tc483168/second-secret-pod.yaml"
+    Given I obtain test data file "secrets/ocp12281/second-secret-pod.yaml"
     And I run the :create client command with:
       | filename | second-secret-pod.yaml |
     Then the step should succeed

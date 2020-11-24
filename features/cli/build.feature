@@ -182,7 +182,7 @@ Feature: build 'apps' with CLI
   # @case_id OCP-11227
   Scenario: Add multiple source inputs
     Given I have a project
-    Given I obtain test data file "templates/tc517667/ruby22rhel7-template-sti.json"
+    Given I obtain test data file "templates/ocp11227/ruby22rhel7-template-sti.json"
     When I run the :new_app client command with:
       | file | ruby22rhel7-template-sti.json |
     Given the "ruby-sample-build-1" build completes
@@ -206,7 +206,7 @@ Feature: build 'apps' with CLI
   # @case_id OCP-10771
   Scenario: Add a image with multiple paths as source input
     Given I have a project
-    Given I obtain test data file "templates/tc517666/ruby22rhel7-template-sti.json"
+    Given I obtain test data file "templates/ocp10771/ruby22rhel7-template-sti.json"
     When I run the :new_app client command with:
       | file | ruby22rhel7-template-sti.json |
     Given the "ruby-sample-build-1" build completes
@@ -246,7 +246,7 @@ Feature: build 'apps' with CLI
     Given I get project builds
     #Create a deploymentconfig to generate pods to test on,
     #Avoids the use of direct docker commands.
-    When I obtain test data file "templates/tc517670/dc.json"
+    When I obtain test data file "templates/ocp11943/dc.json"
     Then the step should succeed
     Given I replace lines in "dc.json":
       | replaceme | final-app |
@@ -312,7 +312,7 @@ Feature: build 'apps' with CLI
   # @case_id OCP-11552
   Scenario: Using a docker image as source input for docker build
     Given I have a project
-    Given I obtain test data file "templates/tc517668/ruby22rhel7-template-docker.json"
+    Given I obtain test data file "templates/ocp11552/ruby22rhel7-template-docker.json"
     When I run the :new_app client command with:
       | file | ruby22rhel7-template-docker.json |
     Given the "ruby-sample-build-1" build completes
@@ -678,7 +678,7 @@ Feature: build 'apps' with CLI
       | app_repo     | https://github.com/openshift/ruby-hello-world.git |
       | image_stream | ruby:latest                                       |
     Then the step should succeed
-    Given I obtain test data file "templates/tc539699/build.yaml"
+    Given I obtain test data file "templates/ocp11023/build.yaml"
     When I run the :create client command with:
       | f | build.yaml |
     Then the step should succeed

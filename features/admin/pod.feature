@@ -220,7 +220,7 @@ Feature: pod related features
     Then the step should succeed
     Given SCC "privileged" is added to the "default" user
     Given I store the schedulable nodes in the :nodes clipboard
-    Given I obtain test data file "secrets/tc483170/secret-nginx-2.yaml"
+    Given I obtain test data file "secrets/ocp12338/secret-nginx-2.yaml"
     When I run the :create client command with:
       | f | secret-nginx-2.yaml |
     Then the step should succeed
@@ -235,7 +235,7 @@ Feature: pod related features
     Then the output should match:
       | password:\\s+11 bytes |
       | username:\\s+9 bytes  |
-    Given I obtain test data file "secrets/tc483170/secret-pod-nginx-2.yaml"
+    Given I obtain test data file "secrets/ocp12338/secret-pod-nginx-2.yaml"
     When I run oc create over "secret-pod-nginx-2.yaml" replacing paths:
       | ["spec"]["nodeName"] | <%= cb.nodes[0].name %> |
     And the step should succeed
