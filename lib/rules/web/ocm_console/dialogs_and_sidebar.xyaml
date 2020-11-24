@@ -405,12 +405,17 @@ edit_cluster_registration_dialog_missing:
             xpath: //div[@role='dialog' and @aria-label='Edit cluster registration']
         missing: true
         timeout: 10
-check_compute_node_count_field_in_scale_dialog:
-  elements:
-  - selector:
-      xpath: //label[@for='nodes_compute']/span[text()='Compute node count']
-  - selector:
-      xpath: //select[@name='nodes_compute']
+check_edit_loadbalancers_and_storage_button_in_dropdown:
+  element: &edit_loadbalancers_and_storage_button
+    selector:
+      xpath: //button[text()='Edit load balancers and persistent storage']
+click_edit_loadbalancers_and_storage_button_in_dropdown:
+  element:
+    <<: *edit_loadbalancers_and_storage_button
+    op: click
+go_to_edit_loadbalancers_and_storage_dialog_on_cluster_detail_page:
+  action: expand_actions_on_cluster_detail_page
+  action: click_edit_loadbalancers_and_storage_button_in_dropdown
 check_load_balancers_field_in_scale_dialog:
   elements:
   - selector:
