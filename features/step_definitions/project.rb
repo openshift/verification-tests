@@ -66,6 +66,19 @@ Given /^I create a project with non-leading digit name$/ do
   end
 end
 
+# create a new project w/ a leading digit to test OVS quoting
+Given /^I create a project with leading digit name$/ do
+  name = rand_str(5, :num) + rand_str(3, :dns952)
+  @result = BushSlicer::Project.create(by: user, name: name)
+  if @result[:success]
+    @projects << @result[:project]
+    @result = @result[:project].wait_to_be_created(user)
+    unless @result[:success]
+      logger.warn("Project #{@projects.last.name} not visible on server after create")
+    end
+  end
+end
+
 # create x number of projects
 Given /^I create (\d+) new projects?$/ do |num|
   (1..Integer(num)).each {
