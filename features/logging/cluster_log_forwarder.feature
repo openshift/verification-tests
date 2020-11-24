@@ -329,7 +329,7 @@ Feature: cluster log forwarder features
 
     Given I obtain test data file "logging/clusterlogging/example_indexmanagement.yaml"
     When I create clusterlogging instance with:
-      | remove_logging_pods | true         |
+      | remove_logging_pods | true                         |
       | crd_yaml            | example_indexmanagement.yaml |
     Then the step should succeed
 
