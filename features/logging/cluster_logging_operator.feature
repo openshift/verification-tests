@@ -133,3 +133,22 @@ Feature: cluster-logging-operator related test
     And the expression should be true> elasticsearch('elasticsearch').policy_ref(name: 'audit') == "audit-policy"
     And the expression should be true> elasticsearch('elasticsearch').delete_min_age(name: "audit-policy") == cluster_logging('instance').audit_max_age
     And the expression should be true> elasticsearch('elasticsearch').rollover_max_age(name: "audit-policy") == "1h"
+
+  # @author qitang@redhat.com
+  # @case_id OCP-33721
+  @admin
+  @destructive
+  @commonlogging
+  Scenario: OpenShift Logging dashboard
+    Given I switch to the first user
+    And the first user is cluster-admin
+    And I open admin console in a browser
+    When I run the :goto_monitoring_db_cluster_logging web action
+    Then the step should succeed
+    Given evaluation of `["Elastic Cluster Status", "Elastic Nodes", "Elastic Shards", "Elastic Documents", "Total Index Size on Disk", "Elastic Pending Tasks", "Elastic JVM GC time", "Elastic JVM GC Rate", "Elastic Query/Fetch Latency | Sum", "Elastic Query Rate | Top 5", "CPU", "Elastic JVM Heap Used", "Elasticsearch Disk Usage", "File Descriptors In Use", "FluentD emit count", "FluentD Buffer Availability", "Elastic rx bytes", "Elastic Index Failure Rate", "FluentD Output Error Rate"]` is stored in the :cards clipboard
+    And I repeat the following steps for each :card in cb.cards:
+    """
+    When I perform the :check_monitoring_dashboard_card web action with:
+      | card_name | #{cb.card} |
+    Then the step should succeed
+    """
