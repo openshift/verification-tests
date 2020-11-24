@@ -73,6 +73,7 @@ Given /^I install metering service using:$/ do | table |
   # if we have an existing metering installation and the meteringconfig hive
   # storage type is different, then we delete the existing meteringconfig
   if metering_config(cb.metering_ns).exists?
+    logger.info("Found existing meteringconfig, removing it...")
     if metering_config(cb.metering_ns).hive_type != storage_type
       step %Q(I ensure "<%= cb.metering_ns %>" meteringconfig is deleted)
     end
@@ -507,6 +508,7 @@ end
 # 3. create PV
 # @return clipboard with :default_sc, :nfs_svc_ip, :sc
 Given /^I set up environment for metering sharedPVC$/ do
+  logger.info("Setting up environment for metering sharedPVC...")
   step %Q(I use the "#{project.name}" project)
   step %Q(I have a NFS service in the project) unless service('nfs-service').exists?
   cb[:nfs_svc_ip] = service('nfs-service').ip
@@ -524,6 +526,9 @@ Given /^I set up environment for metering sharedPVC$/ do
   end
   step %Q(I run oc create as admin over ERB test file: metering/configs/pv_metering.yaml)
   step %Q(the step should succeed)
+  step %Q/a pod becomes ready with labels:/, table(%{
+    | app=metering-operator,name=metering-operator |
+  })
 end
 
 # @return set cb.metering_project_setup_done to be DRY
@@ -558,9 +563,11 @@ Given /^I prepare OLM via CLI$/ do
   step %Q(I set operator channel)
   cb[:default_channel] = cb.channel
   # 2. create operatorgroup
+  logger.info("Creating metering operatorgroup...")
   step %Q(I run oc create as admin over ERB test file: metering/configs/metering_operatorgroup.yaml)
   #step %Q/the step should succeed/
   # 3. create subscription
+  logger.info("Creating metering subscription...")
   step %Q(I run oc create as admin over ERB test file: metering/configs/metering_subscription.yaml)
   #step %Q/the step should succeed/
 end
