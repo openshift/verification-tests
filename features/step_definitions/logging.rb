@@ -767,14 +767,11 @@ Given /^I get(?: (\d+))? records from the #{QUOTED} kafka topic in the #{QUOTED}
   })
 
   # wait up to 1 minutes for the kafka message
-  success = wait_for(60, interval: 10) {
+  success = wait_for(60, interval: 15) {
     @result = user.cli_exec(:logs, {resource_name: "#{pod.name}"})
-    if @result[:response].match("pipeline_metadata")
-      @result[:success] = true
-    else
-      @result[:success] = false
-    end
+    @result[:response].match("pipeline_metadata")
   }
+  raise "Couldn't received logs from the kafka topic #{topic_name}" unless success
 end
 
 # Register an topic consumer which listen the topic continuously. we can verify the logging records by the next step 'I get N logs from the X kafka consumer job'
@@ -808,11 +805,7 @@ Given /^I get(?: (\d+))? logs from the #{QUOTED} kafka consumer job in the #{QUO
     else
       @result = user.cli_exec(:logs, {resource_name: "#{pod.name}"})
     end
-
-    if @result[:response].match("pipeline_metadata")
-      @result[:success] = true
-    else
-      @result[:success] = false
-    end
+    @result[:response].match("pipeline_metadata")
   }
+  raise "Couldn't retrieve kafka records #{pod.name}" unless success
 end
