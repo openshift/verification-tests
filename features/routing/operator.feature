@@ -31,14 +31,14 @@ Feature: Testing Ingress Operator related scenarios
     # create route in the first namespace
     Given I switch to the first user
     And I have a project
-    Given I obtain test data file "routing/caddy-docker.json"
+    Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
-      | f | caddy-docker.json |
+      | f | web-server-1.yaml |
     Then the step should succeed
-    Given the pod named "caddy-docker" becomes ready
-    Given I obtain test data file "routing/unsecure/service_unsecure.json"
+    Given the pod named "web-server-1" becomes ready
+    Given I obtain test data file "routing/service_unsecure.yaml"
     When I run the :create client command with:
-      | f | service_unsecure.json |
+      | f | service_unsecure.yaml |
     Then the step should succeed
     When I run the :expose client command with:
       | resource      | service          |
@@ -50,15 +50,15 @@ Feature: Testing Ingress Operator related scenarios
     # switch to another user/namespace and create one same hostname with different path
     Given I switch to the second user
     And I have a project
-    Given I obtain test data file "routing/caddy-docker.json"
+    Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
-      | f | caddy-docker.json |
+      | f | web-server-1.yaml |
     Then the step should succeed
-    Given the pod named "caddy-docker" becomes ready
+    Given the pod named "web-server-1" becomes ready
     And evaluation of `pod.ip` is stored in the :pod_ip clipboard
-    Given I obtain test data file "routing/unsecure/service_unsecure.json"
+    Given I obtain test data file "routing/service_unsecure.yaml"
     When I run the :create client command with:
-      | f | service_unsecure.json |
+      | f | service_unsecure.yaml |
     Then the step should succeed
     When I run the :expose client command with:
       | resource      | service            |

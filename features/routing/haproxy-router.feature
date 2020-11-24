@@ -5,18 +5,18 @@ Feature: Testing haproxy router
   Scenario: haproxy cookies based sticky session for unsecure routes
     #create route and service which has two endpoints
     Given I have a project
-    Given I obtain test data file "routing/caddy-docker.json"
+    Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
-      | f | caddy-docker.json |
+      | f | web-server-1.yaml |
     Then the step should succeed
-    Given I obtain test data file "routing/caddy-docker-2.json"
+    Given I obtain test data file "routing/web-server-2.yaml"
     When I run the :create client command with:
-      | f | caddy-docker-2.json |
+      | f | web-server-2.yaml |
     Then the step should succeed
     And all pods in the project are ready
-    Given I obtain test data file "routing/unsecure/service_unsecure.json"
+    Given I obtain test data file "routing/service_unsecure.yaml"
     When I run the :create client command with:
-      | f | service_unsecure.json |
+      | f | service_unsecure.yaml |
     Then the step should succeed
     When I expose the "service-unsecure" service
     Then the step should succeed
@@ -61,21 +61,21 @@ Feature: Testing haproxy router
   Scenario: haproxy cookies based sticky session for edge termination routes
     #create route and service which has two endpoints
     Given I have a project
-    Given I obtain test data file "routing/caddy-docker.json"
+    Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
-      | f | caddy-docker.json |
+      | f | web-server-1.yaml |
     Then the step should succeed
-    Given I obtain test data file "routing/caddy-docker-2.json"
+    Given I obtain test data file "routing/web-server-2.yaml"
     When I run the :create client command with:
-      | f | caddy-docker-2.json |
+      | f | web-server-2.yaml |
     Then the step should succeed
     And all pods in the project are ready
-    Given I obtain test data file "routing/edge/service_unsecure.json"
+    Given I obtain test data file "routing/service_unsecure.yaml"
     When I run the :create client command with:
-      | f | service_unsecure.json |
+      | f | service_unsecure.yaml |
     Then the step should succeed
     When I run the :create_route_edge client command with:
-      | name | route-edge |
+      | name    | route-edge       |
       | service | service-unsecure |
     Then the step should succeed
 
@@ -121,17 +121,17 @@ Feature: Testing haproxy router
   # @case_id OCP-11619
   Scenario: Limit the number of TCP connection per IP in specified time period
     Given I have a project
-    Given I obtain test data file "routing/caddy-docker.json"
+    Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
-      | f | caddy-docker.json |
+      | f | web-server-1.yaml |
     Then the step should succeed
-    And the pod named "caddy-docker" becomes ready
-    Given I obtain test data file "routing/passthrough/service_secure.json"
+    And the pod named "web-server-1" becomes ready
+    Given I obtain test data file "routing/service_secure.yaml"
     When I run the :create client command with:
-      | f | service_secure.json |
+      | f | service_secure.yaml |
     Then the step should succeed
     When I run the :create_route_passthrough client command with:
-      | name | route-pass |
+      | name    | route-pass     |
       | service | service-secure |
     Then the step should succeed
 
@@ -174,12 +174,12 @@ Feature: Testing haproxy router
 
     Given I switch to the first user
     And I have a project
-    Given I obtain test data file "routing/list_for_caddy.json"
-    When I run the :create client command with:
-      | f | list_for_caddy.json |
+    Given I obtain test data file "routing/web-server-rc.yaml"
+    When I run oc create over "web-server-rc.yaml" replacing paths:
+      | ["items"][0]["spec"]["replicas"] | 2 |
     Then the step should succeed
     Given a pod becomes ready with labels:
-      | name=caddy-pods |
+      | name=web-server-rc |
     Then evaluation of `pod.ip` is stored in the :pod_ip clipboard
 
     # create unsecure route
@@ -213,12 +213,12 @@ Feature: Testing haproxy router
 
     Given I switch to the first user
     And I have a project
-    Given I obtain test data file "routing/list_for_caddy.json"
-    When I run the :create client command with:
-      | f | list_for_caddy.json |
+    Given I obtain test data file "routing/web-server-rc.yaml"
+    When I run oc create over "web-server-rc.yaml" replacing paths:
+      | ["items"][0]["spec"]["replicas"] | 2 |
     Then the step should succeed
     Given a pod becomes ready with labels:
-      | name=caddy-pods |
+      | name=web-server-rc |
     Then evaluation of `pod.ip` is stored in the :pod_ip clipboard
 
     When I run the :create_route_edge client command with:
@@ -247,21 +247,21 @@ Feature: Testing haproxy router
   Scenario: Set balance leastconn for passthrough routes
     Given I have a project
     And I store an available router IP in the :router_ip clipboard
-    Given I obtain test data file "routing/caddy-docker.json"
+    Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
-      | f | caddy-docker.json |
+      | f | web-server-1.yaml |
     Then the step should succeed
-    Given I obtain test data file "routing/caddy-docker-2.json"
+    Given I obtain test data file "routing/web-server-2.yaml"
     When I run the :create client command with:
-      | f | caddy-docker-2.json |
+      | f | web-server-2.yaml |
     Then the step should succeed
     And all pods in the project are ready
-    Given I obtain test data file "routing/passthrough/service_secure.json"
+    Given I obtain test data file "routing/service_secure.yaml"
     When I run the :create client command with:
-      | f | service_secure.json |
+      | f | service_secure.yaml |
     Then the step should succeed
     When I run the :create_route_passthrough client command with:
-      | name | route-pass |
+      | name    | route-pass     |
       | service | service-secure |
     Then the step should succeed
 
@@ -297,18 +297,18 @@ Feature: Testing haproxy router
   # @case_id OCP-11679
   Scenario: Disable haproxy hash based sticky session for unsecure routes
     Given I have a project
-    Given I obtain test data file "routing/caddy-docker.json"
+    Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
-      | f | caddy-docker.json |
+      | f | web-server-1.yaml |
     Then the step should succeed
-    Given I obtain test data file "routing/caddy-docker-2.json"
+    Given I obtain test data file "routing/web-server-2.yaml"
     When I run the :create client command with:
-      | f | caddy-docker-2.json |
+      | f | web-server-2.yaml |
     Then the step should succeed
     And all pods in the project are ready
-    Given I obtain test data file "routing/unsecure/service_unsecure.json"
+    Given I obtain test data file "routing/service_unsecure.yaml"
     When I run the :create client command with:
-      | f | service_unsecure.json |
+      | f | service_unsecure.yaml |
     Then the step should succeed
     When I expose the "service-unsecure" service
     Then the step should succeed
@@ -331,8 +331,8 @@ Feature: Testing haproxy router
       | bash | -c | for i in {1..10} ; do curl -sS  http://<%= route("service-unsecure", service("service-unsecure")).dns(by: user) %>/ -b /tmp/cookies ; done |
     Then the step should succeed
     And the output should contain:
-      | Hello-OpenShift-1 |
-      | Hello-OpenShift-2 |
+      | Hello-OpenShift web-server-1 |
+      | Hello-OpenShift web-server-2 |
 
   # @author hongli@redhat.com
   # @case_id OCP-15872
@@ -341,18 +341,18 @@ Feature: Testing haproxy router
     #create route and service which has two endpoints
     Given the master version >= "3.7"
     Given I have a project
-    Given I obtain test data file "routing/caddy-docker.json"
+    Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
-      | f | caddy-docker.json |
+      | f | web-server-1.yaml |
     Then the step should succeed
-    Given I obtain test data file "routing/caddy-docker-2.json"
+    Given I obtain test data file "routing/web-server-2.yaml"
     When I run the :create client command with:
-      | f | caddy-docker-2.json |
+      | f | web-server-2.yaml |
     Then the step should succeed
     And all pods in the project are ready
-    Given I obtain test data file "routing/unsecure/service_unsecure.json"
+    Given I obtain test data file "routing/service_unsecure.yaml"
     When I run the :create client command with:
-      | f | service_unsecure.json |
+      | f | service_unsecure.yaml |
     Then the step should succeed
     When I expose the "service-unsecure" service
     Then the step should succeed
@@ -386,18 +386,18 @@ Feature: Testing haproxy router
     #create route and service which has two endpoints
     Given the master version >= "3.7"
     Given I have a project
-    Given I obtain test data file "routing/caddy-docker.json"
+    Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
-      | f | caddy-docker.json |
+      | f | web-server-1.yaml |
     Then the step should succeed
-    Given I obtain test data file "routing/caddy-docker-2.json"
+    Given I obtain test data file "routing/web-server-2.yaml"
     When I run the :create client command with:
-      | f | caddy-docker-2.json |
+      | f | web-server-2.yaml |
     Then the step should succeed
     And all pods in the project are ready
-    Given I obtain test data file "routing/edge/service_unsecure.json"
+    Given I obtain test data file "routing/service_unsecure.yaml"
     When I run the :create client command with:
-      | f | service_unsecure.json |
+      | f | service_unsecure.yaml |
     Then the step should succeed
     When I run the :create_route_edge client command with:
       | name    | edge-route       |
