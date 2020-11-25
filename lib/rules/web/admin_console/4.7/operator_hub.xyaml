@@ -558,7 +558,7 @@ check_condition_status:
     timeout: 20
   - selector:
       xpath: //span[contains(.,'Condition') and contains(.,'<status>')]
-
+    timeout: 20
 ## project selector: one project
 check_column_header_for_one_namespace:
   action: check_managed_namespace_column_header

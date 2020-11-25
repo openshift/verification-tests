@@ -190,7 +190,7 @@ goto_create_app_from_imagestream_page:
 goto_create_app_from_template_page:
   params:
     template_namespace: openshift
-  url: catalog/instantiate-template?template==<template_name>&template-ns=<template_namespace>&preselected-ns=<project_name>
+  url: catalog/instantiate-template?template=<template_name>&template-ns=<template_namespace>&preselected-ns=<project_name>
 
 # monitoring
 goto_monitoring_metrics_page:

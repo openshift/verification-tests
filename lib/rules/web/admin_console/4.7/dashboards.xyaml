@@ -168,7 +168,7 @@ check_resources_pod_dashboard:
 check_cluster_utilization_items:
   elements:
   - selector:
-      xpath: //h2[contains(@class,'co-dashboard-card__title') and text()='Cluster Utilization']
+      xpath: //h2[contains(@class,'co-dashboard-card__title') and text()='Cluster utilization']
     timeout: 30 
   - selector:
       xpath: //div[contains(@class,'co-utilization-card__item')]//h4[text()='CPU']
@@ -177,7 +177,7 @@ check_cluster_utilization_items:
   - selector:
       xpath: //div[contains(@class,'co-utilization-card__item')]//h4[text()='Filesystem']
   - selector:
-      xpath: //div[contains(@class,'co-utilization-card__item')]//h4[text()='Network Transfer']
+      xpath: //div[contains(@class,'co-utilization-card__item')]//h4[text()='Network transfer']
   - selector:
       xpath: //div[contains(@class,'co-utilization-card__item')]//h4[text()='Pod count']
 click_cpu_data:
@@ -203,12 +203,12 @@ click_pod_count_data:
 click_network_in_data:
   element:
     selector:
-      xpath: //h4[text()='Network Transfer']/..//button[contains(@class,'co-dashboard-card__button-link')][1]
+      xpath: //h4[text()='Network transfer']/..//button[contains(@class,'co-dashboard-card__button-link')][1]
     op: click
 click_network_out_data:
   element:
     selector:
-      xpath: //h4[text()='Network Transfer']/..//button[contains(@class,'co-dashboard-card__button-link')][2]
+      xpath: //h4[text()='Network transfer']/..//button[contains(@class,'co-dashboard-card__button-link')][2]
     op: click
     timeout: 60
 choose_consumer_measure:
