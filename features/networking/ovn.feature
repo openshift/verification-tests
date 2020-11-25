@@ -1,5 +1,6 @@
 Feature: OVN related networking scenarios
 
+
   # @author anusaxen@redhat.com
   # @case_id OCP-29954
   @admin
@@ -376,6 +377,7 @@ Feature: OVN related networking scenarios
     """
     And admin waits for all pods in the project to become ready up to 120 seconds
 
+
   # @author rbrattai@redhat.com
   # @case_id OCP-26138
   @admin
@@ -444,3 +446,21 @@ Feature: OVN related networking scenarios
     """
     And admin waits for all pods in the project to become ready up to 120 seconds
 
+
+  # @author rbrattai@redhat.com
+  # @case_id OCP-37031
+  @admin
+  Scenario: OVN handles projects that start with a digit
+    Given the env is using "OVNKubernetes" networkType
+    Given I create a project with leading digit name
+    And I obtain test data file "networking/list_for_pods.json"
+    When I run the :create client command with:
+      | f | list_for_pods.json |
+    Then the step should succeed
+    Given 2 pods become ready with labels:
+      | name=test-pods |
+    When I run command on the "<%= pod(0).node_name %>" node's sdn pod:
+      | bash | -c | ovs-vsctl list interface \| grep iface-id |
+    Then the step should succeed
+    # the iface-id should be quoted if it starts with a digit
+    And the output should contain "<%= project.name %>"
