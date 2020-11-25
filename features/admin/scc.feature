@@ -12,7 +12,7 @@ Feature: SCC policy related scenarios
     Then the step should succeed
     Given I obtain test data file "authorization/scc/ocp11762/dc.json"
     When I run the :create client command with:
-      | f | tc_dc.json |
+      | f | dc.json |
     And I register clean-up steps:
     """
     I run the :delete admin command with:
