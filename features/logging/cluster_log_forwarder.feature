@@ -326,28 +326,7 @@ Feature: cluster log forwarder features
     Then the step should succeed
     Given I switch to cluster admin pseudo user
     And I use the "openshift-logging" project
-
-    Given I obtain test data file "logging/clusterlogging/example_indexmanagement.yaml"
-    When I create clusterlogging instance with:
-      | remove_logging_pods | true                         |
-      | crd_yaml            | example_indexmanagement.yaml |
-    Then the step should succeed
-
-    Given I wait for the "app" index to appear in the ES pod with labels "es-node-master=true"
-    And I wait for the project "<%= cb.proj.name %>" logs to appear in the ES pod
-    
-    When I perform the HTTP request on the ES pod with labels "es-node-master=true":
-      | relative_url | infra*/_count?pretty  |
-      | op           | GET                   |
-    Then the step should succeed
-    And the expression should be true> @result[:parsed]['count'] > 0
-    When I perform the HTTP request on the ES pod with labels "es-node-master=true":
-      | relative_url | audit*/_count?pretty  |
-      | op           | GET                   |
-    Then the step should succeed
-    And the expression should be true> @result[:parsed]['count'] = 0
-    
-    # forward logs to rsyslog server
+  
     Given rsyslog receiver is deployed as insecure in the "openshift-logging" project
     Given admin ensures "instance" cluster_log_forwarder is deleted from the "openshift-logging" project after scenario
     Given I obtain test data file "logging/clusterlogforwarder/rsyslog/<file>"
@@ -355,10 +334,17 @@ Feature: cluster log forwarder features
       | f | <file> |
     Then the step should succeed
     And I wait for the "instance" cluster_log_forwarder to appear
-    
-    Given 10 seconds have passed
+
+    Given I obtain test data file "logging/clusterlogging/fluentd_only.yaml"
+    When I create clusterlogging instance with:
+      | remove_logging_pods | true              |
+      | crd_yaml            | fluentd_only.yaml |
+      | check_status        | false             |
+    Then the step should succeed
+    Given I wait for the "fluentd" daemon_set to appear up to 300 seconds
     And <%= daemon_set('fluentd').replica_counters[:desired] %> pods become ready with labels:
       | logging-infra=fluentd |
+        
     Given I wait up to 300 seconds for the steps to pass:
     """
     And I execute on the "<%= cb.log_receiver.name %>" pod:
