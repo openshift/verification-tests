@@ -126,10 +126,10 @@ Feature: cluster-logging-operator related test
     """
     And the expression should be true> elasticsearch('elasticsearch').policy_ref(name: 'app') == "app-policy"
     And the expression should be true> elasticsearch('elasticsearch').delete_min_age(name: "app-policy") == cluster_logging('instance').application_max_age
-    And the expression should be true> elasticsearch('elasticsearch').rollover_max_age(name: "app-policy") == "1h"
+    And the expression should be true> elasticsearch('elasticsearch').rollover_max_age(name: "app-policy") == "3m"
     And the expression should be true> elasticsearch('elasticsearch').policy_ref(name: 'infra') == "infra-policy"
     And the expression should be true> elasticsearch('elasticsearch').delete_min_age(name: "infra-policy") == cluster_logging('instance').infra_max_age
-    And the expression should be true> elasticsearch('elasticsearch').rollover_max_age(name: "infra-policy") == "8h"
+    And the expression should be true> elasticsearch('elasticsearch').rollover_max_age(name: "infra-policy") == "9m"
     And the expression should be true> elasticsearch('elasticsearch').policy_ref(name: 'audit') == "audit-policy"
     And the expression should be true> elasticsearch('elasticsearch').delete_min_age(name: "audit-policy") == cluster_logging('instance').audit_max_age
     And the expression should be true> elasticsearch('elasticsearch').rollover_max_age(name: "audit-policy") == "1h"
