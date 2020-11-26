@@ -23,6 +23,8 @@ Feature: Testing haproxy router
 
     Given I have a pod-for-ping in the project
     #access the route without cookies
+    Given I wait for the steps to pass:
+    """
     When I execute on the pod:
       | curl |
       | -sS |
@@ -30,8 +32,8 @@ Feature: Testing haproxy router
       | -c |
       | /tmp/cookies |
     Then the step should succeed
-    And the output should contain "Hello-OpenShift"
-    And evaluation of `@result[:response]` is stored in the :first_access clipboard
+    And the output should contain "Hello-OpenShift web-server-2"
+    """
     Given I wait for the steps to pass:
     """
     When I execute on the pod:
@@ -39,8 +41,7 @@ Feature: Testing haproxy router
       | -sS |
       | http://<%= route("service-unsecure", service("service-unsecure")).dns(by: user) %>/ |
     Then the step should succeed
-    And the output should contain "Hello-OpenShift"
-    And the expression should be true> cb.first_access != @result[:response]
+    And the output should contain "Hello-OpenShift web-server-1"
     """
     #access the route with cookies
     Given I run the steps 6 times:
@@ -52,8 +53,7 @@ Feature: Testing haproxy router
       | -b |
       | /tmp/cookies |
     Then the step should succeed
-    And the output should contain "Hello-OpenShift"
-    And the expression should be true> cb.first_access == @result[:response]
+    And the output should contain "Hello-OpenShift web-server-2"
     """
 
   # @author bmeng@redhat.com
@@ -80,7 +80,9 @@ Feature: Testing haproxy router
     Then the step should succeed
 
     Given I have a pod-for-ping in the project
-    #access the route without cookies
+    # access the route without cookies
+    Given I wait for the steps to pass:
+    """
     When I execute on the pod:
       | curl |
       | -sS |
@@ -89,8 +91,8 @@ Feature: Testing haproxy router
       | -c |
       | /tmp/cookies |
     Then the step should succeed
-    And the output should contain "Hello-OpenShift"
-    And evaluation of `@result[:response]` is stored in the :first_access clipboard
+    And the output should contain "Hello-OpenShift web-server-1"
+    """
     Given I wait for the steps to pass:
     """
     When I execute on the pod:
@@ -99,10 +101,9 @@ Feature: Testing haproxy router
       | https://<%= route("route-edge", service("route-edge")).dns(by: user) %>/ |
       | -k |
     Then the step should succeed
-    And the output should contain "Hello-OpenShift"
-    And the expression should be true> cb.first_access != @result[:response]
+    And the output should contain "Hello-OpenShift web-server-2"
     """
-    #access the route with cookies
+    # access the route with cookies
     Given I run the steps 6 times:
     """
     When I execute on the pod:
@@ -113,8 +114,7 @@ Feature: Testing haproxy router
       | -b |
       | /tmp/cookies |
     Then the step should succeed
-    And the output should contain "Hello-OpenShift"
-    And the expression should be true> cb.first_access == @result[:response]
+    And the output should contain "Hello-OpenShift web-server-1"
     """
 
   # @author bmeng@redhat.com
@@ -274,6 +274,8 @@ Feature: Testing haproxy router
 
     Given I have a pod-for-ping in the project
     And I use the "service-secure" service
+    Given I wait for the steps to pass:
+    """
     When I execute on the pod:
       | curl                                                   |
       | -ksS                                                   |
@@ -281,8 +283,8 @@ Feature: Testing haproxy router
       | <%= route("route-pass").dns(by: user) %>:443:<%= cb.router_ip[0] %> |
       | https://<%= route("route-pass").dns(by: user) %> |
     Then the step should succeed
-    And the output should contain "Hello-OpenShift"
-    And evaluation of `@result[:response]` is stored in the :first_access clipboard
+    And the output should contain "Hello-OpenShift web-server-2"
+    """
     When I execute on the pod:
       | curl                                                   |
       | -ksS                                                   |
@@ -290,8 +292,7 @@ Feature: Testing haproxy router
       | <%= route("route-pass").dns(by: user) %>:443:<%= cb.router_ip[0] %> |
       | https://<%= route("route-pass").dns(by: user) %> |
     Then the step should succeed
-    And the output should contain "Hello-OpenShift"
-    And the expression should be true> cb.first_access != @result[:response]
+    And the output should contain "Hello-OpenShift web-server-1"
 
   # @author yadu@redhat.com
   # @case_id OCP-11679
@@ -367,17 +368,16 @@ Feature: Testing haproxy router
     Given I wait up to 30 seconds for the steps to pass:
     """
     When I open web server via the "service-unsecure" route
-    Then the output should contain "Hello-OpenShift"
+    Then the output should contain "Hello-OpenShift web-server-2"
     And the expression should be true> @result[:cookies].any? {|c| c.name == "unsecure-cookie_1"}
     """
-    And evaluation of `@result[:response]` is stored in the :first_access clipboard
 
-    #access the route with cookies
+    # access the route with cookies
     Given HTTP cookies from result are used in further request
     Given I run the steps 6 times:
     """
-    When I wait for a web server to become available via the "service-unsecure" route
-    Then the expression should be true> cb.first_access == @result[:response]
+    When I open web server via the "service-unsecure" route
+    Then the output should contain "Hello-OpenShift web-server-2"
     """
 
   # @author hongli@redhat.com
@@ -415,15 +415,14 @@ Feature: Testing haproxy router
     And I wait up to 30 seconds for the steps to pass:
     """
     When I open secure web server via the "edge-route" route
-    Then the output should contain "Hello-OpenShift"
+    Then the output should contain "Hello-OpenShift web-server-1"
     And the expression should be true> @result[:cookies].any? {|c| c.name == "2-edge_cookie"}
     """
-    And evaluation of `@result[:response]` is stored in the :first_access clipboard
 
-    #access the route with cookies
+    # access the route with cookies
     Given HTTP cookies from result are used in further request
     Given I run the steps 6 times:
     """
-    When I wait for a secure web server to become available via the "edge-route" route
-    And the expression should be true> cb.first_access == @result[:response]
+    When I open secure web server via the "edge-route" route
+    Then the output should contain "Hello-OpenShift web-server-1"
     """
