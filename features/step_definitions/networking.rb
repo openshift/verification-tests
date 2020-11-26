@@ -729,13 +729,8 @@ end
 
 Given /^the bridge interface named "([^"]*)" is deleted from the "([^"]*)" node$/ do |bridge_name, node_name|
   ensure_admin_tagged
-  check_and_delete_inf= %Q(if ip addr show  #{bridge_name};
-                           then
-                              ip link delete #{bridge_name};
-                           fi)
   node = node(node_name)
-  host = node.host
-  @result = host.exec_admin(check_and_delete_inf)
+  @result=step "I run command on the node's sdn pod:", table("| bash | -c | if ip addr show #{bridge_name};then ip link delete #{bridge_name};fi |")
   raise "Failed to delete bridge interface" unless @result[:success]
 end
 
