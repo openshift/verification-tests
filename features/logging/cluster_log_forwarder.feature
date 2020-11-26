@@ -295,3 +295,69 @@ Feature: cluster log forwarder features
       | file                                 | app_pipeline_name     | infra_pipeline_name   | audit_pipeline_name   |
       | clf-forward-with-same-tag.yaml       | forward-to-default-es | forward-to-default-es | forward-to-default-es | # @case_id OCP-33750
       | clf-forward-with-different-tags.yaml | forward-app-logs      | forward-infra-logs    | forward-audit-logs    | # @case_id OCP-33893
+
+  # @author gkarager@redhat.com
+  # @case_id OCP-33627
+  @admin
+  @destructive
+  Scenario: Forward logs to remote-syslog - config error
+    Given the master version >= "4.6"
+    Given I switch to cluster admin pseudo user
+    And I use the "openshift-logging" project
+
+    Given rsyslog receiver is deployed as insecure in the "openshift-logging" project
+    Given admin ensures "instance" cluster_log_forwarder is deleted from the "openshift-logging" project after scenario
+    Given I obtain test data file "logging/clusterlogforwarder/rsyslog/rsys_clf_invalid_values.yaml"
+    When I run the :create client command with:
+      | f | rsys_clf_invalid_values.yaml |
+    Then the step should fail
+
+  # @author gkarager@redhat.com
+  @admin
+  @destructive
+  Scenario Outline: Forward logs to remote-syslog
+    Given the master version >= "4.6"
+    Given I switch to the first user
+    And I create a project with non-leading digit name
+    And evaluation of `project` is stored in the :proj clipboard
+    Given I obtain test data file "logging/loggen/container_json_log_template.json"
+    When I run the :new_app client command with:
+      | file | container_json_log_template.json |
+    Then the step should succeed
+    Given I switch to cluster admin pseudo user
+    And I use the "openshift-logging" project
+  
+    Given rsyslog receiver is deployed as insecure in the "openshift-logging" project
+    Given admin ensures "instance" cluster_log_forwarder is deleted from the "openshift-logging" project after scenario
+    Given I obtain test data file "logging/clusterlogforwarder/rsyslog/<file>"
+    When I run the :create client command with:
+      | f | <file> |
+    Then the step should succeed
+    And I wait for the "instance" cluster_log_forwarder to appear
+
+    Given I obtain test data file "logging/clusterlogging/fluentd_only.yaml"
+    When I create clusterlogging instance with:
+      | remove_logging_pods | true              |
+      | crd_yaml            | fluentd_only.yaml |
+      | check_status        | false             |
+    Then the step should succeed
+    Given I wait for the "fluentd" daemon_set to appear up to 300 seconds
+    And <%= daemon_set('fluentd').replica_counters[:desired] %> pods become ready with labels:
+      | logging-infra=fluentd |
+        
+    Given I wait up to 300 seconds for the steps to pass:
+    """
+    And I execute on the "<%= cb.log_receiver.name %>" pod:
+      | ls | -l | /var/log/clf/ |
+    Then the output should contain:
+      | app-container.log   |
+      | audit.log           |
+      | infra.log           |
+      | infra-container.log |
+    """
+
+    Examples:
+      | file                  |
+      | rsys_clf_RFC3164.yaml | # @case_id OCP-32643
+      | rsys_clf_RFC5424.yaml | # @case_id OCP-32967
+      | rsys_clf_default.yaml | # @case_id OCP-32864
