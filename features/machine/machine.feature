@@ -410,4 +410,22 @@ Feature: Machine features testing
       | default-valued-33380         | <%= cb.template %>                        | <%= cb.diskGiB %> | # @case_id OCP-33380
       | default-valued-windows-35421 | 1909-template-docker-ssh-upgraded-vmtools | 135               | # @case_id OCP-35421
 
+  # @author miyadav@redhat.com
+  # @case_id OCP-36489
+  @admin
+  Scenario: [Azure] Machineset should not be created when publicIP:true in disconnected Azure enviroment
+    Given I have an IPI deployment
+    And I switch to cluster admin pseudo user
+    Then I use the "openshift-machine-api" project
+
+    Given I obtain test data file "cloud/ms-azure/ms_disconnected_env.yaml"
+    When I run oc create over "ms_disconnected_env.yaml" replacing paths:
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]           | <%= infrastructure("cluster").infra_name %> |
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"]        | disconnected-azure-36489                    |
+      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-cluster"]    | <%= infrastructure("cluster").infra_name %> |
+      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-machineset"] | disconnected-azure-36489                    |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["publicIP"]                         | true                                        |
+
+    And the output should contain:
+      | Forbidden: publicIP is not allowed in Azure disconnected installation |
 
