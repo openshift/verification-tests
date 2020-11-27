@@ -393,6 +393,30 @@ delete_catalogsource_kabab_operation:
   params:
     kebab_item: Delete CatalogSource
   action: click_one_operation_in_kebab
+check_display_name_column_in_table:
+  params:
+    field: Display Name
+  action: check_column_in_table
+check_scale_target_column_in_table:
+  params:
+    field: Scale Target
+  action: check_column_in_table
+check_min_pods_column_in_table:
+  params:
+    field: Min Pods
+  action: check_column_in_table
+check_max_pods_column_in_table:
+  params:
+    field: Max Pods
+  action: check_column_in_table
+check_highest_severity_column_in_table:
+  params:
+    field: Highest Severity
+  action: check_column_in_table
+check_affected_pods_column_in_table:
+  params:
+    field: Affected Pods
+  action: check_column_in_table
 check_column_in_table:
   action: wait_box_loaded
   elements:
@@ -925,6 +949,10 @@ check_key_and_action_link:
   element: &key_action
     selector:
       xpath: //dt[contains(text(),'<key>')]/following-sibling::dd[1]//button | //dt[contains(., '<key>')]/following-sibling::dd[1]//button
+click_pod_selector_on_resource_detail:
+  params:
+    key: Pod Selector
+  action: click_value_on_resource_detail
 click_value_on_resource_detail:
   element:
     <<: *key_value

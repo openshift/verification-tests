@@ -37,6 +37,7 @@ goto_builds_page:
   url: k8s/ns/<project_name>/builds
 goto_one_build_page:
   url: k8s/ns/<project_name>/builds/<build_name>
+  action: wait_page_body_loaded
 goto_one_build_environment_page:
   url: k8s/ns/<project_name>/builds/<build_name>/environment
   action: wait_box_loaded
@@ -67,14 +68,17 @@ goto_one_configmap_page:
 # cronjobs
 goto_cronjobs_page:
   url: k8s/ns/<project_name>/cronjobs
+  action: wait_box_loaded
 goto_one_cronjob_page:
   url: k8s/ns/<project_name>/cronjobs/<cronjob_name>
+  action: wait_box_loaded
 
 # jobs
 goto_jobs_page:
   url: k8s/ns/<project_name>/jobs
 goto_one_job_page:
   url: k8s/ns/<project_name>/jobs/<job_name>
+  action: wait_box_loaded
           
 # events
 goto_project_events:
@@ -287,6 +291,7 @@ goto_machineconfigs_page:
   url: k8s/cluster/machineconfiguration.openshift.io~v1~MachineConfig
 goto_machineconfig_pools_page:
   url: k8s/cluster/machineconfiguration.openshift.io~v1~MachineConfigPool
+  action: wait_box_loaded
 goto_machine_sets_page:
   url: k8s/ns/openshift-machine-api/machine.openshift.io~v1beta1~MachineSet
 goto_machineautoscaler_list_page:
