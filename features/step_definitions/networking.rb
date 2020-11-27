@@ -530,6 +530,8 @@ Given /^I store a random unused IP address from the reserved range to the#{OPT_S
 
   reserved_range = "#{cb.subnet_range}"
 
+  unused_ips=[]
+  #Save four unused ip in the clipboard
   # use the sdn pod instead of the ovs pod since we have switched to host OVS
   IPAddr.new(reserved_range).to_range.to_a.shuffle.each { |ip|
     @result = step "I run command on the node's sdn pod:", table(
@@ -537,12 +539,15 @@ Given /^I store a random unused IP address from the reserved range to the#{OPT_S
     )
     if @result[:exitstatus] == 0
       logger.info "The IP is in use."
+    elsif unused_ips.length < 4
+      unused_ips << ip.to_s
+      logger.info "Get the unused IP #{ip.to_s}"
     else
-      logger.info "The random unused IP is stored in the #{cb_name} clipboard."
-      cb[cb_name] = ip.to_s
       break
     end
   }
+  cb.valid_ips=unused_ips
+  cb[cb_name]=cb.valid_ips[0]
   raise "No available ip found in the range." unless IPAddr.new(cb[cb_name])
 end
 
@@ -1257,6 +1262,9 @@ Given /^I save egress type to the#{OPT_SYM} clipboard$/ do | cb_name |
   logger.info "The egressfirewall type is stored to the #{cb_name} clipboard."
 end
 
+# ipecho service is used for retrieve the source IP from the outbound traffic of the cluster
+# It is used for egress IP testing. Currently it is installed in a VM in vmc network.
+# Huiran Wang
 Given /^I save ipecho url to the#{OPT_SYM} clipboard$/ do | cb_name |
   ensure_admin_tagged
   cb_name = "ipecho_url" unless cb_name
