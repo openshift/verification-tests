@@ -356,7 +356,7 @@ Feature: OVN Egress IP related features
   @destructive
   Scenario: After reboot node or reboot OVN services EgressIP still work
     Given I save ipecho url to the clipboard
-    Given I store the schedulable nodes in the :nodes clipboard
+    Given I store the schedulable workers in the :nodes clipboard
     Then label "k8s.ovn.org/egress-assignable=true" is added to the "<%= cb.nodes[0].name %>" node
 
     #Get unused IP as egress ip
@@ -370,7 +370,15 @@ Feature: OVN Egress IP related features
       | name     | <%= cb.proj1 %>     |
       | key_val  | og=qe               |
     Then the step should succeed
-    And I have a pod-for-ping in the project
+
+    #Make sure the pod located on another node to avoid rebooting the node cause killing the pod
+    Given I obtain test data file "networking/list_for_pods.json"
+    When I run oc create over "list_for_pods.json" replacing paths:
+      | ["items"][0]["spec"]["template"]["spec"]["nodeName"] | <%= cb.nodes[1].name %> |
+      | ["items"][0]["spec"]["replicas"]                     | 1                       |
+    Then the step should succeed
+    Given a pod becomes ready with labels:
+      | name=test-pods |
 
     #Create egress ip object
     When I obtain test data file "networking/ovn-egressip/egressip1.yaml"
@@ -417,6 +425,8 @@ Feature: OVN Egress IP related features
     And admin ensures "egressip" egress_ip is deleted after scenario
 
     #Check events
+    Given I switch to cluster admin pseudo user
+    And I use the "default" project
     Then I wait up to 30 seconds for the steps to pass:
     """
     When I run the :get admin command with:
@@ -449,8 +459,8 @@ Feature: OVN Egress IP related features
     #Specify different node for pod than egressIP node
     Given I obtain test data file "networking/list_for_pods.json"
     When I run oc create over "list_for_pods.json" replacing paths:
-      | ["items"][0]["spec"]["template"]["spec"]["nodename"] | <%= cb.nodes[1].name %> |
-      | ["items"][0]["spec"]["replicas"] | 1 |
+      | ["items"][0]["spec"]["template"]["spec"]["nodeName"] | <%= cb.nodes[1].name %> |
+      | ["items"][0]["spec"]["replicas"]                     | 1                       |
     Then the step should succeed
     Given a pod becomes ready with labels:
       | name=test-pods |

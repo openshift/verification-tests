@@ -528,7 +528,7 @@ Given /^I store a random unused IP address from the reserved range to the#{OPT_S
   cb_name = "valid_ip" unless cb_name
   step "the subnet for primary interface on node is stored in the clipboard"
 
-  reserved_range = "#{cb.subnet_range}"
+  reserved_range = cb.subnet_range
 
   unused_ips=[]
   #Save four unused ip in the clipboard
@@ -827,7 +827,7 @@ Given /^the subnet for primary interface on node is stored in the#{OPT_SYM} clip
     "| bash | -c | ip -4 -brief a show \"<%= cb.interface %>\" \\| awk '{print $3}' |"
   )
   raise "Failed to get the subnet range for the primary interface on the node" unless @result[:success]
-  cb[cb_name] = @result[:response].chomp
+  cb[cb_name] = @result[:stdout].chomp
   logger.info "Subnet range for the primary interface on the node is stored in the #{cb_name} clipboard."
 end
 
