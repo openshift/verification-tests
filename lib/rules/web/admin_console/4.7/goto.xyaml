@@ -151,7 +151,7 @@ goto_project_pods_list_page:
 
 goto_cluster_oauth_configuration_page:
   url: k8s/cluster/config.openshift.io~v1~OAuth/cluster
-
+  action: wait_box_loaded
 
 #replica sets
 goto_replica_sets_page:
