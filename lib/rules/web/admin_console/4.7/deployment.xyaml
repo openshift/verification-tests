@@ -16,7 +16,7 @@ update_rollout_strategy:
 click_initcontainer_in_detail_page:
   element:
     selector:
-      xpath: //h2[contains(.,'Init Containers')]/..//span[contains(.,'<container_name>')]
+      xpath: //h2[contains(.,'Init containers')]/..//span[contains(.,'<container_name>')]
     op: click
 confirm_cancel_rollout:
   params:

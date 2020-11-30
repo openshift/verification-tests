@@ -380,7 +380,7 @@ click_one_operation_in_kebab:
   action: click_kebab_item
 cancel_build_kebab_operation:
   params:
-    kebab_item: Cancel Build
+    kebab_item: Cancel build
   action: click_one_operation_in_kebab
 edit_receiver_kebab_operation:
   params:
@@ -567,6 +567,14 @@ check_page_not_match:
   element:
     selector: *page_content
     missing: true
+check_no_data_found_text:
+  params:
+    content: No Data found
+  action: check_page_contains
+check_no_binary_data_text_missing:
+  params:
+    content: No Binary Data Found
+  action: check_page_not_match
 submit_changes:
   elements:
   - selector:
@@ -970,7 +978,7 @@ check_resource_name:
   action: check_resource_details_key_and_value
 check_resource_display_name:
   params:
-    key: Display Name
+    key: Display name
     value: <display_name>
   action: check_resource_details_key_and_value
 check_resource_labels:
@@ -1180,12 +1188,12 @@ check_resource_kind:
   action: check_resource_details_key_and_value
 check_api_group:
   params:
-    key: API Group
+    key: API group
     value: <api_group>
   action: check_resource_details_key_and_value
 check_api_version:
   params:
-    key: API Version
+    key: API version
     value: <api_version>
   action: check_resource_details_key_and_value
 check_namespaced:
@@ -1195,12 +1203,12 @@ check_namespaced:
   action: check_resource_details_key_and_value
 check_short_names:
   params:
-    key: Short Names
+    key: Short names
     value: <short_names>
   action: check_resource_details_key_and_value
 check_created_at:
   params:
-    key: Created At
+    key: Created at
   action: check_resource_details_key_only
 check_scale_target:
   params:
