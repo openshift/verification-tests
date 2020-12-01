@@ -677,6 +677,8 @@ check_power_upi_install_page:
             xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-installer.ppc64le.iso') and text()='Download RHCOS ISO']
         - selector:
             xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-metal.ppc64le.raw.gz') and text()='Download RHCOS RAW']
+        - selector:
+            xpath: //a[contains(@href,'rhcos-installerlive-kernel-s390x' and text()='kernel')]
 check_power_page_title:
     scripts:
     - command: return document.title=='Install OpenShift 4 | Red Hat OpenShift Cluster Manager | Power'
