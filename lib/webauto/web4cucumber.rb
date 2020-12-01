@@ -32,7 +32,7 @@ require_relative 'chrome_extension'
       :span => :spans
     }
 
-    ELEMENT_TIMEOUT = 10
+    ELEMENT_TIMEOUT = 20
 
     # @param logger [Object] should have methods `#info`, `#warn`, `#error` and
     #   `#debug` defined

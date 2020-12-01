@@ -80,6 +80,7 @@ cancel_rollout_action:
   params:
     item: Cancel Rollout
   action: click_one_dropdown_action
+  action: confirm_cancel_rollout
 delete_configmap_action:
   params:
     item: Delete Config Map

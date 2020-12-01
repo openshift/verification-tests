@@ -90,7 +90,7 @@ expand_pvc_size:
   action: click_button
 attach_storage_to_container:
   params:
-    item: Add Storage
+    item: Add storage
     content: You must choose at least one container to mount to
   action: goto_one_dc_page
   action: click_one_dropdown_action
@@ -115,20 +115,28 @@ attach_storage_to_container:
 check_volume_on_workload_page:
   elements:
   - selector: &volume_info
-      xpath: //h2[contains(., Volumes)]/following-sibling::div//tr[td[@data-label='Name' and contains(., '<volume_name>')] and td[@data-label='Mount Path' and contains(., '<mount_path>')] and td[contains(., '<pvc_name>')] and td[contains(., '<container_name>')]]
+      xpath: //h2[contains(., Volumes)]/following-sibling::div//tr[td[@data-label='Name' and contains(., '<volume_name>')] and td[@data-label='Mount path' and contains(., '<mount_path>')] and td[contains(., '<pvc_name>')] and td[contains(., '<container_name>')]]
 check_volume_missing_on_workload_page:
   element:
     selector: *volume_info
     missing: true
-remove_volume_from_container:
+remove_volume_from_container_base:
   params:
-    kebab_item: Remove Volume
+    kebab_item: Remove volume
   elements:
   - selector:
       xpath: //h2[contains(., Volumes)]/following-sibling::div//tr[td[@data-label='Name' and contains(., '<volume_name>')] and td[contains(., '<container_name>')]]//button[@data-test-id='kebab-button']
     op: click
   action: click_kebab_item
   action: click_button
+remove_volume_from_container_but_cancel:
+  params:
+    button_text: Cancel
+  action: remove_volume_from_container_base
+remove_volume_from_container:
+  params:
+    button_text: Remove Volume
+  action: remove_volume_from_container_base
 set_storageclass_name:
   params:
     input_field_id: storage-class-name
