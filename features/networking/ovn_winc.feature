@@ -17,12 +17,7 @@ Feature: OVNKubernetes Windows Container related networking scenarios
     
     Given I use the "test-service" service
     And evaluation of `service.ip` is stored in the :linux_service_ip clipboard
-    # Run level needs to set to 1 for windows pod to be spawned in a test project
-    When I run the :label admin command with:
-      | resource | namespace                |
-      | name     | <%= project.name %>      |
-      | key_val  | openshift.io/run-level=1 |
-    Then the step should succeed
+    
     Given I obtain test data file "networking/windows_pod_and_service.yaml"
     When I run the :create client command with:
       | f | windows_pod_and_service.yaml |
