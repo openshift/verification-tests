@@ -14,6 +14,7 @@ check_edit_console_button_in_dropdown:
   element: &edit_console_button_in_dropdown
     selector:
       xpath: //ul[@role='menu']//li[@role='menuitem']/button[text()='Edit console URL' and not(@disabled)]
+    timeout: 500
 check_edit_node_count_button_in_dropdown:
   element: &edit_node_count_button_in_dropdown
     selector:
@@ -34,10 +35,18 @@ check_edit_subscription_settings_button_in_dropdown:
   element: &edit_subscription_settings_button
     selector:
       xpath: //ul[@role='menu']//button[text()='Edit subscription settings']
+check_edit_subscription_settings_button_in_dropdown_missing:
+  element:
+    <<: *edit_subscription_settings_button
+    missing: true
 check_transfer_cluster_ownership_button_in_dropdown:
   element: &transfer_cluster_ownership_button
     selector:
       xpath: //ul[@role='menu']//button[text()='Transfer cluster ownership']
+check_transfer_cluster_ownership_button_in_dropdown_missing:
+  element:
+    <<: *transfer_cluster_ownership_button
+    missing: true
 click_edit_cluster_registration_button_in_dropdown:
   element:
     <<: *edit_cluster_registration

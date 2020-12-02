@@ -263,7 +263,7 @@ check_issuer_url_field:
   - selector:
       xpath: //div//label[@for='issuer']/span[text()='Issuer URL']/following-sibling::span[text()='*']
   - selector:
-      xpath: //div//div[@id='issuer-helper' and text()='The URL that the OpenID provider asserts as the Issuer Identifier. It must use the https scheme with no URL query parameters or fragment.']
+      xpath: //div//div[@id='issuer-helper' and text()='The URL that the OpenID provider asserts as the issuer identifier. It must use the https scheme with no URL query parameters or fragment.']
 check_issuer_url_input:
   element: &issuer_url_input
     selector:
@@ -304,11 +304,11 @@ check_idp_advanced_options_collapsed:
   - selector:
       xpath: //div//span[text()='Show advanced Options']/../span/*[name()='svg']
   - selector:
-      xpath: //div//button/span[text()='Show advanced Options']
+      xpath: //div//button/span[text()='Show advanced options']
 click_the_advanced_options_button:
   element:
     selector:
-      xpath: //div//button/span[text()='Show advanced Options']
+      xpath: //div//button/span[text()='Show advanced options']
     op: click
 check_idp_advanced_options_expanded:
   elements:
@@ -514,7 +514,7 @@ check_idp_items_table_title:
   - selector:
       xpath: //section[@id='accessControlTabContent']//tr/th[@data-label='Type' and text()='Type']
   - selector:
-      xpath: //section[@id='accessControlTabContent']//tr/th[@data-label='Auth Callback URL' and text()='Auth Callback URL']
+      xpath: //section[@id='accessControlTabContent']//tr/th[@data-label='Auth Callback URL' and text()='Auth callback URL']
 check_empty_idp_info_in_tab:
   action: check_add_identity_provider_button
   elements:
