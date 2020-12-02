@@ -127,8 +127,12 @@ Feature: Operator related networking scenarios
   @destructive
   Scenario: The clusteroperator should be able to reflect the realtime status of the network when a new node added
     Given I have an IPI deployment
-    # Check that the operator is not progressing
-    Given the expression should be true> cluster_operator('network').condition(type: 'Progressing')['status'] == "False"
+    And I switch to cluster admin pseudo user
+    # Check that the operator is not progressing at the beginning to make sure the network operator is normal
+    Given I wait up to 160 seconds for the steps to pass:
+    """
+    Given the status of condition "Progressing" for network operator is :False
+    """
 
     # Record the original machine replica and scale it up to number +1
     Given I pick a random machineset to scale
