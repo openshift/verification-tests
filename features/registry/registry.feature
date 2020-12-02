@@ -15,9 +15,9 @@ Feature: Testing registry
     Then the step should succeed
 
     When I run the :import_image client command with:
-      | from       | docker.io/library/busybox |
-      | confirm    | true                      |
-      | image_name | mystream                  |
+      | from       | quay.io/openshifttest/busybox |
+      | confirm    | true                          |
+      | image_name | mystream                      |
     Then the step should succeed
     And the "mystream:latest" image stream tag was created
     And evaluation of `image_stream_tag("mystream:latest").image_layers(user:user)` is stored in the :layers clipboard
