@@ -528,6 +528,7 @@ check_machinepool_field_on_edit_node_count_dialog:
       xpath: //span[text()='Machine pool']
   - selector:
       xpath: //select/option[text()='Default']
+    timeout: 500
 check_node_count_field_on_edit_node_count_dialog:
   elements:
   - selector:

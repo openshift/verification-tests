@@ -19,6 +19,7 @@ check_edit_node_count_button_in_dropdown:
   element: &edit_node_count_button_in_dropdown
     selector:
       xpath: //button[text()='Edit node count']
+    timeout: 500
 check_delete_cluster_button_in_dropdown:
   element: &delete_cluster_button_in_dropdown
     selector:
@@ -71,7 +72,6 @@ click_edit_node_count_button_in_dropdown:
   element:
     <<: *edit_node_count_button_in_dropdown
     op: click
-    timeout: 60
 click_delete_cluster_button_in_dropdown:
   element:
     <<: *delete_cluster_button_in_dropdown
