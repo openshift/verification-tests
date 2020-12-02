@@ -158,6 +158,7 @@ goto_replica_sets_page:
   url: k8s/ns/<project_name>/replicasets
 goto_one_rs_page:
   url: k8s/ns/<project_name>/replicasets/<rs_name>
+  action: wait_box_loaded
 
 #routes
 goto_routes_page:

@@ -574,6 +574,30 @@ check_no_binary_data_text_missing:
   params:
     content: No Binary Data Found
   action: check_page_not_match
+check_no_deployment_found_text:
+  params:
+    content: No Deployments Found
+  action: check_page_contains
+check_no_alertmanager_found_text:
+  params:
+    content: No Alertmanagers Found
+  action: check_page_contains
+check_no_resources_selected_text:
+  params:
+    content: No resources selected
+  action: check_page_contains
+check_restricted_access_text:
+  params:
+    content: Restricted Access
+  action: check_page_contains
+check_no_configmaps_found_text:
+  params:
+    content: No Config Maps Found
+  action: check_page_contains
+check_no_machinehealthcheck_text:
+  params:
+    content: No Machine Health Checks Found
+  action: check_page_contains
 submit_changes:
   elements:
   - selector:

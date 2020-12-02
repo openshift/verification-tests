@@ -10,15 +10,14 @@ create_project:
     ref: set_project_description
   action: submit_changes
 check_project_dropdown_selected_all_projects:
-  params:
-    dropdown_name: namespace-bar-dropdown
-    selection_text: all projects
-  action: check_dropdown_selected_item
+  element:
+    selector: &all_selected
+      xpath: //div[contains(@data-test-id, 'namespace-bar-dropdown')]//span[contains(., 'All Projects')]
 check_project_dropdown_not_selected_all_projects:
-  params:
-    dropdown_name: namespace-bar-dropdown
-    selection_text: all projects
-  action: check_dropdown_not_selected_item
+  element:
+    selector:
+      <<: *all_selected
+    missing: true
 create_project_from_dropdown:
   params:
     dropdown_name: namespace-bar
@@ -84,3 +83,7 @@ switch_to_project:
     selector:
       xpath: //a[text()='<project_name>']
     op: click
+switch_to_all_projects:
+  params:
+    project_name: All Projects
+  action: switch_to_project
