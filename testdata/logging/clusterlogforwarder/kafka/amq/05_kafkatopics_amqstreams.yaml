@@ -1,0 +1,52 @@
+---
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic 
+metadata:
+  name: topic-logging-all
+  labels:
+    strimzi.io/cluster: my-cluster 
+spec: 
+  partitions: 1
+  replicas: 1
+  config:
+    retention.ms: 300000
+    segment.bytes: 1073741824
+---
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic 
+metadata:
+  name: topic-logging-app
+  labels:
+    strimzi.io/cluster: my-cluster 
+spec: 
+  partitions: 1
+  replicas: 1
+  config:
+    retention.ms: 300000
+    segment.bytes: 1073741824
+---
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic 
+metadata:
+  name: topic-logging-audit
+  labels:
+    strimzi.io/cluster: my-cluster 
+spec: 
+  partitions: 1
+  replicas: 1
+  config:
+    retention.ms: 300000
+    segment.bytes: 1073741824
+---
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic 
+metadata:
+  name: topic-logging-infra
+labels:
+  strimzi.io/cluster: my-cluster 
+spec: 
+  partitions: 1
+  replicas: 1
+  config:
+    retention.ms: 300000
+    segment.bytes: 1073741824

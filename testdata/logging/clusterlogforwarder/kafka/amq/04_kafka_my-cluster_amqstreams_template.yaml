@@ -1,0 +1,47 @@
+kind: Template
+apiVersion: v1
+metadata:
+  name: amq-cr-template
+  annotations:
+    description: "Deploy AMQ "
+    tags: "amq-aosqe"
+objects:
+- apiVersion: kafka.strimzi.io/v1beta1
+  kind: Kafka
+  metadata:
+    name: my-cluster
+    namespace: ${AMQ_NAMESPACE}
+  spec:
+    entityOperator:
+      topicOperator:
+        reconciliationIntervalSeconds: 90
+      userOperator:
+        reconciliationIntervalSeconds: 120
+    kafka:
+      config:
+        log.message.format.version: "2.5"
+        offsets.topic.replication.factor: 3
+        transaction.state.log.min.isr: 2
+        transaction.state.log.replication.factor: 3
+        message.max.bytes: 10485760
+      listeners:
+        plain:
+          authentiation:
+            type: scram-sha-512
+        tls:
+          authentiation:
+            type: tls
+      replicas: 3
+      storage:
+        type: ephemeral
+      version: 2.5.0
+    zookeeper:
+      replicas: 3
+      storage:
+        type: ephemeral
+parameters:
+  - name: AMQ_NAMESPACE
+    value: "amq-aosqe"
+  - name: STORAGE_TYPE
+    value: "ephemeral"
+
