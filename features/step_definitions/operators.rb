@@ -160,3 +160,49 @@ Given /^the major.minor version of the cluster is stored in the#{OPT_SYM} clipbo
   cb_name = 'operator_channel_name' unless cb_name
   cb[cb_name] = cluster_version('version').channel.split('-')[1]
 end
+
+Given /^operator #{QUOTED} becomes "([^"]*)" within(?: (\d+) seconds)?$/ do | operator_name, conditions, timeout |
+  ensure_admin_tagged
+
+  expected = {}
+  interval_time = 5
+  timeout = Integer(timeout) rescue 60
+  interval_time = 20 if timeout > 100
+  actual_results = {}
+  stats = {}
+ 
+  # Parse the conditions to Hash table {Available"=>"True", "Progressing"=>"False", "Degraded"=>"False"}
+  arr_conditions = conditions.split("/")
+  arr_conditions.each do |v|
+    case v
+    when /^(available|non-available)$/
+      (v.include? "non-") ? expected["Available"] = "False" : expected["Available"] = "True"
+    when /^(progressing|non-progressing)$/
+      (v.include? "non-") ? expected["Progressing"] = "False" : expected["Progressing"] = "True"
+    when /^(degraded|non-degraded)$/
+      (v.include? "non-") ? expected["Degraded"] = "False" : expected["Degraded"] = "True"
+    else
+      raise "#### Invalid condition: #{v}, please input one or more condition(s) of (available|non-available)/(progressing|non-progressing)/(degraded|non-degraded) !"
+    end                                 
+  end 
+  raise "#### Without any conditions, please input at least one condition!!!" unless expected.length >0
+
+  begin
+    # Log to StdOut dedup
+    logger.dedup_start
+    success = wait_for(timeout, interval: interval_time, stats: stats) {
+      # Does not get conditions data from the cache
+      current_conditions = cluster_operator(operator_name).conditions(cached: false)
+      expected.keys.each do |c|
+        actual_results[c] = current_conditions.select{ |t| t['type'] == c }.first['status']
+      end
+      expected == actual_results
+    }
+    logger.info("#### Operator #{operator_name} Expected conditions: #{expected}")
+    logger.info "#### After #{stats[:seconds]} seconds and #{stats[:iterations]} iterations " <<
+      "operator #{operator_name} becomes: #{actual_results}" if success
+    raise "The #{operator_name} operator still didn't become #{expected} after #{timeout} seconds" unless success
+  ensure
+    logger.dedup_flush
+  end
+end
