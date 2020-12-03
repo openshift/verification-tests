@@ -12,6 +12,7 @@
         "containers": [{
             "name": "hello-openshift",
             "image": "aosqe/client-cert",
+
             "ports": [{
                 "containerPort": 9443,
                 "protocol": "TCP"
@@ -27,7 +28,7 @@
             "securityContext": {
                 "capabilities": {},
                 "privileged": false,
-                "runAsUser": <%= cb.scc_uid %>
+                "runAsNonRoot": true
             }
         }],
         "volumes": [{
@@ -38,7 +39,7 @@
         "dnsPolicy": "ClusterFirst",
         "serviceAccount": "",
         "securityContext":{
-            "runAsUser": <%= cb.proj_scc_uid %>
+            "runAsNonRoot": false
         }
     },
     "status": {}
