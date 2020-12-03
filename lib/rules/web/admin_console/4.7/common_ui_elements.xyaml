@@ -765,7 +765,7 @@ wait_table_loaded:
   element:
     selector:
       xpath: //table//tr
-    timeout: 30
+    timeout: 40
 skip_dev_perspective_tour:
   elements:
   - selector:
