@@ -224,7 +224,7 @@ Feature: build 'apps' with CLI
   Scenario: Using a docker image as source input using new-build cmd
     Given I have a project
     When I run the :tag client command with:
-      | source | docker.io/python:latest |
+      | source | quay.io/openshifttest/python:latest |
       | dest   | python:latest |
     Then the step should succeed
     And the "python" image stream becomes ready
@@ -274,7 +274,7 @@ Feature: build 'apps' with CLI
       | image_name | python |
       | all | true |
       | confirm | true |
-      | from | docker.io/openshift/python-33-centos7 |
+      | from | quay.io/openshifttest/ruby-25-centos7 |
       | n | <%= project.name %> |
     Then the step should succeed
     Given I get project builds
