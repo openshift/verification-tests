@@ -92,33 +92,6 @@ check_error_icon_for_overview_item:
     selector:
       css: .project-overview__detail--alert
     timeout: 20
-check_popover_info:
-  action: wait_resource_summary_loaded
-  action: click_open_popover
-  action:
-    if_param:
-      popover_item: Run Policy
-    ref: check_run_policy_popover_info
-  action:
-    if_param:
-      popover_item: Triggered By
-    ref: check_triggered_by_popover_info
-  action:
-    if_param:
-      popover_item: Update Strategy
-    ref: check_update_strategy_popover_info
-  action:
-    if_param:
-      popover_item: Namespace
-    ref: check_namespace_popover_info
-  action:
-    if_param:
-      popover_item: Labels
-    ref: check_label_popover_info
-  action:
-    if_param:
-      popover_item: Service
-    ref: check_service_popover_info
 wait_resource_summary_loaded:
   elements:
   - selector:
@@ -136,35 +109,36 @@ check_popover_title:
 check_run_policy_popover_info:
   params:
     content: RunPolicy describes how the new build created from this build configuration
+    popover_item: Run Policy
+  action: wait_resource_summary_loaded
+  action: click_open_popover
   action: check_popover_title
   action: check_page_contains
 check_triggered_by_popover_info:
   params:
     content: triggeredBy describes which triggers started the most recent update to the build configuration
+    popover_item: Triggered By
+  action: wait_resource_summary_loaded
+  action: click_open_popover
   action: check_popover_title
   action: check_page_contains
 check_update_strategy_popover_info:
   params:
     content: the name of a deployment strategy
+    popover_item: Update Strategy
+  action: wait_resource_summary_loaded
+  action: click_open_popover
   action: check_popover_title
   action: check_page_contains
 check_namespace_popover_info:
   params:
     text: docs/user-guide/namespaces
     link_url: docs/user-guide/namespaces
+    popover_item: Namespace
+  action: wait_resource_summary_loaded
+  action: click_open_popover
   action: check_popover_title
   action: check_link_and_text
-check_label_popover_info:
-  params:
-    text: docs/user-guide/labels
-    link_url: docs/user-guide/labels
-  action: check_popover_title
-  action: check_link_and_text
-check_service_popover_info:
-  params:
-    content: name of the service/target that is being referred
-  action: check_popover_title
-  action: check_page_contains
 click_groupby_dropdown_button:
   elements:
   - selector:
