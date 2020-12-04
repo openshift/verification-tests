@@ -48,7 +48,7 @@ Feature: stibuild.feature
     When I run the :patch client command with:
       | resource      | buildconfig                                                                                                                                      |
       | resource_name | ruby-ex                                                                                                                                          |
-      | p             | {"spec": {"strategy": {"sourceStrategy": {"from": {"kind": "DockerImage","name": "docker.io/centos/ruby-25-centos7:latest"}}},"type": "Source"}} |
+      | p             | {"spec": {"strategy": {"sourceStrategy": {"from": {"kind": "DockerImage","name": "quay.io/openshifttest/ruby-25-centos7@sha256:575194aa8be12ea066fc3f4aa9103dcb4291d43f9ee32e4afe34e0063051610b"}}},"type": "Source"}} |
     Then the step should succeed
     When I run the :start_build client command with:
       | buildconfig | ruby-ex |
@@ -58,7 +58,7 @@ Feature: stibuild.feature
     When I run the :patch client command with:
       | resource      | buildconfig                                                                                                                                     |
       | resource_name | ruby-ex                                                                                                                                         |
-      | p             | {"spec": {"strategy": {"sourceStrategy": {"from": {"kind": "DockerImage","name": "docker.io/centos/ruby-25-centos7:error"}}},"type": "Source"}} |
+      | p             | {"spec": {"strategy": {"sourceStrategy": {"from": {"kind": "DockerImage","name": "quay.io/openshifttest/ruby-25-centos7:error"}}},"type": "Source"}} |
     Then the step should succeed
     When I run the :start_build client command with:
       | buildconfig | ruby-ex |

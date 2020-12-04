@@ -2,9 +2,9 @@ Feature: test refactor of update_from_api_object to use raw_resource
   Scenario: test image_stream_tag
     Given I have a project
     And I run the :tag client command with:
-      | source_type | docker                                  |
-      | source      | docker.io/aosqe/pushwithdocker19:latest |
-      | dest        | pushwithdocker19:latest                 |
+      | source_type | docker                                        |
+      | source      | quay.io/openshifttest/pushwithdocker19:latest |
+      | dest        | pushwithdocker19:latest                       |
     Then the step should succeed
     And the "pushwithdocker19:latest" image stream tag was created
     And evaluation of `image_stream_tag("pushwithdocker19:latest").digest` is stored in the :a clipboard

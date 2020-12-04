@@ -22,7 +22,7 @@ spec:
         name: history-limit
     spec:
       containers:
-      - image: "docker.io/centos:centos7"
+      - image: "quay.io/openshifttest/centos@sha256:285bc3161133ec01d8ca8680cd746eecbfdbc1faa6313bd863151c4b26d7e5a5"
         imagePullPolicy: IfNotPresent
         name: myapp
         command:

@@ -575,7 +575,7 @@ Given /^an IP echo service is setup on the master node and the ip is stored in t
   cb_name = "ipecho_ip" unless cb_name
   cb[cb_name] = host.local_ip
 
-  @result = host.exec_admin("docker run --name ipecho -d -p 8888:80 docker.io/aosqe/ip-echo")
+  @result = host.exec_admin("docker run --name ipecho -d -p 8888:80 quay.io/openshifttest/ip-echo")
   raise "Failed to create the IP echo service." unless @result[:success]
   teardown_add {
     @result = host.exec_admin("docker rm -f ipecho")
