@@ -354,12 +354,11 @@ Feature: Egress IP related features
     """
 
     # Create a pod
-    Given I obtain test data file "routing/caddy-docker.json"
+    Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
-      | f | caddy-docker.json |
+      | f | web-server-1.yaml |
     Then the step should succeed
-    And the pod named "caddy-docker" becomes ready
-
+    And the pod named "web-server-1" becomes ready
     # Patch egressIP to the node
     Given the valid egress IP is added to the node
 
@@ -373,7 +372,7 @@ Feature: Egress IP related features
     When I execute on the pod:
       | /usr/bin/curl | --connect-timeout | 10 | <%= cb.hostip %>:27017 |
     Then the output should contain:
-      | Hello-OpenShift-1 http-8080 |
+      | Hello-OpenShift |
 
   # @author huirwang@redhat.com
   # @case_id OCP-18316
