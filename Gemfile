@@ -17,10 +17,7 @@ gem 'aws-sdk', '~> 2'
 gem 'google-api-client', '~>0.9.2'
 gem 'rbvmomi'
 
-gem 'azure-storage'
-# for upgrading to 0.15.x see according to changelog
-# https://github.com/Azure/azure-sdk-for-ruby/pull/1090
-# https://github.com/Azure/azure-sdk-for-ruby/pull/1092
+gem 'azure-storage', '~> 0.15.0.preview'
 gem 'azure_mgmt_storage', '~>0.17.0'
 gem 'azure_mgmt_compute', '~>0.18.0'
 gem 'azure_mgmt_resources', '~>0.17.0'
