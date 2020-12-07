@@ -1,4 +1,6 @@
 source 'https://rubygems.org'
+# source 'https://gems.ruby-china.com/'
+
 gem 'json'
 gem 'psych'
 # gem 'rest-client', '2.0.0.rc2'
