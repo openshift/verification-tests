@@ -85,7 +85,7 @@ perform_silence:
 check_silence_detail:
   element:
     selector:
-      xpath: //span[text()='Silence Details']
+      xpath: //span[text()='Silence details']
 silence_alert_from_detail:
   params:
     comment_text: silence comments is a must from ocp 4.5
@@ -300,7 +300,7 @@ check_active_alerts:
   action: check_alert_description_on_rule_detail
 check_rule_breadcrumb:
   params:
-    text: Alerting Rules
+    text: Alerting rules
     link_url: /monitoring/alertrules
   action: check_link_and_text
 check_view_metrics:

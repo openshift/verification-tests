@@ -33,9 +33,6 @@ choose_project_developer_mode:
   action: input_select_project_developer_mode
   action: click_project_link_developer_mode
 check_tech_preview_badge:
-  element:
-    selector:
-      xpath: //span[text()='Tech Preview']
 
 perform_cutomer_query:
   action: click_metrics_query_dropdown
@@ -52,7 +49,7 @@ click_metrics_query_dropdown:
 click_custom_query_button:
   element:
     selector:
-      xpath: //button[text()='Custom Query']
+      xpath: //button[text()='Custom query']
     op: click
 set_query_input_text_area:
   elements:
