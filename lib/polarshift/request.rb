@@ -313,7 +313,7 @@ module BushSlicer
             return res
           else
             logger.info %Q{got status "#{res[:exitstatus]}" updating test run "#{run_id}" in project "#{project_id}":\n#{res[:response]}}
-            return false
+            false
           end
         }
         unless success
