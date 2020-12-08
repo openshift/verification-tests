@@ -321,7 +321,8 @@ Feature: OVN related networking scenarios
     Then the expression should be true> @result[:parsed]['end']['sum']['lost_percent'].to_f < 10
     # server doesn't count bytes
     Then the expression should be true> @result[:parsed]['end']['sum']['packets'].to_f > 0
-    Then the expression should be true> @result[:parsed]['end']['sum']['jitter_ms'].to_f < 1
+    # try < 5 ms jitter, really anything < 20 ms might be considered good.
+    Then the expression should be true> @result[:parsed]['end']['sum']['jitter_ms'].to_f < 5
 
 
   # @author rbrattai@redhat.com
