@@ -32,6 +32,10 @@ check_custom_dns_help_info:
   params:
     content: To use a custom route, you must update your DNS provider
   action: check_page_contains
+check_routes_web_page_contains:
+  element:
+    selector:
+      xpath: //*[contains(.,'<content>')]
 create_route:
   action: set_route_name
   action:
