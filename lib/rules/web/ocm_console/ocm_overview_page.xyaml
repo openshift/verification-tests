@@ -2,18 +2,20 @@
 check_overview_nav_item:
   element: &overview_nav_item
     selector:
-      xpath: //nav/ul/li/a[@href='https://qaprodauth.cloud.redhat.com/openshift/overview']
+      xpath: //nav/ul/li/a[text()='Overview']
 go_to_ocm_overview_page:
   element:
     <<: *overview_nav_item
     op: click
-check_empty_overview_page:
+check_empty_overview_page_header:
   elements:
   - selector:
       xpath: //div/h1[text()='Get started with OpenShift Container Platform']
     timeout: 900
   - selector:
       xpath: //div/a/span[text()='Create an OpenShift cluster']
+check_empty_overview_page_productive_products:
+  elements:
   - selector:
       xpath: //div/h2[text()='OpenShift Serverless']/../following-sibling::div/a[@href='https://docs.openshift.com/container-platform/latest/serverless/serverless-getting-started.html']
   - selector:
@@ -22,8 +24,12 @@ check_empty_overview_page:
       xpath: //div/h2[text()='OpenShift Virtualization']/../following-sibling::div/a[@href='https://docs.openshift.com/container-platform/latest/cnv/cnv-about-cnv.html']
   - selector:
       xpath: //div/h2[text()='Migrating OpenShift Container Platform 3 to 4']/../following-sibling::div/a[@href='https://docs.openshift.com/container-platform/latest/migration/migrating_3_4/about-migration.html']
+check_empty_overview_page_run_for_you:
+  elements:
   - selector:
       xpath: //div/h2[text()='Let Red Hat run it for you']/following-sibling::a[@href='https://www.openshift.com/products/dedicated/contact/']
+check_empty_overview_page_learn_more:
+  elements:
   - selector:
       xpath: //div//h1[text()='Learn more about the platform']
   - selector:
@@ -36,4 +42,8 @@ check_empty_overview_page:
       xpath: //div//h2[text()='Other resources']/following-sibling::ul/li/a[@href='https://www.openshift.com/learn/courses/playground/']
   - selector:
       xpath: //div//h2[text()='Other resources']/following-sibling::ul/li/a[@href='https://www.twitch.tv/redhatopenshift']
-
+check_empty_overview_page:
+  action: check_empty_overview_page_header
+  action: check_empty_overview_page_productive_products
+  action: check_empty_overview_page_run_for_you
+  action: check_empty_overview_page_learn_more

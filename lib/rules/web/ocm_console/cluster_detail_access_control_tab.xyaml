@@ -167,13 +167,13 @@ check_basic_elements_on_AWS_infrastructure_access_tab:
   elements:
   - selector:
       xpath: //div/h3[text()='AWS infrastructure access']
-    timeout: 300
+    timeout: 100
   - selector:
       xpath: //div/p[contains(.,'Grant permission to view or manage the AWS infrastructure')]
-    timeout: 300
+    timeout: 50
   - selector:
       xpath: //div/p/a[@href='https://console.aws.amazon.com/console/home' and text()='Log in to your aws account.']
-    timeout: 300
+    timeout: 50
 check_grant_role_button_in_card:
   element: &grant_role_button_in_card
     selector:
