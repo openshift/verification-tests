@@ -161,13 +161,13 @@ upload_destination_ca_crt_file:
 check_metrics_charts_on_route_overview:
   elements:
   - selector:
-      xpath: //h5[@class='graph-title' and text()='Traffic In']/following::div[1][@class='pf-c-chart']
+      xpath: //h5[@class='graph-title' and text()='Traffic in']/following::div[1][@class='pf-c-chart']
     timeout: 20
   - selector:
-      xpath: //h5[@class='graph-title' and text()='Traffic Out']/following::div[1][@class='pf-c-chart']
+      xpath: //h5[@class='graph-title' and text()='Traffic out']/following::div[1][@class='pf-c-chart']
     timeout: 20
   - selector:
-      xpath: //h5[@class='graph-title' and text()='Connection Rate']/following::div[1][@class='pf-c-chart']
+      xpath: //h5[@class='graph-title' and text()='Connection rate']/following::div[1][@class='pf-c-chart']
     timeout: 20
   - selector:
       xpath: //h1[contains(@class,'graph-empty-state__title') and contains(text(),'No datapoints found')]
