@@ -550,3 +550,7 @@ check_cancel_transfer_cluster_ownership_notification:
     element:
         selector:
             xpath: //h4[text()='Cluster ownership transfer canceled']
+check_actions_button_disabled:
+  element:
+    selector:
+      xpath: //button[@disabled]/span[text()='Actions']
