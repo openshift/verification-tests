@@ -12,32 +12,26 @@ elif [ "$(os_type)" == "fedora" ]; then
     cmd="yum install -y --setopt=skip_missing_names_on_install=False"
     file="deps.yum.fedora"
     additional_deps=install_rvm_if_ruby_is_outdated
-    need_bundler_from_gem=1
 elif [ "$(os_type)" == "ubuntu" -o "$(os_type)" == "debian" ] || [ "$(os_type)" == "mint" ]; then
     cmd="apt-get install -q --ignore-missing --fix-missing -y"
     file="deps.deb"
     additional_deps=install_rvm_if_ruby_is_outdated
-    need_bundler_from_gem=1
 elif [ "$(os_type)" == "rhel6" ]; then
     cmd="yum install -y"
     file="deps.yum.RHEL"
     additional_deps=install_rvm_if_ruby_is_outdated
-    need_bundler_from_gem=1
 elif [ "$(os_type)" == "rhel7" ] || [ "$(os_type)" == "centos7" ]; then
     cmd="yum install -y --setopt=skip_missing_names_on_install=False,tsflags=nodocs"
     file="deps.yum.RHEL7"
     additional_deps=install_rvm_if_ruby_is_outdated
-    need_bundler_from_gem=1
 elif [ "$(os_type)" == "rhel8" ] || [ "$(os_type)" == "centos8" ]; then
     cmd="dnf install -y --setopt=skip_missing_names_on_install=False"
     file="deps.yum.RHEL8"
     additional_deps=install_rvm_if_ruby_is_outdated
-    # need_bundler_from_gem=1
 elif [ "$(os_type)" == "Mac OS X" ]; then
     cmd="brew install"
     file="deps.macos"
     additional_deps=install_rvm_if_ruby_is_outdated
-    need_bundler_from_gem=1
 else
     exit 3
 fi
@@ -57,6 +51,6 @@ fi
 #    from /usr/share/rubygems/rubygems/dependency.rb:307:in `to_spec'
 #    from /usr/share/rubygems/rubygems/core_ext/kernel_gem.rb:47:in `gem'
 #    from /bin/bundle:22:in `<main>'
-if [ -n "$need_bundler_from_gem" ]; then
+if ! bundle --version; then
     gem install bundler
 fi
