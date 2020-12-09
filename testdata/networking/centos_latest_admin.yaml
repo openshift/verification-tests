@@ -10,7 +10,7 @@ spec:
     command: ["/bin/bash", "-c"]
     args:
         ["yum install -y iptables && sleep inf"]
-    image: centos:latest
+    image: quay.io/openshifttest/centos@sha256:285bc3161133ec01d8ca8680cd746eecbfdbc1faa6313bd863151c4b26d7e5a5
     securityContext:
       capabilities:
         add: ["NET_ADMIN"]

@@ -266,7 +266,7 @@ Given /^I have an http-git service in the(?: "([^ ]+?)")? project$/ do |project_
   end
 
   @result = user.cli_exec(:create, f: "#{BushSlicer::HOME}/testdata/image/gitserver/gitserver-ephemeral.yaml")
-  # @result = user.cli_exec(:run, name: "gitserver", image: "openshift/origin-gitserver", env: 'GIT_HOME=/var/lib/git')
+  # @result = user.cli_exec(:run, name: "gitserver", image: "quay.io/openshifttest/origin-gitserver@sha256:8062457c330f0da521b340f2dceb13c4852d46ec58e45a9ef276a5ec639a328c", env: 'GIT_HOME=/var/lib/git')
   raise "could not create the http-git-server" unless @result[:success]
 
   @result = user.cli_exec(:policy_add_role_to_user, role: "edit", serviceaccount: "git")
@@ -297,7 +297,7 @@ Given /^I have a git client pod in the#{OPT_QUOTED} project$/ do |project_name|
   end
 
   #@result = user.cli_exec(:create, f: "https://raw.githubusercontent.com/openshift/origin/master/examples/gitserver/gitserver-ephemeral.yaml")
-  @result = user.cli_exec(:run, name: "git-client", image: "openshift/origin-gitserver", env: 'GIT_HOME=/var/lib/git')
+  @result = user.cli_exec(:run, name: "git-client", image: "quay.io/openshifttest/origin-gitserver@sha256:8062457c330f0da521b340f2dceb13c4852d46ec58e45a9ef276a5ec639a328c", env: 'GIT_HOME=/var/lib/git')
   raise "could not create the git client pod" unless @result[:success]
 
   @result = BushSlicer::Pod.wait_for_labeled("run=git-client", count: 1,
