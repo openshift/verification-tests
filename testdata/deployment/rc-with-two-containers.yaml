@@ -12,7 +12,7 @@ spec:
         run: rctest
     spec:
       containers:
-      - image: yapei/hello-openshift
+      - image: quay.io/openshifttest/hello-openshift@sha256:424e57db1f2e8e8ac9087d2f5e8faea6d73811f0b6f96301bc94293680897073
         imagePullPolicy: IfNotPresent
         name: hello-openshift
         ports:
@@ -21,7 +21,7 @@ spec:
         resources:
           limits:
             memory: 256Mi
-      - image: yapei/hello-openshift-fedora
+      - image: quay.io/openshifttest/hello-openshift-fedora@sha256:5895ec9bbe97f8ca124a723c51116c9c76c51e4ae421ff1c5634a93b0dd1d357
         imagePullPolicy: IfNotPresent
         name: hello-openshift-fedora
         ports:

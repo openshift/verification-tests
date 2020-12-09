@@ -1,6 +1,6 @@
 # original rsyslogd build files. 
 # "rsyslog.conf" file should be available in the same relative directory for the build to succeed
-FROM alpine:latest
+FROM quay.io/openshifttest/alpine:latest
 RUN     apk update && apk add rsyslog \
                               wget \
                               curl

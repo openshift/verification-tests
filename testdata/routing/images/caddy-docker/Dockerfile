@@ -1,5 +1,5 @@
 # Original caddy-docker build file.
-FROM alpine:latest
+FROM quay.io/openshifttest/alpine:latest
 
 RUN apk add --update openssh-client git tar curl wget
 RUN rm -rf /var/cache/apk/*
