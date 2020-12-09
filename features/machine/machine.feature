@@ -279,6 +279,13 @@ Feature: Machine features testing
       | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-machineset"] | default-valued-33056                            |
     Then the step should succeed
 
+    # Verify machine could be created successful
+    And I wait up to 300 seconds for the steps to pass:
+    """ 
+    Then the expression should be true> machine_set("default-valued-33056").desired_replicas(cached: false) == 1
+    """
+    Then the machineset should have expected number of running machines
+
   # @author miyadav@redhat.com
   # @case_id OCP-33058
   @admin
