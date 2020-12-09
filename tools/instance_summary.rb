@@ -1,6 +1,5 @@
 require 'text-table'
 require 'thread'
-require 'thwait'
 
 module BushSlicer
 
@@ -110,7 +109,7 @@ module BushSlicer
           break if target_region == region.region_name
         end
       end
-      ThreadsWait.all_waits(*threads)
+      threads.each(&:join)
       grand_summary = []
       aws_instances.each do |region, inst_list|
         # print "Getting summary for region '#{region}'\n"
@@ -198,7 +197,7 @@ module BushSlicer
           end
         end
       end
-      ThreadsWait.all_waits(*threads_zones)
+      threads_zones.each(&:join)
 
       targets.each do |region, zones|
         # print "Getting summary for region #{region}\n"
