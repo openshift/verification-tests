@@ -32,8 +32,7 @@ choose_project_developer_mode:
   action: click_projects_dropdown_developer_mode
   action: input_select_project_developer_mode
   action: click_project_link_developer_mode
-check_tech_preview_badge:
-
+check_tech_preview_badge: {}
 perform_cutomer_query:
   action: click_metrics_query_dropdown
   action: click_custom_query_button

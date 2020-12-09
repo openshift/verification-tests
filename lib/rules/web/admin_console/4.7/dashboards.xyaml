@@ -561,7 +561,7 @@ check_operator_status_on_status_card:
 check_cluster_inventory_items:
   elements:
   - selector:
-      xpath: //div[contains(@class,'co-dashboard-card__header')]/*[text()='Cluster Inventory']
+      xpath: //div[contains(@class,'co-dashboard-card__header')]/*[text()='Cluster inventory']
   - selector:
       xpath: //div[contains(@class,'co-inventory-card__item')]//a[contains(text(),'Node')]
   - selector:

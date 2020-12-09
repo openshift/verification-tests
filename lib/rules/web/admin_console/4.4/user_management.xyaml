@@ -13,9 +13,6 @@ check_rolebinding_of_user:
   action: goto_rolebinding_page_of_user
   action: wait_until_no_loading
   action:
-    if_param: content
-    ref: check_page_contains
-  action:
     if_param: rolebinding
     ref: check_link_and_text
 impersonate_one_user:
