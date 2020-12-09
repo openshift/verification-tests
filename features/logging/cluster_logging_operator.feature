@@ -152,3 +152,81 @@ Feature: cluster-logging-operator related test
       | card_name | #{cb.card} |
     Then the step should succeed
     """
+
+  # @author gkarager@redhat.com
+  # OCPQE-2773
+  @admin
+  @destructive
+  Scenario: Create one logging acceptance cases for all cluster
+    # Logging deployment
+    Given logging service is removed successfully	
+    Given the logging operators are redeployed after scenario	
+    Given logging channel name is stored in the :logging_channel clipboard	
+    Given I obtain test data file "logging/clusterlogging/deploy_clo_via_olm/01_clo_ns.yaml"	
+    Given I run the :create admin command with:	
+      | f | 01_clo_ns.yaml |	
+    Then the step should succeed
+    Given I obtain test data file "logging/clusterlogging/deploy_eo_via_olm/01_eo_ns.yaml"	
+    Given I run the :create admin command with:	
+      | f | 01_eo_ns.yaml |	
+    Then the step should succeed
+    Given I register clean-up steps:	
+    """	
+    Given logging service is removed successfully	
+    Then the step should succeed	
+    """	
+    Given "cluster-logging" packagemanifest's catalog source name is stored in the :clo_opsrc clipboard	
+    Given "elasticsearch-operator" packagemanifest's catalog source name is stored in the :eo_opsrc clipboard	
+
+    Given I switch to the first user	
+    Given the first user is cluster-admin	
+    Given I open admin console in a browser	
+    # subscribe cluster-logging-operator	
+    When I perform the :goto_operator_subscription_page web action with:	
+      | package_name     | cluster-logging     |	
+      | catalog_name     | <%= cb.clo_opsrc %> |	
+      | target_namespace | openshift-logging   |	
+    Then the step should succeed	
+    And I perform the :set_custom_channel_and_subscribe web action with:	
+      | update_channel    | <%= cb.logging_channel %> |	
+      | install_mode      | OwnNamespace              |	
+      | approval_strategy | Automatic                 |	
+    Given cluster logging operator is ready	
+    # subscribe elasticsearch-operator
+    When I perform the :goto_operator_subscription_page web action with:	
+      | package_name     | elasticsearch-operator        |	
+      | catalog_name     | <%= cb.eo_opsrc %>            |	
+      | target_namespace | openshift-operators-redhat    |	
+    Then the step should succeed	
+    When I perform the :set_custom_channel_and_subscribe web action with:	
+      | update_channel    | <%= cb.logging_channel %> |	
+      | install_mode      | AllNamespace              |	
+      | approval_strategy | Automatic                 |	
+    Then the step should succeed	
+    Given I use the "openshift-operators-redhat" project
+    Given elasticsearch operator is ready
+    And I close the current browser
+  # ES Metrics
+  # Data Check
+    Given I obtain test data file "logging/clusterlogging/example.yaml"
+    When I create clusterlogging instance with:
+      | remove_logging_pods | true         |
+      | crd_yaml            | example.yaml |
+    Then the step should succeed
+  # Kibana Access
+    Given I switch to the first user
+    Given I create a project with non-leading digit name
+    Given evaluation of `project` is stored in the :proj clipboard
+    Given I obtain test data file "logging/loggen/container_json_log_template.json"
+    When I run the :new_app client command with:
+      | file | container_json_log_template.json |
+    Then the step should succeed
+    Given a pod becomes ready with labels:
+      | run=centos-logtest,test=centos-logtest |
+    Given I switch to cluster admin pseudo user
+    Given I use the "openshift-logging" project
+    And I wait for the "kibana" route to appear
+    And I wait for the "project.<%= cb.proj.name %>" index to appear in the ES pod with labels "es-node-master=true"
+    Given I switch to the first user
+    And I login to kibana logging web console
+  # Console Dashboard
