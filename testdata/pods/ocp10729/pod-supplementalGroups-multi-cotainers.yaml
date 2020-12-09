@@ -14,7 +14,7 @@ spec:
       securityContext:
         privileged: false
     - name: nfs-server
-      image: aosqe/nfs-server
+      image: quay.io/openshifttest/nfs-server
       ports:
         - name: nfs
           containerPort: 2050

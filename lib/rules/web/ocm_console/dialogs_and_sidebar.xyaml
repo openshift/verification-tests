@@ -409,6 +409,10 @@ check_edit_loadbalancers_and_storage_button_in_dropdown:
   element: &edit_loadbalancers_and_storage_button
     selector:
       xpath: //button[text()='Edit load balancers and persistent storage']
+check_edit_loadbalancers_and_storage_button_in_dropdown_missing:
+  element:
+    <<: *edit_loadbalancers_and_storage_button
+    missing: true
 click_edit_loadbalancers_and_storage_button_in_dropdown:
   element:
     <<: *edit_loadbalancers_and_storage_button
@@ -507,4 +511,27 @@ check_change_cluster_privacy_settings_with_warning_dialog:
         selector:
             xpath: //h4[text()='All routers will be exposed publicly because there is no label match on the additional application router. This is a potential security risk.']
     action: check_change_cluster_privacy_settings_dialog
-    
+check_elements_on_edit_node_count_dialog:
+  action: check_edit_node_count_dialog_title
+  action: check_machinepool_field_on_edit_node_count_dialog
+  action: check_node_count_field_on_edit_node_count_dialog
+  action: check_apply_button
+  action: check_cancel_button
+  action: check_close_button
+check_edit_node_count_dialog_title:
+  element:
+    selector:
+      xpath: //h1[text()='Edit node count']
+check_machinepool_field_on_edit_node_count_dialog:
+  elements:
+  - selector:
+      xpath: //span[text()='Machine pool']
+  - selector:
+      xpath: //select/option[text()='Default']
+    timeout: 100
+check_node_count_field_on_edit_node_count_dialog:
+  elements:
+  - selector:
+      xpath: //span[text()='Node count']
+  - selector:
+      xpath: //select/option[text()='4']

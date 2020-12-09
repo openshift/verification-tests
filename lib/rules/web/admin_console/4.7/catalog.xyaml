@@ -69,10 +69,13 @@ create_app_from_deploy_image:
     ref: set_label
   action: click_create_button
 wait_for_catalog_loaded:
-  element:
-    selector:
+  elements:
+  - selector:
       css: .co-catalog-page
-    timeout: 20
+  - selector:
+      xpath: //div[contains(@class,'catalog-tile-pf-body')]
+  - selector:
+      xpath: //div[contains(@class,'catalog-tile-pf-header')]
 filter_by_category:
   element:
     selector:
@@ -80,7 +83,7 @@ filter_by_category:
     op: click
 filter_by_sourcetoimage_type:
   params:
-    type: image-stream
+    type: BuilderImage
   action: filter_by_type
 filter_by_serviceclass_type:
   params:
@@ -88,16 +91,16 @@ filter_by_serviceclass_type:
   action: filter_by_type
 filter_by_template_type:
   params:
-    type: template
+    type: Template
   action: filter_by_type
 filter_by_operatorbacked_type:
   params:
-    type: cluster-service-version
+    type: OperatorBackedService
   action: filter_by_type
 filter_by_type:
   element:
     selector:
-      xpath: //input[@data-test='kind-<type>']
+      xpath: //a[contains(@href,'/?catalogType=<type>')]
     op: click
 filter_by_keyword:
   element:
@@ -163,7 +166,7 @@ click_project_list_dropdown:
 choose_project_from_dropdown_list:
   element:
     selector:
-      xpath: //ul//a[@id='<project_name>-Namespace-link' and contains(@class,'dropdown__menu-item')]
+      xpath: //ul//a[@id='<project_name>-Project-link' and contains(@class,'dropdown__menu-item')]
     op: click
 select_target_namespace:
   params:

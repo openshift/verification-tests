@@ -12,7 +12,7 @@
     "containers": [
       {
         "name": "hello-openshift",
-        "image": "openshift/nonexist",
+        "image": "quay.io/openshifttest/nonexist",
         "ports": [
           {
             "containerPort": 8080,

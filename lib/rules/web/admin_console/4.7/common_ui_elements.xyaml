@@ -163,7 +163,7 @@ click_events_tab:
   action: click_tab
 click_replication_controllers_tab:
   params:
-    tab_name: Replication Controllers
+    tab_name: ReplicationControllers
   action: click_tab
 click_replica_sets_tab:
   params:
