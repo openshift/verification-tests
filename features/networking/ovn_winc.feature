@@ -70,7 +70,7 @@ Feature: OVNKubernetes Windows Container related networking scenarios
       | name | win-webserver |
       | tcp  | 80            |
     Then the step should succeed
-    And I pry
+    
     # Get the external ip of the loadbalancer service
     And I wait up to 60 seconds for the steps to pass:
     """
