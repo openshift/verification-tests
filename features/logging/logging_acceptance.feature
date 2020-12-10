@@ -7,18 +7,6 @@ Feature: Logging smoke test case
   @admin
   @destructive
   Scenario: One logging acceptance case for all cluster
-# ES Metrics
-    Given I wait for the "monitor-elasticsearch-cluster" service_monitor to appear
-    And the expression should be true> service_monitor('monitor-elasticsearch-cluster').service_monitor_endpoint_spec(server_name: "elasticsearch-metrics.openshift-logging.svc").port == "elasticsearch"
-    And the expression should be true> service_monitor('monitor-elasticsearch-cluster').service_monitor_endpoint_spec(server_name: "elasticsearch-metrics.openshift-logging.svc").path == "/_prometheus/metrics"
-    Given I wait up to 360 seconds for the steps to pass:
-    """
-    When I perform the GET prometheus rest client with:
-      | path  | /api/v1/query?          |
-      | query | es_cluster_nodes_number |
-    Then the step should succeed
-    And the expression should be true>  @result[:parsed]['data']['result'][0]['value']
-    """
 # Deploy cluster-logging operator via web console
     Given logging service is removed successfully	
     Given the logging operators are redeployed after scenario	
@@ -57,6 +45,30 @@ Feature: Logging smoke test case
       | approval_strategy | Automatic                 |	
     Then the step should succeed
     And I close the current browser
+# ES Metrics
+    Given I wait for the "monitor-elasticsearch-cluster" service_monitor to appear
+    And the expression should be true> service_monitor('monitor-elasticsearch-cluster').service_monitor_endpoint_spec(server_name: "elasticsearch-metrics.openshift-logging.svc").port == "elasticsearch"
+    And the expression should be true> service_monitor('monitor-elasticsearch-cluster').service_monitor_endpoint_spec(server_name: "elasticsearch-metrics.openshift-logging.svc").path == "/_prometheus/metrics"
+    Given I wait up to 360 seconds for the steps to pass:
+    """
+    When I perform the GET prometheus rest client with:
+      | path  | /api/v1/query?          |
+      | query | es_cluster_nodes_number |
+    Then the step should succeed
+    And the expression should be true>  @result[:parsed]['data']['result'][0]['value']
+    """
+# Fluentd Metrics
+    Given I wait for the "fluentd" service_monitor to appear
+    Given the expression should be true> service_monitor('fluentd').service_monitor_endpoint_spec(server_name: "fluentd.openshift-logging.svc").port == "metrics"
+    And the expression should be true> service_monitor('fluentd').service_monitor_endpoint_spec(server_name: "fluentd.openshift-logging.svc").path == "/metrics"
+    Given I wait up to 360 seconds for the steps to pass:
+    """
+    When I perform the GET prometheus rest client with:
+      | path  | /api/v1/query?                            |
+      | query | fluentd_output_status_buffer_queue_length |
+    Then the step should succeed
+    And the expression should be true>  @result[:parsed]['data']['result'][0]['value']
+    """
 # Kibana Access
     Given I switch to the first user
     And the first user is cluster-admin
@@ -148,16 +160,4 @@ Feature: Logging smoke test case
     When I perform the :check_monitoring_dashboard_card web action with:
       | card_name | #{cb.card} |
     Then the step should succeed
-    """
-# Fluentd Metrics
-    Given I wait for the "fluentd" service_monitor to appear
-    Given the expression should be true> service_monitor('fluentd').service_monitor_endpoint_spec(server_name: "fluentd.openshift-logging.svc").port == "metrics"
-    And the expression should be true> service_monitor('fluentd').service_monitor_endpoint_spec(server_name: "fluentd.openshift-logging.svc").path == "/metrics"
-    Given I wait up to 360 seconds for the steps to pass:
-    """
-    When I perform the GET prometheus rest client with:
-      | path  | /api/v1/query?                            |
-      | query | fluentd_output_status_buffer_queue_length |
-    Then the step should succeed
-    And the expression should be true>  @result[:parsed]['data']['result'][0]['value']
     """
