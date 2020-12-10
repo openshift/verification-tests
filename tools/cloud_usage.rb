@@ -34,7 +34,7 @@ module BushSlicer
     # to save time
     def initialize
       @jenkins = Jenkins.new
-      @jenkins.construct_jenkins_build_map
+      @jenkins.construct_jenkins_build_map unless @jenkins.build_map
       always_trace!
     end
 
@@ -83,6 +83,24 @@ module BushSlicer
         c.action do |args, options|
           ps = OpenstackSummary.new(jenkins: @jenkins)
           ps.get_summary
+        end
+      end
+      # packet
+      command :"packet" do |c|
+        c.syntax = "#{File.basename __FILE__}"
+        c.description = 'display summary of running instances'
+        c.action do |args, options|
+          ps = PacketSummary.new(jenkins: @jenkins)
+          ps.get_summary
+        end
+      end
+      # VSphere
+      command :"vms" do |c|
+        c.syntax = "#{File.basename __FILE__}"
+        c.description = 'display summary of running instances'
+        c.action do |args, options|
+          vms = VSphereSummary.new(jenkins: @jenkins)
+          vms.get_summary
         end
       end
       run!

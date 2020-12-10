@@ -287,5 +287,74 @@ module BushSlicer
       print_grand_summary(grand_summary)
     end
   end
+
+  class PacketSummary < InstanceSummary
+    attr_accessor :packet
+
+    def initialize(jenkins: nil)
+      @packet = Packet.new
+      @jenkins = jenkins
+    end
+
+    # instances is <Array> of server objects
+    def summarize_instances(instances)
+      summary = []
+      instances.each do | inst |
+        inst_summary = {}
+        inst_summary[:region] = 'packet'
+        inst_summary[:name]= inst['hostname']
+        inst_summary[:uptime]= packet.instance_uptime inst["created_at"]
+        inst_summary[:owned] = inst['created_by']['email']
+        inst_summary[:flexy_job_id] = jenkins.get_jenkins_flexy_job_id(inst['hostname'])
+        summary << inst_summary
+      end
+      return summary
+    end
+
+    def get_summary
+      grand_summary = []
+      inst_details = packet.get_running_instances
+      summary = summarize_instances(inst_details)
+      # summary = summarize_instances(rg_name, instances)
+      print_summary(summary) if summary.count > 0
+      grand_summary << {platform: 'openstack', region: summary.first[:region], inst_count: summary.count}
+      print_grand_summary(grand_summary)
+    end
+  end
+
+
+  class VSphereSummary < InstanceSummary
+    attr_accessor :vms
+
+    def initialize(profile_name="vsphere_vmc7-qe", jenkins: nil)
+      @vms = BushSlicer::VSphere.new(service_name: profile_name)
+      @jenkins = jenkins
+    end
+
+    # instances is <Array> of server objects
+    def summarize_instances(instances)
+      summary = []
+      instances.each do | inst |
+        inst_summary = {}
+        inst_summary[:region] = 'vSphere'
+        inst_summary[:name]= inst['name']
+        inst_summary[:uptime]= vms.instance_uptime(inst.config.createDate)
+        # inst_summary[:owned] = inst['created_by']['email']
+        inst_summary[:flexy_job_id] = jenkins.get_jenkins_flexy_job_id(inst['name'])
+        summary << inst_summary
+      end
+      return summary
+    end
+
+    def get_summary
+      grand_summary = []
+      inst_details = vms.get_running_instances
+      summary = summarize_instances(inst_details)
+      # summary = summarize_instances(rg_name, instances)
+      print_summary(summary) if summary.count > 0
+      grand_summary << {platform: 'openstack', region: summary.first[:region], inst_count: summary.count}
+      print_grand_summary(grand_summary)
+    end
+  end
 end
 
