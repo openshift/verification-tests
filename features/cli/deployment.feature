@@ -199,7 +199,7 @@ Feature: deployment related steps
     When I run the :patch client command with:
       | resource      | deployment                                                                                                     |
       | resource_name | hello-openshift                                                                                                |
-      | p             | {"spec":{"template":{"spec":{"containers":[{"name":"hello-openshift","image":"openshift/hello-openshift-noexist"}]}}}} |
+      | p             | {"spec":{"template":{"spec":{"containers":[{"name":"hello-openshift","image":"quay.io/openshifttest/nonexist"}]}}}} |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | deployment      |
@@ -298,7 +298,7 @@ Feature: deployment related steps
     When I run the :patch client command with:
       | resource      | deployment                                                                                                               |
       | resource_name | hello-openshift                                                                                                          |
-      | p             | {"spec":{"template":{"spec":{"containers":[{"name":"hello-openshift","image":"openshift/hello-openshift-noexist-1"}]}}}} |
+      | p             | {"spec":{"template":{"spec":{"containers":[{"name":"hello-openshift","image":"quay.io/openshifttest/nonexist-1"}]}}}} |
     Then the step should succeed
     And I wait up to 60 seconds for the steps to pass:
     """
@@ -324,7 +324,7 @@ Feature: deployment related steps
     When I run the :patch client command with:
       | resource      | deployment                                                                                                               |
       | resource_name | hello-openshift                                                                                                          |
-      | p             | {"spec":{"template":{"spec":{"containers":[{"name":"hello-openshift","image":"openshift/hello-openshift-noexist-2"}]}}}} |
+      | p             | {"spec":{"template":{"spec":{"containers":[{"name":"hello-openshift","image":"quay.io/openshifttest/nonexist-2"}]}}}} |
     Then the step should succeed
     And I wait up to 60 seconds for the steps to pass:
     """
