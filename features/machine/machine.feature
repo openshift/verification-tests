@@ -228,10 +228,9 @@ Feature: Machine features testing
     And the output should match "node-role.kubernetes.io/infra="
 
   # @author miyadav@redhat.com
-  # @case_id OCP-32269
   @admin
   @destructive
-  Scenario: Implement defaulting machineset values for AWS
+  Scenario Outline: Implement defaulting machineset values for AWS
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
@@ -240,18 +239,40 @@ Feature: Machine features testing
     Given I store the last provisioned machine in the :machine clipboard
     When evaluation of `machine(cb.machine).aws_ami_id` is stored in the :default_ami_id clipboard
     And evaluation of `machine(cb.machine).aws_availability_zone` is stored in the :default_availability_zone clipboard
-    Then admin ensures "default-valued-32269" machineset is deleted after scenario
+    Then admin ensures "<name>" machineset is deleted after scenario
 
-    Given I obtain test data file "cloud/ms-aws/ms_default_values.yaml"
-    When I run oc create over "ms_default_values.yaml" replacing paths:
-      | n                                                                                         | openshift-machine-api                           |
-      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]           | <%= infrastructure("cluster").infra_name %>     |
-      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"]        | default-valued-32269                            |
-      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-cluster"]    | <%= infrastructure("cluster").infra_name %>     |
-      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["ami"]["id"]                        | <%= cb.default_ami_id %>                        |
-      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["placement"]["availabilityZone"]    | <%= cb.default_availability_zone %>             |
-      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-machineset"] | default-valued-32269                            |
+    Given I obtain test data file "cloud/ms-aws/<file_name>"
+    When I run oc create over "<file_name>" replacing paths:
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]           | <%= infrastructure("cluster").infra_name %> |
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"]        | <name>                                      |
+      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-cluster"]    | <%= infrastructure("cluster").infra_name %> |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["ami"]["id"]                        | <%= cb.default_ami_id %>                    |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["placement"]["availabilityZone"]    | <%= cb.default_availability_zone %>         |
+      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-machineset"] | <name>                                      |
+      | ["metadata"]["name"]                                                                      | <name>                                      |
     Then the step should succeed
+
+    And I wait up to 120 seconds for the steps to pass:
+    """
+    When I run the :get admin command with:
+      | resource | machine |
+    Then the step should succeed
+    And the output should contain:
+      | Running |
+    """
+
+    Then I store the last provisioned machine in the :machine_latest clipboard
+    When I run the :describe admin command with:
+      | resource | machine                  |
+      | name     | <%= cb.machine_latest %> |
+    Then the step should succeed
+    And the output should contain:
+      | <Validation> |
+	       
+    Examples:
+      | name                    | file_name                 | Validation                    |
+      | default-valued-32269    | ms_default_values.yaml    | Placement                     |# @case_id OCP-32269
+      | tenancy-dedicated-37132 | ms_tenancy_dedicated.yaml | Tenancy:            dedicated |# @case_id OCP-37132
 
   # @author miyadav@redhat.com
   # @case_id OCP-33056
