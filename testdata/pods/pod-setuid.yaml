@@ -8,7 +8,7 @@ spec:
   containers:
     -
       capabilities: {}
-      image: "deshuai/hello-openshift:root"
+      image: "quay.io/openshifttest/hello-openshift:root"
       imagePullPolicy: IfNotPresent
       name: test-setuid
       ports:

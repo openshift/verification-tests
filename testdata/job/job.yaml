@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: pi
-        image: openshift/perl-516-centos7
+        image: quay.io/openshifttest/perl-516-centos7
         command: ["perl",  "-Mbignum=bpi", "-wle", "print bpi(2000)"]
       restartPolicy: Never
