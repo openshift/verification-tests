@@ -7,7 +7,6 @@ end
 
 require 'collections'
 require 'common'
-require 'pry-byebug'
 
 module BushSlicer
   class Packet
@@ -76,7 +75,7 @@ module BushSlicer
 
     # current time - creation time
     def instance_uptime(timestamp)
-      (Time.now  - Time.parse(timestamp)) /(60 * 60)
+      ((Time.now  - Time.parse(timestamp)) /(60 * 60)).round(2)
     end
   end
 end

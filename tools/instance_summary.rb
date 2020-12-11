@@ -339,7 +339,6 @@ module BushSlicer
         inst_summary[:region] = 'vSphere'
         inst_summary[:name]= inst['name']
         inst_summary[:uptime]= vms.instance_uptime(inst.config.createDate)
-        # inst_summary[:owned] = inst['created_by']['email']
         inst_summary[:flexy_job_id] = jenkins.get_jenkins_flexy_job_id(inst['name'])
         summary << inst_summary
       end
@@ -352,7 +351,7 @@ module BushSlicer
       summary = summarize_instances(inst_details)
       # summary = summarize_instances(rg_name, instances)
       print_summary(summary) if summary.count > 0
-      grand_summary << {platform: 'openstack', region: summary.first[:region], inst_count: summary.count}
+      grand_summary << {platform: 'vSphere', region: summary.first[:region], inst_count: summary.count}
       print_grand_summary(grand_summary)
     end
   end

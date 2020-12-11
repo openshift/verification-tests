@@ -415,7 +415,7 @@ module BushSlicer
     end
 
     def instance_uptime(timestamp)
-      (Time.now  - timestamp) /(60 * 60)
+      ((Time.now  - timestamp) /(60 * 60)).round(2)
     end
 
     class VSphereError < StandardError
