@@ -51,7 +51,7 @@ Given /^local storage provisioner has been installed successfully$/ do
 
   step %Q/I use the "#{namespace}" project/
   # create localvolume
-  unless local_volume("#{name}").exists?
+  unless local_volume_local_storage_openshift_io("#{name}").exists?
     step %Q|I obtain test data file "storage/localvolume/localvolume.yaml"|
     step %Q/I run oc create over "localvolume.yaml" replacing paths:/, table(%{
       | ["metadata"]["name"]                                   | #{name}      |
@@ -86,6 +86,7 @@ Given /^local storage PVs are created successfully in schedulable workers$/ do
   })
 
   # check PVs are created
+  step %Q/20 seconds have passed/
   @result = BushSlicer::PersistentVolume.wait_for_labeled("storage.openshift.com/local-volume-owner-name=local-storage", user: admin, seconds: 5 * 60)
   if @result[:matching].count != cb.nodes.count
     raise "Create PVs failed, expected #{cb.nodes.count}, got: #{@result[:matching].count}"
