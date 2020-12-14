@@ -15,9 +15,9 @@ Feature: Testing registry
     Then the step should succeed
 
     When I run the :import_image client command with:
-      | from       | docker.io/library/busybox |
-      | confirm    | true                      |
-      | image_name | mystream                  |
+      | from       | quay.io/openshifttest/busybox |
+      | confirm    | true                          |
+      | image_name | mystream                      |
     Then the step should succeed
     And the "mystream:latest" image stream tag was created
     And evaluation of `image_stream_tag("mystream:latest").image_layers(user:user)` is stored in the :layers clipboard
@@ -59,10 +59,10 @@ Feature: Testing registry
     Given I have a project
     Given docker config for default image registry is stored to the :dockercfg_file clipboard
     Then I run the :image_mirror client command with:
-      | source_image | docker.io/library/busybox:latest=<%= cb.integrated_reg_ip %>/<%= project.name %>/myimage1:v1 |
-      | dest_image   | centos/ruby-25-centos7:latest=<%= cb.integrated_reg_ip %>/<%= project.name %>/myimage2:v1    |
-      | a            | <%= cb.dockercfg_file %>                                                                     |
-      | insecure     | true                                                                                         |
+      | source_image | quay.io/openshifttest/busybox:latest=<%= cb.integrated_reg_ip %>/<%= project.name %>/myimage1:v1        |
+      | dest_image   | quay.io/openshifttest/hello-openshift:aosqe=<%= cb.integrated_reg_ip %>/<%= project.name %>/myimage2:v1 |
+      | a            | <%= cb.dockercfg_file %>                                                                                |
+      | insecure     | true                                                                                                    |
     And the step should succeed
     And the output should match:
       | Mirroring completed in |
@@ -164,7 +164,7 @@ Feature: Testing registry
     Given I have a project
     Given docker config for default image registry is stored to the :dockercfg_file clipboard
     Then I run the :image_mirror client command with:
-      | source_image | centos/ruby-22-centos7:latest                              |
+      | source_image | quay.io/openshifttest/busybox:latest                       |
       | dest_image   | <%= cb.integrated_reg_ip %>/<%= project.name %>/myimage:v1 |
       | a            | <%= cb.dockercfg_file %>                                   | 
       | insecure     | true                                                       |

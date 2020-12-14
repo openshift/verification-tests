@@ -1,7 +1,7 @@
 check_unhealthy_conditions_table:
   elements:
   - selector:
-      xpath: //h2[contains(.,'Unhealthy Conditions')]
+      xpath: //h2[contains(.,'Unhealthy conditions')]
   - selector:
       xpath: //table//tr[th[contains(text(),'Status')] and th[contains(text(),'Timeout')] and  th[contains(text(),'Type')] ]
   - selector:
@@ -12,12 +12,12 @@ click_machine_tab:
   action: click_tab
 check_desired_count_on_machineset_page:
   params:
-    key: Desired Count
+    key: Desired count
     value: <machine_count>
   action: check_resource_details_key_and_value
 edit_machine_count:
   params:
-    item: Edit Machine Count
+    item: Edit Machine count
   action: click_one_dropdown_action
   action: update_resource_count
 delete_machineset_from_action:

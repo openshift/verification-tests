@@ -310,6 +310,18 @@ wait_box_loaded:
     selector:
       css: .loading-box__loaded
     timeout: 20
+check_scale_target_column_in_table:
+  params:
+    field: Scale Target
+  action: check_column_in_table
+check_min_pods_column_in_table:
+  params:
+    field: Min Pods
+  action: check_column_in_table
+check_max_pods_column_in_table:
+  params:
+    field: Max Pods
+  action: check_column_in_table
 check_column_in_table:
   action: wait_box_loaded
   elements:

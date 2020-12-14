@@ -705,3 +705,107 @@ Given /^I check the cronjob status$/ do
     end
   end
 end
+
+# This step will deploy one kafka cluster and create 4 topics(topic-logging-all,topic-logging-infra,topic-logging-app,topic-logging-audit) in this kafka
+Given /^I deploy kafka in the #{QUOTED} project via amqstream operator$/ do | project_name|
+  ensure_admin_tagged
+  step %Q/I switch to cluster admin pseudo user/
+  step %Q/"amq-streams" packagemanifest's catalog source name is stored in the :kafka_csc clipboard/
+
+  step %Q/I use the "#{project_name}" project/
+  step %Q/I process and create:/, table(%{
+    | f | #{BushSlicer::HOME}/testdata/logging/clusterlogforwarder/kafka/amq/02_og_amqstreams_template.yaml |
+    | p | AMQ_NAMESPACE=#{project_name} |
+  })
+  raise "Error create operatorgroup" unless @result[:success]
+
+  step %Q/I process and create:/, table(%{
+    | f | #{BushSlicer::HOME}/testdata/logging/clusterlogforwarder/kafka/amq/03_sub_amqstreams_template.yaml |
+    | p | AMQ_NAMESPACE=#{project_name}  |
+    | p | AMQ_CATALOGSOURCE=#{cb.kafka_csc} |
+  })
+  raise "Error subscript amqstreams" unless @result[:success]
+
+  step %Q/a pod becomes ready with labels:/, table(%{
+    | name=amq-streams-cluster-operator |
+  })
+
+  step %Q/I process and create:/, table(%{
+    | f | #{BushSlicer::HOME}/testdata/logging/clusterlogforwarder/kafka/amq/04_kafka_my-cluster_amqstreams_template.yaml |
+    | p | AMQ_NAMESPACE=#{project_name} |
+  })
+  raise "Error create kafka" unless @result[:success]
+
+  @result = admin.cli_exec(:create, f: "#{BushSlicer::HOME}/testdata/logging/clusterlogforwarder/kafka/amq/05_kafkatopics_amqstreams.yaml")
+  raise "Error create kafka topics" unless @result[:success]
+
+  step %Q/3 pods becomes ready with labels:/, table(%{
+    | strimzi.io/name=my-cluster-kafka |
+  })
+  raise "Error kafka cluster not ready" unless @result[:success]
+end
+
+# Get some records from a kafka topic 
+# https://datacadamia.com/dit/kafka/kafka-console-consumer
+Given /^I get(?: (\d+))? records from the #{QUOTED} kafka topic in the #{QUOTED} project$/ do | record_num, topic_name, project_name|
+  record_num = record_num ? record_num.to_str : "10"
+  job_name=rand_str(8, :dns)
+  step %Q/I use the "#{project_name}" project/
+  kafka_image=stateful_set('my-cluster-kafka').containers_spec(user: user)[0].image
+  teardown_add {
+    admin.cli_exec(:delete, object_type: 'job', object_name_or_id: job_name, n: project_name)
+  }
+  step %Q/I process and create:/,table(%{
+    | f | #{BushSlicer::HOME}/testdata/logging/clusterlogforwarder/kafka/amq/21_job_topic_consumer_from_beginning_template.yaml |
+    | p | KAFKA_IMAGE=#{kafka_image} |
+    | p | KAFKA_TOPIC=#{topic_name}  |
+    | p | MAX_MESSAGES=#{record_num} |
+    | p | JOB_NAME=#{job_name} |
+  })
+  step %Q/a pod becomes ready with labels:/, table(%{
+    | job-name=#{job_name}|
+  })
+
+  # wait up to 1 minutes for the kafka message
+  success = wait_for(60, interval: 15) {
+    @result = user.cli_exec(:logs, {resource_name: "#{pod.name}"})
+    @result[:response].match("pipeline_metadata")
+  }
+  raise "Couldn't received logs from the kafka topic #{topic_name}" unless success
+end
+
+# Register an topic consumer which listen the topic continuously. we can verify the logging records by the next step 'I get N logs from the X kafka consumer job'
+Given /^I create the #{QUOTED} consumer job to the #{QUOTED} kafka topic in the #{QUOTED} project$/ do | job_name, topic_name, project_name |
+  step %Q/I use the "#{project_name}" project/
+  kafka_image=stateful_set('my-cluster-kafka').containers_spec(user: user)[0].image
+  teardown_add {
+    admin.cli_exec(:delete, object_type: 'job', object_name_or_id: job_name, n: project_name)
+  }
+  step %Q/I process and create:/,table(%{
+    | f | #{BushSlicer::HOME}/testdata/logging/clusterlogforwarder/kafka/amq/21_job_topic_consumer_from_latest_template.yaml |
+    | p | KAFKA_IMAGE=#{kafka_image} |
+    | p | KAFKA_TOPIC=#{topic_name} |
+    | p | JOB_NAME=#{job_name} |
+  })
+  raise "Unable to create consumer job" unless @result[:success]
+end
+
+# Get logs from the kafka comsumer job which created by upper job
+Given /^I get(?: (\d+))? logs from the #{QUOTED} kafka consumer job in the #{QUOTED} project$/ do | record_num, job_name, project_name |
+  record_num = record_num ? record_num.to_i : 0
+  step %Q/I use the "#{project_name}" project/
+  step %Q/a pod becomes ready with labels:/, table(%{
+    | job-name=#{job_name}|
+  })
+
+  # wait up to 1 minutes for the kafka message
+  success = wait_for(60, interval: 10) {
+    if record_num >0
+      @result = user.cli_exec(:logs, {resource_name: "#{pod.name}", tail: "#{ record_num }"})
+    else
+      @result = user.cli_exec(:logs, {resource_name: "#{pod.name}"})
+    end
+    @result[:response].match("pipeline_metadata")
+  }
+  raise "Couldn't retrieve kafka records #{pod.name}" unless success
+end

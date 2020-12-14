@@ -80,6 +80,7 @@ cancel_rollout_action:
   params:
     item: Cancel Rollout
   action: click_one_dropdown_action
+  action: confirm_cancel_rollout
 delete_configmap_action:
   params:
     item: Delete Config Map
@@ -104,6 +105,8 @@ click_resource_action_icon:
     op: click
 # a combined action can be directly used for Edit Labels
 add_label_for_resource:
+  params:
+    item: Edit Labels
   action: click_one_dropdown_action
   action: add_label
   action: submit_changes

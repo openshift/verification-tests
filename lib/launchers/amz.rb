@@ -1,6 +1,11 @@
 #!/usr/bin/env ruby
 require 'aws-sdk'
 
+lib_path = File.expand_path(File.dirname(File.dirname(__FILE__)))
+unless $LOAD_PATH.any? {|p| File.expand_path(p) == lib_path}
+    $LOAD_PATH.unshift(lib_path)
+end
+
 require 'common'
 require 'host'
 require 'launchers/cloud_helper'
@@ -63,6 +68,10 @@ module BushSlicer
 
     private def client_iam
       @client_sts ||= Aws::IAM::Client.new
+    end
+
+    private def client_r53
+      @client_r53 ||= Aws::Route53::Client.new
     end
 
     private def ec2
@@ -471,6 +480,89 @@ module BushSlicer
       client_ec2.describe_regions.to_a[0][0]
     end
 
+    def default_zone
+      config[:install_base_domain].sub(/\.$/,"") + "."
+    end
+
+    def default_zone_id
+      @default_r53_zone_id ||= r53_zone_id_by_domain(default_zone)
+    end
+
+    def r53_zone_id_by_domain(domain)
+      zone = client_r53.list_hosted_zones.hosted_zones.find { |z|
+        z.name == domain
+      }
+      unless zone
+        raise "can't find zone '#{domain}' in AWS"
+      end
+      return zone.id.sub(%r{.*/(.*)$}, "\\1")
+    end
+
+    def r53_zone_by_id(id)
+      zone = client_r53.get_hosted_zone({id: id})
+      return zone.hosted_zone.id.sub(%r{.*/(.*)$}, "\\1")
+    end
+
+    # @param [Hash] changes might be something like
+    #   [{
+    #     :action=>"UPSERT",
+    #     :resource_record_set=> {
+    #       :name=>"myhost.qe.devcluster.openshift.com",
+    #       :resource_records=> [{:value=>"192.0.2.44"}],
+    #       :ttl=>60,
+    #       :type=>"A"
+    #     }
+    #   }]
+    # @see https://docs.aws.amazon.com/sdk-for-ruby/v2/api/Aws/Route53/Client.html#change_resource_record_sets-instance_method
+    def change_resource_record_sets(zone_id: nil, changes:)
+      zone_id ||= default_zone_id
+      client_r53.change_resource_record_sets(
+        hosted_zone_id: zone_id,
+        change_batch: { changes: changes }
+      )
+    end
+
+    def list_resource_record_sets(zone_id: nil)
+      zone_id ||= default_zone_id
+      res = []
+      client_r53.list_resource_record_sets(hosted_zone_id: zone_id).each_page { |p|
+        res.concat p.resource_record_sets.map(&:to_h)
+      }
+      return res
+    end
+
+    # @param [Regexp] re
+    # @note be very careful to avoid interfering regular expressions
+    # example: delete_resource_records_re(/my-hostname/)
+    def delete_resource_records_re(re, zone_id: nil)
+      logger.warn("Removing Route53 records matching #{re.inspect}")
+      records = list_resource_record_sets(zone_id: zone_id)
+      to_delete = records.select { |r| r[:name] =~ re }
+      logger.debug("Removing records: #{to_delete.map {|r| r[:name]}}")
+      list = to_delete.map { |r| { action: "DELETE", resource_record_set: r } }
+      change_resource_record_sets(zone_id: zone_id, changes: list)
+    end
+
+    def create_a_records(name, ips, zone_id: nil, ttl: 180)
+      record = {
+        :action =>"UPSERT",
+        :resource_record_set => {
+          :ttl => ttl,
+          :type => "A"
+        }
+      }
+
+      zone = zone_id ? r53_zone_by_id(zone_id) : default_zone
+      if ! name.end_with?(".")
+        name = "#{name}.#{zone}"
+      end
+      record[:resource_record_set][:name] = name
+      record[:resource_record_set][:resource_records] = ips.map { |ip|
+        {value: ip}
+      }
+      change_resource_record_sets(zone_id: zone_id, changes: [record])
+    end
+
     def instance_uptime(instance)
       ((Time.now.utc - instance.launch_time) / (60 * 60)).round(2)
     end
@@ -682,4 +774,10 @@ module BushSlicer
       return res
     end
   end
+end
+
+if __FILE__ == $0
+  extend BushSlicer::Common::Helper
+  # amz = BushSlicer::Amz_EC2.new(service_name: "AWS-CI")
+  require 'pry'; binding.pry
 end

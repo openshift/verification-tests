@@ -24,7 +24,7 @@ check_getting_started:
 check_dim_resource_list:
   elements:
   - selector:
-      xpath: //div[@class='co-disabled']//div[contains(.,'No <resource_singular>s Found')]
+      xpath: //div[@class='co-disabled']//div[contains(.,'No <resource_singular>s found')]
 check_user_starter_guide_message_when_no_projects:
   elements:
   - selector:

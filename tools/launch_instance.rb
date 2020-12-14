@@ -744,6 +744,8 @@ module BushSlicer
       end
 
       ## perform provisioning steps
+      org_term = Signal.trap('TERM') { raise "Received SIGTERM during installation." }
+      org_int = Signal.trap('INT') { raise "Received SIGINT during installation." }
       template[:install_sequence].each do |task|
         installation_task(
           task,
@@ -767,6 +769,8 @@ module BushSlicer
         end
       end
     ensure
+      Signal.trap('TERM', org_term)
+      Signal.trap('INT', org_int)
       # create a file with launched instances information
       # TODO: change VMINFO to better name here and in Jenkins jobs
       terminate_out = ENV["BUSHSLICER_VMINFO_YAML"] || "vminfo.yml"

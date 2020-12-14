@@ -15,7 +15,6 @@ require 'host'
 require 'http'
 require 'net'
 require 'thread'
-require 'thwait'
 
 module BushSlicer
   # works with OSP10 and OSP7
@@ -956,7 +955,7 @@ module BushSlicer
           running_inst[inst_details.dig('server', 'name')] = inst_details['server'] if inst_details.dig('server','status') == "ACTIVE"
         end
       end
-      ThreadsWait.all_waits(*threads)
+      threads.each(&:join)
       return running_inst
     end
 

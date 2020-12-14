@@ -119,7 +119,7 @@ module BushSlicer
       def update_to!(new_state)
         raise "cannot update virtual test record" if virtual?
         logger.info "Updating PolarShift test case #{test_case_id} with #{new_state["result"]} status and duration of #{new_state["duration"]} seconds"
-        res = request.update_caseruns(project_id, run_id, {
+        res = request.update_caseruns_smart(project_id, run_id, {
           "id" => test_case_id,
           "current" => {
             "comment" => comment,

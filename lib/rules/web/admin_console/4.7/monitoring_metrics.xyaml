@@ -32,11 +32,7 @@ choose_project_developer_mode:
   action: click_projects_dropdown_developer_mode
   action: input_select_project_developer_mode
   action: click_project_link_developer_mode
-check_tech_preview_badge:
-  element:
-    selector:
-      xpath: //span[text()='Tech Preview']
-
+check_tech_preview_badge: {}
 perform_cutomer_query:
   action: click_metrics_query_dropdown
   action: click_custom_query_button
@@ -52,7 +48,7 @@ click_metrics_query_dropdown:
 click_custom_query_button:
   element:
     selector:
-      xpath: //button[text()='Custom Query']
+      xpath: //button[text()='Custom query']
     op: click
 set_query_input_text_area:
   elements:
@@ -295,6 +291,6 @@ click_link_from_uitilization_description:
   action: click_link_with_text_only
 check_pod_detail:
   params:
-    content: Memory Usage
+    content: Memory usage
   action: check_page_contains 
   action: check_pod_detail_page_charts_style

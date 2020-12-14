@@ -395,6 +395,15 @@ check_actions_items_of_ready_osd_cluster_on_list:
   action: check_archive_button_in_dropdown_missing
   action: check_edit_console_button_in_dropdown_missing
   action: check_launch_console_button_in_dropdown
+check_actions_items_by_org_member_on_list:
+  action: check_edit_display_name_button_in_dropdown_missing
+  action: check_edit_node_count_button_in_dropdown_missing
+  action: check_edit_loadbalancers_and_storage_button_in_dropdown_missing
+  action: check_edit_console_button_in_dropdown_missing
+  action: check_archive_button_in_dropdown_missing
+  action: check_edit_subscription_settings_button_in_dropdown_missing
+  action: check_transfer_cluster_ownership_button_in_dropdown_missing
+  action: check_delete_cluster_button_in_dropdown_missing
 check_actions_items_of_ready_ocp_cluster_on_list:
   action: check_edit_console_button_in_dropdown
   action: check_edit_display_name_button_in_dropdown

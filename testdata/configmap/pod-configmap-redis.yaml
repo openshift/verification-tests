@@ -5,7 +5,7 @@ metadata:
 spec:
   containers:
   - name: redis
-    image: kubernetes/redis:v1
+    image: quay.io/openshifttest/redis:v1
     env:
     - name: MASTER
       value: "true"

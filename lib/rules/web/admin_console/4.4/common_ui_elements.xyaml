@@ -378,6 +378,30 @@ delete_catalogsource_kabab_operation:
   params:
     kebab_item: Delete CatalogSource
   action: click_one_operation_in_kebab
+check_display_name_column_in_table:
+  params:
+    field: Display Name
+  action: check_column_in_table
+check_scale_target_column_in_table:
+  params:
+    field: Scale Target
+  action: check_column_in_table
+check_min_pods_column_in_table:
+  params:
+    field: Min Pods
+  action: check_column_in_table
+check_max_pods_column_in_table:
+  params:
+    field: Max Pods
+  action: check_column_in_table
+check_highest_severity_column_in_table:
+  params:
+    field: Highest Severity
+  action: check_column_in_table
+check_affected_pods_column_in_table:
+  params:
+    field: Affected Pods
+  action: check_column_in_table
 check_column_in_table:
   action: wait_box_loaded
   elements:
@@ -515,6 +539,38 @@ check_page_not_match:
   element:
     selector: *page_content
     missing: true
+check_no_data_found_text:
+  params:
+    content: No Data Found
+  action: check_page_contains
+check_no_binary_data_text_missing:
+  params:
+    content: No Binary Data Found
+  action: check_page_not_match
+check_no_deployment_found_text:
+  params:
+    content: No Deployments Found
+  action: check_page_contains
+check_no_alertmanager_found_text:
+  params:
+    content: No Alertmanagers Found
+  action: check_page_contains
+check_no_resources_selected_text:
+  params:
+    content: No resources selected
+  action: check_page_contains
+check_restricted_access_text:
+  params:
+    content: Restricted Access
+  action: check_page_contains
+check_no_configmaps_found_text:
+  params:
+    content: No Config Maps Found
+  action: check_page_contains
+check_no_machinehealthcheck_text:
+  params:
+    content: No Machine Health Checks Found
+  action: check_page_contains
 submit_changes:
   elements:
   - selector:

@@ -248,6 +248,18 @@ Given /^I collect the deployment log for pod "(.+)" until it disappears$/ do |po
   @result  = res_cache
 end
 
+Given /^I collect the deployment log for pod "(.+)" until it becomes :([^\s]*?)$/ do |name, status|
+  opts = {resource_name: name}
+  timeout = 15 * 60   # just put a timeout so we don't hang there indefintely
+  podstatus = pod(name).wait_till_status(status.to_sym, user, timeout)
+  unless podstatus[:success]
+    logger.error(podstatus[:response])
+    raise "pod #{name} didn't become #{status}"
+  end
+
+  @result = user.cli_exec(:logs, **opts)
+end
+
 # pod_info is the user pod, for example.... deployment-example
 # the step will do 'docker ps | grep deployment-example' to filter out a target
 # TODO: cri-o is not implemented yet

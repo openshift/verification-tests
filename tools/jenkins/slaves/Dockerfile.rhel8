@@ -1,48 +1,57 @@
 # The standard name for this image is aosqe/openshift-vtests-public
 
-FROM docker-registry.engineering.redhat.com/aosqe/jenkins-slave-base-rhel8
+FROM quay.io/openshift/origin-jenkins-agent-base:4.6
 
 LABEL vendor="Red Hat inc."
 LABEL maintainer="AOS QE Team"
 
 RUN set -x && \
-    yum repolist all && \
-    yum config-manager --enable ansible-2.8-for-rhel-8-x86_64-rpms && \
-    INSTALL_PKGS="@ruby git bsdtar ansible" && \
-    yum -y update && \
-    yum install -y --setopt=skip_missing_names_on_install=False $INSTALL_PKGS && \
-    yum install -y https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm && \
+    dnf repolist all && \
+    dnf config-manager --enable ansible-2.9-for-rhel-8-x86_64-rpms && \
+    INSTALL_PKGS="@ruby git bsdtar ansible subversion" && \
+    dnf -y update && \
+    dnf install -y --setopt=skip_missing_names_on_install=False $INSTALL_PKGS && \
+    dnf install -y https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm && \
+    dnf install -y --setopt=tsflags=nodocs https://cbs.centos.org/kojifiles/packages/git-crypt/0.6.0/2.el8/x86_64/git-crypt-0.6.0-2.el8.x86_64.rpm && \
     CHROMEDRIVER_URL="https://chromedriver.storage.googleapis.com" && \
     CHROMEDRIVER_VERSION=`curl -L "$CHROMEDRIVER_URL/LATEST_RELEASE"` && \
     curl -L "$CHROMEDRIVER_URL/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip"  | bsdtar --no-same-owner --no-same-permissions -xvf - -C /usr/local/bin && \
-    GECKODRIVER_DOWNLOAD_URL="$(curl -L $GITHUB_API_CURL_OPTS https://api.github.com/repos/mozilla/geckodriver/releases/latest | grep -E 'browser_download_url.*linux64' | sed -E 's/.*(https[^"]*).*/\1/')" && \
-    curl -L "$GECKODRIVER_DOWNLOAD_URL" | bsdtar -xvf - -C /usr/local/bin && \
+    GECKODRIVER_SPEC="https://api.github.com/repos/mozilla/geckodriver/releases/latest" && \
+    GECKODRIVER_RE='^.*"browser_download_url": ?"(http[^"]*linux64.tar.gz)".*$' && \
+    curl -sSL $GITHUB_API_CURL_OPTS "$GECKODRIVER_SPEC" | sed -En "s#$GECKODRIVER_RE#\1#p" | xargs -d '\n' curl -sSL | bsdtar -xvf - -C /usr/local/bin && \
     chmod +x /usr/local/bin/chromedriver /usr/local/bin/geckodriver && \
     # curl -L https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm -o /tmp/epel-release-latest-7.noarch.rpm && \
-    # yum install -y /tmp/epel-release-latest-7.noarch.rpm && \
+    # dnf install -y /tmp/epel-release-latest-7.noarch.rpm && \
     mkdir -p $HOME/bin
 
 # make sure context dir is at the repo root
 ADD . $HOME/verification-tests
 
 RUN "$HOME/verification-tests/tools/install_os_deps.sh"
-RUN "$HOME/verification-tests/tools/hack_bundle.rb"
+RUN chown -R 1001 "$HOME/verification-tests" && \
+    # in case Bundler updated in RHEL see:
+    # check https://github.com/rubygems/rubygems/pull/3933
+    setpriv --reuid 1001 bundle config path ~/.gem/ruby && \
+    setpriv --reuid 1001 verification-tests/tools/hack_bundle.rb
 
 # -k is a bad option, better setup proper system certificates in a layered image
 # RUN sed -i -e 's/^\s\+curl\s/  curl -Sk /' /usr/local/bin/run-jnlp-client
 
 RUN rpm -qa && \
-    yum clean all -y && \
+    dnf clean all -y && \
     rm -rf $HOME/verification-tests /var/cache/yum /tmp/*
 
 RUN dbus-uuidgen > /etc/machine-id # e.g. needed for firefox
-RUN chown -R 1001:0 $HOME && chmod -R g+rw $HOME /etc/machine-id
+RUN chown -R 1001:0 $HOME && \
+    chmod -R g+rw $HOME /etc/machine-id /etc/passwd /etc/pki
 # allow yum/dnf; but probably fakeroot would be needed and still some install
 # scripts may fail because of lack of real root
 #RUN dirs="/usr /etc /var /home /opt" && \
 #    chown -R 1001:0 $dirs && chmod -R g+rw $dirs
 
+# running pod on OCP 3.x needs this
+RUN echo 'id -un 2>/dev/null || echo "default:x:`id -u`:`id -g`:Default Application User:${HOME}:/sbin/nologin" >> /etc/passwd' > /usr/local/bin/configure-agent
 # have sudo working just in case
-RUN echo -e '#!/bin/bash\nexec "$@"' > /usr/local/bin/sudo && chmod 755 /usr/local/bin/sudo
+RUN echo -e '#!/bin/bash\nexec "$@"' > /usr/bin/sudo && chmod 755 /usr/bin/sudo
 
 USER 1001

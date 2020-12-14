@@ -10,7 +10,7 @@
   "spec": {
       "containers": [{
         "name": "hello-pod",
-        "image": "yadu/hello-openshift-getent"
+        "image": "quay.io/openshifttest/hello-openshift-getent"
       }]
   }
 }
