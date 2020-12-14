@@ -1,5 +1,3 @@
-@clusterlogging
-@commonlogging
 Feature: Logging smoke test case
 
   # @author gkarager@redhat.com
@@ -8,17 +6,10 @@ Feature: Logging smoke test case
   @destructive
   Scenario: One logging acceptance case for all cluster
 # Deploy cluster-logging operator via web console
-    Given logging service is removed successfully	
-    Given the logging operators are redeployed after scenario	
     Given logging channel name is stored in the :logging_channel clipboard	
-    Given I register clean-up steps:	
-    """	
     Given logging service is removed successfully	
-    Then the step should succeed	
-    """	
+    Given "elasticsearch-operator" packagemanifest's catalog source name is stored in the :eo_opsrc clipboard		
     Given "cluster-logging" packagemanifest's catalog source name is stored in the :clo_opsrc clipboard	
-    Given "elasticsearch-operator" packagemanifest's catalog source name is stored in the :eo_opsrc clipboard	
-
     Given I switch to the first user	
     Given the first user is cluster-admin	
     Given I open admin console in a browser	
@@ -46,6 +37,11 @@ Feature: Logging smoke test case
     Then the step should succeed
     And I close the current browser
 # ES Metrics
+    Given I obtain test data file "logging/clusterlogging/example_indexmanagement.yaml"
+    Given I create clusterlogging instance with:
+      | remove_logging_pods | true                         |
+      | crd_yaml            | example_indexmanagement.yaml |
+    Then the step should succeed
     Given I wait for the "monitor-elasticsearch-cluster" service_monitor to appear
     And the expression should be true> service_monitor('monitor-elasticsearch-cluster').service_monitor_endpoint_spec(server_name: "elasticsearch-metrics.openshift-logging.svc").port == "elasticsearch"
     And the expression should be true> service_monitor('monitor-elasticsearch-cluster').service_monitor_endpoint_spec(server_name: "elasticsearch-metrics.openshift-logging.svc").path == "/_prometheus/metrics"
@@ -58,6 +54,11 @@ Feature: Logging smoke test case
     And the expression should be true>  @result[:parsed]['data']['result'][0]['value']
     """
 # Fluentd Metrics
+    Given I obtain test data file "logging/clusterlogging/example_indexmanagement.yaml"
+    Given I create clusterlogging instance with:
+      | remove_logging_pods | true                         |
+      | crd_yaml            | example_indexmanagement.yaml |
+    Then the step should succeed
     Given I wait for the "fluentd" service_monitor to appear
     Given the expression should be true> service_monitor('fluentd').service_monitor_endpoint_spec(server_name: "fluentd.openshift-logging.svc").port == "metrics"
     And the expression should be true> service_monitor('fluentd').service_monitor_endpoint_spec(server_name: "fluentd.openshift-logging.svc").path == "/metrics"
@@ -75,19 +76,7 @@ Feature: Logging smoke test case
     Given evaluation of `route('kibana', service('kibana',project('openshift-logging', switch: false))).dns(by: admin)` is stored in the :kibana_route clipboard
     Given I login to kibana logging web console
     Then the step should succeed
-    When I run the :logout_kibana web action
-    Then the step should succeed
     And I close the current browser
-    Given I open admin console in a browser
-    When I perform the :click_kibana_link_in_console web action with:
-      | kibana_route   | https://<%= cb.kibana_route %> |
-    Then the step should succeed
-    And I perform the :kibana_login web action in ":url=>https://<%= cb.kibana_route %>" window with:
-      | username   | <%= user.name %>               |
-      | password   | <%= user.password %>           |
-      | kibana_url | https://<%= cb.kibana_route %> |
-      | idp        | <%= env.idp %>                 |
-    Then the step should succeed
 # Data Check
 # Authorization
     Given I switch to the first user
@@ -120,6 +109,19 @@ Feature: Logging smoke test case
       | token        | <%= cb.user_token %>    |
     Then the step should succeed
     And the expression should be true> @result[:parsed]['count'] > 0
+# Console Dashboard
+    Given I switch to the first user
+    And the first user is cluster-admin
+    And I open admin console in a browser
+    When I run the :goto_monitoring_db_cluster_logging web action
+    Then the step should succeed
+    Given evaluation of `["Elastic Cluster Status", "Elastic Nodes", "Elastic Shards", "Elastic Documents", "Total Index Size on Disk", "Elastic Pending Tasks", "Elastic JVM GC time", "Elastic JVM GC Rate", "Elastic Query/Fetch Latency | Sum", "Elastic Query Rate | Top 5", "CPU", "Elastic JVM Heap Used", "Elasticsearch Disk Usage", "File Descriptors In Use", "FluentD emit count", "FluentD Buffer Availability", "Elastic rx bytes", "Elastic Index Failure Rate", "FluentD Output Error Rate"]` is stored in the :cards clipboard
+    And I repeat the following steps for each :card in cb.cards:
+    """
+    When I perform the :check_monitoring_dashboard_card web action with:
+      | card_name | #{cb.card} |
+    Then the step should succeed
+    """
 # Cronjob
     Given I obtain test data file "logging/clusterlogging/example.yaml"
     Given I create clusterlogging instance with:
@@ -148,16 +150,3 @@ Feature: Logging smoke test case
     Then the step should succeed
     Given 60 seconds have passed
     And the expression should be true> cron_job('curator').schedule(cached: false, quiet: true) == "*/15 * * * *"
-# Console Dashboard
-    Given I switch to the first user
-    And the first user is cluster-admin
-    And I open admin console in a browser
-    When I run the :goto_monitoring_db_cluster_logging web action
-    Then the step should succeed
-    Given evaluation of `["Elastic Cluster Status", "Elastic Nodes", "Elastic Shards", "Elastic Documents", "Total Index Size on Disk", "Elastic Pending Tasks", "Elastic JVM GC time", "Elastic JVM GC Rate", "Elastic Query/Fetch Latency | Sum", "Elastic Query Rate | Top 5", "CPU", "Elastic JVM Heap Used", "Elasticsearch Disk Usage", "File Descriptors In Use", "FluentD emit count", "FluentD Buffer Availability", "Elastic rx bytes", "Elastic Index Failure Rate", "FluentD Output Error Rate"]` is stored in the :cards clipboard
-    And I repeat the following steps for each :card in cb.cards:
-    """
-    When I perform the :check_monitoring_dashboard_card web action with:
-      | card_name | #{cb.card} |
-    Then the step should succeed
-    """
