@@ -507,6 +507,32 @@ transfer_cluster_ownership:
     action: check_transfer_cluster_ownership_dialog
     action: click_initiate_transfer_button
     action: check_transfer_cluster_ownership_notification
+transfer_disconnected_cluster_ownership:
+    action: expand_actions_on_cluster_detail_page
+    action: click_transfer_cluster_ownership_button
+    action: check_transfer_disconnected_cluster_ownership_dialog
+    action: click_initiate_transfer_button
+    action: check_transfer_disconnected_cluster_ownership_notification
+check_transfer_disconnected_cluster_ownership_dialog:
+    elements:
+        - selector:
+            xpath: //h1[text()='Transfer cluster ownership']
+        - selector:
+            xpath: //p[text()='Transferring cluster ownership will allow another individual to manage this cluster. The steps for transferring cluster ownership are:']
+        - selector:
+            xpath: //li[text()='Initiate transfer']
+        - selector:
+            xpath: //a[text()='Register the cluster' and @href='/openshift/register']
+        - selector:
+            xpath: //h4[text()='If the transfer is not completed within 5 days, the procedure must be restarted.']
+check_transfer_disconnected_cluster_ownership_notification:
+    elements:
+        - selector:
+            xpath: //h4[text()='Cluster ownership transfer initiated']
+        - selector:
+            xpath: //div[text()='the cluster again using the same id.']
+        - selector:
+            xpath: //a[text()='registering' and @href='/openshift/register']
 click_transfer_cluster_ownership_button:
     element:
         selector:
@@ -554,3 +580,92 @@ check_actions_button_disabled:
   element:
     selector:
       xpath: //button[@disabled]/span[text()='Actions']
+check_subscription_settings_dialog:
+    action: open_subscription_settings_dialog
+    action: subscription_settings_dialog_loaded
+open_subscription_settings_dialog:
+    element:
+        selector:
+            xpath: //dl[@class='cluster-details-item left']/dd/button[text()='Edit subscription settings']
+        timeout: 30
+        op: click
+subscription_settings_dialog_loaded:
+    elements:
+        - selector:
+            xpath: //p[text()='Editing the subscription settings will help ensure that you receive the level of support that you expect, and that your cluster is consuming the correct type of subscription.']
+        - selector:
+            xpath: //span[text()='Choose the support type for this cluster.']
+        - selector:
+            xpath: //span[text()='How do you intend to use this cluster?']
+        - selector:
+            xpath: //span[text()='Choose your service level. (If you bought your subscription through Red Hat, choose L1-L3.)']
+        - selector:
+            xpath: //span[text()='What unit of measure do you want to use, cores/vCPU or sockets?']
+check_save_button_disable_in_subscription_settings_dialog:
+    element:
+        selector:
+            xpath: //button[text()='Save settings' and @aria-disabled='true']
+check_save_button_enable_in_subscription_settings_dialog:
+    element:
+        selector:
+            xpath: //button[text()='Save settings' and @aria-disabled='false']
+        op: click
+update_subscription_settings_in_dialog:
+    action: select_support_level
+    action: select_production_status
+    action: select_service_level
+    action: select_unit
+    action: input_compute_cores
+    action: check_save_button_enable_in_subscription_settings_dialog
+    action: check_subscription_settings_in_overview
+select_support_level:
+    element:
+        selector:
+            xpath: //input[@value='<support_level>']
+        timeout: 30
+        op: click
+select_production_status:
+    element:
+        selector:
+            xpath: //input[@value='<production_status>']
+        op: click
+select_service_level:
+    element:
+        selector:
+            xpath: //input[@value='<service_level>']
+        op: click
+select_unit:
+    element:
+        selector:
+            xpath: //input[@value='<unit>']
+        op: click
+input_compute_cores:
+    elements:
+        - selector: &compute_cores_textbox
+            xpath: //input[@name='compute_cores']
+          op: clear
+        - selector:
+            <<: *compute_cores_textbox
+          op: send_keys <unit_value>
+check_subscription_settings_in_overview:
+    elements:
+        - selector:
+            xpath: //div[@class='pf-c-card__body ocm-c-overview-subscription-settings__card--body']//dd[text()='<support_level>']
+          timeout: 30
+        - selector:
+            xpath: //div[@class='pf-c-card__body ocm-c-overview-subscription-settings__card--body']//dd[text()='<production_status>']
+        - selector:
+            xpath: //div[@class='pf-c-card__body ocm-c-overview-subscription-settings__card--body']//dd[text()='<service_level>']
+        - selector:
+            xpath: //div[@class='pf-c-card__body ocm-c-overview-subscription-settings__card--body']//dd[text()='<unit>']
+        - selector:
+            xpath: //div[@class='pf-c-card__body ocm-c-overview-subscription-settings__card--body']//dd[contains(., '<unit_value>')]
+check_subscription_settings_error_message:
+    action: input_compute_cores
+    action: subscription_settings_error_message_loaded
+    action: check_save_button_disable_in_subscription_settings_dialog
+subscription_settings_error_message_loaded:
+    element:
+        selector:
+            xpath: //div[contains(., '<error_message>')]
+        timeout: 30
