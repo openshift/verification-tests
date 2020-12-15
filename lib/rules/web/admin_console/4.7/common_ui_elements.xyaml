@@ -342,11 +342,45 @@ check_link_in_breadcrumb:
   element:
     selector:
       xpath: //ol[@class='pf-c-breadcrumb__list']/li[<layer_number>]/a[contains(@data-test-id,'breadcrumb-link') and contains(@href,'<link>') and translate(normalize-space(text()), ' ','')='<text>']
-
+check_installplandetails_text_in_breadcrumb:
+  params:
+    layer_number: 2
+    text: InstallPlan details
+  action: check_text_in_breadcrumb
+check_projectdetails_text_in_breadcrumb:
+  params:
+    layer_number: 2
+    text: Project details
+  action: check_text_in_breadcrumb
+check_replicasetdetails_text_in_breadcrumb:
+  params:
+    layer_number: 2
+    text: Replica Set details
+  action: check_text_in_breadcrumb
+check_machinedetails_text_in_breadcrumb:
+  params:
+    layer_number: 2
+    text: Machine details
+  action: check_text_in_breadcrumb
+check_machinesetdetails_text_in_breadcrumb:
+  params:
+    layer_number: 2
+    text: Machine Set details
+  action: check_text_in_breadcrumb
+check_containerdetails_text_in_breadcrumb:
+  params:
+    layer_number: 3
+    text: Container Details
+  action: check_text_in_breadcrumb
+check_imagestreamtagdetails_text_in_breadcrumb:
+  params:
+    layer_number: 3
+    text: Image Stream Tag Details
+  action: check_text_in_breadcrumb
 check_text_in_breadcrumb:
   element:
     selector:
-      xpath: //ol[@class='pf-c-breadcrumb__list']/li[<layer_number>][translate(normalize-space(text()), ' ','')='<text>']
+      xpath: //ol[@class='pf-c-breadcrumb__list']/li[<layer_number>][normalize-space(text())='<text>']
 
 check_row_filter_on_page:
   elements:
