@@ -1,3 +1,15 @@
+click_button_example_query:
+  params:
+    button_text: Insert example query
+  action: click_button_text
+check_button_example_query:
+  params:
+    button_text: Insert example query
+  action: check_button_text
+click_run_queries_button:
+  params:
+    button_text: Run queries
+  action: click_button_text
 check_sample_query_area:
   element:
     selector:
@@ -19,7 +31,7 @@ click_projects_dropdown_developer_mode:
 input_select_project_developer_mode:
   element:
     selector:
-      xpath: //div[@class='co-namespace-selector']//input[@placeholder='Select project...']
+      xpath: //div[@class='co-namespace-selector']//input[@placeholder='Select Project...']
     op: send_keys <project_name>
     type: input
 click_project_link_developer_mode:
@@ -64,7 +76,7 @@ set_query_input_text_area:
 choose_metrics_query:
   element:
     selector:
-      xpath: //a[text()='<metrics_name>']
+      xpath: //a[contains(text(),'<metrics_name>')]
     op: click
 check_query_input_text_area:
   element:
@@ -114,9 +126,10 @@ click_zoom_value_button:
       xpath: //div[contains(@class,'query-browser__controls' )]//button[text()='<zoom_value>']
     op: click
 click_reset_zoom_button:
-  params:
-    zoom_value: Reset Zoom 
-  action: click_zoom_value_button
+  element:
+    selector:
+      xpath: //div[contains(@class,'query-browser__controls' )]/button
+    op: click
 check_zoom_value:
   element:
     selector:
@@ -171,7 +184,7 @@ set_query_input_text_area_only:
 click_clear_query_button:
   element:
     selector:
-      xpath: //button[@aria-label='Clear Query']
+      xpath: //button[@aria-label='Clear query']
     op: click
 order_metrics_data:
   element:
@@ -264,12 +277,12 @@ check_all_series_show:
 click_pod_chart_link:
   element:
     selector: 
-      xpath: //h5[text()='<chart_name>']/../a
+      xpath: //h5[contains(text(),'<chart_name>')]/../a
     op: click
 check_data_diplayed_db:
   element:
     selector:
-      xpath: //h2[text()='<data_name>']/../..//*[contains(text(), '<legend_name>')]
+      xpath: //h2[contains(text(),'<data_name>')]/../..//*[contains(text(), '<legend_name>')]
 
 click_utilization_graph_link:
   element:
