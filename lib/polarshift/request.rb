@@ -209,6 +209,7 @@ module BushSlicer
           end
         }
 
+
         Http.request(
           method: :post,
           url: "#{base_url}project/#{project_id}/test-cases/query",
@@ -217,6 +218,7 @@ module BushSlicer
           **common_opts
         )
       end
+
 
       def query_test_cases_smart(timeout: 360, **opts)
         res = query_test_cases(**opts)
@@ -303,22 +305,6 @@ module BushSlicer
           raise_on_error: false,
           **common_opts
         )
-      end
-
-      def update_caseruns_smart(project_id, run_id, updates, timeout: 360)
-        res = nil
-        success = wait_for(timeout, interval: 30) {
-          res = update_caseruns(project_id, run_id, updates)
-          if res[:success]
-            return res
-          else
-            logger.info %Q{got status "#{res[:exitstatus]}" updating test run "#{run_id}" in project "#{project_id}":\n#{res[:response]}}
-            false
-          end
-        }
-        unless success
-          raise %Q{timeout ("#{timeout}" seconds) updating run "#{run_id}" in project "#{project_id}":\n#{res[:response]}}
-        end
       end
 
       # @param project_id [String]

@@ -28,7 +28,7 @@ objects:
                 - "-Mbignum=bpi"
                 - "-wle"
                 - "print bpi(2000)"
-              image: openshift/perl-516-centos7
+              image: quay.io/openshifttest/perl-516-centos7
               name: pi-restartpolicy
           restartPolicy: "${RESTART_POLICY}"
 parameters:

@@ -15,7 +15,7 @@ gem 'net-scp'
 gem 'cucumber', '~>2.4.0'
 # gem 'rspec', '~>2.14.1'
 # gem 'rspec-expectations', '~>2.14.0'
-gem 'aws-sdk', '~> 2'
+gem 'aws-sdk', '~> 3'
 gem 'google-api-client', '~>0.9.2'
 gem 'rbvmomi'
 
