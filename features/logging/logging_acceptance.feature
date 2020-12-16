@@ -35,11 +35,12 @@ Feature: Logging smoke test case
       | install_mode      | AllNamespace              |	
       | approval_strategy | Automatic                 |	
     Then the step should succeed
+    Given elasticsearch operator is ready in the "openshift-operators-redhat" namespace
     And I close the current browser
 # ES Metrics
     Given I obtain test data file "logging/clusterlogging/example_indexmanagement.yaml"
     Given I create clusterlogging instance with:
-      | remove_logging_pods | true                         |
+      | remove_logging_pods | false                        |
       | crd_yaml            | example_indexmanagement.yaml |
     Then the step should succeed
     Given I wait for the "monitor-elasticsearch-cluster" service_monitor to appear
@@ -56,7 +57,7 @@ Feature: Logging smoke test case
 # Fluentd Metrics
     Given I obtain test data file "logging/clusterlogging/example_indexmanagement.yaml"
     Given I create clusterlogging instance with:
-      | remove_logging_pods | true                         |
+      | remove_logging_pods | false                        |
       | crd_yaml            | example_indexmanagement.yaml |
     Then the step should succeed
     Given I wait for the "fluentd" service_monitor to appear
@@ -72,20 +73,27 @@ Feature: Logging smoke test case
     """
 # Kibana Access
     Given I switch to the first user
-    And the first user is cluster-admin
-    Given evaluation of `route('kibana', service('kibana',project('openshift-logging', switch: false))).dns(by: admin)` is stored in the :kibana_route clipboard
-    Given I login to kibana logging web console
-    Then the step should succeed
-    And I close the current browser
-# Data Check
-# Authorization
-    Given I switch to the first user
-    Given I create a project with non-leading digit name
+    And I create a project with non-leading digit name
     And evaluation of `project` is stored in the :proj clipboard
     Given I obtain test data file "logging/loggen/container_json_log_template.json"
     When I run the :new_app client command with:
       | file | container_json_log_template.json |
     Then the step should succeed
+    Given a pod becomes ready with labels:
+      | run=centos-logtest,test=centos-logtest |
+    Given I switch to cluster admin pseudo user
+    And I use the "openshift-logging" project
+    Given I wait for the "app" index to appear in the ES pod with labels "es-node-master=true"
+    And I wait for the project "<%= cb.proj.name %>" logs to appear in the ES pod
+    Given I switch to the first user
+    When I login to kibana logging web console
+    Then the step should succeed
+    When I perform the :create_index_pattern_in_kibana web action with:
+      | index_pattern_name | app |
+    Then the step should succeed
+    And I close the current browser
+# Data Check
+# Authorization
     Given I switch to the second user
     And the second user is cluster-admin
     Given evaluation of `user.cached_tokens.first` is stored in the :user_token clipboard
