@@ -224,7 +224,7 @@ Feature: build 'apps' with CLI
   Scenario: Using a docker image as source input using new-build cmd
     Given I have a project
     When I run the :tag client command with:
-      | source | quay.io/openshifttest/python:latest |
+      | source | quay.io/openshifttest/python:3.6 |
       | dest   | python:latest |
     Then the step should succeed
     And the "python" image stream becomes ready
@@ -654,9 +654,10 @@ Feature: build 'apps' with CLI
     And the output should match:
       | .*one or more resources.* |
     When I run the :new_app client command with:
-      | file | https://raw.githubusercontent.com/openshift/origin/master/examples/sample-app/application-template-dockerbuild.json |
+      | app_repo     | https://github.com/openshift/ruby-hello-world |
+      | image_stream | openshift/ruby:2.6                            |
     Then the step should succeed
-    And the "ruby-sample-build-1" build becomes :running
+    And the "ruby-hello-world-1" build becomes :running
     When I run the :logs client command with:
       | resource_name | |
     Then the step should fail
