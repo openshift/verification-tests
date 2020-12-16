@@ -5,9 +5,9 @@ Feature: buildlogic.feature
   Scenario: Build with specified Dockerfile via new-build -D
     Given I have a project
     When I run the :new_build client command with:
-      | D    | FROM centos:7\nRUN echo "hello" |
-      | to   | myappis                         |
-      | name | myapp                           |
+      | D    | FROM quay.io/openshifttest/centos@sha256:285bc3161133ec01d8ca8680cd746eecbfdbc1faa6313bd863151c4b26d7e5a5\nRUN echo "hello" |
+      | to   | myappis |
+      | name | myapp   |
     Then the step should succeed
     And the "myapp-1" build was created
     And the "myapp-1" build completed
@@ -96,19 +96,20 @@ Feature: buildlogic.feature
   Scenario: Build with specified Dockerfile to image with same image name via new-build
     Given I have a project
     When I run the :new_build client command with:
-      | D | FROM centos:7 |
+      | D  | FROM quay.io/openshifttest/centos@sha256:285bc3161133ec01d8ca8680cd746eecbfdbc1faa6313bd863151c4b26d7e5a5 |
+      | to | centos |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | bc     |
       | name     | centos |
     Then the output should match:
-      | From Image:\s+ImageStreamTag centos:7     |
-      | Output to:\s+ImageStreamTag centos:latest |
+      | From Image:\s+ImageStreamTag centos:latest |
+      | Output to:\s+ImageStreamTag centos:latest  |
     Given the "centos-1" build becomes :complete
     When I run the :new_build client command with:
-      | D    | FROM centos:7 |
-      | to   | centos:7      |
-      | name | myapp         |
+      | D    | FROM quay.io/openshifttest/centos@sha256:285bc3161133ec01d8ca8680cd746eecbfdbc1faa6313bd863151c4b26d7e5a5 |
+      | to   | centos:7 |
+      | name | myapp    |
     And I get project bc
     Then the output should contain:
       | myapp |
@@ -116,7 +117,7 @@ Feature: buildlogic.feature
     And the "myapp-2" build becomes :complete
     And the "myapp-3" build becomes :running
     When I run the :new_build client command with:
-      | code         | https://github.com/sclorg/nodejs-ex.git    |
+      | code         | https://github.com/sclorg/nodejs-ex.git       |
       | image_stream | openshift/nodejs:0.10                         |
       | code         | https://github.com/openshift/ruby-hello-world |
       | image_stream | openshift/ruby:2.0                            |

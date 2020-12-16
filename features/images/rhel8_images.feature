@@ -12,7 +12,7 @@ Feature: rhel8images.feature
       | n                | openshift                               |
     Then the step should succeed
     When I run the :new_app client command with:
-      | image_stream | openshift/qe-ruby-25-rhel8                   |
+      | image_stream | openshift/qe-ruby-25-rhel8:latest            |
       | app_repo     | https://github.com/sclorg/s2i-ruby-container |
       | context_dir  | 2.5/test/puma-test-app                       |
       | name         | ruby25rhel8                                  |
@@ -172,7 +172,7 @@ Feature: rhel8images.feature
       | n                | openshift                               |
     Then the step should succeed
     When I run the :new_app client command with:
-      | image_stream | openshift/qe-ruby-25-rhel8                   |
+      | image_stream | openshift/qe-ruby-25-rhel8:latest            |
       | app_repo     | https://github.com/sclorg/s2i-ruby-container |
       | context_dir  | 2.5/test/puma-test-app                       |
       | name         | ruby25rhel8                                  |
