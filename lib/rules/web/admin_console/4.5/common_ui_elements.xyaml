@@ -620,6 +620,10 @@ check_no_machinehealthcheck_text:
   params:
     content: No Machine Health Checks Found
   action: check_page_contains
+check_no_results_text:
+  params:
+    content: No Results
+  action: check_page_contains
 submit_changes:
   elements:
   - selector:

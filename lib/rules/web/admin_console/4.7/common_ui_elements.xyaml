@@ -633,6 +633,10 @@ check_no_machinehealthcheck_text:
   params:
     content: No Machine Health Checks found
   action: check_page_contains
+check_no_results_text:
+  params:
+    content: No results
+  action: check_page_contains
 submit_changes:
   elements:
   - selector:
@@ -662,7 +666,7 @@ click_annotation_link:
 click_annotation_edit_link:
   element:
     selector:
-      xpath: //button[contains(@data-test-id,'edit-annotations')]
+      xpath: //button[@data-test='edit-annotations']
     op: click
     timeout: 20
 uncheck_checkbox:
