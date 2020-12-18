@@ -14,9 +14,9 @@ Feature: Check status via oc status, wait etc
     When I run the :status client command
     Then the step should succeed
     Then the output should match:
-      | rc/<%= cb.stdrc_name %> runs openshift/origin |
-      | rc/<%= cb.stdrc_name %> created               |
-      | \\d warning.*oc status.* to see details       |
+      | rc/<%= cb.stdrc_name %> runs quay.io/openshift/origin-base |
+      | rc/<%= cb.stdrc_name %> created                            |
+      | \\d warning.*oc status.* to see details                    |
     When I run the :status client command with:
       | suggest |     |
     Then the step should succeed
@@ -32,7 +32,7 @@ Feature: Check status via oc status, wait etc
     When I run the :status client command
     Then the step should succeed
     And the output should contain:
-      | pod/hello-openshift runs aosqe/hello-openshift |
+      | pod/hello-openshift runs quay.io/openshifttest/hello-openshift |
     # Clear out memory and cpu usage to fit into online quota limits
     And I ensure "hello-openshift" pod is deleted
 
