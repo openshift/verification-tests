@@ -106,3 +106,28 @@ Feature: Machine misc features testing
       | o             | json                         |
     Then the expression should be true>  @result[:parsed]['webhooks'][0]['clientConfig']['service']['port'] == 443
     """
+
+  # @author miyadav@redhat.com
+  # @case_id OCP-37744
+  @admin
+  Scenario Outline: kube-rbac-proxy should not expose tokens, have excessive verbosity
+    Given I switch to cluster admin pseudo user
+    Then I use the "<project>" project
+
+    Given a pod becomes ready with labels:
+      | api=clusterapi | <labels>  |
+    When I run the :logs admin command with:
+      | resource_name | <%= pod.name %>  |
+      | c             | <container_name> |
+    Then the output should not contain:
+      | Response Headers |
+
+   Examples:
+      | container_name                  | project                            | labels                              |
+      | kube-rbac-proxy-machine-mtrc    | openshift-machine-api              | k8s-app=controller                  |
+      | kube-rbac-proxy-machineset-mtrc | openshift-machine-api              | k8s-app=controller                  |
+      | kube-rbac-proxy-mhc-mtrc        | openshift-machine-api              | k8s-app=controller                  |
+      | kube-rbac-proxy                 | openshift-cluster-machine-approver | app=machine-approver                |
+      | kube-rbac-proxy                 | openshift-machine-api              | k8s-app=machine-api-operator        |
+      | kube-rbac-proxy                 | openshift-machine-api              | k8s-app=cluster-autoscaler-operator |
+
