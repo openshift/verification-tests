@@ -105,7 +105,7 @@ Feature: cluster-logging-operator related test
     Then the step should succeed
     And the output should match:
       | "alertstate":"pending\|firing" |
-    """ 
+    """
 
   # @author qitang@redhat.com
   # @case_id OCP-28131
@@ -114,7 +114,7 @@ Feature: cluster-logging-operator related test
   Scenario: CLO should generate Elasticsearch Index Management
     Given I obtain test data file "logging/clusterlogging/example_indexmanagement.yaml"
     Given I create clusterlogging instance with:
-      | remove_logging_pods | true                                                                                 |
+      | remove_logging_pods | true                         |
       | crd_yaml            | example_indexmanagement.yaml |
     Then the step should succeed
     Given I wait for the "indexmanagement-scripts" config_map to appear

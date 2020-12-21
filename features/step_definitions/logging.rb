@@ -470,6 +470,11 @@ end
 Given /^(fluentd|elasticsearch|rsyslog) receiver is deployed as (secure|insecure)(?: in the#{OPT_QUOTED} project)?$/ do | server, security, project_name |
   project_name ||= "openshift-logging"
   project(project_name)
+  if env.version_lt('4.6', user: user)
+    file_dir = "#{BushSlicer::HOME}/testdata/logging/logforwarding"
+  else
+    file_dir = "#{BushSlicer::HOME}/testdata/logging/clusterlogforwarder"
+  end
   case server
   when "fluentd"
     receiver_name = "fluentdserver"
@@ -491,11 +496,11 @@ Given /^(fluentd|elasticsearch|rsyslog) receiver is deployed as (secure|insecure
       if project_name != "openshift-logging"
         step %Q/I create pipelinesecret named "fluentdserver" with sharedkey "fluentdserver"/
       end
-      configmap_file = "#{BushSlicer::HOME}/testdata/logging/logforwarding/fluentd/secure/configmap.yaml"
-      deployment_file = "#{BushSlicer::HOME}/testdata/logging/logforwarding/fluentd/secure/fluentdserver_deployment.yaml"
+      configmap_file = "#{file_dir}/fluentd/secure/configmap.yaml"
+      deployment_file = "#{file_dir}/fluentd/secure/deployment.yaml"
     else
-      configmap_file = "#{BushSlicer::HOME}/testdata/logging/logforwarding/fluentd/insecure/configmap.yaml"
-      deployment_file = "#{BushSlicer::HOME}/testdata/logging/logforwarding/fluentd/insecure/fluentdserver_deployment.yaml"
+      configmap_file = "#{file_dir}/fluentd/insecure/configmap.yaml"
+      deployment_file = "#{file_dir}/fluentd/insecure/deployment.yaml"
     end
 
   when "elasticsearch"
@@ -516,18 +521,18 @@ Given /^(fluentd|elasticsearch|rsyslog) receiver is deployed as (secure|insecure
       })
       step %Q/the step should succeed/
       step %Q/I create pipelinesecret named "pipelinesecret"/
-      configmap_file = "#{BushSlicer::HOME}/testdata/logging/logforwarding/elasticsearch/secure/configmap.yaml"
-      deployment_file = "#{BushSlicer::HOME}/testdata/logging/logforwarding/elasticsearch/secure/deployment.yaml"
+      configmap_file = "#{file_dir}/elasticsearch/secure/configmap.yaml"
+      deployment_file = "#{file_dir}/elasticsearch/secure/deployment.yaml"
     else
-      configmap_file = "#{BushSlicer::HOME}/testdata/logging/logforwarding/elasticsearch/insecure/configmap.yaml"
-      deployment_file = "#{BushSlicer::HOME}/testdata/logging/logforwarding/elasticsearch/insecure/deployment.yaml"
+      configmap_file = "#{file_dir}/elasticsearch/insecure/configmap.yaml"
+      deployment_file = "#{file_dir}/elasticsearch/insecure/deployment.yaml"
     end
 
   when "rsyslog"
     receiver_name = "rsyslogserver"
     pod_label = "component=rsyslogserver"
-    configmap_file = "#{BushSlicer::HOME}/testdata/logging/logforwarding/rsyslog/insecure/rsyslogserver_configmap.yaml"
-    deployment_file = "#{BushSlicer::HOME}/testdata/logging/logforwarding/rsyslog/insecure/rsyslogserver_deployment.yaml"
+    configmap_file = "#{file_dir}/rsyslog/insecure/rsyslogserver_configmap.yaml"
+    deployment_file = "#{file_dir}/rsyslog/insecure/rsyslogserver_deployment.yaml"
 
   end
 

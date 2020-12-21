@@ -69,7 +69,7 @@ When /^I get the #{QUOTED} logging index information(?: from a pod with labels #
     | #{labels} |
   })
 
-  step %Q/I perform the HTTP request on the ES pod with labels "#{pod_labels}":/, table(%{
+  step %Q/I perform the HTTP request on the ES pod with labels "#{labels}":/, table(%{
     | relative_url | _cat/indices?format=JSON |
     | op           | GET                      |
   })

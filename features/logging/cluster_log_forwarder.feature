@@ -82,7 +82,7 @@ Feature: cluster log forwarder features
     Then the step should succeed
     And the expression should be true> @result[:parsed]['count'] == cb.infra_log_count_1
     """
-    
+
     # forward logs to fluentd and ES
     Given I obtain test data file "logging/clusterlogforwarder/multiple_receiver/clusterlogforwarder.yaml"
     When I run the :apply client command with:
@@ -126,7 +126,7 @@ Feature: cluster log forwarder features
       | infra.log           |
       | infra-container.log |
     """
-    
+
   # @author qitang@redhat.com
   @admin
   @destructive
@@ -187,7 +187,7 @@ Feature: cluster log forwarder features
     Given I wait for the "fluentd" daemon_set to appear up to 300 seconds
     And <%= daemon_set('fluentd').replica_counters[:desired] %> pods become ready with labels:
       | logging-infra=fluentd |
-    
+
     Given elasticsearch receiver is deployed as <security> in the "openshift-logging" project
     Given admin ensures "instance" cluster_log_forwarder is deleted from the "openshift-logging" project after scenario
     And I obtain test data file "logging/clusterlogforwarder/elasticsearch/<security>/clusterlogforwarder.yaml"
@@ -288,7 +288,7 @@ Feature: cluster log forwarder features
       | relative_url | audit*/_search?format=JSON' -d '{"size": 2, "sort": [{"@timestamp": {"order":"desc"}}]} |
       | op           | GET                 |
     Then the step should succeed
-    And the expression should be true> JSON.parse(@result[:response])['hits']['hits'][0]['_source']['openshift']['labels'] == cluster_log_forwarder('instance').output_labels(name: '<audit_pipeline_name>')    
+    And the expression should be true> JSON.parse(@result[:response])['hits']['hits'][0]['_source']['openshift']['labels'] == cluster_log_forwarder('instance').output_labels(name: '<audit_pipeline_name>')
     """
 
     Examples:
