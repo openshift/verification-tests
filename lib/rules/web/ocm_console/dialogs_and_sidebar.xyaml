@@ -230,7 +230,7 @@ click_add_url_button:
   element:
     <<: *active_add_url_button
     op: click
-customer_cloud_subscription_prompt_message_loaded:
+aws_customer_cloud_subscription_prompt_message_loaded:
     elements:
         - selector:
             xpath: //h1[text()='Customer cloud subscription']
@@ -254,7 +254,9 @@ customer_cloud_subscription_prompt_message_loaded:
             xpath: //div[contains(text()[1],'Refer to the')]
 
 close_customer_cloud_subscription_prompt_message:
-    action: customer_cloud_subscription_prompt_message_loaded
+    action: 
+        if_param: AWS
+        ref: aws_customer_cloud_subscription_prompt_message_loaded
     element:
         selector:
             xpath: //button[text()='Close']
@@ -498,7 +500,9 @@ check_change_cluster_privacy_settings_dialog:
         - selector:
             xpath: //h1[text()='Change cluster privacy settings?']
         - selector:
-            xpath: //div[contains(.,'Changes may be required in AWS to maintain access. It may take up to one hour for the settings to become effective.')]
+            xpath: //div[contains(.,'Changes may be required in AWS to maintain access.')]
+        - selector:
+            xpath: //div[contains(.,'It may take up to one hour for the settings to become effective.')]
         - selector:
             xpath: //a[@href='https://docs.openshift.com/dedicated/4/cloud_infrastructure_access/dedicated-aws-private-cluster.html' and text()='Learn more']
     action: change_settings_button_on_dialog_enabled
@@ -535,3 +539,119 @@ check_node_count_field_on_edit_node_count_dialog:
       xpath: //span[text()='Node count']
   - selector:
       xpath: //select/option[text()='4']
+
+add_machine_pool_dialog_loaded:
+    elements:
+        - selector:
+            xpath: //h1[text()='Add machine pool']
+        - selector:
+            xpath: //span[text()='Compute node instance type']
+        - selector:
+            xpath: //span[text()='Compute node count']
+        - selector:
+            xpath: //select[@aria-label='Compute nodes']
+        - selector:
+            xpath: //span[text()='Edit node labels']
+        - selector:
+            xpath: //span[text()='Machine pool name']
+        - selector:
+            xpath: //input[@id='name']
+        - selector:
+            xpath: //div[@role='dialog']//button[text()='Add machine pool']
+        - selector:
+            xpath: // button[text()='Cancel']
+expand_edit_node_labels:
+    element:
+        selector:
+            xpath: //span[text()='Edit node labels']
+        op: click
+click_add_label_button:
+    element:
+        selector:
+            xpath: //button[text()='Add label']
+        op: click
+add_new_label:
+    action: click_add_label_button
+    action: input_label
+click_delete_node_label_button:
+    element:
+        selector:
+            xpath: //div[@class='space-bottom-md'][<row_number>]/button
+        op: click
+select_node_count:
+    elements:
+        - selector:
+            xpath: //select[@aria-label='Compute nodes']
+          op: click
+        - selector:
+            xpath: //option[@value='<compute_node>']
+          op: click
+select_machine_pool_name:
+    elements:
+        - selector:
+            xpath: //select[@id='machine_pool']
+          op: click
+        - selector:
+            xpath: //option[@value='<machine_pool_name>']
+          op: click
+
+edit_machine_pool:
+    action:
+        if_param: machine_pool_name
+        ref: click_scale_machine_pool_button
+    action:
+        if_not_param: machine_pool_name
+        ref: go_to_edit_node_count_dialog_on_cluster_detail_page
+    action:
+        if_param: machine_pool_name
+        ref: select_machine_pool_name
+    action: select_node_count
+    action: click_apply_button
+
+input_machine_pool_name:
+    params:
+        locator_id: name
+    action: clear_input
+    element:
+        selector:
+            xpath: //input[@id='name']
+        op: send_keys <machine_pool_name>
+input_label_key:
+    elements:
+        - selector:
+            xpath: //div[@class='space-bottom-md'][<row_number>]/input[@aria-label='Key-value list key']
+          op: clear
+        - selector:
+            xpath: //div[@class='space-bottom-md'][<row_number>]/input[@aria-label='Key-value list key']
+          op: send_keys <label_key>
+input_label_value:
+    elements:
+        - selector:
+            xpath: //div[@class='space-bottom-md'][<row_number>]/input[@aria-label='Key-value list value']
+          op: clear
+        - selector:
+            xpath: //div[@class='space-bottom-md'][<row_number>]/input[@aria-label='Key-value list value']
+          op: send_keys <label_value>
+input_label:
+    action: input_label_key
+    action: input_label_value
+click_add_machine_pool_button_on_dialog:
+    element:
+        selector:
+            xpath: //div[@role='dialog']//button[text()='Add machine pool']
+        op: click
+
+check_machine_pool_dialog:
+    action: add_machine_pool_dialog_loaded
+    action: expand_edit_node_labels
+    action: click_add_label_button
+    action: input_label
+    action: select_compute_node_in_dialog
+
+check_existed_label:
+    elements:
+        - selector:
+            xpath: //div[@class='space-bottom-md']/input[@aria-label='Key-value list value' and @value='<label_value>']
+        - selector:
+            xpath: //div[@class='space-bottom-md']/input[@aria-label='Key-value list key' and @value='<label_key>']
+
