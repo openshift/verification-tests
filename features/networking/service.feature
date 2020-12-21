@@ -157,7 +157,7 @@ Feature: Service related networking scenarios
     # Create a svc with externalIP
     Given I switch to the first user
     Given I obtain test data file "networking/externalip_service1.json"
-    And I wait up to 300 seconds for the steps to pass:
+    And I wait up to 500 seconds for the steps to pass:
     """
     When I run oc create over "externalip_service1.json" replacing paths:
       | ["spec"]["externalIPs"][0] | <%= cb.hostip %> |
@@ -196,7 +196,7 @@ Feature: Service related networking scenarios
     # Create a svc with externalIP/22.2.2.10 which is in 22.2.2.0/25
     Given I have a project
     Given I obtain test data file "networking/externalip_service1.json"
-    And I wait up to 300 seconds for the steps to pass:
+    And I wait up to 500 seconds for the steps to pass:
     """
     When I run oc create over "externalip_service1.json" replacing paths:
       | ["spec"]["externalIPs"][0] | 22.2.2.10 |
@@ -205,7 +205,7 @@ Feature: Service related networking scenarios
 
     # Create a svc with externalIP/22.2.2.130 which is not in 22.2.2.0/25
     Given I obtain test data file "networking/externalip_service1.json"
-    And I wait up to 300 seconds for the steps to pass:
+    And I wait up to 500 seconds for the steps to pass:
     """
     When I run oc create over "externalip_service1.json" replacing paths:
       | ["spec"]["externalIPs"][0] | 22.2.2.130 |
@@ -249,7 +249,7 @@ Feature: Service related networking scenarios
     # Create a svc with externalIP
     Given I switch to the first user
     Given I obtain test data file "networking/externalip_service1.json"
-    And I wait up to 300 seconds for the steps to pass:
+    And I wait up to 500 seconds for the steps to pass:
     """
     When I run oc create over "externalip_service1.json" replacing paths:
       | ["spec"]["externalIPs"][0] | <%= cb.hostip %> |
@@ -275,7 +275,7 @@ Feature: Service related networking scenarios
     # Create a svc with externalIP/22.2.2.10 which is in rejectedCIDRs
     Given I have a project
     Given I obtain test data file "networking/externalip_service1.json"
-    And I wait up to 300 seconds for the steps to pass:
+    And I wait up to 500 seconds for the steps to pass:
     """
     When I run oc create over "externalip_service1.json" replacing paths:
       | ["spec"]["externalIPs"][0] | 22.2.2.10 |
@@ -284,7 +284,7 @@ Feature: Service related networking scenarios
 
     # Create a svc with externalIP/22.2.2.130 which is in rejectedCIDRs
     Given I obtain test data file "networking/externalip_service1.json"
-    And I wait up to 300 seconds for the steps to pass:
+    And I wait up to 500 seconds for the steps to pass:
     """
     When I run oc create over "externalip_service1.json" replacing paths:
       | ["spec"]["externalIPs"][0] | 22.2.2.130 |
@@ -316,7 +316,7 @@ Feature: Service related networking scenarios
     # Create a svc with externalIP
     Given I switch to the first user
     Given I obtain test data file "networking/externalip_service1.json"
-    And I wait up to 300 seconds for the steps to pass:
+    And I wait up to 500 seconds for the steps to pass:
     """
     When I run oc create over "externalip_service1.json" replacing paths:
       | ["spec"]["externalIPs"][0] | <%= cb.host1ip %> |
@@ -344,7 +344,7 @@ Feature: Service related networking scenarios
 
     # Create a svc with second externalIP
     Given I obtain test data file "networking/externalip_service1.json"
-    And I wait up to 300 seconds for the steps to pass:
+    And I wait up to 500 seconds for the steps to pass:
     """
     When I run oc create over "externalip_service1.json" replacing paths:
       | ["spec"]["externalIPs"][0] | <%= cb.host2ip %> |
