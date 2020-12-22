@@ -31,3 +31,16 @@ Feature: CSI testing related feature
     Given I switch to cluster admin pseudo user
     Given admin uses the "csihostpath" project
     Given the pod named "my-csi-app" status becomes :running
+
+  # @author chaoyang@redhat.com
+  # @case_id OCP-37827
+  @admin
+  Scenario: CSI images checking in prod registry env
+    Given the master version >= "4.4"
+    Given I switch to cluster admin pseudo user
+    Given admin uses the "csihostpath" project
+    Given the pod named "my-csi-app" status becomes :running
+    And the expression should be true> pvc("csi-pvc").capacity(cached: false) == "2Gi"
+    When I run the :get admin command with:
+      | resource | volumesnapshot |
+    Then the output should contain "true"
