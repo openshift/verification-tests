@@ -271,14 +271,14 @@ Feature: MachineHealthCheck Test Scenarios
     Given I obtain test data file "cloud/mhc/mhc_validations.yaml"
     When I run oc create over "mhc_validations.yaml" replacing paths:
       | ["spec"]["maxUnhealthy"] | <maxUnhealthy> |
-    Then the output should contain:
-      | maxUnhealthy: Invalid value: "": spec.maxUnhealthy |
+    Then the output should match:
+      | maxUnhealthy: Invalid value: ".*": spec.maxUnhealthy |
 
    Examples:
       | maxUnhealthy |
       |  -2a         |
-      | "10t%"       |
-      | "-2%"        |
+      |  10t%        |
+      |  -2%         |
       |  -2%         |
 
   # @author miyadav@redhat.com
