@@ -10,6 +10,7 @@ Feature: Machine features testing
   # @author jhou@redhat.com
   # @case_id OCP-22115
   @smoke
+  @admin
   Scenario: machine-api clusteroperator should be in Available state
     Given evaluation of `cluster_operator('machine-api').condition(type: 'Available')` is stored in the :co_available clipboard
     Then the expression should be true> cb.co_available["status"]=="True"
@@ -22,6 +23,14 @@ Feature: Machine features testing
 
     Given evaluation of `cluster_operator('machine-api').condition(type: 'Progressing')` is stored in the :co_progressing clipboard
     Then the expression should be true> cb.co_progressing["status"]=="False"
+
+  # @author zhsun@redhat.com
+  # @case_id OCP-37706
+  @smoke
+  @admin
+  Scenario: Baremetal clusteroperator should be disabled in any deployment that is not baremetal
+    Given evaluation of `cluster_operator('baremetal').condition(type: 'Disabled')` is stored in the :co_disabled clipboard
+    Then the expression should be true> cb.co_disabled["status"]=="True"
 
   # @author jhou@redhat.com
   # @case_id OCP-25436
