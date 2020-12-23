@@ -1085,6 +1085,7 @@
   :options:
     :buildconfig: <value>
     :build_arg: --build-arg=<value>
+    :build_loglevel: --build-loglevel=<value>
     :commit: --commit=<value>
     :env: --env=<value>
     :follow: --follow=<value>
