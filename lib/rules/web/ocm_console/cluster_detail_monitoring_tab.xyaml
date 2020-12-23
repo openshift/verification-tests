@@ -41,6 +41,7 @@ issue_summary_loaded:
             timeout: 20
         - selector:
             xpath: //div[contains(., 'minutes ago')]
+            timeout: 2
         - selector:
             xpath: //h2[text()='Status']
         - selector:

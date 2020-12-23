@@ -5,16 +5,24 @@ check_osd_creation_page:
     action: cluster_detail_displayed
     action: cluster_scale_displayed
     action: check_help_messages_on_creation_page
+    action: check_node_draining
 osd_creation_page_loaded:
     action: creation_page_navigation_displayed
     action: cluster_detail_displayed
     action: cluster_scale_displayed
 input_cluster_name_on_osd_creation_page:
+    params:
+        locator_id: name
+    action: clear_input
     element:
         selector:
             xpath: //input[@id='name']
         op: send_keys <cluster_name>
         type: input
+cluster_name_filled:
+    element:
+        selector:
+            xpath: //input[@id='name' and @value='<cluster_name>']
 
 creation_page_navigation_displayed:
     elements:
@@ -31,7 +39,7 @@ page_title_displayed:
 cluster_detail_displayed:
     elements:
         - selector:
-            xpath: //h3[@class='osd-page-header' and text()='Cluster details']
+            xpath: //h3[text()='Cluster details']
 cluster_scale_displayed:
     elements:
     - selector:
@@ -88,7 +96,7 @@ select_basic_radio_button:
 check_networking_configuration:
     elements:
         - selector:
-            xpath: //h4[text()='Networking']
+            xpath: //h3[text()='Networking']
         - selector:
             xpath: //span[text()='Network configuration']
         - selector:
@@ -144,6 +152,7 @@ check_aws_advanced_elements_loaded:
         - selector:
             xpath: //*[@id='network_pod_cidr' and @placeholder='10.128.0.0/16']
     action: check_advanced_privacy_loaded
+    
 check_gcp_advanced_elements_loaded:
     elements:
         - selector:
@@ -349,11 +358,15 @@ check_no_input_errors_to_required_aws_items:
     action: click_create_button
     elements:
         - selector:
-            xpath: //input[@id='account_id']/../div[text()=' AWS account ID is required.']
+            xpath: //div[@id='account_id-helper' and text()=' AWS account ID is required.']
         - selector:
-            xpath: //input[@id='access_key_id']/../div[text()=' Field is required']
+            xpath: //div[@id='access_key_id-helper' and text()=' Field is required']
         - selector:
-            xpath: //input[@id='secret_access_key']/../div[text()=' Field is required']
+            xpath: //div[@id='secret_access_key-helper' and text()=' Field is required']
+check_error_to_cluster_name_on_creation_page:
+    element:
+        selector:
+            xpath: //div[@id='name-helper' and contains(text(),'<error_message>')]
 aws_account_id_textbox_loaded:
     element: &aws_account_id_textbox
         selector:
@@ -509,17 +522,22 @@ byoc_page_loaded:
     action: aws_account_id_textbox_loaded
     action: aws_access_key_textbox_loaded
     action: aws_access_secret_textbox_loaded
+    action: select_advanced_radio_button
+    
 
 check_byoc_creation_page:
     action: byoc_page_loaded
     action: check_lb_field_in_creation_page_missing
     action: check_persistent_storage_field_in_creation_page_missing
     action: cluster_detail_displayed
+    action: multi_az_radio_button_loaded
+    action: region_dropdown_loaded
     action: cluster_scale_displayed
     action: check_networking_configuration
     action: select_advanced_radio_button
-    action: multi_az_radio_button_loaded
-    action: region_dropdown_loaded
+    action: check_aws_advanced_elements_loaded
+    action: click_install_into_vpc_checkbox
+    action: check_existing_vpc
 check_creation_pending_message:
     elements:
         - selector:
@@ -676,3 +694,109 @@ close_help_message:
         selector:
             xpath: //button[@aria-label='Close']
         op: click
+expand_node_labels:
+    element:
+        selector:
+            xpath: //span[text()='Edit node labels']
+        op: click
+
+close_edit_node_labels:
+    action: expand_node_labels
+
+input_node_label_key:
+    element:
+        selector:
+            xpath: //input[@aria-label='Key-value list key' and @name='node_labels[<row_number>].key']
+        op: clear
+    element:
+        selector:
+            xpath: //input[@aria-label='Key-value list key' and @name='node_labels[<row_number>].key']
+        op: send_keys <label_key>
+input_node_label_value:
+    element:
+        selector:
+            xpath: //input[@aria-label='Key-value list value' and @name='node_labels[<row_number>].value']
+        op: clear
+    element:
+        selector:
+            xpath: //input[@aria-label='Key-value list value' and @name='node_labels[<row_number>].value']
+        op: send_keys <label_value>
+
+check_error_for_labels:
+    element:
+        selector:
+            xpath: //div[@id='labe-help' and text()='<error_message>']
+
+click_install_into_vpc_checkbox:
+    element:
+        selector:
+            xpath: //input[@id='install_to_vpc']
+        op: click
+
+check_node_draining:
+    elements:
+        - selector:
+            xpath: //h4[text()='Node draining']
+        - selector:
+            xpath: //div[contains(.,'You may set a grace period for how long Pod Disruption Budget-protected workloads will')]
+        - selector:
+            xpath: //div[contains(.,'be respected during updates. After this grace period, any workloads protected by')]
+        - selector:
+            xpath: //div[contains(.,'Pod Disruption Budgets that have not been successfully drained from a node will be')]
+        - selector:
+            xpath: //div[contains(.,'forcibly evicted.')]
+        - selector:
+            xpath: //span[text()='Grace period']
+        - selector:
+            xpath: //div/span[text()='1 hour']
+        - selector:
+            xpath: //div[@class='pf-c-form__group ocm-c-upgrades-pdb-select']/div/div/button[@aria-haspopup='listbox']
+select_node_drain:
+    elements:
+        - selector:
+            xpath: //div[@class='pf-c-form__group ocm-c-upgrades-pdb-select']/div/div/button[@aria-haspopup='listbox']
+          op: click
+        - selector:
+            xpath: //li/button[text()='<drain_value>']
+          op: click
+check_existing_vpc:
+    elements:
+        - selector:
+            xpath: //h4[text()='Existing VPC']
+        - selector:
+            xpath: //div[contains(text(), 'your VPC is configured with a public and a private subnet for each availability zone that you want the cluster installed into.')]
+        - selector:
+            xpath: //span[text()='Availability zone']
+        - selector:
+            xpath: //div[@class='pf-c-form__group ocm-c-create-osd-az-select']/div[@class='pf-c-form__group-control']
+        - selector:
+            xpath: //span[text()='Private subnet ID']
+        - selector:
+            xpath: //input[contains(@id,'private_subnet_id_0')]
+        - selector:
+            xpath: //span[text()='Public subnet ID']
+        - selector:
+            xpath: //input[contains(@id,'public_subnet_id_0')]
+        - selector:
+            xpath: //span[text()='Select availability zone']
+    action: select_multi_az
+    elements:
+        - selector:
+            xpath: //input[contains(@id,'private_subnet_id_1')]
+        - selector:
+            xpath: //input[contains(@id,'public_subnet_id_1')]
+        - selector:
+            xpath: //input[contains(@id,'private_subnet_id_2')]
+        - selector:
+            xpath: //input[contains(@id,'public_subnet_id_2')]
+select_vpc_avalilability_zone:
+    elements:
+        - selector:
+            xpath: (//div[@class='pf-c-form__group ocm-c-create-osd-az-select']/div[@class='pf-c-form__group-control'])[<row_number>]
+          op: click
+        - selector:
+            xpath: //button[text()='<available_zone>']
+          op: click
+        - selector:
+            xpath: //span[text()='<available_zone>']
+    
