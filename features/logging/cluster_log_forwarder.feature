@@ -35,7 +35,7 @@ Feature: cluster log forwarder features
     Given fluentd receiver is deployed as secure in the "openshift-logging" project
     Given admin ensures "instance" cluster_log_forwarder is deleted from the "openshift-logging" project after scenario
     Given I obtain test data file "logging/clusterlogforwarder/fluentd/secure/clusterlogforwarder.yaml"
-    When I run the :create client command with:
+    When I process and create:
       | f | clusterlogforwarder.yaml |
     Then the step should succeed
     And I wait for the "instance" cluster_log_forwarder to appear
@@ -131,6 +131,28 @@ Feature: cluster log forwarder features
   @admin
   @destructive
   Scenario Outline: ClusterLogForwarder: Forward logs to fluentd
+    Given I switch to the first user
+    And I have a project
+    And evaluation of `project` is stored in the :fluentd_proj clipboard
+    Given fluentd receiver is deployed as <security> in the "<%= cb.fluentd_proj.name %>" project
+
+    And I create a project with non-leading digit name
+    And evaluation of `project` is stored in the :proj clipboard
+    Given I obtain test data file "logging/loggen/container_json_log_template.json"
+    When I run the :new_app client command with:
+      | file | container_json_log_template.json |
+    Then the step should succeed
+
+    Given I switch to cluster admin pseudo user
+    And I use the "openshift-logging" project
+    Given admin ensures "instance" cluster_log_forwarder is deleted from the "openshift-logging" project after scenario
+    And I obtain test data file "logging/clusterlogforwarder/fluentd/<security>/clusterlogforwarder.yaml"
+    When I process and create:
+      | f | clusterlogforwarder.yaml |
+      | p | URL=tcp://fluentdserver.<%= cb.fluentd_proj.name %>.svc:24224 |
+    Then the step should succeed
+    And I wait for the "instance" cluster_log_forwarder to appear
+
     Given I obtain test data file "logging/clusterlogging/fluentd_only.yaml"
     When I create clusterlogging instance with:
       | remove_logging_pods | true              |
@@ -140,28 +162,11 @@ Feature: cluster log forwarder features
     Given I wait for the "fluentd" daemon_set to appear up to 300 seconds
     And <%= daemon_set('fluentd').replica_counters[:desired] %> pods become ready with labels:
       | logging-infra=fluentd |
-    Given fluentd receiver is deployed as <security> in the "openshift-logging" project
-    Given admin ensures "instance" cluster_log_forwarder is deleted from the "openshift-logging" project after scenario
-    And I obtain test data file "logging/clusterlogforwarder/fluentd/<security>/clusterlogforwarder.yaml"
-    When I run the :create client command with:
-      | f | clusterlogforwarder.yaml |
-    Then the step should succeed
-    And I wait for the "instance" cluster_log_forwarder to appear
 
-    Given I switch to the first user
-    And I create a project with non-leading digit name
-    And evaluation of `project` is stored in the :proj clipboard
-    Given I obtain test data file "logging/loggen/container_json_log_template.json"
-    When I run the :new_app client command with:
-      | file | container_json_log_template.json |
-    Then the step should succeed
-    Given I switch to cluster admin pseudo user
-    And I use the "openshift-logging" project
-    And <%= daemon_set('fluentd').replica_counters[:desired] %> pods become ready with labels:
-      | logging-infra=fluentd |
-    Given I wait up to 300 seconds for the steps to pass:
+    Given I use the "<%= cb.fluentd_proj.name %>" project
+    And I wait up to 300 seconds for the steps to pass:
     """
-    And I execute on the "<%= cb.log_receiver.name %>" pod:
+    When I execute on the "<%= cb.log_receiver.name %>" pod:
       | ls | -l | /fluentd/log |
     Then the output should contain:
       | app.log             |
@@ -178,6 +183,28 @@ Feature: cluster log forwarder features
   @admin
   @destructive
   Scenario Outline: ClusterLogForwarder: Forward logs to non-clusterlogging-managed elasticsearch
+    Given I switch to the first user
+    And I have a project
+    And evaluation of `project` is stored in the :es_proj clipboard
+    Given elasticsearch receiver is deployed as <security> in the "<%= cb.es_proj.name %>" project
+
+    And I create a project with non-leading digit name
+    And evaluation of `project` is stored in the :proj clipboard
+    Given I obtain test data file "logging/loggen/container_json_log_template.json"
+    When I run the :new_app client command with:
+      | file | container_json_log_template.json |
+    Then the step should succeed
+
+    Given I switch to cluster admin pseudo user
+    And I use the "openshift-logging" project
+    Given admin ensures "instance" cluster_log_forwarder is deleted from the "openshift-logging" project after scenario
+    And I obtain test data file "logging/clusterlogforwarder/elasticsearch/<security>/clusterlogforwarder.yaml"
+    When I process and create:
+      | f | clusterlogforwarder.yaml |
+      | p | URL=<protocol>://elasticsearch-server.<%= cb.es_proj.name %>.svc:9200 |
+    Then the step should succeed
+    And I wait for the "instance" cluster_log_forwarder to appear
+
     Given I obtain test data file "logging/clusterlogging/fluentd_only.yaml"
     When I create clusterlogging instance with:
       | remove_logging_pods | true              |
@@ -188,56 +215,38 @@ Feature: cluster log forwarder features
     And <%= daemon_set('fluentd').replica_counters[:desired] %> pods become ready with labels:
       | logging-infra=fluentd |
 
-    Given elasticsearch receiver is deployed as <security> in the "openshift-logging" project
-    Given admin ensures "instance" cluster_log_forwarder is deleted from the "openshift-logging" project after scenario
-    And I obtain test data file "logging/clusterlogforwarder/elasticsearch/<security>/clusterlogforwarder.yaml"
-    When I run the :create client command with:
-      | f | clusterlogforwarder.yaml |
-    Then the step should succeed
-    And I wait for the "instance" cluster_log_forwarder to appear
-
-    Given I switch to the first user
-    And I create a project with non-leading digit name
-    And evaluation of `project` is stored in the :proj clipboard
-    Given I obtain test data file "logging/loggen/container_json_log_template.json"
-    When I run the :new_app client command with:
-      | file | container_json_log_template.json |
-    Then the step should succeed
-    Given I switch to cluster admin pseudo user
-    And I use the "openshift-logging" project
-    And <%= daemon_set('fluentd').replica_counters[:desired] %> pods become ready with labels:
-      | logging-infra=fluentd |
-    Given I wait up to 300 seconds for the steps to pass:
+    Given I use the "<%= cb.es_proj.name %>" project
+    And I wait up to 300 seconds for the steps to pass:
     """
     # check app logs
     When I execute on the "<%= cb.log_receiver.name %>" pod:
-      | curl | -sk | -XGET | <url>/*/_count?format=JSON | -H | Content-Type: application/json | -d | {"query": {"match": {"kubernetes.namespace_name": "<%= cb.proj.name %>"}}} |
+      | curl | -sk | -XGET | <protocol>://localhost:9200/*/_count?format=JSON | -H | Content-Type: application/json | -d | {"query": {"match": {"kubernetes.namespace_name": "<%= cb.proj.name %>"}}} |
     Then the step should succeed
-    And the expression should be true> JSON.parse(@result[:response])['count'] > 0
+    And the expression should be true> JSON.parse(@result[:stdout])['count'] > 0
 
     # check journal logs
     When I execute on the "<%= cb.log_receiver.name %>" pod:
-      | curl | -sk | -XGET | <url>/*/_count?format=JSON | -H | Content-Type: application/json | -d | {"query": {"exists": {"field": "systemd"}}} |
+      | curl | -sk | -XGET | <protocol>://localhost:9200/*/_count?format=JSON | -H | Content-Type: application/json | -d | {"query": {"exists": {"field": "systemd"}}} |
     Then the step should succeed
-    And the expression should be true> JSON.parse(@result[:response])['count'] > 0
+    And the expression should be true> JSON.parse(@result[:stdout])['count'] > 0
 
     # check logs in openshift* namespace
     When I execute on the "<%= cb.log_receiver.name %>" pod:
-      | curl | -sk | -XGET | <url>/*/_count?format=JSON | -H | Content-Type: application/json | -d | {"query": {"regexp": {"kubernetes.namespace_name": "openshift@"}}} |
+      | curl | -sk | -XGET | <protocol>://localhost:9200/*/_count?format=JSON | -H | Content-Type: application/json | -d | {"query": {"regexp": {"kubernetes.namespace_name": "openshift@"}}} |
     Then the step should succeed
-    And the expression should be true> JSON.parse(@result[:response])['count'] > 0
+    And the expression should be true> JSON.parse(@result[:stdout])['count'] > 0
 
     # check audit logs
     When I execute on the "<%= cb.log_receiver.name %>" pod:
-      | curl | -sk | -XGET | <url>/*/_count?format=JSON | -H | Content-Type: application/json | -d | {"query": {"exists": {"field": "auditID"}}} |
+      | curl | -sk | -XGET | <protocol>://localhost:9200/*/_count?format=JSON | -H | Content-Type: application/json | -d | {"query": {"exists": {"field": "auditID"}}} |
     Then the step should succeed
-    And the expression should be true> JSON.parse(@result[:response])['count'] > 0
+    And the expression should be true> JSON.parse(@result[:stdout])['count'] > 0
     """
 
     Examples:
-      | security | url                    |
-      | insecure | http://localhost:9200  | # @case_id OCP-29846
-      | secure   | https://localhost:9200 | # @case_id OCP-29845
+      | security | protocol |
+      | insecure | http     | # @case_id OCP-29846
+      | secure   | https    | # @case_id OCP-29845
 
   # @author qitang@redhat.com
   @admin
@@ -318,20 +327,24 @@ Feature: cluster log forwarder features
   Scenario Outline: Forward logs to remote-syslog
     Given the master version >= "4.6"
     Given I switch to the first user
+    And I have a project
+    And evaluation of `project` is stored in the :syslog_proj clipboard
+    Given rsyslog receiver is deployed as insecure in the "<%= cb.syslog_proj.name %>" project
+
     And I create a project with non-leading digit name
     And evaluation of `project` is stored in the :proj clipboard
     Given I obtain test data file "logging/loggen/container_json_log_template.json"
     When I run the :new_app client command with:
       | file | container_json_log_template.json |
     Then the step should succeed
+
     Given I switch to cluster admin pseudo user
     And I use the "openshift-logging" project
-  
-    Given rsyslog receiver is deployed as insecure in the "openshift-logging" project
     Given admin ensures "instance" cluster_log_forwarder is deleted from the "openshift-logging" project after scenario
     Given I obtain test data file "logging/clusterlogforwarder/rsyslog/<file>"
-    When I run the :create client command with:
+    When I process and create:
       | f | <file> |
+      | p | URL=<protocol>://rsyslogserver.<%= cb.syslog_proj.name %>.svc:514 |
     Then the step should succeed
     And I wait for the "instance" cluster_log_forwarder to appear
 
@@ -344,9 +357,10 @@ Feature: cluster log forwarder features
     Given I wait for the "fluentd" daemon_set to appear up to 300 seconds
     And <%= daemon_set('fluentd').replica_counters[:desired] %> pods become ready with labels:
       | logging-infra=fluentd |
-    Given I wait up to 300 seconds for the steps to pass:
+    Given I use the "<%= cb.syslog_proj.name %>" project
+    And I wait up to 300 seconds for the steps to pass:
     """
-    And I execute on the "<%= cb.log_receiver.name %>" pod:
+    When I execute on the "<%= cb.log_receiver.name %>" pod:
       | ls | -l | /var/log/clf/ |
     Then the output should contain:
       | app-container.log   |
@@ -356,10 +370,10 @@ Feature: cluster log forwarder features
     """
 
     Examples:
-      | file                  |
-      | rsys_clf_RFC3164.yaml | # @case_id OCP-32643
-      | rsys_clf_RFC5424.yaml | # @case_id OCP-32967
-      | rsys_clf_default.yaml | # @case_id OCP-32864
+      | file                  | protocol |
+      | rsys_clf_RFC3164.yaml | tls      | # @case_id OCP-32643
+      | rsys_clf_RFC5424.yaml | tcp      | # @case_id OCP-32967
+      | rsys_clf_default.yaml | udp      | # @case_id OCP-32864
 
   # @author anli@redhat.com
   # @case_id OCP-32697

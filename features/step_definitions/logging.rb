@@ -81,6 +81,12 @@ Given /^logging operators are installed successfully$/ do
       end
     end
   end
+  # check csv existense
+  success = wait_for(300, interval: 10) {
+    csv = subscription('elasticsearch-operator').current_csv
+    cluster_service_version(csv).exists?
+  }
+  raise "CSV #{csv} isn't created" unless success
   step %Q/elasticsearch operator is ready/
 
   # Create namespace
@@ -124,6 +130,12 @@ Given /^logging operators are installed successfully$/ do
       end
     end
   end
+  # check csv existense
+  success = wait_for(300, interval: 10) {
+    csv = subscription('cluster-logging').current_csv
+    cluster_service_version(csv).exists?
+  }
+  raise "CSV #{csv} isn't created" unless success
   step %Q/cluster logging operator is ready/
 end
 
@@ -406,7 +418,7 @@ Given /^I create pipelinesecret(?: named#{OPT_QUOTED})?(?: with sharedkey#{OPT_Q
   secret_name ||= "pipelinesecret"
   step %Q/admin ensures "#{secret_name}" secret is deleted from the "openshift-logging" project after scenario/
   if shared_key != nil
-    step %Q/I run the :create_secret client command with:/, table(%{
+    step %Q/I run the :create_secret admin command with:/, table(%{
       | name         | #{secret_name}           |
       | secret_type  | generic                  |
       | from_file    | tls.key=logging-es.key   |
@@ -417,7 +429,7 @@ Given /^I create pipelinesecret(?: named#{OPT_QUOTED})?(?: with sharedkey#{OPT_Q
       | n            | openshift-logging        |
     })
   else
-    step %Q/I run the :create_secret client command with:/, table(%{
+    step %Q/I run the :create_secret admin command with:/, table(%{
       | name         | #{secret_name}           |
       | secret_type  | generic                  |
       | from_file    | tls.key=logging-es.key   |
