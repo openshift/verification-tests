@@ -36,6 +36,17 @@ Feature: Logging smoke test case
       | approval_strategy | Automatic                 |	
     Then the step should succeed
     Given elasticsearch operator is ready in the "openshift-operators-redhat" namespace
+    Then I use the "openshift-logging" project
+    And default storageclass is stored in the :default_sc clipboard
+    Given I obtain test data file "logging/clusterlogging/clusterlogging-storage-template.yaml"
+    When I process and create:
+      | f | clusterlogging-storage-template.yaml    |
+      | p | STORAGE_CLASS=<%= cb.default_sc.name %> |
+      | p | PVC_SIZE=10Gi                           |
+      | p | ES_NODE_COUNT=1                         |
+      | p | REDUNDANCY_POLICY=ZeroRedundancy        |
+    Then the step should succeed
+    Given I wait for the "instance" clusterloggings to appear   
 # Console Dashboard
     When I run the :goto_monitoring_db_cluster_logging web action
     Then the step should succeed
@@ -48,11 +59,6 @@ Feature: Logging smoke test case
     """
     And I close the current browser
 # ES Metrics
-    Given I obtain test data file "logging/clusterlogging/example_indexmanagement.yaml"
-    Given I create clusterlogging instance with:
-      | remove_logging_pods | false                        |
-      | crd_yaml            | example_indexmanagement.yaml |
-    Then the step should succeed
     Given I wait for the "monitor-elasticsearch-cluster" service_monitor to appear
     And the expression should be true> service_monitor('monitor-elasticsearch-cluster').service_monitor_endpoint_spec(server_name: "elasticsearch-metrics.openshift-logging.svc").port == "elasticsearch"
     And the expression should be true> service_monitor('monitor-elasticsearch-cluster').service_monitor_endpoint_spec(server_name: "elasticsearch-metrics.openshift-logging.svc").path == "/_prometheus/metrics"
@@ -65,11 +71,7 @@ Feature: Logging smoke test case
     And the expression should be true>  @result[:parsed]['data']['result'][0]['value']
     """
 # Fluentd Metrics
-    Given I obtain test data file "logging/clusterlogging/example_indexmanagement.yaml"
-    Given I create clusterlogging instance with:
-      | remove_logging_pods | false                        |
-      | crd_yaml            | example_indexmanagement.yaml |
-    Then the step should succeed
+    Given I use the "openshift-logging" project
     Given I wait for the "fluentd" service_monitor to appear
     Given the expression should be true> service_monitor('fluentd').service_monitor_endpoint_spec(server_name: "fluentd.openshift-logging.svc").port == "metrics"
     And the expression should be true> service_monitor('fluentd').service_monitor_endpoint_spec(server_name: "fluentd.openshift-logging.svc").path == "/metrics"
@@ -126,12 +128,7 @@ Feature: Logging smoke test case
     Then the step should succeed
     And the expression should be true> @result[:parsed]['count'] > 0
 # Cronjob
-    Given I obtain test data file "logging/clusterlogging/example.yaml"
-    Given I create clusterlogging instance with:
-      | remove_logging_pods | true         |
-      | crd_yaml            | example.yaml |
-    Then the step should succeed
-    And the expression should be true> cluster_logging('instance').management_state == "Managed"
+    Given the expression should be true> cluster_logging('instance').management_state == "Managed"
     And the expression should be true> elasticsearch('elasticsearch').management_state == "Managed"
     Given evaluation of `cron_job('curator').schedule` is stored in the :curator_schedule_1 clipboard
     Then the expression should be true> cb.curator_schedule_1 == cluster_logging('instance').curation_schedule
