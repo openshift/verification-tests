@@ -22,7 +22,7 @@ Feature: job.feature
     When I run the :logs client command with:
       | resource_name | <%= cb.pilog %> |
     Then the step should succeed
-    And the output should contain "3.14159"
+    And the output should contain "hello-openshift"
     When I run the :delete client command with:
       | object_type | job |
       | object_name_or_id | pi |
@@ -66,7 +66,7 @@ Feature: job.feature
     When I run the :logs client command with:
       | resource_name | <%= cb.pilog %> |
     Then the step should succeed
-    And the output should contain "3.14159"
+    And the output should contain "hello-openshift"
     # Delete job and check job and pod
     When I run the :delete client command with:
       | object_type       | job  |
