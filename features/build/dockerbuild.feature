@@ -81,8 +81,10 @@ Feature: dockerbuild.feature
   Scenario: Add ARGs in docker build
     Given I have a project
     When I run the :new_build client command with:
-      | code      | https://github.com/openshift/ruby-hello-world |
-      | build_arg | ARG=VALUE                                     |
+      | code         | https://github.com/openshift/ruby-hello-world |
+      | image_stream | openshift/ruby:2.5                            |
+      | strategy     | docker                                        |
+      | build_arg    | ARG=VALUE                                     |
     Then the step should succeed
     Given the "ruby-hello-world-1" build was created
     When I run the :get client command with:
