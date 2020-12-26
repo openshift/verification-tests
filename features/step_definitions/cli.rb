@@ -110,8 +110,8 @@ end
 # instead of writing multiple steps, this step does this in one go:
 # 1. download file from URL
 # 2. load it as an ERB file with the cucumber scenario variables binding
-# 3. runs `oc create` command over the resulting file
-When /^I run oc create( as admin)? over ERB test file: (.*)$/ do |admin, file_path|
+# 3. runs `oc create|apply` command over the resulting file
+When /^I run oc (create|apply)( as admin)? over ERB test file: (.*)$/ do |action, admin, file_path|
   step %Q|I obtain test data file "#{file_path}"|
   file_path = cb.test_file
   # overwrite with ERB loaded content
@@ -119,9 +119,9 @@ When /^I run oc create( as admin)? over ERB test file: (.*)$/ do |admin, file_pa
   File.write(file_path, loaded)
   if admin
     ensure_admin_tagged
-    @result = self.admin.cli_exec(:create, {f: file_path})
+    @result = self.admin.cli_exec(action.to_sym, {f: file_path})
   else
-    @result = user.cli_exec(:create, {f: file_path})
+    @result = user.cli_exec(action.to_sym, {f: file_path})
   end
 end
 

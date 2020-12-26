@@ -14,3 +14,11 @@ Feature: example kata container scenarios
     Given the master version >= "4.6"
     Given I switch to cluster admin pseudo user
     And I remove kata operator from "kata-operator" namespace
+
+
+  Scenario: test install kata-webhook
+    Given I have a project
+    And evaluation of `project.name` is stored in the :test_project_name clipboard
+    And I run oc create over ERB test file: kata/webhook/example-fedora.yaml
+    And the pod named "example-fedora" becomes ready
+    Then the expression should be true> pod.runtime_class_name == 'kata'

@@ -48,6 +48,7 @@ module BushSlicer
       props[:service_account_name] = spec["serviceAccountName"]
       props[:termination_grace_period_seconds] = spec['terminationGracePeriodSeconds']
       props[:volumes] = spec["volumes"]
+      props[:runtime_class_name] = spec["runtimeClassName"]
       s = pod_hash["status"]
       props[:ip] = s["podIP"]
       # status should be retrieved on demand but we cache it for the brave
@@ -325,6 +326,10 @@ module BushSlicer
 
     def tolerations(user: nil, cached: true, quiet: false)
       raw_resource(user: user, cached: cached, quiet: quiet).dig('spec', 'tolerations')
+    end
+
+    def runtime_class_name(user: nil, cached: true, quiet: false)
+      return get_cached_prop(prop: :runtime_class_name, user: user, cached: cached, quiet: quiet)
     end
 
   end

@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: pod-annotate-webhook-certs
+  namespace: <%= project.name %>
+data:
+  cert.pem: <%= cb.webhook_cert_pem %>
+  key.pem: <%= cb.webhook_key_pem %>

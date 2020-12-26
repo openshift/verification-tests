@@ -83,3 +83,78 @@ And /^I verify kata container runtime is installed into the a worker node$/ do
   @result = node(pod.node_name).host.exec_admin(node_cmd)
   raise "No qemu process detected inside pod node" unless @result[:response].include? 'qemu'
 end
+
+# generate a cert for the kata-webhook pod which involves
+# 1. generate a cert for the webhook
+# 2. create certs secrets for k8s
+# 3. set the CABundle on the webhook registration yaml
+Given /^I install kata-webhook for the#{OPT_QUOTED} namespace$/ do | ns |
+  # ignore the admin check if it's for kata
+  unless ENV.has_key? 'USE_KATA_RUNTIME' and ENV['USE_KATA_RUNTIME']
+    ensure_admin_tagged
+  end
+
+  org_user = user
+  @user = admin
+  ns ||= project.name
+  project(ns)
+  step %Q{I use the "#{ns}" project}
+  key = OpenSSL::PKey::RSA.new(2048)
+  public_key = key.public_key
+  logger.info("Generating cert for project '#{project.name}")
+
+  webhook_ns = ns
+  webhook_name = "pod-annotate"
+  webhook_svc = "#{webhook_name}-webhook"
+  subject = OpenSSL::X509::Name.parse "CN=#{webhook_svc}.#{webhook_ns}.svc"
+
+  ### generate CSR
+  # The CA signs keys through a Certificate Signing Request (CSR). The CSR contains the information necessary to identify the key.
+  # openssl req -new -key ./webhookCA.key -subj "/CN=${WEBHOOK_SVC}.${WEBHOOK_NS}.svc" -out ./webhookCA.csr
+  csr = OpenSSL::X509::Request.new
+  csr.version = 0
+  csr.subject = subject
+  csr.public_key = public_key
+  csr.sign key, OpenSSL::Digest::SHA1.new
+
+  cert = OpenSSL::X509::Certificate.new
+  cert.subject = cert.issuer = subject #cert.issuer = OpenSSL::X509::Name.parse(subject)
+  cert.not_before = Time.now
+  cert.not_after = Time.now + 365 * 24 * 60 * 60
+  cert.public_key = public_key
+  cert.serial = 0x0
+  cert.version = 2
+
+  ef = OpenSSL::X509::ExtensionFactory.new
+  ef.subject_certificate = cert
+  ef.issuer_certificate = cert
+  cert.extensions = [
+    ef.create_extension("basicConstraints","CA:TRUE", true),
+    ef.create_extension("subjectKeyIdentifier", "hash"),
+    # ef.create_extension("keyUsage", "cRLSign,keyCertSign", true),
+  ]
+  cert.add_extension ef.create_extension("authorityKeyIdentifier",
+                                         "keyid:always,issuer:always")
+
+  cert.sign key, OpenSSL::Digest::SHA1.new
+
+  #  save them in the clipboard so testdata/xxx.yaml can use them
+  cb.webhook_key_pem = Base64.strict_encode64(key.to_s)
+  cb.webhook_cert_pem = Base64.strict_encode64(cert.to_pem)
+  cb.ca_bundle = cb.webhook_cert_pem
+  logger.info("Creating secret for webhook...")
+  step %Q(I run oc apply over ERB test file: kata/webhook/webhook-certs.yaml)
+  step %Q(the step should succeed)
+  logger.info("Applying webhook registration...")
+  step %Q(I run oc apply over ERB test file: kata/webhook/webhook-registration.yaml)
+  step %Q(the step should succeed)
+  logger.info("Applying webhook.yaml...")
+  step %Q(I run oc apply over ERB test file: kata/webhook/webhook.yaml)
+  step %Q(the step should succeed)
+  ### wait for pod to become ready to make sure
+  step %Q/a pod becomes ready with labels:/, table(%{
+    | app=pod-annotate-webhook |
+  })
+  @user = org_user
+
+end

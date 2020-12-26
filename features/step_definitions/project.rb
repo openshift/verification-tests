@@ -49,6 +49,11 @@ When /^I create a new project(?: via (.*?))?$/ do |via|
       step %Q/I use the "#{@projects.last.name}" project/
     end
   end
+  ## special case for enable kata webhook automatically when user sets the
+  # env variable USE_KATA_RUNTIME
+  if ENV.has_key? 'USE_KATA_RUNTIME' and ENV['USE_KATA_RUNTIME']
+    step %Q/I install kata-webhook for the namespace/
+  end
 end
 
 # create a new project w/o leading digit to get around this java bug.
@@ -64,6 +69,11 @@ Given /^I create a project with non-leading digit name$/ do
       logger.warn("Project #{@projects.last.name} not visible on server after create")
     end
   end
+  ## special case for enable kata webhook automatically when user sets the
+  # env variable USE_KATA_RUNTIME
+  if ENV.has_key? 'USE_KATA_RUNTIME' and ENV['USE_KATA_RUNTIME']
+    step %Q/I install kata-webhook for the namespace/
+  end
 end
 
 # create a new project w/ a leading digit to test OVS quoting
@@ -76,6 +86,11 @@ Given /^I create a project with leading digit name$/ do
     unless @result[:success]
       logger.warn("Project #{@projects.last.name} not visible on server after create")
     end
+  end
+  ## special case for enable kata webhook automatically when user sets the
+  # env variable USE_KATA_RUNTIME
+  if ENV.has_key? 'USE_KATA_RUNTIME' and ENV['USE_KATA_RUNTIME']
+    step %Q/I install kata-webhook for the namespace/
   end
 end
 
