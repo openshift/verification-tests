@@ -45,7 +45,7 @@ check_changed_one_project_pods_list_columns:
   - selector:
       xpath: //thead//th[.='Labels']
   - selector:
-      xpath: //thead//th[.='IP Address']
+      xpath: //thead//th[.='IP address']
   - selector:
       xpath: //tbody//tr
   scripts:
@@ -57,7 +57,7 @@ check_default_columns_in_projects_list_table:
   - selector:
       xpath: //thead//th[.='Name']
   - selector:
-      xpath: //thead//th[.='Display Name']
+      xpath: //thead//th[.='Display name']
   - selector:
       xpath: //thead//th[.='Status']
   - selector:
@@ -74,7 +74,7 @@ check_changed_projects_list_columns:
   - selector:
       xpath: //thead//th[.='Name']
   - selector:
-      xpath: //thead//th[.='Display Name']
+      xpath: //thead//th[.='Display name']
   - selector:
       xpath: //thead//th[.='Status']
   - selector:
@@ -92,7 +92,7 @@ check_default_columns_in_namespaces_list_table:
   - selector:
       xpath: //thead//th[.='Name']
   - selector:
-      xpath: //thead//th[.='Display Name']
+      xpath: //thead//th[.='Display name']
   - selector:
       xpath: //thead//th[.='Status']
   - selector:
@@ -207,7 +207,7 @@ check_updated_columns_in_all_projects_pods_list_table:
   - selector:
       xpath: //thead//th[.='Labels']
   - selector:
-      xpath: //thead//th[.='IP Address']
+      xpath: //thead//th[.='IP address']
 check_default_columns_in_all_projects_pods_list_table:
   elements:
   - selector:
@@ -242,7 +242,7 @@ check_table_column_heading:
 click_table_column_management_tooltip:
   elements:
   - selector:
-      xpath: //button[@aria-label='Column Management']
+      xpath: //button[@aria-label='Column management']
     op: click
   - selector:
       xpath: //p[contains(.,'Selected columns will appear in the table')]
@@ -263,7 +263,7 @@ check_no_more_selection_allowed:
       xpath: //input[@disabled and not(@name='Name')]
 unselect_displayname_column:
   params:
-    column_name: Display Name
+    column_name: Display name
   action: click_column_checkbox
 unselect_status_column:
   params:
@@ -315,7 +315,7 @@ select_node_column:
   action: click_column_checkbox
 select_ipaddress_column:
   params:
-    column_name: IP Address
+    column_name: IP address
   action: click_column_checkbox
 select_created_column:
   params:

@@ -22,7 +22,7 @@ create_app_from_imagestream:
   action: click_create_button
 click_try_sample:
   params:
-    button_text: Try Sample
+    button_text: Try sample
   action: click_button
 set_app_name:
   params:
@@ -85,10 +85,9 @@ filter_by_sourcetoimage_type:
   params:
     type: BuilderImage
   action: filter_by_type
-filter_by_serviceclass_type:
-  params:
-    type: cluster-service-class
-  action: filter_by_type
+# in 4.7 we don't support filter by ClusterServiceVersion
+# to be compatible with earlier versions we still keep this rule
+filter_by_serviceclass_type: {}
 filter_by_template_type:
   params:
     type: Template
@@ -100,15 +99,14 @@ filter_by_operatorbacked_type:
 filter_by_type:
   element:
     selector:
-      xpath: //a[contains(@href,'/?catalogType=<type>')]
+      xpath: //a[contains(@href,'catalogType=<type>')]
     op: click
 filter_by_keyword:
   element:
     selector: &filter_by_keyword
-      xpath: //input[contains(@class, 'co-catalog-page__input')]
+      xpath: //input[contains(@class, 'search-input__text-input')]
     op: send_keys <keyword>
-show_catalog_items:
-  action: filter_by_operatorbacked_type
+show_catalog_items: {}
 clear_filter_by_keyword:
   element:
     selector: *filter_by_keyword
@@ -166,7 +164,7 @@ click_project_list_dropdown:
 choose_project_from_dropdown_list:
   element:
     selector:
-      xpath: //ul//a[@id='<project_name>-Project-link' and contains(@class,'dropdown__menu-item')]
+      xpath: //ul//a[@id='<project_name>-Namespace-link' and contains(@class,'dropdown__menu-item')]
     op: click
 select_target_namespace:
   params:
@@ -184,3 +182,7 @@ check_the_support_link:
     text: Get support
     link_url: <link_url>
   action: check_link_and_text
+check_browser_url_has_catagory_keyword_kind:
+  scripts:
+    - command: return window.location.href.indexOf('category=languages&keyword=php&catalogType=BuilderImage') != -1
+      expect_result: true
