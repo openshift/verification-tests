@@ -7,7 +7,7 @@ Given /^the #{QUOTED} scheduler priorityclasses is restored after scenario$/ do 
   }
 end
 
-Given /^the CR #{QUOTED} named #{QUOTED} is restored after scenario$/ do |name, crd|
+Given /^the CR #{QUOTED} named #{QUOTED} is restored after scenario$/ do |crd, name|
   ensure_admin_tagged
   ensure_destructive_tagged
   org_scheduler = {}
