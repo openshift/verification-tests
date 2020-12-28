@@ -1,3 +1,7 @@
+check_users_secondary_menu:
+  params:
+    secondary_menu: Users
+  action: check_secondary_menu
 check_user_in_users_page:
   action: goto_users_list_page
   action: check_link_and_text

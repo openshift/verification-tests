@@ -161,7 +161,7 @@ click_not_cancel:
     op: click
 create_autoscaler_action:
   params:
-    item: Create Autoscaler
+    item: Create MachineAutoscaler
   action: click_one_dropdown_action
 click_add_users_action:
   params:
