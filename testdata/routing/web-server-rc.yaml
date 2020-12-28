@@ -15,7 +15,7 @@ items:
           name: web-server-rc
       spec:
         containers:
-        - image: quay.io/openshifttest/nginx-alpine@sha256:7b888a83dc936934b7bb49b103df41b53d28fa58795ceb86b50ee280dca4257c
+        - image: quay.io/openshifttest/nginx-alpine@sha256:5d3f3372288b8a93fc9fc7747925df2328c24db41e4b4226126c3af293c5ad88
           name: nginx
 - apiVersion: v1
   kind: Service
