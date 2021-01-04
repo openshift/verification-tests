@@ -394,12 +394,12 @@ Feature: deployment related features
   Scenario: Blue-Green Deployment
     Given I have a project
     When I run the :new_app client command with:
-      | docker_image | <%= project_docker_repo %>openshift/deployment-example:v1 |
-      | name         | bluegreen-example-old                                     |
+      | docker_image | quay.io/openshifttest/deployment-example:v1 |
+      | name         | bluegreen-example-old                       |
     Then the step should succeed
     When I run the :new_app client command with:
-      | docker_image | <%= project_docker_repo %>openshift/deployment-example:v2 |
-      | name         | bluegreen-example-new                                     |
+      | docker_image | quay.io/openshifttest/deployment-example:v2 |
+      | name         | bluegreen-example-new                       |
     Then the step should succeed
     #When I expose the "bluegreen-example-old" service
     When I run the :expose client command with:
@@ -840,11 +840,11 @@ Feature: deployment related features
     Given the master version >= "4.5"
     Given I have a project
     When I run the :new_app client command with:
-      | docker_image         | <%= project_docker_repo %>openshift/deployment-example |
-      | name                 | ab-example-a                                           |
-      | as_deployment_config | true                                                   |
-      | l                    | ab-example=true                                        |
-      | env                  | SUBTITLE=shardA                                        |
+      | docker_image         | quay.io/openshifttest/deployment-example |
+      | name                 | ab-example-a                             |
+      | as_deployment_config | true                                     |
+      | l                    | ab-example=true                          |
+      | env                  | SUBTITLE=shardA                          |
     Then the step should succeed
     When I run the :expose client command with:
       | resource      | deploymentconfig |
@@ -856,11 +856,11 @@ Feature: deployment related features
     Then I wait for a web server to become available via the "ab-example" route
     And the output should contain "shardA"
     When I run the :new_app client command with:
-      | docker_image         | <%= project_docker_repo %>openshift/deployment-example |
-      | name                 | ab-example-b                                           |
-      | as_deployment_config | true                                                   |
-      | l                    | ab-example=true                                        |
-      | env                  | SUBTITLE=shardB                                        |
+      | docker_image         | quay.io/openshifttest/deployment-example |
+      | name                 | ab-example-b                             |
+      | as_deployment_config | true                                     |
+      | l                    | ab-example=true                          |
+      | env                  | SUBTITLE=shardB                          |
     Then the step should succeed
     Then I run the :scale client command with:
       | resource | deploymentconfig |
