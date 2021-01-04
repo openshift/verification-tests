@@ -104,7 +104,7 @@ filter_by_type:
 filter_by_keyword:
   element:
     selector: &filter_by_keyword
-      xpath: //input[contains(@class, 'search-input__text-input')]
+      xpath: //input[contains(@placeholder, 'Filter by keyword')]
     op: send_keys <keyword>
 show_catalog_items: {}
 clear_filter_by_keyword:

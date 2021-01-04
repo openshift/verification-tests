@@ -624,6 +624,10 @@ check_restricted_access_text:
   params:
     content: Restricted Access
   action: check_page_contains
+check_no_endpoints_found_text:
+  params:
+    content: No Endpoints Found
+  action: check_page_contains
 check_no_configmaps_found_text:
   params:
     content: No Config Maps Found

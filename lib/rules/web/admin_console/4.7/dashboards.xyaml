@@ -253,13 +253,13 @@ close_breakdown_modal:
 check_on_monitoring_metrics_page:
   elements:
   - selector:
-      xpath: //button[text()='Add Query']
-    timeout: 20
+      xpath: //button[text()='Add query']
+    timeout: 30
   - selector:
-      xpath: //button[text()='Run Queries']
+      xpath: //button[text()='Run queries']
   - selector:
       xpath: //div[contains(@class,'query-browser__graph-container')]
-    timeout: 20
+    timeout: 30
 check_textarea:
   element:
     selector:
