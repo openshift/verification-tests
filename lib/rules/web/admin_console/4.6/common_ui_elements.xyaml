@@ -628,10 +628,6 @@ check_no_endpoints_found_text:
   params:
     content: No Endpoints Found
   action: check_page_contains
-check_no_configmaps_found_text:
-  params:
-    content: No Config Maps Found
-  action: check_page_contains
 check_no_machinehealthcheck_text:
   params:
     content: No Machine Health Checks Found
