@@ -1,34 +1,44 @@
-apiVersion: logging.openshift.io/v1
-kind: ClusterLogForwarder
+kind: Template
+apiVersion: v1
 metadata:
-  name: instance
-  namespace: openshift-logging
-spec:
-  outputs:
-  - name: es-created-by-user
-    type: elasticsearch
-    url: 'https://elasticsearch-server.openshift-logging.svc:9200'
-    secret:
-       name: 'pipelinesecret'
-  pipelines:
-  - name: forward-app-logs
-    inputRefs:
-    - application
-    labels:
-      logging: app-logs
-    outputRefs:
-    - es-created-by-user
-  - name: forward-infra-logs
-    inputRefs:
-    - infrastructure
-    labels:
-      logging: infra-logs
-    outputRefs:
-    - es-created-by-user
-  - name: forward-audit-logs
-    inputRefs:
-    - audit
-    labels:
-      logging: audit-logs
-    outputRefs:
-    - es-created-by-user
+  name: clusterlogforwarder-template
+objects:
+- apiVersion: logging.openshift.io/v1
+  kind: ClusterLogForwarder
+  metadata:
+    name: instance
+    namespace: openshift-logging
+  spec:
+    outputs:
+    - name: secure-es
+      type: elasticsearch
+      url: ${URL}
+      secret:
+        name: ${PIPELINE_SECRET_NAME}
+    pipelines:
+    - name: forward-app-logs
+      inputRefs:
+      - application
+      labels:
+        logging: app-logs
+      outputRefs:
+      - secure-es
+    - name: forward-infra-logs
+      inputRefs:
+      - infrastructure
+      labels:
+        logging: infra-logs
+      outputRefs:
+      - secure-es
+    - name: forward-audit-logs
+      inputRefs:
+      - audit
+      labels:
+        logging: audit-logs
+      outputRefs:
+      - secure-es
+parameters:
+- name: URL
+  value: "https://elasticsearch-server.openshift-logging.svc:9200"
+- name: PIPELINE_SECRET_NAME
+  value: "pipelinesecret"
