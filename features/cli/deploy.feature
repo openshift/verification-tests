@@ -344,7 +344,7 @@ Feature: deployment related features
   Scenario: A/B Deployment
     Given I have a project
     When I run the :new_app client command with:
-      | docker_image | quay.io/openshifttest/deployment-example@sha256:97adb15f1238c4c9216c1e6bf3986e2468d0709fc5c3625e96d463c81240f652 |
+      | docker_image | quay.io/openshifttest/deployment-example@sha256:0631a0c7aee3554391156d991138af4b00e9a724f9c5813f4079930c8fc0d16b |
       | name         | ab-example-a                                                                                                     |
       | l            | ab-example=true                                                                                                  |
       | env          | SUBTITLE=shardA                                                                                                  |
@@ -359,7 +359,7 @@ Feature: deployment related features
     Then I wait for a web server to become available via the "ab-example" route
     And the output should contain "shardA"
     When I run the :new_app client command with:
-      | docker_image | quay.io/openshifttest/deployment-example@sha256:97adb15f1238c4c9216c1e6bf3986e2468d0709fc5c3625e96d463c81240f652 |
+      | docker_image | quay.io/openshifttest/deployment-example@sha256:0631a0c7aee3554391156d991138af4b00e9a724f9c5813f4079930c8fc0d16b |
       | name         | ab-example-b                                                                                                     |
       | l            | ab-example=true                                                                                                  |
       | env          | SUBTITLE=shardB                                                                                                  |
@@ -661,7 +661,7 @@ Feature: deployment related features
   Scenario: Scale up when deployment running
     Given I have a project
     When I run the :create_deploymentconfig client command with:
-      | image | quay.io/openshifttest/deployment-example@sha256:97adb15f1238c4c9216c1e6bf3986e2468d0709fc5c3625e96d463c81240f652 |
+      | image | quay.io/openshifttest/deployment-example@sha256:0631a0c7aee3554391156d991138af4b00e9a724f9c5813f4079930c8fc0d16b |
       | name  | deployment-example                                                                                               |
     Then the step should succeed
     And I wait until the status of deployment "deployment-example" becomes :complete
