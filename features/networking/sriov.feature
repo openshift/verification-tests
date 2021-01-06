@@ -35,7 +35,7 @@ Feature: Sriov related scenarios
       | namespace   | openshift-sriov-network-operator |
       | o           | yaml                             |
     Then the step should succeed
-    And the output should contain: 
+    And the output should contain:
       | intel-netdevice       |
       | syncStatus: Succeeded |
       | vfID: 4               |
@@ -69,7 +69,7 @@ Feature: Sriov related scenarios
   # @author zzhao@redhat.com
   # @case_id OCP-21364
   @destructive
-  @admin  
+  @admin
   Scenario: Create pod with sriov-cni plugin and macvlan on the same interface
     Given the sriov operator is running well
     Given I obtain test data file "networking/sriov/sriovnetworkpolicy/intel-netdevice.yaml"
@@ -85,7 +85,7 @@ Feature: Sriov related scenarios
       | namespace   | openshift-sriov-network-operator |
       | o           | yaml                             |
     Then the step should succeed
-    And the output should contain: 
+    And the output should contain:
       | intel-netdevice       |
       | syncStatus: Succeeded |
       | vfID: 4               |
@@ -124,12 +124,12 @@ Feature: Sriov related scenarios
     Then the output should contain "10.56.217"
     When I execute on the pod:
       | bash | -c | ip addr show net2 |
-    Then the output should contain "192.168.1"  
+    Then the output should contain "192.168.1"
 
   # @author zzhao@redhat.com
   # @case_id OCP-24713
   @destructive
-  @admin  
+  @admin
   Scenario: NAD can be also updated when networknamespace is change
     Given the sriov operator is running well
     Given I switch to the first user
@@ -203,14 +203,14 @@ Feature: Sriov related scenarios
       | 10.56.217 |
 
     Examples:
-      | cardname | 
+      | cardname |
       | mlx277   | # @case_id OCP-24774
       | mlx278   | # @case_id OCP-24775
 
   # @author zzhao@redhat.com
   # @case_id OCP-24780
   @destructive
-  @admin  
+  @admin
   Scenario: NAD will be deleted too when sriovnetwork is deleted
     Given the sriov operator is running well
     Given I switch to the first user
@@ -231,7 +231,7 @@ Feature: Sriov related scenarios
   # @author zzhao@redhat.com
   # @case_id OCP-25287
   @destructive
-  @admin  
+  @admin
   Scenario: NAD should be able to restore by sriov operator when it was deleted
     Given the sriov operator is running well
     Given I switch to the first user
@@ -258,7 +258,7 @@ Feature: Sriov related scenarios
 
   # @author zzhao@redhat.com
   # @case_id OCP-25790
-  @admin  
+  @admin
   @destructive
   Scenario: SR-IOV network config daemon can be set by nodeselector
     Given the sriov operator is running well
@@ -412,7 +412,7 @@ Feature: Sriov related scenarios
   # @case_id OCP-24776
   @destructive
   @admin
-  Scenario: The default sriov networkpolicy should be able to restore by sriov operator when it was deleted	
+  Scenario: The default sriov networkpolicy should be able to restore by sriov operator when it was deleted
     Given the sriov operator is running well
     When I run the :delete admin command with:
       | object_type       | sriovnetworknodepolicies |
@@ -421,7 +421,7 @@ Feature: Sriov related scenarios
     When I run the :get admin command with:
       | resource    |  sriovnetworknodepolicies |
     Then the step should succeed
-    And the output should contain "default"        
+    And the output should contain "default"
     Given I obtain test data file "networking/sriov/sriovnetworkpolicy/mlx278-netdevice.yaml"
     Given I create sriov resource with following:
       | cr_yaml       | mlx278-netdevice.yaml    |
@@ -453,7 +453,7 @@ Feature: Sriov related scenarios
     When I run the :get admin command with:
       | resource    | ds |
     Then the step should succeed
-    And the output should not contain "<keyword>"    
+    And the output should not contain "<keyword>"
     When I run the :get admin command with:
       | resource    | sa |
     Then the step should succeed
@@ -548,7 +548,7 @@ Feature: Sriov related scenarios
     Examples:
       | file              | Error message                |
       | invalidname.yaml  | invalid characters           |
-      | non-deviceid      | no supported NIC             |        
+      | non-deviceid      | no supported NIC             |
       | non-vondor        | vendor 15b4 is not supported |
       | vfnum0            | numVfs(0) in CR              |
 
@@ -600,7 +600,7 @@ Feature: Sriov related scenarios
     Then the step should succeed
     And the output should not contain "nodeUpdateHandler"
     Given I patch the sriov logs to "2"
-    Then the step should succeed 
+    Then the step should succeed
     Given 10 seconds have passed
     When I run the :logs admin command with:
       | resource_name | <%= pod.name %> |
@@ -681,7 +681,7 @@ Feature: Sriov related scenarios
       | bash | -c | ip a show net1 |
     Then the step should succeed
     And the output should contain "mtu 1800"
-    And evaluation of `pod.node_name` is stored in the :pod_node clipboard    
+    And evaluation of `pod.node_name` is stored in the :pod_node clipboard
     #Delete the networkpolicy, the PF Mtu should rollback to origin value.
     Given I delete the "mlx278-netdevice" sriov networkpolicy
     And I wait up to 500 seconds for the steps to pass:

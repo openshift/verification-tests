@@ -3,8 +3,8 @@ Feature: basic verification for upgrade testing
   @upgrade-prepare
   @users=upuser1,upuser2
   @admin
-  Scenario: etcd-operator and cluster works well after upgrade - prepare 
-    Given I switch to cluster admin pseudo user		
+  Scenario: etcd-operator and cluster works well after upgrade - prepare
+    Given I switch to cluster admin pseudo user
     Given I obtain test data file "admin/subscription.yaml"
     When I run the :create client command with:
       | f | subscription.yaml |
@@ -29,7 +29,7 @@ Feature: basic verification for upgrade testing
     When I use the "openshift-operators" project
     Then status becomes :running of exactly 1 pods labeled:
       | name=etcd-operator-alm-owned |
-	    
+
   # @author knarra@redhat.com
   # @case_id OCP-22665
   @upgrade-check

@@ -37,4 +37,4 @@ Feature: oc registry command scenarios
     Then the step should fail
     And the output should contain:
       | invalid |
-    
+

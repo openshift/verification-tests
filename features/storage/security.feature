@@ -141,6 +141,6 @@ Feature: storage security check
       | system_u:object_r:(svirt_sandbox_file_t\|container_file_t):s0 |
     When I execute on the pod:
       | touch | /mnt/secret/file |
-    Then the step should fail 
+    Then the step should fail
     And the outputs should contain "Read-only file system"
 

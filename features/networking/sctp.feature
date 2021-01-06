@@ -5,7 +5,7 @@ Feature: SCTP related scenarios
   @admin
   @destructive
   Scenario: Establish pod to pod SCTP connections
-    Given I store the workers in the :workers clipboard    
+    Given I store the workers in the :workers clipboard
     Given I install machineconfigs load-sctp-module
     Given I have a project
     And I wait up to 800 seconds for the steps to pass:
@@ -26,7 +26,7 @@ Feature: SCTP related scenarios
       | ["spec"]["nodeName"]      | <%= cb.workers[1].name %> |
     Then the step should succeed
     And the pod named "sctpclient" becomes ready
-   
+
     # sctpserver pod start to wait for sctp traffic
     And I wait up to 60 seconds for the steps to pass:
     """
@@ -61,7 +61,7 @@ Feature: SCTP related scenarios
   @admin
   @destructive
   Scenario: Expose SCTP ClusterIP Services
-    Given I store the workers in the :workers clipboard    
+    Given I store the workers in the :workers clipboard
     Given I install machineconfigs load-sctp-module
     Given I have a project
     And I wait up to 800 seconds for the steps to pass:
@@ -81,7 +81,7 @@ Feature: SCTP related scenarios
       | ["spec"]["nodeName"]      | <%= cb.workers[1].name %> |
     Then the step should succeed
     And the pod named "sctpclient" becomes ready
-   
+
     Given I obtain test data file "networking/sctp/sctpservice.yaml"
     When I run oc create as admin over "sctpservice.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %>       |
@@ -124,7 +124,7 @@ Feature: SCTP related scenarios
   @destructive
   Scenario: Expose SCTP NodePort Services
     Given I store the workers in the :workers clipboard
-    And the Internal IP of node "<%= cb.workers[1].name %>" is stored in the :worker1_ip clipboard  
+    And the Internal IP of node "<%= cb.workers[1].name %>" is stored in the :worker1_ip clipboard
     Given I install machineconfigs load-sctp-module
     Given I have a project
     And I wait up to 800 seconds for the steps to pass:
@@ -144,7 +144,7 @@ Feature: SCTP related scenarios
       | ["spec"]["nodeName"]      | <%= cb.workers[1].name %> |
     Then the step should succeed
     And the pod named "sctpclient" becomes ready
-   
+
     Given I obtain test data file "networking/sctp/sctpservice.yaml"
     When I run oc create as admin over "sctpservice.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %>       |
@@ -186,7 +186,7 @@ Feature: SCTP related scenarios
   @admin
   @destructive
   Scenario: Networkpolicy allow SCTP Client
-    Given I store the workers in the :workers clipboard    
+    Given I store the workers in the :workers clipboard
     Given I install machineconfigs load-sctp-module
     Given I have a project
     And I wait up to 800 seconds for the steps to pass:
@@ -207,7 +207,7 @@ Feature: SCTP related scenarios
       | ["spec"]["nodeName"]      | <%= cb.workers[1].name %> |
     Then the step should succeed
     And the pod named "sctpclient" becomes ready
-   
+
     # sctpserver pod start to wait for sctp traffic
     And I wait up to 60 seconds for the steps to pass:
     """"
@@ -230,7 +230,7 @@ Feature: SCTP related scenarios
       | oc_opts_end      |                                                                  |
       | exec_command     | bash                                                             |
       | exec_command_arg | -c                                                               |
-      | exec_command_arg | echo test-openshift \| nc -v <%= cb.serverpod_ip %> 30102 --sctp | 
+      | exec_command_arg | echo test-openshift \| nc -v <%= cb.serverpod_ip %> 30102 --sctp |
     Then the step should succeed
     And the output should contain:
       | Connected to <%= cb.serverpod_ip %> |
@@ -253,7 +253,7 @@ Feature: SCTP related scenarios
       | exec_command_arg | -c                                                               |
       | exec_command_arg | echo test-openshift \| nc -v <%= cb.serverpod_ip %> 30102 --sctp |
     Then the step should fail
-   
+
     # Define a networkpolicy to allow sctpclient to sctpserver
     Given I obtain test data file "networking/sctp/allow_sctpclient.yaml"
     When I run the :create admin command with:

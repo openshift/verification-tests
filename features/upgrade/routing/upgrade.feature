@@ -1,5 +1,5 @@
 Feature: Routing and DNS related scenarios
-    
+
   @upgrade-prepare
   @admin
   Scenario: ensure ingress works well before and after upgrade - prepare
@@ -11,7 +11,7 @@ Feature: Routing and DNS related scenarios
     When I open secure web server via the "console" route
     Then the step should succeed
     """
-    
+
   # @author hongli@redhat.com
   # @case_id OCP-29746
   @upgrade-check

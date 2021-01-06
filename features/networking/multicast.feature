@@ -29,7 +29,7 @@ Feature: testing multicast scenarios
       | overwrite    | true            |
       | keyval       | netnamespace.network.openshift.io/multicast-enabled=true |
     Then the step should succeed
-    
+
     # run omping as background on first and second pods
     When I run the :exec background client command with:
       | pod              | <%= cb.pod1 %>   |
@@ -159,7 +159,7 @@ Feature: testing multicast scenarios
     And evaluation of `pod(2).ip` is stored in the :proj1pod3ip clipboard
     And evaluation of `pod(2).name` is stored in the :proj1pod3 clipboard
     # Enable multicast in proj1
-    Given I enable multicast for the "<%= cb.proj1 %>" namespace 
+    Given I enable multicast for the "<%= cb.proj1 %>" namespace
 
     # Create second project
     Given I create a new project
@@ -177,7 +177,7 @@ Feature: testing multicast scenarios
     And evaluation of `pod(5).ip` is stored in the :proj2pod3ip clipboard
     And evaluation of `pod(5).name` is stored in the :proj2pod3 clipboard
     # Enable multicast in proj2
-    Given I enable multicast for the "<%= cb.proj2 %>" namespace 
+    Given I enable multicast for the "<%= cb.proj2 %>" namespace
 
     # Check multicast group 239.255.254.24 stream in proj1
     Given I use the "<%= cb.proj1 %>" project
@@ -187,7 +187,7 @@ Feature: testing multicast scenarios
       | oc_opts_end      |                                                                                                       |
       | exec_command     | sh                                                                                                    |
       | exec_command_arg | -c                                                                                                    |
-      | exec_command     | omping -m 239.255.254.24 -c 5 -T 10 <%= cb.proj1pod1ip %> <%= cb.proj1pod2ip %> <%= cb.proj1pod3ip %> |     
+      | exec_command     | omping -m 239.255.254.24 -c 5 -T 10 <%= cb.proj1pod1ip %> <%= cb.proj1pod2ip %> <%= cb.proj1pod3ip %> |
     Then the step should succeed
     # Enable multicast group 239.255.254.24 stream proj1pod2
     When I run the :exec background client command with:
@@ -195,7 +195,7 @@ Feature: testing multicast scenarios
       | oc_opts_end      |                                                                                                       |
       | exec_command     | sh                                                                                                    |
       | exec_command_arg | -c                                                                                                    |
-      | exec_command     | omping -m 239.255.254.24 -c 5 -T 10 <%= cb.proj1pod1ip %> <%= cb.proj1pod2ip %> <%= cb.proj1pod3ip %> |    
+      | exec_command     | omping -m 239.255.254.24 -c 5 -T 10 <%= cb.proj1pod1ip %> <%= cb.proj1pod2ip %> <%= cb.proj1pod3ip %> |
     Then the step should succeed
     # Enable multicast group 239.255.254.24 stream proj1pod3
     When I run the :exec background client command with:
@@ -223,7 +223,7 @@ Feature: testing multicast scenarios
       | <%= cb.proj1pod1ip %>.*multicast, xmt/rcv/%loss = 5/5/0%                |
       | <%= cb.proj1pod2ip %>.*multicast, xmt/rcv/%loss = 5/5/0%                |
     """
-      
+
     # Check multicast group 239.255.254.24 stream in proj2
     Given I use the "<%= cb.proj2 %>" project
     # Enable multicast group 239.255.254.24 stream proj2pod1
@@ -232,7 +232,7 @@ Feature: testing multicast scenarios
       | oc_opts_end      |                                                                                                       |
       | exec_command     | sh                                                                                                    |
       | exec_command_arg | -c                                                                                                    |
-      | exec_command     | omping -m 239.255.254.24 -c 5 -T 10 <%= cb.proj2pod1ip %> <%= cb.proj2pod2ip %> <%= cb.proj2pod3ip %> |     
+      | exec_command     | omping -m 239.255.254.24 -c 5 -T 10 <%= cb.proj2pod1ip %> <%= cb.proj2pod2ip %> <%= cb.proj2pod3ip %> |
     Then the step should succeed
     # Enable multicast group 239.255.254.24 stream proj2pod2
     When I run the :exec background client command with:
@@ -240,7 +240,7 @@ Feature: testing multicast scenarios
       | oc_opts_end      |                                                                                                       |
       | exec_command     | sh                                                                                                    |
       | exec_command_arg | -c                                                                                                    |
-      | exec_command     | omping -m 239.255.254.24 -c 5 -T 10 <%= cb.proj2pod1ip %> <%= cb.proj2pod2ip %> <%= cb.proj2pod3ip %> |    
+      | exec_command     | omping -m 239.255.254.24 -c 5 -T 10 <%= cb.proj2pod1ip %> <%= cb.proj2pod2ip %> <%= cb.proj2pod3ip %> |
     Then the step should succeed
     # Enable multicast group 239.255.254.24 stream proj2pod3
     When I run the :exec background client command with:

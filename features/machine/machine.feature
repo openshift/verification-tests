@@ -277,7 +277,7 @@ Feature: Machine features testing
     Then the step should succeed
     And the output should contain:
       | <Validation> |
-	       
+
     Examples:
       | name                    | file_name                 | Validation                    |
       | default-valued-32269    | ms_default_values.yaml    | Placement                     |# @case_id OCP-32269
@@ -292,12 +292,12 @@ Feature: Machine features testing
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
     Then admin ensures machine number is restored after scenario
-   
+
     Given I store the last provisioned machine in the :machine clipboard
     When evaluation of `machine(cb.machine).gcp_region` is stored in the :default_region clipboard
     And evaluation of `machine(cb.machine).gcp_zone` is stored in the :default_zone clipboard
     Then admin ensures "default-valued-33056" machineset is deleted after scenario
-   
+
     Given I obtain test data file "cloud/ms-gcp/ms_default_values.yaml"
     When I run oc create over "ms_default_values.yaml" replacing paths:
       | n                                                                                         | openshift-machine-api                           |
@@ -311,7 +311,7 @@ Feature: Machine features testing
 
     # Verify machine could be created successful
     And I wait up to 300 seconds for the steps to pass:
-    """ 
+    """
     Then the expression should be true> machine_set("default-valued-33056").desired_replicas(cached: false) == 1
     """
     Then the machineset should have expected number of running machines
@@ -320,7 +320,7 @@ Feature: Machine features testing
   # @case_id OCP-33058
   @admin
   @destructive
-  Scenario: Implement defaulting machineset values for azure 
+  Scenario: Implement defaulting machineset values for azure
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
@@ -368,7 +368,7 @@ Feature: Machine features testing
   # @author zhsun@redhat.com
   # @case_id OCP-34718
   @admin
-  Scenario: Node labels and Affinity definition in PV should match	
+  Scenario: Node labels and Affinity definition in PV should match
     Given I have a project
 
     # Create a pvc
@@ -441,7 +441,7 @@ Feature: Machine features testing
     And the output should contain:
       | Provisioned  |
     """
- 
+
     Examples:
       | name                         | template                                  | diskGiB           |
       | default-valued-33380         | <%= cb.template %>                        | <%= cb.diskGiB %> | # @case_id OCP-33380

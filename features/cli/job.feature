@@ -483,7 +483,7 @@ Feature: job.feature
        | exec_command     | sleep        |
        | exec_command_arg | 300          |
     Then the step should fail
-    And the output should contain: 
+    And the output should contain:
        | Invalid value: "30 25 15 1 3": End of range (25) above maximum (23): 25 |
     When I run the :create_cronjob client command with:
        | name             | sjc          |
