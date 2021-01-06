@@ -4,7 +4,7 @@ Feature: fips enabled verification for upgrade
   @users=upuser1,upuser2
   @admin
   Scenario: FIPS mode checking command works for a cluster with fip mode on - prepare
-    Given fips is enabled 
+    Given fips is enabled
 
     #check whether fips enabled for master node
     When I store the masters in the :masters clipboard
@@ -15,7 +15,7 @@ Feature: fips enabled verification for upgrade
     And the output should match:
       | FIPS |
     When I run commands on the host:
-      | sysctl crypto.fips_enabled | 
+      | sysctl crypto.fips_enabled |
     Then the step should succeed
     And the output should match:
       | crypto.fips_enabled = 1 |
@@ -29,7 +29,7 @@ Feature: fips enabled verification for upgrade
     Given I store the workers in the :workers clipboard
     And I use the "<%= cb.workers[0].name %>" node
     When I run commands on the host:
-      | sysctl crypto.fips_enabled |  
+      | sysctl crypto.fips_enabled |
     Then the step should succeed
     And the output should match:
       | crypto.fips_enabled = 1 |
@@ -56,7 +56,7 @@ Feature: fips enabled verification for upgrade
     And the output should match:
       | FIPS |
     When I run commands on the host:
-      | sysctl crypto.fips_enabled |                 
+      | sysctl crypto.fips_enabled |
     Then the step should succeed
     And the output should match:
       | crypto.fips_enabled = 1 |

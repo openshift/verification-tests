@@ -16,7 +16,7 @@ Feature: oc_set_build_hook
       | buildconfig | bc/rails-postgresql-example |
       | post_commit | true                        |
       | command     |                             |
-      | oc_opts_end |                             |  
+      | oc_opts_end |                             |
       | args        | /bin/bash                   |
       | args        | -c                          |
       | args        | bundle                      |

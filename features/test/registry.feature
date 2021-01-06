@@ -58,7 +58,7 @@ Feature: registry related test scenario
     When I docker push on the node to the registry the following images:
       | quay.io/openshifttest/busybox@sha256:afe605d272837ce1732f390966166c2afff5391208ddd57de10942748694049d | busybox:latest |
     Then the step should succeed
-  
+
   @admin
   @destructive
   Scenario: Fail to push to auth registry without login

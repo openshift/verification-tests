@@ -15,7 +15,7 @@ Feature: Machine misc features testing
       | o             | yaml          |
    And I save the output to file> vsphere-creds_original.yaml
    Then the "vsphere-creds" secret is recreated by admin in the "kube-system" project after scenario
-   
+
    Given I obtain test data file "cloud/misc/vsphere-creds_test.yaml"
    Then I run the :replace admin command with:
       | _tool | oc                       |
@@ -31,10 +31,10 @@ Feature: Machine misc features testing
 
    Then I obtain test data file "cloud/misc/PVC.yaml"
    And I run oc create over "PVC.yaml" replacing paths:
-     | n | openshift-machine-api | 
+     | n | openshift-machine-api |
    Then the step should succeed
    And admin ensures "pvc" pvc is deleted after scenario
-    
+
    Given I obtain test data file "cloud/misc/nginx-pod.yaml"
    When I run oc create over "nginx-pod.yaml" replacing paths:
      | n | openshift-machine-api |
@@ -49,11 +49,11 @@ Feature: Machine misc features testing
       | f     | vsphere-creds_original.yaml  |
       | force |                              |
    And the step should succeed
- 
+
    Then I get project events
    And the output should match:
      | Successfully provisioned volume |
-     
+
   # @author miyadav@redhat.com
   # @case_id OCP-35454
   @admin

@@ -63,7 +63,7 @@ Feature: set deployment-hook/build-hook with CLI
       | [Pp]re-deployment hook   |
       | failure policy: [Rr]etry |
       | ./migrate-database.sh    |
-    Given I wait until the status of deployment "rails-postgresql-example" becomes :complete    
+    Given I wait until the status of deployment "rails-postgresql-example" becomes :complete
     When I run the :rollout_latest client command with:
       | resource | dc/rails-postgresql-example |
     Then the step should succeed

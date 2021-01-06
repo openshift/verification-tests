@@ -3,7 +3,7 @@ Feature: Template service broker related features
   # @author zitang@redhat.com
   # @case_id OCP-21690
   @admin
-  Scenario: [CVP] Clusterserviceclass and clusterserviceplan of templateinstance were created 
+  Scenario: [CVP] Clusterserviceclass and clusterserviceplan of templateinstance were created
     Given admin checks that the "template-service-broker" cluster_service_broker exists
     When I run the :get client command with:
       | resource | clusterserviceplan                                                      |
@@ -16,7 +16,7 @@ Feature: Template service broker related features
   # @author zitang@redhat.com
   # @case_id OCP-14477
   @admin
-  Scenario: Provision a templateinstance 
+  Scenario: Provision a templateinstance
     Given I have a project
     # Provision jenkins instance
     Given I obtain test data file "svc-catalog/serviceinstance-template.yaml"

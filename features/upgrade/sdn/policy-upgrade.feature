@@ -31,11 +31,11 @@ Feature: SDN compoment upgrade testing
   @admin
   @upgrade-prepare
   Scenario: Check the networkpolicy works well after upgrade - prepare
-    Given I switch to cluster admin pseudo user		
+    Given I switch to cluster admin pseudo user
     When I run the :new_project client command with:
-      | project_name | policy-upgrade |		
+      | project_name | policy-upgrade |
     Then the step should succeed
-    When I use the "policy-upgrade" project      
+    When I use the "policy-upgrade" project
     Given I obtain test data file "networking/list_for_pods.json"
     And I run the :create client command with:
       | f | list_for_pods.json |
@@ -47,8 +47,8 @@ Feature: SDN compoment upgrade testing
 
     When I execute on the "<%= cb.pod1 %>" pod:
       | curl | -s | --connect-timeout | 5 | <%= cb.pod2ip %>:8080 |
-    Then the step should succeed 
-    And the output should contain "Hello"    
+    Then the step should succeed
+    And the output should contain "Hello"
 
     Given the DefaultDeny policy is applied to the "policy-upgrade" namespace
     Then the step should succeed
@@ -68,7 +68,7 @@ Feature: SDN compoment upgrade testing
   @admin
   @upgrade-check
   Scenario: Check the networkpolicy works well after upgrade
-    Given I switch to cluster admin pseudo user		
+    Given I switch to cluster admin pseudo user
     When I use the "policy-upgrade" project
     Given status becomes :running of 2 pods labeled:
       | name=test-pods |

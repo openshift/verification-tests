@@ -72,8 +72,8 @@ Feature: ONLY ONLINE Quota related scripts in this file
 
   # @author yuwei@redhat.com
   # @case_id OCP-10291
-  Scenario: Can not create resource exceed the hard quota in appliedclusterresourcequota  
-    Given I have a project  
+  Scenario: Can not create resource exceed the hard quota in appliedclusterresourcequota
+    Given I have a project
     And evaluation of `BushSlicer::AppliedClusterResourceQuota.list(user: user, project: project)` is stored in the :acrq clipboard
     And evaluation of `cb.acrq.find{|o|o.name.end_with?("-compute")}` is stored in the :memory_crq clipboard
     And evaluation of `cb.acrq.find{|o|o.name.end_with?('-timebound')}` is stored in the :memory_terminate_crq clipboard
@@ -94,7 +94,7 @@ Feature: ONLY ONLINE Quota related scripts in this file
       | cmd     | 60m              |
       | restart | Never            |
       | limits  | memory=1Gi       |
-    Then the step should succeed 
+    Then the step should succeed
     And the expression should be true> cb.memory_crq.total_used(cached: false).memory_limit_raw == "1Gi"
     And the expression should be true> cb.storage_crq.total_used(cached: false).storage_requests_raw == "1Gi"
     And the expression should be true> cb.memory_terminate_crq.total_used(cached: false).memory_limit_raw == "1Gi"

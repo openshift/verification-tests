@@ -25,7 +25,7 @@ Feature: Testing abrouting
     And a pod becomes ready with labels:
       | name=abtest-websrv2 |
     And evaluation of `pod.ip` is stored in the :pod_ip2 clipboard
-    
+
     When I expose the "service-unsecure" service
     Then the step should succeed
     When I run the :annotate client command with:

@@ -69,7 +69,7 @@ Feature: buildconfig.feature
     When I run the :create_secret client command with:
      | name        | pull                                                                            |
      | secret_type | generic                                                                         |
-     | from_file   | .dockercfg=<%= expand_private_path(conf[:services, :docker_hub, :dockercfg]) %> | 
+     | from_file   | .dockercfg=<%= expand_private_path(conf[:services, :docker_hub, :dockercfg]) %> |
      | type        | kubernetes.io/dockercfg                                                         |
     Then the step should succeed
     Given I obtain test data file "build/ocp11474/<template>"
@@ -90,7 +90,7 @@ Feature: buildconfig.feature
     When I run the :create_secret client command with:
      | name        | pull                                                                            |
      | secret_type | generic                                                                         |
-     | from_file   | .dockercfg=<%= expand_private_path(conf[:services, :docker_hub, :dockercfg]) %> | 
+     | from_file   | .dockercfg=<%= expand_private_path(conf[:services, :docker_hub, :dockercfg]) %> |
      | type        | kubernetes.io/dockercfg                                                         |
     Then the step should succeed
     Given I obtain test data file "templates/OCP-12057/application-template-stibuild_pull_private_sourceimage.json"

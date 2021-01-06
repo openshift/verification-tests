@@ -64,7 +64,7 @@ Feature: basic verification for upgrade oc client testing
   @upgrade-check
   @admin
   @users=upuser1,upuser2
-  Scenario: Check some container related oc commands still work for ocp45 after upgrade 
+  Scenario: Check some container related oc commands still work for ocp45 after upgrade
     Given I switch to the first user
     When I use the "workloads-upgrade" project
     Given status becomes :running of 1 pods labeled:

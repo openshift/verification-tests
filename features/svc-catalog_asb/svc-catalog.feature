@@ -95,11 +95,11 @@ Feature: Service-catalog related scenarios
   # @case_id OCP-15604
   @admin
   @destructive
-  Scenario: Create/get/update/delete for ClusterServiceBroker resource  
+  Scenario: Create/get/update/delete for ClusterServiceBroker resource
     Given I have a project
     When I run the :get admin command with:
       | resource | clusterservicebroker |
-    Then the step should succeed  
+    Then the step should succeed
     And evaluation of `project.name` is stored in the :ups_broker_project clipboard
 
     # Deploy ups broker
@@ -302,7 +302,7 @@ Feature: Service-catalog related scenarios
 
     # Delete servicebinding
     Given admin ensures "ups-binding" servicebinding is deleted
-    And I wait for the resource "secret" named "my-secret" to disappear within 60 seconds  
+    And I wait for the resource "secret" named "my-secret" to disappear within 60 seconds
 
   # @author chezhang@redhat.com
   # @case_id OCP-15602
@@ -313,7 +313,7 @@ Feature: Service-catalog related scenarios
     When I run the :get admin command with:
       | resource | clusterservicebroker |
     Then the step should succeed
-    
+
     # Deploy ups broker
     Given admin ensures "ups-broker" clusterservicebroker is deleted after scenario
 

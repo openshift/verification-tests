@@ -12,7 +12,7 @@ Feature: CloudCredentialOperator components upgrade tests
     Given the expression should be true> cluster_operator('cloud-credential').condition(type: 'Upgradeable')['status'] == "True"
 
   # @author lwan@redhat.com
-  # @case_id OCP-34260 
+  # @case_id OCP-34260
   @upgrade-check
   @admin
   Scenario: Cluster operator cloud-credential should be available after upgrade

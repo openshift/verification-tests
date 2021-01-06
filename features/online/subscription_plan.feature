@@ -46,8 +46,8 @@ Feature: ONLY ONLINE subscription plan related scripts in this file
     Then the step should succeed
     When I perform the :check_addon_slider_of_resource web action with:
       | resource  | <resource>  |
-      | max_value | <max_value> | 
-    Then the step should succeed 
+      | max_value | <max_value> |
+    Then the step should succeed
     When I perform the :check_addon_input_field_of_resource web action with:
       | resource  | <resource>  |
       | max_value | <max_value> |

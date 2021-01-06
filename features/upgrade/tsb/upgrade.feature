@@ -1,6 +1,6 @@
 @tsb
 Feature: TSB related scenarios
-    
+
   # @author jiazha@redhat.com
   # @case_id OCP-20584
   @admin
@@ -15,7 +15,7 @@ Feature: TSB related scenarios
       | project_name | openshift-template-service-broker |
     Then the step should succeed
 
-    # Install the art or aopqe4 OperatorSource. 
+    # Install the art or aopqe4 OperatorSource.
     # TODO: it's better to set the below steps in CI post action.
     # Given I obtain test data file "olm/art-secret-template.yaml"
     # When I process and create:
@@ -58,7 +58,7 @@ Feature: TSB related scenarios
     And a pod becomes ready with labels:
         | app=template-service-broker |
     """
-    
+
   @admin
   @upgrade-check
   @users=upuser1,upuser2
