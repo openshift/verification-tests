@@ -148,5 +148,7 @@ Feature: Logging smoke test case
       | resource_name | curator                                 |
       | p             | {"spec": {"schedule": "*/20 * * * *" }} |
     Then the step should succeed
-    Given 60 seconds have passed
-    And the expression should be true> cron_job('curator').schedule(cached: false, quiet: true) == "*/15 * * * *"
+    And I wait up to 180 seconds for the steps to pass:
+    """"
+    Given the expression should be true> cron_job('curator').schedule(cached: false, quiet: true) == "*/15 * * * *"
+    """
