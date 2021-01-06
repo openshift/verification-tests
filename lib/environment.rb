@@ -406,10 +406,10 @@ module BushSlicer
     #   return @api_version = api_paths[idx][5..-1]
     # end
 
-    def nodes(user: admin, refresh: false)
+    def nodes(user: admin, refresh: false, quiet: true)
       return @nodes if @nodes && !refresh
       @nodes ||= []
-      @nodes = @nodes.concat(Node.list(user: user))
+      @nodes = @nodes.concat(Node.list(user: user, get_opts: {_quiet: quiet}))
     end
 
     # @return [Project] a project unique to this executor for test framework
