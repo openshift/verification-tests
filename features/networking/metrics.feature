@@ -25,7 +25,7 @@ Feature: SDN/OVN metrics related networking scenarios
       | oc_opts_end      |                      |
       | exec_command     | bash                 |
       | exec_command_arg | -c                   |
-      | exec_command     | <%= cb.curl_query %> |
+      | exec_command_arg | <%= cb.curl_query %> |
     Then the step should succeed
     #The idea is to check whether these metrics are being relayed on the port 9101
     And the output should contain:
@@ -57,7 +57,7 @@ Feature: SDN/OVN metrics related networking scenarios
       | oc_opts_end      |                      |
       | exec_command     | bash                 |
       | exec_command_arg | -c                   |
-      | exec_command     | <%= cb.curl_query %> |
+      | exec_command_arg | <%= cb.curl_query %> |
     Then the step should succeed
     #The idea is to check whether these metrics are being relayed on the port 9101
     And the output should contain:
@@ -80,7 +80,8 @@ Feature: SDN/OVN metrics related networking scenarios
     
     Given I use the "openshift-monitoring" project
     And evaluation of `secret(service_account('prometheus-k8s').get_secret_names.find {|s| s.match('token')}).token` is stored in the :sa_token clipboard
-    
+
+    #Storing respective curl queries in clipboards to be able to call them during execution on peometheus pods
     Given evaluation of `%Q{curl -k -H \"Authorization: Bearer <%= cb.sa_token %>\" https://<%= cb.ovn_master_metrics_ep %>/metrics}` is stored in the :curl_query_for_ovn_master clipboard
     Given evaluation of `%Q{curl -k -H \"Authorization: Bearer <%= cb.sa_token %>\" https://<%= cb.ovn_node_metrics_ep %>/metrics}` is stored in the :curl_query_for_ovn_node clipboard
     When I run the :exec admin command with:
@@ -90,7 +91,7 @@ Feature: SDN/OVN metrics related networking scenarios
       | oc_opts_end      |                                     |
       | exec_command     | bash                                |
       | exec_command_arg | -c                                  |
-      | exec_command     | <%= cb.curl_query_for_ovn_master %> |
+      | exec_command_arg | <%= cb.curl_query_for_ovn_master %> |
     Then the step should succeed
     #The idea is to check whether these metrics are being relayed on the port 9102 for ovnkube-master
     And the output should contain:
@@ -110,7 +111,7 @@ Feature: SDN/OVN metrics related networking scenarios
       | oc_opts_end      |                                   |
       | exec_command     | bash                              |
       | exec_command_arg | -c                                |
-      | exec_command     | <%= cb.curl_query_for_ovn_node %> |
+      | exec_command_arg | <%= cb.curl_query_for_ovn_node %> |
     Then the step should succeed
     #The idea is to check whether these metrics are being relayed on the port 9103 for ovnkube-node
     And the output should contain:
