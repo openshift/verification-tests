@@ -68,16 +68,17 @@ Given /^cluster role #{QUOTED} is (added to|removed from) the #{QUOTED} (user|gr
     raise "what is this subject type #{type}?!"
   end
 
+  current_rbs = BushSlicer::ClusterRoleBinding.list(user: _admin, get_opts: {_quiet: true})
   case op
   when "added to"
-    if BushSlicer::ClusterRoleBinding.list(user: _admin).any? { |crb| crb.role.name == role && crb.subjects.include?(_subject) }
+    if current_rbs.any? { |crb| crb.role.name == role && crb.subjects.include?(_subject) }
       logger.info "#{_subject_name} already has role #{role}"
       next
     end
     _command = _add_command
     _teardown_command = _remove_command
   when "removed from"
-    if BushSlicer::ClusterRoleBinding.list(user: _admin).none? { |crb| crb.role.name == role && crb.subjects.include?(_subject) }
+    if current_rbs.none? { |crb| crb.role.name == role && crb.subjects.include?(_subject) }
       logger.info "#{_subject_name} does not have role #{role}"
       next
     end
