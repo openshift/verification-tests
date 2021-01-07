@@ -161,7 +161,7 @@ Given /^the major.minor version of the cluster is stored in the#{OPT_SYM} clipbo
   cb[cb_name] = cluster_version('version').channel.split('-')[1]
 end
 
-Given /^operator #{QUOTED} becomes "([^"]*)" within(?: (\d+) seconds)?$/ do | operator_name, conditions, timeout |
+Given /^operator #{QUOTED} becomes #{NO_SPACE_STR}(?: within #{NUMBER} seconds)?$/ do | operator_name, conditions, timeout |
   ensure_admin_tagged
 
   expected = {}
@@ -170,7 +170,7 @@ Given /^operator #{QUOTED} becomes "([^"]*)" within(?: (\d+) seconds)?$/ do | op
   interval_time = 20 if timeout > 100
   actual_results = {}
   stats = {}
- 
+
   # Parse the conditions to Hash table {Available"=>"True", "Progressing"=>"False", "Degraded"=>"False"}
   arr_conditions = conditions.split("/")
   arr_conditions.each do |v|
@@ -183,8 +183,8 @@ Given /^operator #{QUOTED} becomes "([^"]*)" within(?: (\d+) seconds)?$/ do | op
       (v.include? "non-") ? expected["Degraded"] = "False" : expected["Degraded"] = "True"
     else
       raise "#### Invalid condition: #{v}, please input one or more condition(s) of (available|non-available)/(progressing|non-progressing)/(degraded|non-degraded) !"
-    end                                 
-  end 
+    end
+  end
   raise "#### Without any conditions, please input at least one condition!!!" unless expected.length >0
 
   begin
