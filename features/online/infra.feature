@@ -4,7 +4,7 @@ Feature: ONLY ONLINE Infra related scripts in this file
   # @case_id OCP-10142
   Scenario: User cannot deploy a pod to an infra node
     Given I have a project
-    Given I obtain test data file "pods/tc532324/pod_nodeSelector_infra.yaml"
+    Given I obtain test data file "pods/ocp10142/pod_nodeSelector_infra.yaml"
     When I run the :create client command with:
       | f | pod_nodeSelector_infra.yaml |
     Then the step should fail

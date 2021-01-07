@@ -1,6 +1,6 @@
 click_notification_drawer:
   params:
-    aria_label: Notification Drawer
+    aria_label: Notification drawer
   action: click_masthead_button
 open_notification_drawer:
   action: click_notification_drawer

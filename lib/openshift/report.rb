@@ -66,6 +66,7 @@ module BushSlicer
           "reportingStart" => opts[:start_time],
           "reportingEnd" => opts[:end_time],
           "query" => opts[:query_type],
+          "expiration" => opts[:expiration],
           "runImmediately" => opts[:run_immediately],
           "gracePeriod" => opts[:grace_period],
           "schedule" => schedule
@@ -93,5 +94,17 @@ module BushSlicer
         raise "Failed to create report" unless @result[:success]
       end
     end
+
+    def creation_time(user: nil, cached: true, quiet: false)
+      rr = raw_resource(user: user, cached: cached, quiet: quiet)
+      rr.dig('metadata', 'creationTimestamp')
+    end
+
+    # @return Float in milliseconds the age of the report  Current time in UTC - report creation_time
+    def age(user: nil, cached: true, quiet: false)
+      report_age = Time.now - Time.parse(creation_time(user:user, cached: cached, quiet: quiet))
+      return report_age
+    end
+
   end
 end

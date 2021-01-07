@@ -68,3 +68,22 @@ Feature: elasticsearch-operator related tests
       | cluster_setting |
       | transient       | # @case_id OCP-21530
       | persistent      | # @case_id OCP-30092
+
+  # @author qitang@redhat.com
+  # @case_id OCP-33883
+  @admin
+  @destructive
+  @commonlogging
+  Scenario: Additional essential metrics ES dashboard
+    Given I switch to the first user
+    And the first user is cluster-admin
+    And I open admin console in a browser
+    When I run the :goto_monitoring_db_elasticsearch web action
+    Then the step should succeed
+    Given evaluation of `["Cluster status", "Cluster nodes", "Cluster data nodes", "Cluster pending tasks", "Cluster active shards", "Cluster non-active shards", "Number of segments", "Memory used by segments", "ThreadPool tasks", "CPU % usage", "Memory usage", "Disk space % used", "Documents indexing rate", "Indexing latency", "Search rate", "Search latency", "Documents count (with replicas)", "Documents deleting rate", "Documents merging rate", "Field data memory size", "Field data evictions", "Query cache size", "Query cache evictions", "Query cache hits", "Query cache misses", "Indexing throttling", "Merging throttling", "Heap used", "GC count", "GC time"]` is stored in the :cards clipboard
+    And I repeat the following steps for each :card in cb.cards:
+    """
+    When I perform the :check_monitoring_dashboard_card web action with:
+      | card_name | #{cb.card} |
+    Then the step should succeed
+    """

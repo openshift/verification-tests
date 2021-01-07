@@ -1,0 +1,16 @@
+{
+  "kind": "Pod",
+  "apiVersion":"v1",
+  "metadata": {
+        "name": "hello-pod",
+        "labels": {
+                "name": "hello-pod"
+        }
+  },
+  "spec": {
+      "containers": [{
+        "name": "hello-pod",
+        "image": "quay.io/openshifttest/hello-openshift-getent"
+      }]
+  }
+}

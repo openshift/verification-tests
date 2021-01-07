@@ -351,7 +351,7 @@ Feature: configMap
 
   # @author xiuli@redhat.com
   # @case_id OCP-16721
-  Scenario: Changes to ConfigMap should be auto-updated into container	
+  Scenario: Changes to ConfigMap should be auto-updated into container
     Given I have a project
     Given I obtain test data file "configmap/configmap.json"
     When I run the :create client command with:

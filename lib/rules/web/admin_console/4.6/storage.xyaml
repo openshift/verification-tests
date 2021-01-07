@@ -120,7 +120,7 @@ check_volume_missing_on_workload_page:
   element:
     selector: *volume_info
     missing: true
-remove_volume_from_container:
+remove_volume_from_container_base:
   params:
     kebab_item: Remove Volume
   elements:
@@ -129,6 +129,14 @@ remove_volume_from_container:
     op: click
   action: click_kebab_item
   action: click_button
+remove_volume_from_container_but_cancel:
+  params:
+    button_text: Cancel
+  action: remove_volume_from_container_base
+remove_volume_from_container:
+  params:
+    button_text: Remove Volume
+  action: remove_volume_from_container_base
 set_storageclass_name:
   params:
     input_field_id: storage-class-name

@@ -121,12 +121,11 @@ Feature: Egress IP related features
   @destructive
   Scenario: Should remove the egressIP from the array if it was not being used
     Given I store a random unused IP address from the reserved range to the clipboard
-    And evaluation of `IPAddr.new("<%= cb.valid_ip %>").to_i + 1 ` is stored in the :newipint clipboard
-    And evaluation of `IPAddr.new(<%= cb.newipint %>, Socket::AF_INET).to_s` is stored in the :newip clipboard
+    And evaluation of `IPAddr.new("<%= cb.subnet_range %>").to_s+"/"+IPAddr.new("<%= cb.subnet_range %>").prefix.to_s` is stored in the :valid_subnet clipboard
 
     #Patch egress cidr to the node
     Given as admin I successfully merge patch resource "hostsubnet/<%= node.name %>" with:
-      | {"egressCIDRs": ["<%= cb.subnet_range %>"] }   |
+      | {"egressCIDRs": ["<%= cb.valid_subnet %>"] }   |
     And I register clean-up steps:
     """
     as admin I successfully merge patch resource "hostsubnet/<%= node.name %>" with:
@@ -136,18 +135,30 @@ Feature: Egress IP related features
     # Patch egress IP to the project twice
     Given I have a project
     And as admin I successfully merge patch resource "netnamespace/<%= project.name %>" with:
-      | {"egressIPs": ["<%= cb.newip %>"]} |
-    And as admin I successfully merge patch resource "netnamespace/<%= project.name %>" with:
-      | {"egressIPs": ["<%= cb.valid_ip %>"]} |
+      | {"egressIPs": ["<%= cb.valid_ips[0]%>"]} |
+
+    And I wait up to 30 seconds for the steps to pass:
+    """
+    When I run command on the "<%= node.name%>" node's sdn pod:
+      | bash | -c | ip address show label <%= cb.interface %>:eip |
+    Then the step should succeed
+    And evaluation of `@result[:response].chomp.match(/inet.*eip/)[0].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :egress_ip clipboard
+    Then the expression should be true> cb.egress_ip == cb.valid_ips[0]
+    Then the expression should be true> cb.egress_ip != cb.valid_ips[1]
+    """
+
+    Given as admin I successfully merge patch resource "netnamespace/<%= project.name %>" with:
+      | {"egressIPs": ["<%= cb.valid_ips[1] %>"]} |
 
     # Check the egress ip is the last one applied
     And I wait up to 30 seconds for the steps to pass:
     """
     When I run command on the "<%= node.name%>" node's sdn pod:
-      | bash | -c | ip address show <%= cb.interface %> |
+      | bash | -c | ip address show label <%= cb.interface %>:eip |
     Then the step should succeed
-    And the output should contain "<%= cb.valid_ip %>"
-    And the output should not contain "<%= cb.newip %>"
+    And evaluation of `@result[:response].chomp.match(/inet.*eip/)[0].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :egress_new_ip clipboard
+    Then the expression should be true> cb.egress_new_ip == cb.valid_ips[1]
+    Then the expression should be true> cb.egress_new_ip != cb.valid_ips[0]
     """
 
   # @author huirwang@redhat.com
@@ -354,12 +365,11 @@ Feature: Egress IP related features
     """
 
     # Create a pod
-    Given I obtain test data file "routing/caddy-docker.json"
+    Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
-      | f | caddy-docker.json |
+      | f | web-server-1.yaml |
     Then the step should succeed
-    And the pod named "caddy-docker" becomes ready
-
+    And the pod named "web-server-1" becomes ready
     # Patch egressIP to the node
     Given the valid egress IP is added to the node
 
@@ -373,7 +383,7 @@ Feature: Egress IP related features
     When I execute on the pod:
       | /usr/bin/curl | --connect-timeout | 10 | <%= cb.hostip %>:27017 |
     Then the output should contain:
-      | Hello-OpenShift-1 http-8080 |
+      | Hello-OpenShift |
 
   # @author huirwang@redhat.com
   # @case_id OCP-18316

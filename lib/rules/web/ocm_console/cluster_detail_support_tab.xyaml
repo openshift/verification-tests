@@ -1,0 +1,123 @@
+click_support_tab:
+    element:
+        selector:
+            xpath: //button[contains(.,'Support')]
+        op: click
+check_support_tab_first_section:
+    action: check_add_notification_contact_button
+    elements:
+        - selector:
+            xpath: //h2[text()='Notification contacts']
+        - selector:
+            xpath: //div[text()='Add users to be contacted in the event of notifications about this cluster.']
+        - selector:
+            xpath: //div[text()='The cluster owner will always receive notifications, at email address <']
+        - selector:
+            xpath: //div[contains(., '<owner_email>')]
+check_add_notification_contact_button:
+    element:
+        selector: &add_notification_contact_button
+            xpath: //button[text()='Add notification contact']
+        timeout: 10
+check_add_notification_contact_button_disabled:
+    element:
+        selector:
+            xpath: //button[text()='Add notification contact' and @aria-disabled='true']
+        timeout: 10
+check_support_tab_second_section:
+    action: check_open_support_case_button
+    elements:
+        - selector:
+            xpath: //h2[text()='Support cases']
+        - selector:
+            xpath: //table[@aria-label='Support Cases']
+check_open_support_case_button:
+    element:
+        selector:
+            xpath: //button[text()='Open support case']
+check_support_tab:
+    action: click_support_tab
+    action: check_support_tab_first_section
+    action: check_support_tab_second_section
+click_add_notification_contact_button:
+    element:
+        selector:
+            <<: *add_notification_contact_button
+        op: click
+check_add_notification_contact_dialog:
+    action: click_add_notification_contact_button
+    elements:
+        - selector:
+            xpath: //h1[text()='Add notification contact']
+        - selector:
+            xpath: //p[text()='Identify the user to be added as notification contact. These users will be contacted in the event of notifications about this cluster.']
+        - selector:
+            xpath: //span[text()='Red Hat username or email']
+input_notification_contact:
+    elements:
+        - selector: &notification_contact_textbox
+            xpath: //input[@id='username']
+          op: clear
+        - selector:
+            <<: *notification_contact_textbox
+          op: send_keys <notification_contact>
+click_add_account_button:
+    element:
+        selector:
+            xpath: //button[text()='Add contact']
+        op: click
+error_message_in_notification_contact_dialog_loaded:
+    element:
+        selector:
+            xpath: //div[text()='Could not find any account identified by <notification_contact>']
+        timeout: 30
+illegal_error_message_in_notification_contact_dialog_loaded:
+    element:
+        selector:
+            xpath: //div[text()='Username includes illegal symbols']
+check_add_account_button_disabled:
+    element:
+        selector:
+            xpath: //button[text()='Add contact' and @aria-disabled='true']
+check_added_notification_contact:
+    element:
+        selector:
+            xpath: //td[@data-label='Username' and text()='<notification_contact>']
+check_added_notification_contact_notification:
+    element:
+        selector:
+            xpath: //h4[text()='Notification contact added successfully']
+check_deleted_notification_contact_notification:
+    element:
+        selector:
+            xpath: //h4[text()='Notification contact deleted successfully']
+check_error_message_in_notification_contact_dialog:
+    action: check_add_notification_contact_dialog
+    action: input_notification_contact
+    action: click_add_account_button
+    action: error_message_in_notification_contact_dialog_loaded
+    action: click_cancel_button
+check_illegal_error_message_in_notification_contact_dialog:
+    action: check_add_notification_contact_dialog
+    action: input_notification_contact
+    action: illegal_error_message_in_notification_contact_dialog_loaded
+    action: check_add_account_button_disabled
+    action: click_cancel_button
+add_notification_contact:
+    action: check_add_notification_contact_dialog
+    action: input_notification_contact
+    action: click_add_account_button
+    action: check_added_notification_contact
+click_delete_button_on_notification_contact:
+    elements:
+        - selector:
+            xpath: //td[@data-label='Username' and text()='<notification_contact>']/..//button[@aria-label='Actions']
+          timeout: 30
+          op: click
+        - selector:
+            xpath: //button[text()='Delete']
+          op: click
+delete_notification_contact:
+    action: click_delete_button_on_notification_contact
+    action: check_deleted_notification_contact_notification
+

@@ -2,22 +2,6 @@
 Feature: cluster-logging-operator related test
 
   # @author qitang@redhat.com
-  # @case_id OCP-19875
-  @admin
-  @destructive
-  @commonlogging
-  Scenario: Fluentd provide Prometheus metrics
-    Given evaluation of `cluster_logging('instance').collection_type` is stored in the :collection_type clipboard
-    Given a pod becomes ready with labels:
-      | component=<%= cb.collection_type %> |
-    And I execute on the pod:
-      | bash                                    |
-      | -c                                      |
-      | curl -k https://localhost:24231/metrics |
-    Then the step should succeed
-    And the expression should be true> @result[:response].include? (cb.collection_type == "fluentd" ? "fluentd_output_status_buffer_total_bytes": "rsyslog_action_processed")
-
-  # @author qitang@redhat.com
   # @case_id OCP-21333
   @admin
   @destructive
@@ -121,7 +105,7 @@ Feature: cluster-logging-operator related test
     Then the step should succeed
     And the output should match:
       | "alertstate":"pending\|firing" |
-    """ 
+    """
 
   # @author qitang@redhat.com
   # @case_id OCP-28131
@@ -130,7 +114,7 @@ Feature: cluster-logging-operator related test
   Scenario: CLO should generate Elasticsearch Index Management
     Given I obtain test data file "logging/clusterlogging/example_indexmanagement.yaml"
     Given I create clusterlogging instance with:
-      | remove_logging_pods | true                                                                                 |
+      | remove_logging_pods | true                         |
       | crd_yaml            | example_indexmanagement.yaml |
     Then the step should succeed
     Given I wait for the "indexmanagement-scripts" config_map to appear
@@ -142,10 +126,29 @@ Feature: cluster-logging-operator related test
     """
     And the expression should be true> elasticsearch('elasticsearch').policy_ref(name: 'app') == "app-policy"
     And the expression should be true> elasticsearch('elasticsearch').delete_min_age(name: "app-policy") == cluster_logging('instance').application_max_age
-    And the expression should be true> elasticsearch('elasticsearch').rollover_max_age(name: "app-policy") == "1h"
+    And the expression should be true> elasticsearch('elasticsearch').rollover_max_age(name: "app-policy") == "3m"
     And the expression should be true> elasticsearch('elasticsearch').policy_ref(name: 'infra') == "infra-policy"
     And the expression should be true> elasticsearch('elasticsearch').delete_min_age(name: "infra-policy") == cluster_logging('instance').infra_max_age
-    And the expression should be true> elasticsearch('elasticsearch').rollover_max_age(name: "infra-policy") == "8h"
+    And the expression should be true> elasticsearch('elasticsearch').rollover_max_age(name: "infra-policy") == "9m"
     And the expression should be true> elasticsearch('elasticsearch').policy_ref(name: 'audit') == "audit-policy"
     And the expression should be true> elasticsearch('elasticsearch').delete_min_age(name: "audit-policy") == cluster_logging('instance').audit_max_age
     And the expression should be true> elasticsearch('elasticsearch').rollover_max_age(name: "audit-policy") == "1h"
+
+  # @author qitang@redhat.com
+  # @case_id OCP-33721
+  @admin
+  @destructive
+  @commonlogging
+  Scenario: OpenShift Logging dashboard
+    Given I switch to the first user
+    And the first user is cluster-admin
+    And I open admin console in a browser
+    When I run the :goto_monitoring_db_cluster_logging web action
+    Then the step should succeed
+    Given evaluation of `["Elastic Cluster Status", "Elastic Nodes", "Elastic Shards", "Elastic Documents", "Total Index Size on Disk", "Elastic Pending Tasks", "Elastic JVM GC time", "Elastic JVM GC Rate", "Elastic Query/Fetch Latency | Sum", "Elastic Query Rate | Top 5", "CPU", "Elastic JVM Heap Used", "Elasticsearch Disk Usage", "File Descriptors In Use", "FluentD emit count", "FluentD Buffer Availability", "Elastic rx bytes", "Elastic Index Failure Rate", "FluentD Output Error Rate"]` is stored in the :cards clipboard
+    And I repeat the following steps for each :card in cb.cards:
+    """
+    When I perform the :check_monitoring_dashboard_card web action with:
+      | card_name | #{cb.card} |
+    Then the step should succeed
+    """

@@ -141,6 +141,7 @@ subscribe_using_default_params:
 set_custom_channel_and_subscribe:
   action: wait_box_loaded
   action: choose_update_channel
+  action: enable_cluster_monitoring
   action: click_subscribe_button
 click_image_tag_dropdown:
   params:
@@ -181,3 +182,7 @@ check_the_support_link:
     text: Get support
     link_url: <link_url>
   action: check_link_and_text
+check_browser_url_has_catagory_keyword_kind:
+  scripts:
+    - command: return window.location.href.indexOf('category=languages&keyword=php&kind=%5B%22ImageStream%22%5D') != -1
+      expect_result: true

@@ -17,7 +17,7 @@ Feature: ONLY Accountant console related feature's scripts in this file
       | username | <%= user.name %> |
     Then the step should succeed
     When I perform the :click_resume_your_subscription_confirm web action with:
-      | last_date | <%= last_second_of_month.strftime("%A, %B %d, %Y") %> |  
+      | last_date | <%= last_second_of_month.strftime("%A, %B %d, %Y") %> |
     Then the step should succeed
 
   # @author yuwan@redhat.com
@@ -34,7 +34,7 @@ Feature: ONLY Accountant console related feature's scripts in this file
     """
     When I perform the :check_region_prepopulation web action with:
       | region_id | #{cb.rid} |
-    Then the step should succeed  
+    Then the step should succeed
     """
     Given I saved following keys to list in :countryid clipboard:
       | contact_country | |

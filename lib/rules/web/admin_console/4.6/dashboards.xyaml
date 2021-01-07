@@ -665,3 +665,8 @@ check_no_errors_in_charts:
   - selector:
       xpath: //div[contains(text(),'No datapoints found')]
     missing: true
+check_monitoring_dashboard_card:
+  element:
+    selector:
+      xpath: //h2[contains(@class,'co-dashboard-card__title') and text()='<card_name>']
+    timeout: 60

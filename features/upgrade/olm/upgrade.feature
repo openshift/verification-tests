@@ -2,7 +2,6 @@
 Feature: OLM related scenarios
 
   # @author jiazha@redhat.com
-  # @case_id OCP-22615
   @admin
   @upgrade-prepare
   @users=upuser1,upuser2
@@ -22,6 +21,8 @@ Feature: OLM related scenarios
     # # Create customer resource in it
     # Given etcdCluster "sample-cluster" is installed successfully in "olm-upgrade" project
 
+  # @author jiazha@redhat.com
+  # @case_id OCP-22615
   @admin
   @upgrade-check
   @users=upuser1,upuser2

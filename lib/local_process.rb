@@ -201,9 +201,11 @@ module BushSlicer
     def finished?
       return result[:exitstatus] if result[:exitstatus]
 
-      thread_res = wait_thread.join(1)
-      if thread_res
+      if wait_thread.alive?
+        return false
+      else
         begin
+          thread_res = wait_thread.join # catch exceptions here
           result[:exitstatus] = thread_res.value.exitstatus
           result[:success] = result[:success] && result[:exitstatus] == 0
 
@@ -241,7 +243,6 @@ module BushSlicer
           close_io
         end
       end
-      return false
     end
 
     def kill_tree

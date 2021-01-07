@@ -6,13 +6,13 @@ Feature: SCC policy related scenarios
   Scenario: deployment hook volume inheritance with hostPath volume
     Given I have a project
     # Create hostdir pod again with new SCC
-    Given I obtain test data file "authorization/scc/tc510609/scc_hostdir.yaml"
+    Given I obtain test data file "authorization/scc/ocp11762/scc_hostdir.yaml"
     When I run the :create admin command with:
       | f | scc_hostdir.yaml |
     Then the step should succeed
-    Given I obtain test data file "authorization/scc/tc510609/tc_dc.json"
+    Given I obtain test data file "authorization/scc/ocp11762/dc.json"
     When I run the :create client command with:
-      | f | tc_dc.json |
+      | f | dc.json |
     And I register clean-up steps:
     """
     I run the :delete admin command with:

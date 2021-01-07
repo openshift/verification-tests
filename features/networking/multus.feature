@@ -563,20 +563,23 @@ Feature: Multus-CNI related scenarios
     # Create the net-attach-def via cluster admin and simulating syntax errors
     Given I have a project
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml"
-    When I run oc create as admin over "macvlan-bridge.yaml" replacing paths:
+
+    Given I switch to cluster admin pseudo user
+    And I use the "<%= project.name %>" project
+    When I run oc create over "macvlan-bridge.yaml" replacing paths:
       | ["metadata"]["name"] | macvlan-bridge-21756 |
       | ["spec"]["config"]   | 'asdf'               |
     Then the step should fail
     And the output should contain:
       | admission webhook "multus-validating-config.k8s.io" denied the request |
-    And admin ensures "macvlan-bridge-21756" network_attachment_definition is deleted from the "default" project after scenario
+    And admin ensures "macvlan-bridge-21756" network_attachment_definition is deleted from the "<%= project.name %>" project after scenario
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml"
-    When I run oc create as admin over "macvlan-bridge.yaml" replacing paths:
+    When I run oc create over "macvlan-bridge.yaml" replacing paths:
       | ["metadata"]["name"] | macvlan-bridge@$ |
     Then the step should fail
     And the output should contain:
       | subdomain must consist of lower case alphanumeric characters |
-    And admin ensures "macvlan-bridge@$" network_attachment_definition is deleted from the "default" project after scenario
+    And admin ensures "macvlan-bridge@$" network_attachment_definition is deleted from the "<%= project.name %>" project after scenario
 
   # @author anusaxen@redhat.com
   # @case_id OCP-21949

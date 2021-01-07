@@ -181,3 +181,7 @@ check_the_support_link:
     text: Get support
     link_url: <link_url>
   action: check_link_and_text
+check_browser_url_has_catagory_keyword_kind:
+  scripts:
+    - command: return window.location.search.indexOf('category=languages&keyword=php&kind=%5B%22ImageStream%22%5D') != -1
+      expect_result: true

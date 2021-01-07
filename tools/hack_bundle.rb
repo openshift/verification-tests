@@ -1,9 +1,19 @@
 #!/usr/bin/env ruby
 
-# This file is to be executed instead of `bundle install` to help avoid
-# some troubles setting up jenkins slaves. i.e. avoid recompiling some
-# existing locally gems. Doing normal `bundle install` should also be
-# absolutely fine as long as it works for user.
+# This file was created to be called instead of `bundle install` mainly to
+# avoid recompiling nokogiri gem with questionable usefulness today. Doing
+# normal `bundle install` or `gem install -g` should be perfectly fine
+# as long as it works and depending on the way verification tests is called.
+
+# Namely, if you call `ruby` or any executable as:
+# * bundle exec command
+# ** you need to make sure `bundle check` succeeds
+# * command # possibly setting RUBYGEMS_GEMDEPS=- environment variable
+# ** must have `gem install -g` succeeded
+# ** or bundle should have installed gems inside any of Gem.paths, usually [0]
+# ** for bundle 2.x the only ways seem to be
+# *** run Bundler as root so that gems are installed globally
+# *** setting `path` and symlinking Bundler.bundle_path + Bundler.ruby_scope
 
 # Idea is to go about all hack_gemfiles and try to lock currently installed
 # local version of gem (if any). We need to copy lockfile so that all gems

@@ -46,7 +46,7 @@
                 "containers": [
                     {
                         "name": "hello-openshift",
-                        "image": "openshift/origin",
+                        "image": "quay.io/openshift/origin-base",
                         "ports": [
                             {
                                 "containerPort": 8080,

@@ -11,13 +11,13 @@ set_placeholder_input_value:
     type: input
 check_message_when_multiple_receivers_not_configured:
   params:    
-    title: Incomplete Alert Receivers
-    description: Configure these receivers
+    title: Incomplete alert receivers
+    description: Configure the receivers
   action: check_alert_message
 check_message_when_single_receiver_not_configured:
   params:    
-    title: Incomplete Alert Receiver
-    description: Configure this receiver
+    title: Incomplete alert receiver
+    description: Configure the receiver
   action: check_alert_message
 check_div_text:
   element:
@@ -85,7 +85,7 @@ perform_silence:
 check_silence_detail:
   element:
     selector:
-      xpath: //span[text()='Silence Details']
+      xpath: //span[text()='Silence details']
 silence_alert_from_detail:
   params:
     comment_text: silence comments is a must from ocp 4.5
@@ -217,7 +217,7 @@ status_specific_alert_rule:
 check_specific_alert:
   element:
     selector:
-      xpath: //div[@aria-label='Alerting Rules']//*[contains(text(),'<table_text>')]
+      xpath: //a[contains(text(),'<table_text>')]
 click_alertrule_expression:
   element:
     selector:
@@ -300,7 +300,7 @@ check_active_alerts:
   action: check_alert_description_on_rule_detail
 check_rule_breadcrumb:
   params:
-    text: Alerting Rules
+    text: Alerting rules
     link_url: /monitoring/alertrules
   action: check_link_and_text
 check_view_metrics:

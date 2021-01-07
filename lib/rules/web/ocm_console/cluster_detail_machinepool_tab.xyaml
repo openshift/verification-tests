@@ -1,0 +1,93 @@
+switch_to_machine_pools_tab:
+    element:
+        selector:
+            xpath: //span[text()='Machine pools']
+        op: click
+    action: machine_pools_table_loaded
+check_machine_pool_tab:
+    action: check_specified_machine_pool
+machine_pools_table_loaded:
+    elements:
+        - selector:
+            xpath: //button[text()='Add machine pool']
+        - selector:
+            xpath: //tr/th[text()='Machine pool']
+        - selector:
+            xpath: //tr/th[text()='Instance type']
+        - selector:
+            xpath: //tr/th[text()='Availability zones']
+        - selector:
+            xpath: //tr/th[text()='Node count']
+
+check_specified_machine_pool:
+    elements:
+        - selector:
+            xpath: //table[@aria-label='Machine pools']/tbody/tr[<row_number>]/td[1][text()='<machine_pool_name>']
+        - selector:
+            xpath: //table[@aria-label='Machine pools']/tbody/tr[<row_number>]/td[2][text()='<instance_type>']
+        - selector:
+            xpath: //table[@aria-label='Machine pools']/tbody/tr[<row_number>]/td[3][text()='<availability_zones>']
+        - selector:
+            xpath: //table[@aria-label='Machine pools']/tbody/tr[<row_number>]/td[4][text()='<node_count>']
+
+check_machine_pool_disappeared:
+    element:
+        selector:
+            xpath: //table[@aria-label='Machine pools']/tbody/tr/td[1][text()='<machine_pool_name>']
+        missing: true
+    action:
+        if_param: row_number
+        ref: check_machine_pool_row_disappeared
+check_machine_pool_row_disappeared:
+    element:
+        selector:
+            xpath: //table[@aria-label='Machine pools']/tbody/tr[<row_number>]
+        missing: true
+        timeout: 5
+
+click_add_machine_pool_button:
+    element:
+        selector:
+            xpath: //button[text()='Add machine pool']
+        op: click
+create_machine_pool:
+    action: machine_pools_table_loaded
+    action: click_add_machine_pool_button
+    action: add_machine_pool_dialog_loaded
+    action: 
+        if_param: machine_pool_name
+        ref: input_machine_pool_name
+    action:
+        if_param: machine_type
+        ref: select_machine_type
+    action:
+        if_param: row_number
+        ref: expand_edit_node_labels
+    action:
+        if_param: label_key
+        ref: input_label_key
+    action:
+        if_param: label_value
+        ref: input_label_value
+    action:
+        if_param: compute_node
+        ref: select_node_count
+    action: click_add_machine_pool_button_on_dialog
+    action: machine_pools_table_loaded
+expand_actions_of_machine_pool:
+    element:
+        selector:
+            xpath: //table[@aria-label='Machine pools']/tbody//td[text()='<machine_pool_name>']/../td//button[@aria-label='Actions']
+        op: click
+delete_machine_pool:
+    action: expand_actions_of_machine_pool
+    element:
+        selector:
+            xpath: //li/button[text()='Delete']
+        op: click
+click_scale_machine_pool_button:
+    action: expand_actions_of_machine_pool
+    element:
+        selector:
+            xpath: //li/button[text()='Scale']
+        op: click

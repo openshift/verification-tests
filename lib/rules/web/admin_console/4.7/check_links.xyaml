@@ -75,7 +75,7 @@ check_metrics_prometheus_url:
 check_dashboards_grafana_menu_url: {}
 check_mega_menu:
   params:
-    content: Red Hat Applications
+    content: Red Hat applications
     text: OpenShift Cluster Manager
     link_url: https://cloud.redhat.com/openshift/details/
   elements:
@@ -124,7 +124,7 @@ check_external_log_link:
 browse_to_cli_tools_page:
   action: click_help_button
   params:
-    text: Command Line Tools
+    text: Command line tools
     link_url: "command-line-tools"
   action: click_link_with_text
 check_consolelink:

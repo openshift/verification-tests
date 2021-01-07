@@ -23,9 +23,9 @@ Feature: Pod related networking scenarios
   @smoke
   Scenario: Container could reach the dns server
     Given I have a project
-    Given I obtain test data file "pods/tc528410/tc_528410_pod.json"
+    Given I obtain test data file "pods/ocp10031/pod.json"
     When I run the :create client command with:
-      | f | tc_528410_pod.json |
+      | f | pod.json |
     And the pod named "hello-pod" becomes ready
     And I run the steps 20 times:
     """
@@ -160,7 +160,7 @@ Feature: Pod related networking scenarios
   @admin
   Scenario: A pod cannot access the MCS port 22623 or 22624 via the SDN/tun0 address of the master
     Given I store the masters in the :masters clipboard
-    And the vxlan tunnel address of node "<%= cb.masters[0].name %>" is stored in the :master_tunnel_address clipboard		
+    And the vxlan tunnel address of node "<%= cb.masters[0].name %>" is stored in the :master_tunnel_address clipboard
     Given I select a random node's host
     And I have a project
     #pod-for-ping will be a non-hostnetwork pod
@@ -262,7 +262,7 @@ Feature: Pod related networking scenarios
       | o             | jsonpath={.items[*].metadata.name}    |
     Then the step should succeed
     And evaluation of `@result[:response]` is stored in the :ovnkube_pod_name clipboard
-    And admin ensure "<%= cb.ovnkube_pod_name %>" pod is deleted from the "openshift-ovn-kubernetes" project
+    And admin ensures "<%= cb.ovnkube_pod_name %>" pod is deleted from the "openshift-ovn-kubernetes" project
     #Waiting up to 60 seconds for new ovnkube pod to get created and running on the same node where it was deleted before
     And I wait up to 60 seconds for the steps to pass:
     """
@@ -383,8 +383,8 @@ Feature: Pod related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-26373
   @admin
-  @destructive  
-  Scenario: Make sure the route to ovn tunnel for Node's Pod CIDR gets created in both hybrid/non-hybrid mode	
+  @destructive
+  Scenario: Make sure the route to ovn tunnel for Node's Pod CIDR gets created in both hybrid/non-hybrid mode
   Given the env is using "OVNKubernetes" networkType
   And I select a random node's host
   And the vxlan tunnel name of node "<%= node.name %>" is stored in the :tunnel_inf_name clipboard
@@ -394,7 +394,7 @@ Feature: Pod related networking scenarios
   #Cleanup for bringing CRD to original
   Given I register clean-up steps:
   """
-  as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
+  as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
     | {"spec":{"defaultNetwork":{"ovnKubernetesConfig": null}}} |
   """
   Given I switch to cluster admin pseudo user
@@ -432,7 +432,7 @@ Feature: Pod related networking scenarios
       | exec_command_arg | /etc/cni/net.d/10-ovn-kubernetes.conf |
     Then the step should succeed
     #Deleting ovnkube-pod will force CNO to rewrite the conf file and bring cluster back to normal after scenario
-    And admin ensure "<%= pod.name %>" pod is deleted from the "openshift-ovn-kubernetes" project after scenario
+    And admin ensures "<%= pod.name %>" pod is deleted from the "openshift-ovn-kubernetes" project after scenario
     #Now make sure readiness probe checking above file will cause one of the two ovnkube-node containers to go down and container ready status change to false
     Given I wait up to 30 seconds for the steps to pass:
     """
@@ -490,7 +490,7 @@ Feature: Pod related networking scenarios
     Then the step should succeed
     When I execute on the "<%= cb.client_pod %>" pod:
       | ping |-s 2000 | -c1 | <%= cb.server_pod.ip %> |
-    Then the step should succeed 
+    Then the step should succeed
 
     #Successful pings will represent a successful xt_u32 match. Here we allow ping for less than 256 bytes packet else Reject
     Given admin executes on the "<%= cb.server_pod.name %>" pod:
@@ -498,7 +498,7 @@ Feature: Pod related networking scenarios
     Then the step should succeed
     When I execute on the "<%= cb.client_pod %>" pod:
       | ping | -s 64 |-c1 | <%= cb.server_pod.ip %> |
-    Then the step should succeed 
+    Then the step should succeed
     Given I execute on the "<%= cb.client_pod %>" pod:
       | ping | -s 256 |-c1 | <%= cb.server_pod.ip %> |
     Then the step should fail

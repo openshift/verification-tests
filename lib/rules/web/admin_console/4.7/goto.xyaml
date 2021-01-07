@@ -10,6 +10,11 @@ goto_resource_page_under_default_project:
 goto_project_resources_page:
   url: k8s/cluster/projects/<project_name>/workloads
   action: wait_box_loaded
+  action:
+    if_element:
+      selector:
+        xpath: //button[@data-test-id='topology-view-shortcuts']
+    ref: click_topology_view_switcher
 goto_project_details_page:
   url: k8s/cluster/projects/<project_name>/details
 # Dashboard renamed to Overview in 4.4, url is same "k8s/cluster/projects/<project_name>"
@@ -37,6 +42,7 @@ goto_builds_page:
   url: k8s/ns/<project_name>/builds
 goto_one_build_page:
   url: k8s/ns/<project_name>/builds/<build_name>
+  action: wait_page_body_loaded
 goto_one_build_environment_page:
   url: k8s/ns/<project_name>/builds/<build_name>/environment
   action: wait_box_loaded
@@ -67,14 +73,17 @@ goto_one_configmap_page:
 # cronjobs
 goto_cronjobs_page:
   url: k8s/ns/<project_name>/cronjobs
+  action: wait_box_loaded
 goto_one_cronjob_page:
   url: k8s/ns/<project_name>/cronjobs/<cronjob_name>
+  action: wait_box_loaded
 
 # jobs
 goto_jobs_page:
   url: k8s/ns/<project_name>/jobs
 goto_one_job_page:
   url: k8s/ns/<project_name>/jobs/<job_name>
+  action: wait_box_loaded
           
 # events
 goto_project_events:
@@ -147,13 +156,14 @@ goto_project_pods_list_page:
 
 goto_cluster_oauth_configuration_page:
   url: k8s/cluster/config.openshift.io~v1~OAuth/cluster
-
+  action: wait_box_loaded
 
 #replica sets
 goto_replica_sets_page:
   url: k8s/ns/<project_name>/replicasets
 goto_one_rs_page:
   url: k8s/ns/<project_name>/replicasets/<rs_name>
+  action: wait_box_loaded
 
 #routes
 goto_routes_page:
@@ -190,7 +200,7 @@ goto_create_app_from_imagestream_page:
 goto_create_app_from_template_page:
   params:
     template_namespace: openshift
-  url: catalog/instantiate-template?template==<template_name>&template-ns=<template_namespace>&preselected-ns=<project_name>
+  url: catalog/instantiate-template?template=<template_name>&template-ns=<template_namespace>&preselected-ns=<project_name>
 
 # monitoring
 goto_monitoring_metrics_page:
@@ -206,6 +216,10 @@ goto_alertmanagerconfig_page:
   action: wait_box_loaded
 goto_monitoring_db_k8s_resource_pod:
   url: monitoring/dashboards/grafana-dashboard-k8s-resources-pod
+goto_monitoring_db_elasticsearch:
+  url: monitoring/dashboards/grafana-dashboard-elasticsearch
+goto_monitoring_db_cluster_logging:
+  url: monitoring/dashboards/grafana-dashboard-cluster-logging
 
 # metering
 goto_chargeback_reports_page:
@@ -283,8 +297,10 @@ goto_machineconfigs_page:
   url: k8s/cluster/machineconfiguration.openshift.io~v1~MachineConfig
 goto_machineconfig_pools_page:
   url: k8s/cluster/machineconfiguration.openshift.io~v1~MachineConfigPool
+  action: wait_box_loaded
 goto_machine_sets_page:
   url: k8s/ns/openshift-machine-api/machine.openshift.io~v1beta1~MachineSet
+  action: wait_box_loaded
 goto_machineautoscaler_list_page:
   url: k8s/ns/openshift-machine-api/autoscaling.openshift.io~v1beta1~MachineAutoscaler
 goto_one_machineautoscaler_page:

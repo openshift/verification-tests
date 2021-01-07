@@ -528,8 +528,10 @@ Given /^I store a random unused IP address from the reserved range to the#{OPT_S
   cb_name = "valid_ip" unless cb_name
   step "the subnet for primary interface on node is stored in the clipboard"
 
-  reserved_range = "#{cb.subnet_range}"
+  reserved_range = cb.subnet_range
 
+  unused_ips=[]
+  #Save four unused ip in the clipboard
   # use the sdn pod instead of the ovs pod since we have switched to host OVS
   IPAddr.new(reserved_range).to_range.to_a.shuffle.each { |ip|
     @result = step "I run command on the node's sdn pod:", table(
@@ -537,12 +539,15 @@ Given /^I store a random unused IP address from the reserved range to the#{OPT_S
     )
     if @result[:exitstatus] == 0
       logger.info "The IP is in use."
+    elsif unused_ips.length < 4
+      unused_ips << ip.to_s
+      logger.info "Get the unused IP #{ip.to_s}"
     else
-      logger.info "The random unused IP is stored in the #{cb_name} clipboard."
-      cb[cb_name] = ip.to_s
       break
     end
   }
+  cb.valid_ips=unused_ips
+  cb[cb_name]=cb.valid_ips[0]
   raise "No available ip found in the range." unless IPAddr.new(cb[cb_name])
 end
 
@@ -570,7 +575,7 @@ Given /^an IP echo service is setup on the master node and the ip is stored in t
   cb_name = "ipecho_ip" unless cb_name
   cb[cb_name] = host.local_ip
 
-  @result = host.exec_admin("docker run --name ipecho -d -p 8888:80 docker.io/aosqe/ip-echo")
+  @result = host.exec_admin("docker run --name ipecho -d -p 8888:80 quay.io/openshifttest/ip-echo")
   raise "Failed to create the IP echo service." unless @result[:success]
   teardown_add {
     @result = host.exec_admin("docker rm -f ipecho")
@@ -729,13 +734,8 @@ end
 
 Given /^the bridge interface named "([^"]*)" is deleted from the "([^"]*)" node$/ do |bridge_name, node_name|
   ensure_admin_tagged
-  check_and_delete_inf= %Q(if ip addr show  #{bridge_name};
-                           then
-                              ip link delete #{bridge_name};
-                           fi)
   node = node(node_name)
-  host = node.host
-  @result = host.exec_admin(check_and_delete_inf)
+  @result=step "I run command on the node's sdn pod:", table("| bash | -c | if ip addr show #{bridge_name};then ip link delete #{bridge_name};fi |")
   raise "Failed to delete bridge interface" unless @result[:success]
 end
 
@@ -827,7 +827,7 @@ Given /^the subnet for primary interface on node is stored in the#{OPT_SYM} clip
     "| bash | -c | ip -4 -brief a show \"<%= cb.interface %>\" \\| awk '{print $3}' |"
   )
   raise "Failed to get the subnet range for the primary interface on the node" unless @result[:success]
-  cb[cb_name] = @result[:response].chomp
+  cb[cb_name] = @result[:stdout].chomp
   logger.info "Subnet range for the primary interface on the node is stored in the #{cb_name} clipboard."
 end
 
@@ -1262,6 +1262,9 @@ Given /^I save egress type to the#{OPT_SYM} clipboard$/ do | cb_name |
   logger.info "The egressfirewall type is stored to the #{cb_name} clipboard."
 end
 
+# ipecho service is used for retrieve the source IP from the outbound traffic of the cluster
+# It is used for egress IP testing. Currently it is installed in a VM in vmc network.
+# Huiran Wang
 Given /^I save ipecho url to the#{OPT_SYM} clipboard$/ do | cb_name |
   ensure_admin_tagged
   cb_name = "ipecho_url" unless cb_name

@@ -165,7 +165,7 @@ check_operand_des_during_creating_operand:
   action: submit_changes
 create_catalog_source:
   params:
-    button_text: Create Catalog Source
+    button_text: Create CatalogSource
     button_id: catalog-source-namespace
     radio_text: 1
   action: goto_catalog_source_page
@@ -558,7 +558,7 @@ check_condition_status:
     timeout: 20
   - selector:
       xpath: //span[contains(.,'Condition') and contains(.,'<status>')]
-
+    timeout: 20
 ## project selector: one project
 check_column_header_for_one_namespace:
   action: check_managed_namespace_column_header

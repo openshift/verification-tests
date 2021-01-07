@@ -158,7 +158,7 @@ Feature: MachineHealthCheck Test Scenarios
       | ["spec"]["nodeStartupTimeout" ]                                                    | 15m                         |
     Then the step should succeed
     And I ensure "mhc-<%= machine_set.name %>" machine_health_check is deleted after scenario
-    
+
     Given I create the 'Ready' unhealthyCondition
     Then a pod becomes ready with labels:
      | api=clusterapi, k8s-app=controller |
@@ -271,14 +271,13 @@ Feature: MachineHealthCheck Test Scenarios
     Given I obtain test data file "cloud/mhc/mhc_validations.yaml"
     When I run oc create over "mhc_validations.yaml" replacing paths:
       | ["spec"]["maxUnhealthy"] | <maxUnhealthy> |
-    Then the output should contain:
-      | maxUnhealthy: Invalid value: "": spec.maxUnhealthy |
+    Then the output should match:
+      | maxUnhealthy: Invalid value: ".*": spec.maxUnhealthy |
 
    Examples:
       | maxUnhealthy |
       |  -2a         |
-      | "10t%"       |
-      | "-2%"        |
+      |  10t%        |
       |  -2%         |
 
   # @author miyadav@redhat.com
@@ -292,11 +291,11 @@ Feature: MachineHealthCheck Test Scenarios
     Given I obtain test data file "cloud/mhc/mhc_validations.yaml"
     When I run oc create over "mhc_validations.yaml" replacing paths:
       | ["spec"]["unhealthyConditions"][0]["timeout"] | <timeout> |
-    Then the output should contain:
-      | timeout: Invalid value: "": spec.unhealthyConditions.timeout |
+    Then the output should match:
+      | timeout: Invalid value: ".*": spec.unhealthyConditions.timeout |
 
    Examples:
       | timeout |
       | "3"     |
       | "3t"    |
- 
+

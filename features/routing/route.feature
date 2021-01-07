@@ -98,15 +98,15 @@ Feature: Testing route
   @smoke
   Scenario: The path specified in route can work well for edge terminated
     Given I have a project
-    Given I obtain test data file "routing/caddy-docker.json"
+    Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
-      | f | caddy-docker.json |
+      | f | web-server-1.yaml |
     Then the step should succeed
     And a pod becomes ready with labels:
-      | name=caddy-docker |
-    Given I obtain test data file "routing/unsecure/service_unsecure.json"
+      | name=web-server |
+    Given I obtain test data file "routing/service_unsecure.yaml"
     When I run the :create client command with:
-      | f | service_unsecure.json |
+      | f | service_unsecure.yaml |
     Then the step should succeed
 
     Given I have a pod-for-ping in the project
@@ -141,15 +141,15 @@ Feature: Testing route
   Scenario: The path specified in route can work well for reencrypt terminated
     Given I have a project
     And I store an available router IP in the :router_ip clipboard
-    Given I obtain test data file "routing/caddy-docker.json"
+    Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
-      | f | caddy-docker.json |
+      | f | web-server-1.yaml |
     Then the step should succeed
     And a pod becomes ready with labels:
-      | name=caddy-docker |
-    Given I obtain test data file "routing/reencrypt/service_secure.json"
+      | name=web-server |
+    Given I obtain test data file "routing/service_secure.yaml"
     When I run the :create client command with:
-      | f | service_secure.json |
+      | f | service_secure.yaml |
     Then the step should succeed
 
     Given I have a pod-for-ping in the project
@@ -193,15 +193,15 @@ Feature: Testing route
   Scenario: Config insecureEdgeTerminationPolicy to Redirect for route
     Given I have a project
     And I store an available router IP in the :router_ip clipboard
-    Given I obtain test data file "routing/caddy-docker.json"
+    Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
-      | f | caddy-docker.json |
+      | f | web-server-1.yaml |
     Then the step should succeed
     And a pod becomes ready with labels:
-      | name=caddy-docker |
-    Given I obtain test data file "routing/unsecure/service_unsecure.json"
+      | name=web-server |
+    Given I obtain test data file "routing/service_unsecure.yaml"
     When I run the :create client command with:
-      | f | service_unsecure.json |
+      | f | service_unsecure.yaml |
     Then the step should succeed
     # Create edge termination route
     When I run the :create_route_edge client command with:
@@ -238,15 +238,15 @@ Feature: Testing route
   Scenario: Config insecureEdgeTerminationPolicy to Allow for route
     Given I have a project
     And I store an available router IP in the :router_ip clipboard
-    Given I obtain test data file "routing/caddy-docker.json"
+    Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
-      | f | caddy-docker.json |
+      | f | web-server-1.yaml |
     Then the step should succeed
     And a pod becomes ready with labels:
-      | name=caddy-docker |
-    Given I obtain test data file "routing/edge/service_unsecure.json"
+      | name=web-server |
+    Given I obtain test data file "routing/service_unsecure.yaml"
     When I run the :create client command with:
-      | f | service_unsecure.json |
+      | f | service_unsecure.yaml |
     Then the step should succeed
     When I run the :create_route_edge client command with:
       | name     | myroute          |
@@ -299,7 +299,7 @@ Feature: Testing route
   @smoke
   Scenario: Route could NOT be updated after created
     Given I have a project
-    Given I obtain test data file "routing/tc/tc470732/route_withouthost1.json"
+    Given I obtain test data file "routing/route_withouthost1.json"
     When I run the :create client command with:
       | f | route_withouthost1.json |
     Then the step should succeed
@@ -315,15 +315,15 @@ Feature: Testing route
   Scenario: Set insecureEdgeTerminationPolicy to Redirect for passthrough route
     Given I have a project
     And I store an available router IP in the :router_ip clipboard
-    Given I obtain test data file "routing/caddy-docker.json"
+    Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
-      | f | caddy-docker.json |
+      | f | web-server-1.yaml |
     Then the step should succeed
     And a pod becomes ready with labels:
-      | name=caddy-docker |
-    Given I obtain test data file "routing/passthrough/service_secure.json"
+      | name=web-server |
+    Given I obtain test data file "routing/service_secure.yaml"
     When I run the :create client command with:
-      | f | service_secure.json |
+      | f | service_secure.yaml |
     Then the step should succeed
     # Create passthrough termination route
     When I run the :create_route_passthrough client command with:
@@ -364,15 +364,15 @@ Feature: Testing route
   Scenario: Set insecureEdgeTerminationPolicy to Redirect and Allow for reencrypt route
     Given I have a project
     And I store an available router IP in the :router_ip clipboard
-    Given I obtain test data file "routing/caddy-docker.json"
+    Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
-      | f | caddy-docker.json |
+      | f | web-server-1.yaml |
     Then the step should succeed
     And a pod becomes ready with labels:
-      | name=caddy-docker |
-    Given I obtain test data file "routing/passthrough/service_secure.json"
+      | name=web-server |
+    Given I obtain test data file "routing/service_secure.yaml"
     When I run the :create client command with:
-      | f | service_secure.json |
+      | f | service_secure.yaml |
     Then the step should succeed
 
     #create reencrypt termination route
@@ -422,9 +422,9 @@ Feature: Testing route
   # @case_id OCP-13248
   Scenario: The hostname should be converted to available route when met special character
     Given I have a project
-    Given I obtain test data file "routing/unsecure/service_unsecure.json"
+    Given I obtain test data file "routing/service_unsecure.yaml"
     When I run the :create client command with:
-      | f  | service_unsecure.json |
+      | f  | service_unsecure.yaml |
     Then the step should succeed
 
     # test those 4 kind of route. When creating route which name have '.', it will be decoded to '-'.
@@ -461,15 +461,15 @@ Feature: Testing route
   Scenario: Check the cookie if using secure mode when insecureEdgeTerminationPolicy to Redirect for edge/reencrypt route
     Given I have a project
     And I store an available router IP in the :router_ip clipboard
-    Given I obtain test data file "routing/caddy-docker.json"
+    Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
-      | f | caddy-docker.json |
+      | f | web-server-1.yaml |
     Then the step should succeed
     And a pod becomes ready with labels:
-      | name=caddy-docker |
-    Given I obtain test data file "routing/unsecure/service_unsecure.json"
+      | name=web-server |
+    Given I obtain test data file "routing/service_unsecure.yaml"
     When I run the :create client command with:
-      | f | service_unsecure.json |
+      | f | service_unsecure.yaml |
     Then the step should succeed
     # Create edge termination route
     When I run the :create_route_edge client command with:
@@ -499,9 +499,9 @@ Feature: Testing route
       | FALSE.*TRUE |
 
     #create reencrypt termination route
-    Given I obtain test data file "routing/passthrough/service_secure.json"
+    Given I obtain test data file "routing/service_secure.yaml"
     Given I run the :create client command with:
-      | f | service_secure.json |
+      | f | service_secure.yaml |
     Then the step should succeed
     Given I obtain test data file "routing/reencrypt/route_reencrypt_dest.ca"
     When I run the :create_route_reencrypt client command with:
@@ -584,14 +584,14 @@ Feature: Testing route
   Scenario: The edge route should support HSTS
     Given the master version >= "3.7"
     And I have a project
-    Given I obtain test data file "routing/caddy-docker.json"
+    Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
-      | f | caddy-docker.json |
+      | f | web-server-1.yaml |
     Then the step should succeed
     And all pods in the project are ready
-    Given I obtain test data file "routing/unsecure/service_unsecure.json"
+    Given I obtain test data file "routing/service_unsecure.yaml"
     When I run the :create client command with:
-      | f | service_unsecure.json |
+      | f | service_unsecure.yaml |
     Then the step should succeed
     When I run the :create_route_edge client command with:
       | name     | myroute          |

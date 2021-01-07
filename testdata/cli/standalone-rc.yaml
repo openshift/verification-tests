@@ -18,7 +18,7 @@ spec:
             - start
             - master
             - --config=/config/master-config.yaml
-          image: "openshift/origin"
+          image: "quay.io/openshift/origin-base"
           name: origin
           ports:
             - containerPort: 8443

@@ -76,7 +76,7 @@ Feature: Kibana related features
     When I login to kibana logging web console
     Then the step should succeed
     When I perform the :create_index_pattern_in_kibana web action with:
-      | index_pattern_name | app |
+      | index_pattern_name | "*app" |
     Then the step should succeed
     Given I wait up to 300 seconds for the steps to pass:
     """
@@ -85,7 +85,7 @@ Feature: Kibana related features
     """
     # check the log count, wait for the Kibana console to be loaded
     When I perform the :kibana_find_index_pattern web action with:
-      | index_pattern_name | app* |
+      | index_pattern_name | *app |
     Then the step should succeed
     Given I wait up to 300 seconds for the steps to pass:
     """
@@ -113,14 +113,14 @@ Feature: Kibana related features
     And I use the "openshift-logging" project
     Given I wait for the "app" index to appear in the ES pod with labels "es-node-master=true"
     Given I wait for the "infra" index to appear in the ES pod with labels "es-node-master=true"
-    And I wait for the project "<%= cb.proj.name %>" logs to appear in the ES pod 
+    And I wait for the project "<%= cb.proj.name %>" logs to appear in the ES pod
     When I login to kibana logging web console
     Then the step should succeed
     When I perform the :create_index_pattern_in_kibana web action with:
-      | index_pattern_name | app |
+      | index_pattern_name | "*app" |
     Then the step should succeed
     When I perform the :create_index_pattern_in_kibana web action with:
-      | index_pattern_name | infra |
+      | index_pattern_name | "*infra" |
     Then the step should succeed
     Given I wait up to 180 seconds for the steps to pass:
     """
@@ -129,7 +129,7 @@ Feature: Kibana related features
     """
 
     When I perform the :kibana_find_index_pattern web action with:
-      | index_pattern_name | app* |
+      | index_pattern_name | *app |
     Then the step should succeed
     Given I wait up to 180 seconds for the steps to pass:
     """
@@ -139,10 +139,10 @@ Feature: Kibana related features
     And I run the :kibana_expand_index_patterns web action
     Then the step should succeed
     When I perform the :kibana_click_index web action with:
-      | index_pattern_name | infra* |
+      | index_pattern_name | *infra |
     Then the step should succeed
     When I perform the :kibana_find_index_pattern web action with:
-      | index_pattern_name | infra* |
+      | index_pattern_name | *infra |
     Then the step should succeed
     Given I wait up to 180 seconds for the steps to pass:
     """
@@ -186,7 +186,7 @@ Feature: Kibana related features
       | idp        | <%= env.idp %>               |
     Then the step should succeed
     # click `Log in with OpenShift` button and login again
-    When I run the :logout_kibana web action 
+    When I run the :logout_kibana web action
     Then the step should succeed
     When I perform the :login_kibana web action with:
       | username   | <%= user.name %>             |

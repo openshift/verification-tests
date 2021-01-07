@@ -5,9 +5,9 @@ Feature: buildlogic.feature
   Scenario: Build with specified Dockerfile via new-build -D
     Given I have a project
     When I run the :new_build client command with:
-      | D    | FROM centos:7\nRUN echo "hello" |
-      | to   | myappis                         |
-      | name | myapp                           |
+      | D    | FROM quay.io/openshifttest/centos@sha256:285bc3161133ec01d8ca8680cd746eecbfdbc1faa6313bd863151c4b26d7e5a5\nRUN echo "hello" |
+      | to   | myappis |
+      | name | myapp   |
     Then the step should succeed
     And the "myapp-1" build was created
     And the "myapp-1" build completed
@@ -96,19 +96,20 @@ Feature: buildlogic.feature
   Scenario: Build with specified Dockerfile to image with same image name via new-build
     Given I have a project
     When I run the :new_build client command with:
-      | D | FROM centos:7 |
+      | D  | FROM quay.io/openshifttest/centos@sha256:285bc3161133ec01d8ca8680cd746eecbfdbc1faa6313bd863151c4b26d7e5a5 |
+      | to | centos |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | bc     |
       | name     | centos |
     Then the output should match:
-      | From Image:\s+ImageStreamTag centos:7     |
-      | Output to:\s+ImageStreamTag centos:latest |
+      | From Image:\s+ImageStreamTag centos:latest |
+      | Output to:\s+ImageStreamTag centos:latest  |
     Given the "centos-1" build becomes :complete
     When I run the :new_build client command with:
-      | D    | FROM centos:7 |
-      | to   | centos:7      |
-      | name | myapp         |
+      | D    | FROM quay.io/openshifttest/centos@sha256:285bc3161133ec01d8ca8680cd746eecbfdbc1faa6313bd863151c4b26d7e5a5 |
+      | to   | centos:7 |
+      | name | myapp    |
     And I get project bc
     Then the output should contain:
       | myapp |
@@ -116,7 +117,7 @@ Feature: buildlogic.feature
     And the "myapp-2" build becomes :complete
     And the "myapp-3" build becomes :running
     When I run the :new_build client command with:
-      | code         | https://github.com/sclorg/nodejs-ex.git    |
+      | code         | https://github.com/sclorg/nodejs-ex.git       |
       | image_stream | openshift/nodejs:0.10                         |
       | code         | https://github.com/openshift/ruby-hello-world |
       | image_stream | openshift/ruby:2.0                            |
@@ -133,7 +134,7 @@ Feature: buildlogic.feature
     And the "secret" file is created with the following lines:
       | <%= cb.ssh_private_key.to_pem %> |
     And I run the :create_secret client command with:
-      | secret_type | generic               | 
+      | secret_type | generic               |
       | name        | mysecret              |
       | from_file   | ssh-privatekey=secret |
     Then the step should succeed
@@ -182,7 +183,7 @@ Feature: buildlogic.feature
     And the "secret" file is created with the following lines:
       | <%= cb.ssh_private_key.to_pem %> |
     And I run the :create_secret client command with:
-      | secret_type | generic               | 
+      | secret_type | generic               |
       | name        | mysecret              |
       | from_file   | ssh-privatekey=secret |
     Then the step should succeed
@@ -207,7 +208,7 @@ Feature: buildlogic.feature
   # @case_id OCP-13683
   Scenario: Check s2i build substatus and times
     Given I have a project
-    Given I obtain test data file "build/tc470422/application-template-stibuild.json"
+    Given I obtain test data file "build/application-template-stibuild.json"
     When I run the :new_app client command with:
       | file | application-template-stibuild.json |
     Then the step should succeed
@@ -242,7 +243,7 @@ Feature: buildlogic.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-13914
   Scenario: Prune old builds automaticly
-    #Should prune completed builds based on the successfulBuildsHistoryLimit setting	
+    #Should prune completed builds based on the successfulBuildsHistoryLimit setting
     Given I have a project
     When I run the :new_build client command with:
       | D    | FROM busybox\nRUN touch /php-file |
@@ -268,7 +269,7 @@ Feature: buildlogic.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-24154
-  Scenario: Should prune canceled builds based on the failedBuildsHistoryLimit setting	
+  Scenario: Should prune canceled builds based on the failedBuildsHistoryLimit setting
     Given I have a project
     When I run the :new_app client command with:
       | template | rails-postgresql-example |
@@ -329,7 +330,7 @@ Feature: buildlogic.feature
   Scenario: Should prune errored builds based on the failedBuildsHistoryLimit setting
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift/origin/master/test/extended/testdata/builds/build-pruning/errored-build-config.yaml |                                              
+      | f | https://raw.githubusercontent.com/openshift/origin/master/test/extended/testdata/builds/build-pruning/errored-build-config.yaml |
     Then the step should succeed
     Given I run the steps 4 times:
     """
@@ -348,7 +349,7 @@ Feature: buildlogic.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-24158
-  Scenario: Should prune builds after a buildConfig change 
+  Scenario: Should prune builds after a buildConfig change
     Given I have a project
     When I run the :new_app client command with:
       | image_stream | ruby                                              |
@@ -409,7 +410,7 @@ Feature: buildlogic.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-19133
-  Scenario: Pipeline build can be pruned automatically	
+  Scenario: Pipeline build can be pruned automatically
     Given I have a project
     And I have a jenkins v2 application
     When I run the :new_app client command with:

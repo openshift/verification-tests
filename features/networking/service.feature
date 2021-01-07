@@ -14,7 +14,7 @@ Feature: Service related networking scenarios
     And a pod becomes ready with labels:
       | name=test-pods |
     Given I use the "test-service" service
-    And evaluation of `service.ip(user: user)` is stored in the :service1_ip clipboard
+    And evaluation of `service.ip` is stored in the :service1_ip clipboard
     Given I wait for the "test-service" service to become ready
 
     # create pod and service in project2
@@ -27,7 +27,7 @@ Feature: Service related networking scenarios
     And a pod becomes ready with labels:
       | name=test-pods |
     Given I use the "test-service" service
-    And evaluation of `service.ip(user: user)` is stored in the :service2_ip clipboard
+    And evaluation of `service.ip` is stored in the :service2_ip clipboard
 
     # access service in project2
     Given I have a pod-for-ping in the project
@@ -51,12 +51,12 @@ Feature: Service related networking scenarios
       | subnet      |
       | multitenant |
     Given I have a project
-    Given I obtain test data file "routing/unsecure/service_unsecure.json"
+    Given I obtain test data file "routing/service_unsecure.yaml"
     When I run the :create client command with:
-      | f | service_unsecure.json |
+      | f | service_unsecure.yaml |
     Then the step should succeed
     Given I use the "service-unsecure" service
-    And evaluation of `service.ip(user: user)` is stored in the :service_ip clipboard
+    And evaluation of `service.ip` is stored in the :service_ip clipboard
     Given I select a random node's host
     When I run ovs dump flows commands on the host
     Then the step should succeed
@@ -157,7 +157,7 @@ Feature: Service related networking scenarios
     # Create a svc with externalIP
     Given I switch to the first user
     Given I obtain test data file "networking/externalip_service1.json"
-    And I wait up to 300 seconds for the steps to pass:
+    And I wait up to 500 seconds for the steps to pass:
     """
     When I run oc create over "externalip_service1.json" replacing paths:
       | ["spec"]["externalIPs"][0] | <%= cb.hostip %> |
@@ -165,17 +165,17 @@ Feature: Service related networking scenarios
     """
 
     # Create a pod
-    Given I obtain test data file "routing/caddy-docker.json"
+    Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
-      | f | caddy-docker.json |
+      | f | web-server-1.yaml |
     Then the step should succeed
-    And the pod named "caddy-docker" becomes ready
+    And the pod named "web-server-1" becomes ready
 
     # Curl externalIP:portnumber should pass
     When I execute on the pod:
       | /usr/bin/curl | --connect-timeout | 10 | <%= cb.hostip %>:27017 |
     Then the output should contain:
-      | Hello-OpenShift-1 http-8080 |
+      | Hello-OpenShift |
 
   # @author weliang@redhat.com
   # @case_id OCP-24692
@@ -196,7 +196,7 @@ Feature: Service related networking scenarios
     # Create a svc with externalIP/22.2.2.10 which is in 22.2.2.0/25
     Given I have a project
     Given I obtain test data file "networking/externalip_service1.json"
-    And I wait up to 300 seconds for the steps to pass:
+    And I wait up to 500 seconds for the steps to pass:
     """
     When I run oc create over "externalip_service1.json" replacing paths:
       | ["spec"]["externalIPs"][0] | 22.2.2.10 |
@@ -205,7 +205,7 @@ Feature: Service related networking scenarios
 
     # Create a svc with externalIP/22.2.2.130 which is not in 22.2.2.0/25
     Given I obtain test data file "networking/externalip_service1.json"
-    And I wait up to 300 seconds for the steps to pass:
+    And I wait up to 500 seconds for the steps to pass:
     """
     When I run oc create over "externalip_service1.json" replacing paths:
       | ["spec"]["externalIPs"][0] | 22.2.2.130 |
@@ -213,17 +213,17 @@ Feature: Service related networking scenarios
     """
 
     # Create a pod
-    Given I obtain test data file "routing/caddy-docker.json"
+    Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
-      | f | caddy-docker.json |
+      | f | web-server-1.yaml |
     Then the step should succeed
-    And the pod named "caddy-docker" becomes ready
+    And the pod named "web-server-1" becomes ready
 
     # Curl externalIP:portnumber on new pod
     When I execute on the pod:
       | /usr/bin/curl | -k | 22.2.2.130:27017 |
     Then the output should contain:
-      | Hello-OpenShift-1 http-8080 |
+      | Hello-OpenShift |
 
   # @author weliang@redhat.com
   # @case_id OCP-24670
@@ -249,7 +249,7 @@ Feature: Service related networking scenarios
     # Create a svc with externalIP
     Given I switch to the first user
     Given I obtain test data file "networking/externalip_service1.json"
-    And I wait up to 300 seconds for the steps to pass:
+    And I wait up to 500 seconds for the steps to pass:
     """
     When I run oc create over "externalip_service1.json" replacing paths:
       | ["spec"]["externalIPs"][0] | <%= cb.hostip %> |
@@ -275,7 +275,7 @@ Feature: Service related networking scenarios
     # Create a svc with externalIP/22.2.2.10 which is in rejectedCIDRs
     Given I have a project
     Given I obtain test data file "networking/externalip_service1.json"
-    And I wait up to 300 seconds for the steps to pass:
+    And I wait up to 500 seconds for the steps to pass:
     """
     When I run oc create over "externalip_service1.json" replacing paths:
       | ["spec"]["externalIPs"][0] | 22.2.2.10 |
@@ -284,7 +284,7 @@ Feature: Service related networking scenarios
 
     # Create a svc with externalIP/22.2.2.130 which is in rejectedCIDRs
     Given I obtain test data file "networking/externalip_service1.json"
-    And I wait up to 300 seconds for the steps to pass:
+    And I wait up to 500 seconds for the steps to pass:
     """
     When I run oc create over "externalip_service1.json" replacing paths:
       | ["spec"]["externalIPs"][0] | 22.2.2.130 |
@@ -316,7 +316,7 @@ Feature: Service related networking scenarios
     # Create a svc with externalIP
     Given I switch to the first user
     Given I obtain test data file "networking/externalip_service1.json"
-    And I wait up to 300 seconds for the steps to pass:
+    And I wait up to 500 seconds for the steps to pass:
     """
     When I run oc create over "externalip_service1.json" replacing paths:
       | ["spec"]["externalIPs"][0] | <%= cb.host1ip %> |
@@ -324,17 +324,17 @@ Feature: Service related networking scenarios
     """
 
     # Create a pod
-    Given I obtain test data file "routing/caddy-docker.json"
+    Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
-      | f | caddy-docker.json |
+      | f | web-server-1.yaml |
     Then the step should succeed
-    And the pod named "caddy-docker" becomes ready
+    And the pod named "web-server-1" becomes ready
 
     # Curl externalIP:portnumber from pod
     When I execute on the pod:
       | /usr/bin/curl | --connect-timeout | 10 | <%= cb.host1ip %>:27017 |
     Then the output should contain:
-      | Hello-OpenShift-1 http-8080 |
+      | Hello-OpenShift |
 
     # Delete created pod and svc
     When I run the :delete client command with:
@@ -344,7 +344,7 @@ Feature: Service related networking scenarios
 
     # Create a svc with second externalIP
     Given I obtain test data file "networking/externalip_service1.json"
-    And I wait up to 300 seconds for the steps to pass:
+    And I wait up to 500 seconds for the steps to pass:
     """
     When I run oc create over "externalip_service1.json" replacing paths:
       | ["spec"]["externalIPs"][0] | <%= cb.host2ip %> |
@@ -352,47 +352,46 @@ Feature: Service related networking scenarios
     """
 
     # Create a pod
-    Given I obtain test data file "routing/caddy-docker.json"
+    Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
-      | f | caddy-docker.json |
+      | f | web-server-1.yaml |
     Then the step should succeed
-    And the pod named "caddy-docker" becomes ready
+    And the pod named "web-server-1" becomes ready
 
     # Curl externalIP:portnumber on new pod
     When I execute on the pod:
       | /usr/bin/curl | --connect-timeout | 10 | <%= cb.host2ip %>:27017 |
     Then the output should contain:
-      | Hello-OpenShift-1 http-8080 |
+      | Hello-OpenShift |
 
   # @author anusaxen@redhat.com
   # @case_id OCP-26035
   @admin
-  Scenario: Idling/Unidling services on OVN
-  Given the env is using "OVNKubernetes" networkType
-  And I have a project
+  Scenario: Idling/Unidling services on sdn/OVN
+    Given I have a project
     Given I obtain test data file "networking/list_for_pods.json"
-  When I run the :create client command with:
-    | f | list_for_pods.json |
-  Then the step should succeed
-  And a pod becomes ready with labels:
-    | name=test-pods |
-  Given I use the "test-service" service
-  And evaluation of `service.url(user: user)` is stored in the :service_url clipboard
-  # Checking idling unidling manually to make sure it works fine
-  When I run the :idle client command with:
-    | svc_name | test-service |
-  Then the step should succeed
-  And the output should contain:
-    | The service "<%= project.name %>/test-service" has been marked as idled |
-  Given I have a pod-for-ping in the project
-  And I wait up to 30 seconds for the steps to pass:
-  """
-  When I execute on the pod:
-    | /usr/bin/curl | --connect-timeout | 30 | <%= cb.service_url %> |
-  Then the step should succeed
-  And the output should contain:
-    | Hello OpenShift |
-  """
+    When I run the :create client command with:
+      | f | list_for_pods.json |
+    Then the step should succeed
+    And a pod becomes ready with labels:
+      | name=test-pods |
+    Given I use the "test-service" service
+    And evaluation of `service.url(user: user)` is stored in the :service_url clipboard
+    # Checking idling unidling manually to make sure it works fine
+    When I run the :idle client command with:
+      | svc_name | test-service |
+    Then the step should succeed
+    And the output should contain:
+      | The service "<%= project.name %>/test-service" has been marked as idled |
+    Given I have a pod-for-ping in the project
+    And I wait up to 30 seconds for the steps to pass:
+    """
+    When I execute on the pod:
+      | /usr/bin/curl | --connect-timeout | 30 | <%= cb.service_url %> |
+    Then the step should succeed
+    And the output should contain:
+      | Hello OpenShift |
+    """
 
   # @author huirwang@redhat.com
   # @case_id OCP-11645
@@ -456,7 +455,7 @@ Feature: Service related networking scenarios
     """
     #This def will also store network project name in network_project_name variable
     Given I store "<%= cb.subject_node %>" node's corresponding default networkType pod name in the :subject_node_network_pod clipboard
-    And admin ensure "<%= cb.subject_node_network_pod %>" pod is deleted from the "<%= cb.network_project_name %>" project
+    And admin ensures "<%= cb.subject_node_network_pod %>" pod is deleted from the "<%= cb.network_project_name %>" project
     Given I wait up to 30 seconds for the steps to pass:
     """
     When I run the :describe admin command with:
@@ -532,3 +531,60 @@ Feature: Service related networking scenarios
       | type          | merge                                            |
     Then the step should fail
     And the output should contain "does not completely cover the previous range"
+
+  # @author zzhao@redhat.com
+  # @case_id OCP-10216
+  @admin
+  Scenario: The iptables rules for the service should be DNAT or REDIRECT to node after being idled
+    Given I have a project
+    And evaluation of `project.name` is stored in the :proj_name clipboard
+    Given I obtain test data file "networking/list_for_pods.json"
+    When I run oc create over "list_for_pods.json" replacing paths:
+      | ["items"][0]["spec"]["replicas"] | 1 |
+    Then the step should succeed
+    And I wait until number of replicas match "1" for replicationController "test-rc"
+    Given I use the "test-service" service
+    And evaluation of `service.ip` is stored in the :service_ip clipboard
+
+    Given I have a pod-for-ping in the project
+    And evaluation of `pod('hello-pod').node_ip` is stored in the :hostip clipboard
+    Given I use the "<%= pod.node_name %>" node
+    When I run the :idle client command with:
+      | svc_name | test-service |
+    Then the step should succeed
+    Given I wait until number of replicas match "0" for replicationController "test-rc"
+    When I run the :get client command with:
+      | resource | endpoints |
+    Then the step should succeed
+    And the output should match:
+      | test-service.*none |
+    When I run commands on the host:
+      | iptables -S -t nat \| grep <%= cb.proj_name %>/test-service |
+    Then the step should succeed
+    And the output should match:
+      | KUBE-PORTALS-CONTAINER -d <%= cb.service_ip %>/32 -p tcp .* -m tcp --dport 27017 -j (DNAT --to-destination <%= cb.hostip %>:\d+\|REDIRECT --to-ports \d+) |
+      | KUBE-PORTALS-HOST -d <%= cb.service_ip %>/32 -p tcp .* -m tcp --dport 27017 -j DNAT --to-destination <%= cb.hostip %>:\d+ |
+
+    Then I wait up to 60 seconds for the steps to pass:
+    """
+    When I execute on the pod:
+      | curl | --max-time | 60 | <%= cb.service_ip %>:27017 |
+    Then the output should contain "Hello OpenShift!"
+    """
+    Given a pod becomes ready with labels:
+      | name=test-pods |
+    Then evaluation of `pod.ip` is stored in the :pod_ip clipboard
+    When I run the :get client command with:
+      | resource | endpoints |
+    Then the step should succeed
+    And the output should match:
+      | test-service\s+<%= cb.pod_ip %>:8080 |
+    When I run commands on the host:
+      | iptables -S -t nat \| grep <%= cb.proj_name %>/test-service |
+    Then the step should succeed
+    And the output should not contain "REDIRECT"
+    And the output should match:
+      | KUBE-SEP-.+ -s <%= cb.pod_ip %>/32 .* -j KUBE-MARK-MASQ                                |
+      | KUBE-SEP-.+ -p tcp .* -m tcp -j DNAT --to-destination <%= cb.pod_ip %>:8080            |
+      | KUBE-SERVICES -d <%= cb.service_ip %>/32 -p tcp .* -m tcp --dport 27017 -j KUBE-SVC-.+ |
+      | KUBE-SVC-.+ .* -j KUBE-SEP-.+                                                          |

@@ -22,7 +22,7 @@
                     "spec": {
                         "containers": [
                             {
-                                "image": "openshift/nonexist",
+                                "image": "quay.io/openshifttest/nonexist",
                                 "name": "test-pod",
                                 "imagePullPolicy": "IfNotPresent",
                                 "resources":{

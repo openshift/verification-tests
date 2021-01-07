@@ -1,6 +1,6 @@
 click_add_value_from_configmap_or_secret:
   params:
-    button_text: Add from Config Map or Secret
+    button_text: Add from ConfigMap or Secret
   action: click_button
 check_env_editor_loaded:
   element:
@@ -18,7 +18,7 @@ add_env_vars:
 add_env_var_name:
   elements:
   - selector: 
-      xpath: //div[contains(@class,'pairs-list__row')][last()]/div[contains(@class,'pairs-list__name-field')]/input[@placeholder='name']
+      xpath: //div[contains(@class,'pairs-list__row')][last()]/div[contains(@class,'pairs-list__name-field')]/input[@placeholder='Name']
     op: send_keys <env_var_name>
     timeout: 15
 add_env_var_pair_value:
@@ -38,7 +38,7 @@ add_env_var_pair_value:
 add_env_var_value:
   element:
     selector:
-      xpath: //div[contains(@class,'pairs-list__row')][last()]/div[contains(@class,'pairs-list__value-field')]/input[@placeholder='value']
+      xpath: //div[contains(@class,'pairs-list__row')][last()]/div[contains(@class,'pairs-list__value-field')]/input[@placeholder='Value']
     op: send_keys <env_var_value>
 choose_container:
   elements:
@@ -80,7 +80,7 @@ remove_env_vars:
       xpath: //div[contains(@class,'pairs-list__row')]
   - selector: &env_var_delete_icon |
       var parent_row = document.querySelectorAll('input[value=<env_var_name>]')[0].parentElement.parentElement
-      return parent_row.querySelector("button[data-test-id='pairs-list__delete-btn']")
+      return parent_row.querySelector("button[data-test='delete-button']")
     type: js
   - selector: *env_var_delete_icon
     type: js

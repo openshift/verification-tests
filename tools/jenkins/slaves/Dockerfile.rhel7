@@ -5,6 +5,8 @@ FROM openshift3/jenkins-slave-base-rhel7:v3.11
 LABEL vendor="Red Hat inc."
 LABEL maintainer="AOS QE Team"
 
+ENV USER_PATHS="$HOME /etc/machine-id /etc/passwd /etc/pki"
+
 RUN set -x && \
     yum repolist all && \
     yum-config-manager --disable rhel-7-server-htb-rpms && \
@@ -14,25 +16,37 @@ RUN set -x && \
     yum-config-manager --enable rhel-7-server-ansible-2-rpms && \
     yum -y update && \
     SCL_BASE_PKGS="scl-utils-build" && \
-    INSTALL_PKGS="rh-ruby26 rh-ruby26-ruby-devel rh-git218 bsdtar" && \
+    INSTALL_PKGS="rh-ruby27 rh-ruby27-ruby-devel rh-ruby27-rubygem-bundler rh-git218 bsdtar" && \
     yum install -y --setopt=skip_missing_names_on_install=False,tsflags=nodocs $SCL_BASE_PKGS && \
     yum install -y --setopt=skip_missing_names_on_install=False,tsflags=nodocs $INSTALL_PKGS && \
     yum install -y --setopt=tsflags=nodocs https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm && \
+    yum-config-manager --save --setopt=google-chrome.skip_if_unavailable=true && \
     CHROMEDRIVER_URL="https://chromedriver.storage.googleapis.com" && \
     CHROMEDRIVER_VERSION=$(curl -sSL "$CHROMEDRIVER_URL/LATEST_RELEASE") && \
     curl -sSL "$CHROMEDRIVER_URL/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip" | bsdtar --no-same-owner --no-same-permissions -xvf - -C /usr/local/bin && \
-    GECKODRIVER_DOWNLOAD_URL="$(curl -sSL $GITHUB_API_CURL_OPTS https://api.github.com/repos/mozilla/geckodriver/releases/latest | grep -Eo 'http.*linux64.tar.gz' | head -1)" && \
-    curl -sSL "$GECKODRIVER_DOWNLOAD_URL" | bsdtar -xvf - -C /usr/local/bin && \
+    GECKODRIVER_SPEC="https://api.github.com/repos/mozilla/geckodriver/releases/latest" && \
+    GECKODRIVER_RE='^.*"browser_download_url": ?"(http[^"]*linux64.tar.gz)".*$' && \
+    curl -sSL $GITHUB_API_CURL_OPTS "$GECKODRIVER_SPEC" | sed -En "s#$GECKODRIVER_RE#\1#p" | xargs -d '\n' curl -sSL | bsdtar -xvf - -C /usr/local/bin && \
     chmod +x /usr/local/bin/chromedriver /usr/local/bin/geckodriver && \
     yum install -y --setopt=tsflags=nodocs https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
+    yum install -y --setopt=tsflags=nodocs https://cbs.centos.org/kojifiles/packages/git-crypt/0.6.0/1.el7/x86_64/git-crypt-0.6.0-1.el7.x86_64.rpm && \
     mkdir -p $HOME/bin
 
 # make sure context dir is at the repo root
 ADD . $HOME/verification-tests
 # RUN scl enable rh-git218 "git clone --depth 1 --single-branch 'https://github.com/openshift/verification-tests.git' '$HOME/verification-tests'"
 
-RUN scl enable rh-ruby26 "$HOME/verification-tests/tools/install_os_deps.sh"
-RUN scl enable rh-ruby26 "$HOME/verification-tests/tools/hack_bundle.rb"
+RUN scl enable rh-ruby27 "$HOME/verification-tests/tools/install_os_deps.sh"
+RUN chown -R 1001 "$HOME/verification-tests"
+# We may consider in the future reliability of using
+# gem install -g --minimal-deps --conservative --no-document # -l --explain
+# The consideration here is to have both `bundle exec command` and
+# `RUBYGEMS_GEMDEPS=- command` working. Also both `bundle install` and
+# `gem install -g` working inside the container as non-root.
+RUN setpriv --reuid 1001 scl enable rh-ruby27 'mkdir -p `ruby -e "puts Gem.path[0]" | xargs dirname`'
+RUN setpriv --reuid 1001 scl enable rh-ruby27 "bundle config path $HOME/.gem/bundler"
+RUN setpriv --reuid 1001 scl enable rh-ruby27 'ln -s `ruby -C "$HOME/verification-tests" -rbundler -e "puts Bundler.bundle_path"` `ruby -e "puts Gem.path[0]"`'
+RUN setpriv --reuid 1001 scl enable rh-ruby27 "$HOME/verification-tests/tools/hack_bundle.rb"
 
 # -k is a bad option, better setup proper system certificates in a layered image
 # RUN sed -i -e 's/^\s\+curl\s/  curl -Sk /' /usr/local/bin/run-jnlp-client
@@ -42,15 +56,17 @@ RUN rpm -qa && \
     rm -rf $HOME/verification-tests /var/cache/yum /tmp/*
 
 RUN dbus-uuidgen > /etc/machine-id # e.g. needed for firefox
-RUN chown -R 1001:0 $HOME && chmod -R g+rw $HOME /etc/machine-id
+RUN chown -R 1001:0 $HOME && \
+    chmod -R g=u $USER_PATHS && chmod -R g+rw $USER_PATHS
+
 # allow yum/dnf; but probably fakeroot would be needed and still some install
 # scripts may fail because of lack of real root
 #RUN dirs="/usr /etc /var /home /opt" && \
 #    chown -R 1001:0 $dirs && chmod -R g+rw $dirs
 
 # have sudo working just in case
-RUN echo -e '#!/bin/bash\nexec "$@"' > /usr/local/bin/sudo && chmod 755 /usr/local/bin/sudo
+RUN echo -e '#!/bin/bash\nexec "$@"' > /usr/bin/sudo && chmod 755 /usr/bin/sudo
 
 USER 1001
 
-ENTRYPOINT ["/usr/bin/scl", "enable", "rh-git218", "rh-ruby26", "--", "/usr/local/bin/run-jnlp-client"]
+ENTRYPOINT ["/usr/bin/dumb-init", "--", "/usr/bin/scl", "enable", "rh-git218", "rh-ruby27", "--", "exec", "/usr/local/bin/run-jnlp-client"]

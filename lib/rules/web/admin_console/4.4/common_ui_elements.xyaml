@@ -135,6 +135,8 @@ check_text_not_a_link:
   element:
     selector:
       xpath: //*[contains(@class,'co-resource-item__resource-name') and text()='<text>' and not(@href)]
+
+# tabs related
 click_tab:
   elements:
   - selector: &tab
@@ -161,6 +163,38 @@ click_overview_tab:
 click_yaml_tab:
   params:
     tab_name: YAML
+  action: click_tab
+click_history_tab:
+  params:
+    tab_name: History
+  action: click_tab
+click_events_tab:
+  params:
+    tab_name: Events
+  action: click_tab
+click_replication_controllers_tab:
+  params:
+    tab_name: Replication Controllers
+  action: click_tab
+click_replica_sets_tab:
+  params:
+    tab_name: Replica Sets
+  action: click_tab
+click_instances_tab:
+  params:
+    tab_name: Instances
+  action: click_tab
+click_access_review_tab:
+  params:
+    tab_name: Access Review
+  action: click_tab
+click_schema_tab:
+  params:
+    tab_name: Schema
+  action: click_tab
+click_machine_configs_tab:
+  params:
+    tab_name: Machine Configs
   action: click_tab
 check_edit_yaml_enabled:
   params:
@@ -292,7 +326,41 @@ check_link_in_breadcrumb:
   element:
     selector:
       xpath: //ol[@class='pf-c-breadcrumb__list']/li[<layer_number>]/a[contains(@data-test-id,'breadcrumb-link') and contains(@href,'<link>') and translate(normalize-space(text()), ' ','')='<text>']
-
+check_installplandetails_text_in_breadcrumb:
+  params:
+    layer_number: 2
+    text: InstallPlanDetails
+  action: check_text_in_breadcrumb
+check_projectdetails_text_in_breadcrumb:
+  params:
+    layer_number: 2
+    text: ProjectDetails
+  action: check_text_in_breadcrumb
+check_replicasetdetails_text_in_breadcrumb:
+  params:
+    layer_number: 2
+    text: ReplicaSetDetails
+  action: check_text_in_breadcrumb
+check_machinedetails_text_in_breadcrumb:
+  params: 
+    layer_number: 2
+    text: MachineDetails
+  action: check_text_in_breadcrumb
+check_machinesetdetails_text_in_breadcrumb:
+  params:
+    layer_number: 2
+    text: MachineSetDetails
+  action: check_text_in_breadcrumb
+check_containerdetails_text_in_breadcrumb:
+  params:
+    layer_number: 3
+    text: ContainerDetails
+  action: check_text_in_breadcrumb
+check_imagestreamtagdetails_text_in_breadcrumb:
+  params:
+    layer_number: 3
+    text: ImageStreamTagDetails
+  action: check_text_in_breadcrumb
 check_text_in_breadcrumb:
   element:
     selector:
@@ -324,9 +392,50 @@ click_kebab_of_one_resource:
   - selector:
       xpath: //*[text()='<resource_name>']//ancestor::tr//button[@data-test-id='kebab-button']
     op: click
+    timeout: 20
 click_one_operation_in_kebab:
   action: click_kebab_of_one_resource
   action: click_kebab_item
+cancel_build_kebab_operation:
+  params:
+    kebab_item: Cancel Build
+  action: click_one_operation_in_kebab
+edit_receiver_kebab_operation:
+  params:
+    kebab_item: Edit Receiver
+  action: click_one_operation_in_kebab
+delete_machinehealthcheck_kabab_operation:
+  params:
+    kebab_item: Delete Machine Health Check
+  action: click_one_operation_in_kebab
+delete_catalogsource_kabab_operation:
+  params:
+    kebab_item: Delete CatalogSource
+  action: click_one_operation_in_kebab
+check_display_name_column_in_table:
+  params:
+    field: Display Name
+  action: check_column_in_table
+check_scale_target_column_in_table:
+  params:
+    field: Scale Target
+  action: check_column_in_table
+check_min_pods_column_in_table:
+  params:
+    field: Min Pods
+  action: check_column_in_table
+check_max_pods_column_in_table:
+  params:
+    field: Max Pods
+  action: check_column_in_table
+check_highest_severity_column_in_table:
+  params:
+    field: Highest Severity
+  action: check_column_in_table
+check_affected_pods_column_in_table:
+  params:
+    field: Affected Pods
+  action: check_column_in_table
 check_column_in_table:
   action: wait_box_loaded
   elements:
@@ -464,6 +573,42 @@ check_page_not_match:
   element:
     selector: *page_content
     missing: true
+check_no_data_found_text:
+  params:
+    content: No Data Found
+  action: check_page_contains
+check_no_binary_data_text_missing:
+  params:
+    content: No Binary Data Found
+  action: check_page_not_match
+check_no_deployment_found_text:
+  params:
+    content: No Deployments Found
+  action: check_page_contains
+check_no_alertmanager_found_text:
+  params:
+    content: No Alertmanagers Found
+  action: check_page_contains
+check_no_resources_selected_text:
+  params:
+    content: No resources selected
+  action: check_page_contains
+check_restricted_access_text:
+  params:
+    content: Restricted Access
+  action: check_page_contains
+check_no_endpoints_found_text:
+  params:
+    content: No Endpoints Found
+  action: check_page_contains
+check_no_machinehealthcheck_text:
+  params:
+    content: No Machine Health Checks Found
+  action: check_page_contains
+check_no_results_text:
+  params:
+    content: No Results
+  action: check_page_contains
 submit_changes:
   elements:
   - selector:
@@ -664,6 +809,12 @@ check_resource_details:
     if_param: labels
     ref: check_resource_labels
   action:
+    if_param: status
+    ref: check_resource_status
+  action:
+    if_param: phase
+    ref: check_resource_phase
+  action:
     if_param: annotations
     ref: check_resource_annotations
   action:
@@ -827,6 +978,16 @@ check_resource_labels:
   params:
     key: Labels
     value: <labels>
+  action: check_resource_details_key_and_value
+check_resource_status:
+  params:
+    key: Status
+    value: <status>
+  action: check_resource_details_key_and_value
+check_resource_phase:
+  params:
+    key: Phase
+    value: <phase>
   action: check_resource_details_key_and_value
 check_resource_annotations:
   params:

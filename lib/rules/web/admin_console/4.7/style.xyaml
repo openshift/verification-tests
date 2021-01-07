@@ -5,12 +5,12 @@ check_chart_using_victory:
 check_cluster_utilization_charts_style:
   elements:
   - selector:
-      xpath: //*[contains(@class, 'card__title') and contains(text(), 'Cluster Utilization')]
+      xpath: //*[contains(@class, 'card__title') and contains(text(), 'Cluster utilization')]
   action: check_chart_using_victory
 check_pod_detail_page_charts_style:
   elements:
   - selector:
-      xpath: //*[contains(@class, 'co-m-pane__body')]//*[contains(text(), 'Pod Details')]
+      xpath: //*[contains(@class, 'co-m-pane__body')]//*[contains(text(), 'Pod details')]
   action: check_chart_using_victory
 check_node_detail_page_charts_style:
   elements:
@@ -40,7 +40,7 @@ check_filter_side_panel_style:
 check_filter_panel_style:
   elements:
   - selector:
-      xpath: //div[contains(@class, 'filter-panel-pf')]/form[contains(@class, 'filter-panel-pf-category')]//div[contains(@class, 'filter-panel-pf-category-item')]
+      xpath: //ul[contains(@class, 'vertical-tabs-pf')]/li[contains(@class, 'vertical-tabs-pf-tab')]
 check_warning_alert_style:
   elements:
   - selector:
@@ -72,6 +72,8 @@ check_alert_style_on_dc_env_page:
   action: submit_changes
   action: check_success_alert_style
 check_alert_style_for_dc_pause_rollouts:
+  params:
+    item: Pause rollouts
   action: goto_one_dc_page
   action: click_one_dropdown_action
   action: check_info_alert_style

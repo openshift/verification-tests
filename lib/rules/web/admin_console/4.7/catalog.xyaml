@@ -22,7 +22,7 @@ create_app_from_imagestream:
   action: click_create_button
 click_try_sample:
   params:
-    button_text: Try Sample
+    button_text: Try sample
   action: click_button
 set_app_name:
   params:
@@ -69,10 +69,13 @@ create_app_from_deploy_image:
     ref: set_label
   action: click_create_button
 wait_for_catalog_loaded:
-  element:
-    selector:
+  elements:
+  - selector:
       css: .co-catalog-page
-    timeout: 20
+  - selector:
+      xpath: //div[contains(@class,'catalog-tile-pf-body')]
+  - selector:
+      xpath: //div[contains(@class,'catalog-tile-pf-header')]
 filter_by_category:
   element:
     selector:
@@ -80,32 +83,30 @@ filter_by_category:
     op: click
 filter_by_sourcetoimage_type:
   params:
-    type: image-stream
+    type: BuilderImage
   action: filter_by_type
-filter_by_serviceclass_type:
-  params:
-    type: cluster-service-class
-  action: filter_by_type
+# in 4.7 we don't support filter by ClusterServiceVersion
+# to be compatible with earlier versions we still keep this rule
+filter_by_serviceclass_type: {}
 filter_by_template_type:
   params:
-    type: template
+    type: Template
   action: filter_by_type
 filter_by_operatorbacked_type:
   params:
-    type: cluster-service-version
+    type: OperatorBackedService
   action: filter_by_type
 filter_by_type:
   element:
     selector:
-      xpath: //input[@data-test='kind-<type>']
+      xpath: //a[contains(@href,'catalogType=<type>')]
     op: click
 filter_by_keyword:
   element:
     selector: &filter_by_keyword
-      xpath: //input[contains(@class, 'co-catalog-page__input')]
+      xpath: //input[contains(@placeholder, 'Filter by keyword')]
     op: send_keys <keyword>
-show_catalog_items:
-  action: filter_by_operatorbacked_type
+show_catalog_items: {}
 clear_filter_by_keyword:
   element:
     selector: *filter_by_keyword
@@ -141,6 +142,7 @@ subscribe_using_default_params:
 set_custom_channel_and_subscribe:
   action: wait_box_loaded
   action: choose_update_channel
+  action: enable_cluster_monitoring
   action: click_subscribe_button
 click_image_tag_dropdown:
   params:
@@ -163,7 +165,7 @@ click_project_list_dropdown:
 choose_project_from_dropdown_list:
   element:
     selector:
-      xpath: //ul//a[@id='<project_name>-Project-link' and contains(@class,'dropdown__menu-item')]
+      xpath: //ul//a[@id='<project_name>-Namespace-link' and contains(@class,'dropdown__menu-item')]
     op: click
 select_target_namespace:
   params:
@@ -181,3 +183,7 @@ check_the_support_link:
     text: Get support
     link_url: <link_url>
   action: check_link_and_text
+check_browser_url_has_catagory_keyword_kind:
+  scripts:
+    - command: return window.location.href.indexOf('category=languages&keyword=php&catalogType=BuilderImage') != -1
+      expect_result: true

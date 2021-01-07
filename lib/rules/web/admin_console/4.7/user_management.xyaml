@@ -1,3 +1,9 @@
+check_users_secondary_menu:
+  params:
+    primary_menu: User Management
+    secondary_menu: Users
+  action: click_primary_menu  
+  action: check_secondary_menu
 check_user_in_users_page:
   action: goto_users_list_page
   action: check_link_and_text
@@ -12,9 +18,6 @@ check_rolebinding_of_user:
     text: <rolebinding>
   action: goto_rolebinding_page_of_user
   action: wait_until_no_loading
-  action:
-    if_param: content
-    ref: check_page_contains
   action:
     if_param: rolebinding
     ref: check_link_and_text

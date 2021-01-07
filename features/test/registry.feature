@@ -43,8 +43,8 @@ Feature: registry related test scenario
     And I add the insecure registry to docker config on the node
     And I log into auth registry on the node
     When I docker push on the node to the registry the following images:
-      | docker.io/busybox:latest | busybox:latest |
-      | centos/ruby-22-centos7   | test/centos7   |
+      | quay.io/openshifttest/busybox@sha256:afe605d272837ce1732f390966166c2afff5391208ddd57de10942748694049d         | busybox:latest |
+      | quay.io/openshifttest/ruby-25-centos7@sha256:575194aa8be12ea066fc3f4aa9103dcb4291d43f9ee32e4afe34e0063051610b | test/centos7   |
     Then the step should succeed
 
   @admin
@@ -56,9 +56,9 @@ Feature: registry related test scenario
     And I add the insecure registry to docker config on the node
     And I log into auth registry on the node
     When I docker push on the node to the registry the following images:
-      | docker.io/busybox:latest | busybox:latest |
+      | quay.io/openshifttest/busybox@sha256:afe605d272837ce1732f390966166c2afff5391208ddd57de10942748694049d | busybox:latest |
     Then the step should succeed
-  
+
   @admin
   @destructive
   Scenario: Fail to push to auth registry without login
@@ -67,8 +67,8 @@ Feature: registry related test scenario
     And I have a registry with htpasswd authentication enabled in my project
     And I add the insecure registry to docker config on the node
     When I docker push on the node to the registry the following images:
-      | docker.io/busybox:latest | busybox:latest |
-      | centos/ruby-22-centos7   | test/centos7   |
+      | quay.io/openshifttest/busybox@sha256:afe605d272837ce1732f390966166c2afff5391208ddd57de10942748694049d         | busybox:latest |
+      | quay.io/openshifttest/ruby-25-centos7@sha256:575194aa8be12ea066fc3f4aa9103dcb4291d43f9ee32e4afe34e0063051610b | test/centos7   |
     Then the step should fail
 
   Scenario: Obtain registry ip by creating a build in the project

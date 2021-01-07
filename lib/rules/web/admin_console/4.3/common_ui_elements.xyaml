@@ -248,7 +248,41 @@ check_link_in_breadcrumb:
   element:
     selector:
       xpath: //ol[@class='pf-c-breadcrumb__list']/li[<layer_number>]/a[contains(@data-test-id,'breadcrumb-link') and contains(@href,'<link>') and translate(normalize-space(text()), ' ','')='<text>']
-
+check_installplandetails_text_in_breadcrumb:
+  params:
+    layer_number: 2
+    text: InstallPlanDetails
+  action: check_text_in_breadcrumb
+check_projectdetails_text_in_breadcrumb:
+  params:
+    layer_number: 2
+    text: ProjectDetails
+  action: check_text_in_breadcrumb
+check_replicasetdetails_text_in_breadcrumb:
+  params:
+    layer_number: 2
+    text: ReplicaSetDetails
+  action: check_text_in_breadcrumb
+check_machinedetails_text_in_breadcrumb:
+  params: 
+    layer_number: 2
+    text: MachineDetails
+  action: check_text_in_breadcrumb
+check_machinesetdetails_text_in_breadcrumb:
+  params:
+    layer_number: 2
+    text: MachineSetDetails
+  action: check_text_in_breadcrumb
+check_containerdetails_text_in_breadcrumb:
+  params:
+    layer_number: 3
+    text: ContainerDetails
+  action: check_text_in_breadcrumb
+check_imagestreamtagdetails_text_in_breadcrumb:
+  params:
+    layer_number: 3
+    text: ImageStreamTagDetails
+  action: check_text_in_breadcrumb
 check_text_in_breadcrumb:
   element:
     selector:
@@ -280,9 +314,26 @@ click_kebab_of_one_resource:
   - selector:
       xpath: //*[text()='<resource_name>']//ancestor::tr//button[@data-test-id='kebab-button']
     op: click
+    timeout: 20
 click_one_operation_in_kebab:
   action: click_kebab_of_one_resource
   action: click_kebab_item
+check_display_name_column_in_table:
+  params:
+    field: Display Name
+  action: check_column_in_table
+check_scale_target_column_in_table:
+  params:
+    field: Scale Target
+  action: check_column_in_table
+check_min_pods_column_in_table:
+  params:
+    field: Min Pods
+  action: check_column_in_table
+check_max_pods_column_in_table:
+  params:
+    field: Max Pods
+  action: check_column_in_table
 check_column_in_table:
   action: wait_box_loaded
   elements:

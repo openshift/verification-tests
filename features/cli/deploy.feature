@@ -86,6 +86,12 @@ Feature: deployment related features
     When I get project dc named "hooks"
     Then the output should match:
       | hooks.*|
+    And I wait up to 60 seconds for the steps to pass:
+    """
+    When I get project dc named "hooks" as JSON
+    Then the output should contain:
+      | "latestVersion": 2 |
+    """
     When I run the :rollback client command with:
       | deployment_name         | hooks-1 |
       | output                  | json    |
@@ -338,7 +344,7 @@ Feature: deployment related features
   Scenario: A/B Deployment
     Given I have a project
     When I run the :new_app client command with:
-      | docker_image | quay.io/openshifttest/deployment-example@sha256:97adb15f1238c4c9216c1e6bf3986e2468d0709fc5c3625e96d463c81240f652 |
+      | docker_image | quay.io/openshifttest/deployment-example@sha256:0631a0c7aee3554391156d991138af4b00e9a724f9c5813f4079930c8fc0d16b |
       | name         | ab-example-a                                                                                                     |
       | l            | ab-example=true                                                                                                  |
       | env          | SUBTITLE=shardA                                                                                                  |
@@ -353,7 +359,7 @@ Feature: deployment related features
     Then I wait for a web server to become available via the "ab-example" route
     And the output should contain "shardA"
     When I run the :new_app client command with:
-      | docker_image | quay.io/openshifttest/deployment-example@sha256:97adb15f1238c4c9216c1e6bf3986e2468d0709fc5c3625e96d463c81240f652 |
+      | docker_image | quay.io/openshifttest/deployment-example@sha256:0631a0c7aee3554391156d991138af4b00e9a724f9c5813f4079930c8fc0d16b |
       | name         | ab-example-b                                                                                                     |
       | l            | ab-example=true                                                                                                  |
       | env          | SUBTITLE=shardB                                                                                                  |
@@ -388,12 +394,12 @@ Feature: deployment related features
   Scenario: Blue-Green Deployment
     Given I have a project
     When I run the :new_app client command with:
-      | docker_image | <%= project_docker_repo %>openshift/deployment-example:v1 |
-      | name         | bluegreen-example-old                                     |
+      | docker_image | quay.io/openshifttest/deployment-example:v1 |
+      | name         | bluegreen-example-old                       |
     Then the step should succeed
     When I run the :new_app client command with:
-      | docker_image | <%= project_docker_repo %>openshift/deployment-example:v2 |
-      | name         | bluegreen-example-new                                     |
+      | docker_image | quay.io/openshifttest/deployment-example:v2 |
+      | name         | bluegreen-example-new                       |
     Then the step should succeed
     #When I expose the "bluegreen-example-old" service
     When I run the :expose client command with:
@@ -454,7 +460,7 @@ Feature: deployment related features
   # @case_id OCP-10724
   Scenario: deployment hook volume inheritance that volume name was null
     Given I have a project
-    Given I obtain test data file "deployment/tc510606/hooks-null-volume.json"
+    Given I obtain test data file "deployment/ocp10724/hooks-null-volume.json"
     When I run the :create client command with:
       | f | hooks-null-volume.json |
     Then the step should fail
@@ -655,7 +661,7 @@ Feature: deployment related features
   Scenario: Scale up when deployment running
     Given I have a project
     When I run the :create_deploymentconfig client command with:
-      | image | quay.io/openshifttest/deployment-example@sha256:97adb15f1238c4c9216c1e6bf3986e2468d0709fc5c3625e96d463c81240f652 |
+      | image | quay.io/openshifttest/deployment-example@sha256:0631a0c7aee3554391156d991138af4b00e9a724f9c5813f4079930c8fc0d16b |
       | name  | deployment-example                                                                                               |
     Then the step should succeed
     And I wait until the status of deployment "deployment-example" becomes :complete
@@ -783,7 +789,7 @@ Feature: deployment related features
   @smoke
   Scenario: Auto cleanup old RCs
     Given I have a project
-    Given I obtain test data file "deployment/tc532411/history-limit-dc.yaml"
+    Given I obtain test data file "deployment/ocp10902/history-limit-dc.yaml"
     When I run the :create client command with:
       | f | history-limit-dc.yaml |
     Then the step should succeed
@@ -834,11 +840,11 @@ Feature: deployment related features
     Given the master version >= "4.5"
     Given I have a project
     When I run the :new_app client command with:
-      | docker_image         | <%= project_docker_repo %>openshift/deployment-example |
-      | name                 | ab-example-a                                           |
-      | as_deployment_config | true                                                   |
-      | l                    | ab-example=true                                        |
-      | env                  | SUBTITLE=shardA                                        |
+      | docker_image         | quay.io/openshifttest/deployment-example |
+      | name                 | ab-example-a                             |
+      | as_deployment_config | true                                     |
+      | l                    | ab-example=true                          |
+      | env                  | SUBTITLE=shardA                          |
     Then the step should succeed
     When I run the :expose client command with:
       | resource      | deploymentconfig |
@@ -850,11 +856,11 @@ Feature: deployment related features
     Then I wait for a web server to become available via the "ab-example" route
     And the output should contain "shardA"
     When I run the :new_app client command with:
-      | docker_image         | <%= project_docker_repo %>openshift/deployment-example |
-      | name                 | ab-example-b                                           |
-      | as_deployment_config | true                                                   |
-      | l                    | ab-example=true                                        |
-      | env                  | SUBTITLE=shardB                                        |
+      | docker_image         | quay.io/openshifttest/deployment-example |
+      | name                 | ab-example-b                             |
+      | as_deployment_config | true                                     |
+      | l                    | ab-example=true                          |
+      | env                  | SUBTITLE=shardB                          |
     Then the step should succeed
     Then I run the :scale client command with:
       | resource | deploymentconfig |

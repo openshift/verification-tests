@@ -362,26 +362,26 @@ Feature: change the policy of user/service account
   # @case_id OCP-9551
   Scenario: User can know if he can create podspec against the current scc rules via CLI
     Given I have a project
-    Given I obtain test data file "authorization/scc/tc538262/PodSecurityPolicySubjectReview_privileged_false.json"
+    Given I obtain test data file "authorization/scc/PodSecurityPolicySubjectReview_privileged_false.json"
     Given I run the :policy_scc_subject_review client command with:
       | f | PodSecurityPolicySubjectReview_privileged_false.json |
     Then the step should succeed
     And the output should match:
       | .*restricted |
-    Given I obtain test data file "authorization/scc/tc538262/PodSecurityPolicySubjectReview_privileged_false.json"
+    Given I obtain test data file "authorization/scc/PodSecurityPolicySubjectReview_privileged_false.json"
     Given I run the :policy_scc_subject_review client command with:
       | f | PodSecurityPolicySubjectReview_privileged_false.json |
       | n | <%= project.name %>                                                                                                    |
     Then the step should succeed
     And the output should match:
       | .*restricted |
-    Given I obtain test data file "authorization/scc/tc538262/PodSecurityPolicySubjectReview_privileged_true.json"
+    Given I obtain test data file "authorization/scc/PodSecurityPolicySubjectReview_privileged_true.json"
     Given I run the :policy_scc_subject_review client command with:
       | f | PodSecurityPolicySubjectReview_privileged_true.json |
     Then the step should succeed
     And the output should match:
       | <none> |
-    Given I obtain test data file "authorization/scc/tc538262/PodSecurityPolicySubjectReview_privileged_true.json"
+    Given I obtain test data file "authorization/scc/PodSecurityPolicySubjectReview_privileged_true.json"
     Given I run the :policy_scc_subject_review client command with:
       | f | PodSecurityPolicySubjectReview_privileged_true.json |
       | n | <%= project.name %>                                                                                                   |
@@ -394,27 +394,27 @@ Feature: change the policy of user/service account
   @admin
   Scenario: User can know which serviceaccount and SA groups can create the podspec against the current sccs by CLI
     Given I have a project
-    Given I obtain test data file "authorization/scc/tc538264/PodSecurityPolicyReview.json"
+    Given I obtain test data file "authorization/scc/PodSecurityPolicyReview.json"
     Given I run the :policy_scc_review client command with:
       | f | PodSecurityPolicyReview.json |
     Then the step should succeed
     And the output should not match:
       | .*default.*restricted |
-    Given I obtain test data file "authorization/scc/tc538264/PodSecurityPolicyReview.json"
+    Given I obtain test data file "authorization/scc/PodSecurityPolicyReview.json"
     Given I run the :policy_scc_review client command with:
       | f | PodSecurityPolicyReview.json |
       | n | <%= project.name %>                                                                            |
     Then the step should succeed
     And the output should not match:
       | .*default.*restricted |
-    Given I obtain test data file "authorization/scc/tc538264/PodSecurityPolicyReview.json"
+    Given I obtain test data file "authorization/scc/PodSecurityPolicyReview.json"
     Given I run the :policy_scc_review client command with:
       | serviceaccount | default                                                                                        |
       | f              | PodSecurityPolicyReview.json |
     Then the step should succeed
     And the output should not match:
       | .*default.*restricted |
-    Given I obtain test data file "authorization/scc/tc538264/PodSecurityPolicyReview.json"
+    Given I obtain test data file "authorization/scc/PodSecurityPolicyReview.json"
     Given I run the :policy_scc_review client command with:
       | serviceaccount | default                                                                                        |
       | f              | PodSecurityPolicyReview.json |
@@ -423,7 +423,7 @@ Feature: change the policy of user/service account
     And the output should not match:
       | .*default.*restricted |
     Given SCC "restricted" is added to the "default" service account
-    Given I obtain test data file "authorization/scc/tc538264/PodSecurityPolicyReview.json"
+    Given I obtain test data file "authorization/scc/PodSecurityPolicyReview.json"
     And I wait for the steps to pass:
     """
     Given I run the :policy_scc_review client command with:
@@ -432,7 +432,7 @@ Feature: change the policy of user/service account
     And the output should match:
       | .*default.*restricted |
     """
-    Given I obtain test data file "authorization/scc/tc538264/PodSecurityPolicyReview.json"
+    Given I obtain test data file "authorization/scc/PodSecurityPolicyReview.json"
     And I wait for the steps to pass:
     """
     Given I run the :policy_scc_review client command with:
@@ -442,7 +442,7 @@ Feature: change the policy of user/service account
     And the output should match:
       | .*default.*restricted |
     """
-    Given I obtain test data file "authorization/scc/tc538264/PodSecurityPolicyReview.json"
+    Given I obtain test data file "authorization/scc/PodSecurityPolicyReview.json"
     And I wait for the steps to pass:
     """
     Given I run the :policy_scc_review client command with:
@@ -452,7 +452,7 @@ Feature: change the policy of user/service account
     And the output should match:
       | .*default.*restricted |
     """
-    Given I obtain test data file "authorization/scc/tc538264/PodSecurityPolicyReview.json"
+    Given I obtain test data file "authorization/scc/PodSecurityPolicyReview.json"
     Given I run the :policy_scc_review client command with:
       | serviceaccount | default                                                                                        |
       | f              | PodSecurityPolicyReview.json |
@@ -465,14 +465,14 @@ Feature: change the policy of user/service account
   # @case_id OCP-9553
   Scenario: User can know whether the PodSpec he's describing will actually be allowed by the current SCC rules via CLI
     Given I have a project
-    Given I obtain test data file "authorization/scc/tc538263/PodSecurityPolicySubjectReview.json"
+    Given I obtain test data file "authorization/scc/PodSecurityPolicySubjectReview.json"
     Given I run the :policy_scc_subject_review client command with:
       | user | <%= user.name %>                                                                                      |
       | f    | PodSecurityPolicySubjectReview.json |
     Then the step should succeed
     And the output should not match:
       | .*restricted |
-    Given I obtain test data file "authorization/scc/tc538263/PodSecurityPolicySubjectReview.json"
+    Given I obtain test data file "authorization/scc/PodSecurityPolicySubjectReview.json"
     Given I run the :policy_scc_subject_review client command with:
       | user | <%= user.name %>                                                                                      |
       | f    | PodSecurityPolicySubjectReview.json |
@@ -480,7 +480,7 @@ Feature: change the policy of user/service account
     Then the step should succeed
     And the output should not match:
       | .*restricted |
-    Given I obtain test data file "authorization/scc/tc538263/PodSecurityPolicySubjectReview.json"
+    Given I obtain test data file "authorization/scc/PodSecurityPolicySubjectReview.json"
     Given I run the :policy_scc_subject_review client command with:
       | user  | <%= user.name %>                                                                                      |
       | group | system:authenticated                                                                                  |
@@ -488,7 +488,7 @@ Feature: change the policy of user/service account
     Then the step should succeed
     And the output should match:
       | .*restricted |
-    Given I obtain test data file "authorization/scc/tc538263/PodSecurityPolicySubjectReview.json"
+    Given I obtain test data file "authorization/scc/PodSecurityPolicySubjectReview.json"
     Given I run the :policy_scc_subject_review client command with:
       | user  | <%= user.name %>                                                                                      |
       | group | system:authenticated                                                                                  |

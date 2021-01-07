@@ -273,28 +273,28 @@ Feature: ONLY ONLINE Imagestreams related scripts in this file
   # @author zhaliu@redhat.com
   Scenario Outline: ImageStream annotation and tag function
     Given I have a project
-    And I attempt the registry route based on API url and store it in the :registry_route clipboard  
+    And I attempt the registry route based on API url and store it in the :registry_route clipboard
     Given I obtain test data file "image-streams/<file>"
     When I run the :create client command with:
       | f | <file> |
-    Then the step should succeed  
+    Then the step should succeed
     When I have a skopeo pod in the project
-    Then the step should succeed  
+    Then the step should succeed
     And a pod becomes ready with labels:
       | name=skopeo |
-    When I execute on the pod:  
-      | skopeo                                                               |
-      | --insecure-policy                                                    |
-      | copy                                                                 |
-      | --dcreds                                                             |
-      | <%= user.name %>:<%= user.cached_tokens.first %>                  |
-      | docker://docker.io/busybox                                           |
-      | docker://<%= cb.registry_route %>/<%= project.name %>/<tag>          |
-    Then the step should succeed  
+    When I execute on the pod:
+      | skopeo                                                      |
+      | --insecure-policy                                           |
+      | copy                                                        |
+      | --dcreds                                                    |
+      | <%= user.name %>:<%= user.cached_tokens.first %>            |
+      | docker://quay.io/openshifttest/busybox                      |
+      | docker://<%= cb.registry_route %>/<%= project.name %>/<tag> |
+    Then the step should succeed
     When I run the :get client command with:
       | resource | imagestreamtag |
       | template | <isttemplate>  |
-    Then the step should succeed  
+    Then the step should succeed
     And the output should match:
       | <istoutput> |
     When I run the :get client command with:

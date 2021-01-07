@@ -1,4 +1,5 @@
 check_info_in_schema:
+  action: wait_page_body_loaded
   action: check_apiversion
   action: check_kind
   action: check_metadata

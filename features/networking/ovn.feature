@@ -1,5 +1,6 @@
 Feature: OVN related networking scenarios
 
+
   # @author anusaxen@redhat.com
   # @case_id OCP-29954
   @admin
@@ -128,7 +129,7 @@ Feature: OVN related networking scenarios
     And admin ensures "ovnkube-master" ds is deleted from the "openshift-ovn-kubernetes" project
     And admin executes existing pods die with labels:
       | app=ovnkube-master |
-    And I ensures "hello-pod" pod is deleted from the "<%= cb.hello_pod_project %>" project
+    And I ensure "hello-pod" pod is deleted from the "<%= cb.hello_pod_project %>" project
     # Now scale up CNO pod to 1 and check whether hello-pod status is synced to NB db means it should not present in the DB
     Given I run the :scale admin command with:
       | namespace | openshift-network-operator |
@@ -320,7 +321,8 @@ Feature: OVN related networking scenarios
     Then the expression should be true> @result[:parsed]['end']['sum']['lost_percent'].to_f < 10
     # server doesn't count bytes
     Then the expression should be true> @result[:parsed]['end']['sum']['packets'].to_f > 0
-    Then the expression should be true> @result[:parsed]['end']['sum']['jitter_ms'].to_f < 1
+    # try < 5 ms jitter, really anything < 20 ms might be considered good.
+    Then the expression should be true> @result[:parsed]['end']['sum']['jitter_ms'].to_f < 5
 
 
   # @author rbrattai@redhat.com
@@ -375,6 +377,7 @@ Feature: OVN related networking scenarios
     And the expression should be true> cb.north_leader.name != cb.new_north_leader.name
     """
     And admin waits for all pods in the project to become ready up to 120 seconds
+
 
   # @author rbrattai@redhat.com
   # @case_id OCP-26138
@@ -444,3 +447,21 @@ Feature: OVN related networking scenarios
     """
     And admin waits for all pods in the project to become ready up to 120 seconds
 
+
+  # @author rbrattai@redhat.com
+  # @case_id OCP-37031
+  @admin
+  Scenario: OVN handles projects that start with a digit
+    Given the env is using "OVNKubernetes" networkType
+    Given I create a project with leading digit name
+    And I obtain test data file "networking/list_for_pods.json"
+    When I run the :create client command with:
+      | f | list_for_pods.json |
+    Then the step should succeed
+    Given 2 pods become ready with labels:
+      | name=test-pods |
+    When I run command on the "<%= pod(0).node_name %>" node's sdn pod:
+      | bash | -c | ovs-vsctl list interface \| grep iface-id |
+    Then the step should succeed
+    # the iface-id should be quoted if it starts with a digit
+    And the output should contain "<%= project.name %>"

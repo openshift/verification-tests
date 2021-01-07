@@ -32,7 +32,7 @@ spec:
         readinessProbe:
           exec:
             command:
-            - sh 
+            - sh
             - /usr/share/elasticsearch/config/add-user.sh
           initialDelaySeconds: 5
           periodSeconds: 5

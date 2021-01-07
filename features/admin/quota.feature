@@ -32,9 +32,9 @@ Feature: Quota related scenarios
 
     Examples:
       | path     | file                           | pod_name                  | expr1             | expr2                       |
-      | tc509090 | pod-request-limit-valid-3.yaml | pod-request-limit-valid-3 | cpu\\s+100m\\s+30 | memory\\s+(134217728\|128Mi)\\s+16Gi | # @case_id OCP-11754
-      | tc509092 | pod-request-limit-valid-1.yaml | pod-request-limit-valid-1 | cpu\\s+500m\\s+30 | memory\\s+(536870912\|512Mi)\\s+16Gi | # @case_id OCP-12049
-      | tc509093 | pod-request-limit-valid-2.yaml | pod-request-limit-valid-2 | cpu\\s+200m\\s+30 | memory\\s+(268435456\|256Mi)\\s+16Gi | # @case_id OCP-12145
+      | ocp11754 | pod-request-limit-valid-3.yaml | pod-request-limit-valid-3 | cpu\\s+100m\\s+30 | memory\\s+(134217728\|128Mi)\\s+16Gi | # @case_id OCP-11754
+      | ocp12049 | pod-request-limit-valid-1.yaml | pod-request-limit-valid-1 | cpu\\s+500m\\s+30 | memory\\s+(536870912\|512Mi)\\s+16Gi | # @case_id OCP-12049
+      | ocp12145 | pod-request-limit-valid-2.yaml | pod-request-limit-valid-2 | cpu\\s+200m\\s+30 | memory\\s+(268435456\|256Mi)\\s+16Gi | # @case_id OCP-12145
 
   # @author qwang@redhat.com
   # @case_id OCP-12292
@@ -55,7 +55,7 @@ Feature: Quota related scenarios
       | cpu\\s+0\\s+30      |
       | memory\\s+0\\s+16Gi |
     """
-    Given I obtain test data file "quota/tc509096/pod-request-limit-invalid-1.yaml"
+    Given I obtain test data file "quota/ocp12292/pod-request-limit-invalid-1.yaml"
     When I run the :create client command with:
       | f | pod-request-limit-invalid-1.yaml |
     Then the step should fail
@@ -87,7 +87,7 @@ Feature: Quota related scenarios
       | cpu\\s+0\\s+30      |
       | memory\\s+0\\s+16Gi |
     """
-    Given I obtain test data file "quota/tc509095/pod-request-limit-invalid-2.yaml"
+    Given I obtain test data file "quota/ocp12256/pod-request-limit-invalid-2.yaml"
     When I run the :create client command with:
       | f | pod-request-limit-invalid-2.yaml |
     Then the step should fail
@@ -123,7 +123,7 @@ Feature: Quota related scenarios
       | cpu\\s+0\\s+30      |
       | memory\\s+0\\s+16Gi |
     """
-    Given I obtain test data file "quota/tc509094/pod-request-limit-invalid-3.yaml"
+    Given I obtain test data file "quota/ocp12206/pod-request-limit-invalid-3.yaml"
     When I run the :create client command with:
       | f | pod-request-limit-invalid-3.yaml |
     Then the step should fail
@@ -505,7 +505,7 @@ Feature: Quota related scenarios
       | resourcequotas\\s+1\\s+3         |
       | secrets\\s+9\\s+5                |
       | services\\s+0\\s+5               |
-    Given I obtain test data file "quota/tc509087/mysecret.json"
+    Given I obtain test data file "quota/ocp10706/mysecret.json"
     When I run the :create client command with:
       | f | mysecret.json |
     Then the step should fail
@@ -529,7 +529,7 @@ Feature: Quota related scenarios
       | resourcequotas\\s+1\\s+3         |
       | secrets\\s+9\\s+15               |
       | services\\s+0\\s+5               |
-    Given I obtain test data file "quota/tc509087/mysecret.json"
+    Given I obtain test data file "quota/ocp10706/mysecret.json"
     When I run the :create client command with:
       | f | mysecret.json |
     Then the step should succeed
@@ -568,7 +568,7 @@ Feature: Quota related scenarios
       | resourcequotas\\s+1\\s+1          |
       | secrets\\s+9\\s+15                |
       | services\\s+0\\s+10               |
-    Given I obtain test data file "quota/tc519922/pod-request-limit-valid-4.yaml"
+    Given I obtain test data file "quota/ocp11779/pod-request-limit-valid-4.yaml"
     When I run the :create client command with:
       | f | pod-request-limit-valid-4.yaml |
     Then the step should succeed
@@ -607,12 +607,12 @@ Feature: Quota related scenarios
   @admin
   Scenario: Quota events for compute resource failures shouldn't be redundant
     Given I have a project
-    Given I obtain test data file "templates/tc528448/quota.yaml"
+    Given I obtain test data file "templates/ocp10033/quota.yaml"
     When I run the :create admin command with:
       | f | quota.yaml |
       | n | <%= project.name %>                                                                              |
     Then the step should succeed
-    Given I obtain test data file "templates/tc528448/sample-app-database-dc-resources-large-invalid.json"
+    Given I obtain test data file "templates/ocp10033/sample-app-database-dc-resources-large-invalid.json"
     Given I process and create "sample-app-database-dc-resources-large-invalid.json"
     Then the step should succeed
     Given I wait until the status of deployment "database" becomes :failed
@@ -695,7 +695,7 @@ Feature: Quota related scenarios
       | resourcequotas\\s+1\\s+1          |
       | secrets\\s+9\\s+15                |
       | services\\s+0\\s+10               |
-    Given I obtain test data file "quota/tc509091/pod-request-limit-valid-4.yaml"
+    Given I obtain test data file "quota/ocp11927/pod-request-limit-valid-4.yaml"
     When I run the :create client command with:
       | f | pod-request-limit-valid-4.yaml |
     Then the step should succeed
