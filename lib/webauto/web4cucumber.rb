@@ -556,11 +556,10 @@ require_relative 'chrome_extension'
         element = elements.first.first.last
         opres = handle_operation(element, op, **user_opts)
 
-        if opres[:response].include? "#<Watir::Exception::UnknownObjectException: unable to locate element" || opres[:response].include? "Watir::Exception::LocatorException"
+        if opres[:response].include? "#<Watir::Exception::UnknownObjectException: unable to locate element"
           # If we are selecting an element before page is fully loaded,
           # Watir can lose this element and its op will fail. Retrying
           # handle_element on such error can help.
-          logger.warn "Retrying...."
           return handle_element(element_rule, **user_opts)
         elsif [Selenium::WebDriver::Error::ElementClickInterceptedError,
                Selenium::WebDriver::Error::UnknownError].include?(
