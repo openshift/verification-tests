@@ -405,7 +405,7 @@ Feature: Service related networking scenarios
     # Create loadbalancer service
     When I run the :create_service_loadbalancer client command with:
       | name | hello-pod |
-      | tcp  | 5678:8080 |
+      | tcp  | 5678:8081 |
     Then the step should succeed
 
     # Get the external ip of the loadbaclancer service
