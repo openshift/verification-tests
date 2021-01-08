@@ -622,7 +622,7 @@ check_charts_in_project_utilization:
       xpath: //h4[text()='Filesystem']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'pf-c-chart')]
     timeout: 40
   - selector:
-      xpath: //h4[text()='Network Transfer']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'pf-c-chart')]
+      xpath: //h4[text()='Network transfer']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'pf-c-chart')]
     timeout: 40
   - selector:
       xpath: //h4[text()='Pod count']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'pf-c-chart')]

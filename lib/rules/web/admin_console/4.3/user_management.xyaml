@@ -23,6 +23,8 @@ check_rolebinding_of_user:
     if_param: rolebinding
     ref: check_link_and_text
 impersonate_one_user:
+  params:
+    kebab_item: Impersonate User "<resource_name>"
   action: goto_users_list_page
   action: click_one_operation_in_kebab
 check_impersonate_notifications:

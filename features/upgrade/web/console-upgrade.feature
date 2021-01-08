@@ -21,30 +21,24 @@ Feature: web console related upgrade check
       | f | hello-deployment-1.yaml |
     Then the step should succeed
     Given I open admin console in a browser
-    When I perform the :create_app_from_imagestream web action with:
-      | project_name | ui-upgrade |
-      | is_name      | ruby       |
-    Then the step should succeed
-    When I get project deploymentconfigs
-    Then the output should contain "ruby"
-    When I perform the :goto_project_resources_page web action with:
+    When I perform the :goto_deployment_page web action with:
       | project_name | ui-upgrade |
     Then the step should succeed
-    When I perform the :check_list_heading_shown web action with:
-      | heading | ruby |
-    Then the step should succeed
-    When I perform the :click_list_item web action with:
-      | resource_kind | DaemonSet       |
-      | resource_name | hello-daemonset |
-    Then the step should succeed
-    When I perform the :click_list_item web action with:
-      | resource_kind | Deployment      |
+    When I perform the :check_resource_item_name web action with:
       | resource_name | hello-openshift |
     Then the step should succeed
-    When I perform the :click_list_item web action with:
-      | resource_kind | DeploymentConfig |
-      | resource_name | hooks            |
+    When I perform the :goto_dc_page web action with:
+      | project_name | ui-upgrade |
     Then the step should succeed
+    When I perform the :check_resource_item_name web action with:
+      | resource_name | hooks |
+    Then the step should succeed
+    When I perform the :goto_daemonsets_page web action with:
+      | project_name | ui-upgrade |
+    Then the step should succeed
+    When I perform the :check_resource_item_name web action with:
+      | resource_name | hello-daemonset |
+    Then the step should succeed    
 
   # @author yanpzhan@redhat.com
   # @case_id OCP-22597
@@ -54,31 +48,21 @@ Feature: web console related upgrade check
   Scenario: check console accessibility
     Given the first user is cluster-admin
     Given I open admin console in a browser
-    When I perform the :create_app_from_imagestream web action with:
-      | project_name | ui-upgrade |
-      | is_name      | python     |
-    Then the step should succeed
-    Given I use the "ui-upgrade" project
-    When I get project deploymentconfigs
-    Then the output should contain "python"
-    When I perform the :goto_project_resources_page web action with:
+    When I perform the :goto_deployment_page web action with:
       | project_name | ui-upgrade |
     Then the step should succeed
-    When I perform the :check_list_heading_shown web action with:
-      | heading | python |
-    Then the step should succeed
-    When I perform the :check_list_heading_shown web action with:
-      | heading | ruby |
-    Then the step should succeed
-    When I perform the :click_list_item web action with:
-      | resource_kind | DaemonSet       |
-      | resource_name | hello-daemonset |
-    Then the step should succeed
-    When I perform the :click_list_item web action with:
-      | resource_kind | Deployment      |
+    When I perform the :check_resource_item_name web action with:
       | resource_name | hello-openshift |
     Then the step should succeed
-    When I perform the :click_list_item web action with:
-      | resource_kind | DeploymentConfig |
-      | resource_name | hooks            |
+    When I perform the :goto_dc_page web action with:
+      | project_name | ui-upgrade |
+    Then the step should succeed
+    When I perform the :check_resource_item_name web action with:
+      | resource_name | hooks |
+    Then the step should succeed
+    When I perform the :goto_daemonsets_page web action with:
+      | project_name | ui-upgrade |
+    Then the step should succeed
+    When I perform the :check_resource_item_name web action with:
+      | resource_name | hello-daemonset |
     Then the step should succeed
