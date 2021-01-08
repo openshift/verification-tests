@@ -361,8 +361,8 @@ Feature: Machine features testing
     When I run the :logs admin command with:
       | resource_name | <%= pod.name %> |
       | c             | #{cb.id}        |
-    Then the output should contain:
-      | attempting to acquire leader lease  openshift-machine-api/cluster-api-provider |
+    Then the output should match:
+      | attempting to acquire leader lease (.*)openshift-machine-api/cluster-api-provider |
     """
 
   # @author zhsun@redhat.com
