@@ -165,17 +165,17 @@ Feature: Service related networking scenarios
     """
 
     # Create a pod
-    Given I obtain test data file "routing/web-server-1.yaml"
+    Given I obtain test data file "networking/externalip_pod.yaml"
     When I run the :create client command with:
-      | f | web-server-1.yaml |
+      | f | externalip_pod.yaml |
     Then the step should succeed
-    And the pod named "web-server-1" becomes ready
-
+    And the pod named "externalip-pod" becomes ready
+ 
     # Curl externalIP:portnumber should pass
     When I execute on the pod:
       | /usr/bin/curl | --connect-timeout | 10 | <%= cb.hostip %>:27017 |
     Then the output should contain:
-      | Hello-OpenShift |
+      | Hello OpenShift! |
 
   # @author weliang@redhat.com
   # @case_id OCP-24692
@@ -213,17 +213,17 @@ Feature: Service related networking scenarios
     """
 
     # Create a pod
-    Given I obtain test data file "routing/web-server-1.yaml"
+    Given I obtain test data file "networking/externalip_pod.yaml"
     When I run the :create client command with:
-      | f | web-server-1.yaml |
+      | f | externalip_pod.yaml |
     Then the step should succeed
-    And the pod named "web-server-1" becomes ready
+    And the pod named "externalip-pod" becomes ready
 
     # Curl externalIP:portnumber on new pod
     When I execute on the pod:
       | /usr/bin/curl | -k | 22.2.2.130:27017 |
     Then the output should contain:
-      | Hello-OpenShift |
+      | Hello OpenShift! |
 
   # @author weliang@redhat.com
   # @case_id OCP-24670
@@ -324,17 +324,17 @@ Feature: Service related networking scenarios
     """
 
     # Create a pod
-    Given I obtain test data file "routing/web-server-1.yaml"
+    Given I obtain test data file "networking/externalip_pod.yaml"
     When I run the :create client command with:
-      | f | web-server-1.yaml |
+      | f | externalip_pod.yaml |
     Then the step should succeed
-    And the pod named "web-server-1" becomes ready
+    And the pod named "externalip-pod" becomes ready
 
     # Curl externalIP:portnumber from pod
     When I execute on the pod:
       | /usr/bin/curl | --connect-timeout | 10 | <%= cb.host1ip %>:27017 |
     Then the output should contain:
-      | Hello-OpenShift |
+      | Hello OpenShift! |
 
     # Delete created pod and svc
     When I run the :delete client command with:
@@ -352,17 +352,17 @@ Feature: Service related networking scenarios
     """
 
     # Create a pod
-    Given I obtain test data file "routing/web-server-1.yaml"
+   Given I obtain test data file "networking/externalip_pod.yaml"
     When I run the :create client command with:
-      | f | web-server-1.yaml |
+      | f | externalip_pod.yaml |
     Then the step should succeed
-    And the pod named "web-server-1" becomes ready
+    And the pod named "externalip-pod" becomes ready
 
     # Curl externalIP:portnumber on new pod
     When I execute on the pod:
       | /usr/bin/curl | --connect-timeout | 10 | <%= cb.host2ip %>:27017 |
     Then the output should contain:
-      | Hello-OpenShift |
+      | Hello OpenShift! |
 
   # @author anusaxen@redhat.com
   # @case_id OCP-26035
