@@ -10,6 +10,7 @@ Given /^logging service has been installed successfully$/ do
   else
     example_cr = "<%= BushSlicer::HOME %>/testdata/logging/clusterlogging/example_indexmanagement.yaml"
   end
+  step %Q/logging operators are installed successfully/
   step %Q/I create clusterlogging instance with:/, table(%{
     | remove_logging_pods | false         |
     | crd_yaml            | #{example_cr} |
@@ -84,7 +85,7 @@ Given /^logging operators are installed successfully$/ do
   # check csv existense
   success = wait_for(300, interval: 10) {
     csv = subscription('elasticsearch-operator').current_csv
-    cluster_service_version(csv).exists?
+    !(csv.nil?) && cluster_service_version(csv).exists?
   }
   raise "CSV #{csv} isn't created" unless success
   step %Q/elasticsearch operator is ready/
@@ -133,7 +134,7 @@ Given /^logging operators are installed successfully$/ do
   # check csv existense
   success = wait_for(300, interval: 10) {
     csv = subscription('cluster-logging').current_csv
-    cluster_service_version(csv).exists?
+    !(csv.nil?) && cluster_service_version(csv).exists?
   }
   raise "CSV #{csv} isn't created" unless success
   step %Q/cluster logging operator is ready/
