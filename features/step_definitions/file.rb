@@ -17,9 +17,9 @@ Given /^I obtain test data (file|dir) #{QUOTED}(?: into the #{QUOTED} dir)?$/ do
         # copy the contents not the dir by appending '/.'
         # otherwise if the dest dir already exists (e.g. step is run twice)
         # cp_r('src', 'dest') will copy src/x -> dest/src/x when instead we want src/x -> dest/x
-        FileUtils.cp_r(File.join(src, "."), dest)
+        FileUtils.cp_r(File.join(src, "."), dest, verbose: true)
       else
-        FileUtils.cp(src, dest)
+        FileUtils.cp(src, dest, verbose: true)
       end
       cb.test_file = File.absolute_path(dest)
     end
