@@ -658,8 +658,9 @@ check_on_dev_monitoring_page:
   elements:
   - selector:
       xpath: //a[contains(@href,'/dev-monitoring/ns/<project_name>/metrics') and text()='Metrics']
+    timeout: 30
   - selector:
-      xpath: //div[contains(@class,'query-browser__graph-container') and contains(@class,'pf-c-chart')]
+      xpath: //div[contains(@class,'pf-c-chart')]
 check_no_errors_in_charts:
   elements:
   - selector:
