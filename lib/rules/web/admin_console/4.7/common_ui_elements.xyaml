@@ -24,8 +24,11 @@ click_edit_yaml_link:
       xpath: //div[contains(@class,'view-lines')]
     timeout: 20
 check_yaml_line_content:
-  element:
-    selector:
+  elements:
+  - selector:
+      xpath: //div[contains(@class, 'ocs-yaml-editor__wrapper')]
+    timeout: 60
+  - selector:
       xpath: //div[contains(@class,'view-line') and contains(.,'<key>') and contains(.,'<value>')]
 click_create_button:
   elements:
