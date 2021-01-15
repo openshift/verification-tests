@@ -1,9 +1,9 @@
-Feature: Jenkins feature upgrade test 
+Feature: Jenkins feature upgrade test
 
   # @author xiuwang@redhat.com
   @upgrade-prepare
   @users=upuser1,upuser2
-  Scenario: Jenkins feature upgrade test - prepare 
+  Scenario: Jenkins feature upgrade test - prepare
     Given I switch to the first user
     When I run the :new_project client command with:
       | project_name | jenkins-upgrade |

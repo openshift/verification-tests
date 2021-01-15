@@ -52,7 +52,7 @@ Feature: ONLY ONLINE Create related feature's scripts in this file
 
   # @author yuwan@redhat.com
   # @case_id OCP-12687
-  Scenario: PyPi index can be used to providing dependencies for django-psql-example template	
+  Scenario: PyPi index can be used to providing dependencies for django-psql-example template
     Given I have a project
     When I run the :new_app client command with:
       | template | django-psql-persistent                                               |

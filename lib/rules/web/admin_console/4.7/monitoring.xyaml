@@ -8,7 +8,7 @@ send_metrics_query:
     op: send_keys <metrics_name>
 query_metrics:
   params:
-    button_text: Run Queries
+    button_text: Run queries
   action: send_metrics_query
   action: click_button_text
 check_metrics_query_result:

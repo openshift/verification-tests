@@ -330,10 +330,10 @@ Feature: jenkins.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-35068
   @admin
-  Scenario: Oauthaccesstoken should be deleted after loging out from Jenkins webconsole 
+  Scenario: Oauthaccesstoken should be deleted after loging out from Jenkins webconsole
     Given I have a project
     When I run the :new_app client command with:
-      | template | jenkins-ephemeral | 
+      | template | jenkins-ephemeral |
     Then the step should succeed
     Given I wait for the "jenkins" service to become ready up to 300 seconds
     Given I have a browser with:

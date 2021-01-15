@@ -5,15 +5,16 @@ Feature: SCTP related scenarios
   @admin
   @destructive
   Scenario: Establish pod to pod SCTP connections
-    # Debug steps: to check the number of worker nodes
+    # Debug steps (202101): to check the number of worker nodes
     When I run the :get admin command with:
       |resource|nodes|
     Then the step should succeed
     Then the outputs should contain "Ready"
+    # Debug end
     
-    Given I store the workers in the :workers clipboard    
-    Given I install machineconfigs load-sctp-module
-    Given I have a project
+    Given I store the workers in the :workers clipboard
+    And I install machineconfigs load-sctp-module
+    And I have a project
     And I wait up to 800 seconds for the steps to pass:
     """
     Given I check load-sctp-module in all workers
@@ -33,7 +34,7 @@ Feature: SCTP related scenarios
     Then the step should succeed
     And the pod named "sctpclient" becomes ready
    
-    # Debug steps: check where are the sctp pods created
+    # Debug steps (202101): check where are the sctp pods created
     When I run the :describe admin command with:
       | resource  | pods                |
       | namespace | <%= project.name %> |
@@ -46,6 +47,7 @@ Feature: SCTP related scenarios
       | nc | -version |
     Then the output should contain "Ncat: Version"
     """
+    # Debug end
 
     # sctpserver pod start to wait for sctp traffic
     And I wait up to 60 seconds for the steps to pass:
@@ -89,15 +91,16 @@ Feature: SCTP related scenarios
   @admin
   @destructive
   Scenario: Expose SCTP ClusterIP Services
-    # Debug steps: to check the number of worker nodes
+    # Debug steps (202101): to check the number of worker nodes
     When I run the :get admin command with:
       |resource|nodes|
     Then the step should succeed
     Then the outputs should contain "Ready"
+    # Debug end
 
-    Given I store the workers in the :workers clipboard    
-    Given I install machineconfigs load-sctp-module
-    Given I have a project
+    Given I store the workers in the :workers clipboard
+    And I install machineconfigs load-sctp-module
+    And I have a project
     And I wait up to 800 seconds for the steps to pass:
     """
     Given I check load-sctp-module in all workers
@@ -115,7 +118,7 @@ Feature: SCTP related scenarios
       | ["spec"]["nodeName"]      | <%= cb.workers[1].name %> |
     Then the step should succeed
     And the pod named "sctpclient" becomes ready
-   
+
     Given I obtain test data file "networking/sctp/sctpservice.yaml"
     When I run oc create as admin over "sctpservice.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %>       |
@@ -186,7 +189,7 @@ Feature: SCTP related scenarios
     Then the outputs should contain "Ready"
 
     Given I store the workers in the :workers clipboard
-    And the Internal IP of node "<%= cb.workers[1].name %>" is stored in the :worker1_ip clipboard  
+    And the Internal IP of node "<%= cb.workers[1].name %>" is stored in the :worker1_ip clipboard
     Given I install machineconfigs load-sctp-module
     Given I have a project
     And I wait up to 800 seconds for the steps to pass:
@@ -206,7 +209,7 @@ Feature: SCTP related scenarios
       | ["spec"]["nodeName"]      | <%= cb.workers[1].name %> |
     Then the step should succeed
     And the pod named "sctpclient" becomes ready
-   
+
     Given I obtain test data file "networking/sctp/sctpservice.yaml"
     When I run oc create as admin over "sctpservice.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %>       |
@@ -270,15 +273,16 @@ Feature: SCTP related scenarios
   @admin
   @destructive
   Scenario: Networkpolicy allow SCTP Client
-    # Debug steps: to check the number of worker nodes
+    # Debug steps (202101): to check the number of worker nodes
     When I run the :get admin command with:
       |resource|nodes|
     Then the step should succeed
     Then the outputs should contain "Ready"
+    # Debug end
 
-    Given I store the workers in the :workers clipboard    
-    Given I install machineconfigs load-sctp-module
-    Given I have a project
+    Given I store the workers in the :workers clipboard
+    And I install machineconfigs load-sctp-module
+    And I have a project
     And I wait up to 800 seconds for the steps to pass:
     """
     Given I check load-sctp-module in all workers
@@ -297,7 +301,7 @@ Feature: SCTP related scenarios
       | ["spec"]["nodeName"]      | <%= cb.workers[1].name %> |
     Then the step should succeed
     And the pod named "sctpclient" becomes ready
-   
+
     # sctpserver pod start to wait for sctp traffic
     And I wait up to 60 seconds for the steps to pass:
     """"
@@ -342,7 +346,7 @@ Feature: SCTP related scenarios
       | oc_opts_end      |                                                                  |
       | exec_command     | bash                                                             |
       | exec_command_arg | -c                                                               |
-      | exec_command_arg | echo test-openshift \| nc -v <%= cb.serverpod_ip %> 30102 --sctp | 
+      | exec_command_arg | echo test-openshift \| nc -v <%= cb.serverpod_ip %> 30102 --sctp |
     Then the step should succeed
     And the output should contain:
       | Connected to <%= cb.serverpod_ip %> |
@@ -365,7 +369,7 @@ Feature: SCTP related scenarios
       | exec_command_arg | -c                                                               |
       | exec_command_arg | echo test-openshift \| nc -v <%= cb.serverpod_ip %> 30102 --sctp |
     Then the step should fail
-   
+
     # Define a networkpolicy to allow sctpclient to sctpserver
     Given I obtain test data file "networking/sctp/allow_sctpclient.yaml"
     When I run the :create admin command with:

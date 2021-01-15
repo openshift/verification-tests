@@ -12,9 +12,9 @@ Feature: Egress-ingress related networking scenarios
     When I execute on the pod:
       | curl           |
       | --head         |
-      | www.google.com | 
+      | www.google.com |
     Then the step should succeed
-    And the output should contain "HTTP/1.1 200" 
+    And the output should contain "HTTP/1.1 200"
     Given I obtain test data file "networking/<%= cb.cb_egress_directory %>/limit_policy.json"
     When I run the :create admin command with:
       | f | limit_policy.json |
@@ -42,10 +42,10 @@ Feature: Egress-ingress related networking scenarios
   @admin
   Scenario: Apply different egress network policy in different projects
     Given the env is using multitenant or networkpolicy network
-    Given I have a project 
+    Given I have a project
     Given I have a pod-for-ping in the project
     And evaluation of `project.name` is stored in the :proj1 clipboard
-  
+
     # Create egress policy in project-1
     And evaluation of `BushSlicer::Common::Net.dns_lookup("yahoo.com")` is stored in the :yahoo_ip clipboard
     When I obtain test data file "networking/egress-ingress/dns-egresspolicy1.json"
@@ -55,19 +55,19 @@ Feature: Egress-ingress related networking scenarios
       | f | dns-egresspolicy1.json |
       | n | <%= cb.proj1 %> |
     Then the step should succeed
-   
+
     # Check curl from pod
     When I execute on the pod:
       | curl | --head | yahoo.com |
     Then the step should succeed
     When I execute on the pod:
-      | curl | --head | <%= cb.yahoo_ip %> | 
+      | curl | --head | <%= cb.yahoo_ip %> |
     Then the step should succeed
-    
+
     Given I create a new project
     Given I have a pod-for-ping in the project
     And evaluation of `project.name` is stored in the :proj2 clipboard
- 
+
     # Create different egress policy in project-2
     When I obtain test data file "networking/egress-ingress/dns-egresspolicy2.json"
     And I replace lines in "dns-egresspolicy2.json":
@@ -76,13 +76,13 @@ Feature: Egress-ingress related networking scenarios
       | f | dns-egresspolicy2.json |
       | n | <%= cb.proj2 %> |
     Then the step should succeed
- 
+
     # Check curl from pod
     When I execute on the pod:
       | curl | --head | yahoo.com |
     Then the step should fail
     When I execute on the pod:
-      | curl | --head | <%= cb.yahoo_ip %> | 
+      | curl | --head | <%= cb.yahoo_ip %> |
     Then the step should fail
 
     # Check egress policy can be deleted in project1
@@ -91,30 +91,30 @@ Feature: Egress-ingress related networking scenarios
       | object_name_or_id | policy-test             |
       | n                 |  <%= cb.proj1 %>    |
     Then the step should succeed
- 
+
     # Check curl from pod after egress policy deleted
     When I execute on the pod:
       | curl | --head | yahoo.com |
     Then the step should fail
     When I execute on the pod:
-      | curl | --head | <%= cb.yahoo_ip %> | 
-    Then the step should fail   
+      | curl | --head | <%= cb.yahoo_ip %> |
+    Then the step should fail
 
   # @author weliang@redhat.com
   # @case_id OCP-13507
   @admin
   Scenario: The rules of egress network policy are added in openflow
     Given the env is using multitenant or networkpolicy network
-    Given I have a project 
+    Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard
- 
+
     # Create egress policy in project-1
     Given I obtain test data file "networking/egress-ingress/dns-egresspolicy1.json"
     And I run the :create admin command with:
       | f | dns-egresspolicy1.json |
       | n | <%= cb.proj1 %> |
     Then the step should succeed
- 
+
     # Check egress rule added in openflow
     Given I select a random node's host
     And evaluation of `node.name` is stored in the :node_name clipboard
@@ -144,19 +144,19 @@ Feature: Egress-ingress related networking scenarios
   @admin
   Scenario: Egress network policy use dnsname with multiple ipv4 addresses
     Given the env is using multitenant or networkpolicy network
-    Given I have a project  
+    Given I have a project
     Given I have a pod-for-ping in the project
     And evaluation of `project.name` is stored in the :proj1 clipboard
     And evaluation of `BushSlicer::Common::Net.dns_lookup("yahoo.com", multi: true)` is stored in the :yahoo clipboard
     Then the expression should be true> cb.yahoo.size >= 3
 
-    # Create egress policy 
+    # Create egress policy
     Given I obtain test data file "networking/egress-ingress/dns-egresspolicy2.json"
     When I run the :create admin command with:
       | f | dns-egresspolicy2.json|
       | n | <%= cb.proj1 %> |
     Then the step should succeed
- 
+
     # Check curl from pod
     When I execute on the pod:
       | curl | --head | <%= cb.yahoo[0] %> |
@@ -166,12 +166,12 @@ Feature: Egress-ingress related networking scenarios
     Then the step should fail
     When I execute on the pod:
       | curl | --head | <%= cb.yahoo[2] %> |
-    Then the step should fail 
+    Then the step should fail
 
   # @author weliang@redhat.com
   # @case_id OCP-15005
   @admin
-  Scenario: Service with a DNS name can not by pass Egressnetworkpolicy with that DNS name	
+  Scenario: Service with a DNS name can not by pass Egressnetworkpolicy with that DNS name
     Given the env is using multitenant or networkpolicy network
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -186,14 +186,14 @@ Feature: Egress-ingress related networking scenarios
       | f | dns-egresspolicy2.json |
       | n | <%= cb.proj1 %> |
     Then the step should succeed
-    
+
     # Create a service with a "externalname"
     Given I obtain test data file "networking/service-externalName.json"
     When I run the :create admin command with:
       | f | service-externalName.json |
       | n | <%= cb.proj1 %> |
-    Then the step should succeed 
-    
+    Then the step should succeed
+
     # Check curl from pod
     When I execute on the pod:
       | curl | --head | www.test.com |
@@ -208,7 +208,7 @@ Feature: Egress-ingress related networking scenarios
     And the output should contain:
       | egressnetworkpolicy |
       | deleted             |
-    
+
     # Create egress policy to allow www.test.com
     When I obtain test data file "networking/egress-ingress/dns-egresspolicy2.json"
     And I replace lines in "dns-egresspolicy2.json":
@@ -220,7 +220,7 @@ Feature: Egress-ingress related networking scenarios
 
     # Check curl from pod
     When I execute on the pod:
-      | curl | --head | www.test.com |    
+      | curl | --head | www.test.com |
     Then the step should succeed
 
   # @author weliang@redhat.com

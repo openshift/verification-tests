@@ -117,7 +117,7 @@ Feature: Elasticsearch related tests
     And evaluation of `@result[:parsed].select {|e| e['index'].start_with? "app"}.map {|x| x["index"]}` is stored in the :app_indices clipboard
     And evaluation of `@result[:parsed].select {|e| e['index'].start_with? "infra"}.map {|x| x["index"]}` is stored in the :infra_indices clipboard
     And evaluation of `@result[:parsed].select {|e| e['index'].start_with? "audit"}.map {|x| x["index"]}` is stored in the :audit_indices clipboard
-    
+
     Given I successfully merge patch resource "elasticsearch/elasticsearch" with:
       | {"spec": {"managementState": "Unmanaged"}} |
     And the expression should be true> elasticsearch("elasticsearch").management_state == "Unmanaged"

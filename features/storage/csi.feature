@@ -29,7 +29,7 @@ Feature: CSI testing related feature
 
   # @author chaoyang@redhat.com
   # @case_id OCP-31346
-  @admin  
+  @admin
   Scenario: CSI images checking in stage env in OCP4.2
     Given the master version == "4.2"
     Given I switch to cluster admin pseudo user

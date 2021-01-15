@@ -54,7 +54,7 @@ Feature: Node components upgrade tests
     Given I store the masters in the :masters clipboard
     And I use the "<%= cb.masters[0].name %>" node
     When I run commands on the host:
-      | cat /etc/kubernetes/kubelet.conf | 
+      | cat /etc/kubernetes/kubelet.conf |
     Then the step should succeed
     And the output should contain:
       | "imageMinimumGCAge": "5m0s"       |

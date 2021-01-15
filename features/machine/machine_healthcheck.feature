@@ -158,7 +158,7 @@ Feature: MachineHealthCheck Test Scenarios
       | ["spec"]["nodeStartupTimeout" ]                                                    | 15m                         |
     Then the step should succeed
     And I ensure "mhc-<%= machine_set.name %>" machine_health_check is deleted after scenario
-    
+
     Given I create the 'Ready' unhealthyCondition
     Then a pod becomes ready with labels:
      | api=clusterapi, k8s-app=controller |
@@ -298,4 +298,4 @@ Feature: MachineHealthCheck Test Scenarios
       | timeout |
       | "3"     |
       | "3t"    |
- 
+
