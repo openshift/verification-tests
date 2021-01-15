@@ -5,9 +5,16 @@ Feature: SCTP related scenarios
   @admin
   @destructive
   Scenario: Establish pod to pod SCTP connections
+    # Debug steps (202101): to check the number of worker nodes
+    When I run the :get admin command with:
+      |resource|nodes|
+    Then the step should succeed
+    Then the outputs should contain "Ready"
+    # Debug end
+    
     Given I store the workers in the :workers clipboard
-    Given I install machineconfigs load-sctp-module
-    Given I have a project
+    And I install machineconfigs load-sctp-module
+    And I have a project
     And I wait up to 800 seconds for the steps to pass:
     """
     Given I check load-sctp-module in all workers
@@ -26,6 +33,21 @@ Feature: SCTP related scenarios
       | ["spec"]["nodeName"]      | <%= cb.workers[1].name %> |
     Then the step should succeed
     And the pod named "sctpclient" becomes ready
+   
+    # Debug steps (202101): check where are the sctp pods created
+    When I run the :describe admin command with:
+      | resource  | pods                |
+      | namespace | <%= project.name %> |
+      Then the step should succeed
+
+    # Debug steps (202101): check if nc is avaible in sctpserver pod
+    And I wait up to 60 seconds for the steps to pass:
+    """
+    When I execute on the "sctpserver" pod:
+      | nc | -version |
+    Then the output should contain "Ncat: Version"
+    """
+    # Debug end
 
     # sctpserver pod start to wait for sctp traffic
     And I wait up to 60 seconds for the steps to pass:
@@ -39,6 +61,15 @@ Feature: SCTP related scenarios
       | exec_command_arg | nc -l 30102 --sctp  |
     Then the step should succeed
     """
+
+    # Debug steps (202101): check if nc is avaible in sctpclient pod
+    And I wait up to 60 seconds for the steps to pass:
+    """
+    When I execute on the "sctpclient" pod:
+      | nc | -version |
+    Then the output should contain "Ncat: Version"
+    """
+    # Debug end
 
     # sctpclient pod start to send sctp traffic
     And I wait up to 60 seconds for the steps to pass:
@@ -61,9 +92,16 @@ Feature: SCTP related scenarios
   @admin
   @destructive
   Scenario: Expose SCTP ClusterIP Services
+    # Debug steps (202101): to check the number of worker nodes
+    When I run the :get admin command with:
+      |resource|nodes|
+    Then the step should succeed
+    Then the outputs should contain "Ready"
+    # Debug end
+
     Given I store the workers in the :workers clipboard
-    Given I install machineconfigs load-sctp-module
-    Given I have a project
+    And I install machineconfigs load-sctp-module
+    And I have a project
     And I wait up to 800 seconds for the steps to pass:
     """
     Given I check load-sctp-module in all workers
@@ -89,6 +127,21 @@ Feature: SCTP related scenarios
     Given I use the "sctpservice" service
     And evaluation of `service.ip(user: user)` is stored in the :service_ip clipboard
 
+    # Debug steps (202101): check where are the sctp pods created
+    When I run the :describe admin command with:
+      | resource  | pods                |
+      | namespace | <%= project.name %> |
+      Then the step should succeed
+
+    # Debug steps (202101): check if nc is avaible in sctpserver pod
+    And I wait up to 60 seconds for the steps to pass:
+    """
+    When I execute on the "sctpserver" pod:
+      | nc | -version |
+    Then the output should contain "Ncat: Version"
+    """
+    # Debug end
+
     # sctpserver pod start to wait for sctp traffic
     And I wait up to 60 seconds for the steps to pass:
     """"
@@ -101,6 +154,15 @@ Feature: SCTP related scenarios
       | exec_command_arg | nc -l 30102 --sctp  |
     Then the step should succeed
     """"
+
+     # Debug steps (202101): check if nc is avaible in sctpclient pod
+    And I wait up to 60 seconds for the steps to pass:
+    """
+    When I execute on the "sctpclient" pod:
+      | nc | -version |
+    Then the output should contain "Ncat: Version"
+    """
+    # Debug end
 
     # sctpclient pod start to send sctp traffic
     And I wait up to 60 seconds for the steps to pass:
@@ -123,6 +185,13 @@ Feature: SCTP related scenarios
   @admin
   @destructive
   Scenario: Expose SCTP NodePort Services
+    # Debug steps (202101): to check the number of worker nodes
+    When I run the :get admin command with:
+      |resource|nodes|
+    Then the step should succeed
+    Then the outputs should contain "Ready"
+    # Debug end
+
     Given I store the workers in the :workers clipboard
     And the Internal IP of node "<%= cb.workers[1].name %>" is stored in the :worker1_ip clipboard
     Given I install machineconfigs load-sctp-module
@@ -152,6 +221,21 @@ Feature: SCTP related scenarios
     Given I use the "sctpservice" service
     And evaluation of `service(cb.sctpserver).node_port(port:30102)` is stored in the :nodeport clipboard
 
+    # Debug steps (202101): check where are the sctp pods created
+    When I run the :describe admin command with:
+      | resource  | pods                |
+      | namespace | <%= project.name %> |
+      Then the step should succeed
+
+    # Debug steps (202101): check if nc is avaible in sctpserver pod
+    And I wait up to 60 seconds for the steps to pass:
+    """
+    When I execute on the "sctpserver" pod:
+      | nc | -version |
+    Then the output should contain "Ncat: Version"
+    """
+    # Debug end
+
     # sctpserver pod start to wait for sctp traffic
     And I wait up to 60 seconds for the steps to pass:
     """"
@@ -164,6 +248,15 @@ Feature: SCTP related scenarios
       | exec_command_arg | nc -l 30102 --sctp  |
     Then the step should succeed
     """
+
+     # Debug steps (202101): check if nc is avaible in sctpclient pod
+    And I wait up to 60 seconds for the steps to pass:
+    """
+    When I execute on the "sctpclient" pod:
+      | nc | -version |
+    Then the output should contain "Ncat: Version"
+    """
+    # Debug end
 
     # sctpclient pod start to send sctp traffic on worknode:port
     And I wait up to 60 seconds for the steps to pass:
@@ -186,9 +279,16 @@ Feature: SCTP related scenarios
   @admin
   @destructive
   Scenario: Networkpolicy allow SCTP Client
+    # Debug steps (202101): to check the number of worker nodes
+    When I run the :get admin command with:
+      |resource|nodes|
+    Then the step should succeed
+    Then the outputs should contain "Ready"
+    # Debug end
+
     Given I store the workers in the :workers clipboard
-    Given I install machineconfigs load-sctp-module
-    Given I have a project
+    And I install machineconfigs load-sctp-module
+    And I have a project
     And I wait up to 800 seconds for the steps to pass:
     """
     Given I check load-sctp-module in all workers
@@ -220,6 +320,21 @@ Feature: SCTP related scenarios
       | exec_command_arg | nc -l 30102 --sctp  |
     Then the step should succeed
     """
+
+    # Debug steps (202101): check where are the sctp pods created
+    When I run the :describe admin command with:
+      | resource  | pods                |
+      | namespace | <%= project.name %> |
+      Then the step should succeed
+
+    # Debug steps (202101): check if nc is avaible in sctpserver pod
+    And I wait up to 60 seconds for the steps to pass:
+    """
+    When I execute on the "sctpserver" pod:
+      | nc | -version |
+    Then the output should contain "Ncat: Version"
+    """
+    # Debug end
 
     # sctpclient pod start to send sctp traffic
     And I wait up to 60 seconds for the steps to pass:
