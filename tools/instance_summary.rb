@@ -266,7 +266,7 @@ module BushSlicer
       sorted_instances = instances.sort_by {|k, v| k}.to_h
       sorted_instances.each do |name, inst|
         inst_summary = {}
-        inst_summary[:region] = 'upshift'
+        inst_summary[:region] = 'psi'
         inst_summary[:name]= name
         inst_summary[:uptime]= os.instance_uptime inst["created"]
         inst_summary[:owned] =  name
@@ -324,10 +324,10 @@ module BushSlicer
 
 
   class VSphereSummary < InstanceSummary
-    attr_accessor :vms
+    attr_accessor :vsphere
 
     def initialize(profile_name="vsphere_vmc7-qe", jenkins: nil)
-      @vms = BushSlicer::VSphere.new(service_name: profile_name)
+      @vsphere = BushSlicer::VSphere.new(service_name: profile_name)
       @jenkins = jenkins
     end
 
@@ -338,7 +338,7 @@ module BushSlicer
         inst_summary = {}
         inst_summary[:region] = 'vSphere'
         inst_summary[:name]= inst['name']
-        inst_summary[:uptime]= vms.instance_uptime(inst.config.createDate)
+        inst_summary[:uptime]= vsphere.instance_uptime(inst.config.createDate)
         inst_summary[:flexy_job_id] = jenkins.get_jenkins_flexy_job_id(inst['name'])
         summary << inst_summary
       end
@@ -347,7 +347,7 @@ module BushSlicer
 
     def get_summary
       grand_summary = []
-      inst_details = vms.get_running_instances
+      inst_details = vsphere.get_running_instances
       summary = summarize_instances(inst_details)
       # summary = summarize_instances(rg_name, instances)
       print_summary(summary) if summary.count > 0

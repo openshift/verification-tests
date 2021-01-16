@@ -77,7 +77,7 @@ module BushSlicer
         end
       end
       # internal openstack
-      command :"upshift" do |c|
+      command :"psi" do |c|
         c.syntax = "#{File.basename __FILE__}"
         c.description = 'display summary of running instances'
         c.action do |args, options|
@@ -95,12 +95,12 @@ module BushSlicer
         end
       end
       # VSphere
-      command :"vms" do |c|
+      command :"vsphere" do |c|
         c.syntax = "#{File.basename __FILE__}"
         c.description = 'display summary of running instances'
         c.action do |args, options|
-          vms = VSphereSummary.new(jenkins: @jenkins)
-          vms.get_summary
+          vsphere = VSphereSummary.new(jenkins: @jenkins)
+          vsphere.get_summary
         end
       end
       run!
