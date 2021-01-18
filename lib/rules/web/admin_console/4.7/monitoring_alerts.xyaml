@@ -246,7 +246,7 @@ silence_alert_from_create_button:
 check_use_regular:
   element:
     selector:
-      xpath: //span[text()='Alert Labels']/ancestor::div[@class='co-m-pane__body-group']//input[@type='checkbox']
+      xpath: //span[text()='Alert labels']/ancestor::div[@class='co-m-pane__body-group']//input[@type='checkbox']
     op: click
 check_info_of_silence_detail_reg:
   params:
@@ -334,6 +334,7 @@ Disable_all_filters:
     selector:
       xpath: (//button[text()='Clear all filters'])[2]
     op: click
+    timeout: 60
 clear_specifc_filter:
   element:
     selector: &specific_filter
