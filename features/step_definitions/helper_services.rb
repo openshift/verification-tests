@@ -161,8 +161,8 @@ Given /^I have LDAP service in my project$/ do
     # So take the second one since this one can be implemented currently
     ###
     step %Q/I run the :run client command with:/, table(%{
-      | name  |ldapserver                             |
-      | image |openshift/openldap-2441-centos7:latest |
+      | name  | ldapserver                                       |
+      | image | quay.io/openshifttest/ldap:openldap-2441-centos7 |
       })
     step %Q/the step should succeed/
     step %Q/a pod becomes ready with labels:/, table(%{
