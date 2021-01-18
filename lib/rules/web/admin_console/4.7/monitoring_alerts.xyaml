@@ -60,7 +60,7 @@ perform_action_item:
   action: click_button_text
 click_silence_alert:
   params:
-    button_text: Silence Alert
+    button_text: Silence alert
   action: click_button_text
 uncheck_start_from_now:
   element:
