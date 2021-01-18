@@ -126,7 +126,7 @@ click_first_action_icon:
   action: click_icon_index_button
 click_expire_alert_button:
   params:
-    button_text: Expire Silence
+    button_text: Expire silence
   action: click_button_text
 disable_silence_tab:
   action:
@@ -143,7 +143,7 @@ click_silenced_tab:
 
 edit_silence_alert:
   params:
-    item_text: Edit Silence
+    item_text: Edit silence
   action: perform_action_item
 check_silence_fields:
   action: ensure_start_from_now_checked
