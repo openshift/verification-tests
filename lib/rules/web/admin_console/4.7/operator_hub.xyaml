@@ -45,9 +45,11 @@ set_password:
 set_k8s_resource:
   params:
     label_text: K8s Resource Prefix
-    project_name: <k8s_resource>
   action: click_label_dropdown_button
-  action: choose_project_from_dropdown_list
+  elements:
+  - selector:
+      xpath: //ul//a[@id='<k8s_resource>-Project-link' and contains(@class,'dropdown__menu-item')]
+    op: click
 set_pod_count:
   params:
     label_text: Pod Count
@@ -659,7 +661,7 @@ check_create_operand_button_and_requied_badge_when_ready:
 check_create_operand_button_and_requied_badge_on_csv_details:
   elements:
   - selector:
-      xpath: //h4[contains(@class,'pf-c-alert__title') and contains(.,'StorageCluster Required')]
+      xpath: //h4[contains(@class,'pf-c-alert__title') and contains(.,'StorageCluster required')]
   action: check_operand_button_link
 check_operand_button_link:
   element:
