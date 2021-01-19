@@ -63,6 +63,16 @@ module BushSlicer
       return @compute_clients[subs_id]
     end
 
+    # @return [ResourceManagementClient] for the provided subscription id
+    def resource_mgmt_client(subs_id = default_subscription_id)
+      return @resource_mgmt_clients[subs_id] if @resource_mgmt_clients&.dig(subs_id)
+
+      @resource_mgmt_clients ||= {}
+      @resource_mgmt_clients[subs_id] = Resource::ResourceManagementClient.new(credentials)
+      @resource_mgmt_clients[subs_id].subscription_id = subs_id
+      return @resource_mgmt_clients[subs_id]
+    end
+
     def net_client(subs_id = default_subscription_id)
       return @net_clients[subs_id] if @net_clients&.dig(subs_id)
 
@@ -103,6 +113,10 @@ module BushSlicer
       return object_storage_client(*key).blob_client
     end
 
+    def resource_groups
+      @resource_groups ||= resource_mgmt_client.resource_groups.list
+    end
+
     # @return [String, StorageAccount] where the String is the name of the
     #   new account
     # @note MS recommends using separate acconut for each VM:
@@ -129,6 +143,60 @@ module BushSlicer
       return storage_account_name, storage_client(subs_id).storage_accounts.create(res_group, storage_account_name, storage_create_params)
     end
 
+    # @return <Array of VirtualMachine>
+    def instances
+      compute_client.virtual_machines.list_all
+    end
+
+    # call instance_view method with ResourceGroup name and instance_name
+    def instance_view(vm_obj)
+      rg_name = BushSlicer::Azure.resource_group_from_id(vm_obj.id)
+      inst_view = compute_client.virtual_machines.instance_view(rg_name, vm_obj.name)
+      return rg_name, inst_view
+    end
+
+    def instance_view_time(inst_view)
+      inst_view.statuses.first.time.strftime
+    end
+
+    def vm_disk_creation_time(inst_view)
+      inst_view.disks.first.statuses.first.time.strftime
+    end
+    # use of vm_disk time is more accurate than instance_view (which resets if a user stops and restart the instance)
+    def instance_uptime(inst_view, src: "vm_disk")
+      time_src = nil
+      if src == 'vm_disk'
+        time_src = vm_disk_creation_time(inst_view)
+      else
+        time_src = instance_view_time(inst_view)
+      end
+      ((Time.now - Time.parse(time_src))/ (60 * 60)).round(2)
+    end
+
+    def running? (inst_view)
+      inst_view.statuses[1].code == 'PowerState/running'
+    end
+
+    def get_running_instances
+      vms = {}
+      instances = self.instances
+      instances.each do |inst|
+        rg_name, iv = instance_view(inst)
+        vms[rg_name] = [] if vms[rg_name].nil?
+        if running? iv
+          uptime = instance_uptime(iv)
+          vms[rg_name] << {:inst => inst,
+            :inst_view => iv,
+            :uptime => uptime }
+        end
+      end
+      # cleanup Hash if the value is an empty array.
+      vms.each do |k,v|
+        vms.delete k if v.empty?
+      end
+      return vms
+    end
+
     def get_volume_by_openshift_metadata(pv_name, project_name)
       TODO
       disk_id_regex = ".*\"kubernetes.io/created-for/pv/name\":\"#{pv_name}\".*\"kubernetes.io/created-for/pvc/namespace\":\"#{project_name}\".*"
@@ -143,7 +211,18 @@ module BushSlicer
     # @return [TODO, nil] returns nil when not found
     # @raise on communication error
     def get_volume_by_id(id)
-      TODO
+      name = id.split("/")[-1]
+      res = "volume " + id + " exists"
+      begin
+      compute_client.disks.get(azure_config[:resource_group], name)
+      rescue MsRestAzure::AzureOperationError => e
+        if e.response.status == 404
+          res = nil
+        else
+          res = e.response
+        end
+      end
+      return res
     end
 
     # @param names [String, Array<String>] one or more names to launch
