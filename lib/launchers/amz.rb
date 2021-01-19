@@ -67,7 +67,7 @@ module BushSlicer
     end
 
     private def client_iam
-      @client_sts ||= Aws::IAM::Client.new
+      @client_iam ||= Aws::IAM::Client.new
     end
 
     private def client_r53
