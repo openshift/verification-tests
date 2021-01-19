@@ -28,6 +28,7 @@ goto_cluster_dashboards_page:
   action: wait_page_body_loaded
 goto_search_page:
   url: search
+  action: wait_box_loaded
 
 #api explore
 goto_api_explore_page:
@@ -329,6 +330,9 @@ goto_consoleyamlsample_crd_instances_page:
 goto_catalog_source_page:
   url: k8s/cluster/config.openshift.io~v1~OperatorHub/cluster/sources
   action: wait_table_loaded
+goto_one_catalogsource_page:
+  url: /k8s/ns/openshift-marketplace/operators.coreos.com~v1alpha1~CatalogSource/<cs_name>
+  action: wait_box_loaded
 
 # quota
 goto_quotas_page:
