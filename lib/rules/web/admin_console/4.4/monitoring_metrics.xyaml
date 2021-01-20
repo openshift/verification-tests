@@ -1,3 +1,15 @@
+click_button_example_query:
+  params:
+    button_text: Insert Example Query
+  action: click_button_text
+check_button_example_query:
+  params:
+    button_text: Insert Example Query
+  action: check_button_text
+click_run_queries_button:
+  params:
+    button_text: Run Queries
+  action: click_button_text
 check_sample_query_area:
   element:
     selector:
@@ -68,7 +80,7 @@ set_query_input_text_area:
 choose_metrics_query:
   element:
     selector:
-      xpath: //a[text()='<metrics_name>']
+      xpath: //a[contains(text(),'<metrics_name>')]
     op: click
 check_query_input_text_area:
   element:
@@ -263,9 +275,33 @@ check_all_series_show:
 click_pod_chart_link:
   element:
     selector: 
-      xpath: //h5[text()='<chart_name>']/../a
+      xpath: //h5[contains(text(),'<chart_name>')]/../a
     op: click
 check_data_diplayed_db:
   element:
     selector:
-      xpath: //h2[text()='<data_name>']/../..//*[contains(text(), '<legend_name>')] 
+      xpath: //h2[contains(text(),'<data_name>')]/../..//*[contains(text(), '<legend_name>')]
+
+click_utilization_graph_link:
+  element:
+    selector:
+      xpath: //div[@class='co-utilization-card__item-chart']//a[contains(@href, '<metric_kind>')]
+    timeout: 120
+    op: click
+click_uitilization_description:
+  element:
+    selector:
+      xpath: //*[text()='<metric_kind>']/ancestor::div[@class='co-utilization-card__item-description']//button
+    timeout: 120
+    op: click
+click_link_from_uitilization_description:
+  params:
+    metric_kind: <metric_kind> 
+    text: <link_text>
+  action: click_uitilization_description 
+  action: click_link_with_text_only
+check_pod_detail:
+  params:
+    content: Memory Usage
+  action: check_page_contains 
+  action: check_pod_detail_page_charts_style

@@ -36,7 +36,7 @@ kibana_click_approve:
 wait_kibana_logged_in:
   elements:
   - selector:
-      xpath: //div[@class="kbnGlobalNavLink__title" and contains(., "Discover")]
+      xpath: //div[@class="kbnGlobalNavLink__title" and contains(., "Discover")] | //div[@class="global-nav-link__title" and contains(., "Discover")]
     timeout: 600
 
 check_kibana_status:
@@ -178,3 +178,9 @@ check_log_count:
       }
       return doc_count
     expect_result: true
+
+click_refresh_button_in_kibana:
+  element:
+    selector:
+      xpath: //span[contains(@class, "euiButton__text euiSuperUpdateButton__text") and contains(., "Refresh")]
+    op: click

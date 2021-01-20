@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  generateName: testpod1
+  labels:
+    name: sriov-specified-cpu
+  annotations:
+    k8s.v1.cni.cncf.io/networks: mlx277-netdevice
+spec:
+  containers:
+  - name: test-pod
+    image: quay.io/openshifttest/multus-pod@sha256:48da37205f9b43424e0983d4c5e7e07f77b7ba1504bbe35e2f264c75dcb4cd15
+    resources:
+      limits:
+        memory: 345Mi
+        cpu: "1"
+      requests:
+        cpu: 333m

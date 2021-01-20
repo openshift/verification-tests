@@ -33,13 +33,13 @@ Feature: basic verification for upgrade testing
     When I run the :create client command with:
       | f | configmap.yaml |
       | n | <%= project.name %>                                       |
-    Then the step should succeed	
+    Then the step should succeed
     Given I obtain test data file "configmap/pod-configmap-volume1.yaml"
     When I run the :create client command with:
       | f | pod-configmap-volume1.yaml |
-    Then the step should succeed	
+    Then the step should succeed
     And the pod named "dapi-test-pod-1" status becomes :succeeded
- 
+
 
   # @author weinliu@redhat.com
   # @case_id OCP-13016

@@ -11,7 +11,6 @@ Feature: Online "Notification" related scripts in this file
 
   # @author bingli@redhat.com
   # @case_id OCP-10334
-  # @case_id OCP-10341
   Scenario: Enable/Disable online notification in web console - UI
     Given I have a project
     When I perform the :goto_notification_page web console action with:

@@ -7,7 +7,7 @@ metadata:
   annotations:
     pod.alpha.kubernetes.io/init-containers: '[{
     "name": "wait1",
-    "image": "centos:centos7",
+    "image": "quay.io/openshifttest/centos@sha256:285bc3161133ec01d8ca8680cd746eecbfdbc1faa6313bd863151c4b26d7e5a5",
     "command": ["/bin/sh", "-c", "sleep 10"],
     "resources": {
         "limits": {
@@ -22,7 +22,7 @@ metadata:
     },
     {
     "name": "wait2",
-    "image": "centos:centos7",
+    "image": "quay.io/openshifttest/centos@sha256:285bc3161133ec01d8ca8680cd746eecbfdbc1faa6313bd863151c4b26d7e5a5",
     "command": ["/bin/sh", "-c", "sleep 10"],
     "resources": {
         "limits": {
@@ -37,7 +37,7 @@ metadata:
     }]'
 spec:
   containers:
-    - image: "docker.io/deshuai/hello-pod:latest"
+    - image: "quay.io/openshifttest/hello-pod@sha256:04b6af86b03c1836211be2589db870dba09b7811c197c47c07fbbe33c7f80ef7"
       imagePullPolicy: IfNotPresent
       name: hello-pod
       ports:
@@ -57,7 +57,7 @@ spec:
       volumeMounts:
         - mountPath: /tmp
           name: tmp
-    - image: "docker.io/deshuai/hello-pod:latest"
+    - image: "quay.io/openshifttest/hello-pod@sha256:04b6af86b03c1836211be2589db870dba09b7811c197c47c07fbbe33c7f80ef7"
       imagePullPolicy: IfNotPresent
       name: hello-pod-1
       env:

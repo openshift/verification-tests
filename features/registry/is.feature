@@ -10,9 +10,9 @@ Feature: Testing imagestream
     And I have a skopeo pod in the project
     And master CA is added to the "skopeo" dc
     When I run the :tag client command with:
-      | source_type  | docker            |
-      | source       | docker.io/busybox |
-      | dest         | myis13895:latest  |
+      | source_type | docker                        |
+      | source      | quay.io/openshifttest/busybox |
+      | dest        | myis13895:latest              |
     Then the step should succeed
     When I run the :policy_add_role_to_user client command with:
       | role            | registry-admin   |
@@ -118,7 +118,7 @@ Feature: Testing imagestream
       | ca                 | <%= cb.reg_crt_name %>      |
     Then the step should fail
     And the output should contain:
-      | invalid container image reference |
+      | invalid |
     And I run the :oadm_prune_images client command with:
       | keep_tag_revisions  | 1                           |
       | keep_younger_than   | 0                           |

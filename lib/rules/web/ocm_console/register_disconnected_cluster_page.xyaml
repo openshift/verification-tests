@@ -22,10 +22,6 @@ required_items_loaded:
             css: input#cluster_id
             type: text
         - selector:
-            text: 'Operating system'
-        - selector:
-            xpath: //span[text()='Operating system']/../span[text()='*']
-        - selector:
             text: 'Red Hat Enterprise Linux CoreOS'
         - selector:
             xpath: //input[@id='operating_system-Red Hat Enterprise Linux CoreOS']

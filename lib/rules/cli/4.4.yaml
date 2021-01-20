@@ -466,6 +466,7 @@
     :sort_by: --sort-by=<value>
     :template: --template=<value>
     :w: --watch=<value>
+    :selector: --selector=<value>
 :help:
   :cmd: oc help
   :options:
@@ -833,6 +834,8 @@
     :command: --command=<value>
     :dry_run: --dry-run
     :env: --env=<value>
+    :exec_command: <value>
+    :exec_command_arg: <value>
     :generator: --generator=<value>
     :image: --image=<value>
     :limits: --limits=<value>
@@ -1083,6 +1086,7 @@
   :options:
     :buildconfig: <value>
     :build_arg: --build-arg=<value>
+    :build_loglevel: --build-loglevel=<value>
     :commit: --commit=<value>
     :env: --env=<value>
     :follow: --follow=<value>

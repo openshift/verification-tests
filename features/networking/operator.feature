@@ -127,8 +127,12 @@ Feature: Operator related networking scenarios
   @destructive
   Scenario: The clusteroperator should be able to reflect the realtime status of the network when a new node added
     Given I have an IPI deployment
-    # Check that the operator is not progressing
-    Given the expression should be true> cluster_operator('network').condition(type: 'Progressing')['status'] == "False"
+    And I switch to cluster admin pseudo user
+    # Check that the operator is not progressing at the beginning to make sure the network operator is normal
+    Given I wait up to 160 seconds for the steps to pass:
+    """
+    Given the status of condition "Progressing" for network operator is :False
+    """
 
     # Record the original machine replica and scale it up to number +1
     Given I pick a random machineset to scale
@@ -172,30 +176,30 @@ Feature: Operator related networking scenarios
     | name=test-pods |
     #And evaluation of `pod(0).node_name` is stored in the :node_name clipboard
   And I store "<%= pod(0).node_name %>" node's corresponding default networkType pod name in the :sdn_pod clipboard
-  
+
   Given I use the "test-service" service
   And evaluation of `service.ip(user: user)` is stored in the :service_ip clipboard
   # Checking idling unidling manually to make sure it works fine before inducing flag feature
   When I run the :idle client command with:
     | svc_name | test-service |
-  Then the step should succeed 
+  Then the step should succeed
   And the output should contain:
     | The service "<%= project.name %>/test-service" has been marked as idled |
-  
+
   Given I have a pod-for-ping in the project
   When I execute on the pod:
     | /usr/bin/curl | --connect-timeout | 60 | <%= cb.service_ip %>:27017 |
   Then the step should succeed
   And the output should contain:
     | Hello OpenShift |
-  
+
   #Inducing flag disablement here an polling loop of 300 seconds for CNO to update it across the nodes by checking keywords in sdn logs
-  Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
+  Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
     | {"spec":{"defaultNetwork":{"openshiftSDNConfig":{"enableUnidling" : false}}}} |
   # Cleanup required to move operator config back to normal
   Given I register clean-up steps:
   """
-  as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
+  as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
     | {"spec":{"defaultNetwork":{"openshiftSDNConfig": null}}} |
   """
   And I wait up to 300 seconds for the steps to pass:
@@ -212,14 +216,14 @@ Feature: Operator related networking scenarios
   #We are idling service again and making sure it doesn't get unidle due to the above enableUnidling flag set to false
   When I run the :idle client command with:
     | svc_name | test-service |
-  Then the step should succeed 
+  Then the step should succeed
   And the output should contain:
     | The service "<%= project.name %>/test-service" has been marked as idled |
   When I execute on the "hello-pod" pod:
     | /usr/bin/curl | --connect-timeout | 60 | <%= cb.service_ip %>:27017 |
   Then the step should fail
   #Moving CNO config back to normal and expect service to unidle by polling loop of 300 seconds for CNO by checking keywords in sdn logs
-  Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
+  Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
     | {"spec":{"defaultNetwork":{"openshiftSDNConfig": null}}} |
   And I wait up to 300 seconds for the steps to pass:
     """
@@ -237,21 +241,21 @@ Feature: Operator related networking scenarios
   Then the step should succeed
   And the output should contain:
 	  | Hello OpenShift |
-    
+
   # @author anusaxen@redhat.com
   # @case_id OCP-21574
   @admin
   @destructive
-  Scenario: Should not allow to change the openshift-sdn config	
+  Scenario: Should not allow to change the openshift-sdn config
   #Trying to change network mode to Subnet or any other
   Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
     | {"spec": {"defaultNetwork": {"openshiftSDNConfig": {"mode": "Subnet"}}}} |
   #Cleanup for bringing CRD to original
   Given I register clean-up steps:
     """
-  as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
+  as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
     | {"spec": {"defaultNetwork": {"openshiftSDNConfig": null}}} |
-    """ 
+    """
   And 10 seconds have passed
   #Getting network operator pod name to leverage for its logs collection later
   Given I switch to cluster admin pseudo user
@@ -267,12 +271,12 @@ Feature: Operator related networking scenarios
   Then the step should succeed
   And the output should contain:
     | cannot change openshift-sdn |
-    
+
   # @author anusaxen@redhat.com
   # @case_id OCP-25856
   @admin
   @destructive
-  Scenario: CNO should delete non-relevant resources	
+  Scenario: CNO should delete non-relevant resources
     # Make sure that the multus is Running
     Given the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard
@@ -282,7 +286,7 @@ Feature: Operator related networking scenarios
     #Cleanup for bringing CRD to original at the end of this scenario
     Given I register clean-up steps:
     """
-    as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
+    as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
       | {"spec":{"additionalNetworks": null}} |
     """
     #Make sure dhcp daemon pods spun up after patching the CNO above
@@ -294,7 +298,7 @@ Feature: Operator related networking scenarios
       | app=dhcp-daemon |
     """
     # Erase additonalnetworks config from CNO and expect dhcp pods to die
-    Given I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
+    Given I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
       | {"spec":{"additionalNetworks": null}} |
 
     And I wait up to 60 seconds for the steps to pass:
@@ -305,7 +309,7 @@ Feature: Operator related networking scenarios
     #Patching config in network operator config CRD again for 2nd iteration check
     Given I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
       | {"spec":{"additionalNetworks": [{"name":"bridge-ipam-dhcp","namespace":"openshift-multus","rawCNIConfig":"{\"name\":\"bridge-ipam-dhcp\",\"cniVersion\":\"0.3.1\",\"type\":\"bridge\",\"master\":\"<%= cb.default_interface %>\",\"ipam\":{\"type\": \"dhcp\"}}","type":"Raw"}]}} |
-    
+
     # Now scale down CNO pod to 0 and makes sure dhcp pods still running and erase additionalnetworks config from CNO
     Given I use the "openshift-network-operator" project
     And I run the :scale client command with:
@@ -329,7 +333,7 @@ Feature: Operator related networking scenarios
     And status becomes :running of exactly <%= cb.desired_multus_replicas %> pods labeled:
       | app=dhcp-daemon |
     """
-    Given I successfully merge patch resource "networks.operator.openshift.io/cluster" with: 
+    Given I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
       | {"spec":{"additionalNetworks": null}} |
     # Now scale up CNO pod back to 1 and expect dhcp pods to disappear
     Given I use the "openshift-network-operator" project

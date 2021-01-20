@@ -94,7 +94,7 @@ Feature: Event related scenarios
   # @case_id OCP-10208
   Scenario: Event should show full failed reason when readiness probe failed
     Given I have a project
-    Given I obtain test data file "pods/tc533910/readiness-probe-exec.yaml"
+    Given I obtain test data file "pods/ocp10208/readiness-probe-exec.yaml"
     When I run the :create client command with:
       | f | readiness-probe-exec.yaml |
     Then the step should succeed

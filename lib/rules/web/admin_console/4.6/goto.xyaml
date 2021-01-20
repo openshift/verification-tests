@@ -129,6 +129,10 @@ goto_one_rc_page:
 goto_rc_list_page:
   url: k8s/ns/<project_name>/replicationcontrollers
 
+goto_daemonsets_page:
+  url: k8s/ns/<project_name>/daemonsets
+  action: wait_box_loaded
+  
 #pod
 goto_all_projects_pods_list:
   url: k8s/all-namespaces/pods
@@ -154,6 +158,7 @@ goto_replica_sets_page:
   url: k8s/ns/<project_name>/replicasets
 goto_one_rs_page:
   url: k8s/ns/<project_name>/replicasets/<rs_name>
+  action: wait_box_loaded
 
 #routes
 goto_routes_page:
@@ -172,6 +177,7 @@ goto_imagestreams_page:
   url: k8s/ns/<project_name>/imagestreams
 goto_one_imagestream_page:
   url: k8s/ns/<project_name>/imagestreams/<imagestream_name>
+  action: wait_box_loaded
 
 #templateinstance
 goto_one_templateinstance_page:
@@ -190,7 +196,7 @@ goto_create_app_from_imagestream_page:
 goto_create_app_from_template_page:
   params:
     template_namespace: openshift
-  url: catalog/instantiate-template?template==<template_name>&template-ns=<template_namespace>&preselected-ns=<project_name>
+  url: catalog/instantiate-template?template=<template_name>&template-ns=<template_namespace>&preselected-ns=<project_name>
 
 # monitoring
 goto_monitoring_metrics_page:
@@ -206,6 +212,21 @@ goto_alertmanagerconfig_page:
   action: wait_box_loaded
 goto_monitoring_db_k8s_resource_pod:
   url: monitoring/dashboards/grafana-dashboard-k8s-resources-pod
+goto_monitoring_db_elasticsearch:
+  url: monitoring/dashboards/grafana-dashboard-elasticsearch
+goto_monitoring_db_cluster_logging:
+  url: monitoring/dashboards/grafana-dashboard-cluster-logging
+
+# metering
+goto_chargeback_reports_page:
+  url: k8s/ns/<namespace>/metering.openshift.io~v1~Report
+  action: wait_box_loaded
+goto_one_reportquery_page:
+  url: /k8s/ns/<namespace>/metering.openshift.io~v1~ReportQuery/<reportquery_name>
+  action: wait_box_loaded
+goto_one_report_page:
+  url: /k8s/ns/<namespace>/metering.openshift.io~v1~Report/<report_name>
+  action: wait_box_loaded
 
 #node
 goto_node_page:
@@ -236,6 +257,7 @@ goto_installed_operators_page:
   action: wait_box_loaded
 goto_all_installed_operators_page:
   url: k8s/all-namespaces/operators.coreos.com~v1alpha1~ClusterServiceVersion
+  action: wait_table_loaded
 goto_operator_subscription_page:
   url: operatorhub/subscribe?pkg=<package_name>&catalog=<catalog_name>&catalogNamespace=openshift-marketplace&targetNamespace=<target_namespace>
   action: wait_box_loaded
@@ -250,6 +272,17 @@ goto_csv_subscription_page:
 goto_operand_list_page:
   url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion/<csv_name>/<operand_name>
   action: wait_box_loaded
+goto_operand_details_page:
+  url: /k8s/ns/<project_name>/clusterserviceversions/<csv_name>/<operand_group>~<operand_version>~<operand_kind>/<operand_name>
+  action: wait_box_loaded
+goto_operand_resources_page:
+  url: /k8s/ns/<project_name>/clusterserviceversions/<csv_name>/<operand_group>~<operand_version>~<operand_kind>/<operand_name>/resources
+  action: wait_box_loaded
+goto_operand_events_page:
+  params:
+    tab_name: Events
+  action: goto_operand_details_page
+  action: click_tab
 goto_operator_all_instance_page:
   url: k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion/<csv_name>/instances
   action: wait_box_loaded
@@ -263,6 +296,7 @@ goto_machineconfig_pools_page:
   url: k8s/cluster/machineconfiguration.openshift.io~v1~MachineConfigPool
 goto_machine_sets_page:
   url: k8s/ns/openshift-machine-api/machine.openshift.io~v1beta1~MachineSet
+  action: wait_box_loaded
 goto_machineautoscaler_list_page:
   url: k8s/ns/openshift-machine-api/autoscaling.openshift.io~v1beta1~MachineAutoscaler
 goto_one_machineautoscaler_page:
@@ -271,6 +305,7 @@ goto_one_machineautoscaler_page:
 #crd
 goto_crds_page:
   url: k8s/cluster/customresourcedefinitions
+  action: wait_box_loaded
 goto_crd_instances_page:
   url: k8s/cluster/customresourcedefinitions/<crd_definition>/instances
 goto_consoleyamlsample_crd_instances_page:
@@ -295,6 +330,7 @@ goto_machinehealthcheck_page:
 #user
 goto_users_list_page:
   url: k8s/cluster/user.openshift.io~v1~User
+  action: wait_table_loaded
 goto_namespace_role_rolebinding_page:
   url: k8s/ns/<project_name>/roles/<role_name>/bindings
   action: wait_box_loaded

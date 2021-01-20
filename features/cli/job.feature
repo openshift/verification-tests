@@ -4,7 +4,7 @@ Feature: job.feature
   # @case_id OCP-11206
   Scenario: Create job with multiple completions
     Given I have a project
-    Given I obtain test data file "templates/tc511597/job.yaml"
+    Given I obtain test data file "templates/ocp11206/job.yaml"
     When I run the :create client command with:
       | f | job.yaml |
     Then the step should succeed
@@ -22,7 +22,7 @@ Feature: job.feature
     When I run the :logs client command with:
       | resource_name | <%= cb.pilog %> |
     Then the step should succeed
-    And the output should contain "3.14159"
+    And the output should contain "hello-openshift"
     When I run the :delete client command with:
       | object_type | job |
       | object_name_or_id | pi |
@@ -34,12 +34,12 @@ Feature: job.feature
     Then the step should succeed
     And the output should not contain "pi-"
     """
-    Given I obtain test data file "templates/tc511597/job.yaml"
+    Given I obtain test data file "templates/ocp11206/job.yaml"
     When I run oc create over "job.yaml" replacing paths:
       | ["spec"]["completions"] | -1 |
     Then the step should fail
     And the output should contain "must be greater than or equal to 0"
-    Given I obtain test data file "templates/tc511597/job.yaml"
+    Given I obtain test data file "templates/ocp11206/job.yaml"
     When I run oc create over "job.yaml" replacing paths:
       | ["spec"]["completions"] | 0.1 |
     Then the step should fail
@@ -66,7 +66,7 @@ Feature: job.feature
     When I run the :logs client command with:
       | resource_name | <%= cb.pilog %> |
     Then the step should succeed
-    And the output should contain "3.14159"
+    And the output should contain "hello-openshift"
     # Delete job and check job and pod
     When I run the :delete client command with:
       | object_type       | job  |
@@ -483,7 +483,7 @@ Feature: job.feature
        | exec_command     | sleep        |
        | exec_command_arg | 300          |
     Then the step should fail
-    And the output should contain: 
+    And the output should contain:
        | Invalid value: "30 25 15 1 3": End of range (25) above maximum (23): 25 |
     When I run the :create_cronjob client command with:
        | name             | sjc          |

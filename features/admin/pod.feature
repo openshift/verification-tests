@@ -42,25 +42,6 @@ Feature: pod related features
       | Hello OpenShift |
 
   # @author chezhang@redhat.com
-  # @case_id OCP-10345
-  @admin
-  @destructive
-  Scenario: pod node label selector must be consistent with its project node label selector
-    Given I have a project
-    Given a 5 characters random string of type :dns is stored into the :proj_name clipboard
-    When I run the :oadm_new_project admin command with:
-      | project_name  | <%= cb.proj_name %> |
-      | node_selector | os=rhel             |
-      | admin         | <%= user.name %>    |
-    Then the step should succeed
-    Given I obtain test data file "pods/pod-with-nodeselector.yaml"
-    When I run the :create admin command with:
-      | f | pod-with-nodeselector.yaml |
-      | n | <%= cb.proj_name %>                                                                                |
-    Then the step should fail
-    And the output should contain "pod node label selector conflicts with its project node label selector"
-
-  # @author chezhang@redhat.com
   # @case_id OCP-11116
   @admin
   @destructive
@@ -239,7 +220,7 @@ Feature: pod related features
     Then the step should succeed
     Given SCC "privileged" is added to the "default" user
     Given I store the schedulable nodes in the :nodes clipboard
-    Given I obtain test data file "secrets/tc483170/secret-nginx-2.yaml"
+    Given I obtain test data file "secrets/ocp12338/secret-nginx-2.yaml"
     When I run the :create client command with:
       | f | secret-nginx-2.yaml |
     Then the step should succeed
@@ -254,7 +235,7 @@ Feature: pod related features
     Then the output should match:
       | password:\\s+11 bytes |
       | username:\\s+9 bytes  |
-    Given I obtain test data file "secrets/tc483170/secret-pod-nginx-2.yaml"
+    Given I obtain test data file "secrets/ocp12338/secret-pod-nginx-2.yaml"
     When I run oc create over "secret-pod-nginx-2.yaml" replacing paths:
       | ["spec"]["nodeName"] | <%= cb.nodes[0].name %> |
     And the step should succeed

@@ -1,9 +1,0 @@
-{
-    "kind": "ImageStream",
-    "apiVersion": "v1",
-    "metadata": {
-      "name": "tc510529",
-      "creationTimestamp": null
-    },
-    "spec": { }
-}

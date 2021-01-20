@@ -44,7 +44,7 @@ Feature: build 'apps' with CLI
   # @author pruan@redhat.com
   Scenario Outline: when delete the bc,the builds pending or running should be deleted
     Given I have a project
-    Given I obtain test data file "build/tc<number>/test-buildconfig.json"
+    Given I obtain test data file "build/<number>/test-buildconfig.json"
     When I run the :create client command with:
       | f | test-buildconfig.json |
     Then the step should succeed
@@ -61,9 +61,9 @@ Feature: build 'apps' with CLI
       | ruby-sample-build |
 
     Examples:
-      | number | build_status |
-      | 517367 | :complete    | # @case_id OCP-11224
-      | 517368 | :failed      | # @case_id OCP-11550
+      | number   | build_status |
+      | ocp11224 | :complete    | # @case_id OCP-11224
+      | ocp11550 | :failed      | # @case_id OCP-11550
 
   # @author xiuwang@redhat.com
   # @case_id OCP-11133
@@ -131,9 +131,9 @@ Feature: build 'apps' with CLI
   Scenario: Create applications only with multiple db images
     Given I create a new project
     When I run the :new_app client command with:
-      | image_stream      | openshift/mongodb:latest               |
-      | image_stream      | openshift/mysql                        |
-      | docker_image      | centos/postgresql-96-centos7:latest    |
+      | image_stream      | openshift/mongodb:latest                             |
+      | image_stream      | openshift/mysql                                      |
+      | docker_image      | registry.access.redhat.com/rhscl/postgresql-96-rhel7 |
       | env               | MONGODB_USER=test                      |
       | env               | MONGODB_PASSWORD=test                  |
       | env               | MONGODB_DATABASE=test                  |
@@ -165,7 +165,7 @@ Feature: build 'apps' with CLI
     """
     And the output should contain:
       | 3.6 |
-    Given I wait for the "postgresql-96-centos7" service to become ready up to 300 seconds
+    Given I wait for the "postgresql-96-rhel7" service to become ready up to 300 seconds
     And I get the service pods
     And I wait up to 120 seconds for the steps to pass:
     """
@@ -182,7 +182,7 @@ Feature: build 'apps' with CLI
   # @case_id OCP-11227
   Scenario: Add multiple source inputs
     Given I have a project
-    Given I obtain test data file "templates/tc517667/ruby22rhel7-template-sti.json"
+    Given I obtain test data file "templates/ocp11227/ruby22rhel7-template-sti.json"
     When I run the :new_app client command with:
       | file | ruby22rhel7-template-sti.json |
     Given the "ruby-sample-build-1" build completes
@@ -206,7 +206,7 @@ Feature: build 'apps' with CLI
   # @case_id OCP-10771
   Scenario: Add a image with multiple paths as source input
     Given I have a project
-    Given I obtain test data file "templates/tc517666/ruby22rhel7-template-sti.json"
+    Given I obtain test data file "templates/ocp10771/ruby22rhel7-template-sti.json"
     When I run the :new_app client command with:
       | file | ruby22rhel7-template-sti.json |
     Given the "ruby-sample-build-1" build completes
@@ -224,7 +224,7 @@ Feature: build 'apps' with CLI
   Scenario: Using a docker image as source input using new-build cmd
     Given I have a project
     When I run the :tag client command with:
-      | source | docker.io/python:latest |
+      | source | quay.io/openshifttest/python:3.6 |
       | dest   | python:latest |
     Then the step should succeed
     And the "python" image stream becomes ready
@@ -246,7 +246,7 @@ Feature: build 'apps' with CLI
     Given I get project builds
     #Create a deploymentconfig to generate pods to test on,
     #Avoids the use of direct docker commands.
-    When I obtain test data file "templates/tc517670/dc.json"
+    When I obtain test data file "templates/ocp11943/dc.json"
     Then the step should succeed
     Given I replace lines in "dc.json":
       | replaceme | final-app |
@@ -274,7 +274,7 @@ Feature: build 'apps' with CLI
       | image_name | python |
       | all | true |
       | confirm | true |
-      | from | docker.io/openshift/python-33-centos7 |
+      | from | quay.io/openshifttest/ruby-25-centos7 |
       | n | <%= project.name %> |
     Then the step should succeed
     Given I get project builds
@@ -284,12 +284,11 @@ Feature: build 'apps' with CLI
   # @case_id OCP-11776
   Scenario: Cannot create secret from local file and with same name via oc new-build
     Given I have a project
-    #Reusing similar secrets to TC #519256
-    Given I obtain test data file "secrets/tc519256/testsecret1.json"
+    Given I obtain test data file "secrets/testsecret1.json"
     When I run the :create client command with:
       | f | testsecret1.json |
     Then the step should succeed
-    Given I obtain test data file "secrets/tc519256/testsecret2.json"
+    Given I obtain test data file "secrets/testsecret2.json"
     When I run the :create client command with:
       | f | testsecret2.json |
     Then the step should succeed
@@ -312,7 +311,7 @@ Feature: build 'apps' with CLI
   # @case_id OCP-11552
   Scenario: Using a docker image as source input for docker build
     Given I have a project
-    Given I obtain test data file "templates/tc517668/ruby22rhel7-template-docker.json"
+    Given I obtain test data file "templates/ocp11552/ruby22rhel7-template-docker.json"
     When I run the :new_app client command with:
       | file | ruby22rhel7-template-docker.json |
     Given the "ruby-sample-build-1" build completes
@@ -328,11 +327,11 @@ Feature: build 'apps' with CLI
   @admin
   Scenario Outline: Do sti/custom build with no inputs in buildconfig
     Given I have a project
-    Given I obtain test data file "build/tc525736/nosrc-setup.json"
+    Given I obtain test data file "build/ocp11580/nosrc-setup.json"
     When I run the :create client command with:
       | f | nosrc-setup.json |
     Then the step should succeed
-    Given I obtain test data file "build/tc525736/nosrc-test.json"
+    Given I obtain test data file "build/ocp11580/nosrc-test.json"
     When I run the :create client command with:
       | f | nosrc-test.json  |
     When I get project bc
@@ -349,7 +348,7 @@ Feature: build 'apps' with CLI
       | object_type       | bc        |
       | object_name_or_id | <bc_name> |
     Then the step should succeed
-    Given I obtain test data file "build/tc525736/<file_name>"
+    Given I obtain test data file "build/ocp11580/<file_name>"
     When I run the :create client command with:
       | f | <file_name> |
     When I get project build_config named "<bc_name>"
@@ -655,9 +654,10 @@ Feature: build 'apps' with CLI
     And the output should match:
       | .*one or more resources.* |
     When I run the :new_app client command with:
-      | file | https://raw.githubusercontent.com/openshift/origin/master/examples/sample-app/application-template-dockerbuild.json |
+      | app_repo     | https://github.com/openshift/ruby-hello-world |
+      | image_stream | openshift/ruby:2.6                            |
     Then the step should succeed
-    And the "ruby-sample-build-1" build becomes :running
+    And the "ruby-hello-world-1" build becomes :running
     When I run the :logs client command with:
       | resource_name | |
     Then the step should fail
@@ -678,7 +678,7 @@ Feature: build 'apps' with CLI
       | app_repo     | https://github.com/openshift/ruby-hello-world.git |
       | image_stream | ruby:latest                                       |
     Then the step should succeed
-    Given I obtain test data file "templates/tc539699/build.yaml"
+    Given I obtain test data file "templates/ocp11023/build.yaml"
     When I run the :create client command with:
       | f | build.yaml |
     Then the step should succeed

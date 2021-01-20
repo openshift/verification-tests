@@ -378,12 +378,13 @@ Given /^I enable image-registry default route$/ do
   org_proj_name = project(generate: false).name rescue nil
 
   step 'I run the :patch admin command with:', table(%{
-      | resource      | configs.imageregistry.operator.openshift.io |
-      | resource_name | cluster                                     |
-      | p             | {"spec":{"defaultRoute":true}}              |
-      | type          | merge                                       |
+      | resource      | configs.imageregistry.operator.openshift.io                 |
+      | resource_name | cluster                                                     |
+      | p             | {"spec":{"defaultRoute":true,"managementState": "Managed"}} |
+      | type          | merge                                                       |
   })
   step %Q/the step should succeed/
+  step %Q/admin waits for the "image-registry" service to become ready in the "openshift-image-registry" project/
   step %Q/admin waits for the "default-route" route to appear in the "openshift-image-registry" project up to 120 seconds/
   project(org_proj_name) if org_proj_name
 end

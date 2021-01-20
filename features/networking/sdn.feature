@@ -335,12 +335,12 @@ Feature: SDN related networking scenarios
     And the output should contain "connected"
     #Checking controller iteration 2
     When I execute on the "<%= cb.ovn_master_pod %>" pod:
-      | ls -l /var/run/ovn/ |
+      | bash | -c | ls -l /var/run/ovn/ |
     Then the step should succeed
     And evaluation of `@result[:response].match(/ovn-controller.\d*\.ctl/)[0]` is stored in the :controller_pid_file clipboard
     #Checking controller iteration 3
     When I execute on the "<%= cb.ovn_master_pod %>" pod:
-      | ovn-appctl -t /var/run/ovn/<%= cb.controller_pid_file %> connection-status |
+      | bash | -c | ovn-appctl -t /var/run/ovn/<%= cb.controller_pid_file %> connection-status |
     Then the step should succeed
     And the output should contain "connected"
     #Checking controller iteration 4
@@ -412,3 +412,18 @@ Feature: SDN related networking scenarios
       | since         | 30s                            |
     And the output should contain:
       | Not applying unsafe change: invalid configuration |
+
+  # @author zzhao@redhat.com
+  # @case_id OCP-36287
+  @admin
+  @destructive
+  Scenario: Netnamespace should be recreated after deleting it before the project is deleted
+    Given the env is using "OpenShiftSDN" networkType
+    Given I have a project
+    And admin checks that the "<%= project.name %>" net_namespace exists
+    Given admin ensures "<%= project.name %>" netnamespace is deleted
+    And admin ensures "<%= project.name %>" project is deleted
+    When I run the :new_project client command with:
+      | project_name | <%= project.name %> |
+    Then the step should succeed
+    And admin checks that the "<%= project.name %>" net_namespace exists

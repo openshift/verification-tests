@@ -27,6 +27,7 @@ Given /^I open admin console in a browser$/ do
                                password: user.password,
                                idp: env.idp)
   raise "cannot login to cluster console" unless @result[:success]
+  step "I run the :navigate_to_admin_console web action"
   browser.base_url = browser.url.sub(%r{(https://[^/]+/).*}, "\\1")
 end
 

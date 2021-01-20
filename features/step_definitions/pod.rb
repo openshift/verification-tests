@@ -248,6 +248,18 @@ Given /^I collect the deployment log for pod "(.+)" until it disappears$/ do |po
   @result  = res_cache
 end
 
+Given /^I collect the deployment log for pod "(.+)" until it becomes :([^\s]*?)$/ do |name, status|
+  opts = {resource_name: name}
+  timeout = 15 * 60   # just put a timeout so we don't hang there indefintely
+  podstatus = pod(name).wait_till_status(status.to_sym, user, timeout)
+  unless podstatus[:success]
+    logger.error(podstatus[:response])
+    raise "pod #{name} didn't become #{status}"
+  end
+
+  @result = user.cli_exec(:logs, **opts)
+end
+
 # pod_info is the user pod, for example.... deployment-example
 # the step will do 'docker ps | grep deployment-example' to filter out a target
 # TODO: cri-o is not implemented yet
@@ -269,3 +281,22 @@ Given /^the system container id for the#{OPT_QUOTED} pod is stored in the#{OPT_S
   cb[cb_name] = system_pod_container_id[1].strip
 end
 
+Given /^I check containers cpu request for pod named #{QUOTED} under limit:$/ do |pod_name, table|
+  container_cpu_hash = table.rows_hash
+  step %Q/I run the :get client command with:/, table(%{
+    | resource      | pods                                                                           |
+    | resource_name | #{pod_name}                                                                    |
+    | o             | go-template={{range.spec.containers}}{{.resources.requests.cpu}}{{"#"}}{{end}} |
+  })
+  cpus=@result[:stdout].split(/#/).map{|n| n.delete('m').to_i}
+  step %Q/I run the :get client command with:/, table(%{
+    | resource      | pods                                                         |
+    | resource_name | #{pod_name}                                                  |
+    | o             | go-template={{range.spec.containers}}{{.name}}{{"#"}}{{end}} |
+  })
+  containers=@result[:stdout].split(/#/)
+  for i in 0..containers.length-1
+    underlimit=container_cpu_hash.include?(containers[i])?cpus[i]<container_cpu_hash[containers[i]].to_i : cpus[i]<container_cpu_hash["default_limit"].to_i
+    raise "#{containers[i]} cpu limit #{cpus[i]} is over" unless underlimit    
+  end    
+end

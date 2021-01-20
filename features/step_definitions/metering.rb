@@ -40,6 +40,7 @@ Given /^metering service has been installed successfully(?: using (OLM|OperatorH
     # there's an existing meteringconfig in the project.  Check if there are
     # subscription and operatorgroup
     mconfig = meteringconfigs.first
+    cb[:meteringconfig_name] = mconfig.name
     cb.metering_namespace = project(mconfig.name)
     metering_name = mconfig.name
     subs = BushSlicer::Subscription.list(user: admin, project: project)
@@ -72,10 +73,13 @@ Given /^I install metering service using:$/ do | table |
   # if we have an existing metering installation and the meteringconfig hive
   # storage type is different, then we delete the existing meteringconfig
   if metering_config(cb.metering_ns).exists?
+    logger.info("Found existing meteringconfig, removing it...")
     if metering_config(cb.metering_ns).hive_type != storage_type
       step %Q(I ensure "<%= cb.metering_ns %>" meteringconfig is deleted)
     end
   end
+  # it takes time for OLM to create the CRD,
+  step %Q(I wait for the "meteringconfigs.metering.openshift.io" custom_resource_definition to appear up to 200 seconds)
   step %Q(I run oc create as admin over ERB test file: #{metering_config})
   step %Q(all metering related pods are running in the project)
   step %Q/all reportdatasources are importing from Prometheus/
@@ -294,8 +298,10 @@ Given /^the#{OPT_QUOTED} metering service is uninstalled using OLM$/ do | meteri
   step %Q/I switch to cluster admin pseudo user/ unless env.is_admin? user
   if project(metering_ns).exists?
     step %Q(I ensure "#{metering_ns}" meteringconfig is deleted)
-    step %Q(I ensure "metering-ocp-sub" subscription is deleted)
-    step %Q(I ensure "metering-ocp-og" subscription is deleted)
+    # need to remove CRDs as well.
+    step %Q(I remove all custom_resource_definition in the project with labels:), table(%{
+      | operators.coreos.com/metering-ocp.openshift-metering= |
+      })
     step %Q/I ensure "#{metering_ns}" project is deleted/
   end
 end
@@ -502,6 +508,7 @@ end
 # 3. create PV
 # @return clipboard with :default_sc, :nfs_svc_ip, :sc
 Given /^I set up environment for metering sharedPVC$/ do
+  logger.info("Setting up environment for metering sharedPVC...")
   step %Q(I use the "#{project.name}" project)
   step %Q(I have a NFS service in the project) unless service('nfs-service').exists?
   cb[:nfs_svc_ip] = service('nfs-service').ip
@@ -519,6 +526,9 @@ Given /^I set up environment for metering sharedPVC$/ do
   end
   step %Q(I run oc create as admin over ERB test file: metering/configs/pv_metering.yaml)
   step %Q(the step should succeed)
+  step %Q/a pod becomes ready with labels:/, table(%{
+    | app=metering-operator |
+  })
 end
 
 # @return set cb.metering_project_setup_done to be DRY
@@ -553,9 +563,11 @@ Given /^I prepare OLM via CLI$/ do
   step %Q(I set operator channel)
   cb[:default_channel] = cb.channel
   # 2. create operatorgroup
+  logger.info("Creating metering operatorgroup...")
   step %Q(I run oc create as admin over ERB test file: metering/configs/metering_operatorgroup.yaml)
   #step %Q/the step should succeed/
   # 3. create subscription
+  logger.info("Creating metering subscription...")
   step %Q(I run oc create as admin over ERB test file: metering/configs/metering_subscription.yaml)
   #step %Q/the step should succeed/
 end

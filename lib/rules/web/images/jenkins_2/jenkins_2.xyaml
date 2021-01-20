@@ -593,7 +593,7 @@ jenkins_oauth_login:
   action: jenkins_verify_logged_in
 
 jenkins_multi_oauth_login:
-  url: /securityRealm/commenceLogin?from=%2F
+  url: /
   scripts:
   - command: |
         var Logtext = document.getElementsByClassName("btn btn-lg btn-primary")[0]

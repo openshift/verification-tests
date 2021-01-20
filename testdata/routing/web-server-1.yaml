@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    name: web-server
+  name: web-server-1
+spec:
+  containers:
+  - image: quay.io/openshifttest/nginx-alpine@sha256:5d3f3372288b8a93fc9fc7747925df2328c24db41e4b4226126c3af293c5ad88
+    name: nginx
+    ports:
+    - containerPort: 8080
+    - containerPort: 8443

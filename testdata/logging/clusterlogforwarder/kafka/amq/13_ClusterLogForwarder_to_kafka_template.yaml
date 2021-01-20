@@ -1,0 +1,43 @@
+kind: Template
+apiVersion: v1
+metadata:
+  name: kafka-forwarder
+  annotations:
+    description: "Deploy AMQ "
+    tags: "amq-aosqe"
+objects:
+- apiVersion: logging.openshift.io/v1
+  kind: ClusterLogForwarder
+  metadata:
+    name: instance
+    namespace: openshift-logging
+  spec:
+    outputs:
+      - name: kafka-infra
+        url: tls://my-cluster-kafka-bootstrap.${AMQ_NAMESPACE}.svc.cluster.local:9092/topic-logging-infra
+        type: kafka
+      - name: kafka-app
+        url: tls://my-cluster-kafka-bootstrap.${AMQ_NAMESPACE}.svc.cluster.local:9092/topic-logging-app
+        type: kafka
+      - name: kafka-audit
+        url: tls://my-cluster-kafka-bootstrap.${AMQ_NAMESPACE}.svc.cluster.local:9092/topic-logging-audit
+        type: kafka
+    pipelines:
+      - name: test-infra
+        inputRefs:
+        - infrastructure
+        outputRefs:
+        - kafka-infra
+      - name: test-app
+        inputRefs:
+        - application
+        outputRefs:
+        - kafka-app
+      - name: test-audit
+        inputRefs:
+        - audit
+        outputRefs:
+        - kafka-audit
+parameters:
+  - name: AMQ_NAMESPACE
+    value: "amq-aosqe"

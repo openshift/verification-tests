@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hello-openshift
+  labels:
+    role: hello-openshift
+spec:
+  containers:
+    - name: hello-openshift
+      image: quay.io/openshifttest/hello-openshift@sha256:424e57db1f2e8e8ac9087d2f5e8faea6d73811f0b6f96301bc94293680897073
+      ports:
+        - name: nfs
+          containerPort: 2049
+      securityContext:
+        privileged: false
+  securityContext:
+    supplementalGroups:
+      - 1234
+      - 5678

@@ -2,21 +2,21 @@ Feature: Testing ingress to route object
 
   # @author zzhao@redhat.com
   # @case_id OCP-18789
-  Scenario: Ingress generic support 
+  Scenario: Ingress generic support
     Given the master version >= "3.10"
     Given I have a project
     And I store an available router IP in the :router_ip clipboard
-    Given I obtain test data file "routing/caddy-docker.json"
+    Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
-      | f | caddy-docker.json |
+      | f | web-server-1.yaml |
     Then the step should succeed
-    And the pod named "caddy-docker" becomes ready
-    Given I obtain test data file "routing/unsecure/service_unsecure.json"
+    And the pod named "web-server-1" becomes ready
+    Given I obtain test data file "routing/service_unsecure.yaml"
     When I run the :create client command with:
-      | f | service_unsecure.json |
+      | f | service_unsecure.yaml |
     Then the step should succeed
     Given I obtain test data file "routing/ingress/test-ingress.json"
-    When I run the :create client command with: 
+    When I run the :create client command with:
       | f | test-ingress.json |
     Then the step should succeed
     When I run the :get client command with:
@@ -32,7 +32,7 @@ Feature: Testing ingress to route object
       | foo.bar.com:80:<%= cb.router_ip[0] %> |
       | http://foo.bar.com/ |
     Then the step should succeed
-    And the output should contain "Hello-OpenShift-1"
+    And the output should contain "Hello-OpenShift web-server-1"
     When I execute on the "hello-pod" pod:
       | curl |
       | --resolve |

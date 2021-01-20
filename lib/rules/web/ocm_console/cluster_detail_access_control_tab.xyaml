@@ -110,18 +110,18 @@ check_popover_content_for_user_id:
     op: click
   elements:
   - selector:
-      xpath: //div[@class='tippy-content']//div[@aria-label='User IDs']/div[@class='pf-c-popover__content']//p[contains(.,'User IDs are matched by the cluster')]
+      xpath: //div[@aria-label='User IDs']/div[@class='pf-c-popover__content']//p[contains(.,'User IDs are matched by the cluster')]
   - selector:
-      xpath: //div[@class='tippy-content']//div[@aria-label='User IDs']/div[@class='pf-c-popover__content']//button[@aria-label='Close']
+      xpath: //div[@aria-label='User IDs']/div[@class='pf-c-popover__content']//button[@aria-label='Close']
 check_popover_content_for_user_group:
   element:
     <<: *user_group_helper_button
     op: click
   elements:
   - selector:
-      xpath: //div[@class='tippy-content']//div[@aria-label='Groups']/div[@class='pf-c-popover__content']//p[text()='Groups are mapped to role bindings on the cluster.']/a[text()='OpenShift 4 documentation']
+      xpath: //div[@aria-label='Groups']/div[@class='pf-c-popover__content']//p[text()='Groups are mapped to role bindings on the cluster.']/a[text()='OpenShift 4 documentation']
   - selector:
-      xpath: //div[@class='tippy-content']//div[@aria-label='Groups']/div[@class='pf-c-popover__content']//button[@aria-label='Close']
+      xpath: //div[@aria-label='Groups']/div[@class='pf-c-popover__content']//button[@aria-label='Close']
 check_the_user_list_item:
   elements:
   - selector:
@@ -162,4 +162,110 @@ click_add_user_button_on_page:
 click_cancel_add_user_button:
   element:
     <<: *cancel_add_user_button
+    op: click
+check_basic_elements_on_AWS_infrastructure_access_tab:
+  elements:
+  - selector:
+      xpath: //div/h3[text()='AWS infrastructure access']
+    timeout: 100
+  - selector:
+      xpath: //div/p[contains(.,'Grant permission to view or manage the AWS infrastructure')]
+    timeout: 50
+  - selector:
+      xpath: //div/p/a[@href='https://console.aws.amazon.com/console/home' and text()='Log in to your aws account.']
+    timeout: 50
+check_grant_role_button_in_card:
+  element: &grant_role_button_in_card
+    selector:
+      xpath: //div/h3[text()='AWS infrastructure access']/../button[text()='Grant role']
+check_grant_role_button_in_dialog:
+  element: &grant_role_button_in_dialog
+    selector:
+      xpath: //footer/button[text()='Grant role']
+click_grant_role_button_in_card:
+  element:
+    <<: *grant_role_button_in_card
+    op: click
+click_grant_role_button_in_dialog:
+  element:
+    <<: *grant_role_button_in_dialog
+    op: click
+check_grant_AWS_infrastructure_role_dialog_loaded:
+  elements:
+  - selector:
+      xpath: //header/h1[text()='Grant AWS infrastructure role']
+    timeout: 300
+  - selector:
+      xpath: //label/span[text()='AWS IAM ARN']
+    timeout: 300
+  - selector:
+      xpath: //form/h3[text()='Role']
+    timeout: 300
+check_aws_iam_arn_input_field:
+  element: &aws_iam_arn_input_field
+    selector:
+      xpath: //div/input[@id='aws-iam-arn-input']
+input_aws_iam_arn:
+  element:
+    <<: *aws_iam_arn_input_field
+    op: send_keys <aws_iam_arn>
+choose_AWS_infrastructure_role:
+  element:
+    selector:
+      xpath: //label[text()='<role>']
+    op: click
+grant_AWS_infrastructure_role:
+  action: click_grant_role_button_in_card
+  action: check_grant_AWS_infrastructure_role_dialog_loaded
+  action: input_aws_iam_arn
+  action: choose_AWS_infrastructure_role
+  action: click_grant_role_button_in_dialog
+  action: check_AWS_infrastructure_role_created
+check_AWS_infrastructure_role_created:
+  elements:
+  - selector:
+      xpath: //tr/td[text()='<aws_iam_arn>']
+    timeout: 300
+  - selector:
+      xpath: //tr/td[text()='Network management']
+check_AWS_infrastructure_role_list_structure:
+  action: check_arn_help_message
+  action: click_close_button_on_arn_help_dialog
+  action: check_AWS_infrastructure_role_list_column
+check_arn_help_message:
+  element:
+    selector:
+      xpath: //tr/th[text()='ARN']/button/*[name()='svg']
+    op: click
+  element:
+    selector:
+      xpath: //div/p[text()='Amazon Resource Names (ARNs) uniquely identify AWS resources.']
+click_close_button_on_arn_help_dialog:
+  element:
+    selector:
+      xpath: //div[@role='dialog']//button[@aria-label='Close']
+    op: click
+check_AWS_infrastructure_role_list_column:
+  elements:
+  - selector:
+      xpath: //table//th[text()='ARN']
+    timeout: 300
+  - selector:
+      xpath: //table//th[text()='Role']
+  - selector:
+      xpath: //table//th[text()='Status']
+  - selector:
+      xpath: //table//th[text()='AWS OSD console URL']   
+delete_AWS_infrastructure_role:
+  action: click_AWS_infrastructure_role_action_dropdown
+  action: click_delete_button_in_AWS_infrastructure_role_action_dropdown
+click_AWS_infrastructure_role_action_dropdown:
+  element:
+    selector:
+      xpath: //tr/td[text()='<aws_iam_arn>']/../td[text()='<role>']/../td//button[@aria-label='Actions']
+    op: click
+click_delete_button_in_AWS_infrastructure_role_action_dropdown:
+  element:
+    selector:
+      xpath: //li/button[text()='Delete']
     op: click

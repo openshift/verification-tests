@@ -2,7 +2,6 @@
 Feature: Marketplace related scenarios
 
   # @author jiazha@redhat.com
-  # @case_id OCP-22618
   @admin
   @upgrade-prepare
   @users=upuser1,upuser2
@@ -26,6 +25,8 @@ Feature: Marketplace related scenarios
     Given the marketplace works well
     """
 
+  # @author jiazha@redhat.com
+  # @case_id OCP-22618
   @admin
   @upgrade-check
   @users=upuser1,upuser2

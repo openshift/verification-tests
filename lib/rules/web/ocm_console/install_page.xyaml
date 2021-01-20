@@ -15,7 +15,9 @@ go_to_gcp_upi_install_page:
     url: /openshift/install/gcp/user-provisioned
 go_to_vsphere_install_page:
     url: /openshift/install/vsphere/user-provisioned
-go_to_bare_metal_install_page:
+go_to_bare_metal_ipi_install_page:
+    url: /openshift/install/metal/installer-provisioned
+go_to_bare_metal_upi_install_page:
     url: /openshift/install/metal/user-provisioned
 go_to_ibm_z_install_page:
     url: /openshift/install/ibmz/user-provisioned
@@ -23,8 +25,10 @@ go_to_openstack_ipi_install_page:
     url: /openshift/install/openstack/installer-provisioned
 go_to_openstack_upi_install_page:
     url: /openshift/install/openstack/user-provisioned
-go_to_rhv_install_page:
+go_to_rhv_ipi_install_page:
     url: /openshift/install/rhv/installer-provisioned
+go_to_rhv_upi_install_page:
+    url: /openshift/install/rhv/user-provisioned
 go_to_power_upi_install_page:
     url: /openshift/install/power/user-provisioned
 go_to_codeready_install_page:
@@ -84,8 +88,6 @@ check_install_page:
     elements:
         - selector:
             xpath: //span[@class='infra-crc-icon-text' and text()='Powered by Red Hat CodeReady Containers']
-        - selector:
-            xpath: //h3[@class='pf-c-title pf-m-2xl' and text()='Select an infrastructure provider']
 required_install_page_items_loaded:
     element:
         selector:
@@ -316,6 +318,12 @@ check_install_page_common_part_two:
             xpath: //div[text()='To quickly create a cluster with the default options, run the following command:']
         - selector:
             xpath: //input[@value='./openshift-install create cluster']
+check_install_page_rhcos_part:
+    elements:
+        - selector:
+            xpath: //h3[text()='Red Hat Enterprise Linux CoreOS (RHCOS)']
+        - selector:
+            xpath: //p[text()='Download RHCOS to create machines for your cluster to use during installation.']
 check_aws_ipi_install_page:
     action: required_specific_provider_install_items_loaded 
     action: check_aws_ipi_page_title
@@ -424,6 +432,7 @@ check_gcp_upi_install_page:
     action: check_install_page_common_part_two
     action: check_data_collection_message_in_install_page
     action: check_install_page_part_three
+    action: check_install_page_rhcos_part
     elements:
         - selector:
             xpath: //h2[text()='Follow the documentation to configure your GCP account and run the installer']
@@ -432,13 +441,9 @@ check_gcp_upi_install_page:
         - selector:
             xpath: //a[contains(@href, 'installing_gcp/installing-gcp-user-infra.html') and text()='Get started']
         - selector:
-            xpath: //h3[text()='Red Hat Enterprise Linux CoreOS (RHCOS)']
-        - selector:
-            xpath: //p[text()='Download RHCOS to create machines for your cluster to use during installation.']
-        - selector:
             xpath: //a[contains(@href, '/installing-gcp-user-infra.html#installation-gcp-user-infra-rhcos_installing-gcp-user-infra') and text()='Learn more']
         - selector:
-            xpath: //a[contains(@href, 'https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/latest/latest/') and text()='Download RHCOS']
+            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-4.5.6-x86_64-gcp.x86_64.tar.gz') and text()='Download RHCOS tar']
 check_gcp_upi_page_title:
     scripts:
     - command: return document.title=='Install OpenShift 4 | Red Hat OpenShift Cluster Manager | GCP User-Provisioned Infrastructure'
@@ -452,6 +457,7 @@ check_vsphere_install_page:
     action: check_install_page_common_part_two
     action: check_data_collection_message_in_install_page
     action: check_install_page_part_three
+    action: check_install_page_rhcos_part
     elements:
         - selector:
             xpath: //h2[text()='Follow the instructions to configure your environment and install your cluster']
@@ -460,26 +466,57 @@ check_vsphere_install_page:
         - selector:
             xpath: //a[contains(@href, 'installing_vsphere/installing-vsphere.html') and text()='Get started']
         - selector:
-            xpath: //h3[text()='Red Hat Enterprise Linux CoreOS (RHCOS)']
-        - selector:
-            xpath: //p[text()='Download RHCOS to create machines for your cluster to use during installation.']
-        - selector:
             xpath: //a[contains(@href, 'installing-vsphere.html#installation-vsphere-machines_installing-vsphere') and text()='Learn more']
         - selector:
-            xpath: //a[contains(@href, 'https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/latest/latest/') and text()='Download RHCOS']
+            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-vmware.x86_64.ova') and text()='Download RHCOS OVA']
 check_vsphere_page_title:
     scripts:
     - command: return document.title=='Install OpenShift 4 | Red Hat OpenShift Cluster Manager | vSphere'
       expect_result: true
 
-check_bare_metal_install_page:
+check_linux_cli_download_button_in_install_page:
+    params:
+        os_name: Linux
+        os_link: linux.tar.gz
+    action: check_download_cli_button_in_install_page
+check_macos_cli_download_button_in_install_page:
+    params:
+        os_name: MacOS
+        os_link: mac.tar.gz
+    action: check_download_cli_button_in_install_page
+check_bare_metal_download_cli_button:
+    params:
+        installer_type: clients/ocp/latest
+    action: check_linux_cli_download_button_in_install_page
+    action: check_macos_cli_download_button_in_install_page
+    action: check_windows_download_button_in_install_page
+
+check_bare_metal_ipi_install_page:
     action: required_specific_provider_install_items_loaded 
-    action: check_bare_metal_page_title
+    action: check_bare_metal_ipi_page_title
+    action: check_bare_metal_download_cli_button
+    action: check_pull_secret_part_in_install_page
+    action: check_data_collection_message_in_install_page
+    action: check_install_page_part_three
+    elements:
+        - selector:
+            xpath: //h2[text()='Follow the instructions to configure your environment and install your cluster']
+        - selector:
+            xpath: //a[contains(@href, 'installing_bare_metal_ipi/ipi-install-installation-workflow.html') and text()='Get started']
+check_bare_metal_ipi_page_title:
+    scripts:
+    - command: return document.title=='Install OpenShift 4 | Red Hat OpenShift Cluster Manager | Bare Metal Installer-Provisioned Infrastructure'
+      expect_result: true
+
+check_bare_metal_upi_install_page:
+    action: required_specific_provider_install_items_loaded 
+    action: check_bare_metal_upi_page_title
     action: check_download_part_in_normal_install_page
     action: check_pull_secret_part_in_install_page
     action: check_install_page_common_part_two
     action: check_data_collection_message_in_install_page
     action: check_install_page_part_three
+    action: check_install_page_rhcos_part
     elements:
         - selector:
             xpath: //h2[text()='Follow the instructions to configure your environment and install your cluster']
@@ -488,14 +525,12 @@ check_bare_metal_install_page:
         - selector:
             xpath: //a[contains(@href, 'installing_bare_metal/installing-bare-metal.html') and text()='Get started']
         - selector:
-            xpath: //h3[text()='Red Hat Enterprise Linux CoreOS (RHCOS)']
-        - selector:
-            xpath: //p[text()='Download RHCOS to create machines for your cluster to use during installation.']
-        - selector:
             xpath: //a[contains(@href, 'installing_bare_metal/installing-bare-metal.html#creating-machines-bare-metal') and text()='Learn more']
         - selector:
-            xpath: //a[contains(@href, 'https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/latest/latest/') and text()='Download RHCOS']
-check_bare_metal_page_title:
+            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-installer.x86_64.iso') and text()='Download RHCOS ISO']
+        - selector:
+            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-metal.x86_64.raw.gz') and text()='Download RHCOS RAW']
+check_bare_metal_upi_page_title:
     scripts:
     - command: return document.title=='Install OpenShift 4 | Red Hat OpenShift Cluster Manager | Bare Metal User-Provisioned Infrastructure'
       expect_result: true
@@ -508,6 +543,7 @@ check_ibm_z_install_page:
     action: check_install_page_common_part_two
     action: check_data_collection_message_in_install_page
     action: check_install_page_part_three
+    action: check_install_page_rhcos_part
     elements:
         - selector:
             xpath: //h2[text()='Follow the instructions to configure your environment and install your cluster']
@@ -516,13 +552,15 @@ check_ibm_z_install_page:
         - selector:
             xpath: //a[contains(@href, 'installing_ibm_z/installing-ibm-z.html') and text()='Get started']
         - selector:
-            xpath: //h3[text()='Red Hat Enterprise Linux CoreOS (RHCOS)']
-        - selector:
-            xpath: //p[text()='Download RHCOS to create machines for your cluster to use during installation.']
-        - selector:
             xpath: //a[contains(@href, 'installing-ibm-z.html#installation-user-infra-machines-iso-ibm-z_installing-ibm-z') and text()='Learn more']
         - selector:
-            xpath: //a[contains(@href, 'https://mirror.openshift.com/pub/openshift-v4/s390x/dependencies/rhcos/latest/latest/') and text()='Download RHCOS']
+            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-installer-initramfs.s390x.img') and text()='Download RHCOS initramfs']
+        - selector:
+            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-installer-kernel-s390x') and text()='Download RHCOS kernel']
+        - selector:
+            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-dasd.s390x.raw.gz') and text()='Download RAW for DASD VM']
+        - selector:
+            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-metal.s390x.raw.gz') and text()='Download RAW for FCP VM']
 check_ibm_z_page_title:
     scripts:
     - command: return document.title=='Install OpenShift 4 | Red Hat OpenShift Cluster Manager | IBM Z'
@@ -556,6 +594,7 @@ check_openstack_upi_install_page:
     action: check_install_page_common_part_two
     action: check_data_collection_message_in_install_page
     action: check_install_page_part_three
+    action: check_install_page_rhcos_part
     elements:
         - selector:
             xpath: //h2[text()='Follow the instructions to configure your environment and install your cluster']
@@ -564,21 +603,17 @@ check_openstack_upi_install_page:
         - selector:
             xpath: //a[contains(@href, 'installing_openstack/installing-openstack-user.html') and text()='Get started']
         - selector:
-            xpath: //h3[text()='Red Hat Enterprise Linux CoreOS (RHCOS)']
-        - selector:
-            xpath: //p[text()='Download RHCOS to create machines for your cluster to use during installation.']
-        - selector:
             xpath: //a[contains(@href, 'installing-openstack-user.html#installation-osp-creating-image_installing-openstack-user') and text()='Learn more']
         - selector:
-            xpath: //a[contains(@href, 'https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/latest/latest/') and text()='Download RHCOS']
+            xpath: //a[contains(@href, '/rhcos-openstack.x86_64.qcow2.gz') and text()='Download RHCOS QCOW']
 check_openstack_upi_page_title:
     scripts:
     - command: return document.title=='Install OpenShift 4 | Red Hat OpenShift Cluster Manager | OpenStack User-Provisioned Infrastructure'
       expect_result: true
 
-check_rhv_install_page:
+check_rhv_ipi_install_page:
     action: required_specific_provider_install_items_loaded 
-    action: check_rhv_page_title
+    action: check_rhv_ipi_page_title
     action: check_download_part_in_normal_install_page
     action: check_pull_secret_part_in_install_page
     action: check_install_page_common_part_two
@@ -590,16 +625,18 @@ check_rhv_install_page:
         - selector:
             xpath: //p[text()='The installer will take about 45 minutes to run.']
         - selector:
-            xpath: //a[contains(@href, 'installing_rhv/installing-rhv-default.html') and text()='Get started']
-check_rhv_page_title:
+            xpath: //a[contains(@href, '/installing_rhv/installing-rhv-default.html') and text()='Get started']
+        - selector:
+            xpath: //a[contains(@href, '/installing_rhv/installing-rhv-customizations.html') and text()='install with customizations']
+check_rhv_ipi_page_title:
     scripts:
-    - command: return document.title=='Install OpenShift 4 | Red Hat OpenShift Cluster Manager | Red Hat Virtualization'
+    - command: return document.title=='Install OpenShift 4 | Red Hat OpenShift Cluster Manager | RHV Installer-Provisioned Infrastructure'
       expect_result: true
 
-check_power_upi_install_page:
+check_rhv_upi_install_page:
     action: required_specific_provider_install_items_loaded 
-    action: check_power_page_title
-    action: check_download_part_in_ppc64le_install_page
+    action: check_rhv_upi_page_title
+    action: check_download_part_in_normal_install_page
     action: check_pull_secret_part_in_install_page
     action: check_install_page_common_part_two
     action: check_data_collection_message_in_install_page
@@ -610,7 +647,36 @@ check_power_upi_install_page:
         - selector:
             xpath: //p[text()='The installer will take about 45 minutes to run.']
         - selector:
+            xpath: //a[contains(@href, '/installing_rhv/installing-rhv-user-infra.html') and text()='Get started']
+        - selector:
+            xpath: //a[contains(@href, '/installing_rhv/installing-rhv-customizations.html') and text()='install with customizations']
+check_rhv_upi_page_title:
+    scripts:
+    - command: return document.title=='Install OpenShift 4 | Red Hat OpenShift Cluster Manager | RHV User-Provisioned Infrastructure'
+      expect_result: true
+
+check_power_upi_install_page:
+    action: required_specific_provider_install_items_loaded 
+    action: check_power_page_title
+    action: check_download_part_in_ppc64le_install_page
+    action: check_pull_secret_part_in_install_page
+    action: check_install_page_common_part_two
+    action: check_data_collection_message_in_install_page
+    action: check_install_page_part_three
+    action: check_install_page_rhcos_part
+    elements:
+        - selector:
+            xpath: //h2[text()='Follow the instructions to configure your environment and install your cluster']
+        - selector:
+            xpath: //p[text()='The installer will take about 45 minutes to run.']
+        - selector:
             xpath: //a[contains(@href, 'installing_ibm_power/installing-ibm-power.html') and text()='Get started']
+        - selector:
+            xpath: //a[contains(@href, '/installing_ibm_power/installing-ibm-power.html#creating-machines-bare-metal-power') and text()='Learn more']
+        - selector:
+            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-installer.ppc64le.iso') and text()='Download RHCOS ISO']
+        - selector:
+            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-metal.ppc64le.raw.gz') and text()='Download RHCOS RAW']
 check_power_page_title:
     scripts:
     - command: return document.title=='Install OpenShift 4 | Red Hat OpenShift Cluster Manager | Power'
@@ -625,6 +691,8 @@ check_codeready_install_page:
         - selector:
             xpath: //h3[text()='CodeReady Containers archive']
         - selector:
+            xpath: //p[text()='Download and extract the CodeReady Containers archive for your operating system and place the executable in your']
+        - selector:
             xpath: //h2[text()='Follow the documentation to install CodeReady containers']
         - selector:
             xpath: //a[contains(@href, 'https://access.redhat.com/documentation/en-us/red_hat_codeready_containers') and text()='Get started']
@@ -633,7 +701,7 @@ check_codeready_install_page:
 required_codeready_install_items_loaded:
     elements:
         - selector:
-            xpath: //h1[text()="Install OpenShift 4 on a laptop with CodeReady Containers"]
+            xpath: //h1[text()="Install OpenShift on a laptop with CodeReady Containers"]
 check_codeready_page_title:
     scripts:
     - command: return document.title=='Install OpenShift 4 | Red Hat OpenShift Cluster Manager | CRC'
@@ -651,13 +719,7 @@ check_pre_release_page:
         - selector:
             xpath: //h3[text()='Feature Completion in Nightly Builds']
         - selector:
-            xpath: //p[contains(., 'the latest pre-release nightly builds')]
-        - selector:
-            xpath: //a[contains(@href, 'query_based_on=OCP4-4-blocker&query_format=advanced&target_release=4.5.0') and text()='test blocker bug list']
-        - selector:
             xpath: //a[@href='https://github.com/openshift/installer/tree/master/docs/user' and text()='latest installer documentation']
-        - selector:
-            xpath: //a[@href='https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/pre-release/latest' and contains(., 'Download RHCOS')]
         - selector:
             xpath: //a[@href='mailto:users@lists.openshift.redhat.com?subject=[dev preview build]' and text()='users@lists.openshift.redhat.com']
         - selector:

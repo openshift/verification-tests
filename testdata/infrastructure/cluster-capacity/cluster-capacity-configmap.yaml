@@ -12,7 +12,7 @@ data:
     spec:
       containers:
       - name: php-redis
-        image: gcr.io/google-samples/gb-frontend:v4
+        image: quay.io/openshifttest/gb-frontend:v4
         imagePullPolicy: Always
         resources:
           limits:
@@ -33,7 +33,7 @@ data:
     spec:
       containers:
       - name: php-redis
-        image: gcr.io/google-samples/gb-frontend:v4
+        image: quay.io/openshifttest/gb-frontend:v4
         imagePullPolicy: Always
         resources:
           limits:
@@ -59,7 +59,7 @@ data:
     spec:
       containers:
       - name: php-redis
-        image: gcr.io/google-samples/gb-frontend:v4
+        image: quay.io/openshifttest/gb-frontend:v4
         imagePullPolicy: Always
         resources:
           limits:

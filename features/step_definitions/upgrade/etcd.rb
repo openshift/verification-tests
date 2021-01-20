@@ -1,7 +1,7 @@
 Given /^etcd operator "([^"]*)" is removed successfully from "([^"]*)" project$/ do | name, proj_name|
   ensure_admin_tagged
   raise "!!! Error doesn't exist etcd operator: #{name} in this #{proj_name} project" unless subscription("#{name}").exists?
-  step %Q/I ensures "#{name}" subscription is deleted from the "#{proj_name}" project/
+  step %Q/I ensure "#{name}" subscription is deleted from the "#{proj_name}" project/
 
   step %Q/I run the :delete client command with:/, table(%{
     | object_type       | clusterserviceversion |
@@ -10,7 +10,7 @@ Given /^etcd operator "([^"]*)" is removed successfully from "([^"]*)" project$/
   })
   raise "Error removing CSV: #{name} in #{proj_name} project" unless @result[:success]
 
-  step %Q/I ensures "etcd-operator" deployment is deleted from the "#{proj_name}" project/
+  step %Q/I ensure "etcd-operator" deployment is deleted from the "#{proj_name}" project/
   logger.info("### etcd operator: #{name} is removed successfully from #{proj_name} namespace")
 
 end

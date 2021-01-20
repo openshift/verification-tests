@@ -1,10 +1,10 @@
-Feature: Builds and samples related metrics test 
+Feature: Builds and samples related metrics test
 
   # @author xiuwang@redhat.com
   # @case_id OCP-33220
   @admin
   @destructive
-  Scenario: Alerts on imagestream import retries 
+  Scenario: Alerts on imagestream import retries
     When as admin I successfully merge patch resource "config.samples.operator.openshift.io/cluster" with:
       | {"spec":{"samplesRegistry":"registry.unconnected.redhat.com"}} |
     And I register clean-up steps:
@@ -15,12 +15,12 @@ Feature: Builds and samples related metrics test
     Then I wait up to 120 seconds for the steps to pass:
     """
     When I run the :describe admin command with:
-      | resource | imagestream | 
+      | resource | imagestream |
       | name     | ruby        |
       | namespace| openshift   |
     Then the step should succeed
     And the output should contain:
-      | no such host |
+      | Import failed |
     """
 
     And I switch to cluster admin pseudo user
@@ -39,7 +39,7 @@ Feature: Builds and samples related metrics test
       | exec_command_arg | curl -k -H "Authorization: Bearer <%= cb.sa_token %>" https://prometheus-k8s.openshift-monitoring.svc:9091/api/v1/query?query=sum\(openshift_samples_retry_imagestream_import_total\) |
     Then the step should succeed
     And the output should match:
-      | "status":"success".*value.*[0-9]* | 
+      | "status":"success".*value.*[0-9]* |
     """
     And I wait up to 240 seconds for the steps to pass:
     """
@@ -53,7 +53,7 @@ Feature: Builds and samples related metrics test
       | exec_command_arg | curl -k -H "Authorization: Bearer <%= cb.sa_token %>" https://prometheus-k8s.openshift-monitoring.svc:9091/api/v1/query?query=sum\(openshift_samples_failed_imagestream_import_info\) |
     Then the step should succeed
     And the output should match:
-      | "status":"success".*value.*[0-9]* | 
+      | "status":"success".*value.*[0-9]* |
     """
 
   # @author xiuwang@redhat.com
@@ -62,15 +62,15 @@ Feature: Builds and samples related metrics test
   Scenario: Check build metrics
     Given I have a project
     When I run the :new_app client command with:
-      | template | cakephp-mysql-example |  
+      | template | cakephp-mysql-example |
     Then the step should succeed
     And the "cakephp-mysql-example-1" build was created
     Given the "cakephp-mysql-example-1" build completed
     When I run the :new_app client command with:
-      | template | jenkins-ephemeral | 
+      | template | jenkins-ephemeral |
     Then the step should succeed
     Given 1 pod becomes ready with labels:
-      | deployment=jenkins-1 | 
+      | deployment=jenkins-1 |
     When I run the :new_app client command with:
       | file | https://raw.githubusercontent.com/openshift/origin/master/examples/jenkins/pipeline/samplepipeline.yaml |
     Then the step should succeed
@@ -96,7 +96,7 @@ Feature: Builds and samples related metrics test
       | oc_opts_end      |                      |
       | exec_command     | sh                   |
       | exec_command_arg | -c                   |
-      | exec_command_arg | curl -k -H "Authorization: Bearer <%= cb.sa_token %>" https://prometheus-k8s.openshift-monitoring.svc:9091/api/v1/label/__name__/values | 
+      | exec_command_arg | curl -k -H "Authorization: Bearer <%= cb.sa_token %>" https://prometheus-k8s.openshift-monitoring.svc:9091/api/v1/label/__name__/values |
     Then the step should succeed
     And the output should contain:
       | openshift_build_created_timestamp_seconds   |
@@ -105,7 +105,7 @@ Feature: Builds and samples related metrics test
       | openshift_build_duration_seconds            |
       | openshift_build_metadata_generation_info    |
       | openshift_build_labels                      |
-      | openshift_build_status_phase_total          | 
+      | openshift_build_status_phase_total          |
     """
     And I wait up to 240 seconds for the steps to pass:
     """
@@ -121,7 +121,7 @@ Feature: Builds and samples related metrics test
     And the output should contain:
       | cakephp-mysql-example-1  |
       | sample-pipeline-1        |
-      | nodejs-mongodb-example-1 | 
+      | nodejs-mongodb-example-1 |
     """
     And I wait up to 240 seconds for the steps to pass:
     """
@@ -136,7 +136,7 @@ Feature: Builds and samples related metrics test
     Then the step should succeed
     And the output should contain:
       | cakephp-mysql-example-1  |
-      | nodejs-mongodb-example-1 | 
+      | nodejs-mongodb-example-1 |
     """
 
   # @author xiuwang@redhat.com
@@ -146,11 +146,11 @@ Feature: Builds and samples related metrics test
     Given I have a project
     #Importing a image with regsitry v1 api
     When I run the :import_image client command with:
-      | image_name | myv1image                                                         | 
+      | image_name | myv1image                                                         |
       | from       | devexp.registry-v1.qe.devcluster.openshift.com:5000/imagev1/test1 |
       | confirm    | true                                                              |
-      | all        | true                                                              | 
-      | insecure   | true                                                              | 
+      | all        | true                                                              |
+      | insecure   | true                                                              |
     Then the step should succeed
 
     And I switch to cluster admin pseudo user
@@ -169,14 +169,14 @@ Feature: Builds and samples related metrics test
       | exec_command_arg | curl -k -H "Authorization: Bearer <%= cb.sa_token %>" https://prometheus-k8s.openshift-monitoring.svc:9091/api/v1/query?query=apiserver_v1_image_imports_total |
     Then the step should succeed
     And the output should match:
-      | "repository":"devexp.registry-v1.qe.devcluster.openshift.com:5000/imagev1/test1".*value.*[0-9]* | 
+      | "repository":"devexp.registry-v1.qe.devcluster.openshift.com:5000/imagev1/test1".*value.*[0-9]* |
     """
 
   # @author xiuwang@redhat.com
   # @case_id OCP-25598
   @admin
   @destructive
-  Scenario: Monitoring, Alerting, and Degraded Status Reporting-Samples-operator 
+  Scenario: Monitoring, Alerting, and Degraded Status Reporting-Samples-operator
     When as admin I successfully merge patch resource "config.samples.operator.openshift.io/cluster" with:
       | {"spec":{"samplesRegistry":"registry.unconnected.redhat.com"}} |
     And I register clean-up steps:
@@ -198,14 +198,13 @@ Feature: Builds and samples related metrics test
       | oc_opts_end      |                      |
       | exec_command     | sh                   |
       | exec_command_arg | -c                   |
-      | exec_command_arg | curl -k -H "Authorization: Bearer <%= cb.sa_token %>" https://prometheus-k8s.openshift-monitoring.svc:9091/api/v1/label/__name__/values | 
+      | exec_command_arg | curl -k -H "Authorization: Bearer <%= cb.sa_token %>" https://prometheus-k8s.openshift-monitoring.svc:9091/api/v1/label/__name__/values |
     Then the step should succeed
     And the output should contain:
-      | openshift_samples_degraded_info                  | 
+      | openshift_samples_degraded_info                  |
       | openshift_samples_failed_imagestream_import_info |
-      | openshift_samples_invalidconfig_info             | 
-      | openshift_samples_invalidsecret_info             | 
-      | openshift_samples_tbr_inaccessible_info          |
+      | openshift_samples_invalidconfig_info             |
+      | openshift_samples_invalidsecret_info             |
     """
     And I wait up to 240 seconds for the steps to pass:
     """

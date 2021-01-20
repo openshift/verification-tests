@@ -12,14 +12,17 @@ check_installing_cluster_monitoring_tab:
             xpath: //h5[text()='Monitoring data is not available']
         - selector:
             xpath: //p[text()='Monitoring data is not available at this time. Try again later.']
+last_checkin_loaded:
+    element:
+        selector:
+            xpath: //div[contains(text(),'Last check-in:')]
 check_disconnected_cluster_monitoring_tab:
     elements:
         - selector:
             xpath: //h2[text()='Disconnected cluster']
         - selector:
             xpath: //h5[text()='Monitoring data is not available']
-        - selector:
-            xpath: //p[contains(text(),'Last check-in:')]
+    action: last_checkin_loaded
 
 check_monitoring_tab:
     action: click_monitoring_tab
@@ -37,7 +40,8 @@ issue_summary_loaded:
             xpath: //div[contains(text(), 'Last check-in')]
             timeout: 20
         - selector:
-            xpath: //div[contains(text(), 'minutes ago')]
+            xpath: //div[contains(., 'minutes ago')]
+            timeout: 2
         - selector:
             xpath: //h2[text()='Status']
         - selector:

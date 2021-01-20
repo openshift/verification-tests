@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: hello-openshift
-        image: openshift/hello-openshift:123
+        image: quay.io/openshifttest/nonexist
         resources:
           limits:
             cpu: 120m

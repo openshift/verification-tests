@@ -28,8 +28,6 @@ data:
     xpack.security.http.ssl.certificate: /usr/share/elasticsearch/config/secret/elasticsearch.crt
     xpack.security.http.ssl.certificate_authorities: [ "/usr/share/elasticsearch/config/secret/admin-ca" ]
     xpack.security.http.ssl.verification_mode: certificate
-  add-user.sh: |
-   curl -XPOST -k 'https://localhost:9200/_xpack/security/user/fluentd' -H "Content-Type: application/json" -d '{"password":"changeme","full_name":"Fluentd","email":"fluentd@clusterlogging.com","roles":["super_user"]}'
 kind: ConfigMap
 metadata:
   name: elasticsearch-server

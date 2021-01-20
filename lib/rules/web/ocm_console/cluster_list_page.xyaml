@@ -129,6 +129,7 @@ check_filter_cluster_existed:
     element:
         selector:
             xpath: //tbody/tr[<coloumn_number>]/td/a[contains(text(),'<filter_keyword>')]
+        timeout: 10
 check_filter_no_result_message:
     element:
         selector:
@@ -295,6 +296,7 @@ click_delete_cluster_button_on_cluster_list_page:
         selector:
             xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Delete cluster']
         op: click
+
 click_clear_filters_button:
     element:
         selector:
@@ -370,32 +372,46 @@ click_scale_cluster_in_action_dropdown:
     selector:
       xpath: //*[@class='pf-c-dropdown__menu-item' and text()='Scale cluster']
     op: click
-go_to_scale_cluster_dialog_on_cluster_list_page:
+go_to_edit_loadbalancers_and_storage_dialog_on_cluster_list_page:
   action: expand_cluster_actions_on_cluster_list_page
-  action: click_scale_cluster_button_in_dropdown
-check_elements_in_scale_cluster_dialog:
+  action: click_edit_loadbalancers_and_storage_button_in_dropdown
+check_elements_in_edit_loadbalancers_and_storage_dialog:
   action: check_close_button
   action: check_cancel_button
   action: check_apply_button
-  action: check_compute_node_count_field_in_scale_dialog
   action: check_load_balancers_field_in_scale_dialog
   action: check_persistent_storage_field_in_scale_dialog
 scale_cluster_from_cluster_list_page:
-  action: go_to_scale_cluster_dialog_on_cluster_list_page
+  action: go_to_edit_node_count_dialog_on_cluster_list_page
   action: choose_compute_node_in_dialog
+go_to_edit_node_count_dialog_on_cluster_list_page:
+  action: expand_cluster_actions_on_cluster_list_page
+  action: click_edit_node_count_button_in_dropdown
 check_actions_items_of_ready_osd_cluster_on_list:
   action: check_edit_display_name_button_in_dropdown
-  action: check_scale_cluster_button_in_dropdown
+  action: check_edit_node_count_button_in_dropdown
+  action: check_edit_loadbalancers_and_storage_button_in_dropdown
   action: check_delete_cluster_button_in_dropdown
   action: check_archive_button_in_dropdown_missing
   action: check_edit_console_button_in_dropdown_missing
   action: check_launch_console_button_in_dropdown
+check_actions_items_by_org_member_on_list:
+  action: check_edit_display_name_button_in_dropdown_missing
+  action: check_edit_node_count_button_in_dropdown_missing
+  action: check_edit_loadbalancers_and_storage_button_in_dropdown_missing
+  action: check_edit_console_button_in_dropdown_missing
+  action: check_archive_button_in_dropdown_missing
+  action: check_edit_subscription_settings_button_in_dropdown_missing
+  action: check_transfer_cluster_ownership_button_in_dropdown_missing
+  action: check_delete_cluster_button_in_dropdown_missing
 check_actions_items_of_ready_ocp_cluster_on_list:
   action: check_edit_console_button_in_dropdown
   action: check_edit_display_name_button_in_dropdown
   action: check_archive_button_in_dropdown
+  action: check_edit_subscription_settings_button_in_dropdown
+  action: check_transfer_cluster_ownership_button_in_dropdown
   action: check_delete_cluster_button_in_dropdown_missing
-  action: check_scale_cluster_button_in_dropdown_missing
+  action: check_edit_node_count_button_in_dropdown_missing
   action: check_launch_console_button_in_dropdown
 go_to_access_control_tab:
   action:
@@ -417,8 +433,8 @@ logout_page_loaded:
     selector:
       xpath: //button[contains(., 'Log in to your Red Hat account')]
 scale_loadbalancer_from_cluster_list_page:
-  action: go_to_scale_cluster_dialog_on_cluster_list_page
+  action: go_to_edit_loadbalancers_and_storage_dialog_on_cluster_list_page
   action: choose_loadbalancer_in_dialog
 scale_persistent_quota_from_cluster_list_page:
-  action: go_to_scale_cluster_dialog_on_cluster_list_page
+  action: go_to_edit_loadbalancers_and_storage_dialog_on_cluster_list_page
   action: choose_persistent_quota_in_dialog

@@ -2,7 +2,7 @@
 require 'oga'
 require 'parseconfig'
 require 'stringio'
-require 'promethues_metrics_data'
+require 'prometheus_metrics_data'
 
 # helper step that does the following:
 # 1. figure out project and route information
@@ -42,7 +42,7 @@ When /^I wait(?: (\d+) seconds)? for the #{QUOTED} index to appear in the ES pod
   seconds ||= 10 * 60
   index_data = nil
   success = wait_for(seconds) {
-    step %Q/I get the "#{index_name}" logging index information from a pod with labels "#{pod_labels}"/
+    step %Q/I get the "#{index_name}" logging index information from a pod with labels "#{labels}"/
     res = cb.index_data
     if res
       index_data = res
@@ -69,7 +69,7 @@ When /^I get the #{QUOTED} logging index information(?: from a pod with labels #
     | #{labels} |
   })
 
-  step %Q/I perform the HTTP request on the ES pod with labels "#{pod_labels}":/, table(%{
+  step %Q/I perform the HTTP request on the ES pod with labels "#{labels}":/, table(%{
     | relative_url | _cat/indices?format=JSON |
     | op           | GET                      |
   })

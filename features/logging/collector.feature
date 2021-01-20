@@ -64,7 +64,7 @@ Feature: collector related tests
       | op           | DELETE     |
     Then the step should succeed
     #Workaround end
-    
+
     Given I wait for the ".operations" index to appear in the ES pod with labels "es-node-master=true"
     Then I get the ".operations" logging index information from a pod with labels "es-node-master=true"
     And the expression should be true> cb.index_data['docs.count'] > "0"
@@ -229,7 +229,7 @@ Feature: collector related tests
     Then the step should succeed
     And I wait until ES cluster is ready
     And I wait for the project "openshift-logging" logs to appear in the ES pod
-    Given a pod becomes ready with labels: 
+    Given a pod becomes ready with labels:
       | logging-infra=fluentd |
     And evaluation of `pod.name` is stored in the :fluentd_pod clipboard
     When I run the :logs client command with:

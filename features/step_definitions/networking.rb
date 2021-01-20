@@ -1,3 +1,4 @@
+
 Given /^I run the ovs commands on the host:$/ do | table |
   ensure_admin_tagged
   _host = node.host
@@ -512,7 +513,7 @@ Given /^the node's default gateway is stored in the#{OPT_SYM} clipboard$/ do |cb
   ensure_admin_tagged
   step "I select a random node's host"
   cb_name = "gateway" unless cb_name
-  @result = host.exec_admin("/sbin/ip route show default | awk '/default/ {print $3}'")
+  @result = host.exec_admin("ip route show default | awk '/default/ {print $3}'")
 
   cb[cb_name] = @result[:response].chomp
   unless IPAddr.new(cb[cb_name])
@@ -527,8 +528,10 @@ Given /^I store a random unused IP address from the reserved range to the#{OPT_S
   cb_name = "valid_ip" unless cb_name
   step "the subnet for primary interface on node is stored in the clipboard"
 
-  reserved_range = "#{cb.subnet_range}"
+  reserved_range = cb.subnet_range
 
+  unused_ips=[]
+  #Save four unused ip in the clipboard
   # use the sdn pod instead of the ovs pod since we have switched to host OVS
   IPAddr.new(reserved_range).to_range.to_a.shuffle.each { |ip|
     @result = step "I run command on the node's sdn pod:", table(
@@ -536,12 +539,15 @@ Given /^I store a random unused IP address from the reserved range to the#{OPT_S
     )
     if @result[:exitstatus] == 0
       logger.info "The IP is in use."
+    elsif unused_ips.length < 4
+      unused_ips << ip.to_s
+      logger.info "Get the unused IP #{ip.to_s}"
     else
-      logger.info "The random unused IP is stored in the #{cb_name} clipboard."
-      cb[cb_name] = ip.to_s
       break
     end
   }
+  cb.valid_ips=unused_ips
+  cb[cb_name]=cb.valid_ips[0]
   raise "No available ip found in the range." unless IPAddr.new(cb[cb_name])
 end
 
@@ -569,7 +575,7 @@ Given /^an IP echo service is setup on the master node and the ip is stored in t
   cb_name = "ipecho_ip" unless cb_name
   cb[cb_name] = host.local_ip
 
-  @result = host.exec_admin("docker run --name ipecho -d -p 8888:80 docker.io/aosqe/ip-echo")
+  @result = host.exec_admin("docker run --name ipecho -d -p 8888:80 quay.io/openshifttest/ip-echo")
   raise "Failed to create the IP echo service." unless @result[:success]
   teardown_add {
     @result = host.exec_admin("docker rm -f ipecho")
@@ -627,7 +633,7 @@ Given /^I run command on the#{OPT_QUOTED} node's sdn pod:$/ do |node_name, table
       pod.node_name == node_name
     }.first
     cache_resources ovnkube_pod
-    @result = ovnkube_pod.exec(network_cmd, as: admin)
+    @result = ovnkube_pod.exec(network_cmd, container: "ovn-controller", as: admin)
   else
     raise "unknown network_type"
   end
@@ -696,21 +702,40 @@ end
 
 Given /^CNI vlan info is obtained on the#{OPT_QUOTED} node$/ do | node_name |
   ensure_admin_tagged
-  node = node(node_name)
-  host = node.host
-  @result = host.exec_admin("/sbin/bridge vlan show")
+  @result = node(node_name).host.exec_admin("/sbin/bridge -j vlan show")
   raise "Failed to execute bridge vlan show command" unless @result[:success]
+  @result[:parsed] = YAML.load @result[:stdout]
+end
+
+Given /^the number of bridge PVID (\d+) VLANs matching #{QUOTED} added between the #{SYM} and #{SYM} clipboards is (\d+)$/ do |pvid, mode, clip_a, clip_b, expected_vlans|
+  pvid = pvid.to_i
+  # RHCOS is Array of VLANs, RHEL7 is a Hash, always convert to Set so we can compare
+  added_bridges = cb[clip_b].to_set - cb[clip_a].to_set
+  logger.info("added_bridges: #{added_bridges}")
+  mode = Regexp.new(mode)
+  num_vlans = added_bridges.count { |b|
+    # handle old RHEL7 bridge JSON and current RHCOS bridge JSON output
+    # RHCOS:
+    # [{"ifname":"bridge3","vlans":[{"vlan":1,"flags":["PVID","Egress Untagged"]}]},{"ifname":"veth66451995","vlans":[{"vlan":1,"flags":["PVID","Egress Untagged"]}]}]
+    # RHEL7
+    # {"bridge3":[{"vlan":1,"flags":["PVID","EgressUntagged"]}],"vethb26eb609":[{"vlan":1,"flags":["PVID","EgressUntagged"]}]}
+    # try b[1] first else check for the "vlans" key
+    vlans = b[1] || b["vlans"]
+    c = vlans.count { |v|
+      v["vlan"] == pvid && v["flags"].include?("PVID") && v["flags"].any?(mode)
+    }
+    c > 0
+  }
+  if num_vlans != expected_vlans.to_i
+    raise "Found #{num_vlans} bridge VLANS of #{pvid} and mode #{mode}, expected #{expected_vlans}"
+  end
+
 end
 
 Given /^the bridge interface named "([^"]*)" is deleted from the "([^"]*)" node$/ do |bridge_name, node_name|
   ensure_admin_tagged
-  check_and_delete_inf= %Q(if ip addr show  #{bridge_name};
-                           then
-                              ip link delete #{bridge_name};
-                           fi)
   node = node(node_name)
-  host = node.host
-  @result = host.exec_admin(check_and_delete_inf)
+  @result=step "I run command on the node's sdn pod:", table("| bash | -c | if ip addr show #{bridge_name};then ip link delete #{bridge_name};fi |")
   raise "Failed to delete bridge interface" unless @result[:success]
 end
 
@@ -802,7 +827,7 @@ Given /^the subnet for primary interface on node is stored in the#{OPT_SYM} clip
     "| bash | -c | ip -4 -brief a show \"<%= cb.interface %>\" \\| awk '{print $3}' |"
   )
   raise "Failed to get the subnet range for the primary interface on the node" unless @result[:success]
-  cb[cb_name] = @result[:response].chomp
+  cb[cb_name] = @result[:stdout].chomp
   logger.info "Subnet range for the primary interface on the node is stored in the #{cb_name} clipboard."
 end
 
@@ -1157,20 +1182,14 @@ Given /^I install machineconfigs load-sctp-module$/ do
   end
 end
 
-Given /^I check load-sctp-module in #{NUMBER} workers$/ do | workers_num |
+Given /^I check load-sctp-module in all workers$/ do
   ensure_admin_tagged
   _admin = admin
-  $i = 0
-  $num = Integer(workers_num)
-  while $i < $num  do
-    step %Q{I run the :debug admin command with:}, table(%{
-      | resource     | node/<%= cb.workers[#$i].name %> |
-      | oc_opts_end  |                                  |
-      | exec_command | lsmod                            |
-    })
-    step %Q/the step should succeed/
-    step %Q/the outputs should contain "sctp"/
-    $i +=1
+  cb.workers.each do |workers|
+    @result = workers.host.exec_admin("cat /sys/module/sctp/initstate")
+    unless @result[:response].include? "live"
+      raise "No sctp module installed"
+    end
   end
 end
 
@@ -1241,4 +1260,14 @@ Given /^I save egress type to the#{OPT_SYM} clipboard$/ do | cb_name |
     raise "unknown network_type"
   end
   logger.info "The egressfirewall type is stored to the #{cb_name} clipboard."
+end
+
+# ipecho service is used for retrieve the source IP from the outbound traffic of the cluster
+# It is used for egress IP testing. Currently it is installed in a VM in vmc network.
+# Huiran Wang
+Given /^I save ipecho url to the#{OPT_SYM} clipboard$/ do | cb_name |
+  ensure_admin_tagged
+  cb_name = "ipecho_url" unless cb_name
+  cb[cb_name]="172.31.249.80:9095"
+  logger.info "The ipecho service url #{cb[cb_name]} is stored to the #{cb_name} clipboard."
 end

@@ -25,6 +25,8 @@ edit_pod_count_action:
 
 # a combined action can be directly used for Edit Labels
 add_label_for_resource:
+  params:
+    item: Edit Labels
   action: click_one_dropdown_action
   action: add_label
   action: submit_changes

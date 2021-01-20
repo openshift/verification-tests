@@ -126,6 +126,10 @@ goto_one_rc_page:
 goto_rc_list_page:
   url: k8s/ns/<project_name>/replicationcontrollers
 
+goto_daemonsets_page:
+  url: k8s/ns/<project_name>/daemonsets
+  action: wait_box_loaded
+  
 #pod
 goto_one_pod_page:
   url: k8s/ns/<project_name>/pods/<resource_name>
@@ -148,6 +152,7 @@ goto_replica_sets_page:
   url: k8s/ns/<project_name>/replicasets
 goto_one_rs_page:
   url: k8s/ns/<project_name>/replicasets/<rs_name>
+  action: wait_box_loaded
 
 #routes
 goto_routes_page:
@@ -165,6 +170,7 @@ goto_imagestreams_page:
   url: k8s/ns/<project_name>/imagestreams
 goto_one_imagestream_page:
   url: k8s/ns/<project_name>/imagestreams/<imagestream_name>
+  action: wait_box_loaded
 
 #templateinstance
 goto_one_templateinstance_page:
@@ -183,7 +189,7 @@ goto_create_app_from_imagestream_page:
 goto_create_app_from_template_page:
   params:
     template_namespace: openshift
-  url: catalog/instantiate-template?template==<template_name>&template-ns=<template_namespace>&preselected-ns=<project_name>
+  url: catalog/instantiate-template?template=<template_name>&template-ns=<template_namespace>&preselected-ns=<project_name>
 
 # monitoring
 goto_monitoring_metrics_page:
@@ -199,6 +205,17 @@ goto_alertmanagerconfig_page:
   action: wait_box_loaded
 goto_monitoring_db_k8s_resource_pod:
   url: monitoring/dashboards/grafana-dashboard-k8s-resources-pod
+
+# metering
+goto_chargeback_reports_page:
+  url: k8s/ns/<namespace>/metering.openshift.io~v1~Report
+  action: wait_box_loaded
+goto_one_reportquery_page:
+  url: /k8s/ns/<namespace>/metering.openshift.io~v1~ReportQuery/<reportquery_name>
+  action: wait_box_loaded
+goto_one_report_page:
+  url: /k8s/ns/<namespace>/metering.openshift.io~v1~Report/<report_name>
+  action: wait_box_loaded
 
 #node
 goto_node_page:
@@ -229,6 +246,7 @@ goto_installed_operators_page:
   action: wait_box_loaded
 goto_all_installed_operators_page:
   url: k8s/all-namespaces/operators.coreos.com~v1alpha1~ClusterServiceVersion
+  action: wait_table_loaded
 goto_operator_subscription_page:
   url: operatorhub/subscribe?pkg=<package_name>&catalog=<catalog_name>&catalogNamespace=openshift-marketplace&targetNamespace=<target_namespace>
   action: wait_box_loaded
@@ -256,6 +274,7 @@ goto_machineconfig_pools_page:
   url: k8s/cluster/machineconfiguration.openshift.io~v1~MachineConfigPool
 goto_machine_sets_page:
   url: k8s/ns/openshift-machine-api/machine.openshift.io~v1beta1~MachineSet
+  action: wait_box_loaded
 goto_machineautoscaler_list_page:
   url: k8s/ns/openshift-machine-api/autoscaling.openshift.io~v1beta1~MachineAutoscaler
 goto_one_machineautoscaler_page:
@@ -288,6 +307,7 @@ goto_machinehealthcheck_page:
 #user
 goto_users_list_page:
   url: k8s/cluster/user.openshift.io~v1~User
+  action: wait_table_loaded
 goto_namespace_role_rolebinding_page:
   url: k8s/ns/<project_name>/roles/<role_name>/bindings
   action: wait_box_loaded

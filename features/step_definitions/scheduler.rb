@@ -7,11 +7,11 @@ Given /^the #{QUOTED} scheduler priorityclasses is restored after scenario$/ do 
   }
 end
 
-Given /^the #{QUOTED} scheduler CR is restored after scenario$/ do |name|
+Given /^the CR #{QUOTED} named #{QUOTED} is restored after scenario$/ do |crd, name|
   ensure_admin_tagged
   ensure_destructive_tagged
   org_scheduler = {}
-  @result = admin.cli_exec(:get, resource: 'scheduler', resource_name: name, o: 'yaml')
+  @result = admin.cli_exec(:get, resource: crd, resource_name: name, o: 'yaml')
   if @result[:success]
     org_scheduler['spec'] = @result[:parsed]['spec']
     logger.info "scheduler restore tear_down registered:\n#{org_scheduler}"

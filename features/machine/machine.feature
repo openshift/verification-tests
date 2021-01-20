@@ -10,6 +10,7 @@ Feature: Machine features testing
   # @author jhou@redhat.com
   # @case_id OCP-22115
   @smoke
+  @admin
   Scenario: machine-api clusteroperator should be in Available state
     Given evaluation of `cluster_operator('machine-api').condition(type: 'Available')` is stored in the :co_available clipboard
     Then the expression should be true> cb.co_available["status"]=="True"
@@ -22,6 +23,14 @@ Feature: Machine features testing
 
     Given evaluation of `cluster_operator('machine-api').condition(type: 'Progressing')` is stored in the :co_progressing clipboard
     Then the expression should be true> cb.co_progressing["status"]=="False"
+
+  # @author zhsun@redhat.com
+  # @case_id OCP-37706
+  @smoke
+  @admin
+  Scenario: Baremetal clusteroperator should be disabled in any deployment that is not baremetal
+    Given evaluation of `cluster_operator('baremetal').condition(type: 'Disabled')` is stored in the :co_disabled clipboard
+    Then the expression should be true> cb.co_disabled["status"]=="True"
 
   # @author jhou@redhat.com
   # @case_id OCP-25436
@@ -228,10 +237,9 @@ Feature: Machine features testing
     And the output should match "node-role.kubernetes.io/infra="
 
   # @author miyadav@redhat.com
-  # @case_id OCP-32269
   @admin
   @destructive
-  Scenario: Implement defaulting machineset values for AWS
+  Scenario Outline: Implement defaulting machineset values for AWS
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
@@ -240,18 +248,40 @@ Feature: Machine features testing
     Given I store the last provisioned machine in the :machine clipboard
     When evaluation of `machine(cb.machine).aws_ami_id` is stored in the :default_ami_id clipboard
     And evaluation of `machine(cb.machine).aws_availability_zone` is stored in the :default_availability_zone clipboard
-    Then admin ensures "default-valued-32269" machineset is deleted after scenario
+    Then admin ensures "<name>" machineset is deleted after scenario
 
-    Given I obtain test data file "cloud/ms-aws/ms_default_values.yaml"
-    When I run oc create over "ms_default_values.yaml" replacing paths:
-      | n                                                                                         | openshift-machine-api                           |
-      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]           | <%= infrastructure("cluster").infra_name %>     |
-      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"]        | default-valued-32269                            |
-      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-cluster"]    | <%= infrastructure("cluster").infra_name %>     |
-      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["ami"]["id"]                        | <%= cb.default_ami_id %>                        |
-      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["placement"]["availabilityZone"]    | <%= cb.default_availability_zone %>             |
-      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-machineset"] | default-valued-32269                            |
+    Given I obtain test data file "cloud/ms-aws/<file_name>"
+    When I run oc create over "<file_name>" replacing paths:
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]           | <%= infrastructure("cluster").infra_name %> |
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"]        | <name>                                      |
+      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-cluster"]    | <%= infrastructure("cluster").infra_name %> |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["ami"]["id"]                        | <%= cb.default_ami_id %>                    |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["placement"]["availabilityZone"]    | <%= cb.default_availability_zone %>         |
+      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-machineset"] | <name>                                      |
+      | ["metadata"]["name"]                                                                      | <name>                                      |
     Then the step should succeed
+
+    And I wait up to 120 seconds for the steps to pass:
+    """
+    When I run the :get admin command with:
+      | resource | machine |
+    Then the step should succeed
+    And the output should contain:
+      | Running |
+    """
+
+    Then I store the last provisioned machine in the :machine_latest clipboard
+    When I run the :describe admin command with:
+      | resource | machine                  |
+      | name     | <%= cb.machine_latest %> |
+    Then the step should succeed
+    And the output should contain:
+      | <Validation> |
+
+    Examples:
+      | name                    | file_name                 | Validation                    |
+      | default-valued-32269    | ms_default_values.yaml    | Placement                     |# @case_id OCP-32269
+      | tenancy-dedicated-37132 | ms_tenancy_dedicated.yaml | Tenancy:            dedicated |# @case_id OCP-37132
 
   # @author miyadav@redhat.com
   # @case_id OCP-33056
@@ -262,12 +292,12 @@ Feature: Machine features testing
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
     Then admin ensures machine number is restored after scenario
-   
+
     Given I store the last provisioned machine in the :machine clipboard
     When evaluation of `machine(cb.machine).gcp_region` is stored in the :default_region clipboard
     And evaluation of `machine(cb.machine).gcp_zone` is stored in the :default_zone clipboard
     Then admin ensures "default-valued-33056" machineset is deleted after scenario
-   
+
     Given I obtain test data file "cloud/ms-gcp/ms_default_values.yaml"
     When I run oc create over "ms_default_values.yaml" replacing paths:
       | n                                                                                         | openshift-machine-api                           |
@@ -279,11 +309,18 @@ Feature: Machine features testing
       | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-machineset"] | default-valued-33056                            |
     Then the step should succeed
 
+    # Verify machine could be created successful
+    And I wait up to 300 seconds for the steps to pass:
+    """
+    Then the expression should be true> machine_set("default-valued-33056").desired_replicas(cached: false) == 1
+    """
+    Then the machineset should have expected number of running machines
+
   # @author miyadav@redhat.com
   # @case_id OCP-33058
   @admin
   @destructive
-  Scenario: Implement defaulting machineset values for azure 
+  Scenario: Implement defaulting machineset values for azure
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
@@ -324,14 +361,14 @@ Feature: Machine features testing
     When I run the :logs admin command with:
       | resource_name | <%= pod.name %> |
       | c             | #{cb.id}        |
-    Then the output should contain:
-      | attempting to acquire leader lease  openshift-machine-api/cluster-api-provider |
+    Then the output should match:
+      | attempting to acquire leader lease (.*)openshift-machine-api/cluster-api-provider |
     """
 
   # @author zhsun@redhat.com
   # @case_id OCP-34718
   @admin
-  Scenario: Node labels and Affinity definition in PV should match	
+  Scenario: Node labels and Affinity definition in PV should match
     Given I have a project
 
     # Create a pvc
@@ -357,3 +394,75 @@ Feature: Machine features testing
     And the output should contain:
       | failure-domain.beta.kubernetes.io/zone in [<%= cb.default_zone %>]     |
       | failure-domain.beta.kubernetes.io/region in [<%= cb.default_region %>] |
+
+  # @author miyadav@redhat.com
+  @admin
+  @destructive
+  Scenario Outline: Implement defaulting machineset values for vsphere
+    Given I have an IPI deployment
+    And I switch to cluster admin pseudo user
+    And I use the "openshift-machine-api" project
+    Then admin ensures machine number is restored after scenario
+
+    Given I store the last provisioned machine in the :machine clipboard
+    And evaluation of `machine(cb.machine).vsphere_datacenter` is stored in the :datacenter clipboard
+    And evaluation of `machine(cb.machine).vsphere_datastore` is stored in the :datastore clipboard
+    And evaluation of `machine(cb.machine).vsphere_folder` is stored in the :folder clipboard
+    And evaluation of `machine(cb.machine).vsphere_resourcePool` is stored in the :resourcePool clipboard
+    And evaluation of `machine(cb.machine).vsphere_server` is stored in the :server clipboard
+    And evaluation of `machine(cb.machine).vsphere_diskGiB` is stored in the :diskGiB clipboard
+    And evaluation of `machine(cb.machine).vsphere_memoryMiB` is stored in the :memoryMiB clipboard
+    And evaluation of `machine(cb.machine).vsphere_template` is stored in the :template clipboard
+    Then admin ensures "<name>" machineset is deleted after scenario
+
+    Given I obtain test data file "cloud/ms-vsphere/ms_default_values.yaml"
+    When I run oc create over "ms_default_values.yaml" replacing paths:
+      | n                                                                                         | openshift-machine-api                       |
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]           | <%= infrastructure("cluster").infra_name %> |
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"]        | <name>                                      |
+      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-cluster"]    | <%= infrastructure("cluster").infra_name %> |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["workspace"]["datacenter"]          | <%= cb.datacenter %>                        |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["workspace"]["datastore"]           | <%= cb.datastore %>                         |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["workspace"]["folder"]              | <%= cb.folder %>                            |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["workspace"]["resourcePool"]        | <%= cb.resourcePool %>                      |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["workspace"]["server"]              | <%= cb.server %>                            |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["diskGiB"]                          | <diskGiB>                                   |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["memoryMiB"]                        | <%= cb.memoryMiB %>                         |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["template"]                         | <template>                                  |
+      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-machineset"] | <name>                                      |
+      | ["metadata"]["name"]                                                                      | <name>                                      |
+    Then the step should succeed
+
+    And I wait up to 120 seconds for the steps to pass:
+    """
+    When I run the :get admin command with:
+      | resource | machine |
+    Then the step should succeed
+    And the output should contain:
+      | Provisioned  |
+    """
+
+    Examples:
+      | name                         | template                                  | diskGiB           |
+      | default-valued-33380         | <%= cb.template %>                        | <%= cb.diskGiB %> | # @case_id OCP-33380
+      | default-valued-windows-35421 | 1909-template-docker-ssh-upgraded-vmtools | 135               | # @case_id OCP-35421
+
+  # @author miyadav@redhat.com
+  # @case_id OCP-36489
+  @admin
+  Scenario: [Azure] Machineset should not be created when publicIP:true in disconnected Azure enviroment
+    Given I have an IPI deployment
+    And I switch to cluster admin pseudo user
+    Then I use the "openshift-machine-api" project
+
+    Given I obtain test data file "cloud/ms-azure/ms_disconnected_env.yaml"
+    When I run oc create over "ms_disconnected_env.yaml" replacing paths:
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]           | <%= infrastructure("cluster").infra_name %> |
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"]        | disconnected-azure-36489                    |
+      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-cluster"]    | <%= infrastructure("cluster").infra_name %> |
+      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-machineset"] | disconnected-azure-36489                    |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["publicIP"]                         | true                                        |
+
+    And the output should contain:
+      | Forbidden: publicIP is not allowed in Azure disconnected installation |
+

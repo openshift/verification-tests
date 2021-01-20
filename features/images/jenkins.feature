@@ -326,3 +326,29 @@ Feature: jenkins.feature
     Then the step should succeed
     Then the output should contain:
       | /usr/bin/java -> /etc/alternatives/java |
+
+  # @author xiuwang@redhat.com
+  # @case_id OCP-35068
+  @admin
+  Scenario: Oauthaccesstoken should be deleted after loging out from Jenkins webconsole
+    Given I have a project
+    When I run the :new_app client command with:
+      | template | jenkins-ephemeral |
+    Then the step should succeed
+    Given I wait for the "jenkins" service to become ready up to 300 seconds
+    Given I have a browser with:
+      | rules    | lib/rules/web/images/jenkins_2/                                   |
+      | base_url | https://<%= route("jenkins", service("jenkins")).dns(by: user) %> |
+    And I log in to jenkins
+    When I run the :get admin command with:
+      | resource | oauthaccesstoken |
+    Then the step should succeed
+    Then the output should contain:
+      | jenkins-<%= project.name %> |
+    When I run the :jenkins_logout web action
+    Then the step should succeed
+    When I run the :get admin command with:
+      | resource | oauthaccesstoken |
+    Then the step should succeed
+    Then the output should not contain:
+      | jenkins-<%= project.name %> |

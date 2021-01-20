@@ -18,6 +18,6 @@ spec:
     spec:
       containers:
       - name: pi
-        image: perl
-        command: ["perl",  "-Mbignum=bpi", "-wle", "sleep(10)"]
+        image: quay.io/openshifttest/busybox@sha256:afe605d272837ce1732f390966166c2afff5391208ddd57de10942748694049d
+        command: ["sh", "-c",  "sleep 10"]
       restartPolicy: Never

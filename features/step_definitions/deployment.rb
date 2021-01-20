@@ -76,3 +76,17 @@ Given /^#{QUOTED} deployment becomes ready in the#{OPT_QUOTED} project$/ do | d_
   }
   raise "Deployment did not become ready" unless success
 end
+
+Given /^admin ensures the deployment replicas is restored to "([^"]*)" in "([^"]*)" for "([^"]*)" after scenario$/ do | replicas , project , deployment |
+  ensure_admin_tagged
+  teardown_add{
+  step %Q{I run the :scale admin command with:}, table(%{
+     | resource | deployment    |
+     | name     | #{deployment} |
+     | replicas | #{replicas}   |
+     |  n       | #{project}    |
+  })
+  step %Q/the step should succeed/
+}
+end
+

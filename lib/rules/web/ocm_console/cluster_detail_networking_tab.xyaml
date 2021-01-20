@@ -1,10 +1,11 @@
 #------------------------------This file is used for cluster detail networking tab definition-----------
 click_networking_tab:
-    element:
+    element: &networking_tab_button
         selector:
             xpath: //button[contains(.,'Networking')]
-        timeout: 300
         op: click
+        timeout: <timeout>
+
 networking_tab_loaded:
     elements:
         - selector:
@@ -30,21 +31,21 @@ check_network_configuration:
         - selector:
             xpath: //h2[text()='Network configuration']
         - selector:
-            xpath: //dl/dt[1][text()='Machine CIDR']
+            xpath: //dl/div[1]/dt/span[text()='Machine CIDR']
         - selector:
-            xpath: //dl/dt[2][text()='Service CIDR']
+            xpath: //dl/div[2]/dt/span[text()='Service CIDR']
         - selector:
-            xpath: //dl/dt[3][text()='Pod CIDR']
+            xpath: //dl/div[3]/dt/span[text()='Pod CIDR']
         - selector:
-            xpath: //dl/dt[4][text()='Host prefix']
+            xpath: //dl/div[4]/dt/span[text()='Host prefix']
         - selector:
-            xpath: //dl/dd[1][text()='<machine_cidr>']
+            xpath: //dl/div[1]/dd/div[text()='<machine_cidr>']
         - selector:
-            xpath: //dl/dd[2][text()='<service_cidr>']
+            xpath: //dl/div[2]/dd/div[text()='<service_cidr>']
         - selector:
-            xpath: //dl/dd[3][text()='<pod_cidr>']
+            xpath: //dl/div[3]/dd/div[text()='<pod_cidr>']
         - selector:
-            xpath: //dl/dd[4][text()='<host_prefix>']
+            xpath: //dl/div[4]/dd/div[text()='<host_prefix>']
     action: cancel_button_disabled
     action: change_settings_button_disabled
     action: click_enable_additional_route

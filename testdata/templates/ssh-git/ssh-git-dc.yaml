@@ -15,7 +15,7 @@ spec:
       name: git-server
     spec:
       containers:
-      - image: aosqe/ssh-git-server-openshift
+      - image: quay.io/openshifttest/ssh-git-server-openshift
         imagePullPolicy: IfNotPresent 
         name: git-server
         resources: {}

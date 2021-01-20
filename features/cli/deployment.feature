@@ -50,7 +50,7 @@ Feature: deployment related steps
     When I run the :patch client command with:
       | resource      | deployment                                                                                                     |
       | resource_name | hello-openshift                                                                                                |
-      | p             | {"spec":{"template":{"spec":{"containers":[{"name":"hello-openshift","image":"openshift/hello-openshift"}]}}}} |
+      | p             | {"spec":{"template":{"spec":{"containers":[{"name":"hello-openshift","image":"quay.io/openshifttest/hello-openshift@sha256:424e57db1f2e8e8ac9087d2f5e8faea6d73811f0b6f96301bc94293680897073"}]}}}} |
     Then the step should succeed
     And I wait for the steps to pass:
     """
@@ -199,7 +199,7 @@ Feature: deployment related steps
     When I run the :patch client command with:
       | resource      | deployment                                                                                                     |
       | resource_name | hello-openshift                                                                                                |
-      | p             | {"spec":{"template":{"spec":{"containers":[{"name":"hello-openshift","image":"openshift/hello-openshift-noexist"}]}}}} |
+      | p             | {"spec":{"template":{"spec":{"containers":[{"name":"hello-openshift","image":"quay.io/openshifttest/nonexist"}]}}}} |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | deployment      |
@@ -298,7 +298,7 @@ Feature: deployment related steps
     When I run the :patch client command with:
       | resource      | deployment                                                                                                               |
       | resource_name | hello-openshift                                                                                                          |
-      | p             | {"spec":{"template":{"spec":{"containers":[{"name":"hello-openshift","image":"openshift/hello-openshift-noexist-1"}]}}}} |
+      | p             | {"spec":{"template":{"spec":{"containers":[{"name":"hello-openshift","image":"quay.io/openshifttest/nonexist-1"}]}}}} |
     Then the step should succeed
     And I wait up to 60 seconds for the steps to pass:
     """
@@ -324,7 +324,7 @@ Feature: deployment related steps
     When I run the :patch client command with:
       | resource      | deployment                                                                                                               |
       | resource_name | hello-openshift                                                                                                          |
-      | p             | {"spec":{"template":{"spec":{"containers":[{"name":"hello-openshift","image":"openshift/hello-openshift-noexist-2"}]}}}} |
+      | p             | {"spec":{"template":{"spec":{"containers":[{"name":"hello-openshift","image":"quay.io/openshifttest/nonexist-2"}]}}}} |
     Then the step should succeed
     And I wait up to 60 seconds for the steps to pass:
     """

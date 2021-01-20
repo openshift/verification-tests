@@ -56,7 +56,7 @@ Feature: basic verification for upgrade oc client testing
     When I run the :new_project client command with:
       | project_name | workloads-upgrade |
     When I run the :new_app client command with:
-      | docker_image | aosqe/hello-openshift |
+      | docker_image | quay.io/openshifttest/hello-openshift@sha256:424e57db1f2e8e8ac9087d2f5e8faea6d73811f0b6f96301bc94293680897073 |
     Then the step should succeed
 
   # @author yinzhou@redhat.com
@@ -64,7 +64,7 @@ Feature: basic verification for upgrade oc client testing
   @upgrade-check
   @admin
   @users=upuser1,upuser2
-  Scenario: Check some container related oc commands still work for ocp45 after upgrade 
+  Scenario: Check some container related oc commands still work for ocp45 after upgrade
     Given I switch to the first user
     When I use the "workloads-upgrade" project
     Given status becomes :running of 1 pods labeled:

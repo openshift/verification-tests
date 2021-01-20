@@ -32,11 +32,11 @@ module BushSlicer
         logger: logger,
         base_url: env.web_console_url,
         browser_type: conf[:browser] ? conf[:browser].to_sym : :firefox,
+        selenium_url: conf[:selenium_url],
         rules: RULES_DIR +  "base/", # will be updated after version is found
         snippets_dir: SNIPPETS_DIR,
         http_proxy: env.client_proxy
       }
-
       logger.debug "initializing web console browser for user #{user.name}"
       e = @executors[user.name] = Web4Cucumber.new(**browser_opts)
 
