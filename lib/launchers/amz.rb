@@ -23,6 +23,16 @@ module BushSlicer
       @config = conf[:services, service_name]
       @can_terminate = true
 
+aws_env=ENV["AWS_CREDENTIALS"]
+logger.info("AWS_CREDENTIALS: '#{aws_env}")
+logger.info("access_key: '#{access_key}', secret_key: '#{secret_key}'")
+      idx = ENV["AWS_CREDENTIALS"]&.index(':')
+      if idx
+        access_key = ENV["AWS_CREDENTIALS"][0..idx-1]
+        secret_key = ENV["AWS_CREDENTIALS"][idx+1..-1]
+      end
+logger.info("access_key: '#{access_key}', secret_key: '#{secret_key}'")
+
       if access_key && secret_key
         awscred = {
           "aws_access_key_id" => access_key,
