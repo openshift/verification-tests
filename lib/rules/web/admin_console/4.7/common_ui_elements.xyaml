@@ -409,7 +409,7 @@ click_kebab_item:
 click_kebab_of_one_resource:
   elements:
   - selector:
-      xpath: //*[text()='<resource_name>']//ancestor::tr//button[@data-test-id='kebab-button']
+      xpath: //a[text()='<resource_name>']//ancestor::tr//button[@data-test-id='kebab-button']
     op: click
 click_one_operation_in_kebab:
   action: click_kebab_of_one_resource
@@ -998,6 +998,15 @@ check_resource_details:
   action:
     if_param: desired_replicas
     ref: check_desired_replicas
+  action:
+    if_param: publisher
+    ref: check_publisher
+  action:
+    if_param: endpoint
+    ref: check_endpoint
+  action:
+    if_param: registrypullinterval
+    ref: check_registry_pull_interval
 check_resource_details_key_and_value:
   element: &key_value
     selector:
@@ -1291,6 +1300,20 @@ check_hpa_max_replicas:
     key: Max replicas
     value: <max_replicas>
   action: check_resource_details_key_and_value
+check_publisher:
+  params:
+    key: Publisher
+    value: <publisher>
+  action: check_resource_details_key_and_value
+check_endpoint:
+  params:
+    key: Endpoint
+    value: <endpoint>
+  action: check_resource_details_key_and_value
+check_registry_pull_interval:
+  element:
+    selector:
+      xpath: //dt[contains(.,'Registry poll interval')]/following-sibling::dd[1]/button[contains(.,'<registrypullinterval>')]
 click_workloads_tab:
   params:
     tab_name: Workloads
