@@ -185,10 +185,10 @@ Feature: rhel8images.feature
     Then the output should contain:
       | Min threads: 0, max threads: 16 |
     When I run the :set_env client command with:
-      | e        | PUMA_MIN_THREADS=1  |
-      | e        | PUMA_MAX_THREADS=12 |
-      | e        | PUMA_WORKERS=5      |
-      | resource | dc/ruby25rhel8      |
+      | e        | PUMA_MIN_THREADS=1     |
+      | e        | PUMA_MAX_THREADS=12    |
+      | e        | PUMA_WORKERS=5         |
+      | resource | deployment/ruby25rhel8 |
     And a pod becomes ready with labels:
       | deployment=ruby25rhel8 |
     When I run the :logs client command with:
