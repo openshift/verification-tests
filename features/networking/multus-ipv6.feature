@@ -74,7 +74,9 @@ Feature: Multus-CNI ipv6 related scenarios
     # Create the three pods which consumes the custom resource
     Given I obtain test data file "networking/multus-cni/Pods/IPv6/ipv6-pod.yaml"
     When I run oc create over "ipv6-pod.yaml" replacing paths:
-      | ["spec"]["nodeName"] | "<%= cb.target_node %>" |
+      | ["spec"]["nodeName"]                                                           | "<%= cb.target_node %>" |
+      | ["metadata"]["name"]                                                           | test-pod                |
+      | ["spec"]["template"]["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | whereabouts-excludeipv6 |
     Then the step should succeed
     When I wait up to 30 seconds for the steps to pass:
     """
@@ -89,7 +91,7 @@ Feature: Multus-CNI ipv6 related scenarios
     """
 
     # Create new net-attach-def via cluster admin to exclude address list
-     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/whereabouts-excludeIP.yaml"
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/whereabouts-excludeIP.yaml"
     When I run oc create as admin over "whereabouts-excludeIP.yaml" replacing paths:
       | ["metadata"]["name"]      | whereabouts-excludeipv6-list                                                                                                                                                                                                                                                                                  |
       | ["metadata"]["namespace"] | <%= project.name %>                                                                                                                                                                                                                                                                                           |
@@ -97,7 +99,7 @@ Feature: Multus-CNI ipv6 related scenarios
     Then the step should succeed
 
     # Create the three pods which consumes the custom resource
-   Given I obtain test data file "networking/multus-cni/Pods/IPv6/ipv6-pod.yaml"
+    Given I obtain test data file "networking/multus-cni/Pods/IPv6/ipv6-pod.yaml"
     When I run oc create over "ipv6-pod.yaml" replacing paths:
       | ["spec"]["nodeName"]                                                           | "<%= cb.target_node %>"      |
       | ["metadata"]["name"]                                                           | test-pod-list                |
