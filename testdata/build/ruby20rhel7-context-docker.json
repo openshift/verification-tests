@@ -125,7 +125,7 @@
           "dockerStrategy": {
             "from": {
               "kind": "DockerImage",
-              "name": "quay.io/openshifttest/ruby-25-centos7@sha256:575194aa8be12ea066fc3f4aa9103dcb4291d43f9ee32e4afe34e0063051610b"
+              "name": "registry.access.redhat.com/rhscl/ruby-22-rhel7:latest"
             },
             "env": [
               {
