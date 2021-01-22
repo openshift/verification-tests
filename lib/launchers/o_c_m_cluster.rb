@@ -14,13 +14,13 @@ require 'os'
 require 'http'
 
 module BushSlicer
-  class OCM
+  class OCMCluster
     include Common::Helper
 
     attr_reader :config, :ocm_cli
     attr_reader :token, :token_file, :url, :region, :version, :num_nodes, :lifespan, :cloud, :cloud_opts, :multi_az, :aws_account_id, :aws_access_key, :aws_secret_key
 
-    def initialize(**options) 
+    def initialize(**options)
       service_name = ENV['OCM_SERVICE_NAME'] || options[:service_name] || 'ocm'
       @opts = default_opts(service_name)&.merge options
       unless @opts
@@ -82,7 +82,7 @@ module BushSlicer
           end
           case @cloud_opts[:cloud_type]
           when "aws"
-            aws = Amz_EC2.new(service_name: @cloud)            
+            aws = Amz_EC2.new(service_name: @cloud)
             @aws_account_id = aws.account_id
             @aws_access_key = aws.access_key
             @aws_secret_key = aws.secret_key

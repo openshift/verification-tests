@@ -1,13 +1,13 @@
 ENV['BUSHSLICER_PRIVATE_DIR'] = nil
 
-lib_path = File.expand_path(File.dirname(File.dirname(__FILE__)))
+lib_path = File.expand_path(File.dirname(File.dirname(File.dirname(File.dirname(__FILE__))))) + "/lib"
 unless $LOAD_PATH.any? {|p| File.expand_path(p) == lib_path}
   $LOAD_PATH.unshift(lib_path)
 end
 
 require 'fileutils'
 require 'test/unit'
-require_relative './ocm'
+require 'launchers/o_c_m_cluster'
 
 class MyTest < Test::Unit::TestCase
   def setup
@@ -30,26 +30,26 @@ class MyTest < Test::Unit::TestCase
 
   def test_default_url
     options = { :token => "abc" }
-    ocm = BushSlicer::OCM.new(options)
+    ocm = BushSlicer::OCMCluster.new(options)
     assert_equal('https://api.stage.openshift.com', ocm.url)
   end
 
   def test_default_url_envvars
     ENV['OCM_TOKEN'] = "abc"
-    ocm = BushSlicer::OCM.new()
+    ocm = BushSlicer::OCMCluster.new()
     assert_equal('https://api.stage.openshift.com', ocm.url)
   end
 
   def test_generating_cluster_data
     options = { :token => "abc" }
-    ocm = BushSlicer::OCM.new(options)
+    ocm = BushSlicer::OCMCluster.new(options)
     json = ocm.generate_cluster_data('myosd4').to_json
     assert_equal('{"name":"myosd4","managed":true,"multi_az":false,"byoc":false}', json)
   end
 
   def test_generating_cluster_data_with_region
     options = { :token => "abc", :region => "us-east-1" }
-    ocm = BushSlicer::OCM.new(options)
+    ocm = BushSlicer::OCMCluster.new(options)
     json = ocm.generate_cluster_data('myosd4').to_json
     assert_equal('{"name":"myosd4","managed":true,"multi_az":false,"byoc":false,"region":{"id":"us-east-1"}}', json)
   end
@@ -57,7 +57,7 @@ class MyTest < Test::Unit::TestCase
   def test_generating_cluster_data_with_region_envvars
     ENV['OCM_TOKEN'] = "abc"
     ENV['OCM_REGION'] = "us-east-2"
-    ocm = BushSlicer::OCM.new()
+    ocm = BushSlicer::OCMCluster.new()
     json = ocm.generate_cluster_data('myosd4').to_json
     assert_equal('{"name":"myosd4","managed":true,"multi_az":false,"byoc":false,"region":{"id":"us-east-2"}}', json)
   end
@@ -69,21 +69,21 @@ class MyTest < Test::Unit::TestCase
     ENV['AWS_ACCESS_KEY'] = 'AKIAZZ007'
     ENV['AWS_SECRET_ACCESS_KEY'] = 'asdfghjkl/123456'
 
-    ocm = BushSlicer::OCM.new()
+    ocm = BushSlicer::OCMCluster.new()
     json = ocm.generate_cluster_data('myosd4').to_json
     assert_equal('{"name":"myosd4","managed":true,"multi_az":false,"byoc":true,"region":{"id":"eu-central-1"},"aws":{"account_id":"123456789","access_key_id":"AKIAZZ007","secret_access_key":"asdfghjkl/123456"}}', json)
   end
 
   def test_generating_json_with_version
     options = { :token => "abc", :version => "4.6.1" }
-    ocm = BushSlicer::OCM.new(options)
+    ocm = BushSlicer::OCMCluster.new(options)
     json = ocm.generate_cluster_data('myosd4').to_json
     assert_equal('{"name":"myosd4","managed":true,"multi_az":false,"byoc":false,"version":{"id":"openshift-v4.6.1"}}', json)
   end
 
   def test_generating_cluster_data_with_lifespan
     options = { :token => "abc", :lifespan => "25h" }
-    ocm = BushSlicer::OCM.new(options)
+    ocm = BushSlicer::OCMCluster.new(options)
     json = ocm.generate_cluster_data('myosd4').to_json
     time = Time.now + 60 * 60 * 25
     year = time.strftime("%Y")
@@ -94,7 +94,7 @@ class MyTest < Test::Unit::TestCase
 
   def test_generating_cluster_data_with_nodes
     options = { :token => "abc", :num_nodes => "8" }
-    ocm = BushSlicer::OCM.new(options)
+    ocm = BushSlicer::OCMCluster.new(options)
     json = ocm.generate_cluster_data('myosd4').to_json
     assert_equal('{"name":"myosd4","managed":true,"multi_az":false,"byoc":false,"nodes":{"compute":8}}', json)
   end
@@ -104,7 +104,7 @@ class MyTest < Test::Unit::TestCase
     File.write(hello_script, "#!/bin/sh\n[[ -z \"$1\" ]] && echo \"Specify a name!\" && exit 1; for i in {1..3}; do echo \"Hello $1\"; sleep 5; done")
     File.chmod(0755, hello_script)
     options = { :token => "abc" }
-    ocm = BushSlicer::OCM.new(options)
+    ocm = BushSlicer::OCMCluster.new(options)
     result = ocm.shell("#{hello_script} World")
     assert_equal("Hello World\nHello World\nHello World\n", result)
     result = ocm.shell("#{hello_script} World", STDOUT)
@@ -117,7 +117,7 @@ class MyTest < Test::Unit::TestCase
 
   def test_downloading_ocm_cli
     options = { :token => "abc" }
-    ocm = BushSlicer::OCM.new(options)
+    ocm = BushSlicer::OCMCluster.new(options)
     ocm_cli = ocm.download_ocm_cli
     assert(File.exists?(ocm_cli), "File '#{ocm_cli}' was not downloaded")
     output = ocm.shell('/tmp/ocm version').strip
@@ -126,7 +126,7 @@ class MyTest < Test::Unit::TestCase
 
   def test_executing_ocm
     options = { :token => "abc" }
-    ocm = BushSlicer::OCM.new(options)
+    ocm = BushSlicer::OCMCluster.new(options)
     output = ocm.exec("version")
     assert_equal("0.1.46", output)
     # if we provide some fake ocm-cli
@@ -145,7 +145,7 @@ class MyTest < Test::Unit::TestCase
 
   def test_generating_ocpinfo_data
     options = { :token => "abc" }
-    ocm = BushSlicer::OCM.new(options)
+    ocm = BushSlicer::OCMCluster.new(options)
     result = ocm.generate_ocpinfo_data('https://api.osd4-123.w95o.s1.foo.com:6443/', 'guest', 'some-password')
     assert_equal('osd4-123.w95o.s1.foo.com', result["ocp_domain"])
     assert_equal('https://api.osd4-123.w95o.s1.foo.com:6443', result["ocp_api_url"])
@@ -164,7 +164,7 @@ class MyTest < Test::Unit::TestCase
     # only if we provide some fake ocm-cli
     if ENV['OCM_CLI_URL']
       options = { :token => "abc" }
-      ocm = BushSlicer::OCM.new(options)
+      ocm = BushSlicer::OCMCluster.new(options)
       ocm.create_osd("osd4-001")
       ocpinfo_file = File.join(BushSlicer::Host.localhost.workdir, 'install-dir', 'OCPINFO.yml')
       ocpinfo = YAML.load_file(ocpinfo_file)
