@@ -180,13 +180,16 @@ Given /^I wait for clusterlogging(?: named "(.+)")? with #{QUOTED} log collector
     | component=kibana |
   })
   cl.wait_until_kibana_is_ready
-  # lastly check the cronjob.
-  if env.version_cmp('4.5', user: user) < 0
-    raise "Failed to find cronjob for curator" if cron_job('curator').schedule.nil?
-  else
-    cj_names = ["elasticsearch-delete-app", "elasticsearch-delete-infra", "elasticsearch-rollover-app", "elasticsearch-rollover-infra"]
+  # check the cronjob curator.
+  if env.version_lt('4.5', user: user)
+    raise "Failed to find cronjob for curator" unless cron_job('curator').exists?
+  end
+
+  # check the cronjob index management
+  if env.version_gt('4.4', user: user)
+    cj_names = ["elasticsearch-im-app", "elasticsearch-im-audit", "elasticsearch-im-infra"]
     for cj_name in cj_names do
-      raise "Failed to find cronjob for #{cj_name}" if cron_job(cj_name).schedule.nil?
+      raise "Failed to find cronjob for #{cj_name}" unless cron_job(cj_name).exists?
     end
   end
 end
@@ -730,58 +733,45 @@ end
 Given /^I check the cronjob status$/ do
   # check logging version
   project("openshift-operators-redhat")
-  eo_version = subscription("elasticsearch-operator").current_csv(cached: false).match(/elasticsearch-operator\.(.*)/)[1].split('-')[0]
+  eo_version = subscription("elasticsearch-operator").current_csv(cached: false)[23..-1].split('-')[0]
   project("openshift-logging")
-  clo_version = subscription("cluster-logging").current_csv(cached: false).match(/clusterlogging\.(.*)/)[1].split('-')[0]
-  if clo_version != eo_version
-    raise "CLO and EO version mismatch"
-  else
-    #csv version >= 4.5, check rollover/delete cronjobs, csv < 4.5, only check curator cronjob
-    if ["4.0", "4.1", "4.2", "4.3", "4.4"].include? clo_version.split('.').take(2).join('.')
-      if cron_job('curator').exists?
-        # remove all the old jobs
-        @result = admin.cli_exec(:delete, object_type: 'job', l: 'component=curator', n: 'openshift-logging')
-        # wait up to 6 minutes for the cronjob to be recreated
-        success = wait_for(360, interval: 10) {
-          BushSlicer::Job.list(user: user, project: project).count > 0
-        }
-        raise "can't recreate cronjobs" unless success
-      else
-        raise "cronjob curator doesn't exist"
-      end
-    else
-      cj_names = ["elasticsearch-delete-app", "elasticsearch-delete-infra", "elasticsearch-delete-audit", "elasticsearch-rollover-audit", "elasticsearch-rollover-app", "elasticsearch-rollover-infra"]
-      for cj_name in cj_names do
-        raise "cronjob #{cj_name} doesn't exist" unless cron_job(cj_name).exists?
-      end
+  clo_version = subscription("cluster-logging").current_csv(cached: false)[16..-1].split('-')[0]
+  #csv version >= 4.5, check rollover/delete cronjobs, csv < 4.5, only check curator cronjob
+  if ["4.0", "4.1", "4.2", "4.3", "4.4"].include? clo_version.split('.').take(2).join('.')
+    if cron_job('curator').exists?
       # remove all the old jobs
-      @result = admin.cli_exec(:delete, object_type: 'job', l: 'component=indexManagement', n: 'openshift-logging')
-      if cron_job('curator').exists?
-        @result = admin.cli_exec(:delete, object_type: 'job', l: 'component=curator', n: 'openshift-logging')
-        # wait up to 16 minutes for the cronjob to be recreated
-        success = wait_for(960, interval: 10) {
-          BushSlicer::Job.list(user: user, project: project).count == 8 || (BushSlicer::Job.list(user: user, project: project).count == 7)
-        }
-        raise "can't recreate cronjobs" unless success
-      else
-        # wait up to 16 minutes for the cronjob to be recreated
-        success = wait_for(960, interval: 10) {
-          BushSlicer::Job.list(user: user, project: project).count == 6
-        }
-        raise "can't recreate cronjobs" unless success
-      end
-    end
-
-    # check the new jobs could be successfully
-    # wait up to 1 minute for the jobs to complete
-    jobs = BushSlicer::Job.list(user: user, project: project)
-    job_names = jobs.map(&:name)
-    for job_name in job_names
-      success = wait_for(60, interval: 5) {
-        job(job_name).succeeded == 1
+      @result = admin.cli_exec(:delete, object_type: 'job', l: 'component=curator', n: 'openshift-logging')
+      # wait up to 6 minutes for the cronjob to be recreated
+      success = wait_for(360, interval: 10) {
+        BushSlicer::Job.list(user: user, project: project).count >= 1
       }
-      raise "#{job_name} failed to complete" unless success
+      raise "can't recreate cronjobs" unless success
+    else
+      raise "cronjob curator doesn't exist"
     end
+  else
+    cj_names = ["elasticsearch-im-app", "elasticsearch-im-audit", "elasticsearch-im-infra"]
+    for cj_name in cj_names do
+      raise "cronjob #{cj_name} doesn't exist" unless cron_job(cj_name).exists?
+    end
+    # remove all the old jobs
+    @result = admin.cli_exec(:delete, object_type: 'job', l: 'component=indexManagement', n: 'openshift-logging')
+    # wait up to 16 minutes for the cronjob to be recreated
+    success = wait_for(960, interval: 10) {
+      BushSlicer::Job.list(user: user, project: project).count >= 3
+    }
+    raise "can't recreate cronjobs" unless success
+  end
+
+  # check the new jobs could be successfully
+  # wait up to 1 minute for the jobs to complete
+  jobs = BushSlicer::Job.list(user: user, project: project)
+  job_names = jobs.map(&:name)
+  for job_name in job_names
+    success = wait_for(60, interval: 5) {
+      job(job_name).succeeded == 1
+    }
+    raise "#{job_name} failed to complete" unless success
   end
 end
 
