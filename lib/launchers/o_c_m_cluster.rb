@@ -168,15 +168,14 @@ module BushSlicer
           raise "Unsupported OS"
         end
       end
-      #doesn't work
-      #File.open('/tmp/ocm', 'wb') do |file|
-      #  @result = Http.get(url: url) do |chunk|
-      #    file.write chunk
-      #  end
-      #end
-      shell("curl -L #{url} -o /tmp/ocm")
-      File.chmod(0775, '/tmp/ocm')
-      return '/tmp/ocm'
+      ocm_path = File.join(Host.localhost.workdir, 'ocm')
+      File.open(ocm_path, 'wb') do |file|
+        @result = Http.get(url: url, raise_on_error: true) do |chunk|
+          file.write chunk
+        end
+      end
+      File.chmod(0775, ocm_path)
+      return ocm_path
     end
 
     def shell(cmd, output = nil)
