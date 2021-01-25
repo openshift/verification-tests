@@ -7,16 +7,25 @@
 <% branch = `git branch | grep "*"  | sed "s/* //"`.strip %>
 <% common_libs = " -r features/step_definitions/ -r features/support/ "%>
 
-<% junit_dir = ENV["WORKSPACE"] ? File.join(ENV["WORKSPACE"], "junit-report") : "junit-report" %>
-
+<%
+  case
+  when ENV["BUSHSLICER_REPORT_DIR"]
+    report_dir = ENV["BUSHSLICER_REPORT_DIR"]
+  when ENV["WORKSPACE"]
+    report_dir = ENV["WORKSPACE"]
+  else
+    report_dir = Dir.pwd
+  end
+%>
 
 default: --profile devel
 debug: --profile _debug --profile devel
 devel: --profile _devel <%= default_args %>
 tcms: BUSHSLICER_TEST_CASE_MANAGER=tcms <%= tcms_args %>
 polarshift: BUSHSLICER_TEST_CASE_MANAGER=polarshift <%= tcms_args %>
-junit: <%= default_args %> -f junit -o "<%= junit_dir %>" --profile dir_embedder
-dir_embedder: -f BushSlicer::SaveToDirEmbeddingFormatter -o "embedded_files"
+junit: <%= default_args %> -f junit -o "<%= File.join(report_dir, 'junit-report') %>" --profile dir_embedder
+dir_embedder: -f BushSlicer::SaveToDirEmbeddingFormatter -o "<%= File.join(report_dir, 'embedded_files') %>"
+report_portal: rp_config=<%= "#{report_dir}/report-portal.yml" %> -f ReportPortal::Cucumber::Formatter
 
 _debug: BUSHSLICER_LOG_LEVEL=debug
 _devel: BUSHSLICER_DEBUG_AFTER_FAIL=true BUSHSLICER_DEBUG_ATTACHER_TIMEOUT=true
