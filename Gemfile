@@ -33,6 +33,7 @@ gem 'watir'
 gem 'headless'
 gem 'selenium-webdriver'
 gem 'protobuf'
+gem 'reportportal'
 ## Docs
 # beware https://github.com/pry/pry/issues/1465
 #        https://bugzilla.redhat.com/show_bug.cgi?id=1257578
