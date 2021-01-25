@@ -9,7 +9,7 @@ More info you can find in link:doc/overview.adoc[Overview document].
 . Install git if not installed already, install ruby 2.4+ if not installed
 . git clone git@github.com:openshift/verification-tests.git
 . cd verification-tests
-. tools/install_os_deps.sh # need sudo; you may need to login again to terminal if ruby was installed via rvm during this phase
+. tools/install_os_deps.sh # need sudo; you may need to login again to terminal if ruby was installed via rvm during this phase (see below for RVM usage)
 . tools/hack_bundle.rb # normal user
 . Install OKD or OpenShift Container Platform client tools
 . Install the web driver if you desire to run tests which work with the Web UI. See link:doc/configuration.adoc[Web Driver]
@@ -68,3 +68,27 @@ It is in link:.gitignore[.gitignore] so that you can keep your test scenarios un
 == Contributing
 
 Please submit issues and pull requests to the project. You can discuss and ask questions on https://lists.openshift.redhat.com/openshiftmm/listinfo/dev[OpenShift mailing list].
+
+
+=== RVM for dependency management
+
+If you are planning on installing dependencies for verification Tests on your system, it is often a good idea to use some kind of Version Manager/Package manager, like RVM.
+
+RVM is analogous to virtualenv in python and it stands for Ruby Version Manager.
+
+You can install RVM and read more abou it on https://rvm.io/
+
+Usually once RVM is installed, you would want to create/install a new `rvm` interpreter using:
+
+```rvm install "ruby-2.7.1" && rvm  --create use 2.7.1@verification-tests``` which will install Ruby 2.7.1 and create a new interpreter as well as a Gemset.
+When we install Ruby 2.7.1, it creates a local directory for your user with Ruby 2.7.1 under `~/.rvm/rubies/ruby-2.7.1`.
+Once that is done, the Gemset creation is basically an attempt to have dependencies for various apps under same interpreter `2.7.1`. So in this case,
+we are creating Gemset `verification-tests` for this repo dependencies. If you had multiple repos, you would use similar command as above to create a new Gemset under 2.7.1
+and give it a name that you can recognize. Then for each respective app you may choose to use different gemset as `rvm use 2.7.1@verification-tests` or `rvm use 2.7.1@my-other-repo-or-app`
+
+Feel free to read about interpreter and gemset in the Ruby docs or elsewhere on the internet.
+
+Once ruby is installed, interpreter is created and gemset is present and activated, you can run `which ruby` to validate if the correct ruby is used and `ruby -v` to check version.
+Following this, you may continue the steps as mentioned above, to run `bundle` commands to install gems listed in Gemfile to your Gemset.
+
+Also if you are wondering what does `bundle` command do, search and read about `ruby bundler` on the internet.
