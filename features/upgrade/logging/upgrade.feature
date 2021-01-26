@@ -5,7 +5,7 @@ Feature: Logging upgrading related features
   @destructive
   @upgrade-prepare
   @users=upuser1,upuser2
-  Scenario: Cluster logging checking during cluster upgrade - prepare 
+  Scenario: Cluster logging checking during cluster upgrade - prepare
     # prepare data
     Given I switch to the first user
     When I run the :new_project client command with:

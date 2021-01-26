@@ -466,6 +466,7 @@
     :sort_by: --sort-by=<value>
     :template: --template=<value>
     :w: --watch=<value>
+    :selector: --selector=<value>
 :help:
   :cmd: oc help
   :options:

@@ -181,14 +181,14 @@ Feature: Storage upgrade tests
   @admin
   Scenario: Snapshot operator should be in available status after upgrade and can created pod with snapshot - prepare
     Given the master version >= "4.4"
- 
+
     Given I store the ready and schedulable workers in the :worker clipboard
 
     When I run the :get admin command with:
       | resource      | nodes                     |
       | resource_name | <%= cb.worker[0].name %>  |
       | show_label    | true                      |
-      
+
     Given evaluation of `@result[:stdout].split(/\n/)[-1].split(/\s/)[-1].split(",").select{|n| n=~ /hostname/}.join("")` is stored in the :label clipboard
 
     When I run the :oadm_new_project admin command with:
@@ -196,12 +196,12 @@ Feature: Storage upgrade tests
       | node_selector | <%= cb.label %>  |
       | admin         | <%= user.name %> |
 
-    Given I switch to cluster admin pseudo user		
+    Given I switch to cluster admin pseudo user
     When I use the "csihostpath" project
 
-    Given I obtain test data file "storage/csi/csi-rbac.yaml"   
+    Given I obtain test data file "storage/csi/csi-rbac.yaml"
     When I run the :apply client command with:
-      | f | csi-rbac.yaml | 
+      | f | csi-rbac.yaml |
     Then the step should succeed
     Given SCC "privileged" is added to the "csi-provisioner" service account without teardown
     Given SCC "privileged" is added to the "csi-attacher" service account without teardown
@@ -240,7 +240,7 @@ Feature: Storage upgrade tests
     Given the pod named "csi-hostpath-snapshotter-0" is ready
     Given the pod named "csi-hostpathplugin-0" is ready
     """
-    
+
     #Create storageclass volumesnapshotclass
     Given I obtain test data file "storage/csi/csi-storageclass.yaml"
     When I run the :apply client command with:
@@ -303,13 +303,13 @@ Feature: Storage upgrade tests
 
     #Restore works
     When I use the "csihostpath" project
-    
+
     #Test case OCP-29741 with cmd oc patch scc privileged -p {} --type merged will cause existed serviceaccount lost priviled scc in pre-action, so add scc back in post-action as a WA.
 
-    Given SCC "privileged" is added to the "csi-provisioner" service account 
+    Given SCC "privileged" is added to the "csi-provisioner" service account
     Given SCC "privileged" is added to the "csi-attacher" service account
-    Given SCC "privileged" is added to the "csi-snapshotter" service account 
-    Given SCC "privileged" is added to the "csi-plugin" service account 
+    Given SCC "privileged" is added to the "csi-snapshotter" service account
+    Given SCC "privileged" is added to the "csi-plugin" service account
 
     Given I ensure "csi-hostpath-attacher-0" pod is deleted
     Given I ensure "csi-hostpath-provisioner-0" pod is deleted
@@ -328,7 +328,7 @@ Feature: Storage upgrade tests
     Given I obtain test data file "storage/csi/restorepvc.yaml"
     Then I run oc create over "restorepvc.yaml" replacing paths:
       | ["spec"]["storageClassName"]   | csi-hostpath-sc       |
-      | ["spec"]["dataSource"]["name"] | pvc-hostpath-snapshot | 
+      | ["spec"]["dataSource"]["name"] | pvc-hostpath-snapshot |
     Then the step should succeed
 
     Given I obtain test data file "storage/misc/pod.yaml"
@@ -341,4 +341,4 @@ Feature: Storage upgrade tests
     When I execute on the pod:
       | ls | /mnt/hostpath |
     Then the output should contain:
-      | test-before-upgrade |      
+      | test-before-upgrade |

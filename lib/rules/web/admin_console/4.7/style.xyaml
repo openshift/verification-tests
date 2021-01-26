@@ -61,9 +61,9 @@ check_info_alert_style:
   - selector:
       xpath: //div[contains(@class, 'pf-c-alert') and contains(@class, 'pf-m-info')]
     timeout: 30
-check_alert_style_on_deploy_image_page: {}
-check_alert_style_on_create_app_page:
-  action: create_app_from_imagestream
+check_alert_style_on_deploy_image_page:
+  action: goto_deploy_image_page
+  action: search_and_deploy_image
   action: check_error_alert_style
 check_alert_style_on_dc_env_page:
   action: goto_one_dc_page

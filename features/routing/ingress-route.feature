@@ -2,7 +2,7 @@ Feature: Testing ingress to route object
 
   # @author zzhao@redhat.com
   # @case_id OCP-18789
-  Scenario: Ingress generic support 
+  Scenario: Ingress generic support
     Given the master version >= "3.10"
     Given I have a project
     And I store an available router IP in the :router_ip clipboard
@@ -16,7 +16,7 @@ Feature: Testing ingress to route object
       | f | service_unsecure.yaml |
     Then the step should succeed
     Given I obtain test data file "routing/ingress/test-ingress.json"
-    When I run the :create client command with: 
+    When I run the :create client command with:
       | f | test-ingress.json |
     Then the step should succeed
     When I run the :get client command with:

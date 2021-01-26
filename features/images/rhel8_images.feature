@@ -25,7 +25,7 @@ Feature: rhel8images.feature
     Then the output should contain:
       | Min threads: 0, max threads: 16 |
     When I run the :set_env client command with:
-      | e        | PUMA_MIN_THREADS=1  | 
+      | e        | PUMA_MIN_THREADS=1  |
       | e        | PUMA_MAX_THREADS=12 |
       | e        | PUMA_WORKERS=5      |
       | resource | dc/ruby25rhel8      |
@@ -70,12 +70,12 @@ Feature: rhel8images.feature
     Given I have a project
     When I run the :tag admin command with:
       | source           | registry.redhat.io/rhel8/mysql-80:latest |
-      | dest             | qe-mysql-80-rhel8:latest                 | 
+      | dest             | qe-mysql-80-rhel8:latest                 |
       | reference_policy | local                                    |
       | n                | openshift                                |
     Then the step should succeed
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift/origin/master/examples/db-templates/mysql-persistent-template.json | 
+      | f | https://raw.githubusercontent.com/openshift/origin/master/examples/db-templates/mysql-persistent-template.json |
     Then the step should succeed
     Given I replace resource "template" named "mysql-persistent" saving edit to "tmp-out.json":
       | mysql:${MYSQL_VERSION} | qe-mysql-80-rhel8:latest |
@@ -185,10 +185,10 @@ Feature: rhel8images.feature
     Then the output should contain:
       | Min threads: 0, max threads: 16 |
     When I run the :set_env client command with:
-      | e        | PUMA_MIN_THREADS=1  |
-      | e        | PUMA_MAX_THREADS=12 |
-      | e        | PUMA_WORKERS=5      |
-      | resource | dc/ruby25rhel8      |
+      | e        | PUMA_MIN_THREADS=1     |
+      | e        | PUMA_MAX_THREADS=12    |
+      | e        | PUMA_WORKERS=5         |
+      | resource | deployment/ruby25rhel8 |
     And a pod becomes ready with labels:
       | deployment=ruby25rhel8 |
     When I run the :logs client command with:

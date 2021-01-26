@@ -14,10 +14,10 @@ Feature: OVNKubernetes Windows Container related networking scenarios
     And a pod becomes ready with labels:
       | name=test-pods |
     And evaluation of `pod` is stored in the :linux_pod clipboard
-    
+
     Given I use the "test-service" service
     And evaluation of `service.ip` is stored in the :linux_service_ip clipboard
-    
+
     Given I obtain test data file "networking/windows_pod_and_service.yaml"
     When I run the :create client command with:
       | f | windows_pod_and_service.yaml |
@@ -25,34 +25,34 @@ Feature: OVNKubernetes Windows Container related networking scenarios
     And a pod becomes ready with labels:
       | app=win-webserver |
     And evaluation of `pod` is stored in the :windows_pod clipboard
-    
+
     Given I use the "win-service" service
     And evaluation of `service.ip` is stored in the :windows_service_ip clipboard
     #Checking Service communication across pods
     When I execute on the "<%= cb.linux_pod.name %>" pod:
       | curl | -s | --connect-timeout | 2 | <%= cb.windows_service_ip %>:27018 |
     Then the step should succeed
-    And the output should contain "Windows Container Web Server" 
-    
+    And the output should contain "Windows Container Web Server"
+
     When I execute on the "<%= cb.windows_pod.name %>" pod:
       | curl | -s | --connect-timeout | 2 | <%= cb.linux_service_ip %>:27017 |
     Then the step should succeed
-    And the output should contain "Hello OpenShift" 
-    
+    And the output should contain "Hello OpenShift"
+
     #Checking network communication across pods
     When I execute on the "<%= cb.linux_pod.name %>" pod:
       | curl | -s | --connect-timeout | 2 | <%= cb.windows_pod.ip %>:80 |
     Then the step should succeed
-    And the output should contain "Windows Container Web Server" 
-    
+    And the output should contain "Windows Container Web Server"
+
     When I execute on the "<%= cb.windows_pod.name %>" pod:
       | curl | -s | --connect-timeout | 2 | <%= cb.linux_pod.ip %>:8080 |
     Then the step should succeed
-    And the output should contain "Hello OpenShift" 
+    And the output should contain "Hello OpenShift"
 
   # @author anusaxen@redhat.com
   # @case_id OCP-37519
-  @admin	
+  @admin
   Scenario: Create Loadbalancer service for a window container
     Given the env has hybridOverlayConfig enabled
     And the env is using windows nodes
@@ -64,13 +64,13 @@ Feature: OVNKubernetes Windows Container related networking scenarios
     Then the step should succeed
     And a pod becomes ready with labels:
       | app=win-webserver |
-      
+
     # Create loadbalancer service
     When I run the :create_service_loadbalancer client command with:
       | name | win-webserver |
       | tcp  | 80            |
     Then the step should succeed
-    
+
     # Get the external ip of the loadbalancer service
     And I wait up to 60 seconds for the steps to pass:
     """

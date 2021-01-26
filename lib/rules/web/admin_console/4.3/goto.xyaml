@@ -117,6 +117,10 @@ goto_one_rc_page:
 goto_rc_list_page:
   url: k8s/ns/<project_name>/replicationcontrollers
 
+goto_daemonsets_page:
+  url: k8s/ns/<project_name>/daemonsets
+  action: wait_box_loaded
+  
 #pod
 goto_one_pod_page:
   url: k8s/ns/<project_name>/pods/<resource_name>

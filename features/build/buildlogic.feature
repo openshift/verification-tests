@@ -55,13 +55,13 @@ Feature: buildlogic.feature
     Given I have a project
     When I run the :new_build client command with:
       | app_repo | https://github.com/openshift/ruby-hello-world   |
-      | D        | FROM centos/ruby-25-centos7:latest\nRUN echo ok |
+      | D        | FROM quay.io/openshifttest/ruby-25-centos7:build\nRUN echo ok |
     Then the step should succeed
     When I get project buildconfigs as YAML
     Then the step should succeed
     Then the output should match:
       | dockerfile   |
-      | FROM centos/ruby-25-centos7:latest                 |
+      | FROM quay.io/openshifttest/ruby-25-centos7:build   |
       | RUN echo ok  |
       | uri: https://github.com/openshift/ruby-hello-world |
       | type: [Gg]it |
@@ -134,7 +134,7 @@ Feature: buildlogic.feature
     And the "secret" file is created with the following lines:
       | <%= cb.ssh_private_key.to_pem %> |
     And I run the :create_secret client command with:
-      | secret_type | generic               | 
+      | secret_type | generic               |
       | name        | mysecret              |
       | from_file   | ssh-privatekey=secret |
     Then the step should succeed
@@ -183,7 +183,7 @@ Feature: buildlogic.feature
     And the "secret" file is created with the following lines:
       | <%= cb.ssh_private_key.to_pem %> |
     And I run the :create_secret client command with:
-      | secret_type | generic               | 
+      | secret_type | generic               |
       | name        | mysecret              |
       | from_file   | ssh-privatekey=secret |
     Then the step should succeed
@@ -243,7 +243,7 @@ Feature: buildlogic.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-13914
   Scenario: Prune old builds automaticly
-    #Should prune completed builds based on the successfulBuildsHistoryLimit setting	
+    #Should prune completed builds based on the successfulBuildsHistoryLimit setting
     Given I have a project
     When I run the :new_build client command with:
       | D    | FROM busybox\nRUN touch /php-file |
@@ -269,7 +269,7 @@ Feature: buildlogic.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-24154
-  Scenario: Should prune canceled builds based on the failedBuildsHistoryLimit setting	
+  Scenario: Should prune canceled builds based on the failedBuildsHistoryLimit setting
     Given I have a project
     When I run the :new_app client command with:
       | template | rails-postgresql-example |
@@ -330,7 +330,7 @@ Feature: buildlogic.feature
   Scenario: Should prune errored builds based on the failedBuildsHistoryLimit setting
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift/origin/master/test/extended/testdata/builds/build-pruning/errored-build-config.yaml |                                              
+      | f | https://raw.githubusercontent.com/openshift/origin/master/test/extended/testdata/builds/build-pruning/errored-build-config.yaml |
     Then the step should succeed
     Given I run the steps 4 times:
     """
@@ -349,7 +349,7 @@ Feature: buildlogic.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-24158
-  Scenario: Should prune builds after a buildConfig change 
+  Scenario: Should prune builds after a buildConfig change
     Given I have a project
     When I run the :new_app client command with:
       | image_stream | ruby                                              |
@@ -410,7 +410,7 @@ Feature: buildlogic.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-19133
-  Scenario: Pipeline build can be pruned automatically	
+  Scenario: Pipeline build can be pruned automatically
     Given I have a project
     And I have a jenkins v2 application
     When I run the :new_app client command with:

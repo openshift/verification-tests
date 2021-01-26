@@ -1,6 +1,7 @@
 #------------------------------ This file is used for cluster detail defination -------------------
 cluster_detail_page_loaded:
     action: overview_tab_loaded
+
 check_disabled_actions_on_cluster_detail_page:
     element:
         selector:
@@ -41,7 +42,7 @@ disabled_launch_console_button_on_cluster_detail_page_loaded:
 check_cluster_status:
     element:
         selector:
-            xpath: "//dd[@style='text-transform: capitalize;' and text()='<expect_status>']"
+            xpath: "//dd[@style='text-transform: capitalize;']/div[text()='ready']"
         timeout: 300
 resource_usage_loaded:
     action: cpu_chart_loaded
@@ -99,7 +100,7 @@ wait_cluster_status_on_detail_page:
     element:
         selector:
             xpath: //div[@class='pf-l-grid__item pf-m-6-col-on-sm']/dl/div/dd/div[text()='<cluster_status>']
-        timeout: 3600
+        timeout: <wait_time>
 go_to_edit_node_count_dialog_on_cluster_detail_page:
   action: expand_actions_on_cluster_detail_page
   action: click_edit_node_count_button_in_dropdown
@@ -109,7 +110,7 @@ check_scale_result_on_detail_page:
 check_desired_compute_nodes:
   element:
     selector:
-      xpath: //dt[text()='Nodes']/following-sibling::dd[1]/dl/dt[text()='Compute:']/following-sibling::dd[contains(.,<desired_compute_nodes>)]
+      xpath: //span[text()='Nodes']/../following-sibling::dd[1]//dt[text()='Compute:']/following-sibling::dd[contains(.,<desired_compute_nodes>)]
     timeout: 1000
 scale_cluster_from_cluster_detail_page:
   action: cluster_detail_page_loaded
@@ -404,12 +405,12 @@ close_actions_behind_open_console_button:
 check_load_balancer_on_detail_page:
   element:
     selector:
-      xpath: //dt[text()='Load balancers']/following-sibling::dd[text()='<load_balancer_value>']
+      xpath: //span[text()='Load balancers']/../following-sibling::dd/div[text()='<load_balancer_value>']
     timeout: 1000
 check_persistent_storage_on_detail_page:
   element:
     selector:
-      xpath: //dt[text()='Persistent storage']/following-sibling::dd[text()='<persistent_storage_value>']
+      xpath: //span[text()='Persistent storage']/../following-sibling::dd/div[text()='<persistent_storage_value>']
     timeout: 1000
 scale_load_balancer_from_cluster_detail_page:
   action: cluster_detail_page_loaded

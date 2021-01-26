@@ -235,7 +235,7 @@ check_organizations_field:
   - selector:
       xpath: //div//input[@id='organizations[0].organizations' and @placeholder='e.g. org 1']
   - selector:
-      xpath: //div//input[@id='organizations[0].organizations' and @placeholder='e.g. org 1']/../../../following-sibling::div[1]/button/span/*[name()='svg']
+      xpath: //div//input[@id='organizations[0].organizations' and @placeholder='e.g. org 1']/../../../../following-sibling::div[1]/button/span/*[name()='svg']
 check_teams_field:
   elements:
   - selector:
@@ -247,7 +247,7 @@ check_teams_field:
   - selector:
       xpath: //div//input[@id='teams[0].teams' and @placeholder='e.g. org/team 1']
   - selector:
-      xpath: //div//input[@id='teams[0].teams' and @placeholder='e.g. org/team 1']/../../../following-sibling::div[1]/button/span/*[name()='svg']
+      xpath: //div//input[@id='teams[0].teams' and @placeholder='e.g. org/team 1']/../../../../following-sibling::div[1]/button/span/*[name()='svg']
 check_openid_idp_info:
   action: check_idp_name_field
   action: check_oauth_callback_url_field
@@ -388,33 +388,33 @@ check_ldap_id_field:
   - selector:
       xpath: //div//input[@id='ldap_id[0].ldap_id' and @value='dn']
   - selector:
-      xpath: //div//input[@id='ldap_id[0].ldap_id' and @value='dn']/../../../following-sibling::div[1]/button/span/*[name()='svg']
+      xpath: //div//input[@id='ldap_id[0].ldap_id' and @value='dn']/../../../../following-sibling::div[1]/button/span/*[name()='svg']
   - selector:
-      xpath: //div//input[@id='ldap_id[0].ldap_id' and @value='dn']/../../../following-sibling::div[2]/button[text()='Add more']/span/*[name()='svg']
+      xpath: //div//input[@id='ldap_id[0].ldap_id' and @value='dn']/../../../../following-sibling::div[2]/button[text()='Add more']/span/*[name()='svg']
 check_ldap_preferred_username_field:
   elements:
   - selector:
       xpath: //div//p[@id='field-array-label' and text()='Preferred username']/following-sibling::p[@id='field-array-help-text' and text()='The list of attributes whose values should be used as the preferred username.']
   - selector:
-      xpath: //div//input[@id='ldap_preferred_username[0].ldap_preferred_username' and @value='uid']/../../../following-sibling::div[1]/button/span/*[name()='svg']
+      xpath: //div//input[@id='ldap_preferred_username[0].ldap_preferred_username' and @value='uid']/../../../../following-sibling::div[1]/button/span/*[name()='svg']
   - selector:
-      xpath: //div//input[@id='ldap_preferred_username[0].ldap_preferred_username' and @value='uid']/../../../following-sibling::div[2]/button[text()='Add more']/span/*[name()='svg']
+      xpath: //div//input[@id='ldap_preferred_username[0].ldap_preferred_username' and @value='uid']/../../../../following-sibling::div[2]/button[text()='Add more']/span/*[name()='svg']
 check_ldap_name_field:
   elements:
   - selector:
       xpath: //div//p[@id='field-array-label' and text()='Name']/following-sibling::p[@id='field-array-help-text' and text()='The list of attributes whose values should be used as the display name.']
   - selector:
-      xpath: //div//input[@id='ldap_name[0].ldap_name' and @value='cn']/../../../following-sibling::div[1]/button/span/*[name()='svg']
+      xpath: //div//input[@id='ldap_name[0].ldap_name' and @value='cn']/../../../../following-sibling::div[1]/button/span/*[name()='svg']
   - selector:
-      xpath: //div//input[@id='ldap_name[0].ldap_name' and @value='cn']/../../../following-sibling::div[2]/button[text()='Add more']/span/*[name()='svg']
+      xpath: //div//input[@id='ldap_name[0].ldap_name' and @value='cn']/../../../../following-sibling::div[2]/button[text()='Add more']/span/*[name()='svg']
 check_ldap_email_field:
   elements:
   - selector:
       xpath: //div//p[@id='field-array-label' and text()='Email']/following-sibling::p[@id='field-array-help-text' and text()='The list of attributes whose values should be used as the email address.']
   - selector:
-      xpath: //div//input[@id='ldap_email[0].ldap_email']/../../../following-sibling::div[1]/button/span/*[name()='svg']
+      xpath: //div//input[@id='ldap_email[0].ldap_email']/../../../../following-sibling::div[1]/button/span/*[name()='svg']
   - selector:
-      xpath: //div//input[@id='ldap_email[0].ldap_email']/../../../following-sibling::div[2]/button[text()='Add more']/span/*[name()='svg']
+      xpath: //div//input[@id='ldap_email[0].ldap_email']/../../../../following-sibling::div[2]/button[text()='Add more']/span/*[name()='svg']
 check_ldap_idp_advanced_options:
   action: check_idp_advanced_options_collapsed
   action: click_the_advanced_options_button
@@ -506,7 +506,7 @@ check_first_idp_item:
   - selector:
       xpath: //section[@id='accessControlTabContent']//tr/td[@data-label='Type' and text()='<idp_type>']
   - selector:
-      xpath: //section[@id='accessControlTabContent']//tr/td[@data-label='Auth Callback URL']/button[text()='Copy URL to clipboard']
+      xpath: //section[@id='accessControlTabContent']//tr/td[@data-label='Auth callback URL']/button[text()='Copy URL to clipboard']
 check_idp_items_table_title:
   elements:
   - selector:
@@ -514,7 +514,7 @@ check_idp_items_table_title:
   - selector:
       xpath: //section[@id='accessControlTabContent']//tr/th[@data-label='Type' and text()='Type']
   - selector:
-      xpath: //section[@id='accessControlTabContent']//tr/th[@data-label='Auth Callback URL' and text()='Auth callback URL']
+      xpath: //section[@id='accessControlTabContent']//tr/th[@data-label='Auth callback URL' and text()='Auth callback URL']
 check_empty_idp_info_in_tab:
   action: check_add_identity_provider_button
   elements:
@@ -588,11 +588,11 @@ clear_idp_name_field:
 check_organizations_field_validation:
   element:
     selector:
-      xpath: //div//input[@id='organizations[0].organizations']/../../../following-sibling::div[2][text()='At least one is required.']
+      xpath: //div//input[@id='organizations[0].organizations']/../../../../following-sibling::div[2][text()='At least one is required.']
 check_teams_field_validation:
   element:
     selector:
-      xpath: //div//input[@id='teams[0].teams']/../../../following-sibling::div[2][text()='At least one is required.']
+      xpath: //div//input[@id='teams[0].teams']/../../../../following-sibling::div[2][text()='At least one is required.']
 check_google_idp_validations:
   action: clear_idp_name_field
   action: click_idp_confirm_button

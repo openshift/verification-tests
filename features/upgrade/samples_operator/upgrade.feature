@@ -34,7 +34,7 @@ Feature: image-registry operator upgrade tests
     # Check cluster operator image-registry should be in correct status
     Given the expression should be true> cluster_operator('image-registry').condition(type: 'Available')['status'] == "True"
     Given the expression should be true> cluster_operator('image-registry').condition(type: 'Progressing')['status'] == "False"
-    Given the expression should be true> cluster_operator('image-registry').condition(type: 'Degraded')['status'] == "False" 
+    Given the expression should be true> cluster_operator('image-registry').condition(type: 'Degraded')['status'] == "False"
 
   # @author xiuwang@redhat.com
   # @case_id OCP-22678
@@ -82,11 +82,11 @@ Feature: image-registry operator upgrade tests
   @upgrade-prepare
   @users=upuser1,upuser2
   @admin
-  Scenario: Upgrade imagestream from old version which not implement node credentials - prepare 
+  Scenario: Upgrade imagestream from old version which not implement node credentials - prepare
     Given I switch to cluster admin pseudo user
     When I run the :extract admin command with:
       | resource  | secret/pull-secret |
-      | namespace | openshift-config   | 
+      | namespace | openshift-config   |
       | to        | /tmp               |
       | confirm   | true               |
     Then the step should succeed

@@ -24,8 +24,10 @@ check_pod_number_and_link:
     selector:
       xpath: //a[@href='<link>']
   scripts:
-    - command: return document.querySelector('a[href="<link>"]').innerText
-      expect_result: <text>
+    - command: |
+        var match = document.querySelector('a[href="<link>"]').innerText.indexOf('<text>') != -1 ? true : false
+        return match
+      expect_result: true
 check_pod_info_on_overview_sidebar:
   action: check_page_contains
 click_list_item:

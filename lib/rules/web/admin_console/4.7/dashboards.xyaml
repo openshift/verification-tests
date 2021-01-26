@@ -258,7 +258,7 @@ check_on_monitoring_metrics_page:
   - selector:
       xpath: //button[text()='Run queries']
   - selector:
-      xpath: //div[contains(@class,'query-browser__graph-container')]
+      xpath: //div[contains(@class,'pf-c-chart')]
     timeout: 30
 check_textarea:
   element:
@@ -317,7 +317,7 @@ check_metrics_query_pod_count_by_node:
 check_metrics_query_pod_count_by_project:
   scripts:
   - command:
-      return /topk.*kube_pod_info.*BY.*namespace/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href))
+      return /topk.*kube_running_pod_ready.*BY.*namespace/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href))
     expect_result: true
 check_metrics_query_network_in_by_node:
   scripts:
@@ -520,9 +520,8 @@ check_network_out_breakdown_info_when_filter_by_node:
 click_operator_status:
   elements:
   - selector:
-      xpath: //div[@class='co-status-card__health-item']/div[@class='co-dashboard-icon']/following-sibling::div[contains(., 'Operators')]
+      xpath: //div[@class='co-status-card__health-item']/div[@class='co-dashboard-icon']/following-sibling::div[contains(., 'Operators')]//button[@aria-disabled='false']
     op: click
-    timeout: 60
 check_operator_status:
   elements:
   - selector:
@@ -622,7 +621,7 @@ check_charts_in_project_utilization:
       xpath: //h4[text()='Filesystem']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'pf-c-chart')]
     timeout: 40
   - selector:
-      xpath: //h4[text()='Network Transfer']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'pf-c-chart')]
+      xpath: //h4[text()='Network transfer']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'pf-c-chart')]
     timeout: 40
   - selector:
       xpath: //h4[text()='Pod count']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'pf-c-chart')]
@@ -658,8 +657,9 @@ check_on_dev_monitoring_page:
   elements:
   - selector:
       xpath: //a[contains(@href,'/dev-monitoring/ns/<project_name>/metrics') and text()='Metrics']
+    timeout: 30
   - selector:
-      xpath: //div[contains(@class,'query-browser__graph-container') and contains(@class,'pf-c-chart')]
+      xpath: //div[contains(@class,'pf-c-chart')]
 check_no_errors_in_charts:
   elements:
   - selector:

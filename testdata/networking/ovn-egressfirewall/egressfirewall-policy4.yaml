@@ -1,0 +1,18 @@
+kind: EgressFirewall
+apiVersion: k8s.ovn.org/v1
+metadata:
+  name: default
+spec:
+  egress:
+  - type: Allow
+    to:
+      dnsName: www.test.com
+  - type: Allow
+    to:
+      dnsName: yahoo.com
+    ports:
+      - protocol: TCP
+        port: 80
+  - type: Deny
+    to:
+      cidrSelector: 0.0.0.0/0

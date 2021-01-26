@@ -51,7 +51,7 @@ filter_event_by_name_or_message:
 search_by_event_catagory:
   elements:
   - selector:
-      xpath: //button[contains(@class,'pf-c-dropdown__toggle')][contains(.,'All Types')]
+      xpath: //button[contains(@class,'pf-c-dropdown__toggle')][contains(.,'All types')]
     op: click
   - selector:
       xpath: //li//*[contains(.,'<catagory>')]
