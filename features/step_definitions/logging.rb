@@ -326,10 +326,14 @@ end
 
 Given /^logging channel name is stored in the#{OPT_SYM} clipboard$/ do | cb_name |
   cb_name = 'logging_channel_name' unless cb_name
-  if cluster_version('version').version.include?('4.1.')
+  version = cluster_version('version').version.split('-')[0].split('.').take(2).join('.')
+  case version
+  when '4.1'
     cb[cb_name] = "preview"
+  when '4.7'
+    cb[cb_name] = "5.0"
   else
-    cb[cb_name] = cluster_version('version').version.split('-')[0].split('.').take(2).join('.')
+    cb[cb_name] = version
   end
 end
 
