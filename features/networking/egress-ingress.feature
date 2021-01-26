@@ -485,3 +485,85 @@ Feature: Egress-ingress related networking scenarios
     Then the step should fail
     And the output should contain:
       | spec.egress in body should have at most 1000 items |
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-37491
+  @admin
+  Scenario: [SDN-1181] EgressFirewall allows traffic to destination dnsName
+    Given I have a project
+    Given I have a pod-for-ping in the project
+
+    When I obtain test data file "networking/ovn-egressfirewall/egressfirewall-policy4.yaml"
+    And I run the :create admin command with:
+      | f | egressfirewall-policy4.yaml  |
+      | n | <%= project.name %>          |
+
+    # Check curl from pod
+    When I execute on the pod:
+      | curl | --connect-timeout | 5 | --head | www.test.com |
+    Then the step should succeed
+    When I execute on the pod:
+      | curl | -k | --connect-timeout | 5 | --head | https://yahoo.com:443 |
+    Then the step should fail
+    When I execute on the pod:
+      | curl | --connect-timeout | 5 | --head | http://yahoo.com:80 |
+    Then the step should succeed
+    When I execute on the pod:
+      | curl | --connect-timeout | 5 | --head | google.com |
+    Then the step should fail
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-37495
+  @admin
+  Scenario: [SDN-1181] EgressFirewall denys traffic to destination dnsName
+    Given I have a project
+
+    When I obtain test data file "networking/ovn-egressfirewall/egressfirewall-policy4.yaml"
+    And I run oc create as admin over "egressfirewall-policy4.yaml" replacing paths:
+      | ["spec"]["egress"][0]["type"]| Deny                 |
+      | ["spec"]["egress"][1]["type"]| Deny                 |
+      | ["spec"]["egress"][2]["type"]| Allow                |
+      | ["metadata"]["namespace"]    | <%= project.name %>  |
+    Then the step should succeed
+
+    Given I have a pod-for-ping in the project
+    # Check curl from pod
+    When I execute on the pod:
+      | curl | --connect-timeout | 5 | --head | www.test.com |
+    Then the step should fail
+    When I execute on the pod:
+      | curl | -k | --connect-timeout | 5 | --head | https://yahoo.com:443 |
+    Then the step should succeed
+    When I execute on the pod:
+      | curl | --connect-timeout | 5 | --head | http://yahoo.com:80 |
+    Then the step should fail
+    When I execute on the pod:
+      | curl | --connect-timeout | 5 | --head | google.com |
+    Then the step should succeed
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-37496
+  @admin
+  Scenario: [SDN-1181] Edit EgressFirewall should take effect
+    Given I have a project
+    Given I have a pod-for-ping in the project
+
+    When I obtain test data file "networking/ovn-egressfirewall/egressfirewall-policy4.yaml"
+    And I run oc create as admin over "egressfirewall-policy4.yaml" replacing paths:
+      | ["spec"]["egress"][0]["type"]| Deny                |
+      | ["metadata"]["namespace"]    | <%= project.name %> |
+    Then the step should succeed
+
+    When I execute on the pod:
+      | curl | --connect-timeout | 5 | --head | www.test.com |
+    Then the step should fail
+
+    #Edit the egressfirewall rule
+    Given I switch to cluster admin pseudo user
+    And I use the "<%= project.name %>" project
+    And as admin I successfully merge patch resource "egressfirewall.k8s.ovn.org/default" with:
+      |{"spec":{"egress":[{"type":"Allow","to":{"dnsName":"www.test.com"}}]}}|
+
+    When I execute on the pod:
+      | curl | --connect-timeout | 5 | --head | www.test.com |
+    Then the step should succeed
