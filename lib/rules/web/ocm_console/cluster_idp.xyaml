@@ -506,7 +506,7 @@ check_first_idp_item:
   - selector:
       xpath: //section[@id='accessControlTabContent']//tr/td[@data-label='Type' and text()='<idp_type>']
   - selector:
-      xpath: //section[@id='accessControlTabContent']//tr/td[@data-label='Auth Callback URL']/button[text()='Copy URL to clipboard']
+      xpath: //section[@id='accessControlTabContent']//tr/td[@data-label='Auth callback URL']/button[text()='Copy URL to clipboard']
 check_idp_items_table_title:
   elements:
   - selector:
@@ -514,7 +514,7 @@ check_idp_items_table_title:
   - selector:
       xpath: //section[@id='accessControlTabContent']//tr/th[@data-label='Type' and text()='Type']
   - selector:
-      xpath: //section[@id='accessControlTabContent']//tr/th[@data-label='Auth Callback URL' and text()='Auth callback URL']
+      xpath: //section[@id='accessControlTabContent']//tr/th[@data-label='Auth callback URL' and text()='Auth callback URL']
 check_empty_idp_info_in_tab:
   action: check_add_identity_provider_button
   elements:

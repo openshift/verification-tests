@@ -221,7 +221,7 @@ check_dialog_missing:
     selector:
       xpath: //div[@class='pf-c-backdrop']/div[@class='pf-l-bullseye']
     missing: true
-    timeout: 30
+    timeout: 80
 check_active_add_url_button:
   element: &active_add_url_button
     selector:
@@ -444,6 +444,7 @@ click_loadbalancer_dropdown:
   element:
     selector:
       xpath: //select[@name='load_balancers']
+    timeout: 80
     op: click
 select_loadbalancer_in_dialog:
   element:
