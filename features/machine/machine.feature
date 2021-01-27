@@ -443,9 +443,9 @@ Feature: Machine features testing
     """
 
     Examples:
-      | name                         | template                                  | diskGiB           |
-      | default-valued-33380         | <%= cb.template %>                        | <%= cb.diskGiB %> | # @case_id OCP-33380
-      | default-valued-windows-35421 | 1909-template-docker-ssh-upgraded-vmtools | 135               | # @case_id OCP-35421
+      | name                         | template                           | diskGiB           |
+      | default-valued-33380         | <%= cb.template %>                 | <%= cb.diskGiB %> | # @case_id OCP-33380
+      | default-valued-windows-35421 | openshift-qe-template-windows-2019 | 135               | # @case_id OCP-35421
 
   # @author miyadav@redhat.com
   # @case_id OCP-36489
