@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-pod
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      name: test-pod
+  template:
+    metadata:
+      annotations:
+        k8s.v1.cni.cncf.io/networks: whereabouts-excludeipv6
+      labels:
+        name: test-pod
+    spec:
+      containers:
+      - name: test-pod
+        image: quay.io/openshifttest/hello-sdn@sha256:d5785550cf77b7932b090fcd1a2625472912fb3189d5973f177a5a2c347a1f95
+        ports:
+        - containerPort: 8080
+        - containerPort: 443
+        env:
+        - name: RESPONSE
+          value: test-pod

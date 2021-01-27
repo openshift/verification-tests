@@ -50,3 +50,72 @@ Feature: Multus-CNI ipv6 related scenarios
       | curl | -g | -6 | --connect-timeout | 5 | [<%= cb.pod1_multus_ipv6 %>]:8080 |
     Then the step should succeed
     And the output should contain "Hello OpenShift"
+
+  # @author weliang@redhat.com
+  # @case_id OCP-38521
+  @admin
+  Scenario: IPv6 testing for OCP-31999: Whereabouts should exclude IPv6 ranges
+  # Bug https://bugzilla.redhat.com/show_bug.cgi?id=1913062
+  # Bug https://bugzilla.redhat.com/show_bug.cgi?id=1917984
+  # Make sure that the multus is enabled
+    Given the master version >= "4.6"
+    And the multus is enabled on the cluster
+    Given the default interface on nodes is stored in the :default_interface clipboard
+    And evaluation of `node.name` is stored in the :target_node clipboard
+    # Create the net-attach-def via cluster admin
+    Given I have a project
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/whereabouts-excludeIP.yaml"
+    When I run oc create as admin over "whereabouts-excludeIP.yaml" replacing paths:
+      | ["metadata"]["name"]      | whereabouts-excludeipv6                                                                                                                                                                                                  |
+      | ["metadata"]["namespace"] | <%= project.name %>                                                                                                                                                                                                      |
+      | ["spec"]["config"]        | '{ "cniVersion": "0.3.0", "name": "whereabouts", "type": "macvlan", "mode": "bridge", "ipam": { "type": "whereabouts", "range": "fd00:dead:beef:1::1-fd00:dead:beef:1::4/64", "exclude": ["fd00:dead:beef:1::2/128"] } }'|
+    Then the step should succeed
+
+    # Create the three pods which consumes the custom resource
+    Given I obtain test data file "networking/multus-cni/Pods/IPv6/ipv6-pod.yaml"
+    When I run oc create over "ipv6-pod.yaml" replacing paths:
+      | ["spec"]["nodeName"]                                                           | "<%= cb.target_node %>" |
+      | ["metadata"]["name"]                                                           | test-pod                |
+      | ["spec"]["template"]["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | whereabouts-excludeipv6 |
+    Then the step should succeed
+    When I wait up to 30 seconds for the steps to pass:
+    """
+    When I run the :describe client command with:
+      | resource | pod |
+    Then the output should contain:
+      | fd00:dead:beef:1::1 |
+      | fd00:dead:beef:1::3 |
+      | fd00:dead:beef:1::4 |
+    And the output should not contain:
+      | fd00:dead:beef:1::2 |
+    """
+
+    # Create new net-attach-def via cluster admin to exclude address list
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/whereabouts-excludeIP.yaml"
+    When I run oc create as admin over "whereabouts-excludeIP.yaml" replacing paths:
+      | ["metadata"]["name"]      | whereabouts-excludeipv6-list                                                                                                                                                                                                                                                                                  |
+      | ["metadata"]["namespace"] | <%= project.name %>                                                                                                                                                                                                                                                                                           |
+      | ["spec"]["config"]        | '{ "cniVersion": "0.3.0", "name": "whereabouts", "type": "macvlan", "mode": "bridge", "ipam": { "type": "whereabouts", "range": "fd00:dead:beef:1::10-fd00:dead:beef:1::16/64", "exclude": ["fd00:dead:beef:1::10/128","fd00:dead:beef:1::11/128","fd00:dead:beef:1::12/128", "fd00:dead:beef:1::13/128"] } }'|
+    Then the step should succeed
+
+    # Create the three pods which consumes the custom resource
+    Given I obtain test data file "networking/multus-cni/Pods/IPv6/ipv6-pod.yaml"
+    When I run oc create over "ipv6-pod.yaml" replacing paths:
+      | ["spec"]["nodeName"]                                                           | "<%= cb.target_node %>"      |
+      | ["metadata"]["name"]                                                           | test-pod-list                |
+      | ["spec"]["template"]["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | whereabouts-excludeipv6-list |
+    Then the step should succeed
+    When I wait up to 30 seconds for the steps to pass:
+    """
+    When I run the :describe client command with:
+      | resource | pod |
+    Then the output should contain:
+      | fd00:dead:beef:1::14 |
+      | fd00:dead:beef:1::15 |
+      | fd00:dead:beef:1::16 |
+    And the output should not contain:
+      | fd00:dead:beef:1::10 |
+      | fd00:dead:beef:1::11 |
+      | fd00:dead:beef:1::12 |
+      | fd00:dead:beef:1::13 |
+    """
