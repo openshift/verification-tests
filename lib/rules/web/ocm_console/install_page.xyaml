@@ -87,7 +87,7 @@ check_install_page:
     action: check_breadcrumbs_in_install_overview_page
     elements:
         - selector:
-            xpath: //span[@class='infra-crc-icon-text' and text()='Powered by Red Hat CodeReady Containers']
+            xpath: //span[text()='Powered by Red Hat CodeReady Containers']
 required_install_page_items_loaded:
     element:
         selector:
@@ -247,7 +247,7 @@ check_download_part_for_crc_install_page:
 click_copyPullSecret_button:
     element:
         selector:
-            xpath: //button[@id='copyPullSecret']
+            xpath: //button[text()='Copy pull secret']
         op: click
     element:
         selector:
@@ -260,13 +260,13 @@ check_pull_secret_part_in_install_page:
         - selector:
             xpath: //button[@type='button' and text()='Download pull secret']
         - selector:
-            xpath: //button[@id='copyPullSecret' and contains(., 'Copy pull secret')]
+            xpath: //button[contains(., 'Copy pull secret')]
 check_data_collection_message_in_install_page:
     elements:
         - selector:
             xpath: //a[contains(@href, '/latest/support/remote_health_monitoring/about-remote-health-monitoring.html') and contains(., 'Learn more')]
         - selector:
-            xpath: //p[text()='Red Hat collects a limited amount of telemetry data. By installing OpenShift Container Platform 4, you accept our data collection policy.']
+            xpath: //small[text()='Red Hat collects a limited amount of telemetry data. By installing OpenShift Container Platform 4, you accept our data collection policy.']
 check_breadcrumbs_include_infrastructure_in_install_page:
     elements:
         - selector:
@@ -292,7 +292,7 @@ check_breadcrumbs_exclude_infrastructure_in_install_page:
 check_developer_preview_bar_in_install_page:
     elements:
         - selector:
-            xpath: //div[@class='developer-preview' and text()='Developer Preview']
+            xpath: //span[text()='Developer Preview']
         - selector:
             xpath: //p[text()='Because these are developer preview builds:']
         - selector:
@@ -315,7 +315,7 @@ check_install_page_common_part_two:
         - selector:
             xpath: //p[text()='The installer will take about 45 minutes to run.']
         - selector:
-            xpath: //div[text()='To quickly create a cluster with the default options, run the following command:']
+            xpath: //p[text()='To quickly create a cluster with the default options, run the following command:']
         - selector:
             xpath: //input[@value='./openshift-install create cluster']
 check_install_page_rhcos_part:
@@ -697,7 +697,7 @@ check_codeready_install_page:
         - selector:
             xpath: //a[contains(@href, 'https://access.redhat.com/documentation/en-us/red_hat_codeready_containers') and text()='Get started']
         - selector:
-            xpath: //p[contains(., 'Your CodeReady Container cluster will not show in your list of clusters in OpenShift Cluster Manager since it is short-lived and occasionally running')]
+            xpath: //small[contains(., 'Your CodeReady Container cluster will not show in your list of clusters in OpenShift Cluster Manager since it is short-lived and occasionally running')]
 required_codeready_install_items_loaded:
     elements:
         - selector:
