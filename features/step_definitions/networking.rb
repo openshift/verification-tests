@@ -1175,10 +1175,14 @@ end
 Given /^I install machineconfigs load-sctp-module$/ do
   ensure_admin_tagged
   _admin = admin
-  @result = _admin.cli_exec(:get, resource: "machineconfigs", output: 'jsonpath={.items[?(@.metadata.name=="load-sctp-module")].metadata.name}')
-  if @result[:response] != "load-sctp-module"
-    @result = _admin.cli_exec(:create, f: "#{BushSlicer::HOME}/testdata/networking/sctp/load-sctp-module.yaml")
-    raise "Failed to install load-sctp-module" unless @result[:success]
+  if cb.workers.count > 1
+    @result = _admin.cli_exec(:get, resource: "machineconfigs", output: 'jsonpath={.items[?(@.metadata.name=="load-sctp-module")].metadata.name}')
+    if @result[:response] != "load-sctp-module"
+      @result = _admin.cli_exec(:create, f: "#{BushSlicer::HOME}/testdata/networking/sctp/load-sctp-module.yaml")
+      raise "Failed to install load-sctp-module" unless @result[:success]
+    end
+  else
+    raise "At least two schedulable workers are needed"
   end
 end
 
