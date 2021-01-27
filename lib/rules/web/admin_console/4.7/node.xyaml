@@ -33,10 +33,7 @@ check_role_column_header:
   params:
     column_name: Role
   action: check_column_header
-check_terminal_tab_on_node_page:
-  action: click_terminal_tab
-  action: check_use_host_binaries_message
-check_use_host_binaries_message:
+check_messages_on_terminal_page:
   element:
     selector:
       xpath: //p[contains(text(), 'To use host binaries, run')]/code[contains(text(), 'chroot /host')]

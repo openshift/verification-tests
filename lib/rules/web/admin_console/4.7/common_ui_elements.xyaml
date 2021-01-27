@@ -419,9 +419,13 @@ cancel_build_kebab_operation:
     kebab_item: Cancel build
   action: click_one_operation_in_kebab
 edit_receiver_kebab_operation:
-  params:
-    kebab_item: Edit Receiver
-  action: click_one_operation_in_kebab
+  elements:
+  - selector:
+      xpath: //td[text()='<resource_name>']//ancestor::tr//button[@data-test-id='kebab-button']
+    op: click
+  - selector:
+      xpath: //button[@data-test-action='Edit Receiver']
+    op: click
 delete_machinehealthcheck_kabab_operation:
   params:
     kebab_item: Delete Machine Health Check

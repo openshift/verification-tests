@@ -28,7 +28,6 @@ goto_cluster_dashboards_page:
   action: wait_page_body_loaded
 goto_search_page:
   url: search
-  action: wait_box_loaded
 
 #api explore
 goto_api_explore_page:
