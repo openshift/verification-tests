@@ -116,7 +116,7 @@ Feature: SCTP related scenarios
   # @case_id OCP-28759
   @admin
   @destructive
-  Scenario: Expose SCTP NodePort Services   
+  Scenario: Expose SCTP NodePort Services
     Given I store the ready and schedulable workers in the :workers clipboard
     And the Internal IP of node "<%= cb.workers[1].name %>" is stored in the :worker1_ip clipboard
     Given I install machineconfigs load-sctp-module
