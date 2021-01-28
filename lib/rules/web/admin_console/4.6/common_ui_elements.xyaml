@@ -696,7 +696,7 @@ click_secondary_menu:
   action: click_primary_menu
   elements:
   - selector: &secondary_menu
-      xpath: //li[contains(@class, 'pf-m-expandable')]/section[contains(@class,'pf-c-nav__subnav')]//a[contains(@class,'pf-c-nav__link') and text()='<secondary_menu>']
+      xpath: //li[contains(@class, 'pf-m-expandable')]/section[contains(@class,'pf-c-nav__subnav')]//a[contains(@class,'pf-c-nav__link') and contains(text(),'<secondary_menu>')]
     op: click
 check_secondary_menu:
   element:
