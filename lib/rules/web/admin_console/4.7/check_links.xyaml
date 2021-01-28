@@ -286,7 +286,7 @@ check_administration_menu_for_admin_user:
   action: check_cluster_settings_menu
 check_crd_sub_menu:
   params:
-    secondary_menu: Custom Resource Definitions
+    secondary_menu: CustomResourceDefinitions
   action: check_secondary_menu
 check_namespaces_menu:
   params:
