@@ -956,6 +956,10 @@ check_key_and_action_link:
   element: &key_action
     selector:
       xpath: //dt[contains(text(),'<key>')]/following-sibling::dd[1]//button | //button[(text()='<key>')]/parent::dt/following-sibling::dd[1]//button
+click_pod_selector_on_resource_detail:
+  params:
+    key: Pod Selector
+  action: click_value_on_resource_detail
 click_value_on_resource_detail:
   element:
     <<: *key_value
