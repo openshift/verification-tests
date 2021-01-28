@@ -15,7 +15,10 @@ check_metrics_query_result:
   elements:
   - selector:
       xpath: //td[@class='query-browser__table-cell' and text()='<metrics_name>']
-    timeout: 20
+  - selector:
+      xpath: //td[@class='query-browser__table-cell' and text()='https://<data>']
+  - selector:
+      xpath: //td[@class='query-browser__table-cell' and text()='1']
 check_alerts_tab:
   params:
     tab_name: Alerts
