@@ -344,7 +344,7 @@ click_first_item_from_sub_resource_list_and_check_breadcrumb:
 check_link_in_breadcrumb:
   element:
     selector:
-      xpath: //ol[@class='pf-c-breadcrumb__list']/li[<layer_number>]/a[contains(@data-test-id,'breadcrumb-link') and contains(@href,'<link>') and translate(normalize-space(text()), ' ','')='<text>']
+      xpath: //ol[@class='pf-c-breadcrumb__list']/li[<layer_number>]/a[contains(@data-test-id,'breadcrumb-link') and contains(@href,'<link>') and contains(translate(normalize-space(text()), ' ',''),'<text>')]
 check_installplandetails_text_in_breadcrumb:
   params:
     layer_number: 2
@@ -358,7 +358,7 @@ check_projectdetails_text_in_breadcrumb:
 check_replicasetdetails_text_in_breadcrumb:
   params:
     layer_number: 2
-    text: Replica Set details
+    text: ReplicaSet details
   action: check_text_in_breadcrumb
 check_machinedetails_text_in_breadcrumb:
   params:
@@ -368,7 +368,7 @@ check_machinedetails_text_in_breadcrumb:
 check_machinesetdetails_text_in_breadcrumb:
   params:
     layer_number: 2
-    text: Machine Set details
+    text: MachineSet details
   action: check_text_in_breadcrumb
 check_containerdetails_text_in_breadcrumb:
   params:
