@@ -9,7 +9,7 @@ click_networking_tab:
 networking_tab_loaded:
     elements:
         - selector:
-            xpath: //h2[text()='Master endpoint API']
+            xpath: //h1[text()='Master API endpoint']
         - selector:
             xpath: //label[text()='Make API private']
         - selector:

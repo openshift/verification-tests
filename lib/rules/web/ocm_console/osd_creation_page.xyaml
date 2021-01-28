@@ -78,7 +78,7 @@ click_create_button:
         op: click
 switch_to_osd_creation_page:
     action: switch_to_creation_cards_page
-    action: select_cluster_product_type
+    action: click_create_osd_button 
     action: check_cloud_provider_selection_page
     action: select_cloud_provider
     action: osd_creation_page_loaded
