@@ -120,7 +120,7 @@ class MyTest < Test::Unit::TestCase
     ocm = BushSlicer::OCMCluster.new(options)
     ocm_cli = ocm.download_ocm_cli
     assert(File.exists?(ocm_cli), "File '#{ocm_cli}' was not downloaded")
-    output = ocm.shell('/tmp/ocm version').strip
+    output = ocm.exec("version")
     assert_equal("0.1.46", output)
   end
 
