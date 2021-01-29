@@ -361,8 +361,8 @@ Feature: Machine features testing
     When I run the :logs admin command with:
       | resource_name | <%= pod.name %> |
       | c             | #{cb.id}        |
-    Then the output should contain:
-      | attempting to acquire leader lease  openshift-machine-api/cluster-api-provider |
+    Then the output should match:
+      | attempting to acquire leader lease (.*)openshift-machine-api/cluster-api-provider |
     """
 
   # @author zhsun@redhat.com
@@ -443,9 +443,9 @@ Feature: Machine features testing
     """
 
     Examples:
-      | name                         | template                                  | diskGiB           |
-      | default-valued-33380         | <%= cb.template %>                        | <%= cb.diskGiB %> | # @case_id OCP-33380
-      | default-valued-windows-35421 | 1909-template-docker-ssh-upgraded-vmtools | 135               | # @case_id OCP-35421
+      | name                         | template                           | diskGiB           |
+      | default-valued-33380         | <%= cb.template %>                 | <%= cb.diskGiB %> | # @case_id OCP-33380
+      | default-valued-windows-35421 | openshift-qe-template-windows-2019 | 135               | # @case_id OCP-35421
 
   # @author miyadav@redhat.com
   # @case_id OCP-36489

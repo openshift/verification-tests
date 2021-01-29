@@ -1,0 +1,11 @@
+kind: IngressController
+apiVersion: operator.openshift.io/v1
+metadata:
+  name: shards
+  namespace: openshift-ingress-operator
+spec:
+  domain: shards.example.com
+  replicas: 1
+  namespaceSelector:
+    matchLabels:
+      namespace: shards

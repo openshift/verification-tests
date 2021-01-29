@@ -60,7 +60,7 @@ perform_action_item:
   action: click_button_text
 click_silence_alert:
   params:
-    button_text: Silence Alert
+    button_text: Silence alert
   action: click_button_text
 uncheck_start_from_now:
   element:
@@ -126,7 +126,7 @@ click_first_action_icon:
   action: click_icon_index_button
 click_expire_alert_button:
   params:
-    button_text: Expire Silence
+    button_text: Expire silence
   action: click_button_text
 disable_silence_tab:
   action:
@@ -143,7 +143,7 @@ click_silenced_tab:
 
 edit_silence_alert:
   params:
-    item_text: Edit Silence
+    item_text: Edit silence
   action: perform_action_item
 check_silence_fields:
   action: ensure_start_from_now_checked
@@ -246,7 +246,7 @@ silence_alert_from_create_button:
 check_use_regular:
   element:
     selector:
-      xpath: //span[text()='Alert Labels']/ancestor::div[@class='co-m-pane__body-group']//input[@type='checkbox']
+      xpath: //span[text()='Alert labels']/ancestor::div[@class='co-m-pane__body-group']//input[@type='checkbox']
     op: click
 check_info_of_silence_detail_reg:
   params:
@@ -334,6 +334,7 @@ Disable_all_filters:
     selector:
       xpath: (//button[text()='Clear all filters'])[2]
     op: click
+    timeout: 60
 clear_specifc_filter:
   element:
     selector: &specific_filter

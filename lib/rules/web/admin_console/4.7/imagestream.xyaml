@@ -6,6 +6,7 @@ check_imagestream_help_link:
   element:
     selector:
       xpath: //button[contains(.,'Do you need to work with this Image Stream outside of the web console')]
+    timeout: 120
 open_imagestream_help_modal:
   params:
     button_text: Do you need to work with this Image Stream

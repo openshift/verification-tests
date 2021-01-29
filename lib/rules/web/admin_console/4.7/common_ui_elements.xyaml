@@ -24,8 +24,11 @@ click_edit_yaml_link:
       xpath: //div[contains(@class,'view-lines')]
     timeout: 20
 check_yaml_line_content:
-  element:
-    selector:
+  elements:
+  - selector:
+      xpath: //div[contains(@class, 'ocs-yaml-editor__wrapper')]
+    timeout: 60
+  - selector:
       xpath: //div[contains(@class,'view-line') and contains(.,'<key>') and contains(.,'<value>')]
 click_create_button:
   elements:
@@ -341,7 +344,7 @@ click_first_item_from_sub_resource_list_and_check_breadcrumb:
 check_link_in_breadcrumb:
   element:
     selector:
-      xpath: //ol[@class='pf-c-breadcrumb__list']/li[<layer_number>]/a[contains(@data-test-id,'breadcrumb-link') and contains(@href,'<link>') and translate(normalize-space(text()), ' ','')='<text>']
+      xpath: //ol[@class='pf-c-breadcrumb__list']/li[<layer_number>]/a[contains(@data-test-id,'breadcrumb-link') and contains(@href,'<link>') and contains(translate(normalize-space(text()), ' ',''),'<text>')]
 check_installplandetails_text_in_breadcrumb:
   params:
     layer_number: 2
@@ -355,7 +358,7 @@ check_projectdetails_text_in_breadcrumb:
 check_replicasetdetails_text_in_breadcrumb:
   params:
     layer_number: 2
-    text: Replica Set details
+    text: ReplicaSet details
   action: check_text_in_breadcrumb
 check_machinedetails_text_in_breadcrumb:
   params:
@@ -365,7 +368,7 @@ check_machinedetails_text_in_breadcrumb:
 check_machinesetdetails_text_in_breadcrumb:
   params:
     layer_number: 2
-    text: Machine Set details
+    text: MachineSet details
   action: check_text_in_breadcrumb
 check_containerdetails_text_in_breadcrumb:
   params:
@@ -406,9 +409,8 @@ click_kebab_item:
 click_kebab_of_one_resource:
   elements:
   - selector:
-      xpath: //*[text()='<resource_name>']//ancestor::tr//button[@data-test-id='kebab-button']
+      xpath: //a[text()='<resource_name>']//ancestor::tr//button[@data-test-id='kebab-button']
     op: click
-    timeout: 20
 click_one_operation_in_kebab:
   action: click_kebab_of_one_resource
   action: click_kebab_item
@@ -417,9 +419,13 @@ cancel_build_kebab_operation:
     kebab_item: Cancel build
   action: click_one_operation_in_kebab
 edit_receiver_kebab_operation:
-  params:
-    kebab_item: Edit Receiver
-  action: click_one_operation_in_kebab
+  elements:
+  - selector:
+      xpath: //td[text()='<resource_name>']//ancestor::tr//button[@data-test-id='kebab-button']
+    op: click
+  - selector:
+      xpath: //button[@data-test-action='Edit Receiver']
+    op: click
 delete_machinehealthcheck_kabab_operation:
   params:
     kebab_item: Delete Machine Health Check
@@ -804,7 +810,7 @@ wait_table_loaded:
   element:
     selector:
       xpath: //table//tr
-    timeout: 40
+    timeout: 50
 skip_dev_perspective_tour:
   elements:
   - selector:
@@ -996,6 +1002,15 @@ check_resource_details:
   action:
     if_param: desired_replicas
     ref: check_desired_replicas
+  action:
+    if_param: publisher
+    ref: check_publisher
+  action:
+    if_param: endpoint
+    ref: check_endpoint
+  action:
+    if_param: registrypullinterval
+    ref: check_registry_pull_interval
 check_resource_details_key_and_value:
   element: &key_value
     selector:
@@ -1289,6 +1304,20 @@ check_hpa_max_replicas:
     key: Max replicas
     value: <max_replicas>
   action: check_resource_details_key_and_value
+check_publisher:
+  params:
+    key: Publisher
+    value: <publisher>
+  action: check_resource_details_key_and_value
+check_endpoint:
+  params:
+    key: Endpoint
+    value: <endpoint>
+  action: check_resource_details_key_and_value
+check_registry_pull_interval:
+  element:
+    selector:
+      xpath: //dt[contains(.,'Registry poll interval')]/following-sibling::dd[1]/button[contains(.,'<registrypullinterval>')]
 click_workloads_tab:
   params:
     tab_name: Workloads

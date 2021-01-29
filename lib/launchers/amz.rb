@@ -23,6 +23,13 @@ module BushSlicer
       @config = conf[:services, service_name]
       @can_terminate = true
 
+      idx = ENV["AWS_CREDENTIALS"]&.index(':')
+      if idx
+        logger.info("Using envvar AWS_CREDENTIALS.")
+        access_key = ENV["AWS_CREDENTIALS"][0..idx-1]
+        secret_key = ENV["AWS_CREDENTIALS"][idx+1..-1]
+      end
+
       if access_key && secret_key
         awscred = {
           "aws_access_key_id" => access_key,
@@ -67,7 +74,7 @@ module BushSlicer
     end
 
     private def client_iam
-      @client_sts ||= Aws::IAM::Client.new
+      @client_iam ||= Aws::IAM::Client.new
     end
 
     private def client_r53

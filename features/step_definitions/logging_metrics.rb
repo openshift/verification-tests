@@ -2,7 +2,7 @@
 require 'oga'
 require 'parseconfig'
 require 'stringio'
-require 'promethues_metrics_data'
+require 'prometheus_metrics_data'
 
 # helper step that does the following:
 # 1. figure out project and route information

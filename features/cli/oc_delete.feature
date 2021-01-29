@@ -127,8 +127,11 @@ Feature: oc_delete.feature
       | object_type | pod           |
       | l           | name=graceful |
     Then the step should succeed
+    And I wait for the steps to pass:
+    """
     When I get project pods
     Then the output should contain "Terminating"
+    """
     And I wait for the resource "pod" named "grace10" to disappear within 120 seconds
 
   # @author cryan@redhat.com

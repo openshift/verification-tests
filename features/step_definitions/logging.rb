@@ -10,6 +10,7 @@ Given /^logging service has been installed successfully$/ do
   else
     example_cr = "<%= BushSlicer::HOME %>/testdata/logging/clusterlogging/example_indexmanagement.yaml"
   end
+  step %Q/logging operators are installed successfully/
   step %Q/I create clusterlogging instance with:/, table(%{
     | remove_logging_pods | false         |
     | crd_yaml            | #{example_cr} |
@@ -84,7 +85,7 @@ Given /^logging operators are installed successfully$/ do
   # check csv existense
   success = wait_for(300, interval: 10) {
     csv = subscription('elasticsearch-operator').current_csv
-    cluster_service_version(csv).exists?
+    !(csv.nil?) && cluster_service_version(csv).exists?
   }
   raise "CSV #{csv} isn't created" unless success
   step %Q/elasticsearch operator is ready/
@@ -133,7 +134,7 @@ Given /^logging operators are installed successfully$/ do
   # check csv existense
   success = wait_for(300, interval: 10) {
     csv = subscription('cluster-logging').current_csv
-    cluster_service_version(csv).exists?
+    !(csv.nil?) && cluster_service_version(csv).exists?
   }
   raise "CSV #{csv} isn't created" unless success
   step %Q/cluster logging operator is ready/
@@ -325,10 +326,14 @@ end
 
 Given /^logging channel name is stored in the#{OPT_SYM} clipboard$/ do | cb_name |
   cb_name = 'logging_channel_name' unless cb_name
-  if cluster_version('version').version.include?('4.1.')
+  version = cluster_version('version').version.split('-')[0].split('.').take(2).join('.')
+  case version
+  when '4.1'
     cb[cb_name] = "preview"
+  when '4.7'
+    cb[cb_name] = "5.0"
   else
-    cb[cb_name] = cluster_version('version').version.split('-')[0].split('.').take(2).join('.')
+    cb[cb_name] = version
   end
 end
 

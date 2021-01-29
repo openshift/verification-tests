@@ -138,6 +138,10 @@ goto_one_rc_page:
 goto_rc_list_page:
   url: k8s/ns/<project_name>/replicationcontrollers
 
+goto_daemonsets_page:
+  url: k8s/ns/<project_name>/daemonsets
+  action: wait_box_loaded
+
 #pod
 goto_all_projects_pods_list:
   url: k8s/all-namespaces/pods
@@ -182,6 +186,7 @@ goto_imagestreams_page:
   url: k8s/ns/<project_name>/imagestreams
 goto_one_imagestream_page:
   url: k8s/ns/<project_name>/imagestreams/<imagestream_name>
+  action: wait_box_loaded
 
 #templateinstance
 goto_one_templateinstance_page:
@@ -190,6 +195,10 @@ goto_one_templateinstance_page:
 #deploy image
 goto_deploy_image_page:
   url: deploy-image/ns/<project_name>?preselected-ns=<project_name>
+  element:
+    selector:
+      xpath: //p[contains(.,'Deploy')]
+    timeout: 30
 
 #catalog page
 goto_catalog_page:
@@ -261,6 +270,7 @@ goto_installed_operators_page:
   action: wait_box_loaded
 goto_all_installed_operators_page:
   url: k8s/all-namespaces/operators.coreos.com~v1alpha1~ClusterServiceVersion
+  action: wait_table_loaded
 goto_operator_subscription_page:
   url: operatorhub/subscribe?pkg=<package_name>&catalog=<catalog_name>&catalogNamespace=openshift-marketplace&targetNamespace=<target_namespace>
   action: wait_box_loaded
@@ -318,6 +328,9 @@ goto_consoleyamlsample_crd_instances_page:
 # catalog source
 goto_catalog_source_page:
   url: k8s/cluster/config.openshift.io~v1~OperatorHub/cluster/sources
+  action: wait_table_loaded
+goto_one_catalogsource_page:
+  url: /k8s/ns/openshift-marketplace/operators.coreos.com~v1alpha1~CatalogSource/<cs_name>
   action: wait_box_loaded
 
 # quota
@@ -334,6 +347,7 @@ goto_machinehealthcheck_page:
 #user
 goto_users_list_page:
   url: k8s/cluster/user.openshift.io~v1~User
+  action: wait_table_loaded
 goto_namespace_role_rolebinding_page:
   url: k8s/ns/<project_name>/roles/<role_name>/bindings
   action: wait_box_loaded

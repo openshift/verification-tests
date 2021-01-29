@@ -2,8 +2,16 @@ check_users_secondary_menu:
   params:
     primary_menu: User Management
     secondary_menu: Users
+  action: navigate_to_admin_console
   action: click_primary_menu  
   action: check_secondary_menu
+check_users_secondary_menu_missing:
+  params:
+    primary_menu: User Management
+    secondary_menu: Users
+  action: navigate_to_admin_console
+  action: click_primary_menu
+  action: check_secondary_menu_missing
 check_user_in_users_page:
   action: goto_users_list_page
   action: check_link_and_text
@@ -22,6 +30,8 @@ check_rolebinding_of_user:
     if_param: rolebinding
     ref: check_link_and_text
 impersonate_one_user:
+  params:
+    kebab_item: Impersonate User <resource_name>
   action: goto_users_list_page
   action: click_one_operation_in_kebab
 check_impersonate_notifications:
@@ -33,9 +43,12 @@ check_impersonate_notifications:
   - selector: &stop_impersonation
       xpath: //a[text()='Stop Impersonation']
 click_stop_impersonation:
-  element:
-    selector: *stop_impersonation
+  elements:
+  - selector: *stop_impersonation
     op: click
+  - selector:
+      xpath: //p[contains(.,'impersonating')]
+    missing: true
 check_data_in_users_table:
   element:
     selector:

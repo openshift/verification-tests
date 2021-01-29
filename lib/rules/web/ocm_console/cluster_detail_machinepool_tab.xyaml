@@ -22,18 +22,18 @@ machine_pools_table_loaded:
 check_specified_machine_pool:
     elements:
         - selector:
-            xpath: //table[@aria-label='Machine pools']/tbody/tr[<row_number>]/td[1][text()='<machine_pool_name>']
+            xpath: //table[@aria-label='Machine pools']/tbody/tr[<row_number>]/td[@data-label='Machine pool' and text()='<machine_pool_name>']
         - selector:
-            xpath: //table[@aria-label='Machine pools']/tbody/tr[<row_number>]/td[2][text()='<instance_type>']
+            xpath: //table[@aria-label='Machine pools']/tbody/tr[<row_number>]/td[@data-label='Instance type' and text()='<instance_type>']
         - selector:
-            xpath: //table[@aria-label='Machine pools']/tbody/tr[<row_number>]/td[3][text()='<availability_zones>']
+            xpath: //table[@aria-label='Machine pools']/tbody/tr[<row_number>]/td[@data-label='Availability zones' and text()='<availability_zones>']
         - selector:
-            xpath: //table[@aria-label='Machine pools']/tbody/tr[<row_number>]/td[4][text()='<node_count>']
+            xpath: //table[@aria-label='Machine pools']/tbody/tr[<row_number>]/td[@data-label='Node count' and text()='<node_count>']
 
 check_machine_pool_disappeared:
     element:
         selector:
-            xpath: //table[@aria-label='Machine pools']/tbody/tr/td[1][text()='<machine_pool_name>']
+            xpath: //table[@aria-label='Machine pools']/tbody/tr/td[@data-label='Machine pool' and text()='<machine_pool_name>']
         missing: true
     action:
         if_param: row_number

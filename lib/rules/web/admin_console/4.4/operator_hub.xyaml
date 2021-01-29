@@ -199,6 +199,10 @@ check_error_message_for_missing_required_name:
   params:
     content: name or generateName is required
   action: check_page_contains
+check_catalogsource_removed_message:
+  params:
+    content: Catalog Source Removed
+  action: check_page_match
 check_quay_image_security_exists_on_dashboard:
   element:
     selector: &quay_image_security

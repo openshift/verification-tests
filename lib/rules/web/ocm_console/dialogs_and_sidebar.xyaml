@@ -221,7 +221,7 @@ check_dialog_missing:
     selector:
       xpath: //div[@class='pf-c-backdrop']/div[@class='pf-l-bullseye']
     missing: true
-    timeout: 30
+    timeout: 80
 check_active_add_url_button:
   element: &active_add_url_button
     selector:
@@ -444,6 +444,7 @@ click_loadbalancer_dropdown:
   element:
     selector:
       xpath: //select[@name='load_balancers']
+    timeout: 80
     op: click
 select_loadbalancer_in_dialog:
   element:
@@ -547,11 +548,11 @@ add_machine_pool_dialog_loaded:
         - selector:
             xpath: //span[text()='Compute node instance type']
         - selector:
-            xpath: //span[text()='Compute node count']
+            xpath: //span[contains(text(),'Compute node count')]
         - selector:
             xpath: //select[@aria-label='Compute nodes']
         - selector:
-            xpath: //span[text()='Edit node labels']
+            xpath: //span[text()='Edit node labels and taints']
         - selector:
             xpath: //span[text()='Machine pool name']
         - selector:
@@ -563,7 +564,7 @@ add_machine_pool_dialog_loaded:
 expand_edit_node_labels:
     element:
         selector:
-            xpath: //span[text()='Edit node labels']
+            xpath: //span[text()='Edit node labels and taints']
         op: click
 click_add_label_button:
     element:
@@ -573,10 +574,52 @@ click_add_label_button:
 add_new_label:
     action: click_add_label_button
     action: input_label
+click_add_taints_button:
+    element:
+        selector:
+            xpath: //button[text()='Add taint']
+        op: click
+add_new_taint:
+    action: click_add_taints_button
+    action: set_taint
+set_taint:
+    action: set_taint_key
+    action: set_taint_value
+    action: set_taint_effect
+set_taint_key:
+    element:
+        selector:
+            xpath: //input[@id='taints[<taint_row_number>].key']
+        op: send_keys <taint_key>
+set_taint_value:
+    element:
+        selector:
+            xpath: //input[@id='taints[<taint_row_number>].value']
+        op: send_keys <taint_value>
+set_taint_effect:
+    elements:
+        - selector:
+            xpath: //select[@id='taints[<taint_row_number>].effect']
+          op: click
+        - selector:
+            xpath: //select[@id='taints[<taint_row_number>].effect']/option[text()='<taint_effect>']
+          op: click
+click_delete_taint_button:
+    element:
+        selector:
+            xpath: //select[@id='taints[<taint_row_number>].effect']/../button
+        op: click
+check_existed_taint:
+    elements:
+        - selector:
+            xpath: //input[@id='taints[<taint_row_number>].key' and @value='<taint_key>']
+        - selector:
+            xpath: //input[@id='taints[<taint_row_number>].value' and @value='<taint_value>']
+
 click_delete_node_label_button:
     element:
         selector:
-            xpath: //div[@class='space-bottom-md'][<row_number>]/button
+            xpath: //input[@name='node_labels[<row_number>].key']/../button
         op: click
 select_node_count:
     elements:
@@ -619,18 +662,18 @@ input_machine_pool_name:
 input_label_key:
     elements:
         - selector:
-            xpath: //div[@class='space-bottom-md'][<row_number>]/input[@aria-label='Key-value list key']
+            xpath: //input[@name='node_labels[<row_number>].key']
           op: clear
         - selector:
-            xpath: //div[@class='space-bottom-md'][<row_number>]/input[@aria-label='Key-value list key']
+            xpath: //input[@name='node_labels[<row_number>].key']
           op: send_keys <label_key>
 input_label_value:
     elements:
         - selector:
-            xpath: //div[@class='space-bottom-md'][<row_number>]/input[@aria-label='Key-value list value']
+            xpath: //input[@name='node_labels[<row_number>].value']
           op: clear
         - selector:
-            xpath: //div[@class='space-bottom-md'][<row_number>]/input[@aria-label='Key-value list value']
+            xpath: //input[@name='node_labels[<row_number>].value']
           op: send_keys <label_value>
 input_label:
     action: input_label_key
@@ -646,6 +689,7 @@ check_machine_pool_dialog:
     action: expand_edit_node_labels
     action: click_add_label_button
     action: input_label
+    action: add_new_taint
     action: select_compute_node_in_dialog
 
 check_existed_label:

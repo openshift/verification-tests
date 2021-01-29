@@ -131,3 +131,14 @@ Feature: Machine misc features testing
       | kube-rbac-proxy                 | openshift-machine-api              | k8s-app=machine-api-operator        |
       | kube-rbac-proxy                 | openshift-machine-api              | k8s-app=cluster-autoscaler-operator |
 
+  # @author miyadav@redhat.com
+  # @case_id OCP-37180
+  @admin
+  Scenario: Report vCenter version to telemetry
+    Given I switch to cluster admin pseudo user
+    When I perform the GET prometheus rest client with:
+      | path  | /api/v1/query?                         |
+      | query | cloudprovider_vsphere_vcenter_versions |
+    Then the step should succeed
+    And the expression should be true> @result[:parsed]["data"]["result"][0]["metric"]["version"] == "7.0.0"
+
