@@ -665,7 +665,7 @@ click_secondary_menu:
       xpath: //a[@data-component='pf-nav-expandable' and text()='<primary_menu>']
     op: click
   - selector: &secondary_menu
-      xpath: //a[@class='pf-c-nav__link' and contains(text(),'<secondary_menu>')]
+      xpath: //a[@class='pf-c-nav__link' and text()='<secondary_menu>']
     op: click
 check_secondary_menu:
   element:
