@@ -703,6 +703,12 @@ click_secondary_menu:
   action: click_primary_menu
   elements:
   - selector: &secondary_menu
+      xpath: //li[contains(@class, 'pf-m-expandable')]/section[contains(@class,'pf-c-nav__subnav')]//a[contains(@class,'pf-c-nav__link') and text()='<secondary_menu>']
+    op: click
+click_common_secondary_menu:
+  action: click_primary_menu
+  elements:
+  - selector: &common_secondary_menu
       xpath: //li[contains(@class, 'pf-m-expandable')]/section[contains(@class,'pf-c-nav__subnav')]//a[contains(@class,'pf-c-nav__link') and contains(text(),'<secondary_menu>')]
     op: click
 check_secondary_menu:
@@ -715,6 +721,21 @@ check_secondary_menu_missing:
 check_secondary_menu_link:
   element:
     selector: *secondary_menu
+  action: check_link_and_text
+check_deploymentconfig_secondary_menu_link:
+  element:
+    selector: 
+      <<: *common_secondary_menu
+  action: check_link_and_text
+check_replicasets_secondary_menu_link:
+  element:
+    selector:
+      <<: *common_secondary_menu
+  action: check_link_and_text
+check_replicationcontrollers_secondary_menu_link:
+  element:
+    selector: 
+      <<: *common_secondary_menu
   action: check_link_and_text
 click_dropdown:
   element:
