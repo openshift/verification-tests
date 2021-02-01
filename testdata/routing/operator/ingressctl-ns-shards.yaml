@@ -6,6 +6,10 @@ metadata:
 spec:
   domain: shards.example.com
   replicas: 1
+  endpointPublishingStrategy:
+    loadBalancer:
+      scope: External
+    type: LoadBalancerService
   namespaceSelector:
     matchLabels:
       namespace: shards

@@ -125,11 +125,20 @@ Feature: Routing and DNS related scenarios
       | key_val  | namespace=shards |
     Then the step should succeed
 
-    # Enable route shards by creating new ingresscontroller
+    # Get the default ingresscontroller's loadBalancer scope
+    # And enable route shards by creating new ingresscontroller
     Given I switch to cluster admin pseudo user
-    And I obtain test data file "routing/operator/ingressctl-ns-shards.yaml"
+    When I run the :get admin command with:
+      | resource      | ingresscontroller                                         |
+      | resource_name | default                                                   |
+      | namespace     | openshift-ingress-operator                                |
+      | template      | {{.status.endpointPublishingStrategy.loadBalancer.scope}} |
+    Then the step should succeed
+    And evaluation of `@result[:response]` is stored in the :default_lb_scope clipboard
+    Given I obtain test data file "routing/operator/ingressctl-ns-shards.yaml"
     When I run oc create over "ingressctl-ns-shards.yaml" replacing paths:
-      | ["spec"]["domain"] | <%= cb.subdomain.gsub("apps","shards") %> |
+      | ["spec"]["domain"]                                              | <%= cb.subdomain.gsub("apps","shards") %> |
+      | ["spec"]["endpointPublishingStrategy"]["loadBalancer"]["scope"] | <%= cb.default_lb_scope  %>               |
     Then the step should succeed
     Given I use the "openshift-ingress" project
     And a pod becomes ready with labels:
