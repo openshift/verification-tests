@@ -492,10 +492,20 @@
     :a: --registry-config=<value>
     :dry_run: --dry-run=<value>
     :f: --filename=<value>
+    :filter_by_os: --filter-by-os=<value>
     :force: --force=<value>
     :from_dir: --from-dir=<value>
     :insecure: --insecure=<value>
+    :keep_manifest_list: --keep-manifest-list=<value>
     :s3_source_bucket: --s3-source-bucket=<value>
+    :skip_verification: --skip-verification=<value>
+:image_info:
+  :cmd: oc image info <image>
+  :options:
+    :a: --registry-config=<value>
+    :dir: --dir=<value>
+    :filter_by_os: --filter-by-os=<value>
+    :insecure: --insecure=<value>
     :skip_verification: --skip-verification=<value>
 :import:
   :cmd: oc import <command>
