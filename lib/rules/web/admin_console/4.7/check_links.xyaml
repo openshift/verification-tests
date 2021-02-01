@@ -99,6 +99,12 @@ navigate_to_dev_console:
       timeout: 30
     ref: skip_dev_perspective_tour
 navigate_to_admin_console:
+  action:
+    if_element:
+      selector:
+        xpath: //div[@id='guided-tour-modal']//button[text()='Skip tour']
+      timeout: 20
+    ref: skip_dev_perspective_tour
   elements:
   - selector:
       xpath: //button[@data-test-id='perspective-switcher-toggle']

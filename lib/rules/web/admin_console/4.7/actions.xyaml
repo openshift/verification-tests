@@ -30,7 +30,7 @@ start_build_action:
   action: click_one_dropdown_action
 delete_buildconfig_action:
   params:
-    item: Delete Build Config
+    item: Delete BuildConfig
   action: click_one_dropdown_action
 cancel_build_action:
   params:
@@ -46,7 +46,7 @@ delete_project_action:
   action: click_one_dropdown_action
 delete_serviceaccount_action:
   params:
-    item: Delete Service Account
+    item: Delete ServiceAccount
   action: click_one_dropdown_action
 edit_parallelism_action:
   params:
@@ -54,7 +54,7 @@ edit_parallelism_action:
   action: click_one_dropdown_action
 delete_cronjob_action:
   params:
-    item: Delete Cron Job
+    item: Delete CronJob
   action: click_one_dropdown_action
 edit_update_strategy_action:
   params:
@@ -83,7 +83,7 @@ cancel_rollout_action:
   action: confirm_cancel_rollout
 delete_configmap_action:
   params:
-    item: Delete Config Map
+    item: Delete ConfigMap
   action: click_one_dropdown_action
 expand_pvc_action:
   params:

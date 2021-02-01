@@ -49,7 +49,7 @@ search_and_deploy_image:
   action: click_create_button
 delete_dc_with_dependency_objects:
   params:
-    item: Delete Deployment Config
+    item: Delete DeploymentConfig
     button_text: Delete
   action: click_one_dropdown_action
   action: click_button
