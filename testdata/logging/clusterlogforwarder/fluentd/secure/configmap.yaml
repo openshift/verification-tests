@@ -5,8 +5,10 @@ data:
       @type forward
       port  24224
       <transport tls>
-        ca_cert_path /etc/fluentd/secrets/ca-bundle.crt
-        ca_private_key_path /etc/fluentd/secrets/ca.key
+        cert_path /etc/fluentd/secrets/tls.crt
+        private_key_path /etc/fluentd/secrets/tls.key
+        ca_path /etc/fluentd/secrets/ca-bundle.crt
+        client_cert_auth true
       </transport>
       <security>
         shared_key "#{File.open('/etc/fluentd/secrets/shared_key') do |f| f.readline end.rstrip}"
