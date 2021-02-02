@@ -566,7 +566,7 @@ check_cluster_inventory_items:
   - selector:
       xpath: //div[contains(@class,'co-inventory-card__item')]//a[contains(text(),'Pod')]
   - selector:
-      xpath: //div[contains(@class,'co-inventory-card__item')]//a[contains(text(),'Storage Class')]
+      xpath: //div[contains(@class,'co-inventory-card__item')]//a[contains(text(),'StorageClass')]
   - selector:
       xpath: //div[contains(@class,'co-inventory-card__item')]//a[contains(text(),'PVC')]
 check_matched_number_of_nodes:
@@ -581,7 +581,7 @@ check_matched_number_of_pvcs:
   action: check_matched_number_of_resource
 check_matched_number_of_storageclasses:
   params:
-    resource_type: storage class
+    resource_type: storageclass
     number_of_resource: <number_of_storageclasses>
   action: check_matched_number_of_resource  
 check_matched_number_of_resource:

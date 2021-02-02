@@ -80,9 +80,9 @@ check_dc_available_action_menus:
   - selector: &edit_annotations
       xpath: //li//button[@data-test-action='Edit annotations']
   - selector:
-      xpath: //li//button[@data-test-action='Edit Deployment Config']
+      xpath: //li//button[@data-test-action='Edit DeploymentConfig']
   - selector:
-      xpath: //li//button[@data-test-action='Delete Deployment Config']
+      xpath: //li//button[@data-test-action='Delete DeploymentConfig']
 check_deployment_availble_action_menus:
   action: click_resource_action_button_on_sidebar
   elements:

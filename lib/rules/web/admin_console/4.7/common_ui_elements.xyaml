@@ -428,7 +428,7 @@ edit_receiver_kebab_operation:
     op: click
 delete_machinehealthcheck_kabab_operation:
   params:
-    kebab_item: Delete Machine Health Check
+    kebab_item: Delete MachineHealthCheck
   action: click_one_operation_in_kebab
 delete_catalogsource_kabab_operation:
   params:
@@ -637,7 +637,7 @@ check_no_endpoints_found_text:
   action: check_page_contains
 check_no_machinehealthcheck_text:
   params:
-    content: No Machine Health Checks found
+    content: No MachineHealthChecks found
   action: check_page_contains
 check_no_results_text:
   params:

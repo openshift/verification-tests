@@ -77,7 +77,7 @@ fill_pvc_form:
     ref: choose_request_size_unit
 create_persistent_volume_claims:
   params:
-    button_text: Create Persistent Volume Claim
+    button_text: Create PersistentVolumeClaim
   action: goto_persistentvolumeclaims_page
   action: click_button
   action: fill_pvc_form
