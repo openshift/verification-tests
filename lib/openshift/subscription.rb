@@ -36,5 +36,9 @@ module BushSlicer
       return rr.dig('status', 'installplan')
     end
 
+    def channel(user: nil, quiet: false, cached: true)
+      return raw_resource(user: user, cached: cached, quiet: quiet).dig('spec', 'channel')
+    end
+
   end
 end

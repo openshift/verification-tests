@@ -1,0 +1,54 @@
+kind: Template
+apiVersion: v1
+metadata:
+  name: clusterlogforwarder-template
+objects:
+- apiVersion: logging.openshift.io/v1
+  kind: ClusterLogForwarder
+  metadata:
+    name: instance
+    namespace: openshift-logging
+  spec:
+    outputs:
+    - name: elasticsearch
+      type: elasticsearch
+      url: ${ELASTICSEARCH_URL}
+    - name: fluentd
+      type: fluentdForward
+      url: ${FLUENTD_URL}
+    - name: rsyslog
+      type: syslog
+      syslog:
+        rfc: ${RFC}
+        facility: ${FACILITY}
+        severity: ${SEVERITY}
+      url: ${SYSLOG_URL}
+    pipelines:
+    - name: test-infra
+      inputRefs:
+      - infrastructure
+      outputRefs:
+      - elasticsearch
+    - name: test-app
+      inputRefs:
+      - application
+      outputRefs:
+      - fluentd
+    - name: test-audit
+      inputRefs:
+      - audit
+      outputRefs:
+      - rsyslog
+parameters:
+- name: ELASTICSEARCH_URL
+  value: http://elasticsearch-server.openshift-logging.svc:9200
+- name: FLUENTD_URL
+  value: tcp://fluentdserver.openshift-logging.svc:24224
+- name: SYSLOG_URL
+  value: 'udp://rsyslogserver.openshift-logging.svc:514'
+- name: FACILITY
+  value: "local0"
+- name: SEVERITY
+  value: "informational"
+- name: RFC
+  value: RFC5424
