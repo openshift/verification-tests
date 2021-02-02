@@ -622,6 +622,11 @@ module BushSlicer
       ec2.client.config.credentials.secret_access_key
     end
 
+    # @return [String]
+    def account_id
+      client_sts.get_caller_identity.to_h[:account]
+    end
+
     # @return [Object] undefined
     def terminate_instance(instance)
       # we don't really have root permission to terminate, we'll just label it

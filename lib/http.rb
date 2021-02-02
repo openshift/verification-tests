@@ -46,7 +46,7 @@ module BushSlicer
                           quiet: false,
                           raise_on_error: false,
                           result: nil,
-                          &block)
+                          &resp_chunk_block)
       rc_opts = {}
       rc_opts[:url] = url
       rc_opts[:cookies] = cookies if cookies
@@ -70,6 +70,23 @@ module BushSlicer
       rc_opts[:ssl_client_key] = ssl_client_key if ssl_client_key
       rc_opts[:read_timeout] = read_timeout
       rc_opts[:open_timeout] = open_timeout
+      if resp_chunk_block
+        rc_opts[:block_response] = proc do |response|
+          if rc_opts[:max_redirects] > 0 &&
+              (Net::HTTPRedirection === response || Net::HTTPFound === response)
+            rc_opts[:url] = response['location']
+            rc_opts[:max_redirects] = rc_opts[:max_redirects] - 1
+            RestClient::Request.new(rc_opts).execute
+          else
+            result[:size] = 0
+            response.read_body { |chunk|
+              result[:size] = result[:size] + chunk.size
+              resp_chunk_block.call chunk
+            }
+            result[:exitstatus] = response.code.to_i
+          end
+        end
+      end
 
       # RestClient.proxy = proxy if proxy && ! proxy.empty?
       if proxy && ! proxy.empty?
@@ -85,7 +102,7 @@ module BushSlicer
       logger.info(result[:instruction]) unless quiet
 
       started = monotonic_seconds
-      response = RestClient::Request.new(rc_opts).execute &block
+      response = RestClient::Request.new(rc_opts).execute
     rescue => e
       result[:error] = e
       # REST request unsuccessful
@@ -104,14 +121,14 @@ module BushSlicer
       raise e if raise_on_error && Exception === e
 
       total_time = monotonic_seconds - started
-      if block && !result[:error]
+      if resp_chunk_block && !result[:error]
         logger.info("HTTP #{method.upcase} took #{'%.3f' % total_time} sec: #{response} bytes of data passed to block") unless quiet
-        result[:exitstatus] ||= -1
-        result[:response] = ""
-        result[:success] = true # we actually don't know
-        result[:cookies] = HTTP::CookieJar.new # empty cookies
-        result[:headers] = {}
-        result[:size] = response
+        result[:exitstatus] ||= -1 # code should be set in response block
+        result[:response] = "" # body was processed elsewhere
+        result[:success] = result[:exitstatus].to_s[0] == "2"
+        result[:cookies] = HTTP::CookieJar.new # TODO empty cookies
+        result[:headers] = response.to_hash
+        result[:size] ||= -1 # size should be set in response block
       else
         logger.info("HTTP #{method.upcase} took #{'%.3f' % total_time} sec: #{result[:error] || response.description}") unless quiet
         result[:exitstatus] ||= response&.code || -1
