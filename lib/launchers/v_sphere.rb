@@ -391,13 +391,15 @@ module BushSlicer
       end
     end
 
-    # @return Array of VirtualMachine objects
-    private def vms(folder, machines)
+    # # @return [Array] of [RbVmomi::VIM::VirtualMachine]
+    private def vms(folder: nil)
+      folder ||= datacenter.vmFolder
+      machines = []
       folder.childEntity.each do |x|
-        name, junk = x.to_s.split('(')
+        name, junk = x.to_s.split('(', 2)
         case name
         when "Folder"
-          vms(x, machines)
+          machines.concat vms(folder: x)
         when "VirtualMachine"
           machines << x if x.runtime.powerState == "poweredOn"
           # puts "#{x.name}   => #{x.config.createDate}"
@@ -409,9 +411,7 @@ module BushSlicer
     end
 
     def get_running_instances
-      folder = datacenter.vmFolder
-      machines = []
-      vms(folder, machines)
+      return vms.select { |i| i.runtime.powerState == "poweredOn" }
     end
 
     def instance_uptime(timestamp)
