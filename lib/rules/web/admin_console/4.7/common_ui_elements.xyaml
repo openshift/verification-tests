@@ -716,6 +716,21 @@ check_secondary_menu_link:
   element:
     selector: *secondary_menu
   action: check_link_and_text
+check_deploymentconfig_secondary_menu_link:
+  params:
+    secondary_menu: DeploymentConfigs
+    text: DeploymentConfigs
+  action: check_secondary_menu_link
+check_replicaset_secondary_menu_link:
+  params:
+    secondary_menu: ReplicaSets
+    text: ReplicaSets
+  action: check_secondary_menu_link
+check_replicationcontroller_secondary_menu_link:
+  params:
+    secondary_menu: ReplicationControllers
+    text: ReplicationControllers
+  action: check_secondary_menu_link
 click_dropdown:
   element:
     selector: &dropdown_name
