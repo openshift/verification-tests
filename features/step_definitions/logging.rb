@@ -444,10 +444,11 @@ Given /^I generate certs for the#{OPT_QUOTED} receiver(?: in the#{OPT_QUOTED} pr
   system(shell_cmd)
 end
 
-Given /^I create pipelinesecret(?: named#{OPT_QUOTED})?(?: with sharedkey#{OPT_QUOTED})?$/ do | secret_name, shared_key |
+Given /^I create pipelinesecret(?: named#{OPT_QUOTED})? with auth type (mTLS|mTLS_share|server_auth|server_auth_share)$/ do | secret_name, auth_type |
   secret_name ||= "pipelinesecret"
   step %Q/admin ensures "#{secret_name}" secret is deleted from the "openshift-logging" project after scenario/
-  if shared_key != nil
+  case auth_type
+  when "mTLS"
     step %Q/I run the :create_secret admin command with:/, table(%{
       | name         | #{secret_name}           |
       | secret_type  | generic                  |
@@ -455,19 +456,38 @@ Given /^I create pipelinesecret(?: named#{OPT_QUOTED})?(?: with sharedkey#{OPT_Q
       | from_file    | tls.crt=logging-es.crt   |
       | from_file    | ca-bundle.crt=ca.crt     |
       | from_file    | ca.key=ca.key            |
-      | from_literal | shared_key=#{shared_key} |
+      | n            | openshift-logging        |
+    })
+  when "mTLS_share"
+    step %Q/I run the :create_secret admin command with:/, table(%{
+      | name         | #{secret_name}           |
+      | secret_type  | generic                  |
+      | from_file    | tls.key=logging-es.key   |
+      | from_file    | tls.crt=logging-es.crt   |
+      | from_file    | ca-bundle.crt=ca.crt     |
+      | from_file    | ca.key=ca.key            |
+      | from_literal | shared_key=fluentdserver |
+      | n            | openshift-logging        |
+    })
+  when "server_auth"
+    step %Q/I run the :create_secret admin command with:/, table(%{
+      | name         | #{secret_name}           |
+      | secret_type  | generic                  |
+      | from_file    | ca-bundle.crt=ca.crt     |
+      | from_file    | ca.key=ca.key            |
+      | n            | openshift-logging        |
+    })
+  when "server_auth_share"
+    step %Q/I run the :create_secret admin command with:/, table(%{
+      | name         | #{secret_name}           |
+      | secret_type  | generic                  |
+      | from_file    | ca-bundle.crt=ca.crt     |
+      | from_file    | ca.key=ca.key            |
+      | from_literal | shared_key=fluentdserver |
       | n            | openshift-logging        |
     })
   else
-    step %Q/I run the :create_secret admin command with:/, table(%{
-      | name         | #{secret_name}           |
-      | secret_type  | generic                  |
-      | from_file    | tls.key=logging-es.key   |
-      | from_file    | tls.crt=logging-es.crt   |
-      | from_file    | ca-bundle.crt=ca.crt     |
-      | from_file    | ca.key=ca.key            |
-      | n            | openshift-logging        |
-    })
+    raise "Unrecognized auth type: #{auth_type}"
   end
   step %Q/the step should succeed/
 end
@@ -509,7 +529,7 @@ Given /^I create the resources for the receiver with:$/ do | table |
   step %Q/evaluation of `pod` is stored in the :log_receiver clipboard/
 end
 
-Given /^(fluentd|elasticsearch|rsyslog) receiver is deployed as (secure|insecure)(?: in the#{OPT_QUOTED} project)?$/ do | server, security, project_name |
+Given /^(fluentd|elasticsearch|rsyslog) receiver is deployed as (secure|insecure)(?: with (mTLS|mTLS_share|server_auth|server_auth_share) enabled)?(?: in the#{OPT_QUOTED} project)?$/ do | server, security, auth_type, project_name |
   project_name ||= "openshift-logging"
   project(project_name)
   if env.version_lt('4.6', user: user)
@@ -524,6 +544,7 @@ Given /^(fluentd|elasticsearch|rsyslog) receiver is deployed as (secure|insecure
     if security == "secure"
       step %Q/I generate certs for the "fluentdserver" receiver in the "<%= project.name %>" project/
       step %Q/I ensure "fluentdserver" secret is deleted from the "<%= project.name %>" project after scenario/
+      # create secret/fluentdserver for fluentd server pod
       step %Q/I run the :create_secret client command with:/, table(%{
         | name         | fluentdserver            |
         | secret_type  | generic                  |
@@ -535,10 +556,20 @@ Given /^(fluentd|elasticsearch|rsyslog) receiver is deployed as (secure|insecure
         | n            | #{project_name}          |
       })
       step %Q/the step should succeed/
-      if project_name != "openshift-logging"
-        step %Q/I create pipelinesecret named "fluentdserver" with sharedkey "fluentdserver"/
+      # set configmap and create pipeline secret in openshift-logging project
+      case auth_type
+      when "mTLS_share"
+        configmap_file = "#{file_dir}/fluentd/secure/cm-mtls-share.yaml"
+      when "mTLS"
+        configmap_file = "#{file_dir}/fluentd/secure/cm-mtls.yaml"
+      when "server_auth"
+        configmap_file = "#{file_dir}/fluentd/secure/cm-serverauth.yaml"
+      when "server_auth_share"
+        configmap_file = "#{file_dir}/fluentd/secure/cm-serverauth-share.yaml"
+      else
+        raise "Unrecognized auth type: #{auth_type}"
       end
-      configmap_file = "#{file_dir}/fluentd/secure/configmap.yaml"
+      step %Q/I create pipelinesecret with auth type #{auth_type}/
       deployment_file = "#{file_dir}/fluentd/secure/deployment.yaml"
     else
       configmap_file = "#{file_dir}/fluentd/insecure/configmap.yaml"
@@ -562,7 +593,8 @@ Given /^(fluentd|elasticsearch|rsyslog) receiver is deployed as (secure|insecure
         | n           | #{project_name}                     |
       })
       step %Q/the step should succeed/
-      step %Q/I create pipelinesecret named "pipelinesecret"/
+      # create pipeline secret for fluentd
+      step %Q/I create pipelinesecret with auth type mTLS/
       configmap_file = "#{file_dir}/elasticsearch/secure/configmap.yaml"
       deployment_file = "#{file_dir}/elasticsearch/secure/deployment.yaml"
     else
@@ -575,7 +607,8 @@ Given /^(fluentd|elasticsearch|rsyslog) receiver is deployed as (secure|insecure
     pod_label = "component=rsyslogserver"
     configmap_file = "#{file_dir}/rsyslog/insecure/rsyslogserver_configmap.yaml"
     deployment_file = "#{file_dir}/rsyslog/insecure/rsyslogserver_deployment.yaml"
-
+  else
+    raise "Unrecognized server: #{server}"
   end
 
   step %Q/I create the resources for the receiver with:/, table(%{

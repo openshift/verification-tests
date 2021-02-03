@@ -32,7 +32,7 @@ Feature: cluster log forwarder features
     Then the step should succeed
     And the expression should be true> @result[:parsed]['count'] = 0
     # forward logs to fluentd server
-    Given fluentd receiver is deployed as secure in the "openshift-logging" project
+    Given fluentd receiver is deployed as secure with mTLS_share enabled in the "openshift-logging" project
     Given admin ensures "instance" cluster_log_forwarder is deleted from the "openshift-logging" project after scenario
     Given I obtain test data file "logging/clusterlogforwarder/fluentd/secure/clusterlogforwarder.yaml"
     When I process and create:
@@ -128,13 +128,14 @@ Feature: cluster log forwarder features
     """
 
   # @author qitang@redhat.com
+  # @case_id OCP-29843
   @admin
   @destructive
-  Scenario Outline: ClusterLogForwarder: Forward logs to fluentd
+  Scenario: ClusterLogForwarder: Forward logs to fluentd as insecure
     Given I switch to the first user
     And I have a project
     And evaluation of `project` is stored in the :fluentd_proj clipboard
-    Given fluentd receiver is deployed as <security> in the "<%= cb.fluentd_proj.name %>" project
+    Given fluentd receiver is deployed as insecure in the "<%= cb.fluentd_proj.name %>" project
 
     And I create a project with non-leading digit name
     And evaluation of `project` is stored in the :proj clipboard
@@ -146,7 +147,55 @@ Feature: cluster log forwarder features
     Given I switch to cluster admin pseudo user
     And I use the "openshift-logging" project
     Given admin ensures "instance" cluster_log_forwarder is deleted from the "openshift-logging" project after scenario
-    And I obtain test data file "logging/clusterlogforwarder/fluentd/<security>/clusterlogforwarder.yaml"
+    And I obtain test data file "logging/clusterlogforwarder/fluentd/insecure/clusterlogforwarder.yaml"
+    When I process and create:
+      | f | clusterlogforwarder.yaml |
+      | p | URL=udp://fluentdserver.<%= cb.fluentd_proj.name %>.svc:24224 |
+    Then the step should succeed
+    And I wait for the "instance" cluster_log_forwarder to appear
+
+    Given I obtain test data file "logging/clusterlogging/fluentd_only.yaml"
+    When I create clusterlogging instance with:
+      | remove_logging_pods | true              |
+      | crd_yaml            | fluentd_only.yaml |
+      | check_status        | false             |
+    Then the step should succeed
+    Given I wait for the "fluentd" daemon_set to appear up to 300 seconds
+    And <%= daemon_set('fluentd').replica_counters[:desired] %> pods become ready with labels:
+      | logging-infra=fluentd |
+
+    Given I use the "<%= cb.fluentd_proj.name %>" project
+    And I wait up to 300 seconds for the steps to pass:
+    """
+    When I execute on the "<%= cb.log_receiver.name %>" pod:
+      | ls | -l | /fluentd/log |
+    Then the output should contain:
+      | app.log             |
+      | audit.log           |
+      | infra.log           |
+      | infra-container.log |
+    """
+
+  # @author qitang@redhat.com
+  @admin
+  @destructive
+  Scenario Outline: ClusterLogForwarder: Forward logs to fluentd as secure
+    Given I switch to the first user
+    And I have a project
+    And evaluation of `project` is stored in the :fluentd_proj clipboard
+    Given fluentd receiver is deployed as secure with <auth_type> enabled in the "<%= cb.fluentd_proj.name %>" project
+
+    And I create a project with non-leading digit name
+    And evaluation of `project` is stored in the :proj clipboard
+    Given I obtain test data file "logging/loggen/container_json_log_template.json"
+    When I run the :new_app client command with:
+      | file | container_json_log_template.json |
+    Then the step should succeed
+
+    Given I switch to cluster admin pseudo user
+    And I use the "openshift-logging" project
+    Given admin ensures "instance" cluster_log_forwarder is deleted from the "openshift-logging" project after scenario
+    And I obtain test data file "logging/clusterlogforwarder/fluentd/secure/clusterlogforwarder.yaml"
     When I process and create:
       | f | clusterlogforwarder.yaml |
       | p | URL=tcp://fluentdserver.<%= cb.fluentd_proj.name %>.svc:24224 |
@@ -175,9 +224,11 @@ Feature: cluster log forwarder features
       | infra-container.log |
     """
     Examples:
-      | security |
-      | insecure | # @case_id OCP-29843
-      | secure   | # @case_id OCP-29844
+      | auth_type         |
+      | mTLS_share        | # @case_id OCP-29844
+      | mTLS              | # @case_id OCP-39041
+      | server_auth       | # @case_id OCP-39042
+      | server_auth_share | # @case_id OCP-39043
 
   # @author qitang@redhat.com
   @admin
@@ -282,22 +333,22 @@ Feature: cluster log forwarder features
       | relative_url | app*/_search?format=JSON' -d '{"size": 2, "sort": [{"@timestamp": {"order":"desc"}}]} |
       | op           | GET                 |
     Then the step should succeed
-    And the expression should be true> JSON.parse(@result[:response])['hits']['hits'][0]['_source']['openshift']['labels'] == cluster_log_forwarder('instance').output_labels(name: '<app_pipeline_name>')
+    And the expression should be true> @result[:parsed]['hits']['hits'][0]['_source']['openshift']['labels'] == cluster_log_forwarder('instance').output_labels(name: '<app_pipeline_name>')
     When I perform the HTTP request on the ES pod with labels "es-node-master=true":
       | relative_url | infra*/_search?format=JSON' -d '{"size": 2, "sort": [{"@timestamp": {"order":"desc"}}], "query": {"exists": {"field": "systemd"}}} |
       | op           | GET                 |
     Then the step should succeed
-    And the expression should be true> JSON.parse(@result[:response])['hits']['hits'][0]['_source']['openshift']['labels'] == cluster_log_forwarder('instance').output_labels(name: '<infra_pipeline_name>')
+    And the expression should be true> @result[:parsed]['hits']['hits'][0]['_source']['openshift']['labels'] == cluster_log_forwarder('instance').output_labels(name: '<infra_pipeline_name>')
     When I perform the HTTP request on the ES pod with labels "es-node-master=true":
       | relative_url | infra*/_search?format=JSON' -d '{"size": 2, "sort": [{"@timestamp": {"order":"desc"}}], "query": {"regexp": {"kubernetes.namespace_name": "openshift@"}}} |
       | op           | GET                 |
     Then the step should succeed
-    And the expression should be true> JSON.parse(@result[:response])['hits']['hits'][0]['_source']['openshift']['labels'] == cluster_log_forwarder('instance').output_labels(name: '<infra_pipeline_name>')
+    And the expression should be true> @result[:parsed]['hits']['hits'][0]['_source']['openshift']['labels'] == cluster_log_forwarder('instance').output_labels(name: '<infra_pipeline_name>')
     When I perform the HTTP request on the ES pod with labels "es-node-master=true":
       | relative_url | audit*/_search?format=JSON' -d '{"size": 2, "sort": [{"@timestamp": {"order":"desc"}}]} |
       | op           | GET                 |
     Then the step should succeed
-    And the expression should be true> JSON.parse(@result[:response])['hits']['hits'][0]['_source']['openshift']['labels'] == cluster_log_forwarder('instance').output_labels(name: '<audit_pipeline_name>')
+    And the expression should be true> @result[:parsed]['hits']['hits'][0]['_source']['openshift']['labels'] == cluster_log_forwarder('instance').output_labels(name: '<audit_pipeline_name>')
     """
 
     Examples:
