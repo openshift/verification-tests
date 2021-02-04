@@ -4,9 +4,13 @@ switch_to_creation_cards_page:
   action: creation_cards_page_loaded
 
 creation_cards_page_loaded:
-    element:
-        selector:
-            xpath: //a[@class='infra-card pf-c-card create-cluster-card' and contains(@href, '/openshift/install')]
+    elements:
+        - selector:
+            xpath: //span[text()='Cloud']
+        - selector:
+            xpath: //span[text()='Datacenter']
+        - selector:
+            xpath: //span[text()='Sandbox']
 
 check_creation_cards_page:
     elements:
@@ -15,28 +19,25 @@ check_creation_cards_page:
         - selector:
             xpath: //li[@class='pf-c-breadcrumb__item' and text()='Create']
         - selector:
-            xpath: //h1[@class='pf-c-title pf-m-2xl ocm-page-title' and text()='Create a cluster to get started']
+            xpath: //h1[text()='Create an OpenShift cluster']
+    action: create_page_osd_loaded
+
+create_page_osd_loaded:
+    elements:
         - selector:
-            xpath: //a[@class='infra-card pf-c-card create-cluster-card' and contains(@href, '/openshift/install')]
+            xpath: //td[text()='Available on AWS and GCP']
         - selector:
-            xpath: //img[@alt='OpenShift Container Platform']/../../div[contains(., 'Create an OCP cluster')]
-        - selector:
-            xpath: //img[@alt='OpenShift Dedicated']/../../div[contains(., 'Create a Red Hat-managed cluster (OSD)')]
+            xpath: //td/a[@href='https://www.openshift.com/products/dedicated/' and text()='Red Hat OpenShift Dedicated']
 
 check_osd_button_enable:
     element:
         selector:
-            xpath: //a[@class='infra-card pf-c-card create-cluster-card' and contains(@href, '/openshift/create/osd')]
+            xpath: //a[contains(@href, '/openshift/create/osd')]
 
 click_create_osd_button:
     element:
         selector:
-            xpath: //a[@class='infra-card pf-c-card create-cluster-card' and contains(@href, '/openshift/create/osd')]
-        op: click
-select_cluster_product_type:
-    element:
-        selector:
-            xpath: //a[@class='infra-card pf-c-card create-cluster-card' and contains(@href, '/openshift/create/<product_id>')]
+            xpath: //a[@id='create-cluster' and contains(@href, '/openshift/create/osd')]
         op: click
 click_create_ocp_button:
     element:

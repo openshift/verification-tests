@@ -16,7 +16,7 @@ install_addon:
             xpath: //div[text()='<addon_name>']/../div/button[@aria-label='Install' and text()='Install']
           op: click
         - selector:
-            xpath: //div[text()='<addon_name>']/../div/div//span[text()='Installing']
+            xpath: //div[text()='Prow Operator']/..//span[text()='Installing']
     action: addon_install_button_missing
     action: 
         if_param: wait_status
@@ -25,11 +25,23 @@ install_addon:
 wait_for_addon_to_status:
     elements:
         - selector:
-            xpath: //div[text()='<addon_name>']/../div/div//span[text()='<wait_status>']
+            xpath: //div[text()='<addon_name>']/..//span[text()='<wait_status>']
           timeout: 1200
-        - selector:
-            xpath: //div[text()='<addon_name>']/../div/a/button[text()='View in console']
-        
+    action:
+        if_param: check_console
+        ref: check_console_url
+    action:
+        if_param: check_support
+        ref: check_contact_support
+check_console_url:
+    element:
+        selector:
+           xpath: //div[text()='<addon_name>']/../div/a/button[text()='View in console']
+
+check_contact_support:
+    element:
+        selector:
+            xpath: //div[text()='<addon_name>']/..//a[@href='https://access.redhat.com/support/cases/#/case/new' and text()='Contact support']
 check_addons_tab:
     action: click_add_ons_tab_button
     elements:
