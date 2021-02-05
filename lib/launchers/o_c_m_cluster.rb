@@ -287,7 +287,7 @@ module BushSlicer
     def delete_osd(osd_name)
       login
       osd_id = get_value(osd_name, "id")
-      exec("delete post /api/clusters_mgmt/v1/clusters/#{osd_id}")
+      exec("delete /api/clusters_mgmt/v1/clusters/#{osd_id}")
     end
 
   end
