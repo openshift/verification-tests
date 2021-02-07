@@ -127,6 +127,10 @@ browse_to_cli_tools_page:
     text: Command Line Tools
     link_url: "command-line-tools"
   action: click_link_with_text
+  element:
+    selector:
+      xpath: //div[contains(.,'oc')]
+    timeout; 60
 check_consolelink:
   action:
     if_param:

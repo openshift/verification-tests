@@ -114,6 +114,9 @@ browse_to_cli_tools_page:
     text: Command Line Tools
     link_url: "#"
   action: click_link_with_text
+  element:
+    selector:
+      xpath: //div[contains(.,'oc')]
 check_consolelink:
   params:
     link_url: "#"
