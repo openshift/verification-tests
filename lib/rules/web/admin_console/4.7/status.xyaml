@@ -22,9 +22,12 @@ check_getting_started:
   - selector:
       xpath: //button[contains(.,'Create a new project')]
 check_dim_resource_list:
-  elements:
-  - selector:
-      xpath: //div[@class='co-disabled']//div[contains(.,'No <resource_singular>s found')]
+  scripts:
+  - command: |      
+      var resource_info = "<resource_singular>".replace(/\s*/g,"");
+      var msg_text = "No "+ resource_info + "s found";
+      return document.querySelector("div[data-test='empty-message']").textContent == msg_text;      
+    expect_result: true
 check_user_starter_guide_message_when_no_projects:
   elements:
   - selector:
@@ -33,6 +36,7 @@ check_get_started_message_when_no_resources:
   elements:
   - selector:
       xpath: //div[.='YAML']
+    timeout: 40
   - selector:
       xpath: //p[contains(., 'add content')]
 check_message_and_doc_for_new_user:
