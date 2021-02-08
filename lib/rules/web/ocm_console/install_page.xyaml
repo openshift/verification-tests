@@ -274,8 +274,6 @@ check_breadcrumbs_include_infrastructure_in_install_page:
         - selector:
             xpath: //a[contains(@href, '/openshift/create') and text()='Create']
         - selector:
-            xpath: //a[contains(@href, '/openshift/install') and text()='OpenShift Container Platform']
-        - selector:
             xpath: //a[contains(@href, '/openshift/install/<provider_link>') and text()='<provider_name>']
         - selector:
             xpath: //li[@class='pf-c-breadcrumb__item' and text()='<infrastructure>']
@@ -285,8 +283,6 @@ check_breadcrumbs_exclude_infrastructure_in_install_page:
             xpath: //li[contains(@href, '/openshift/')]/a[text()='Clusters']
         - selector:
             xpath: //a[contains(@href, '/openshift/create') and text()='Create']
-        - selector:
-            xpath: //a[contains(@href, '/openshift/install') and text()='OpenShift Container Platform']
         - selector:
             xpath: //li[@class='pf-c-breadcrumb__item' and text()='<provider_name>']
 check_developer_preview_bar_in_install_page:
@@ -527,7 +523,7 @@ check_bare_metal_upi_install_page:
         - selector:
             xpath: //a[contains(@href, 'installing_bare_metal/installing-bare-metal.html#creating-machines-bare-metal') and text()='Learn more']
         - selector:
-            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-installer.x86_64.iso') and text()='Download RHCOS ISO']
+            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-live.x86_64.iso') and text()='Download RHCOS ISO']
         - selector:
             xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-metal.x86_64.raw.gz') and text()='Download RHCOS RAW']
 check_bare_metal_upi_page_title:
