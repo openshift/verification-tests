@@ -255,7 +255,7 @@ class CucuFormatter
     url << "/" << file
     # need to escape file path above because encode/escape method is deprecated
     # see https://bugs.ruby-lang.org/issues/4167
-    url = URI.encode(url)
+    url = URI.encode_www_form_component(url)
     url << '#L' << line
     return url
   end
