@@ -31,14 +31,14 @@ check_cluster_list_page:
         - selector:
             css: input.pf-c-form-control.cluster-list-filter
         - selector:
-            xpath: //span[text()='Filter']
+            xpath: //span[text()='Cluster type']
         - selector:
             xpath: //button[text()='Create cluster']/../../..//button[@aria-label='Actions']
           op: click
         - selector:
             xpath: //a[text()='Register cluster' and contains(@href, '/openshift/register')]
         - selector:
-            xpath: //a[text()='Show archived clusters' and contains(@href, '/openshift/archived')]
+            xpath: //a[text()='View cluster archives' and contains(@href, '/openshift/archived')]
         - selector:
             xpath: //button[text()='Create cluster']/../../..//button[@aria-label='Actions']
           op: click
