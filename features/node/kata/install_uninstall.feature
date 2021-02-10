@@ -51,4 +51,3 @@ Feature: kata related features
     #   | install_mode      | OwnNamespace      |
     #   | approval_strategy | Automatic         |
     # Then the step should succeed
-  
