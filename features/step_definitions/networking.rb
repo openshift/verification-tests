@@ -1210,7 +1210,8 @@ Given /^the node's MTU value is stored in the#{OPT_SYM} clipboard$/ do |cb_node_
   else
      step %Q/I run command on the node's sdn pod:/, table("| bash | -c | ip route show default |")
   end
-  inf_name = @result[:response].split("\n").first.split(/\W+/)[7]
+  # OVN uses `br-ex` and `-` is not a word char, so we have to split on whitespace
+  inf_name = @result[:response].split("\n").first.split[4]
   @result = host.exec_admin("ip a show #{inf_name}")
   cb[cb_node_mtu] = @result[:response].split(/mtu /)[1][0,4]
   logger.info "Node's MTU value is stored in the #{cb_node_mtu} clipboard."
@@ -1274,4 +1275,11 @@ Given /^I save ipecho url to the#{OPT_SYM} clipboard$/ do | cb_name |
   cb_name = "ipecho_url" unless cb_name
   cb[cb_name]="172.31.249.80:9095"
   logger.info "The ipecho service url #{cb[cb_name]} is stored to the #{cb_name} clipboard."
+end
+
+Given /^the IPSec is enabled on the cluster$/ do
+  ensure_admin_tagged
+  _admin = admin
+  @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.ovnKubernetesConfig}")
+  raise "env doesn't have IPSec enabled" unless @result[:response].include? "ipsecConfig"
 end
