@@ -34,7 +34,8 @@ Feature: OVNKubernetes IPSec related networking scenarios
     And a pod becomes ready with labels:
        | name=network-pod |
     And evaluation of `pod.name` is stored in the :hello_pod_worker1 clipboard
-    #Make sure you got some packets captured at the receiver node.The socat we used earlier will dump any ESP packets less that 40 in length (these are invalid in our clusters)
+    #Make sure you got some packets captured at the receiver node.The socat we used earlier will dump any ESP packets less that 40 in length (these are invalid in our clusters). Checking limited number
+    #of packets say 1 or 2 should suffice as that would imply the successful communication of ESP traffic across the nodes
     When admin executes on the "<%= cb.hello_pod_worker1 %>" pod:
        | bash | -c | timeout  --preserve-status 60 tcpdump -c 2 -i br-ex "esp and less 40" |
     Then the step should succeed 
@@ -77,7 +78,7 @@ Feature: OVNKubernetes IPSec related networking scenarios
     And I run commands on the host:
       | grep -i "IPsec SA established transport mode" /var/log/openvswitch/libreswan.log |
     Then the step should succeed
-    #We need to make sure some mode is chosen and supported only is trasport
+    #We need to make sure some mode is chosen and supported only for now is transport
     And the output should contain "IPsec SA established transport mode"
     
   # @author anusaxen@redhat.com
