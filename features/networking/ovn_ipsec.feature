@@ -127,7 +127,7 @@ Feature: OVNKubernetes IPSec related networking scenarios
     Then the step should succeed
     And a pod becomes ready with labels:
        | name=hello-pod |
-    And evaluation of `pod.ip` is stored in the :test_pod_worker1 clipboard
+    And evaluation of `pod.ip_url` is stored in the :test_pod_worker1 clipboard
     
     Given I obtain test data file "networking/pod-for-ping.json"
     When I run oc create over "pod-for-ping.json" replacing paths:
