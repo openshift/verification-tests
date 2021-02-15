@@ -36,7 +36,7 @@ Feature: OVNKubernetes IPSec related networking scenarios
     And evaluation of `pod.name` is stored in the :hello_pod_worker1 clipboard
     #Make sure you got some packets captured at the receiver node.The socat we used earlier will dump any ESP packets less that 40 in length (these are invalid in our clusters)
     When admin executes on the "<%= cb.hello_pod_worker1 %>" pod:
-       | bash | -c | tcpdump -i br-ex "esp and less 40" & sleep 60s; kill $! |
+       | bash | -c | timeout  --preserve-status 60 tcpdump -c 2 -i br-ex "esp and less 40" |
     Then the step should succeed 
     And the output should not contain "0 packets captured"
   
@@ -60,7 +60,7 @@ Feature: OVNKubernetes IPSec related networking scenarios
     Given I use the "<%= cb.workers[0].name %>" node
     #Simulating segfault on pluto IKE dameon
     And I run commands on the host:
-      | pgrep pluto \| xargs kill -SEGV |
+      | pgrep -SEGV pluto|
     Then the step should succeed
     #Need to give it some hard coded time for ovn-ipsec pod to notice segfault
     Given 90 seconds have passed
@@ -75,7 +75,7 @@ Feature: OVNKubernetes IPSec related networking scenarios
     And the IPSec is enabled on the cluster
     Given I select a random node's host
     And I run commands on the host:
-      | cat /var/log/openvswitch/libreswan.log \| grep -i "IPsec SA established transport mode" |
+      | grep -i "IPsec SA established transport mode" /var/log/openvswitch/libreswan.log |
     Then the step should succeed
     #We need to make sure some mode is chosen and supported only is trasport
     And the output should contain "IPsec SA established transport mode"
@@ -91,12 +91,12 @@ Feature: OVNKubernetes IPSec related networking scenarios
     Given I have a project
     And I have a pod-for-ping in the project
     When I execute on the pod:
-      | bash | -c | ip link show eth0 |
+      | bash | -c | cat /sys/class/net/eth0/mtu |
     Then the step should succeed
-    And evaluation of `@result[:response].split(/mtu /)[1][0,4]` is stored in the :test_pod_mtu clipboard
+    And evaluation of `@result[:response]` is stored in the :test_pod_mtu clipboard
     # OVN needs 100 byte header and IPSec needs another 46 bytes due to ESP etc so the pod's mtu must be 146 bytes less than cluster mtu
     And the expression should be true> cb.test_pod_mtu.to_i + 146 == cb.cluster_mtu.to_i
-    
+ 
   # @author anusaxen@redhat.com
   # @case_id OCP-37590
   @admin
@@ -131,9 +131,9 @@ Feature: OVNKubernetes IPSec related networking scenarios
     
     Given I obtain test data file "networking/pod-for-ping.json"
     When I run oc create over "pod-for-ping.json" replacing paths:
-      | ["spec"]["nodeName"]                 | <%= cb.workers[0].name %>                                                             |
-      | ["metadata"]["name"]                 | pod-worker0                                                                           |
-      | ["spec"]["containers"][0]["command"] | ["bash", "-c", "while true; do curl <%= cb.test_pod_worker1 %>:8080 ; sleep 1; done"] |
+      | ["spec"]["nodeName"]                 | <%= cb.workers[0].name %>                                                                     |
+      | ["metadata"]["name"]                 | pod-worker0                                                                                   |
+      | ["spec"]["containers"][0]["command"] | ["bash", "-c", "for f in {0..3600}; do curl <%= cb.test_pod_worker1 %>:8080 ; sleep 1; done"] |
     Then the step should succeed
     #Above command will curl "hello openshift" traffic every 1 second to worker1 test pod which is expected to cause ESP traffic generation across those nodes
     And a pod becomes ready with labels:
@@ -151,7 +151,7 @@ Feature: OVNKubernetes IPSec related networking scenarios
     And evaluation of `pod.name` is stored in the :hostnw_pod_worker1 clipboard
     #capturing tcpdump for 2 seconds
     When admin executes on the "<%= cb.hostnw_pod_worker1 %>" pod:
-       | bash | -c | tcpdump -i <%= cb.default_interface %> esp & sleep 2s; kill $! |
+       | bash | -c | timeout  --preserve-status 2 tcpdump -i <%= cb.default_interface %> esp |
     Then the step should succeed 
     # Example ESP packet un-encrypted will look like 16:37:16.309297 IP ip-10-0-x-x.us-east-2.compute.internal > ip-10-0-x-x.us-east-2.compute.internal: ESP(spi=0xf50c771c,seq=0xfaad)
     And the output should contain: 
