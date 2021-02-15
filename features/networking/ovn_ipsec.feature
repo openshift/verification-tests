@@ -60,7 +60,7 @@ Feature: OVNKubernetes IPSec related networking scenarios
     Given I use the "<%= cb.workers[0].name %>" node
     #Simulating segfault on pluto IKE dameon
     And I run commands on the host:
-      | pgrep -SEGV pluto|
+      | pkill -SEGV pluto|
     Then the step should succeed
     #Need to give it some hard coded time for ovn-ipsec pod to notice segfault
     Given 90 seconds have passed

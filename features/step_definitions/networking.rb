@@ -1280,6 +1280,7 @@ end
 Given /^the IPSec is enabled on the cluster$/ do
   ensure_admin_tagged
   _admin = admin
-  @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.ovnKubernetesConfig}")
-  raise "env doesn't have IPSec enabled" unless @result[:response].include? "ipsecConfig"
+  network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
+  default_network = network_operator.default_network(user: admin)
+  raise "env doesn't have IPSec enabled" unless default_network["ipsecConfig"]
 end
