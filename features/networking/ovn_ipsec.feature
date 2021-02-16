@@ -71,7 +71,7 @@ Feature: OVNKubernetes IPsec related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-37591
   @admin
-  Scenario: Make sure IPSEC-SA's are establishing in a transport mode
+  Scenario: Make sure IPsec SA's are establishing in a transport mode
     Given the env is using "OVNKubernetes" networkType
     And the IPsec is enabled on the cluster
     Given I select a random node's host
