@@ -1,11 +1,11 @@
-Feature: OVNKubernetes IPSec related networking scenarios
+Feature: OVNKubernetes IPsec related networking scenarios
 
   # @author anusaxen@redhat.com
   # @case_id OCP-38846
   @admin
-  Scenario: Should be able to send node to node ESP traffic on IPSec clusters	
+  Scenario: Should be able to send node to node ESP traffic on IPsec clusters	
     Given the env is using "OVNKubernetes" networkType
-    And the IPSec is enabled on the cluster
+    And the IPsec is enabled on the cluster
     Given I store all worker nodes to the :workers clipboard
     #Consider worker1 as a host where worker0 would like to send ESP traffic
     And the Internal IP of node "<%= cb.workers[1].name %>" is stored in the :host_ip clipboard
@@ -47,7 +47,7 @@ Feature: OVNKubernetes IPSec related networking scenarios
   @destructive
   Scenario: Segfault on pluto IKE daemon should result in restarting pluto daemon and corresponding ovn-ipsec pod
     Given the env is using "OVNKubernetes" networkType
-    And the IPSec is enabled on the cluster
+    And the IPsec is enabled on the cluster
     Given I store all worker nodes to the :workers clipboard
     #Getting ovn-ipsec pod name for a corresponding worker node in sight
     When I run the :get admin command with:
@@ -73,7 +73,7 @@ Feature: OVNKubernetes IPSec related networking scenarios
   @admin
   Scenario: Make sure IPSEC-SA's are establishing in a transport mode
     Given the env is using "OVNKubernetes" networkType
-    And the IPSec is enabled on the cluster
+    And the IPsec is enabled on the cluster
     Given I select a random node's host
     And I run commands on the host:
       | grep -i "IPsec SA established transport mode" /var/log/openvswitch/libreswan.log |
@@ -84,9 +84,9 @@ Feature: OVNKubernetes IPSec related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-39216
   @admin
-  Scenario: Pod created on IPSec cluster should have appropriate MTU size to accomdate IPSec Header
+  Scenario: Pod created on IPsec cluster should have appropriate MTU size to accomdate IPsec Header
     Given the env is using "OVNKubernetes" networkType
-    And the IPSec is enabled on the cluster
+    And the IPsec is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard
     And the node's MTU value is stored in the :cluster_mtu clipboard
     Given I have a project
@@ -95,7 +95,7 @@ Feature: OVNKubernetes IPSec related networking scenarios
       | bash | -c | cat /sys/class/net/eth0/mtu |
     Then the step should succeed
     And evaluation of `@result[:response]` is stored in the :test_pod_mtu clipboard
-    # OVN needs 100 byte header and IPSec needs another 46 bytes due to ESP etc so the pod's mtu must be 146 bytes less than cluster mtu
+    # OVN needs 100 byte header and IPsec needs another 46 bytes due to ESP etc so the pod's mtu must be 146 bytes less than cluster mtu
     And the expression should be true> cb.test_pod_mtu.to_i + 146 == cb.cluster_mtu.to_i
  
   # @author anusaxen@redhat.com
@@ -104,7 +104,7 @@ Feature: OVNKubernetes IPSec related networking scenarios
   @destructive	
   Scenario: Delete all ovn-ipsec containers and check if they gets recreated
     Given the env is using "OVNKubernetes" networkType
-    And the IPSec is enabled on the cluster
+    And the IPsec is enabled on the cluster
     When I run the :delete admin command with:
       | object_type | pod                      |
       | l           | app=ovn-ipsec            |
@@ -117,7 +117,7 @@ Feature: OVNKubernetes IPSec related networking scenarios
   @admin
   Scenario: pod to pod traffic on different nodes should be ESP encrypted
     Given the env is using "OVNKubernetes" networkType
-    And the IPSec is enabled on the cluster
+    And the IPsec is enabled on the cluster
     Given I store all worker nodes to the :workers clipboard
     Given the default interface on nodes is stored in the :default_interface clipboard
     Given I have a project

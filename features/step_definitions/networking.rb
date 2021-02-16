@@ -1277,7 +1277,7 @@ Given /^I save ipecho url to the#{OPT_SYM} clipboard$/ do | cb_name |
   logger.info "The ipecho service url #{cb[cb_name]} is stored to the #{cb_name} clipboard."
 end
 
-Given /^the IPSec is enabled on the cluster$/ do
+Given /^the IPsec is enabled on the cluster$/ do
   ensure_admin_tagged
   _admin = admin
   network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
