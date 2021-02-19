@@ -1,0 +1,17 @@
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: kata-operator
+  namespace: kata-operator-system
+  labels:
+    app: kata-operatorgroup
+
+spec:
+  channel: 4.7
+  installPlanApproval: Automatic
+  name: kata-operator
+  source: kataconfig-catalog
+  sourceNamespace: openshift-marketplace
+  startingCSV: kata-operator.v4.7.0
+  targetNamespaces:
+  - kata-operator-system

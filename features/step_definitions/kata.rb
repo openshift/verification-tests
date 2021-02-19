@@ -83,3 +83,50 @@ And /^I verify kata container runtime is installed into the a worker node$/ do
   @result = node(pod.node_name).host.exec_admin(node_cmd)
   raise "No qemu process detected inside pod node" unless @result[:response].include? 'qemu'
 end
+
+Given /^there is a catalogsource for kata container$/ do
+  step %Q/I switch to cluster admin pseudo user/
+  step %Q/I use the "openshift-marketplace" project/
+  step %Q|I obtain test data file "kata/release-4.7/catalogsource.yaml"|
+  user.cli_exec(:apply, f: 'catalogsource.yaml')
+  step %Q/a pod becomes ready with labels:/, table(%{
+    | olm.catalogSource=redhat-marketplace |
+  })
+end
+
+Given /^the kata-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|GUI))?$/ do | kata_ns, method |
+  kata_ns ||= "kata-operator-system"
+  install_method ||= 'CLI'
+  step %Q/there is a catalogsource for kata container/
+  @result = user.cli_exec(:create_namespace, name: kata_ns)
+  project(kata_ns)
+  #step %Q/I use the "#{kata_ns}" project/
+  # step %Q/I switch to cluster admin pseudo user/
+  step %Q/I switch to the first user/
+  step %Q/the first user is cluster-admin/
+  step %Q(I use the "#{kata_ns}" project)
+  step %Q/evaluation of `cluster_version('version').version.split('-')[0].to_f` is stored in the :channel clipboard/
+  step %Q/I open admin console in a browser/
+  step %Q/the step should succeed/
+  step %Q/I perform the :goto_operator_subscription_page web action with:/, table(%{
+    | package_name     | kata-operator      |
+    | catalog_name     | kataconfig-catalog |
+    | target_namespace | #{kata_ns}         |
+  })
+  step %Q/the step should succeed/
+  step %Q/I perform the :set_custom_channel_and_subscribe web action with:/, table(%{
+    | update_channel    | alpha        |
+    | install_mode      | OwnNamespace |
+    | approval_strategy | Automatic    |
+  })
+  step %Q/the step should succeed/
+  step %Q/a pod becomes ready with labels:/, table(%{
+    | control-plane=controller-manager |
+  })
+  step %Q/SCC "privileged" is added to the "default" service account/
+  step %Q|I obtain test data file "kata/release-4.7/kataconfiguration_v1_kataconfig.yaml"|
+  @result = user.cli_exec(:apply, f: 'kataconfiguration_v1_kataconfig.yaml')
+      raise "Failed to apply kataconfig" unless @result[:success]
+  step %Q/I store all worker nodes to the :nodes clipboard/
+  step %Q/I wait until number of completed kata runtime nodes match "<%= cb.nodes.count %>" for "example-kataconfig"/
+end
