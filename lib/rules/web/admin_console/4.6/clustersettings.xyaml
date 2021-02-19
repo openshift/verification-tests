@@ -42,3 +42,7 @@ check_list_of_channels_in_channel_modal:
   action: click_update_channel_button
   action: click_dropdown_button
   action: check_drop_down_items
+check_co_related_objs:
+  elements:
+  - selector:
+      xpath: //a[text()='<name>']/ancestor::tr[//td[text()='<resource>'] and //td[text()='<group>'] and //a[text()='<namespace>']] | //a[text()='<name>']/ancestor::tr[//td[text()='<resource>'] and //td[text()='<group>'] and //td[text()='<namespace>']]

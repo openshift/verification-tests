@@ -92,3 +92,7 @@ check_packagemanifests_have_cs_link:
       xpath: //th[@data-label='CatalogSource']
   - selector:
       xpath: //a[@data-test-id='redhat-operators' and contains(@class,'co-resource-item__resource-name')]
+check_co_related_objs:
+  elements:
+  - selector:
+      xpath: //a[text()='<name>']/ancestor::tr[//td[text()='<resource>'] and //td[text()='<group>'] and //a[text()='<namespace>']] | //a[text()='<name>']/ancestor::tr[//td[text()='<resource>'] and //td[text()='<group>'] and //td[text()='<namespace>']]

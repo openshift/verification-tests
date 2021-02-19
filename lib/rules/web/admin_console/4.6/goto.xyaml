@@ -376,6 +376,10 @@ goto_one_hpa_page:
 goto_cluster_operators:
   url: settings/cluster/clusteroperators
   action: wait_box_loaded
+goto_co_relatedobjects_page:
+  url: /k8s/cluster/config.openshift.io~v1~ClusterOperator/<clusteroperator_name>/related-objects
+  action: wait_table_loaded
+  action: wait_box_loaded
 goto_global_configuration_page:
   url: settings/cluster/globalconfig
   action: wait_box_loaded 
