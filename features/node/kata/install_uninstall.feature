@@ -15,9 +15,7 @@ Feature: kata related features
   @destructive
   @upgrade-prepare
   Scenario: test delete kata installation
-    Given the master version >= "4.6"
-    Given I switch to cluster admin pseudo user
-    And I remove kata operator from "kata-operator" namespace
+    Given I remove kata operator from the namespace
 
 
   Scenario: test install kata-webhook
@@ -33,6 +31,7 @@ Feature: kata related features
   @destructive
   @upgrade-prepare
   Scenario: Operator can be installed through web console
+    Given the master version >= "4.7"
     Given the kata-operator is installed using OLM GUI
     # Given there is a catalogsource for kata container
     # Given the first user is cluster-admin
@@ -51,3 +50,13 @@ Feature: kata related features
     #   | install_mode      | OwnNamespace      |
     #   | approval_strategy | Automatic         |
     # Then the step should succeed
+
+
+  # @author pruan@redhat.com
+  # @case_id OCP-39499
+  @admin
+  @destructive
+  @upgrade-prepare
+  Scenario: kata operator can be installed via CLI with OLM for OCP>=4.7
+    Given the master version >= "4.7"
+    Given the kata-operator is installed using OLM CLI
