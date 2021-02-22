@@ -1,0 +1,34 @@
+apiVersion: machine.openshift.io/v1beta1
+kind: MachineSet
+metadata:
+  labels:
+    machine.openshift.io/cluster-api-cluster:
+    machine.openshift.io/cluster-api-machine-role: worker
+    machine.openshift.io/cluster-api-machine-type: worker
+  name: default-valued-33058
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      machine.openshift.io/cluster-api-cluster:
+      machine.openshift.io/cluster-api-machineset:
+  template:
+    metadata:
+      labels:
+        machine.openshift.io/cluster-api-cluster:
+        machine.openshift.io/cluster-api-machine-role: worker
+        machine.openshift.io/cluster-api-machine-type: worker
+        machine.openshift.io/cluster-api-machineset:
+    spec:
+      metadata: {}
+      taints:
+      - effect: "NoSchedule"
+        key: "mapi"
+        value: "mapi_test"
+      providerSpec:
+        value:
+          location:
+          osDisk:
+            diskSizeGB: 128
+          securityProfile:
+                  encryptionAtHost: true
