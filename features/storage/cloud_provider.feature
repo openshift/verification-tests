@@ -18,7 +18,7 @@ Feature: kubelet restart and node restart
       | resource | pv |
     Then the output should contain:
       | dynamic-pvc-#{cb.i} |
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/misc/pod.yaml" replacing paths:
+    When I run oc create over "https://raw.githubusercontent.com/openshift/verification-tests/master/testdata/storage/misc/pod.yaml" replacing paths:
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | dynamic-pvc-#{cb.i} |
       | ["metadata"]["name"]                                         | mypod#{cb.i}        |
       | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt/<platform>     |

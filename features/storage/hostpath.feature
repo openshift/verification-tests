@@ -40,7 +40,7 @@ Feature: Storage of Hostpath plugin testing
     Then the step should succeed
     And the "localc-<%= cb.proj_name %>" PVC becomes bound to the "local-<%= cb.proj_name %>" PV
 
-    Then I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/hostpath/pod.yaml" replacing paths:
+    Then I run oc create over "https://raw.githubusercontent.com/openshift/verification-tests/master/testdata/storage/hostpath/pod.yaml" replacing paths:
       | ["metadata"]["name"]                                         | localpd-<%= cb.proj_name %> |
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | localc-<%= cb.proj_name %>  |
     Then the step should succeed
