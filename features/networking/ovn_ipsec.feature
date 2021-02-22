@@ -51,11 +51,11 @@ Feature: OVNKubernetes IPsec related networking scenarios
     Given I store all worker nodes to the :workers clipboard
     #Getting ovn-ipsec pod name for a corresponding worker node in sight
     When I run the :get admin command with:
-      | resource      | pod                                   |
-      | l             | app=ovn-ipsec    |
+      | resource      | pod                                     |
+      | l             | app=ovn-ipsec                           |
       | fieldSelector | spec.nodeName=<%= cb.workers[0].name %> |
-      | n             | openshift-ovn-kubernetes              |
-      | o             | jsonpath={.items[*].metadata.name}    |
+      | n             | openshift-ovn-kubernetes                |
+      | o             | jsonpath={.items[*].metadata.name}      |
     Then the step should succeed
     And evaluation of `@result[:response]` is stored in the :ovn_ipsec_pod clipboard
     Given I use the "<%= cb.workers[0].name %>" node
