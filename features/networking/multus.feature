@@ -6,6 +6,9 @@ Feature: Multus-CNI related scenarios
   Scenario: Create pods with multus-cni - macvlan bridge mode
     # Make sure that the multus is enabled
     Given the master version >= "4.1"
+    # Debug steps (202102)
+    Given I Collect multus related information
+    # Debug end
     And the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard
     And evaluation of `node.name` is stored in the :target_node clipboard
@@ -66,6 +69,9 @@ Feature: Multus-CNI related scenarios
   Scenario: Create pods with multus-cni - macvlan private mode
     # Make sure that the multus is enabled
     Given the master version >= "4.1"
+    # Debug steps (202102)
+    Given I Collect multus related information
+    # Debug end
     And the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard
     And evaluation of `node.name` is stored in the :target_node clipboard
@@ -124,6 +130,9 @@ Feature: Multus-CNI related scenarios
   Scenario: Create pods with multus-cni - macvlan vepa mode
     # Make sure that the multus is enabled
     Given the master version >= "4.1"
+    # Debug steps (202102)
+    Given I Collect multus related information
+    # Debug end
     And the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard
     And evaluation of `node.name` is stored in the :target_node clipboard
@@ -184,6 +193,9 @@ Feature: Multus-CNI related scenarios
   Scenario: Create pods with multus-cni - host-device
     # Make sure that the multus is enabled
     Given the master version >= "4.1"
+    # Debug steps (202102)
+    Given I Collect multus related information
+    # Debug end
     And the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard
     And evaluation of `node.name` is stored in the :target_node clipboard
@@ -253,6 +265,9 @@ Feature: Multus-CNI related scenarios
   Scenario: Create pods with muliple cni plugins via multus-cni - macvlan + macvlan
     # Make sure that the multus is enabled
     Given the master version >= "4.1"
+    # Debug steps (202102)
+    Given I Collect multus related information
+    # Debug end
     And the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard
     And evaluation of `node.name` is stored in the :target_node clipboard
@@ -297,6 +312,9 @@ Feature: Multus-CNI related scenarios
   Scenario: Create pods with muliple cni plugins via multus-cni - macvlan + host-device
     # Make sure that the multus is enabled
     Given the master version >= "4.1"
+    # Debug steps (202102)
+    Given I Collect multus related information
+    # Debug end
     And the multus is enabled on the cluster
     And an 4 character random string of type :hex is stored into the :nic_name clipboard
     Given the default interface on nodes is stored in the :default_interface clipboard
@@ -361,6 +379,9 @@ Feature: Multus-CNI related scenarios
   Scenario: Create pods with muliple cni plugins via multus-cni - host-device + host-device
     # Make sure that the multus is enabled
     Given the master version >= "4.1"
+    # Debug steps (202102)
+    Given I Collect multus related information
+    # Debug end
     And the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard
     And evaluation of `node.name` is stored in the :target_node clipboard
@@ -429,6 +450,9 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-24488
   @admin
   Scenario: Create pod with Multus bridge CNI plugin without vlan
+    # Debug steps (202102)
+    Given I Collect multus related information
+    # Debug end
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin
@@ -477,6 +501,9 @@ Feature: Multus-CNI related scenarios
   @admin
   @destructive
   Scenario: Create pod with Multus bridge CNI plugin and vlan tag
+    # Debug steps (202102)
+    Given I Collect multus related information
+    # Debug end
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin
@@ -517,6 +544,9 @@ Feature: Multus-CNI related scenarios
   @admin
   @destructive
   Scenario: CNO manager mavlan configured manually with static
+    # Debug steps (202102)
+    Given I Collect multus related information
+    # Debug end
     Given the multus is enabled on the cluster
     And I store all worker nodes to the :nodes clipboard
     Given the default interface on nodes is stored in the :default_interface clipboard
@@ -558,6 +588,9 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-21946
   @admin
   Scenario: The multus admission controller should be able to detect the syntax issue in the net-attach-def
+    # Debug steps (202102)
+    Given I Collect multus related information
+    # Debug end
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin and simulating syntax errors
@@ -585,6 +618,9 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-21949
   @admin
   Scenario: The multus admission controller should be able to detect the issue in the pod template
+    # Debug steps (202102)
+    Given I Collect multus related information
+    # Debug end
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin
@@ -606,6 +642,9 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-21793
   @admin
   Scenario: User cannot consume the net-attach-def created in other project which is namespace isolated
+    # Debug steps (202102)
+    Given I Collect multus related information
+    # Debug end
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     Given I have a project
@@ -640,6 +679,9 @@ Feature: Multus-CNI related scenarios
   @admin
   @destructive
   Scenario: Pods can communicate each other with same vlan tag
+    # Debug steps (202102)
+    Given I Collect multus related information
+    # Debug end
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     And I store all worker nodes to the :nodes clipboard
@@ -725,6 +767,9 @@ Feature: Multus-CNI related scenarios
   @admin
   @destructive
   Scenario: Pods cannot communicate each other with different vlan tag
+    # Debug steps (202102)
+    Given I Collect multus related information
+    # Debug end
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     And I store all worker nodes to the :nodes clipboard
@@ -825,6 +870,9 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-24607
   @admin
   Scenario: macvlan plugin without master parameter
+    # Debug steps (202102)
+    Given I Collect multus related information
+    # Debug end
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     # Create the net-attach-def without master pmtr via cluster admin
@@ -850,6 +898,9 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-25676
   @admin
   Scenario: Supported runtimeConfig/capability for MAC/IP
+    # Debug steps (202102)
+    Given I Collect multus related information
+    # Debug end
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
 
@@ -886,6 +937,9 @@ Feature: Multus-CNI related scenarios
   @admin
   @destructive
   Scenario: Multus CNI type bridge with DHCP
+    # Debug steps (202102)
+    Given I Collect multus related information
+    # Debug end
     # Make sure that the multus is Running
     Given the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard
@@ -940,6 +994,9 @@ Feature: Multus-CNI related scenarios
   @admin
   @destructive
   Scenario: CNO manager macvlan configured manually with DHCP
+    # Debug steps (202102)
+    Given I Collect multus related information
+    # Debug end
     Given the multus is enabled on the cluster
     And I store the masters in the :master clipboard
     And I store all worker nodes to the :worker clipboard
@@ -1014,6 +1071,9 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-25909
   @admin
   Scenario: Assign static IP address using pod annotation
+    # Debug steps (202102)
+    Given I Collect multus related information
+    # Debug end
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
 
@@ -1048,6 +1108,9 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-25910
   @admin
   Scenario: Assign static MAC address using pod annotation
+    # Debug steps (202102)
+    Given I Collect multus related information
+    # Debug end
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin
@@ -1080,6 +1143,9 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-25915
   @admin
   Scenario: Multus default route overwrite
+    # Debug steps (202102)
+    Given I Collect multus related information
+    # Debug end
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin
@@ -1110,6 +1176,9 @@ Feature: Multus-CNI related scenarios
   @admin
   @destructive
   Scenario: Multus Telemetry Adds capability to track usage of network attachment definitions
+    # Debug steps (202102)
+    Given I Collect multus related information
+    # Debug end
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     Given I switch to cluster admin pseudo user
@@ -1166,6 +1235,11 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-22504
   @admin
   Scenario: The multus admission controller should be able to detect that the pod is using net-attach-def in other namespaces when the isolation is enabled
+    # Debug steps (202102)
+    Given I Collect multus related information
+    # Debug end
+    # Make sure that the multus is enabled
+    Given the multus is enabled on the cluster
     Given I create 2 new projects
     # Create the net-attach-def via cluster admin
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml"
@@ -1196,6 +1270,9 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-24492
   @admin
   Scenario: Create pod with Multus ipvlan CNI plugin
+    # Debug steps (202102)
+    Given I Collect multus related information
+    # Debug end
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     And the default interface on nodes is stored in the :default_interface clipboard
@@ -1249,6 +1326,9 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-28633
   @admin
   Scenario: Dynamic IP address assignment with Whereabouts
+    # Debug steps (202102)
+    Given I Collect multus related information
+    # Debug end
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard
@@ -1306,6 +1386,9 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-28518
   @admin
   Scenario: Multus custom route change with route override
+    # Debug steps (202102)
+    Given I Collect multus related information
+    # Debug end
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin
@@ -1336,6 +1419,9 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-30054
   @admin
   Scenario: Multus namespaceIsolation should allow references to CRD in the default namespace
+    # Debug steps (202102)
+    Given I Collect multus related information
+    # Debug end
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     # Create the net-attach-def in default namespace via cluster admin
@@ -1362,6 +1448,9 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-29742
   @admin
   Scenario: Log pod IP and pod UUID when pod start
+    # Debug steps (202102)
+    Given I Collect multus related information
+    # Debug end
     Given the multus is enabled on the cluster
     And I store all worker nodes to the :nodes clipboard
     # Create the net-attach-def via cluster admin
@@ -1408,6 +1497,9 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-31999
   @admin
   Scenario: Whereabouts with exclude IP address
+    # Debug steps (202102)
+    Given I Collect multus related information
+    # Debug end
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     # Create the net-attach-def via cluster admin
@@ -1465,6 +1557,9 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-33579
   @admin
   Scenario: Additional network IPAM should support changes in range and overlapping ranges
+    # Debug steps (202102)
+    Given I Collect multus related information
+    # Debug end
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
     # Create the net-attach-def with whereabouts-shortrange

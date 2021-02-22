@@ -1275,3 +1275,20 @@ Given /^I save ipecho url to the#{OPT_SYM} clipboard$/ do | cb_name |
   cb[cb_name]="172.31.249.80:9095"
   logger.info "The ipecho service url #{cb[cb_name]} is stored to the #{cb_name} clipboard."
 end
+
+Given /^I Collect multus related information/ do
+  ensure_admin_tagged
+  step %Q/I run the :get admin command with:/, table(%{
+    | resource | nodes |
+    | o        | wide  |
+  })
+  step %Q/I run the :describe admin command with:/, table(%{
+    | resource | daemonset        |
+    | n        | openshift-multus |
+  })
+  step %Q/I run the :get admin command with:/, table(%{
+    | resource | pods             |
+    | n        | openshift-multus |
+    | o        | wide             |   
+  })
+end
