@@ -1284,3 +1284,22 @@ Given /^the IPsec is enabled on the cluster$/ do
   default_network = network_operator.default_network(user: admin)
   raise "env doesn't have IPSec enabled" unless default_network["ipsecConfig"]
 end
+
+# For debug purpose to collect multus related information
+Given /^I collect multus related information/ do
+  ensure_admin_tagged
+  step %Q/I run the :get admin command with:/, table(%{
+    | resource | nodes |
+    | o        | wide  |
+  })
+  step %Q/I run the :describe admin command with:/, table(%{
+    | resource | daemonset        |
+    | n        | openshift-multus |
+  })
+  step %Q/I run the :get admin command with:/, table(%{
+    | resource | pods             |
+    | n        | openshift-multus |
+    | o        | wide             |   
+  })
+end
+
