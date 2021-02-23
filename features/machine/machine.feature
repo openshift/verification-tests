@@ -301,6 +301,7 @@ Feature: Machine features testing
     Given I store the last provisioned machine in the :machine clipboard
     When evaluation of `machine(cb.machine).aws_ami_id` is stored in the :default_ami_id clipboard
     And evaluation of `machine(cb.machine).aws_availability_zone` is stored in the :default_availability_zone clipboard
+    And evaluation of `machine(cb.machine).aws_subnet` is stored in the :default_subnet clipboard
     Then admin ensures "<name>" machineset is deleted after scenario
 
     Given I obtain test data file "cloud/ms-aws/<file_name>"
@@ -310,6 +311,7 @@ Feature: Machine features testing
       | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-cluster"]    | <%= infrastructure("cluster").infra_name %> |
       | ["spec"]["template"]["spec"]["providerSpec"]["value"]["ami"]["id"]                        | <%= cb.default_ami_id %>                    |
       | ["spec"]["template"]["spec"]["providerSpec"]["value"]["placement"]["availabilityZone"]    | <%= cb.default_availability_zone %>         |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["subnet"]["filters"][0]["values"]   |  <%= cb.default_subnet[0].values[1] %>      |
       | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-machineset"] | <name>                                      |
       | ["metadata"]["name"]                                                                      | <name>                                      |
     Then the step should succeed
@@ -317,9 +319,9 @@ Feature: Machine features testing
     Then I store the last provisioned machine in the :machine_latest clipboard
     And I wait up to 120 seconds for the steps to pass:
     """
-    Then the expression should be true> machine(cb.machine_latest).phase(cached: false) == "Running"
+    Then the expression should be true> machine(cb.machine_latest).phase(cached: false) == "Provisioned"
     """
-   
+
     When I run the :describe admin command with:
       | resource | machine                  |
       | name     | <%= cb.machine_latest %> |

@@ -30,4 +30,8 @@ spec:
           placement:
             availabilityZone:
             tenancy: dedicated
+          subnet:
+            filters:
+            - name: tag:Name
+              values:
 
