@@ -314,16 +314,12 @@ Feature: Machine features testing
       | ["metadata"]["name"]                                                                      | <name>                                      |
     Then the step should succeed
 
+    Then I store the last provisioned machine in the :machine_latest clipboard
     And I wait up to 120 seconds for the steps to pass:
     """
-    When I run the :get admin command with:
-      | resource | machine |
-    Then the step should succeed
-    And the output should contain:
-      | Running |
+    Then the expression should be true> machine(cb.machine_latest).phase(cached: false) == "Running"
     """
-
-    Then I store the last provisioned machine in the :machine_latest clipboard
+   
     When I run the :describe admin command with:
       | resource | machine                  |
       | name     | <%= cb.machine_latest %> |
