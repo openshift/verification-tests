@@ -591,7 +591,15 @@ Given /^the multus is enabled on the cluster$/ do
   available_multus_replicas = daemon_set('multus', project('openshift-multus')).replica_counters(user: admin)[:available]
   #storing desired_multus_replicas value in desired_multus_replicas clipboard variable as well
   cb.desired_multus_replicas = desired_multus_replicas
-  raise "Multus is not running correctly!" unless desired_multus_replicas == available_multus_replicas && available_multus_replicas != 0
+  unless desired_multus_replicas == available_multus_replicas && available_multus_replicas != 0
+    daemon_set('multus', project('openshift-multus')).describe(admin, quiet:false)
+    BushSlicer::Pod.get_labeled("app=multus", user: admin, project: project("openshift-multus", switch: false)) do |pod|
+      pod.describe(admin, quiet: false)
+    end
+    env.nodes(user:admin, refresh: true, quiet: false)
+    raise "Multus is not running correctly!"
+  end
+
 end
 
 Given /^the status of condition#{OPT_QUOTED} for network operator is :(.+)$/ do | type, status |
