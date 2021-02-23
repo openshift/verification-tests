@@ -31,4 +31,4 @@ spec:
           osDisk:
             diskSizeGB: 128
           securityProfile:
-                  encryptionAtHost: true
+            encryptionAtHost: true
