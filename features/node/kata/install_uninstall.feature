@@ -3,7 +3,6 @@ Feature: kata related features
   # @case_id OCP-36508
   @admin
   @destructive
-  @upgrade-prepare
   Scenario: kata container operator installation
     Given the master version >= "4.6"
     Given kata container has been installed successfully in the "kata-operator" project
@@ -13,7 +12,6 @@ Feature: kata related features
   # @case_id OCP-36509
   @admin
   @destructive
-  @upgrade-prepare
   Scenario: test delete kata installation
     Given I remove kata operator from the namespace
 
@@ -29,7 +27,6 @@ Feature: kata related features
   # @case_id OCP-39344
   @admin
   @destructive
-  @upgrade-prepare
   Scenario: Operator can be installed through web console
     Given the master version >= "4.7"
     Given the kata-operator is installed using OLM GUI
@@ -56,7 +53,6 @@ Feature: kata related features
   # @case_id OCP-39499
   @admin
   @destructive
-  @upgrade-prepare
   Scenario: kata operator can be installed via CLI with OLM for OCP>=4.7
     Given the master version >= "4.7"
     Given the kata-operator is installed using OLM CLI
