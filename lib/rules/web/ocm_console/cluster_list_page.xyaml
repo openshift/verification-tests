@@ -184,9 +184,11 @@ click_actions_behind_create_button:
 actions_behind_create_button_menu_loaded:
     elements:
         - selector:
-            xpath: //a[contains(@href,'/openshift/register')]
+            xpath: //a[contains(@href,'/openshift/register') and text()='Register cluster']
         - selector:
-            xpath: //a[contains(@href, '/openshift/archived') and text()='Show archived clusters']
+            xpath: //a[contains(@href, '/openshift/archived') and text()='View cluster archives']
+        - selector:
+            xpath: //a[contains(@href, '/openshift/assisted-installer') and text()='Assisted Installer clusters']
 click_register_cluster_button:
     element:
         selector:
