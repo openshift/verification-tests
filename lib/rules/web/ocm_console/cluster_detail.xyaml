@@ -136,31 +136,33 @@ check_actions_items_of_ready_ocp_cluster_on_detail:
 check_disconnected_cluster_overview_information:
     elements:
         - selector:
-            xpath: //div[@class='pf-l-grid']//div//dt[2][text()='Type']/../dd[2]/*[text()='OCP']
+            xpath: //div[@class='pf-l-grid']//span[text()='Type']/../../dd/div/span[text()='OCP']
         - selector:
-            xpath: //div[@class='pf-l-grid']/div//dt[3][text()='Location']/../dd[3][text()='N/A']
+            xpath: //div[@class='pf-l-grid']//span[text()='Location']/../../dd/div[text()='N/A']
         - selector:
-            xpath: //div[@class='pf-l-grid']//div//dt[4][text()='Provider']/../dd[4][text()='N/A']
+            xpath: //div[@class='pf-l-grid']//span[text()='Provider']/../../dd/div[text()='N/A']
         - selector:
-            xpath: //div[@class='pf-l-grid']//div//dt[1][text()='Status']/../dd[1][text()='disconnected']
+            xpath: //div[@class='pf-l-grid']//span[text()='Status']/../../dd/div[text()='disconnected']
     action:
         if_param: vcpu_type
         ref: total_vCPU_loaded
     action:
         if_param: sockets_type
         ref: total_sockets_loaded
+check_disconnected_cluster_without_items:
+    elements:
+        - selector:
+            xpath: //article[@class='pf-c-card ocm-c-overview-details__card']//span[text()='Total vCPU']
+        - selector:
+            xpath: //article[@class='pf-c-card ocm-c-overview-details__card']//span[text()='Total memory']
 total_vCPU_loaded:
     elements:
         - selector:
-            xpath: //div[@class='pf-l-grid']/div[2]//dt[2][text()='Total vCPU']/../dd[2][contains(.,'vCPU')]
-        - selector:
-            xpath: //dt[text()='Subscription units']/../dd[1][text()='Cores/vCPU']
+            xpath: //span[text()='Subscription units']/../../dd/div[text()='Cores/vCPU']
 total_sockets_loaded:
     elements:
         - selector:
-            xpath: //div[@class='pf-l-grid']/div[2]//dt[3][text()='Total sockets']
-        - selector:
-            xpath: //dt[text()='Subscription units']/../dd[1][text()='Sockets']
+            xpath: //span[text()='Subscription units']/../../dd/div[text()='Sockets']
 check_total_vcpu_value:
     element:
         selector:
@@ -248,9 +250,9 @@ check_ocp_details_in_detail_page:
         - selector:
             xpath: //article[@class='pf-c-card ocm-c-overview-details__card']//span[text()='Nodes']
         - selector:
-            xpath: //article[@class='pf-c-card ocm-c-overview-details__card']//dt[text()='Master:']
+            xpath: //article[@class='pf-c-card ocm-c-overview-details__card']//dt[text()='Control plane:']
         - selector:
-            xpath: //article[@class='pf-c-card ocm-c-overview-details__card']//dt[text()='Compute:']
+            xpath: //article[@class='pf-c-card ocm-c-overview-details__card']//dt[text()='Worker:']
 check_ocp_subscription_settings_in_detail_page:
     elements:
         - selector:
@@ -343,13 +345,19 @@ check_osd_details_in_detail_page:
         - selector:
             xpath: //article[@class='pf-c-card ocm-c-overview-details__card']//span[text()='Nodes']
         - selector:
-            xpath: //article[@class='pf-c-card ocm-c-overview-details__card']//dt[text()='Master:']
+            xpath: //article[@class='pf-c-card ocm-c-overview-details__card']//dt[text()='Control plane:']
         - selector:
             xpath: //article[@class='pf-c-card ocm-c-overview-details__card']//dt[text()='Infra:']
         - selector:
-            xpath: //article[@class='pf-c-card ocm-c-overview-details__card']//dt[text()='Compute:']
+            xpath: //article[@class='pf-c-card ocm-c-overview-details__card']//dt[text()='Worker:']
         - selector:
             xpath: //article[@class='pf-c-card ocm-c-overview-details__card']//span[text()='Network']
+check_osd_location_in_detail_page:
+    elements:
+        - selector:
+            xpath: //article[@class='pf-c-card ocm-c-overview-details__card']//div[text()='<provider>']
+        - selector:
+            xpath: //article[@class='pf-c-card ocm-c-overview-details__card']//div[text()='<location>']
 check_osd_ocp_comman_details_in_detail_page:
     elements:
         - selector:

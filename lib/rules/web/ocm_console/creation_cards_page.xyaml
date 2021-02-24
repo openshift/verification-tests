@@ -10,7 +10,7 @@ creation_cards_page_loaded:
         - selector:
             xpath: //span[text()='Datacenter']
         - selector:
-            xpath: //span[text()='Sandbox']
+            xpath: //span[text()='Local']
 
 check_creation_cards_page:
     elements:
