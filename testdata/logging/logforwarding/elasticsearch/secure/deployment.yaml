@@ -29,13 +29,6 @@ spec:
       - image: quay.io/openshifttest/elasticsearch@sha256:87538ba78df48470563796df1dbbf2e7bf407e97542830bfd395f912b15c07f0
         imagePullPolicy: IfNotPresent
         name: elasticsearch-server
-        readinessProbe:
-          exec:
-            command:
-            - sh
-            - /usr/share/elasticsearch/config/add-user.sh
-          initialDelaySeconds: 5
-          periodSeconds: 5
         ports:
         - containerPort: 9300
           protocol: TCP
@@ -47,9 +40,6 @@ spec:
         volumeMounts:
         - mountPath: /usr/share/elasticsearch/config/elasticsearch.yml
           subPath: elasticsearch.yml
-          name: elasticsearch-config
-        - mountPath: /usr/share/elasticsearch/config/add-user.sh
-          subPath: add-user.sh
           name: elasticsearch-config
         - mountPath: /usr/share/elasticsearch/config/secret
           name: certificates
