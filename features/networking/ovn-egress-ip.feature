@@ -18,7 +18,7 @@ Feature: OVN Egress IP related features
     When I run the :label admin command with:
       | resource | namespace           |
       | name     | <%= project.name %> |
-      | key_val  | og=qe               |
+      | key_val  | org=qe              |
     Then the step should succeed
 
     Given I obtain test data file "networking/list_for_pods.json"
@@ -82,7 +82,7 @@ Feature: OVN Egress IP related features
     When I run the :label admin command with:
       | resource | namespace           |
       | name     | <%= cb.proj1 %>     |
-      | key_val  | og=qe               |
+      | key_val  | org=qe              |
     Then the step should succeed
     And I have a pod-for-ping in the project
 
@@ -92,7 +92,7 @@ Feature: OVN Egress IP related features
     When I run the :label admin command with:
       | resource | namespace           |
       | name     | <%= cb.proj2 %>     |
-      | key_val  | og=dev              |
+      | key_val  | org=dev             |
     Then the step should succeed
     And I have a pod-for-ping in the project
 
@@ -147,7 +147,7 @@ Feature: OVN Egress IP related features
     When I run the :label admin command with:
       | resource | namespace           |
       | name     | <%= cb.proj1 %>     |
-      | key_val  | og=qe               |
+      | key_val  | org=qe              |
     Then the step should succeed
     And I have a pod-for-ping in the project
 
@@ -157,7 +157,7 @@ Feature: OVN Egress IP related features
     When I run the :label admin command with:
       | resource | namespace           |
       | name     | <%= cb.proj2 %>     |
-      | key_val  | og=qe               |
+      | key_val  | org=qe              |
     Then the step should succeed
     And I have a pod-for-ping in the project
 
@@ -187,7 +187,7 @@ Feature: OVN Egress IP related features
     When I run the :label admin command with:
       | resource | namespace           |
       | name     | <%= cb.proj3 %>     |
-      | key_val  | og=qe               |
+      | key_val  | org=qe              |
     Then the step should succeed
     And I have a pod-for-ping in the project
 
@@ -215,7 +215,7 @@ Feature: OVN Egress IP related features
     When I run the :label admin command with:
       | resource | namespace           |
       | name     | <%= cb.proj1 %>     |
-      | key_val  | og=qe               |
+      | key_val  | org=qe              |
     Then the step should succeed
     And I have a pod-for-ping in the project
 
@@ -238,7 +238,7 @@ Feature: OVN Egress IP related features
     When I run the :label admin command with:
       | resource | namespace           |
       | name     | <%= cb.proj1 %>     |
-      | key_val  | og-                 |
+      | key_val  | org-                |
     Then the step should succeed
 
     # Check source ip is not egress ip
@@ -265,7 +265,7 @@ Feature: OVN Egress IP related features
     When I run the :label admin command with:
       | resource | namespace           |
       | name     | <%= cb.proj1 %>     |
-      | key_val  | og=qe               |
+      | key_val  | org=qe              |
     Then the step should succeed
     And I have a pod-for-ping in the project
     When I run the :label admin command with:
@@ -322,7 +322,7 @@ Feature: OVN Egress IP related features
     When I run the :label admin command with:
       | resource | namespace           |
       | name     | <%= cb.proj1 %>     |
-      | key_val  | og=qe               |
+      | key_val  | org=qe              |
     Then the step should succeed
     And I have a pod-for-ping in the project
 
@@ -368,7 +368,7 @@ Feature: OVN Egress IP related features
     When I run the :label admin command with:
       | resource | namespace           |
       | name     | <%= cb.proj1 %>     |
-      | key_val  | og=qe               |
+      | key_val  | org=qe              |
     Then the step should succeed
 
     #Make sure the pod located on another node to avoid rebooting the node cause killing the pod
@@ -453,7 +453,7 @@ Feature: OVN Egress IP related features
     When I run the :label admin command with:
       | resource | namespace           |
       | name     | <%= project.name %> |
-      | key_val  | og=qe               |
+      | key_val  | org=qe              |
     Then the step should succeed
 
     #Specify different node for pod than egressIP node
@@ -499,7 +499,7 @@ Feature: OVN Egress IP related features
     When I run the :label admin command with:
       | resource | namespace           |
       | name     | <%= cb.proj1 %>     |
-      | key_val  | og=qe               |
+      | key_val  | org=qe              |
     Then the step should succeed
     And I have a pod-for-ping in the project
 

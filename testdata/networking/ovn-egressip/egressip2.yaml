@@ -8,4 +8,4 @@ spec:
   -  172.31.249.228
   namespaceSelector:
     matchLabels:
-      og: qe
+      org: qe
