@@ -326,26 +326,34 @@ end
 
 Given /^logging channel name is stored in the#{OPT_SYM} clipboard$/ do | cb_name |
   cb_name = 'logging_channel_name' unless cb_name
-  version = cluster_version('version').version.split('-')[0].split('.').take(2).join('.')
-  case version
-  when '4.1'
-    cb[cb_name] = "preview"
-  when '4.7'
-    cb[cb_name] = "5.0"
+  if env.logging_channel_name.empty?
+    version = cluster_version('version').version.split('-')[0].split('.').take(2).join('.')
+    case version
+    when '4.1'
+      cb[cb_name] = "preview"
+    when '4.7'
+      cb[cb_name] = "5.0"
+    else
+      cb[cb_name] = version
+    end
   else
-    cb[cb_name] = version
+    cb[cb_name] = env.logging_channel_name
   end
 end
 
 Given /^#{QUOTED} packagemanifest's catalog source name is stored in the#{OPT_SYM} clipboard$/ do |packagemanifest, cb_name|
   cb_name = "catsrc_name" unless cb_name
   project("openshift-marketplace")
-  if catalog_source("qe-app-registry").exists?
-    cb[cb_name] = "qe-app-registry"
+  if env.logging_catsrc.empty?
+    if catalog_source("qe-app-registry").exists?
+      cb[cb_name] = "qe-app-registry"
+    else
+      @result = admin.cli_exec(:get, resource: 'packagemanifest', resource_name: packagemanifest, n: 'openshift-marketplace', o: 'yaml')
+      raise "Unable to get catalog source name" unless @result[:success]
+      cb[cb_name] = @result[:parsed]['status']['catalogSource']
+    end
   else
-    @result = admin.cli_exec(:get, resource: 'packagemanifest', resource_name: packagemanifest, n: 'openshift-marketplace', o: 'yaml')
-    raise "Unable to get catalog source name" unless @result[:success]
-    cb[cb_name] = @result[:parsed]['status']['catalogSource']
+    cb[cb_name] = env.logging_catsrc
   end
 end
 
