@@ -732,7 +732,7 @@ module BushSlicer
       end
     end
 
-    def allocate_floating_ip(network_name, reuse: true, tenant: nil)
+    def allocate_floating_ip(network_name, reuse: true, designator: nil)
       network = floating_ip_networks.find { |n| n["name"] == network_name }
       unless network
         raise "could not find network #{network_name} in current tenant."
@@ -764,7 +764,7 @@ module BushSlicer
           floating_network_id: network_id,
           project_id: self.os_tenant_id,
           description: "IP allocated automatically by OpenShift verification-tests" \
-            + ((tenant.nil? || tenant.length == 0) ? "":" (#{tenant})")
+            + ((designator.nil? || designator.length == 0) ? "":" (#{designator})")
         }
       }
       res = self.rest_run(request_url, method, payload, self.os_token)
