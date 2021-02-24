@@ -1,4 +1,5 @@
 create_osd_cluster:
+    action: cluster_list_page_loaded
     action: switch_to_osd_creation_page
     action: input_cluster_name_on_osd_creation_page
     action:
@@ -62,9 +63,11 @@ archive_cluster_from_cluster_list_page:
     action: cluster_list_page_loaded
     
 unarchive_cluster_from_cluster_list_page:
+    params:
+        filter_keyword: <cluster_name>
     action: go_to_archived_cluster_page
     action: archived_page_loaded
-    action: archived_page_loaded
+    action: filter_name_or_id
     action: click_unarchive_cluster_button_on_archived_cluster_list_page
     action: unarchive_dialog_loaded
     action: click_unarchive_button

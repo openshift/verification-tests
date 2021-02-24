@@ -699,3 +699,73 @@ check_existed_label:
         - selector:
             xpath: //div[@class='space-bottom-md']/input[@aria-label='Key-value list key' and @value='<label_key>']
 
+addon_deletion_dialog_loaded:
+    element:
+        selector:
+            xpath: //*[contains(text(), "This action will uninstall the add-on, removing add-on data from cluster can not be undone.")]
+
+clear_addon_deletion_confirm_text:
+    element: &input_box
+        selector:
+            xpath: //input[@placeholder='Enter name' and @aria-label='addon name']
+        op: clear
+        
+input_addon_deletion_confirm_text:
+    action: clear_addon_deletion_confirm_text
+    element:
+        <<: *input_box
+        op: send_keys <input_text>
+check_addon_deletion_dialog:
+    action: addon_deletion_dialog_loaded
+    elements:
+        - selector:
+            xpath: //h1[text()="Uninstall <addon_name>"]
+        - selector:
+            xpath: //input[@placeholder='Enter name' and @aria-label='addon name']
+    action: uninstall_button_disabled
+    action: check_cancel_button
+    element:
+        <<: *input_box
+check_uninstall_button:
+    action: input_addon_deletion_confirm_text
+    action:
+        if_param: button_disabled
+        ref: uninstall_button_disabled
+    action:
+        if_param: button_enabled
+        ref: uninstall_button_enabled
+uninstall_button_disabled:
+    element:
+        selector:
+            xpath: //button[@disabled='' and text()='Uninstall']
+uninstall_button_enabled:
+    element: &uninstall_button
+        selector:
+            xpath: //button[@aria-disabled='false' and text()='Uninstall']
+click_addon_uninstall_button:
+    element:
+        <<: *uninstall_button
+        op: click
+
+set_addon_install_parameter:
+    action: input_addon_install_parameter
+    action:
+        if_param: parameter_input_finished
+        ref: click_install_button_on_parameter_dialog
+set_addon_cidr_default_parameter:
+    element:
+        selector:
+            xpath: //button[contains(text(),'Use default')]
+        op: click
+
+input_addon_install_parameter:
+    element:
+        selector:
+            xpath: //input[@id='parameters.<parameter_key>']
+        op: send_keys <parameter_value>
+
+click_install_button_on_parameter_dialog:
+    element:
+        selector:
+            xpath: //button[@type='submit' and text()="Install"]
+        op: click

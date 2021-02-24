@@ -20,7 +20,7 @@ empty_table_loaded:
 archived_cluster_list_table_loaded:
     elements:
         - selector:
-            xpath: //h1[text()='Archived clusters']
+            xpath: //h1[text()='Cluster Archives']
         - selector:
             xpath: //table[@class='pf-c-table pf-m-grid-md']
         - selector:
@@ -48,6 +48,9 @@ click_unarchive_cluster_button_on_archived_cluster_list_page:
         timeout: 30
         op: click
 go_to_archived_cluster_detail_page:
+    params:
+        filter_keyword: <cluster_name>
+    action: filter_name_or_id
     element:
         selector:
             xpath: //table[@class='pf-c-table pf-m-grid-md']/tbody/tr/td/a[contains(text(),'<cluster_name>')]
