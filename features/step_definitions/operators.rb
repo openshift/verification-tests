@@ -71,7 +71,7 @@ Given /^the marketplace works well$/ do
       | Test Operators       |
       | CSC Operators        |
     })
-  elif env.version_eq("4.5", user: user)
+  elsif env.version_eq("4.5", user: user)
     step %Q/I run the :get client command with:/, table(%{
       | resource       | packagemanifest |
       | all_namespaces | true            |
