@@ -4,19 +4,31 @@ click_add_ons_tab_button:
             xpath: //button[contains(.,'Add-ons')]
         op: click
 
-addon_install_button_missing:
-    element:
+addon_install_button_loaded:
+    element: &addon_install_button
         selector:
             xpath: //div[text()='<addon_name>']/../div/button[@aria-label='Install' and text()='Install']
+wait_for_addon_install_button_show:
+    element:
+        <<: *addon_install_button
+        timeout: <timeout>
+addon_install_button_missing:
+    element:
+        <<: *addon_install_button
         missing: true
+click_addon_install_button:
+    element:
+        <<: *addon_install_button
+        op: click
 install_addon:
     action: click_add_ons_tab_button
-    elements:
-        - selector:
-            xpath: //div[text()='<addon_name>']/../div/button[@aria-label='Install' and text()='Install']
-          op: click
-        - selector:
-            xpath: //div[text()='Prow Operator']/..//span[text()='Installing']
+    action: click_addon_install_button
+    action:
+        if_param: set_cidr_default
+        ref: set_addon_cidr_default_parameter
+    action:
+        if_param: set_parameter
+        ref: set_addon_install_parameter
     action: addon_install_button_missing
     action: 
         if_param: wait_status
@@ -26,13 +38,25 @@ wait_for_addon_to_status:
     elements:
         - selector:
             xpath: //div[text()='<addon_name>']/..//span[text()='<wait_status>']
-          timeout: 1200
+          timeout: <timeout>
     action:
         if_param: check_console
         ref: check_console_url
     action:
         if_param: check_support
         ref: check_contact_support
+click_addon_actions_dropdown:
+    element: &addon_actions
+        selector:
+            xpath: //div[text()='<addon_name>']/..//button[@aria-label='Actions']
+        op: click
+
+click_delete_addon_button:
+    action: click_addon_actions_dropdown
+    element:
+        selector:
+            xpath: //button[text()='Uninstall add-on']
+        op: click
 check_console_url:
     element:
         selector:
@@ -46,6 +70,18 @@ check_addons_tab:
     action: click_add_ons_tab_button
     elements:
         - selector:
-            xpath: //article[@class='pf-c-card']
+            xpath: //section[@id='addOnsTabContent']
+delete_addon:
+    action: click_add_ons_tab_button
+    action: click_delete_addon_button
+    action: addon_deletion_dialog_loaded
+    action: input_addon_deletion_confirm_text
+    action: uninstall_button_enabled
+    action: click_addon_uninstall_button
+no_permission_tooltip_display:
+    elements:
         - selector:
-            xpath: //article[@class='pf-c-card']/div/button[text()='Install']
+            xpath: //div[text()='<addon_name>']/..//button[@aria-label='Actions' and @disabled]
+          op: hover
+        - selector:
+            xpath: //*[contains(text(), "You do not have permission to make changes to this add-on.")]

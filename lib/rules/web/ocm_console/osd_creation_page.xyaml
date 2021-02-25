@@ -43,7 +43,7 @@ cluster_detail_displayed:
 cluster_scale_displayed:
     elements:
     - selector:
-        text: Compute node instance type
+        text: Worker node instance type
     - selector:
         xpath: //label[@class='pf-c-form__label' and @for='node_type']/span[@class='pf-c-form__label-required']
     - selector:
@@ -52,7 +52,7 @@ cluster_scale_displayed:
 select_compute_node_count_on_creation_page:
     elements:
         - selector:
-            xpath: //select[@aria-label='Compute nodes' and @name='nodes_compute']
+            xpath: //select[@aria-label='Worker nodes' and @name='nodes_compute']
           op: click
         - selector:
             xpath: //option[text()='<node_number>']
@@ -543,7 +543,7 @@ check_creation_pending_message:
         - selector:
             xpath: //button[@type='submit' and @disabled='' and text()='Create cluster']
         - selector:
-            xpath: //span[text()='Do not refresh this page. This request may take a moment...']
+            xpath: //*[text()='Do not refresh this page. This request may take a moment...']
 
 check_podcidr_hostprefix_invalid_message:
     action: set_pod_cidr_value
@@ -660,16 +660,16 @@ check_help_messages_on_creation_page:
     action: close_help_message
     elements:
         - selector:
-            xpath: //span[text()='Compute node instance type']/../../span
+            xpath: //span[text()='Worker node instance type']/../../span
           op: click
         - selector:
-            xpath: //span[text()='Compute node instance type']/../span[text()='*']
+            xpath: //span[text()='Worker node instance type']/../span[text()='*']
         - selector:
             xpath: //div[contains(text(),'The instance type for the compute nodes. Instance type')]
     action: close_help_message
     elements:
         - selector:
-            xpath: //span[text()='Compute node count']/../../span
+            xpath: //span[text()='Worker node count']/../../span
           op: click
         - selector:
             xpath: //div[contains(text(),'The number of compute, or worker, nodes to provision per zone.')]

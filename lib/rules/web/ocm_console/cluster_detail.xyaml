@@ -110,7 +110,7 @@ check_scale_result_on_detail_page:
 check_desired_compute_nodes:
   element:
     selector:
-      xpath: //span[text()='Nodes']/../following-sibling::dd[1]//dt[text()='Compute:']/following-sibling::dd[contains(.,<desired_compute_nodes>)]
+      xpath: //span[text()='Nodes']/../following-sibling::dd[1]//dt[text()='Worker:']/following-sibling::dd[contains(.,<desired_compute_nodes>)]
     timeout: 1000
 scale_cluster_from_cluster_detail_page:
   action: cluster_detail_page_loaded
