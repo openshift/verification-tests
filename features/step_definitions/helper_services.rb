@@ -630,7 +630,7 @@ Given /^I have a registry with htpasswd authentication enabled in my project$/ d
   if BushSlicer::Project::SYSTEM_PROJECTS.include?(project(generate: false).name)
     raise "I refuse create registry in a system project: #{project.name}"
   end
-  @result = admin.cli_exec(:new_app, docker_image: "registry:2", namespace: project.name)
+  @result = admin.cli_exec(:new_app, as_deployment_config:true, docker_image: "quay.io/openshifttest/registry:2", namespace: project.name)
   step %Q/the step should succeed/
   step %Q/a pod becomes ready with labels:/, table(%{
        | deploymentconfig=registry |
@@ -645,7 +645,7 @@ Given /^I have a registry with htpasswd authentication enabled in my project$/ d
     | namespace   | #{project.name} |
   })
   step %Q/the step should succeed/
-  step %Q/I run the :env client command with:/, table(%{
+  step %Q/I run the :set_env client command with:/, table(%{
     | resource  | dc/registry                                 |
     | e         | REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd  |
     | e         | REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm |
