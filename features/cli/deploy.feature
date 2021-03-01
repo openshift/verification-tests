@@ -368,11 +368,6 @@ Feature: deployment related features
       | current   | 0 |
       | updated   | 0 |
       | available | 0 |
-    Given number of replicas of "ab-example-b" deployment config becomes:
-      | desired   | 1 |
-      | current   | 1 |
-      | updated   | 1 |
-      | available | 1 |
     When I use the "ab-example" service
     Then I wait for a web server to become available via the "ab-example" route
     And the output should contain "shardB"
@@ -386,11 +381,6 @@ Feature: deployment related features
       | name     | ab-example-a     |
       | replicas | 1                |
     Then the step should succeed
-    Given number of replicas of "ab-example-b" deployment config becomes:
-      | desired   | 0 |
-      | current   | 0 |
-      | updated   | 0 |
-      | available | 0 |
     Given number of replicas of "ab-example-a" deployment config becomes:
       | desired   | 1 |
       | current   | 1 |
