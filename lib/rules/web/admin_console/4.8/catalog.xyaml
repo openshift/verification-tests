@@ -1,0 +1,193 @@
+create_app_from_template:
+  action: goto_create_app_from_template_page
+  action: wait_form_loaded
+  action: click_create_button
+delete_template_instance_action:
+  params:
+    item: Delete Template Instance
+  action: click_one_dropdown_action
+  action: submit_changes
+create_app_from_imagestream:
+  action: goto_create_app_from_imagestream_page
+  action: wait_form_loaded
+  action: click_try_sample
+  action: choose_dc_type
+  action:
+    if_param: 
+      deploy_type: "k8s"
+    ref: choose_k8s_type
+  action:
+    if_param: label
+    ref: set_label
+  action: click_create_button
+click_try_sample:
+  params:
+    button_text: Try sample
+  action: click_button
+set_app_name:
+  params:
+    input_field_id: form-input-name-field
+    input_value: <app_name>
+  action: set_input_value
+choose_dc_type:
+  params:
+    radio_text: openshift
+  action: click_radio_input
+choose_k8s_type:
+  params:
+    radio_text: k8s
+  action: click_radio_input
+open_env_edit_for_dc:
+  action: choose_dc_type
+  action: open_deployment_env_edit
+open_deployment_env_edit:
+  params:
+    button_text: Deployment
+  action: click_button
+set_label:
+  params:
+    button_text: Labels
+  action: click_button
+  element:
+    selector:
+      xpath: //h2[contains(., 'Labels')]/following-sibling::div//input
+    op: send_keys <label>
+create_app_from_deploy_image:
+  action: goto_deploy_image_page
+  action: wait_until_no_loading
+  action: search_image
+  action:
+    if_param: app_name
+    ref: set_app_name
+  action: choose_dc_type
+  action:
+    if_param:
+      deploy_type: "k8s"
+    ref: choose_k8s_type
+  action:
+    if_param: label
+    ref: set_label
+  action: click_create_button
+wait_for_catalog_loaded:
+  elements:
+  - selector:
+      css: .co-catalog-page
+  - selector:
+      xpath: //div[contains(@class,'catalog-tile-pf-body')]
+  - selector:
+      xpath: //div[contains(@class,'catalog-tile-pf-header')]
+filter_by_category:
+  element:
+    selector:
+      xpath: //li/a[contains(., '<category>')]
+    op: click
+filter_by_sourcetoimage_type:
+  params:
+    type: BuilderImage
+  action: filter_by_type
+# in 4.7 we don't support filter by ClusterServiceVersion
+# to be compatible with earlier versions we still keep this rule
+filter_by_serviceclass_type: {}
+filter_by_template_type:
+  params:
+    type: Template
+  action: filter_by_type
+filter_by_operatorbacked_type:
+  params:
+    type: OperatorBackedService
+  action: filter_by_type
+filter_by_type:
+  element:
+    selector:
+      xpath: //a[contains(@href,'catalogType=<type>')]
+    op: click
+filter_by_keyword:
+  element:
+    selector: &filter_by_keyword
+      xpath: //input[contains(@placeholder, 'Filter by keyword')]
+    op: send_keys <keyword>
+show_catalog_items: {}
+clear_filter_by_keyword:
+  element:
+    selector: *filter_by_keyword
+    op: clear
+click_on_catalog_item:
+  element:
+    selector:
+      xpath: //a[@data-test='<operator_name>-<catalog_name>-openshift-marketplace']
+click_catalog_overlay_button:
+  element:
+    selector:
+      xpath: //a[contains(@class,'co-catalog-page__overlay-create')]
+    op: click
+choose_installmode:
+  params:
+    radio_text: <install_mode>
+  action: click_radio_input
+choose_update_channel:
+  params:
+    radio_text: <update_channel>
+  action: click_radio_input
+choose_approval_strategy:
+  params:
+    radio_text: <approval_strategy>
+  action: click_radio_input
+click_subscribe_button:
+  params:
+    button_text: Install
+  action: click_button_text
+subscribe_using_default_params:
+  action: wait_box_loaded
+  action: click_subscribe_button
+set_custom_channel_and_subscribe:
+  action: wait_box_loaded
+  action: choose_update_channel
+  action:
+    if_element:
+      selector:
+        xpath: //input[contains(@type,'checkbox') and contains(@id,'enable-monitoring-checkbox')]
+    ref: enable_cluster_monitoring
+  action: click_subscribe_button
+click_image_tag_dropdown:
+  params:
+    button_id: form-dropdown-image-tag-field
+  action: click_button_by_id
+browse_to_install_plan:
+  elements:
+  - selector:
+      xpath: //ul[contains(@class,'nav__menu')]//a[contains(text(), 'Subscription')]
+    timeout: 60
+    op: click
+  - selector:
+      xpath: //a[contains(@href, 'InstallPlan')]
+    timeout: 60
+    op: click
+click_project_list_dropdown:
+  params:
+    button_id: dropdown-selectbox
+  action: click_button_by_id
+choose_project_from_dropdown_list:
+  element:
+    selector:
+      xpath: //ul//a[@id='<project_name>-Namespace-link' and contains(@class,'dropdown__menu-item')]
+    op: click
+select_target_namespace:
+  params:
+    install_mode: OwnNamespace
+  action: choose_installmode
+  action: click_project_list_dropdown
+  action: choose_project_from_dropdown_list
+click_catalog_item:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'catalog-tile-pf-title') and text()='<catalog_item>']
+    op: click
+check_the_support_link:
+  params:
+    text: Get support
+    link_url: <link_url>
+  action: check_link_and_text
+check_browser_url_has_catagory_keyword_kind:
+  scripts:
+    - command: return window.location.href.indexOf('category=languages&keyword=php&catalogType=BuilderImage') != -1
+      expect_result: true

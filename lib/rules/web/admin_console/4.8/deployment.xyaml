@@ -1,0 +1,114 @@
+update_resource_count:
+  elements:
+  - selector: &modal_count
+      xpath: //input[contains(@class,"co-m-number-spinner__input")]
+    op: clear
+  - selector:
+      <<: *modal_count
+    op: send_keys <resource_count>
+  action: submit_changes
+update_rollout_strategy:
+  elements:
+  - selector:
+      xpath: //input[@value='<update_strategy>']
+    op: click
+  action: submit_changes
+click_initcontainer_in_detail_page:
+  element:
+    selector:
+      xpath: //h2[contains(.,'Init containers')]/..//span[contains(.,'<container_name>')]
+    op: click
+confirm_cancel_rollout:
+  params:
+    button_text: Yes, cancel
+  action: click_button
+search_image:
+  params:
+    clear_field_id: form-input-searchTerm-field
+    input_field_id: form-input-searchTerm-field
+    input_value: <search_content>
+  action: clear_input_value
+  action: set_input_value
+  elements:
+  - selector:
+      xpath: //span[contains(.,'Deploy Image')]
+    op: click
+search_nonexisted_image_and_check_message:
+  params:
+    search_content: non-existed
+    content: may not have access to the container image
+  action: search_image
+  action: check_page_contains
+search_and_deploy_image:
+  action: search_image
+  elements:
+  - selector:
+      xpath: //*[contains(@class,'pf-m-success') and contains(text(), 'Validated')]
+    timeout: 30
+  action: choose_dc_type
+  action: click_create_button
+delete_dc_with_dependency_objects:
+  params:
+    item: Delete DeploymentConfig
+    button_text: Delete
+  action: click_one_dropdown_action
+  action: click_button
+check_sections_on_container_details:
+  elements:
+  - selector:
+      xpath: //h2[contains(@class,'co-section-heading') and .='Container Details']
+  - selector:
+      xpath: //h2[contains(@class,'co-section-heading') and .='Image Details']
+  - selector:
+      xpath: //h2[contains(@class,'co-section-heading') and .='Network']
+check_hpa_metrics_table:
+  elements:
+  - selector:
+      xpath: //div/h2[contains(@data-test-section-heading,'Metrics')]/following-sibling::div[contains(.,'Type')]/../div[contains(.,'Current')]/../div[contains(.,'Target')]
+  action:
+    if_param: target_resource_memory
+    ref: check_target_resource_memory
+  action:
+    if_param: target_resource_cpu
+    ref: check_target_resource_cpu
+  action:
+    if_param: current_cpu_utilization
+    ref: check_current_cpu_utilization
+check_value_in_metrics_table:
+  elements:
+  - selector: &value
+      xpath: //div[contains(@class,'row')]//div[contains(.,'<value>')]
+check_target_resource_memory:
+  params:
+    value: <target_resource_memory>
+  element:
+    selector:
+      <<: *value
+check_target_resource_cpu:
+  params:
+    value: <target_resource_cpu>
+  element:
+    selector:
+      <<: *value
+check_current_cpu_utilization:
+  params:
+    value: <current_cpu_utilization>
+  element:
+    selector:
+      <<: *value
+check_pod_status:
+  elements:
+  - selector: &status
+      xpath: //tr/td[contains(.,'<pod_name>')]/following-sibling::td[contains(.,'<pod_status>')]
+check_pod_completed_status:
+  params:
+    pod_status: Completed
+  element:
+    selector:
+      <<: *status
+check_resource_pod_name_and_link:
+  params:
+    resource_type: Pod
+    resource_name: <pod_name>
+    resource_link: /k8s/ns/<project_name>/pods/<pod_name>
+  action: check_resource_item
