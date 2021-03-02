@@ -141,15 +141,19 @@ module BushSlicer
         @var_name==other.var_name
     end
     def to_s
-      path=@@files[@var_name]
-      if path.nil?
+      file=@@files[@var_name]
+      if !file.nil? && !file.file?
+        @@files.except!(@var_name)
+        file=nil
+      end
+      if file.nil?
         e = ENV[@var_name]
         Tempfile.open("env_#{@var_name}_") do |f|
           f.write("#{e}") if !e.nil?
-          @@files[@var_name]=f.path
+          @@files[@var_name]=f
         end
       end
-      path
+      file.path
     end
 
     alias :eql? :==
