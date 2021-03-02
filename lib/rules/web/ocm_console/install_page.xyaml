@@ -779,6 +779,9 @@ check_creation_page_datacenter_tab:
 check_creation_page_cloud_tab_with_quota:
     action: creation_cards_page_loaded
     action: check_creation_cards_page_title
+    action: check_creation_page_cloud_tab_specific_part_with_quota
+    action: check_creation_page_cloud_tab_common_part
+check_creation_page_cloud_tab_specific_part_with_quota:
     elements:
         - selector:
             xpath: //h2[text()='Active subscriptions']
@@ -788,6 +791,8 @@ check_creation_page_cloud_tab_with_quota:
             xpath: //a[@href='/openshift/create/osd']/button[text()='Create cluster']
         - selector:
             xpath: //a[@href='/openshift/subscriptions']/button[text()='View your available quota']
+check_creation_page_cloud_tab_common_part:
+    elements:
         - selector:
             xpath: //h2[text()='Managed services']
         - selector:
@@ -800,4 +805,7 @@ check_creation_page_cloud_tab_with_quota:
             xpath: //a[@href='/openshift/install/gcp' and text()='Google Cloud']
         - selector:
             xpath: //a[@href='/openshift/install/metal' and text()='Platform agnostic']
-
+check_creation_page_cloud_tab_without_quota:
+    action: creation_cards_page_loaded
+    action: check_creation_cards_page_title
+    action: check_creation_page_cloud_tab_common_part

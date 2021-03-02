@@ -15,43 +15,19 @@ check_disconnected_cluster_register_page:
 required_items_loaded:
     elements:
         - selector:
+            xpath: //a[@href='/openshift' and text()='Clusters']
+        - selector:
+            xpath: //li[text()='Register disconnected cluster']
+        - selector:
+            xpath: //h1[text()='Register disconnected cluster']
+        - selector:
+            xpath: //p[contains(., 'Use this form to register clusters that are not connected to OpenShift Cluster Manager.')]
+        - selector:
             text: 'Cluster ID'
         - selector:
             xpath: //span[text()='Cluster ID']/../span[text()='*']
         - selector:
             css: input#cluster_id
-            type: text
-        - selector:
-            text: 'Red Hat Enterprise Linux CoreOS'
-        - selector:
-            xpath: //input[@id='operating_system-Red Hat Enterprise Linux CoreOS']
-            type: radio
-        - selector:
-            text: 'Red Hat Enterprise Linux'
-        - selector:
-            xpath: //input[@id='operating_system-Red Hat Enterprise Linux']
-            type: radio
-        - selector:
-            text: 'System type'
-        - selector:
-            xpath: //span[text()='System type']/../span[text()='*']
-        - selector:
-            text: 'Physical'
-        - selector:
-            css: input#system_type-physical
-            type: radio
-        - selector:
-            text: Virtual
-        - selector:
-            css: input#system_type-virtual
-            type: radio
-        - selector:
-            text: 'Number of sockets or LPARs'
-        - selector:
-            xpath: //span[text()='Number of sockets or LPARs']/../span[text()='*']
-        - selector:
-            css: input#socket_num
-            type: text
 optional_items_loaded:
     elements:
         - selector:
@@ -63,13 +39,15 @@ optional_items_loaded:
         - selector:
             css: input#web_console_url
         - selector:
-            text: 'Memory capacity (GiB)'
+            xpath: //h4[text()='Subscription settings']
         - selector:
-            css: input#memory_gib
+            xpath: //span[text()='Choose the support type for this cluster.']
         - selector:
-            text: 'Number of compute nodes'
+            xpath: //span[text()='How do you intend to use this cluster?']
         - selector:
-            css: input#nodes_compute
+            xpath: //span[text()='Choose your service level. (If you bought your subscription through Red Hat, choose L1-L3.)']
+        - selector:
+            xpath: //span[text()='What unit of measure do you want to use, cores/vCPU or sockets?']
 click_register_cluster_button_on_cluster_register_page:
     element:
         selector:
@@ -79,7 +57,6 @@ input_text:
     element:
         selector:
             css: input#<locator_id>
-            type: text
         op: send_keys <input_value>
 clear_input:
     element:
@@ -174,8 +151,6 @@ check_vcpu_invalid_input_error_messages:
     
 check_required_items_invalid_input_error_messages:
     action: check_external_id_invalid_input_error_messages
-    action: check_sockets_invalid_input_error_messages
-    action: check_vcpu_invalid_input_error_messages
 check_display_name_exceed_max_characters_input_error_message:
     params:
         locator_id: display_name
@@ -252,7 +227,14 @@ check_memory_capacity_invalid_input_error_messages:
     action: clear_input
     action: check_memory_capacity_exceed_max_num_input_error_message
 check_optional_items_invalid_input_error_messages:
-    action: check_memory_capacity_invalid_input_error_messages
     action: check_web_console_url_invalid_input_error_messages
-    action: check_nodes_invalid_input_error_messages
     action: check_display_name_invalid_input_error_messages
+register_disconnect_cluster:
+    action: required_items_loaded
+    action: input_correct_cluster_id
+    action: click_register_cluster_button_on_cluster_register_page
+input_correct_cluster_id:
+    params:
+        input_value: <cluster_uuid>
+        locator_id: cluster_id
+    action: input_text
