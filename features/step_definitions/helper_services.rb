@@ -492,32 +492,17 @@ Given /^I have a iSCSI setup in the environment$/ do
 
   if _pod.ready?(user: admin, quiet: true)[:success]
     logger.info "found existing iSCSI pod, skipping config"
-    cb.iscsi_ip = _service.ip(user: admin)
   elsif _pod.exists?(user: admin, quiet: true)
     logger.warn "broken iSCSI pod, will try to recreate keeping other config"
     @result = admin.cli_exec(:delete, n: _project.name, object_type: "pod", object_name_or_id: _pod.name)
     raise "could not delete broken iSCSI pod" unless @result[:success]
   else
-    env.node_hosts.each do |host|
-      setup_commands = [
-        "sed -i '/^node.session.auth./'d  /etc/iscsi/iscsid.conf",
-        "cat >> /etc/iscsi/iscsid.conf << EOF\n" +
-          "node.session.auth.authmethod = CHAP\n" +
-          "node.session.auth.username = 5f84cec2\n" +
-          "node.session.auth.password = b0d324e9\n" +
-          "EOF\n",
-        "systemctl enable iscsid",
-        "systemctl restart iscsid"
-      ]
-      res = host.exec_admin(*setup_commands)
-      raise "iSCSI initiator setup commands error" unless res[:success]
-    end
     @result = admin.cli_exec(:create, n: _project.name, f: "#{BushSlicer::HOME}/testdata/storage/iscsi/iscsi-target.json")
     raise "could not create iSCSI pod" unless @result[:success]
   end
 
   if !_service.exists?(user:admin, quiet: true)
-    @result = admin.cli_exec(:create, n: _project.name, f: 'https://raw.githubusercontent.com/openshift-qe/docker-iscsi/master/service.json')
+    @result = admin.cli_exec(:create, n: _project.name, f: "#{BushSlicer::HOME}/testdata/storage/iscsi/service.json")
     raise "could not create iSCSI service" unless @result[:success]
   end
 

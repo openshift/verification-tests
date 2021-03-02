@@ -14,6 +14,16 @@
         "selector": {
             "role": "iscsi-target"
         },
+	"tolerations": [
+            {
+                "effect": "NoSchedule",
+                "key": "node-role.kubernetes.io/master",
+                "operator": "Exists"
+            }
+	],
+	"nodeSelector": {
+            "node-role.kubernetes.io/master": ""
+        },
         "containers": [
             {
                 "name": "iscsi-target",
