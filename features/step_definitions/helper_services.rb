@@ -502,7 +502,8 @@ Given /^I have a iSCSI setup in the environment$/ do
   end
 
   if !_service.exists?(user:admin, quiet: true)
-    @result = admin.cli_exec(:create, n: _project.name, f: "#{BushSlicer::HOME}/testdata/storage/iscsi/service.json")
+    step %Q{I obtain test data file "storage/iscsi/service.json"}
+    @result = admin.cli_exec(:create, n: _project.name, f: "service.json")
     raise "could not create iSCSI service" unless @result[:success]
   end
 

@@ -5,16 +5,16 @@
         "name": "iscsi-target"
     },
     "spec": {
-	"selector": {
-	    "storage": "iscsi-target"
-	},
-	"ports": [
-	    {
-		"name": "3260",
-		"protocol": "TCP",
-		"port": 3260,
-		"targetPort": 3260
-	    }
-	]	
+        "selector": {
+                "storage": "iscsi-target"
+        },
+        "ports": [
+            {   
+                "name": "3260",
+                "protocol": "TCP",
+                "port": 3260,
+                "targetPort": 3260
+            }
+        ]	
     }
 }
