@@ -1,7 +1,7 @@
-Given(/^I pick a random machineset to scale$/) do
+Given(/^I pick a random( windows)? machineset to scale$/) do | windows |
   ensure_admin_tagged
   machine_sets = BushSlicer::MachineSet.list(user: admin, project: project("openshift-machine-api")).
-    select { |ms| ms.available_replicas >= 1 }
+    select { |ms| ms.available_replicas >= 1 && (windows ? ms.is_windows_machinesets? : !ms.is_windows_machinesets?) }
   cache_resources *machine_sets.shuffle
 end
 
@@ -56,8 +56,8 @@ Then(/^the machineset should have expected number of running machines$/) do
   end
 end
 
-Given(/^I clone a machineset and name it "([^"]*)"$/) do | ms_name |
-  step %Q{I pick a random machineset to scale}
+Given(/^I clone a( windows)? machineset and name it "([^"]*)"$/) do | os_type, ms_name |
+  step %Q{I pick a random#{os_type} machineset to scale}
 
   ms_yaml = machine_set.raw_resource.to_yaml
   new_spec = YAML.load ms_yaml
