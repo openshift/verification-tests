@@ -526,7 +526,7 @@ transfer_disconnected_cluster_ownership:
 check_transfer_disconnected_cluster_ownership_dialog:
     elements:
         - selector:
-            xpath: //h1[text()='Transfer cluster ownership']
+            xpath: //span[text()='Transfer cluster ownership']
         - selector:
             xpath: //p[text()='Transferring cluster ownership will allow another individual to manage this cluster. The steps for transferring cluster ownership are:']
         - selector:
@@ -551,7 +551,7 @@ click_transfer_cluster_ownership_button:
 check_transfer_cluster_ownership_dialog:
     elements:
         - selector:
-            xpath: //h1[text()='Transfer cluster ownership']
+            xpath: //span[text()='Transfer cluster ownership']
         - selector:
             xpath: //p[text()='Transferring cluster ownership will allow another individual to manage this cluster. The steps for transferring cluster ownership are:']
         - selector:
