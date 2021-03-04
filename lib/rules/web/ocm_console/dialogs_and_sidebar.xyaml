@@ -11,7 +11,7 @@ archive_dialog_loaded:
         - selector:
             xpath: //button[@class='pf-c-button pf-m-plain' and @aria-label='Close']
         - selector:
-            xpath: //h1[text()='Archive cluster']
+            xpath: //span[text()='Archive cluster']
         - selector:
             xpath: //form/p[contains(text(), 'Archiving a cluster will remove it from the cluster list and remove the cluster from subscription management.')]
         - selector:
@@ -72,7 +72,7 @@ unarchive_dialog_loaded:
         - selector:
             xpath: //button[@class='pf-c-button pf-m-plain' and @aria-label='Close']
         - selector:
-            xpath: //h1[text()='Unarchive cluster']
+            xpath: //span[text()='Unarchive cluster']
         - selector:
             xpath: //p[text()='Un-archiving a cluster will make it visible in the active (default) cluster list. You may need to manage subscriptions if the cluster is active.']
         - selector:
@@ -233,7 +233,7 @@ click_add_url_button:
 aws_customer_cloud_subscription_prompt_message_loaded:
     elements:
         - selector:
-            xpath: //h1[text()='Customer cloud subscription']
+            xpath: //span[text()='Customer cloud subscription']
         - selector:
             text: "With this subscription option, the cluster will be provisioned in an AWS account owned by you or your company. This allows you to pay AWS directly for public cloud costs, leveraging your existing relationship."
         - selector:

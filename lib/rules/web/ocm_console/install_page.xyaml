@@ -753,7 +753,7 @@ check_creation_page_datacenter_tab:
         - selector:
             xpath: //h2[text()='Assisted Installer']
         - selector:
-            xpath: //span[text()='Developer preview']
+            xpath: //span[text()='Technology preview']
         - selector:
             xpath: //div[text()='Create a cluster on bare metal following a guided installation process to connect your hardware.']
         - selector:
