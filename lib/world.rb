@@ -35,7 +35,7 @@ module BushSlicer
     end
 
     def setup_logger
-      BushSlicer::Logger.runtime = @__cucumber_runtime
+      BushSlicer::Logger.runtime = self
     end
 
     def debug_in_after_hook?
