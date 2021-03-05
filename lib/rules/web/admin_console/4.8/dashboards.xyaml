@@ -566,7 +566,7 @@ check_cluster_inventory_items:
   - selector:
       xpath: //div[contains(@class,'co-inventory-card__item')]//a[contains(text(),'Pod')]
   - selector:
-      xpath: //div[contains(@class,'co-inventory-card__item')]//a[contains(text(),'StorageClass')]
+      xpath: //div[contains(@class,'co-inventory-card__item')]//a[contains(normalize-space(text()),'StorageClass')]
   - selector:
       xpath: //div[contains(@class,'co-inventory-card__item')]//a[contains(text(),'PVC')]
 check_matched_number_of_nodes:
