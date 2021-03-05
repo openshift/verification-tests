@@ -142,10 +142,13 @@ module BushSlicer
     end
     def to_s
       file=@@files[@var_name]
+
+      # file has been deleted on filesystem
       if !file.nil? && !file.file?
         @@files.except!(@var_name)
         file=nil
       end
+
       if file.nil?
         e = ENV[@var_name]
         Tempfile.open("env_#{@var_name}_") do |f|
