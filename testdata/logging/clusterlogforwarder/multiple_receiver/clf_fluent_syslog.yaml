@@ -1,0 +1,31 @@
+kind: Template
+apiVersion: v1
+metadata:
+  name: clusterlogforwarder-template
+objects:
+- apiVersion: logging.openshift.io/v1
+  kind: ClusterLogForwarder
+  metadata:
+    name: instance
+    namespace: openshift-logging
+  spec:
+    outputs:
+    - name: fluentd-insecure
+      type: fluentdForward
+      url: 'tcp://fluentdserver.openshift-logging.svc:24224'
+      insecure: true
+    - name: rsyslog-default
+      type: syslog
+      syslog:
+        facility: local0
+        severity: informational
+      url: "udp://rsyslogserver.openshift-logging.svc:514"
+    pipelines:
+    - name: forward-to-multilple-server
+      inputRefs:
+      - infrastructure
+      - application
+      - audit
+      outputRefs:
+      - fluentd-insecure
+      - rsyslog-default

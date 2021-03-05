@@ -421,3 +421,83 @@ Feature: cluster log forwarder features
     Then the step should succeed
     When I get records from the "topic-logging-audit" kafka topic in the "<%= cb.kafka_project.name %>" project
     Then the step should succeed
+
+  # @author gkarager@redhat.com
+  # @case_id OCP-32628
+  @admin
+  @destructive
+  Scenario: Fluentd continues to ship logs even when one of multiple destination is down
+    # create project to generate logs
+    Given I switch to the first user
+    Given I create a project with non-leading digit name
+    And evaluation of `project` is stored in the :proj clipboard
+    And I obtain test data file "logging/loggen/container_json_log_template.json"
+    When I run the :new_app client command with:
+      | file | container_json_log_template.json |
+    Then the step should succeed
+    # create fluentd and rsyslog receiver
+    Given I switch to cluster admin pseudo user
+    And I use the "openshift-logging" project
+    And fluentd receiver is deployed as insecure in the "openshift-logging" project
+    And rsyslog receiver is deployed as insecure in the "openshift-logging" project
+    # create clusterlogforwarder instace with multiple receiver
+    Given admin ensures "instance" cluster_log_forwarder is deleted from the "openshift-logging" project after scenario
+    And I obtain test data file "logging/clusterlogforwarder/multiple_receiver/clf_fluent_syslog.yaml"
+    When I process and create:
+      | f | clf_fluent_syslog.yaml |
+    Then the step should succeed
+    And I wait for the "instance" cluster_log_forwarder to appear
+    # create clusterlogging instance
+    Given I obtain test data file "logging/clusterlogging/fluentd_only.yaml"
+    When I create clusterlogging instance with:
+      | remove_logging_pods | true              |
+      | crd_yaml            | fluentd_only.yaml |
+      | check_status        | false             |
+    Then the step should succeed
+    Given I wait for the "fluentd" daemon_set to appear up to 300 seconds
+    And <%= daemon_set('fluentd').replica_counters[:desired] %> pods become ready with labels:
+      | logging-infra=fluentd |
+    #Check logs in fluentd server
+    Given a pod becomes ready with labels:
+      | component=fluentdserver |
+    And I wait up to 300 seconds for the steps to pass:
+    """
+    When I execute on the pod:
+      | ls | -l | /fluentd/log |
+    Then the output should contain:
+      | app.log             |
+      | audit.log           |
+      | infra.log           |
+      | infra-container.log |
+    """
+    #Check logs in rsyslogserver
+    Given a pod becomes ready with labels:
+      | appname=rsyslogserver |
+    And I wait up to 300 seconds for the steps to pass:
+    """
+    When I execute on the pod:
+      | ls | -l | /var/log/clf/ |
+    Then the output should contain:
+      | app-container.log   |
+      | audit.log           |
+      | infra.log           |
+      | infra-container.log |
+    """
+    # delete fluentdserver
+    Given I ensure "fluentdserver" config_map is deleted from the "openshift-logging" project
+    And I ensure "fluentdserver" deployment is deleted from the "openshift-logging" project
+    And I ensure "fluentdserver" service is deleted from the "openshift-logging" project
+    # Again check logs in rsyslogserver
+    Given a pod becomes ready with labels:
+      | appname=rsyslogserver |
+    And I wait up to 300 seconds for the steps to pass:
+    """
+    When I execute on the pod:
+      | ls | -l | /var/log/clf/ |
+    Then the output should contain:
+      | app-container.log   |
+      | audit.log           |
+      | infra.log           |
+      | infra-container.log |
+    """
+    
