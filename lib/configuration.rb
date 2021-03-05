@@ -153,6 +153,7 @@ module BushSlicer
         Tempfile.open("env_#{@var_name}_") do |f|
           f.write("#{e}") if !e.nil?
           @@files[@var_name]=f
+          file=f
         end
       end
       file.path
