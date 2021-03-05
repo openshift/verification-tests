@@ -628,7 +628,7 @@ check_operator_column_all_namespace:
 check_logging_operator_filtered_out:
   elements:
   - selector:
-      xpath: //div[contains(@class, 'catalog-tile-pf-title') and text()='Cluster Logging']
+      xpath: //div[contains(@class, 'catalog-tile-pf-title') and contains(text(), 'Logging')]
 click_create_mockk8sdropdownresouce:
   params:
     button_text: Create MockK8sDropdownResource
