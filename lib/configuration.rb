@@ -126,7 +126,6 @@ module BushSlicer
     
     alias :eql? :==
     alias :to_str :to_s
-    alias :[]= :to_s
   end
 
   class FlexyEnvFile
@@ -161,6 +160,5 @@ module BushSlicer
 
     alias :eql? :==
     alias :to_str :to_s
-    alias :[]= :to_s
   end
 end
