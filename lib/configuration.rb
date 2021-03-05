@@ -143,7 +143,7 @@ module BushSlicer
       file=@@files[@var_name]
 
       # file has been deleted on filesystem
-      if !file.nil? && !file.file?
+      if !file.nil? && !File.file?(file.path)
         @@files.except!(@var_name)
         file=nil
       end
