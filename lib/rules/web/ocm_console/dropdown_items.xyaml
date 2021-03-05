@@ -117,9 +117,6 @@ check_edit_display_name_button_in_dropdown_missing:
     missing: true
 check_enabled_actions_in_dropdown:
   action:
-    if_param: edit_cluster_registration_button
-    ref: check_edit_cluster_registration_button_in_dropdown
-  action:
     if_param: edit_display_name_button
     ref: check_edit_display_name_button_in_dropdown
   action:
@@ -147,6 +144,9 @@ check_missing_actions_in_dropdown:
   action:
     if_param: edit_display_name_button
     ref: check_edit_display_name_button_in_dropdown_missing
+  action:
+    if_param: edit_subscription_settings_button
+    ref: check_edit_subscription_settings_button_in_dropdown
 
 check_edit_displayname_button_in_dropdown_missing:
   element:
