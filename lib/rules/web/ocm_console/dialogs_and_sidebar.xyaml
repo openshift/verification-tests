@@ -11,7 +11,7 @@ archive_dialog_loaded:
         - selector:
             xpath: //button[@class='pf-c-button pf-m-plain' and @aria-label='Close']
         - selector:
-            xpath: //span[text()='Archive cluster']
+            xpath: //h1/span[text()='Archive cluster']
         - selector:
             xpath: //form/p[contains(text(), 'Archiving a cluster will remove it from the cluster list and remove the cluster from subscription management.')]
         - selector:
@@ -139,7 +139,7 @@ edit_display_name_in_dialog:
 delete_cluster_dialog_loaded:
     elements:
         - selector:
-            xpath: //h1[text()='Delete cluster']
+            xpath: //h1/span[text()='Delete cluster']
         - selector:
             xpath: //p[text()='This action cannot be undone. It will uninstall the cluster, and all data will be deleted.']
         - selector:
@@ -233,7 +233,7 @@ click_add_url_button:
 aws_customer_cloud_subscription_prompt_message_loaded:
     elements:
         - selector:
-            xpath: //span[text()='Customer cloud subscription']
+            xpath: //h1/span[text()='Customer cloud subscription']
         - selector:
             text: "With this subscription option, the cluster will be provisioned in an AWS account owned by you or your company. This allows you to pay AWS directly for public cloud costs, leveraging your existing relationship."
         - selector:
@@ -544,13 +544,13 @@ check_node_count_field_on_edit_node_count_dialog:
 add_machine_pool_dialog_loaded:
     elements:
         - selector:
-            xpath: //h1[text()='Add machine pool']
+            xpath: //h1/span[text()='Add machine pool']
         - selector:
-            xpath: //span[text()='Compute node instance type']
+            xpath: //span[text()='Worker node instance type']
         - selector:
-            xpath: //span[contains(text(),'Compute node count')]
+            xpath: //span[contains(text(),'Worker node count')]
         - selector:
-            xpath: //select[@aria-label='Compute nodes']
+            xpath: //select[@aria-label='Worker nodes']
         - selector:
             xpath: //span[text()='Edit node labels and taints']
         - selector:
@@ -719,7 +719,7 @@ check_addon_deletion_dialog:
     action: addon_deletion_dialog_loaded
     elements:
         - selector:
-            xpath: //h1[text()="Uninstall <addon_name>"]
+            xpath: //h1/span[text()="Uninstall <addon_name>"]
         - selector:
             xpath: //input[@placeholder='Enter name' and @aria-label='addon name']
     action: uninstall_button_disabled

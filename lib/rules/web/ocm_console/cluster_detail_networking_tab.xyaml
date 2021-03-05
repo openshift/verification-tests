@@ -29,7 +29,7 @@ check_network_configuration:
     action: click_networking_tab
     elements:
         - selector:
-            xpath: //h2[text()='Network configuration']
+            xpath: //div[text()='Network configuration']
         - selector:
             xpath: //dl/div[1]/dt/span[text()='Machine CIDR']
         - selector:

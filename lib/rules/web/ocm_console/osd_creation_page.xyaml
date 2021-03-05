@@ -132,15 +132,15 @@ check_advanced_privacy_loaded:
         - selector:
             xpath: //h4[text()='Cluster privacy']
         - selector:
-            xpath: //p[text()='Clusters may be created initially with master API endpoint and application routes being all public or all private. More options are available after the initial installation.']
+            xpath: //p[text()='Clusters may be created initially with control plane API endpoint and application routes being all public or all private. More options are available after the initial installation.']
         - selector:
             xpath: //label[text()='Public (recommended)']
         - selector:
-            xpath: //div[text()='Master API endpoint and application routes are accessible from the internet.']
+            xpath: //div[text()='Control plane API endpoint and application routes are accessible from the internet.']
         - selector:
             xpath: //label[text()='Private']
         - selector:
-            xpath: //div[text()='Master API endpoint and application routes are restricted to direct, private connectivity.']
+            xpath: //div[text()='Control plane API endpoint and application routes are restricted to direct, private connectivity.']
 check_aws_advanced_elements_loaded:
     elements:
         - selector:
@@ -665,14 +665,14 @@ check_help_messages_on_creation_page:
         - selector:
             xpath: //span[text()='Worker node instance type']/../span[text()='*']
         - selector:
-            xpath: //div[contains(text(),'The instance type for the compute nodes. Instance type')]
+            xpath: //div[contains(text(),'The instance type for the worker nodes. Instance type')]
     action: close_help_message
     elements:
         - selector:
             xpath: //span[text()='Worker node count']/../../span
           op: click
         - selector:
-            xpath: //div[contains(text(),'The number of compute, or worker, nodes to provision per zone.')]
+            xpath: //div[contains(text(),'The number of worker nodes to provision per zone.')]
     action: close_help_message
     elements:
         - selector:
