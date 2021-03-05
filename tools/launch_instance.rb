@@ -193,13 +193,13 @@ module BushSlicer
         return Http.get(url: path, raise_on_error: true)[:response]
       when %r{\A/}
         details[:location] = path
-        return File.read(URI::decode(path))
+        return File.read(URI::decode_www_form(path))
       else
         if basepath
           with_base = join_paths_or_urls(basepath, path)
           return readfile(with_base, details: details)
         else
-          details[:location] = expand_path(URI::decode(path))
+          details[:location] = expand_path(URI::decode_www_form(path))
           return File.read details[:location]
         end
       end
