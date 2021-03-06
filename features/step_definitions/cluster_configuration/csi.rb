@@ -1,4 +1,5 @@
 Given /^I deploy #{QUOTED} driver using csi(?: with "([^ ]+?)" version)?$/ do |driver, img_version|
+  transform binding, :driver, :img_version
   ensure_admin_tagged
   ensure_destructive_tagged
 
@@ -82,6 +83,7 @@ Given /^I deploy #{QUOTED} driver using csi(?: with "([^ ]+?)" version)?$/ do |d
 end
 
 Given /^I cleanup #{QUOTED} csi driver$/ do |driver|
+  transform binding, :driver
   ensure_admin_tagged
   ensure_destructive_tagged
 
@@ -113,6 +115,7 @@ Given /^I cleanup #{QUOTED} csi driver$/ do |driver|
 end
 
 Given /^I create (default )?storage class for #{QUOTED} csi driver$/ do |default_sc, driver|
+  transform binding, :default_sc, :driver
   step %Q{I obtain test data file "storage/csi/#{driver}-storageclass.yaml"}
   sc = YAML.load(@result[:response])
   filepath = @result[:abs_path]
@@ -127,6 +130,7 @@ Given /^I create (default )?storage class for #{QUOTED} csi driver$/ do |default
 end
 
 Given /^I checked #{QUOTED} csi driver is running$/ do |driver|
+  transform binding, :driver
   ensure_admin_tagged
   ensure_destructive_tagged
   

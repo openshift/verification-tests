@@ -4,6 +4,7 @@ require 'yaml'
 #   the object hash with the given value e.g.
 # | ["metadata"]["name"] | sc-<%= project.name %> |
 When /^admin creates a StorageClass( in the node's zone)? from #{QUOTED} where:$/ do |nodezone, location, table|
+  transform binding, :nodezone, :location, :table
   ensure_admin_tagged
 
   if location.include? '://'
@@ -223,6 +224,7 @@ Given(/^admin clones storage class #{QUOTED} from #{QUOTED} with:$/) do |target_
 end
 
 Given /^default storageclass is stored in the#{OPT_SYM} clipboard$/ do | cb_name |
+  transform binding, :cb_name
   ensure_admin_tagged
   cb_name = 'default_sc' unless cb_name
   _sc = BushSlicer::StorageClass.get_matching(user: user) { |sc, sc_hash| sc.default? }.first

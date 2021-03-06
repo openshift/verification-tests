@@ -1,4 +1,5 @@
 Given /^azure file dynamic provisioning is enabled in the#{OPT_QUOTED} project$/ do |project_name|
+  transform binding, :project_name
   project(project_name)
   project(generate: false)
   step %Q{I run oc create over "#{BushSlicer::HOME}/testdata/storage/azure-file/azf-role.yaml" replacing paths:}, table(%{

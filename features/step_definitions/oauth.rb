@@ -1,4 +1,5 @@
 Given /^the #{QUOTED} oauth CRD is restored after scenario$/ do |name|
+  transform binding, :name
   ensure_admin_tagged
   org_oauth = {}
   @result = admin.cli_exec(:get, resource: 'oauth', resource_name: name, o: 'yaml')
@@ -20,6 +21,7 @@ end
 
 # extract the secret given a htpasswd spec name
 Given /^the secret for #{QUOTED} htpasswd is stored in the#{OPT_SYM} clipboard$/ do |name, cb_name|
+  transform binding, :name, :cb_name
   cb_name ||= :htpasswd_secret
   project('openshift-config')
   generated_htpasswd_name = o_auth('cluster').htpasswds[name]

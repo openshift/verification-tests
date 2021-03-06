@@ -2,12 +2,14 @@ require 'json'
 require 'yaml'
 
 Then /^the step should( not)? (succeed|fail)$/ do |negative, outcome|
+  transform binding, :negative, :outcome
   if ((outcome == "succeed") ^ negative ) != @result[:success]
     raise "the step #{@result[:success] ? "succeeded" : "failed"}"
   end
 end
 
 Given /^the step (succeeded|failed)$/ do |outcome|
+  transform binding, :outcome
   if (outcome == "succeeded") != @result[:success]
     raise "the step #{@result[:success] ? "succeeded" : "failed"}"
   end
@@ -19,10 +21,12 @@ Then /^the step should have timed out$/ do
 end
 
 When /^I perform the :([a-z_]*?) rest request$/ do |yaml_key|
+  transform binding, :yaml_key
   @result = user.rest_request(yaml_key.to_sym)
 end
 
 When /^I perform the :([a-z_]*?) rest request with:$/ do |yaml_key, table|
+  transform binding, :yaml_key, :table
   @result = user.rest_request(yaml_key.to_sym, opts_array_to_hash(table.raw))
 end
 
@@ -31,6 +35,7 @@ end
 # @note Checks whether the output contains/(does not contain) any of the
 # strings or regular expressions listed in the given table
 Then /^(the|all)? outputs?( by order)? should( not)? (contain|match)(?: (\d+) times)?:$/ do |all, in_order, negative, match_type, times, table|
+  transform binding, :all, :in_order, :negative, :match_type, :times, :table
   raise "incompatible options 'times' and 'by order'" if times && in_order
   if all == "all"
     case
@@ -111,26 +116,31 @@ end
 # @note Checks whether the output contains/(does not contain) any of the
 # strings or regular expressions listed in the given table
 Then /^(the|all)? outputs?( by order)? should( not)? (contain|match) "(.+)"(?: (\d+) times)?$/ do |all, in_order, negative, match_type, pattern, times|
+  transform binding, :all, :in_order, :negative, :match_type, :pattern, :times
   step "#{all} output#{in_order} should#{negative} #{match_type}#{times}:",
     table([[pattern]])
 end
 
 Then /^the output should equal #{QUOTED}$/ do |value|
+  transform binding, :value
   unless value.strip == @result[:response].strip
     raise "output does not equal expected value, see log"
   end
 end
 
 Given /^([0-9]+?) seconds have passed$/ do |num|
+  transform binding, :num
   sleep(num.to_i)
 end
 
 Given /^evaluation of `(.+?)` is stored in the#{OPT_SYM} clipboard$/ do |what, clipboard_name|
+  transform binding, :what, :clipboard_name
   clipboard_name = 'tmp' unless clipboard_name
   cb[clipboard_name] = eval(what)
 end
 
 Then /^(?:the )?expression should be true> (.+)$/ do |expr|
+  transform binding, :expr
   res = eval expr
   unless res
     raise "expression \"#{expr}\" returned non-positive status: #{res}"
@@ -138,6 +148,7 @@ Then /^(?:the )?expression should be true> (.+)$/ do |expr|
 end
 
 Given /^an?(?: (\d+) characters?)? random string(?: of type :(.*?))? is (?:saved|stored) into the(?: :(.*?))? clipboard$/ do |chars, rand_type, clipboard_name|
+  transform binding, :chars, :rand_type, :clipboard_name
   chars = 8 unless chars
   rand_type = rand_type.to_sym unless rand_type.nil?
   rand_str = rand_str(chars.to_i, rand_type)
@@ -146,6 +157,7 @@ Given /^an?(?: (\d+) characters?)? random string(?: of type :(.*?))? is (?:saved
 end
 
 Given /^the output is parsed as (YAML|JSON)$/ do |format|
+  transform binding, :format
   case format
   when "YAML"
     @result[:parsed] = YAML.load @result[:response]
@@ -157,6 +169,7 @@ Given /^the output is parsed as (YAML|JSON)$/ do |format|
 end
 
 Given /^feature gate "(.+)" is (enabled|disabled)(?: with admission#{OPT_QUOTED} (enabled|disabled)?)?$/ do |fg, fgen, adm, admen|
+  transform binding, :fg, :fgen, :adm, :admen
   ensure_destructive_tagged
   fg_en = (fgen == "enabled")
   env.master_services.each { |service|
@@ -225,6 +238,7 @@ Given /^feature gate "(.+)" is (enabled|disabled)(?: with admission#{OPT_QUOTED}
 end
 
 Given /^I check feature gate #{QUOTED}(?: with admission #{QUOTED})? is enabled$/ do |fg, adm|
+  transform binding, :fg, :adm
   non_default_feature_gates_3_11 = Set[
     'BlockVolume'
   ]
@@ -270,6 +284,7 @@ Given /^I check feature gate #{QUOTED}(?: with admission #{QUOTED})? is enabled$
 end
 
 Given /^I saved following keys to list in #{SYM} clipboard:$/ do |cbsym, table|
+  transform binding, :cbsym, :table
   options = hash_symkeys(table.rows_hash)
   cb[cbsym]= options.keys
 end

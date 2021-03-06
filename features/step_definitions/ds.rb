@@ -3,6 +3,7 @@
 require 'active_support/core_ext/hash/slice.rb'
 
 Given /^number of replicas of#{OPT_QUOTED} daemon set becomes:$/ do |name, table|
+  transform binding, :name, :table
   options = hash_symkeys(table.rows_hash)
 
   int_keys = %i[seconds] + BushSlicer::DaemonSet::REPLICA_COUNTERS.keys

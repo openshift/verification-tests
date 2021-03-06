@@ -29,6 +29,7 @@ Given /^I login to kibana logging web console$/ do
 end
 
 When /^I wait(?: (\d+) seconds)? for the #{QUOTED} index to appear in the ES pod(?: with labels #{QUOTED})?$/ do |seconds, index_name, pod_labels|
+  transform binding, :seconds, :index_name, :pod_labels
   if pod_labels
     labels = pod_labels
   else
@@ -60,6 +61,7 @@ end
 # must execute in the es-xxx pod
 # @return stored data into cb.index_data
 When /^I get the #{QUOTED} logging index information(?: from a pod with labels #{QUOTED})?$/ do | index_name, pod_labels |
+  transform binding, :index_name, :pod_labels
   if pod_labels
     labels = pod_labels
   else
@@ -81,6 +83,7 @@ end
 # @relative_url: relative url of the query
 # @op: operation we want to perform (GET, POST, DELETE, and etc)
 Given /^I perform the HTTP request on the ES pod(?: with labels #{QUOTED})?:$/ do |pod_labels, table|
+  transform binding, :pod_labels, :table
   if pod_labels
     labels = pod_labels
   else
@@ -116,6 +119,7 @@ Given /^I perform the HTTP request on the ES pod(?: with labels #{QUOTED})?:$/ d
 end
 
 Given /^I check the #{QUOTED} prometheus rule in the #{QUOTED} project on the prometheus server$/ do | prometheus_rule_name, project_name |
+  transform binding, :prometheus_rule_name, :project_name
   step %Q/I run the :exec client command with:/, table(%{
     | n                | openshift-monitoring                                                                          |
     | container        | prometheus                                                                                    |

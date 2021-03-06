@@ -6,6 +6,7 @@
 #   modification state.
 
 Given /^fips is (enabled|disabled)$/ do |status|
+  transform binding, :status
   ensure_admin_tagged
   step %Q/I run the :get admin command with:/, table(%{
     | resource | machineconfigs |
@@ -32,6 +33,7 @@ Given /^I select a random node's host$/ do
 end
 
 Given /^I store the( schedulable| ready and schedulable)? (node|master|worker)s in the#{OPT_SYM} clipboard(?: excluding #{QUOTED})?$/ do |state, role, cbname, exclude|
+  transform binding, :state, :role, :cbname, :exclude
   ensure_admin_tagged
   cbname = 'nodes' unless cbname
 
@@ -59,6 +61,7 @@ Given /^I store the( schedulable| ready and schedulable)? (node|master|worker)s 
 end
 
 Given /^(I|admin) stores? in the#{OPT_SYM} clipboard the nodes backing pods(?: in project #{QUOTED})? labeled:$/ do |who, cbname, project, labels|
+  transform binding, :who, :cbname, :project, :labels
   if who == "admin"
     ensure_admin_tagged
     _user = admin
@@ -77,6 +80,7 @@ Given /^(I|admin) stores? in the#{OPT_SYM} clipboard the nodes backing pods(?: i
 end
 
 Given /^environment has( at least| at most) (\d+)( schedulable)? nodes?$/ do |cmp, num, schedulable|
+  transform binding, :cmp, :num, :schedulable
   ensure_admin_tagged
   nodes = env.nodes.select { |n| !schedulable || n.schedulable?}
   cache_resources *nodes.shuffle
@@ -93,6 +97,7 @@ end
 
 # @host from World will be used.
 Given /^I run( background)? commands on the host:$/ do |bg, table|
+  transform binding, :bg, :table
   ensure_admin_tagged
 
   raise "You must set a host prior to running this step" unless host
@@ -100,6 +105,7 @@ Given /^I run( background)? commands on the host:$/ do |bg, table|
 end
 
 Given /^I run commands on the host after scenario:$/ do |table|
+  transform binding, :table
   _host = @host
   _command = *table.raw.flatten
   logger.info "Will run the command #{_command} after scenario on #{_host.hostname}"
@@ -112,6 +118,7 @@ Given /^I run commands on the host after scenario:$/ do |table|
 end
 
 Given /^I run( background)? commands on the hosts in the#{OPT_SYM} clipboard:$/ do |bg, cbname, table|
+  transform binding, :bg, :cbname, :table
   ensure_admin_tagged
   cbname ||= "hosts"
 
@@ -129,6 +136,7 @@ Given /^I run( background)? commands on the hosts in the#{OPT_SYM} clipboard:$/ 
 end
 
 Given /^I run( background)? commands on the nodes in the#{OPT_SYM} clipboard:$/ do |bg, cbname, table|
+  transform binding, :bg, :cbname, :table
   ensure_admin_tagged
   cbname ||= "nodes"
 
@@ -142,11 +150,13 @@ end
 
 # use a specific node in cluster
 Given /^I use the #{QUOTED} node$/ do | host |
+  transform binding, :host
   @host = node(host).host
 end
 
 # restore particular file after scenario; if missing, then removes it
 Given /^the #{QUOTED} file is restored on host after scenario$/ do |path|
+  transform binding, :path
   _host = @host
 
   # check path sanity
@@ -182,6 +192,7 @@ end
 # if clipboard is not specified step will try :hosts and :nodes
 # the content of clipboard can either be Array<Host> or Array<Node>
 Given /^the #{QUOTED} file is restored on all hosts in the#{OPT_QUOTED} clipboard after scenario$/ do |path, cb_name|
+  transform binding, :path, :cb_name
   unless cb_name
     if cb.hosts
       cb_name = :hosts
@@ -202,6 +213,7 @@ end
 
 # restore particular file after scenario
 Given /^the #{QUOTED} path is( recursively)? removed on the host after scenario$/ do |path, recurse|
+  transform binding, :path, :recurse
   _host = @host
   path = _host.absolutize(path)
 
@@ -221,6 +233,7 @@ Given /^the #{QUOTED} path is( recursively)? removed on the host after scenario$
 end
 
 Given /^the node service is restarted on the host( after scenario)?$/ do |after|
+  transform binding, :after
   ensure_destructive_tagged
   _node = env.nodes.find { |n| n.host.hostname == @host.hostname }
 
@@ -243,11 +256,13 @@ end
 # the step does not register clean-ups because these usually are properly
 #   ordered in scenario itself, we don't want automatic extra restarts
 Given /^the#{OPT_QUOTED} node service is stopped$/ do |node_name|
+  transform binding, :node_name
   ensure_destructive_tagged
   node(node_name).service.stop(raise: true)
 end
 
 Given /^label #{QUOTED} is added to the#{OPT_QUOTED} node$/ do |label, node_name|
+  transform binding, :label, :node_name
   ensure_admin_tagged
 
   _admin = admin
@@ -275,6 +290,7 @@ Given /^label #{QUOTED} is added to the#{OPT_QUOTED} node$/ do |label, node_name
 end
 
 Given /^the#{OPT_QUOTED} node service is verified$/ do |node_name|
+  transform binding, :node_name
   ensure_admin_tagged
 
   _node = node(node_name)
@@ -340,11 +356,13 @@ Given /^the#{OPT_QUOTED} node service is verified$/ do |node_name|
 end
 
 Given /^the host is rebooted and I wait it(?: up to (\d+) seconds)? to become available$/ do |timeout|
+  transform binding, :timeout
   timeout = timeout ? Integer(timeout) : 300
   @host.reboot_checked(timeout: timeout)
 end
 
 Given /^the#{OPT_QUOTED} node labels are restored after scenario$/ do |node_name|
+  transform binding, :node_name
   ensure_destructive_tagged
   _node = node(node_name)
   _node_labels = _node.labels
@@ -360,6 +378,7 @@ Given /^the#{OPT_QUOTED} node labels are restored after scenario$/ do |node_name
 end
 
 Given /^config of all( schedulable)? nodes is merged with the following hash:$/ do |schedulable, yaml_string|
+  transform binding, :schedulable, :yaml_string
   ensure_destructive_tagged
 
   nodes = env.nodes.select { |n| !schedulable || n.schedulable? }
@@ -376,6 +395,7 @@ Given /^config of all( schedulable)? nodes is merged with the following hash:$/ 
 end
 
 Given /^node#{OPT_QUOTED} config is merged with the following hash:$/ do |node_name, yaml_string|
+  transform binding, :node_name, :yaml_string
   ensure_destructive_tagged
 
   service_config = node(node_name).service.config
@@ -395,11 +415,13 @@ end
 
 
 Given /^node#{OPT_QUOTED} config is restored from backup$/ do |node_name|
+  transform binding, :node_name
   ensure_destructive_tagged
   @result = node(node_name).service.config.restore()
 end
 
 Given /^the value with path #{QUOTED} in node config is stored into the#{OPT_SYM} clipboard$/ do |path, cb_name|
+  transform binding, :path, :cb_name
   ensure_admin_tagged
   config_hash = node.service.config.as_hash()
   cb_name ||= "config_value"
@@ -407,6 +429,7 @@ Given /^the value with path #{QUOTED} in node config is stored into the#{OPT_SYM
 end
 
 Given /^the node service is restarted on all( schedulable)? nodes$/ do |schedulable|
+  transform binding, :schedulable
   ensure_destructive_tagged
   nodes = env.nodes.select { |n| !schedulable || n.schedulable? }
   services = nodes.map(&:service)
@@ -417,11 +440,13 @@ Given /^the node service is restarted on all( schedulable)? nodes$/ do |schedula
 end
 
 Given /^the#{OPT_QUOTED} node service is restarted$/ do |node_name|
+  transform binding, :node_name
   ensure_destructive_tagged
   node(node_name).service.restart(raise: true)
 end
 
 Given /^I try to restart the node service on all( schedulable)? nodes$/ do |schedulable|
+  transform binding, :schedulable
   ensure_destructive_tagged
   results = []
   nodes = env.nodes.select { |n| !schedulable || n.schedulable? }
@@ -435,11 +460,13 @@ Given /^I try to restart the node service on all( schedulable)? nodes$/ do |sche
 end
 
 Given /^I try to restart the node service on node#{OPT_QUOTED}$/ do |node_name|
+  transform binding, :node_name
   ensure_destructive_tagged
   @result = node(node_name).service.restart
 end
 
 Given /^I have (?:(at least ))?(\d+) nodes?$/ do |quantifier, nodes|
+  transform binding, :quantifier, :nodes
   num_of_nodes = nodes.to_i
   nodes_found = env.nodes.count
   @result = {}
@@ -454,6 +481,7 @@ end
 # use oc rsync to copy files from node to a pod
 # required table params are src_dir and dst_dir
 Given /^I rsync files from node named #{QUOTED} to pod named #{QUOTED} using parameters:$/ do | node_name, pod_name, table |
+  transform binding, :node_name, :pod_name, :table
   ensure_admin_tagged
   opts = opts_array_to_hash(table.raw)
   raise "Not all requried parameters given, expected #{opts.keys}" if opts.keys.sort != [:dst_dir, :src_dir]
@@ -464,6 +492,7 @@ Given /^I rsync files from node named #{QUOTED} to pod named #{QUOTED} using par
 end
 
 Given /^the taints of the nodes in the#{OPT_SYM} clipboard are restored after scenario$/ do |nodecb|
+  transform binding, :nodecb
   ensure_destructive_tagged
 
   nodecb ||= :nodes
@@ -516,6 +545,7 @@ Given /^the taints of the nodes in the#{OPT_SYM} clipboard are restored after sc
 end
 
 Given /^I run commands on all nodes:$/ do |table|
+  transform binding, :table
   ensure_admin_tagged
   @result = BushSlicer::ResultHash.aggregate_results env.node_hosts.map { |host|
     host.exec_admin(table.raw.flatten)
@@ -539,6 +569,7 @@ Given /^node schedulable status should be restored after scenario$/ do
 end
 
 Given /^nodes have #{NUMBER} #{WORD} hugepages configured$/ do |num, word|
+  transform binding, :num, :word
   ensure_destructive_tagged
   ensure_admin_tagged
   unless word == "2Mi"
@@ -568,6 +599,7 @@ Given /^nodes have #{NUMBER} #{WORD} hugepages configured$/ do |num, word|
 end
 
 Given /^a node that can run pods in the#{OPT_QUOTED} project is selected$/ do |project_name|
+  transform binding, :project_name
   ensure_admin_tagged
   selector = project(project_name, generate: false).defined_node_selector
   unless selector
@@ -590,6 +622,7 @@ Given /^a node that can run pods in the#{OPT_QUOTED} project is selected$/ do |p
 end
 
 Given /^#{QUOTED} is copied to the host(?: under #{QUOTED} path)?$/ do |local_path, remote_path|
+  transform binding, :local_path, :remote_path
   @host ||= node.host
   @host.copy_to(local_path, remote_path || "./")
 end
@@ -597,6 +630,7 @@ end
 # rync local direction dst_dir to a pod, if no pod_name is given the current pod context will be used.
 # XXX: should we just hard-code everything to /tmp as the directory.  That seems to be only the only user writable dir
 Given /^ssh key for accessing nodes is copied to(?: the #{QUOTED} directory in)? the#{OPT_QUOTED} pod?$/ do |dst_dir, pod_name|
+  transform binding, :dst_dir, :pod_name
   ensure_admin_tagged
 
   pod ||= pod(pod_name)
@@ -611,18 +645,21 @@ end
 
 
 Given /^I store all worker nodes to the#{OPT_SYM} clipboard$/ do |cb_name|
+  transform binding, :cb_name
   cb_name ||= :worker_nodes
   nodes = BushSlicer::Node.list(user: admin)
   cb[cb_name] = nodes.select { |n| n.is_worker? }
 end
 
 Given /^I store the number of worker nodes to the#{OPT_SYM} clipboard$/ do |cb_name|
+  transform binding, :cb_name
   nodes = BushSlicer::Node.list(user: admin)
   worker_nodes = nodes.select { |n| n.is_worker? }
   cb[cb_name] = worker_nodes.length
 end
 
 Given /^I store the node #{QUOTED} YAML to the#{OPT_SYM} clipboard$/ do |node, cb_name|
+  transform binding, :node, :cb_name
   ensure_admin_tagged
 
   cb_name ||= :deleted_node
@@ -637,6 +674,7 @@ Given /^I store the node #{QUOTED} YAML to the#{OPT_SYM} clipboard$/ do |node, c
 end
 
 Given /^the node in the#{OPT_SYM} clipboard is restored from YAML after scenario$/ do |cb_name|
+  transform binding, :cb_name
   ensure_admin_tagged
 
   cb_name ||= :deleted_node

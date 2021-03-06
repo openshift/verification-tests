@@ -1,5 +1,6 @@
 # operators related helper steps
 Given /^all clusteroperators reached version #{QUOTED} successfully$/ do |version|
+  transform binding, :version
   ensure_admin_tagged
   clusteroperators = BushSlicer::ClusterOperator.list(user: admin)
   clusteroperators.each do | co |
@@ -19,6 +20,7 @@ Given /^all clusteroperators reached version #{QUOTED} successfully$/ do |versio
 end
 
 Given /^the status of condition "([^"]*)" for "([^"]*)" operator is: (.+)$/ do | type, operator, status |
+  transform binding, :type, :operator, :status
   ensure_admin_tagged
   actual_status = cluster_operator(operator).condition(type: type, cached: false)['status']
   unless status == actual_status
@@ -132,6 +134,7 @@ Given /^the status of condition Upgradeable for marketplace operator as expected
 end
 
 Given /^the "([^"]*)" operator version matches the current cluster version$/ do | operator |
+  transform binding, :operator
   ensure_admin_tagged
   @result = admin.cli_exec(:get, resource: "clusteroperators", resource_name: operator, o: "jsonpath={.status.versions[?(.name == \"operator\")].version}")
   operator_version = @result[:response]
@@ -144,6 +147,7 @@ Given /^the "([^"]*)" operator version matches the current cluster version$/ do 
 end
 
 Given /^admin updated the operator crd "([^"]*)" managementstate operand to (Managed|Removed|Unmanaged)$/ do |cluster_operator, manage_type|
+  transform binding, :cluster_operator, :manage_type
   ensure_admin_tagged
   ensure_destructive_tagged
   step %Q/I run the :patch admin command with:/, table(%{
@@ -157,11 +161,13 @@ end
 
 # Get the Major.Minor cluster version
 Given /^the major.minor version of the cluster is stored in the#{OPT_SYM} clipboard$/ do | cb_name |
+  transform binding, :cb_name
   cb_name = 'operator_channel_name' unless cb_name
   cb[cb_name] = cluster_version('version').channel.split('-')[1]
 end
 
 Given /^operator #{QUOTED} becomes #{NO_SPACE_STR}(?: within #{NUMBER} seconds)?$/ do | operator_name, conditions, timeout |
+  transform binding, :operator_name, :conditions, :timeout
   ensure_admin_tagged
 
   expected = {}

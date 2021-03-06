@@ -1,4 +1,5 @@
 Given /^bundles( in the#{OPT_QUOTED} project)? with qualified name matching #{RE} are stored in the#{OPT_SYM} clipboard$/ do |in_project, pr_name, pattern, cb_name|
+  transform binding, :in_project, :pr_name, :pattern, :cb_name
   cb_name ||= "bundles"
   project(pr_name, generate: false)
   re = Regexp.new(pattern)

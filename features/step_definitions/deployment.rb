@@ -5,6 +5,7 @@ require 'active_support/core_ext/hash/slice.rb'
 ### Deployment related steps
 
 Given /^I wait until number of replicas match "(\d+)" for deployment "(.+)"$/ do |number, d_name|
+  transform binding, :number, :d_name
   ready_timeout = 300
   matched = deployment(d_name).wait_till_replica_counters_match(
     user:          user,
@@ -17,6 +18,7 @@ Given /^I wait until number of replicas match "(\d+)" for deployment "(.+)"$/ do
 end
 
 Given /^number of replicas of#{OPT_QUOTED} deployment becomes:$/ do |name, table|
+  transform binding, :name, :table
   options = hash_symkeys(table.rows_hash)
 
   int_keys = %i[seconds] + BushSlicer::Deployment::REPLICA_COUNTERS.keys
@@ -34,6 +36,7 @@ Given /^number of replicas of#{OPT_QUOTED} deployment becomes:$/ do |name, table
 end
 
 Given /^number of replicas of the current replica set for the#{OPT_QUOTED} deployment becomes:$/ do |name, table|
+  transform binding, :name, :table
   options = hash_symkeys(table.rows_hash)
 
   int_keys = %i[seconds] + BushSlicer::ReplicaSet::REPLICA_COUNTERS.keys
@@ -53,10 +56,12 @@ Given /^number of replicas of the current replica set for the#{OPT_QUOTED} deplo
 end
 
 Given /^current replica set name of#{OPT_QUOTED} deployment stored into#{OPT_SYM} clipboard$/ do |name, cb_name|
+  transform binding, :name, :cb_name
   cb[cb_name] = deployment(name).current_replica_set(user: user, cached: false).name
 end
 
 Given /^replica set #{QUOTED} becomes non-current for the #{QUOTED} deployment$/ do |rs_name, name|
+  transform binding, :rs_name, :name
   seconds = 180
   deplmnt = deployment(name)
   success = wait_for(seconds) do
@@ -66,6 +71,7 @@ Given /^replica set #{QUOTED} becomes non-current for the #{QUOTED} deployment$/
 end
 
 Given /^#{QUOTED} deployment becomes ready in the#{OPT_QUOTED} project$/ do | d_name, proj_name |
+  transform binding, :d_name, :proj_name
   proj_name ||= project.name
   project(proj_name)
   seconds = 5 * 60
@@ -78,6 +84,7 @@ Given /^#{QUOTED} deployment becomes ready in the#{OPT_QUOTED} project$/ do | d_
 end
 
 Given /^admin ensures the deployment replicas is restored to "([^"]*)" in "([^"]*)" for "([^"]*)" after scenario$/ do | replicas , project , deployment |
+  transform binding, :replicas , :project , :deployment
   ensure_admin_tagged
   teardown_add{
   step %Q{I run the :scale admin command with:}, table(%{

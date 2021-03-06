@@ -1,6 +1,7 @@
 require 'yaml'
 
 Given /^the#{OPT_QUOTED} PVC becomes #{SYM}(?: within (\d+) seconds)?$/ do |pvc_name, status, timeout|
+  transform binding, :pvc_name, :status, :timeout
   timeout = timeout ? timeout.to_i : 30
   @result = pvc(pvc_name).wait_till_status(status.to_sym, user, timeout)
 
@@ -12,6 +13,7 @@ Given /^the#{OPT_QUOTED} PVC becomes #{SYM}(?: within (\d+) seconds)?$/ do |pvc_
 end
 
 Given /^the#{OPT_QUOTED} PVC becomes terminating(?: within (\d+) seconds)?$/ do |pvc_name, timeout|
+  transform binding, :pvc_name, :timeout
   timeout = timeout ? timeout.to_i : 30
   success = wait_for(timeout) {
     pvc(pvc_name).deletion_timestamp(cached: false, quiet: true)
@@ -22,6 +24,7 @@ Given /^the#{OPT_QUOTED} PVC becomes terminating(?: within (\d+) seconds)?$/ do 
 end
 
 Given /^the#{OPT_QUOTED} PVC status is #{SYM}$/ do |pvc_name, status|
+  transform binding, :pvc_name, :status
   @result = pvc(pvc_name).status?(status: status.to_sym, user: user)
 
   unless @result[:success]
@@ -32,6 +35,7 @@ Given /^the#{OPT_QUOTED} PVC status is #{SYM}$/ do |pvc_name, status|
 end
 
 Given /^([0-9]+) PVCs become #{SYM}(?: within (\d+) seconds)? with labels:$/ do |count, status, timeout, table|
+  transform binding, :count, :status, :timeout, :table
   labels = table.raw.flatten # dimentions irrelevant
   timeout = timeout ? timeout.to_i : 60
   status = status.to_sym
@@ -52,6 +56,7 @@ Given /^([0-9]+) PVCs become #{SYM}(?: within (\d+) seconds)? with labels:$/ do 
 end
 
 Given /^the "([^"]*)" PVC becomes bound to the "([^"]*)" PV(?: within (\d+) seconds)?$/ do |pvc_name, pv_name, timeout|
+  transform binding, :pvc_name, :pv_name, :timeout
   timeout = timeout ? timeout.to_i : 30
 
   @result = pvc(pvc_name).wait_till_status(:bound, user, timeout)
@@ -67,6 +72,7 @@ end
 # 3. replace any path with given value from table
 # 4. runs `oc create` command over the resulting file
 When /^I create a (manual|dynamic) pvc from #{QUOTED} replacing paths:$/ do |type, file, table|
+  transform binding, :type, :file, :table
   if file.include? '://'
     step %Q|I download a file from "#{file}"|
     resource_hash = YAML.load(@result[:response])

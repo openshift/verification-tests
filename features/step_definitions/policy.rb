@@ -1,4 +1,5 @@
 When /^I give project (.+?) role to the(?: (.+?))? (user|service account)$/ do |role_name, user_name, user_type|
+  transform binding, :role_name, :user_name, :user_type
   case user_type
   when "user"
     user_name=user(word_to_num(user_name), switch: false).name
@@ -18,6 +19,7 @@ When /^I give project (.+?) role to the(?: (.+?))? (user|service account)$/ do |
 end
 
 When /^I remove project (.+?) role from the(?: (.+))? (user|service account)$/ do |role_name, user_name, user_type|
+  transform binding, :role_name, :user_name, :user_type
   case user_type
   when "user"
     user_name=user(word_to_num(user_name), switch: false).name
@@ -36,11 +38,13 @@ When /^I remove project (.+?) role from the(?: (.+))? (user|service account)$/ d
 end
 
 Given /^(the [a-z]+) user is cluster-admin$/ do |which_user|
+  transform binding, :which_user
   ensure_admin_tagged
   step %Q{cluster role "cluster-admin" is added to the "#{which_user}" user}
 end
 
 Given /^cluster role #{QUOTED} is (added to|removed from) the #{QUOTED} (user|group|service account)$/ do |role, op, which, type|
+  transform binding, :role, :op, :which, :type
   ensure_admin_tagged
   _admin = admin
   cluster_role(role)
@@ -126,6 +130,7 @@ Given /^cluster roles are restored after scenario$/ do
 end
 
 Given /^project role #{QUOTED} is (added to|removed from) the #{QUOTED} (user|group|service account)$/ do |role, op, which, type|
+  transform binding, :role, :op, :which, :type
   case type
     when "group"
       _add_command = :oadm_policy_add_role_to_group
@@ -156,6 +161,7 @@ Given /^project role #{QUOTED} is (added to|removed from) the #{QUOTED} (user|gr
 end
 
 Given /^the #{QUOTED} clusterole is recreated( after scenario)?$/ do |name, after_scenario|
+  transform binding, :name, :after_scenario
   _admin = admin
   _csb = cluster_role(name)
   cb.cluster_resource_to_recreate = _csb
@@ -177,6 +183,7 @@ Given /^the #{QUOTED} clusterole is recreated( after scenario)?$/ do |name, afte
 end
 
 Given /^the #{QUOTED} clusterolebinding is recreated( after scenario)?$/ do |name, after_scenario|
+  transform binding, :name, :after_scenario
   _admin = admin
   _csb = cluster_role_binding(name)
   cb.cluster_resource_to_recreate = _csb

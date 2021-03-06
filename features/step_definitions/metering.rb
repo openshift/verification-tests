@@ -8,6 +8,7 @@ require 'ssl'
 # OLM (CLI)  => deploy via OLM from the CLI.
 # OperatorHub => Openshift Webconsole  <<  default method
 Given /^metering service has been installed successfully(?: using (OLM|OperatorHub))?$/ do |method|
+  transform binding, :method
   ensure_admin_tagged
   # default to OLM install
   method ||= 'OLM'
@@ -57,6 +58,7 @@ end
 
 # allow user to specify the meteringconfig
 Given /^I install metering service using:$/ do | table |
+  transform binding, :table
   ensure_admin_tagged
   opts = opts_array_to_hash(table.raw)
   storage_type = opts[:storage_type]
@@ -98,6 +100,7 @@ end
 # for easier to test, we default to 'runImmediately', to disable that parameter,
 # specify the parameter `run_immediately` the value `false` in the table
 Given /^I get the #{QUOTED} report and store it in the#{OPT_SYM} clipboard using:$/ do |name, cb_name, table|
+  transform binding, :name, :cb_name, :table
   ensure_admin_tagged
 
   cb_name ||= :report
@@ -170,6 +173,7 @@ Given /^I setup an app to test metering reports$/ do
 end
 
 Given /^I wait until #{QUOTED} report for #{QUOTED} namespace to be available$/ do | report_type, namespace |
+  transform binding, :report_type, :namespace
   # longest wait time is 8 minutes
   seconds = 8 * 60  # for PVs it can take as long as 5 minutes sometimes more with timing of the query/creation
   res = []
@@ -186,6 +190,7 @@ Given /^I wait until #{QUOTED} report for #{QUOTED} namespace to be available$/ 
 end
 
 Given /^I construct a patch_json with s3 enabled and save it to the#{OPT_SYM} clipboard$/ do |cb_name|
+  transform binding, :cb_name
   cb_name ||= :patch_json
   htpasswd = BushSlicer::SSL.sha1_htpasswd(username: 'fake_user', password: 'fake_password')
   cookie_seed = rand_str(32, :hex)
@@ -213,6 +218,7 @@ BASE_TEMPLATE
 end
 
 Given /^I enable route for#{OPT_QUOTED} metering service$/ do | metering_name |
+  transform binding, :metering_name
   metering_name ||= metering_config('operator-metering').name
   # create the route only if one does not exists (currently it's hardcoded
   # in the chart file charts/reporting-operator/values.yaml)
@@ -239,6 +245,7 @@ end
 
 # XXX: should we check metering route exists first prior to patching?
 Given /^I disable route for#{OPT_QUOTED} metering service$/ do | metering_name |
+  transform binding, :metering_name
   metering_name ||= cb.metering_namespace.name
   patch_json = '{"spec":{"reporting-operator":{"spec":{"route":{"enabled":false}}}}}'
   opts = {resource: 'metering', resource_name: metering_name, p: patch_json, type: 'merge', n: project.name}
@@ -249,6 +256,7 @@ end
 
 # install metering via OLM (via OperatorHub)
 Given /^the metering service is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|GUI))?$/ do | metering_ns, method |
+  transform binding, :metering_ns, :method
   ensure_admin_tagged
   ensure_destructive_tagged
   install_method ||= 'CLI'
@@ -292,6 +300,7 @@ end
 # 1. metertingconfig  2. subscription  3. operatorgroup
 # 4. the namespace
 Given /^the#{OPT_QUOTED} metering service is uninstalled using OLM$/ do | metering_ns |
+  transform binding, :metering_ns
   ensure_admin_tagged
   ensure_destructive_tagged
   metering_ns ||= ENV['METERING_NAMESPACE']
@@ -309,6 +318,7 @@ Given /^the#{OPT_QUOTED} metering service is uninstalled using OLM$/ do | meteri
 end
 
 Given /^I remove metering service from the #{QUOTED} project$/ do | metering_ns |
+  transform binding, :metering_ns
   step %Q/the "#{metering_ns}" metering service is uninstalled using OLM/
 end
 
@@ -331,6 +341,7 @@ end
 # 2. METERING_NAMESPACE: the namespace under which metering is installed
 # 3. REPORT_NAME: the specific name of the report we are querying
 When /^I perform the GET metering rest request with:$/ do | table |
+  transform binding, :table
   opts = opts_array_to_hash(table.raw)
   bearer_token = opts[:token] ? opts[:token] : service_account('reporting-operator').load_bearer_tokens.first.token
   https_opts = {}
@@ -360,6 +371,7 @@ When /^I perform the GET metering rest request with:$/ do | table |
 end
 
 Given /^I wait(?: up to ([0-9]+) seconds)? for metering route to be accessible$/ do | seconds |
+  transform binding, :seconds
   seconds = seconds.to_i unless seconds.nil?
   seconds ||= 120
   wait_for(seconds) {
@@ -372,6 +384,7 @@ Given /^I wait(?: up to ([0-9]+) seconds)? for metering route to be accessible$/
 end
 ## valid column names are EARLIEST METRIC, NEWEST METRIC, IMPORT START, IMPORT END, LAST IMPORT TIME
 And /^I get the (latest|earliest) timestamp from reportdatasource column #{QUOTED} and store it to#{OPT_SYM} clipboard$/ do | time_filter, column, cb_name |
+  transform binding, :time_filter, :column, :cb_name
   ensure_admin_tagged
   cb_name ||= :rds_timestamp
   column_lookup = {
@@ -408,6 +421,7 @@ end
 #         },
 #
 When /^I generate a metering report with:$/ do |table|
+  transform binding, :table
   opts = opts_array_to_hash(table.raw)
   ### these are defaults
   # 1. runImmediately=true unless schedule (period)is specified
@@ -447,6 +461,7 @@ end
 # and metering can't be ready until presto can write to storage.
 #
 Given /^all metering related pods are running in the#{OPT_QUOTED} project$/ do | proj_name |
+  transform binding, :proj_name
   ensure_destructive_tagged
   proj_name ||= cb.metering_ns
   target_proj = proj_name.nil? ? "openshift-metering" : proj_name
@@ -490,6 +505,7 @@ end
 # 1. in the step  2. environment OPERATOR_CHANNEL
 # 3. cluster_version('version')
 And /^I set operator channel(?: to#{OPT_QUOTED})?$/ do | channel |
+  transform binding, :channel
   if channel
     cb.channel = channel
   elsif ENV['OPERATOR_CHANNEL']
@@ -535,6 +551,7 @@ end
 
 # @return set cb.metering_project_setup_done to be DRY
 Given /^I setup a metering project(?: named #{QUOTED})?$/ do | metering_ns |
+  transform binding, :metering_ns
   ensure_admin_tagged
   # 1. create the metering namespace
   metering_ns ||= ENV['METERING_NAMESPACE']
@@ -574,6 +591,7 @@ Given /^I prepare OLM via CLI$/ do
 end
 
 Given /^I save all valid (ReportDataSources|ReportQuerys) to the#{OPT_SYM} clipboard$/ do | resource_type, cb_name |
+  transform binding, :resource_type, :cb_name
   cb_name ||= :valid_resource
   if resource_type == 'ReportDataSources'
     res = BushSlicer::ReportDataSource.list(user: user, project: project)

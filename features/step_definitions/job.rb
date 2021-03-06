@@ -1,4 +1,5 @@
 Given /^I wait until job "(.+)" completes$/ do |job_name|
+  transform binding, :job_name
   ready_timeout = 5 * 60
   @result = job(job_name).wait_till_ready(user, ready_timeout)
 
@@ -6,6 +7,7 @@ Given /^I wait until job "(.+)" completes$/ do |job_name|
 end
 
 Given /^a job appears with labels:$/ do |table|
+  transform binding, :table
   labels = table.raw.flatten
   job_timeout = 5 * 60
 

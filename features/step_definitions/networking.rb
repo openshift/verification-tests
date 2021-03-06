@@ -1,5 +1,6 @@
 
 Given /^I run the ovs commands on the host:$/ do | table |
+  transform binding, :table
   ensure_admin_tagged
   _host = node.host
   ovs_cmd = table.raw.flatten.join
@@ -37,6 +38,7 @@ Given /^the env is using multitenant or networkpolicy network$/ do
 end
 
 Given /^the env is using one of the listed network plugins:$/ do |table|
+  transform binding, :table
   ensure_admin_tagged
   plugin_list = table.raw.flatten
   _admin = admin
@@ -82,6 +84,7 @@ Given /^the env is using one of the listed network plugins:$/ do |table|
 end
 
 Given /^the network plugin is switched on the#{OPT_QUOTED} node$/ do |node_name|
+  transform binding, :node_name
   ensure_admin_tagged
 
   node_config = node(node_name).service.config
@@ -97,6 +100,7 @@ Given /^the network plugin is switched on the#{OPT_QUOTED} node$/ do |node_name|
 end
 
 Given /^the#{OPT_QUOTED} node network is verified$/ do |node_name|
+  transform binding, :node_name
   ensure_admin_tagged
 
   _node = node(node_name)
@@ -130,6 +134,7 @@ end
 
 
 Given /^the#{OPT_QUOTED} node iptables config is checked$/ do |node_name|
+  transform binding, :node_name
   ensure_admin_tagged
   _node = node(node_name)
   _host = _node.host
@@ -197,6 +202,7 @@ Given /^the#{OPT_QUOTED} node iptables config is checked$/ do |node_name|
 end
 
 Given /^the#{OPT_QUOTED} node standard iptables rules are removed$/ do |node_name|
+  transform binding, :node_name
   ensure_admin_tagged
   _node = node(node_name)
   _host = _node.host
@@ -226,6 +232,7 @@ Given /^the#{OPT_QUOTED} node standard iptables rules are removed$/ do |node_nam
 end
 
 Given /^the#{OPT_QUOTED} node standard iptables rules are completely flushed$/ do |node_name|
+  transform binding, :node_name
   ensure_admin_tagged
   _node = node(node_name)
   _host = _node.host
@@ -251,6 +258,7 @@ Given /^the#{OPT_QUOTED} node standard iptables rules are completely flushed$/ d
 end
 
 Given /^admin adds( and overwrites)? following annotations to the "(.+?)" netnamespace:$/ do |overwrite, netnamespace, table|
+  transform binding, :overwrite, :netnamespace, :table
   ensure_admin_tagged
   _admin = admin
   _netnamespace = netns(netnamespace, env)
@@ -290,6 +298,7 @@ Given /^admin adds( and overwrites)? following annotations to the "(.+?)" netnam
 end
 
 Given /^the DefaultDeny policy is applied to the "(.+?)" namespace$/ do | project_name |
+  transform binding, :project_name
   ensure_admin_tagged
 
   if env.version_lt("3.6", user: user)
@@ -457,6 +466,7 @@ Given /^I restart the openvswitch service on the node$/ do
 end
 
 Given /^I restart the network components on the node( after scenario)?$/ do |after|
+  transform binding, :after
   ensure_admin_tagged
   _admin = admin
   _node = node
@@ -488,6 +498,7 @@ Given /^I restart the network components on the node( after scenario)?$/ do |aft
 end
 
 Given /^I get the networking components logs of the node since "(.+)" ago$/ do | duration |
+  transform binding, :duration
   ensure_admin_tagged
   _admin = admin
 
@@ -510,6 +521,7 @@ Given /^I get the networking components logs of the node since "(.+)" ago$/ do |
 end
 
 Given /^the node's default gateway is stored in the#{OPT_SYM} clipboard$/ do |cb_name|
+  transform binding, :cb_name
   ensure_admin_tagged
   step "I select a random node's host"
   cb_name = "gateway" unless cb_name
@@ -524,6 +536,7 @@ end
 
 
 Given /^I store a random unused IP address from the reserved range to the#{OPT_SYM} clipboard$/ do |cb_name|
+  transform binding, :cb_name
   ensure_admin_tagged
   cb_name = "valid_ip" unless cb_name
   step "the subnet for primary interface on node is stored in the clipboard"
@@ -552,6 +565,7 @@ Given /^I store a random unused IP address from the reserved range to the#{OPT_S
 end
 
 Given /^the valid egress IP is added to the#{OPT_QUOTED} node$/ do |node_name|
+  transform binding, :node_name
   ensure_admin_tagged
   step "I store a random unused IP address from the reserved range to the clipboard"
   node_name = node.name unless node_name
@@ -569,6 +583,7 @@ end
 # An IP echo service, which returns your source IP when you access it
 # Used for returning the exact source IP when the packet being SNAT
 Given /^an IP echo service is setup on the master node and the ip is stored in the#{OPT_SYM} clipboard$/ do | cb_name |
+  transform binding, :cb_name
   ensure_admin_tagged
 
   host = env.master_hosts.first
@@ -603,6 +618,7 @@ Given /^the multus is enabled on the cluster$/ do
 end
 
 Given /^the status of condition#{OPT_QUOTED} for network operator is :(.+)$/ do | type, status |
+  transform binding, :type, :status
   ensure_admin_tagged
   expected_status = status
 
@@ -623,6 +639,7 @@ Given /^the status of condition#{OPT_QUOTED} for network operator is :(.+)$/ do 
 end
 
 Given /^I run command on the#{OPT_QUOTED} node's sdn pod:$/ do |node_name, table|
+  transform binding, :node_name, :table
   ensure_admin_tagged
   network_cmd = table.raw
   node_name ||= node.name
@@ -649,6 +666,7 @@ Given /^I run command on the#{OPT_QUOTED} node's sdn pod:$/ do |node_name, table
 end
 
 Given /^I restart the ovs pod on the#{OPT_QUOTED} node$/ do | node_name |
+  transform binding, :node_name
   ensure_admin_tagged
   ensure_destructive_tagged
   node_name ||= node.name
@@ -688,6 +706,7 @@ Given /^I restart the ovs pod on the#{OPT_QUOTED} node$/ do | node_name |
 end
 
 Given /^the default interface on nodes is stored in the#{OPT_SYM} clipboard$/ do |cb_name|
+  transform binding, :cb_name
   ensure_admin_tagged
   _admin = admin
   step "I select a random node's host"
@@ -709,6 +728,7 @@ Given /^the default interface on nodes is stored in the#{OPT_SYM} clipboard$/ do
 end
 
 Given /^CNI vlan info is obtained on the#{OPT_QUOTED} node$/ do | node_name |
+  transform binding, :node_name
   ensure_admin_tagged
   @result = node(node_name).host.exec_admin("/sbin/bridge -j vlan show")
   raise "Failed to execute bridge vlan show command" unless @result[:success]
@@ -716,6 +736,7 @@ Given /^CNI vlan info is obtained on the#{OPT_QUOTED} node$/ do | node_name |
 end
 
 Given /^the number of bridge PVID (\d+) VLANs matching #{QUOTED} added between the #{SYM} and #{SYM} clipboards is (\d+)$/ do |pvid, mode, clip_a, clip_b, expected_vlans|
+  transform binding, :pvid, :mode, :clip_a, :clip_b, :expected_vlans
   pvid = pvid.to_i
   # RHCOS is Array of VLANs, RHEL7 is a Hash, always convert to Set so we can compare
   added_bridges = cb[clip_b].to_set - cb[clip_a].to_set
@@ -741,6 +762,7 @@ Given /^the number of bridge PVID (\d+) VLANs matching #{QUOTED} added between t
 end
 
 Given /^the bridge interface named "([^"]*)" is deleted from the "([^"]*)" node$/ do |bridge_name, node_name|
+  transform binding, :bridge_name, :node_name
   ensure_admin_tagged
   node = node(node_name)
   @result=step "I run command on the node's sdn pod:", table("| bash | -c | if ip addr show #{bridge_name};then ip link delete #{bridge_name};fi |")
@@ -748,6 +770,7 @@ Given /^the bridge interface named "([^"]*)" is deleted from the "([^"]*)" node$
 end
 
 Given /^I run command on the#{OPT_QUOTED} node's ovnkube pod:$/ do |node_name, table|
+  transform binding, :node_name, :table
   ensure_admin_tagged
   network_cmd = table.raw
   node_name ||= node.name
@@ -761,6 +784,7 @@ Given /^I run command on the#{OPT_QUOTED} node's ovnkube pod:$/ do |node_name, t
 end
 
 Given /^I run cmds on all ovs pods:$/ do | table |
+  transform binding, :table
   ensure_admin_tagged
   network_cmd = table.raw
 
@@ -794,6 +818,7 @@ end
 
 # WARNING: Starting in 4.6 OVS runs on the host.  This step will detect automatically
 Given /^I run command on the#{OPT_QUOTED} node's ovs pod:$/ do |node_name, table|
+  transform binding, :node_name, :table
   ensure_admin_tagged
   network_cmd = table.raw
   node_name ||= node.name
@@ -827,6 +852,7 @@ Given /^I run command on the#{OPT_QUOTED} node's ovs pod:$/ do |node_name, table
 end
 
 Given /^the subnet for primary interface on node is stored in the#{OPT_SYM} clipboard$/ do |cb_name|
+  transform binding, :cb_name
   ensure_admin_tagged
   cb_name = "subnet_range" unless cb_name
 
@@ -840,6 +866,7 @@ Given /^the subnet for primary interface on node is stored in the#{OPT_SYM} clip
 end
 
 Given /^the env is using "([^"]*)" networkType$/ do |network_type|
+  transform binding, :network_type
   ensure_admin_tagged
   _admin = admin
   network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
@@ -862,6 +889,7 @@ end
 
 
 Given /^the bridge interface named "([^"]*)" with address "([^"]*)" is added to the "([^"]*)" node$/ do |bridge_name,address,node_name|
+  transform binding, :bridge_name, :address, :node_name
   ensure_admin_tagged
   node = node(node_name)
   host = node.host
@@ -870,6 +898,7 @@ Given /^the bridge interface named "([^"]*)" with address "([^"]*)" is added to 
 end
 
 Given /^a DHCP service is configured for interface "([^"]*)" on "([^"]*)" node with address range and lease time as "([^"]*)"$/ do |br_inf,node_name,add_lease|
+  transform binding, :br_inf, :node_name, :add_lease
   ensure_admin_tagged
   node = node(node_name)
   host = node.host
@@ -892,6 +921,7 @@ Given /^a DHCP service is configured for interface "([^"]*)" on "([^"]*)" node w
 end
 
 Given /^a DHCP service is deconfigured on the "([^"]*)" node$/ do |node_name|
+  transform binding, :node_name
   ensure_admin_tagged
   node = node(node_name)
   host = node.host
@@ -910,6 +940,7 @@ Given /^a DHCP service is deconfigured on the "([^"]*)" node$/ do |node_name|
 end
 
 Given /^the vxlan tunnel name of node "([^"]*)" is stored in the#{OPT_SYM} clipboard$/ do |node_name, cb_name|
+  transform binding, :node_name, :cb_name
   ensure_admin_tagged
   cb_name ||= "interface_name"
 
@@ -927,6 +958,7 @@ Given /^the vxlan tunnel name of node "([^"]*)" is stored in the#{OPT_SYM} clipb
 end
 
 Given /^the vxlan tunnel address of node "([^"]*)" is stored in the#{OPT_SYM} clipboard$/ do |node_name, cb_address|
+  transform binding, :node_name, :cb_address
   ensure_admin_tagged
   node = node(node_name)
   host = node.host
@@ -948,6 +980,7 @@ Given /^the vxlan tunnel address of node "([^"]*)" is stored in the#{OPT_SYM} cl
 end
 
 Given /^the Internal IP of node "([^"]*)" is stored in the#{OPT_SYM} clipboard$/ do |node_name, cb_ipaddr|
+  transform binding, :node_name, :cb_ipaddr
   ensure_admin_tagged
   node = node(node_name)
   host = node.host
@@ -972,6 +1005,7 @@ Given /^the Internal IP of node "([^"]*)" is stored in the#{OPT_SYM} clipboard$/
 end
 
 Given /^I store "([^"]*)" node's corresponding default networkType pod name in the#{OPT_SYM} clipboard$/ do |node_name, cb_pod_name|
+  transform binding, :node_name, :cb_pod_name
   ensure_admin_tagged
   node_name ||= node.name
   _admin = admin
@@ -993,6 +1027,7 @@ Given /^I store "([^"]*)" node's corresponding default networkType pod name in t
 end
 
 Given /^I store the ovnkube-master#{OPT_QUOTED} leader pod in the#{OPT_SYM} clipboard(?: using node #{QUOTED})?$/ do |ovndb, cb_leader_name, node_name|
+  transform binding, :ovndb, :cb_leader_name, :node_name
   ensure_admin_tagged
   cb_leader_name ||= "#{ovndb}_leader"
   case ovndb
@@ -1055,6 +1090,7 @@ end
 
 # work-around nested clipboard Transform <% cb.south_leader.name %> issues by combining this step
 Given /^admin deletes the ovnkube-master#{OPT_QUOTED} leader$/ do |ovndb|
+  transform binding, :ovndb
   ensure_admin_tagged
 
   cb_leader_name ||= "#{ovndb}_leader"
@@ -1069,6 +1105,7 @@ Given /^admin deletes the ovnkube-master#{OPT_QUOTED} leader$/ do |ovndb|
 end
 
 Given /^the OVN "([^"]*)" database is killed on the "([^"]*)" node$/ do |ovndb, node_name|
+  transform binding, :ovndb, :node_name
   ensure_admin_tagged
   node = node(node_name)
   host = node.host
@@ -1094,6 +1131,7 @@ Given /^OVN is functional on the cluster$/ do
 end
 
 Given /^I enable multicast for the "(.+?)" namespace$/ do | project_name |
+  transform binding, :project_name
   ensure_admin_tagged
   _admin = admin
   @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
@@ -1113,6 +1151,7 @@ Given /^I enable multicast for the "(.+?)" namespace$/ do | project_name |
 end
 
 Given /^I get the ptp logs of the "([^"]*)" node since "(.+)" ago$/ do | node_name, duration |
+  transform binding, :node_name, :duration
   ensure_admin_tagged
   node_name ||= node.name
 
@@ -1206,6 +1245,7 @@ Given /^I check load-sctp-module in all workers$/ do
 end
 
 Given /^the node's MTU value is stored in the#{OPT_SYM} clipboard$/ do |cb_node_mtu|
+  transform binding, :cb_node_mtu
   ensure_admin_tagged
   cb_node_mtu = "mtu" unless cb_node_mtu
   @result = admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
@@ -1226,6 +1266,7 @@ Given /^the node's MTU value is stored in the#{OPT_SYM} clipboard$/ do |cb_node_
 end
 
 Given /^the mtu value "([^"]*)" is patched in CNO config according to the networkType$/ do | mtu_value |
+  transform binding, :mtu_value
   ensure_admin_tagged
   mtu_value ||= "mtu_value"
   @result = admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
@@ -1244,6 +1285,7 @@ Given /^the mtu value "([^"]*)" is patched in CNO config according to the networ
 end
 
 Given /^I save egress data file directory to the#{OPT_SYM} clipboard$/ do | cb_name |
+  transform binding, :cb_name
   ensure_admin_tagged
   cb_name = "cb_egress_directory" unless cb_name
   network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
@@ -1260,6 +1302,7 @@ Given /^I save egress data file directory to the#{OPT_SYM} clipboard$/ do | cb_n
 end
 
 Given /^I save egress type to the#{OPT_SYM} clipboard$/ do | cb_name |
+  transform binding, :cb_name
   ensure_admin_tagged
   cb_name = "cb_egress_type" unless cb_name
   network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
@@ -1279,6 +1322,7 @@ end
 # It is used for egress IP testing. Currently it is installed in a VM in vmc network.
 # Huiran Wang
 Given /^I save ipecho url to the#{OPT_SYM} clipboard$/ do | cb_name |
+  transform binding, :cb_name
   ensure_admin_tagged
   cb_name = "ipecho_url" unless cb_name
   cb[cb_name]="172.31.249.80:9095"

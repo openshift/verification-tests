@@ -1,5 +1,6 @@
 require 'webauto/webconsole_executor'
 Given /^I open ocm portal as an? #{WORD} user$/ do |usertype|
+  transform binding, :usertype
   base_rules = BushSlicer::WebConsoleExecutor::RULES_DIR
   snippets_dir = BushSlicer::WebConsoleExecutor::SNIPPETS_DIR
   base_url = env.web_console_url

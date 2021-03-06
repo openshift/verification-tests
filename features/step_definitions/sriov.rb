@@ -60,6 +60,7 @@ Given /^sriov config daemon is ready$/ do
 end
 
 Given /^(network-resources-injector|operator-webhook) daemon is ready$/ do | feature |
+  transform binding, :feature
   ensure_admin_tagged
   project("openshift-sriov-network-operator")
   step %Q/3 pods become ready with labels:/, table(%{
@@ -68,6 +69,7 @@ Given /^(network-resources-injector|operator-webhook) daemon is ready$/ do | fea
 end
 
 Given /^configDaemonNodeSelector set to (true|false) in sriovoperatorconfig$/ do | status |
+  transform binding, :status
   ensure_admin_tagged
   project("openshift-sriov-network-operator")
   step %Q/I run the :patch admin command with:/, table(%{
@@ -80,6 +82,7 @@ Given /^configDaemonNodeSelector set to (true|false) in sriovoperatorconfig$/ do
 end
 
 Given /^I create sriov resource with following:$/ do | table |
+  transform binding, :table
   opts = opts_array_to_hash(table.raw)
   ensure_admin_tagged
   step %Q/I switch to cluster admin pseudo user/
@@ -121,6 +124,7 @@ end
 
 
 Given /^I delete the #{QUOTED} sriov networkpolicy$/ do | cr_name |
+  transform binding, :cr_name
   ensure_admin_tagged
   ensure_destructive_tagged
   step %Q/I switch to cluster admin pseudo user/
@@ -133,6 +137,7 @@ Given /^I delete the #{QUOTED} sriov networkpolicy$/ do | cr_name |
 end
 
 Given /^I delete the #{QUOTED} sriovnetwork$/ do | cr_name |
+  transform binding, :cr_name
   ensure_admin_tagged
   ensure_destructive_tagged
   step %Q/I switch to cluster admin pseudo user/
@@ -145,6 +150,7 @@ Given /^I delete the #{QUOTED} sriovnetwork$/ do | cr_name |
 end
 
 Given /^(SR-IOV resource injector|Admission webhook) is (enabled|disabled)$/ do | feature, status |
+  transform binding, :feature, :status
   ensure_admin_tagged
   project("openshift-sriov-network-operator")
   if feature == 'SR-IOV resource injector'
@@ -167,6 +173,7 @@ Given /^(SR-IOV resource injector|Admission webhook) is (enabled|disabled)$/ do 
 end
 
 Given /^I patch the sriov logs to "(.+?)"$/ do | loglevel |
+  transform binding, :loglevel
   ensure_admin_tagged
   project("openshift-sriov-network-operator")
   step %Q/as admin I successfully merge patch resource "sriovoperatorconfigs.sriovnetwork.openshift.io\/default" with:/,table(%{

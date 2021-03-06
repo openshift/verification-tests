@@ -4,6 +4,7 @@
 # ref: doc/storage_automation_spec.adoc
 
 Given /^I deploy local storage provisioner(?: with "([^ ]+?)" version)?$/ do |img_version|
+  transform binding, :img_version
   ensure_admin_tagged
   ensure_destructive_tagged
 
@@ -133,6 +134,7 @@ end
 # local raw block devices provisioner is supported from OCP 3.10
 # Before deploy this provisioner, feature gate "BlockVolume" needs enable first.
 Given /^I deploy local raw block devices provisioner(?: with "([^ ]+?)" version)?$/ do |img_version|
+  transform binding, :img_version
   ensure_admin_tagged
   ensure_destructive_tagged
 

@@ -1,4 +1,5 @@
 Given /^the #{QUOTED} build was created(?: within #{NUMBER} seconds)?$/ do |build_name, timeout|
+  transform binding, :build_name, :timeout
   timeout = timeout ? Integer(timeout) : 60
   @result = build(build_name).wait_to_appear(user, timeout)
 
@@ -9,6 +10,7 @@ end
 
 # success when build finish regardless of completion status
 Given /^the #{QUOTED} build finishe(?:d|s)(?: within #{NUMBER} seconds)?$/ do |build_name, timeout|
+  transform binding, :build_name, :timeout
   wait_timeout = timeout ? Integer(timeout) : 60*15
   @result = build(build_name).wait_till_finished(user, wait_timeout)
 
@@ -19,6 +21,7 @@ end
 
 # success if build completed successfully
 Given /^the #{QUOTED} build complete(?:d|s)(?: within #{NUMBER} seconds)?$/ do |build_name, timeout|
+  transform binding, :build_name, :timeout
   wait_timeout = timeout ? Integer(timeout) : 60*15
   @result = build(build_name).wait_till_completed(user, wait_timeout)
 
@@ -33,6 +36,7 @@ end
 
 # success if build completed with a failure
 Given /^the #{QUOTED} build fail(?:ed|s)(?: within #{NUMBER} seconds)?$/ do |build_name, timeout|
+  transform binding, :build_name, :timeout
   wait_timeout = timeout ? Integer(timeout) : 60*15
   @result = build(build_name).wait_till_failed(user, wait_timeout)
 
@@ -43,6 +47,7 @@ end
 
 # success if build was cancelled
 Given /^the #{QUOTED} build was cancelled(?: within #{NUMBER} seconds)?$/ do |build_name, timeout|
+  transform binding, :build_name, :timeout
   wait_timeout = timeout ? Integer(timeout) : 60*15
   @result = build(build_name).wait_till_cancelled(user, wait_timeout)
 
@@ -52,6 +57,7 @@ Given /^the #{QUOTED} build was cancelled(?: within #{NUMBER} seconds)?$/ do |bu
 end
 
 Given /^the #{QUOTED} build (becomes|is) #{SYM}(?: within #{NUMBER} seconds)?$/ do |build_name, mode, status, timeout|
+  transform binding, :build_name, :mode, :status, :timeout
   if mode == "becomes"
     wait_time_out = timeout ? Integer(timeout) : 60*10
     @result = build(build_name).wait_till_status(status.to_sym, user, wait_time_out)
@@ -67,6 +73,7 @@ Given /^the #{QUOTED} build (becomes|is) #{SYM}(?: within #{NUMBER} seconds)?$/ 
 end
 # the build can be any of the status in the table
 Given /^the #{QUOTED} build status is any of:$/ do |build_name, table|
+  transform binding, :build_name, :table
   status = table.raw.flatten
   status.map! {|x| x.to_sym }
   @result = build(build_name).status?(user: user, status: status)
@@ -85,6 +92,7 @@ Then(/^I save pruned builds in the #{QUOTED} project into the #{SYM} clipboard$/
 end
 
 Given /^I save project builds into the #{SYM} clipboard$/ do |cb_name|
+  transform binding, :cb_name
   cb[cb_name] = project.get_builds(by: user)
 end
 

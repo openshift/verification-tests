@@ -26,6 +26,7 @@ Given /^I open accountant console in a browser$/ do
 end
 
 When /^accountant console cluster resource quota is set to:$/ do |table|
+  transform binding, :table
   step 'I perform the :goto_resource_settings_page web action with:', table
   step 'the step should succeed'
   step 'I perform the :set_resource_amount_by_input_and_update web action with:', table

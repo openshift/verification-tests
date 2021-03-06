@@ -1,4 +1,5 @@
 Given /^etcd operator "([^"]*)" is removed successfully from "([^"]*)" project$/ do | name, proj_name|
+  transform binding, :name, :proj_name
   ensure_admin_tagged
   raise "!!! Error doesn't exist etcd operator: #{name} in this #{proj_name} project" unless subscription("#{name}").exists?
   step %Q/I ensure "#{name}" subscription is deleted from the "#{proj_name}" project/
@@ -16,6 +17,7 @@ Given /^etcd operator "([^"]*)" is removed successfully from "([^"]*)" project$/
 end
 
 Given /^etcd operator "([^"]*)" is installed successfully in "([^"]*)" project$/ do | name, proj_name|
+  transform binding, :name, :proj_name
     ensure_admin_tagged
     step %Q/I switch to cluster admin pseudo user/
     step %Q/I use the "#{proj_name}" project/
@@ -59,6 +61,7 @@ Given /^etcd operator "([^"]*)" is installed successfully in "([^"]*)" project$/
 end
 
 Given /^etcdCluster "([^"]*)" is installed successfully in "([^"]*)" project$/ do | name, proj_name|
+  transform binding, :name, :proj_name
   step %Q/I use the "#{proj_name}" project/
   etcdCluster_yaml ||= "#{BushSlicer::HOME}/testdata/olm/etcd-cluster-template.yaml"
   step %Q/I process and create:/, table(%{
@@ -71,6 +74,7 @@ Given /^etcdCluster "([^"]*)" is installed successfully in "([^"]*)" project$/ d
 end
 
 Given /^etcdCluster "([^"]*)" is removed successfully from "([^"]*)" project$/ do | name, proj_name|
+  transform binding, :name, :proj_name
   step %Q/I ensure "#{name}" etcd_cluster is deleted from the "#{proj_name}" project/
   logger.info("### etcdCluster: #{name} is removed successfully from #{proj_name} namespace")
 end

@@ -3,6 +3,7 @@
 # to reliably wait for all the replicas to be come ready, we do
 # 'oc get rc <rc_name>' and wait until the spec['replicas'] == status['replicas']
 Given /^(I|admin) waits? until replicationController#{OPT_QUOTED} is ready$/ do |who, rc_name|
+  transform binding, :who, :rc_name
   ready_timeout = 15 * 60
   who = who == "admin" ? admin : user
   @result = rc(rc_name).wait_till_ready(who, ready_timeout)
@@ -16,6 +17,7 @@ end
 # end
 
 Given /^I wait until number of(?: "(.*?)")? replicas match "(\d+)" for replicationController "(.+)"$/ do |state, number, rc_name|
+  transform binding, :state, :number, :rc_name
   ready_timeout = 300
   state = :running if state.nil?
   @result = rc(rc_name).wait_till_replica_counters_match(
@@ -30,6 +32,7 @@ Given /^I wait until number of(?: "(.*?)")? replicas match "(\d+)" for replicati
 end
 
 Given /^a replicationController becomes ready with labels:$/ do |table|
+  transform binding, :table
   labels = table.raw.flatten # dimentions irrelevant
   rc_timeout = 10 * 60
   ready_timeout = 15 * 60

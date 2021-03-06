@@ -1,12 +1,14 @@
 # ssl related steps
 
 Given /^the #{QUOTED} cert file is parsed into the#{OPT_SYM} clipboard$/ do |cert_path, cb_name |
+  transform binding, :cert_path, :cb_name
   cb_name ||= :cert
   cert = OpenSSL::X509::Certificate.new(File.read(File.expand_path(cert_path)))
   cb[cb_name] = cert
 end
 
 Given /^the custom certs are generated with:$/ do |table|
+  transform binding, :table
   ensure_admin_tagged
   signer_path = "/etc/origin/master"
   _host = env.master_hosts.first

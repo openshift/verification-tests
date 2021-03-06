@@ -2,6 +2,7 @@
 # will create a dummy route to obtain that
 # somehow hacky in all regardsm hope we obtain a better mechanism after some time
 Given /^I store default router subdomain in the#{OPT_SYM} clipboard$/ do |cb_name|
+  transform binding, :cb_name
   if env.is_admin? user
     raise "get router info as regular user"
   end
@@ -13,6 +14,7 @@ Given /^I store default router subdomain in the#{OPT_SYM} clipboard$/ do |cb_nam
 end
 
 Given /^I store default router IPs in the#{OPT_SYM} clipboard$/ do |cb_name|
+  transform binding, :cb_name
   if env.is_admin? user
     raise "get router info as regular user"
   end
@@ -23,6 +25,7 @@ Given /^I store default router IPs in the#{OPT_SYM} clipboard$/ do |cb_name|
 end
 
 Given /^default (docker-registry|router) replica count is stored in the#{OPT_SYM} clipboard$/ do |resource ,cb_name|
+  transform binding, :resource, :cb_name
   ensure_admin_tagged
 
   cb_name = 'replicas' unless cb_name
@@ -33,6 +36,7 @@ Given /^default (docker-registry|router) replica count is stored in the#{OPT_SYM
 end
 # example output... ["3.10.0-0.15.0", 3, 10]  we are only intersted in the elements [1] and [2]
 Given /^I store master major version in the#{OPT_SYM} clipboard$/ do |cb_name|
+  transform binding, :cb_name
   cb_name = 'master_version' unless cb_name
   full_version, major, minor = env.get_version(user: user)
   cb[cb_name] = major.to_s + "." + minor.to_s
@@ -40,6 +44,7 @@ Given /^I store master major version in the#{OPT_SYM} clipboard$/ do |cb_name|
 end
 
 Given /^I store master image version in the#{OPT_SYM} clipboard$/ do |cb_name|
+  transform binding, :cb_name
   ensure_admin_tagged
   hosts = step "I select a random node's host"
   res = host.exec_admin("docker images")
@@ -59,6 +64,7 @@ end
 #   versions (e.g. 3.x); Such that "3.4" === "1.4";
 # Example: Given the master version >= "3.4"
 Given /^the master version ([<>=]=?) #{QUOTED}$/ do |op, ver|
+  transform binding, :op, :ver
   unless env.version_cmp(ver, user: user).send(op.to_sym, 0)
     raise "master version not #{op} #{ver}"
   end

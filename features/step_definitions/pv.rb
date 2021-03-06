@@ -1,6 +1,7 @@
 require 'yaml'
 
 Given /^I save volume id from PV named "([^"]*)" in the#{OPT_SYM} clipboard$/ do |resource_name, cbname|
+  transform binding, :resource_name, :cbname
   cbname = 'volume' unless cbname
   ensure_admin_tagged
   step %Q/I run the :get admin command with:/, table(%{
@@ -33,6 +34,7 @@ Given /^I save volume id from PV named "([^"]*)" in the#{OPT_SYM} clipboard$/ do
 end
 
 Given /^I have a(?: (\d+) GB)? volume and save volume id in the#{OPT_SYM} clipboard$/ do |size, cbname|
+  transform binding, :size, :cbname
   timeout = 60
   size = size ? size.to_i : 1
   cbname = 'volume_id' unless cbname
@@ -59,6 +61,7 @@ Given /^I have a(?: (\d+) GB)? volume and save volume id in the#{OPT_SYM} clipbo
 end
 
 Given /^the#{OPT_QUOTED} PV becomes #{SYM}(?: within (\d+) seconds)?$/ do |pv_name, status, timeout|
+  transform binding, :pv_name, :status, :timeout
   timeout = timeout ? timeout.to_i : 30
   @result = pv(pv_name).wait_till_status(status.to_sym, admin, timeout)
 
@@ -69,6 +72,7 @@ end
 
 #This is new step to obtain an volume id from storage class dynamic provision
 Given /^I have a(?: (\d+) GB)? volume from provisioner "([^"]*)" and save volume id in the#{OPT_SYM} clipboard$/ do |size, provisioner, cbname|
+  transform binding, :size, :provisioner, :cbname
   timeout = 120
   size = size ? size.to_i : 1
   cbname = 'volume_id' unless cbname
@@ -95,6 +99,7 @@ Given /^I have a(?: (\d+) GB)? volume from provisioner "([^"]*)" and save volume
 end
 
 Given /^the PVs become #{SYM}(?: within (\d+) seconds) with labels:?$/ do |status, timeout, table|
+  transform binding, :status, :timeout, :table
   timeout = timeout ? timeout.to_i : 30
   @result = pv(pv_name).wait_till_status(status.to_sym, admin, timeout)
 
@@ -104,6 +109,7 @@ Given /^the PVs become #{SYM}(?: within (\d+) seconds) with labels:?$/ do |statu
 end
 
 Given /^([0-9]+) PVs become #{SYM}(?: within (\d+) seconds)? with labels:$/ do |count, status, timeout, table|
+  transform binding, :count, :status, :timeout, :table
   labels = table.raw.flatten # dimentions irrelevant
   timeout = timeout ? timeout.to_i : 60
   status = status.to_sym
@@ -124,6 +130,7 @@ Given /^([0-9]+) PVs become #{SYM}(?: within (\d+) seconds)? with labels:$/ do |
 end
 
 Given /^the#{OPT_QUOTED} PV status is #{SYM}$/ do |pv_name, status|
+  transform binding, :pv_name, :status
   @result = pv(pv_name).status?(status: status.to_sym, user: admin)
 
   unless @result[:success]
@@ -132,6 +139,7 @@ Given /^the#{OPT_QUOTED} PV status is #{SYM}$/ do |pv_name, status|
 end
 
 Given /^the#{OPT_QUOTED} PV becomes terminating(?: within (\d+) seconds)?$/ do |pv_name, timeout|
+  transform binding, :pv_name, :timeout
   timeout = timeout ? timeout.to_i : 30
   success = wait_for(timeout) {
     pv(pv_name).deletion_timestamp(cached: false, quiet: true)
@@ -145,6 +153,7 @@ end
 #   the object hash with the given value e.g.
 # | ["spec"]["nfs"]["server"] | service("nfs-service").ip |
 When /^admin creates a PV from "([^"]*)" where:$/ do |location, table|
+  transform binding, :location, :table
   ensure_admin_tagged
 
   if location.include? '://'
@@ -187,6 +196,7 @@ When /^admin creates a PV from "([^"]*)" where:$/ do |location, table|
 end
 
 Given /^I verify that the IAAS volume with id "(.+?)" was deleted(?: within #{NUMBER} seconds)?$/ do |vol_id, timeout|
+  transform binding, :vol_id, :timeout
   timeout = timeout ? Integer(timeout) : 30
   ensure_admin_tagged
 
@@ -197,6 +207,7 @@ Given /^I verify that the IAAS volume with id "(.+?)" was deleted(?: within #{NU
 end
 
 Given /^I verify that the IAAS volume with id "(.+?)" has status "(.+?)"(?: within #{NUMBER} seconds)?$/ do |vol_id, status, timeout|
+  transform binding, :vol_id, :status, :timeout
   timeout = timeout ? Integer(timeout) : 30
   ensure_admin_tagged
 
@@ -214,6 +225,7 @@ Given /^I verify that the IAAS volume with id "(.+?)" has status "(.+?)"(?: with
 end
 
 Given /^I verify that the IAAS volume for the "(.+?)" PV was deleted(?: within #{NUMBER} seconds)?$/ do |pv_name, timeout|
+  transform binding, :pv_name, :timeout
   timeout = timeout ? Integer(timeout) : 30
   ensure_admin_tagged
 
@@ -224,6 +236,7 @@ Given /^I verify that the IAAS volume for the "(.+?)" PV was deleted(?: within #
 end
 
 Given /^I verify that the IAAS volume for the "(.+?)" PV becomes "(.+?)"(?: within #{NUMBER} seconds)?$/ do |pv_name, status, timeout|
+  transform binding, :pv_name, :status, :timeout
   timeout = timeout ? Integer(timeout) : 30
   ensure_admin_tagged
 

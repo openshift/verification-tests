@@ -4,6 +4,7 @@
 # end
 
 Given /^default admin-console downloads route is stored in the#{OPT_SYM} clipboard$/ do | cb_name |
+  transform binding, :cb_name
   ensure_admin_tagged
   cb_name ||= :downloads_route
   cb[cb_name] = route('downloads', service('downloads',project('openshift-console', switch: false))).dns(by: admin)

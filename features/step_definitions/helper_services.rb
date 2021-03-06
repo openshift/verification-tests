@@ -1,6 +1,7 @@
 # store here steps that create test services within OpenShift test env
 
 Given /^I have a NFS service in the(?: "([^ ]+?)")? project$/ do |project_name|
+  transform binding, :project_name
   ensure_admin_tagged
 
   project(project_name)
@@ -25,6 +26,7 @@ end
 
 #This is a step to create nfs-provisioner pod or dc in the project
 Given /^I have a nfs-provisioner (pod|service) in the(?: "([^ ]+?)")? project$/ do |deploymode, project_name|
+  transform binding, :deploymode, :project_name
   ensure_admin_tagged
   _service = deploymode == "service" ? true : false
   _project = project(project_name)
@@ -74,6 +76,7 @@ end
 
 #This is a step to create efs-provisioner service in the project
 Given /^I have a efs-provisioner(?: with fsid "(.+)")?(?: of region "(.+)")? in the(?: "([^ ]+?)")? project$/ do |fsid, region, project_name|
+  transform binding, :fsid, :region, :project_name
   ensure_admin_tagged
   _project = project(project_name)
   unless project.exists?(user: user)
@@ -119,6 +122,7 @@ end
 #The following helper step will create a squid proxy, and
 #save the service ip and port of the proxy pod for later use in the scenario.
 Given /^I have a(n authenticated)? proxy configured in the project$/ do |use_auth|
+  transform binding, :use_auth
   if use_auth
     step %Q/I run the :create_deploymentconfig client command with:/, table(%{
       | image | quay.io/openshifttest/squid-proxy |
@@ -196,6 +200,7 @@ Given /^I have LDAP service in my project$/ do
 end
 
 Given /^I have an ssh-git service in the(?: "([^ ]+?)")? project$/ do |project_name|
+  transform binding, :project_name
   project(project_name, switch: true)
   unless project.exists?(user: user)
     raise "project #{project_name} does not exist"
@@ -260,6 +265,7 @@ Given /^I have an ssh-git service in the(?: "([^ ]+?)")? project$/ do |project_n
 end
 
 Given /^I have an http-git service in the(?: "([^ ]+?)")? project$/ do |project_name|
+  transform binding, :project_name
   project(project_name, switch: true)
   unless project.exists?(user: user)
     raise "project #{project_name} does not exist"
@@ -291,6 +297,7 @@ Given /^I have an http-git service in the(?: "([^ ]+?)")? project$/ do |project_
 end
 
 Given /^I have a git client pod in the#{OPT_QUOTED} project$/ do |project_name|
+  transform binding, :project_name
   project(project_name, switch: true)
   unless project.exists?(user: user)
     raise "project #{project_name} does not exist"
@@ -341,6 +348,7 @@ end
 
 # pod-for-ping is a pod that has curl, wget, telnet and ncat
 Given /^I have a pod-for-ping in the#{OPT_QUOTED} project$/ do |project_name|
+  transform binding, :project_name
   project(project_name, switch: true)
   unless project.exists?(user: user)
     raise "project #{project_name} does not exist"
@@ -359,6 +367,7 @@ end
 
 # headertest is a service that returns all HTTP request headers used by client
 Given /^I have a header test service in the#{OPT_QUOTED} project$/ do |project_name|
+  transform binding, :project_name
   project(project_name)
   unless project.exists?(user: user)
     raise "project #{project_name} does not exist"
@@ -394,6 +403,7 @@ end
 
 # skopeo is a pod that has skopeo clients tools
 Given /^I have a skopeo pod in the(?: "([^ ]+?)")? project$/ do |project_name|
+  transform binding, :project_name
   project(project_name, switch: true)
   unless project.exists?(user: user)
     raise "project #{project_name} does not exist"
@@ -421,6 +431,7 @@ Given /^CA trust is added to the pod-for-ping$/ do
 end
 
 Given /^I have a Gluster service in the(?: "([^ ]+?)")? project$/ do |project_name|
+  transform binding, :project_name
   ensure_admin_tagged
 
   project(project_name)
@@ -441,6 +452,7 @@ Given /^I have a Gluster service in the(?: "([^ ]+?)")? project$/ do |project_na
 end
 
 Given /^I have a Ceph pod in the(?: "([^ ]+?)")? project$/ do |project_name|
+  transform binding, :project_name
   ensure_admin_tagged
 
   project(project_name)
@@ -462,6 +474,7 @@ end
 
 # Configure CephFS server in current environment
 Given /^I have a CephFS pod in the(?: "([^ ]+?)")? project$/ do |project_name|
+  transform binding, :project_name
   ensure_admin_tagged
 
   project(project_name)

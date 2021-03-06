@@ -1,5 +1,6 @@
 # you use "second", "third", "default", etc. user
 Given /^I switch to(?: the)? #{WORD} user$/ do |who|
+  transform binding, :who
   user(word_to_num(who))
 end
 
@@ -7,6 +8,7 @@ end
 # system:serviceaccount:project_name:acc_name
 # acc_name
 Given /^I switch to the (.+) service account$/ do |who|
+  transform binding, :who
   @user = service_account(who)
 end
 
@@ -16,6 +18,7 @@ Given /^I switch to cluster admin pseudo user$/ do
 end
 
 Given /^I create the serviceaccount "([^"]*)"$/ do |name|
+  transform binding, :name
   sa = service_account(name)
   @result = sa.create(by: user)
 
@@ -23,15 +26,18 @@ Given /^I create the serviceaccount "([^"]*)"$/ do |name|
 end
 
 Given /^I find a bearer token of the(?: (.+?))? service account$/ do |acc|
+  transform binding, :acc
   service_account(acc).load_bearer_tokens(user: user)
 end
 
 Given /^the(?: ([a-z]+))? user has all owned resources cleaned$/ do |who|
+  transform binding, :who
   num = who ? word_to_num(who) : nil
   user(num).clean_up_on_load
 end
 
 Given /^(I|admin) ensures identity #{QUOTED} is deleted$/ do |by, name|
+  transform binding, :by, :name
   _user = by == "admin" ? admin : user
   _resource = identity(name)
   _seconds = 60
@@ -51,6 +57,7 @@ Given /^I restore user's context after scenario$/ do
 end
 
 Given /^I save kube config in file #{QUOTED}$/ do |path|
+  transform binding, :path
   view_opts = { output: "yaml", minify: true, flatten: true }
   @result = user.cli_exec(:config_view, **view_opts, _quiet: true)
   unless @result[:success]

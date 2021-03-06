@@ -33,6 +33,7 @@ end
 # return the metadata information for the `oc get secret <secret_name>`  the secret_name varies 
 # depending on the cluster platform
 Given /^admin obtains the cloudcredentials from cluster and store them to the#{OPT_QUOTED} clipboard$/ do |cb_name|
+  transform binding, :cb_name
   cb_name ||= :cloud_creds
   platform = infrastructure('cluster').platform
   case platform

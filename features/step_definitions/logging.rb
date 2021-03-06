@@ -143,6 +143,7 @@ end
 ## To check cluserlogging is working correctly, we check all of the subcomponents' status
 #  The list of components currently are: ["collection", "curation", "logStore",  "visualization"]
 Given /^I wait for clusterlogging(?: named "(.+)")? with #{QUOTED} log collector to be functional in the#{OPT_QUOTED} project$/ do | logging_name, log_collector, proj_name |
+  transform binding, :logging_name, :log_collector, :proj_name
   ensure_admin_tagged
   cb.target_proj ||= 'openshift-logging'
   proj_name = cb.target_proj if proj_name.nil?
@@ -224,6 +225,7 @@ Given /^logging service is removed successfully$/ do
 end
 
 Given /^I wait until #{QUOTED} log collector is ready$/ do | log_collector |
+  transform binding, :log_collector
   step %Q/#{daemon_set(log_collector).replica_counters[:desired]} pods become ready with labels:/, table(%{
     | logging-infra=#{log_collector} |
   })
@@ -251,6 +253,7 @@ Given /^cluster logging operator is ready$/ do
 end
 
 Given /^elasticsearch operator is ready(?: in the "(.+)" namespace)?$/ do | proj_name |
+  transform binding, :proj_name
   ensure_admin_tagged
   if proj_name
     target_namespace = proj_name
@@ -264,6 +267,7 @@ Given /^elasticsearch operator is ready(?: in the "(.+)" namespace)?$/ do | proj
 end
 
 Given /^I create clusterlogging instance with:$/ do | table |
+  transform binding, :table
   opts = opts_array_to_hash(table.raw)
   ensure_admin_tagged
   step %Q/I switch to cluster admin pseudo user/
@@ -325,6 +329,7 @@ Given /^I delete the clusterlogging instance$/ do
 end
 
 Given /^logging channel name is stored in the#{OPT_SYM} clipboard$/ do | cb_name |
+  transform binding, :cb_name
   cb_name = 'logging_channel_name' unless cb_name
   if env.logging_channel_name.empty?
     version = cluster_version('version').version.split('-')[0].split('.').take(2).join('.')
@@ -342,6 +347,7 @@ Given /^logging channel name is stored in the#{OPT_SYM} clipboard$/ do | cb_name
 end
 
 Given /^#{QUOTED} packagemanifest's catalog source name is stored in the#{OPT_SYM} clipboard$/ do |packagemanifest, cb_name|
+  transform binding, :packagemanifest, :cb_name
   cb_name = "catsrc_name" unless cb_name
   project("openshift-marketplace")
   if env.logging_catsrc.empty?
@@ -368,6 +374,7 @@ end
 # es_util --query=*/_count -d '{"query": {"match": {"kubernetes.namespace_name": "project-name"}}}'
 # if count > 0, then the project logs are received
 When /^I wait(?: (\d+) seconds)? for the project #{QUOTED} logs to appear in the ES pod(?: with labels #{QUOTED})?$/ do |seconds, project_name, pod_labels|
+  transform binding, :seconds, :project_name, :pod_labels
   if pod_labels
     labels = pod_labels
   else
@@ -437,6 +444,7 @@ Given /^logging eventrouter is installed in the cluster$/ do
 end
 
 Given /^I generate certs for the#{OPT_QUOTED} receiver(?: in the#{OPT_QUOTED} project)?$/ do | receiver_name, project_name |
+  transform binding, :receiver_name, :project_name
   script_file = "#{BushSlicer::HOME}/testdata/logging/logforwarding/cert_generation.sh"
   project_name ||= "openshift-logging"
   #step %Q/I download a file from "#{script_file}"/
@@ -445,6 +453,7 @@ Given /^I generate certs for the#{OPT_QUOTED} receiver(?: in the#{OPT_QUOTED} pr
 end
 
 Given /^I create pipelinesecret(?: named#{OPT_QUOTED})?(?: with sharedkey#{OPT_QUOTED})?$/ do | secret_name, shared_key |
+  transform binding, :secret_name, :shared_key
   secret_name ||= "pipelinesecret"
   step %Q/admin ensures "#{secret_name}" secret is deleted from the "openshift-logging" project after scenario/
   if shared_key != nil
@@ -473,6 +482,7 @@ Given /^I create pipelinesecret(?: named#{OPT_QUOTED})?(?: with sharedkey#{OPT_Q
 end
 
 Given /^I create the resources for the receiver with:$/ do | table |
+  transform binding, :table
   org_user = user
   opts = opts_array_to_hash(table.raw)
   namespace = opts[:namespace]
@@ -510,6 +520,7 @@ Given /^I create the resources for the receiver with:$/ do | table |
 end
 
 Given /^(fluentd|elasticsearch|rsyslog) receiver is deployed as (secure|insecure)(?: in the#{OPT_QUOTED} project)?$/ do | server, security, project_name |
+  transform binding, :server, :security, :project_name
   project_name ||= "openshift-logging"
   project(project_name)
   if env.version_lt('4.6', user: user)
@@ -589,6 +600,7 @@ end
 
 # upgrade operator and check the EFK pods status
 Given /^I upgrade the operator with:$/ do | table |
+  transform binding, :table
   opts = opts_array_to_hash(table.raw)
   subscription = opts[:subscription]
   channel = opts[:channel]
@@ -754,6 +766,7 @@ end
 
 # This step will deploy one kafka cluster and create 4 topics(topic-logging-all,topic-logging-infra,topic-logging-app,topic-logging-audit) in this kafka
 Given /^I deploy kafka in the #{QUOTED} project via amqstream operator$/ do | project_name|
+  transform binding, :project_name
   ensure_admin_tagged
   step %Q/I switch to cluster admin pseudo user/
   step %Q/"amq-streams" packagemanifest's catalog source name is stored in the :kafka_csc clipboard/
@@ -794,6 +807,7 @@ end
 # Get some records from a kafka topic
 # https://datacadamia.com/dit/kafka/kafka-console-consumer
 Given /^I get(?: (\d+))? records from the #{QUOTED} kafka topic in the #{QUOTED} project$/ do | record_num, topic_name, project_name|
+  transform binding, :record_num, :topic_name, :project_name
   record_num = record_num ? record_num.to_str : "10"
   job_name=rand_str(8, :dns)
   step %Q/I use the "#{project_name}" project/
@@ -822,6 +836,7 @@ end
 
 # Register an topic consumer which listen the topic continuously. we can verify the logging records by the next step 'I get N logs from the X kafka consumer job'
 Given /^I create the #{QUOTED} consumer job to the #{QUOTED} kafka topic in the #{QUOTED} project$/ do | job_name, topic_name, project_name |
+  transform binding, :job_name, :topic_name, :project_name
   step %Q/I use the "#{project_name}" project/
   kafka_image=stateful_set('my-cluster-kafka').containers_spec(user: user)[0].image
   teardown_add {
@@ -838,6 +853,7 @@ end
 
 # Get logs from the kafka comsumer job which created by upper job
 Given /^I get(?: (\d+))? logs from the #{QUOTED} kafka consumer job in the #{QUOTED} project$/ do | record_num, job_name, project_name |
+  transform binding, :record_num, :job_name, :project_name
   record_num = record_num ? record_num.to_i : 0
   step %Q/I use the "#{project_name}" project/
   step %Q/a pod becomes ready with labels:/, table(%{

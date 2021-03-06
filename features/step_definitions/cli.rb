@@ -1,16 +1,19 @@
 ## Put here steps that are mostly cli specific, e.g new-app
 When /^I run the :(.*?) client command$/ do |yaml_key|
+  transform binding, :yaml_key
   yaml_key.sub!(/^:/,'')
   @result = user.cli_exec(yaml_key.to_sym, {})
 end
 
 Given /^oc major.minor version is stored in the#{OPT_SYM} clipboard$/ do |cb_name|
+  transform binding, :cb_name
   @result = user.cli_exec(:version)
   cb_name ||= "oc_version"
   cb[cb_name] = @result[:props][:oc_version].split(".")[0..1].join(".")
 end
 
 When /^I run the :([a-z_]*?)( background)? client command with:$/ do |yaml_key, background, table|
+  transform binding, :yaml_key, :background, :table
   if background
     @result = user.cli_exec(
       yaml_key.to_sym,
@@ -24,11 +27,13 @@ When /^I run the :([a-z_]*?)( background)? client command with:$/ do |yaml_key, 
 end
 
 When /^I run the :([a-z_]*?)( background)? admin command$/ do |yaml_key, background|
+  transform binding, :yaml_key, :background
   step "I run the :#{yaml_key}#{background} admin command with:",
     table([["dummy"]])
 end
 
 When /^I run the :([a-z_]*?)( background)? admin command with:$/ do |yaml_key, background, table|
+  transform binding, :yaml_key, :background, :table
   ensure_admin_tagged
   opts = table.raw == [["dummy"]] ? [] : opts_array_process(table.raw)
 
@@ -50,6 +55,7 @@ end
 #   the funcitonality. Not sure that goes anywhere but we could adapt this
 #   step for backward compatibility if needed.
 Given /^I create a new application with:$/ do |table|
+  transform binding, :table
   step 'I run the :new_app client command with:', table
 end
 
@@ -58,6 +64,7 @@ end
 # 2. replace any path with given value from table
 # 3. runs `oc create` command over the resulting file
 When /^I run oc create( as admin)? (?:over|with) #{QUOTED} replacing paths:$/ do |admin, file, table|
+  transform binding, :admin, :file, :table
   if file.include? '://'
     step %Q|I download a file from "#{file}"|
     resource_hash = YAML.load(@result[:response])
@@ -83,6 +90,7 @@ When /^I run oc create( as admin)? (?:over|with) #{QUOTED} replacing paths:$/ do
 end
 
 When /^I run oc replace( as admin)? (?:over|with) #{QUOTED} replacing paths:$/ do |admin, file, table|
+  transform binding, :admin, :file, :table
   if file.include? '://'
     step %Q|I download a file from "#{file}"|
     resource_hash = YAML.load(@result[:response])
@@ -112,6 +120,7 @@ end
 # 2. load it as an ERB file with the cucumber scenario variables binding
 # 3. runs `oc create` command over the resulting file
 When /^I run oc create( as admin)? over ERB test file: (.*)$/ do |admin, file_path|
+  transform binding, :admin, :file_path
   step %Q|I obtain test data file "#{file_path}"|
   file_path = cb.test_file
   # overwrite with ERB loaded content
@@ -129,6 +138,7 @@ end
 #@notes Given a remote (http/s) or local file, run the 'oc process'
 #command followed by the 'oc create' command to save space
 When /^I process and create #{QUOTED}$/ do |file|
+  transform binding, :file
   step 'I process and create:', table([["f", file]])
 end
 
@@ -136,11 +146,13 @@ end
 #@notes Given a remote (http/s) or local template, run the 'oc process'
 #command followed by the 'oc create' command to save space
 When /^I process and create template #{QUOTED}$/ do |template|
+  transform binding, :template
   step 'I process and create:', table([["template", template]])
 end
 
 # process file/url with parameters, then feed into :create
 When /^I process and create:$/ do |table|
+  transform binding, :table
   # run the process command, then pass it in as stdin to 'oc create'
   process_opts = opts_array_process(table.raw)
   process_opts << [:_stderr, :stderr]
@@ -164,6 +176,7 @@ end
 #  So the output file name will be hard-coded to 'tmp_out.yaml', we still need to
 #  supply the resouce_name and the lines we are replacing
 Given /^(?:(as admin) )?I replace resource "([^"]+)" named "([^"]+)"(?: saving edit to "([^"]+)")?:$/ do |as_admin, resource, resource_name, filename, table |
+  transform binding, :as_admin, :resource, :resource_name, :filename, :table
   filename = "edit_resource.yaml" if filename.nil?
   if as_admin.nil?
     as_user = "client"
@@ -184,6 +197,7 @@ Given /^(?:(as admin) )?I replace resource "([^"]+)" named "([^"]+)"(?: saving e
 end
 
 Given /^I wait(?: up to #{NUMBER} seconds)? for the last background process to finish$/ do |seconds|
+  transform binding, :seconds
   seconds = Integer(seconds) rescue 60
   success = wait_for(seconds) { @bg_processes.last.finished? }
   raise "last process did not finish within #{seconds} seconds" unless success
@@ -214,6 +228,7 @@ end
 # E.g. if the resource has ONLY ONE label and we remove it, the "labels" key will be removed together, so
 # the expected json should be {"metadata":{"labels":null}}.
 Given /^(?:(as admin) )?I successfully#{OPT_WORD} patch resource "(.*)\/(.*)" with:$/ do |as_admin, patch_type, resource_type, resource_name, table|
+  transform binding, :as_admin, :patch_type, :resource_type, :resource_name, :table
   if table.raw[1]
     hash = table.rows_hash
     patch_json = hash["patch"]

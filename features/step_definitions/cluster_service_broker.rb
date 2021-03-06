@@ -1,4 +1,5 @@
 Given /^the #{QUOTED} cluster service broker is recreated( after scenario)?$/ do |name, after_scenario|
+  transform binding, :name, :after_scenario
   _admin = admin
   _csb = cluster_service_broker(name)
   cb.cluster_resource_to_recreate = _csb
@@ -22,6 +23,7 @@ Given /^the #{QUOTED} cluster service broker is recreated( after scenario)?$/ do
 end
 
 Given /^I save the first service broker registry prefix to#{OPT_SYM} clipboard$/ do |cb_name|
+  transform binding, :cb_name
   ensure_admin_tagged
   cb_name ||= :reg_prefix
   org_project = project(generate: false) rescue nil

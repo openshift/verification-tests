@@ -471,6 +471,31 @@ module BushSlicer
       conf[:project_docker_repo]
     end
 
+    # transforms <%= expression %> inside variables of a target binding
+    def transform(target_binding, *variables)
+      # @param [String] str to be expanded
+      # @return string with expanded evaluation of expressions
+      expand_str = proc do |str|
+        str.gsub(/<%=(.+?)%>/m) { |c| target_binding.eval $1 }
+      end
+
+      variables.each do |v|
+        x = target_binding.local_variable_get(v) || next
+        if x.respond_to? :raw
+          # this is a table
+          modified_args = x.raw.map { |row|
+            row.map { |cell|
+              expand_str.call(cell)
+            }
+          }
+          x = table(modified_args)
+        else #for non-table -> inline expansion
+          x = expand_str.call(x)
+        end
+        target_binding.local_variable_set(v, x)
+      end
+    end
+
     # Embedded table delimiter is '!' if '|' not used
     # Gherkin more recent than 3.1.2 does support escaping new lines by `\n`.
     #   Also these two escapes are supported: `\|` amd `\\`. This means two

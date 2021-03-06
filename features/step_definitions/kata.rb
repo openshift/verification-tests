@@ -1,4 +1,5 @@
 Given /^kata container has been installed successfully(?: in the #{QUOTED} project)?$/ do |ns|
+  transform binding, :ns
   kata_ns ||= "kata-operator"
   step %Q/I switch to cluster admin pseudo user/
   unless namespace(kata_ns).exists?
@@ -42,6 +43,7 @@ end
 
 
 Given /^I wait until number of completed kata runtime nodes match #{QUOTED} for #{QUOTED}$/ do |number, kc_name|
+  transform binding, :number, :kc_name
   ready_timeout = 900
   matched = kata_config(kc_name).wait_till_installed_counter_match(
     user: user, seconds: ready_timeout, count: number.to_i)
@@ -51,6 +53,7 @@ Given /^I wait until number of completed kata runtime nodes match #{QUOTED} for 
 end
 
 Given /^I remove kata operator from #{QUOTED} namespace$/ do | kata_ns |
+  transform binding, :kata_ns
   # 1. remove kataconfig first
   project(kata_ns)
   kataconfig_name = BushSlicer::KataConfig.list(user: admin).first.name

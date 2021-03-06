@@ -3,6 +3,7 @@ require 'openshift/service'
 
 # e.g I expose the "myapp" service
 When /^I expose(?: the#{OPT_QUOTED} port of)? the#{OPT_QUOTED} service$/ do |port, service_name|
+  transform binding, :port, :service_name
   cache_resources service(service_name).expose(user: user, port: port)
 
   # for backward compatibility return a successrul ResultHash
@@ -16,6 +17,7 @@ end
 
 # get the route information given a project name
 Given /^(I|admin) save the hostname of route #{QUOTED} in project #{QUOTED} to the#{OPT_SYM} clipboard$/ do |by, route_name, proj_name, clipboard_name |
+  transform binding, :by, :route_name, :proj_name, :clipboard_name
   _user = by == "admin" ? admin : user
   ensure_admin_tagged if by == "admin"
   clipboard_name ||= :host_route
@@ -41,6 +43,7 @@ end
 
 # add env to dc/router and wait for new router pod ready
 Given /^admin ensures new router pod becomes ready after following env added:$/ do |table|
+  transform binding, :table
   ensure_admin_tagged
   ensure_destructive_tagged
   begin
@@ -90,6 +93,7 @@ Given /^F5 router public IP is stored in the :vserver_ip clipboard$/ do
 end
 
 Given /^default router image is stored into the#{OPT_SYM} clipboard$/ do | cb_name |
+  transform binding, :cb_name
   step %Q/I run the :get admin command with:/, table(%{
     | resource      | dc      |
     | resource_name | router  |
@@ -101,6 +105,7 @@ Given /^default router image is stored into the#{OPT_SYM} clipboard$/ do | cb_na
 end
 
 Given /^the last reload log of a router pod is stored in #{SYM} clipboard$/ do | cb_name |
+  transform binding, :cb_name
   unless cb.router_pod
     step %Q/a pod becomes ready with labels:/, table(%{
       | deploymentconfig=router |
@@ -133,6 +138,7 @@ Given /^all default router pods become ready$/ do
 end
 
 Given /^I store an available router IP in the#{OPT_SYM} clipboard$/ do |cb_name|
+  transform binding, :cb_name
   step %Q/I run the :create client command with:/, table(%{
     | f |  #{BushSlicer::HOME}/testdata/networking/service_with_selector.json |
   })

@@ -6,6 +6,7 @@
 # type will require. Thus extracting common code here and leave resource type
 # specific steps handle verification.
 Given /^hidden recreate cluster resource( after scenario)?$/ do |after_scenario|
+  transform binding, :after_scenario
   ensure_destructive_tagged
 
   unless cb.cluster_resource_to_recreate
@@ -37,6 +38,7 @@ Given /^hidden recreate cluster resource( after scenario)?$/ do |after_scenario|
 end
 
 Given /^the #{QUOTED} (\w+) is recreated( by admin)? in the#{OPT_QUOTED} project after scenario$/ do |resource_name, resource_type, by_admin, project_name|
+  transform binding, :resource_name, :resource_type, :by_admin, :project_name
   if by_admin
     ensure_admin_tagged
     _user = admin
@@ -64,6 +66,7 @@ end
 
 # as resource you need to use a string that exists as a resource method in World
 Given /^(I|admin) checks? that the #{QUOTED} (\w+) exists(?: in the#{OPT_QUOTED} project)?$/ do |who, name, resource_type, namespace|
+  transform binding, :who, :name, :resource_type, :namespace
   _user = who == "admin" ? admin : user
 
   resource = resource(name, resource_type, project_name: namespace)
@@ -72,6 +75,7 @@ Given /^(I|admin) checks? that the #{QUOTED} (\w+) exists(?: in the#{OPT_QUOTED}
 end
 
 Given /^(I|admin) checks? that there are no (\w+)(?: in the#{OPT_QUOTED} project)?$/ do |who, resource_type, namespace|
+  transform binding, :who, :resource_type, :namespace
   _user = who == "admin" ? admin : user
 
   clazz = resource_class(resource_type)
@@ -87,6 +91,7 @@ Given /^(I|admin) checks? that there are no (\w+)(?: in the#{OPT_QUOTED} project
 end
 
 Given /^(I|admin) waits? for all (\w+) in the#{OPT_QUOTED} project to become ready(?: up to (\d+) seconds)?$/ do |by, type, project_name, timeout|
+  transform binding, :by, :type, :project_name, :timeout
   timeout = timeout ? Integer(timeout) : 180
   _user = by == "admin" ? admin : user
   clazz = resource_class(type)
@@ -112,6 +117,7 @@ Given /^(I|admin) waits? for all (\w+) in the#{OPT_QUOTED} project to become rea
 end
 
 Given /^(I|admin) waits? for the#{OPT_QUOTED} (\w+) to become ready(?: in the#{OPT_QUOTED} project)?(?: up to (\d+) seconds)?$/ do |by, name, type, project_name, timeout|
+  transform binding, :by, :name, :type, :project_name, :timeout
   _user = by == "admin" ? admin : user
   _resource = resource(name, type, project_name: project_name)
   timeout = timeout ? timeout.to_i : 60
@@ -126,6 +132,7 @@ end
 # tries to delete resource if it exists and make sure it disappears
 # example: I ensure "hello-openshift" pod is deleted
 Given /^(I|admin) ensures? #{QUOTED} (\w+) is deleted(?: from the#{OPT_QUOTED} project)?( after scenario)?$/ do |by, name, type, project_name, after|
+  transform binding, :by, :name, :type, :project_name, :after
   _user = by == "admin" ? admin : user
   _resource = resource(name, type, project_name: project_name)
   _seconds = 300
@@ -142,6 +149,7 @@ end
 
 # example: I wait for the "hello-pod" pod to appear up to 42 seconds
 Given /^(I|admin) waits? for the #{QUOTED} (\w+) to appear(?: in the#{OPT_QUOTED} project)?(?: up to (\d+) seconds)?$/ do |by, name, type, project_name, timeout|
+  transform binding, :by, :name, :type, :project_name, :timeout
   _user = by == "admin" ? admin : user
   _resource = resource(name, type, project_name: project_name)
   timeout = timeout ? timeout.to_i : 60
@@ -153,6 +161,7 @@ Given /^(I|admin) waits? for the #{QUOTED} (\w+) to appear(?: in the#{OPT_QUOTED
 end
 
 Given /^the( admin)? (\w+) named #{QUOTED} does not exist(?: in the#{OPT_QUOTED} project)?$/ do |who, resource_type, resource_name, project_name|
+  transform binding, :who, :resource_type, :resource_name, :project_name
   _user = who ? admin : user
   _resource = resource(resource_name, resource_type, project_name: project_name)
   _seconds = 60
@@ -165,6 +174,7 @@ end
 # When applying "oc delete" on one resource, the resource may take some time to
 # terminate, so use this step to wait for its dispapearing.
 Given /^I wait for the resource "(.+)" named "(.+)" to disappear(?: within (\d+) seconds)?$/ do |resource_type, resource_name, timeout|
+  transform binding, :resource_type, :resource_name, :timeout
   opts = {resource_name: resource_name, resource: resource_type}
   res = {}
   # just put a timeout so we don't hang there indefintely
@@ -188,6 +198,7 @@ Given /^I wait for the resource "(.+)" named "(.+)" to disappear(?: within (\d+)
 end
 
 Given /^#{WORD}( in the#{OPT_QUOTED} project)? with name matching #{RE} are stored in the#{OPT_SYM} clipboard$/ do |type, in_project, pr_name, pattern, cb_name|
+  transform binding, :type, :in_project, :pr_name, :pattern, :cb_name
   cb_name ||= "resources"
   re = Regexp.new(pattern)
   clazz = resource_class(type)
@@ -207,6 +218,7 @@ Given /^#{WORD}( in the#{OPT_QUOTED} project)? with name matching #{RE} are stor
 end
 
 Given /^(I|admin) stores? all (\w+)( in the#{OPT_QUOTED} project)? to the#{OPT_SYM} clipboard$/ do |who, type, in_project, namespace, cb_name|
+  transform binding, :who, :type, :in_project, :namespace, :cb_name
   cb_name ||= :resources
   _user = who == "admin" ? admin : user
 
@@ -223,6 +235,7 @@ Given /^(I|admin) stores? all (\w+)( in the#{OPT_QUOTED} project)? to the#{OPT_S
 end
 
 Given /^I remove all #{WORD}(?: in the#{OPT_QUOTED} project) with labels:$/ do | resource_type, namespace, table |
+  transform binding, :resource_type, :namespace, :table
   labels = table.raw.flatten
   namespace ||= project.name
   clazz = resource_class(resource_type)

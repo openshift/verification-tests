@@ -1,4 +1,5 @@
 When /^I perform the :(.*?) web( console)? action with:$/ do |action, console, table|
+  transform binding, :action, :console, :table
   if console
     # OpenShift web console actions should not depend on last used browser but
     #   current user we are switched to
@@ -11,6 +12,7 @@ end
 
 #run web action without parameters
 When /^I run the :(.+?) web( console)? action$/ do |action, console|
+  transform binding, :action, :console
   if console
     cache_browser(user.webconsole_executor)
     @result = user.webconsole_exec(action.to_sym)
@@ -21,6 +23,7 @@ end
 
 # @precondition a `browser` object
 When /^I access the "(.*?)" (?:path|url) in the web (?:console|browser)$/ do |url|
+  transform binding, :url
   @result = browser.handle_url(url)
 end
 
@@ -44,6 +47,7 @@ Given /^I logout via web console$/ do
 end
 
 Given /^the (.*) user is using same web console browser as (.*)$/ do |who, from_who|
+  transform binding, :who, :from_who
   new_user = user(word_to_num(who))
   base_user = user(word_to_num(from_who))
   env.webconsole_executor.set_executor_for_user(new_user, base_user.webconsole_executor)
@@ -59,6 +63,7 @@ end
 # *NOTE* be sure to include the protocol before the base URL in your table,
 # for example, http:// or https://, otherwise this will generate a URI error.
 Given /^I have a browser with:$/ do |table|
+  transform binding, :table
   init_params = opts_array_to_hash(table.raw)
   if init_params[:rules].kind_of? Array
     init_params[:rules].map! { |r| expand_path(r) }
@@ -120,6 +125,7 @@ end
 # And I get the "disabled" attribute of the "button" web element with:
 #   | type | submit |
 When /^I get the (?:"([^"]*)" attribute|content) of the "([^"]*)" web element:$/ do |attribute, element_type, table|
+  transform binding, :attribute, :element_type, :table
   selector = opts_array_to_hash(table.raw)
   #Collections.map_hash!(selector) do |key, value|
   #  [ key, YAML.load(value) ]
@@ -158,6 +164,7 @@ end
 # @precondition a `browser` object
 # useful for web common "click" action
 When /^I click the following "([^"]*)" element:$/ do |element_type, table|
+  transform binding, :element_type, :table
   selector = opts_array_to_hash(table.raw)
   @result = browser.handle_element({type: element_type, selector: selector, op: "click"})
 end
@@ -175,6 +182,7 @@ end
 
 # repeat doing web action until success,useful for waiting resource to become visible and available on web
 Given /^I wait(?: (\d+) seconds)? for the :(.+?) web( console)? action to succeed with:$/ do |time, web_action, console, table|
+  transform binding, :time, :web_action, :console, :table
   time = time ? time.to_i : 15 * 60
   if console
     step_string = "I perform the :#{web_action} web console action with:"
@@ -193,6 +201,7 @@ end
 
 # @precondition a `browser` object
 Given /^I wait(?: (\d+) seconds)? for the title of the web browser to match "(.+)"$/ do |time, pattern|
+  transform binding, :time, :pattern
   time = time ? time.to_i : 10
   reg = Regexp.new(pattern)
   success = wait_for(time) {
@@ -207,6 +216,7 @@ end
 # @notes used for swithing browser window,e.g. do some action in pop-up window
 # @window_spec is something like,":url=>console\.html"(need escape here,part of url),":title=>some info"(part of title)
 When /^I perform the :(.*?) web( console)? action in "([^"]+)" window with:$/ do |action, console, window_spec, table|
+  transform binding, :action, :console, :window_spec, :table
   window_selector = opts_array_to_hash([window_spec.split("=>")])
   window_selector.each{ |key,value| window_selector[key] = Regexp.new(value) }
   if console
@@ -242,6 +252,7 @@ Given /^I close the current browser$/ do
 end
 
 Given /^I check all relatedObjects of clusteroperator "(.*?)" are shown/ do |clusteroperator_name|
+  transform binding, :clusteroperator_name
   ensure_admin_tagged
   #get relatedObjects of clusteroperator
   relatedObjectsArray = cluster_operator(clusteroperator_name).related_objects

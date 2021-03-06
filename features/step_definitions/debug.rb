@@ -4,6 +4,7 @@ When /^I pry$/ do
 end
 
 When /^I pry in a step with table$/ do |table|
+  transform binding, :table
   require 'pry'
   binding.pry
 end
@@ -13,6 +14,7 @@ And /^I fail the scenario$/ do
 end
 
 And /^I log the message> (.+)$/ do |message|
+  transform binding, :message
   @result = {}
   @result[:response] = message
   @result[:success] = true
@@ -22,6 +24,7 @@ And /^I log the message> (.+)$/ do |message|
 end
 
 And /^I log the messages:$/ do |table|
+  transform binding, :table
   @result = {}
   @result[:success] = true
   @result[:response] = "log message: #{table.raw.flatten.join("\n")}"

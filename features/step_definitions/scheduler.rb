@@ -1,4 +1,5 @@
 Given /^the #{QUOTED} scheduler priorityclasses is restored after scenario$/ do |name|
+  transform binding, :name
   _admin = admin
   teardown_add {
     opts = {object_type: 'priorityclasses', object_name_or_id: name}
@@ -8,6 +9,7 @@ Given /^the #{QUOTED} scheduler priorityclasses is restored after scenario$/ do 
 end
 
 Given /^the CR #{QUOTED} named #{QUOTED} is restored after scenario$/ do |crd, name|
+  transform binding, :crd, :name
   ensure_admin_tagged
   ensure_destructive_tagged
   org_scheduler = {}

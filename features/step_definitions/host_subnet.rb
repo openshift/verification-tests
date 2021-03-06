@@ -1,4 +1,5 @@
 Given /^host subnets are stored in the#{OPT_SYM} clipboard$/ do |clipboard|
+  transform binding, :clipboard
   clipboard ||= "host_subnets"
 
   cb[clipboard] = BushSlicer::HostSubnet.list(user: admin)
@@ -6,6 +7,7 @@ Given /^host subnets are stored in the#{OPT_SYM} clipboard$/ do |clipboard|
 end
 
 Given /^host subnet #{QUOTED} is restored after scenario$/ do |subnet|
+  transform binding, :subnet
   ensure_destructive_tagged
 
   @result = admin.cli_exec(:get, resource: 'hostsubnet', resource_name: subnet, o: 'yaml')

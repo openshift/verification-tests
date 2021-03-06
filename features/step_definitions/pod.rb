@@ -1,4 +1,5 @@
 Given /^a pod becomes ready with labels:$/ do |table|
+  transform binding, :table
   labels = table.raw.flatten # dimentions irrelevant
   pod_timeout = 15 * 60
 
@@ -16,6 +17,7 @@ Given /^a pod becomes ready with labels:$/ do |table|
 end
 
 Given /^the pod(?: named "(.+)")? becomes ready$/ do |name|
+  transform binding, :name
   ready_timeout = 15 * 60
   @result = pod(name).wait_till_ready(user, ready_timeout)
 
@@ -26,6 +28,7 @@ Given /^the pod(?: named "(.+)")? becomes ready$/ do |name|
 end
 
 Given /^the pod(?: named "(.+)")? is ready$/ do |name|
+  transform binding, :name
   @result = pod(name).ready?(user: user, cached: false)
 
   unless @result[:success]
@@ -34,6 +37,7 @@ Given /^the pod(?: named "(.+)")? is ready$/ do |name|
 end
 
 Given /^the pod(?: named "(.+)")? becomes terminating$/ do |name|
+  transform binding, :name
   ready_timeout = 60
   @result = pod(name).wait_till_terminating(user, ready_timeout)
 
@@ -44,6 +48,7 @@ end
 
 
 Given /^the pod(?: named "(.+)")? becomes present$/ do |name|
+  transform binding, :name
   present_timeout = 5 * 60
   @result = pod(name).wait_to_appear(user, present_timeout)
 
@@ -54,6 +59,7 @@ Given /^the pod(?: named "(.+)")? becomes present$/ do |name|
 end
 
 Given /^a pod is present with labels:$/ do |table|
+  transform binding, :table
   labels = table.raw.flatten
   pod_timeout = 5 * 60
 
@@ -68,6 +74,7 @@ Given /^a pod is present with labels:$/ do |table|
 end
 
 Given /^I store in the#{OPT_SYM} clipboard the pods labeled:$/ do |cbn, labels|
+  transform binding, :cbn, :labels
   cbn ||= :pods
   cb[cbn] = BushSlicer::Pod.get_labeled(*labels.raw.flatten,
                                        project: project,
@@ -75,6 +82,7 @@ Given /^I store in the#{OPT_SYM} clipboard the pods labeled:$/ do |cbn, labels|
 end
 
 Given /^the pod(?: named "(.+)")? status becomes :([^\s]*?)(?: within #{NUMBER} seconds)?$/ do |name, status, timeout|
+  transform binding, :name, :status, :timeout
   timeout = timeout ? Integer(timeout) : 15 * 60
   @result = pod(name).wait_till_status(status.to_sym, user, timeout)
 
@@ -86,6 +94,7 @@ Given /^the pod(?: named "(.+)")? status becomes :([^\s]*?)(?: within #{NUMBER} 
 end
 
 Given /^status becomes :([^\s]*?) of( exactly)? ([0-9]+) pods? labeled:$/ do |status, exact_count, count, labels|
+  transform binding, :status, :exact_count, :count, :labels
   timeout = 15 * 60
   labels = labels.raw.flatten
 
@@ -132,6 +141,7 @@ Given /^all pods in the project are ready$/ do
 end
 
 Given /^#{NUMBER} pods? becomes? ready with labels:$/ do |count, table|
+  transform binding, :count, :table
   labels = table.raw.flatten # dimentions irrelevant
   pod_timeout = 10 * 60
   ready_timeout = 15 * 60
@@ -164,6 +174,7 @@ end
 #   ready status, then somehow dies. With the parameter it just makes sure
 #   pod os not there regardless of its current status.
 Given /^I wait for the pod(?: named #{QUOTED})? to die( regardless of current status)?$/ do |name, ignore_status|
+  transform binding, :name, :ignore_status
   ready_timeout = 15 * 60
   @result = pod(name).wait_till_ready(user, ready_timeout) unless ignore_status
   if ignore_status || @result[:success]
@@ -176,6 +187,7 @@ Given /^I wait for the pod(?: named #{QUOTED})? to die( regardless of current st
 end
 
 Given /^(admin executes|all) existing pods die with labels:$/ do |by,table|
+  transform binding, :by, :table
   _user = by.split.first == "admin" ? admin : user
   labels = table.raw.flatten # dimensions irrelevant
   timeout = 10 * 60
@@ -195,6 +207,7 @@ Given /^(admin executes|all) existing pods die with labels:$/ do |by,table|
 end
 
 Given /^all existing pods are ready with labels:$/ do |table|
+  transform binding, :table
   labels = table.raw.flatten # dimensions irrelevant
   timeout = 15 * 60
   start_time = monotonic_seconds
@@ -214,6 +227,7 @@ end
 # args can be a table where each cell is a command or an argument, or a
 #   multiline string where each line is a command or an argument
 When /^(I execute|admin executes) on the#{OPT_QUOTED} pod(?: #{QUOTED} container)?:$/ do |by, pod_name, container, raw_args|
+  transform binding, :by, :pod_name, :container, :raw_args
   _user = by.split.first == "admin" ? admin : user
   if raw_args.respond_to? :raw
     # this is table, we don't mind dimentions used by user
@@ -230,6 +244,7 @@ end
 # There are few occassion that the 'oc logs' cmd returned empty response
 #   this step should address those situations
 Given /^I collect the deployment log for pod "(.+)" until it disappears$/ do |pod_name|
+  transform binding, :pod_name
   opts = {resource_name: pod_name}
   res_cache = {}
   res = {}
@@ -249,6 +264,7 @@ Given /^I collect the deployment log for pod "(.+)" until it disappears$/ do |po
 end
 
 Given /^I collect the deployment log for pod "(.+)" until it becomes :([^\s]*?)$/ do |name, status|
+  transform binding, :name, :status
   opts = {resource_name: name}
   timeout = 15 * 60   # just put a timeout so we don't hang there indefintely
   podstatus = pod(name).wait_till_status(status.to_sym, user, timeout)
@@ -264,6 +280,7 @@ end
 # the step will do 'docker ps | grep deployment-example' to filter out a target
 # TODO: cri-o is not implemented yet
 Given /^the system container id for the#{OPT_QUOTED} pod is stored in the#{OPT_SYM} clipboard$/ do | pod_name, cb_name |
+  transform binding, :pod_name, :cb_name
   cb_name ||= :system_pod_container_id
   system_pod_container_id_regexp=/^(.*)\s+.*(ose|origin)-pod:.+\s/
   pod_name = pod(pod_name).name
@@ -282,6 +299,7 @@ Given /^the system container id for the#{OPT_QUOTED} pod is stored in the#{OPT_S
 end
 
 Given /^I check containers cpu request for pod named #{QUOTED} under limit:$/ do |pod_name, table|
+  transform binding, :pod_name, :table
   container_cpu_hash = table.rows_hash
   step %Q/I run the :get client command with:/, table(%{
     | resource      | pods                                                                           |

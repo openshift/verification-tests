@@ -1,6 +1,7 @@
 #Use this step definition file to create image-specific steps
 
 Given /^I have an?( ephemeral| persistent)? jenkins v#{NUMBER} application(?: from #{QUOTED})?$/ do |type, version, cust_templ|
+  transform binding, :type, :version, :cust_templ
 
   if cust_templ && type
     raise "custom template file and template type should not be " \
@@ -109,6 +110,7 @@ Given /^I log in to jenkins$/ do
 end
 
 Given /^I update #{QUOTED} slave image for jenkins #{NUMBER} server$/ do |slave_name,jenkins_version|
+  transform binding, :slave_name, :jenkins_version
 
   if env.version_gt("3.11", user: user)
     print "Skipped, agent images don't need update above openshift 4.0"

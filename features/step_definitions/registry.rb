@@ -56,6 +56,7 @@ Given /^I wait until the latest rc of internal registry is ready$/ do
 end
 
 Given /^all the image layers in the#{OPT_SYM} clipboard do( not)? exist in the registry$/ do |layers_board,not_exist|
+  transform binding, :layers_board, :not_exist
   _regdir =  cb["reg_dir"]
   _regdir = "/registry" unless _regdir
   layers = cb[layers_board]
@@ -122,6 +123,7 @@ Given /^I add the insecure registry to docker config on the node$/ do
 end
 
 Given /^I docker push on the node to the registry the following images:$/ do |table|
+  transform binding, :table
   ensure_admin_tagged
   table.raw.each do |image|
     step 'I run commands on the host:', table(%Q{
@@ -218,6 +220,7 @@ Given /^default docker-registry service is deleted$/ do
 end
 
  Given /^default registry is verified using a pod in a project( after scenario)?$/ do |after|
+  transform binding, :after
   p = proc {
     step %Q/I switch to the first user/
     step %Q/I create a new project/
@@ -237,6 +240,7 @@ end
 end
 
 Given /^I secure the default docker(?: (daemon set))? registry$/ do |deployment_type|
+  transform binding, :deployment_type
   _admin = admin
   _svc = service("docker-registry", project("default", switch: false))
   cb.default_reg_svc_ip = _svc.ip(user: _admin, cached: false)
@@ -330,6 +334,7 @@ Given /^I secure the default docker(?: (daemon set))? registry$/ do |deployment_
 end
 
 Given /^default registry service ip is stored in the#{OPT_SYM} clipboard$/ do |cb_name|
+  transform binding, :cb_name
   # save the orignial project name
   org_proj_name = project(generate: false).name rescue nil
   cb_name ||= :registry_ip
@@ -346,6 +351,7 @@ Given /^default registry service ip is stored in the#{OPT_SYM} clipboard$/ do |c
 end
 
 Given /^default (docker-registry|registry-console) route is stored in the#{OPT_SYM} clipboard$/ do |route_name, cb_name|
+  transform binding, :route_name, :cb_name
   # save the orignial project name
   org_proj_name = project(generate: false).name rescue nil
   cb_name ||= :registry_route
@@ -355,6 +361,7 @@ end
 
 # store the default registry scheme type by doing 'oc get dc/docker-registry -o yaml'
 Given /^I store the default registry scheme to the#{OPT_SYM} clipboard$/ do |cb_name|
+  transform binding, :cb_name
   ensure_admin_tagged
   cb_name ||= :registry_scheme
   @result = admin.cli_exec(:get, resource: 'dc', resource_name: 'docker-registry', n: 'default', o: 'yaml')
@@ -366,6 +373,7 @@ end
 
 # Generate registry route for online and dedicated environments
 Given /^I attempt the registry route based on API url and store it in the#{OPT_SYM} clipboard$/ do |cb_name|
+  transform binding, :cb_name
   api_hostname = env.api_hostname
   raise "The API route got from env is incorrect" unless api_hostname =~ /api\..+/
   cb_name ||= :registry_route
@@ -389,7 +397,8 @@ Given /^I enable image-registry default route$/ do
   project(org_proj_name) if org_proj_name
 end
 
-Given /^default image registry route is stored in the#{OPT_SYM} clipboard$/ do |cb_name| 
+Given /^default image registry route is stored in the#{OPT_SYM} clipboard$/ do |cb_name|
+  transform binding, :cb_name
   ensure_admin_tagged
   org_proj_name = project(generate: false).name rescue nil
   cb_name ||= :registry_route
@@ -398,11 +407,13 @@ Given /^default image registry route is stored in the#{OPT_SYM} clipboard$/ do |
 end
 
 Given /^current generation number of#{OPT_QUOTED} deployment is stored into#{OPT_SYM} clipboard$/ do |name, cb_name|
+  transform binding, :name, :cb_name
   cb_name ||= :generation_number
   cb[cb_name] = deployment(name).generation_number(user: user, cached: false)
 end
 
 Given /^docker config for default image registry is stored to the#{OPT_SYM} clipboard$/ do |cb_name|
+  transform binding, :cb_name
   cb_name ||= :dockercfg_file
   step %Q/I enable image-registry default route/
   step %Q/default image registry route is stored in the :integrated_reg_ip clipboard/
@@ -427,6 +438,7 @@ Given /^docker config for default image registry is stored to the#{OPT_SYM} clip
 end
 
 Given /^certification for default image registry is stored to the#{OPT_SYM} clipboard$/ do |cb_name|
+  transform binding, :cb_name
   ensure_admin_tagged
   cb_name ||= :reg_crt_name
   

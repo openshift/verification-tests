@@ -20,6 +20,7 @@ end
 # save the appropriate catalog name for the target operator to a clipboard for
 # future reference
 Given /^I save the catalogsource for #{QUOTED} operator to the#{OPT_SYM} clipboard$/ do |op_name, cb_name |
+  transform binding, :op_name, :cb_name
   cb_name ||= :catalog
   cb[cb_name] = package_manifest(op_name).catalog_source
 end

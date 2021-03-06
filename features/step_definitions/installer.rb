@@ -3,6 +3,7 @@
 # required input: to_image in the calling step, which can be passed manually or set in the environment variable
 # UPGRADE_TARGET_VERSION
 Given /^I upgrade my cluster to:$/ do | table |
+  transform binding, :table
   ensure_admin_tagged
   _admin = admin
   opts = opts_array_to_hash(table.raw)

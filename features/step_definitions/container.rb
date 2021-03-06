@@ -1,6 +1,7 @@
 # container related steps
 #
 Given /^I wait for the container(?: named #{QUOTED})? of the #{QUOTED} pod to terminate with reason #{SYM}$/ do |container_name, pod_name, reason|
+  transform binding, :container_name, :pod_name, :reason
   ready_timeout = 15 * 60
   @result = pod(pod_name).container(user: user, name: container_name).wait_till_completed(ready_timeout)
 
@@ -10,6 +11,7 @@ Given /^I wait for the container(?: named #{QUOTED})? of the #{QUOTED} pod to te
 end
 
 Given /^I wait for the container(?: named #{QUOTED})? of the #{QUOTED} pod to reach waiting "(.*?)" state(?: within #{NUMBER} seconds)?$/ do |container_name, pod_name, state_reason, timeout|
+  transform binding, :container_name, :pod_name, :state_reason, :timeout
 	timeout = timeout ? Integer(timeout) : 3 * 60
   matched_c_status = []
 	success = wait_for(timeout){

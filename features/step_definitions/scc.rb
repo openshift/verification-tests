@@ -1,5 +1,6 @@
 # creates a SCC policy and registers clean-up to remove it after scenario
 Given /^the following scc policy is created: (.+)$/ do |policy|
+  transform binding, :policy
   ensure_admin_tagged
 
   if policy.include? '://'
@@ -33,6 +34,7 @@ end
 
 # setup tier_down to restore scc after scenario end;
 Given /^scc policy #{QUOTED} is restored after scenario$/ do |policy|
+  transform binding, :policy
   ensure_admin_tagged
 
   @result = admin.cli_exec(:get, resource: 'scc', resource_name: policy, o: 'yaml')
@@ -63,6 +65,7 @@ Given /^scc policy #{QUOTED} is restored after scenario$/ do |policy|
 end
 
 Given /^SCC #{QUOTED} is (added to|removed from) the #{QUOTED} (user|group|service account)( without teardown)?$/ do |scc, op, which, type, no_teardown|
+  transform binding, :scc, :op, :which, :type, :no_teardown
   ensure_admin_tagged
   if no_teardown
     ensure_upgrade_prepare_tagged

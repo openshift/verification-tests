@@ -1,4 +1,5 @@
 Given /^there is no (\w+) in the#{OPT_QUOTED} project$/ do |resource, project_name|
+  transform binding, :resource, :project_name
   project_name = ' "' + project_name + '"' if project_name
   @result = user.cli_exec(:get, resource: resource, n: project_name)
   step %Q/the output should match "No resources found"/
@@ -36,6 +37,7 @@ end
 
 # try to create a new project with current user
 When /^I create a new project(?: via (.*?))?$/ do |via|
+  transform binding, :via
   @result = BushSlicer::Project.create(by: user, name: rand_str(5, :dns), _via: (via.to_sym if via))
   if @result[:success]
     @projects << @result[:project]
@@ -81,6 +83,7 @@ end
 
 # create x number of projects
 Given /^I create (\d+) new projects?$/ do |num|
+  transform binding, :num
   (1..Integer(num)).each {
     step 'I create a new project'
     unless @result[:success]
@@ -92,6 +95,7 @@ end
 
 # create a new project with user options,either via web or cli
 When /^I create a project via (.+?) with:$/ do |via, table|
+  transform binding, :via, :table
   opts = opts_array_to_hash(table.raw)
   @result = BushSlicer::Project.create(by: user, name: rand_str(5, :dns), _via: (via.to_sym if via), **opts)
   if @result[:success]
@@ -108,6 +112,7 @@ When /^I create a project via (.+?) with:$/ do |via, table|
 end
 
 Given /^I use the "(.+?)" project$/ do |project_name|
+  transform binding, :project_name
   # this would find project in cache and move it up the stack
   # or create a new BushSlicer::Project object and put it on top of stack
   project(project_name)
@@ -120,6 +125,7 @@ Given /^I use the "(.+?)" project$/ do |project_name|
 end
 
 Given /^admin uses the "(.+?)" project$/ do |project_name|
+  transform binding, :project_name
   ensure_admin_tagged
 
   project(project_name)
@@ -151,6 +157,7 @@ When /^admin creates a project$/ do
 end
 
 When /^admin creates a project with:$/ do |table|
+  transform binding, :table
   ensure_admin_tagged
 
   opts = opts_array_process(table.raw)
@@ -184,6 +191,7 @@ Given /^admin creates a project with a random schedulable node selector$/ do
 end
 
 When /^admin deletes the #{QUOTED} project$/ do |project_name|
+  transform binding, :project_name
   p = project(project_name)
   @result = p.delete(by: :admin)
   @projects.delete(p) if @result[:success]
@@ -191,6 +199,7 @@ end
 
 # tries to delete last used project or a project with given name (if name given)
 When /^I delete the(?: "(.+?)")? project$/ do |project_name|
+  transform binding, :project_name
   p = project(project_name)
   @result = project(project_name).delete(by: user)
   if @result[:success]
@@ -203,6 +212,7 @@ When /^I delete the(?: "(.+?)")? project$/ do |project_name|
 end
 
 Given /^the(?: "(.+?)")? project is deleted$/ do |project_name|
+  transform binding, :project_name
   project_name = ' "' + project_name + '"' if project_name
   step "I delete the#{project_name} project"
   unless @result[:success]
@@ -253,6 +263,7 @@ Then(/^the project should be empty$/) do
 end
 
 When /^I get project ([-a-zA-Z_]+) named #{QUOTED}(?: as (YAML|JSON))?$/ do |resource, resource_name, format|
+  transform binding, :resource, :resource_name, :format
   _resource = resource(resource_name, resource, project_name: project.name)
   @result = _resource.get(user: user)
   if @result[:success] && format == "JSON"
@@ -266,16 +277,19 @@ end
 
 # discouraged
 When /^I get project ([-a-zA-Z_]+)$/ do |type|
+  transform binding, :type
   @result = user.cli_exec(:get, resource: type, n: project.name)
 end
 
 # discouraged
 When /^I get project ([-a-zA-Z_]+) with labels:$/ do |resource, table|
+  transform binding, :resource, :table
   labels = table.raw.flatten
   @result = user.cli_exec(:get, resource: resource, n: project.name, l: labels)
 end
 
 When /^I get project ([-a-zA-Z_]+) as (YAML|JSON)$/ do |type, format|
+  transform binding, :type, :format
   @result = {}
   clazz = resource_class(type)
 

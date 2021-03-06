@@ -1,4 +1,5 @@
 Given /^I obtain test data (file|dir) #{QUOTED}(?: into the #{QUOTED} dir)?$/ do |type, path, dest_dir|
+  transform binding, :type, :path, :dest_dir
   accepted_roots = [
     "#{BushSlicer::HOME}/testdata",
     "#{BushSlicer::HOME}/features/tierN/testdata",
@@ -28,6 +29,7 @@ Given /^I obtain test data (file|dir) #{QUOTED}(?: into the #{QUOTED} dir)?$/ do
 end
 
 Given /^I save the (output|response) to file>(.+)$/ do |part, filepath|
+  transform binding, :part, :filepath
   part = part == "response"? :response : :stdout
   File.write(File.expand_path(filepath.strip), @result[part])
 end
@@ -36,6 +38,7 @@ end
 #   then write another step. If pattern starts with '/' or '%r{' treat as RE.
 #   Relative paths are considered inside workdir.
 Given /^I delete matching lines from "(.+)":$/ do |file, table|
+  transform binding, :file, :table
 
   # deal with relative file names
   if !file.start_with?("/")
@@ -69,6 +72,7 @@ end
 # This step is used to replace strings and patterns in file. If pattern starts
 #   with '/' or '%r{' treat as RE. Relative paths are considered inside workdir.
 Given /^I replace (lines|content) in "(.+)":$/ do |mode, file, table|
+  transform binding, :mode, :file, :table
 
   # deal with relative file names
   if !file.start_with?("/")
@@ -145,6 +149,7 @@ end
 #    Given I restore the "/home/gusun/test/file" file
 #
 Given /^I restore the file "(.+)"$/ do |file|
+  transform binding, :file
   file.strip!
   filename = File.basename(file)
 
@@ -160,6 +165,7 @@ end
 # @param [Table] table Contents of the file
 # @note Creates a local file with the given content
 Given /^(?:a|the) "([^"]+)" file is (created|appended) with the following lines:$/ do |path, action, table|
+  transform binding, :path, :action, :table
   mode = "w" if action =~ /created/
   mode = "a" if action =~ /appended/
   FileUtils::mkdir_p File.expand_path(File::dirname(path))
@@ -175,6 +181,7 @@ Given /^(?:a|the) "([^"]+)" file is (created|appended) with the following lines:
 end
 
 Given /^I create the #{QUOTED} directory$/ do |path|
+  transform binding, :path
   FileUtils.mkdir_p(path)
 end
 
@@ -182,6 +189,7 @@ end
 # @param [String] path Path to the file
 # @note Deletes a local file
 Given /^(?:a|the) "([^"]+)" file is deleted( if it exists)?$/ do |file, graceful|
+  transform binding, :file, :graceful
   if File.exist?(file)
     FileUtils.rm(file)
   else
@@ -197,6 +205,7 @@ end
 # @param [String] path Path to the file
 # @note Checks for the presence or absence of a local file
 Given /^(?:a|the) "([^"]+)" file is( not)? present$/ do |file, negative|
+  transform binding, :file, :negative
   if File.exist?(file)
     if negative
       raise "The file exists, when it should not."
@@ -209,6 +218,7 @@ Given /^(?:a|the) "([^"]+)" file is( not)? present$/ do |file, negative|
 end
 
 Given /^the #{QUOTED} directory listing is stored in the#{OPT_SYM} clipboard$/ do |dir_name, cb_name|
+  transform binding, :dir_name, :cb_name
   cb_name ||= :dir_list
   # ignore the . and .. entries
   cb[cb_name] = Dir.entries(dir_name) - ['.', '..']
@@ -218,6 +228,7 @@ end
 # @param [String] directory name we want to list
 # @return [Boolean] true if directory contains all of the expected, false otherwise
 Given /^the #{QUOTED} directory contains:$/ do |dir_name, table|
+  transform binding, :dir_name, :table
   # ignore the . and .. entries
   dir_list = Dir.entries(dir_name) - ['.', '..']
   expected_list = table.raw.flatten
@@ -226,14 +237,17 @@ Given /^the #{QUOTED} directory contains:$/ do |dir_name, table|
 end
 
 Given /^the #{QUOTED} directory is removed$/ do | dir_name |
+  transform binding, :dir_name
   localhost.delete(File.expand_path(dir_name), r: true)
 end
 
 Given /^the #{QUOTED} file is made executable$/ do | filename |
+  transform binding, :filename
   FileUtils.chmod("a+x",filename)
 end
 
 Given /^I read the #{QUOTED} file$/ do |path|
+  transform binding, :path
   file = expand_path path # lets fail if file is not found
 
   @result = {

@@ -26,6 +26,7 @@ end
 
 # Subscribe the 3rd level operator according to the channel
 Given /^optional operator "([^"]*)" from channel "([^"]*)" is subscribed in "([^"]*)" project$/ do | name, channel, proj_name|
+  transform binding, :name, :channel, :proj_name
     ensure_admin_tagged
     step %Q/I switch to cluster admin pseudo user/
     step %Q/I use the "#{proj_name}" project/

@@ -7,11 +7,13 @@
 #   is same as on creation.
 # see #to_step_procs
 Then /^I register clean\-up steps:$/ do |table|
+  transform binding, :table
   teardown_add *to_step_procs(table)
 end
 
 # clean-up steps executed when clipboard is `nil` or `false`
 Given /^I register skippable clean\-up steps based on the #{SYM} clipboard:$/ do |cb_name, table|
+  transform binding, :cb_name, :table
   _procs = to_step_procs(table)
   teardown_add {_procs.reverse_each(&:call) unless cb[cb_name]}
   # teardown_add *to_step_procs(table).map{|p| proc {p.call unless cb[cb_name]}}
@@ -23,6 +25,7 @@ end
 #   steps, so you may need the step `the expression should be true>` as a
 #   workaround
 Then /^system verification steps are used:$/ do |table|
+  transform binding, :table
   steps = to_step_procs(table)
   steps.reverse_each { |s| s.call }
   teardown_add *steps
@@ -31,6 +34,7 @@ end
 # repeat steps specified in a multi-line string until they pass (that means
 #   until they execute without raising an error)
 Given /^I wait(?: up to #{NUMBER} seconds)? for the steps to pass:$/ do |seconds, steps_string|
+  transform binding, :seconds, :steps_string
   begin
     unless steps_string.respond_to? :lines
       # we are using a table instead of multi-line string it seems
@@ -62,6 +66,7 @@ end
 # note that when steps started before time limit was reached, if they take
 # more time to complete than the limit, total execute time will be longer
 Given /^I repeat the steps up to #{NUMBER} seconds:$/ do |seconds, steps_string|
+  transform binding, :seconds, :steps_string
   begin
     logger.dedup_start
     seconds = Integer(seconds)
@@ -77,6 +82,7 @@ end
 
 # repeat steps x times in a multi-line string
 Given /^I run the steps #{NUMBER} times:$/ do |num, steps_string|
+  transform binding, :num, :steps_string
   eval_regex = /\#\{(.+?)\}/
   eval_found = steps_string =~ eval_regex
   begin
@@ -97,6 +103,7 @@ end
 # repeat steps with the values from a clipboard
 # Example in scenario 'Loop over the clipboard'
 Given /^I repeat the following steps for each #{SYM} in cb\.([\w]+):$/ do |varname, cbsym, steps_str|
+  transform binding, :varname, :cbsym, :steps_str
   eval_regex = /\#\{(.+?)\}/
   eval_found = steps_str =~ eval_regex
   begin

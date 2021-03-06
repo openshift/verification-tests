@@ -1,4 +1,5 @@
 Given /^there are no PVs with local path #{QUOTED}$/ do | local_path |
+  transform binding, :local_path
   ensure_admin_tagged
 
   pvs = BushSlicer::PersistentVolume.list(user: admin)
@@ -10,6 +11,7 @@ Given /^there are no PVs with local path #{QUOTED}$/ do | local_path |
 end
 
 Given /^I get the log of local storage provisioner for node #{QUOTED}?$/ do |node_name|
+  transform binding, :node_name
   ensure_admin_tagged
 
   pods = env.local_storage_provisioner_project.pods(by: admin)
@@ -20,6 +22,7 @@ Given /^I get the log of local storage provisioner for node #{QUOTED}?$/ do |nod
 end
 
 Given /^I delete the local storage provisioner for node #{QUOTED}?$/ do |node_name|
+  transform binding, :node_name
   ensure_admin_tagged
   ensure_destructive_tagged
 

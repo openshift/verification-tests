@@ -1,4 +1,5 @@
 Given /^the(?: "([^"]*)")? image stream was created$/ do |is_name|
+  transform binding, :is_name
   @result = image_stream(is_name).wait_to_appear(user, 30)
 
   unless @result[:success]
@@ -7,6 +8,7 @@ Given /^the(?: "([^"]*)")? image stream was created$/ do |is_name|
 end
 
 Given /^the(?: "([^"]*)")? image stream becomes ready$/ do |is_name|
+  transform binding, :is_name
   @result = image_stream(is_name).wait_till_ready(user,120)
 
   unless @result[:success]
@@ -15,6 +17,7 @@ Given /^the(?: "([^"]*)")? image stream becomes ready$/ do |is_name|
 end
 
 Given /^I store the image stream tag of the#{OPT_QUOTED} image stream latest tag in the#{OPT_SYM} clipboard$/ do |is_spec, cb_name|
+  transform binding, :is_spec, :cb_name
   cb_name ||= :tag
   org_project = project(generate: false) rescue nil
 
@@ -40,6 +43,7 @@ Given /^I store the image stream tag of the#{OPT_QUOTED} image stream latest tag
 end
 
 Given /^the(?: "([^"]*)")? image stream tag was created$/ do |istag_name|
+  transform binding, :istag_name
   @result = image_stream_tag(istag_name).wait_to_appear(user, 30)
 
   unless @result[:success]

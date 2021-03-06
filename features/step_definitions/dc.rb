@@ -3,6 +3,7 @@
 require 'active_support/core_ext/hash/slice.rb'
 
 Given /^I wait until the status of deployment "(.+)" becomes :(.+)$/ do |resource_name, status|
+  transform binding, :resource_name, :status
   ready_timeout = 10 * 60
   @result = dc(resource_name).wait_till_status(status.to_sym, user, ready_timeout)
   unless @result[:success]
@@ -12,6 +13,7 @@ Given /^I wait until the status of deployment "(.+)" becomes :(.+)$/ do |resourc
 end
 
 Given /^(I|admin) stores? in the#{OPT_SYM} clipboard the replication controller of deployment config #{QUOTED}(?: from the #{QUOTED} project)?$/ do |who, cb_name, dc_name, project_name|
+  transform binding, :who, :cb_name, :dc_name, :project_name
   cb_name ||= 'rc'
   who = who == "admin" ? admin : user
   _rc = dc(dc_name, project(project_name, switch: false)).rc(user: who, cached: false)
@@ -32,6 +34,7 @@ end
 # restore the selected dc in teardown by getting current deployment and do:
 #   'oc rollback <dc_name> --to-version=<saved_good_version>'
 Given /^default (router|docker-registry) deployment config is restored after scenario$/ do |resource|
+  transform binding, :resource
   ensure_destructive_tagged
   _admin = admin
   _project = project("default", switch: false)
@@ -63,6 +66,7 @@ Given /^default (router|docker-registry) deployment config is restored after sce
 end
 
 Given /^default (docker-registry|router) replica count is restored after scenario$/ do |resource|
+  transform binding, :resource
   ensure_destructive_tagged
   _admin = admin
   _project = project("default", switch: false)
@@ -96,6 +100,7 @@ Given /^default (docker-registry|router) replica count is restored after scenari
 end
 
 Given /^number of replicas of#{OPT_QUOTED} deployment config becomes:$/ do |name, table|
+  transform binding, :name, :table
   options = hash_symkeys(table.rows_hash)
 
   int_keys = %i[seconds] + BushSlicer::DeploymentConfig::REPLICA_COUNTERS.keys
@@ -113,6 +118,7 @@ Given /^number of replicas of#{OPT_QUOTED} deployment config becomes:$/ do |name
 end
 
 Given /^(I|admin) redeploys? #{QUOTED} dc( after scenario)?$/ do |who, dc_name, at_teardown|
+  transform binding, :who, :dc_name, :at_teardown
   _user = who == "admin" ? admin : user
   _dc = dc(dc_name)
 
@@ -149,6 +155,7 @@ Given /^(I|admin) redeploys? #{QUOTED} dc( after scenario)?$/ do |who, dc_name, 
 end
 
 Given /^master CA is added to the#{OPT_QUOTED} dc$/ do |name|
+  transform binding, :name
 
   step %Q/certification for default image registry is stored to the :reg_crt_name clipboard/
   step %Q/I run the :create_configmap client command with:/, table(%{
@@ -191,6 +198,7 @@ Given /^master CA is added to the#{OPT_QUOTED} dc$/ do |name|
 end
 
 Given /^a deploymentConfig becomes ready with labels:$/ do |table|
+  transform binding, :table
   labels = table.raw.flatten # dimentions irrelevant
   dc_timeout = 10 * 60
   ready_timeout = 15 * 60
@@ -211,6 +219,7 @@ Given /^a deploymentConfig becomes ready with labels:$/ do |table|
 end
 
 Given /^build configs that trigger the#{OPT_QUOTED} dc are stored in the#{OPT_SYM} clipboard$/ do |dc_name, cb_name|
+  transform binding, :dc_name, :cb_name
   cb_name ||= :dcbcs
 
   cb[cb_name] = dc(dc_name).trigger_build_configs(cached: false)

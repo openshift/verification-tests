@@ -25,6 +25,7 @@ Given /^a secret is created for admin kubeconfig in current project$/ do
 end
 
 Given /^I save the project hosting #{QUOTED} resource to#{OPT_QUOTED} clipboard/ do |resource, cb_name|
+  transform binding, :resource, :cb_name
   ensure_admin_tagged
   cb_name ||= :namespace
   @result = admin.cli_exec(:get, all_namespaces: true, resource: resource, o: 'yaml')

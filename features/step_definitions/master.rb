@@ -1,6 +1,7 @@
 # steps which interact with master-config.yaml file.
 
 Given /^master config is merged with the following hash:$/ do |yaml_string|
+  transform binding, :yaml_string
   ensure_destructive_tagged
 
   env.master_services.each { |service|
@@ -38,6 +39,7 @@ end
 #end
 
 Given /^the value with path #{QUOTED} in master config is stored into the#{OPT_SYM} clipboard$/ do |path, cb_name|
+  transform binding, :path, :cb_name
   ensure_admin_tagged
   config_hash = env.master_services[0].config.as_hash()
   cb_name ||= "config_value"
@@ -45,6 +47,7 @@ Given /^the value with path #{QUOTED} in master config is stored into the#{OPT_S
 end
 
 Given /^the master service is restarted on all master nodes( after scenario)?$/ do |after|
+  transform binding, :after
   ensure_destructive_tagged
 
   _master_services = env.master_services
@@ -77,6 +80,7 @@ Given /^I use the first master host$/ do
 end
 
 Given /^I run commands on all masters:$/ do |table|
+  transform binding, :table
   ensure_admin_tagged
   @result = BushSlicer::ResultHash.aggregate_results env.master_hosts.map { |host|
     host.exec_admin(table.raw.flatten)
@@ -92,6 +96,7 @@ Given /^the master is operational$/ do
 end
 
 Given /^the etcd version is stored in the#{OPT_SYM} clipboard$/ do |cb_name|
+  transform binding, :cb_name
   ensure_admin_tagged
   cb_name ||= :etcd_version
   # get etcd version depending if we have that executable installed or not
@@ -108,6 +113,7 @@ Given /^the etcd version is stored in the#{OPT_SYM} clipboard$/ do |cb_name|
 end
 
 Given /^the #{QUOTED} path is( recursively)? removed on all masters after scenario$/ do |path, recursively|
+  transform binding, :path, :recursively
   @result = env.master_hosts.reverse_each { |host|
     @host = host
     step %{the "#{path}" path is#{recursively} removed on the host after scenario}

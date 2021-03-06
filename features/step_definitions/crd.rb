@@ -1,4 +1,5 @@
 Given /^the #{QUOTED} #{QUOTED} CRD is recreated after scenario$/ do |name, crd|
+  transform binding, :name, :crd
   ensure_admin_tagged
   allowed_crds = ["kubeapiserver", "openshiftapiserver"]
 
@@ -11,6 +12,7 @@ Given /^the #{QUOTED} #{QUOTED} CRD is recreated after scenario$/ do |name, crd|
 end
 
 Given /^the #{QUOTED} #{QUOTED} CR is restored after scenario$/ do |name, crd|
+  transform binding, :name, :crd
   ensure_admin_tagged
   ensure_destructive_tagged
   org_crd = {}
