@@ -254,7 +254,9 @@ Given /^the metering service is installed(?: to #{OPT_QUOTED})? using OLM(?: (CL
   install_method ||= 'CLI'
   metering_ns ||= ENV['METERING_NAMESPACE']
   metering_ns ||= "openshift-metering"
+  req_packagemanifest = "metering-ocp"
   step %Q/I setup a metering project named "#{metering_ns}"/ unless cb.metering_project_setup_done
+  step %Q(I save the catalogsource for "#{req_packagemanifest}" operator to the clipboard)
   if install_method == 'CLI'
     step %Q/I prepare OLM via CLI/
   elsif install_method == 'GUI'
@@ -265,7 +267,7 @@ Given /^the metering service is installed(?: to #{OPT_QUOTED})? using OLM(?: (CL
     step %Q(I open admin console in a browser)
     step %Q/I perform the :goto_operator_subscription_page web action with:/, table(%{
       | package_name     | metering-ocp        |
-      | catalog_name     | qe-app-registry     |
+      | catalog_name     | <%= cb.catalog %>   |
       | target_namespace | <%= project.name %> |
     })
     step %Q/I perform the :set_custom_channel_and_subscribe web action with:/, table(%{
@@ -552,10 +554,9 @@ Given /^I prepare OLM via CLI$/ do
   project_name_org = project.name
   # check if qe-app-registry exists
   logger.info("Checking for OLM pre-requisites...")
-  req_registry = 'qe-app-registry'
   req_packagemanifest = 'metering-ocp'
-  raise "required CatalogSource '#{req_registry}' is not found" unless catalog_source(req_registry, project('openshift-marketplace')).exists?
-  raise "required PackageManifest '#{req_packagemanifest}' is not found" unless package_manifest(req_packagemanifest).exists?
+  step %Q(I save the catalogsource for "#{req_packagemanifest}" operator to the clipboard)
+  req_registry = cb.catalog
   # need to change context back
   step %Q(I use the "#{project_name_org}" project)
   # save the default channel from packagemanifest to be referenced in the `I set operator channel` step

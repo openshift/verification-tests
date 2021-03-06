@@ -8,5 +8,5 @@ metadata:
 spec:
   channel: "<%= cb.default_channel %>"
   name: metering-ocp
-  source: qe-app-registry
+  source: "<%= cb.catalog %>"
   sourceNamespace: openshift-marketplace
