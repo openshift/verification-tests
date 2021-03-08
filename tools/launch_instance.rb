@@ -681,6 +681,12 @@ module BushSlicer
       hosts = []
       terminate_spec = {}
       file_details = {}
+
+      # Export configuration's block of environment variables to running environment context
+      conf[:services, :"install-envvars"].each do |key, val|
+        ENV[key.to_s] = val
+      end
+
       vars = YAML.load(readfile(config, details: file_details))
       if ENV["LAUNCHER_VARS"] && !ENV["LAUNCHER_VARS"].strip.empty?
         launcher_vars = YAML.load ENV["LAUNCHER_VARS"]
