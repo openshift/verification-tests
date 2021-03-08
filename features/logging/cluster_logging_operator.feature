@@ -152,3 +152,64 @@ Feature: cluster-logging-operator related test
       | card_name | #{cb.card} |
     Then the step should succeed
     """
+
+  # @author gkarager@redhat.com
+  # @case_id OCP-33868
+  @admin
+  @destructive
+  Scenario: Expose more fluentd knobs to support optimizing fluentd for different environments - Invalid Values
+    Given I obtain test data file "logging/clusterlogging/cl_fluentd-buffer_Invalid.yaml"
+    When I run the :create client command with:
+      | f | cl_fluentd-buffer_Invalid.yaml |
+    Then the step should fail
+
+  # @author gkarager@redhat.com
+  # @case_id OCP-33868
+  # @case_id OCP-33866
+  @admin
+  @destructive
+  Scenario: Expose more fluentd knobs to support optimizing fluentd for different environments
+    Given I obtain test data file "logging/clusterlogging/cl_fluentd-buffer.yaml"
+    And I create clusterlogging instance with:
+      | remove_logging_pods | true                   |
+      | crd_yaml            | cl_fluentd-buffer.yaml |
+    Then the step should succeed
+    And I wait for the "fluentd" config_map to appear up to 300 seconds
+    When I run the :extract admin command with:
+      | resource  | configmap/fluentd |
+      | confirm   | true              |
+    Then the step should succeed
+    And evaluation of `File.read("fluent.conf")` is stored in the :fluent_conf clipboard
+    And the expression should be true> cb.fluent_conf != nil
+
+  # @author gkarager@redhat.com
+  # @case_id OCP-33894
+  @admin
+  @destructive
+  Scenario: Fluentd optimizing variable changes trigger new deployment
+    Given I obtain test data file "logging/clusterlogging/cl_fluentd-buffer_default.yaml"
+    And I create clusterlogging instance with:
+      | remove_logging_pods | true                   |
+      | crd_yaml            | cl_fluentd-buffer_default.yaml |
+    Then the step should succeed
+    And I wait for the "fluentd" config_map to appear up to 300 seconds
+    When I run the :extract admin command with:
+      | resource  | configmap/fluentd |
+      | confirm   | true              |
+    Then the step should succeed
+    And evaluation of `File.read("fluent.conf")` is stored in the :fluent_conf clipboard
+    And the expression should be true> cb.fluent_conf != nil
+    When I run the :patch client command with:
+      | resource      | clusterlogging                                                              |
+      | resource_name | instance                                                                    |
+      | p             | {"spec": {"forwarder": {"fluentd": {"buffer": {"flushMode":"immediate"}}}}} |
+      | type          | merge                                                                       |
+    Then the step should succeed
+    And I wait for the "fluentd" config_map to appear up to 300 seconds
+    When I run the :extract admin command with:
+      | resource  | configmap/fluentd |
+      | confirm   | true              |
+    Then the step should succeed
+    And evaluation of `File.read("fluent.conf")` is stored in the :fluent_conf1 clipboard
+    And the expression should be true> cb.fluent_conf1 != nil
+    And the expression should be true> cb.fluent_conf != cb.fluent_conf1
