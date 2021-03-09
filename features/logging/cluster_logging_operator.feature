@@ -162,6 +162,7 @@ Feature: cluster-logging-operator related test
     When I run the :create client command with:
       | f | cl_fluentd-buffer_Invalid.yaml |
     Then the step should fail
+    And I delete the clusterlogging instance
 
   # @author gkarager@redhat.com
   # @case_id OCP-33793
@@ -188,7 +189,7 @@ Feature: cluster-logging-operator related test
   Scenario: Fluentd optimizing variable changes trigger new deployment
     Given I obtain test data file "logging/clusterlogging/cl_fluentd-buffer_default.yaml"
     And I create clusterlogging instance with:
-      | remove_logging_pods | true                   |
+      | remove_logging_pods | true                           |
       | crd_yaml            | cl_fluentd-buffer_default.yaml |
     Then the step should succeed
     And I wait for the "fluentd" config_map to appear up to 300 seconds
