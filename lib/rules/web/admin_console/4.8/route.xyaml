@@ -133,28 +133,28 @@ set_insecure_traffic:
 upload_certificate_file:
   elements:
   - selector:
-      xpath: //input[@aria-describedby="certificate-help"]/following-sibling::span[contains(.,"Browse…")]/input
+      xpath: //input[@aria-describedby="certificate-help"]/following-sibling::span[contains(.,"Browse")]/input
     visible: false
     type: filefield
     op: set <certificate_path>
 upload_key_file:
   elements:
   - selector:
-      xpath: //input[@aria-describedby="private-key-help"]/following-sibling::span[contains(.,"Browse…")]/input
+      xpath: //input[@aria-describedby="private-key-help"]/following-sibling::span[contains(.,"Browse")]/input
     visible: false
     type: filefield
     op: set <private_key_path>
 upload_ca_certificate_file:
   elements:
   - selector:
-      xpath: //input[@aria-describedby="ca-certificate-help"]/following-sibling::span[contains(.,"Browse…")]/input
+      xpath: //input[@aria-describedby="ca-certificate-help"]/following-sibling::span[contains(.,"Browse")]/input
     visible: false
     type: filefield
     op: set <ca_certificate_path>
 upload_destination_ca_crt_file:
   elements:
   - selector:
-      xpath: //input[@aria-describedby="destination-ca-certificate-help"]/following-sibling::span[contains(.,"Browse…")]//input
+      xpath: //input[@aria-describedby="destination-ca-certificate-help"]/following-sibling::span[contains(.,"Browse")]//input
     visible: false
     type: filefield
     op: set <destination_ca_certificate>
