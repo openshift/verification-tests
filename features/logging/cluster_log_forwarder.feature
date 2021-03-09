@@ -501,3 +501,131 @@ Feature: cluster log forwarder features
       | infra-container.log |
     """
     
+  # @author gkarager@redhat.com
+  # @case_id OCP-32628
+  @admin
+  @destructive
+  Scenario: Fluentd continues to ship logs even when one of multiple destination is down
+    # create project to generate logs
+    Given I switch to the first user
+    Given I create a project with non-leading digit name
+    And evaluation of `project` is stored in the :proj clipboard
+    And I obtain test data file "logging/loggen/container_json_log_template.json"
+    When I run the :new_app client command with:
+      | file | container_json_log_template.json |
+    Then the step should succeed
+    # create fluentd and elasticsearch receiver
+    Given I switch to cluster admin pseudo user
+    And I use the "openshift-logging" project
+    And fluentd receiver is deployed as insecure in the "openshift-logging" project
+    And elasticsearch receiver is deployed as insecure in the "openshift-logging" project
+    # create clusterlogforwarder instace with multiple receiver
+    Given admin ensures "instance" cluster_log_forwarder is deleted from the "openshift-logging" project after scenario
+    And I obtain test data file "logging/clusterlogforwarder/multiple_receiver/clf_fluent_es.yaml"
+    When I process and create:
+      | f | clf_fluent_es.yaml |
+    Then the step should succeed
+    And I wait for the "instance" cluster_log_forwarder to appear
+    # create clusterlogging instance
+    Given I obtain test data file "logging/clusterlogging/fluentd_only.yaml"
+    When I create clusterlogging instance with:
+      | remove_logging_pods | true              |
+      | crd_yaml            | fluentd_only.yaml |
+      | check_status        | false             |
+    Then the step should succeed
+    Given I wait for the "fluentd" daemon_set to appear up to 300 seconds
+    And <%= daemon_set('fluentd').replica_counters[:desired] %> pods become ready with labels:
+      | logging-infra=fluentd |
+    #Check logs in fluentd server
+    Given a pod becomes ready with labels:
+      | component=fluentdserver |
+    And I wait up to 300 seconds for the steps to pass:
+    """
+    When I execute on the pod:
+      | ls | -l | /fluentd/log |
+    Then the output should contain:
+      | app.log             |
+      | audit.log           |
+      | infra.log           |
+      | infra-container.log |
+    """
+    #Check logs in elasticsearch server
+    Given a pod becomes ready with labels:
+      | app=elasticsearch-server |
+    And I wait up to 300 seconds for the steps to pass:
+    """
+    # check app logs
+    When I execute on the pod:
+      | curl | -sk | -XGET | http://localhost:9200/*/_count?format=JSON | -H | Content-Type: application/json | -d | {"query": {"match": {"kubernetes.namespace_name": "<%= cb.proj.name %>"}}} |
+    Then the step should succeed
+    And evaluation of `JSON.parse(@result[:stdout])['count']` is stored in the :app_log_count_1 clipboard
+    And the expression should be true> cb.app_log_count_1 > 0
+
+    # check journal logs
+    When I execute on the pod:
+      | curl | -sk | -XGET | http://localhost:9200/*/_count?format=JSON | -H | Content-Type: application/json | -d | {"query": {"exists": {"field": "systemd"}}} |
+    Then the step should succeed
+    And evaluation of `JSON.parse(@result[:stdout])['count']` is stored in the :journal_log_count_1 clipboard
+    And the expression should be true> cb.journal_log_count_1 > 0
+
+    # check logs in openshift* namespace
+    When I execute on the pod:
+      | curl | -sk | -XGET | http://localhost:9200/*/_count?format=JSON | -H | Content-Type: application/json | -d | {"query": {"regexp": {"kubernetes.namespace_name": "openshift@"}}} |
+    Then the step should succeed
+    And evaluation of `JSON.parse(@result[:stdout])['count']` is stored in the :openshift_log_count_1 clipboard
+    And the expression should be true> cb.openshift_log_count_1 > 0
+
+    # check audit logs
+    When I execute on the pod:
+      | curl | -sk | -XGET | http://localhost:9200/*/_count?format=JSON | -H | Content-Type: application/json | -d | {"query": {"exists": {"field": "auditID"}}} |
+    Then the step should succeed
+    And evaluation of `JSON.parse(@result[:stdout])['count']` is stored in the :audit_log_count_1 clipboard
+    And the expression should be true> cb.audit_log_count_1 > 0
+    """
+    # delete fluentd server
+    Given I ensure "fluentdserver" config_map is deleted from the "openshift-logging" project
+    And I ensure "fluentdserver" deployment is deleted from the "openshift-logging" project
+    And I ensure "fluentdserver" service is deleted from the "openshift-logging" project
+    # create another project to generate logs
+    Given I switch to the first user
+    Given I create a project with non-leading digit name
+    And evaluation of `project` is stored in the :proj1 clipboard
+    And I obtain test data file "logging/loggen/container_json_log_template.json"
+    When I run the :new_app client command with:
+      | file | container_json_log_template.json |
+    Then the step should succeed
+    # Again check logs in elasticsearch server
+    Given I switch to cluster admin pseudo user
+    Given I use the "openshift-logging" project
+    And a pod becomes ready with labels:
+      | app=elasticsearch-server |
+    And I wait up to 300 seconds for the steps to pass:
+    """
+    # check app logs
+    When I execute on the pod:
+      | curl | -sk | -XGET | http://localhost:9200/*/_count?format=JSON | -H | Content-Type: application/json | -d | {"query": {"match": {"kubernetes.namespace_name": "<%= cb.proj1.name %>"}}} |
+    Then the step should succeed
+    And evaluation of `JSON.parse(@result[:stdout])['count']` is stored in the :app_log_count_2 clipboard
+    And the expression should be true> cb.app_log_count_2 > 0
+
+    # check journal logs
+    When I execute on the pod:
+      | curl | -sk | -XGET | http://localhost:9200/*/_count?format=JSON | -H | Content-Type: application/json | -d | {"query": {"exists": {"field": "systemd"}}} |
+    Then the step should succeed
+    And evaluation of `JSON.parse(@result[:stdout])['count']` is stored in the :journal_log_count_2 clipboard
+    And the expression should be true> cb.journal_log_count_2 > cb.journal_log_count_1
+
+    # check logs in openshift* namespace
+    When I execute on the pod:
+      | curl | -sk | -XGET | http://localhost:9200/*/_count?format=JSON | -H | Content-Type: application/json | -d | {"query": {"regexp": {"kubernetes.namespace_name": "openshift@"}}} |
+    Then the step should succeed
+    And evaluation of `JSON.parse(@result[:stdout])['count']` is stored in the :openshift_log_count_2 clipboard
+    And the expression should be true> cb.openshift_log_count_2 > cb.openshift_log_count_1
+
+    # check audit logs
+    When I execute on the pod:
+      | curl | -sk | -XGET | http://localhost:9200/*/_count?format=JSON | -H | Content-Type: application/json | -d | {"query": {"exists": {"field": "auditID"}}} |
+    Then the step should succeed
+    And evaluation of `JSON.parse(@result[:stdout])['count']` is stored in the :audit_log_count_2 clipboard
+    And the expression should be true> cb.audit_log_count_2 > cb.audit_log_count_1
+    """

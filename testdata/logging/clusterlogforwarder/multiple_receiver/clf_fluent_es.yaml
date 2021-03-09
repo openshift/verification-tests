@@ -14,12 +14,10 @@ objects:
       type: fluentdForward
       url: 'tcp://fluentdserver.openshift-logging.svc:24224'
       insecure: true
-    - name: rsyslog-default
-      type: syslog
-      syslog:
-        facility: local0
-        severity: informational
-      url: "udp://rsyslogserver.openshift-logging.svc:514"
+    - name: insecure-es
+      type: elasticsearch
+      url: "http://elasticsearch-server.openshift-logging.svc:9200"
+      insecure: true
     pipelines:
     - name: forward-to-multilple-server
       inputRefs:
@@ -28,4 +26,4 @@ objects:
       - audit
       outputRefs:
       - fluentd-insecure
-      - rsyslog-default
+      - insecure-es
