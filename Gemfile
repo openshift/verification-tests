@@ -12,7 +12,15 @@ gem 'net-ssh'
 # https://github.com/net-ssh/net-ssh/pull/646
 gem 'net-scp'
 # gem 'net-ssh-multi'
-gem 'cucumber', '~>2.4.0'
+
+##### Things to verify on Cucumber upgrade: #####
+# the hack in step_definitions/transform.rb
+# ReportPortal formatter (in case Formatter API changed
+# The PolarShift scenario filter - TestCaseManagerFilter
+# BushSlicer::CucuFormatter is we are still uploading html logs to a file server
+gem 'cucumber', '~>5.3.0'
+#########################
+
 # gem 'rspec', '~>2.14.1'
 # gem 'rspec-expectations', '~>2.14.0'
 gem 'aws-sdk', '~> 3'
