@@ -164,8 +164,7 @@ Feature: cluster-logging-operator related test
     Then the step should fail
 
   # @author gkarager@redhat.com
-  # @case_id OCP-33868
-  # @case_id OCP-33866
+  # @case_id OCP-33793
   @admin
   @destructive
   Scenario: Expose more fluentd knobs to support optimizing fluentd for different environments
