@@ -64,7 +64,7 @@ add_user:
     op: send_keys <user_name>
 click_add_more_users:
   params:
-    button_text: Add More
+    button_text: Add more
   action: click_button
 remove_user_from_group:
   params:
