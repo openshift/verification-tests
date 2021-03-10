@@ -158,11 +158,16 @@ Feature: cluster-logging-operator related test
   @admin
   @destructive
   Scenario: Expose more fluentd knobs to support optimizing fluentd for different environments - Invalid Values
+    Given I use the "openshift-logging" project
+    And I register clean-up steps:
+    """
+    Given I delete the clusterlogging instance
+    Then the step should succeed
+    """
     Given I obtain test data file "logging/clusterlogging/cl_fluentd-buffer_Invalid.yaml"
     When I run the :create client command with:
       | f | cl_fluentd-buffer_Invalid.yaml |
     Then the step should fail
-    And I delete the clusterlogging instance
 
   # @author gkarager@redhat.com
   # @case_id OCP-33793
@@ -213,3 +218,4 @@ Feature: cluster-logging-operator related test
     And evaluation of `File.read("fluent.conf")` is stored in the :fluent_conf1 clipboard
     And the expression should be true> cb.fluent_conf1 != nil
     And the expression should be true> cb.fluent_conf != cb.fluent_conf1
+  
