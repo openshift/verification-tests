@@ -23,3 +23,9 @@ Feature: some storage related scenarios
   @admin
   Scenario: Store PV into clipboard
     Given admin stores all persistentvolumes to the clipboard
+
+  @admin
+  Scenario: test LocalVolumeDiscoveryResult support
+    Given I switch to cluster admin pseudo user
+    Given I use the "openshift-local-storage" project
+    Given I save all localvolumediscoveryresults for my cluster to clipboard

@@ -29,3 +29,12 @@ Given /^I delete the local storage provisioner for node #{QUOTED}?$/ do |node_na
 
   @result = env.master_hosts[0].exec_admin("oc delete pod #{pod.name} -n #{env.local_storage_provisioner_project.name}")
 end
+
+Given /^I save all localvolumediscoveryresults for my cluster to#{OPT_SYM} clipboard$/ do |cb_name|
+  ensure_admin_tagged
+  cb_name ||= :avail_devices
+  discovery_results = BushSlicer::LocalVolumeDiscoveryResult.list(user: user, project: project)
+  res_map = {}
+  discovery_results.select {|r| res_map[r.name] = local_volume_discovery_result(r.name).available_devices }
+  cb[cb_name] = res_map
+end
