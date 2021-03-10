@@ -33,3 +33,10 @@ check_memory_descending order_result:
              }
              return true
     expect_result: true
+check_status_popover:
+  elements:
+  - selector:
+      xpath: //span[contains(.,'<status>')]
+    op: click
+  - selector:
+      xpath: //div[contains(@class,'pf-c-popover__body') and contains(.,'<message>')]

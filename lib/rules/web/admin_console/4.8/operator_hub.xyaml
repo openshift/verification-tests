@@ -322,11 +322,9 @@ check_ticked_capability_level:
 click_checkbox_from_provider_type:  
   elements:
   - selector:
-      xpath:  //form[@data-test-group-name='providerType']
-    timeout: 30
-  - selector:
-      xpath: //form[@data-test-group-name='providerType']//*[contains(@class, 'pf-c-check__label') and contains(text(), '<text>')]
+      xpath: //form[@data-test-group-name='catalogSourceDisplayName']//*[contains(@class, 'pf-c-check__label') and contains(text(), '<text>')]
     op: click
+    timeout: 40
 click_qe_customized_provider:
   params:
     text: OpenShift QE
