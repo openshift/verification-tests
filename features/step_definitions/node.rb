@@ -140,6 +140,20 @@ Given /^I run( background)? commands on the nodes in the#{OPT_SYM} clipboard:$/ 
   cb[tmpcb] = nil
 end
 
+Given /^I run( background)? commands on the nodes in the#{OPT_SYM} clipboard after scenario:$/ do |bg, cbname, table|
+  ensure_admin_tagged
+  ensure_destructive_tagged
+  cbname ||= "nodes"
+  teardown_add {
+    tmpcb = rand_str(5, "dns")
+    cb[tmpcb] = cb[cbname].map(&:host)
+
+    step "I run#{bg} commands on the hosts in the :#{tmpcb} clipboard:", table
+
+    cb[tmpcb] = nil
+  }
+end
+
 # use a specific node in cluster
 Given /^I use the #{QUOTED} node$/ do | host |
   @host = node(host).host
