@@ -8,14 +8,18 @@ Feature: idle service related scenarios
     When I run the :create client command with:
       | f | web-server-rc.yaml |
     Then the step should succeed
-    Given I wait until replicationController "web-server-rc" is ready
-    And I wait until number of replicas match "1" for replicationController "web-server-rc"
+    And a pod becomes ready with labels:
+      | name=web-server-rc |
+    Then evaluation of `pod.name` is stored in the :pod_name clipboard
     When I expose the "service-unsecure" service
     Then the step should succeed
+    And I wait up to 60 seconds for a web server to become available via the "service-unsecure" route
+
+    # ilde the service then wake up
     When I run the :idle client command with:
       | svc_name | service-unsecure |
     Then the step should succeed
-    Given I wait until number of replicas match "0" for replicationController "web-server-rc"
+    Given I wait for the resource "pod" named "<%= cb.pod_name %>" to disappear within 120 seconds
     When I run the :get client command with:
       | resource | endpoints |
     Then the step should succeed
@@ -23,10 +27,10 @@ Feature: idle service related scenarios
       | service-secure.*none |
       | service-unsecure.*none |
     Then I wait up to 60 seconds for a web server to become available via the "service-unsecure" route
-    Given I wait until number of replicas match "1" for replicationController "web-server-rc"
     And a pod becomes ready with labels:
       | name=web-server-rc |
     Then evaluation of `pod.ip` is stored in the :pod_ip clipboard
+    And evaluation of `pod.name` is stored in the :pod_name clipboard
     When I run the :get client command with:
       | resource | endpoints |
     Then the step should succeed
@@ -36,13 +40,14 @@ Feature: idle service related scenarios
 
     # check edge route
     When I run the :create_route_edge client command with:
-      | name | edge-route |
+      | name    | edge-route       |
       | service | service-unsecure |
     Then the step should succeed
+    And I wait up to 60 seconds for a secure web server to become available via the "edge-route" route
     When I run the :idle client command with:
       | svc_name | service-unsecure |
     Then the step should succeed
-    Given I wait until number of replicas match "0" for replicationController "web-server-rc"
+    Given I wait for the resource "pod" named "<%= cb.pod_name %>" to disappear within 120 seconds
     When I run the :get client command with:
       | resource | endpoints |
     Then the step should succeed
@@ -51,10 +56,10 @@ Feature: idle service related scenarios
       | service-unsecure.*none |
     Given I use the "edge-route" service
     Then I wait up to 60 seconds for a secure web server to become available via the "edge-route" route
-    Given I wait until number of replicas match "1" for replicationController "web-server-rc"
     And a pod becomes ready with labels:
       | name=web-server-rc |
     Then evaluation of `pod.ip` is stored in the :pod_ip clipboard
+    And evaluation of `pod.name` is stored in the :pod_name clipboard
     When I run the :get client command with:
       | resource | endpoints |
     Then the step should succeed
@@ -67,10 +72,11 @@ Feature: idle service related scenarios
       | name    | route-pass     |
       | service | service-secure |
     Then the step should succeed
+    Then I wait up to 60 seconds for a secure web server to become available via the "route-pass" route
     When I run the :idle client command with:
       | svc_name | service-secure |
     Then the step should succeed
-    Given I wait until number of replicas match "0" for replicationController "web-server-rc"
+    Given I wait for the resource "pod" named "<%= cb.pod_name %>" to disappear within 120 seconds
     When I run the :get client command with:
       | resource | endpoints |
     Then the step should succeed
@@ -79,7 +85,6 @@ Feature: idle service related scenarios
       | service-unsecure.*none |
     Given I use the "route-pass" service
     Then I wait up to 60 seconds for a secure web server to become available via the "route-pass" route
-    Given I wait until number of replicas match "1" for replicationController "web-server-rc"
     And a pod becomes ready with labels:
       | name=web-server-rc |
     Then evaluation of `pod.ip` is stored in the :pod_ip clipboard
@@ -98,8 +103,9 @@ Feature: idle service related scenarios
     When I run the :create client command with:
       | f | web-server-rc.yaml |
     Then the step should succeed
-    Given I wait until replicationController "web-server-rc" is ready
-    And I wait until number of replicas match "1" for replicationController "web-server-rc"
+    And a pod becomes ready with labels:
+      | name=web-server-rc |
+    Then evaluation of `pod.name` is stored in the :pod_name clipboard
 
     # check reencrypt route
     Given I obtain test data file "routing/reencrypt/route_reencrypt_dest.ca"
@@ -108,10 +114,11 @@ Feature: idle service related scenarios
       | service    | service-secure          |
       | destcacert | route_reencrypt_dest.ca |
     Then the step should succeed
+    And I wait up to 60 seconds for a secure web server to become available via the "route-reen" route
     When I run the :idle client command with:
       | svc_name | service-secure |
     Then the step should succeed
-    Given I wait until number of replicas match "0" for replicationController "web-server-rc"
+    Given I wait for the resource "pod" named "<%= cb.pod_name %>" to disappear within 120 seconds
     When I run the :get client command with:
       | resource | endpoints |
     Then the step should succeed
@@ -120,7 +127,6 @@ Feature: idle service related scenarios
       | service-unsecure.*none |
     Given I use the "route-reen" service
     Then I wait up to 60 seconds for a secure web server to become available via the "route-reen" route
-    Given I wait until number of replicas match "1" for replicationController "web-server-rc"
     And a pod becomes ready with labels:
       | name=web-server-rc |
     Then evaluation of `pod.ip` is stored in the :pod_ip clipboard
