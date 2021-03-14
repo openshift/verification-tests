@@ -7,4 +7,4 @@ spec:
   -  172.31.249.227
   namespaceSelector:
     matchLabels:
-      og: qe
+      org: qe

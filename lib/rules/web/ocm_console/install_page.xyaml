@@ -39,6 +39,10 @@ go_to_aro_pull_secret_page:
     url: /openshift/install/azure/aro-provisioned
 go_to_pull_secret_page:
     url: /openshift/install/pull-secret
+go_to_creation_page_cloud_tab:
+    url: /openshift/create/cloud
+go_to_creation_page_datacenter_tab:
+    url: /openshift/create/datacenter
 
 check_common_part:
     action: check_cluster_list_page_title
@@ -87,7 +91,7 @@ check_install_page:
     action: check_breadcrumbs_in_install_overview_page
     elements:
         - selector:
-            xpath: //span[@class='infra-crc-icon-text' and text()='Powered by Red Hat CodeReady Containers']
+            xpath: //span[text()='Powered by Red Hat CodeReady Containers']
 required_install_page_items_loaded:
     element:
         selector:
@@ -214,16 +218,16 @@ check_download_part_in_ppc64le_install_page:
 click_download_crc_button:
     element:
         selector:
-            xpath: //a[text()='Download Code-Ready Containers']/../../div/select
+            xpath: //a[text()='Download CodeReady Containers']/../../div/select
         op: click
 check_download_crc_button_in_crc_install_page:
     action: click_download_crc_button
     elements:
         - selector:
-            xpath: //a[text()='Download Code-Ready Containers']/../../div/select/option[text()='<os_name>']
+            xpath: //a[text()='Download CodeReady Containers']/../../div/select/option[text()='<os_name>']
           op: click
         - selector:
-            xpath: //a[text()='Download Code-Ready Containers' and @href='https://mirror.openshift.com/pub/openshift-v4/clients/crc/latest/<os_link>']
+            xpath: //a[text()='Download CodeReady Containers' and @href='https://mirror.openshift.com/pub/openshift-v4/clients/crc/latest/<os_link>']
 check_linux_download_crc_button_in_crc_install_page:
     params:
         os_name: Linux
@@ -247,7 +251,7 @@ check_download_part_for_crc_install_page:
 click_copyPullSecret_button:
     element:
         selector:
-            xpath: //button[@id='copyPullSecret']
+            xpath: //button[text()='Copy pull secret']
         op: click
     element:
         selector:
@@ -260,21 +264,19 @@ check_pull_secret_part_in_install_page:
         - selector:
             xpath: //button[@type='button' and text()='Download pull secret']
         - selector:
-            xpath: //button[@id='copyPullSecret' and contains(., 'Copy pull secret')]
+            xpath: //button[contains(., 'Copy pull secret')]
 check_data_collection_message_in_install_page:
     elements:
         - selector:
             xpath: //a[contains(@href, '/latest/support/remote_health_monitoring/about-remote-health-monitoring.html') and contains(., 'Learn more')]
         - selector:
-            xpath: //p[text()='Red Hat collects a limited amount of telemetry data. By installing OpenShift Container Platform 4, you accept our data collection policy.']
+            xpath: //small[text()='Red Hat collects a limited amount of telemetry data. By installing OpenShift Container Platform 4, you accept our data collection policy.']
 check_breadcrumbs_include_infrastructure_in_install_page:
     elements:
         - selector:
             xpath: //li[contains(@href, '/openshift/')]/a[text()='Clusters']
         - selector:
             xpath: //a[contains(@href, '/openshift/create') and text()='Create']
-        - selector:
-            xpath: //a[contains(@href, '/openshift/install') and text()='OpenShift Container Platform']
         - selector:
             xpath: //a[contains(@href, '/openshift/install/<provider_link>') and text()='<provider_name>']
         - selector:
@@ -286,13 +288,11 @@ check_breadcrumbs_exclude_infrastructure_in_install_page:
         - selector:
             xpath: //a[contains(@href, '/openshift/create') and text()='Create']
         - selector:
-            xpath: //a[contains(@href, '/openshift/install') and text()='OpenShift Container Platform']
-        - selector:
             xpath: //li[@class='pf-c-breadcrumb__item' and text()='<provider_name>']
 check_developer_preview_bar_in_install_page:
     elements:
         - selector:
-            xpath: //div[@class='developer-preview' and text()='Developer Preview']
+            xpath: //span[text()='Developer Preview']
         - selector:
             xpath: //p[text()='Because these are developer preview builds:']
         - selector:
@@ -315,7 +315,7 @@ check_install_page_common_part_two:
         - selector:
             xpath: //p[text()='The installer will take about 45 minutes to run.']
         - selector:
-            xpath: //div[text()='To quickly create a cluster with the default options, run the following command:']
+            xpath: //p[text()='To quickly create a cluster with the default options, run the following command:']
         - selector:
             xpath: //input[@value='./openshift-install create cluster']
 check_install_page_rhcos_part:
@@ -527,7 +527,7 @@ check_bare_metal_upi_install_page:
         - selector:
             xpath: //a[contains(@href, 'installing_bare_metal/installing-bare-metal.html#creating-machines-bare-metal') and text()='Learn more']
         - selector:
-            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-installer.x86_64.iso') and text()='Download RHCOS ISO']
+            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-live.x86_64.iso') and text()='Download RHCOS ISO']
         - selector:
             xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-metal.x86_64.raw.gz') and text()='Download RHCOS RAW']
 check_bare_metal_upi_page_title:
@@ -683,29 +683,23 @@ check_power_page_title:
       expect_result: true
 
 check_codeready_install_page:
-    action: required_codeready_install_items_loaded
-    action: check_codeready_page_title
+    action: creation_cards_page_loaded
+    action: check_creation_cards_page_title
     action: check_pull_secret_part_in_install_page
     action: check_download_part_for_crc_install_page
     elements:
         - selector:
-            xpath: //h3[text()='CodeReady Containers archive']
+            xpath: //h2[text()='Red Hat CodeReady Containers']
         - selector:
-            xpath: //p[text()='Download and extract the CodeReady Containers archive for your operating system and place the executable in your']
+            xpath: //span[text()='local sandbox']
+        - selector:
+            xpath: //div[text()='Create a minimal cluster on your desktop/laptop for local development and testing.']
+        - selector:
+            xpath: //p[contains(., 'appear in the OpenShift Cluster Manager unless you enable cluster monitoring and telemetry.')]
         - selector:
             xpath: //h2[text()='Follow the documentation to install CodeReady containers']
         - selector:
             xpath: //a[contains(@href, 'https://access.redhat.com/documentation/en-us/red_hat_codeready_containers') and text()='Get started']
-        - selector:
-            xpath: //p[contains(., 'Your CodeReady Container cluster will not show in your list of clusters in OpenShift Cluster Manager since it is short-lived and occasionally running')]
-required_codeready_install_items_loaded:
-    elements:
-        - selector:
-            xpath: //h1[text()="Install OpenShift on a laptop with CodeReady Containers"]
-check_codeready_page_title:
-    scripts:
-    - command: return document.title=='Install OpenShift 4 | Red Hat OpenShift Cluster Manager | CRC'
-      expect_result: true
 
 check_pre_release_page:
     action: required_pre_release_page_items_loaded
@@ -752,3 +746,66 @@ check_pull_secret_page:
             xpath: //h3[text()='Pull secret']
         - selector:
             xpath: //a[contains(@href, '/latest/support/remote_health_monitoring/about-remote-health-monitoring.html') and contains(., 'Learn more')]
+check_creation_page_datacenter_tab:
+    action: creation_cards_page_loaded
+    action: check_creation_cards_page_title
+    elements:
+        - selector:
+            xpath: //h2[text()='Assisted Installer']
+        - selector:
+            xpath: //span[text()='Technology preview']
+        - selector:
+            xpath: //div[text()='Create a cluster on bare metal following a guided installation process to connect your hardware.']
+        - selector:
+            xpath: //a[@href='/openshift/assisted-installer/clusters/~new' and text()='Create cluster']
+        - selector:
+            xpath: //h2[text()='Other datacenter options']
+        - selector:
+            xpath: //div[text()='Create clusters on supported infrastructure using our extensive documentation and installer program.']
+        - selector:
+            xpath: //a[@href='/openshift/install/metal' and text()='Bare Metal']
+        - selector:
+            xpath: //a[@href='/openshift/install/ibmz/user-provisioned' and text()='IBM Z']
+        - selector:
+            xpath: //a[@href='/openshift/install/power/user-provisioned' and text()='Power']
+        - selector:
+            xpath: //a[@href='/openshift/install/openstack' and text()='Red Hat OpenStack']
+        - selector:
+            xpath: //a[@href='/openshift/install/rhv' and text()='Red Hat Virtualization']
+        - selector:
+            xpath: //a[@href='/openshift/install/vsphere/user-provisioned' and text()='vSphere']
+        - selector:
+            xpath: //a[@href='/openshift/install/metal' and text()='Platform agnostic']
+check_creation_page_cloud_tab_with_quota:
+    action: creation_cards_page_loaded
+    action: check_creation_cards_page_title
+    action: check_creation_page_cloud_tab_specific_part_with_quota
+    action: check_creation_page_cloud_tab_common_part
+check_creation_page_cloud_tab_specific_part_with_quota:
+    elements:
+        - selector:
+            xpath: //h2[text()='Active subscriptions']
+        - selector:
+            xpath: //a[@href='https://www.openshift.com/products/dedicated/' and text()='Red Hat OpenShift Dedicated']
+        - selector:
+            xpath: //a[@href='/openshift/create/osd']/button[text()='Create cluster']
+        - selector:
+            xpath: //a[@href='/openshift/subscriptions']/button[text()='View your available quota']
+check_creation_page_cloud_tab_common_part:
+    elements:
+        - selector:
+            xpath: //h2[text()='Managed services']
+        - selector:
+            xpath: //h2[text()='Run it yourself']
+        - selector:
+            xpath: //a[@href='/openshift/install/aws' and text()='AWS']
+        - selector:
+            xpath: //a[@href='/openshift/install/azure' and text()='Azure']
+        - selector:
+            xpath: //a[@href='/openshift/install/gcp' and text()='Google Cloud']
+        - selector:
+            xpath: //a[@href='/openshift/install/metal' and text()='Platform agnostic']
+check_creation_page_cloud_tab_without_quota:
+    action: creation_cards_page_loaded
+    action: check_creation_cards_page_title
+    action: check_creation_page_cloud_tab_common_part

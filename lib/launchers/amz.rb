@@ -23,6 +23,13 @@ module BushSlicer
       @config = conf[:services, service_name]
       @can_terminate = true
 
+      idx = ENV["AWS_CREDENTIALS"]&.index(':')
+      if idx
+        logger.info("Using envvar AWS_CREDENTIALS.")
+        access_key = ENV["AWS_CREDENTIALS"][0..idx-1]
+        secret_key = ENV["AWS_CREDENTIALS"][idx+1..-1]
+      end
+
       if access_key && secret_key
         awscred = {
           "aws_access_key_id" => access_key,
@@ -613,6 +620,11 @@ module BushSlicer
     # @return [String]
     def secret_key
       ec2.client.config.credentials.secret_access_key
+    end
+
+    # @return [String]
+    def account_id
+      client_sts.get_caller_identity.to_h[:account]
     end
 
     # @return [Object] undefined

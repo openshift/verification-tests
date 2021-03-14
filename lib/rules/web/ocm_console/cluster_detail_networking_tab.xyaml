@@ -9,7 +9,7 @@ click_networking_tab:
 networking_tab_loaded:
     elements:
         - selector:
-            xpath: //h2[text()='Master endpoint API']
+            xpath: //h1[text()='Master API endpoint']
         - selector:
             xpath: //label[text()='Make API private']
         - selector:
@@ -29,7 +29,7 @@ check_network_configuration:
     action: click_networking_tab
     elements:
         - selector:
-            xpath: //h2[text()='Network configuration']
+            xpath: //div[text()='Network configuration']
         - selector:
             xpath: //dl/div[1]/dt/span[text()='Machine CIDR']
         - selector:

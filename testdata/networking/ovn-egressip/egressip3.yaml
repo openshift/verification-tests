@@ -10,4 +10,4 @@ spec:
       team: blue
   namespaceSelector:
     matchLabels:
-      og: qe
+      org: qe

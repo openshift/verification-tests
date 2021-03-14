@@ -229,6 +229,10 @@ check_error_message_for_missing_required_name:
   params:
     content: name or generateName is required
   action: check_page_contains
+check_catalogsource_removed_message:
+  params:
+    content: CatalogSource removed
+  action: check_page_match
 check_quay_image_security_exists_on_dashboard:
   element:
     selector: &quay_image_security
@@ -280,7 +284,7 @@ check_marketplace_operator_description_on_overlay:
 check_community_operator_description_on_overlay:
   params:
     text: Community
-    description: This is a community provided operator
+    description: This is a community provided Operator
   action: click_checkbox_from_provider_type
   action: open_first_card_in_overlay
   action: check_operator_description_on_overlay
@@ -377,17 +381,17 @@ check_label_and_value_in_modal:
       xpath: //h5[contains(@class,'properties-side-panel-pf-property-label') and text()='<label>']/../div[contains(@class,'properties-side-panel-pf-property-value')]/div[text()='<value>']
 check_disconnected_infra_value:
   params:
-    label: Infrastructure Features
+    label: Infrastructure features
     value: Disconnected
   action: check_label_and_value_in_modal
 check_proxy_infra_value:
   params:
-    label: Infrastructure Features
+    label: Infrastructure features
     value: Proxy
   action: check_label_and_value_in_modal
 check_fips_infra_value:
   params:
-    label: Infrastructure Features
+    label: Infrastructure features
     value: FIPS Mode
   action: check_label_and_value_in_modal
 check_3scale_subs_value:
@@ -513,12 +517,12 @@ subscribe_operator_to_namespace_with_manually_approval:
 check_message_during_installing:
   elements:
   - selector:
-      xpath: //h2[contains(., 'Installing operator')]
+      xpath: //h2[contains(., 'Installing Operator')]
     timeout: 20
   - selector:
-      xpath: //p[contains(., 'The operator is being installed. This may take a few minutes.')]
+      xpath: //p[contains(., 'The Operator is being installed. This may take a few minutes.')]
   - selector:
-      xpath: //a[contains(@href, '/k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion') and contains(., 'View Installed Operators')]
+      xpath: //a[contains(@href, '/k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion') and contains(., 'View installed Operators')]
 check_manual_approve_info:
   elements:
   - selector:
@@ -531,7 +535,7 @@ check_installation_failure_message:
     timeout: 30
 check_view_error_button:
   params:
-    text: View Error
+    text: View error
     link_url: /k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion
   action: check_link_and_text
 check_customized_operator_purchase_link:
@@ -624,7 +628,7 @@ check_operator_column_all_namespace:
 check_logging_operator_filtered_out:
   elements:
   - selector:
-      xpath: //div[contains(@class, 'catalog-tile-pf-title') and text()='Cluster Logging']
+      xpath: //div[contains(@class, 'catalog-tile-pf-title') and contains(text(), 'Logging')]
 click_create_mockk8sdropdownresouce:
   params:
     button_text: Create MockK8sDropdownResource
@@ -693,12 +697,12 @@ check_spec_descriptor_grouping:
 click_field_resource_limits_edit_button:
   elements:
   - selector:
-      xpath: //dd[@data-test-selector='details-item-value__<field_group_name>']//dd[@data-test-selector='details-item-value__Resource Requirements']//dt[text()='Resource Limits']/following::button[1]
+      xpath: //dd[@data-test-selector='details-item-value__<field_group_name>']//dd[@data-test-selector='details-item-value__Resource Requirements']//dt[text()='Resource limits']/following::button[1]
     op: click
 click_field_resource_requests_edit_button:
   elements:
   - selector:
-      xpath: //dd[@data-test-selector='details-item-value__<field_group_name>']//dd[@data-test-selector='details-item-value__Resource Requirements']//dt[text()='Resource Requests']/following::button[1]
+      xpath: //dd[@data-test-selector='details-item-value__<field_group_name>']//dd[@data-test-selector='details-item-value__Resource Requirements']//dt[text()='Resource requests']/following::button[1]
     op: click
 set_cpu_cores_value:
   params:

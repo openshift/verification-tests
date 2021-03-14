@@ -109,4 +109,57 @@ module BushSlicer
       return Object.const_get(class_opts[:class]).new(**class_opts[:opts])
     end
   end
+
+  class FlexyEnvVariable
+    attr_reader :var_name
+
+    def initialize(var_name)
+      @var_name=var_name
+    end
+    def ==(other)
+      self.class===other &&
+        @var_name==other.var_name
+    end
+    def to_s
+      ENV[@var_name]
+    end
+    
+    alias :eql? :==
+    alias :to_str :to_s
+  end
+
+  class FlexyEnvFile
+    @@files = Hash.new
+    attr_reader :var_name
+
+    def initialize(var_name)
+      @var_name=var_name
+    end
+    def ==(other)
+      self.class===other && 
+        @var_name==other.var_name
+    end
+    def to_s
+      file=@@files[@var_name]
+
+      # file has been deleted on filesystem
+      if file && !File.file?(file.path)
+        @@files.except!(@var_name)
+        file=nil
+      end
+
+      if file.nil?
+        e = ENV[@var_name]
+        Tempfile.open("env_#{@var_name}_") do |f|
+          f.write("#{e}") if !e.nil?
+          @@files[@var_name]=f
+          file=f
+        end
+      end
+      file.path
+    end
+
+    alias :eql? :==
+    alias :to_str :to_s
+  end
 end

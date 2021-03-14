@@ -492,32 +492,18 @@ Given /^I have a iSCSI setup in the environment$/ do
 
   if _pod.ready?(user: admin, quiet: true)[:success]
     logger.info "found existing iSCSI pod, skipping config"
-    cb.iscsi_ip = _service.ip(user: admin)
   elsif _pod.exists?(user: admin, quiet: true)
     logger.warn "broken iSCSI pod, will try to recreate keeping other config"
     @result = admin.cli_exec(:delete, n: _project.name, object_type: "pod", object_name_or_id: _pod.name)
     raise "could not delete broken iSCSI pod" unless @result[:success]
   else
-    env.node_hosts.each do |host|
-      setup_commands = [
-        "sed -i '/^node.session.auth./'d  /etc/iscsi/iscsid.conf",
-        "cat >> /etc/iscsi/iscsid.conf << EOF\n" +
-          "node.session.auth.authmethod = CHAP\n" +
-          "node.session.auth.username = 5f84cec2\n" +
-          "node.session.auth.password = b0d324e9\n" +
-          "EOF\n",
-        "systemctl enable iscsid",
-        "systemctl restart iscsid"
-      ]
-      res = host.exec_admin(*setup_commands)
-      raise "iSCSI initiator setup commands error" unless res[:success]
-    end
     @result = admin.cli_exec(:create, n: _project.name, f: "#{BushSlicer::HOME}/testdata/storage/iscsi/iscsi-target.json")
     raise "could not create iSCSI pod" unless @result[:success]
   end
 
   if !_service.exists?(user:admin, quiet: true)
-    @result = admin.cli_exec(:create, n: _project.name, f: 'https://raw.githubusercontent.com/openshift-qe/docker-iscsi/master/service.json')
+    step %Q{I obtain test data file "storage/iscsi/service.json"}
+    @result = admin.cli_exec(:create, n: _project.name, f: "service.json")
     raise "could not create iSCSI service" unless @result[:success]
   end
 
@@ -612,12 +598,12 @@ Given /^I have a registry in my project$/ do
   if BushSlicer::Project::SYSTEM_PROJECTS.include?(project(generate: false).name)
     raise "I refuse create registry in a system project: #{project.name}"
   end
-  @result = admin.cli_exec(:new_app, docker_image: "registry:2.5.1", namespace: project.name)
+  @result = admin.cli_exec(:new_app, docker_image: "quay.io/openshifttest/registry:2", namespace: project.name)
   step %Q/the step should succeed/
-  @result = admin.cli_exec(:set_probe, resource: "dc/registry", readiness: true, liveness: true, get_url: "http://:5000/v2",namespace: project.name)
+  @result = admin.cli_exec(:set_probe, resource: "deploy/registry", readiness: true, liveness: true, get_url: "http://:5000/v2",namespace: project.name)
   step %Q/the step should succeed/
   step %Q/a pod becomes ready with labels:/, table(%{
-       | deploymentconfig=registry |
+       | deployment=registry |
   })
   cb.reg_svc_ip = "#{service("registry").ip(user: user)}"
   cb.reg_svc_port = "#{service("registry").ports(user: user)[0].dig("port")}"
@@ -630,7 +616,7 @@ Given /^I have a registry with htpasswd authentication enabled in my project$/ d
   if BushSlicer::Project::SYSTEM_PROJECTS.include?(project(generate: false).name)
     raise "I refuse create registry in a system project: #{project.name}"
   end
-  @result = admin.cli_exec(:new_app, docker_image: "registry:2", namespace: project.name)
+  @result = admin.cli_exec(:new_app, as_deployment_config:true, docker_image: "quay.io/openshifttest/registry:2", namespace: project.name)
   step %Q/the step should succeed/
   step %Q/a pod becomes ready with labels:/, table(%{
        | deploymentconfig=registry |
@@ -645,7 +631,7 @@ Given /^I have a registry with htpasswd authentication enabled in my project$/ d
     | namespace   | #{project.name} |
   })
   step %Q/the step should succeed/
-  step %Q/I run the :env client command with:/, table(%{
+  step %Q/I run the :set_env client command with:/, table(%{
     | resource  | dc/registry                                 |
     | e         | REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd  |
     | e         | REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm |

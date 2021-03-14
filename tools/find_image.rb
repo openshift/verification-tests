@@ -30,17 +30,17 @@ class QueryPayload
       c.action do |args, options|
         options.default \
           :build_type => "nightly-",
-          :url => "https://openshift-release.svc.ci.openshift.org/"
+          :url => "https://amd64.ocp.releases.ci.openshift.org/"
         raise "missing query string" if options.query.nil?
         print("Querying #{options.url} against #{options.build_type}\n")
-        doc = Nokogiri::HTML(open(options.url).read)
+        doc = Nokogiri::HTML(URI.open(options.url).read)
         links = doc.xpath("//a[contains(text(), '#{options.build_type}')]")
 
         target_links = links.map { |l|  options.url + l.attributes['href'].value }
         threads = []
         target_links.each do |link|
           threads << Thread.new(link) do |i|
-            doc = Nokogiri::HTML(open(link).read)
+            doc = Nokogiri::HTML(URI.open(link).read)
               if doc.to_s.include? options.query
                 puts "Pattern '#{options.query}' found in payload: #{link}"
               end

@@ -6,6 +6,12 @@ switch_to_machine_pools_tab:
     action: machine_pools_table_loaded
 check_machine_pool_tab:
     action: check_specified_machine_pool
+    action:
+        if_param: label_key
+        ref: check_machine_pool_label
+    action:
+        if_param: taint_key
+        ref: check_machine_pool_taint
 machine_pools_table_loaded:
     elements:
         - selector:
@@ -22,18 +28,40 @@ machine_pools_table_loaded:
 check_specified_machine_pool:
     elements:
         - selector:
-            xpath: //table[@aria-label='Machine pools']/tbody/tr[<row_number>]/td[1][text()='<machine_pool_name>']
+            xpath: //table[@aria-label='Machine pools']/tbody[<row_number>]/tr/td[@data-label='Machine pool' and text()='<machine_pool_name>']
         - selector:
-            xpath: //table[@aria-label='Machine pools']/tbody/tr[<row_number>]/td[2][text()='<instance_type>']
+            xpath: //table[@aria-label='Machine pools']/tbody[<row_number>]/tr/td[@data-label='Instance type' and text()='<instance_type>']
         - selector:
-            xpath: //table[@aria-label='Machine pools']/tbody/tr[<row_number>]/td[3][text()='<availability_zones>']
+            xpath: //table[@aria-label='Machine pools']/tbody[<row_number>]/tr/td[@data-label='Availability zones' and text()='<availability_zones>']
         - selector:
-            xpath: //table[@aria-label='Machine pools']/tbody/tr[<row_number>]/td[4][text()='<node_count>']
-
+            xpath: //table[@aria-label='Machine pools']/tbody[<row_number>]/tr/td[@data-label='Node count' and text()='<node_count>']
+check_machine_pool_label:
+    action: expand_advance_machinepool_info
+    elements:
+        - selector:
+            xpath: //h4[text()='Labels']
+        - selector:
+            xpath: //h4[text()='Labels']/..//span[text()='<label_key> = <label_value>']
+    action: unexpand_advance_machinepool_info
+check_machine_pool_taint:
+    action: expand_advance_machinepool_info
+    elements:
+        - selector:
+            xpath: //h4[text()='Taints']
+        - selector:
+            xpath: //h4[text()='Taints']/..//span[text()='<taint_key> = <taint_value>:<taint_type>']
+    action: unexpand_advance_machinepool_info
+expand_advance_machinepool_info:
+    element:
+        selector:
+            xpath: //td[@data-label='Machine pool' and text()='<machine_pool_name>']/..//button[contains(@id,'expandable')]
+        op: click
+unexpand_advance_machinepool_info:
+    action: expand_advance_machinepool_info
 check_machine_pool_disappeared:
     element:
         selector:
-            xpath: //table[@aria-label='Machine pools']/tbody/tr/td[1][text()='<machine_pool_name>']
+            xpath: //table[@aria-label='Machine pools']/tbody/tr/td[@data-label='Machine pool' and text()='<machine_pool_name>']
         missing: true
     action:
         if_param: row_number
@@ -41,7 +69,7 @@ check_machine_pool_disappeared:
 check_machine_pool_row_disappeared:
     element:
         selector:
-            xpath: //table[@aria-label='Machine pools']/tbody/tr[<row_number>]
+            xpath: //div[@class='ins-c-skeleton ins-c-skeleton__lg']
         missing: true
         timeout: 5
 
@@ -69,6 +97,9 @@ create_machine_pool:
     action:
         if_param: label_value
         ref: input_label_value
+    action:
+        if_param: taint_key
+        ref: set_taint
     action:
         if_param: compute_node
         ref: select_node_count

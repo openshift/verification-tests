@@ -240,3 +240,33 @@ end
 Given /^I close the current browser$/ do
   browser.finalize
 end
+
+Given /^I check all relatedObjects of clusteroperator "(.*?)" are shown/ do |clusteroperator_name|
+  ensure_admin_tagged
+  #get relatedObjects of clusteroperator
+  relatedObjectsArray = cluster_operator(clusteroperator_name).related_objects
+  relatedObjectsArray.each do |related_object|
+    if !related_object.key?('name') or related_object['name'] == ""
+      next
+    end
+
+    if !related_object.key?('group') or related_object['group'] == ""
+      related_object_group = '-'
+    else
+      related_object_group = related_object['group']
+    end
+
+    if !related_object.key?('namespace') or related_object['namespace'] == ""
+      related_object_ns = '-'
+    else
+      related_object_ns = related_object['namespace']
+    end
+    step "I perform the :check_co_related_objs web action with:", table(%{
+      | name      | #{related_object['name']}     |
+      | resource  | #{related_object['resource']} |
+      | group     | #{related_object_group}       |
+      | namespace | #{related_object_ns}          |
+    })
+    step %Q/the step should succeed/
+  end
+end

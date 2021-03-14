@@ -14,7 +14,7 @@ check_cluster_list_page_without_cluster:
         - selector:
             xpath: //a[contains(@href, '/openshift/register')]/button[text()='Register cluster']
         - selector:
-            xpath: //a[contains(@href, '/openshift/archived')]/button[text()='View archived clusters']
+            xpath: //a[contains(@href, '/openshift/archived')]/button[text()='View cluster archives']
 
 cluster_list_page_loaded:
     action: create_cluster_button_loaded
@@ -31,14 +31,14 @@ check_cluster_list_page:
         - selector:
             css: input.pf-c-form-control.cluster-list-filter
         - selector:
-            xpath: //span[text()='Filter']
+            xpath: //span[text()='Cluster type']
         - selector:
             xpath: //button[text()='Create cluster']/../../..//button[@aria-label='Actions']
           op: click
         - selector:
             xpath: //a[text()='Register cluster' and contains(@href, '/openshift/register')]
         - selector:
-            xpath: //a[text()='Show archived clusters' and contains(@href, '/openshift/archived')]
+            xpath: //a[text()='View cluster archives' and contains(@href, '/openshift/archived')]
         - selector:
             xpath: //button[text()='Create cluster']/../../..//button[@aria-label='Actions']
           op: click
@@ -184,9 +184,11 @@ click_actions_behind_create_button:
 actions_behind_create_button_menu_loaded:
     elements:
         - selector:
-            xpath: //a[contains(@href,'/openshift/register')]
+            xpath: //a[contains(@href,'/openshift/register') and text()='Register cluster']
         - selector:
-            xpath: //a[contains(@href, '/openshift/archived') and text()='Show archived clusters']
+            xpath: //a[contains(@href, '/openshift/archived') and text()='View cluster archives']
+        - selector:
+            xpath: //a[contains(@href, '/openshift/assisted-installer') and text()='Assisted Installer clusters']
 click_register_cluster_button:
     element:
         selector:
@@ -255,9 +257,24 @@ go_to_cluster_detail_page:
     element:
         selector:
             xpath: //td/a[contains(text(),'<cluster_name>')]
-        timeout: 30
+        timeout: 60
         op: click
     action: cluster_detail_page_loaded
+    action:
+        if_param: addons_tab
+        ref: click_add_ons_tab_button
+    action:
+        if_param: networking_tab
+        ref: click_networking_tab
+    action:
+        if_param: machinepool_tab
+        ref: switch_to_machine_pools_tab
+    action:
+        if_param: monitoring_tab
+        ref: click_monitoring_tab
+    action:
+        if_param: accesscontrol_tab
+        ref: click_access_control_tab
 expand_cluster_actions_on_cluster_list_page:
     element:
         selector:

@@ -11,7 +11,7 @@ archive_dialog_loaded:
         - selector:
             xpath: //button[@class='pf-c-button pf-m-plain' and @aria-label='Close']
         - selector:
-            xpath: //h1[text()='Archive cluster']
+            xpath: //h1/span[text()='Archive cluster']
         - selector:
             xpath: //form/p[contains(text(), 'Archiving a cluster will remove it from the cluster list and remove the cluster from subscription management.')]
         - selector:
@@ -72,7 +72,7 @@ unarchive_dialog_loaded:
         - selector:
             xpath: //button[@class='pf-c-button pf-m-plain' and @aria-label='Close']
         - selector:
-            xpath: //h1[text()='Unarchive cluster']
+            xpath: //span[text()='Unarchive cluster']
         - selector:
             xpath: //p[text()='Un-archiving a cluster will make it visible in the active (default) cluster list. You may need to manage subscriptions if the cluster is active.']
         - selector:
@@ -139,7 +139,7 @@ edit_display_name_in_dialog:
 delete_cluster_dialog_loaded:
     elements:
         - selector:
-            xpath: //h1[text()='Delete cluster']
+            xpath: //h1/span[text()='Delete cluster']
         - selector:
             xpath: //p[text()='This action cannot be undone. It will uninstall the cluster, and all data will be deleted.']
         - selector:
@@ -221,7 +221,7 @@ check_dialog_missing:
     selector:
       xpath: //div[@class='pf-c-backdrop']/div[@class='pf-l-bullseye']
     missing: true
-    timeout: 30
+    timeout: 80
 check_active_add_url_button:
   element: &active_add_url_button
     selector:
@@ -233,7 +233,7 @@ click_add_url_button:
 aws_customer_cloud_subscription_prompt_message_loaded:
     elements:
         - selector:
-            xpath: //h1[text()='Customer cloud subscription']
+            xpath: //h1/span[text()='Customer cloud subscription']
         - selector:
             text: "With this subscription option, the cluster will be provisioned in an AWS account owned by you or your company. This allows you to pay AWS directly for public cloud costs, leveraging your existing relationship."
         - selector:
@@ -444,6 +444,7 @@ click_loadbalancer_dropdown:
   element:
     selector:
       xpath: //select[@name='load_balancers']
+    timeout: 80
     op: click
 select_loadbalancer_in_dialog:
   element:
@@ -543,15 +544,15 @@ check_node_count_field_on_edit_node_count_dialog:
 add_machine_pool_dialog_loaded:
     elements:
         - selector:
-            xpath: //h1[text()='Add machine pool']
+            xpath: //h1/span[text()='Add machine pool']
         - selector:
-            xpath: //span[text()='Compute node instance type']
+            xpath: //span[text()='Worker node instance type']
         - selector:
-            xpath: //span[text()='Compute node count']
+            xpath: //span[contains(text(),'Worker node count')]
         - selector:
-            xpath: //select[@aria-label='Compute nodes']
+            xpath: //select[@aria-label='Worker nodes']
         - selector:
-            xpath: //span[text()='Edit node labels']
+            xpath: //span[text()='Edit node labels and taints']
         - selector:
             xpath: //span[text()='Machine pool name']
         - selector:
@@ -563,7 +564,7 @@ add_machine_pool_dialog_loaded:
 expand_edit_node_labels:
     element:
         selector:
-            xpath: //span[text()='Edit node labels']
+            xpath: //span[text()='Edit node labels and taints']
         op: click
 click_add_label_button:
     element:
@@ -573,10 +574,52 @@ click_add_label_button:
 add_new_label:
     action: click_add_label_button
     action: input_label
+click_add_taints_button:
+    element:
+        selector:
+            xpath: //button[text()='Add taint']
+        op: click
+add_new_taint:
+    action: click_add_taints_button
+    action: set_taint
+set_taint:
+    action: set_taint_key
+    action: set_taint_value
+    action: set_taint_effect
+set_taint_key:
+    element:
+        selector:
+            xpath: //input[@id='taints[<taint_row_number>].key']
+        op: send_keys <taint_key>
+set_taint_value:
+    element:
+        selector:
+            xpath: //input[@id='taints[<taint_row_number>].value']
+        op: send_keys <taint_value>
+set_taint_effect:
+    elements:
+        - selector:
+            xpath: //select[@id='taints[<taint_row_number>].effect']
+          op: click
+        - selector:
+            xpath: //select[@id='taints[<taint_row_number>].effect']/option[text()='<taint_effect>']
+          op: click
+click_delete_taint_button:
+    element:
+        selector:
+            xpath: //select[@id='taints[<taint_row_number>].effect']/../button
+        op: click
+check_existed_taint:
+    elements:
+        - selector:
+            xpath: //input[@id='taints[<taint_row_number>].key' and @value='<taint_key>']
+        - selector:
+            xpath: //input[@id='taints[<taint_row_number>].value' and @value='<taint_value>']
+
 click_delete_node_label_button:
     element:
         selector:
-            xpath: //div[@class='space-bottom-md'][<row_number>]/button
+            xpath: //input[@name='node_labels[<row_number>].key']/../button
         op: click
 select_node_count:
     elements:
@@ -619,18 +662,18 @@ input_machine_pool_name:
 input_label_key:
     elements:
         - selector:
-            xpath: //div[@class='space-bottom-md'][<row_number>]/input[@aria-label='Key-value list key']
+            xpath: //input[@name='node_labels[<row_number>].key']
           op: clear
         - selector:
-            xpath: //div[@class='space-bottom-md'][<row_number>]/input[@aria-label='Key-value list key']
+            xpath: //input[@name='node_labels[<row_number>].key']
           op: send_keys <label_key>
 input_label_value:
     elements:
         - selector:
-            xpath: //div[@class='space-bottom-md'][<row_number>]/input[@aria-label='Key-value list value']
+            xpath: //input[@name='node_labels[<row_number>].value']
           op: clear
         - selector:
-            xpath: //div[@class='space-bottom-md'][<row_number>]/input[@aria-label='Key-value list value']
+            xpath: //input[@name='node_labels[<row_number>].value']
           op: send_keys <label_value>
 input_label:
     action: input_label_key
@@ -646,6 +689,7 @@ check_machine_pool_dialog:
     action: expand_edit_node_labels
     action: click_add_label_button
     action: input_label
+    action: add_new_taint
     action: select_compute_node_in_dialog
 
 check_existed_label:
@@ -655,3 +699,73 @@ check_existed_label:
         - selector:
             xpath: //div[@class='space-bottom-md']/input[@aria-label='Key-value list key' and @value='<label_key>']
 
+addon_deletion_dialog_loaded:
+    element:
+        selector:
+            xpath: //*[contains(text(), "This action will uninstall the add-on, removing add-on data from cluster can not be undone.")]
+
+clear_addon_deletion_confirm_text:
+    element: &input_box
+        selector:
+            xpath: //input[@placeholder='Enter name' and @aria-label='addon name']
+        op: clear
+        
+input_addon_deletion_confirm_text:
+    action: clear_addon_deletion_confirm_text
+    element:
+        <<: *input_box
+        op: send_keys <input_text>
+check_addon_deletion_dialog:
+    action: addon_deletion_dialog_loaded
+    elements:
+        - selector:
+            xpath: //h1/span[text()="Uninstall <addon_name>"]
+        - selector:
+            xpath: //input[@placeholder='Enter name' and @aria-label='addon name']
+    action: uninstall_button_disabled
+    action: check_cancel_button
+    element:
+        <<: *input_box
+check_uninstall_button:
+    action: input_addon_deletion_confirm_text
+    action:
+        if_param: button_disabled
+        ref: uninstall_button_disabled
+    action:
+        if_param: button_enabled
+        ref: uninstall_button_enabled
+uninstall_button_disabled:
+    element:
+        selector:
+            xpath: //button[@disabled='' and text()='Uninstall']
+uninstall_button_enabled:
+    element: &uninstall_button
+        selector:
+            xpath: //button[@aria-disabled='false' and text()='Uninstall']
+click_addon_uninstall_button:
+    element:
+        <<: *uninstall_button
+        op: click
+
+set_addon_install_parameter:
+    action: input_addon_install_parameter
+    action:
+        if_param: parameter_input_finished
+        ref: click_install_button_on_parameter_dialog
+set_addon_cidr_default_parameter:
+    element:
+        selector:
+            xpath: //button[contains(text(),'Use default')]
+        op: click
+
+input_addon_install_parameter:
+    element:
+        selector:
+            xpath: //input[@id='parameters.<parameter_key>']
+        op: send_keys <parameter_value>
+
+click_install_button_on_parameter_dialog:
+    element:
+        selector:
+            xpath: //button[@type='submit' and text()="Install"]
+        op: click

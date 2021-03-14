@@ -325,7 +325,7 @@ click_first_item_from_sub_resource_list_and_check_breadcrumb:
 check_link_in_breadcrumb:
   element:
     selector:
-      xpath: //ol[@class='pf-c-breadcrumb__list']/li[<layer_number>]/a[contains(@data-test-id,'breadcrumb-link') and contains(@href,'<link>') and translate(normalize-space(text()), ' ','')='<text>']
+      xpath: //ol[@class='pf-c-breadcrumb__list']/li[<layer_number>]/a[contains(@data-test-id,'breadcrumb-link') and contains(@href,'<link>') and contains(translate(normalize-space(text()), ' ',''),'<text>')]
 check_installplandetails_text_in_breadcrumb:
   params:
     layer_number: 2
@@ -956,6 +956,10 @@ check_key_and_action_link:
   element: &key_action
     selector:
       xpath: //dt[contains(text(),'<key>')]/following-sibling::dd[1]//button | //button[(text()='<key>')]/parent::dt/following-sibling::dd[1]//button
+click_pod_selector_on_resource_detail:
+  params:
+    key: Pod Selector
+  action: click_value_on_resource_detail
 click_value_on_resource_detail:
   element:
     <<: *key_value

@@ -11,4 +11,4 @@ Feature: test logging and metrics related steps
     Given I obtain test data file "logging/clusterlogging/example.yaml"
     Given I create clusterlogging instance with:
       | crd_yaml            | example.yaml |
-      | remove_logging_pods | true                                                                 |
+      | remove_logging_pods | true         |

@@ -202,6 +202,59 @@ Feature: Machine features testing
     And 1 pod becomes ready with labels:
       | k8s-app=termination-handler |
 
+    # Create clusterautoscaler
+    Given I obtain test data file "cloud/cluster-autoscaler.yml"
+    When I run the :create admin command with:
+      | f | cluster-autoscaler.yml |
+    Then the step should succeed
+    And admin ensures "default" clusterautoscaler is deleted after scenario
+    And 1 pod becomes ready with labels:
+      | cluster-autoscaler=default,k8s-app=cluster-autoscaler |
+
+    # Create machineautoscaler
+    Given I obtain test data file "cloud/machine-autoscaler.yml"
+    When I run oc create over "machine-autoscaler.yml" replacing paths:
+      | ["metadata"]["name"]               | maotest           |
+      | ["spec"]["minReplicas"]            | 1                 |
+      | ["spec"]["maxReplicas"]            | 3                 |
+      | ["spec"]["scaleTargetRef"]["name"] | <machineset_name> |
+    Then the step should succeed
+    And admin ensures "maotest" machineautoscaler is deleted after scenario
+
+    # Create workload
+    Given I obtain test data file "cloud/autoscaler-auto-tmpl.yml"
+    When I run the :create admin command with:
+      | f | autoscaler-auto-tmpl.yml |
+    Then the step should succeed
+    And admin ensures "workload" job is deleted from the "openshift-machine-api" project after scenario
+
+    # Verify machineset has scaled
+    Given I wait up to 300 seconds for the steps to pass:
+    """
+    Then the expression should be true> machine_set.desired_replicas(cached: false) == 3
+    """
+    Then the machineset should have expected number of running machines
+
+    # Delete workload
+    Given admin ensures "workload" job is deleted from the "openshift-machine-api" project
+    # Check cluster auto scales down
+    And I wait up to 300 seconds for the steps to pass:
+    """
+    Then the expression should be true> machine_set.desired_replicas(cached: false) == 1
+    """
+    Then the machineset should have expected number of running machines
+
+    # Check autoscaler taints are deleted when min node is reached
+    Given I store the last provisioned machine in the :machine clipboard
+    And evaluation of `machine(cb.machine).node_name` is stored in the :noderef_name clipboard
+    When I run the :describe admin command with:
+      | resource | node                  |
+      | name     | <%= cb.noderef_name%> |
+    Then the step should succeed
+    And the output should not contain:
+      | DeletionCandidateOfClusterAutoscaler |
+      | ToBeDeletedByClusterAutoscaler       |
+
     Examples:
       | iaas_type | machineset_name        |
       | aws       | machineset-clone-29199 | # @case_id OCP-29199
@@ -317,10 +370,9 @@ Feature: Machine features testing
     Then the machineset should have expected number of running machines
 
   # @author miyadav@redhat.com
-  # @case_id OCP-33058
   @admin
   @destructive
-  Scenario: Implement defaulting machineset values for azure
+  Scenario Outline: Implement defaulting machineset values for azure
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
     And I use the "openshift-machine-api" project
@@ -328,17 +380,36 @@ Feature: Machine features testing
 
     Given I store the last provisioned machine in the :machine clipboard
     Then evaluation of `machine(cb.machine).azure_location` is stored in the :default_location clipboard
-    And admin ensures "default-valued-33058" machineset is deleted after scenario
+    And admin ensures "<name>" machineset is deleted after scenario
 
-    Given I obtain test data file "cloud/ms-azure/ms_default_values.yaml"
-    When I run oc create over "ms_default_values.yaml" replacing paths:
-      | n                                                                                         | openshift-machine-api                           |
-      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]           | <%= infrastructure("cluster").infra_name %>     |
-      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"]        | default-valued-33058                            |
-      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-cluster"]    | <%= infrastructure("cluster").infra_name %>     |
-      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["location"]                         | <%= cb.default_location %>                      |
-      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-machineset"] | default-valued-33058                            |
+    Given I obtain test data file "cloud/ms-azure/<file_name>"
+    When I run oc create over "<file_name>" replacing paths:
+      | n                                                                                         | openshift-machine-api                       |
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]           | <%= infrastructure("cluster").infra_name %> |
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"]        | <name>                                      |
+      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-cluster"]    | <%= infrastructure("cluster").infra_name %> |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["location"]                         | <%= cb.default_location %>                  |
+      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-machineset"] | <name>                                      |
+      | ["metadata"]["name"]                                                                      | <name>                                      |
     Then the step should succeed
+  
+    Then I store the last provisioned machine in the :machine_latest clipboard
+    And I wait up to 120 seconds for the steps to pass:
+    """
+    Then the expression should be true> machine(cb.machine_latest).phase(cached: false) == "Running"
+    """
+   
+    When I run the :describe admin command with:
+      | resource | machine                  |
+      | name     | <%= cb.machine_latest %> |
+    Then the step should succeed
+    And the output should contain:
+      | <Validation> |
+
+    Examples:
+      | name                    | file_name               | Validation                |
+      | default-valued-33058    | ms_default_values.yaml  | Public IP                 |# @case_id OCP-33058
+      | encrypt-at-rest-39639   | ms_encrypt_at_rest.yaml | Encryption At Host:  true |# @case_id OCP-39639
 
   # @author miyadav@redhat.com
   # @case_id OCP-33455
@@ -443,9 +514,9 @@ Feature: Machine features testing
     """
 
     Examples:
-      | name                         | template                                  | diskGiB           |
-      | default-valued-33380         | <%= cb.template %>                        | <%= cb.diskGiB %> | # @case_id OCP-33380
-      | default-valued-windows-35421 | 1909-template-docker-ssh-upgraded-vmtools | 135               | # @case_id OCP-35421
+      | name                         | template                           | diskGiB           |
+      | default-valued-33380         | <%= cb.template %>                 | <%= cb.diskGiB %> | # @case_id OCP-33380
+      | default-valued-windows-35421 | openshift-qe-template-windows-2019 | 135               | # @case_id OCP-35421
 
   # @author miyadav@redhat.com
   # @case_id OCP-36489

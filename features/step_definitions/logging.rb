@@ -326,22 +326,34 @@ end
 
 Given /^logging channel name is stored in the#{OPT_SYM} clipboard$/ do | cb_name |
   cb_name = 'logging_channel_name' unless cb_name
-  if cluster_version('version').version.include?('4.1.')
-    cb[cb_name] = "preview"
+  if env.logging_channel_name.empty?
+    version = cluster_version('version').version.split('-')[0].split('.').take(2).join('.')
+    case version
+    when '4.1'
+      cb[cb_name] = "preview"
+    when '4.7'
+      cb[cb_name] = "5.0"
+    else
+      cb[cb_name] = version
+    end
   else
-    cb[cb_name] = cluster_version('version').version.split('-')[0].split('.').take(2).join('.')
+    cb[cb_name] = env.logging_channel_name
   end
 end
 
 Given /^#{QUOTED} packagemanifest's catalog source name is stored in the#{OPT_SYM} clipboard$/ do |packagemanifest, cb_name|
   cb_name = "catsrc_name" unless cb_name
   project("openshift-marketplace")
-  if catalog_source("qe-app-registry").exists?
-    cb[cb_name] = "qe-app-registry"
+  if env.logging_catsrc.empty?
+    if catalog_source("qe-app-registry").exists?
+      cb[cb_name] = "qe-app-registry"
+    else
+      @result = admin.cli_exec(:get, resource: 'packagemanifest', resource_name: packagemanifest, n: 'openshift-marketplace', o: 'yaml')
+      raise "Unable to get catalog source name" unless @result[:success]
+      cb[cb_name] = @result[:parsed]['status']['catalogSource']
+    end
   else
-    @result = admin.cli_exec(:get, resource: 'packagemanifest', resource_name: packagemanifest, n: 'openshift-marketplace', o: 'yaml')
-    raise "Unable to get catalog source name" unless @result[:success]
-    cb[cb_name] = @result[:parsed]['status']['catalogSource']
+    cb[cb_name] = env.logging_catsrc
   end
 end
 
@@ -387,15 +399,32 @@ Given /^logging eventrouter is installed in the cluster$/ do
   step %Q/admin ensures "eventrouter" service_account is deleted from the "openshift-logging" project after scenario/
   step %Q/admin ensures "eventrouter" config_map is deleted from the "openshift-logging" project after scenario/
   step %Q/admin ensures "eventrouter" deployment is deleted from the "openshift-logging" project after scenario/
-  image_version = cluster_version('version').channel.split('-')[1]
+  clo_csv_version = subscription("cluster-logging").current_csv(cached: false)
+  if clo_csv_version.include? "cluster-logging"
+    image_version = clo_csv_version.match(/cluster-logging\.(.*)/)[1].split('-')[0]
+  else
+    image_version = clo_csv_version.match(/clusterlogging\.(.*)/)[1].split('-')[0]
+  end
+  if image_version.start_with?("5")
+    # from logging 5.0, the image name is changed to eventrouter-rhel8
+    image_name = "eventrouter-rhel8"
+  else
+    image_name = "logging-eventrouter"
+  end
+
   if image_content_source_policy('brew-registry').exists?
     registry = image_content_source_policy('brew-registry').mirror_repository[0]
-    image = "#{registry}/rh-osbs/openshift-ose-logging-eventrouter:v#{image_version}"
+    if image_version.start_with?("5")
+      # from logging 5.0, the image namespace is changed to openshift-logging
+      image = "#{registry}/rh-osbs/openshift-logging-#{image_name}:v#{image_version}"
+    else
+      image = "#{registry}/rh-osbs/openshift-ose-#{image_name}:v#{image_version}"
+    end
   else
     # get image registry from CLO
-    image_registry = deployment('cluster-logging-operator').container_spec(name: 'cluster-logging-operator').image
-    registry = image_registry.split('@')[0].gsub("cluster-logging-operator", "logging-eventrouter")
-    image = "#{registry}:v#{image_version}"
+    clo_image = deployment('cluster-logging-operator').container_spec(name: 'cluster-logging-operator').image
+    registry = clo_image.split(/cluster-logging(.*)/)[0]
+    image = "#{registry}#{image_name}:v#{image_version}"
   end
   step %Q/I process and create:/, table(%{
     | f | #{BushSlicer::HOME}/testdata/logging/eventrouter/internal_eventrouter.yaml |

@@ -48,7 +48,7 @@ check_add_notification_contact_dialog:
     action: click_add_notification_contact_button
     elements:
         - selector:
-            xpath: //h1[text()='Add notification contact']
+            xpath: //span[text()='Add notification contact']
         - selector:
             xpath: //p[text()='Identify the user to be added as notification contact. These users will be contacted in the event of notifications about this cluster.']
         - selector:

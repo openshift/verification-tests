@@ -141,7 +141,11 @@ subscribe_using_default_params:
 set_custom_channel_and_subscribe:
   action: wait_box_loaded
   action: choose_update_channel
-  action: enable_cluster_monitoring
+  action:
+    if_element:
+      selector:
+        xpath: //input[contains(@type,'checkbox') and contains(@id,'enable-monitoring-checkbox')]
+    ref: enable_cluster_monitoring
   action: click_subscribe_button
 click_image_tag_dropdown:
   params:

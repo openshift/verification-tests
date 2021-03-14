@@ -340,7 +340,7 @@ click_first_item_from_sub_resource_list_and_check_breadcrumb:
 check_link_in_breadcrumb:
   element:
     selector:
-      xpath: //ol[@class='pf-c-breadcrumb__list']/li[<layer_number>]/a[contains(@data-test-id,'breadcrumb-link') and contains(@href,'<link>') and translate(normalize-space(text()), ' ','')='<text>']
+      xpath: //ol[@class='pf-c-breadcrumb__list']/li[<layer_number>]/a[contains(@data-test-id,'breadcrumb-link') and contains(@href,'<link>') and contains(translate(normalize-space(text()), ' ',''),'<text>')]
 check_installplandetails_text_in_breadcrumb:
   params:
     layer_number: 2
@@ -709,6 +709,21 @@ check_secondary_menu_link:
   element:
     selector: *secondary_menu
   action: check_link_and_text
+check_deploymentconfig_secondary_menu_link:
+  params:
+    secondary_menu: Deployment Configs
+    text: Deployment Configs
+  action: check_secondary_menu_link
+check_replicaset_secondary_menu_link:
+  params:
+    secondary_menu: Replica Sets
+    text: Replica Sets
+  action: check_secondary_menu_link
+check_replicationcontroller_secondary_menu_link:
+  params:
+    secondary_menu: Replication Controllers
+    text: Replication Controllers
+  action: check_secondary_menu_link
 click_dropdown:
   element:
     selector: &dropdown_name

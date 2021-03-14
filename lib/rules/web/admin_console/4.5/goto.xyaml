@@ -184,6 +184,11 @@ goto_deploy_image_page:
 goto_catalog_page:
   url: catalog/ns/<project_name>
   action: wait_box_loaded
+  action:
+    if_element:
+      selector:
+        xpath: //input[@data-test='kind-cluster-service-version' and @checked]
+    ref: filter_by_operatorbacked_type
 goto_create_app_from_imagestream_page:
   url: catalog/source-to-image?imagestream=<is_name>&imagestream-ns=openshift&preselected-ns=<project_name>
 goto_create_app_from_template_page:

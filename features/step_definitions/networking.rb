@@ -591,7 +591,15 @@ Given /^the multus is enabled on the cluster$/ do
   available_multus_replicas = daemon_set('multus', project('openshift-multus')).replica_counters(user: admin)[:available]
   #storing desired_multus_replicas value in desired_multus_replicas clipboard variable as well
   cb.desired_multus_replicas = desired_multus_replicas
-  raise "Multus is not running correctly!" unless desired_multus_replicas == available_multus_replicas && available_multus_replicas != 0
+  unless desired_multus_replicas == available_multus_replicas && available_multus_replicas != 0
+    daemon_set('multus', project('openshift-multus')).describe(admin, quiet:false)
+    BushSlicer::Pod.get_labeled("app=multus", user: admin, project: project("openshift-multus", switch: false)) do |pod|
+      pod.describe(admin, quiet: false)
+    end
+    env.nodes(user:admin, refresh: true, quiet: false)
+    raise "Multus is not running correctly!"
+  end
+
 end
 
 Given /^the status of condition#{OPT_QUOTED} for network operator is :(.+)$/ do | type, status |
@@ -1175,10 +1183,14 @@ end
 Given /^I install machineconfigs load-sctp-module$/ do
   ensure_admin_tagged
   _admin = admin
-  @result = _admin.cli_exec(:get, resource: "machineconfigs", output: 'jsonpath={.items[?(@.metadata.name=="load-sctp-module")].metadata.name}')
-  if @result[:response] != "load-sctp-module"
-    @result = _admin.cli_exec(:create, f: "#{BushSlicer::HOME}/testdata/networking/sctp/load-sctp-module.yaml")
-    raise "Failed to install load-sctp-module" unless @result[:success]
+  if cb.workers.count > 1
+    @result = _admin.cli_exec(:get, resource: "machineconfigs", output: 'jsonpath={.items[?(@.metadata.name=="load-sctp-module")].metadata.name}')
+    if @result[:response] != "load-sctp-module"
+      @result = _admin.cli_exec(:create, f: "#{BushSlicer::HOME}/testdata/networking/sctp/load-sctp-module.yaml")
+      raise "Failed to install load-sctp-module" unless @result[:success]
+    end
+  else
+    raise "At least two schedulable workers are needed"
   end
 end
 
@@ -1206,7 +1218,8 @@ Given /^the node's MTU value is stored in the#{OPT_SYM} clipboard$/ do |cb_node_
   else
      step %Q/I run command on the node's sdn pod:/, table("| bash | -c | ip route show default |")
   end
-  inf_name = @result[:response].split("\n").first.split(/\W+/)[7]
+  # OVN uses `br-ex` and `-` is not a word char, so we have to split on whitespace
+  inf_name = @result[:response].split("\n").first.split[4]
   @result = host.exec_admin("ip a show #{inf_name}")
   cb[cb_node_mtu] = @result[:response].split(/mtu /)[1][0,4]
   logger.info "Node's MTU value is stored in the #{cb_node_mtu} clipboard."
@@ -1270,4 +1283,12 @@ Given /^I save ipecho url to the#{OPT_SYM} clipboard$/ do | cb_name |
   cb_name = "ipecho_url" unless cb_name
   cb[cb_name]="172.31.249.80:9095"
   logger.info "The ipecho service url #{cb[cb_name]} is stored to the #{cb_name} clipboard."
+end
+
+Given /^the IPsec is enabled on the cluster$/ do
+  ensure_admin_tagged
+  _admin = admin
+  network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
+  default_network = network_operator.default_network(user: admin)
+  raise "env doesn't have IPSec enabled" unless default_network["ipsecConfig"]
 end

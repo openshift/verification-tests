@@ -18,7 +18,7 @@ Feature: OVN Egress IP related features
     When I run the :label admin command with:
       | resource | namespace           |
       | name     | <%= project.name %> |
-      | key_val  | og=qe               |
+      | key_val  | org=qe              |
     Then the step should succeed
 
     Given I obtain test data file "networking/list_for_pods.json"
@@ -82,7 +82,7 @@ Feature: OVN Egress IP related features
     When I run the :label admin command with:
       | resource | namespace           |
       | name     | <%= cb.proj1 %>     |
-      | key_val  | og=qe               |
+      | key_val  | org=qe              |
     Then the step should succeed
     And I have a pod-for-ping in the project
 
@@ -92,7 +92,7 @@ Feature: OVN Egress IP related features
     When I run the :label admin command with:
       | resource | namespace           |
       | name     | <%= cb.proj2 %>     |
-      | key_val  | og=dev              |
+      | key_val  | org=dev             |
     Then the step should succeed
     And I have a pod-for-ping in the project
 
@@ -147,7 +147,7 @@ Feature: OVN Egress IP related features
     When I run the :label admin command with:
       | resource | namespace           |
       | name     | <%= cb.proj1 %>     |
-      | key_val  | og=qe               |
+      | key_val  | org=qe              |
     Then the step should succeed
     And I have a pod-for-ping in the project
 
@@ -157,7 +157,7 @@ Feature: OVN Egress IP related features
     When I run the :label admin command with:
       | resource | namespace           |
       | name     | <%= cb.proj2 %>     |
-      | key_val  | og=qe               |
+      | key_val  | org=qe              |
     Then the step should succeed
     And I have a pod-for-ping in the project
 
@@ -187,7 +187,7 @@ Feature: OVN Egress IP related features
     When I run the :label admin command with:
       | resource | namespace           |
       | name     | <%= cb.proj3 %>     |
-      | key_val  | og=qe               |
+      | key_val  | org=qe              |
     Then the step should succeed
     And I have a pod-for-ping in the project
 
@@ -215,7 +215,7 @@ Feature: OVN Egress IP related features
     When I run the :label admin command with:
       | resource | namespace           |
       | name     | <%= cb.proj1 %>     |
-      | key_val  | og=qe               |
+      | key_val  | org=qe              |
     Then the step should succeed
     And I have a pod-for-ping in the project
 
@@ -238,7 +238,7 @@ Feature: OVN Egress IP related features
     When I run the :label admin command with:
       | resource | namespace           |
       | name     | <%= cb.proj1 %>     |
-      | key_val  | og-                 |
+      | key_val  | org-                |
     Then the step should succeed
 
     # Check source ip is not egress ip
@@ -265,7 +265,7 @@ Feature: OVN Egress IP related features
     When I run the :label admin command with:
       | resource | namespace           |
       | name     | <%= cb.proj1 %>     |
-      | key_val  | og=qe               |
+      | key_val  | org=qe              |
     Then the step should succeed
     And I have a pod-for-ping in the project
     When I run the :label admin command with:
@@ -322,7 +322,7 @@ Feature: OVN Egress IP related features
     When I run the :label admin command with:
       | resource | namespace           |
       | name     | <%= cb.proj1 %>     |
-      | key_val  | og=qe               |
+      | key_val  | org=qe              |
     Then the step should succeed
     And I have a pod-for-ping in the project
 
@@ -368,7 +368,7 @@ Feature: OVN Egress IP related features
     When I run the :label admin command with:
       | resource | namespace           |
       | name     | <%= cb.proj1 %>     |
-      | key_val  | og=qe               |
+      | key_val  | org=qe              |
     Then the step should succeed
 
     #Make sure the pod located on another node to avoid rebooting the node cause killing the pod
@@ -453,7 +453,7 @@ Feature: OVN Egress IP related features
     When I run the :label admin command with:
       | resource | namespace           |
       | name     | <%= project.name %> |
-      | key_val  | og=qe               |
+      | key_val  | org=qe              |
     Then the step should succeed
 
     #Specify different node for pod than egressIP node
@@ -482,3 +482,151 @@ Feature: OVN Egress IP related features
       | curl | -s | --connect-timeout | 5 | <%= cb.ipecho_url %> |
     Then the step should succeed
     """
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-33718
+  @admin
+  @destructive
+  Scenario: Deleting EgressIP object and recreating it will work
+    Given I save ipecho url to the clipboard
+
+    #Get unused IP as egress ip
+    Given I store a random unused IP address from the reserved range to the clipboard
+
+    #Create a project and pods in it,add label to the namespace
+    Given I have a project
+    And evaluation of `project.name` is stored in the :proj1 clipboard
+    When I run the :label admin command with:
+      | resource | namespace           |
+      | name     | <%= cb.proj1 %>     |
+      | key_val  | org=qe              |
+    Then the step should succeed
+    And I have a pod-for-ping in the project
+
+    #Create egress ip object
+    When I obtain test data file "networking/ovn-egressip/egressip1.yaml"
+    And I replace lines in "egressip1.yaml":
+      | 172.31.249.227 | "<%= cb.valid_ip %>" |
+    And I run the :create admin command with:
+      | f | egressip1.yaml |
+    And admin ensures "egressip" egress_ip is deleted after scenario
+
+    #Label EgressIP nodes.
+    Given I store the schedulable nodes in the :nodes clipboard
+    Then label "k8s.ovn.org/egress-assignable=true" is added to the "<%= cb.nodes[0].name %>" node
+
+    # Check source ip is egress ip
+    Then I wait up to 20 seconds for the steps to pass:
+    """
+    When I execute on the pod:
+      | curl | -s | --connect-timeout | 5 | <%= cb.ipecho_url %> |
+    Then the step should succeed
+    And the output should contain "<%= cb.valid_ip %>"
+    """
+
+    #Remove egress ip object and recreate it
+    Given admin ensures "egressip" egress_ip is deleted
+    When I obtain test data file "networking/ovn-egressip/egressip1.yaml"
+    And I replace lines in "egressip1.yaml":
+      | 172.31.249.227 | "<%= cb.valid_ip %>" |
+    And I run the :create admin command with:
+      | f | egressip1.yaml |
+    Then the step should succeed
+
+    # Check source ip is egress ip
+    Then I wait up to 20 seconds for the steps to pass:
+    """
+    When I execute on the pod:
+      | curl | -s | --connect-timeout | 5 | <%= cb.ipecho_url %> |
+    Then the step should succeed
+    And the output should contain "<%= cb.valid_ip %>"
+    """
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-33710
+  @admin
+  @destructive
+  Scenario: An EgressIP object can not have multiple egress IP assignments on the same node
+    Given I store the schedulable workers in the :nodes clipboard
+    Then label "k8s.ovn.org/egress-assignable=true" is added to the "<%= cb.nodes[0].name %>" node
+
+    #Get unused IP as egress ip
+    Given I store a random unused IP address from the reserved range to the clipboard
+
+    #Create first egress ip object with two EgressIPs
+    When I obtain test data file "networking/ovn-egressip/egressip2.yaml"
+    And I replace lines in "egressip2.yaml":
+      | 172.31.249.227 | "<%= cb.valid_ips[0] %>" |
+      | 172.31.249.228 | "<%= cb.valid_ips[1] %>" |
+    And I run the :create admin command with:
+      | f | egressip2.yaml |
+    And admin ensures "egressip2" egress_ip is deleted after scenario
+
+    # Check only one IP assigned.
+    When I run the :get admin command with:
+      | resource       | egressip                    |
+      | resource_name  | egressip2                   |
+      | o              | jsonpath={.status.items[*]} |
+    Then the step should succeed
+    And evaluation of `@result[:response].chomp.match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/).length` is stored in the :egressip_num clipboard
+    Then the expression should be true> cb.egressip_num == 1
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-33617
+  @admin
+  Scenario: Common user cannot tag the nodes by labelling them as egressIP nodes
+    Given I select a random node's host
+    And evaluation of `node.name` is stored in the :egress_node clipboard
+
+    #Label nodes with normal user
+    When I run the :label client command with:
+      | resource | node                               |
+      | name     | <%= cb.egress_node %>              |
+      | key_val  | k8s.ovn.org/egress-assignable=true |
+    Then the step should fail
+    And the output should match:
+      | nodes "<%= cb.egress_node %>" is forbidden |
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-33719
+  @admin
+  @destructive
+  Scenario: Any egress IP can only be assigned to one node only
+    Given I store the schedulable workers in the :nodes clipboard
+    Then label "k8s.ovn.org/egress-assignable=true" is added to the "<%= cb.nodes[0].name %>" node
+    And label "k8s.ovn.org/egress-assignable=true" is added to the "<%= cb.nodes[1].name %>" node
+
+    #Get unused IP as egress ip
+    Given I store a random unused IP address from the reserved range to the clipboard
+
+    # Create two egressip objects with same EgressIP
+    When I obtain test data file "networking/ovn-egressip/egressip1.yaml"
+    And I replace lines in "egressip1.yaml":
+      | 172.31.249.227 | "<%= cb.valid_ips[0] %>" |
+    And I run the :create admin command with:
+      | f | egressip1.yaml |
+    And admin ensures "egressip" egress_ip is deleted after scenario
+
+    When I obtain test data file "networking/ovn-egressip/egressip1.yaml"
+    And I replace lines in "egressip1.yaml":
+      | 172.31.249.227 | "<%= cb.valid_ips[0] %>" |
+      | name: egressip | name: egressipnew        |
+    And I run the :create admin command with:
+      | f | egressip1.yaml |
+    And admin ensures "egressipnew" egress_ip is deleted after scenario
+
+    #Check the egressIP can be only assigned to one node.
+    When I run the :get admin command with:
+      | resource       | egressip                    |
+      | resource_name  | egressip                    |
+      | o              | jsonpath={.status.items[*]} |
+    Then the step should succeed
+    And evaluation of `@result[:response].chomp.match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/).length` is stored in the :egressip_num clipboard
+    Then the expression should be true> cb.egressip_num == 1
+
+    When I run the :get admin command with:
+      | resource       | egressip                    |
+      | resource_name  | egressipnew                 |
+      | o              | jsonpath={.status.items[*]} |
+    Then the step should succeed
+    Then the expression should be true> @result[:response].chomp.match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/).nil?

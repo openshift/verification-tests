@@ -14,8 +14,8 @@ Feature: API server Test features
     """
     Given as admin I successfully merge patch resource "apiserver/cluster" with:
       | {"spec": {"audit": {"profile": "Default"}}} |
-    Given operator "kube-apiserver" becomes "progressing" within 100 seconds
-    Given operator "kube-apiserver" becomes "available/non-progressing/non-degraded" within 1200 seconds
+    Given operator "kube-apiserver" becomes progressing within 100 seconds
+    Given operator "kube-apiserver" becomes available/non-progressing/non-degraded within 1200 seconds
     """
     Given operator "kube-apiserver" becomes progressing
     Given operator "kube-apiserver" becomes available/non-progressing/non-degraded within 1200 seconds

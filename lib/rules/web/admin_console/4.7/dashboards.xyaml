@@ -258,7 +258,7 @@ check_on_monitoring_metrics_page:
   - selector:
       xpath: //button[text()='Run queries']
   - selector:
-      xpath: //div[contains(@class,'query-browser__graph-container')]
+      xpath: //div[contains(@class,'pf-c-chart')]
     timeout: 30
 check_textarea:
   element:
@@ -317,7 +317,7 @@ check_metrics_query_pod_count_by_node:
 check_metrics_query_pod_count_by_project:
   scripts:
   - command:
-      return /topk.*kube_pod_info.*BY.*namespace/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href))
+      return /topk.*kube_running_pod_ready.*BY.*namespace/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href))
     expect_result: true
 check_metrics_query_network_in_by_node:
   scripts:
@@ -520,13 +520,25 @@ check_network_out_breakdown_info_when_filter_by_node:
 click_operator_status:
   elements:
   - selector:
-      xpath: //div[@class='co-status-card__health-item']/div[@class='co-dashboard-icon']/following-sibling::div[contains(., 'Operators')]
+      xpath: //div[@class='co-status-card__health-item']/div[@class='co-dashboard-icon']/following-sibling::div[contains(., 'Operators')]//button[@aria-disabled='false']
     op: click
-    timeout: 60
 check_operator_status:
   elements:
   - selector:
       xpath: //div[contains(., '<operator_type>')]/following-sibling::div[*[contains(., '<operator_name>')] and *[contains(., '<status>')]]
+click_insights_status:
+  element:
+    selector:
+      xpath: //div[@class='co-status-card__health-item']//button[.='Insights']
+    op: click
+check_insights_status_icon:
+  element:
+    selector:
+      xpath: //button[.='Insights']/ancestor::div[contains(@class,'co-status-card__health-item')]//div[contains(@class,'co-dashboard-icon') and contains(.,'<status>')]
+check_status_card_health_item_text:
+  element:
+    selector:
+      xpath: //span[contains(@class,'co-status-card__health-item-text')]/following::div[contains(.,'<status_text>')]
 check_view_all_for_operators:
   params:
     text: View all
@@ -556,6 +568,34 @@ check_operator_status_on_status_card:
   action: click_operator_status
   action: check_operator_status
   action: click_link_with_text_only
+check_insights_popover_info_when_available:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'pf-c-chart')]
+  - selector:
+      xpath: //a[contains(@class,'co-external-link') and contains(@href,'https://cloud.redhat.com/openshift/details/<cluster_id>#insights')]
+check_insights_popover_info_when_unavailable:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'co-status-popup__section') and contains(.,'Temporary unavailable')]
+  - selector:
+      xpath: //a[contains(@class,'co-external-link') and contains(@href,'https://docs.openshift.com/container-platform/latest/support/getting-support.html')]
+check_insights_status_when_available:
+  params:
+    status: Warning
+    status_text: issue found
+  action: click_insights_status
+  action: check_status_card_health_item_text
+  action: check_insights_popover_info_when_available
+  action: click_close_icon
+check_insights_status_when_unavailable:
+  params:
+    status: Error
+    status_text: Not available
+  action: click_insights_status
+  action: check_status_card_health_item_text
+  action: check_insights_popover_info_when_unavailable
+  action: click_close_icon
 
 # cluster inventory
 check_cluster_inventory_items:
@@ -567,9 +607,9 @@ check_cluster_inventory_items:
   - selector:
       xpath: //div[contains(@class,'co-inventory-card__item')]//a[contains(text(),'Pod')]
   - selector:
-      xpath: //div[contains(@class,'co-inventory-card__item')]//a[contains(text(),'Storage Class')]
+      xpath: //div[contains(@class,'co-inventory-card__item')]//a[contains(normalize-space(text()),'StorageClass')]
   - selector:
-      xpath: //div[contains(@class,'co-inventory-card__item')]//a[contains(text(),'PVC')]
+      xpath: //div[contains(@class,'co-inventory-card__item')]//a[contains(normalize-space(text()),'PVC')]
 check_matched_number_of_nodes:
   params:
     resource_type: nodes
@@ -582,7 +622,7 @@ check_matched_number_of_pvcs:
   action: check_matched_number_of_resource
 check_matched_number_of_storageclasses:
   params:
-    resource_type: storage class
+    resource_type: storageclass
     number_of_resource: <number_of_storageclasses>
   action: check_matched_number_of_resource  
 check_matched_number_of_resource:
