@@ -226,8 +226,9 @@ Feature: buildlogic.feature
   # @case_id OCP-13684
   Scenario: Check docker build substatus and times
     Given I have a project
+    Given I obtain test data file "build/application-template-dockerbuild.json"
     When I run the :new_app client command with:
-      | file | https://raw.githubusercontent.com/openshift/origin/master/examples/sample-app/application-template-dockerbuild.json |
+      | file | application-template-dockerbuild.json |
     Then the step should succeed
     Given the "ruby-sample-build-1" build completed
     When I run the :describe client command with:

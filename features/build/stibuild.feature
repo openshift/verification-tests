@@ -11,9 +11,9 @@ Feature: stibuild.feature
       | build_name | sample-build-1                  |
     Then the step should succeed
     When I run the :import_image client command with:
-      | image_name | myimage               |
-      | from       | centos/ruby-25-centos7|
-      | confirm    | true                  |
+      | image_name | myimage                                       |
+      | from       | registry.redhat.io/rhscl/ruby-27-rhel7:latest |
+      | confirm    | true                                          |
     Then the step should succeed
     And the "sample-build-2" build was created
     When I run the :describe client command with:
@@ -21,9 +21,9 @@ Feature: stibuild.feature
       | name     | sample-build-2 |
     Then the step should succeed
     And the output should contain:
-      |Build trigger cause:	Image change          |
-      |Image ID:		centos/ruby-25-centos7|
-      |Image Name/Kind:	myimage:latest                |
+      |Build trigger cause:	Image change                           |
+      |Image ID:		registry.redhat.io/rhscl/ruby-27-rhel7 |
+      |Image Name/Kind:	myimage:latest                                 |
     When I run the :start_build client command with:
       | buildconfig | sample-build |
     Then the step should succeed
