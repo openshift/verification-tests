@@ -102,7 +102,7 @@ check_dashboard_kubernetes_networking_cluster:
   action: check_dropdown_menu_item
 check_dashboard_prometheus:
   params:
-    dropdown_menu_item: Prometheus Overview
+    dropdown_menu_item: Prometheus / Overview
   action: check_dropdown_menu_item
 check_dashboard_use_method_cluster:
   params:

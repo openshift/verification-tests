@@ -79,7 +79,7 @@ check_log_streaming_is_paused:
   - selector:
       xpath: //div[contains(@class,'co-toolbar__item') and contains(.,'Log stream paused')]
   - selector: &resume_button
-      xpath: //button[contains(.,' Resume stream')]
+      xpath: //button[contains(.,'Resume stream')]
 check_log_streaming_is_resumed:
   elements:
   - selector:
