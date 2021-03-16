@@ -1,3 +1,5 @@
+require 'openshift/project_resource'
+
 module BushSlicer
   class VolumeSnapshot < ProjectResource
     RESOURCE = "volumesnapshots"
@@ -31,5 +33,30 @@ module BushSlicer
 
       return res
     end
+
+    def pvc_name(user: nil, cached: true, quiet: false)
+      rr = raw_resource(user: user, cached: cached, quiet: quiet)
+      rr.dig('spec', 'source', 'persistentVolumeClaimName')
+    end
+
+    def volume_snapshot_class_name(user: nil, cached: true, quiet: false)
+      rr = raw_resource(user: user, cached: cached, quiet: quiet)
+      rr.dig('spec', 'volumeSnapshotClassName')
+    end
+
+    def restore_size(user: nil, cached: true, quiet: false)
+      rr = raw_resource(user: user, cached: cached, quiet: quiet)
+      size = rr.dig('status', 'restoreSize')
+      if size
+        size = size.scan(/\d+/)[0].to_s
+      end
+      return size
+    end
+
+    def volume_snapshot_content_name(user: nil, cached: true, quiet: false)
+      rr = raw_resource(user: user, cached: cached, quiet: quiet)
+      rr.dig('status', 'boundVolumeSnapshotContentName')
+    end
+
   end
 end
