@@ -12,11 +12,24 @@ module BushSlicer
     end
 
     # return @Hash information of container status matching the @name variable
-    def status(user: nil, cached: true, quiet: false)
-      container_statuses = @pod.status_raw(user: user, cached: cached, quiet: quiet)['containerStatuses']
+    # the parameter `type:` can be containerStatuses or initContainerStatuses.
+    #    shorthand as 'init'
+    #    we are defaulting it to containerStatuses.  For init container we are
+    #    not checking the name since we don't have a way to find out what
+    #    that would be
+    def status(user: nil, type: nil, cached: true, quiet: false)
+      valid_types = ['containerStatuses', 'initContainerStatuses']
+      type ||= "containerStatuses"
+      type = "initContainerStatuses" if type == 'init'
+      raise "valid status are 'containerStatuses' and 'initContainerStatuses'" unless valid_types.include? type
+      container_statuses = @pod.status_raw(user: user, cached: cached, quiet: quiet)[type]
       stat = {}
       container_statuses.each do | cs |
-        stat = cs if cs['name'] == @name
+        if type == 'containerStatuses'
+          stat = cs if cs['name'] == @name
+        else
+          stat = cs
+        end
       end
       return stat
     end

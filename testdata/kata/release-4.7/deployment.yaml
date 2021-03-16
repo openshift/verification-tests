@@ -1,0 +1,536 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    control-plane: controller-manager
+  name: kata-operator-system
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.3.0
+  creationTimestamp: null
+  name: kataconfigs.kataconfiguration.openshift.io
+spec:
+  group: kataconfiguration.openshift.io
+  names:
+    kind: KataConfig
+    listKind: KataConfigList
+    plural: kataconfigs
+    singular: kataconfig
+  scope: Cluster
+  subresources:
+    status: {}
+  validation:
+    openAPIV3Schema:
+      description: KataConfig is the Schema for the kataconfigs API
+      properties:
+        apiVersion:
+          description: 'APIVersion defines the versioned schema of this representation
+            of an object. Servers should convert recognized schemas to the latest
+            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+          type: string
+        kind:
+          description: 'Kind is a string value representing the REST resource this
+            object represents. Servers may infer this from the endpoint the client
+            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+          type: string
+        metadata:
+          type: object
+        spec:
+          description: KataConfigSpec defines the desired state of KataConfig
+          nullable: true
+          properties:
+            config:
+              description: KataInstallConfig is a placeholder struct
+              properties:
+                sourceImage:
+                  description: SourceImage is the name of the kata-deploy image
+                  type: string
+              required:
+              - sourceImage
+              type: object
+            kataConfigPoolSelector:
+              description: KataConfigPoolSelector is used to filer the worker nodes
+                if not specified, all worker nodes are selected
+              nullable: true
+              properties:
+                matchExpressions:
+                  description: matchExpressions is a list of label selector requirements.
+                    The requirements are ANDed.
+                  items:
+                    description: A label selector requirement is a selector that contains
+                      values, a key, and an operator that relates the key and values.
+                    properties:
+                      key:
+                        description: key is the label key that the selector applies
+                          to.
+                        type: string
+                      operator:
+                        description: operator represents a key's relationship to a
+                          set of values. Valid operators are In, NotIn, Exists and
+                          DoesNotExist.
+                        type: string
+                      values:
+                        description: values is an array of string values. If the operator
+                          is In or NotIn, the values array must be non-empty. If the
+                          operator is Exists or DoesNotExist, the values array must
+                          be empty. This array is replaced during a strategic merge
+                          patch.
+                        items:
+                          type: string
+                        type: array
+                    required:
+                    - key
+                    - operator
+                    type: object
+                  type: array
+                matchLabels:
+                  additionalProperties:
+                    type: string
+                  description: matchLabels is a map of {key,value} pairs. A single
+                    {key,value} in the matchLabels map is equivalent to an element
+                    of matchExpressions, whose key field is "key", the operator is
+                    "In", and the values array contains only "value". The requirements
+                    are ANDed.
+                  type: object
+              type: object
+          type: object
+        status:
+          description: KataConfigStatus defines the observed state of KataConfig
+          properties:
+            installationStatus:
+              description: InstallationStatus reflects the status of the ongoing kata
+                installation
+              properties:
+                completed:
+                  description: Completed reflects the status of nodes that have completed
+                    kata installation
+                  properties:
+                    completedNodesCount:
+                      description: CompletedNodesCount reflects the number of nodes
+                        that have completed kata operation
+                      type: integer
+                    completedNodesList:
+                      description: CompletedNodesList reflects the list of nodes that
+                        have completed kata operation
+                      items:
+                        type: string
+                      type: array
+                  type: object
+                failed:
+                  description: Failed reflects the status of nodes that have failed
+                    kata installation
+                  properties:
+                    failedNodesCount:
+                      description: FailedNodesCount reflects the number of nodes that
+                        have failed kata operation
+                      type: integer
+                    failedNodesList:
+                      description: FailedNodesList reflects the list of nodes that
+                        have failed kata operation
+                      items:
+                        description: FailedNodeStatus holds the name and the error
+                          message of the failed node
+                        properties:
+                          error:
+                            description: Error message of the failed node reported
+                              by the installation daemon
+                            type: string
+                          name:
+                            description: Name of the failed node
+                            type: string
+                        required:
+                        - error
+                        - name
+                        type: object
+                      type: array
+                  type: object
+                inProgress:
+                  description: InProgress reflects the status of nodes that are in
+                    the process of kata installation
+                  properties:
+                    binariesInstallNodesList:
+                      items:
+                        type: string
+                      type: array
+                    inProgressNodesCount:
+                      description: InProgressNodesCount reflects the number of nodes
+                        that are in the process of kata installation
+                      type: integer
+                  type: object
+              type: object
+            kataImage:
+              description: KataImage is the image used for delivering kata binaries
+              type: string
+            runtimeClass:
+              description: RuntimeClass is the name of the runtime class used in CRIO
+                configuration
+              type: string
+            totalNodesCount:
+              description: TotalNodesCounts is the total number of worker nodes targeted
+                by this CR
+              type: integer
+            unInstallationStatus:
+              description: UnInstallationStatus reflects the status of the ongoing
+                kata uninstallation
+              properties:
+                completed:
+                  description: Completed reflects the status of nodes that have completed
+                    kata uninstallation
+                  properties:
+                    completedNodesCount:
+                      description: CompletedNodesCount reflects the number of nodes
+                        that have completed kata operation
+                      type: integer
+                    completedNodesList:
+                      description: CompletedNodesList reflects the list of nodes that
+                        have completed kata operation
+                      items:
+                        type: string
+                      type: array
+                  type: object
+                failed:
+                  description: Failed reflects the status of nodes that have failed
+                    kata uninstallation
+                  properties:
+                    failedNodesCount:
+                      description: FailedNodesCount reflects the number of nodes that
+                        have failed kata operation
+                      type: integer
+                    failedNodesList:
+                      description: FailedNodesList reflects the list of nodes that
+                        have failed kata operation
+                      items:
+                        description: FailedNodeStatus holds the name and the error
+                          message of the failed node
+                        properties:
+                          error:
+                            description: Error message of the failed node reported
+                              by the installation daemon
+                            type: string
+                          name:
+                            description: Name of the failed node
+                            type: string
+                        required:
+                        - error
+                        - name
+                        type: object
+                      type: array
+                  type: object
+                inProgress:
+                  description: InProgress reflects the status of nodes that are in
+                    the process of kata uninstallation
+                  properties:
+                    binariesUninstallNodesList:
+                      items:
+                        type: string
+                      type: array
+                    inProgressNodesCount:
+                      type: integer
+                  type: object
+              type: object
+            upgradeStatus:
+              description: upgradeStatus reflects the status of the ongoing kata upgrade
+              type: object
+          required:
+          - kataImage
+          - runtimeClass
+          - totalNodesCount
+          type: object
+      type: object
+  version: v1
+  versions:
+  - name: v1
+    served: true
+    storage: true
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: kata-operator-leader-election-role
+  namespace: kata-operator-system
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+- apiGroups:
+  - ""
+  resources:
+  - configmaps/status
+  verbs:
+  - get
+  - update
+  - patch
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - patch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  name: kata-operator-manager-role
+rules:
+- apiGroups:
+  - ""
+  - machineconfiguration.openshift.io
+  resources:
+  - configmaps
+  - endpoints
+  - events
+  - machineconfigpools
+  - machineconfigs
+  - nodes
+  - persistentvolumeclaims
+  - pods
+  - secrets
+  - services
+  - services/finalizers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - apps
+  resources:
+  - daemonsets
+  - deployments
+  - replicasets
+  - statefulsets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - apps
+  resourceNames:
+  - manager-role
+  resources:
+  - daemonsets/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - config.openshift.io
+  resources:
+  - clusterversions
+  verbs:
+  - get
+- apiGroups:
+  - kataconfiguration.openshift.io
+  resources:
+  - kataconfigs
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - kataconfiguration.openshift.io
+  resources:
+  - kataconfigs
+  - kataconfigs/finalizers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - kataconfiguration.openshift.io
+  resources:
+  - kataconfigs/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - node.k8s.io
+  resources:
+  - runtimeclasses
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kata-operator-proxy-role
+rules:
+- apiGroups:
+  - authentication.k8s.io
+  resources:
+  - tokenreviews
+  verbs:
+  - create
+- apiGroups:
+  - authorization.k8s.io
+  resources:
+  - subjectaccessreviews
+  verbs:
+  - create
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRole
+metadata:
+  name: kata-operator-metrics-reader
+rules:
+- nonResourceURLs:
+  - /metrics
+  verbs:
+  - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: kata-operator-leader-election-rolebinding
+  namespace: kata-operator-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: kata-operator-leader-election-role
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: kata-operator-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kata-operator-manager-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: kata-operator-manager-role
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: kata-operator-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: kata-operator-proxy-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: kata-operator-proxy-role
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: kata-operator-system
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    control-plane: controller-manager
+  name: kata-operator-controller-manager-metrics-service
+  namespace: kata-operator-system
+spec:
+  ports:
+  - name: https
+    port: 8443
+    targetPort: https
+  selector:
+    control-plane: controller-manager
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    control-plane: controller-manager
+  name: kata-operator-controller-manager
+  namespace: kata-operator-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      control-plane: controller-manager
+  template:
+    metadata:
+      labels:
+        control-plane: controller-manager
+    spec:
+      containers:
+      - args:
+        - --secure-listen-address=0.0.0.0:8443
+        - --upstream=http://127.0.0.1:8080/
+        - --logtostderr=true
+        - --v=10
+        image: gcr.io/kubebuilder/kube-rbac-proxy@sha256:e10d1d982dd653db74ca87a1d1ad017bc5ef1aeb651bdea089debf16485b080b
+        name: kube-rbac-proxy
+        ports:
+        - containerPort: 8443
+          name: https
+      - args:
+        - --metrics-addr=127.0.0.1:8080
+        - --enable-leader-election
+        command:
+        - /manager
+        image: quay.io/isolatedcontainers/kata-operator:4.7
+        imagePullPolicy: Always
+        name: manager
+        resources:
+          limits:
+            cpu: 100m
+            memory: 50Mi
+          requests:
+            cpu: 100m
+            memory: 40Mi
+      nodeSelector:
+        node-role.kubernetes.io/master: ""
+      terminationGracePeriodSeconds: 10
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/master
+        operator: Exists
+      - effect: NoExecute
+        key: node.kubernetes.io/unreachable
+        operator: Exists
+        tolerationSeconds: 120
+      - effect: NoExecute
+        key: node.kubernetes.io/not-ready
+        operator: Exists
+        tolerationSeconds: 120
+      - effect: NoSchedule
+        key: node.kubernetes.io/memory-pressure
+        operator: Exists

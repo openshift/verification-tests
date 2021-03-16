@@ -1,0 +1,13 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+  name: kataconfig-catalog
+  namespace: openshift-marketplace
+spec:
+  sourceType: grpc
+  image: quay.io/isolatedcontainers/kata-operator-catalog:latest
+  displayName: Kata container Operators
+  publisher: Red Hat
+  updateStrategy:
+    registryPoll: 
+      interval: 30m
