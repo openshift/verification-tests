@@ -75,7 +75,7 @@
           "sourceStrategy": {
             "from": {
               "kind": "ImageStreamTag",
-              "name": "ruby:latest",
+              "name": "ruby:2.7",
               "namespace": "openshift"
             },
             "env": [
