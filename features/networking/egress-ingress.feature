@@ -14,7 +14,8 @@ Feature: Egress-ingress related networking scenarios
       | --head         |
       | www.google.com |
     Then the step should succeed
-    And the output should contain "HTTP/1.1 200"
+    And the output should match:
+      | HTTP/1.1 20\d |
     Given I obtain test data file "networking/<%= cb.cb_egress_directory %>/limit_policy.json"
     When I run the :create admin command with:
       | f | limit_policy.json |
@@ -35,7 +36,8 @@ Feature: Egress-ingress related networking scenarios
       | --head         |
       | www.google.com |
     Then the step should succeed
-    And the output should contain "HTTP/1.1 200"
+    And the output should match:
+      | HTTP/1.1 20\d |
 
   # @author weliang@redhat.com
   # @case_id OCP-13502
