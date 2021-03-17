@@ -24,7 +24,7 @@ Feature: dockerbuild.feature
   Scenario: Docker build with dockerImage with specified tag
     Given I have a project
     When I run the :new_app client command with:
-      | image_stream | openshift/ruby:2.5                            |
+      | image_stream | openshift/ruby:2.7                            |
       | app_repo     | https://github.com/openshift/ruby-hello-world |
       | strategy     | docker                                        |
     Then the step should succeed

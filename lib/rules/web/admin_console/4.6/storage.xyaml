@@ -160,3 +160,25 @@ set_iops_value:
   params:
     input_field_id: storage-class-provisioner-iops-per-gi-b
   action: set_input_value
+check_snapshot_on_pvc_page:
+  params:
+    tab_name: Volume Snapshots
+  action: goto_one_pvc_page
+  action: click_tab
+  action: check_page_contains
+create_volumesnapshot_from_console:
+  action: goto_volumesnapshots_page
+  action: click_create_button
+  action: choose_pvc
+  action: choose_snapshot_class
+  action: submit_changes
+choose_pvc:
+  params:
+    dropdown_field: Persistent Volume
+    dropdown_item: <pvc_name>
+  action: choose_dropdown_item_text
+choose_snapshot_class:
+  params:
+    dropdown_field: Snapshot Class
+    dropdown_item: <vsc_name>
+  action: choose_dropdown_item_text
