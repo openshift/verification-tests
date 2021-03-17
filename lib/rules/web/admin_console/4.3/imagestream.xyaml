@@ -1,6 +1,6 @@
 check_istag_warning_info:
   element:
-    selector: 
+    selector:
       xpath: //div[span[contains(., '<istag_name>')]]/following-sibling::span[contains(., '<info>')]
 check_imagestream_help_link:
   params:
@@ -35,5 +35,9 @@ check_docker_pull:
   action: check_command
 check_command:
   element:
-    selector: 
+    selector:
       xpath: //pre[contains(., '<command>')]/following-sibling::button[contains(., 'Copy to Clipboard')]
+check_page_contains_warning_alert:
+  params:
+    content: There are 1 warning alert
+  action: check_page_contains
