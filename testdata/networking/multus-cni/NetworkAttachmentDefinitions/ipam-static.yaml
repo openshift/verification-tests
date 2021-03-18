@@ -4,7 +4,7 @@ metadata:
   name: ipam-name
 spec:
   config: '{
-      "cniVersion": "0.3.0",
+      "cniVersion": "0.3.1",
       "type": "ipam-type",
       "master": "ens3",
       "ipam": {

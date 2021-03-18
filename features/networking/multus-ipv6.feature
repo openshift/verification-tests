@@ -14,7 +14,7 @@ Feature: Multus-CNI ipv6 related scenarios
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/IPv6/macvlan-bridge-v6.yaml"
     When I run oc create as admin over "macvlan-bridge-v6.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %>            |
-      | ["spec"]["config"]| '{ "cniVersion": "0.3.0", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "bridge", "ipam": { "type": "host-local", "subnet": "fd00:dead:beef::/64"} }' |
+      | ["spec"]["config"]| '{ "cniVersion": "0.3.1", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "bridge", "ipam": { "type": "host-local", "subnet": "fd00:dead:beef::/64"} }' |
     Then the step should succeed
 
     # Create the first pod which consumes the macvlan custom resource
@@ -68,7 +68,7 @@ Feature: Multus-CNI ipv6 related scenarios
     When I run oc create as admin over "whereabouts-excludeIP.yaml" replacing paths:
       | ["metadata"]["name"]      | whereabouts-excludeipv6                                                                                                                                                                                                  |
       | ["metadata"]["namespace"] | <%= project.name %>                                                                                                                                                                                                      |
-      | ["spec"]["config"]        | '{ "cniVersion": "0.3.0", "name": "whereabouts", "type": "macvlan", "mode": "bridge", "ipam": { "type": "whereabouts", "range": "fd00:dead:beef:1::1-fd00:dead:beef:1::4/64", "exclude": ["fd00:dead:beef:1::2/128"] } }'|
+      | ["spec"]["config"]        | '{ "cniVersion": "0.3.1", "name": "whereabouts", "type": "macvlan", "mode": "bridge", "ipam": { "type": "whereabouts", "range": "fd00:dead:beef:1::1-fd00:dead:beef:1::4/64", "exclude": ["fd00:dead:beef:1::2/128"] } }'|
     Then the step should succeed
 
     # Create the three pods which consumes the custom resource
@@ -95,7 +95,7 @@ Feature: Multus-CNI ipv6 related scenarios
     When I run oc create as admin over "whereabouts-excludeIP.yaml" replacing paths:
       | ["metadata"]["name"]      | whereabouts-excludeipv6-list                                                                                                                                                                                                                                                                                  |
       | ["metadata"]["namespace"] | <%= project.name %>                                                                                                                                                                                                                                                                                           |
-      | ["spec"]["config"]        | '{ "cniVersion": "0.3.0", "name": "whereabouts", "type": "macvlan", "mode": "bridge", "ipam": { "type": "whereabouts", "range": "fd00:dead:beef:1::10-fd00:dead:beef:1::16/64", "exclude": ["fd00:dead:beef:1::10/128","fd00:dead:beef:1::11/128","fd00:dead:beef:1::12/128", "fd00:dead:beef:1::13/128"] } }'|
+      | ["spec"]["config"]        | '{ "cniVersion": "0.3.1", "name": "whereabouts", "type": "macvlan", "mode": "bridge", "ipam": { "type": "whereabouts", "range": "fd00:dead:beef:1::10-fd00:dead:beef:1::16/64", "exclude": ["fd00:dead:beef:1::10/128","fd00:dead:beef:1::11/128","fd00:dead:beef:1::12/128", "fd00:dead:beef:1::13/128"] } }'|
     Then the step should succeed
 
     # Create the three pods which consumes the custom resource

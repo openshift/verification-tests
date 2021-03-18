@@ -14,7 +14,7 @@ Feature: Multus-CNI related scenarios
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml"
     When I run oc create as admin over "macvlan-bridge.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %>                                                                                                                                                                                                                                                                    |
-      | ["spec"]["config"]        | '{ "cniVersion": "0.3.0", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "bridge", "ipam": { "type": "host-local", "subnet": "10.1.1.0/24", "rangeStart": "10.1.1.100", "rangeEnd": "10.1.1.200", "routes": [ { "dst": "0.0.0.0/0" } ], "gateway": "10.1.1.1" } }' |
+      | ["spec"]["config"]        | '{ "cniVersion": "0.3.1", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "bridge", "ipam": { "type": "host-local", "subnet": "10.1.1.0/24", "rangeStart": "10.1.1.100", "rangeEnd": "10.1.1.200", "routes": [ { "dst": "0.0.0.0/0" } ], "gateway": "10.1.1.1" } }' |
     Then the step should succeed
 
     # Create the first pod which consumes the macvlan custom resource
@@ -74,7 +74,7 @@ Feature: Multus-CNI related scenarios
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/macvlan-private.yaml"
     When I run oc create as admin over "macvlan-private.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %>                                                                                                                                                                                                                                                                     |
-      | ["spec"]["config"]        | '{ "cniVersion": "0.3.0", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "private", "ipam": { "type": "host-local", "subnet": "10.1.1.0/24", "rangeStart": "10.1.1.100", "rangeEnd": "10.1.1.200", "routes": [ { "dst": "0.0.0.0/0" } ], "gateway": "10.1.1.1" } }' |
+      | ["spec"]["config"]        | '{ "cniVersion": "0.3.1", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "private", "ipam": { "type": "host-local", "subnet": "10.1.1.0/24", "rangeStart": "10.1.1.100", "rangeEnd": "10.1.1.200", "routes": [ { "dst": "0.0.0.0/0" } ], "gateway": "10.1.1.1" } }' |
     Then the step should succeed
 
     # Create the first pod which consumes the macvlan custom resource
@@ -132,7 +132,7 @@ Feature: Multus-CNI related scenarios
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/macvlan-vepa.yaml"
     When I run oc create as admin over "macvlan-vepa.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %>                                                                                                                                                                                                                                                                  |
-      | ["spec"]["config"]        | '{ "cniVersion": "0.3.0", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "vepa", "ipam": { "type": "host-local", "subnet": "10.1.1.0/24", "rangeStart": "10.1.1.100", "rangeEnd": "10.1.1.200", "routes": [ { "dst": "0.0.0.0/0" } ], "gateway": "10.1.1.1" } }' |
+      | ["spec"]["config"]        | '{ "cniVersion": "0.3.1", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "vepa", "ipam": { "type": "host-local", "subnet": "10.1.1.0/24", "rangeStart": "10.1.1.100", "rangeEnd": "10.1.1.200", "routes": [ { "dst": "0.0.0.0/0" } ], "gateway": "10.1.1.1" } }' |
     Then the step should succeed
 
     # Create the first pod which consumes the macvlan custom resource
@@ -205,7 +205,7 @@ Feature: Multus-CNI related scenarios
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/host-device.yaml"
     When I run oc create as admin over "host-device.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %>                                                              |
-      | ["spec"]["config"]        | '{"cniVersion": "0.3.0", "type": "host-device", "device": "<%= cb.nic_name %>"}' |
+      | ["spec"]["config"]        | '{"cniVersion": "0.3.1", "type": "host-device", "device": "<%= cb.nic_name %>"}' |
     Then the step should succeed
     # Create the first pod which consumes the host-device custom resource
     Given I obtain test data file "networking/multus-cni/Pods/1interface-host-device.yaml"
@@ -261,7 +261,7 @@ Feature: Multus-CNI related scenarios
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml"
     When I run oc create as admin over "macvlan-bridge.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %>                                                                                                                                                                                                                                                                    |
-      | ["spec"]["config"]        | '{ "cniVersion": "0.3.0", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "bridge", "ipam": { "type": "host-local", "subnet": "10.1.1.0/24", "rangeStart": "10.1.1.100", "rangeEnd": "10.1.1.200", "routes": [ { "dst": "0.0.0.0/0" } ], "gateway": "10.1.1.1" } }' |
+      | ["spec"]["config"]        | '{ "cniVersion": "0.3.1", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "bridge", "ipam": { "type": "host-local", "subnet": "10.1.1.0/24", "rangeStart": "10.1.1.100", "rangeEnd": "10.1.1.200", "routes": [ { "dst": "0.0.0.0/0" } ], "gateway": "10.1.1.1" } }' |
     Then the step should succeed
 
     # Create the pod which consumes multiple macvlan custom resources
@@ -306,12 +306,12 @@ Feature: Multus-CNI related scenarios
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/macvlan-bridge.yaml"
     When I run oc create as admin over "macvlan-bridge.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %>                                                                                                                                                                                                                                                                    |
-      | ["spec"]["config"]        | '{ "cniVersion": "0.3.0", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "bridge", "ipam": { "type": "host-local", "subnet": "10.1.1.0/24", "rangeStart": "10.1.1.100", "rangeEnd": "10.1.1.200", "routes": [ { "dst": "0.0.0.0/0" } ], "gateway": "10.1.1.1" } }' |
+      | ["spec"]["config"]        | '{ "cniVersion": "0.3.1", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "bridge", "ipam": { "type": "host-local", "subnet": "10.1.1.0/24", "rangeStart": "10.1.1.100", "rangeEnd": "10.1.1.200", "routes": [ { "dst": "0.0.0.0/0" } ], "gateway": "10.1.1.1" } }' |
     Then the step should succeed
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/host-device.yaml"
     When I run oc create as admin over "host-device.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %>                                                              |
-      | ["spec"]["config"]        | '{"cniVersion": "0.3.0", "type": "host-device", "device": "<%= cb.nic_name %>"}' |
+      | ["spec"]["config"]        | '{"cniVersion": "0.3.1", "type": "host-device", "device": "<%= cb.nic_name %>"}' |
     Then the step should succeed
 
     # Prepare the net link on the node which will be attached to the pod
@@ -372,13 +372,13 @@ Feature: Multus-CNI related scenarios
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/host-device.yaml"
     When I run oc create as admin over "host-device.yaml" replacing paths:
       | ["metadata"]["name"]      | host-device                                                                      |
-      | ["spec"]["config"]        | '{"cniVersion": "0.3.0", "type": "host-device", "device": "<%= cb.nic_name1%>"}' |
+      | ["spec"]["config"]        | '{"cniVersion": "0.3.1", "type": "host-device", "device": "<%= cb.nic_name1%>"}' |
       | ["metadata"]["namespace"] | <%= project.name %>                                                              |
     Then the step should succeed
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/host-device.yaml"
     When I run oc create as admin over "host-device.yaml" replacing paths:
       | ["metadata"]["name"]      | host-device-2                                                                    |
-      | ["spec"]["config"]        | '{"cniVersion": "0.3.0", "type": "host-device", "device": "<%= cb.nic_name2%>"}' |
+      | ["spec"]["config"]        | '{"cniVersion": "0.3.1", "type": "host-device", "device": "<%= cb.nic_name2%>"}' |
       | ["metadata"]["namespace"] | <%= project.name %>                                                              |
     Then the step should succeed
 
@@ -920,7 +920,7 @@ Feature: Multus-CNI related scenarios
     When I run oc create as admin over "ipam-dhcp.yaml" replacing paths:
       | ["metadata"]["name"]      | bridge-dhcp                                                                                                                                               |
       | ["metadata"]["namespace"] | <%= project.name %>                                                                                                                                       |
-      | ["spec"]["config"]        | '{ "cniVersion": "0.3.0", "type": "bridge", "bridge": "testbr1", "hairpinMode": true, "master": "<%= cb.default_interface %>", "ipam": {"type": "dhcp"}}' |
+      | ["spec"]["config"]        | '{ "cniVersion": "0.3.1", "type": "bridge", "bridge": "testbr1", "hairpinMode": true, "master": "<%= cb.default_interface %>", "ipam": {"type": "dhcp"}}' |
     Then the step should succeed
 
     #Creating dhcp pod absorbing above net-attach-def
@@ -1088,7 +1088,7 @@ Feature: Multus-CNI related scenarios
     When I run oc create as admin over "ipam-static.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %>                                                                                                                      |
       | ["metadata"]["name"]      | bridge-static                                                                                                                            |
-      | ["spec"]["config"]        | '{ "cniVersion": "0.3.0", "type": "bridge", "ipam": {"type":"static","addresses": [{"address": "22.2.2.22/24","gateway": "22.2.2.1"}]}}' |
+      | ["spec"]["config"]        | '{ "cniVersion": "0.3.1", "type": "bridge", "ipam": {"type":"static","addresses": [{"address": "22.2.2.22/24","gateway": "22.2.2.1"}]}}' |
     Then the step should succeed
 
     # Create a pod absorbing above net-attach-def
@@ -1257,7 +1257,7 @@ Feature: Multus-CNI related scenarios
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/whereabouts-macvlan.yaml"
     When I run oc create as admin over "whereabouts-macvlan.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %>                                                                                                                                                      |
-      | ["spec"]["config"]        | '{ "cniVersion": "0.3.0", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "bridge", "ipam": { "type": "whereabouts", "range": "192.168.22.100/30"} }' |
+      | ["spec"]["config"]        | '{ "cniVersion": "0.3.1", "type": "macvlan", "master": "<%= cb.default_interface %>","mode": "bridge", "ipam": { "type": "whereabouts", "range": "192.168.22.100/30"} }' |
     Then the step should succeed
 
     # Create a pod absorbing above net-attach-def
@@ -1314,7 +1314,7 @@ Feature: Multus-CNI related scenarios
     When I run oc create as admin over "route-override.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %>                                                                                                                                                                                                                                                 |
       | ["metadata"]["name"]      | route-override                                                                                                                                                                                                                                                      |
-      | ["spec"]["config"]        | '{ "cniVersion": "0.3.0", "name" : "mymacvlan", "plugins": [ { "type": "macvlan", "mode": "bridge", "ipam": { "type": "static", "addresses": [{"address": "192.168.20.2/24"}] } }, { "type" : "route-override", "addroutes": [ { "dst": "192.168.10.0/24" }] } ] }' |
+      | ["spec"]["config"]        | '{ "cniVersion": "0.3.1", "name" : "mymacvlan", "plugins": [ { "type": "macvlan", "mode": "bridge", "ipam": { "type": "static", "addresses": [{"address": "192.168.20.2/24"}] } }, { "type" : "route-override", "addroutes": [ { "dst": "192.168.10.0/24" }] } ] }' |
     Then the step should succeed
 
     # Create a pod absorbing above net-attach-def
@@ -1342,7 +1342,7 @@ Feature: Multus-CNI related scenarios
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/whereabouts-macvlan.yaml"
     When I run oc create as admin over "whereabouts-macvlan.yaml" replacing paths:
       | ["metadata"]["namespace"] | default                                                                                                                          |
-      | ["spec"]["config"]        | '{ "cniVersion": "0.3.0", "type": "macvlan", "mode": "bridge", "ipam": { "type": "whereabouts", "range": "192.168.22.100/24"} }' |
+      | ["spec"]["config"]        | '{ "cniVersion": "0.3.1", "type": "macvlan", "mode": "bridge", "ipam": { "type": "whereabouts", "range": "192.168.22.100/24"} }' |
     Then the step should succeed
 
     #Cleanup created net-attach-def from default namespaces
@@ -1369,7 +1369,7 @@ Feature: Multus-CNI related scenarios
     Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/whereabouts-macvlan.yaml"
     When I run oc create as admin over "whereabouts-macvlan.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %>                                                                                                             |
-      | ["spec"]["config"]        | '{ "cniVersion": "0.3.0", "type": "macvlan","mode": "bridge", "ipam": { "type": "whereabouts", "range": "192.168.22.100/24"} }' |
+      | ["spec"]["config"]        | '{ "cniVersion": "0.3.1", "type": "macvlan","mode": "bridge", "ipam": { "type": "whereabouts", "range": "192.168.22.100/24"} }' |
     Then the step should succeed
 
     # Create a pod absorbing above net-attach-def
@@ -1493,7 +1493,7 @@ Feature: Multus-CNI related scenarios
     When I run oc create as admin over "whereabouts-overlapping.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %>    |
       | ["metadata"]["name"]      | whereabouts-largerange |
-      | ["spec"]["config"]        |'{ "cniVersion": "0.3.0", "type": "macvlan","mode": "bridge", "ipam": { "type": "whereabouts", "range": "192.168.42.0/24"} }' |
+      | ["spec"]["config"]        |'{ "cniVersion": "0.3.1", "type": "macvlan","mode": "bridge", "ipam": { "type": "whereabouts", "range": "192.168.42.0/24"} }' |
     Then the step should succeed
 
     # Create a pod absorbing above net-attach-def
