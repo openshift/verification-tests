@@ -82,3 +82,7 @@ check_no_errors_in_charts:
   - selector:
       xpath: //div[contains(text(),'No datapoints found')]
     missing: true
+insert_snippet:
+  params:
+      button_text: Insert Snippet
+  action: click_button

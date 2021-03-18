@@ -33,3 +33,7 @@ check_console_notification:
     text: <link_text>
     link_url: <link_url>
   action: check_link_and_text
+insert_snippet:
+  params:
+      button_text: Insert snippet
+  action: click_button
