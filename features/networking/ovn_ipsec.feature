@@ -155,5 +155,5 @@ Feature: OVNKubernetes IPsec related networking scenarios
        | bash | -c | timeout  --preserve-status 2 tcpdump -i <%= cb.default_interface %> esp |
     Then the step should succeed 
     # Example ESP packet un-encrypted will look like 16:37:16.309297 IP ip-10-0-x-x.us-east-2.compute.internal > ip-10-0-x-x.us-east-2.compute.internal: ESP(spi=0xf50c771c,seq=0xfaad)
-    And the output should contain: 
-       | <%= cb.workers[0].name %> > <%= cb.workers[1].name %>: ESP |
+    And the output should match: 
+       | <%= cb.workers[0].name %>.* > <%= cb.workers[1].name %>.*: ESP |
