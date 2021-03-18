@@ -72,7 +72,7 @@ Feature: NFS Persistent Volume
 
     Given I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/security/pod-supplementalgroup.json" replacing paths:
+    When I run oc create over "https://raw.githubusercontent.com/openshift/verification-tests/master/testdata/storage/nfs/security/pod-supplementalgroup.json" replacing paths:
       | ["metadata"]["name"]                                         | nfspd-<%= project.name %> |
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | nfsc-<%= project.name %>  |
     Then the step should succeed
@@ -128,7 +128,7 @@ Feature: NFS Persistent Volume
 
     Given I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/nfs/security/pod-supplementalgroup.json" replacing paths:
+    When I run oc create over "https://raw.githubusercontent.com/openshift/verification-tests/master/testdata/storage/nfs/security/pod-supplementalgroup.json" replacing paths:
       | ["metadata"]["name"]                                         | nfspd-<%= project.name %> |
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | nfsc-<%= project.name %>  |
     Then the step should succeed

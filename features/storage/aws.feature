@@ -15,7 +15,7 @@ Feature: AWS specific scenarios
       | ["metadata"]["annotations"]["volume.beta.kubernetes.io/storage-class"] | sc-<%= project.name %>     |
     Then the step should succeed
     And the "efspvc-<%= project.name %>" PVC becomes :bound within 60 seconds
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/ebs/pod.yaml" replacing paths:
+    When I run oc create over "https://raw.githubusercontent.com/openshift/verification-tests/master/testdata/storage/ebs/pod.yaml" replacing paths:
       | ["metadata"]["name"]                                         | pod1-<%= project.name %>   |
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | efspvc-<%= project.name %> |
     Then the step should succeed
@@ -24,7 +24,7 @@ Feature: AWS specific scenarios
       | touch | /tmp/file_pod1 |
     Then the step should succeed
 
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/ebs/pod.yaml" replacing paths:
+    When I run oc create over "https://raw.githubusercontent.com/openshift/verification-tests/master/testdata/storage/ebs/pod.yaml" replacing paths:
       | ["metadata"]["name"]                                         | pod2-<%= project.name %>   |
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | efspvc-<%= project.name %> |
     Then the step should succeed

@@ -27,7 +27,7 @@ Feature: Storage of Ceph plugin testing
     And I use the "<%= project.name %>" project
     And I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/rbd/dynamic-provisioning/user_secret.yaml" replacing paths:
       | ["data"]["key"] | <%= cb.secret_key %> |
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/rbd/dynamic-provisioning/pod.json" replacing paths:
+    When I run oc create over "https://raw.githubusercontent.com/openshift/verification-tests/master/testdata/storage/rbd/dynamic-provisioning/pod.json" replacing paths:
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | pvc-<%= project.name %> |
     Then the step should succeed
     And the pod named "rbdpd" becomes ready

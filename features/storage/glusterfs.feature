@@ -23,7 +23,7 @@ Feature: Storage of GlusterFS plugin testing
       | ["subsets"][0]["ports"][0]["port"]   | 24007                         |
     Then the step should succeed
 
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/security/gluster_pod_sg.json" replacing paths:
+    When I run oc create over "https://raw.githubusercontent.com/openshift/verification-tests/master/testdata/storage/gluster/security/gluster_pod_sg.json" replacing paths:
       | ["metadata"]["name"] | glusterpd-<%= project.name %> |
     Then the step should succeed
 
@@ -45,7 +45,7 @@ Feature: Storage of GlusterFS plugin testing
     And the output should contain:
       | Hello OpenShift Storage |
 
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/security/gluster_pod_sg.json" replacing paths:
+    When I run oc create over "https://raw.githubusercontent.com/openshift/verification-tests/master/testdata/storage/gluster/security/gluster_pod_sg.json" replacing paths:
       | ["metadata"]["name"]                              | glusterpd-negative-<%= project.name %> |
       | ["spec"]["securityContext"]["supplementalGroups"] | [123460]                               |
     Then the step should succeed
@@ -79,7 +79,7 @@ Feature: Storage of GlusterFS plugin testing
     # Switch to admin so as to create privileged pod
     Given I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/dynamic-provisioning/pod.json" replacing paths:
+    When I run oc create over "https://raw.githubusercontent.com/openshift/verification-tests/master/testdata/storage/gluster/dynamic-provisioning/pod.json" replacing paths:
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | pvc1 |
     Then the step should succeed
     And the pod named "gluster" status becomes :running
@@ -143,7 +143,7 @@ Feature: Storage of GlusterFS plugin testing
     # Switch to admin so as to create privileged pod
     Given I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/dynamic-provisioning/pod.json" replacing paths:
+    When I run oc create over "https://raw.githubusercontent.com/openshift/verification-tests/master/testdata/storage/gluster/dynamic-provisioning/pod.json" replacing paths:
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | pvc1 |
     Then the step should succeed
     And the pod named "gluster" status becomes :running
@@ -177,7 +177,7 @@ Feature: Storage of GlusterFS plugin testing
       | pv.beta.kubernetes.io/gid: "3333" |
 
     # Verify Pod is assigned gid 3333
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/dynamic-provisioning/pod_gid.json" replacing paths:
+    When I run oc create over "https://raw.githubusercontent.com/openshift/verification-tests/master/testdata/storage/gluster/dynamic-provisioning/pod_gid.json" replacing paths:
       | ["metadata"]["name"]                                         | pod-<%= project.name %> |
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | pvc1                    |
     Then the step should succeed
@@ -195,7 +195,7 @@ Feature: Storage of GlusterFS plugin testing
 
     # Pod should work as well having its supplementalGroups set to 3333 explicitly
     Given I ensure "pod-<%= project.name %>" pod is deleted
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/gluster/dynamic-provisioning/pod_gid.json" replacing paths:
+    When I run oc create over "https://raw.githubusercontent.com/openshift/verification-tests/master/testdata/storage/gluster/dynamic-provisioning/pod_gid.json" replacing paths:
       | ["metadata"]["name"]                                         | pod1-<%= project.name %> |
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | pvc1                     |
       | ["spec"]["securityContext"]["supplementalGroups"]            | [3333]                   |

@@ -110,7 +110,7 @@ Feature: storage security check
     Given I switch to cluster admin pseudo user
     And I use the "<%= project.name %>" project
     When I run the :create client command with:
-      | filename | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/storage/secret/secret-pod-test.json |
+      | filename | https://raw.githubusercontent.com/openshift/verification-tests/master/testdata/storage/secret/secret-pod-test.json |
     Then the step should succeed
 
     Given the pod named "secretpd" becomes ready
