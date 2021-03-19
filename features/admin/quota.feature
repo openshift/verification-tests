@@ -804,6 +804,7 @@ Feature: Quota related scenarios
   # @author chezhang@redhat.com
   # @case_id OCP-12086
   @admin
+  @flaky
   Scenario: Quota with Terminating and NotTerminating scope
     Given I have a project
     When I run the :create_quota admin command with:

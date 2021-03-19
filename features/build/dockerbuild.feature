@@ -21,6 +21,7 @@ Feature: dockerbuild.feature
 
   # @author wzheng@redhat.com
   # @case_id OCP-30854
+  @flaky
   Scenario: Docker build with dockerImage with specified tag
     Given I have a project
     When I run the :new_app client command with:

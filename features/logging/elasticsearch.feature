@@ -19,6 +19,7 @@ Feature: Elasticsearch related tests
   # @case_id OCP-22050
   @admin
   @destructive
+  @flaky
   Scenario: Elasticsearch using dynamic volumes
     And default storageclass is stored in the :default_sc clipboard
     Given I delete the clusterlogging instance

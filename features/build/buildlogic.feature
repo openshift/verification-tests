@@ -224,6 +224,7 @@ Feature: buildlogic.feature
 
   # @author dyan@redhat.com
   # @case_id OCP-13684
+  @flaky
   Scenario: Check docker build substatus and times
     Given I have a project
     Given I obtain test data file "build/application-template-dockerbuild.json"
