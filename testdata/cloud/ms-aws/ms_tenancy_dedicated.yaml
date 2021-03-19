@@ -27,6 +27,7 @@ spec:
         value:
           ami:
             id:
+          apiVersion: awsproviderconfig.openshift.io/v1beta1
           placement:
             availabilityZone:
             tenancy: dedicated
@@ -34,4 +35,5 @@ spec:
             filters:
             - name: tag:Name
               values:
-
+          iamInstanceProfile:
+              id: 
