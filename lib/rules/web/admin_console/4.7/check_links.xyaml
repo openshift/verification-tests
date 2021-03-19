@@ -163,13 +163,50 @@ check_customized_documentation_link_in_helpmenu:
     link_url: <link_url>
   action: click_help_button
   action: check_link_and_text
-click_report_bug_link_in_helpmenu:
-  action: click_help_button
-  action: click_report_bug_link
-click_report_bug_link:
-  params:
-    text: Report Bug to Red Hat
-  action: click_link_with_text_only
+check_report_bug_or_open_case_link:
+  action:
+    if_element:
+      selector:
+        xpath: //a[contains(text(),'Report Bug to Red Hat')]
+    ref: check_report_bug_link
+  action:
+    if_element:
+      selector:
+        xpath: //a[contains(text(),'Open Support Case')]
+    ref: check_open_case_link
+check_report_bug_link:
+  scripts:
+    - command: |
+        var allas = document.querySelectorAll('a[data-test="application-launcher-item"]');
+        var expecteda;
+        for (var i of allas){
+          if(i.innerText.startsWith("Report Bug to Red Hat"))
+            expecteda = i
+        }
+        var bugzillaVersion = <bz_version>
+        var version = <detail_version>
+        var clusterID = <cluster_id>
+        var environment = encodeURIComponent(`Version: ${version}
+          Cluster ID: ${clusterID}
+          Browser: ${window.navigator.userAgent}
+        `)
+        var hh = `https://bugzilla.redhat.com/enter_bug.cgi?product=OpenShift%20Container%20Platform&version=${bugzillaVersion}&cf_environment=${environment}`
+        return decodeURIComponent(hh).replace(/\n/g, "").replace(/ +/g, "") === decodeURIComponent(expecteda.href).replace(/\n/g, "").replace(/ +/g, "")
+      expect_result: true
+check_open_case_link:
+  scripts:
+    - command: |
+        var allas = document.querySelectorAll('a[data-test="application-launcher-item"]');
+        var expecteda;
+        for (var i of allas){
+          if(i.innerText.startsWith("Open Support Case"))
+            expecteda = i
+        }
+        var ocp_version = <bz_version>
+        var clusterID = <cluster_id>
+        var hh = `https://access.redhat.com/support/cases/#/case/new?product=OpenShift%20Container%20Platform&version=${ocp_version}&clusterId=${cluster_id}`
+        return decodeURIComponent(hh).replace(/\n/g, "").replace(/ +/g, "") === decodeURIComponent(expecteda.href).replace(/\n/g, "").replace(/ +/g, "")
+      expect_result: true
 check_console_link_in_applauncher:
   action: click_application_launcher_button
   action: check_link_and_text
