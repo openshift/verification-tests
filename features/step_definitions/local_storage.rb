@@ -35,6 +35,6 @@ Given /^I save all localvolumediscoveryresults for my cluster to#{OPT_SYM} clipb
   cb_name ||= :avail_devices
   discovery_results = BushSlicer::LocalVolumeDiscoveryResult.list(user: user, project: project)
   res_map = {}
-  discovery_results.select {|r| res_map[r.name] = local_volume_discovery_result(r.name).available_devices }
+  discovery_results.select {|r| res_map[r.name] = local_volume_discovery_result(r.name).available_devices(cached: false) }
   cb[cb_name] = res_map
 end
