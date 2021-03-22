@@ -187,19 +187,20 @@ module BushSlicer
     # @param details [Hash] a hash to put additional details about the read
     #   file; this is absolute location as string presently
     def readfile(path, basepath=nil, details: {})
+      uri_parser = URI::RFC2396_Parser.new
       case path
       when %r{\Ahttps?://}
         details[:location] = path
         return Http.get(url: path, raise_on_error: true)[:response]
       when %r{\A/}
         details[:location] = path
-        return File.read(URI::decode(path))
+        return File.read(uri_parser.unescape(path))
       else
         if basepath
           with_base = join_paths_or_urls(basepath, path)
           return readfile(with_base, details: details)
         else
-          details[:location] = expand_path(URI::decode(path))
+          details[:location] = expand_path(uri_parser.unescape(path))
           return File.read details[:location]
         end
       end
