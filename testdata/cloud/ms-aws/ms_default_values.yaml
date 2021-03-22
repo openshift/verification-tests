@@ -3,7 +3,7 @@ kind: MachineSet
 metadata:
   labels:
     machine.openshift.io/cluster-api-cluster:
-  name: default-valued-32269           
+  name:            
 spec:
   replicas: 1
   selector:
@@ -27,7 +27,13 @@ spec:
         value:
           ami:
             id: 
+          apiVersion: awsproviderconfig.openshift.io/v1beta1
           placement:
             availabilityZone: 
-
-
+          subnet:
+            filters:
+            - name: tag:Name
+              values:
+          iamInstanceProfile:
+              id:        
+ 

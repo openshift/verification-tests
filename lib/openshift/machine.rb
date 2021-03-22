@@ -68,6 +68,16 @@ module BushSlicer
          dig('spec', 'providerSpec', 'value', 'placement','availabilityZone')
     end
 
+    def aws_subnet(user: nil, cached: true, quiet: false)
+       raw_resource(user: user, cached: cached ,quiet: quiet).
+         dig('spec', 'providerSpec', 'value', 'subnet','filters')
+    end
+
+    def aws_iamInstanceProfile(user: nil, cached: true, quiet: false)
+       raw_resource(user: user, cached: cached ,quiet: quiet).
+         dig('spec', 'providerSpec', 'value', 'iamInstanceProfile', 'id')
+    end
+
     def vsphere_datacenter(user: nil, cached: true, quiet: false)
        raw_resource(user: user, cached: cached ,quiet: quiet).
          dig('spec', 'providerSpec', 'value', 'workspace', 'datacenter')
