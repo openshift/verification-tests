@@ -135,6 +135,10 @@ Feature: MachineHealthCheck Test Scenarios
       | mhc-<%= machine_set.name %>-1: total targets: 1,  maxUnhealthy: 0, unhealthy: 1. Short-circuiting remediation   |
       | mhc-<%= machine_set.name %>-2: total targets: 1,  maxUnhealthy: 90%, unhealthy: 1. Short-circuiting remediation |
     """
+    When I run the :describe admin command with:
+      | resource | machinehealthcheck/mhc-<%= machine_set.name %>-2 |
+    Then the output should match:
+      | Type.*RemediationAllowed |
 
   # @author miyadav@redhat.com
   # @case_id OCP-28718
