@@ -1,6 +1,5 @@
 Feature: Storage upgrade tests
   # @author wduan@redhat.com
-  # @case_id OCP-23501
   @upgrade-prepare
   @users=upuser1,upuser2
   @admin
@@ -67,6 +66,7 @@ Feature: Storage upgrade tests
       | test-before-upgrade |
 
   # @author wduan@redhat.com
+  # @case_id OCP-23501
   @upgrade-check
   @users=upuser1,upuser2
   @admin
@@ -147,7 +147,6 @@ Feature: Storage upgrade tests
       | test-upgrade |
 
   # @author wduan@redhat.com
-  # @case_id OCP-31331
   @upgrade-prepare
   @users=upuser1,upuser2
   @admin
@@ -160,6 +159,7 @@ Feature: Storage upgrade tests
     Given the expression should be true> cluster_operator('storage').condition(type: 'Upgradeable')['status'] == "True"
 
   # @author wduan@redhat.com
+  # @case_id OCP-31331
   @upgrade-check
   @users=upuser1,upuser2
   @admin
@@ -175,7 +175,6 @@ Feature: Storage upgrade tests
     Given the expression should be true> cluster_operator('storage').condition(type: 'Upgradeable')['status'] == "True"
 
   # @author chaoyang@redhat.com
-  # @case_id OCP-28630
   @upgrade-prepare
   @users=upuser1,upuser2
   @admin
@@ -288,6 +287,7 @@ Feature: Storage upgrade tests
     """
 
   # @author chaoyang@redhat.com
+  # @case_id OCP-28630
   @upgrade-check
   @admin
   Scenario: Snapshot operator should be in available status after upgrade and can created pod with snapshot
