@@ -792,3 +792,64 @@ check_no_result_on_operatorhub_page:
   elements:
   - selector:
       xpath: //h2[contains(., 'No Results Match the Filter Criteria')]
+check_extension_help_block:
+  elements:
+  - selector:
+      xpath: //button[text()='Console UI extensions']
+    op: click
+  - selector: &help_block1
+      xpath: //div[contains(.,'a custom interface')]
+  - selector:
+      xpath: //div[contains(.,'trust this operator before enabling')]
+  action: click_close_icon
+check_plugins_are_disabled_bydefault:
+  elements:
+  - selector:
+      xpath: //input[@value='disabled' and @name='prometheus-plugin1' and @checked]
+  - selector:
+      xpath: //input[@value='disabled' and @name='prometheus-plugin2' and @checked]
+check_warning_for_enablement:
+  elements:
+  - selector:
+      xpath: //legend[text()='<plugin_name>']/following::input[@value='enabled'][1]
+    op: click
+  - selector:
+      <<: *help_block1
+  - selector:
+      xpath: //div[contains(.,'trust it before enabling')]
+check_extension_available_guide:
+  elements:
+  - selector:
+      xpath: //button[text()='UI extension available']
+    op: click
+  - selector:
+      xpath: //div[contains(.,'enable its UI extension in the operator detail')]
+  - selector:
+      xpath: //a[contains(.,'View operator details')]
+    op: click
+check_plugin_status_on_operator_details_page:
+  elements:
+  - selector: 
+      xpath: //strong[contains(.,'<plugin_1_name>')]/parent::dd//button[text()='<plugin_1_status>']
+  - selector:
+      xpath: //strong[contains(.,'<plugin_2_name>')]/parent::dd//button[text()='<plugin_2_status>']
+enable_plugin:
+  params:
+    source_status: Disabled
+    target_status: enabled
+  action: toggle_plugin_status
+disable_plugin:
+  params:
+    source_status: Enabled
+    target_status: disabled
+  action: toggle_plugin_status
+toggle_plugin_status:
+  elements:
+  - selector:
+      xpath: //strong[contains(.,'<plugin_name>')]/parent::dd//button[text()='<source_status>']
+    op: click
+  params:
+    radio_text: <target_status>
+    button_text: Save
+  action: click_radio_input
+  action: click_button_text
