@@ -51,7 +51,7 @@ check_common_part:
         - selector:
             xpath: //a[@class='pf-c-page__header-brand-link' and @href='./']/img[@alt='Red Hat Logo']
         - selector:
-            xpath: //span[text()='Red Hat OpenShift Cluster Manager']
+            xpath: //span[text()='OpenShift Cluster Manager']
         - selector:
             xpath: //a[contains(@href, '/openshift/') and contains(., 'Clusters')]
         - selector:
@@ -736,7 +736,13 @@ check_aro_pull_secret_page:
         - selector:
             xpath: //h3[text()='Red Hat content access']
         - selector:
-            xpath: //h4[text()='Azure Red Hat OpenShift clusters do not connect to OpenShift Cluster Manager at this time. OpenShift Cluster Manager integration may be offered in a future release.']
+            xpath: //h4[text()='Connecting your cluster to OpenShift Cluster Manager']
+        - selector:
+            xpath: //p[text()='Azure Red Hat OpenShift clusters do not connect to OpenShift Cluster Manager at creation time. Follow the']
+        - selector:
+            xpath: //a[text()='Microsoft documentation' and @href='https://docs.microsoft.com/en-us/azure/openshift/howto-add-update-pull-secret']
+        - selector:
+            xpath: //p[text()='if you would like to enable telemetry as a day 2 operation.']
 check_pull_secret_page:
     action: click_copyPullSecret_button
     elements:

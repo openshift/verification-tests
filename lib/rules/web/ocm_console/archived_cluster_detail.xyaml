@@ -15,7 +15,7 @@ archived_cluster_detail_page_loaded:
         - selector:
             xpath: //h2[text()='Details']
         - selector:
-            xpath: //dt/span[text()='Status']/../../dd/div[text()='archived']
+            xpath: //dt/span[text()='Status']/../../dd/div[text()='Archived']
 click_detail_page_unarchive_cluster_button:
     element:
         selector:

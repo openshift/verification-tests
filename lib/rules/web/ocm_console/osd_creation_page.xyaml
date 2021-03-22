@@ -799,4 +799,19 @@ select_vpc_avalilability_zone:
           op: click
         - selector:
             xpath: //span[text()='<available_zone>']
-    
+check_billing_model:
+    elements:
+        - selector: 
+            xpath: //h3[text()='Billing model']
+        - selector:
+            xpath: //h3[text()='Subscription type:']
+        - selector:
+            xpath: //label[text()='Red Hat subscriptions (pre-paid)']
+        - selector:
+            xpath: //div[text()='Use the quota pre-purchased by your organization']
+        - selector:
+            xpath: //label[text()='Consumption billing via the Red Hat Marketplace']
+        - selector:
+            xpath: //div[text()='Use Red Hat Marketplace to subscribe and pay based on the services you use']
+        - selector:
+            xpath: //h3[text()='Infrastructure type:']
