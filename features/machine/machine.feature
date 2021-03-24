@@ -333,8 +333,8 @@ Feature: Machine features testing
 
     Examples:
       | name                    | file_name                 | Validation                    |
-      | default-valued-32269    | ms_default_values.yaml    | Placement                     |# @case_id OCP-32269
-      | tenancy-dedicated-37132 | ms_tenancy_dedicated.yaml | Tenancy:            dedicated |# @case_id OCP-37132
+      | default-valued-32269    | ms_default_values.yaml    | Placement                     | # @case_id OCP-32269
+      | tenancy-dedicated-37132 | ms_tenancy_dedicated.yaml | Tenancy:            dedicated | # @case_id OCP-37132
 
   # @author miyadav@redhat.com
   # @case_id OCP-33056
@@ -408,8 +408,8 @@ Feature: Machine features testing
 
     Examples:
       | name                    | file_name               | Validation                |
-      | default-valued-33058    | ms_default_values.yaml  | Public IP                 |# @case_id OCP-33058
-      | encrypt-at-rest-39639   | ms_encrypt_at_rest.yaml | Encryption At Host:  true |# @case_id OCP-39639
+      | default-valued-33058    | ms_default_values.yaml  | Public IP                 | # @case_id OCP-33058
+      | encrypt-at-rest-39639   | ms_encrypt_at_rest.yaml | Encryption At Host:  true | # @case_id OCP-39639
 
   # @author miyadav@redhat.com
   # @case_id OCP-33455
