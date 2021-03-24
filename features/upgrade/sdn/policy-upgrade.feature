@@ -109,6 +109,7 @@ Feature: SDN compoment upgrade testing
     Given a pod becomes ready with labels:
       | name=hello-idle |
     And evaluation of `pod(2).name` is stored in the :pod3 clipboard
+    And evaluation of `pod(2).ip_url` is stored in the :pod3ip clipboard
 
     When I use the "policy-upgrade2" project
     Given I obtain test data file "networking/list_for_pods.json"
@@ -155,6 +156,10 @@ Feature: SDN compoment upgrade testing
       | curl | -s | --connect-timeout | 5 | <%= cb.pod2ip %>:8080 |
     Then the step should fail 
     And the output should not contain "Hello"
+    When I execute on the "<%= cb.pod5 %>" pod:
+      | curl | -s | --connect-timeout | 5 | <%= cb.pod3ip %>:8080 |
+    Then the step should succeed 
+    And the output should contain "Hello"
 
   # @author asood@redhat.com
   # @case_id OCP-38751
@@ -173,6 +178,7 @@ Feature: SDN compoment upgrade testing
     Given a pod becomes ready with labels:
       | name=hello-idle |
     And evaluation of `pod(2).name` is stored in the :pod3 clipboard
+    And evaluation of `pod(2).ip_url` is stored in the :pod3ip clipboard
     When I execute on the "<%= cb.pod3 %>" pod:
       | curl | -s | --connect-timeout | 5 | <%= cb.pod2ip %>:8080 |
     Then the step should fail
@@ -190,3 +196,7 @@ Feature: SDN compoment upgrade testing
     When I execute on the "<%= cb.pod5 %>" pod:
       | curl | -s | --connect-timeout | 5 | <%= cb.pod2ip %>:8080 |
     Then the step should fail 
+    When I execute on the "<%= cb.pod5 %>" pod:
+      | curl | -s | --connect-timeout | 5 | <%= cb.pod3ip %>:8080 |
+    Then the step should succeed 
+    And the output should contain "Hello"
