@@ -29,4 +29,4 @@ parameters:
 - name: URL
   value: "tls://fluentdserver.openshift-logging.svc:24224"
 - name: PIPELINE_SECRET_NAME
-  value: "fluentdserver"
+  value: "pipelinesecret"
