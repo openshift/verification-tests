@@ -156,7 +156,7 @@ Feature: SDN compoment upgrade testing
       | curl | -s | --connect-timeout | 5 | <%= cb.pod2ip %>:8080 |
     Then the step should fail 
     And the output should not contain "Hello"
-    When I execute on the "<%= cb.pod5 %>" pod:
+    When I execute on the "<%= cb.pod4 %>" pod:
       | curl | -s | --connect-timeout | 5 | <%= cb.pod3ip %>:8080 |
     Then the step should succeed 
     And the output should contain "Hello"
@@ -196,7 +196,7 @@ Feature: SDN compoment upgrade testing
     When I execute on the "<%= cb.pod5 %>" pod:
       | curl | -s | --connect-timeout | 5 | <%= cb.pod2ip %>:8080 |
     Then the step should fail 
-    When I execute on the "<%= cb.pod5 %>" pod:
+    When I execute on the "<%= cb.pod4 %>" pod:
       | curl | -s | --connect-timeout | 5 | <%= cb.pod3ip %>:8080 |
     Then the step should succeed 
     And the output should contain "Hello"
