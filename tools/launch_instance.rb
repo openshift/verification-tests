@@ -683,7 +683,7 @@ module BushSlicer
       file_details = {}
 
       # Export configuration's block of environment variables to running environment context
-      conf[:services, :"install-envvars"].each do |key, val|
+      conf[:global, :"install-envvars"].each do |key, val|
         ENV[key.to_s] = val
       end
 
