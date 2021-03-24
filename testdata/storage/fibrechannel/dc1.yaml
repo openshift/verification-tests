@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-storage
+  template:
+    metadata:
+      labels:
+        app: hello-storage
+    spec:
+      containers:
+      - name: hello-storage
+        command:
+          - "/bin/sh"
+          - "-c"
+          - "while true; do dd if=/dev/random of=/mnt/storage/foo; done"
+        image: quay.io/openshifttest/storage@sha256:a05b96d373be86f46e76817487027a7f5b8b5f87c0ac18a246b018df11529b40
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: local
+          mountPath: /mnt/storage
+      volumes:
+      - name: local
+        persistentVolumeClaim:
+          claimName: pvc001

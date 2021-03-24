@@ -1,0 +1,16 @@
+Create PV:
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv0001
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: fc-sc
+  fc:
+    targetWWNs: ['50050768030539b6','50050768030539b7']
+    lun: 0
+    fsType: xfs
+  persistentVolumeReclaimPolicy: Delete
