@@ -9,13 +9,10 @@ ENV USER_PATHS="$HOME /etc/machine-id /etc/passwd /etc/pki"
 
 RUN set -x && \
     yum repolist all && \
-    yum-config-manager --disable rhel-7-for-power-le-rpms && \
-    yum-config-manager --disable rhel-7-server-htb-rpms && \
-    yum-config-manager --enable rhel-7-server-optional-rpms && \
-    yum-config-manager --enable rhel-7-server-extras-rpms && \
-    yum-config-manager --enable rhel-server-rhscl-7-rpms && \
-    yum-config-manager --enable rhel-7-server-ansible-2-rpms && \
-    yum-config-manager --setopt=\*.skip_if_unavailable=1 --save \* && \
+    yum-config-manager --disable \* && \
+    ENABLE_REPOS="rhel-7-server-rpms rhel-7-server-optional-rpms rhel-7-server-extras-rpms rhel-7-server-ansible-2-rpms rhel-server-rhscl-7-rpms" && \
+    yum-config-manager --enable $ENABLE_REPOS && \
+    yum-config-manager --save --setopt=\*.skip_if_unavailable=1 $ENABLE_REPOS && \
     yum -y update && \
     SCL_BASE_PKGS="scl-utils-build" && \
     INSTALL_PKGS="rh-ruby27 rh-ruby27-ruby-devel rh-ruby27-rubygem-bundler rh-git218 bsdtar" && \
@@ -55,7 +52,7 @@ RUN setpriv --reuid 1001 scl enable rh-ruby27 "$HOME/verification-tests/tools/ha
 
 RUN rpm -qa && \
     yum clean all -y && \
-    rm -rf $HOME/verification-tests /var/cache/yum /tmp/*
+    rm -rf $HOME/verification-tests /var/cache/yum /var/tmp/ /tmp/*
 
 RUN dbus-uuidgen > /etc/machine-id # e.g. needed for firefox
 RUN chown -R 1001:0 $HOME && \
