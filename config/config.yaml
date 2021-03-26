@@ -49,15 +49,23 @@ global:
   # Leave unset for default of launching local browser via geckodriver etc.
   # selenium_url: http://example.com:4444/wd/hub
 
+  # Each key:value pair from this section is exported as shell environment variable
+  # into the running context:
+  # install-envvars:
+  #   foo: "bar"
+
+  # Examples of usage YAML Helper classes
   # Any value you can set to refer to an environment variable
+  #
   # read value from ENVVAR1 environment variable:
-  # test1: !ruby/object:BushSlicer::ConfigEnvVariable
+  # input_entry: !ruby/object:BushSlicer::ConfigEnvVariable
   #   var_name: ENVVAR1
-  # `test1` key will be a string with value
-  # read value from ENVVAR2, decode as base64 and write to file, `test2` will
-  #   contain the path of this temporary file:
-  # test2: !ruby/object:BushSlicer::ConfigEnvFile
+  # `input_entry` key will be a string with value
+  #
+  # read value from ENVVAR2, decode as base64 and write to file
+  # file_entry: !ruby/object:BushSlicer::ConfigEnvFile
   #   var_name: ENVVAR2
+  # `file_entry` will contain the path of this temporary file
 
 environments:
   online_starter:
