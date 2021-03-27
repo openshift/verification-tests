@@ -39,3 +39,14 @@ Feature: Debug and Explore Stuff
       |vc4|\s\t\\n\\s|
       |gag| <%= "a\na\\na" %> |
       |gor| <%= raise %> |
+
+  @pry_params
+  Scenario: I use pry step with parameters
+    When I pry with simple param "something"
+    And I pry with a param "someotherthing" and a multi-line arg
+    """
+    Some multil-line string param for testing.
+    """
+    And I pry with a param "someotherthing" and a multi-line arg
+      | some   | header |
+      | value1 | value2 |
