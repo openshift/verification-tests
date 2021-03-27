@@ -4,10 +4,12 @@ require 'tmpdir' # Dir.tmpdir
 
 module BushSlicer
   class SaveToDirEmbeddingFormatter
-    attr_reader :target_dir, :log
-    private :target_dir, :log
+    attr_reader :target_dir
+    private :target_dir
 
-    def initialize(step_mother, path, options)
+    def initialize(config)
+      path = config.out_stream
+
       if ENV['WORKSPACE'] && File.directory?(ENV['WORKSPACE'])
         # in jenkins it would be nice to have formatter log in WORKSPACE
         basedir = ENV['WORKSPACE']
@@ -28,8 +30,13 @@ module BushSlicer
       unless File.directory? @target_dir
         raise "could not create file embedder target directory"
       end
+    end
 
-      # @log = File.join(@target_dir, 'file_embedder.log')
+    # @note #embed has been replaced by #attach in Cucumber 5.x
+    def attach(src, media_type)
+      if media_type != 'text/x.cucumber.log+plain'
+        embed(src, media_type, "test case execution attachment")
+      end
     end
 
     # @see CucuFormatter

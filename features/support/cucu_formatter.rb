@@ -13,63 +13,153 @@ require 'cgi' # to escape html content
 require 'tmpdir' # Dir.tmpdir
 require 'zlib'
 
-require 'common' # mainly localhost is used
+require 'cucumber/formatter/ast_lookup'
+
+require 'common'
 
 module BushSlicer
   # custom Cucumber HTML formatter that also cooperates with test case manager
-  # TODO: new API https://github.com/cucumber/cucumber-ruby/pull/851/files/
 class CucuFormatter
-  include Common::Helper
+  attr_reader :log_file_io, :ast_lookup, :uri_parser
 
-  def initialize(runtime, io_or_path, options)
-    if io_or_path.kind_of? String
-      ## find place for our formatter log
-      if ENV['WORKSPACE'] && File.directory?(ENV['WORKSPACE'])
-        # in jenkins it would be nice to have formatter log in WORKSPACE
-        @io = File.new(File.join(ENV['WORKSPACE'], "/formatter.log") ,'w')
-      else
-        @io = File.new("#{Dir.tmpdir}/formatter_#{EXECUTOR_NAME}.log", 'w')
-      end
+  include Common::BaseHelper
 
-      ## where to store scenario log and artifacts
-      if io_or_path == ":auto"
-        @log_dir = File.expand_path(localhost.workdir(absolute: true) + "_cucu_formatter")
-      else
-        @log_dir = File.expand_path(io_or_path)
-      end
-    else
-      # looks like they gave us stdout, that's a mistake
-      # @io = io_or_path
-      raise "CucuFormatter needs output dir specified"
-    end
-
-    prepare_log_dir
-    @options = options
-
-    @step_messages = []
+  def initialize(config)
+    log_file!
+    # io_or_path = config.formats.find {|f| f[0].end_with?(self.class.name)}&.last
+    io_or_path = config.out_stream
+    prepare_log_dir!(io_or_path)
 
     # Read html template
     @template = File.read File.expand_path(File.join(File.dirname(__FILE__), 'formatter_template.html'))
 
     # register with the Manager
+    # TODO: with Cucumber 5.x I expect this hack to not be needed anymore
+    #   if proper hooks are used
     manager.custom_formatters << self
+
+    @ast_lookup = ::Cucumber::Formatter::AstLookup.new(config)
+    @step_matches = {}
+    @uri_parser = URI::RFC2396_Parser.new
+    @step_messages = []
+
+    config.on_event :test_case_started do |event|
+      test_case = event.test_case
+      uri = test_case.location.file
+      feature = ast_lookup.gherkin_document(uri).feature
+      feature_name(feature.keyword, feature.name)
+      test_source = ast_lookup.scenario_source(test_case)
+      if test_source.respond_to? :scenario_outline
+        outline_arg = "(" + test_source.row.cells.map(&:value).join("\t") + ")"
+        test_source = test_source.scenario_outline
+      else
+        test_source = test_source.scenario
+      end
+      scenario_name(test_source.keyword, test_source.name, test_case.location.to_s, outline_arg)
+    end
+
+    config.on_event :test_run_finished do |event|
+      after_features(nil)
+    end
+
+    config.on_event :step_activated do |event|
+      @step_matches[event.test_step.id] = event.step_match
+      # Kernel.puts "Activated: #{event.step_match.file_colon_line}"
+    end
+
+    config.on_event :test_step_finished do |event|
+      step = event.test_step
+      if step.hook?
+        case step.text
+        when "Before hook"
+          before_steps(nil)
+        when "After hook"
+          after_feature_element(nil)
+        end
+      else
+        step_source = ast_lookup.step_source(step).step
+        result = event.result
+        exception = result.respond_to?(:exception) ? result.exception : nil
+        result.embeddings.each { |e| embed(e['src'], e['mime_type'], e['label']) } if result.respond_to?(:embeddings)
+        after_step_result(step_source.keyword, @step_matches[step.id], step.multiline_arg, result.to_sym, exception, nil, nil, "#{step.location.file}:#{step.location.lines.min}")
+      end
+      # Kernel.puts "Step finished: #{step.location}"
+    end
+
+    config.on_event :test_case_finished do |event|
+      # we can probably replace adding ourselves to manager.custom_formatters by
+      # process_scenario_log
+    end
+  end
+
+  ####### ISOLATED HELPER METHODS #######
+  def manager
+    Manager.instance
+  end
+
+  def conf
+    manager.conf
+  end
+
+  def localhost
+    Host.localhost
+  end
+
+  # def logger
+  #   raise "not sure it's safe to use logger from a formatter, lets disable for the time being"
+  # end
+
+  ################## END ISOLATED HELPER METHODS ####################
+
+  ############### CucuFormatter Setup Methods ################
+  # find place for our formatter log
+  private def log_file!
+    if ENV['WORKSPACE'] && File.directory?(ENV['WORKSPACE'])
+      # in Jenkins it is better to have formatter log in WORKSPACE
+      @log_file_io = File.new(File.join(ENV['WORKSPACE'], "/formatter.log") ,'w')
+    else
+      @log_file_io = File.new("#{Dir.tmpdir}/formatter_#{EXECUTOR_NAME}.log", 'w')
+    end
+    at_exit do @log_file_io.close; end
   end
 
   # make sure log dir exists and is empty
-  def prepare_log_dir
+  private def prepare_log_dir!(io_or_path)
+    case io_or_path
+    when String, STDOUT, nil
+
+      ## where to store scenario log and artifacts
+      case io_or_path
+      when /^:auto/, STDOUT, nil
+        @log_dir = File.expand_path(localhost.workdir(absolute: true) + "_cucu_formatter")
+      else
+        @log_dir = File.expand_path(io_or_path)
+      end
+    else
+      raise "CucuFormatter needs output dir path specified, we were given: #{io_or_path.inspect}"
+    end
+
     wipe_log_dir
     # FileUtils.mkdir_p(@log_dir) # subdirs should be created on demand
   end
 
-  def wipe_log_dir
+  private def wipe_log_dir
     localhost.delete(@log_dir, :r => true, :raw => true)
   end
+  ############### END CucuFormatter Setup Methods ################
 
-  def logger
-    raise "not sure it's safe to use logger from a formatter, lets disable for the time being"
+  # This seems to be the only hook method as of Cucumber 5.3, the rest is in
+  #   event registrations in initializer.
+  #   Here go log lines and attach/embed files.
+  def attach(src, media_type)
+    if media_type == 'text/x.cucumber.log+plain'
+      puts src
+    else
+      embed(src, media_type, "test case execution attachment")
+    end
   end
 
-  ###################### FORMATTER HOOKS BEGIN ########################
+  #################### OBSOLETED FORMATTER HOOKS BEGIN ####################
 
   # cucumber formatter hooks
   def feature_name(keyword, name)
@@ -85,22 +175,12 @@ class CucuFormatter
     # wipe_log_dir # avoid interfering with uploaders; posible harm negligible
   end
 
-  def scenario_name(keyword, name, file_colon_line, source_indent)
-    # Create a new scenario hash
-    if keyword == 'Scenario Outline'
-      @scenario_outline_name = name
-      @scenario_keyword = 'Scenario Outline'
-    else
-      @scenario_keyword = 'Scenario'
-      # before we handled previous scenario log here, now we process log at
-      #   better time by calling it from TestCaseManagerFilter
-      #process_scenario_log
-    end
+  def scenario_name(keyword, name, file_colon_line, arg)
       # Create a new scenario
-      @scenario = { :name => @scenario_outline_name ? @scenario_outline_name : name,
+      @scenario = { :name => name,
                     :status => :failed,
                     :steps => [],
-                    :arg => @scenario_outline_name ? name : nil,
+                    :arg => arg,
                     :file_colon_line => file_colon_line,
                     :before => [],
                     :after => []
@@ -118,28 +198,17 @@ class CucuFormatter
   end
 
   def after_step_result(keyword, step_match, multiline_arg, status, exception, source_indent, background, file_colon_line)
-    unless @scenario_keyword == 'Scenario Outline'
       step = {:name => self.gen_step_name(keyword, step_match, status, step_match.file_colon_line, source_indent),
               :status => status,
               :messages => @step_messages.clone}
       @step_messages.clear
       step[:multiline_arg] = multiline_arg if multiline_arg
-      if exception
+      # skipped steps have exception bui nil backtrace in Cucumber 5.3
+      if exception && exception.backtrace
         step[:backtrace] = gen_repo_links_in_backtrace(exception.backtrace)
-        step[:backtrace].unshift(exception.class.to_s)
-        step[:backtrace].unshift(CGI.escapeHTML(exception.to_s))
+        step[:backtrace].unshift(CGI.escapeHTML(exception.inspect))
       end
       @scenario[:steps].push(step)
-    end
-  end
-
-  def before_outline_table(outline_table)
-    @outline_table = outline_table
-  end
-
-  def after_outline_table(outline_table)
-    @outline_table = nil
-    @scenario_outline_name = nil
   end
 
   def puts(message)
@@ -202,6 +271,8 @@ class CucuFormatter
     if @feature and @scenario
       if opts[:before_failed]
         # lets give a clue in html log what went wrong
+        # with Cucumber 5.x we can figure this out by ourselves
+        #   from step finished event instead of getting externally
         @scenario[:steps].unshift(
           { :status=>:failed,
             :name=>'<div class="step_name step_fail">Before hook failed</div>',
@@ -210,6 +281,8 @@ class CucuFormatter
         )
       elsif opts[:after_failed]
         # lets give a clue in html log what went wrong
+        # with Cucumber 5.x we can figure this out by ourselves
+        #   from step finished event instead of getting externally
         @scenario[:steps].unshift(
           { :status=>:failed,
             :name=>'<div class="step_name step_fail">After hook failed</div>',
@@ -252,10 +325,7 @@ class CucuFormatter
     url = conf[:git_repo_url].dup
     url << "/blob/"
     url << GIT_HASH == :unknown ? conf(:git_repo_default_branch) : GIT_HASH
-    url << "/" << file
-    # need to escape file path above because encode/escape method is deprecated
-    # see https://bugs.ruby-lang.org/issues/4167
-    url = URI.encode_www_form_component(url)
+    url << "/" << uri_parser.escape(file)
     url << '#L' << line
     return url
   end
@@ -264,17 +334,21 @@ class CucuFormatter
     %Q^<a href="#{gen_repo_url(file_colon_line)}">#{file_colon_line}</a>^
   end
 
-  # TODO: handle PRIVATE source files by delegating all file_colon_line to
-  #   [#gen_repo_url]
   def gen_repo_links_in_backtrace(backtrace)
     backtrace.map do |el|
-      el_orig = el.dup
-      file_colon_line = el.slice!(/^[-._a-zA-Z0-9\/]+:[0-9]+(?=:in)/)
+      el_rest = el.dup
+      # Note that we need to handle both:
+      # features/step_definitions/debug.rb:3:in
+      # features/test/debug.feature:24:21:in
+      file_colon_line = el_rest.slice!(/^[-._a-zA-Z0-9\/]+:\d+(?=(?::\d+)?:in)/)
+      if file_colon_line&.start_with?(HOME + "/")
+        file_colon_line = file_colon_line[HOME.size+1..-1]
+      end
       if file_colon_line && Pathname.new(file_colon_line).relative?
         file_colon_line.slice!("./")
-        gen_repo_link(file_colon_line) + el
+        gen_repo_link(file_colon_line) + el_rest
       else
-        el_orig
+        el
       end
     end
   end
@@ -431,7 +505,7 @@ class CucuFormatter
     output = "Failed to generate log HTML file for scenario: " \
              "#{scenario_hash[:name]}, #{scenario_hash[:arg]}\n" \
              "#{exception_to_string(e)}\n"
-    @io.write(output)
+    log_file_io.write(output)
     Kernel.puts(output)
   end
 
@@ -455,7 +529,9 @@ class CucuFormatter
     elsif skipped_count == scenario_hash[:steps].length
       return :skipped
     else
-      @io.write("Warning!!! passed: #{passed_count}, failed: #{failed_count}, skipped: #{skipped_count}, total steps: #{scenario_hash[:steps].length}\n")
+      err = "Warning!!! passed: #{passed_count}, failed: #{failed_count}, skipped: #{skipped_count}, total steps: #{scenario_hash[:steps].length}"
+      Kernel.puts(err)
+      log_file_io.write "#{msg}\n"
       return :failed
     end
   end
