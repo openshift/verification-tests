@@ -76,3 +76,13 @@ Given /^the cluster is running on OpenStack$/ do
   end
 end
 
+Given(/^the cluster is Single Node Openshift$/) do
+  ensure_admin_tagged
+  @result = env.nodes.length
+
+  if @result == 1
+    logger.info "Running case on single node cluster"
+  else
+    raise "Case can be executed on SNO cluster only"
+  end
+end
