@@ -1,3 +1,4 @@
+#nodeSelector set for openshift-qe testing, node is labeled after installation
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -28,3 +29,5 @@ spec:
       - name: local
         persistentVolumeClaim:
           claimName: pvc001
+      nodeSelector:
+        test: fibrechannel

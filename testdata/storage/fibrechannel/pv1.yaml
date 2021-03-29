@@ -1,3 +1,4 @@
+#targetWWNs is set by openshift-qe fc device 
 Create PV:
 apiVersion: v1
 kind: PersistentVolume
