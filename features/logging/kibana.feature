@@ -92,6 +92,14 @@ Feature: Kibana related features
     When I run the :check_log_count web action
     Then the step should succeed
     """
+    # Verify the token are encrypted in kibana logs 
+    Given the first user is cluster-admin
+    Given a pod becomes ready with labels:
+      | logging-infra=kibana |
+    When I run the :logs client command with:
+      | resource_name | <%= pod.name %> |
+      | c | kibana |
+    Then the output should not contain "XXXXXXXXXXXXXXXXXXXXXXXX"
 
   # @author qitang@redhat.com
   # @case_id OCP-30361
