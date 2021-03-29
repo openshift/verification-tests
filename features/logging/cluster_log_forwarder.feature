@@ -528,25 +528,4 @@ Feature: cluster log forwarder features
     Then the step should succeed
     And evaluation of `JSON.parse(@result[:stdout])['count']` is stored in the :app_log_count_2 clipboard
     And the expression should be true> cb.app_log_count_2 > 0
-
-    # check journal logs
-    When I execute on the pod:
-      | curl | -sk | -XGET | http://localhost:9200/*/_count?format=JSON | -H | Content-Type: application/json | -d | {"query": {"exists": {"field": "systemd"}}} |
-    Then the step should succeed
-    And evaluation of `JSON.parse(@result[:stdout])['count']` is stored in the :journal_log_count_2 clipboard
-    And the expression should be true> cb.journal_log_count_2 > cb.journal_log_count_1
-
-    # check logs in openshift* namespace
-    When I execute on the pod:
-      | curl | -sk | -XGET | http://localhost:9200/*/_count?format=JSON | -H | Content-Type: application/json | -d | {"query": {"regexp": {"kubernetes.namespace_name": "openshift@"}}} |
-    Then the step should succeed
-    And evaluation of `JSON.parse(@result[:stdout])['count']` is stored in the :openshift_log_count_2 clipboard
-    And the expression should be true> cb.openshift_log_count_2 > cb.openshift_log_count_1
-
-    # check audit logs
-    When I execute on the pod:
-      | curl | -sk | -XGET | http://localhost:9200/*/_count?format=JSON | -H | Content-Type: application/json | -d | {"query": {"exists": {"field": "auditID"}}} |
-    Then the step should succeed
-    And evaluation of `JSON.parse(@result[:stdout])['count']` is stored in the :audit_log_count_2 clipboard
-    And the expression should be true> cb.audit_log_count_2 > cb.audit_log_count_1
     """
