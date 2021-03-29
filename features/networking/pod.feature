@@ -326,11 +326,14 @@ Feature: Pod related networking scenarios
     Given a pod becomes ready with labels:
       | name=network-pod |
     And evaluation of `pod.name` is stored in the :network_pod clipboard
+    Given I wait up to 20 seconds for the steps to pass:
+    """
     And I execute on the pod:
       | bash | -c | conntrack -L \| grep "<%= cb.nodeport %>" |
     Then the step should succeed
     And the output should contain:
       |<%= cb.host_pod1.ip %>|
+    """
 
     #Deleting the udp listener pod which will trigger a new udp listener pod with new IP
     Given I ensure "<%= cb.host_pod1.name %>" pod is deleted
@@ -347,10 +350,13 @@ Feature: Pod related networking scenarios
       | exec_command_arg | for n in {1..3}; do echo $n; sleep 1; done>/dev/udp/<%= cb.node_ip %>/<%= cb.nodeport %> |
     Then the step should succeed
     #Making sure that the conntrack table should not contain old deleted udp listener pod IP entries but new pod one's
+    Given I wait up to 20 seconds for the steps to pass:
+    """
     When I execute on the "<%= cb.network_pod %>" pod:
       | bash | -c | conntrack -L \| grep "<%= cb.nodeport %>" |
     Then the output should contain "<%= cb.host_pod2.ip %>"
     And the output should not contain "<%= cb.host_pod1.ip %>"
+    """
 
   # @author anusaxen@redhat.com
   # @case_id OCP-25294
