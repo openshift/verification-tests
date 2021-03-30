@@ -156,9 +156,6 @@ click_yaml_tab:
   params:
     tab_name: YAML
   action: click_tab
-click_yaml_tab_and_wait:
-  action: click_yaml_tab
-  action: wait_page_body_loaded
 click_history_tab:
   params:
     tab_name: History
