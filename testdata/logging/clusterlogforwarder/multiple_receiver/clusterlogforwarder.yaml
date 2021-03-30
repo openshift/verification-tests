@@ -9,7 +9,7 @@ spec:
     type: fluentdForward
     url: 'tls://fluentdserver.openshift-logging.svc:24224'
     secret:
-      name: 'fluentdserver'
+      name: 'pipelinesecret'
   pipelines:
   - name: forward-app-logs
     inputRefs:
