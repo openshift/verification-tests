@@ -1373,17 +1373,17 @@ check_sc_driver:
   action: check_resource_details_key_and_value
 check_deletion_policy:
   params:
-    key: Deletion Policy
+    key: Deletion policy
     value: <deletion_policy>
   action: check_resource_details_key_and_value
 check_snapshot_handle:
   params:
-    key: Snapshot Handle
+    key: Snapshot handle
     value: <snapshot_handle>
   action: check_resource_details_key_and_value
 check_volume_snapshot:
   params:
-    key: Volume Snapshot
+    key: VolumeSnapshot
     value: <volume_snapshot>
   action: check_resource_details_key_and_value
 check_volume_snapshot_content:
@@ -1398,7 +1398,7 @@ check_volume_snapshot_class:
   action: check_resource_details_key_and_value
 check_volume_snapshot_class_name:
   params:
-    key: Volume Snapshot Class
+    key: VolumeSnapshotClass
     value: <volume_snapshot_class_name>
   action: check_resource_details_key_and_value
 check_registry_pull_interval:
