@@ -36,7 +36,6 @@ create_osd_cluster:
         if_param: listening
         ref: select_privacy
     action: click_create_button
-    action: check_creation_pending_message
     action: cluster_detail_page_loaded
     action: overview_tab_loaded
 delete_osd_cluster_from_detail_page:

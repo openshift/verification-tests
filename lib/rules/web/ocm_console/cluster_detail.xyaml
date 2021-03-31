@@ -99,7 +99,7 @@ check_new_name_in_cluster_detail:
 wait_cluster_status_on_detail_page:
     element:
         selector:
-            xpath: //div[@class='pf-l-grid__item pf-m-6-col-on-sm']/dl/div/dd/div[text()='<cluster_status>']
+            xpath: //div[@class='pf-l-grid']//span[text()='Status']/../../dd/div[text()='<cluster_status>']
         timeout: <wait_time>
 go_to_edit_node_count_dialog_on_cluster_detail_page:
   action: expand_actions_on_cluster_detail_page
