@@ -721,10 +721,13 @@ Given /^I make sure the logging operators match the cluster version$/ do
   step %Q/I switch to cluster admin pseudo user/
   # check if channel name in subscription is same to the target channel
   step %Q/logging channel name is stored in the :channel clipboard/
+  step %Q/"elasticsearch-operator" packagemanifest's catalog source name is stored in the :eo_catsrc clipboard/
+  step %Q/"cluster-logging" packagemanifest's catalog source name is stored in the :clo_catsrc clipboard/
   # check EO
   project("openshift-operators-redhat")
   eo_current_channel = subscription("elasticsearch-operator").channel(cached: false)
-  if cb.channel != eo_current_channel
+  eo_current_catsrc = subscription("elasticsearch-operator").source
+  if cb.channel != eo_current_channel || cb.eo_catsrc != eo_current_catsrc
     upgrade_eo = true
     step %Q/"elasticsearch-operator" packagemanifest's catalog source name is stored in the :catsrc clipboard/
     step %Q/I upgrade the operator with:/, table(%{
@@ -740,7 +743,8 @@ Given /^I make sure the logging operators match the cluster version$/ do
   # check CLO
   project("openshift-logging")
   clo_current_channel = subscription("cluster-logging").channel(cached: false)
-  if clo_current_channel != cb.channel
+  clo_current_catsrc = subscription("cluster-logging").source
+  if clo_current_channel != cb.channel || cb.clo_catsrc != clo_current_catsrc
     upgrade_clo = true
     step %Q/"cluster-logging" packagemanifest's catalog source name is stored in the :catsrc clipboard/
     step %Q/I upgrade the operator with:/, table(%{

@@ -135,6 +135,8 @@ Feature: Upgrade Logging with ClusterLogForwarder
     # check data in elasticsearch server
     Given a pod becomes ready with labels:
       | app=elasticsearch-server |
+    And I wait up to 300 seconds for the steps to pass:
+    """
     # check journal logs
     When I execute on the pod:
       | curl | -sk | -XGET | http://localhost:9200/*/_count?format=JSON | -H | Content-Type: application/json | -d | {"query": {"exists": {"field": "systemd"}}} |
@@ -155,6 +157,7 @@ Feature: Upgrade Logging with ClusterLogForwarder
       | curl | -sk | -XGET | http://localhost:9200/*/_count?format=JSON | -H | Content-Type: application/json | -d | {"query": {"match": {"kubernetes.namespace_name": "logging-data"}}} |
     Then the step should succeed
     And the expression should be true> JSON.parse(@result[:stdout])['count'] = 0
+    """
 
     # upgrade CLO and EO if needed
     Given I make sure the logging operators match the cluster version
@@ -205,6 +208,8 @@ Feature: Upgrade Logging with ClusterLogForwarder
     # check data in elasticsearch server
     Given a pod becomes ready with labels:
       | app=elasticsearch-server |
+    And I wait up to 300 seconds for the steps to pass:
+    """
     # check journal logs
     When I execute on the pod:
       | curl | -sk | -XGET | http://localhost:9200/*/_count?format=JSON | -H | Content-Type: application/json | -d | {"query": {"exists": {"field": "systemd"}}} |
@@ -225,3 +230,4 @@ Feature: Upgrade Logging with ClusterLogForwarder
       | curl | -sk | -XGET | http://localhost:9200/*/_count?format=JSON | -H | Content-Type: application/json | -d | {"query": {"match": {"kubernetes.namespace_name": "<%= cb.proj_au.name %>"}}} |
     Then the step should succeed
     And the expression should be true> JSON.parse(@result[:stdout])['count'] = 0
+    """

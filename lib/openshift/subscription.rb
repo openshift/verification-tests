@@ -40,5 +40,9 @@ module BushSlicer
       return raw_resource(user: user, cached: cached, quiet: quiet).dig('spec', 'channel')
     end
 
+    def source(user: nil, quiet: false, cached: true)
+      return raw_resource(user: user, cached: cached, quiet: quiet).dig('spec', 'source')
+    end
+
   end
 end
