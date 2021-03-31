@@ -12,7 +12,8 @@ module BushSlicer
   class DefaultManager
     include Singleton
     attr_accessor :world
-    attr_reader :temp_resources, :test_case_manager, :custom_formatters
+    attr_reader :temp_resources, :test_case_manager, :custom_formatters, :cucumber_config
+    attr_writer :ast_lookup
 
     def initialize
       @world = nil
@@ -69,7 +70,28 @@ module BushSlicer
       self.instance.conf
     end
 
-    def init_test_case_manager(cucumbler_config)
+    def setup_for_test_run(cucumber_config)
+      @cucumber_config = cucumber_config
+      init_test_case_manager(cucumber_config)
+    end
+
+    def ast_lookup
+      unless @ast_lookup
+        @ast_lookup = custom_formatters.find { |f|
+          f.respond_to? :ast_lookup
+        }&.ast_lookup
+        unless @ast_lookup
+          unless cucumber_config
+            raise "to have an AstLookup, you must run under Cucumber and properly call #setup_for_test_run first"
+          end
+          require 'cucumber/formatter/ast_lookup'
+          @ast_lookup = ::Cucumber::Formatter::AstLookup.new(cucumber_config)
+        end
+      end
+      @ast_lookup
+    end
+
+    def init_test_case_manager(cucumber_config)
       tc_mngr = ENV['BUSHSLICER_TEST_CASE_MANAGER'] || conf[:test_case_manager]
       tc_mngr = tc_mngr ? tc_mngr + '_tc_manager' : false
       if tc_mngr
@@ -81,7 +103,7 @@ module BushSlicer
 
         ## add our test case manager notifyer to the filter chain
         require 'test_case_manager_filter'
-        cucumbler_config.filters << TestCaseManagerFilter.new(tc_mngr_obj)
+        cucumber_config.filters << TestCaseManagerFilter.new(tc_mngr_obj)
       else
         # dummy test case manager to avoid no method defined errors
         @test_case_manager = Class.new do

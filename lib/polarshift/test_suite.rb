@@ -71,33 +71,58 @@ module BushSlicer
       end
 
       # @return [Cucumber::Core::Test::Case, nil]
-      def test_case_next!
-        unless current_test_record
-          record = pending.find { |test_record| test_record.reserve! }
-          self.current_test_record = record if record
+      # @note unused with Cucumber 5.3 integration
+      # def test_case_next!
+      #   unless current_test_record
+      #     record = pending.find { |test_record| test_record.reserve! }
+      #     self.current_test_record = record if record
+      #   end
+
+      #   if current_test_record
+      #     return current_test_record.next_cucumber_case!
+      #   else
+      #     return nil
+      #   end
+      # end
+
+      # reserve a matching test record (unless we already have one) and mark
+      #   test scenario as running
+      # @param [Cucumber::Core::Test::Case] test_case starting that we need to
+      #   commit to or reject
+      # @return [Boolean] whether we want to run this test case or not
+      # @note #test_case_execute_start! is redundant when test_case_next! is
+      #   not used
+      def commit!(test_case)
+        unless self.current_test_record
+          record = pending.find { |test_record| test_record.match! test_case }
+          unless record
+            raise "logic error: filter shouldn't ask us about test cases not part of the run"
+          end
+          if record.reserve!
+            self.current_test_record = record
+          else
+            return false
+          end
         end
 
-        if current_test_record
-          return current_test_record.next_cucumber_case!
+        if self.current_test_record.start_scenario_for! test_case
+          return true
         else
-          return nil
+          raise "logic error: starting test case that is not part of current test record"
         end
       end
 
       # @param test_case [Cucumber::Core::Test::Case]
+      # @note this method is redundant when using #reserve! instad of
+      #   #test_case_execute_start!
       def test_case_execute_start!(test_case)
         test_case_expected?(test_case)
       end
 
-      # @param test_case [Cucumber::Core::Test::Case]
-      def test_case_result!(test_case)
-        test_case_expected?(test_case)
-      end
-
-      # @param test_case [Cucumber::Core::Test::Case]
-      def test_case_execute_finish!(test_case, attach:)
-        test_case_expected?(test_case)
-        current_test_record.finished!(test_case, attach: attach)
+      # @param test_case [Cucumber::Events::TestRunFinished]
+      def test_case_execute_finish!(event, attach:)
+        test_case_expected?(event.test_case)
+        current_test_record.finished!(event, attach: attach)
       ensure
         if current_test_record.finished?
           self.current_test_record = nil
@@ -124,6 +149,29 @@ module BushSlicer
 
         unless current_test_record.in_progress?(test_case)
           raise "logic error: test case in progress status confusion"
+        end
+      end
+
+      # @return [Enumerator<Cucumber::Core::Test::Case>] the remaining pending
+      #   Cucumber test cases (does not include current test record)
+      def all_cucumber_test_cases(randomize: false)
+        test_records = pending
+        test_records.shuffle! if randomize
+        if block_given?
+          test_records.each { |record|
+            record.test_case.scenarios.each { |scenario_wrapper|
+              yield scenario_wrapper.cucumber_test_case
+            }
+          }
+          nil
+        else
+          Enumerator.new do |tcs|
+            test_records.each { |record|
+              record.test_case.scenarios.each { |scenario_wrapper|
+                tcs << scenario_wrapper.cucumber_test_case
+              }
+            }
+          end
         end
       end
 

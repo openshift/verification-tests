@@ -38,7 +38,8 @@ class CucuFormatter
     #   if proper hooks are used
     manager.custom_formatters << self
 
-    @ast_lookup = ::Cucumber::Formatter::AstLookup.new(config)
+    @ast_lookup = manager.ast_lookup
+    @ast_lookup ||= ::Cucumber::Formatter::AstLookup.new(config)
     @step_matches = {}
     @uri_parser = URI::RFC2396_Parser.new
     @step_messages = []
