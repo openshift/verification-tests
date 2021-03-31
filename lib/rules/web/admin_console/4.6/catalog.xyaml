@@ -104,8 +104,7 @@ filter_by_keyword:
     selector: &filter_by_keyword
       xpath: //input[contains(@class, 'co-catalog-page__input')]
     op: send_keys <keyword>
-show_catalog_items:
-  action: filter_by_operatorbacked_type
+show_catalog_items: {}
 clear_filter_by_keyword:
   element:
     selector: *filter_by_keyword

@@ -862,9 +862,10 @@ Feature: build 'apps' with CLI
     Then the step should succeed
     #Insert cm and secret to bc with empty destination - succeed
     When I run the :new_build client command with:
-      | app_repo       | https://github.com/openshift/ruby-hello-world |
-      | build_config_map| cmtest1:.                                    |
-      | build_config_map| cmtest2:./newdir                             |
+      | app_repo         | ruby~https://github.com/openshift/ruby-hello-world |
+      | build_config_map | cmtest1:.                                          |
+      | build_config_map | cmtest2:./newdir                                   |
+      | strategy         | docker                                             |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | bc               |
@@ -893,8 +894,9 @@ Feature: build 'apps' with CLI
     Then the step should succeed
     #Add a configmaps with a multi-level dirs - succeed
     When I run the :new_build client command with:
-      | app_repo       | https://github.com/openshift/ruby-hello-world |
-      | build_config_map| cmtest1:./newdir1/newdir2/newdir3            |
+      | app_repo         | ruby~https://github.com/openshift/ruby-hello-world |
+      | build_config_map | cmtest1:./newdir1/newdir2/newdir3                  |
+      | strategy         | docker                                             |
     Then the step should succeed
     When I run the :describe client command with:
       | resource | bc               |

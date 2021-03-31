@@ -162,7 +162,7 @@ set_iops_value:
   action: set_input_value
 check_snapshot_on_pvc_page:
   params:
-    tab_name: Volume Snapshots
+    tab_name: VolumeSnapshots
   action: goto_one_pvc_page
   action: click_tab
   action: check_page_contains

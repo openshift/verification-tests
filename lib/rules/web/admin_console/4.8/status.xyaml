@@ -35,10 +35,8 @@ check_user_starter_guide_message_when_no_projects:
 check_get_started_message_when_no_resources:
   elements:
   - selector:
-      xpath: //div[.='YAML']
+      xpath: //h3[contains(., 'No resources found')]
     timeout: 40
-  - selector:
-      xpath: //p[contains(., 'add content')]
 check_message_and_doc_for_new_user:
   elements:
   - selector:

@@ -83,7 +83,7 @@ Feature: dockerbuild.feature
     Given I have a project
     When I run the :new_build client command with:
       | code         | https://github.com/openshift/ruby-hello-world |
-      | image_stream | openshift/ruby:2.5                            |
+      | image_stream | openshift/ruby:latest                         |
       | strategy     | docker                                        |
       | build_arg    | ARG=VALUE                                     |
     Then the step should succeed

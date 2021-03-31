@@ -32,7 +32,7 @@ Feature: buildconfig.feature
     And the "ruby-hello-world-1" build was created
     When I run the :tag client command with:
       | source_type | docker                 |
-      | source      | openshift/ruby:2.5     |
+      | source      | openshift/ruby:2.7     |
       | dest        | ruby-25-centos7:latest |
     Then the step should succeed
     And the "ruby-hello-world-2" build was created
