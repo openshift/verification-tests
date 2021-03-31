@@ -146,25 +146,39 @@ module BushSlicer
       end
 
       # @return [Cucumber::Core::Test::Case]
-      def next_cucumber_case!
-        unless complete?
-          raise "inconsistent logic: we didn't yet see (all) scenarios for the test case but next scenario is requested"
-        end
+      # @note redundant with Cucumber 5.3 integration
+      # def next_cucumber_case!
+      #   unless complete?
+      #     raise "inconsistent logic: we didn't yet see (all) scenarios for the test case but next scenario is requested"
+      #   end
 
-        unless reserved?
-          raise "inconsistent logic: we didn't reserve case but next scenario is requested"
-        end
+      #   unless reserved?
+      #     raise "inconsistent logic: we didn't reserve case but next scenario is requested"
+      #   end
 
-        if self.test_case.scenarios.any? { |s| s.in_progress? }
-          raise "inconsistent logic: we have a scenario in progress but next is requested"
-        end
+      #   if self.test_case.scenarios.any? { |s| s.in_progress? }
+      #     raise "inconsistent logic: we have a scenario in progress but next is requested"
+      #   end
 
-        scenario = test_case.scenarios.find{ |s| s.pending? }
+      #   scenario = test_case.scenarios.find{ |s| s.pending? }
+      #   unless scenario
+      #     raise "inconsistent logic: no pending scenario but we were asked to start one"
+      #   end
+      #   scenario.start!
+      #   return scenario.cucumber_test_case
+      # end
+
+      # @param test_case [Cucumber::Core::Test::Case] test_case that is started
+      # @return [Boolean]
+      def start_scenario_for!(test_case)
+        scenario = self.test_case.scenarios.find { |s| s.match! test_case}
+        unless scenario
+          raise "logic error: trying to start Cucumber scenario not part of this test record"
+        end
         scenario.start!
-        return scenario.cucumber_test_case
       end
 
-      # @param test_case [Cucumber::Core::Test::Case]
+      # @param test_case [Cucumber::Core::Test::Case, Cucumber::Events::TestRunFinished]
       # @return [ScenarioWrapper]
       def current_scenario_for(test_case)
         scenarios = self.test_case.scenarios.select { |s| s.in_progress? }
@@ -180,15 +194,15 @@ module BushSlicer
         return scenario
       end
 
-      # @param test_case [Cucumber::Core::Test::Case]
+      # @param event [Cucumber::Events::TestRunFinished]
       # @param attach [Array<String>] URLs to put in comment
-      def finished!(test_case, attach: [])
-        scenario = current_scenario_for(test_case)
+      def finished!(event, attach: [])
+        scenario = current_scenario_for(event)
         scenario.finish!
         scenario.attach(attach)
 
         # TODO: should we skip any other scenarios from current test case if
-        #  this scenario failed of errored?
+        #  this scenario failed or errored?
 
         if !virtual? && finished?
           attachments = self.test_case.scenarios.map(&:attachments).reduce(&:+).join("\n")
@@ -261,6 +275,9 @@ module BushSlicer
 
       # @return [Boolean] whether we have everything needed to execute
       def pending?
+        if test_case&.scenarios&.any? { |s| s.name == "Container could reach the dns server"}
+          # require 'pry'; binding.pry
+        end
         runnable? && complete?
       end
 

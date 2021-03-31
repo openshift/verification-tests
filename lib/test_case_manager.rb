@@ -43,9 +43,9 @@ module BushSlicer
         test_case = args[0]
         test_suite.test_case_execute_start!(test_case)
       when :end_case
-        test_case = args[0]
+        finish_event = args[0]
         attachments = handle_current_artifacts(test_suite.artifacts_format)
-        test_suite.test_case_execute_finish!(test_case, attach: attachments)
+        test_suite.test_case_execute_finish!(finish_event, attach: attachments)
         reset_hooks_status
       when :finish_before_hook
         test_case = args[0]
@@ -60,9 +60,6 @@ module BushSlicer
         if err
           test_suite.test_case_failed_after!(test_case)
           @after_failed = true
-        else
-          # just update suite with the scenario object after execution
-          test_suite.test_case_result!(test_case)
         end
       when :at_exit
         if test_suite.incomplete?
@@ -110,8 +107,22 @@ module BushSlicer
     end
 
     # return next cucumber test_case to be executed and sets status to RUNNING
-    def next
-      test_suite.test_case_next!
+    # @note redundant with Cucumber 5.3 integration
+    # def next
+    #   test_suite.test_case_next!
+    # end
+
+    # we commit to executing a test case
+    # @return [Boolean] whether we do or reject for whatever reason
+    def commit!(test_case)
+      test_suite.commit!(test_case)
+    end
+
+    # @return [Enumerator<Cucumber::Core::Test::Case>] the remaining pending
+    #   Cucumber test cases (does not include current test record)
+    # @yields [Enumerator<Cucumber::Core::Test::Case>]
+    def all_cucumber_test_cases(*args, &block)
+      test_suite.all_cucumber_test_cases(*args, &block)
     end
 
     ############ test case manager interface methods end ############
@@ -197,6 +208,11 @@ module BushSlicer
         ## move artifacts to a separate dir
         dir = formatter.process_scenario_log(after_failed: after_failed?,
                                              before_failed: before_failed?)
+        unless dir
+          logger.warn "Formatter dir not set, bug in formatter of test case could not be run"
+          next
+        end
+
         urls.concat artifacts_urls(dir)
         if urls.empty?
           if Dir.empty?(dir)

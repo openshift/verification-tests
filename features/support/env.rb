@@ -32,6 +32,11 @@ end
 ## while we can move everything inside World, lets try to outline here the
 #    basic steps to have world ready to execute scenario
 Before do |_scenario|
+  if _scenario.respond_to?(:test_case_manager_skip?)
+    skip_this_scenario "Scenario skipped by Test Case Manager"
+    next
+  end
+
   setup_logger
   logger.info("=== Before Scenario: #{_scenario.name} ===")
   localhost.chdir
@@ -56,6 +61,10 @@ end
 ## while we can move everything inside World, lets try to outline here the
 #    basic steps that are run after each scenario execution
 After do |_scenario|
+  if _scenario.respond_to?(:test_case_manager_skip?)
+    next
+  end
+
   # logger.dedup_flush
   logger.info("=== After Scenario: #{_scenario.name} ===")
   self.scenario = _scenario # this is different object than in Before hook
@@ -95,8 +104,8 @@ AfterConfiguration do |config|
     BushSlicer::Debug.step_fail_cucumber2
   end
 
-  ## set test case manager if requested (adds a scenario filter as well)
-  BushSlicer::Manager.instance.init_test_case_manager(config)
+  ## set test case manager and scenario filter if requested
+  BushSlicer::Manager.instance.setup_for_test_run(config)
 end
 
 at_exit do

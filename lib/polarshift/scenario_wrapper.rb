@@ -4,20 +4,24 @@ module BushSlicer
   module PolarShift
     # wrapper for Cucumber scenarios
     class ScenarioWrapper
-      attr_reader :test_case, :attachments
+      attr_reader :test_case, :attachments, :result
       @@api_checked = false
+
+      private :result
 
       # @param test_case [Cucumber::Core::Test::Case]
       def initialize(test_case)
         @test_case = test_case
         @attachments = []
-        api_check!
       end
 
       alias cucumber_test_case test_case
 
       # this scenario is starting execution
       def start!
+        if @started_at
+          raise "logic error: trying to start scenario twice: #{name}"
+        end
         @started_at = Time.now
       end
 
@@ -26,15 +30,53 @@ module BushSlicer
         @finished_at = Time.now
       end
 
+      private def source
+        @source ||= Manager.instance.ast_lookup.scenario_source(test_case)
+      end
+
+      # @return [Cucumber::Messages::GherkinDocument::Feature::TableRow]
+      private def example
+        source.row if source.respond_to? :scenario_outline
+      end
+
+      # @return [Cucumber::Messages::GherkinDocument::Feature::Scenario::Examples] examples table this scenario is part of
+      private def examples_table
+        unless defined?(@examples_table)
+          if example?
+            @examples_table = gherkin.examples.find { |table|
+              table.table_body.include? example
+            }
+            unless @examples_table
+              raise "Cannot find Examples table we are part of. Cucumber got updated and API is incompatible?"
+            end
+          else
+            @examples_table = nil
+          end
+        end
+        @examples_table
+      end
+
+      # @return [Cucumber::Messages::GherkinDocument::Feature::Scenario] the parsed Gherkin of the Scenario (Outline)
+      private def gherkin
+        source.respond_to?(:scenario_outline) ? source.scenario_outline : source.scenario
+      end
+
       # @param test_case [Cucumber::Core::Test::Case]
       private def matches?(test_case)
         self.location == test_case.location.to_s
       end
 
-      # @param test_case [Cucumber::Core::Test::Case]
+      # @param test_case [Cucumber::Core::Test::Case, Cucumber::Events::TestRunFinished]
       def match!(test_case)
+        if Cucumber::Events::TestCaseFinished === test_case
+          result = test_case.result
+          test_case = test_case.test_case
+        end
+        unless Cucumber::Core::Test::Case === test_case
+          raise ArgumentError, "test case should be of type Cucumber::Core::Test::Case but it is #{test_case.inspect}"
+        end
         if matches?(test_case)
-          @test_case = test_case if self.class.running_test_case?(test_case)
+          @result = result if test_case
           return true
         else
           return false
@@ -63,21 +105,21 @@ module BushSlicer
       end
 
       def passed?
-        !error? && self.class.running_test_case?(test_case) && test_case.passed?
+        # I don't think we can work with retries but lets keep an eye on it
+        # see Cucumber::Core::Test::Result::TYPES for available statuses
+        !error? && [:passed, :flaky].include?(result&.to_sym)
+      end
+
+      def failed?
+        !error? && result&.failed?
       end
 
       def error?
         @failed_before || @failed_after
       end
 
-      def failed?
-        !error? && self.class.running_test_case?(test_case) && test_case.failed?
-      end
-
       def example?
-        test_case.keyword == "Scenario Outline"
-        # https://github.com/cucumber/cucumber-ruby-core/issues/119
-        # test_case.outline?
+        !!example
       end
 
       def file
@@ -88,7 +130,7 @@ module BushSlicer
       #   an Outline, then the name of the Scenario Outline
       def name
         # btw we can also use #match_name? but this should be faster for us
-        example? ? test_case.source[-3].name : test_case.name
+        test_case.name
       end
 
       def location
@@ -110,46 +152,30 @@ module BushSlicer
       # @return [Integer] number of examples contained in the whole Outline
       def examples_size
         if example?
-          outline = test_case.source[-3]
-          # outline.examples_tables.reduce(0) { |sum, t| sum + t.example_rows.size }
-          outline.examples_tables.map(&:example_rows).map(&:size).reduce(&:+)
+          gherkin.examples.map(&:table_body).map(&:size).reduce(&:+)
         end
       end
 
       # @return [String] name of the examples table this scenario is part of
       def examples_table_name
-        test_case.source[-2].name if example?
+        examples_table&.name
       end
 
       # @return [Integer] number of examples contained in the examples table
       #   this scenario is part of
       def examples_table_size
-        test_case.source[-2].example_rows.size if example?
+        examples_table&.table_body&.size
       end
 
       # @return [Hash] the arguments from the examples table associated with
       #   this example
       def example_args
-        test_case.source.last.instance_variable_get(:@data) if example?
-      end
-
-      # @param test_case [Cucumber::Core::Test::Case]
-      # @return [Boolean] whether this is a running test case or Core test case,
-      #   e.g. Cucumber::RunningTestCase::ScenarioOutlineExample
-      def self.running_test_case?(test_case)
-        test_case.respond_to? :failed?
-      end
-
-      private def api_check!
-        if !@@api_checked && example?
-          if test_case.source.last.class.to_s.end_with?("::Row") &&
-              test_case.source[-2].class.to_s =~ /::Examples(Table)?$/ &&
-              test_case.source[-3].class.to_s.end_with?("ScenarioOutline")
-            @@api_checked = true
-          else
-            raise "Cucumber API seems to have changed, code here needs update."
-          end
+        if example? && !@example_args
+          row_array = source.row.cells.map(&:value)
+          header = examples_table.table_header.cells.map(&:value)
+          @example_args = Hash[header.zip(row_array)]
         end
+        @example_args
       end
     end
   end
