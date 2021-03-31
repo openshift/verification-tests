@@ -32,7 +32,8 @@ Given /^logging operators are installed successfully$/ do
   ensure_admin_tagged
   step %Q/I switch to cluster admin pseudo user/
   step %Q/evaluation of `cluster_version('version').version` is stored in the :ocp_cluster_version clipboard/
-  step %Q/logging channel name is stored in the :channel clipboard/
+  step %Q/cluster-logging channel name is stored in the :clo_channel clipboard/
+  step %Q/elasticsearch-operator channel name is stored in the :eo_channel clipboard/
 
   unless project('openshift-operators-redhat').exists?
     eo_namespace_yaml = "#{BushSlicer::HOME}/testdata/logging/eleasticsearch/deploy_via_olm/01_eo-project.yaml"
@@ -61,7 +62,7 @@ Given /^logging operators are installed successfully$/ do
       step %Q/I use the "openshift-marketplace" project/
       # first check packagemanifest exists for elasticsearch-operator
       raise "Required packagemanifest 'elasticsearch-operator' no found!" unless package_manifest('elasticsearch-operator').exists?
-      step %Q/"elasticsearch-operator" packagemanifest's catalog source name is stored in the :eo_catsrc clipboard/
+      step %Q/elasticsearch-operator catalog source name is stored in the :eo_catsrc clipboard/
       step %Q/I use the "openshift-operators-redhat" project/
       if cb.ocp_cluster_version.include? "4.1."
         # create catalogsourceconfig and subscription for elasticsearch-operator
@@ -77,7 +78,7 @@ Given /^logging operators are installed successfully$/ do
         step %Q/I process and create:/, table(%{
           | f | #{sub_elasticsearch_yaml} |
           | p | SOURCE=#{cb.eo_catsrc}    |
-          | p | CHANNEL=#{cb.channel}     |
+          | p | CHANNEL=#{cb.eo_channel}  |
         })
         raise "Error creating subscription for elasticsearch" unless @result[:success]
       end
@@ -110,7 +111,7 @@ Given /^logging operators are installed successfully$/ do
       step %Q/I use the "openshift-marketplace" project/
       # first check packagemanifest exists for cluster-logging
       raise "Required packagemanifest 'cluster-logging' no found!" unless package_manifest('cluster-logging').exists?
-      step %Q/"cluster-logging" packagemanifest's catalog source name is stored in the :clo_catsrc clipboard/
+      step %Q/cluster-logging catalog source name is stored in the :clo_catsrc clipboard/
       step %Q/I use the "openshift-logging" project/
       if cb.ocp_cluster_version.include? "4.1."
         # create catalogsourceconfig and subscription for cluster-logging-operator
@@ -124,9 +125,9 @@ Given /^logging operators are installed successfully$/ do
         # create subscription in `openshift-logging` namespace:
         sub_logging_yaml ||= "#{BushSlicer::HOME}/testdata/logging/clusterlogging/deploy_clo_via_olm/4.2/clo-sub-template.yaml"
         step %Q/I process and create:/, table(%{
-          | f | #{sub_logging_yaml}     |
-          | p | SOURCE=#{cb.clo_catsrc} |
-          | p | CHANNEL=#{cb.channel}   |
+          | f | #{sub_logging_yaml}       |
+          | p | SOURCE=#{cb.clo_catsrc}   |
+          | p | CHANNEL=#{cb.clo_channel} |
         })
         raise "Error creating subscription for cluster_logging" unless @result[:success]
       end
@@ -327,36 +328,64 @@ Given /^I delete the clusterlogging instance$/ do
   })
 end
 
-Given /^logging channel name is stored in the#{OPT_SYM} clipboard$/ do | cb_name |
-  cb_name = 'logging_channel_name' unless cb_name
-  if env.logging_channel_name.empty?
+Given /^(cluster-logging|elasticsearch-operator) channel name is stored in the#{OPT_SYM} clipboard$/ do | packagemanifest, cb_name |
+  cb_name = 'channel' unless cb_name
+  logging_envs = env.logging_envs
+  unless logging_envs.empty?
+    case packagemanifest
+    when "cluster-logging"
+      envs = logging_envs[:clo]
+    when "elasticsearch-operator"
+      envs = logging_envs[:eo]
+    end
+  end
+  # check if the packagemanifest exist
+  raise "Packagemanifest #{packagemanifest} doesn't exist" unless package_manifest(packagemanifest).exists?
+
+  if (logging_envs.empty?) || (envs.nil?) || (envs[:channel].nil?)
     version = cluster_version('version').version.split('-')[0].split('.').take(2).join('.')
     case version
     when '4.1'
       cb[cb_name] = "preview"
     when '4.7'
       cb[cb_name] = "5.0"
+    when '4.8'
+      cb[cb_name] = "5.1"
     else
       cb[cb_name] = version
     end
   else
-    cb[cb_name] = env.logging_channel_name
+    cb[cb_name] = envs[:channel]
   end
 end
 
-Given /^#{QUOTED} packagemanifest's catalog source name is stored in the#{OPT_SYM} clipboard$/ do |packagemanifest, cb_name|
-  cb_name = "catsrc_name" unless cb_name
+Given /^(cluster-logging|elasticsearch-operator) catalog source name is stored in the#{OPT_SYM} clipboard$/ do | packagemanifest, cb_name |
+  cb_name = 'source' unless cb_name
+  logging_envs = env.logging_envs
+  unless logging_envs.empty?
+    case packagemanifest
+    when "cluster-logging"
+      envs = logging_envs[:clo]
+    when "elasticsearch-operator"
+      envs = logging_envs[:eo]
+    end
+  end
   project("openshift-marketplace")
-  if env.logging_catsrc.empty?
+  # check if the packagemanifest exist
+  raise "Packagemanifest #{packagemanifest} doesn't exist" unless package_manifest(packagemanifest).exists?
+
+  # get source name, if it's not set, use default source
+  if (logging_envs.empty?) || (envs.nil?) || (envs[:catsrc].nil?)
     if catalog_source("qe-app-registry").exists?
       cb[cb_name] = "qe-app-registry"
+    elsif catalog_source("redhat-operators").exists?
+      cb[cb_name] = "redhat-operators"
     else
-      @result = admin.cli_exec(:get, resource: 'packagemanifest', resource_name: packagemanifest, n: 'openshift-marketplace', o: 'yaml')
-      raise "Unable to get catalog source name" unless @result[:success]
-      cb[cb_name] = @result[:parsed]['status']['catalogSource']
+      cb[cb_name] = package_manifest(packagemanifest).catalog_source
     end
   else
-    cb[cb_name] = env.logging_catsrc
+    #raise "The specified catalog source doesn't exist" unless catalog_source(envs[:catsrc]).exists?
+    cb[cb_name] = envs[:catsrc]
   end
 end
 
@@ -652,7 +681,7 @@ Given /^I upgrade the operator with:$/ do | table |
   raise "Patch failed with #{@result[:response]}" unless @result[:success]
   # wait till new csv to be installed
   success = wait_for(180, interval: 10) {
-    subscription(subscription).installplan_csv.include? cb.channel
+    subscription(subscription).installplan_csv.include? channel
   }
   raise "the new CSV can't be installed" unless success
   # wait till new csv is ready
@@ -720,21 +749,21 @@ end
 Given /^I make sure the logging operators match the cluster version$/ do
   step %Q/I switch to cluster admin pseudo user/
   # check if channel name in subscription is same to the target channel
-  step %Q/logging channel name is stored in the :channel clipboard/
-  step %Q/"elasticsearch-operator" packagemanifest's catalog source name is stored in the :eo_catsrc clipboard/
-  step %Q/"cluster-logging" packagemanifest's catalog source name is stored in the :clo_catsrc clipboard/
+  step %Q/cluster-logging channel name is stored in the :clo_channel clipboard/
+  step %Q/elasticsearch-operator channel name is stored in the :eo_channel clipboard/
+  step %Q/elasticsearch-operator catalog source name is stored in the :eo_catsrc clipboard/
+  step %Q/cluster-logging catalog source name is stored in the :clo_catsrc clipboard/
   # check EO
   project("openshift-operators-redhat")
   eo_current_channel = subscription("elasticsearch-operator").channel(cached: false)
   eo_current_catsrc = subscription("elasticsearch-operator").source
-  if cb.channel != eo_current_channel || cb.eo_catsrc != eo_current_catsrc
+  if cb.eo_channel != eo_current_channel || cb.eo_catsrc != eo_current_catsrc
     upgrade_eo = true
-    step %Q/"elasticsearch-operator" packagemanifest's catalog source name is stored in the :catsrc clipboard/
     step %Q/I upgrade the operator with:/, table(%{
       | namespace    | openshift-operators-redhat |
       | subscription | elasticsearch-operator     |
-      | channel      | #{cb.channel}              |
-      | catsrc       | #{cb.catsrc}               |
+      | channel      | #{cb.eo_channel}           |
+      | catsrc       | #{cb.eo_catsrc}            |
     })
     step %Q/the step should succeed/
   else
@@ -744,14 +773,13 @@ Given /^I make sure the logging operators match the cluster version$/ do
   project("openshift-logging")
   clo_current_channel = subscription("cluster-logging").channel(cached: false)
   clo_current_catsrc = subscription("cluster-logging").source
-  if clo_current_channel != cb.channel || cb.clo_catsrc != clo_current_catsrc
+  if clo_current_channel != cb.clo_channel || cb.clo_catsrc != clo_current_catsrc
     upgrade_clo = true
-    step %Q/"cluster-logging" packagemanifest's catalog source name is stored in the :catsrc clipboard/
     step %Q/I upgrade the operator with:/, table(%{
       | namespace    | openshift-logging |
       | subscription | cluster-logging   |
-      | channel      | #{cb.channel}     |
-      | catsrc       | #{cb.catsrc}      |
+      | channel      | #{cb.clo_channel} |
+      | catsrc       | #{cb.clo_catsrc}  |
     })
     step %Q/the step should succeed/
   else
@@ -816,7 +844,7 @@ end
 Given /^I deploy kafka in the #{QUOTED} project via amqstream operator$/ do | project_name|
   ensure_admin_tagged
   step %Q/I switch to cluster admin pseudo user/
-  step %Q/"amq-streams" packagemanifest's catalog source name is stored in the :kafka_csc clipboard/
+  kafka_catsrc = package_manifest("amq-streams").catalog_source
 
   step %Q/I use the "#{project_name}" project/
   step %Q/I process and create:/, table(%{
@@ -827,8 +855,8 @@ Given /^I deploy kafka in the #{QUOTED} project via amqstream operator$/ do | pr
 
   step %Q/I process and create:/, table(%{
     | f | #{BushSlicer::HOME}/testdata/logging/clusterlogforwarder/kafka/amq/03_sub_amqstreams_template.yaml |
-    | p | AMQ_NAMESPACE=#{project_name}  |
-    | p | AMQ_CATALOGSOURCE=#{cb.kafka_csc} |
+    | p | AMQ_NAMESPACE=#{project_name}     |
+    | p | AMQ_CATALOGSOURCE=#{kafka_catsrc} |
   })
   raise "Error subscript amqstreams" unless @result[:success]
 

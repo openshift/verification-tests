@@ -224,26 +224,25 @@ module BushSlicer
       return @authentication_url
     end
 
-    def logging_channel_name
-      unless @logging_channel_name
-        if opts[:logging_channel_name]
-          @logging_channel_name = opts[:logging_channel_name]
+    # add env var to set some parameters for logging testing
+    # for example:
+    # logging_envs:
+    #   clo:
+    #     catsrc: "test"
+    #     channel: "4.1"
+    #   eo:
+    #     catsrc: "redhat"
+    #     channel: "5.1"
+    # any of the above vars can be nil/empty
+    def logging_envs
+      unless @logging_envs
+        if opts[:logging_envs]
+          @logging_envs = opts[:logging_envs]
         else
-          @logging_channel_name = ''
+          @logging_envs = ''
         end
       end
-      return @logging_channel_name
-    end
-
-    def logging_catsrc
-      unless @logging_catsrc
-        if opts[:logging_catsrc]
-          @logging_catsrc = opts[:logging_catsrc]
-        else
-          @logging_catsrc = ''
-        end
-      end
-      return @logging_catsrc
+      return @logging_envs
     end
 
     # naming scheme is https://logs.<cluster_id>.openshift.com for Online
