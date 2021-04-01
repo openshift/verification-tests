@@ -1,0 +1,16 @@
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-ns-and-pod
+spec:
+  podSelector:
+    matchLabels:
+      name: test-pods
+  ingress:
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            team: operations
+        podSelector:
+          matchLabels:
+            name: test-pods

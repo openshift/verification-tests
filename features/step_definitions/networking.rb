@@ -305,6 +305,17 @@ Given /^the DefaultDeny policy is applied to the "(.+?)" namespace$/ do | projec
   end
 end
 
+Given /^the AllowNamespaceAndPod policy is applied to the "(.+?)" namespace$/ do | project_name |
+  ensure_admin_tagged
+
+  step %Q{I obtain test data file "networking/networkpolicy/allow-ns-and-pod.yaml"}
+  step %Q/I run the :create admin command with:/,table(%{
+    | f | allow-ns-and-pod.yaml |
+    | n | #{project_name}       |
+  })
+  step %Q{the step should succeed}
+end
+
 Given /^the cluster network plugin type and version and stored in the clipboard$/ do
   ensure_admin_tagged
   _host = node.host
