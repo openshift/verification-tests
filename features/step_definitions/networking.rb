@@ -311,7 +311,7 @@ Given /^the AllowNamespaceAndPod policy is applied to the "(.+?)" namespace$/ do
   step %Q{I obtain test data file "networking/networkpolicy/allow-ns-and-pod.yaml"}
   step %Q/I run the :create admin command with:/,table(%{
     | f | allow-ns-and-pod.yaml |
-    | n | #{project_name} |
+    | n | #{project_name}       |
   })
   step %Q{the step should succeed}
 end
