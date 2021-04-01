@@ -122,7 +122,7 @@ Feature: Elasticsearch related tests
     Given I successfully merge patch resource "elasticsearch/elasticsearch" with:
       | {"spec": {"managementState": "Unmanaged"}} |
     And the expression should be true> elasticsearch("elasticsearch").management_state == "Unmanaged"
-    Given evaluation of `["elasticsearch-delete-app", "elasticsearch-delete-infra", "elasticsearch-delete-audit", "elasticsearch-rollover-audit", "elasticsearch-rollover-app", "elasticsearch-rollover-infra"]` is stored in the :cj_names clipboard
+    Given evaluation of `["elasticsearch-im-app", "elasticsearch-im-audit", "elasticsearch-im-infra"]` is stored in the :cj_names clipboard
     And I repeat the following steps for each :cj_name in cb.cj_names:
     """
     Given I successfully merge patch resource "cronjob/#{cb.cj_name}" with:
