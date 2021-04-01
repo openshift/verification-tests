@@ -23,13 +23,13 @@ spec:
     fluentd: 
       buffer: 
         chunkLimitSize: 1m
-        flushAtShutdown: false
+        flushAtShutdown: true
         flushInterval: 5s
         flushMode: interval
         flushThreadCount: 2
-        overflowAction: throw_exception
+        overflowAction: drop_oldest_chunk
         retryMaxInterval: "300"
-        retryType: periodic
+        retryType: exponential_backoff
         retryWait: 1s
         totalLimitSize: 32m
   logStore: 

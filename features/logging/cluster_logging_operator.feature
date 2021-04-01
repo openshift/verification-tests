@@ -178,16 +178,16 @@ Feature: cluster-logging-operator related test
       | remove_logging_pods | true                   |
       | crd_yaml            | cl_fluentd-buffer.yaml |
     Then the step should succeed
-    Given I wait for the "fluentd" daemon_set to appear up to 300 seconds
-    And <%= daemon_set('fluentd').replica_counters[:desired] %> pods become ready with labels:
-      | logging-infra=fluentd |
-    And I wait for the "fluentd" config_map to appear up to 300 seconds
     When I run the :extract admin command with:
       | resource  | configmap/fluentd |
       | confirm   | true              |
     Then the step should succeed
-    And evaluation of `File.read("fluent.conf")` is stored in the :fluent_conf clipboard
-    And the expression should be true> cb.fluent_conf.size > 0
+    Given evaluation of `File.read("fluent.conf")` is stored in the :fluent_conf clipboard
+    And evaluation of `["flush_mode interval", "flush_interval 5s", "flush_thread_count 2", "flush_at_shutdown true", "retry_type exponential_backoff", "retry_wait 1s", "retry_max_interval 300", "retry_forever true", "total_limit_size 32m", "chunk_limit_size 1m", "overflow_action drop_oldest_chunk"]` is stored in the :configs clipboard
+    And I repeat the following steps for each :config in cb.configs:
+    """
+      Given the expression should be true> (cb.fluent_conf).include? cb.config
+    """
 
   # @author gkarager@redhat.com
   # @case_id OCP-33894
@@ -199,30 +199,21 @@ Feature: cluster-logging-operator related test
       | remove_logging_pods | true                           |
       | crd_yaml            | cl_fluentd-buffer_default.yaml |
     Then the step should succeed
-    Given I wait for the "fluentd" daemon_set to appear up to 300 seconds
-    And <%= daemon_set('fluentd').replica_counters[:desired] %> pods become ready with labels:
-      | logging-infra=fluentd |
-    And I wait for the "fluentd" config_map to appear up to 300 seconds
     When I run the :extract admin command with:
       | resource  | configmap/fluentd |
       | confirm   | true              |
     Then the step should succeed
     And evaluation of `File.read("fluent.conf")` is stored in the :fluent_conf clipboard
-    And the expression should be true> cb.fluent_conf.size > 0
+    And the expression should be true> (cb.fluent_conf).include? "flush_mode interval"
     When I run the :patch client command with:
       | resource      | clusterlogging                                                              |
       | resource_name | instance                                                                    |
-      | p             | {"spec": {"forwarder": {"fluentd": {"buffer": {"flushMode":"immediate"}}}}} |
+      | p             | {"spec": {"forwarder": {"fluentd": {"buffer": {"flushMode":"lazy"}}}}}      |
       | type          | merge                                                                       |
     Then the step should succeed
-    Given I wait for the "fluentd" daemon_set to appear up to 300 seconds
-    And <%= daemon_set('fluentd').replica_counters[:desired] %> pods become ready with labels:
-      | logging-infra=fluentd |
-    And I wait for the "fluentd" config_map to appear up to 300 seconds
     When I run the :extract admin command with:
       | resource  | configmap/fluentd |
       | confirm   | true              |
     Then the step should succeed
-    And evaluation of `File.read("fluent.conf")` is stored in the :fluent_conf1 clipboard
-    And the expression should be true> cb.fluent_conf1.size > 0
-    And the expression should be true> cb.fluent_conf != cb.fluent_conf1
+    And evaluation of `File.read("fluent.conf")` is stored in the :fluent_conf clipboard
+    Given the expression should be true> (cb.fluent_conf).include? "flush_mode lazy"
