@@ -102,6 +102,8 @@ module BushSlicer
         if v.has_key? :total_cost
           user_info = user_map[v[:job_id]]
           user_info = v[:user] if user_info.nil?
+          # force it to k if user_info is nil
+          user_info ||= k
           users << user_info
           res_list << [k, v[:job_id], v[:uptime].round(2), v[:total_cost], user_info]
           has_cost = true
@@ -134,7 +136,6 @@ module BushSlicer
         tag_users_msg += "\nThese clusters have no owners association #{unknown_users}\n"
         #tag_users_msg = "<@UBET0LUR3> please terminate your long-lived clusters if they are no longer in use"
         options.slack_no_block_format = true
-        binding.pry
         send_to_slack(summary_text: tag_users_msg, options: options) unless options.no_slack
       end
     end
