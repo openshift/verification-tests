@@ -795,12 +795,12 @@ check_no_result_on_operatorhub_page:
 check_extension_help_block:
   elements:
   - selector:
-      xpath: //button[text()='Console UI extensions']
+      xpath: //button[text()='Console plugins']
     op: click
   - selector: &help_block1
       xpath: //div[contains(.,'a custom interface')]
   - selector:
-      xpath: //div[contains(.,'trust this operator before enabling')]
+      xpath: //div[contains(.,'trust this console plugin before enabling')]
   action: click_close_icon
 check_plugins_are_disabled_bydefault:
   elements:
@@ -820,10 +820,10 @@ check_warning_for_enablement:
 check_extension_available_guide:
   elements:
   - selector:
-      xpath: //button[text()='UI extension available']
+      xpath: //button[text()='Plugin available']
     op: click
   - selector:
-      xpath: //div[contains(.,'enable its UI extension in the operator detail')]
+      xpath: //div[contains(.,'enable its console plugin in the operator detail')]
   - selector:
       xpath: //a[contains(.,'View operator details')]
     op: click

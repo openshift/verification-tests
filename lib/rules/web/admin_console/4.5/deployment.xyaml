@@ -1,3 +1,6 @@
+update_pod_count:
+  action: edit_pod_count_action
+  action: update_resource_count
 update_resource_count:
   elements:
   - selector: &modal_count
@@ -8,6 +11,7 @@ update_resource_count:
     op: send_keys <resource_count>
   action: submit_changes
 update_rollout_strategy:
+  action: edit_update_strategy_action
   elements:
   - selector:
       xpath: //input[@value='<update_strategy>']
