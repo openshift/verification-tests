@@ -612,7 +612,7 @@ Given /^I have a registry in my project$/ do
 end
 
 Given /^I have a registry with htpasswd authentication enabled in my project$/ do
-  ensure_admin_tagged
+#  ensure_admin_tagged
   if BushSlicer::Project::SYSTEM_PROJECTS.include?(project(generate: false).name)
     raise "I refuse create registry in a system project: #{project.name}"
   end
@@ -725,4 +725,34 @@ Given /^I have a cluster-capacity pod in my project$/ do
   step 'I run oc create over ERB test file: infrastructure/cluster-capacity/cluster-capacity-pod.yaml'
   step 'the step should succeed'
   step 'the pod named "cluster-capacity" becomes ready'
+end
+
+Given /^I save a htpasswd registry auth to the#{OPT_SYM} clipboard$/ do |cb_name|
+  cb_name ||= :dockercfg_file
+  ensure_admin_tagged
+  step 'docker config for default image registry is stored to the :default_dockercfg clipboard'
+  step 'I have a registry with htpasswd authentication enabled in my project'
+  step %Q/I run the :create_route_edge client command with:/, table(%{
+    | name    | registry |
+    | service | registry |
+  })
+  step 'the step should succeed'
+  step 'I save the hostname of route "registry" in project "<%= project.name %>" to the :custom_registry clipboard'
+  step %Q/a 5 characters random string of type :dns is stored into the :dockercfg_name clipboard/
+  cb[cb_name] ="/tmp/#{cb.dockercfg_name}"
+
+  cb.new_cfg={
+        "#{cb.custom_registry}" => {
+          "auth" => Base64.strict_encode64(
+            "#{cb.reg_user}:#{cb.reg_pass}"
+          ),    
+        }     
+  }
+  File.open("#{cb[cb_name]}", 'wb') { |f| 
+    f.write(
+       {   
+         "auths" => cb.generated_cfg.merge(cb.new_cfg)
+       }.to_json
+    )   
+  }
 end

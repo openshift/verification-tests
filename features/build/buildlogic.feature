@@ -458,3 +458,45 @@ Feature: buildlogic.feature
       | sample-pipeline.*Cancelled |
       | sample-pipeline.*Complete  |
     """
+
+  # @author xiuwang@redhat.com
+  # @case_id OCP-40366
+  @admin
+  Scenario: Mirroring built image doesn't degrade scheme2 ,keep consistent SHA's	
+    Given I have a project
+    Given I save a htpasswd registry auth to the :combine_dockercfg clipboard
+    And default image registry route is stored in the :integrated_reg_host clipboard
+    And I have a skopeo pod in the project
+    And master CA is added to the "skopeo" dc
+    When I run the :new_app client command with:
+      | app_repo | httpd:latest~https://github.com/sclorg/httpd-ex.git |
+    Then the step should succeed
+    Given the "httpd-ex-1" build completed
+    When I execute on the pod:
+      | skopeo                                                                     |
+      | inspect                                                                    |
+      | --tls-verify=false                                                         |
+      | --creds                                                                    |
+      | <%= user.name %>:<%= user.cached_tokens.first %>                           |
+      | --raw                                                                      |
+      | docker://<%= cb.integrated_reg_host %>/<%= project.name %>/httpd-ex:latest |
+    Then the step should succeed
+    Then the output should match:
+      | "schemaVersion":2 |
+    Then I run the :image_mirror client command with:
+      | source_image | <%= cb.integrated_reg_host %>/<%= project.name %>/httpd-ex:latest |
+      | dest_image   | <%= cb.custom_registry %>/myimage:latest                          |
+      | a            | <%= cb.combine_dockercfg %>                                       |
+      | insecure     | true                                                              |
+    And the step should succeed
+    When I execute on the pod:
+      | skopeo                                            |
+      | inspect                                           |
+      | --tls-verify=false                                |
+      | --creds                                           |
+      | <%= cb.reg_user %>:<%= cb.reg_pass %>             |
+      | --raw                                             |
+      | docker://<%= cb.custom_registry %>/myimage:latest |
+    Then the step should succeed
+    Then the output should match:
+      | "schemaVersion":2 |

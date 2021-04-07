@@ -506,6 +506,7 @@
     :dir: --dir=<value>
     :filter_by_os: --filter-by-os=<value>
     :insecure: --insecure=<value>
+    :o: --output=<value>
     :skip_verification: --skip-verification=<value>
 :import:
   :cmd: oc import <command>
