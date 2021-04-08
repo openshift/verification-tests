@@ -154,3 +154,68 @@ Feature: cluster-logging-operator related test
       | card_name | #{cb.card} |
     Then the step should succeed
     """
+
+  # @author gkarager@redhat.com
+  # @case_id OCP-33868
+  @admin
+  @destructive
+  Scenario: Expose more fluentd knobs to support optimizing fluentd for different environments - Invalid Values
+    Given I register clean-up steps:
+    """
+    Given I delete the clusterlogging instance
+    Then the step should succeed
+    """
+    Given I obtain test data file "logging/clusterlogging/cl_fluentd-buffer_Invalid.yaml"
+    When I run the :create client command with:
+      | f | cl_fluentd-buffer_Invalid.yaml |
+    Then the step should fail
+
+  # @author gkarager@redhat.com
+  # @case_id OCP-33793
+  @admin
+  @destructive
+  Scenario: Expose more fluentd knobs to support optimizing fluentd for different environments
+    Given I obtain test data file "logging/clusterlogging/cl_fluentd-buffer.yaml"
+    And I create clusterlogging instance with:
+      | remove_logging_pods | true                   |
+      | crd_yaml            | cl_fluentd-buffer.yaml |
+    Then the step should succeed
+    When I run the :extract admin command with:
+      | resource  | configmap/fluentd |
+      | confirm   | true              |
+    Then the step should succeed
+    Given evaluation of `File.read("fluent.conf")` is stored in the :fluent_conf clipboard
+    And evaluation of `["flush_mode interval", "flush_interval 5s", "flush_thread_count 2", "flush_at_shutdown true", "retry_type exponential_backoff", "retry_wait 1s", "retry_max_interval 300", "retry_forever true", "total_limit_size 32m", "chunk_limit_size 1m", "overflow_action drop_oldest_chunk"]` is stored in the :configs clipboard
+    And I repeat the following steps for each :config in cb.configs:
+    """
+      Given the expression should be true> (cb.fluent_conf).include? cb.config
+    """
+
+  # @author gkarager@redhat.com
+  # @case_id OCP-33894
+  @admin
+  @destructive
+  Scenario: Fluentd optimizing variable changes trigger new deployment
+    Given I obtain test data file "logging/clusterlogging/cl_fluentd-buffer_default.yaml"
+    And I create clusterlogging instance with:
+      | remove_logging_pods | true                           |
+      | crd_yaml            | cl_fluentd-buffer_default.yaml |
+    Then the step should succeed
+    When I run the :extract admin command with:
+      | resource  | configmap/fluentd |
+      | confirm   | true              |
+    Then the step should succeed
+    And evaluation of `File.read("fluent.conf")` is stored in the :fluent_conf clipboard
+    And the expression should be true> (cb.fluent_conf).include? "flush_mode interval"
+    When I run the :patch client command with:
+      | resource      | clusterlogging                                                              |
+      | resource_name | instance                                                                    |
+      | p             | {"spec": {"forwarder": {"fluentd": {"buffer": {"flushMode":"lazy"}}}}}      |
+      | type          | merge                                                                       |
+    Then the step should succeed
+    When I run the :extract admin command with:
+      | resource  | configmap/fluentd |
+      | confirm   | true              |
+    Then the step should succeed
+    And evaluation of `File.read("fluent.conf")` is stored in the :fluent_conf clipboard
+    Given the expression should be true> (cb.fluent_conf).include? "flush_mode lazy"
