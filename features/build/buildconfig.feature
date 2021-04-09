@@ -26,37 +26,39 @@ Feature: buildconfig.feature
   Scenario: Rebuild image when the underlying image changed for Docker build
     Given I have a project
     When I run the :new_build client command with:
-      | app_repo | https://github.com/openshift/ruby-hello-world.git |
+      | D    | FROM quay.io/openshifttest/centos@sha256:285bc3161133ec01d8ca8680cd746eecbfdbc1faa6313bd863151c4b26d7e5a5\nRUN echo "hello" |
+      | to   | centos  |
+      | name | mybuild |
     Then the step should succeed
-    Then the "ruby-25-centos7" image stream was created
-    And the "ruby-hello-world-1" build was created
+    Then the "centos" image stream was created
+    And the "mybuild-1" build was created
     When I run the :tag client command with:
-      | source_type | docker                 |
-      | source      | openshift/ruby:2.7     |
-      | dest        | ruby-25-centos7:latest |
+      | source_type | docker         |
+      | source      | openshift/ruby |
+      | dest        | centos:latest  |
     Then the step should succeed
-    And the "ruby-hello-world-2" build was created
+    And the "mybuild-2" build was created
 
   # @author dyan@redhat.com
   # @case_id OCP-12020
   Scenario: Trigger chain builds from a image update
     Given I have a project
     When I run the :new_build client command with:
-      | app_repo | centos/ruby-25-centos7:latest~https://github.com/openshift/ruby-hello-world.git |
+      | app_repo     | registry.redhat.io/rhscl/ruby-27-rhel7:latest~https://github.com/openshift/ruby-hello-world.git |
     Then the step should succeed
-    Then the "ruby-25-centos7" image stream was created
+    Then the "ruby-27-rhel7" image stream was created
     And the "ruby-hello-world-1" build was created
     Given the "ruby-hello-world-1" build becomes :complete
     When I run the :new_build client command with:
-      | image_stream | ruby-hello-world                     |
-      | code         | https://github.com/sclorg/ruby-ex    |
-      | name         | ruby-ex                              |
+      | image_stream | ruby-hello-world                  |
+      | code         | https://github.com/sclorg/ruby-ex |
+      | name         | ruby-ex                           |
     Then the step should succeed
     And the "ruby-ex-1" build was created
     When I run the :tag client command with:
-      | source_type      | docker                 |
-      | source           | openshift/ruby:2.5     |
-      | dest             | ruby-25-centos7:latest |
+      | source_type      | docker                |
+      | source           | openshift/ruby:latest |
+      | dest             | ruby-27-rhel7:latest  |
       | reference_policy | local                  |
     Then the step should succeed
     And the "ruby-hello-world-2" build was created

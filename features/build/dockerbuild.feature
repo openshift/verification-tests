@@ -25,15 +25,15 @@ Feature: dockerbuild.feature
   Scenario: Docker build with dockerImage with specified tag
     Given I have a project
     When I run the :new_app client command with:
-      | image_stream | openshift/ruby:2.7                            |
-      | app_repo     | https://github.com/openshift/ruby-hello-world |
+      | docker_image | quay.io/openshifttest/ruby-27-centos7:centos7 |
+      | app_repo     | http://github.com/openshift/ruby-hello-world  |
       | strategy     | docker                                        |
     Then the step should succeed
     And the "ruby-hello-world-1" build completes
     When I run the :patch client command with:
       | resource      | buildconfig                                                                                                                                      |
       | resource_name | ruby-hello-world                                                                                                                                 |
-      | p             | {"spec": {"strategy": {"dockerStrategy": {"from": {"kind": "DockerImage","name": "quay.io/openshifttest/ruby-25-centos7@sha256:575194aa8be12ea066fc3f4aa9103dcb4291d43f9ee32e4afe34e0063051610b"}}},"type": "Docker"}} |
+      | p             | {"spec": {"strategy": {"dockerStrategy": {"from": {"kind": "DockerImage","name": "registry.redhat.io/rhscl/ruby-27-rhel7:latest"}}},"type": "Docker"}} |
     Then the step should succeed
     When I run the :start_build client command with:
       | buildconfig | ruby-hello-world |
@@ -82,10 +82,10 @@ Feature: dockerbuild.feature
   Scenario: Add ARGs in docker build
     Given I have a project
     When I run the :new_build client command with:
-      | code         | https://github.com/openshift/ruby-hello-world |
-      | image_stream | openshift/ruby:latest                         |
-      | strategy     | docker                                        |
-      | build_arg    | ARG=VALUE                                     |
+      | code         | http://github.com/openshift/ruby-hello-world.git |
+      | docker_image | quay.io/openshifttest/ruby-27-centos7:centos7    |
+      | strategy     | docker                                           |
+      | build_arg    | ARG=VALUE                                        |
     Then the step should succeed
     Given the "ruby-hello-world-1" build was created
     When I run the :get client command with:

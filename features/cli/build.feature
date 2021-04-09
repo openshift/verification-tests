@@ -655,7 +655,7 @@ Feature: build 'apps' with CLI
       | .*one or more resources.* |
     When I run the :new_app client command with:
       | app_repo     | https://github.com/openshift/ruby-hello-world |
-      | image_stream | openshift/ruby:2.6                            |
+      | image_stream | openshift/ruby                                |
     Then the step should succeed
     And the "ruby-hello-world-1" build becomes :running
     When I run the :logs client command with:
@@ -698,7 +698,7 @@ Feature: build 'apps' with CLI
   Scenario: io.openshift.build.commit.ref displays correctly in build reference on imagestreamtag if building from git branch reference
     Given I have a project
     When I run the :new_app client command with:
-      | app_repo | ruby:2.7~https://github.com/openshift/ruby-hello-world#beta4 |
+      | app_repo | quay.io/openshifttest/ruby-22-centos7:2.2~https://github.com/openshift/ruby-hello-world#beta4 |
     Then the step should succeed
     Given the "ruby-hello-world-1" build was created
     And the "ruby-hello-world-1" build completed
