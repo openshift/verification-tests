@@ -408,38 +408,6 @@ Feature: Sriov related scenarios
     Then the step should succeed
     And the output should contain "<%= cb.pod1_net1_mac %>"
 
-  # @author zzhao@redhat.com
-  # @case_id OCP-24776
-  @destructive
-  @admin
-  Scenario: The default sriov networkpolicy should be able to restore by sriov operator when it was deleted
-    Given the sriov operator is running well
-    When I run the :delete admin command with:
-      | object_type       | sriovnetworknodepolicies |
-      | object_name_or_id | default                  |
-    Then the step should succeed
-    When I run the :get admin command with:
-      | resource    |  sriovnetworknodepolicies |
-    Then the step should succeed
-    And the output should contain "default"
-    Given I obtain test data file "networking/sriov/sriovnetworkpolicy/mlx278-netdevice.yaml"
-    Given I create sriov resource with following:
-      | cr_yaml       | mlx278-netdevice.yaml    |
-      | cr_name       | mlx278-netdevice         |
-      | resource_type | sriovnetworknodepolicies |
-    Then the step should succeed
-    And I wait up to 500 seconds for the steps to pass:
-    """
-    When I run the :get admin command with:
-      | resource    | sriovnetworknodestates           |
-      | namespace   | openshift-sriov-network-operator |
-      | o           | yaml                             |
-    Then the step should succeed
-    And the output should contain:
-      | mlx278-netdevice      |
-      | syncStatus: Succeeded |
-      | vfID: 0               |
-    """
 
   # @author zzhao@redhat.com
   @destructive
