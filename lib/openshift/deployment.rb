@@ -57,6 +57,15 @@ module BushSlicer
       raw_resource(user: user, cached: cached, quiet: quiet).dig('metadata', 'generation')
     end
 
+    def pod_selector(user: nil, cached: true, quiet: false)
+      raw_labels = raw_resource(user: user, cached: cached, quiet: quiet).dig('spec', 'template', 'metadata', 'labels')
+      arr = []
+      raw_labels.each do |key, value|
+        arr.push(key + "=" + value)
+      end
+      return arr
+    end
+
     def node_selector(user: nil, cached: false, quiet: false)
       template(user: user, cached: cached, quiet: quiet).dig('spec', 'nodeSelector')
     end
