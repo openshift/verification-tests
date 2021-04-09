@@ -165,7 +165,7 @@ Feature: SDN compoment upgrade testing
   # @case_id OCP-38751
   @admin
   @upgrade-check
-  Scenario: Check the networkpolicy works well after upgrade
+  Scenario: Check the namespace networkpolicy for an application works well after upgrade 
     Given I switch to cluster admin pseudo user
     When I use the "policy-upgrade1" project
     Given status becomes :running of 2 pods labeled:
