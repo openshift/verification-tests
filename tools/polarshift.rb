@@ -20,7 +20,7 @@ module BushSlicer
     include Commander::Methods
     include Common::Helper
 
-    TCMS_RELEVANT_TAGS = ["admin", "destructive", "vpn", "smoke"].freeze
+    TCMS_RELEVANT_TAGS = ["admin", "destructive", "flaky", "smoke", "vpn"].freeze
 
     def initialize
       always_trace!
