@@ -68,7 +68,7 @@ Feature: creating 'apps' with CLI
     Given an 8 character random string of type :dns952 is stored into the :appname2 clipboard
     When I run the :new_app client command with:
       | code         | http://github.com/openshift/ruby-hello-world |
-      | image_stream | openshift/ruby:2.5                           |
+      | image_stream | openshift/ruby                               |
       | name         | <%= cb.appname2 %>                           |
       | env          | MYSQL_ROOT_PASSWORD=test                     |
     Given the "<%= cb.appname2 %>-1" build completes

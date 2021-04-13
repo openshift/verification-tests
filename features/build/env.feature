@@ -37,8 +37,8 @@ Feature: env.feature
     DB_USER=test
     """
     When I run the :new_app client command with:
-      | app_repo | ruby:2.5~https://github.com/openshift/ruby-hello-world |
-      | env_file | test                                                   |
+      | app_repo | ruby~https://github.com/openshift/ruby-hello-world |
+      | env_file | test                                               |
     Then the step should succeed
     And the "ruby-hello-world-1" build was created
     Given the "ruby-hello-world-1" build completed
@@ -55,8 +55,8 @@ Feature: env.feature
     RACK_ENV=development
     """
     When I run the :new_app client command with:
-      | app_repo | ruby:2.5~https://github.com/openshift/ruby-hello-world |
-      | env_file | test                                                   |
+      | app_repo | ruby~https://github.com/openshift/ruby-hello-world |
+      | env_file | test                                               |
     Then the step should succeed
     And the "ruby-hello-world-1" build was created
     Given the "ruby-hello-world-1" build completed
