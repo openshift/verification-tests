@@ -4,20 +4,21 @@ check_ocm_subscription:
       xpath: //a[contains(., 'OpenShift Cluster Manager') and @href='https://cloud.redhat.com/openshift/details/<cluster_id>']
 check_help_info_on_channel_popup:
   params:
-    button_text: Channel
     help_info: Channels help to control the pace of updates and recommend the appropriate release versions
-  action: click_button
   action: check_help_info
   action: check_dock_link_for_upgrade
   action: click_close_icon
 check_help_info_in_update_channel_modal:
   params:
-    help_info: Select a channel that reflects your desired version. Critical security updates will be delivered to any vulnerable channels
+    help_info: a channel that reflects the desired version
   action: click_update_channel_button
   action: check_help_info
   action: check_dock_link_for_upgrade
 check_help_info:
   elements:
+  - selector:
+      xpath: //*[contains(text(), 'Channel')]/button
+    op: click
   - selector:
       xpath: //p[contains(., '<help_info>')]
 check_dock_link_for_upgrade:
@@ -38,10 +39,7 @@ check_drop_down_items:
       xpath: //button[@data-test-id='dropdown-menu' and contains(., 'fast-<product_version>')]
   - selector:
       xpath: //button[@data-test-id='dropdown-menu' and contains(., 'candidate-<product_version>')]
-check_list_of_channels_in_channel_modal:
-  action: click_update_channel_button
-  action: click_dropdown_button
-  action: check_drop_down_items
+check_list_of_channels_in_channel_modal: {}
 check_kebab_menus_for_default_cs:
   params:
     resource_name: community-operators
