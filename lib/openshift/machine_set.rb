@@ -40,5 +40,10 @@ module BushSlicer
       raw_resource(user: user, cached: cached, quiet: quiet).
         dig('spec', 'taints')
     end
+
+    def is_windows_machinesets?(user: nil, cached: true, quiet: false)
+      rr = raw_resource(user: user, cached: cached, quiet: quiet)
+      rr.dig('spec', 'template', 'metadata', 'labels','machine.openshift.io/os-id') == "Windows"
+    end 
   end
 end
