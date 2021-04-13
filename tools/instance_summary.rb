@@ -126,14 +126,25 @@ module BushSlicer
         end
       end
       if table.rows.count > 0
-        msg = "\nThese '#{options.platform}' clusters have been alive longer than #{options.uptime} hrs.  Did you forget to remove them??\n"
+        msg = "\nThese '#{options.platform}' clusters have been alive longer than #{options.uptime} hrs.\n"
         print msg
         puts table
         send_to_slack(summary_text: msg + table.to_s, options: options) unless options.no_slack
         # tag the users of the long-lived clusters
+        # for Packet platform, we ignore host that ends with  'aux'
+        if self.class == BushSlicer::PacketSummary
+          filtered_list = res_list.select {|r| r[4] unless r[0].end_with? '-aux'}
+          users = filtered_list
+        # Special case for vSphere where `Workload` user is not real, so just
+        # ignore it
+        elsif self.class == BushSlicer::VSphereSummary
+          filtered_list = res_list.map {|r| r[4] if r[0] !='Workloads' }.compact
+          users = filtered_list
+        end
+
         valid_users, unknown_users = translate_to_slack_users(users: users)
         tag_users_msg =  valid_users + " please terminate your long-lived clusters if they are no longer in use\n"
-        tag_users_msg += "\nThese clusters have no owners association #{unknown_users}\n"
+        tag_users_msg += "\nThese clusters have no owners association #{unknown_users}\n" if unknown_users.size > 0
         #tag_users_msg = "<@UBET0LUR3> please terminate your long-lived clusters if they are no longer in use"
         options.slack_no_block_format = true
         send_to_slack(summary_text: tag_users_msg, options: options) unless options.no_slack
@@ -243,10 +254,10 @@ module BushSlicer
       return c_hash
     end
 
-
     def print_longlived_clusters(summary, options)
       options.uptime ||= 18
       res = get_longlived_clusters(summary, options)
+      ### special case for Packet, in which if the names ends with `-aux-server`, then do not tag the owners
       if res.count > 0
         res = compact_results(res)
         print_condensed_usage(usage: res, options: options)
