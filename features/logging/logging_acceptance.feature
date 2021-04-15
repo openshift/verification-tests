@@ -3,8 +3,6 @@ Feature: Logging smoke test case
   # @author gkarager@redhat.com
   # @case_id OCP-37508
   @admin
-  @destructive
-  @flaky
   Scenario: One logging acceptance case for all cluster
 # Deploy cluster-logging operator via web console
     Given logging channel name is stored in the :logging_channel clipboard	

@@ -196,7 +196,6 @@ end
 
 # to cleanup OLM installed clusterlogging
 Given /^logging service is removed successfully$/ do
-  ensure_destructive_tagged
   ensure_admin_tagged
   # remove namespace
   clo_proj_name = "openshift-logging"
