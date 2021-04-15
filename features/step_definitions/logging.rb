@@ -449,7 +449,9 @@ end
 
 Given /^I create pipelinesecret(?: named#{OPT_QUOTED})? with auth type (mTLS|mTLS_share|server_auth|server_auth_share)$/ do | secret_name, auth_type |
   secret_name ||= "pipelinesecret"
-  step %Q/admin ensures "#{secret_name}" secret is deleted from the "openshift-logging" project after scenario/
+  unless tagged_upgrade?
+    step %Q/admin ensures "#{secret_name}" secret is deleted from the "openshift-logging" project after scenario/
+  end
   case auth_type
   when "mTLS"
     step %Q/I run the :create_secret admin command with:/, table(%{
@@ -505,14 +507,21 @@ Given /^I create the resources for the receiver with:$/ do | table |
   pod_label = opts[:pod_label]
   project(namespace)
 
-  step %Q/I ensure "#{receiver_name}" service_account is deleted from the "#{namespace}" project after scenario/
+  unless tagged_upgrade?
+    step %Q/I ensure "#{receiver_name}" service_account is deleted from the "#{namespace}" project after scenario/
+  end
   @result = user.cli_exec(:create_serviceaccount, serviceaccount_name: receiver_name, n: namespace)
   raise "Unable to create serviceaccout #{receiver_name}" unless @result[:success]
-  step %Q/SCC "privileged" is added to the "system:serviceaccount:<%= project.name %>:#{receiver_name}" service account/
 
-  step %Q/I ensure "#{receiver_name}" config_map is deleted from the "#{namespace}" project after scenario/
-  step %Q/I ensure "#{receiver_name}" deployment is deleted from the "#{namespace}" project after scenario/
-  step %Q/I ensure "#{receiver_name}" service is deleted from the "#{namespace}" project after scenario/
+  if tagged_upgrade?
+    step %Q/SCC "privileged" is added to the "system:serviceaccount:<%= project.name %>:#{receiver_name}" service account without teardown/
+  else
+    step %Q/SCC "privileged" is added to the "system:serviceaccount:<%= project.name %>:#{receiver_name}" service account/
+    step %Q/I ensure "#{receiver_name}" config_map is deleted from the "#{namespace}" project after scenario/
+    step %Q/I ensure "#{receiver_name}" deployment is deleted from the "#{namespace}" project after scenario/
+    step %Q/I ensure "#{receiver_name}" service is deleted from the "#{namespace}" project after scenario/
+  end
+
   files = [configmap_file, deployment_file]
   for file in files do
     @result = user.cli_exec(:create, f: file, n: namespace)
@@ -546,7 +555,9 @@ Given /^(fluentd|elasticsearch|rsyslog) receiver is deployed as (secure|insecure
     pod_label = "logging-infra=fluentdserver"
     if security == "secure"
       step %Q/I generate certs for the "fluentdserver" receiver in the "<%= project.name %>" project/
-      step %Q/I ensure "fluentdserver" secret is deleted from the "<%= project.name %>" project after scenario/
+      unless tagged_upgrade?
+        step %Q/I ensure "fluentdserver" secret is deleted from the "<%= project.name %>" project after scenario/
+      end
       # create secret/fluentdserver for fluentd server pod
       step %Q/I run the :create_secret client command with:/, table(%{
         | name         | fluentdserver            |
@@ -584,7 +595,9 @@ Given /^(fluentd|elasticsearch|rsyslog) receiver is deployed as (secure|insecure
     pod_label = "app=elasticsearch-server"
     if security == "secure"
       step %Q/I generate certs for the "elasticsearch-server" receiver in the "<%= project.name %>" project/
-      step %Q/I ensure "elasticsearch-server" secret is deleted from the "<%= project.name %>" project after scenario/
+      unless tagged_upgrade?
+        step %Q/I ensure "elasticsearch-server" secret is deleted from the "<%= project.name %>" project after scenario/
+      end
       step %Q/I run the :create_secret client command with:/, table(%{
         | name        | elasticsearch-server                |
         | secret_type | generic                             |
@@ -651,48 +664,70 @@ Given /^I upgrade the operator with:$/ do | table |
 
   #check if the EFK pods could be upgraded successfully
   project("openshift-logging")
-  if subscription == "elasticsearch-operator"
-    # check if the ES cluster could be upgraded
-    success = wait_for(300, interval: 10) {
-      elasticsearch('elasticsearch').nodes_status[0]["upgradeStatus"]["scheduledUpgrade"]
-    }
-    raise "Can't upgrade the ES cluster" unless success
-  end
-  # wait for the ES cluster to be ready
-  success = wait_for(600, interval: 10) {
-    elasticsearch('elasticsearch').cluster_health == "green" &&
-    (elasticsearch('elasticsearch').nodes_status.last["upgradeStatus"].empty? ||
-    elasticsearch('elasticsearch').nodes_status.last["upgradeStatus"]["scheduledUpgrade"].nil?)
-  }
-  raise "ES cluster isn't in a good status" unless success
-  # check pvc count
-  unless BushSlicer::PersistentVolumeClaim.list(user: user, project: project).count == cluster_logging('instance').logstore_node_count
-    raise "The PVC count doesn't match the ES node count"
+  if cluster_logging('instance').log_store_spec != nil
+    if elasticsearch('elasticsearch').exists?
+      if subscription == "elasticsearch-operator"
+        # check if the ES cluster could be upgraded
+        success = wait_for(300, interval: 10) {
+          elasticsearch('elasticsearch').nodes_status[0]["upgradeStatus"]["scheduledUpgrade"]
+        }
+        raise "Can't upgrade the ES cluster" unless success
+      end
+      # wait for the ES cluster to be ready
+      success = wait_for(600, interval: 10) {
+        elasticsearch('elasticsearch').cluster_health == "green" &&
+        (elasticsearch('elasticsearch').nodes_status.last["upgradeStatus"].empty? ||
+        elasticsearch('elasticsearch').nodes_status.last["upgradeStatus"]["scheduledUpgrade"].nil?)
+      }
+      raise "ES cluster isn't in a good status" unless success
+      # check pvc count
+      unless BushSlicer::PersistentVolumeClaim.list(user: user, project: project).count == cluster_logging('instance').logstore_node_count
+        raise "The PVC count doesn't match the ES node count"
+      end
+    else
+      raise "The elasticsearch/elasticsearch is not created"
+    end
   end
 
   # check the kibana status
-  success = wait_for(300, interval: 10) {
-    (deployment('kibana').replica_counters(cached: false)[:desired] == deployment('kibana').replica_counters(cached: false)[:updated]) &&
-    (deployment('kibana').replica_counters(cached: false)[:desired] == deployment('kibana').replica_counters(cached: false)[:available])
-  }
-  raise "Kibana isn't in a good status" unless success
+  if cluster_logging('instance').visualization_spec != nil
+    if deployment('kibana').exists?
+      success = wait_for(300, interval: 10) {
+        (deployment('kibana').replica_counters(cached: false)[:desired] == deployment('kibana').replica_counters(cached: false)[:updated]) &&
+        (deployment('kibana').replica_counters(cached: false)[:desired] == deployment('kibana').replica_counters(cached: false)[:available])
+      }
+      raise "Kibana isn't in a good status" unless success
+    else
+      raise "Deployment/kibana does not exist"
+    end
+  end
+
   # check fluentd status
-  success = wait_for(300, interval: 10) {
-    (daemon_set('fluentd').replica_counters(cached: false)[:desired] == daemon_set('fluentd').replica_counters(cached: false)[:updated_scheduled]) &&
-    (daemon_set('fluentd').replica_counters(cached: false)[:desired] == daemon_set('fluentd').replica_counters(cached: false)[:available])
-  }
-  raise "Fluentd isn't in a good status" unless success
+  if cluster_logging('instance').collection_spec != nil
+    if daemon_set('fluentd').exists?
+      success = wait_for(300, interval: 10) {
+        (daemon_set('fluentd').replica_counters(cached: false)[:desired] == daemon_set('fluentd').replica_counters(cached: false)[:updated_scheduled]) &&
+        (daemon_set('fluentd').replica_counters(cached: false)[:desired] == daemon_set('fluentd').replica_counters(cached: false)[:available])
+      }
+      raise "Fluentd isn't in a good status" unless success
+    else
+      raise "Daemonset/fluentd doesn't exist"
+    end
+  end
 end
 
 # only check the major version, such as 4.4, 4.5, 4.6, don't care about versions like 4.6.0-2020xxxxxxxx
 Given /^I make sure the logging operators match the cluster version$/ do
   step %Q/I switch to cluster admin pseudo user/
+  # check if channel name in subscription is same to the target channel
   step %Q/logging channel name is stored in the :channel clipboard/
-  cv = cluster_version('version').version.split('-')[0].split('.').take(2).join('.')
+  step %Q/"elasticsearch-operator" packagemanifest's catalog source name is stored in the :eo_catsrc clipboard/
+  step %Q/"cluster-logging" packagemanifest's catalog source name is stored in the :clo_catsrc clipboard/
   # check EO
   project("openshift-operators-redhat")
-  eo_csv_version = subscription("elasticsearch-operator").current_csv(cached: false).match(/elasticsearch-operator\.(.*)/)[1].split('-')[0].split('.').take(2).join('.')
-  if eo_csv_version != cv
+  eo_current_channel = subscription("elasticsearch-operator").channel(cached: false)
+  eo_current_catsrc = subscription("elasticsearch-operator").source
+  if cb.channel != eo_current_channel || cb.eo_catsrc != eo_current_catsrc
     upgrade_eo = true
     step %Q/"elasticsearch-operator" packagemanifest's catalog source name is stored in the :catsrc clipboard/
     step %Q/I upgrade the operator with:/, table(%{
@@ -707,8 +742,9 @@ Given /^I make sure the logging operators match the cluster version$/ do
   end
   # check CLO
   project("openshift-logging")
-  clo_csv_version = subscription("cluster-logging").current_csv(cached: false).match(/clusterlogging\.(.*)/)[1].split('-')[0].split('.').take(2).join('.')
-  if clo_csv_version != cv
+  clo_current_channel = subscription("cluster-logging").channel(cached: false)
+  clo_current_catsrc = subscription("cluster-logging").source
+  if clo_current_channel != cb.channel || cb.clo_catsrc != clo_current_catsrc
     upgrade_clo = true
     step %Q/"cluster-logging" packagemanifest's catalog source name is stored in the :catsrc clipboard/
     step %Q/I upgrade the operator with:/, table(%{
@@ -722,7 +758,8 @@ Given /^I make sure the logging operators match the cluster version$/ do
     upgrade_clo = false
   end
   # check cronjobs if the CLO or/and EO is upgraded
-  if upgrade_eo || upgrade_clo
+  project("openshift-logging")
+  if (upgrade_eo || upgrade_clo) && (BushSlicer::CronJob.list(user: user, project: project).count != 0)
     step %Q/I check the cronjob status/
     step %Q/the step should succeed/
   end

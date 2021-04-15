@@ -124,19 +124,19 @@ module BushSlicer
       end
     end
 
-    private def collection_spec(user: nil, quiet: false, cached: false)
+    def collection_spec(user: nil, quiet: false, cached: false)
       raw_resource(user: user, cached: cached, quiet: quiet).dig('spec', 'collection')
     end
 
-    private def log_store_spec(user: nil, quiet: false, cached: false)
+    def log_store_spec(user: nil, quiet: false, cached: false)
       raw_resource(user: user, cached: cached, quiet: quiet).dig('spec', 'logStore')
     end
 
-    private def curation_spec(user: nil, quiet: false, cached: false)
+    def curation_spec(user: nil, quiet: false, cached: false)
       raw_resource(user: user, cached: cached, quiet: quiet).dig('spec', 'curation')
     end
 
-    private def visualization_spec(user: nil, quiet: false, cached: false)
+    def visualization_spec(user: nil, quiet: false, cached: false)
       raw_resource(user: user, cached: cached, quiet: quiet).dig('spec', 'visualization')
     end
 
