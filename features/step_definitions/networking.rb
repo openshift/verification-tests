@@ -1000,7 +1000,7 @@ Given /^I store "([^"]*)" node's corresponding default networkType pod name in t
   cb[cb_pod_name] = BushSlicer::Pod.get_labeled(app, project: project(project_name, switch: false), user: admin) { |pod, hash|
     pod.node_name == node_name
   }.first.name
-  logger.info "node's corresponding networkType pod name is stored in the #{cb_pod_name} clipboard."
+  logger.info "node's corresponding networkType pod name is stored in the #{cb_pod_name} clipboard as #{cb[cb_pod_name]}."
 end
 
 Given /^I store the ovnkube-master#{OPT_QUOTED} leader pod in the#{OPT_SYM} clipboard(?: using node #{QUOTED})?$/ do |ovndb, cb_leader_name, node_name|
