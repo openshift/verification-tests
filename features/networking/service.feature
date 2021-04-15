@@ -434,7 +434,7 @@ Feature: Service related networking scenarios
     And the output should contain "Hello OpenShift"
     """
 
-  # @author anusaxen@redhat.com, kkulkarni@redhat.com
+  # @author anusaxen@redhat.com
   # @case_id OCP-24694
   @admin
   @destructive
@@ -469,8 +469,8 @@ Feature: Service related networking scenarios
     #Reset the MTU using nmcli
     Given I use the "<%= cb.subject_node %>" node
     And I run commands on the host:
-    | nmcli con modify "<%= cb.nmcli_active_con_uuid %>" ethernet.mtu <%= cb.mtu_actual %> |
-    | nmcli dev reapply  <%= cb.default_interface %> |
+      | nmcli con modify "<%= cb.nmcli_active_con_uuid %>" ethernet.mtu <%= cb.mtu_actual %> |
+      | nmcli dev reapply  <%= cb.default_interface %> |
     Then the step should succeed
     And the node's MTU value is stored in the :mtu_actual_redeployed clipboard
     And the expression should be true> cb.mtu_actual == cb.mtu_actual_redeployed

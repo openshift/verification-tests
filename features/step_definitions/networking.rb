@@ -1306,7 +1306,7 @@ end
 
 Given /^the node's active nmcli connection is stored in the#{OPT_SYM} clipboard$/ do |cb_name|
   ensure_admin_tagged
-  cb_name = "nmcli_active_con_uuid" unless cb_name
+  cb_name = "active_con_uuid" unless cb_name
   @result = host.exec_admin("nmcli -t -f UUID c show --active")
   # run command and store first line of output as the response
   cb[cb_name] = @result[:response].split("\n").first
