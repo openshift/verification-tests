@@ -80,6 +80,35 @@ module BushSlicer
       spec = raw_resource(user: user, cached: cached, quiet: quiet).dig('spec')
       return (spec.dig('portalIP') || spec.dig('clusterIP'))
     end
+    
+    # return service ipv6 address for dualstack cluster
+    def ip_v6(user: nil, cached: true, quiet: false)
+      spec = raw_resource(user: user, cached: cached, quiet: quiet).dig('spec')
+      ipv6 = spec['clusterIPs'].find { |ip| ip.include? ":" }
+      return ipv6
+    end
+
+    # return service ipv6 address as URL for dualstack cluster
+    def ip_v6_url(user: nil, cached: true, quiet: false)
+      ipv6 = self.ip_v6(user: user, cached: cached, quiet: quiet)
+      port = self.ports(user: user, cached: true, quiet: quiet)[0]["port"]
+      "[#{ipv6}]:#{port}"
+    end
+
+    # return service ipv4 address for dualstack cluster
+    def ip_v4(user: nil, cached: true, quiet: false)
+      spec = raw_resource(user: user, cached: cached, quiet: quiet).dig('spec')
+      ipv4 = spec['clusterIPs'].find { |ip| ip.include? "." }
+      return ipv4
+    end
+
+    # return service ipv4 address as URL for dualstack cluster
+    def ip_v4_url(user: nil, cached: true, quiet: false)
+      ipv4 = self.ip_v4(user: user, cached: cached, quiet: quiet)
+      port = self.ports(user: user, cached: true, quiet: quiet)[0]["port"]
+      "#{ipv4}:#{port}"
+    end
+
     # @note call without parameters only when props are loaded
     # return @Array of ports
     def ports(user: nil, cached: true, quiet: false)
