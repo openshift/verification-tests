@@ -569,3 +569,34 @@ Feature: Egress-ingress related networking scenarios
     When I execute on the pod:
       | curl | --connect-timeout | 5 | --head | www.test.com |
     Then the step should succeed
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-41179
+  @admin
+  Scenario: [bug1947917] Egress Firewall should reliably apply firewall rules
+    Given I have a project
+    Given I have a pod-for-ping in the project
+
+    When I obtain test data file "networking/ovn-egressfirewall/egressfirewall-policy5.yaml"
+    And I run oc create as admin over "egressfirewall-policy5.yaml" replacing paths:
+      | ["metadata"]["namespace"]    | <%= project.name %> |
+    Then the step should succeed
+
+    When I run the :get admin command with:
+      | resource      | egressfirewall                 |
+      | resource_name | default                        |
+      | o             | jsonpath={.status}             |
+      | n             | <%= project.name %>            |
+    Then the step should succeed
+    And the output should contain:
+      | EgressFirewall Rules applied |
+
+    #Check the last dns name in yaml file should be allowed
+    When I execute on the pod:
+      | curl | --connect-timeout | 5 | --head | www.amihealthy.com |
+    Then the step should succeed
+
+    # Check another dnsname not in the yaml file should be blocked.
+    When I execute on the pod:
+      | curl | --connect-timeout | 5 | --head | www.test.com |
+    Then the step should fail
