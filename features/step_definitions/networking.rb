@@ -716,7 +716,7 @@ Given /^the default interface on nodes is stored in the#{OPT_SYM} clipboard$/ do
   end
   # OVN uses `br-ex` and `-` is not a word char, so we have to split on whitespace
   cb[cb_name] = @result[:response].split("\n").first.split[4]
-  logger.info "The node's default interface is stored in the #{cb_name} clipboard."
+  logger.info "The node's default interface is stored in the #{cb_name} clipboard as #{cb[cb_name]}."
 end
 
 Given /^CNI vlan info is obtained on the#{OPT_QUOTED} node$/ do | node_name |
@@ -1000,7 +1000,7 @@ Given /^I store "([^"]*)" node's corresponding default networkType pod name in t
   cb[cb_pod_name] = BushSlicer::Pod.get_labeled(app, project: project(project_name, switch: false), user: admin) { |pod, hash|
     pod.node_name == node_name
   }.first.name
-  logger.info "node's corresponding networkType pod name is stored in the #{cb_pod_name} clipboard."
+  logger.info "node's corresponding networkType pod name is stored in the #{cb_pod_name} clipboard as #{cb[cb_pod_name]}."
 end
 
 Given /^I store the ovnkube-master#{OPT_QUOTED} leader pod in the#{OPT_SYM} clipboard(?: using node #{QUOTED})?$/ do |ovndb, cb_leader_name, node_name|
@@ -1233,7 +1233,7 @@ Given /^the node's MTU value is stored in the#{OPT_SYM} clipboard$/ do |cb_node_
   inf_name = @result[:response].split("\n").first.split[4]
   @result = host.exec_admin("ip a show #{inf_name}")
   cb[cb_node_mtu] = @result[:response].split(/mtu /)[1][0,4]
-  logger.info "Node's MTU value is stored in the #{cb_node_mtu} clipboard."
+  logger.info "Node's MTU value is stored in the #{cb_node_mtu} clipboard as #{cb[cb_node_mtu]}."
 end
 
 Given /^the mtu value "([^"]*)" is patched in CNO config according to the networkType$/ do | mtu_value |
@@ -1302,4 +1302,13 @@ Given /^the IPsec is enabled on the cluster$/ do
   network_operator = BushSlicer::NetworkOperator.new(name: "cluster", env: env)
   default_network = network_operator.default_network(user: admin)
   raise "env doesn't have IPSec enabled" unless default_network["ipsecConfig"]
+end
+
+Given /^the node's active nmcli connection is stored in the#{OPT_SYM} clipboard$/ do |cb_name|
+  ensure_admin_tagged
+  cb_name = "active_con_uuid" unless cb_name
+  @result = host.exec_admin("nmcli -t -f UUID c show --active")
+  # run command and store first line of output as the response
+  cb[cb_name] = @result[:response].split("\n").first
+  logger.info "Node's active nmcli connection uuid is stored in the #{cb_name} clipboard as #{cb[cb_name]}"
 end
