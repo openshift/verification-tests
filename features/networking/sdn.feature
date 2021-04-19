@@ -427,3 +427,16 @@ Feature: SDN related networking scenarios
       | project_name | <%= project.name %> |
     Then the step should succeed
     And admin checks that the "<%= project.name %>" net_namespace exists
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-41132
+  @admin
+  Scenario: UDP offloads were disabled on vsphere platform
+    Given I select a random node's host
+    Given the default interface on nodes is stored in the :default_interface clipboard
+    And I run commands on the host:
+      | ethtool -k <%= cb.default_interface %>  \| grep udp_tnl |
+    Then the step should succeed
+    And the output should contain:
+      | tx-udp_tnl-segmentation: off      |
+      | tx-udp_tnl-csum-segmentation: off |
