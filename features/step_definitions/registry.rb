@@ -409,7 +409,7 @@ Given /^docker config for default image registry is stored to the#{OPT_SYM} clip
   step %Q/a 5 characters random string of type :dns is stored into the :dockercfg_name clipboard/
   cb[cb_name] ="/tmp/#{cb.dockercfg_name}"
 
-  generated_cfg={
+  cb.generated_cfg={
         "#{cb.integrated_reg_ip}" => {
           "auth" => Base64.strict_encode64(
             "#{user.name}:#{user.cached_tokens.first}"
@@ -420,7 +420,7 @@ Given /^docker config for default image registry is stored to the#{OPT_SYM} clip
   File.open("#{cb[cb_name]}", 'wb') { |f| 
     f.write(
        {   
-         "auths" => generated_cfg
+         "auths" => cb.generated_cfg
        }.to_json
     )
   }
