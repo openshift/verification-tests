@@ -366,8 +366,6 @@ Feature: SDN related networking scenarios
     | nmcli |
   Then the output should contain:
     | br-int: unmanaged                    |
-    | br-local: unmanaged                  |
-    | ovn-k8s-gw0: unmanaged               |
     | genev_sys_6081: unmanaged            |
     | <%= cb.tunnel_inf_name %>: unmanaged |
   # And veths ovs interfaces also needs to be unmanaged
