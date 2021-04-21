@@ -1,8 +1,9 @@
 Feature: NoDiskConflict
 
   # @author lxia@redhat.com
+  # @case_id OCP-9929
   @admin
-  Scenario Outline: [storage_201] Only one pod with the same persistent volume can be scheduled when NoDiskConflicts policy is enabled
+  Scenario: [storage_201] Only one pod with the same persistent volume can be scheduled when NoDiskConflicts policy is enabled
     Given a 5 characters random string of type :dns is stored into the :proj_name clipboard
     When I run the :oadm_new_project admin command with:
       | project_name  | <%= cb.proj_name %>                 |
@@ -17,19 +18,19 @@ Feature: NoDiskConflict
     And I use the "<%= cb.proj_name %>" project
 
     Given I have a 1 GB volume and save volume id in the :volumeID clipboard
-    Given I obtain test data file "storage/<path_to_file>"
-    When I run oc create over "<path_to_file>" replacing paths:
-      | ["metadata"]["name"]                                      | mypod1 |
-      | ["spec"]["volumes"][0]["<storage_type>"]["<volume_name>"] | <%= cb.volumeID %>       |
+    Given I obtain test data file "storage/ebs/security/ebs-selinux-fsgroup-test.json"
+    When I run oc create over "ebs-selinux-fsgroup-test.json" replacing paths:
+      | ["metadata"]["name"]                                       | mypod1             |
+      | ["spec"]["volumes"][0]["awsElasticBlockStore"]["volumeID"] | <%= cb.volumeID %> |
     Then the step should succeed
-    Given I obtain test data file "storage/<path_to_file>"
-    When I run oc create over "<path_to_file>" replacing paths:
-      | ["metadata"]["name"]                                      | mypod2 |
-      | ["spec"]["volumes"][0]["<storage_type>"]["<volume_name>"] | <%= cb.volumeID %>       |
+    Given I obtain test data file "storage/ebs/security/ebs-selinux-fsgroup-test.json"
+    When I run oc create over "ebs-selinux-fsgroup-test.json" replacing paths:
+      | ["metadata"]["name"]                                       | mypod2             |
+      | ["spec"]["volumes"][0]["awsElasticBlockStore"]["volumeID"] | <%= cb.volumeID %> |
     Then the step should succeed
 
     When I run the :describe client command with:
-      | resource | pod                      |
+      | resource | pod    |
       | name     | mypod2 |
     Then the step should succeed
     And the output should match:
@@ -41,8 +42,3 @@ Feature: NoDiskConflict
     And the output should match:
       | FailedScheduling                    |
       | (NoDiskConflict\|no available disk) |
-
-    Examples:
-      | storage_type         | volume_name | path_to_file |
-      | awsElasticBlockStore | volumeID    | ebs/security/ebs-selinux-fsgroup-test.json | # @case_id OCP-9929
-
