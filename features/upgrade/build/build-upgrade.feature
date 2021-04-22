@@ -11,8 +11,8 @@ Feature: build related upgrade check
       | app_repo | openshift/ruby~https://github.com/openshift/ruby-ex |
     Then the step should succeed
     When I run the :new_app_as_dc client command with:
-      | app_repo | openshift/ruby~https://github.com/openshift/ruby-hello-world |
-      | strategy | docker                                                           |
+      | app_repo | quay.io/openshifttest/ruby-27-centos7:centos7~https://github.com/openshift/ruby-hello-world |
+      | strategy | docker                                                                                      |
     Then the step should succeed
     Given I use the "build-upgrade" project
     Then the "ruby-ex-1" build completed
