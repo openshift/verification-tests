@@ -1,6 +1,6 @@
 require 'text-table'
 require 'thread'
-#require 'pry-byebug'
+# require 'pry-byebug'
 
 module BushSlicer
 
@@ -79,7 +79,11 @@ module BushSlicer
         if res.count > 0
           valid_users << res.first
         else
-          match = auto_names_reg_exp.match(u)
+          begin
+            match = auto_names_reg_exp.match(u)
+          rescue
+            match = nil
+          end
           # try to catch qeci and ugd ci user name
           if match
             # strip out the last 6 charcters
@@ -233,23 +237,24 @@ module BushSlicer
           }
         end
         sample = cluster_group.first
-
-        # calculate the total cost unless it's `openstack` which is `free`,
-        # vsphere calculation is skipped due to complication
-        unless cluster_group.first[:region] == "openstack" or cluster_group.first[:region] == 'vSphere'
-          begin
-            cluster_group.each {|r| cluster_total_cost += r[:cost]}
-          rescue
-            puts "##### exception occured while calculating the total cost!\n"
+        unless sample.nil?
+          # calculate the total cost unless it's `openstack` which is `free`,
+          # vsphere calculation is skipped due to complication
+          unless cluster_group.first[:region] == "openstack" or cluster_group.first[:region] == 'vSphere'
+            begin
+              cluster_group.each {|r| cluster_total_cost += r[:cost]}
+            rescue
+              puts "##### exception occured while calculating the total cost!\n"
+            end
           end
+          # try to get the owner of the job which would be displayed in the
+          # summary
+          job_id = sample[:flexy_job_id]
+          unless sample[:owned].nil?
+            sample[:owned] =  sample[:owned].split('@redhat.com').first
+          end
+          c_hash[owner] = {'job_id': job_id, 'uptime': sample[:uptime], 'total_cost': cluster_total_cost.round(2), 'user': sample[:owned] }
         end
-        # try to get the owner of the job which would be displayed in the
-        # summary
-        job_id = sample[:flexy_job_id]
-        unless sample[:owned].nil?
-          sample[:owned] =  sample[:owned].split('@redhat.com').first
-        end
-        c_hash[owner] = {'job_id': job_id, 'uptime': sample[:uptime], 'total_cost': cluster_total_cost.round(2), 'user': sample[:owned] }
       end
       return c_hash
     end
@@ -651,6 +656,7 @@ module BushSlicer
       # https://metal.equinix.com/product/servers/ for pricing
       @packet_prices = {
         "t1.small.x86" => 0.07,
+        "c2.medium.x86" => 1.10,
         "c3.small.x86" => 0.50,
         "c3.medium.x86" => 1.10,
         "m3.large.x86" => 2.00,

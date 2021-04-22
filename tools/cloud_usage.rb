@@ -24,7 +24,8 @@ require 'launchers/openstack'
 require 'instance_summary'
 require 'jenkins'
 require 'jenkins_mongo'
-
+require 'iam_summary'
+require 'pry-byebug'
 module BushSlicer
   class CloudUsage
     include Commander::Methods
@@ -116,6 +117,19 @@ module BushSlicer
           vms = VSphereSummary.new(jenkins: @jenkins)
           options.config = conf
           vms.get_summary(options: options)
+        end
+      end
+
+      # Display IAMs for aws
+      command :"aws_iams" do |c|
+        c.syntax = "#{File.basename __FILE__}"
+        c.description = 'display summary of IAMs'
+        c.action do |args, options|
+          ps = IAM_AwsSummary.new
+          options.config = conf
+          say 'Getting IAM summary...'
+          ps.get_summary(options: options)
+
         end
       end
       run!
