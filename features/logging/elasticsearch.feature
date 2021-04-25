@@ -37,9 +37,9 @@ Feature: Elasticsearch related tests
     """
     Given I obtain test data file "logging/clusterlogging/clusterlogging-storage-template.yaml"
     When I process and create:
-      | f | clusterlogging-storage-template.yaml |
-      | p | STORAGE_CLASS=<%= cb.default_sc.name %>                                                      |
-      | p | PVC_SIZE=10Gi                                                                                |
+      | f | clusterlogging-storage-template.yaml    |
+      | p | STORAGE_CLASS=<%= cb.default_sc.name %> |
+      | p | PVC_SIZE=10Gi                           |
     Then the step should succeed
     Given I wait for the "instance" clusterloggings to appear
     And the expression should be true> cluster_logging('instance').logstore_storage_class_name == cb.default_sc.name
