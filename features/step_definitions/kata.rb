@@ -56,18 +56,21 @@ Given /^I remove kata operator from the#{OPT_QUOTED} namespace$/ do | kata_ns |
   if kata_ns.nil?
     if cb.master_version == '4.6'
       kata_ns = "kata-operator"
-    else
+    elsif cb.master_version == '4.7'
       kata_ns = "kata-operator-system"
+    else
+      kata_ns = "sandboxed-containers-operator-system"
     end
   end
   step %Q/I switch to cluster admin pseudo user/
   # 1. remove kataconfig first
   project(kata_ns)
   kataconfig_name = BushSlicer::KataConfig.list(user: admin).first.name
-  step %Q/I ensure "#{kataconfig_name}" kata_config is deleted/
+  step %Q/I ensure "#{kataconfig_name}" kata_config is deleted within 900 seconds/
   # 2. remove namespace
   step %Q/I ensure "#{kata_ns}" project is deleted/
 end
+
 # # assumption that
 And /^I verify kata container runtime is installed into the a worker node$/ do
   # create a project and install sample app has
@@ -107,10 +110,18 @@ end
 Given /^the kata-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|GUI))?$/ do | kata_ns, install_method |
   ensure_admin_tagged
   kata_ns ||= "kata-operator-system"
+  cluster_ver = cluster_version('version').version.split('-').first.to_f
+  kata_ns = "sandboxed-containers-operator-system" if cluster_ver >= 4.8
   install_method ||= 'CLI'
   if install_method == 'GUI'
-    step %Q/there is a catalogsource for kata container/
-    @result = user.cli_exec(:create_namespace, name: kata_ns)
+    package_name = 'kata-operator'
+    if cluster_ver >= 4.8
+      catalog_name = 'qe-app-registry'
+    else
+      catalog_name = 'kataconfig-catalog'
+    end
+    step %Q/there is a catalogsource for kata container/ if cluster_ver < 4.8
+    @result = admin.cli_exec(:create_namespace, name: kata_ns)
     project(kata_ns)
     #step %Q/I use the "#{kata_ns}" project/
     # step %Q/I switch to cluster admin pseudo user/
@@ -121,15 +132,15 @@ Given /^the kata-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|G
     step %Q/I open admin console in a browser/
     step %Q/the step should succeed/
     step %Q/I perform the :goto_operator_subscription_page web action with:/, table(%{
-      | package_name     | kata-operator      |
-      | catalog_name     | kataconfig-catalog |
-      | target_namespace | #{kata_ns}         |
+      | package_name     | #{package_name} |
+      | catalog_name     | #{catalog_name} |
+      | target_namespace | #{kata_ns}      |
     })
     step %Q/the step should succeed/
     step %Q/I perform the :set_custom_channel_and_subscribe web action with:/, table(%{
-      | update_channel    | alpha        |
-      | install_mode      | OwnNamespace |
-      | approval_strategy | Automatic    |
+      | update_channel    | #{cluster_ver} |
+      | install_mode      | OwnNamespace   |
+      | approval_strategy | Automatic      |
     })
     step %Q/the step should succeed/
     step %Q/a pod becomes ready with labels:/, table(%{
@@ -142,8 +153,8 @@ Given /^the kata-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|G
     raise "Failed to apply kataconfig" unless @result[:success]
     project(kata_ns)
   end
-  step %Q/SCC "privileged" is added to the "default" service account/
-  step %Q|I obtain test data file "kata/release-4.7/kataconfiguration_v1_kataconfig.yaml"|
+  step %Q/SCC "privileged" is added to the "default" service account/ if cluster_ver < 4.8
+  step %Q|I obtain test data file "kata/release-#{cluster_ver}/kataconfiguration_v1_kataconfig.yaml"|
   @result = user.cli_exec(:apply, f: 'kataconfiguration_v1_kataconfig.yaml')
   raise "Failed to apply kataconfig" unless @result[:success]
   step %Q/I store all worker nodes to the :nodes clipboard/
