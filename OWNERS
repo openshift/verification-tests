@@ -2,3 +2,9 @@ approvers:
   - akostadinov
   - liangxia
   - pruan-rht
+
+reviewers:
+  - liangxia
+  - pruan-rht
+  - yanpzhan
+  - yapei
