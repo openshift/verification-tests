@@ -125,10 +125,10 @@ end
 
 # tries to delete resource if it exists and make sure it disappears
 # example: I ensure "hello-openshift" pod is deleted
-Given /^(I|admin) ensures? #{QUOTED} (\w+) is deleted(?: from the#{OPT_QUOTED} project)?( after scenario)?$/ do |by, name, type, project_name, after|
+Given /^(I|admin) ensures? #{QUOTED} (\w+) is deleted(?: from the#{OPT_QUOTED} project)?(?: within (\d+) seconds)?( after scenario)?$/ do |by, name, type, project_name, timeout, after|
   _user = by == "admin" ? admin : user
   _resource = resource(name, type, project_name: project_name)
-  _seconds = 300
+  _seconds = timeout ? timeout.to_i : 300
   p = proc {
     @result = _resource.ensure_deleted(user: _user, wait: _seconds)
   }

@@ -6,7 +6,12 @@ module BushSlicer
     RESOURCE = 'kataconfigs'
 
     def install_completed_node_count(user: nil, cached: true, quiet: false)
-      raw_resource(user: user, cached: cached, quiet: quiet).dig('status', 'installationStatus', 'completed', 'completedNodesCount')
+      raw_resource(user: user, cached: cached, quiet: quiet).dig('status', 'installationStatus', 'completed', 'completedNodesList')&.count || 0
+      #raw_resource(user: user, cached: cached, quiet: quiet).dig('status', 'installationStatus', 'completed', 'completedNodesCount')
+    end
+
+    def total_nodes_count(user: nil, cached: true, quiet: false)
+      raw_resource(user: user, cached: cached, quiet: quiet).dig('status', 'totalNodesCount')
     end
 
     def wait_till_installed_counter_match(user: nil, seconds: 600, count: nil)
@@ -18,6 +23,7 @@ module BushSlicer
       result[:success] = wait_for(seconds, stats: stats) do
         counters = install_completed_node_count(user: user, quiet: true, cached: false)
         counters == count
+        #counters.count == count unless counters.nil?
       end
       logger.info "After #{stats[:iterations]} iterations\n" \
         "and #{stats[:full_seconds]} seconds:\n" \
