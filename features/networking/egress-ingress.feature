@@ -582,6 +582,8 @@ Feature: Egress-ingress related networking scenarios
       | ["metadata"]["namespace"]    | <%= project.name %> |
     Then the step should succeed
 
+    And I wait up to 60 seconds for the steps to pass:
+    """
     When I run the :get admin command with:
       | resource      | egressfirewall                 |
       | resource_name | default                        |
@@ -590,6 +592,7 @@ Feature: Egress-ingress related networking scenarios
     Then the step should succeed
     And the output should contain:
       | EgressFirewall Rules applied |
+    """
 
     #Check the last dns name in yaml file should be allowed
     When I execute on the pod:
