@@ -49,6 +49,7 @@ Given /^logging operators are installed successfully$/ do
       raise "Error creating operatorgroup" unless @result[:success]
     end
 
+    #TODO: start from logging 5.1, no need to create role and rolebing, these resources will be created by OLM operator
     unless role_binding('prometheus-k8s').exists?
       # create RBAC object in `openshift-operators-redhat` namespace
       operator_group_yaml ||= "#{BushSlicer::HOME}/testdata/logging/eleasticsearch/deploy_via_olm/03_eo-rbac.yaml"
