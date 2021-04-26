@@ -5,6 +5,7 @@ check_ocm_subscription:
 check_help_info_on_channel_popup:
   params:
     help_info: Channels help to control the pace of updates and recommend the appropriate release versions
+  action: click_channel_help_icon
   action: check_help_info
   action: check_dock_link_for_upgrade
   action: click_close_icon
@@ -14,11 +15,13 @@ check_help_info_in_update_channel_modal:
   action: click_update_channel_button
   action: check_help_info
   action: check_dock_link_for_upgrade
-check_help_info:
-  elements:
-  - selector:
+click_channel_help_icon:
+  element:
+    selector:
       xpath: //*[contains(text(), 'Channel')]/button
     op: click
+check_help_info:
+  elements:
   - selector:
       xpath: //p[contains(., '<help_info>')]
 check_dock_link_for_upgrade:

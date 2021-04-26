@@ -50,6 +50,7 @@ set_k8s_resource:
   - selector:
       xpath: //ul//a[@id='<k8s_resource>-Project-link' and contains(@class,'dropdown__menu-item')]
     op: click
+    timeout: 40
 set_pod_count:
   params:
     label_text: Pod Count
@@ -70,9 +71,10 @@ toggle_boolean_switch:
     label_text: Boolean Switch
   action: toggle_label_input
 toggle_checkbox:
-  params:
-    label_text: Checkbox
-  action: toggle_label_input
+  element:
+    selector:
+      xpath: (//label[contains(.,'Checkbox')]/following::div[contains(@class,'pf-c-check')]//label[contains(@class,'pf-c-check__label')])[1]
+    op: click
 set_image_pull_policy:
   params:
     label_text: Image Pull Policy
