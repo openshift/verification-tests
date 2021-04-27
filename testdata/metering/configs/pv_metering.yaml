@@ -1,7 +1,23 @@
+---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: pv-<%= cb.metering_ns %>
+  name: pv-<%= cb.metering_ns %>-1
+spec:
+  storageClassName: <%= cb.sc_name %>
+  capacity:
+    storage: 5Gi
+  accessModes:
+  - ReadWriteMany
+  nfs:
+    path: "/"
+    server: "<%= cb.nfs_svc_ip %>"
+  persistentVolumeReclaimPolicy: Delete
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-<%= cb.metering_ns %>-2
 spec:
   storageClassName: <%= cb.sc_name %>
   capacity:
