@@ -6,32 +6,23 @@ metadata:
 apiVersion: operators.coreos.com/v1
 kind: OperatorGroup
 metadata:
-  name: openshift-sandboxed-containers-kataconfig-group
+  name: sandboxed-containers-operator-system
   namespace: sandboxed-containers-operator-system
 spec:
   targetNamespaces:
-    - openshift-sandboxed-containers
----
-apiVersion: operators.coreos.com/v1alpha1
-kind: CatalogSource
-metadata:
- name:  qe-optional-operators
- namespace: openshift-marketplace
-spec:
- sourceType: grpc
- image: quay.io/openshift-qe-optional-operators/ocp4-index:latest
+  - sandboxed-containers-operator-system
 ---
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
 metadata:
-  name: sandboxed-containers-operatorhub
+  name: kata-operator
   namespace: sandboxed-containers-operator-system
 spec:
-  source: qe-optional-operators
-  sourceNamespace: openshift-marketplace
-  name: sandboxed-containers-kataconfig
-  startingCSV: openshift-sandboxed-containers-kataconfig.v1.0.0
   channel: "4.8"
-  approval: "Automatic"
+  installPlanApproval: Automatic
+  name: kata-operator
+  source: qe-app-registry
+  sourceNamespace: openshift-marketplace
+  startingCSV: sandboxed-containers-operator.v1.0.0
 
 
