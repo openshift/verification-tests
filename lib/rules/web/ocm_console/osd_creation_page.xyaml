@@ -806,11 +806,11 @@ check_billing_model:
         - selector:
             xpath: //h3[text()='Subscription type:']
         - selector:
-            xpath: //label[text()='Red Hat subscriptions (pre-paid)']
+            xpath: //label[contains(., 'Fixed capacity subscription from Red Hat')]
         - selector:
             xpath: //div[text()='Use the quota pre-purchased by your organization']
         - selector:
-            xpath: //label[text()='Consumption billing via the Red Hat Marketplace']
+            xpath: //label[contains(., 'Flexible usage billed through the Red Hat Marketplace')]
         - selector:
             xpath: //div[text()='Use Red Hat Marketplace to subscribe and pay based on the services you use']
         - selector:

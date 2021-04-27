@@ -13,6 +13,8 @@ go_to_gcp_ipi_install_page:
     url: /openshift/install/gcp/installer-provisioned
 go_to_gcp_upi_install_page:
     url: /openshift/install/gcp/user-provisioned
+go_to_vsphere_ipi_install_page:
+    url: /openshift/install/vsphere/installer-provisioned
 go_to_vsphere_install_page:
     url: /openshift/install/vsphere/user-provisioned
 go_to_bare_metal_ipi_install_page:
@@ -185,7 +187,7 @@ check_download_part_commen_items:
             xpath: //a[contains(@href, '/openshift/install/pre-release') and text()='pre-release builds']
 check_download_part_in_normal_install_page:
     params:
-        installer_type: clients/ocp/latest
+        installer_type: clients/ocp/stable
     action: check_linux_download_button_in_install_page
     action: check_macos_download_button_in_install_page
     action: check_windows_download_button_in_install_page
@@ -203,14 +205,14 @@ check_download_part_in_dev_preview_install_page:
             xpath: //h3[text()='Command line interface']
 check_download_part_in_s390x_install_page:
     params:
-        installer_type: s390x/clients/ocp/latest
+        installer_type: s390x/clients/ocp/stable
     action: check_linux_download_button_in_install_page
     action: check_macos_download_button_in_install_page
     action: check_windows_download_button_in_install_page
     action: check_download_part_commen_items
 check_download_part_in_ppc64le_install_page:
     params:
-        installer_type: ppc64le/clients/ocp/latest
+        installer_type: ppc64le/clients/ocp/stable
     action: check_linux_download_button_in_install_page
     action: check_macos_download_button_in_install_page
     action: check_windows_download_button_in_install_page
@@ -449,6 +451,24 @@ check_gcp_upi_page_title:
     - command: return document.title=='Install OpenShift 4 | Red Hat OpenShift Cluster Manager | GCP User-Provisioned Infrastructure'
       expect_result: true
 
+check_vsphere_ipi_install_page:
+    action: required_specific_provider_install_items_loaded 
+    action: check_vsphere_page_title
+    action: check_download_part_in_normal_install_page
+    action: check_pull_secret_part_in_install_page
+    action: check_install_page_common_part_two
+    action: check_data_collection_message_in_install_page
+    action: check_install_page_part_three
+    elements:
+        - selector:
+            xpath: //h2[text()='Follow the instructions to configure your environment and install your cluster']
+        - selector:
+            xpath: //p[text()='The installer will take about 45 minutes to run.']
+        - selector:
+            xpath: //a[contains(@href, 'installing_vsphere/installing-vsphere-installer-provisioned.html') and text()='Get started']
+        - selector:
+            xpath: //a[contains(@href, 'installing_vsphere/installing-vsphere-installer-provisioned-customizations.html') and text()='install with customizations']
+
 check_vsphere_install_page:
     action: required_specific_provider_install_items_loaded 
     action: check_vsphere_page_title
@@ -486,7 +506,7 @@ check_macos_cli_download_button_in_install_page:
     action: check_download_cli_button_in_install_page
 check_bare_metal_download_cli_button:
     params:
-        installer_type: clients/ocp/latest
+        installer_type: clients/ocp/stable
     action: check_linux_cli_download_button_in_install_page
     action: check_macos_cli_download_button_in_install_page
     action: check_windows_download_button_in_install_page
@@ -796,11 +816,23 @@ check_creation_page_cloud_tab_specific_part_with_quota:
         - selector:
             xpath: //a[@href='/openshift/create/osd']/button[text()='Create cluster']
         - selector:
-            xpath: //a[@href='/openshift/subscriptions']/button[text()='View your available quota']
+            xpath: //a[@href='/openshift/quota']/button[text()='View your available quota']
 check_creation_page_cloud_tab_common_part:
     elements:
         - selector:
             xpath: //h2[text()='Managed services']
+        - selector:
+            xpath: //a[@href='https://azure.microsoft.com/en-us/services/openshift' and text()='Azure Red Hat Openshift']
+        - selector:
+            xpath: //a[@href='https://azure.microsoft.com/en-us/services/openshift' and text()='Try it on Azure']
+        - selector:
+            xpath: //a[@href='https://www.ibm.com/cloud/openshift' and text()='Red Hat OpenShift on IBM Cloud']
+        - selector:
+            xpath: //a[@href='https://cloud.ibm.com/kubernetes/catalog/create?platformType=openshift' and text()='Try it on IBM']
+        - selector:
+            xpath: //a[@href='https://console.aws.amazon.com/rosa/home' and text()='Red Hat OpenShift Service on AWS']
+        - selector:
+            xpath: //a[@href='https://console.aws.amazon.com/rosa/home' and text()='Try it on AWS']
         - selector:
             xpath: //h2[text()='Run it yourself']
         - selector:
