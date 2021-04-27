@@ -1,6 +1,13 @@
 Feature: UPI GCP Tests
 
   # @author zhsun@redhat.com
+  # @case_id OCP-34697
+  @admin
+  @destructive
+  Scenario: MachineSets in GCP should create Machines in a Shared (XPN) VPC environment
+    Given I have an UPI deployment and machinesets are enabled
+
+  # @author zhsun@redhat.com
   # @case_id OCP-25034
   @admin
   @destructive
