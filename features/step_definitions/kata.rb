@@ -94,9 +94,8 @@ Given /^the kata-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|G
   install_method ||= 'CLI'
   if install_method == 'GUI'
     package_name = 'kata-operator'
-    if cb.master_version >= "4.8"
-      catalog_name = 'qe-app-registry'
-    end
+    catalog_name = 'qe-app-registry'
+
     @result = admin.cli_exec(:create_namespace, name: kata_ns)
     project(kata_ns)
     step %Q/I switch to the first user/
