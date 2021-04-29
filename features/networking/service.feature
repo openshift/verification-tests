@@ -383,6 +383,7 @@ Feature: Service related networking scenarios
     Then the step should succeed
     And the output should contain:
       | The service "<%= project.name %>/test-service" has been marked as idled |
+    And I wait until number of replicas match "0" for replicationController "test-rc"
     Given I have a pod-for-ping in the project
     And I wait up to 30 seconds for the steps to pass:
     """
