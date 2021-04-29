@@ -23,7 +23,6 @@ module BushSlicer
       result[:success] = wait_for(seconds, stats: stats) do
         counters = install_completed_node_count(user: user, quiet: true, cached: false)
         counters == count
-        #counters.count == count unless counters.nil?
       end
       logger.info "After #{stats[:iterations]} iterations\n" \
         "and #{stats[:full_seconds]} seconds:\n" \

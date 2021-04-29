@@ -1,10 +1,9 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: example-fedora
+  name: example-fedora-kata
   labels:
-    app: example-kata-fedora-app
-  namespace: <%= cb.test_project_name %>
+    app: example-fedora-kata-app
 spec:
   containers:
     - name: example-fedora
