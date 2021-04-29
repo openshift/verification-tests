@@ -21,7 +21,7 @@ required_items_loaded:
         - selector:
             xpath: //h1[text()='Register disconnected cluster']
         - selector:
-            xpath: //p[contains(., 'Use this form to register clusters that are not connected to OpenShift Cluster Manager.')]
+            xpath: //p[contains(., 'Register clusters that are not connected to OpenShift Cluster Manager.')]
         - selector:
             text: 'Cluster ID'
         - selector:
@@ -41,13 +41,13 @@ optional_items_loaded:
         - selector:
             xpath: //h4[text()='Subscription settings']
         - selector:
-            xpath: //span[text()='Choose the support type for this cluster.']
+            xpath: //span[text()='Service level agreement (SLA)']
         - selector:
-            xpath: //span[text()='How do you intend to use this cluster?']
+            xpath: //span[text()='Support type']
         - selector:
-            xpath: //span[text()='Choose your service level. (If you bought your subscription through Red Hat, choose L1-L3.)']
+            xpath: //span[text()='Cluster usage']
         - selector:
-            xpath: //span[text()='What unit of measure do you want to use, cores/vCPU or sockets?']
+            xpath: //span[text()='Subscription units']
 click_register_cluster_button_on_cluster_register_page:
     element:
         selector:
