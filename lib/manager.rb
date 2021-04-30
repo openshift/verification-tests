@@ -91,6 +91,30 @@ module BushSlicer
       @ast_lookup
     end
 
+    def skip_scenario!(scenario)
+      @skip_scenario = scenario
+    end
+
+    def skip_scenario?(scenario)
+      if @skip_scenario
+        if @skip_scenario == scenario
+          true
+        else
+          raise "instructed to skip scenario #{@skip_scenario} but was asked about #{scenario}"
+        end
+      end
+    end
+
+    def skip_scenario_done(scenario)
+      if @skip_scenario
+        if @skip_scenario != scenario
+          raise "instructed to skip scenario #{@skip_scenario} but was notified about skipping #{scenario}"
+        end
+      else
+        raise "no scenario to skip but was notified about skipping #{scenario}"
+      end
+    end
+
     def init_test_case_manager(cucumber_config)
       tc_mngr = ENV['BUSHSLICER_TEST_CASE_MANAGER'] || conf[:test_case_manager]
       tc_mngr = tc_mngr ? tc_mngr + '_tc_manager' : false

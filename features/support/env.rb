@@ -32,7 +32,8 @@ end
 ## while we can move everything inside World, lets try to outline here the
 #    basic steps to have world ready to execute scenario
 Before do |_scenario|
-  if _scenario.respond_to?(:test_case_manager_skip?)
+  if manager.skip_scenario? _scenario
+    manager.skip_scenario_done _scenario
     skip_this_scenario "Scenario skipped by Test Case Manager"
     next
   end
