@@ -107,7 +107,9 @@ module BushSlicer
 
     def skip_scenario_done(scenario)
       if @skip_scenario
-        if @skip_scenario != scenario
+        if @skip_scenario == scenario
+          @skip_scenario = nil
+        else
           raise "instructed to skip scenario #{@skip_scenario} but was notified about skipping #{scenario}"
         end
       else
