@@ -8,11 +8,13 @@ LABEL maintainer="AOS QE Team"
 ENV USER_PATHS="$HOME /etc/machine-id /etc/passwd /etc/pki"
 
 RUN set -x && \
-    yum repolist all && \
-    yum-config-manager --disable \* && \
-    ENABLE_REPOS="rhel-7-server-rpms rhel-7-server-optional-rpms rhel-7-server-extras-rpms rhel-7-server-ansible-2-rpms rhel-server-rhscl-7-rpms" && \
-    yum-config-manager --enable $ENABLE_REPOS && \
-    yum-config-manager --save --setopt=\*.skip_if_unavailable=1 $ENABLE_REPOS && \
+    yum repolist enabled && \
+    OLD_REPOS=$(yum repolist enabled -q | sed 1d | cut -d'/' -f1) && \
+    ([ -n "$OLD_REPOS" ] && yum-config-manager --disable $OLD_REPOS || :) && \
+    NEW_REPOS="rhel-7-server-rpms rhel-7-server-optional-rpms rhel-7-server-extras-rpms rhel-7-server-ansible-2-rpms rhel-server-rhscl-7-rpms" && \
+    yum-config-manager --enable $NEW_REPOS && \
+    yum-config-manager --save --setopt=\*.skip_if_unavailable=1 $NEW_REPOS && \
+    yum repolist enabled && \
     yum -y update && \
     SCL_BASE_PKGS="scl-utils-build" && \
     INSTALL_PKGS="rh-ruby27 rh-ruby27-ruby-devel rh-ruby27-rubygem-bundler rh-git218 bsdtar" && \
