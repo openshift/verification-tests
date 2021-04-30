@@ -119,7 +119,7 @@ module BushSlicer
       #   outdated test_case object
       # hmm, we don't need such method for the time being
 
-      # @param test_case [Cucumber::Core::Test::Case]
+      # @param test_case [Cucumber::Core::Test::Case, Cucumber::Events::TestRunFinished]
       # @return [Boolean] whether Cucumber scenario is matching this record
       def match!(test_case)
         if !automated?
