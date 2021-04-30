@@ -51,21 +51,25 @@ check_common_part:
     action: check_account_username
     elements:
         - selector:
-            xpath: //a[@class='pf-c-page__header-brand-link' and @href='./']/img[@alt='Red Hat Logo']
+            xpath: //a[@href='./']/img[@alt='Red Hat Logo']
         - selector:
-            xpath: //span[text()='OpenShift Cluster Manager']
+            xpath: //div[text()='OpenShift']
         - selector:
             xpath: //a[contains(@href, '/openshift/') and contains(., 'Clusters')]
         - selector:
-            xpath: //a[contains(@href, '/openshift/subscriptions') and contains(., 'Subscriptions')]
+            xpath: //a[contains(@href, '/openshift/overview') and contains(., 'Overview')]
         - selector:
-            xpath: //a[@href='https://docs.openshift.com/dedicated/4/' and contains(., 'Documentation')]
+            xpath: //button[text()='Subscriptions']
         - selector:
-            xpath: //a[@href='https://access.redhat.com/support/cases' and contains(., 'Support Cases')]
+            xpath: //button[text()='Cost Management']
         - selector:
-            xpath: //a[@href='mailto:ocm-feedback@redhat.com' and contains(., 'Cluster Manager Feedback')]
+            xpath: //a[contains(., 'Documentation')]
         - selector:
-            xpath: //a[@href='https://marketplace.redhat.com' and contains(., 'Red Hat Marketplace')]  
+            xpath: //a[contains(., 'Support Cases')]
+        - selector:
+            xpath: //a[contains(., 'Cluster Manager Feedback')]
+        - selector:
+            xpath: //a[contains(., 'Red Hat Marketplace')]  
 check_cluster_list_page_title:
     scripts:
     - command: return document.title=='Clusters | Red Hat OpenShift Cluster Manager'
@@ -799,7 +803,7 @@ check_creation_page_datacenter_tab:
         - selector:
             xpath: //a[@href='/openshift/install/rhv' and text()='Red Hat Virtualization']
         - selector:
-            xpath: //a[@href='/openshift/install/vsphere/user-provisioned' and text()='vSphere']
+            xpath: //a[@href='/openshift/install/vsphere' and text()='vSphere']
         - selector:
             xpath: //a[@href='/openshift/install/metal' and text()='Platform agnostic']
 check_creation_page_cloud_tab_with_quota:

@@ -806,12 +806,20 @@ check_billing_model:
         - selector:
             xpath: //h3[text()='Subscription type:']
         - selector:
+            xpath: //label[contains(., 'Free trial (upgradeable)')]
+        - selector:
+            xpath: //a[@href='https://access.redhat.com/articles/5990101' and text()='Try OpenShift Dedicated']
+        - selector:
+            xpath: //div[contains(., 'for free for 60 days. Upgrade anytime')]
+        - selector:
             xpath: //label[contains(., 'Fixed capacity subscription from Red Hat')]
         - selector:
             xpath: //div[text()='Use the quota pre-purchased by your organization']
         - selector:
             xpath: //label[contains(., 'Flexible usage billed through the Red Hat Marketplace')]
         - selector:
-            xpath: //div[text()='Use Red Hat Marketplace to subscribe and pay based on the services you use']
+            xpath: //a[@href='/openshift/quota/resource-limits' and text()='Red Hat Marketplace']
+        - selector:
+            xpath: //div[contains(., 'to subscribe and pay based on the services you use')]
         - selector:
             xpath: //h3[text()='Infrastructure type:']

@@ -158,7 +158,7 @@ check_disconnected_cluster_without_items:
 total_vCPU_loaded:
     elements:
         - selector:
-            xpath: //span[text()='Subscription units']/../../dd/div[text()='Cores/vCPU']
+            xpath: //span[text()='Subscription units']/../../dd/div[text()='Cores/vCPUs ']
 total_sockets_loaded:
     elements:
         - selector:
@@ -258,15 +258,15 @@ check_ocp_subscription_settings_in_detail_page:
         - selector:
             xpath: //article[@class='pf-c-card ocm-c-overview-subscription-settings__card']//h2[text()='Subscription settings']
         - selector:
-            xpath: //article[@class='pf-c-card ocm-c-overview-subscription-settings__card']//span[text()='SLA']
+            xpath: //article[@class='pf-c-card ocm-c-overview-subscription-settings__card']//span[text()='Service level agreement (SLA)']
         - selector:
-            xpath: //article[@class='pf-c-card ocm-c-overview-subscription-settings__card']//span[text()='Production status']
+            xpath: //article[@class='pf-c-card ocm-c-overview-subscription-settings__card']//span[text()='Support type']
         - selector:
-            xpath: //article[@class='pf-c-card ocm-c-overview-subscription-settings__card']//span[text()='Service level']
+            xpath: //article[@class='pf-c-card ocm-c-overview-subscription-settings__card']//span[text()='Cluster usage']
         - selector:
             xpath: //article[@class='pf-c-card ocm-c-overview-subscription-settings__card']//span[text()='Subscription units']
         - selector:
-            xpath: //article[@class='pf-c-card ocm-c-overview-subscription-settings__card']//span[text()='Subscription obligation']
+            xpath: //article[@class='pf-c-card ocm-c-overview-subscription-settings__card']//span[contains(., 'Number of compute')]
         - selector:
             xpath: //article[@class='pf-c-card ocm-c-overview-subscription-settings__card']//button[text()='Edit subscription settings']
 check_osd_title_in_detail_page:
@@ -335,9 +335,13 @@ check_osd_details_in_detail_page:
         - selector:
             xpath: //article[@class='pf-c-card ocm-c-overview-details__card']//span[text()='OSD']
         - selector:
-            xpath: //article[@class='pf-c-card ocm-c-overview-details__card']//span[text()='Billing model']
+            xpath: //article[@class='pf-c-card ocm-c-overview-details__card']//span[text()='Subscription type']
         - selector:
-            xpath: //article[@class='pf-c-card ocm-c-overview-details__card']//div[text()='Standard']
+            xpath: //article[@class='pf-c-card ocm-c-overview-details__card']//span[text()='Infrastructure type']
+        - selector:
+            xpath: //article[@class='pf-c-card ocm-c-overview-details__card']//div[text()='Subscription (yearly)']
+        - selector:
+            xpath: //article[@class='pf-c-card ocm-c-overview-details__card']//div[text()='Red Hat cloud account']
         - selector:
             xpath: //article[@class='pf-c-card ocm-c-overview-details__card']//span[text()='Load balancers']
         - selector:
@@ -602,23 +606,27 @@ open_subscription_settings_dialog:
 subscription_settings_dialog_loaded:
     elements:
         - selector:
-            xpath: //p[text()='Editing the subscription settings will help ensure that you receive the level of support that you expect, and that your cluster is consuming the correct type of subscription.']
+            xpath: //p[text()='Edit your subscription settings to receive the correct level of cluster support.']
         - selector:
-            xpath: //span[text()='Choose the support type for this cluster.']
+            xpath: //span[text()='Service level agreement (SLA)']
         - selector:
-            xpath: //span[text()='How do you intend to use this cluster?']
+            xpath: //span[text()='Support type']
         - selector:
-            xpath: //span[text()='Choose your service level. (If you bought your subscription through Red Hat, choose L1-L3.)']
+            xpath: //span[text()='Cluster usage']
         - selector:
-            xpath: //span[text()='What unit of measure do you want to use, cores/vCPU or sockets?']
+            xpath: //span[text()='Subscription units']
+        - selector:
+            xpath: //span[contains(., 'Number of')]
+        - selector:
+            xpath: //div[contains(., 'value can be any integer number between 1-999')]
 check_save_button_disable_in_subscription_settings_dialog:
     element:
         selector:
-            xpath: //button[text()='Save settings' and @aria-disabled='true']
+            xpath: //button[text()='Save' and @aria-disabled='true']
 check_save_button_enable_in_subscription_settings_dialog:
     element:
         selector:
-            xpath: //button[text()='Save settings' and @aria-disabled='false']
+            xpath: //button[text()='Save' and @aria-disabled='false']
         op: click
 update_subscription_settings_in_dialog:
     action: select_support_level
@@ -652,11 +660,26 @@ select_unit:
 input_compute_cores:
     elements:
         - selector: &compute_cores_textbox
-            xpath: //input[@name='compute_cores']
+            xpath: //input[@name='cpu_total']
           op: clear
         - selector:
             <<: *compute_cores_textbox
           op: send_keys <unit_value>
+input_sockets:
+    elements:
+        - selector: &sockets_textbox
+            xpath: //input[@name='socket_total']
+          op: clear
+        - selector:
+            <<: *sockets_textbox
+          op: send_keys <unit_value>
+input_cpu_socket_value:
+    action:
+        if_param: cpu_units
+        ref: input_compute_cores
+    action:
+        if_param: socket_units
+        ref: input_sockets
 check_subscription_settings_in_overview:
     elements:
         - selector:
@@ -665,9 +688,9 @@ check_subscription_settings_in_overview:
         - selector:
             xpath: //article[@class='pf-c-card ocm-c-overview-subscription-settings__card']//div[text()='<production_status>']
         - selector:
-            xpath: //article[@class='pf-c-card ocm-c-overview-subscription-settings__card']//div[text()='<service_level>']
+            xpath: //article[@class='pf-c-card ocm-c-overview-subscription-settings__card']//div[text()='<support_type>']
         - selector:
-            xpath: //article[@class='pf-c-card ocm-c-overview-subscription-settings__card']//div[text()='<unit>']
+            xpath: //article[@class='pf-c-card ocm-c-overview-subscription-settings__card']//div[contains(., '<unit>')]
         - selector:
             xpath: //article[@class='pf-c-card ocm-c-overview-subscription-settings__card']//div[contains(., '<unit_value>')]
 check_subscription_settings_error_message:
