@@ -27,17 +27,15 @@ module BushSlicer
     # called at end of the list to print summary
     def done
       # note that registering events in #initialize results in dup registration
-      config = Manager.instance.cucumber_config
+      manager = Manager.instance
+      config = manager.cucumber_config
 
       config.on_event :test_case_started do |event|
         if tc_manager.commit!(event.test_case)
           tc_manager.signal(:start_case, event.test_case)
         else
           # ugly but I don't see another way to mark this test case for skipping
-          test_case = event.test_case
-          def test_case.test_case_manager_skip?
-            true
-          end
+          manager.skip_scenario! event.test_case
         end
       end
 
