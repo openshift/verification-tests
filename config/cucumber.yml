@@ -18,7 +18,7 @@
   end
 %>
 
-default: --profile devel
+default: --publish-quiet --profile devel
 debug: --profile _debug --profile devel
 devel: --profile _devel <%= default_args %>
 tcms: BUSHSLICER_TEST_CASE_MANAGER=tcms <%= tcms_args %>
