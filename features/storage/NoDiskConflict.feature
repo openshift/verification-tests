@@ -11,7 +11,7 @@ Feature: NoDiskConflict
       | admin         | <%= user.name %>                    |
     Then the step should succeed
 
-    Given I store the ready and schedulable nodes in the :nodes clipboard
+    Given I store the ready and schedulable workers in the :nodes clipboard
     And label "<%= cb.proj_name %>=NoDiskConflicts" is added to the "<%= cb.nodes[0].name %>" node
 
     Given I switch to cluster admin pseudo user
