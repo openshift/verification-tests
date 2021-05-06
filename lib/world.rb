@@ -453,6 +453,8 @@ module BushSlicer
         table( x.raw.map { |row| row.map { |cell| transform_value(cell) } } )
       elsif x.respond_to? :gsub
         x.gsub(/<%=(.+?)%>/m) { |c| eval $1 }
+      elsif Numeric === x
+        x.to_s
       else
         raise ArgumentError, "Unexected argument: #{x.inspect}"
       end
