@@ -683,8 +683,10 @@ module BushSlicer
       file_details = {}
 
       # Export configuration's block of environment variables to running environment context
-      conf[:global, :"install-envvars"].each do |key, val|
-        ENV[key.to_s] = val
+      if (conf[:global, :"install-envvars"] != nil)
+        conf[:global, :"install-envvars"].each do |key, val|
+          ENV[key.to_s] = val
+        end
       end
 
       vars = YAML.load(readfile(config, details: file_details))
