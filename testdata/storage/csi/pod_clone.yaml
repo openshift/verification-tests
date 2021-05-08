@@ -1,0 +1,36 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+    name: mypvc-clone
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: "standard-csi"
+  resources:
+    requests:
+      storage: 2Gi
+  dataSource:
+    kind: PersistentVolumeClaim
+    name: mypvc
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: mypod-clone
+  labels: 
+    name: frontendhttp-clone
+spec:
+  containers:
+    - name: myfrontend
+      image: quay.io/openshifttest/storage@sha256:a05b96d373be86f46e76817487027a7f5b8b5f87c0ac18a246b018df11529b40
+      ports:
+        - containerPort: 80
+          name: "http-server"
+      volumeMounts:
+      - mountPath: "/mnt/local"
+        name: local
+  volumes:
+    - name: local
+      persistentVolumeClaim:
+        claimName: mypvc-clone
