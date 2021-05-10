@@ -1,5 +1,5 @@
 Given /^kata container has been installed successfully(?: in the #{QUOTED} project)?$/ do |ns|
-  kata_ns ||= "sandboxed-containers-operator-system"
+  kata_ns ||= "openshift-sandboxed-containers-operator"
   kata_config_name = "example-kataconfig"
   step %Q/I switch to cluster admin pseudo user/
   unless namespace(kata_ns).exists?
@@ -21,21 +21,40 @@ Given /^kata container has been installed successfully(?: in the #{QUOTED} proje
   end
 end
 
+Given /^I wait for #{QUOTED} (uninstall|install) to start$/ do | kc_name, mode |
+  timeout = 50
+  stats = {}
+  success = false
+  wait_for(timeout, stats: stats) do
+    if mode == 'install'
+      success = kata_config(kc_name).installing?(user: user, quiet: true, cached: false)
+    else
+      success = kata_config(kc_name).uninstalling?(user: user, quiet: true, cached: false)
+    end
+    break if success
+  end
+  unless success
+    raise "#{mode} failed to start after #{timeout} seconds"
+  else
+    logger.info("#{mode} started...")
+  end
+end
 
 Given /^I wait until number of completed kata runtime nodes match#{OPT_QUOTED} for #{QUOTED}$/ do |number, kc_name|
   ready_timeout = 900
-  number ||= kata_config(kc_name).total_nodes_count
   matched = kata_config(kc_name).wait_till_installed_counter_match(
-    user: user, seconds: ready_timeout, count: number.to_i)
+    user: user, seconds: ready_timeout)
   unless matched[:success]
-    raise "Kata runtime did not install into all worker nodes!"
+    installed_node_count = kata_config(kc_name).install_completed_node_count(user: user, cached: false)
+    expected_node_count = kata_config(kc_name).total_nodes_count
+    raise "Kata runtime did not install into all worker nodes, only #{installed_node_count} reached, expecting #{expected_node_count}"
   end
 end
 
 Given /^I remove kata operator from the#{OPT_QUOTED} namespace$/ do | kata_ns |
   ensure_admin_tagged
   step %Q/I store master major version in the clipboard/
-  kata_ns ||= "sandboxed-containers-operator-system"
+  kata_ns ||= "openshift-sandboxed-containers-operator"
   step %Q/I switch to cluster admin pseudo user/
   # 1. remove kataconfig first
   project(kata_ns)
@@ -86,10 +105,9 @@ end
 
 Given /^the kata-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|GUI))?$/ do | kata_ns, install_method |
   ensure_admin_tagged
-  kata_ns ||= "sandboxed-containers-operator-system"
+  kata_ns ||= "openshift-sandboxed-containers-operator"
   kata_config_name = "example-kataconfig"
   step %Q/I store master major version in the :master_version clipboard/
-  cb.channel = cb.master_version
   raise "Kata operator OLM installation only supported for OCP >= 4.8" unless cb.master_version >= "4.8"
   install_method ||= 'CLI'
   if install_method == 'GUI'
@@ -109,10 +127,12 @@ Given /^the kata-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|G
       | target_namespace | #{kata_ns}      |
     })
     step %Q/the step should succeed/
+    # save the channel from subscription into cb.channel
+    step %Q/I extract the channel information from subscription and save it to the clipboard/
     step %Q/I perform the :set_custom_channel_and_subscribe web action with:/, table(%{
-      | update_channel    | #{cb.master_version} |
-      | install_mode      | OwnNamespace         |
-      | approval_strategy | Automatic            |
+      | update_channel    | #{cb.channel} |
+      | install_mode      | OwnNamespace  |
+      | approval_strategy | Automatic     |
     })
     step %Q/the step should succeed/
     step %Q/a pod becomes ready with labels:/, table(%{
@@ -125,8 +145,22 @@ Given /^the kata-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|G
     raise "Failed to deploy kata operator" unless @result[:success]
     project(kata_ns)
   end
+  # make sure kata-operator is running first before installing the kataconfig
+  step %Q/a pod is present with labels:/, table(%{
+    | control-plane=controller-manager |
+  })
   step %Q|I obtain test data file "kata/release-#{cb.master_version}/kataconfiguration_v1_kataconfig.yaml"|
   @result = user.cli_exec(:apply, f: 'kataconfiguration_v1_kataconfig.yaml')
   raise "Failed to apply kataconfig" unless @result[:success]
+  step %Q/I wait for "#{kata_config_name}" install to start/
   step %Q/I wait until number of completed kata runtime nodes match for "#{kata_config_name}"/
+end
+
+Given /^I extract the channel information from subscription and save it to the#{OPT_SYM} clipboard$/ do |cb_name|
+  cb_name ||= :channel
+  step %Q/I store master major version in the :master_version clipboard/ if cb.master_version.nil?
+  step %Q|I obtain test data file "kata/release-#{cb.master_version}/subscription.yaml"|
+  channel = YAML.load(open('subscription.yaml')).dig('spec', 'channel')
+  logger.info("Subscription using channel: #{channel}")
+  cb[cb_name] = channel
 end

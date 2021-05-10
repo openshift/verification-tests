@@ -33,5 +33,5 @@ Feature: kata related features
   # @case_id OCP-39499
   @admin
   @destructive
-  Scenario: kata operator can be installed via CLI with OLM for OCP>=4.7
+  Scenario: kata operator can be installed via CLI with OLM for OCP>=4.8
     Given the kata-operator is installed using OLM CLI
