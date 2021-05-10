@@ -108,7 +108,6 @@ Given /^the kata-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|G
   kata_ns ||= "openshift-sandboxed-containers-operator"
   kata_config_name = "example-kataconfig"
   step %Q/I store master major version in the :master_version clipboard/
-  cb.channel = cb.master_version
   raise "Kata operator OLM installation only supported for OCP >= 4.8" unless cb.master_version >= "4.8"
   install_method ||= 'CLI'
   if install_method == 'GUI'
