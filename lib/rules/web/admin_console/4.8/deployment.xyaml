@@ -60,11 +60,17 @@ delete_dc_with_dependency_objects:
 check_sections_on_container_details:
   elements:
   - selector:
-      xpath: //h2[contains(@class,'co-section-heading') and .='Container Details']
+      xpath: //h2[contains(@class,'co-section-heading') and .='Container details']
   - selector:
-      xpath: //h2[contains(@class,'co-section-heading') and .='Image Details']
+      xpath: //h2[contains(@class,'co-section-heading') and .='Image details']
   - selector:
       xpath: //h2[contains(@class,'co-section-heading') and .='Network']
+  - selector:
+      xpath: //span[contains(.,'Ports')]
+  - selector:
+      xpath: //span[contains(.,'Mounted volumes')]
+  - selector:
+      xpath: //span[contains(.,'Environment variables')]
 check_hpa_metrics_table:
   elements:
   - selector:

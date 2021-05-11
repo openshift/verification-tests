@@ -72,7 +72,7 @@ set_service_name:
   action: choose_dropdown_item
 set_alternative_service_name:
   params:
-    dropdown_field: Alternate Service Target
+    dropdown_field: Alternate Service target
     dropdown_item: <alternative_service_name>
   action: choose_dropdown_item
 click_add_alternative_service:
@@ -82,7 +82,7 @@ click_add_alternative_service:
     op: click
 click_remove_alternative_service:
   params:
-    button_text: Remove Alternate Service
+    button_text: Remove alternate Service
   action: click_button
 set_weight_for_main_service:
   params:
@@ -91,7 +91,7 @@ set_weight_for_main_service:
   action: set_label_input
 set_weight_for_alternative_service:
   params:
-    label_text: Alternate Service Weight
+    label_text: Alternate Service weight
     input_value: <alternative_service_weight>
   action: set_label_input
 set_alternative_service:
@@ -101,7 +101,7 @@ set_alternative_service:
   action: set_weight_for_alternative_service
 set_target_port:
   params:
-    dropdown_field: Target Port
+    dropdown_field: Target port
     dropdown_item: <target_port>
   action: choose_dropdown_item
 set_secure_route:
@@ -122,12 +122,12 @@ set_secure_route:
     ref: upload_destination_ca_crt_file
 set_tls_termination:
   params:
-    dropdown_field: TLS Termination
+    dropdown_field: TLS termination
     dropdown_item: <tls_termination_type>
   action: choose_dropdown_item
 set_insecure_traffic:
   params:
-    dropdown_field: Insecure Traffic
+    dropdown_field: Insecure traffic
     dropdown_item: <insecure_traffic_type>
   action: choose_dropdown_item
 upload_certificate_file:
@@ -177,9 +177,9 @@ check_inputs_for_alternative_services_exists:
   - selector: &weight_input
       xpath: //label[text()='Weight']
   - selector: &alternative_service_weight
-      xpath: //label[text()='Alternate Service Weight']
+      xpath: //label[text()='Alternate Service weight']
   - selector: &alternative_service_target
-      xpath: //label[text()='Alternate Service Target']
+      xpath: //label[text()='Alternate Service target']
 check_inputs_for_alternative_services_missing:
   elements:
   - selector:

@@ -65,6 +65,12 @@ check_sections_on_container_details:
       xpath: //h2[contains(@class,'co-section-heading') and .='Image Details']
   - selector:
       xpath: //h2[contains(@class,'co-section-heading') and .='Network']
+  - selector:
+      xpath: //span[contains(.,'Ports')]
+  - selector:
+      xpath: //span[contains(.,'Mounted Volumes')]
+  - selector:
+      xpath: //span[contains(.,'Environment Variables')]   
 check_hpa_metrics_table:
   elements:
   - selector:
