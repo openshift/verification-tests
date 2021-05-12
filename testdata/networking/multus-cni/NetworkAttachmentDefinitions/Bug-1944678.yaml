@@ -1,0 +1,15 @@
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata:
+  name: macvlan-bridge
+spec:
+  config: '{
+      "cniVersion": "0.3.1",
+      "type": "macvlan",
+      "mode": "bridge",
+      "ipam": {
+        "type": "whereabouts",
+        "range": "10.199.199.0/24",
+        "range_start": "10.199.199.100"
+      }
+  }'
