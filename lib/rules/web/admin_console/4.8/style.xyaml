@@ -92,7 +92,7 @@ check_filter_dropdown_style:
 check_input_toolbar_style:
   elements:
     - selector: 
-        xpath: //div[@class='pf-c-toolbar']//input[contains(@class,'pf-c-form-control')]
+        xpath: //div[@class='pf-c-toolbar']//input[contains(@class,'pf-c-form-control-testingtesting')]
 check_search_tool_bar_style:
   action: check_filter_toolbar_style
   action: check_filter_dropdown_style

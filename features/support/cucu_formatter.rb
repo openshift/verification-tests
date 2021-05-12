@@ -12,6 +12,7 @@ require 'uri'
 require 'cgi' # to escape html content
 require 'tmpdir' # Dir.tmpdir
 require 'zlib'
+require 'log' # BushSlicer::Logger
 
 require 'cucumber/formatter/ast_lookup'
 
@@ -29,7 +30,6 @@ class CucuFormatter
     # io_or_path = config.formats.find {|f| f[0].end_with?(self.class.name)}&.last
     io_or_path = config.out_stream
     prepare_log_dir!(io_or_path)
-
     # Read html template
     @template = File.read File.expand_path(File.join(File.dirname(__FILE__), 'formatter_template.html'))
 
@@ -153,10 +153,14 @@ class CucuFormatter
   #   event registrations in initializer.
   #   Here go log lines and attach/embed files.
   def attach(src, media_type)
+    puts "yapei debugging CucuFormatter attach"
+    logger = BushSlicer::Logger.new
+    label = logger.label
+    puts "label in is CucuFormatter attach is #{label}"
     if media_type == 'text/x.cucumber.log+plain'
       puts src
     else
-      embed(src, media_type, "test case execution attachment")
+      embed(src, media_type, label)
     end
   end
 
@@ -224,7 +228,7 @@ class CucuFormatter
     # Namely we may want to create attachments in `html_report` dor to work fine
     #   with the official HTML formatter and then attach this as external file
     #   regardless if `src` is a file path or data.
-
+    puts "yapei debugging CucuFormatter embed"
     label = CGI.escapeHTML(label)
 
     if (File.file?(src) rescue false)

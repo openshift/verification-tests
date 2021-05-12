@@ -978,6 +978,7 @@ require_relative 'chrome_extension'
       alias debug info
 
       def embed(src, mime_type, label)
+        puts "yapei debugging Web4Cucumber embed"
         if !src.kind_of?(String) || src.empty?
           Kernel.puts "empty embedding??"
         elsif (File.file?(src) rescue false)

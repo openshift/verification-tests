@@ -73,6 +73,7 @@ module BushSlicer
       else
         @level = INFO
       end
+      @label
     end
 
     def dedup_start
@@ -158,9 +159,16 @@ module BushSlicer
 
     # supports embedding content similar with same semantics as Cucumber
     def embed(src, mime_type, label)
+      puts "yapei debugging Logger embed"
+      puts src
+      puts mime_type
+      puts self.class.runtime
+      puts self.class.runtime.respond_to? :embed
+      @label = label
+      puts label
       if self.class.runtime.respond_to? :embed
         info "embedding #{label.inspect}"
-        self.class.runtime.embed src, mime_type, label
+        self.class.runtime.attach src, mime_type
       else
         if src.kind_of?(String)
           if src.empty?
@@ -176,6 +184,14 @@ module BushSlicer
           warn "Embedding request for #{mime_type} data labeled #{label} of unrecognized type: #{src.inspect}"
         end
       end
+    end
+    # store label
+    def label=(label)
+      @label = label
+    end
+    # get label
+    def label
+      return @label
     end
 
     def reset_dedup
