@@ -65,7 +65,7 @@ Given /^I remove kata operator from the#{OPT_QUOTED} namespace$/ do | kata_ns |
 end
 
 # assumption is that kata is already installed
-And /^I verify kata container runtime is installed into the a worker node$/ do
+And /^I verify kata container runtime is installed into a worker node$/ do
   # create a project and install sample app has
   org_user = user
   step %Q/I switch to the first user/
@@ -110,49 +110,57 @@ Given /^the kata-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|G
   step %Q/I store master major version in the :master_version clipboard/
   raise "Kata operator OLM installation only supported for OCP >= 4.8" unless cb.master_version >= "4.8"
   install_method ||= 'CLI'
-  if install_method == 'GUI'
-    package_name = 'kata-operator'
-    catalog_name = 'qe-app-registry'
 
-    @result = admin.cli_exec(:create_namespace, name: kata_ns)
-    project(kata_ns)
-    step %Q/I switch to the first user/
-    step %Q/the first user is cluster-admin/
-    step %Q(I use the "#{kata_ns}" project)
-    step %Q/I open admin console in a browser/
-    step %Q/the step should succeed/
-    step %Q/I perform the :goto_operator_subscription_page web action with:/, table(%{
-      | package_name     | #{package_name} |
-      | catalog_name     | #{catalog_name} |
-      | target_namespace | #{kata_ns}      |
-    })
-    step %Q/the step should succeed/
-    # save the channel from subscription into cb.channel
-    step %Q/I extract the channel information from subscription and save it to the clipboard/
-    step %Q/I perform the :set_custom_channel_and_subscribe web action with:/, table(%{
-      | update_channel    | #{cb.channel} |
-      | install_mode      | OwnNamespace  |
-      | approval_strategy | Automatic     |
-    })
-    step %Q/the step should succeed/
-    step %Q/a pod becomes ready with labels:/, table(%{
+  unless kata_config(kata_config_name).exists?
+    if install_method == 'GUI'
+      package_name = 'kata-operator'
+      catalog_name = 'qe-app-registry'
+
+      @result = admin.cli_exec(:create_namespace, name: kata_ns)
+      project(kata_ns)
+      step %Q/I switch to the first user/
+      step %Q/the first user is cluster-admin/
+      step %Q(I use the "#{kata_ns}" project)
+      step %Q/I open admin console in a browser/
+      step %Q/the step should succeed/
+      step %Q/I perform the :goto_operator_subscription_page web action with:/, table(%{
+        | package_name     | #{package_name} |
+        | catalog_name     | #{catalog_name} |
+        | target_namespace | #{kata_ns}      |
+      })
+      step %Q/the step should succeed/
+      # save the channel from subscription into cb.channel
+      step %Q/I extract the channel information from subscription and save it to the clipboard/
+      step %Q/I perform the :set_custom_channel_and_subscribe web action with:/, table(%{
+        | update_channel    | #{cb.channel} |
+        | install_mode      | OwnNamespace  |
+        | approval_strategy | Automatic     |
+      })
+      step %Q/the step should succeed/
+      step %Q/a pod becomes ready with labels:/, table(%{
+        | control-plane=controller-manager |
+      })
+    else
+      step %Q/I switch to cluster admin pseudo user/
+      step %Q|I obtain test data file "kata/release-#{cb.master_version}/deployment.yaml"|
+      @result = user.cli_exec(:apply, f: "deployment.yaml")
+      raise "Failed to deploy kata operator" unless @result[:success]
+      project(kata_ns)
+    end
+
+    # make sure kata-operator is running first before installing the kataconfig
+    step %Q/a pod is present with labels:/, table(%{
       | control-plane=controller-manager |
     })
+    step %Q|I obtain test data file "kata/release-#{cb.master_version}/kataconfiguration_v1_kataconfig.yaml"|
+    @result = user.cli_exec(:apply, f: 'kataconfiguration_v1_kataconfig.yaml')
+    raise "Failed to apply kataconfig" unless @result[:success]
+    step %Q/I wait for "#{kata_config_name}" install to start/
   else
-    step %Q/I switch to cluster admin pseudo user/
-    step %Q|I obtain test data file "kata/release-#{cb.master_version}/deployment.yaml"|
-    @result = user.cli_exec(:apply, f: "deployment.yaml")
-    raise "Failed to deploy kata operator" unless @result[:success]
+    logger.info("There's already an existing 'kataconfig' resuing it...")
     project(kata_ns)
+    step %Q/I switch to cluster admin pseudo user/
   end
-  # make sure kata-operator is running first before installing the kataconfig
-  step %Q/a pod is present with labels:/, table(%{
-    | control-plane=controller-manager |
-  })
-  step %Q|I obtain test data file "kata/release-#{cb.master_version}/kataconfiguration_v1_kataconfig.yaml"|
-  @result = user.cli_exec(:apply, f: 'kataconfiguration_v1_kataconfig.yaml')
-  raise "Failed to apply kataconfig" unless @result[:success]
-  step %Q/I wait for "#{kata_config_name}" install to start/
   step %Q/I wait until number of completed kata runtime nodes match for "#{kata_config_name}"/
 end
 

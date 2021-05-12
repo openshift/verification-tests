@@ -4,8 +4,8 @@ Feature: kata related features
   @admin
   @destructive
   Scenario: kata container operator installation
-    Given kata container has been installed successfully in the "sandboxed-containers-operator-system" project
-    And I verify kata container runtime is installed into the a worker node
+    Given kata container has been installed successfully in the "openshift-sandboxed-containers-operator" project
+    And I verify kata container runtime is installed into a worker node
 
   # @author pruan@redhat.com
   # @case_id OCP-36509
