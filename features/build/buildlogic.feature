@@ -174,9 +174,9 @@ Feature: buildlogic.feature
   Scenario: Create new-app from private git repo with ssh key
     Given I have a project
     When I run the :new_app client command with:
-      | image_stream   | openshift/perl:5.26                              |
+      | image_stream   | openshift/perl:latest                            |
       | code           | https://github.com/sclorg/s2i-perl-container.git |
-      | context_dir    | 5.26/test/sample-test-app/                       |
+      | context_dir    | 5.30/test/sample-test-app/                       |
     Then the step should succeed
     Given the "s2i-perl-container-1" build completes
     And I have an ssh-git service in the project
