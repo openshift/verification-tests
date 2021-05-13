@@ -256,8 +256,8 @@ module BushSlicer
             res["file"] = file_rel
             res["scenario"] = scenario[:scenario][:name]
             res["tags"] = scenario[:scenario][:tags].map{|s| s[:name][1..-1]}
-          elsif scenario[:scenario][:keyword] == :ScenarioOutline
-            scenario[:examples].each do |examples_table|
+          elsif scenario[:scenario][:keyword] == "Scenario Outline"
+            scenario[:scenario][:examples].each do |examples_table|
               if examples_table[:location][:line] == line
                 res["file"] = file_rel
                 res["scenario"] = scenario[:scenario][:name]
@@ -268,7 +268,7 @@ module BushSlicer
                 # FYI example[:keyword] == "Examples" but we hardcode
                 res["args"] = {"Examples" => examples_table[:name]}
               else
-                examples_table[:tableBody].each do |example|
+                examples_table[:table_body].each do |example|
                   if example[:location][:line] == line
                     res["file"] = file_rel
                     res["scenario"] = scenario[:scenario][:name]
@@ -277,7 +277,7 @@ module BushSlicer
                       ex_tag[:name][1..-1]
                     }
 
-                    header = examples_table[:tableHeader][:cells].map { |cell|
+                    header = examples_table[:table_header][:cells].map { |cell|
                       cell[:value]
                     }
                     values = example[:cells].map { |cell| cell[:value] }
