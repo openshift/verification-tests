@@ -5,35 +5,36 @@ Feature: Logging smoke test case
   @admin
   Scenario: One logging acceptance case for all cluster
     # Deploy cluster-logging operator via web console
-    Given logging channel name is stored in the :logging_channel clipboard
+    Given cluster-logging channel name is stored in the :clo_channel clipboard
+    And elasticsearch-operator channel name is stored in the :eo_channel clipboard
     Given logging service is removed successfully
-    Given "elasticsearch-operator" packagemanifest's catalog source name is stored in the :eo_opsrc clipboard
-    Given "cluster-logging" packagemanifest's catalog source name is stored in the :clo_opsrc clipboard
+    Given elasticsearch-operator catalog source name is stored in the :eo_catsrc clipboard
+    Given cluster-logging catalog source name is stored in the :clo_catsrc clipboard
     Given I switch to the first user
     Given the first user is cluster-admin
     And evaluation of `user.cached_tokens.first` is stored in the :user_token_1 clipboard
     Given I open admin console in a browser
     # subscribe cluster-logging-operator
     When I perform the :goto_operator_subscription_page web action with:
-      | package_name     | cluster-logging     |
-      | catalog_name     | <%= cb.clo_opsrc %> |
-      | target_namespace | openshift-logging   |
+      | package_name     | cluster-logging      |
+      | catalog_name     | <%= cb.clo_catsrc %> |
+      | target_namespace | openshift-logging    |
     Then the step should succeed
     And I perform the :set_custom_channel_and_subscribe web action with:
-      | update_channel    | <%= cb.logging_channel %> |
-      | install_mode      | OwnNamespace              |
-      | approval_strategy | Automatic                 |
+      | update_channel    | <%= cb.clo_channel %> |
+      | install_mode      | OwnNamespace          |
+      | approval_strategy | Automatic             |
     Given cluster logging operator is ready
     # subscribe elasticsearch-operator
     When I perform the :goto_operator_subscription_page web action with:
-      | package_name     | elasticsearch-operator        |
-      | catalog_name     | <%= cb.eo_opsrc %>            |
-      | target_namespace | openshift-operators-redhat    |
+      | package_name     | elasticsearch-operator     |
+      | catalog_name     | <%= cb.eo_catsrc %>        |
+      | target_namespace | openshift-operators-redhat |
     Then the step should succeed
     When I perform the :set_custom_channel_and_subscribe web action with:
-      | update_channel    | <%= cb.logging_channel %> |
-      | install_mode      | AllNamespace              |
-      | approval_strategy | Automatic                 |
+      | update_channel    | <%= cb.eo_channel %> |
+      | install_mode      | AllNamespace         |
+      | approval_strategy | Automatic            |
     Then the step should succeed
     Given elasticsearch operator is ready in the "openshift-operators-redhat" namespace
     Then I use the "openshift-logging" project

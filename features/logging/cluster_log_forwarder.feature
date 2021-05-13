@@ -472,7 +472,7 @@ Feature: cluster log forwarder features
     Then the step should succeed
     When I get records from the "topic-logging-audit" kafka topic in the "<%= cb.kafka_project.name %>" project
     Then the step should succeed
-   
+
   # @author gkarager@redhat.com
   # @case_id OCP-32628
   @admin
