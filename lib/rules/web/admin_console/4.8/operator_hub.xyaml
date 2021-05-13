@@ -387,7 +387,7 @@ check_disconnected_infra_value:
 check_proxy_infra_value:
   params:
     label: Infrastructure features
-    value: Proxy
+    value: Proxy-aware
   action: check_label_and_value_in_modal
 check_fips_infra_value:
   params:
@@ -413,7 +413,7 @@ click_checkbox_disconnected_from_infrastructure_features:
 click_checkbox_proxy_from_infrastructure_features:
   params:
     filter_type_value: infraFeatures
-    checkbox_text: Proxy
+    checkbox_text: Proxy-aware
   action: wait_filter_section_loaded
   action: choose_one_checkbox
 click_checkbox_fips_from_infrastructure_features:
