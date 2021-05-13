@@ -207,13 +207,14 @@ Given /^#{WORD}( in the#{OPT_QUOTED} project)? with name matching #{RE} are stor
 end
 
 Given /^(I|admin) stores? all (\w+) in the#{OPT_QUOTED} project to the#{OPT_SYM} clipboard$/ do |who, type, namespace, cb_name|
-#Given /^(I|admin) stores? all (\w+)( in the#{OPT_QUOTED} project)? to the#{OPT_SYM} clipboard$/ do |who, type, in_project, namespace, cb_name|
   cb_name ||= :resources
   _user = who == "admin" ? admin : user
 
   clazz = resource_class(type)
   if BushSlicer::ProjectResource > clazz
     cb[cb_name] = clazz.list(user: _user, project: project(namespace))
+  else
+    cb[cb_name] = clazz.list(user: _user)
   end
 end
 
@@ -224,6 +225,8 @@ Given /^(I|admin) stores? all (\w+) to the#{OPT_SYM} clipboard$/ do |who, type, 
   clazz = resource_class(type)
   if BushSlicer::ProjectResource > clazz
     cb[cb_name] = clazz.list(user: _user, project: project)
+  else
+    cb[cb_name] = clazz.list(user: _user)
   end
 end
 
