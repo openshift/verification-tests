@@ -114,7 +114,7 @@ Given /^the kata-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|G
   step %Q/I switch to cluster admin pseudo user/
   project('openshift-marketplace')
   unless catalog_source('qe-app-registry').exists?
-    logger.info("Kata installation depends on `qe-app-registry`, which is missing in this cluster, calling step to create it..."
+    logger.info("Kata installation depends on `qe-app-registry`, which is missing in this cluster, calling step to create it...")
     step %Q/I create "qe-app-registry" catalogsource for my cluster/
   end
 

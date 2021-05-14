@@ -37,7 +37,7 @@ end
 Given /^I create #{QUOTED} catalogsource for my#{OPT_QUOTED} cluster$/ do |catalog_name, ocp_version|
   ensure_admin_tagged
   ensure_destructive_tagged
-  
+
   step %Q/I store master major version in the :master_version clipboard/ unless ocp_version
   ocp_version ||= cb.master_version
   project("openshift-marketplace")
