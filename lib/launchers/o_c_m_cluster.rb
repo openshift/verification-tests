@@ -124,7 +124,9 @@ module BushSlicer
         "name" => name,
         "managed" => true,
         "multi_az" => false,
-        "byoc" => false
+        "ccs" => {
+          "enabled": false
+        }
       }
 
       if @multi_az
@@ -150,7 +152,7 @@ module BushSlicer
 
       if @aws_account_id && @aws_access_key && @aws_secret_key
         json_data.merge!({"aws" => {"account_id":@aws_account_id, "access_key_id":@aws_access_key, "secret_access_key":@aws_secret_key}})
-        json_data.merge!({"byoc" => true})
+        json_data.merge!({"ccs" => {"enabled": true}})
       end
 
       return json_data

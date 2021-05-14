@@ -44,14 +44,14 @@ class MyTest < Test::Unit::TestCase
     options = { :token => "abc" }
     ocm = BushSlicer::OCMCluster.new(options)
     json = ocm.generate_cluster_data('myosd4').to_json
-    assert_equal('{"name":"myosd4","managed":true,"multi_az":false,"byoc":false}', json)
+    assert_equal('{"name":"myosd4","managed":true,"multi_az":false,"ccs":{"enabled":false}}', json)
   end
 
   def test_generating_cluster_data_with_region
     options = { :token => "abc", :region => "us-east-1" }
     ocm = BushSlicer::OCMCluster.new(options)
     json = ocm.generate_cluster_data('myosd4').to_json
-    assert_equal('{"name":"myosd4","managed":true,"multi_az":false,"byoc":false,"region":{"id":"us-east-1"}}', json)
+    assert_equal('{"name":"myosd4","managed":true,"multi_az":false,"ccs":{"enabled":false},"region":{"id":"us-east-1"}}', json)
   end
 
   def test_generating_cluster_data_with_region_envvars
@@ -59,7 +59,7 @@ class MyTest < Test::Unit::TestCase
     ENV['OCM_REGION'] = "us-east-2"
     ocm = BushSlicer::OCMCluster.new()
     json = ocm.generate_cluster_data('myosd4').to_json
-    assert_equal('{"name":"myosd4","managed":true,"multi_az":false,"byoc":false,"region":{"id":"us-east-2"}}', json)
+    assert_equal('{"name":"myosd4","managed":true,"multi_az":false,"ccs":{"enabled":false},"region":{"id":"us-east-2"}}', json)
   end
 
   def test_generating_cluster_data_with_aws_envvars
@@ -71,14 +71,14 @@ class MyTest < Test::Unit::TestCase
 
     ocm = BushSlicer::OCMCluster.new()
     json = ocm.generate_cluster_data('myosd4').to_json
-    assert_equal('{"name":"myosd4","managed":true,"multi_az":false,"byoc":true,"region":{"id":"eu-central-1"},"aws":{"account_id":"123456789","access_key_id":"AKIAZZ007","secret_access_key":"asdfghjkl/123456"}}', json)
+    assert_equal('{"name":"myosd4","managed":true,"multi_az":false,"ccs":{"enabled":true},"region":{"id":"eu-central-1"},"aws":{"account_id":"123456789","access_key_id":"AKIAZZ007","secret_access_key":"asdfghjkl/123456"}}', json)
   end
 
   def test_generating_json_with_version
     options = { :token => "abc", :version => "4.6.1" }
     ocm = BushSlicer::OCMCluster.new(options)
     json = ocm.generate_cluster_data('myosd4').to_json
-    assert_equal('{"name":"myosd4","managed":true,"multi_az":false,"byoc":false,"version":{"id":"openshift-v4.6.1"}}', json)
+    assert_equal('{"name":"myosd4","managed":true,"multi_az":false,"ccs":{"enabled":false},"version":{"id":"openshift-v4.6.1"}}', json)
   end
 
   def test_generating_cluster_data_with_lifespan
@@ -96,7 +96,7 @@ class MyTest < Test::Unit::TestCase
     options = { :token => "abc", :num_nodes => "8" }
     ocm = BushSlicer::OCMCluster.new(options)
     json = ocm.generate_cluster_data('myosd4').to_json
-    assert_equal('{"name":"myosd4","managed":true,"multi_az":false,"byoc":false,"nodes":{"compute":8}}', json)
+    assert_equal('{"name":"myosd4","managed":true,"multi_az":false,"ccs":{"enabled":false},"nodes":{"compute":8}}', json)
   end
 
   def test_executing_shell
