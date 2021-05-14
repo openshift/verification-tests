@@ -486,7 +486,15 @@ end
 Given /^I have a iSCSI setup in the environment$/ do
   ensure_admin_tagged
 
-  _project = project("default", switch: false)
+  _project = project("iscsi-target", switch: false)
+  if !_project.exists?(user:admin, quiet: true)
+    step %Q{admin creates a project with:}, table(%{
+      | project_name  | iscsi-target |
+      | node_selector |              |
+    })
+    step %Q{the step should succeed}
+  end
+
   _pod = cb.iscsi_pod = pod("iscsi-target", _project)
   _service = cb.iscsi_service = service("iscsi-target", _project)
 
@@ -519,7 +527,7 @@ end
 Given /^I create a second iSCSI path$/ do
   ensure_admin_tagged
 
-  _project = project("default", switch: false)
+  _project = project("iscsi-target", switch: false)
   _pod = cb.iscsi_pod = pod("iscsi-target", _project)
   step %Q{I download a file from "https://raw.githubusercontent.com/openshift-qe/docker-iscsi/master/service.json"}
   service_content = JSON.load(@result[:response])
@@ -547,7 +555,7 @@ end
 Given /^I disable the second iSCSI path$/ do
   ensure_destructive_tagged
 
-  _project = project("default", switch: false)
+  _project = project("iscsi-target", switch: false)
   _service_2 = service('iscsi-target-2', _project)
   _service_2.ensure_deleted(user: admin)
 end
