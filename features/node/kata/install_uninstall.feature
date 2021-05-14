@@ -35,3 +35,13 @@ Feature: kata related features
   @destructive
   Scenario: kata operator can be installed via CLI with OLM for OCP>=4.8
     Given the kata-operator is installed using OLM CLI
+
+  # @author pruan@redhat.com
+  # @case_id OCP-41813
+  @admin
+  @destructive
+  Scenario: basic smoke test for kata
+    Given the kata-operator is installed using OLM CLI
+    And I verify kata container runtime is installed into a worker node
+    And I ensure "<%= project.name %>" project is deleted
+    And I remove kata operator from the namespace
