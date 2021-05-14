@@ -667,6 +667,20 @@ check_charts_in_project_utilization:
   - selector:
       xpath: //h4[text()='Pod count']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'pf-c-chart')]
     timeout: 40
+
+check_cpu_request:
+  params:
+      graph_title: CPU
+  action: check_utilization_chart_details
+check_memory_request:
+  params:
+      graph_title: Memory
+  action: check_utilization_chart_details
+check_utilization_chart_details:
+  elements:
+  - selector:
+      xpath: //h4[text()='<graph_title>']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'pf-c-chart')]//*[name()='path' and contains(@style, 'rgb(236, 122, 8)')]
+
 click_filesystem_chart:
   element:
     selector:
