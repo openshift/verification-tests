@@ -92,6 +92,19 @@ navigate_to_dev_console:
   - selector:
       xpath: //li//h1[contains(., 'Developer')]
     op: click
+check_active_perspective:
+  action:
+    if_param:
+      perspective: dev
+    ref: check_active_perspective_is_developer
+check_active_perspective_is_developer:
+  params:
+    active_perspective_text: Developer
+  action: check_current_perspective_text
+check_current_perspective_text:
+  elements:
+  - selector:
+      xpath: //span[contains(@class,'pf-c-dropdown__toggle-text') and contains(.,'<active_perspective_text>')]
 check_external_link:
   elements:
   - selector:
