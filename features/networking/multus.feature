@@ -1551,8 +1551,8 @@ Feature: Multus-CNI related scenarios
     Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
     When I run oc create over "generic_multus_pod.yaml" replacing paths:
       | ["metadata"]["name"]                                       | macvlan-bridge-pod1 |
-      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | macvlan-bridge           |
-      | ["spec"]["containers"][0]["name"]                          | macvlan-bridge           |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | macvlan-bridge      |
+      | ["spec"]["containers"][0]["name"]                          | macvlan-bridge      |
     Then the step should succeed
     And the pod named "macvlan-bridge-pod1" becomes ready
     # Check the created pod has correct ip
@@ -1565,8 +1565,8 @@ Feature: Multus-CNI related scenarios
     Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
     When I run oc create over "generic_multus_pod.yaml" replacing paths:
       | ["metadata"]["name"]                                       | macvlan-bridge-pod2 |
-      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | macvlan-bridge           |
-      | ["spec"]["containers"][0]["name"]                          | macvlan-bridge           |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | macvlan-bridge      |
+      | ["spec"]["containers"][0]["name"]                          | macvlan-bridge      |
     Then the step should succeed
     And the pod named "macvlan-bridge-pod2" becomes ready
     # Check the created pod has correct ip
@@ -1579,8 +1579,8 @@ Feature: Multus-CNI related scenarios
     Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
     When I run oc create over "generic_multus_pod.yaml" replacing paths:
       | ["metadata"]["name"]                                       | macvlan-bridge-pod3 |
-      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | macvlan-bridge           |
-      | ["spec"]["containers"][0]["name"]                          | macvlan-bridge           |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | macvlan-bridge      |
+      | ["spec"]["containers"][0]["name"]                          | macvlan-bridge      |
     Then the step should succeed
     And the pod named "macvlan-bridge-pod3" becomes ready
     # Check the created pod has correct ip
