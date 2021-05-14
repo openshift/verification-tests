@@ -33,3 +33,41 @@ Given /^I enable autoscaling for my cluster$/ do
   end
 end
 
+# helper method to enabled qe-app-registry
+Given /^I create #{QUOTED} catalogsource for my#{OPT_QUOTED} cluster$/ do |catalog_name, ocp_version|
+  ensure_admin_tagged
+  ensure_destructive_tagged
+  
+  step %Q/I store master major version in the :master_version clipboard/ unless ocp_version
+  ocp_version ||= cb.master_version
+  project("openshift-marketplace")
+  iib='quay.io/openshift-qe-optional-operators/ocp4-index:latest'
+  case ocp_version
+  when '4.5stage'
+    iib='registry-proxy.engineering.redhat.com/rh-osbs/iib-pub-pending:v4.5'
+  when '4.5', '4.5qe'
+    iib = 'quay.io/openshift-qe-optional-operators/qe45-index:latest'
+  when  '4.6stage'
+    iib = 'registry-proxy.engineering.redhat.com/rh-osbs/iib-pub-pending:v4.6'
+  when '4.7stage'
+    iib='registry-proxy.engineering.redhat.com/rh-osbs/iib-pub-pending:v4.7'
+  when '4.8', '4.7', '4.7qe', '4.6', '4.6qe'
+    iib='quay.io/openshift-qe-optional-operators/ocp4-index:latest'
+  else
+    iib='quay.io/openshift-qe-optional-operators/ocp4-index:latest'
+  end
+  logger.info("Using IIB #{iib}...")
+  cb.iib = iib
+  cb.catalog_name = catalog_name
+  step %Q/I switch to cluster admin pseudo user/
+  if catalog_source(catalog_name).exists?
+    # step %Q/I ensure "#{catalog_name}" opsrc is deleted/
+    step %Q/I ensure "#{catalog_name}" catalogsource is deleted/
+    step %Q/I ensure "#{catalog_name}" deployment is deleted/
+  end
+  # create policy
+  step %Q|I obtain test data file "catalogsource/image_content_soruce_policy.yaml"|
+  admin.cli_exec(:create, f: 'image_content_soruce_policy.yaml')
+  step %Q(I run oc create as admin over ERB test file: catalogsource/catalog_source.yaml)
+  step %Q(all pods in the project are ready)
+end
