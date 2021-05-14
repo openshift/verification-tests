@@ -1,3 +1,4 @@
+require "base64"
 require 'yaml'
 
 require 'bushslicer'
@@ -107,6 +108,86 @@ module BushSlicer
       class_opts = self[:optional_classes, keyword.to_sym]
       require class_opts[:include_path] if class_opts[:include_path]
       return Object.const_get(class_opts[:class]).new(**class_opts[:opts])
+    end
+  end
+
+  # We basically try to duck-type the behavior of a String
+  # @note comparing the object to string only works one-directonal, i.e.
+  #   from_env_obj <=> str works but not str <=> from_env_obj
+  class FromEnvVariable
+    include Comparable
+
+    attr_reader :var_name
+
+    # We don't create such classes, they are just unmarshalled by YAML
+    # def initialize(var_name)
+    #   @var_name=var_name
+    # end
+
+    def inspect
+      "#<#{self.class.shortclass}:#{to_s}>"
+    end
+
+    def self.shortclass
+      self.name.split("::").last
+    end
+
+    alias :to_str :to_s
+
+    [
+      :[], :==, :<=>, :b, :bytes, :byteslice, :chars, :chomp, :chop, :chr,
+      :codepoints, :count, :crypt, :delete, :downcase, :dump, :each_byte,
+      :each_char, :each_codepoint, :each_line, :empty?, :encode, :encoding,
+      :end_with?, :getbyte, :gsub, :hash, :hex, :include?, :index, :insert,
+      :intern, :length, :lines, :ljust, :lstrip, :match, :match?, :next,
+      :oct, :ord, :partition, :prepend, :replace, :reverse, :rindex, :rjust,
+      :rpartition, :rstrip, :scan, :scrub, :setbyte, :size, :slice, :split,
+      :squeeze, :start_with?, :strip, :sub, :succ, :sum, :swapcase, :to_c,
+      :to_f, :to_i, :to_r, :to_sym, :tr, :tr_s, :unpack, :unpack1, :upcase,
+      :upto, :valid_encoding?
+    ].each do |name|
+      define_method(name) do |*args, &block|
+        to_s.public_send name, *args, &block
+      end
+    end
+  end
+
+  class FlexyEnvVariable < FromEnvVariable
+    def to_s
+      ENV[@var_name]
+    end
+  end
+
+  class FlexyEnvFile < FromEnvVariable
+    def to_s
+      if !(cache[:file] && File.file?(cache[:file].path))
+        # file was never created or was deleted in the mean time
+
+        content = ENV[@var_name]
+
+        unless content
+          raise "Environemnt variable #{@var_name} was not set."
+        end
+
+        Tempfile.open("env_#{@var_name}_") do |f|
+          f.write(Base64.decode64 content)
+          cache[:file] = f
+        end
+      end
+      cache[:file].path
+    end
+
+    # we override this because YAML unmarshals the file without
+    # calling a constructor. Then configuration freezes all values.
+    # Thus we can't initialize anything before object is frozen.
+    # That's why we initialize the cache Hash within here.
+    def freeze
+      cache
+      super
+    end
+
+    private def cache
+      @cache ||= {}
     end
   end
 end

@@ -45,6 +45,20 @@ global:
   # browser: chrome
   # browser: firefox_marionette
 
+  # Optional: remote selenium URL to connect to.
+  # Leave unset for default of launching local browser via geckodriver etc.
+  # selenium_url: http://example.com:4444/wd/hub
+
+  # Any value you can set to refer to an environment variable
+  # read value from ENVVAR1 environment variable:
+  # test1: !ruby/object:BushSlicer::FlexyEnvVariable
+  #   var_name: ENVVAR1
+  # `test1` key will be a string with value
+  # read value from ENVVAR2, decode as base64 and write to file, `test2` will
+  #   contain the path of this temporary file:
+  # test2: !ruby/object:BushSlicer::FlexyEnvFile
+  #   var_name: ENVVAR2
+
 environments:
   online_starter:
     hosts: api.starter-us-east-1.openshift.com:etcd:master:node

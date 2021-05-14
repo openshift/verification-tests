@@ -50,19 +50,20 @@ module BushSlicer
 
     RESET = Term::ANSIColor.reset rescue ""
 
-    @@runtime = Kernel unless defined? @@runtime
-
     def self.runtime=(runtime)
       @@runtime = runtime
+      @@puts_method = runtime.respond_to?(:log) ? runtime.method(:log) : runtime.method(:puts)
     end
 
     def self.runtime
-      return @@runtime
+      @@runtime
     end
 
     def self.reset_runtime
-      @@runtime = Kernel
+      self.runtime = Kernel
     end
+
+    reset_runtime unless defined? @@runtime
 
     def initialize(level=nil)
       if level
@@ -152,23 +153,27 @@ module BushSlicer
     end
 
     def print(msg)
-      @@runtime.puts(msg)
+      @@puts_method.call(msg)
     end
 
     # supports embedding content similar with same semantics as Cucumber
     def embed(src, mime_type, label)
-      if @@runtime.respond_to? :embed
+      if self.class.runtime.respond_to? :embed
         info "embedding #{label.inspect}"
-        @@runtime.embed src, mime_type, label
+        self.class.runtime.embed src, mime_type, label
       else
-        if !src.kind_of?(String) || src.empty?
-          warn "empty embedding #{label}??"
-        elsif (File.file?(src) rescue false)
-          info "Embedding request for file: #{File.absolute_path(src)}"
-        elsif src =~ /\A[[:print:]]*\z/
-          print "Embedded #{mime_type} data labeled #{label}:\n#{src}"
+        if src.kind_of?(String)
+          if src.empty?
+            warn "empty string embedding??"
+          elsif (File.file?(src) rescue false)
+            warn "Embedding request for file: #{File.absolute_path(src)}"
+          elsif src =~ /\A[[:print:]]*\z/
+            warn "Embedded #{mime_type} data labeled #{label}:\n#{src}"
+          else
+            warn "Unrecognized #{mime_type} data labeled #{label} (Base64):\n#{Base64.encode64 src}"
+          end
         else
-          print "Unrecognized #{mime_type} data labeled #{label} (Base64):\n#{Base64.encode64 src}"
+          warn "Embedding request for #{mime_type} data labeled #{label} of unrecognized type: #{src.inspect}"
         end
       end
     end
