@@ -12,5 +12,10 @@ module BushSlicer
     def platform(user: nil, cached: true, quiet: false)
       status_raw(user: user, cached: cached, quiet: quiet).dig("platform")
     end
+
+    def infra_topo(user: nil, cached: true, quiet: false)
+      status_raw(user: user, cached: cached, quiet: quiet).dig("infrastructureTopology")
+    end
+
   end
 end
