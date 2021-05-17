@@ -92,14 +92,17 @@ Feature: Kibana related features
     When I run the :check_log_count web action
     Then the step should succeed
     """
-    # Verify the token are encrypted in kibana logs 
-    Given the first user is cluster-admin
+    # Verify the token are encrypted in kibana logs
+    Given I switch to cluster admin pseudo user
+    And I use the "openshift-logging" project
     Given a pod becomes ready with labels:
       | logging-infra=kibana |
     When I run the :logs client command with:
       | resource_name | <%= pod.name %> |
-      | c | kibana |
-    Then the output should not contain "XXXXXXXXXXXXXXXXXXXXXXXX"
+      | c             | kibana          |
+    Then the output should contain:
+      | "x-forwarded-access-token":"XXXXXXXXXXXXXX |
+      | "x-forwarded-email":"XXXXXXXXXXXXXX        |
 
   # @author qitang@redhat.com
   # @case_id OCP-30361
@@ -149,11 +152,11 @@ Feature: Kibana related features
     When I perform the :kibana_click_index web action with:
       | index_pattern_name | *infra |
     Then the step should succeed
+    Given I wait up to 180 seconds for the steps to pass:
+    """
     When I perform the :kibana_find_index_pattern web action with:
       | index_pattern_name | *infra |
     Then the step should succeed
-    Given I wait up to 180 seconds for the steps to pass:
-    """
     When I run the :check_log_count web action
     Then the step should succeed
     """

@@ -211,6 +211,8 @@ click_close_icon:
     selector:
       xpath: //button[contains(@aria-label,'Close')]
     op: click
+click_resource_creation_button:
+  action: click_yaml_create_button
 click_yaml_create_button:
   params:
     button_id: yaml-create

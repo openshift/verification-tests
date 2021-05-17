@@ -215,7 +215,7 @@ Feature: storageClass related feature
 
     Examples:
       | type | size | errorMessage                  |
-      | sc1  | 5Gi  | at least 500 GiB              | # @case_id OCP-10164
+      | sc1  | 5Gi  | at least 125 GiB              | # @case_id OCP-10164
       | st1  | 17Ti | too large for volume type st1 | # @case_id OCP-10425
 
   # @author chaoyang@redhat.com

@@ -149,7 +149,7 @@ set_provisioner:
   action: choose_dropdown_item
 create_storageclass_from_form:
   params:
-    button_text: Create Storage Class
+    button_text: Create StorageClass
   action: goto_storageclass_page
   action: click_button
   action: wait_form_loaded

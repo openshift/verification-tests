@@ -185,7 +185,6 @@ Feature: collector related tests
   @admin
   @destructive
   @commonlogging
-  @flaky
   Scenario: All nodes logs are collected
     Given the master version >= "4.5"
     Given evaluation of `cluster_logging('instance').collection_type` is stored in the :collection_type clipboard
@@ -202,14 +201,14 @@ Feature: collector related tests
       | relative_url | _search?pretty&size=0' -d'{"aggs" : {"exists_field_kubernetes" : {"filter": {"exists": {"field":"kubernetes"}},"aggs" : {"distinct_node_ip" : {"terms" : {"field" : "pipeline_metadata.collector.ipaddr4"}}}}}} |
       | op           | GET   |
     Then the step should succeed
-    Given evaluation of `JSON.parse(@result[:response])['aggregations']['exists_field_kubernetes']['distinct_node_ip']['buckets'].map {|furn| furn["key"]}` is stored in the :kuber_ips clipboard
+    Given evaluation of `@result[:parsed]['aggregations']['exists_field_kubernetes']['distinct_node_ip']['buckets'].map {|furn| furn["key"]}` is stored in the :kuber_ips clipboard
     And the expression should be true> Set.new(cb.node_ips) == Set.new(cb.kuber_ips)
 
     And I perform the HTTP request on the ES pod with labels "es-node-master=true":
       | relative_url | _search?pretty&size=0' -d'{"aggs" : {"exists_field_systemd" : {"filter": {"exists": {"field":"systemd"}},"aggs" : {"distinct_node_ip" : {"terms" : {"field" : "pipeline_metadata.collector.ipaddr4"}}}}}} |
       | op           | GET  |
     Then the step should succeed
-    Given evaluation of `JSON.parse(@result[:response])['aggregations']['exists_field_systemd']['distinct_node_ip']['buckets'].map {|furn| furn["key"]}` is stored in the :journal_ips clipboard
+    Given evaluation of `@result[:parsed]['aggregations']['exists_field_systemd']['distinct_node_ip']['buckets'].map {|furn| furn["key"]}` is stored in the :journal_ips clipboard
     And the expression should be true> Set.new(cb.node_ips) == Set.new(cb.journal_ips)
     """
 

@@ -441,16 +441,18 @@ Feature: Service related networking scenarios
   Scenario: Taint node with too small MTU value
     Given the default interface on nodes is stored in the :default_interface clipboard
     And the node's MTU value is stored in the :mtu_actual clipboard
+    And the node's active nmcli connection is stored in the :nmcli_active_con_uuid clipboard
     And evaluation of `node.name` is stored in the :subject_node clipboard
     And I run commands on the host:
-      | systemctl stop NetworkManager                        |
-      | ip link set mtu 1300 dev <%= cb.default_interface %> |
+      | nmcli con modify  "<%= cb.nmcli_active_con_uuid %>"  ethernet.mtu  1300  |
+      | nmcli dev reapply <%= cb.default_interface %> |
     Then the step should succeed
     Given I register clean-up steps:
     """
     Given I use the "<%= cb.subject_node %>" node
     And I run commands on the host:
-      | systemctl start NetworkManager |
+      | nmcli con modify "<%= cb.nmcli_active_con_uuid %>" ethernet.mtu <%= cb.mtu_actual %> |
+      | nmcli dev reapply  <%= cb.default_interface %> |
     Then the step should succeed
     """
     #This def will also store network project name in network_project_name variable
@@ -464,10 +466,11 @@ Feature: Service related networking scenarios
     Then the step should succeed
     And the output should contain "mtu-too-small"
     """
-    #Starting NetworkManager to roll out original system MTU
+    #Reset the MTU using nmcli
     Given I use the "<%= cb.subject_node %>" node
     And I run commands on the host:
-      | systemctl start NetworkManager |
+      | nmcli con modify "<%= cb.nmcli_active_con_uuid %>" ethernet.mtu <%= cb.mtu_actual %> |
+      | nmcli dev reapply  <%= cb.default_interface %> |
     Then the step should succeed
     And the node's MTU value is stored in the :mtu_actual_redeployed clipboard
     And the expression should be true> cb.mtu_actual == cb.mtu_actual_redeployed

@@ -20,7 +20,7 @@ module BushSlicer
     include Commander::Methods
     include Common::Helper
 
-    TCMS_RELEVANT_TAGS = ["admin", "destructive", "vpn", "smoke"].freeze
+    TCMS_RELEVANT_TAGS = ["admin", "destructive", "flaky", "smoke", "vpn"].freeze
 
     def initialize
       always_trace!
@@ -469,9 +469,13 @@ module BushSlicer
     def clone_run(test_run_id: nil)
       template_hash = {}
       query_result = polarshift.get_run_smart(project, test_run_id)
-
       tc_ids = extract_test_case_ids(query_result)
-      custom_fields = transform_custom_fields(query_result['customFields']['Custom'])
+      if query_result['customFields'].nil?
+        # hard-code it to something
+        custom_fields = { "caseimportance" => "critical", "description" => "" }
+      else
+        custom_fields = transform_custom_fields(query_result['customFields']['Custom'])
+      end
       tc_str = tc_ids.join(" ")
       template_hash[:run_title] = "Clone of #{test_run_id} -- #{query_result['title']}"
       template_hash[:case_query] = "id:(#{tc_str})"

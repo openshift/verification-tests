@@ -22,7 +22,7 @@ edit_machine_count:
   action: update_resource_count
 delete_machineset_from_action:
   params:
-    item: Delete Machine Set
+    item: Delete MachineSet
   action: click_one_dropdown_action
   action: submit_changes
 check_status_text:

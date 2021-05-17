@@ -22,13 +22,13 @@ Under `environments` there are default options for different environment types. 
 
 The default environment is determined by the `default_environment` global option. It's usually set by the BUSHSLICER_DEFAULT_ENVIRONMENT env variable.
 
-Let's take one example - OSE environment. It has as a default `hosts_type: SSHAccessibleHost`. If we want to override it, we can specify env variable OPENSHIFT_ENV_OSE_HOSTS_TYPE. Its the same with any other option. All variables that start with `OPENSHIFT_ENV_<env name>_SOMETHING` get an option for the named environment set. The first part `OPENSHIFT_ENV_<env name>_` is removed, then the other part `SOMETHING` is downcased and converted to a Symbol to become a key in the configuration Hash that is passed to the environment class constructor. That is taken care of in the `#load_env` private method of `BushSlicer::EnvironmentManager` class.
+Let's take one example - OCP4 environment. It has as a default `hosts_type: SSHAccessibleHost`. If we want to override it, we can specify env variable OPENSHIFT_ENV_OCP4_HOSTS_TYPE. Its the same with any other option. All variables that start with `OPENSHIFT_ENV_<env name>_SOMETHING` get an option for the named environment set. The first part `OPENSHIFT_ENV_<env name>_` is removed, then the other part `SOMETHING` is downcased and converted to a Symbol to become a key in the configuration Hash that is passed to the environment class constructor. That is taken care of in the `#load_env` private method of `BushSlicer::EnvironmentManager` class.
 
 == user configuration
 
 `UserManager`, whatever it is inherits options used to create environment. The user manager should only use options prefixed with `:user_manager_`. Because it inherits environment configuration, all such options can be provided or overriden by environment variables.
 
-So far we only have `StaticUserManager` so users are defined with the `OPENSHIFT_ENV_OSE_USER_MANAGER_USERS` env variable. Two ways to provide a user:
+So far we only have `StaticUserManager` so users are defined with the `OPENSHIFT_ENV_OCP4_USER_MANAGER_USERS` env variable. Two ways to provide a user:
 
 * by user/password
 * by token
@@ -39,9 +39,9 @@ Username should be written in full. e.g. with kerberos auth the client tool can 
 
 Some examples:
 
-* `export OPENSHIFT_ENV_OSE_USER_MANAGER_USERS=joe:password` - one user with name joe and password `password`
-* `export OPENSHIFT_ENV_OSE_USER_MANAGER_USERS=:eKORXg2tqwoNsTmd2s1OdhG2w0vOq9y7R6HbM4pgQ8U` one user where we only have a token (username auto-discovered)
-* `export OPENSHIFT_ENV_OSE_USER_MANAGER_USERS=joe:password,:eKORXg2tqwoNsTmd2s1OdhG2w0vOq9y7R6HbM4pgQ8U,alice:password` - 3 users where first and last specified by user/password pairs and the second one with a token; usually you use only one approach but it's possible to mix
+* `export OPENSHIFT_ENV_OCP4_USER_MANAGER_USERS=joe:password` - one user with name joe and password `password`
+* `export OPENSHIFT_ENV_OCP4_USER_MANAGER_USERS=:eKORXg2tqwoNsTmd2s1OdhG2w0vOq9y7R6HbM4pgQ8U` one user where we only have a token (username auto-discovered)
+* `export OPENSHIFT_ENV_OCP4_USER_MANAGER_USERS=joe:password,:eKORXg2tqwoNsTmd2s1OdhG2w0vOq9y7R6HbM4pgQ8U,alice:password` - 3 users where first and last specified by user/password pairs and the second one with a token; usually you use only one approach but it's possible to mix
 
 == other configuration
 

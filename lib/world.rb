@@ -35,7 +35,7 @@ module BushSlicer
     end
 
     def setup_logger
-      BushSlicer::Logger.runtime = @__cucumber_runtime
+      BushSlicer::Logger.runtime = self
     end
 
     def debug_in_after_hook?
@@ -469,6 +469,34 @@ module BushSlicer
 
     def project_docker_repo
       conf[:project_docker_repo]
+    end
+
+    # transforms <%= expression %> inside variables of a target binding
+    # it is safer not to modify the original strings and tables
+    # @param [String, Cucumber::MultilineArgument::DataTable] x field to process
+    # @return string with expanded evaluation of expressions
+    def transform_value(x)
+      if x.nil?
+        nil
+      elsif x.respond_to? :raw
+        table( x.raw.map { |row| row.map { |cell| transform_value(cell) } } )
+      elsif x.respond_to? :gsub
+        x.gsub(/<%=(.+?)%>/m) { |c| eval $1 }
+      elsif Numeric === x
+        x.to_s
+      else
+        raise ArgumentError, "Unexected argument: #{x.inspect}"
+      end
+    end
+
+    def transform(target_binding, *variables)
+      b = target_binding
+      unless Binding === b
+        raise ArgumentError, "First argument must be a Binding, instead it is #{b.inspect}"
+      end
+      variables.each do |v|
+        b.local_variable_set(v, transform_value(b.local_variable_get(v)))
+      end
     end
 
     # Embedded table delimiter is '!' if '|' not used

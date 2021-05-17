@@ -32,7 +32,8 @@ Given /^logging operators are installed successfully$/ do
   ensure_admin_tagged
   step %Q/I switch to cluster admin pseudo user/
   step %Q/evaluation of `cluster_version('version').version` is stored in the :ocp_cluster_version clipboard/
-  step %Q/logging channel name is stored in the :channel clipboard/
+  step %Q/cluster-logging channel name is stored in the :clo_channel clipboard/
+  step %Q/elasticsearch-operator channel name is stored in the :eo_channel clipboard/
 
   unless project('openshift-operators-redhat').exists?
     eo_namespace_yaml = "#{BushSlicer::HOME}/testdata/logging/eleasticsearch/deploy_via_olm/01_eo-project.yaml"
@@ -49,6 +50,7 @@ Given /^logging operators are installed successfully$/ do
       raise "Error creating operatorgroup" unless @result[:success]
     end
 
+    #TODO: start from logging 5.1, no need to create role and rolebing, these resources will be created by OLM operator
     unless role_binding('prometheus-k8s').exists?
       # create RBAC object in `openshift-operators-redhat` namespace
       operator_group_yaml ||= "#{BushSlicer::HOME}/testdata/logging/eleasticsearch/deploy_via_olm/03_eo-rbac.yaml"
@@ -60,7 +62,7 @@ Given /^logging operators are installed successfully$/ do
       step %Q/I use the "openshift-marketplace" project/
       # first check packagemanifest exists for elasticsearch-operator
       raise "Required packagemanifest 'elasticsearch-operator' no found!" unless package_manifest('elasticsearch-operator').exists?
-      step %Q/"elasticsearch-operator" packagemanifest's catalog source name is stored in the :eo_catsrc clipboard/
+      step %Q/elasticsearch-operator catalog source name is stored in the :eo_catsrc clipboard/
       step %Q/I use the "openshift-operators-redhat" project/
       if cb.ocp_cluster_version.include? "4.1."
         # create catalogsourceconfig and subscription for elasticsearch-operator
@@ -76,7 +78,7 @@ Given /^logging operators are installed successfully$/ do
         step %Q/I process and create:/, table(%{
           | f | #{sub_elasticsearch_yaml} |
           | p | SOURCE=#{cb.eo_catsrc}    |
-          | p | CHANNEL=#{cb.channel}     |
+          | p | CHANNEL=#{cb.eo_channel}  |
         })
         raise "Error creating subscription for elasticsearch" unless @result[:success]
       end
@@ -109,7 +111,7 @@ Given /^logging operators are installed successfully$/ do
       step %Q/I use the "openshift-marketplace" project/
       # first check packagemanifest exists for cluster-logging
       raise "Required packagemanifest 'cluster-logging' no found!" unless package_manifest('cluster-logging').exists?
-      step %Q/"cluster-logging" packagemanifest's catalog source name is stored in the :clo_catsrc clipboard/
+      step %Q/cluster-logging catalog source name is stored in the :clo_catsrc clipboard/
       step %Q/I use the "openshift-logging" project/
       if cb.ocp_cluster_version.include? "4.1."
         # create catalogsourceconfig and subscription for cluster-logging-operator
@@ -123,9 +125,9 @@ Given /^logging operators are installed successfully$/ do
         # create subscription in `openshift-logging` namespace:
         sub_logging_yaml ||= "#{BushSlicer::HOME}/testdata/logging/clusterlogging/deploy_clo_via_olm/4.2/clo-sub-template.yaml"
         step %Q/I process and create:/, table(%{
-          | f | #{sub_logging_yaml}     |
-          | p | SOURCE=#{cb.clo_catsrc} |
-          | p | CHANNEL=#{cb.channel}   |
+          | f | #{sub_logging_yaml}       |
+          | p | SOURCE=#{cb.clo_catsrc}   |
+          | p | CHANNEL=#{cb.clo_channel} |
         })
         raise "Error creating subscription for cluster_logging" unless @result[:success]
       end
@@ -196,7 +198,6 @@ end
 
 # to cleanup OLM installed clusterlogging
 Given /^logging service is removed successfully$/ do
-  ensure_destructive_tagged
   ensure_admin_tagged
   # remove namespace
   clo_proj_name = "openshift-logging"
@@ -327,36 +328,64 @@ Given /^I delete the clusterlogging instance$/ do
   })
 end
 
-Given /^logging channel name is stored in the#{OPT_SYM} clipboard$/ do | cb_name |
-  cb_name = 'logging_channel_name' unless cb_name
-  if env.logging_channel_name.empty?
+Given /^(cluster-logging|elasticsearch-operator) channel name is stored in the#{OPT_SYM} clipboard$/ do | packagemanifest, cb_name |
+  cb_name = 'channel' unless cb_name
+  logging_envs = env.logging_envs
+  unless logging_envs.empty?
+    case packagemanifest
+    when "cluster-logging"
+      envs = logging_envs[:clo]
+    when "elasticsearch-operator"
+      envs = logging_envs[:eo]
+    end
+  end
+  # check if the packagemanifest exist
+  raise "Packagemanifest #{packagemanifest} doesn't exist" unless package_manifest(packagemanifest).exists?
+
+  if (logging_envs.empty?) || (envs.nil?) || (envs[:channel].nil?)
     version = cluster_version('version').version.split('-')[0].split('.').take(2).join('.')
     case version
     when '4.1'
       cb[cb_name] = "preview"
     when '4.7'
       cb[cb_name] = "5.0"
+    when '4.8'
+      cb[cb_name] = "5.1"
     else
       cb[cb_name] = version
     end
   else
-    cb[cb_name] = env.logging_channel_name
+    cb[cb_name] = envs[:channel]
   end
 end
 
-Given /^#{QUOTED} packagemanifest's catalog source name is stored in the#{OPT_SYM} clipboard$/ do |packagemanifest, cb_name|
-  cb_name = "catsrc_name" unless cb_name
+Given /^(cluster-logging|elasticsearch-operator) catalog source name is stored in the#{OPT_SYM} clipboard$/ do | packagemanifest, cb_name |
+  cb_name = 'source' unless cb_name
+  logging_envs = env.logging_envs
+  unless logging_envs.empty?
+    case packagemanifest
+    when "cluster-logging"
+      envs = logging_envs[:clo]
+    when "elasticsearch-operator"
+      envs = logging_envs[:eo]
+    end
+  end
   project("openshift-marketplace")
-  if env.logging_catsrc.empty?
+  # check if the packagemanifest exist
+  raise "Packagemanifest #{packagemanifest} doesn't exist" unless package_manifest(packagemanifest).exists?
+
+  # get source name, if it's not set, use default source
+  if (logging_envs.empty?) || (envs.nil?) || (envs[:catsrc].nil?)
     if catalog_source("qe-app-registry").exists?
       cb[cb_name] = "qe-app-registry"
+    elsif catalog_source("redhat-operators").exists?
+      cb[cb_name] = "redhat-operators"
     else
-      @result = admin.cli_exec(:get, resource: 'packagemanifest', resource_name: packagemanifest, n: 'openshift-marketplace', o: 'yaml')
-      raise "Unable to get catalog source name" unless @result[:success]
-      cb[cb_name] = @result[:parsed]['status']['catalogSource']
+      cb[cb_name] = package_manifest(packagemanifest).catalog_source
     end
   else
-    cb[cb_name] = env.logging_catsrc
+    #raise "The specified catalog source doesn't exist" unless catalog_source(envs[:catsrc]).exists?
+    cb[cb_name] = envs[:catsrc]
   end
 end
 
@@ -449,7 +478,9 @@ end
 
 Given /^I create pipelinesecret(?: named#{OPT_QUOTED})? with auth type (mTLS|mTLS_share|server_auth|server_auth_share)$/ do | secret_name, auth_type |
   secret_name ||= "pipelinesecret"
-  step %Q/admin ensures "#{secret_name}" secret is deleted from the "openshift-logging" project after scenario/
+  unless tagged_upgrade?
+    step %Q/admin ensures "#{secret_name}" secret is deleted from the "openshift-logging" project after scenario/
+  end
   case auth_type
   when "mTLS"
     step %Q/I run the :create_secret admin command with:/, table(%{
@@ -505,14 +536,21 @@ Given /^I create the resources for the receiver with:$/ do | table |
   pod_label = opts[:pod_label]
   project(namespace)
 
-  step %Q/I ensure "#{receiver_name}" service_account is deleted from the "#{namespace}" project after scenario/
+  unless tagged_upgrade?
+    step %Q/I ensure "#{receiver_name}" service_account is deleted from the "#{namespace}" project after scenario/
+  end
   @result = user.cli_exec(:create_serviceaccount, serviceaccount_name: receiver_name, n: namespace)
   raise "Unable to create serviceaccout #{receiver_name}" unless @result[:success]
-  step %Q/SCC "privileged" is added to the "system:serviceaccount:<%= project.name %>:#{receiver_name}" service account/
 
-  step %Q/I ensure "#{receiver_name}" config_map is deleted from the "#{namespace}" project after scenario/
-  step %Q/I ensure "#{receiver_name}" deployment is deleted from the "#{namespace}" project after scenario/
-  step %Q/I ensure "#{receiver_name}" service is deleted from the "#{namespace}" project after scenario/
+  if tagged_upgrade?
+    step %Q/SCC "privileged" is added to the "system:serviceaccount:<%= project.name %>:#{receiver_name}" service account without teardown/
+  else
+    step %Q/SCC "privileged" is added to the "system:serviceaccount:<%= project.name %>:#{receiver_name}" service account/
+    step %Q/I ensure "#{receiver_name}" config_map is deleted from the "#{namespace}" project after scenario/
+    step %Q/I ensure "#{receiver_name}" deployment is deleted from the "#{namespace}" project after scenario/
+    step %Q/I ensure "#{receiver_name}" service is deleted from the "#{namespace}" project after scenario/
+  end
+
   files = [configmap_file, deployment_file]
   for file in files do
     @result = user.cli_exec(:create, f: file, n: namespace)
@@ -546,7 +584,9 @@ Given /^(fluentd|elasticsearch|rsyslog) receiver is deployed as (secure|insecure
     pod_label = "logging-infra=fluentdserver"
     if security == "secure"
       step %Q/I generate certs for the "fluentdserver" receiver in the "<%= project.name %>" project/
-      step %Q/I ensure "fluentdserver" secret is deleted from the "<%= project.name %>" project after scenario/
+      unless tagged_upgrade?
+        step %Q/I ensure "fluentdserver" secret is deleted from the "<%= project.name %>" project after scenario/
+      end
       # create secret/fluentdserver for fluentd server pod
       step %Q/I run the :create_secret client command with:/, table(%{
         | name         | fluentdserver            |
@@ -584,7 +624,9 @@ Given /^(fluentd|elasticsearch|rsyslog) receiver is deployed as (secure|insecure
     pod_label = "app=elasticsearch-server"
     if security == "secure"
       step %Q/I generate certs for the "elasticsearch-server" receiver in the "<%= project.name %>" project/
-      step %Q/I ensure "elasticsearch-server" secret is deleted from the "<%= project.name %>" project after scenario/
+      unless tagged_upgrade?
+        step %Q/I ensure "elasticsearch-server" secret is deleted from the "<%= project.name %>" project after scenario/
+      end
       step %Q/I run the :create_secret client command with:/, table(%{
         | name        | elasticsearch-server                |
         | secret_type | generic                             |
@@ -639,7 +681,7 @@ Given /^I upgrade the operator with:$/ do | table |
   raise "Patch failed with #{@result[:response]}" unless @result[:success]
   # wait till new csv to be installed
   success = wait_for(180, interval: 10) {
-    subscription(subscription).installplan_csv.include? cb.channel
+    subscription(subscription).installplan_csv.include? channel
   }
   raise "the new CSV can't be installed" unless success
   # wait till new csv is ready
@@ -651,55 +693,77 @@ Given /^I upgrade the operator with:$/ do | table |
 
   #check if the EFK pods could be upgraded successfully
   project("openshift-logging")
-  if subscription == "elasticsearch-operator"
-    # check if the ES cluster could be upgraded
-    success = wait_for(300, interval: 10) {
-      elasticsearch('elasticsearch').nodes_status[0]["upgradeStatus"]["scheduledUpgrade"]
-    }
-    raise "Can't upgrade the ES cluster" unless success
-  end
-  # wait for the ES cluster to be ready
-  success = wait_for(600, interval: 10) {
-    elasticsearch('elasticsearch').cluster_health == "green" &&
-    (elasticsearch('elasticsearch').nodes_status.last["upgradeStatus"].empty? ||
-    elasticsearch('elasticsearch').nodes_status.last["upgradeStatus"]["scheduledUpgrade"].nil?)
-  }
-  raise "ES cluster isn't in a good status" unless success
-  # check pvc count
-  unless BushSlicer::PersistentVolumeClaim.list(user: user, project: project).count == cluster_logging('instance').logstore_node_count
-    raise "The PVC count doesn't match the ES node count"
+  if cluster_logging('instance').log_store_spec != nil
+    if elasticsearch('elasticsearch').exists?
+      if subscription == "elasticsearch-operator"
+        # check if the ES cluster could be upgraded
+        success = wait_for(300, interval: 10) {
+          elasticsearch('elasticsearch').nodes_status[0]["upgradeStatus"]["scheduledUpgrade"]
+        }
+        raise "Can't upgrade the ES cluster" unless success
+      end
+      # wait for the ES cluster to be ready
+      success = wait_for(600, interval: 10) {
+        elasticsearch('elasticsearch').cluster_health == "green" &&
+        (elasticsearch('elasticsearch').nodes_status.last["upgradeStatus"].empty? ||
+        elasticsearch('elasticsearch').nodes_status.last["upgradeStatus"]["scheduledUpgrade"].nil?)
+      }
+      raise "ES cluster isn't in a good status" unless success
+      # check pvc count
+      unless BushSlicer::PersistentVolumeClaim.list(user: user, project: project).count == cluster_logging('instance').logstore_node_count
+        raise "The PVC count doesn't match the ES node count"
+      end
+    else
+      raise "The elasticsearch/elasticsearch is not created"
+    end
   end
 
   # check the kibana status
-  success = wait_for(300, interval: 10) {
-    (deployment('kibana').replica_counters(cached: false)[:desired] == deployment('kibana').replica_counters(cached: false)[:updated]) &&
-    (deployment('kibana').replica_counters(cached: false)[:desired] == deployment('kibana').replica_counters(cached: false)[:available])
-  }
-  raise "Kibana isn't in a good status" unless success
+  if cluster_logging('instance').visualization_spec != nil
+    if deployment('kibana').exists?
+      success = wait_for(300, interval: 10) {
+        (deployment('kibana').replica_counters(cached: false)[:desired] == deployment('kibana').replica_counters(cached: false)[:updated]) &&
+        (deployment('kibana').replica_counters(cached: false)[:desired] == deployment('kibana').replica_counters(cached: false)[:available])
+      }
+      raise "Kibana isn't in a good status" unless success
+    else
+      raise "Deployment/kibana does not exist"
+    end
+  end
+
   # check fluentd status
-  success = wait_for(300, interval: 10) {
-    (daemon_set('fluentd').replica_counters(cached: false)[:desired] == daemon_set('fluentd').replica_counters(cached: false)[:updated_scheduled]) &&
-    (daemon_set('fluentd').replica_counters(cached: false)[:desired] == daemon_set('fluentd').replica_counters(cached: false)[:available])
-  }
-  raise "Fluentd isn't in a good status" unless success
+  if cluster_logging('instance').collection_spec != nil
+    if daemon_set('fluentd').exists?
+      success = wait_for(300, interval: 10) {
+        (daemon_set('fluentd').replica_counters(cached: false)[:desired] == daemon_set('fluentd').replica_counters(cached: false)[:updated_scheduled]) &&
+        (daemon_set('fluentd').replica_counters(cached: false)[:desired] == daemon_set('fluentd').replica_counters(cached: false)[:available])
+      }
+      raise "Fluentd isn't in a good status" unless success
+    else
+      raise "Daemonset/fluentd doesn't exist"
+    end
+  end
 end
 
 # only check the major version, such as 4.4, 4.5, 4.6, don't care about versions like 4.6.0-2020xxxxxxxx
 Given /^I make sure the logging operators match the cluster version$/ do
   step %Q/I switch to cluster admin pseudo user/
-  step %Q/logging channel name is stored in the :channel clipboard/
-  cv = cluster_version('version').version.split('-')[0].split('.').take(2).join('.')
+  # check if channel name in subscription is same to the target channel
+  step %Q/cluster-logging channel name is stored in the :clo_channel clipboard/
+  step %Q/elasticsearch-operator channel name is stored in the :eo_channel clipboard/
+  step %Q/elasticsearch-operator catalog source name is stored in the :eo_catsrc clipboard/
+  step %Q/cluster-logging catalog source name is stored in the :clo_catsrc clipboard/
   # check EO
   project("openshift-operators-redhat")
-  eo_csv_version = subscription("elasticsearch-operator").current_csv(cached: false).match(/elasticsearch-operator\.(.*)/)[1].split('-')[0].split('.').take(2).join('.')
-  if eo_csv_version != cv
+  eo_current_channel = subscription("elasticsearch-operator").channel(cached: false)
+  eo_current_catsrc = subscription("elasticsearch-operator").source
+  if cb.eo_channel != eo_current_channel || cb.eo_catsrc != eo_current_catsrc
     upgrade_eo = true
-    step %Q/"elasticsearch-operator" packagemanifest's catalog source name is stored in the :catsrc clipboard/
     step %Q/I upgrade the operator with:/, table(%{
       | namespace    | openshift-operators-redhat |
       | subscription | elasticsearch-operator     |
-      | channel      | #{cb.channel}              |
-      | catsrc       | #{cb.catsrc}               |
+      | channel      | #{cb.eo_channel}           |
+      | catsrc       | #{cb.eo_catsrc}            |
     })
     step %Q/the step should succeed/
   else
@@ -707,22 +771,23 @@ Given /^I make sure the logging operators match the cluster version$/ do
   end
   # check CLO
   project("openshift-logging")
-  clo_csv_version = subscription("cluster-logging").current_csv(cached: false).match(/clusterlogging\.(.*)/)[1].split('-')[0].split('.').take(2).join('.')
-  if clo_csv_version != cv
+  clo_current_channel = subscription("cluster-logging").channel(cached: false)
+  clo_current_catsrc = subscription("cluster-logging").source
+  if clo_current_channel != cb.clo_channel || cb.clo_catsrc != clo_current_catsrc
     upgrade_clo = true
-    step %Q/"cluster-logging" packagemanifest's catalog source name is stored in the :catsrc clipboard/
     step %Q/I upgrade the operator with:/, table(%{
       | namespace    | openshift-logging |
       | subscription | cluster-logging   |
-      | channel      | #{cb.channel}     |
-      | catsrc       | #{cb.catsrc}      |
+      | channel      | #{cb.clo_channel} |
+      | catsrc       | #{cb.clo_catsrc}  |
     })
     step %Q/the step should succeed/
   else
     upgrade_clo = false
   end
   # check cronjobs if the CLO or/and EO is upgraded
-  if upgrade_eo || upgrade_clo
+  project("openshift-logging")
+  if (upgrade_eo || upgrade_clo) && (BushSlicer::CronJob.list(user: user, project: project).count != 0)
     step %Q/I check the cronjob status/
     step %Q/the step should succeed/
   end
@@ -779,7 +844,7 @@ end
 Given /^I deploy kafka in the #{QUOTED} project via amqstream operator$/ do | project_name|
   ensure_admin_tagged
   step %Q/I switch to cluster admin pseudo user/
-  step %Q/"amq-streams" packagemanifest's catalog source name is stored in the :kafka_csc clipboard/
+  kafka_catsrc = package_manifest("amq-streams").catalog_source
 
   step %Q/I use the "#{project_name}" project/
   step %Q/I process and create:/, table(%{
@@ -790,8 +855,8 @@ Given /^I deploy kafka in the #{QUOTED} project via amqstream operator$/ do | pr
 
   step %Q/I process and create:/, table(%{
     | f | #{BushSlicer::HOME}/testdata/logging/clusterlogforwarder/kafka/amq/03_sub_amqstreams_template.yaml |
-    | p | AMQ_NAMESPACE=#{project_name}  |
-    | p | AMQ_CATALOGSOURCE=#{cb.kafka_csc} |
+    | p | AMQ_NAMESPACE=#{project_name}     |
+    | p | AMQ_CATALOGSOURCE=#{kafka_catsrc} |
   })
   raise "Error subscript amqstreams" unless @result[:success]
 

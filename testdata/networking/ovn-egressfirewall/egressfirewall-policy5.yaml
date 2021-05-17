@@ -1,0 +1,72 @@
+apiVersion: k8s.ovn.org/v1
+kind: EgressFirewall
+metadata:
+  name: default
+spec:
+  egress:
+  - type: Allow
+    to:
+      cidrSelector: 192.168.0.0/16
+  - type: Allow
+    to:
+      cidrSelector: 10.188.28.0/24
+  - type: Allow
+    to:
+      cidrSelector: 10.9.0.0/16
+  - type: Allow
+    to:
+      dnsName: yahoo.com
+  - type: Allow
+    to:
+      dnsName: github.com
+  - type: Allow
+    to:
+      dnsName: www.baidu.com
+  - type: Allow
+    to:
+      dnsName: gateway.push.apple.com
+  - type: Allow
+    to:
+      dnsName: gateway.almacgroup.com
+  - type: Allow
+    to:
+      dnsName: gl-sandbox6.translations.com
+  - type: Allow
+    to:
+      dnsName: eportaldev.sotio.com
+  - type: Allow
+    to:
+      dnsName: eportalqa.sotio.com
+  - type: Allow
+    to:
+      dnsName: www.googleapis.com
+  - type: Allow
+    to:
+      dnsName: fcm.googleapis.com
+  - type: Allow
+    to:
+      dnsName: translate.google.com
+  - type: Allow
+    to:
+      dnsName: www.sohu.com
+  - type: Allow
+    to:
+      dnsName: mergehealthcare.zendesk.com
+  - type: Allow
+    to:
+      dnsName: api.segment.io
+  - type: Allow
+    to:
+      dnsName: login.ibm.com
+  - type: Allow
+    to:
+      dnsName: marketscan2.truvenhealth.com
+  - type: Allow
+    to:
+      dnsName: www.google.com
+  - type: Allow
+    to:
+      dnsName: www.amihealthy.com
+  - type: Deny
+    to:
+      cidrSelector: 0.0.0.0/0

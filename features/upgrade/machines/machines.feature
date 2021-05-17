@@ -79,6 +79,77 @@ Feature: Machine-api components upgrade tests
 
   @upgrade-prepare
   @admin
+  @destructive
+  Scenario Outline: Spot/preemptible instances should not block upgrade - prepare
+    Given I have an IPI deployment
+    And I switch to cluster admin pseudo user
+    And I use the "openshift-machine-api" project
+    And I pick a random machineset to scale
+
+    # Create a machineset
+    Given I get project machineset named "<%= machine_set.name %>" as YAML
+    And I save the output to file> <machineset_name>.yaml
+    And I replace content in "<machineset_name>.yaml":
+      | <%= machine_set.name %> | <machineset_name> |
+      | /replicas.*/            | replicas: 0       |
+
+    When I run the :create admin command with:
+      | f | <machineset_name>.yaml |
+    Then the step should succeed
+
+    Given as admin I successfully merge patch resource "machineset/<machineset_name>" with:
+      | {"spec":{"replicas":1,"template":{"spec":{"providerSpec":{"value":{<value>}}}}}} |
+
+    # Verify machine could be created successful
+    And I wait up to 300 seconds for the steps to pass:
+    """
+    Then the expression should be true> machine_set("<machineset_name>").desired_replicas(cached: false) == 1
+    """
+    Then the machineset should have expected number of running machines
+
+    And "machine-api-termination-handler" daemonset becomes ready in the "openshift-machine-api" project
+    And 1 pod becomes ready with labels:
+      | k8s-app=termination-handler |
+
+    Examples:
+      | iaas_type | machineset_name        | value                   |
+      | aws       | machineset-clone-41175 | "spotMarketOptions": {} | # @case_id OCP-41175
+      | gcp       | machineset-clone-41803 | "preemptible": true     | # @case_id OCP-41803
+      | azure     | machineset-clone-41804 | "spotVMOptions": {}     | # @case_id OCP-41804
+
+  # @author zhsun@redhat.com
+  @upgrade-check
+  @admin
+  @destructive
+  Scenario Outline: Spot/preemptible instances should not block upgrade
+    Given I have an IPI deployment
+    And I switch to cluster admin pseudo user
+    And I use the "openshift-machine-api" project
+    And admin ensures "<machineset_name>" machineset is deleted after scenario
+
+    Given "machine-api-termination-handler" daemonset becomes ready in the "openshift-machine-api" project
+    And 1 pod becomes ready with labels:
+      | k8s-app=termination-handler |
+
+    Given admin ensures "<machineset_name>" machineset is deleted
+    And I wait up to 300 seconds for the steps to pass:
+    """
+    When I run the :get admin command with:
+      | resource | machine                                      |
+      | l        | machine.openshift.io/interruptible-instance= |
+    Then the step should succeed
+    And the output should not contain:
+      | <machineset_name> |
+    """
+
+    Examples:
+      | machineset_name        | 
+      | machineset-clone-41175 | # @case_id OCP-41175
+      | machineset-clone-41803 | # @case_id OCP-41803
+      | machineset-clone-41804 | # @case_id OCP-41804
+      
+  @upgrade-prepare
+  @admin
   Scenario: Cluster should automatically scale up and scale down with clusterautoscaler deployed - prepare
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user

@@ -186,7 +186,7 @@ click_schema_tab:
   action: click_tab
 click_machine_configs_tab:
   params:
-    tab_name: Machine Configs
+    tab_name: MachineConfigs
   action: click_tab
 check_edit_yaml_enabled:
   params:
@@ -216,6 +216,8 @@ click_close_icon:
     selector:
       xpath: //button[contains(@aria-label,'Close')]
     op: click
+click_resource_creation_button:
+  action: click_yaml_create_button
 click_yaml_create_button:
   params:
     button_id: yaml-create
@@ -373,7 +375,7 @@ check_machinesetdetails_text_in_breadcrumb:
 check_containerdetails_text_in_breadcrumb:
   params:
     layer_number: 3
-    text: Container Details
+    text: Container details
   action: check_text_in_breadcrumb
 check_imagestreamtagdetails_text_in_breadcrumb:
   params:
@@ -1119,12 +1121,12 @@ check_resource_provisioner:
   action: check_resource_details_key_and_value
 check_resource_reclaim_policy:
   params:
-    key: Reclaim Policy
+    key: Reclaim policy
     value: <reclaim_policy>
   action: check_resource_details_key_and_value
 check_resource_default_class:
   params:
-    key: Default Class
+    key: Default class
     value: <default_class>
   action: check_resource_details_key_and_value
 check_resource_pod_selector:

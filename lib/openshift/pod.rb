@@ -50,6 +50,7 @@ module BushSlicer
       props[:volumes] = spec["volumes"]
       s = pod_hash["status"]
       props[:ip] = s["podIP"]
+      props[:ips] = s["podIPs"]
       # status should be retrieved on demand but we cache it for the brave
       props[:status] = s
 
@@ -111,6 +112,23 @@ module BushSlicer
     # @note call without parameters only when props are loaded
     def ip(user: nil, cached: true, quiet: false)
       return get_cached_prop(prop: :ip, user: user, cached: cached, quiet: quiet)
+    end
+
+    def ip_v6(user: nil, cached: true, quiet: false)
+      ips = get_cached_prop(prop: :ips, user: user, cached: cached, quiet: quiet)
+      ipv6 = ips.find { |ip| ip["ip"].include? ":" }
+      return ipv6["ip"]
+    end
+
+    # return pod ipv6 address as URL for dualstack cluster
+    def ip_v6_url(user: nil, cached: true, quiet: false)
+      return "[#{ip_v6(user: user, cached: cached, quiet: quiet)}]"
+    end
+
+    def ip_v4(user: nil, cached: true, quiet: false)
+      ips = get_cached_prop(prop: :ips, user: user, cached: cached, quiet: quiet)
+      ipv4 = ips.find { |ip| ip["ip"].include? "." }
+      return ipv4["ip"]
     end
 
     # @return [String] string IP if IPv4 or [IP] if IPv6

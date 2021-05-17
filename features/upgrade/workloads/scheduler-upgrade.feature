@@ -39,7 +39,6 @@ Feature: scheduler with custom policy upgrade check
     And the output should contain:
       | map[CheckNodeUnschedulable:{} CheckVolumeBinding:{} GeneralPredicates:{} MatchInterPodAffinity:{} MaxAzureDiskVolumeCount:{} MaxCSIVolumeCountPred:{} MaxEBSVolumeCount:{} MaxGCEPDVolumeCount:{} NoDiskConflict:{} NoVolumeZoneConflict:{} PodToleratesNodeTaints:{}] |
 
-
   # @author knarra@redhat.com
   # @case_id OCP-34164
   @upgrade-check

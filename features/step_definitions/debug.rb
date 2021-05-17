@@ -8,6 +8,14 @@ When /^I pry in a step with table$/ do |table|
   binding.pry
 end
 
+When /^I pry with simple param #{QUOTED}$/ do |simple_param|
+  require 'pry'; binding.pry
+end
+
+When /^I pry with a param #{QUOTED} and a multi-line arg$/ do |simple_param, multi_line_arg|
+  require 'pry'; binding.pry
+end
+
 And /^I fail the scenario$/ do
   raise "Stop in the name of Christ!"
 end

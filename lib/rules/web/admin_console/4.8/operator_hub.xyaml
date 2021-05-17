@@ -50,6 +50,7 @@ set_k8s_resource:
   - selector:
       xpath: //ul//a[@id='<k8s_resource>-Project-link' and contains(@class,'dropdown__menu-item')]
     op: click
+    timeout: 40
 set_pod_count:
   params:
     label_text: Pod Count
@@ -70,9 +71,10 @@ toggle_boolean_switch:
     label_text: Boolean Switch
   action: toggle_label_input
 toggle_checkbox:
-  params:
-    label_text: Checkbox
-  action: toggle_label_input
+  element:
+    selector:
+      xpath: (//label[contains(.,'Checkbox')]/following::div[contains(@class,'pf-c-check')]//label[contains(@class,'pf-c-check__label')])[1]
+    op: click
 set_image_pull_policy:
   params:
     label_text: Image Pull Policy
@@ -385,7 +387,7 @@ check_disconnected_infra_value:
 check_proxy_infra_value:
   params:
     label: Infrastructure features
-    value: Proxy
+    value: Proxy-aware
   action: check_label_and_value_in_modal
 check_fips_infra_value:
   params:
@@ -411,7 +413,7 @@ click_checkbox_disconnected_from_infrastructure_features:
 click_checkbox_proxy_from_infrastructure_features:
   params:
     filter_type_value: infraFeatures
-    checkbox_text: Proxy
+    checkbox_text: Proxy-aware
   action: wait_filter_section_loaded
   action: choose_one_checkbox
 click_checkbox_fips_from_infrastructure_features:
@@ -795,12 +797,12 @@ check_no_result_on_operatorhub_page:
 check_extension_help_block:
   elements:
   - selector:
-      xpath: //button[text()='Console UI extensions']
+      xpath: //button[text()='Console plugins']
     op: click
   - selector: &help_block1
       xpath: //div[contains(.,'a custom interface')]
   - selector:
-      xpath: //div[contains(.,'trust this operator before enabling')]
+      xpath: //div[contains(.,'trust this console plugin before enabling')]
   action: click_close_icon
 check_plugins_are_disabled_bydefault:
   elements:
@@ -820,10 +822,10 @@ check_warning_for_enablement:
 check_extension_available_guide:
   elements:
   - selector:
-      xpath: //button[text()='UI extension available']
+      xpath: //button[text()='Plugin available']
     op: click
   - selector:
-      xpath: //div[contains(.,'enable its UI extension in the operator detail')]
+      xpath: //div[contains(.,'enable its console plugin in the operator detail')]
   - selector:
       xpath: //a[contains(.,'View operator details')]
     op: click

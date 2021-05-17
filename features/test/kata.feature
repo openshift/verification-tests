@@ -14,3 +14,6 @@ Feature: example kata container scenarios
     Given the master version >= "4.6"
     Given I switch to cluster admin pseudo user
     And I remove kata operator from "kata-operator" namespace
+
+  Scenario: test get channel
+    Given I extract the channel information from subscription and save it to the :channel clipboard

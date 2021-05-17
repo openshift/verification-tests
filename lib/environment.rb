@@ -224,26 +224,25 @@ module BushSlicer
       return @authentication_url
     end
 
-    def logging_channel_name
-      unless @logging_channel_name
-        if opts[:logging_channel_name]
-          @logging_channel_name = opts[:logging_channel_name]
+    # add env var to set some parameters for logging testing
+    # for example:
+    # logging_envs:
+    #   clo:
+    #     catsrc: "test"
+    #     channel: "4.1"
+    #   eo:
+    #     catsrc: "redhat"
+    #     channel: "5.1"
+    # any of the above vars can be nil/empty
+    def logging_envs
+      unless @logging_envs
+        if opts[:logging_envs]
+          @logging_envs = opts[:logging_envs]
         else
-          @logging_channel_name = ''
+          @logging_envs = ''
         end
       end
-      return @logging_channel_name
-    end
-
-    def logging_catsrc
-      unless @logging_catsrc
-        if opts[:logging_catsrc]
-          @logging_catsrc = opts[:logging_catsrc]
-        else
-          @logging_catsrc = ''
-        end
-      end
-      return @logging_catsrc
+      return @logging_envs
     end
 
     # naming scheme is https://logs.<cluster_id>.openshift.com for Online
@@ -438,7 +437,10 @@ module BushSlicer
     #   support purposes (e.g. host a debug pod for running node commands)
     def service_project
       unless @service_project
-        project = Project.new(name: "tests-" + EXECUTOR_NAME.downcase, env: self)
+        # if the cluster set the default scheduler, set the project running debug pod node-selector=''
+        # to overwrite the default scheduler, or the pod can not be run successfully
+        project_name = "tests-" + EXECUTOR_NAME.downcase
+        project = Project.new(name: project_name, env: self)
         unless project.active?
           # 30 seconds is no longer enough
           project.wait_to_disappear(admin, 60)
@@ -446,6 +448,7 @@ module BushSlicer
           unless res[:success]
             raise "failed to create service project #{project.name}, see log"
           end
+          admin.cli_exec(:annotate, resource: "namespace", resourcename: project_name, keyval: 'openshift.io/node-selector=', overwrite: true)
           # we must update the cache, since we just waited for the previously active project to disappear
           project.reload
         end

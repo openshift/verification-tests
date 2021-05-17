@@ -1,0 +1,65 @@
+{
+    "apiVersion": "v1",
+    "kind": "List",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "kind": "ReplicationController",
+            "metadata": {
+                "labels": {
+                    "name": "test-rc"
+                },
+                "name": "test-rc"
+            },
+            "spec": {
+                "replicas": 1,
+                "template": {
+                    "metadata": {
+                        "labels": {
+                            "name": "test-pods"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                            {
+                                "image": "quay.io/openshifttest/hello-sdn@sha256:d5785550cf77b7932b090fcd1a2625472912fb3189d5973f177a5a2c347a1f95",
+                                "name": "test-pod",
+                                "imagePullPolicy": "IfNotPresent",
+                                "resources":{
+                                  "limits":{
+                                    "memory":"340Mi"
+                                  }
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Service",
+            "metadata": {
+                "labels": {
+                    "name": "test-service"
+                },
+                "name": "test-service"
+            },
+            "spec": {
+                "ports": [
+                    {
+                        "name": "http",
+                        "port": 27017,
+                        "protocol": "TCP",
+                        "targetPort": 8080
+                    }
+                ],
+                "ipFamilyPolicy": "RequireDualStack",
+                "selector": {
+                    "name": "test-pods"
+                }
+            }
+        }
+    ]
+}
+

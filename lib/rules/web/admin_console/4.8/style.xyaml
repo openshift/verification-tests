@@ -86,7 +86,7 @@ check_filter_dropdown_style:
   action: click_filter_dropdown
   elements:
   - selector:
-      xpath: //li[contains(@class, 'co-filter-dropdown__list-item')]
+      xpath: //span[contains(@class, 'co-filter-dropdown-item')]
     timeout: 15
   action: click_filter_dropdown
 check_input_toolbar_style:
@@ -118,13 +118,14 @@ filter_running_and_check_style:
   action: click_filter_dropdown
   action: select_filter
   action: check_filtered_item_style
+  action: click_filter_dropdown
 filter_pending_and_check_style:
   params:
     filter: Pending
   action: click_filter_dropdown
   action: select_filter
   action: check_filtered_item_style
-
+  action: click_filter_dropdown
 filter_name_and_check_style:
   params:
     dropdown_menu_item: Name

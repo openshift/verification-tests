@@ -21,30 +21,40 @@ Given /^the CR #{QUOTED} named #{QUOTED} is restored after scenario$/ do |crd, n
   patch_json = org_scheduler.to_json
   _admin = admin
   teardown_add {
-    opts = {resource: 'scheduler', resource_name: name, p: patch_json, type: 'merge' }
+    # Added code to support removal of tlsSecurityProfile while restoring
+    @result = admin.cli_exec(:get, resource: crd, resource_name: name, o: 'yaml')
+    if @result[:success] and @result[:parsed]['spec']['tlsSecurityProfile']
+      patch_json = [{"op": "remove","path": "/spec/tlsSecurityProfile"}].to_json
+      opts = {resource: crd, resource_name: name, p: patch_json, type: 'json' }
+    else
+      opts = {resource: crd, resource_name: name, p: patch_json, type: 'merge' }
+    end
     @result = _admin.cli_exec(:patch, **opts)
-    raise "Cannot restore scheduler: #{name}" unless @result[:success]
+    raise "Cannot restore crd: #{name}" unless @result[:success]
     timeout = 300
+    if crd == 'kubescheduler'
+       crd = 'kube-scheduler'
+    end
     wait_for(timeout) do
-      @result = admin.cli_exec(:get, resource: "clusteroperators", resource_name: "kube-scheduler", o: "jsonpath={.status.conditions[?(.type == \"Progressing\")].status}")
+      @result = admin.cli_exec(:get, resource: "clusteroperators", resource_name: crd, o: "jsonpath={.status.conditions[?(.type == \"Progressing\")].status}")
       if @result[:response] == "True"
         break
       end
     end
     wait_for(timeout) do
-      @result = admin.cli_exec(:get, resource: "clusteroperators", resource_name: "kube-scheduler", o: "jsonpath={.status.conditions[?(.type == \"Progressing\")].status}")
+      @result = admin.cli_exec(:get, resource: "clusteroperators", resource_name: crd, o: "jsonpath={.status.conditions[?(.type == \"Progressing\")].status}")
       if @result[:response] == "False"
         break
       end
     end
     wait_for(timeout) do
-      @result = admin.cli_exec(:get, resource: "clusteroperators", resource_name: "kube-scheduler", o: "jsonpath={.status.conditions[?(.type == \"Degraded\")].status}")
+      @result = admin.cli_exec(:get, resource: "clusteroperators", resource_name: crd, o: "jsonpath={.status.conditions[?(.type == \"Degraded\")].status}")
       if @result[:response] == "False"
         break
       end
     end
     wait_for(timeout) do
-      @result = admin.cli_exec(:get, resource: "clusteroperators", resource_name: "kube-scheduler", o: "jsonpath={.status.conditions[?(.type == \"Available\")].status}")
+      @result = admin.cli_exec(:get, resource: "clusteroperators", resource_name: crd, o: "jsonpath={.status.conditions[?(.type == \"Available\")].status}")
       if @result[:response] == "True"
         break
       end

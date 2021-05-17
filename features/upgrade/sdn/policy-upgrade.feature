@@ -137,6 +137,8 @@ Feature: SDN compoment upgrade testing
     Given the AllowNamespaceAndPod policy is applied to the "policy-upgrade1" namespace
     Then the step should succeed
 
+    And I wait up to 10 seconds for the steps to pass:
+    """
     When I use the "policy-upgrade1" project
     When I execute on the "<%= cb.pod1 %>" pod:
       | curl | -s | --connect-timeout | 5 | <%= cb.pod2ip %>:8080 |
@@ -160,39 +162,45 @@ Feature: SDN compoment upgrade testing
       | curl | -s | --connect-timeout | 5 | <%= cb.pod3ip %>:8080 |
     Then the step should succeed 
     And the output should contain "Hello"
+    """
 
   # @author asood@redhat.com
   # @case_id OCP-38751
   @admin
   @upgrade-check
-  Scenario: Check the networkpolicy works well after upgrade
+  Scenario: Check the namespace networkpolicy for an application works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "policy-upgrade1" project
     Given status becomes :running of 2 pods labeled:
       | name=test-pods |
     And evaluation of `pod(1).ip_url` is stored in the :pod2ip clipboard
     And evaluation of `pod(0).name` is stored in the :pod1 clipboard
-    When I execute on the "<%= cb.pod1 %>" pod:
-      | curl | -s | --connect-timeout | 5 | <%= cb.pod2ip %>:8080 |
-    Then the step should fail
     Given a pod becomes ready with labels:
       | name=hello-idle |
     And evaluation of `pod(2).name` is stored in the :pod3 clipboard
     And evaluation of `pod(2).ip_url` is stored in the :pod3ip clipboard
+    And I wait up to 10 seconds for the steps to pass:
+    """
+    When I execute on the "<%= cb.pod1 %>" pod:
+      | curl | -s | --connect-timeout | 5 | <%= cb.pod2ip %>:8080 |
+    Then the step should fail
     When I execute on the "<%= cb.pod3 %>" pod:
       | curl | -s | --connect-timeout | 5 | <%= cb.pod2ip %>:8080 |
     Then the step should fail
+    """
 
     When I use the "policy-upgrade2" project
     Given a pod becomes ready with labels:
       | name=test-pods |
     And evaluation of `pod(3).name` is stored in the :pod4 clipboard
-    When I execute on the "<%= cb.pod4 %>" pod:
-      | curl | -s | --connect-timeout | 5 | <%= cb.pod2ip %>:8080 |
-    Then the step should succeed
     Given a pod becomes ready with labels:
       | name=hello-idle |
     And evaluation of `pod(4).name` is stored in the :pod5 clipboard
+    And I wait up to 10 seconds for the steps to pass:
+    """
+    When I execute on the "<%= cb.pod4 %>" pod:
+      | curl | -s | --connect-timeout | 5 | <%= cb.pod2ip %>:8080 |
+    Then the step should succeed
     When I execute on the "<%= cb.pod5 %>" pod:
       | curl | -s | --connect-timeout | 5 | <%= cb.pod2ip %>:8080 |
     Then the step should fail 
@@ -200,3 +208,4 @@ Feature: SDN compoment upgrade testing
       | curl | -s | --connect-timeout | 5 | <%= cb.pod3ip %>:8080 |
     Then the step should succeed 
     And the output should contain "Hello"
+    """
