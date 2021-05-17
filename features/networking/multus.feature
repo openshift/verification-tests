@@ -1188,7 +1188,7 @@ Feature: Multus-CNI related scenarios
       | name     | <%= cb.pod_name %> |
     Then the step should succeed
     And the output should contain:
-      | cannot find get a network-attachment-definition |
+      | cannot find a network-attachment-definition |
       | ContainerCreating                               |
     """
 
