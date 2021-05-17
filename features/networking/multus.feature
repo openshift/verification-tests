@@ -1189,7 +1189,7 @@ Feature: Multus-CNI related scenarios
     Then the step should succeed
     And the output should contain:
       | cannot find a network-attachment-definition |
-      | ContainerCreating                               |
+      | ContainerCreating                           |
     """
 
   # @author anusaxen@redhat.com
