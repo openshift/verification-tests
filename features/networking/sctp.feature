@@ -29,8 +29,14 @@ Feature: SCTP related scenarios
     And the pod named "sctpclient" becomes ready
    
     # sctpserver pod start to wait for sctp traffic
-    When I execute on the "sctpserver" pod:
-      | bash | -c  | nc -k -l 30102 --sctp |
+    When I run the :exec background client command with:
+      | pod              | sctpserver                                |
+      | namespace        | <%= project.name %>                       |
+      | oc_opts_end      |                                           |
+      | exec_command     | sh                                        |
+      | exec_command_arg | -c                                        |
+      | exec_command_arg | /usr/bin/nc -k -l 30102 --sctp            |
+    Then the step should succeed
 
     # sctpclient pod start to send sctp traffic
     And I wait up to 60 seconds for the steps to pass:
@@ -78,8 +84,14 @@ Feature: SCTP related scenarios
     And evaluation of `service.ip(user: user)` is stored in the :service_ip clipboard
 
     # sctpserver pod start to wait for sctp traffic
-    When I execute on the "sctpserver" pod:
-      | bash | -c  | nc -k -l 30102 --sctp |
+    When I run the :exec background client command with:
+      | pod              | sctpserver                                |
+      | namespace        | <%= project.name %>                       |
+      | oc_opts_end      |                                           |
+      | exec_command     | sh                                        |
+      | exec_command_arg | -c                                        |
+      | exec_command_arg | /usr/bin/nc -k -l 30102 --sctp            |
+    Then the step should succeed
 
     # sctpclient pod start to send sctp traffic
     And I wait up to 60 seconds for the steps to pass:
@@ -128,8 +140,14 @@ Feature: SCTP related scenarios
     And evaluation of `service(cb.sctpserver).node_port(port:30102)` is stored in the :nodeport clipboard
 
     # sctpserver pod start to wait for sctp traffic
-    When I execute on the "sctpserver" pod:
-      | bash | -c  | nc -k -l 30102 --sctp |
+    When I run the :exec background client command with:
+      | pod              | sctpserver                                |
+      | namespace        | <%= project.name %>                       |
+      | oc_opts_end      |                                           |
+      | exec_command     | sh                                        |
+      | exec_command_arg | -c                                        |
+      | exec_command_arg | /usr/bin/nc -k -l 30102 --sctp            |
+    Then the step should succeed
 
     # sctpclient pod start to send sctp traffic on worknode:port
     And I wait up to 60 seconds for the steps to pass:
@@ -171,8 +189,14 @@ Feature: SCTP related scenarios
     And the pod named "sctpclient" becomes ready
 
     # sctpserver pod start to wait for sctp traffic
-    When I execute on the "sctpserver" pod:
-      | bash | -c  | nc -k -l 30102 --sctp |
+    When I run the :exec background client command with:
+      | pod              | sctpserver                                |
+      | namespace        | <%= project.name %>                       |
+      | oc_opts_end      |                                           |
+      | exec_command     | sh                                        |
+      | exec_command_arg | -c                                        |
+      | exec_command_arg | /usr/bin/nc -k -l 30102 --sctp            |
+    Then the step should succeed
 
     # sctpclient pod start to send sctp traffic
     And I wait up to 60 seconds for the steps to pass:
@@ -208,8 +232,14 @@ Feature: SCTP related scenarios
     Then the step should succeed
 
     # sctpserver pod start to wait for sctp traffic
-    When I execute on the "sctpserver" pod:
-      | bash | -c  | nc -k -l 30102 --sctp |
+    When I run the :exec background client command with:
+      | pod              | sctpserver                                |
+      | namespace        | <%= project.name %>                       |
+      | oc_opts_end      |                                           |
+      | exec_command     | sh                                        |
+      | exec_command_arg | -c                                        |
+      | exec_command_arg | /usr/bin/nc -k -l 30102 --sctp            |
+    Then the step should succeed
 
     # sctpclient pod start to send sctp traffic
     And I wait up to 60 seconds for the steps to pass:
