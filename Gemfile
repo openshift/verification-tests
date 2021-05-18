@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 # source 'https://gems.ruby-china.com/'
 
 gem 'json'
-gem 'psych'
+gem 'psych', '~> 3.3', '>= 3.3.1'
 # gem 'rest-client', '2.0.0.rc2'
 gem 'rest-client', '>=2.0'
 # gem 'httpclient', '>=2.4'
