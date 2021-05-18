@@ -285,24 +285,19 @@ Feature: Egress IP related features
   # @author huirwang@redhat.com
   # @case_id OCP-15998
   @admin
-  Scenario Outline: Invalid egressIP should not be acceptable
+  Scenario: Invalid egressIP should not be acceptable
     Given I select a random node's host
+    Given evaluation of `["fe80::5054:ff:fedd:3698", ""a.b.c.d, "10.10.10.-1", "10.0.0.1/64", "10.1.1/24", "A008696"]` is stored in the :ips clipboard
+    And I repeat the following steps for each :ip in cb.ips:
+    """
     When I run the :patch admin command with:
-      | resource      | hostsubnet                     |
-      | resource_name | <%= node.name %>               |
-      | p             | {"egressIPs": <invalid_ip> }   |
-      | type          | merge                          |
+      | resource      | hostsubnet               |
+      | resource_name | <%= node.name %>         |
+      | p             | {"egressIPs": #{cb.ip} } |
+      | type          | merge                    |
     Then the step should fail
     And the output should contain "Invalid JSON Patch"
-
-    Examples:
-      | invalid_ip              |
-      | fe80::5054:ff:fedd:3698 |
-      | a.b.c.d                 |
-      | 10.10.10.-1             |
-      | 10.0.0.1/64             |
-      | 10.1.1/24               |
-      | A008696                 |
+    """
 
   # @author huirwang@redhat.com
   # @case_id OCP-25694
