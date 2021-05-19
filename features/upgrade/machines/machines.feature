@@ -143,10 +143,10 @@ Feature: Machine-api components upgrade tests
     """
 
     Examples:
-      | machineset_name        | 
-      | machineset-clone-41175 | # @case_id OCP-41175
-      | machineset-clone-41803 | # @case_id OCP-41803
-      | machineset-clone-41804 | # @case_id OCP-41804
+      | iaas_type | machineset_name        | value                   |
+      | aws       | machineset-clone-41175 | "spotMarketOptions": {} | # @case_id OCP-41175
+      | gcp       | machineset-clone-41803 | "preemptible": true     | # @case_id OCP-41803
+      | azure     | machineset-clone-41804 | "spotVMOptions": {}     | # @case_id OCP-41804
       
   @upgrade-prepare
   @admin
