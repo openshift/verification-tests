@@ -6,7 +6,7 @@ Feature: Testing route
   Scenario: Alias will be invalid after removing it
     Given I have a project
     When I run the :create client command with:
-      | f  |   https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/header-test/dc.json  |
+      | f | https://raw.githubusercontent.com/openshift/verification-tests/master/testdata/routing/header-test/dc.json |
     Then the step should succeed
     When I run the :create client command with:
       | f  |   https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/header-test/insecure-service.json |
@@ -29,7 +29,7 @@ Feature: Testing route
   @smoke
   Scenario: Service endpoint can be work well if the mapping pod ip is updated
     Given I have a project
-    When I run oc create over "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/list_for_pods.json" replacing paths:
+    When I run oc create over "https://raw.githubusercontent.com/openshift/verification-tests/master/testdata/networking/list_for_pods.json" replacing paths:
       | ["items"][0]["spec"]["replicas"] | 1 |
     Then the step should succeed
     Given a pod becomes ready with labels:
@@ -92,7 +92,7 @@ Feature: Testing route
     Given I have a project
     And I store default router IPs in the :router_ip clipboard
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker.json |
+      | f | https://raw.githubusercontent.com/openshift/verification-tests/master/testdata/routing/caddy-docker.json |
     Then the step should succeed
     And a pod becomes ready with labels:
       | name=caddy-docker |

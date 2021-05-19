@@ -18,10 +18,10 @@ Feature: Testing haproxy router
     #create route and service which has two endpoints
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker.json |
+      | f | https://raw.githubusercontent.com/openshift/verification-tests/master/testdata/routing/caddy-docker.json |
     Then the step should succeed
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker-2.json |
+      | f | https://raw.githubusercontent.com/openshift/verification-tests/master/testdata/routing/caddy-docker-2.json |
     Then the step should succeed
     And all pods in the project are ready
     When I run the :create client command with:
@@ -736,10 +736,10 @@ Feature: Testing haproxy router
     Given the master version >= "3.7"
     Given I have a project
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker.json |
+      | f | https://raw.githubusercontent.com/openshift/verification-tests/master/testdata/routing/caddy-docker.json |
     Then the step should succeed
     When I run the :create client command with:
-      | f | https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/routing/caddy-docker-2.json |
+      | f | https://raw.githubusercontent.com/openshift/verification-tests/master/testdata/routing/caddy-docker-2.json |
     Then the step should succeed
     And all pods in the project are ready
     When I run the :create client command with:
