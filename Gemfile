@@ -2,7 +2,8 @@ source 'https://rubygems.org'
 # source 'https://gems.ruby-china.com/'
 
 gem 'json'
-# temp workaround for https://issues.redhat.com/browse/OCPQE-4052
+# temp workaround for OCPQE-4052 in which Psych 4.x is not compatible with
+# cucumber 5.x
 gem 'psych', '~> 3.3', '>= 3.3.1'
 # gem 'rest-client', '2.0.0.rc2'
 gem 'rest-client', '>=2.0'
