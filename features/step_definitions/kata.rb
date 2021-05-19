@@ -22,7 +22,7 @@ Given /^kata container has been installed successfully(?: in the #{QUOTED} proje
 end
 
 Given /^I wait for #{QUOTED} (uninstall|install) to start$/ do | kc_name, mode |
-  timeout = 50
+  timeout = 300
   stats = {}
   success = false
   wait_for(timeout, stats: stats) do
@@ -115,7 +115,7 @@ Given /^the kata-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|G
   project('openshift-marketplace')
   unless catalog_source('qe-app-registry').exists?
     logger.info("Kata installation depends on `qe-app-registry`, which is missing in this cluster, calling step to create it...")
-    step %Q/I create "qe-app-registry" catalogsource for my cluster/
+    step %Q/I create "qe-app-registry" catalogsource for testing/
   end
 
   unless kata_config(kata_config_name).exists?

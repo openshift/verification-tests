@@ -34,27 +34,27 @@ Given /^I enable autoscaling for my cluster$/ do
 end
 
 # helper method to enabled qe-app-registry
-Given /^I create #{QUOTED} catalogsource for my#{OPT_QUOTED} cluster$/ do |catalog_name, ocp_version|
+# @args
+# 1. catalogname (default to `qe-app-registry` if none is given)
+# 2. index-version: if none is given, then just use the oc master version of the cluster
+# 3. test_type: `stage` or nil.
+Given /^I create #{QUOTED} catalogsource(?: with index version #{QUOTED})? for#{OPT_QUOTED} testing$/ do |catalog_name, index_version, test_type|
   ensure_admin_tagged
   ensure_destructive_tagged
+  step %Q/I store master major version in the :master_version clipboard/ unless index_version
+  index_version ||= cb.master_version
+  # find out what the test_type is,
+  test_type ||= ENV['OCP_TEST_TYPE']
 
-  step %Q/I store master major version in the :master_version clipboard/ unless ocp_version
-  ocp_version ||= cb.master_version
   project("openshift-marketplace")
-  iib='quay.io/openshift-qe-optional-operators/ocp4-index:latest'
-  case ocp_version
-  when '4.5stage'
-    iib='registry-proxy.engineering.redhat.com/rh-osbs/iib-pub-pending:v4.5'
-  when '4.5', '4.5qe'
-    iib = 'quay.io/openshift-qe-optional-operators/qe45-index:latest'
-  when  '4.6stage'
-    iib = 'registry-proxy.engineering.redhat.com/rh-osbs/iib-pub-pending:v4.6'
-  when '4.7stage'
-    iib='registry-proxy.engineering.redhat.com/rh-osbs/iib-pub-pending:v4.7'
-  when '4.8', '4.7', '4.7qe', '4.6', '4.6qe'
-    iib='quay.io/openshift-qe-optional-operators/ocp4-index:latest'
+  if test_type=='stage' and index_version > "4.4"
+    iib="registry-proxy.engineering.redhat.com/rh-osbs/iib-pub-pending:v#{index_version}"
   else
-    iib='quay.io/openshift-qe-optional-operators/ocp4-index:latest'
+    if %w(4.1 4.2 4.3 4.4 4.5).include? index_version
+      iib = "quay.io/openshift-qe-optional-operators/qe45-index:latest"
+    else
+      iib = "quay.io/openshift-qe-optional-operators/ocp4-index:latest"
+    end
   end
   logger.info("Using IIB #{iib}...")
   cb.iib = iib

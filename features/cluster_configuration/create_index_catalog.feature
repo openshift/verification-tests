@@ -3,5 +3,5 @@ Feature: create index catalog
   @admin
   @destructive
   Scenario: create index catalogsource
-    Given I create "qe-app-registry" catalogsource for my cluster
+    Given I create "qe-app-registry" catalogsource for testing
 
