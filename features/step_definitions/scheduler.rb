@@ -32,7 +32,7 @@ Given /^the CR #{QUOTED} named #{QUOTED} is restored after scenario$/ do |crd, n
     @result = _admin.cli_exec(:patch, **opts)
     raise "Cannot restore crd: #{name}" unless @result[:success]
     timeout = 300
-    if crd == 'kubescheduler'
+    if crd == 'kubescheduler' or crd == 'Scheduler'
        crd = 'kube-scheduler'
     end
     wait_for(timeout) do
