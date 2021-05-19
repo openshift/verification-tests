@@ -67,7 +67,7 @@ Given /^I create #{QUOTED} catalogsource(?: with index version #{QUOTED})? for#{
   end
   # create policy
   step %Q|I obtain test data file "catalogsource/image_content_soruce_policy.yaml"|
-  admin.cli_exec(:create, f: 'image_content_soruce_policy.yaml')
+  admin.cli_exec(:apply, f: 'image_content_soruce_policy.yaml')
   step %Q(I run oc create as admin over ERB test file: catalogsource/catalog_source.yaml)
   step %Q(all pods in the project are ready)
 end
