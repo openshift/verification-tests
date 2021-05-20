@@ -702,7 +702,7 @@ Given /^I upgrade the operator with:$/ do | table |
   raise "the new CSV can't be installed" unless success
   # wait till new csv is ready
   success = wait_for(600, interval: 10) {
-    new_csv = subscription(subscription).current_csv(cached: false)
+    new_csv = subscription(subscription).installplan_csv(cached: false)
     cluster_service_version(new_csv).ready?[:success]
   }
   raise "can't upgrade operator #{subscription}" unless success
@@ -763,7 +763,7 @@ Given /^I upgrade the operator with:$/ do | table |
   end
 end
 
-# only check the major version, such as 4.4, 4.5, 4.6, don't care about versions like 4.6.0-2020xxxxxxxx
+# upgrade operators when the channel and/or catalog source changed
 Given /^I make sure the logging operators match the cluster version$/ do
   step %Q/I switch to cluster admin pseudo user/
   # check if channel name in subscription is same to the target channel
