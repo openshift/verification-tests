@@ -4,7 +4,7 @@ update_pod_count:
 update_resource_count:
   elements:
   - selector: &modal_count
-      xpath: //input[contains(@class,"co-m-number-spinner__input")]
+      xpath: //input[@type='number']
     op: clear
   - selector:
       <<: *modal_count

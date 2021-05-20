@@ -226,7 +226,7 @@ set_headers:
 set_more_headers:
   elements:
   - selector:
-      xpath: //label[text()='Headers']/following-sibling::button[contains(., 'Add More')]
+      xpath: //label[text()='Headers']/following-sibling::button[contains(., 'Add more')]
     op: click
   - selector:
       xpath: //label[text()='Headers']/following::input[2]
