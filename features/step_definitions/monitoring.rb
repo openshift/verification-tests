@@ -5,7 +5,7 @@ Then(/^I check replicas of monitoring component for sno cluster$/) do
     project("openshift-monitoring") 
     #check deamonset replicas
     step %Q/I run the :get client command with:/, table(%{
-      | resource   | ds                   |
+      | resource   | daemonset            |
       | n          | openshift-monitoring |
       | no_headers | true                 |
     })
@@ -19,7 +19,7 @@ Then(/^I check replicas of monitoring component for sno cluster$/) do
     end
     #check statefulset replicas
     step %Q/I run the :get client command with:/, table(%{
-      | resource   | sts                  |
+      | resource   | statefulset          |
       | n          | openshift-monitoring |
       | no_headers | true                 |
     })
@@ -49,7 +49,7 @@ Then(/^I check replicas of monitoring component for sno cluster$/) do
     project("openshift-user-workload-monitoring") 
     #check statefulset replicas
     step %Q/I run the :get client command with:/, table(%{
-      | resource   | sts                                |
+      | resource   | statefulset                        |
       | n          | openshift-user-workload-monitoring |
       | no_headers | true                               |
     })
