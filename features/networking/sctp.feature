@@ -33,7 +33,7 @@ Feature: SCTP related scenarios
       | pod              | sctpserver                                |
       | namespace        | <%= project.name %>                       |
       | oc_opts_end      |                                           |
-      | exec_command     | sh                                        |
+      | exec_command     | bash                                      |
       | exec_command_arg | -c                                        |
       | exec_command_arg | /usr/bin/nc -k -l 30102 --sctp            |
     Then the step should succeed
@@ -88,7 +88,7 @@ Feature: SCTP related scenarios
       | pod              | sctpserver                                |
       | namespace        | <%= project.name %>                       |
       | oc_opts_end      |                                           |
-      | exec_command     | sh                                        |
+      | exec_command     | bash                                      |
       | exec_command_arg | -c                                        |
       | exec_command_arg | /usr/bin/nc -k -l 30102 --sctp            |
     Then the step should succeed
@@ -144,7 +144,7 @@ Feature: SCTP related scenarios
       | pod              | sctpserver                                |
       | namespace        | <%= project.name %>                       |
       | oc_opts_end      |                                           |
-      | exec_command     | sh                                        |
+      | exec_command     | bash                                      |
       | exec_command_arg | -c                                        |
       | exec_command_arg | /usr/bin/nc -k -l 30102 --sctp            |
     Then the step should succeed
@@ -193,7 +193,7 @@ Feature: SCTP related scenarios
       | pod              | sctpserver                                |
       | namespace        | <%= project.name %>                       |
       | oc_opts_end      |                                           |
-      | exec_command     | sh                                        |
+      | exec_command     | bash                                      |
       | exec_command_arg | -c                                        |
       | exec_command_arg | /usr/bin/nc -k -l 30102 --sctp            |
     Then the step should succeed
@@ -236,7 +236,7 @@ Feature: SCTP related scenarios
       | pod              | sctpserver                                |
       | namespace        | <%= project.name %>                       |
       | oc_opts_end      |                                           |
-      | exec_command     | sh                                        |
+      | exec_command     | bash                                      |
       | exec_command_arg | -c                                        |
       | exec_command_arg | /usr/bin/nc -k -l 30102 --sctp            |
     Then the step should succeed
