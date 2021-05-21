@@ -22,7 +22,7 @@ Given /^kata container has been installed successfully(?: in the #{QUOTED} proje
 end
 
 Given /^I wait for #{QUOTED} (uninstall|install) to start$/ do | kc_name, mode |
-  timeout = 50
+  timeout = 300
   stats = {}
   success = false
   wait_for(timeout, stats: stats) do
@@ -110,12 +110,18 @@ Given /^the kata-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|G
   step %Q/I store master major version in the :master_version clipboard/
   raise "Kata operator OLM installation only supported for OCP >= 4.8" unless cb.master_version >= "4.8"
   install_method ||= 'CLI'
+  # first check pre-req
+  step %Q/I switch to cluster admin pseudo user/
+  project('openshift-marketplace')
+  unless catalog_source('qe-app-registry').exists?
+    logger.info("Kata installation depends on `qe-app-registry`, which is missing in this cluster, calling step to create it...")
+    step %Q/I create "qe-app-registry" catalogsource for testing/
+  end
 
   unless kata_config(kata_config_name).exists?
     if install_method == 'GUI'
       package_name = 'kata-operator'
       catalog_name = 'qe-app-registry'
-
       @result = admin.cli_exec(:create_namespace, name: kata_ns)
       project(kata_ns)
       step %Q/I switch to the first user/
