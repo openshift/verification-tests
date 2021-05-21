@@ -158,9 +158,8 @@ module BushSlicer
 
     # supports embedding content similar with same semantics as Cucumber
     def embed(src, mime_type, label)
-      if self.class.runtime.respond_to? :embed
-        info "embedding #{label.inspect}"
-        self.class.runtime.embed src, mime_type, label
+      if self.class.runtime.respond_to? :attach
+        self.class.runtime.attach src, mime_type
       else
         if src.kind_of?(String)
           if src.empty?
