@@ -144,13 +144,12 @@ end
 
 ## To check cluserlogging is working correctly, we check all of the subcomponents' status
 #  The list of components currently are: ["collection", "curation", "logStore",  "visualization"]
-Given /^I wait for clusterlogging(?: named "(.+)")? with #{QUOTED} log collector to be functional in the#{OPT_QUOTED} project$/ do | logging_name, log_collector, proj_name |
+Given /^I wait for clusterlogging(?: named "(.+)")? to be functional in the#{OPT_QUOTED} project$/ do | logging_name, proj_name |
   ensure_admin_tagged
   cb.target_proj ||= 'openshift-logging'
   proj_name = cb.target_proj if proj_name.nil?
   org_proj_name = project.name
   logging_name ||= 'instance'
-  log_collector ||= 'fluentd'
 
   step %Q/I switch to cluster admin pseudo user/
   step %Q/I use the "#{proj_name}" project/
@@ -168,14 +167,10 @@ Given /^I wait for clusterlogging(?: named "(.+)")? with #{QUOTED} log collector
 
   # check log collector is ready.
   logger.info("### checking logging subcomponent status: log collector")
-  if log_collector == "fluentd" then
-    step %Q/a pod becomes ready with labels:/, table(%{
-      | component=fluentd |
-    })
-    cl.wait_until_fluentd_is_ready
-  else
-    raise "unknow log collector"
-  end
+  step %Q/a pod becomes ready with labels:/, table(%{
+    | component=fluentd |
+  })
+  cl.wait_until_fluentd_is_ready
 
   logger.info("### checking logging subcomponent status: kibana")
   step %Q/a pod becomes ready with labels:/, table(%{
@@ -227,9 +222,9 @@ Given /^logging service is removed successfully$/ do
   end
 end
 
-Given /^I wait until #{QUOTED} log collector is ready$/ do | log_collector |
-  step %Q/#{daemon_set(log_collector).replica_counters[:desired]} pods become ready with labels:/, table(%{
-    | logging-infra=#{log_collector} |
+Given /^I wait until fluentd is ready$/ do
+  step %Q/#{daemon_set('fluentd').replica_counters[:desired]} pods become ready with labels:/, table(%{
+    | logging-infra=fluentd |
   })
 end
 
@@ -293,16 +288,18 @@ Given /^I create clusterlogging instance with:$/ do | table |
   end
   step %Q/I wait for the "instance" clusterloggings to appear up to 300 seconds/
   if check_status == 'true'
-    step %Q/I wait for the "elasticsearch" elasticsearches to appear up to 300 seconds/
-    step %Q/I wait for the "kibana" deployment to appear up to 300 seconds/
-    log_collector = cluster_logging('instance').collection_type
-    step %Q/I wait for the "#{log_collector}" daemonset to appear up to 300 seconds/
-    # to wait for the status informations to show up in the clusterlogging instance
-    #sleep 10
-    #step %Q/I wait for clusterlogging with "#{log_collector}" log collector to be functional in the project/
-    step %Q/I wait until ES cluster is ready/
-    step %Q/I wait until "#{log_collector}" log collector is ready/
-    step %Q/I wait until kibana is ready/
+    unless cluster_logging("instance").log_store_spec.nil?
+      step %Q/I wait for the "elasticsearch" elasticsearches to appear up to 300 seconds/
+      step %Q/I wait until ES cluster is ready/
+    end
+    unless  cluster_logging("instance").visualization_spec.nil?
+      step %Q/I wait for the "kibana" deployment to appear up to 300 seconds/
+      step %Q/I wait until kibana is ready/
+    end
+    unless cluster_logging('instance').collection_spec.nil?
+      step %Q/I wait for the "fluentd" daemonset to appear up to 300 seconds/
+      step %Q/I wait until fluentd is ready/
+    end
   end
 end
 
@@ -476,54 +473,47 @@ Given /^I generate certs for the#{OPT_QUOTED} receiver(?: in the#{OPT_QUOTED} pr
   system(shell_cmd)
 end
 
-Given /^I create pipelinesecret(?: named#{OPT_QUOTED})? with auth type (mTLS|mTLS_share|server_auth|server_auth_share)$/ do | secret_name, auth_type |
-  secret_name ||= "pipelinesecret"
-  unless tagged_upgrade?
+Given /^I create a pipeline secret with:$/ do | table |
+  opts = opts_array_to_hash(table.raw)
+  secret_name = opts[:secret_name]
+  username = opts[:username]
+  password = opts[:password]
+  transport_ssl_enabled = opts[:transport_ssl_enabled]
+  user_auth_enabled = opts[:user_auth_enabled]
+  http_ssl_enabled = opts[:http_ssl_enabled]
+  shared_key = opts[:shared_key]
+  auth_type = opts[:auth_type]
+  #require 'pry'
+  #binding.pry
+  unless tagged_upgrade? || secret_name.empty? || secret_name.nil?
     step %Q/admin ensures "#{secret_name}" secret is deleted from the "openshift-logging" project after scenario/
   end
-  case auth_type
-  when "mTLS"
-    step %Q/I run the :create_secret admin command with:/, table(%{
-      | name         | #{secret_name}           |
-      | secret_type  | generic                  |
-      | from_file    | tls.key=logging-es.key   |
-      | from_file    | tls.crt=logging-es.crt   |
-      | from_file    | ca-bundle.crt=ca.crt     |
-      | from_file    | ca.key=ca.key            |
-      | n            | openshift-logging        |
-    })
-  when "mTLS_share"
-    step %Q/I run the :create_secret admin command with:/, table(%{
-      | name         | #{secret_name}           |
-      | secret_type  | generic                  |
-      | from_file    | tls.key=logging-es.key   |
-      | from_file    | tls.crt=logging-es.crt   |
-      | from_file    | ca-bundle.crt=ca.crt     |
-      | from_file    | ca.key=ca.key            |
-      | from_literal | shared_key=fluentdserver |
-      | n            | openshift-logging        |
-    })
-  when "server_auth"
-    step %Q/I run the :create_secret admin command with:/, table(%{
-      | name         | #{secret_name}           |
-      | secret_type  | generic                  |
-      | from_file    | ca-bundle.crt=ca.crt     |
-      | from_file    | ca.key=ca.key            |
-      | n            | openshift-logging        |
-    })
-  when "server_auth_share"
-    step %Q/I run the :create_secret admin command with:/, table(%{
-      | name         | #{secret_name}           |
-      | secret_type  | generic                  |
-      | from_file    | ca-bundle.crt=ca.crt     |
-      | from_file    | ca.key=ca.key            |
-      | from_literal | shared_key=fluentdserver |
-      | n            | openshift-logging        |
-    })
-  else
-    raise "Unrecognized auth type: #{auth_type}"
+
+  secret_keys = [
+    ["name", "#{secret_name}"],
+    ["secret_type", "generic"],
+    ["n", "openshift-logging"]
+  ]
+
+  if transport_ssl_enabled == "true" || auth_type == "mTLS" || auth_type == "mTLS_share"
+    secret_keys << ["from_file", "tls.key=logging-es.key"] << ["from_file", "tls.crt=logging-es.crt"] << ["from_file", "ca-bundle.crt=ca.crt"] << ["from_file", "ca.key=ca.key"]
   end
-  step %Q/the step should succeed/
+
+  if user_auth_enabled == "true"
+    secret_keys << ["from_literal", "username=#{username}"] << ["from_literal", "password=#{password}"]
+  end
+
+  if http_ssl_enabled == "true" || auth_type == "server_auth" || auth_type == "server_auth_share"
+    secret_keys << ["from_file", "ca-bundle.crt=ca.crt"] << ["from_file", "ca.key=ca.key"]
+  end
+
+  if auth_type == "mTLS_share" || auth_type == "server_auth_share"
+    raise "No shared_key specified" unless !(shared_key.empty? || shared_key.nil?)
+    secret_keys << ["from_literal", "shared_key=#{shared_key}"]
+  end
+
+  @result = admin.cli_exec(:create_secret, opts_array_process(secret_keys.uniq))
+  raise "Unable to create secret #{secret_name}" unless @result[:success]
 end
 
 Given /^I create the resources for the receiver with:$/ do | table |
@@ -570,7 +560,7 @@ Given /^I create the resources for the receiver with:$/ do | table |
   step %Q/evaluation of `pod` is stored in the :log_receiver clipboard/
 end
 
-Given /^(fluentd|elasticsearch|rsyslog) receiver is deployed as (secure|insecure)(?: with (mTLS|mTLS_share|server_auth|server_auth_share) enabled)?(?: in the#{OPT_QUOTED} project)?$/ do | server, security, auth_type, project_name |
+Given /^(fluentd|rsyslog) receiver is deployed as (secure|insecure)(?: with (mTLS|mTLS_share|server_auth|server_auth_share) enabled)?(?: in the#{OPT_QUOTED} project)?$/ do | server, security, auth_type, project_name |
   project_name ||= "openshift-logging"
   project(project_name)
   if env.version_lt('4.6', user: user)
@@ -598,6 +588,11 @@ Given /^(fluentd|elasticsearch|rsyslog) receiver is deployed as (secure|insecure
         | from_literal | shared_key=fluentdserver |
         | n            | #{project_name}          |
       })
+      step %Q/I create a pipeline secret with:/, table(%{
+        | secret_name | pipelinesecret |
+        | auth_type   | #{auth_type}   |
+        | shared_key  | fluentdserver  |
+      })
       step %Q/the step should succeed/
       # set configmap and create pipeline secret in openshift-logging project
       case auth_type
@@ -612,39 +607,10 @@ Given /^(fluentd|elasticsearch|rsyslog) receiver is deployed as (secure|insecure
       else
         raise "Unrecognized auth type: #{auth_type}"
       end
-      step %Q/I create pipelinesecret with auth type #{auth_type}/
       deployment_file = "#{file_dir}/fluentd/secure/deployment.yaml"
     else
       configmap_file = "#{file_dir}/fluentd/insecure/configmap.yaml"
       deployment_file = "#{file_dir}/fluentd/insecure/deployment.yaml"
-    end
-
-  when "elasticsearch"
-    receiver_name = "elasticsearch-server"
-    pod_label = "app=elasticsearch-server"
-    if security == "secure"
-      step %Q/I generate certs for the "elasticsearch-server" receiver in the "<%= project.name %>" project/
-      unless tagged_upgrade?
-        step %Q/I ensure "elasticsearch-server" secret is deleted from the "<%= project.name %>" project after scenario/
-      end
-      step %Q/I run the :create_secret client command with:/, table(%{
-        | name        | elasticsearch-server                |
-        | secret_type | generic                             |
-        | from_file   | logging-es.key=logging-es.key       |
-        | from_file   | logging-es.crt=logging-es.crt       |
-        | from_file   | elasticsearch.key=elasticsearch.key |
-        | from_file   | elasticsearch.crt=elasticsearch.crt |
-        | from_file   | admin-ca=ca.crt                     |
-        | n           | #{project_name}                     |
-      })
-      step %Q/the step should succeed/
-      # create pipeline secret for fluentd
-      step %Q/I create pipelinesecret with auth type mTLS/
-      configmap_file = "#{file_dir}/elasticsearch/secure/configmap.yaml"
-      deployment_file = "#{file_dir}/elasticsearch/secure/deployment.yaml"
-    else
-      configmap_file = "#{file_dir}/elasticsearch/insecure/configmap.yaml"
-      deployment_file = "#{file_dir}/elasticsearch/insecure/deployment.yaml"
     end
 
   when "rsyslog"
@@ -942,4 +908,108 @@ Given /^I get(?: (\d+))? logs from the #{QUOTED} kafka consumer job in the #{QUO
     @result[:response].match("pipeline_metadata")
   }
   raise "Couldn't retrieve kafka records #{pod.name}" unless success
+end
+
+# deploy external elasticsearch server
+# version: 6.8 or 7.12
+# project_name: where the external ES deployed
+# scheme: http or https
+# transport_ssl_enabled: true or false
+# user_auth_enabled: true or false, if `true`, must provide username and password
+# secret_name: the name of the pipeline secret for the fluentd to use
+Given /^external elasticsearch server is deployed with:$/ do | table |
+  opts = opts_array_to_hash(table.raw)
+  version = opts[:version] # 6.8 or 7.12
+  project_name = opts[:project_name]
+  scheme = opts[:scheme]
+  transport_ssl_enabled = opts[:transport_ssl_enabled]
+  user_auth_enabled = opts[:user_auth_enabled]
+  username = opts[:username]
+  password = opts[:password]
+  secret_name = opts[:secret_name]
+  project(project_name)
+
+  unless ["6.8", "7.12"].include? version
+    raise "Unsupported ES version: #{version}, we only support ES 6.8 and 7.12!"
+  end
+
+  if scheme == "https"
+    http_ssl_enabled = "true"
+  else
+    http_ssl_enabled = "false"
+  end
+
+  if user_auth_enabled == "true"
+    raise "username or password is not specified" unless !(username.nil? || username.empty?) && !(password.nil? || password.empty?)
+  end
+
+  if user_auth_enabled == "true" || transport_ssl_enabled == "true" || http_ssl_enabled == "true"
+    raise "secret_name is not specified or is empty" unless !(secret_name.nil? || secret_name.empty?)
+    step %Q/I create a pipeline secret with:/, table(%{
+      | secret_name           | #{secret_name}           |
+      | username              | #{username}              |
+      | password              | #{password}              |
+      | transport_ssl_enabled | #{transport_ssl_enabled} |
+      | user_auth_enabled     | #{user_auth_enabled}     |
+      | http_ssl_enabled      | #{http_ssl_enabled}      |
+    })
+  end
+
+  file_dir = "#{BushSlicer::HOME}/testdata/logging/clusterlogforwarder/elasticsearch/#{version}/#{scheme}"
+  receiver_name = "elasticsearch-server"
+  pod_label = "app=elasticsearch-server"
+
+  # create secret/elasticsearch-server for ES if needed
+  if transport_ssl_enabled == "true" || scheme == "https"
+    step %Q/I generate certs for the "elasticsearch-server" receiver in the "<%= project.name %>" project/
+    unless tagged_upgrade?
+      step %Q/I ensure "elasticsearch-server" secret is deleted from the "<%= project.name %>" project after scenario/
+    end
+    step %Q/I run the :create_secret client command with:/, table(%{
+      | name        | elasticsearch-server                |
+      | secret_type | generic                             |
+      | from_file   | logging-es.key=logging-es.key       |
+      | from_file   | logging-es.crt=logging-es.crt       |
+      | from_file   | elasticsearch.key=elasticsearch.key |
+      | from_file   | elasticsearch.crt=elasticsearch.crt |
+      | from_file   | admin-ca=ca.crt                     |
+      | n           | #{project_name}                     |
+    })
+    step %Q/the step should succeed/
+  end
+
+  # chose files per transport_ssl_enabled and user_auth_enabled
+  if transport_ssl_enabled == "true" && user_auth_enabled == "true"
+    step %Q/I run the :process client command with:/, table(%{
+      | f | #{file_dir}/user_auth_with_transport_tls/configmap.yaml |
+      | p | USERNAME=#{username} |
+      | p | PASSWORD=#{password} |
+    })
+    File.write(File.expand_path("cm.yaml".strip), @result[:stdout])
+    cm = "cm.yaml"
+    deploy = "#{file_dir}/user_auth_with_transport_tls/deployment.yaml"
+  elsif transport_ssl_enabled == "true" && user_auth_enabled != "true"
+    cm = "#{file_dir}/transport_tls/configmap.yaml"
+    deploy = "#{file_dir}/transport_tls/deployment.yaml"
+  elsif transport_ssl_enabled != "true" && user_auth_enabled == "true"
+    step %Q/I run the :process client command with:/, table(%{
+      | f | #{file_dir}/user_auth/configmap.yaml |
+      | p | USERNAME=#{username} |
+      | p | PASSWORD=#{password} |
+    })
+    File.write(File.expand_path("cm.yaml".strip), @result[:stdout])
+    cm = "cm.yaml"
+    deploy = "#{file_dir}/user_auth/deployment.yaml"
+  else
+    cm = "#{file_dir}/insecure/configmap.yaml"
+    deploy = "#{file_dir}/insecure/deployment.yaml"
+  end
+
+  step %Q/I create the resources for the receiver with:/, table(%{
+    | namespace       | #{project_name}  |
+    | receiver_name   | #{receiver_name} |
+    | configmap_file  | #{cm}            |
+    | deployment_file | #{deploy}        |
+    | pod_label       | #{pod_label}     |
+  })
 end
