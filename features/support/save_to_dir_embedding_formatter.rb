@@ -34,18 +34,10 @@ module BushSlicer
 
     # @note #embed has been replaced by #attach in Cucumber 5.x
     def attach(src, media_type)
-      if media_type == 'image/png;base64'
-        filename = Time.now.iso8601 + '-screenshot.png'
-        puts "embedding #{filename}"
-        embed(src, media_type, "#{filename}")
-      elsif media_type == 'text/html;base64'
-        filename = Time.now.iso8601 + '.html'
-        puts "embedding #{filename}"
-        embed(src, media_type, "#{filename}")
-      else
-        filename = 'test case execution attachment'
-        puts "embedding #{filename}"
-        embed(src, media_type, "#{filename}")
+      if media_type == 'image/png;base64' || media_type == 'text/html;base64'
+        embed(src, media_type, "#{$screenshot_label}")
+      elsif media_type != 'text/x.cucumber.log+plain'
+        embed(src, media_type, "test case execution attachment")
       end
     end
 

@@ -660,10 +660,11 @@ require_relative 'chrome_extension'
     # another option would be to save to file but not sure where to store
     #   as most formatters do not relocate the file
     def take_screenshot
+      filename = Time.now.iso8601
       # screenshot = %{data:image/png;base64,#{browser.screenshot.base64}}
       # logger.embed screenshot, "application/octet-stream", "#{filename}-screenshot.png"
-      logger.embed browser.screenshot.base64, "image/png;base64", ''
-      logger.embed Base64.strict_encode64(browser.html), "text/html;base64", ''
+      logger.embed browser.screenshot.base64, "image/png;base64", "#{filename}-screenshot.png"
+      logger.embed Base64.strict_encode64(browser.html), "text/html;base64", "#{filename}.html"
     end
 
     def get_elements(type: nil, context: browser, selector:)
