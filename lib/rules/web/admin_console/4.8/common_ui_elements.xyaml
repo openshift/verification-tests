@@ -1407,6 +1407,16 @@ check_registry_pull_interval:
   element:
     selector:
       xpath: //dt[contains(.,'Registry poll interval')]/following-sibling::dd[1]/button[contains(.,'<registrypullinterval>')]
+check_runtimeclass:
+  params:
+    key: Runtime class
+    value: kata
+  action: check_resource_details_key_and_value
+check_runtimeclass_missing:
+  element:
+    selector:
+      xpath: //dt[contains(.,'Runtime class')]
+    missing: true
 click_workloads_tab:
   params:
     tab_name: Workloads
