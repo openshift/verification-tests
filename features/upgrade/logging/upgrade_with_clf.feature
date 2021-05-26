@@ -7,13 +7,18 @@ Feature: Upgrade Logging with ClusterLogForwarder
   @users=upuser1,upuser2
   Scenario: Upgrade clusterlogging with mulitple external log store enabled - prepare
     Given the master version >= "4.6"
+    And logging operators are installed successfully
     Given I switch to the first user
     When I run the :new_project client command with:
       | project_name | logging-receivers |
     Then the step should succeed
     Given fluentd receiver is deployed as insecure in the "logging-receivers" project
     And rsyslog receiver is deployed as insecure in the "logging-receivers" project
-    And elasticsearch receiver is deployed as insecure in the "logging-receivers" project
+    And external elasticsearch server is deployed with:
+      | version               | 6.8               |
+      | scheme                | http              |
+      | transport_ssl_enabled | false             |
+      | project_name          | logging-receivers |
     When I run the :new_project client command with:
       | project_name | logging-data |
     Then the step should succeed
@@ -22,7 +27,6 @@ Feature: Upgrade Logging with ClusterLogForwarder
       | file | container_json_log_template.json |
     Then the step should succeed
     Given I switch to cluster admin pseudo user
-    And logging operators are installed successfully
     And I use the "openshift-logging" project
     Given I obtain test data file "logging/clusterlogforwarder/clf-multiple-external-logstore-template.yaml"
     When I process and create:
@@ -35,11 +39,7 @@ Feature: Upgrade Logging with ClusterLogForwarder
     When I create clusterlogging instance with:
       | remove_logging_pods | false             |
       | crd_yaml            | fluentd_only.yaml |
-      | check_status        | false             |
     Then the step should succeed
-    Given I wait for the "fluentd" daemon_set to appear up to 300 seconds
-    And <%= daemon_set('fluentd').replica_counters[:desired] %> pods become ready with labels:
-      | logging-infra=fluentd |
     #check data in fluentd server
     Given I use the "logging-receivers" project
     And a pod becomes ready with labels:
