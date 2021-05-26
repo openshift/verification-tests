@@ -45,9 +45,8 @@ Feature: Elasticsearch related tests
     And the expression should be true> cluster_logging('instance').logstore_storage_class_name == cb.default_sc.name
     Given I wait for the "elasticsearch" elasticsearches to appear
     And the expression should be true> elasticsearch('elasticsearch').nodes[0]['storage']['storageClassName'] == cb.default_sc.name
-    #Given I wait for clusterlogging with "fluentd" log collector to be functional in the project
     Given I wait until ES cluster is ready
-    And I wait until "fluentd" log collector is ready
+    And I wait until fluentd is ready
     And I wait until kibana is ready
     Given I wait up to 300 seconds for the steps to pass:
     """

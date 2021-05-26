@@ -943,18 +943,6 @@ Given /^external elasticsearch server is deployed with:$/ do | table |
     raise "username or password is not specified" unless !(username.nil? || username.empty?) && !(password.nil? || password.empty?)
   end
 
-  if user_auth_enabled == "true" || transport_ssl_enabled == "true" || http_ssl_enabled == "true"
-    raise "secret_name is not specified or is empty" unless !(secret_name.nil? || secret_name.empty?)
-    step %Q/I create a pipeline secret with:/, table(%{
-      | secret_name           | #{secret_name}           |
-      | username              | #{username}              |
-      | password              | #{password}              |
-      | transport_ssl_enabled | #{transport_ssl_enabled} |
-      | user_auth_enabled     | #{user_auth_enabled}     |
-      | http_ssl_enabled      | #{http_ssl_enabled}      |
-    })
-  end
-
   file_dir = "#{BushSlicer::HOME}/testdata/logging/clusterlogforwarder/elasticsearch/#{version}/#{scheme}"
   receiver_name = "elasticsearch-server"
   pod_label = "app=elasticsearch-server"
@@ -976,6 +964,18 @@ Given /^external elasticsearch server is deployed with:$/ do | table |
       | n           | #{project_name}                     |
     })
     step %Q/the step should succeed/
+  end
+
+  if user_auth_enabled == "true" || transport_ssl_enabled == "true" || http_ssl_enabled == "true"
+    raise "secret_name is not specified or is empty" unless !(secret_name.nil? || secret_name.empty?)
+    step %Q/I create a pipeline secret with:/, table(%{
+      | secret_name           | #{secret_name}           |
+      | username              | #{username}              |
+      | password              | #{password}              |
+      | transport_ssl_enabled | #{transport_ssl_enabled} |
+      | user_auth_enabled     | #{user_auth_enabled}     |
+      | http_ssl_enabled      | #{http_ssl_enabled}      |
+    })
   end
 
   # chose files per transport_ssl_enabled and user_auth_enabled

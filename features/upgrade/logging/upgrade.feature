@@ -29,7 +29,7 @@ Feature: Logging upgrading related features
     Then the step should succeed
     Given I wait for the "fluentd" daemonset to appear up to 300 seconds
     And I wait until ES cluster is ready
-    And I wait until "fluentd" log collector is ready
+    And I wait until fluentd is ready
     And I wait until kibana is ready
     Given I wait for the project "logging-upgrade-data-check" logs to appear in the ES pod
     # check cron jobs
@@ -59,7 +59,7 @@ Feature: Logging upgrading related features
     And I use the "openshift-logging" project
     Given I wait for the "fluentd" daemonset to appear up to 300 seconds
     And I wait until ES cluster is ready
-    And I wait until "fluentd" log collector is ready
+    And I wait until fluentd is ready
     And I wait until kibana is ready
     # check the logs collected before upgrading
     Given I wait for the project "logging-upgrade-data-check" logs to appear in the ES pod
