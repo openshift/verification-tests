@@ -1,4 +1,4 @@
-Then(/^I check replicas of monitoring component for sno cluster$/) do
+Then(/^I check replicas of monitoring components for sno cluster$/) do
 
   if infrastructure("cluster").infra_topology=="SingleReplica"
 
