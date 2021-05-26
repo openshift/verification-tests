@@ -51,12 +51,12 @@ global:
 
   # Any value you can set to refer to an environment variable
   # read value from ENVVAR1 environment variable:
-  # test1: !ruby/object:BushSlicer::FlexyEnvVariable
+  # test1: !ruby/object:BushSlicer::ConfigEnvVariable
   #   var_name: ENVVAR1
   # `test1` key will be a string with value
   # read value from ENVVAR2, decode as base64 and write to file, `test2` will
   #   contain the path of this temporary file:
-  # test2: !ruby/object:BushSlicer::FlexyEnvFile
+  # test2: !ruby/object:BushSlicer::ConfigEnvFile
   #   var_name: ENVVAR2
 
 environments:
