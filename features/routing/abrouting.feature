@@ -81,6 +81,7 @@ Feature: Testing abrouting
       | <%= cb.pod_ip2 %>.* weight 256 |
     """
 
+
   # @author yadu@redhat.com
   # @case_id OCP-11970
   @admin
