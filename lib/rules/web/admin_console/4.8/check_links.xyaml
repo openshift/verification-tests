@@ -272,12 +272,12 @@ check_download_linux_oc_ibm_power:
   params:
     text: Download oc for Linux for IBM Power, little endian
     link_url: <downloads_route>/ppc64le/linux/oc.tar
-  action: check_link_and_text 
+  action: check_link_and_text
 check_download_linux_oc_ibm_z:
   params:
     text: Download oc for Linux for IBM Z
     link_url: <downloads_route>/s390x/linux/oc.tar
-  action: check_link_and_text 
+  action: check_link_and_text
 check_download_mac_oc:
   params:
     text: Download oc for Mac
@@ -287,12 +287,12 @@ check_download_windows_oc:
   params:
     text: Download oc for Windows
     link_url: <downloads_route>/amd64/windows/oc.zip
-  action: check_link_and_text  
+  action: check_link_and_text
 check_oc_license:
   params:
     text: LICENSE
     link_url: oc-license
-  action: check_link_and_text 
+  action: check_link_and_text
 check_default_odo_download_links:
   params:
     text: odo

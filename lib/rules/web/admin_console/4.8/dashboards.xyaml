@@ -163,13 +163,13 @@ check_resources_pod_dashboard:
   action: click_dropdown_menu_item
   action: change_namespace
   action: check_table_loaded
-  action: check_chart_loaded  
+  action: check_chart_loaded
 # cluster dashboards
 check_cluster_utilization_items:
   elements:
   - selector:
       xpath: //h2[contains(@class,'co-dashboard-card__title') and text()='Cluster utilization']
-    timeout: 30 
+    timeout: 30
   - selector:
       xpath: //div[contains(@class,'co-utilization-card__item')]//h4[text()='CPU']
   - selector:
@@ -442,7 +442,7 @@ check_pod_count_breakdown_info_when_filter_by_project:
   action: click_pod_count_data
   action: choose_consumer_measure
   action: wait_for_consumer_lists_loaded
-  action: check_has_5_top_consumers  
+  action: check_has_5_top_consumers
   action: check_consumer_link_to_project
   action: check_view_more_link
   action: check_metrics_query_pod_count_by_project
@@ -464,7 +464,7 @@ check_network_in_breakdown_info_when_filter_by_project:
   action: click_network_in_data
   action: choose_consumer_measure
   action: wait_for_consumer_lists_loaded
-  action: check_has_5_top_consumers  
+  action: check_has_5_top_consumers
   action: check_consumer_link_to_project
   action: check_view_more_link
   action: check_metrics_query_network_in_by_project
@@ -473,7 +473,7 @@ check_network_in_breakdown_info_when_filter_by_pod:
     dropdown_menu_item: By Pod
   action: choose_consumer_measure
   action: wait_for_consumer_lists_loaded
-  action: check_has_5_top_consumers  
+  action: check_has_5_top_consumers
   action: check_consumer_link_to_pod
   action: check_view_more_link
   action: check_metrics_query_network_in_by_pod
@@ -482,7 +482,7 @@ check_network_in_breakdown_info_when_filter_by_node:
     dropdown_menu_item: By Node
   action: choose_consumer_measure
   action: wait_for_consumer_lists_loaded
-  action: check_has_5_top_consumers  
+  action: check_has_5_top_consumers
   action: check_consumer_link_to_node
   action: check_view_more_link
   action: check_metrics_query_network_in_by_node
@@ -493,7 +493,7 @@ check_network_out_breakdown_info_when_filter_by_project:
   action: click_network_out_data
   action: choose_consumer_measure
   action: wait_for_consumer_lists_loaded
-  action: check_has_5_top_consumers  
+  action: check_has_5_top_consumers
   action: check_consumer_link_to_project
   action: check_view_more_link
   action: check_metrics_query_network_out_by_project
@@ -502,7 +502,7 @@ check_network_out_breakdown_info_when_filter_by_pod:
     dropdown_menu_item: By Pod
   action: choose_consumer_measure
   action: wait_for_consumer_lists_loaded
-  action: check_has_5_top_consumers  
+  action: check_has_5_top_consumers
   action: check_consumer_link_to_pod
   action: check_view_more_link
   action: check_metrics_query_network_out_by_pod
@@ -511,7 +511,7 @@ check_network_out_breakdown_info_when_filter_by_node:
     dropdown_menu_item: By Node
   action: choose_consumer_measure
   action: wait_for_consumer_lists_loaded
-  action: check_has_5_top_consumers  
+  action: check_has_5_top_consumers
   action: check_consumer_link_to_node
   action: check_view_more_link
   action: check_metrics_query_network_out_by_node
@@ -624,7 +624,7 @@ check_matched_number_of_storageclasses:
   params:
     resource_type: storageclass
     number_of_resource: <number_of_storageclasses>
-  action: check_matched_number_of_resource  
+  action: check_matched_number_of_resource
 check_matched_number_of_resource:
   element:
     selector:

@@ -9,7 +9,7 @@ search_by_resource:
     ref: search_resource_kind_and_api_group
 click_resource_type_dropdown:
   elements:
-  - selector: 
+  - selector:
       xpath: //button[contains(., 'Resources')]
     op: click
   - selector:
@@ -33,7 +33,7 @@ search_resource_kind_and_api_group:
     timeout: 15
 clear_one_search_item:
   elements:
-  - selector: 
+  - selector:
       xpath: //span[contains(., '<search_item>')]/following-sibling::button
     op: click
 check_resource_tile:

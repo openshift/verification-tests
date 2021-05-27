@@ -1,7 +1,7 @@
 check_software_info:
   elements:
   - selector:
-      xpath: //*[contains(.,'Software Info')]/.[contains(.,'Kubernetes') and contains(.,'OpenShift Container Platform')] 
+      xpath: //*[contains(.,'Software Info')]/.[contains(.,'Kubernetes') and contains(.,'OpenShift Container Platform')]
 check_software_info_versions:
   action: check_software_info
   elements:
@@ -23,10 +23,10 @@ check_getting_started:
       xpath: //button[contains(.,'Create a new project')]
 check_dim_resource_list:
   scripts:
-  - command: |      
+  - command: |
       var resource_info = "<resource_singular>".replace(/\s*/g,"");
       var msg_text = "No "+ resource_info + "s found";
-      return document.querySelector("div[data-test='empty-message']").textContent == msg_text;      
+      return document.querySelector("div[data-test='empty-message']").textContent == msg_text;
     expect_result: true
 check_user_starter_guide_message_when_no_projects:
   elements:
