@@ -2,6 +2,7 @@ Feature: vSphere test scenarios
 
   # @author jhou@redhat.com
   @admin
+  @smoke
   Scenario Outline: Dynamically provision a vSphere volume with different disk formats
     Given I have a project
     Given I obtain test data file "storage/vsphere/storageclass.yml"
