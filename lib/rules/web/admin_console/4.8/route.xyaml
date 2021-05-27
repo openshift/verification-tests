@@ -37,7 +37,7 @@ create_route:
   action:
     if_param: route_hostname
     ref: set_hostname
-  action: 
+  action:
     if_param: route_path
     ref: set_route_path
   action: set_service_name
@@ -97,7 +97,7 @@ set_weight_for_alternative_service:
 set_alternative_service:
   action: click_add_alternative_service
   action: set_weight_for_main_service
-  action: set_alternative_service_name  
+  action: set_alternative_service_name
   action: set_weight_for_alternative_service
 set_target_port:
   params:
