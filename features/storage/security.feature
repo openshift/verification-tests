@@ -3,6 +3,7 @@ Feature: storage security check
   # @author lxia@redhat.com
   # @author piqin@redhat.com
   @admin
+  @smoke
   Scenario Outline: [origin_infra_20] volume security testing
     Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"
@@ -114,6 +115,7 @@ Feature: storage security check
   # @author chaoyang@redhat.com
   # @case_id OCP-9709
   @admin
+  @smoke
   Scenario: secret volume security check
     Given I have a project
     Given I obtain test data file "storage/secret/secret.yaml"
