@@ -120,7 +120,7 @@ Given /^the kata-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|G
 
   unless kata_config(kata_config_name).exists?
     if install_method == 'GUI'
-      package_name = 'kata-operator'
+      package_name = 'sandboxed-containers-operator'
       catalog_name = 'qe-app-registry'
       @result = admin.cli_exec(:create_namespace, name: kata_ns)
       project(kata_ns)
