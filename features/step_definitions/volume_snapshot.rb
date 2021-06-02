@@ -8,7 +8,7 @@ Given /^I check volume snapshot is deployed$/ do
   step %Q/I switch to the default user/
 end
 
-# This step is to create VolumeSnapshotClass according to different paramater on differnt platforms, also it supports custom-defined paramater
+# This step is to create VolumeSnapshotClass according to different parameter on differnt platforms, also it supports custom-defined parameter
 When /^admin creates a VolumeSnapshotClass replacing paths:$/ do |table|
   ensure_admin_tagged
 
