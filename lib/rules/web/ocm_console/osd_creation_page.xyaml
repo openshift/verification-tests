@@ -814,7 +814,7 @@ check_billing_model:
         - selector:
             xpath: //label[contains(., 'Fixed capacity subscription from Red Hat')]
         - selector:
-            xpath: //div[text()='Use the quota pre-purchased by your organization']
+            xpath: //div/span[text()='Use the quota pre-purchased by your organization']
         - selector:
             xpath: //label[contains(., 'Flexible usage billed through the Red Hat Marketplace')]
         - selector:

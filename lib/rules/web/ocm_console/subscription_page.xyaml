@@ -1,4 +1,8 @@
 #----------------------------------- This file is used for subscription page definition -------------------------
+go_to_subscription_quota_page:
+    url: /openshift/quota
+go_to_subscription_quota_limit_page:
+    url: /openshift/quota/resource-limits
 subscriptions_page_loaded:
     element:
         selector:
