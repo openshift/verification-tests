@@ -81,22 +81,22 @@ To access non-global options, you need to write the root option name first, e.g.
 
 Instead of simple kay:value pairs in a configuration it is possible to use so called Helper classes supported by Ruby YAML processor like:
 
-`input_entry: !ruby/object:BushSlicer::FlexyEnvVariable
+`input_entry: !ruby/object:BushSlicer::ConfigEnvVariable
   var_name: ENVVAR1`
 
 Above example means the key `input_entry` contains a value extracted from the content of shell environment variable `ENVVAR1`. This approach can be used anywhere in the configuration.
 
 Available Helper classed:
-* `FlexyEnvVariable` - content of environment variable
-* `FlexyEnvFile` - path for file with content of environment variable
+* `ConfigEnvVariable` - content of environment variable
+* `ConfigEnvFile` - path for file with content of environment variable
 
-=== `FlexyEnvVariable`
+=== `ConfigEnvVariable`
 The aim of this helper class is a simple injecting of value from shell environment variable. It is useful in the case when the simple value is expected by the configuration.
 
 Parameters:
   `var_name` - the name of shell environment variable for its content
 
-=== `FlexyEnvFile`
+=== `ConfigEnvFile`
 The aim of this helper class is a simple injection of file path. The file path is a reference to created temporary file where content from shell environment variable is stored. Temporary file is deleted at the end of execution automatically. It is useful in case when the file path is expected by the configuration.
 
 Parameters:
