@@ -683,10 +683,10 @@ module BushSlicer
       file_details = {}
 
       # Export configuration's block of environment variables to running environment context
-      if (conf[:global, :"install-envvars"] != nil)
+      if Hash === conf[:global, :"install-envvars"]
         conf[:global, :"install-envvars"].each do |key, val|
           if ENV.key?(key.to_s)
-            say "WARNING: Clashing value coming from Environment (priority) and configuration for key: '#{key.to_s}'"
+            say "WARNING: value from environment variable #{key.to_s} takes precedence over value in 'install-envvars' configuration"
           else
             ENV[key.to_s] = val
           end

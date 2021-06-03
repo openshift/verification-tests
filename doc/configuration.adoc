@@ -97,7 +97,7 @@ Parameters:
   `var_name` - the name of shell environment variable for its content
 
 === `ConfigEnvFile`
-The aim of this helper class is a simple injection of file path. The file path is a reference to created temporary file where content from shell environment variable is stored. Temporary file is deleted at the end of execution automatically. It is useful in case when the file path is expected by the configuration.
+The aim of this helper class is an easy injection of file path. The file path is a reference to created temporary file where is stored a content from shell environment variable after its base64 decoding. Temporary file is deleted at the end of execution automatically. It is useful in case when the file path is expected by the configuration.
 
 Parameters:
   `var_name` - the name of shell environment variable for its content
