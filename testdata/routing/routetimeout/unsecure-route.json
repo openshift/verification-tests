@@ -1,0 +1,14 @@
+{
+    "kind": "Route",
+    "apiVersion": "route.openshift.io/v1",
+    "metadata": {
+        "name": "unsecure-route"
+    },
+    "spec": {
+        "host": "unsecure.example.com",
+        "to": {
+            "kind": "Service",
+            "name": "service-unsecure"
+        }
+    }
+}
