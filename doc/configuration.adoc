@@ -102,7 +102,7 @@ The aim of this helper class is an easy injection of file path. The file path is
 Parameters:
   `var_name` - the name of shell environment variable for its content
 
-== Additional shell environment variables
+== Additional environment variables for `launch_instance.rb`
 It is possible to specify additional environment variables which are available in the running context of Ruby templates and invoked Shell scripts. This approach works differently than template's variables.
 
 Environment variables for exporting into the running context are specified by sub-section `install-envvars` under the `global` section inside `config/config.yaml`.
