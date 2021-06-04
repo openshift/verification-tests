@@ -119,5 +119,3 @@ click_delete_button_on_notification_contact:
           op: click
 delete_notification_contact:
     action: click_delete_button_on_notification_contact
-    action: check_deleted_notification_contact_notification
-
