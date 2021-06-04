@@ -69,12 +69,12 @@ Feature: CSI clone testing related feature
       | sh | -c | sync -f /mnt/local/testfile |
     Then the step should succeed
 
-    # Clone mypvc-ori with 3Gi size
+    # Clone mypvc-ori with 2Gi size
     Given I obtain test data file "storage/csi/pvc-clone.yaml"
     When I create a dynamic pvc from "pvc-clone.yaml" replacing paths:
       | ["metadata"]["name"]                         | mypvc-clone  |
       | ["spec"]["storageClassName"]                 | standard-csi |
-      | ["spec"]["resources"]["requests"]["storage"] | 3Gi          |
+      | ["spec"]["resources"]["requests"]["storage"] | 2Gi          |
     Then the step should succeed
     Given I obtain test data file "storage/misc/pod.yaml"
     When I run oc create over "pod.yaml" replacing paths:
@@ -84,26 +84,23 @@ Feature: CSI clone testing related feature
     Then the step should succeed
     Given the pod named "mypod-clone" becomes ready
     And the "mypvc-clone" PVC becomes :bound 
-    Given the expression should be true> pv(pvc("mypvc-clone").volume_name).capacity_raw(cached: false) == "3Gi"
-    When I execute on the "mypod-clone" pod:
-      | sh | -c | ls /mnt/local/testfile |
-    Then the step should succeed
+    Given the expression should be true> pv(pvc("mypvc-clone").volume_name).capacity_raw(cached: false) == "2Gi"
     When I execute on the "mypod-clone" pod:
       | sh | -c | more /mnt/local/testfile |
     Then the step should succeed
     And the output should contain "clone test"
-    # Need update when the filesystem is also 3Gi size(BZ) 
+    # Need update when the filesystem is also 2Gi size(BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1964210)
 
   # @author wduan@redhat.com
   # @case_id OCP-27690
   Scenario: [Cinder CSI Clone] Clone a pvc with capacity less than original pvc will fail
     Given I have a project
-    # Create mypvc-ori with 3Gi size
+    # Create mypvc-ori with 2Gi size
     Given I obtain test data file "storage/misc/pvc.json"
     When I create a dynamic pvc from "pvc.json" replacing paths:
       | ["metadata"]["name"]                         | mypvc-ori    |
       | ["spec"]["storageClassName"]                 | standard-csi |
-      | ["spec"]["resources"]["requests"]["storage"] | 3Gi          |
+      | ["spec"]["resources"]["requests"]["storage"] | 2Gi          |
     Then the step should succeed
     Given I obtain test data file "storage/misc/pod.yaml"
     When I run oc create over "pod.yaml" replacing paths:
@@ -125,8 +122,8 @@ Feature: CSI clone testing related feature
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc-clone |
       | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt/local  |
     Then the step should succeed
-    Given 30 seconds have passed
-    And the "mypvc-clone" PVC status is :pending
+    Given I wait up to 30 seconds for the steps to pass:
+    """
     When I run the :describe client command with:
       | resource | pvc         |
       | name     | mypvc-clone |
@@ -134,3 +131,4 @@ Feature: CSI clone testing related feature
     And the output should match:
       | ProvisioningFailed                                                                     |
       | new PVC request must be greater than or equal in size to the specified PVC data source |
+    """
