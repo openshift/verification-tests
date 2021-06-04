@@ -59,12 +59,12 @@ set_pod_count:
 increase_pod_count:
   element:
     selector:
-      xpath: //button[contains(@class,'co-m-number-spinner__button') and @aria-label='Increment']
+      xpath: //button[@aria-label='Increment']
     op: click
 decrease_pod_count:
   element:
     selector:
-      xpath: //button[contains(@class,'co-m-number-spinner__button') and @aria-label='Decrement']
+      xpath: //button[@aria-label='Decrement']
     op: click
 toggle_boolean_switch:
   params:

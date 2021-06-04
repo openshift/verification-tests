@@ -57,11 +57,7 @@ click_alert_manager_menu:
     text: Alerting
     link_url: /monitoring/alerts
   action: click_link_with_text
-check_alert_manager_url:
-  params:
-    text: Alertmanager UI
-    link_url: https://<alert_ui_route>/#/alerts
-  action: check_link_and_text
+check_alert_manager_url: {}
 click_metrics_prometheus_menu:
   params:
     text: Metrics
