@@ -2,7 +2,7 @@
 
 declare -a ARRAY_IDS
 ARRAY_IDS=($(echo `find . -name '*.feature' -exec grep 'case[-_]id.*OCP-' {} \; | rev | cut -d'@' -f1 | rev | sed 's/case_id //g;s/,/ /g' | sort -V`))
-IGNORE_IDS="OCP-xxx OCP-yyy"
+IGNORE_IDS="OCP-24498 OCP-24520 OCP-24524"
 
 echo "Total IDs: ${#ARRAY_IDS[@]}"
 echo "Excluding IDs: ${IGNORE_IDS}"
