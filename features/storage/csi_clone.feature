@@ -132,3 +132,54 @@ Feature: CSI clone testing related feature
       | ProvisioningFailed                                                                     |
       | new PVC request must be greater than or equal in size to the specified PVC data source |
     """
+
+
+  # @author wduan@redhat.com
+  # @case_id OCP-30315
+  Scenario: [Cinder CSI clone] Clone a pvc with block VolumeMode successfully
+    Given I have a project
+    Given I obtain test data file "storage/misc/pvc.json"
+    When I create a dynamic pvc from "pvc.json" replacing paths:
+      | ["metadata"]["name"]         | mypvc-ori    |
+      | ["spec"]["storageClassName"] | standard-csi |
+      | ["spec"]["volumeMode"]       | Block        |
+    Then the step should succeed
+    Given I obtain test data file "storage/misc/pod-with-block-volume.yaml"
+    When I run oc create over "pod-with-block-volume.yaml" replacing paths:
+      | ["metadata"]["name"]                                         | mypod-ori   |
+      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc-ori   |
+      | ["spec"]["containers"][0]["volumeDevices"][0]["devicePath"]  | /dev/dblock |
+    Then the step should succeed
+    And the pod named "mypod-ori" becomes ready
+    When I execute on the pod:
+      | /bin/dd | if=/dev/zero | of=/dev/dblock | bs=1M | count=1 |
+    Then the step should succeed
+    When I execute on the pod:
+      | sh | -c | echo "test data" > /dev/dblock |
+    Then the step should succeed
+    When I execute on the pod:
+      | sync |
+    Then the step should succeed
+
+    Given I obtain test data file "storage/csi/pvc-clone.yaml"
+    When I create a dynamic pvc from "pvc-clone.yaml" replacing paths:
+      | ["metadata"]["name"]                         | mypvc-clone  |
+      | ["spec"]["storageClassName"]                 | standard-csi |
+      | ["spec"]["resources"]["requests"]["storage"] | 1Gi          |
+      | ["spec"]["volumeMode"]                       | Block        |
+    Then the step should succeed
+    Given I obtain test data file "storage/misc/pod-with-block-volume.yaml"
+    When I run oc create over "pod-with-block-volume.yaml" replacing paths:
+      | ["metadata"]["name"]                                         | mypod-clone |
+      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc-clone |
+      | ["spec"]["containers"][0]["volumeDevices"][0]["devicePath"]  | /dev/dblock |
+    Then the step should succeed
+    Given the pod named "mypod-clone" becomes ready
+    When I execute on the pod:
+      | /bin/dd | if=/dev/dblock | of=/tmp/testfile | bs=1M | count=1 |
+    Then the step should succeed
+    When I execute on the pod:
+      | sh | -c | cat /tmp/testfile |
+    Then the step should succeed
+    And the output should contain "test data"
+
