@@ -97,7 +97,7 @@ attach_storage_to_container:
   action: attach_storage
   action:
     if_param: container_name
-    ref: 
+    ref:
     - open_containers_selector
     - select_one_container
   action:

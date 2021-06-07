@@ -1,0 +1,9 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+  name:  "<%= cb.catalog_name %>"
+  namespace: openshift-marketplace
+spec:
+  sourceType: grpc
+  image: "<%= cb.iib %>"
+

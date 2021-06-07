@@ -76,3 +76,33 @@ Whenever you are, you should usually have the convenience `#conf` method availab
 To access global options just type `conf[:option_name]`. If option is nested, you could do: `conf[:neting0, :nesting1, :options_name]`. This guarantees you that you don't get an exception looking for nested options but just get a nil when the option is not defined.
 
 To access non-global options, you need to write the root option name first, e.g. `conf[:optional_classes, :tcms_tc_manager, :class]`. What is a `root` option name you can see in `Configuration#[]` method.
+
+== Configuration YAML helper classes
+
+Instead of simple kay:value pairs in a configuration it is possible to use so called Helper classes supported by Ruby YAML processor like:
+
+`input_entry: !ruby/object:BushSlicer::ConfigEnvVariable
+  var_name: ENVVAR1`
+
+Above example means the key `input_entry` contains a value extracted from the content of shell environment variable `ENVVAR1`. This approach can be used anywhere in the configuration.
+
+Available Helper classed:
+* `ConfigEnvVariable` - content of environment variable
+* `ConfigEnvFile` - path for file with content of environment variable
+
+=== `ConfigEnvVariable`
+The aim of this helper class is a simple injecting of value from shell environment variable. It is useful in the case when the simple value is expected by the configuration.
+
+Parameters:
+  `var_name` - the name of shell environment variable for its content
+
+=== `ConfigEnvFile`
+The aim of this helper class is an easy injection of file path. The file path is a reference to created temporary file where is stored a content from shell environment variable after its base64 decoding. Temporary file is deleted at the end of execution automatically. It is useful in case when the file path is expected by the configuration.
+
+Parameters:
+  `var_name` - the name of shell environment variable for its content
+
+== Additional environment variables for `launch_instance.rb`
+It is possible to specify additional environment variables which are available in the running context of Ruby templates and invoked Shell scripts. This approach works differently than template's variables.
+
+Environment variables for exporting into the running context are specified by sub-section `install-envvars` under the `global` section inside `config/config.yaml`.

@@ -192,6 +192,8 @@ module BushSlicer
         c.syntax = "#{$0} clone-run [options]"
         c.description = "clone a test run from Polarion\n\t" \
           "e.g. tools/polarshift.rb clone-run my_run_id"
+        c.option('-s', "--status CASE_STAUTS", "testcase status to be cloned, passed, failed, default to all")
+        c.option('-t', "--title RUN_TITLE", "Title of the clone run you wish to be")
         c.action do |args, options|
           setup_global_opts(options)
 
@@ -200,7 +202,7 @@ module BushSlicer
           end
 
           test_run_id = args.first
-          clone_run(test_run_id: test_run_id)
+          clone_run(test_run_id: test_run_id, options: options)
         end
       end
 
@@ -462,14 +464,33 @@ module BushSlicer
 
     # given a testrun_id, generate a query statement based on testcase IDs and custom fields
     # which is fed into create_run_smart method to generate the new polarion run
+    # @options: is the cli options with
+    #  options['case_status'] = the cases status to be clones if none is given
+    #  then we clone all
+    #     valid_statuses = ['Passed', 'Failed', 'Waiting', 'Running', 'Blocked']
+    #  options['title'] = title of the run to be cloned, if none a default use
+    #  be used.
+    # cli example: ./polarshift.rb clone-run 20210525-1939 -s passed -t "kata passed clone"
     # The YAML basically contains 3 fields
     # 1.   "run_title":  "Clone of xyz run"
     # 2.   "case_query": "<SQL_STATEMENT>"
     # 3.   "custom_fields": <CONSTRUCTED_FROM_call_to_get_smart_run_method>
-    def clone_run(test_run_id: nil)
+    def clone_run(test_run_id: nil, options: nil)
       template_hash = {}
+      case_status = options.status
+      run_title = options.title
+      valid_statuses = ['Passed', 'Failed', 'Waiting', 'Running', 'Blocked']
       query_result = polarshift.get_run_smart(project, test_run_id)
-      tc_ids = extract_test_case_ids(query_result)
+      if case_status
+        case_status = case_status.downcase.capitalize
+        raised "Invalid status given, only #{valid_statuses} are accepted" unless valid_statuses.include? case_status
+        filtered_cases = query_result['records']["TestRecord"].select {|r| r['result'] == case_status}
+        tc_ids = filtered_cases.map {|c| c['test_case']['id']}
+        run_title ||= "Clone of '#{case_status}' cases for #{test_run_id}"
+      else
+        tc_ids = extract_test_case_ids(query_result)
+        run_title ||= "Clone of #{test_run_id}"
+      end
       if query_result['customFields'].nil?
         # hard-code it to something
         custom_fields = { "caseimportance" => "critical", "description" => "" }
@@ -477,7 +498,7 @@ module BushSlicer
         custom_fields = transform_custom_fields(query_result['customFields']['Custom'])
       end
       tc_str = tc_ids.join(" ")
-      template_hash[:run_title] = "Clone of #{test_run_id} -- #{query_result['title']}"
+      template_hash[:run_title] = run_title
       template_hash[:case_query] = "id:(#{tc_str})"
       template_hash[:custom_fields] = custom_fields
       pr = polarshift.create_run_smart(project_id: project, **template_hash)

@@ -664,7 +664,6 @@ require_relative 'chrome_extension'
       # screenshot = %{data:image/png;base64,#{browser.screenshot.base64}}
       # logger.embed screenshot, "application/octet-stream", "#{filename}-screenshot.png"
       logger.embed browser.screenshot.base64, "image/png;base64", "#{filename}-screenshot.png"
-      logger.embed Base64.strict_encode64(browser.html), "text/html;base64", "#{filename}.html"
     end
 
     def get_elements(type: nil, context: browser, selector:)

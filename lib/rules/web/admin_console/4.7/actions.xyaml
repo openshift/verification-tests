@@ -153,8 +153,8 @@ confirm_cancel_action:
   action:
     if_param:
       cancel: 'false'
-    ref: click_not_cancel
-click_not_cancel:
+    ref: click_cancel_in_modal
+click_cancel_in_modal:
   element:
     selector:
       xpath: //button[@data-test-id='modal-cancel-action']

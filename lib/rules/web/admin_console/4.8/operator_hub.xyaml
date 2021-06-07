@@ -321,7 +321,7 @@ check_ticked_capability_level:
   elements:
   - selector:
       xpath: //li[contains(., '<capability_name>')]/*[name()='svg']
-click_checkbox_from_provider_type:  
+click_checkbox_from_provider_type:
   elements:
   - selector:
       xpath: //form[@data-test-group-name='catalogSourceDisplayName']//*[contains(@class, 'pf-c-check__label') and contains(text(), '<text>')]
@@ -573,7 +573,7 @@ check_column_header_for_one_namespace:
 check_column_header_for_all_namespace:
   action: check_managed_namespace_column_header
   action: check_namesapce_column_header
-  
+
 check_managed_namespace_column_header:
   params:
     column_name: Managed Namespaces
@@ -591,7 +591,7 @@ check_namesapce_column_header_missing:
 check_managed_namespace_column_installed_for_one_ns:
   params:
     col_index: 2
-  action: check_operator_column_one_namespace 
+  action: check_operator_column_one_namespace
 check_managed_namespace_column_installed_for_all_ns:
   params:
     col_index: 2
@@ -601,7 +601,7 @@ check_managed_namespace_column_installed_for_all_ns:
 check_namespace_column_installed_for_one_ns_under_all_projects:
   params:
     col_index: 2
-  action: check_operator_column_one_namespace 
+  action: check_operator_column_one_namespace
 check_namespace_column_installed_for_all_ns_under_all_projects:
   params:
     col_index: 2
@@ -611,7 +611,7 @@ check_namespace_column_installed_for_all_ns_under_all_projects:
 check_managed_namespace_column_installed_for_one_ns_under_all_projects:
   params:
     col_index: 3
-  action: check_operator_column_one_namespace 
+  action: check_operator_column_one_namespace
 check_managed_namespace_column_installed_for_all_ns_under_all_projects:
   params:
     col_index: 3
@@ -619,11 +619,11 @@ check_managed_namespace_column_installed_for_all_ns_under_all_projects:
 
 check_operator_column_one_namespace:
   elements:
-  - selector: 
+  - selector:
       xpath: //h1[contains(text(),'<operator_name>')]//ancestor::tr[@data-test-rows='resource-row']/td[<col_index>]//a[contains(text(),'<project_name>') and @href='/k8s/cluster/namespaces/<project_name>']
 check_operator_column_all_namespace:
   elements:
-  - selector: 
+  - selector:
       xpath: //h1[contains(text(),'<operator_name>')]//ancestor::tr[@data-test-rows='resource-row']/td[<col_index>][contains(text(),'All Namespaces')]
 check_logging_operator_filtered_out:
   elements:
@@ -681,7 +681,7 @@ check_status_descriptor_grouping:
   - selector:
       xpath: //div[contains(@class,'co-operand-details__section')]//dl[@data-test-id='resource-summary']//button[contains(text(),'Namespace')]
   - selector:
-      xpath: //div[contains(@class,'co-operand-details__section')]//dl[@data-test-id='resource-summary']//button[contains(text(),'Labels')]      
+      xpath: //div[contains(@class,'co-operand-details__section')]//dl[@data-test-id='resource-summary']//button[contains(text(),'Labels')]
   - selector:
       xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--status')]//button[contains(text(),'Phase')]
   - selector:
@@ -831,7 +831,7 @@ check_extension_available_guide:
     op: click
 check_plugin_status_on_operator_details_page:
   elements:
-  - selector: 
+  - selector:
       xpath: //strong[contains(.,'<plugin_1_name>')]/parent::dd//button[text()='<plugin_1_status>']
   - selector:
       xpath: //strong[contains(.,'<plugin_2_name>')]/parent::dd//button[text()='<plugin_2_status>']

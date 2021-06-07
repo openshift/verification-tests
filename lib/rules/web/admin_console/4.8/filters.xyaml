@@ -118,7 +118,7 @@ check_results_contain_correct_catagory:
           contain = catagory.className.includes('<catagory>'.toLowerCase()) || contain
         })
         return contain
-      expect_result: true 
+      expect_result: true
 check_item_in_table:
   elements:
   - selector:

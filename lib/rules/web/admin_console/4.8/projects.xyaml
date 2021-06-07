@@ -2,7 +2,7 @@
 create_project:
   action: click_create_project_button
   action: set_project_name
-  action: 
+  action:
     if_param: display_name
     ref: set_project_display_name
   action:
