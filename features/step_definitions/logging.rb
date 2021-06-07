@@ -267,8 +267,11 @@ Given /^I create clusterlogging instance with:$/ do | table |
   ensure_admin_tagged
   step %Q/I switch to cluster admin pseudo user/
   step %Q/I use the "openshift-logging" project/
-  logging_ns = "openshift-logging"
   crd_yaml = opts[:crd_yaml]
+  storage_class = opts[:storage_class]
+  storage_size = opts[:storage_size]
+  es_node_count = opts[:es_node_count]
+  redundancy_policy = opts[:redundancy_policy]
   if opts[:check_status].nil?
     check_status = 'true'
   else
@@ -279,7 +282,34 @@ Given /^I create clusterlogging instance with:$/ do | table |
     step %Q/I delete the clusterlogging instance/
   end
 
-  @result = admin.cli_exec(:create, f: crd_yaml, n: logging_ns)
+  if !(storage_size.nil? && storage_class.nil?)
+    process_opts=[
+      ["f", "#{crd_yaml}"],
+      ["n", "openshift-logging"]
+    ]
+    if !(storage_class.nil?)
+      process_opts << ["p", "STORAGE_CLASS=#{storage_class}"]
+    end
+    if !(storage_size.nil?)
+      process_opts << ["p", "PVC_SIZE=#{storage_size}"]
+    end
+    if !(es_node_count.nil?)
+      process_opts << ["p", "ES_NODE_COUNT=#{es_node_count}"]
+    end
+    if !(redundancy_policy.nil?)
+      process_opts << ["p", "REDUNDANCY_POLICY=#{redundancy_policy}"]
+    end
+
+    p_opts = opts_array_process(process_opts)
+    p_opts << [:_stderr, :stderr]
+    @result = admin.cli_exec(:process, p_opts)
+    if @result[:success]
+      @result = admin.cli_exec(:create, {f: "-", _stdin: @result[:stdout]})
+    end
+  else
+    @result = admin.cli_exec(:create, f: crd_yaml, n: "openshift-logging")
+  end
+
   raise "Unable to create clusterlogging instance" unless @result[:success]
   if opts[:remove_logging_pods] == 'true'
     teardown_add {
@@ -308,9 +338,8 @@ Given /^I delete the clusterlogging instance$/ do
   ensure_destructive_tagged
   step %Q/I switch to cluster admin pseudo user/
   step %Q/I use the "openshift-logging" project/
-  logging_ns = "openshift-logging"
   if cluster_logging("instance").exists?
-    @result = admin.cli_exec(:delete, object_type: 'clusterlogging', object_name_or_id: 'instance', n: logging_ns)
+    @result = admin.cli_exec(:delete, object_type: 'clusterlogging', object_name_or_id: 'instance', n: 'openshift-logging')
     raise "Unable to delete instance" unless @result[:success]
   end
   step %Q/I wait for the resource "deployment" named "kibana" to disappear/
@@ -323,6 +352,9 @@ Given /^I delete the clusterlogging instance$/ do
   step %Q/all existing pods die with labels:/, table(%{
     | component=kibana |
   })
+  if BushSlicer::PersistentVolumeClaim.list(user: user, project: project).count > 0
+    admin.cli_exec(:delete, object_type: 'pvc', l: 'logging-cluster=elasticsearch', n: 'openshift-logging')
+  end
 end
 
 Given /^(cluster-logging|elasticsearch-operator) channel name is stored in the#{OPT_SYM} clipboard$/ do | packagemanifest, cb_name |
@@ -336,6 +368,7 @@ Given /^(cluster-logging|elasticsearch-operator) channel name is stored in the#{
       envs = logging_envs[:eo]
     end
   end
+  project("openshift-marketplace")
   # check if the packagemanifest exist
   raise "Packagemanifest #{packagemanifest} doesn't exist" unless package_manifest(packagemanifest).exists?
 

@@ -19,35 +19,17 @@ Feature: Elasticsearch related tests
   # @case_id OCP-22050
   @admin
   @destructive
-  @flaky
   Scenario: Elasticsearch using dynamic volumes
-    And default storageclass is stored in the :default_sc clipboard
-    Given I delete the clusterlogging instance
-    Then the step should succeed
-    Given I use the "openshift-logging" project
-    And I register clean-up steps:
-    """
-    Given I delete the clusterlogging instance
-    Then the step should succeed
-    And I run the :delete client command with:
-      | object_type | pvc               |
-      | all         | true              |
-      | n           | openshift-logging |
-    Then the step should succeed
-    """
+    Given default storageclass is stored in the :default_sc clipboard
     Given I obtain test data file "logging/clusterlogging/clusterlogging-storage-template.yaml"
-    When I process and create:
-      | f | clusterlogging-storage-template.yaml    |
-      | p | STORAGE_CLASS=<%= cb.default_sc.name %> |
-      | p | PVC_SIZE=10Gi                           |
+    Given I create clusterlogging instance with:
+      | remove_logging_pods | true                                 |
+      | crd_yaml            | clusterlogging-storage-template.yaml |
+      | storage_class       | <%= cb.default_sc.name %>            |
+      | storage_size        | 10Gi                                 |
     Then the step should succeed
-    Given I wait for the "instance" clusterloggings to appear
     And the expression should be true> cluster_logging('instance').logstore_storage_class_name == cb.default_sc.name
-    Given I wait for the "elasticsearch" elasticsearches to appear
     And the expression should be true> elasticsearch('elasticsearch').nodes[0]['storage']['storageClassName'] == cb.default_sc.name
-    Given I wait until ES cluster is ready
-    And I wait until fluentd is ready
-    And I wait until kibana is ready
     Given I wait up to 300 seconds for the steps to pass:
     """
     Given evaluation of `elasticsearch('elasticsearch').nodes[0]['genUUID']` is stored in the :gen_uuid clipboard
