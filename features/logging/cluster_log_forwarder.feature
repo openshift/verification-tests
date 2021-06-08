@@ -495,3 +495,58 @@ Feature: cluster log forwarder features
     And evaluation of `JSON.parse(@result[:stdout])['count']` is stored in the :app_log_count_2 clipboard
     And the expression should be true> cb.app_log_count_2 > 0
     """
+  # @author kbharti@redhat.com
+  # @case_id OCP-39786
+  @admin
+  @destructive
+  Scenario: Send logs to both external fluentd and internalES
+    #Creating secure fluentd receiver
+    Given I switch to the first user
+    And I have a project
+    And evaluation of `project` is stored in the :fluentd_proj clipboard
+    Given fluentd receiver is deployed as secure with mTLS enabled in the "<%= cb.fluentd_proj.name %>" project
+    # Creating app
+    And I create a project with non-leading digit name
+    And evaluation of `project` is stored in the :proj clipboard
+    And I obtain test data file "logging/loggen/container_json_log_template.json"
+    When I run the :new_app client command with:
+      | file | container_json_log_template.json |
+    Then the step should succeed
+    #Creating Cluster Logging Forwarder instance
+    Given I switch to cluster admin pseudo user
+    And I use the "openshift-logging" project
+    Given admin ensures "instance" cluster_log_forwarder is deleted from the "openshift-logging" project after scenario
+    And I obtain test data file "logging/clusterlogforwarder/fluentd/secure/clusterlogforwarder.yaml"
+    When I process and create:
+      | f | clusterlogforwarder.yaml |
+      | p | URL=tcp://fluentdserver.<%= cb.fluentd_proj.name %>.svc:24224 |
+    Then the step should succeed
+    And I wait for the "instance" cluster_log_forwarder to appear
+    # Creating Cluster Logging Instance
+    And I wait for the "instance" cluster_log_forwarder to appear
+    Given I obtain test data file "logging/clusterlogging/example_indexmanagement.yaml"
+    When I create clusterlogging instance with:
+      | remove_logging_pods | true                         |
+      | crd_yaml            | example_indexmanagement.yaml |
+    Then the step should succeed
+    Given I wait for the "fluentd" daemon_set to appear up to 300 seconds
+    And <%= daemon_set('fluentd').replica_counters[:desired] %> pods become ready with labels:
+      | logging-infra=fluentd |
+    # Check logs in fluentd receiver
+    Given I use the "<%= cb.fluentd_proj.name %>" project
+    And I wait up to 300 seconds for the steps to pass:
+    """
+    When I execute on the "<%= cb.log_receiver.name %>" pod:
+      | ls | -l | /fluentd/log |
+    Then the output should contain:
+      | app.log             |
+      | audit.log           |
+      | infra.log           |
+      | infra-container.log |
+    """
+    # Check logs in ES server
+    Given I use the "openshift-logging" project
+    When I perform the HTTP request on the ES pod with labels "es-node-master=true":
+      | relative_url | app*/_count?format=JSON |
+      | op           | GET                     |
+    Then the step should succeed
