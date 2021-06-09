@@ -1,0 +1,11 @@
+apiVersion: console.openshift.io/v1
+kind: ConsoleLink
+metadata:
+  name: acm-console-link
+spec:
+  applicationMenu:
+    imageURL: https://CONSOLE_ROUTE/multicloud/header/graphics/RHACM-logo_24x24.svg
+    section: Red Hat Applications
+  href: https://CONSOLE_ROUTE
+  location: ApplicationMenu
+  text: Red Hat Advanced Cluster Management for Kubernetes

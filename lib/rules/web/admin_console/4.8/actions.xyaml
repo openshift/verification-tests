@@ -93,6 +93,10 @@ edit_secret_action:
   params:
     item: Edit Secret
   action: click_one_dropdown_action
+rollback_action:
+  params:
+    item: Rollback
+  action: click_one_dropdown_action
 choose_item_from_list:
   elements:
   - selector:
