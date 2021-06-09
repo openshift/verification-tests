@@ -193,6 +193,11 @@ check_edit_yaml_enabled:
     button_text: Save
   action: click_yaml_tab
   action: check_button_enabled
+click_checkbox_input_by_text:
+  element:
+    selector:
+      xpath: //label[contains(.,'<text>')]/input[@type='checkbox']
+    op: click
 click_radio_input:
   element:
     selector:
