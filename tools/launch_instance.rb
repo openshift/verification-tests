@@ -603,7 +603,7 @@ module BushSlicer
       when "shell_command"
         exec_opts = {
           single: true,
-          stderr: :stdout, stdout: STDOUT,
+          stderr: :stdout, stdout: STDOUT, stdin: task[:stdin],
           timeout: 36000
         }
         if task[:env]
