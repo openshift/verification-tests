@@ -322,7 +322,7 @@ Given /^I have a pod-for-ping in the(?: "([^ ]+?)")? project$/ do |project_name|
     raise "project #{project_name} does not exist"
   end
 
-  @result = user.cli_exec(:create, f: "https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/aosqe-pod-for-ping.json")
+  @result = user.cli_exec(:create, f: "https://raw.githubusercontent.com/openshift/verification-tests/master/testdata/networking/aosqe-pod-for-ping.json")
   raise "could not create a pod-for-ping" unless @result[:success]
 
   cb.ping_pod = pod("hello-pod")
