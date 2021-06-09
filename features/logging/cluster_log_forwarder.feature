@@ -501,29 +501,32 @@ Feature: cluster log forwarder features
   @destructive
   Scenario: Send logs to both external fluentd and internalES
     #Creating secure fluentd receiver
-    Given I switch to the first user
-    And I have a project
-    And evaluation of `project` is stored in the :fluentd_proj clipboard
-    Given fluentd receiver is deployed as secure with mTLS enabled in the "<%= cb.fluentd_proj.name %>" project
+    Given I switch to cluster admin pseudo user
+    Given fluentd receiver is deployed as secure with server_auth_share enabled in the "openshift-logging" project
     # Creating app
+    Given I switch to the first user
     And I create a project with non-leading digit name
     And evaluation of `project` is stored in the :proj clipboard
     And I obtain test data file "logging/loggen/container_json_log_template.json"
     When I run the :new_app client command with:
       | file | container_json_log_template.json |
     Then the step should succeed
-    #Creating Cluster Logging Forwarder instance
+    #Creating secure secret and ConfigMap
     Given I switch to cluster admin pseudo user
-    And I use the "openshift-logging" project
-    Given admin ensures "instance" cluster_log_forwarder is deleted from the "openshift-logging" project after scenario
-    And I obtain test data file "logging/clusterlogforwarder/fluentd/secure/clusterlogforwarder.yaml"
-    When I process and create:
-      | f | clusterlogforwarder.yaml |
-      | p | URL=tcp://fluentdserver.<%= cb.fluentd_proj.name %>.svc:24224 |
+    Given admin ensures "secure-forward" config_map is deleted from the "openshift-logging" project after scenario
+    Given admin ensures "secure-forward" secret is deleted from the "openshift-logging" project after scenario
+    Given I run the :create_secret client command with:
+      | name         | secure-forward           |
+      | secret_type  | generic                  |
+      | from_file    | ca-bundle.crt=ca.crt     |
+      | n            | openshift-logging        |
     Then the step should succeed
-    And I wait for the "instance" cluster_log_forwarder to appear
+    Given I obtain test data file "logging/clusterlogforwarder/fluentd/secure/secure-forward-cm.yaml"
+    Given I run the :create client command with:
+      | f | secure-forward-cm.yaml |
+    Then the step should succeed
+    And I wait for the "secure-forward" config_map to appear
     # Creating Cluster Logging Instance
-    And I wait for the "instance" cluster_log_forwarder to appear
     Given I obtain test data file "logging/clusterlogging/example_indexmanagement.yaml"
     When I create clusterlogging instance with:
       | remove_logging_pods | true                         |
@@ -533,7 +536,7 @@ Feature: cluster log forwarder features
     And <%= daemon_set('fluentd').replica_counters[:desired] %> pods become ready with labels:
       | logging-infra=fluentd |
     # Check logs in fluentd receiver
-    Given I use the "<%= cb.fluentd_proj.name %>" project
+    Given I use the "openshift-logging" project
     And I wait up to 300 seconds for the steps to pass:
     """
     When I execute on the "<%= cb.log_receiver.name %>" pod:
@@ -547,6 +550,7 @@ Feature: cluster log forwarder features
     # Check logs in ES server
     Given I use the "openshift-logging" project
     When I perform the HTTP request on the ES pod with labels "es-node-master=true":
-      | relative_url | app*/_count?format=JSON |
+      | relative_url | app*/_count?format=JSON' -d '{"query": {"match": {"kubernetes.namespace_name": "<%= cb.proj.name %>"}}} |
       | op           | GET                     |
     Then the step should succeed
+    And the expression should be true> @result[:parsed]['count'] > 0
