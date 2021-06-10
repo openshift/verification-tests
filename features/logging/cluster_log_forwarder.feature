@@ -532,11 +532,7 @@ Feature: cluster log forwarder features
       | remove_logging_pods | true                         |
       | crd_yaml            | example_indexmanagement.yaml |
     Then the step should succeed
-    Given I wait for the "fluentd" daemon_set to appear up to 300 seconds
-    And <%= daemon_set('fluentd').replica_counters[:desired] %> pods become ready with labels:
-      | logging-infra=fluentd |
     # Check logs in fluentd receiver
-    Given I use the "openshift-logging" project
     And I wait up to 300 seconds for the steps to pass:
     """
     When I execute on the "<%= cb.log_receiver.name %>" pod:
