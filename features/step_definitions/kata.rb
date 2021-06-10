@@ -41,7 +41,7 @@ Given /^I wait for #{QUOTED} (uninstall|install) to start$/ do | kc_name, mode |
 end
 
 Given /^I wait until number of completed kata runtime nodes match#{OPT_QUOTED} for #{QUOTED}$/ do |number, kc_name|
-  ready_timeout = 1000
+  ready_timeout = 1200
   matched = kata_config(kc_name).wait_till_installed_counter_match(
     user: user, seconds: ready_timeout)
   unless matched[:success]
@@ -59,7 +59,7 @@ Given /^I remove kata operator from the#{OPT_QUOTED} namespace$/ do | kata_ns |
   # 1. remove kataconfig first
   project(kata_ns)
   kataconfig_name = BushSlicer::KataConfig.list(user: admin).first.name
-  step %Q/I ensure "#{kataconfig_name}" kata_config is deleted within 1000 seconds/
+  step %Q/I ensure "#{kataconfig_name}" kata_config is deleted within 1200 seconds/
   # 2. remove namespace
   step %Q/I ensure "#{kata_ns}" project is deleted/
 end
