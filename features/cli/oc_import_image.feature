@@ -199,9 +199,9 @@ Feature: oc import-image related feature
   Scenario: Allow imagestream request deployment config triggers by different mode('TagreferencePolicy':source/local)
     Given I have a project
     When I run the :tag client command with:
-      | source_type | docker                       |
-      | source      | openshift/deployment-example |
-      | dest        | deployment-example:latest    |
+      | source_type | docker                                          |
+      | source      | quay.io/openshifttest/deployment-example:latest |
+      | dest        | deployment-example:latest                       |
     Then the output should match:
       | [Tt]ag deployment-example:latest           |
     When I run the :new_app client command with:
@@ -231,10 +231,10 @@ Feature: oc import-image related feature
       | all         |     |
     Then the step should succeed
     When I run the :tag client command with:
-      | source_type      | docker                       |
-      | source           | openshift/deployment-example |
-      | dest             | deployment-example:latest    |
-      | reference_policy | local                        |
+      | source_type      | docker                                          |
+      | source           | quay.io/openshifttest/deployment-example:latest |
+      | dest             | deployment-example:latest                       |
+      | reference_policy | local                                           |
     Then the output should match:
       | [Tt]ag deployment-example:latest           |
     When I run the :new_app client command with:
@@ -257,19 +257,19 @@ Feature: oc import-image related feature
   Scenario: Allow imagestream request build config triggers by different mode('TagreferencePolicy':source/local)
     Given I have a project
     When I run the :import_image client command with:
-      | from       | centos/ruby-22-centos7 |
-      | confirm    | true                   |
-      | image_name | ruby-22-centos7:latest |
+      | from       | quay.io/openshifttest/ruby-25-centos7 |
+      | confirm    | true                                  |
+      | image_name | ruby-25-centos7:latest                |
     Then the step should succeed
     When I run the :new_build client command with:
-      | image_stream | ruby-22-centos7                          |
+      | image_stream | ruby-25-centos7                       |
       | code         | https://github.com/sclorg/ruby-ex.git |
     Then the step should succeed
     When I run the :get client command with:
       | resource_name   | ruby-ex |
       | resource        | bc      |
       | o               | yaml    |
-    Then the expression should be true> @result[:parsed]['spec']['triggers'][3]['imageChange']['lastTriggeredImageID'].include? 'centos/ruby-22-centos7'
+    Then the expression should be true> @result[:parsed]['spec']['triggers'][3]['imageChange']['lastTriggeredImageID'].include? 'centos/ruby-25-centos7'
     When I run the :delete client command with:
       | object_type | bc |
       | all         |    |
@@ -279,18 +279,18 @@ Feature: oc import-image related feature
       | all         |    |
     Then the step should succeed
     When I run the :import_image client command with:
-      | from            | centos/ruby-22-centos7 |
-      | confirm         | true                   |
-      | image_name      | ruby-22-centos7:latest |
-      | reference-policy| local                  |
+      | from            | quay.io/openshifttest/ruby-25-centos7 |
+      | confirm         | true                                  |
+      | image_name      | ruby-25-centos7:latest                |
+      | reference-policy| local                                 |
     Then the step should succeed
     When I run the :new_build client command with:
-      | image_stream | ruby-22-centos7                          |
+      | image_stream | ruby-25-centos7                       |
       | code         | https://github.com/sclorg/ruby-ex.git |
     Then the step should succeed
     When I run the :get client command with:
       | resource_name   | ruby-ex |
       | resource        | bc      |
       | o               | yaml    |
-    Then the expression should be true> @result[:parsed]['spec']['triggers'][3]['imageChange']['lastTriggeredImageID'].include? '<%= project.name %>/ruby-22-centos7'
+    Then the expression should be true> @result[:parsed]['spec']['triggers'][3]['imageChange']['lastTriggeredImageID'].include? '<%= project.name %>/ruby-25-centos7'
 

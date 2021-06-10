@@ -36,18 +36,18 @@ Feature: dockerbuild.feature
   Scenario Outline: Docker and STI build with dockerImage with specified tag
     Given I have a project
     When I run oc create over "<template>" replacing paths:
-      | ["spec"]["strategy"]["<strategy>"]["from"]["name"] | docker.io/centos/ruby-22-centos7 | 
+      | ["spec"]["strategy"]["<strategy>"]["from"]["name"] | quay.io/openshifttest/ruby-25-centos7 | 
     Then the step should succeed
     Given the "ruby-sample-build-1" build completed
     When I run the :describe client command with:
       | resource | build               |
       | name     | ruby-sample-build-1 |
     Then the output should contain:
-      | DockerImage docker.io/centos/ruby-22-centos7 |
+      | DockerImage quay.io/openshifttest/ruby-25-centos7 |
     When I run the :patch client command with:
-      | resource      | bc                                                                                                  |
-      | resource_name | ruby-sample-build                                                                                   |
-      | p             | {"spec":{"strategy":{"<strategy>":{"from":{"name":"docker.io/centos/ruby-22-centos7:incorrect"}}}}} |
+      | resource      | bc                                                                                                       |
+      | resource_name | ruby-sample-build                                                                                        |
+      | p             | {"spec":{"strategy":{"<strategy>":{"from":{"name":"quay.io/openshifttest/ruby-25-centos7:incorrect"}}}}} |
     Then the step should succeed
     Given I run the :start_build client command with:
       | buildconfig | ruby-sample-build |
@@ -56,8 +56,8 @@ Feature: dockerbuild.feature
       | resource | build               |
       | name     | ruby-sample-build-2 |
     Then the output should contain:
-      | Failed                                                              |
-      | DockerImage docker.io/centos/ruby-22-centos7:incorrect |
+      | Failed                                                      |
+      | DockerImage quay.io/openshifttest/ruby-25-centos7:incorrect |
 
     Examples:
       | template | strategy |
