@@ -9,27 +9,22 @@ module BushSlicer
       rr.dig('spec', 'snapshotDataName')
     end
 
-    # @return [BushSlicer::ResultHash] with :success depending on
-    #   condition type=Ready and status=True
     def ready?(user:, quiet: false, cached: false)
-      if cached && props[:raw]
-        res = { instruction: "get cached volume snapshot #{name} readiness",
-                response: props[:raw].to_yaml,
-                success: true,
-                exitstatus: 0,
-                parsed: props[:raw]
-        }
-      else
-        res = get(user: user, quiet: quiet)
-      end
-      if res[:success]
-        res[:success] =
-          res[:parsed]["status"] &&
-          res[:parsed]["status"]["conditions"] &&
-          res[:parsed]["status"]["conditions"].any? { |c|
-            c["type"] == "Ready" && c["status"] == "True"
-          }
-      end
+      rr = raw_resource(user: user, cached: cached, quiet: quiet)
+      rr.dig('status', 'readyToUse') == true
+    end
+
+    def wait_till_ready(user: nil, seconds: 30)
+      res = nil
+      iterations = 0
+      start_time = monotonic_seconds
+
+      success = wait_for(seconds) {
+        res = ready?(user: user, quiet: true)
+      }
+      duration = monotonic_seconds - start_time
+      logger.info "After #{iterations} iterations and #{duration.to_i} " <<
+                    "seconds:\n"
 
       return res
     end
