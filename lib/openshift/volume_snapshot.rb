@@ -21,6 +21,7 @@ module BushSlicer
 
       success = wait_for(seconds) {
         res = ready?(user: user, quiet: true)
+        iterations = iterations + 1
       }
       duration = monotonic_seconds - start_time
       logger.info "After #{iterations} iterations and #{duration.to_i} " <<
