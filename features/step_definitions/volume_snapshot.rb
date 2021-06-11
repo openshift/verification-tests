@@ -48,3 +48,9 @@ When /^admin creates a VolumeSnapshotClass replacing paths:$/ do |table|
     raise "Failed to create VolumeSnapshotClass."
   end
 end
+
+
+Given /^the#{OPT_QUOTED} volumesnapshot becomes ready(?: within (\d+) seconds)?$/ do |name, timeout|
+  timeout ||= 60
+  volume_snapshot(name).wait_till_ready(user: user, seconds: timeout)
+end
