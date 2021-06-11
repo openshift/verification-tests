@@ -31,3 +31,22 @@ Given /^I open admin console in a browser$/ do
   browser.base_url = browser.url.sub(%r{(https://[^/]+/).*}, "\\1")
 end
 
+Given /^I open admin console in a browser with:$/ do |table|
+  base_rules = BushSlicer::WebConsoleExecutor::RULES_DIR + "/base/"
+  snippets_dir = BushSlicer::WebConsoleExecutor::SNIPPETS_DIR
+
+  version = env.webconsole_executor.get_master_version(user, via_rest: true)
+  step "I have a browser with:", table(%{
+    | rules        | lib/rules/web/admin_console/#{version}/  |
+    | rules        | #{base_rules}                            |
+    | rules        | lib/rules/web/admin_console/base/        |
+    | base_url     | <%= env.admin_console_url %>             |
+    | snippets_dir | #{snippets_dir}                          |
+  })
+  browser.run_action(:goto_admin_console_root)
+  params = opts_array_to_hash(table.raw)
+  @result = browser.run_action(:login_sequence,
+                               username: params[:user],
+                               password: params[:password],
+                               idp: params[:idp])
+end
