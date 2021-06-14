@@ -220,7 +220,7 @@ Feature: testing multicast scenarios
     And the output should match:
       | <%= cb.proj1pod1ip %>.*joined \(S,G\) = \(\*, 239.255.254.24\), pinging |
       | <%= cb.proj1pod2ip %>.*joined \(S,G\) = \(\*, 239.255.254.24\), pinging |
-    And the output should not contain:
+    And the output should not match:
       | <%= cb.proj1pod1ip %>.*multicast, xmt/rcv/%loss = 5/0/0%                |
       | <%= cb.proj1pod2ip %>.*multicast, xmt/rcv/%loss = 5/0/0%                |
     """
@@ -266,7 +266,7 @@ Feature: testing multicast scenarios
     And the output should match:
       | <%= cb.proj2pod1ip %>.*joined \(S,G\) = \(\*, 239.255.254.24\), pinging |
       | <%= cb.proj2pod2ip %>.*joined \(S,G\) = \(\*, 239.255.254.24\), pinging |
-    And the output should not contain:
+    And the output should not match:
       | <%= cb.proj2pod1ip %>.*multicast, xmt/rcv/%loss = 5/0/0%                |
       | <%= cb.proj2pod2ip %>.*multicast, xmt/rcv/%loss = 5/0/0%                |
     """
