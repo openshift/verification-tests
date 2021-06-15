@@ -275,9 +275,13 @@ check_all_series_show:
   action: check_button_title
 
 click_pod_chart_link:
+  params:
+    text: Metrics
+    link_url: /metrics
+  action: click_link_with_text
   element:
     selector:
-      xpath: //h5[contains(text(),'<chart_name>')]/../a
+      xpath: //h2[contains(text(),'<chart_name>')]/../..//a
     op: click
 check_data_diplayed_db:
   element:
