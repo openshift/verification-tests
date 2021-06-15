@@ -51,6 +51,7 @@ Feature: Logging smoke test case
     # Console Dashboard
     When I run the :goto_monitoring_db_cluster_logging web action
     Then the step should succeed
+    Given 60 seconds have passed
     Given evaluation of `["Elastic Cluster Status", "Elastic Nodes", "Elastic Shards", "Elastic Documents", "Total Index Size on Disk", "Elastic Pending Tasks", "Elastic JVM GC time", "Elastic JVM GC Rate", "Elastic Query/Fetch Latency | Sum", "Elastic Query Rate | Top 5", "CPU", "Elastic JVM Heap Used", "Elasticsearch Disk Usage", "File Descriptors In Use", "FluentD emit count", "FluentD Buffer Availability", "Elastic rx bytes", "Elastic Index Failure Rate", "FluentD Output Error Rate"]` is stored in the :cards clipboard
     And I repeat the following steps for each :card in cb.cards:
     """
