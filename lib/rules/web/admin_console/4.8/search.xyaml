@@ -17,20 +17,26 @@ click_resource_type_dropdown:
 send_type_filter:
   elements:
   - selector:
-      xpath: //input[@data-test-id='dropdown-text-filter']
+      xpath: //input[@placeholder='Select Resource']
     op: send_keys <resource_kind>
 search_resource_kind_only:
-  element:
-    selector:
-      xpath: //li//span[text()='<resource_kind>']
+  elements:
+  - selector:
+      xpath: //label//span[text()='<resource_kind>']
     op: click
     timeout: 15
+  - selector:
+      xpath: //span[@class='pf-c-dropdown__toggle']
+    op: click
 search_resource_kind_and_api_group:
-  element:
-    selector:
-      xpath: //li//span[text()='<resource_kind>']/following-sibling::span[contains(., '<resource_group>')]
+  elements:
+  - selector:
+      xpath: //span[text()='<resource_kind>']/following-sibling::span[contains(., '<resource_group>')]
     op: click
     timeout: 15
+  - selector:
+      xpath: //span[@class='pf-c-dropdown__toggle']
+    op: click
 clear_one_search_item:
   elements:
   - selector:
