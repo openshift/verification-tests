@@ -188,6 +188,10 @@ click_machine_configs_tab:
   params:
     tab_name: MachineConfigs
   action: click_tab
+click_metrics_tab:
+  params:
+    tab_name: Metrics
+  action: click_tab
 check_edit_yaml_enabled:
   params:
     button_text: Save
