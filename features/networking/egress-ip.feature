@@ -129,7 +129,7 @@ Feature: Egress IP related features
     And I register clean-up steps:
     """
     as admin I successfully merge patch resource "hostsubnet/<%= node.name %>" with:
-      | {"egressCIDRs":null}   |
+      | {"egressCIDRs":null,"egressIPs": null}   |
     """
 
     # Patch egress IP to the project twice
@@ -560,7 +560,7 @@ Feature: Egress IP related features
     And I register clean-up steps:
     """
     as admin I successfully merge patch resource "hostsubnet/<%= cb.nodes[0].name %>" with:
-      | {"egressCIDRs":null}   |
+      | {"egressCIDRs":null,"egressIPs": null}   |
     """
 
     # Patch same egress IP to different project
@@ -582,3 +582,187 @@ Feature: Egress IP related features
       | bash | -c | ip -4 -brief a show <%= cb.interface %> |
     Then the step should succeed
     And the output should not contain "<%= cb.valid_ip %>"
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-40928
+  @admin
+  @destructive
+  Scenario: [sdn-1282] Manually EgressIPs assignments:if a pod is on a node that is hosting an egressIP that pod will always use the egressIP of the node it is on
+    Given I save ipecho url to the clipboard
+    Given I store the schedulable workers in the :nodes clipboard
+    Given I store a random unused IP address from the reserved range to the clipboard
+
+    #Patch two egress ips to two nodes
+    Given I register clean-up steps:
+    """
+    as admin I successfully merge patch resource "hostsubnet/<%= cb.nodes[0].name %>" with:
+      | {"egressIPs":null}   |
+    as admin I successfully merge patch resource "hostsubnet/<%= cb.nodes[1].name %>" with:
+      | {"egressIPs":null}   |
+    """
+    Given as admin I successfully merge patch resource "hostsubnet/<%= cb.nodes[0].name %>" with:
+      | {"egressIPs": ["<%= cb.valid_ips[0] %>"] } |
+    Given as admin I successfully merge patch resource "hostsubnet/<%= cb.nodes[1].name %>" with:
+      | {"egressIPs": ["<%= cb.valid_ips[1] %>"] } |
+
+    # Create a pod and locate on specific node
+    Given I have a project
+    Given I obtain test data file "networking/list_for_pods.json"
+    When I run oc create over "list_for_pods.json" replacing paths:
+      | ["items"][0]["spec"]["template"]["spec"]["nodeName"] | <%= cb.nodes[1].name %> |
+      | ["items"][0]["spec"]["replicas"]                     | 1                       |
+    Then the step should succeed
+    Given a pod becomes ready with labels:
+      | name=test-pods |
+
+    # patch two egress ips to new project
+    Given as admin I successfully merge patch resource "netnamespace/<%= project.name %>" with:
+      | {"egressIPs": <%= cb.valid_ips[0..1].to_json %> } |
+
+    # Check the source IP is pods's located node's egress ip
+    When I execute on the pod:
+      | bash | -c | for i in {1..10}; do curl -s --connect-timeout 2 <%= cb.ipecho_url %> ; sleep 2;echo ""; done;  |
+    Then the step should succeed
+    And the output should contain "<%= cb.valid_ips[1] %>"
+    And the output should not contain "<%= cb.valid_ips[0] %>"
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-40933
+  @admin
+  @destructive
+  Scenario: [sdn-1282] Manually EgressIPs assignments: if a pod is not on a node hosting an egressIP it is random which egressIP it will use
+    Given I save ipecho url to the clipboard
+    Given I store the masters in the :masters clipboard
+    Given I store the schedulable workers in the :workers clipboard
+    Given I store a random unused IP address from the reserved range to the clipboard
+
+    #Patch two egress ips to two nodes
+    Given I register clean-up steps:
+    """
+    as admin I successfully merge patch resource "hostsubnet/<%= cb.masters[0].name %>" with:
+      | {"egressIPs":null}   |
+    as admin I successfully merge patch resource "hostsubnet/<%= cb.workers[0].name %>" with:
+      | {"egressIPs":null}   |
+    """
+    Given as admin I successfully merge patch resource "hostsubnet/<%= cb.masters[0].name %>" with:
+      | {"egressIPs": ["<%= cb.valid_ips[0] %>"] } |
+    Given as admin I successfully merge patch resource "hostsubnet/<%= cb.workers[0].name %>" with:
+      | {"egressIPs": ["<%= cb.valid_ips[1] %>"] } |
+
+    # Create a pod and locate on specific node which is not an egress ip node
+    Given I have a project
+    Given I obtain test data file "networking/list_for_pods.json"
+    When I run oc create over "list_for_pods.json" replacing paths:
+      | ["items"][0]["spec"]["template"]["spec"]["nodeName"] | <%= cb.workers[1].name %> |
+      | ["items"][0]["spec"]["replicas"]                     | 1                       |
+    Then the step should succeed
+    Given a pod becomes ready with labels:
+      | name=test-pods |
+
+    # patch two egress ips to new project
+    Given as admin I successfully merge patch resource "netnamespace/<%= project.name %>" with:
+      | {"egressIPs": <%= cb.valid_ips[0..1].to_json %>} |
+
+    # Check the source IP randomly uses both egress ips
+    When I execute on the pod:
+      | bash | -c | for i in {1..10}; do curl -s --connect-timeout 2 <%= cb.ipecho_url %> ; sleep 2;echo ""; done;  |
+    Then the step should succeed
+    And the output should contain "<%= cb.valid_ips[1] %>"
+    And the output should contain "<%= cb.valid_ips[0] %>"
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-40957
+  @admin
+  @destructive
+  Scenario: [SDN-1282] Auto EgressIPs assignments: if a pod is not on a node hosting an egressIP it is random which egressIP it will use
+    Given I save ipecho url to the clipboard
+    Given I store the masters in the :masters clipboard
+    Given I store the schedulable workers in the :workers clipboard
+    Given I store a random unused IP address from the reserved range to the clipboard
+    And evaluation of `lambda { |i| "#{i.to_s}/#{i.prefix.to_s}" }.call(IPAddr.new("<%= cb.subnet_range %>"))` is stored in the :valid_subnet clipboard
+
+    #Patch two egress ips to two nodes
+    Given I register clean-up steps:
+    """
+    as admin I successfully merge patch resource "hostsubnet/<%= cb.masters[0].name %>" with:
+      | {"egressCIDRs":null,"egressIPs": null}   |
+    as admin I successfully merge patch resource "hostsubnet/<%= cb.workers[0].name %>" with:
+      | {"egressCIDRs":null,"egressIPs": null}   |
+    """
+    Given as admin I successfully merge patch resource "hostsubnet/<%= cb.masters[0].name %>" with:
+      | {"egressCIDRs": ["<%= cb.valid_subnet %>"] }   |
+    Given as admin I successfully merge patch resource "hostsubnet/<%= cb.workers[0].name %>" with:
+      | {"egressCIDRs": ["<%= cb.valid_subnet %>"] }   |
+
+    # Create a pod and locate on specific node which is not an egress ip node
+    Given I have a project
+    Given I obtain test data file "networking/list_for_pods.json"
+    When I run oc create over "list_for_pods.json" replacing paths:
+      | ["items"][0]["spec"]["template"]["spec"]["nodeName"] | <%= cb.workers[1].name %> |
+      | ["items"][0]["spec"]["replicas"]                     | 1                       |
+    Then the step should succeed
+    Given a pod becomes ready with labels:
+      | name=test-pods |
+
+    # patch two egress ips to new project
+    Given as admin I successfully merge patch resource "netnamespace/<%= project.name %>" with:
+      | {"egressIPs": <%= cb.valid_ips[0..1].to_json %>} |
+
+    # Check the source IP randomly uses both egress ips
+    When I execute on the pod:
+      | bash | -c | for i in {1..10}; do curl -s --connect-timeout 2 <%= cb.ipecho_url %> ; sleep 2;echo ""; done;  |
+    Then the step should succeed
+    And the output should contain "<%= cb.valid_ips[1] %>"
+    And the output should contain "<%= cb.valid_ips[0] %>"
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-40956
+  @admin
+  @destructive
+  Scenario: [SDN-1282] Auto EgressIPs assignments:if a pod is on a node that is hosting an egressIP that pod will always use the egressIP of the node
+    Given I save ipecho url to the clipboard
+    Given I store the schedulable workers in the :workers clipboard
+    Given I store a random unused IP address from the reserved range to the clipboard
+    And evaluation of `lambda { |i| "#{i.to_s}/#{i.prefix.to_s}" }.call(IPAddr.new("<%= cb.subnet_range %>"))` is stored in the :valid_subnet clipboard
+
+    #Patch two egress ips to two nodes
+    Given I register clean-up steps:
+    """
+    as admin I successfully merge patch resource "hostsubnet/<%= cb.workers[0].name %>" with:
+      | {"egressCIDRs":null,"egressIPs": null}   |
+    as admin I successfully merge patch resource "hostsubnet/<%= cb.workers[1].name %>" with:
+      | {"egressCIDRs":null,"egressIPs": null}   |
+    """
+    Given as admin I successfully merge patch resource "hostsubnet/<%= cb.workers[0].name %>" with:
+      | {"egressCIDRs": ["<%= cb.valid_subnet %>"] }   |
+    Given as admin I successfully merge patch resource "hostsubnet/<%= cb.workers[1].name %>" with:
+      | {"egressCIDRs": ["<%= cb.valid_subnet %>"] }   |
+
+    # Create a pod and locate on specific node which is an egress ip node
+    Given I have a project
+    Given I obtain test data file "networking/list_for_pods.json"
+    When I run oc create over "list_for_pods.json" replacing paths:
+      | ["items"][0]["spec"]["template"]["spec"]["nodeName"] | <%= cb.workers[1].name %> |
+      | ["items"][0]["spec"]["replicas"]                     | 1                       |
+    Then the step should succeed
+    Given a pod becomes ready with labels:
+      | name=test-pods |
+
+    # patch two egress ips to new project
+    Given as admin I successfully merge patch resource "netnamespace/<%= project.name %>" with:
+      | {"egressIPs": <%= cb.valid_ips[0..1].to_json %> } |
+
+    # Get the patched egress ip on pod's located node
+    When I run the :get admin command with:
+      | resource      | hostsubnet                  |
+      | resource_name | <%= cb.workers[1].name %>   |
+      | o             | jsonpath={.egressIPs[0]}    |
+    Then the step should succeed
+    And evaluation of `@result[:response]` is stored in the :egress_ip clipboard
+
+    # Check will always use the egressIP of the pod's located node
+    When I execute on the pod:
+      | bash | -c | for i in {1..10}; do curl -s --connect-timeout 2 <%= cb.ipecho_url %> ; sleep 2;echo ""; done;  |
+    Then the step should succeed
+    And the output should contain 10 times:
+      | <%= cb.egress_ip %> |
