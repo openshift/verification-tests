@@ -183,3 +183,89 @@ Feature: CSI clone testing related feature
     Then the step should succeed
     And the output should contain "test data"
 
+  # @author wduan@redhat.com
+  # @case_id OCP-27617
+  @admin
+  @destructive
+  Scenario: [Cinder CSI Clone] Clone a pvc with default storageclass
+    Given default storage class is patched to non-default
+    And admin clones storage class "my-csi-default" from "standard-csi" with:
+      | ["metadata"]["name"] | my-csi-default |
+    When I run the :patch admin command with:
+      | resource      | storageclass                                                                           |
+      | resource_name | my-csi-default                                                                         |
+      | p             | {"metadata": {"annotations": {"storageclass.kubernetes.io/is-default-class": "true"}}} |
+
+    # Create mypvc-ori without sc specified
+    Given I have a project
+    When I obtain test data file "storage/misc/pvc.json"
+    When I create a dynamic pvc from "pvc.json" replacing paths:
+      | ["metadata"]["name"] | mypvc-ori |
+    Then the step should succeed
+    Given I obtain test data file "storage/misc/pod.yaml"
+    When I run oc create over "pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                         | mypod-ori  |
+      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc-ori  |
+      | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt/local |
+    Then the step should succeed
+    Given the pod named "mypod-ori" becomes ready
+    When I execute on the pod:
+      | sh | -c | echo "clone test" > /mnt/local/testfile |
+    Then the step should succeed
+    And I execute on the pod:
+      | sh | -c | sync -f /mnt/local/testfile |
+    Then the step should succeed
+
+    # Clone mypvc-ori without sc specified
+    Given I obtain test data file "storage/csi/pvc-clone.yaml"
+    When I create a dynamic pvc from "pvc-clone.yaml" replacing paths:
+      | ["metadata"]["name"] | mypvc-clone  |
+    Then the step should succeed
+    Given I obtain test data file "storage/misc/pod.yaml"
+    When I run oc create over "pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                         | mypod-clone |
+      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc-clone |
+      | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt/local  |
+    Then the step should succeed
+    Given the pod named "mypod-clone" becomes ready
+    And the "mypvc-clone" PVC becomes :bound
+    When I execute on the "mypod-clone" pod:
+      | sh | -c | more /mnt/local/testfile |
+    Then the step should succeed
+    And the output should contain "clone test"
+
+
+  # @author wduan@redhat.com
+  # @case_id OCP-27686
+  @admin
+  Scenario: [Cinder CSI Clone] Clone a pvc with different storage class is failed
+    # Create mypvc-ori with sc1
+    Given I have a project
+    When admin clones storage class "sc-<%= project.name %>-1" from "standard-csi" with:
+      | ["volumeBindingMode"] | Immediate |
+    Given I obtain test data file "storage/misc/pvc.json"
+    When I create a dynamic pvc from "pvc.json" replacing paths:
+      | ["metadata"]["name"]         | mypvc-ori                |
+      | ["spec"]["storageClassName"] | sc-<%= project.name %>-1 |
+    Then the step should succeed
+
+    # Clone mypvc-ori with sc2
+    When admin clones storage class "sc-<%= project.name %>-2" from "standard-csi" with:
+      | ["volumeBindingMode"] | Immediate |
+    Given I obtain test data file "storage/csi/pvc-clone.yaml"
+    When I create a dynamic pvc from "pvc-clone.yaml" replacing paths:
+      | ["metadata"]["name"]         | mypvc-clone              |
+      | ["spec"]["storageClassName"] | sc-<%= project.name %>-2 |
+    Then the step should succeed
+
+    Given I wait up to 60 seconds for the steps to pass:
+    """
+    When I run the :describe client command with:
+      | resource | pvc         |
+      | name     | mypvc-clone |
+    Then the step should succeed
+    And the output should match:
+      | ProvisioningFailed                                                                |
+      | the source PVC and destination PVCs must be in the same storage class for cloning |
+    """
+

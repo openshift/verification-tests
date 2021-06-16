@@ -11,4 +11,3 @@ spec:
   dataSource:
     kind: PersistentVolumeClaim
     name: mypvc-ori
-  storageClassName: sc-name
