@@ -219,7 +219,7 @@ Feature: CSI clone testing related feature
     # Clone mypvc-ori without sc specified
     Given I obtain test data file "storage/csi/pvc-clone.yaml"
     When I create a dynamic pvc from "pvc-clone.yaml" replacing paths:
-      | ["metadata"]["name"]                         | mypvc-clone  |
+      | ["metadata"]["name"] | mypvc-clone  |
     Then the step should succeed
     Given I obtain test data file "storage/misc/pod.yaml"
     When I run oc create over "pod.yaml" replacing paths:
@@ -245,8 +245,8 @@ Feature: CSI clone testing related feature
       | ["volumeBindingMode"] | Immediate |
     Given I obtain test data file "storage/misc/pvc.json"
     When I create a dynamic pvc from "pvc.json" replacing paths:
-      | ["metadata"]["name"]                         | mypvc-ori                |
-      | ["spec"]["storageClassName"]                 | sc-<%= project.name %>-1 |
+      | ["metadata"]["name"]         | mypvc-ori                |
+      | ["spec"]["storageClassName"] | sc-<%= project.name %>-1 |
     Then the step should succeed
 
     # Clone mypvc-ori with sc2
@@ -254,8 +254,8 @@ Feature: CSI clone testing related feature
       | ["volumeBindingMode"] | Immediate |
     Given I obtain test data file "storage/csi/pvc-clone.yaml"
     When I create a dynamic pvc from "pvc-clone.yaml" replacing paths:
-      | ["metadata"]["name"]                         | mypvc-clone              |
-      | ["spec"]["storageClassName"]                 | sc-<%= project.name %>-2 |
+      | ["metadata"]["name"]         | mypvc-clone              |
+      | ["spec"]["storageClassName"] | sc-<%= project.name %>-2 |
     Then the step should succeed
 
     Given I wait up to 60 seconds for the steps to pass:
