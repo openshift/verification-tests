@@ -28,21 +28,20 @@ Feature: SCTP related scenarios
     Then the step should succeed
     And the pod named "sctpclient" becomes ready
    
-    # sctpserver pod start to wait for sctp traffic
-    When I run the :exec background client command with:
-      | pod              | sctpserver                                |
-      | namespace        | <%= project.name %>                       |
-      | oc_opts_end      |                                           |
-      | exec_command     | bash                                      |
-      | exec_command_arg | -c                                        |
-      | exec_command_arg | /usr/bin/nc -k -l 30102 --sctp            |
-    Then the step should succeed
-
-    # sctpclient pod start to send sctp traffic
     And I wait up to 60 seconds for the steps to pass:
     """
+    # sctpserver pod start to wait for sctp traffic
+    When I run the :exec background client command with:
+      | pod              | sctpserver                  |
+      | namespace        | <%= project.name %>         |
+      | oc_opts_end      |                             |
+      | exec_command     | bash                        |
+      | exec_command_arg | -c                          |
+      | exec_command_arg | /usr/bin/nc -l 30102 --sctp |
+    Then the step should succeed
+    # sctpclient pod start to send sctp traffic   
     When I execute on the "sctpclient" pod:
-      | bash | -c | echo test-openshift \| nc -w 5 -v <%= cb.serverpod_ip %> 30102 --sctp |
+      | bash | -c | echo test-openshift \| nc -v <%= cb.serverpod_ip %> 30102 --sctp |
     Then the step should succeed
     And the output should contain:
       | Connected to <%= cb.serverpod_ip %>:30102 |
@@ -83,21 +82,20 @@ Feature: SCTP related scenarios
     Given I use the "sctpservice" service
     And evaluation of `service.ip(user: user)` is stored in the :service_ip clipboard
 
-    # sctpserver pod start to wait for sctp traffic
-    When I run the :exec background client command with:
-      | pod              | sctpserver                                |
-      | namespace        | <%= project.name %>                       |
-      | oc_opts_end      |                                           |
-      | exec_command     | bash                                      |
-      | exec_command_arg | -c                                        |
-      | exec_command_arg | /usr/bin/nc -k -l 30102 --sctp            |
-    Then the step should succeed
-
-    # sctpclient pod start to send sctp traffic
     And I wait up to 60 seconds for the steps to pass:
     """
+    # sctpserver pod start to wait for sctp traffic
+    When I run the :exec background client command with:
+      | pod              | sctpserver                  |
+      | namespace        | <%= project.name %>         |
+      | oc_opts_end      |                             |
+      | exec_command     | bash                        |
+      | exec_command_arg | -c                          |
+      | exec_command_arg | /usr/bin/nc -l 30102 --sctp |
+    Then the step should succeed
+    # sctpclient pod start to send sctp traffic   
     When I execute on the "sctpclient" pod:
-      | bash | -c | echo test-openshift \| nc -w 5 -v <%= cb.service_ip %> 30102 --sctp |
+      | bash | -c | echo test-openshift \| nc -v <%= cb.service_ip %> 30102 --sctp |
     Then the step should succeed
     And the output should contain:
       | Connected to <%= cb.service_ip %>:30102 |
@@ -139,25 +137,25 @@ Feature: SCTP related scenarios
     Given I use the "sctpservice" service
     And evaluation of `service(cb.sctpserver).node_port(port:30102)` is stored in the :nodeport clipboard
 
-    # sctpserver pod start to wait for sctp traffic
-    When I run the :exec background client command with:
-      | pod              | sctpserver                                |
-      | namespace        | <%= project.name %>                       |
-      | oc_opts_end      |                                           |
-      | exec_command     | bash                                      |
-      | exec_command_arg | -c                                        |
-      | exec_command_arg | /usr/bin/nc -k -l 30102 --sctp            |
-    Then the step should succeed
-
-    # sctpclient pod start to send sctp traffic on worknode:port
     And I wait up to 60 seconds for the steps to pass:
     """
+    # sctpserver pod start to wait for sctp traffic
+    When I run the :exec background client command with:
+      | pod              | sctpserver                  |
+      | namespace        | <%= project.name %>         |
+      | oc_opts_end      |                             |
+      | exec_command     | bash                        |
+      | exec_command_arg | -c                          |
+      | exec_command_arg | /usr/bin/nc -l 30102 --sctp |
+    Then the step should succeed
+    # sctpclient pod start to send sctp traffic on worknode:port
     When I execute on the "sctpclient" pod:
-      | bash | -c | echo test-openshift \| nc -w 5 -v <%= cb.worker1_ip %> <%= cb.nodeport %>  --sctp |
+      | bash | -c | echo test-openshift \| nc -v <%= cb.worker1_ip %> <%= cb.nodeport %>  --sctp |
     Then the step should succeed
     And the output should contain:
       | Connected to <%= cb.worker1_ip %>:<%= cb.nodeport %> |
       | 15 bytes sent                                        |
+    Given 5 seconds have passed
     """
 
   # @author weliang@redhat.com
@@ -188,21 +186,20 @@ Feature: SCTP related scenarios
     Then the step should succeed
     And the pod named "sctpclient" becomes ready
 
-    # sctpserver pod start to wait for sctp traffic
-    When I run the :exec background client command with:
-      | pod              | sctpserver                                |
-      | namespace        | <%= project.name %>                       |
-      | oc_opts_end      |                                           |
-      | exec_command     | bash                                      |
-      | exec_command_arg | -c                                        |
-      | exec_command_arg | /usr/bin/nc -k -l 30102 --sctp            |
-    Then the step should succeed
-
-    # sctpclient pod start to send sctp traffic
     And I wait up to 60 seconds for the steps to pass:
     """
+    # sctpserver pod start to wait for sctp traffic
+    When I run the :exec background client command with:
+      | pod              | sctpserver                  |
+      | namespace        | <%= project.name %>         |
+      | oc_opts_end      |                             |
+      | exec_command     | bash                        |
+      | exec_command_arg | -c                          |
+      | exec_command_arg | /usr/bin/nc -l 30102 --sctp |
+    Then the step should succeed
+    # sctpclient pod start to send sctp traffic 
     When I execute on the "sctpclient" pod:
-      | bash | -c | echo test-openshift \| nc -w 5 -v <%= cb.serverpod_ip %> 30102 --sctp |
+      | bash | -c | echo test-openshift \| nc -v <%= cb.serverpod_ip %> 30102 --sctp |
     Then the step should succeed
     And the output should contain:
       | Connected to <%= cb.serverpod_ip %> |
@@ -219,8 +216,17 @@ Feature: SCTP related scenarios
     # sctpclient pod start to send sctp traffic
     And I wait up to 60 seconds for the steps to pass:
     """
+    # sctpserver pod start to wait for sctp traffic
+    When I run the :exec background client command with:
+      | pod              | sctpserver                  |
+      | namespace        | <%= project.name %>         |
+      | oc_opts_end      |                             |
+      | exec_command     | bash                        |
+      | exec_command_arg | -c                          |
+      | exec_command_arg | /usr/bin/nc -l 30102 --sctp |
+    Then the step should succeed
     When I execute on the "sctpclient" pod:
-      | bash | -c | echo test-openshift \| nc -w 5 -v <%= cb.serverpod_ip %> 30102 --sctp |
+      | bash | -c | echo test-openshift \| nc -v <%= cb.serverpod_ip %> 30102 --sctp |
     Then the step should fail
     """
 
@@ -231,21 +237,20 @@ Feature: SCTP related scenarios
       | n | <%= project.name %>   |
     Then the step should succeed
 
-    # sctpserver pod start to wait for sctp traffic
-    When I run the :exec background client command with:
-      | pod              | sctpserver                                |
-      | namespace        | <%= project.name %>                       |
-      | oc_opts_end      |                                           |
-      | exec_command     | bash                                      |
-      | exec_command_arg | -c                                        |
-      | exec_command_arg | /usr/bin/nc -k -l 30102 --sctp            |
-    Then the step should succeed
-
-    # sctpclient pod start to send sctp traffic
     And I wait up to 60 seconds for the steps to pass:
     """
+    # sctpserver pod start to wait for sctp traffic
+    When I run the :exec background client command with:
+      | pod              | sctpserver                  |
+      | namespace        | <%= project.name %>         |
+      | oc_opts_end      |                             |
+      | exec_command     | bash                        |
+      | exec_command_arg | -c                          |
+      | exec_command_arg | /usr/bin/nc -l 30102 --sctp |
+    Then the step should succeed
+    # sctpclient pod start to send sctp traffic  
     When I execute on the "sctpclient" pod:
-      | bash | -c | echo test-openshift \| nc -w 5 -v <%= cb.serverpod_ip %> 30102 --sctp |
+      | bash | -c | echo test-openshift \| nc -v <%= cb.serverpod_ip %> 30102 --sctp |
     Then the step should succeed
     And the output should contain:
       | Connected to <%= cb.serverpod_ip %> |
