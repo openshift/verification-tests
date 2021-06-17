@@ -231,6 +231,11 @@ module BushSlicer
         dig("spec", "nodeSelector")
     end
 
+    def runtime_class_name(user: nil, cached: true, quiet: false)
+      raw_resource(user: user, cached: cached, quiet: quiet).
+        dig("spec", "runtimeClassName")
+    end
+
     # @note call without parameters only when props are loaded
     def node_ip(user: nil, cached: true, quiet: false)
       return get_cached_prop(prop: :status, user: user, cached: cached, quiet: quiet)["hostIP"]

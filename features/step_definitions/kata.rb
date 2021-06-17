@@ -80,7 +80,7 @@ And /^I verify kata container runtime is installed into a worker node$/ do
   })
   logger.info("Checking for runtime engine match...")
   # 1. check pod's spec to make sure the runtimeClassName is 'kata'
-  pod_runtime_class_name = pod('example-fedora-kata').raw_resource['spec']['runtimeClassName']
+  pod_runtime_class_name = pod('example-fedora-kata').runtime_class_name
   if pod_runtime_class_name != 'kata'
     raise "Pod's runtimeclass name #{pod_runtime_class_name} should be `kata`"
   end
