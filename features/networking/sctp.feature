@@ -207,10 +207,10 @@ Feature: SCTP related scenarios
     """
 
     # Define a networkpolicy to deny sctpclient to sctpserver
-    Given I obtain test data file "networking/sctp/default-deny.yaml"
+    Given I obtain test data file "networking/networkpolicy/defaultdeny-v1-semantic.yaml"
     When I run the :create admin command with:
-      | f | default-deny.yaml   |
-      | n | <%= project.name %> |
+      | f | defaultdeny-v1-semantic.yaml   |
+      | n | <%= project.name %>            |
     Then the step should succeed
 
     # sctpclient pod start to send sctp traffic
