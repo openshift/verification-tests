@@ -27,8 +27,10 @@ filter_alert:
   params:
     class_text: co-text-filter
     input_value: <alert_name>
+    content: <alert_name>
   action: clear_name_filter_if_exists
   action: set_input_class
+  action: check_page_contains
 open_alert_detail:
   action: Disable_all_filters
   action: filter_alert
