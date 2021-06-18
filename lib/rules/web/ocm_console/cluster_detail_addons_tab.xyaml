@@ -17,9 +17,13 @@ addon_install_button_missing:
         <<: *addon_install_button
         missing: true
 click_addon_install_button:
-    element:
-        <<: *addon_install_button
-        op: click
+    elements:
+        - selector:
+            xpath: //div[text()='<addon_name>']
+          op: click
+        - selector:
+            xpath: //button[contains(@aria-label,'Install')]
+          op: click
 install_addon:
     action: click_add_ons_tab_button
     action: click_addon_install_button
@@ -63,9 +67,12 @@ check_console_url:
            xpath: //div[text()='<addon_name>']/../div/a/button[text()='View in console']
 
 check_contact_support:
-    element:
-        selector:
-            xpath: //div[text()='<addon_name>']/..//a[@href='https://access.redhat.com/support/cases/#/case/new' and text()='Contact support']
+    elements:
+        - selector:
+            xpath: //div[text()='<addon_name>']
+          op: click
+        - selector:
+            xpath: //a[@href='https://access.redhat.com/support/cases/#/case/new']
 check_addons_tab:
     action: click_add_ons_tab_button
     elements:

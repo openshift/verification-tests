@@ -56,15 +56,19 @@ select_compute_node_count_on_creation_page:
           op: click
         - selector:
             xpath: //option[text()='<node_number>']
+          op: click
 
 specified_machine_type_loaded:
     element: &machine_type_locator
         selector:
             xpath: //button[contains(@id,"<machine_type>")]
 select_machine_type:
-    element:
-        <<: *machine_type_locator
-        op: click
+    elements: 
+        - selector:
+            xpath: //*[text()='Worker node instance type']/../../..//button
+          op: click
+        - selector:
+            xpath: //span[text()='<machine_type>']
 
 hover_machine_type:
     element:
