@@ -371,7 +371,7 @@ check_osd_ocp_comman_details_in_detail_page:
         - selector:
             xpath: //article[@class='pf-c-card ocm-c-overview-details__card']//span[text()='Type']
         - selector:
-            xpath: //article[@class='pf-c-card ocm-c-overview-details__card']//span[text()='Location']
+            xpath: //article[@class='pf-c-card ocm-c-overview-details__card']//span[text()='Region']
         - selector:
             xpath: //article[@class='pf-c-card ocm-c-overview-details__card']//span[text()='Provider']
         - selector:
