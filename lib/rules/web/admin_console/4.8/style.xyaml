@@ -11,7 +11,6 @@ check_pod_detail_page_charts_style:
   elements:
   - selector:
       xpath: //*[contains(@class, 'co-m-pane__body')]//*[contains(text(), 'Pod details')]
-  action: check_chart_using_victory
 check_node_detail_page_charts_style:
   elements:
   - selector:

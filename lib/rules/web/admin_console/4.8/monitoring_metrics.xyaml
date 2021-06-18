@@ -308,6 +308,6 @@ click_link_from_uitilization_description:
   action: click_link_with_text_only
 check_pod_detail:
   params:
-    content: Memory usage
+    content: Pod IP
   action: check_page_contains
   action: check_pod_detail_page_charts_style
