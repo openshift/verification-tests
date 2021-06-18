@@ -179,20 +179,20 @@ click_delete_button_on_deletion_dialog:
 osd_creation_error_dialog_loaded:
     elements:
         - selector:
-            xpath: //h2[text()='Error creating cluster']
-            timeout: 30
+            xpath: //h2[@class='pf-c-title pf-m-2xl']
+          timeout: 60
         - selector:
             xpath: //h2/*[name()='svg']
-            timeout: 30
+          timeout: 60
         - selector:
             xpath: //p[contains(text(),"<error_reason>")]
-            timeout: 30
+          timeout: 30
         - selector:
             xpath: //p[contains(text(), 'Operation ID')]
-            timeout: 30
+          timeout: 30
         - selector:
             xpath: //button[text()='Close']
-            timeout: 30
+          timeout: 30
 close_error_message_dialog:
     element:
         selector:
@@ -499,7 +499,7 @@ click_change_settings_button_on_dialog:
 check_change_cluster_privacy_settings_dialog:
     elements:
         - selector:
-            xpath: //h1[text()='Change cluster privacy settings?']
+            xpath: //span[text()='Change cluster privacy settings?']
         - selector:
             xpath: //div[contains(.,'Changes may be required in AWS to maintain access.')]
         - selector:
@@ -624,7 +624,7 @@ click_delete_node_label_button:
 select_node_count:
     elements:
         - selector:
-            xpath: //select[@aria-label='Compute nodes']
+            xpath: //select[@aria-label='Worker nodes']
           op: click
         - selector:
             xpath: //option[@value='<compute_node>']
@@ -761,7 +761,7 @@ set_addon_cidr_default_parameter:
 input_addon_install_parameter:
     element:
         selector:
-            xpath: //input[@id='parameters.<parameter_key>']
+            xpath: //input[@name='parameters.<parameter_key>']
         op: send_keys <parameter_value>
 
 click_install_button_on_parameter_dialog:

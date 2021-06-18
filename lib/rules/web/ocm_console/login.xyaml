@@ -7,7 +7,7 @@ login_ocm_page_loaded:
   element:
     selector:
       css: "#kc-form-login, #username, #login-show-step2"
-    timeout: 60
+    timeout: 600
 login_ocm_portal:
   elements:
     - selector:
