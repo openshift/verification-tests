@@ -64,7 +64,7 @@ RUN setpriv --reuid 1001 scl enable rh-ruby27 "$HOME/verification-tests/tools/ha
 
 RUN rpm -qa && \
     yum clean all -y && \
-    rm -rf $HOME/verification-tests /var/cache/yum /var/tmp/ /tmp/*
+    rm -rf $HOME/verification-tests /var/cache/yum /var/tmp/* /tmp/*
 
 RUN dbus-uuidgen > /etc/machine-id # e.g. needed for firefox
 RUN chmod -R g=u $USER_PATHS && chmod -R g+rw $USER_PATHS
