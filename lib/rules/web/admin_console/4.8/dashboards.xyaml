@@ -673,21 +673,22 @@ click_filesystem_chart:
       <<: *filesystem_chart
     op: click
 check_charts_on_pod_page:
+  action: click_metrics_tab
   elements:
   - selector: &memory_usage_chart
-      xpath: //h5[text()='Memory usage']/ancestor::div[contains(@class, 'col-')]//div[contains(@class,'pf-c-chart')]
+      xpath: //div/h2[text()='Memory usage']/following::div[1]//div[@class='pf-c-chart']
     timeout: 40
   - selector:
-      xpath: //h5[text()='CPU usage']/ancestor::div[contains(@class, 'col-')]//div[contains(@class,'pf-c-chart')]
+      xpath: //div/h2[text()='CPU usage']/following::div[1]//div[@class='pf-c-chart']
     timeout: 40
   - selector:
-      xpath: //h5[text()='Filesystem']/ancestor::div[contains(@class, 'col-')]//div[contains(@class,'pf-c-chart')]
+      xpath: //div/h2[text()='Filesystem']/following::div[1]//div[@class='pf-c-chart']
     timeout: 40
   - selector:
-      xpath: //h5[text()='Network in']/ancestor::div[contains(@class, 'col-')]//div[contains(@class,'pf-c-chart')]
+      xpath: //div/h2[text()='Network in']/following::div[1]//div[@class='pf-c-chart']
     timeout: 40
   - selector:
-      xpath: //h5[text()='Network out']/ancestor::div[contains(@class, 'col-')]//div[contains(@class,'pf-c-chart')]
+      xpath: //div/h2[text()='Network out']/following::div[1]//div[@class='pf-c-chart']
     timeout: 40
 click_memory_usage_chart:
   element:
