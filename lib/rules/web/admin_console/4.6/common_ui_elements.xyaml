@@ -807,7 +807,7 @@ wait_box_loaded:
   element:
     selector:
       css: .loading-box__loaded
-    timeout: 120
+    timeout: 300
 wait_page_body_loaded:
   element:
     selector:

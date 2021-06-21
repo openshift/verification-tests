@@ -110,12 +110,6 @@ add_tolerations:
   action: set_affinity_operator
   action: input_node_affinity_modal_value
   action: set_affinity_effect
-click_to_machines_page:
-  params:
-    primary_menu: Compute
-    secondary_menu: Machines
-  action: navigate_to_admin_console
-  action: click_secondary_menu
 set_minimum_replicas:
   params:
     label_text: Minimum Replicas
