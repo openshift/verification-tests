@@ -133,7 +133,21 @@ end
 Then /^(?:the )?expression should be true> (.+)$/ do |expr|
   res = eval expr
   unless res
-    raise "expression \"#{expr}\" returned non-positive status: #{res}"
+    # try to print out the left and right operand values to help with debugging
+    # please note the order of the operator matters
+    comparison_operators = /===|==|>=|<=|!=|>|<|&&|\|\|&|\|/
+    op = expr.scan(comparison_operators).first
+    if op
+      e1, e2 = expr.split(op)
+      # XXX: we may not catch everything, wrap it around begin/rescue and print
+      # out blank if some complex comparison is in the expression.
+      begin
+        eval_details = "\nleft_operand: #{eval(e1)}, right_operand: #{eval(e2)}\n"
+      rescue
+        eval_details = ""
+      end
+    end
+    raise "expression \"#{expr}\" returned non-positive status: #{res}" + eval_details
   end
 end
 

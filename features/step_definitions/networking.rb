@@ -857,6 +857,13 @@ Given /^the env is using "([^"]*)" networkType$/ do |network_type|
   raise "the networkType is not #{network_type}" unless network_operator.network_type(user: _admin) == network_type
 end
 
+Given /^the cluster has "([^"]*)" endpoint publishing strategy$/ do |ep_pub_strategy|
+  ensure_admin_tagged
+  _admin = admin
+  @result = admin.cli_exec(:get, n: "openshift-ingress-operator", resource: "ingresscontrollers", resource_name: "default", o: "jsonpath={.status.endpointPublishingStrategy.type}")
+  raise "the endpoint strategy is not #{ep_pub_strategy}" unless @result[:response] == ep_pub_strategy
+end
+
 Given /^the env is using windows nodes$/ do
   ensure_admin_tagged
   _admin = admin
@@ -1043,7 +1050,7 @@ Given /^I store the ovnkube-master#{OPT_QUOTED} leader pod in the#{OPT_SYM} clip
   raise "Failed to execute network command!" unless cluster_state != nil
   # for some reason "oc rsh" output contains CR, so we have to remove them
   leader_id = cluster_state.match(/Leader:\s+(\S+)/)
-  if leader_id[1] == "unknown"
+  if leader_id.nil? || leader_id[1] == "unknown"
     raise "Unknown leader"
   end
   servers = cluster_state.match(/Servers:\n(.*)/m)

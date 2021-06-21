@@ -138,7 +138,7 @@ check_disconnected_cluster_overview_information:
         - selector:
             xpath: //div[@class='pf-l-grid']//span[text()='Type']/../../dd/div/span[text()='OCP']
         - selector:
-            xpath: //div[@class='pf-l-grid']//span[text()='Location']/../../dd/div[text()='N/A']
+            xpath: //div[@class='pf-l-grid']//span[text()='Region']/../../dd/div[text()='N/A']
         - selector:
             xpath: //div[@class='pf-l-grid']//span[text()='Provider']/../../dd/div[text()='N/A']
         - selector:
@@ -243,7 +243,7 @@ check_ocp_usage_in_detail_page:
         - selector:
             xpath: //p[text()='The cluster currently does not have any metrics data. Try again later.']
 check_ocp_details_in_detail_page:
-    action: check_osd_ocp_comman_details_in_detail_page
+    action: check_common_part_in_detail_page
     elements:
         - selector:
             xpath: //article[@class='pf-c-card ocm-c-overview-details__card']//span[text()='OCP']
@@ -297,7 +297,7 @@ check_osd_tab_in_detail_page:
         - selector:
             xpath: //button[contains(., 'Machine pools')]
         - selector:
-            xpath: //button[contains(., 'Update settings')]
+            xpath: //button[contains(., 'Settings')]
 check_osd_usage_in_detail_page:
     element:
         selector:
@@ -330,7 +330,7 @@ check_uninstalling_cluster_usage_message:
             xpath: //p[text()='This cluster is being deleted so some data might not be available.']
 
 check_osd_details_in_detail_page:
-    action: check_osd_ocp_comman_details_in_detail_page
+    action: check_common_part_in_detail_page
     elements:
         - selector:
             xpath: //article[@class='pf-c-card ocm-c-overview-details__card']//span[text()='OSD']
@@ -362,7 +362,7 @@ check_osd_location_in_detail_page:
             xpath: //article[@class='pf-c-card ocm-c-overview-details__card']//div[text()='<provider>']
         - selector:
             xpath: //article[@class='pf-c-card ocm-c-overview-details__card']//div[text()='<location>']
-check_osd_ocp_comman_details_in_detail_page:
+check_common_part_in_detail_page:
     elements:
         - selector:
             xpath: //article[@class='pf-c-card ocm-c-overview-details__card']//h2[text()='Details']
@@ -371,7 +371,7 @@ check_osd_ocp_comman_details_in_detail_page:
         - selector:
             xpath: //article[@class='pf-c-card ocm-c-overview-details__card']//span[text()='Type']
         - selector:
-            xpath: //article[@class='pf-c-card ocm-c-overview-details__card']//span[text()='Location']
+            xpath: //article[@class='pf-c-card ocm-c-overview-details__card']//span[text()='Region']
         - selector:
             xpath: //article[@class='pf-c-card ocm-c-overview-details__card']//span[text()='Provider']
         - selector:
@@ -633,7 +633,7 @@ update_subscription_settings_in_dialog:
     action: select_production_status
     action: select_service_level
     action: select_unit
-    action: input_compute_cores
+    action: input_cpu_socket_value
     action: check_save_button_enable_in_subscription_settings_dialog
     action: check_subscription_settings_in_overview
 select_support_level:
@@ -694,7 +694,7 @@ check_subscription_settings_in_overview:
         - selector:
             xpath: //article[@class='pf-c-card ocm-c-overview-subscription-settings__card']//div[contains(., '<unit_value>')]
 check_subscription_settings_error_message:
-    action: input_compute_cores
+    action: input_cpu_socket_value
     action: subscription_settings_error_message_loaded
     action: check_save_button_disable_in_subscription_settings_dialog
 subscription_settings_error_message_loaded:

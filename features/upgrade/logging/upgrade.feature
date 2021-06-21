@@ -20,17 +20,13 @@ Feature: Logging upgrading related features
     Given logging operators are installed successfully
     And default storageclass is stored in the :default_sc clipboard
     Given I obtain test data file "logging/clusterlogging/clusterlogging-storage-template.yaml"
-    When I process and create:
-      | f | clusterlogging-storage-template.yaml    |
-      | p | STORAGE_CLASS=<%= cb.default_sc.name %> |
-      | p | PVC_SIZE=20Gi                           |
-      | p | ES_NODE_COUNT=3                         |
-      | p | REDUNDANCY_POLICY=SingleRedundancy      |
+    Given I create clusterlogging instance with:
+      | crd_yaml            | clusterlogging-storage-template.yaml |
+      | storage_class       | <%= cb.default_sc.name %>            |
+      | storage_size        | 20Gi                                 |
+      | es_node_count       | 3                                    |
+      | redundancy_policy   | SingleRedundancy                     |
     Then the step should succeed
-    Given I wait for the "fluentd" daemonset to appear up to 300 seconds
-    And I wait until ES cluster is ready
-    And I wait until "fluentd" log collector is ready
-    And I wait until kibana is ready
     Given I wait for the project "logging-upgrade-data-check" logs to appear in the ES pod
     # check cron jobs
     When I check the cronjob status
@@ -59,7 +55,7 @@ Feature: Logging upgrading related features
     And I use the "openshift-logging" project
     Given I wait for the "fluentd" daemonset to appear up to 300 seconds
     And I wait until ES cluster is ready
-    And I wait until "fluentd" log collector is ready
+    And I wait until fluentd is ready
     And I wait until kibana is ready
     # check the logs collected before upgrading
     Given I wait for the project "logging-upgrade-data-check" logs to appear in the ES pod

@@ -499,7 +499,7 @@ click_change_settings_button_on_dialog:
 check_change_cluster_privacy_settings_dialog:
     elements:
         - selector:
-            xpath: //h1[text()='Change cluster privacy settings?']
+            xpath: //span[text()='Change cluster privacy settings?']
         - selector:
             xpath: //div[contains(.,'Changes may be required in AWS to maintain access.')]
         - selector:

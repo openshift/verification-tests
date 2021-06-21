@@ -22,7 +22,7 @@ Given /^kata container has been installed successfully(?: in the #{QUOTED} proje
 end
 
 Given /^I wait for #{QUOTED} (uninstall|install) to start$/ do | kc_name, mode |
-  timeout = 50
+  timeout = 300
   stats = {}
   success = false
   wait_for(timeout, stats: stats) do
@@ -41,7 +41,7 @@ Given /^I wait for #{QUOTED} (uninstall|install) to start$/ do | kc_name, mode |
 end
 
 Given /^I wait until number of completed kata runtime nodes match#{OPT_QUOTED} for #{QUOTED}$/ do |number, kc_name|
-  ready_timeout = 900
+  ready_timeout = 1200
   matched = kata_config(kc_name).wait_till_installed_counter_match(
     user: user, seconds: ready_timeout)
   unless matched[:success]
@@ -59,7 +59,7 @@ Given /^I remove kata operator from the#{OPT_QUOTED} namespace$/ do | kata_ns |
   # 1. remove kataconfig first
   project(kata_ns)
   kataconfig_name = BushSlicer::KataConfig.list(user: admin).first.name
-  step %Q/I ensure "#{kataconfig_name}" kata_config is deleted within 900 seconds/
+  step %Q/I ensure "#{kataconfig_name}" kata_config is deleted within 1200 seconds/
   # 2. remove namespace
   step %Q/I ensure "#{kata_ns}" project is deleted/
 end
@@ -80,7 +80,7 @@ And /^I verify kata container runtime is installed into a worker node$/ do
   })
   logger.info("Checking for runtime engine match...")
   # 1. check pod's spec to make sure the runtimeClassName is 'kata'
-  pod_runtime_class_name = pod('example-fedora-kata').raw_resource['spec']['runtimeClassName']
+  pod_runtime_class_name = pod('example-fedora-kata').runtime_class_name
   if pod_runtime_class_name != 'kata'
     raise "Pod's runtimeclass name #{pod_runtime_class_name} should be `kata`"
   end
@@ -110,12 +110,18 @@ Given /^the kata-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|G
   step %Q/I store master major version in the :master_version clipboard/
   raise "Kata operator OLM installation only supported for OCP >= 4.8" unless cb.master_version >= "4.8"
   install_method ||= 'CLI'
+  # first check pre-req
+  step %Q/I switch to cluster admin pseudo user/
+  project('openshift-marketplace')
+  unless catalog_source('qe-app-registry').exists?
+    logger.info("Kata installation depends on `qe-app-registry`, which is missing in this cluster, calling step to create it...")
+    step %Q/I create "qe-app-registry" catalogsource for testing/
+  end
 
   unless kata_config(kata_config_name).exists?
     if install_method == 'GUI'
-      package_name = 'kata-operator'
+      package_name = 'sandboxed-containers-operator'
       catalog_name = 'qe-app-registry'
-
       @result = admin.cli_exec(:create_namespace, name: kata_ns)
       project(kata_ns)
       step %Q/I switch to the first user/
@@ -149,7 +155,7 @@ Given /^the kata-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|G
     end
 
     # make sure kata-operator is running first before installing the kataconfig
-    step %Q/a pod is present with labels:/, table(%{
+    step %Q/a pod becomes ready with labels:/, table(%{
       | control-plane=controller-manager |
     })
     step %Q|I obtain test data file "kata/release-#{cb.master_version}/kataconfiguration_v1_kataconfig.yaml"|
@@ -160,7 +166,12 @@ Given /^the kata-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|G
     logger.info("There's already an existing 'kataconfig' resuing it...")
     project(kata_ns)
     step %Q/I switch to cluster admin pseudo user/
+    # make sure kata-operator is running first before installing the kataconfig
+    step %Q/a pod becomes ready with labels:/, table(%{
+      | control-plane=controller-manager |
+    })
   end
+  logger.info("Using kata image: #{pod.container_specs.first.image}")
   step %Q/I wait until number of completed kata runtime nodes match for "#{kata_config_name}"/
 end
 

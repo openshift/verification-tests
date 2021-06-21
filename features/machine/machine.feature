@@ -463,8 +463,7 @@ Feature: Machine features testing
       | resource | pv |
     Then the step should succeed
     And the output should contain:
-      | failure-domain.beta.kubernetes.io/zone in [<%= cb.default_zone %>]     |
-      | failure-domain.beta.kubernetes.io/region in [<%= cb.default_region %>] |
+      | region in [<%= cb.default_region %>] |
 
   # @author miyadav@redhat.com
   @admin

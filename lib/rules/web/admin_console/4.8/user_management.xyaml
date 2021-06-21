@@ -3,7 +3,7 @@ check_users_secondary_menu:
     primary_menu: User Management
     secondary_menu: Users
   action: navigate_to_admin_console
-  action: click_primary_menu  
+  action: click_primary_menu
   action: check_secondary_menu
 check_users_secondary_menu_missing:
   params:
@@ -187,7 +187,7 @@ check_no_edit_links_on_detail_page:
   action: goto_one_dc_page
   action: check_no_button_with_link
 check_no_button_with_link:
-  elements: 
+  elements:
   - selector:
       xpath: //button[contains(@class, 'pf-m-link pf-m-inline')]
     missing: true

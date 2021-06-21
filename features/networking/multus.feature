@@ -1188,8 +1188,8 @@ Feature: Multus-CNI related scenarios
       | name     | <%= cb.pod_name %> |
     Then the step should succeed
     And the output should contain:
-      | cannot find get a network-attachment-definition |
-      | ContainerCreating                               |
+      | cannot find a network-attachment-definition |
+      | ContainerCreating                           |
     """
 
   # @author anusaxen@redhat.com
@@ -1533,3 +1533,59 @@ Feature: Multus-CNI related scenarios
       | bash | -c | ip -4 -brief a |
     Then the output should contain:
       | 192.168.42.4 |
+
+  # @author weliang@redhat.com
+  # @case_id OCP-41789
+  @admin
+  Scenario: [BZ1944678] Whereabouts IPAM CNI duplicate IP addresses assigned to pods	
+    Given the multus is enabled on the cluster
+    And I store all worker nodes to the :nodes clipboard
+    # Create the net-attach-def via cluster admin
+    Given I have a project
+    Given I obtain test data file "networking/multus-cni/NetworkAttachmentDefinitions/Bug-1944678.yaml"
+    When I run oc create as admin over "Bug-1944678.yaml" replacing paths:
+      | ["metadata"]["namespace"] | <%= project.name %> |
+    Then the step should succeed
+    
+    # Create a pod absorbing above net-attach-def
+    Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
+    When I run oc create over "generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                       | macvlan-bridge-pod1 |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | macvlan-bridge      |
+      | ["spec"]["containers"][0]["name"]                          | macvlan-bridge      |
+    Then the step should succeed
+    And the pod named "macvlan-bridge-pod1" becomes ready
+    # Check the created pod has correct ip
+    When I execute on the "macvlan-bridge-pod1" pod:
+      | bash | -c | ip -4 -brief a |
+    Then the output should contain:
+      | 10.199.199.100 |
+
+    # Create second pod absorbing above net-attach-def
+    Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
+    When I run oc create over "generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                       | macvlan-bridge-pod2 |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | macvlan-bridge      |
+      | ["spec"]["containers"][0]["name"]                          | macvlan-bridge      |
+    Then the step should succeed
+    And the pod named "macvlan-bridge-pod2" becomes ready
+    # Check the created pod has correct ip
+    When I execute on the "macvlan-bridge-pod2" pod:
+      | bash | -c | ip -4 -brief a |
+    Then the output should contain:
+      | 10.199.199.101 |
+
+    # Create third pod absorbing above net-attach-def
+    Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
+    When I run oc create over "generic_multus_pod.yaml" replacing paths:
+      | ["metadata"]["name"]                                       | macvlan-bridge-pod3 |
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | macvlan-bridge      |
+      | ["spec"]["containers"][0]["name"]                          | macvlan-bridge      |
+    Then the step should succeed
+    And the pod named "macvlan-bridge-pod3" becomes ready
+    # Check the created pod has correct ip
+    When I execute on the "macvlan-bridge-pod3" pod:
+      | bash | -c | ip -4 -brief a |
+    Then the output should contain:
+      | 10.199.199.102 |
+    

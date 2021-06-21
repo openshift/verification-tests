@@ -188,11 +188,20 @@ click_machine_configs_tab:
   params:
     tab_name: MachineConfigs
   action: click_tab
+click_metrics_tab:
+  params:
+    tab_name: Metrics
+  action: click_tab
 check_edit_yaml_enabled:
   params:
     button_text: Save
   action: click_yaml_tab
   action: check_button_enabled
+click_checkbox_input_by_text:
+  element:
+    selector:
+      xpath: //label[contains(.,'<text>')]/input[@type='checkbox']
+    op: click
 click_radio_input:
   element:
     selector:
@@ -380,7 +389,7 @@ check_containerdetails_text_in_breadcrumb:
 check_imagestreamtagdetails_text_in_breadcrumb:
   params:
     layer_number: 3
-    text: Image Stream Tag Details
+    text: ImageStreamTag details
   action: check_text_in_breadcrumb
 check_text_in_breadcrumb:
   element:
@@ -1407,6 +1416,16 @@ check_registry_pull_interval:
   element:
     selector:
       xpath: //dt[contains(.,'Registry poll interval')]/following-sibling::dd[1]/button[contains(.,'<registrypullinterval>')]
+check_runtimeclass:
+  params:
+    key: Runtime class
+    value: kata
+  action: check_resource_details_key_and_value
+check_runtimeclass_missing:
+  element:
+    selector:
+      xpath: //dt[contains(.,'Runtime class')]
+    missing: true
 click_workloads_tab:
   params:
     tab_name: Workloads

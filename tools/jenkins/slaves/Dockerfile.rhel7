@@ -38,7 +38,7 @@ ADD . $HOME/verification-tests
 # RUN scl enable rh-git218 "git clone --depth 1 --single-branch 'https://github.com/openshift/verification-tests.git' '$HOME/verification-tests'"
 
 RUN scl enable rh-ruby27 "$HOME/verification-tests/tools/install_os_deps.sh"
-RUN chown -R 1001 "$HOME/verification-tests"
+RUN chown -R 1001 "$HOME"
 # We may consider in the future reliability of using
 # gem install -g --minimal-deps --conservative --no-document # -l --explain
 # The consideration here is to have both `bundle exec command` and
@@ -47,6 +47,16 @@ RUN chown -R 1001 "$HOME/verification-tests"
 RUN setpriv --reuid 1001 scl enable rh-ruby27 'mkdir -p `ruby -e "puts Gem.path[0]" | xargs dirname`'
 RUN setpriv --reuid 1001 scl enable rh-ruby27 "bundle config path $HOME/.gem/bundler"
 RUN setpriv --reuid 1001 scl enable rh-ruby27 'ln -s `ruby -C "$HOME/verification-tests" -rbundler -e "puts Bundler.bundle_path"` `ruby -e "puts Gem.path[0]"`'
+RUN setpriv --reuid 1001 scl enable rh-ruby27 '`ruby -rfileutils -e "FileUtils.mkdir_p(File.readlink(Gem.path[0]))"`'
+
+RUN set -x && \
+    git clone --depth 1 --single-branch https://github.com/openshift-qe/reportportal-agent-ruby.git && \
+    chown -R 1001:0 reportportal-agent-ruby && \
+    cd reportportal-agent-ruby && \
+    setpriv --reuid 1001 scl enable rh-ruby27 'gem build reportportal' && \
+    setpriv --reuid 1001 scl enable rh-ruby27 'gem install reportportal-*.gem' && \
+    cd .. && rm -rf reportportal-agent-ruby
+
 RUN setpriv --reuid 1001 scl enable rh-ruby27 "$HOME/verification-tests/tools/hack_bundle.rb"
 
 # -k is a bad option, better setup proper system certificates in a layered image
@@ -54,11 +64,10 @@ RUN setpriv --reuid 1001 scl enable rh-ruby27 "$HOME/verification-tests/tools/ha
 
 RUN rpm -qa && \
     yum clean all -y && \
-    rm -rf $HOME/verification-tests /var/cache/yum /var/tmp/ /tmp/*
+    rm -rf $HOME/verification-tests /var/cache/yum /var/tmp/* /tmp/*
 
 RUN dbus-uuidgen > /etc/machine-id # e.g. needed for firefox
-RUN chown -R 1001:0 $HOME && \
-    chmod -R g=u $USER_PATHS && chmod -R g+rw $USER_PATHS
+RUN chmod -R g=u $USER_PATHS && chmod -R g+rw $USER_PATHS
 
 # allow yum/dnf; but probably fakeroot would be needed and still some install
 # scripts may fail because of lack of real root

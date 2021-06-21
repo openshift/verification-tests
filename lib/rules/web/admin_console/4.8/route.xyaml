@@ -37,7 +37,7 @@ create_route:
   action:
     if_param: route_hostname
     ref: set_hostname
-  action: 
+  action:
     if_param: route_path
     ref: set_route_path
   action: set_service_name
@@ -97,7 +97,7 @@ set_weight_for_alternative_service:
 set_alternative_service:
   action: click_add_alternative_service
   action: set_weight_for_main_service
-  action: set_alternative_service_name  
+  action: set_alternative_service_name
   action: set_weight_for_alternative_service
 set_target_port:
   params:
@@ -159,15 +159,17 @@ upload_destination_ca_crt_file:
     type: filefield
     op: set <destination_ca_certificate>
 check_metrics_charts_on_route_overview:
+  action: click_metrics_tab
+  action: wait_box_loaded
   elements:
   - selector:
-      xpath: //h5[@class='graph-title' and text()='Traffic in']/following::div[1][@class='pf-c-chart']
+      xpath: //div/h2[text()='Traffic in']/following::div[1]//div[@class='pf-c-chart']
     timeout: 20
   - selector:
-      xpath: //h5[@class='graph-title' and text()='Traffic out']/following::div[1][@class='pf-c-chart']
+      xpath: //div/h2[text()='Traffic out']/following::div[1]//div[@class='pf-c-chart']
     timeout: 20
   - selector:
-      xpath: //h5[@class='graph-title' and text()='Connection rate']/following::div[1][@class='pf-c-chart']
+      xpath: //div/h2[text()='Connection rate']/following::div[1]//div[@class='pf-c-chart']
     timeout: 20
   - selector:
       xpath: //h1[contains(@class,'graph-empty-state__title') and contains(text(),'No datapoints found')]
