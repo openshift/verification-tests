@@ -8,9 +8,7 @@ check_cluster_utilization_charts_style:
       xpath: //*[contains(@class, 'card__title') and contains(text(), 'Cluster utilization')]
   action: check_chart_using_victory
 check_pod_detail_page_charts_style:
-  elements:
-  - selector:
-      xpath: //*[contains(@class, 'co-m-pane__body')]//*[contains(text(), 'Pod details')]
+  action: click_metrics_tab
   action: check_chart_using_victory
 check_node_detail_page_charts_style:
   elements:

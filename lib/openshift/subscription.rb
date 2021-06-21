@@ -1,6 +1,6 @@
 module BushSlicer
   class Subscription < ProjectResource
-    RESOURCE = "subscriptions"
+    RESOURCE = "subscriptions.operators.coreos.com"
 
     def current_csv(user: nil, quiet: false, cached: false)
       rr = raw_resource(user: user, cached: cached, quiet: quiet)
