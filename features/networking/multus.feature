@@ -1227,7 +1227,7 @@ Feature: Multus-CNI related scenarios
     Then the step should succeed
     And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod1_net1_ip clipboard
     And evaluation of `@result[:response].match(/\h+:\h+:\h+:\h+:\h+:\h+/)[0]` is stored in the :pod1_net1_mac clipboard
-    And the expression should be true> cb.pod1_net1_mac==cb.default_interface_mac
+    And the expression should be true> cb.pod1_net1_mac == cb.default_interface_mac
 
     #Creating pod2 absorbing above net-attach-def
     Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
@@ -1242,8 +1242,8 @@ Feature: Multus-CNI related scenarios
     Then the step should succeed
     And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :pod2_net1_ip clipboard
     And evaluation of `@result[:response].match(/\h+:\h+:\h+:\h+:\h+:\h+/)[0]` is stored in the :pod2_net1_mac clipboard
-    And the expression should be true> cb.pod2_net1_mac==cb.default_interface_mac
-    And the expression should be true> !(cb.pod2_net1_ip==cb.pod1_net1_ip)
+    And the expression should be true> cb.pod2_net1_mac == cb.default_interface_mac
+    And the expression should be true> !(cb.pod2_net1_ip == cb.pod1_net1_ip)
 
   # @author weliang@redhat.com
   # @case_id OCP-28633
@@ -1537,7 +1537,7 @@ Feature: Multus-CNI related scenarios
   # @author weliang@redhat.com
   # @case_id OCP-41789
   @admin
-  Scenario: [BZ1944678] Whereabouts IPAM CNI duplicate IP addresses assigned to pods	
+  Scenario: [BZ1944678] Whereabouts IPAM CNI duplicate IP addresses assigned to pods
     Given the multus is enabled on the cluster
     And I store all worker nodes to the :nodes clipboard
     # Create the net-attach-def via cluster admin
@@ -1546,7 +1546,7 @@ Feature: Multus-CNI related scenarios
     When I run oc create as admin over "Bug-1944678.yaml" replacing paths:
       | ["metadata"]["namespace"] | <%= project.name %> |
     Then the step should succeed
-    
+
     # Create a pod absorbing above net-attach-def
     Given I obtain test data file "networking/multus-cni/Pods/generic_multus_pod.yaml"
     When I run oc create over "generic_multus_pod.yaml" replacing paths:
@@ -1588,4 +1588,4 @@ Feature: Multus-CNI related scenarios
       | bash | -c | ip -4 -brief a |
     Then the output should contain:
       | 10.199.199.102 |
-    
+

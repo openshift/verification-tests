@@ -21,9 +21,9 @@ Feature: oc_portforward.feature
       | port_spec | <%= cb[:portd] %>:8081  |
       | _timeout | 40 |
     Then the step should succeed
+    Given the expression should be true> @host = localhost
     And I wait up to 40 seconds for the steps to pass:
     """
-    Given the expression should be true> @host = localhost
     And I run commands on the host:
       | curl http://127.0.0.1:<%= cb[:porta] %> --noproxy "127.0.0.1" |
     Then the step should succeed
