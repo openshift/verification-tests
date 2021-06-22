@@ -317,13 +317,23 @@ check_ticked_capability_level:
   elements:
   - selector:
       xpath: //li[contains(., '<capability_name>')]/*[name()='svg']
-click_checkbox_from_provider_type:  
+click_checkbox_from_provider_type:
+  action:
+    if_element:
+      selector: &show_more_prodiver_button
+        xpath: //form[@data-test-group-name='providerType']//button[contains(.,'more')]
+    ref: show_all_provider_type  
   elements:
   - selector:
       xpath:  //form[@data-test-group-name='providerType']
     timeout: 30
   - selector:
       xpath: //form[@data-test-group-name='providerType']//*[contains(@class, 'pf-c-check__label') and contains(text(), '<text>')]
+    op: click
+show_all_provider_type:
+  element:
+    selector:
+      <<: *show_more_prodiver_button
     op: click
 click_qe_customized_provider:
   params:

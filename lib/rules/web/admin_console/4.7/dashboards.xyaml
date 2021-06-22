@@ -612,7 +612,7 @@ check_cluster_inventory_items:
       xpath: //div[contains(@class,'co-inventory-card__item')]//a[contains(normalize-space(text()),'PVC')]
 check_matched_number_of_nodes:
   params:
-    resource_type: nodes
+    resource_type: node
     number_of_resource: <number_of_nodes>
   action: check_matched_number_of_resource
 check_matched_number_of_pvcs:
