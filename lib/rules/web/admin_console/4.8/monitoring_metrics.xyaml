@@ -275,9 +275,13 @@ check_all_series_show:
   action: check_button_title
 
 click_pod_chart_link:
+  params:
+    text: Metrics
+    link_url: /metrics
+  action: click_link_with_text
   element:
     selector:
-      xpath: //h5[contains(text(),'<chart_name>')]/../a
+      xpath: //h2[contains(text(),'<chart_name>')]/../..//a
     op: click
 check_data_diplayed_db:
   element:
@@ -304,6 +308,6 @@ click_link_from_uitilization_description:
   action: click_link_with_text_only
 check_pod_detail:
   params:
-    content: Memory usage
+    content: Pod IP
   action: check_page_contains
   action: check_pod_detail_page_charts_style

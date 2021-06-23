@@ -310,7 +310,10 @@ goto_operator_all_instance_page:
   action: wait_box_loaded
 
 
-
+# machines
+goto_machines_page:
+  url: /k8s/ns/openshift-machine-api/machine.openshift.io~v1beta1~Machine
+  action: wait_box_loaded
 # machine config
 goto_machineconfigs_page:
   url: k8s/cluster/machineconfiguration.openshift.io~v1~MachineConfig

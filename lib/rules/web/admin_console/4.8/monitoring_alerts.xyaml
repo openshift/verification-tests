@@ -27,8 +27,10 @@ filter_alert:
   params:
     class_text: co-text-filter
     input_value: <alert_name>
+    content: <alert_name>
   action: clear_name_filter_if_exists
   action: set_input_class
+  action: check_page_contains
 open_alert_detail:
   action: Disable_all_filters
   action: filter_alert
@@ -354,15 +356,16 @@ list_alerts_by_filters_clear:
 list_alerts_by_filters:
   action: click_alert_filter_dropdown
   action: click_alert_filter_item
+  action: click_alert_filter_dropdown
 click_alert_filter_dropdown:
   element:
     selector:
-      xpath: //div[@id='filter-toolbar']//button[@data-test-id='filter-dropdown-toggle']
+      xpath: //div[@data-test-id="filter-dropdown-toggle"]//button
     op: click
 click_alert_filter_item:
   element:
     selector:
-      xpath: //li[@id='<filter_item>']
+      xpath: //input[@id='<filter_item>']
     op: click
 click_label_filter_dropdown:
   params:

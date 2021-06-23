@@ -10,7 +10,7 @@ Feature: Operator related networking scenarios
     Given evaluation of `cluster_version('version').version` is stored in the :ocp_version clipboard
     And evaluation of `cluster_operator('network').condition(type: 'Available')` is stored in the :operator_status clipboard
     #Making sure that network operator AVAILABLE status value is True
-    Then the expression should be true> cb.operator_status["status"]=="True"
+    Then the expression should be true> cb.operator_status["status"] == "True"
     #Confirm whether network operator version matches with ocp version
     And the expression should be true> cluster_operator('network').version_exists?(version: cb.ocp_version)
 
@@ -25,10 +25,10 @@ Feature: Operator related networking scenarios
     Given evaluation of `cluster_version('version').version` is stored in the :ocp_version clipboard
     #Making sure that operator is not Degraded before proceesing further steps
     And evaluation of `cluster_operator('network').condition(type: 'Degraded')` is stored in the :degraded_status_before_patch clipboard
-    Then the expression should be true> cb.degraded_status_before_patch["status"]=="False"
+    Then the expression should be true> cb.degraded_status_before_patch["status"] == "False"
     #Making sure that operator is not Degraded before proceesing further steps
     And evaluation of `cluster_operator('network').condition(type: 'Degraded')` is stored in the :degraded_status_before_patch clipboard
-    Then the expression should be true> cb.degraded_status_before_patch["status"]=="False"
+    Then the expression should be true> cb.degraded_status_before_patch["status"] == "False"
     #Editing networks.config.openshift.io cluster to reflect bad config like changing networktype from OpenShiftSDN to OpenShift
     When I run the :patch admin command with:
       | resource      | networks.config.openshift.io         |
@@ -46,9 +46,9 @@ Feature: Operator related networking scenarios
       | p             | {"spec":{"networkType":"OpenShiftSDN"}} |
       | type          | merge                                   |
     Then the step should succeed
-    20 seconds have passed
-    evaluation of `cluster_operator('network').condition(type: 'Degraded',cached: false)` is stored in the :degraded_status clipboard
-    the expression should be true> cb.degraded_status["status"]=="False"
+    And 20 seconds have passed
+    And evaluation of `cluster_operator('network').condition(type: 'Degraded',cached: false)` is stored in the :degraded_status clipboard
+    Then the expression should be true> cb.degraded_status["status"] == "False"
     """
     #Normally it takes 5-10 seconds for network config update to reconcile across the cluster but taking 20 seconds wait to make sure that Degraded status becomes True post bad patch
     Given 20 seconds have passed

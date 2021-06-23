@@ -58,6 +58,16 @@ Given /^I remove kata operator from the#{OPT_QUOTED} namespace$/ do | kata_ns |
   step %Q/I switch to cluster admin pseudo user/
   # 1. remove kataconfig first
   project(kata_ns)
+  # prereq is that there are no outstanding pods in the cluster with
+  # kata-runtime.
+  step %Q/I find all pods running with kata as runtime in the cluster and store them to the :kata_pods clipboard/
+  if cb.kata_pods.count > 0
+    cb.kata_pods.each do |p|
+      logger.info("pod: #{p.name}, project: #{p.project.name}")
+    end
+    raise "There are pods in the cluster running kata as runtime, they must be removed before kataconfig can be removed"
+  end
+
   kataconfig_name = BushSlicer::KataConfig.list(user: admin).first.name
   step %Q/I ensure "#{kataconfig_name}" kata_config is deleted within 1200 seconds/
   # 2. remove namespace
@@ -182,4 +192,12 @@ Given /^I extract the channel information from subscription and save it to the#{
   channel = YAML.load(open('subscription.yaml')).dig('spec', 'channel')
   logger.info("Subscription using channel: #{channel}")
   cb[cb_name] = channel
+end
+
+Given /^I find all pods running with kata as runtime in the cluster and store them to the#{OPT_SYM} clipboard$/ do |cb_name|
+  ensure_admin_tagged
+  cb_name ||= :kata_pods
+  pods = BushSlicer::Pod.list(user: admin, project: :all)
+  kata_pods = pods.select { |p| p.runtime_class_name == 'kata' }
+  cb[cb_name] = kata_pods
 end
