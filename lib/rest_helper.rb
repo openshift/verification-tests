@@ -1,4 +1,4 @@
-require 'http'
+require 'cucuhttp'
 require 'json'
 require 'yaml'
 

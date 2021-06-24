@@ -12,7 +12,7 @@ end
 
 require 'collections'
 require 'common'
-require 'http'
+require 'cucuhttp'
 
 module BushSlicer
   class Alicloud
