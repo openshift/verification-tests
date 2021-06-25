@@ -287,7 +287,7 @@ Feature: Egress IP related features
   @admin
   Scenario: Invalid egressIP should not be acceptable
     Given I select a random node's host
-    Given evaluation of `["fe80::5054:ff:fedd:3698", ""a.b.c.d, "10.10.10.-1", "10.0.0.1/64", "10.1.1/24", "A008696"]` is stored in the :ips clipboard
+    Given evaluation of `["fe80::5054:ff:fedd:3698", "a.b.c.d", "10.10.10.-1", "10.0.0.1/64", "10.1.1/24", "A008696"]` is stored in the :ips clipboard
     And I repeat the following steps for each :ip in cb.ips:
     """
     When I run the :patch admin command with:
