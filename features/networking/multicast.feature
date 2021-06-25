@@ -4,8 +4,6 @@ Feature: testing multicast scenarios
   # @case_id OCP-12926
   @admin
   Scenario: pods should be able to subscribe send and receive multicast traffic
-    Given the env is using multitenant or networkpolicy network
-
     # create some multicast testing pods
     Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard
@@ -23,12 +21,7 @@ Feature: testing multicast scenarios
     And evaluation of `pod(2).name` is stored in the :pod3 clipboard
 
     # enable multicast for the netnamespace
-    When I run the :annotate admin command with:
-      | resource     | netnamespace    |
-      | resourcename | <%= cb.proj1 %> |
-      | overwrite    | true            |
-      | keyval       | netnamespace.network.openshift.io/multicast-enabled=true |
-    Then the step should succeed
+    Given I enable multicast for the "<%= cb.proj1 %>" namespace
 
     # run omping as background on first and second pods
     When I run the :exec background client command with:
@@ -67,28 +60,31 @@ Feature: testing multicast scenarios
     Then the step should succeed
 
     # ensure interface join to the multicast group
+    And I wait up to 10 seconds for the steps to pass:
+    """
     When I execute on the "<%= cb.pod3 %>" pod:
       | netstat | -ng |
     Then the step should succeed
     And the output should match:
       | eth0\s+1\s+232.43.211.234 |
-
-    Given 10 seconds have passed
+    """   
+    And I wait up to 20 seconds for the steps to pass:
+    """
     When I execute on the "<%= cb.pod3 %>" pod:
       | cat | /tmp/p3.log |
     Then the step should succeed
     And the output should match:
       | <%= cb.pod1ip %>.*joined \(S,G\) = \(\*, 232.43.211.234\), pinging |
       | <%= cb.pod2ip %>.*joined \(S,G\) = \(\*, 232.43.211.234\), pinging |
-      | <%= cb.pod1ip %>.*multicast, xmt/rcv/%loss = 5/5/0% |
-      | <%= cb.pod2ip %>.*multicast, xmt/rcv/%loss = 5/5/0% |
-
+    And the output should not match:
+      | <%= cb.pod1ip %>.*multicast, xmt/rcv/%loss = 5/0/0% |
+      | <%= cb.pod2ip %>.*multicast, xmt/rcv/%loss = 5/0/0% |
+    """
+    
   # @author hongli@redhat.com
   # @case_id OCP-12977
   @admin
   Scenario: multicast is disabled by default if not annotate the netnamespace
-    Given the env is using multitenant or networkpolicy network
-
     # create multicast testing pods in the project and without multicast enable
     Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard
@@ -103,6 +99,9 @@ Feature: testing multicast scenarios
     And evaluation of `pod(1).ip` is stored in the :pod2ip clipboard
     And evaluation of `pod(1).name` is stored in the :pod2 clipboard
 
+    # Enable multicast in proj1
+    Given I enable multicast for the "<%= cb.proj1 %>" namespace
+    
     # run omping as background on the pods
     When I run the :exec background client command with:
       | pod              | <%= cb.pod1 %>   |
@@ -125,20 +124,25 @@ Feature: testing multicast scenarios
     Then the step should succeed
 
     # ensure interface join to the multicast group
+    And I wait up to 10 seconds for the steps to pass:
+    """
     When I execute on the "<%= cb.pod2 %>" pod:
       | netstat | -ng |
     Then the step should succeed
     And the output should match:
       | eth0\s+1\s+232.43.211.234 |
-
+    """
     # check the result and should received 0 multicast packet
-    Given 10 seconds have passed
+    And I wait up to 20 seconds for the steps to pass:
+    """
     When I execute on the "<%= cb.pod2 %>" pod:
       | cat | /tmp/p2-disable.log |
     Then the step should succeed
     And the output should contain:
       | <%= cb.pod1ip %> : joined (S,G) = (*, 232.43.211.234), pinging |
+    And the output should not match:
       | <%= cb.pod1ip %> : multicast, xmt/rcv/%loss = 5/0/100%         |
+    """
 
   # @author weliang@redhat.com
   # @case_id OCP-12930
@@ -207,11 +211,14 @@ Feature: testing multicast scenarios
     Then the step should succeed
 
     # Ensure proj1pod3 interface join to the multicast group 239.255.254.24
+    And I wait up to 10 seconds for the steps to pass:
+    """
     When I execute on the "<%= cb.proj1pod3 %>" pod:
       | netstat | -ng |
     Then the step should succeed
     And the output should match:
       | eth0\s+1\s+239.255.254.24 |
+    """
     And I wait up to 20 seconds for the steps to pass:
     """
     When I execute on the "<%= cb.proj1pod3 %>" pod:
@@ -253,11 +260,14 @@ Feature: testing multicast scenarios
     Then the step should succeed
 
     # Ensure proj2pod3 interface join to the multicast group 239.255.254.24
+    And I wait up to 10 seconds for the steps to pass:
+    """
     When I execute on the "<%= cb.proj2pod3 %>" pod:
       | netstat | -ng |
     Then the step should succeed
     And the output should match:
       | eth0\s+1\s+239.255.254.24 |
+    """
     And I wait up to 20 seconds for the steps to pass:
     """
     When I execute on the "<%= cb.proj2pod3 %>" pod:
