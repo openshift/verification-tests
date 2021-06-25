@@ -209,3 +209,29 @@ Feature: SDN compoment upgrade testing
     Then the step should succeed 
     And the output should contain "Hello"
     """
+    #Steps to modify policy post upgrade for bug 1973679
+    When I obtain test data file "networking/networkpolicy/allow-ns-and-pod.yaml"
+    And I replace lines in "allow-ns-and-pod.yaml":
+      | test-pods | hello-idle |
+    And I run the :replace admin command with:
+      | f | allow-ns-and-pod.yaml |
+      | n | policy-upgrade1       |
+    Then the step should succeed
+
+    And I wait up to 10 seconds for the steps to pass:
+    """
+    When I execute on the "<%= cb.pod4 %>" pod:
+      | curl | -s | --connect-timeout | 5 | <%= cb.pod3ip %>:8080 |
+    Then the step should fail
+    And the output should not contain "Hello"
+    When I execute on the "<%= cb.pod5 %>" pod:
+      | curl | -s | --connect-timeout | 5 | <%= cb.pod2ip %>:8080 |
+    Then the step should succeed
+    And the output should contain "Hello"
+    When I execute on the "<%= cb.pod5 %>" pod:
+      | curl | -s | --connect-timeout | 5 | <%= cb.pod3ip %>:8080 |
+    Then the step should succeed
+    And the output should contain "Hello"
+    """
+
+
