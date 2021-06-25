@@ -14,7 +14,7 @@ require 'json'
 
 require 'collections'
 require 'common'
-require 'http'
+require 'cucuhttp'
 
 require 'launchers/cloud_helper'
 

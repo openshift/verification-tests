@@ -11,7 +11,7 @@ require 'launchers/amz'
 
 require 'collections'
 require 'common'
-require 'http'
+require 'cucuhttp'
 
 module BushSlicer
   class AWSCli
