@@ -1,37 +1,53 @@
 #----------------------------------- This file is used for subscription page definition -------------------------
-go_to_subscription_quota_page:
+go_to_subscription_quota_annual_page:
     url: /openshift/quota
 go_to_subscription_quota_limit_page:
     url: /openshift/quota/resource-limits
-subscriptions_page_loaded:
-    element:
-        selector:
-            xpath: //h1[@widget-type='InsightsPageHeaderTitle' and text()='Subscriptions']
 switch_subscriptions_page:
     element:
         selector:
             xpath: //a[text()='Subscriptions' and contains(@href, '/openshift/subscriptions')]
         op: click
-check_subscriptions_page:
-    action: check_subscriptions_page_title
+check_quota_page_title:
+    scripts:
+    - command: return document.title=='Quota | Red Hat OpenShift Cluster Manager'
+      expect_result: true
+check_quota_annual_page:
+    action: check_quota_page_title
     elements:
         - selector:
-            xpath: //div[text()='OpenShift Container Platform now uses Subscription Watch to manage subscriptions.']
-        - selector:
-            xpath: //a[contains(@href, '/subscriptions/openshift-sw') and text()='Open Subscription Watch']
+            xpath: //h1[@class='pf-c-title pf-m-2xl page-title' and text()='Dedicated (Annual)']
     elements:
         - selector:
             xpath: //div[text()='OpenShift Dedicated']
         - selector:
-            xpath: //div[text()='The summary of all subscriptions for OpenShift Dedicated purchased by your organization or granted by Red Hat.']
+            xpath: //div[contains(text(), 'The summary of all annual subscriptions for OpenShift Dedicated purchased by your organization or granted by Red Hat.')]
+        - selector:
+            xpath: //a[@href='/openshift/quota/resource-limits' and text()='Dedicated (On-Demand Limits)']
         - selector:
             xpath: //h4[text()='You do not have any quota']
         - selector:
             xpath: //a[@href='https://www.openshift.com/products/dedicated/contact/' and text()='Contact sales']
         - selector:
             xpath: //p[text()='to get started with OpenShift Dedicated.']
-check_subscriptions_page_title:
-    scripts:
-    - command: return document.title=='Subscriptions | Red Hat OpenShift Cluster Manager'
-      expect_result: true
-      
+check_quota_limit_page:
+    action: check_quota_page_title
+    elements:
+        - selector:
+            xpath: //h1[@class='pf-c-title pf-m-2xl page-title' and text()='Dedicated (On-Demand Limits)']
+    elements:
+        - selector:
+            xpath: //div[text()='OpenShift Dedicated']
+        - selector:
+            xpath: //div[contains(text(), 'Active subscriptions allow your organization to use up to a certain number of OpenShift Dedicated clusters.')]
+        - selector:
+            xpath: //a[@href='/openshift/subscriptions/openshift-dedicated' and text()='Dedicated (On-Demand)']
+        - selector:
+            xpath: //h4[text()='Marketplace on-demand subscriptions not detected']
+        - selector:
+            xpath: //p[text()='No marketplace subscriptions for OpenShift Dedicated or add-ons were found in your account'] 
+        - selector:
+            xpath: //a[@class='pf-c-button pf-m-primary' and text()='Enable in Marketplace' and @href='https://marketplace.redhat.com/en-us/products/red-hat-openshift-dedicated']
+        - selector:
+            xpath: //a[text()='Learn more' and @href='https://access.redhat.com/documentation/en-us/openshift_cluster_manager/2021-02/html/managing_clusters/assembly-cluster-subscriptions']
+                 
