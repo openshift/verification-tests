@@ -57,7 +57,7 @@ set_request_size:
 choose_request_size_unit:
   elements:
   - selector:
-      xpath: //input[@name='requestSizeValue']/parent::*//button[@class='pf-c-dropdown__toggle']
+      xpath: //button[@data-test-id='dropdown-button']
     op: click
   - selector:
       id: <pvc_size_unit>-link
