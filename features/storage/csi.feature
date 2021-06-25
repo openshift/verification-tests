@@ -197,4 +197,82 @@ Feature: CSI testing related feature
       | standard-csi  | ext4   | # @case_id OCP-37558
 
 
+  # @author wduan@redhat.com
+  Scenario Outline: CSI dynamic provisioning with block
+    Given I have a project
+    Given I obtain test data file "storage/misc/pvc.json"
+    When I create a dynamic pvc from "pvc.json" replacing paths:
+      | ["metadata"]["name"]         | mypvc     |
+      | ["spec"]["storageClassName"] | <sc_name> |
+      | ["spec"]["volumeMode"]       | Block     |
+    Then the step should succeed
+    Given I obtain test data file "storage/misc/pod-with-block-volume.yaml"
+    When I run oc create over "pod-with-block-volume.yaml" replacing paths:
+      | ["metadata"]["name"]                                         | mypod       |
+      | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc       |
+      | ["spec"]["containers"][0]["volumeDevices"][0]["devicePath"]  | /dev/dblock |
+    Then the step should succeed
+    And the pod named "mypod" becomes ready
+    And the "mypvc" PVC becomes :bound
+    When I execute on the pod:
+      | sh | -c | [[ -b /dev/dblock ]] |
+    Then the step should succeed
+    When I execute on the pod:
+      | /bin/dd | if=/dev/zero | of=/dev/dblock | bs=1M | count=1 |
+    Then the step should succeed
+    When I execute on the pod:
+      | sh | -c | echo "test data" > /dev/dblock |
+    Then the step should succeed
+    When I execute on the pod:
+      | /bin/dd | if=/dev/dblock | of=/tmp/testfile | bs=1M | count=1 |
+    Then the step should succeed
+    When I execute on the pod:
+      | sh | -c | cat /tmp/testfile |
+    Then the step should succeed
+    And the output should contain "test data"
 
+    Examples:
+      | sc_name      |
+      | standard-csi | # @case_id OCP-37564
+
+
+  # @author wduan@redhat.com
+  @admin
+  Scenario Outline: CSI dynamic provisioning with different type
+    Given I have a project
+    And admin clones storage class "sc-<%= project.name %>" from "<sc_name>" with:
+      | ["parameters"]["type"] | <type> |
+
+    Given I obtain test data file "storage/misc/pvc.json"
+    When I create a dynamic pvc from "pvc.json" replacing paths:
+      | ["metadata"]["name"]                         | mypvc                  |
+      | ["spec"]["storageClassName"]                 | sc-<%= project.name %> |
+      | ["spec"]["resources"]["requests"]["storage"] | <size>                 |
+    Then the step should succeed
+
+    Given I obtain test data file "storage/misc/deployment.yaml"
+    When I run oc create over "deployment.yaml" replacing paths:
+      | ["metadata"]["name"]                                                             | mydep      |
+      | ["spec"]["template"]["metadata"]["labels"]["action"]                             | storage    |
+      | ["spec"]["template"]["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc      |
+      | ["spec"]["template"]["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt/local |
+    Then the step should succeed
+    And a pod becomes ready with labels:
+      | action=storage |
+    And the "mypvc" PVC becomes :bound
+    And the expression should be true> pvc.capacity == "<size>"
+    When I execute on the pod:
+      | sh | -c | echo "test" > /mnt/local/testfile |
+    Then the step should succeed
+    When I execute on the pod:
+      | cp | /hello | /mnt/local |
+    Then the step should succeed
+    When I execute on the pod:
+      | /mnt/local/hello |
+    Then the step should succeed
+    And the output should contain "Hello OpenShift Storage"
+
+    Examples:
+      | sc_name | type | size  |
+      | gp2-csi | sc1  | 125Gi | # @case_id OCP-24546
+      | gp2-csi | st1  | 125Gi | # @case_id OCP-24572
