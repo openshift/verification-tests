@@ -529,7 +529,7 @@ Given /^I create a pipeline secret with:$/ do | table |
   ]
 
   if transport_ssl_enabled == "true" || auth_type == "mTLS" || auth_type == "mTLS_share"
-    secret_keys << ["from_file", "tls.key=logging-es.key"] << ["from_file", "tls.crt=logging-es.crt"] << ["from_file", "ca-bundle.crt=ca.crt"] << ["from_file", "ca.key=ca.key"]
+    secret_keys << ["from_file", "tls.key=logging-es.key"] << ["from_file", "tls.crt=logging-es.crt"] << ["from_file", "ca-bundle.crt=ca.crt"]
   end
 
   if user_auth_enabled == "true"
@@ -537,7 +537,7 @@ Given /^I create a pipeline secret with:$/ do | table |
   end
 
   if http_ssl_enabled == "true" || auth_type == "server_auth" || auth_type == "server_auth_share"
-    secret_keys << ["from_file", "ca-bundle.crt=ca.crt"] << ["from_file", "ca.key=ca.key"]
+    secret_keys << ["from_file", "ca-bundle.crt=ca.crt"]
   end
 
   if auth_type == "mTLS_share" || auth_type == "server_auth_share"
