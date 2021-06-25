@@ -233,5 +233,3 @@ Feature: SDN compoment upgrade testing
     Then the step should succeed
     And the output should contain "Hello"
     """
-
-
