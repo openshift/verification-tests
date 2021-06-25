@@ -1,4 +1,4 @@
-require 'http'
+require 'cucuhttp'
 
 module BushSlicer
   module Platform
