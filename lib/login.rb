@@ -2,7 +2,7 @@ require 'cgi'
 require 'oga'
 require 'uri'
 
-require 'http'
+require 'cucuhttp'
 
 module BushSlicer
   # this file hosts necessary logic to login into OpenShift via username and
