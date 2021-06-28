@@ -223,3 +223,60 @@ Feature: apiserver and auth related upgrade check
     And the output should match:
       | system:serviceaccount:test-scc:test-scc |
 
+  # @author scheng@redhat.com
+  @upgrade-prepare
+  @users=upuser1,upuser2
+  Scenario: Upgrade action will cause re-generation of certificates for headless services to include the wildcard subjects - prepare
+    Given I switch to the first user
+    When I run the :new_project client command with:
+      | project_name | service-ca-upgrade |
+    Then the step should succeed
+    And I obtain test data file "services/headless-services.yaml"
+    When I run the :create client command with:
+      | f | headless-services.yaml |
+    Then the step should succeed
+    Given I use the "service-ca-upgrade" project
+    When I run the :run client command with:
+      | name    | openssl                          |
+      | image   | quay.io/openshifttest/openssl:oc |
+      | env     | POD_NAMESPACE=service-ca-upgrade |
+      | command | true                             |
+      | cmd     | sleep                            |
+      | cmd     | 360                              |
+    Then the step should succeed
+    Given a pod becomes ready with labels:
+      | run=openssl |
+    And I give project admin role to the default service account
+    Given I execute on the pod:
+      | bash                                                                                                                        |
+      | -c                                                                                                                          |
+      | oc extract secret/test-serving-cert -n service-ca-upgrade --to=/tmp --confirm && openssl x509 -in /tmp/tls.crt -noout -text |
+    Then the step should succeed
+    And the output should contain:
+      | DNS:foo.service-ca-upgrade.svc, DNS:foo.service-ca-upgrade.svc.cluster.local |
+
+  # @author scheng@redhat.com
+  # @case_id OCP-41198
+  @upgrade-check
+  @users=upuser1,upuser2
+  Scenario: Upgrade action will cause re-generation of certificates for headless services to include the wildcard subjects
+    Given the master version >= "4.8"
+    Given I use the "service-ca-upgrade" project
+    When I run the :run client command with:
+      | name    | openssl                          |
+      | image   | quay.io/openshifttest/openssl:oc |
+      | env     | POD_NAMESPACE=service-ca-upgrade |
+      | command | true                             |
+      | cmd     | sleep                            |
+      | cmd     | 360                              |
+    Then the step should succeed
+    Given a pod becomes ready with labels:
+      | run=openssl |
+    And I give project admin role to the default service account
+    Given I execute on the pod:
+      | bash                                                                                                                        |
+      | -c                                                                                                                          |
+      | oc extract secret/test-serving-cert -n service-ca-upgrade --to=/tmp --confirm && openssl x509 -in /tmp/tls.crt -noout -text |
+    Then the step should succeed
+    And the output should contain:
+      | DNS:*.foo.service-ca-upgrade.svc, DNS:*.foo.service-ca-upgrade.svc.cluster.local, DNS:foo.service-ca-upgrade.svc, DNS:foo.service-ca-upgrade.svc.cluster.local |

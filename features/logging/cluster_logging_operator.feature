@@ -35,9 +35,9 @@ Feature: cluster-logging-operator related test
   Scenario: Scale Elasticsearch nodes by nodeCount 2->3->4 in clusterlogging
     Given I obtain test data file "logging/clusterlogging/scalebase.yaml"
     Given I create clusterlogging instance with:
-      | remove_logging_pods | true                                                                   |
+      | remove_logging_pods | true           |
       | crd_yaml            | scalebase.yaml |
-      | check_status        | false                                                                  |
+      | check_status        | false          |
     Then the step should succeed
     And I wait for the "elasticsearch" elasticsearches to appear up to 300 seconds
     And the expression should be true> cluster_logging('instance').logstore_node_count == 2

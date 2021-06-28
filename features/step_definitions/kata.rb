@@ -41,7 +41,7 @@ Given /^I wait for #{QUOTED} (uninstall|install) to start$/ do | kc_name, mode |
 end
 
 Given /^I wait until number of completed kata runtime nodes match#{OPT_QUOTED} for #{QUOTED}$/ do |number, kc_name|
-  ready_timeout = 900
+  ready_timeout = 1200
   matched = kata_config(kc_name).wait_till_installed_counter_match(
     user: user, seconds: ready_timeout)
   unless matched[:success]
@@ -58,8 +58,18 @@ Given /^I remove kata operator from the#{OPT_QUOTED} namespace$/ do | kata_ns |
   step %Q/I switch to cluster admin pseudo user/
   # 1. remove kataconfig first
   project(kata_ns)
+  # prereq is that there are no outstanding pods in the cluster with
+  # kata-runtime.
+  step %Q/I find all pods running with kata as runtime in the cluster and store them to the :kata_pods clipboard/
+  if cb.kata_pods.count > 0
+    cb.kata_pods.each do |p|
+      logger.info("pod: #{p.name}, project: #{p.project.name}")
+    end
+    raise "There are pods in the cluster running kata as runtime, they must be removed before kataconfig can be removed"
+  end
+
   kataconfig_name = BushSlicer::KataConfig.list(user: admin).first.name
-  step %Q/I ensure "#{kataconfig_name}" kata_config is deleted within 900 seconds/
+  step %Q/I ensure "#{kataconfig_name}" kata_config is deleted within 1200 seconds/
   # 2. remove namespace
   step %Q/I ensure "#{kata_ns}" project is deleted/
 end
@@ -80,7 +90,7 @@ And /^I verify kata container runtime is installed into a worker node$/ do
   })
   logger.info("Checking for runtime engine match...")
   # 1. check pod's spec to make sure the runtimeClassName is 'kata'
-  pod_runtime_class_name = pod('example-fedora-kata').raw_resource['spec']['runtimeClassName']
+  pod_runtime_class_name = pod('example-fedora-kata').runtime_class_name
   if pod_runtime_class_name != 'kata'
     raise "Pod's runtimeclass name #{pod_runtime_class_name} should be `kata`"
   end
@@ -120,7 +130,7 @@ Given /^the kata-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|G
 
   unless kata_config(kata_config_name).exists?
     if install_method == 'GUI'
-      package_name = 'kata-operator'
+      package_name = 'sandboxed-containers-operator'
       catalog_name = 'qe-app-registry'
       @result = admin.cli_exec(:create_namespace, name: kata_ns)
       project(kata_ns)
@@ -155,7 +165,7 @@ Given /^the kata-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|G
     end
 
     # make sure kata-operator is running first before installing the kataconfig
-    step %Q/a pod is present with labels:/, table(%{
+    step %Q/a pod becomes ready with labels:/, table(%{
       | control-plane=controller-manager |
     })
     step %Q|I obtain test data file "kata/release-#{cb.master_version}/kataconfiguration_v1_kataconfig.yaml"|
@@ -166,7 +176,12 @@ Given /^the kata-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|G
     logger.info("There's already an existing 'kataconfig' resuing it...")
     project(kata_ns)
     step %Q/I switch to cluster admin pseudo user/
+    # make sure kata-operator is running first before installing the kataconfig
+    step %Q/a pod becomes ready with labels:/, table(%{
+      | control-plane=controller-manager |
+    })
   end
+  logger.info("Using kata image: #{pod.container_specs.first.image}")
   step %Q/I wait until number of completed kata runtime nodes match for "#{kata_config_name}"/
 end
 
@@ -177,4 +192,12 @@ Given /^I extract the channel information from subscription and save it to the#{
   channel = YAML.load(open('subscription.yaml')).dig('spec', 'channel')
   logger.info("Subscription using channel: #{channel}")
   cb[cb_name] = channel
+end
+
+Given /^I find all pods running with kata as runtime in the cluster and store them to the#{OPT_SYM} clipboard$/ do |cb_name|
+  ensure_admin_tagged
+  cb_name ||= :kata_pods
+  pods = BushSlicer::Pod.list(user: admin, project: :all)
+  kata_pods = pods.select { |p| p.runtime_class_name == 'kata' }
+  cb[cb_name] = kata_pods
 end

@@ -236,17 +236,19 @@ Given /^(?:(as admin) )?I successfully#{OPT_WORD} patch resource "(.*)\/(.*)" wi
     raise "Failed to patch #{resource_type} #{resource_name} with #{patch_json}"
   end
 
-  opts = {resource: resource_type, resource_name: resource_name, o: "yaml", _quiet: true}
-  sec = 30
-  failpath = nil
-  success = wait_for(sec) {
-    failpath = []
-    res = _user.cli_exec(:get, **opts)
-    substruct?(expect_hash, res[:parsed], vague_nulls: true, failpath: failpath, exact_arrays: true, null_deletes_key: true)
-  }
+  if patch_type != "json" # below substruct? does not apply for json patch
+    opts = {resource: resource_type, resource_name: resource_name, o: "yaml", _quiet: true}
+    sec = 30
+    failpath = nil
+    success = wait_for(sec) {
+      failpath = []
+      res = _user.cli_exec(:get, **opts)
+      substruct?(expect_hash, res[:parsed], vague_nulls: true, failpath: failpath, exact_arrays: true, null_deletes_key: true)
+    }
 
-  if ! success
-    raise "patch failed to apply at #{failpath}! #{@result[:response]}"
+    if ! success
+      raise "patch failed to apply at #{failpath}! #{@result[:response]}"
+    end
   end
 end
 

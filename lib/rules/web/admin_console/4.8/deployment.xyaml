@@ -122,3 +122,31 @@ check_resource_pod_name_and_link:
     resource_name: <pod_name>
     resource_link: /k8s/ns/<project_name>/pods/<pod_name>
   action: check_resource_item
+rollback_with_options:
+  action: rollback_action
+  action:
+    if_param:
+      strategy: 'true'
+    ref: select_deployment_strategy
+  action:
+    if_param:
+      trigger: 'true'
+    ref: select_deployment_trigger
+  action:
+    if_param:
+      replica_count_and_selector: 'true'
+    ref: select_replica_count_and_selector
+  action: submit_changes
+select_deployment_strategy:
+  params:
+    text: Deployment strategy 
+  action: click_checkbox_input_by_text
+select_deployment_trigger:
+  params:
+    text: Deployment trigger
+  action: click_checkbox_input_by_text
+select_replica_count_and_selector:
+  params:
+    text: Replica count and selector
+  action: click_checkbox_input_by_text
+

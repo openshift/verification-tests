@@ -57,15 +57,15 @@ remove_taint_from_node:
   action: delete_node_affinity
   action: submit_changes
 node_affinity_modal_value:
-  element: 
+  element:
     selector: &value
       xpath: //div[text()='Value']/following-sibling::input
 node_affinity_modal_key:
-  element: 
+  element:
     selector: &key
       xpath: //div[text()='Key']/following-sibling::input
 node_affinity_modal_dropdown:
-  element: 
+  element:
     selector: &dropdown
       xpath: //div[contains(text(),'<option>')]/following-sibling::div//button
 delete_node_affinity:
@@ -111,12 +111,6 @@ add_tolerations:
   action: set_affinity_operator
   action: input_node_affinity_modal_value
   action: set_affinity_effect
-click_to_machines_page:
-  params:
-    primary_menu: Compute
-    secondary_menu: Machines
-  action: navigate_to_admin_console
-  action: click_secondary_menu
 set_minimum_replicas:
   params:
     label_text: Minimum replicas
@@ -136,7 +130,7 @@ check_machineautoscaler_list_table_struc:
   - selector:
       xpath: //th[@data-label='Min']
   - selector:
-      xpath: //th[@data-label='Max']  
+      xpath: //th[@data-label='Max']
 check_machineautoscaler_name_and_link:
   params:
     resource_type: MachineAutoscaler

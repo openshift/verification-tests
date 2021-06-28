@@ -21,7 +21,7 @@ click_primary_menu_developer_mode:
     op: click
 goto_monitoring:
   params:
-    menu_text: Monitoring 
+    menu_text: Monitoring
   action: click_primary_menu_developer_mode
 click_projects_dropdown_developer_mode:
   element:
@@ -39,7 +39,7 @@ click_project_link_developer_mode:
     selector:
       xpath: //a[text()='<project_name>']
     timeout: 20
-    op: click    
+    op: click
 choose_project_developer_mode:
   action: click_projects_dropdown_developer_mode
   action: input_select_project_developer_mode
@@ -68,10 +68,10 @@ set_query_input_text_area:
       xpath: //textarea[contains(@class, 'query-browser__query-input')]
     op: send_keys <metrics>
     type: textarea
-  - selector: 
+  - selector:
       <<: *query_input_text_area
     op: send_keys <press_enter>
-    type: textarea 
+    type: textarea
 
 choose_metrics_query:
   element:
@@ -80,7 +80,7 @@ choose_metrics_query:
     op: click
 check_query_input_text_area:
   element:
-    selector: 
+    selector:
       <<: *query_input_text_area
 click_promql_button:
   element:
@@ -89,7 +89,7 @@ click_promql_button:
     op: click
 click_hide_promql_button:
   params:
-    text: Hide PromQL 
+    text: Hide PromQL
   action: click_promql_button
 click_show_promql_button:
   params:
@@ -110,7 +110,7 @@ show_promql_if_exists:
     if_element:
       selector:
         <<: *promql_button
-    ref: click_show_promql_button    
+    ref: click_show_promql_button
 
 choose_zoom_value:
   action: click_chart_zoom_dropdown
@@ -177,7 +177,7 @@ perform_metric_query_textarea:
   action: submit_changes
 set_query_input_text_area_only:
   elements:
-  - selector: 
+  - selector:
       xpath: //textarea[contains(@class, 'query-browser__query-input')]
     op: send_keys <metrics>
     type: textarea
@@ -201,12 +201,12 @@ check_result_page:
     if_element:
       selector:
         xpath: //th[@aria-sort='descending']
-    ref: order_metrics_data  
+    ref: order_metrics_data
   action: check_metric_query_table_text
 
 perform_filter_query:
   params:
-    text: <metrics> 
+    text: <metrics>
   action: click_metrics_query_dropdown_admin
   action: check_query_input
   action: set_query_input
@@ -217,10 +217,10 @@ set_query_input:
     selector: &query_input
       xpath: //div[@class='dropdown-menu__filter']//input
     op: send_keys <metrics>
-    type: input 
+    type: input
 check_query_input:
   element:
-    selector: 
+    selector:
       <<: *query_input
 perform_query_cog_action_delete_query:
   params:
@@ -249,12 +249,12 @@ check_query_input_text_area_no_value:
 
 perform_disable_query:
   element:
-    selector: 
+    selector:
       xpath: //div[@title='Disable query']
     op: click
 perform_enable_query:
   element:
-    selector: 
+    selector:
       xpath: //div[@title='Enable query']
     op: click
 perform_hide_table:
@@ -264,7 +264,7 @@ perform_hide_table:
 perform_show_table:
   params:
     button_title: Show Table
-  action: click_button_title 
+  action: click_button_title
 check_all_series_hide:
   params:
     button_title: Hide series
@@ -272,12 +272,16 @@ check_all_series_hide:
 check_all_series_show:
   params:
     button_title: Show series
-  action: check_button_title 
+  action: check_button_title
 
 click_pod_chart_link:
+  params:
+    text: Metrics
+    link_url: /metrics
+  action: click_link_with_text
   element:
-    selector: 
-      xpath: //h5[contains(text(),'<chart_name>')]/../a
+    selector:
+      xpath: //h2[contains(text(),'<chart_name>')]/../..//a
     op: click
 check_data_diplayed_db:
   element:
@@ -298,12 +302,12 @@ click_uitilization_description:
     op: click
 click_link_from_uitilization_description:
   params:
-    metric_kind: <metric_kind> 
+    metric_kind: <metric_kind>
     text: <link_text>
-  action: click_uitilization_description 
+  action: click_uitilization_description
   action: click_link_with_text_only
 check_pod_detail:
   params:
-    content: Memory usage
-  action: check_page_contains 
+    content: Pod IP
+  action: check_page_contains
   action: check_pod_detail_page_charts_style
