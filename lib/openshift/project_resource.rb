@@ -247,6 +247,24 @@ module BushSlicer
       alias list get_matching
     end
 
+    def owner_references(user: nil, cached: true, quiet: false)
+      rr = raw_resource(user: user, cached: cached, quiet: quiet)
+      rr.dig('metadata', 'ownerReferences')
+    end
+
+    # recursively call itself until there is no ownerReference
+    def walk_owner_references(user: nil, resource_type: nil, resource_name: nil, cached: true, quiet: false)
+      logger.info("resource_type: #{resource_type}, resource_name: #{resource_name}")
+      res = owner_references(user: user)
+      if res
+        r_type = res.first['kind']
+        r_name = res.first['name']
+        clazz = Object.const_get("::BushSlicer::#{r_type}")
+        rc = clazz.new(name: r_name, project: project)
+        resource_type, resource_name = rc.walk_owner_references(user: user, resource_type: r_type, resource_name: r_name, cached: cached,  quiet: quiet)
+      end
+      return resource_type, resource_name
+    end
     ############### take care of object comparison ###############
 
     def ==(p)

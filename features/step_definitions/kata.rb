@@ -59,13 +59,12 @@ Given /^I remove kata operator from the#{OPT_QUOTED} namespace$/ do | kata_ns |
   # 1. remove kataconfig first
   project(kata_ns)
   # prereq is that there are no outstanding pods in the cluster with
-  # kata-runtime.
+  # kata-runtime.  Do the destructive action of removing them so kataconfig can be removed.
   step %Q/I find all pods running with kata as runtime in the cluster and store them to the :kata_pods clipboard/
   if cb.kata_pods.count > 0
-    cb.kata_pods.each do |p|
-      logger.info("pod: #{p.name}, project: #{p.project.name}")
-    end
-    raise "There are pods in the cluster running kata as runtime, they must be removed before kataconfig can be removed"
+    logger.info("All existing pods using kata must be removed before kataconfig can be uninstalled.")
+    logger.info("Removing all pods using kata...")
+    step %Q/I remove all kata pods in the cluster stored in the clipboard/
   end
 
   kataconfig_name = BushSlicer::KataConfig.list(user: admin).first.name
@@ -197,7 +196,34 @@ end
 Given /^I find all pods running with kata as runtime in the cluster and store them to the#{OPT_SYM} clipboard$/ do |cb_name|
   ensure_admin_tagged
   cb_name ||= :kata_pods
-  pods = BushSlicer::Pod.list(user: admin, project: :all)
-  kata_pods = pods.select { |p| p.runtime_class_name == 'kata' }
+  @result_pods = admin.cli_exec(:get, resource: "pods", all_namespaces: true, o: "jsonpath='{.items[?(@.spec.runtimeClassName==\"kata\")].metadata.name}'")
+  @result_namespaces = admin.cli_exec(:get, resource: "pods", all_namespaces: true, o: "jsonpath='{.items[?(@.spec.runtimeClassName==\"kata\")].metadata.namespace}'")
+  pods = eval(@result_pods[:response]).split(' ')
+  ns = eval(@result_namespaces[:response]).split(' ')
+  ns_pods_list = ns.zip pods
+  kata_pods = []
+  ns_pods_list.each do |ns, p|
+    project(ns)
+    pod_obj = pod(p)
+    kata_pods << pod_obj
+  end
   cb[cb_name] = kata_pods
+end
+
+Given /^I remove all kata pods in the cluster stored in the#{OPT_SYM} clipboard$/ do |cb_name|
+  cb_name ||= :kata_pods
+  cb[cb_name].each do | kp |
+    logger.info("Removing pod #{kp.name}...")
+    begin
+      res_type, res_name = kp.walk_owner_references(user: user, resource_name: pod.name, resource_type: kp)
+      unless res_type.is_a? String
+        res_type = res_type.class.name.split('BushSlicer::').last
+      end
+      resource_word = camel_to_snake_case(res_type) # BushSlicer::RESOURCES[res_type.class].to_s
+      step_sentence = "I ensure \"#{res_name}\" #{resource_word} is deleted from the \"#{project.name}\" project"
+      step %Q/#{step_sentence}/
+    rescue
+      next
+    end
+  end
 end
