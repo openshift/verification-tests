@@ -195,12 +195,12 @@ add_requestheader_idp:
     dropdown_item: Request Header
   action: click_one_item_text
   action: set_idp_name
-  action: 
+  action:
     if_param: login_url
     ref: set_login_url
   action: set_idp_ca_path
   action: set_headers
-  action: 
+  action:
     if_param: preferred_username_headers
     ref: set_preferred_username_headers
   action:

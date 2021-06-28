@@ -13,7 +13,7 @@ create_app_from_imagestream:
   action: click_try_sample
   action: choose_dc_type
   action:
-    if_param: 
+    if_param:
       deploy_type: "k8s"
     ref: choose_k8s_type
   action:

@@ -152,13 +152,13 @@ module BushSlicer
     end
   end
 
-  class FlexyEnvVariable < FromEnvVariable
+  class ConfigEnvVariable < FromEnvVariable
     def to_s
       ENV[@var_name]
     end
   end
 
-  class FlexyEnvFile < FromEnvVariable
+  class ConfigEnvFile < FromEnvVariable
     def to_s
       if !(cache[:file] && File.file?(cache[:file].path))
         # file was never created or was deleted in the mean time

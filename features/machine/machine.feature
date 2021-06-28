@@ -335,6 +335,7 @@ Feature: Machine features testing
       | name                    | file_name                 | Validation                    |
       | default-valued-32269    | ms_default_values.yaml    | Placement                     | # @case_id OCP-32269
       | tenancy-dedicated-37132 | ms_tenancy_dedicated.yaml | Tenancy:            dedicated | # @case_id OCP-37132
+      | default-valued-42346    | ms_default_values.yaml    | Instance Type:  m5.large      | # @case_id OCP-42346
 
   # @author miyadav@redhat.com
   # @case_id OCP-33056
@@ -463,8 +464,7 @@ Feature: Machine features testing
       | resource | pv |
     Then the step should succeed
     And the output should contain:
-      | failure-domain.beta.kubernetes.io/zone in [<%= cb.default_zone %>]     |
-      | failure-domain.beta.kubernetes.io/region in [<%= cb.default_region %>] |
+      | region in [<%= cb.default_region %>] |
 
   # @author miyadav@redhat.com
   @admin

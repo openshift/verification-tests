@@ -3,6 +3,7 @@ Feature: testing for parameter fsType
   # @author chaoyang@redhat.com
   # @author lxia@redhat.com
   @admin
+  @smoke
   Scenario Outline: persistent volume formated with fsType
     Given I have a project
     And admin clones storage class "sc-<%= project.name %>" from ":default" with:

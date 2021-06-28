@@ -110,26 +110,43 @@ Feature: Machine misc features testing
   # @author miyadav@redhat.com
   # @case_id OCP-37744
   @admin
-  Scenario Outline: kube-rbac-proxy should not expose tokens, have excessive verbosity
+  Scenario: kube-rbac-proxy should not expose tokens, have excessive verbosity
     Given I switch to cluster admin pseudo user
-    Then I use the "<project>" project
 
+    Given I use the "openshift-machine-api" project
     Given a pod becomes ready with labels:
-      | api=clusterapi | <labels>  |
+      | api=clusterapi | k8s-app=controller |
+    Given evaluation of `["kube-rbac-proxy-machine-mtrc", "kube-rbac-proxy-machineset-mtrc", "kube-rbac-proxy-mhc-mtrc"]` is stored in the :containers clipboard
+    And I repeat the following steps for each :container in cb.containers:
+    """
     When I run the :logs admin command with:
-      | resource_name | <%= pod.name %>  |
-      | c             | <container_name> |
+      | resource_name | <%= pod.name %> |
+      | c             | #{cb.container} |
     Then the output should not contain:
       | Response Headers |
+    """
 
-   Examples:
-      | container_name                  | project                            | labels                              |
-      | kube-rbac-proxy-machine-mtrc    | openshift-machine-api              | k8s-app=controller                  |
-      | kube-rbac-proxy-machineset-mtrc | openshift-machine-api              | k8s-app=controller                  |
-      | kube-rbac-proxy-mhc-mtrc        | openshift-machine-api              | k8s-app=controller                  |
-      | kube-rbac-proxy                 | openshift-cluster-machine-approver | app=machine-approver                |
-      | kube-rbac-proxy                 | openshift-machine-api              | k8s-app=machine-api-operator        |
-      | kube-rbac-proxy                 | openshift-machine-api              | k8s-app=cluster-autoscaler-operator |
+    Given I use the "openshift-machine-api" project
+    Given evaluation of `["machine-api-operator", "cluster-autoscaler-operator"]` is stored in the :labels clipboard
+    And I repeat the following steps for each :label in cb.labels:
+    """
+    Given a pod becomes ready with labels:
+      | api=clusterapi | k8s-app=#{cb.label} |
+    When I run the :logs admin command with:
+      | resource_name | <%= pod.name %> |
+      | c             | kube-rbac-proxy |
+    Then the output should not contain:
+      | Response Headers |
+    """
+
+    Given I use the "openshift-cluster-machine-approver" project
+    Given a pod becomes ready with labels:
+      | api=clusterapi | app=machine-approver |
+    When I run the :logs admin command with:
+      | resource_name | <%= pod.name %> |
+      | c             | kube-rbac-proxy |
+    Then the output should not contain:
+      | Response Headers |
 
   # @author miyadav@redhat.com
   # @case_id OCP-37180
@@ -140,5 +157,4 @@ Feature: Machine misc features testing
       | path  | /api/v1/query?                         |
       | query | cloudprovider_vsphere_vcenter_versions |
     Then the step should succeed
-    And the expression should be true> @result[:parsed]["data"]["result"][0]["metric"]["version"] == "7.0.0"
-
+    And the expression should be true> @result[:parsed]["data"]["result"][0]["metric"]["version"] =~ /7.0/

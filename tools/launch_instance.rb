@@ -14,7 +14,7 @@ require 'json'
 
 require 'collections'
 require 'common'
-require 'http'
+require 'cucuhttp'
 
 require 'launchers/cloud_helper'
 
@@ -603,7 +603,7 @@ module BushSlicer
       when "shell_command"
         exec_opts = {
           single: true,
-          stderr: :stdout, stdout: STDOUT,
+          stderr: :stdout, stdout: STDOUT, stdin: task[:stdin],
           timeout: 36000
         }
         if task[:env]
@@ -681,6 +681,18 @@ module BushSlicer
       hosts = []
       terminate_spec = {}
       file_details = {}
+
+      # Export configuration's block of environment variables to running environment context
+      if Hash === conf[:global, :"install-envvars"]
+        conf[:global, :"install-envvars"].each do |key, val|
+          if ENV.key?(key.to_s)
+            say "WARNING: value from environment variable #{key.to_s} takes precedence over value in 'install-envvars' configuration"
+          else
+            ENV[key.to_s] = val
+          end
+        end
+      end
+
       vars = YAML.load(readfile(config, details: file_details))
       if ENV["LAUNCHER_VARS"] && !ENV["LAUNCHER_VARS"].strip.empty?
         launcher_vars = YAML.load ENV["LAUNCHER_VARS"]

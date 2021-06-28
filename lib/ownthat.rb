@@ -2,7 +2,7 @@ require 'json'
 
 require 'common'
 require 'collections'
-require 'http'
+require 'cucuhttp'
 
 module BushSlicer
   # let you operate a git repo

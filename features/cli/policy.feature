@@ -241,6 +241,7 @@ Feature: change the policy of user/service account
   # @author chaoyang@redhat.com
   # @case_id OCP-10466
   @admin
+  @smoke
   Scenario: User with role storage-admin can check deeper pv object info
     Given I have a project
     And admin ensures "pv-<%= project.name %>" pv is deleted after scenario

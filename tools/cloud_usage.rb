@@ -12,7 +12,7 @@ require 'launchers/amz'
 
 require 'collections'
 require 'common'
-require 'http'
+require 'cucuhttp'
 require 'thread'
 require 'jenkins_api_client'
 require 'text-table'

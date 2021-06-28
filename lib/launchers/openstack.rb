@@ -12,7 +12,7 @@ require 'yaml'
 
 require 'common'
 require 'host'
-require 'http'
+require 'cucuhttp'
 require 'net'
 require 'thread'
 

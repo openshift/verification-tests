@@ -17,7 +17,7 @@ add_env_vars:
     ref: add_env_var_value
 add_env_var_name:
   elements:
-  - selector: 
+  - selector:
       xpath: //div[contains(@class,'pairs-list__row')][last()]/div[contains(@class,'pairs-list__name-field')]/input[@placeholder='Name']
     op: send_keys <env_var_name>
     timeout: 15
@@ -53,7 +53,7 @@ update_env_vars:
   action:
     if_param: env_var_value
     ref: update_env_var_value
-    op: click 
+    op: click
 update_env_var_pair_value:
   action: update_pair_source
   action: update_pair_key
