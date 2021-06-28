@@ -72,13 +72,17 @@ Feature: stibuild.feature
 
   # @author wzheng@redhat.com
   # @case_id OCP-22596
-  Scenario: Create app with template eap72-basic-s2i with jbosseap rhel7 image
+  Scenario: Create app with template eap73-basic-s2i with jbosseap rhel7 image
     Given I have a project
     When I run the :new_app client command with:
-      | template | eap72-basic-s2i |
+      | template | eap73-basic-s2i |
     Then the step should succeed
-    Given the "eap-app-1" build was created
-    And the "eap-app-1" build completed
+    Given the "eap-app-build-artifacts-1" build was created
+    And the "eap-app-build-artifacts-1" build completed
+    Given 1 pod becomes ready with labels:
+      | openshift.io/build.name=eap-app-build-artifacts-1 |
+    Given the "eap-app-2" build was created
+    And the "eap-app-2" build completed
     Given 1 pod becomes ready with labels:
       | application=eap-app |
 
