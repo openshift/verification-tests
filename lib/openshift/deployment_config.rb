@@ -58,10 +58,9 @@ module BushSlicer
       rc(user: user, cached: cached, quiet: quiet).ready?(user: user, cached: cached, quiet: quiet)
     end
 
-    # we define this in method_missing so alias can't fly
-    # alias replicas desired_replicas
-    def replicas(*args, &block)
-      desired_replicas(*args, &block)
+    def replicas(user: nil, cached: false, quiet: false)
+      rr = raw_resource(user: user, cached: cached, quiet: quiet)
+      rr.dig('spec', 'replicas').to_i
     end
 
     def available_replicas(user: nil, cached: false, quiet: false)
@@ -111,6 +110,11 @@ module BushSlicer
     def selector(user: nil, cached: true, quiet: false)
       raw_resource(user: user, cached: cached, quiet: quiet).
         dig("spec", "selector")
+    end
+
+    def containers(user: nil, cached: false, quiet: false)
+      raw_resource(user: user, cached: cached, quiet: quiet).
+        dig("spec", "template", "spec", "containers")
     end
 
     # @return [Array<DeploymentConfigTrigger>]

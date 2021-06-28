@@ -11,7 +11,7 @@ require 'yaml'
 require 'tmpdir'
 require 'git'
 require 'os'
-require 'http'
+require 'cucuhttp'
 
 module BushSlicer
   class OCMCluster

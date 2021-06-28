@@ -4,6 +4,7 @@ Feature: Persistent Volume Claim binding policies
   # @author lxia@redhat.com
   # @author chaoyang@redhat.com
   @admin
+  @smoke
   Scenario Outline: PVC with one accessMode can bind PV with all accessMode
     Given I have a project
 

@@ -34,7 +34,7 @@ browse_to_receiver_config:
     op: click
   action: wait_box_loaded
 set_pagerduty_key:
-  params:    
+  params:
     input_field_id: integration-key
   action: set_input_value
 
@@ -42,7 +42,7 @@ set_pagerduty_key:
 check_reports_table:
   action: goto_chargeback_reports_page
   action: check_report_table_columns
-  action: check_report_data 
+  action: check_report_data
 check_report_table_columns:
   elements:
   - selector:
@@ -62,7 +62,7 @@ check_report_data:
   - selector:
       xpath: //tbody//td[2]//a[contains(@href,'/k8s/cluster/namespaces/<namespace>')]
   - selector:
-      xpath: //tbody//td[3]//a[contains(@href,'/k8s/ns/<namespace>/metering.openshift.io~v1~ReportQuery/<reportquery_name>')] 
+      xpath: //tbody//td[3]//a[contains(@href,'/k8s/ns/<namespace>/metering.openshift.io~v1~ReportQuery/<reportquery_name>')]
 navigate_to_chargeback_reportquery_page:
   params:
     tab_name: Report Queries
@@ -114,7 +114,7 @@ check_namespace_cpu_usage_usage_report_table:
   - selector:
       xpath: //tbody//td[contains(@class,'column-0')]/*[contains(@class,'co-timestamp')]
   - selector:
-      xpath: //tbody//td[contains(@class,'column-1')]/*[contains(@class,'co-timestamp')]      
+      xpath: //tbody//td[contains(@class,'column-1')]/*[contains(@class,'co-timestamp')]
   - selector:
       xpath: //tbody//td[contains(@class,'column-2')]/*[contains(.,'co-resource-item')]
 check_invalid_start_end_date_conditions_table:

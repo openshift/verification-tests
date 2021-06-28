@@ -190,6 +190,18 @@ click_memory_data:
     selector:
       xpath: //h4[text()='Memory']/..//button[contains(@class,'co-dashboard-card__button-link')]
     op: click
+check_cpu_request:
+  params:
+      graph_title: CPU
+  action: check_utilization_chart_details
+check_memory_request:
+  params:
+      graph_title: Memory
+  action: check_utilization_chart_details
+check_utilization_chart_details:
+  elements:
+  - selector:
+      xpath: //h4[text()='<graph_title>']/ancestor::div[@data-test-id='utilization-item']//div[contains(@class,'pf-c-chart')]//*[name()='path' and contains(@style, 'rgb(236, 122, 8)')]
 click_filesystem_data:
   element:
     selector:
@@ -612,7 +624,7 @@ check_cluster_inventory_items:
       xpath: //div[contains(@class,'co-inventory-card__item')]//a[contains(normalize-space(text()),'PVC')]
 check_matched_number_of_nodes:
   params:
-    resource_type: nodes
+    resource_type: node
     number_of_resource: <number_of_nodes>
   action: check_matched_number_of_resource
 check_matched_number_of_pvcs:

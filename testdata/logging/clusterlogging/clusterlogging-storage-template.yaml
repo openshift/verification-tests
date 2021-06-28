@@ -1,5 +1,5 @@
 kind: Template
-apiVersion: v1
+apiVersion: template.openshift.io/v1
 metadata:
   name: clusterlogging-template
   annotations:
@@ -29,10 +29,6 @@ objects:
           type: "kibana"
           kibana:
             replicas: 1
-        curation:
-          type: "curator"
-          curator:
-            schedule: "*/5 * * * *"
         collection:
           logs:
             type: "fluentd"

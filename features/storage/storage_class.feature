@@ -35,6 +35,7 @@ Feature: storageClass related feature
   # @author lxia@redhat.com
   # @author chaoyang@redhat.com
   @admin
+  @smoke
   Scenario Outline: storage class provisioner
     Given I have a project
     And admin clones storage class "sc-<%= project.name %>" from ":default" with:
@@ -242,6 +243,7 @@ Feature: storageClass related feature
 
   # @author chaoyang@redhat.com
   # @case_id OCP-10228
+  @smoke
   Scenario: AWS ebs volume is dynamic provisioned with default storageclass
     Given I have a project
     Given I obtain test data file "storage/ebs/pvc-retain.json"

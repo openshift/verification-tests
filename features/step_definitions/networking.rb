@@ -857,6 +857,13 @@ Given /^the env is using "([^"]*)" networkType$/ do |network_type|
   raise "the networkType is not #{network_type}" unless network_operator.network_type(user: _admin) == network_type
 end
 
+Given /^the cluster has "([^"]*)" endpoint publishing strategy$/ do |ep_pub_strategy|
+  ensure_admin_tagged
+  _admin = admin
+  @result = admin.cli_exec(:get, n: "openshift-ingress-operator", resource: "ingresscontrollers", resource_name: "default", o: "jsonpath={.status.endpointPublishingStrategy.type}")
+  raise "the endpoint strategy is not #{ep_pub_strategy}" unless @result[:response] == ep_pub_strategy
+end
+
 Given /^the env is using windows nodes$/ do
   ensure_admin_tagged
   _admin = admin

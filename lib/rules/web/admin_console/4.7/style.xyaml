@@ -148,4 +148,65 @@ filter_label_and_check_style:
         xpath: //button[contains(@class, 'co-suggestion-line') and //span[contains(text(),'<suggestion_text>')]]
       op: click
   action: check_filtered_item_style
-
+choose_console_language:
+  elements:
+  - selector: &username_button
+      xpath: //span[@data-test='username']/ancestor::button[contains(@class,'app-launcher__toggle')]
+    op: click
+  - selector: &language_setting_button
+      xpath: //button[@data-test='language']
+    op: click
+  - selector:
+      id: language_dropdown
+    type: button
+    op: click
+  - selector:
+      xpath: //button[@id='<lng_button_id>']
+    op: click
+check_default_language:
+  elements:
+  - selector:
+      <<: *username_button
+    op: click
+  - selector:
+      <<: *language_setting_button
+    op: click
+  - selector:
+      xpath: //span[contains(@class,'pf-c-dropdown__toggle-text') and contains(text(),'English')]
+  action: click_cancel_in_modal
+switch_language_to_chinese:
+  params:
+    lng_button_id: zh-link
+  action: choose_console_language
+  action: submit_changes  
+switch_language_to_japanese:
+  params:
+    lng_button_id: ja-link
+  action: choose_console_language
+  action: submit_changes
+# korean support is added from 4.8
+switch_language_to_korean: {}
+check_pages_in_chinese:
+  elements:
+  - selector:
+      xpath: //button[contains(@class,'pf-c-nav__link') and contains(.,'主页')]
+  - selector:
+      xpath: //button[contains(@class,'pf-c-nav__link') and contains(.,'网络')]
+  - selector:
+      xpath: //button[contains(@class,'pf-c-nav__link') and contains(.,'存储')]
+  scripts:
+  - command: return localStorage['bridge/language'] == 'zh'
+    expect_result: true
+check_pages_in_japanese:
+  elements:
+  - selector:
+      xpath: //button[contains(@class,'pf-c-nav__link') and contains(.,'ホーム')]
+  - selector:
+      xpath: //button[contains(@class,'pf-c-nav__link') and contains(.,'ネットワーク')]
+  - selector:
+      xpath: //button[contains(@class,'pf-c-nav__link') and contains(.,'ストレージ')]
+  scripts:
+  - command: return localStorage['bridge/language'] == 'ja'
+    expect_result: true
+# korean support is added from 4.8
+check_pages_in_korean: {}

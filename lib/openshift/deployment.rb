@@ -70,7 +70,7 @@ module BushSlicer
       template(user: user, cached: cached, quiet: quiet).dig('spec', 'nodeSelector')
     end
 
-    def containers(user: nil, cached: true, quiet: false)
+    def containers(user: nil, cached: false, quiet: false)
       template(user: user, cached: cached, quiet: quiet).dig('spec', 'containers')
     end
 

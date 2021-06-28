@@ -150,8 +150,9 @@
     :f: -f <value>
     :filename: --filename=<value>
     :record: --record=<value>
-    :resource_name: <resource_name>
-    :resource_type: <resource_type>
+    :resource_name: <value>
+    :resource_type: <value>
+    :other_arg: <value>
 :create_clusterresourcequota:
   :cmd: oc create clusterresourcequota <name>
   :options:
@@ -1189,6 +1190,10 @@
     :raw: --raw
 :oadm_cordon_node:
   :cmd: oc adm cordon <node_name>
+:oadm_create_login_template:
+  :cmd: oc adm create-login-template
+:oadm_create_provider_selection_template:
+  :cmd: oc adm create-provider-selection-template
 :oadm_drain:
   :cmd: oc adm drain
   :options:

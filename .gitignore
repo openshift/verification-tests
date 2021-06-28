@@ -10,5 +10,7 @@
 junit-report/
 vendor/
 .byebug_history
+.tool-versions
+report-portal.yml
 /tmp
 *.iml

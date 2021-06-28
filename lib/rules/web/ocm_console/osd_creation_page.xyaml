@@ -66,8 +66,11 @@ select_machine_type:
     elements: 
         - selector:
             xpath: //*[text()='Worker node instance type']/../../..//button
+          op: click
         - selector:
             xpath: //span[text()='<machine_type>']
+          op: click
+
 
 hover_machine_type:
     element:
@@ -817,7 +820,7 @@ check_billing_model:
         - selector:
             xpath: //label[contains(., 'Fixed capacity subscription from Red Hat')]
         - selector:
-            xpath: //div[text()='Use the quota pre-purchased by your organization']
+            xpath: //div/span[text()='Use the quota pre-purchased by your organization']
         - selector:
             xpath: //label[contains(., 'Flexible usage billed through the Red Hat Marketplace')]
         - selector:

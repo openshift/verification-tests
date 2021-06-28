@@ -97,7 +97,7 @@ attach_storage_to_container:
   action: attach_storage
   action:
     if_param: container_name
-    ref: 
+    ref:
     - open_containers_selector
     - select_one_container
   action:
@@ -135,7 +135,7 @@ remove_volume_from_container_but_cancel:
   action: remove_volume_from_container_base
 remove_volume_from_container:
   params:
-    button_text: Remove Volume
+    button_text: Remove volume
   action: remove_volume_from_container_base
 set_storageclass_name:
   params:

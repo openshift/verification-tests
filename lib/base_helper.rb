@@ -392,6 +392,13 @@ module BushSlicer
         end
       end
 
+      def get_oauthaccesstoken(token)
+        if token.include? "sha256~"
+          "sha256~" + Base64.urlsafe_encode64(OpenSSL::Digest::SHA256.digest(token.gsub("sha256~","")),padding: false)
+        else
+          raise "provided token is not valid and not started with sha256"
+        end
+      end
 
     end
 

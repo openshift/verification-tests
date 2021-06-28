@@ -4,11 +4,27 @@ click_add_ons_tab_button:
             xpath: //button[contains(.,'Add-ons')]
         op: click
 
+click_addon_article:
+    element:
+        selector:
+            xpath: //div[text()='<addon_name>']
+        op: click
+
 addon_install_button_loaded:
     element: &addon_install_button
         selector:
-            xpath: //div[text()='<addon_name>']/../div/button[@aria-label='Install' and text()='Install']
+            xpath: //button[text()='Install']
+
+wait_for_uninstalling_complete:
+    element:
+        selector:
+            xpath: //span[text()='Uninstalling']
+        missing: true
+        timeout: <timeout>
+
 wait_for_addon_install_button_show:
+    action: wait_for_uninstalling_complete
+    action: click_addon_article
     element:
         <<: *addon_install_button
         timeout: <timeout>
@@ -55,11 +71,12 @@ click_addon_actions_dropdown:
             xpath: //div[text()='<addon_name>']/..//button[@aria-label='Actions']
         op: click
 
+
 click_delete_addon_button:
-    action: click_addon_actions_dropdown
+    action: click_addon_article
     element:
         selector:
-            xpath: //button[text()='Uninstall add-on']
+            xpath: //button[text()='Uninstall']
         op: click
 check_console_url:
     element:
@@ -92,7 +109,7 @@ delete_addon:
 no_permission_tooltip_display:
     elements:
         - selector:
-            xpath: //div[text()='<addon_name>']/..//button[@aria-label='Actions' and @disabled]
-          op: hover
+            xpath: //div[text()='<addon_name>']
+          op: click
         - selector:
-            xpath: //*[contains(text(), "You do not have permission to make changes to this add-on.")]
+            xpath: //button[@aria-disabled='true' and text()='Uninstall']
