@@ -45,6 +45,10 @@ module BushSlicer
         return true
       elsif result[:response] =~ /not found/ or result[:response] =~ /doesn't have/
         return false
+      # prevent premature exit as described in OCPQE-4351
+      elsif result[:response] =~ /Unable to connect to the server/
+        logger.info(result[:response])
+        return false
       else
         # e.g. when called by user without rights to list Resource
         raise "error getting #{self.class.name} '#{name}' existence: #{result[:response]}"

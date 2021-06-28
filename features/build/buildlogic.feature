@@ -263,7 +263,7 @@ Feature: buildlogic.feature
     """
     When I save project builds into the :builds_all clipboard
     And evaluation of `cb.builds_all.select{|b| b.status?(user: user, status: :complete)[:success]}.size` is stored in the :builds_nums clipboard
-    Then the expression should be true> cb.builds_nums >= 5 and cb.builds_nums < 7
+    Then the expression should be true> cb.builds_nums >= 5 && cb.builds_nums < 7
     """
     Given I get project builds
     Then the output should not contain:
@@ -321,7 +321,7 @@ Feature: buildlogic.feature
     """
     When I save project builds into the :builds_all clipboard
     And evaluation of `cb.builds_all.select{|b| b.status?(user: user, status: :failed)[:success]}.size` is stored in the :builds_nums clipboard
-    Then the expression should be true> cb.builds_nums >= 5 and cb.builds_nums < 7
+    Then the expression should be true> cb.builds_nums >= 5 && cb.builds_nums < 7
     """
     Given I get project builds
     Then the output should not contain:
@@ -373,7 +373,7 @@ Feature: buildlogic.feature
     """
     When I save project builds into the :builds_all clipboard
     And evaluation of `cb.builds_all.select{|b| b.status?(user: user, status: :cancelled)[:success]}.size` is stored in the :builds_nums clipboard
-    Then the expression should be true> cb.builds_nums >= 5 and cb.builds_nums < 7
+    Then the expression should be true> cb.builds_nums >= 5 && cb.builds_nums < 7
     """
     Given I get project builds
     Then the output should not contain:
@@ -462,7 +462,7 @@ Feature: buildlogic.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-40366
   @admin
-  Scenario: Mirroring built image doesn't degrade scheme2 ,keep consistent SHA's	
+  Scenario: Mirroring built image doesn't degrade scheme2 ,keep consistent SHA's
     Given I have a project
     Given I save a htpasswd registry auth to the :combine_dockercfg clipboard
     And default image registry route is stored in the :integrated_reg_host clipboard

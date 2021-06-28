@@ -199,7 +199,7 @@ Feature: SDN related networking scenarios
       | iptables-save | --version |
     Then the step should succeed
     And evaluation of `@result[:response].scan(/\d\.\d.\d/)` is stored in the :iptables_version_pod clipboard
-    Then the expression should be true> cb.iptables_version_host==cb.iptables_version_pod
+    Then the expression should be true> cb.iptables_version_host == cb.iptables_version_pod
 
     When I run commands on the host:
       | iptables -S \| wc -l |
@@ -210,7 +210,7 @@ Feature: SDN related networking scenarios
       | bash | -c | iptables -S \| wc -l |
     Then the step should succeed
     And evaluation of `@result[:response].split("\n")[0]` is stored in the :sdn_pod_rules clipboard
-    Then the expression should be true> cb.host_rules==cb.sdn_pod_rules
+    Then the expression should be true> cb.host_rules == cb.sdn_pod_rules
 
   # @author huirwang@redhat.com
   # @case_id OCP-25707
@@ -375,7 +375,7 @@ Feature: SDN related networking scenarios
   And I run commands on the host:
     | nmcli \| grep veth \| wc -l |
   And evaluation of `@result[:response].split("\n")[0]` is stored in the :no_of_veths clipboard
-  Then the expression should be true> cb.no_of_veths==cb.no_of_unmanaged_veths
+  Then the expression should be true> cb.no_of_veths == cb.no_of_unmanaged_veths
 
   # @author huirwang@redhat.com
   # @case_id OCP-29299

@@ -2,20 +2,21 @@
 
 declare -a ARRAY_IDS
 ARRAY_IDS=($(echo `find . -name '*.feature' -exec grep 'case[-_]id.*OCP-' {} \; | rev | cut -d'@' -f1 | rev | sed 's/case_id //g;s/,/ /g' | sort -V`))
+IGNORE_IDS="OCP-24498 OCP-24520 OCP-24524"
 
 echo "Total IDs: ${#ARRAY_IDS[@]}"
-echo "The first ID: ${ARRAY_IDS[0]}"
-echo "The last ID: ${ARRAY_IDS[-1]}"
+echo "Excluding IDs: ${IGNORE_IDS}"
 
 function sync() {
 	INDEX_L="$1"
 	INDEX_R="$2"
-	echo "Sync from index ${INDEX_L}, till ${INDEX_R}"
-	echo "Sync from ${ARRAY_IDS[$INDEX_L]}, till ${ARRAY_IDS[$INDEX_R-1]}"
 	IDs=''
 	for (( i=INDEX_L; i<INDEX_R; ++i )) ; do
-		IDs+="${ARRAY_IDS[$i]} "
+		if [[ ! $IGNORE_IDS =~ ${ARRAY_IDS[$i]} ]] ; then
+			IDs+="${ARRAY_IDS[$i]} "
+		fi
 	done
+	echo "Sync test cases with below IDs:"
 	echo $IDs
 	tools/polarshift.rb update-automation --no-wait $IDs
 	if [ $? -ne 0 ] ; then

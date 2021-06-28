@@ -26,6 +26,12 @@ Given /^the CR #{QUOTED} named #{QUOTED} is restored after scenario$/ do |crd, n
     if @result[:success] and @result[:parsed]['spec']['tlsSecurityProfile']
       patch_json = [{"op": "remove","path": "/spec/tlsSecurityProfile"}].to_json
       opts = {resource: crd, resource_name: name, p: patch_json, type: 'json' }
+    elsif @result[:success] and @result[:parsed]['spec']['profile']
+      patch_json = [{"op": "remove","path": "/spec/profile"}].to_json
+      opts = {resource: crd, resource_name: name, p: patch_json, type: 'json' }
+    elsif @result[:success] and @result[:parsed]['spec']['forceRedeploymentReason']
+      patch_json = [{"op": "remove","path":  "/spec/forceRedeploymentReason"}].to_json
+      opts = {resource: crd, resource_name: name, p: patch_json, type: 'json' }
     else
       opts = {resource: crd, resource_name: name, p: patch_json, type: 'merge' }
     end

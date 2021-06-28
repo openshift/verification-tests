@@ -2,6 +2,7 @@ Feature: Dynamic provisioning
 
   # @author lxia@redhat.com
   @admin
+  @smoke
   Scenario Outline: dynamic provisioning
     Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"

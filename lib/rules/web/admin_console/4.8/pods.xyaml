@@ -9,7 +9,7 @@ check_column_header_items_on_pods_list_page:
   action: check_created_column_header
 check_ready_count_items_on_pods_list_page:
   elements:
-  - selector: 
+  - selector:
       xpath: //tbody/tr/td[3][contains(., '<ready_count>')]
 check_memory_descending_sorted_on_pods_list_page:
   action: click_memory_button

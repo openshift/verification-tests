@@ -2,7 +2,7 @@ check_used_quota_ratio:
   action:
     if_param: cpu_request_ratio
     ref: check_used_cpu_request
-  action: 
+  action:
     if_param: cpu_limit_ratio
     ref: check_used_cpu_limit
   action:

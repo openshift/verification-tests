@@ -50,7 +50,7 @@ check_changed_one_project_pods_list_columns:
       xpath: //tbody//tr
   scripts:
   - command: return document.querySelector('tbody tr').querySelectorAll('td').length == 9 + 1
-    expect_result: true 
+    expect_result: true
 check_default_columns_in_projects_list_table:
   action: goto_projects_list_page
   elements:
@@ -231,7 +231,7 @@ change_all_projects_pods_list_columns_but_reset:
   action: unselect_cpu_column
   action: select_created_column
   action: click_reset_default_columns_button
-  action: submit_changes  
+  action: submit_changes
 check_changed_columns_in_all_projects_list_table:
   action: goto_projects_list_page
   action: check_changed_projects_list_columns

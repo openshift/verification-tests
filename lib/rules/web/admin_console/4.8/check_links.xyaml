@@ -57,11 +57,7 @@ click_alert_manager_menu:
     text: Alerting
     link_url: /monitoring/alerts
   action: click_link_with_text
-check_alert_manager_url:
-  params:
-    text: Alertmanager UI
-    link_url: https://<alert_ui_route>/#/alerts
-  action: check_link_and_text
+check_alert_manager_url: {}
 click_metrics_prometheus_menu:
   params:
     text: Metrics
@@ -84,6 +80,11 @@ check_mega_menu:
     op: click
   action: check_page_contains
   action: check_link_and_text
+click_perspective_switcher_button:
+  element:
+    selector:
+      xpath: //button[@data-test-id='perspective-switcher-toggle']
+    op: click
 navigate_to_dev_console:
   elements:
   - selector:
@@ -125,6 +126,13 @@ check_current_perspective_text:
   elements:
   - selector:
       xpath: //span[contains(@class,'pf-c-dropdown__toggle-text') and contains(.,'<active_perspective_text>')]
+check_perspective_list_has_acm_option:
+  element:
+    selector:
+      xpath: //h2[@data-test-id='perspective-switcher-menu-option' and contains(.,'Advanced Cluster Management')]
+check_acm_in_perspective_switcher:
+  action: click_perspective_switcher_button
+  action: check_perspective_list_has_acm_option
 check_external_link:
   elements:
   - selector:
@@ -224,6 +232,12 @@ check_console_link_in_applauncher:
   action: click_application_launcher_button
   action: check_link_and_text
   action: check_image_url
+check_acm_not_in_applauncher:
+  action: click_application_launcher_button
+  element:
+    selector:
+      xpath: //span[contains(@class,'pf-c-app-launcher__menu-item-text') and contains(.,'Advanced Cluster Management')]
+    missing: true
 check_console_link_in_usermenu:
   params:
     link_url: "www.youtube.com"
@@ -272,12 +286,12 @@ check_download_linux_oc_ibm_power:
   params:
     text: Download oc for Linux for IBM Power, little endian
     link_url: <downloads_route>/ppc64le/linux/oc.tar
-  action: check_link_and_text 
+  action: check_link_and_text
 check_download_linux_oc_ibm_z:
   params:
     text: Download oc for Linux for IBM Z
     link_url: <downloads_route>/s390x/linux/oc.tar
-  action: check_link_and_text 
+  action: check_link_and_text
 check_download_mac_oc:
   params:
     text: Download oc for Mac
@@ -287,12 +301,12 @@ check_download_windows_oc:
   params:
     text: Download oc for Windows
     link_url: <downloads_route>/amd64/windows/oc.zip
-  action: check_link_and_text  
+  action: check_link_and_text
 check_oc_license:
   params:
     text: LICENSE
     link_url: oc-license
-  action: check_link_and_text 
+  action: check_link_and_text
 check_default_odo_download_links:
   params:
     text: odo

@@ -10,12 +10,12 @@ set_placeholder_input_value:
     op: send_keys <input_value>
     type: input
 check_message_when_multiple_receivers_not_configured:
-  params:    
+  params:
     title: Incomplete alert receivers
     description: Configure the receivers
   action: check_alert_message
 check_message_when_single_receiver_not_configured:
-  params:    
+  params:
     title: Incomplete alert receiver
     description: Configure the receiver
   action: check_alert_message
@@ -24,11 +24,13 @@ check_div_text:
     selector:
       xpath: //div[contains(text(),'<text>')]
 filter_alert:
-  params: 
+  params:
     class_text: co-text-filter
     input_value: <alert_name>
+    content: <alert_name>
   action: clear_name_filter_if_exists
   action: set_input_class
+  action: check_page_contains
 open_alert_detail:
   action: Disable_all_filters
   action: filter_alert
@@ -116,12 +118,12 @@ click_actions_button:
       xpath: //button[@aria-label='Actions'][@data-test-id='actions-menu-button']
     op: click
 
-expire_alert_from_detail: 
+expire_alert_from_detail:
   action: click_first_action_icon
   action: click_expire_alert_button
 click_first_action_icon:
   params:
-    aria_label_text: Actions 
+    aria_label_text: Actions
     index: 1
   action: click_icon_index_button
 click_expire_alert_button:
@@ -147,7 +149,7 @@ edit_silence_alert:
   action: perform_action_item
 check_silence_fields:
   action: ensure_start_from_now_checked
-  action: check_silence_duration_null 
+  action: check_silence_duration_null
 remove_matcher_silence_alert:
   params:
     aria_label_text: Remove
@@ -179,18 +181,18 @@ set_silence_duration_null:
   element:
     selector:
       xpath: //ul[@class='pf-c-dropdown__menu']//button[text()='-']
-    op: click 
+    op: click
 check_silence_duration_null:
   element:
     selector:
-      xpath: //label[text()='For...']/..//span[text()='-'] 
+      xpath: //label[text()='For...']/..//span[text()='-']
 set_invalid_end_time_silence:
   params:
     label_text: Until...
     input_value: 2020/03/05 20:11:44
   action: set_silence_duration_null
   action: set_label_input_simple
-  
+
 status_specific_alert_no_clear:
   action: filter_alert
   element:
@@ -268,10 +270,10 @@ check_silence_breadcrumb:
     text: Silences
     link_url: /monitoring/silences
   action: check_link_and_text
-expire_alert_from_cog_menu: 
+expire_alert_from_cog_menu:
   action: filter_alert
   action: click_first_action_icon
-  action: click_expire_alert_button  
+  action: click_expire_alert_button
 
 open_alert_rule_from_detail:
   params:
@@ -327,8 +329,8 @@ hide_show_alert_graph_button:
   element:
     selector:
       xpath: //h2[@class='co-section-heading']/../button
-    op: click 
- 
+    op: click
+
 Disable_all_filters:
   element:
     selector:
@@ -354,15 +356,16 @@ list_alerts_by_filters_clear:
 list_alerts_by_filters:
   action: click_alert_filter_dropdown
   action: click_alert_filter_item
+  action: click_alert_filter_dropdown
 click_alert_filter_dropdown:
   element:
     selector:
-      xpath: //div[@id='filter-toolbar']//button[@data-test-id='filter-dropdown-toggle']
+      xpath: //div[@data-test-id="filter-dropdown-toggle"]//button
     op: click
 click_alert_filter_item:
   element:
     selector:
-      xpath: //li[@id='<filter_item>']
+      xpath: //input[@id='<filter_item>']
     op: click
 click_label_filter_dropdown:
   params:

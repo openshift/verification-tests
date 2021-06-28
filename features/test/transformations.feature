@@ -13,3 +13,10 @@ Feature: test some transformations
     Examples:
       | message                       |
       | <%= "example " + "message" %> |
+
+  Scenario: mistaken nested ERB expression still should not fail
+    Given the expression should be true> cb.test = ["1", "2", "3"]
+    When I repeat the following steps for each :item in cb.test:
+    """
+    Then I log the message> an item in "<%= cb.test %>: #{cb.item}"
+    """
