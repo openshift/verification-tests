@@ -4,13 +4,14 @@ check_istag_warning_info:
       xpath: //div[span[contains(., '<istag_name>')]]/following-sibling::span[contains(., '<info>')]
 check_imagestream_help_link:
   element:
-    selector:
-      xpath: //button[contains(.,'Do you need to work with this Image Stream outside of the web console')]
-    timeout: 120
+    selector: &image_help_button
+      xpath: //button[contains(.,'Do you need to work with this ImageStream')]
+    timeout: 30
 open_imagestream_help_modal:
-  params:
-    button_text: Do you need to work with this Image Stream
-  action: click_button
+  element:
+    selector:
+      <<: *image_help_button
+    op: click
 check_image_registry_command:
   action: check_registry_login
   action: check_docker_push
@@ -30,7 +31,7 @@ check_docker_pull:
 check_command:
   element:
     selector:
-      xpath: //pre[contains(., '<command>')]/following-sibling::button[contains(@class, 'copy-to-clipboard__btn')]
+      xpath: //pre[contains(., '<command>')]/following-sibling::button[contains(@class, 'copy-to-clipboard')]
 check_page_contains_warning_alert:
   params:
     content: warning alert
