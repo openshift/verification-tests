@@ -80,7 +80,13 @@ Feature: elasticsearch-operator related tests
     And I open admin console in a browser
     When I run the :goto_monitoring_db_elasticsearch web action
     Then the step should succeed
-    Given evaluation of `["Cluster status", "Cluster nodes", "Cluster data nodes", "Cluster pending tasks", "Cluster active shards", "Cluster non-active shards", "Number of segments", "Memory used by segments", "ThreadPool tasks", "CPU % usage", "Memory usage", "Disk space % used", "Documents indexing rate", "Indexing latency", "Search rate", "Search latency", "Documents count (with replicas)", "Documents deleting rate", "Documents merging rate", "Field data memory size", "Field data evictions", "Query cache size", "Query cache evictions", "Query cache hits", "Query cache misses", "Indexing throttling", "Merging throttling", "Heap used", "GC count", "GC time"]` is stored in the :cards clipboard
+    And I wait up to 300 seconds for the steps to pass:
+    """
+    When I perform the :check_monitoring_dashboard_card web action with:
+      | card_name | Cluster status |
+    Then the step should succeed
+    """
+    Given evaluation of `["Cluster nodes", "Cluster data nodes", "Cluster pending tasks", "Cluster active shards", "Cluster non-active shards", "Number of segments", "Memory used by segments", "ThreadPool tasks", "CPU % usage", "Memory usage", "Disk space % used", "Documents indexing rate", "Indexing latency", "Search rate", "Search latency", "Documents count (with replicas)", "Documents deleting rate", "Documents merging rate", "Field data memory size", "Field data evictions", "Query cache size", "Query cache evictions", "Query cache hits", "Query cache misses", "Indexing throttling", "Merging throttling", "Heap used", "GC count", "GC time"]` is stored in the :cards clipboard
     And I repeat the following steps for each :card in cb.cards:
     """
     When I perform the :check_monitoring_dashboard_card web action with:

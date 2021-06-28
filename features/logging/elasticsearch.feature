@@ -125,6 +125,6 @@ Feature: Elasticsearch related tests
     And evaluation of `@result[:parsed].select {|e| e['index'].start_with? "infra"}.map {|x| x["index"]}` is stored in the :new_infra_indices clipboard
     And evaluation of `@result[:parsed].select {|e| e['index'].start_with? "audit"}.map {|x| x["index"]}` is stored in the :new_audit_indices clipboard
     Then the expression should be true> !(cb.new_app_indices - cb.app_indices).empty? && !(cb.app_indices - cb.new_app_indices).empty?
-    And the expression should be true> !(cb.new_infra_indices - cb.infra_indices).empty? && !(cb.app_indices - cb.new_app_indices).empty?
-    And the expression should be true> !(cb.new_audit_indices - cb.audit_indices).empty? && !(cb.app_indices - cb.new_app_indices).empty?
+    And the expression should be true> !(cb.new_infra_indices - cb.infra_indices).empty? && !(cb.infra_indices - cb.new_infra_indices).empty?
+    And the expression should be true> !(cb.new_audit_indices - cb.audit_indices).empty? && !(cb.audit_indices - cb.new_audit_indices).empty?
     """
