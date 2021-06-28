@@ -380,7 +380,7 @@ Given /^(cluster-logging|elasticsearch-operator) channel name is stored in the#{
     when '4.7'
       cb[cb_name] = "5.0"
     when '4.8'
-      cb[cb_name] = "5.1"
+      cb[cb_name] = "stable-5.1"
     else
       cb[cb_name] = version
     end
