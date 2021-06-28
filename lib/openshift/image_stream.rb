@@ -27,6 +27,15 @@ module BushSlicer
       rr.dig('status', 'dockerImageRepository')
     end
 
+    def public_docker_image_repository(user: nil, cached: false, quiet: false)
+      rr = raw_resource(user: user, cached: cached, quiet: quiet)
+      if rr.dig('status').key?('publicDockerImageRepository')
+        return rr.dig('status', 'publicDockerImageRepository')
+      else
+        return "no publicDockerImageRepository added"
+      end
+    end
+
     def docker_registry_ip_or_hostname(user)
       return self.docker_image_repository(user).match(/[^\/]*\//)[0]
     end

@@ -528,7 +528,7 @@ enable_cluster_monitoring:
     op: click
 click_radio_to_pick_ns:
   params:
-    text: Select a namespace
+    text: Select
   action: click_radio_input_by_text
 click_approve_button:
   params:
@@ -825,12 +825,12 @@ check_no_result_on_operatorhub_page:
 check_extension_help_block:
   elements:
   - selector:
-      xpath: //button[text()='Console plugins']
+      xpath: //label[contains(.,'Console plugins')]/following::button[1][contains(@class,'help')]
     op: click
   - selector: &help_block1
       xpath: //div[contains(.,'a custom interface')]
   - selector:
-      xpath: //div[contains(.,'trust this console plugin before enabling')]
+      xpath: //div[contains(.,'console plugin')]
   action: click_close_icon
 check_plugins_are_disabled_bydefault:
   elements:
