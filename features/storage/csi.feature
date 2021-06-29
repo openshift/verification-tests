@@ -276,3 +276,42 @@ Feature: CSI testing related feature
       | sc_name | type | size  |
       | gp2-csi | sc1  | 125Gi | # @case_id OCP-24546
       | gp2-csi | st1  | 125Gi | # @case_id OCP-24572
+
+
+  # @author wduan@redhat.com
+  @admin
+  Scenario Outline: Check CSI Driver Operator installation
+    When I run the :get admin command with:
+      | resource | clusteroperator/storage                                                            |
+      | o        | custom-columns=csi:.status.relatedObjects[?(@.resource=="clustercsidrivers")].name |
+    Then the step should succeed
+    And the output should contain:
+      | <provisioner> |
+    When I run the :get admin command with:
+      | resource | clustercsidrivers |
+    Then the step should succeed
+    And the output should contain:
+      | <provisioner> |
+    When I run the :get admin command with:
+      | resource  | deployment/<deployment_operator>                             |
+      | o         | custom-columns=Management:.metadata.managedFields[*].manager |
+      | namespace | openshift-cluster-csi-drivers                                |
+    Then the step should succeed
+    And the output should contain:
+      | cluster-storage-operator |
+      | kube-controller-manager  |
+    When I run the :get client command with:
+      | resource | storageclass |
+    Then the output should match:
+      | <sc_name>.*<provisioner>|
+
+    When I switch to cluster admin pseudo user
+    Given "<deployment_operator>" deployment becomes ready in the "openshift-cluster-csi-drivers" project
+    Given "<deployment_controller>" deployment becomes ready in the "openshift-cluster-csi-drivers" project
+    Given "<daemonset_node>" daemonset becomes ready in the "openshift-cluster-csi-drivers" project
+
+    Examples:
+      | provisioner              | sc_name      | deployment_operator                  | deployment_controller                  | daemonset_node                   |
+      | cinder.csi.openstack.org | standard-csi | openstack-cinder-csi-driver-operator | openstack-cinder-csi-driver-controller | openstack-cinder-csi-driver-node | # @case_id OCP-37557
+      | ebs.csi.aws.com          | gp2-csi      | aws-ebs-csi-driver-operator          | aws-ebs-csi-driver-controller          | aws-ebs-csi-driver-node          | # @case_id OCP-34144
+      | pd.csi.storage.gke.io    | standard-csi | gcp-pd-csi-driver-operator           | gcp-pd-csi-driver-controller           | gcp-pd-csi-driver-node           | # @case_id OCP-37474
