@@ -1322,7 +1322,7 @@ end
 
 Given /^I save multus pod on master node to the#{OPT_SYM} clipboard$/ do | cb_name |
   ensure_admin_tagged
-  cb_name = "multus_pod" unless cb_name
+  cb_name ||= :multuspod
   master_nodes = env.nodes.select { |n| n.schedulable? && n.is_master? }
   master_node_names = master_nodes.collect { |n| n.name }
   cb[cb_name] = BushSlicer::Pod.get_labeled("app=multus", project: project("openshift-multus", switch: false), user: admin) { |pod, hash|
