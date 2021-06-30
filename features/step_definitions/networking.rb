@@ -1319,3 +1319,14 @@ Given /^the node's active nmcli connection is stored in the#{OPT_SYM} clipboard$
   cb[cb_name] = @result[:response].split("\n").first
   logger.info "Node's active nmcli connection uuid is stored in the #{cb_name} clipboard as #{cb[cb_name]}"
 end
+
+Given /^I save multus pod on master node to the#{OPT_SYM} clipboard$/ do | cb_name |
+  ensure_admin_tagged
+  cb_name ||= :multuspod
+  master_nodes = env.nodes.select { |n| n.schedulable? && n.is_master? }
+  master_node_names = master_nodes.collect { |n| n.name }
+  cb[cb_name] = BushSlicer::Pod.get_labeled("app=multus", project: project("openshift-multus", switch: false), user: admin) { |pod, hash|
+     master_node_names.include?(pod.node_name)
+  }.first.name
+  logger.info "The multus pod is stored to the #{cb[cb_name]} clipboard."
+end
