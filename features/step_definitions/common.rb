@@ -132,20 +132,26 @@ end
 
 Then /^(?:the )?expression should be true> (.+)$/ do |expr|
   res = eval expr
+  eval_details = ""
   unless res
-    # try to print out the left and right operand values to help with debugging
-    # please note the order of the operator matters
-    comparison_operators = /===|==|>=|<=|!=|>|<|&&|\|\|&|\|/
-    op = expr.scan(comparison_operators).first
-    if op
-      e1, e2 = expr.split(op)
-      # XXX: we may not catch everything, wrap it around begin/rescue and print
-      # out blank if some complex comparison is in the expression.
-      begin
-        eval_details = "\nleft_operand: #{eval(e1)}, right_operand: #{eval(e2)}\n"
-      rescue
-        eval_details = ""
+    ruby_special_op = /\?/
+    unless expr.scan(ruby_special_op)
+      # try to print out the left and right operand values to help with debugging
+      # please note the order of the operator matters
+      comparison_operators = /===|==|>=|<=|!=|>|<|&&|\|\|&|\|/
+      op = expr.scan(comparison_operators).first
+      if op
+        e1, e2 = expr.split(op)
+        # XXX: we may not catch everything, wrap it around begin/rescue and print
+        # out blank if some complex comparison is in the expression.
+        begin
+          eval_details = "\nleft_operand: #{eval(e1)}, right_operand: #{eval(e2)}\n"
+        rescue
+          logger.info("Unable to interpret the expression...")
+        end
       end
+    else
+      logger.info("singular expression detected skipping left & right operand eval() ...")
     end
     raise "expression \"#{expr}\" returned non-positive status: #{res}" + eval_details
   end
