@@ -395,7 +395,7 @@ Feature: Machine features testing
     Then the step should succeed
   
     Then I store the last provisioned machine in the :machine_latest clipboard
-    And I wait up to 120 seconds for the steps to pass:
+    And I wait up to 400 seconds for the steps to pass:
     """
     Then the expression should be true> machine(cb.machine_latest).phase(cached: false) == "Running"
     """
