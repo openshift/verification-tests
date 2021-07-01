@@ -139,26 +139,26 @@ check_evaluation_notification_in_install_page:
 click_download_installer_button:
     element:
         selector:
-            xpath: //a[text()='Download installer']/../../div/select
+            xpath: //a[text()='Download installer']/../../div/select[@aria-label='Select OS dropdown']
         op: click
 check_download_installer_button_in_install_page:
     action: click_download_installer_button
     elements:
         - selector:
-            xpath: //a[text()='Download installer']/../../div/select/option[text()='<os_name>']
+            xpath: //a[text()='Download installer']/../../div/select[@aria-label='Select OS dropdown']/option[text()='<os_name>']
           op: click
         - selector:
             xpath: //a[text()='Download installer' and @href='https://mirror.openshift.com/pub/openshift-v4/<installer_type>/openshift-install-<os_link>']
 click_download_cli_button:
     element:
         selector:
-            xpath: //a[text()='Download command-line tools']/../../div/select
+            xpath: //a[text()='Download command-line tools']/../../div/select[@aria-label='Select OS dropdown']
         op: click
 check_download_cli_button_in_install_page:
     action: click_download_cli_button
     elements:
         - selector:
-            xpath: //a[text()='Download command-line tools']/../../div/select/option[text()='<os_name>']
+            xpath: //a[text()='Download command-line tools']/../../div/select[@aria-label='Select OS dropdown']/option[text()='<os_name>']
           op: click
         - selector:
             xpath: //a[text()='Download command-line tools' and @href='https://mirror.openshift.com/pub/openshift-v4/<installer_type>/openshift-client-<os_link>']
@@ -801,3 +801,121 @@ check_creation_page_cloud_tab_without_quota:
     action: creation_cards_page_loaded
     action: check_creation_cards_page_title
     action: check_creation_page_cloud_tab_common_part
+switch_to_aws_arm_installer_page:
+    action: switch_to_creation_cards_page
+    action: click_aws_arm_installer_button
+check_aws_arm_install_page_browser_title:
+    scripts:
+    - command: return document.title=='Install OpenShift 4 | AWS ARM | Experimental Developer Preview Builds'
+      expect_result: true
+check_aws_arm_installer_page_title:
+    element:
+        selector:
+            xpath: //h1[text()='Install OpenShift Container Platform 4']
+check_logo_on_aws_arm_install_page_title:
+    element:
+        selector:
+            xpath: //img[@src='/apps/chrome/js/fonts/logo.svg']
+check_links_on_install_page:
+    element:
+        selector:
+            xpath: //a[@href='<link>']
+switch_arch_type_for_download_installer:
+    elements:
+        - selector:
+            xpath: //a[text()='Download installer']/../../div/select[@aria-label='Select architecture dropdown']
+          op: click
+        - selector:
+            xpath: //a[text()='Download installer']/../../div/select[@aria-label='Select architecture dropdown']/option[text()='<arch_type>']
+          op: click  
+switch_arch_type_for_download_cli:
+    elements:
+        - selector:
+            xpath: //a[text()='Download command-line tools']/../../div/select[@aria-label='Select architecture dropdown']
+          op: click
+        - selector:
+            xpath: //a[text()='Download command-line tools']/../../div/select[@aria-label='Select architecture dropdown']/option[text()='<arch_type>']
+          op: click  
+check_linux_download_installer_button_in_aws_arm_install_page_x86_64:
+    params:
+        os_name: Linux
+        os_link: linux-amd64.tar.gz
+        installer_type: aarch64/clients/ocp-dev-preview/pre-release
+        arch_type: x86_64
+    action: switch_arch_type_for_download_installer
+    action: check_download_installer_button_in_install_page
+check_linux_download_installer_button_in_aws_arm_install_page_aarch64:
+    params:
+        os_name: Linux
+        os_link: linux.tar.gz
+        installer_type: aarch64/clients/ocp-dev-preview/pre-release
+        arch_type: aarch64
+    action: switch_arch_type_for_download_installer
+    action: check_download_installer_button_in_install_page
+check_linux_download_cli_button_in_aws_arm_install_page_x86_64:
+    params:
+        os_name: Linux
+        os_link: linux.tar.gz
+        installer_type: x86_64/clients/ocp-dev-preview/pre-release
+        arch_type: x86_64
+    action: switch_arch_type_for_download_cli
+    action: check_download_cli_button_in_install_page
+check_linux_download_cli_button_in_aws_arm_install_page_aarch64:
+    params:
+        os_name: Linux
+        os_link: linux.tar.gz
+        installer_type: aarch64/clients/ocp-dev-preview/pre-release
+        arch_type: aarch64
+    action: switch_arch_type_for_download_cli
+    action: check_download_cli_button_in_install_page
+check_linux_download_cli_button_in_aws_arm_install_page_ppc64le:
+    params:
+        os_name: Linux
+        os_link: linux.tar.gz
+        installer_type: ppc64le/clients/ocp-dev-preview/pre-release
+        arch_type: ppc64le
+    action: switch_arch_type_for_download_cli
+    action: check_download_cli_button_in_install_page
+check_linux_download_cli_button_in_aws_arm_install_page_s390x:
+    params:
+        os_name: Linux
+        os_link: linux.tar.gz
+        installer_type: s390x/clients/ocp-dev-preview/pre-release
+        arch_type: s390x
+    action: switch_arch_type_for_download_cli
+    action: check_download_cli_button_in_install_page
+check_macos_download_installer_button_in_aws_arm_install_page:
+    params:
+        os_name: MacOS
+        os_link: mac.tar.gz
+        installer_type: aarch64/clients/ocp-dev-preview/pre-release
+    action: check_download_installer_button_in_install_page
+check_macos_download_cli_button_in_aws_arm_install_page:
+    params:
+        os_name: MacOS
+        os_link: mac.tar.gz
+        installer_type: x86_64/clients/ocp-dev-preview/pre-release
+    action: check_download_cli_button_in_install_page
+check_download_part_in_aws_arm_install_page:
+    action: check_linux_download_installer_button_in_aws_arm_install_page_aarch64
+    action: check_linux_download_installer_button_in_aws_arm_install_page_x86_64
+    action: check_linux_download_cli_button_in_aws_arm_install_page_x86_64
+    action: check_linux_download_cli_button_in_aws_arm_install_page_s390x
+    action: check_linux_download_cli_button_in_aws_arm_install_page_aarch64
+    action: check_linux_download_cli_button_in_aws_arm_install_page_ppc64le
+    action: check_macos_download_installer_button_in_aws_arm_install_page
+    action: check_macos_download_cli_button_in_aws_arm_install_page
+check_aws_arm_install_page:
+    action: check_aws_arm_install_page_browser_title
+    action: check_download_part_in_aws_arm_install_page
+    action: check_pull_secret_part_in_install_page
+    action: check_aws_arm_installer_page_title
+    action: check_logo_on_aws_arm_install_page_title
+    elements:
+        - selector:
+            xpath: //a[@href='https://github.com/openshift/ocp-on-arm/blob/main/README.md']
+        - selector:
+            xpath: //a[@href='https://github.com/openshift/ocp-on-arm']
+        - selector:
+            xpath: //a[@href='https://access.redhat.com/articles/4307871']
+
