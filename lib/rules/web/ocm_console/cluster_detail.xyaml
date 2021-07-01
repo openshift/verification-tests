@@ -42,7 +42,7 @@ disabled_launch_console_button_on_cluster_detail_page_loaded:
 check_cluster_status:
     element:
         selector:
-            xpath: "//dd[@style='text-transform: capitalize;']/div[text()='ready']"
+            xpath: //div[text()='Ready']
         timeout: 300
 resource_usage_loaded:
     action: cpu_chart_loaded
