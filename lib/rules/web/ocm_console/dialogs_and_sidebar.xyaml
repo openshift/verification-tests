@@ -118,7 +118,7 @@ uninstall_succ_prompt_message_missing:
 check_display_name_dialog_loaded:
   elements:
     - selector:
-        xpath: //div[@class='pf-c-backdrop']//h1[text()='Edit display name'] 
+        xpath: //span[text()='Edit display name']
     - selector:
         xpath: //*[@id='edit-display-name-input' and contains(@value,<original_name>)]
 edit_display_name_in_dialog:
@@ -526,7 +526,7 @@ check_elements_on_edit_node_count_dialog:
 check_edit_node_count_dialog_title:
   element:
     selector:
-      xpath: //h1[text()='Edit node count']
+      xpath: //span[text()='Edit node count']
 check_machinepool_field_on_edit_node_count_dialog:
   elements:
   - selector:
@@ -547,6 +547,7 @@ add_machine_pool_dialog_loaded:
             xpath: //h1/span[text()='Add machine pool']
         - selector:
             xpath: //span[text()='Worker node instance type']
+          timeout: 30
         - selector:
             xpath: //span[contains(text(),'Worker node count')]
         - selector:
