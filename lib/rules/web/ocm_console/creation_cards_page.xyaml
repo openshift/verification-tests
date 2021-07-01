@@ -22,6 +22,12 @@ check_creation_cards_page:
             xpath: //h1[text()='Create an OpenShift cluster']
     action: create_page_osd_loaded
 
+click_aws_installer_button:
+    element:
+        selector:
+            xpath: //a[contains(@href, '/openshift/install/aws/arm')]
+        op: click
+
 create_page_osd_loaded:
     elements:
         - selector:
@@ -87,3 +93,41 @@ check_creation_cards_page_title:
     scripts:
     - command: return document.title=='Create an OpenShift cluster | Red Hat OpenShift Cluster Manager'
       expect_result: true
+check_creation_cards_page_browser_title:
+    scripts:
+    - command: return document.title=='Install OpenShift 4 | AWS ARM | Experimental Developer Preview Builds'
+      expect_result: true
+check_aws_installer_page_title:
+    element:
+        selector:
+            xpath: //h1[text()='Install OpenShift Container Platform 4']
+check_logo_on_creation_cards_page_title:
+    element:
+        selector:
+            xpath: //img[@src='/apps/chrome/js/fonts/logo.svg']
+check_breadcrumb_in_aws_installer_page:
+    elements:
+        - selector:
+            xpath: //li[@href='/openshift/create']
+        - selector:
+            xpath: //li[text()='AWS ARM Pre-Release Builds']
+check_link_for_installation_documentation:
+    element:
+        selector:
+            xpath: //a[@href='https://github.com/openshift/ocp-on-arm/blob/main/README.md']
+check_link_for_download_installer:
+    element:
+        selector:
+            xpath: //a[@href='https://mirror.openshift.com/pub/openshift-v4/aarch64/clients/ocp-dev-preview/pre-release/openshift-install-linux-amd64.tar.gz']
+check_link_for_download_cli_tool:
+    element:
+        selector:
+            xpath: //a[@href='https://mirror.openshift.com/pub/openshift-v4/aarch64/clients/ocp-dev-preview/pre-release/openshift-client-linux-amd64.tar.gz']
+check_link_for_our_git_repo:
+    element:
+        selector:
+            xpath: //a[@href='https://github.com/openshift/ocp-on-arm']
+check_link_for_knowledge_article:
+    element:
+        selector:
+            xpath: //a[@href='https://access.redhat.com/articles/4307871']
