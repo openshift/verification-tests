@@ -259,7 +259,6 @@ Feature: SDN compoment upgrade testing
       | name=test-pods |
     When I expose the "test-service" service
     And I wait up to 60 seconds for a web server to become available via the "test-service" route
-    Then the step should succeed
     Given the DefaultDeny policy is applied to the "policy-upgrade3" namespace
     Then the step should succeed
     Given I obtain test data file "networking/networkpolicy/allow-from-router-ingress.yaml"
@@ -276,7 +275,6 @@ Feature: SDN compoment upgrade testing
       | name=test-pods |
     When I expose the "test-service" service
     And I wait up to 60 seconds for a web server to become available via the "test-service" route
-    Then the step should succeed
     Given the DefaultDeny policy is applied to the "policy-upgrade4" namespace
     Then the step should succeed
     Given I obtain test data file "networking/networkpolicy/allow-from-router.yaml"
@@ -330,13 +328,11 @@ Feature: SDN compoment upgrade testing
     Given a pod becomes ready with labels:
       | name=test-pods |
     And I wait up to 60 seconds for a web server to become available via the "test-service" route
-    Then the step should succeed
 
     When I use the "policy-upgrade4" project
     Given a pod becomes ready with labels:
       | name=test-pods |
     And I wait up to 60 seconds for a web server to become available via the "test-service" route
-    Then the step should succeed
 
     When I use the "policy-upgrade5" project
     Given a pod becomes ready with labels:
