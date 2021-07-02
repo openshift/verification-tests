@@ -350,17 +350,19 @@ Feature: Machine features testing
     Given I store the last provisioned machine in the :machine clipboard
     When evaluation of `machine(cb.machine).gcp_region` is stored in the :default_region clipboard
     And evaluation of `machine(cb.machine).gcp_zone` is stored in the :default_zone clipboard
+    And evaluation of `machine(cb.machine).gcp_service_account` is stored in the :default_service_account clipboard
     Then admin ensures "default-valued-33056" machineset is deleted after scenario
 
     Given I obtain test data file "cloud/ms-gcp/ms_default_values.yaml"
     When I run oc create over "ms_default_values.yaml" replacing paths:
-      | n                                                                                         | openshift-machine-api                           |
-      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]           | <%= infrastructure("cluster").infra_name %>     |
-      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"]        | default-valued-33056                            |
-      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-cluster"]    | <%= infrastructure("cluster").infra_name %>     |
-      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["region"]                           | <%= cb.default_region %>                        |
-      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["zone"]                             | <%= cb.default_zone %>                          |
-      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-machineset"] | default-valued-33056                            |
+      | n                                                                                         | openshift-machine-api                                |
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]           | <%= infrastructure("cluster").infra_name %>          |
+      | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"]        | default-valued-33056                                 |
+      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-cluster"]    | <%= infrastructure("cluster").infra_name %>          |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["region"]                           | <%= cb.default_region %>                             |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["serviceAccounts"][0]["email"]      | <%=  cb.default_service_account[0].fetch("email") %> | 
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["zone"]                             | <%= cb.default_zone %>                               |
+      | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-machineset"] | default-valued-33056                                 |
     Then the step should succeed
 
     # Verify machine could be created successful
