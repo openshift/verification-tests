@@ -579,11 +579,11 @@ check_insights_popover_info_when_unavailable:
   - selector:
       xpath: //div[contains(@class,'co-status-popup__section') and contains(.,'Temporary unavailable')]
   - selector:
-      xpath: //a[contains(@class,'co-external-link') and contains(@href,'https://docs.openshift.com/container-platform/latest/support/getting-support.html')]
+      xpath: //a[contains(@class,'co-external-link') and contains(@href,'support/remote_health_monitoring/using-insights-to-identify-issues-with-your-cluster.html')]
 check_insights_status_when_available:
   params:
     status: Warning
-    status_text: issue found
+    status_text: issues found
   action: click_insights_status
   action: check_status_card_health_item_text
   action: check_insights_popover_info_when_available
