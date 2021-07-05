@@ -135,7 +135,7 @@ Then /^(?:the )?expression should be true> (.+)$/ do |expr|
   eval_details = ""
   unless res
     ruby_special_op = /\?/
-    unless expr.scan(ruby_special_op)
+    unless expr.scan(ruby_special_op).count > 0
       # try to print out the left and right operand values to help with debugging
       # please note the order of the operator matters
       comparison_operators = /===|==|>=|<=|!=|>|<|&&|\|\|&|\|/
