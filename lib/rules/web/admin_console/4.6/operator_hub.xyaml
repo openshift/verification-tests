@@ -403,17 +403,17 @@ check_infrastructure_property_missing:
 check_disconnected_infra_value:
   params:
     label: Infrastructure Features
-    value: Disconnected
+    value: isconnected
   action: check_property_label_and_value
 check_proxy_infra_value:
   params:
     label: Infrastructure Features
-    value: Proxy
+    value: roxy
   action: check_property_label_and_value
 check_fips_infra_value:
   params:
     label: Infrastructure Features
-    value: FIPS Mode
+    value: FipsMode
   action: check_property_label_and_value
 check_3scale_subs_value:
   params:
@@ -445,9 +445,19 @@ click_checkbox_proxy_from_infrastructure_features:
 click_checkbox_fips_from_infrastructure_features:
   params:
     filter_type_value: infraFeatures
-    checkbox_text: FIPS Mode
+    checkbox_text: FipsMode
   action: wait_filter_section_loaded
+  action:
+    if_element:
+      selector: &show_more_infrafeature_button
+        xpath: //form[@data-test-group-name='infraFeatures']//button[contains(.,'more')]
+    ref: show_all_infrastructure_feature
   action: choose_one_checkbox
+show_all_infrastructure_feature:
+  element:
+    selector:
+      <<: *show_more_infrafeature_button
+    op: click
 check_disconnected_infra_value_in_operator_modal:
   action: click_checkbox_disconnected_from_infrastructure_features
   action: open_first_card_in_overlay
