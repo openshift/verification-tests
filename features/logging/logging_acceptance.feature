@@ -5,9 +5,9 @@ Feature: Logging smoke test case
   @admin
   Scenario: One logging acceptance case for all cluster
     # Deploy cluster-logging operator via web console
+    Given logging service is removed successfully
     Given cluster-logging channel name is stored in the :clo_channel clipboard
     And elasticsearch-operator channel name is stored in the :eo_channel clipboard
-    Given logging service is removed successfully
     Given elasticsearch-operator catalog source name is stored in the :eo_catsrc clipboard
     Given cluster-logging catalog source name is stored in the :clo_catsrc clipboard
     Given I switch to the first user
