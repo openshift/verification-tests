@@ -12,7 +12,7 @@ end
 When /^admin creates a VolumeSnapshotClass replacing paths:$/ do |table|
   ensure_admin_tagged
 
-  path = "#{BushSlicer::HOME}/testdata/storage/snapshot"
+  path = "#{BushSlicer::HOME}/testdata/storage/csi"
 
   iaas_type = env.iaas[:type] rescue nil
   case iaas_type
@@ -22,7 +22,7 @@ When /^admin creates a VolumeSnapshotClass replacing paths:$/ do |table|
     file = "#{path}/volumesnapshotclass-gce.yaml"
   when "azure"
     file = "#{path}/volumesnapshotclass-azure.yaml"
-  when "cinder"
+  when "openstack"
     file = "#{path}/volumesnapshotclass-cinder.yaml"
   else
     raise "No volumesnapshot template for #{iaas_type} platform"
