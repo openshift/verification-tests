@@ -1,6 +1,6 @@
 Feature: kata data collect tests
   # @author valiev@redhat.com
-  # @case_id OCP-41974
+  # @case_id OCP-42162
   @admin
   Background:
     Given kata container has been installed successfully
