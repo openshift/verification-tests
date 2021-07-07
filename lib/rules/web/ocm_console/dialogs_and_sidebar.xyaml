@@ -53,17 +53,17 @@ click_archive_button:
         selector:
             xpath: //button[@class='pf-c-button pf-m-primary' and text()='Archive cluster']
         op: click
-archive_succ_promt_message_displayed:
-    element: &archive_succ_promt_message
+archive_succ_prompt_message_displayed:
+    element: &archive_succ_prompt_message
         selector:
             xpath: //h4[contains(text(),'Cluster <cluster_name> has been archived')]
         timeout: 5
     action:
         if_param: wait_missing
-        ref: archive_succ_promt_message_missing
-archive_succ_promt_message_missing:
+        ref: archive_succ_prompt_message_missing
+archive_succ_prompt_message_missing:
     element:
-        <<: *archive_succ_promt_message
+        <<: *archive_succ_prompt_message
         missing: true
         timeout: 20
         
@@ -101,9 +101,9 @@ hover_unarchive_succ_prompt_message:
         <<: *unarchive_succ_prompt_message
         op: hover
 
-hover_archive_succ_promt_message:
+hover_archive_succ_prompt_message:
     element:
-        <<: *archive_succ_promt_message
+        <<: *archive_succ_prompt_message
         op: hover
 uninstall_succ_prompt_message_displayed:
     element: &uninstall_succ_prompt_message
@@ -264,7 +264,7 @@ close_customer_cloud_subscription_prompt_message:
 go_to_cluster_list_page:
     element:
         selector:
-            xpath: //a[contains(@href, '/openshift/') and text()='Clusters']
+            xpath: //a[contains(@href, '/openshift') and text()='Clusters']
         op: click
     action: cluster_list_page_loaded
 open_cluster_registration_dialog_from_cluster_list_page:
@@ -770,3 +770,10 @@ click_install_button_on_parameter_dialog:
         selector:
             xpath: //button[@type='submit' and text()="Install"]
         op: click
+wait_for_dialog_disappear:
+    element:
+        selector:
+            xpath: //div[@role='dialog']
+        missing: true
+        timeout: 5
+        
