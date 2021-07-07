@@ -5,7 +5,6 @@ LABEL maintainer="AOS QE Team"
 
 USER root
 
-ADD . /verification-tests/
 
 RUN set -x && \
     yum -y update && \
@@ -19,9 +18,11 @@ RUN set -x && \
     curl -sSL https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm -o /tmp/epel-release-latest-7.noarch.rpm && \
     yum install -y /tmp/epel-release-latest-7.noarch.rpm
 
+RUN scl enable rh-git218 "git clone https://github.com/openshift/verification-tests.git /verification-tests/" && \
+    scl enable rh-git218 "git clone https://github.com/openshift/cucushift.git /verification-tests/tierN/"
+
 RUN scl enable rh-ruby26 /verification-tests/tools/install_os_deps.sh
 RUN scl enable rh-ruby26 /verification-tests/tools/hack_bundle.rb
 
-RUN git clone https://github.com/openshift/cucushift.git /verification-tests/tierN
 
 RUN yum clean all -y && rm -rf /var/cache/yum /tmp/*
