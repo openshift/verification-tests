@@ -234,3 +234,22 @@ Given /^I run must-gather command$/ do |ns|
   @result = admin.cli_exec(command)
   raise "Failed to run must-gather command" unless @result[:success]
 end
+
+Given /^Pre-test checks$/ do
+  kata_ns ||= "openshift-sandboxed-containers-operator"
+  kata_config_name = "example-kataconfig"
+  project(kata_ns)
+  namespace_exists = namespace(kata_ns).exists?
+  kataconfig_exists = kata_config('example-kataconfig').exists?
+  @result_pods = admin.cli_exec(:get, resource: "pods", all_namespaces: true, o: "jsonpath='{.items[?(@.spec.runtimeClassName==\"kata\")].metadata.name}'")
+  logger.info("==================================PRE TEST CHECKS=========================================")
+  if namespace_exists && kataconfig_exists && !@result_pods.to_s.strip.empty?
+        logger.info("Sandboxed operator installed")
+        logger.info("Kataconfig file exists")
+        logger.info("At least 1 pod is running with kata runtime")
+        logger.info("Pre-test checks passed, test can start")
+  else
+        logger.fatal("Pre test checks failed, can't start the test")
+  end
+end
+
