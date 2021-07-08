@@ -228,10 +228,11 @@ Given /^I remove all kata pods in the cluster stored in the#{OPT_SYM} clipboard$
   end
 end
 
-Given /^I run must-gather command$/ do |ns|
-  command = ' must-gather quay.io/openshift_sandboxed_containers/openshift-sandboxed-containers-must-gather:202106221012'
+Given /^I run must-gather command$/ do
+  require 'json'
+  command = 'quay.io/openshift_sandboxed_containers/openshift-sandboxed-containers-must-gather:202106221012'
   logger.info("Running must-gather command")
-  @result = admin.cli_exec(command)
+  @result = env.admin.cli_exec(:oadm_must_gather, image:command)
   raise "Failed to run must-gather command" unless @result[:success]
 end
 
