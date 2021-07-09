@@ -3,7 +3,7 @@
 FROM quay.io/openshift/origin-jenkins-agent-base:4.6
 
 LABEL vendor="Red Hat inc."
-LABEL maintainer="AOS QE Team"
+LABEL maintainer="OCP QE Team"
 
 RUN set -x && \
     dnf repolist all && \

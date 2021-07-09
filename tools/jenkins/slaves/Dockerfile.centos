@@ -3,7 +3,7 @@
 FROM openshift/jenkins-slave-base-centos7
 
 LABEL vendor="Red Hat inc."
-LABEL maintainer="AOS QE Team"
+LABEL maintainer="OCP QE Team"
 
 ADD . $HOME/bushslicer
 RUN [ -d $HOME/bushslicer/private/config/ca ] && \
