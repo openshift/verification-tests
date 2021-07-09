@@ -68,7 +68,7 @@ Given /^I remove kata operator from the#{OPT_QUOTED} namespace$/ do | kata_ns |
   end
 
   kataconfig_name = BushSlicer::KataConfig.list(user: admin).first.name
-  step %Q/I ensure "#{kataconfig_name}" kata_config is deleted within 1200 seconds/
+  step %Q/I ensure "#{kataconfig_name}" kata_config is deleted within 1500 seconds/
   # 2. remove namespace
   step %Q/I ensure "#{kata_ns}" project is deleted/
 end
