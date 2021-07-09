@@ -1,7 +1,7 @@
 FROM quay.io/centos/centos:7
 
 LABEL vendor="Red Hat inc."
-LABEL maintainer="AOS QE Team"
+LABEL maintainer="OCP QE Team"
 
 WORKDIR /root
 USER root

@@ -3,7 +3,7 @@
 FROM openshift3/jenkins-slave-base-rhel7:v3.11
 
 LABEL vendor="Red Hat inc."
-LABEL maintainer="AOS QE Team"
+LABEL maintainer="OCP QE Team"
 
 ENV USER_PATHS="$HOME /etc/machine-id /etc/passwd /etc/pki"
 
