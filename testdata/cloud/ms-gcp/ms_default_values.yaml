@@ -3,7 +3,7 @@ kind: MachineSet
 metadata:
   labels:
     machine.openshift.io/cluster-api-cluster:
-  name: default-valued-33056           
+  name: default-valued-33056
 spec:
   replicas: 1
   selector:
@@ -25,6 +25,10 @@ spec:
         value: "mapi_test"
       providerSpec:
         value:
-          region: 
-          zone: 
+          region:
+          zone:
+          serviceAccounts:
+          - email:
+            scopes:
+            - https://www.googleapis.com/auth/cloud-platform
 

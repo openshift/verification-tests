@@ -4,6 +4,7 @@ Feature: basic verification for upgrade testing
   @admin
   Scenario: Upgrade - Make sure multiple resources work well after upgrade - prepare
     Given I switch to cluster admin pseudo user
+    Given I ensure "node-upgrade" project is deleted
     When I run the :new_project client command with:
       | project_name | node-upgrade |
     And I use the "node-upgrade" project

@@ -11,6 +11,7 @@ create_app_from_imagestream:
   action: goto_create_app_from_imagestream_page
   action: wait_form_loaded
   action: click_try_sample
+  action: click_try_sample
   action: choose_dc_type
   action:
     if_param:

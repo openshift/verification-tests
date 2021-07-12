@@ -1,0 +1,10 @@
+apiVersion: snapshot.storage.k8s.io/v1
+kind: VolumeSnapshotClass
+metadata:
+  name: csi-cinder-snapclass
+  annotations:
+    snapshot.storage.kubernetes.io/is-default-class: "false"
+driver: cinder.csi.openstack.org
+deletionPolicy: Delete
+parameters:
+  force-create: "true"

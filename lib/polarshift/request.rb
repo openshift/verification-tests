@@ -221,6 +221,10 @@ module BushSlicer
 
 
       def query_test_cases_smart(timeout: 360, **opts)
+        valid_params =[:project_id, :case_query, :template_id, :custom_fields]
+        invalids = opts.keys - valid_params
+        # need to remove extra Hash keys that is not part of the valid parameters for method query_test_cases
+        invalids.each { |i| opts.delete(i) }
         res = query_test_cases(**opts)
         if res[:exitstatus] == 202
           op_url = JSON.load(res[:response])["operation_result_url"]
