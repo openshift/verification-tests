@@ -6,7 +6,6 @@ Feature: cluster-logging-operator related test
   @admin
   @destructive
   @commonlogging
-  @flaky
   Scenario: ServiceMonitor Object for collector is deployed along with cluster logging
     Given I wait for the "fluentd" service_monitor to appear
     Given the expression should be true> service_monitor('fluentd').service_monitor_endpoint_spec(server_name: "fluentd.openshift-logging.svc").port == "metrics"
@@ -24,7 +23,6 @@ Feature: cluster-logging-operator related test
   # @case_id OCP-21907
   @admin
   @destructive
-  @flaky
   Scenario: Deploy elasticsearch-operator via OLM using CLI
     Given logging operators are installed successfully
 

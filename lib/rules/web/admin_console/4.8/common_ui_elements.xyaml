@@ -608,7 +608,7 @@ check_page_contains:
   element:
     selector:
       xpath: //div[contains(.,'<content>')]
-    timeout: 15
+    timeout: 30
 check_page_match:
   element:
     selector: &page_content

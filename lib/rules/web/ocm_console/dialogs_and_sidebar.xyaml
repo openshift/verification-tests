@@ -53,17 +53,17 @@ click_archive_button:
         selector:
             xpath: //button[@class='pf-c-button pf-m-primary' and text()='Archive cluster']
         op: click
-archive_succ_promt_message_displayed:
-    element: &archive_succ_promt_message
+archive_succ_prompt_message_displayed:
+    element: &archive_succ_prompt_message
         selector:
             xpath: //h4[contains(text(),'Cluster <cluster_name> has been archived')]
         timeout: 5
     action:
         if_param: wait_missing
-        ref: archive_succ_promt_message_missing
-archive_succ_promt_message_missing:
+        ref: archive_succ_prompt_message_missing
+archive_succ_prompt_message_missing:
     element:
-        <<: *archive_succ_promt_message
+        <<: *archive_succ_prompt_message
         missing: true
         timeout: 20
         
@@ -101,9 +101,9 @@ hover_unarchive_succ_prompt_message:
         <<: *unarchive_succ_prompt_message
         op: hover
 
-hover_archive_succ_promt_message:
+hover_archive_succ_prompt_message:
     element:
-        <<: *archive_succ_promt_message
+        <<: *archive_succ_prompt_message
         op: hover
 uninstall_succ_prompt_message_displayed:
     element: &uninstall_succ_prompt_message
@@ -264,7 +264,7 @@ close_customer_cloud_subscription_prompt_message:
 go_to_cluster_list_page:
     element:
         selector:
-            xpath: //a[contains(@href, '/openshift/') and text()='Clusters']
+            xpath: //a[contains(@href, '/openshift') and text()='Clusters']
         op: click
     action: cluster_list_page_loaded
 open_cluster_registration_dialog_from_cluster_list_page:
@@ -770,3 +770,99 @@ click_install_button_on_parameter_dialog:
         selector:
             xpath: //button[@type='submit' and text()="Install"]
         op: click
+wait_for_dialog_disappear:
+    element:
+        selector:
+            xpath: //div[@role='dialog']
+        missing: true
+        timeout: 5
+check_for_no_input_in_taints:
+    elements:
+        - selector:
+            xpath: //input[@id='taints[<row_num>].key' and value='']
+          missing: true
+        - selector:
+            xpath: //input[@id='taints[<row_num>].value' and value='']
+          missing: true
+check_for_taints_row:
+    elements:
+        - selector:
+            xpath: //input[@id='taints[<row_num>].key']
+        - selector:
+            xpath: //input[@id='taints[<row_num>].value']
+        - selector:
+            xpath: //select[@id='taints[<row_num>].effect']
+check_edit_taints_dialog:
+    action: click_edit_taints_in_dropdown
+    action: check_no_default_in_dropdown_when_editing_taints
+    action: check_for_taints_row
+    elements:
+        - selector:
+            xpath: //h4[text()='Your edits will only apply to new nodes']
+        - selector:
+            xpath: //span[text()='Edit taints']
+        - selector:
+            xpath: //button[text()='Add taint']
+        - selector:
+            xpath: //button[text()='Save' and @aria-disabled='true']
+        - selector:
+            xpath: //button[text()='Cancel']
+check_for_add_taint:
+    elements:
+        - selector:
+            xpath: //button[text()='Add taint']
+          op: click
+        - selector:
+            xpath: (//button[@class='pf-c-button pf-m-link reduxFormKeyValueList-removeBtn'])[2]
+    action: check_for_taints_row
+check_edit_labels_dialog:
+    action: click_edit_labels_in_dropdown
+    action: check_no_default_in_dropdown_when_editing_taints
+    elements:
+        - selector:
+            xpath: //h4[text()='Your edits will only apply to new nodes']
+        - selector:
+            xpath: //span[text()='Edit labels']
+        - selector:
+            xpath: //p[contains(text(),'Labels help you organize and select resources')]
+        - selector:
+            xpath: //input[@placeholder='Add a label']
+        - selector:
+            xpath: //button[text()='Save' and @aria-disabled='true']
+        - selector:
+            xpath: //button[text()='Cancel']
+input_labels_and_values:
+    elements:
+        - selector:
+            xpath: //input[@placeholder='Add a label']
+          op: send_keys <key_value_pair>
+        - selector:
+            xpath: //input[@placeholder='Add a label']
+          op: send_keys :enter
+check_labels_and_values_pair:
+    element:
+        selector:
+            xpath: //span[text()='<key_value_pair>']
+check_error_messages_when_duplicate_labels:
+    element:
+        selector:
+            xpath: //div[text()='Each label should have a unique key. <label_name> already exists.']
+check_error_messages_when_invalid_label_value_pair:
+    element:
+        selector:
+            xpath: //div[text()='Each label should be in the form of "key=value".']
+click_delete_label_button:
+    element:
+        selector:
+            xpath: //span[text()='<key_value_pair>']/../button[@aria-label='remove-label']
+        op: click
+check_labels_and_values_pair_disappeared:
+    element:
+        selector:
+            xpath: //span[text()='<key_value_pair>']
+        missing: true
+check_no_cache_for_labels_and_values_pair:
+    element:
+        selector:
+            xpath: //span[@class='pf-c-label pf-m-blue']
+        missing: true

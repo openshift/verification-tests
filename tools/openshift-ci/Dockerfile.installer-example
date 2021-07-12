@@ -4,7 +4,7 @@
 FROM	aosqe/cucushift-public
 
 LABEL vendor="Red Hat inc."
-LABEL maintainer="AOS QE Team"
+LABEL maintainer="OCP QE Team"
 
 USER root
 

@@ -73,7 +73,6 @@ Feature: ResourceQuata for storage
   # @author jhou@redhat.com
   # @case_id OCP-14382
   @admin
-  @smoke
   Scenario: Setting quota for a StorageClass
     Given I have a project
     Given admin clones storage class "sc-<%= project.name %>" from ":default" with:
