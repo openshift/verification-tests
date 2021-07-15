@@ -236,21 +236,82 @@ Given /^I run must-gather command$/ do
   raise "Failed to run must-gather command" unless @result[:success]
 end
 
+Given /^I run must-gather command$/ do
+  require 'json'
+  command = 'quay.io/openshift_sandboxed_containers/openshift-sandboxed-containers-must-gather:202106221012'
+  logger.info("Running must-gather command")
+  @result = env.admin.cli_exec(:oadm_must_gather, image:command, dest_dir:'/home/valiev/workdir/')
+  pods_json = ''
+  @error_message = {}
+  dc_output = @result[:stdout]
+  logger.info("\nMust-gather image is:#{command}")
+  if dc_output.to_s.include? "logs_crio"
+        logger.info("CRI-O logs are in must-gather bundle")
+        dc_output.each_line do |line|
+                if line.to_s.include? "logs_crio"
+                        logger.info(line)
+                end
+        end
+  end
+  if dc_output.to_s.include? "audit.log"
+        logger.info("Audit logs are in must-gather bundle")
+        dc_output.each_line do |line|
+                if line.to_s.include? "audit.log"
+                        logger.info(line)
+                end
+        end
+  end
+  raise "Failed to run must-gather command" unless @result[:success]
+end
+
 Given /^Pre-test checks$/ do
+  require 'json'
   kata_ns ||= "openshift-sandboxed-containers-operator"
   kata_config_name = "example-kataconfig"
   project(kata_ns)
   namespace_exists = namespace(kata_ns).exists?
   kataconfig_exists = kata_config('example-kataconfig').exists?
-  @result_pods = admin.cli_exec(:get, resource: "pods", all_namespaces: true, o: "jsonpath='{.items[?(@.spec.runtimeClassName==\"kata\")].metadata.name}'")
-  logger.info("==================================PRE TEST CHECKS=========================================")
-  if namespace_exists && kataconfig_exists && !@result_pods.to_s.strip.empty?
+  @result_pods = admin.cli_exec(:get, resource: "pods", n:kata_ns, o: "jsonpath='{.items[?(@.spec.runtimeClassName==\"kata\")].metadata.name}'")
+  @pods_json = @result_pods[:stdout]
+  @error_message = {}
+  node_cmd = "cat /proc/sys/crypto/fips_enabled"
+  @fips_status = node('valiev-kata-tests-lgb4r-worker-c-hlvzd.c.openshift-qe.internal').host.exec_admin(node_cmd)
+  if @pods_json != "''"
+        @pods_json = true
+  else
+      	@pods_json = false
+  end
+  logger.info("==================================RUNNING PRE-TEST CHECKS=========================================")
+  if namespace_exists
+        logger.info("Sandboxed operator namespace exists")
+  else
+      	@error_message['Namespace_message'] = "Sandboxed operator namespace doesn't exists"
+  end
+  if kataconfig_exists
+        logger.info("Sandboxed operator kataconfig exists")
+  else
+      	@error_message['Kataconfig_message'] = "Sandboxed operator kataconfig doesn't exists"
+end
+  if @pods_json
+        logger.info("At least 1 pod with kata runtime exists")
+  else
+      	@error_message['Kata pods_message'] = "No pods with kata runtime"
+  end
+  if @fips_status[:stdout].to_s.include? "0"
+        logger.info("FIPS is disabled")
+  else
+      	logger.info("FIPS is enabled")
+  end
+  if namespace_exists && kataconfig_exists && !@pods_json
         logger.info("Sandboxed operator installed")
-        logger.info("Kataconfig file exists")
-        logger.info("At least 1 pod is running with kata runtime")
         logger.info("Pre-test checks passed, test can start")
   else
-        logger.fatal("Pre test checks failed, can't start the test")
+      	logger.error("====================================PRE-TEST CHECKS FAILED===========================================\n")
+        @error_message.each do |name, message|
+                logger.error("#{name}:#{message}")
+        end
+	logger.error("Pre test checks failed, can't start the test\n")
+        break
   end
 end
 
