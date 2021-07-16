@@ -888,3 +888,4 @@ click_workload_details:
   params:
     button_text: Overview
   action: click_button_text
+check_resource_item_name: {}
