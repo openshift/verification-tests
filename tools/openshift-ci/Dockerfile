@@ -11,7 +11,7 @@ RUN set -x && \
     mv /tierN/ /verification-tests/tierN/ && \
     yum -y update && \
     SCL_BASE_PKGS="centos-release-scl scl-utils-build" && \
-    INSTALL_PKGS="rh-ruby27 rh-ruby27-ruby-devel bsdtar git openssh-clients" && \
+    INSTALL_PKGS="rh-ruby27 rh-ruby27-ruby-devel bsdtar git openssh-clients httpd-tools" && \
     yum install -y --enablerepo=centosplus --setopt=skip_missing_names_on_install=False $SCL_BASE_PKGS && \
     yum install -y --enablerepo=centosplus --setopt=skip_missing_names_on_install=False $INSTALL_PKGS && \
     GECKODRIVER_DOWNLOAD_URL="$(curl -sSL https://api.github.com/repos/mozilla/geckodriver/releases/latest | grep -Eo 'http.*linux64.tar.gz' | sed -E 's/.*(https[^"]*).*/\1/' | head -1)" && \
