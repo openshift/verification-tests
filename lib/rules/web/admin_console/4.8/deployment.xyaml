@@ -149,4 +149,38 @@ select_replica_count_and_selector:
   params:
     text: Replica count and selector
   action: click_checkbox_input_by_text
-
+check_and_click_metrics_tab:
+  elements:
+  - selector:
+      xpath: //*[@id="content-scrollable"]//a[contains(text(),'Metrics')]
+  params:
+    tab_name: Metrics
+  action: click_tab
+check_charts_on_metrics_tab:
+  elements:
+  - selector:
+      xpath: //h2[@class='co-dashboard-card__title' and text()='Memory usage']
+    timeout: 10
+  - selector:
+      xpath: //h2[@class='co-dashboard-card__title' and text()='CPU usage']
+    timeout: 10
+  - selector:
+      xpath: //h2[@class='co-dashboard-card__title' and text()='Filesystem']
+    timeout: 10
+  - selector:
+      xpath: //h2[@class='co-dashboard-card__title' and text()='Network in']
+    timeout: 10
+  - selector:
+      xpath: //h2[@class='co-dashboard-card__title' and text()='Network out']
+    timeout: 10
+check_charts_on_build_metrics_tab:
+  elements:
+  - selector:
+      xpath: //h2[@class='co-dashboard-card__title' and text()='Memory usage']
+    timeout: 10
+  - selector:
+      xpath: //h2[@class='co-dashboard-card__title' and text()='CPU usage']
+    timeout: 10
+  - selector:
+      xpath: //h2[@class='co-dashboard-card__title' and text()='Filesystem']
+    timeout: 10
