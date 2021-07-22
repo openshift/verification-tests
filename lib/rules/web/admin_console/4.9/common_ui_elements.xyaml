@@ -1445,3 +1445,7 @@ check_owner_reference:
     resource_name: <owner_resource_name>
     resource_link: /k8s/ns/<owner_resource_namespace>/<owner_resource_group>~<owner_resource_version>~<owner_resource_kind>/<owner_resource_name>
   action: check_resource_item
+click_metrics_tab
+  params:
+    tab_name: Metrics
+  action: click_tab
