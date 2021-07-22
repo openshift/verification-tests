@@ -282,6 +282,7 @@ Feature: SDN related networking scenarios
     And evaluation of `pod(1).ip_url` is stored in the :pod2_ip clipboard
     And evaluation of `pod(2).ip_url` is stored in the :pod3_ip clipboard
     And evaluation of `pod(3).ip_url` is stored in the :pod4_ip clipboard
+    And evaluation of `service("test-service").url` is stored in the :svcurl clipboard
     And I register clean-up steps:
     """
     Given I ensure "test-rc" replicationcontroller is deleted
@@ -305,6 +306,13 @@ Feature: SDN related networking scenarios
     Then the step should succeed
     And the output should contain "Hello OpenShift"
 
+    #add checkpopint from work to access the service
+    Given I select a random node's host
+    And I run commands on the host:
+      | curl --connect-timeout 5 <%= cb.svcurl %> |
+    Then the step should succeed
+    And the output should contain "Hello OpenShift"
+   
   # @author anusaxen@redhat.com
   # @case_id OCP-25787
   @admin
