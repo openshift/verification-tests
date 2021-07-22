@@ -1,0 +1,45 @@
+check_software_info:
+  elements:
+  - selector:
+      xpath: //*[contains(.,'Software Info')]/.[contains(.,'Kubernetes') and contains(.,'OpenShift Container Platform')]
+check_software_info_versions:
+  action: check_software_info
+  elements:
+  - selector:
+      xpath: //div[contains(.,'Software Info') and contains(., 'Kubernetes') and contains(., '<k8s_version>')]
+  - selector:
+      xpath: //div[contains(.,'Software Info') and contains(., 'OpenShift Container Platform') and contains(., '<openshift_version>')]
+check_additional_support:
+  elements:
+  - selector:
+      xpath: //*[contains(.,'Additional Support')]
+  - selector:
+      xpath: //*[@href='https://learn.openshift.com' and contains(.,'Interactive Learning Portal' )]
+check_getting_started:
+  elements:
+  - selector:
+      xpath: //h2[contains(.,'Getting Started')]
+  - selector:
+      xpath: //button[contains(.,'Create a new project')]
+check_dim_resource_list:
+  scripts:
+  - command: |
+      var resource_info = "<resource_singular>".replace(/\s*/g,"");
+      var msg_text = "No "+ resource_info + "s found";
+      return document.querySelector("div[data-test='empty-message']").textContent == msg_text;
+    expect_result: true
+check_user_starter_guide_message_when_no_projects:
+  elements:
+  - selector:
+      visible_text: !ruby/regexp /Create a project/i
+check_get_started_message_when_no_resources:
+  elements:
+  - selector:
+      xpath: //h3[contains(., 'No resources found')]
+    timeout: 40
+check_message_and_doc_for_new_user:
+  elements:
+  - selector:
+      xpath: //p[contains(., 'To learn more, visit the OpenShift')]/a[contains(@href, 'docs.openshift.com/container-platform')]
+  - selector:
+      xpath: //a[contains(@href, '/command-line-tools') and contains(., 'command-line tools')]
