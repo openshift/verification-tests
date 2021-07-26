@@ -269,8 +269,7 @@ Feature: MachineHealthCheck Test Scenarios
   # @case_id OCP-33714
   @admin
   Scenario: Leverage OpenAPI validation within MHC
-    Given I have an IPI deployment
-    And I switch to cluster admin pseudo user
+    Given I switch to cluster admin pseudo user
     Then I use the "openshift-machine-api" project
 
     Given I obtain test data file "cloud/mhc/mhc_validations.yaml"
