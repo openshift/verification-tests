@@ -92,3 +92,19 @@ check_event_is_streaming:
   elements:
   - selector:
       xpath: //span[contains(.,'Streaming events')]
+check_logs_not_wrapped:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'log-window__lines--wrap')]
+    missing: true
+check_logs_wrapped:
+  elements:
+  - selector:
+      xpath: //div[contains(@class,'log-window__lines--wrap')]
+toggle_log_wraps:
+  element:
+    selector:
+      xpath: //input[@id='wrapLogLines']
+    op: click
+
+
