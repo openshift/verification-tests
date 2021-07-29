@@ -170,6 +170,7 @@ module BushSlicer
         c.syntax = "#{$0} get-run [options]"
         c.description = "retrieve a test run Polarion\n\t" \
           "e.g. tools/polarshift.rb get-run my_run_id"
+        c.option('-w', "--with_cases VALUE", "set 'with_case' filter with value; valid values are automation|full")
         c.option('-o', "--output FILE", "Write query result to file in JSON format")
         c.action do |args, options|
           setup_global_opts(options)
@@ -179,7 +180,11 @@ module BushSlicer
           end
 
           test_run_id = args.first
-          query_result = polarshift.get_run_smart(project, test_run_id)
+          if options.with_cases
+            query_result = polarshift.get_run_smart(project, test_run_id, with_cases: options.with_cases)
+          else
+            query_result = polarshift.get_run_smart(project, test_run_id)
+          end
           result = query_result
           pp(result)
           if options.output

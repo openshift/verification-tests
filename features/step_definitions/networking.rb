@@ -1330,3 +1330,22 @@ Given /^I save multus pod on master node to the#{OPT_SYM} clipboard$/ do | cb_na
   }.first.name
   logger.info "The multus pod is stored to the #{cb[cb_name]} clipboard."
 end
+
+Given /^I disable multicast for the "(.+?)" namespace$/ do | project_name |
+  ensure_admin_tagged
+  _admin = admin
+  @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
+  raise "Unable to find corresponding networkType pod name" unless @result[:success]
+  if @result[:response] == "OpenShiftSDN"
+    annotation = 'netnamespace.network.openshift.io/multicast-enabled-'
+    space = 'netnamespace'
+  else
+    annotation = 'k8s.ovn.org/multicast-enabled-'
+    space = 'namespace'
+  end
+  @result = admin.cli_exec(:annotate, resource: space, resourcename: project_name, keyval: annotation)
+  unless @result[:success]
+    raise "Failed to apply the default deny annotation to specified namespace."
+  end
+  logger.info "The multicast is enable in the #{project_name} project"
+end

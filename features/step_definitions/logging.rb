@@ -340,19 +340,27 @@ Given /^I delete the clusterlogging instance$/ do
   if cluster_logging("instance").exists?
     @result = admin.cli_exec(:delete, object_type: 'clusterlogging', object_name_or_id: 'instance', n: 'openshift-logging')
     raise "Unable to delete instance" unless @result[:success]
-  end
-  step %Q/I wait for the resource "deployment" named "kibana" to disappear/
-  step %Q/I wait for the resource "elasticsearch" named "elasticsearch" to disappear/
-  step %Q/I wait for the resource "cronjob" named "curator" to disappear/
-  step %Q/I wait for the resource "daemonset" named "fluentd" to disappear/
-  step %Q/all existing pods die with labels:/, table(%{
-    | component=elasticsearch |
-  })
-  step %Q/all existing pods die with labels:/, table(%{
-    | component=kibana |
-  })
-  if BushSlicer::PersistentVolumeClaim.list(user: user, project: project).count > 0
-    admin.cli_exec(:delete, object_type: 'pvc', l: 'logging-cluster=elasticsearch', n: 'openshift-logging')
+    unless cluster_logging("instance").log_store_spec(cached: true).nil?
+      step %Q/I wait for the resource "elasticsearch" named "elasticsearch" to disappear/
+      success = wait_for(180, interval: 10) {
+        res = admin.cli_exec(:get, resource: "deploy", l: "cluster-name=elasticsearch", n: "openshift-logging")
+        case res[:response]
+        # the resource has terminated which means we are done waiting.
+        when /No resources found/
+          break true
+        end
+      }
+      raise "the ES deployment did not terminate" unless success
+      if BushSlicer::PersistentVolumeClaim.list(user: user, project: project).count > 0
+        admin.cli_exec(:delete, object_type: 'pvc', l: 'logging-cluster=elasticsearch', n: 'openshift-logging')
+      end
+    end
+    unless  cluster_logging("instance").visualization_spec(cached: true).nil?
+      step %Q/I wait for the resource "deployment" named "kibana" to disappear/
+    end
+    unless cluster_logging('instance').collection_spec(cached: true).nil?
+      step %Q/I wait for the resource "daemonset" named "fluentd" to disappear/
+    end
   end
 end
 
@@ -376,12 +384,16 @@ Given /^(cluster-logging|elasticsearch-operator) channel name is stored in the#{
     case version
     when '4.1'
       cb[cb_name] = "preview"
+    when '4.2','4.3','4.4','4.5','4.6'
+      cb[cb_name] = version
     when '4.7'
       cb[cb_name] = "5.0"
     when '4.8'
       cb[cb_name] = "stable-5.1"
+    when '4.9'
+      cb[cb_name] = "stable-5.2"
     else
-      cb[cb_name] = version
+      cb[cb_name] = "stable"
     end
   else
     cb[cb_name] = envs[:channel]
