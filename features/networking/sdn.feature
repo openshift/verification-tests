@@ -454,3 +454,18 @@ Feature: SDN related networking scenarios
     And the output should contain:
       | tx-udp_tnl-segmentation: off      |
       | tx-udp_tnl-csum-segmentation: off |
+
+  # @author zzhao@redhat.com
+  # @case_id OCP-43146
+  @admin
+  Scenario: Disable conntrack for vxlan traffic
+    Given the env is using "OpenShiftSDN" networkType
+    Given I select a random node's host
+    And I run commands on the host:
+      | iptables -t raw -S |
+    Then the step should succeed
+    And the output should contain:
+      | -N OPENSHIFT-NOTRACK |
+      | -A PREROUTING -m comment --comment "disable conntrack for vxlan" -j OPENSHIFT-NOTRACK |
+      | -A OUTPUT -m comment --comment "disable conntrack for vxlan" -j OPENSHIFT-NOTRACK |
+      | -A OPENSHIFT-NOTRACK -p udp -m udp --dport 4789 -j NOTRACK |
