@@ -1,0 +1,41 @@
+kind: Template
+apiVersion: template.openshift.io/v1
+metadata:
+  name: clusterlogforwarder-template
+objects:
+- apiVersion: logging.openshift.io/v1
+  kind: ClusterLogForwarder
+  metadata:
+    name: instance
+  spec:
+    inputs:
+    - application:
+        namespaces:
+        - ${DATA_PROJECT}
+      name: input-qa
+    outputs:
+    - elasticsearch:
+        structuredTypeKey: ${STRUCTURED_TYPE_KEY}
+        structuredTypeName: ${STRUCTURED_TYPE_NAME}
+      name: custom-es-a
+      secret:
+        name: ${SECRET_NAME}
+      type: elasticsearch
+      url: ${URL}
+    pipelines:
+    - inputRefs:
+      - input-qa
+      name: pipeline-a
+      outputRefs:
+      - custom-es-a
+      parse: json
+parameters:
+- name: DATA_PROJECT
+- name: URL
+  value: "https://elasticsearch.openshift-logging.svc:9200"
+- name: SECRET_NAME
+  value: fluentd
+- name: STRUCTURED_TYPE_KEY
+  value: kubernetes.labels.test
+- name: STRUCTURED_TYPE_NAME
+  value: qa-index-name

@@ -1,0 +1,33 @@
+kind: Template
+apiVersion: template.openshift.io/v1
+metadata:
+  name: clusterlogforwarder-template
+objects:
+- apiVersion: logging.openshift.io/v1
+  kind: ClusterLogForwarder
+  metadata:
+    name: instance
+  spec:
+    inputs:
+    - application:
+        namespaces:
+        - ${DATA_PROJECT}
+      name: input-qa
+    outputs:
+    - elasticsearch:
+        structuredTypeKey: kubernetes.namespace_name
+        structuredTypeName: app-fall-in-index
+      name: external-es
+      type: elasticsearch
+      url: ${URL}
+    pipelines:
+    - inputRefs:
+      - input-qa
+      name: pipeline-a
+      outputRefs:
+      - external-es
+      parse: json
+parameters:
+- name: DATA_PROJECT
+- name: URL
+  value: "https://elasticsearch.openshift-logging.svc:9200"
