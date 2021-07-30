@@ -73,8 +73,6 @@ Feature: Logging smoke test case
     And I close the current browser
     # ES Metrics
     Given I wait for the "monitor-elasticsearch-cluster" service_monitor to appear
-    And the expression should be true> service_monitor('monitor-elasticsearch-cluster').service_monitor_endpoint_spec(server_name: "elasticsearch-metrics.openshift-logging.svc").port == "elasticsearch"
-    And the expression should be true> service_monitor('monitor-elasticsearch-cluster').service_monitor_endpoint_spec(server_name: "elasticsearch-metrics.openshift-logging.svc").path == "/_prometheus/metrics"
     Given I wait up to 360 seconds for the steps to pass:
     """
     When I perform the GET prometheus rest client with:
@@ -86,8 +84,7 @@ Feature: Logging smoke test case
     # Fluentd Metrics
     Given I use the "openshift-logging" project
     And I wait for the "fluentd" service_monitor to appear
-    Given the expression should be true> service_monitor('fluentd').service_monitor_endpoint_spec(server_name: "fluentd.openshift-logging.svc").port == "metrics"
-    And the expression should be true> service_monitor('fluentd').service_monitor_endpoint_spec(server_name: "fluentd.openshift-logging.svc").path == "/metrics"
+    And the expression should be true> service_monitor('fluentd').service_monitor_endpoint_spec(port: "metrics").path == "/metrics"
     Given I wait up to 360 seconds for the steps to pass:
     """
     When I perform the GET prometheus rest client with:

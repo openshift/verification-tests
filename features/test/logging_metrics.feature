@@ -20,15 +20,3 @@ Feature: test logging and metrics related steps
     And elasticsearch-operator channel name is stored in the :eo_channel clipboard
     Given elasticsearch-operator catalog source name is stored in the :eo_catsrc clipboard
     Given cluster-logging catalog source name is stored in the :clo_catsrc clipboard
-
-  @admin
-  Scenario: test logging envs
-    Given I switch to the first user
-    And I have a project
-    And evaluation of `project.name` is stored in the :es_proj clipboard
-    Given external elasticsearch server is deployed with:
-      | version               | 6.8               |
-      | scheme                | http              |
-      | transport_ssl_enabled | false             |
-      | project_name          | <%= cb.es_proj %> |
-    And I pry
