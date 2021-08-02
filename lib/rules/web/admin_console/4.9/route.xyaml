@@ -154,7 +154,7 @@ upload_ca_certificate_file:
 upload_destination_ca_crt_file:
   elements:
   - selector:
-      xpath: //input[@aria-describedby="destination-ca-certificate-help"]/following-sibling::span[contains(.,"Browse")]//input
+      xpath: //span[contains(.,"Browse")]//input[@id='destination-ca-certificate']
     visible: false
     type: filefield
     op: set <destination_ca_certificate>
