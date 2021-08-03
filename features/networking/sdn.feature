@@ -44,7 +44,7 @@ Feature: SDN related networking scenarios
     Given I select a random node's host
     And the node iptables config is checked
     And the step succeeded
-    And the node service is restarted on the host after scenario
+    And I restart the network components on the node after scenario
     And I register clean-up steps:
     """
     When the node iptables config is checked
@@ -312,7 +312,7 @@ Feature: SDN related networking scenarios
       | curl --connect-timeout 5 <%= cb.svcurl %> |
     Then the step should succeed
     And the output should contain "Hello OpenShift"
-   
+
   # @author anusaxen@redhat.com
   # @case_id OCP-25787
   @admin

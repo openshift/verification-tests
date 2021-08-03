@@ -148,7 +148,7 @@ Given /^the#{OPT_QUOTED} node iptables config is checked$/ do |node_name|
     raise "#{plugin_type} != openshift-ovs-networkpolicy.  This is unsupported?"
   end
 
-  puts "OpenShift version >= 3.9 and uses networkpolicy plugin."
+  logger.info "OpenShift version >= 3.9 and uses networkpolicy plugin."
   filter_matches = [
     'INPUT -m comment --comment "Ensure that non-local NodePort traffic can flow" -j KUBE-NODEPORT-NON-LOCAL',
     'INPUT -m conntrack --ctstate NEW -m comment --comment "kubernetes externally-visible service portals" -j KUBE-EXTERNAL-SERVICES',
