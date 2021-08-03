@@ -14,73 +14,73 @@ Feature: Add, update remove volume to rc/dc and --overwrite option
       | name         | mydb                       |
     Then the step should succeed
     And a pod becomes ready with labels:
-      | deploymentconfig=mydb |
+      | deployment=mydb |
     # Check oc volume command
     When I run the :set_volume client command with:
-      | resource   | dc/mydb  |
-      | action     | --add    |
-      | type       | emptyDir |
-      | mount-path | /opt1    |
-      | name       | v1       |
+      | resource   | deployment/mydb |
+      | action     | --add           |
+      | type       | emptyDir        |
+      | mount-path | /opt1           |
+      | name       | v1              |
     Then the step should succeed
     And I wait for the resource "pod" named "<%= pod.name %>" to disappear
     And a pod becomes ready with labels:
-      | deploymentconfig=mydb |
+      | deployment=mydb |
     When I execute on the pod:
       | grep | opt1 | /proc/mounts |
     Then the step should succeed
     # remove pvc from dc
     When I run the :set_volume client command with:
-      | resource | dc/mydb  |
-      | action   | --remove |
-      | name     | v1       |
+      | resource | deployment/mydb  |
+      | action   | --remove         |
+      | name     | v1               |
     Then the step should succeed
     And I wait for the resource "pod" named "<%= pod.name %>" to disappear
     And a pod becomes ready with labels:
-      | deploymentconfig=mydb |
-    When I get project dc named "mydb" as YAML
+      | deployment=mydb |
+    When I get project deployment named "mydb" as YAML
     Then the step should succeed
     And the output should not contain:
       | name: v1 |
     # Check set volume command
     When I run the :set_volume client command with:
-      | resource      | dc       |
-      | resource_name | mydb     |
-      | action        | --add    |
-      | name          | v1       |
-      | type          | emptyDir |
-      | mount-path    | /opt1    |
+      | resource      | deployment |
+      | resource_name | mydb       |
+      | action        | --add      |
+      | name          | v1         |
+      | type          | emptyDir   |
+      | mount-path    | /opt1      |
     Then the step should succeed
     And I wait for the resource "pod" named "<%= pod.name %>" to disappear
     And a pod becomes ready with labels:
-      | deploymentconfig=mydb |
+      | deployment=mydb |
     When I execute on the pod:
       | grep | opt1 | /proc/mounts |
     Then the step should succeed
     Then I run the :set_volume client command with:
-      | resource      | dc       |
-      | resource_name | mydb     |
-      | action        | --add    |
-      | name          | v1       |
-      | type          | emptyDir |
-      | mount-path    | /opt2    |
-      | overwrite     |          |
+      | resource      | deployment |
+      | resource_name | mydb       |
+      | action        | --add      |
+      | name          | v1         |
+      | type          | emptyDir   |
+      | mount-path    | /opt2      |
+      | overwrite     |            |
     Then the step should succeed
     And I wait for the resource "pod" named "<%= pod.name %>" to disappear
     And a pod becomes ready with labels:
-      | deploymentconfig=mydb |
+      | deployment=mydb |
     When I execute on the pod:
       | grep | opt2 | /proc/mounts |
     Then the step should succeed
     When I run the :set_volume client command with:
-      | resource | dc/mydb  |
-      | action   | --remove |
-      | name     | v1       |
+      | resource | deployment/mydb |
+      | action   | --remove        |
+      | name     | v1              |
     Then the step should succeed
     And I wait for the resource "pod" named "<%= pod.name %>" to disappear
     And a pod becomes ready with labels:
-      | deploymentconfig=mydb |
-    When I get project dc named "mydb" as YAML
+      | deployment=mydb |
+    When I get project deployment named "mydb" as YAML
     Then the step should succeed
     And the output should not contain:
       | name: v1 |
