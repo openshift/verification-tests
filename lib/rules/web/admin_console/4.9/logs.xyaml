@@ -106,5 +106,14 @@ toggle_log_wraps:
     selector:
       xpath: //input[@id='wrapLogLines']
     op: click
+check_logs_history_not_present:
+  elements:
+  - selector:
+      xpath: //button[@disabled]//span[text()='Current log']
+  - selector:
+      xpath: //div[@class='pf-c-select']
+    op: hover
+  - selector:
+      xpath: //div[@class='pf-c-tooltip__content' and contains(text(),'<message>')]
 
 
