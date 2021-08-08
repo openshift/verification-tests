@@ -3,6 +3,7 @@ Feature: kata data collect tests
   # @case_id OCP-42162
   @admin
   @destructive
+  @kata
 
   Scenario: Must-gather command works with a specific image
     Given Pre-test checks
