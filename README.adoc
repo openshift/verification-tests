@@ -1,4 +1,4 @@
-= Cucumber based blackbox testing framework for OpenShift
+= Cucumber based blackbox testing framework for OpenShift and Kata
 
 == Getting started
 
