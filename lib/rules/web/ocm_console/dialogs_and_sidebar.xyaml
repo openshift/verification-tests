@@ -855,6 +855,7 @@ input_addon_install_parameter:
             xpath: //input[@name='parameters.<parameter_key>']
         op: send_keys <parameter_value>
 
+
 click_install_button_on_parameter_dialog:
     element:
         selector:
