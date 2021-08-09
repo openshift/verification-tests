@@ -31,7 +31,7 @@ search_resource_kind_only:
 search_resource_kind_and_api_group:
   elements:
   - selector:
-      xpath: //span[text()='<resource_kind>']/following-sibling::span[contains(., '<resource_group>')]
+      xpath: //span[text()='<resource_kind>']/following-sibling::div[contains(., '<resource_group>')]
     op: click
     timeout: 15
   - selector:
