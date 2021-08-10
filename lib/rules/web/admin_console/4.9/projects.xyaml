@@ -57,6 +57,8 @@ create_project_from_get_started_instru:
   action: click_button
   action: set_project_name
   action: submit_changes
+  action: navigate_to_admin_console
+  action: goto_one_project_page
 nagivate_to_project_resources_page:
   params:
     tab_name: Workloads

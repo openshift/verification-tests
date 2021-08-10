@@ -19,14 +19,14 @@ module BushSlicer
       return specs
     end
 
-    # return the spec for a specific endpoint identified by the param server_name
-    def service_monitor_endpoint_spec(user: nil, server_name:, cached: true, quiet: false)
+    # return the spec for a specific endpoint identified by the param port
+    def service_monitor_endpoint_spec(user: nil, port:, cached: true, quiet: false)
       specs = service_monitor_endpoints_spec(user: user, cached: cached, quiet: quiet)
       target_spec = {}
       specs.each do | spec |
-        target_spec = spec if spec.server_name == server_name
+        target_spec = spec if spec.port == port
       end
-      raise "No endpoint spec found matching '#{server_name}'!" if target_spec.is_a? Hash
+      raise "No endpoint spec found matching '#{port}'!" if target_spec.is_a? Hash
       return target_spec
     end
 

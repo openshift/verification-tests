@@ -63,11 +63,7 @@ click_metrics_prometheus_menu:
     text: Metrics
     link_url: /monitoring/query-browser?query0=
   action: click_link_with_text
-check_metrics_prometheus_url:
-  params:
-    text: Prometheus UI
-    link_url: https://<prometheus_ui_route>
-  action: check_link_and_text
+check_metrics_prometheus_url: {}
 check_dashboards_grafana_menu_url: {}
 check_mega_menu:
   params:

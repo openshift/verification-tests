@@ -8,8 +8,6 @@ Feature: elasticsearch-operator related tests
   @commonlogging
   Scenario: ServiceMonitor Object for Elasticsearch is deployed along with the Elasticsearch cluster
     Given I wait for the "monitor-elasticsearch-cluster" service_monitor to appear
-    And the expression should be true> service_monitor('monitor-elasticsearch-cluster').service_monitor_endpoint_spec(server_name: "elasticsearch-metrics.openshift-logging.svc").port == "elasticsearch"
-    And the expression should be true> service_monitor('monitor-elasticsearch-cluster').service_monitor_endpoint_spec(server_name: "elasticsearch-metrics.openshift-logging.svc").path == "/_prometheus/metrics"
     When I perform the HTTP request on the ES pod with labels "es-node-master=true":
       | relative_url | _prometheus/metrics |
       | op           | GET                 |

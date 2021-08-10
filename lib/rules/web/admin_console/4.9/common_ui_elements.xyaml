@@ -3,6 +3,10 @@ expand_primary_menu:
   - selector:
       xpath: //li[contains(@class, 'pf-m-expandable') and contains(@class,'pf-c-nav__item')]/*[contains(@class,'pf-c-nav__link') and contains(text(), '<primary_menu>')]
     op: click
+expand_monitoring_menu:
+  params:
+    primary_menu: Observe
+  action: expand_primary_menu
 create_resource_by_default_yaml:
   elements:
   - selector:
