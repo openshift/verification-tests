@@ -1,4 +1,4 @@
-Feature: kata data collect tests and scenarios
+Feature: kata data collect tests
   # @author valiev@redhat.com
   # @case_id OCP-42162
   @admin
