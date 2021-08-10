@@ -224,6 +224,7 @@ Feature: apiserver and auth related upgrade check
       | system:serviceaccount:test-scc:test-scc |
 
   # @author scheng@redhat.com
+  @admin
   @upgrade-prepare
   @users=upuser1,upuser2
   Scenario: Upgrade action will cause re-generation of certificates for headless services to include the wildcard subjects - prepare
@@ -236,47 +237,40 @@ Feature: apiserver and auth related upgrade check
       | f | headless-services.yaml |
     Then the step should succeed
     Given I use the "service-ca-upgrade" project
-    When I run the :run client command with:
-      | name    | openssl                          |
-      | image   | quay.io/openshifttest/openssl:oc |
-      | env     | POD_NAMESPACE=service-ca-upgrade |
-      | command | true                             |
-      | cmd     | sleep                            |
-      | cmd     | 360                              |
+    And I run the :extract client command with:
+      | resource | secret/test-serving-cert |
+      | confirm  | true                     |
     Then the step should succeed
-    Given a pod becomes ready with labels:
-      | run=openssl |
-    And I give project admin role to the default service account
-    Given I execute on the pod:
-      | bash                                                                                                                        |
-      | -c                                                                                                                          |
-      | oc extract secret/test-serving-cert -n service-ca-upgrade --to=/tmp --confirm && openssl x509 -in /tmp/tls.crt -noout -text |
+    And the output should contain "tls.crt"
+
+    When I store the ready and schedulable masters in the clipboard
+    And I use the "<%= cb.nodes[0].name %>" node
+    And I run commands on the host:
+      | openssl x509 -noout -text -in <(echo '<%= File.read("tls.crt") %>') |
     Then the step should succeed
     And the output should contain:
       | DNS:foo.service-ca-upgrade.svc, DNS:foo.service-ca-upgrade.svc.cluster.local |
 
   # @author scheng@redhat.com
   # @case_id OCP-41198
+  @admin
   @upgrade-check
   @users=upuser1,upuser2
   Scenario: Upgrade action will cause re-generation of certificates for headless services to include the wildcard subjects
     Given the master version >= "4.8"
+    Given I switch to the first user
     Given I use the "service-ca-upgrade" project
-    When I run the :run client command with:
-      | name    | openssl                          |
-      | image   | quay.io/openshifttest/openssl:oc |
-      | env     | POD_NAMESPACE=service-ca-upgrade |
-      | command | true                             |
-      | cmd     | sleep                            |
-      | cmd     | 360                              |
+    And I run the :extract client command with:
+      | resource | secret/test-serving-cert |
+      | confirm  | true                     |
     Then the step should succeed
-    Given a pod becomes ready with labels:
-      | run=openssl |
-    And I give project admin role to the default service account
-    Given I execute on the pod:
-      | bash                                                                                                                        |
-      | -c                                                                                                                          |
-      | oc extract secret/test-serving-cert -n service-ca-upgrade --to=/tmp --confirm && openssl x509 -in /tmp/tls.crt -noout -text |
+    And the output should contain "tls.crt"
+
+    When I store the ready and schedulable masters in the clipboard
+    And I use the "<%= cb.nodes[0].name %>" node
+    And I run commands on the host:
+      | openssl x509 -noout -text -in <(echo '<%= File.read("tls.crt") %>') |
     Then the step should succeed
     And the output should contain:
-      | DNS:*.foo.service-ca-upgrade.svc, DNS:*.foo.service-ca-upgrade.svc.cluster.local, DNS:foo.service-ca-upgrade.svc, DNS:foo.service-ca-upgrade.svc.cluster.local |
+      | DNS:foo.service-ca-upgrade.svc, DNS:foo.service-ca-upgrade.svc.cluster.local     |
+      | DNS:*.foo.service-ca-upgrade.svc, DNS:*.foo.service-ca-upgrade.svc.cluster.local |
