@@ -46,6 +46,9 @@ goto_one_build_page:
 goto_one_build_environment_page:
   url: k8s/ns/<project_name>/builds/<build_name>/environment
   action: wait_box_loaded
+goto_one_build_log_page:
+  url: k8s/ns/<project_name>/builds/<build_name>/logs
+  action: wait_log_window_loaded
 
 goto_pipelines_list_page:
   url: pipelines/ns/<project_name>

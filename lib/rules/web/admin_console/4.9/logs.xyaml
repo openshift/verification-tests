@@ -106,5 +106,29 @@ toggle_log_wraps:
     selector:
       xpath: //input[@id='wrapLogLines']
     op: click
-
-
+check_logs_history_not_present:
+  elements:
+  - selector:
+      xpath: //button[@disabled]//span[text()='Current log']
+  - selector:
+      xpath: //div[@class='pf-c-select']
+    op: hover
+  - selector:
+      xpath: //div[@class='pf-c-tooltip__content' and contains(text(),'Only the current log is available')]
+check_logs_history_is_present:
+  elements:
+  - selector:
+      xpath: //button//span[text()='Current log']
+  - selector:
+      xpath: //div[@class='pf-c-select']
+    op: click
+  - selector:
+      xpath: //button[@class='pf-c-select__menu-item pf-m-selected' and contains(text(),'Current log')]
+  - selector:
+      xpath: //button[@class='pf-c-select__menu-item' and contains(text(),'Previous log')]
+    op: click
+check_logs_option_not_present:
+  elements:
+  - selector:
+      xpath: //button//span[text()='Current log']
+    missing: true
