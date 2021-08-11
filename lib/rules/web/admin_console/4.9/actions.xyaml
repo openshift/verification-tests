@@ -18,7 +18,7 @@ choose_action_item_from_list:
   - selector:
       xpath: //*[@data-test-id="action-items"]
   - selector:
-      xpath: //button[@data-test-action='<item>' and not(@disabled)]
+      xpath: //button[.='<item>' and not(@disabled)]
     op: click
 edit_pod_count_action:
   params:
