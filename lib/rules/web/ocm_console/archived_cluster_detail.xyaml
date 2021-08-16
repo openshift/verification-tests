@@ -9,9 +9,7 @@ archived_cluster_detail_page_loaded:
         - selector:
             xpath: //button[@aria-controls='overviewTabContent' and contains(.,'Overview')]
         - selector:
-            xpath: //h2[text()='Resource usage']
-        - selector:
-            xpath: //p[text()='The cluster has been archived and does not have any metrics data.']
+            xpath: //button[@aria-controls='supportTabContent' and contains(.,'Support')]
         - selector:
             xpath: //h2[text()='Details']
         - selector:

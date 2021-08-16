@@ -1,7 +1,6 @@
 Feature: ONLY ONLINE STI related scripts in this file
 
   # @author etrott@redhat.com
-  @smoke
   Scenario Outline: Private Repository can be used to providing dependency caching for STI builds
     Given I have a project
     Given I perform the :create_app_from_image web console action with:

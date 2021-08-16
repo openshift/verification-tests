@@ -7,10 +7,7 @@ metadata:
 spec:
   containers:
     - name: sctpserver
-      image: quay.io/openshifttest/ubi@sha256:cd014e94a9a2af4946fc1697be604feb97313a3ceb5b4d821253fcdb6b6159ee
-      command: ["/bin/bash", "-c"]
-      args:
-        ["dnf install -y nc && trap 'kill $(jobs -p); exit 0' TERM ; sleep inf & wait"]
+      image: quay.io/openshifttest/centos-network@sha256:48da37205f9b43424e0983d4c5e7e07f77b7ba1504bbe35e2f264c75dcb4cd15
       ports:
         - containerPort: 30102
           name: sctpserver

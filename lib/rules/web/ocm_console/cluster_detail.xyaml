@@ -99,7 +99,7 @@ check_new_name_in_cluster_detail:
 wait_cluster_status_on_detail_page:
     element:
         selector:
-            xpath: //div[@class='pf-l-grid']//span[text()='Status']/../../dd/div[text()='<cluster_status>']
+            xpath: //dt/span[text()='Status']/../../dd/div[text()='<cluster_status>']
         timeout: <wait_time>
 go_to_edit_node_count_dialog_on_cluster_detail_page:
   action: expand_actions_on_cluster_detail_page
@@ -702,3 +702,21 @@ subscription_settings_error_message_loaded:
         selector:
             xpath: //div[contains(., '<error_message>')]
         timeout: 30
+wait_cluster_addon_uninstallation_on_detail_page:
+    element:
+        selector:
+            xpath: //div[@class='pf-l-grid pf-m-gutter']//span[text()='Add-on uninstallation']/../../dd/div[text()='<cluster_status>']
+        timeout: <wait_time>
+wait_cluster_uninstallation_on_detail_page:
+    element:
+        selector:
+            xpath: //div[@class='pf-l-grid pf-m-gutter']//span[text()='Cluster uninstallation']/../../dd/div[text()='<cluster_status>']
+        timeout: <wait_time>
+wait_for_uninstallation_to_finish:
+    elements:
+        - selector:
+            xpath: //h1[text()='Clusters']
+          timeout: 2000
+        - selector:
+            xpath: //button[contains(.,'Name')]
+          timeout: 2000

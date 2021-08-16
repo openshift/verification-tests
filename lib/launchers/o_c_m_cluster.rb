@@ -161,7 +161,7 @@ module BushSlicer
     def download_ocm_cli
       url = ENV['OCM_CLI_URL']
       unless url
-        url_prefix = ENV['OCM_CLI_URL_PREFIX'] || 'https://github.com/openshift-online/ocm-cli/releases/download/v0.1.46'
+        url_prefix = ENV['OCM_CLI_URL_PREFIX'] || 'https://github.com/openshift-online/ocm-cli/releases/download/v0.1.54'
         if OS.mac?
           url = "#{url_prefix}/ocm-darwin-amd64"
         elsif OS.linux?

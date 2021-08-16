@@ -1,6 +1,7 @@
 go_to_overview_tab:
     element:
         xpath: //button[@class='pf-c-tabs__button' and text()='Overview']
+    op: click
 
 check_installation_logs_tab:
     elements:

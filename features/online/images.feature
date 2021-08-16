@@ -2,7 +2,6 @@ Feature: ONLY ONLINE Images related scripts in this file
 
   # @author etrott@redhat.com
   # @case_id OCP-11614
-  @smoke
   Scenario: Create mongo resources with persistent template for mongodb-32-rhel7 images
     Given I have a project
     Then I run the :new_app client command with:
@@ -24,7 +23,6 @@ Feature: ONLY ONLINE Images related scripts in this file
 
   # @author etrott@redhat.com
   # @case_id OCP-10144
-  @smoke
   Scenario: Add env variables to postgresql-95-rhel7 image
     Given I have a project
     When I run the :new_app client command with:
@@ -67,7 +65,6 @@ Feature: ONLY ONLINE Images related scripts in this file
 
   # @author etrott@redhat.com
   # @case_id OCP-10147
-  @smoke
   Scenario: Verify Mariadb can be connected after admin and user password are changed and re-deployment for persistent storage - marialdb-101-rhel7
     Given I have a project
     Given I obtain test data file "templates/ocp10147/mariadb-persistent.json"

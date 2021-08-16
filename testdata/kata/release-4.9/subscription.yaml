@@ -1,0 +1,13 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: sandboxed-containers-operator
+  namespace: openshift-sandboxed-containers-operator
+spec:
+  channel: "preview-1.1"
+  installPlanApproval: Automatic
+  name: sandboxed-containers-operator
+  source: qe-app-registry
+  sourceNamespace: openshift-marketplace
+  startingCSV: sandboxed-containers-operator.v1.1.0
+

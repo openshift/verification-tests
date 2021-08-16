@@ -1,6 +1,5 @@
 Feature: jenkins.feature
   # @author cryan@redhat.com
-  @smoke
   Scenario Outline: Trigger build of application from jenkins job with persistent volume
     Given I have a project
     And I have a jenkins v<ver> application

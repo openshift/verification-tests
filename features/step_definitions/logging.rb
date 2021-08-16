@@ -50,11 +50,10 @@ Given /^logging operators are installed successfully$/ do
       raise "Error creating operatorgroup" unless @result[:success]
     end
 
-    #TODO: start from logging 5.1, no need to create role and rolebing, these resources will be created by OLM operator
-    unless role_binding('prometheus-k8s').exists?
+    unless role_binding('prometheus-k8s').exists? || env.version_gt('4.6', user: user)
       # create RBAC object in `openshift-operators-redhat` namespace
-      operator_group_yaml ||= "#{BushSlicer::HOME}/testdata/logging/eleasticsearch/deploy_via_olm/03_eo-rbac.yaml"
-      @result = admin.cli_exec(:create, f: operator_group_yaml)
+      rbac_yaml ||= "#{BushSlicer::HOME}/testdata/logging/eleasticsearch/deploy_via_olm/03_eo-rbac.yaml"
+      @result = admin.cli_exec(:create, f: rbac_yaml)
       raise "Error creating rolebinding" unless @result[:success]
     end
 
@@ -243,7 +242,7 @@ end
 
 Given /^cluster logging operator is ready$/ do
   ensure_admin_tagged
-  project("openshift-logging")
+  step %Q/I use the "openshift-logging" project/
   step %Q/a pod becomes ready with labels:/, table(%{
     | name=cluster-logging-operator |
   })
@@ -256,7 +255,7 @@ Given /^elasticsearch operator is ready(?: in the "(.+)" namespace)?$/ do | proj
   else
     target_namespace = "openshift-operators-redhat"
   end
-  project(target_namespace)
+  step %Q/I use the "#{target_namespace}" project/
   step %Q/a pod becomes ready with labels:/, table(%{
     | name=elasticsearch-operator |
   })
@@ -341,19 +340,27 @@ Given /^I delete the clusterlogging instance$/ do
   if cluster_logging("instance").exists?
     @result = admin.cli_exec(:delete, object_type: 'clusterlogging', object_name_or_id: 'instance', n: 'openshift-logging')
     raise "Unable to delete instance" unless @result[:success]
-  end
-  step %Q/I wait for the resource "deployment" named "kibana" to disappear/
-  step %Q/I wait for the resource "elasticsearch" named "elasticsearch" to disappear/
-  step %Q/I wait for the resource "cronjob" named "curator" to disappear/
-  step %Q/I wait for the resource "daemonset" named "fluentd" to disappear/
-  step %Q/all existing pods die with labels:/, table(%{
-    | component=elasticsearch |
-  })
-  step %Q/all existing pods die with labels:/, table(%{
-    | component=kibana |
-  })
-  if BushSlicer::PersistentVolumeClaim.list(user: user, project: project).count > 0
-    admin.cli_exec(:delete, object_type: 'pvc', l: 'logging-cluster=elasticsearch', n: 'openshift-logging')
+    unless cluster_logging("instance").log_store_spec(cached: true).nil?
+      step %Q/I wait for the resource "elasticsearch" named "elasticsearch" to disappear/
+      success = wait_for(180, interval: 10) {
+        res = admin.cli_exec(:get, resource: "deploy", l: "cluster-name=elasticsearch", n: "openshift-logging")
+        case res[:response]
+        # the resource has terminated which means we are done waiting.
+        when /No resources found/
+          break true
+        end
+      }
+      raise "the ES deployment did not terminate" unless success
+      if BushSlicer::PersistentVolumeClaim.list(user: user, project: project).count > 0
+        admin.cli_exec(:delete, object_type: 'pvc', l: 'logging-cluster=elasticsearch', n: 'openshift-logging')
+      end
+    end
+    unless  cluster_logging("instance").visualization_spec(cached: true).nil?
+      step %Q/I wait for the resource "deployment" named "kibana" to disappear/
+    end
+    unless cluster_logging('instance').collection_spec(cached: true).nil?
+      step %Q/I wait for the resource "daemonset" named "fluentd" to disappear/
+    end
   end
 end
 
@@ -368,7 +375,7 @@ Given /^(cluster-logging|elasticsearch-operator) channel name is stored in the#{
       envs = logging_envs[:eo]
     end
   end
-  project("openshift-marketplace")
+  step %Q/I use the "openshift-marketplace" project/
   # check if the packagemanifest exist
   raise "Packagemanifest #{packagemanifest} doesn't exist" unless package_manifest(packagemanifest).exists?
 
@@ -377,12 +384,16 @@ Given /^(cluster-logging|elasticsearch-operator) channel name is stored in the#{
     case version
     when '4.1'
       cb[cb_name] = "preview"
+    when '4.2','4.3','4.4','4.5','4.6'
+      cb[cb_name] = version
     when '4.7'
       cb[cb_name] = "5.0"
     when '4.8'
       cb[cb_name] = "stable-5.1"
+    when '4.9'
+      cb[cb_name] = "stable-5.2"
     else
-      cb[cb_name] = version
+      cb[cb_name] = "stable"
     end
   else
     cb[cb_name] = envs[:channel]
@@ -400,7 +411,7 @@ Given /^(cluster-logging|elasticsearch-operator) catalog source name is stored i
       envs = logging_envs[:eo]
     end
   end
-  project("openshift-marketplace")
+  step %Q/I use the "openshift-marketplace" project/
   # check if the packagemanifest exist
   raise "Packagemanifest #{packagemanifest} doesn't exist" unless package_manifest(packagemanifest).exists?
 
@@ -557,7 +568,7 @@ Given /^I create the resources for the receiver with:$/ do | table |
   configmap_file = opts[:configmap_file]
   deployment_file = opts[:deployment_file]
   pod_label = opts[:pod_label]
-  project(namespace)
+  step %Q/I use the "#{namespace}" project/
 
   unless tagged_upgrade?
     step %Q/I ensure "#{receiver_name}" service_account is deleted from the "#{namespace}" project after scenario/
@@ -595,7 +606,7 @@ end
 
 Given /^(fluentd|rsyslog) receiver is deployed as (secure|insecure)(?: with (mTLS|mTLS_share|server_auth|server_auth_share) enabled)?(?: in the#{OPT_QUOTED} project)?$/ do | server, security, auth_type, project_name |
   project_name ||= "openshift-logging"
-  project(project_name)
+  step %Q/I use the "#{project_name}" project/
   if env.version_lt('4.6', user: user)
     file_dir = "#{BushSlicer::HOME}/testdata/logging/logforwarding"
   else
@@ -671,7 +682,7 @@ Given /^I upgrade the operator with:$/ do | table |
   channel = opts[:channel]
   catsrc = opts[:catsrc]
   namespace = opts[:namespace]
-  project(namespace)
+  step %Q/I use the "#{namespace}" project/
 
   # upgrade operator
   patch_json = {"spec": {"channel": "#{channel}", "source": "#{catsrc}"}}
@@ -691,7 +702,7 @@ Given /^I upgrade the operator with:$/ do | table |
   raise "can't upgrade operator #{subscription}" unless success
 
   #check if the EFK pods could be upgraded successfully
-  project("openshift-logging")
+  step %Q/I use the "openshift-logging" project/
   if cluster_logging('instance').log_store_spec != nil
     if elasticsearch('elasticsearch').exists?
       if subscription == "elasticsearch-operator"
@@ -753,7 +764,7 @@ Given /^I make sure the logging operators match the cluster version$/ do
   step %Q/elasticsearch-operator catalog source name is stored in the :eo_catsrc clipboard/
   step %Q/cluster-logging catalog source name is stored in the :clo_catsrc clipboard/
   # check EO
-  project("openshift-operators-redhat")
+  step %Q/I use the "openshift-operators-redhat" project/
   eo_current_channel = subscription("elasticsearch-operator").channel(cached: false)
   eo_current_catsrc = subscription("elasticsearch-operator").source
   if cb.eo_channel != eo_current_channel || cb.eo_catsrc != eo_current_catsrc
@@ -769,7 +780,7 @@ Given /^I make sure the logging operators match the cluster version$/ do
     upgrade_eo = false
   end
   # check CLO
-  project("openshift-logging")
+  step %Q/I use the "openshift-logging" project/
   clo_current_channel = subscription("cluster-logging").channel(cached: false)
   clo_current_catsrc = subscription("cluster-logging").source
   if clo_current_channel != cb.clo_channel || cb.clo_catsrc != clo_current_catsrc
@@ -785,7 +796,6 @@ Given /^I make sure the logging operators match the cluster version$/ do
     upgrade_clo = false
   end
   # check cronjobs if the CLO or/and EO is upgraded
-  project("openshift-logging")
   if (upgrade_eo || upgrade_clo) && (BushSlicer::CronJob.list(user: user, project: project).count != 0)
     step %Q/I check the cronjob status/
     step %Q/the step should succeed/
@@ -796,9 +806,9 @@ end
 # delete all the jobs, and wait up to 15min to check the jobs status
 Given /^I check the cronjob status$/ do
   # check logging version
-  project("openshift-operators-redhat")
+  step %Q/I use the "openshift-operators-redhat" project/
   eo_version = subscription("elasticsearch-operator").current_csv(cached: false)[23..-1].split('-')[0]
-  project("openshift-logging")
+  step %Q/I use the "openshift-logging" project/
   clo_version = subscription("cluster-logging").current_csv(cached: false)[16..-1].split('-')[0]
   #csv version >= 4.5, check rollover/delete cronjobs, csv < 4.5, only check curator cronjob
   if ["4.0", "4.1", "4.2", "4.3", "4.4"].include? clo_version.split('.').take(2).join('.')
@@ -960,7 +970,7 @@ Given /^external elasticsearch server is deployed with:$/ do | table |
   username = opts[:username]
   password = opts[:password]
   secret_name = opts[:secret_name]
-  project(project_name)
+  step %Q/I use the "#{project_name}" project/
 
   unless ["6.8", "7.12"].include? version
     raise "Unsupported ES version: #{version}, we only support ES 6.8 and 7.12!"

@@ -22,6 +22,12 @@ check_creation_cards_page:
             xpath: //h1[text()='Create an OpenShift cluster']
     action: create_page_osd_loaded
 
+click_aws_arm_installer_button:
+    element:
+        selector:
+            xpath: //a[contains(@href, '/openshift/install/aws/arm')]
+        op: click
+
 create_page_osd_loaded:
     elements:
         - selector:

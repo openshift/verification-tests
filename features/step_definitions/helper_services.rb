@@ -160,6 +160,7 @@ Given /^I have LDAP service in my project$/ do
     # 2, Port forward the ldap server pod to the jenkins agent.
     # So take the second one since this one can be implemented currently
     ###
+    stats = {}
     step %Q/I run the :run client command with:/, table(%{
       | name  | ldapserver                                       |
       | image | quay.io/openshifttest/ldap:openldap-2441-centos7 |
@@ -175,10 +176,16 @@ Given /^I have LDAP service in my project$/ do
 
     step 'I obtain test data file "authorization/init.ldif"'
     step %Q/the step should succeed/
- 
+
     # Init the test data in ldap server.
-    @result = pod.exec("ldapadd", "-x", "-h", "127.0.0.1", "-p", "389", "-D", "cn=Manager,dc=example,dc=com", "-w", "admin", stdin: File.read(cb.test_file), as: user)
-    step %Q/the step should succeed/
+    wait_for(60, interval: 5, stats: stats){
+      @result = pod.exec("ldapadd", "-x", "-h", "127.0.0.1", "-p", "389", "-D", "cn=Manager,dc=example,dc=com", "-w", "admin", stdin: File.read(cb.test_file), as: user)
+      @result[:success]
+    }
+    logger.info "after #{stats[:seconds]} seconds and #{stats[:iterations]} " <<
+                  "iterations, ldapadd result is: " <<
+                  "#{@result[:success] ? "success" : @result[:error].inspect}"
+    raise "ldapadd failed" unless @result[:success]
 
     # Port forword ldapserver to local
     step %Q/evaluation of `rand(32000...65536)` is stored in the :ldap_port clipboard/
@@ -753,14 +760,14 @@ Given /^I save a htpasswd registry auth to the#{OPT_SYM} clipboard$/ do |cb_name
         "#{cb.custom_registry}" => {
           "auth" => Base64.strict_encode64(
             "#{cb.reg_user}:#{cb.reg_pass}"
-          ),    
-        }     
+          ),
+        }
   }
-  File.open("#{cb[cb_name]}", 'wb') { |f| 
+  File.open("#{cb[cb_name]}", 'wb') { |f|
     f.write(
-       {   
+       {
          "auths" => cb.generated_cfg.merge(cb.new_cfg)
        }.to_json
-    )   
+    )
   }
 end

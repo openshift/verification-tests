@@ -6,11 +6,9 @@ Feature: cluster-logging-operator related test
   @admin
   @destructive
   @commonlogging
-  @flaky
   Scenario: ServiceMonitor Object for collector is deployed along with cluster logging
     Given I wait for the "fluentd" service_monitor to appear
-    Given the expression should be true> service_monitor('fluentd').service_monitor_endpoint_spec(server_name: "fluentd.openshift-logging.svc").port == "metrics"
-    And the expression should be true> service_monitor('fluentd').service_monitor_endpoint_spec(server_name: "fluentd.openshift-logging.svc").path == "/metrics"
+    And the expression should be true> service_monitor('fluentd').service_monitor_endpoint_spec(port: "metrics").path == "/metrics"
     Given I wait up to 360 seconds for the steps to pass:
     """
     When I perform the GET prometheus rest client with:
@@ -19,14 +17,6 @@ Feature: cluster-logging-operator related test
     Then the step should succeed
     And the expression should be true>  @result[:parsed]['data']['result'][0]['value']
     """
-
-  # @author qitang@redhat.com
-  # @case_id OCP-21907
-  @admin
-  @destructive
-  @flaky
-  Scenario: Deploy elasticsearch-operator via OLM using CLI
-    Given logging operators are installed successfully
 
   # @author qitang@redhat.com
   # @case_id OCP-22492

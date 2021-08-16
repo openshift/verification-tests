@@ -3,6 +3,10 @@ expand_primary_menu:
   - selector:
       xpath: //*[contains(@data-component, 'pf-nav-expandable') and contains(text(), '<primary_menu>')]
     op: click
+expand_monitoring_menu:
+  params:
+    primary_menu: Monitoring
+  action: expand_primary_menu
 create_resource_by_default_yaml:
   elements:
   - selector:
@@ -227,6 +231,7 @@ check_resource_link:
   element:
     selector:
       css: a[href$='<resource_link>']
+check_resource_item_name: {}
 check_page_contains:
   element:
     selector:

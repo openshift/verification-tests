@@ -148,7 +148,7 @@ Given /^the#{OPT_QUOTED} node iptables config is checked$/ do |node_name|
     raise "#{plugin_type} != openshift-ovs-networkpolicy.  This is unsupported?"
   end
 
-  puts "OpenShift version >= 3.9 and uses networkpolicy plugin."
+  logger.info "OpenShift version >= 3.9 and uses networkpolicy plugin."
   filter_matches = [
     'INPUT -m comment --comment "Ensure that non-local NodePort traffic can flow" -j KUBE-NODEPORT-NON-LOCAL',
     'INPUT -m conntrack --ctstate NEW -m comment --comment "kubernetes externally-visible service portals" -j KUBE-EXTERNAL-SERVICES',
@@ -1329,4 +1329,83 @@ Given /^I save multus pod on master node to the#{OPT_SYM} clipboard$/ do | cb_na
      master_node_names.include?(pod.node_name)
   }.first.name
   logger.info "The multus pod is stored to the #{cb[cb_name]} clipboard."
+end
+
+Given /^I disable multicast for the "(.+?)" namespace$/ do | project_name |
+  ensure_admin_tagged
+  _admin = admin
+  @result = _admin.cli_exec(:get, resource: "network.operator", output: "jsonpath={.items[*].spec.defaultNetwork.type}")
+  raise "Unable to find corresponding networkType pod name" unless @result[:success]
+  if @result[:response] == "OpenShiftSDN"
+    annotation = 'netnamespace.network.openshift.io/multicast-enabled-'
+    space = 'netnamespace'
+  else
+    annotation = 'k8s.ovn.org/multicast-enabled-'
+    space = 'namespace'
+  end
+  @result = admin.cli_exec(:annotate, resource: space, resourcename: project_name, keyval: annotation)
+  unless @result[:success]
+    raise "Failed to apply the default deny annotation to specified namespace."
+  end
+  logger.info "The multicast is enable in the #{project_name} project"
+end
+
+Given /^I store the hostname from external ids in the#{OPT_SYM} clipboard on the "([^"]*)" node$/ do |cb_ovn_hostname, node_name|
+  ensure_admin_tagged
+  node_name ||= node.name
+  cb_ovn_hostname ||= "ovn_hostname"
+
+  ovsvsctl_cmd = %w(ovs-vsctl list open .)
+  ovn_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
+    pod.node_name == node_name
+  }.first
+  @result = ovn_pod.exec(*ovsvsctl_cmd, as: admin, container: "ovnkube-node")
+  if @result[:success]
+    ovn_state_output = @result[:response].strip
+  end
+  raise "Failed to execute network command!" unless ovn_state_output != nil
+  cb[cb_ovn_hostname] = ovn_state_output.split("hostname=").last.split(", ovn-bridge-mappings").first
+  logger.info "nodes's corresponding hostname from external_ids is stored in the #{cb_ovn_hostname} clipboard."
+end
+
+Given /^I store the#{OPT_QUOTED} hostname in the#{OPT_SYM} clipboard for the "([^"]*)" node$/ do |type_name,cb_type_hostname,node_name|
+  ensure_admin_tagged
+  node_name ||= node.name
+  cb_type_hostname ||= "type_hostname"
+  case type_name
+  when "short"
+    ovn_cmd = %w(hostname -s)
+  else
+    ovn_cmd = %w(hostname -f)
+  end
+
+  ovn_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
+    pod.node_name == node_name
+  }.first
+  @result = ovn_pod.exec(*ovn_cmd, as: admin, container: "ovnkube-node")
+  if @result[:success]
+     hostname_result = @result[:response].lines.first.strip
+  end
+  raise "Failed to execute network command!" unless hostname_result != nil
+  cb[cb_type_hostname] = hostname_result
+  logger.info "nodes's corresponding #{type_name} hostname is stored in the #{cb_type_hostname}"
+end
+
+Given /^I set#{OPT_QUOTED} hostname to external ids on the "([^"]*)" node$/ do |custom_hostname,node_name|
+  ensure_admin_tagged
+  node_name ||= node.name
+
+  # set hostname to external ids
+  ovsvsctl_cmd = %w(ovs-vsctl set open .)
+  external_hostname = "external_ids:hostname=#{custom_hostname}"
+  ovsvsctl_cmd << external_hostname
+  ovn_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
+    pod.node_name == node_name
+  }.first
+  @result = ovn_pod.exec(*ovsvsctl_cmd, as: admin, container: "ovnkube-node")
+  if @result[:success]
+    logger.info "Set the ${custom_hostname} to ovn external_ids successfully."
+  else
+    raise "Set the ${custom_hostname} to ovn external_ids failed."
+  end
 end

@@ -1,7 +1,6 @@
 Feature: Persistent Volume reclaim policy tests
   # @author lxia@redhat.com
   @admin
-  @smoke
   Scenario Outline: Persistent volume with RWO access mode and Delete policy
     Given I have a project
     And I have a 1 GB volume and save volume id in the :vid clipboard

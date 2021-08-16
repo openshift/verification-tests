@@ -234,6 +234,7 @@ Feature: CSI testing related feature
     Examples:
       | sc_name      |
       | standard-csi | # @case_id OCP-37564
+      | standard-csi | # @case_id OCP-37511
 
 
   # @author wduan@redhat.com
@@ -273,9 +274,10 @@ Feature: CSI testing related feature
     And the output should contain "Hello OpenShift Storage"
 
     Examples:
-      | sc_name | type | size  |
-      | gp2-csi | sc1  | 125Gi | # @case_id OCP-24546
-      | gp2-csi | st1  | 125Gi | # @case_id OCP-24572
+      | sc_name      | type   | size  |
+      | gp2-csi      | sc1    | 125Gi | # @case_id OCP-24546
+      | gp2-csi      | st1    | 125Gi | # @case_id OCP-24572
+      | standard-csi | pd-ssd | 1Gi   | # @case_id OCP-37478
 
 
   # @author wduan@redhat.com

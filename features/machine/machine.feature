@@ -3,6 +3,7 @@ Feature: Machine features testing
   # @author jhou@redhat.com
   # @case_id OCP-21196
   @smoke
+  @admin
   Scenario: Machines should be linked to nodes
     Given I have an IPI deployment
     Then the machines should be linked to nodes

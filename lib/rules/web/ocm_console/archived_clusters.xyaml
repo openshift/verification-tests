@@ -1,3 +1,5 @@
+go_to_archived_cluster_list_page:
+    url: /openshift/archived
 archived_page_loaded:
     elements:
         - selector:

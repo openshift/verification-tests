@@ -3,11 +3,6 @@ go_to_subscription_quota_annual_page:
     url: /openshift/quota
 go_to_subscription_quota_limit_page:
     url: /openshift/quota/resource-limits
-switch_subscriptions_page:
-    element:
-        selector:
-            xpath: //a[text()='Subscriptions' and contains(@href, '/openshift/subscriptions')]
-        op: click
 check_quota_page_title:
     scripts:
     - command: return document.title=='Quota | Red Hat OpenShift Cluster Manager'

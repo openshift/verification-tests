@@ -85,8 +85,10 @@ set_password:
 set_k8s_resource:
   params:
     label_text: K8s Resource Prefix
+    filter_text: <k8s_resource>
     project_name: <k8s_resource>
   action: click_label_dropdown_button
+  action: set_strings_in_dropdown_filter_box
   action: choose_project_from_dropdown_list
 set_pod_count:
   params:
