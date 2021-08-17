@@ -16,6 +16,7 @@ RUN set -x && \
     yum install -y /tmp/epel-release-latest-8.noarch.rpm
 
 ADD . /verification-tests/
+RUN chmod 777 /verification-tests/
 RUN mv /tierN/ /verification-tests/tierN/
 RUN set -x && \
     yum module reset ruby && \
