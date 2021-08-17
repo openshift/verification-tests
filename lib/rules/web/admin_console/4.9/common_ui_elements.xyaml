@@ -302,6 +302,11 @@ set_label_textarea:
       <<: *label_textarea
     op: send_keys <input_value>
     type: textarea
+click_label_filter_dropdown_button:
+  element:
+    selector:
+      xpath: //label[contains(text(),'<label_text>')]/following::button[1][contains(@class,'select__toggle')]
+    op: click
 click_label_dropdown_button:
   element:
     selector:
@@ -834,7 +839,7 @@ wait_until_no_loading:
 wait_sidebar_loaded:
   element:
     selector:
-      css: .co-p-has-sidebar__sidebar-close
+      xpath: //div[@data-test='resource-sidebar']
     timeout: 30
 wait_table_loaded:
   element:

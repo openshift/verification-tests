@@ -55,7 +55,7 @@ check_cluster_id_in_details_card:
 # grafana dashboards
 nagivate_to_monitoring_dashboards_page:
   params:
-    primary_menu: Monitoring
+    primary_menu: Observe
     secondary_menu: Dashboards
   action: click_secondary_menu
   action: check_grafana_dashboard_body_loaded
@@ -65,72 +65,84 @@ check_grafana_dashboard_body_loaded:
       xpath: //div[contains(@class,'co-dashboard-body')]//*[contains(@class,'monitoring-dashboards')]
     timeout: 30
 click_dashboard_dropdown:
-  params:
-    label_text: Dashboard
-  action: click_label_dropdown_button
+  element:
+    selector:
+      xpath: //label[contains(text(),'Dashboard')]/following::button[1][contains(@class,'pf-c-select__toggle')]
+    op: click
+check_dashboard_dropdown_item:
+  element:
+    selector: &dashboard_dropdown_item
+      xpath: //button[contains(@class,'monitoring-dashboards__dashboard_dropdown_item') and contains(text(),'<dropdown_menu_item>')]
+click_dashboard_dropdown_item:
+  element:
+    selector:
+      <<: *dashboard_dropdown_item
+    op: click
 check_dashboard_etcd:
   params:
     dropdown_menu_item: etcd
-  action: check_dropdown_menu_item
+  action: check_dashboard_dropdown_item
 check_dashboard_kubernetes_compute_resources_cluster:
   params:
     dropdown_menu_item: Kubernetes / Compute Resources / Cluster
-  action: check_dropdown_menu_item
+  action: check_dashboard_dropdown_item
 check_dashboard_kubernetes_compute_resources_namespace_pods:
   params:
     dropdown_menu_item: Kubernetes / Compute Resources / Namespace (Pods)
-  action: check_dropdown_menu_item
+  action: check_dashboard_dropdown_item
 check_dashboard_kubernetes_compute_resources_namespace_workloads:
   params:
     dropdown_menu_item: Kubernetes / Compute Resources / Namespace (Workloads)
-  action: check_dropdown_menu_item
+  action: check_dashboard_dropdown_item
 check_dashboard_kubernetes_compute_resources_namespace_node_pods:
   params:
     dropdown_menu_item: Kubernetes / Compute Resources / Node (Pods)
-  action: check_dropdown_menu_item
+  action: check_dashboard_dropdown_item
 check_dashboard_kubernetes_compute_resources_pod:
   params:
     dropdown_menu_item: Kubernetes / Compute Resources / Pod
-  action: check_dropdown_menu_item
+  action: check_dashboard_dropdown_item
 check_dashboard_kubernetes_compute_resources_workload:
   params:
     dropdown_menu_item: Kubernetes / Compute Resources / Workload
-  action: check_dropdown_menu_item
+  action: check_dashboard_dropdown_item
 check_dashboard_kubernetes_networking_cluster:
   params:
     dropdown_menu_item: Kubernetes / Networking / Cluster
-  action: check_dropdown_menu_item
+  action: check_dashboard_dropdown_item
 check_dashboard_prometheus:
   params:
     dropdown_menu_item: Prometheus / Overview
-  action: check_dropdown_menu_item
+  action: check_dashboard_dropdown_item
 check_dashboard_use_method_cluster:
   params:
     dropdown_menu_item: USE Method / Cluster
-  action: check_dropdown_menu_item
+  action: check_dashboard_dropdown_item
 check_dashboard_use_method_node:
   params:
     dropdown_menu_item: USE Method / Node
-  action: check_dropdown_menu_item
+  action: check_dashboard_dropdown_item
 check_table_loaded:
   elements:
   - selector:
       xpath: //table[contains(@class,'monitoring-dashboards__table')]
+    timeout: 40
 check_chart_loaded:
   elements:
   - selector:
       xpath: //div[contains(@class,'pf-c-chart')]
+    timeout: 40
 change_namespace:
   params:
     label_text: namespace
     button_text: <namespace>
-  action: click_label_dropdown_button
+  action: click_label_filter_dropdown_button
   action: click_button_text
 change_workload:
   params:
     label_text: workload
     button_text: <workload>
-  action: click_label_dropdown_button
+  action: click_label_filter_dropdown_button
   action: click_button_text
 check_dashboard_dropdown_items:
   action: click_dashboard_dropdown
@@ -150,19 +162,17 @@ check_resources_workloads_dashboard:
   params:
     dropdown_menu_item: Kubernetes / Compute Resources / Workload
   action: click_dashboard_dropdown
-  action: click_dropdown_menu_item
+  action: click_dashboard_dropdown_item
   action: change_namespace
   action: change_workload
-  action: check_table_loaded
   action: check_chart_loaded
   action: check_no_errors_in_charts
 check_resources_pod_dashboard:
   params:
     dropdown_menu_item: Kubernetes / Compute Resources / Pod
   action: click_dashboard_dropdown
-  action: click_dropdown_menu_item
+  action: click_dashboard_dropdown_item
   action: change_namespace
-  action: check_table_loaded
   action: check_chart_loaded
 # cluster dashboards
 check_cluster_utilization_items:
@@ -573,7 +583,7 @@ check_insights_popover_info_when_available:
   - selector:
       xpath: //div[contains(@class,'pf-c-chart')]
   - selector:
-      xpath: //a[contains(@class,'co-external-link') and contains(@href,'https://cloud.redhat.com/openshift/details/<cluster_id>#insights')]
+      xpath: //a[contains(@class,'co-external-link') and contains(@href,'https://console.redhat.com/openshift/details/<cluster_id>#insights')]
 check_insights_popover_info_when_unavailable:
   elements:
   - selector:

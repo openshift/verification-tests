@@ -1,7 +1,7 @@
 check_ocm_subscription:
   element:
     selector:
-      xpath: //a[contains(., 'OpenShift Cluster Manager') and @href='https://cloud.redhat.com/openshift/details/<cluster_id>']
+      xpath: //a[contains(., 'OpenShift Cluster Manager') and @href='https://console.redhat.com/openshift/details/<cluster_id>']
 check_help_info_on_channel_popup:
   params:
     help_info: Channels help to control the pace of updates and recommend the appropriate release versions
