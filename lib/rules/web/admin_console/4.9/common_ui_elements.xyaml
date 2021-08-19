@@ -811,7 +811,7 @@ choose_item_from_dropdown_menu:
 upload_file_for_one_field:
   elements:
   - selector:
-      xpath: //input[contains(@aria-describedby, '<field_name>')]/following-sibling::span/input
+      xpath: //input[@id='<field_name>-input']
     visible: false
     type: filefield
     op: set <file_path>
