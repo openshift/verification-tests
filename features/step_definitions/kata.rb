@@ -233,7 +233,7 @@ Given /^I run must-gather command$/ do
   command = 'quay.io/openshift_sandboxed_containers/openshift-sandboxed-containers-must-gather:202106221012'
   logger.info("==================================TEST IS RUNNING=========================================")
   logger.info("Running must-gather command")
-  @result = env.admin.cli_exec(:oadm_must_gather, image:command, dest_dir:'/home/valiev/workdir/')
+  @result = env.admin.cli_exec(:oadm_must_gather, image:command)
   pods_json = ''
   @error_message = {}
   dc_output = @result[:stdout]
