@@ -293,7 +293,7 @@ Given /^Pre-test checks$/ do
       @workerNodesAmmount += 1
     end
   end
-  @fips_status = node('valiev-kata-new-tjr2b-worker-a-9fczk.c.openshift-qe.internal').host.exec_admin(node_cmd)
+  @fips_status = node('abhishek-kata-49-wtdxf-worker-c-h459z.c.openshift-qe.internal').host.exec_admin(node_cmd)
   logger.info("Cluster version is:#{@result_pods[:stdout]}")
   logger.info("==================================RUNNING PRE-TEST CHECKS=========================================")
   logger.info("Cluster version is:#{@version[:stdout]}")
