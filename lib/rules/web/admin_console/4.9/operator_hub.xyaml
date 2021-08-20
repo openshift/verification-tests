@@ -675,36 +675,31 @@ check_k8sresource_dropdown_items:
 check_required_badge_on_operator_installation_page:
   elements:
   - selector:
-      xpath: //span[contains(@class,'co-resource-item')]//span[contains(@class,'co-resource-item__resource-name') and text()='Storage Cluster']
-  - selector:
-      xpath: //span[contains(@class,'co-resource-item')]//span[contains(@class,'co-icon-and-text')]//span[text()='Required']
+      xpath: //span[contains(@class,'co-resource-item')]//span[contains(text(),'Ditto')]/following::span[contains(text(),'Required')]
 check_required_badge_during_installation:
   elements:
   - selector:
-      xpath: //span[contains(@class,'co-resource-item')]//span[contains(@class,'co-resource-item__resource-name') and text()='StorageCluster']
-  - selector:
-      xpath: //span[contains(@class,'co-resource-item')]//span[contains(@class,'co-icon-and-text')]//span[text()='Required']
+      xpath: //span[contains(@class,'co-resource-item')]//span[contains(text(),'Ditto')]/following::span[contains(text(),'Required')]
 check_create_operand_button_and_requied_badge_when_ready:
   elements:
   - selector:
       xpath: //h2[contains(@class,'co-clusterserviceversion-install__heading') and contains(.,'Installed operator') and contains(.,'operand required')]
-    timeout: 60
+    timeout: 30
   - selector: &create_operand_button
-      xpath: //button[contains(.,'Create') and contains(.,'StorageCluster') and not(disabled)]
-check_create_operand_button_and_requied_badge_on_v_details:
+      xpath: //button[contains(.,'Create Ditto') and not(disabled)]
+check_create_operand_button_and_requied_badge_on_csv_details:
   elements:
   - selector:
-      xpath: //h4[contains(@class,'pf-c-alert__title') and contains(.,'StorageCluster required')]
+      xpath: //h4[contains(@class,'pf-c-alert__title') and contains(.,'required')]
   action: check_operand_button_link
 check_operand_button_link:
   element:
     selector:
-      xpath: //button[contains(.,'Create') and contains(.,'StorageCluster') and not(disabled)]/parent::a[contains(@href,'/k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion/portworx-essentials.v1.3.4/core.libopenstorage.org~v1alpha1~StorageCluster/~new')]
-click_create_storagecluster_button:
-  element:
-    selector:
-      <<: *create_operand_button
-    op: click
+      xpath: //button[contains(.,'Create') and contains(.,'Ditto') and not(disabled)]/parent::a[contains(@href,'/k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion/ditto-operator.v0.2.0/iot.eclipse.org~v1alpha1~Ditto/~new')]
+click_create_ditto_button:
+  params:
+    operand_kind: Ditto
+  action: click_create_operand_button
 check_status_descriptor_grouping:
   elements:
   - selector:
