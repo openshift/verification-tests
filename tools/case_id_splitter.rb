@@ -95,6 +95,22 @@ module BushSlicer
         end
       end
 
+      command :"add-tags" do |c|
+        c.syntax = "#{$PROGRAM_NAME} add-tags [tag] [test_case]"
+        c.description = "Add tags to test case\n\t" \
+          'Example: tools/case_id_splitter.rb add-tags @tag_name OCP-xxxxx'
+        c.option('--tags TAGS', Array, 'Tag to add to the scenario')
+        c.option('--cid ID', String, 'Test case id')
+        c.action do |_args, options|
+          setup_global_opts(options)
+
+          tags = options.tags
+          case_id = options.cid
+
+          add_tags_to_scenario(tags, case_id)
+        end
+      end
+
       run!
     end
 
@@ -158,6 +174,44 @@ module BushSlicer
         complete_feature_list << "#{value[0]}:#{value[1].to_s}"
       end
       return complete_feature_list
+    end
+
+    # add tags to a test scenario in the .feature
+    private def add_tags_to_scenario(tags, case_id)
+      parser = GherkinParse.new
+      begin
+        ranges_loc = parser.ranges_for(case_id)
+      rescue RuntimeError => re
+        puts "Could not find locations for test case #{case_id}"
+        return
+      end
+
+      res = ranges_loc[case_id]
+
+      current_tags = []
+      start_line_num = 0
+
+      content = IO.readlines(res[:file])
+      res[:range].each do |i|
+        current_tags << content[i].strip if content[i] =~ /^\s.*@/
+        if content[i] =~ /^\s*(Scenario)/
+          start_line_num = i
+          break
+        end
+      end
+
+      tags.each do |tag|
+        if current_tags.include?(tag)
+          puts "Test case #{case_id} already has tag #{tag}"
+          next
+        end
+
+        line_to_add = "  #{tag}"
+        puts "Adding tag #{tag} to #{res[:file]} for test case #{case_id}"
+        content.insert(start_line_num, line_to_add)
+      end
+
+      File.open(res[:file], 'w') { |f| f.puts(content) }
     end
 
     def opts
