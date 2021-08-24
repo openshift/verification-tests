@@ -61,6 +61,7 @@ Feature: image-registry operator upgrade tests
   @upgrade-check
   @users=upuser1,upuser2
   @admin
+  @inactive
   Scenario: OpenShift can upgrade when image-registry/sample operator is unmanaged
     Given I switch to cluster admin pseudo user
     Given I use the "default" project
@@ -140,6 +141,7 @@ Feature: image-registry operator upgrade tests
   @upgrade-check
   @users=upuser1,upuser2
   @admin
+  @inactive
   Scenario: Upgrade imagestream from old version which not implement node credentials
     Given I switch to cluster admin pseudo user
     When I use the "devexp-p1" project

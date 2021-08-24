@@ -1,6 +1,7 @@
 Feature: quickstarts.feature
 
   # @author haowang@redhat.com
+  @inactive
   Scenario Outline: quickstart test
     Given I have a project
     When I run the :new_app client command with:

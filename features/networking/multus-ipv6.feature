@@ -3,6 +3,7 @@ Feature: Multus-CNI ipv6 related scenarios
   # @author weliang@redhat.com
   # @case_id OCP-28968
   @admin
+  @inactive
   Scenario: IPv6 testing for OCP-21151: Create pods with multus-cni - macvlan bridge mode
     # Make sure that the multus is enabled
     Given the master version >= "4.1"

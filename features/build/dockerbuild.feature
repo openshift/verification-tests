@@ -123,6 +123,7 @@ Feature: dockerbuild.feature
 
   # @author wzheng@redhat.com
   # @case_id OCP-18501
+  @inactive
   Scenario: Support additional EXPOSE values in new-app
     Given I have a project
     When I run the :new_app client command with:

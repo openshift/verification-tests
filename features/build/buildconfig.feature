@@ -2,6 +2,7 @@ Feature: buildconfig.feature
 
   # @author wzheng@redhat.com
   # @case_id OCP-12121
+  @inactive
   Scenario: Start build from buildConfig/build
     Given I have a project
     When I run the :new_app client command with:

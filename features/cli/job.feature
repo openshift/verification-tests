@@ -141,6 +141,7 @@ Feature: job.feature
 
   # @author qwang@redhat.com
   # @case_id OCP-9948
+  @inactive
   Scenario: Create job with activeDeadlineSeconds
     Given I have a project
     Given I obtain test data file "job/job_with_lessthan_runtime_activeDeadlineSeconds.yaml"
@@ -181,6 +182,7 @@ Feature: job.feature
 
   # @author qwang@redhat.com
   # @case_id OCP-10734
+  @inactive
   Scenario: Create job with different pod restartPolicy
     Given I have a project
     Given I obtain test data file "job/job-restartpolicy.yaml"

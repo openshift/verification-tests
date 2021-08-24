@@ -162,6 +162,7 @@ Feature: OVNKubernetes IPsec related networking scenarios
   # @case_id OCP-40569
   @admin
   @destructive
+  @inactive
   Scenario: Allow enablement/disablement ipsec at runtime
     Given the env is using "OVNKubernetes" networkType   
     Given I store all worker nodes to the :workers clipboard

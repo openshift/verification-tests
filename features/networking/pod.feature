@@ -390,6 +390,7 @@ Feature: Pod related networking scenarios
   # @case_id OCP-26373
   @admin
   @destructive
+  @inactive
   Scenario: Make sure the route to ovn tunnel for Node's Pod CIDR gets created in both hybrid/non-hybrid mode
   Given the env is using "OVNKubernetes" networkType
   And I select a random node's host
@@ -458,6 +459,7 @@ Feature: Pod related networking scenarios
   # @case_id OCP-33413
   @admin
   @destructive
+  @inactive
   Scenario: xt_u32 kernel module functionality check from NET_ADMIN pods
     Given I have a project
     And I have a pod-for-ping in the project
