@@ -6,6 +6,7 @@ Feature: TSB related scenarios
   @admin
   @upgrade-prepare
   @users=upuser1,upuser2
+  @inactive
   Scenario: upgrade TSB - prepare
     # Create a namespace and an operator in it
     Given I switch to cluster admin pseudo user

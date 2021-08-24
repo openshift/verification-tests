@@ -3,6 +3,7 @@ Feature: limit range related scenarios:
   # @author pruan@redhat.com
   # @author azagayno@redhat.com
   @admin
+  @inactive
   Scenario Outline: Limit range default request tests
     Given I have a project
     Given I obtain test data file "limits/<path>/limit.yaml"

@@ -4,6 +4,7 @@ Feature: Service-catalog related scenarios
   # @case_id OCP-15600
   @admin
   @destructive
+  @inactive
   Scenario: service-catalog walkthrough example
     Given I have a project
     When I run the :get admin command with:
@@ -95,6 +96,7 @@ Feature: Service-catalog related scenarios
   # @case_id OCP-15604
   @admin
   @destructive
+  @inactive
   Scenario: Create/get/update/delete for ClusterServiceBroker resource
     Given I have a project
     When I run the :get admin command with:
@@ -173,6 +175,7 @@ Feature: Service-catalog related scenarios
   # @case_id OCP-15603
   @admin
   @destructive
+  @inactive
   Scenario: Create/get/update/delete for ServiceInstance resource
     Given I have a project
     When I run the :get admin command with:
@@ -233,6 +236,7 @@ Feature: Service-catalog related scenarios
   # @case_id OCP-15605
   @admin
   @destructive
+  @inactive
   Scenario: Create/get/update/delete for ServiceBinding resource
     Given I have a project
     When I run the :get admin command with:
@@ -308,6 +312,7 @@ Feature: Service-catalog related scenarios
   # @case_id OCP-15602
   @admin
   @destructive
+  @inactive
   Scenario: Create/get/update/delete for Clusterserviceclass/Clusterserviceplan resource
     Given I have a project
     When I run the :get admin command with:

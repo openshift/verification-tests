@@ -40,6 +40,7 @@ Feature: rhel8images.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-22953
   @admin
+  @inactive
   Scenario: Enable hot deploy for ruby app with ruby rhel8 image
     Given I have a project
     When I run the :tag admin command with:
@@ -158,6 +159,7 @@ Feature: rhel8images.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-31249
   @admin
+  @inactive
   Scenario: Using new-app cmd to create app with ruby rhel8 image test
     Given I have a project
     When I run the :tag admin command with:

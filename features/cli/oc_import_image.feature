@@ -35,6 +35,7 @@ Feature: oc import-image related feature
 
   # @author wjiang@redhat.com
   # @case_id OCP-11760
+  @inactive
   Scenario: Import Image when spec.DockerImageRepository not defined
     Given I have a project
     Given I obtain test data file "image-streams/ocp11760.json"
@@ -55,6 +56,7 @@ Feature: oc import-image related feature
   # @author wjiang@redhat.com
   # @case_id OCP-12052
   @smoke
+  @inactive
   Scenario: Import image when spec.DockerImageRepository with some tags defined when Kind==DockerImage
     Given I have a project
     Given I obtain test data file "image-streams/ocp12052.json"

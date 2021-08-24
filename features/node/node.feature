@@ -3,6 +3,7 @@ Feature: Node management
   # @author chaoyang@redhat.com
   # @case_id OCP-11084
   @admin
+  @inactive
   Scenario: admin can get nodes
     Given I have a project
     When I run the :get admin command with:

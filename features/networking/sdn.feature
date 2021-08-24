@@ -88,6 +88,7 @@ Feature: SDN related networking scenarios
   # @case_id OCP-15251
   @admin
   @destructive
+  @inactive
   Scenario: net.ipv4.ip_forward should be always enabled on node service startup
     Given I select a random node's host
     And the node service is verified
@@ -121,6 +122,7 @@ Feature: SDN related networking scenarios
   # @case_id OCP-14985
   @admin
   @destructive
+  @inactive
   Scenario: The openflow list will be cleaned after deleted the node
     Given the env is using "OpenShiftSDN" networkType
     Given environment has at least 2 schedulable nodes

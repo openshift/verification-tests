@@ -2,6 +2,7 @@ Feature: apiserver and auth related upgrade check
   # @author pmali@redhat.com
   # @case_id OCP-22734
   @upgrade-prepare
+  @inactive
   Scenario: Check Authentication operators and operands are upgraded correctly - prepare
     # According to our upgrade workflow, we need an upgrade-prepare and upgrade-check for each scenario.
     # But some of them do not need any prepare steps, which lead to errors "can not find scenarios" in the log.
@@ -62,6 +63,7 @@ Feature: apiserver and auth related upgrade check
   # @case_id OCP-22673
   @upgrade-check
   @admin
+  @inactive
   Scenario: Check apiserver operators and operands are upgraded correctly
     Given the "kube-apiserver" operator version matches the current cluster version
     And the "openshift-apiserver" operator version matches the current cluster version

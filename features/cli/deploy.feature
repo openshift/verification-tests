@@ -291,6 +291,7 @@ Feature: deployment related features
 
   # @author pruan@redhat.com
   # @case_id OCP-12528
+  @inactive
   Scenario: Make multiple deployment by oc deploy
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -313,6 +314,7 @@ Feature: deployment related features
 
   # @author xiaocwan@redhat.com
   # @case_id OCP-10717
+  @inactive
   Scenario: View the logs of the latest deployment
     # check deploy log when deploying
     Given I have a project
@@ -430,6 +432,7 @@ Feature: deployment related features
 
   # @author pruan@redhat.com
   # @case_id OCP-12532
+  @inactive
   Scenario: Manually start deployment by oc deploy
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -444,6 +447,7 @@ Feature: deployment related features
 
   # @author yinzhou@redhat.com
   # @case_id OCP-12468
+  @inactive
   Scenario: Pre and post deployment hooks
     Given I have a project
     Given I obtain test data file "deployment/testhook.json"
@@ -465,6 +469,7 @@ Feature: deployment related features
 
   # @author yinzhou@redhat.com
   # @case_id OCP-10724
+  @inactive
   Scenario: deployment hook volume inheritance that volume name was null
     Given I have a project
     Given I obtain test data file "deployment/ocp10724/hooks-null-volume.json"
@@ -476,6 +481,7 @@ Feature: deployment related features
   # @author yadu@redhat.com
   # @case_id OCP-9567
   @smoke
+  @inactive
   Scenario: Recreate deployment strategy
     Given I have a project
     When I run the :create client command with:
@@ -514,6 +520,7 @@ Feature: deployment related features
 
   # @author pruan@redhat.com
   # @case_id OCP-12056
+  @inactive
   Scenario: Manual scale dc will update the deploymentconfig's replicas
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -539,6 +546,7 @@ Feature: deployment related features
 
   # @author pruan@redhat.com
   # @case_id OCP-10728
+  @inactive
   Scenario: Inline deployer hook logs
     Given I have a project
     Given I obtain test data file "deployment/Inline-logs.json"
@@ -686,6 +694,7 @@ Feature: deployment related features
 
   # @author qwang@redhat.com
   # @case_id OCP-12356
+  @inactive
   Scenario: configchange triggers deploy automatically
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -794,6 +803,7 @@ Feature: deployment related features
   # @author mcurlej@redhat.com
   # @case_id OCP-10902
   @smoke
+  @inactive
   Scenario: Auto cleanup old RCs
     Given I have a project
     Given I obtain test data file "deployment/ocp10902/history-limit-dc.yaml"
