@@ -73,7 +73,7 @@ check_mega_menu:
   params:
     content: Red Hat applications
     text: OpenShift Cluster Manager
-    link_url: https://console.redhat.com/openshift/details/
+    link_url: https://cloud.redhat.com/openshift/details/
   elements:
   - selector:
       xpath: //button[@aria-label='Application launcher']
