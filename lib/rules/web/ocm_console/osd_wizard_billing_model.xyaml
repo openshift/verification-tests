@@ -1,0 +1,66 @@
+##################### Billing model defination ################
+# -------------------- Below defination is for subscription type --------------------
+free_trial_subscription_loaded:
+    elements:
+        - selector:
+            xpath: //label[text()='Free trial (upgradeable)']
+        - selector:
+            xpath: //a[@href='https://access.redhat.com/articles/5990101' and text()='Try OpenShift Dedicated']
+        - selector:
+            xpath: //p[text()='for free for 60 days. Upgrade anytime']
+annual_subscription_loaded:
+    elements:
+        - selector:
+            visible_text: !ruby/regexp '/Annual: Fixed capacity subscription from Red Hat/'
+        - selector:
+            xpath: //span[text()='Use the quota pre-purchased by your organization']
+macketplace_sunscription_loaded:
+    elements:
+        - selector:
+            xpath: //label[text()='On-demand']
+        - selector:
+            xpath: //a[@href='/openshift/quota/resource-limits' and text()='Red Hat Marketplace']
+        - selector:
+            xpath: //p[contains(.,'to subscribe and pay based on the services you use')]
+
+select_subscription_type:
+    element:
+        selector:
+            xpath: //input[@id='billing_model-<subscription_type>']
+        op: click
+
+# --------------------  Below defination is Infrastructure type --------------------
+ccs_type_loaded:
+    elements:
+        - selector:
+            xpath: //label[text()='Customer cloud subscription']
+        - selector:
+            xpath: //span[text()='Leverage your existing cloud provider account (AWS or Google Cloud)']
+
+redhat_cloud_account:
+    elements:
+        - selector:
+            xpath: //label[text()='Red Hat cloud account']
+        - selector:
+            xpath: //span[text()='Deploy in cloud provider accounts owned by Red Hat']
+
+
+select_infrastructure_type:
+    element:
+        selector:
+            xpath: //input[@id='byoc-<byoc>']
+        op: click
+
+# -------------------- General steps --------------------
+set_billing_model_values:
+    action:
+        if_param: subscription_type
+        ref: select_subscription_type
+    action:
+        if_param: byoc
+        ref: select_infrastructure_type
+
+open_osd_creation_wizard:
+    action: switch_to_creation_cards_page
+    action: click_create_osd_button 
+    action: osd_creation_wizard_loaded

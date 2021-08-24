@@ -1,0 +1,343 @@
+################# Below defination is for networking step #################
+
+# -------------------- Network configuration related --------------------
+select_advanced_radio_button:
+    element:
+        selector:
+            xpath: //*[@id='network_configuration_toggle-advanced']
+        op: click
+select_basic_radio_button:
+    element:
+        selector:
+            xpath: //*[@id='network_configuration_toggle-basic']
+        op: click
+
+check_networking_configuration:
+    elements:
+        - selector:
+            xpath: //h3[text()='Networking']
+        - selector:
+            xpath: //span[text()='Network configuration']
+        - selector:
+            xpath: //label[text()='Basic']
+        - selector:
+            xpath: //label[text()='Basic']/div[text()='Creates a new VPC for your cluster using default values.']
+        - selector:
+            xpath: //label[text()='Advanced']
+        - selector:
+            xpath: //label[text()='Advanced']/div[text()='Choose this option if you will ever need direct, private network connectivity to your cluster, e.g. VPN or VPC peering.']
+
+check_advanced_elements_loaded:
+    action: 
+        if_param: aws
+        ref: check_aws_advanced_elements_loaded
+    action:
+        if_param: gcp
+        ref: check_gcp_advanced_elements_loaded
+    elements:
+        - selector:
+            xpath: //h4[text()='CIDR ranges may not be changed once the cluster has been created.']
+        - selector:
+            xpath: //*[@id='network_machine_cidr' and @placeholder='10.0.0.0/16']
+        - selector:
+            xpath: //*[@id='network_service_cidr' and @placeholder='172.30.0.0/16']
+        - selector:
+            xpath: //*[@id='network_host_prefix' and @placeholder='/23']
+        - selector:
+            xpath: //div[@id='network_host_prefix-helper' and text()='Must be between /23 and /26.']
+error_information_loaded:
+    element:
+        selector:
+            xpath: //*[@id='<error_message_locator>' and contains(text(),"<error_reason>")]
+        
+check_advanced_privacy_loaded:
+    elements:
+        - selector:
+            xpath: //h4[text()='Cluster privacy']
+        - selector:
+            xpath: //p[text()='Clusters may be created initially with control plane API endpoint and application routes being all public or all private. More options are available after the initial installation.']
+        - selector:
+            xpath: //label[text()='Public (recommended)']
+        - selector:
+            xpath: //div[text()='Control plane API endpoint and application routes are accessible from the internet.']
+        - selector:
+            xpath: //label[text()='Private']
+        - selector:
+            xpath: //div[text()='Control plane API endpoint and application routes are restricted to direct, private connectivity.']
+
+check_aws_advanced_elements_loaded:
+    elements:
+        - selector:
+            xpath: //div[@id='network_machine_cidr-helper' and text()='Subnet mask must be between /16 and <max_machinecidr_range>.']
+        - selector:
+            xpath: //div[@id='network_service_cidr-helper' and text()='Subnet mask must be at most /24.']
+        - selector:
+            xpath: //div[@id='network_pod_cidr-helper' and text()='Subnet mask must allow for at least 32 nodes.']
+        - selector:
+            xpath: //*[@id='network_pod_cidr' and @placeholder='10.128.0.0/16']
+    action: check_advanced_privacy_loaded
+    
+check_gcp_advanced_elements_loaded:
+    elements:
+        - selector:
+            xpath: //h4[text()='CIDR ranges may not be changed once the cluster has been created.']
+        - selector:
+            xpath: //div[text()='The machine, service and pod ranges may not overlap. The addresses must specify a range, and correspond to the first IP address in their subnet.']
+        - selector:
+            xpath: //span[text()='All addresses must be private IPv4 addresses, and belong to one of the following ranges:']
+        - selector:
+            xpath: //li[text()='10.0.0.0 – 10.255.255.255']
+        - selector:
+            xpath: //li[text()='172.16.0.0 – 172.31.255.255']
+        - selector:
+            xpath: //li[text()='192.168.0.0 – 192.168.255.255']
+        - selector:
+            xpath: //div[@id='network_machine_cidr-helper' and text()='Range must be private. Subnet mask must be at most /23.']
+        - selector:
+            xpath: //div[@id='network_service_cidr-helper' and text()='Range must be private. Subnet mask must be at most /24.']
+        - selector:
+            xpath: //div[@id='network_pod_cidr-helper' and text()='Range must be private. Subnet mask must allow for at least 32 nodes.']
+        - selector:
+            xpath: //*[@id='network_pod_cidr' and @placeholder='10.128.0.0/14']
+
+# -------------------- Machine CIDR related --------------------
+set_machine_cidr_value:
+    params:
+        locator_id: network_machine_cidr
+    action: select_advanced_radio_button
+    action: clear_input
+    element:
+        selector:
+            xpath: //*[@id='network_machine_cidr']
+        op: clear
+        op: send_keys <machine_cidr>
+
+check_machine_cidr_error_message:
+    params:
+        locator_id: network_machine_cidr
+        error_message_locator: network_machine_cidr-helper
+    action: set_machine_cidr_value
+    action: click_create_button
+    action: error_information_loaded
+    action: clear_input
+
+check_machine_cidr_error_message_wizard:
+    params:
+        locator_id: network_machine_cidr
+        error_message_locator: network_machine_cidr-helper
+    action: set_machine_cidr_value
+    action: click_next_button
+    action: error_information_loaded
+    action: clear_input
+
+# -------------------- Service CIDR related --------------------
+set_service_cidr_value:
+    params:
+        locator_id: network_service_cidr
+    action: select_advanced_radio_button
+    action: clear_input
+    element:
+        selector:
+            xpath: //*[@id='network_service_cidr']
+        op: clear
+        op: send_keys <service_cidr>
+
+check_service_cidr_error_message:
+    params:
+        locator_id: network_service_cidr
+        error_message_locator: network_service_cidr-helper
+    action: set_service_cidr_value
+    action: click_create_button
+    action: error_information_loaded
+    action: clear_input
+
+check_service_cidr_error_message_wizard:
+    params:
+        locator_id: network_service_cidr
+        error_message_locator: network_service_cidr-helper
+    action: set_service_cidr_value
+    action: click_next_button
+    action: error_information_loaded
+    action: clear_input
+
+# -------------------- Pod CIDR related --------------------
+set_pod_cidr_value:
+    params:
+        locator_id: network_pod_cidr
+    action: select_advanced_radio_button
+    action: clear_input
+    element:
+        selector:
+            xpath: //*[@id='network_pod_cidr']
+        op: send_keys <pod_cidr>
+
+check_pod_cidr_error_message:
+    params:
+        locator_id: network_pod_cidr
+        error_message_locator: network_pod_cidr-helper
+    action: set_pod_cidr_value
+    action: click_create_button
+    action: error_information_loaded
+    action: clear_input
+
+check_pod_cidr_error_message_wizard:
+    params:
+        locator_id: network_pod_cidr
+        error_message_locator: network_pod_cidr-helper
+    action: set_pod_cidr_value
+    action: click_next_button
+    action: error_information_loaded
+    action: clear_input
+
+# -------------------- Host prefix  related --------------------
+set_host_prefix_value:
+    params:
+        locator_id: network_host_prefix
+    action: select_advanced_radio_button
+    action: clear_input
+    element:
+        selector:
+            xpath: //*[@id='network_host_prefix']
+        op: clear
+        op: send_keys <host_prefix>
+
+check_host_prefix_error_message:
+    params:
+        locator_id: network_host_prefix
+        error_message_locator: network_host_prefix-helper
+    action: set_host_prefix_value
+    action: click_create_button
+    element:
+        selector:
+            xpath: //*[contains(text(),"<error_reason>")]
+    action: clear_input
+
+check_host_prefix_error_message_wizard:
+    params:
+        locator_id: network_host_prefix
+        error_message_locator: network_host_prefix-helper
+    action: set_host_prefix_value
+    action: click_next_button
+    element:
+        selector:
+            xpath: //*[contains(text(),"<error_reason>")]
+    action: clear_input
+
+# -------------------- Privacy related --------------------
+select_privacy:
+    action: select_advanced_radio_button
+    element:
+        selector:
+            xpath: //input[@id='cluster_privacy-<listening>']
+        op: click
+
+check_existing_vpc:
+    elements:
+        - selector:
+            xpath: //h4[text()='Existing VPC']
+        - selector:
+            xpath: //div[contains(text(), 'your VPC is configured with a public and a private subnet for each availability zone that you want the cluster installed into.')]
+        - selector:
+            xpath: //span[text()='Availability zone']
+        - selector:
+            xpath: //div[@class='pf-c-form__group ocm-c-create-osd-az-select']/div[@class='pf-c-form__group-control']
+        - selector:
+            xpath: //span[text()='Private subnet ID']
+        - selector:
+            xpath: //input[contains(@id,'private_subnet_id_0')]
+        - selector:
+            xpath: //span[text()='Public subnet ID']
+        - selector:
+            xpath: //input[contains(@id,'public_subnet_id_0')]
+        - selector:
+            xpath: //span[text()='Select availability zone']
+    action: select_multi_az
+    elements:
+        - selector:
+            xpath: //input[contains(@id,'private_subnet_id_1')]
+        - selector:
+            xpath: //input[contains(@id,'public_subnet_id_1')]
+        - selector:
+            xpath: //input[contains(@id,'private_subnet_id_2')]
+        - selector:
+            xpath: //input[contains(@id,'public_subnet_id_2')]
+
+select_vpc_avalilability_zone:
+    elements:
+        - selector:
+            xpath: (//div[@class='pf-c-form__group ocm-c-create-osd-az-select']/div[@class='pf-c-form__group-control'])[<row_number>]
+          op: click
+        - selector:
+            xpath: //button[text()='<available_zone>']
+          op: click
+        - selector:
+            xpath: //span[text()='<available_zone>']
+# -------------------- Existed vpc related --------------------
+click_install_into_vpc_checkbox:
+    element:
+        selector:
+            xpath: //input[@id='install_to_vpc']
+        op: click
+
+# -------------------- General steps --------------------
+goto_networking_on_wizard:
+    action: goto_machine_pool_on_wizard
+    action: set_machinepool_values
+    action: click_next_button
+
+set_networking_values:
+    action:
+        if_param: machine_cidr
+        ref: set_machine_cidr_value
+    action:
+        if_param: service_cidr
+        ref: set_service_cidr_value
+    action:
+        if_param: pod_cidr
+        ref: set_pod_cidr_value
+    action:
+        if_param: host_prefix
+        ref: set_host_prefix_value
+    action:
+        if_param: listening
+        ref: select_privacy
+
+
+check_overlap_subnet_error_message:
+    action: set_machine_cidr_value
+    action: set_service_cidr_value
+    elements:
+        - selector:
+            text: "This subnet overlaps with the subnet in the Machine CIDR field."
+        - selector:
+            text: "This subnet overlaps with the subnet in the Service CIDR field."
+    action: set_pod_cidr_value
+    elements:
+        - selector:
+            text: "This subnet overlaps with the subnets in the Service CIDR, Pod CIDR fields."
+        - selector:
+            text: "This subnet overlaps with the subnets in the Machine CIDR, Pod CIDR fields."
+        - selector:
+            text: "This subnet overlaps with the subnets in the Machine CIDR, Service CIDR fields."
+
+check_cidr_background_validation_error_message:
+    action: clear_input
+    action: osd_creation_page_loaded
+    action: check_networking_configuration
+    action: check_advanced_elements_loaded
+    action: set_machine_cidr_value
+    action: click_create_button
+    action: osd_creation_error_dialog_loaded
+    action: close_error_message_dialog
+    action: clear_input
+
+check_cidr_background_validation_error_message_wizard:
+    action: clear_input
+    action: osd_creation_page_loaded
+    action: check_networking_configuration
+    action: check_advanced_elements_loaded
+    action: set_machine_cidr_value
+    action: click_next_button
+    action: osd_creation_error_dialog_loaded
+    action: close_error_message_dialog
+    action: clear_input

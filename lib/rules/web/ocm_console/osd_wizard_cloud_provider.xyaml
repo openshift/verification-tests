@@ -1,0 +1,80 @@
+########### Below defination is cloud provider selection step #############
+# -------------------- Cloud provider related --------------------
+select_cloud_provider_wizard:
+    element:
+        selector:
+            xpath: //article[@data-test-id='<cloud_provider>-provider-card']
+        op: click
+
+# -------------------- AWS credential related --------------------
+check_no_input_errors_to_required_aws_items:
+    action: click_create_button
+    elements:
+        - selector:
+            xpath: //div[@id='account_id-helper' and text()=' AWS account ID is required.']
+        - selector:
+            xpath: //div[@id='access_key_id-helper' and text()=' Field is required']
+        - selector:
+            xpath: //div[@id='secret_access_key-helper' and text()=' Field is required']
+check_error_to_cluster_name_on_creation_page:
+    element:
+        selector:
+            xpath: //div[@id='name-helper' and contains(text(),'<error_message>')]
+aws_account_id_textbox_loaded:
+    element: &aws_account_id_textbox
+        selector:
+            xpath: //input[@id='account_id']
+aws_access_key_textbox_loaded:
+    element: &aws_access_key_textbox
+        selector:
+            xpath: //input[@id='access_key_id']
+aws_access_secret_textbox_loaded:
+    element: &aws_secret_key_textbox
+        selector:
+            xpath: //input[@id='secret_access_key']
+input_aws_account_id:
+    element:
+        <<: *aws_account_id_textbox
+        op: send_keys <account_id>
+input_aws_access_key:
+    element:
+        <<: *aws_access_key_textbox
+        op: send_keys <aws_access_key>
+input_aws_secret_key:
+    element:
+        <<: *aws_secret_key_textbox
+        op: send_keys <aws_secret>
+input_aws_credentials:
+    action: input_aws_account_id
+    action: input_aws_access_key
+    action: input_aws_secret_key
+
+check_invalid_aws_credential_error_message:
+    action: input_aws_credentials
+    action: fill_in_required_items_on_osd_creation_page
+    action: click_create_button
+    action: osd_creation_error_dialog_loaded
+    action: close_error_message_dialog
+
+check_aws_account_id_error_message:
+    params:
+        locator_id: account_id
+    action: input_aws_account_id 
+    action: click_create_button
+    element:
+        selector:
+            xpath: //div[contains(text(), '<error_message>')]
+    action: clear_input
+
+# -------------------- GCP credential related --------------------
+
+# -------------------- General steps --------------------
+set_cloud_provider_values:
+    action:
+        if_param: cloud_provider
+        ref: select_cloud_provider_wizard
+
+goto_cloud_provider_on_wizard:
+    action: open_osd_creation_wizard
+    action: set_billing_model_values
+    action: click_next_button

@@ -49,256 +49,14 @@ cluster_scale_displayed:
     - selector:
         xpath: //div[@class='flat-radio-buttons-flex-container']
 
-select_compute_node_count_on_creation_page:
-    elements:
-        - selector:
-            xpath: //select[@aria-label='Worker nodes' and @name='nodes_compute']
-          op: click
-        - selector:
-            xpath: //option[text()='<node_number>']
-          op: click
 
-specified_machine_type_loaded:
-    element: &machine_type_locator
-        selector:
-            xpath: //button[contains(@id,"<machine_type>")]
-select_machine_type:
-    elements: 
-        - selector:
-            xpath: //*[text()='Worker node instance type']/../../..//button
-          op: click
-        - selector:
-            xpath: //span[text()='<machine_type>']
-          op: click
-
-hover_machine_type:
-    element:
-        <<: *machine_type_locator
-        op: hover
-
-click_create_button:
-    element:
-        selector:
-            xpath: //button[@type='submit']
-        op: click
 switch_to_osd_creation_page:
     action: switch_to_creation_cards_page
     action: click_create_osd_button 
     action: check_cloud_provider_selection_page
     action: select_cloud_provider
     action: osd_creation_page_loaded
-select_advanced_radio_button:
-    element:
-        selector:
-            xpath: //*[@id='network_configuration_toggle-advanced']
-        op: click
-select_basic_radio_button:
-    element:
-        selector:
-            xpath: //*[@id='network_configuration_toggle-basic']
-        op: click
 
-check_networking_configuration:
-    elements:
-        - selector:
-            xpath: //h3[text()='Networking']
-        - selector:
-            xpath: //span[text()='Network configuration']
-        - selector:
-            xpath: //label[text()='Basic']
-        - selector:
-            xpath: //label[text()='Basic']/div[text()='Creates a new VPC for your cluster using default values.']
-        - selector:
-            xpath: //label[text()='Advanced']
-        - selector:
-            xpath: //label[text()='Advanced']/div[text()='Choose this option if you will ever need direct, private network connectivity to your cluster, e.g. VPN or VPC peering.']
-
-check_advanced_elements_loaded:
-    action: 
-        if_param: aws
-        ref: check_aws_advanced_elements_loaded
-    action:
-        if_param: gcp
-        ref: check_gcp_advanced_elements_loaded
-    elements:
-        - selector:
-            xpath: //h4[text()='CIDR ranges may not be changed once the cluster has been created.']
-        - selector:
-            xpath: //*[@id='network_machine_cidr' and @placeholder='10.0.0.0/16']
-        - selector:
-            xpath: //*[@id='network_service_cidr' and @placeholder='172.30.0.0/16']
-        - selector:
-            xpath: //*[@id='network_host_prefix' and @placeholder='/23']
-        - selector:
-            xpath: //div[@id='network_host_prefix-helper' and text()='Must be between /23 and /26.']
-        
-check_advanced_privacy_loaded:
-    elements:
-        - selector:
-            xpath: //h4[text()='Cluster privacy']
-        - selector:
-            xpath: //p[text()='Clusters may be created initially with control plane API endpoint and application routes being all public or all private. More options are available after the initial installation.']
-        - selector:
-            xpath: //label[text()='Public (recommended)']
-        - selector:
-            xpath: //div[text()='Control plane API endpoint and application routes are accessible from the internet.']
-        - selector:
-            xpath: //label[text()='Private']
-        - selector:
-            xpath: //div[text()='Control plane API endpoint and application routes are restricted to direct, private connectivity.']
-check_aws_advanced_elements_loaded:
-    elements:
-        - selector:
-            xpath: //div[@id='network_machine_cidr-helper' and text()='Subnet mask must be between /16 and <max_machinecidr_range>.']
-        - selector:
-            xpath: //div[@id='network_service_cidr-helper' and text()='Subnet mask must be at most /24.']
-        - selector:
-            xpath: //div[@id='network_pod_cidr-helper' and text()='Subnet mask must allow for at least 32 nodes.']
-        - selector:
-            xpath: //*[@id='network_pod_cidr' and @placeholder='10.128.0.0/16']
-    action: check_advanced_privacy_loaded
-    
-check_gcp_advanced_elements_loaded:
-    elements:
-        - selector:
-            xpath: //h4[text()='CIDR ranges may not be changed once the cluster has been created.']
-        - selector:
-            xpath: //div[text()='The machine, service and pod ranges may not overlap. The addresses must specify a range, and correspond to the first IP address in their subnet.']
-        - selector:
-            xpath: //span[text()='All addresses must be private IPv4 addresses, and belong to one of the following ranges:']
-        - selector:
-            xpath: //li[text()='10.0.0.0 – 10.255.255.255']
-        - selector:
-            xpath: //li[text()='172.16.0.0 – 172.31.255.255']
-        - selector:
-            xpath: //li[text()='192.168.0.0 – 192.168.255.255']
-        - selector:
-            xpath: //div[@id='network_machine_cidr-helper' and text()='Range must be private. Subnet mask must be at most /23.']
-        - selector:
-            xpath: //div[@id='network_service_cidr-helper' and text()='Range must be private. Subnet mask must be at most /24.']
-        - selector:
-            xpath: //div[@id='network_pod_cidr-helper' and text()='Range must be private. Subnet mask must allow for at least 32 nodes.']
-        - selector:
-            xpath: //*[@id='network_pod_cidr' and @placeholder='10.128.0.0/14']
-
-set_machine_cidr_value:
-    params:
-        locator_id: network_machine_cidr
-    action: select_advanced_radio_button
-    action: clear_input
-    element:
-        selector:
-            xpath: //*[@id='network_machine_cidr']
-        op: clear
-        op: send_keys <machine_cidr>
-
-set_service_cidr_value:
-    params:
-        locator_id: network_service_cidr
-    action: select_advanced_radio_button
-    action: clear_input
-    element:
-        selector:
-            xpath: //*[@id='network_service_cidr']
-        op: clear
-        op: send_keys <service_cidr>
-set_pod_cidr_value:
-    params:
-        locator_id: network_pod_cidr
-    action: select_advanced_radio_button
-    action: clear_input
-    element:
-        selector:
-            xpath: //*[@id='network_pod_cidr']
-        op: send_keys <pod_cidr>
-
-set_host_prefix_value:
-    params:
-        locator_id: network_host_prefix
-    action: select_advanced_radio_button
-    action: clear_input
-    element:
-        selector:
-            xpath: //*[@id='network_host_prefix']
-        op: clear
-        op: send_keys <host_prefix>
-
-select_privacy:
-    action: select_advanced_radio_button
-    element:
-        selector:
-            xpath: //input[@id='cluster_privacy-<listening>']
-        op: click
-
-error_information_loaded:
-    element:
-        selector:
-            xpath: //*[@id='<error_message_locator>' and contains(text(),"<error_reason>")]
-check_machine_cidr_error_message:
-    params:
-        locator_id: network_machine_cidr
-        error_message_locator: network_machine_cidr-helper
-    action: set_machine_cidr_value
-    action: click_create_button
-    action: error_information_loaded
-    action: clear_input
-
-check_service_cidr_error_message:
-    params:
-        locator_id: network_service_cidr
-        error_message_locator: network_service_cidr-helper
-    action: set_service_cidr_value
-    action: click_create_button
-    action: error_information_loaded
-    action: clear_input
-
-check_pod_cidr_error_message:
-    params:
-        locator_id: network_pod_cidr
-        error_message_locator: network_pod_cidr-helper
-    action: set_pod_cidr_value
-    action: click_create_button
-    action: error_information_loaded
-    action: clear_input
-
-check_overlap_subnet_error_message:
-    action: set_machine_cidr_value
-    action: set_service_cidr_value
-    elements:
-        - selector:
-            text: "This subnet overlaps with the subnet in the Machine CIDR field."
-        - selector:
-            text: "This subnet overlaps with the subnet in the Service CIDR field."
-    action: set_pod_cidr_value
-    elements:
-        - selector:
-            text: "This subnet overlaps with the subnets in the Service CIDR, Pod CIDR fields."
-        - selector:
-            text: "This subnet overlaps with the subnets in the Machine CIDR, Pod CIDR fields."
-        - selector:
-            text: "This subnet overlaps with the subnets in the Machine CIDR, Service CIDR fields."
-
-check_host_prefix_error_message:
-    params:
-        locator_id: network_host_prefix
-        error_message_locator: network_host_prefix-helper
-    action: set_host_prefix_value
-    action: click_create_button
-    element:
-        selector:
-            xpath: //*[contains(text(),"<error_reason>")]
-    action: clear_input
-
-check_cidr_background_validation_error_message:
-    action: clear_input
-    action: osd_creation_page_loaded
-    action: check_networking_configuration
-    action: check_advanced_elements_loaded
-    action: set_machine_cidr_value
-    action: click_create_button
-    action: osd_creation_error_dialog_loaded
-    action: close_error_message_dialog
-    action: clear_input
 
 fill_in_required_items_on_osd_creation_page:
     action: input_cluster_name_on_osd_creation_page
@@ -359,79 +117,9 @@ select_byoc_model:
     action: click_customer_cloud_subscription
     action: close_customer_cloud_subscription_prompt_message
 
-check_no_input_errors_to_required_aws_items:
-    action: click_create_button
-    elements:
-        - selector:
-            xpath: //div[@id='account_id-helper' and text()=' AWS account ID is required.']
-        - selector:
-            xpath: //div[@id='access_key_id-helper' and text()=' Field is required']
-        - selector:
-            xpath: //div[@id='secret_access_key-helper' and text()=' Field is required']
-check_error_to_cluster_name_on_creation_page:
-    element:
-        selector:
-            xpath: //div[@id='name-helper' and contains(text(),'<error_message>')]
-aws_account_id_textbox_loaded:
-    element: &aws_account_id_textbox
-        selector:
-            xpath: //input[@id='account_id']
-aws_access_key_textbox_loaded:
-    element: &aws_access_key_textbox
-        selector:
-            xpath: //input[@id='access_key_id']
-aws_access_secret_textbox_loaded:
-    element: &aws_secret_key_textbox
-        selector:
-            xpath: //input[@id='secret_access_key']
-input_aws_account_id:
-    element:
-        <<: *aws_account_id_textbox
-        op: send_keys <account_id>
-input_aws_access_key:
-    element:
-        <<: *aws_access_key_textbox
-        op: send_keys <aws_access_key>
-input_aws_secret_key:
-    element:
-        <<: *aws_secret_key_textbox
-        op: send_keys <aws_secret>
-input_aws_credentials:
-    action: input_aws_account_id
-    action: input_aws_access_key
-    action: input_aws_secret_key
 
-check_invalid_aws_credential_error_message:
-    action: input_aws_credentials
-    action: fill_in_required_items_on_osd_creation_page
-    action: click_create_button
-    action: osd_creation_error_dialog_loaded
-    action: close_error_message_dialog
 
-region_dropdown_loaded:
-    element: &region_dropdown
-        selector:
-            xpath: //select[contains(@class, 'cloud-region-combo-box')]
-expand_region_dropdown:
-    element:
-        <<: *region_dropdown
-        op: click
-close_region_dropdown:
-    action: expand_region_dropdown
 
-    
-select_region:
-    action: expand_region_dropdown
-    element:
-        selector:
-            xpath: //option[@value='<region_id>']
-        op: click
-select_region_by_text:
-    action: expand_region_dropdown
-    element:
-        selector:
-            xpath: //option[text()='<region_name>']
-        op: click
 check_non_support_multi_az_region_error_message:
     params:
         error_reason: "does not support multiple availability zones"
@@ -451,65 +139,6 @@ check_non_support_multi_az_region_error_message:
     action:
         if_not_param: no_regions
         ref: close_error_message_dialog
-
-check_persistent_storage_field_in_creation_page:
-  elements:
-  - selector:
-      xpath: //span[text()='Persistent storage']
-  - selector:
-      xpath: //select[@name='persistent_storage']
-  - selector:
-      xpath: //label[@for='persistent_storage']/following-sibling::span/*[name()='svg']
-select_persisten_storage_on_creation_page:
-    elements:
-        - selector:
-            xpath: //select[@aria-label='Persistent Storage' and @name='persistent_storage']
-          op: click
-        - selector:
-            xpath: //option[text()='<storage_quota>']
-          op: click
-check_lb_field_in_creation_page:
-  elements:
-  - selector:
-      xpath: //span[text()='Load balancers']
-  - selector:
-      xpath: //select[@name='load_balancers']
-  - selector:
-      xpath: //label[@for='load_balancers']/following-sibling::span/*[name()='svg']
-select_lb_on_creation_page:
-    elements:
-        - selector:
-            xpath: //select[@name='load_balancers' and @aria-label='Load Balancers']
-          op: click
-        - selector:
-            xpath: //option[text()='<lb_quota>']
-          op: click
-check_persistent_storage_field_in_creation_page_missing:
-  element:
-    selector:
-      xpath: //span[text()='Persistent storage']
-    missing: true
-check_lb_field_in_creation_page_missing:
-  element:
-    selector:
-      xpath: //span[text()='Load balancers']
-    missing: true
-check_persistent_storage_popover_message:
-  element:
-    selector:
-      xpath: //label[@for='persistent_storage']/following-sibling::span/*[name()='svg']
-    op: click
-  element:
-    selector:
-      xpath: //div[@class='pf-c-popover__body' and text()='The storage quota set on the deployed cluster.']
-check_lb_popover_message:
-  element:
-    selector:
-      xpath: //label[@for='load_balancers']/following-sibling::span/*[name()='svg']
-    op: click
-  element:
-    selector:
-      xpath: //div[@class='pf-c-popover__body' and text()='The load balancer quota set on the deployed cluster.']
 byoc_page_loaded:
     elements:
         - selector:
@@ -626,79 +255,8 @@ check_gcp_compute_node_instances_type:
         - selector:
             xpath: //h4[text()='16 vCPU 32 GiB RAM']/../../div/div[text()='Compute optimized']
 
-check_aws_account_id_error_message:
-    params:
-        locator_id: account_id
-    action: input_aws_account_id 
-    action: click_create_button
-    element:
-        selector:
-            xpath: //div[contains(text(), '<error_message>')]
-    action: clear_input
-check_help_messages_on_creation_page:
-    elements:
-        - selector:
-            xpath: //span[text()='Cluster name']/../../span
-          op: click
-        - selector:
-            xpath: //span[text()='Cluster name']/../span[text()='*']
-        - selector:
-            xpath: //div[contains(text(),'The name of the cluster. This will be used when generating a sub-domain')]
-    action: close_help_message
-    elements:
-        - selector:
-            xpath: //span[text()='Region']/../../span
-          op: click
-        - selector:
-            xpath: //span[text()='Region']/../span[text()='*']
-        - selector:
-            xpath: //div[text()='The data center where your worker pool will be located.']
-    action: close_help_message
-    elements:
-        - selector:
-            xpath: //span[text()='Availability']/../../span
-          op: click
-        - selector:
-            xpath: //span[text()='Availability']/../span[text()='*']
-        - selector:
-            xpath: //div[text()='Deploy to a single data center or to multiple data centers.']
-    action: close_help_message
-    elements:
-        - selector:
-            xpath: //span[text()='Worker node instance type']/../../span
-          op: click
-        - selector:
-            xpath: //span[text()='Worker node instance type']/../span[text()='*']
-        - selector:
-            xpath: //div[contains(text(),'The instance type for the worker nodes. Instance type')]
-    action: close_help_message
-    elements:
-        - selector:
-            xpath: //span[text()='Worker node count']/../../span
-          op: click
-        - selector:
-            xpath: //div[contains(text(),'The number of worker nodes to provision per zone.')]
-    action: close_help_message
-    elements:
-        - selector:
-            xpath: //span[text()='Persistent storage']/../../span
-          op: click
-        - selector:
-            xpath: //div[contains(text(),'The storage quota set on the deployed cluster.')]
-    action: close_help_message
-    elements:
-        - selector:
-            xpath: //span[text()='Load balancers']/../../span
-          op: click
-        - selector:
-            xpath: //div[contains(text(),'The load balancer quota set on the deployed cluster.')]
-    action: close_help_message
 
-close_help_message:
-    element:
-        selector:
-            xpath: //button[@aria-label='Close']
-        op: click
+
 expand_node_labels:
     element:
         selector:
@@ -732,30 +290,6 @@ check_error_for_labels:
         selector:
             xpath: //div[@id='labe-help' and text()='<error_message>']
 
-click_install_into_vpc_checkbox:
-    element:
-        selector:
-            xpath: //input[@id='install_to_vpc']
-        op: click
-
-check_node_draining:
-    elements:
-        - selector:
-            xpath: //h4[text()='Node draining']
-        - selector:
-            xpath: //div[contains(.,'You may set a grace period for how long Pod Disruption Budget-protected workloads will')]
-        - selector:
-            xpath: //div[contains(.,'be respected during updates. After this grace period, any workloads protected by')]
-        - selector:
-            xpath: //div[contains(.,'Pod Disruption Budgets that have not been successfully drained from a node will be')]
-        - selector:
-            xpath: //div[contains(.,'forcibly evicted.')]
-        - selector:
-            xpath: //span[text()='Grace period']
-        - selector:
-            xpath: //div/span[text()='1 hour']
-        - selector:
-            xpath: //div[@class='pf-c-form__group ocm-c-upgrades-pdb-select']/div/div/button[@aria-haspopup='listbox']
 select_node_drain:
     elements:
         - selector:
@@ -764,46 +298,8 @@ select_node_drain:
         - selector:
             xpath: //li/button[text()='<drain_value>']
           op: click
-check_existing_vpc:
-    elements:
-        - selector:
-            xpath: //h4[text()='Existing VPC']
-        - selector:
-            xpath: //div[contains(text(), 'your VPC is configured with a public and a private subnet for each availability zone that you want the cluster installed into.')]
-        - selector:
-            xpath: //span[text()='Availability zone']
-        - selector:
-            xpath: //div[@class='pf-c-form__group ocm-c-create-osd-az-select']/div[@class='pf-c-form__group-control']
-        - selector:
-            xpath: //span[text()='Private subnet ID']
-        - selector:
-            xpath: //input[contains(@id,'private_subnet_id_0')]
-        - selector:
-            xpath: //span[text()='Public subnet ID']
-        - selector:
-            xpath: //input[contains(@id,'public_subnet_id_0')]
-        - selector:
-            xpath: //span[text()='Select availability zone']
-    action: select_multi_az
-    elements:
-        - selector:
-            xpath: //input[contains(@id,'private_subnet_id_1')]
-        - selector:
-            xpath: //input[contains(@id,'public_subnet_id_1')]
-        - selector:
-            xpath: //input[contains(@id,'private_subnet_id_2')]
-        - selector:
-            xpath: //input[contains(@id,'public_subnet_id_2')]
-select_vpc_avalilability_zone:
-    elements:
-        - selector:
-            xpath: (//div[@class='pf-c-form__group ocm-c-create-osd-az-select']/div[@class='pf-c-form__group-control'])[<row_number>]
-          op: click
-        - selector:
-            xpath: //button[text()='<available_zone>']
-          op: click
-        - selector:
-            xpath: //span[text()='<available_zone>']
+
+
 check_billing_model:
     elements:
         - selector: 
@@ -828,3 +324,7 @@ check_billing_model:
             xpath: //div[contains(., 'to subscribe and pay based on the services you use')]
         - selector:
             xpath: //h3[text()='Infrastructure type:']
+
+
+
+
