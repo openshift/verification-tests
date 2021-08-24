@@ -11,7 +11,7 @@ archive_dialog_loaded:
         - selector:
             xpath: //button[@class='pf-c-button pf-m-plain' and @aria-label='Close']
         - selector:
-            xpath: //h1/span[text()='Archive cluster']
+            xpath: //h1[text()='Archive cluster']
         - selector:
             xpath: //form/p[contains(text(), 'Archiving a cluster will remove it from the cluster list and remove the cluster from subscription management.')]
         - selector:
@@ -72,7 +72,7 @@ unarchive_dialog_loaded:
         - selector:
             xpath: //button[@class='pf-c-button pf-m-plain' and @aria-label='Close']
         - selector:
-            xpath: //span[text()='Unarchive cluster']
+            xpath: //h1[text()='Unarchive cluster']
         - selector:
             xpath: //p[text()='Un-archiving a cluster will make it visible in the active (default) cluster list. You may need to manage subscriptions if the cluster is active.']
         - selector:

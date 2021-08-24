@@ -1,0 +1,38 @@
+################## For osd wizard review #################
+
+# --------------------- Review page related ---------------------
+review_and_create_loaded:
+    element:
+        selector:
+            xpath: //h2[text()='Review your dedicated cluster']
+        
+
+check_subscription_type_on_review:
+    element:
+        selector:
+            xpath: //dt/*[text()='Subscription type']/../../dd/*[text()='<subscription_name>']
+
+check_infrastructure_type:
+    elemnet:
+        selector:
+            xpath: //dt/*[text()='Infrastracture type']/../../dd/*[text()='<infrastracture_name>']
+
+check_review_page:
+    action:
+        if_param: subscription_name
+        ref: check_subscription_type_on_review
+    action:
+        if_param: infrastracture_name
+        ref: check_infrastructure_type
+
+click_create_button:
+    element:
+        selector:
+            xpath: //button[@type='submit']
+        op: click
+
+# -------------------- General steps --------------------
+goto_reviews_on_wizard:
+    action: goto_updates_on_wizard
+    action: set_updates_values
+    action: click_next_button
