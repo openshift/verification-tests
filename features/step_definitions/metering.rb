@@ -529,7 +529,7 @@ Given /^I set up environment for metering sharedPVC$/ do
   step %Q(I run oc create as admin over ERB test file: metering/configs/pv_metering.yaml)
   step %Q(the step should succeed)
   step %Q/a pod becomes ready with labels:/, table(%{
-    | app=metering-operator |
+    | app=metering-operator-failure-on-purpose |
   })
 end
 
