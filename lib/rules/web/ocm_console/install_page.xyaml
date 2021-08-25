@@ -55,7 +55,7 @@ check_common_part:
         - selector:
             xpath: //div[text()='OpenShift']
         - selector:
-            xpath: //a[contains(@href, '/openshift/') and contains(., 'Clusters')]
+            xpath: //a[@aria-current='page' and contains(@href, '/openshift') and contains(., 'Clusters')]
         - selector:
             xpath: //a[contains(@href, '/openshift/overview') and contains(., 'Overview')]
         - selector:
@@ -248,7 +248,7 @@ check_macos_download_crc_button_in_crc_install_page:
 check_windows_download_crc_button_crc_in_install_page:
     params:
         os_name: Windows
-        os_link: crc-windows-amd64.zip
+        os_link: crc-windows-installer.zip
     action: check_download_crc_button_in_crc_install_page
 check_download_part_for_crc_install_page:
     action: check_linux_download_crc_button_in_crc_install_page
@@ -260,9 +260,6 @@ click_copyPullSecret_button:
         selector:
             xpath: //button[text()='Copy pull secret']
         op: click
-    element:
-        selector:
-            xpath: //div[text()='Copied!']
 check_pull_secret_part_in_install_page:
     action: click_copyPullSecret_button
     elements:

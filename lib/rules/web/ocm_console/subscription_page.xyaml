@@ -44,5 +44,5 @@ check_quota_limit_page:
         - selector:
             xpath: //a[@class='pf-c-button pf-m-primary' and text()='Enable in Marketplace' and @href='https://marketplace.redhat.com/en-us/products/red-hat-openshift-dedicated']
         - selector:
-            xpath: //a[text()='Learn more' and @href='https://access.redhat.com/documentation/en-us/openshift_cluster_manager/2021-02/html/managing_clusters/assembly-cluster-subscriptions']
+            xpath: //a[text()='Learn more' and @href='https://access.redhat.com/documentation/en-us/openshift_cluster_manager/2021/html/managing_clusters/assembly-cluster-subscriptions']
                  
