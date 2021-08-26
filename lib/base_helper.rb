@@ -142,7 +142,9 @@ module BushSlicer
       #   is reached
       def wait_for(seconds, interval: 1, stats: nil)
         if seconds > 60
-          Kernel.puts("waiting for operation up to #{seconds} seconds..")
+          unless ENV['DISABLE_WAIT_PRINT'] == 'true'
+            Kernel.puts("waiting for operation up to #{seconds} seconds..")
+          end
         end
         iterations = 0
 
