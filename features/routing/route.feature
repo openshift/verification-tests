@@ -111,9 +111,9 @@ Feature: Testing route
 
     Given I have a pod-for-ping in the project
     When I run the :create_route_edge client command with:
-      | name | edge-route |
+      | name    | edge-route       |
       | service | service-unsecure |
-      | path| /test |
+      | path    | /test            |
     Then the step should succeed
     And I wait up to 20 seconds for the steps to pass:
     """
@@ -135,6 +135,39 @@ Feature: Testing route
     Then the step should succeed
     And the output should not contain "OPENSHIFT"
     And the output should not match "\d+\.\d+\.\d+\.\d+"
+
+    ## add extra steps for BZ #1660598: remove path then re-add the same path
+    When I run the :patch client command with:
+      | resource      | route                  |
+      | resource_name | edge-route             |
+      | p             | {"spec": {"path": ""}} |
+    Then the step should succeed
+    And I wait up to 20 seconds for the steps to pass:
+    """
+    When I execute on the pod:
+      | curl |
+      | https://<%= route("edge-route", service("edge-route")).dns(by: user) %>/ |
+      | -k |
+    Then the output should contain "Hello-OpenShift"
+    """
+    When I run the :patch client command with:
+      | resource      | route                       |
+      | resource_name | edge-route                  |
+      | p             | {"spec": {"path": "/test"}} |
+    Then the step should succeed
+    When I run the :get client command with:
+      | resource | route |
+    Then the step should succeed
+    And the output should not contain:
+      | HostAlreadyClaimed |
+    And I wait up to 20 seconds for the steps to pass:
+    """
+    When I execute on the pod:
+      | curl |
+      | https://<%= route("edge-route", service("edge-route")).dns(by: user) %>/test/ |
+      | -k |
+    Then the output should contain "Hello-OpenShift-Path-Test"
+    """
 
   # @author zzhao@redhat.com
   # @case_id OCP-12564
