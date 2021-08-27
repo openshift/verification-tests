@@ -148,7 +148,14 @@ refresh_on_machine_pool_page:
             xpath: //button[@aria-label='Refresh']
         op: click
 
-
+check_machine_pool_name:
+    elements:
+        - selector:
+            xpath: //input[@id='name']
+          op: click
+        - selector:
+            xpath: //span[contains(text(),'Worker node instance type')]
+          op: click
 
         
 check_edit_labels_in_dropdown:
