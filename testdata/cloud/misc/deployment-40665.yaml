@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "dep-40665"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+     containers:
+     -
+       name: "myfrontend"
+       image: "quay.io/openshifttest/hello-openshift@sha256:aaea76ff622d2f8bcb32e538e7b3cd0ef6d291953f3e7c9f556c1ba5baf47e2e"
+       ports:
+        -
+          containerPort: 80
+          name: "http-server"
+       volumeMounts:
+        -
+          mountPath: "/var/www/html"
+          name: "task-pv-storage"
+     volumes:
+        - 
+          name: task-pv-storage
+          persistentVolumeClaim:
+           claimName: pvc-cloud
+     nodeSelector:
+              testcase: ocp40665
