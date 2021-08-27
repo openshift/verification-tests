@@ -100,14 +100,14 @@ module BushSlicer
         c.description = "Add tags to test case\n\t" \
           'Example: tools/case_id_splitter.rb add-tags @tag_name OCP-xxxxx'
         c.option('--tags TAGS', Array, 'Tag to add to the scenario')
-        c.option('--cid ID', String, 'Test case id')
+        c.option('--ids ID', Array, 'Test case ids')
         c.action do |_args, options|
           setup_global_opts(options)
 
           tags = options.tags
-          case_id = options.cid
+          case_ids = options.ids
 
-          add_tags_to_scenario(tags, case_id)
+          add_tags_to_scenario(tags, case_ids)
         end
       end
 
@@ -177,41 +177,42 @@ module BushSlicer
     end
 
     # add tags to a test scenario in the .feature
-    private def add_tags_to_scenario(tags, case_id)
+    private def add_tags_to_scenario(tags, case_ids)
       parser = GherkinParse.new
-      begin
-        ranges_loc = parser.ranges_for(case_id)
-      rescue RuntimeError => re
-        puts "Could not find locations for test case #{case_id}"
-        return
-      end
-
-      res = ranges_loc[case_id]
-
-      current_tags = []
-      start_line_num = 0
-
-      content = IO.readlines(res[:file])
-      res[:range].each do |i|
-        current_tags << content[i].strip if content[i] =~ /^\s.*@/
-        if content[i] =~ /^\s*(Scenario)/
-          start_line_num = i
-          break
-        end
-      end
-
-      tags.each do |tag|
-        if current_tags.include?(tag)
-          puts "Test case #{case_id} already has tag #{tag}"
+      case_ids.each do |case_id|
+        begin
+          ranges_loc = parser.ranges_for(case_id)
+        rescue RuntimeError => re
+          puts "Could not find locations for test case #{case_id}"
           next
         end
+        res = ranges_loc[case_id]
 
-        line_to_add = "  #{tag}"
-        puts "Adding tag #{tag} to #{res[:file]} for test case #{case_id}"
-        content.insert(start_line_num, line_to_add)
+        current_tags = []
+        start_line_num = 0
+
+        content = IO.readlines(res[:file])
+        res[:range].each do |i|
+          current_tags << content[i].strip if content[i] =~ /^\s.*@/
+          if content[i] =~ /^\s*(Scenario)/
+            start_line_num = i
+            break
+          end
+        end
+
+        tags.each do |tag|
+          if current_tags.include?(tag)
+            puts "Test case #{case_id} already has tag #{tag}"
+            next
+          end
+
+          line_to_add = "  #{tag}"
+          puts "Adding tag #{tag} to #{res[:file]} for test case #{case_id}"
+          content.insert(start_line_num, line_to_add)
+        end
+
+        File.open(res[:file], 'w') { |f| f.puts(content) }
       end
-
-      File.open(res[:file], 'w') { |f| f.puts(content) }
     end
 
     def opts
