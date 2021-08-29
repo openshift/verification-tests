@@ -2,6 +2,7 @@ Feature: apiserver and auth related upgrade check
   # @author pmali@redhat.com
   # @case_id OCP-22734
   @upgrade-prepare
+  @inactive
   Scenario: Check Authentication operators and operands are upgraded correctly - prepare
     # According to our upgrade workflow, we need an upgrade-prepare and upgrade-check for each scenario.
     # But some of them do not need any prepare steps, which lead to errors "can not find scenarios" in the log.
@@ -62,6 +63,7 @@ Feature: apiserver and auth related upgrade check
   # @case_id OCP-22673
   @upgrade-check
   @admin
+  @inactive
   Scenario: Check apiserver operators and operands are upgraded correctly
     Given the "kube-apiserver" operator version matches the current cluster version
     And the "openshift-apiserver" operator version matches the current cluster version
@@ -274,3 +276,27 @@ Feature: apiserver and auth related upgrade check
     And the output should contain:
       | DNS:foo.service-ca-upgrade.svc, DNS:foo.service-ca-upgrade.svc.cluster.local     |
       | DNS:*.foo.service-ca-upgrade.svc, DNS:*.foo.service-ca-upgrade.svc.cluster.local |
+
+  # @author xxia@redhat.com
+  @upgrade-prepare
+  Scenario: kube-apiserver and openshift-apiserver should have zero-disruption upgrade - prepare
+    # According to our upgrade workflow, we need an upgrade-prepare and upgrade-check for each scenario.
+    # But some of them do not need any prepare steps, which lead to errors "can not find scenarios" in the log.
+    # So we just add a simple/useless step here to get rid of the errors in the log.
+    Given the expression should be true> "True" == "True"
+
+  # @author xxia@redhat.com
+  # @case_id OCP-34223
+  @upgrade-check
+  @admin
+  Scenario: kube-apiserver and openshift-apiserver should have zero-disruption upgrade
+    # This case needs keep running oc commands against servers during upgrade, but our framework does not support
+    # So using a workaround: run them in a background script during upgrade CI job and check result here
+    # The project is created in the script
+    When I run the :get admin command with:
+      | resource | cm/log         |
+      | o        | yaml           |
+      | n        | ocp-34223-proj |
+    Then the step should succeed
+    # This is to discover bugs like: 1845411 1804717 1912820
+    And the output should not contain "failed"

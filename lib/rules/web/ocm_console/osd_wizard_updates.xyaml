@@ -1,0 +1,71 @@
+################# Below defination is for updates step #################
+
+# --------------------- Updates schedule related ---------------------
+select_update_strategy:
+    element:
+        selector:
+            xpath: //input[@id='upgrade_policy-<update_strategy>']
+        op: click
+
+set_update_daytime:
+    params:
+        update_strategy: automatic
+    action: select_update_strategy
+    elements:
+        - selector:
+            xpath: (//div[@class='pf-c-select'])[1]
+          op: click
+        - selector:
+            xpath: //button[text()='<day>']
+          op: click
+        - selector:
+            xpath: (//div[@class='pf-c-select'])[2]
+          op: click
+        - selector: 
+            xpath: //button[contains(text(), '<time>')]
+
+# --------------------- Node draining related ---------------------
+check_node_draining:
+    elements:
+        - selector:
+            xpath: //h4[text()='Node draining']
+        - selector:
+            xpath: //div[contains(.,'You may set a grace period for how long Pod Disruption Budget-protected workloads will')]
+        - selector:
+            xpath: //div[contains(.,'be respected during updates. After this grace period, any workloads protected by')]
+        - selector:
+            xpath: //div[contains(.,'Pod Disruption Budgets that have not been successfully drained from a node will be')]
+        - selector:
+            xpath: //div[contains(.,'forcibly evicted.')]
+        - selector:
+            xpath: //span[text()='Grace period']
+        - selector:
+            xpath: //div/span[text()='1 hour']
+        - selector:
+            xpath: //div[@class='pf-c-form__group ocm-c-upgrades-pdb-select']/div/div/button[@aria-haspopup='listbox']
+
+select_grace_period:
+    elements:
+        - selector:
+            xpath: //button[@aria-haspopup='listbox']
+          op: click
+        - selector:
+            xpath: //button[text()=<grace_period>]
+          op: click
+        
+# -------------------- General steps --------------------
+goto_updates_on_wizard:
+    action: goto_networking_on_wizard
+    action: set_networking_values
+    action: click_next_button
+
+set_updates_values:
+    action:
+        if_param: update_strategy
+        ref: select_update_strategy
+    action:
+        if_param: day
+        ref: set_update_daytime
+    action:
+        if_param: grace_period
+        ref: select_grace_period

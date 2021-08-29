@@ -46,6 +46,7 @@ Feature: Service related networking scenarios
   # @author yadu@redhat.com
   # @case_id OCP-15032
   @admin
+  @inactive
   Scenario: The openflow list will be cleaned after delete the services
     Given the env is using one of the listed network plugins:
       | subnet      |
@@ -395,6 +396,7 @@ Feature: Service related networking scenarios
 
   # @author huirwang@redhat.com
   # @case_id OCP-11645
+  @inactive
   Scenario: Create loadbalancer service
     Given I have a project
     Given I obtain test data file "networking/ping_for_pod_containerPort.json"

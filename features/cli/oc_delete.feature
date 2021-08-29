@@ -51,6 +51,7 @@ Feature: oc_delete.feature
   # @case_id OCP-12048
   # @bug_id 1277101
   @admin
+  @inactive
   Scenario: The namespace will not be deleted until all pods gracefully terminate
     Given I have a project
     And evaluation of `project.name` is stored in the :prj1 clipboard
@@ -84,6 +85,7 @@ Feature: oc_delete.feature
 
   # @author cryan@redhat.com
   # @case_id OCP-10705
+  @inactive
   Scenario: Default termination grace period is 30s if it's not set
     Given I have a project
     Given I obtain test data file "pods/graceful-delete/default.json"

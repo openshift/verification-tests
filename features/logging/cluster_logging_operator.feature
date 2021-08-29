@@ -103,6 +103,7 @@ Feature: cluster-logging-operator related test
   # @case_id OCP-28131
   @admin
   @destructive
+  @inactive
   Scenario: CLO should generate Elasticsearch Index Management
     Given I obtain test data file "logging/clusterlogging/example_indexmanagement.yaml"
     Given I create clusterlogging instance with:

@@ -139,6 +139,7 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-11566
   @admin
+  @inactive
   Scenario: The quota status is calculated ASAP when editing its quota spec
     Given I have a project
     Given I obtain test data file "quota/myquota.yaml"
@@ -395,6 +396,7 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-11780
   @admin
+  @inactive
   Scenario: Check Terminating scope of resourcequota
     Given I have a project
     Given I obtain test data file "quota/quota-terminating.yaml"
@@ -549,6 +551,7 @@ Feature: Quota related scenarios
   # @author chezhang@redhat.com
   # @case_id OCP-11779
   @admin
+  @inactive
   Scenario: The usage for cpu/mem/pod counts are fixed up ASAP if delete a pod
     Given I have a project
     Given I obtain test data file "quota/myquota.yaml"
@@ -631,6 +634,7 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-11247
   @admin
+  @inactive
   Scenario: The current quota usage is calculated ASAP when adding a quota
     Given I have a project
     Given I obtain test data file "quota/myquota.yaml"

@@ -118,6 +118,7 @@ Feature: configMap
   # @author chezhang@redhat.com
   # @case_id OCP-9882
   @smoke
+  @inactive
   Scenario: Set command-line arguments with ConfigMap
     Given I have a project
     Given I obtain test data file "configmap/configmap.yaml"
@@ -149,6 +150,7 @@ Feature: configMap
 
   # @author chezhang@redhat.com
   # @case_id OCP-9884
+  @inactive
   Scenario: Configuring redis using ConfigMap
     Given I have a project
     Given a "redis-config" file is created with the following lines:
@@ -185,6 +187,7 @@ Feature: configMap
   # @author chezhang@redhat.com
   # @case_id OCP-9880
   @smoke
+  @inactive
   Scenario: Create ConfigMap from file
     Given I have a project
     Given I create the "configmap-test" directory
@@ -278,6 +281,7 @@ Feature: configMap
 
   # @author chezhang@redhat.com
   # @case_id OCP-9881
+  @inactive
   Scenario: Create ConfigMap from literal values
     Given I have a project
     When I run the :create_configmap client command with:
@@ -301,6 +305,7 @@ Feature: configMap
 
   # @author chezhang@redhat.com
   # @case_id OCP-9879
+  @inactive
   Scenario: Create ConfigMap from directories
     Given I have a project
     Given I create the "configmap-test" directory
@@ -351,6 +356,7 @@ Feature: configMap
 
   # @author xiuli@redhat.com
   # @case_id OCP-16721
+  @inactive
   Scenario: Changes to ConfigMap should be auto-updated into container
     Given I have a project
     Given I obtain test data file "configmap/configmap.json"

@@ -1,0 +1,151 @@
+###################### Below defination is cluster detail step ########################
+# -------------------- Cluster name related actions --------------------
+set_cluster_name:
+    params:
+        locator_id: name
+    action: clear_input
+    element:
+        selector:
+            xpath: //input[@id='name']
+        op: send_keys <cluster_name>
+        type: input
+
+# -------------------- Region related actions --------------------
+region_dropdown_loaded:
+    element: &region_dropdown
+        selector:
+            xpath: //select[contains(@class, 'cloud-region-combo-box')]
+expand_region_dropdown:
+    element:
+        <<: *region_dropdown
+        op: click
+close_region_dropdown:
+    action: expand_region_dropdown
+
+select_region:
+    action: expand_region_dropdown
+    element:
+        selector:
+            xpath: //option[@value='<region_id>']
+        op: click
+select_region_by_text:
+    action: expand_region_dropdown
+    element:
+        selector:
+            xpath: //option[text()='<region_name>']
+        op: click
+
+# -------------------- Availability related actions --------------------
+select_availability:
+    element:
+        selector:
+            xpath: //input[@id='multi_az-<multi_az>']
+        op: click
+
+# -------------------- Persistent storage related actions --------------------
+check_persistent_storage_field_in_creation_page:
+  elements:
+  - selector:
+      xpath: //span[text()='Persistent storage']
+  - selector:
+      xpath: //select[@name='persistent_storage']
+  - selector:
+      xpath: //label[@for='persistent_storage']/following-sibling::span/*[name()='svg']
+select_persisten_storage_on_creation_page:
+    elements:
+        - selector:
+            xpath: //select[@aria-label='Persistent Storage' and @name='persistent_storage']
+          op: click
+        - selector:
+            xpath: //option[text()='<storage_quota>']
+          op: click
+check_persistent_storage_field_in_creation_page_missing:
+  element:
+    selector:
+      xpath: //span[text()='Persistent storage']
+    missing: true
+
+check_persistent_storage_popover_message:
+  element:
+    selector:
+      xpath: //label[@for='persistent_storage']/following-sibling::span/*[name()='svg']
+    op: click
+  element:
+    selector:
+      xpath: //div[@class='pf-c-popover__body' and text()='The storage quota set on the deployed cluster.']
+
+# -------------------- Load balancers related actions --------------------
+check_lb_field_in_creation_page:
+  elements:
+  - selector:
+      xpath: //span[text()='Load balancers']
+  - selector:
+      xpath: //select[@name='load_balancers']
+  - selector:
+      xpath: //label[@for='load_balancers']/following-sibling::span/*[name()='svg']
+select_lb_on_creation_page:
+    elements:
+        - selector:
+            xpath: //select[@name='load_balancers' and @aria-label='Load Balancers']
+          op: click
+        - selector:
+            xpath: //option[text()='<lb_quota>']
+          op: click
+
+check_lb_field_in_creation_page_missing:
+  element:
+    selector:
+      xpath: //span[text()='Load balancers']
+    missing: true
+
+check_lb_popover_message:
+  element:
+    selector:
+      xpath: //label[@for='load_balancers']/following-sibling::span/*[name()='svg']
+    op: click
+  element:
+    selector:
+      xpath: //div[@class='pf-c-popover__body' and text()='The load balancer quota set on the deployed cluster.']
+
+# -------------------- Monitoring related actions --------------------
+click_enable_user_workload_monirtoing_checkbox:
+    element:
+        selector:
+            xpath: //input[@id='enable_user_workload_monitoring']
+        op: click
+
+# -------------------- Encryption related actions --------------------
+click_enable_etcd_encryption_checkbox:
+    element:
+        selector:
+            xpath: //input[@id='etcd_encryption']
+        op: click
+
+# -------------------- General steps --------------------
+goto_cluster_details_on_wizard:
+    action: goto_cloud_provider_on_wizard
+    action: set_cloud_provider_values
+    action: click_next_button
+
+set_cluster_details_values:
+    action:
+        if_param: cluster_name
+        ref: set_cluster_name
+    action:
+        if_param: region_id
+        ref: select_region
+    action:
+        if_param: multi_az
+        ref: select_availability
+    action:
+        if_param: storage_quota
+        ref: select_persisten_storage_on_creation_page
+    action:
+        if_param: lb_quota
+        ref: select_lb_on_creation_page
+    action:
+        if_param: disable_uwm
+        ref: click_enable_user_workload_monirtoing_checkbox
+    action: 
+        if_param: enable_etcd
+        ref: click_enable_etcd_encryption_checkbox

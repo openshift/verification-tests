@@ -2,6 +2,7 @@ Feature: build 'apps' with CLI
 
   # @author cryan@redhat.com
   # @case_id OCP-11132
+  @inactive
   Scenario: Create a build config based on the provided image and source code
     Given I have a project
     When I run the :new_build client command with:

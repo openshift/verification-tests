@@ -727,6 +727,7 @@ Feature: Sriov related scenarios
   # @case_id OCP-34092
   @destructive
   @admin
+  @inactive
   Scenario: sriov-device-plugin can be scheduled on any node
     Given the sriov operator is running well
     When I run the :get admin command with:

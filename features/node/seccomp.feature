@@ -2,6 +2,7 @@ Feature: Secure Computing Test Scenarios
 
   # @author wmeng@redhat.com
   # @case_id OCP-10483
+  @inactive
   Scenario: seccomp=unconfined used by default
     Given I have a project
     Given I obtain test data file "pods/hello-pod.json"

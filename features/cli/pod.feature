@@ -2,6 +2,7 @@ Feature: pods related scenarios
 
   # @author chezhang@redhat.com
   # @case_id OCP-11218
+  @inactive
   Scenario: kubectl describe pod should show qos tier info when pod without limits and request info
     Given I have a project
     Given I obtain test data file "pods/hello-pod.json"
@@ -53,6 +54,7 @@ Feature: pods related scenarios
 
   # @author chezhang@redhat.com
   # @case_id OCP-10729
+  @inactive
   Scenario: Implement supplemental groups for pod
     Given I have a project
     Given I obtain test data file "pods/ocp10729/pod-supplementalGroups.yaml"
@@ -115,6 +117,7 @@ Feature: pods related scenarios
   # @author cryan@redhat.com
   # @case_id OCP-10813
   # @bug_id 1324396
+  @inactive
   Scenario: Update ActiveDeadlineSeconds for pod
     Given I have a project
     Given I obtain test data file "pods/ocp10813/hello-pod.json"

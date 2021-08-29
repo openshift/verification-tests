@@ -99,6 +99,7 @@ Feature: Downward API
   # @author qwang@redhat.com
   # @case_id OCP-11977
   @admin
+  @inactive
   Scenario: Using resources downward API via volume plugin should be compatible with metadata downward API
     Given I have a project
     Given I obtain test data file "downwardapi/dapi-resources-metadata-volume-pod.yaml"
@@ -184,6 +185,7 @@ Feature: Downward API
   # @author qwang@redhat.com
   # @case_id OCP-11618
   @admin
+  @inactive
   Scenario: Could expose resouces limits and requests via volume plugin from Downward APIs with magics keys
     Given I have a project
     Given I obtain test data file "downwardapi/dapi-resources-volume-magic-keys-pod.yaml"
@@ -237,6 +239,7 @@ Feature: Downward API
   # @author qwang@redhat.com
   # @case_id OCP-11816
   @admin
+  @inactive
   Scenario: Using resources downward API via ENV should be compatible with metadata downward API
     Given I have a project
     Given I obtain test data file "downwardapi/dapi-resources-metadata-env-pod.yaml"

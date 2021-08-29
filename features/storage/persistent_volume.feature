@@ -42,6 +42,7 @@ Feature: Persistent Volume Claim binding policies
 
   # @author yinzhou@redhat.com
   # @case_id OCP-11933
+  @inactive
   Scenario: deployment hook volume inheritance -- with persistentvolumeclaim Volume
     Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"
