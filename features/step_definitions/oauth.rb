@@ -32,3 +32,32 @@ Given /^the secret for #{QUOTED} htpasswd is stored in the#{OPT_SYM} clipboard$/
   generated_htpasswd_name = o_auth('cluster').htpasswds[name]
   cb[cb_name] = secret(generated_htpasswd_name).value_of('htpasswd')
 end
+
+# this step must be used immediately after the config changes, if place it after several steps of the changes,
+# "Progressing" may be quickly changed from False to True and quickly changed to False then, which will make this step definition fail
+Given /^authentication successfully rolls out after config changes$/ do
+  ensure_admin_tagged
+  interval_time = 5
+  timeout = 300 # set 300 seconds here due to https://bugzilla.redhat.com/show_bug.cgi?id=1958198, after the bug fixed, the seconds should be reduced accordingly
+  stats = {}
+  error = nil
+  step %Q/operator "authentication" becomes progressing within #{timeout} seconds/
+  step %Q|operator "authentication" becomes available/non-progressing/non-degraded within #{timeout} seconds|
+  success = wait_for(timeout, interval: interval_time, stats: stats){
+    begin
+      step %Q/I run the :get admin command with:/, table(%{
+          | resource | pod                      |
+          | l        | app=oauth-openshift      |
+          | n        | openshift-authentication |
+          })
+      step %Q/the step should succeed/
+      step %Q/the output should not contain "Terminating"/
+      true
+    rescue => e
+      error = e
+      false
+    end
+  }
+  raise error unless success
+end
+
