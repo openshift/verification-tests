@@ -3,6 +3,7 @@ Feature: Node proxy configuration tests
   # @author jhou@redhat.com
   @admin
   @flaky
+  @aws-ipi
   Scenario Outline: Proxy config should be applied to kubelet and crio
     Given I use the "default" project
     Given I switch to cluster admin pseudo user

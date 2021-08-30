@@ -202,6 +202,7 @@ Feature: oc_set_probe.feature
 
   # @author wewang@redhat.com
   # @case_id OCP-31245
+  @aws-ipi
   Scenario: Set a probe over HTTPS/HTTP test
     Given I have a project
     When I run the :new_app client command with:
@@ -247,6 +248,7 @@ Feature: oc_set_probe.feature
 
   # @author wewang@redhat.com
   # @case_id OCP-31246
+  @aws-ipi
   Scenario: Set an exec action probe test
     Given I have a project
     When I run the :new_app client command with:

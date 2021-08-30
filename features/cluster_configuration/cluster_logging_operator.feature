@@ -3,6 +3,7 @@ Feature: cluster logging related scenarios
   # @case_id OCP-21311
   @admin
   @destructive
+  @aws-ipi
   Scenario: Deploy Logging Via Community Operators
     Given logging service has been installed successfully
 

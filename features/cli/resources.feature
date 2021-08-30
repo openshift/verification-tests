@@ -2,6 +2,7 @@ Feature: resouces related scenarios
 
   # @author xxia@redhat.com
   # @case_id OCP-11882
+  @aws-ipi
   Scenario: Return description of resources with cli describe
     Given I have a project
     And I create a new application with:
