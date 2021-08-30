@@ -90,6 +90,7 @@ Feature: Testing imagestream
   # @case_id OCP-19196
   @destructive
   @admin
+  @aws-ipi
   Scenario: Prune images when DC reference to invalid image
     Given I have a project
     Given I enable image-registry default route
@@ -132,6 +133,7 @@ Feature: Testing imagestream
   # @case_id OCP-16495
   @destructive
   @admin
+  @aws-ipi
   Scenario: Do not prune layer of a valid Image due to minimum aging
     Given I have a project
     Given I enable image-registry default route

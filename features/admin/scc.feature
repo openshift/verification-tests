@@ -3,6 +3,7 @@ Feature: SCC policy related scenarios
   # @author pruan@redhat.com
   # @case_id OCP-11762
   @admin
+  @aws-ipi
   Scenario: deployment hook volume inheritance with hostPath volume
     Given I have a project
     # Create hostdir pod again with new SCC
@@ -31,6 +32,7 @@ Feature: SCC policy related scenarios
   # @case_id OCP-11775
   @admin
   @destructive
+  @aws-ipi
   Scenario: Create or update scc with illegal capability name should fail with prompt message
     Given I have a project
     Given cluster role "cluster-admin" is added to the "first" user

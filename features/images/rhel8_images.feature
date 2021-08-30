@@ -67,6 +67,7 @@ Feature: rhel8images.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-22595
   @admin
+  @aws-ipi
   Scenario: mysql persistent template
     Given I have a project
     When I run the :tag admin command with:

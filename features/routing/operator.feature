@@ -3,6 +3,7 @@ Feature: Testing Ingress Operator related scenarios
   # @author hongli@redhat.com
   # @case_id OCP-27594
   @admin
+  @aws-ipi
   Scenario: set namespaceOwnership of routeAdmission to InterNamespaceAllowed
     Given the master version >= "4.4"
     And I have a project

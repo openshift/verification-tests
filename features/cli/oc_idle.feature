@@ -2,6 +2,7 @@ Feature: oc idle
 
   # @author chezhang@redhat.com
   # @case_id OCP-11633
+  @aws-ipi
   Scenario: CLI - Idle all the service in the same project
     Given I have a project
     Given I obtain test data file "rc/idle-rc-1.yaml"
@@ -45,6 +46,7 @@ Feature: oc idle
 
   # @author chezhang@redhat.com
   # @case_id OCP-11980
+  @aws-ipi
   Scenario: CLI - Idle service by label
     Given I have a project
     Given I obtain test data file "rc/idle-rc-2.yaml"
@@ -81,6 +83,7 @@ Feature: oc idle
 
   # @author chezhang@redhat.com
   # @case_id OCP-12085
+  @aws-ipi
   Scenario: CLI - Idle service from file
     Given I have a project
     Given I obtain test data file "rc/idle-rc-2.yaml"
@@ -122,6 +125,7 @@ Feature: oc idle
 
   # @author chezhang@redhat.com
   # @case_id OCP-12169
+  @aws-ipi
   Scenario: CLI - Idle service with dry-run
     Given I have a project
     Given I obtain test data file "rc/idle-rc-2.yaml"
