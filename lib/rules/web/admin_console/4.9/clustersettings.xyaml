@@ -68,13 +68,13 @@ check_kebab_menus_for_custom_cs:
 check_columns_for_cs:
   elements:
   - selector:
-      xpath: //a[@title='<cs_name>']/ancestor::tr//td[contains(.,'<cs_status>')]
+      xpath: //a[text()='<cs_name>']/ancestor::tr//td[contains(.,'<cs_status>')]
   - selector:
-      xpath: //a[@title='<cs_name>']/ancestor::tr//td[contains(.,'<registrypullinterval>')]
+      xpath: //a[text()='<cs_name>']/ancestor::tr//td[contains(.,'<registrypullinterval>')]
   - selector:
-      xpath: //a[@title='<cs_name>']/ancestor::tr//td[contains(.,'<endpoint>')]
+      xpath: //a[text()='<cs_name>']/ancestor::tr//td[contains(.,'<endpoint>')]
   - selector:
-      xpath: //a[@title='<cs_name>']/ancestor::tr//td[contains(.,'<publisher>')]
+      xpath: //a[text()='<cs_name>']/ancestor::tr//td[contains(.,'<publisher>')]
 check_catalogsource_operators_info:
   params:
     tab_name: Operators
