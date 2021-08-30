@@ -158,3 +158,53 @@ Feature: Machine misc features testing
       | query | cloudprovider_vsphere_vcenter_versions |
     Then the step should succeed
     And the expression should be true> @result[:parsed]["data"]["result"][0]["metric"]["version"] =~ /7.0/
+
+  # @author miyadav@redhat.com
+  # @case_id OCP-40665
+  @admin
+  @destructive	
+  Scenario: Deattach disk before destroying vm from vsphere
+    Given I switch to cluster admin pseudo user
+    Then I use the "openshift-machine-api" project		
+    And I clone a machineset and name it "machineset-clone-40665"
+
+    Given I store the last provisioned machine in the :new_machine clipboard
+    And evaluation of `machine(cb.new_machine).node_name` is stored in the :nodeRef clipboard
+
+    When I run the :label admin command with:
+      | resource | node                |
+      | name     | <%= cb.nodeRef %>   |
+      | key_val  | testcase=ocp40665   |
+    Then the step should succeed
+    
+    Given I obtain test data file "cloud/misc/pvc-40665.yaml"
+    When I run the :create admin command with:
+      | f | pvc-40665.yaml |
+    Then the step should succeed
+    And admin ensures "pvc-cloud" pvc is deleted after scenario
+
+    Given I obtain test data file "cloud/misc/deployment-40665.yaml"
+    When I run the :create admin command with:
+      | f | deployment-40665.yaml |
+    Then the step should succeed
+    And admin ensures "dep-40665" deployment is deleted after scenario
+
+    Given I obtain test data file "cloud/mhc/kubelet-killer-pod.yml"
+    When I run oc create over "kubelet-killer-pod.yml" replacing paths:
+	    | ["spec"]["nodeName"]  | "<%= machine(cb.new_machine).node_name %>" |
+    Then the step should succeed
+   
+    When I run the :delete admin command with:
+      | object_type       | machine                |
+      | object_name_or_id | <%= cb.new_machine %>  |
+    Then the step succeeded
+
+    Given a pod becomes ready with labels:
+      | api=clusterapi, k8s-app=controller |
+    When I run the :logs admin command with:
+      | resource_name | <%= pod.name %>    |
+      | c             | machine-controller |
+    Then the output should contain:
+      | Detaching disks before vm destroy  |
+
+   
