@@ -296,6 +296,7 @@ module BushSlicer
       exec("post /api/clusters_mgmt/v1/clusters --body='#{cluster_file}'")
       wait_for_osd(osd_name)
       create_ocpinfo_file(osd_name, install_dir)
+      File.delete(cluster_file)
     end
 
     # delete OSD cluster
