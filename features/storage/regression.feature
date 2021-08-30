@@ -3,6 +3,7 @@ Feature: Regression testing cases
   # @author jhou@redhat.com
   # @case_id OCP-16485
   @admin
+  @aws-ipi
   Scenario: RWO volumes are exclusively mounted on different nodes
     Given I have a project
 

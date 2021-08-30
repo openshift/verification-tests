@@ -20,6 +20,7 @@ Feature: pods related scenarios
 
   # @author chezhang@redhat.com
   # @case_id OCP-11527
+  @aws-ipi
   Scenario: kubectl describe pod should show qos tier info
     Given I have a project
     Given I obtain test data file "quota/pod-notbesteffort.yaml"
@@ -151,6 +152,7 @@ Feature: pods related scenarios
 
   # @author qwang@redhat.com
   # @case_id OCP-11055
+  @aws-ipi
   Scenario: /dev/shm can be automatically shared among all of a pod's containers
     Given I have a project
     Given I obtain test data file "pods/pod_with_two_containers.json"
@@ -201,6 +203,7 @@ Feature: pods related scenarios
 
   # @author chuyu@redhat.com
   # @case_id OCP-22283
+  @aws-ipi
   Scenario: 4.0 Oauth provider info should be consumed in a pod
     Given I have a project
     When I run the :new_app client command with:

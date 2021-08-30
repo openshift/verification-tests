@@ -30,6 +30,7 @@ Feature: Marketplace related scenarios
   @admin
   @upgrade-check
   @users=upuser1,upuser2
+  @aws-ipi
   Scenario: upgrade Marketplace
     # Check Marketplace version after upgraded
     Given the "marketplace" operator version matches the current cluster version

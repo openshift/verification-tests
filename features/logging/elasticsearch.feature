@@ -5,6 +5,7 @@ Feature: Elasticsearch related tests
   # @case_id OCP-22050
   @admin
   @destructive
+  @aws-ipi
   Scenario: Elasticsearch using dynamic volumes
     Given default storageclass is stored in the :default_sc clipboard
     Given I obtain test data file "logging/clusterlogging/clusterlogging-storage-template.yaml"

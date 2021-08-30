@@ -46,6 +46,7 @@ Feature: basic verification for upgrade testing
   # @case_id OCP-13016
   @upgrade-check
   @admin
+  @aws-ipi
   Scenario: Upgrade - Make sure multiple resources work well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "node-upgrade" project

@@ -53,6 +53,7 @@ Feature: oc_secrets.feature
 
   # @author xiaocwan@redhat.com
   # @case_id OCP-10631
+  @aws-ipi
   Scenario: [origin_platformexp_391] Project admin can process local directory or files and convert it to kubernetes secret
     Given I have a project
     When the "tmpfoo" file is created with the following lines:

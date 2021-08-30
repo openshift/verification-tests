@@ -15,6 +15,7 @@ Feature: CloudCredentialOperator components upgrade tests
   # @case_id OCP-34260
   @upgrade-check
   @admin
+  @aws-ipi
   Scenario: Cluster operator cloud-credential should be available after upgrade
     # Check cloud-credential operator version after upgraded
     Given the "cloud-credential" operator version matches the current cluster version

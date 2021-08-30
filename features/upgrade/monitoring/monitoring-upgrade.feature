@@ -14,6 +14,7 @@ Feature: cluster monitoring related upgrade check
   # @case_id OCP-29797
   @upgrade-check
   @admin
+  @aws-ipi
   Scenario: upgrade cluster monitoring along with OCP
     Given I switch to cluster admin pseudo user
     And I use the "openshift-monitoring" project

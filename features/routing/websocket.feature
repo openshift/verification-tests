@@ -2,6 +2,7 @@ Feature: Testing websocket features
 
   # @author hongli@redhat.com
   # @case_id OCP-17145
+  @aws-ipi
   Scenario: haproxy router support websocket via unsecure route
     Given I have a project
     Given I obtain test data file "routing/websocket/pod.json"
