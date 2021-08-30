@@ -265,6 +265,7 @@ Feature: Testing abrouting
   # @author yadu@redhat.com
   # @case_id OCP-15910
   @admin
+  @aws-ipi
   Scenario: Each endpoint gets weight/numberOfEndpoints portion of the requests - unsecure route
     Given I switch to cluster admin pseudo user
     And I use the router project
@@ -345,6 +346,7 @@ Feature: Testing abrouting
   # @author yadu@redhat.com
   # @case_id OCP-15994
   @admin
+  @aws-ipi
   Scenario: Each endpoint gets weight/numberOfEndpoints portion of the requests - passthrough route
     Given I switch to cluster admin pseudo user
     And I use the router project

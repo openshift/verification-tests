@@ -2,6 +2,7 @@ Feature: deployment related features
 
   # @author xxing@redhat.com
   # @case_id OCP-12543
+  @aws-ipi
   Scenario: Restart a failed deployment by oc deploy
     Given I have a project
     Given I obtain test data file "deployment/dc-with-pre-mid-post.yaml"
@@ -32,6 +33,7 @@ Feature: deployment related features
   # @author xxing@redhat.com
   # @case_id OCP-10643
   @smoke
+  @aws-ipi
   Scenario: Manually make deployment
     Given I have a project
     Given I obtain test data file "deployment/manual.json"
@@ -70,6 +72,7 @@ Feature: deployment related features
 
   # @author xxing@redhat.com
   # @case_id OCP-11695
+  @aws-ipi
   Scenario: CLI rollback output to file
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -111,6 +114,7 @@ Feature: deployment related features
       | [tT]ype:\\s+ConfigChange |
 
   # @author xxing@redhat.com
+  @aws-ipi
   Scenario Outline: CLI rollback two more components of deploymentconfig
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -162,6 +166,7 @@ Feature: deployment related features
 
   # @author xxing@redhat.com
   # @case_id OCP-11877
+  @aws-ipi
   Scenario: CLI rollback with one component
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -205,6 +210,7 @@ Feature: deployment related features
 
   # @author pruan@redhat.com
   # @case_id OCP-12133
+  @aws-ipi
   Scenario: Can't stop a deployment in Failed status
     Given I have a project
     Given I obtain test data file "deployment/test-stop-failed-deployment.json"
@@ -239,6 +245,7 @@ Feature: deployment related features
 
   # @author pruan@redhat.com
   # @case_id OCP-12246
+  @aws-ipi
   Scenario: Stop a "Running" deployment
     Given I have a project
     Given I obtain test data file "deployment/dc-with-pre-mid-post.yaml"
@@ -262,6 +269,7 @@ Feature: deployment related features
 
   # @author cryan@redhat.com
   # @case_id OCP-10648
+  @aws-ipi
   Scenario: Rollback via CLI when previous version failed
     Given I have a project
     When I run the :create_deploymentconfig client command with:
@@ -400,6 +408,7 @@ Feature: deployment related features
 
   # @author yinzhou@redhat.com
   # @case_id OCP-9566
+  @aws-ipi
   Scenario: Blue-Green Deployment
     Given I have a project
     When I run the :new_app client command with:
@@ -504,6 +513,7 @@ Feature: deployment related features
 
   # @author pruan@redhat.com
   # @case_id OCP-11939
+  @aws-ipi
   Scenario: start deployment when the latest deployment is completed
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -565,6 +575,7 @@ Feature: deployment related features
 
   # @author yinzhou@redhat.com
   # @case_id OCP-11769
+  @aws-ipi
   Scenario: Start new deployment when deployment running
     Given I have a project
     Given I obtain test data file "deployment/dc-with-pre-mid-post.yaml"
@@ -585,6 +596,7 @@ Feature: deployment related features
 
   # @author cryan@redhat.com
   # @case_id OCP-12151
+  @aws-ipi
   Scenario: When the latest deployment failed auto rollback to the active deployment
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -638,6 +650,7 @@ Feature: deployment related features
   # @author yinzhou@redhat.com
   # @case_id OCP-10617
   @admin
+  @aws-ipi
   Scenario: DeploymentConfig should allow valid value of resource requirements
     Given I have a project
     Given I obtain test data file "quota/limits.yaml"
@@ -673,6 +686,7 @@ Feature: deployment related features
 
   # @author yinzhou@redhat.com
   # @case_id OCP-11221
+  @aws-ipi
   Scenario: Scale up when deployment running
     Given I have a project
     When I run the :create_deploymentconfig client command with:
@@ -837,6 +851,7 @@ Feature: deployment related features
 
   # @author haowang@redhat.com
   # @case_id OCP-16443
+  @aws-ipi
   Scenario: Trigger info is retained for deployment caused by image changes 37 new feature
     Given the master version >= "3.7"
     Given I have a project
@@ -853,6 +868,7 @@ Feature: deployment related features
 
   # @author yinzhou@redhat.com
   # @case_id OCP-31200
+  @aws-ipi
   Scenario: A/B Deployment for OCP 4.5 or greater
     Given the master version >= "4.5"
     Given I have a project

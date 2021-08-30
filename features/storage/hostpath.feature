@@ -3,6 +3,7 @@ Feature: Storage of Hostpath plugin testing
   # @author chaoyang@redhat.com
   # @author lxia@redhat.com
   @admin
+  @aws-ipi
   Scenario Outline: Create hostpath pv with access mode and reclaim policy
     Given I have a project
     Given I obtain test data file "storage/hostpath/local.yaml"

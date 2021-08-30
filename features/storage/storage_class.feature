@@ -2,6 +2,7 @@ Feature: storageClass related feature
 
   # @author lxia@redhat.com
   @admin
+  @aws-ipi
   Scenario Outline: PVC modification after creating storage class
     Given I have a project
     Given I obtain test data file "storage/misc/pvc-without-annotations.json"
@@ -36,6 +37,7 @@ Feature: storageClass related feature
   # @author chaoyang@redhat.com
   @admin
   @smoke
+  @aws-ipi
   Scenario Outline: storage class provisioner
     Given I have a project
     And admin clones storage class "sc-<%= project.name %>" from ":default" with:
@@ -82,6 +84,7 @@ Feature: storageClass related feature
   # @author lxia@redhat.com
   @admin
   @destructive
+  @aws-ipi
   Scenario Outline: New creation PVC failed when multiple classes are set as default
     Given I have a project
     Given I obtain test data file "storage/misc/storageClass.yaml"
@@ -126,6 +129,7 @@ Feature: storageClass related feature
       | vsphere-volume | # @case_id OCP-24259
 
   # @author lxia@redhat.com
+  @aws-ipi
   Scenario Outline: New created PVC without specifying storage class use default class when only one class is marked as default
     Given I have a project
     Given I obtain test data file "storage/misc/pvc-without-annotations.json"
@@ -188,6 +192,7 @@ Feature: storageClass related feature
 
   # @author chaoyang@redhat.com
   @admin
+  @aws-ipi
   Scenario Outline: PVC with storage class will not provision pv with st1/sc1 type ebs volume if request size is wrong
     Given I have a project
     Given I obtain test data file "storage/ebs/dynamic-provisioning/storageclass.yaml"
@@ -244,6 +249,7 @@ Feature: storageClass related feature
   # @author chaoyang@redhat.com
   # @case_id OCP-10228
   @smoke
+  @aws-ipi
   Scenario: AWS ebs volume is dynamic provisioned with default storageclass
     Given I have a project
     Given I obtain test data file "storage/ebs/pvc-retain.json"

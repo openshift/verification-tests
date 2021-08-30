@@ -183,6 +183,7 @@ Feature: collector related tests
   @admin
   @destructive
   @commonlogging
+  @aws-ipi
   Scenario: All nodes logs are collected
     Given the master version >= "4.5"
     Given evaluation of `cluster_logging('instance').collection_type` is stored in the :collection_type clipboard
