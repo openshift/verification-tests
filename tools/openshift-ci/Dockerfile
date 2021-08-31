@@ -17,7 +17,7 @@ RUN set -x && \
 
 ADD . /verification-tests/
 RUN chmod 777 /verification-tests/
-RUN mv /tierN/ /verification-tests/tierN/
+RUN mv /tierN/ /verification-tests/features/tierN/
 RUN set -x && \
     yum module reset ruby && \
     yum module -y enable ruby:2.7 && \
