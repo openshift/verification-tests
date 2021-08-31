@@ -521,10 +521,14 @@ Given /^I set up environment for metering sharedPVC$/ do
   step %Q(the step should succeed)
   cb[:sc] = storage_class(project.name)
   cb[:sc_name] = "sc-" + project.name
-  # need to delete if there's an existing pv created by the nfs yaml with matching name
-  pv_name = "pv-" + project.name
-  if pv(pv_name).exists?
-    step %Q(I ensure "#{pv_name}" pv is deleted)
+  # there are two pvs created pv-openshift-metering-1 & pv-openshift-metering-2
+  (1..2).each do |i|
+    # need to delete if there's an existing pv created by the nfs yaml with matching name
+    pv_name = "pv-" + project.name + "-#{i}"
+    if pv(pv_name).exists?
+      logger.info("Found existing pv '#{pv_name}', remvoing before installation...")
+      step %Q(I ensure "#{pv_name}" pv is deleted)
+    end
   end
   step %Q(I run oc create as admin over ERB test file: metering/configs/pv_metering.yaml)
   step %Q(the step should succeed)
