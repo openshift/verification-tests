@@ -1,4 +1,5 @@
 class ClusterObj
+#Class for openshift cluster object, to be used in tests
   include BushSlicer
   require "/home/valiev/mygit/verification-tests/lib/world"
   require "/home/valiev/mygit/verification-tests/lib/log"
@@ -13,12 +14,33 @@ class ClusterObj
 		:kataconfigsList, :podsList, :namespacesList, :fipsStatus, :nodeNamesList, :nodesList
 
   def initialize()
+#myworld: cucushift default class type:bushslicer default class object
+#logger: cucushift logs class type:bushslicer default log class object
+#admin: cli class type: bushslicer default cli class object
+#uri: cluster host
+# uri type: string
+#version: openshift cluster version type: string
+#data: cluster nodes info type:json
+#clusterEnv: cluster type (e.g. GCP, AZURE) type: string
+#nodeAmmount: total cluster nodes amount type: int
+#workerNodesAmmount: worker nodes amount type:int
+#masterNodesAmmount: master nodes amount typr: int
+#randomWorkerNodeName: random worker node name type: string
+#nodeNamesList: list of cluster node names type: array
+#nodesList: list of cluster node objects type: NodeObj
+#TODO convert namespacesList to array
+#namespacesList: list of cluster namespaces type: string
+#TODO convert kataconfigsList to array
+#kataconfigsList: list of cluster kataconfigs type: string
+#podsList:l list of cluster pods type: array
+#fipsStatus: fips enabled("1")/disabled("0") type: string
+
         myworld = DefaultWorld.new()
 	@logger = Logger.new()
 	@admin = myworld.admin
         myworld.project(KATA_NAMESPACE)
         @uri = @admin.cli_exec(:get, resource: "infrastructure", n:KATA_NAMESPACE, o: "jsonpath='{..status.apiServerURL}'")[:stdout]
-	@version = @admin.cli_exec(:get, resource: "clusterversion", n:KATA_NAMESPACE, o: "jsonpath='{.items[0].status.history[0].version}'")[:stdout]
+	@version = getClusterVersion()
 	@datajs = @admin.cli_exec(:get, resource: "nodes", n:KATA_NAMESPACE, o: "json")
  	@data = JSON.parse(@datajs[:stdout])
   	@clusterEnv = @admin.cli_exec(:get, resource: "infrastructure", n:KATA_NAMESPACE, o: "jsonpath='{..status.platform}'")[:stdout]
@@ -28,18 +50,17 @@ class ClusterObj
 	@randomWorkerNodeName = ""
 	@nodeNamesList = (@admin.cli_exec(:get, resource: "nodes", o: "jsonpath='{..metadata.name}'")[:stdout]).split(" ")
 	@nodesList = getNodeObjects()
-	puts @nodesList[0].uid
 	getNodesType()
 	@namespacesList = @admin.cli_exec(:get, resource: "namespace")[:stdout]
 	@kataconfigsList = @admin.cli_exec(:get, resource: "kataconfig")[:stdout]
 	@podsList = (@admin.cli_exec(:get, resource: "pods")[:stdout]).split(" ")
-	@fipsStatus = myworld.node("#{randomWorkerNodeName}").host.exec_admin(NODE_CMD_FOR_FIPS)[:stdout]
-	puts "KATA completed nodes"
-	puts getKataCompletedNodesLIst()
-	#@podsWithKataList = @admin.cli_exec(:get, resource: "pods", n:nameSpaceName, o: "jsonpath='{.items[?(@.spec.runtimeClassName==\"kata\")].metadata.name}'")
+	@fipsStatus = getFipsStatus(@randomWorkerNodeName)
   end; nil
   
   def getNodesType()
+#Counting master and nodes amount and assigns random worker node name
+#parameters: none
+#return: none
 	 self.nodeNamesList.each do |node|
 		node = node.delete("'")
     		if node.to_s.include? 'master'
@@ -52,6 +73,10 @@ class ClusterObj
   end;nil
   
   def getNodeObjects()
+#Creating list of node objects
+#parameters: none
+#return: nodeList type: list of NodeObj
+
 	nodesList = []
 	self.nodeNamesList.each do |node|
 		node = node.delete("'")
@@ -60,7 +85,4 @@ class ClusterObj
         end
    	return nodesList
   end
-  #puts @nodesList
-
-  
 end; nil

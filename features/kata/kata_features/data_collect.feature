@@ -5,5 +5,5 @@ Feature: kata data collect tests and scenarios
   @destructive
   
   Scenario: Must-gather command works with a specific image	
-    Given Pre-test checks
+    Given Apply "full" test setup
     Given I run must-gather command
