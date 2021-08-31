@@ -413,3 +413,33 @@ Given /^Deploy #{QUOTED} pod with kata runtime$/ do |pod_name|
   end
 end
 
+Given /^Apply #{QUOTED} test setup$/ do |setupLevel|
+        #setupLevel = "full"
+        require '/home/valiev/mygit/verification-tests/features/kata/test_constants'
+        require '/home/valiev/mygit/verification-tests/features/kata/test_functions/cluster'
+        require '/home/valiev/mygit/verification-tests/features/kata/objects/cluster'
+        clusterObj = ClusterObj.new()
+        result = true
+        if setupLevel.to_s.include? SETUP_OPTIONS
+                if setupLevel.to_s.equal? 'full'
+                        result = fullPreTestChecks(clusterObj)
+                elsif setupLevel.to_s.equal? 'kataconfig'
+                        result = checkForKataconfigExistance(clusterObj)
+                elsif setupLevel.to_s.equal? 'operator'
+                        result = checkForKataconfigExistance(clusterObj)
+                elsif setupLevel.to_s.equal? 'operator'
+                        result = checkForPodRuntime('example')
+                end
+        else
+            	result = false
+                logger.error("#{setupLevel} is not a valid option for test setup")
+                logger.error("Valid options are #{SETUP_OPTIONS}")
+        end
+	if result
+                logger.info("Pre-test checks passed, test can start")
+        else
+            	logger.error("Pre test checks failed, can't start the test\n")
+        break
+	end
+end
+
