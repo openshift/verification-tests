@@ -3,6 +3,7 @@ Feature: CSI testing related feature
   # @author chaoyang@redhat.com
   # @case_id OCP-30787
   @admin
+  @stage-only
   Scenario: CSI images checking in stage and prod env
     Given the master version >= "4.4"
     Given I switch to cluster admin pseudo user
@@ -16,6 +17,7 @@ Feature: CSI testing related feature
   # @author chaoyang@redhat.com
   # @case_id OCP-31345
   @admin
+  @stage-only
   Scenario: CSI images checking in stage env in OCP4.3
     Given the master version == "4.3"
     Given I switch to cluster admin pseudo user
@@ -26,6 +28,7 @@ Feature: CSI testing related feature
   # @author chaoyang@redhat.com
   # @case_id OCP-31346
   @admin
+  @stage-only
   Scenario: CSI images checking in stage env in OCP4.2
     Given the master version == "4.2"
     Given I switch to cluster admin pseudo user
