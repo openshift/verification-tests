@@ -465,7 +465,7 @@ Feature: SDN related networking scenarios
       | iptables -t raw -S |
     Then the step should succeed
     And the output should contain:
-      | -N OPENSHIFT-NOTRACK |
+      | -N OPENSHIFT-NOTRACK                                                                  |
       | -A PREROUTING -m comment --comment "disable conntrack for vxlan" -j OPENSHIFT-NOTRACK |
-      | -A OUTPUT -m comment --comment "disable conntrack for vxlan" -j OPENSHIFT-NOTRACK |
-      | -A OPENSHIFT-NOTRACK -p udp -m udp --dport 4789 -j NOTRACK |
+      | -A OUTPUT -m comment --comment "disable conntrack for vxlan" -j OPENSHIFT-NOTRACK     |
+      | -A OPENSHIFT-NOTRACK -p udp -m udp --dport 4789 -j NOTRACK                            |
