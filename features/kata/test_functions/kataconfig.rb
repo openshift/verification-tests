@@ -1,10 +1,10 @@
 #Functions for Kata tests, kataconfig level
 
 include BushSlicer
-require "verification-tests/lib/world"
-require "verification-tests/features/kata/test_functions/cluster"
-require "verification-tests/features/kata/test_constants"
-require "verification-tests/features/kata/objects/node"
+require "world"
+#require "verification-tests/features/kata/test_functions/cluster"
+#require "verification-tests/features/kata/test_constants"
+#require "verification-tests/features/kata/objects/node"
 
 
 
