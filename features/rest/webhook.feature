@@ -1,6 +1,7 @@
 Feature: Webhook REST Related Tests
 
   # @author cryan@redhat.com
+  @proxy
   Scenario Outline: Trigger build with webhook
     Given I have a project
     Given I obtain test data file "build/ruby20rhel7-template-sti.json"

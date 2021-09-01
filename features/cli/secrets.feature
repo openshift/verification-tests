@@ -116,6 +116,7 @@ Feature: secrets related scenarios
 
   # @author yantan@redhat.com
   @aws-ipi
+  @proxy
   Scenario Outline: Insert secret to builder container via oc new-build - source/docker build
     Given I have a project
     Given I obtain test data file "secrets/testsecret1.json"

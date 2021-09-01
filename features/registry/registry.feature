@@ -179,6 +179,7 @@ Feature: Testing registry
   # @author xiuwang@redhat.com
   # @case_id OCP-29696
   @aws-ipi
+  @proxy
   Scenario: Use node credentials in imagestream import
     Given I have a project
     When I run the :tag client command with:

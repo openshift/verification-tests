@@ -3,6 +3,7 @@ Feature: route related features via cli
   # @author cryan@redhat.com
   # @case_id OCP-10629
   @aws-ipi
+  @proxy
   Scenario: Expose routes from services
     Given I have a project
     When I run the :new_app client command with:

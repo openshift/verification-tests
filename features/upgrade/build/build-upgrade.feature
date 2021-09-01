@@ -22,6 +22,7 @@ Feature: build related upgrade check
   # @case_id OCP-13025
   @upgrade-check
   @users=upuser1,upuser2
+  @proxy
   Scenario: Check docker and sti build works well before and after upgrade
     Given I switch to the first user
     When I use the "build-upgrade" project

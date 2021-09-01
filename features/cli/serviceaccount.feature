@@ -32,6 +32,7 @@ Feature: ServiceAccount and Policy Managerment
   # @author xiaocwan@redhat.com
   # @case_id OCP-11494
   @aws-ipi
+  @proxy
   Scenario: Could grant admin permission for the service account group to access to its own project
     Given I have a project
     When I run the :new_app client command with:

@@ -3,6 +3,7 @@ Feature: rhel8images.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-22950
   @admin
+  @proxy
   Scenario: Using new-app cmd to create app with ruby rhel8 image
     Given I have a project
     When I run the :tag admin command with:
@@ -68,6 +69,7 @@ Feature: rhel8images.feature
   # @case_id OCP-22595
   @admin
   @aws-ipi
+  @proxy
   Scenario: mysql persistent template
     Given I have a project
     When I run the :tag admin command with:
@@ -119,6 +121,7 @@ Feature: rhel8images.feature
   # @author wewang@redhat.com
   # @case_id OCP-22958
   @admin
+  @proxy
   Scenario: Create mysql service from imagestream via oc new-app mysql-rhel8 image
     Given I have a project
     When I run the :new_app client command with:
