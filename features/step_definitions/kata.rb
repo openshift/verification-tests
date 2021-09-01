@@ -393,7 +393,7 @@ Given /^Deploy #{QUOTED} pod with kata runtime$/ do |pod_name|
   kata_ns ||= "openshift-sandboxed-containers-operator"
   file_path = "kata/#{pod_name}.yaml"
   pod_runtime = "kata"
-  project(kata_ns)
+  #project(kata_ns)
   step %Q/I switch to cluster admin pseudo user/
   @result_pods = admin.cli_exec(:get, resource: "pods", n:kata_ns, o: "jsonpath='{.items[?(@.spec.runtimeClassName==\"kata\")].metadata.name}'")
   logger.info("Installing #{pod_name}")
