@@ -402,7 +402,8 @@ Given /^Deploy #{QUOTED} pod with kata runtime$/ do |pod_name|
     step %Q/I switch to cluster admin pseudo user/
     #step %Q/I create a new project/
     #cb.test_project_name = project.name
-    step %Q(I run oc create over ERB test file: #{file_path})
+    @deploy_pod = admin.cli_exec(:create, resource: "pod", n:kata_ns, f: file_path)
+    #step %Q(I run oc create over ERB test file: #{file_path})
     sleep(60)
     #raise "Kata pod creation failed" unless @result[:success]
     logger.info("Waiting for RUNNING pod status")
