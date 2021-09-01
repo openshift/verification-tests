@@ -3,10 +3,10 @@ class ClusterObj
   include BushSlicer
   require "world"
   require "log"
-  require "kata/objects/cluster"
-  require "kataconfig"
-  require "test_constants"
-  require "node"
+  #require "kata/objects/cluster"
+  #require "kataconfig"
+  #require "test_constants"
+  #require "node"
   require 'net/http'
   require 'json'
   #attr_reader :uri, :token
