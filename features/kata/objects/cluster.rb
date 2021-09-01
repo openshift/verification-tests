@@ -1,12 +1,12 @@
 class ClusterObj
 #Class for openshift cluster object, to be used in tests
   include BushSlicer
-  require "/home/valiev/mygit/verification-tests/lib/world"
-  require "/home/valiev/mygit/verification-tests/lib/log"
-  require "/home/valiev/mygit/verification-tests/features/kata/test_functions/cluster"
-  require "/home/valiev/mygit/verification-tests/features/kata/test_functions/kataconfig"
-  require "/home/valiev/mygit/verification-tests/features/kata/test_constants"
-  require "/home/valiev/mygit/verification-tests/features/kata/objects/node"
+  require "verification-tests/lib/world"
+  require "verification-tests/lib/log"
+  require "verification-tests/features/kata/test_functions/cluster"
+  require "verification-tests/features/kata/test_functions/kataconfig"
+  require "verification-tests/features/kata/test_constants"
+  require "verification-tests/features/kata/objects/node"
   require 'net/http'
   require 'json'
   #attr_reader :uri, :token
