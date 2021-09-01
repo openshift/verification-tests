@@ -3,6 +3,7 @@ Feature: projects related features via cli
   # @author yapei@redhat.com
   # @case_id OCP-11887
   @aws-ipi
+  @proxy
   Scenario: Could delete all resources when delete the project
     Given a 5 characters random string of type :dns is stored into the :prj_name clipboard
     When I run the :new_project client command with:
@@ -131,6 +132,7 @@ Feature: projects related features via cli
   # @author yinzhou@redhat.com
   # @case_id OCP-11201
   @aws-ipi
+  @proxy
   Scenario: Process with default FSGroup id can be ran when using the default MustRunAs as the RunAsGroupStrategy
     Given I have a project
     Given I obtain test data file "pods/hello-pod.json"

@@ -68,6 +68,7 @@ Feature: change the policy of user/service account
   # @author xiaocwan@redhat.com
   # @case_id OCP-11442
   @aws-ipi
+  @proxy
   Scenario: [origin_platformexp_214] User can view, add , modify and delete specific role to/from new added project via admin role user
     Given I have a project
     Given I obtain test data file "authorization/policy/projectviewservice.json"

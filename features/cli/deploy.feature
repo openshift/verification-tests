@@ -852,6 +852,7 @@ Feature: deployment related features
   # @author haowang@redhat.com
   # @case_id OCP-16443
   @aws-ipi
+  @proxy
   Scenario: Trigger info is retained for deployment caused by image changes 37 new feature
     Given the master version >= "3.7"
     Given I have a project

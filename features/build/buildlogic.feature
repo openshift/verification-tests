@@ -53,6 +53,7 @@ Feature: buildlogic.feature
   # @author yantan@redhat.com
   # @case_id OCP-10799
   @aws-ipi
+  @proxy
   Scenario: Create new build config use dockerfile with source repo
     Given I have a project
     When I run the :new_build client command with:
@@ -87,11 +88,15 @@ Feature: buildlogic.feature
     And the output should match:
       | Force Pull:\s+(true\|yes)|
 
+    @proxy
     Examples:
       | template                            |
       | buildconfig-docker-ImageStream.json | # @case_id OCP-10651
       | buildconfig-s2i-ImageStream.json    | # @case_id OCP-11148
       | buildconfig-docker-dockerimage.json | # @case_id OCP-10652
+
+    Examples:
+      | template                            |
       | buildconfig-s2i-dockerimage.json    | # @case_id OCP-11149
 
   # @author yantan@redhat.com
@@ -233,6 +238,7 @@ Feature: buildlogic.feature
   # @case_id OCP-13684
   @flaky
   @aws-ipi
+  @proxy
   Scenario: Check docker build substatus and times
     Given I have a project
     Given I obtain test data file "build/application-template-dockerbuild.json"
@@ -420,6 +426,7 @@ Feature: buildlogic.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-19133
+  @proxy
   Scenario: Pipeline build can be pruned automatically
     Given I have a project
     And I have a jenkins v2 application

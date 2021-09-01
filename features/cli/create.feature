@@ -4,6 +4,7 @@ Feature: creating 'apps' with CLI
   # @case_id OCP-11761
   @admin
   @aws-ipi
+  @proxy
   Scenario: Process with special FSGroup id can be ran when using RunAsAny as the RunAsGroupStrategy
     Given I have a project
     Given I obtain test data file "pods/pod_with_special_fsGroup.json"

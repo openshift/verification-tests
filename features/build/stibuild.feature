@@ -40,6 +40,7 @@ Feature: stibuild.feature
   # @author wzheng@redhat.com
   # @case_id OCP-30858
   @aws-ipi
+  @proxy
   Scenario: STI build with dockerImage with specified tag
     Given I have a project
     When I run the :new_app client command with:
@@ -74,6 +75,7 @@ Feature: stibuild.feature
 
   # @author wzheng@redhat.com
   # @case_id OCP-22596
+  @proxy
   Scenario: Create app with template eap73-basic-s2i with jbosseap rhel7 image
     Given I have a project
     When I run the :new_app client command with:

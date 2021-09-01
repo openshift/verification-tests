@@ -3,6 +3,7 @@ Feature: set deployment-hook/build-hook with CLI
   # @author dyan@redhat.com
   # @case_id OCP-11805
   @aws-ipi
+  @proxy
   Scenario: Set pre/mid/post deployment hooks on deployment config via oc set deployment-hook
     Given I have a project
     When I run the :new_app client command with:

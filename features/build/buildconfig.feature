@@ -67,6 +67,7 @@ Feature: buildconfig.feature
     Then the "ruby-ex-2" build was created
 
   # @author haowang@redhat.com
+  @proxy
   Scenario Outline: Build with images pulled from private repositories
     Given I have a project
     When I run the :create_secret client command with:
@@ -89,6 +90,7 @@ Feature: buildconfig.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-12057
   @aws-ipi
+  @proxy
   Scenario: Using secret to pull a docker image which be used as source input
     Given I have a project
     When I run the :create_secret client command with:
