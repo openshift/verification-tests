@@ -102,6 +102,7 @@ Feature: Upgrade Logging with ClusterLogForwarder
   @admin
   @upgrade-check
   @users=upuser1,upuser2
+  @stage-only
   Scenario: Upgrade clusterlogging with mulitple external log store enabled
     Given the master version >= "4.6"
     #check data
