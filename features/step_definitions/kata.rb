@@ -391,7 +391,7 @@ end
 Given /^Deploy #{QUOTED} pod with kata runtime$/ do |pod_name|
   #Given /^kata container has been installed successfully(?: in the #{QUOTED} project)?$/ do |ns|
   kata_ns ||= "openshift-sandboxed-containers-operator"
-  file_path = "kata/#{pod_name}.yaml"
+  file_path = "/home/jenkins/ws/workspace/ocp-common/Runner/workdir/#{pod_name}.yaml"
   pod_runtime = "kata"
   project(kata_ns)
   @result_pods = admin.cli_exec(:get, resource: "pods", n:kata_ns, o: "jsonpath='{.items[?(@.spec.runtimeClassName==\"kata\")].metadata.name}'")
