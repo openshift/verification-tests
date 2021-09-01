@@ -3,7 +3,7 @@ class ClusterObj
   include BushSlicer
   require "world"
   require "log"
-  require "verification-tests/features/kata/objects/cluster"
+  require "kata/objects/cluster"
   require "kataconfig"
   require "test_constants"
   require "node"
