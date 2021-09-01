@@ -2,11 +2,11 @@ class ClusterObj
 #Class for openshift cluster object, to be used in tests
   include BushSlicer
   require "world"
-  require "verification-tests/lib/log"
-  require "verification-tests/features/kata/test_functions/cluster"
-  require "verification-tests/features/kata/test_functions/kataconfig"
-  require "verification-tests/features/kata/test_constants"
-  require "verification-tests/features/kata/objects/node"
+  require "log"
+  require "cluster"
+  require "kataconfig"
+  require "test_constants"
+  require "node"
   require 'net/http'
   require 'json'
   #attr_reader :uri, :token
