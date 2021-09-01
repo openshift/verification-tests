@@ -1,7 +1,7 @@
 #Functions for Kata tests, cluster level
 include BushSlicer
-require 'verification-tests/features/kata/test_constants'
-require "verification-tests/lib/world"
+#require 'verification-tests/features/kata/test_constants'
+require "world"
 require 'json'
 
 def getFipsStatus(nodeName, namespace: KATA_NAMESPACE)
