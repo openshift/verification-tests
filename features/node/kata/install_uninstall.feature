@@ -40,9 +40,8 @@ Feature: kata related features
   # @case_id OCP-41813
   @admin
   @destructive
-  @kata
-  Scenario: install kata, verify pod has kata runtime followed by uninstall kata from cluster
-    Given the kata-operator is installed using OLM CLI
-    And I verify kata container runtime is installed into a worker node
-    And I ensure "<%= project.name %>" project is deleted
-    And I remove kata operator from the namespace
+   Scenario: full kata installation
+    Given Verify catalog source existence
+    Given Install Kata operator
+    Given Apply "example-kataconfig" kataconfig
+    Given Deploy "example" pod with kata runtime
