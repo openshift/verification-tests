@@ -355,7 +355,7 @@ Given /^Install Kata operator$/ do
   kata_operator_name = "sandboxed-containers-operator"
   @result_operators = admin.cli_exec(:get, resource: "operators", n:kata_ns)
   if !@result_operators[:stdout].to_s.include? kata_operator_name
-    project('openshift-marketplace')
+    project(kata_ns)
     step %Q/I store master major version in the :master_version clipboard/
     logger.warn("#{kata_operator_name} is not installed")
     logger.info("Installing #{kata_operator_name}")
@@ -374,7 +374,7 @@ end
 Given /^Apply #{QUOTED} kataconfig$/ do |kata_config_name|
   kata_ns ||= "openshift-sandboxed-containers-operator"
   #kata_config_name = "example-kataconfig"
-  project('openshift-marketplace')
+  project(kata_ns)
   step %Q/I store master major version in the :master_version clipboard/
   @result_kataconfigs = admin.cli_exec(:get, resource: "kataconfig", n:kata_ns)
   if @result_kataconfigs[:stderr].to_s.include? "No resources found"
@@ -393,6 +393,7 @@ Given /^Deploy #{QUOTED} pod with kata runtime$/ do |pod_name|
   kata_ns ||= "openshift-sandboxed-containers-operator"
   file_path = "kata/#{pod_name}.yaml"
   pod_runtime = "kata"
+  project(kata_ns)
   @result_pods = admin.cli_exec(:get, resource: "pods", n:kata_ns, o: "jsonpath='{.items[?(@.spec.runtimeClassName==\"kata\")].metadata.name}'")
   logger.info("Installing #{pod_name}")
   if @result_pods[:stdout].to_s.include? "''"
@@ -400,7 +401,7 @@ Given /^Deploy #{QUOTED} pod with kata runtime$/ do |pod_name|
     logger.info("Deploying #{pod_name} pod with kata runtime")
     step %Q/I switch to cluster admin pseudo user/
     #step %Q/I create a new project/
-    cb.test_project_name = project.name
+    #cb.test_project_name = project.name
     step %Q(I run oc create over ERB test file: #{file_path})
     sleep(60)
     #raise "Kata pod creation failed" unless @result[:success]
