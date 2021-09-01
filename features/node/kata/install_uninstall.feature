@@ -44,4 +44,4 @@ Feature: kata related features
     Given Verify catalog source existence
     Given Install Kata operator
     Given Apply "example-kataconfig" kataconfig
-    Given Deploy "example" pod with kata runtime
+    #Given Deploy "example" pod with kata runtime
