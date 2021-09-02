@@ -69,3 +69,17 @@ set_updates_values:
     action:
         if_param: grace_period
         ref: select_grace_period
+updates_loaded:
+    elements:
+        - selector:
+            text: "Clusters will be automatically updated based on your defined day and start time when new versions are available"
+        - selector:
+            xpath: //*[contains(., "You are responsible for updating your cluster. Note that if your cluster version falls more than 1 minor version behind the latest available")]
+        - selector:
+            text: "Node draining"
+        - selector:
+            text: "Grace period"
+        - selector:
+            xpath: //*[contains(., "You may set a grace period for how long Pod Disruption Budget-protected workloads will be respected during updates")]
+check_updates:
+    action: updates_loaded

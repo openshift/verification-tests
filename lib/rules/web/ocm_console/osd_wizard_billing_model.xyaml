@@ -17,7 +17,7 @@ annual_subscription_loaded:
 macketplace_sunscription_loaded:
     elements:
         - selector:
-            xpath: //label[text()='On-demand']
+            visible_text: !ruby/regexp '/On-demand: Flexible usage billed through the Red Hat Marketplace/'
         - selector:
             xpath: //a[@href='/openshift/quota/resource-limits' and text()='Red Hat Marketplace']
         - selector:
@@ -64,3 +64,10 @@ open_osd_creation_wizard:
     action: switch_to_creation_cards_page
     action: click_create_osd_button 
     action: osd_creation_wizard_loaded
+
+osd_billing_model_loaded:
+    action: annual_subscription_loaded
+    action: macketplace_sunscription_loaded
+check_billing_model_wizard:
+    action: osd_billing_model_loaded
+    

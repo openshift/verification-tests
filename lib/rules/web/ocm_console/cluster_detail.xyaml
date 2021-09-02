@@ -1,4 +1,12 @@
-#------------------------------ This file is used for cluster detail defination -------------------
+############################## This file is used for cluster detail defination ##############################
+
+# -------------------- general part of the cluster detail page ---------------------
+click_cluster_detail_tab:
+    element:
+        selector:
+            xpath: //button/span[text()='<tab_name>']
+        op: click
+
 cluster_detail_page_loaded:
     action: overview_tab_loaded
 

@@ -9,7 +9,16 @@ set_cluster_name:
             xpath: //input[@id='name']
         op: send_keys <cluster_name>
         type: input
-
+check_error_to_cluster_name_on_creation_page:
+    elements:
+        - selector:
+            xpath: //input[@id='name']
+          op: click
+        - selector:
+            xpath: //*[text()='Cluster name']
+          op: click
+        - selector:
+            xpath: //div[@id='name-helper' and contains(text(),'<error_message>')]
 # -------------------- Region related actions --------------------
 region_dropdown_loaded:
     element: &region_dropdown
@@ -122,6 +131,35 @@ click_enable_etcd_encryption_checkbox:
         op: click
 
 # -------------------- General steps --------------------
+check_cluster_details_help_messages:
+    elements:
+        - selector:
+            xpath: //span[text()='Cluster name']/../../span
+          op: click
+        - selector:
+            xpath: //span[text()='Cluster name']/../span[text()='*']
+        - selector:
+            xpath: //div[contains(text(),'The name of the cluster. This will be used when generating a sub-domain')]
+    action: close_help_message
+    elements:
+        - selector:
+            xpath: //span[text()='Region']/../../span
+          op: click
+        - selector:
+            xpath: //span[text()='Region']/../span[text()='*']
+        - selector:
+            xpath: //div[text()='The data center where your worker pool will be located.']
+    action: close_help_message
+    elements:
+        - selector:
+            xpath: //span[text()='Availability']/../../span
+          op: click
+        - selector:
+            xpath: //span[text()='Availability']/../span[text()='*']
+        - selector:
+            xpath: //div[text()='Deploy to a single data center or to multiple data centers.']
+    action: close_help_message
+
 goto_cluster_details_on_wizard:
     action: goto_cloud_provider_on_wizard
     action: set_cloud_provider_values
@@ -149,3 +187,28 @@ set_cluster_details_values:
     action: 
         if_param: enable_etcd
         ref: click_enable_etcd_encryption_checkbox
+cluster_details_loaded:
+    elements:
+      - selector:
+          xpath: //span[text()='Cluster name']
+      - selector:
+          xpath: //span[text()='Region']
+      - selector:
+          xpath: //span[text()='Availability']
+      - selector:
+          text: Monitoring
+    action:
+        if_param: ccs
+        ref: check_lb_field_in_creation_page_missing
+    action:
+        if_param: ccs
+        ref: check_persistent_storage_field_in_creation_page_missing
+    action:
+        if_not_param: ccs
+        ref: check_lb_field_in_creation_page
+    action:
+        if_not_param: ccs
+        ref: check_persistent_storage_field_in_creation_page
+check_cluster_details:
+  action: cluster_details_loaded
+  action: check_cluster_details_help_messages

@@ -1,6 +1,11 @@
 ################# Below defination is for networking step #################
 
 # -------------------- Network configuration related --------------------
+click_network_configuration_toggle:
+    element:
+        selector:
+            xpath: //label[@for='network_configuration_toggle']
+        op: click
 select_advanced_radio_button:
     element:
         selector:
@@ -117,7 +122,12 @@ check_machine_cidr_error_message:
         locator_id: network_machine_cidr
         error_message_locator: network_machine_cidr-helper
     action: set_machine_cidr_value
-    action: click_create_button
+    action: 
+        if_not_param: wizard
+        ref: click_create_button
+    action: 
+        if_param: wizard
+        ref: click_network_configuration_toggle
     action: error_information_loaded
     action: clear_input
 
@@ -126,7 +136,7 @@ check_machine_cidr_error_message_wizard:
         locator_id: network_machine_cidr
         error_message_locator: network_machine_cidr-helper
     action: set_machine_cidr_value
-    action: click_next_button
+    action: click_network_configuration_toggle
     action: error_information_loaded
     action: clear_input
 
@@ -147,7 +157,12 @@ check_service_cidr_error_message:
         locator_id: network_service_cidr
         error_message_locator: network_service_cidr-helper
     action: set_service_cidr_value
-    action: click_create_button
+    action:
+        if_not_param: wizard
+        ref: click_create_button 
+    action:
+        if_param: wizard
+        ref: click_network_configuration_toggle
     action: error_information_loaded
     action: clear_input
 
@@ -156,7 +171,7 @@ check_service_cidr_error_message_wizard:
         locator_id: network_service_cidr
         error_message_locator: network_service_cidr-helper
     action: set_service_cidr_value
-    action: click_next_button
+    action: click_network_configuration_toggle
     action: error_information_loaded
     action: clear_input
 
@@ -176,7 +191,12 @@ check_pod_cidr_error_message:
         locator_id: network_pod_cidr
         error_message_locator: network_pod_cidr-helper
     action: set_pod_cidr_value
-    action: click_create_button
+    action:
+        if_not_param: wizard
+        ref: click_create_button
+    action:
+        if_param: wizard
+        ref: click_network_configuration_toggle
     action: error_information_loaded
     action: clear_input
 
@@ -185,7 +205,7 @@ check_pod_cidr_error_message_wizard:
         locator_id: network_pod_cidr
         error_message_locator: network_pod_cidr-helper
     action: set_pod_cidr_value
-    action: click_next_button
+    action: click_network_configuration_toggle
     action: error_information_loaded
     action: clear_input
 
@@ -206,7 +226,12 @@ check_host_prefix_error_message:
         locator_id: network_host_prefix
         error_message_locator: network_host_prefix-helper
     action: set_host_prefix_value
-    action: click_create_button
+    action:
+        if_not_param: wizard
+        ref: click_create_button
+    action:
+        if_param: wizard
+        ref: click_network_configuration_toggle
     element:
         selector:
             xpath: //*[contains(text(),"<error_reason>")]
@@ -217,11 +242,24 @@ check_host_prefix_error_message_wizard:
         locator_id: network_host_prefix
         error_message_locator: network_host_prefix-helper
     action: set_host_prefix_value
-    action: click_next_button
+    action: click_network_configuration_toggle
     element:
         selector:
             xpath: //*[contains(text(),"<error_reason>")]
     action: clear_input
+
+check_podcidr_hostprefix_invalid_message:
+    action: set_pod_cidr_value
+    action: set_host_prefix_value
+    action:
+        if_not_param: wizard
+        ref: click_create_button
+    action:
+        if_param: wizard
+        ref: click_network_configuration_toggle
+    element:
+        selector:
+            xpath: //*[@id='network_pod_cidr-helper'and contains(.,'does not allow for enough nodes. Try changing the host prefix or the pod subnet range.')]
 
 # -------------------- Privacy related --------------------
 select_privacy:
@@ -231,6 +269,7 @@ select_privacy:
             xpath: //input[@id='cluster_privacy-<listening>']
         op: click
 
+# -------------------- Existed vpc related --------------------
 check_existing_vpc:
     elements:
         - selector:
@@ -272,7 +311,6 @@ select_vpc_avalilability_zone:
           op: click
         - selector:
             xpath: //span[text()='<available_zone>']
-# -------------------- Existed vpc related --------------------
 click_install_into_vpc_checkbox:
     element:
         selector:
@@ -280,6 +318,15 @@ click_install_into_vpc_checkbox:
         op: click
 
 # -------------------- General steps --------------------
+check_networking:
+    action: check_networking_configuration
+    action: select_advanced_radio_button
+    action:
+        if_param: aws
+        ref: check_aws_advanced_elements_loaded
+    action:
+        if_param: gcp
+        ref: check_gcp_advanced_elements_loaded
 goto_networking_on_wizard:
     action: goto_machine_pool_on_wizard
     action: set_machinepool_values
@@ -326,18 +373,17 @@ check_cidr_background_validation_error_message:
     action: check_networking_configuration
     action: check_advanced_elements_loaded
     action: set_machine_cidr_value
-    action: click_create_button
+    action:
+        if_not_param: wizard
+        ref: click_create_button
+    action:
+        if_param: wizard
+        ref: click_network_configuration_toggle
     action: osd_creation_error_dialog_loaded
     action: close_error_message_dialog
     action: clear_input
 
 check_cidr_background_validation_error_message_wizard:
-    action: clear_input
-    action: osd_creation_page_loaded
-    action: check_networking_configuration
-    action: check_advanced_elements_loaded
-    action: set_machine_cidr_value
-    action: click_next_button
-    action: osd_creation_error_dialog_loaded
-    action: close_error_message_dialog
-    action: clear_input
+    action: goto_reviews_on_wizard
+    action: click_create_button
+    action: click_cancel_button

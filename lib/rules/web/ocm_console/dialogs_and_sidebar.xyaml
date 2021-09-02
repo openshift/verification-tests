@@ -11,7 +11,7 @@ archive_dialog_loaded:
         - selector:
             xpath: //button[@class='pf-c-button pf-m-plain' and @aria-label='Close']
         - selector:
-            xpath: //h1[text()='Archive cluster']
+            xpath: //*[text()='Archive cluster']
         - selector:
             xpath: //form/p[contains(text(), 'Archiving a cluster will remove it from the cluster list and remove the cluster from subscription management.')]
         - selector:
@@ -35,7 +35,7 @@ click_close_button:
 check_cancel_button:
   element: &cancel_button_in_dialog
     selector:
-      xpath: //button[@class='pf-c-button pf-m-secondary' and text()='Cancel']
+      xpath: //button[text()='Cancel']
 click_cancel_button:
   element:
     <<: *cancel_button_in_dialog
@@ -72,7 +72,7 @@ unarchive_dialog_loaded:
         - selector:
             xpath: //button[@class='pf-c-button pf-m-plain' and @aria-label='Close']
         - selector:
-            xpath: //h1[text()='Unarchive cluster']
+            xpath: //*[text()='Unarchive cluster']
         - selector:
             xpath: //p[text()='Un-archiving a cluster will make it visible in the active (default) cluster list. You may need to manage subscriptions if the cluster is active.']
         - selector:
@@ -139,7 +139,7 @@ edit_display_name_in_dialog:
 delete_cluster_dialog_loaded:
     elements:
         - selector:
-            xpath: //h1[text()='Delete cluster']
+            xpath: //*[text()='Delete cluster']
         - selector:
             xpath: //p[text()='This action cannot be undone. It will uninstall the cluster, and all data will be deleted.']
         - selector:
