@@ -23,6 +23,7 @@ Feature: Pod related networking scenarios
   # @case_id OCP-10031
   @smoke
   @aws-ipi
+  @disconnected
   Scenario: Container could reach the dns server
     Given I have a project
     Given I obtain test data file "pods/ocp10031/pod.json"
@@ -130,6 +131,7 @@ Feature: Pod related networking scenarios
   # @case_id OCP-23890
   @admin
   @aws-ipi
+  @disconnected
   Scenario: A pod with or without hostnetwork cannot access the MCS port 22623 or 22624 on the master
     Given I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master_ip clipboard
