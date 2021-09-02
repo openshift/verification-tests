@@ -93,6 +93,7 @@ Feature: stibuild.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-28891
   @aws-ipi
+  @disconnected
   Scenario: Test s2i build in disconnect cluster
     Given I have a project
     When I have an http-git service in the project

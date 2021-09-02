@@ -531,6 +531,7 @@ Feature: Machine features testing
   # @author miyadav@redhat.com
   # @case_id OCP-36489
   @admin
+  @disconnected
   Scenario: [Azure] Machineset should not be created when publicIP:true in disconnected Azure enviroment
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user

@@ -210,6 +210,7 @@ Feature: Testing registry
   # @case_id OCP-29693
   @admin
   @aws-ipi
+  @disconnected
   Scenario: [Disconnect]Import image from a secure registry using node credentials
     Given I have a project
     And evaluation of `image_content_source_policy('image-policy-aosqe').mirror_registry(cached: false)` is stored in the :mirror_registry clipboard
