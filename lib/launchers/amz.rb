@@ -580,7 +580,11 @@ module BushSlicer
     end
 
     def instance_name(instance)
-      instance.tags.select { |i| i['value'] if i['key'] == "Name" }.first['value']
+      begin
+        instance.tags.select { |i| i['value'] if i['key'] == "Name" }.first['value']
+      rescue
+        print "******\n"
+      end
     end
     # @return group of instances that belong to the same `owned`
     def instance_owned(instance)

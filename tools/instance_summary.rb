@@ -1,6 +1,6 @@
 require 'text-table'
 require 'thread'
-# require 'pry-byebug'
+
 
 module BushSlicer
 
@@ -177,7 +177,11 @@ module BushSlicer
       elsif reg_name_match
         reg_name_match[0]
       else
-        name_str[0..12]
+        unless name_str.nil?
+          name_str[0..12]
+        else
+          name_str = ""
+        end
       end
     end
 
@@ -233,7 +237,9 @@ module BushSlicer
             else
               owner_str = r[:owned]
             end
-            owner_str.include? owner
+            unless owner_str.nil?
+              owner_str.include? owner
+            end
           }
         end
         sample = cluster_group.first
@@ -494,8 +500,16 @@ module BushSlicer
           inst_summary[:name]= inst.name
           inst_summary[:uptime]= gce.instance_uptime inst
           inst_summary[:type] = inst.machine_type.split('/').last
-          inst_summary[:cost] = (inst_summary[:uptime] * @gce_prices[inst_summary[:type]]).round(2)
+          inst_hourly_price = @gce_prices[inst_summary[:type]]
+          cost = 0.0
+          if inst_hourly_price.nil?
+            inst_hourly_price = 0.0
+            puts "##### WARNING, setting hourly price for '#{inst_summary[:type]}' to 0.0 because it's not known"
+          end
+          cost = inst_summary[:uptime] * inst_hourly_price
+          inst_summary[:cost] = cost.round(2)
           inst_summary[:owned] = inst.name
+
           if inst_summary[:owned]
             inst_summary[:flexy_job_id], inst_summary[:inst_prefix] = jenkins.get_jenkins_flexy_job_id(inst_summary[:owned])
           else
@@ -576,7 +590,12 @@ module BushSlicer
           inst_summary[:name]= inst[:inst].name
           inst_summary[:uptime]= inst[:uptime]
           inst_summary[:type] = inst[:inst].hardware_profile.vm_size
-          inst_summary[:cost] = (inst_summary[:uptime] * @azure_prices[inst_summary[:type]]).round(2)
+          begin
+            inst_summary[:cost] = (inst_summary[:uptime] * @azure_prices[inst_summary[:type]]).round(2)
+          rescue
+            print("Unknown price for #{@azure_prices[inst_summary[:type]]}...setting it to 0.0")
+            inst_summary[:cost] = 0.0
+          end
           inst_summary[:owned] = rg_name.downcase
           if inst_summary[:owned]
             inst_summary[:flexy_job_id], inst_summary[:inst_prefix] = jenkins.get_jenkins_flexy_job_id(inst_summary[:owned])
@@ -660,6 +679,7 @@ module BushSlicer
         "c3.small.x86" => 0.50,
         "c3.medium.x86" => 1.10,
         "m3.large.x86" => 2.00,
+        "m2.xlarge.x86" => 2.00,
         "s3.xlarge.x86" => 1.85,
         "n2.xlarge.x86" => 2.25,
       }

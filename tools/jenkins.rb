@@ -76,6 +76,8 @@ module BushSlicer
       if index
         return self.build_map[index], index
       else
+        puts "INST_GROUP_NAME #{inst_group_name}\n"
+        #binding.pry if inst_group_name.end_with? 'int-svc'
         return "not found", nil
       end
     end

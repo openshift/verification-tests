@@ -1,4 +1,11 @@
+#!/usr/bin/env ruby
+
+lib_path = File.expand_path(File.dirname(__FILE__))
+unless $LOAD_PATH.any? {|p| File.expand_path(p) == lib_path}
+  $LOAD_PATH.unshift(lib_path)
+end
 require 'mongo'
+require 'common'
 
 # Turn off debug-mode
 Mongo::Logger.logger.level = Logger::WARN
@@ -36,6 +43,16 @@ module BushSlicer
       @query_results = self.collections.find(query).to_a
     end
 
+    def get_all_cluster_names
+      query = {}
+      builds = self.get_all_builds(query: query)
+      cnames = builds.map do |b|
+        if b['metadata_json']
+          YAML.load(b['metadata_json'])['clusterName']
+        end
+      end
+    end
+
     def construct_build_map
       # query = {"result"=> "SUCCESS"}
       query = {}
@@ -43,7 +60,10 @@ module BushSlicer
       build_owner_map = {}
       builds = self.get_all_builds(query: query)
       builds.map do |b|
-        build_map[b["instance_prefix"]] = b['job_id']
+        infra_id = YAML.load(b['metadata_json'])['infraID'] if b['metadata_json']
+        #cluster_name = YAML.load(b['metadata_json'])['clusterName'] if b['metadata_json']
+        build_map[infra_id] = b['job_id']
+        #build_map[b["instance_prefix"]] = b['job_id']
         if b.has_key? 'user'
           # users installed by Flexy-install has the format  <username-job-id>
           # we just want the username.
@@ -51,7 +71,7 @@ module BushSlicer
         end
       end
       # build_map.keys.compact!
-      sorted_keys = build_map.keys.compact!.sort
+      sorted_keys = build_map.keys.compact.sort
       return build_map, sorted_keys, build_owner_map
     end
 
@@ -61,4 +81,5 @@ end
 
 if __FILE__ == $0
   m = BushSlicer::JenkinsMongo.new
+  m.get_all_cluster_names
 end
