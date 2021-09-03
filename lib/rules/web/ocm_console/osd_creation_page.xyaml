@@ -179,13 +179,6 @@ check_creation_pending_message:
         - selector:
             xpath: //*[text()='Do not refresh this page. This request may take a moment...']
 
-check_podcidr_hostprefix_invalid_message:
-    action: set_pod_cidr_value
-    action: set_host_prefix_value
-    action: click_create_button
-    element:
-        selector:
-            xpath: //*[@id='network_pod_cidr-helper'and contains(.,'does not allow for enough nodes. Try changing the host prefix or the pod subnet range.')]
 check_aws_compute_node_instances_type:
     elements:
         - selector:
@@ -266,29 +259,7 @@ expand_node_labels:
 close_edit_node_labels:
     action: expand_node_labels
 
-input_node_label_key:
-    element:
-        selector:
-            xpath: //input[@aria-label='Key-value list key' and @name='node_labels[<row_number>].key']
-        op: clear
-    element:
-        selector:
-            xpath: //input[@aria-label='Key-value list key' and @name='node_labels[<row_number>].key']
-        op: send_keys <label_key>
-input_node_label_value:
-    element:
-        selector:
-            xpath: //input[@aria-label='Key-value list value' and @name='node_labels[<row_number>].value']
-        op: clear
-    element:
-        selector:
-            xpath: //input[@aria-label='Key-value list value' and @name='node_labels[<row_number>].value']
-        op: send_keys <label_value>
 
-check_error_for_labels:
-    element:
-        selector:
-            xpath: //div[@id='labe-help' and text()='<error_message>']
 
 select_node_drain:
     elements:

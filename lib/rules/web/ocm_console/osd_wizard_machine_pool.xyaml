@@ -41,13 +41,8 @@ expand_edit_labels:
     op: click
 
 input_label_key_value:
-  elements:
-    - selector:
-        xpath:// input[@name='node_labels[<row_number>].key']
-      op: send_keys <label_key>
-    - selector:
-        xpath:// input[@name='node_labels[<row_number>].value']
-      op: send_keys <label_value>
+  action: input_node_label_key
+  action: input_node_label_value
 
 delete_label:
   element:
@@ -55,8 +50,61 @@ delete_label:
       xpath: // input[@name='node_labels[<row_number>].value']/../button
     op: click
 
+input_node_label_key:
+    element:
+        selector:
+            xpath: //input[@name='node_labels[<row_number>].key']
+        op: clear
+    element:
+        selector:
+            xpath: //input[@name='node_labels[<row_number>].key']
+        op: send_keys <label_key>
+input_node_label_value:
+    element:
+        selector:
+            xpath: //input[@aria-label='Key-value list value' and @name='node_labels[<row_number>].value']
+        op: clear
+    element:
+        selector:
+            xpath: //input[@aria-label='Key-value list value' and @name='node_labels[<row_number>].value']
+        op: send_keys <label_value>
+
+check_error_for_labels:
+    elements:
+      - selector:
+          xpath: //*[text()='Key']
+        op: click
+      - selector:
+          xpath: //div[@id='labe-help' and text()='<error_message>']
 
 # -------------------- General steps --------------------
+machine_pool_loaded:
+    elements:
+        - selector:
+            text: "Worker node instance type"
+        - selector:
+            text: "Worker node count"
+    action: expand_edit_labels
+    elements:
+        - selector:
+            text: Node labels
+check_machine_pool_help_messages:
+    elements:
+        - selector:
+            xpath: //span[text()='Worker node instance type']/../../span
+          op: click
+        - selector:
+            xpath: //span[text()='Worker node instance type']/../span[text()='*']
+        - selector:
+            xpath: //div[contains(text(),'The instance type for the worker nodes. Instance type')]
+    action: close_help_message
+    elements:
+        - selector:
+            xpath: //span[text()='Worker node count']/../../span
+          op: click
+        - selector:
+            xpath: //div[contains(text(),'The number of worker nodes to provision per zone.')]
+    action: close_help_message
 goto_machine_pool_on_wizard:
     action: goto_cluster_details_on_wizard
     action: set_cluster_details_values
@@ -69,3 +117,6 @@ set_machinepool_values:
     action: 
         if_param: node_number
         ref: select_compute_node_count_on_creation_page
+check_machine_pool:
+  action: check_machine_pool_help_messages
+  action: machine_pool_loaded

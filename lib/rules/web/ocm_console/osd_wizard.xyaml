@@ -9,6 +9,23 @@ osd_creation_wizard_loaded:
         - selector:
             xpath: //p[contains(text(),', a fully managed service of Red Hat OpenShift on Amazon Web Services (AWS) and Google Cloud.')]
 
+check_osd_creation_wizard:
+    action: page_title_displayed
+    action: billing_model_loaded
+    action: click_next_button
+    action: cloud_provider_loaded
+    action: click_next_button
+    action: check_cluster_details
+    action: set_cluster_name
+    action: click_next_button
+    action: check_machine_pool
+    action: click_next_button
+    action: check_networking
+    action: click_next_button
+    action: check_updates
+    action: click_next_button
+    action: review_and_create_loaded
+
 # -------------------- Next| Back| Cancel buttons --------------------
 click_next_button:
     element:

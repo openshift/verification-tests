@@ -17,13 +17,6 @@ check_infrastructure_type:
         selector:
             xpath: //dt/*[text()='Infrastracture type']/../../dd/*[text()='<infrastracture_name>']
 
-check_review_page:
-    action:
-        if_param: subscription_name
-        ref: check_subscription_type_on_review
-    action:
-        if_param: infrastracture_name
-        ref: check_infrastructure_type
 
 click_create_button:
     element:
@@ -32,6 +25,15 @@ click_create_button:
         op: click
 
 # -------------------- General steps --------------------
+check_review_and_create:
+    action: review_and_create_loaded
+    action:
+        if_param: subscription_name
+        ref: check_subscription_type_on_review
+    action:
+        if_param: infrastracture_name
+        ref: check_infrastructure_type
+
 goto_reviews_on_wizard:
     action: goto_updates_on_wizard
     action: set_updates_values
