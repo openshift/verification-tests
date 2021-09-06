@@ -175,7 +175,7 @@ Feature: oc import-image related feature
       | resource_name   | ruby-ex |
       | resource        | bc      |
       | o               | yaml    |
-    Then the expression should be true> @result[:parsed]['spec']['triggers'][3]['imageChange']['lastTriggeredImageID'].include? 'openshifttest/ruby-25-centos7'
+    Then the expression should be true> @result[:parsed]['status']['imageChangeTriggers'][0]['lastTriggeredImageID'].include? 'openshifttest/ruby-25-centos7'
     When I run the :delete client command with:
       | object_type | bc |
       | all         |    |
@@ -198,5 +198,5 @@ Feature: oc import-image related feature
       | resource_name   | ruby-ex |
       | resource        | bc      |
       | o               | yaml    |
-    Then the expression should be true> @result[:parsed]['spec']['triggers'][3]['imageChange']['lastTriggeredImageID'].include? '<%= project.name %>/ruby-25-centos7'
+    Then the expression should be true> @result[:parsed]['status']['imageChangeTriggers'][0]['lastTriggeredImageID'].include? '<%= project.name %>/ruby-25-centos7'
 
