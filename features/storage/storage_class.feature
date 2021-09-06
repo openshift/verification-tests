@@ -130,6 +130,7 @@ Feature: storageClass related feature
 
   # @author lxia@redhat.com
   @aws-ipi
+  @inactive
   Scenario Outline: New created PVC without specifying storage class use default class when only one class is marked as default
     Given I have a project
     Given I obtain test data file "storage/misc/pvc-without-annotations.json"
