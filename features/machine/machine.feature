@@ -391,6 +391,7 @@ Feature: Machine features testing
 
     Given I store the last provisioned machine in the :machine clipboard
     Then evaluation of `machine(cb.machine).azure_location` is stored in the :default_location clipboard
+    And evaluation of `machine(cb.machine).azure_resource_id` is stored in the :default_resource_id clipboard
     And admin ensures "<name>" machineset is deleted after scenario
 
     Given I obtain test data file "cloud/ms-azure/<file_name>"
@@ -399,6 +400,7 @@ Feature: Machine features testing
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-cluster"]           | <%= infrastructure("cluster").infra_name %> |
       | ["spec"]["selector"]["matchLabels"]["machine.openshift.io/cluster-api-machineset"]        | <name>                                      |
       | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-cluster"]    | <%= infrastructure("cluster").infra_name %> |
+      | ["spec"]["template"]["spec"]["providerSpec"]["value"]["image"]["resourceID"]              | <%= cb.default_resource_id %>                |
       | ["spec"]["template"]["spec"]["providerSpec"]["value"]["location"]                         | <%= cb.default_location %>                  |
       | ["spec"]["template"]["metadata"]["labels"]["machine.openshift.io/cluster-api-machineset"] | <name>                                      |
       | ["metadata"]["name"]                                                                      | <name>                                      |

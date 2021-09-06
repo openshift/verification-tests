@@ -48,6 +48,11 @@ module BushSlicer
          dig('spec', 'providerSpec', 'value', 'location')
     end
 
+    def azure_resource_id(user: nil, cached: true, quiet: false)
+       raw_resource(user: user, cached: cached ,quiet: quiet).
+         dig('spec', 'providerSpec', 'value', 'image', 'resourceID')
+    end
+
     def gcp_region(user: nil, cached: true, quiet: false)
        raw_resource(user: user, cached: cached ,quiet: quiet).
          dig('spec', 'providerSpec', 'value', 'region')

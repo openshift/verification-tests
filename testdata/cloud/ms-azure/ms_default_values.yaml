@@ -27,6 +27,8 @@ spec:
         value: "mapi_test"
       providerSpec:
         value:
+          image:
+           resourceID:       
           location: 
           osDisk:
             diskSizeGB: 128
