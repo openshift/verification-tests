@@ -608,7 +608,7 @@ set_taint_effect:
 click_delete_taint_button:
     element:
         selector:
-            xpath: //select[@id='taints[<taint_row_number>].effect']/../button
+            xpath: //select[@id='taints[<taint_row_number>].effect']/../following-sibling::div[1]/button
         op: click
 check_existed_taint:
     elements:
