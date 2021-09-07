@@ -48,7 +48,7 @@ module BushSlicer
     # likely a jenkins environment
     EXECUTOR_NAME = "#{ENV["NODE_NAME"]}-#{ENV["EXECUTOR_NUMBER"]}".freeze
   else
-    EXECUTOR_NAME = "#{HOSTNAME.split('.')[0]}-#{LOCAL_USER}".freeze
+    EXECUTOR_NAME = "#{HOSTNAME.split('.')[0]}-#{LOCAL_USER}".chomp('-').freeze
   end
 
   START_TIME = Time.now
