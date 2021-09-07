@@ -86,6 +86,14 @@ check_silence_detail:
   element:
     selector:
       xpath: //span[text()='Silence details']
+
+silence_alert_from_detail_if:     
+  action:
+    if_element:
+      selector:
+        tag_name: button
+        text: Silence alert
+    ref: silence_alert_from_detail
 silence_alert_from_detail:
   params:
     comment_text: silence comments is a must from ocp 4.5
@@ -93,6 +101,14 @@ silence_alert_from_detail:
   action: input_silence_comments
   action: perform_silence
   action: check_silence_detail
+  
+silence_alert_from_detail_check_fields_if:     
+  action:
+    if_element:
+      selector:
+        tag_name: button
+        text: Silence alert
+    ref: silence_alert_from_detail_check_fields
 silence_alert_from_detail_check_fields:
   params:
     comment_text: silence comments is a must from ocp 4.5
