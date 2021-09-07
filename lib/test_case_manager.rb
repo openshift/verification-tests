@@ -83,7 +83,9 @@ module BushSlicer
         ## let attacher know we finish and wait for queue drain
         @attach_queue << false
         wait_for_attacher
-        @artifacts_filer.clean_up if @artifacts_filer
+        unless @artifacts_filer.class.is_a? BushSlicer::Amz_EC2
+          @artifacts_filer.clean_up
+        end
       end
     end
 
@@ -181,13 +183,22 @@ module BushSlicer
 
     # executed from within the attacher thread to actually upload/attach log;
     def handle_attach(dir)
-      ## upload files
-      artifacts_filer.mkdir artifacts_base_remote_path, raw: true
-      artifacts_filer.copy_to(dir, artifacts_base_remote_path, raw: true)
-    rescue => e
-      Kernel.puts exception_to_string(e)
-    ensure
-      FileUtils.remove_entry dir
+      if ENV['USE_SCP_SERVER']
+        begin
+          ## upload files
+          artifacts_filer.mkdir artifacts_base_remote_path, raw: true
+          artifacts_filer.copy_to(dir, artifacts_base_remote_path, raw: true)
+        rescue => e
+          Kernel.puts exception_to_string(e)
+        ensure
+          FileUtils.remove_entry dir
+        end
+      else
+        # this is a Aws_EC2 instance
+        bucket_name = conf['services', 'DATA-HUB', 'bucket_name']
+        artifacts_filer.upload_cucushift_html(bucket_name: bucket_name,
+          local_log: dir, dst_base_path: artifacts_base_remote_path)
+      end
     end
 
     # @param job [TCMSTestCase]
@@ -231,13 +242,16 @@ module BushSlicer
     # @return [BushSlicer::Host] of the server storing logs and artifacts
     def artifacts_filer
       @artifacts_filer if @artifacts_filer
-
-      @artifacts_filer = BushSlicer.
-        const_get(conf[:services, :artifacts_file_server, :host_type]).
-        new(
-          conf[:services, :artifacts_file_server, :hostname],
-          **conf[:services, :artifacts_file_server]
-        )
+      if ENV['USE_SCP_SERVER']
+        @artifacts_filer = BushSlicer.
+          const_get(conf[:services, :artifacts_file_server, :host_type]).
+          new(
+            conf[:services, :artifacts_file_server, :hostname],
+            **conf[:services, :artifacts_file_server]
+          )
+      else
+        @artifacts_filer = BushSlicer::Amz_EC2.new(service_name: "DATA-HUB")
+      end
       return @artifacts_filer
     end
   end
