@@ -169,7 +169,7 @@ check_silence_fields:
 remove_matcher_silence_alert:
   params:
     aria_label_text: Remove
-    index: 1
+    index: 2
   action: click_icon_index_button
 input_matcher_name_silence:
   params:
