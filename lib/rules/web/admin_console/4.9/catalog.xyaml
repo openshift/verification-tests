@@ -170,7 +170,7 @@ click_project_list_dropdown:
 choose_project_from_dropdown_list:
   element:
     selector:
-      xpath: //ul//a[@id='<project_name>-Namespace-link' and contains(@class,'dropdown__menu-item')]
+      xpath: //li//a[@id='<project_name>-Project-link' and contains(@class,'dropdown__menu-item')]
     op: click
 select_target_namespace:
   params:
