@@ -442,8 +442,8 @@ module BushSlicer
         project_name = "proj-" + EXECUTOR_NAME.downcase + "s"
         project = Project.new(name: project_name, env: self)
         unless project.active?
-          # 30 seconds is no longer enough
-          project.wait_to_disappear(admin, 60)
+          # 60 seconds is no longer enough
+          project.wait_to_disappear(admin, 120)
           res = project.create(by: admin, clean_up_registered: true)
           unless res[:success]
             raise "failed to create service project #{project.name}, see log"
