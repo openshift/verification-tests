@@ -4,7 +4,7 @@ Feature: Logging smoke test case
   # @case_id OCP-37508
   @admin
   @aws-ipi
-  @console
+  @serial
   Scenario: One logging acceptance case for all cluster
     # Deploy cluster-logging operator via web console
     Given logging service is removed successfully
