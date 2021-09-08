@@ -820,7 +820,6 @@ Feature: Quota related scenarios
   # @author chezhang@redhat.com
   # @case_id OCP-12086
   @admin
-  @flaky
   @aws-ipi
   Scenario: Quota with Terminating and NotTerminating scope
     Given I have a project
@@ -867,8 +866,11 @@ Feature: Quota related scenarios
       | name=pod-terminating |
     And I wait up to 70 seconds for the steps to pass:
     """
-    When I get project pods
-    Then the output should match "pod-terminating.*DeadlineExceeded"
+    When I run the :describe client command with:
+      | resource | pod             |
+      | name     | pod-terminating |
+    Then the output should match:
+      | .*DeadlineExceeded.*Pod was active on the node longer than the specified deadline |
     """
     When I run the :describe client command with:
       | resource | quota |
