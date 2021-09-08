@@ -5,6 +5,7 @@ Feature: Logging smoke test case
   @admin
   @aws-ipi
   @serial
+  @prow_unstable
   Scenario: One logging acceptance case for all cluster
     # Deploy cluster-logging operator via web console
     Given logging service is removed successfully
