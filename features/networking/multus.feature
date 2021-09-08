@@ -431,6 +431,7 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-24488
   @admin
   @aws-ipi
+  @serial
   Scenario: Create pod with Multus bridge CNI plugin without vlan
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
