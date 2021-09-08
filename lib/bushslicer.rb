@@ -50,6 +50,7 @@ module BushSlicer
   else
     EXECUTOR_NAME = "#{HOSTNAME.split('.')[0]}-#{LOCAL_USER}".freeze
   end
+  EXECUTOR_NAME = "#{EXECUTOR_NAME}-e"
 
   START_TIME = Time.now
   TIME_SUFFIX = [
