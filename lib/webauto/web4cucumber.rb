@@ -129,6 +129,8 @@ require_relative 'chrome_extension'
         # options.log_level = 'trace'
 
         @browser = Watir::Browser.new :firefox, :http_client=>client, desired_capabilities: caps, options: options, url: @selenium_url
+        logger.info "#{browser.driver.capabilities[:browser_name]} version is #{browser.driver.capabilities[:browser_version]}"
+        logger.info "Geckodriver version is #{browser.driver.capabilities['moz:geckodriverVersion']}"
         if @size
           browser.window.resize_to(*@size)
         end
@@ -149,6 +151,8 @@ require_relative 'chrome_extension'
         options[:extensions] = [proxy_chrome_ext_file] if proxy_chrome_ext_file
         url_or_switches = @selenium_url ? {url: @selenium_url} : {switches: chrome_switches}
         @browser = Watir::Browser.new :chrome, desired_capabilities: chrome_caps, options: options, **url_or_switches
+        logger.info "#{browser.driver.capabilities[:browser_name]} version is #{browser.driver.capabilities[:browser_version]}"
+        logger.info "Chromedriver version is #{browser.driver.capabilities['chrome']['chromedriverVersion']}"
         if @size
           browser.window.resize_to(*@size)
         end
