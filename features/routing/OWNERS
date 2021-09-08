@@ -1,8 +1,8 @@
 approvers:
-- lihongan
+  - lihongan
 
 reviewers:
-- lihongan
-- quarterpin
-- melvinjoseph86
-- shudili
+  - lihongan
+  - melvinjoseph86
+  - quarterpin
+  - shudili

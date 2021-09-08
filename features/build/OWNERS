@@ -1,5 +1,8 @@
 approvers:
+  - wzheng1
+  - xiuwang
+
 reviewers:
-- wewang58
-- wzheng1
-- xiuwang
+  - wewang58
+  - wzheng1
+  - xiuwang
