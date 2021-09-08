@@ -3,6 +3,7 @@ Feature: Sriov related scenarios
   # @author zzhao@redhat.com
   # @case_id OCP-29944
   @admin
+  @stage-only
   Scenario: sriov operator can be setup and running well
     Given I switch to cluster admin pseudo user
     And I use the "openshift-sriov-network-operator" project
@@ -727,6 +728,7 @@ Feature: Sriov related scenarios
   # @case_id OCP-34092
   @destructive
   @admin
+  @inactive
   Scenario: sriov-device-plugin can be scheduled on any node
     Given the sriov operator is running well
     When I run the :get admin command with:

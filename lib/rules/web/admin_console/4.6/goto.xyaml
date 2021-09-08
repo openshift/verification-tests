@@ -141,6 +141,8 @@ goto_rc_list_page:
 goto_daemonsets_page:
   url: k8s/ns/<project_name>/daemonsets
   action: wait_box_loaded
+goto_one_statefulset_page:
+  url: /k8s/ns/<project_name>/statefulsets/<statefulset_name>
   
 #pod
 goto_all_projects_pods_list:

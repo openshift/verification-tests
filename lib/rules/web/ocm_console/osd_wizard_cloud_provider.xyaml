@@ -1,0 +1,170 @@
+########### Below defination is cloud provider selection step #############
+# -------------------- Cloud provider related --------------------
+select_cloud_provider_wizard:
+    element:
+        selector:
+            xpath: //article[@data-test-id='<cloud_provider>-provider-card']
+        op: click
+
+click_validate_button:
+    element:
+        selector:
+            xpath: //button[text()='Validate']
+        op: click
+# -------------------- AWS credential related --------------------
+check_no_input_errors_to_required_aws_items:
+    elements:
+        - selector:
+            xpath: //*[@id='account_id']
+          op: click
+        - selector:
+            xpath: //*[text()='AWS account ID']
+          op: click
+        - selector:
+            xpath: //div[@id='account_id-helper' and text()=' AWS account ID is required.']
+        - selector:
+            xpath: //*[@id='access_key_id']
+          op: click
+        - selector:
+            xpath: //*[text()='AWS access key ID']
+          op: click
+        - selector:
+            xpath: //div[@id='access_key_id-helper' and contains(text(),'Field is required')]
+        - selector:
+            xpath: //*[@id='secret_access_key']
+          op: click
+        - selector:
+            xpath: //*[text()='AWS secret access key']
+          op: click
+        - selector:
+            xpath: //div[@id='secret_access_key-helper' and contains(text(),'Field is required')]
+
+
+aws_account_id_textbox_loaded:
+    element: &aws_account_id_textbox
+        selector:
+            xpath: //input[@id='account_id']
+aws_access_key_textbox_loaded:
+    element: &aws_access_key_textbox
+        selector:
+            xpath: //input[@id='access_key_id']
+aws_access_secret_textbox_loaded:
+    element: &aws_secret_key_textbox
+        selector:
+            xpath: //input[@id='secret_access_key']
+input_aws_account_id:
+    element:
+        <<: *aws_account_id_textbox
+        op: send_keys <account_id>
+input_aws_access_key:
+    element:
+        <<: *aws_access_key_textbox
+        op: send_keys <aws_access_key>
+input_aws_secret_key:
+    element:
+        <<: *aws_secret_key_textbox
+        op: send_keys <aws_secret>
+input_aws_credentials:
+    action: input_aws_account_id
+    action: input_aws_access_key
+    action: input_aws_secret_key
+
+check_invalid_aws_credential_error_message:
+    action: input_aws_credentials
+    action: click_validate_button
+    elements:
+        - selector:
+            xpath: //*[text()="AWS wasn't able to verify your credentials"]
+        - selector:
+            xpath: //div[contains(text(),'Verify that your entered')]
+        - selector:
+            xpath: //div[contains(.,"access keys match the access keys provided in your AWS account.")]
+
+click_aws_account_id_text:
+    element:
+        selector:
+            xpath: //*[text()="AWS account ID"]
+        op: click
+check_aws_account_id_error_message:
+    params:
+        locator_id: account_id
+    action: input_aws_account_id 
+    action: click_aws_account_id_text
+    element:
+        selector:
+            xpath: //div[contains(text(), '<error_message>')]
+    action: clear_input
+
+# -------------------- GCP credential related --------------------
+gcp_credential_textbox_loaded:
+    elements:
+        - selector:
+            text: "Provision your cluster in a Google Cloud Platform account owned by you or your company to leverage your existing relationship and pay Google Cloud Platform directly for public cloud costs."
+        - selector:
+            xpath: //span[text()='Prerequisites']
+          op: click
+        - selector:
+            text: "Successful cluster provisioning requires that" 
+        - selector:
+            xpath: //span[text()='Service account JSON']
+        - selector:
+            xpath: //input[@id='gcp_service_account-filename']
+        - selector: 
+            xpath: //button[@id='gcp_service_account-browse-button']
+        - selector:
+            xpath: //button[text()='Clear']
+        - selector:
+            xpath: //textarea[@id='gcp_service_account']
+# -------------------- General steps --------------------
+set_cloud_provider_values:
+    action:
+        if_param: cloud_provider
+        ref: select_cloud_provider_wizard
+
+goto_cloud_provider_on_wizard:
+    action: open_osd_creation_wizard
+    action: set_billing_model_values
+    action: click_next_button
+
+check_cloud_provider:
+    action: cloud_provider_loaded
+    action:
+        if_param: aws_ccs
+        ref: select_cloud_provider_wizard
+    action:
+        if_param: aws_ccs
+        ref: aws_ccs_cloud_provider_loaded
+    action:
+        if_param: gcp_ccs
+        ref: select_cloud_provider_wizard
+    action:
+        if_param: gcp_ccs
+        ref: gcp_ccs_cloud_provider_loaded
+    
+cloud_provider_loaded:
+    elements:
+        - selector:
+            xpath: //article[@data-test-id='aws-provider-card']
+        - selector:
+            xpath: //article[@data-test-id='gcp-provider-card']
+
+aws_ccs_cloud_provider_loaded:
+    elements:
+        - selector:
+            xpath: //h3[text()='AWS account details']
+        - selector:
+            xpath: //span[text()='AWS account ID']/../span[text()='*']
+        - selector:
+            xpath: //h4[text()='AWS IAM user credentials']
+        - selector:
+            xpath: //span[text()='AWS access key ID']/../span[text()='*']
+        - selector:
+            xpath: //span[text()='AWS secret access key']/../span[text()='*']
+    action: aws_account_id_textbox_loaded
+    action: aws_access_key_textbox_loaded
+    action: aws_access_secret_textbox_loaded
+
+gcp_ccs_cloud_provider_loaded:
+    action: cloud_provider_loaded
+    action: select_cloud_provider_wizard
+    action: gcp_credential_textbox_loaded

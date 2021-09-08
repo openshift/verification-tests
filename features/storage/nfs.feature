@@ -4,6 +4,7 @@ Feature: NFS Persistent Volume
   # @author lxia@redhat.com
   # @case_id OCP-9572
   @admin
+  @aws-ipi
   Scenario: Share NFS with multiple pods with ReadWriteMany mode
     Given I have a project
     And I have a NFS service in the project

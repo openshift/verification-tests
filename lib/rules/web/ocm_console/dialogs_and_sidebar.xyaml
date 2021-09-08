@@ -11,7 +11,7 @@ archive_dialog_loaded:
         - selector:
             xpath: //button[@class='pf-c-button pf-m-plain' and @aria-label='Close']
         - selector:
-            xpath: //h1/span[text()='Archive cluster']
+            xpath: //*[text()='Archive cluster']
         - selector:
             xpath: //form/p[contains(text(), 'Archiving a cluster will remove it from the cluster list and remove the cluster from subscription management.')]
         - selector:
@@ -35,7 +35,7 @@ click_close_button:
 check_cancel_button:
   element: &cancel_button_in_dialog
     selector:
-      xpath: //button[@class='pf-c-button pf-m-secondary' and text()='Cancel']
+      xpath: //button[text()='Cancel']
 click_cancel_button:
   element:
     <<: *cancel_button_in_dialog
@@ -72,7 +72,7 @@ unarchive_dialog_loaded:
         - selector:
             xpath: //button[@class='pf-c-button pf-m-plain' and @aria-label='Close']
         - selector:
-            xpath: //span[text()='Unarchive cluster']
+            xpath: //*[text()='Unarchive cluster']
         - selector:
             xpath: //p[text()='Un-archiving a cluster will make it visible in the active (default) cluster list. You may need to manage subscriptions if the cluster is active.']
         - selector:
@@ -139,7 +139,7 @@ edit_display_name_in_dialog:
 delete_cluster_dialog_loaded:
     elements:
         - selector:
-            xpath: //h1/span[text()='Delete cluster']
+            xpath: //*[text()='Delete cluster']
         - selector:
             xpath: //p[text()='This action cannot be undone. It will uninstall the cluster, and all data will be deleted.']
         - selector:
@@ -608,7 +608,7 @@ set_taint_effect:
 click_delete_taint_button:
     element:
         selector:
-            xpath: //select[@id='taints[<taint_row_number>].effect']/../button
+            xpath: //select[@id='taints[<taint_row_number>].effect']/../following-sibling::div[1]/button
         op: click
 check_existed_taint:
     elements:
@@ -684,7 +684,6 @@ click_add_machine_pool_button_on_dialog:
         selector:
             xpath: //div[@role='dialog']//button[text()='Add machine pool']
         op: click
-
 check_machine_pool_dialog:
     action: add_machine_pool_dialog_loaded
     action: expand_edit_node_labels
@@ -696,9 +695,9 @@ check_machine_pool_dialog:
 check_existed_label:
     elements:
         - selector:
-            xpath: //div[@class='space-bottom-md']/input[@aria-label='Key-value list value' and @value='<label_value>']
+            xpath: //div[@class='pf-u-mb-md']/input[@aria-label='Key-value list value' and @value='<label_value>']
         - selector:
-            xpath: //div[@class='space-bottom-md']/input[@aria-label='Key-value list key' and @value='<label_key>']
+            xpath: //div[@class='pf-u-mb-md']/input[@aria-label='Key-value list key' and @value='<label_key>']
 
 addon_deletion_dialog_loaded:
     element:

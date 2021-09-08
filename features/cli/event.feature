@@ -49,6 +49,7 @@ Feature: Event related scenarios
 
   # @author chezhang@redhat.com
   # @case_id OCP-10750
+  @inactive
   Scenario: Check normal and warning information for kubernetes events
     Given I have a project
     Given I obtain test data file "pods/hello-pod.json"
@@ -92,6 +93,7 @@ Feature: Event related scenarios
 
   # @author dma@redhat.com
   # @case_id OCP-10208
+  @inactive
   Scenario: Event should show full failed reason when readiness probe failed
     Given I have a project
     Given I obtain test data file "pods/ocp10208/readiness-probe-exec.yaml"

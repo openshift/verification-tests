@@ -5,6 +5,7 @@ Feature: cluster-capacity related features
   # @case_id OCP-14799
   @admin
   @flaky
+  @aws-ipi
   Scenario: Cluster capacity image support: Cluster capacity can work well with a simple pod
     Given environment has at least 2 schedulable nodes
     Given I have a project

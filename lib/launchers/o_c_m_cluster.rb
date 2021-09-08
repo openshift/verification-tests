@@ -275,6 +275,19 @@ module BushSlicer
       end
     end
 
+    # Wait until OSD cluster is deleted
+    def wait_for_osd_delete(osd_name)
+      loop do
+        osd_status = get_value(osd_name, "state")
+        logger.info("Status of cluster #{osd_name} is #{osd_status}")
+        if osd_status != "uninstalling"
+          break
+        end
+        logger.info("Check again after 2 minutes")
+        sleep(120)
+      end
+    end
+
     # Create OSD cluster
     def create_osd(osd_name)
       login
@@ -283,6 +296,7 @@ module BushSlicer
       exec("post /api/clusters_mgmt/v1/clusters --body='#{cluster_file}'")
       wait_for_osd(osd_name)
       create_ocpinfo_file(osd_name, install_dir)
+      File.delete(cluster_file)
     end
 
     # delete OSD cluster
@@ -290,6 +304,7 @@ module BushSlicer
       login
       osd_id = get_value(osd_name, "id")
       exec("delete /api/clusters_mgmt/v1/clusters/#{osd_id}")
+      wait_for_osd_delete(osd_name)
     end
 
   end

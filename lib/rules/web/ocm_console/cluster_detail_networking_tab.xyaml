@@ -141,7 +141,7 @@ input_additional_route_label:
 change_settings_button_disabled:
     element:
         selector:
-            xpath: //button[text()='Change settings' and @disabled='']
+            xpath: //button[text()='Change settings' and @aria-disabled='true']
 click_change_settings_button_on_page:
     element:
         selector:

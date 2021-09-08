@@ -2,6 +2,7 @@ Feature: Update sql apb related feature
 
   # @author zitang@redhat.com
   @admin
+  @inactive
   Scenario Outline: Plan of serviceinstance can be updated
     Given I save the first service broker registry prefix to :prefix clipboard
     #provision postgresql

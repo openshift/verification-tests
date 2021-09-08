@@ -22,7 +22,7 @@ default: --publish-quiet --profile devel
 debug: --profile _debug --profile devel
 devel: --profile _devel <%= default_args %>
 tcms: BUSHSLICER_TEST_CASE_MANAGER=tcms <%= tcms_args %>
-polarshift: BUSHSLICER_TEST_CASE_MANAGER=polarshift <%= tcms_args %>
+polarshift: --publish-quiet BUSHSLICER_TEST_CASE_MANAGER=polarshift <%= tcms_args %>
 junit: <%= default_args %> -f junit -o "<%= File.join(report_dir, 'junit-report') %>" --profile dir_embedder
 dir_embedder: -f BushSlicer::SaveToDirEmbeddingFormatter -o "<%= File.join(report_dir, 'embedded_files') %>"
 report_portal: rp_config=<%= "#{report_dir}/report-portal.yml" %> -f ReportPortal::Cucumber::Formatter

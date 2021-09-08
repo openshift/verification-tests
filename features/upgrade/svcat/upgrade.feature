@@ -6,6 +6,7 @@ Feature: Service Catalog related scenarios
   @admin
   @upgrade-prepare
   @users=upuser1,upuser2
+  @inactive
   Scenario: upgrade svcat - prepare
     # Check SVCAT version
     Given the "service-catalog-apiserver" operator version matches the current cluster version

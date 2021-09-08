@@ -2,6 +2,7 @@ Feature: pod related features
 
   # @author xiuli@redhat.com
   # @case_id OCP-15808
+  @aws-ipi
   Scenario: Endpoints should update in time and no delay
     Given I have a project
     Given I obtain test data file "networking/list_for_pods.json"
@@ -16,6 +17,7 @@ Feature: pod related features
   # @case_id OCP-10598
   @admin
   @destructive
+  @inactive
   Scenario: Existing pods will not be affected when node is unschedulable
     Given I have a project
     When I run the :create client command with:
@@ -45,6 +47,7 @@ Feature: pod related features
   # @case_id OCP-11116
   @admin
   @destructive
+  @inactive
   Scenario: New pods creation will be disabled on unschedulable nodes
     Given I have a project
     Given I store the schedulable nodes in the :nodes clipboard
@@ -72,6 +75,7 @@ Feature: pod related features
   # @case_id OCP-11466
   @admin
   @destructive
+  @inactive
   Scenario: Recovering an unschedulable node
     Given I have a project
     Given I run the :patch admin command with:
@@ -98,6 +102,7 @@ Feature: pod related features
   # @author chezhang@redhat.com
   # @case_id OCP-11752
   @admin
+  @inactive
   Scenario: Pod will not be copied to nodes which does not match it's node selector
     Given I have a project
     Given I run the :patch admin command with:
@@ -129,6 +134,7 @@ Feature: pod related features
   # @case_id OCP-11925
   @admin
   @destructive
+  @aws-ipi
   Scenario: Pods will still be created by DaemonSet when nodes are SchedulingDisabled
     Given I have a project
     Given I store the schedulable workers in the :nodes clipboard
@@ -158,6 +164,7 @@ Feature: pod related features
   # @author weinliu@redhat.com
   # @case_id OCP-12047
   @admin
+  @aws-ipi
   Scenario: When node labels change, DaemonSet will add pods to newly matching nodes and delete pods from not-matching nodes
     Given I have a project
     Given I run the :patch admin command with:
@@ -211,6 +218,7 @@ Feature: pod related features
   # @case_id OCP-12338
   @admin
   @destructive
+  @inactive
   Scenario: Secret is valid after node reboot
     Given I have a project
     Given I run the :patch admin command with:

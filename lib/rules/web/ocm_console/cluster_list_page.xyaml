@@ -442,7 +442,7 @@ click_logout_button:
 logout_page_loaded:
   element:
     selector:
-      xpath: //button[contains(., 'Log in to your account')]
+      xpath: //h1[contains(., 'Log in to your Red Hat account')]
 scale_loadbalancer_from_cluster_list_page:
   action: go_to_edit_loadbalancers_and_storage_dialog_on_cluster_list_page
   action: choose_loadbalancer_in_dialog

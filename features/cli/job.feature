@@ -141,6 +141,7 @@ Feature: job.feature
 
   # @author qwang@redhat.com
   # @case_id OCP-9948
+  @inactive
   Scenario: Create job with activeDeadlineSeconds
     Given I have a project
     Given I obtain test data file "job/job_with_lessthan_runtime_activeDeadlineSeconds.yaml"
@@ -181,6 +182,7 @@ Feature: job.feature
 
   # @author qwang@redhat.com
   # @case_id OCP-10734
+  @inactive
   Scenario: Create job with different pod restartPolicy
     Given I have a project
     Given I obtain test data file "job/job-restartpolicy.yaml"
@@ -288,6 +290,7 @@ Feature: job.feature
 
   # @author yinzhou@redhat.com
   # @case_id OCP-10781
+  @aws-ipi
   Scenario: Create job with specific deadline
     Given I have a project
     Given I obtain test data file "job/job_with_0_activeDeadlineSeconds.yaml"
@@ -341,6 +344,7 @@ Feature: job.feature
 
   # @author geliu@redhat.com
   # @case_id OCP-17515
+  @aws-ipi
   Scenario: User can schedule a Cronjob execution with cron format time
     Given I have a project
     When I run the :create_cronjob client command with:
@@ -473,7 +477,7 @@ Feature: job.feature
        | exec_command_arg | 300           |
     Then the step should fail
     And the output should contain:
-       | Invalid value: "70 12 15 11 3": End of range (70) above maximum (59): 70 |
+       | Invalid value: "70 12 15 11 3": end of range (70) above maximum (59): 70 |
     When I run the :create_cronjob client command with:
        | name             | sjc          |
        | image            | busybox      |
@@ -484,7 +488,7 @@ Feature: job.feature
        | exec_command_arg | 300          |
     Then the step should fail
     And the output should contain:
-       | Invalid value: "30 25 15 1 3": End of range (25) above maximum (23): 25 |
+       | Invalid value: "30 25 15 1 3": end of range (25) above maximum (23): 25 |
     When I run the :create_cronjob client command with:
        | name             | sjc          |
        | image            | busybox      |
@@ -495,7 +499,7 @@ Feature: job.feature
        | exec_command_arg | 300          |
     Then the step should fail
     And the output should contain:
-       | Invalid value: "30 8 35 11 3": End of range (35) above maximum (31): 35 |
+       | Invalid value: "30 8 35 11 3": end of range (35) above maximum (31): 35 |
     When I run the :create_cronjob client command with:
        | name             | sjc         |
        | image            | busybox     |
@@ -506,7 +510,7 @@ Feature: job.feature
        | exec_command_arg | 300         |
     Then the step should fail
     And the output should contain:
-       | Invalid value: "30 8 1 13 3": End of range (13) above maximum (12): 13 |
+       | Invalid value: "30 8 1 13 3": end of range (13) above maximum (12): 13 |
     When I run the :create_cronjob client command with:
        | name             | sjc        |
        | image            | busybox    |
@@ -517,7 +521,7 @@ Feature: job.feature
        | exec_command_arg | 300        |
     Then the step should fail
     And the output should contain:
-       | Invalid value: "30 8 1 8 7": End of range (7) above maximum (6): 7 |
+       | Invalid value: "30 8 1 8 7": end of range (7) above maximum (6): 7 |
     When I run the :create_cronjob client command with:
        | name             | sjd       |
        | image            | busybox   |

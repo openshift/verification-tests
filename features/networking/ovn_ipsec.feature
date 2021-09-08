@@ -3,6 +3,7 @@ Feature: OVNKubernetes IPsec related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-38846
   @admin
+  @aws-ipi
   Scenario: Should be able to send node to node ESP traffic on IPsec clusters	
     Given the env is using "OVNKubernetes" networkType
     And the IPsec is enabled on the cluster
@@ -45,6 +46,7 @@ Feature: OVNKubernetes IPsec related networking scenarios
   # @case_id OCP-38845
   @admin
   @destructive
+  @aws-ipi
   Scenario: Segfault on pluto IKE daemon should result in restarting pluto daemon and corresponding ovn-ipsec pod
     Given the env is using "OVNKubernetes" networkType
     And the IPsec is enabled on the cluster
@@ -84,6 +86,7 @@ Feature: OVNKubernetes IPsec related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-39216
   @admin
+  @aws-ipi
   Scenario: Pod created on IPsec cluster should have appropriate MTU size to accomdate IPsec Header
     Given the env is using "OVNKubernetes" networkType
     And the IPsec is enabled on the cluster
@@ -162,6 +165,7 @@ Feature: OVNKubernetes IPsec related networking scenarios
   # @case_id OCP-40569
   @admin
   @destructive
+  @inactive
   Scenario: Allow enablement/disablement ipsec at runtime
     Given the env is using "OVNKubernetes" networkType   
     Given I store all worker nodes to the :workers clipboard

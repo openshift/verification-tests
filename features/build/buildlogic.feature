@@ -2,6 +2,7 @@ Feature: buildlogic.feature
 
   # @author haowang@redhat.com
   # @case_id OCP-11545
+  @aws-ipi
   Scenario: Build with specified Dockerfile via new-build -D
     Given I have a project
     When I run the :new_build client command with:
@@ -51,6 +52,8 @@ Feature: buildlogic.feature
 
   # @author yantan@redhat.com
   # @case_id OCP-10799
+  @aws-ipi
+  @proxy
   Scenario: Create new build config use dockerfile with source repo
     Given I have a project
     When I run the :new_build client command with:
@@ -69,6 +72,7 @@ Feature: buildlogic.feature
     Then the "ruby-hello-world-1" build completed
 
   # @author haowang@redhat.com
+  @aws-ipi
   Scenario Outline: ForcePull image for build
     Given I have a project
     Given I obtain test data file "build/forcePull/<template>"
@@ -84,15 +88,20 @@ Feature: buildlogic.feature
     And the output should match:
       | Force Pull:\s+(true\|yes)|
 
+    @proxy
     Examples:
       | template                            |
       | buildconfig-docker-ImageStream.json | # @case_id OCP-10651
       | buildconfig-s2i-ImageStream.json    | # @case_id OCP-11148
       | buildconfig-docker-dockerimage.json | # @case_id OCP-10652
+
+    Examples:
+      | template                            |
       | buildconfig-s2i-dockerimage.json    | # @case_id OCP-11149
 
   # @author yantan@redhat.com
   # @case_id OCP-10745
+  @aws-ipi
   Scenario: Build with specified Dockerfile to image with same image name via new-build
     Given I have a project
     When I run the :new_build client command with:
@@ -128,6 +137,7 @@ Feature: buildlogic.feature
 
   # @author haowang@redhat.com
   # @case_id OCP-11720
+  @aws-ipi
   Scenario: Build from private git repo with/without ssh key
     Given I have a project
     And I have an ssh-git service in the project
@@ -171,6 +181,7 @@ Feature: buildlogic.feature
 
   # @author yantan@redhat.com
   # @case_id OCP-11896
+  @aws-ipi
   Scenario: Create new-app from private git repo with ssh key
     Given I have a project
     When I run the :new_app client command with:
@@ -206,6 +217,7 @@ Feature: buildlogic.feature
 
   # @author dyan@redhat.com
   # @case_id OCP-13683
+  @aws-ipi
   Scenario: Check s2i build substatus and times
     Given I have a project
     Given I obtain test data file "build/application-template-stibuild.json"
@@ -225,6 +237,8 @@ Feature: buildlogic.feature
   # @author dyan@redhat.com
   # @case_id OCP-13684
   @flaky
+  @aws-ipi
+  @proxy
   Scenario: Check docker build substatus and times
     Given I have a project
     Given I obtain test data file "build/application-template-dockerbuild.json"
@@ -412,6 +426,7 @@ Feature: buildlogic.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-19133
+  @proxy
   Scenario: Pipeline build can be pruned automatically
     Given I have a project
     And I have a jenkins v2 application
@@ -462,6 +477,7 @@ Feature: buildlogic.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-40366
   @admin
+  @aws-ipi
   Scenario: Mirroring built image doesn't degrade scheme2 ,keep consistent SHA's
     Given I have a project
     Given I save a htpasswd registry auth to the :combine_dockercfg clipboard

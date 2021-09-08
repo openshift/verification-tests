@@ -3,6 +3,7 @@ Feature: Pod related networking scenarios
   # @author bmeng@redhat.com
   # @case_id OCP-9747
   @admin
+  @aws-ipi
   Scenario: Pod cannot claim UDP port 4789 on the node as part of a port mapping
     Given I have a project
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
@@ -21,6 +22,8 @@ Feature: Pod related networking scenarios
   # @author yadu@redhat.com
   # @case_id OCP-10031
   @smoke
+  @aws-ipi
+  @disconnected
   Scenario: Container could reach the dns server
     Given I have a project
     Given I obtain test data file "pods/ocp10031/pod.json"
@@ -38,6 +41,7 @@ Feature: Pod related networking scenarios
   # @author yadu@redhat.com
   # @case_id OCP-14986
   @admin
+  @aws-ipi
   Scenario: The openflow list will be cleaned after delete the pods
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -64,6 +68,7 @@ Feature: Pod related networking scenarios
   # @author bmeng@redhat.com
   # @case_id OCP-10817
   @admin
+  @aws-ipi
   Scenario: Check QoS after creating pod
     Given I have a project
     # setup iperf server to receive the traffic
@@ -125,6 +130,8 @@ Feature: Pod related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-23890
   @admin
+  @aws-ipi
+  @disconnected
   Scenario: A pod with or without hostnetwork cannot access the MCS port 22623 or 22624 on the master
     Given I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master_ip clipboard
@@ -206,6 +213,7 @@ Feature: Pod related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-23894
   @admin
+  @aws-ipi
   Scenario: User cannot access the MCS by creating a service that maps to non-MCS port to port 22623 or 22624 on the IP of a master (via manually-created ep's)
     Given I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master_ip clipboard
@@ -277,6 +285,7 @@ Feature: Pod related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-26822
   @admin
+  @aws-ipi
   Scenario: [4.x] Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted
     Given I store the workers in the :nodes clipboard
     And the Internal IP of node "<%= cb.nodes[0].name %>" is stored in the :node_ip clipboard
@@ -390,6 +399,7 @@ Feature: Pod related networking scenarios
   # @case_id OCP-26373
   @admin
   @destructive
+  @inactive
   Scenario: Make sure the route to ovn tunnel for Node's Pod CIDR gets created in both hybrid/non-hybrid mode
   Given the env is using "OVNKubernetes" networkType
   And I select a random node's host
@@ -458,6 +468,7 @@ Feature: Pod related networking scenarios
   # @case_id OCP-33413
   @admin
   @destructive
+  @inactive
   Scenario: xt_u32 kernel module functionality check from NET_ADMIN pods
     Given I have a project
     And I have a pod-for-ping in the project
@@ -513,6 +524,7 @@ Feature: Pod related networking scenarios
   # @case_id OCP-22034
   @admin
   @destructive
+  @aws-ipi
   Scenario: Check the unused ip are released after node reboot
     Given I store the workers in the :workers clipboard
     Given I use the "<%= cb.workers[0].name %>" node

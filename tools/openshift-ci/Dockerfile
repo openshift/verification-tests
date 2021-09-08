@@ -7,7 +7,7 @@ USER root
 
 RUN set -x && \
     yum -y update && \
-    INSTALL_PKGS="bsdtar git openssh-clients httpd-tools" && \
+    INSTALL_PKGS="bsdtar git openssh-clients httpd-tools rsync" && \
     yum install -y $INSTALL_PKGS && \
     GECKODRIVER_DOWNLOAD_URL="$(curl -sSL https://api.github.com/repos/mozilla/geckodriver/releases/latest | grep -Eo 'http.*linux64.tar.gz' | sed -E 's/.*(https[^"]*).*/\1/' | head -1)" && \
     curl -sSL $GITHUB_API_CURL_OPTS "$GECKODRIVER_DOWNLOAD_URL" | bsdtar -xvf - -C /usr/local/bin && \
@@ -17,7 +17,7 @@ RUN set -x && \
 
 ADD . /verification-tests/
 RUN chmod 777 /verification-tests/
-RUN mv /tierN/ /verification-tests/tierN/
+RUN mv /tierN/ /verification-tests/features/tierN/
 RUN set -x && \
     yum module reset ruby && \
     yum module -y enable ruby:2.7 && \

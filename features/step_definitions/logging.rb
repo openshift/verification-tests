@@ -691,7 +691,7 @@ Given /^I upgrade the operator with:$/ do | table |
   raise "Patch failed with #{@result[:response]}" unless @result[:success]
   # wait till new csv to be installed
   success = wait_for(180, interval: 10) {
-    subscription(subscription).installplan_csv.include? channel
+    (subscription(subscription).installplan_csv.include? channel) || (subscription(subscription).installplan_csv.include? (channel.split('-')[1]))
   }
   raise "the new CSV can't be installed" unless success
   # wait till new csv is ready

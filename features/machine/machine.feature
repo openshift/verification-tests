@@ -4,6 +4,7 @@ Feature: Machine features testing
   # @case_id OCP-21196
   @smoke
   @admin
+  @aws-ipi
   Scenario: Machines should be linked to nodes
     Given I have an IPI deployment
     Then the machines should be linked to nodes
@@ -29,6 +30,7 @@ Feature: Machine features testing
   # @case_id OCP-37706
   @smoke
   @admin
+  @aws-ipi
   Scenario: Baremetal clusteroperator should be disabled in any deployment that is not baremetal
     Given evaluation of `cluster_operator('baremetal').condition(type: 'Disabled')` is stored in the :co_disabled clipboard
     Then the expression should be true> cb.co_disabled["status"]=="True"
@@ -37,6 +39,7 @@ Feature: Machine features testing
   # @case_id OCP-25436
   @admin
   @destructive
+  @aws-ipi
   Scenario: Scale up and scale down a machineSet
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -56,6 +59,7 @@ Feature: Machine features testing
 
   # @author jhou@redhat.com
   @admin
+  @aws-ipi
   Scenario Outline: Metrics is exposed on https
     Given I switch to cluster admin pseudo user
     And I use the "openshift-monitoring" project
@@ -81,6 +85,7 @@ Feature: Machine features testing
   # @case_id OCP-25608
   @admin
   @destructive
+  @aws-ipi
   Scenario: Machine should have immutable field providerID and nodeRef
     Given I have an IPI deployment
     Given I store the last provisioned machine in the :machine clipboard
@@ -177,6 +182,7 @@ Feature: Machine features testing
   # @author zhsun@redhat.com
   @admin
   @destructive
+  @aws-ipi
   Scenario Outline: Required configuration should be added to the ProviderSpec to enable spot instances
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -293,6 +299,7 @@ Feature: Machine features testing
   # @author miyadav@redhat.com
   @admin
   @destructive
+  @aws-ipi
   Scenario Outline: Implement defaulting machineset values for AWS
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -524,6 +531,7 @@ Feature: Machine features testing
   # @author miyadav@redhat.com
   # @case_id OCP-36489
   @admin
+  @disconnected
   Scenario: [Azure] Machineset should not be created when publicIP:true in disconnected Azure enviroment
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
