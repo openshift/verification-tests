@@ -1,7 +1,11 @@
 approvers:
+  - anuragthehatter
+  - zhaozhanqi
 
 reviewers:
-- anuragthehatter
-- zhaozhanqi
-- weliang1
-- rbbratta
+  - anuragthehatter
+  - asood-rh
+  - huiran0826
+  - rbbratta
+  - weliang1
+  - zhaozhanqi
