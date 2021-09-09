@@ -46,11 +46,13 @@ module BushSlicer
 
   if ENV["NODE_NAME"]
     # likely a jenkins environment
-    EXECUTOR_NAME = "#{ENV["NODE_NAME"]}-#{ENV["EXECUTOR_NUMBER"]}".freeze
+    EXECUTOR_NAME_TEMP = "#{ENV["NODE_NAME"]}-#{ENV["EXECUTOR_NUMBER"]}"
   else
-    EXECUTOR_NAME = "#{HOSTNAME.split('.')[0]}-#{LOCAL_USER}".freeze
+    EXECUTOR_NAME_TEMP = "#{HOSTNAME.split('.')[0]}-#{LOCAL_USER}"
   end
-  EXECUTOR_NAME = "#{EXECUTOR_NAME}-e"
+  # EXECUTOR_NAME is used as part of project name and workdir,
+  # apppend "-e" to make sure it always ends with proper char
+  EXECUTOR_NAME = "#{EXECUTOR_NAME_TEMP}-e".freeze
 
   START_TIME = Time.now
   TIME_SUFFIX = [
