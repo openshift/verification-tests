@@ -283,6 +283,7 @@ check_data_diplayed_db:
   element:
     selector:
       xpath: //h2[contains(text(),'<data_name>')]/../..//*[contains(text(), '<legend_name>')]
+    timeout: 60
 
 click_utilization_graph_link:
   element:

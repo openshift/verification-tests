@@ -764,7 +764,7 @@ check_dropdown_missing:
 click_dropdown_field:
   elements:
   - selector:
-      xpath: //*[(.='<dropdown_field>')]/following-sibling::*//button[contains(@class, 'dropdown__toggle')]
+      xpath: //*[(.='<dropdown_field>')]/..//button[contains(@class, 'select__toggle')]
     op: click
 click_item_in_resource_list:
   elements:

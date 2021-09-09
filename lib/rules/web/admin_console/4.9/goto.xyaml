@@ -172,6 +172,8 @@ goto_one_pod_environment_page:
 goto_project_pods_list_page:
   url: k8s/ns/<project_name>/pods
   action: wait_box_loaded
+goto_project_pods_list_page_no_wait:
+  url: k8s/ns/<project_name>/pods
 
 goto_cluster_oauth_configuration_page:
   url: k8s/cluster/config.openshift.io~v1~OAuth/cluster
