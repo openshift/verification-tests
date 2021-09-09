@@ -133,7 +133,7 @@ module BushSlicer
 
     # given a s3 object key, return a valid URL to the key to be accessible
     # via web
-    def s3_generate_url(key: nil, bucket_name: nil, expires_in_seconds: 604800)
+    def s3_generate_url(key: nil, bucket_name: 'cucushift-html-logs', expires_in_seconds: 604800)
       Aws::S3::Object.new(key: key, bucket_name: bucket_name).presigned_url(:get, expires_in: expires_in_seconds)
     end
 
@@ -169,6 +169,7 @@ module BushSlicer
       file_name = File.basename(local_log)
       object_key =  File.join(dst_base_path, file_name)
       local_log = File.join(local_log, "console.html")
+      logger.info("s3 object key: #{object_key}")
       res = s3_upload_file(bucket: bucket_name, file: local_log, target: object_key)
     end
 

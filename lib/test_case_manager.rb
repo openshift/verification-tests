@@ -83,7 +83,7 @@ module BushSlicer
         ## let attacher know we finish and wait for queue drain
         @attach_queue << false
         wait_for_attacher
-        unless @artifacts_filer.class.is_a? BushSlicer::Amz_EC2
+        unless @artifacts_filer.is_a? BushSlicer::Amz_EC2
           @artifacts_filer.clean_up
         end
       end
@@ -156,27 +156,44 @@ module BushSlicer
     end
 
     def artifacts_base_url
-      File.join(
-        conf[:services, :artifacts_file_server, :url],
-        artifacts_relative_path
-      )
+      if ENV['USE_SCP_SERVER']
+        File.join(
+          conf[:services, :artifacts_file_server, :url],
+          artifacts_relative_path
+        )
+      else # s3
+        File.join(
+          conf[:services, :"DATA-HUB", :endpoint],
+          conf[:services, :"DATA-HUB", :bucket_name]
+        )
+      end
     end
 
     def artifacts_base_remote_path
-      remote_path = File.join(
-        conf[:services, :artifacts_file_server, :upload_path],
-        artifacts_relative_path
-      )
+      if ENV['USE_SCP_SERVER']
+        remote_path = File.join(
+          conf[:services, :artifacts_file_server, :upload_path],
+          artifacts_relative_path
+        )
+      else
+        remote_path = File.join(
+          "logs/", artifacts_relative_path)
+      end
     end
 
     # @return [Array<String>] list of attached artifacts URLs for a dir
     def artifacts_urls(dir)
       urls = []
-      dirchars = dir.length + ( dir.end_with?("/","\\") ? 0 : 1 )
-      Find.find(dir) do |file|
-        if File.file? file
-          urls << File.join(artifacts_base_url, File.basename(dir), file[dirchars..-1])
+      if ENV['USE_SCP_SERVER']
+        dirchars = dir.length + ( dir.end_with?("/","\\") ? 0 : 1 )
+        Find.find(dir) do |file|
+          if File.file? file
+            urls << File.join(artifacts_base_url, File.basename(dir), file[dirchars..-1])
+          end
         end
+      else # s3 object
+        dhub = BushSlicer::Amz_EC2.new(service_name: "DATA-HUB")
+        urls << dhub.s3_generate_url(key: File.join(artifacts_base_remote_path, File.basename(dir)))
       end
       return urls
     end
