@@ -91,7 +91,7 @@ silence_alert_from_detail_if:
     if_element:
       selector:
         tag_name: button
-        text: Silence alert
+        text: Silence Alert
     ref: silence_alert_from_detail
 silence_alert_from_detail:
   params:
@@ -105,7 +105,7 @@ silence_alert_from_detail_check_fields_if:
     if_element:
       selector:
         tag_name: button
-        text: Silence alert
+        text: Silence Alert
     ref: silence_alert_from_detail_check_fields
 silence_alert_from_detail_check_fields:
   params:
