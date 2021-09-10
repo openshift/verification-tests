@@ -476,8 +476,8 @@ Feature: job.feature
        | exec_command     | sleep         |
        | exec_command_arg | 300           |
     Then the step should fail
-    And the output should contain:
-       | Invalid value: "70 12 15 11 3": end of range (70) above maximum (59): 70 |
+    And the output should match:
+       | Invalid value: \"70 12 15 11 3\": .*\(70\) above maximum \(59\): 70 |
     When I run the :create_cronjob client command with:
        | name             | sjc          |
        | image            | busybox      |
@@ -487,8 +487,8 @@ Feature: job.feature
        | exec_command     | sleep        |
        | exec_command_arg | 300          |
     Then the step should fail
-    And the output should contain:
-       | Invalid value: "30 25 15 1 3": end of range (25) above maximum (23): 25 |
+    And the output should match:
+       | Invalid value: \"30 25 15 1 3\": .*\(25\) above maximum \(23\): 25 |
     When I run the :create_cronjob client command with:
        | name             | sjc          |
        | image            | busybox      |
@@ -498,8 +498,8 @@ Feature: job.feature
        | exec_command     | sleep        |
        | exec_command_arg | 300          |
     Then the step should fail
-    And the output should contain:
-       | Invalid value: "30 8 35 11 3": end of range (35) above maximum (31): 35 |
+    And the output should match:
+       | Invalid value: \"30 8 35 11 3\": .*\(35\) above maximum \(31\): 35 |
     When I run the :create_cronjob client command with:
        | name             | sjc         |
        | image            | busybox     |
@@ -509,8 +509,8 @@ Feature: job.feature
        | exec_command     | sleep       |
        | exec_command_arg | 300         |
     Then the step should fail
-    And the output should contain:
-       | Invalid value: "30 8 1 13 3": end of range (13) above maximum (12): 13 |
+    And the output should match:
+       | Invalid value: \"30 8 1 13 3\": .*\(13\) above maximum \(12\): 13 |
     When I run the :create_cronjob client command with:
        | name             | sjc        |
        | image            | busybox    |
@@ -520,8 +520,8 @@ Feature: job.feature
        | exec_command     | sleep      |
        | exec_command_arg | 300        |
     Then the step should fail
-    And the output should contain:
-       | Invalid value: "30 8 1 8 7": end of range (7) above maximum (6): 7 |
+    And the output should match:
+       | Invalid value: \"30 8 1 8 7\": .*\(7\) above maximum \(6\): 7 |
     When I run the :create_cronjob client command with:
        | name             | sjd       |
        | image            | busybox   |
