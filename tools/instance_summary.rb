@@ -1,5 +1,6 @@
 require 'text-table'
 require 'thread'
+require 'openshift_qe_slack'
 
 
 module BushSlicer
@@ -145,8 +146,8 @@ module BushSlicer
           filtered_list = res_list.map {|r| r[4] if r[0] !='Workloads' }.compact
           users = filtered_list
         end
-
-        valid_users, unknown_users = translate_to_slack_users(users: users)
+        slack_client = BushSlicer::CoreosSlack.new
+        valid_users, unknown_users = translate_to_slack_users(users: users, slack_client: slack_client)
         tag_users_msg =  valid_users + " please terminate your long-lived clusters if they are no longer in use\n"
         tag_users_msg += "\nThese clusters have no owners association #{unknown_users}\n" if unknown_users.size > 0
         #tag_users_msg = "<@UBET0LUR3> please terminate your long-lived clusters if they are no longer in use"
@@ -156,9 +157,9 @@ module BushSlicer
     end
 
     # @returns a list of users' slack user_ids and list of unknown users
-    def translate_to_slack_users(users: nil)
+    def translate_to_slack_users(users: nil, slack_client:)
       # 1. get the slacker_users lookup map
-      users_map_hash = YAML.load(open(File.expand_path("creds/slack_users_map.yaml")))
+      users_map_hash = slack_client.build_user_map
       # 2. separate valid users from unknown into their buckets
       users_hash = validate_users(users_map: users_map_hash.keys, users_list: users)
 
