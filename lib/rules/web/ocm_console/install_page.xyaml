@@ -56,7 +56,7 @@ check_page_title_and_h1:
     scripts:
         - command: return document.title=='<title>'
           expect_result: true
-
+#------------------------------ pull secret -------------------
 click_copyPullSecret_button:
     element:
         selector:
@@ -71,6 +71,55 @@ check_pull_secret_part_in_install_page:
             xpath: //button[@type='button' and text()='Download pull secret']
         - selector:
             xpath: //button[contains(., 'Copy pull secret')]
+#------------------------------ part_two -------------------
+check_installation_instructions_in_install_page:
+    elements:
+        - selector:
+            xpath: //p[text()='The installer will take about 45 minutes to run.']
+        - selector:
+            xpath: //p[text()='To quickly create a cluster with the default options, run the following command:']
+        - selector:
+            xpath: //input[@value='./openshift-install create cluster']
+        - selector:
+            xpath: //h2[text()='<part2_title>']
+        - selector:
+            xpath: //a[contains(@href, '<part2_get_started_url>') and text()='Get started']
+        - selector:
+            xpath: //a[contains(@href, '<customizations_url>') and text()='install with customizations']
+#------------------------------ part_two special -------------------
+check_installation_instructions_in_bare_metal_ipi_install_page:
+    elements:
+        - selector:
+            xpath: //p/p[contains(., 'When the installer is complete you will see the console URL and credentials for accessing your new cluster. A kubeconfig file will also be generated for you to use with the oc CLI tools you downloaded.')]
+        - selector:
+            xpath: //h2[text()='Follow the instructions to configure your environment and install your cluster']
+        - selector:
+            xpath: //a[contains(@href, 'installing_bare_metal_ipi/ipi-install-installation-workflow.html') and text()='Get started']
+check_installation_instructions_in_ibm_z_install_page:
+    elements:
+        - selector:
+            xpath: //p[text()='The installer will take about 45 minutes to run.']
+        - selector:
+            xpath: //p[text()='To quickly create a cluster with the default options, run the following command:']
+        - selector:
+            xpath: //input[@value='./openshift-install create cluster']
+        - selector:
+            xpath: //h2[text()='Follow the instructions to configure your environment and install your cluster']
+        - selector:
+            xpath: //a[contains(@href, 'installing_ibm_z/installing-ibm-z.html') and text()='Get started']
+check_installation_instructions__power_upi_install_page:
+    elements:
+        - selector:
+            xpath: //p[text()='The installer will take about 45 minutes to run.']
+        - selector:
+            xpath: //p[text()='To quickly create a cluster with the default options, run the following command:']
+        - selector:
+            xpath: //input[@value='./openshift-install create cluster']
+        - selector:
+            xpath: //h2[text()='Follow the instructions to configure your environment and install your cluster']
+        - selector:
+            xpath: //a[contains(@href, 'installing_ibm_power/installing-ibm-power.html') and text()='Get started']
+
 check_download_part_in_normal_install_page:
     params:
         pre_release_type: pre-release
@@ -85,21 +134,13 @@ check_download_part_common_items:
             xpath: //span[@class='pf-c-label pf-m-compact dev-preview-label' and contains(., 'Developer Preview')]
         - selector:
             xpath: //a[contains(@href, '/openshift/install/<pre_release_type>') and contains(.,'Download pre-release builds')]
-check_install_page_common_part_two:
-    elements:
-        - selector:
-            xpath: //p[text()='The installer will take about 45 minutes to run.']
-        - selector:
-            xpath: //p[text()='To quickly create a cluster with the default options, run the following command:']
-        - selector:
-            xpath: //input[@value='./openshift-install create cluster']
 check_data_collection_message_in_install_page:
     elements:
         - selector:
             xpath: //a[contains(@href, '/latest/support/remote_health_monitoring/about-remote-health-monitoring.html') and contains(., 'Learn more')]
         - selector:
             xpath: //small[text()='Red Hat collects a limited amount of telemetry data. By installing OpenShift Container Platform 4, you accept our data collection policy.']
-check_install_page_part_three:
+check_subscription_and_support_in_install_page:
     elements:
         - selector:
             xpath: //h2[text()='Subscription and support']
@@ -107,7 +148,6 @@ check_install_page_part_three:
             xpath: //span[text()='Choose "Edit subscriptions settings " from the actions menu in the upper right of the cluster details pages.']
         - selector:
             xpath: //span[text()='Select the options that apply to your cluster in the dialog and save.']
-
 #------------------------------ download_installer_button -------------------
 switch_os_type_for_download_installer:
     elements:
@@ -139,7 +179,7 @@ check_linux_download_installer_button_in_page:
     elements:
         - selector:
             xpath: //a[text()='Download installer' and @href='https://mirror.openshift.com/pub/openshift-v4/<linux_url>']
-download_installer_button_common:
+check_download_installer_button:
     params:
         mac_url: clients/ocp/stable/openshift-install-mac.tar.gz
         linux_url: clients/ocp/stable/openshift-install-linux.tar.gz
@@ -261,7 +301,6 @@ check_linux_download_cli_oc_common_button_page_aarch64_pre_release:
     elements:
         - selector:
             xpath: //a[text()='Download command-line tools' and @href='https://mirror.openshift.com/pub/openshift-v4/aarch64/clients/ocp-dev-preview/pre-release/openshift-client-linux.tar.gz']
-
 check_linux_download_cli_oc_common_button_page_ppc64le_pre_release:
     params:
         os_name: Linux
@@ -271,7 +310,6 @@ check_linux_download_cli_oc_common_button_page_ppc64le_pre_release:
     elements:
         - selector:
             xpath: //a[text()='Download command-line tools' and @href='https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp-dev-preview/pre-release/openshift-client-linux.tar.gz']
-
 check_linux_download_cli_oc_common_button_page_s390x_pre_release:
     params:
         os_name: Linux
@@ -281,7 +319,6 @@ check_linux_download_cli_oc_common_button_page_s390x_pre_release:
     elements:
         - selector:
             xpath: //a[text()='Download command-line tools' and @href='https://mirror.openshift.com/pub/openshift-v4/s390x/clients/ocp-dev-preview/pre-release/openshift-client-linux.tar.gz']
-
 check_macos_download_cli_oc_common_button_pre_release:
     params:
         os_name: MacOS
@@ -297,29 +334,88 @@ check_windows_download_cli_oc_common_button_pre_release:
         - selector:
             xpath: //a[text()='Download command-line tools' and @href='https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp-dev-preview/pre-release/openshift-client-windows.zip']
 #------------------------------ download_cli_oc_button common -------------------
-download_cli_oc_button_common:
+check_download_oc_button:
     action: check_linux_download_cli_oc_common_button_page_x86_64
     action: check_linux_download_cli_oc_common_button_page_ppc64le
     action: check_linux_download_cli_oc_common_button_page_s390x
     action: check_macos_download_cli_oc_common_button
     action: check_windows_download_cli_oc_common_button
 
-download_cli_oc_button_common_pre_release:
+check_download_oc_button_pre_release:
     action: check_linux_download_cli_oc_common_button_page_x86_64_pre_release
     action: check_linux_download_cli_oc_common_button_page_aarch64_pre_release
     action: check_linux_download_cli_oc_common_button_page_ppc64le_pre_release
     action: check_linux_download_cli_oc_common_button_page_s390x_pre_release
     action: check_macos_download_cli_oc_common_button_pre_release
     action: check_windows_download_cli_oc_common_button_pre_release
-#------------------------------ end download_cli_oc_button -------------------
+#------------------------------ download rhcos -------------------
+check_install_page_rhcos_part:
+    elements:
+        - selector:
+            xpath: //h3[text()='Red Hat Enterprise Linux CoreOS (RHCOS)']
+        - selector:
+            xpath: //p[text()='Download RHCOS to create machines for your cluster to use during installation.']
+check_download_rhcos_gcp_upi_install_page:
+    action: check_install_page_rhcos_part
+    elements:
+        - selector:
+            xpath: //a[contains(@href, '/installing-gcp-user-infra.html#installation-gcp-user-infra-rhcos_installing-gcp-user-infra') and text()='Learn more']
+        - selector:
+            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-4.5.6-x86_64-gcp.x86_64.tar.gz') and text()='Download RHCOS tar']
+check_download_rhcos_vsphere_upi_install_page:
+    action: check_install_page_rhcos_part
+    elements:
+        - selector:
+            xpath: //a[contains(@href, 'installing-vsphere.html#installation-vsphere-machines_installing-vsphere') and text()='Learn more']
+        - selector:
+            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-vmware.x86_64.ova') and text()='Download RHCOS OVA']
+check_download_rhcos_bare_metal_upi_install_page:
+    action: check_install_page_rhcos_part
+    elements:
+        - selector:
+            xpath: //a[contains(@href, 'installing_bare_metal/installing-bare-metal.html#creating-machines-bare-metal') and text()='Learn more']
+        - selector:
+            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-live.x86_64.iso') and text()='Download RHCOS ISO']
+        - selector:
+            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-metal.x86_64.raw.gz') and text()='Download RHCOS RAW']
+check_download_rhcos_ibm_z_install_page:
+    action: check_install_page_rhcos_part
+    elements:
+        - selector:
+            xpath: //a[contains(@href, 'installing-ibm-z.html#installation-user-infra-machines-iso-ibm-z_installing-ibm-z') and text()='Learn more']
+        - selector:
+            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-live-initramfs.s390x.img') and text()='Download RHCOS initramfs']
+        - selector:
+            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-live-kernel-s390x') and text()='Download RHCOS kernel']
+        - selector:
+            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-live-rootfs.s390x.img') and text()='Download RHCOS rootfs']
+        - selector:
+            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-qemu.s390x.qcow2.gz') and text()='Download QCOW2 image']
+check_download_rhcos_openstack_upi_install_page:
+    action: check_install_page_rhcos_part
+    elements:
+        - selector:
+            xpath: //a[contains(@href, 'installing-openstack-user.html#installation-osp-creating-image_installing-openstack-user') and text()='Learn more']
+        - selector:
+            xpath: //a[contains(@href, '/rhcos-openstack.x86_64.qcow2.gz') and text()='Download RHCOS QCOW']
+check_download_rhcos_power_upi_install_page:
+    action: check_install_page_rhcos_part
+    elements:
+        - selector:
+            xpath: //a[contains(@href, '/installing_ibm_power/installing-ibm-power.html#creating-machines-bare-metal-power') and text()='Learn more']
+        - selector:
+            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-live.ppc64le.iso') and text()='Download RHCOS ISO']
+        - selector:
+            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-live-initramfs.ppc64le.img') and text()='Download RHCOS initramfs']
+        - selector:
+            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-live-kernel-ppc64le') and text()='Download RHCOS kernel']
+        - selector:
+            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-live-rootfs.ppc64le.img') and text()='Download RHCOS rootfs']
+
+
 check_common_part_in_page:
-    action: download_installer_button_common
-    action: download_cli_oc_button_common
     action: check_download_part_in_normal_install_page
-    action: check_pull_secret_part_in_install_page
-    action: check_install_page_common_part_two
     action: check_data_collection_message_in_install_page
-    action: check_install_page_part_three
 
 check_common_part:
     action: check_account_username
@@ -360,24 +456,6 @@ check_account_username:
             xpath: //a[contains(@href, '/personalInfo.html') and text()='My profile']
         - selector:
             xpath: //button[@type='button' and text()='Log out']
-check_evaluation_notification_in_install_page:
-    elements:
-        - selector:
-            xpath: //h4[@class='pf-c-alert__title' and text()='New clusters are automatically registered with a 60-day evaluation subscription.']
-        - selector:
-            xpath: //div[text()='Evaluation subscriptions do not include support from Red Hat. You can edit your subscription settings after the cluster is created to receive support.']
-        - selector:
-            xpath: //a[@href='https://access.redhat.com/articles/4389911' and text()='Learn more']
-check_download_cli_oc_button_in_install_page:
-    elements:
-        - selector:
-            xpath: //a[text()='Download command-line tools']/../../div/select[@aria-label='Select OS dropdown']
-          op: click
-        - selector:
-            xpath: //a[text()='Download command-line tools']/../../div/select[@aria-label='Select OS dropdown']/option[text()='<os_name>']
-          op: click
-        - selector:
-            xpath: //a[text()='Download command-line tools' and @href='https://mirror.openshift.com/pub/openshift-v4/<installer_type>/openshift-client-<os_link>']
 click_download_crc_button:
     element:
         selector:
@@ -436,116 +514,8 @@ check_developer_preview_bar_in_install_page:
             xpath: //p[text()='Because these are developer preview builds:']
         - selector:
             xpath: //li[text()='Production use is not permitted.']
-check_install_page_rhcos_part:
-    elements:
-        - selector:
-            xpath: //h3[text()='Red Hat Enterprise Linux CoreOS (RHCOS)']
-        - selector:
-            xpath: //p[text()='Download RHCOS to create machines for your cluster to use during installation.']
-check_aws_ipi_install_page_special_parts:
-    elements:
-        - selector:
-            xpath: //h2[text()='Follow the documentation to configure your AWS account and run the installer']
-        - selector:
-            xpath: //p[text()='The installer will take about 45 minutes to run.']
-        - selector:
-            xpath: //a[contains(@href, 'installing_aws/installing-aws-account.html') and text()='Get started']
-check_aws_upi_install_page_special_parts:
-    elements:
-        - selector:
-            xpath: //h2[text()='Follow the documentation to configure your AWS account and run the installer']
-        - selector:
-            xpath: //p[text()='The installer will take about 45 minutes to run.']
-        - selector:
-            xpath: //a[contains(@href, 'installing_aws/installing-aws-user-infra.html') and text()='Get started']
-check_azure_ipi_install_page_special_parts:
-    elements:
-        - selector:
-            xpath: //h2[text()='Follow the documentation to configure your Azure account and run the installer']
-        - selector:
-            xpath: //p[text()='The installer will take about 45 minutes to run.']
-        - selector:
-            xpath: //a[contains(@href, 'installing_azure/installing-azure-default.html') and text()='Get started']
-check_azure_upi_install_page_special_parts:
-    elements:
-        - selector:
-            xpath: //h2[text()='Follow the documentation to configure your Azure account and run the installer']
-        - selector:
-            xpath: //p[text()='The installer will take about 45 minutes to run.']
-        - selector:
-            xpath: //a[contains(@href, 'installing_azure/installing-azure-default.html') and text()='Get started']
-check_gcp_ipi_install_page_special_parts:
-    elements:
-        - selector:
-            xpath: //h2[text()='Follow the documentation to configure your GCP account and run the installer']
-        - selector:
-            xpath: //p[text()='The installer will take about 45 minutes to run.']
-        - selector:
-            xpath: //a[contains(@href, 'installing_gcp/installing-gcp-account.html') and text()='Get started']
-check_gcp_upi_install_page_special_parts:
-    action: check_install_page_rhcos_part
-    elements:
-        - selector:
-            xpath: //h2[text()='Follow the documentation to configure your GCP account and run the installer']
-        - selector:
-            xpath: //p[text()='The installer will take about 45 minutes to run.']
-        - selector:
-            xpath: //a[contains(@href, 'installing_gcp/installing-gcp-user-infra.html') and text()='Get started']
-        - selector:
-            xpath: //a[contains(@href, '/installing-gcp-user-infra.html#installation-gcp-user-infra-rhcos_installing-gcp-user-infra') and text()='Learn more']
-        - selector:
-            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-4.5.6-x86_64-gcp.x86_64.tar.gz') and text()='Download RHCOS tar']
-check_vsphere_ipi_install_page_special_parts:
-    elements:
-        - selector:
-            xpath: //h2[text()='Follow the instructions to configure your environment and install your cluster']
-        - selector:
-            xpath: //p[text()='The installer will take about 45 minutes to run.']
-        - selector:
-            xpath: //a[contains(@href, 'installing_vsphere/installing-vsphere-installer-provisioned.html') and text()='Get started']
-        - selector:
-            xpath: //a[contains(@href, 'installing_vsphere/installing-vsphere-installer-provisioned-customizations.html') and text()='install with customizations']
-check_vsphere_upi_install_page_special_parts:
-    action: check_install_page_rhcos_part
-    elements:
-        - selector:
-            xpath: //h2[text()='Follow the instructions to configure your environment and install your cluster']
-        - selector:
-            xpath: //p[text()='The installer will take about 45 minutes to run.']
-        - selector:
-            xpath: //a[contains(@href, 'installing_vsphere/installing-vsphere.html') and text()='Get started']
-        - selector:
-            xpath: //a[contains(@href, 'installing-vsphere.html#installation-vsphere-machines_installing-vsphere') and text()='Learn more']
-        - selector:
-            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-vmware.x86_64.ova') and text()='Download RHCOS OVA']
-check_macos_cli_download_button_in_install_page:
-    params:
-        os_name: MacOS
-        os_link: mac.tar.gz
-    action: check_download_cli_oc_button_in_install_page
 check_bare_metal_ipi_install_page_special_parts:
     action: check_data_collection_message_in_install_page
-    action: check_install_page_part_three
-    elements:
-        - selector:
-            xpath: //h2[text()='Follow the instructions to configure your environment and install your cluster']
-        - selector:
-            xpath: //a[contains(@href, 'installing_bare_metal_ipi/ipi-install-installation-workflow.html') and text()='Get started']
-check_bare_metal_upi_install_page_special_parts:
-    action: check_install_page_rhcos_part
-    elements:
-        - selector:
-            xpath: //h2[text()='Follow the instructions to configure your environment and install your cluster']
-        - selector:
-            xpath: //p[text()='The installer will take about 45 minutes to run.']
-        - selector:
-            xpath: //a[contains(@href, 'installing_bare_metal/installing-bare-metal.html') and text()='Get started']
-        - selector:
-            xpath: //a[contains(@href, 'installing_bare_metal/installing-bare-metal.html#creating-machines-bare-metal') and text()='Learn more']
-        - selector:
-            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-live.x86_64.iso') and text()='Download RHCOS ISO']
-        - selector:
-            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-metal.x86_64.raw.gz') and text()='Download RHCOS RAW']
 
 check_download_installer_button_in_ibm_z_install_page:
     params:
@@ -553,73 +523,11 @@ check_download_installer_button_in_ibm_z_install_page:
         linux_url: s390x/clients/ocp/stable/openshift-install-linux.tar.gz
     action: check_mac_download_installer_button_in_page
     action: check_linux_download_installer_button_in_page
-
 check_ibm_z_install_page_special_parts:
     params:
         pre_release_type: ibmz/pre-release
     action: check_download_part_common_items
-    action: check_install_page_common_part_two
     action: check_data_collection_message_in_install_page
-    action: check_install_page_part_three
-    action: check_install_page_rhcos_part
-    elements:
-        - selector:
-            xpath: //h2[text()='Follow the instructions to configure your environment and install your cluster']
-        - selector:
-            xpath: //p[text()='The installer will take about 45 minutes to run.']
-        - selector:
-            xpath: //a[contains(@href, 'installing_ibm_z/installing-ibm-z.html') and text()='Get started']
-        - selector:
-            xpath: //a[contains(@href, 'installing-ibm-z.html#installation-user-infra-machines-iso-ibm-z_installing-ibm-z') and text()='Learn more']
-        - selector:
-            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-live-initramfs.s390x.img') and text()='Download RHCOS initramfs']
-        - selector:
-            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-live-kernel-s390x') and text()='Download RHCOS kernel']
-        - selector:
-            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-live-rootfs.s390x.img') and text()='Download RHCOS rootfs']
-        - selector:
-            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-qemu.s390x.qcow2.gz') and text()='Download QCOW2 image']
-check_openstack_ipi_install_page_special_parts:
-    elements:
-        - selector:
-            xpath: //h2[text()='Follow the instructions to configure your environment and install your cluster']
-        - selector:
-            xpath: //p[text()='The installer will take about 45 minutes to run.']
-        - selector:
-            xpath: //a[contains(@href, 'installing_openstack/installing-openstack-installer-custom.html') and text()='Get started']
-check_openstack_upi_install_page_special_parts:
-    action: check_install_page_rhcos_part
-    elements:
-        - selector:
-            xpath: //h2[text()='Follow the instructions to configure your environment and install your cluster']
-        - selector:
-            xpath: //p[text()='The installer will take about 45 minutes to run.']
-        - selector:
-            xpath: //a[contains(@href, 'installing_openstack/installing-openstack-user.html') and text()='Get started']
-        - selector:
-            xpath: //a[contains(@href, 'installing-openstack-user.html#installation-osp-creating-image_installing-openstack-user') and text()='Learn more']
-        - selector:
-            xpath: //a[contains(@href, '/rhcos-openstack.x86_64.qcow2.gz') and text()='Download RHCOS QCOW']
-check_rhv_ipi_install_page_special_parts:
-    elements:
-        - selector:
-            xpath: //h2[text()='Follow the instructions to configure your environment and install your cluster']
-        - selector:
-            xpath: //p[text()='The installer will take about 45 minutes to run.']
-        - selector:
-            xpath: //a[contains(@href, '/installing_rhv/installing-rhv-default.html') and text()='Get started']
-        - selector:
-            xpath: //a[contains(@href, '/installing_rhv/installing-rhv-customizations.html') and text()='install with customizations']
-check_rhv_upi_install_page_special_parts:
-    elements:
-        - selector:
-            xpath: //h2[text()='Follow the instructions to configure your environment and install your cluster']
-        - selector:
-            xpath: //p[text()='The installer will take about 45 minutes to run.']
-        - selector:
-            xpath: //a[contains(@href, '/installing_rhv/installing-rhv-user-infra.html') and text()='Get started']
-        - selector:
-            xpath: //a[contains(@href, '/installing_rhv/installing-rhv-customizations.html') and text()='install with customizations']
 
 check_download_installer_button_in_power_upi_install_page:
     params:
@@ -627,32 +535,12 @@ check_download_installer_button_in_power_upi_install_page:
         linux_url: ppc64le/clients/ocp/stable/openshift-install-linux.tar.gz
     action: check_linux_download_installer_button_in_page
     action: check_mac_download_installer_button_in_page
-
 check_power_upi_install_page_special_parts:
     params:
         pre_release_type: power/pre-release
     action: check_download_part_common_items
-    action: check_install_page_common_part_two
     action: check_data_collection_message_in_install_page
-    action: check_install_page_part_three
-    action: check_install_page_rhcos_part
-    elements:
-        - selector:
-            xpath: //h2[text()='Follow the instructions to configure your environment and install your cluster']
-        - selector:
-            xpath: //p[text()='The installer will take about 45 minutes to run.']
-        - selector:
-            xpath: //a[contains(@href, 'installing_ibm_power/installing-ibm-power.html') and text()='Get started']
-        - selector:
-            xpath: //a[contains(@href, '/installing_ibm_power/installing-ibm-power.html#creating-machines-bare-metal-power') and text()='Learn more']
-        - selector:
-            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-live.ppc64le.iso') and text()='Download RHCOS ISO']
-        - selector:
-            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-live-initramfs.ppc64le.img') and text()='Download RHCOS initramfs']
-        - selector:
-            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-live-kernel-ppc64le') and text()='Download RHCOS kernel']
-        - selector:
-            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-live-rootfs.ppc64le.img') and text()='Download RHCOS rootfs']
+
 check_codeready_install_page:
     action: creation_cards_page_loaded
     action: check_creation_cards_page_title
