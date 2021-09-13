@@ -12,6 +12,11 @@ module BushSlicer
       return rr.dig('status', 'currentCSV')      
     end
 
+    def installedCSV(user: nil, quiet: true, cached: true)
+      rr = raw_resource(user: user, cached: cached, quiet: quiet)
+      return rr.dig('status', 'installedCSV')
+    end
+
     def ready?(user:, quiet: false)
        res = get(user: user, quiet: quiet)
        if res[:success]
