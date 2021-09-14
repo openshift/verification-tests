@@ -1,6 +1,7 @@
 approvers:
+  - kasturinarra
 
 reviewers:
-- chengzhang1016
-- zhouying7780
-- xiuwang
+  - zhouying7780
+  - xiuwang
+  - kasturinarra
