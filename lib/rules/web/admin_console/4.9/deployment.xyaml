@@ -150,7 +150,8 @@ select_replica_count_and_selector:
     text: Replica count and selector
   action: click_checkbox_input_by_text
 check_workloads_metrics:
-  elements:
+ action: click_metrics_tab
+ elements:
   - selector:
       xpath: //h2[contains(@class, "co-dashboard-card__title") and contains(text(), "Memory usage")]
     timeout: 20
@@ -167,6 +168,7 @@ check_workloads_metrics:
       xpath: //h2[contains(@class, "co-dashboard-card__title") and contains(text(), "Network out")]
     timeout: 20
 check_build_metrics:
+  action: click_metrics_tab
   elements:
   - selector:
       xpath: //h2[contains(@class, "co-dashboard-card__title") and contains(text(), "Memory usage")]
