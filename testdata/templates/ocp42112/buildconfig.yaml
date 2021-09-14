@@ -2,7 +2,6 @@ apiVersion: build.openshift.io/v1
 kind: BuildConfig
 metadata:
   name: examplebc
-  namespace: default
 spec:
   source:
     git:
