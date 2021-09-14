@@ -1,6 +1,7 @@
 Feature: ONLY ONLINE Create related feature's scripts in this file
 
   # @author bingli@redhat.com
+  @inactive
   Scenario Outline: Maven repository can be used to providing dependency caching for xPaas templates
     Given I have a project
     When I run the :new_app client command with:
@@ -15,7 +16,6 @@ Feature: ONLY ONLINE Create related feature's scripts in this file
     Then the output should contain:
       | https://repo1.maven.org/non-existing/ |
     # @case_id OCP-10106
-    @smoke
     Examples: MAVEN
       | template                                | parameter_name   | env_name         |
       | eap71-amq-persistent-s2i                | APPLICATION_NAME | MAVEN_MIRROR_URL |

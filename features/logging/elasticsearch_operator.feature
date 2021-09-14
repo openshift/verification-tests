@@ -6,10 +6,16 @@ Feature: elasticsearch-operator related tests
   @admin
   @destructive
   @commonlogging
+  @aws-ipi
   Scenario: ServiceMonitor Object for Elasticsearch is deployed along with the Elasticsearch cluster
     Given I wait for the "monitor-elasticsearch-cluster" service_monitor to appear
-    And the expression should be true> service_monitor('monitor-elasticsearch-cluster').service_monitor_endpoint_spec(server_name: "elasticsearch-metrics.openshift-logging.svc").port == "elasticsearch"
-    And the expression should be true> service_monitor('monitor-elasticsearch-cluster').service_monitor_endpoint_spec(server_name: "elasticsearch-metrics.openshift-logging.svc").path == "/_prometheus/metrics"
+    When I perform the HTTP request on the ES pod with labels "es-node-master=true":
+      | relative_url | _prometheus/metrics |
+      | op           | GET                 |
+    Then the step should succeed
+    And the output should contain:
+      | es_cluster_nodes_number          |
+      | es_cluster_shards_active_percent |
     Given I wait up to 360 seconds for the steps to pass:
     """
     When I perform the GET prometheus rest client with:
@@ -22,6 +28,7 @@ Feature: elasticsearch-operator related tests
   # @author qitang@redhat.com
   @admin
   @destructive
+  @aws-ipi
   Scenario Outline: elasticsearch alerting rules test: ElasticsearchClusterNotHealthy
     Given I obtain test data file "logging/clusterlogging/example.yaml"
     Given I create clusterlogging instance with:
@@ -74,6 +81,7 @@ Feature: elasticsearch-operator related tests
   @admin
   @destructive
   @commonlogging
+  @aws-ipi
   Scenario: Additional essential metrics ES dashboard
     Given I switch to the first user
     And the first user is cluster-admin

@@ -16,6 +16,7 @@ Feature: Routing and DNS related scenarios
   # @case_id OCP-29746
   @upgrade-check
   @admin
+  @aws-ipi
   Scenario: ensure ingress works well before and after upgrade
     # Check console route after upgraded
     Given I switch to cluster admin pseudo user
@@ -45,6 +46,7 @@ Feature: Routing and DNS related scenarios
   # @case_id OCP-29747
   @upgrade-check
   @admin
+  @aws-ipi
   Scenario: ensure DNS works well before and after upgrade
     # Check service name can be resolvede
     Given I switch to cluster admin pseudo user

@@ -68,21 +68,23 @@ click_sidebar_resources_tab:
 check_dc_available_action_menus:
   elements:
   - selector:
-      xpath: //li//button[@data-test-action='Start rollout']
+      xpath: //li//button[.='Edit Application grouping']
+  - selector:
+      xpath: //li//button[.='Start rollout']
   - selector: &pause_rollouts
-      xpath: //li//button[@data-test-action='Pause rollouts']
+      xpath: //li//button[.='Pause rollouts']
   - selector: &edit_counts
-      xpath: //li//button[@data-test-action='Edit Pod count']
+      xpath: //li//button[.='Edit Pod count']
   - selector: &add_storage
-      xpath: //li//button[@data-test-action='Add storage']
+      xpath: //li//button[.='Add storage']
   - selector: &edit_labels
-      xpath: //li//button[@data-test-action='Edit labels']
+      xpath: //li//button[.='Edit labels']
   - selector: &edit_annotations
-      xpath: //li//button[@data-test-action='Edit annotations']
+      xpath: //li//button[.='Edit annotations']
   - selector:
-      xpath: //li//button[@data-test-action='Edit DeploymentConfig']
+      xpath: //li//button[.='Edit DeploymentConfig']
   - selector:
-      xpath: //li//button[@data-test-action='Delete DeploymentConfig']
+      xpath: //li//button[.='Delete DeploymentConfig']
 check_deployment_availble_action_menus:
   action: click_resource_action_button_on_sidebar
   elements:

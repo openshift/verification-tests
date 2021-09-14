@@ -11,7 +11,7 @@ login_ocm_page_loaded:
 login_ocm_portal:
   elements:
     - selector:
-        id: username
+        id: username-verification
       op: send_keys <username>
       type: input
     - selector:
@@ -24,6 +24,6 @@ login_ocm_portal:
       op: send_keys <password>
       type: input
     - selector:
-        id: kc-login
+        id: rh-password-verification-submit-button
       type: button
       op: click

@@ -3,6 +3,47 @@ click_monitoring_tab:
         selector:
             xpath: //button[contains(.,'Monitoring')]
         op: click
+click_settings_tab:
+    element:
+        selector:
+            xpath: //button[contains(.,'Settings')]
+        op: click
+check_user_monitoring_checkbox_disabled:
+    element:
+        selector:
+            xpath: //input[@name='enable_user_workload_monitoring' and @disabled]
+check_user_monitoring_checkbox_unchecked:
+    element:
+        selector:
+            xpath: //input[@name='enable_user_workload_monitoring' and @value='false']
+check_user_monitoring_checkbox_checked:
+    element:
+        selector:
+            xpath: //input[@name='enable_user_workload_monitoring' and @value='true']
+refresh_detail_page_for_settings_tab:
+    element:
+        selector:
+            xpath: //button[@aria-label='Refresh']
+        op: click
+click_save_button_in_settings_tab:
+    element:
+        selector:
+            xpath: //button[text()='Save']
+        op: click
+check_for_error_message_for_updating_in_monitoring_tab:
+    element:
+        selector:
+            xpath: //h4[@class='pf-c-alert__title' and text()='Error processing request']
+        timeout: 5
+check_or_uncheck_monitoring_checkbox:
+    element:
+        selector:
+            xpath: //input[@name='enable_user_workload_monitoring']
+        op: click
+    action:
+        if_param: click_save
+        ref: click_save_button_in_settings_tab
+
 
 check_installing_cluster_monitoring_tab:
     elements:
@@ -19,10 +60,7 @@ last_checkin_loaded:
 check_disconnected_cluster_monitoring_tab:
     elements:
         - selector:
-            xpath: //h2[text()='Disconnected cluster']
-        - selector:
             xpath: //h5[text()='Monitoring data is not available']
-    action: last_checkin_loaded
 
 check_monitoring_tab:
     action: click_monitoring_tab

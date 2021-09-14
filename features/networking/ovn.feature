@@ -5,6 +5,7 @@ Feature: OVN related networking scenarios
   # @case_id OCP-29954
   @admin
   @destructive
+  @aws-ipi
   Scenario: Creating a resource in Kube API should be synced to OVN NB db correctly even post NB db crash too
     Given the env is using "OVNKubernetes" networkType
     Given I have a project
@@ -47,6 +48,7 @@ Feature: OVN related networking scenarios
   # @case_id OCP-30055
   @admin
   @destructive
+  @aws-ipi
   Scenario: OVN DB should be updated correctly if a resource only exist in Kube API but not in OVN NB db
     Given the env is using "OVNKubernetes" networkType
     Given I register clean-up steps:
@@ -97,6 +99,7 @@ Feature: OVN related networking scenarios
   # @case_id OCP-30057
   @admin
   @destructive
+  @aws-ipi
   Scenario: OVN DB should be updated correctly if a resource only exist in NB db but not in Kube API
     Given the env is using "OVNKubernetes" networkType
     Given I have a project
@@ -155,6 +158,7 @@ Feature: OVN related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-32205
   @admin
+  @aws-ipi
   Scenario: Thrashing ovnkube master IPAM allocator by creating and deleting various pods on a specific node
     Given the env is using "OVNKubernetes" networkType
     And I store all worker nodes to the :nodes clipboard
@@ -202,6 +206,7 @@ Feature: OVN related networking scenarios
   # @case_id OCP-28936
   @admin
   @destructive
+  @aws-ipi
   Scenario: Create/delete pods while forcing OVN leader election
   #Test for bug https://bugzilla.redhat.com/show_bug.cgi?id=1781297
     Given the env is using "OVNKubernetes" networkType
@@ -226,6 +231,7 @@ Feature: OVN related networking scenarios
   # @case_id OCP-26092
   @admin
   @destructive
+  @aws-ipi
   Scenario: Pods and Services should keep running when a new raft leader gets be elected
     Given the env is using "OVNKubernetes" networkType
     Given I store the ovnkube-master "south" leader pod in the clipboard
@@ -266,6 +272,7 @@ Feature: OVN related networking scenarios
   # @case_id OCP-26139
   @admin
   @destructive
+  @aws-ipi
   Scenario: Traffic flow shouldn't be interrupted when master switches the leader positions
     Given the env is using "OVNKubernetes" networkType
     Given I switch to cluster admin pseudo user
@@ -329,6 +336,7 @@ Feature: OVN related networking scenarios
   # @case_id OCP-26089
   @admin
   @destructive
+  @aws-ipi
   Scenario: New raft leader should be elected if existing leader gets deleted or crashed in hybrid/non-hybrid clusters
     Given the env is using "OVNKubernetes" networkType
     Given admin uses the "openshift-ovn-kubernetes" project
@@ -349,6 +357,7 @@ Feature: OVN related networking scenarios
   # @case_id OCP-26091
   @admin
   @destructive
+  @aws-ipi
   Scenario: New corresponding raft leader should be elected if SB db or NB db on existing master is crashed
     Given the env is using "OVNKubernetes" networkType
     Given admin uses the "openshift-ovn-kubernetes" project
@@ -451,6 +460,7 @@ Feature: OVN related networking scenarios
   # @author rbrattai@redhat.com
   # @case_id OCP-37031
   @admin
+  @aws-ipi
   Scenario: OVN handles projects that start with a digit
     Given the env is using "OVNKubernetes" networkType
     Given I create a project with leading digit name
@@ -465,3 +475,61 @@ Feature: OVN related networking scenarios
     Then the step should succeed
     # the iface-id should be quoted if it starts with a digit
     And the output should contain "<%= project.name %>"
+
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-38132
+  @admin
+  @destructive
+  Scenario: Should no intermittent packet drop from pod to pod after change hostname
+    Given I store the schedulable workers in the :nodes clipboard
+    Given admin uses the "openshift-ovn-kubernetes" project
+    And I store the hostname from external ids in the :original_hostname clipboard on the "<%= cb.nodes[0].name %>" node
+    Then the step should succeed
+    And I store the "short" hostname in the :short_hostname clipboard for the "<%= cb.nodes[0].name %>" node
+    Then the step should succeed
+
+    # Configure short hostname to the external_ids for the ovn node
+    When I set "<%= cb.short_hostname %>" hostname to external ids on the "<%= cb.nodes[0].name %>" node
+    Then the step should succeed
+    Given I register clean-up steps:
+    """
+    When I set "<%= cb.original_hostname%>" hostname to external ids on the "<%= cb.nodes[0].name %>" node
+    Then the step should succeed
+    """
+
+    # Check short hostname was set
+    Given I store the ovnkube-master "north" leader pod in the clipboard
+    Given I wait up to 15 seconds for the steps to pass:
+    """
+    And admin executes on the pod "northd" container:
+      | bash | -c | ovn-sbctl --no-leader-only list chassis \|grep "<%= cb.short_hostname %>" |
+    Then the step should succeed
+    And the output should contain:
+      | <%= cb.short_hostname %> |
+    And the output should not contain:
+      | <%= cb.original_hostname%> |
+    """
+
+    #Check no packet drop from pod to pod
+    Given I have a project
+    And I obtain test data file "networking/aosqe-pod-for-ping.json"
+    When I run oc create over "aosqe-pod-for-ping.json" replacing paths:
+      | ["spec"]["nodeName"] | <%= cb.nodes[0].name %> |
+    Then the step should succeed
+    And a pod becomes ready with labels:
+      | name=hello-pod |
+    And evaluation of `pod(1).name` is stored in the :pod1_name clipboard
+    Given I obtain test data file "networking/list_for_pods.json"
+    When I run oc create over "list_for_pods.json" replacing paths:
+      | ["items"][0]["spec"]["nodeName"] | <%= cb.nodes[1].name %> |
+      | ["items"][0]["spec"]["replicas"] | 1                       |
+    Then the step should succeed
+    Given 1 pod becomes ready with labels:
+      | name=test-pods |
+    And evaluation of `pod(2).ip` is stored in the :pod2_ip clipboard
+
+    When I execute on the "<%= cb.pod1_name%>" pod:
+      | ping | -c | 30 | -i | 0.2 | <%= cb.pod2_ip%> |
+    Then the step should succeed
+    And the output should contain "0% packet loss"

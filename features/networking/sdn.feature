@@ -37,6 +37,7 @@ Feature: SDN related networking scenarios
   # @case_id OCP-11286
   @admin
   @destructive
+  @aws-ipi
   Scenario: iptables rules will be repaired automatically once it gets destroyed
     # we do not detect incomplete rule removal since ~4.3, BZ-1810316
     # so only test on >= 4.3
@@ -44,7 +45,7 @@ Feature: SDN related networking scenarios
     Given I select a random node's host
     And the node iptables config is checked
     And the step succeeded
-    And the node service is restarted on the host after scenario
+    And I restart the network components on the node after scenario
     And I register clean-up steps:
     """
     When the node iptables config is checked
@@ -71,6 +72,7 @@ Feature: SDN related networking scenarios
   # @author hongli@redhat.com
   # @case_id OCP-13847
   @admin
+  @aws-ipi
   Scenario: an empty OPENSHIFT-ADMIN-OUTPUT-RULES chain is created in filter table at startup
     Given the master version >= "3.6"
     Given I have a project
@@ -88,6 +90,7 @@ Feature: SDN related networking scenarios
   # @case_id OCP-15251
   @admin
   @destructive
+  @inactive
   Scenario: net.ipv4.ip_forward should be always enabled on node service startup
     Given I select a random node's host
     And the node service is verified
@@ -121,6 +124,7 @@ Feature: SDN related networking scenarios
   # @case_id OCP-14985
   @admin
   @destructive
+  @inactive
   Scenario: The openflow list will be cleaned after deleted the node
     Given the env is using "OpenShiftSDN" networkType
     Given environment has at least 2 schedulable nodes
@@ -171,6 +175,7 @@ Feature: SDN related networking scenarios
   # @author hongli@redhat.com
   # @case_id OCP-18535
   @admin
+  @aws-ipi
   Scenario: should not show "No such device" message when run "ovs-vsctl show" command
     Given I have a project
     And I have a pod-for-ping in the project
@@ -188,6 +193,7 @@ Feature: SDN related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-23543
   @admin
+  @aws-ipi
   Scenario: The iptables binary and rules on sdn containers should be the same as host
     Given I select a random node's host
     When I run commands on the host:
@@ -267,6 +273,7 @@ Feature: SDN related networking scenarios
   # @author weliang@redhat.com
   # @case_id OCP-27655
   @admin
+  @aws-ipi
   Scenario: Networking should work on default namespace
   #Test for bug https://bugzilla.redhat.com/show_bug.cgi?id=1800324 and https://bugzilla.redhat.com/show_bug.cgi?id=1796157
     Given I switch to cluster admin pseudo user
@@ -282,6 +289,7 @@ Feature: SDN related networking scenarios
     And evaluation of `pod(1).ip_url` is stored in the :pod2_ip clipboard
     And evaluation of `pod(2).ip_url` is stored in the :pod3_ip clipboard
     And evaluation of `pod(3).ip_url` is stored in the :pod4_ip clipboard
+    And evaluation of `service("test-service").url` is stored in the :svcurl clipboard
     And I register clean-up steps:
     """
     Given I ensure "test-rc" replicationcontroller is deleted
@@ -302,6 +310,13 @@ Feature: SDN related networking scenarios
     And the output should contain "Hello OpenShift"
     When I execute on the "<%= cb.pod1_name %>" pod:
       | curl | --connect-timeout | 5 | <%= cb.pod4_ip %>:8080 |
+    Then the step should succeed
+    And the output should contain "Hello OpenShift"
+
+    #add checkpopint from work to access the service
+    Given I select a random node's host
+    And I run commands on the host:
+      | curl --connect-timeout 5 <%= cb.svcurl %> |
     Then the step should succeed
     And the output should contain "Hello OpenShift"
 
@@ -357,6 +372,7 @@ Feature: SDN related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-25933
   @admin
+  @aws-ipi
   Scenario: NetworkManager should consider OVS interfaces as unmanaged
   Given the env is using "OVNKubernetes" networkType
   And I select a random node's host

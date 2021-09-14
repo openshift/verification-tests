@@ -2,6 +2,7 @@ Feature: apiserver and auth related upgrade check
   # @author pmali@redhat.com
   # @case_id OCP-22734
   @upgrade-prepare
+  @inactive
   Scenario: Check Authentication operators and operands are upgraded correctly - prepare
     # According to our upgrade workflow, we need an upgrade-prepare and upgrade-check for each scenario.
     # But some of them do not need any prepare steps, which lead to errors "can not find scenarios" in the log.
@@ -62,6 +63,7 @@ Feature: apiserver and auth related upgrade check
   # @case_id OCP-22673
   @upgrade-check
   @admin
+  @inactive
   Scenario: Check apiserver operators and operands are upgraded correctly
     Given the "kube-apiserver" operator version matches the current cluster version
     And the "openshift-apiserver" operator version matches the current cluster version
@@ -224,6 +226,7 @@ Feature: apiserver and auth related upgrade check
       | system:serviceaccount:test-scc:test-scc |
 
   # @author scheng@redhat.com
+  @admin
   @upgrade-prepare
   @users=upuser1,upuser2
   Scenario: Upgrade action will cause re-generation of certificates for headless services to include the wildcard subjects - prepare
@@ -236,47 +239,65 @@ Feature: apiserver and auth related upgrade check
       | f | headless-services.yaml |
     Then the step should succeed
     Given I use the "service-ca-upgrade" project
-    When I run the :run client command with:
-      | name    | openssl                          |
-      | image   | quay.io/openshifttest/openssl:oc |
-      | env     | POD_NAMESPACE=service-ca-upgrade |
-      | command | true                             |
-      | cmd     | sleep                            |
-      | cmd     | 360                              |
+    And I run the :extract client command with:
+      | resource | secret/test-serving-cert |
+      | confirm  | true                     |
     Then the step should succeed
-    Given a pod becomes ready with labels:
-      | run=openssl |
-    And I give project admin role to the default service account
-    Given I execute on the pod:
-      | bash                                                                                                                        |
-      | -c                                                                                                                          |
-      | oc extract secret/test-serving-cert -n service-ca-upgrade --to=/tmp --confirm && openssl x509 -in /tmp/tls.crt -noout -text |
+    And the output should contain "tls.crt"
+
+    When I store the ready and schedulable masters in the clipboard
+    And I use the "<%= cb.nodes[0].name %>" node
+    And I run commands on the host:
+      | openssl x509 -noout -text -in <(echo '<%= File.read("tls.crt") %>') |
     Then the step should succeed
     And the output should contain:
       | DNS:foo.service-ca-upgrade.svc, DNS:foo.service-ca-upgrade.svc.cluster.local |
 
   # @author scheng@redhat.com
   # @case_id OCP-41198
+  @admin
   @upgrade-check
   @users=upuser1,upuser2
   Scenario: Upgrade action will cause re-generation of certificates for headless services to include the wildcard subjects
     Given the master version >= "4.8"
+    Given I switch to the first user
     Given I use the "service-ca-upgrade" project
-    When I run the :run client command with:
-      | name    | openssl                          |
-      | image   | quay.io/openshifttest/openssl:oc |
-      | env     | POD_NAMESPACE=service-ca-upgrade |
-      | command | true                             |
-      | cmd     | sleep                            |
-      | cmd     | 360                              |
+    And I run the :extract client command with:
+      | resource | secret/test-serving-cert |
+      | confirm  | true                     |
     Then the step should succeed
-    Given a pod becomes ready with labels:
-      | run=openssl |
-    And I give project admin role to the default service account
-    Given I execute on the pod:
-      | bash                                                                                                                        |
-      | -c                                                                                                                          |
-      | oc extract secret/test-serving-cert -n service-ca-upgrade --to=/tmp --confirm && openssl x509 -in /tmp/tls.crt -noout -text |
+    And the output should contain "tls.crt"
+
+    When I store the ready and schedulable masters in the clipboard
+    And I use the "<%= cb.nodes[0].name %>" node
+    And I run commands on the host:
+      | openssl x509 -noout -text -in <(echo '<%= File.read("tls.crt") %>') |
     Then the step should succeed
     And the output should contain:
-      | DNS:*.foo.service-ca-upgrade.svc, DNS:*.foo.service-ca-upgrade.svc.cluster.local, DNS:foo.service-ca-upgrade.svc, DNS:foo.service-ca-upgrade.svc.cluster.local |
+      | DNS:foo.service-ca-upgrade.svc, DNS:foo.service-ca-upgrade.svc.cluster.local     |
+      | DNS:*.foo.service-ca-upgrade.svc, DNS:*.foo.service-ca-upgrade.svc.cluster.local |
+
+  # @author xxia@redhat.com
+  @upgrade-prepare
+  Scenario: kube-apiserver and openshift-apiserver should have zero-disruption upgrade - prepare
+    # According to our upgrade workflow, we need an upgrade-prepare and upgrade-check for each scenario.
+    # But some of them do not need any prepare steps, which lead to errors "can not find scenarios" in the log.
+    # So we just add a simple/useless step here to get rid of the errors in the log.
+    Given the expression should be true> "True" == "True"
+
+  # @author xxia@redhat.com
+  # @case_id OCP-34223
+  @upgrade-check
+  @admin
+  @aws-ipi
+  Scenario: kube-apiserver and openshift-apiserver should have zero-disruption upgrade
+    # This case needs keep running oc commands against servers during upgrade, but our framework does not support
+    # So using a workaround: run them in a background script during upgrade CI job and check result here
+    # The project is created in the script
+    When I run the :get admin command with:
+      | resource | cm/log         |
+      | o        | yaml           |
+      | n        | ocp-34223-proj |
+    Then the step should succeed
+    # This is to discover bugs like: 1845411 1804717 1912820
+    And the output should not contain "failed"

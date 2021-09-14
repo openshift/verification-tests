@@ -294,6 +294,7 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-21855
   @admin
   @destructive
+  @aws-ipi
   Scenario: Create pods with muliple cni plugins via multus-cni - macvlan + host-device
     # Make sure that the multus is enabled
     Given the master version >= "4.1"
@@ -358,6 +359,7 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-21859
   @admin
   @destructive
+  @aws-ipi
   Scenario: Create pods with muliple cni plugins via multus-cni - host-device + host-device
     # Make sure that the multus is enabled
     Given the master version >= "4.1"
@@ -428,6 +430,8 @@ Feature: Multus-CNI related scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-24488
   @admin
+  @aws-ipi
+  @serial
   Scenario: Create pod with Multus bridge CNI plugin without vlan
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -476,6 +480,7 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-24489
   @admin
   @destructive
+  @aws-ipi
   Scenario: Create pod with Multus bridge CNI plugin and vlan tag
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -516,6 +521,7 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-24467
   @admin
   @destructive
+  @aws-ipi
   Scenario: CNO manager mavlan configured manually with static
     Given the multus is enabled on the cluster
     And I store all worker nodes to the :nodes clipboard
@@ -605,6 +611,7 @@ Feature: Multus-CNI related scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-21793
   @admin
+  @aws-ipi
   Scenario: User cannot consume the net-attach-def created in other project which is namespace isolated
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -639,6 +646,7 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-24490
   @admin
   @destructive
+  @aws-ipi
   Scenario: Pods can communicate each other with same vlan tag
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -724,6 +732,7 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-24491
   @admin
   @destructive
+  @aws-ipi
   Scenario: Pods cannot communicate each other with different vlan tag
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -824,6 +833,7 @@ Feature: Multus-CNI related scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-24607
   @admin
+  @aws-ipi
   Scenario: macvlan plugin without master parameter
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -849,6 +859,7 @@ Feature: Multus-CNI related scenarios
   # @author weliang@redhat.com
   # @case_id OCP-25676
   @admin
+  @aws-ipi
   Scenario: Supported runtimeConfig/capability for MAC/IP
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -885,6 +896,7 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-24465
   @admin
   @destructive
+  @aws-ipi
   Scenario: Multus CNI type bridge with DHCP
     # Make sure that the multus is Running
     Given the multus is enabled on the cluster
@@ -939,6 +951,7 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-24466
   @admin
   @destructive
+  @aws-ipi
   Scenario: CNO manager macvlan configured manually with DHCP
     Given the multus is enabled on the cluster
     And I store the masters in the :master clipboard
@@ -1013,6 +1026,7 @@ Feature: Multus-CNI related scenarios
   # @author weliang@redhat.com
   # @case_id OCP-25909
   @admin
+  @aws-ipi
   Scenario: Assign static IP address using pod annotation
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -1047,6 +1061,7 @@ Feature: Multus-CNI related scenarios
   # @author weliang@redhat.com
   # @case_id OCP-25910
   @admin
+  @aws-ipi
   Scenario: Assign static MAC address using pod annotation
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -1079,6 +1094,7 @@ Feature: Multus-CNI related scenarios
   # @author weliang@redhat.com
   # @case_id OCP-25915
   @admin
+  @aws-ipi
   Scenario: Multus default route overwrite
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -1109,6 +1125,7 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-25917
   @admin
   @destructive
+  @aws-ipi
   Scenario: Multus Telemetry Adds capability to track usage of network attachment definitions
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -1165,6 +1182,7 @@ Feature: Multus-CNI related scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-22504
   @admin
+  @aws-ipi
   Scenario: The multus admission controller should be able to detect that the pod is using net-attach-def in other namespaces when the isolation is enabled
     Given I create 2 new projects
     # Create the net-attach-def via cluster admin
@@ -1195,6 +1213,7 @@ Feature: Multus-CNI related scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-24492
   @admin
+  @aws-ipi
   Scenario: Create pod with Multus ipvlan CNI plugin
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster

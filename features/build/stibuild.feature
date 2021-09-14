@@ -1,5 +1,6 @@
 Feature: stibuild.feature
   # @author xiuwang@redhat.com
+  @aws-ipi
   Scenario Outline: Trigger s2i/docker/custom build using additional imagestream
     Given I have a project
     Given I obtain test data file "templates/<template>"
@@ -38,6 +39,8 @@ Feature: stibuild.feature
 
   # @author wzheng@redhat.com
   # @case_id OCP-30858
+  @aws-ipi
+  @proxy
   Scenario: STI build with dockerImage with specified tag
     Given I have a project
     When I run the :new_app client command with:
@@ -72,6 +75,7 @@ Feature: stibuild.feature
 
   # @author wzheng@redhat.com
   # @case_id OCP-22596
+  @proxy
   Scenario: Create app with template eap73-basic-s2i with jbosseap rhel7 image
     Given I have a project
     When I run the :new_app client command with:
@@ -88,6 +92,8 @@ Feature: stibuild.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-28891
+  @aws-ipi
+  @disconnected
   Scenario: Test s2i build in disconnect cluster
     Given I have a project
     When I have an http-git service in the project
@@ -109,3 +115,43 @@ Feature: stibuild.feature
     Then the step should succeed
     Given the "httpd-ex-1" build was created
     And the "httpd-ex-1" build completes
+
+  # @author xiuwang@redhat.com
+  # @case_id OCP-42159
+  @aws-ipi
+  Scenario: Mount source secret and configmap to builder container- sourcestrategy 
+    Given I have a project
+    When I run the :create_secret client command with:
+      | secret_type  | generic            |
+      | name         | mysecret           |
+      | from_literal | username=openshift |
+      | from_literal | password=redhat    |
+    Then the step should succeed
+    When I run the :create_configmap client command with:
+      | name         | myconfig  | 
+      | from_literal | key=foo   |
+      | from_literal | value=bar |
+    Then the step should succeed
+    When I run the :new_app client command with:
+      | image_stream | ruby                                             |
+      | app_repo     | http://github.com/openshift/ruby-hello-world.git | 
+    Then the step should succeed
+    And the "ruby-hello-world-1" build was created
+    Given the "ruby-hello-world-1" build completed
+    When I run the :patch client command with:
+      | resource      | buildconfig      | 
+      | resource_name | ruby-hello-world |
+      | p             | {"spec":{"strategy":{"sourceStrategy":{"volumes":[{"mounts":[{"destinationPath":"/var/run/secret/mysecret"}],"name":"mysecret","source":{"secret":{"secretName":"mysecret"},"type":"Secret"}},{"mounts":[{"destinationPath":"/var/run/secret/myconfig"}],"name":"myconfig","source":{"configMap":{"name":"myconfig"},"type":"ConfigMap"}}]}}}} | 
+    Then the step should succeed
+    When I run the :start_build client command with:
+      | buildconfig | ruby-hello-world |
+    Then the step should succeed
+    And the "ruby-hello-world-2" build was created
+    Given the "ruby-hello-world-2" build completed
+    When I run the :get client command with:
+      | resource      | pod                      |
+      | resource_name | ruby-hello-world-2-build |
+      | o             | yaml                     |
+    Then the output should contain:
+      | mysecret-user-build-volume |
+      | myconfig-user-build-volume | 

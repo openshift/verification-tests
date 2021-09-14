@@ -2,6 +2,7 @@ Feature: Secure Computing Test Scenarios
 
   # @author wmeng@redhat.com
   # @case_id OCP-10483
+  @inactive
   Scenario: seccomp=unconfined used by default
     Given I have a project
     Given I obtain test data file "pods/hello-pod.json"
@@ -20,6 +21,7 @@ Feature: Secure Computing Test Scenarios
   # @case_id OCP-32065
   @admin
   @destructive
+  @aws-ipi
   Scenario: Using Secure Computing Profiles with Pod Annotations
     # Create custom machine config that contains the seccomp
     Given I switch to cluster admin pseudo user

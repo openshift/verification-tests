@@ -41,7 +41,7 @@ check_impersonate_notifications:
   - selector:
       xpath: //span[contains(@class,'co-global-notification__impersonate-name') and text()='<username>']
   - selector: &stop_impersonation
-      xpath: //a[text()='Stop Impersonation']
+      xpath: //button[contains(text(),'Stop impersonation')]
 click_stop_impersonation:
   elements:
   - selector: *stop_impersonation

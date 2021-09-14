@@ -4,6 +4,7 @@ Feature: Persistent Volume Claim binding policies
   # @author lxia@redhat.com
   # @author chaoyang@redhat.com
   @admin
+  @aws-ipi
   Scenario Outline: PVC with one accessMode can bind PV with all accessMode
     Given I have a project
 
@@ -42,6 +43,7 @@ Feature: Persistent Volume Claim binding policies
 
   # @author yinzhou@redhat.com
   # @case_id OCP-11933
+  @inactive
   Scenario: deployment hook volume inheritance -- with persistentvolumeclaim Volume
     Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"
@@ -67,6 +69,7 @@ Feature: Persistent Volume Claim binding policies
 
   # @author lxia@redhat.com
   @admin
+  @aws-ipi
   Scenario Outline: PV can not bind PVC which request more storage
     Given I have a project
     # PV is 100Mi and PVC is 1Gi
@@ -95,6 +98,7 @@ Feature: Persistent Volume Claim binding policies
 
   # @author lxia@redhat.com
   @admin
+  @aws-ipi
   Scenario Outline: PV can not bind PVC with mismatched accessMode
     Given I have a project
     Given I obtain test data file "storage/nfs/auto/pv-template.json"

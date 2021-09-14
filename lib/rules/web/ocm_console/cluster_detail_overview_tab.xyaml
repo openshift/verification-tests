@@ -1,16 +1,8 @@
-go_to_overview_tab:
-    element:
-        xpath: //button[@class='pf-c-tabs__button' and text()='Overview']
 
 check_installation_logs_tab:
     elements:
         - selector:
-            xpath: //span[text()='View logs']
-          op: click
-        - selector:
             xpath: //p[text()='Cluster installation has started. Installation log will appear here once it becomes available.']
-        - selector:
-            xpath: //span[text()='Hide logs']
         - selector:
             xpath: //div[@class='log-window__header' and contains(.,'lines')]
           timeout: 600
@@ -60,9 +52,9 @@ check_cluster_logs:
         ref: check_uninstallation_logs_tab
     action: click_expand_button
     action: exit_full_log_screen
-    action:
-        if_param: installation
-        ref: hide_logs_view
+    #action:
+    #    if_param: installation
+    #    ref: hide_logs_view
 
 click_expand_button:
     element:

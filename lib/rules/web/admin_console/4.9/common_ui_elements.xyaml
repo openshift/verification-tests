@@ -3,6 +3,10 @@ expand_primary_menu:
   - selector:
       xpath: //li[contains(@class, 'pf-m-expandable') and contains(@class,'pf-c-nav__item')]/*[contains(@class,'pf-c-nav__link') and contains(text(), '<primary_menu>')]
     op: click
+expand_monitoring_menu:
+  params:
+    primary_menu: Observe
+  action: expand_primary_menu
 create_resource_by_default_yaml:
   elements:
   - selector:
@@ -298,6 +302,11 @@ set_label_textarea:
       <<: *label_textarea
     op: send_keys <input_value>
     type: textarea
+click_label_filter_dropdown_button:
+  element:
+    selector:
+      xpath: //label[contains(text(),'<label_text>')]/following::button[1][contains(@class,'select__toggle')]
+    op: click
 click_label_dropdown_button:
   element:
     selector:
@@ -755,7 +764,7 @@ check_dropdown_missing:
 click_dropdown_field:
   elements:
   - selector:
-      xpath: //*[(.='<dropdown_field>')]/following-sibling::*//button[contains(@class, 'dropdown__toggle')]
+      xpath: //*[(.='<dropdown_field>')]/..//button[contains(@class, 'select__toggle')]
     op: click
 click_item_in_resource_list:
   elements:
@@ -802,7 +811,7 @@ choose_item_from_dropdown_menu:
 upload_file_for_one_field:
   elements:
   - selector:
-      xpath: //input[contains(@aria-describedby, '<field_name>')]/following-sibling::span/input
+      xpath: //input[@id='<field_name>-input']
     visible: false
     type: filefield
     op: set <file_path>
@@ -830,7 +839,7 @@ wait_until_no_loading:
 wait_sidebar_loaded:
   element:
     selector:
-      css: .co-p-has-sidebar__sidebar-close
+      xpath: //div[@data-test='resource-sidebar']
     timeout: 30
 wait_table_loaded:
   element:

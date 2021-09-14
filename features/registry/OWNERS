@@ -1,5 +1,7 @@
 approvers:
+  - xiuwang
 
 reviewers:
-- zhouying7780
-- pruan-rht
+  - wewang58
+  - wzheng1
+  - xiuwang

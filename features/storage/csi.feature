@@ -3,6 +3,7 @@ Feature: CSI testing related feature
   # @author chaoyang@redhat.com
   # @case_id OCP-30787
   @admin
+  @stage-only
   Scenario: CSI images checking in stage and prod env
     Given the master version >= "4.4"
     Given I switch to cluster admin pseudo user
@@ -16,6 +17,7 @@ Feature: CSI testing related feature
   # @author chaoyang@redhat.com
   # @case_id OCP-31345
   @admin
+  @stage-only
   Scenario: CSI images checking in stage env in OCP4.3
     Given the master version == "4.3"
     Given I switch to cluster admin pseudo user
@@ -26,6 +28,7 @@ Feature: CSI testing related feature
   # @author chaoyang@redhat.com
   # @case_id OCP-31346
   @admin
+  @stage-only
   Scenario: CSI images checking in stage env in OCP4.2
     Given the master version == "4.2"
     Given I switch to cluster admin pseudo user
@@ -34,6 +37,7 @@ Feature: CSI testing related feature
 
   # @author chaoyang@redhat.com
   @admin
+  @aws-ipi
   Scenario Outline: Configure 'Retain' reclaim policy
     Given I have a project
     And admin clones storage class "sc-<%= project.name %>" from "<sc_name>" with:
@@ -239,6 +243,7 @@ Feature: CSI testing related feature
 
   # @author wduan@redhat.com
   @admin
+  @aws-ipi
   Scenario Outline: CSI dynamic provisioning with different type
     Given I have a project
     And admin clones storage class "sc-<%= project.name %>" from "<sc_name>" with:
@@ -282,6 +287,7 @@ Feature: CSI testing related feature
 
   # @author wduan@redhat.com
   @admin
+  @aws-ipi
   Scenario Outline: Check CSI Driver Operator installation
     When I run the :get admin command with:
       | resource | clusteroperator/storage                                                            |

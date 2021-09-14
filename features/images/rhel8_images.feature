@@ -3,6 +3,7 @@ Feature: rhel8images.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-22950
   @admin
+  @proxy
   Scenario: Using new-app cmd to create app with ruby rhel8 image
     Given I have a project
     When I run the :tag admin command with:
@@ -40,6 +41,7 @@ Feature: rhel8images.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-22953
   @admin
+  @inactive
   Scenario: Enable hot deploy for ruby app with ruby rhel8 image
     Given I have a project
     When I run the :tag admin command with:
@@ -66,6 +68,8 @@ Feature: rhel8images.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-22595
   @admin
+  @aws-ipi
+  @proxy
   Scenario: mysql persistent template
     Given I have a project
     When I run the :tag admin command with:
@@ -117,19 +121,15 @@ Feature: rhel8images.feature
   # @author wewang@redhat.com
   # @case_id OCP-22958
   @admin
+  @proxy
   Scenario: Create mysql service from imagestream via oc new-app mysql-rhel8 image
     Given I have a project
-    When I run the :tag admin command with:
-      | source           | registry.redhat.io/rhel8/mysql-80:latest |
-      | dest             | qe-mysql-80-rhel8:latest                 |
-      | reference_policy | local                                    |
-      | n                | openshift                                |
-    Then the step should succeed
     When I run the :new_app client command with:
-      | image_stream | openshift/qe-mysql-80-rhel8 |
-      | env          | MYSQL_USER=user             |
-      | env          | MYSQL_PASSWORD=pass         |
-      | env          | MYSQL_DATABASE=db           |
+      | image_stream | openshift/mysql:latest |
+      | env          | MYSQL_USER=user        |
+      | env          | MYSQL_PASSWORD=pass    |
+      | env          | MYSQL_DATABASE=db      |
+      | name         | qe-mysql-80-rhel8      |
     Then the step should succeed
     Given I wait for the "qe-mysql-80-rhel8" service to become ready
     And I get the service pods
@@ -163,6 +163,7 @@ Feature: rhel8images.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-31249
   @admin
+  @inactive
   Scenario: Using new-app cmd to create app with ruby rhel8 image test
     Given I have a project
     When I run the :tag admin command with:

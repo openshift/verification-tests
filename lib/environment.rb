@@ -439,11 +439,11 @@ module BushSlicer
       unless @service_project
         # if the cluster set the default scheduler, set the project running debug pod node-selector=''
         # to overwrite the default scheduler, or the pod can not be run successfully
-        project_name = "tests-" + EXECUTOR_NAME.downcase
+        project_name = "proj-" + EXECUTOR_NAME.downcase
         project = Project.new(name: project_name, env: self)
         unless project.active?
-          # 30 seconds is no longer enough
-          project.wait_to_disappear(admin, 60)
+          # 60 seconds is no longer enough
+          project.wait_to_disappear(admin, 120)
           res = project.create(by: admin, clean_up_registered: true)
           unless res[:success]
             raise "failed to create service project #{project.name}, see log"

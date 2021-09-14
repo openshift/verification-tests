@@ -4,6 +4,7 @@ Feature: MachineHealthCheck Test Scenarios
   # @case_id OCP-25897
   @admin
   @destructive
+  @aws-ipi
   Scenario: Remediation should be applied when the unhealthyCondition 'Ready' is met
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -39,6 +40,7 @@ Feature: MachineHealthCheck Test Scenarios
   # @case_id OCP-26311
   @admin
   @destructive
+  @aws-ipi
   Scenario: Create a machinehealthcheck when there is already an unhealthy machine
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -66,6 +68,7 @@ Feature: MachineHealthCheck Test Scenarios
   # @case_id OCP-25734
   @admin
   @destructive
+  @aws-ipi
   Scenario: Create multiple MHCs to monitor same machineset
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -95,6 +98,7 @@ Feature: MachineHealthCheck Test Scenarios
   # @case_id OCP-25691
   @admin
   @destructive
+  @aws-ipi
   Scenario: Use "maxUnhealthy" to prevent automated remediation
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -269,8 +273,7 @@ Feature: MachineHealthCheck Test Scenarios
   # @case_id OCP-33714
   @admin
   Scenario: Leverage OpenAPI validation within MHC
-    Given I have an IPI deployment
-    And I switch to cluster admin pseudo user
+    Given I switch to cluster admin pseudo user
     Then I use the "openshift-machine-api" project
 
     Given I obtain test data file "cloud/mhc/mhc_validations.yaml"

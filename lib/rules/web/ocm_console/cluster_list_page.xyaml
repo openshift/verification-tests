@@ -97,19 +97,19 @@ check_clusters_list_info_include_provider:
     action: check_clusters_list_info
     element:
         selector:
-            xpath: //a[text()='<cluster_name>']/../../td[@data-label='Provider (Location)' and text()='<provider>' and contains(., '<location>')]
+            xpath: //a[text()='<cluster_name>']/../../td[@data-label='Provider (Region)' and text()='<provider>' and contains(., '<location>')]
 check_hover_in_cluster_list:
     elements:
         - selector:
-            xpath: //td[@data-label='Type']/span[text()='OCP']
+            xpath: (//td[@data-label='Type']/span[text()='OCP'])[1]
           op: hover
         - selector:
-            xpath: //div[@class='tippy-popper' and contains(., 'Self-managed')]
+            xpath: //div[@class='pf-c-tooltip__content' and contains(., 'Self-managed')]
         - selector:
-            xpath: //td[@data-label='Type']/span[text()='OSD']
+            xpath: (//td[@data-label='Type']/span[text()='OSD'])[1]
           op: hover
         - selector:
-            xpath: //div[@class='tippy-popper' and contains(., 'Dedicated')]
+            xpath: //div[@class='pf-c-tooltip__content' and contains(., 'Dedicated')]
 filter_name_or_id:
     action: clear_filter_name_or_id
     element:
@@ -442,7 +442,7 @@ click_logout_button:
 logout_page_loaded:
   element:
     selector:
-      xpath: //button[contains(., 'Log in to your account')]
+      xpath: //h1[contains(., 'Log in to your Red Hat account')]
 scale_loadbalancer_from_cluster_list_page:
   action: go_to_edit_loadbalancers_and_storage_dialog_on_cluster_list_page
   action: choose_loadbalancer_in_dialog

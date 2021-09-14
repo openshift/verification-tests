@@ -2,6 +2,7 @@ Feature: oc_expose.feature
 
   # @author pruan@redhat.com
   # @case_id OCP-10873
+  @aws-ipi
   Scenario: Access app througth secure service and regenerate service serving certs if it about to expire
     Given the master version >= "3.3"
     Given I have a project

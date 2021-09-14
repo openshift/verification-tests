@@ -1,6 +1,7 @@
 Feature: remote registry related scenarios
   # @author yinzhou@redhat.com
   # @case_id OCP-10904
+  @aws-ipi
   Scenario: Support unauthenticated with registry-admin role
     Given I have a project
     Given I find a bearer token of the default service account

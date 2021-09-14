@@ -194,7 +194,7 @@ Feature: cluster log forwarder features
     And I obtain test data file "logging/clusterlogforwarder/fluentd/secure/clusterlogforwarder.yaml"
     When I process and create:
       | f | clusterlogforwarder.yaml |
-      | p | URL=tcp://fluentdserver.<%= cb.fluentd_proj.name %>.svc:24224 |
+      | p | URL=tls://fluentdserver.<%= cb.fluentd_proj.name %>.svc:24224 |
     Then the step should succeed
     And I wait for the "instance" cluster_log_forwarder to appear
 
