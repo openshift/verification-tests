@@ -30,7 +30,7 @@ click_projects_dropdown_developer_mode_admin:
     op: click
   element:
     selector:
-      xpath: span[contains(@class,'pf-c-switch__toggle')]
+      xpath: //span[contains(@class,'pf-c-switch__toggle')]
     op: click
 click_projects_dropdown_developer_mode_user:
   element:
