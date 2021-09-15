@@ -71,6 +71,8 @@ Feature: Storage upgrade tests
   @users=upuser1,upuser2
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: Cluster operator storage should be in correct status and dynamic provisioning should work well after upgrade
     Given I switch to cluster admin pseudo user
     # Check storage operator version after upgraded

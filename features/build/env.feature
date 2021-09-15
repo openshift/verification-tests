@@ -3,6 +3,8 @@ Feature: env.feature
   # @author shiywang@redhat.com
   # @case_id OCP-11543
   @proxy
+  @gcp-upi
+  @gcp-ipi
   Scenario: Can set env vars on buildconfig with new-app --env and --env-file
     Given I have a project
     When I run the :new_app client command with:
@@ -72,6 +74,8 @@ Feature: env.feature
   # @author wewang@redhat.com
   # @case_id OCP-31247
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: Can set env vars on buildconfig with new-app --env and --env-file test
     Given I have a project
     When I run the :new_app client command with:

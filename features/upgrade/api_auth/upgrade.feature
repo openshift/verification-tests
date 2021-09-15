@@ -290,6 +290,8 @@ Feature: apiserver and auth related upgrade check
   @upgrade-check
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: kube-apiserver and openshift-apiserver should have zero-disruption upgrade
     # This case needs keep running oc commands against servers during upgrade, but our framework does not support
     # So using a workaround: run them in a background script during upgrade CI job and check result here

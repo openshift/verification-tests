@@ -3,6 +3,8 @@ Feature: scaling related scenarios
   # @author pruan@redhat.com
   # @case_id OCP-10626
   @proxy
+  @gcp-upi
+  @gcp-ipi
   Scenario: Scale replicas via replicationcontrollers and deploymentconfig
     Given I have a project
     And I create a new application with:

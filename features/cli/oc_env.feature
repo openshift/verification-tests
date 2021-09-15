@@ -4,6 +4,8 @@ Feature: oc_env.feature
   # @case_id OCP-11032
   @aws-ipi
   @proxy
+  @gcp-upi
+  @gcp-ipi
   Scenario: Set environment variables when creating application using non-DeploymentConfig template
     Given I have a project
     When I run the :new_app client command with:

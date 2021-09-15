@@ -2,6 +2,8 @@ Feature: Testing ingress to route object
 
   # @author zzhao@redhat.com
   # @case_id OCP-18789
+  @gcp-upi
+  @gcp-ipi
   Scenario: Ingress generic support
     Given the master version >= "3.10"
     Given I have a project

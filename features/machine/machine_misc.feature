@@ -111,6 +111,8 @@ Feature: Machine misc features testing
   # @case_id OCP-37744
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: kube-rbac-proxy should not expose tokens, have excessive verbosity
     Given I switch to cluster admin pseudo user
 

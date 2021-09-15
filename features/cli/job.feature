@@ -291,6 +291,8 @@ Feature: job.feature
   # @author yinzhou@redhat.com
   # @case_id OCP-10781
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: Create job with specific deadline
     Given I have a project
     Given I obtain test data file "job/job_with_0_activeDeadlineSeconds.yaml"
@@ -345,6 +347,8 @@ Feature: job.feature
   # @author geliu@redhat.com
   # @case_id OCP-17515
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: User can schedule a Cronjob execution with cron format time
     Given I have a project
     When I run the :create_cronjob client command with:

@@ -17,6 +17,8 @@ Feature: Template service broker related features
   # @author zitang@redhat.com
   # @case_id OCP-14477
   @admin
+  @gcp-upi
+  @gcp-ipi
   Scenario: Provision a templateinstance
     Given I have a project
     # Provision jenkins instance

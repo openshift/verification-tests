@@ -27,6 +27,8 @@ Feature: OLM related scenarios
   @upgrade-check
   @users=upuser1,upuser2
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: upgrade OLM
     # Check OLM version after upgraded
     Given the "operator-lifecycle-manager" operator version matches the current cluster version

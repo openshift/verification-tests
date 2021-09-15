@@ -5,6 +5,8 @@ Feature: oc_set_build_hook
   # @bug_id 1351797
   @aws-ipi
   @proxy
+  @gcp-upi
+  @gcp-ipi
   Scenario: Set post-build-commit on buildconfig via oc set build-hook
     Given I have a project
     When I process and create "https://raw.githubusercontent.com/openshift/rails-ex/master/openshift/templates/rails-postgresql.json"
