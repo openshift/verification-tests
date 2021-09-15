@@ -4,6 +4,7 @@ Feature: Testing ingress to route object
   # @case_id OCP-18789
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: Ingress generic support
     Given the master version >= "3.10"
     Given I have a project

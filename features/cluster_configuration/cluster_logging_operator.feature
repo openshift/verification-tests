@@ -6,6 +6,7 @@ Feature: cluster logging related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: Deploy Logging Via Community Operators
     Given logging service has been installed successfully
 

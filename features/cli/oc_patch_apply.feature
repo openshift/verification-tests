@@ -6,6 +6,7 @@ Feature: oc patch/apply related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: oc patch can update one or more fields of rescource
     Given I have a project
     And I run the :create_deploymentconfig client command with:

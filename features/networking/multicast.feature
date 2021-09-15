@@ -6,6 +6,7 @@ Feature: testing multicast scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: pods should be able to subscribe send and receive multicast traffic
     # create some multicast testing pods
     Given I have a project
@@ -90,6 +91,7 @@ Feature: testing multicast scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: multicast is disabled by default if not annotate the netnamespace
     # create multicast testing pods in the project and without multicast enable
     Given I have a project

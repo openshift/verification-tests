@@ -33,6 +33,7 @@ Feature: Marketplace related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: upgrade Marketplace
     # Check Marketplace version after upgraded
     Given the "marketplace" operator version matches the current cluster version

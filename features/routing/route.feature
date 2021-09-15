@@ -6,6 +6,7 @@ Feature: Testing route
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: Alias will be invalid after removing it
     Given I have a project
     Given I obtain test data file "routing/header-test/dc.json"
@@ -35,6 +36,7 @@ Feature: Testing route
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: Service endpoint can be work well if the mapping pod ip is updated
     Given I have a project
     Given I obtain test data file "networking/list_for_pods.json"
@@ -83,6 +85,7 @@ Feature: Testing route
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: The later route should be HostAlreadyClaimed when there is a same host exist
     Given I have a project
     Given I obtain test data file "routing/unsecure/route_unsecure.json"
@@ -108,6 +111,7 @@ Feature: Testing route
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: The path specified in route can work well for edge terminated
     Given I have a project
     Given I obtain test data file "routing/web-server-1.yaml"
@@ -186,6 +190,7 @@ Feature: Testing route
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: The path specified in route can work well for reencrypt terminated
     Given I have a project
     And I store an available router IP in the :router_ip clipboard
@@ -241,6 +246,7 @@ Feature: Testing route
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: Config insecureEdgeTerminationPolicy to Redirect for route
     Given I have a project
     And I store an available router IP in the :router_ip clipboard
@@ -289,6 +295,7 @@ Feature: Testing route
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: Config insecureEdgeTerminationPolicy to Allow for route
     Given I have a project
     And I store an available router IP in the :router_ip clipboard
@@ -354,6 +361,7 @@ Feature: Testing route
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: Route could NOT be updated after created
     Given I have a project
     Given I obtain test data file "routing/route_withouthost1.json"
@@ -372,6 +380,7 @@ Feature: Testing route
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: Set insecureEdgeTerminationPolicy to Redirect for passthrough route
     Given I have a project
     And I store an available router IP in the :router_ip clipboard
@@ -424,6 +433,7 @@ Feature: Testing route
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: Set insecureEdgeTerminationPolicy to Redirect and Allow for reencrypt route
     Given I have a project
     And I store an available router IP in the :router_ip clipboard
@@ -486,6 +496,7 @@ Feature: Testing route
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: The hostname should be converted to available route when met special character
     Given I have a project
     Given I obtain test data file "routing/service_unsecure.yaml"
@@ -527,6 +538,7 @@ Feature: Testing route
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: Check the cookie if using secure mode when insecureEdgeTerminationPolicy to Redirect for edge/reencrypt route
     Given I have a project
     And I store an available router IP in the :router_ip clipboard
@@ -606,6 +618,7 @@ Feature: Testing route
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: Use the default destination CA of router if the route does not specify one for reencrypt route
     Given I have a project
     Given I obtain test data file "routing/reencrypt/reencrypt-without-all-cert.yaml"
@@ -622,6 +635,7 @@ Feature: Testing route
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: Only the host in whitelist could access the route - unsecure route
     Given I have a project
     And I have a header test service in the project
@@ -659,6 +673,7 @@ Feature: Testing route
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: The edge route should support HSTS
     Given the master version >= "3.7"
     And I have a project
@@ -718,6 +733,7 @@ Feature: Testing route
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: The reencrypt route should support HSTS
     Given the master version >= "3.7"
     And I have a project

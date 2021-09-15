@@ -293,6 +293,7 @@ Feature: job.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: Create job with specific deadline
     Given I have a project
     Given I obtain test data file "job/job_with_0_activeDeadlineSeconds.yaml"
@@ -349,6 +350,7 @@ Feature: job.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: User can schedule a Cronjob execution with cron format time
     Given I have a project
     When I run the :create_cronjob client command with:

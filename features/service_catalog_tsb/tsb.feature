@@ -19,6 +19,7 @@ Feature: Template service broker related features
   @admin
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: Provision a templateinstance
     Given I have a project
     # Provision jenkins instance
