@@ -35,7 +35,7 @@ module BushSlicer
     # to save time
     def initialize
       @jenkins = Jenkins.new
-      @mongodb = JenkinsMongo.new
+      @mongodb = InstallerLogMongo.new
       @jenkins.build_map, @jenkins.bm_sorted_keys, @jenkins.build_user_map = @mongodb.construct_build_map
       @jenkins.construct_jenkins_build_map unless @jenkins.build_map
       always_trace!

@@ -15,7 +15,7 @@ module BushSlicer
   # store the Flexy-install information.  We use this database cache to avoide
   # querying the main jenkins server and also, there's a limitation on how
   # many records are returned with jenkins's query API (100)
-  class JenkinsMongo
+  class InstallerLogMongo
     include Common::Helper
     attr_accessor :client, :collections, :query_results
 
@@ -84,6 +84,6 @@ module BushSlicer
 end
 
 if __FILE__ == $0
-  m = BushSlicer::JenkinsMongo.new
+  m = BushSlicer::InstallerLogMongo.new
   m.get_all_cluster_names
 end

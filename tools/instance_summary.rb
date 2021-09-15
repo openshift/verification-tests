@@ -146,7 +146,7 @@ module BushSlicer
           filtered_list = res_list.map {|r| r[4] if r[0] !='Workloads' }.compact
           users = filtered_list
         end
-        slack_client = BushSlicer::CoreosSlack.new
+        slack_client = BushSlicer::Slack.new
         valid_users, unknown_users = translate_to_slack_users(users: users, slack_client: slack_client)
         tag_users_msg =  valid_users + " please terminate your long-lived clusters if they are no longer in use\n"
         tag_users_msg += "\nThese clusters have no owners association #{unknown_users}\n" if unknown_users.size > 0
