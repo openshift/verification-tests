@@ -3,6 +3,8 @@ Feature: Ansible-service-broker related scenarios
   # @author jiazha@redhat.com
   @admin
   @smoke
+  @gcp-upi
+  @gcp-ipi
   Scenario Outline: Provison mediawiki & DB application
     Given I have a project
     And evaluation of `project.name` is stored in the :org_proj_name clipboard

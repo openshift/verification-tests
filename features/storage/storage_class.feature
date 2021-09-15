@@ -38,6 +38,8 @@ Feature: storageClass related feature
   @admin
   @smoke
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario Outline: storage class provisioner
     Given I have a project
     And admin clones storage class "sc-<%= project.name %>" from ":default" with:

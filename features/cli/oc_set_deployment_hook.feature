@@ -4,6 +4,8 @@ Feature: set deployment-hook/build-hook with CLI
   # @case_id OCP-11805
   @aws-ipi
   @proxy
+  @gcp-upi
+  @gcp-ipi
   Scenario: Set pre/mid/post deployment hooks on deployment config via oc set deployment-hook
     Given I have a project
     When I run the :new_app client command with:
@@ -88,6 +90,8 @@ Feature: set deployment-hook/build-hook with CLI
   # @author dyan@redhat.com
   # @case_id OCP-11298
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: Set invalid pre/mid/post deployment hooks on deployment config via oc set deployment-hook
     Given I have a project
     When I run the :new_app client command with:

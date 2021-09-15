@@ -22,6 +22,8 @@ Feature: Secure Computing Test Scenarios
   @admin
   @destructive
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: Using Secure Computing Profiles with Pod Annotations
     # Create custom machine config that contains the seccomp
     Given I switch to cluster admin pseudo user

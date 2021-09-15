@@ -47,6 +47,8 @@ Feature: basic verification for upgrade testing
   @upgrade-check
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: Upgrade - Make sure multiple resources work well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "node-upgrade" project

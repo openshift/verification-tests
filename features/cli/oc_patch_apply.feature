@@ -4,6 +4,8 @@ Feature: oc patch/apply related scenarios
   # @case_id OCP-10696
   @smoke
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: oc patch can update one or more fields of rescource
     Given I have a project
     And I run the :create_deploymentconfig client command with:

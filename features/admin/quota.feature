@@ -3,6 +3,8 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario Outline: The quota usage should be incremented if meet the following requirement
     Given I have a project
     Given I obtain test data file "quota/myquota.yaml"
@@ -41,6 +43,8 @@ Feature: Quota related scenarios
   # @case_id OCP-12292
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: The quota usage should NOT be incremented if Requests and Limits aren't specified
     Given I have a project
     Given I obtain test data file "quota/myquota.yaml"
@@ -74,6 +78,8 @@ Feature: Quota related scenarios
   # @case_id OCP-12256
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: The quota usage should NOT be incremented if Requests > Limits
     Given I have a project
     Given I obtain test data file "quota/myquota.yaml"
@@ -111,6 +117,8 @@ Feature: Quota related scenarios
   # @case_id OCP-12206
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: The quota usage should NOT be incremented if Requests = Limits but exceeding hard quota
     Given I have a project
     Given I obtain test data file "quota/myquota.yaml"
@@ -201,6 +209,8 @@ Feature: Quota related scenarios
   # @case_id OCP-10801
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: Check BestEffort scope of resourcequota
     Given I have a project
     Given I obtain test data file "quota/quota-besteffort.yaml"
@@ -255,6 +265,8 @@ Feature: Quota related scenarios
   # @case_id OCP-11251
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: Check NotBestEffort scope of resourcequota
     Given I have a project
     Given I obtain test data file "quota/quota-notbesteffort.yaml"
@@ -329,6 +341,8 @@ Feature: Quota related scenarios
   # @case_id OCP-11568
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: Check NotTerminating scope of resourcequota
     Given I have a project
     Given I obtain test data file "quota/quota-notterminating.yaml"
@@ -488,6 +502,8 @@ Feature: Quota related scenarios
   # @case_id OCP-10706
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: Could create quota if existing resources exceed to the hard quota but prevent to create further resources
     Given I have a project
     Given I obtain test data file "quota/quota_template.yaml"
@@ -617,6 +633,8 @@ Feature: Quota related scenarios
   # @bug_id 1333122
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: Quota events for compute resource failures shouldn't be redundant
     Given I have a project
     Given I obtain test data file "templates/ocp10033/quota.yaml"
@@ -690,6 +708,8 @@ Feature: Quota related scenarios
   # @case_id OCP-11927
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: The quota usage should be incremented if Requests = Limits and in the range of hard quota but exceed the real node available resources
     Given I have a project
     Given I obtain test data file "quota/myquota.yaml"
@@ -731,6 +751,8 @@ Feature: Quota related scenarios
   # @case_id OCP-10945
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: The quota usage should be released when pod completed
     Given I have a project
     When I run the :create_quota admin command with:
@@ -769,6 +791,8 @@ Feature: Quota related scenarios
   # @case_id OCP-11983
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: Quota with BestEffort and NotBestEffort scope
     Given I have a project
     When I run the :create_quota admin command with:
@@ -821,6 +845,8 @@ Feature: Quota related scenarios
   # @case_id OCP-12086
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: Quota with Terminating and NotTerminating scope
     Given I have a project
     When I run the :create_quota admin command with:
@@ -882,6 +908,8 @@ Feature: Quota related scenarios
   # @case_id OCP-11348
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: Quota combined scopes
     Given I have a project
     When I run the :create_quota admin command with:
@@ -975,6 +1003,8 @@ Feature: Quota related scenarios
   # @case_id OCP-11636
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: Quota scope conflict BestEffort and NotBestEffort
     Given I have a project
     When I run the :create_quota admin command with:
@@ -989,6 +1019,8 @@ Feature: Quota related scenarios
   # @case_id OCP-11827
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: Quota scope conflict Terminating and NotTerminating
     Given I have a project
     When I run the :create_quota admin command with:
@@ -1003,6 +1035,8 @@ Feature: Quota related scenarios
   # @case_id OCP-11000
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: Negative test for requests.storage of quota
     Given I have a project
     When I run the :create_quota admin command with:
@@ -1048,6 +1082,8 @@ Feature: Quota related scenarios
   # @case_id OCP-10283
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: Annotation selector supports special characters
     Given I have a project
     Given admin ensures "crq-<%= project.name %>" cluster_resource_quota is deleted after scenario
@@ -1077,6 +1113,8 @@ Feature: Quota related scenarios
   # @case_id OCP-11660
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: Quota requests.storage with PVC existing
     Given I have a project
     Given I obtain test data file "storage/nfs/claim-rox.json"
@@ -1128,6 +1166,8 @@ Feature: Quota related scenarios
   # @case_id OCP-11389
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: Prevent creating further PVC if existing PVC exceeds the quota of requests.storage
     Given I have a project
     # Only quota requests.storage < 5Gi
