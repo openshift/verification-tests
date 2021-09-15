@@ -5,6 +5,7 @@ Feature: Machine features testing
   @smoke
   @admin
   @aws-ipi
+  @gcp-ipi
   Scenario: Machines should be linked to nodes
     Given I have an IPI deployment
     Then the machines should be linked to nodes
@@ -31,6 +32,8 @@ Feature: Machine features testing
   @smoke
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: Baremetal clusteroperator should be disabled in any deployment that is not baremetal
     Given evaluation of `cluster_operator('baremetal').condition(type: 'Disabled')` is stored in the :co_disabled clipboard
     Then the expression should be true> cb.co_disabled["status"]=="True"
@@ -40,6 +43,7 @@ Feature: Machine features testing
   @admin
   @destructive
   @aws-ipi
+  @gcp-ipi
   Scenario: Scale up and scale down a machineSet
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -60,6 +64,7 @@ Feature: Machine features testing
   # @author jhou@redhat.com
   @admin
   @aws-ipi
+  @gcp-ipi
   Scenario Outline: Metrics is exposed on https
     Given I switch to cluster admin pseudo user
     And I use the "openshift-monitoring" project
@@ -86,6 +91,7 @@ Feature: Machine features testing
   @admin
   @destructive
   @aws-ipi
+  @gcp-ipi
   Scenario: Machine should have immutable field providerID and nodeRef
     Given I have an IPI deployment
     Given I store the last provisioned machine in the :machine clipboard
@@ -183,6 +189,7 @@ Feature: Machine features testing
   @admin
   @destructive
   @aws-ipi
+  @gcp-ipi
   Scenario Outline: Required configuration should be added to the ProviderSpec to enable spot instances
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user

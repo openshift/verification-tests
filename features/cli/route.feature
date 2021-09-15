@@ -4,6 +4,8 @@ Feature: route related features via cli
   # @case_id OCP-10629
   @aws-ipi
   @proxy
+  @gcp-upi
+  @gcp-ipi
   Scenario: Expose routes from services
     Given I have a project
     When I run the :new_app client command with:
@@ -30,6 +32,8 @@ Feature: route related features via cli
   # @author cryan@redhat.com
   # @case_id OCP-12022
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: Be unable to add an existed alias name for service
     Given I have a project
     Given I obtain test data file "routing/unsecure/route_unsecure.json"

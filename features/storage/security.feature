@@ -118,6 +118,8 @@ Feature: storage security check
   @admin
   @smoke
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: secret volume security check
     Given I have a project
     Given I obtain test data file "storage/secret/secret.yaml"

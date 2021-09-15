@@ -17,6 +17,8 @@ Feature: Routing and DNS related scenarios
   @upgrade-check
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: ensure ingress works well before and after upgrade
     # Check console route after upgraded
     Given I switch to cluster admin pseudo user
@@ -47,6 +49,8 @@ Feature: Routing and DNS related scenarios
   @upgrade-check
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: ensure DNS works well before and after upgrade
     # Check service name can be resolvede
     Given I switch to cluster admin pseudo user
@@ -163,6 +167,8 @@ Feature: Routing and DNS related scenarios
   @upgrade-check
   @users=upuser1,upuser2
   @admin
+  @gcp-upi
+  @gcp-ipi
   Scenario: upgrade with route shards
     # Ensure cluster operator ingress is in normal status after upgrade
     Given I switch to cluster admin pseudo user

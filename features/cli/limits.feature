@@ -5,6 +5,8 @@ Feature: limit range related scenarios:
   @admin
   @inactive
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario Outline: Limit range default request tests
     Given I have a project
     Given I obtain test data file "limits/<path>/limit.yaml"
@@ -30,6 +32,8 @@ Feature: limit range related scenarios:
   # @author azagayno@redhat.com
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario Outline: Limit range invalid values tests
     Given I have a project
     Given I obtain test data file "limits/<path>/limit.yaml"
@@ -54,6 +58,8 @@ Feature: limit range related scenarios:
   # @case_id OCP-12286
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario Outline: Limit range incorrect values
     Given I have a project
     Given I obtain test data file "limits/<path>/limit.yaml"
@@ -74,6 +80,8 @@ Feature: limit range related scenarios:
   # @case_id OCP-12250
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: Limit range does not allow min > defaultRequest
     Given I have a project
     Given I obtain test data file "limits/ocp12250/limit.yaml"
@@ -90,6 +98,8 @@ Feature: limit range related scenarios:
   # @case_id OCP-11918
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: Limit range does not allow defaultRequest > default
     Given I have a project
     Given I obtain test data file "limits/ocp11918/limit.yaml"
@@ -106,6 +116,8 @@ Feature: limit range related scenarios:
   # @case_id OCP-12043
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: Limit range does not allow defaultRequest > max
     Given I have a project
     Given I obtain test data file "limits/ocp12043/limit.yaml"
@@ -122,6 +134,8 @@ Feature: limit range related scenarios:
   # @case_id OCP-12139
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: Limit range does not allow maxLimitRequestRatio > Limit/Request
     Given I have a project
     Given I obtain test data file "limits/ocp12139/limit.yaml"
@@ -147,6 +161,8 @@ Feature: limit range related scenarios:
   # @case_id OCP-12315
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: Limit range with all values set with proper values
     Given I have a project
     Given I obtain test data file "limits/ocp12315/limit.yaml"

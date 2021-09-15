@@ -4,6 +4,8 @@ Feature: configMap
   # @case_id OCP-10805
   @smoke
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: Consume ConfigMap in environment variables
     Given I have a project
     Given I obtain test data file "configmap/configmap.yaml"
@@ -38,6 +40,8 @@ Feature: configMap
   # @case_id OCP-11255
   @smoke
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: Consume ConfigMap via volume plugin
     Given I have a project
     Given I obtain test data file "configmap/configmap.yaml"
@@ -80,6 +84,8 @@ Feature: configMap
   # @author chezhang@redhat.com
   # @case_id OCP-11572
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: Perform CRUD operations against a ConfigMap resource
     Given I have a project
     Given I obtain test data file "configmap/configmap-example.yaml"

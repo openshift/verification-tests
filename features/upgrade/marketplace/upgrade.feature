@@ -31,6 +31,8 @@ Feature: Marketplace related scenarios
   @upgrade-check
   @users=upuser1,upuser2
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: upgrade Marketplace
     # Check Marketplace version after upgraded
     Given the "marketplace" operator version matches the current cluster version

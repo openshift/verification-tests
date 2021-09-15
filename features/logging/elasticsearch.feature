@@ -6,6 +6,8 @@ Feature: Elasticsearch related tests
   @admin
   @destructive
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: Elasticsearch using dynamic volumes
     Given default storageclass is stored in the :default_sc clipboard
     Given I obtain test data file "logging/clusterlogging/clusterlogging-storage-template.yaml"
@@ -68,6 +70,8 @@ Feature: Elasticsearch related tests
   # @case_id OCP-28140
   @admin
   @destructive
+  @gcp-upi
+  @gcp-ipi
   Scenario: Elasticsearch retention policy testing
     Given I switch to the first user
     And I create a project with non-leading digit name

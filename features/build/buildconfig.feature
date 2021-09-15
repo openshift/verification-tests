@@ -91,6 +91,8 @@ Feature: buildconfig.feature
   # @case_id OCP-12057
   @aws-ipi
   @proxy
+  @gcp-upi
+  @gcp-ipi
   Scenario: Using secret to pull a docker image which be used as source input
     Given I have a project
     When I run the :create_secret client command with:

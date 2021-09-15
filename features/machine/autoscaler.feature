@@ -5,6 +5,7 @@ Feature: Cluster Autoscaler Tests
   @admin
   @destructive
   @aws-ipi
+  @gcp-ipi
   Scenario: Cluster should automatically scale up and scale down with clusterautoscaler deployed
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user

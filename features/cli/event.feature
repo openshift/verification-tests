@@ -3,6 +3,8 @@ Feature: Event related scenarios
   # @author chezhang@redhat.com
   # @case_id OCP-10751
   @admin
+  @gcp-upi
+  @gcp-ipi
   Scenario: check event compressed in kube
     Given I have a project
     Given I obtain test data file "quota/quota_template.yaml"

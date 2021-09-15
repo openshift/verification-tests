@@ -5,6 +5,8 @@ Feature: Egress-ingress related networking scenarios
   @admin
   @destructive
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: EgressNetworkPolicy will not take effect after delete it
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -44,6 +46,8 @@ Feature: Egress-ingress related networking scenarios
   # @case_id OCP-13502
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: Apply different egress network policy in different projects
     Given the env is using multitenant or networkpolicy network
     Given I have a project
@@ -108,6 +112,8 @@ Feature: Egress-ingress related networking scenarios
   # @case_id OCP-13507
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: The rules of egress network policy are added in openflow
     Given the env is using multitenant or networkpolicy network
     Given I have a project
@@ -148,6 +154,8 @@ Feature: Egress-ingress related networking scenarios
   # @case_id OCP-13509
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: Egress network policy use dnsname with multiple ipv4 addresses
     Given the env is using multitenant or networkpolicy network
     Given I have a project
@@ -178,6 +186,8 @@ Feature: Egress-ingress related networking scenarios
   # @case_id OCP-15005
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: Service with a DNS name can not by pass Egressnetworkpolicy with that DNS name
     Given the env is using multitenant or networkpolicy network
     Given I have a project
@@ -234,6 +244,8 @@ Feature: Egress-ingress related networking scenarios
   # @case_id OCP-15017
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: Add nodes local IP address to OVS rules for egressnetworkpolicy
     Given the env is using multitenant or networkpolicy network
     Given I have a project
@@ -318,6 +330,8 @@ Feature: Egress-ingress related networking scenarios
   # @case_id OCP-19615
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: Iptables should be updated with correct endpoints when egress DNS policy was used
     Given I have a project
     Given I obtain test data file "networking/list_for_pods.json"
@@ -367,6 +381,8 @@ Feature: Egress-ingress related networking scenarios
   # @case_id OCP-33530
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: [SDN-682] EgressFirewall allows traffic to destination ports
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -402,6 +418,8 @@ Feature: Egress-ingress related networking scenarios
   # @case_id OCP-33531
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario:  [SDN-682] EgressFirewall rules take effect in order
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -422,6 +440,8 @@ Feature: Egress-ingress related networking scenarios
   # @case_id OCP-33539
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario:  [SDN-682] EgressFirewall policy should not take effect for traffic between pods and pods to service
     Given I have a project
     # Create EgressFirewall policy to deny all outbound traffic
@@ -456,6 +476,8 @@ Feature: Egress-ingress related networking scenarios
   # @case_id OCP-33565
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: [SDN-682] EgressFirewall policy take effect for multiple port
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -503,6 +525,8 @@ Feature: Egress-ingress related networking scenarios
   # @case_id OCP-37491
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: [SDN-1181] EgressFirewall allows traffic to destination dnsName
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -530,6 +554,8 @@ Feature: Egress-ingress related networking scenarios
   # @case_id OCP-37495
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: [SDN-1181] EgressFirewall denys traffic to destination dnsName
     Given I have a project
 
@@ -587,6 +613,8 @@ Feature: Egress-ingress related networking scenarios
   # @case_id OCP-41179
   @admin
   @aws-ipi
+  @gcp-upi
+  @gcp-ipi
   Scenario: [bug1947917] Egress Firewall should reliably apply firewall rules
     Given I have a project
     Given I have a pod-for-ping in the project
