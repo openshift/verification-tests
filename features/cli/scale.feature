@@ -5,6 +5,7 @@ Feature: scaling related scenarios
   @proxy
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: Scale replicas via replicationcontrollers and deploymentconfig
     Given I have a project
     And I create a new application with:

@@ -4,6 +4,7 @@ Feature: Egress IP related features
   # @case_id OCP-15465
   @admin
   @aws-ipi
+  @aws-upi
   Scenario: Only cluster admin can add/remove egressIPs on hostsubnet
     Given I select a random node's host
     And evaluation of `node.name` is stored in the :egress_node clipboard
@@ -19,6 +20,7 @@ Feature: Egress IP related features
   # @author bmeng@redhat.com
   # @case_id OCP-15466
   @aws-ipi
+  @aws-upi
   Scenario: Only cluster admin can add/remove egressIPs on netnamespaces
     # Try to add the egress ip to the netnamespace with normal user
     Given I have a project
@@ -88,6 +90,7 @@ Feature: Egress IP related features
   # @case_id OCP-15472
   @admin
   @aws-ipi
+  @aws-upi
   Scenario: The egressIPs will be added to the node's primary NIC when it gets set on hostsubnet and will be removed after gets unset
     # add the egress ip to the hostsubnet
     Given  the valid egress IP is added to the node

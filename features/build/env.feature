@@ -5,6 +5,7 @@ Feature: env.feature
   @proxy
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: Can set env vars on buildconfig with new-app --env and --env-file
     Given I have a project
     When I run the :new_app client command with:
@@ -76,6 +77,7 @@ Feature: env.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: Can set env vars on buildconfig with new-app --env and --env-file test
     Given I have a project
     When I run the :new_app client command with:

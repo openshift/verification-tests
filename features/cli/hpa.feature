@@ -5,6 +5,7 @@ Feature: hpa scale
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: HPA shouldn't scale up target if the replicas of dc is 0
     Given I have a project
     Given I obtain test data file "hpa/dc-hello-openshift.yaml"
@@ -44,6 +45,7 @@ Feature: hpa scale
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: HPA shouldn't scale up target if the replicas of rc is 0
     Given I have a project
     Given I obtain test data file "hpa/rc-hello-openshift.yaml"
@@ -82,6 +84,7 @@ Feature: hpa scale
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: Creates autoscaler for replication controller by oc autoscale
     Given I have a project
     Given I obtain test data file "hpa/rc-hello-openshift.yaml"

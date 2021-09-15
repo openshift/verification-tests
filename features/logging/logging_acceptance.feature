@@ -8,6 +8,7 @@ Feature: Logging smoke test case
   @prow_unstable
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: One logging acceptance case for all cluster
     # Deploy cluster-logging operator via web console
     Given logging service is removed successfully
