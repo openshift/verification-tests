@@ -31,9 +31,10 @@ Feature: Machine-api components upgrade tests
     Then the expression should be true> cb.co_progressing["status"]=="False"
 
   Examples:
-    | cluster_operator     |
-    | "machine-api"        | # @case_id OCP-22712
-    | "cluster-autoscaler" | # @case_id OCP-27664
+    | cluster_operator           |
+    | "machine-api"              | # @case_id OCP-22712
+    | "cluster-autoscaler"       | # @case_id OCP-27664
+    | "cloud-controller-manager" | # @case_id OCP-43331
 
 
   @upgrade-prepare
