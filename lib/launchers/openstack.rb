@@ -955,8 +955,8 @@ module BushSlicer
           begin
             inst_details = get_instance_detail(i['id'])
             running_inst[inst_details.dig('server', 'name')] = inst_details['server'] if inst_details.dig('server','status') == "ACTIVE"
-          rescue
-            next
+          rescue => e
+            logger.warn  exception_to_string(e)
           end
         end
       end

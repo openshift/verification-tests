@@ -11,6 +11,10 @@ require 'common'
 Mongo::Logger.logger.level = Logger::WARN
 
 module BushSlicer
+  # this class is used to query the cached_jenkins database which is used to
+  # store the Flexy-install information.  We use this database cache to avoide
+  # querying the main jenkins server and also, there's a limitation on how
+  # many records are returned with jenkins's query API (100)
   class JenkinsMongo
     include Common::Helper
     attr_accessor :client, :collections, :query_results

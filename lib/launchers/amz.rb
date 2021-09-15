@@ -97,11 +97,6 @@ module BushSlicer
       current_user.arn
     end
 
-    def iam_client
-      self.arn
-      @client_iam
-    end
-
     # @param ecoded_message [String]
     # @return [String] in JSON format
     def decode_authorization_message(encoded_message)
@@ -582,8 +577,8 @@ module BushSlicer
     def instance_name(instance)
       begin
         instance.tags.select { |i| i['value'] if i['key'] == "Name" }.first['value']
-      rescue
-        print "******\n"
+      rescue => e
+        logger.warn  exception_to_string(e)
       end
     end
     # @return group of instances that belong to the same `owned`
