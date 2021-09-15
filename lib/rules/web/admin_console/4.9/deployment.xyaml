@@ -152,11 +152,11 @@ select_replica_count_and_selector:
 check_workloads_metrics:
   action: click_metrics_tab
   elements:
-  - selector:
+  - selector: &memory_usage_chart
       xpath: //h2[contains(@class, "co-dashboard-card__title") and contains(text(), "Memory usage")]
-  - selector:
+  - selector: &cpu_usage_chart
       xpath: //h2[contains(@class, "co-dashboard-card__title") and contains(text(), "CPU usage")]
-  - selector:
+  - selector: &filessystem_chart
       xpath: //h2[contains(@class, "co-dashboard-card__title") and contains(text(), "Filesystem")]
   - selector:
       xpath: //h2[contains(@class, "co-dashboard-card__title") and contains(text(), "Network in")]
@@ -166,9 +166,9 @@ check_build_metrics:
   action: click_metrics_tab
   elements:
   - selector:
-      xpath: //h2[contains(@class, "co-dashboard-card__title") and contains(text(), "Memory usage")]
+      <<: *memory_usage_chart
   - selector:
-      xpath: //h2[contains(@class, "co-dashboard-card__title") and contains(text(), "CPU usage")]
+      <<: *cpu_usage_chart
   - selector:
-      xpath: //h2[contains(@class, "co-dashboard-card__title") and contains(text(), "Filesystem")]
+      <<: *filessystem_chart
 
