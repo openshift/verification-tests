@@ -23,7 +23,16 @@ goto_monitoring:
   params:
     menu_text: Observe
   action: click_primary_menu_developer_mode
-click_projects_dropdown_developer_mode:
+click_projects_dropdown_developer_mode_admin:
+  element:
+    selector:
+      xpath: (//div[@class='co-namespace-bar']//button)[1]
+    op: click
+  element:
+    selector:
+      xpath: //span[contains(@class,'pf-c-switch__toggle')]
+    op: click
+click_projects_dropdown_developer_mode_user:
   element:
     selector:
       xpath: (//div[@class='co-namespace-bar']//button)[1]
@@ -31,17 +40,23 @@ click_projects_dropdown_developer_mode:
 input_select_project_developer_mode:
   element:
     selector:
-      xpath: //div[@class='co-namespace-selector']//input[@placeholder='Select Project...']
+      xpath: //div[@class='co-namespace-dropdown']//input[@placeholder='Select project...']
     op: send_keys <project_name>
     type: input
 click_project_link_developer_mode:
   element:
     selector:
-      xpath: //a[text()='<project_name>']
+      xpath: //span[text()='<project_name>']
     timeout: 20
     op: click
-choose_project_developer_mode:
-  action: click_projects_dropdown_developer_mode
+# used for admin
+choose_project_developer_mode_admin:
+  action: click_projects_dropdown_developer_mode_admin
+  action: input_select_project_developer_mode
+  action: click_project_link_developer_mode
+# used for common user
+choose_project_developer_mode_user:
+  action: click_projects_dropdown_developer_mode_user
   action: input_select_project_developer_mode
   action: click_project_link_developer_mode
 check_tech_preview_badge: {}
