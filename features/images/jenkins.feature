@@ -17,7 +17,7 @@ Feature: jenkins.feature
       |  id | -u |
     Then the step should succeed
     #Check that the user is not root, or 0 id
-    Then the expression should be true> Integer(@result[:response]) > 0
+    Then the expression should be true> Integer(@result[:stdout]) > 0
     Given I have a jenkins browser
     And I log in to jenkins
     When I perform the :jenkins_trigger_sample_openshift_build web action with:
