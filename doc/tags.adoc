@@ -1,0 +1,50 @@
+= Understanding The Tags
+
+We use tags to catetorize different types of test scenarios. With a combination of tags, we are able to execute on a specific ci profile.
+
+== List of Tags
+
+[cols=2]
+|===
+|Tag Name
+|Usage Scenario
+
+|`@admin`
+|Test scenarios that perform operations requiring the `cluster-admin` priviledge
+
+|`@destructive`
+|Test scenarios that perform operations which would result in failures of other parallel tests or create an outage/downtime to the cluster. Scenarios including: node draining, node restart, scaling down, etc.
+
+|`@inactive`
+|Inactive test scenario that is either outdated or no longer applicable. Skip tests with an `@inactive` tag
+
+|`@flaky`
+|Unreliable test that keeps failing and is recognized as test automation bug. Skip tests with a `@flaky` tag
+
+|`@prow_unstable`
+|Unstable test in Prow but can still run in QECI thus not having a `@flaky` tag. Skip tests with a `@prow_unstable` tag in Prow
+
+|`@disconnected`
+|Test that must run on a diconnected cluster
+
+|`@proxy`
+|Test that must run under a cluster/proxy configuration
+
+|`@serial`
+|Test that can not run in parallel, scenarios including: console test, `oc debug node`, etc
+
+|`@aws-ipi`
+|Test scenarios for aws ipi
+
+|===
+
+== Running Tests With Tags
+
+Use `cucumber --tags "@foo"` to execute all test scenarios with tag `@foo`
+
+Use `cucumber --tags "not @foo"` to execute all test scenarios without tag `@foo`
+
+Use `cucumber --tags "@foo and @bar"` to execute all test scenarios with both tag `@foo` and `@bar`
+
+Use `cucumber --tags "@foo and not @bar"` to execute all test scenarios with tag `@foo` and without tag `@bar`
+
