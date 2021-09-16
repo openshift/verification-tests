@@ -2,6 +2,7 @@ Feature: oc_set_probe.feature
 
   # @author dyan@redhat.com
   # @case_id OCP-9870
+  @inactive
   @gcp-upi
   @gcp-ipi
   Scenario: Set a probe to open a TCP socket
@@ -61,6 +62,7 @@ Feature: oc_set_probe.feature
 
   # @author dyan@redhat.com
   # @case_id OCP-9871
+  @inactive
   @gcp-upi
   @gcp-ipi
   Scenario: Set a probe over HTTPS/HTTP
@@ -108,6 +110,7 @@ Feature: oc_set_probe.feature
 
   # @author dyan@redhat.com
   # @case_id OCP-9872
+  @inactive
   @gcp-upi
   @gcp-ipi
   Scenario: Set an exec action probe
