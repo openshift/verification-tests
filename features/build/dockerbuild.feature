@@ -154,7 +154,7 @@ Feature: dockerbuild.feature
       | from_literal | password=redhat    |
     Then the step should succeed
     When I run the :new_build client command with:
-      | D | FROM quay.io/openshifttest/centos:7\nRUN yum install -y httpd\nRUN ls -l /var/run/secret/sourcesecret |
+      | D | FROM quay.io/openshifttest/centos:7\nRUN ls -l /var/run/secret/sourcesecret |
     Then the step should succeed
     Then the "centos" image stream was created
     And the "centos-1" build was created
