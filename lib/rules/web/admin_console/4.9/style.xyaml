@@ -150,47 +150,48 @@ filter_label_and_check_style:
         xpath: //button[contains(@class, 'co-suggestion-line') and //span[contains(text(),'<suggestion_text>')]]
       op: click
   action: check_filtered_item_style
-choose_console_language:
-  elements:
-  - selector: &username_button
-      xpath: //span[@data-test='username']/ancestor::button[contains(@class,'app-launcher__toggle')]
-    op: click
-  - selector: &language_setting_button
-      xpath: //button[@data-test='language']
-    op: click
-  - selector:
-      id: language_dropdown
-    type: button
-    op: click
-  - selector:
-      xpath: //button[@id='<lng_button_id>']
-    op: click
 check_default_language:
   elements:
   - selector:
-      <<: *username_button
+      xpath: //span[@data-test='username']/ancestor::button[contains(@class,'app-launcher__toggle')]
     op: click
   - selector:
-      <<: *language_setting_button
+      xpath: //a[contains(., 'User Preferences')]
     op: click
   - selector:
-      xpath: //span[contains(@class,'pf-c-dropdown__toggle-text') and contains(text(),'English')]
-  action: click_cancel_in_modal
+      xpath: //a[@data-test='tab language']
+    op: click
+  - selector:
+      xpath: //button[@id='console.preferredLanguage' and @disabled]
+  action: uncheck_use_default_language
+uncheck_use_default_language:
+  elements:
+  - selector:
+      xpath: //input[@id='default-language-checkbox' and @type='checkbox']
+    op: click
+  - selector:
+      xpath: //button[@id='console.preferredLanguage']
+choose_console_language:
+  elements:
+  - selector:
+      id: console.preferredLanguage
+    type: button
+    op: click
+  - selector:
+      xpath: //button[contains(., '<lng_button>')]
+    op: click
 switch_language_to_chinese:
   params:
-    lng_button_id: zh-link
+    lng_button: 中文
   action: choose_console_language
-  action: submit_changes
 switch_language_to_japanese:
   params:
-    lng_button_id: ja-link
+    lng_button: 日本語
   action: choose_console_language
-  action: submit_changes
 switch_language_to_korean:
   params:
-    lng_button_id: ko-link
+    lng_button: 한국어
   action: choose_console_language
-  action: submit_changes
 check_pages_in_chinese:
   elements:
   - selector:
@@ -200,7 +201,7 @@ check_pages_in_chinese:
   - selector:
       xpath: //button[contains(@class,'pf-c-nav__link') and contains(.,'存储')]
   scripts:
-  - command: return localStorage['bridge/language'] == 'zh'
+  - command: return localStorage['bridge/last-language'] == 'zh'
     expect_result: true
 check_pages_in_japanese:
   elements:
@@ -211,7 +212,7 @@ check_pages_in_japanese:
   - selector:
       xpath: //button[contains(@class,'pf-c-nav__link') and contains(.,'ストレージ')]
   scripts:
-  - command: return localStorage['bridge/language'] == 'ja'
+  - command: return localStorage['bridge/last-language'] == 'ja'
     expect_result: true
 check_pages_in_korean:
   elements:
@@ -222,5 +223,5 @@ check_pages_in_korean:
   - selector:
       xpath: //button[contains(@class,'pf-c-nav__link') and contains(.,'스토리지')]
   scripts:
-  - command: return localStorage['bridge/language'] == 'ko'
+  - command: return localStorage['bridge/last-language'] == 'ko'
     expect_result: true
