@@ -14,6 +14,24 @@ click_create_operand_button:
     selector:
       xpath: //button[contains(.,'Create') and contains(.,'<operand_kind>') and not(disabled)]
     op: click
+create_cr_etcdcluster:
+  params:
+    api: etcd Cluster
+  action: create_custom_resource
+  action: switch_to_yaml_view
+  action: click_create_button
+create_cr_topic:
+  params:
+    api: Topic
+  action: create_custom_resource
+  action: switch_to_yaml_view
+  action: click_create_button
+create_cr_infinispancluster:
+  params:
+    api: Infinispan Cluster
+  action: create_custom_resource
+  action: switch_to_yaml_view
+  action: click_create_button 
 create_operand:
   params:
     tab_name: <operand_kind>
@@ -493,10 +511,11 @@ open_edit_form_view: {}
 switch_to_yaml_view:
   params:
     radio_text: yaml
-    content: Create by manually entering YAML or JSON definitions
   action: click_radio_input
-  action: check_page_contains
   action: wait_box_loaded
+  element:
+    selector:
+      xpath: //div[contains(@class,'monaco-editor')]
 select_installed_namespace:
   action: click_project_list_dropdown
   action: choose_project_from_dropdown_list
