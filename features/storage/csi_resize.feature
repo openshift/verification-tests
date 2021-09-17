@@ -75,3 +75,86 @@ Feature: CSI Resizing related feature
     Examples:
       | sc_name |
       | gp2-csi | # @case_id OCP-25809
+
+  # @author ropatil@redhat.com
+  @admin
+  Scenario Outline: [CSI Resize] offline volume expansion from 1Gi to 2Gi
+    Given the master version >= "4.8"
+    Given I have a project
+ 
+    # Create pvc with csi storage class 
+    Given I obtain test data file "storage/misc/pvc.json"
+    When I create a dynamic pvc from "pvc.json" replacing paths:
+      | ["metadata"]["name"]                         | mypvc         |
+      | ["spec"]["storageClassName"]                 | <sc_name>     |
+      | ["spec"]["accessModes"][0]                   | ReadWriteOnce |
+      | ["spec"]["resources"]["requests"]["storage"] | 1Gi           |
+    Then the step should succeed    
+  
+    # Create deployment with pvc and check for pvc bound status
+    Given I obtain test data file "storage/misc/deployment.yaml"
+    When I run oc create over "deployment.yaml" replacing paths:
+      | ["metadata"]["name"]                                                             | mydep        |
+      | ["spec"]["template"]["metadata"]["labels"]["action"]                             | storage      |
+      | ["spec"]["template"]["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc        |
+      | ["spec"]["template"]["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt/storage |
+    Then the step should succeed
+    And a pod becomes ready with labels:
+      | action=storage |
+    And the "mypvc" PVC becomes :bound
+
+    # Apply the patch command to resize the pvc storage size 
+    When I run the :patch client command with:
+      | resource      | pvc                                                   |
+      | resource_name | mypvc                                                 |
+      | p             | {"spec":{"resources":{"requests":{"storage":"2Gi"}}}} |
+    Then the step should succeed
+    And the output should match:   
+      | persistentvolumeclaim/mypvc patched |
+    
+    # Scale the deployment and wait till it gets disappeared
+    When I run the :scale admin command with:
+      | resource | deployment          |
+      | name     | mydep               |
+      | replicas | 0                   |
+      | n        | <%= project.name %> |
+    Then the step should succeed
+    And I wait for the resource "pod" named "<%= pod.name %>" to disappear   
+
+    # Run mount on node for syncup
+    And I wait up to 60 seconds for the steps to pass:
+    """
+    Given I use the "<%= pod.node_name %>" node
+    When I run commands on the host:
+      | mount |
+    Then the output should not contain:
+      | <%= pvc.volume_name %> |
+    """
+
+     # Scale the deployment and check for ready status
+     When I run the :scale client command with:
+      | resource | deployment          |
+      | name     | mydep               |
+      | replicas | 1                   |
+      | n        | <%= project.name %> |
+    Then the step should succeed
+    And a pod becomes ready with labels:
+      | action=storage |
+
+    # Check the pv,pvc capacity size 
+    And I wait up to 800 seconds for the steps to pass:
+    """
+    Given the expression should be true> pv(pvc("mypvc").volume_name).capacity_raw(cached: false) == "2Gi"
+    And the expression should be true> pvc.capacity(cached: false) == "2Gi"
+    """
+
+    # Write data completely of available size
+    When I execute on the pod:
+      | /bin/dd | if=/dev/zero | of=/mnt/storage/1 | bs=1M | count=1500 |
+    Then the step should succeed
+    And the output should not contain:
+      | No space left on device |
+
+    Examples:
+      | sc_name     | 
+      | managed-csi | # @case_id OCP-41452 
