@@ -13,6 +13,7 @@ Feature: kata related features
   @destructive
   @gcp-upi
   @gcp-ipi
+  @4.9
   Scenario: test delete kata installation
     Given I remove kata operator from the namespace
 
@@ -30,6 +31,7 @@ Feature: kata related features
   @destructive
   @gcp-upi
   @gcp-ipi
+  @4.9
   Scenario: Operator can be installed through web console
     Given the kata-operator is installed using OLM GUI
 

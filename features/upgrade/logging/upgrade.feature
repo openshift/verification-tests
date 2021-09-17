@@ -42,6 +42,7 @@ Feature: Logging upgrading related features
   @admin
   @upgrade-check
   @users=upuser1,upuser2
+  @4.9
   Scenario: Cluster logging checking during cluster upgrade
     Given I switch to the first user
     And I create a project with non-leading digit name

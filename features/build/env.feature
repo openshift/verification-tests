@@ -76,6 +76,7 @@ Feature: env.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
   Scenario: Can set env vars on buildconfig with new-app --env and --env-file test
     Given I have a project
     When I run the :new_app client command with:

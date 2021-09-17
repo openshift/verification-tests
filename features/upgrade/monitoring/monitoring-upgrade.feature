@@ -17,6 +17,7 @@ Feature: cluster monitoring related upgrade check
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
   Scenario: upgrade cluster monitoring along with OCP
     Given I switch to cluster admin pseudo user
     And I use the "openshift-monitoring" project

@@ -196,6 +196,7 @@ Feature: collector related tests
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
   Scenario: All nodes logs are collected
     Given the master version >= "4.5"
     Given evaluation of `cluster_logging('instance').collection_type` is stored in the :collection_type clipboard
