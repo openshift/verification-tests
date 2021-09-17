@@ -184,3 +184,14 @@ click_refresh_button_in_kibana:
     selector:
       xpath: //span[contains(@class, "euiButton__text euiSuperUpdateButton__text") and contains(., "Refresh")]
     op: click
+
+click_visuallize_button_in_discover_page:
+  elements:
+  - selector:
+      xpath: //field-name[@title="<field_name>"]
+    op: click
+  - selector:
+      xpath: //span[contains(@i18n-default-message, "Visualize") and contains(., "Visualize")]
+    timeout: 30
+    op: click
+
