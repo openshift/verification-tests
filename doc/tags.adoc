@@ -21,8 +21,8 @@ We use tags to catetorize different types of test scenarios. With a combination 
 |`@flaky`
 |Unreliable test that keeps failing and is recognized as test automation bug. Skip tests with a `@flaky` tag
 
-|`@prow_unstable`
-|Unstable test in Prow but can still run in QECI thus not having a `@flaky` tag. Skip tests with a `@prow_unstable` tag in Prow
+|`@console`
+|Tests that launches a browser and uses Selenium to complete certain tasks. Skip tests with a `@console` tag in Prow because the webdriver does not work reliably inside containers.
 
 |`@disconnected`
 |Test that must run on a diconnected cluster
