@@ -5,7 +5,7 @@ Feature: Logging smoke test case
   @admin
   @aws-ipi
   @serial
-  @prow_unstable
+  @console
   @gcp-upi
   @gcp-ipi
   @4.9

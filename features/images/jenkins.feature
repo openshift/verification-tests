@@ -77,6 +77,7 @@ Feature: jenkins.feature
       | 2   | # @case_id OCP-11369
 
   # @author xiuwang@redhat.com
+  @console
   @aws-ipi
   @gcp-upi
   @gcp-ipi
@@ -227,6 +228,7 @@ Feature: jenkins.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-13259
+  @console
   @aws-ipi
   @gcp-upi
   @gcp-ipi
@@ -301,6 +303,7 @@ Feature: jenkins.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-15384
+  @console
   @aws-ipi
   @gcp-upi
   @gcp-ipi
