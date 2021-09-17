@@ -174,7 +174,8 @@ module BushSlicer
     end
 
     def running? (inst_view)
-      inst_view.statuses[1].code == 'PowerState/running'
+      # I've seen inst_view.statuses[1] is Nil
+      inst_view.statuses[1]&.code == 'PowerState/running'
     end
 
     def get_running_instances
