@@ -29,6 +29,7 @@ Feature: service upgrade scenarios
   # @case_id OCP-44259
   @admin
   @upgrade-check
+  @4.9
   Scenario: Check the idle service works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "idle-upgrade" project
@@ -87,6 +88,7 @@ Feature: service upgrade scenarios
   # @case_id OCP-44302
   @admin
   @upgrade-check
+  @4.9
   Scenario: Check the nodeport service works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "nodeport-upgrade" project

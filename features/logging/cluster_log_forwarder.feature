@@ -513,6 +513,7 @@ Feature: cluster log forwarder features
   # @case_id OCP-39786
   @admin
   @destructive
+  @4.9
   Scenario: Send logs to both external fluentd and internalES
     #Creating secure fluentd receiver
     Given I switch to cluster admin pseudo user

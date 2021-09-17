@@ -41,6 +41,7 @@ Feature: Egress compoment upgrade testing
   # @case_id OCP-44315
   @admin
   @upgrade-check
+  @4.9
   Scenario: Check egressfirewall is functional post upgrade
     Given I switch to cluster admin pseudo user
     And I use the "egressfw-upgrade1" project
@@ -106,6 +107,7 @@ Feature: Egress compoment upgrade testing
   # @case_id OCP-44316
   @admin
   @upgrade-check
+  @4.9
   Scenario: Check ovn egressip is functional post upgrade
     Given I save ipecho url to the clipboard
     Given I switch to cluster admin pseudo user

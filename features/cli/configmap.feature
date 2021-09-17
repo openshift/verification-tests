@@ -6,6 +6,7 @@ Feature: configMap
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
   Scenario: Consume ConfigMap in environment variables
     Given I have a project
     Given I obtain test data file "configmap/configmap.yaml"
@@ -42,6 +43,7 @@ Feature: configMap
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
   Scenario: Consume ConfigMap via volume plugin
     Given I have a project
     Given I obtain test data file "configmap/configmap.yaml"
@@ -86,6 +88,7 @@ Feature: configMap
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
   Scenario: Perform CRUD operations against a ConfigMap resource
     Given I have a project
     Given I obtain test data file "configmap/configmap-example.yaml"

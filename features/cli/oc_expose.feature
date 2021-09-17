@@ -5,6 +5,7 @@ Feature: oc_expose.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
   Scenario: Access app througth secure service and regenerate service serving certs if it about to expire
     Given the master version >= "3.3"
     Given I have a project

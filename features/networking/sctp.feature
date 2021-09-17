@@ -4,6 +4,7 @@ Feature: SCTP related scenarios
   # @case_id OCP-28757
   @admin
   @destructive
+  @4.9
   Scenario: Establish pod to pod SCTP connections
     Given I store the ready and schedulable workers in the :workers clipboard
     And I install machineconfigs load-sctp-module
@@ -52,6 +53,7 @@ Feature: SCTP related scenarios
   # @case_id OCP-28758
   @admin
   @destructive
+  @4.9
   Scenario: Expose SCTP ClusterIP Services
     Given I store the ready and schedulable workers in the :workers clipboard
     And I install machineconfigs load-sctp-module
@@ -106,6 +108,7 @@ Feature: SCTP related scenarios
   # @case_id OCP-28759
   @admin
   @destructive
+  @4.9
   Scenario: Expose SCTP NodePort Services
     Given I store the ready and schedulable workers in the :workers clipboard
     And the Internal IP of node "<%= cb.workers[1].name %>" is stored in the :worker1_ip clipboard
@@ -162,6 +165,7 @@ Feature: SCTP related scenarios
   # @case_id OCP-29645
   @admin
   @destructive
+  @4.9
   Scenario: Networkpolicy allow SCTP Client
     Given I store the ready and schedulable workers in the :workers clipboard
     And I install machineconfigs load-sctp-module

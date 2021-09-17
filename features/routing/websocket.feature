@@ -5,6 +5,7 @@ Feature: Testing websocket features
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
   Scenario: haproxy router support websocket via unsecure route
     Given I have a project
     Given I obtain test data file "routing/websocket/pod.json"
