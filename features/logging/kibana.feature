@@ -81,8 +81,7 @@ Feature: Kibana related features
     Given I switch to the first user
     When I login to kibana logging web console
     Then the step should succeed
-    When I perform the :create_index_pattern_in_kibana web action with:
-      | index_pattern_name | "*app" |
+    Given I have index pattern "*app"
     Then the step should succeed
     Given I wait up to 300 seconds for the steps to pass:
     """
@@ -137,11 +136,10 @@ Feature: Kibana related features
     And I wait for the project "<%= cb.proj.name %>" logs to appear in the ES pod
     When I login to kibana logging web console
     Then the step should succeed
-    When I perform the :create_index_pattern_in_kibana web action with:
-      | index_pattern_name | "*app" |
+    Given I have index pattern "*app"
     Then the step should succeed
-    When I perform the :create_index_pattern_in_kibana web action with:
-      | index_pattern_name | "*infra" |
+    Given I have index pattern "*infra"
+    Then the step should succeed
     Then the step should succeed
     Given I wait up to 180 seconds for the steps to pass:
     """

@@ -1056,3 +1056,139 @@ Given /^external elasticsearch server is deployed with:$/ do | table |
     | pod_label       | #{pod_label}     |
   })
 end
+
+Given /^I have(?: "(\w+)")? log pod in project #{QUOTED}$/ do | log_type, project_name |
+    file_dir = "#{BushSlicer::HOME}/testdata/logging/loggen"
+    deploy_pod = true
+    log_type ||= "any"
+
+    template_file = "#{file_dir}/container_json_log_template.json"
+    if log_type == "unicode" || log_type == "flat"
+      template_file = "#{file_dir}/container_json_unicode_log_template.json"
+    end
+
+    unless project(project_name).exists?
+      step %Q/I run the :new_project client command with:/,table(%{
+        | project_name | #{project_name} |
+      })
+      raise "Error creating namespace" unless @result[:success]
+    end
+
+    step %Q/I use the "#{project_name}" project/
+
+    if log_type == "any"
+      pods = project.pods(by:user)
+      pods.each do | current_pod |
+        cache_pods(current_pod)
+        @result = user.cli_exec(:logs, {resource_name: "#{current_pod.name}", n: "#{project_name}", since: "15s"})
+        if @result[:success]
+           deploy_pod = false
+        end
+      end
+    end
+
+    if deploy_pod
+      step %Q/I run the :delete client command with:/, table(%{
+        | object_type | configmap |
+        | object_name_or_id | logtest-config |
+      })
+      step %Q/I run the :delete client command with:/, table(%{
+        | object_type | ReplicationController |
+        | object_name_or_id | centos-logtest |
+      })
+      step %Q/I run the :new_app client command with:/,table(%{
+        | file | #{template_file} |
+      })
+    end
+end
+
+Given /^I have index pattern #{QUOTED}$/ do | pattern_name |
+    step %Q/I perform the :kibana_index_pattern_exist web action with:/,table(%{
+      | index_pattern_name | #{pattern_name} |
+    })
+    unless @result[:success]
+      step %Q/I run the :go_to_kibana_management_page web action/
+      step %Q/I perform the :create_index_pattern_in_kibana web action with:/, table(%{
+        | index_pattern_name | "#{pattern_name}" |
+       })
+       raise "Failed to create index pattern #{pattern_name}" unless @result[:success]
+    end
+end
+
+Given /^cluster-admin create the #{QUOTED} pattern for the #{WORD} user$/ do | pattern_name, who |
+    user(word_to_num(who))
+    user_name=user.name
+    user_token=user.cached_tokens.first
+    step %Q/I switch to cluster admin pseudo user/
+    step %Q/I use the "openshift-logging" project/
+    
+    rest_cmd="curl -s --connect-timeout 10  -XPOST \"http://localhost:5601/api/saved_objects/index-pattern/#{pattern_name}\" -H \"kbn-xsrf: true\" -H \"x-forwarded-user: #{user_name}\" -H \"securitytenant: __user__\" -H \"Authorization: Bearer #{user_token}\" -H \"Content-Type: application/json\" -d \'{\"attributes\": {\"title\": \"#{pattern_name}\", \"timeFieldName\": \"@timestamp\"}}\'"
+
+    step %Q/a pod becomes ready with labels:/, table(%{
+      | component= kibana|
+    })
+    @result = pod.exec("bash", "-c", rest_cmd, as: admin, container: 'kibana')
+    raise "Failed to create index pattern via rest api" unless @result[:success]
+end
+
+Given /^I can display the#{OPT_QUOTED} pod logs of the#{OPT_QUOTED} project under the#{OPT_QUOTED} pattern in kibana$/ do | pod_name, project_name, pattern_name |
+    # I switch to cluster admin pseudo user
+    pod_name ||= "*"
+    project_name ||= "*"
+    pattern_name ||= "app"
+    #lucene_query_string = "kubernetes.namespace_name: #{project_name} and kubernetes.pod_name: #{pod_name} and @timestamp:[now-15m TO now]"
+    lucene_query_string = "kubernetes.namespace_name: #{project_name} and kubernetes.pod_name: #{pod_name}"
+    step %Q/I perform the :select_index_pattern_in_kibana web action with:/,table(%{
+      | index_pattern_name | #{pattern_name} |
+    })
+    raise("Can not select to pattern #{ pattern_name}!") unless @result[:success]
+
+    step %Q/I perform the :search_doc_in_kibana web action with:/,table(%{
+      | search_string | #{lucene_query_string} |
+    })
+    raise("Can not refresh the search #{lucene_query_string}!") unless @result[:success]
+
+    retries = 3
+    succeed=false
+    while retries > 0
+      retries -= 1
+      step %Q/I run the :check_log_count web action/
+      if @result[:success]
+        succeed=true
+        break
+      else
+        log("Can not find documents using clause #{lucene_query_string} under pattern  #{ pattern_name}! retry.....")
+      end
+    end
+    raise("Can not find documents using clause #{lucene_query_string} under pattern  #{ pattern_name}! after 3 retry,  abort") unless succeed
+end
+
+Given /^I have clusterlogging with(?: (\d+))? persistent storage ES$/ do |es_num|
+    # I switch to cluster admin pseudo user
+    ensure_admin_tagged
+    es_num ||= 3
+    redundancy_policy="SingleRedundancy"
+    deploy_cluster_logging=true
+
+    if project('openshift-logging').exists?
+        step %Q/I use the "openshift-logging" project/
+        if cluster_logging('instance').exists? && cluster_logging('instance').logstore_storage.has_key?("storageClassName")
+            deploy_cluster_logging=false
+        end
+    end
+
+    if deploy_cluster_logging
+      if(es_num==1)
+        redundancy_policy="ZeroRedundancy"
+      end 
+      step %Q/default storageclass is stored in the :default_sc clipboard/
+      step %Q|I obtain test data file "logging/clusterlogging/clusterlogging-storage-template.yaml"|
+      step %Q/I create clusterlogging instance with:/, table(%{
+        | crd_yaml          | clusterlogging-storage-template.yaml |
+        | storage_class     | <%= cb.default_sc.name %>            |
+        | storage_size      | 20Gi                                 |
+        | es_node_count     | #{ es_num }                          |
+        | redundancy_policy | #{ redundancy_policy }               |
+      })
+    end
+end
