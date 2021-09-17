@@ -59,18 +59,18 @@ Feature: Testing haproxy rate limit related features
 
     Given I switch to cluster admin pseudo user
     And I use the router project
-    And I wait up to 30 seconds for the steps to pass:
+    And I wait up to 60 seconds for the steps to pass:
     """
     When I execute on the "<%=cb.router_pod %>" pod:
-      | bash | -lc | grep -w "<%= cb.proj_name %>:unsecure-route" haproxy.config -A15 \| grep <%=cb.pod_ip %> |
+      | bash | -lc | grep -w "<%= cb.proj_name %>:unsecure-route" haproxy.config -A20 \| grep <%=cb.pod_ip %> |
     Then the output should contain:
       | maxconn 1 |
     When I execute on the "<%=cb.router_pod %>" pod:
-      | bash | -lc | grep -w "<%= cb.proj_name %>:secured-edge-route" haproxy.config -A15 \| grep <%=cb.pod_ip %> |
+      | bash | -lc | grep -w "<%= cb.proj_name %>:secured-edge-route" haproxy.config -A20 \| grep <%=cb.pod_ip %> |
     Then the output should contain:
       | maxconn 2 |
     When I execute on the "<%=cb.router_pod %>" pod:
-      | bash | -lc | grep -w  "<%= cb.proj_name %>:route-reencrypt" haproxy.config -A15 \| grep <%=cb.pod_ip %> |
+      | bash | -lc | grep -w  "<%= cb.proj_name %>:route-reencrypt" haproxy.config -A20 \| grep <%=cb.pod_ip %> |
     Then the output should contain:
       | maxconn 3 |
     """
