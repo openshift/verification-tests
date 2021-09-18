@@ -1,13 +1,19 @@
 ---
-kind: Pod
+kind: ReplicationController
 apiVersion: v1
 metadata:
   name: hello-pod
   labels:
     name: hello-pod
 spec:
-  containers:
-  - name: hello-pod
-    image: quay.io/openshifttest/hello-sdn@sha256:d5785550cf77b7932b090fcd1a2625472912fb3189d5973f177a5a2c347a1f95
-    ports:
-    - containerPort: 8081
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: hello-pod
+    spec:
+      containers:
+      - name: hello-pod
+        image: quay.io/openshifttest/hello-sdn@sha256:d5785550cf77b7932b090fcd1a2625472912fb3189d5973f177a5a2c347a1f95
+        ports:
+        - containerPort: 8081
