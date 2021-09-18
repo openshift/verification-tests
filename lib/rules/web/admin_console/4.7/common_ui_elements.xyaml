@@ -119,6 +119,10 @@ check_button_disabled:
   element:
     selector:
       xpath: //button[contains(., '<button_text>') and @disabled]
+check_create_btn_disabled:
+  params:
+    button_text: Create
+  action: check_button_disabled
 check_button_enabled:
   element:
     selector:
@@ -750,7 +754,7 @@ check_dropdown_missing:
 click_dropdown_field:
   elements:
   - selector:
-      xpath: //*[(.='<dropdown_field>')]/following-sibling::*//button[contains(@class, 'dropdown__toggle')]
+      xpath: //*[(.='<dropdown_field>')]/following-sibling::*//button[contains(@class, 'toggle')]
     op: click
 click_item_in_resource_list:
   elements:

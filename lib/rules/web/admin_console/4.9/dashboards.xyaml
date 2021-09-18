@@ -277,87 +277,87 @@ check_textarea:
 check_metrics_query_cpu_by_project:
   scripts:
   - command:
-      return /topk.*pod.*container_cpu_usage.*sum.*container.*pod.*BY.*namespace/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href))
+      return /topk.*pod.*container_cpu_usage.*sum.*container.*pod.*BY.*namespace/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href).replaceAll('\n',''))
     expect_result: true
 check_metrics_query_cpu_by_pod:
   scripts:
   - command:
-      return /topk.*pod.*container_cpu_usage.*sum.*container.*pod.*BY.*pod.*namespace/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href))
+      return /topk.*pod.*container_cpu_usage.*sum.*container.*pod.*BY.*pod.*namespace/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href).replaceAll('\n',''))
     expect_result: true
 check_metrics_query_cpu_by_node:
   scripts:
   - command:
-      return /topk.*instance.*node_cpu.*/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href))
+      return /topk.*instance.*node_cpu.*/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href).replaceAll('\n',''))
     expect_result: true
 check_metrics_query_memory_by_node:
   scripts:
   - command:
-      return /topk.*node_memory_MemTotal_bytes.*-.*node_memory_MemAvailable_byte/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href))
+      return /topk.*node_memory_MemTotal_bytes.*-.*node_memory_MemAvailable_byte/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href).replaceAll('\n',''))
     expect_result: true
 check_metrics_query_memory_by_project:
   scripts:
   - command:
-      return /topk.*container_memory_working_set_bytes.*BY.*namespace/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href))
+      return /topk.*container_memory_working_set_bytes.*BY.*namespace/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href).replaceAll('\n',''))
     expect_result: true
 check_metrics_query_memory_by_pod:
   scripts:
   - command:
-      return /topk.*container_memory_working_set_bytes.*BY.*pod.*namespace/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href))
+      return /topk.*container_memory_working_set_bytes.*BY.*pod.*namespace/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href).replaceAll('\n',''))
     expect_result: true
 check_metrics_query_filesystem_by_node:
   scripts:
   - command:
-      return /topk.*/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href))
+      return /topk.*/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href).replaceAll('\n',''))
     expect_result: true
 check_metrics_query_filesystem_by_project:
   scripts:
   - command:
-      return /topk.*pod.*container_fs_usage_bytes.*BY.*namespace/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href))
+      return /topk.*pod.*container_fs_usage_bytes.*BY.*namespace/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href).replaceAll('\n',''))
     expect_result: true
 check_metrics_query_filesystem_by_pod:
   scripts:
   - command:
-      return /topk.*pod.*container_fs_usage_bytes.*BY.*pod.*namespace/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href))
+      return /topk.*pod.*container_fs_usage_bytes.*BY.*pod.*namespace/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href).replaceAll('\n',''))
     expect_result: true
 check_metrics_query_pod_count_by_node:
   scripts:
   - command:
-      return /topk.*kubelet_running_pods.*BY.*node/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href))
+      return /topk.*kubelet_running_pods.*BY.*node/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href).replaceAll('\n',''))
     expect_result: true
 check_metrics_query_pod_count_by_project:
   scripts:
   - command:
-      return /topk.*kube_running_pod_ready.*BY.*namespace/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href))
+      return /topk.*kube_running_pod_ready.*namespace/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href).replaceAll('\n',''))
     expect_result: true
 check_metrics_query_network_in_by_node:
   scripts:
   - command:
-      return /topk.*instance.*node_network_receive_bytes_excluding_lo.*BY.*instance/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href))
+      return /topk.*instance.*node_network_receive_bytes_excluding_lo.*BY.*instance/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href).replaceAll('\n',''))
     expect_result: true
 check_metrics_query_network_in_by_project:
   scripts:
   - command:
-      return /topk.*container_network_receive_bytes_total.*BY.*namespace/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href))
+      return /topk.*container_network_receive_bytes_total.*BY.*namespace/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href).replaceAll('\n',''))
     expect_result: true
 check_metrics_query_network_in_by_pod:
   scripts:
   - command:
-      return /topk.*container_network_receive_bytes_total.*BY.*namespace.*pod/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href))
+      return /topk.*container_network_receive_bytes_total.*BY.*namespace.*pod/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href).replaceAll('\n',''))
     expect_result: true
 check_metrics_query_network_out_by_node:
   scripts:
   - command:
-      return /topk.*instance.*node_network_transmit_bytes_excluding_lo.*BY.*instance/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href))
+      return /topk.*instance.*node_network_transmit_bytes_excluding_lo.*BY.*instance/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href).replaceAll('\n',''))
     expect_result: true
 check_metrics_query_network_out_by_project:
   scripts:
   - command:
-      return /topk.*container_network_transmit_bytes_total.*BY.*namespace/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href))
+      return /topk.*container_network_transmit_bytes_total.*BY.*namespace/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href).replaceAll('\n',''))
     expect_result: true
 check_metrics_query_network_out_by_pod:
   scripts:
   - command:
-      return /topk.*container_network_transmit_bytes_total.*BY.*namespace.*pod/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href))
+      return /topk.*container_network_transmit_bytes_total.*BY.*namespace.*pod/.test(decodeURI(document.querySelector('div.co-utilization-card-popover__body>a').href).replaceAll('\n',''))
     expect_result: true
 check_cpu_breakdown_info_when_filter_by_project:
   params:

@@ -41,3 +41,9 @@ check_message_and_doc_for_new_user:
       xpath: //p[contains(., 'To learn more, visit the OpenShift')]/a[contains(@href, 'docs.openshift.com/container-platform')]
   - selector:
       xpath: //a[contains(@href, '/command-line-tools') and contains(., 'command-line tools')]
+check_name_validation_error:
+  elements:
+  - selector:
+      xpath: //h4[contains(.,'error occur')]
+  - selector:
+      xpath: //div[contains(.,'subdomain must consist of lower case alphanumeric character')]
