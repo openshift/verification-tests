@@ -144,9 +144,16 @@ set_storageclass_name:
   action: set_input_value
 set_provisioner:
   params:
-    dropdown_field: Provisioner
+    button_id: storage-class-provisioner
     dropdown_item: <provisioner>
-  action: choose_dropdown_item
+  action: click_button_by_id
+  action: click_one_item_text
+set_sc_provisioner_type:
+  params:
+    button_id: storage-class-provisioner-type
+    dropdown_item: <provisioner_type>
+  action: click_button_by_id
+  action: click_one_item_text
 create_storageclass_from_form:
   params:
     button_text: Create StorageClass
