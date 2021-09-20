@@ -162,10 +162,21 @@ module BushSlicer
           artifacts_relative_path
         )
       else # s3
-        File.join(
-          conf[:services, :"DATA-HUB", :endpoint],
-          conf[:services, :"DATA-HUB", :bucket_name]
-        )
+        # we can generate in the framework with the resulting URL valid only 7
+        # days, or use the proxy presigned_url generator web service which
+        # generates a new url each time.  Set environment variable
+        # GEN_DATA_HUB_URL to use the framework approach
+        unless ENV['GEN_DATA_HUB_URL']
+          File.join(
+            conf[:services, :"DATA-HUB", :url_generator_endpoint],
+            conf[:services, :"DATA-HUB", :generator_controller_path]
+          )
+        else
+          File.join(
+            conf[:services, :"DATA-HUB", :endpoint],
+            conf[:services, :"DATA-HUB", :bucket_name]
+          )
+        end
       end
     end
 
@@ -192,8 +203,16 @@ module BushSlicer
           end
         end
       else # s3 object
-        dhub = BushSlicer::Amz_EC2.new(service_name: "DATA-HUB")
-        urls << dhub.s3_generate_url(key: File.join(artifacts_base_remote_path, File.basename(dir)))
+        if ENV['GEN_DATA_HUB_URL']
+          dhub = BushSlicer::Amz_EC2.new(service_name: "DATA-HUB")
+          urls << dhub.s3_generate_url(key: File.join(artifacts_base_remote_path, File.basename(dir)))
+        else
+          object_key = artifacts_base_remote_path + "/" + File.basename(dir)
+          logger.info("obj_key: #{object_key}")
+          url = artifacts_base_url +  object_key
+          logger.info("URL: #{url}")
+          urls << url
+        end
       end
       return urls
     end
@@ -213,8 +232,9 @@ module BushSlicer
       else
         # this is a Aws_EC2 instance
         bucket_name = conf['services', 'DATA-HUB', 'bucket_name']
-        artifacts_filer.upload_cucushift_html(bucket_name: bucket_name,
+        key = artifacts_filer.upload_cucushift_html(bucket_name: bucket_name,
           local_log: dir, dst_base_path: artifacts_base_remote_path)
+        logger.info("HTML log uploaded to #{bucket_name} with key #{key}")
       end
     end
 

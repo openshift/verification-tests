@@ -137,11 +137,11 @@ module BushSlicer
       Aws::S3::Object.new(key: key, bucket_name: bucket_name).presigned_url(:get, expires_in: expires_in_seconds)
     end
 
-    def s3_list_bucket_contents(bucket: nil)
-      res = s3.client.list_objects(bucket: bucket).contents
-      res.each do | obj |
-        print "key: #{obj.key}, filesize: #{obj.size}\n"
-      end
+    # input:
+    # @return a list of object keys in the bucket
+    def s3_list_bucket_contents(bucket: nil, prefix: "", delimiter: "")
+      res = s3.bucket(bucket).objects(prefix: prefix, delimiter: delimiter).collect(&:key)
+      puts res
       return res
     end
 
@@ -152,6 +152,8 @@ module BushSlicer
     def s3_batch_delete_from_bucket(bucket:, prefix:)
       s3.bucket(bucket).objects(prefix: prefix).batch_delete!
     end
+
+
 
     # target is the directory path to the file, which is not really a path but
     # a key index for example we can think of
@@ -170,7 +172,8 @@ module BushSlicer
       object_key =  File.join(dst_base_path, file_name)
       local_log = File.join(local_log, "console.html")
       logger.info("s3 object key: #{object_key}")
-      res = s3_upload_file(bucket: bucket_name, file: local_log, target: object_key)
+      s3_upload_file(bucket: bucket_name, file: local_log, target: object_key)
+      return object_key
     end
 
 
