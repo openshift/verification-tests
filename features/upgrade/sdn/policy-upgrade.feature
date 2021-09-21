@@ -357,3 +357,103 @@ Feature: SDN compoment upgrade testing
       | curl | -I | <%= cb.p5pod1ip %>:8080 |
     Then the step should succeed
     """
+
+  # @author anusaxen@redhat.com
+  @admin
+  @upgrade-prepare
+  Scenario: Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted post upgrade	
+    Given I switch to cluster admin pseudo user
+    And I store the workers in the :nodes clipboard
+    When I run the :new_project client command with:
+      | project_name | nodeport-upgrade |
+    Then the step should succeed
+    When I use the "nodeport-upgrade" project
+    #privileges are needed to support network-pod as hostnetwork pod creation later
+    And SCC "privileged" is added to the "system:serviceaccounts:nodeport-upgrade" group
+    Given I obtain test data file "networking/pod_with_udp_port_4789_nodename.json"
+    When I run oc create over "pod_with_udp_port_4789_nodename.json" replacing paths:
+      | ["items"][0]["spec"]["template"]["spec"]["nodeName"] | <%= cb.nodes[0].name %> |
+    Then the step should succeed
+    Given a pod becomes ready with labels:
+      | name=udp-pods |
+    And evaluation of `pod` is stored in the :host_pod1 clipboard
+
+    #Using node port to expose the service on port 8080 on the node IP address
+    When I run the :expose client command with:
+      | resource      | pod                      |
+      | resource_name | <%= cb.host_pod1.name %> |
+      | type          | NodePort                 |
+      | port          | 8080                     |
+      | protocol      | UDP                      |
+    Then the step should succeed
+    
+  # @author anusaxen@redhat.com
+  # @case_id OCP-44901
+  @admin
+  @upgrade-check
+  Scenario: Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted post upgrade
+    Given I switch to cluster admin pseudo user
+    And I use the "nodeport-upgrade" project
+    And a pod becomes ready with labels:
+      | name=udp-pods |
+    And evaluation of `pod` is stored in the :host_pod1 clipboard
+    #Getting nodeport value
+    And evaluation of `service(cb.host_pod1.name).node_port(port: 8080)` is stored in the :nodeport clipboard
+
+    # Creating a simple client pod to generate traffic from it towards the exposed node IP address
+    Given I obtain test data file "networking/aosqe-pod-for-ping.json"
+    When I run oc create over "aosqe-pod-for-ping.json" replacing paths:
+      | ["spec"]["nodeName"] | <%= cb.host_pod1.node_name %> |
+    Then the step should succeed
+    Given a pod becomes ready with labels:
+      | name=hello-pod |
+    And evaluation of `pod` is stored in the :client_pod clipboard
+
+    # The 3 seconds mechanism via for loop will create an Assured conntrack entry which will give us enough time to validate upcoming steps
+    When I run the :exec background client command with:
+      | pod              | <%= cb.client_pod.name %>                                                                       |
+      | oc_opts_end      |                                                                                                 |
+      | exec_command     | bash                                                                                            |
+      | exec_command_arg | -c                                                                                              |
+      | exec_command_arg | for n in {1..3}; do echo $n; sleep 1; done>/dev/udp/<%= cb.host_pod1.node_name %>/<%= cb.nodeport %> |
+    Then the step should succeed
+    
+    #Creating network test pod to levearage conntrack tool
+    Given I obtain test data file "networking/net_admin_cap_pod.yaml"
+    When I run oc create over "net_admin_cap_pod.yaml" replacing paths:
+      | ["spec"]["nodeName"] | <%= cb.host_pod1.node_name %> |
+    Then the step should succeed
+    Given a pod becomes ready with labels:
+      | name=network-pod |
+    And evaluation of `pod.name` is stored in the :network_pod clipboard
+    Given I wait up to 20 seconds for the steps to pass:
+    """
+    And I execute on the pod:
+      | bash | -c | conntrack -L \| grep "<%= cb.nodeport %>" |
+    Then the step should succeed
+    And the output should contain:
+      |<%= cb.host_pod1.ip %>|
+    """
+    #Deleting the udp listener pod which will trigger a new udp listener pod with new IP
+    Given I ensure "<%= cb.host_pod1.name %>" pod is deleted
+    And a pod becomes ready with labels:
+      | name=udp-pods |
+    And evaluation of `pod` is stored in the :host_pod2 clipboard
+
+    # The 3 seconds mechanism via for loop will create an Assured conntrack entry which will give us enough time to validate upcoming steps
+    When I run the :exec background client command with:
+      | pod              | <%= cb.client_pod.name %>                                                                            |
+      | oc_opts_end      |                                                                                                      |
+      | exec_command     | bash                                                                                                 |
+      | exec_command_arg | -c                                                                                                   |
+      | exec_command_arg | for n in {1..3}; do echo $n; sleep 1; done>/dev/udp/<%= cb.host_pod1.node_name %>/<%= cb.nodeport %> |
+    Then the step should succeed
+    #Making sure that the conntrack table should not contain old deleted udp listener pod IP entries but new pod one's
+    Given I wait up to 20 seconds for the steps to pass:
+    """
+    When I execute on the "<%= cb.network_pod %>" pod:
+      | bash | -c | conntrack -L \| grep "<%= cb.nodeport %>" |
+    Then the output should contain "<%= cb.host_pod2.ip %>"
+    And the output should not contain "<%= cb.host_pod1.ip %>"
+    """
+
