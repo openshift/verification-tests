@@ -4,6 +4,7 @@ Feature: stibuild.feature
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario Outline: Trigger s2i/docker/custom build using additional imagestream
     Given I have a project
     Given I obtain test data file "templates/<template>"
@@ -47,6 +48,7 @@ Feature: stibuild.feature
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario: STI build with dockerImage with specified tag
     Given I have a project
     When I run the :new_app client command with:
@@ -104,6 +106,7 @@ Feature: stibuild.feature
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario: Test s2i build in disconnect cluster
     Given I have a project
     When I have an http-git service in the project
@@ -132,6 +135,7 @@ Feature: stibuild.feature
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario: Mount source secret and configmap to builder container- sourcestrategy 
     Given I have a project
     When I run the :create_secret client command with:

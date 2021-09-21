@@ -7,6 +7,7 @@ Feature: SCC policy related scenarios
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario: deployment hook volume inheritance with hostPath volume
     Given I have a project
     # Create hostdir pod again with new SCC
@@ -39,6 +40,7 @@ Feature: SCC policy related scenarios
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario: Create or update scc with illegal capability name should fail with prompt message
     Given I have a project
     Given cluster role "cluster-admin" is added to the "first" user

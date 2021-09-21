@@ -7,6 +7,7 @@ Feature: Storage of Hostpath plugin testing
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario Outline: Create hostpath pv with access mode and reclaim policy
     Given I have a project
     Given I obtain test data file "storage/hostpath/local.yaml"

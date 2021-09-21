@@ -5,6 +5,7 @@ Feature: oc import-image related feature
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario: Do not create tags for ImageStream if image repository does not have tags
     When I have a project
     Given I obtain test data file "image-streams/is_without_tags.json"
@@ -26,6 +27,7 @@ Feature: oc import-image related feature
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario: Could not import the tag when reference is true
     Given I have a project
     Given I obtain test data file "image-streams/ocp10721.json"
@@ -86,6 +88,7 @@ Feature: oc import-image related feature
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario: Tags should be added to ImageStream if image repository is from an external docker registry
     Given I have a project
     Given I obtain test data file "image-streams/external.json"

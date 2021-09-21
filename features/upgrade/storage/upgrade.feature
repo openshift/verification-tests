@@ -74,6 +74,7 @@ Feature: Storage upgrade tests
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario: Cluster operator storage should be in correct status and dynamic provisioning should work well after upgrade
     Given I switch to cluster admin pseudo user
     # Check storage operator version after upgraded
@@ -296,6 +297,7 @@ Feature: Storage upgrade tests
   @upgrade-check
   @admin
   @aws-ipi
+  @aws-upi
   Scenario: Snapshot operator should be in available status after upgrade and can created pod with snapshot
     Given I switch to cluster admin pseudo user
 

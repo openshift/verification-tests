@@ -39,6 +39,7 @@ Feature: CSI testing related feature
   @admin
   @aws-ipi
   @4.9
+  @aws-upi
   Scenario Outline: Configure 'Retain' reclaim policy
     Given I have a project
     And admin clones storage class "sc-<%= project.name %>" from "<sc_name>" with:
@@ -249,6 +250,7 @@ Feature: CSI testing related feature
   @admin
   @aws-ipi
   @4.9
+  @aws-upi
   Scenario Outline: CSI dynamic provisioning with different type
     Given I have a project
     And admin clones storage class "sc-<%= project.name %>" from "<sc_name>" with:
@@ -294,6 +296,7 @@ Feature: CSI testing related feature
   @admin
   @aws-ipi
   @4.9
+  @aws-upi
   Scenario Outline: Check CSI Driver Operator installation
     When I run the :get admin command with:
       | resource | clusteroperator/storage                                                            |
