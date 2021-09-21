@@ -13,7 +13,8 @@ Feature: IPsec upgrade scenarios
     Then the step should succeed
     When I use the "ipsec-upgrade" project
     Given I obtain test data file "networking/list_for_pods.json"
-    #Creating two test pods for pod-pod encryption check
+    #Creating two test pods for pod-pod encryption check. Pods needs to be deployment/rc backed so that they can be migrate successfuly to the upgraded cluster.Creating each separat as they need to be on diff 
+    #nodes
     When I run oc create over "list_for_pods.json" replacing paths:
       | ["items"][0]["spec"]["template"]["spec"]["nodeName"]           | <%= cb.workers[1].name %> |
       | ["items"][0]["spec"]["replicas"]                               | 1                         |
@@ -56,6 +57,7 @@ Feature: IPsec upgrade scenarios
     And evaluation of `pod.node_name` is stored in the :worker1 clipboard
     And the Internal IP of node "<%= cb.worker1 %>" is stored in the :host_ip clipboard
     Given I obtain test data file "networking/net_admin_cap_pod.yaml"
+    #Host network pod for running tcpdump on correcpdonding worker node
     When I run oc create as admin over "net_admin_cap_pod.yaml" replacing paths:
       | ["spec"]["nodeName"]                                       | <%= cb.worker1 %>  |
       | ["metadata"]["namespace"]                                  | ipsec-upgrade      |
@@ -68,7 +70,7 @@ Feature: IPsec upgrade scenarios
     And evaluation of `pod.name` is stored in the :hostnw_pod_worker1 clipboard
     #capturing tcpdump for 2 seconds
     When admin executes on the "<%= cb.hostnw_pod_worker1 %>" pod:
-       | bash | -c | timeout  --preserve-status 2 tcpdump -i <%= cb.default_interface %> esp |
+       | sh | -c | timeout  --preserve-status 2 tcpdump -i <%= cb.default_interface %> esp |
     Then the step should succeed
     #Following will confirm pod-pod encryption
     #Example ESP packet un-encrypted will look like 16:37:16.309297 IP ip-10-0-x-x.us-east-2.compute.internal > ip-10-0-x-x.us-east-2.compute.internal: ESP(spi=0xf50c771c,seq=0xfaad)
@@ -81,13 +83,13 @@ Feature: IPsec upgrade scenarios
        | ["metadata"]["namespace"]      | ipsec-upgrade      |
        | ["metadata"]["labels"]["name"] | network-pod0       |
     #Below socat command will send ESP traffic at a length less than 40 between worker 0 and worker1 nodes
-       | ["spec"]["containers"][0]["command"]                       | ["bash", "-c", "socat /dev/random ip-sendto:<%= cb.host_ip %>:<%= cb.protocol %>"] |
+       | ["spec"]["containers"][0]["command"]                       | ["sh", "-c", "socat /dev/random ip-sendto:<%= cb.host_ip %>:<%= cb.protocol %>"] |
        | ["spec"]["containers"][0]["securityContext"]["privileged"] | true                                                                               |
     Then the step should succeed
     And a pod becomes ready with labels:
        | name=network-pod0 |
     #Following will confirm node-node encryption
     When admin executes on the "<%= cb.hostnw_pod_worker1 %>" pod:
-       | bash | -c | timeout  --preserve-status 60 tcpdump -c 2 -i br-ex "esp and less 40" |
+       | sh | -c | timeout  --preserve-status 60 tcpdump -c 2 -i br-ex "esp and less 40" |
     Then the step should succeed 
     And the output should not contain "0 packets captured"
