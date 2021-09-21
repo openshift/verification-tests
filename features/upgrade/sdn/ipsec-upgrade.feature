@@ -12,29 +12,33 @@ Feature: IPsec upgrade scenarios
       | project_name | ipsec-upgrade |
     Then the step should succeed
     When I use the "ipsec-upgrade" project
-    Given I obtain test data file "networking/pod-for-ping.json"
-    When I run oc create over "pod-for-ping.json" replacing paths:
-      | ["spec"]["nodeName"]           | <%= cb.workers[1].name %> |
-      | ["metadata"]["name"]           | pod-worker1               |
-      | ["metadata"]["labels"]["name"] | hello-pod1                |
-      | ["metadata"]["namespace"]      | ipsec-upgrade             |
+    Given I obtain test data file "networking/list_for_pods.json"
+    #Creating two test pods for pod-pod encryption check
+    When I run oc create over "list_for_pods.json" replacing paths:
+      | ["items"][0]["spec"]["template"]["spec"]["nodeName"]           | <%= cb.workers[1].name %> |
+      | ["items"][0]["spec"]["replicas"]                               | 1                         |
+      | ["items"][0]["metadata"]["name"]                               | hello-pod1-rc             |
+      | ["items"][0]["spec"]["template"]["metadata"]["labels"]["name"] | hello-pod1                |
+      | ["items"][1]["metadata"]["name"]                               | test-service1             |
     Then the step should succeed
     And a pod becomes ready with labels:
       | name=hello-pod1 |
     And evaluation of `pod.ip_url` is stored in the :test_pod_worker1 clipboard
 
-    Given I obtain test data file "networking/pod-for-ping.json"
-    When I run oc create over "pod-for-ping.json" replacing paths:
-      | ["spec"]["nodeName"]                 | <%= cb.workers[0].name %>                                                                      |
-      | ["metadata"]["name"]                 | pod-worker0                                                                                    |
-      | ["metadata"]["labels"]["name"]       | hello-pod0                                                                                     |
-      | ["metadata"]["namespace"]            | ipsec-upgrade                                                                                  |
-      | ["spec"]["containers"][0]["command"] | ["bash", "-c", "for f in {0..36000}; do curl <%= cb.test_pod_worker1 %>:8080 ; sleep 1; done"] |
+    Given I obtain test data file "networking/list_for_pods.json"
+    When I run oc create over "list_for_pods.json" replacing paths:
+      | ["items"][0]["spec"]["template"]["spec"]["nodeName"]                 | <%= cb.workers[0].name %>                                                                      |
+      | ["items"][0]["spec"]["replicas"]                                     | 1                                                                                              |
+      | ["items"][0]["metadata"]["name"]                                     | hello-pod0-rc                                                                                  |
+      | ["items"][0]["spec"]["template"]["metadata"]["labels"]["name"]       | hello-pod0                                                                                     |
+      | ["items"][1]["metadata"]["name"]                                     | test-service0                                                                                  |
+      | ["items"][0]["spec"]["template"]["spec"]["containers"][0]["command"] | ["bash", "-c", "for f in {0..36000}; do curl <%= cb.test_pod_worker1 %>:8080 ; sleep 1; done"] |
+
     Then the step should succeed
     #Above command will curl "hello openshift" traffic every 1 second to worker1 test pod which is expected to cause ESP traffic generation across those nodes
     And a pod becomes ready with labels:
       | name=hello-pod0 |
-    
+      
   # @author anusaxen@redhat.com
   # @case_id OCP-44834
   @admin
