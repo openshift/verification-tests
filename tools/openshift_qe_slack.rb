@@ -5,7 +5,7 @@ require 'common'
 require 'slack-ruby-client'
 
 module BushSlicer
-  class Slack
+  class CoreosSlack
     include Common::Helper
 
     attr_accessor :client, :usergroup_id, :token, :user_list, :users_map, :channel
@@ -84,8 +84,8 @@ module BushSlicer
 end
 
 if __FILE__ == $0
-  slack = BushSlicer::Slack.new(channel: '#pruan_slack_bot_sandbox')
-  #slack = OpenshiftQE::Slack.new #(channel: '#ocp-qe-scale-ci-results')
+  slack = BushSlicer::CoreosSlack.new(channel: '#pruan_slack_bot_sandbox')
+  #slack = OpenshiftQE::CoreosSlack.new #(channel: '#ocp-qe-scale-ci-results')
   #slack.build_user_lookup_table
   #slack.build_user_lookup_table(pre_compiled_result: 'creds/slack_users_map.yaml')
   # clusters =  [[nil, nil, 29.71, nil],
