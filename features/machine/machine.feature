@@ -37,6 +37,7 @@ Feature: Machine features testing
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario: Baremetal clusteroperator should be disabled in any deployment that is not baremetal
     Given evaluation of `cluster_operator('baremetal').condition(type: 'Disabled')` is stored in the :co_disabled clipboard
     Then the expression should be true> cb.co_disabled["status"]=="True"

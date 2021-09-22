@@ -6,6 +6,7 @@ Feature: pod related features
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario: Endpoints should update in time and no delay
     Given I have a project
     Given I obtain test data file "networking/list_for_pods.json"
@@ -141,6 +142,7 @@ Feature: pod related features
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario: Pods will still be created by DaemonSet when nodes are SchedulingDisabled
     Given I have a project
     Given I store the schedulable workers in the :nodes clipboard
@@ -174,6 +176,7 @@ Feature: pod related features
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario: When node labels change, DaemonSet will add pods to newly matching nodes and delete pods from not-matching nodes
     Given I have a project
     Given I run the :patch admin command with:

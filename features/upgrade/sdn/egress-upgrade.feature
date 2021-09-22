@@ -42,6 +42,7 @@ Feature: Egress compoment upgrade testing
   @admin
   @upgrade-check
   @4.9
+  @aws-upi
   Scenario: Check egressfirewall is functional post upgrade
     Given I switch to cluster admin pseudo user
     And I use the "egressfw-upgrade1" project

@@ -6,6 +6,7 @@ Feature: oc idle
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario: CLI - Idle all the service in the same project
     Given I have a project
     Given I obtain test data file "rc/idle-rc-1.yaml"
@@ -53,6 +54,7 @@ Feature: oc idle
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario: CLI - Idle service by label
     Given I have a project
     Given I obtain test data file "rc/idle-rc-2.yaml"
@@ -93,6 +95,7 @@ Feature: oc idle
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario: CLI - Idle service from file
     Given I have a project
     Given I obtain test data file "rc/idle-rc-2.yaml"
@@ -138,6 +141,7 @@ Feature: oc idle
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario: CLI - Idle service with dry-run
     Given I have a project
     Given I obtain test data file "rc/idle-rc-2.yaml"
@@ -172,6 +176,7 @@ Feature: oc idle
   # @case_id OCP-10941
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: Idling service with dc
     Given I have a project
     Given I obtain test data file "rc/idling-echo-server.yaml"
@@ -240,6 +245,7 @@ Feature: oc idle
   # @case_id OCP-11345
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: Idling service with rc
     Given I have a project
     Given I obtain test data file "rc/idle-rc-2.yaml"

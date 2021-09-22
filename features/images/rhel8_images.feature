@@ -73,6 +73,7 @@ Feature: rhel8images.feature
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario: mysql persistent template
     Given I have a project
     When I run the :tag admin command with:

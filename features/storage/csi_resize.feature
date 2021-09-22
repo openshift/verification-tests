@@ -3,6 +3,7 @@ Feature: CSI Resizing related feature
   @admin
   @aws-ipi
   @4.9
+  @aws-upi
   Scenario Outline: Resize online volume from 1Gi to 2Gi
     Given I have a project
 

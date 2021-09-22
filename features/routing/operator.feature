@@ -7,6 +7,7 @@ Feature: Testing Ingress Operator related scenarios
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario: set namespaceOwnership of routeAdmission to InterNamespaceAllowed
     Given the master version >= "4.4"
     And I have a project

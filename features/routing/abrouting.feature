@@ -178,6 +178,7 @@ Feature: Testing abrouting
   @admin
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: The edge route with multiple service will set load balance policy to RoundRobin by default
     #Create pod/service/route
     Given I have a project
@@ -271,6 +272,7 @@ Feature: Testing abrouting
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario: Each endpoint gets weight/numberOfEndpoints portion of the requests - unsecure route
     Given I switch to cluster admin pseudo user
     And I use the router project
@@ -355,6 +357,7 @@ Feature: Testing abrouting
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario: Each endpoint gets weight/numberOfEndpoints portion of the requests - passthrough route
     Given I switch to cluster admin pseudo user
     And I use the router project

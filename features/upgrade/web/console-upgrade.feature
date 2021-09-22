@@ -49,6 +49,7 @@ Feature: web console related upgrade check
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario: check console accessibility
     Given the first user is cluster-admin
     Given I open admin console in a browser

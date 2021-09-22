@@ -8,6 +8,7 @@ Feature: testing for parameter fsType
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario Outline: persistent volume formated with fsType
     Given I have a project
     And admin clones storage class "sc-<%= project.name %>" from ":default" with:

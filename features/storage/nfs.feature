@@ -8,6 +8,7 @@ Feature: NFS Persistent Volume
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario: Share NFS with multiple pods with ReadWriteMany mode
     Given I have a project
     And I have a NFS service in the project

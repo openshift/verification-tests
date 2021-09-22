@@ -6,6 +6,7 @@ Feature: resouces related scenarios
   @gcp-upi
   @gcp-ipi
   @4.9
+  @aws-upi
   Scenario: Return description of resources with cli describe
     Given I have a project
     And I create a new application with:
