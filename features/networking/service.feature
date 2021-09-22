@@ -559,7 +559,8 @@ Feature: Service related networking scenarios
       | ["spec"]["ports"][0]["nodePort"] | <%= cb.port %> |
     Then the step should succeed
     """
-    Given the pod named "hello-pod" becomes ready
+    Given a pod becomes ready with labels:
+      | name=hello-pod |
     Given I use the "<%= cb.workers[0].name %>" node
     When I run commands on the host:
       | curl --connect-timeout 5 <%= cb.worker0_ip %>:<%= cb.port %> |
