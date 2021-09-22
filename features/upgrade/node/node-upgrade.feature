@@ -43,6 +43,7 @@ Feature: Node components upgrade tests
   # @case_id OCP-13022
   @upgrade-check
   @admin
+  @4.9
   Scenario: Make sure nodeConfig is not changed after upgrade
     Given I switch to cluster admin pseudo user
     When I run the :get admin command with:

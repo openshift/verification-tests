@@ -5,6 +5,8 @@ Feature: storage security check
   @admin
   @smoke
   @aws-ipi
+  @4.9
+  @aws-upi
   Scenario Outline: [origin_infra_20] volume security testing
     Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"
@@ -120,6 +122,8 @@ Feature: storage security check
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario: secret volume security check
     Given I have a project
     Given I obtain test data file "storage/secret/secret.yaml"

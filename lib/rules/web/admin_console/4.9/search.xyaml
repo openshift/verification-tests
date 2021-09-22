@@ -45,7 +45,7 @@ clear_one_search_item:
 check_resource_tile:
   elements:
   - selector:
-      xpath: //span[contains(text(), '<resource_kind>')]/span[contains(., '<resource_group>')]
+      xpath: //span[contains(.,'<resource_kind>') and contains(.,'<resource_group>')]
 choose_filter_type_on_search_page:
   elements:
   - selector:

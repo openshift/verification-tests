@@ -8,6 +8,7 @@ Feature: collector related tests
   @commonlogging
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: All nodes logs are sent to Elasticsearch
     Given the master version == "4.1"
     Given evaluation of `cluster_logging('instance').fluentd_ready_pods.map(&:ip)` is stored in the :collector_pod_ips clipboard
@@ -50,6 +51,7 @@ Feature: collector related tests
   @commonlogging
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: All nodes logs had sent logs to Elasticsearch
     Given the master version >= "4.2"
     Given evaluation of `cluster_logging('instance').collection_type` is stored in the :collection_type clipboard
@@ -96,6 +98,7 @@ Feature: collector related tests
   @commonlogging
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario Outline: The System Journald log can be collected
     Given evaluation of `cluster_logging('instance').collection_type` is stored in the :collection_type clipboard
     And I wait for the "<index_name>" index to appear in the ES pod with labels "es-node-master=true"
@@ -120,6 +123,7 @@ Feature: collector related tests
   @commonlogging
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: The Container logs metadata check
     Given the master version == "4.1"
     Given I switch to the first user
@@ -158,6 +162,7 @@ Feature: collector related tests
   @commonlogging
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: The container logs metadata check
     Given the master version >= "4.2"
     Given I switch to the first user
@@ -196,6 +201,8 @@ Feature: collector related tests
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario: All nodes logs are collected
     Given the master version >= "4.5"
     Given evaluation of `cluster_logging('instance').collection_type` is stored in the :collection_type clipboard

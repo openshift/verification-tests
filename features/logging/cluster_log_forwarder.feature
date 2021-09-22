@@ -8,6 +8,7 @@ Feature: cluster log forwarder features
   @commonlogging
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: ClusterLogForwarder `default` behavior testing
     Given the master version >= "4.6"
     # create project to generate logs
@@ -135,6 +136,7 @@ Feature: cluster log forwarder features
   @destructive
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: ClusterLogForwarder: Forward logs to fluentd as insecure
     Given I switch to the first user
     And I have a project
@@ -181,6 +183,7 @@ Feature: cluster log forwarder features
   @destructive
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario Outline: ClusterLogForwarder: Forward logs to fluentd as secure
     Given I switch to the first user
     And I have a project
@@ -233,6 +236,7 @@ Feature: cluster log forwarder features
   @destructive
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario Outline: Forward logs with tags
     Given I switch to the first user
     And I create a project with non-leading digit name
@@ -293,6 +297,7 @@ Feature: cluster log forwarder features
   @destructive
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: Forward logs to remote-syslog - config error
     Given the master version >= "4.6"
     Given I switch to cluster admin pseudo user
@@ -310,6 +315,7 @@ Feature: cluster log forwarder features
   @destructive
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario Outline: Forward logs to remote-syslog
     Given the master version >= "4.6"
     Given I switch to the first user
@@ -363,6 +369,7 @@ Feature: cluster log forwarder features
   @destructive
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: Forward logs to different kafka topics
     Given I switch to the first user
     And I create a project with non-leading digit name
@@ -513,6 +520,7 @@ Feature: cluster log forwarder features
   # @case_id OCP-39786
   @admin
   @destructive
+  @4.9
   Scenario: Send logs to both external fluentd and internalES
     #Creating secure fluentd receiver
     Given I switch to cluster admin pseudo user

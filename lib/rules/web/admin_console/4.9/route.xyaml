@@ -67,9 +67,12 @@ set_route_path:
   action: set_input_value
 set_service_name:
   params:
-    dropdown_field: Service
     dropdown_item: <service_name>
-  action: choose_dropdown_item
+  elements:
+  - selector:
+      xpath: //*[(.='Service')]/..//button[@data-test-id='dropdown-button']
+    op: click
+  action: click_one_item
 set_alternative_service_name:
   params:
     dropdown_field: Alternate Service target

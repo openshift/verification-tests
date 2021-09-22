@@ -4,6 +4,7 @@ Feature: Machine misc features testing
   # @case_id OCP-34940
   @admin
   @destructive
+  @4.9
   Scenario: PVCs can still be provisioned after the password has been changed vSphere
     Given I have an IPI deployment
     Then I switch to cluster admin pseudo user
@@ -58,6 +59,7 @@ Feature: Machine misc features testing
   # @case_id OCP-35454
   @admin
   @destructive
+  @4.9
   Scenario: Reconciliation of MutatingWebhookConfiguration values should happen
     Given I switch to cluster admin pseudo user
 
@@ -113,6 +115,8 @@ Feature: Machine misc features testing
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario: kube-rbac-proxy should not expose tokens, have excessive verbosity
     Given I switch to cluster admin pseudo user
 
@@ -154,6 +158,7 @@ Feature: Machine misc features testing
   # @author miyadav@redhat.com
   # @case_id OCP-37180
   @admin
+  @4.9
   Scenario: Report vCenter version to telemetry
     Given I switch to cluster admin pseudo user
     When I perform the GET prometheus rest client with:
@@ -166,6 +171,7 @@ Feature: Machine misc features testing
   # @case_id OCP-40665
   @admin
   @destructive	
+  @4.9
   Scenario: Deattach disk before destroying vm from vsphere
     Given I switch to cluster admin pseudo user
     Then I use the "openshift-machine-api" project		

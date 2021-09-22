@@ -6,6 +6,8 @@ Feature: Regression testing cases
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario: RWO volumes are exclusively mounted on different nodes
     Given I have a project
 

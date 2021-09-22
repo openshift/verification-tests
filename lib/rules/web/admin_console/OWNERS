@@ -1,6 +1,9 @@
 approvers:
-- yapei
+  - juzhao
+  - QiaolingTang
+  - yapei
 
 reviewers:
-- yanpzhan
-- yapei
+  - XiyunZhao
+  - yanpzhan
+  - yapei

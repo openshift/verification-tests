@@ -2,6 +2,7 @@ Feature: jenkins.feature
   # @author cryan@redhat.com
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario Outline: Trigger build of application from jenkins job with persistent volume
     Given I have a project
     And I have a jenkins v<ver> application
@@ -17,7 +18,7 @@ Feature: jenkins.feature
       |  id | -u |
     Then the step should succeed
     #Check that the user is not root, or 0 id
-    Then the expression should be true> Integer(@result[:response]) > 0
+    Then the expression should be true> Integer(@result[:stdout]) > 0
     Given I have a jenkins browser
     And I log in to jenkins
     When I perform the :jenkins_trigger_sample_openshift_build web action with:
@@ -77,9 +78,12 @@ Feature: jenkins.feature
       | 2   | # @case_id OCP-11369
 
   # @author xiuwang@redhat.com
+  @console
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario Outline: Make jenkins slave configurable when do jenkinspipeline strategy with maven slave
     Given I have a project
     And I have a jenkins v<version> application
@@ -104,6 +108,8 @@ Feature: jenkins.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario: new-app/new-build support for pipeline buildconfigs
     Given I have a project
     When I run the :new_app client command with:
@@ -225,9 +231,12 @@ Feature: jenkins.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-13259
+  @console
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario Outline: Add/update env vars to pipeline buildconfigs using jenkinsfile field
     Given I have a project
     And I have a jenkins v<version> application
@@ -298,9 +307,12 @@ Feature: jenkins.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-15384
+  @console
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario: Jenkins pipeline build with OpenShift Client Plugin Example
     And I have a project
     When I run the :create client command with:
@@ -329,6 +341,7 @@ Feature: jenkins.feature
   # @case_id OCP-25401
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: Create jenkins application directly
     Given I have a project
     When I run the :new_app client command with:
@@ -345,6 +358,7 @@ Feature: jenkins.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-35068
   @admin
+  @4.9
   Scenario: Oauthaccesstoken should be deleted after loging out from Jenkins webconsole
     Given I have a project
     When I run the :new_app client command with:

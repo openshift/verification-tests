@@ -7,6 +7,8 @@ Feature: Testing registry
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario: Prune images by command oadm_prune_images
     Given cluster role "system:image-pruner" is added to the "first" user
     Given I enable image-registry default route
@@ -41,6 +43,7 @@ Feature: Testing registry
   # @author xiuwang@redhat.com
   # @case_id OCP-18994
   @admin
+  @4.9
   Scenario: Copy image to another tag via 'oc image mirror'
     Given I have a project
     Given docker config for default image registry is stored to the :dockercfg_file clipboard
@@ -58,6 +61,7 @@ Feature: Testing registry
   # @author xiuwang@redhat.com
   # @case_id OCP-18998
   @admin
+  @4.9
   Scenario: Mirror multiple locations to another registry via 'oc image mirror'
     Given I have a project
     Given docker config for default image registry is stored to the :dockercfg_file clipboard
@@ -77,6 +81,7 @@ Feature: Testing registry
   # @author wewang@redhat.com
   # @case_id OCP-23030
   @admin
+  @4.9
   Scenario: Enable must-gather object refs in image-registry cluster
     When I run the :get admin command with:
       | resource      | co             |
@@ -147,6 +152,7 @@ Feature: Testing registry
   # @case_id OCP-23063
   @admin
   @destructive
+  @4.9
   Scenario: Check the related log from must-gather tool
     When I run the :delete admin command with:
       | object_type       | co             |
@@ -166,6 +172,8 @@ Feature: Testing registry
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario: Mirror image to another registry via 'oc image mirror'
     Given I have a project
     Given docker config for default image registry is stored to the :dockercfg_file clipboard
@@ -186,6 +194,8 @@ Feature: Testing registry
   @proxy
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario: Use node credentials in imagestream import
     Given I have a project
     When I run the :tag client command with:
@@ -219,6 +229,8 @@ Feature: Testing registry
   @disconnected
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario: [Disconnect]Import image from a secure registry using node credentials
     Given I have a project
     And evaluation of `image_content_source_policy('image-policy-aosqe').mirror_registry(cached: false)` is stored in the :mirror_registry clipboard
@@ -248,6 +260,7 @@ Feature: Testing registry
   # @author xiuwang@redhat.com
   # @case_id OCP-29706
   @admin
+  @4.9
   Scenario: Node secret takes effect when common secret is removed
     Given I have a project
     When I run the :extract admin command with:

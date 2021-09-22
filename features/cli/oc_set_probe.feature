@@ -2,8 +2,10 @@ Feature: oc_set_probe.feature
 
   # @author dyan@redhat.com
   # @case_id OCP-9870
+  @inactive
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: Set a probe to open a TCP socket
     Given I have a project
     When I run the :new_app client command with:
@@ -61,8 +63,10 @@ Feature: oc_set_probe.feature
 
   # @author dyan@redhat.com
   # @case_id OCP-9871
+  @inactive
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: Set a probe over HTTPS/HTTP
     Given I have a project
     When I run the :new_app client command with:
@@ -108,8 +112,10 @@ Feature: oc_set_probe.feature
 
   # @author dyan@redhat.com
   # @case_id OCP-9872
+  @inactive
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: Set an exec action probe
     Given I have a project
     When I run the :new_app client command with:
@@ -152,6 +158,7 @@ Feature: oc_set_probe.feature
 
   # @author wewang@redhat.com
   # @case_id OCP-31241
+  @4.9
   Scenario: Set a probe to open a TCP socket test
     Given I have a project
     When I run the :new_app client command with:
@@ -211,6 +218,8 @@ Feature: oc_set_probe.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario: Set a probe over HTTPS/HTTP test
     Given I have a project
     When I run the :new_app client command with:
@@ -259,6 +268,8 @@ Feature: oc_set_probe.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario: Set an exec action probe test
     Given I have a project
     When I run the :new_app client command with:

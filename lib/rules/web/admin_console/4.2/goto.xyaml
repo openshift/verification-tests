@@ -108,6 +108,10 @@ goto_dc_page:
 goto_one_dc_page:
   url: k8s/ns/<project_name>/deploymentconfigs/<dc_name>
 
+goto_daemonsets_page:
+  url: k8s/ns/<project_name>/daemonsets
+  action: wait_box_loaded
+
 #pod
 goto_one_pod_page:
   url: k8s/ns/<project_name>/pods/<resource_name>

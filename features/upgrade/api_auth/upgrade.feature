@@ -158,6 +158,7 @@ Feature: apiserver and auth related upgrade check
   # @case_id OCP-19470
   @upgrade-check
   @admin
+  @4.9
   Scenario: Default RBAC role, rolebinding, clusterrole and clusterrolebinding without any missing after upgraded
     # Checking original clusterrole resources recovered after upgraded
     When I run the :get admin command with:
@@ -201,6 +202,7 @@ Feature: apiserver and auth related upgrade check
   @upgrade-check
   @admin
   @destructive
+  @4.9
   Scenario: Check the default SCCs should not be stomped by CVO
     Given the "kube-apiserver" operator version matches the current cluster version
     And the "openshift-apiserver" operator version matches the current cluster version
@@ -258,6 +260,7 @@ Feature: apiserver and auth related upgrade check
   @admin
   @upgrade-check
   @users=upuser1,upuser2
+  @4.9
   Scenario: Upgrade action will cause re-generation of certificates for headless services to include the wildcard subjects
     Given the master version >= "4.8"
     Given I switch to the first user
@@ -292,6 +295,8 @@ Feature: apiserver and auth related upgrade check
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario: kube-apiserver and openshift-apiserver should have zero-disruption upgrade
     # This case needs keep running oc commands against servers during upgrade, but our framework does not support
     # So using a workaround: run them in a background script during upgrade CI job and check result here

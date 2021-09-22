@@ -9,6 +9,8 @@ Feature: cluster-logging-operator related test
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario: ServiceMonitor Object for collector is deployed along with cluster logging
     Given I wait for the "fluentd" service_monitor to appear
     And the expression should be true> service_monitor('fluentd').service_monitor_endpoint_spec(port: "metrics").path == "/metrics"
@@ -27,6 +29,7 @@ Feature: cluster-logging-operator related test
   @destructive
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: Scale Elasticsearch nodes by nodeCount 2->3->4 in clusterlogging
     Given I obtain test data file "logging/clusterlogging/scalebase.yaml"
     Given I create clusterlogging instance with:
@@ -81,6 +84,8 @@ Feature: cluster-logging-operator related test
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario: Fluentd alert rule: FluentdNodeDown
     Given the master version >= "4.2"
     Given I obtain test data file "logging/clusterlogging/example.yaml"
@@ -143,6 +148,8 @@ Feature: cluster-logging-operator related test
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario: OpenShift Logging dashboard
     Given I switch to the first user
     And the first user is cluster-admin
@@ -182,6 +189,7 @@ Feature: cluster-logging-operator related test
   # @case_id OCP-33793
   @admin
   @destructive
+  @4.9
   Scenario: Expose more fluentd knobs to support optimizing fluentd for different environments
     Given I obtain test data file "logging/clusterlogging/cl_fluentd-buffer.yaml"
     And I create clusterlogging instance with:
@@ -206,6 +214,8 @@ Feature: cluster-logging-operator related test
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario: Fluentd optimizing variable changes trigger new deployment
     Given I obtain test data file "logging/clusterlogging/cl_fluentd-buffer_default.yaml"
     And I create clusterlogging instance with:

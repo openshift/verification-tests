@@ -4,6 +4,7 @@ Feature: Sriov related scenarios
   # @case_id OCP-29944
   @admin
   @stage-only
+  @4.9
   Scenario: sriov operator can be setup and running well
     Given I switch to cluster admin pseudo user
     And I use the "openshift-sriov-network-operator" project

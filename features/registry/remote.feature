@@ -4,6 +4,8 @@ Feature: remote registry related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario: Support unauthenticated with registry-admin role
     Given I have a project
     Given I find a bearer token of the default service account

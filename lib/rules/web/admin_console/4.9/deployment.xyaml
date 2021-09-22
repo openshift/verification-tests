@@ -149,4 +149,25 @@ select_replica_count_and_selector:
   params:
     text: Replica count and selector
   action: click_checkbox_input_by_text
-
+check_workloads_metrics:
+  action: click_metrics_tab
+  elements:
+  - selector: &memory_usage_chart
+      xpath: //h2[contains(@class, "co-dashboard-card__title") and contains(text(), "Memory usage")]
+  - selector: &cpu_usage_chart
+      xpath: //h2[contains(@class, "co-dashboard-card__title") and contains(text(), "CPU usage")]
+  - selector: &filessystem_chart
+      xpath: //h2[contains(@class, "co-dashboard-card__title") and contains(text(), "Filesystem")]
+  - selector:
+      xpath: //h2[contains(@class, "co-dashboard-card__title") and contains(text(), "Network in")]
+  - selector:
+      xpath: //h2[contains(@class, "co-dashboard-card__title") and contains(text(), "Network out")]
+check_build_metrics:
+  action: click_metrics_tab
+  elements:
+  - selector:
+      <<: *memory_usage_chart
+  - selector:
+      <<: *cpu_usage_chart
+  - selector:
+      <<: *filessystem_chart

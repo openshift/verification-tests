@@ -5,6 +5,8 @@ Feature: deployment related features
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario: Restart a failed deployment by oc deploy
     Given I have a project
     Given I obtain test data file "deployment/dc-with-pre-mid-post.yaml"
@@ -38,6 +40,8 @@ Feature: deployment related features
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario: Manually make deployment
     Given I have a project
     Given I obtain test data file "deployment/manual.json"
@@ -79,6 +83,8 @@ Feature: deployment related features
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario: CLI rollback output to file
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -123,6 +129,8 @@ Feature: deployment related features
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario Outline: CLI rollback two more components of deploymentconfig
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -177,6 +185,8 @@ Feature: deployment related features
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario: CLI rollback with one component
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -223,6 +233,8 @@ Feature: deployment related features
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario: Can't stop a deployment in Failed status
     Given I have a project
     Given I obtain test data file "deployment/test-stop-failed-deployment.json"
@@ -260,6 +272,8 @@ Feature: deployment related features
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario: Stop a "Running" deployment
     Given I have a project
     Given I obtain test data file "deployment/dc-with-pre-mid-post.yaml"
@@ -286,6 +300,8 @@ Feature: deployment related features
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario: Rollback via CLI when previous version failed
     Given I have a project
     When I run the :create_deploymentconfig client command with:
@@ -369,6 +385,7 @@ Feature: deployment related features
   # @case_id OCP-9563
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: A/B Deployment
     Given I have a project
     When I run the :new_app client command with:
@@ -429,6 +446,8 @@ Feature: deployment related features
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario: Blue-Green Deployment
     Given I have a project
     When I run the :new_app client command with:
@@ -536,6 +555,8 @@ Feature: deployment related features
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario: start deployment when the latest deployment is completed
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -600,6 +621,8 @@ Feature: deployment related features
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario: Start new deployment when deployment running
     Given I have a project
     Given I obtain test data file "deployment/dc-with-pre-mid-post.yaml"
@@ -623,6 +646,8 @@ Feature: deployment related features
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario: When the latest deployment failed auto rollback to the active deployment
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -679,6 +704,8 @@ Feature: deployment related features
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario: DeploymentConfig should allow valid value of resource requirements
     Given I have a project
     Given I obtain test data file "quota/limits.yaml"
@@ -717,6 +744,8 @@ Feature: deployment related features
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario: Scale up when deployment running
     Given I have a project
     When I run the :create_deploymentconfig client command with:
@@ -885,6 +914,8 @@ Feature: deployment related features
   @proxy
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario: Trigger info is retained for deployment caused by image changes 37 new feature
     Given the master version >= "3.7"
     Given I have a project
@@ -904,6 +935,8 @@ Feature: deployment related features
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario: A/B Deployment for OCP 4.5 or greater
     Given the master version >= "4.5"
     Given I have a project

@@ -5,6 +5,8 @@ Feature: oc_set_env.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario: Set environment variables for resources using oc set env
     Given I have a project
     Given I obtain test data file "build/application-template-stibuild.json"
@@ -62,6 +64,8 @@ Feature: oc_set_env.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario: Remove environment variables for resources using oc set env
     Given I have a project
     Given I obtain test data file "build/application-template-stibuild.json"

@@ -4,6 +4,7 @@ Feature: PTP related scenarios
   # @case_id OCP-25940
   @admin
   @stage-only
+  @4.9
   Scenario: ptp operator can be deployed successfully
     Given I switch to cluster admin pseudo user
     And I use the "openshift-ptp" project
@@ -90,6 +91,7 @@ Feature: PTP related scenarios
   # @case_id OCP-26187
   @admin
   @destructive
+  @4.9
   Scenario: PTP operator starts linuxptp daemon based on nodeSelector configured in default PtpOperatorConfig CRD
     Given the ptp operator is running well
     And I use the "openshift-ptp" project

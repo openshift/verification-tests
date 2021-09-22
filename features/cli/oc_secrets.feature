@@ -4,6 +4,7 @@ Feature: oc_secrets.feature
   # @case_id OCP-12600
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: Add secrets to serviceaccount via oc secrets add
     Given I have a project
     When I run the :secrets client command with:
@@ -58,6 +59,8 @@ Feature: oc_secrets.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario: [origin_platformexp_391] Project admin can process local directory or files and convert it to kubernetes secret
     Given I have a project
     When the "tmpfoo" file is created with the following lines:
@@ -106,6 +109,7 @@ Feature: oc_secrets.feature
   # @case_id OCP-11900
   @gcp-upi
   @gcp-ipi
+  @aws-upi
   Scenario: Check name requirements for oc secret
     Given I have a project
     And I run the :get client command with:

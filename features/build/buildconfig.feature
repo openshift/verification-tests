@@ -68,6 +68,7 @@ Feature: buildconfig.feature
 
   # @author haowang@redhat.com
   @proxy
+  @4.9
   Scenario Outline: Build with images pulled from private repositories
     Given I have a project
     When I run the :create_secret client command with:
@@ -93,6 +94,8 @@ Feature: buildconfig.feature
   @proxy
   @gcp-upi
   @gcp-ipi
+  @4.9
+  @aws-upi
   Scenario: Using secret to pull a docker image which be used as source input
     Given I have a project
     When I run the :create_secret client command with:
