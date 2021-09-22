@@ -397,8 +397,13 @@ Feature: SDN compoment upgrade testing
     And a pod becomes ready with labels:
       | name=udp-pods |
     And evaluation of `pod` is stored in the :host_pod1 clipboard
-    #Getting nodeport value
-    And evaluation of `service(cb.host_pod1.name).node_port(port: 8080)` is stored in the :nodeport clipboard
+    #Getting service name and nodeport value
+    When I run the :get client command with:
+      | resource | svc                                |
+      | o        | jsonpath={.items[*].metadata.name} |
+    Then the step should succeed
+    And evaluation of `@result[:response]` is stored in the :service_name clipboard
+    And evaluation of `service(cb.service_name).node_port(port: 8080)` is stored in the :nodeport clipboard
 
     # Creating a simple client pod to generate traffic from it towards the exposed node IP address
     Given I obtain test data file "networking/aosqe-pod-for-ping.json"
@@ -411,10 +416,10 @@ Feature: SDN compoment upgrade testing
 
     # The 3 seconds mechanism via for loop will create an Assured conntrack entry which will give us enough time to validate upcoming steps
     When I run the :exec background client command with:
-      | pod              | <%= cb.client_pod.name %>                                                                       |
-      | oc_opts_end      |                                                                                                 |
-      | exec_command     | bash                                                                                            |
-      | exec_command_arg | -c                                                                                              |
+      | pod              | <%= cb.client_pod.name %>                                                                            |
+      | oc_opts_end      |                                                                                                      |
+      | exec_command     | bash                                                                                                 |
+      | exec_command_arg | -c                                                                                                   |
       | exec_command_arg | for n in {1..3}; do echo $n; sleep 1; done>/dev/udp/<%= cb.host_pod1.node_name %>/<%= cb.nodeport %> |
     Then the step should succeed
     
