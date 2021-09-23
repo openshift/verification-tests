@@ -461,6 +461,14 @@ check_affected_pods_column_in_table:
   params:
     field: Affected Pods
   action: check_column_in_table
+check_fixable_column_in_table:
+  params:
+    field: Fixable
+  action: check_column_in_table
+check_manifest_column_in_table:
+  params:
+    field: Manifest
+  action: check_column_in_table
 check_column_in_table:
   action: wait_box_loaded
   elements:

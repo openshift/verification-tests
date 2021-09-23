@@ -251,18 +251,11 @@ check_catalogsource_removed_message:
   params:
     content: Catalog Source Removed
   action: check_page_match
-check_quay_image_security_exists_on_dashboard:
-  element:
-    selector: &quay_image_security
-      xpath: //button[contains(.,'Image Vulnerabilities')]
-    timeout: 40
-click_quay_image_security_button:
-  element:
-    selector:
-      <<: *quay_image_security
-    op: click
 check_quay_image_security_popup:
   elements:
+  - selector:
+      xpath: //button[contains(.,'Image Vulnerabilities')]
+    op: click
   - selector:
       xpath: //div[contains(@class,'co-status-popup') and contains(.,'Impact') and contains(.,'Vulnerabilities')]
   - selector:
