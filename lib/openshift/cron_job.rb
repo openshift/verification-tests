@@ -5,7 +5,7 @@ module BushSlicer
   class CronJob < ProjectResource
     RESOURCE = "cronjobs"
 
-    def schedule(user: nil, cached: true, quiet: false)
+    def schedule(user: nil, cached: true, quiet: true)
       spec = raw_resource(user: user, cached: cached, quiet: quiet).dig('spec')
       spec.dig('schedule')
     end

@@ -3,6 +3,7 @@ Feature: Service related networking scenarios
   # @author yadu@redhat.com
   # @case_id OCP-9604
   @admin
+  @network-multitenant
   Scenario: tenants can access their own services
     # create pod and service in project1
     Given the env is using multitenant network
@@ -47,6 +48,7 @@ Feature: Service related networking scenarios
   # @case_id OCP-15032
   @admin
   @inactive
+  @network-multitenant
   Scenario: The openflow list will be cleaned after delete the services
     Given the env is using one of the listed network plugins:
       | subnet      |
@@ -559,7 +561,8 @@ Feature: Service related networking scenarios
       | ["spec"]["ports"][0]["nodePort"] | <%= cb.port %> |
     Then the step should succeed
     """
-    Given the pod named "hello-pod" becomes ready
+    Given a pod becomes ready with labels:
+      | name=hello-pod |
     Given I use the "<%= cb.workers[0].name %>" node
     When I run commands on the host:
       | curl --connect-timeout 5 <%= cb.worker0_ip %>:<%= cb.port %> |

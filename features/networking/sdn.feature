@@ -7,6 +7,7 @@ Feature: SDN related networking scenarios
   @gcp-upi
   @gcp-ipi
   @aws-upi
+  @network-multitenant
   Scenario: kubelet proxy could change to userspace mode
     Given the env is using one of the listed network plugins:
       | subnet      |
