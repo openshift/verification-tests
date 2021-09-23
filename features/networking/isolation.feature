@@ -87,6 +87,7 @@ Feature: networking isolation related scenarios
   # @author bmeng@redhat.com
   # @case_id OCP-9564
   @admin
+  @network-multitenant
   Scenario: Only the pods nested in a same namespace can communicate with each other
     Given the env is using multitenant network
     Given I have a project
@@ -129,6 +130,7 @@ Feature: networking isolation related scenarios
   # @author bmeng@redhat.com
   # @case_id OCP-9641
   @admin
+  @network-multitenant
   Scenario: Make the network of given project be accessible to other projects
     # Create 3 projects and each contains 1 pod and 1 service
     Given the env is using multitenant network
@@ -421,6 +423,7 @@ Feature: networking isolation related scenarios
   # @author bmeng@redhat.com
   # @case_id OCP-9646
   @admin
+  @network-multitenant
   Scenario: Isolate the network for the project which already make network global
     Given the env is using multitenant network
     Given I have a project
