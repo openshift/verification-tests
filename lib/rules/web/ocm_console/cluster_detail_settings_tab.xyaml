@@ -1,0 +1,28 @@
+############# Below actions are defined for settings tab ################
+
+# ---------------------- Monitroing checkbox related ----------------------
+
+# ---------------------- Update strategy related ----------------------
+select_update_strategy_on_settings_tab:
+    element:
+        selector:
+            xpath: //input[@id='upgrade_policy-<update_strategy>']
+        op: click
+
+automatic_day_loaded:
+    element:
+        selector:
+            xpath: //div/span[text()='<day>']
+automatic_time_loaded:
+    element:
+        selector:
+            xpath: //div/span[contains(text(),'<time>')]
+check_automatic_strategy_settings:
+    action: automatic_day_loaded
+    action: automatic_time_loaded
+
+# ---------------------- Node draining related ----------------------
+check_node_draining_setting:
+    element:
+        selector:
+            xpath: //div/span[text()="<grace_period>"]
