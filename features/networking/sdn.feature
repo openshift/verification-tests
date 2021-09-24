@@ -348,6 +348,7 @@ Feature: SDN related networking scenarios
   # @case_id OCP-25787
   @admin
   @4.9
+  @network-ovnkubernetes
   Scenario: Don't write CNI configuration file until ovn-controller has done at least one iteration
     Given the env is using "OVNKubernetes" networkType
     And I store the masters in the :master clipboard
@@ -400,8 +401,9 @@ Feature: SDN related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
   @aws-upi
+  @4.9
+  @network-ovnkubernetes
   Scenario: NetworkManager should consider OVS interfaces as unmanaged
   Given the env is using "OVNKubernetes" networkType
   And I select a random node's host
