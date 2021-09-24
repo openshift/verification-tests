@@ -6,7 +6,7 @@ metadata:
   name: web-server-1
 spec:
   containers:
-  - image: quay.io/openshifttest/nginx-alpine@sha256:5d3f3372288b8a93fc9fc7747925df2328c24db41e4b4226126c3af293c5ad88
+  - image: quay.io/openshifttest/nginx-alpine@sha256:f266733786efb10c4353d4b44ada6f22434e983d22f0975d20803f1817d38f56
     name: nginx
     ports:
     - containerPort: 8080
