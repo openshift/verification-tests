@@ -33,8 +33,24 @@ We use tags to catetorize different types of test scenarios. With a combination 
 |`@serial`
 |Test that can not run in parallel, scenarios including: console test, `oc debug node`, etc
 
+|`@network-multitenant`
+|SDN multitenant test, requires cluster network as multitenat
+
+|`@network-ovnkubernetes`
+|SDN ovnkubernetes test, requires cluster network as ovnkubernetes
+
 |`@aws-ipi`
 |Test scenarios for aws ipi
+
+|`@aws-upi`
+|Test scenarios for aws upi
+
+|`@gcp-ipi`
+|Test scenarios for gcp ipi
+
+|`@gcp-upi`
+|Test scenarios for gcp upi
+
 
 |===
 

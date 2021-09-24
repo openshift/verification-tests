@@ -267,6 +267,7 @@ Feature: Pod related networking scenarios
   @admin
   @destructive
   @4.9
+  @network-ovnkubernetes
   Scenario: ovn pod can be scheduled even if the node taint to unschedule
     Given the env is using "OVNKubernetes" networkType
     And I store all worker nodes to the :nodes clipboard
@@ -434,6 +435,7 @@ Feature: Pod related networking scenarios
   @admin
   @destructive
   @inactive
+  @network-ovnkubernetes
   Scenario: Make sure the route to ovn tunnel for Node's Pod CIDR gets created in both hybrid/non-hybrid mode
   Given the env is using "OVNKubernetes" networkType
   And I select a random node's host
@@ -467,6 +469,7 @@ Feature: Pod related networking scenarios
   @admin
   @destructive
   @4.9
+  @network-ovnkubernetes
   Scenario: Pod readiness check for OVN
     Given the env is using "OVNKubernetes" networkType
     And OVN is functional on the cluster
@@ -620,7 +623,7 @@ Feature: Pod related networking scenarios
     When I run oc create over "max-pods-without-consume-memory.yaml" replacing paths:
       | ["items"][0]["spec"]["template"]["spec"]["nodeName"] | <%= cb.nodes[0].name %> |
     Then the step should succeed
-    
+
     ##wait 700 seconds to make sure pods can consume all 509(one subnet eg 10.128.0.1/23 contains 510 ips, there is 10.128.0.1 already be used, so the rest of are 509 ips)
     And I wait up to 700 seconds for the steps to pass:
     """
@@ -637,10 +640,10 @@ Feature: Pod related networking scenarios
     Then the step should succeed
 
     Given the "<%= cb.proj1 %>" project is deleted
-    
+
     ##wait 120 seconds here to make the ip can be released
     Given 120 seconds have passed
-     
+
     ##another project pods will continue consuming the pods ip again
     And I wait up to 700 seconds for the steps to pass:
     """

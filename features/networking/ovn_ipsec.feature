@@ -6,9 +6,10 @@ Feature: OVNKubernetes IPsec related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
   @aws-upi
-  Scenario: Should be able to send node to node ESP traffic on IPsec clusters	
+  @4.9
+  @network-ovnkubernetes
+  Scenario: Should be able to send node to node ESP traffic on IPsec clusters
     Given the env is using "OVNKubernetes" networkType
     And the IPsec is enabled on the cluster
     Given I store all worker nodes to the :workers clipboard
@@ -43,9 +44,9 @@ Feature: OVNKubernetes IPsec related networking scenarios
     #of packets say 1 or 2 should suffice as that would imply the successful communication of ESP traffic across the nodes
     When admin executes on the "<%= cb.hello_pod_worker1 %>" pod:
        | bash | -c | timeout  --preserve-status 60 tcpdump -c 2 -i br-ex "esp and less 40" |
-    Then the step should succeed 
+    Then the step should succeed
     And the output should not contain "0 packets captured"
-  
+
   # @author anusaxen@redhat.com
   # @case_id OCP-38845
   @admin
@@ -53,8 +54,9 @@ Feature: OVNKubernetes IPsec related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
   @aws-upi
+  @4.9
+  @network-ovnkubernetes
   Scenario: Segfault on pluto IKE daemon should result in restarting pluto daemon and corresponding ovn-ipsec pod
     Given the env is using "OVNKubernetes" networkType
     And the IPsec is enabled on the cluster
@@ -77,11 +79,12 @@ Feature: OVNKubernetes IPsec related networking scenarios
     Given 90 seconds have passed
     #Checking readiness probe functionality to make sure it re-creates corresponding ovn-ipsec pod
     And admin waits for all pods in the "openshift-ovn-kubernetes" project to become ready up to 300 seconds
-    
+
   # @author anusaxen@redhat.com
   # @case_id OCP-37591
   @admin
   @4.9
+  @network-ovnkubernetes
   Scenario: Make sure IPsec SA's are establishing in a transport mode
     Given the env is using "OVNKubernetes" networkType
     And the IPsec is enabled on the cluster
@@ -91,15 +94,16 @@ Feature: OVNKubernetes IPsec related networking scenarios
     Then the step should succeed
     #We need to make sure some mode is chosen and supported only for now is transport
     And the output should contain "IPsec SA established transport mode"
-    
+
   # @author anusaxen@redhat.com
   # @case_id OCP-39216
   @admin
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
   @aws-upi
+  @4.9
+  @network-ovnkubernetes
   Scenario: Pod created on IPsec cluster should have appropriate MTU size to accomdate IPsec Header
     Given the env is using "OVNKubernetes" networkType
     And the IPsec is enabled on the cluster
@@ -113,12 +117,13 @@ Feature: OVNKubernetes IPsec related networking scenarios
     And evaluation of `@result[:response]` is stored in the :test_pod_mtu clipboard
     # OVN needs 100 byte header and IPsec needs another 46 bytes due to ESP etc so the pod's mtu must be 146 bytes less than cluster mtu
     And the expression should be true> cb.test_pod_mtu.to_i + 146 == cb.cluster_mtu.to_i
- 
+
   # @author anusaxen@redhat.com
   # @case_id OCP-37590
   @admin
-  @destructive	
+  @destructive
   @4.9
+  @network-ovnkubernetes
   Scenario: Delete all ovn-ipsec containers and check if they gets recreated
     Given the env is using "OVNKubernetes" networkType
     And the IPsec is enabled on the cluster
@@ -128,11 +133,12 @@ Feature: OVNKubernetes IPsec related networking scenarios
       | n           | openshift-ovn-kubernetes |
     Then the step should succeed
     And admin waits for all pods in the "openshift-ovn-kubernetes" project to become ready up to 300 seconds
-    
+
   # @author anusaxen@redhat.com
   # @case_id OCP-37392
   @admin
   @4.9
+  @network-ovnkubernetes
   Scenario: pod to pod traffic on different nodes should be ESP encrypted
     Given the env is using "OVNKubernetes" networkType
     And the IPsec is enabled on the cluster
@@ -147,7 +153,7 @@ Feature: OVNKubernetes IPsec related networking scenarios
     And a pod becomes ready with labels:
        | name=hello-pod |
     And evaluation of `pod.ip_url` is stored in the :test_pod_worker1 clipboard
-    
+
     Given I obtain test data file "networking/pod-for-ping.json"
     When I run oc create over "pod-for-ping.json" replacing paths:
       | ["spec"]["nodeName"]                 | <%= cb.workers[0].name %>                                                                     |
@@ -171,23 +177,24 @@ Feature: OVNKubernetes IPsec related networking scenarios
     #capturing tcpdump for 2 seconds
     When admin executes on the "<%= cb.hostnw_pod_worker1 %>" pod:
        | bash | -c | timeout  --preserve-status 2 tcpdump -i <%= cb.default_interface %> esp |
-    Then the step should succeed 
+    Then the step should succeed
     # Example ESP packet un-encrypted will look like 16:37:16.309297 IP ip-10-0-x-x.us-east-2.compute.internal > ip-10-0-x-x.us-east-2.compute.internal: ESP(spi=0xf50c771c,seq=0xfaad)
-    And the output should match: 
+    And the output should match:
        | <%= cb.workers[0].name %>.* > <%= cb.workers[1].name %>.*: ESP |
-       
+
   # @author weliang@redhat.com
   # @case_id OCP-40569
   @admin
   @destructive
   @inactive
+  @network-ovnkubernetes
   Scenario: Allow enablement/disablement ipsec at runtime
-    Given the env is using "OVNKubernetes" networkType   
+    Given the env is using "OVNKubernetes" networkType
     Given I store all worker nodes to the :workers clipboard
     Given the default interface on nodes is stored in the :default_interface clipboard
     #Enable ipsec through CNO
     Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
-      | {"spec":{"defaultNetwork":{"ovnKubernetesConfig":{"ipsecConfig":{}}}}} |  
+      | {"spec":{"defaultNetwork":{"ovnKubernetesConfig":{"ipsecConfig":{}}}}} |
     Given I have a project
     Given I obtain test data file "networking/pod-for-ping.json"
     When I run oc create over "pod-for-ping.json" replacing paths:
@@ -197,7 +204,7 @@ Feature: OVNKubernetes IPsec related networking scenarios
     And a pod becomes ready with labels:
       | name=hello-pod |
     And evaluation of `pod.ip_url` is stored in the :test_pod_worker1 clipboard
-    
+
     Given I obtain test data file "networking/pod-for-ping.json"
     When I run oc create over "pod-for-ping.json" replacing paths:
       | ["spec"]["nodeName"]                 | <%= cb.workers[0].name %>                                                                                          |
@@ -223,21 +230,21 @@ Feature: OVNKubernetes IPsec related networking scenarios
     """
     When admin executes on the "<%= cb.hostnw_pod_worker1 %>" pod:
       | bash | -c | timeout  --preserve-status 2 tcpdump -i <%= cb.default_interface %> esp |
-    Then the step should succeed 
+    Then the step should succeed
     # Example ESP packet un-encrypted will look like 16:37:16.309297 IP ip-10-0-x-x.us-east-2.compute.internal > ip-10-0-x-x.us-east-2.compute.internal: ESP(spi=0xf50c771c,seq=0xfaad)
-    And the output should match: 
+    And the output should match:
       | <%= cb.workers[0].name %>.* > <%= cb.workers[1].name %>.*: ESP |
     """
-    
+
     #Disable ipsec through CNO
     Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
-      | {"spec":{"defaultNetwork":{"ovnKubernetesConfig":{"ipsecConfig":null}}}} | 
+      | {"spec":{"defaultNetwork":{"ovnKubernetesConfig":{"ipsecConfig":null}}}} |
     Given I wait up to 60 seconds for the steps to pass:
     """
     When admin executes on the "<%= cb.hostnw_pod_worker1 %>" pod:
       | bash | -c | timeout  --preserve-status 2 tcpdump -i <%= cb.default_interface %> esp |
-    Then the step should succeed 
+    Then the step should succeed
     # Example ESP packet un-encrypted will look like 16:37:16.309297 IP ip-10-0-x-x.us-east-2.compute.internal > ip-10-0-x-x.us-east-2.compute.internal: ESP(spi=0xf50c771c,seq=0xfaad)
-    And the output should not match: 
+    And the output should not match:
       | <%= cb.workers[0].name %>.* > <%= cb.workers[1].name %>.*: ESP |
     """

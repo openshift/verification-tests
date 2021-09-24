@@ -8,8 +8,9 @@ Feature: OVN related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
   @aws-upi
+  @4.9
+  @network-ovnkubernetes
   Scenario: Creating a resource in Kube API should be synced to OVN NB db correctly even post NB db crash too
     Given the env is using "OVNKubernetes" networkType
     Given I have a project
@@ -55,8 +56,9 @@ Feature: OVN related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
   @aws-upi
+  @4.9
+  @network-ovnkubernetes
   Scenario: OVN DB should be updated correctly if a resource only exist in Kube API but not in OVN NB db
     Given the env is using "OVNKubernetes" networkType
     Given I register clean-up steps:
@@ -112,6 +114,7 @@ Feature: OVN related networking scenarios
   @gcp-ipi
   @4.9
   @aws-upi
+  @network-ovnkubernetes
   Scenario: OVN DB should be updated correctly if a resource only exist in NB db but not in Kube API
     Given the env is using "OVNKubernetes" networkType
     Given I have a project
@@ -175,6 +178,7 @@ Feature: OVN related networking scenarios
   @gcp-ipi
   @4.9
   @aws-upi
+  @network-ovnkubernetes
   Scenario: Thrashing ovnkube master IPAM allocator by creating and deleting various pods on a specific node
     Given the env is using "OVNKubernetes" networkType
     And I store all worker nodes to the :nodes clipboard
@@ -200,6 +204,7 @@ Feature: OVN related networking scenarios
   # @case_id OCP-32184
   @admin
   @4.9
+  @network-ovnkubernetes
   Scenario: ovnkube-masters should allocate pod IP and mac addresses
     Given the env is using "OVNKubernetes" networkType
     And I have a project
@@ -228,6 +233,7 @@ Feature: OVN related networking scenarios
   @gcp-ipi
   @4.9
   @aws-upi
+  @network-ovnkubernetes
   Scenario: Create/delete pods while forcing OVN leader election
   #Test for bug https://bugzilla.redhat.com/show_bug.cgi?id=1781297
     Given the env is using "OVNKubernetes" networkType
@@ -257,6 +263,7 @@ Feature: OVN related networking scenarios
   @gcp-ipi
   @4.9
   @aws-upi
+  @network-ovnkubernetes
   Scenario: Pods and Services should keep running when a new raft leader gets be elected
     Given the env is using "OVNKubernetes" networkType
     Given I store the ovnkube-master "south" leader pod in the clipboard
@@ -302,6 +309,7 @@ Feature: OVN related networking scenarios
   @gcp-ipi
   @4.9
   @aws-upi
+  @network-ovnkubernetes
   Scenario: Traffic flow shouldn't be interrupted when master switches the leader positions
     Given the env is using "OVNKubernetes" networkType
     Given I switch to cluster admin pseudo user
@@ -370,6 +378,7 @@ Feature: OVN related networking scenarios
   @gcp-ipi
   @4.9
   @aws-upi
+  @network-ovnkubernetes
   Scenario: New raft leader should be elected if existing leader gets deleted or crashed in hybrid/non-hybrid clusters
     Given the env is using "OVNKubernetes" networkType
     Given admin uses the "openshift-ovn-kubernetes" project
@@ -395,6 +404,7 @@ Feature: OVN related networking scenarios
   @gcp-ipi
   @4.9
   @aws-upi
+  @network-ovnkubernetes
   Scenario: New corresponding raft leader should be elected if SB db or NB db on existing master is crashed
     Given the env is using "OVNKubernetes" networkType
     Given admin uses the "openshift-ovn-kubernetes" project
@@ -478,6 +488,7 @@ Feature: OVN related networking scenarios
   @admin
   @destructive
   @4.9
+  @network-ovnkubernetes
   Scenario: Delete all OVN master pods and makes sure leader/follower election converges smoothly
     Given the env is using "OVNKubernetes" networkType
     Given admin uses the "openshift-ovn-kubernetes" project
@@ -504,6 +515,7 @@ Feature: OVN related networking scenarios
   @gcp-ipi
   @4.9
   @aws-upi
+  @network-ovnkubernetes
   Scenario: OVN handles projects that start with a digit
     Given the env is using "OVNKubernetes" networkType
     Given I create a project with leading digit name
