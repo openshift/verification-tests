@@ -136,26 +136,25 @@ Feature: build 'apps' with CLI
   # @author xiuwang@redhat.com
   # @case_id OCP-11139
   @aws-ipi
-  @gcp-upi
-  @gcp-ipi
-  @4.9
   @aws-upi
+  @gcp-ipi
+  @gcp-upi
+  @4.9
   Scenario: Create applications only with multiple db images
     Given I create a new project
     When I run the :new_app client command with:
-      | image_stream      | openshift/mongodb:latest                             |
       | image_stream      | openshift/mysql                                      |
-      | docker_image      | registry.access.redhat.com/rhscl/postgresql-96-rhel7 |
-      | env               | MONGODB_USER=test                      |
-      | env               | MONGODB_PASSWORD=test                  |
-      | env               | MONGODB_DATABASE=test                  |
-      | env               | MONGODB_ADMIN_PASSWORD=test            |
-      | env               | POSTGRESQL_USER=user                   |
-      | env               | POSTGRESQL_DATABASE=db                 |
-      | env               | POSTGRESQL_PASSWORD=test               |
-      | env               | MYSQL_ROOT_PASSWORD=test               |
-      | l                 | app=testapps                           |
-      | insecure_registry | true                                   |
+      | image             | registry.access.redhat.com/rhscl/postgresql-96-rhel7 |
+      | env               | MONGODB_USER=test                                    |
+      | env               | MONGODB_PASSWORD=test                                |
+      | env               | MONGODB_DATABASE=test                                |
+      | env               | MONGODB_ADMIN_PASSWORD=test                          |
+      | env               | POSTGRESQL_USER=user                                 |
+      | env               | POSTGRESQL_DATABASE=db                               |
+      | env               | POSTGRESQL_PASSWORD=test                             |
+      | env               | MYSQL_ROOT_PASSWORD=test                             |
+      | l                 | app=testapps                                         |
+      | insecure_registry | true                                                 |
     Then the step should succeed
 
     Given I wait for the "mysql" service to become ready up to 300 seconds
@@ -163,28 +162,16 @@ Feature: build 'apps' with CLI
     And I wait up to 120 seconds for the steps to pass:
     """
     When I execute on the pod:
-      | bash | -c | mysql  -h $HOSTNAME -u root -ptest -e "show databases" |
+      | bash | -c | mysql -h $HOSTNAME -u root -ptest -e "show databases" |
     Then the step should succeed
     """
     And the output should contain "mysql"
-    Given I wait for the "mongodb" service to become ready up to 300 seconds
-    And I get the service pods
-    And I wait up to 120 seconds for the steps to pass:
-    """
-    When I execute on the pod:
-      | scl | enable | rh-mongodb36 | mongo $MONGODB_DATABASE -u $MONGODB_USER -p $MONGODB_PASSWORD  --eval 'db.version()' |
-    Then the step should succeed
-    """
-    And the output should contain:
-      | 3.6 |
     Given I wait for the "postgresql-96-rhel7" service to become ready up to 300 seconds
     And I get the service pods
     And I wait up to 120 seconds for the steps to pass:
     """
     When I execute on the pod:
-      | bash |
-      | -c |
-      | psql -U user -c 'CREATE TABLE tbl (col1 VARCHAR(20), col2 VARCHAR(20));' db |
+      | bash | -c | psql -U user -c 'CREATE TABLE tbl (col1 VARCHAR(20), col2 VARCHAR(20));' db |
     Then the step should succeed
     """
     And the output should contain:
