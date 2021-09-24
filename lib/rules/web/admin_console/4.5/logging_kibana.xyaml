@@ -61,7 +61,7 @@ create_index_pattern:
         xpath: //a[@data-test-subj="indexPatternLink"]
       timeout: 30
     ref: click_create_index_pattern_button   
-  action: set_index_patter_name
+  action: set_index_pattern_name
   action: click_create_index_pattern_go_to_step2_button
   action: create_index_pattern_time_field_select
   action: click_create_index_pattern_create_button
@@ -111,6 +111,7 @@ set_index_patter_name:
   elements: 
   - selector:
       xpath: //input[@type="text" and @name="indexPattern"]
+    op: clear
     timeout: 30
   - selector:
       xpath: //input[@type="text" and @name="indexPattern"]
@@ -153,7 +154,7 @@ kibana_find_index_pattern:
 kibana_click_index:
   elements:
   - selector:
-      xpath: //h2[contains(@class, "index-pattern-label") and contains(., "<index_pattern_name>")] | //span[contains(., "<index_pattern_name>")]
+      xpath: //span[@class="ui-select-choices-row-inner"]/*[text()="<index_pattern_name>"]
     timeout: 30
     op: click
 
@@ -168,7 +169,7 @@ check_log_count:
     selector:
       xpath: //span[@data-test-subj="discoverQueryHits" and @class="kuiLocalBreadcrumb__emphasis"]
   scripts:
-  - command: | 
+  - command: |
       var x = document.querySelector("#kui_local_breadcrumb > span:nth-child(2)").textContent;
       var replaced_x = x.replace(/\,/g,'')
       var doc_count = false;
@@ -183,4 +184,49 @@ click_refresh_button_in_kibana:
   element:
     selector:
       xpath: //span[contains(@class, "euiButton__text euiSuperUpdateButton__text") and contains(., "Refresh")]
+    op: click
+
+click_visuallize_button_in_discover_page:
+  elements:
+  - selector:
+      xpath: //field-name[@title="<field_name>"]
+    op: click
+  - selector:
+      xpath: //span[contains(@i18n-default-message, "Visualize") and contains(., "Visualize")]
+    timeout: 30
+    op: click
+
+kibana_index_pattern_exist:
+  action: go_to_kibana_management_page
+  elements:
+  - selector:
+      xpath: //span[@class="euiSideNavItemButton__label" and contains(., "Index Patterns")]
+    op: click
+    timeout: 30
+  - selector:
+      xpath: //div[@id="indexPatternListReact"]//*[text()="<index_pattern_name>"]
+
+select_index_pattern_in_kibana:
+  action: go_to_kibana_discover_page
+  action:
+    if_element:
+      selector:
+        xpath: //span[@class="euiSideNavItemButton__label" and contains(., "Index Patterns")]
+    ref: kibana_expand_index_patterns
+  action:
+    if_element:
+      selector:
+        xpath: //span[@class="euiSideNavItemButton__label" and contains(., "Index Patterns")]
+    ref: kibana_click_index
+
+search_doc_in_kibana:
+  elements:
+  - selector:
+      xpath: //input[@type="text" and @class="euiFieldText kuiLocalSearchAssistedInput__input euiFieldText--withIcon euiFieldText--fullWidth"]
+    op: clear
+  - selector:
+      xpath: //input[@type="text" and @class="euiFieldText kuiLocalSearchAssistedInput__input euiFieldText--withIcon euiFieldText--fullWidth"]
+    op: send_keys "<search_string>"
+  - selector:
+      xpath: //button[@data-test-subj="querySubmitButton" and @type="button"]
     op: click
