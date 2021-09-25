@@ -8,7 +8,16 @@ Given /^the nfd-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|GU
   install_method ||= 'CLI'
   step %Q/the first user is cluster-admin/
   step %Q/I ensure "#{nfd_ns}" project is deleted after scenario/
+  pod_label = "name=nfd-operator"
+  pod_label = "control-plane=controller-manager" if cb.channel > 4.7
   if install_method == 'GUI'
+    # for 4.6, the GUI doesn't create the ns automatically if not present, so
+    # do it manually
+    if cb.channel < 4.7
+      admin.cli_exec(:create_namespace, name: nfd_ns)
+      step %Q/I wait for the "#{nfd_ns}" project to appear/
+      step %Q/I use the "#{nfd_ns}" project/
+    end
     cb.project = project(nfd_ns)
     step %Q/I open admin console in a browser/
     step %Q/the step should succeed/
@@ -24,10 +33,11 @@ Given /^the nfd-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|GU
       | approval_strategy | Automatic         |
     })
     step %Q/the step should succeed/
-    step %Q/I use the "#{nfd_ns}" project/
+
+    logger.info("Make sure pod is running with #{pod_label}")
     # must make sure the nfd-operator pod is `Running`
     step %Q/a pod becomes ready with labels:/, table(%{
-      | name=nfd-operator |
+      | #{pod_label} |
     })
     step %Q|I run oc create over ERB test file: nfd/<%= cb.channel %>/nfd_master.yaml|
     step %Q/the step should succeed/
@@ -41,9 +51,10 @@ Given /^the nfd-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|GU
     file_path = "nfd/#{cb.channel}/030_operator_sub.yaml"
     step %Q(I run oc create over ERB test file: #{file_path})
     step %Q(the step should succeed)
+
     # must make sure the nfd-operator pod is `Running`
     step %Q/a pod becomes ready with labels:/, table(%{
-      | name=nfd-operator |
+      | #{pod_label} |
     })
     file_path = "nfd/#{cb.channel}/040_customresources.yaml"
     step %Q(I run oc create over ERB test file: #{file_path})
