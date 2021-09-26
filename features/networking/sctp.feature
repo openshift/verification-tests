@@ -11,6 +11,10 @@ Feature: SCTP related scenarios
     And I have a project
     And I wait up to 800 seconds for the steps to pass:
     """
+    When I run the :get admin command with:
+      |resource|nodes|
+    Then the step should succeed
+    Then the outputs should contain "Ready"
     Given I check load-sctp-module in all workers
     """
 
@@ -60,6 +64,10 @@ Feature: SCTP related scenarios
     And I have a project
     And I wait up to 800 seconds for the steps to pass:
     """
+    When I run the :get admin command with:
+      |resource|nodes|
+    Then the step should succeed
+    Then the outputs should contain "Ready"
     Given I check load-sctp-module in all workers
     """
  
@@ -116,6 +124,10 @@ Feature: SCTP related scenarios
     Given I have a project
     And I wait up to 800 seconds for the steps to pass:
     """
+    When I run the :get admin command with:
+      |resource|nodes|
+    Then the step should succeed
+    Then the outputs should contain "Ready"
     Given I check load-sctp-module in all workers
     """
 
@@ -172,6 +184,10 @@ Feature: SCTP related scenarios
     And I have a project
     And I wait up to 800 seconds for the steps to pass:
     """
+    When I run the :get admin command with:
+      |resource|nodes|
+    Then the step should succeed
+    Then the outputs should contain "Ready"
     Given I check load-sctp-module in all workers
     """
 
@@ -260,3 +276,4 @@ Feature: SCTP related scenarios
       | Connected to <%= cb.serverpod_ip %> |
       | 15 bytes sent                       |
     """
+
