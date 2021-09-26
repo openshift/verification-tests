@@ -38,6 +38,7 @@ create_operand:
   action: goto_csv_detail_page
   action: click_tab
   action: click_create_operand_button
+  action: wait_box_loaded
   action: submit_changes
 set_operand_name:
   params:
@@ -387,6 +388,16 @@ uninstall_operator_on_console:
     button_text: Uninstall Operator
   action: click_resource_action_icon
   action: click_button
+  action: submit_changes
+uninstall_operator_and_remove_operands:
+  params:
+    button_text: Uninstall Operator
+    text: Delete all operand instances
+    content: Operand instances
+  action: click_resource_action_icon
+  action: click_button
+  action: check_page_match
+  action: click_checkbox_input_by_text
   action: submit_changes
 wait_filter_section_loaded:
   element:
@@ -888,8 +899,16 @@ enable_plugin_from_install_page:
     op: click
 uninstall_operator_and_check_pluginremoval_msg:
   params:
+    check_msg: console plugins provided by this operator will be disabled and removed
+  action: uninstall_operator_with_msg_check
+uninstall_operator_and_check_operandremoval_msg:
+  params:
+    check_msg: Cannot load Operands
+  action: uninstall_operator_with_msg_check
+uninstall_operator_with_msg_check:
+  params:
     button_text: Uninstall Operator
-    content: console plugins provided by this operator will be disabled and removed
+    content: <check_msg>
   action: click_resource_action_icon
   action: click_button
   action: check_page_match
