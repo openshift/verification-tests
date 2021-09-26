@@ -881,6 +881,25 @@ disable_plugin:
     source_status: Enabled
     target_status: disabled
   action: toggle_plugin_status
+enable_plugin_from_install_page:
+  elements:
+  - selector:
+      xpath: //input[@name='<plugin_name>' and @data-test='Enable-radio-input']
+    op: click
+uninstall_operator_and_check_pluginremoval_msg:
+  params:
+    button_text: Uninstall Operator
+    content: console plugins provided by this operator will be disabled and removed
+  action: click_resource_action_icon
+  action: click_button
+  action: check_page_match
+  action: submit_changes
+check_no_plugin_message_on_uninstall_modal:
+  params:
+    item: Remove Subscription
+    content: console plugins provided by this operator will be disabled and removed
+  action: click_one_dropdown_action
+  action: check_page_not_match
 toggle_plugin_status:
   elements:
   - selector:
