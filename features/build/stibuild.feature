@@ -52,8 +52,8 @@ Feature: stibuild.feature
   Scenario: STI build with dockerImage with specified tag
     Given I have a project
     When I run the :new_app client command with:
-      | docker_image | centos/ruby-25-centos7                  |
-      | app_repo     | https://github.com/openshift-qe/ruby-ex |
+      | docker_image | quay.io/openshifttest/ruby-22-centos7:2.2 |
+      | app_repo     | https://github.com/openshift-qe/ruby-ex   |
     Then the step should succeed
     And the "ruby-ex-1" build completes
     When I run the :patch client command with:
