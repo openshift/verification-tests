@@ -12,8 +12,9 @@ Feature: cluster-logging-operator related test
   @4.9
   @aws-upi
   Scenario: ServiceMonitor Object for collector is deployed along with cluster logging
-    Given I wait for the "fluentd" service_monitor to appear
-    And the expression should be true> service_monitor('fluentd').service_monitor_endpoint_spec(port: "metrics").path == "/metrics"
+    Given logging collector name is stored in the :collector_name clipboard
+    Given I wait for the "<%= cb.collector_name %>" service_monitor to appear
+    And the expression should be true> service_monitor("<%= cb.collector_name %>").service_monitor_endpoint_spec(port: "metrics").path == "/metrics"
     Given I wait up to 360 seconds for the steps to pass:
     """
     When I perform the GET prometheus rest client with:
@@ -93,8 +94,9 @@ Feature: cluster-logging-operator related test
       | remove_logging_pods | true                                                                 |
       | crd_yaml            | example.yaml |
     Then the step should succeed
-    Given I wait for the "fluentd" prometheus_rule to appear
-    And I wait for the "fluentd" service_monitor to appear
+    Given logging collector name is stored in the :collector_name clipboard
+    And I wait for the "<%= cb.collector_name %>" prometheus_rule to appear
+    And I wait for the "<%= cb.collector_name %>" service_monitor to appear
     # make all fluentd pods down
     When I run the :patch client command with:
       | resource      | clusterlogging                                                                        |
@@ -197,9 +199,10 @@ Feature: cluster-logging-operator related test
       | remove_logging_pods | true                   |
       | crd_yaml            | cl_fluentd-buffer.yaml |
     Then the step should succeed
+    Given logging collector name is stored in the :collector_name clipboard
     When I run the :extract admin command with:
-      | resource  | configmap/fluentd |
-      | confirm   | true              |
+      | resource  | configmap/<%= cb.collector_name %> |
+      | confirm   | true                               |
     Then the step should succeed
     Given evaluation of `File.read("fluent.conf")` is stored in the :fluent_conf clipboard
     And evaluation of `["flush_mode interval", "flush_interval 5s", "flush_thread_count 2", "flush_at_shutdown true", "retry_type exponential_backoff", "retry_wait 1s", "retry_max_interval 300", "retry_forever true", "total_limit_size 32m", "chunk_limit_size 1m", "overflow_action drop_oldest_chunk"]` is stored in the :configs clipboard
@@ -223,9 +226,10 @@ Feature: cluster-logging-operator related test
       | remove_logging_pods | true                           |
       | crd_yaml            | cl_fluentd-buffer_default.yaml |
     Then the step should succeed
+    Given logging collector name is stored in the :collector_name clipboard
     When I run the :extract admin command with:
-      | resource  | configmap/fluentd |
-      | confirm   | true              |
+      | resource  | configmap/<%= cb.collector_name %> |
+      | confirm   | true                               |
     Then the step should succeed
     And evaluation of `File.read("fluent.conf")` is stored in the :fluent_conf clipboard
     And the expression should be true> (cb.fluent_conf).include? "flush_mode interval"
@@ -236,8 +240,8 @@ Feature: cluster-logging-operator related test
       | type          | merge                                                                       |
     Then the step should succeed
     When I run the :extract admin command with:
-      | resource  | configmap/fluentd |
-      | confirm   | true              |
+      | resource  | configmap/<%= cb.collector_name %> |
+      | confirm   | true                               |
     Then the step should succeed
     And evaluation of `File.read("fluent.conf")` is stored in the :fluent_conf clipboard
     Given the expression should be true> (cb.fluent_conf).include? "flush_mode lazy"

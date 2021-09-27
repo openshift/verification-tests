@@ -98,9 +98,9 @@ module BushSlicer
       es_cluster_health(user: user, cached: cached, quiet: quiet) == 'green'
     end
 
-    def wait_until_es_is_ready(user: nil, quiet: false, timeout: 10*60)
+    def wait_until_es_is_ready(user: nil, quiet: true, timeout: 10*60)
       success = wait_for(timeout) {
-        es_ready?(user: user, cached: false, quiet: quiet)
+        log_store_raw(user: user, cached: false, quiet: quiet ) && es_ready?(user: user, cached: false, quiet: quiet)
       }
       unless success
         raise "elasticsearch cluster did not in green status within #{timeout} seconds"
