@@ -37,9 +37,7 @@ Feature: CSI testing related feature
 
   # @author chaoyang@redhat.com
   @admin
-  @aws-ipi
   @4.9
-  @aws-upi
   Scenario Outline: Configure 'Retain' reclaim policy
     Given I have a project
     And admin clones storage class "sc-<%= project.name %>" from "<sc_name>" with:
@@ -71,9 +69,14 @@ Feature: CSI testing related feature
     Then the PV becomes :released
     And admin ensures "<%= pvc.volume_name %>" pv is deleted
 
+    @aws-ipi
+    @aws-upi
     Examples:
       | sc_name      |
       | gp2-csi      | # @case_id OCP-24575
+
+    Examples:
+      | sc_name      |
       | standard-csi | # @case_id OCP-37572
 
 
@@ -248,9 +251,7 @@ Feature: CSI testing related feature
 
   # @author wduan@redhat.com
   @admin
-  @aws-ipi
   @4.9
-  @aws-upi
   Scenario Outline: CSI dynamic provisioning with different type
     Given I have a project
     And admin clones storage class "sc-<%= project.name %>" from "<sc_name>" with:
@@ -285,18 +286,21 @@ Feature: CSI testing related feature
     Then the step should succeed
     And the output should contain "Hello OpenShift Storage"
 
+    @aws-ipi
+    @aws-upi
     Examples:
       | sc_name      | type   | size  |
       | gp2-csi      | sc1    | 125Gi | # @case_id OCP-24546
       | gp2-csi      | st1    | 125Gi | # @case_id OCP-24572
+
+    Examples:
+      | sc_name      | type   | size  |
       | standard-csi | pd-ssd | 1Gi   | # @case_id OCP-37478
 
 
   # @author wduan@redhat.com
   @admin
-  @aws-ipi
   @4.9
-  @aws-upi
   Scenario Outline: Check CSI Driver Operator installation
     When I run the :get admin command with:
       | resource | clusteroperator/storage                                                            |
@@ -330,5 +334,13 @@ Feature: CSI testing related feature
     Examples:
       | provisioner              | sc_name      | deployment_operator                  | deployment_controller                  | daemonset_node                   |
       | cinder.csi.openstack.org | standard-csi | openstack-cinder-csi-driver-operator | openstack-cinder-csi-driver-controller | openstack-cinder-csi-driver-node | # @case_id OCP-37557
+
+    @aws-ipi
+    @aws-upi
+    Examples:
+      | provisioner              | sc_name      | deployment_operator                  | deployment_controller                  | daemonset_node                   |
       | ebs.csi.aws.com          | gp2-csi      | aws-ebs-csi-driver-operator          | aws-ebs-csi-driver-controller          | aws-ebs-csi-driver-node          | # @case_id OCP-34144
+
+    Examples:
+      | provisioner              | sc_name      | deployment_operator                  | deployment_controller                  | daemonset_node                   |
       | pd.csi.storage.gke.io    | standard-csi | gcp-pd-csi-driver-operator           | gcp-pd-csi-driver-controller           | gcp-pd-csi-driver-node           | # @case_id OCP-37474
