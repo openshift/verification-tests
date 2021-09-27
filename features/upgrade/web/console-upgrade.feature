@@ -1,5 +1,6 @@
 Feature: web console related upgrade check
   # @author yanpzhan@redhat.com
+  @console
   @upgrade-prepare
   @users=upuser1,upuser2
   Scenario: check console accessibility - prepare
@@ -44,12 +45,13 @@ Feature: web console related upgrade check
   # @case_id OCP-22597
   @upgrade-check
   @admin
+  @console
   @users=upuser1,upuser2
   @aws-ipi
+  @aws-upi
   @gcp-upi
   @gcp-ipi
   @4.9
-  @aws-upi
   Scenario: check console accessibility
     Given the first user is cluster-admin
     Given I open admin console in a browser

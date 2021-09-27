@@ -87,13 +87,14 @@ Feature: elasticsearch-operator related tests
   # @author qitang@redhat.com
   # @case_id OCP-33883
   @admin
+  @consle
   @destructive
   @commonlogging
   @aws-ipi
-  @gcp-upi
-  @gcp-ipi
-  @4.9
   @aws-upi
+  @gcp-ipi
+  @gcp-upi
+  @4.9
   Scenario: Additional essential metrics ES dashboard
     Given I switch to the first user
     And the first user is cluster-admin
