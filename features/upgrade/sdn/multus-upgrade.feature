@@ -66,6 +66,3 @@
     
     # Delete the created project from testing cluster
     Given the "multus-upgrade" project is deleted
-
-
-    
