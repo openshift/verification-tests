@@ -51,6 +51,7 @@ Feature: basic verification for upgrade testing
   @gcp-ipi
   @4.9
   @aws-upi
+  @vsphere-ipi
   Scenario: Upgrade - Make sure multiple resources work well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "node-upgrade" project

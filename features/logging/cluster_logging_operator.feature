@@ -11,6 +11,7 @@ Feature: cluster-logging-operator related test
   @gcp-ipi
   @4.9
   @aws-upi
+  @vsphere-ipi
   Scenario: ServiceMonitor Object for collector is deployed along with cluster logging
     Given I wait for the "fluentd" service_monitor to appear
     And the expression should be true> service_monitor('fluentd').service_monitor_endpoint_spec(port: "metrics").path == "/metrics"
@@ -86,6 +87,7 @@ Feature: cluster-logging-operator related test
   @gcp-ipi
   @4.9
   @aws-upi
+  @vsphere-ipi
   Scenario: Fluentd alert rule: FluentdNodeDown
     Given the master version >= "4.2"
     Given I obtain test data file "logging/clusterlogging/example.yaml"
@@ -151,6 +153,7 @@ Feature: cluster-logging-operator related test
   @gcp-ipi
   @4.9
   @aws-upi
+  @vsphere-ipi
   Scenario: OpenShift Logging dashboard
     Given I switch to the first user
     And the first user is cluster-admin
@@ -217,6 +220,7 @@ Feature: cluster-logging-operator related test
   @gcp-ipi
   @4.9
   @aws-upi
+  @vsphere-ipi
   Scenario: Fluentd optimizing variable changes trigger new deployment
     Given I obtain test data file "logging/clusterlogging/cl_fluentd-buffer_default.yaml"
     And I create clusterlogging instance with:

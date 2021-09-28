@@ -5,6 +5,7 @@ Feature: kubelet restart and node restart
   @destructive
   @inactive
   @4.9
+  @vsphere-ipi
   Scenario Outline: kubelet restart should not affect attached/mounted volumes
     Given I have a project
     When I run the :new_app client command with:

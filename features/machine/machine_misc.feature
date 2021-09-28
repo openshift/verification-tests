@@ -5,6 +5,7 @@ Feature: Machine misc features testing
   @admin
   @destructive
   @4.9
+  @vsphere-ipi
   Scenario: PVCs can still be provisioned after the password has been changed vSphere
     Given I have an IPI deployment
     Then I switch to cluster admin pseudo user
@@ -117,6 +118,7 @@ Feature: Machine misc features testing
   @gcp-ipi
   @4.9
   @aws-upi
+  @vsphere-ipi
   Scenario: kube-rbac-proxy should not expose tokens, have excessive verbosity
     Given I switch to cluster admin pseudo user
 

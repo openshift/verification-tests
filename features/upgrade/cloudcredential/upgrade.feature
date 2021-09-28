@@ -20,6 +20,7 @@ Feature: CloudCredentialOperator components upgrade tests
   @gcp-ipi
   @4.9
   @aws-upi
+  @vsphere-ipi
   Scenario: Cluster operator cloud-credential should be available after upgrade
     # Check cloud-credential operator version after upgraded
     Given the "cloud-credential" operator version matches the current cluster version

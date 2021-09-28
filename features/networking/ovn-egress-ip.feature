@@ -5,6 +5,7 @@ Feature: OVN Egress IP related features
   @admin
   @destructive
   @4.9
+  @vsphere-ipi
   Scenario: EgressIP works for all pods in the matched namespace when only configure namespaceSelector
     Given I save ipecho url to the clipboard
     Given I select a random node's host
@@ -69,6 +70,7 @@ Feature: OVN Egress IP related features
   @admin
   @destructive
   @4.9
+  @vsphere-ipi
   Scenario: Multiple EgressIP objects can have multiple Egress IPs
     Given I save ipecho url to the clipboard
     Given I store the schedulable nodes in the :nodes clipboard
@@ -136,6 +138,7 @@ Feature: OVN Egress IP related features
   @admin
   @destructive
   @4.9
+  @vsphere-ipi
   Scenario: Multi-project can share same EgressIP
     Given I save ipecho url to the clipboard
     Given I store the schedulable nodes in the :nodes clipboard
@@ -205,6 +208,7 @@ Feature: OVN Egress IP related features
   @admin
   @destructive
   @4.9
+  @vsphere-ipi
   Scenario: Removed matched labels from project will not use EgressIP
     Given I save ipecho url to the clipboard
     Given I store the schedulable nodes in the :nodes clipboard
@@ -256,6 +260,7 @@ Feature: OVN Egress IP related features
   @admin
   @destructive
   @4.9
+  @vsphere-ipi
   Scenario: Removed matched labels from pods will not use EgressIP
     Given I save ipecho url to the clipboard
     Given I store the schedulable nodes in the :nodes clipboard
@@ -314,6 +319,7 @@ Feature: OVN Egress IP related features
   @admin
   @destructive
   @4.9
+  @vsphere-ipi
   Scenario: EgressIP was removed after delete egressIP object
     Given I save ipecho url to the clipboard
     Given I store the schedulable nodes in the :nodes clipboard
@@ -361,6 +367,7 @@ Feature: OVN Egress IP related features
   @admin
   @destructive
   @4.9
+  @vsphere-ipi
   Scenario: After reboot node or reboot OVN services EgressIP still work
     Given I save ipecho url to the clipboard
     Given I store the schedulable workers in the :nodes clipboard

@@ -124,6 +124,7 @@ Feature: storage security check
   @gcp-ipi
   @4.9
   @aws-upi
+  @vsphere-ipi
   Scenario: secret volume security check
     Given I have a project
     Given I obtain test data file "storage/secret/secret.yaml"

@@ -7,6 +7,7 @@ Feature: ServiceAccount and Policy Managerment
   @gcp-ipi
   @4.9
   @aws-upi
+  @vsphere-ipi
   Scenario: Could grant admin permission for the service account username to access to its own project
     Given I have a project
     When I create a new application with:
@@ -41,6 +42,7 @@ Feature: ServiceAccount and Policy Managerment
   @gcp-ipi
   @4.9
   @aws-upi
+  @vsphere-ipi
   Scenario: Could grant admin permission for the service account group to access to its own project
     Given I have a project
     When I run the :new_app client command with:
@@ -80,6 +82,7 @@ Feature: ServiceAccount and Policy Managerment
   @gcp-ipi
   @4.9
   @aws-upi
+  @vsphere-ipi
   Scenario: User can get the serviceaccount token via client
     Given I have a project
     When I run the :serviceaccounts_get_token client command with:
