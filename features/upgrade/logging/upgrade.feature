@@ -12,7 +12,7 @@ Feature: Logging upgrading related features
     Given I run the :oadm_groups_new admin command with:
       | group_name | project-group-share                |
       | user_name  | <%= user(1, switch: false).name %> |
-    Given I switch to cluster admin pseudo user
+    Given logging operators are installed successfully
     Given I have clusterlogging with persistent storage ES
     Then I wait for the project "logging-upg-prep-1" logs to appear in the ES pod
     When I check the cronjob status
