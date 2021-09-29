@@ -1,6 +1,7 @@
 # creates a SCC policy and registers clean-up to remove it after scenario
 Given /^the following scc policy is created: (.+)$/ do |policy|
   ensure_admin_tagged
+  ensure_destructive_tagged
 
   if policy.include? '://'
     step %Q{I download a file from "#{policy}"}
@@ -34,6 +35,7 @@ end
 # setup tier_down to restore scc after scenario end;
 Given /^scc policy #{QUOTED} is restored after scenario$/ do |policy|
   ensure_admin_tagged
+  ensure_destructive_tagged
 
   @result = admin.cli_exec(:get, resource: 'scc', resource_name: policy, o: 'yaml')
   if @result[:success]
