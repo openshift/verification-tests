@@ -253,24 +253,32 @@ Feature: collector related tests
       | l           | es-node-master=true |
     Then the step should succeed
     And I wait until ES cluster is ready
-    And I wait for the project "openshift-logging" logs to appear in the ES pod
+    Given I switch to the first user
+    And I have a project
+    And evaluation of `project` is stored in the :loggen_proj clipboard
+    And I have "json" log pod in project "<%= cb. loggen_proj.name%>"
+    Given I switch to cluster admin pseudo user
+    And I use the "openshift-logging" project
+    And I wait for the project "<%= cb. loggen_proj.name%>" logs to appear in the ES pod
+    Given logging collector name is stored in the :collector_name clipboard
     Given a pod becomes ready with labels:
-      | logging-infra=fluentd |
+      | logging-infra=<%= cb.collector_name %> |
     And evaluation of `pod.name` is stored in the :fluentd_pod clipboard
     When I run the :logs client command with:
-      | resource_name | <%= cb.fluentd_pod %> |
+      | resource_name  | <%= cb.fluentd_pod %>    |
+      | c              | <%= cb.collector_name %> |
     Then the step should succeed
     And the output should not contain:
       | Fluentd logs have been redirected to: /var/log/fluentd/fluentd.log |
       | If you want to print out the logs, use command:                    |
       | oc exec <pod_name> /usr/local/logs                                 |
-    When I execute on the "<%= cb.fluentd_pod %>" pod:
+    When I execute on the "<%= cb.fluentd_pod %>" pod "<%= cb.collector_name %>" container:
       | ls | /var/log/ |
     Then the step should succeed
     And the output should not contain:
       | fluentd |
     When I perform the HTTP request on the ES pod with labels "es-node-master=true":
-      | relative_url | _count?pretty' -d '{"query": {"match": {"kubernetes.container_name": "fluentd"}}} |
+      | relative_url | _count?pretty' -d '{"query": {"match": {"kubernetes.container_name": "<%= cb.collector_name %>"}}} |
       | op           | GET |
     Then the step should succeed
-    And the expression should be true> JSON.parse(@result[:response])['count'] == 0
+    And the expression should be true> JSON.parse(@result[:stdout])['count'] == 0

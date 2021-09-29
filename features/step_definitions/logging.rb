@@ -166,8 +166,9 @@ Given /^I wait for clusterlogging(?: named "(.+)")? to be functional in the#{OPT
 
   # check log collector is ready.
   logger.info("### checking logging subcomponent status: log collector")
+  step %Q/logging collector name is stored in the :collector_name clipboard/
   step %Q/a pod becomes ready with labels:/, table(%{
-    | component=fluentd |
+    | component=#{cb.collector_name} |
   })
   cl.wait_until_fluentd_is_ready
 
@@ -222,8 +223,9 @@ Given /^logging service is removed successfully$/ do
 end
 
 Given /^I wait until fluentd is ready$/ do
-  step %Q/#{daemon_set('fluentd').replica_counters[:desired]} pods become ready with labels:/, table(%{
-    | logging-infra=fluentd |
+  step %Q/logging collector name is stored in the :collector_name clipboard/
+  step %Q/#{daemon_set("#{cb.collector_name}").replica_counters[:desired]} pods become ready with labels:/, table(%{
+    | logging-infra=#{cb.collector_name} |
   })
 end
 
@@ -326,7 +328,6 @@ Given /^I create clusterlogging instance with:$/ do | table |
       step %Q/I wait until kibana is ready/
     end
     unless cluster_logging('instance').collection_spec.nil?
-      step %Q/I wait for the "fluentd" daemonset to appear up to 300 seconds/
       step %Q/I wait until fluentd is ready/
     end
   end
@@ -337,6 +338,7 @@ Given /^I delete the clusterlogging instance$/ do
   ensure_destructive_tagged
   step %Q/I switch to cluster admin pseudo user/
   step %Q/I use the "openshift-logging" project/
+
   if cluster_logging("instance").exists?
     @result = admin.cli_exec(:delete, object_type: 'clusterlogging', object_name_or_id: 'instance', n: 'openshift-logging')
     raise "Unable to delete instance" unless @result[:success]
@@ -358,8 +360,9 @@ Given /^I delete the clusterlogging instance$/ do
     unless  cluster_logging("instance").visualization_spec(cached: true).nil?
       step %Q/I wait for the resource "deployment" named "kibana" to disappear/
     end
+      step %Q/logging collector name is stored in the :collector_name clipboard/
     unless cluster_logging('instance').collection_spec(cached: true).nil?
-      step %Q/I wait for the resource "daemonset" named "fluentd" to disappear/
+      step %Q/I wait for the resource "daemonset" named "#{cb.collector_name}" to disappear/
     end
   end
 end
@@ -392,6 +395,8 @@ Given /^(cluster-logging|elasticsearch-operator) channel name is stored in the#{
       cb[cb_name] = "stable-5.1"
     when '4.9'
       cb[cb_name] = "stable-5.2"
+    when '4.10'
+      cb[cb_name] = "stable-5.3"
     else
       cb[cb_name] = "stable"
     end
@@ -741,16 +746,18 @@ Given /^I upgrade the operator with:$/ do | table |
     end
   end
 
+
+  step %Q/logging collector name is stored in the :collector_name clipboard/
   # check fluentd status
   if cluster_logging('instance').collection_spec != nil
-    if daemon_set('fluentd').exists?
+    if daemon_set("#{cb.collector_name}").exists?
       success = wait_for(300, interval: 10) {
-        (daemon_set('fluentd').replica_counters(cached: false)[:desired] == daemon_set('fluentd').replica_counters(cached: false)[:updated_scheduled]) &&
-        (daemon_set('fluentd').replica_counters(cached: false)[:desired] == daemon_set('fluentd').replica_counters(cached: false)[:available])
+        (daemon_set("#{cb.collector_name}").replica_counters(cached: false)[:desired] == daemon_set("#{cb.collector_name}").replica_counters(cached: false)[:updated_scheduled]) &&
+        (daemon_set("#{cb.collector_name}").replica_counters(cached: false)[:desired] == daemon_set("#{cb.collector_name}").replica_counters(cached: false)[:available])
       }
-      raise "Fluentd isn't in a good status" unless success
+      raise "the collector fluentd isn't in a good status" unless success
     else
-      raise "Daemonset/fluentd doesn't exist"
+      raise "Daemonset/#{cb.collector_name} doesn't exist"
     end
   end
 end
@@ -1191,4 +1198,21 @@ Given /^I have clusterlogging with(?: (\d+))? persistent storage ES$/ do |es_num
         | redundancy_policy | #{ redundancy_policy }               |
       })
     end
+end
+
+Given /^logging collector name is stored in the#{OPT_SYM} clipboard$/ do | collector_name |
+  collector_name ||= "collector_name"
+  fluentd_component_label ||= "collector"
+
+  clo_csv_version = subscription("cluster-logging").current_csv(cached: false)
+  if clo_csv_version.include? "cluster-logging"
+    clo_release_version = clo_csv_version.match(/cluster-logging\.(.*)/)[1].split('-')[0]
+  else
+    clo_release_version = clo_csv_version.match(/clusterlogging\.(.*)/)[1].split('-')[0]
+  end
+
+  if Integer(clo_release_version.split('.')[0]) < 5 || (Integer(clo_release_version.split('.')[0]) ==5 &&  Integer(clo_release_version.split('.')[1]) < 3 )
+     fluentd_component_label="fluentd"
+  end
+  cb[collector_name] = fluentd_component_label
 end

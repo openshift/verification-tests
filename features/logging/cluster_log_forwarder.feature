@@ -22,6 +22,7 @@ Feature: cluster log forwarder features
     # check logs in ES
     Given I switch to cluster admin pseudo user
     And I use the "openshift-logging" project
+    Given logging collector name is stored in the :collector_name clipboard
     Given I wait for the "app" index to appear in the ES pod with labels "es-node-master=true"
     And I wait for the project "<%= cb.proj.name %>" logs to appear in the ES pod
     When I perform the HTTP request on the ES pod with labels "es-node-master=true":
@@ -43,8 +44,8 @@ Feature: cluster log forwarder features
     Then the step should succeed
     And I wait for the "instance" cluster_log_forwarder to appear
     Given 10 seconds have passed
-    And <%= daemon_set('fluentd').replica_counters[:desired] %> pods become ready with labels:
-      | logging-infra=fluentd |
+    And <%= daemon_set("<%= cb.collector_name %>").replica_counters[:desired] %> pods become ready with labels:
+      | logging-infra=<%= cb.collector_name %> |
     Given I wait up to 300 seconds for the steps to pass:
     """
     And I execute on the "<%= cb.log_receiver.name %>" pod:
@@ -92,9 +93,8 @@ Feature: cluster log forwarder features
       | f | clusterlogforwarder.yaml |
     Then the step should succeed
     Given 10 seconds have passed
-    And <%= daemon_set('fluentd').replica_counters[:desired] %> pods become ready with labels:
-      | logging-infra=fluentd |
-
+    And <%= daemon_set("<%= cb.collector_name %>").replica_counters[:desired] %> pods become ready with labels:
+      | logging-infra=<%= cb.collector_name %> |
     Given I wait up to 300 seconds for the steps to pass:
     """
     When I perform the HTTP request on the ES pod with labels "es-node-master=true":
