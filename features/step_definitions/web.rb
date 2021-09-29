@@ -90,6 +90,7 @@ Given /^I have a browser with:$/ do |table|
 end
 
 Given /^I open registry console in a browser$/ do
+  ensure_console_tagged
   base_rules = BushSlicer::WebConsoleExecutor::RULES_DIR + "/base/"
   snippets_dir = BushSlicer::WebConsoleExecutor::SNIPPETS_DIR
   step "default registry-console route is stored in the :reg_console_url clipboard"
@@ -232,6 +233,7 @@ end
 
 # perhaps we can get rid of this step since it's so short??
 Given /^I open metrics console in the browser$/ do
+  ensure_console_tagged
   metrics_url = env.metrics_console_url + "/metrics"
   step %Q/I access the "#{metrics_url}" url in the web browser/
 end
