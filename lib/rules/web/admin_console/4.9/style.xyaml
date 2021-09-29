@@ -150,36 +150,54 @@ filter_label_and_check_style:
         xpath: //button[contains(@class, 'co-suggestion-line') and //span[contains(text(),'<suggestion_text>')]]
       op: click
   action: check_filtered_item_style
-check_default_language:
-  elements:
-  - selector:
-      xpath: //span[@data-test='username']/ancestor::button[contains(@class,'app-launcher__toggle')]
-    op: click
-  - selector:
-      xpath: //a[contains(., 'User Preferences')]
-    op: click
-  - selector:
-      xpath: //a[@data-test='tab language']
-    op: click
-  - selector:
-      xpath: //button[@id='console.preferredLanguage' and @disabled]
-  action: uncheck_use_default_language
-uncheck_use_default_language:
-  elements:
-  - selector:
-      xpath: //input[@id='default-language-checkbox' and @type='checkbox']
-    op: click
-  - selector:
-      xpath: //button[@id='console.preferredLanguage']
 choose_console_language:
   elements:
+  - selector: &username_button
+      xpath: //span[@data-test='username']/ancestor::button[contains(@class,'app-launcher__toggle')]
+    op: click
+  - selector: &user_preferences
+      xpath: //a[contains(@href, 'user-preferences')]
+    op: click
+  - selector: &language_setting_button
+      xpath: //a[@data-test='tab language']
+    op: click
+  action:
+    if_element:
+      selector: &language_dropdownlist_disabled
+        xpath: //button[contains(@id,'preferredLanguage') and @disabled]
+    ref: toggle_default_language_checkbox
+  elements:
   - selector:
-      id: console.preferredLanguage
-    type: button
+      xpath: //button[contains(@id, 'console.preferredLanguage')]
     op: click
   - selector:
       xpath: //button[contains(., '<lng_button>')]
     op: click
+toggle_default_language_checkbox:
+  elements:
+  - selector:
+      xpath: //input[@id='default-language-checkbox' and @type='checkbox']
+    op: click
+check_default_language:
+  elements:
+  - selector:
+      <<: *username_button
+    op: click
+  - selector:
+      <<: *user_preferences
+    op: click
+  - selector:
+      <<: *language_setting_button
+    op: click
+  action:
+    if_element:
+      selector:
+        <<: *language_dropdownlist_disabled
+    ref: toggle_default_language_checkbox
+switch_language_to_english:
+  params:
+    lng_button: English
+  action: choose_console_language
 switch_language_to_chinese:
   params:
     lng_button: 中文
