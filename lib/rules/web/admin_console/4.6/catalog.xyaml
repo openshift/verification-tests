@@ -167,13 +167,15 @@ click_project_list_dropdown:
 choose_project_from_dropdown_list:
   element:
     selector:
-      xpath: //ul//a[@id='<project_name>-Project-link' and contains(@class,'dropdown__menu-item')]
+      xpath: //ul//a[contains(@id,'<project_name>')]
     op: click
 select_target_namespace:
   params:
     install_mode: OwnNamespace
+    filter_text: <project_name>
   action: choose_installmode
   action: click_project_list_dropdown
+  action: set_strings_in_dropdown_filter_box
   action: choose_project_from_dropdown_list
 click_catalog_item:
   elements:
