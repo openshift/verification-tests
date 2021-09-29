@@ -143,7 +143,7 @@ Feature: cluster-logging-operator related test
   # @author qitang@redhat.com
   # @case_id OCP-33721
   @admin
-  @consle
+  @console
   @destructive
   @commonlogging
   @aws-ipi

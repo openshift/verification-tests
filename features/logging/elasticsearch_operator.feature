@@ -87,7 +87,7 @@ Feature: elasticsearch-operator related tests
   # @author qitang@redhat.com
   # @case_id OCP-33883
   @admin
-  @consle
+  @console
   @destructive
   @commonlogging
   @aws-ipi

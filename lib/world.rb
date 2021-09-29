@@ -58,6 +58,10 @@ module BushSlicer
       scenario_tags.include? '@admin'
     end
 
+    def tagged_console?
+      scenario_tags.include? '@console'
+    end
+
     def tagged_destructive?
       scenario_tags.include? '@destructive'
     end
@@ -76,6 +80,10 @@ module BushSlicer
 
     def ensure_admin_tagged
       raise 'tag scenario @admin as you use admin access' unless tagged_admin?
+    end
+
+    def ensure_console_tagged
+      raise 'tag scenario @console as you need console' unless tagged_console?
     end
 
     def ensure_destructive_tagged

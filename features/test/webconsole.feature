@@ -45,7 +45,7 @@ Feature: console test
     When I access the "https://github.com" url in the web browser
 
   @admin
-  @consle
+  @console
   @destructive
   Scenario: create operator subscription
     #Given logging service is removed successfully

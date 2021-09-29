@@ -10,6 +10,7 @@ Given /^default admin-console downloads route is stored in the#{OPT_SYM} clipboa
 end
 
 Given /^I open admin console in a browser$/ do
+  ensure_console_tagged
   base_rules = BushSlicer::WebConsoleExecutor::RULES_DIR + "/base/"
   snippets_dir = BushSlicer::WebConsoleExecutor::SNIPPETS_DIR
 
@@ -32,6 +33,7 @@ Given /^I open admin console in a browser$/ do
 end
 
 Given /^I open admin console in a browser with:$/ do |table|
+  ensure_console_tagged
   base_rules = BushSlicer::WebConsoleExecutor::RULES_DIR + "/base/"
   snippets_dir = BushSlicer::WebConsoleExecutor::SNIPPETS_DIR
 
