@@ -509,7 +509,6 @@ Feature: Machine features testing
   @admin
   @destructive
   @4.9
-  @vsphere-ipi
   Scenario Outline: Implement defaulting machineset values for vsphere
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -554,9 +553,13 @@ Feature: Machine features testing
       | Provisioned  |
     """
 
+    @vsphere-ipi
     Examples:
       | name                         | template                           | diskGiB           |
       | default-valued-33380         | <%= cb.template %>                 | <%= cb.diskGiB %> | # @case_id OCP-33380
+    @vsphere-ipi
+    Examples:
+      | name                         | template                           | diskGiB           |
       | default-valued-windows-35421 | openshift-qe-template-windows-2019 | 135               | # @case_id OCP-35421
 
   # @author miyadav@redhat.com
