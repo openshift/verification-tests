@@ -199,6 +199,7 @@ module BushSlicer
           "e.g. tools/polarshift.rb clone-run my_run_id"
         c.option('-s', "--status CASE_STAUTS", "testcase status to be cloned, passed, failed, default to all")
         c.option('-t', "--title RUN_TITLE", "Title of the clone run you wish to be")
+        c.option('-e', "--subteam SUBTEAM_NAME", "the subteam to filter on")
         c.action do |args, options|
           setup_global_opts(options)
 
@@ -467,6 +468,18 @@ module BushSlicer
       return custom_fields
     end
 
+    # @input given a yaml, parse and extract the subcomopnent
+    # @return String subcomponent name or nil
+    def get_subcomponent(res_yaml)
+      custom_list = res_yaml.dig('test_case', 'customFields', 'Custom')
+      res = custom_list.select { |e| e.dig('value', 'id') if e.dig('key') == 'subteam' }
+      if res.count > 0
+        res.first.dig('value', 'id')
+      else
+        nil
+      end
+    end
+
     # given a testrun_id, generate a query statement based on testcase IDs and custom fields
     # which is fed into create_run_smart method to generate the new polarion run
     # @options: is the cli options with
@@ -485,11 +498,22 @@ module BushSlicer
       case_status = options.status
       run_title = options.title
       valid_statuses = ['Passed', 'Failed', 'Waiting', 'Running', 'Blocked']
-      query_result = polarshift.get_run_smart(project, test_run_id)
+      query_result = polarshift.get_run_smart(project, test_run_id, with_cases: 'full')
       if case_status
         case_status = case_status.downcase.capitalize
         raised "Invalid status given, only #{valid_statuses} are accepted" unless valid_statuses.include? case_status
         filtered_cases = query_result['records']["TestRecord"].select {|r| r['result'] == case_status}
+        # user wants further filter by specifying subteam as as a single or
+        # multiple subteam by putting them in a csv
+        if opts[:subteam]
+          subteams = opts[:subteam].split(',')
+          target_cases = []
+          filtered_cases.each do |fc|
+            fc_subteam = get_subcomponent(fc)
+            target_cases << fc if subteams.include? fc_subteam
+          end
+          filtered_cases = target_cases
+        end
         tc_ids = filtered_cases.map {|c| c['test_case']['id']}
         run_title ||= "Clone of '#{case_status}' cases for #{test_run_id}"
       else
