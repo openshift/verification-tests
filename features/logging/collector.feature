@@ -205,9 +205,9 @@ Feature: collector related tests
   @aws-upi
   Scenario: All nodes logs are collected
     Given the master version >= "4.5"
-    Given evaluation of `cluster_logging('instance').collection_type` is stored in the :collection_type clipboard
-    Given <%= daemon_set(cb.collection_type).replica_counters[:desired] %> pods become ready with labels:
-      | component=<%= cb.collection_type %> |
+    Given logging collector name is stored in the :collector_name clipboard
+    Given <%= daemon_set(cb.collector_name).replica_counters[:desired] %> pods become ready with labels:
+      | component=<%= cb.collector_name %> |
     And evaluation of `@pods.map {|n| n.node_ip}.uniq` is stored in the :node_ips clipboard
     Given I wait for the "infra" index to appear in the ES pod with labels "es-node-master=true"
     Then I get the "infra" logging index information from a pod with labels "es-node-master=true"
@@ -230,11 +230,12 @@ Feature: collector related tests
     And the expression should be true> Set.new(cb.node_ips) == Set.new(cb.journal_ips)
     """
 
+    Given evaluation of `cluster_logging('instance').collection_type` is stored in the :collection_type clipboard
     When I perform the HTTP request on the ES pod with labels "es-node-master=true":
       | relative_url | infra*/_search?pretty'  -d '{"query": {"exists": {"field": "systemd"}}} |
       | op           | GET                                                                     |
     Then the step should succeed
-    And the expression should be true> @result[:parsed]['hits']['hits'][0]['_source']['pipeline_metadata']['collector']['name'] == "fluentd"
+    And the expression should be true> @result[:parsed]['hits']['hits'][0]['_source']['pipeline_metadata']['collector']['name'] == "<%= cb.collection_type %>"
     And the expression should be true> @result[:parsed]['hits']['hits'][0]['_source']['pipeline_metadata']['collector']['inputname'] == "fluent-plugin-systemd"
 
   # @author qitang@redhat.com
