@@ -46,6 +46,7 @@ Feature: SDN related networking scenarios
   @gcp-ipi
   @4.9
   @aws-upi
+  @vsphere-ipi
   Scenario: iptables rules will be repaired automatically once it gets destroyed
     # we do not detect incomplete rule removal since ~4.3, BZ-1810316
     # so only test on >= 4.3
@@ -85,6 +86,7 @@ Feature: SDN related networking scenarios
   @gcp-ipi
   @4.9
   @aws-upi
+  @vsphere-ipi
   Scenario: an empty OPENSHIFT-ADMIN-OUTPUT-RULES chain is created in filter table at startup
     Given the master version >= "3.6"
     Given I have a project
@@ -192,6 +194,7 @@ Feature: SDN related networking scenarios
   @gcp-ipi
   @4.9
   @aws-upi
+  @vsphere-ipi
   Scenario: should not show "No such device" message when run "ovs-vsctl show" command
     Given I have a project
     And I have a pod-for-ping in the project
@@ -214,6 +217,7 @@ Feature: SDN related networking scenarios
   @gcp-ipi
   @4.9
   @aws-upi
+  @vsphere-ipi
   Scenario: The iptables binary and rules on sdn containers should be the same as host
     Given I select a random node's host
     When I run commands on the host:
@@ -298,6 +302,7 @@ Feature: SDN related networking scenarios
   @gcp-ipi
   @4.9
   @aws-upi
+  @vsphere-ipi
   Scenario: Networking should work on default namespace
   #Test for bug https://bugzilla.redhat.com/show_bug.cgi?id=1800324 and https://bugzilla.redhat.com/show_bug.cgi?id=1796157
     Given I switch to cluster admin pseudo user
@@ -404,6 +409,7 @@ Feature: SDN related networking scenarios
   @aws-upi
   @4.9
   @network-ovnkubernetes
+  @vsphere-ipi
   Scenario: NetworkManager should consider OVS interfaces as unmanaged
   Given the env is using "OVNKubernetes" networkType
   And I select a random node's host
@@ -478,6 +484,7 @@ Feature: SDN related networking scenarios
   # @case_id OCP-41132
   @admin
   @4.9
+  @vsphere-ipi
   Scenario: UDP offloads were disabled on vsphere platform
     Given I select a random node's host
     Given the default interface on nodes is stored in the :default_interface clipboard
@@ -493,6 +500,7 @@ Feature: SDN related networking scenarios
   @admin
   @4.9
   @aws-upi
+  @vsphere-ipi
   Scenario: Disable conntrack for vxlan traffic
     Given the env is using "OpenShiftSDN" networkType
     Given I select a random node's host

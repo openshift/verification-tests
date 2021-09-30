@@ -7,6 +7,7 @@ Feature: MachineHealthCheck Test Scenarios
   @aws-ipi
   @gcp-ipi
   @4.9
+  @vsphere-ipi
   Scenario: Remediation should be applied when the unhealthyCondition 'Ready' is met
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -45,6 +46,7 @@ Feature: MachineHealthCheck Test Scenarios
   @aws-ipi
   @gcp-ipi
   @4.9
+  @vsphere-ipi
   Scenario: Create a machinehealthcheck when there is already an unhealthy machine
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -75,6 +77,7 @@ Feature: MachineHealthCheck Test Scenarios
   @aws-ipi
   @gcp-ipi
   @4.9
+  @vsphere-ipi
   Scenario: Create multiple MHCs to monitor same machineset
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -107,6 +110,7 @@ Feature: MachineHealthCheck Test Scenarios
   @aws-ipi
   @gcp-ipi
   @4.9
+  @vsphere-ipi
   Scenario: Use "maxUnhealthy" to prevent automated remediation
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user

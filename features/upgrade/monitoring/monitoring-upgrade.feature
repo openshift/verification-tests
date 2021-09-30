@@ -19,6 +19,7 @@ Feature: cluster monitoring related upgrade check
   @gcp-ipi
   @4.9
   @aws-upi
+  @vsphere-ipi
   Scenario: upgrade cluster monitoring along with OCP
     Given I switch to cluster admin pseudo user
     And I use the "openshift-monitoring" project

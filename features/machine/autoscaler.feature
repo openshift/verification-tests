@@ -7,6 +7,7 @@ Feature: Cluster Autoscaler Tests
   @aws-ipi
   @gcp-ipi
   @4.9
+  @vsphere-ipi
   Scenario: Cluster should automatically scale up and scale down with clusterautoscaler deployed
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user

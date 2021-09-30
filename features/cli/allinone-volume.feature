@@ -7,6 +7,7 @@ Feature: All in one volume
   @gcp-ipi
   @4.9
   @aws-upi
+  @vsphere-ipi
   Scenario: Project secrets, configmap and downward API into the same volume with normal keys and path
     Given I have a project
     Given I obtain test data file "pods/allinone-volume/configmap.yaml"

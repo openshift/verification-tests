@@ -9,6 +9,7 @@ Feature: NFS Persistent Volume
   @gcp-ipi
   @4.9
   @aws-upi
+  @vsphere-ipi
   Scenario: Share NFS with multiple pods with ReadWriteMany mode
     Given I have a project
     And I have a NFS service in the project
@@ -56,6 +57,7 @@ Feature: NFS Persistent Volume
   # @case_id OCP-10281
   @admin
   @4.9
+  @vsphere-ipi
   Scenario: Permission denied when nfs pv annotaion is not right
     Given I have a project
     And I have a NFS service in the project

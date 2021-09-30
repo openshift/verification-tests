@@ -75,6 +75,7 @@ Feature: Storage upgrade tests
   @gcp-ipi
   @4.9
   @aws-upi
+  @vsphere-ipi
   Scenario: Cluster operator storage should be in correct status and dynamic provisioning should work well after upgrade
     Given I switch to cluster admin pseudo user
     # Check storage operator version after upgraded

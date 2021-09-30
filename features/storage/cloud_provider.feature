@@ -29,9 +29,18 @@ Feature: kubelet restart and node restart
     Then the step should succeed
     """
 
+    
     Examples:
       | platform       |
       | azure-disk     | # @case_id OCP-13333
+    Examples:
+      | platform       |
       | cinder         | # @case_id OCP-11317
+    Examples:
+      | platform       |
       | gce            | # @case_id OCP-11613
+    
+    @vsphere-ipi
+    Examples:
+      | platform       |
       | vsphere-volume | # @case_id OCP-13631

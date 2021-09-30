@@ -9,6 +9,7 @@ Feature: oc_volume.feature
   @gcp-ipi
   @4.9
   @aws-upi
+  @vsphere-ipi
   Scenario: Create a pod that consumes the secret in a volume
     Given I have a project
     Given I obtain test data file "pods/allinone-volume/secret.yaml"
@@ -55,6 +56,7 @@ Feature: oc_volume.feature
   @gcp-ipi
   @4.9
   @aws-upi
+  @vsphere-ipi
   Scenario: Add secret volume to dc and rc
     Given I have a project
     When I run the :new_app_as_dc client command with:

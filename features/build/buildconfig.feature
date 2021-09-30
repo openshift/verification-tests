@@ -96,6 +96,7 @@ Feature: buildconfig.feature
   @gcp-ipi
   @4.9
   @aws-upi
+  @vsphere-ipi
   Scenario: Using secret to pull a docker image which be used as source input
     Given I have a project
     When I run the :create_secret client command with:
