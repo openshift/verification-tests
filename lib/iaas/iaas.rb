@@ -16,6 +16,8 @@ module BushSlicer
           return {:type => "gcp", :provider => self.init_gcp(env)}
         when "Azure"
           return {:type => "azure", :provider => self.init_azure(env)}
+        when "None"
+          return {:type => "none", :provider => nil}
         else
           raise "The IAAS provider #{provider_name} is currently not supported by test framework!"
         end

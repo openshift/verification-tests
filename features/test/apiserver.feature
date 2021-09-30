@@ -24,3 +24,11 @@ Feature: API server Test features
     Given operator "kube-apiserver" becomes available within 100 seconds
     Given operator "kube-apiserver" becomes non-progressing within 100 seconds
     Given operator "kube-apiserver" becomes non-degraded within 100 seconds
+
+  # @author kewang@redhat.com
+  @admin
+  Scenario: Quick test for baremetal cluster init
+    # Currently we don't support baremetal iaas, but the iaas type will be checked by some cases with baremetal cluster
+    # The platform type from the baremetal openshift we get is None, we need to handle this type and return one value(even if it's nil), 
+    # ensure check iaas type with baremetal without exception and exit.
+    Given evaluation of `env.iaas[:type] == "aws" ? "1500" : "1300"` is stored in the :wait_time clipboard
