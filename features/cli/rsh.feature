@@ -5,7 +5,7 @@ Feature: rsh.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Check oc rsh for simpler access to a remote shell

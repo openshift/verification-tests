@@ -5,7 +5,7 @@ Feature: Testing the isolation during build scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario Outline: Build-container is constrained to access other projects pod for multitenant plugin
@@ -57,7 +57,7 @@ Feature: Testing the isolation during build scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario Outline: Build-container is constrained to access other projects pod for networkpolicy plugin

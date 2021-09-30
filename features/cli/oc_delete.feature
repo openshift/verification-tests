@@ -5,7 +5,7 @@ Feature: oc_delete.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Gracefully delete a pod with '--grace-period' option
@@ -122,7 +122,7 @@ Feature: oc_delete.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Verify pod is gracefully deleted when DeletionGracePeriodSeconds is specified.
@@ -153,7 +153,7 @@ Feature: oc_delete.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Pod should be immediately deleted if TerminationGracePeriodSeconds is 0

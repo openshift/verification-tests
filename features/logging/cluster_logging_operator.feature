@@ -9,7 +9,7 @@ Feature: cluster-logging-operator related test
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: ServiceMonitor Object for collector is deployed along with cluster logging
@@ -86,7 +86,7 @@ Feature: cluster-logging-operator related test
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Fluentd alert rule: FluentdNodeDown
@@ -153,7 +153,7 @@ Feature: cluster-logging-operator related test
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: OpenShift Logging dashboard
@@ -195,7 +195,7 @@ Feature: cluster-logging-operator related test
   # @case_id OCP-33793
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   Scenario: Expose more fluentd knobs to support optimizing fluentd for different environments
     Given I obtain test data file "logging/clusterlogging/cl_fluentd-buffer.yaml"
     And I create clusterlogging instance with:
@@ -221,7 +221,7 @@ Feature: cluster-logging-operator related test
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Fluentd optimizing variable changes trigger new deployment

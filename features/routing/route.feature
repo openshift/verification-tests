@@ -6,7 +6,7 @@ Feature: Testing route
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Alias will be invalid after removing it
@@ -38,7 +38,7 @@ Feature: Testing route
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Service endpoint can be work well if the mapping pod ip is updated
@@ -89,7 +89,7 @@ Feature: Testing route
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: The later route should be HostAlreadyClaimed when there is a same host exist
@@ -117,7 +117,7 @@ Feature: Testing route
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: The path specified in route can work well for edge terminated
@@ -198,7 +198,7 @@ Feature: Testing route
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: The path specified in route can work well for reencrypt terminated
@@ -256,7 +256,7 @@ Feature: Testing route
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Config insecureEdgeTerminationPolicy to Redirect for route
@@ -307,7 +307,7 @@ Feature: Testing route
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Config insecureEdgeTerminationPolicy to Allow for route
@@ -375,7 +375,7 @@ Feature: Testing route
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Route could NOT be updated after created
@@ -396,7 +396,7 @@ Feature: Testing route
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Set insecureEdgeTerminationPolicy to Redirect for passthrough route
@@ -451,7 +451,7 @@ Feature: Testing route
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Set insecureEdgeTerminationPolicy to Redirect and Allow for reencrypt route
@@ -516,7 +516,7 @@ Feature: Testing route
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: The hostname should be converted to available route when met special character
@@ -560,7 +560,7 @@ Feature: Testing route
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Check the cookie if using secure mode when insecureEdgeTerminationPolicy to Redirect for edge/reencrypt route
@@ -642,7 +642,7 @@ Feature: Testing route
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Use the default destination CA of router if the route does not specify one for reencrypt route
@@ -661,7 +661,7 @@ Feature: Testing route
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Only the host in whitelist could access the route - unsecure route
@@ -701,7 +701,7 @@ Feature: Testing route
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: The edge route should support HSTS
@@ -763,7 +763,7 @@ Feature: Testing route
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: The reencrypt route should support HSTS

@@ -5,7 +5,7 @@ Feature: ServiceAccount and Policy Managerment
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Could grant admin permission for the service account username to access to its own project
@@ -40,7 +40,7 @@ Feature: ServiceAccount and Policy Managerment
   @proxy
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Could grant admin permission for the service account group to access to its own project
@@ -80,7 +80,7 @@ Feature: ServiceAccount and Policy Managerment
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: User can get the serviceaccount token via client

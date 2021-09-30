@@ -6,7 +6,7 @@ Feature: configMap
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Consume ConfigMap in environment variables
@@ -45,7 +45,7 @@ Feature: configMap
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Consume ConfigMap via volume plugin
@@ -92,7 +92,7 @@ Feature: configMap
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Perform CRUD operations against a ConfigMap resource

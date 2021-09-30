@@ -4,7 +4,7 @@ Feature: oc import-image related feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Do not create tags for ImageStream if image repository does not have tags
@@ -27,7 +27,7 @@ Feature: oc import-image related feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Could not import the tag when reference is true
@@ -89,7 +89,7 @@ Feature: oc import-image related feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Tags should be added to ImageStream if image repository is from an external docker registry
@@ -113,7 +113,7 @@ Feature: oc import-image related feature
 
   # @author geliu@redhat.com
   # @case_id OCP-12765
-  @4.9
+  @4.10 @4.9
   Scenario: Allow imagestream request deployment config triggers by different mode('TagreferencePolicy':source/local)
     Given I have a project
     When I run the :tag client command with:
@@ -176,7 +176,7 @@ Feature: oc import-image related feature
 
   # @author geliu@redhat.com
   # @case_id OCP-12766
-  @4.9
+  @4.10 @4.9
   Scenario: Allow imagestream request build config triggers by different mode('TagreferencePolicy':source/local)
     Given I have a project
     When I run the :import_image client command with:

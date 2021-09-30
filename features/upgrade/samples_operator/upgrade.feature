@@ -41,7 +41,7 @@ Feature: image-registry operator upgrade tests
   @upgrade-check
   @users=upuser1,upuser2
   @admin
-  @4.9
+  @4.10 @4.9
   Scenario: samples/openshift-controller-manager/image-registry operators should be in correct status after upgrade
     Given I switch to cluster admin pseudo user
     # Check cluster operator openshift-samples should be in correct status

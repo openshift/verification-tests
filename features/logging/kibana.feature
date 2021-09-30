@@ -64,7 +64,7 @@ Feature: Kibana related features
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Normal User can only view logs out of the projects owned by himself --kibana
@@ -120,7 +120,7 @@ Feature: Kibana related features
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: User with cluster-admin role can show logs out of all projects -- kibana

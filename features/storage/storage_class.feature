@@ -3,7 +3,7 @@ Feature: storageClass related feature
   # @author lxia@redhat.com
   @admin
   @aws-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   Scenario Outline: PVC modification after creating storage class
     Given I have a project
@@ -42,7 +42,7 @@ Feature: storageClass related feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   Scenario Outline: storage class provisioner
     Given I have a project
@@ -91,7 +91,7 @@ Feature: storageClass related feature
   @admin
   @destructive
   @aws-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   Scenario Outline: New creation PVC failed when multiple classes are set as default
     Given I have a project
@@ -157,7 +157,7 @@ Feature: storageClass related feature
 
   # @author chaoyang@redhat.com
   @admin
-  @4.9
+  @4.10 @4.9
   Scenario Outline: PVC with storage class will provision pv with io1 type and 100/20000 iops ebs volume
     Given I have a project
     Given I obtain test data file "storage/ebs/dynamic-provisioning/storageclass-io1.yaml"
@@ -203,7 +203,7 @@ Feature: storageClass related feature
   # @author chaoyang@redhat.com
   @admin
   @aws-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   Scenario Outline: PVC with storage class will not provision pv with st1/sc1 type ebs volume if request size is wrong
     Given I have a project
@@ -239,7 +239,7 @@ Feature: storageClass related feature
   # @author chaoyang@redhat.com
   # @case_id OCP-10159
   @admin
-  @4.9
+  @4.10 @4.9
   Scenario: PVC with storage class won't provisioned pv if no storage class or wrong storage class object
     Given I have a project
     # No sc exists
@@ -263,7 +263,7 @@ Feature: storageClass related feature
   # @case_id OCP-10228
   @smoke
   @aws-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   Scenario: AWS ebs volume is dynamic provisioned with default storageclass
     Given I have a project

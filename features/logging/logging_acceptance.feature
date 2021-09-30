@@ -8,7 +8,7 @@ Feature: Logging smoke test case
   @console
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: One logging acceptance case for all cluster

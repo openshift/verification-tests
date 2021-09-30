@@ -7,7 +7,7 @@ Feature: limit range related scenarios:
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario Outline: Limit range default request tests
@@ -37,7 +37,7 @@ Feature: limit range related scenarios:
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario Outline: Limit range invalid values tests
@@ -66,7 +66,7 @@ Feature: limit range related scenarios:
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario Outline: Limit range incorrect values
@@ -91,7 +91,7 @@ Feature: limit range related scenarios:
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Limit range does not allow min > defaultRequest
@@ -112,7 +112,7 @@ Feature: limit range related scenarios:
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Limit range does not allow defaultRequest > default
@@ -133,7 +133,7 @@ Feature: limit range related scenarios:
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Limit range does not allow defaultRequest > max
@@ -154,7 +154,7 @@ Feature: limit range related scenarios:
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Limit range does not allow maxLimitRequestRatio > Limit/Request
@@ -184,7 +184,7 @@ Feature: limit range related scenarios:
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Limit range with all values set with proper values

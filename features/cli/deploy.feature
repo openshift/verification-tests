@@ -5,7 +5,7 @@ Feature: deployment related features
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Restart a failed deployment by oc deploy
@@ -41,7 +41,7 @@ Feature: deployment related features
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Manually make deployment
@@ -85,7 +85,7 @@ Feature: deployment related features
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: CLI rollback output to file
@@ -132,7 +132,7 @@ Feature: deployment related features
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario Outline: CLI rollback two more components of deploymentconfig
@@ -189,7 +189,7 @@ Feature: deployment related features
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: CLI rollback with one component
@@ -238,7 +238,7 @@ Feature: deployment related features
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Can't stop a deployment in Failed status
@@ -278,7 +278,7 @@ Feature: deployment related features
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Stop a "Running" deployment
@@ -307,7 +307,7 @@ Feature: deployment related features
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Rollback via CLI when previous version failed
@@ -454,7 +454,7 @@ Feature: deployment related features
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Blue-Green Deployment
@@ -564,7 +564,7 @@ Feature: deployment related features
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: start deployment when the latest deployment is completed
@@ -631,7 +631,7 @@ Feature: deployment related features
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Start new deployment when deployment running
@@ -657,7 +657,7 @@ Feature: deployment related features
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: When the latest deployment failed auto rollback to the active deployment
@@ -716,7 +716,7 @@ Feature: deployment related features
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: DeploymentConfig should allow valid value of resource requirements
@@ -757,7 +757,7 @@ Feature: deployment related features
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Scale up when deployment running
@@ -928,7 +928,7 @@ Feature: deployment related features
   @proxy
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Trigger info is retained for deployment caused by image changes 37 new feature
@@ -950,7 +950,7 @@ Feature: deployment related features
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: A/B Deployment for OCP 4.5 or greater

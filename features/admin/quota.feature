@@ -5,7 +5,7 @@ Feature: Quota related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario Outline: The quota usage should be incremented if meet the following requirement
@@ -48,7 +48,7 @@ Feature: Quota related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: The quota usage should NOT be incremented if Requests and Limits aren't specified
@@ -86,7 +86,7 @@ Feature: Quota related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: The quota usage should NOT be incremented if Requests > Limits
@@ -128,7 +128,7 @@ Feature: Quota related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: The quota usage should NOT be incremented if Requests = Limits but exceeding hard quota
@@ -223,7 +223,7 @@ Feature: Quota related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Check BestEffort scope of resourcequota
@@ -282,7 +282,7 @@ Feature: Quota related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Check NotBestEffort scope of resourcequota
@@ -361,7 +361,7 @@ Feature: Quota related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Check NotTerminating scope of resourcequota
@@ -525,7 +525,7 @@ Feature: Quota related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Could create quota if existing resources exceed to the hard quota but prevent to create further resources
@@ -659,7 +659,7 @@ Feature: Quota related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Quota events for compute resource failures shouldn't be redundant
@@ -737,7 +737,7 @@ Feature: Quota related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: The quota usage should be incremented if Requests = Limits and in the range of hard quota but exceed the real node available resources
@@ -783,7 +783,7 @@ Feature: Quota related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: The quota usage should be released when pod completed
@@ -826,7 +826,7 @@ Feature: Quota related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Quota with BestEffort and NotBestEffort scope
@@ -883,7 +883,7 @@ Feature: Quota related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Quota with Terminating and NotTerminating scope
@@ -949,7 +949,7 @@ Feature: Quota related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Quota combined scopes
@@ -1047,7 +1047,7 @@ Feature: Quota related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Quota scope conflict BestEffort and NotBestEffort
@@ -1066,7 +1066,7 @@ Feature: Quota related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Quota scope conflict Terminating and NotTerminating
@@ -1085,7 +1085,7 @@ Feature: Quota related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Negative test for requests.storage of quota
@@ -1135,7 +1135,7 @@ Feature: Quota related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Annotation selector supports special characters
@@ -1169,7 +1169,7 @@ Feature: Quota related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Quota requests.storage with PVC existing
@@ -1225,7 +1225,7 @@ Feature: Quota related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Prevent creating further PVC if existing PVC exceeds the quota of requests.storage

@@ -44,7 +44,7 @@ Feature: scheduler with custom policy upgrade check
   @upgrade-check
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   Scenario: Upgrading cluster when using a custom policy for kube-scheduler should work fine
     Given the "kube-scheduler" operator version matches the current cluster version
     Given the expression should be true> cluster_operator('kube-scheduler').condition(type: 'Progressing')['status'] == "False"

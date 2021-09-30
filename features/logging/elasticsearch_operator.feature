@@ -9,7 +9,7 @@ Feature: elasticsearch-operator related tests
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: ServiceMonitor Object for Elasticsearch is deployed along with the Elasticsearch cluster
@@ -36,7 +36,7 @@ Feature: elasticsearch-operator related tests
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario Outline: elasticsearch alerting rules test: ElasticsearchClusterNotHealthy
@@ -96,7 +96,7 @@ Feature: elasticsearch-operator related tests
   @aws-upi
   @gcp-ipi
   @gcp-upi
-  @4.9
+  @4.10 @4.9
   @vsphere-ipi
   Scenario: Additional essential metrics ES dashboard
     Given I switch to the first user

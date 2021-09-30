@@ -6,7 +6,7 @@ Feature: SCC policy related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: deployment hook volume inheritance with hostPath volume
@@ -40,7 +40,7 @@ Feature: SCC policy related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Create or update scc with illegal capability name should fail with prompt message

@@ -55,7 +55,7 @@ Feature: Multus-CNI ipv6 related scenarios
   # @author weliang@redhat.com
   # @case_id OCP-38521
   @admin
-  @4.9
+  @4.10 @4.9
   Scenario: IPv6 testing for OCP-31999: Whereabouts should exclude IPv6 ranges
   # Bug https://bugzilla.redhat.com/show_bug.cgi?id=1913062
   # Bug https://bugzilla.redhat.com/show_bug.cgi?id=1917984

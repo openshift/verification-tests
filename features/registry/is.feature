@@ -96,7 +96,7 @@ Feature: Testing imagestream
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Prune images when DC reference to invalid image
@@ -144,7 +144,7 @@ Feature: Testing imagestream
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Do not prune layer of a valid Image due to minimum aging

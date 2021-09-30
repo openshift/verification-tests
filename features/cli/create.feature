@@ -7,7 +7,7 @@ Feature: creating 'apps' with CLI
   @proxy
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Process with special FSGroup id can be ran when using RunAsAny as the RunAsGroupStrategy
@@ -155,7 +155,7 @@ Feature: creating 'apps' with CLI
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: 4.x Could not create any context in non-existent project
@@ -193,7 +193,7 @@ Feature: creating 'apps' with CLI
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Create an application from source code test

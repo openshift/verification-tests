@@ -4,7 +4,7 @@ Feature: Builds and samples related metrics test
   # @case_id OCP-33220
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   Scenario: Alerts on imagestream import retries
     When as admin I successfully merge patch resource "config.samples.operator.openshift.io/cluster" with:
       | {"spec":{"samplesRegistry":"registry.unconnected.redhat.com"}} |
@@ -60,7 +60,7 @@ Feature: Builds and samples related metrics test
   # @author xiuwang@redhat.com
   # @case_id OCP-33722
   @admin
-  @4.9
+  @4.10 @4.9
   Scenario: Check build metrics
     Given I have a project
     When I run the :new_app client command with:
@@ -181,7 +181,7 @@ Feature: Builds and samples related metrics test
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Monitoring, Alerting, and Degraded Status Reporting-Samples-operator

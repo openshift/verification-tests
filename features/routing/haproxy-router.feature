@@ -5,7 +5,7 @@ Feature: Testing haproxy router
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: haproxy cookies based sticky session for unsecure routes
@@ -66,7 +66,7 @@ Feature: Testing haproxy router
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: haproxy cookies based sticky session for edge termination routes
@@ -132,7 +132,7 @@ Feature: Testing haproxy router
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Limit the number of TCP connection per IP in specified time period
@@ -185,7 +185,7 @@ Feature: Testing haproxy router
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: The backend health check interval of unsecure route can be set by annotation
@@ -230,7 +230,7 @@ Feature: Testing haproxy router
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: The backend health check interval of edge route can be set by annotation
@@ -275,7 +275,7 @@ Feature: Testing haproxy router
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Set balance leastconn for passthrough routes
@@ -332,7 +332,7 @@ Feature: Testing haproxy router
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Disable haproxy hash based sticky session for unsecure routes
@@ -379,7 +379,7 @@ Feature: Testing haproxy router
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: can set cookie name for unsecure routes by annotation
@@ -428,7 +428,7 @@ Feature: Testing haproxy router
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: can set cookie name for edge routes by annotation

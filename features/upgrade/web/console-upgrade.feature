@@ -51,7 +51,7 @@ Feature: web console related upgrade check
   @aws-upi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @vsphere-ipi
   Scenario: check console accessibility
     Given the first user is cluster-admin

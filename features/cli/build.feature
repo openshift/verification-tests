@@ -72,7 +72,7 @@ Feature: build 'apps' with CLI
   @proxy
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Create a build config based on the source code in the current git repository
@@ -140,7 +140,7 @@ Feature: build 'apps' with CLI
   @aws-upi
   @gcp-ipi
   @gcp-upi
-  @4.9
+  @4.10 @4.9
   @vsphere-ipi
   Scenario: Create applications only with multiple db images
     Given I create a new project
@@ -185,7 +185,7 @@ Feature: build 'apps' with CLI
   @proxy
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Add multiple source inputs
@@ -216,7 +216,7 @@ Feature: build 'apps' with CLI
   @proxy
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Add a image with multiple paths as source input
@@ -240,7 +240,7 @@ Feature: build 'apps' with CLI
   @proxy
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Using a docker image as source input using new-build cmd
@@ -307,7 +307,7 @@ Feature: build 'apps' with CLI
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Cannot create secret from local file and with same name via oc new-build
@@ -340,7 +340,7 @@ Feature: build 'apps' with CLI
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Using a docker image as source input for docker build
@@ -402,7 +402,7 @@ Feature: build 'apps' with CLI
   @proxy
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Change runpolicy to SerialLatestOnly build
@@ -485,7 +485,7 @@ Feature: build 'apps' with CLI
   @proxy
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario Outline: Cancel multiple new/pending/running builds
@@ -633,7 +633,7 @@ Feature: build 'apps' with CLI
   @proxy
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario Outline: The default runpolicy is Serial build -- new-build/new-app command
@@ -705,7 +705,7 @@ Feature: build 'apps' with CLI
   @proxy
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Simple error message return when no value followed with oc build-logs
@@ -737,7 +737,7 @@ Feature: build 'apps' with CLI
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Handle build naming collisions
@@ -767,7 +767,7 @@ Feature: build 'apps' with CLI
   @proxy
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: io.openshift.build.commit.ref displays correctly in build reference on imagestreamtag if building from git branch reference
@@ -789,7 +789,7 @@ Feature: build 'apps' with CLI
   @proxy
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Insert configmap when create a buildconfig
@@ -926,7 +926,7 @@ Feature: build 'apps' with CLI
   @proxy
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Allow using a configmap as an input to a docker build

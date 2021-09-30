@@ -5,7 +5,7 @@ Feature: buildlogic.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Build with specified Dockerfile via new-build -D
@@ -61,7 +61,7 @@ Feature: buildlogic.feature
   @proxy
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Create new build config use dockerfile with source repo
@@ -85,7 +85,7 @@ Feature: buildlogic.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario Outline: ForcePull image for build
@@ -119,7 +119,7 @@ Feature: buildlogic.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Build with specified Dockerfile to image with same image name via new-build
@@ -160,7 +160,7 @@ Feature: buildlogic.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Build from private git repo with/without ssh key
@@ -209,7 +209,7 @@ Feature: buildlogic.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Create new-app from private git repo with ssh key
@@ -250,7 +250,7 @@ Feature: buildlogic.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Check s2i build substatus and times
@@ -276,7 +276,7 @@ Feature: buildlogic.feature
   @proxy
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Check docker build substatus and times
@@ -467,7 +467,7 @@ Feature: buildlogic.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-19133
   @proxy
-  @4.9
+  @4.10 @4.9
   Scenario: Pipeline build can be pruned automatically
     Given I have a project
     And I have a jenkins v2 application
@@ -521,7 +521,7 @@ Feature: buildlogic.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Mirroring built image doesn't degrade scheme2 ,keep consistent SHA's

@@ -5,7 +5,7 @@ Feature: oc_expose.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Access app througth secure service and regenerate service serving certs if it about to expire

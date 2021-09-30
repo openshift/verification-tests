@@ -6,7 +6,7 @@ Feature: oc_env.feature
   @proxy
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Set environment variables when creating application using non-DeploymentConfig template

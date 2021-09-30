@@ -23,7 +23,7 @@ Feature: pods related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: kubectl describe pod should show qos tier info
@@ -106,7 +106,7 @@ Feature: pods related scenarios
 
   # @author chezhang@redhat.com
   # @case_id OCP-11753
-  @4.9
+  @4.10 @4.9
   Scenario: Pod should be immediately deleted if it's not scheduled even if graceful termination period is set
     Given I have a project
     Given I obtain test data file "pods/graceful-delete/10.json"
@@ -161,7 +161,7 @@ Feature: pods related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: /dev/shm can be automatically shared among all of a pod's containers
@@ -218,7 +218,7 @@ Feature: pods related scenarios
   @proxy
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: 4.0 Oauth provider info should be consumed in a pod

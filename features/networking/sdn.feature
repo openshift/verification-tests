@@ -44,7 +44,7 @@ Feature: SDN related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: iptables rules will be repaired automatically once it gets destroyed
@@ -84,7 +84,7 @@ Feature: SDN related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: an empty OPENSHIFT-ADMIN-OUTPUT-RULES chain is created in filter table at startup
@@ -192,7 +192,7 @@ Feature: SDN related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: should not show "No such device" message when run "ovs-vsctl show" command
@@ -215,7 +215,7 @@ Feature: SDN related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: The iptables binary and rules on sdn containers should be the same as host
@@ -300,7 +300,7 @@ Feature: SDN related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Networking should work on default namespace
@@ -352,7 +352,7 @@ Feature: SDN related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-25787
   @admin
-  @4.9
+  @4.10 @4.9
   @network-ovnkubernetes
   Scenario: Don't write CNI configuration file until ovn-controller has done at least one iteration
     Given the env is using "OVNKubernetes" networkType
@@ -407,7 +407,7 @@ Feature: SDN related networking scenarios
   @gcp-upi
   @gcp-ipi
   @aws-upi
-  @4.9
+  @4.10 @4.9
   @network-ovnkubernetes
   @vsphere-ipi
   Scenario: NetworkManager should consider OVS interfaces as unmanaged
@@ -468,7 +468,7 @@ Feature: SDN related networking scenarios
   # @case_id OCP-36287
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   Scenario: Netnamespace should be recreated after deleting it before the project is deleted
     Given the env is using "OpenShiftSDN" networkType
     Given I have a project
@@ -483,7 +483,7 @@ Feature: SDN related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-41132
   @admin
-  @4.9
+  @4.10 @4.9
   @vsphere-ipi
   Scenario: UDP offloads were disabled on vsphere platform
     Given I select a random node's host
@@ -498,7 +498,7 @@ Feature: SDN related networking scenarios
   # @author zzhao@redhat.com
   # @case_id OCP-43146
   @admin
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Disable conntrack for vxlan traffic

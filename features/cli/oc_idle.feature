@@ -5,7 +5,7 @@ Feature: oc idle
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: CLI - Idle all the service in the same project
@@ -54,7 +54,7 @@ Feature: oc idle
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: CLI - Idle service by label
@@ -96,7 +96,7 @@ Feature: oc idle
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: CLI - Idle service from file
@@ -143,7 +143,7 @@ Feature: oc idle
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: CLI - Idle service with dry-run

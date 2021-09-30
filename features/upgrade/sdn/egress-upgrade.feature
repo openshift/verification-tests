@@ -41,7 +41,7 @@ Feature: Egress compoment upgrade testing
   # @case_id OCP-44315
   @admin
   @upgrade-check
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Check egressfirewall is functional post upgrade
@@ -109,7 +109,7 @@ Feature: Egress compoment upgrade testing
   # @case_id OCP-44316
   @admin
   @upgrade-check
-  @4.9
+  @4.10 @4.9
   Scenario: Check ovn egressip is functional post upgrade
     Given I save ipecho url to the clipboard
     Given I switch to cluster admin pseudo user
