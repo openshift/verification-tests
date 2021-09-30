@@ -72,7 +72,7 @@ Feature: rhel8images.feature
   @proxy
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: mysql persistent template
@@ -127,7 +127,7 @@ Feature: rhel8images.feature
   # @case_id OCP-22958
   @admin
   @proxy
-  @4.9
+  @4.10 @4.9
   Scenario: Create mysql service from imagestream via oc new-app mysql-rhel8 image
     Given I have a project
     When I run the :new_app client command with:

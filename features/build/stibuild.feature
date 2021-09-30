@@ -3,7 +3,7 @@ Feature: stibuild.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario Outline: Trigger s2i/docker/custom build using additional imagestream
@@ -48,7 +48,7 @@ Feature: stibuild.feature
   @proxy
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: STI build with dockerImage with specified tag
@@ -86,7 +86,7 @@ Feature: stibuild.feature
   # @author wzheng@redhat.com
   # @case_id OCP-22596
   @proxy
-  @4.9
+  @4.10 @4.9
   Scenario: Create app with template eap73-basic-s2i with jbosseap rhel7 image
     Given I have a project
     When I run the :new_app client command with:
@@ -107,7 +107,7 @@ Feature: stibuild.feature
   @disconnected
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Test s2i build in disconnect cluster
@@ -137,7 +137,7 @@ Feature: stibuild.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Mount source secret and configmap to builder container- sourcestrategy 

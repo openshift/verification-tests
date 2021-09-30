@@ -7,7 +7,7 @@ Feature: testing for parameter fsType
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   Scenario Outline: persistent volume formated with fsType
     Given I have a project

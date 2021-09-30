@@ -291,7 +291,7 @@ Feature: networking isolation related scenarios
   @gcp-upi
   @gcp-ipi
   @aws-upi
-  @4.9
+  @4.10 @4.9
   @network-multitenant
   @vsphere-ipi
   Scenario: Make the network of given projects be accessible globally

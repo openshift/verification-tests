@@ -81,7 +81,7 @@ Feature: Service related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: User cannot access the MCS by creating a LoadBalancer service that points to the MCS
@@ -110,7 +110,7 @@ Feature: Service related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-21814
   @admin
-  @4.9
+  @4.10 @4.9
   Scenario: The headless service can publish the pods even if they are not ready
     Given I have a project
     Given I obtain test data file "networking/headless_notreadypod.json"
@@ -138,7 +138,7 @@ Feature: Service related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: externalIP defined in service but no spec.externalIP defined
@@ -156,7 +156,7 @@ Feature: Service related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: externalIP defined in service with set ExternalIP in allowedCIDRs
@@ -206,7 +206,7 @@ Feature: Service related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: A rejectedCIDRs inside an allowedCIDRs
@@ -260,7 +260,7 @@ Feature: Service related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: externalIP defined in service with set ExternalIP in rejectedCIDRs
@@ -297,7 +297,7 @@ Feature: Service related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: An allowedCIDRs inside an rejectedCIDRs
@@ -338,7 +338,7 @@ Feature: Service related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Defined Multiple allowedCIDRs
@@ -416,7 +416,7 @@ Feature: Service related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Idling/Unidling services on sdn/OVN
@@ -491,7 +491,7 @@ Feature: Service related networking scenarios
   # @case_id OCP-24694
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   Scenario: Taint node with too small MTU value
     Given the default interface on nodes is stored in the :default_interface clipboard
     And the node's MTU value is stored in the :mtu_actual clipboard
@@ -549,7 +549,7 @@ Feature: Service related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: User can expand the nodePort range by patch the serviceNodePortRange in network
@@ -602,7 +602,7 @@ Feature: Service related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: The iptables rules for the service should be DNAT or REDIRECT to node after being idled

@@ -6,7 +6,7 @@ Feature: Operator related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: The clusteroperator should be able to reflect the network operator version corresponding to the OCP version
@@ -24,7 +24,7 @@ Feature: Operator related networking scenarios
   # @case_id OCP-22706
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   Scenario: The clusteroperator should be able to reflect the correct version field post bad network operator config
 
     Given the master version >= "4.1"
@@ -69,7 +69,7 @@ Feature: Operator related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Should have a clusteroperator object created under config.openshift.io api group for network-operator
@@ -175,7 +175,7 @@ Feature: Operator related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Service should not get unidle when config flag is disabled under CNO
@@ -261,7 +261,7 @@ Feature: Operator related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Should not allow to change the openshift-sdn config
@@ -294,7 +294,7 @@ Feature: Operator related networking scenarios
   # @case_id OCP-25856
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   Scenario: CNO should delete non-relevant resources
     # Make sure that the multus is Running
     Given the multus is enabled on the cluster
@@ -373,7 +373,7 @@ Feature: Operator related networking scenarios
   # @case_id OCP-27333
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   Scenario: Changing mtu in CNO should not be allowed
     Given the mtu value "1750" is patched in CNO config according to the networkType
     And admin uses the "openshift-network-operator" project

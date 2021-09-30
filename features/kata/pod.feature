@@ -1,7 +1,7 @@
 Feature: kata and pod related scenarios
   # @author pruan@redhat.com
   # @case_id OCP-38468
-  @4.9
+  @4.10 @4.9
   Scenario: Pod using kata runtime can have an initcontainer
     Given I have a project
     And I obtain test data file "kata/OCP-38468/pod_with_init_container.yaml"

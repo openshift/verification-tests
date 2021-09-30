@@ -82,7 +82,7 @@ Feature: jenkins.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario Outline: Make jenkins slave configurable when do jenkinspipeline strategy with maven slave
@@ -109,7 +109,7 @@ Feature: jenkins.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: new-app/new-build support for pipeline buildconfigs
@@ -237,7 +237,7 @@ Feature: jenkins.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario Outline: Add/update env vars to pipeline buildconfigs using jenkinsfile field
@@ -314,7 +314,7 @@ Feature: jenkins.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Jenkins pipeline build with OpenShift Client Plugin Example
@@ -362,7 +362,7 @@ Feature: jenkins.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-35068
   @admin
-  @4.9
+  @4.10 @4.9
   Scenario: Oauthaccesstoken should be deleted after loging out from Jenkins webconsole
     Given I have a project
     When I run the :new_app client command with:

@@ -5,7 +5,7 @@ Feature: hpa scale
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: HPA shouldn't scale up target if the replicas of dc is 0
@@ -47,7 +47,7 @@ Feature: hpa scale
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: HPA shouldn't scale up target if the replicas of rc is 0
@@ -88,7 +88,7 @@ Feature: hpa scale
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Creates autoscaler for replication controller by oc autoscale

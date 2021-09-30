@@ -5,7 +5,7 @@ Feature: secrets related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: deployment hook volume inheritance --with secret volume
@@ -38,7 +38,7 @@ Feature: secrets related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Pods do not have access to each other's secrets in the same namespace
@@ -89,7 +89,7 @@ Feature: secrets related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Pods do not have access to each other's secrets with the same secret name in different namespaces
@@ -134,7 +134,7 @@ Feature: secrets related scenarios
   @proxy
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario Outline: Insert secret to builder container via oc new-build - source/docker build
@@ -184,7 +184,7 @@ Feature: secrets related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Consume the same Secrets as environment variables in multiple pods
@@ -240,7 +240,7 @@ Feature: secrets related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Using Secrets as Environment Variables
@@ -310,7 +310,7 @@ Feature: secrets related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Mapping specified secret volume should update when secret is updated
@@ -348,7 +348,7 @@ Feature: secrets related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Allow specifying secret data using strings and images
@@ -400,7 +400,7 @@ Feature: secrets related scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: oc new-app to gather git creds

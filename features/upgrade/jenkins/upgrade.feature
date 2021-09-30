@@ -17,7 +17,7 @@ Feature: Jenkins feature upgrade test
   # @case_id OCP-16932
   @upgrade-check
   @users=upuser1,upuser2
-  @4.9
+  @4.10 @4.9
   Scenario: Jenkins feature upgrade test
     Given I switch to the first user
     When I use the "jenkins-upgrade" project

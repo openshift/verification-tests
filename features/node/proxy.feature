@@ -7,7 +7,7 @@ Feature: Node proxy configuration tests
   @proxy
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario Outline: Proxy config should be applied to kubelet and crio

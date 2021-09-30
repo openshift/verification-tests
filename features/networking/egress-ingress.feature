@@ -7,7 +7,7 @@ Feature: Egress-ingress related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: EgressNetworkPolicy will not take effect after delete it
@@ -51,7 +51,7 @@ Feature: Egress-ingress related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Apply different egress network policy in different projects
@@ -120,7 +120,7 @@ Feature: Egress-ingress related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: The rules of egress network policy are added in openflow
@@ -165,7 +165,7 @@ Feature: Egress-ingress related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Egress network policy use dnsname with multiple ipv4 addresses
@@ -200,7 +200,7 @@ Feature: Egress-ingress related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Service with a DNS name can not by pass Egressnetworkpolicy with that DNS name
@@ -261,7 +261,7 @@ Feature: Egress-ingress related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Add nodes local IP address to OVS rules for egressnetworkpolicy
@@ -313,7 +313,7 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-13506
   @admin
-  @4.9
+  @4.10 @4.9
   Scenario: Update different dnsname in same egress network policy
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -351,7 +351,7 @@ Feature: Egress-ingress related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Iptables should be updated with correct endpoints when egress DNS policy was used
@@ -405,7 +405,7 @@ Feature: Egress-ingress related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: [SDN-682] EgressFirewall allows traffic to destination ports
@@ -445,7 +445,7 @@ Feature: Egress-ingress related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario:  [SDN-682] EgressFirewall rules take effect in order
@@ -470,7 +470,7 @@ Feature: Egress-ingress related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario:  [SDN-682] EgressFirewall policy should not take effect for traffic between pods and pods to service
@@ -509,7 +509,7 @@ Feature: Egress-ingress related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: [SDN-682] EgressFirewall policy take effect for multiple port
@@ -537,7 +537,7 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-35341
   @admin
-  @4.9
+  @4.10 @4.9
   Scenario: EgressNetworkPolicy maxItems is 1000
     Given I have a project
     Given I obtain test data file "networking/egressnetworkpolicy/egressnetworkpolicy_1000.yaml"
@@ -562,7 +562,7 @@ Feature: Egress-ingress related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: [SDN-1181] EgressFirewall allows traffic to destination dnsName
@@ -597,7 +597,7 @@ Feature: Egress-ingress related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: [SDN-1181] EgressFirewall denys traffic to destination dnsName
@@ -630,7 +630,7 @@ Feature: Egress-ingress related networking scenarios
   # @author huirwang@redhat.com
   # @case_id OCP-37496
   @admin
-  @4.9
+  @4.10 @4.9
   Scenario: [SDN-1181] Edit EgressFirewall should take effect
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -665,7 +665,7 @@ Feature: Egress-ingress related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: [bug1947917] Egress Firewall should reliably apply firewall rules

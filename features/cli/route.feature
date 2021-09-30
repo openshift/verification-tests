@@ -6,7 +6,7 @@ Feature: route related features via cli
   @proxy
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Expose routes from services
@@ -37,7 +37,7 @@ Feature: route related features via cli
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Be unable to add an existed alias name for service

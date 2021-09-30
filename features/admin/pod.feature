@@ -5,7 +5,7 @@ Feature: pod related features
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Endpoints should update in time and no delay
@@ -142,7 +142,7 @@ Feature: pod related features
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Pods will still be created by DaemonSet when nodes are SchedulingDisabled
@@ -177,7 +177,7 @@ Feature: pod related features
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: When node labels change, DaemonSet will add pods to newly matching nodes and delete pods from not-matching nodes

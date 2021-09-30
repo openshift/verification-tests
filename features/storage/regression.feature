@@ -7,7 +7,7 @@ Feature: Regression testing cases
   @gcp-upi
   @gcp-ipi
   @aws-upi
-  @4.9
+  @4.10 @4.9
   @vsphere-ipi
   Scenario: RWO volumes are exclusively mounted on different nodes
     Given I have a project

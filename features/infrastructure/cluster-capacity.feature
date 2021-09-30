@@ -8,7 +8,7 @@ Feature: cluster-capacity related features
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Cluster capacity image support: Cluster capacity can work well with a simple pod

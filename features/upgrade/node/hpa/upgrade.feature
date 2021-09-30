@@ -49,7 +49,7 @@ Feature: basic verification for upgrade testing
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Upgrade - Make sure multiple resources work well after upgrade

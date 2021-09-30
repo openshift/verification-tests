@@ -9,7 +9,7 @@ Feature: OVN related networking scenarios
   @gcp-upi
   @gcp-ipi
   @aws-upi
-  @4.9
+  @4.10 @4.9
   @network-ovnkubernetes
   @vsphere-ipi
   Scenario: Creating a resource in Kube API should be synced to OVN NB db correctly even post NB db crash too
@@ -58,7 +58,7 @@ Feature: OVN related networking scenarios
   @gcp-upi
   @gcp-ipi
   @aws-upi
-  @4.9
+  @4.10 @4.9
   @network-ovnkubernetes
   @vsphere-ipi
   Scenario: OVN DB should be updated correctly if a resource only exist in Kube API but not in OVN NB db
@@ -114,7 +114,7 @@ Feature: OVN related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @network-ovnkubernetes
   @vsphere-ipi
@@ -179,7 +179,7 @@ Feature: OVN related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @network-ovnkubernetes
   @vsphere-ipi
@@ -207,7 +207,7 @@ Feature: OVN related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-32184
   @admin
-  @4.9
+  @4.10 @4.9
   @network-ovnkubernetes
   Scenario: ovnkube-masters should allocate pod IP and mac addresses
     Given the env is using "OVNKubernetes" networkType
@@ -235,7 +235,7 @@ Feature: OVN related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @network-ovnkubernetes
   @vsphere-ipi
@@ -266,7 +266,7 @@ Feature: OVN related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @network-ovnkubernetes
   @vsphere-ipi
@@ -313,7 +313,7 @@ Feature: OVN related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @network-ovnkubernetes
   @vsphere-ipi
@@ -383,7 +383,7 @@ Feature: OVN related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @network-ovnkubernetes
   @vsphere-ipi
@@ -410,7 +410,7 @@ Feature: OVN related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @network-ovnkubernetes
   @vsphere-ipi
@@ -448,7 +448,7 @@ Feature: OVN related networking scenarios
   # @case_id OCP-26138
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   Scenario: Inducing Split Brain in the OVN HA cluster
     Given admin uses the "openshift-ovn-kubernetes" project
     When I store the ovnkube-master "south" leader pod in the clipboard
@@ -496,7 +496,7 @@ Feature: OVN related networking scenarios
   # @case_id OCP-26140
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   @network-ovnkubernetes
   Scenario: Delete all OVN master pods and makes sure leader/follower election converges smoothly
     Given the env is using "OVNKubernetes" networkType
@@ -522,7 +522,7 @@ Feature: OVN related networking scenarios
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @network-ovnkubernetes
   @vsphere-ipi
@@ -546,7 +546,7 @@ Feature: OVN related networking scenarios
   # @case_id OCP-38132
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   Scenario: Should no intermittent packet drop from pod to pod after change hostname
     Given I store the schedulable workers in the :nodes clipboard
     Given admin uses the "openshift-ovn-kubernetes" project

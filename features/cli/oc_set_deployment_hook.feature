@@ -6,7 +6,7 @@ Feature: set deployment-hook/build-hook with CLI
   @proxy
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Set pre/mid/post deployment hooks on deployment config via oc set deployment-hook
@@ -95,7 +95,7 @@ Feature: set deployment-hook/build-hook with CLI
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Set invalid pre/mid/post deployment hooks on deployment config via oc set deployment-hook

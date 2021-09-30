@@ -201,7 +201,7 @@ Feature: collector related tests
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: All nodes logs are collected

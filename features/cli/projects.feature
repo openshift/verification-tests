@@ -6,7 +6,7 @@ Feature: projects related features via cli
   @proxy
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Could delete all resources when delete the project
@@ -77,7 +77,7 @@ Feature: projects related features via cli
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: User can get node selector from a project
@@ -109,7 +109,7 @@ Feature: projects related features via cli
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Could remove user and group from the current project
@@ -150,7 +150,7 @@ Feature: projects related features via cli
   @proxy
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Process with default FSGroup id can be ran when using the default MustRunAs as the RunAsGroupStrategy

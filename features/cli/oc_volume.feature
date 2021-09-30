@@ -7,7 +7,7 @@ Feature: oc_volume.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Create a pod that consumes the secret in a volume
@@ -54,7 +54,7 @@ Feature: oc_volume.feature
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Add secret volume to dc and rc

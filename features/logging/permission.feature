@@ -57,7 +57,7 @@ Feature: permission related test
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Normal User can only view project owned by himself
@@ -107,7 +107,7 @@ Feature: permission related test
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: cluster-admin view all projects

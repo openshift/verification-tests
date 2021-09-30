@@ -7,7 +7,7 @@ Feature: Persistent Volume Claim binding policies
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario Outline: PVC with one accessMode can bind PV with all accessMode
@@ -77,7 +77,7 @@ Feature: Persistent Volume Claim binding policies
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario Outline: PV can not bind PVC which request more storage
@@ -111,7 +111,7 @@ Feature: Persistent Volume Claim binding policies
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario Outline: PV can not bind PVC with mismatched accessMode

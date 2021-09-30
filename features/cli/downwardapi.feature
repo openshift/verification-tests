@@ -5,7 +5,7 @@ Feature: Downward API
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Pods can get IPs via downward API under race condition
@@ -25,7 +25,7 @@ Feature: Downward API
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: downward api pod name and pod namespace as env variables
@@ -48,7 +48,7 @@ Feature: Downward API
   @aws-ipi
   @gcp-upi
   @gcp-ipi
-  @4.9
+  @4.10 @4.9
   @aws-upi
   @vsphere-ipi
   Scenario: Container consume infomation from the downward API using a volume plugin

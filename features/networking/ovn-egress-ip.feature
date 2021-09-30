@@ -4,7 +4,7 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33618
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   @vsphere-ipi
   Scenario: EgressIP works for all pods in the matched namespace when only configure namespaceSelector
     Given I save ipecho url to the clipboard
@@ -69,7 +69,7 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33723
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   @vsphere-ipi
   Scenario: Multiple EgressIP objects can have multiple Egress IPs
     Given I save ipecho url to the clipboard
@@ -137,7 +137,7 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33641
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   @vsphere-ipi
   Scenario: Multi-project can share same EgressIP
     Given I save ipecho url to the clipboard
@@ -207,7 +207,7 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33699
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   @vsphere-ipi
   Scenario: Removed matched labels from project will not use EgressIP
     Given I save ipecho url to the clipboard
@@ -259,7 +259,7 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33700
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   @vsphere-ipi
   Scenario: Removed matched labels from pods will not use EgressIP
     Given I save ipecho url to the clipboard
@@ -318,7 +318,7 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33631
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   @vsphere-ipi
   Scenario: EgressIP was removed after delete egressIP object
     Given I save ipecho url to the clipboard
@@ -366,7 +366,7 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33704
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   @vsphere-ipi
   Scenario: After reboot node or reboot OVN services EgressIP still work
     Given I save ipecho url to the clipboard
@@ -425,7 +425,7 @@ Feature: OVN Egress IP related features
   # @case_id OCP-34938
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   Scenario: Warning event will be triggered if apply EgressIP object but no EgressIP nodes
     #Get unused IP as egress ip
     Given I store a random unused IP address from the reserved range to the clipboard
@@ -455,7 +455,7 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33706
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   Scenario: The pod located on different node than EgressIP nodes
     Given I save ipecho url to the clipboard
     Given I store the schedulable nodes in the :nodes clipboard
@@ -503,7 +503,7 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33718
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   Scenario: Deleting EgressIP object and recreating it will work
     Given I save ipecho url to the clipboard
 
@@ -563,7 +563,7 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33710
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   Scenario: An EgressIP object can not have multiple egress IP assignments on the same node
     Given I store the schedulable workers in the :nodes clipboard
     Then label "k8s.ovn.org/egress-assignable=true" is added to the "<%= cb.nodes[0].name %>" node
@@ -592,7 +592,7 @@ Feature: OVN Egress IP related features
   # @author huirwang@redhat.com
   # @case_id OCP-33617
   @admin
-  @4.9
+  @4.10 @4.9
   Scenario: Common user cannot tag the nodes by labelling them as egressIP nodes
     Given I select a random node's host
     And evaluation of `node.name` is stored in the :egress_node clipboard
@@ -610,7 +610,7 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33719
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
   Scenario: Any egress IP can only be assigned to one node only
     Given I store the schedulable workers in the :nodes clipboard
     Then label "k8s.ovn.org/egress-assignable=true" is added to the "<%= cb.nodes[0].name %>" node
