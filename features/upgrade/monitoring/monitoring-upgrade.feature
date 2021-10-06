@@ -20,6 +20,8 @@ Feature: cluster monitoring related upgrade check
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @vsphere-upi
   Scenario: upgrade cluster monitoring along with OCP
     Given I switch to cluster admin pseudo user
     And I use the "openshift-monitoring" project

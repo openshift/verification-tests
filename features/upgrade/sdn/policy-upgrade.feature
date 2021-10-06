@@ -19,6 +19,8 @@ Feature: SDN compoment upgrade testing
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @vsphere-upi
   Scenario: network operator should be available after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "openshift-network-operator" project
@@ -181,6 +183,8 @@ Feature: SDN compoment upgrade testing
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @vsphere-upi
   Scenario: Check the namespace networkpolicy for an application works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "policy-upgrade1" project

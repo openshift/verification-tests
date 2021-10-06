@@ -10,6 +10,8 @@ Feature: Testing registry
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @vsphere-upi
   Scenario: Prune images by command oadm_prune_images
     Given cluster role "system:image-pruner" is added to the "first" user
     Given I enable image-registry default route
@@ -176,6 +178,8 @@ Feature: Testing registry
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @vsphere-upi
   Scenario: Mirror image to another registry via 'oc image mirror'
     Given I have a project
     Given docker config for default image registry is stored to the :dockercfg_file clipboard
@@ -199,6 +203,8 @@ Feature: Testing registry
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @vsphere-upi
   Scenario: Use node credentials in imagestream import
     Given I have a project
     When I run the :tag client command with:
@@ -235,6 +241,8 @@ Feature: Testing registry
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @vsphere-upi
   Scenario: [Disconnect]Import image from a secure registry using node credentials
     Given I have a project
     And evaluation of `image_content_source_policy('image-policy-aosqe').mirror_registry(cached: false)` is stored in the :mirror_registry clipboard

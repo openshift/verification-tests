@@ -53,6 +53,8 @@ Feature: web console related upgrade check
   @gcp-ipi
   @4.10 @4.9
   @vsphere-ipi
+  @4.9
+  @vsphere-upi
   Scenario: check console accessibility
     Given the first user is cluster-admin
     Given I open admin console in a browser

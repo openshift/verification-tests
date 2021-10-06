@@ -60,6 +60,8 @@ Feature: permission related test
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @vsphere-upi
   Scenario: Normal User can only view project owned by himself
     Given I switch to the first user
     And evaluation of `user.cached_tokens.first` is stored in the :user_token clipboard
@@ -110,6 +112,8 @@ Feature: permission related test
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @vsphere-upi
   Scenario: cluster-admin view all projects
     Given I switch to the first user
     Given I create a project with non-leading digit name

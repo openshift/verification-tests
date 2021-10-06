@@ -11,6 +11,8 @@ Feature: Logging smoke test case
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @vsphere-upi
   Scenario: One logging acceptance case for all cluster
     # Deploy cluster-logging operator via web console
     Given logging service is removed successfully

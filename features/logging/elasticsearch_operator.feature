@@ -12,6 +12,8 @@ Feature: elasticsearch-operator related tests
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @vsphere-upi
   Scenario: ServiceMonitor Object for Elasticsearch is deployed along with the Elasticsearch cluster
     Given I wait for the "monitor-elasticsearch-cluster" service_monitor to appear
     When I perform the HTTP request on the ES pod with labels "es-node-master=true":
@@ -39,6 +41,8 @@ Feature: elasticsearch-operator related tests
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @vsphere-upi
   Scenario Outline: elasticsearch alerting rules test: ElasticsearchClusterNotHealthy
     Given I obtain test data file "logging/clusterlogging/example.yaml"
     Given I create clusterlogging instance with:
@@ -98,6 +102,8 @@ Feature: elasticsearch-operator related tests
   @gcp-upi
   @4.10 @4.9
   @vsphere-ipi
+  @4.9
+  @vsphere-upi
   Scenario: Additional essential metrics ES dashboard
     Given I switch to the first user
     And the first user is cluster-admin

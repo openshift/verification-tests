@@ -5,6 +5,8 @@ Feature: vSphere test scenarios
   @smoke
   @4.10 @4.9
   @vsphere-ipi
+  @4.9
+  @vsphere-upi
   Scenario Outline: Dynamically provision a vSphere volume with different disk formats
     Given I have a project
     Given I obtain test data file "storage/vsphere/storageclass.yml"
@@ -67,6 +69,8 @@ Feature: vSphere test scenarios
   @admin
   @4.10 @4.9
   @vsphere-ipi
+  @4.9
+  @vsphere-upi
   Scenario: Dynamically provision a vSphere volume with invalid disk format
     Given I have a project
     Given I obtain test data file "storage/vsphere/storageclass.yml"

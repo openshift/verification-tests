@@ -4,6 +4,8 @@ Feature: Node operations test scenarios
   @admin
   @destructive
   @4.10 @4.9
+  @4.9
+  @vsphere-upi
   Scenario Outline: Drain a node that has cloud vendor volumes
     Given environment has at least 2 schedulable nodes
     And I have a project

@@ -9,6 +9,8 @@ Feature: ipv6 dual stack cluster test scenarios
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @vsphere-upi
   Scenario: Project should be in isolation when using multitenant policy for ipv6 dual stack
     # create project and pods
     Given I have a project

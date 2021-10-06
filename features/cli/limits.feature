@@ -10,6 +10,8 @@ Feature: limit range related scenarios:
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @vsphere-upi
   Scenario Outline: Limit range default request tests
     Given I have a project
     Given I obtain test data file "limits/<path>/limit.yaml"
@@ -40,6 +42,8 @@ Feature: limit range related scenarios:
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @vsphere-upi
   Scenario Outline: Limit range invalid values tests
     Given I have a project
     Given I obtain test data file "limits/<path>/limit.yaml"
@@ -69,6 +73,8 @@ Feature: limit range related scenarios:
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @vsphere-upi
   Scenario Outline: Limit range incorrect values
     Given I have a project
     Given I obtain test data file "limits/<path>/limit.yaml"
@@ -94,6 +100,8 @@ Feature: limit range related scenarios:
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @vsphere-upi
   Scenario: Limit range does not allow min > defaultRequest
     Given I have a project
     Given I obtain test data file "limits/ocp12250/limit.yaml"
@@ -115,6 +123,8 @@ Feature: limit range related scenarios:
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @vsphere-upi
   Scenario: Limit range does not allow defaultRequest > default
     Given I have a project
     Given I obtain test data file "limits/ocp11918/limit.yaml"
@@ -136,6 +146,8 @@ Feature: limit range related scenarios:
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @vsphere-upi
   Scenario: Limit range does not allow defaultRequest > max
     Given I have a project
     Given I obtain test data file "limits/ocp12043/limit.yaml"
@@ -157,6 +169,8 @@ Feature: limit range related scenarios:
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @vsphere-upi
   Scenario: Limit range does not allow maxLimitRequestRatio > Limit/Request
     Given I have a project
     Given I obtain test data file "limits/ocp12139/limit.yaml"
@@ -187,6 +201,8 @@ Feature: limit range related scenarios:
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @vsphere-upi
   Scenario: Limit range with all values set with proper values
     Given I have a project
     Given I obtain test data file "limits/ocp12315/limit.yaml"

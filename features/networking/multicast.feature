@@ -9,6 +9,8 @@ Feature: testing multicast scenarios
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @vsphere-upi
   Scenario: pods should be able to subscribe send and receive multicast traffic
     # create some multicast testing pods
     Given I have a project
@@ -96,6 +98,8 @@ Feature: testing multicast scenarios
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @vsphere-upi
   Scenario: multicast is disabled by default if not annotate the netnamespace
     # create multicast testing pods in the project and without multicast enable
     Given I have a project

@@ -44,6 +44,8 @@ Feature: Egress compoment upgrade testing
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @vsphere-upi
   Scenario: Check egressfirewall is functional post upgrade
     Given I switch to cluster admin pseudo user
     And I use the "egressfw-upgrade1" project
