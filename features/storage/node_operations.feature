@@ -5,7 +5,6 @@ Feature: Node operations test scenarios
   @destructive
   @4.10 @4.9
   @4.9
-  @vsphere-upi
   Scenario Outline: Drain a node that has cloud vendor volumes
     Given environment has at least 2 schedulable nodes
     And I have a project
@@ -44,6 +43,7 @@ Feature: Node operations test scenarios
       | cloud_provider |
       | azure-disk     | # @case_id OCP-15275
     @vsphere-ipi
+    @vsphere-upi
     Examples:
       | cloud_provider |
       | vsphere-volume | # @case_id OCP-15268
