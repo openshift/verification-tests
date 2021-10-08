@@ -20,6 +20,8 @@ Feature: Seccomp part of SCC policy should be kept and working after upgrade
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @azure-ipi
   Scenario: Seccomp part of SCC policy should be kept and working after upgrade
     Given I switch to cluster admin pseudo user
     Given admin checks that the "seccomp" scc exists

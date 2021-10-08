@@ -8,6 +8,8 @@ Feature: oc_expose.feature
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @azure-ipi
   Scenario: Access app througth secure service and regenerate service serving certs if it about to expire
     Given the master version >= "3.3"
     Given I have a project

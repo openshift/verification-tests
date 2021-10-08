@@ -52,6 +52,8 @@ Feature: basic verification for upgrade testing
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @azure-ipi
   Scenario: Upgrade - Make sure multiple resources work well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "node-upgrade" project

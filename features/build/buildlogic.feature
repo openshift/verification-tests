@@ -8,6 +8,8 @@ Feature: buildlogic.feature
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @azure-ipi
   Scenario: Build with specified Dockerfile via new-build -D
     Given I have a project
     When I run the :new_build client command with:
@@ -64,6 +66,8 @@ Feature: buildlogic.feature
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @azure-ipi
   Scenario: Create new build config use dockerfile with source repo
     Given I have a project
     When I run the :new_build client command with:
@@ -88,6 +92,8 @@ Feature: buildlogic.feature
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @azure-ipi
   Scenario Outline: ForcePull image for build
     Given I have a project
     Given I obtain test data file "build/forcePull/<template>"
@@ -122,6 +128,8 @@ Feature: buildlogic.feature
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @azure-ipi
   Scenario: Build with specified Dockerfile to image with same image name via new-build
     Given I have a project
     When I run the :new_build client command with:
@@ -163,6 +171,8 @@ Feature: buildlogic.feature
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @azure-ipi
   Scenario: Build from private git repo with/without ssh key
     Given I have a project
     And I have an ssh-git service in the project
@@ -212,6 +222,8 @@ Feature: buildlogic.feature
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @azure-ipi
   Scenario: Create new-app from private git repo with ssh key
     Given I have a project
     When I run the :new_app client command with:
@@ -253,6 +265,8 @@ Feature: buildlogic.feature
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @azure-ipi
   Scenario: Check s2i build substatus and times
     Given I have a project
     Given I obtain test data file "build/application-template-stibuild.json"
@@ -279,6 +293,8 @@ Feature: buildlogic.feature
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @azure-ipi
   Scenario: Check docker build substatus and times
     Given I have a project
     Given I obtain test data file "build/application-template-dockerbuild.json"
@@ -524,6 +540,8 @@ Feature: buildlogic.feature
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @azure-ipi
   Scenario: Mirroring built image doesn't degrade scheme2 ,keep consistent SHA's
     Given I have a project
     Given I save a htpasswd registry auth to the :combine_dockercfg clipboard

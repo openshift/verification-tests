@@ -8,6 +8,8 @@ Feature: Cluster Autoscaler Tests
   @gcp-ipi
   @4.10 @4.9
   @vsphere-ipi
+  @4.9
+  @azure-ipi
   Scenario: Cluster should automatically scale up and scale down with clusterautoscaler deployed
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user

@@ -9,6 +9,8 @@ Feature: route related features via cli
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @azure-ipi
   Scenario: Expose routes from services
     Given I have a project
     When I run the :new_app client command with:
@@ -40,6 +42,8 @@ Feature: route related features via cli
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @azure-ipi
   Scenario: Be unable to add an existed alias name for service
     Given I have a project
     Given I obtain test data file "routing/unsecure/route_unsecure.json"

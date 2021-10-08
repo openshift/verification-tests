@@ -8,6 +8,8 @@ Feature: resouces related scenarios
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @azure-ipi
   Scenario: Return description of resources with cli describe
     Given I have a project
     And I create a new application with:

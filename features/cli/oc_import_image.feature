@@ -7,6 +7,8 @@ Feature: oc import-image related feature
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @azure-ipi
   Scenario: Do not create tags for ImageStream if image repository does not have tags
     When I have a project
     Given I obtain test data file "image-streams/is_without_tags.json"
@@ -30,6 +32,8 @@ Feature: oc import-image related feature
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @azure-ipi
   Scenario: Could not import the tag when reference is true
     Given I have a project
     Given I obtain test data file "image-streams/ocp10721.json"
@@ -92,6 +96,8 @@ Feature: oc import-image related feature
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @4.9
+  @azure-ipi
   Scenario: Tags should be added to ImageStream if image repository is from an external docker registry
     Given I have a project
     Given I obtain test data file "image-streams/external.json"
