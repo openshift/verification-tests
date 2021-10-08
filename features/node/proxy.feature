@@ -10,6 +10,7 @@ Feature: Node proxy configuration tests
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @azure-ipi
   Scenario Outline: Proxy config should be applied to kubelet and crio
     Given I use the "default" project
     Given I switch to cluster admin pseudo user

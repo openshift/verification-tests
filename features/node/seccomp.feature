@@ -27,6 +27,7 @@ Feature: Secure Computing Test Scenarios
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @azure-ipi
   Scenario: Using Secure Computing Profiles with Pod Annotations
     # Create custom machine config that contains the seccomp
     Given I switch to cluster admin pseudo user

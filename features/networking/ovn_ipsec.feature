@@ -10,6 +10,7 @@ Feature: OVNKubernetes IPsec related networking scenarios
   @4.10 @4.9
   @network-ovnkubernetes
   @vsphere-ipi
+  @azure-ipi
   Scenario: Should be able to send node to node ESP traffic on IPsec clusters
     Given the env is using "OVNKubernetes" networkType
     And the IPsec is enabled on the cluster
@@ -59,6 +60,7 @@ Feature: OVNKubernetes IPsec related networking scenarios
   @4.10 @4.9
   @network-ovnkubernetes
   @vsphere-ipi
+  @azure-ipi
   Scenario: Segfault on pluto IKE daemon should result in restarting pluto daemon and corresponding ovn-ipsec pod
     Given the env is using "OVNKubernetes" networkType
     And the IPsec is enabled on the cluster
@@ -107,6 +109,7 @@ Feature: OVNKubernetes IPsec related networking scenarios
   @4.10 @4.9
   @network-ovnkubernetes
   @vsphere-ipi
+  @azure-ipi
   Scenario: Pod created on IPsec cluster should have appropriate MTU size to accomdate IPsec Header
     Given the env is using "OVNKubernetes" networkType
     And the IPsec is enabled on the cluster

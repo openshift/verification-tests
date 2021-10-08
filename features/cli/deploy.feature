@@ -8,6 +8,7 @@ Feature: deployment related features
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @azure-ipi
   Scenario: Restart a failed deployment by oc deploy
     Given I have a project
     Given I obtain test data file "deployment/dc-with-pre-mid-post.yaml"
@@ -44,6 +45,7 @@ Feature: deployment related features
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @azure-ipi
   Scenario: Manually make deployment
     Given I have a project
     Given I obtain test data file "deployment/manual.json"
@@ -88,6 +90,7 @@ Feature: deployment related features
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @azure-ipi
   Scenario: CLI rollback output to file
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -135,6 +138,7 @@ Feature: deployment related features
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @azure-ipi
   Scenario Outline: CLI rollback two more components of deploymentconfig
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -192,6 +196,7 @@ Feature: deployment related features
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @azure-ipi
   Scenario: CLI rollback with one component
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -241,6 +246,7 @@ Feature: deployment related features
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @azure-ipi
   Scenario: Can't stop a deployment in Failed status
     Given I have a project
     Given I obtain test data file "deployment/test-stop-failed-deployment.json"
@@ -281,6 +287,7 @@ Feature: deployment related features
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @azure-ipi
   Scenario: Stop a "Running" deployment
     Given I have a project
     Given I obtain test data file "deployment/dc-with-pre-mid-post.yaml"
@@ -310,6 +317,7 @@ Feature: deployment related features
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @azure-ipi
   Scenario: Rollback via CLI when previous version failed
     Given I have a project
     When I run the :create_deploymentconfig client command with:
@@ -457,6 +465,7 @@ Feature: deployment related features
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @azure-ipi
   Scenario: Blue-Green Deployment
     Given I have a project
     When I run the :new_app client command with:
@@ -567,6 +576,7 @@ Feature: deployment related features
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @azure-ipi
   Scenario: start deployment when the latest deployment is completed
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -634,6 +644,7 @@ Feature: deployment related features
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @azure-ipi
   Scenario: Start new deployment when deployment running
     Given I have a project
     Given I obtain test data file "deployment/dc-with-pre-mid-post.yaml"
@@ -660,6 +671,7 @@ Feature: deployment related features
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @azure-ipi
   Scenario: When the latest deployment failed auto rollback to the active deployment
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -719,6 +731,7 @@ Feature: deployment related features
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @azure-ipi
   Scenario: DeploymentConfig should allow valid value of resource requirements
     Given I have a project
     Given I obtain test data file "quota/limits.yaml"
@@ -760,6 +773,7 @@ Feature: deployment related features
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @azure-ipi
   Scenario: Scale up when deployment running
     Given I have a project
     When I run the :create_deploymentconfig client command with:
@@ -931,6 +945,7 @@ Feature: deployment related features
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @azure-ipi
   Scenario: Trigger info is retained for deployment caused by image changes 37 new feature
     Given the master version >= "3.7"
     Given I have a project
@@ -953,6 +968,7 @@ Feature: deployment related features
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @azure-ipi
   Scenario: A/B Deployment for OCP 4.5 or greater
     Given the master version >= "4.5"
     Given I have a project

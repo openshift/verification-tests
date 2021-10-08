@@ -221,6 +221,7 @@ Feature: oc_set_probe.feature
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @azure-ipi
   Scenario: Set a probe over HTTPS/HTTP test
     Given I have a project
     When I run the :new_app client command with:
@@ -272,6 +273,7 @@ Feature: oc_set_probe.feature
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @azure-ipi
   Scenario: Set an exec action probe test
     Given I have a project
     When I run the :new_app client command with:
