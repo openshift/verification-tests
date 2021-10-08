@@ -889,7 +889,7 @@ Given /^I deploy kafka in the #{QUOTED} project via amqstream operator$/ do | pr
   @result = admin.cli_exec(:create, f: "#{BushSlicer::HOME}/testdata/logging/clusterlogforwarder/kafka/amq/05_kafkatopics_amqstreams.yaml")
   raise "Error create kafka topics" unless @result[:success]
 
-  step %Q/3 pods becomes ready with labels:/, table(%{
+  step %Q/1 pod becomes ready with labels:/, table(%{
     | strimzi.io/name=my-cluster-kafka |
   })
   raise "Error kafka cluster not ready" unless @result[:success]
