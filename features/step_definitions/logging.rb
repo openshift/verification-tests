@@ -224,6 +224,7 @@ end
 
 Given /^I wait until fluentd is ready$/ do
   step %Q/logging collector name is stored in the :collector_name clipboard/
+  step %Q/I wait for the "<%= cb.collector_name %>" daemon_set to appear up to 300 seconds/
   step %Q/#{daemon_set("#{cb.collector_name}").replica_counters[:desired]} pods become ready with labels:/, table(%{
     | logging-infra=#{cb.collector_name} |
   })
