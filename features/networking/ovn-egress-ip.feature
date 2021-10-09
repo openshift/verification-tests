@@ -650,3 +650,200 @@ Feature: OVN Egress IP related features
       | o              | jsonpath={.status.items[*]} |
     Then the step should succeed
     Then the expression should be true> @result[:response].chomp.match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/).nil?
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-44250
+  @admin
+  @destructive
+  @4.9
+  Scenario: lr-policy-list and snat should be updated correctly after remove pods
+    Given I store the schedulable workers in the :nodes clipboard
+    Then label "k8s.ovn.org/egress-assignable=true" is added to the "<%= cb.nodes[0].name %>" node
+
+    #Get unused IP as egress ip
+    Given I store a random unused IP address from the reserved range to the clipboard
+
+    #Create first project and pods in it,add label to the namespace
+    Given I have a project
+    And evaluation of `project.name` is stored in the :proj1 clipboard
+    When I run the :label admin command with:
+      | resource | namespace           |
+      | name     | <%= cb.proj1 %>     |
+      | key_val  | org=pm              |
+    Then the step should succeed
+
+    #Create 10  pods in projects
+    Given I obtain test data file "networking/list_for_pods.json"
+    When I run oc create over "list_for_pods.json" replacing paths:
+      | ["items"][0]["spec"]["replicas"] | 10 |
+    Then the step should succeed
+    Given 10 pod become ready with labels:
+      | name=test-pods |
+
+    #Create an egress ip object
+    Given admin ensures "egressip" egress_ip is deleted after scenario
+    When I obtain test data file "networking/ovn-egressip/egressip1.yaml"
+    And I replace lines in "egressip1.yaml":
+      | 172.31.249.227 | "<%= cb.valid_ips[0] %>" |
+      | qe             | "pm"                     |
+    And I run the :create admin command with:
+      | f | egressip1.yaml |
+    Then the step should succeed
+
+    #Scale down CNO to 0 and delete ovnkube-master pods
+    Given I register clean-up steps:
+    """
+    And I run the :scale admin command with:
+      | resource | deployment                 |
+      | name     | network-operator           |
+      | replicas | 1                          |
+      | n        | openshift-network-operator |
+    Then the step should succeed
+    """
+    # Now scale down CNO pod to 0
+    And I run the :scale admin command with:
+      | resource | deployment                 |
+      | name     | network-operator           |
+      | replicas | 0                          |
+      | n        | openshift-network-operator |
+    Then the step should succeed
+    And admin ensures "ovnkube-master" ds is deleted from the "openshift-ovn-kubernetes" project
+    And admin executes existing pods die with labels:
+      | app=ovnkube-master |
+
+    # Now scale down test pods to 1
+    Given I run the :scale admin command with:
+      | resource | rc                         |
+      | name     | test-rc                    |
+      | replicas | 1                          |
+      | n        | <%= cb.proj1 %>            |
+    Then the step should succeed
+    Given I use the "<%= cb.proj1 %>" project
+    Given status becomes :running of 1 pod labeled:
+      | name=test-pods |
+    And evaluation of `pod(-1).ip` is stored in the :pod0ip clipboard
+
+    # Now scale up CNO pod to 1
+    Given I run the :scale admin command with:
+      | resource | deployment                 |
+      | name     | network-operator           |
+      | replicas | 1                          |
+      | n        | openshift-network-operator |
+    Then the step should succeed
+    # A minimum wait for 30 seconds is tested to reflect CNO deployment to be effective which will then re-spawn ovn pods
+    Given I switch to cluster admin pseudo user
+    And I use the "openshift-ovn-kubernetes" project
+    And a pod becomes ready with labels:  
+      | app=ovnkube-master |
+    And admin waits for all pods in the "openshift-ovn-kubernetes" project to become ready up to 150 seconds
+
+    # Checking lr-policy-list, no duplicate records, only 1 record left 
+    Given I store the ovnkube-master "north" leader pod in the clipboard
+    And admin executes on the pod "northd" container:
+      | bash | -c | ovn-nbctl lr-policy-list ovn_cluster_router  \| grep "100 " \| grep -v inport |
+    Then the step should succeed
+    And the output should match 1 times:
+      | <%= cb.pod0ip %> |
+    And admin executes on the pod "northd" container:
+      | bash | -c | ovn-nbctl lr-policy-list ovn_cluster_router  \| grep "100 " \| grep -v inport \| grep -v <%= cb.pod0ip %> |
+    Then the step should fail 
+    # Checking snat rules, only 1 running pod related rule is there.
+    And admin executes on the pod "northd" container:
+      | bash | -c | ovn-nbctl --format=csv --no-heading find nat external_ids:name=egressip |
+    Then the step should succeed
+    And the output should match 1 times:
+      | <%= cb.pod0ip %> |
+    And admin executes on the pod "northd" container:
+      | bash | -c | ovn-nbctl --format=csv --no-heading find nat external_ids:name=egressip \| grep -v <%= cb.pod0ip %> |
+    Then the step should fail 
+    And the output should not contain:
+      | name=egressip |
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-44251
+  @admin
+  @destructive
+  @4.9
+  Scenario: lr-policy-list and snat should be updated correctly after remove egressip objects 
+    Given I store the schedulable workers in the :nodes clipboard
+    Then label "k8s.ovn.org/egress-assignable=true" is added to the "<%= cb.nodes[0].name %>" node
+
+    #Get unused IP as egress ip
+    Given I store a random unused IP address from the reserved range to the clipboard
+
+    #Create first project and pods in it,add label to the namespace
+    Given I have a project
+    And evaluation of `project.name` is stored in the :proj1 clipboard
+    When I run the :label admin command with:
+      | resource | namespace           |
+      | name     | <%= cb.proj1 %>     |
+      | key_val  | org=pm              |
+    Then the step should succeed
+
+    #Create 10  pods in projects
+    Given I obtain test data file "networking/list_for_pods.json"
+    When I run oc create over "list_for_pods.json" replacing paths:
+      | ["items"][0]["spec"]["replicas"] | 10 |
+    Then the step should succeed
+    Given 10 pod become ready with labels:
+      | name=test-pods |
+
+    #Create an egress ip object
+    Given admin ensures "egressip" egress_ip is deleted after scenario
+    When I obtain test data file "networking/ovn-egressip/egressip1.yaml"
+    And I replace lines in "egressip1.yaml":
+      | 172.31.249.227 | "<%= cb.valid_ips[0] %>" |
+      | qe             | "pm"                     |
+    And I run the :create admin command with:
+      | f | egressip1.yaml |
+    Then the step should succeed
+
+    #Scale down CNO to 0 and delete ovnkube-master pods
+    Given I register clean-up steps:
+    """
+    And I run the :scale admin command with:
+      | resource | deployment                 |
+      | name     | network-operator           |
+      | replicas | 1                          |
+      | n        | openshift-network-operator |
+    Then the step should succeed
+    """
+    # Now scale down CNO pod to 0
+    And I run the :scale admin command with:
+      | resource | deployment                 |
+      | name     | network-operator           |
+      | replicas | 0                          |
+      | n        | openshift-network-operator |
+    Then the step should succeed
+    And admin ensures "ovnkube-master" ds is deleted from the "openshift-ovn-kubernetes" project
+    And admin executes existing pods die with labels:
+      | app=ovnkube-master |
+
+    # Now delete egressip object 
+    Given admin ensures "egressip" egress_ip is deleted
+
+    # Now scale up CNO pod to 1
+    Given I run the :scale admin command with:
+      | resource | deployment                 |
+      | name     | network-operator           |
+      | replicas | 1                          |
+      | n        | openshift-network-operator |
+    Then the step should succeed
+    # A minimum wait for 30 seconds is tested to reflect CNO deployment to be effective which will then re-spawn ovn pods
+    Given I switch to cluster admin pseudo user
+    And I use the "openshift-ovn-kubernetes" project
+    And a pod becomes ready with labels:  
+      | app=ovnkube-master |
+    And admin waits for all pods in the "openshift-ovn-kubernetes" project to become ready up to 150 seconds
+
+    # Checking lr-policy-list,no egressip list 
+    Given I store the ovnkube-master "north" leader pod in the clipboard
+    And admin executes on the pod "northd" container:
+      | bash | -c | ovn-nbctl lr-policy-list ovn_cluster_router  \| grep "100 " \| grep -v inport |
+    Then the step should fail 
+    # Checking snat rules, no egressip rules 
+    And admin executes on the pod "northd" container:
+      | bash | -c | ovn-nbctl --format=csv --no-heading find nat external_ids:name=egressip |
+    Then the step should succeed 
+    And the output should not contain:
+      | name=egressip |
