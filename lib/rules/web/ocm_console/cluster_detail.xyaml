@@ -75,6 +75,30 @@ check_actions_on_cluster_detail_page_partial_enabled:
     action: scale_cluster_button_disabled
     action: delete_cluster_button_enabled
     action: edit_display_name_enabled
+
+check_button_status:
+    element:
+        selector:
+            xpath: //button[text()='<button_text>' and @aria-disabled='<disabled>']
+    action:
+        if_param: hover_message
+        ref: check_button_hover_message
+
+wait_external_id_display:
+    element:
+        selector:
+            xpath: //dt/span[text()='Cluster ID']/../../dd/div[text()='N/A']
+        missing: true
+        timeout: 1800
+
+check_button_hover_message:
+    elements:
+        - selector:
+            xpath: //button[text()='<button_text>']
+          op: hover
+        - selector:
+            xpath: //*[text()='<hover_message>']
+        
 click_clusters_url:
     element:
         selector:
@@ -83,12 +107,12 @@ click_clusters_url:
 click_archive_button_on_cluster_detail_page:
     element:
         selector:
-            xpath: //button[@class='pf-c-dropdown__menu-item' and text()='Archive cluster']
+            xpath: //button[text()='Archive cluster']
         op: click
 click_delete_button_on_cluster_detail_page:
     element:
         selector:
-            xpath: //button[@class='pf-c-dropdown__menu-item' and text()='Delete cluster']
+            xpath: //button[text()='Delete cluster']
         op: click
 click_edit_display_name_button_on_cluster_detail_page:
     element:

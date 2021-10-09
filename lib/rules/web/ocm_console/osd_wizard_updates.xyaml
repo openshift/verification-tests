@@ -23,6 +23,7 @@ set_update_daytime:
           op: click
         - selector: 
             xpath: //button[contains(text(), '<time>')]
+          op: click
 
 # --------------------- Node draining related ---------------------
 check_node_draining:
@@ -50,7 +51,7 @@ select_grace_period:
             xpath: //button[@aria-haspopup='listbox']
           op: click
         - selector:
-            xpath: //button[text()=<grace_period>]
+            xpath: //button[text()='<grace_period>']
           op: click
         
 # -------------------- General steps --------------------
