@@ -678,7 +678,7 @@ Feature: deployment related features
     When I run the :create client command with:
       | f | deployment1.json |
     Given a pod becomes ready with labels:
-    | deployment=hooks-1 |
+      | deployment=hooks-1 |
     Then I run the :scale client command with:
       | resource | deploymentconfig |
       | name     | hooks            |
@@ -689,37 +689,34 @@ Feature: deployment related features
       | name     | hooks            |
       | replicas | 1                |
     Given I wait until number of replicas match "1" for replicationController "hooks-1"
-    When I run the :rollout_latest client command with:
-      | resource | hooks |
+    When I run the :patch client command with:
+      | resource      | dc                                                             |
+      | resource_name | hooks                                                          |
+      | p             | {"spec":{"strategy":{"recreateParams":{"timeoutSeconds":50}}}} |
+    Then the step should succeed
+    When I get project dc named "hooks" as JSON
+    Then the output should contain ""timeoutSeconds": 50"
+    When I run the :patch client command with:
+      | resource      | dc                                                                                                          |
+      | resource_name | hooks                                                                                                       |
+      | p             | {"spec":{"template":{"spec":{"containers":[{"name":"hello-openshift","image":"quay.io/hello-nonexist"}]}}}} |
     Then the step should succeed
     Given the pod named "hooks-2-deploy" becomes present
-    When I run the :patch client command with:
-      | resource      | pod                                   |
-      | resource_name | hooks-2-deploy                        |
-      | p             | {"spec":{"activeDeadlineSeconds": 5}} |
-    Then the step should succeed
-    When I run the :patch client command with:
-      | resource      |dc                        |
-      | resource_name | hooks                    |
-      | p             | {"spec":{"replicas": 2}} |
-    Then the step should succeed
-    When I get project pod named "hooks-2-deploy" as JSON
-    Then the output should contain ""activeDeadlineSeconds": 5"
-    When I get project dc named "hooks" as JSON
-    Then the output should contain ""replicas": 2"
-    Given all existing pods die with labels:
-      | deployment=hooks-2 |
+    Given I wait up to 100 seconds for the steps to pass:
+    """
+    And the pod named "hooks-2-deploy" status becomes :failed
     When I get project pods with labels:
       | l | deployment=hooks-2 |
     Then the output should not contain "hooks-2"
+    """
     Given a pod becomes ready with labels:
       | deployment=hooks-1 |
     Given I wait up to 60 seconds for the steps to pass:
     """
     When I get project pods
     And the output should match:
-      | DeadlineExceeded\|Error |
-      | hooks-1                 |
+      | Error    |
+      | hooks-1  |
     """
 
   # @author yinzhou@redhat.com
