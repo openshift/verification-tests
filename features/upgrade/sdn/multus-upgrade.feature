@@ -28,16 +28,15 @@
     Then the step should succeed
     Given a pod becomes ready with labels:
       | name=test-pod1 |
-    And evaluation of `pod(1).name` is stored in the :pod1name clipboard
 
     # Check pod1 has correct macvlan mode on interface net1
-    When I execute on the "<%= cb.pod1name %>" pod:
+    When I execute on the pod:
       | ip | -d | link |
     Then the output should contain:
       | net1                |
       | macvlan mode bridge |
     # Check created pod has correct ip address on interface net1
-    When I execute on the "<%= cb.pod1name %>" pod:
+    When I execute on the pod:
       | ip | a |
     Then the output should contain:
       | 192.168.22.101 |
@@ -51,15 +50,14 @@
     When I use the "multus-upgrade" project
     Given a pod becomes ready with labels:
       | name=test-pod1 |
-    And evaluation of `pod(0).name` is stored in the :pod1name clipboard
     # Check pod1 has correct macvlan mode on interface net1
-    When I execute on the "<%= cb.pod1name %>" pod:
+    When I execute on the pod:
       | ip | -d | link |
     Then the output should contain:
       | net1                |
       | macvlan mode bridge |
     # Check created pod has correct ip address on interface net1
-    When I execute on the "<%= cb.pod1name %>" pod:
+    When I execute on the pod:
       | ip | a |
     Then the output should contain:
       | 192.168.22.101 |
