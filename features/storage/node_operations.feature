@@ -38,6 +38,7 @@ Feature: Node operations test scenarios
     Examples:
       | cloud_provider |
       | gcp            | # @case_id OCP-15287
+    @azure-ipi
     Examples:
       | cloud_provider |
       | azure-disk     | # @case_id OCP-15275

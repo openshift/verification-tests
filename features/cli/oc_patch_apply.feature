@@ -9,6 +9,7 @@ Feature: oc patch/apply related scenarios
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @azure-ipi
   Scenario: oc patch can update one or more fields of rescource
     Given I have a project
     And I run the :create_deploymentconfig client command with:

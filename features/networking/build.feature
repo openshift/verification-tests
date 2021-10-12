@@ -8,6 +8,7 @@ Feature: Testing the isolation during build scenarios
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @azure-ipi
   Scenario Outline: Build-container is constrained to access other projects pod for multitenant plugin
     Given I have a project
     Given I obtain test data file "networking/list_for_pods.json"
@@ -60,6 +61,7 @@ Feature: Testing the isolation during build scenarios
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @azure-ipi
   Scenario Outline: Build-container is constrained to access other projects pod for networkpolicy plugin
     Given I have a project
     Given I obtain test data file "networking/list_for_pods.json"

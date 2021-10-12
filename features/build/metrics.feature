@@ -184,6 +184,7 @@ Feature: Builds and samples related metrics test
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @azure-ipi
   Scenario: Monitoring, Alerting, and Degraded Status Reporting-Samples-operator
     When as admin I successfully merge patch resource "config.samples.operator.openshift.io/cluster" with:
       | {"spec":{"samplesRegistry":"registry.unconnected.redhat.com"}} |

@@ -20,6 +20,7 @@ Feature: Machine-api components upgrade tests
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @azure-ipi
   Scenario Outline: Cluster operator should be available after upgrade
     Given evaluation of `cluster_operator(<cluster_operator>).condition(type: 'Available')` is stored in the :co_available clipboard
     Then the expression should be true> cb.co_available["status"]=="True"
@@ -54,6 +55,7 @@ Feature: Machine-api components upgrade tests
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @azure-ipi
   Scenario: There should be no pending or firing alerts for machine-api operators
     Given I switch to cluster admin pseudo user
 
@@ -78,6 +80,7 @@ Feature: Machine-api components upgrade tests
   @gcp-ipi
   @4.10 @4.9
   @vsphere-ipi
+  @azure-ipi
   Scenario: Scale up and scale down a machineSet after upgrade
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -189,6 +192,7 @@ Feature: Machine-api components upgrade tests
   @gcp-ipi
   @4.10 @4.9
   @vsphere-ipi
+  @azure-ipi
   Scenario: Cluster should automatically scale up and scale down with clusterautoscaler deployed
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user

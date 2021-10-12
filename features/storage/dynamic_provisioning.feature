@@ -4,6 +4,7 @@ Feature: Dynamic provisioning
   @admin
   @smoke
   @4.10 @4.9
+  @azure-ipi
   Scenario Outline: dynamic provisioning
     Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"

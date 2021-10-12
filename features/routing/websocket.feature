@@ -8,6 +8,7 @@ Feature: Testing websocket features
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @azure-ipi
   Scenario: haproxy router support websocket via unsecure route
     Given I have a project
     Given I obtain test data file "routing/websocket/pod.json"

@@ -9,6 +9,7 @@ Feature: testing multicast scenarios
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @azure-ipi
   Scenario: pods should be able to subscribe send and receive multicast traffic
     # create some multicast testing pods
     Given I have a project
@@ -96,6 +97,7 @@ Feature: testing multicast scenarios
   @4.10 @4.9
   @aws-upi
   @vsphere-ipi
+  @azure-ipi
   Scenario: multicast is disabled by default if not annotate the netnamespace
     # create multicast testing pods in the project and without multicast enable
     Given I have a project
@@ -302,6 +304,7 @@ Feature: testing multicast scenarios
   @gcp-upi
   @gcp-ipi
   @4.10 @4.9
+  @azure-ipi
   Scenario: pods in default project should not be able to receive multicast traffic from other tenants
     # create multicast testing pod in one project
     Given I have a project
@@ -383,6 +386,7 @@ Feature: testing multicast scenarios
   @gcp-upi
   @gcp-ipi
   @4.10 @4.9
+  @azure-ipi
   Scenario: pods should be able to join multiple multicast groups at same time  
     # create some multicast testing pods in the project
     Given I have a project
@@ -482,6 +486,7 @@ Feature: testing multicast scenarios
   @gcp-upi
   @gcp-ipi
   @4.10 @4.9
+  @azure-ipi
   Scenario: pods should not be able to receive multicast traffic from other pods in different tenant
     # create some multicast testing pods in one project
     Given I have a project
@@ -562,6 +567,7 @@ Feature: testing multicast scenarios
   @gcp-upi
   @gcp-ipi
   @4.10 @4.9
+  @azure-ipi
   Scenario: pods in default project should be able to receive multicast traffic from other default project pods
     # enable multicast and create testing pods
     Given I switch to cluster admin pseudo user
