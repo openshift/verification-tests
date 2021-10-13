@@ -110,9 +110,9 @@ Feature: oc import-image related feature
   Scenario: Allow imagestream request deployment config triggers by different mode('TagreferencePolicy':source/local)
     Given I have a project
     When I run the :tag client command with:
-      | source_type | docker                                          |
-      | source      | quay.io/openshifttest/deployment-example:latest |
-      | dest        | deployment-example:latest                       |
+      | source_type | docker                                                |
+      | source      | quay.io/openshifttest/deployment-example:v1-multiarch |
+      | dest        | deployment-example:latest                             |
     Then the step should succeed
     And the "deployment-example" image stream becomes ready
     When I run the :new_app_as_dc client command with:
@@ -144,10 +144,10 @@ Feature: oc import-image related feature
       | all         |     |
     Then the step should succeed
     When I run the :tag client command with:
-      | source_type      | docker                                          |
-      | source           | quay.io/openshifttest/deployment-example:latest |
-      | dest             | deployment-example:latest                       |
-      | reference_policy | local                                           |
+      | source_type      | docker                                                |
+      | source           | quay.io/openshifttest/deployment-example:v1-multiarch |
+      | dest             | deployment-example:latest                             |
+      | reference_policy | local                                                 |
     Then the step should succeed
     And the "deployment-example" image stream becomes ready
     When I run the :new_app_as_dc client command with:

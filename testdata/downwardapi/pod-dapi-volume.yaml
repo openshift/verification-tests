@@ -12,7 +12,7 @@ metadata:
 spec:
   containers:
     - name: client-container
-      image: quay.io/openshifttest/busybox@sha256:afe605d272837ce1732f390966166c2afff5391208ddd57de10942748694049d
+      image: quay.io/openshifttest/base-alpine@sha256:0b379877aba876774e0043ea5ba41b0c574825ab910d32b43c05926fab4eea22
       command: ["sh", "-c", "while true; do if [[ -e /var/tmp/podinfo/labels ]]; then cat /var/tmp/podinfo/labels; fi; if [[ -e /var/tmp/podinfo/annotations ]]; then cat /var/tmp/podinfo/annotations; fi; sleep 5; done"]
       securityContext:
         privileged: false

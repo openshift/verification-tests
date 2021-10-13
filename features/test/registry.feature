@@ -43,7 +43,7 @@ Feature: registry related test scenario
     And I add the insecure registry to docker config on the node
     And I log into auth registry on the node
     When I docker push on the node to the registry the following images:
-      | quay.io/openshifttest/busybox@sha256:afe605d272837ce1732f390966166c2afff5391208ddd57de10942748694049d         | busybox:latest |
+      | quay.io/openshifttest/base-alpine@sha256:0b379877aba876774e0043ea5ba41b0c574825ab910d32b43c05926fab4eea22     | busybox:latest |
       | quay.io/openshifttest/ruby-25-centos7@sha256:575194aa8be12ea066fc3f4aa9103dcb4291d43f9ee32e4afe34e0063051610b | test/centos7   |
     Then the step should succeed
 
@@ -56,7 +56,7 @@ Feature: registry related test scenario
     And I add the insecure registry to docker config on the node
     And I log into auth registry on the node
     When I docker push on the node to the registry the following images:
-      | quay.io/openshifttest/busybox@sha256:afe605d272837ce1732f390966166c2afff5391208ddd57de10942748694049d | busybox:latest |
+      | quay.io/openshifttest/base-alpine@sha256:0b379877aba876774e0043ea5ba41b0c574825ab910d32b43c05926fab4eea22 | busybox:latest |
     Then the step should succeed
 
   @admin
@@ -67,7 +67,7 @@ Feature: registry related test scenario
     And I have a registry with htpasswd authentication enabled in my project
     And I add the insecure registry to docker config on the node
     When I docker push on the node to the registry the following images:
-      | quay.io/openshifttest/busybox@sha256:afe605d272837ce1732f390966166c2afff5391208ddd57de10942748694049d         | busybox:latest |
+      | quay.io/openshifttest/base-alpine@sha256:0b379877aba876774e0043ea5ba41b0c574825ab910d32b43c05926fab4eea22     | busybox:latest |
       | quay.io/openshifttest/ruby-25-centos7@sha256:575194aa8be12ea066fc3f4aa9103dcb4291d43f9ee32e4afe34e0063051610b | test/centos7   |
     Then the step should fail
 

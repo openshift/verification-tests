@@ -24,7 +24,7 @@ spec:
         run: dctest
     spec:
       containers:
-      - image: quay.io/openshifttest/hello-openshift-centos@sha256:b9e19f1d8f25059bd4ee8bfd2ec1a24ab4ffe9767622132d1b991edc4d2e0d8a
+      - image: quay.io/openshifttest/hello-openshift@sha256:1e70b596c05f46425c39add70bf749177d78c1e98b2893df4e5ae3883c2ffb5e
         imagePullPolicy: IfNotPresent
         name: dctest-1
         ports:
@@ -35,7 +35,7 @@ spec:
           limits:
             memory: 256Mi
         terminationMessagePath: /dev/termination-log
-      - image: quay.io/openshifttest/hello-openshift-fedora@sha256:5895ec9bbe97f8ca124a723c51116c9c76c51e4ae421ff1c5634a93b0dd1d357
+      - image: quay.io/openshifttest/hello-openshift@sha256:eb47fdebd0f2cc0c130228ca972f15eb2858b425a3df15f10f7bb519f60f0c96
         imagePullPolicy: IfNotPresent
         name: dctest-2
         ports:
