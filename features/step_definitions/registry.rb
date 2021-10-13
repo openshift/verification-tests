@@ -249,10 +249,6 @@ Given /^I secure the default docker(?: (daemon set))? registry$/ do |deployment_
   step %Q/the step should succeed/
 
   _oadm_command = "oc adm"
-  if env.version_lt("3.3", user: user)
-    _oadm_command = "oadm"
-  end
-
   _host.exec_admin(_oadm_command + " ca create-server-cert --signer-cert=#{signer_path}/ca.crt --signer-key=#{signer_path}/ca.key --signer-serial=#{signer_path}/ca.serial.txt --hostnames=#{cb.default_reg_svc_ip},docker-registry.default.svc.cluster.local,docker-registry.default.svc --cert=registry.crt --key=registry.key")
   step %Q/the step should succeed/
 
