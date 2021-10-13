@@ -183,19 +183,19 @@ Feature: oc import-image related feature
   Scenario: Allow imagestream request build config triggers by different mode('TagreferencePolicy':source/local)
     Given I have a project
     When I run the :import_image client command with:
-      | from       | quay.io/openshifttest/ruby-25-centos7 |
-      | confirm    | true                                  |
-      | image_name | ruby-25-centos7:latest                |
+      | from       | registry.redhat.io/rhscl/ruby-26-rhel7:latest |
+      | confirm    | true                                          |
+      | image_name | ruby-26-rhel7:latest                          |
     Then the step should succeed
     When I run the :new_build client command with:
-      | image_stream | ruby-25-centos7                       |
+      | image_stream | ruby-26-rhel7                         |
       | code         | https://github.com/sclorg/ruby-ex.git |
     Then the step should succeed
     When I run the :get client command with:
       | resource_name   | ruby-ex |
       | resource        | bc      |
       | o               | yaml    |
-    Then the expression should be true> @result[:parsed]['status']['imageChangeTriggers'][0]['lastTriggeredImageID'].include? 'openshifttest/ruby-25-centos7'
+    Then the expression should be true> @result[:parsed]['status']['imageChangeTriggers'][0]['lastTriggeredImageID'].include? 'rhscl/ruby-26-rhel7'
     When I run the :delete client command with:
       | object_type | bc |
       | all         |    |
@@ -205,18 +205,18 @@ Feature: oc import-image related feature
       | all         |    |
     Then the step should succeed
     When I run the :import_image client command with:
-      | from            | quay.io/openshifttest/ruby-25-centos7 |
-      | confirm         | true                                  |
-      | image_name      | ruby-25-centos7:latest                |
-      | reference-policy| local                                 |
+      | from            | registry.redhat.io/rhscl/ruby-26-rhel7:latest |
+      | confirm         | true                                          |
+      | image_name      | ruby-26-rhel7:latest                          |
+      | reference-policy| local                                         |
     Then the step should succeed
     When I run the :new_build client command with:
-      | image_stream | ruby-25-centos7                       |
+      | image_stream | ruby-26-rhel7                         |
       | code         | https://github.com/sclorg/ruby-ex.git |
     Then the step should succeed
     When I run the :get client command with:
       | resource_name   | ruby-ex |
       | resource        | bc      |
       | o               | yaml    |
-    Then the expression should be true> @result[:parsed]['status']['imageChangeTriggers'][0]['lastTriggeredImageID'].include? '<%= project.name %>/ruby-25-centos7'
+    Then the expression should be true> @result[:parsed]['status']['imageChangeTriggers'][0]['lastTriggeredImageID'].include? '<%= project.name %>/ruby-26-rhel7'
 
