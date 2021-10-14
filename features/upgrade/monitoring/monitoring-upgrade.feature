@@ -21,6 +21,7 @@ Feature: cluster monitoring related upgrade check
   @aws-upi
   @vsphere-ipi
   @azure-ipi
+  @baremetal-ipi
   Scenario: upgrade cluster monitoring along with OCP
     Given I switch to cluster admin pseudo user
     And I use the "openshift-monitoring" project

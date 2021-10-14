@@ -9,6 +9,7 @@ Feature: Testing timeout route
   @aws-upi
   @vsphere-ipi
   @azure-ipi
+  @baremetal-ipi
   Scenario: Set timeout server for passthough route
     Given I have a project
     And I store an available router IP in the :router_ip clipboard

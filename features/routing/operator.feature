@@ -10,6 +10,7 @@ Feature: Testing Ingress Operator related scenarios
   @aws-upi
   @vsphere-ipi
   @azure-ipi
+  @baremetal-ipi
   Scenario: set namespaceOwnership of routeAdmission to InterNamespaceAllowed
     Given the master version >= "4.4"
     And I have a project

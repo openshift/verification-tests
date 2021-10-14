@@ -68,6 +68,7 @@ Feature: Kibana related features
   @aws-upi
   @vsphere-ipi
   @azure-ipi
+  @baremetal-ipi
   Scenario: Normal User can only view logs out of the projects owned by himself --kibana
     Given I switch to the first user
     And I create a project with non-leading digit name
@@ -125,6 +126,7 @@ Feature: Kibana related features
   @aws-upi
   @vsphere-ipi
   @azure-ipi
+  @baremetal-ipi
   Scenario: User with cluster-admin role can show logs out of all projects -- kibana
     Given I switch to the first user
     Given I create a project with non-leading digit name

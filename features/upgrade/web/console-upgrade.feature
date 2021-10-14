@@ -54,6 +54,7 @@ Feature: web console related upgrade check
   @4.10 @4.9
   @vsphere-ipi
   @azure-ipi
+  @baremetal-ipi
   Scenario: check console accessibility
     Given the first user is cluster-admin
     Given I open admin console in a browser

@@ -21,6 +21,7 @@ Feature: Machine-api components upgrade tests
   @aws-upi
   @vsphere-ipi
   @azure-ipi
+  @baremetal-ipi
   Scenario Outline: Cluster operator should be available after upgrade
     Given evaluation of `cluster_operator(<cluster_operator>).condition(type: 'Available')` is stored in the :co_available clipboard
     Then the expression should be true> cb.co_available["status"]=="True"
@@ -56,6 +57,7 @@ Feature: Machine-api components upgrade tests
   @aws-upi
   @vsphere-ipi
   @azure-ipi
+  @baremetal-ipi
   Scenario: There should be no pending or firing alerts for machine-api operators
     Given I switch to cluster admin pseudo user
 

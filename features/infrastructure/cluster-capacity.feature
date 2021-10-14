@@ -12,6 +12,7 @@ Feature: cluster-capacity related features
   @aws-upi
   @vsphere-ipi
   @azure-ipi
+  @baremetal-ipi
   Scenario: Cluster capacity image support: Cluster capacity can work well with a simple pod
     Given environment has at least 2 schedulable nodes
     Given I have a project

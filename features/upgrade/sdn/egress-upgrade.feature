@@ -45,6 +45,7 @@ Feature: Egress compoment upgrade testing
   @aws-upi
   @vsphere-ipi
   @azure-ipi
+  @baremetal-ipi
   Scenario: Check egressfirewall is functional post upgrade
     Given I switch to cluster admin pseudo user
     And I save egress type to the clipboard

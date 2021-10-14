@@ -27,6 +27,7 @@ Feature: pods related scenarios
   @aws-upi
   @vsphere-ipi
   @azure-ipi
+  @baremetal-ipi
   Scenario: kubectl describe pod should show qos tier info
     Given I have a project
     Given I obtain test data file "quota/pod-notbesteffort.yaml"
@@ -166,6 +167,7 @@ Feature: pods related scenarios
   @aws-upi
   @vsphere-ipi
   @azure-ipi
+  @baremetal-ipi
   Scenario: /dev/shm can be automatically shared among all of a pod's containers
     Given I have a project
     Given I obtain test data file "pods/pod_with_two_containers.json"
@@ -224,6 +226,7 @@ Feature: pods related scenarios
   @aws-upi
   @vsphere-ipi
   @azure-ipi
+  @baremetal-ipi
   Scenario: 4.0 Oauth provider info should be consumed in a pod
     Given I have a project
     When I run the :new_app client command with:

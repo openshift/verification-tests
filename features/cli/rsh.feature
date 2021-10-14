@@ -9,6 +9,7 @@ Feature: rsh.feature
   @aws-upi
   @vsphere-ipi
   @azure-ipi
+  @baremetal-ipi
   Scenario: Check oc rsh for simpler access to a remote shell
     Given I have a project
     Then evaluation of `project.name` is stored in the :proj_name clipboard
