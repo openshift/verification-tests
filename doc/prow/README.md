@@ -21,18 +21,18 @@ The following commands will retrieve all test case ids and add the tag `@aws-ipi
 ```bash
 cd verficiation-tests
 # x.y are versions, e.g, 4.9
-QUERY_FILE="../path-to-folder/ci-profiles/prow/x.y/query_aws_ipi_tests.json"
+QUERY_FILE="../path-to-folder/verification-tests/doc/prow/x.y/query_aws_ipi_tests.json"
 TAGS="@aws-ipi,@4.9"
 tools/case_id_splitter.rb add-tags --tags ${TAGS} --ids $(tools/polarshift.rb query-cases -f ${QUERY_FILE} | grep -o -E 'OCP-[0-9]+' | tr '\n' ',')
 ```
 
-Upon completion of the steps, create a pull request in  `verfication-tests` and `cucushift` respectively. Add clear and consistent summary to your PR and ask qe-productivity for review.
+Upon completion of the steps, create a pull request in `verfication-tests` and `cucushift` respectively. Add clear and consistent summary to your PR and ask qe-productivity for review.
 
 ## Create a Job in Prow
 
 Once your test case selection is solid, you are ready to create a new job. Fork https://github.com/openshift/release.git and create your own branch. We have job and steps created that you can use as a reference:
 
-- [e2e-cucushift-aws-ipi](https://steps.ci.openshift.org/job?org=openshift&repo=release&branch=master&test=e2e-cucushift-aws-ipi&variant=nightly-4.9)
+- [e2e-cucushift-aws-ipi](https://steps.ci.openshift.org/job?org=openshift&repo=verification-tests&branch=master&test=e2e-aws-cucushift-ipi&variant=ocp-4.10)
 
 - [cucushift-pre](https://steps.ci.openshift.org/reference/cucushift-pre): used to prepare your cluster before running CucuShift tests. You should reuse this step as a pre step in your workflow
 - [cucushift-aws-ipi](https://steps.ci.openshift.org/reference/cucushift-aws-ipi): Run all `@aws-ipi` test cases in Prow, you should follow this step and create your own step to run on another profile.
@@ -55,7 +55,10 @@ The Github bot and ci-operator automation will run all tests necessary to valida
 
 ## Getting Your Pull Request Merged
 
-Once you have all your tests passed, the github bot will add an `approved` label to your PR. Remove the `[WIP]` from the summary and ask DPTP for review.
+Once you have all your tests passed, the github bot will add an `approved` label to your PR. Remove the `[WIP]` from the summary and ask qe-productivity for review.
 
 Upon being merged, your job will be created
 
+## Add Your Job Into Testgrid
+
+Once you have the job created, add your job to the [_allow-list.yaml](https://github.com/openshift/release/blob/master/core-services/testgrid-config-generator/_allow-list.yaml) to get the results displayed in testgrid. Ask DPTP for review.
