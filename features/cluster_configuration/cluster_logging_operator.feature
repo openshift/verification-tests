@@ -10,6 +10,7 @@ Feature: cluster logging related scenarios
   @aws-upi
   @vsphere-ipi
   @azure-ipi
+  @baremetal-ipi
   Scenario: Deploy Logging Via Community Operators
     Given logging service has been installed successfully
 

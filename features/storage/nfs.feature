@@ -11,6 +11,7 @@ Feature: NFS Persistent Volume
   @aws-upi
   @vsphere-ipi
   @azure-ipi
+  @baremetal-ipi
   Scenario: Share NFS with multiple pods with ReadWriteMany mode
     Given I have a project
     And I have a NFS service in the project
@@ -60,6 +61,7 @@ Feature: NFS Persistent Volume
   @4.10 @4.9
   @vsphere-ipi
   @azure-ipi
+  @baremetal-ipi
   Scenario: Permission denied when nfs pv annotaion is not right
     Given I have a project
     And I have a NFS service in the project

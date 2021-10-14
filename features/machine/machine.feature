@@ -79,6 +79,7 @@ Feature: Machine features testing
   @4.10 @4.9
   @vsphere-ipi
   @azure-ipi
+  @baremetal-ipi
   Scenario Outline: Metrics is exposed on https
     Given I switch to cluster admin pseudo user
     And I use the "openshift-monitoring" project

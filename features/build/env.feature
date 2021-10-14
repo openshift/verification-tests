@@ -81,6 +81,7 @@ Feature: env.feature
   @aws-upi
   @vsphere-ipi
   @azure-ipi
+  @baremetal-ipi
   Scenario: Can set env vars on buildconfig with new-app --env and --env-file test
     Given I have a project
     When I run the :new_app client command with:

@@ -10,6 +10,7 @@ Feature: oc_process.feature
   @aws-upi
   @vsphere-ipi
   @azure-ipi
+  @baremetal-ipi
   Scenario: Supply oc new-app parameter list+env vars via a file
     Given I have a project
     Given a "test1.env" file is created with the following lines:

@@ -295,6 +295,7 @@ Feature: networking isolation related scenarios
   @network-multitenant
   @vsphere-ipi
   @azure-ipi
+  @baremetal-ipi
   Scenario: Make the network of given projects be accessible globally
     # Create 3 projects and each contains 1 pod and 1 service
     Given the env is using multitenant network

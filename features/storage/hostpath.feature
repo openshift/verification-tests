@@ -10,6 +10,7 @@ Feature: Storage of Hostpath plugin testing
   @aws-upi
   @vsphere-ipi
   @azure-ipi
+  @baremetal-ipi
   Scenario Outline: Create hostpath pv with access mode and reclaim policy
     Given I have a project
     Given I obtain test data file "storage/hostpath/local.yaml"

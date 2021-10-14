@@ -9,6 +9,7 @@ Feature: hpa scale
   @aws-upi
   @vsphere-ipi
   @azure-ipi
+  @baremetal-ipi
   Scenario: HPA shouldn't scale up target if the replicas of dc is 0
     Given I have a project
     Given I obtain test data file "hpa/dc-hello-openshift.yaml"
@@ -52,6 +53,7 @@ Feature: hpa scale
   @aws-upi
   @vsphere-ipi
   @azure-ipi
+  @baremetal-ipi
   Scenario: HPA shouldn't scale up target if the replicas of rc is 0
     Given I have a project
     Given I obtain test data file "hpa/rc-hello-openshift.yaml"
@@ -94,6 +96,7 @@ Feature: hpa scale
   @aws-upi
   @vsphere-ipi
   @azure-ipi
+  @baremetal-ipi
   Scenario: Creates autoscaler for replication controller by oc autoscale
     Given I have a project
     Given I obtain test data file "hpa/rc-hello-openshift.yaml"

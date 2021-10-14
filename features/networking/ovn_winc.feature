@@ -61,6 +61,7 @@ Feature: OVNKubernetes Windows Container related networking scenarios
   @aws-upi
   @vsphere-ipi
   @azure-ipi
+  @baremetal-ipi
   Scenario: Create Loadbalancer service for a window container
     Given the env has hybridOverlayConfig enabled
     And the env is using windows nodes
