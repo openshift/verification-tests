@@ -29,6 +29,8 @@ Feature: Secure Computing Test Scenarios
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: Using Secure Computing Profiles with Pod Annotations
     # Create custom machine config that contains the seccomp
     Given I switch to cluster admin pseudo user

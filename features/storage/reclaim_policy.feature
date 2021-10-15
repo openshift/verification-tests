@@ -43,5 +43,9 @@ Feature: Persistent Volume reclaim policy tests
       | storage_type         | volume_name | path   | file                |
       | gcePersistentDisk    | pdName      | gce    | pv-default-rwo.json | # @case_id OCP-9949
       | awsElasticBlockStore | volumeID    | ebs    | pv-rwo.yaml         | # @case_id OCP-9943
+    
+    @openstack-ipi
+    @openstack-upi
+    Examples:
       | cinder               | volumeID    | cinder | pv-rwx-default.json | # @case_id OCP-9944
 

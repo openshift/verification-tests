@@ -10,6 +10,8 @@ Feature: Regression testing cases
   @4.10 @4.9
   @vsphere-ipi
   @azure-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: RWO volumes are exclusively mounted on different nodes
     Given I have a project
     Given I store the schedulable workers in the :workers clipboard

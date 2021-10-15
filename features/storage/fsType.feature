@@ -45,7 +45,11 @@ Feature: testing for parameter fsType
       | ext3   | ebs    | # @case_id OCP-10048
       | ext4   | ebs    | # @case_id OCP-9612
       | xfs    | ebs    | # @case_id OCP-10049
+
+    @openstack-ipi
+    @openstack-upi
+    Examples:
+      | fsType | type   |
       | ext3   | cinder | # @case_id OCP-10097
       | ext4   | cinder | # @case_id OCP-10098
       | xfs    | cinder | # @case_id OCP-10099
-

@@ -11,6 +11,8 @@ Feature: Testing haproxy rate limit related features
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: limits backend pod max concurrent connections for unsecure, edge, reen route
     Given I switch to cluster admin pseudo user
     And I use the router project

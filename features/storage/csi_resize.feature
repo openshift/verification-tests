@@ -43,9 +43,13 @@ Feature: CSI Resizing related feature
     Examples:
       | sc_name      |
       | standard-csi | # @case_id OCP-37479
-      | standard-csi | # @case_id OCP-37559
       | gp2-csi      | # @case_id OCP-25808
 
+    @openstack-ipi
+    @openstack-upi
+    Examples:
+      | sc_name      |
+      | standard-csi | # @case_id OCP-37559
 
   # @author wduan@redhat.com
   @4.10 @4.9

@@ -77,6 +77,8 @@ Feature: build 'apps' with CLI
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: Create a build config based on the source code in the current git repository
     Given I have a project
     And I git clone the repo "https://github.com/openshift/ruby-hello-world.git"
@@ -146,6 +148,8 @@ Feature: build 'apps' with CLI
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: Create applications only with multiple db images
     Given I create a new project
     When I run the :new_app client command with:
@@ -194,6 +198,8 @@ Feature: build 'apps' with CLI
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: Add multiple source inputs
     Given I have a project
     Given I obtain test data file "templates/ocp11227/ruby22rhel7-template-sti.json"
@@ -227,6 +233,8 @@ Feature: build 'apps' with CLI
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: Add a image with multiple paths as source input
     Given I have a project
     Given I obtain test data file "templates/ocp10771/ruby22rhel7-template-sti.json"
@@ -253,6 +261,8 @@ Feature: build 'apps' with CLI
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: Using a docker image as source input using new-build cmd
     Given I have a project
     When I run the :tag client command with:
@@ -322,6 +332,8 @@ Feature: build 'apps' with CLI
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: Cannot create secret from local file and with same name via oc new-build
     Given I have a project
     Given I obtain test data file "secrets/testsecret1.json"
@@ -357,6 +369,8 @@ Feature: build 'apps' with CLI
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: Using a docker image as source input for docker build
     Given I have a project
     Given I obtain test data file "templates/ocp11552/ruby22rhel7-template-docker.json"
@@ -421,6 +435,8 @@ Feature: build 'apps' with CLI
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: Change runpolicy to SerialLatestOnly build
     Given I have a project
     When I run the :new_build client command with:
@@ -506,6 +522,8 @@ Feature: build 'apps' with CLI
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario Outline: Cancel multiple new/pending/running builds
     Given I have a project
     When I run the :new_build client command with:
@@ -656,6 +674,8 @@ Feature: build 'apps' with CLI
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario Outline: The default runpolicy is Serial build -- new-build/new-app command
     Given I have a project
     When I run the :<cmd> client command with:
@@ -730,6 +750,8 @@ Feature: build 'apps' with CLI
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: Simple error message return when no value followed with oc build-logs
     Given I have a project
     When I run the :logs client command with:
@@ -764,6 +786,8 @@ Feature: build 'apps' with CLI
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: Handle build naming collisions
     Given I have a project
     When I run the :new_build client command with:
@@ -796,6 +820,8 @@ Feature: build 'apps' with CLI
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: io.openshift.build.commit.ref displays correctly in build reference on imagestreamtag if building from git branch reference
     Given I have a project
     When I run the :new_app client command with:
@@ -820,6 +846,8 @@ Feature: build 'apps' with CLI
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: Insert configmap when create a buildconfig
     Given I have a project
     Given a "configmap.test" file is created with the following lines:
@@ -959,6 +987,8 @@ Feature: build 'apps' with CLI
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: Allow using a configmap as an input to a docker build
     Given I have a project
     Given a "configmap1.test" file is created with the following lines:

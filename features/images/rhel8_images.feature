@@ -77,6 +77,8 @@ Feature: rhel8images.feature
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: mysql persistent template
     Given I have a project
     When I run the :tag admin command with:

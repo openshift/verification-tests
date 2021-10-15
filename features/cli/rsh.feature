@@ -10,6 +10,8 @@ Feature: rsh.feature
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: Check oc rsh for simpler access to a remote shell
     Given I have a project
     Then evaluation of `project.name` is stored in the :proj_name clipboard

@@ -99,6 +99,8 @@ Feature: buildconfig.feature
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: Using secret to pull a docker image which be used as source input
     Given I have a project
     When I run the :create_secret client command with:

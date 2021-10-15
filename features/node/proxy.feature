@@ -12,6 +12,8 @@ Feature: Node proxy configuration tests
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario Outline: Proxy config should be applied to kubelet and crio
     Given I use the "default" project
     Given I switch to cluster admin pseudo user

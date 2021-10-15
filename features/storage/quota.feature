@@ -10,6 +10,8 @@ Feature: ResourceQuata for storage
   @aws-upi
   @vsphere-ipi
   @azure-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: Requested storage can not exceed the namespace's storage quota
     Given I have a project
     And I switch to cluster admin pseudo user
@@ -87,6 +89,8 @@ Feature: ResourceQuata for storage
   @aws-upi
   @vsphere-ipi
   @azure-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: Setting quota for a StorageClass
     Given I have a project
     Given admin clones storage class "sc-<%= project.name %>" from ":default" with:
