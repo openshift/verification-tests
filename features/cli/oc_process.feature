@@ -11,6 +11,8 @@ Feature: oc_process.feature
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: Supply oc new-app parameter list+env vars via a file
     Given I have a project
     Given a "test1.env" file is created with the following lines:

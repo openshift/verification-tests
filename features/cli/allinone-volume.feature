@@ -10,6 +10,8 @@ Feature: All in one volume
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: Project secrets, configmap and downward API into the same volume with normal keys and path
     Given I have a project
     Given I obtain test data file "pods/allinone-volume/configmap.yaml"

@@ -77,6 +77,8 @@ Feature: Storage upgrade tests
   @aws-upi
   @vsphere-ipi
   @azure-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: Cluster operator storage should be in correct status and dynamic provisioning should work well after upgrade
     Given I switch to cluster admin pseudo user
     # Check storage operator version after upgraded

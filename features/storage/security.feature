@@ -113,6 +113,10 @@ Feature: storage security check
       | storage_type         | volume_name | type   |
       | gcePersistentDisk    | pdName      | gce    | # @case_id OCP-9700
       | awsElasticBlockStore | volumeID    | ebs    | # @case_id OCP-9699
+
+    @openstack-ipi
+    @openstack-upi
+    Examples:
       | cinder               | volumeID    | cinder | # @case_id OCP-9721
 
   # @author chaoyang@redhat.com
@@ -127,6 +131,8 @@ Feature: storage security check
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: secret volume security check
     Given I have a project
     Given I obtain test data file "storage/secret/secret.yaml"

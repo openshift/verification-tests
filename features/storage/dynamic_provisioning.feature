@@ -60,7 +60,12 @@ Feature: Dynamic provisioning
 
     Examples:
       | cloud_provider |
-      | cinder         | # @case_id OCP-9656
       | ebs            | # @case_id OCP-9685
       | gce            | # @case_id OCP-12665
       | azure          | # @case_id OCP-13787
+
+    @openstack-ipi
+    @openstack-upi
+    Examples:
+      | cloud_provider |
+      | cinder         | # @case_id OCP-9656

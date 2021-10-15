@@ -10,6 +10,8 @@ Feature: secrets related scenarios
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: deployment hook volume inheritance --with secret volume
     Given I have a project
     And I run the :create_secret client command with:
@@ -45,6 +47,8 @@ Feature: secrets related scenarios
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: Pods do not have access to each other's secrets in the same namespace
     Given I have a project
     Given I obtain test data file "secrets/ocp12281/first-secret.json"
@@ -98,6 +102,8 @@ Feature: secrets related scenarios
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: Pods do not have access to each other's secrets with the same secret name in different namespaces
     Given I have a project
     Given evaluation of `project.name` is stored in the :project0 clipboard
@@ -145,6 +151,8 @@ Feature: secrets related scenarios
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario Outline: Insert secret to builder container via oc new-build - source/docker build
     Given I have a project
     Given I obtain test data file "secrets/testsecret1.json"
@@ -197,6 +205,8 @@ Feature: secrets related scenarios
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: Consume the same Secrets as environment variables in multiple pods
     Given I have a project
     Given I obtain test data file "secrets/secret.yaml"
@@ -255,6 +265,8 @@ Feature: secrets related scenarios
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: Using Secrets as Environment Variables
     Given I have a project
     Given I obtain test data file "secrets/secret.yaml"
@@ -327,6 +339,8 @@ Feature: secrets related scenarios
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: Mapping specified secret volume should update when secret is updated
     Given I have a project
     Given I obtain test data file "secrets/secret1.json"
@@ -367,6 +381,8 @@ Feature: secrets related scenarios
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: Allow specifying secret data using strings and images
     Given I have a project
     Given I obtain test data file "secrets/secret-datastring-image.json"
@@ -421,6 +437,8 @@ Feature: secrets related scenarios
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: oc new-app to gather git creds
     Given I have a project
     When I have an http-git service in the project

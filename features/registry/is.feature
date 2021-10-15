@@ -101,6 +101,8 @@ Feature: Testing imagestream
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: Prune images when DC reference to invalid image
     Given I have a project
     Given I enable image-registry default route
@@ -151,6 +153,8 @@ Feature: Testing imagestream
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: Do not prune layer of a valid Image due to minimum aging
     Given I have a project
     Given I enable image-registry default route

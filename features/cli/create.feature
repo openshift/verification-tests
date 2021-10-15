@@ -12,6 +12,8 @@ Feature: creating 'apps' with CLI
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: Process with special FSGroup id can be ran when using RunAsAny as the RunAsGroupStrategy
     Given I have a project
     Given I obtain test data file "pods/pod_with_special_fsGroup.json"
@@ -162,6 +164,8 @@ Feature: creating 'apps' with CLI
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: 4.x Could not create any context in non-existent project
     Given I create a new application with:
       | docker image | openshift/ruby-20-centos7~https://github.com/openshift/ruby-hello-world |
@@ -202,6 +206,8 @@ Feature: creating 'apps' with CLI
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: Create an application from source code test
     Given I have a project
     When I git clone the repo "https://github.com/openshift/ruby-hello-world"

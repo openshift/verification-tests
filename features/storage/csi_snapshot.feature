@@ -56,8 +56,13 @@ Feature: Volume snapshot test
     Examples:
       | csi-sc       |
       | gp2-csi      | # @case_id OCP-27727
-      | standard-csi | # @case_id OCP-37568
       | managed-csi  | # @case_id OCP-41449
+
+    @openstack-ipi
+    @openstack-upi
+    Examples:
+      | csi-sc       |
+      | standard-csi | # @case_id OCP-37568
 
   # @author wduan@redhat.com
   @admin
@@ -124,4 +129,9 @@ Feature: Volume snapshot test
     Examples:
     | csi-sc       |
     | gp2-csi      | # @case_id OCP-27727
+
+    @openstack-ipi
+    @openstack-upi
+    Examples:
+    | csi-sc       |
     | standard-csi | # @case_id OCP-37569
