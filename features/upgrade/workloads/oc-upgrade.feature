@@ -50,6 +50,7 @@ Feature: basic verification for upgrade oc client testing
   # @author yinzhou@redhat.com
   @upgrade-prepare
   @users=upuser1,upuser2
+  @4.10 @4.9
   Scenario: Check some container related oc commands still work for ocp45 after upgrade - prepare
     Given the master version >= "4.5"
     Given I switch to the first user

@@ -3,6 +3,7 @@ Feature: Jenkins feature upgrade test
   # @author xiuwang@redhat.com
   @upgrade-prepare
   @users=upuser1,upuser2
+  @4.10 @4.9
   Scenario: Jenkins feature upgrade test - prepare
     Given I switch to the first user
     When I run the :new_project client command with:

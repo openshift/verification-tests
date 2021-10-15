@@ -3,6 +3,16 @@ Feature: basic verification for upgrade testing
   @upgrade-prepare
   @users=upuser1,upuser2
   @admin
+  @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.10 @4.9
+  @aws-upi
+  @vsphere-ipi
+  @azure-ipi
+  @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: etcd-operator and cluster works well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     Given I obtain test data file "admin/subscription.yaml"

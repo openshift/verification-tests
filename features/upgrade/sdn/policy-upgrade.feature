@@ -3,6 +3,16 @@ Feature: SDN compoment upgrade testing
   # @author huirwang@redhat.com
   @admin
   @upgrade-prepare
+  @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.10 @4.9
+  @aws-upi
+  @vsphere-ipi
+  @azure-ipi
+  @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: network operator should be available after upgrade - prepare
   # According to our upgrade workflow, we need an upgrade-prepare and upgrade-check for each scenario.
   # But some of them do not need any prepare steps, which lead to errors "can not find scenarios" in the log.
@@ -40,6 +50,7 @@ Feature: SDN compoment upgrade testing
   # @author zzhao@redhat.com
   @admin
   @upgrade-prepare
+  @4.10 @4.9
   Scenario: Check the networkpolicy works well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     When I run the :new_project client command with:
@@ -94,6 +105,16 @@ Feature: SDN compoment upgrade testing
   # @author asood@redhat.com
   @admin
   @upgrade-prepare
+  @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.10 @4.9
+  @aws-upi
+  @vsphere-ipi
+  @azure-ipi
+  @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: Check the namespace networkpolicy for an application works well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     When I run the :new_project client command with:
@@ -153,7 +174,7 @@ Feature: SDN compoment upgrade testing
     When I use the "policy-upgrade1" project
     When I execute on the "<%= cb.pod1 %>" pod:
       | curl | -s | --connect-timeout | 5 | <%= cb.pod2ip %>:8080 |
-    Then the step should fail 
+    Then the step should fail
     And the output should not contain "Hello"
     When I execute on the "<%= cb.pod3 %>" pod:
       | curl | -s | --connect-timeout | 5 | <%= cb.pod2ip %>:8080 |
@@ -167,11 +188,11 @@ Feature: SDN compoment upgrade testing
     And the output should contain "Hello"
     When I execute on the "<%= cb.pod5 %>" pod:
       | curl | -s | --connect-timeout | 5 | <%= cb.pod2ip %>:8080 |
-    Then the step should fail 
+    Then the step should fail
     And the output should not contain "Hello"
     When I execute on the "<%= cb.pod4 %>" pod:
       | curl | -s | --connect-timeout | 5 | <%= cb.pod3ip %>:8080 |
-    Then the step should succeed 
+    Then the step should succeed
     And the output should contain "Hello"
     """
 
@@ -224,10 +245,10 @@ Feature: SDN compoment upgrade testing
     Then the step should succeed
     When I execute on the "<%= cb.pod5 %>" pod:
       | curl | -s | --connect-timeout | 5 | <%= cb.pod2ip %>:8080 |
-    Then the step should fail 
+    Then the step should fail
     When I execute on the "<%= cb.pod4 %>" pod:
       | curl | -s | --connect-timeout | 5 | <%= cb.pod3ip %>:8080 |
-    Then the step should succeed 
+    Then the step should succeed
     And the output should contain "Hello"
     """
     #Steps to modify policy post upgrade for bug 1973679
@@ -258,6 +279,7 @@ Feature: SDN compoment upgrade testing
   # @author asood@redhat.com
   @admin
   @upgrade-prepare
+  @4.10 @4.9
   Scenario: Check allow from router and allow from hostnetwork policy are functional post upgrade - prepare
     Given I switch to cluster admin pseudo user
     When I run the :new_project client command with:
@@ -344,7 +366,7 @@ Feature: SDN compoment upgrade testing
   @admin
   @upgrade-check
   @4.10 @4.9
-  Scenario: Check allow from router and allow from hostnetwork policy are functional post upgrade 
+  Scenario: Check allow from router and allow from hostnetwork policy are functional post upgrade
     Given I switch to cluster admin pseudo user
     When I use the "policy-upgrade3" project
     Given a pod becomes ready with labels:
