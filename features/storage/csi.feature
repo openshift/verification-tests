@@ -75,6 +75,8 @@ Feature: CSI testing related feature
       | sc_name      |
       | gp2-csi      | # @case_id OCP-24575
 
+    @openstack-ipi
+    @openstack-upi
     Examples:
       | sc_name      |
       | standard-csi | # @case_id OCP-37572
@@ -153,6 +155,8 @@ Feature: CSI testing related feature
     Then the step should succeed
     And the output should contain "test"
 
+    @openstack-ipi
+    @openstack-upi
     Examples:
       | sc_name      |
       | standard-csi | # @case_id OCP-37562
@@ -202,6 +206,8 @@ Feature: CSI testing related feature
     Then the step should succeed
     And the output should contain "Hello OpenShift Storage"
 
+    @openstack-ipi
+    @openstack-upi
     Examples:
       | sc_name       | fstype |
       | standard-csi  | xfs    | # @case_id OCP-37560
@@ -243,9 +249,14 @@ Feature: CSI testing related feature
     Then the step should succeed
     And the output should contain "test data"
 
+    @openstack-ipi
+    @openstack-upi
     Examples:
       | sc_name      |
       | standard-csi | # @case_id OCP-37564
+
+    Examples:
+      | sc_name      |
       | standard-csi | # @case_id OCP-37511
 
 
@@ -331,6 +342,8 @@ Feature: CSI testing related feature
     Given "<deployment_controller>" deployment becomes ready in the "openshift-cluster-csi-drivers" project
     Given "<daemonset_node>" daemonset becomes ready in the "openshift-cluster-csi-drivers" project
 
+    @openstack-ipi
+    @openstack-upi
     Examples:
       | provisioner              | sc_name      | deployment_operator                  | deployment_controller                  | daemonset_node                   |
       | cinder.csi.openstack.org | standard-csi | openstack-cinder-csi-driver-operator | openstack-cinder-csi-driver-controller | openstack-cinder-csi-driver-node | # @case_id OCP-37557

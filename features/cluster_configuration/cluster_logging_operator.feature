@@ -11,6 +11,8 @@ Feature: cluster logging related scenarios
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: Deploy Logging Via Community Operators
     Given logging service has been installed successfully
 

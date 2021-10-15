@@ -9,6 +9,7 @@ Feature: Machine features testing
   @4.10 @4.9
   @vsphere-ipi
   @azure-ipi
+  @openstack-ipi
   Scenario: Machines should be linked to nodes
     Given I have an IPI deployment
     Then the machines should be linked to nodes
@@ -42,6 +43,8 @@ Feature: Machine features testing
   @aws-upi
   @vsphere-ipi
   @azure-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: Baremetal clusteroperator should be disabled in any deployment that is not baremetal
     Given evaluation of `cluster_operator('baremetal').condition(type: 'Disabled')` is stored in the :co_disabled clipboard
     Then the expression should be true> cb.co_disabled["status"]=="True"
@@ -55,6 +58,7 @@ Feature: Machine features testing
   @4.10 @4.9
   @vsphere-ipi
   @azure-ipi
+  @openstack-ipi
   Scenario: Scale up and scale down a machineSet
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -80,6 +84,7 @@ Feature: Machine features testing
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
   Scenario Outline: Metrics is exposed on https
     Given I switch to cluster admin pseudo user
     And I use the "openshift-monitoring" project
@@ -110,6 +115,7 @@ Feature: Machine features testing
   @4.10 @4.9
   @vsphere-ipi
   @azure-ipi
+  @openstack-ipi
   Scenario: Machine should have immutable field providerID and nodeRef
     Given I have an IPI deployment
     Given I store the last provisioned machine in the :machine clipboard

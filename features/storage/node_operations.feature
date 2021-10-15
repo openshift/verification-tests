@@ -46,6 +46,8 @@ Feature: Node operations test scenarios
     Examples:
       | cloud_provider |
       | vsphere-volume | # @case_id OCP-15268
+    @openstack-ipi
+    @openstack-upi
     Examples:
       | cloud_provider |
       | cinder         | # @case_id OCP-15276

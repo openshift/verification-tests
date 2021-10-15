@@ -14,6 +14,8 @@ Feature: cluster-logging-operator related test
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: ServiceMonitor Object for collector is deployed along with cluster logging
     Given logging collector name is stored in the :collector_name clipboard
     Given I wait for the "<%= cb.collector_name %>" service_monitor to appear
@@ -93,6 +95,8 @@ Feature: cluster-logging-operator related test
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: Fluentd alert rule: FluentdNodeDown
     Given the master version >= "4.2"
     Given I obtain test data file "logging/clusterlogging/example.yaml"
@@ -162,6 +166,8 @@ Feature: cluster-logging-operator related test
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: OpenShift Logging dashboard
     Given I switch to the first user
     And the first user is cluster-admin
@@ -232,6 +238,8 @@ Feature: cluster-logging-operator related test
   @vsphere-ipi
   @azure-ipi
   @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: Fluentd optimizing variable changes trigger new deployment
     Given I obtain test data file "logging/clusterlogging/cl_fluentd-buffer_default.yaml"
     And I create clusterlogging instance with:
