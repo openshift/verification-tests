@@ -706,7 +706,7 @@ check_aws_arm_install_page_special_parts:
         - selector:
             xpath: //a[@href='https://access.redhat.com/articles/4307871']
         - selector:
-            xpath: //img[@src='/apps/chrome/js/fonts/logo.svg']
+            xpath: //img[@src='/apps/chrome/js/../assets/images/logo.svg']
 
 check_download_installer_button_in_install_ibmz_pre_page:
     params:
