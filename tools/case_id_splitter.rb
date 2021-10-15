@@ -189,7 +189,10 @@ module BushSlicer
         res = ranges_loc[case_id]
 
         current_tags = []
-        start_line_num = 0
+        insert_at_line = 0
+        insert_at_line_version = 0
+        insert_at_line_ipi = 0
+        insert_at_line_upi = 0
         indention = ''
 
         content = IO.readlines(res[:file])
@@ -200,14 +203,23 @@ module BushSlicer
               current_tags << tag_in_line
             end
           end
-          if content[i] =~ /^\s+(Scenario:)/
-            start_line_num = i
+          if content[i] =~ /^\s+(@4.)/
+            insert_at_line_version = i
+            next
+          elsif content[i] =~ /^\s+(@.*ipi)/
+            insert_at_line_ipi = i
+            next
+          elsif content[i] =~ /^\s+(@.*upi)/
+            insert_at_line_upi = i
+            next
+          elsif content[i] =~ /^\s+(Scenario:)/
+            insert_at_line = i
             indention = '  '
             break
           elsif content[i] =~ /^\s+(Scenario Outline:)/
             next
           elsif content[i] =~ /^\s+(Examples:)/
-            start_line_num = i
+            insert_at_line = i
             indention = '    '
             break
           end
@@ -219,9 +231,17 @@ module BushSlicer
             next
           end
 
-          line_to_add = "#{indention}#{tag}"
+          content_to_add = "#{indention}#{tag}"
           puts "Adding tag #{tag} to #{res[:file]} for test case #{case_id}"
-          content.insert(start_line_num, line_to_add)
+          if tag =~ /@4[.][0-9]+/ && insert_at_line_version != 0
+            content[insert_at_line_version].prepend(content_to_add)
+          elsif tag =~ /@.*ipi/ && insert_at_line_ipi != 0
+            content[insert_at_line_ipi].prepend(content_to_add)
+          elsif tag =~ /@.*upi/ && insert_at_line_upi != 0
+            content[insert_at_line_upi].prepend(content_to_add)
+          else
+            content.insert(insert_at_line, content_to_add)
+          end
         end
 
         File.open(res[:file], 'w') { |f| f.puts(content) }
