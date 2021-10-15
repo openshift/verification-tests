@@ -190,12 +190,25 @@ module BushSlicer
 
         current_tags = []
         start_line_num = 0
+        indention = ''
 
         content = IO.readlines(res[:file])
         res[:range].each do |i|
-          current_tags << content[i].strip if content[i] =~ /^\s.*@/
-          if content[i] =~ /^\s*(Scenario)/
+          if content[i] =~ /^\s+@/
+            tags_in_line = content[i].strip.split(' ')
+            tags_in_line.each do |tag_in_line|
+              current_tags << tag_in_line
+            end
+          end
+          if content[i] =~ /^\s+(Scenario:)/
             start_line_num = i
+            indention = '  '
+            break
+          elsif content[i] =~ /^\s+(Scenario Outline:)/
+            next
+          elsif content[i] =~ /^\s+(Examples:)/
+            start_line_num = i
+            indention = '    '
             break
           end
         end
@@ -206,7 +219,7 @@ module BushSlicer
             next
           end
 
-          line_to_add = "  #{tag}"
+          line_to_add = "#{indention}#{tag}"
           puts "Adding tag #{tag} to #{res[:file]} for test case #{case_id}"
           content.insert(start_line_num, line_to_add)
         end
