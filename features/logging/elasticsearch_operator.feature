@@ -6,16 +6,9 @@ Feature: elasticsearch-operator related tests
   @admin
   @destructive
   @commonlogging
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: ServiceMonitor Object for Elasticsearch is deployed along with the Elasticsearch cluster
     Given I wait for the "monitor-elasticsearch-cluster" service_monitor to appear
     When I perform the HTTP request on the ES pod with labels "es-node-master=true":
@@ -37,16 +30,7 @@ Feature: elasticsearch-operator related tests
   # @author qitang@redhat.com
   @admin
   @destructive
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
   Scenario Outline: elasticsearch alerting rules test: ElasticsearchClusterNotHealthy
     Given I obtain test data file "logging/clusterlogging/example.yaml"
     Given I create clusterlogging instance with:
@@ -89,6 +73,8 @@ Feature: elasticsearch-operator related tests
     And the output should match:
       | "alertstate":"pending\|firing" |
     """
+    @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+    @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
     Examples:
       | cluster_setting |
       | transient       | # @case_id OCP-21530
@@ -100,16 +86,9 @@ Feature: elasticsearch-operator related tests
   @console
   @destructive
   @commonlogging
-  @aws-ipi
-  @aws-upi
-  @gcp-ipi
-  @gcp-upi
   @4.10 @4.9
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Additional essential metrics ES dashboard
     Given I switch to the first user
     And the first user is cluster-admin

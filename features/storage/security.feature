@@ -4,9 +4,7 @@ Feature: storage security check
   # @author piqin@redhat.com
   @admin
   @smoke
-  @aws-ipi
   @4.10 @4.9
-  @aws-upi
   Scenario Outline: [origin_infra_20] volume security testing
     Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"
@@ -109,13 +107,13 @@ Feature: storage security check
     And the output should contain "Hello OpenShift Storage"
 
     # keep the parameters for 3.11 cases can be run.
+    @openstack-ipi @aws-ipi
+    @openstack-upi @aws-upi
     Examples:
       | storage_type         | volume_name | type   |
       | gcePersistentDisk    | pdName      | gce    | # @case_id OCP-9700
       | awsElasticBlockStore | volumeID    | ebs    | # @case_id OCP-9699
 
-    @openstack-ipi
-    @openstack-upi
     Examples:
       | cinder               | volumeID    | cinder | # @case_id OCP-9721
 
@@ -123,16 +121,9 @@ Feature: storage security check
   # @case_id OCP-9709
   @admin
   @smoke
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: secret volume security check
     Given I have a project
     Given I obtain test data file "storage/secret/secret.yaml"

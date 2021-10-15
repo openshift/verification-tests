@@ -4,7 +4,6 @@ Feature: vSphere test scenarios
   @admin
   @smoke
   @4.10 @4.9
-  @vsphere-ipi
   Scenario Outline: Dynamically provision a vSphere volume with different disk formats
     Given I have a project
     Given I obtain test data file "storage/vsphere/storageclass.yml"
@@ -56,6 +55,8 @@ Feature: vSphere test scenarios
     Given I switch to cluster admin pseudo user
     And I wait for the resource "pv" named "<%= pvc.volume_name %>" to disappear within 60 seconds
 
+    @vsphere-ipi
+    @vsphere-upi
     Examples:
       | disk_format      |
       | thin             | # @case_id OCP-13386
@@ -67,6 +68,7 @@ Feature: vSphere test scenarios
   @admin
   @4.10 @4.9
   @vsphere-ipi
+  @vsphere-upi
   Scenario: Dynamically provision a vSphere volume with invalid disk format
     Given I have a project
     Given I obtain test data file "storage/vsphere/storageclass.yml"

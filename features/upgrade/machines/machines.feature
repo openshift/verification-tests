@@ -14,16 +14,7 @@ Feature: Machine-api components upgrade tests
   # @author jhou@redhat.com
   @upgrade-check
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
   Scenario Outline: Cluster operator should be available after upgrade
     Given evaluation of `cluster_operator(<cluster_operator>).condition(type: 'Available')` is stored in the :co_available clipboard
     Then the expression should be true> cb.co_available["status"]=="True"
@@ -37,6 +28,8 @@ Feature: Machine-api components upgrade tests
     Given evaluation of `cluster_operator(<cluster_operator>).condition(type: 'Progressing')` is stored in the :co_progressing clipboard
     Then the expression should be true> cb.co_progressing["status"]=="False"
 
+    @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+    @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Examples:
     | cluster_operator           |
     | "machine-api"              | # @case_id OCP-22712
@@ -52,16 +45,9 @@ Feature: Machine-api components upgrade tests
   # @case_id OCP-22692
   @upgrade-check
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: There should be no pending or firing alerts for machine-api operators
     Given I switch to cluster admin pseudo user
 
@@ -82,12 +68,8 @@ Feature: Machine-api components upgrade tests
   @upgrade-check
   @admin
   @destructive
-  @aws-ipi
-  @gcp-ipi
   @4.10 @4.9
-  @vsphere-ipi
-  @azure-ipi
-  @openstack-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   Scenario: Scale up and scale down a machineSet after upgrade
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -195,12 +177,8 @@ Feature: Machine-api components upgrade tests
   @upgrade-check
   @admin
   @destructive
-  @aws-ipi
-  @gcp-ipi
   @4.10 @4.9
-  @vsphere-ipi
-  @azure-ipi
-  @openstack-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   Scenario: Cluster should automatically scale up and scale down with clusterautoscaler deployed
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user

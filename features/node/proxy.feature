@@ -3,17 +3,8 @@ Feature: Node proxy configuration tests
   # @author jhou@redhat.com
   @admin
   @flaky
-  @aws-ipi
   @proxy
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
   Scenario Outline: Proxy config should be applied to kubelet and crio
     Given I use the "default" project
     Given I switch to cluster admin pseudo user
@@ -36,6 +27,8 @@ Feature: Node proxy configuration tests
       | Environment=HTTPS_PROXY=<%= cb.proxy["spec"]["httpProxy"] %> |
       | Environment=NO_PROXY=.*<%= cb.proxy["spec"]["noProxy"] %>    |
 
+    @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+    @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
     Examples:
       | file                                                      |
       | /etc/systemd/system/kubelet.service.d/10-default-env.conf | # @case_id OCP-24429

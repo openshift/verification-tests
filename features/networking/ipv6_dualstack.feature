@@ -3,16 +3,9 @@ Feature: ipv6 dual stack cluster test scenarios
   # @author zzhao@redhat.com
   # @case_id OCP-40581
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Project should be in isolation when using multitenant policy for ipv6 dual stack
     # create project and pods
     Given I have a project
