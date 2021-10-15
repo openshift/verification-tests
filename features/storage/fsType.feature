@@ -1,14 +1,9 @@
 Feature: testing for parameter fsType
 
   # @author chaoyang@redhat.com
-  # @author lxia@redhat.com
   @admin
   @smoke
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
   Scenario Outline: persistent volume formated with fsType
     Given I have a project
     And admin clones storage class "sc-<%= project.name %>" from ":default" with:
@@ -37,11 +32,18 @@ Feature: testing for parameter fsType
       | ls | /mnt/testfile |
     Then the step should succeed
 
+    @gcp-upi
+    @gcp-ipi
     Examples:
       | fsType | type   |
       | ext3   | gce    | # @case_id OCP-10095
       | ext4   | gce    | # @case_id OCP-10094
       | xfs    | gce    | # @case_id OCP-10096
+
+    @aws-ipi
+    @aws-upi
+    Examples:
+      | fsType | type   |
       | ext3   | ebs    | # @case_id OCP-10048
       | ext4   | ebs    | # @case_id OCP-9612
       | xfs    | ebs    | # @case_id OCP-10049
