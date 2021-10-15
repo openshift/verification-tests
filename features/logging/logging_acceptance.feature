@@ -3,18 +3,11 @@ Feature: Logging smoke test case
   # @author gkarager@redhat.com
   # @case_id OCP-37508
   @admin
-  @aws-ipi
   @serial
   @console
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: One logging acceptance case for all cluster
     # Deploy cluster-logging operator via web console
     Given logging service is removed successfully

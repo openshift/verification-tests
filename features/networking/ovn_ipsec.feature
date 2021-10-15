@@ -3,17 +3,10 @@ Feature: OVNKubernetes IPsec related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-38846
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
-  @aws-upi
   @4.10 @4.9
   @network-ovnkubernetes
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Should be able to send node to node ESP traffic on IPsec clusters
     Given the env is using "OVNKubernetes" networkType
     And the IPsec is enabled on the cluster
@@ -56,17 +49,10 @@ Feature: OVNKubernetes IPsec related networking scenarios
   # @case_id OCP-38845
   @admin
   @destructive
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
-  @aws-upi
   @4.10 @4.9
   @network-ovnkubernetes
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Segfault on pluto IKE daemon should result in restarting pluto daemon and corresponding ovn-ipsec pod
     Given the env is using "OVNKubernetes" networkType
     And the IPsec is enabled on the cluster
@@ -108,17 +94,10 @@ Feature: OVNKubernetes IPsec related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-39216
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
-  @aws-upi
   @4.10 @4.9
   @network-ovnkubernetes
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Pod created on IPsec cluster should have appropriate MTU size to accomdate IPsec Header
     Given the env is using "OVNKubernetes" networkType
     And the IPsec is enabled on the cluster

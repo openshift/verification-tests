@@ -4,9 +4,6 @@ Feature: Cases to test forward logs to external elasticsearch
   # @author qitang@redhat.com
   @admin
   @destructive
-  @gcp-upi
-  @gcp-ipi
-  @aws-upi
   Scenario Outline: ClusterLogForwarder: Forward logs to non-clusterlogging-managed elasticsearch
     Given I switch to the first user
     And I have a project

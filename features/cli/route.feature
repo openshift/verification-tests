@@ -2,17 +2,10 @@ Feature: route related features via cli
 
   # @author cryan@redhat.com
   # @case_id OCP-10629
-  @aws-ipi
   @proxy
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Expose routes from services
     Given I have a project
     When I run the :new_app client command with:
@@ -38,16 +31,9 @@ Feature: route related features via cli
 
   # @author cryan@redhat.com
   # @case_id OCP-12022
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Be unable to add an existed alias name for service
     Given I have a project
     Given I obtain test data file "routing/unsecure/route_unsecure.json"

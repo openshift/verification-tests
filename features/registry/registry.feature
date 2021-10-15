@@ -4,16 +4,9 @@ Feature: Testing registry
   # @case_id OCP-12400
   @admin
   @destructive
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Prune images by command oadm_prune_images
     Given cluster role "system:image-pruner" is added to the "first" user
     Given I enable image-registry default route
@@ -174,16 +167,9 @@ Feature: Testing registry
   # @author xiuwang@redhat.com
   # @case_id OCP-18995
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Mirror image to another registry via 'oc image mirror'
     Given I have a project
     Given docker config for default image registry is stored to the :dockercfg_file clipboard
@@ -200,17 +186,10 @@ Feature: Testing registry
 
   # @author xiuwang@redhat.com
   # @case_id OCP-29696
-  @aws-ipi
   @proxy
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Use node credentials in imagestream import
     Given I have a project
     When I run the :tag client command with:
@@ -240,17 +219,10 @@ Feature: Testing registry
   # @author xiuwang@redhat.com
   # @case_id OCP-29693
   @admin
-  @aws-ipi
   @disconnected
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: [Disconnect]Import image from a secure registry using node credentials
     Given I have a project
     And evaluation of `image_content_source_policy('image-policy-aosqe').mirror_registry(cached: false)` is stored in the :mirror_registry clipboard

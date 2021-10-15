@@ -69,14 +69,12 @@ Feature: CSI testing related feature
     Then the PV becomes :released
     And admin ensures "<%= pvc.volume_name %>" pv is deleted
 
-    @aws-ipi
-    @aws-upi
+    @openstack-ipi @aws-ipi
+    @openstack-upi @aws-upi
     Examples:
       | sc_name      |
       | gp2-csi      | # @case_id OCP-24575
 
-    @openstack-ipi
-    @openstack-upi
     Examples:
       | sc_name      |
       | standard-csi | # @case_id OCP-37572
@@ -342,14 +340,12 @@ Feature: CSI testing related feature
     Given "<deployment_controller>" deployment becomes ready in the "openshift-cluster-csi-drivers" project
     Given "<daemonset_node>" daemonset becomes ready in the "openshift-cluster-csi-drivers" project
 
-    @openstack-ipi
-    @openstack-upi
+    @openstack-ipi @aws-ipi
+    @openstack-upi @aws-upi
     Examples:
       | provisioner              | sc_name      | deployment_operator                  | deployment_controller                  | daemonset_node                   |
       | cinder.csi.openstack.org | standard-csi | openstack-cinder-csi-driver-operator | openstack-cinder-csi-driver-controller | openstack-cinder-csi-driver-node | # @case_id OCP-37557
 
-    @aws-ipi
-    @aws-upi
     Examples:
       | provisioner              | sc_name      | deployment_operator                  | deployment_controller                  | daemonset_node                   |
       | ebs.csi.aws.com          | gp2-csi      | aws-ebs-csi-driver-operator          | aws-ebs-csi-driver-controller          | aws-ebs-csi-driver-node          | # @case_id OCP-34144

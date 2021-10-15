@@ -4,12 +4,8 @@ Feature: Cluster Autoscaler Tests
   # @case_id OCP-28108
   @admin
   @destructive
-  @aws-ipi
-  @gcp-ipi
   @4.10 @4.9
-  @vsphere-ipi
-  @azure-ipi
-  @openstack-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   Scenario: Cluster should automatically scale up and scale down with clusterautoscaler deployed
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user

@@ -39,13 +39,13 @@ Feature: Persistent Volume reclaim policy tests
     Given I switch to cluster admin pseudo user
     And I wait for the resource "pv" named "<%= pv.name %>" to disappear within 1200 seconds
 
+    @openstack-ipi
+    @openstack-upi
     Examples:
       | storage_type         | volume_name | path   | file                |
       | gcePersistentDisk    | pdName      | gce    | pv-default-rwo.json | # @case_id OCP-9949
       | awsElasticBlockStore | volumeID    | ebs    | pv-rwo.yaml         | # @case_id OCP-9943
     
-    @openstack-ipi
-    @openstack-upi
     Examples:
       | cinder               | volumeID    | cinder | pv-rwx-default.json | # @case_id OCP-9944
 

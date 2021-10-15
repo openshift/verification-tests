@@ -30,6 +30,8 @@ Feature: kubelet restart and node restart
     """
 
     
+    @vsphere-ipi
+    @vsphere-upi
     Examples:
       | platform       |
       | azure-disk     | # @case_id OCP-13333
@@ -40,7 +42,6 @@ Feature: kubelet restart and node restart
       | platform       |
       | gce            | # @case_id OCP-11613
     
-    @vsphere-ipi
     Examples:
       | platform       |
       | vsphere-volume | # @case_id OCP-13631

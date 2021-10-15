@@ -90,17 +90,10 @@ Feature: buildconfig.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-12057
-  @aws-ipi
   @proxy
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Using secret to pull a docker image which be used as source input
     Given I have a project
     When I run the :create_secret client command with:

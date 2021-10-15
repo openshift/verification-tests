@@ -36,16 +36,9 @@ Feature: SDN/OVN metrics related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-16016
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Should be able to monitor the openshift-sdn related metrics by prometheus
     Given I switch to cluster admin pseudo user
     And I use the "openshift-sdn" project

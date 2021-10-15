@@ -1,9 +1,7 @@
 Feature: CSI Resizing related feature
   # @author chaoyang@redhat.com
   @admin
-  @aws-ipi
   @4.10 @4.9
-  @aws-upi
   Scenario Outline: Resize online volume from 1Gi to 2Gi
     Given I have a project
 
@@ -40,13 +38,13 @@ Feature: CSI Resizing related feature
     And the output should not contain:
       | No space left on device |
 
+    @openstack-ipi @gcp-ipi @aws-ipi
+    @openstack-upi @gcp-upi @aws-upi
     Examples:
       | sc_name      |
       | standard-csi | # @case_id OCP-37479
       | gp2-csi      | # @case_id OCP-25808
 
-    @openstack-ipi
-    @openstack-upi
     Examples:
       | sc_name      |
       | standard-csi | # @case_id OCP-37559

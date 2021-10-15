@@ -79,15 +79,9 @@ Feature: Storage upgrade tests
   @upgrade-check
   @users=upuser1,upuser2
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Cluster operator storage should be in correct status and dynamic provisioning should work well after upgrade
     Given I switch to cluster admin pseudo user
     # Check storage operator version after upgraded
@@ -314,8 +308,6 @@ Feature: Storage upgrade tests
   # @case_id OCP-28630
   @upgrade-check
   @admin
-  @aws-ipi
-  @aws-upi
   Scenario: Snapshot operator should be in available status after upgrade and can created pod with snapshot
     Given I switch to cluster admin pseudo user
 
@@ -465,6 +457,9 @@ Feature: Storage upgrade tests
   @upgrade-check
   @users=upuser1,upuser2
   @admin
+  @4.9
+  @aws-ipi
+  @aws-upi
   Scenario: [AWS-EBS-CSI] [Snapshot operator] should work well before and after upgrade of a cluster
     Given I switch to cluster admin pseudo user
     Given the master version >= "4.7"

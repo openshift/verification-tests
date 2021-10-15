@@ -2,16 +2,7 @@ Feature: Quota related scenarios
 
   # @author qwang@redhat.com
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
   Scenario Outline: The quota usage should be incremented if meet the following requirement
     Given I have a project
     Given I obtain test data file "quota/myquota.yaml"
@@ -40,6 +31,8 @@ Feature: Quota related scenarios
       | <expr1> |
       | <expr2> |
 
+    @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+    @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
     Examples:
       | path     | file                           | pod_name                  | expr1             | expr2                       |
       | ocp11754 | pod-request-limit-valid-3.yaml | pod-request-limit-valid-3 | cpu\\s+100m\\s+30 | memory\\s+(134217728\|128Mi)\\s+16Gi | # @case_id OCP-11754
@@ -49,16 +42,9 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-12292
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: The quota usage should NOT be incremented if Requests and Limits aren't specified
     Given I have a project
     Given I obtain test data file "quota/myquota.yaml"
@@ -91,16 +77,9 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-12256
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: The quota usage should NOT be incremented if Requests > Limits
     Given I have a project
     Given I obtain test data file "quota/myquota.yaml"
@@ -137,16 +116,9 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-12206
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: The quota usage should NOT be incremented if Requests = Limits but exceeding hard quota
     Given I have a project
     Given I obtain test data file "quota/myquota.yaml"
@@ -236,16 +208,9 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-10801
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Check BestEffort scope of resourcequota
     Given I have a project
     Given I obtain test data file "quota/quota-besteffort.yaml"
@@ -299,16 +264,9 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-11251
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Check NotBestEffort scope of resourcequota
     Given I have a project
     Given I obtain test data file "quota/quota-notbesteffort.yaml"
@@ -382,16 +340,9 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-11568
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Check NotTerminating scope of resourcequota
     Given I have a project
     Given I obtain test data file "quota/quota-notterminating.yaml"
@@ -550,16 +501,9 @@ Feature: Quota related scenarios
   # @author chezhang@redhat.com
   # @case_id OCP-10706
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Could create quota if existing resources exceed to the hard quota but prevent to create further resources
     Given I have a project
     Given I obtain test data file "quota/quota_template.yaml"
@@ -688,16 +632,9 @@ Feature: Quota related scenarios
   # @case_id OCP-10033
   # @bug_id 1333122
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Quota events for compute resource failures shouldn't be redundant
     Given I have a project
     Given I obtain test data file "templates/ocp10033/quota.yaml"
@@ -770,16 +707,9 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-11927
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: The quota usage should be incremented if Requests = Limits and in the range of hard quota but exceed the real node available resources
     Given I have a project
     Given I obtain test data file "quota/myquota.yaml"
@@ -820,16 +750,9 @@ Feature: Quota related scenarios
   # @author chezhang@redhat.com
   # @case_id OCP-10945
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: The quota usage should be released when pod completed
     Given I have a project
     When I run the :create_quota admin command with:
@@ -867,16 +790,9 @@ Feature: Quota related scenarios
   # @author chezhang@redhat.com
   # @case_id OCP-11983
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Quota with BestEffort and NotBestEffort scope
     Given I have a project
     When I run the :create_quota admin command with:
@@ -928,16 +844,9 @@ Feature: Quota related scenarios
   # @author chezhang@redhat.com
   # @case_id OCP-12086
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Quota with Terminating and NotTerminating scope
     Given I have a project
     When I run the :create_quota admin command with:
@@ -998,16 +907,9 @@ Feature: Quota related scenarios
   # @author chezhang@redhat.com
   # @case_id OCP-11348
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Quota combined scopes
     Given I have a project
     When I run the :create_quota admin command with:
@@ -1100,16 +1002,9 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-11636
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Quota scope conflict BestEffort and NotBestEffort
     Given I have a project
     When I run the :create_quota admin command with:
@@ -1123,16 +1018,9 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-11827
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Quota scope conflict Terminating and NotTerminating
     Given I have a project
     When I run the :create_quota admin command with:
@@ -1146,16 +1034,9 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-11000
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Negative test for requests.storage of quota
     Given I have a project
     When I run the :create_quota admin command with:
@@ -1200,16 +1081,9 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-10283
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Annotation selector supports special characters
     Given I have a project
     Given admin ensures "crq-<%= project.name %>" cluster_resource_quota is deleted after scenario
@@ -1238,16 +1112,9 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-11660
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Quota requests.storage with PVC existing
     Given I have a project
     Given I obtain test data file "storage/nfs/claim-rox.json"
@@ -1298,16 +1165,9 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-11389
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Prevent creating further PVC if existing PVC exceeds the quota of requests.storage
     Given I have a project
     # Only quota requests.storage < 5Gi

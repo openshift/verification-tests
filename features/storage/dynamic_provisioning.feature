@@ -4,7 +4,6 @@ Feature: Dynamic provisioning
   @admin
   @smoke
   @4.10 @4.9
-  @azure-ipi
   Scenario Outline: dynamic provisioning
     Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"
@@ -58,14 +57,14 @@ Feature: Dynamic provisioning
       | <%= cb.volumeID %>     |
     And I verify that the IAAS volume with id "<%= cb.volumeID %>" was deleted
 
+    @openstack-ipi @azure-ipi
+    @openstack-upi @azure-upi
     Examples:
       | cloud_provider |
       | ebs            | # @case_id OCP-9685
       | gce            | # @case_id OCP-12665
       | azure          | # @case_id OCP-13787
 
-    @openstack-ipi
-    @openstack-upi
     Examples:
       | cloud_provider |
       | cinder         | # @case_id OCP-9656

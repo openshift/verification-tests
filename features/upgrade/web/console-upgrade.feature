@@ -57,16 +57,9 @@ Feature: web console related upgrade check
   @admin
   @console
   @users=upuser1,upuser2
-  @aws-ipi
-  @aws-upi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: check console accessibility
     Given the first user is cluster-admin
     Given I open admin console in a browser

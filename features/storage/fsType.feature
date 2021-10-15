@@ -32,24 +32,20 @@ Feature: testing for parameter fsType
       | ls | /mnt/testfile |
     Then the step should succeed
 
-    @gcp-upi
-    @gcp-ipi
+    @openstack-ipi @gcp-ipi @aws-ipi
+    @openstack-upi @gcp-upi @aws-upi
     Examples:
       | fsType | type   |
       | ext3   | gce    | # @case_id OCP-10095
       | ext4   | gce    | # @case_id OCP-10094
       | xfs    | gce    | # @case_id OCP-10096
 
-    @aws-ipi
-    @aws-upi
     Examples:
       | fsType | type   |
       | ext3   | ebs    | # @case_id OCP-10048
       | ext4   | ebs    | # @case_id OCP-9612
       | xfs    | ebs    | # @case_id OCP-10049
 
-    @openstack-ipi
-    @openstack-upi
     Examples:
       | fsType | type   |
       | ext3   | cinder | # @case_id OCP-10097
