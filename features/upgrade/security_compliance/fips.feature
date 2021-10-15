@@ -3,6 +3,7 @@ Feature: fips enabled verification for upgrade
   @upgrade-prepare
   @users=upuser1,upuser2
   @admin
+  @4.10 @4.9
   Scenario: FIPS mode checking command works for a cluster with fip mode on - prepare
     Given fips is enabled
 

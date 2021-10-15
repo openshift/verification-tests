@@ -1,5 +1,15 @@
 Feature: Machine-api components upgrade tests
   @upgrade-prepare
+  @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.10 @4.9
+  @aws-upi
+  @vsphere-ipi
+  @azure-ipi
+  @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario Outline: Cluster operator should be available after upgrade - prepare
     # According to our upgrade workflow, we need an upgrade-prepare and upgrade-check for each scenario.
     # But some of them do not need any prepare steps, which lead to errors "can not find scenarios" in the log.
@@ -45,6 +55,16 @@ Feature: Machine-api components upgrade tests
 
 
   @upgrade-prepare
+  @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.10 @4.9
+  @aws-upi
+  @vsphere-ipi
+  @azure-ipi
+  @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: There should be no pending or firing alerts for machine-api operators - prepare
     Given the expression should be true> "True" == "True"
 
@@ -175,9 +195,15 @@ Feature: Machine-api components upgrade tests
       | aws       | machineset-clone-41175 | "spotMarketOptions": {} | # @case_id OCP-41175
       | gcp       | machineset-clone-41803 | "preemptible": true     | # @case_id OCP-41803
       | azure     | machineset-clone-41804 | "spotVMOptions": {}     | # @case_id OCP-41804
-      
+
   @upgrade-prepare
   @admin
+  @aws-ipi
+  @gcp-ipi
+  @4.10 @4.9
+  @vsphere-ipi
+  @azure-ipi
+  @openstack-ipi
   Scenario: Cluster should automatically scale up and scale down with clusterautoscaler deployed - prepare
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user

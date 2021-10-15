@@ -3,6 +3,16 @@ Feature: Seccomp part of SCC policy should be kept and working after upgrade
   # @author sunilc@redhat.com
   @upgrade-prepare
   @admin
+  @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.10 @4.9
+  @aws-upi
+  @vsphere-ipi
+  @azure-ipi
+  @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: Seccomp part of SCC policy should be kept and working after upgrade - prepare
     Given I switch to cluster admin pseudo user
     Given I obtain test data file "node/scc.yaml"

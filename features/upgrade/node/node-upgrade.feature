@@ -2,6 +2,7 @@ Feature: Node components upgrade tests
   # @author minmli@redhat.com
   @upgrade-prepare
   @admin
+  @4.10 @4.9
   Scenario: Make sure nodeConfig is not changed after upgrade - prepare
     Given I switch to cluster admin pseudo user
     When I run the :label admin command with:

@@ -5,6 +5,16 @@ Feature: OLM related scenarios
   @admin
   @upgrade-prepare
   @users=upuser1,upuser2
+  @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.10 @4.9
+  @aws-upi
+  @vsphere-ipi
+  @azure-ipi
+  @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: upgrade OLM - prepare
     # Check OLM version
     Given the "operator-lifecycle-manager" operator version matches the current cluster version

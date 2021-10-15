@@ -3,6 +3,7 @@ Feature: image-registry operator upgrade tests
   @upgrade-prepare
   @users=upuser1,upuser2
   @admin
+  @4.10 @4.9
   Scenario: samples/openshift-controller-manager/image-registry operators should be in correct status after upgrade - prepare
     Given I switch to cluster admin pseudo user
     # Check cluster operator openshift-samples should be in correct status
@@ -23,6 +24,7 @@ Feature: image-registry operator upgrade tests
   @users=upuser1,upuser2
   @admin
   @destructive
+  @inactive
   Scenario: OpenShift can upgrade when image-registry/sample operator is unmanaged - prepare
     Given I switch to cluster admin pseudo user
     Given admin updated the operator crd "configs.imageregistry" managementstate operand to Unmanaged
@@ -84,6 +86,7 @@ Feature: image-registry operator upgrade tests
   @upgrade-prepare
   @users=upuser1,upuser2
   @admin
+  @inactive
   Scenario: Upgrade imagestream from old version which not implement node credentials - prepare
     Given I switch to cluster admin pseudo user
     When I run the :extract admin command with:

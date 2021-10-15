@@ -2,6 +2,8 @@ Feature: build related upgrade check
   # @author wewang@redhat.com
   @upgrade-prepare
   @users=upuser1,upuser2
+  @proxy
+  @4.10 @4.9
   Scenario: Check docker and sti build works well before and after upgrade - prepare
     Given I switch to the first user
     When I run the :new_project client command with:
