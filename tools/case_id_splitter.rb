@@ -231,15 +231,18 @@ module BushSlicer
             next
           end
 
-          content_to_add = "#{indention}#{tag}"
           puts "Adding tag #{tag} to #{res[:file]} for test case #{case_id}"
           if tag =~ /@4[.][0-9]+/ && insert_at_line_version != 0
-            content[insert_at_line_version].prepend(content_to_add)
+            content_to_add = "  #{tag} "
+            content[insert_at_line_version].lstrip!.prepend(content_to_add)
           elsif tag =~ /@.*ipi/ && insert_at_line_ipi != 0
-            content[insert_at_line_ipi].prepend(content_to_add)
+            content_to_add = "#{indention}#{tag} "
+            content[insert_at_line_ipi].lstrip!.prepend(content_to_add)
           elsif tag =~ /@.*upi/ && insert_at_line_upi != 0
-            content[insert_at_line_upi].prepend(content_to_add)
+            content_to_add = "#{indention}#{tag} "
+            content[insert_at_line_upi].lstrip!.prepend(content_to_add)
           else
+            content_to_add = "#{indention}#{tag}"
             content.insert(insert_at_line, content_to_add)
           end
         end
