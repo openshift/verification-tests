@@ -287,16 +287,10 @@ Feature: apiserver and auth related upgrade check
 
   # @author xxia@redhat.com
   @upgrade-prepare
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
+  @qeci
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: kube-apiserver and openshift-apiserver should have zero-disruption upgrade - prepare
     # According to our upgrade workflow, we need an upgrade-prepare and upgrade-check for each scenario.
     # But some of them do not need any prepare steps, which lead to errors "can not find scenarios" in the log.
@@ -306,6 +300,7 @@ Feature: apiserver and auth related upgrade check
   # @author xxia@redhat.com
   # @case_id OCP-34223
   @upgrade-check
+  @qeci
   @admin
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
