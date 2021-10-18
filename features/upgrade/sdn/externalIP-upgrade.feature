@@ -27,10 +27,10 @@ Feature: SDN externalIP compoment upgrade testing
     """
 
     # Create a pod
-    Given I obtain test data file "networking/externalip_pod.yaml"
+    Given I obtain test data file "networking/externalip_pod_upgrade.yaml"
     When I run the :create client command with:
-      | f | externalip_pod.yaml |
-      | n | externalip-upgrade  |
+      | f | externalip_pod_upgrade.yaml |
+      | n | externalip-upgrade          |
     Then the step should succeed
     Given a pod becomes ready with labels:
       | name=externalip-pod    |
@@ -69,5 +69,6 @@ Feature: SDN externalIP compoment upgrade testing
     """
     ### delete this project,make sure project is deleted
     Given the "externalip-upgrade" project is deleted
+
     
     
