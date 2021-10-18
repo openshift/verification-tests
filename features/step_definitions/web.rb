@@ -272,3 +272,47 @@ Given /^I check all relatedObjects of clusteroperator "(.*?)" are shown/ do |clu
     step %Q/the step should succeed/
   end
 end
+
+Given /^admin enable "(.*?)" consoleplugin successfully$/ do | pluginname |
+  # check if spec.plugins is empty or not
+  # if spec.plugins is empty, add first patch
+  # else add new patch
+  ensure_admin_tagged
+  consoleoperator_spec = console_operator('cluster').spec(cached: false, quiet: false)
+  if not consoleoperator_spec.key?('plugins') or consoleoperator_spec['plugins'].empty?
+    logger.warn("console.operator doesn't have plugins spec or plugins empty, adding first plugin")
+    step %Q/I run the :patch admin command with:/, table(%{
+      | resource | console.operator.openshift.io/cluster |
+      | type     | json                                  |
+      | p        | [{"op": "add", "path": "/spec/plugins", "value": ["#{pluginname}"]}] |
+    })
+    step %Q/the step should succeed/
+  else
+    logger.warn("adding more plugin")
+    step %Q/I run the :patch admin command with:/, table(%{
+      | resource | console.operator.openshift.io/cluster |
+      | type     | json                                  |
+      | p        | [{"op": "add", "path": "/spec/plugins/-", "value": "#{pluginname}"}] |
+    })
+    step %Q/the step should succeed/
+  end
+end
+
+Given /^admin disable "(.*?)" consoleplugin successfully$/ do |pluginname |
+  ensure_admin_tagged
+  consoleoperator_spec = console_operator('cluster').spec(cached: false, quiet: false)
+  if not consoleoperator_spec.key?('plugins')
+    logger.warn("console.operator doesn't have plugins spec")
+  elsif consoleoperator_spec['plugins'].empty? or consoleoperator_spec['plugins'].index("#{pluginname}") == nil
+    logger.warn("console.operator plugins list already empty OR #{pluginname} not found in plugins list")
+  else
+    logger.warn("removing #{pluginname} from console.operator plugins list")
+    plugin_index = consoleoperator_spec['plugins'].index("#{pluginname}")
+    step %Q/I run the :patch admin command with:/, table(%{
+      | resource | console.operator.openshift.io/cluster |
+      | type     | json                                  |
+      | p        | [{"op": "remove", "path": "/spec/plugins/#{plugin_index}"}] |
+    })
+    step %Q/the step should succeed/
+  end 
+end
