@@ -1,0 +1,3 @@
+{
+   "case_query":"products.KEY:ocp AND type:testcase AND NOT status:inactive AND caseautomation.KEY:automated AND automation_script:cucushift AND NOT upstream.KEY:yes AND env_install_method.KEY:(__all__ ipi) AND env_iaas_cloud_provider.KEY:(vsphere __all__ vsphere67 vsphere70) AND caseimportance.KEY:(critical high) AND version.KEY:4_10 AND NOT tags:stage_only"
+}
