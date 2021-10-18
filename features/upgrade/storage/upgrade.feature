@@ -365,6 +365,8 @@ Feature: Storage upgrade tests
   @upgrade-prepare
   @users=upuser1,upuser2
   @admin
+  @aws-ipi
+  @aws-upi
   Scenario: [AWS-EBS-CSI] [Snapshot operator] should work well before and after upgrade of a cluster - prepare
     Given I switch to cluster admin pseudo user
     Given the master version >= "4.7"
