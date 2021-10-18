@@ -725,19 +725,17 @@ check_status_descriptor_grouping:
   - selector:
       xpath: //div[contains(@class,'co-operand-details__section')]//dl[@data-test-id='resource-summary']//button[contains(text(),'Namespace')]
   - selector:
-      xpath: //div[contains(@class,'co-operand-details__section')]//dl[@data-test-id='resource-summary']//button[contains(text(),'Labels')]      
+      xpath: //div[contains(@class,'co-operand-details__section')]//dl[@data-test-id='resource-summary']//button[contains(text(),'Labels')]
   - selector:
-      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--status')]//button[contains(text(),'Phase')]
+      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--status')]//button[contains(text(),'Status')]
   - selector:
-      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--status')]//button[contains(text(),'Server')]
+      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--status')]//button[contains(text(),'Cluster Size')]
 check_spec_descriptor_grouping:
   elements:
   - selector:
-      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--spec')]//button[contains(text(),'Version')]
-  - selector: &grafana_fieldgroup
-      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--spec')]//button[contains(text(),'Grafana')]
+      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--spec')]//button[contains(text(),'Size')]
   - selector:
-      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--spec')]//button[contains(text(),'Prometheus')]
+      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--spec')]//button[contains(text(),'Pod')]
 click_field_resource_limits_edit_button:
   elements:
   - selector:
@@ -775,13 +773,13 @@ set_field_resource_requests:
   action: set_memory_value
   action: set_storage_value
   action: submit_changes
-set_controller_group_resource_limits:
+set_pod_resource_limits:
   params:
-    field_group_name: Controller
+    field_group_name: Pod
   action: set_field_resource_limits
-set_controller_group_resource_requests:
+set_pod_resource_requests:
   params:
-    field_group_name: Controller
+    field_group_name: Pod
   action: set_field_resource_requests
 check_resource_requirement_values:
   elements:
