@@ -2,6 +2,9 @@ Feature: basic verification for upgrade testing
   # @author weinliu@redhat.com
   @upgrade-prepare
   @admin
+  @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Upgrade - Make sure multiple resources work well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     Given I ensure "node-upgrade" project is deleted
