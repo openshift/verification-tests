@@ -457,7 +457,7 @@ Feature: Storage upgrade tests
   @upgrade-check
   @users=upuser1,upuser2
   @admin
-  @4.9
+  @4.10 @4.9
   @aws-ipi
   @aws-upi
   Scenario: [AWS-EBS-CSI] [Snapshot operator] should work well before and after upgrade of a cluster
