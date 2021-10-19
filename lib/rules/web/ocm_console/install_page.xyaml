@@ -47,6 +47,8 @@ go_to_creation_page_datacenter_tab:
     url: /openshift/create/datacenter
 go_to_install_ibmz_pre_page:
     url: /openshift/install/ibmz/pre-release
+go_to_power_pre_page:
+    url: /openshift/install/power/pre-release
 #------------------------------ title and h1 title -------------------
 check_page_title_and_h1:
     element:
@@ -222,6 +224,24 @@ check_linux_download_installer_button_s390x_in_install_ibmz_pre_release_page:
     elements:
         - selector:
             xpath: //a[text()='Download installer' and @href='https://mirror.openshift.com/pub/openshift-v4/s390x/clients/ocp-dev-preview/pre-release/openshift-install-linux.tar.gz']
+check_linux_download_installer_button_x86_64_in_install_power_pre_release_page:
+    params:
+        os_name: Linux
+        arch_type: x86_64
+    action: switch_os_type_for_download_installer
+    action: switch_arch_type_for_download_installer
+    elements:
+        - selector:
+            xpath: //a[text()='Download installer' and @href='https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp-dev-preview/pre-release/openshift-install-linux-amd64.tar.gz']
+check_linux_download_installer_button_ppc64le_in_install_power_pre_release_page:
+    params:
+        os_name: Linux
+        arch_type: ppc64le
+    action: switch_os_type_for_download_installer
+    action: switch_arch_type_for_download_installer
+    elements:
+        - selector:
+            xpath: //a[text()='Download installer' and @href='https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp-dev-preview/pre-release/openshift-install-linux.tar.gz']
 
 #------------------------------ download_cli_oc_button -------------------
 switch_arch_type_for_download_cli_oc:
@@ -714,6 +734,12 @@ check_download_installer_button_in_install_ibmz_pre_page:
     action: check_mac_download_installer_button_in_page
     action: check_linux_download_installer_button_x86_64_in_install_ibmz_pre_release_page
     action: check_linux_download_installer_button_s390x_in_install_ibmz_pre_release_page
+check_download_installer_button_in_install_power_pre_page:
+    params:
+        mac_url: ppc64le/clients/ocp-dev-preview/pre-release/openshift-install-mac.tar.gz
+    action: check_mac_download_installer_button_in_page
+    action: check_linux_download_installer_button_x86_64_in_install_power_pre_release_page
+    action: check_linux_download_installer_button_ppc64le_in_install_power_pre_release_page
 
 check_install_ibmz_pre_page_special_parts:
     action: check_developer_preview_bar_in_install_page
