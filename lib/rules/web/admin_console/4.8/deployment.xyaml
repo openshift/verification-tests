@@ -162,6 +162,7 @@ check_workloads_metrics:
       xpath: //h2[contains(@class, "co-dashboard-card__title") and contains(text(), "Network in")]
   - selector:
       xpath: //h2[contains(@class, "co-dashboard-card__title") and contains(text(), "Network out")]
+  action: check_no_errors_in_charts
 check_build_metrics:
   action: click_metrics_tab
   elements:
@@ -171,3 +172,4 @@ check_build_metrics:
       <<: *cpu_usage_chart
   - selector:
       <<: *filessystem_chart
+  action: check_no_errors_in_charts
