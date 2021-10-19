@@ -240,8 +240,9 @@ Feature: Egress IP related features
       | OPENSHIFT-FIREWALL-ALLOW  |
 
     #check related openflow added
+    Given I save openflow egressip table number to the clipboard
     When I run command on the "<%= node.name%>" node's sdn pod:
-      | bash | -c | ovs-ofctl dump-flows br0 -O OpenFlow13 \| grep table=100 |
+      | bash | -c | ovs-ofctl dump-flows br0 -O OpenFlow13 \| grep table="<%= cb.openflow_egressip_table %>"|
     Then the step should succeed
     And the output should contain "reg0=0x"
 
@@ -258,7 +259,7 @@ Feature: Egress IP related features
     And the output should not contain:
       |  <%= cb.valid_ip %> |
     When I run command on the "<%= node.name%>" node's sdn pod:
-      | bash | -c | ovs-ofctl dump-flows br0 -O OpenFlow13 \| grep table=100 |
+      | bash | -c | ovs-ofctl dump-flows br0 -O OpenFlow13 \| grep table="<%= cb.openflow_egressip_table %>" |
     Then the step should succeed
     And the output should not contain "reg0=0x"
     """
