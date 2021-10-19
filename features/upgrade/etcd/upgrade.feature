@@ -13,7 +13,7 @@ Feature: basic verification for upgrade testing
   @baremetal-ipi
   @openstack-ipi
   @openstack-upi
-  @inactive
+  @flaky
   Scenario: etcd-operator and cluster works well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     Given I obtain test data file "admin/subscription.yaml"
@@ -38,7 +38,7 @@ Feature: basic verification for upgrade testing
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
-  @inactive
+  @flaky
   Scenario: etcd-operator and cluster works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "openshift-operators" project
