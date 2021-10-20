@@ -38,13 +38,20 @@ Feature: CSI Resizing related feature
     And the output should not contain:
       | No space left on device |
 
-    @openstack-ipi @gcp-ipi @aws-ipi
-    @openstack-upi @gcp-upi @aws-upi
+    @gcp-ipi
+    @gcp-upi
     Examples:
       | sc_name      |
       | standard-csi | # @case_id OCP-37479
+
+    @aws-ipi
+    @aws-upi
+    Examples:
+      | sc_name      |
       | gp2-csi      | # @case_id OCP-25808
 
+    @openstack-ipi
+    @openstack-upi
     Examples:
       | sc_name      |
       | standard-csi | # @case_id OCP-37559

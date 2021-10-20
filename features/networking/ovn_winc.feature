@@ -55,6 +55,7 @@ Feature: OVNKubernetes Windows Container related networking scenarios
   # @case_id OCP-37519
   @admin
   @4.10 @4.9
+  @network-ovnkubernetes
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Create Loadbalancer service for a window container

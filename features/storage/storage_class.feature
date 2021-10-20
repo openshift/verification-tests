@@ -30,8 +30,11 @@ Feature: storageClass related feature
     @aws-upi
     Examples:
       | storage-class-name |
-      | standard           | # @case_id OCP-12089
       | gp2                | # @case_id OCP-12269
+
+    Examples:
+      | storage-class-name |
+      | standard           | # @case_id OCP-12089
       | standard           | # @case_id OCP-12272
       | managed-premium    | # @case_id OCP-13488
 
@@ -75,12 +78,17 @@ Feature: storageClass related feature
     Given I switch to cluster admin pseudo user
     And I wait for the resource "pv" named "<%= pvc.volume_name %>" to disappear
 
-    @gcp-ipi @aws-ipi
-    @gcp-upi @aws-upi
+    @gcp-ipi
+    @gcp-upi
     Examples:
       | provisioner | type        | zone          | is-default | size  |
       | gce-pd      | pd-ssd      | us-central1-a | false      | 1Gi   | # @case_id OCP-11359
       | gce-pd      | pd-standard | us-central1-a | false      | 2Gi   | # @case_id OCP-11640
+
+    @aws-ipi
+    @aws-upi
+    Examples:
+      | provisioner | type        | zone          | is-default | size  |
       | aws-ebs     | gp2         | us-east-1d    | false      | 1Gi   | # @case_id OCP-10160
       | aws-ebs     | sc1         | us-east-1d    | false      | 500Gi | # @case_id OCP-10161
       | aws-ebs     | st1         | us-east-1d    | false      | 500Gi | # @case_id OCP-10424
@@ -129,6 +137,9 @@ Feature: storageClass related feature
     Examples:
       | provisioner    |
       | aws-ebs        | # @case_id OCP-12226
+
+    Examples:
+      | provisioner    |
       | azure-disk     | # @case_id OCP-13490
       | cinder         | # @case_id OCP-12227
       | gce-pd         | # @case_id OCP-12223
