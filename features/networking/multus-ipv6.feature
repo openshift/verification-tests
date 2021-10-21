@@ -149,6 +149,8 @@ Feature: Multus-CNI ipv6 related scenarios
       | ["metadata"]["name"]                                                           | test-pod                |
       | ["spec"]["template"]["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | whereabouts-excludeipv6 |
     Then the step should succeed
+    Given 3 pods becomes ready with labels:
+      | name=test-pod |
     When I wait up to 30 seconds for the steps to pass:
     """
     When I run the :describe client command with:
@@ -176,6 +178,8 @@ Feature: Multus-CNI ipv6 related scenarios
       | ["metadata"]["name"]                                                           | test-pod-list                |
       | ["spec"]["template"]["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | whereabouts-excludeipv6-list |
     Then the step should succeed
+    Given 3 pods becomes ready with labels:
+      | name=test-pod |
     When I wait up to 30 seconds for the steps to pass:
     """
     When I run the :describe client command with:
