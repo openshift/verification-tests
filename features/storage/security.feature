@@ -107,14 +107,22 @@ Feature: storage security check
     And the output should contain "Hello OpenShift Storage"
 
     # keep the parameters for 3.11 cases can be run.
-    @openstack-ipi @aws-ipi
-    @openstack-upi @aws-upi
+    @gcp-ipi
+    @gcp-upi
     Examples:
       | storage_type         | volume_name | type   |
       | gcePersistentDisk    | pdName      | gce    | # @case_id OCP-9700
+
+    @aws-ipi
+    @aws-upi
+    Examples:
+      | storage_type         | volume_name | type   |
       | awsElasticBlockStore | volumeID    | ebs    | # @case_id OCP-9699
 
+    @openstack-ipi
+    @openstack-upi
     Examples:
+      | storage_type         | volume_name | type   |
       | cinder               | volumeID    | cinder | # @case_id OCP-9721
 
   # @author chaoyang@redhat.com
