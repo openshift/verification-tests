@@ -59,6 +59,15 @@ module BushSlicer
         )
       }) )
       Aws.config.update( config[:config_opts].merge({region: region})) if region
+      ## for internal data-hub, which is a s3 like service, we need to override the
+      if service_name == 'DATA-HUB'
+        datahub_endpoint = conf.dig(:services, service_name, :endpoint)
+        Aws.config.update(config[:config_opts].merge({
+          endpoint: datahub_endpoint,
+          force_path_style: true,
+
+        }))
+      end
     end
 
     private def client_ec2
@@ -112,9 +121,64 @@ module BushSlicer
       launch_instances(image=image_id)
     end
 
+    ####### s3 bucket related methods
+    def s3_list_buckets
+      res = s3.client.list_buckets
+      res.buckets
+    end
+
+    def s3_create_bucket(bucket: nil, acl: 'public-read')
+      s3.client.create_bucket(bucket: bucket, acl: acl)
+    end
+
+    # given a s3 object key, return a valid URL to the key to be accessible
+    # via web
+    def s3_generate_url(key: nil, bucket_name: 'cucushift-html-logs', expires_in_seconds: 604800)
+      Aws::S3::Object.new(key: key, bucket_name: bucket_name).presigned_url(:get, expires_in: expires_in_seconds)
+    end
+
+    # input:
+    # @return a list of object keys in the bucket
+    def s3_list_bucket_contents(bucket: nil, prefix: "", delimiter: "")
+      res = s3.bucket(bucket).objects(prefix: prefix, delimiter: delimiter).collect(&:key)
+      puts res
+      return res
+    end
+
+    def s3_delete_object_from_bucket(bucket:, key: )
+      s3.client.delete_object(bucket: bucket, key: key)
+    end
+
+    def s3_batch_delete_from_bucket(bucket:, prefix:)
+      s3.bucket(bucket).objects(prefix: prefix).batch_delete!
+    end
+
+
+
+    # target is the directory path to the file, which is not really a path but
+    # a key index for example we can think of
+    # 2021/09/04/12:11:12 and 2021/09/04/23:11:12 as differnt directories
     def s3_upload_file(bucket:, file:, target: nil)
       target ||= File.basename file
-      s3.bucket(bucket).object(target).upload_file(file)
+      res = s3.bucket(bucket).object(target).upload_file(file)
+      unless res
+        raise "Failed to upload file '#{file}' to #{target}'"
+      end
+    end
+
+    # wrapper around method 's3_upload_file'
+    def upload_cucushift_html(bucket_name: nil, local_log: nil, dst_base_path: nil)
+      file_name = File.basename(local_log)
+      object_key =  File.join(dst_base_path, file_name)
+      local_log = File.join(local_log, "console.html")
+      logger.info("s3 object key: #{object_key}")
+      s3_upload_file(bucket: bucket_name, file: local_log, target: object_key)
+      return object_key
+    end
+
+
+    def s3_delete_bucket(bucket: nil)
+      s3.client.delete_bucket(bucket: bucket)
     end
 
     ########################################################################
@@ -794,6 +858,8 @@ end
 
 if __FILE__ == $0
   extend BushSlicer::Common::Helper
-  # amz = BushSlicer::Amz_EC2.new(service_name: "AWS-CI")
+  dhub = BushSlicer::Amz_EC2.new(service_name: "DATA-HUB")
+  bucket_name = 'cucushift-html-logs'
+  res = dhub.s3_list_bucket_contents(bucket: bucket_name)
   require 'pry'; binding.pry
 end
