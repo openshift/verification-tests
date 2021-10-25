@@ -45,6 +45,7 @@ Feature: Webhook REST Related Tests
     """
     Then the step should fail
     Then the output should contain "not accept"
+    @aws-ipi
     Examples:
       | type    | negative1 | negative2   | negative3 | path              | file              | header1        | header2 |
       | generic | GitHub    | ImageChange | github    | generic/testdata/ | push-generic.json |                |         | # @case_id OCP-11693

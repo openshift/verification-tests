@@ -3,6 +3,7 @@ Feature: oc registry command scenarios
   # @author wzheng@redhat.com
   # @case_id OCP-21926
   @4.10 @4.9
+  @aws-ipi
   Scenario: Check function of oc registry command
     Given I have a project
     When I run the :registry_info client command with:

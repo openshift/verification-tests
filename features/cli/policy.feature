@@ -156,6 +156,7 @@ Feature: change the policy of user/service account
   # @author chaoyang@redhat.com
   # @case_id OCP-10447
   @4.10 @4.9
+  @aws-ipi
   Scenario: Basic user could not get deeper storageclass object info
     Given I have a project
     When I run the :get client command with:
@@ -201,6 +202,7 @@ Feature: change the policy of user/service account
   # @case_id OCP-10448
   @admin
   @4.10 @4.9
+  @aws-ipi
   Scenario: User with role storage-admin can check deeper storageclass object info
     Given I have a project
     And admin ensures "sc-<%= project.name %>" storageclasses is deleted after scenario
@@ -363,6 +365,7 @@ Feature: change the policy of user/service account
   # @author chaoyang@redhat.com
   # @case_id OCP-10465
   @4.10 @4.9
+  @aws-ipi
   Scenario: Basic user could not get pv object info
     Given I have a project
     Then I run the :get client command with:

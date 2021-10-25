@@ -150,6 +150,7 @@ Feature: oc_set_probe.feature
   # @author wewang@redhat.com
   # @case_id OCP-31241
   @4.10 @4.9
+  @aws-ipi
   Scenario: Set a probe to open a TCP socket test
     Given I have a project
     When I run the :new_app client command with:

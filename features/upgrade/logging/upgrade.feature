@@ -38,6 +38,8 @@ Feature: Logging upgrading related features
   @admin
   @upgrade-check
   @users=upuser1,upuser2
+  @4.10 @4.9
+  @aws-ipi
   Scenario: Cluster logging checking during cluster upgrade
     Given I switch to the first user
     Given I create a project with non-leading digit name

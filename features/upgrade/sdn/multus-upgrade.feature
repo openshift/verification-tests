@@ -45,6 +45,8 @@
   # @case_id OCP-44898
   @admin
   @upgrade-check
+  @4.10 @4.9
+  @aws-ipi
   Scenario: Check the multus works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "multus-upgrade" project

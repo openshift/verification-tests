@@ -27,6 +27,7 @@ Feature: dockerbuild.feature
   @flaky
   @proxy
   @4.10 @4.9
+  @aws-ipi
   Scenario: Docker build with dockerImage with specified tag
     Given I have a project
     When I run the :new_app client command with:

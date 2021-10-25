@@ -81,6 +81,7 @@ Feature: stibuild.feature
   # @case_id OCP-22596
   @proxy
   @4.10 @4.9
+  @aws-ipi
   Scenario: Create app with template eap73-basic-s2i with jbosseap rhel7 image
     Given I have a project
     When I run the :new_app client command with:

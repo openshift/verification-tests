@@ -296,6 +296,7 @@ Feature: Egress-ingress related networking scenarios
   # @case_id OCP-13506
   @admin
   @4.10 @4.9
+  @aws-ipi
   Scenario: Update different dnsname in same egress network policy
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -505,6 +506,7 @@ Feature: Egress-ingress related networking scenarios
   # @case_id OCP-35341
   @admin
   @4.10 @4.9
+  @aws-ipi
   Scenario: EgressNetworkPolicy maxItems is 1000
     Given I have a project
     Given I obtain test data file "networking/egressnetworkpolicy/egressnetworkpolicy_1000.yaml"
@@ -592,6 +594,7 @@ Feature: Egress-ingress related networking scenarios
   # @case_id OCP-37496
   @admin
   @4.10 @4.9
+  @aws-ipi
   Scenario: [SDN-1181] Edit EgressFirewall should take effect
     Given I have a project
     Given I have a pod-for-ping in the project
