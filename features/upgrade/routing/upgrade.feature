@@ -110,6 +110,7 @@ Feature: Routing and DNS related scenarios
   @upgrade-check
   @admin
   @4.10 @4.9
+  @vsphere-upi
   Scenario: upgrade with running router pods on all worker nodes
     Given I switch to cluster admin pseudo user
     And I store the number of worker nodes to the :num_workers clipboard

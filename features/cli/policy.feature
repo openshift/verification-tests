@@ -363,6 +363,7 @@ Feature: change the policy of user/service account
   # @author chaoyang@redhat.com
   # @case_id OCP-10465
   @4.10 @4.9
+  @vsphere-upi
   Scenario: Basic user could not get pv object info
     Given I have a project
     Then I run the :get client command with:

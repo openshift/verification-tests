@@ -181,6 +181,7 @@ Feature: Egress IP related features
   @admin
   @destructive
   @4.10 @4.9
+  @vsphere-upi
   Scenario: The EgressNetworkPolicy should work well with egressIP
     Given I save ipecho url to the clipboard
     Given the valid egress IP is added to the node
@@ -223,6 +224,7 @@ Feature: Egress IP related features
   @admin
   @destructive
   @4.10 @4.9
+  @vsphere-upi
   Scenario: The related iptables/openflow rules will be removed once the egressIP gets removed from netnamespace
     Given the valid egress IP is added to the node
     And I have a project
@@ -326,6 +328,7 @@ Feature: Egress IP related features
   @admin
   @destructive
   @4.10 @4.9
+  @vsphere-upi
   Scenario: Random outages with egressIP
     Given I store the schedulable workers in the :nodes clipboard
     And the valid egress IP is added to the "<%= cb.nodes[0].name %>" node
@@ -411,6 +414,7 @@ Feature: Egress IP related features
   @admin
   @destructive
   @4.10 @4.9
+  @vsphere-upi
   Scenario: The egressIPs should work well when re-using the egressIP which is holding by a deleted project
     Given I save ipecho url to the clipboard
     Given I store the schedulable workers in the :nodes clipboard
@@ -441,6 +445,7 @@ Feature: Egress IP related features
   @admin
   @destructive
   @4.10 @4.9
+  @vsphere-upi
   Scenario: Add the removed egressIP back to the netnamespace would work well
     Given I save ipecho url to the clipboard
     Given I store the schedulable workers in the :nodes clipboard
@@ -477,6 +482,7 @@ Feature: Egress IP related features
   @admin
   @destructive
   @4.10 @4.9
+  @vsphere-upi
   Scenario: The pod should be able to access outside with the node source IP after the egressIP removed
     Given I save ipecho url to the clipboard
     Given I store the schedulable workers in the :nodes clipboard
@@ -521,6 +527,7 @@ Feature: Egress IP related features
   @admin
   @destructive
   @4.10 @4.9
+  @vsphere-upi
   Scenario: Pods will not be affected by the egressIP set on other netnamespace
     Given I save ipecho url to the clipboard
     # create project with pods
@@ -580,6 +587,7 @@ Feature: Egress IP related features
   @admin
   @destructive
   @4.10 @4.9
+  @vsphere-upi
   Scenario: The same egressIP will not be assigned to different netnamespace
     Given I save ipecho url to the clipboard
     Given I store the schedulable workers in the :nodes clipboard
@@ -760,6 +768,7 @@ Feature: Egress IP related features
   @admin
   @destructive
   @4.10 @4.9
+  @vsphere-upi
   Scenario: [SDN-1282] Auto EgressIPs assignments:if a pod is on a node that is hosting an egressIP that pod will always use the egressIP of the node
     Given I save ipecho url to the clipboard
     Given I store the schedulable workers in the :workers clipboard

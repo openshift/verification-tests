@@ -15,6 +15,7 @@ Feature: Machine features testing
   @smoke
   @admin
   @4.10 @4.9
+  @vsphere-upi
   Scenario: machine-api clusteroperator should be in Available state
     Given evaluation of `cluster_operator('machine-api').condition(type: 'Available')` is stored in the :co_available clipboard
     Then the expression should be true> cb.co_available["status"]=="True"

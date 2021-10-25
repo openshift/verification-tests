@@ -46,6 +46,8 @@ Feature: SDN externalIP compoment upgrade testing
   # @case_id OCP-44790
   @admin
   @upgrade-check
+  @4.10
+  @vsphere-upi
   Scenario: Check the externalIP works well after upgrade
     Given I switch to cluster admin pseudo user
     Given I store the schedulable nodes in the :nodes clipboard

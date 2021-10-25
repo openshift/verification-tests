@@ -108,6 +108,7 @@ Feature: Service related networking scenarios
   # @case_id OCP-21814
   @admin
   @4.10 @4.9
+  @vsphere-upi
   Scenario: The headless service can publish the pods even if they are not ready
     Given I have a project
     Given I obtain test data file "networking/headless_notreadypod.json"
@@ -468,6 +469,7 @@ Feature: Service related networking scenarios
   @admin
   @destructive
   @4.10 @4.9
+  @vsphere-upi
   Scenario: Taint node with too small MTU value
     Given the default interface on nodes is stored in the :default_interface clipboard
     And the node's MTU value is stored in the :mtu_actual clipboard

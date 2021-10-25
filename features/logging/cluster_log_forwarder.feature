@@ -500,6 +500,7 @@ Feature: cluster log forwarder features
   @admin
   @destructive
   @4.10 @4.9
+  @vsphere-upi
   Scenario: Send logs to both external fluentd and internalES
     #Creating secure fluentd receiver
     Given I switch to cluster admin pseudo user

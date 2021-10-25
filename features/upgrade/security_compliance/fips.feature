@@ -46,6 +46,7 @@ Feature: fips enabled verification for upgrade
   @users=upuser1,upuser2
   @admin
   @4.10 @4.9
+  @vsphere-upi
   Scenario: FIPS mode checking command works for a cluster with fip mode on
     Given fips is enabled
 

@@ -133,7 +133,7 @@ Feature: storageClass related feature
     And the "mypvc2" PVC becomes :bound within 120 seconds
 
     @aws-ipi
-    @aws-upi
+    @vsphere-upi @aws-upi
     Examples:
       | provisioner    |
       | aws-ebs        | # @case_id OCP-12226
