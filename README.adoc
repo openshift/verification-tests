@@ -6,7 +6,7 @@ More info you can find in link:doc/overview.adoc[Overview document].
 
 === Create local dev environment
 
-. Install git if not installed already, install ruby 2.4+ if not installed
+. Install git if not installed already, install ruby 2.7+ if not installed
 . git clone git@github.com:openshift/verification-tests.git
 . cd verification-tests
 . tools/install_os_deps.sh # need sudo; you may need to login again to terminal if ruby was installed via rvm during this phase (see below for RVM usage)
@@ -27,23 +27,28 @@ Check link:doc/configuration.adoc[Configuring a BushSlicer v3 run]
 This is an example:
 
 ----
-export BUSHSLICER_DEFAULT_ENVIRONMENT=ose
-export OPENSHIFT_ENV_OSE_HOSTS=<host1>:etcd:master:node,<host2>:node,...
-export OPENSHIFT_ENV_OSE_USER_MANAGER_USERS=user1:redhat,user2:redhat
+export BUSHSLICER_DEFAULT_ENVIRONMENT=ocp4
+export OPENSHIFT_ENV_OCP4_HOSTS=api.*.openshift.com:lb
+export OPENSHIFT_ENV_OCP4_USER_MANAGER_USERS=user1:redhat,user2:redhat
+export OPENSHIFT_ENV_OCP4_ADMIN_CREDS_SPEC=file:///home/path-to/kubeconfig
+export BUSHSLICER_CONFIG='
+global:
+  browser: firefox
+environments:
+  ocp4:
+    version: "4.9.0"
+    #api_port: 443	# For HA clusters, both 3.x and 4.x
+    #api_port: 6443	# For non-HA 4.x clusters
+    #api_port: 8443	# For non-HA 3.x clusters
+    #web_console_url: https://console-openshift-console.apps.*.openshift.com
+'
+
 # execute a whole feature file
 bundle exec cucumber features/cli/create.feature
 # or execute a single scenario
 bundle exec cucumber features/cli/create.feature:5
 # or execute the smoke tests
 bundle exec cucumber --tags @smoke
-----
-
-For Origin environment, add the following environment variables:
-
-----
-export BUSHSLICER_DEFAULT_ENVIRONMENT=origin
-export OPENSHIFT_ENV_ORIGIN_HOSTS=<host1>:etcd:master:node,<host2>:node,...
-export OPENSHIFT_ENV_ORIGIN_USER_MANAGER_USERS=user1:redhat,user2:redhat
 ----
 
 You can check which environments are defined in link:config/config.yaml[config/config.yaml].
