@@ -16,6 +16,8 @@ module BushSlicer
           return {:type => "gcp", :provider => self.init_gcp(env)}
         when "Azure"
           return {:type => "azure", :provider => self.init_azure(env)}
+        when "VSphere"
+          return {:type => "vsphere", :provider => nil}
         when "None"
           return {:type => "none", :provider => nil}
         else
