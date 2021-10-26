@@ -221,7 +221,7 @@ module BushSlicer
           elsif content[i] =~ /^\s+(Examples:)/
             insert_at_line = i
             indention = '    '
-            break
+            next
           end
         end
 
