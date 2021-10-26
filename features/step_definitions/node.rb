@@ -24,9 +24,9 @@ Given /^fips is (enabled|disabled)$/ do |status|
 end
 
 # select a random node from a cluster.
-Given /^I select a random node's host$/ do
+Given /^I select a random( windows)? node's host$/ do | windows |
   ensure_admin_tagged
-  nodes = env.nodes.select { |n| n.schedulable? }
+  nodes = env.nodes.select { |n| n.schedulable? && (windows ? n.is_windows_worker? : ! n.is_windows_worker?) }
   cache_resources *nodes.shuffle
   @host = node.host
 end
