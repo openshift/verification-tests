@@ -32,10 +32,22 @@ Feature: storageClass related feature
       | storage-class-name |
       | gp2                | # @case_id OCP-12269
 
+    @gcp-ipi
+    @gcp-upi
     Examples:
       | storage-class-name |
       | standard           | # @case_id OCP-12089
+
+    @openstack-ipi
+    @openstack-upi
+    Examples:
+      | storage-class-name |
       | standard           | # @case_id OCP-12272
+
+    @azure-ipi
+    @azure-upi
+    Examples:
+      | storage-class-name |
       | managed-premium    | # @case_id OCP-13488
 
   # @author lxia@redhat.com
@@ -138,11 +150,28 @@ Feature: storageClass related feature
       | provisioner    |
       | aws-ebs        | # @case_id OCP-12226
 
+    @azure-ipi
+    @azure-upi
     Examples:
       | provisioner    |
       | azure-disk     | # @case_id OCP-13490
+
+    @openstack-ipi
+    @openstack-upi
+    Examples:
+      | provisioner    |
       | cinder         | # @case_id OCP-12227
+
+    @gcp-ipi
+    @gcp-upi
+    Examples:
+      | provisioner    |
       | gce-pd         | # @case_id OCP-12223
+
+    @vsphere-ipi
+    @vsphere-upi
+    Examples:
+      | provisioner    |
       | vsphere-volume | # @case_id OCP-24259
 
   # @author lxia@redhat.com

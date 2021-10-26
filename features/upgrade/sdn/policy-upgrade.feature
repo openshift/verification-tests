@@ -82,7 +82,8 @@ Feature: SDN compoment upgrade testing
   @admin
   @upgrade-check
   @4.10 @4.9
-  @aws-ipi
+  @gcp-ipi @aws-ipi
+  @gcp-upi
   Scenario: Check the networkpolicy works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "policy-upgrade" project
@@ -353,7 +354,8 @@ Feature: SDN compoment upgrade testing
   @admin
   @upgrade-check
   @4.10 @4.9
-  @aws-ipi
+  @gcp-ipi @aws-ipi
+  @gcp-upi
   Scenario: Check allow from router and allow from hostnetwork policy are functional post upgrade
     Given I switch to cluster admin pseudo user
     When I use the "policy-upgrade3" project

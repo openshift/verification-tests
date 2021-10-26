@@ -45,7 +45,8 @@ Feature: Node components upgrade tests
   @upgrade-check
   @admin
   @4.10 @4.9
-  @aws-ipi
+  @gcp-ipi @aws-ipi
+  @gcp-upi
   Scenario: Make sure nodeConfig is not changed after upgrade
     Given I switch to cluster admin pseudo user
     When I run the :get admin command with:
