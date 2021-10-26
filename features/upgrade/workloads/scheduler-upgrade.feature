@@ -46,7 +46,7 @@ Feature: scheduler with custom policy upgrade check
   @admin
   @destructive
   @4.10 @4.9
-  @vsphere-ipi @gcp-ipi @aws-ipi
+  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @vsphere-upi @gcp-upi
   Scenario: Upgrading cluster when using a custom policy for kube-scheduler should work fine
     Given the "kube-scheduler" operator version matches the current cluster version

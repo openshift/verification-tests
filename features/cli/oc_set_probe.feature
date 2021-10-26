@@ -150,7 +150,7 @@ Feature: oc_set_probe.feature
   # @author wewang@redhat.com
   # @case_id OCP-31241
   @4.10 @4.9
-  @vsphere-ipi @gcp-ipi @aws-ipi
+  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @vsphere-upi @gcp-upi
   Scenario: Set a probe to open a TCP socket test
     Given I have a project

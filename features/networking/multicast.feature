@@ -154,7 +154,7 @@ Feature: testing multicast scenarios
   # @case_id OCP-12930
   @admin
   @4.10 @4.9
-  @vsphere-ipi @gcp-ipi @aws-ipi
+  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @vsphere-upi @gcp-upi
   Scenario: Same multicast groups can be created in multiple tenant
     Given I have a project

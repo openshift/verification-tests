@@ -45,7 +45,7 @@ Feature: Webhook REST Related Tests
     """
     Then the step should fail
     Then the output should contain "not accept"
-    @vsphere-ipi @gcp-ipi @aws-ipi
+    @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
     @vsphere-upi @gcp-upi
     Examples:
       | type    | negative1 | negative2   | negative3 | path              | file              | header1        | header2 |

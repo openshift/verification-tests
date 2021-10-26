@@ -422,7 +422,7 @@ Feature: OVN related networking scenarios
   @admin
   @destructive
   @4.10 @4.9
-  @vsphere-ipi @gcp-ipi @aws-ipi
+  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @vsphere-upi @gcp-upi
   Scenario: Inducing Split Brain in the OVN HA cluster
     Given admin uses the "openshift-ovn-kubernetes" project
@@ -473,7 +473,7 @@ Feature: OVN related networking scenarios
   @destructive
   @4.10 @4.9
   @network-ovnkubernetes
-  @vsphere-ipi @gcp-ipi @aws-ipi
+  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @vsphere-upi @gcp-upi
   Scenario: Delete all OVN master pods and makes sure leader/follower election converges smoothly
     Given the env is using "OVNKubernetes" networkType

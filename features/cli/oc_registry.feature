@@ -3,7 +3,7 @@ Feature: oc registry command scenarios
   # @author wzheng@redhat.com
   # @case_id OCP-21926
   @4.10 @4.9
-  @vsphere-ipi @gcp-ipi @aws-ipi
+  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @vsphere-upi @gcp-upi
   Scenario: Check function of oc registry command
     Given I have a project

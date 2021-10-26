@@ -5,7 +5,7 @@ Feature: Builds and samples related metrics test
   @admin
   @destructive
   @4.10 @4.9
-  @vsphere-ipi @gcp-ipi @aws-ipi
+  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @vsphere-upi @gcp-upi
   Scenario: Alerts on imagestream import retries
     When as admin I successfully merge patch resource "config.samples.operator.openshift.io/cluster" with:
@@ -63,7 +63,7 @@ Feature: Builds and samples related metrics test
   # @case_id OCP-33722
   @admin
   @4.10 @4.9
-  @vsphere-ipi @gcp-ipi @aws-ipi
+  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @vsphere-upi @gcp-upi
   Scenario: Check build metrics
     Given I have a project

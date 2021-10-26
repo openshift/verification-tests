@@ -58,7 +58,7 @@ Feature: SCTP related scenarios
   @admin
   @destructive
   @4.10 @4.9
-  @vsphere-ipi @gcp-ipi @aws-ipi
+  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @vsphere-upi @gcp-upi
   Scenario: Expose SCTP ClusterIP Services
     Given I store the ready and schedulable workers in the :workers clipboard
@@ -119,7 +119,7 @@ Feature: SCTP related scenarios
   @admin
   @destructive
   @4.10 @4.9
-  @vsphere-ipi @gcp-ipi @aws-ipi
+  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @vsphere-upi @gcp-upi
   Scenario: Expose SCTP NodePort Services
     Given I store the ready and schedulable workers in the :workers clipboard
@@ -182,7 +182,7 @@ Feature: SCTP related scenarios
   @admin
   @destructive
   @4.10 @4.9
-  @vsphere-ipi @gcp-ipi @aws-ipi
+  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @vsphere-upi @gcp-upi
   Scenario: Networkpolicy allow SCTP Client
     Given I store the ready and schedulable workers in the :workers clipboard

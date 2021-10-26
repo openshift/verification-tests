@@ -176,7 +176,7 @@ Feature: Pod related networking scenarios
   # @case_id OCP-23891
   @admin
   @4.10 @4.9
-  @vsphere-ipi @gcp-ipi @aws-ipi
+  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @vsphere-upi @gcp-upi
   Scenario: A pod cannot access the MCS port 22623 or 22624 via the SDN/tun0 address of the master
     Given I store the masters in the :masters clipboard
@@ -197,7 +197,7 @@ Feature: Pod related networking scenarios
   # @case_id OCP-23893
   @admin
   @4.10 @4.9
-  @vsphere-ipi @aws-ipi
+  @baremetal-ipi @vsphere-ipi @aws-ipi
   @vsphere-upi
   Scenario: A pod in a namespace with an egress IP cannot access the MCS
     Given I store the masters in the :masters clipboard
@@ -260,7 +260,7 @@ Feature: Pod related networking scenarios
   @destructive
   @4.10 @4.9
   @network-ovnkubernetes
-  @vsphere-ipi @gcp-ipi @aws-ipi
+  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @vsphere-upi @gcp-upi
   Scenario: ovn pod can be scheduled even if the node taint to unschedule
     Given the env is using "OVNKubernetes" networkType
@@ -459,7 +459,7 @@ Feature: Pod related networking scenarios
   @destructive
   @4.10 @4.9
   @network-ovnkubernetes
-  @vsphere-ipi @gcp-ipi @aws-ipi
+  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @vsphere-upi @gcp-upi
   Scenario: Pod readiness check for OVN
     Given the env is using "OVNKubernetes" networkType

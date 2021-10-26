@@ -162,7 +162,7 @@ Feature: apiserver and auth related upgrade check
   @upgrade-check
   @admin
   @4.10 @4.9
-  @vsphere-ipi @gcp-ipi @aws-ipi
+  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @vsphere-upi @gcp-upi
   Scenario: Default RBAC role, rolebinding, clusterrole and clusterrolebinding without any missing after upgraded
     # Checking original clusterrole resources recovered after upgraded
@@ -209,7 +209,7 @@ Feature: apiserver and auth related upgrade check
   @admin
   @destructive
   @4.10 @4.9
-  @vsphere-ipi @gcp-ipi @aws-ipi
+  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @vsphere-upi @gcp-upi
   Scenario: Check the default SCCs should not be stomped by CVO
     Given the "kube-apiserver" operator version matches the current cluster version
@@ -270,7 +270,7 @@ Feature: apiserver and auth related upgrade check
   @upgrade-check
   @users=upuser1,upuser2
   @4.10 @4.9
-  @vsphere-ipi @gcp-ipi @aws-ipi
+  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @vsphere-upi @gcp-upi
   Scenario: Upgrade action will cause re-generation of certificates for headless services to include the wildcard subjects
     Given the master version >= "4.8"

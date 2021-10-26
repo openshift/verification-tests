@@ -27,7 +27,7 @@ Feature: dockerbuild.feature
   @flaky
   @proxy
   @4.10 @4.9
-  @vsphere-ipi @gcp-ipi @aws-ipi
+  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @vsphere-upi @gcp-upi
   Scenario: Docker build with dockerImage with specified tag
     Given I have a project

@@ -44,7 +44,7 @@ Feature: image-registry operator upgrade tests
   @users=upuser1,upuser2
   @admin
   @4.10 @4.9
-  @vsphere-ipi @gcp-ipi @aws-ipi
+  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @vsphere-upi @gcp-upi
   Scenario: samples/openshift-controller-manager/image-registry operators should be in correct status after upgrade
     Given I switch to cluster admin pseudo user
