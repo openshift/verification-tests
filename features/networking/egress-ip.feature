@@ -226,7 +226,7 @@ Feature: Egress IP related features
   @destructive
   @4.10 @4.9
   @vsphere-ipi @aws-ipi
-  @vsphere-upi
+  @aws-upi @vsphere-upi
   Scenario: The related iptables/openflow rules will be removed once the egressIP gets removed from netnamespace
     Given the valid egress IP is added to the node
     And I have a project

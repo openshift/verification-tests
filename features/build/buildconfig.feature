@@ -84,8 +84,8 @@ Feature: buildconfig.feature
     And the "ruby-sample-build-1" build was created
     Then the "ruby-sample-build-1" build completes
 
-    @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-    @openstack-upi @vsphere-upi @gcp-upi
+    @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+    @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
     Examples:
       | template                  |
       | test-buildconfig-s2i.json | # @case_id OCP-11474

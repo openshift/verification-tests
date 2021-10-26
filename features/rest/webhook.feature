@@ -45,8 +45,8 @@ Feature: Webhook REST Related Tests
     """
     Then the step should fail
     Then the output should contain "not accept"
-    @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-    @openstack-upi @vsphere-upi @gcp-upi
+    @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+    @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
     Examples:
       | type    | negative1 | negative2   | negative3 | path              | file              | header1        | header2 |
       | generic | GitHub    | ImageChange | github    | generic/testdata/ | push-generic.json |                |         | # @case_id OCP-11693

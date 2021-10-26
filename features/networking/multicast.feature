@@ -154,8 +154,8 @@ Feature: testing multicast scenarios
   # @case_id OCP-12930
   @admin
   @4.10 @4.9
-  @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @openstack-upi @vsphere-upi @gcp-upi
+  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Same multicast groups can be created in multiple tenant
     Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard

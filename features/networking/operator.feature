@@ -283,8 +283,8 @@ Feature: Operator related networking scenarios
   @admin
   @destructive
   @4.10 @4.9
-  @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @openstack-upi @vsphere-upi @gcp-upi
+  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: CNO should delete non-relevant resources
     # Make sure that the multus is Running
     Given the multus is enabled on the cluster
@@ -364,8 +364,8 @@ Feature: Operator related networking scenarios
   @admin
   @destructive
   @4.10 @4.9
-  @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @openstack-upi @vsphere-upi @gcp-upi
+  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Changing mtu in CNO should not be allowed
     Given the mtu value "1750" is patched in CNO config according to the networkType
     And admin uses the "openshift-network-operator" project

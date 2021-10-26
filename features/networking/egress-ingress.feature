@@ -296,8 +296,8 @@ Feature: Egress-ingress related networking scenarios
   # @case_id OCP-13506
   @admin
   @4.10 @4.9
-  @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @openstack-upi @vsphere-upi @gcp-upi
+  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Update different dnsname in same egress network policy
     Given I have a project
     Given I have a pod-for-ping in the project
@@ -507,8 +507,8 @@ Feature: Egress-ingress related networking scenarios
   # @case_id OCP-35341
   @admin
   @4.10 @4.9
-  @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @openstack-upi @vsphere-upi @gcp-upi
+  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: EgressNetworkPolicy maxItems is 1000
     Given I have a project
     Given I obtain test data file "networking/egressnetworkpolicy/egressnetworkpolicy_1000.yaml"
@@ -596,8 +596,8 @@ Feature: Egress-ingress related networking scenarios
   # @case_id OCP-37496
   @admin
   @4.10 @4.9
-  @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @openstack-upi @vsphere-upi @gcp-upi
+  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: [SDN-1181] Edit EgressFirewall should take effect
     Given I have a project
     Given I have a pod-for-ping in the project

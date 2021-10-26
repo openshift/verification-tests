@@ -233,6 +233,7 @@ Feature: storageClass related feature
     And I wait for the resource "pv" named "<%= pvc.volume_name %>" to disappear within 300 seconds
 
     @aws-ipi
+    @aws-upi
     Examples:
       | size  |
       | 4Gi   | # @case_id OCP-10158
@@ -279,6 +280,7 @@ Feature: storageClass related feature
   @admin
   @4.10 @4.9
   @aws-ipi
+  @aws-upi
   Scenario: PVC with storage class won't provisioned pv if no storage class or wrong storage class object
     Given I have a project
     # No sc exists

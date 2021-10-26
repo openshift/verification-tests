@@ -434,7 +434,7 @@ Feature: OVN Egress IP related features
   @destructive
   @4.10 @4.9
   @vsphere-ipi @aws-ipi
-  @vsphere-upi
+  @aws-upi @vsphere-upi
   Scenario: Warning event will be triggered if apply EgressIP object but no EgressIP nodes
     #Get unused IP as egress ip
     Given I store a random unused IP address from the reserved range to the clipboard
@@ -609,6 +609,7 @@ Feature: OVN Egress IP related features
   @admin
   @4.10 @4.9
   @aws-ipi
+  @aws-upi
   Scenario: Common user cannot tag the nodes by labelling them as egressIP nodes
     Given I select a random node's host
     And evaluation of `node.name` is stored in the :egress_node clipboard
@@ -628,6 +629,7 @@ Feature: OVN Egress IP related features
   @destructive
   @4.10 @4.9
   @aws-ipi
+  @aws-upi
   Scenario: Any egress IP can only be assigned to one node only
     Given I store the schedulable workers in the :nodes clipboard
     Then label "k8s.ovn.org/egress-assignable=true" is added to the "<%= cb.nodes[0].name %>" node
