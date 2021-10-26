@@ -31,8 +31,8 @@ Feature: service upgrade scenarios
   @admin
   @upgrade-check
   @4.10 @4.9
-  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @vsphere-upi @gcp-upi
+  @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Check the idle service works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "idle-upgrade" project
@@ -93,8 +93,8 @@ Feature: service upgrade scenarios
   @admin
   @upgrade-check
   @4.10 @4.9
-  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @vsphere-upi @gcp-upi
+  @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Check the nodeport service works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "nodeport-upgrade" project

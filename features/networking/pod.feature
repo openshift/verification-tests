@@ -176,8 +176,8 @@ Feature: Pod related networking scenarios
   # @case_id OCP-23891
   @admin
   @4.10 @4.9
-  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @vsphere-upi @gcp-upi
+  @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @openstack-upi @vsphere-upi @gcp-upi
   Scenario: A pod cannot access the MCS port 22623 or 22624 via the SDN/tun0 address of the master
     Given I store the masters in the :masters clipboard
     And the vxlan tunnel address of node "<%= cb.masters[0].name %>" is stored in the :master_tunnel_address clipboard
@@ -260,8 +260,8 @@ Feature: Pod related networking scenarios
   @destructive
   @4.10 @4.9
   @network-ovnkubernetes
-  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @vsphere-upi @gcp-upi
+  @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @openstack-upi @vsphere-upi @gcp-upi
   Scenario: ovn pod can be scheduled even if the node taint to unschedule
     Given the env is using "OVNKubernetes" networkType
     And I store all worker nodes to the :nodes clipboard
@@ -459,8 +459,8 @@ Feature: Pod related networking scenarios
   @destructive
   @4.10 @4.9
   @network-ovnkubernetes
-  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @vsphere-upi @gcp-upi
+  @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Pod readiness check for OVN
     Given the env is using "OVNKubernetes" networkType
     And OVN is functional on the cluster

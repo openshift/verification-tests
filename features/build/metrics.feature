@@ -5,8 +5,8 @@ Feature: Builds and samples related metrics test
   @admin
   @destructive
   @4.10 @4.9
-  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @vsphere-upi @gcp-upi
+  @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Alerts on imagestream import retries
     When as admin I successfully merge patch resource "config.samples.operator.openshift.io/cluster" with:
       | {"spec":{"samplesRegistry":"registry.unconnected.redhat.com"}} |
@@ -63,8 +63,8 @@ Feature: Builds and samples related metrics test
   # @case_id OCP-33722
   @admin
   @4.10 @4.9
-  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @vsphere-upi @gcp-upi
+  @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Check build metrics
     Given I have a project
     When I run the :new_app client command with:

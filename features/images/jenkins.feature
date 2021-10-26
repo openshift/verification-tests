@@ -345,8 +345,8 @@ Feature: jenkins.feature
   # @case_id OCP-35068
   @admin
   @4.10 @4.9
-  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @vsphere-upi @gcp-upi
+  @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Oauthaccesstoken should be deleted after loging out from Jenkins webconsole
     Given I have a project
     When I run the :new_app client command with:

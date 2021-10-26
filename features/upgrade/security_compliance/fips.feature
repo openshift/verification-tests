@@ -46,8 +46,8 @@ Feature: fips enabled verification for upgrade
   @users=upuser1,upuser2
   @admin
   @4.10 @4.9
-  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @vsphere-upi @gcp-upi
+  @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @openstack-upi @vsphere-upi @gcp-upi
   Scenario: FIPS mode checking command works for a cluster with fip mode on
     Given fips is enabled
 

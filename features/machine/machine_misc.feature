@@ -61,7 +61,7 @@ Feature: Machine misc features testing
   @admin
   @destructive
   @4.10 @4.9
-  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   Scenario: Reconciliation of MutatingWebhookConfiguration values should happen
     Given I switch to cluster admin pseudo user
 
