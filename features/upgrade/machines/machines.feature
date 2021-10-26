@@ -151,6 +151,7 @@ Feature: Machine-api components upgrade tests
   @upgrade-check
   @admin
   @destructive
+  @4.10 @4.9
   Scenario Outline: Spot/preemptible instances should not block upgrade
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -172,10 +173,19 @@ Feature: Machine-api components upgrade tests
       | <machineset_name> |
     """
 
+    @aws-ipi
     Examples:
       | iaas_type | machineset_name        | value                   |
       | aws       | machineset-clone-41175 | "spotMarketOptions": {} | # @case_id OCP-41175
+
+    @gcp-ipi
+    Examples:
+      | iaas_type | machineset_name        | value                   |
       | gcp       | machineset-clone-41803 | "preemptible": true     | # @case_id OCP-41803
+
+    @azure-ipi
+    Examples:
+      | iaas_type | machineset_name        | value                   |
       | azure     | machineset-clone-41804 | "spotVMOptions": {}     | # @case_id OCP-41804
 
   @upgrade-prepare

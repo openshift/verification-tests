@@ -60,7 +60,8 @@ Feature: Testing registry
   # @case_id OCP-18998
   @admin
   @4.10 @4.9
-  @aws-ipi
+  @gcp-ipi @aws-ipi
+  @gcp-upi
   Scenario: Mirror multiple locations to another registry via 'oc image mirror'
     Given I have a project
     Given docker config for default image registry is stored to the :dockercfg_file clipboard
@@ -81,7 +82,8 @@ Feature: Testing registry
   # @case_id OCP-23030
   @admin
   @4.10 @4.9
-  @aws-ipi
+  @gcp-ipi @aws-ipi
+  @gcp-upi
   Scenario: Enable must-gather object refs in image-registry cluster
     When I run the :get admin command with:
       | resource      | co             |
@@ -153,7 +155,8 @@ Feature: Testing registry
   @admin
   @destructive
   @4.10 @4.9
-  @aws-ipi
+  @gcp-ipi @aws-ipi
+  @gcp-upi
   Scenario: Check the related log from must-gather tool
     When I run the :delete admin command with:
       | object_type       | co             |
@@ -256,7 +259,8 @@ Feature: Testing registry
   # @case_id OCP-29706
   @admin
   @4.10 @4.9
-  @aws-ipi
+  @gcp-ipi @aws-ipi
+  @gcp-upi
   Scenario: Node secret takes effect when common secret is removed
     Given I have a project
     When I run the :extract admin command with:

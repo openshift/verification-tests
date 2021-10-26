@@ -81,7 +81,8 @@ Feature: OVNKubernetes IPsec related networking scenarios
   @admin
   @4.10 @4.9
   @network-ovnkubernetes
-  @aws-ipi
+  @gcp-ipi @aws-ipi
+  @gcp-upi
   Scenario: Make sure IPsec SA's are establishing in a transport mode
     Given the env is using "OVNKubernetes" networkType
     And the IPsec is enabled on the cluster
@@ -119,7 +120,8 @@ Feature: OVNKubernetes IPsec related networking scenarios
   @destructive
   @4.10 @4.9
   @network-ovnkubernetes
-  @aws-ipi
+  @gcp-ipi @aws-ipi
+  @gcp-upi
   Scenario: Delete all ovn-ipsec containers and check if they gets recreated
     Given the env is using "OVNKubernetes" networkType
     And the IPsec is enabled on the cluster
@@ -135,7 +137,8 @@ Feature: OVNKubernetes IPsec related networking scenarios
   @admin
   @4.10 @4.9
   @network-ovnkubernetes
-  @aws-ipi
+  @gcp-ipi @aws-ipi
+  @gcp-upi
   Scenario: pod to pod traffic on different nodes should be ESP encrypted
     Given the env is using "OVNKubernetes" networkType
     And the IPsec is enabled on the cluster

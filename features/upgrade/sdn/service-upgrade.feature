@@ -31,7 +31,8 @@ Feature: service upgrade scenarios
   @admin
   @upgrade-check
   @4.10 @4.9
-  @aws-ipi
+  @gcp-ipi @aws-ipi
+  @gcp-upi
   Scenario: Check the idle service works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "idle-upgrade" project
@@ -92,7 +93,8 @@ Feature: service upgrade scenarios
   @admin
   @upgrade-check
   @4.10 @4.9
-  @aws-ipi
+  @gcp-ipi @aws-ipi
+  @gcp-upi
   Scenario: Check the nodeport service works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "nodeport-upgrade" project

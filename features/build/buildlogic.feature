@@ -444,7 +444,8 @@ Feature: buildlogic.feature
   # @case_id OCP-19133
   @proxy
   @4.10 @4.9
-  @aws-ipi
+  @gcp-ipi @aws-ipi
+  @gcp-upi
   Scenario: Pipeline build can be pruned automatically
     Given I have a project
     And I have a jenkins v2 application
