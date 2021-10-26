@@ -1,6 +1,7 @@
 Feature: remote registry related scenarios
   # @author yinzhou@redhat.com
   # @case_id OCP-10904
+  @flaky
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
