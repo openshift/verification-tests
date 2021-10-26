@@ -53,13 +53,20 @@ Feature: Volume snapshot test
     Then the step should succeed
     And the output should contain "snapshot test"
     
-    @openstack-ipi
-    @openstack-upi
+    @aws-ipi
+    @aws-upi
     Examples:
       | csi-sc       |
       | gp2-csi      | # @case_id OCP-27727
+
+    @azure-ipi
+    @azure-upi
+    Examples:
+      | csi-sc       |
       | managed-csi  | # @case_id OCP-41449
 
+    @openstack-ipi
+    @openstack-upi
     Examples:
       | csi-sc       |
       | standard-csi | # @case_id OCP-37568
