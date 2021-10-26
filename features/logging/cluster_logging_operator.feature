@@ -184,8 +184,8 @@ Feature: cluster-logging-operator related test
   @admin
   @destructive
   @4.10 @4.9
-  @gcp-ipi @aws-ipi
-  @gcp-upi
+  @vsphere-ipi @gcp-ipi @aws-ipi
+  @vsphere-upi @gcp-upi
   Scenario: Expose more fluentd knobs to support optimizing fluentd for different environments
     Given I obtain test data file "logging/clusterlogging/cl_fluentd-buffer.yaml"
     And I create clusterlogging instance with:

@@ -15,8 +15,8 @@ Feature: Machine features testing
   @smoke
   @admin
   @4.10 @4.9
-  @gcp-ipi @aws-ipi
-  @gcp-upi
+  @vsphere-ipi @gcp-ipi @aws-ipi
+  @vsphere-upi @gcp-upi
   Scenario: machine-api clusteroperator should be in Available state
     Given evaluation of `cluster_operator('machine-api').condition(type: 'Available')` is stored in the :co_available clipboard
     Then the expression should be true> cb.co_available["status"]=="True"
@@ -146,7 +146,7 @@ Feature: Machine features testing
   @admin
   @destructive
   @4.10 @4.9
-  @gcp-ipi @aws-ipi
+  @vsphere-ipi @gcp-ipi @aws-ipi
   Scenario: Scaling a machineset with providerSpec.publicIp set to true
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -164,7 +164,7 @@ Feature: Machine features testing
   @admin
   @destructive
   @4.10 @4.9
-  @gcp-ipi @aws-ipi
+  @vsphere-ipi @gcp-ipi @aws-ipi
   Scenario: [MAO] Reconciling machine taints with nodes
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -288,7 +288,7 @@ Feature: Machine features testing
   @admin
   @destructive
   @4.10 @4.9
-  @gcp-ipi @aws-ipi
+  @vsphere-ipi @gcp-ipi @aws-ipi
   Scenario: Labels specified in a machineset should propagate to nodes
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
