@@ -100,6 +100,8 @@ Feature: CSI clone testing related feature
   # @author wduan@redhat.com
   # @case_id OCP-27690
   @4.10 @4.9
+  @openstack-ipi
+  @openstack-upi
   Scenario: [Cinder CSI Clone] Clone a pvc with capacity less than original pvc will fail
     Given I have a project
     # Create mypvc-ori with 2Gi size
@@ -252,6 +254,8 @@ Feature: CSI clone testing related feature
   # @case_id OCP-27686
   @admin
   @4.10 @4.9
+  @openstack-ipi
+  @openstack-upi
   Scenario: [Cinder CSI Clone] Clone a pvc with different storage class is failed
     # Create mypvc-ori with sc1
     Given I have a project

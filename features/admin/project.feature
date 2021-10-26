@@ -25,8 +25,8 @@ Feature: project permissions
   # @case_id OCP-10736
   @admin
   @4.10 @4.9
-  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @vsphere-upi @gcp-upi
+  @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @openstack-upi @vsphere-upi @gcp-upi
   Scenario: The job and HPA should be deleted when project has been deleted
     Given I have a project
     Given I obtain test data file "hpa/hpa.yaml"
