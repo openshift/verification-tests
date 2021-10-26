@@ -296,7 +296,7 @@ Feature: Egress-ingress related networking scenarios
   # @case_id OCP-13506
   @admin
   @4.10 @4.9
-  @vsphere-ipi @gcp-ipi @aws-ipi
+  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @vsphere-upi @gcp-upi
   Scenario: Update different dnsname in same egress network policy
     Given I have a project
@@ -507,7 +507,7 @@ Feature: Egress-ingress related networking scenarios
   # @case_id OCP-35341
   @admin
   @4.10 @4.9
-  @vsphere-ipi @gcp-ipi @aws-ipi
+  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @vsphere-upi @gcp-upi
   Scenario: EgressNetworkPolicy maxItems is 1000
     Given I have a project
@@ -596,7 +596,7 @@ Feature: Egress-ingress related networking scenarios
   # @case_id OCP-37496
   @admin
   @4.10 @4.9
-  @vsphere-ipi @gcp-ipi @aws-ipi
+  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @vsphere-upi @gcp-upi
   Scenario: [SDN-1181] Edit EgressFirewall should take effect
     Given I have a project

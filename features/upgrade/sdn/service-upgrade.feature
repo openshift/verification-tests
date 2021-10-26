@@ -31,7 +31,7 @@ Feature: service upgrade scenarios
   @admin
   @upgrade-check
   @4.10 @4.9
-  @vsphere-ipi @gcp-ipi @aws-ipi
+  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @vsphere-upi @gcp-upi
   Scenario: Check the idle service works well after upgrade
     Given I switch to cluster admin pseudo user
@@ -93,7 +93,7 @@ Feature: service upgrade scenarios
   @admin
   @upgrade-check
   @4.10 @4.9
-  @vsphere-ipi @gcp-ipi @aws-ipi
+  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @vsphere-upi @gcp-upi
   Scenario: Check the nodeport service works well after upgrade
     Given I switch to cluster admin pseudo user

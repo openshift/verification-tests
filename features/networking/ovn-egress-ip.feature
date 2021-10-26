@@ -577,7 +577,7 @@ Feature: OVN Egress IP related features
   @admin
   @destructive
   @4.10 @4.9
-  @vsphere-ipi
+  @baremetal-ipi @vsphere-ipi
   @vsphere-upi
   Scenario: An EgressIP object can not have multiple egress IP assignments on the same node
     Given I store the schedulable workers in the :nodes clipboard

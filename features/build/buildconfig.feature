@@ -84,7 +84,7 @@ Feature: buildconfig.feature
     And the "ruby-sample-build-1" build was created
     Then the "ruby-sample-build-1" build completes
 
-    @vsphere-ipi @gcp-ipi @aws-ipi
+    @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
     @vsphere-upi @gcp-upi
     Examples:
       | template                  |

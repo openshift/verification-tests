@@ -82,7 +82,7 @@ Feature: SDN compoment upgrade testing
   @admin
   @upgrade-check
   @4.10 @4.9
-  @vsphere-ipi @gcp-ipi @aws-ipi
+  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @vsphere-upi @gcp-upi
   Scenario: Check the networkpolicy works well after upgrade
     Given I switch to cluster admin pseudo user
@@ -354,7 +354,7 @@ Feature: SDN compoment upgrade testing
   @admin
   @upgrade-check
   @4.10 @4.9
-  @vsphere-ipi @gcp-ipi @aws-ipi
+  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @vsphere-upi @gcp-upi
   Scenario: Check allow from router and allow from hostnetwork policy are functional post upgrade
     Given I switch to cluster admin pseudo user

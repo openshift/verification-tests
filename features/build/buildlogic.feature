@@ -444,7 +444,7 @@ Feature: buildlogic.feature
   # @case_id OCP-19133
   @proxy
   @4.10 @4.9
-  @vsphere-ipi @gcp-ipi @aws-ipi
+  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @vsphere-upi @gcp-upi
   Scenario: Pipeline build can be pruned automatically
     Given I have a project

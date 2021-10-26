@@ -3,7 +3,7 @@ Feature: job.feature
   # @author cryan@redhat.com
   # @case_id OCP-11206
   @4.10 @4.9
-  @vsphere-ipi @gcp-ipi @aws-ipi
+  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @vsphere-upi @gcp-upi
   Scenario: Create job with multiple completions
     Given I have a project
@@ -50,7 +50,7 @@ Feature: job.feature
   # @author qwang@redhat.com
   # @case_id OCP-11539
   @4.10 @4.9
-  @vsphere-ipi @gcp-ipi @aws-ipi
+  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @vsphere-upi @gcp-upi
   Scenario: Create job with pod parallelism
     Given I have a project
@@ -170,7 +170,7 @@ Feature: job.feature
   # @author qwang@redhat.com
   # @case_id OCP-9952
   @4.10 @4.9
-  @vsphere-ipi @gcp-ipi @aws-ipi
+  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @vsphere-upi @gcp-upi
   Scenario: Specifying your own pod selector for job
     Given I have a project

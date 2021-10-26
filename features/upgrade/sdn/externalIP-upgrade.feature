@@ -47,7 +47,7 @@ Feature: SDN externalIP compoment upgrade testing
   @admin
   @upgrade-check
   @4.10 @4.9
-  @vsphere-ipi @gcp-ipi @aws-ipi
+  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @vsphere-upi @gcp-upi
   Scenario: Check the externalIP works well after upgrade
     Given I switch to cluster admin pseudo user

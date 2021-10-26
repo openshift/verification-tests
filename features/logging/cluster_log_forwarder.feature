@@ -500,7 +500,7 @@ Feature: cluster log forwarder features
   @admin
   @destructive
   @4.10 @4.9
-  @vsphere-ipi @gcp-ipi @aws-ipi
+  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @vsphere-upi @gcp-upi
   Scenario: Send logs to both external fluentd and internalES
     #Creating secure fluentd receiver

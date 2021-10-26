@@ -108,7 +108,7 @@ Feature: Service related networking scenarios
   # @case_id OCP-21814
   @admin
   @4.10 @4.9
-  @vsphere-ipi @gcp-ipi @aws-ipi
+  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @vsphere-upi @gcp-upi
   Scenario: The headless service can publish the pods even if they are not ready
     Given I have a project
@@ -470,7 +470,7 @@ Feature: Service related networking scenarios
   @admin
   @destructive
   @4.10 @4.9
-  @vsphere-ipi @gcp-ipi @aws-ipi
+  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @vsphere-upi @gcp-upi
   Scenario: Taint node with too small MTU value
     Given the default interface on nodes is stored in the :default_interface clipboard

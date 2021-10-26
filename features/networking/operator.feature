@@ -283,7 +283,7 @@ Feature: Operator related networking scenarios
   @admin
   @destructive
   @4.10 @4.9
-  @vsphere-ipi @gcp-ipi @aws-ipi
+  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @vsphere-upi @gcp-upi
   Scenario: CNO should delete non-relevant resources
     # Make sure that the multus is Running
@@ -364,7 +364,7 @@ Feature: Operator related networking scenarios
   @admin
   @destructive
   @4.10 @4.9
-  @vsphere-ipi @gcp-ipi @aws-ipi
+  @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @vsphere-upi @gcp-upi
   Scenario: Changing mtu in CNO should not be allowed
     Given the mtu value "1750" is patched in CNO config according to the networkType
