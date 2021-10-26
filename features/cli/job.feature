@@ -3,6 +3,7 @@ Feature: job.feature
   # @author cryan@redhat.com
   # @case_id OCP-11206
   @4.10 @4.9
+  @aws-ipi
   Scenario: Create job with multiple completions
     Given I have a project
     Given I obtain test data file "templates/ocp11206/job.yaml"
@@ -48,6 +49,7 @@ Feature: job.feature
   # @author qwang@redhat.com
   # @case_id OCP-11539
   @4.10 @4.9
+  @aws-ipi
   Scenario: Create job with pod parallelism
     Given I have a project
     Given I obtain test data file "job/job_with_0_activeDeadlineSeconds.yaml"
@@ -166,6 +168,7 @@ Feature: job.feature
   # @author qwang@redhat.com
   # @case_id OCP-9952
   @4.10 @4.9
+  @aws-ipi
   Scenario: Specifying your own pod selector for job
     Given I have a project
     Given I obtain test data file "job/job-manualselector.yaml"

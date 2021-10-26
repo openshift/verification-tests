@@ -125,6 +125,7 @@ Feature: Cluster Autoscaler Tests
   @admin
   @destructive
   @4.10 @4.9
+  @aws-ipi
   Scenario: Update machineAutoscaler to reference a different MachineSet
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -197,6 +198,7 @@ Feature: Cluster Autoscaler Tests
   @admin
   @destructive
   @4.10 @4.9
+  @aws-ipi
   Scenario: Machineautoscaler can be deleted when its referenced machineset does not exist
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
