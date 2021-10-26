@@ -13,7 +13,6 @@ Feature: basic verification for upgrade testing
   @baremetal-ipi
   @openstack-ipi
   @openstack-upi
-  @flaky
   Scenario: etcd-operator and cluster works well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     Given I obtain test data file "admin/subscription.yaml"
@@ -28,8 +27,14 @@ Feature: basic verification for upgrade testing
     When I run the :create client command with:
       | f | etcd-cluster.yaml |
     Then the step should succeed
-    Then status becomes :running of exactly 3 pods labeled:
-      | etcd_cluster=example |
+    #bugzilla - id=1979550
+    #Then status becomes :running of exactly 3 pods labeled:
+    #  | etcd_cluster=example |
+    When I run the :get admin command with:
+      | resource | EtcdCluster |
+    Then the step should succeed
+    And the output should match:
+      | example.* |
 
   # @author geliu@redhat.com
   # @case_id OCP-22606
@@ -38,7 +43,6 @@ Feature: basic verification for upgrade testing
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
-  @flaky
   Scenario: etcd-operator and cluster works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "openshift-operators" project
