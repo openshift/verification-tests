@@ -433,7 +433,8 @@ Feature: OVN Egress IP related features
   @admin
   @destructive
   @4.10 @4.9
-  @aws-ipi
+  @vsphere-ipi @aws-ipi
+  @vsphere-upi
   Scenario: Warning event will be triggered if apply EgressIP object but no EgressIP nodes
     #Get unused IP as egress ip
     Given I store a random unused IP address from the reserved range to the clipboard
@@ -464,6 +465,8 @@ Feature: OVN Egress IP related features
   @admin
   @destructive
   @4.10 @4.9
+  @vsphere-ipi
+  @vsphere-upi
   Scenario: The pod located on different node than EgressIP nodes
     Given I save ipecho url to the clipboard
     Given I store the schedulable nodes in the :nodes clipboard
@@ -512,6 +515,8 @@ Feature: OVN Egress IP related features
   @admin
   @destructive
   @4.10 @4.9
+  @vsphere-ipi
+  @vsphere-upi
   Scenario: Deleting EgressIP object and recreating it will work
     Given I save ipecho url to the clipboard
 
@@ -572,6 +577,8 @@ Feature: OVN Egress IP related features
   @admin
   @destructive
   @4.10 @4.9
+  @vsphere-ipi
+  @vsphere-upi
   Scenario: An EgressIP object can not have multiple egress IP assignments on the same node
     Given I store the schedulable workers in the :nodes clipboard
     Then label "k8s.ovn.org/egress-assignable=true" is added to the "<%= cb.nodes[0].name %>" node
@@ -665,7 +672,9 @@ Feature: OVN Egress IP related features
   # @case_id OCP-44250
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
+  @vsphere-ipi
+  @vsphere-upi
   Scenario: lr-policy-list and snat should be updated correctly after remove pods
     Given I store the schedulable workers in the :nodes clipboard
     Then label "k8s.ovn.org/egress-assignable=true" is added to the "<%= cb.nodes[0].name %>" node
@@ -773,7 +782,9 @@ Feature: OVN Egress IP related features
   # @case_id OCP-44251
   @admin
   @destructive
-  @4.9
+  @4.10 @4.9
+  @vsphere-ipi
+  @vsphere-upi
   Scenario: lr-policy-list and snat should be updated correctly after remove egressip objects 
     Given I store the schedulable workers in the :nodes clipboard
     Then label "k8s.ovn.org/egress-assignable=true" is added to the "<%= cb.nodes[0].name %>" node

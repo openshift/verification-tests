@@ -4,8 +4,8 @@ Feature: SDN/OVN metrics related networking scenarios
   # @case_id OCP-28519
   @admin
   @4.10 @4.9
-  @gcp-ipi @aws-ipi
-  @gcp-upi
+  @vsphere-ipi @gcp-ipi @aws-ipi
+  @vsphere-upi @gcp-upi
   Scenario: Prometheus should be able to monitor kubeproxy metrics
     Given I switch to cluster admin pseudo user
     And I use the "openshift-sdn" project
@@ -74,8 +74,8 @@ Feature: SDN/OVN metrics related networking scenarios
   # @case_id OCP-37704
   @admin
   @4.10 @4.9
-  @gcp-ipi @aws-ipi
-  @gcp-upi
+  @vsphere-ipi @gcp-ipi @aws-ipi
+  @vsphere-upi @gcp-upi
   Scenario: Should be able to monitor various ovnkube-master and ovnkube-node metrics via prometheus
     Given I switch to cluster admin pseudo user
     And I use the "openshift-ovn-kubernetes" project

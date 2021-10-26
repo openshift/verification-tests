@@ -39,8 +39,8 @@ Feature: Logging upgrading related features
   @upgrade-check
   @users=upuser1,upuser2
   @4.10 @4.9
-  @gcp-ipi @aws-ipi
-  @gcp-upi
+  @vsphere-ipi @gcp-ipi @aws-ipi
+  @vsphere-upi @gcp-upi
   Scenario: Cluster logging checking during cluster upgrade
     Given I switch to the first user
     Given I create a project with non-leading digit name

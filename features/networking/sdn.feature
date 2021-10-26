@@ -336,8 +336,8 @@ Feature: SDN related networking scenarios
   @admin
   @4.10 @4.9
   @network-ovnkubernetes
-  @gcp-ipi @aws-ipi
-  @gcp-upi
+  @vsphere-ipi @gcp-ipi @aws-ipi
+  @vsphere-upi @gcp-upi
   Scenario: Don't write CNI configuration file until ovn-controller has done at least one iteration
     Given the env is using "OVNKubernetes" networkType
     And I store the masters in the :master clipboard
@@ -450,8 +450,8 @@ Feature: SDN related networking scenarios
   @admin
   @destructive
   @4.10 @4.9
-  @gcp-ipi @aws-ipi
-  @gcp-upi
+  @vsphere-ipi @gcp-ipi @aws-ipi
+  @vsphere-upi @gcp-upi
   Scenario: Netnamespace should be recreated after deleting it before the project is deleted
     Given the env is using "OpenShiftSDN" networkType
     Given I have a project

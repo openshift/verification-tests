@@ -191,7 +191,7 @@ Feature: MachineHealthCheck Test Scenarios
   @admin
   @destructive
   @4.10 @4.9
-  @gcp-ipi @aws-ipi
+  @vsphere-ipi @gcp-ipi @aws-ipi
   Scenario: Remediation should be applied when machine has nodeRef but node is deleted
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -244,7 +244,7 @@ Feature: MachineHealthCheck Test Scenarios
   @admin
   @destructive
   @4.10 @4.9
-  @gcp-ipi @aws-ipi
+  @vsphere-ipi @gcp-ipi @aws-ipi
   Scenario: MHC MaxUnhealthy string value should be checked for '%' symbol
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user

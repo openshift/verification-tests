@@ -66,8 +66,8 @@ Feature: basic verification for upgrade oc client testing
   @admin
   @users=upuser1,upuser2
   @4.10 @4.9
-  @gcp-ipi @aws-ipi
-  @gcp-upi
+  @vsphere-ipi @gcp-ipi @aws-ipi
+  @vsphere-upi @gcp-upi
   Scenario: Check some container related oc commands still work for ocp45 after upgrade
     Given I switch to the first user
     When I use the "workloads-upgrade" project
