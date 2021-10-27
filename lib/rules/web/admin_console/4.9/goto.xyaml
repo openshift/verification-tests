@@ -433,4 +433,7 @@ goto_command_line_tools:
     selector:
       xpath: //div[contains(text(), "Command Line Tools")]
     timeout: 15
-
+goto_test_consumer_page:
+  url: /test-consumer
+goto_dynamic_plugin_pseudo_page:
+  url: /test-consumer?pseudolocalization=true&lng=en
