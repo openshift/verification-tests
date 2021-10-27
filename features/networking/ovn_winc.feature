@@ -3,6 +3,7 @@ Feature: OVNKubernetes Windows Container related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-26360
   @admin
+  @network-ovnkubernetes
   @4.10 @4.9
   @azure-ipi @aws-ipi
   Scenario: Ensure Pods and Service communication across window and linux nodes
