@@ -1,0 +1,8 @@
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: openshift-kube-descheduler-operator
+  namespace: openshift-kube-descheduler-operator
+spec:
+  targetNamespaces:
+  - openshift-kube-descheduler-operator
