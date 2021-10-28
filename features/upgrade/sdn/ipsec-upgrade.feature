@@ -58,7 +58,6 @@ Feature: IPsec upgrade scenarios
        | sh | -c | timeout  --preserve-status 2 tcpdump -i <%= cb.default_interface %> esp |
     Then the step should succeed
     And the output should contain "ESP"
-
       
   # @author anusaxen@redhat.com
   # @case_id OCP-44834
