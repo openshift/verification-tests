@@ -361,7 +361,7 @@ Feature: SDN compoment upgrade testing
   # @author anusaxen@redhat.com
   @admin
   @upgrade-prepare
-  Scenario: Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted post upgrade	
+  Scenario: Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted post upgrade - prepare
     Given I switch to cluster admin pseudo user
     And I store the workers in the :nodes clipboard
     When I run the :new_project client command with:
