@@ -3,7 +3,7 @@ Feature: IPsec upgrade scenarios
   # @author anusaxen@redhat.com
   @admin
   @upgrade-prepare
-  Scenario: Confirm node-node and pod-pod packets are ESP enrypted on IPsec clusters post upgrade
+  Scenario: Confirm node-node and pod-pod packets are ESP enrypted on IPsec clusters post upgrade - prepare
     Given the env is using "OVNKubernetes" networkType
     And the IPsec is enabled on the cluster
     Given I store all worker nodes to the :workers clipboard
@@ -39,6 +39,26 @@ Feature: IPsec upgrade scenarios
     #Above command will curl "hello openshift" traffic every 1 second to worker1 test pod which is expected to cause ESP traffic generation across those nodes
     And a pod becomes ready with labels:
       | name=hello-pod0 |
+    #Quick pre-upgrade check whether nodes are getting ESP packets or not. Just to confirm IPsec functionality
+    #Host network pod for running tcpdump on any  worker node to leverage tcpdump utility
+    Given I obtain test data file "networking/net_admin_cap_pod.yaml"
+    When I run oc create as admin over "net_admin_cap_pod.yaml" replacing paths:
+      | ["spec"]["nodeName"]                                       | <%= cb.workers[0].name %> |
+      | ["metadata"]["namespace"]                                  | ipsec-upgrade            |
+      | ["metadata"]["name"]                                       | hostnw-pod-worker0       |
+      | ["metadata"]["labels"]["name"]                             | network-pod              |
+      | ["spec"]["containers"][0]["securityContext"]["privileged"] | true                     |
+    Then the step should succeed
+    And a pod becomes ready with labels:
+       | name=network-pod |
+    And evaluation of `pod.name` is stored in the :hostnw_pod_worker0 clipboard
+    #capturing tcpdump for 2 seconds
+    Given I use the "ipsec-upgrade" project
+    When admin executes on the "<%= cb.hostnw_pod_worker0 %>" pod:
+       | sh | -c | timeout  --preserve-status 2 tcpdump -i <%= cb.default_interface %> esp |
+    Then the step should succeed
+    And the output should contain "ESP"
+
       
   # @author anusaxen@redhat.com
   # @case_id OCP-44834
