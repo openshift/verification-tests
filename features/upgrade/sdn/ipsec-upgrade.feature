@@ -44,10 +44,10 @@ Feature: IPsec upgrade scenarios
     Given I obtain test data file "networking/net_admin_cap_pod.yaml"
     When I run oc create as admin over "net_admin_cap_pod.yaml" replacing paths:
       | ["spec"]["nodeName"]                                       | <%= cb.workers[0].name %> |
-      | ["metadata"]["namespace"]                                  | ipsec-upgrade            |
-      | ["metadata"]["name"]                                       | hostnw-pod-worker0       |
-      | ["metadata"]["labels"]["name"]                             | network-pod              |
-      | ["spec"]["containers"][0]["securityContext"]["privileged"] | true                     |
+      | ["metadata"]["namespace"]                                  | ipsec-upgrade             |
+      | ["metadata"]["name"]                                       | hostnw-pod-worker0        |
+      | ["metadata"]["labels"]["name"]                             | network-pod               |
+      | ["spec"]["containers"][0]["securityContext"]["privileged"] | true                      |
     Then the step should succeed
     And a pod becomes ready with labels:
        | name=network-pod |
