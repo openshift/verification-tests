@@ -212,3 +212,46 @@ Feature: oc import-image related feature
       | o               | yaml    |
     Then the expression should be true> @result[:parsed]['status']['imageChangeTriggers'][0]['lastTriggeredImageID'].include? '<%= project.name %>/ruby-26-rhel7'
 
+ # @author wewang@redhat.com
+  # @case_id OCP-45471
+  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
+  Scenario: Allow is request build config triggers by different mode('TagreferencePolicy':source/local)	
+    Given I have a project
+    When I run the :import_image client command with:
+      | from       | registry.redhat.io/rhscl/ruby-26-rhel7:latest |
+      | confirm    | true                                          |
+      | image_name | ruby-26-rhel7:latest                          |
+    Then the step should succeed
+    When I run the :new_build client command with:
+      | image_stream | ruby-26-rhel7                         |
+      | code         | https://github.com/sclorg/ruby-ex.git |
+    Then the step should succeed
+    When I run the :get client command with:
+      | resource_name   | ruby-ex |
+      | resource        | bc      |
+      | o               | yaml    |
+    Then the expression should be true> @result[:parsed]['spec']['triggers'][0]['imageChange']['lastTriggeredImageID'].include? 'rhscl/ruby-26-rhel7'
+    When I run the :delete client command with:
+      | object_type | bc |
+      | all         |    |
+    Then the step should succeed
+    When I run the :delete client command with:
+      | object_type | is |
+      | all         |    |
+    Then the step should succeed
+    When I run the :import_image client command with:
+      | from            | registry.redhat.io/rhscl/ruby-26-rhel7:latest |
+      | confirm         | true                                          |
+      | image_name      | ruby-26-rhel7:latest                          |
+      | reference-policy| local                                         |
+    Then the step should succeed
+    When I run the :new_build client command with:
+      | image_stream | ruby-26-rhel7                         |
+      | code         | https://github.com/sclorg/ruby-ex.git |
+    Then the step should succeed
+    When I run the :get client command with:
+      | resource_name   | ruby-ex |
+      | resource        | bc      |
+      | o               | yaml    |
+    Then the expression should be true> @result[:parsed]['spec']['triggers'][3]['lastTriggeredImageID'].include? '<%= project.name %>/ruby-26-rhel7'
