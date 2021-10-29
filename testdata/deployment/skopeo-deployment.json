@@ -38,7 +38,7 @@
                             "-c",
                             "while : ; do sleep 15m ; done"
                         ],
-                        "image": "quay.io/openshifttest/skopeo@sha256:d59939bb619bc98613b2a0403022bf97442ca8c67efaa43deac33122703deabb",
+                        "image": "quay.io/openshifttest/skopeo@sha256:426196e376cf045012289d53fec986554241496ed7f38e347fc56505aa8ad322",
                         "imagePullPolicy": "IfNotPresent",
                         "name": "skopeo",
                         "resources": {},
