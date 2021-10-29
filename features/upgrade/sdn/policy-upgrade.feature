@@ -367,10 +367,8 @@ Feature: SDN compoment upgrade testing
     When I run the :new_project client command with:
       | project_name | nodeport-upgrade |
     Then the step should succeed
-    When I use the "nodeport-upgrade" project
-    #privileges are needed to support network-pod as hostnetwork pod creation later
-    And SCC "privileged" is added to the "system:serviceaccounts:nodeport-upgrade" group
-    Given I obtain test data file "networking/pod_with_udp_port_4789_nodename.json"
+    Given I use the "nodeport-upgrade" project
+    And I obtain test data file "networking/pod_with_udp_port_4789_nodename.json"
     When I run oc create over "pod_with_udp_port_4789_nodename.json" replacing paths:
       | ["items"][0]["spec"]["template"]["spec"]["nodeName"] | <%= cb.nodes[0].name %> |
     Then the step should succeed
