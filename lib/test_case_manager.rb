@@ -84,7 +84,7 @@ module BushSlicer
         @attach_queue << false
         wait_for_attacher
         unless @artifacts_filer.is_a? BushSlicer::Amz_EC2
-          @artifacts_filer.clean_up
+          @artifacts_filer.clean_up if @artifacts_filter
         end
       end
     end
