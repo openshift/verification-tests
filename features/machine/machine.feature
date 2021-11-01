@@ -276,11 +276,19 @@ Feature: Machine features testing
       | DeletionCandidateOfClusterAutoscaler |
       | ToBeDeletedByClusterAutoscaler       |
 
-    @gcp-ipi @azure-ipi @aws-ipi
+    @aws-ipi
     Examples:
       | iaas_type | machineset_name        |
       | aws       | machineset-clone-29199 | # @case_id OCP-29199
+
+    @gcp-ipi
+    Examples:
+      | iaas_type | machineset_name        |
       | gcp       | machineset-clone-32126 | # @case_id OCP-32126
+
+    @azure-ipi
+    Examples:
+      | iaas_type | machineset_name        |
       | azure     | machineset-clone-33040 | # @case_id OCP-33040
 
   # @author zhsun@redhat.com
