@@ -380,6 +380,6 @@ Feature: Operator related networking scenarios
       | resource_name | <%= cb.network_operator_pod %> |
       | since         | 30s                            |
     Then the step should succeed
-    And the output should contain:
-      | cannot change ovn-kubernetes MTU |
+    And the output should match:
+      | cannot change.*(MTU\|mtu) |
     """
