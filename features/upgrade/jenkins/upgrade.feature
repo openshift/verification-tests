@@ -4,6 +4,8 @@ Feature: Jenkins feature upgrade test
   @upgrade-prepare
   @users=upuser1,upuser2
   @4.10 @4.9
+  @azure-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @azure-upi @aws-upi @vsphere-upi @gcp-upi
   Scenario: Jenkins feature upgrade test - prepare
     Given I switch to the first user
     When I run the :new_project client command with:

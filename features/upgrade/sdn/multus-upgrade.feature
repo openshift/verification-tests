@@ -4,6 +4,8 @@
   @admin
   @upgrade-prepare
   @users=upuser1,upuser2
+  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Check the multus works well after upgrade - prepare
     Given the multus is enabled on the cluster
     Given the default interface on nodes is stored in the :default_interface clipboard

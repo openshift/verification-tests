@@ -3,6 +3,8 @@ Feature: SDN externalIP compoment upgrade testing
   # @author weliang@redhat.com
   @admin
   @upgrade-prepare
+  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Check the externalIP works well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     And I run the :new_project client command with:
