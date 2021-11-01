@@ -363,6 +363,7 @@ Feature: Operator related networking scenarios
   # @case_id OCP-27333
   @admin
   @destructive
+  @network-ovnkubernetes
   @4.10 @4.9
   @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
