@@ -9,8 +9,8 @@ spec:
   - name: centos-pod
     command: ["/bin/bash", "-c"]
     args:
-        ["yum install -y iptables && sleep inf"]
-    image: quay.io/openshifttest/centos@sha256:285bc3161133ec01d8ca8680cd746eecbfdbc1faa6313bd863151c4b26d7e5a5
+        ["apk add iptables && sleep inf"]
+    image: quay.io/openshifttest/base-alpine@sha256:0b379877aba876774e0043ea5ba41b0c574825ab910d32b43c05926fab4eea22
     securityContext:
       capabilities:
         add: ["NET_ADMIN"]

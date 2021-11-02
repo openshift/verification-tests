@@ -37,7 +37,7 @@ Feature: remote registry related scenarios
       | --dest-tls-verify=false    |
       | --dcreds                   |
       | <%= service_account.cached_tokens.first %>                                |
-      | docker://quay.io/openshifttest/busybox                                    |
+      | docker://quay.io/openshifttest/base-alpine:multiarch                      |
       | docker://<%= cb.integrated_reg_ip %>/<%= project.name %>/mystream:latest  |
     Then the step should succeed
     Given I create a new project
@@ -66,6 +66,6 @@ Feature: remote registry related scenarios
       | copy                       |
       | --dest-tls-verify=false    |
       | <%= service_account.cached_tokens.first %>                           |
-      | docker://quay.io/openshifttest/busybox                               |
+      | docker://quay.io/openshifttest/base-alpine:multiarch                 |
       | docker://<%= cb.integrated_reg_ip %>/<%= cb.u1p2 %>/mystream:latest  |
     Then the step should fail

@@ -6,7 +6,7 @@ metadata:
   name: hello-pod
 spec:
   containers:
-    - image: "quay.io/openshifttest/hello-pod@sha256:04b6af86b03c1836211be2589db870dba09b7811c197c47c07fbbe33c7f80ef7"
+    - image: "quay.io/openshifttest/hello-openshift@sha256:1e70b596c05f46425c39add70bf749177d78c1e98b2893df4e5ae3883c2ffb5e"
       imagePullPolicy: IfNotPresent
       name: hello-pod
       ports:

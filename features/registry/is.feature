@@ -10,9 +10,9 @@ Feature: Testing imagestream
     And I have a skopeo pod in the project
     And master CA is added to the "skopeo" dc
     When I run the :tag client command with:
-      | source_type | docker                        |
-      | source      | quay.io/openshifttest/busybox |
-      | dest        | myis13895:latest              |
+      | source_type | docker                                      |
+      | source      | quay.io/openshifttest/base-alpine:multiarch |
+      | dest        | myis13895:latest                            |
     Then the step should succeed
     When I run the :policy_add_role_to_user client command with:
       | role            | registry-admin   |

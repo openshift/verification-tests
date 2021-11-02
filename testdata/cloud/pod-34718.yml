@@ -9,7 +9,7 @@ spec:
         claimName: pvc-cloud
   containers:
     - name: task-pv-container
-      image: quay.io/openshifttest/hello-openshift@sha256:aaea76ff622d2f8bcb32e538e7b3cd0ef6d291953f3e7c9f556c1ba5baf47e2e
+      image: quay.io/openshifttest/hello-openshift@sha256:1e70b596c05f46425c39add70bf749177d78c1e98b2893df4e5ae3883c2ffb5e
       ports:
         - containerPort: 80
           name: "http-server"
