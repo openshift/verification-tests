@@ -403,7 +403,7 @@ Feature: SDN compoment upgrade testing
   # @case_id OCP-44901
   @admin
   @upgrade-check
-  @4.9
+  @4.10 @4.9
   @azure-upi
   Scenario: Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted post upgrade
     Given I switch to cluster admin pseudo user

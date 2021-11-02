@@ -89,7 +89,7 @@
   # @case_id OCP-44636
   @admin
   @upgrade-check
-  @4.9
+  @4.10 @4.9
   @azure-upi
   Scenario: Check the multicast works well after upgrade
     Given I switch to cluster admin pseudo user
