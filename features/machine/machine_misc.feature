@@ -61,6 +61,7 @@ Feature: Machine misc features testing
   @admin
   @destructive
   @4.10 @4.9
+  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   Scenario: Reconciliation of MutatingWebhookConfiguration values should happen
     Given I switch to cluster admin pseudo user
 
@@ -113,12 +114,9 @@ Feature: Machine misc features testing
   # @author miyadav@redhat.com
   # @case_id OCP-37744
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: kube-rbac-proxy should not expose tokens, have excessive verbosity
     Given I switch to cluster admin pseudo user
 

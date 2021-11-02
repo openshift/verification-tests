@@ -369,7 +369,7 @@ module BushSlicer
     # @param user [BushSlicer::User]
     # @param project [BushSlicer::project]
     def get_routing_details(user:, project:, obj:)
-      service_res = Service.create(by: user, project: project, spec: 'https://raw.githubusercontent.com/openshift-qe/v3-testfiles/master/networking/service_with_selector.json')
+      service_res = Service.create(by: user, project: project, spec: "#{BushSlicer::HOME}/testdata/networking/service_with_selector.json")
       raise "cannot create service" unless service_res[:success]
       service = service_res[:resource]
 

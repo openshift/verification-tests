@@ -68,13 +68,10 @@ Feature: rhel8images.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-22595
   @admin
-  @aws-ipi
   @proxy
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: mysql persistent template
     Given I have a project
     When I run the :tag admin command with:
@@ -128,6 +125,8 @@ Feature: rhel8images.feature
   @admin
   @proxy
   @4.10 @4.9
+  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Create mysql service from imagestream via oc new-app mysql-rhel8 image
     Given I have a project
     When I run the :new_app client command with:

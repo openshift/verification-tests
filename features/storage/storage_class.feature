@@ -2,9 +2,7 @@ Feature: storageClass related feature
 
   # @author lxia@redhat.com
   @admin
-  @aws-ipi
   @4.10 @4.9
-  @aws-upi
   Scenario Outline: PVC modification after creating storage class
     Given I have a project
     Given I obtain test data file "storage/misc/pvc-without-annotations.json"
@@ -28,22 +26,35 @@ Feature: storageClass related feature
       | p             | {"metadata":{"annotations":{"volume.beta.kubernetes.io/storage-class":"<storage-class-name>"}}} |
     Then the expression should be true> @result[:success] == env.version_le("3.5", user: user)
 
+    @aws-ipi
+    @aws-upi
+    Examples:
+      | storage-class-name |
+      | gp2                | # @case_id OCP-12269
+
+    @gcp-ipi
+    @gcp-upi
     Examples:
       | storage-class-name |
       | standard           | # @case_id OCP-12089
-      | gp2                | # @case_id OCP-12269
+
+    @openstack-ipi
+    @openstack-upi
+    Examples:
+      | storage-class-name |
       | standard           | # @case_id OCP-12272
+
+    @azure-ipi
+    @azure-upi
+    Examples:
+      | storage-class-name |
       | managed-premium    | # @case_id OCP-13488
 
   # @author lxia@redhat.com
   # @author chaoyang@redhat.com
   @admin
   @smoke
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
   Scenario Outline: storage class provisioner
     Given I have a project
     And admin clones storage class "sc-<%= project.name %>" from ":default" with:
@@ -79,10 +90,17 @@ Feature: storageClass related feature
     Given I switch to cluster admin pseudo user
     And I wait for the resource "pv" named "<%= pvc.volume_name %>" to disappear
 
+    @gcp-ipi
+    @gcp-upi
     Examples:
       | provisioner | type        | zone          | is-default | size  |
       | gce-pd      | pd-ssd      | us-central1-a | false      | 1Gi   | # @case_id OCP-11359
       | gce-pd      | pd-standard | us-central1-a | false      | 2Gi   | # @case_id OCP-11640
+
+    @aws-ipi
+    @aws-upi
+    Examples:
+      | provisioner | type        | zone          | is-default | size  |
       | aws-ebs     | gp2         | us-east-1d    | false      | 1Gi   | # @case_id OCP-10160
       | aws-ebs     | sc1         | us-east-1d    | false      | 500Gi | # @case_id OCP-10161
       | aws-ebs     | st1         | us-east-1d    | false      | 500Gi | # @case_id OCP-10424
@@ -90,9 +108,7 @@ Feature: storageClass related feature
   # @author lxia@redhat.com
   @admin
   @destructive
-  @aws-ipi
   @4.10 @4.9
-  @aws-upi
   Scenario Outline: New creation PVC failed when multiple classes are set as default
     Given I have a project
     Given I obtain test data file "storage/misc/storageClass.yaml"
@@ -128,16 +144,37 @@ Feature: storageClass related feature
     And the "mypvc1" PVC becomes :bound within 120 seconds
     And the "mypvc2" PVC becomes :bound within 120 seconds
 
+    @aws-ipi
+    @aws-upi
     Examples:
       | provisioner    |
       | aws-ebs        | # @case_id OCP-12226
+
+    @azure-ipi
+    @azure-upi
+    Examples:
+      | provisioner    |
       | azure-disk     | # @case_id OCP-13490
+
+    @openstack-ipi
+    @openstack-upi
+    Examples:
+      | provisioner    |
       | cinder         | # @case_id OCP-12227
+
+    @gcp-ipi
+    @gcp-upi
+    Examples:
+      | provisioner    |
       | gce-pd         | # @case_id OCP-12223
+
+    @vsphere-ipi
+    @vsphere-upi
+    Examples:
+      | provisioner    |
       | vsphere-volume | # @case_id OCP-24259
 
   # @author lxia@redhat.com
-  @aws-ipi
   @inactive
   Scenario Outline: New created PVC without specifying storage class use default class when only one class is marked as default
     Given I have a project
@@ -195,6 +232,8 @@ Feature: storageClass related feature
     Given I switch to cluster admin pseudo user
     And I wait for the resource "pv" named "<%= pvc.volume_name %>" to disappear within 300 seconds
 
+    @aws-ipi
+    @aws-upi
     Examples:
       | size  |
       | 4Gi   | # @case_id OCP-10158
@@ -202,9 +241,7 @@ Feature: storageClass related feature
 
   # @author chaoyang@redhat.com
   @admin
-  @aws-ipi
   @4.10 @4.9
-  @aws-upi
   Scenario Outline: PVC with storage class will not provision pv with st1/sc1 type ebs volume if request size is wrong
     Given I have a project
     Given I obtain test data file "storage/ebs/dynamic-provisioning/storageclass.yaml"
@@ -231,6 +268,8 @@ Feature: storageClass related feature
       | <errorMessage>        |
     """
 
+    @aws-ipi
+    @aws-upi
     Examples:
       | type | size | errorMessage                  |
       | sc1  | 5Gi  | at least 125 GiB              | # @case_id OCP-10164
@@ -240,6 +279,8 @@ Feature: storageClass related feature
   # @case_id OCP-10159
   @admin
   @4.10 @4.9
+  @aws-ipi
+  @aws-upi
   Scenario: PVC with storage class won't provisioned pv if no storage class or wrong storage class object
     Given I have a project
     # No sc exists
@@ -262,8 +303,8 @@ Feature: storageClass related feature
   # @author chaoyang@redhat.com
   # @case_id OCP-10228
   @smoke
-  @aws-ipi
   @4.10 @4.9
+  @aws-ipi
   @aws-upi
   Scenario: AWS ebs volume is dynamic provisioned with default storageclass
     Given I have a project

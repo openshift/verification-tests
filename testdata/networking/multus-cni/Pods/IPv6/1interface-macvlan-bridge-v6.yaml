@@ -9,5 +9,5 @@ metadata:
 spec:
   containers:
   - name: macvlan-bridge-pod-v6
-    image: quay.io/openshifttest/hello-sdn@sha256:d5785550cf77b7932b090fcd1a2625472912fb3189d5973f177a5a2c347a1f95
+    image: quay.io/openshifttest/hello-sdn@sha256:395a3ebee51efa13c61bf163f9eeea3ed0967eb8ca5ff92aa50b01ee2bc0c39d
     imagePullPolicy: IfNotPresent

@@ -2,6 +2,9 @@ Feature: Node components upgrade tests
   # @author minmli@redhat.com
   @upgrade-prepare
   @admin
+  @4.10 @4.9
+  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Make sure nodeConfig is not changed after upgrade - prepare
     Given I switch to cluster admin pseudo user
     When I run the :label admin command with:
@@ -44,6 +47,8 @@ Feature: Node components upgrade tests
   @upgrade-check
   @admin
   @4.10 @4.9
+  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Make sure nodeConfig is not changed after upgrade
     Given I switch to cluster admin pseudo user
     When I run the :get admin command with:

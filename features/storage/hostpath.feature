@@ -3,12 +3,7 @@ Feature: Storage of Hostpath plugin testing
   # @author chaoyang@redhat.com
   # @author lxia@redhat.com
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
   Scenario Outline: Create hostpath pv with access mode and reclaim policy
     Given I have a project
     Given I obtain test data file "storage/hostpath/local.yaml"
@@ -52,6 +47,8 @@ Feature: Storage of Hostpath plugin testing
       | ls /etc/origin/hostpath/<%= project.name %>/test |
     Then the step should <step_status>
 
+    @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+    @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
     Examples:
       | access_mode   | reclaim_policy | pv_status | step_status |
       | ReadWriteOnce | Retain         | released  | succeed     | # @case_id OCP-9639

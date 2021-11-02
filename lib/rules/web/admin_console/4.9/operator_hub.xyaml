@@ -38,6 +38,7 @@ create_operand:
   action: goto_csv_detail_page
   action: click_tab
   action: click_create_operand_button
+  action: wait_box_loaded
   action: submit_changes
 set_operand_name:
   params:
@@ -388,6 +389,16 @@ uninstall_operator_on_console:
   action: click_resource_action_icon
   action: click_button
   action: submit_changes
+uninstall_operator_and_remove_operands:
+  params:
+    button_text: Uninstall Operator
+    text: Delete all operand instances
+    content: Operand instances
+  action: click_resource_action_icon
+  action: click_button
+  action: check_page_match
+  action: click_checkbox_input_by_text
+  action: submit_changes
 wait_filter_section_loaded:
   element:
     selector:
@@ -429,6 +440,11 @@ check_fips_infra_value:
     label: Infrastructure features
     value: FIPS Mode
   action: check_property_label_and_value
+check_singlenodecluster_infra_value:
+  params:
+    label: Infrastructure features
+    value: Single Node Clusters
+  action: check_property_label_and_value
 check_3scale_subs_value:
   params:
     label: Valid Subscriptions
@@ -462,6 +478,18 @@ click_checkbox_fips_from_infrastructure_features:
     checkbox_text: FIPS Mode
   action: wait_filter_section_loaded
   action: choose_one_checkbox
+click_checkbox_singlenodecluster_from_infrastructure_features:
+  params:
+    filter_type_value: infraFeatures
+    checkbox_text: Single Node Clusters
+  action: wait_filter_section_loaded
+  action: choose_one_checkbox
+check_singlenodecluster_infra_value_in_operator_modal:
+  action: click_checkbox_singlenodecluster_from_infrastructure_features
+  action: open_first_card_in_overlay
+  action: check_singlenodecluster_infra_value
+  action: click_close_icon
+  action: click_checkbox_singlenodecluster_from_infrastructure_features
 check_disconnected_infra_value_in_operator_modal:
   action: click_checkbox_disconnected_from_infrastructure_features
   action: open_first_card_in_overlay
@@ -500,7 +528,11 @@ check_default_view_is_form_view:
   element:
     selector:
       xpath: //input[@type='radio' and @value='form' and @checked]
-open_edit_form_view: {}
+open_edit_form_view:
+  elements:
+  - selector:
+      xpath: //label[contains(.,'Form view')]//input
+    op: click
 switch_to_yaml_view:
   params:
     radio_text: yaml
@@ -719,17 +751,15 @@ check_status_descriptor_grouping:
   - selector:
       xpath: //div[contains(@class,'co-operand-details__section')]//dl[@data-test-id='resource-summary']//button[contains(text(),'Labels')]
   - selector:
-      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--status')]//button[contains(text(),'Phase')]
+      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--status')]//button[contains(text(),'Status')]
   - selector:
-      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--status')]//button[contains(text(),'Server')]
+      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--status')]//button[contains(text(),'Cluster Size')]
 check_spec_descriptor_grouping:
   elements:
   - selector:
-      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--spec')]//button[contains(text(),'Version')]
-  - selector: &grafana_fieldgroup
-      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--spec')]//button[contains(text(),'Grafana')]
+      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--spec')]//button[contains(text(),'Size')]
   - selector:
-      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--spec')]//button[contains(text(),'Prometheus')]
+      xpath: //div[contains(@class,'co-operand-details__section')]//dl[contains(@class,'olm-descriptors--spec')]//button[contains(text(),'Pod')]
 click_field_resource_limits_edit_button:
   elements:
   - selector:
@@ -767,13 +797,13 @@ set_field_resource_requests:
   action: set_memory_value
   action: set_storage_value
   action: submit_changes
-set_controller_group_resource_limits:
+set_pod_resource_limits:
   params:
-    field_group_name: Controller
+    field_group_name: Pod
   action: set_field_resource_limits
-set_controller_group_resource_requests:
+set_pod_resource_requests:
   params:
-    field_group_name: Controller
+    field_group_name: Pod
   action: set_field_resource_requests
 check_resource_requirement_values:
   elements:
@@ -888,8 +918,16 @@ enable_plugin_from_install_page:
     op: click
 uninstall_operator_and_check_pluginremoval_msg:
   params:
+    check_msg: console plugins provided by this operator will be disabled and removed
+  action: uninstall_operator_with_msg_check
+uninstall_operator_and_check_operandremoval_msg:
+  params:
+    check_msg: Cannot load Operands
+  action: uninstall_operator_with_msg_check
+uninstall_operator_with_msg_check:
+  params:
     button_text: Uninstall Operator
-    content: console plugins provided by this operator will be disabled and removed
+    content: <check_msg>
   action: click_resource_action_icon
   action: click_button
   action: check_page_match

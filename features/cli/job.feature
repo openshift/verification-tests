@@ -3,6 +3,8 @@ Feature: job.feature
   # @author cryan@redhat.com
   # @case_id OCP-11206
   @4.10 @4.9
+  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Create job with multiple completions
     Given I have a project
     Given I obtain test data file "templates/ocp11206/job.yaml"
@@ -48,6 +50,8 @@ Feature: job.feature
   # @author qwang@redhat.com
   # @case_id OCP-11539
   @4.10 @4.9
+  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Create job with pod parallelism
     Given I have a project
     Given I obtain test data file "job/job_with_0_activeDeadlineSeconds.yaml"
@@ -166,6 +170,8 @@ Feature: job.feature
   # @author qwang@redhat.com
   # @case_id OCP-9952
   @4.10 @4.9
+  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Specifying your own pod selector for job
     Given I have a project
     Given I obtain test data file "job/job-manualselector.yaml"
@@ -293,12 +299,9 @@ Feature: job.feature
 
   # @author yinzhou@redhat.com
   # @case_id OCP-10781
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Create job with specific deadline
     Given I have a project
     Given I obtain test data file "job/job_with_0_activeDeadlineSeconds.yaml"
@@ -352,17 +355,14 @@ Feature: job.feature
 
   # @author geliu@redhat.com
   # @case_id OCP-17515
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: User can schedule a Cronjob execution with cron format time
     Given I have a project
     When I run the :create_cronjob client command with:
        | name             | sj3       |
-       | image            | busybox   |
+       | image            | quay.io/openshifttest/base-alpine:multiarch |
        | restart          | Never     |
        | schedule         | * * * * * |
        | oc_opts_end      |           |
@@ -372,7 +372,7 @@ Feature: job.feature
     And the expression should be true> cron_job('sj3').schedule == "* * * * *"
     When I run the :create_cronjob client command with:
        | name             | sj4       |
-       | image            | busybox   |
+       | image            | quay.io/openshifttest/base-alpine:multiarch |
        | restart          | Never     |
        | schedule         | 0 * * * * |
        | oc_opts_end      |           |
@@ -382,7 +382,7 @@ Feature: job.feature
     And the expression should be true> cron_job('sj4').schedule == "0 * * * *"
     When I run the :create_cronjob client command with:
        | name             | sj5        |
-       | image            | busybox    |
+       | image            | quay.io/openshifttest/base-alpine:multiarch |
        | restart          | Never      |
        | schedule         | * 12 * * * |
        | oc_opts_end      |            |
@@ -392,7 +392,7 @@ Feature: job.feature
     And the expression should be true> cron_job('sj5').schedule == "* 12 * * *"
     When I run the :create_cronjob client command with:
        | name             | sj6       |
-       | image            | busybox   |
+       | image            | quay.io/openshifttest/base-alpine:multiarch |
        | restart          | Never     |
        | schedule         | * * 1 * * |
        | oc_opts_end      |           |
@@ -402,7 +402,7 @@ Feature: job.feature
     And the expression should be true> cron_job('sj6').schedule == "* * 1 * *"
     When I run the :create_cronjob client command with:
        | name             | sj7       |
-       | image            | busybox   |
+       | image            | quay.io/openshifttest/base-alpine:multiarch |
        | restart          | Never     |
        | schedule         | * * * 4 * |
        | oc_opts_end      |           |
@@ -412,7 +412,7 @@ Feature: job.feature
     And the expression should be true> cron_job('sj7').schedule == "* * * 4 *"
     When I run the :create_cronjob client command with:
        | name             | sj8       |
-       | image            | busybox   |
+       | image            | quay.io/openshifttest/base-alpine:multiarch |
        | restart          | Never     |
        | schedule         | * * * * 3 |
        | oc_opts_end      |           |
@@ -422,7 +422,7 @@ Feature: job.feature
     And the expression should be true> cron_job('sj8').schedule == "* * * * 3"
     When I run the :create_cronjob client command with:
        | name             | sja        |
-       | image            | busybox    |
+       | image            | quay.io/openshifttest/base-alpine:multiarch |
        | restart          | Never      |
        | schedule         | 0 12 * * * |
        | oc_opts_end      |            |
@@ -432,7 +432,7 @@ Feature: job.feature
     And the expression should be true> cron_job('sja').schedule == "0 12 * * *"
     When I run the :create_cronjob client command with:
        | name             | sjb          |
-       | image            | busybox      |
+       | image            | quay.io/openshifttest/base-alpine:multiarch |
        | restart          | Never        |
        | schedule         | 0 12 15 11 3 |
        | oc_opts_end      |              |
@@ -442,7 +442,7 @@ Feature: job.feature
     And the expression should be true> cron_job('sjb').schedule == "0 12 15 11 3"
     When I run the :create_cronjob client command with:
        | name             | sjc           |
-       | image            | busybox       |
+       | image            | quay.io/openshifttest/base-alpine:multiarch |
        | restart          | Never         |
        | schedule         | 70 12 15 11 3 |
        | oc_opts_end      |               |
@@ -454,7 +454,7 @@ Feature: job.feature
        | [eE]nd of range \(70\) above maximum \(59\): 70 |
     When I run the :create_cronjob client command with:
        | name             | sjc          |
-       | image            | busybox      |
+       | image            | quay.io/openshifttest/base-alpine:multiarch |
        | restart          | Never        |
        | schedule         | 30 25 15 1 3 |
        | oc_opts_end      |              |
@@ -466,7 +466,7 @@ Feature: job.feature
        | [eE]nd of range \(25\) above maximum \(23\): 25 |
     When I run the :create_cronjob client command with:
        | name             | sjc          |
-       | image            | busybox      |
+       | image            | quay.io/openshifttest/base-alpine:multiarch |
        | restart          | Never        |
        | schedule         | 30 8 35 11 3 |
        | oc_opts_end      |              |
@@ -478,7 +478,7 @@ Feature: job.feature
        | [eE]nd of range \(35\) above maximum \(31\): 35 |
     When I run the :create_cronjob client command with:
        | name             | sjc         |
-       | image            | busybox     |
+       | image            | quay.io/openshifttest/base-alpine:multiarch |
        | restart          | Never       |
        | schedule         | 30 8 1 13 3 |
        | oc_opts_end      |             |
@@ -490,7 +490,7 @@ Feature: job.feature
       | [eE]nd of range \(13\) above maximum \(12\): 13 |
     When I run the :create_cronjob client command with:
        | name             | sjc        |
-       | image            | busybox    |
+       | image            | quay.io/openshifttest/base-alpine:multiarch |
        | restart          | Never      |
        | schedule         | 30 8 1 8 7 |
        | oc_opts_end      |            |
@@ -502,7 +502,7 @@ Feature: job.feature
        | [eE]nd of range \(7\) above maximum \(6\): 7 |
     When I run the :create_cronjob client command with:
        | name             | sjd       |
-       | image            | busybox   |
+       | image            | quay.io/openshifttest/base-alpine:multiarch |
        | restart          | Never     |
        | schedule         | @every 5m |
        | oc_opts_end      |           |
@@ -512,7 +512,7 @@ Feature: job.feature
     And the expression should be true> cron_job('sjd').schedule == "@every 5m"
     When I run the :create_cronjob client command with:
        | name             | sje     |
-       | image            | busybox |
+       | image            | quay.io/openshifttest/base-alpine:multiarch |
        | restart          | Never   |
        | schedule         | @daily  |
        | oc_opts_end      |         |

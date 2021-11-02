@@ -84,8 +84,8 @@ Feature: networking isolation related scenarios
       | /usr/bin/curl | <%= cb.defaultsvc_ip %>:27017 |
     Then the output should contain "Hello OpenShift!"
 
-  # @author bmeng@redhat.com
-  # @case_id OCP-9564
+  # @author jechen@redhat.com
+  # @case_id OCP-9564 & OCP-45077
   @admin
   @network-multitenant
   Scenario: Only the pods nested in a same namespace can communicate with each other
@@ -126,6 +126,22 @@ Feature: networking isolation related scenarios
       | curl | --connect-timeout | 5 | <%= cb.pr2ip0 %>:8080 |
     Then the step should fail
     And the output should not contain "Hello"
+
+    Given I switch to cluster admin pseudo user
+    Given I store the masters in the :masters clipboard
+    Given admin uses the "openshift-sdn" project
+    And <%= cb.masters.count %> pods become ready with labels:
+      | app=sdn-controller |
+    And I store in the :sdnpods clipboard the pods labeled:
+      | app=sdn-controller |
+    Given I repeat the following steps for each :p in cb.sdnpods:
+    """
+      When I run the :logs client command with:
+        | resource_name |  #{cb.p.name} |   
+      Then the step should succeed
+      And the output should not contain "unable to allocate"
+    """
+
 
   # @author bmeng@redhat.com
   # @case_id OCP-9641
@@ -287,13 +303,10 @@ Feature: networking isolation related scenarios
   # @author bmeng@redhat.com
   # @case_id OCP-12659
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
-  @aws-upi
   @4.10 @4.9
   @network-multitenant
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Make the network of given projects be accessible globally
     # Create 3 projects and each contains 1 pod and 1 service
     Given the env is using multitenant network

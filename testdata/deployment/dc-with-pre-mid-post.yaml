@@ -16,7 +16,7 @@ spec:
           command:
           - /bin/bash
           - -c
-          - /usr/bin/sleep 5
+          - /bin/sleep 5
           containerName: hello-openshift
           env:
           - name: VAR
@@ -29,7 +29,7 @@ spec:
           command:
           - /bin/bash
           - -c
-          - /usr/bin/sleep 5
+          - /bin/sleep 5
           containerName: hello-openshift
           env:
           - name: VAR
@@ -42,7 +42,7 @@ spec:
           command:
           - /bin/bash
           - -c
-          - /usr/bin/sleep 5
+          - /bin/sleep 5
           containerName: hello-openshift
           env:
           - name: VAR
@@ -63,7 +63,7 @@ spec:
       - command:
         - /bin/bash
         - -c
-        - /usr/bin/sleep 30d
+        - /bin/sleep 30d
         env:
         - name: MYSQL_USER
           value: user8Y2
@@ -71,7 +71,7 @@ spec:
           value: Plqe5Wev
         - name: MYSQL_DATABASE
           value: root
-        image: quay.io/openshifttest/hello-openshift-fedora@sha256:5895ec9bbe97f8ca124a723c51116c9c76c51e4ae421ff1c5634a93b0dd1d357 
+        image: quay.io/openshifttest/hello-openshift@sha256:eb47fdebd0f2cc0c130228ca972f15eb2858b425a3df15f10f7bb519f60f0c96
         imagePullPolicy: Always
         name: hello-openshift
         ports:

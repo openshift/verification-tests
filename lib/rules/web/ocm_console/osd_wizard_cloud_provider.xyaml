@@ -3,7 +3,7 @@
 select_cloud_provider_wizard:
     element:
         selector:
-            xpath: //article[@data-test-id='<cloud_provider>-provider-card']
+            xpath: //div[@data-test-id='<cloud_provider>-provider-card']
         op: click
 
 click_validate_button:

@@ -3,6 +3,8 @@ Feature: SDN externalIP compoment upgrade testing
   # @author weliang@redhat.com
   @admin
   @upgrade-prepare
+  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Check the externalIP works well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     And I run the :new_project client command with:
@@ -27,10 +29,10 @@ Feature: SDN externalIP compoment upgrade testing
     """
 
     # Create a pod
-    Given I obtain test data file "networking/externalip_pod.yaml"
+    Given I obtain test data file "networking/externalip_pod_upgrade.yaml"
     When I run the :create client command with:
-      | f | externalip_pod.yaml |
-      | n | externalip-upgrade  |
+      | f | externalip_pod_upgrade.yaml |
+      | n | externalip-upgrade          |
     Then the step should succeed
     Given a pod becomes ready with labels:
       | name=externalip-pod    |
@@ -46,6 +48,9 @@ Feature: SDN externalIP compoment upgrade testing
   # @case_id OCP-44790
   @admin
   @upgrade-check
+  @4.10 @4.9
+  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Check the externalIP works well after upgrade
     Given I switch to cluster admin pseudo user
     Given I store the schedulable nodes in the :nodes clipboard
@@ -69,5 +74,6 @@ Feature: SDN externalIP compoment upgrade testing
     """
     ### delete this project,make sure project is deleted
     Given the "externalip-upgrade" project is deleted
+
     
     

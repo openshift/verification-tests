@@ -4,18 +4,15 @@ Feature: Testing imagestream
   # @case_id OCP-13895
   @destructive
   @admin
-  @gcp-upi
-  @gcp-ipi
-  @aws-upi
   Scenario: Should prune the extenal image correctly
     Given default registry service ip is stored in the :registry_hostname clipboard
     Given I have a project
     And I have a skopeo pod in the project
     And master CA is added to the "skopeo" dc
     When I run the :tag client command with:
-      | source_type | docker                        |
-      | source      | quay.io/openshifttest/busybox |
-      | dest        | myis13895:latest              |
+      | source_type | docker                                      |
+      | source      | quay.io/openshifttest/base-alpine:multiarch |
+      | dest        | myis13895:latest                            |
     Then the step should succeed
     When I run the :policy_add_role_to_user client command with:
       | role            | registry-admin   |
@@ -93,12 +90,9 @@ Feature: Testing imagestream
   # @case_id OCP-19196
   @destructive
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Prune images when DC reference to invalid image
     Given I have a project
     Given I enable image-registry default route
@@ -141,12 +135,9 @@ Feature: Testing imagestream
   # @case_id OCP-16495
   @destructive
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Do not prune layer of a valid Image due to minimum aging
     Given I have a project
     Given I enable image-registry default route

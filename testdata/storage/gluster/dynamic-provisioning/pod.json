@@ -10,7 +10,7 @@
     "spec": {
         "containers": [{
             "name": "gluster",
-            "image": "quay.io/openshifttest/hello-openshift@sha256:424e57db1f2e8e8ac9087d2f5e8faea6d73811f0b6f96301bc94293680897073",
+            "image": "quay.io/openshifttest/hello-openshift@sha256:b1aabe8c8272f750ce757b6c4263a2712796297511e0c6df79144ee188933623",
             "imagePullPolicy": "IfNotPresent",
             "securityContext": {
                 "privileged": true

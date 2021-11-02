@@ -24,9 +24,9 @@ Given /^fips is (enabled|disabled)$/ do |status|
 end
 
 # select a random node from a cluster.
-Given /^I select a random node's host$/ do
+Given /^I select a random( windows)? node's host$/ do | windows |
   ensure_admin_tagged
-  nodes = env.nodes.select { |n| n.schedulable? }
+  nodes = env.nodes.select { |n| n.schedulable? && (windows ? n.is_windows_worker? : ! n.is_windows_worker?) }
   cache_resources *nodes.shuffle
   @host = node.host
 end
@@ -314,7 +314,7 @@ Given /^the#{OPT_QUOTED} node service is verified$/ do |node_name|
   #    "spec": {
   #      "containers": [{
   #        "name": "hostname-pod",
-  #        "image": "quay.io/openshifttest/hello-openshift@sha256:424e57db1f2e8e8ac9087d2f5e8faea6d73811f0b6f96301bc94293680897073",
+  #        "image": "quay.io/openshifttest/hello-openshift@sha256:eb47fdebd0f2cc0c130228ca972f15eb2858b425a3df15f10f7bb519f60f0c96",
   #        "ports": [{
   #          "containerPort": 8080,
   #          "protocol": "TCP"

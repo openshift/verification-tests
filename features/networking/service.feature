@@ -78,12 +78,9 @@ Feature: Service related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-23895
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: User cannot access the MCS by creating a LoadBalancer service that points to the MCS
     Given I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master_ip clipboard
@@ -111,6 +108,8 @@ Feature: Service related networking scenarios
   # @case_id OCP-21814
   @admin
   @4.10 @4.9
+  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: The headless service can publish the pods even if they are not ready
     Given I have a project
     Given I obtain test data file "networking/headless_notreadypod.json"
@@ -135,12 +134,9 @@ Feature: Service related networking scenarios
 
   # @author weliang@redhat.com
   # @case_id OCP-24668
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: externalIP defined in service but no spec.externalIP defined
     Given I have a project
     # Create a service with a externalIP
@@ -153,12 +149,9 @@ Feature: Service related networking scenarios
   # @case_id OCP-24669
   @admin
   @destructive
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: externalIP defined in service with set ExternalIP in allowedCIDRs
     Given I have a project
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
@@ -203,12 +196,9 @@ Feature: Service related networking scenarios
   # @case_id OCP-24692
   @admin
   @destructive
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: A rejectedCIDRs inside an allowedCIDRs
     # Create additional network through CNO
     Given as admin I successfully merge patch resource "networks.config.openshift.io/cluster" with:
@@ -257,12 +247,9 @@ Feature: Service related networking scenarios
   # @case_id OCP-24670
   @admin
   @destructive
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: externalIP defined in service with set ExternalIP in rejectedCIDRs
     Given I have a project
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
@@ -294,12 +281,9 @@ Feature: Service related networking scenarios
   # @case_id OCP-24739
   @admin
   @destructive
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: An allowedCIDRs inside an rejectedCIDRs
     # Create additional network through CNO
     Given as admin I successfully merge patch resource "networks.config.openshift.io/cluster" with:
@@ -335,12 +319,9 @@ Feature: Service related networking scenarios
   # @case_id OCP-24691
   @admin
   @destructive
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Defined Multiple allowedCIDRs
     Given I have a project
     And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
@@ -413,12 +394,9 @@ Feature: Service related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-26035
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Idling/Unidling services on sdn/OVN
     Given I have a project
     Given I obtain test data file "networking/list_for_pods.json"
@@ -492,6 +470,8 @@ Feature: Service related networking scenarios
   @admin
   @destructive
   @4.10 @4.9
+  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Taint node with too small MTU value
     Given the default interface on nodes is stored in the :default_interface clipboard
     And the node's MTU value is stored in the :mtu_actual clipboard
@@ -546,12 +526,9 @@ Feature: Service related networking scenarios
   # @case_id OCP-33848
   @admin
   @destructive
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: User can expand the nodePort range by patch the serviceNodePortRange in network
     Given I store the workers in the :workers clipboard
     And the Internal IP of node "<%= cb.workers[0].name %>" is stored in the :worker0_ip clipboard
@@ -599,12 +576,9 @@ Feature: Service related networking scenarios
   # @author zzhao@redhat.com
   # @case_id OCP-10216
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: The iptables rules for the service should be DNAT or REDIRECT to node after being idled
     Given I have a project
     And evaluation of `project.name` is stored in the :proj_name clipboard

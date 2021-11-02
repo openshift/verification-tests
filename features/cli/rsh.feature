@@ -2,12 +2,9 @@ Feature: rsh.feature
 
   # @author cryan@redhat.com
   # @case_id OCP-10658
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Check oc rsh for simpler access to a remote shell
     Given I have a project
     Then evaluation of `project.name` is stored in the :proj_name clipboard

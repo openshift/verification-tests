@@ -2,13 +2,10 @@ Feature: oc_env.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-11032
-  @aws-ipi
   @proxy
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Set environment variables when creating application using non-DeploymentConfig template
     Given I have a project
     When I run the :new_app client command with:

@@ -1,7 +1,7 @@
 check_ocm_subscription:
   element:
     selector:
-      xpath: //a[contains(., 'OpenShift Cluster Manager') and @href='https://cloud.redhat.com/openshift/details/<cluster_id>']
+      xpath: //a[contains(., 'OpenShift Cluster Manager') and @href='https://console.redhat.com/openshift/details/<cluster_id>']
 check_help_info_on_channel_popup:
   params:
     button_text: Channel
@@ -51,6 +51,7 @@ check_kebab_menus_for_default_cs:
       xpath: //button[@data-test-action='Disable']
   - selector:
       xpath: //button[@data-test-action='Edit CatalogSource']
+  action: click_kebab_of_one_resource
 check_kebab_menus_for_custom_cs:
   params:
     resource_name: <cs_name>
@@ -64,6 +65,7 @@ check_kebab_menus_for_custom_cs:
       xpath: //button[@data-test-action='Edit CatalogSource']
   - selector:
       xpath: //button[@data-test-action='Delete CatalogSource']
+  action: click_kebab_of_one_resource
 check_columns_for_cs:
   elements:
   - selector:

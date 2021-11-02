@@ -3,7 +3,9 @@ Feature: OVNKubernetes Windows Container related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-26360
   @admin
+  @network-ovnkubernetes
   @4.10 @4.9
+  @azure-ipi @aws-ipi
   Scenario: Ensure Pods and Service communication across window and linux nodes
     Given the env has hybridOverlayConfig enabled
     And the env is using windows nodes
@@ -54,12 +56,10 @@ Feature: OVNKubernetes Windows Container related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-37519
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @network-ovnkubernetes
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Create Loadbalancer service for a window container
     Given the env has hybridOverlayConfig enabled
     And the env is using windows nodes

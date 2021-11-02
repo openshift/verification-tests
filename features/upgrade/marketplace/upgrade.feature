@@ -5,6 +5,16 @@ Feature: Marketplace related scenarios
   @admin
   @upgrade-prepare
   @users=upuser1,upuser2
+  @aws-ipi
+  @gcp-upi
+  @gcp-ipi
+  @4.10 @4.9
+  @aws-upi
+  @vsphere-ipi
+  @azure-ipi
+  @baremetal-ipi
+  @openstack-ipi
+  @openstack-upi
   Scenario: upgrade Marketplace - prepare
     # Check Marketplace version
     Given the "marketplace" operator version matches the current cluster version
@@ -30,12 +40,9 @@ Feature: Marketplace related scenarios
   @admin
   @upgrade-check
   @users=upuser1,upuser2
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: upgrade Marketplace
     # Check Marketplace version after upgraded
     Given the "marketplace" operator version matches the current cluster version

@@ -53,11 +53,23 @@ Feature: Volume snapshot test
     Then the step should succeed
     And the output should contain "snapshot test"
     
+    @aws-ipi
+    @aws-upi
     Examples:
       | csi-sc       |
       | gp2-csi      | # @case_id OCP-27727
-      | standard-csi | # @case_id OCP-37568
+
+    @azure-ipi
+    @azure-upi
+    Examples:
+      | csi-sc       |
       | managed-csi  | # @case_id OCP-41449
+
+    @openstack-ipi
+    @openstack-upi
+    Examples:
+      | csi-sc       |
+      | standard-csi | # @case_id OCP-37568
 
   # @author wduan@redhat.com
   @admin
@@ -121,7 +133,12 @@ Feature: Volume snapshot test
     Then the step should succeed
     And the output should contain "test data"
 
+    @openstack-ipi
+    @openstack-upi
     Examples:
     | csi-sc       |
     | gp2-csi      | # @case_id OCP-27727
+
+    Examples:
+    | csi-sc       |
     | standard-csi | # @case_id OCP-37569

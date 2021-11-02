@@ -1409,3 +1409,14 @@ Given /^I set#{OPT_QUOTED} hostname to external ids on the "([^"]*)" node$/ do |
     raise "Set the ${custom_hostname} to ovn external_ids failed."
   end
 end
+
+Given /^I save openflow egressip table number to the#{OPT_SYM} clipboard$/ do | cb_name |
+  ensure_admin_tagged
+  cb_name = "openflow_egressip_table" unless cb_name
+  if env.version_lt("4.8", user: user)
+    cb[cb_name]="100"
+  else
+    cb[cb_name]="101"
+  end
+  logger.info "The openfolw egressip related table number #{cb[cb_name]} is stored to the #{cb_name} clipboard."
+end

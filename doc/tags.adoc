@@ -18,6 +18,12 @@ We use tags to catetorize different types of test scenarios. With a combination 
 |`@inactive`
 |Inactive test scenario that is either outdated or no longer applicable. Skip tests with an `@inactive` tag
 
+|`@stage-only`
+|Tests that can only run on stage
+
+|`@qeci`
+|Tests that can only run on QECI because they have implemented dependencies. Do not run tests with this tag unless you have configured their preconditions properly
+
 |`@flaky`
 |Unreliable test that keeps failing and is recognized as test automation bug. Skip tests with a `@flaky` tag
 
@@ -51,7 +57,29 @@ We use tags to catetorize different types of test scenarios. With a combination 
 |`@gcp-upi`
 |Test scenarios for gcp upi
 
+|`@azure-ipi`
+|Test scenarios for azure ipi
 
+|`@azure-upi`
+|Test scenarios for azure upi
+
+|`@vsphere-ipi`
+|Test scenarios for vsphere ipi
+
+|`@vsphere-upi`
+|Test scenarios for vsphere upi
+
+|`@openstack-ipi`
+|Test scenarios for openstack ipi
+
+|`@openstack-upi`
+|Test scenarios for openstack upi
+
+|`@baremetal-ipi`
+|Test scenarios for baremetal ipi
+
+|`@baremetal-upi`
+|Test scenarios for baremetal upi
 |===
 
 == Running Tests With Tags

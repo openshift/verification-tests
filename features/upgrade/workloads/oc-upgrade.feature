@@ -50,13 +50,16 @@ Feature: basic verification for upgrade oc client testing
   # @author yinzhou@redhat.com
   @upgrade-prepare
   @users=upuser1,upuser2
+  @4.10 @4.9
+  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Check some container related oc commands still work for ocp45 after upgrade - prepare
     Given the master version >= "4.5"
     Given I switch to the first user
     When I run the :new_project client command with:
       | project_name | workloads-upgrade |
     When I run the :new_app client command with:
-      | docker_image | quay.io/openshifttest/hello-openshift@sha256:424e57db1f2e8e8ac9087d2f5e8faea6d73811f0b6f96301bc94293680897073 |
+      | docker_image | quay.io/openshifttest/hello-openshift@sha256:eb47fdebd0f2cc0c130228ca972f15eb2858b425a3df15f10f7bb519f60f0c96 |
     Then the step should succeed
 
   # @author yinzhou@redhat.com
@@ -65,6 +68,8 @@ Feature: basic verification for upgrade oc client testing
   @admin
   @users=upuser1,upuser2
   @4.10 @4.9
+  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Check some container related oc commands still work for ocp45 after upgrade
     Given I switch to the first user
     When I use the "workloads-upgrade" project

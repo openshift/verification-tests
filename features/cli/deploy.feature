@@ -2,12 +2,9 @@ Feature: deployment related features
 
   # @author xxing@redhat.com
   # @case_id OCP-12543
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Restart a failed deployment by oc deploy
     Given I have a project
     Given I obtain test data file "deployment/dc-with-pre-mid-post.yaml"
@@ -38,12 +35,9 @@ Feature: deployment related features
   # @author xxing@redhat.com
   # @case_id OCP-10643
   @smoke
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Manually make deployment
     Given I have a project
     Given I obtain test data file "deployment/manual.json"
@@ -82,12 +76,9 @@ Feature: deployment related features
 
   # @author xxing@redhat.com
   # @case_id OCP-11695
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: CLI rollback output to file
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -129,12 +120,7 @@ Feature: deployment related features
       | [tT]ype:\\s+ConfigChange |
 
   # @author xxing@redhat.com
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
   Scenario Outline: CLI rollback two more components of deploymentconfig
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -178,6 +164,8 @@ Feature: deployment related features
       | "value": "Plqe5Wev"    |
       | <changed_val1>         |
       | <changed_val2>         |
+    @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+    @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
     Examples:
       | change_scaling_settings | change_strategy | changed_val1  | changed_val2       |
       | :false                  | :false          |               |                    | # @case_id OCP-12116
@@ -186,12 +174,9 @@ Feature: deployment related features
 
   # @author xxing@redhat.com
   # @case_id OCP-11877
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: CLI rollback with one component
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -235,12 +220,9 @@ Feature: deployment related features
 
   # @author pruan@redhat.com
   # @case_id OCP-12133
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Can't stop a deployment in Failed status
     Given I have a project
     Given I obtain test data file "deployment/test-stop-failed-deployment.json"
@@ -275,12 +257,9 @@ Feature: deployment related features
 
   # @author pruan@redhat.com
   # @case_id OCP-12246
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Stop a "Running" deployment
     Given I have a project
     Given I obtain test data file "deployment/dc-with-pre-mid-post.yaml"
@@ -304,16 +283,13 @@ Feature: deployment related features
 
   # @author cryan@redhat.com
   # @case_id OCP-10648
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Rollback via CLI when previous version failed
     Given I have a project
     When I run the :create_deploymentconfig client command with:
-      | image | quay.io/openshifttest/hello-openshift@sha256:424e57db1f2e8e8ac9087d2f5e8faea6d73811f0b6f96301bc94293680897073 |
+      | image | quay.io/openshifttest/hello-openshift@sha256:eb47fdebd0f2cc0c130228ca972f15eb2858b425a3df15f10f7bb519f60f0c96 |
       | name  | mydc                  |
     Then the step should succeed
     And I wait until the status of deployment "mydc" becomes :complete
@@ -391,13 +367,10 @@ Feature: deployment related features
 
   # @author yinzhou@redhat.com
   # @case_id OCP-9563
-  @gcp-upi
-  @gcp-ipi
-  @aws-upi
   Scenario: A/B Deployment
     Given I have a project
     When I run the :new_app client command with:
-      | docker_image | quay.io/openshifttest/deployment-example@sha256:0631a0c7aee3554391156d991138af4b00e9a724f9c5813f4079930c8fc0d16b |
+      | docker_image | quay.io/openshifttest/deployment-example@sha256:9e0a0cd621fcb46b3439cb8979a0467dfaadb934215e8544193741aae2454668 |
       | name         | ab-example-a                                                                                                     |
       | l            | ab-example=true                                                                                                  |
       | env          | SUBTITLE=shardA                                                                                                  |
@@ -412,7 +385,7 @@ Feature: deployment related features
     Then I wait for a web server to become available via the "ab-example" route
     And the output should contain "shardA"
     When I run the :new_app client command with:
-      | docker_image | quay.io/openshifttest/deployment-example@sha256:0631a0c7aee3554391156d991138af4b00e9a724f9c5813f4079930c8fc0d16b |
+      | docker_image | quay.io/openshifttest/deployment-example@sha256:9e0a0cd621fcb46b3439cb8979a0467dfaadb934215e8544193741aae2454668 |
       | name         | ab-example-b                                                                                                     |
       | l            | ab-example=true                                                                                                  |
       | env          | SUBTITLE=shardB                                                                                                  |
@@ -451,20 +424,17 @@ Feature: deployment related features
 
   # @author yinzhou@redhat.com
   # @case_id OCP-9566
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Blue-Green Deployment
     Given I have a project
     When I run the :new_app client command with:
-      | docker_image | quay.io/openshifttest/deployment-example:v1 |
+      | docker_image | quay.io/openshifttest/deployment-example:v1-multiarch |
       | name         | bluegreen-example-old                       |
     Then the step should succeed
     When I run the :new_app client command with:
-      | docker_image | quay.io/openshifttest/deployment-example:v2 |
+      | docker_image | quay.io/openshifttest/deployment-example:v2-multiarch |
       | name         | bluegreen-example-new                       |
     Then the step should succeed
     #When I expose the "bluegreen-example-old" service
@@ -561,12 +531,9 @@ Feature: deployment related features
 
   # @author pruan@redhat.com
   # @case_id OCP-11939
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: start deployment when the latest deployment is completed
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
@@ -628,12 +595,9 @@ Feature: deployment related features
 
   # @author yinzhou@redhat.com
   # @case_id OCP-11769
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Start new deployment when deployment running
     Given I have a project
     Given I obtain test data file "deployment/dc-with-pre-mid-post.yaml"
@@ -654,19 +618,16 @@ Feature: deployment related features
 
   # @author cryan@redhat.com
   # @case_id OCP-12151
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: When the latest deployment failed auto rollback to the active deployment
     Given I have a project
     Given I obtain test data file "deployment/deployment1.json"
     When I run the :create client command with:
       | f | deployment1.json |
     Given a pod becomes ready with labels:
-    | deployment=hooks-1 |
+      | deployment=hooks-1 |
     Then I run the :scale client command with:
       | resource | deploymentconfig |
       | name     | hooks            |
@@ -677,48 +638,42 @@ Feature: deployment related features
       | name     | hooks            |
       | replicas | 1                |
     Given I wait until number of replicas match "1" for replicationController "hooks-1"
-    When I run the :rollout_latest client command with:
-      | resource | hooks |
+    When I run the :patch client command with:
+      | resource      | dc                                                             |
+      | resource_name | hooks                                                          |
+      | p             | {"spec":{"strategy":{"recreateParams":{"timeoutSeconds":50}}}} |
+    Then the step should succeed
+    When I get project dc named "hooks" as JSON
+    Then the output should contain ""timeoutSeconds": 50"
+    When I run the :patch client command with:
+      | resource      | dc                                                                                                          |
+      | resource_name | hooks                                                                                                       |
+      | p             | {"spec":{"template":{"spec":{"containers":[{"name":"hello-openshift","image":"quay.io/hello-nonexist"}]}}}} |
     Then the step should succeed
     Given the pod named "hooks-2-deploy" becomes present
-    When I run the :patch client command with:
-      | resource      | pod                                   |
-      | resource_name | hooks-2-deploy                        |
-      | p             | {"spec":{"activeDeadlineSeconds": 5}} |
-    Then the step should succeed
-    When I run the :patch client command with:
-      | resource      |dc                        |
-      | resource_name | hooks                    |
-      | p             | {"spec":{"replicas": 2}} |
-    Then the step should succeed
-    When I get project pod named "hooks-2-deploy" as JSON
-    Then the output should contain ""activeDeadlineSeconds": 5"
-    When I get project dc named "hooks" as JSON
-    Then the output should contain ""replicas": 2"
-    Given all existing pods die with labels:
-      | deployment=hooks-2 |
+    Given I wait up to 100 seconds for the steps to pass:
+    """
+    And the pod named "hooks-2-deploy" status becomes :failed
     When I get project pods with labels:
       | l | deployment=hooks-2 |
     Then the output should not contain "hooks-2"
+    """
     Given a pod becomes ready with labels:
       | deployment=hooks-1 |
     Given I wait up to 60 seconds for the steps to pass:
     """
     When I get project pods
     And the output should match:
-      | DeadlineExceeded\|Error |
-      | hooks-1                 |
+      | Error    |
+      | hooks-1  |
     """
 
   # @author yinzhou@redhat.com
   # @case_id OCP-10617
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: DeploymentConfig should allow valid value of resource requirements
     Given I have a project
     Given I obtain test data file "quota/limits.yaml"
@@ -754,16 +709,13 @@ Feature: deployment related features
 
   # @author yinzhou@redhat.com
   # @case_id OCP-11221
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Scale up when deployment running
     Given I have a project
     When I run the :create_deploymentconfig client command with:
-      | image | quay.io/openshifttest/deployment-example@sha256:0631a0c7aee3554391156d991138af4b00e9a724f9c5813f4079930c8fc0d16b |
+      | image | quay.io/openshifttest/deployment-example@sha256:9e0a0cd621fcb46b3439cb8979a0467dfaadb934215e8544193741aae2454668 |
       | name  | deployment-example                                                                                               |
     Then the step should succeed
     And I wait until the status of deployment "deployment-example" becomes :complete
@@ -924,13 +876,10 @@ Feature: deployment related features
 
   # @author haowang@redhat.com
   # @case_id OCP-16443
-  @aws-ipi
   @proxy
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Trigger info is retained for deployment caused by image changes 37 new feature
     Given the master version >= "3.7"
     Given I have a project
@@ -947,21 +896,18 @@ Feature: deployment related features
 
   # @author yinzhou@redhat.com
   # @case_id OCP-31200
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: A/B Deployment for OCP 4.5 or greater
     Given the master version >= "4.5"
     Given I have a project
     When I run the :new_app client command with:
-      | docker_image         | quay.io/openshifttest/deployment-example |
-      | name                 | ab-example-a                             |
-      | as_deployment_config | true                                     |
-      | l                    | ab-example=true                          |
-      | env                  | SUBTITLE=shardA                          |
+      | docker_image         | quay.io/openshifttest/deployment-example:v1-multiarch |
+      | name                 | ab-example-a                                          |
+      | as_deployment_config | true                                                  |
+      | l                    | ab-example=true                                       |
+      | env                  | SUBTITLE=shardA                                       |
     Then the step should succeed
     When I run the :expose client command with:
       | resource      | deploymentconfig |
@@ -973,11 +919,11 @@ Feature: deployment related features
     Then I wait for a web server to become available via the "ab-example" route
     And the output should contain "shardA"
     When I run the :new_app client command with:
-      | docker_image         | quay.io/openshifttest/deployment-example |
-      | name                 | ab-example-b                             |
-      | as_deployment_config | true                                     |
-      | l                    | ab-example=true                          |
-      | env                  | SUBTITLE=shardB                          |
+      | docker_image         | quay.io/openshifttest/deployment-example:v1-multiarch |
+      | name                 | ab-example-b                                          |
+      | as_deployment_config | true                                                  |
+      | l                    | ab-example=true                                       |
+      | env                  | SUBTITLE=shardB                                       |
     Then the step should succeed
     Then I run the :scale client command with:
       | resource | deploymentconfig |

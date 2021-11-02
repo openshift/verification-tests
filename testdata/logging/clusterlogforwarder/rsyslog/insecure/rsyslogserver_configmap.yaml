@@ -20,8 +20,8 @@ data:
     :programname, contains, "k8s-audit.log" /var/log/custom/audit.log
     :programname, contains, "openshift-audit.log" /var/log/custom/audit.log
     :msg, contains, "docker"{
-      if $msg contains "viaq_index_name:infra-write" then /var/log/clf/infra-container.log
-      if $msg contains "viaq_index_name:app-write" then /var/log/clf/app-container.log
+      if $msg contains "infra-write" then /var/log/clf/infra-container.log
+      if $msg contains "app-write" then /var/log/clf/app-container.log
     }
     :msg, contains, "_STREAM_ID" /var/log/clf/infra.log
     :msg, contains, "auditID" /var/log/clf/audit.log

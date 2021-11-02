@@ -27,7 +27,7 @@ Feature: buildconfig.feature
   Scenario: Rebuild image when the underlying image changed for Docker build
     Given I have a project
     When I run the :new_build client command with:
-      | D    | FROM quay.io/openshifttest/centos@sha256:285bc3161133ec01d8ca8680cd746eecbfdbc1faa6313bd863151c4b26d7e5a5\nRUN echo "hello" |
+      | D    | FROM quay.io/openshifttest/base-alpine@sha256:0b379877aba876774e0043ea5ba41b0c574825ab910d32b43c05926fab4eea22\nRUN echo "hello" |
       | to   | centos  |
       | name | mybuild |
     Then the step should succeed
@@ -84,19 +84,18 @@ Feature: buildconfig.feature
     And the "ruby-sample-build-1" build was created
     Then the "ruby-sample-build-1" build completes
 
+    @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+    @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
     Examples:
       | template                  |
       | test-buildconfig-s2i.json | # @case_id OCP-11474
 
   # @author xiuwang@redhat.com
   # @case_id OCP-12057
-  @aws-ipi
   @proxy
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Using secret to pull a docker image which be used as source input
     Given I have a project
     When I run the :create_secret client command with:

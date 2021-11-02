@@ -4,7 +4,8 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-21151
   @admin
   @4.10 @4.9
-  @vsphere-ipi
+  @vsphere-ipi @baremetal-ipi
+  @vsphere-upi
   Scenario: Create pods with multus-cni - macvlan bridge mode
     # Make sure that the multus is enabled
     Given the master version >= "4.1"
@@ -66,7 +67,8 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-21489
   @admin
   @4.10 @4.9
-  @vsphere-ipi
+  @vsphere-ipi @baremetal-ipi
+  @vsphere-upi
   Scenario: Create pods with multus-cni - macvlan private mode
     # Make sure that the multus is enabled
     Given the master version >= "4.1"
@@ -126,7 +128,8 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-21496
   @admin
   @4.10 @4.9
-  @vsphere-ipi
+  @vsphere-ipi @baremetal-ipi
+  @vsphere-upi
   Scenario: Create pods with multus-cni - macvlan vepa mode
     # Make sure that the multus is enabled
     Given the master version >= "4.1"
@@ -188,7 +191,8 @@ Feature: Multus-CNI related scenarios
   @admin
   @destructive
   @4.10 @4.9
-  @vsphere-ipi
+  @vsphere-ipi @baremetal-ipi
+  @vsphere-upi
   Scenario: Create pods with multus-cni - host-device
     # Make sure that the multus is enabled
     Given the master version >= "4.1"
@@ -259,7 +263,8 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-21854
   @admin
   @4.10 @4.9
-  @vsphere-ipi
+  @vsphere-ipi @baremetal-ipi
+  @vsphere-upi
   Scenario: Create pods with muliple cni plugins via multus-cni - macvlan + macvlan
     # Make sure that the multus is enabled
     Given the master version >= "4.1"
@@ -304,12 +309,9 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-21855
   @admin
   @destructive
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Create pods with muliple cni plugins via multus-cni - macvlan + host-device
     # Make sure that the multus is enabled
     Given the master version >= "4.1"
@@ -374,12 +376,9 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-21859
   @admin
   @destructive
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Create pods with muliple cni plugins via multus-cni - host-device + host-device
     # Make sure that the multus is enabled
     Given the master version >= "4.1"
@@ -450,13 +449,10 @@ Feature: Multus-CNI related scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-24488
   @admin
-  @aws-ipi
   @serial
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Create pod with Multus bridge CNI plugin without vlan
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -505,12 +501,9 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-24489
   @admin
   @destructive
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Create pod with Multus bridge CNI plugin and vlan tag
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -551,12 +544,9 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-24467
   @admin
   @destructive
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: CNO manager mavlan configured manually with static
     Given the multus is enabled on the cluster
     And I store all worker nodes to the :nodes clipboard
@@ -646,12 +636,9 @@ Feature: Multus-CNI related scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-21793
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: User cannot consume the net-attach-def created in other project which is namespace isolated
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -686,12 +673,9 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-24490
   @admin
   @destructive
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Pods can communicate each other with same vlan tag
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -777,12 +761,9 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-24491
   @admin
   @destructive
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Pods cannot communicate each other with different vlan tag
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -883,12 +864,9 @@ Feature: Multus-CNI related scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-24607
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: macvlan plugin without master parameter
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -914,12 +892,9 @@ Feature: Multus-CNI related scenarios
   # @author weliang@redhat.com
   # @case_id OCP-25676
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Supported runtimeConfig/capability for MAC/IP
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -956,12 +931,9 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-24465
   @admin
   @destructive
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Multus CNI type bridge with DHCP
     # Make sure that the multus is Running
     Given the multus is enabled on the cluster
@@ -1016,12 +988,9 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-24466
   @admin
   @destructive
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: CNO manager macvlan configured manually with DHCP
     Given the multus is enabled on the cluster
     And I store the masters in the :master clipboard
@@ -1096,12 +1065,9 @@ Feature: Multus-CNI related scenarios
   # @author weliang@redhat.com
   # @case_id OCP-25909
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Assign static IP address using pod annotation
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -1136,12 +1102,9 @@ Feature: Multus-CNI related scenarios
   # @author weliang@redhat.com
   # @case_id OCP-25910
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Assign static MAC address using pod annotation
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -1174,12 +1137,9 @@ Feature: Multus-CNI related scenarios
   # @author weliang@redhat.com
   # @case_id OCP-25915
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Multus default route overwrite
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -1210,12 +1170,9 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-25917
   @admin
   @destructive
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Multus Telemetry Adds capability to track usage of network attachment definitions
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -1272,12 +1229,9 @@ Feature: Multus-CNI related scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-22504
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: The multus admission controller should be able to detect that the pod is using net-attach-def in other namespaces when the isolation is enabled
     Given I create 2 new projects
     # Create the net-attach-def via cluster admin
@@ -1308,12 +1262,9 @@ Feature: Multus-CNI related scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-24492
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Create pod with Multus ipvlan CNI plugin
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -1368,6 +1319,8 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-28633
   @admin
   @4.10 @4.9
+  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Dynamic IP address assignment with Whereabouts
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -1426,6 +1379,8 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-28518
   @admin
   @4.10 @4.9
+  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Multus custom route change with route override
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -1457,6 +1412,8 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-30054
   @admin
   @4.10 @4.9
+  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Multus namespaceIsolation should allow references to CRD in the default namespace
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -1484,6 +1441,8 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-29742
   @admin
   @4.10 @4.9
+  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Log pod IP and pod UUID when pod start
     Given the multus is enabled on the cluster
     And I store all worker nodes to the :nodes clipboard
@@ -1531,6 +1490,8 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-31999
   @admin
   @4.10 @4.9
+  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Whereabouts with exclude IP address
     # Make sure that the multus is enabled
     Given the multus is enabled on the cluster
@@ -1662,6 +1623,8 @@ Feature: Multus-CNI related scenarios
   # @case_id OCP-41789
   @admin
   @4.10 @4.9
+  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: [BZ1944678] Whereabouts IPAM CNI duplicate IP addresses assigned to pods
     Given the multus is enabled on the cluster
     And I store all worker nodes to the :nodes clipboard
