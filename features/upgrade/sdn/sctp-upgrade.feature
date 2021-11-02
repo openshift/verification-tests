@@ -65,6 +65,8 @@ Feature: SDN sctp compoment upgrade testing
   # @case_id OCP-44765
   @admin
   @upgrade-check
+  @4.9
+  @azure-upi
   Scenario: Check the sctp works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "sctp-upgrade" project
