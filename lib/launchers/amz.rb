@@ -161,6 +161,7 @@ module BushSlicer
     def s3_upload_file(bucket:, file:, target: nil)
       target ||= File.basename file
       res = s3.bucket(bucket).object(target).upload_file(file)
+      logger.info("S3 upload file status: #{res}")
       unless res
         raise "Failed to upload file '#{file}' to #{target}'"
       end
