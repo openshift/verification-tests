@@ -209,7 +209,7 @@ Feature: Machine-api components upgrade tests
       | f | cluster-autoscaler.yml |
     Then the step should succeed
     And 1 pod becomes ready with labels:
-      | cluster-autoscaler=default,k8s-app=cluster-autoscaler |
+      | cluster-autoscaler=default |
 
   # @author jhou@redhat.com
   # @case_id OCP-30783
