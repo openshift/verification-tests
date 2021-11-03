@@ -48,3 +48,12 @@ check_unhealthy_health_check_status:
   action: click_health_status_card
   action: check_health_condition
   action: check_alert_description
+check_instance_type_on_machinesets_page:
+  action: goto_machine_sets_page
+  action: check_instance_type_in_table
+  elements:
+  - selector:
+      xpath: //td[contains(., '<machineset_name>')]/following-sibling::td[contains(., '<instance_type>')]
+check_instance_type_on_one_machineset_page:
+  action: goto_one_machineset_page
+  action: check_instance_type
