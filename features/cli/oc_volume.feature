@@ -4,9 +4,10 @@ Feature: oc_volume.feature
   # @author weinliu@redhat.com
   # @case_id OCP-12194
   @smoke
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: Create a pod that consumes the secret in a volume
     Given I have a project
     Given I obtain test data file "pods/allinone-volume/secret.yaml"
@@ -48,9 +49,10 @@ Feature: oc_volume.feature
   # @author xxia@redhat.com
   # @case_id OCP-11906
   @smoke
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: Add secret volume to dc and rc
     Given I have a project
     When I run the :new_app_as_dc client command with:

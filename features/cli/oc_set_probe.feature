@@ -208,9 +208,10 @@ Feature: oc_set_probe.feature
 
   # @author wewang@redhat.com
   # @case_id OCP-31245
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: Set a probe over HTTPS/HTTP test
     Given I have a project
     When I run the :new_app client command with:
@@ -256,9 +257,10 @@ Feature: oc_set_probe.feature
 
   # @author wewang@redhat.com
   # @case_id OCP-31246
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: Set an exec action probe test
     Given I have a project
     When I run the :new_app client command with:

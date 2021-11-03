@@ -3,9 +3,10 @@ Feature: Testing Ingress Operator related scenarios
   # @author hongli@redhat.com
   # @case_id OCP-27594
   @admin
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: set namespaceOwnership of routeAdmission to InterNamespaceAllowed
     Given the master version >= "4.4"
     And I have a project

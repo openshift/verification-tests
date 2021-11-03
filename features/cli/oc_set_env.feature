@@ -2,9 +2,10 @@ Feature: oc_set_env.feature
 
   # @author wewang@redhat.com
   # @case_id OCP-11248
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: Set environment variables for resources using oc set env
     Given I have a project
     Given I obtain test data file "build/application-template-stibuild.json"
@@ -59,9 +60,10 @@ Feature: oc_set_env.feature
 
   # @author wewang@redhat.com
   # @case_id OCP-10798
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: Remove environment variables for resources using oc set env
     Given I have a project
     Given I obtain test data file "build/application-template-stibuild.json"

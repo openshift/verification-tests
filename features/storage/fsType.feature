@@ -3,7 +3,7 @@ Feature: testing for parameter fsType
   # @author chaoyang@redhat.com
   @admin
   @smoke
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   Scenario Outline: persistent volume formated with fsType
     Given I have a project
     And admin clones storage class "sc-<%= project.name %>" from ":default" with:
@@ -46,6 +46,7 @@ Feature: testing for parameter fsType
       | ext4   | ebs    | # @case_id OCP-9612
       | xfs    | ebs    | # @case_id OCP-10049
 
+    @upgrade-sanity
     Examples:
       | fsType | type   |
       | ext3   | cinder | # @case_id OCP-10097

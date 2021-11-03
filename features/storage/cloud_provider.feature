@@ -4,7 +4,7 @@ Feature: kubelet restart and node restart
   @admin
   @destructive
   @inactive
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   Scenario Outline: kubelet restart should not affect attached/mounted volumes
     Given I have a project
     When I run the :new_app client command with:
@@ -49,6 +49,7 @@ Feature: kubelet restart and node restart
 
     @vsphere-ipi
     @vsphere-upi
+    @upgrade-sanity
     Examples:
       | platform       |
       | vsphere-volume | # @case_id OCP-13631

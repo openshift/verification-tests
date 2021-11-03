@@ -176,6 +176,8 @@ Feature: Testing abrouting
   # @author yadu@redhat.com
   # @case_id OCP-13519
   @admin
+  @upgrade-sanity
+  @4.7
   Scenario: The edge route with multiple service will set load balance policy to RoundRobin by default
     #Create pod/service/route
     Given I have a project
@@ -265,9 +267,10 @@ Feature: Testing abrouting
   # @author yadu@redhat.com
   # @case_id OCP-15910
   @admin
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: Each endpoint gets weight/numberOfEndpoints portion of the requests - unsecure route
     Given I switch to cluster admin pseudo user
     And I use the router project
@@ -348,9 +351,10 @@ Feature: Testing abrouting
   # @author yadu@redhat.com
   # @case_id OCP-15994
   @admin
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: Each endpoint gets weight/numberOfEndpoints portion of the requests - passthrough route
     Given I switch to cluster admin pseudo user
     And I use the router project

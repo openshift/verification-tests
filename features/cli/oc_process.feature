@@ -3,9 +3,10 @@ Feature: oc_process.feature
   # @author shiywang@redhat.com
   # @case_id OCP-11044
   @proxy
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: Supply oc new-app parameter list+env vars via a file
     Given I have a project
     Given a "test1.env" file is created with the following lines:

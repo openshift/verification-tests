@@ -3,9 +3,10 @@ Feature: Operator related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-22704
   @admin
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: The clusteroperator should be able to reflect the network operator version corresponding to the OCP version
 
     Given the master version > "3.11"
@@ -63,9 +64,10 @@ Feature: Operator related networking scenarios
   # @author bmeng@redhat.com
   # @case_id OCP-22201
   @admin
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: Should have a clusteroperator object created under config.openshift.io api group for network-operator
     Given the master version >= "4.1"
     # Check the operator object has version
@@ -249,9 +251,10 @@ Feature: Operator related networking scenarios
   # @case_id OCP-21574
   @admin
   @destructive
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: Should not allow to change the openshift-sdn config
     #Trying to change network mode to Subnet or any other
     Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:

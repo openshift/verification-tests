@@ -56,10 +56,11 @@ Feature: OVNKubernetes Windows Container related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-37519
   @admin
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   @network-ovnkubernetes
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: Create Loadbalancer service for a window container
     Given the env has hybridOverlayConfig enabled
     And the env is using windows nodes

@@ -2,9 +2,10 @@ Feature: dockerbuild.feature
   # @author wzheng@redhat.com
   # @case_id OCP-12115
   @smoke
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: Docker build with both SourceURI and context dir
     Given I have a project
     Given I obtain test data file "build/ruby20rhel7-context-docker.json"
@@ -86,9 +87,10 @@ Feature: dockerbuild.feature
 
   # @author dyan@redhat.com
   # @case_id OCP-12855
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: Add ARGs in docker build
     Given I have a project
     When I run the :new_build client command with:
