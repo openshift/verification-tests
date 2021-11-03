@@ -526,6 +526,65 @@ check_network_out_breakdown_info_when_filter_by_node:
   action: check_view_more_link
   action: check_metrics_query_network_out_by_node
   action: close_breakdown_modal
+check_metrics_query_cpu_filter_by_node_type:
+  scripts:
+  - command:
+      return /sum.*cpu.*kube_node_role.*<node_type>/.test(decodeURI(document.querySelector('div.co-utilization-card__item-chart>div>a').href).replaceAll('\n',''))
+    expect_result: true
+check_metrics_query_memory_filter_by_node_type:
+  scripts:
+  - command:
+      return /sum.*node_memory_MemTotal_bytes.*kube_node_role.*<node_type>/.test(decodeURI(document.querySelectorAll('div.co-utilization-card__item-chart>div>a')[1].href).replaceAll('\n',''))
+    expect_result: true
+check_metrics_query_filesystem_filter_by_node_type:
+  scripts:
+  - command:
+      return /sum.*node_filesystem_size_bytes.*kube_node_role.*<node_type>/.test(decodeURI(document.querySelectorAll('div.co-utilization-card__item-chart>div>a')[2].href).replaceAll('\n',''))
+    expect_result: true   
+check_metrics_query_network_filter_by_node_type:
+  scripts:
+  - command:
+      return /sum.*node_network_transmit_bytes_excluding_lo.*kube_node_role.*<node_type>/.test(decodeURI(document.querySelectorAll('div.co-utilization-card__item-chart>div>a')[3].href).replaceAll('\n',''))
+    expect_result: true
+check_metrics_query_podcount_filter_by_node_type:
+  scripts:
+  - command:
+      return /count.*pod.*kube_node_role.*<node_type>/.test(decodeURI(document.querySelectorAll('div.co-utilization-card__item-chart>div>a')[4].href).replaceAll('\n',''))
+    expect_result: true
+check_worker_info_when_filter_by_node_type:
+  params:
+    node_type: worker
+  action: choose_node_type
+  action: check_metrics_query_cpu_filter_by_node_type
+  action: check_metrics_query_memory_filter_by_node_type
+  action: check_metrics_query_filesystem_filter_by_node_type
+  action: check_metrics_query_network_filter_by_node_type
+  action: check_metrics_query_podcount_filter_by_node_type
+check_master_info_when_filter_by_node_type:
+  params:
+    node_type: master
+  action: choose_node_type
+  action: check_metrics_query_cpu_filter_by_node_type
+  action: check_metrics_query_memory_filter_by_node_type
+  action: check_metrics_query_filesystem_filter_by_node_type
+  action: check_metrics_query_network_filter_by_node_type
+  action: check_metrics_query_podcount_filter_by_node_type
+check_infra_info_when_filter_by_node_type:
+  params:
+    node_type: infra
+  action: choose_node_type
+  action: check_metrics_query_cpu_filter_by_node_type
+  action: check_metrics_query_memory_filter_by_node_type
+  action: check_metrics_query_filesystem_filter_by_node_type
+  action: check_metrics_query_network_filter_by_node_type
+  action: check_metrics_query_podcount_filter_by_node_type
+choose_node_type:
+  action: click_filter_dropdown
+  elements:
+  - selector:
+      xpath: //span[contains(@class,'pf-c-check__label') and contains(text(),'<node_type>')]
+    op: click
+  action: click_filter_dropdown
 # status card
 click_operator_status:
   elements:
