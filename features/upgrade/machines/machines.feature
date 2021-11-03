@@ -38,8 +38,8 @@ Feature: Machine-api components upgrade tests
     Given evaluation of `cluster_operator(<cluster_operator>).condition(type: 'Progressing')` is stored in the :co_progressing clipboard
     Then the expression should be true> cb.co_progressing["status"]=="False"
 
-    @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-    @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Examples:
     | cluster_operator           |
     | "machine-api"              | # @case_id OCP-22712
@@ -48,6 +48,7 @@ Feature: Machine-api components upgrade tests
 
 
   @upgrade-prepare
+  @admin
   @aws-ipi
   @gcp-upi
   @gcp-ipi
@@ -80,6 +81,9 @@ Feature: Machine-api components upgrade tests
 
 
   @upgrade-prepare
+  @admin
+  @destructive
+  @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   Scenario: Scale up and scale down a machineSet after upgrade - prepare
     Given the expression should be true> "True" == "True"
 
@@ -189,13 +193,10 @@ Feature: Machine-api components upgrade tests
       | azure     | machineset-clone-41804 | "spotVMOptions": {}     | # @case_id OCP-41804
 
   @upgrade-prepare
+  @destructive
   @admin
-  @aws-ipi
-  @gcp-ipi
   @4.10 @4.9
-  @vsphere-ipi
-  @azure-ipi
-  @openstack-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   Scenario: Cluster should automatically scale up and scale down with clusterautoscaler deployed - prepare
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user

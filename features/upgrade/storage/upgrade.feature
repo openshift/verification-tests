@@ -302,6 +302,8 @@ Feature: Storage upgrade tests
   # @case_id OCP-28630
   @upgrade-check
   @admin
+  @aws-ipi
+  @aws-upi
   Scenario: Snapshot operator should be in available status after upgrade and can created pod with snapshot
     Given I switch to cluster admin pseudo user
 

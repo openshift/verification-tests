@@ -87,6 +87,8 @@ Feature: Routing and DNS related scenarios
   @upgrade-prepare
   @admin
   @4.10 @4.9
+  @baremetal-ipi @vsphere-ipi
+  @vsphere-upi
   Scenario: upgrade with running router pods on all worker nodes - prepare
     # Get the number of worker nodes and scale up router pods
     Given I switch to cluster admin pseudo user

@@ -100,6 +100,7 @@ Feature: Upgrade Logging with ClusterLogForwarder
   # @case_id OCP-29743
   # @author qitang@redhat.com
   @admin
+  @destructive
   @upgrade-check
   @users=upuser1,upuser2
   @stage-only

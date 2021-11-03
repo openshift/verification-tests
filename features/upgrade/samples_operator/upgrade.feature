@@ -66,6 +66,7 @@ Feature: image-registry operator upgrade tests
   @upgrade-check
   @users=upuser1,upuser2
   @admin
+  @destructive
   @inactive
   Scenario: OpenShift can upgrade when image-registry/sample operator is unmanaged
     Given I switch to cluster admin pseudo user
