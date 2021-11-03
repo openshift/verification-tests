@@ -1,6 +1,6 @@
 Feature: stibuild.feature
   # @author xiuwang@redhat.com
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   Scenario Outline: Trigger s2i/docker/custom build using additional imagestream
     Given I have a project
     Given I obtain test data file "templates/<template>"
@@ -35,6 +35,7 @@ Feature: stibuild.feature
 
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
     @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+    @upgrade-sanity
     Examples:
       | template          |
       | ocp12041-s2i.json | # @case_id OCP-12041
@@ -100,9 +101,10 @@ Feature: stibuild.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-28891
   @disconnected
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: Test s2i build in disconnect cluster
     Given I have a project
     When I have an http-git service in the project

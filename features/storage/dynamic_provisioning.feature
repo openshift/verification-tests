@@ -3,7 +3,7 @@ Feature: Dynamic provisioning
   # @author lxia@redhat.com
   @admin
   @smoke
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   Scenario Outline: dynamic provisioning
     Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"
@@ -75,6 +75,7 @@ Feature: Dynamic provisioning
 
     @openstack-ipi
     @openstack-upi
+    @upgrade-sanity
     Examples:
       | cloud_provider |
       | cinder         | # @case_id OCP-9656

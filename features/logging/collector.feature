@@ -183,9 +183,10 @@ Feature: collector related tests
   @admin
   @destructive
   @commonlogging
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: All nodes logs are collected
     Given the master version >= "4.5"
     Given logging collector name is stored in the :collector_name clipboard

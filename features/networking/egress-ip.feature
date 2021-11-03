@@ -3,9 +3,10 @@ Feature: Egress IP related features
   # @author bmeng@redhat.com
   # @case_id OCP-15465
   @admin
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   @vsphere-ipi @aws-ipi
   @vsphere-upi @aws-upi
+  @upgrade-sanity
   Scenario: Only cluster admin can add/remove egressIPs on hostsubnet
     Given I select a random node's host
     And evaluation of `node.name` is stored in the :egress_node clipboard
@@ -20,9 +21,10 @@ Feature: Egress IP related features
 
   # @author bmeng@redhat.com
   # @case_id OCP-15466
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   @vsphere-ipi @aws-ipi
   @vsphere-upi @aws-upi
+  @upgrade-sanity
   Scenario: Only cluster admin can add/remove egressIPs on netnamespaces
     # Try to add the egress ip to the netnamespace with normal user
     Given I have a project
@@ -37,9 +39,10 @@ Feature: Egress IP related features
   # @author bmeng@redhat.com
   # @case_id OCP-15471
   @admin
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   @vsphere-ipi
   @vsphere-upi
+  @upgrade-sanity
   Scenario: All the pods egress connection will get out through the egress IP if the egress IP is set to netns and egress node can host the IP
     Given I save ipecho url to the clipboard
     Given I select a random node's host

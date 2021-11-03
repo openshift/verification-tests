@@ -54,7 +54,7 @@ Feature: storageClass related feature
   # @author chaoyang@redhat.com
   @admin
   @smoke
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   Scenario Outline: storage class provisioner
     Given I have a project
     And admin clones storage class "sc-<%= project.name %>" from ":default" with:
@@ -99,6 +99,7 @@ Feature: storageClass related feature
 
     @aws-ipi
     @aws-upi
+    @upgrade-sanity
     Examples:
       | provisioner | type        | zone          | is-default | size  |
       | aws-ebs     | gp2         | us-east-1d    | false      | 1Gi   | # @case_id OCP-10160
@@ -108,7 +109,7 @@ Feature: storageClass related feature
   # @author lxia@redhat.com
   @admin
   @destructive
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   Scenario Outline: New creation PVC failed when multiple classes are set as default
     Given I have a project
     Given I obtain test data file "storage/misc/storageClass.yaml"
@@ -170,6 +171,7 @@ Feature: storageClass related feature
 
     @vsphere-ipi
     @vsphere-upi
+    @upgrade-sanity
     Examples:
       | provisioner    |
       | vsphere-volume | # @case_id OCP-24259
@@ -303,9 +305,10 @@ Feature: storageClass related feature
   # @author chaoyang@redhat.com
   # @case_id OCP-10228
   @smoke
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   @aws-ipi
   @aws-upi
+  @upgrade-sanity
   Scenario: AWS ebs volume is dynamic provisioned with default storageclass
     Given I have a project
     Given I obtain test data file "storage/ebs/pvc-retain.json"

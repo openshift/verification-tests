@@ -2,9 +2,10 @@ Feature: resouces related scenarios
 
   # @author xxia@redhat.com
   # @case_id OCP-11882
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: Return description of resources with cli describe
     Given I have a project
     And I create a new application with:

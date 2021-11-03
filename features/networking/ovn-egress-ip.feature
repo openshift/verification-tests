@@ -4,9 +4,10 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33618
   @admin
   @destructive
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   @vsphere-ipi
   @vsphere-upi
+  @upgrade-sanity
   Scenario: EgressIP works for all pods in the matched namespace when only configure namespaceSelector
     Given I save ipecho url to the clipboard
     Given I select a random node's host
@@ -70,9 +71,10 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33723
   @admin
   @destructive
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   @vsphere-ipi
   @vsphere-upi
+  @upgrade-sanity
   Scenario: Multiple EgressIP objects can have multiple Egress IPs
     Given I save ipecho url to the clipboard
     Given I store the schedulable nodes in the :nodes clipboard
@@ -139,9 +141,10 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33641
   @admin
   @destructive
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   @vsphere-ipi
   @vsphere-upi
+  @upgrade-sanity
   Scenario: Multi-project can share same EgressIP
     Given I save ipecho url to the clipboard
     Given I store the schedulable nodes in the :nodes clipboard
@@ -323,9 +326,10 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33631
   @admin
   @destructive
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   @vsphere-ipi
   @vsphere-upi
+  @upgrade-sanity
   Scenario: EgressIP was removed after delete egressIP object
     Given I save ipecho url to the clipboard
     Given I store the schedulable nodes in the :nodes clipboard

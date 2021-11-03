@@ -215,6 +215,8 @@ Feature: cluster log forwarder features
       | infra.log           |
       | infra-container.log |
     """
+    @upgrade-sanity
+    @4.7
     Examples:
       | auth_type         |
       | mTLS_share        | # @case_id OCP-29844
@@ -339,6 +341,8 @@ Feature: cluster log forwarder features
       | infra-container.log |
     """
 
+    @upgrade-sanity
+    @4.7
     Examples:
       | file                  | protocol |
       | rsys_clf_RFC3164.yaml | tls      | # @case_id OCP-32643
@@ -349,6 +353,8 @@ Feature: cluster log forwarder features
   # @case_id OCP-32697
   @admin
   @destructive
+  @upgrade-sanity
+  @4.7
   Scenario: Forward logs to different kafka topics
     Given I switch to the first user
     And I create a project with non-leading digit name

@@ -6,9 +6,10 @@ Feature: cluster-logging-operator related test
   @admin
   @destructive
   @commonlogging
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: ServiceMonitor Object for collector is deployed along with cluster logging
     Given logging collector name is stored in the :collector_name clipboard
     Given I wait for the "<%= cb.collector_name %>" service_monitor to appear

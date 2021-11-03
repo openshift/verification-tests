@@ -7,9 +7,10 @@ Feature: CSI clone testing related feature
   
   # @author jianl@redhat.com
   # @case_id OCP-27615
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   @openstack-ipi
   @openstack-upi
+  @upgrade-sanity
   Scenario: Clone a PVC and verify data consistency
     # Step 1
     Given the master version >= "4.7"
@@ -145,9 +146,10 @@ Feature: CSI clone testing related feature
 
   # @author wduan@redhat.com
   # @case_id OCP-30315
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   @openstack-ipi
   @openstack-upi
+  @upgrade-sanity
   Scenario: [Cinder CSI clone] Clone a pvc with block VolumeMode successfully
     Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"

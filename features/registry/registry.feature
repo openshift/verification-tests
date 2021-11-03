@@ -4,9 +4,10 @@ Feature: Testing registry
   # @case_id OCP-12400
   @admin
   @destructive
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: Prune images by command oadm_prune_images
     Given cluster role "system:image-pruner" is added to the "first" user
     Given I enable image-registry default route
@@ -193,9 +194,10 @@ Feature: Testing registry
   # @author xiuwang@redhat.com
   # @case_id OCP-29696
   @proxy
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: Use node credentials in imagestream import
     Given I have a project
     When I run the :tag client command with:
@@ -226,9 +228,10 @@ Feature: Testing registry
   # @case_id OCP-29693
   @admin
   @disconnected
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: [Disconnect]Import image from a secure registry using node credentials
     Given I have a project
     And evaluation of `image_content_source_policy('image-policy-aosqe').mirror_registry(cached: false)` is stored in the :mirror_registry clipboard

@@ -3,9 +3,10 @@ Feature: testing multicast scenarios
   # @author hongli@redhat.com
   # @case_id OCP-12926
   @admin
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: pods should be able to subscribe send and receive multicast traffic
     # create some multicast testing pods
     Given I have a project
@@ -87,9 +88,10 @@ Feature: testing multicast scenarios
   # @author hongli@redhat.com
   # @case_id OCP-12977
   @admin
-  @4.10 @4.9
+  @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: multicast is disabled by default if not annotate the netnamespace
     # create multicast testing pods in the project and without multicast enable
     Given I have a project
