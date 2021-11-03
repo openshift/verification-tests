@@ -41,8 +41,6 @@ module BushSlicer
           BushSlicer::Packet.new(service_name: service_name)
         when "ibmcloud"
           BushSlicer::IBMCloud.new(service_name: service_name)
-        when "ovirt"
-          BushSlicer::Ovirt.new(service_name: service_name)
         else
           raise "unknown service type " \
             "#{conf[:services, service_name, :cloud_type]} for cloud " \

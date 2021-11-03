@@ -18,7 +18,6 @@ module BushSlicer
   autoload :Packet, "launchers/packet"
   autoload :IBMCloud, "launchers/ibmcloud"
   autoload :OCMCluster, "launchers/o_c_m_cluster"
-  autoload :Ovirt, "launchers/ovirt"
   autoload :EnvironmentLauncher, "launchers/environment_launcher"
   autoload :PolarShift, "polarshift/autoload"
 
