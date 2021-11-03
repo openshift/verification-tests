@@ -381,7 +381,7 @@ check_download_rhcos_gcp_upi_install_page:
         - selector:
             xpath: //a[contains(@href, '/installing-gcp-user-infra.html#installation-gcp-user-infra-rhcos_installing-gcp-user-infra') and text()='Learn more']
         - selector:
-            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-4.5.6-x86_64-gcp.x86_64.tar.gz') and text()='Download RHCOS tar']
+            xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-gcp.x86_64.tar.gz') and text()='Download RHCOS tar']
 check_download_rhcos_vsphere_upi_install_page:
     action: check_install_page_rhcos_part
     elements:
@@ -540,7 +540,7 @@ check_bare_metal_ipi_install_page_special_parts:
 check_download_installer_button_in_ibm_z_install_page:
     params:
         mac_url: s390x/clients/ocp/stable/openshift-install-mac.tar.gz
-        linux_url: s390x/clients/ocp/stable/openshift-install-linux.tar.gz
+        linux_url: s390x/clients/ocp/stable/openshift-install-linux-amd64.tar.gz
     action: check_mac_download_installer_button_in_page
     action: check_linux_download_installer_button_in_page
 check_ibm_z_install_page_special_parts:
@@ -552,7 +552,7 @@ check_ibm_z_install_page_special_parts:
 check_download_installer_button_in_power_upi_install_page:
     params:
         mac_url: ppc64le/clients/ocp/stable/openshift-install-mac.tar.gz
-        linux_url: ppc64le/clients/ocp/stable/openshift-install-linux.tar.gz
+        linux_url: ppc64le/clients/ocp/stable/openshift-install-linux-amd64.tar.gz
     action: check_linux_download_installer_button_in_page
     action: check_mac_download_installer_button_in_page
 check_power_upi_install_page_special_parts:
@@ -572,13 +572,11 @@ check_codeready_install_page:
         - selector:
             xpath: //span[text()='local sandbox']
         - selector:
-            xpath: //div[text()='Create a minimal cluster on your desktop/laptop for local development and testing.']
+            xpath: //p[text()='Create a minimal cluster on your desktop/laptop for local development and testing.']
         - selector:
             xpath: //p[contains(., 'appear in the OpenShift Cluster Manager unless you enable cluster monitoring and telemetry.')]
         - selector:
-            xpath: //h2[text()='Follow the documentation to install CodeReady containers']
-        - selector:
-            xpath: //a[contains(@href, 'https://access.redhat.com/documentation/en-us/red_hat_codeready_containers') and contains(text(), 'Getting started')]
+            xpath: //a[contains(@href, 'https://access.redhat.com/documentation/en-us/red_hat_codeready_containers') and contains(text(), 'View the CodeReady Containers Getting started guide')]
 check_download_installer_button_in_pre_release_page:
     params:
         mac_url: x86_64/clients/ocp-dev-preview/pre-release/openshift-install-mac.tar.gz
@@ -648,7 +646,7 @@ check_creation_page_datacenter_tab:
         - selector:
             xpath: //div[text()='Create clusters on supported infrastructure using our extensive documentation and installer program.']
         - selector:
-            xpath: //a[@href='/openshift/install/metal' and text()='Bare Metal']
+            xpath: //a[@href='/openshift/install/metal' and text()='Bare Metal (x86_64)']
         - selector:
             xpath: //a[@href='/openshift/install/ibmz/user-provisioned' and text()='IBM Z']
         - selector:
@@ -660,7 +658,7 @@ check_creation_page_datacenter_tab:
         - selector:
             xpath: //a[@href='/openshift/install/vsphere' and text()='vSphere']
         - selector:
-            xpath: //a[@href='/openshift/install/metal' and text()='Platform agnostic']
+            xpath: //a[@href='/openshift/install/platform-agnostic' and text()='Platform agnostic (x86_64)']
 check_creation_page_cloud_tab_with_quota:
     action: creation_cards_page_loaded
     action: check_creation_cards_page_title
@@ -689,19 +687,21 @@ check_creation_page_cloud_tab_common_part:
         - selector:
             xpath: //a[@href='https://cloud.ibm.com/kubernetes/catalog/create?platformType=openshift' and text()='Try it on IBM']
         - selector:
-            xpath: //a[@href='https://console.aws.amazon.com/rosa/home' and text()='Red Hat OpenShift Service on AWS']
+            xpath: //a[@href='https://cloud.redhat.com/products/amazon-openshift' and text()='Red Hat OpenShift Service on AWS']
         - selector:
-            xpath: //a[@href='https://console.aws.amazon.com/rosa/home' and text()='Try it on AWS']
+            xpath: //a[@href='/openshift/create/rosa/welcome' and text()='Create cluster']
         - selector:
             xpath: //h2[text()='Run it yourself']
         - selector:
-            xpath: //a[@href='/openshift/install/aws' and text()='AWS']
+            xpath: //a[@href='/openshift/install/aws' and text()='AWS (x86_64)']
+        - selector:
+            xpath: //a[@href='/openshift/install/aws/arm' and text()='AWS (ARM)']
         - selector:
             xpath: //a[@href='/openshift/install/azure' and text()='Azure']
         - selector:
             xpath: //a[@href='/openshift/install/gcp' and text()='Google Cloud']
         - selector:
-            xpath: //a[@href='/openshift/install/metal' and text()='Platform agnostic']
+            xpath: //a[@href='/openshift/install/platform-agnostic' and text()='Platform agnostic (x86_64)']
 check_creation_page_cloud_tab_without_quota:
     action: creation_cards_page_loaded
     action: check_creation_cards_page_title
