@@ -18,6 +18,8 @@ module BushSlicer
           return {:type => "azure", :provider => self.init_azure(env)}
         when "VSphere"
           return {:type => "vsphere", :provider => nil}
+        when "Ovirt"
+          return {:type => "ovirt", :provider => self.init_ovirt(env)}
         when "None"
           return {:type => "none", :provider => nil}
         else
@@ -85,6 +87,10 @@ module BushSlicer
         :auth => auth,
         :resource_group => secret.value_of("azure_resourcegroup", user: :admin)
       )
+    end
+
+    def self.init_ovirt(env)
+      return BushSlicer::Ovirt.new()
     end
   end
 end
