@@ -38,6 +38,7 @@ Feature: Logging upgrading related features
   # @case_id OCP-22911
   # @author qitang@redhat.com
   @admin
+  @destructive
   @upgrade-check
   @users=upuser1,upuser2
   @4.10 @4.9

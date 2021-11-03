@@ -37,6 +37,7 @@ Feature: Service Catalog related scenarios
 
   @admin
   @upgrade-check
+  @inactive
   @users=upuser1,upuser2
   Scenario: upgrade svcat
     # Check cluster operator svcat-apiserver status

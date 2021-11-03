@@ -70,6 +70,8 @@ Feature: Egress compoment upgrade testing
   @admin
   @upgrade-prepare
   @4.10 @4.9
+  @vsphere-ipi
+  @vsphere-upi
   Scenario: Check ovn egressip is functional post upgrade - prepare
     Given I switch to cluster admin pseudo user
     And I save ipecho url to the clipboard

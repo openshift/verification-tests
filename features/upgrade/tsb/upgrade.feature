@@ -62,6 +62,7 @@ Feature: TSB related scenarios
 
   @admin
   @upgrade-check
+  @inactive
   @users=upuser1,upuser2
   Scenario: upgrade TSB
     Given I switch to cluster admin pseudo user
