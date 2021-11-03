@@ -258,3 +258,37 @@ Feature: Machine-api components upgrade tests
     Then the expression should be true> machine_set.desired_replicas(cached: false) == 1
     """
     Then the machineset should have expected number of running machines
+
+  @upgrade-prepare
+  @admin
+  @aws-ipi
+  @gcp-ipi
+  @4.7 @4.8 @4.10 @4.9
+  @vsphere-ipi
+  @azure-ipi
+  @openstack-ipi
+  Scenario: Registering Components delays should not be more than liveliness probe - prepare 
+    Given the expression should be true> "True" == "True"
+
+  # @author miyadav@redhat.com
+  # @case_id OCP-39845
+  @upgrade-check
+  @admin
+  @4.7 @4.8 @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
+  Scenario: Registering Components delays should not be more than liveliness probe 
+    Given I have an IPI deployment
+    And I switch to cluster admin pseudo user
+    And I use the "openshift-machine-api" project
+
+    And 1 pod becomes ready with labels:
+      | api=clusterapi,k8s-app=controller |
+
+    When I run the :logs admin command with:
+      | resource_name | <%= pod.name %>       |
+      | c             | machineset-controller |
+
+    And I save the output to file> logtime.txt 
+    Given I get time difference using "Registering Components." and "Starting the Cmd." in logtime.txt file
+    Then the step should succeed
+
