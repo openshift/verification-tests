@@ -290,6 +290,8 @@ Feature: dockerbuild.feature
 
   # @author xiuwang@redhat.com
   # @case_id OCP-42529
+  @4.10 @4.9
+  @azure-upi
   Scenario: Mount source name must be unique
     Given I have a project
     When I run the :create_secret client command with:
