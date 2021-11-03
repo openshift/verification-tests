@@ -870,3 +870,47 @@ Feature: OVN Egress IP related features
     Then the step should succeed 
     And the output should not contain:
       | name=egressip |
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-42925
+  @admin
+  @destructive
+  @4.10 @4.9
+  @network-ovnkubernetes
+  @vsphere-ipi
+  @vsphere-upi
+  Scenario: Traffic is load balanced between egress nodes in OVN cluster
+    Given I save ipecho url to the clipboard
+    Given I store the schedulable nodes in the :nodes clipboard
+    Then label "k8s.ovn.org/egress-assignable=true" is added to the "<%= cb.nodes[0].name %>" node
+    Then label "k8s.ovn.org/egress-assignable=true" is added to the "<%= cb.nodes[1].name %>" node
+
+    #Get unused IP as egress ip
+    Given I store a random unused IP address from the reserved range to the clipboard
+
+    #Create a project and pods in it,add label to the namespace
+    Given I have a project
+    And evaluation of `project.name` is stored in the :proj1 clipboard
+    When I run the :label admin command with:
+      | resource | namespace           |
+      | name     | <%= cb.proj1 %>     |
+      | key_val  | org=qe              |
+    Then the step should succeed
+    And I have a pod-for-ping in the project
+
+    #Create egress ip object
+    When I obtain test data file "networking/ovn-egressip/egressip2.yaml"
+    And I replace lines in "egressip2.yaml":
+      | 172.31.249.227 | "<%= cb.valid_ips[0] %>" |
+      | 172.31.249.228 | "<%= cb.valid_ips[1] %>" |
+    And I run the :create admin command with:
+      | f | egressip2.yaml |
+    Then the step should succeed
+    And admin ensures "egressip2" egress_ip is deleted after scenario
+
+    # Check egress ip is loadbalanced
+    When I execute on the pod:
+      | bash | -c | for i in {1..10}; do curl -s --connect-timeout 2 <%= cb.ipecho_url %> ; sleep 2;echo ""; done;  |
+    Then the step should succeed
+    And the output should contain "<%= cb.valid_ips[1] %>"
+    And the output should contain "<%= cb.valid_ips[0] %>"
