@@ -227,3 +227,78 @@ Given /^I remove all kata pods in the cluster stored in the#{OPT_SYM} clipboard$
     end
   end
 end
+
+Given /^Verify catalog source existence$/ do
+  project_name = 'openshift-marketplace'
+  catalog_source_name = 'redhat-operators'
+  step %Q/I switch to cluster admin pseudo user/
+  project(project_name)
+  if !catalog_source(catalog_source_name).exists?
+    logger.warn("Missing #{catalog_source_name} catalog source")
+    logger.info("Creating #{catalog_source_name}")
+    step %Q/I create "redhat-operators" catalogsource for testing/
+    sleep(120)
+    raise "Failed to create catalog source" unless catalog_source('redhat-operators').exists?
+  elsif catalog_source('redhat-operators').exists?
+    logger.info("Catalog source #{catalog_source_name} exists")
+  end
+end
+
+Given /^Install Kata operator$/ do
+  kata_ns ||= "openshift-sandboxed-containers-operator"
+  kata_operator_name = "sandboxed-containers-operator"
+  @result_operators = admin.cli_exec(:get, resource: "operators", n:kata_ns)
+  if !@result_operators[:stdout].to_s.include? kata_operator_name
+    project('openshift-marketplace')
+    step %Q/I store master major version in the :master_version clipboard/
+    logger.warn("#{kata_operator_name} is not installed")
+    logger.info("Installing #{kata_operator_name}")
+    step %Q/I switch to cluster admin pseudo user/
+    step %Q|I obtain test data file "kata/release-#{cb.master_version}/deployment.yaml"|
+    @result = user.cli_exec(:apply, f: "deployment.yaml")
+    sleep(120)
+    project(kata_ns)
+    @result_operators = admin.cli_exec(:get, resource: "operators", n:kata_ns)
+  elsif @result_operators[:stdout].to_s.include? kata_operator_name
+    logger.info("#{kata_operator_name} exists")
+  end
+end
+
+Given /^Apply #{QUOTED} kataconfig$/ do |kata_config_name|
+  kata_ns ||= "openshift-sandboxed-containers-operator"
+  project('openshift-marketplace')
+  step %Q/I store master major version in the :master_version clipboard/
+  @result_kataconfigs = admin.cli_exec(:get, resource: "kataconfig", n:kata_ns)
+  if @result_kataconfigs[:stderr].to_s.include? "No resources found" or @result_kataconfigs[:stderr].to_s.include? "error"
+    step %Q/I store master major version in the :master_version clipboard/
+    step %Q|I obtain test data file "kata/release-#{cb.master_version}/kataconfiguration_v1_kataconfig.yaml"|
+    @result = user.cli_exec(:apply, f: 'kataconfiguration_v1_kataconfig.yaml')
+    sleep(60)
+    raise "Failed to apply kataconfig" unless @result[:success]
+    step %Q/I wait until number of completed kata runtime nodes match for "#{kata_config_name}"/
+  end
+end
+
+Given /^Deploy #{QUOTED} pod with kata runtime$/ do |pod_name|
+  kata_ns ||= "openshift-sandboxed-containers-operator"
+  file_path = "kata/#{pod_name}.yaml"
+  pod_runtime = "kata"
+  @result_pods = admin.cli_exec(:get, resource: "pods", n:kata_ns, o: "jsonpath='{.items[?(@.spec.runtimeClassName==\"kata\")].metadata.name}'")
+  logger.info("Installing #{pod_name}")
+  if @result_pods[:stdout].to_s.include? "''"
+    logger.warn("No pods with kata runtime")
+    logger.info("Deploying #{pod_name} pod with kata runtime")
+    step %Q/I switch to cluster admin pseudo user/
+    #step %Q/I create a new project/
+    cb.test_project_name = project.name
+    step %Q(I run oc create over ERB test file: #{file_path})
+    sleep(60)
+    raise "Kata pod creation failed" unless @result[:success]
+    logger.info("Waiting for RUNNING pod status")
+    logger.info("Checking for runtime engine match...")
+    @result_pods = admin.cli_exec(:get, resource: "pods", n:kata_ns, o: "jsonpath='{.items[?(@.spec.runtimeClassName==\"kata\")].metadata.name}'")
+    raise "Failed to deploy #{pod_name}" unless !@result_pods[:stdout].to_s.include? "''"
+  else
+    logger.info("List of pods with kata runtime:\n #{@result_pods[:stdout]}")
+  end
+end
