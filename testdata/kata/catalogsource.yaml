@@ -1,9 +1,9 @@
 apiVersion: operators.coreos.com/v1alpha1
 kind: CatalogSource
 metadata:
- name:  qe-optional-operators
+ name:  redhat-operators
  namespace: openshift-marketplace
 spec:
  sourceType: grpc
- image: quay.io/openshift-qe-optional-operators/ocp4-index:latest
+ image: registry.redhat.io/redhat/redhat-operator-index:v4.9
 
