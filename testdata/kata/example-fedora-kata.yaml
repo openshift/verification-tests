@@ -1,16 +1,14 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: example-fedora-kata
+  name: example
   labels:
-    app: example-fedora-kata-app
+    app: httpd
+  namespace: openshift-sandboxed-containers-operator
 spec:
   containers:
-    - name: example-fedora
-      image: fedora:30
+    - name: httpd
+      image: 'image-registry.openshift-image-registry.svc:5000/openshift/httpd:latest'
       ports:
-        - containerPort: 8080
-      command: ["python3"]
-      args: [ "-m", "http.server", "8080"]
+	- containerPort: 8080
   runtimeClassName: kata
-
