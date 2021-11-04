@@ -83,7 +83,9 @@ module BushSlicer
         ## let attacher know we finish and wait for queue drain
         @attach_queue << false
         wait_for_attacher
-        @artifacts_filer.clean_up if @artifacts_filer
+        unless @artifacts_filer.is_a? BushSlicer::Amz_EC2
+          @artifacts_filer.clean_up if @artifacts_filter
+        end
       end
     end
 
@@ -154,26 +156,62 @@ module BushSlicer
     end
 
     def artifacts_base_url
-      File.join(
-        conf[:services, :artifacts_file_server, :url],
-        artifacts_relative_path
-      )
+      if ENV['USE_SCP_SERVER']
+        File.join(
+          conf[:services, :artifacts_file_server, :url],
+          artifacts_relative_path
+        )
+      else # s3
+        # we can generate in the framework with the resulting URL valid only 7
+        # days, or use the proxy presigned_url generator web service which
+        # generates a new url each time.  Set environment variable
+        # GEN_DATA_HUB_URL to use the framework approach
+        unless ENV['GEN_DATA_HUB_URL']
+          File.join(
+            conf[:services, :"DATA-HUB", :url_generator_endpoint],
+            conf[:services, :"DATA-HUB", :generator_controller_path]
+          )
+        else
+          File.join(
+            conf[:services, :"DATA-HUB", :endpoint],
+            conf[:services, :"DATA-HUB", :bucket_name]
+          )
+        end
+      end
     end
 
     def artifacts_base_remote_path
-      remote_path = File.join(
-        conf[:services, :artifacts_file_server, :upload_path],
-        artifacts_relative_path
-      )
+      if ENV['USE_SCP_SERVER']
+        remote_path = File.join(
+          conf[:services, :artifacts_file_server, :upload_path],
+          artifacts_relative_path
+        )
+      else
+        remote_path = File.join(
+          "logs/", artifacts_relative_path)
+      end
     end
 
     # @return [Array<String>] list of attached artifacts URLs for a dir
     def artifacts_urls(dir)
       urls = []
-      dirchars = dir.length + ( dir.end_with?("/","\\") ? 0 : 1 )
-      Find.find(dir) do |file|
-        if File.file? file
-          urls << File.join(artifacts_base_url, File.basename(dir), file[dirchars..-1])
+      if ENV['USE_SCP_SERVER']
+        dirchars = dir.length + ( dir.end_with?("/","\\") ? 0 : 1 )
+        Find.find(dir) do |file|
+          if File.file? file
+            urls << File.join(artifacts_base_url, File.basename(dir), file[dirchars..-1])
+          end
+        end
+      else # s3 object
+        if ENV['GEN_DATA_HUB_URL']
+          dhub = BushSlicer::Amz_EC2.new(service_name: "DATA-HUB")
+          urls << dhub.s3_generate_url(key: File.join(artifacts_base_remote_path, File.basename(dir)))
+        else
+          object_key = artifacts_base_remote_path + "/" + File.basename(dir)
+          logger.info("obj_key: #{object_key}")
+          url = artifacts_base_url +  object_key
+          logger.info("URL: #{url}")
+          urls << url
         end
       end
       return urls
@@ -181,13 +219,23 @@ module BushSlicer
 
     # executed from within the attacher thread to actually upload/attach log;
     def handle_attach(dir)
-      ## upload files
-      artifacts_filer.mkdir artifacts_base_remote_path, raw: true
-      artifacts_filer.copy_to(dir, artifacts_base_remote_path, raw: true)
-    rescue => e
-      Kernel.puts exception_to_string(e)
-    ensure
-      FileUtils.remove_entry dir
+      if ENV['USE_SCP_SERVER']
+        begin
+          ## upload files
+          artifacts_filer.mkdir artifacts_base_remote_path, raw: true
+          artifacts_filer.copy_to(dir, artifacts_base_remote_path, raw: true)
+        rescue => e
+          Kernel.puts exception_to_string(e)
+        ensure
+          FileUtils.remove_entry dir
+        end
+      else
+        # this is a Aws_EC2 instance
+        bucket_name = conf['services', 'DATA-HUB', 'bucket_name']
+        key = artifacts_filer.upload_cucushift_html(bucket_name: bucket_name,
+          local_log: dir, dst_base_path: artifacts_base_remote_path)
+        logger.info("HTML log uploaded to #{bucket_name} with key #{key}")
+      end
     end
 
     # @param job [TCMSTestCase]
@@ -231,13 +279,16 @@ module BushSlicer
     # @return [BushSlicer::Host] of the server storing logs and artifacts
     def artifacts_filer
       @artifacts_filer if @artifacts_filer
-
-      @artifacts_filer = BushSlicer.
-        const_get(conf[:services, :artifacts_file_server, :host_type]).
-        new(
-          conf[:services, :artifacts_file_server, :hostname],
-          **conf[:services, :artifacts_file_server]
-        )
+      if ENV['USE_SCP_SERVER']
+        @artifacts_filer = BushSlicer.
+          const_get(conf[:services, :artifacts_file_server, :host_type]).
+          new(
+            conf[:services, :artifacts_file_server, :hostname],
+            **conf[:services, :artifacts_file_server]
+          )
+      else
+        @artifacts_filer = BushSlicer::Amz_EC2.new(service_name: "DATA-HUB")
+      end
       return @artifacts_filer
     end
   end
