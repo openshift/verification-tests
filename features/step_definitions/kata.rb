@@ -227,3 +227,40 @@ Given /^I remove all kata pods in the cluster stored in the#{OPT_SYM} clipboard$
     end
   end
 end
+
+Given /^Valid cluster type for kata tests exists$/ do
+  accepted_platforms = ['gcp', 'azure']
+  iaas_type = env.iaas[:type] rescue nil
+  raise "Kata installation only supports GCE platform #{iaas_type} is not a valid cluster type" unless accepted_platforms.include? iaas_type
+  logger.info("Cluster type #{iaas_type} is a valid cluster type")
+end
+
+Given /^Catalog source #{QUOTED} exists in #{QUOTED} namespace$/ do |catalog_source_name, project_name|
+  step %Q/I switch to cluster admin pseudo user/
+  project(project_name)
+  raise "Failed to create catalog source" unless catalog_source("#{catalog_source_name}").exists?
+  logger.info("Catalog source #{catalog_source_name} exists")
+end
+
+When /^I install sandboxed-operator in #{QUOTED} namespace$/ do |kata_ns|
+  step %Q/I store master major version in the :master_version clipboard/
+  step %Q/I switch to cluster admin pseudo user/
+  step %Q|I obtain test data file "kata/release-#{cb.master_version}/deployment.yaml"|
+  @result = user.cli_exec(:apply, f: "deployment.yaml")
+  raise "Failed to install sandboxed-operator" unless @result[:success]
+end
+
+Then /^Operator should be up and running$/ do
+  step %Q/I wait until sandboxed operator is ready/
+end
+
+Given /^I wait until sandboxed operator is ready$/ do
+  timeout = 120
+  kata_ns = "openshift-sandboxed-containers-operator"
+  expected_status = "Installed"
+  wait_for(timeout) do
+    @operator_status = admin.cli_exec(:get, resource: "operators", o: "jsonpath=''{..status.components.refs[4].conditions[0].type}'", n:kata_ns)[:stdout]
+  end
+  raise "Failed to install sandboxed operator" unless @operator_status.to_s.include? expected_status
+  logger.info("Sandboxed operator installation status is #{@operator_status}")
+end
