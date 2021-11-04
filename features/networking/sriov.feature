@@ -251,7 +251,7 @@ Feature: Sriov related scenarios
     When I run the :delete admin command with:
       | object_type       | net-attach-def        |
       | object_name_or_id | intel-netdevice-rhcos |
-      | namespace         | <%= cb.usr_project1%> |
+      | namespace         | <%= cb.usr_project%>  |
     Then the step should succeed
     And I wait up to 30 seconds for the steps to pass:
     """
@@ -403,13 +403,12 @@ Feature: Sriov related scenarios
     When I execute on the pod:
       | bash | -c | cat /sys/class/net/net1/address |
     Then the step should succeed
-    And evaluation of `@result[:response].strip` is stored in the :pod1_net1_mac clipboard
+    And evaluation of `@result[:stdout].match(/\h+:\h+:\h+:\h+:\h+:\h+/)[0].strip` is stored in the :pod1_net1_mac clipboard
     Given I use the "<%= pod.node_name %>" node
     And I run commands on the host:
       | ip link show ens3f0 |
     Then the step should succeed
     And the output should contain "<%= cb.pod1_net1_mac %>"
-
 
   # @author zzhao@redhat.com
   @destructive
@@ -565,32 +564,20 @@ Feature: Sriov related scenarios
     Then the step should succeed
     Given 10 seconds have passed
     When I run the :logs admin command with:
-      | resource_name | <%= pod.name %> |
-      | since         | 10s             |
+      | resource_name | <%= pod.name %>             |
+      | c             | sriov-network-config-daemon |
+      | since         | 10s                         |
     Then the step should succeed
     And the output should not contain "nodeUpdateHandler"
     Given I patch the sriov logs to "2"
     Then the step should succeed
     Given 10 seconds have passed
     When I run the :logs admin command with:
-      | resource_name | <%= pod.name %> |
-      | since         | 10s             |
+      | resource_name | <%= pod.name %>             |
+      | c             | sriov-network-config-daemon |
+      | since         | 10s                         |
     Then the step should succeed
     And the output should contain "nodeUpdateHandler"
-
-  # @author zzhao@redhat.com
-  # @case_id OCP-30269
-  @destructive
-  @admin
-  Scenario: Negtive testing for loglevel for sriov config daemon
-    Given the sriov operator is running well
-    Given sriov config daemon is ready
-    Given I patch the sriov logs to "3"
-    Then the step should fail
-    And the output should contain "logLevel in body should be less than or equal to 2"
-    Given I patch the sriov logs to "-1"
-    Then the step should fail
-    And the output should contain "logLevel in body should be greater than or equal to 0"
 
   # @author zzhao@redhat.com
   # @case_id OCP-30277
@@ -673,65 +660,20 @@ Feature: Sriov related scenarios
     And the output should contain "mtu 1800"
 
   # @author zzhao@redhat.com
-  # @case_id OCP-32641
-  @destructive
-  @admin
-  Scenario: MTU can be set according the PF when policy is not specified
-    Given the sriov operator is running well
-    Given sriov config daemon is ready
-    And I use the "<%= pod.node_name %>" node
-    And I run commands on the host:
-      | ip link set dev ens2f0 mtu 2020 |
-    Then the step should succeed
-    Given I obtain test data file "networking/sriov/sriovnetworkpolicy/mlx277-netdevice-without-mtu.yaml"
-    Given I create sriov resource with following:
-      | cr_yaml       | mlx277-netdevice-without-mtu.yaml    |
-      | cr_name       | mlx277-netdevice-without-mtu         |
-      | resource_type | sriovnetworknodepolicies             |
-    Then the step should succeed
-    And I wait up to 500 seconds for the steps to pass:
-    """
-    When I run the :get admin command with:
-      | resource    | sriovnetworknodestates           |
-      | namespace   | openshift-sriov-network-operator |
-      | o           | yaml                             |
-    Then the step should succeed
-    And the output should contain:
-      | mlx277-netdevice-without-mtu |
-      | syncStatus: Succeeded        |
-      | vfID: 1                      |
-    """
-    Given I switch to the first user
-    And I have a project
-    And evaluation of `project.name` is stored in the :usr_project clipboard
-    Given I obtain test data file "networking/sriov/sriovnetwork/mlx277netdevice.yaml"
-    Given I create sriov resource with following:
-      | cr_yaml       | mlx277netdevice.yaml |
-      | cr_name       | mlx277-netdevice     |
-      | resource_type | sriovnetwork         |
-      | project       | <%= cb.usr_project%> |
-    Then the step should succeed
-
-    And admin checks that the "mlx277-netdevice" network_attachment_definition exists in the "<%= cb.usr_project %>" project
-    And I use the "<%= cb.usr_project%>" project
-    Given I obtain test data file "networking/sriov/pod/sriov-macvlan.yaml"
-    When I run oc create over "sriov-macvlan.yaml" replacing paths:
-      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | mlx277-netdevice |
-    Then the step should succeed
-    And a pod becomes ready with labels:
-      | name=sriov-macvlan |
-    When I execute on the pod:
-      | bash | -c | ip a show net1 |
-    Then the step should succeed
-    And the output should contain "mtu 2020"
-
-  # @author zzhao@redhat.com
   # @case_id OCP-34092
   @destructive
   @admin
   @inactive
   Scenario: sriov-device-plugin can be scheduled on any node
     Given the sriov operator is running well
+    Given I obtain test data file "networking/sriov/sriovnetworkpolicy/mlx278-netdevice.yaml"
+    Given I create sriov resource with following:
+      | cr_yaml       | mlx278-netdevice.yaml    |
+      | cr_name       | mlx278-netdevice         |
+      | resource_type | sriovnetworknodepolicies |
+    Then the step should succeed
+    And I wait up to 50 seconds for the steps to pass:
+    """
     When I run the :get admin command with:
       | resource  | ds/sriov-device-plugin            |
       | namespace | openshift-sriov-network-operator  |
@@ -739,3 +681,96 @@ Feature: Sriov related scenarios
     Then the step should succeed
     And the output should contain "operator: Exists"
     And the output should not contain "NoSchedule"
+    """
+
+  # @author zzhao@redhat.com
+  # @case_id OCP-25321
+  @destructive
+  @admin
+  Scenario: dpdk for intel card works well
+    Given the sriov operator is running well
+    Given I obtain test data file "networking/sriov/sriovnetworkpolicy/intel-dpdk.yaml"
+    Given I create sriov resource with following:
+      | cr_yaml       | intel-dpdk.yaml          |
+      | cr_name       | intel-dpdk               |
+      | resource_type | sriovnetworknodepolicies |
+    Then the step should succeed
+    And I wait up to 300 seconds for the steps to pass:
+    """
+    When I run the :get admin command with:
+      | resource    | sriovnetworknodestates           |
+      | namespace   | openshift-sriov-network-operator |
+      | o           | yaml                             |
+    Then the step should succeed
+    And the output should contain:
+      | intel-dpdk            |
+      | syncStatus: Succeeded |
+      | vfID: 1               |
+    """
+    Given I switch to the first user
+    And I have a project
+    And evaluation of `project.name` is stored in the :usr_project clipboard
+    Given I obtain test data file "networking/sriov/sriovnetwork/intel-dpdk.yaml"
+    Given I create sriov resource with following:
+      | cr_yaml       | intel-dpdk.yaml        |
+      | cr_name       | dpdk-network           |
+      | resource_type | sriovnetwork           |
+      | project       | <%= cb.usr_project%>   |
+    Then the step should succeed
+
+    And admin checks that the "dpdk-network" network_attachment_definition exists in the "<%= cb.usr_project%>" project
+    Given I switch to the first user
+    And I use the "<%= cb.usr_project%>" project
+    Given I obtain test data file "networking/sriov/pod/sriov-specified-cpu.yaml"
+    When I run oc create over "sriov-specified-cpu.yaml" replacing paths:
+      | ["metadata"]["annotations"]["k8s.v1.cni.cncf.io/networks"] | dpdk-network |
+    Then the step should succeed
+    And a pod becomes ready with labels:
+      | name=sriov-specified-cpu |
+    When I execute on the pod:
+      | bash | -c | ls /dev/vfio |
+    Then the step should succeed
+    And evaluation of `@result[:response].match(/\d{1,3}/)[0].strip` is stored in the :dpdk_id clipboard
+    Given I use the "<%= pod.node_name %>" node
+    And I run commands on the host:
+      | ls /dev/vfio |
+    Then the step should succeed
+    And the output should contain "<%= cb.dpdk_id %>"
+
+  # @author zzhao@redhat.com
+  # @case_id OCP-37458
+  @destructive
+  @admin
+  Scenario: user can disable drain node by DisableDrain
+    Given the sriov operator is running well
+    #disable drain node by DisableDrain
+    #When I run the :patch admin command with:
+    #  | resource      | sriovoperatorconfigs.sriovnetwork.openshift.io |
+    #  | resource_name | default                                        |
+    #  | p             | {"spec":{"disableDrain": true}}                |
+    #  | type          | merge                                          |
+    #Then the step should succeed
+    Given as admin I successfully merge patch resource "sriovoperatorconfigs.sriovnetwork.openshift.io/default" with:
+      | {"spec":{"disableDrain": true}}   |
+    And I register clean-up steps:
+    """
+    as admin I successfully merge patch resource "sriovoperatorconfigs.sriovnetwork.openshift.io/default" with:
+      | {"spec":{"disableDrain": false}}  |
+    """
+
+    Given I obtain test data file "networking/sriov/sriovnetworkpolicy/intel-dpdk.yaml"
+    Given I create sriov resource with following:
+      | cr_yaml       | intel-dpdk.yaml          |
+      | cr_name       | intel-dpdk               |
+      | resource_type | sriovnetworknodepolicies |
+    Then the step should succeed
+    Given sriov config daemon is ready
+    And I wait up to 30 seconds for the steps to pass:
+    """
+    When I run the :logs admin command with:
+      | resource_name | <%= pod.name %>             |
+      | c             | sriov-network-config-daemon |
+      | since         | 40s                         |
+    Then the step should succeed
+    And the output should contain "disableDrain true"
+    """
