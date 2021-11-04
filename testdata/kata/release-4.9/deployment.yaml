@@ -21,6 +21,6 @@ spec:
   channel: "preview-1.1"
   installPlanApproval: Automatic
   name: sandboxed-containers-operator
-  source: qe-app-registry
+  source: redhat-operators
   sourceNamespace: openshift-marketplace
   startingCSV: sandboxed-containers-operator.v1.1.0
