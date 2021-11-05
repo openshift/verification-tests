@@ -1,5 +1,5 @@
 Feature: SDN sctp compoment upgrade testing
- 
+
   # @author weliang@redhat.com
   @admin
   @upgrade-prepare
@@ -18,7 +18,7 @@ Feature: SDN sctp compoment upgrade testing
     Then the outputs should contain "Ready"
     Given I check load-sctp-module in all workers
     """
-    
+
     When I use the "sctp-upgrade" project
     Given I obtain test data file "networking/sctp/sctpserver-upgrade.yaml"
     When I run the :create client command with:
@@ -29,7 +29,7 @@ Feature: SDN sctp compoment upgrade testing
       | name=sctpserver    |
     And evaluation of `pod.ip` is stored in the :serverpod_ip clipboard
     And evaluation of `pod.name` is stored in the :sctpserver clipboard
-    
+
     Given I obtain test data file "networking/sctp/sctpclient-upgrade.yaml"
     When I run the :create client command with:
       | f | sctpclient-upgrade.yaml |
@@ -47,19 +47,19 @@ Feature: SDN sctp compoment upgrade testing
       | oc_opts_end      |                             |
       | exec_command     | bash                        |
       | exec_command_arg | -c                          |
-      | exec_command_arg | /usr/bin/nc -l 30102 --sctp |
+      | exec_command_arg | ncat -l 30102 --sctp        |
     Then the step should succeed
-    # sctpclient pod start to send sctp traffic   
+    # sctpclient pod start to send sctp traffic
     When I run the :exec client command with:
-      | pod              | <%= cb.sctpclient %>                                             |
-      | namespace        | sctp-upgrade                                                     |
-      | oc_opts_end      |                                                                  |
-      | exec_command     | bash                                                             |
-      | exec_command_arg | -c                                                               |
-      | exec_command_arg | echo test-openshift \| nc -v <%= cb.serverpod_ip %> 30102 --sctp |
+      | pod              | <%= cb.sctpclient %>                                               |
+      | namespace        | sctp-upgrade                                                       |
+      | oc_opts_end      |                                                                    |
+      | exec_command     | bash                                                               |
+      | exec_command_arg | -c                                                                 |
+      | exec_command_arg | echo test-openshift \| ncat -v <%= cb.serverpod_ip %> 30102 --sctp |
     Then the step should succeed
     """
-   
+
 
   # @author weliang@redhat.com
   # @case_id OCP-44765
@@ -85,18 +85,18 @@ Feature: SDN sctp compoment upgrade testing
       | oc_opts_end      |                             |
       | exec_command     | bash                        |
       | exec_command_arg | -c                          |
-      | exec_command_arg | /usr/bin/nc -l 30102 --sctp |
+      | exec_command_arg | ncat -l 30102 --sctp |
     Then the step should succeed
-    # sctpclient pod start to send sctp traffic   
+    # sctpclient pod start to send sctp traffic
     When I run the :exec client command with:
       | pod              | <%= cb.sctpclient %>                                             |
       | namespace        | sctp-upgrade                                                     |
       | oc_opts_end      |                                                                  |
       | exec_command     | bash                                                             |
       | exec_command_arg | -c                                                               |
-      | exec_command_arg | echo test-openshift \| nc -v <%= cb.serverpod_ip %> 30102 --sctp |
+      | exec_command_arg | echo test-openshift \| ncat -v <%= cb.serverpod_ip %> 30102 --sctp |
     Then the step should succeed
     """
-    
+
     # delete the created project
     Given the "sctp-upgrade" project is deleted
