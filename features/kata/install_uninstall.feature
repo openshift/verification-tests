@@ -1,7 +1,7 @@
 Feature: kata install/uninstall related features
   Background:
   Given a valid cluster type for kata tests exists
-
+  
   # @author valiev@redhat.com
   # @case_id OCP-41813
   @admin

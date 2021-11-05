@@ -54,7 +54,7 @@ Feature: storageClass related feature
   # @author chaoyang@redhat.com
   @admin
   @smoke
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   Scenario Outline: storage class provisioner
     Given I have a project
     And admin clones storage class "sc-<%= project.name %>" from ":default" with:
@@ -109,7 +109,7 @@ Feature: storageClass related feature
   # @author lxia@redhat.com
   @admin
   @destructive
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   Scenario Outline: New creation PVC failed when multiple classes are set as default
     Given I have a project
     Given I obtain test data file "storage/misc/storageClass.yaml"
@@ -305,7 +305,7 @@ Feature: storageClass related feature
   # @author chaoyang@redhat.com
   # @case_id OCP-10228
   @smoke
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @aws-ipi
   @aws-upi
   @upgrade-sanity

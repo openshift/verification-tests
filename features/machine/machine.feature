@@ -4,7 +4,7 @@ Feature: Machine features testing
   # @case_id OCP-21196
   @smoke
   @admin
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @upgrade-sanity
   Scenario: Machines should be linked to nodes
@@ -35,7 +35,7 @@ Feature: Machine features testing
   # @case_id OCP-37706
   @smoke
   @admin
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -47,7 +47,7 @@ Feature: Machine features testing
   # @case_id OCP-25436
   @admin
   @destructive
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @upgrade-sanity
   Scenario: Scale up and scale down a machineSet

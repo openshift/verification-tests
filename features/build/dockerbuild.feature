@@ -2,7 +2,7 @@ Feature: dockerbuild.feature
   # @author wzheng@redhat.com
   # @case_id OCP-12115
   @smoke
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -87,7 +87,7 @@ Feature: dockerbuild.feature
 
   # @author dyan@redhat.com
   # @case_id OCP-12855
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -150,6 +150,7 @@ Feature: dockerbuild.feature
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: Mount source secret to builder container- dockerstrategy
     Given I have a project
     When I run the :create_secret client command with:
@@ -187,6 +188,7 @@ Feature: dockerbuild.feature
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: Mount source configmap to builder container- dockerstrategy
     Given I have a project
     When I run the :create_configmap client command with:
@@ -223,6 +225,7 @@ Feature: dockerbuild.feature
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: Mount multi paths to builder container
     Given I have a project
     When I run the :create_secret client command with:
@@ -261,6 +264,7 @@ Feature: dockerbuild.feature
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: Can't add relative path for mount path
     Given I have a project
     When I run the :create_secret client command with:
@@ -294,6 +298,7 @@ Feature: dockerbuild.feature
   # @case_id OCP-42529
   @4.10 @4.9
   @azure-upi
+  @upgrade-sanity
   Scenario: Mount source name must be unique
     Given I have a project
     When I run the :create_secret client command with:

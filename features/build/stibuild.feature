@@ -1,6 +1,6 @@
 Feature: stibuild.feature
   # @author xiuwang@redhat.com
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   Scenario Outline: Trigger s2i/docker/custom build using additional imagestream
     Given I have a project
     Given I obtain test data file "templates/<template>"
@@ -101,7 +101,7 @@ Feature: stibuild.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-28891
   @disconnected
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -132,6 +132,7 @@ Feature: stibuild.feature
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @upgrade-sanity
   Scenario: Mount source secret and configmap to builder container- sourcestrategy 
     Given I have a project
     When I run the :create_secret client command with:

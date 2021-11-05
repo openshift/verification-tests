@@ -7,7 +7,7 @@ Feature: CSI clone testing related feature
   
   # @author jianl@redhat.com
   # @case_id OCP-27615
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @openstack-ipi
   @openstack-upi
   @upgrade-sanity
@@ -146,7 +146,7 @@ Feature: CSI clone testing related feature
 
   # @author wduan@redhat.com
   # @case_id OCP-30315
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @openstack-ipi
   @openstack-upi
   @upgrade-sanity
