@@ -163,7 +163,7 @@ Given /^I have LDAP service in my project$/ do
     stats = {}
     step %Q/I run the :run client command with:/, table(%{
       | name  | ldapserver                                       |
-      | image | quay.io/openshifttest/ldap:openldap-2441-centos7 |
+      | image | quay.io/openshifttest/ldap:multiarch |
       })
     step %Q/the step should succeed/
     step %Q/a pod becomes ready with labels:/, table(%{
