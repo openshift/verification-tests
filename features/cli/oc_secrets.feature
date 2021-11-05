@@ -53,7 +53,7 @@ Feature: oc_secrets.feature
 
   # @author xiaocwan@redhat.com
   # @case_id OCP-10631
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity

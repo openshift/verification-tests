@@ -2,7 +2,7 @@ Feature: oc idle
 
   # @author chezhang@redhat.com
   # @case_id OCP-11633
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -49,7 +49,7 @@ Feature: oc idle
 
   # @author chezhang@redhat.com
   # @case_id OCP-11980
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -89,7 +89,7 @@ Feature: oc idle
 
   # @author chezhang@redhat.com
   # @case_id OCP-12085
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -134,7 +134,7 @@ Feature: oc idle
 
   # @author chezhang@redhat.com
   # @case_id OCP-12169
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity

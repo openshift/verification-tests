@@ -69,7 +69,7 @@ Feature: build 'apps' with CLI
   # @author xiuwang@redhat.com
   # @case_id OCP-11133
   @proxy
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -134,7 +134,7 @@ Feature: build 'apps' with CLI
 
   # @author xiuwang@redhat.com
   # @case_id OCP-11139
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -178,7 +178,7 @@ Feature: build 'apps' with CLI
   # @author cryan@redhat.com
   # @case_id OCP-11227
   @proxy
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -207,7 +207,7 @@ Feature: build 'apps' with CLI
 
   # @case_id OCP-10771
   @proxy
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -229,7 +229,7 @@ Feature: build 'apps' with CLI
   # @author cryan@redhat.com
   # @case_id OCP-11943
   @proxy
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -294,7 +294,7 @@ Feature: build 'apps' with CLI
 
   # @author cryan@redhat.com
   # @case_id OCP-11776
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -325,7 +325,7 @@ Feature: build 'apps' with CLI
 
   # @author xiuwang@redhat.com
   # @case_id OCP-11552
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -385,7 +385,7 @@ Feature: build 'apps' with CLI
   # @author cryan@redhat.com
   # @case_id OCP-11582
   @proxy
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -466,7 +466,7 @@ Feature: build 'apps' with CLI
 
   # @author cryan@redhat.com
   @proxy
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   Scenario Outline: Cancel multiple new/pending/running builds
     Given I have a project
     When I run the :new_build client command with:
@@ -612,7 +612,7 @@ Feature: build 'apps' with CLI
 
   # @author haowang@redhat.com
   @proxy
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   Scenario Outline: The default runpolicy is Serial build -- new-build/new-app command
     Given I have a project
     When I run the :<cmd> client command with:
@@ -709,7 +709,7 @@ Feature: build 'apps' with CLI
 
   # @author cryan@redhat.com
   # @case_id OCP-11023
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -737,7 +737,7 @@ Feature: build 'apps' with CLI
   # @author wzheng@redhat.com
   # @case_id OCP-17523
   @proxy
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -757,7 +757,7 @@ Feature: build 'apps' with CLI
   # @author xiuwang@redhat.com
   # @case_id OCP-19631
   @proxy
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -892,7 +892,7 @@ Feature: build 'apps' with CLI
   # @author xiuwang@redhat.com
   # @case_id OCP-18962
   @proxy
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity

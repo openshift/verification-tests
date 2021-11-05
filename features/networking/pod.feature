@@ -3,7 +3,7 @@ Feature: Pod related networking scenarios
   # @author bmeng@redhat.com
   # @case_id OCP-9747
   @admin
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -26,7 +26,7 @@ Feature: Pod related networking scenarios
   # @case_id OCP-10031
   @smoke
   @disconnected
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -47,7 +47,7 @@ Feature: Pod related networking scenarios
   # @author yadu@redhat.com
   # @case_id OCP-14986
   @admin
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -77,7 +77,7 @@ Feature: Pod related networking scenarios
   # @author bmeng@redhat.com
   # @case_id OCP-10817
   @admin
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -233,7 +233,7 @@ Feature: Pod related networking scenarios
   # @author anusaxen@redhat.com
   # @case_id OCP-23894
   @admin
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity

@@ -11,9 +11,10 @@ Feature: kata related features
   # @case_id OCP-36509
   @admin
   @destructive
-  @4.10 @4.9
+  @4.8 @4.10 @4.9
   @gcp-ipi @baremetal-ipi @azure-ipi
   @gcp-upi @azure-upi
+  @upgrade-sanity
   Scenario: test delete kata installation
     Given I remove kata operator from the namespace
 
@@ -46,6 +47,8 @@ Feature: kata related features
   # @case_id OCP-41813
   @admin
   @destructive
+  @upgrade-sanity
+  @4.8
   Scenario: install kata, verify pod has kata runtime followed by uninstall kata from cluster
     Given the kata-operator is installed using OLM CLI
     And I verify kata container runtime is installed into a worker node

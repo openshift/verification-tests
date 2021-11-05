@@ -3,7 +3,7 @@ Feature: Egress IP related features
   # @author bmeng@redhat.com
   # @case_id OCP-15465
   @admin
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @aws-ipi
   @vsphere-upi @aws-upi
   @upgrade-sanity
@@ -21,7 +21,7 @@ Feature: Egress IP related features
 
   # @author bmeng@redhat.com
   # @case_id OCP-15466
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @aws-ipi
   @vsphere-upi @aws-upi
   @upgrade-sanity
@@ -39,7 +39,7 @@ Feature: Egress IP related features
   # @author bmeng@redhat.com
   # @case_id OCP-15471
   @admin
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi
   @vsphere-upi
   @upgrade-sanity

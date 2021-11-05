@@ -2,7 +2,7 @@ Feature: change the policy of user/service account
 
   # @author xxing@redhat.com
   # @case_id OCP-11074
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -54,7 +54,7 @@ Feature: change the policy of user/service account
   # @author xxing@redhat.com
   # @case_id OCP-12430
   @admin
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -74,7 +74,7 @@ Feature: change the policy of user/service account
   # @author xiaocwan@redhat.com
   # @case_id OCP-11442
   @proxy
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -130,7 +130,7 @@ Feature: change the policy of user/service account
   # @author chezhang@redhat.com
   # @case_id OCP-10211
   @admin
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -265,7 +265,7 @@ Feature: change the policy of user/service account
   # @case_id OCP-10466
   @admin
   @smoke
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @aws-ipi
   @aws-upi
   @upgrade-sanity
@@ -326,7 +326,7 @@ Feature: change the policy of user/service account
   # @author lxia@redhat.com
   # @case_id OCP-10467
   @admin
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -395,7 +395,7 @@ Feature: change the policy of user/service account
 
   # @author chuyu@redhat.com
   # @case_id OCP-9551
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
@@ -505,7 +505,7 @@ Feature: change the policy of user/service account
 
   # @author chuyu@redhat.com
   # @case_id OCP-9553
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
