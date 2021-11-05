@@ -228,7 +228,7 @@ Given /^I remove all kata pods in the cluster stored in the#{OPT_SYM} clipboard$
   end
 end
 
-Given /^Valid cluster type for kata tests exists$/ do
+Given /^a valid cluster type for kata tests exists$/ do
   accepted_platforms = ['gcp', 'azure']
   iaas_type = env.iaas[:type] rescue nil
   raise "Kata installation only supports GCE platform #{iaas_type} is not a valid cluster type" unless accepted_platforms.include? iaas_type
