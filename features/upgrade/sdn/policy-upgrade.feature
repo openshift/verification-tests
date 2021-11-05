@@ -381,9 +381,9 @@ Feature: SDN compoment upgrade testing
     Given I switch to cluster admin pseudo user
     And I store the workers in the :nodes clipboard
     When I run the :new_project client command with:
-      | project_name | nodeport-upgrade |
+      | project_name | conntrack-upgrade |
     Then the step should succeed
-    Given I use the "nodeport-upgrade" project
+    Given I use the "conntrack-upgrade" project
     And I obtain test data file "networking/pod_with_udp_port_4789_nodename.json"
     When I run oc create over "pod_with_udp_port_4789_nodename.json" replacing paths:
       | ["items"][0]["spec"]["template"]["spec"]["nodeName"] | <%= cb.nodes[0].name %> |
@@ -409,7 +409,7 @@ Feature: SDN compoment upgrade testing
   @azure-upi
   Scenario: Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted post upgrade
     Given I switch to cluster admin pseudo user
-    And I use the "nodeport-upgrade" project
+    And I use the "conntrack-upgrade" project
     And a pod becomes ready with labels:
       | name=udp-pods |
     And evaluation of `pod` is stored in the :host_pod1 clipboard
