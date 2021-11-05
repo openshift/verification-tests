@@ -4,7 +4,7 @@ Feature: Cluster Autoscaler Tests
   # @case_id OCP-28108
   @admin
   @destructive
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @upgrade-sanity
   Scenario: Cluster should automatically scale up and scale down with clusterautoscaler deployed

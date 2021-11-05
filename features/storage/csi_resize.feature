@@ -1,7 +1,7 @@
 Feature: CSI Resizing related feature
   # @author chaoyang@redhat.com
   @admin
-  @4.10 @4.9
+  @4.8 @4.10 @4.9
   Scenario Outline: Resize online volume from 1Gi to 2Gi
     Given I have a project
 
@@ -52,6 +52,7 @@ Feature: CSI Resizing related feature
 
     @openstack-ipi
     @openstack-upi
+    @upgrade-sanity
     Examples:
       | sc_name      |
       | standard-csi | # @case_id OCP-37559

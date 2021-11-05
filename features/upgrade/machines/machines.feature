@@ -24,7 +24,7 @@ Feature: Machine-api components upgrade tests
   # @author jhou@redhat.com
   @upgrade-check
   @admin
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   Scenario Outline: Cluster operator should be available after upgrade
     Given evaluation of `cluster_operator(<cluster_operator>).condition(type: 'Available')` is stored in the :co_available clipboard
     Then the expression should be true> cb.co_available["status"]=="True"
@@ -93,7 +93,7 @@ Feature: Machine-api components upgrade tests
   @upgrade-check
   @admin
   @destructive
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @upgrade-sanity
   Scenario: Scale up and scale down a machineSet after upgrade
@@ -216,7 +216,7 @@ Feature: Machine-api components upgrade tests
   @upgrade-check
   @admin
   @destructive
-  @4.7 @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @upgrade-sanity
   Scenario: Cluster should automatically scale up and scale down with clusterautoscaler deployed
