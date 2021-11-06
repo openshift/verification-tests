@@ -497,14 +497,19 @@ module BushSlicer
       template_hash = {}
       case_status = options.status
       run_title = options.title
-      valid_statuses = ['Passed', 'Failed', 'Waiting', 'Running', 'Blocked']
+      # 'All' statuss mean we ignore the status and just filter on subteam name
+      valid_statuses = ['Passed', 'Failed', 'Waiting', 'Running', 'Blocked', 'All']
       query_result = polarshift.get_run_smart(project, test_run_id, with_cases: 'full')
       if case_status
         case_status = case_status.downcase.capitalize
         raised "Invalid status given, only #{valid_statuses} are accepted" unless valid_statuses.include? case_status
-        filtered_cases = query_result['records']["TestRecord"].select {|r| r['result'] == case_status}
-        # user wants further filter by specifying subteam as as a single or
-        # multiple subteam by putting them in a csv
+        unless case_status == 'All'
+          filtered_cases = query_result['records']["TestRecord"].select {|r| r['result'] == case_status}
+        else  # ignore status and filter on subteam
+          # user wants further filter by specifying subteam as as a single or
+          # multiple subteam by putting them in a csv
+          filtered_cases = query_result['records']["TestRecord"]
+        end
         if opts[:subteam]
           subteams = opts[:subteam].split(',')
           target_cases = []
@@ -513,9 +518,10 @@ module BushSlicer
             target_cases << fc if subteams.include? fc_subteam
           end
           filtered_cases = target_cases
+          run_title ||= "Clone of '#{case_status}' #{subteams}  cases for #{test_run_id}"
         end
         tc_ids = filtered_cases.map {|c| c['test_case']['id']}
-        run_title ||= "Clone of '#{case_status}' cases for #{test_run_id}"
+        run_title ||= "Clone of '#{case_status}'  cases for #{test_run_id}"
       else
         tc_ids = extract_test_case_ids(query_result)
         run_title ||= "Clone of #{test_run_id}"
