@@ -15,8 +15,8 @@ spec:
       name: git-server
     spec:
       containers:
-      - image: quay.io/openshifttest/ssh-git-server-openshift
-        imagePullPolicy: IfNotPresent 
+      - image: quay.io/openshifttest/ssh-git-server-openshift:multiarch
+        imagePullPolicy: IfNotPresent
         name: git-server
         resources: {}
       dnsPolicy: ClusterFirst
