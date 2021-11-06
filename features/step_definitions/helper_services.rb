@@ -121,7 +121,7 @@ end
 Given /^I have a(n authenticated)? proxy configured in the project$/ do |use_auth|
   if use_auth
     step %Q/I run the :create_deploymentconfig client command with:/, table(%{
-      | image | quay.io/openshifttest/squid-proxy |
+      | image | quay.io/openshifttest/squid-proxy:multiarch |
       | name  | squid-proxy                       |
       })
     step %Q/I wait until the status of deployment "squid-proxy" becomes :running/
@@ -135,7 +135,7 @@ Given /^I have a(n authenticated)? proxy configured in the project$/ do |use_aut
     @result = user.cli_exec(:expose, resource: "deploymentconfig", resource_name: "squid-proxy", port: "3128")
   else
     step %Q/I run the :create_deployment client command with:/, table(%{
-      | image | quay.io/openshifttest/squid-proxy |
+      | image | quay.io/openshifttest/squid-proxy:multiarch |
       | name  | squid-proxy                       |
       })
     step %Q/a pod becomes ready with labels:/, table(%{
