@@ -255,12 +255,11 @@ Then /^Operator should be up and running$/ do
 end
 
 Given /^I wait until sandboxed operator is ready$/ do
-  timeout = 120
+  timeout = 60
   kata_ns = "openshift-sandboxed-containers-operator"
   expected_status = "Installed"
-  wait_for(timeout) do
-    @operator_status = admin.cli_exec(:get, resource: "operators", o: "jsonpath=''{..status.components.refs[4].conditions[0].type}'", n:kata_ns)[:stdout]
-  end
+  sleep(timeout)
+  @operator_status = admin.cli_exec(:get, resource: "operators", o: "jsonpath=''{..status.components.refs[4].conditions[0].type}'", n:kata_ns)[:stdout]
   raise "Failed to install sandboxed operator" unless @operator_status.to_s.include? expected_status
   logger.info("Sandboxed operator installation status is #{@operator_status}")
 end
