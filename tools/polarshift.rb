@@ -404,10 +404,10 @@ module BushSlicer
       @opts = opts
     end
 
-    # given a query_result from a call to get_smart_run()
+    # given a query_result from a call to get_smart_run() Array of testcase Hash
     # @return Array of testcase IDs
     def extract_test_case_ids(query_result)
-      query_result['records']['TestRecord'].map { |tr| tr['test_case']['id'] }
+      query_result.map { |tr| tr['test_case']['id'] }
     end
 
     # the Custom fields object from the original run is the form of {key: value
@@ -480,6 +480,18 @@ module BushSlicer
       end
     end
 
+    # @input a csv subteam, Array of cases
+    # @return Array of testcase Hash, Array of subteams
+    def filtered_cases_by_subteam(subteam_opt:, cases:)
+      subteams = subteam_opt.split(',')
+      target_cases = []
+      cases.each do |fc|
+        fc_subteam = get_subcomponent(fc)
+        target_cases << fc if subteams.include? fc_subteam
+      end
+      return target_cases, subteams
+    end
+
     # given a testrun_id, generate a query statement based on testcase IDs and custom fields
     # which is fed into create_run_smart method to generate the new polarion run
     # @options: is the cli options with
@@ -497,34 +509,36 @@ module BushSlicer
       template_hash = {}
       case_status = options.status
       run_title = options.title
-      # 'All' statuss mean we ignore the status and just filter on subteam name
-      valid_statuses = ['Passed', 'Failed', 'Waiting', 'Running', 'Blocked', 'All']
+      # if no statuss is given then we clone all cases
+      valid_statuses = ['Passed', 'Failed', 'Waiting', 'Running', 'Blocked']
       query_result = polarshift.get_run_smart(project, test_run_id, with_cases: 'full')
       if case_status
         case_status = case_status.downcase.capitalize
         raised "Invalid status given, only #{valid_statuses} are accepted" unless valid_statuses.include? case_status
-        unless case_status == 'All'
-          filtered_cases = query_result['records']["TestRecord"].select {|r| r['result'] == case_status}
-        else  # ignore status and filter on subteam
-          # user wants further filter by specifying subteam as as a single or
-          # multiple subteam by putting them in a csv
-          filtered_cases = query_result['records']["TestRecord"]
-        end
+        filtered_cases = query_result['records']["TestRecord"].select {|r| r['result'] == case_status}
         if opts[:subteam]
-          subteams = opts[:subteam].split(',')
-          target_cases = []
-          filtered_cases.each do |fc|
-            fc_subteam = get_subcomponent(fc)
-            target_cases << fc if subteams.include? fc_subteam
-          end
-          filtered_cases = target_cases
+          filtered_cases, subteams = filtered_cases_by_subteam(subteam_opt: opts[:subteam], cases: filtered_cases)
           run_title ||= "Clone of '#{case_status}' #{subteams}  cases for #{test_run_id}"
         end
         tc_ids = filtered_cases.map {|c| c['test_case']['id']}
+        if tc_ids.count == 0
+          print "No cases found matching your criteria\n"
+          exit
+        end
         run_title ||= "Clone of '#{case_status}'  cases for #{test_run_id}"
       else
-        tc_ids = extract_test_case_ids(query_result)
-        run_title ||= "Clone of #{test_run_id}"
+        filtered_cases = query_result['records']["TestRecord"]
+        if opts[:subteam]
+          filtered_cases, subteams = filtered_cases_by_subteam(subteam_opt: opts[:subteam], cases: filtered_cases)
+          run_title ||= "Clone of '#{case_status}' #{subteams}  cases for #{test_run_id}"
+        end
+        if filtered_cases.count > 0
+          tc_ids = extract_test_case_ids(filtered_cases)
+          run_title ||= "Clone of #{test_run_id}"
+        else
+          print("No cases found matching your criteria")
+          exit
+        end
       end
       if query_result['customFields'].nil?
         # hard-code it to something
