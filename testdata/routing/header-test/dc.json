@@ -18,7 +18,7 @@
         "containers": [
           {
             "name": "header-test-container",
-            "image": "quay.io/openshifttest/http-header-test@sha256:4ccfce22943c2afcc0c9fd575f6856086c5d937c260bf957af337eb8af57986e",
+            "image": "quay.io/openshifttest/http-header-test@sha256:6d5e683cbf96594cabe4d4c36ee7178d025897db5ab0fc2f671ccc8df844a569",
             "ports": [
               {
                 "containerPort": 8080,
