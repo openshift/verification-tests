@@ -3,7 +3,7 @@ Feature: Egress compoment upgrade testing
   # @author huirwang@redhat.com
   @admin
   @upgrade-prepare
-  @4.10 @4.9
+  @4.8 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Check egressfirewall is functional post upgrade - prepare
@@ -44,7 +44,7 @@ Feature: Egress compoment upgrade testing
   # @case_id OCP-44315
   @admin
   @upgrade-check
-  @4.10 @4.9
+  @4.8 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Check egressfirewall is functional post upgrade
@@ -69,7 +69,7 @@ Feature: Egress compoment upgrade testing
   # @author huirwang@redhat.com
   @admin
   @upgrade-prepare
-  @4.10 @4.9
+  @4.8 @4.10 @4.9
   @vsphere-ipi
   @vsphere-upi
   Scenario: Check ovn egressip is functional post upgrade - prepare
@@ -123,7 +123,7 @@ Feature: Egress compoment upgrade testing
   # @case_id OCP-44316
   @admin
   @upgrade-check
-  @4.10 @4.9
+  @4.8 @4.10 @4.9
   @vsphere-ipi
   @vsphere-upi
   Scenario: Check ovn egressip is functional post upgrade
@@ -222,14 +222,14 @@ Feature: Egress compoment upgrade testing
     """
 
   # @author huirwang@redhat.com
-  # @case_id OCP-45349 
+  # @case_id OCP-45349
   @admin
   @upgrade-check
   @4.10 @4.9
-  Scenario: Check sdn egressip is functional post upgrade 
+  Scenario: Check sdn egressip is functional post upgrade
     Given I run the :get admin command with:
-      | resource      | hostsubnet                                  |    
-      | o             | jsonpath={.items[?(@.egressCIDRs)].host}    |    
+      | resource      | hostsubnet                                  |
+      | o             | jsonpath={.items[?(@.egressCIDRs)].host}    |
     Then the step should succeed
     And evaluation of `@result[:response].split(" ")` is stored in the :egress_nodes clipboard
     And I register clean-up steps:
@@ -249,12 +249,12 @@ Feature: Egress compoment upgrade testing
 
     #Get configured EgressIPs
     When I run the :get admin command with:
-      | resource       | netnamespace             |   
+      | resource       | netnamespace             |
       | resource_name  | sdn-egressip-upgrade1    |
       | o              | jsonpath={.egressIPs[0]} |
     And evaluation of `@result[:response].chomp` is stored in the :egress_ip1 clipboard
     When I run the :get admin command with:
-      | resource       | netnamespace             |   
+      | resource       | netnamespace             |
       | resource_name  | sdn-egressip-upgrade2    |
       | o              | jsonpath={.egressIPs[0]} |
     And evaluation of `@result[:response].chomp` is stored in the :egress_ip2 clipboard

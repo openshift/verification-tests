@@ -130,7 +130,7 @@ Feature: apiserver and auth related upgrade check
   # @author kewang@redhat.com
   @upgrade-prepare
   @admin
-  @4.10 @4.9
+  @4.8 @4.10 @4.9
   @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Default RBAC role, rolebinding, clusterrole and clusterrolebinding without any missing after upgraded - prepare
@@ -163,7 +163,7 @@ Feature: apiserver and auth related upgrade check
   # @case_id OCP-19470
   @upgrade-check
   @admin
-  @4.10 @4.9
+  @4.8 @4.10 @4.9
   @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Default RBAC role, rolebinding, clusterrole and clusterrolebinding without any missing after upgraded
@@ -186,7 +186,7 @@ Feature: apiserver and auth related upgrade check
   @upgrade-prepare
   @admin
   @destructive
-  @4.10 @4.9
+  @4.8 @4.10 @4.9
   @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Check the default SCCs should not be stomped by CVO - prepare
@@ -212,7 +212,7 @@ Feature: apiserver and auth related upgrade check
   @upgrade-check
   @admin
   @destructive
-  @4.10 @4.9
+  @4.8 @4.10 @4.9
   @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Check the default SCCs should not be stomped by CVO
@@ -243,7 +243,7 @@ Feature: apiserver and auth related upgrade check
   @admin
   @upgrade-prepare
   @users=upuser1,upuser2
-  @4.10 @4.9
+  @4.8 @4.10 @4.9
   @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Upgrade action will cause re-generation of certificates for headless services to include the wildcard subjects - prepare
@@ -275,7 +275,7 @@ Feature: apiserver and auth related upgrade check
   @admin
   @upgrade-check
   @users=upuser1,upuser2
-  @4.10 @4.9
+  @4.8 @4.10 @4.9
   @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Upgrade action will cause re-generation of certificates for headless services to include the wildcard subjects

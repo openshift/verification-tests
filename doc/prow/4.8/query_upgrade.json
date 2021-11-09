@@ -1,0 +1,3 @@
+{
+  "case_query": "products.KEY:ocp AND NOT status:inactive AND type:testcase AND subcomponent.KEY:upgrade AND caseautomation.KEY:automated AND automation_script:cucushift AND NOT tags:(prod_only stage_only) AND version.KEY:4_8"
+}
