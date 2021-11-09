@@ -41,6 +41,7 @@ Feature: Elasticsearch related tests
   # @author qitang@redhat.com
   # @case_id OCP-30776
   @admin
+  @console
   @destructive
   @commonlogging
   Scenario: Elasticsearch6 new data modle indices

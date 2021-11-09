@@ -7,6 +7,7 @@ require 'prometheus_metrics_data'
 # helper step that does the following:
 # 1. figure out project and route information
 Given /^I login to kibana logging web console$/ do
+  ensure_console_tagged
   cb.logging_console_url = route('kibana', service('kibana',project('openshift-logging', switch: false))).dns(by: admin)
   base_rules = BushSlicer::WebConsoleExecutor::RULES_DIR + "/base/"
   snippets_dir = BushSlicer::WebConsoleExecutor::SNIPPETS_DIR
