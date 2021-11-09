@@ -50,7 +50,7 @@ Feature: basic verification for upgrade oc client testing
   # @author yinzhou@redhat.com
   @upgrade-prepare
   @users=upuser1,upuser2
-  @4.10 @4.9
+  @4.8 @4.10 @4.9
   @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Check some container related oc commands still work for ocp45 after upgrade - prepare
@@ -67,7 +67,7 @@ Feature: basic verification for upgrade oc client testing
   @upgrade-check
   @admin
   @users=upuser1,upuser2
-  @4.10 @4.9
+  @4.8 @4.10 @4.9
   @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Check some container related oc commands still work for ocp45 after upgrade

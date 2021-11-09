@@ -3,6 +3,7 @@ Feature: IPsec upgrade scenarios
   # @author anusaxen@redhat.com
   @admin
   @upgrade-prepare
+  @4.10 @4.9 @4.8
   Scenario: Confirm node-node and pod-pod packets are ESP enrypted on IPsec clusters post upgrade - prepare
     Given the env is using "OVNKubernetes" networkType
     And the IPsec is enabled on the cluster
@@ -13,7 +14,7 @@ Feature: IPsec upgrade scenarios
     Then the step should succeed
     When I use the "ipsec-upgrade" project
     Given I obtain test data file "networking/list_for_pods.json"
-    #Creating two test pods for pod-pod encryption check. Pods needs to be deployment/rc backed so that they can be migrate successfuly to the upgraded cluster.Creating each separat as they need to be on diff 
+    #Creating two test pods for pod-pod encryption check. Pods needs to be deployment/rc backed so that they can be migrate successfuly to the upgraded cluster.Creating each separat as they need to be on diff
     #nodes
     When I run oc create over "list_for_pods.json" replacing paths:
       | ["items"][0]["spec"]["template"]["spec"]["nodeName"]           | <%= cb.workers[1].name %> |
@@ -58,11 +59,12 @@ Feature: IPsec upgrade scenarios
        | sh | -c | timeout  --preserve-status 2 tcpdump -i <%= cb.default_interface %> esp |
     Then the step should succeed
     And the output should contain "ESP"
-      
+
   # @author anusaxen@redhat.com
   # @case_id OCP-44834
   @admin
   @upgrade-check
+  @4.10 @4.9 @4.8
   Scenario: Confirm node-node and pod-pod packets are ESP enrypted on IPsec clusters post upgrade
     Given evaluation of `50` is stored in the :protocol clipboard
     Given I switch to cluster admin pseudo user
@@ -110,5 +112,5 @@ Feature: IPsec upgrade scenarios
     #Following will confirm node-node encryption
     When admin executes on the "<%= cb.hostnw_pod_worker1 %>" pod:
        | sh | -c | timeout  --preserve-status 60 tcpdump -c 2 -i br-ex "esp and less 40" |
-    Then the step should succeed 
+    Then the step should succeed
     And the output should not contain "0 packets captured"

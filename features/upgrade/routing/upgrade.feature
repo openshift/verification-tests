@@ -2,16 +2,9 @@ Feature: Routing and DNS related scenarios
 
   @upgrade-prepare
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
-  @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @4.8 @4.7 @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: ensure ingress works well before and after upgrade - prepare
     # Check console route
     Given I switch to cluster admin pseudo user
@@ -29,7 +22,6 @@ Feature: Routing and DNS related scenarios
   @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
-  @upgrade-sanity
   Scenario: ensure ingress works well before and after upgrade
     # Check console route after upgraded
     Given I switch to cluster admin pseudo user
@@ -42,16 +34,9 @@ Feature: Routing and DNS related scenarios
 
   @upgrade-prepare
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
-  @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @4.8 @4.7 @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: ensure DNS works well before and after upgrade - prepare
     # Check service name can be resolvede
     Given I switch to cluster admin pseudo user
@@ -72,7 +57,6 @@ Feature: Routing and DNS related scenarios
   @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
-  @upgrade-sanity
   Scenario: ensure DNS works well before and after upgrade
     # Check service name can be resolvede
     Given I switch to cluster admin pseudo user
@@ -88,7 +72,7 @@ Feature: Routing and DNS related scenarios
 
   @upgrade-prepare
   @admin
-  @4.10 @4.9
+  @4.8 @4.10 @4.9
   @baremetal-ipi @vsphere-ipi
   @vsphere-upi
   Scenario: upgrade with running router pods on all worker nodes - prepare
@@ -113,7 +97,7 @@ Feature: Routing and DNS related scenarios
   # @case_id OCP-30501
   @upgrade-check
   @admin
-  @4.10 @4.9
+  @4.8 @4.10 @4.9
   @baremetal-ipi @vsphere-ipi
   @vsphere-upi
   Scenario: upgrade with running router pods on all worker nodes
@@ -128,10 +112,9 @@ Feature: Routing and DNS related scenarios
   @upgrade-prepare
   @users=upuser1,upuser2
   @admin
-  @gcp-upi
-  @gcp-ipi
-  @4.10 @4.9
-  @azure-ipi
+  @4.8 @4.10 @4.9
+  @gcp-ipi @azure-ipi
+  @gcp-upi @azure-upi
   Scenario: upgrade with route shards - prepare
     # Ensure cluster operator ingress is in normal status
     Given I switch to cluster admin pseudo user
@@ -199,7 +182,7 @@ Feature: Routing and DNS related scenarios
   @upgrade-check
   @users=upuser1,upuser2
   @admin
-  @4.10 @4.9
+  @4.8 @4.10 @4.9
   @gcp-ipi @azure-ipi
   @gcp-upi @azure-upi
   Scenario: upgrade with route shards

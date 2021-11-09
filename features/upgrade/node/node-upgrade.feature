@@ -2,7 +2,7 @@ Feature: Node components upgrade tests
   # @author minmli@redhat.com
   @upgrade-prepare
   @admin
-  @4.10 @4.9
+  @4.8 @4.10 @4.9
   @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Make sure nodeConfig is not changed after upgrade - prepare
@@ -46,7 +46,7 @@ Feature: Node components upgrade tests
   # @case_id OCP-13022
   @upgrade-check
   @admin
-  @4.10 @4.9
+  @4.8 @4.10 @4.9
   @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Make sure nodeConfig is not changed after upgrade

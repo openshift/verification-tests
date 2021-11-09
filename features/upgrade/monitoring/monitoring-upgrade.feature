@@ -2,16 +2,9 @@ Feature: cluster monitoring related upgrade check
   # @author hongyli@redhat.com
   @upgrade-prepare
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
-  @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @4.8 @4.7 @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: upgrade cluster monitoring along with OCP - prepare
     Given I switch to cluster admin pseudo user
     Given I obtain test data file "monitoring/upgrade/cm-monitoring-retention.yaml"
@@ -27,7 +20,6 @@ Feature: cluster monitoring related upgrade check
   @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
-  @upgrade-sanity
   Scenario: upgrade cluster monitoring along with OCP
     Given I switch to cluster admin pseudo user
     And I use the "openshift-monitoring" project
