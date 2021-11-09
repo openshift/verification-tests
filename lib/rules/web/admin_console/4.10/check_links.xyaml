@@ -171,7 +171,7 @@ check_console_link_in_helpmenu:
 check_documentation_link_in_helpmenu:
   params:
     text: Documentation
-    link_url: https://docs.openshift.com/container-platform/<version>
+    link_url: https://access.redhat.com/documentation/en-us/openshift_container_platform/<version>
   action: click_help_button
   action: check_link_and_text
 check_customized_documentation_link_in_helpmenu:
