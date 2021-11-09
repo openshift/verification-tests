@@ -1,1 +1,264 @@
-../4.9/idp.xyaml
+# basicauth idp
+add_basicauth_idp:
+  action: click_add_dropdown_button
+  params:
+    dropdown_item: Basic Authentication
+  action: click_one_item_text
+  action: set_idp_name
+  action: set_remote_url
+  action:
+    if_param: ca_path
+    ref: set_idp_ca_path
+  action:
+    if_param: crt_path
+    ref: set_idp_crt_path
+  action:
+    if_param: key_path
+    ref: set_idp_key_path
+  action: submit_changes
+set_remote_url:
+  params:
+    input_field_id: url
+    input_value: <remote_url>
+  action: set_input_value
+set_idp_ca_path:
+  params:
+    file_path: <ca_path>
+    field_name: idp-file
+  action: upload_file_for_one_field
+set_idp_crt_path:
+  params:
+    file_path: <crt_path>
+    field_name: cert-file
+  action: upload_file_for_one_field
+set_idp_key_path:
+  params:
+    file_path: <key_path>
+    field_name: key-file
+  action: upload_file_for_one_field
+check_idp_in_table_list:
+  elements:
+  - selector:
+      xpath: //td[text()='<idp_name>']/following-sibling::td[text()='<idp_type>']
+    timeout: 20
+
+# github idp
+add_github_idp:
+  action: click_add_dropdown_button
+  params:
+    dropdown_item: GitHub
+  action: click_one_item_text
+  action: set_idp_name
+  action: set_client_id
+  action: set_client_secret
+  action:
+    if_param: org_name
+    ref: set_org_name
+  action:
+    if_param: team_name
+    ref: set_team_name
+  action: submit_changes
+set_client_id:
+  params:
+    label_text: Client ID
+    input_value: <client_id>
+  action: set_label_input
+set_client_secret:
+  params:
+    label_text: Client secret
+    input_value: <client_secret>
+  action: set_label_input
+set_org_name:
+  params:
+    label_text: Organization
+    input_value: <org_name>
+  action: set_label_input
+set_team_name:
+  params:
+    label_text: Team
+    input_value: <team_name>
+  action: set_label_input
+check_error_info_for_no_org_and_team:
+  params:
+    content: one of organizations or teams must be specified unless hostname is set or lookup is used
+  action: check_page_contains
+check_error_info_for_both_org_and_team:
+  params:
+    content: Specify either organizations or teams, but not both
+  action: check_page_contains
+check_error_info_for_dupicated_idp_name:
+  params:
+    content: must have a unique name
+  action: check_page_contains
+
+# gitlab idp
+add_gitlab_idp:
+  action: click_add_dropdown_button
+  params:
+    dropdown_item: GitLab
+  action: click_one_item_text
+  action: set_idp_name
+  action: set_remote_url
+  action: set_client_id
+  action: set_client_secret
+  action: submit_changes
+
+# ldap idp
+add_ldap_idp:
+  action: click_add_dropdown_button
+  params:
+    dropdown_item: LDAP
+  action: click_one_item_text
+  action: set_idp_name
+  action: set_remote_url
+  action:
+    if_param: bind_dn
+    ref: set_bind_dn
+  action:
+    if_param: bind_passwd
+    ref: set_bind_passwd
+  action:
+    if_param: preferred_username
+    ref: set_preferred_username
+  action:
+    if_param: attr_email
+    ref: set_attr_email
+  action:
+    if_param: ca_path
+    ref: set_idp_ca_path
+  action: submit_changes
+set_bind_dn:
+  params:
+    input_field_id: bind-dn
+    input_value: <bind_dn>
+  action: set_input_value
+set_bind_passwd:
+  params:
+    input_field_id: bind-password
+    input_value: <bind_passwd>
+  action: set_input_value
+set_preferred_username:
+  params:
+    label_text: Preferred username
+    input_value: <preferred_username>
+  action: set_label_input
+set_attr_email:
+  params:
+    label_text: Email
+    input_value: <attr_email>
+  action: set_label_input
+
+# google idp
+add_google_idp:
+  action: click_add_dropdown_button
+  params:
+    dropdown_item: Google
+  action: click_one_item_text
+  action: set_idp_name
+  action: set_client_id
+  action: set_client_secret
+  action: set_hosted_domain
+  action: submit_changes
+set_hosted_domain:
+  params:
+    input_field_id: hosted-domain
+    input_value: <hosted_domain>
+  action: set_input_value
+
+# openid idp
+add_openid_idp:
+  action: click_add_dropdown_button
+  params:
+    dropdown_item: OpenID Connect
+  action: click_one_item_text
+  action: set_idp_name
+  action: set_client_id
+  action: set_client_secret
+  action: set_issuer_url
+  action:
+    if_param: preferred_username
+    ref: set_preferred_username
+  action:
+    if_param: ca_path
+    ref: set_idp_ca_path
+  action: submit_changes
+set_issuer_url:
+  params:
+    label_text: Issuer URL
+    input_value: <issuer_url>
+  action: set_label_input
+
+# requestheader idp
+add_requestheader_idp:
+  action: click_add_dropdown_button
+  params:
+    dropdown_item: Request Header
+  action: click_one_item_text
+  action: set_idp_name
+  action:
+    if_param: login_url
+    ref: set_login_url
+  action: set_idp_ca_path
+  action: set_headers
+  action:
+    if_param: preferred_username_headers
+    ref: set_preferred_username_headers
+  action:
+    if_param: name_headers
+    ref: set_name_headers
+  action:
+    if_param: email_headers
+    ref: set_email_headers
+  action: submit_changes
+set_login_url:
+  params:
+    label_text: Login URL
+    input_value: <login_url>
+  action: set_label_input
+set_headers:
+  params:
+    label_text: Header
+    input_value: <headers>
+  action: set_label_input
+  action:
+    if_param: more_headers
+    ref: set_more_headers
+set_more_headers:
+  elements:
+  - selector:
+      xpath: //label[text()='Headers']/following-sibling::button[contains(., 'Add more')]
+    op: click
+  - selector:
+      xpath: //label[text()='Headers']/following::input[2]
+    op: send_keys <more_headers>
+set_preferred_username_headers:
+  params:
+    label_text: Preferred username headers
+    input_value: <preferred_username_headers>
+  action: set_label_input
+set_name_headers:
+  params:
+    label_text: Name headers
+    input_value: <name_headers>
+  action: set_label_input
+set_email_headers:
+  params:
+    label_text: Email headers
+    input_value: <email_headers>
+  action: set_label_input
+
+# keystone idp
+add_keystone_idp:
+  action: click_add_dropdown_button
+  params:
+    dropdown_item: Keystone
+  action: click_one_item_text
+  action: set_idp_name
+  action: set_domain_name
+  action: set_remote_url
+  action: submit_changes
+set_domain_name:
+  params:
+    label_text: Domain name
+    input_value: <domain_name>
+  action: set_label_input

@@ -1,1 +1,232 @@
-../4.9/logging_kibana.xyaml
+---
+kibana_login:
+  url: <kibana_url>
+  action: login_kibana
+
+login_kibana:
+  action:
+    if_element:
+      selector:
+        tag_name: button
+        text: Log in with OpenShift
+    ref: click_log_in_with_openshift_button
+  action: login_sequence
+  action: kibana_verify_logged_in
+
+click_log_in_with_openshift_button:
+  element:
+    selector:
+      xpath: //button[text()='Log in with OpenShift']
+    op: click
+
+kibana_verify_logged_in:
+  action:
+    if_element:
+      selector:
+        text: Authorize Access
+    ref: kibana_click_approve
+  action: wait_kibana_logged_in
+
+kibana_click_approve:
+  elements:
+  - selector:
+      name: approve
+    op: click
+
+wait_kibana_logged_in:
+  elements:
+  - selector:
+      xpath: //div[@class="kbnGlobalNavLink__title" and contains(., "Discover")]
+    timeout: 600
+
+check_kibana_status:
+  elements:
+  - selector:
+      xpath: //div[@id="createStatusPageReact"]
+    missing: true
+    timeout: 30
+
+create_index_pattern_in_kibana:
+  action:
+    if_element:
+      selector:
+        xpath: //span[@class="euiSideNavItemButton__label" and contains(., "Index Patterns")]
+    ref: create_index_pattern
+
+create_index_pattern:
+  action: click_kibana_index_patterns
+  action:
+    if_element:
+      selector:
+        xpath: //a[@data-test-subj="indexPatternLink"]
+      timeout: 30
+    ref: click_create_index_pattern_button
+  action: set_index_patter_name
+  action: click_create_index_pattern_go_to_step2_button
+  action: create_index_pattern_time_field_select
+  action: click_create_index_pattern_create_button
+  action: wait_index_pattern_to_be_created
+
+go_to_kibana_management_page:
+  elements:
+  - selector:
+      xpath: //a[@class="kbnGlobalNavLink__anchor" and @aria-label="Management"]
+    timeout: 30
+    op: click
+  - selector:
+      xpath: //div[@class="kbnGlobalNavLink__title" and contains(., "Management")]
+    op: click
+  - selector:
+      xpath: //span[@class="euiSideNavItemButton__label" and contains(., "Index Patterns")]
+    timeout: 30
+
+go_to_kibana_discover_page:
+  elements:
+  - selector:
+      xpath: //a[@class="kbnGlobalNavLink__anchor" and @aria-label="Discover"]
+    timeout: 30
+    op: click
+  - selector:
+      xpath: //div[@class="kbnGlobalNavLink__title" and contains(., "Discover")]
+    op: click
+  - selector:
+      xpath: //discover-app[@class="app-container"]
+    timeout: 30
+
+click_kibana_index_patterns:
+  element:
+    selector:
+      xpath: //span[@class="euiSideNavItemButton__label" and contains(., "Index Patterns")]
+    timeout: 30
+    op: click
+
+click_create_index_pattern_button:
+  element:
+    selector:
+      xpath: //button[@type="button" and @data-test-subj="createIndexPatternButton"]
+    timeout: 30
+    op: click
+
+set_index_patter_name:
+  elements:
+  - selector:
+      xpath: //input[@type="text" and @name="indexPattern"]
+    op: clear
+    timeout: 30
+  - selector:
+      xpath: //input[@type="text" and @name="indexPattern"]
+    op: send_keys <index_pattern_name>
+
+click_create_index_pattern_go_to_step2_button:
+  element:
+    selector:
+      xpath: //button[@type="button" and @data-test-subj="createIndexPatternGoToStep2Button"]
+    op: click
+
+create_index_pattern_time_field_select:
+  elements:
+  - selector:
+      xpath: //select[@name="timeField" and @class="euiSelect" and @data-test-subj="createIndexPatternTimeFieldSelect"]
+    op: click
+  - selector:
+      xpath: //option[@value="@timestamp" and contains(., "@timestamp")]
+    op: click
+
+click_create_index_pattern_create_button:
+  element:
+    selector:
+      xpath: //button[@type="button" and @data-test-subj="createIndexPatternCreateButton"]
+    op: click
+
+wait_index_pattern_to_be_created:
+  element:
+    selector:
+      xpath: //button[@ng-if="setDefault" and @data-test-subj="setDefaultIndexPatternButton"]
+    timeout: 30
+
+kibana_find_index_pattern:
+  elements:
+  - selector:
+      xpath: //h2[@class="index-pattern-label" and @id="index_pattern_id" and contains(., "<index_pattern_name>")] | //span[contains(., "<index_pattern_name>")]
+    timeout: 300
+    op: click
+
+kibana_click_index:
+  elements:
+  - selector:
+      xpath: //span[@class="ui-select-choices-row-inner"]/*[text()="<index_pattern_name>"]
+    timeout: 30
+    op: click
+
+kibana_expand_index_patterns:
+  elements:
+  - selector:
+      xpath: //div[contains(@ng-model, "selectedIndexPattern")]
+    op: click
+
+check_log_count:
+  element:
+    selector:
+      xpath: //span[@data-test-subj="discoverQueryHits" and @class="kuiLocalBreadcrumb__emphasis"]
+  scripts:
+  - command: |
+      var x = document.querySelector("#kui_local_breadcrumb > span:nth-child(2)").textContent;
+      var replaced_x = x.replace(/\,/g,'')
+      var doc_count = false;
+      if (replaced_x > 0 || x > 0) {
+        doc_count = true;
+        return doc_count
+      }
+      return doc_count
+    expect_result: true
+
+click_refresh_button_in_kibana:
+  element:
+    selector:
+      xpath: //span[contains(@class, "euiButton__text euiSuperUpdateButton__text") and contains(., "Refresh")]
+    op: click
+
+click_visuallize_button_in_discover_page:
+  elements:
+  - selector:
+      xpath: //field-name[@title="<field_name>"]
+    op: click
+  - selector:
+      xpath: //span[contains(@i18n-default-message, "Visualize") and contains(., "Visualize")]
+    timeout: 30
+    op: click
+
+kibana_index_pattern_exist:
+  action: go_to_kibana_management_page
+  elements:
+  - selector:
+      xpath: //span[@class="euiSideNavItemButton__label" and contains(., "Index Patterns")]
+    op: click
+    timeout: 30
+  - selector:
+      xpath: //div[@id="indexPatternListReact"]//*[text()="<index_pattern_name>"]
+
+select_index_pattern_in_kibana:
+  action: go_to_kibana_discover_page
+  action:
+    if_element:
+      selector:
+        xpath: //span[@class="euiSideNavItemButton__label" and contains(., "Index Patterns")]
+    ref: kibana_expand_index_patterns
+  action:
+    if_element:
+      selector:
+        xpath: //span[@class="euiSideNavItemButton__label" and contains(., "Index Patterns")]
+    ref: kibana_click_index
+
+search_doc_in_kibana:
+  elements:
+  - selector:
+      xpath: //input[@type="text" and @class="euiFieldText kuiLocalSearchAssistedInput__input euiFieldText--withIcon euiFieldText--fullWidth"]
+    op: clear
+  - selector:
+      xpath: //input[@type="text" and @class="euiFieldText kuiLocalSearchAssistedInput__input euiFieldText--withIcon euiFieldText--fullWidth"]
+    op: send_keys "<search_string>"
+  - selector:
+      xpath: //button[@data-test-subj="querySubmitButton" and @type="button"]
+    op: click

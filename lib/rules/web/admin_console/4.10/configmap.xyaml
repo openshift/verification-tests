@@ -1,1 +1,7 @@
-../4.9/configmap.xyaml
+check_binary_data_contains:
+  elements:
+  - selector:
+      xpath: //h2[@data-test-section-heading='Binary data']/following::dt[text()='<binary_key>']
+  - selector:
+      text: Save file
+    type: button
