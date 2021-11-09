@@ -509,36 +509,27 @@ module BushSlicer
       template_hash = {}
       case_status = options.status
       run_title = options.title
-      # if no statuss is given then we clone all cases
-      valid_statuses = ['Passed', 'Failed', 'Waiting', 'Running', 'Blocked']
       query_result = polarshift.get_run_smart(project, test_run_id, with_cases: 'full')
+      filtered_cases = query_result['records']["TestRecord"]
+      new_run_title = "Clone of #{test_run_id}"
       if case_status
         case_status = case_status.downcase.capitalize
-        raised "Invalid status given, only #{valid_statuses} are accepted" unless valid_statuses.include? case_status
-        filtered_cases = query_result['records']["TestRecord"].select {|r| r['result'] == case_status}
-        if opts[:subteam]
-          filtered_cases, subteams = filtered_cases_by_subteam(subteam_opt: opts[:subteam], cases: filtered_cases)
-          run_title ||= "Clone of '#{case_status}' #{subteams}  cases for #{test_run_id}"
-        end
-        tc_ids = filtered_cases.map {|c| c['test_case']['id']}
-        if tc_ids.count == 0
-          print "No cases found matching your criteria\n"
-          exit
-        end
-        run_title ||= "Clone of '#{case_status}'  cases for #{test_run_id}"
+        valid_statuses = ['Passed', 'Failed', 'Waiting', 'Running', 'Blocked']
+        raise "Invalid status given, only #{valid_statuses} are accepted" unless valid_statuses.include? case_status
+        filtered_cases = filtered_cases.select {|r| r['result'] == case_status}
+        new_run_title += ", with #{case_status} status"
+      end
+      if opts[:subteam]
+        filtered_cases, subteams = filtered_cases_by_subteam(subteam_opt: opts[:subteam], cases: filtered_cases)
+        new_run_title += ", with #{subteams} subteams"
+      end
+      new_run_title += " cases"
+      if filtered_cases.count > 0
+        tc_ids = extract_test_case_ids(filtered_cases)
+        run_title ||= "#{new_run_title}"
       else
-        filtered_cases = query_result['records']["TestRecord"]
-        if opts[:subteam]
-          filtered_cases, subteams = filtered_cases_by_subteam(subteam_opt: opts[:subteam], cases: filtered_cases)
-          run_title ||= "Clone of #{subteams}  cases for #{test_run_id}"
-        end
-        if filtered_cases.count > 0
-          tc_ids = extract_test_case_ids(filtered_cases)
-          run_title ||= "Clone of #{test_run_id}"
-        else
-          print("No cases found matching your criteria")
-          exit
-        end
+        print "No cases found matching your criteria\n"
+        exit
       end
       if query_result['customFields'].nil?
         # hard-code it to something
