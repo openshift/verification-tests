@@ -530,7 +530,7 @@ module BushSlicer
         filtered_cases = query_result['records']["TestRecord"]
         if opts[:subteam]
           filtered_cases, subteams = filtered_cases_by_subteam(subteam_opt: opts[:subteam], cases: filtered_cases)
-          run_title ||= "Clone of '#{case_status}' #{subteams}  cases for #{test_run_id}"
+          run_title ||= "Clone of #{subteams}  cases for #{test_run_id}"
         end
         if filtered_cases.count > 0
           tc_ids = extract_test_case_ids(filtered_cases)
