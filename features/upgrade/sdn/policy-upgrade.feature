@@ -3,9 +3,9 @@ Feature: SDN compoment upgrade testing
   # @author huirwang@redhat.com
   @admin
   @upgrade-prepare
+  @4.8 @4.7 @4.10 @4.9
   @aws-ipi @gcp-ipi @vsphere-ipi @azure-ipi @baremetal-ipi @openstack-ipi
   @aws-upi @gcp-upi @openstack-upi
-  @4.10 @4.9
   Scenario: network operator should be available after upgrade - prepare
   # According to our upgrade workflow, we need an upgrade-prepare and upgrade-check for each scenario.
   # But some of them do not need any prepare steps, which lead to errors "can not find scenarios" in the log.
@@ -19,7 +19,6 @@ Feature: SDN compoment upgrade testing
   @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
-  @upgrade-sanity
   Scenario: network operator should be available after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "openshift-network-operator" project
@@ -37,7 +36,7 @@ Feature: SDN compoment upgrade testing
   # @author zzhao@redhat.com
   @admin
   @upgrade-prepare
-  @4.10 @4.9
+  @4.8 @4.10 @4.9
   @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Check the networkpolicy works well after upgrade - prepare
@@ -77,7 +76,7 @@ Feature: SDN compoment upgrade testing
   # @case_id OCP-22735
   @admin
   @upgrade-check
-  @4.10 @4.9
+  @4.8 @4.10 @4.9
   @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Check the networkpolicy works well after upgrade
@@ -96,9 +95,9 @@ Feature: SDN compoment upgrade testing
   # @author asood@redhat.com
   @admin
   @upgrade-prepare
+  @4.8 @4.7 @4.10 @4.9
   @aws-ipi @gcp-ipi @vsphere-ipi @azure-ipi @baremetal-ipi @openstack-ipi
   @aws-upi @gcp-upi @openstack-upi
-  @4.10 @4.9
   Scenario: Check the namespace networkpolicy for an application works well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     When I run the :new_project client command with:
@@ -187,7 +186,6 @@ Feature: SDN compoment upgrade testing
   @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
-  @upgrade-sanity
   Scenario: Check the namespace networkpolicy for an application works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "policy-upgrade1" project
@@ -257,7 +255,7 @@ Feature: SDN compoment upgrade testing
   # @author asood@redhat.com
   @admin
   @upgrade-prepare
-  @4.10 @4.9
+  @4.8 @4.10 @4.9
   @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Check allow from router and allow from hostnetwork policy are functional post upgrade - prepare
@@ -345,7 +343,7 @@ Feature: SDN compoment upgrade testing
   # @case_id OCP-40620
   @admin
   @upgrade-check
-  @4.10 @4.9
+  @4.8 @4.10 @4.9
   @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Check allow from router and allow from hostnetwork policy are functional post upgrade
@@ -377,13 +375,14 @@ Feature: SDN compoment upgrade testing
   # @author anusaxen@redhat.com
   @admin
   @upgrade-prepare
+  @4.8 @4.10 @4.9
   Scenario: Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted post upgrade - prepare
     Given I switch to cluster admin pseudo user
     And I store the workers in the :nodes clipboard
     When I run the :new_project client command with:
-      | project_name | nodeport-upgrade |
+      | project_name | conntrack-upgrade |
     Then the step should succeed
-    Given I use the "nodeport-upgrade" project
+    Given I use the "conntrack-upgrade" project
     And I obtain test data file "networking/pod_with_udp_port_4789_nodename.json"
     When I run oc create over "pod_with_udp_port_4789_nodename.json" replacing paths:
       | ["items"][0]["spec"]["template"]["spec"]["nodeName"] | <%= cb.nodes[0].name %> |
@@ -400,16 +399,16 @@ Feature: SDN compoment upgrade testing
       | port          | 8080                     |
       | protocol      | UDP                      |
     Then the step should succeed
-    
+
   # @author anusaxen@redhat.com
   # @case_id OCP-44901
   @admin
   @upgrade-check
-  @4.10 @4.9
+  @4.8 @4.10 @4.9
   @azure-upi
   Scenario: Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted post upgrade
     Given I switch to cluster admin pseudo user
-    And I use the "nodeport-upgrade" project
+    And I use the "conntrack-upgrade" project
     And a pod becomes ready with labels:
       | name=udp-pods |
     And evaluation of `pod` is stored in the :host_pod1 clipboard
@@ -438,7 +437,7 @@ Feature: SDN compoment upgrade testing
       | exec_command_arg | -c                                                                                                   |
       | exec_command_arg | for n in {1..3}; do echo $n; sleep 1; done>/dev/udp/<%= cb.host_pod1.node_name %>/<%= cb.nodeport %> |
     Then the step should succeed
-    
+
     #Creating network test pod to levearage conntrack tool
     Given I obtain test data file "networking/net_admin_cap_pod.yaml"
     When I run oc create over "net_admin_cap_pod.yaml" replacing paths:

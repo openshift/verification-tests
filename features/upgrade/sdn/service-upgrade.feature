@@ -3,7 +3,7 @@ Feature: service upgrade scenarios
   # @author zzhao@redhat.com
   @admin
   @upgrade-prepare
-  @4.10 @4.9
+  @4.8 @4.10 @4.9
   @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Check the idle service works well after upgrade - prepare
@@ -32,7 +32,7 @@ Feature: service upgrade scenarios
   # @case_id OCP-44259
   @admin
   @upgrade-check
-  @4.10 @4.9
+  @4.8 @4.10 @4.9
   @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Check the idle service works well after upgrade
@@ -58,7 +58,7 @@ Feature: service upgrade scenarios
   # @author zzhao@redhat.com
   @admin
   @upgrade-prepare
-  @4.10 @4.9
+  @4.8 @4.10 @4.9
   @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Check the nodeport service works well after upgrade - prepare
@@ -96,7 +96,7 @@ Feature: service upgrade scenarios
   # @case_id OCP-44302
   @admin
   @upgrade-check
-  @4.10 @4.9
+  @4.8 @4.10 @4.9
   @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Check the nodeport service works well after upgrade

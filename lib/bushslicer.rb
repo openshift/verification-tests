@@ -52,8 +52,9 @@ module BushSlicer
     EXECUTOR_NAME_TEMP = "#{HOSTNAME.split('.')[0]}-#{LOCAL_USER}"
   end
   # EXECUTOR_NAME is used as part of project name and workdir,
-  # apppend "-e" to make sure it always ends with proper char
-  EXECUTOR_NAME = "#{EXECUTOR_NAME_TEMP}-e".freeze
+  # truncate it as the project name is limited to 63 chars,
+  # apppend "x" to make sure it always ends with proper char
+  EXECUTOR_NAME = "#{EXECUTOR_NAME_TEMP[0..55]}x".freeze
 
   START_TIME = Time.now
   TIME_SUFFIX = [

@@ -4,6 +4,7 @@ Feature: Kibana related features
   # @author qitang@redhat.com
   # @case_id OCP-25599
   @admin
+  @console
   @destructive
   @commonlogging
   Scenario: Show logs on Kibana web console according to different user role
@@ -56,6 +57,7 @@ Feature: Kibana related features
   # @author qitang@redhat.com
   # @case_id OCP-30362
   @admin
+  @console
   @destructive
   @commonlogging
   @4.10 @4.9
@@ -109,6 +111,7 @@ Feature: Kibana related features
   # @author qitang@redhat.com
   # @case_id OCP-30361
   @admin
+  @console
   @destructive
   @commonlogging
   @4.10 @4.9
@@ -168,6 +171,7 @@ Feature: Kibana related features
   # @author qitang@redhat.com
   # @case_id OCP-32002
   @admin
+  @console
   @destructive
   @commonlogging
   Scenario: Kibana logout function should log off user

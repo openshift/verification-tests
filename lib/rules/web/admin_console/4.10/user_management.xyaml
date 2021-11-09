@@ -1,1 +1,193 @@
-../4.9/user_management.xyaml
+check_users_secondary_menu:
+  params:
+    primary_menu: User Management
+    secondary_menu: Users
+  action: navigate_to_admin_console
+  action: click_primary_menu
+  action: check_secondary_menu
+check_users_secondary_menu_missing:
+  params:
+    primary_menu: User Management
+    secondary_menu: Users
+  action: navigate_to_admin_console
+  action: click_primary_menu
+  action: check_secondary_menu_missing
+check_user_in_users_page:
+  action: goto_users_list_page
+  action: check_link_and_text
+delete_user_from_kebab:
+  params:
+    kebab_item: Delete User
+  action: click_kebab_of_one_resource
+  action: click_kebab_item
+  action: submit_changes
+check_rolebinding_of_user:
+  params:
+    text: <rolebinding>
+  action: goto_rolebinding_page_of_user
+  action: wait_until_no_loading
+  action:
+    if_param: rolebinding
+    ref: check_link_and_text
+impersonate_one_user:
+  params:
+    kebab_item: Impersonate User <resource_name>
+  action: goto_users_list_page
+  action: click_one_operation_in_kebab
+check_impersonate_notifications:
+  elements:
+  - selector:
+      xpath: //span[contains(.,"Impersonating User")]
+  - selector:
+      xpath: //span[contains(@class,'co-global-notification__impersonate-name') and text()='<username>']
+  - selector: &stop_impersonation
+      xpath: //button[contains(text(),'Stop impersonation')]
+click_stop_impersonation:
+  elements:
+  - selector: *stop_impersonation
+    op: click
+  - selector:
+      xpath: //p[contains(.,'impersonating')]
+    missing: true
+check_data_in_users_table:
+  element:
+    selector:
+      xpath: //h2[@data-test-section-heading='Users']
+  action: check_resource_item
+add_user:
+  elements:
+  - selector: &user_input
+      xpath: (//div[@class='co-list-input__value']//input)[last()]
+    op: clear
+  - selector:
+      <<: *user_input
+    op: send_keys <user_name>
+click_add_more_users:
+  params:
+    button_text: Add more
+  action: click_button
+remove_user_from_group:
+  params:
+    kebab_item: Remove User
+  action: click_kebab_of_one_resource
+  action: click_kebab_item
+  action: submit_changes
+set_rolebinding_name:
+  params:
+    input_field_id: role-binding-name
+    input_value: <rolebinding_name>
+  action: set_input_value
+select_namespace:
+  params:
+    button_id: ns-dropdown
+    filter_text: <rolebinding_namespace>
+    project_name: <rolebinding_namespace>
+  action: click_button_by_id
+  action: set_strings_in_dropdown_filter_box
+  action: choose_project_from_dropdown_list
+select_role_name:
+  params:
+    button_id: role-dropdown
+    filter_text: <role_name>
+  action: click_button_by_id
+  action: set_strings_in_dropdown_filter_box
+  element:
+    selector:
+      xpath: //span[contains(@class,'co-resource-item__resource-name') and text()='<role_name>']
+    op: click
+choose_subject_type:
+  params:
+    radio_text: <subject_type>
+  action: click_radio_input
+set_subject_name:
+  params:
+    input_field_id: subject-name
+    input_value: <subject_name>
+  action: set_input_value
+create_namespace_rolebinding:
+  params:
+    radio_text: RoleBinding
+  action: click_radio_input
+  action: set_rolebinding_name
+  action: select_namespace
+  action: select_role_name
+  action: choose_subject_type
+  action: set_subject_name
+  action: click_create_button
+create_cluster_rolebinding:
+  params:
+    radio_text: ClusterRoleBinding
+  action: click_radio_input
+  action: set_rolebinding_name
+  action: select_role_name
+  action: choose_subject_type
+  action: set_subject_name
+  action: click_create_button
+filter_by_role_name:
+  params:
+    filter_text: <role_name>
+  action: set_filter_strings
+filter_by_subject_name:
+  params:
+    filter_text: <subject_name>
+  action: set_filter_strings
+filter_by_role_or_subject:
+  action:
+    if_param: role_name
+    ref: filter_by_role_name
+  action:
+    if_param: subject_name
+    ref: filter_by_subject_name
+check_namespace_rolebinding_name:
+  params:
+    resource_type: RoleBinding
+    resource_name: <rolebinding_name>
+    resource_link: /k8s/ns/<project_name>/rolebindings/<rolebinding_name>
+  action: check_resource_item
+check_cluster_rolebinding_name:
+  params:
+    resource_type: ClusterRoleBinding
+    resource_name: <rolebinding_name>
+    resource_link: /k8s/cluster/clusterrolebindings/<rolebinding_name>
+  action: check_resource_item
+check_namespace_role_reference:
+  params:
+    resource_type: Role
+    resource_name: <role_name>
+    resource_link: /k8s/ns/<project_name>/roles/<role_name>
+  action: check_resource_item
+check_cluster_role_reference:
+  params:
+    resource_type: ClusterRole
+    resource_name: <role_name>
+    resource_link: /k8s/cluster/clusterroles/<role_name>
+  action: check_resource_item
+check_no_create_button_on_list_page:
+  action: goto_project_pods_list_page
+  action: check_yaml_create_button_missing
+  action: goto_deployment_page
+  action: check_yaml_create_button_missing
+  action: goto_serviceaccounts_page
+  action: check_yaml_create_button_missing
+  action: goto_persistentvolumeclaims_page
+  action: check_yaml_create_button_missing
+check_kebab_items_disabled_on_list_page:
+  action: goto_dc_page
+  action: click_kebab_of_one_resource
+  action: check_kebab_items_disabled
+check_no_action_button_on_resource_page:
+  action: goto_one_dc_page
+  action: check_kebab_items_disabled
+check_no_save_button_on_resource_page:
+  action: click_yaml_tab
+  action: check_save_button_missing
+  action: click_environment_tab
+  action: check_save_button_missing
+check_no_edit_links_on_detail_page:
+  action: goto_one_dc_page
+  action: check_no_button_with_link
+check_no_button_with_link:
+  elements:
+  - selector:
+      xpath: //button[contains(@class, 'pf-m-link pf-m-inline')]
+    missing: true

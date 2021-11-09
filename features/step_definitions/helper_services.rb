@@ -121,7 +121,7 @@ end
 Given /^I have a(n authenticated)? proxy configured in the project$/ do |use_auth|
   if use_auth
     step %Q/I run the :create_deploymentconfig client command with:/, table(%{
-      | image | quay.io/openshifttest/squid-proxy |
+      | image | quay.io/openshifttest/squid-proxy:multiarch |
       | name  | squid-proxy                       |
       })
     step %Q/I wait until the status of deployment "squid-proxy" becomes :running/
@@ -135,7 +135,7 @@ Given /^I have a(n authenticated)? proxy configured in the project$/ do |use_aut
     @result = user.cli_exec(:expose, resource: "deploymentconfig", resource_name: "squid-proxy", port: "3128")
   else
     step %Q/I run the :create_deployment client command with:/, table(%{
-      | image | quay.io/openshifttest/squid-proxy |
+      | image | quay.io/openshifttest/squid-proxy:multiarch |
       | name  | squid-proxy                       |
       })
     step %Q/a pod becomes ready with labels:/, table(%{
@@ -163,7 +163,7 @@ Given /^I have LDAP service in my project$/ do
     stats = {}
     step %Q/I run the :run client command with:/, table(%{
       | name  | ldapserver                                       |
-      | image | quay.io/openshifttest/ldap:openldap-2441-centos7 |
+      | image | quay.io/openshifttest/ldap:multiarch |
       })
     step %Q/the step should succeed/
     step %Q/a pod becomes ready with labels:/, table(%{
@@ -613,7 +613,7 @@ Given /^I have a registry in my project$/ do
   if BushSlicer::Project::SYSTEM_PROJECTS.include?(project(generate: false).name)
     raise "I refuse create registry in a system project: #{project.name}"
   end
-  @result = admin.cli_exec(:new_app, docker_image: "quay.io/openshifttest/registry:2", namespace: project.name)
+  @result = admin.cli_exec(:new_app, docker_image: "quay.io/openshifttest/registry:multiarch", namespace: project.name)
   step %Q/the step should succeed/
   @result = admin.cli_exec(:set_probe, resource: "deploy/registry", readiness: true, liveness: true, get_url: "http://:5000/v2",namespace: project.name)
   step %Q/the step should succeed/
@@ -631,7 +631,7 @@ Given /^I have a registry with htpasswd authentication enabled in my project$/ d
   if BushSlicer::Project::SYSTEM_PROJECTS.include?(project(generate: false).name)
     raise "I refuse create registry in a system project: #{project.name}"
   end
-  @result = admin.cli_exec(:new_app, as_deployment_config:true, docker_image: "quay.io/openshifttest/registry:2", namespace: project.name)
+  @result = admin.cli_exec(:new_app, as_deployment_config:true, docker_image: "quay.io/openshifttest/registry:multiarch", namespace: project.name)
   step %Q/the step should succeed/
   step %Q/a pod becomes ready with labels:/, table(%{
        | deploymentconfig=registry |

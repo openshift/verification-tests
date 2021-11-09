@@ -3,7 +3,8 @@ Feature: fips enabled verification for upgrade
   @upgrade-prepare
   @users=upuser1,upuser2
   @admin
-  @4.10 @4.9
+  @4.8 @4.10 @4.9
+  @fips
   @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: FIPS mode checking command works for a cluster with fip mode on - prepare
@@ -47,7 +48,8 @@ Feature: fips enabled verification for upgrade
   @upgrade-check
   @users=upuser1,upuser2
   @admin
-  @4.10 @4.9
+  @fips
+  @4.8 @4.10 @4.9
   @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: FIPS mode checking command works for a cluster with fip mode on

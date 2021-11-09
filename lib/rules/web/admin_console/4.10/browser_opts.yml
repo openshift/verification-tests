@@ -1,1 +1,25 @@
-../4.9/browser_opts.yml
+---
+:scroll_strategy: 1
+:hooks:
+  :click: |-
+    # this will execute in the Web4Cucumber instance context
+    proc { |element, *op_call|
+      begin
+        logger.trace "Clicking web element via hook.."
+        element.send *op_call
+      rescue Selenium::WebDriver::Error::UnknownError,Selenium::WebDriver::Error::ElementClickInterceptedError => e
+        if e.message.include? "not clickable"
+          logger.warn e.inspect
+          # element.scroll_into_view
+          # list of keys http://watir.com/guides/special-keys/
+          element.send_keys(:page_down)
+          sleep 5 # allow time for scrolling to be performed
+          #repeat op
+          element.send *op_call
+        else
+          logger.debug "unhandled UnknownError"
+          raise
+        end
+      end
+    }
+:size: [1477,1024]

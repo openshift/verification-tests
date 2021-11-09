@@ -1,1 +1,39 @@
-../4.9/customizations.xyaml
+add_htpasswd_idp_upload_files:
+  action: click_add_dropdown_button
+  params:
+    dropdown_item: HTPasswd
+  action: click_one_item_text
+  action: set_idp_name
+  action: upload_file
+  action: submit_changes
+set_idp_name:
+  elements:
+  - selector:
+      id: idp-name
+    op: clear
+  - selector:
+      id: idp-name
+    op: send_keys <idp_name>
+upload_file:
+  element:
+    selector:
+      xpath: //input[@type='file']
+    visible: false
+    type: filefield
+    op: set <file_path>
+check_console_notification:
+  elements:
+  - selector:
+      xpath: //div[@class='co-global-notification' and @data-test='<name>-<location>']//*[contains(text(), '<notification_text>')]
+  - selector:
+      css: '.co-global-notification[style*="background-color: <background>"]'
+  - selector:
+      css: '.co-global-notification[style*="color: <color>"]'
+  params:
+    text: <link_text>
+    link_url: <link_url>
+  action: check_link_and_text
+insert_snippet:
+  params:
+      button_text: Insert snippet
+  action: click_button

@@ -1,15 +1,8 @@
 Feature: Machine-api components upgrade tests
   @upgrade-prepare
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
-  @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @4.8 @4.7 @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario Outline: Cluster operator should be available after upgrade - prepare
     # According to our upgrade workflow, we need an upgrade-prepare and upgrade-check for each scenario.
     # But some of them do not need any prepare steps, which lead to errors "can not find scenarios" in the log.
@@ -40,7 +33,6 @@ Feature: Machine-api components upgrade tests
 
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
-    @upgrade-sanity
   Examples:
     | cluster_operator           |
     | "machine-api"              | # @case_id OCP-22712
@@ -50,16 +42,9 @@ Feature: Machine-api components upgrade tests
 
   @upgrade-prepare
   @admin
-  @aws-ipi
-  @gcp-upi
-  @gcp-ipi
   @4.10 @4.9
-  @aws-upi
-  @vsphere-ipi
-  @azure-ipi
-  @baremetal-ipi
-  @openstack-ipi
-  @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: There should be no pending or firing alerts for machine-api operators - prepare
     Given the expression should be true> "True" == "True"
 
@@ -84,6 +69,7 @@ Feature: Machine-api components upgrade tests
   @upgrade-prepare
   @admin
   @destructive
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   Scenario: Scale up and scale down a machineSet after upgrade - prepare
     Given the expression should be true> "True" == "True"
@@ -95,7 +81,6 @@ Feature: Machine-api components upgrade tests
   @destructive
   @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
-  @upgrade-sanity
   Scenario: Scale up and scale down a machineSet after upgrade
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -115,7 +100,7 @@ Feature: Machine-api components upgrade tests
   @upgrade-prepare
   @admin
   @destructive
-  @4.10 @4.9
+  @4.8 @4.10 @4.9
   Scenario Outline: Spot/preemptible instances should not block upgrade - prepare
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -149,15 +134,15 @@ Feature: Machine-api components upgrade tests
 
     Examples:
       | iaas_type | machineset_name        | value                   |
-      | aws       | machineset-clone-41175 | "spotMarketOptions": {} | 
-      | gcp       | machineset-clone-41803 | "preemptible": true     | 
+      | aws       | machineset-clone-41175 | "spotMarketOptions": {} |
+      | gcp       | machineset-clone-41803 | "preemptible": true     |
       | azure     | machineset-clone-41804 | "spotVMOptions": {}     |
 
   # @author zhsun@redhat.com
   @upgrade-check
   @admin
   @destructive
-  @4.10 @4.9
+  @4.8 @4.10 @4.9
   Scenario Outline: Spot/preemptible instances should not block upgrade
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -197,7 +182,7 @@ Feature: Machine-api components upgrade tests
   @upgrade-prepare
   @destructive
   @admin
-  @4.10 @4.9
+  @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   Scenario: Cluster should automatically scale up and scale down with clusterautoscaler deployed - prepare
     Given I have an IPI deployment
@@ -218,7 +203,6 @@ Feature: Machine-api components upgrade tests
   @destructive
   @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
-  @upgrade-sanity
   Scenario: Cluster should automatically scale up and scale down with clusterautoscaler deployed
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -262,3 +246,37 @@ Feature: Machine-api components upgrade tests
     Then the expression should be true> machine_set.desired_replicas(cached: false) == 1
     """
     Then the machineset should have expected number of running machines
+
+  @upgrade-prepare
+  @admin
+  @aws-ipi
+  @gcp-ipi
+  @4.7 @4.8 @4.10 @4.9
+  @vsphere-ipi
+  @azure-ipi
+  @openstack-ipi
+  Scenario: Registering Components delays should not be more than liveliness probe - prepare 
+    Given the expression should be true> "True" == "True"
+
+  # @author miyadav@redhat.com
+  # @case_id OCP-39845
+  @upgrade-check
+  @admin
+  @4.7 @4.8 @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
+  Scenario: Registering Components delays should not be more than liveliness probe 
+    Given I have an IPI deployment
+    And I switch to cluster admin pseudo user
+    And I use the "openshift-machine-api" project
+
+    And 1 pod becomes ready with labels:
+      | api=clusterapi,k8s-app=controller |
+
+    When I run the :logs admin command with:
+      | resource_name | <%= pod.name %>       |
+      | c             | machineset-controller |
+
+    And I save the output to file> logtime.txt 
+    Given I get time difference using "Registering Components." and "Starting the Cmd." in logtime.txt file
+    Then the step should succeed
+
