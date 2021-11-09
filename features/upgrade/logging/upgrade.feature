@@ -2,6 +2,7 @@ Feature: Logging upgrading related features
 
   # @author qitang@redhat.com
   @admin
+  @console
   @destructive
   @upgrade-prepare
   @users=upuser1,upuser2
@@ -39,6 +40,7 @@ Feature: Logging upgrading related features
   # @case_id OCP-22911
   # @author qitang@redhat.com
   @admin
+  @console
   @destructive
   @upgrade-check
   @users=upuser1,upuser2
