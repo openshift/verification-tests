@@ -143,10 +143,6 @@ Feature: build 'apps' with CLI
     When I run the :new_app client command with:
       | image_stream      | openshift/mysql                                      |
       | image             | registry.access.redhat.com/rhscl/postgresql-96-rhel7 |
-      | env               | MONGODB_USER=test                                    |
-      | env               | MONGODB_PASSWORD=test                                |
-      | env               | MONGODB_DATABASE=test                                |
-      | env               | MONGODB_ADMIN_PASSWORD=test                          |
       | env               | POSTGRESQL_USER=user                                 |
       | env               | POSTGRESQL_DATABASE=db                               |
       | env               | POSTGRESQL_PASSWORD=test                             |
