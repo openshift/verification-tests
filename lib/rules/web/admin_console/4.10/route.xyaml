@@ -1,1 +1,276 @@
-../4.9/route.xyaml
+click_create_route_button:
+  params:
+    button_text: Create Route
+  action: click_button_text
+check_custom_dns_help_link:
+  params:
+    content: Do you need to set up custom DNS
+  action: wait_box_loaded
+  action: check_page_match
+check_route_traffic_table_shown:
+  elements:
+  - selector:
+      xpath: //h2[@data-test-section-heading='Traffic']
+  - selector:
+      xpath: //table//th[1][text()='Service']
+  - selector:
+      xpath: //table//th[2][text()='Weight']
+  - selector:
+      xpath: //table//th[3][text()='Percent']
+check_data_in_traffic_table:
+  action: check_resource_item
+  elements:
+  - selector:
+      xpath: //tr//td[2][text()='<weight>']
+  - selector:
+      xpath: //tr//td[3][text()='<percent>']
+open_custom_dns_help_modal:
+  params:
+    button_text: Do you need to set up custom DNS
+  action: click_button
+check_custom_dns_help_info:
+  params:
+    content: To use a custom route, you must update your DNS provider
+  action: check_page_contains
+create_route:
+  action: set_route_name
+  action:
+    if_param: route_hostname
+    ref: set_hostname
+  action:
+    if_param: route_path
+    ref: set_route_path
+  action: set_service_name
+  action:
+    if_param: alternative_service_name
+    ref: set_alternative_service
+  action: set_target_port
+  action:
+    if_param:
+      secure_route: "true"
+    ref: set_secure_route
+  action: click_create_button
+set_route_name:
+  params:
+    input_field_id: name
+    input_value: <route_name>
+  action: set_input_value
+set_hostname:
+  params:
+    input_field_id: hostname
+    input_value: <route_hostname>
+  action: set_input_value
+set_route_path:
+  params:
+    input_field_id: path
+    input_value: <route_path>
+  action: set_input_value
+set_service_name:
+  params:
+    dropdown_item: <service_name>
+  elements:
+  - selector:
+      xpath: //*[(.='Service')]/..//button[@data-test-id='dropdown-button']
+    op: click
+  action: click_one_item
+set_alternative_service_name:
+  params:
+    dropdown_field: Alternate Service target
+    dropdown_item: <alternative_service_name>
+  action: choose_dropdown_item
+click_add_alternative_service:
+  element:
+    selector:
+      xpath: //button[contains(@class,'co-create-route__add-service-btn')]
+    op: click
+click_remove_alternative_service:
+  params:
+    button_text: Remove alternate Service
+  action: click_button
+set_weight_for_main_service:
+  params:
+    label_text: Weight
+    input_value: <service_weight>
+  action: set_label_input
+set_weight_for_alternative_service:
+  params:
+    label_text: Alternate Service weight
+    input_value: <alternative_service_weight>
+  action: set_label_input
+set_alternative_service:
+  action: click_add_alternative_service
+  action: set_weight_for_main_service
+  action: set_alternative_service_name
+  action: set_weight_for_alternative_service
+set_target_port:
+  params:
+    dropdown_field: Target port
+    dropdown_item: <target_port>
+  action: choose_dropdown_item
+set_secure_route:
+  action: uncheck_checkbox
+  action: set_tls_termination
+  action: set_insecure_traffic
+  action:
+    if_param: certificate_path
+    ref: upload_certificate_file
+  action:
+    if_param: private_key_path
+    ref: upload_key_file
+  action:
+    if_param: ca_certificate_path
+    ref: upload_ca_certificate_file
+  action:
+    if_param: destination_ca_certificate
+    ref: upload_destination_ca_crt_file
+set_tls_termination:
+  params:
+    dropdown_field: TLS termination
+    dropdown_item: <tls_termination_type>
+  action: choose_dropdown_item
+set_insecure_traffic:
+  params:
+    dropdown_field: Insecure traffic
+    dropdown_item: <insecure_traffic_type>
+  action: choose_dropdown_item
+upload_certificate_file:
+  elements:
+  - selector:
+      xpath: //input[@aria-describedby="certificate-help"]/following-sibling::span[contains(.,"Browse")]/input
+    visible: false
+    type: filefield
+    op: set <certificate_path>
+upload_key_file:
+  elements:
+  - selector:
+      xpath: //input[@aria-describedby="private-key-help"]/following-sibling::span[contains(.,"Browse")]/input
+    visible: false
+    type: filefield
+    op: set <private_key_path>
+upload_ca_certificate_file:
+  elements:
+  - selector:
+      xpath: //input[@aria-describedby="ca-certificate-help"]/following-sibling::span[contains(.,"Browse")]/input
+    visible: false
+    type: filefield
+    op: set <ca_certificate_path>
+upload_destination_ca_crt_file:
+  elements:
+  - selector:
+      xpath: //span[contains(.,"Browse")]//input[@id='destination-ca-certificate']
+    visible: false
+    type: filefield
+    op: set <destination_ca_certificate>
+check_metrics_charts_on_route_overview:
+  action: click_metrics_tab
+  action: wait_box_loaded
+  elements:
+  - selector:
+      xpath: //div/h2[text()='Traffic in']/following::div[1]//div[@class='pf-c-chart']
+    timeout: 20
+  - selector:
+      xpath: //div/h2[text()='Traffic out']/following::div[1]//div[@class='pf-c-chart']
+    timeout: 20
+  - selector:
+      xpath: //div/h2[text()='Connection rate']/following::div[1]//div[@class='pf-c-chart']
+    timeout: 20
+  - selector:
+      xpath: //h1[contains(@class,'graph-empty-state__title') and contains(text(),'No datapoints found')]
+    missing: true
+check_inputs_for_alternative_services_exists:
+  elements:
+  - selector: &weight_input
+      xpath: //label[text()='Weight']
+  - selector: &alternative_service_weight
+      xpath: //label[text()='Alternate Service weight']
+  - selector: &alternative_service_target
+      xpath: //label[text()='Alternate Service target']
+check_inputs_for_alternative_services_missing:
+  elements:
+  - selector:
+      <<: *weight_input
+    missing: true
+  - selector:
+      <<: *alternative_service_weight
+    missing: true
+  - selector:
+      <<: *alternative_service_target
+    missing: true
+filter_and_show_accepted_routes:
+  params:
+    filter: Accepted
+  action: click_filter_dropdown
+  action: select_filter
+filter_and_show_rejected_routes:
+  params:
+    filter: Rejected
+  action: click_filter_dropdown
+  action: select_filter
+disable_status_filter:
+  element:
+    selector:
+      xpath: //a[contains(@class,'row-filter__box--active') and contains(@class,'row-filter__box') and text()='<status_text>']
+    op: click
+    timeout: 20
+enable_status_filter:
+  element:
+    selector:
+      xpath: //a[contains(@class,'row-filter__box') and text()='<status_text>']
+    op: click
+    timeout: 20
+select_all_filters:
+  action: clear_all_filters
+check_rejected_icon_and_text:
+  params:
+    icon_text: Rejected
+  action: check_icon_and_text
+check_healthy_icon_and_text:
+  params:
+    icon_text: Healthy
+  action: check_icon_and_text
+check_icon_and_text:
+  element:
+    selector:
+      xpath: //span[@class='co-icon-and-text']/span[text()='<icon_text>']
+check_extendedValidationFailed_in_conditions_table:
+  params:
+    status: Failed
+    reason: ExtendedValidationFailed
+    message: "failed to parse CA certificate"
+  action: check_conditions_table
+check_conditions_table:
+  elements:
+  - selector:
+      xpath: //h3[contains(.,'Conditions')]/following-sibling::div[contains(.,'Type')]/../div[contains(.,'Status')]/../div[contains(.,'Reason')]/../div[contains(.,'Message')]
+  action:
+    if_param: type
+    ref: check_type_in_conditions_table
+  action:
+    if_param: status
+    ref: check_status_in_conditions_table
+  action:
+    if_param: reason
+    ref: check_reason_in_conditions_table
+  action:
+    if_param: message
+    ref: check_message_in_conditions_table
+check_type_in_conditions_table:
+  params:
+    value: <type>
+  action: check_value_in_conditions_table
+check_status_in_conditions_table:
+  params:
+    value: <status>
+  action: check_value_in_conditions_table
+check_reason_in_conditions_table:
+  params:
+    value: <reason>
+  action: check_value_in_conditions_table
+check_message_in_conditions_table:
+  params:
+    value: <message>
+  action: check_value_in_conditions_table
+check_value_in_conditions_table:
+  element:
+    selector:
+      xpath: //div[contains(@class,'row')]//div[contains(.,'<value>')]

@@ -1,1 +1,48 @@
-../4.9/masthead.xyaml
+click_notification_drawer:
+  params:
+    aria_label: Notification drawer
+  action: click_masthead_button
+open_notification_drawer:
+  action: click_notification_drawer
+  element:
+    selector: &header_title
+      xpath: //h1[contains(.,'Notifications')]
+close_notification_drawer:
+  action: click_notification_drawer
+  element:
+    selector: *header_title
+    missing: true
+check_toggle_title_in_notification_drawer:
+  elements:
+  - selector: &critical_toggle
+      xpath: //div[contains(@class,'group-toggle-title') and contains(.,'Critical Alerts')]
+  - selector: &other_alerts_toggle
+      xpath: //div[contains(@class,'group-toggle-title') and contains(.,'Other Alerts')]
+expand_critical_alerts_toggle:
+  element:
+    selector: *critical_toggle
+    op: click
+check_messages_when_no_critical_alerts:
+  params:
+    text: View all alerts
+    link_url: /monitoring/alerts
+  elements:
+  - selector:
+      xpath: //h5[contains(.,'No critical alerts')]
+  action: check_link_and_text
+view_alert_detail_info_in_drawer:
+  action:
+    if_param:
+      alert_name: AlertmanagerReceiversNotConfigured
+    ref: view_AlertmanagerReceiversNotConfigured_alert
+view_AlertmanagerReceiversNotConfigured_alert:
+  params:
+    text: Configure
+    link_url: /monitoring/alertmanagerconfig
+  action: check_link_and_text
+  action: click_alert_name
+click_alert_name:
+  elements:
+  - selector:
+      xpath: //h4[contains(.,'<alert_name>')]
+    op: click
