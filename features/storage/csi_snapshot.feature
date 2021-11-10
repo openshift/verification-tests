@@ -136,11 +136,7 @@ Feature: Volume snapshot test
 
     @openstack-ipi
     @openstack-upi
-    Examples:
-    | csi-sc       |
-    | gp2-csi      | # @case_id OCP-27727
-
     @upgrade-sanity
     Examples:
-    | csi-sc       |
-    | standard-csi | # @case_id OCP-37569
+      | csi-sc       |
+      | standard-csi | # @case_id OCP-37569
