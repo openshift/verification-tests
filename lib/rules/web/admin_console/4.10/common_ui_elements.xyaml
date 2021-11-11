@@ -490,6 +490,10 @@ check_manifest_column_in_table:
   params:
     field: Manifest
   action: check_column_in_table  
+check_instance_type_in_table:
+  params:
+    field: Instance type
+  action: check_column_in_table
 check_column_in_table:
   action: wait_box_loaded
   elements:
@@ -1085,6 +1089,9 @@ check_resource_details:
   action:
     if_param: volume_snapshot_class_name
     ref: check_volume_snapshot_class_name
+  action:
+    if_param: instance_type
+    ref: check_instance_type
 check_resource_details_key_and_value:
   element: &key_value
     selector:
@@ -1432,6 +1439,11 @@ check_volume_snapshot_class_name:
   params:
     key: VolumeSnapshotClass
     value: <volume_snapshot_class_name>
+  action: check_resource_details_key_and_value
+check_instance_type:
+  params:
+    key: Instance type
+    value: <instance_type>
   action: check_resource_details_key_and_value
 check_registry_pull_interval:
   element:

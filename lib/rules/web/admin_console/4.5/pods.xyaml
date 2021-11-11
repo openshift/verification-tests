@@ -15,12 +15,12 @@ check_ready_count_items_on_pods_list_page:
 check_memory_descending_sorted_on_pods_list_page:
   action: click_memory_button
   action: click_memory_button
-  action: check_memory_descending order_result
+  action: check_memory_descending_order_result
 click_memory_button:
   params:
     button_text: Memory
   action: click_button
-check_memory_descending order_result:
+check_memory_descending_order_result:
   scripts:
   - command: |
              var list = document.querySelectorAll("tbody tr td:nth-of-type(7)");

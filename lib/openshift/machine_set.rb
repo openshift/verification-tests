@@ -45,5 +45,11 @@ module BushSlicer
       rr = raw_resource(user: user, cached: cached, quiet: quiet)
       rr.dig('spec', 'template', 'metadata', 'labels','machine.openshift.io/os-id') == "Windows"
     end 
+    def machineset_flavor(user: nil, cached: true, quiet: true)
+      rr = raw_resource(user: user, cached: cached, quiet: quiet)
+      ms_provider_spec = rr.dig('spec', 'template', 'spec', 'providerSpec', 'value')
+      flavor = ms_provider_spec['instanceType'] || ms_provider_spec['vmSize'] || ms_provider_spec['machineType'] || ms_provider_spec['flavor']
+      return flavor
+    end
   end
 end

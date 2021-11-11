@@ -336,6 +336,9 @@ goto_machineconfig_pools_page:
 goto_machine_sets_page:
   url: k8s/ns/openshift-machine-api/machine.openshift.io~v1beta1~MachineSet
   action: wait_box_loaded
+goto_one_machineset_page:
+  url: k8s/ns/openshift-machine-api/machine.openshift.io~v1beta1~MachineSet/<machineset_name>
+  action: wait_box_loaded
 goto_machineautoscaler_list_page:
   url: k8s/ns/openshift-machine-api/autoscaling.openshift.io~v1beta1~MachineAutoscaler
 goto_one_machineautoscaler_page:
