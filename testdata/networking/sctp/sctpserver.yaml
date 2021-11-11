@@ -7,7 +7,7 @@ metadata:
 spec:
   containers:
     - name: sctpserver
-      image: quay.io/openshifttest/hello-sdn@sha256:395a3ebee51efa13c61bf163f9eeea3ed0967eb8ca5ff92aa50b01ee2bc0c39d
+      image: quay.io/openshifttest/hello-sdn@sha256:2af5b5ec480f05fda7e9b278023ba04724a3dd53a296afcd8c13f220dec52197
       ports:
         - containerPort: 30102
           name: sctpserver
