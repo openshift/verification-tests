@@ -3,6 +3,7 @@ Feature: kata related features
   # @case_id OCP-36508
   @admin
   @destructive
+  @flaky
   Scenario: kata container operator installation
     Given kata container has been installed successfully in the "openshift-sandboxed-containers-operator" project
     And I verify kata container runtime is installed into a worker node
@@ -11,6 +12,7 @@ Feature: kata related features
   # @case_id OCP-36509
   @admin
   @destructive
+  @flaky
   @4.8 @4.10 @4.9
   @gcp-ipi @baremetal-ipi @azure-ipi
   @gcp-upi @azure-upi
@@ -30,6 +32,7 @@ Feature: kata related features
   # @case_id OCP-39344
   @admin
   @destructive
+  @flaky
   @4.10 @4.9
   @gcp-ipi @baremetal-ipi @azure-ipi
   @gcp-upi @azure-upi
@@ -40,6 +43,7 @@ Feature: kata related features
   # @case_id OCP-39499
   @admin
   @destructive
+  @flaky
   Scenario: kata operator can be installed via CLI with OLM for OCP>=4.8
     Given the kata-operator is installed using OLM CLI
 
