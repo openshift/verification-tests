@@ -89,7 +89,7 @@ Feature: basic verification for upgrade oc client testing
     And evaluation of `rand(5000..7999)` is stored in the :port1 clipboard
     When I run the :port_forward background client command with:
       | pod       | <%= pod.name %>        |
-      | port_spec | <%= cb[:port1] %>:8888 |
+      | port_spec | <%= cb[:port1] %>:8081 |
       | _timeout  | 100                    |
     Then the step should succeed
     Given I wait up to 30 seconds for the steps to pass:
