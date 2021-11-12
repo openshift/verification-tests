@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    name: hello-pod
+  name: hello-pod
+spec:
+  containers:
+  - image: quay.io/openshifttest/nginx-alpine@sha256:f266733786efb10c4353d4b44ada6f22434e983d22f0975d20803f1817d38f56
+    name: hello-pod
+    ports:
+    - containerPort: 8080
+    - containerPort: 8443

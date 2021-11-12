@@ -347,20 +347,26 @@ Given /^I have a git client pod in the#{OPT_QUOTED} project$/ do |project_name|
 end
 
 # pod-for-ping is a pod that has curl, wget, telnet and ncat
-Given /^I have a pod-for-ping in the#{OPT_QUOTED} project$/ do |project_name|
+# test-client-pod is a pod that for routing testing
+Given /^I have a (pod-for-ping|test-client-pod) in the#{OPT_QUOTED} project$/ do |pod_name, project_name|
   project(project_name, switch: true)
   unless project.exists?(user: user)
     raise "project #{project_name} does not exist"
   end
 
-  @result = user.cli_exec(:create, f: "#{BushSlicer::HOME}/testdata/networking/aosqe-pod-for-ping.json")
-  raise "could not create a pod-for-ping" unless @result[:success]
+  if pod_name == 'test-client-pod'
+    res_file = "#{BushSlicer::HOME}/testdata/routing/test-client-pod.yaml"
+  else
+    res_file = "#{BushSlicer::HOME}/testdata/networking/aosqe-pod-for-ping.json"
+  end
+  @result = user.cli_exec(:create, f: res_file)
+  raise "could not create a #{pod_name}" unless @result[:success]
 
   cb.ping_pod = pod("hello-pod")
   @result = pod("hello-pod").wait_till_ready(user, 300)
   unless @result[:success]
     pod.describe(user, quiet: false)
-    raise "pod-for-ping did not become ready in time"
+    raise "#{pod_name} did not become ready in time"
   end
 end
 

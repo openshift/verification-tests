@@ -137,7 +137,7 @@ Given /^I store an available router IP in the#{OPT_SYM} clipboard$/ do |cb_name|
     | f |  #{BushSlicer::HOME}/testdata/networking/service_with_selector.json |
   })
   step %Q/I expose the "selector-service" service/
-  step %Q/I have a pod-for-ping in the project/
+  step %Q/I have a test-client-pod in the project/
   step %Q/I execute on the pod:/, table(%{
     | bash | -c | curl http://<%= route("selector-service", service("selector-service")).dns(by: user) %>/ --connect-timeout 10 -I -v -s |
   })
