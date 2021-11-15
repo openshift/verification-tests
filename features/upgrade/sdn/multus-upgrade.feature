@@ -1,9 +1,10 @@
  Feature: SDN multus compoment upgrade testing
- 
+
   # @author weliang@redhat.com
   @admin
   @upgrade-prepare
   @users=upuser1,upuser2
+  @4.10 @4.9
   @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Check the multus works well after upgrade - prepare
@@ -68,6 +69,6 @@
       | ip | a |
     Then the output should contain:
       | 192.168.22.101 |
-    
+
     # Delete the created project from testing cluster
     Given the "multus-upgrade" project is deleted
