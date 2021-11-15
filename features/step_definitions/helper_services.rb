@@ -501,11 +501,8 @@ Given /^I have a iSCSI setup in the environment$/ do
 
   _project = project("iscsi-target", switch: false)
   if !_project.exists?(user:admin, quiet: true)
-    step %Q{admin creates a project with:}, table(%{
-      | project_name  | iscsi-target |
-      | node_selector |              |
-    })
-    step %Q{the step should succeed}
+    @result = admin.cli_exec(:create_namespace, name: 'iscsi-target')
+    raise 'failed to "iscsi-target" project' unless @result[:success]
   end
 
   _pod = cb.iscsi_pod = pod("iscsi-target", _project)
