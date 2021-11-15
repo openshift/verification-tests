@@ -1,15 +1,16 @@
 Feature: SDN externalIP compoment upgrade testing
- 
+
   # @author weliang@redhat.com
   @admin
   @upgrade-prepare
+  @4.10 @4.9
   @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Check the externalIP works well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     And I run the :new_project client command with:
       | project_name | externalip-upgrade |
-    Then the step should succeed  
+    Then the step should succeed
     Given I store the schedulable nodes in the :nodes clipboard
     And the Internal IP of node "<%= cb.nodes[0].name %>" is stored in the :hostip clipboard
 
@@ -37,7 +38,7 @@ Feature: SDN externalIP compoment upgrade testing
     Given a pod becomes ready with labels:
       | name=externalip-pod    |
     And evaluation of `pod(1).name` is stored in the :pod1name clipboard
- 
+
     # Curl externalIP:portnumber should pass
     When I execute on the "<%= cb.pod1name %>" pod:
       | /usr/bin/curl | --connect-timeout | 10 | <%= cb.hostip %>:27017 |
@@ -59,13 +60,13 @@ Feature: SDN externalIP compoment upgrade testing
     Given a pod becomes ready with labels:
       | name=externalip-pod    |
     And evaluation of `pod(1).name` is stored in the :pod1name clipboard
- 
+
     # Curl externalIP:portnumber should pass
     When I execute on the "<%= cb.pod1name %>" pod:
       | /usr/bin/curl | --connect-timeout | 10 | <%= cb.hostip %>:27017 |
     Then the output should contain:
       | Hello OpenShift! |
-    
+
     # Clean-up required to erase above externalIP policy after testing done
     Given I register clean-up steps:
     """
@@ -75,5 +76,5 @@ Feature: SDN externalIP compoment upgrade testing
     ### delete this project,make sure project is deleted
     Given the "externalip-upgrade" project is deleted
 
-    
-    
+
+
