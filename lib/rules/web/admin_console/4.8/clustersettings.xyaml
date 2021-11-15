@@ -7,14 +7,14 @@ check_help_info_on_channel_popup:
     help_info: Channels help to control the pace of updates and recommend the appropriate release versions
   action: click_channel_help_icon
   action: check_help_info
-  action: check_dock_link_for_upgrade
+  action: check_doc_link_for_upgrade
   action: click_close_icon
 check_help_info_in_update_channel_modal:
   params:
     help_info: a channel that reflects the desired version
   action: click_update_channel_button
   action: check_help_info
-  action: check_dock_link_for_upgrade
+  action: check_doc_link_for_upgrade
 click_channel_help_icon:
   element:
     selector:
@@ -24,7 +24,7 @@ check_help_info:
   elements:
   - selector:
       xpath: //p[contains(., '<help_info>')]
-check_dock_link_for_upgrade:
+check_doc_link_for_upgrade:
   params:
     text: Learn more about OpenShift update channels
     link_url: https://docs.openshift.com/container-platform/<product_version>/updating/updating-cluster-between-minor.html
