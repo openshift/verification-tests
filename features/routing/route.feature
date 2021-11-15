@@ -125,7 +125,7 @@ Feature: Testing route
       | f | service_unsecure.yaml |
     Then the step should succeed
 
-    Given I have a pod-for-ping in the project
+    Given I have a test-client-pod in the project
     When I run the :create_route_edge client command with:
       | name    | edge-route       |
       | service | service-unsecure |
