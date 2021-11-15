@@ -1,10 +1,11 @@
 Feature: Volume snapshot test
 
   # @author wduan@redhat.com
+  @inactive
   @admin
   @4.8 @4.7 @4.10 @4.9
   Scenario Outline: Volume snapshot create and restore test
-    Given I have a project  
+    Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"
     When I create a dynamic pvc from "pvc.json" replacing paths:
       | ["metadata"]["name"]         | mypvc-ori |
@@ -47,12 +48,12 @@ Feature: Volume snapshot test
       | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt/local |
     Then the step should succeed
     Given the pod named "mypod-snap" becomes ready
-    And the "mypvc-snap" PVC becomes :bound 
+    And the "mypvc-snap" PVC becomes :bound
     When I execute on the "mypod-snap" pod:
       | sh | -c | more /mnt/local/testfile |
     Then the step should succeed
     And the output should contain "snapshot test"
-    
+
     @aws-ipi
     @aws-upi
     Examples:
@@ -73,6 +74,8 @@ Feature: Volume snapshot test
       | standard-csi | # @case_id OCP-37568
 
   # @author wduan@redhat.com
+  @admin
+  @inactive
   @admin
   @4.8 @4.7 @4.10 @4.9
   Scenario Outline: Volume snapshot create and restore test with block
