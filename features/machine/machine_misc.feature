@@ -2,6 +2,7 @@ Feature: Machine misc features testing
 
   # @author miyadav@redhat.com
   # @case_id OCP-34940
+  @inactive
   @admin
   @destructive
   @4.10 @4.9
@@ -170,11 +171,11 @@ Feature: Machine misc features testing
   # @author miyadav@redhat.com
   # @case_id OCP-40665
   @admin
-  @destructive	
+  @destructive
   @4.10 @4.9
   Scenario: Deattach disk before destroying vm from vsphere
     Given I switch to cluster admin pseudo user
-    Then I use the "openshift-machine-api" project		
+    Then I use the "openshift-machine-api" project
     And I clone a machineset and name it "machineset-clone-40665"
 
     Given I store the last provisioned machine in the :new_machine clipboard
@@ -185,7 +186,7 @@ Feature: Machine misc features testing
       | name     | <%= cb.nodeRef %>   |
       | key_val  | testcase=ocp40665   |
     Then the step should succeed
-    
+
     Given I obtain test data file "cloud/misc/pvc-40665.yaml"
     When I run the :create admin command with:
       | f | pvc-40665.yaml |
@@ -202,7 +203,7 @@ Feature: Machine misc features testing
     When I run oc create over "kubelet-killer-pod.yml" replacing paths:
 	    | ["spec"]["nodeName"]  | "<%= machine(cb.new_machine).node_name %>" |
     Then the step should succeed
-   
+
     When I run the :delete admin command with:
       | object_type       | machine                |
       | object_name_or_id | <%= cb.new_machine %>  |
@@ -216,4 +217,4 @@ Feature: Machine misc features testing
     Then the output should contain:
       | Detaching disks before vm destroy  |
 
-   
+
