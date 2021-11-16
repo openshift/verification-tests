@@ -245,6 +245,17 @@ module BushSlicer
       return @logging_envs
     end
 
+    def descheduler_envs
+      unless @descheduler_envs
+        if opts[:descheduler_envs]
+          @descheduler_envs = opts[:descheduler_envs]
+        else
+          @descheduler_envs = ''
+        end
+      end
+      return @descheduler_envs
+    end
+
     # naming scheme is https://logs.<cluster_id>.openshift.com for Online
     # for OCP it's https://logs.<subdomain>.openshift.com
     def logging_console_url
