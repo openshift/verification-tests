@@ -130,6 +130,14 @@ Given /^evaluation of `(.+?)` is stored in the#{OPT_SYM} clipboard$/ do |what, c
   cb[clipboard_name] = eval(what)
 end
 
+Given /^I save custom resource `(.+?)` to file>(.+)$/ do |what,filepath|
+  ensure_admin_tagged
+
+  resource = eval(what)
+  txt = resource.raw_resource(quiet: true).to_yaml
+  File.write(File.expand_path(filepath.strip), txt)
+end
+
 Then /^(?:the )?expression should be true> (.+)$/ do |expr|
   res = eval expr
   eval_details = ""
