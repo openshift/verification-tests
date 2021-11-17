@@ -12,7 +12,7 @@
     "containers": [
       {
         "name": "hello-openshift",
-        "image": "quay.io/openshifttest/sigcapture@sha256:e9c7ecf75c57def20f1964a119e858a7a45de9d3b21a384f5a32d9562a15270b",
+        "image": "quay.io/openshifttest/hello-openshift@sha256:0ed6e7163863e52438a5ed189d82e572a6c2ddd1b4db224c2c4b0688fee2c2cc",
         "ports": [
           {
             "containerPort": 8080,
