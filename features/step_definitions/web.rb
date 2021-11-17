@@ -314,7 +314,7 @@ Given /^admin disable "(.*?)" consoleplugin successfully$/ do | pluginname |
       | p        | [{"op": "remove", "path": "/spec/plugins/#{plugin_index}"}] |
     })
     step %Q/the step should succeed/
-  end 
+  end
 end
 
 Given /^admin enable demo dynamic plugin successfully$/ do
@@ -323,7 +323,7 @@ Given /^admin enable demo dynamic plugin successfully$/ do
   plugin_image_tag = full_version.gsub('.','')
   step %Q|I obtain test data file "templates/oc-manifest-demo-plugin.yaml"|
   step %Q/I replace lines in "oc-manifest-demo-plugin.yaml":/, table(%{
-    | :latest | :#{plugin_image_tag}} |
+    | :latest | :#{plugin_image_tag} |
   })
   @result = admin.cli_exec(:apply, f: 'oc-manifest-demo-plugin.yaml')
   raise "Failed to apply oc-manifest-demo-plugin yaml" unless @result[:success]
