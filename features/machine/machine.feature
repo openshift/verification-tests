@@ -33,11 +33,10 @@ Feature: Machine features testing
 
   # @author zhsun@redhat.com
   # @case_id OCP-37706
-  @smoke
   @admin
-  @4.8 @4.7 @4.10 @4.9
-  @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @4.10
+  @gcp-ipi @azure-ipi @aws-ipi
+  @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Baremetal clusteroperator should be disabled in any deployment that is not baremetal
     Given evaluation of `cluster_operator('baremetal').condition(type: 'Disabled')` is stored in the :co_disabled clipboard
