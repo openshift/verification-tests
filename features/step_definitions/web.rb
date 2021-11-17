@@ -298,7 +298,7 @@ Given /^admin enable "(.*?)" consoleplugin successfully$/ do | pluginname |
   end
 end
 
-Given /^admin disable "(.*?)" consoleplugin successfully$/ do |pluginname |
+Given /^admin disable "(.*?)" consoleplugin successfully$/ do | pluginname |
   ensure_admin_tagged
   consoleoperator_spec = console_operator('cluster').spec(cached: false, quiet: false)
   if not consoleoperator_spec.key?('plugins')
@@ -315,4 +315,17 @@ Given /^admin disable "(.*?)" consoleplugin successfully$/ do |pluginname |
     })
     step %Q/the step should succeed/
   end 
+end
+
+Given /^admin enable demo dynamic plugin successfully$/ do
+  ensure_admin_tagged
+  full_version, major, minor = env.get_version(user: user)
+  plugin_image_tag = full_version.gsub('.','')
+  step %Q|I obtain test data file "templates/oc-manifest-demo-plugin.yaml"|
+  step %Q/I replace lines in "oc-manifest-demo-plugin.yaml":/, table(%{
+    | :latest | :#{plugin_image_tag}} |
+  })
+  @result = admin.cli_exec(:apply, f: 'oc-manifest-demo-plugin.yaml')
+  raise "Failed to apply oc-manifest-demo-plugin yaml" unless @result[:success]
+  step %Q/admin enable "console-demo-plugin" consoleplugin successfully/
 end

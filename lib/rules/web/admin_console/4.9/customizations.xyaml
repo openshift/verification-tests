@@ -37,3 +37,23 @@ insert_snippet:
   params:
       button_text: Insert snippet
   action: click_button
+check_exposed_flag_model:
+  action: goto_test_consumer_page
+  elements:
+  - selector: &model_flag
+      xpath: //div[contains(.,'Model Flag')]
+  - selector: &model_group
+      xpath: //div[contains(.,'Model Group')]
+  - selector:
+      xpath: //li[contains(.,'kubevirt')]
+  - selector:
+      xpath: //li[contains(.,'v1alpha')]
+check_pseudolocalization:
+  action: goto_dynamic_plugin_pseudo_page
+  elements:
+  - selector:
+      <<: *model_flag
+    missing: true
+  - selector:
+      <<: *model_group
+    missing: true
