@@ -203,8 +203,7 @@ Feature: Testing route
     When I run the :create client command with:
       | f | service_secure.yaml |
     Then the step should succeed
-    Given I have a pod-for-ping in the project
-    #And CA trust is added to the pod-for-ping
+    Given I have a test-client-pod in the project
     # check reencrypt route
     Given I obtain test data file "routing/reencrypt/route_reencrypt_dest.ca"
     When I run the :create_route_reencrypt client command with:
@@ -238,7 +237,6 @@ Feature: Testing route
   @upgrade-sanity
   Scenario: Config insecureEdgeTerminationPolicy to Redirect for route
     Given I have a project
-    And I store an available router IP in the :router_ip clipboard
     Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
       | f | web-server-1.yaml |
@@ -266,7 +264,7 @@ Feature: Testing route
     And the output should contain:
       | Redirect |
     # Acess the route
-    Given I have a pod-for-ping in the project
+    Given I have a test-client-pod in the project
     When I execute on the pod:
       | curl |
       | -v |
@@ -287,7 +285,6 @@ Feature: Testing route
   @upgrade-sanity
   Scenario: Config insecureEdgeTerminationPolicy to Allow for route
     Given I have a project
-    And I store an available router IP in the :router_ip clipboard
     Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
       | f | web-server-1.yaml |
@@ -312,11 +309,11 @@ Feature: Testing route
     Then the step should succeed
     And the output should contain:
       | Allow |
-    Given I have a pod-for-ping in the project
+    Given I have a test-client-pod in the project
+    And I wait up to 60 seconds for the steps to pass:
+    """
     When I execute on the pod:
       | curl                                                                                          |
-      | --resolve                                                                                     |
-      | <%= route("myroute", service("service-unsecure")).dns(by: user) %>:443:<%= cb.router_ip[0] %> |
       | https://<%= route("myroute", service("service-unsecure")).dns(by: user) %>/                   |
       | -k                                                                                            |
       | -v                                                                                            |
@@ -325,10 +322,11 @@ Feature: Testing route
       | Hello-OpenShift |
     And the output should not contain:
       | HTTP/1.1 302 Found |
+    """
+    And I wait up to 60 seconds for the steps to pass:
+    """
     When I execute on the pod:
       | curl                                                                                         |
-      | --resolve                                                                                    |
-      | <%= route("myroute", service("service-unsecure")).dns(by: user) %>:80:<%= cb.router_ip[0] %> |
       | http://<%= route("myroute", service("service-unsecure")).dns(by: user) %>/                   |
       | -v                                                                                           |
       | -c                                                                                           |
@@ -343,6 +341,7 @@ Feature: Testing route
     Then the step should succeed
     And the output should match:
       | FALSE.*FALSE |
+    """
 
   # @author hongli@redhat.com
   # @case_id OCP-10024
@@ -372,7 +371,6 @@ Feature: Testing route
   @upgrade-sanity
   Scenario: Set insecureEdgeTerminationPolicy to Redirect for passthrough route
     Given I have a project
-    And I store an available router IP in the :router_ip clipboard
     Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
       | f | web-server-1.yaml |
@@ -395,8 +393,8 @@ Feature: Testing route
       | p             | {"spec":{"tls":{"insecureEdgeTerminationPolicy":"Redirect"}}} |
     Then the step should succeed
     # Acess the route
-    Given I have a pod-for-ping in the project
-    And I wait up to 20 seconds for the steps to pass:
+    Given I have a test-client-pod in the project
+    And I wait up to 60 seconds for the steps to pass:
     """
     When I execute on the pod:
       | curl |
@@ -425,7 +423,6 @@ Feature: Testing route
   @upgrade-sanity
   Scenario: Set insecureEdgeTerminationPolicy to Redirect and Allow for reencrypt route
     Given I have a project
-    And I store an available router IP in the :router_ip clipboard
     Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
       | f | web-server-1.yaml |
@@ -531,7 +528,6 @@ Feature: Testing route
   @upgrade-sanity
   Scenario: Check the cookie if using secure mode when insecureEdgeTerminationPolicy to Redirect for edge/reencrypt route
     Given I have a project
-    And I store an available router IP in the :router_ip clipboard
     Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
       | f | web-server-1.yaml |
@@ -549,7 +545,9 @@ Feature: Testing route
       | insecure_policy | Redirect   |
     Then the step should succeed
 
-    Given I have a pod-for-ping in the project
+    Given I have a test-client-pod in the project
+    And I wait up to 60 seconds for the steps to pass:
+    """
     When I execute on the pod:
       | curl |
       | -v |
@@ -563,6 +561,7 @@ Feature: Testing route
       | Hello-OpenShift |
       | HTTP/1.1 302 Found |
       | ocation: https:// |
+    """
     And I execute on the pod:
       | cat | /tmp/cookie |
     Then the step should succeed
@@ -582,7 +581,7 @@ Feature: Testing route
       | insecure_policy | Redirect                |
     Then the step should succeed
     And I wait up to 60 seconds for a secure web server to become available via the "reen" route
-    And I wait up to 20 seconds for the steps to pass:
+    And I wait up to 60 seconds for the steps to pass:
     """
     When I execute on the pod:
       | curl |
