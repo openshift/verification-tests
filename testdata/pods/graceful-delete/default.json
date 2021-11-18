@@ -19,6 +19,20 @@
             "protocol": "TCP"
           }
         ],
+        "env": [         
+          {
+            "name": "PORT",
+            "value": ""
+          },
+          {
+            "name": "SECOND_PORT",
+            "value": ""
+          },
+          {
+            "name": "TRAP_SIGNALS",
+            "value": "yes"
+         }
+      ],
         "resources": {},
         "volumeMounts": [
           {
