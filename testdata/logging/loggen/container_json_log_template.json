@@ -40,7 +40,7 @@
                         "containers": [
                             {
                                 "env": [],
-                                "image": "quay.io/openshifttest/ocp-logtest@sha256:f23bea6f669d125f2f317e3097a0a4da48e8792746db32838725b45efa6c64a4",
+                                "image": "quay.io/openshifttest/ocp-logtest:multiarch@sha256:16232868ba1143721b786dbabb3f7384645acb663fadb4af48e9ea1228a67635",
                                 "imagePullPolicy": "Always",
                                 "name": "centos-logtest",
                                 "resources": {},
