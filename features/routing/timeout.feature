@@ -8,7 +8,6 @@ Feature: Testing timeout route
   @upgrade-sanity
   Scenario: Set timeout server for passthough route
     Given I have a project
-    And I store an available router IP in the :router_ip clipboard
     Given I obtain test data file "routing/routetimeout/httpbin-pod-2.json"
     When I run the :create client command with:
       | f  | httpbin-pod-2.json |
@@ -30,11 +29,9 @@ Feature: Testing timeout route
       | overwrite        | true                                   |
       | keyval           | haproxy.router.openshift.io/timeout=3s |
     Then the step should succeed
-    Given I have a pod-for-ping in the project
+    Given I have a test-client-pod in the project
     When I execute on the pod:
       | curl                                                                                       |
-      | --resolve                                                                                  |
-      | <%= route("pass-route", service("pass-route")).dns(by: user) %>:443:<%= cb.router_ip[0] %> |
       | https://<%= route("pass-route", service("pass-route")).dns(by: user) %>/delay/2            |
       | -k                                                                                         |
     Then the step should succeed
@@ -44,8 +41,6 @@ Feature: Testing timeout route
     When I execute on the pod:
       | curl                                                                                       |
       | -Iv                                                                                        |
-      | --resolve                                                                                  |
-      | <%= route("pass-route", service("pass-route")).dns(by: user) %>:443:<%= cb.router_ip[0] %> |
       | https://<%= route("pass-route", service("pass-route")).dns(by: user) %>/delay/4            |
       | -k                                                                                         |
     Then the step should fail
