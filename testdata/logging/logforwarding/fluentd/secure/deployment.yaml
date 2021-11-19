@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
       - name: "fluentdserver"
-        image: "quay.io/openshifttest/fluentd@sha256:7eece00d1bc784ac1e9722b2580911cd3ead5afd740dad6594be945b3b1dd884"
+        image: "quay.io/openshiftteststaging/fluentd@sha256:a3ac4e437768746f9f265b2ae67fb6ad104affd515baed5f68e02a41b9180401"
         imagePullPolicy: "IfNotPresent"
         args:
         - "fluentd"
@@ -56,3 +56,10 @@ spec:
           defaultMode: 420
           secretName: fluentdserver
 
+
+
+  git fetch upstream
+  git rebase upstream/master
+
+
+  git push origin master -f
