@@ -3,7 +3,7 @@ Feature: Descheduler major upgrade should work fine
   @upgrade-prepare
   @admin
   @destructive
-  Scenario: upgrade descheduler from 4.x to 4.y - prepare
+  Scenario: [upgrade] - upgrade descheduler from 4.x to 4.y - prepare
     Given I store master major version in the clipboard
     Given I switch to cluster admin pseudo user
     Given kubedescheduler operator has been installed successfully
