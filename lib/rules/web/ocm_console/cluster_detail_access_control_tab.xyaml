@@ -269,3 +269,72 @@ click_delete_button_in_AWS_infrastructure_role_action_dropdown:
     selector:
       xpath: //li/button[text()='Delete']
     op: click
+grant_OCM_roles_and_access_with_valid:
+  action: check_OCM_roles_and_access_part_loaded
+  action: click_grant_role_button_in_tab
+  action: check_grant_OCM_roles_and_access_dialog_loaded
+  action: add_OCM_roles_and_access_role
+  action: check_OCM_roles_and_access_created
+check_OCM_roles_and_access_part_loaded:
+  elements:
+  - selector:
+      xpath: //h3[text()='OCM Roles and Access']
+  - selector:
+      xpath: //button[text()='Grant role']
+check_grant_OCM_roles_and_access_dialog_loaded:
+  elements:
+  - selector:
+      xpath: //span[text()='Grant role']
+  - selector:
+      xpath: //h4[text()='This user will be granted with Cluster Editor role and will be able to manage and configure the cluster.']
+click_grant_role_button_in_tab:
+  elements:
+  - selector:
+      xpath: //div/h3[text()='OCM Roles and Access']/../button[text()='Grant role']
+    op: click
+check_popover_content_for_username:
+  element:
+    selector:
+      xpath: //section[@id='accessControlTabContent']//div[@id='cluster-details-access-control-tab-contents']//table[@role='grid']//thead/tr/th[text()='Username']/button[@class='pf-c-button pf-m-plain']
+    op: click
+  elements:
+  - selector:
+      xpath: //div[@aria-label='Username']/div[@class='pf-c-popover__content']//p[contains(.,'Red Hat login')]
+  - selector:
+      xpath: //div[@aria-label='Username']/div[@class='pf-c-popover__content']//button[@aria-label='Close']
+add_OCM_roles_and_access_role:
+  element:
+    selector:
+      xpath: //input[@id='username']
+    op: send_keys <user_id>
+  action: click_grant_role_button_in_dialog
+check_OCM_roles_and_access_created:
+  elements:
+  - selector:
+      xpath: //tr/td/span[text()='<user_id>']
+    timeout: 30
+  - selector:
+      xpath: //tr/td[text()='Cluster Editor']  
+grant_OCM_roles_and_access_with_invalid:
+  action: check_OCM_roles_and_access_part_loaded
+  action: click_grant_role_button_in_tab
+  action: check_grant_OCM_roles_and_access_dialog_loaded
+  action: add_OCM_roles_and_access_role
+  element:
+    selector:
+      xpath: //div[contains(.,'<error_message>')]
+  action: click_cancel_button
+check_OCM_roles_and_access_disabled:
+  action: check_OCM_roles_and_access_part_loaded
+  element:
+    selector:
+      xpath: //button[@aria-disabled='true' and text()='Grant role']
+remove_OCM_roles_and_access:
+  elements:
+  - selector:
+      xpath: //td[@data-label='Username']/span[text()='<user_id>']/../..//button[@aria-label='Actions']
+    timeout: 30
+    op: click
+  - selector:
+      xpath: //button[text()='Delete']
+    op: click
