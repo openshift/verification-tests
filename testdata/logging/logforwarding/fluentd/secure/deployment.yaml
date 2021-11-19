@@ -55,11 +55,3 @@ spec:
         secret:
           defaultMode: 420
           secretName: fluentdserver
-
-
-
-  git fetch upstream
-  git rebase upstream/master
-
-
-  git push origin master -f
