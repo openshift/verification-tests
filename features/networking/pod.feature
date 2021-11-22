@@ -576,6 +576,7 @@ Feature: Pod related networking scenarios
 
   # @author zzhao@redhat.com
   # @case_id OCP-41666
+  @customer
   # @bug_id 1924741
   @long-duration
   @admin

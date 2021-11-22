@@ -131,6 +131,7 @@ Feature: Egress IP related features
 
   # @author huirwang@redhat.com
   # @case_id OCP-21812
+  @customer
   # @bug_id  1609112
   @admin
   @destructive
@@ -273,6 +274,7 @@ Feature: Egress IP related features
 
   # @author huirwang@redhat.com
   # @case_id OCP-19973
+  @customer
   @admin
   @destructive
   @4.10 @4.9
@@ -330,6 +332,7 @@ Feature: Egress IP related features
 
   # @author huirwang@redhat.com
   # @case_id OCP-25694
+  @customer
   @admin
   @destructive
   @4.10 @4.9
@@ -417,6 +420,7 @@ Feature: Egress IP related features
 
   # @author huirwang@redhat.com
   # @case_id OCP-18316
+  @customer
   @admin
   @destructive
   @4.10 @4.9
@@ -449,6 +453,7 @@ Feature: Egress IP related features
 
   # @author huirwang@redhat.com
   # @case_id OCP-18315
+  @customer
   @admin
   @destructive
   @4.10 @4.9
@@ -487,6 +492,7 @@ Feature: Egress IP related features
 
   # @author huirwang@redhat.com
   # @case_id OCP-19785
+  @customer
   @admin
   @destructive
   @4.10 @4.9

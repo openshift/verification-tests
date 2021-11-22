@@ -181,6 +181,7 @@ Feature: SDN related networking scenarios
 
   # @author hongli@redhat.com
   # @case_id OCP-18535
+  @customer
   @admin
   @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
@@ -284,6 +285,7 @@ Feature: SDN related networking scenarios
 
   # @author weliang@redhat.com
   # @case_id OCP-27655
+  @customer
   @admin
   @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
@@ -451,6 +453,7 @@ Feature: SDN related networking scenarios
 
   # @author zzhao@redhat.com
   # @case_id OCP-36287
+  @customer
   @admin
   @destructive
   @4.10 @4.9
@@ -485,6 +488,7 @@ Feature: SDN related networking scenarios
 
   # @author zzhao@redhat.com
   # @case_id OCP-43146
+  @customer
   @admin
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
