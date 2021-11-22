@@ -31,8 +31,8 @@
           {
             "name": "TRAP_SIGNALS",
             "value": "yes"
-         }
-      ],
+          }
+        ],
         "resources": {},
         "volumeMounts": [
           {
