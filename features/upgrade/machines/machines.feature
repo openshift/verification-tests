@@ -10,11 +10,13 @@ Feature: Machine-api components upgrade tests
     Given the expression should be true> "True" == "True"
 
   Examples:
-    | cluster_operator     |
-    | "machine-api"        |
-    | "cluster-autoscaler" |
+    | cluster_operator           |
+    | "machine-api"              |
+    | "cluster-autoscaler"       |
+    | "cloud-controller-manager" |
 
   # @author jhou@redhat.com
+  # @author huliu@redhat.com
   @upgrade-check
   @admin
   @4.8 @4.7 @4.10 @4.9
@@ -37,37 +39,6 @@ Feature: Machine-api components upgrade tests
     | cluster_operator           |
     | "machine-api"              | # @case_id OCP-22712
     | "cluster-autoscaler"       | # @case_id OCP-27664
-
-
-  @upgrade-prepare
-  @admin
-  @4.10 @4.9
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
-  Scenario: Cluster operator should be available after upgrade - prepare
-    Given the expression should be true> "True" == "True"
-
-  # @author huliu@redhat.com
-  @upgrade-check
-  @admin
-  @4.10 @4.9
-  Scenario Outline: Cluster operator should be available after upgrade
-    Given evaluation of `cluster_operator(<cluster_operator>).condition(type: 'Available')` is stored in the :co_available clipboard
-    Then the expression should be true> cb.co_available["status"]=="True"
-
-    Given evaluation of `cluster_operator(<cluster_operator>).condition(type: 'Degraded')` is stored in the :co_degraded clipboard
-    Then the expression should be true> cb.co_degraded["status"]=="False"
-
-    Given evaluation of `cluster_operator(<cluster_operator>).condition(type: 'Upgradeable')` is stored in the :co_upgradable clipboard
-    Then the expression should be true> cb.co_upgradable["status"]=="True"
-
-    Given evaluation of `cluster_operator(<cluster_operator>).condition(type: 'Progressing')` is stored in the :co_progressing clipboard
-    Then the expression should be true> cb.co_progressing["status"]=="False"
-
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
-  Examples:
-    | cluster_operator           |
     | "cloud-controller-manager" | # @case_id OCP-43331
 
   @upgrade-prepare

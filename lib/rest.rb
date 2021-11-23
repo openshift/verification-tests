@@ -23,7 +23,7 @@ module BushSlicer
         if opts[:_header]
           base_opts[:headers].merge!(normalize_header_list(opts.delete(:_header)))
         end
-        logger.info("REST #{req} for user '#{user}', base_opts: #{base_opts}, opts: #{opts}")
+        logger.debug("REST #{req} for user '#{user}', base_opts: #{base_opts}, opts: #{opts}")
         return delegate_rest_request(req, base_opts, opts)
       end
 

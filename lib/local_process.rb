@@ -30,7 +30,7 @@ module BushSlicer
         log_text << opts[:env].inject("") { |r,e| r << e.join('=') << "\n" }
       end
       log_text << result[:command]
-      logger.info(log_text) unless opts[:quiet]
+      logger.debug(log_text) unless opts[:quiet]
 
       spawn
     end
