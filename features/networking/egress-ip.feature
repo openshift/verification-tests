@@ -828,3 +828,44 @@ Feature: Egress IP related features
     Then the step should succeed
     And the output should contain 10 times:
       | <%= cb.egress_ip %> |
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-46244
+  @admin
+  @destructive
+  @4.10 @4.9
+  @vsphere-ipi
+  @vsphere-upi
+  Scenario: [Bug 1926662] NodePort works when configuring an EgressIP address
+    Given I store the schedulable workers in the :workers clipboard
+    And I store the masters in the :masters clipboard
+    And the Internal IP of node "<%= cb.workers[0].name %>" is stored in the :worker0_ip clipboard
+    And the valid egress IP is added to the "<%= cb.workers[1].name %>" node
+
+    # Patch egress IP to the project
+    Given I have a project
+    And as admin I successfully merge patch resource "netnamespace/<%= project.name %>" with:
+      | {"egressIPs": ["<%= cb.valid_ip %>"]} |
+
+    #Create nodeport service with externalTrafficPolicy Local
+    Given evaluation of `rand(30000..32767)` is stored in the :port clipboard
+    Given I obtain test data file "networking/nodeport_test_pod.yaml"
+    When I run oc create over "nodeport_test_pod.yaml" replacing paths:
+      | ["spec"]["template"]["spec"]["nodeName"] | <%= cb.workers[0].name %>  |
+    Then the step should succeed
+    And a pod becomes ready with labels:
+      | name=hello-pod |
+    When I obtain test data file "networking/nodeport_test_service.yaml"
+    And I wait up to 600 seconds for the steps to pass:
+    """
+    When I run oc create over "nodeport_test_service.yaml" replacing paths:
+      | ["spec"]["ports"][0]["nodePort"]  | <%= cb.port %> |
+      | ["spec"]["externalTrafficPolicy"] | Local          |
+    Then the step should succeed
+    """
+    Given I use the "<%= cb.masters[0].name %>" node
+    When I run commands on the host:
+      | curl --connect-timeout 5 <%= cb.worker0_ip %>:<%= cb.port %> |
+    Then the step should succeed
+    And the output should contain:
+      | Hello OpenShift! |

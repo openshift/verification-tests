@@ -127,8 +127,8 @@ module BushSlicer
       end
 
       unless res[:success]
-        # logger.error res[:response]
-        raise "cannot login with command: #{res[:instruction]}"
+        logger.debug res[:instruction]
+        raise "cannot login with command"
       end
     end
 

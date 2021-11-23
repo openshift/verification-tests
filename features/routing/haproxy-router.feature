@@ -24,7 +24,7 @@ Feature: Testing haproxy router
     When I expose the "service-unsecure" service
     Then the step should succeed
 
-    Given I have a pod-for-ping in the project
+    Given I have a test-client-pod in the project
     #access the route without cookies
     Given I wait for the steps to pass:
     """
@@ -85,7 +85,7 @@ Feature: Testing haproxy router
       | service | service-unsecure |
     Then the step should succeed
 
-    Given I have a pod-for-ping in the project
+    Given I have a test-client-pod in the project
     # access the route without cookies
     Given I wait for the steps to pass:
     """
@@ -268,7 +268,6 @@ Feature: Testing haproxy router
   @upgrade-sanity
   Scenario: Set balance leastconn for passthrough routes
     Given I have a project
-    And I store an available router IP in the :router_ip clipboard
     Given I obtain test data file "routing/web-server-1.yaml"
     When I run the :create client command with:
       | f | web-server-1.yaml |
@@ -293,15 +292,13 @@ Feature: Testing haproxy router
       | overwrite | true |
     Then the step should succeed
 
-    Given I have a pod-for-ping in the project
+    Given I have a test-client-pod in the project
     And I use the "service-secure" service
     Given I wait for the steps to pass:
     """
     When I execute on the pod:
       | curl                                                   |
       | -ksS                                                   |
-      | --resolve                                              |
-      | <%= route("route-pass").dns(by: user) %>:443:<%= cb.router_ip[0] %> |
       | https://<%= route("route-pass").dns(by: user) %> |
     Then the step should succeed
     And the output should contain "Hello-OpenShift web-server-2"
@@ -309,8 +306,6 @@ Feature: Testing haproxy router
     When I execute on the pod:
       | curl                                                   |
       | -ksS                                                   |
-      | --resolve                                              |
-      | <%= route("route-pass").dns(by: user) %>:443:<%= cb.router_ip[0] %> |
       | https://<%= route("route-pass").dns(by: user) %> |
     Then the step should succeed
     And the output should contain "Hello-OpenShift web-server-1"
