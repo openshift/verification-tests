@@ -31,7 +31,7 @@ Given /^I select a random( windows)? node's host$/ do | windows |
   @host = node.host
 end
 
-Given /^I store the( schedulable| ready and schedulable)? (node|master|worker)s in the#{OPT_SYM} clipboard(?: excluding #{QUOTED})?$/ do |state, role, cbname, exclude|
+Given /^I store the( schedulable| ready and schedulable)?( windows)? (node|master|worker)s in the#{OPT_SYM} clipboard(?: excluding #{QUOTED})?$/ do |state, windows, role, cbname, exclude|
   ensure_admin_tagged
   cbname = 'nodes' unless cbname
 
@@ -54,6 +54,9 @@ Given /^I store the( schedulable| ready and schedulable)? (node|master|worker)s 
   elsif role == "master"
     cb[cbname] = cb[cbname].select { |n| n.is_master? }
   end
+
+  ###select windows worker or not
+  cb[cbname] = cb[cbname].select { |n| windows ? n.is_windows_worker? : ! n.is_windows_worker? }
 
   cache_resources *cb[cbname].shuffle
 end
