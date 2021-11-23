@@ -633,3 +633,73 @@ Feature: Service related networking scenarios
       | KUBE-SEP-.+ -p tcp .* -m tcp -j DNAT --to-destination <%= cb.pod_ip %>:8080            |
       | KUBE-SERVICES -d <%= cb.service_ip %>/32 -p tcp .* -m tcp --dport 27017 -j KUBE-SVC-.+ |
       | KUBE-SVC-.+ .* -j KUBE-SEP-.+                                                          |
+
+
+  # @author jechen@redhat.com
+  # @case_id OCP-43493
+  @admin
+  @destructive
+  @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  Scenario: Update externalIP from oc edit svc
+    Given I have a project
+    And evaluation of `project.name` is stored in the :proj_name clipboard
+    And SCC "privileged" is added to the "system:serviceaccounts:<%= project.name %>" group
+    Given I store the schedulable nodes in the :nodes clipboard
+ 
+    # Add externalIP policy to CNO
+    Given as admin I successfully merge patch resource "networks.config.openshift.io/cluster" with:
+	    | {"spec":{"externalIP":{"policy":{"allowedCIDRs":["1.1.1.0/24"]}}}} |
+
+    # Clean-up required to erase above externalIP policy after testing done
+    Given I register clean-up steps:
+    """
+    Given as admin I successfully merge patch resource "networks.config.openshift.io/cluster" with:
+      | {"spec":{"externalIP":{"policy":{"allowedCIDRs": null}}}} |
+    """
+ 
+    # Create a svc with externalIP
+    Given I switch to the first user
+    And I use the "<%= cb.proj_name %>" project
+    Given I obtain test data file "networking/externalip_service1.json"
+    And I wait up to 500 seconds for the steps to pass:
+    """
+    When I run oc create over "externalip_service1.json" replacing paths:
+      | ["spec"]["externalIPs"][0] | 1.1.1.1 |
+    Then the step should succeed
+    """
+ 
+    # Create a pod
+    Given I obtain test data file "networking/externalip_pod.yaml"
+    When I run the :create client command with:
+      | f | externalip_pod.yaml |
+    Then the step should succeed
+    And the pod named "externalip-pod" becomes ready
+ 
+    # Curl externalIP:portnumber should pass
+    Given I use the "<%= cb.nodes[0].name %>" node
+    And I run commands on the host:
+      | curl --connect-timeout 5 1.1.1.1:27017 |
+    Then the step should succeed
+    And the output should contain "Hello OpenShift!"
+ 
+    # change externalIP for the svc
+    Given I switch to the first user
+    And I use the "<%= cb.proj_name %>" project
+    And I wait up to 60 seconds for the steps to pass:
+    """
+    When I run the :patch client command with:
+      | resource      | service                              |
+      | resource_name | service-unsecure                     |
+      | p             | {"spec":{"externalIPs":["1.1.1.2"]}} |
+    Then the step should succeed
+    """
+ 
+    # Curl new externalIP:portnumber should pass
+    Given I use the "<%= cb.nodes[0].name %>" node
+    And I run commands on the host:
+      | curl --connect-timeout 5 1.1.1.2:27017 |
+    Then the step should succeed
+    And the output should contain "Hello OpenShift!"
+
