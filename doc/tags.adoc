@@ -24,6 +24,12 @@ We use tags to catetorize different types of test scenarios. With a combination 
 |`@qeci`
 |Tests that can only run on QECI because they have implemented dependencies. Do not run tests with this tag unless you have configured their preconditions properly
 
+|`@security`
+|Tests that contain sensitive information which should be run in private ci.
+
+|`@customer`
+|Tests that contain customer information which should be run in private ci.
+
 |`@flaky`
 |Unreliable test that keeps failing and is recognized as test automation bug. Skip tests with a `@flaky` tag
 
@@ -80,6 +86,9 @@ We use tags to catetorize different types of test scenarios. With a combination 
 
 |`@baremetal-upi`
 |Test scenarios for baremetal upi
+
+|`@4.x`
+|The OCP version the test supports. Tests are executed by matching the supported versions and excludig unsupported versions
 |===
 
 == Running Tests With Tags
