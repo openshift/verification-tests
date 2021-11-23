@@ -15,7 +15,7 @@
         "containers": [
           {
             "name": "iperf-server",
-            "image": "quay.io/openshifttest/hello-sdn@sha256:afdac7d35d6fc61d0f61c991b7657bb638892add8ed8acc6541cc7b605dcfd80",
+            "image": "quay.io/openshifttest/mcast-pod@sha256:7cccaa51ca2da1dba019ca2817674d0f35762e6dd099187184ff73e01f8764e4",
             "ports": [
               {
                 "containerPort": 5201
