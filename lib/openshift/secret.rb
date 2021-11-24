@@ -13,6 +13,11 @@ module BushSlicer
       return obj['type']
     end
 
+    def data(user: nil, cached: true, quiet: true)
+      rr = raw_resource(user: user, cached: cached, quiet: true)
+      return rr.dig('data')
+    end
+
     # @param user [BushSlicer::User] the user to run cli commands with if needed
     def bearer_token?(user: nil, cached: true, quiet: true)
       type(user: user, cached: cached, quiet: true).include?('service-account-token') && raw_resource.dig('data', 'token')
