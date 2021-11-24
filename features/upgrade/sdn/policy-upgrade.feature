@@ -477,3 +477,169 @@ Feature: SDN compoment upgrade testing
     And the output should not contain "<%= cb.host_pod1.ip %>"
     """
 
+  # @author asood@redhat.com
+  @admin
+  @upgrade-prepare
+  @4.10 @4.9
+  @aws-ipi @gcp-ipi @vsphere-ipi @azure-ipi @baremetal-ipi @openstack-ipi
+  @aws-upi @gcp-upi @openstack-upi
+  @destructive
+  @network-ovnkubernetes
+  Scenario: Check network policy ACL logging works post upgrade -prepare
+    Given I switch to cluster admin pseudo user
+    Given the env is using "OVNKubernetes" networkType
+    When I run the :new_project client command with:
+      | project_name | rsyslog-server |
+    Then the step should succeed
+    And evaluation of `"rsyslog-server"` is stored in the :proj0 clipboard
+    Given I obtain test data file "networking/syslog/config-map.yaml"
+    Given I obtain test data file "logging/clusterlogforwarder/rsyslog/insecure/rsyslogserver_deployment.yaml"
+    Given I create the resources for the receiver with:
+      | namespace       | <%= cb.proj0 %>               |
+      | receiver_name   | rsyslogserver                 |
+      | configmap_file  | config-map.yaml               |
+      | deployment_file | rsyslogserver_deployment.yaml |
+      | pod_label       | component=rsyslogserver       |
+    And evaluation of `service("rsyslogserver").ip` is stored in the :svc_ip clipboard
+    And evaluation of `pod(0).name` is stored in the :rsyslog_server_pod clipboard
+    Then the step should succeed
+
+    Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
+      | {"spec":{"defaultNetwork":{"ovnKubernetesConfig":{"policyAuditConfig": {"destination": "udp:<%= cb.svc_ip %>:514" }}}}} |
+    And I wait up to 300 seconds for the steps to pass:
+    """
+      Given the status of condition "Progressing" for network operator is :False
+      And the status of condition "Available" for network operator is :True
+    """
+
+    When I run the :new_project client command with:
+      | project_name | policy-upgrade6 |
+    Then the step should succeed
+    And evaluation of `"policy-upgrade6"` is stored in the :proj1 clipboard
+    When I run the :annotate admin command with:
+      | resource     | namespace                                                |
+      | resourcename | <%= cb.proj1 %>                                          |
+      | keyval       | k8s.ovn.org/acl-logging={"deny":"alert","allow":"alert"} |
+    Then the step should succeed
+    When I run the :new_project client command with:
+      | project_name | policy-upgrade7 |
+    Then the step should succeed
+    And evaluation of `"policy-upgrade7"` is stored in the :proj2 clipboard
+    When I run the :label admin command with:
+      | resource | namespace       |
+      | name     | <%= cb.proj2 %> |
+      | key_val  | team=operations |
+    Then the step should succeed
+    Given I use the "<%= cb.proj1 %>" project
+    Given I obtain test data file "networking/list_for_pods.json"
+    When I run oc create over "list_for_pods.json" replacing paths:
+      | ["items"][0]["spec"]["replicas"] | 1 |
+    Then the step should succeed
+    Given a pod becomes ready with labels:
+      | name=test-pods |
+    And evaluation of `pod(1).ip_url` is stored in the :p1pod1ip clipboard
+    Given I obtain test data file "networking/networkpolicy/allow-ns-and-pod.yaml"
+    When I run the :create admin command with:
+      | f | allow-ns-and-pod.yaml |
+      | n | <%= cb.proj1 %>       |
+    Then the step should succeed
+    Given I use the "<%= cb.proj2 %>" project
+    Given I obtain test data file "networking/list_for_pods.json"
+    When I run oc create over "list_for_pods.json" replacing paths:
+      | ["items"][0]["spec"]["replicas"] | 1 |
+    Then the step should succeed
+    Given a pod becomes ready with labels:
+      | name=test-pods |
+    And evaluation of `pod(2).name` is stored in the :p2pod1name clipboard
+    Given I obtain test data file "rc/idle-rc-1.yaml"
+    When I run oc create over "idle-rc-1.yaml" replacing paths:
+      | ["items"][0]["spec"]["replicas"] | 1 |
+    Then the step should succeed
+    Given a pod becomes ready with labels:
+      | name=hello-idle |
+    And evaluation of `pod(3).name` is stored in the :p2pod2name clipboard
+    And I wait up to 20 seconds for the steps to pass:
+    """
+    When I execute on the "<%= cb.p2pod1name %>" pod:
+      | curl | -I | <%= cb.p1pod1ip %>:8080 | --connect-timeout | 5 |
+    Then the output should contain "200 OK"
+    Then the step should succeed
+    Given I use the "<%= cb.proj0 %>" project
+    When I execute on the "<%= cb.rsyslog_server_pod %>" pod:
+      | grep | -w | verdict=allow | /var/log/messages |
+    Then the output should contain "verdict=allow"
+    
+    Given I use the "<%= cb.proj2 %>" project
+    When I execute on the "<%= cb.p2pod2name %>" pod:
+      | curl | -I | <%= cb.p1pod1ip %>:8080 | --connect-timeout | 5 |
+    Then the output should not contain "200 OK"
+    Then the step should fail
+    Given I use the "<%= cb.proj0 %>" project
+    When I execute on the "<%= cb.rsyslog_server_pod %>" pod:
+      | grep | -w | verdict=drop | /var/log/messages |
+    Then the output should contain "verdict=drop"
+    """
+
+  # @author asood@redhat.com
+  # @case_id OCP-44978
+  @admin
+  @upgrade-check
+  @4.10 @4.9
+  @aws-ipi @gcp-ipi @vsphere-ipi @azure-ipi @baremetal-ipi @openstack-ipi
+  @aws-upi @gcp-upi @openstack-upi
+  @destructive
+  @network-ovnkubernetes
+  Scenario: Check network policy ACL logging works post upgrade -prepare
+    Given I switch to cluster admin pseudo user
+    Given the env is using "OVNKubernetes" networkType
+    And evaluation of `"rsyslog-server"` is stored in the :proj0 clipboard
+    And evaluation of `"policy-upgrade6"` is stored in the :proj1 clipboard
+    And evaluation of `"policy-upgrade7"` is stored in the :proj2 clipboard
+    Given I use the "<%= cb.proj0 %>" project
+    Given I wait for the "rsyslogserver" service to become ready
+    Given a pod becomes ready with labels:
+      | appname=rsyslogserver |
+    And evaluation of `service("rsyslogserver").ip` is stored in the :svc_ip clipboard
+    And evaluation of `pod(0).name` is stored in the :rsyslog_server_pod clipboard
+    Then the step should succeed
+
+    Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
+      | {"spec":{"defaultNetwork":{"ovnKubernetesConfig":{"policyAuditConfig": {"destination": "udp:<%= cb.svc_ip %>:514" }}}}} |
+    And I wait up to 300 seconds for the steps to pass:
+    """
+      Given the status of condition "Progressing" for network operator is :False
+      And the status of condition "Available" for network operator is :True
+    """
+
+    Given I use the "<%= cb.proj1 %>" project
+    Given a pod becomes ready with labels:
+      | name=test-pods |
+    And evaluation of `pod(1).ip_url` is stored in the :p1pod1ip clipboard
+    Given I use the "<%= cb.proj2 %>" project
+    Given a pod becomes ready with labels:
+      | name=test-pods |
+    And evaluation of `pod(2).name` is stored in the :p2pod1name clipboard
+    Given a pod becomes ready with labels:
+      | name=hello-idle |
+    And evaluation of `pod(3).name` is stored in the :p2pod2name clipboard
+    And I wait up to 30 seconds for the steps to pass:
+    """
+    When I execute on the "<%= cb.p2pod1name %>" pod:
+      | curl | -I | <%= cb.p1pod1ip %>:8080 | --connect-timeout | 5 |
+    Then the output should contain "200 OK"
+    Then the step should succeed
+    Given I use the "<%= cb.proj0 %>" project
+    When I execute on the "<%= cb.rsyslog_server_pod %>" pod:
+      | grep | -w | verdict=allow | /var/log/messages |
+    Then the output should contain "verdict=allow"
+    
+    Given I use the "<%= cb.proj2 %>" project
+    When I execute on the "<%= cb.p2pod2name %>" pod:
+      | curl | -I | <%= cb.p1pod1ip %>:8080 | --connect-timeout | 5 |
+    Then the output should not contain "200 OK"
+    Then the step should fail
+    Given I use the "<%= cb.proj0 %>" project
+    When I execute on the "<%= cb.rsyslog_server_pod %>" pod:
+      | grep | -w | verdict=drop | /var/log/messages |
+    Then the output should contain "verdict=drop"
+    """
