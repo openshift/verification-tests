@@ -47,8 +47,5 @@ Given /^admin obtains the cloudcredentials from cluster and store them to the#{O
   else
     raise "Unsupported platform `#{platform}`"
   end
-  cloud_cred = secret(secret_name, project('kube-system'))
-  data = cloud_cred.raw_resource.dig('data')
-  cb[cb_name] = data
+  cb[cb_name] = secret(secret_name, project('kube-system')).data
 end
-  
