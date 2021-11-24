@@ -67,6 +67,7 @@ Feature: Machine features testing
 
 
   # @author jhou@redhat.com
+  @security
   @admin
   @4.10 @4.9
   Scenario Outline: Metrics is exposed on https

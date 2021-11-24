@@ -5,6 +5,7 @@ Feature: Machine misc features testing
   @inactive
   @admin
   @destructive
+  @security
   @4.10 @4.9
   @vsphere-ipi
   Scenario: PVCs can still be provisioned after the password has been changed vSphere
