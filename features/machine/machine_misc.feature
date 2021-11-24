@@ -2,7 +2,6 @@ Feature: Machine misc features testing
 
   # @author miyadav@redhat.com
   # @case_id OCP-34940
-  @inactive
   @admin
   @destructive
   @4.10 @4.9

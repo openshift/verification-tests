@@ -115,7 +115,7 @@ module BushSlicer
         timestamp = ''
       end
 
-      m = {msg: msg, level: level, timestamp: timestamp}
+      m = {msg: censor(msg), level: level, timestamp: timestamp}
       if @dup_buffer
         @dup_buffer.push(m)
       else
@@ -181,6 +181,21 @@ module BushSlicer
 
     def reset_dedup
       @dup_buffer.reset if @dup_buffer
+    end
+
+    private
+    def censor(msg)
+      secured_lines = []
+      lines = msg.split("\n")
+      censor_kw = %w[client_id client-id client_secret client-secret subscription_id tenant_id access_key_id secret_access_key secret authorization username password oauth token .dockercfg .dockerconfigjson kubeconfig htpasswd ca service-ca tls service-account service_account serviceaccount cloud pull_secret pull-secret cred key]
+      lines.each do |line|
+        if censor_kw.any? { |kw| line.downcase.match(/^.*#{kw}.*:.*/) }
+          secured_lines << line.downcase.gsub(/:.*/, ': [PROTECTED_DATA]')
+          next
+        end
+        secured_lines << line
+      end
+      secured_lines.join("\n")
     end
 
     # map messages to unique characters, then run a regular expression to
