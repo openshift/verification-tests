@@ -107,7 +107,6 @@ Feature: storageClass related feature
       | aws-ebs     | st1         | us-east-1d    | false      | 500Gi | # @case_id OCP-10424
 
   # @author lxia@redhat.com
-  @inactive
   @admin
   @destructive
   @4.8 @4.7 @4.10 @4.9
