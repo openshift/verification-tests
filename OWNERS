@@ -3,6 +3,8 @@ approvers:
   - liangxia
   - pruan-rht
   - jhou1
+  - jianlinliu
+  - gpei
 
 reviewers:
   - dis016
@@ -12,3 +14,6 @@ reviewers:
   - shellyyang1989
   - yanpzhan
   - yapei
+  - jhou1
+  - jianlinliu
+  - gpei
