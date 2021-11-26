@@ -186,22 +186,28 @@ module BushSlicer
     private
     def censor(msg)
       return if msg.nil?
-      secured_lines = []
-      lines = msg.split("\n")
       censor_kw = [
         'data:',
         '"data":',
         'kind: secret',
         '"kind": "secret"'
       ]
-      lines.each do |line|
-        if censor_kw.any? { |kw| line.downcase.include?(kw) }
-          secured_lines.clear()
-          break
+      secured_lines = []
+      if (msg.is_a?(String))
+        lines = msg.split("\n")
+        lines.each do |line|
+          if censor_kw.any? { |kw| line.downcase.include?(kw) }
+            secured_lines.clear()
+            break
+          end
+          secured_lines << line
         end
-        secured_lines << line
+        secured_lines.join("\n")
+      elsif (msg.is_a?(Array))
+        msg.map do |str|
+          censor(str)
+        end
       end
-      secured_lines.join("\n")
     end
 
     # map messages to unique characters, then run a regular expression to
