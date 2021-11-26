@@ -188,11 +188,16 @@ module BushSlicer
       return if msg.nil?
       secured_lines = []
       lines = msg.split("\n")
-      censor_kw = %w[client_id client-id client_secret client-secret subscription_id tenant_id access_key_id secret_access_key secret authorization username password oauth token .dockercfg .dockerconfigjson kubeconfig htpasswd ca service-ca tls service-account service_account serviceaccount cloud pull_secret pull-secret cred key]
+      censor_kw = [
+        'data:',
+        '"data":',
+        'kind: secret',
+        '"kind": "secret"'
+      ]
       lines.each do |line|
-        if censor_kw.any? { |kw| line.downcase.match(/^.*#{kw}.*:.*/) }
-          secured_lines << line.downcase.gsub(/:.*/, ': [PROTECTED_DATA]')
-          next
+        if censor_kw.any? { |kw| line.downcase.include?(kw) }
+          secured_lines.clear()
+          break
         end
         secured_lines << line
       end
