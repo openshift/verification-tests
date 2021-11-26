@@ -363,10 +363,10 @@ Feature: SDN compoment upgrade testing
       | name=test-pods |
     And evaluation of `pod(2).ip_url` is stored in the :p5pod1ip clipboard
     Given I save multus pod on master node to the :multuspod clipboard
-    And I wait up to 30 seconds for the steps to pass:
-    """
     Given I switch to cluster admin pseudo user
     Given I use the "openshift-multus" project
+    And I wait up to 30 seconds for the steps to pass:
+    """
     When I execute on the "<%= cb.multuspod %>" pod:
       | curl | -I | <%= cb.p5pod1ip %>:8080 |
     Then the step should succeed
