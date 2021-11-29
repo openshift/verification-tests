@@ -30,7 +30,13 @@ module BushSlicer
         log_text << opts[:env].inject("") { |r,e| r << e.join('=') << "\n" }
       end
       log_text << result[:command]
-      if ['oc login','oc get secret','oc whoami','oc serviceaccount'].any? { |cmd| log_text.include?(cmd) }
+      censor_cmds = [
+        'oc exec alertmanager',
+        'oc exec elasticsearch',
+        'oc exec prometheus',
+        'oc login',
+      ]
+      if censor_cmds.any? { |cmd| log_text.downcase.include?(cmd) }
         logger.debug(log_text) unless opts[:quiet]
       else
         logger.info(log_text) unless opts[:quiet]
