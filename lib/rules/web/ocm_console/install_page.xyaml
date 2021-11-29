@@ -760,3 +760,40 @@ check_install_ibmz_pre_page_special_parts:
             xpath: //a[@href='https://access.redhat.com/articles/4307871' and text()='knowledge article']
         - selector:
             xpath: //h3[@class='pf-c-title pf-m-2xl' and contains(., 'Experimental Developer Preview Builds')]
+go_to_rosa_landing_page:
+    action: switch_to_creation_cards_page
+    action: click_rosa_create_button
+check_rosa_landing_page:
+    elements:
+        - selector:
+            xpath: //a[text()='Learn more about ROSA' and @href='https://cloud.redhat.com/products/amazon-openshift']
+        - selector:
+            xpath: //a[text()='AWS Prerequisites for ROSA' and @href='https://docs.openshift.com/rosa/rosa_getting_started/rosa-aws-prereqs.html']
+        - selector:
+            xpath: //h3[text()='Enable ROSA in your AWS account']/..//a[text()='https://console.aws.amazon.com/rosa' and @href='https://console.aws.amazon.com/rosa']
+        - selector:
+            xpath: //h3[text()='Enable ROSA in your AWS account']/..//a[text()='Help' and @href='https://www.rosaworkshop.io/rosa/1-account_setup/#3-enable-rosa']
+        - selector:
+            xpath: //h3[text()='Download and install the ROSA command line tool']/..//a[text()='Help' and @href='https://docs.openshift.com/rosa/rosa_getting_started/rosa-installing-rosa.html']
+        - selector:
+            xpath: //h3[text()='Download and install the ROSA command line tool']/..//a[text()='install the AWS CLI' and @href='https://aws.amazon.com/cli/']
+        - selector:
+            xpath: //h3[text()='Log in to the command line']/..//a[text()='Help' and @href='/openshift/token/rosa']
+        - selector:
+            xpath: //h3[text()='Verify your credentials and quota']/..//a[text()='Help' and @href='https://www.rosaworkshop.io/rosa/1-account_setup/#verify-credentials']
+        - selector:
+            xpath: //h3[text()='Verify your credentials and quota']/..//a[text()='Help' and @href='https://www.rosaworkshop.io/rosa/1-account_setup/#verify-quota']
+        - selector:
+            xpath: //a[text()='Get started' and @href='https://www.rosaworkshop.io/rosa/2-deploy/']
+        - selector:
+            xpath: //a[text()='access your cluster' and @href='https://www.rosaworkshop.io/rosa/6-access_cluster/']
+        - selector:
+            xpath: //a[text()='Contact Red Hat Support' and @href='https://support.redhat.com/']
+        - selector:
+            xpath: //a[text()='ROSA workshop' and @href='https://www.rosaworkshop.io/']
+        - selector:
+            xpath: //a[text()='ROSA documentation' and @href='https://docs.openshift.com/rosa/welcome/index.html']
+        - selector:
+            xpath: //a[text()='ROSA Service Definition' and @href='https://docs.openshift.com/rosa/rosa_policy/rosa-service-definition.html']
+        - selector:
+            xpath: //a[text()='Responsibility Assignment Matrix' and @href='https://docs.openshift.com/rosa/rosa_policy/rosa-policy-responsibility-matrix.html']
