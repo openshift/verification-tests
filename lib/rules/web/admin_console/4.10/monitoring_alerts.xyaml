@@ -41,6 +41,7 @@ open_alert_detail_href:
   action: click_link_with_text
 open_silence_detail:
   action: filter_alert
+  action: clear_pending_filter_if_exists
   action: click_alert_link_with_text
 check_alert_detail:
   params:
@@ -361,6 +362,14 @@ clear_specifc_filter:
 clear_name_filter_if_exists:
   params:
     filter_category: Name
+  action:
+    if_element:
+      selector:
+        <<: *specific_filter
+    ref: clear_specifc_filter
+clear_pending_filter_if_exists:
+  params:
+    filter_category: Pending
   action:
     if_element:
       selector:
