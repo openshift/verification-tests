@@ -305,8 +305,13 @@ module BushSlicer
 
       add_proxy_env_opt(user.env, opts)
       cli_tool = tool_from_opts!(opts)
+      if key == :serviceaccounts_get_token
+        # no worry if opts already has set it; below will override
+        opts << [:_quiet, true]
+      end
+      new_opts = Common::Rules.merge_opts(logged_users[user.id], opts)
       executor(cli_tool: cli_tool).
-        run(key, Common::Rules.merge_opts(logged_users[user.id], opts))
+        run(key, new_opts)
     end
 
     def clean_up
