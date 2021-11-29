@@ -506,6 +506,10 @@ Feature: SDN compoment upgrade testing
 
     Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
       | {"spec":{"defaultNetwork":{"ovnKubernetesConfig":{"policyAuditConfig": {"destination": "udp:<%= cb.svc_ip %>:514" }}}}} |
+    And I wait up to 30 seconds for the steps to pass:
+    """
+      Given the status of condition "Progressing" for network operator is :True
+    """
     And I wait up to 300 seconds for the steps to pass:
     """
       Given the status of condition "Progressing" for network operator is :False
