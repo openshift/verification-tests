@@ -187,10 +187,8 @@ module BushSlicer
     def censor(msg)
       return if msg.nil?
       censor_kw = [
-        'data:',
-        '"data":',
         'kind: secret',
-        '"kind": "secret"'
+        '"kind": "secret"',
       ]
       secured_lines = []
       if (msg.is_a?(String))
