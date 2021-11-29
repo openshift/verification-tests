@@ -208,3 +208,57 @@ Feature: Routing and DNS related scenarios
     Then the step should succeed
     And the output should contain "Hello-OpenShift web-server-rc"
     """
+
+
+  # @author mjoseph@redhat.com
+  @upgrade-prepare
+  @users=upuser1,upuser2
+  Scenario: Unidling a route work without user intervention - prepare
+    Given I switch to first user
+    And I run the :new_project client command with:
+      | project_name | ocp45955 |
+    Then the step should succeed
+    When I use the "ocp45955" project
+    Given I obtain test data file "routing/web-server-rc.yaml"
+    When I run the :create client command with:
+      | f | web-server-rc.yaml|
+    Then the step should succeed
+
+    And a pod becomes ready with labels:
+      | name=web-server-rc |
+    Then evaluation of `pod.name` is stored in the :pod_name clipboard
+    Then the expression should be true> service('service-unsecure').exists?
+    When I expose the "service-unsecure" service
+    Then the step should succeed
+    
+    Given I have a test-client-pod in the project
+    When I execute on the pod:
+      | curl | -ksS | http://<%= route("service-unsecure", service("service-unsecure")).dns %>/ |
+    Then the step should succeed
+    And the output should contain "Hello-OpenShift web-server-rc"
+
+    When I run the :idle client command with:
+      | svc_name | service-unsecure |
+    Then the step should succeed
+    Given I wait for the resource "pod" named "<%= cb.pod_name %>" to disappear within 120 seconds
+
+    # Check the servcie service-unsecure to see the idle annotation
+    And the expression should be true> service('service-unsecure').annotation('idling.alpha.openshift.io/unidle-targets', cached: false) == "[{\"kind\":\"ReplicationController\",\"name\":\"web-server-rc\",\"replicas\":1}]"
+
+  # @author mjoseph@redhat.com
+  # @case_id OCP-45955
+  @upgrade-check
+  @users=upuser1,upuser2
+  Scenario: Unidling a route work without user intervention
+    # Check the servcie service-unsecure to see the idle annotation is still intact
+    Given I switch to first user
+    Given I use the "ocp45955" project
+    And the expression should be true> service('service-unsecure').annotation('idling.alpha.openshift.io/unidle-targets', cached: false) == "[{\"kind\":\"ReplicationController\",\"name\":\"web-server-rc\",\"replicas\":1}]"
+  
+    When I execute on the "hello-pod" pod:
+      | curl | -ksS | http://<%= route("service-unsecure", service("service-unsecure")).dns %>/ |
+    Then the step should succeed
+    And the output should contain "Hello-OpenShift web-server-rc"
+
+    # Check the servcie service-unsecure to see the idle annotation got removed
+    And the expression should be true> !service('service-unsecure').annotation('idling.alpha.openshift.io/unidle-targets', cached: false)
