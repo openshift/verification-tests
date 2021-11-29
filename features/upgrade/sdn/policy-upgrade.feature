@@ -565,7 +565,7 @@ Feature: SDN compoment upgrade testing
     And I wait up to 20 seconds for the steps to pass:
     """
     When I execute on the "<%= cb.p2pod1name %>" pod:
-      | curl | -I | <%= cb.p1pod1ip %>:8080 | --connect-timeout | 5 |
+      | curl | -I | <%= cb.p1pod1ip %>:8080 | 
     Then the output should contain "200 OK"
     Then the step should succeed
     Given I use the "<%= cb.proj0 %>" project
@@ -629,7 +629,7 @@ Feature: SDN compoment upgrade testing
     And I wait up to 30 seconds for the steps to pass:
     """
     When I execute on the "<%= cb.p2pod1name %>" pod:
-      | curl | -I | <%= cb.p1pod1ip %>:8080 | --connect-timeout | 5 |
+      | curl | -I | <%= cb.p1pod1ip %>:8080 | 
     Then the output should contain "200 OK"
     Then the step should succeed
     Given I use the "<%= cb.proj0 %>" project
