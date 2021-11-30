@@ -3,7 +3,6 @@ data:
   fluent.conf: |
     <source>
       @type forward
-      bind ::
       port  24224
     </source>
 

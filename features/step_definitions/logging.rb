@@ -577,15 +577,6 @@ Given /^I create the resources for the receiver with:$/ do | table |
   step %Q/I use the "#{namespace}" project/
 
   unless tagged_upgrade?
-    step %Q/I ensure "#{receiver_name}" service_account is deleted from the "#{namespace}" project after scenario/
-  end
-  @result = user.cli_exec(:create_serviceaccount, serviceaccount_name: receiver_name, n: namespace)
-  raise "Unable to create serviceaccout #{receiver_name}" unless @result[:success]
-
-  if tagged_upgrade?
-    step %Q/SCC "privileged" is added to the "system:serviceaccount:<%= project.name %>:#{receiver_name}" service account without teardown/
-  else
-    step %Q/SCC "privileged" is added to the "system:serviceaccount:<%= project.name %>:#{receiver_name}" service account/
     step %Q/I ensure "#{receiver_name}" config_map is deleted from the "#{namespace}" project after scenario/
     step %Q/I ensure "#{receiver_name}" deployment is deleted from the "#{namespace}" project after scenario/
     step %Q/I ensure "#{receiver_name}" service is deleted from the "#{namespace}" project after scenario/
@@ -596,6 +587,7 @@ Given /^I create the resources for the receiver with:$/ do | table |
     @result = user.cli_exec(:create, f: file, n: namespace)
     raise "Unable to create resoure with #{file}" unless @result[:success]
   end
+
   if receiver_name == "rsyslogserver"
     svc_file = "#{BushSlicer::HOME}/testdata/logging/logforwarding/rsyslog/rsyslogserver_svc.yaml"
     @result = user.cli_exec(:create, f: svc_file, n: namespace)
@@ -604,9 +596,11 @@ Given /^I create the resources for the receiver with:$/ do | table |
     @result = user.cli_exec(:expose, name: receiver_name, resource: 'deployment', resource_name: receiver_name, namespace: namespace)
     raise "Unable to expose the service for #{receiver_name}" unless @result[:success]
   end
+
   step %Q/a pod becomes ready with labels:/, table(%{
     | #{pod_label} |
   })
+
   step %Q/evaluation of `pod` is stored in the :log_receiver clipboard/
 end
 
