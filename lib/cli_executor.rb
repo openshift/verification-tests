@@ -10,6 +10,10 @@ module BushSlicer
 
     RULES_DIR = File.expand_path(HOME + "/lib/rules/cli")
     LOGIN_TIMEOUT = 20 # seconds
+    CENSOR_LOGS = [
+      'serviceaccounts_get_token',
+      'whoami',
+    ]
 
     attr_reader :opts
 
@@ -305,6 +309,9 @@ module BushSlicer
 
       add_proxy_env_opt(user.env, opts)
       cli_tool = tool_from_opts!(opts)
+      if CENSOR_LOGS.any? { |cmd| key.match?(cmd) }
+        opts << [:_quiet, true]
+      end
       executor(cli_tool: cli_tool).
         run(key, Common::Rules.merge_opts(logged_users[user.id], opts))
     end
