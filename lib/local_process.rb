@@ -10,6 +10,12 @@ module BushSlicer
     include Common::Helper
 
     DEFAULT_TIMEOUT = 3600
+    CENSOR_CMDS = [
+      'oc exec alertmanager',
+      'oc exec elasticsearch',
+      'oc exec prometheus',
+      'oc login',
+    ]
 
     attr_reader :pid
     attr_accessor :exit_status, :wait_thread, :cmd, :opts
@@ -30,13 +36,7 @@ module BushSlicer
         log_text << opts[:env].inject("") { |r,e| r << e.join('=') << "\n" }
       end
       log_text << result[:command]
-      censor_cmds = [
-        'oc exec alertmanager',
-        'oc exec elasticsearch',
-        'oc exec prometheus',
-        'oc login',
-      ]
-      if censor_cmds.any? { |cmd| log_text.downcase.include?(cmd) }
+      if CENSOR_CMDS.any? { |cmd| log_text.downcase.include?(cmd) }
         logger.debug(log_text) unless opts[:quiet]
       else
         logger.info(log_text) unless opts[:quiet]
