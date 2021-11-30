@@ -774,3 +774,86 @@ Feature: Sriov related scenarios
     Then the step should succeed
     And the output should contain "disableDrain true"
     """
+
+  # @author zzhao@redhat.com
+  # @case_id OCP-46413
+  @destructive
+  @admin
+  Scenario: User cannot create two resource on same PF
+    Given the sriov operator is running well
+    Given I obtain test data file "networking/sriov/sriovnetworkpolicy/mlx278-netdevice.yaml"
+    Given I create sriov resource with following:
+      | cr_yaml       | mlx278-netdevice.yaml    |
+      | cr_name       | mlx278-netdevice         |
+      | resource_type | sriovnetworknodepolicies |
+    Then the step should succeed
+  
+    ##Create another policy with differnt name on same PF will be rejected by webhook
+    When I run oc create as admin over "mlx278-netdevice.yaml" replacing paths:
+      | ["metadata"]["name"] | mlx278-netdevice-dup   |
+      | ["spec"]["resourceName"] | mlx278netdevicedup |
+    Then the step should fail
+    And the output should contain "overlapped with existing policy"
+    
+  # @author zzhao@redhat.com
+  # @case_id OCP-46414
+  @destructive
+  @admin
+  Scenario: NM_UNMANAGED rules should including move in action
+    Given the sriov operator is running well
+    Given I store the schedulable workers in the :nodes clipboard
+    Given I use the "<%= cb.nodes[1].name %>" node
+    And I run commands on the host:
+      | cat /etc/udev/rules.d/10-nm-unmanaged.rules |
+    Then the step should succeed
+    And the output should contain "ACTION=="add|change|move""
+
+  # @author zzhao@redhat.com
+  # @case_id OCP-46421
+  @destructive
+  @admin
+  Scenario: Create max number VF and pods and repeat pods creation/deletion multiple times
+    Given the sriov operator is running well
+    Given I obtain test data file "networking/sriov/sriovnetworkpolicy/mlx277-netdevice.yaml"
+    Given I create sriov resource with following:
+      | cr_yaml       | mlx277-netdevice.yaml    |
+      | cr_name       | mlx277-netdevice         |
+      | resource_type | sriovnetworknodepolicies |
+    Then the step should succeed
+    And I wait up to 500 seconds for the steps to pass:
+    """
+    When I run the :get admin command with:
+      | resource    | sriovnetworknodestates           |
+      | namespace   | openshift-sriov-network-operator |
+      | o           | yaml                             |
+    Then the step should succeed
+    And the output should contain:
+      | mlx277-netdevice      |
+      | syncStatus: Succeeded |
+      | vfID: 1               |
+    """
+    Given I obtain test data file "networking/sriov/sriovnetwork/mlx277netdevice.yaml"
+    Given I create sriov resource with following:
+      | cr_yaml       | mlx277netdevice.yaml |
+      | cr_name       | mlx277-netdevice     |
+      | resource_type | sriovnetwork         |
+      | project       | default              |
+    Then the step should succeed
+    And admin checks that the "mlx277-netdevice" network_attachment_definition exists in the "default" project
+
+    And I use the "default" project
+    Given I obtain test data file "networking/sriov/pod/sriov-deployment.yaml"
+    When I run the steps 5 times:
+    """
+    When I run the :create client command with:
+      | f | sriov-deployment.yaml |
+    Then the step should succeed
+    And 2 pods become ready with labels:
+      | app=sriov-test |
+    Given I run the :delete client command with:
+      | object_type       | Deployment |
+      | object_name_or_id | sriov-test |
+    Then the step should succeed
+    And all existing pods die with labels:
+      | app=sriov-test |
+    """

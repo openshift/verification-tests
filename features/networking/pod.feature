@@ -110,7 +110,7 @@ Feature: Pod related networking scenarios
     When I run command on the "<%= cb.node_name %>" node's sdn pod:
       | ovs-vsctl | list | interface |
     Then the step should succeed
-    And the output should contain "ingress_policing_rate: 1953"
+    And the output should match "ingress_policing_rate: (1953|2000)"
 
     # test the bandwidth limit with qos for egress
     When I execute on the "<%= cb.iperf_client %>" pod:
@@ -137,7 +137,7 @@ Feature: Pod related networking scenarios
     When I run command on the "<%= cb.node_name %>" node's sdn pod:
       | ovs-vsctl | list | interface |
     Then the step should succeed
-    And the output should not contain "ingress_policing_rate: 1953"
+    And the output should not match "ingress_policing_rate: (1953|2000)"
 
   # @author anusaxen@redhat.com
   # @case_id OCP-23890
