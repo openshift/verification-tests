@@ -565,7 +565,7 @@ Feature: SDN compoment upgrade testing
     And I wait up to 20 seconds for the steps to pass:
     """
     When I execute on the "<%= cb.p2pod1name %>" pod:
-      | curl | -I | <%= cb.p1pod1ip %>:8080 | 
+      | curl | -I | <%= cb.p1pod1ip %>:8080 | --connect-timeout | 5 | 
     Then the output should contain "200 OK"
     Then the step should succeed
     Given I use the "<%= cb.proj0 %>" project
@@ -593,7 +593,7 @@ Feature: SDN compoment upgrade testing
   @aws-upi @gcp-upi @openstack-upi
   @destructive
   @network-ovnkubernetes
-  Scenario: Check network policy ACL logging works post upgrade -prepare
+  Scenario: Check network policy ACL logging works post upgrade 
     Given I switch to cluster admin pseudo user
     Given the env is using "OVNKubernetes" networkType
     And evaluation of `"rsyslog-server"` is stored in the :proj0 clipboard
@@ -629,7 +629,7 @@ Feature: SDN compoment upgrade testing
     And I wait up to 30 seconds for the steps to pass:
     """
     When I execute on the "<%= cb.p2pod1name %>" pod:
-      | curl | -I | <%= cb.p1pod1ip %>:8080 | 
+      | curl | -I | <%= cb.p1pod1ip %>:8080 | --connect-timeout | 5 | 
     Then the output should contain "200 OK"
     Then the step should succeed
     Given I use the "<%= cb.proj0 %>" project
