@@ -564,6 +564,7 @@ Feature: SDN compoment upgrade testing
     And evaluation of `pod(3).name` is stored in the :p2pod2name clipboard
     And I wait up to 20 seconds for the steps to pass:
     """
+    Given I use the "<%= cb.proj2 %>" project
     When I execute on the "<%= cb.p2pod1name %>" pod:
       | curl | -I | <%= cb.p1pod1ip %>:8080 | --connect-timeout | 5 | 
     Then the output should contain "200 OK"
@@ -572,7 +573,10 @@ Feature: SDN compoment upgrade testing
     When I execute on the "<%= cb.rsyslog_server_pod %>" pod:
       | grep | -w | verdict=allow | /var/log/messages |
     Then the output should contain "verdict=allow"
+    """
     
+    And I wait up to 20 seconds for the steps to pass:
+    """
     Given I use the "<%= cb.proj2 %>" project
     When I execute on the "<%= cb.p2pod2name %>" pod:
       | curl | -I | <%= cb.p1pod1ip %>:8080 | --connect-timeout | 2 |
@@ -626,8 +630,9 @@ Feature: SDN compoment upgrade testing
     Given a pod becomes ready with labels:
       | name=hello-idle |
     And evaluation of `pod(3).name` is stored in the :p2pod2name clipboard
-    And I wait up to 30 seconds for the steps to pass:
+    And I wait up to 20 seconds for the steps to pass:
     """
+    Given I use the "<%= cb.proj2 %>" project
     When I execute on the "<%= cb.p2pod1name %>" pod:
       | curl | -I | <%= cb.p1pod1ip %>:8080 | --connect-timeout | 5 | 
     Then the output should contain "200 OK"
@@ -636,7 +641,10 @@ Feature: SDN compoment upgrade testing
     When I execute on the "<%= cb.rsyslog_server_pod %>" pod:
       | grep | -w | verdict=allow | /var/log/messages |
     Then the output should contain "verdict=allow"
+    """
     
+    And I wait up to 20 seconds for the steps to pass:
+    """
     Given I use the "<%= cb.proj2 %>" project
     When I execute on the "<%= cb.p2pod2name %>" pod:
       | curl | -I | <%= cb.p1pod1ip %>:8080 | --connect-timeout | 2 |
