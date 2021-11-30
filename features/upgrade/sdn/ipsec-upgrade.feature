@@ -9,6 +9,7 @@ Feature: IPsec upgrade scenarios
     And the IPsec is enabled on the cluster
     Given I store all worker nodes to the :workers clipboard
     Given I switch to cluster admin pseudo user
+    And the default interface on nodes is stored in the :default_interface clipboard
     When I run the :new_project client command with:
       | project_name | ipsec-upgrade |
     Then the step should succeed
