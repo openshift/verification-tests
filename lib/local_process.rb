@@ -11,10 +11,13 @@ module BushSlicer
 
     DEFAULT_TIMEOUT = 3600
     CENSOR_CMDS = [
-      'oc exec alertmanager',
-      'oc exec elasticsearch',
-      'oc exec prometheus',
-      'oc login',
+      'oc exec .*bearer',   # oc exec elasticsearch-* -- curl "Authorization: Bearer ***"
+      'oc rsh .*bearer',    # oc rsh elasticsearch-* -- curl "Authorization: Bearer ***"
+      'oc login .*--token', # oc login --token=***
+                            # oc login --token ***
+      'oc login .*-p',      # oc login --passwordr= ***
+                            # oc login --password ***
+                            # oc login -p ***
     ]
 
     attr_reader :pid
@@ -36,7 +39,7 @@ module BushSlicer
         log_text << opts[:env].inject("") { |r,e| r << e.join('=') << "\n" }
       end
       log_text << result[:command]
-      if CENSOR_CMDS.any? { |cmd| log_text.downcase.include?(cmd) }
+      if CENSOR_CMDS.any? { |cmd| result[:command].downcase.match?(cmd) }
         logger.debug(log_text) unless opts[:quiet]
       else
         logger.info(log_text) unless opts[:quiet]
