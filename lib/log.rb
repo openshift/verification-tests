@@ -19,6 +19,12 @@ module BushSlicer
     # include Term::ANSIColor
 
     attr_reader :level
+    CENSOR_KW = [
+      'kind: secret',
+      '"kind": "secret"',
+      'source: data:',
+      '"source": "data:',
+    ]
 
     PLAIN = 0
     ERROR = 1
@@ -186,15 +192,11 @@ module BushSlicer
     private
     def censor(msg)
       return if msg.nil?
-      censor_kw = [
-        'kind: secret',
-        '"kind": "secret"',
-      ]
       secured_lines = []
       if (msg.is_a?(String))
         lines = msg.split("\n")
         lines.each do |line|
-          if censor_kw.any? { |kw| line.downcase.include?(kw) }
+          if CENSOR_KW.any? { |kw| line.downcase.include?(kw) }
             secured_lines.clear()
             break
           end
