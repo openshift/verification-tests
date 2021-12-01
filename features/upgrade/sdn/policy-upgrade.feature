@@ -517,18 +517,18 @@ Feature: SDN compoment upgrade testing
     """
 
     When I run the :new_project client command with:
-      | project_name | policy-upgrade6 |
+      | project_name | policy-acl-upgrade1 |
     Then the step should succeed
-    And evaluation of `"policy-upgrade6"` is stored in the :proj1 clipboard
+    And evaluation of `"policy-acl-upgrade1"` is stored in the :proj1 clipboard
     When I run the :annotate admin command with:
       | resource     | namespace                                                |
       | resourcename | <%= cb.proj1 %>                                          |
       | keyval       | k8s.ovn.org/acl-logging={"deny":"alert","allow":"alert"} |
     Then the step should succeed
     When I run the :new_project client command with:
-      | project_name | policy-upgrade7 |
+      | project_name | policy-acl-upgrade2 |
     Then the step should succeed
-    And evaluation of `"policy-upgrade7"` is stored in the :proj2 clipboard
+    And evaluation of `"policy-acl-upgrade2"` is stored in the :proj2 clipboard
     When I run the :label admin command with:
       | resource | namespace       |
       | name     | <%= cb.proj2 %> |
@@ -601,8 +601,8 @@ Feature: SDN compoment upgrade testing
     Given I switch to cluster admin pseudo user
     Given the env is using "OVNKubernetes" networkType
     And evaluation of `"rsyslog-server"` is stored in the :proj0 clipboard
-    And evaluation of `"policy-upgrade6"` is stored in the :proj1 clipboard
-    And evaluation of `"policy-upgrade7"` is stored in the :proj2 clipboard
+    And evaluation of `"policy-acl-upgrade1"` is stored in the :proj1 clipboard
+    And evaluation of `"policy-acl-upgrade2"` is stored in the :proj2 clipboard
     Given I use the "<%= cb.proj0 %>" project
     Given I wait for the "rsyslogserver" service to become ready
     Given a pod becomes ready with labels:
