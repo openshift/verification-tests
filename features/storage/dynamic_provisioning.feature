@@ -55,8 +55,10 @@ Feature: Dynamic provisioning
     And the output should not contain:
       | <%= pvc.volume_name %> |
       | <%= cb.volumeID %>     |
-    And I verify that the IAAS volume with id "<%= cb.volumeID %>" was deleted
+    # And I verify that the IAAS volume with id "<%= cb.volumeID %>" was deleted
 
+    @aws-ipi
+    @aws-upi
     Examples:
       | cloud_provider |
       | ebs            | # @case_id OCP-9685
