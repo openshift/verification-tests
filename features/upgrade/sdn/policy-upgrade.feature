@@ -363,10 +363,10 @@ Feature: SDN compoment upgrade testing
       | name=test-pods |
     And evaluation of `pod(2).ip_url` is stored in the :p5pod1ip clipboard
     Given I save multus pod on master node to the :multuspod clipboard
-    And I wait up to 30 seconds for the steps to pass:
-    """
     Given I switch to cluster admin pseudo user
     Given I use the "openshift-multus" project
+    And I wait up to 30 seconds for the steps to pass:
+    """
     When I execute on the "<%= cb.multuspod %>" pod:
       | curl | -I | <%= cb.p5pod1ip %>:8080 |
     Then the step should succeed
@@ -562,25 +562,24 @@ Feature: SDN compoment upgrade testing
     Given a pod becomes ready with labels:
       | name=hello-idle |
     And evaluation of `pod(3).name` is stored in the :p2pod2name clipboard
-    And I wait up to 20 seconds for the steps to pass:
-    """
-    Given I use the "<%= cb.proj2 %>" project
     When I execute on the "<%= cb.p2pod1name %>" pod:
       | curl | -I | <%= cb.p1pod1ip %>:8080 | --connect-timeout | 5 | 
     Then the output should contain "200 OK"
     Then the step should succeed
     Given I use the "<%= cb.proj0 %>" project
+    And I wait up to 20 seconds for the steps to pass:
+    """
     When I execute on the "<%= cb.rsyslog_server_pod %>" pod:
       | grep | -w | verdict=allow | /var/log/messages |
     Then the output should contain "verdict=allow"
     """
     
-    And I wait up to 20 seconds for the steps to pass:
-    """
     Given I use the "<%= cb.proj2 %>" project
     When I execute on the "<%= cb.p2pod2name %>" pod:
       | curl | -I | <%= cb.p1pod1ip %>:8080 | --connect-timeout | 2 |
     Then the output should not contain "200 OK"
+    And I wait up to 20 seconds for the steps to pass:
+    """
     Then the step should fail
     Given I use the "<%= cb.proj0 %>" project
     When I execute on the "<%= cb.rsyslog_server_pod %>" pod:
@@ -630,26 +629,26 @@ Feature: SDN compoment upgrade testing
     Given a pod becomes ready with labels:
       | name=hello-idle |
     And evaluation of `pod(3).name` is stored in the :p2pod2name clipboard
-    And I wait up to 20 seconds for the steps to pass:
-    """
-    Given I use the "<%= cb.proj2 %>" project
+
     When I execute on the "<%= cb.p2pod1name %>" pod:
       | curl | -I | <%= cb.p1pod1ip %>:8080 | --connect-timeout | 5 | 
     Then the output should contain "200 OK"
     Then the step should succeed
     Given I use the "<%= cb.proj0 %>" project
+    And I wait up to 20 seconds for the steps to pass:
+    """
     When I execute on the "<%= cb.rsyslog_server_pod %>" pod:
       | grep | -w | verdict=allow | /var/log/messages |
     Then the output should contain "verdict=allow"
     """
     
-    And I wait up to 20 seconds for the steps to pass:
-    """
     Given I use the "<%= cb.proj2 %>" project
     When I execute on the "<%= cb.p2pod2name %>" pod:
       | curl | -I | <%= cb.p1pod1ip %>:8080 | --connect-timeout | 2 |
     Then the output should not contain "200 OK"
     Then the step should fail
+    And I wait up to 20 seconds for the steps to pass:
+    """
     Given I use the "<%= cb.proj0 %>" project
     When I execute on the "<%= cb.rsyslog_server_pod %>" pod:
       | grep | -w | verdict=drop | /var/log/messages |
