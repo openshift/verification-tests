@@ -118,6 +118,8 @@ Feature: CSI clone testing related feature
       | ["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] | mypvc-ori  |
       | ["spec"]["containers"][0]["volumeMounts"][0]["mountPath"]    | /mnt/local |
     Then the step should succeed
+    And the pod named "mypod-ori" becomes ready
+    And the "mypvc-ori" PVC becomes :bound
 
     # Clone mypvc-ori with 1Gi size failed
     Given I obtain test data file "storage/csi/pvc-clone.yaml"
