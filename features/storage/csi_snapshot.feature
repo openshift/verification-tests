@@ -1,7 +1,6 @@
 Feature: Volume snapshot test
 
   # @author wduan@redhat.com
-  @inactive
   @admin
   @4.8 @4.7 @4.10 @4.9
   Scenario Outline: Volume snapshot create and restore test
@@ -74,8 +73,6 @@ Feature: Volume snapshot test
       | standard-csi | standard-csi |# @case_id OCP-37568
 
   # @author wduan@redhat.com
-  @admin
-  @inactive
   @admin
   @4.8 @4.7 @4.10 @4.9
   Scenario Outline: Volume snapshot create and restore test with block

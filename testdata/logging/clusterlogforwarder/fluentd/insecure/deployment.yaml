@@ -25,24 +25,15 @@ spec:
     spec:
       containers:
       - name: "fluentdserver"
-        image: "quay.io/openshifttest/fluentd@sha256:7eece00d1bc784ac1e9722b2580911cd3ead5afd740dad6594be945b3b1dd884"
+        image: "quay.io/openshifttest/fluentd:multiarch@sha256:fd0c0e76fb693eb3b56f7d5b1936deaea27733882047260ad65169e16085c196"
         imagePullPolicy: "IfNotPresent"
-        args:
-        - "fluentd"
-        - "-c"
-        - "/fluentd/etc/fluent.conf"
         ports:
         - containerPort: 24224
           name: fluentdserver
-        securityContext:
-          privileged: true
-          procMount: Default
         volumeMounts:
         - mountPath: /fluentd/etc
           name: config
           readOnly: true
-      serviceAccount: fluentdserver
-      serviceAccountName: fluentdserver
       volumes:
       - configMap:
           defaultMode: 420

@@ -1,0 +1,10 @@
+apiVersion: sriovnetwork.openshift.io/v1
+kind: SriovNetwork
+metadata:
+  name: dpdk-network
+  namespace: openshift-sriov-network-operator
+spec:
+  networkNamespace: default
+  ipam: "{}" 
+  vlan: 0
+  resourceName: inteldpdk

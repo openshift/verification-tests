@@ -19,6 +19,12 @@ module BushSlicer
     # include Term::ANSIColor
 
     attr_reader :level
+    CENSOR_KW = [
+      'kind: secret',
+      '"kind": "secret"',
+      'source: data:',
+      '"source": "data:',
+    ]
 
     PLAIN = 0
     ERROR = 1
@@ -115,7 +121,7 @@ module BushSlicer
         timestamp = ''
       end
 
-      m = {msg: msg, level: level, timestamp: timestamp}
+      m = {msg: censor(msg), level: level, timestamp: timestamp}
       if @dup_buffer
         @dup_buffer.push(m)
       else
@@ -181,6 +187,27 @@ module BushSlicer
 
     def reset_dedup
       @dup_buffer.reset if @dup_buffer
+    end
+
+    private
+    def censor(msg)
+      return if msg.nil?
+      secured_lines = []
+      if (msg.is_a?(String))
+        lines = msg.split("\n")
+        lines.each do |line|
+          if CENSOR_KW.any? { |kw| line.downcase.include?(kw) }
+            secured_lines.clear()
+            break
+          end
+          secured_lines << line
+        end
+        secured_lines.join("\n")
+      elsif (msg.is_a?(Array))
+        msg.map do |str|
+          censor(str)
+        end
+      end
     end
 
     # map messages to unique characters, then run a regular expression to

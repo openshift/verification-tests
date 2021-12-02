@@ -28,9 +28,6 @@ spec:
         - containerPort: 9200
           protocol: TCP
         resources: {}
-        securityContext:
-          privileged: true
-          procMount: Default
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
         volumeMounts:
@@ -42,9 +39,6 @@ spec:
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
-      securityContext: {}
-      serviceAccount: elasticsearch-server
-      serviceAccountName: elasticsearch-server
       terminationGracePeriodSeconds: 30
       volumes:
       - configMap:

@@ -1,11 +1,12 @@
 Feature: Descheduler major upgrade should work fine
   # @author knarra@redhat.com
-  @upgrade-prepare
   @admin
+  @upgrade-prepare
+  @users=upuser1,upuser2
   @destructive
   Scenario: [upgrade] - upgrade descheduler from 4.x to 4.y - prepare
-    Given I store master major version in the clipboard
     Given I switch to cluster admin pseudo user
+    Given I store master major version in the clipboard
     Given kubedescheduler operator has been installed successfully
     Given I use the "openshift-kube-descheduler-operator" project
     Given I obtain test data file "descheduler/kubedescheduler-<%= cb.master_version %>.yaml"
@@ -32,12 +33,14 @@ Feature: Descheduler major upgrade should work fine
 
   # @author knarra@redhat.com
   # @case_id OCP-40536
-  @upgrade-check
   @admin
+  @upgrade-check
+  @users=upuser1,upuser2
   @destructive
   Scenario: [upgrade] - upgrade descheduler from 4.x to 4.y
     Given I switch to cluster admin pseudo user
     And I use the "openshift-kube-descheduler-operator" project
+    Given I store master major version in the clipboard
     Given a pod becomes ready with labels:
       | app=descheduler |
     Given cluster-kube-descheduler-operator channel name is stored in the :kdo_channel clipboard
