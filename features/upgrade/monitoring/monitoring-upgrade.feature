@@ -24,19 +24,10 @@ Feature: cluster monitoring related upgrade check
     Given I switch to cluster admin pseudo user
     And I use the "openshift-monitoring" project
     Given all pods in the project are ready
-    Then the step should succeed
-    When I run the :get client command with:
-      | resource      | clusteroperator |
-      | resource_name | monitoring      |
-    And evaluation of `@result[:stdout].split(/\n/)[1].split(/\s+/)[4]` is stored in the :degreaded_status clipboard
-    Then the expression should be true> cb.degreaded_status == "False"
+    And the expression should be true> cluster_operator('monitoring').condition(type: 'Degraded')['status'] == "False"
 
     #check retention time
-    When I run the :get client command with:
-      | resource      | prometheus |
-      | resource_name | k8s        |
-      | o             | yaml       |
-    Then the expression should be true> YAML.load(@result[:stdout])["spec"]["retention"] == "3h"
+    Given the expression should be true> prometheus('k8s').retention == "3h"
 
     # get sa/prometheus-k8s token
     When evaluation of `secret(service_account('prometheus-k8s').get_secret_names.find {|s| s.match('token')}).token` is stored in the :sa_token clipboard

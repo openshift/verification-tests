@@ -71,6 +71,12 @@ select_cloud_provider:
             xpath: //a[@href='/openshift/create/osd/<cloud_provider>']
         op: click
 
+click_rosa_create_button:
+    element:
+        selector:
+            xpath: //a[text()='Create cluster' and contains(@href, '/rosa/welcome')]
+        op: click
+
 go_to_aws_creation_page_directly:
     url: /openshift/create/osd/aws
 go_to_gcp_creation_page_directly:

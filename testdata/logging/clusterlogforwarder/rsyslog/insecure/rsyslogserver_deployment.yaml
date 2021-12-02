@@ -22,8 +22,6 @@ spec:
         component: "rsyslogserver"
         appname: rsyslogserver
     spec:
-      serviceAccount: rsyslogserver
-      serviceAccountName: rsyslogserver
       containers:
       - name: "rsyslog"
         args:
@@ -32,16 +30,13 @@ spec:
         - "-n"
         command:
         - "/usr/sbin/rsyslogd"
-        image: quay.io/openshifttest/rsyslog@sha256:11a93aa0cd836327f6d22926adf999c726916cdf404c61a7b702f98be4d43d70
+        image: quay.io/openshifttest/rsyslogd-container:multiarch@sha256:51a26abd1626e2e8bc422e0e92994fa823570cb7a6aab7b1ad37cf0b76912193
         imagePullPolicy: IfNotPresent
-        securityContext:
-          privileged: true
-          procMount: Default
         ports:
-        - containerPort: 514
+        - containerPort: 6514
           name: rsyslog-pod-tcp
           protocol: TCP
-        - containerPort: 514
+        - containerPort: 6514
           name: rsyslog-pod-udp
           protocol: UDP
         volumeMounts:

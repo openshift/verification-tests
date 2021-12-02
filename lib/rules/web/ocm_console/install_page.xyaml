@@ -49,6 +49,12 @@ go_to_install_ibmz_pre_page:
     url: /openshift/install/ibmz/pre-release
 go_to_power_pre_page:
     url: /openshift/install/power/pre-release
+go_to_rosa_landing_page:
+    action: switch_to_creation_cards_page
+    action: click_rosa_create_button
+go_to_aws_arm_installer_page:
+    action: switch_to_creation_cards_page
+    action: click_aws_arm_installer_button
 #------------------------------ title and h1 title -------------------
 check_page_title_and_h1:
     element:
@@ -183,8 +189,8 @@ check_linux_download_installer_button_in_page:
             xpath: //a[text()='Download installer' and @href='https://mirror.openshift.com/pub/openshift-v4/<linux_url>']
 check_download_installer_button:
     params:
-        mac_url: clients/ocp/stable/openshift-install-mac.tar.gz
-        linux_url: clients/ocp/stable/openshift-install-linux.tar.gz
+        mac_url: x86_64/clients/ocp/stable/openshift-install-mac.tar.gz
+        linux_url: x86_64/clients/ocp/stable/openshift-install-linux.tar.gz
     action: check_mac_download_installer_button_in_page
     action: check_linux_download_installer_button_in_page
 #------------------------------ download_installer_button special button-------------------
@@ -196,7 +202,7 @@ check_linux_download_installer_button_aarch64_in_install_aws_arm_page:
     action: switch_arch_type_for_download_installer
     elements:
         - selector:
-            xpath: //a[text()='Download installer' and @href='https://mirror.openshift.com/pub/openshift-v4/aarch64/clients/ocp-dev-preview/pre-release/openshift-install-linux.tar.gz']
+            xpath: //a[text()='Download installer' and @href='https://mirror.openshift.com/pub/openshift-v4/aarch64/clients/ocp/stable/openshift-install-linux.tar.gz']
 check_linux_download_installer_button_x86_64_in_install_aws_arm_page:
     params:
         os_name: Linux
@@ -205,7 +211,7 @@ check_linux_download_installer_button_x86_64_in_install_aws_arm_page:
     action: switch_arch_type_for_download_installer
     elements:
         - selector:
-            xpath: //a[text()='Download installer' and @href='https://mirror.openshift.com/pub/openshift-v4/aarch64/clients/ocp-dev-preview/pre-release/openshift-install-linux-amd64.tar.gz']
+            xpath: //a[text()='Download installer' and @href='https://mirror.openshift.com/pub/openshift-v4/aarch64/clients/ocp/stable/openshift-install-linux-amd64.tar.gz']
 check_linux_download_installer_button_x86_64_in_install_ibmz_pre_release_page:
     params:
         os_name: Linux
@@ -243,6 +249,43 @@ check_linux_download_installer_button_ppc64le_in_install_power_pre_release_page:
         - selector:
             xpath: //a[text()='Download installer' and @href='https://mirror.openshift.com/pub/openshift-v4/ppc64le/clients/ocp-dev-preview/pre-release/openshift-install-linux.tar.gz']
 
+
+check_download_installer_button_in_ibm_z_install_page:
+    params:
+        mac_url: s390x/clients/ocp/stable/openshift-install-mac.tar.gz
+        linux_url: s390x/clients/ocp/stable/openshift-install-linux-amd64.tar.gz
+    action: check_mac_download_installer_button_in_page
+    action: check_linux_download_installer_button_in_page
+check_download_installer_button_in_power_upi_install_page:
+    params:
+        mac_url: ppc64le/clients/ocp/stable/openshift-install-mac.tar.gz
+        linux_url: ppc64le/clients/ocp/stable/openshift-install-linux-amd64.tar.gz
+    action: check_linux_download_installer_button_in_page
+    action: check_mac_download_installer_button_in_page
+check_download_installer_button_in_aws_arm_install_page:
+    params:
+        mac_url: aarch64/clients/ocp/stable/openshift-install-mac.tar.gz
+    action: check_linux_download_installer_button_aarch64_in_install_aws_arm_page
+    action: check_linux_download_installer_button_x86_64_in_install_aws_arm_page
+    action: check_mac_download_installer_button_in_page
+check_download_installer_button_in_install_ibmz_pre_page:
+    params:
+        mac_url: s390x/clients/ocp-dev-preview/pre-release/openshift-install-mac.tar.gz
+    action: check_mac_download_installer_button_in_page
+    action: check_linux_download_installer_button_x86_64_in_install_ibmz_pre_release_page
+    action: check_linux_download_installer_button_s390x_in_install_ibmz_pre_release_page
+check_download_installer_button_in_install_power_pre_page:
+    params:
+        mac_url: ppc64le/clients/ocp-dev-preview/pre-release/openshift-install-mac.tar.gz
+    action: check_mac_download_installer_button_in_page
+    action: check_linux_download_installer_button_x86_64_in_install_power_pre_release_page
+    action: check_linux_download_installer_button_ppc64le_in_install_power_pre_release_page
+check_download_installer_button_in_pre_release_page:
+    params:
+        mac_url: x86_64/clients/ocp-dev-preview/pre-release/openshift-install-mac.tar.gz
+        linux_url: x86_64/clients/ocp-dev-preview/pre-release/openshift-install-linux.tar.gz
+    action: check_linux_download_installer_button_in_page
+    action: check_mac_download_installer_button_in_page
 #------------------------------ download_cli_oc_button -------------------
 switch_arch_type_for_download_cli_oc:
     elements:
@@ -269,7 +312,7 @@ check_linux_download_cli_oc_common_button_page_x86_64:
     action: switch_arch_type_for_download_cli_oc
     elements:
         - selector:
-            xpath: //a[text()='Download command-line tools' and @href='https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz']
+            xpath: //a[text()='Download command-line tools' and @href='https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/openshift-client-linux.tar.gz']
 check_linux_download_cli_oc_common_button_page_ppc64le:
     params:
         os_name: Linux
@@ -294,14 +337,14 @@ check_macos_download_cli_oc_common_button:
     action: switch_os_type_for_download_cli_oc
     elements:
         - selector:
-            xpath: //a[text()='Download command-line tools' and @href='https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-mac.tar.gz']
+            xpath: //a[text()='Download command-line tools' and @href='https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/openshift-client-mac.tar.gz']
 check_windows_download_cli_oc_common_button:
     params:
         os_name: Windows
     action: switch_os_type_for_download_cli_oc
     elements:
         - selector:
-            xpath: //a[text()='Download command-line tools' and @href='https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-windows.zip']
+            xpath: //a[text()='Download command-line tools' and @href='https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/openshift-client-windows.zip']
 
 check_linux_download_cli_oc_common_button_page_x86_64_pre_release:
     params:
@@ -432,6 +475,39 @@ check_download_rhcos_power_upi_install_page:
         - selector:
             xpath: //a[contains(@href, '/rhcos/latest/latest/rhcos-live-rootfs.ppc64le.img') and text()='Download RHCOS rootfs']
 
+#------------------------------ download crc -------------------
+click_download_crc_button:
+    element:
+        selector:
+            xpath: //a[text()='Download CodeReady Containers']/../../div/select[@aria-label='Select OS dropdown']
+        op: click
+check_download_crc_button_in_crc_install_page:
+    action: click_download_crc_button
+    elements:
+        - selector:
+            xpath: //a[text()='Download CodeReady Containers']/../../div/select/option[text()='<os_name>']
+          op: click
+        - selector:
+            xpath: //a[text()='Download CodeReady Containers' and @href='https://developers.redhat.com/content-gateway/rest/mirror/pub/openshift-v4/clients/crc/latest/<os_link>']
+check_linux_download_crc_button_in_crc_install_page:
+    params:
+        os_name: Linux
+        os_link: crc-linux-amd64.tar.xz
+    action: check_download_crc_button_in_crc_install_page
+check_macos_download_crc_button_in_crc_install_page:
+    params:
+        os_name: MacOS
+        os_link: crc-macos-amd64.pkg
+    action: check_download_crc_button_in_crc_install_page
+check_windows_download_crc_button_crc_in_install_page:
+    params:
+        os_name: Windows
+        os_link: crc-windows-installer.zip
+    action: check_download_crc_button_in_crc_install_page
+check_download_part_for_crc_install_page:
+    action: check_linux_download_crc_button_in_crc_install_page
+    action: check_macos_download_crc_button_in_crc_install_page
+    action: check_windows_download_crc_button_crc_in_install_page
 
 check_common_part_in_page:
     action: check_download_part_in_normal_install_page
@@ -476,38 +552,7 @@ check_account_username:
             xpath: //a[contains(@href, '/personalInfo.html') and text()='My profile']
         - selector:
             xpath: //button[@type='button' and text()='Log out']
-click_download_crc_button:
-    element:
-        selector:
-            xpath: //a[text()='Download CodeReady Containers']/../../div/select[@aria-label='Select OS dropdown']
-        op: click
-check_download_crc_button_in_crc_install_page:
-    action: click_download_crc_button
-    elements:
-        - selector:
-            xpath: //a[text()='Download CodeReady Containers']/../../div/select/option[text()='<os_name>']
-          op: click
-        - selector:
-            xpath: //a[text()='Download CodeReady Containers' and @href='https://developers.redhat.com/content-gateway/rest/mirror/pub/openshift-v4/clients/crc/latest/<os_link>']
-check_linux_download_crc_button_in_crc_install_page:
-    params:
-        os_name: Linux
-        os_link: crc-linux-amd64.tar.xz
-    action: check_download_crc_button_in_crc_install_page
-check_macos_download_crc_button_in_crc_install_page:
-    params:
-        os_name: MacOS
-        os_link: crc-macos-amd64.pkg
-    action: check_download_crc_button_in_crc_install_page
-check_windows_download_crc_button_crc_in_install_page:
-    params:
-        os_name: Windows
-        os_link: crc-windows-installer.zip
-    action: check_download_crc_button_in_crc_install_page
-check_download_part_for_crc_install_page:
-    action: check_linux_download_crc_button_in_crc_install_page
-    action: check_macos_download_crc_button_in_crc_install_page
-    action: check_windows_download_crc_button_crc_in_install_page
+
 check_breadcrumbs_include_infrastructure_in_install_page:
     elements:
         - selector:
@@ -534,32 +579,6 @@ check_developer_preview_bar_in_install_page:
             xpath: //p[text()='Because these are developer preview builds:']
         - selector:
             xpath: //li[text()='Production use is not permitted.']
-check_bare_metal_ipi_install_page_special_parts:
-    action: check_data_collection_message_in_install_page
-
-check_download_installer_button_in_ibm_z_install_page:
-    params:
-        mac_url: s390x/clients/ocp/stable/openshift-install-mac.tar.gz
-        linux_url: s390x/clients/ocp/stable/openshift-install-linux-amd64.tar.gz
-    action: check_mac_download_installer_button_in_page
-    action: check_linux_download_installer_button_in_page
-check_ibm_z_install_page_special_parts:
-    params:
-        pre_release_type: ibmz/pre-release
-    action: check_download_part_common_items
-    action: check_data_collection_message_in_install_page
-
-check_download_installer_button_in_power_upi_install_page:
-    params:
-        mac_url: ppc64le/clients/ocp/stable/openshift-install-mac.tar.gz
-        linux_url: ppc64le/clients/ocp/stable/openshift-install-linux-amd64.tar.gz
-    action: check_linux_download_installer_button_in_page
-    action: check_mac_download_installer_button_in_page
-check_power_upi_install_page_special_parts:
-    params:
-        pre_release_type: power/pre-release
-    action: check_download_part_common_items
-    action: check_data_collection_message_in_install_page
 
 check_codeready_install_page:
     action: creation_cards_page_loaded
@@ -577,58 +596,6 @@ check_codeready_install_page:
             xpath: //p[contains(., 'appear in the OpenShift Cluster Manager unless you enable cluster monitoring and telemetry.')]
         - selector:
             xpath: //a[contains(@href, 'https://access.redhat.com/documentation/en-us/red_hat_codeready_containers') and contains(text(), 'View the CodeReady Containers Getting started guide')]
-check_download_installer_button_in_pre_release_page:
-    params:
-        mac_url: x86_64/clients/ocp-dev-preview/pre-release/openshift-install-mac.tar.gz
-        linux_url: x86_64/clients/ocp-dev-preview/pre-release/openshift-install-linux.tar.gz
-    action: check_linux_download_installer_button_in_page
-    action: check_mac_download_installer_button_in_page
-check_pre_release_page_special_parts:
-    params:
-        mac_url: x86_64/clients/ocp-dev-preview/pre-release/openshift-install-mac.tar.gz
-        linux_url: x86_64/clients/ocp-dev-preview/pre-release/openshift-install-linux.tar.gz
-    action: check_developer_preview_bar_in_install_page
-    elements:
-        - selector:
-            xpath: //h3[text()='OpenShift installer']
-        - selector:
-            xpath: //h3[text()='Command line interface']
-        - selector:
-            xpath: //a[contains(@href, '/latest/support/remote_health_monitoring/about-remote-health-monitoring.html') and contains(., 'Learn more')]
-        - selector:
-            xpath: //h3[text()='Feature Completion in Nightly Builds']
-        - selector:
-            xpath: //a[@href='https://github.com/openshift/installer/tree/master/docs/user' and text()='latest installer documentation']
-        - selector:
-            xpath: //a[@href='mailto:users@lists.openshift.redhat.com?subject=[dev preview build]' and text()='users@lists.openshift.redhat.com']
-        - selector:
-            xpath: //a[@href='https://access.redhat.com/articles/4307871' and text()='knowledge article']
-        - selector:
-            xpath: //h3[@class='pf-c-title pf-m-2xl' and contains(., 'Experimental Developer Preview Builds')]
-check_aro_pull_secret_page:
-    action: click_copyPullSecret_button
-    elements:
-        - selector:
-            xpath: //h1[text()='Azure Red Hat OpenShift']
-        - selector:
-            xpath: //h3[text()='Red Hat content access']
-        - selector:
-            xpath: //h4[text()='Connecting your cluster to OpenShift Cluster Manager']
-        - selector:
-            xpath: //p[text()='Azure Red Hat OpenShift clusters do not connect to OpenShift Cluster Manager at creation time. Follow the']
-        - selector:
-            xpath: //a[text()='Microsoft documentation' and @href='https://docs.microsoft.com/en-us/azure/openshift/howto-add-update-pull-secret']
-        - selector:
-            xpath: //p[text()='if you would like to enable telemetry as a day 2 operation.']
-check_pull_secret_page:
-    action: click_copyPullSecret_button
-    elements:
-        - selector:
-            xpath: //h1[text()='Install OpenShift Container Platform 4']
-        - selector:
-            xpath: //h3[text()='Pull secret']
-        - selector:
-            xpath: //a[contains(@href, '/latest/support/remote_health_monitoring/about-remote-health-monitoring.html') and contains(., 'Learn more')]
 check_creation_page_datacenter_tab:
     action: creation_cards_page_loaded
     action: check_creation_cards_page_title
@@ -706,17 +673,89 @@ check_creation_page_cloud_tab_without_quota:
     action: creation_cards_page_loaded
     action: check_creation_cards_page_title
     action: check_creation_page_cloud_tab_common_part
-switch_to_aws_arm_installer_page:
-    action: switch_to_creation_cards_page
-    action: click_aws_arm_installer_button
 
-check_download_installer_button_in_aws_arm_install_page:
+check_rosa_landing_page:
+    elements:
+        - selector:
+            xpath: //a[text()='Learn more about ROSA' and @href='https://cloud.redhat.com/products/amazon-openshift']
+        - selector:
+            xpath: //a[text()='AWS Prerequisites for ROSA' and @href='https://docs.openshift.com/rosa/rosa_getting_started/rosa-aws-prereqs.html']
+        - selector:
+            xpath: //h3[text()='Enable ROSA in your AWS account']/..//a[text()='https://console.aws.amazon.com/rosa' and @href='https://console.aws.amazon.com/rosa']
+        - selector:
+            xpath: //h3[text()='Enable ROSA in your AWS account']/..//a[text()='Help' and @href='https://www.rosaworkshop.io/rosa/1-account_setup/#3-enable-rosa']
+        - selector:
+            xpath: //h3[text()='Download and install the ROSA command line tool']/..//a[text()='Help' and @href='https://docs.openshift.com/rosa/rosa_getting_started/rosa-installing-rosa.html']
+        - selector:
+            xpath: //h3[text()='Download and install the ROSA command line tool']/..//a[text()='install the AWS CLI' and @href='https://aws.amazon.com/cli/']
+        - selector:
+            xpath: //h3[text()='Log in to the command line']/..//a[text()='Help' and @href='/openshift/token/rosa']
+        - selector:
+            xpath: //h3[text()='Verify your credentials and quota']/..//a[text()='Help' and @href='https://www.rosaworkshop.io/rosa/1-account_setup/#verify-credentials']
+        - selector:
+            xpath: //h3[text()='Verify your credentials and quota']/..//a[text()='Help' and @href='https://www.rosaworkshop.io/rosa/1-account_setup/#verify-quota']
+        - selector:
+            xpath: //a[text()='Get started' and @href='https://www.rosaworkshop.io/rosa/2-deploy/']
+        - selector:
+            xpath: //a[text()='access your cluster' and @href='https://www.rosaworkshop.io/rosa/6-access_cluster/']
+        - selector:
+            xpath: //a[text()='Contact Red Hat Support' and @href='https://support.redhat.com/']
+        - selector:
+            xpath: //a[text()='ROSA workshop' and @href='https://www.rosaworkshop.io/']
+        - selector:
+            xpath: //a[text()='ROSA documentation' and @href='https://docs.openshift.com/rosa/welcome/index.html']
+        - selector:
+            xpath: //a[text()='ROSA Service Definition' and @href='https://docs.openshift.com/rosa/rosa_policy/rosa-service-definition.html']
+        - selector:
+            xpath: //a[text()='Responsibility Assignment Matrix' and @href='https://docs.openshift.com/rosa/rosa_policy/rosa-policy-responsibility-matrix.html']
+
+#------------------------------ special_parts -------------------
+check_bare_metal_ipi_install_page_special_parts:
+    action: check_data_collection_message_in_install_page
+check_aro_pull_install_page_special_parts:
+    elements:
+        - selector:
+            xpath: //h3[text()='Red Hat content access']
+        - selector:
+            xpath: //h4[text()='Connecting your cluster to OpenShift Cluster Manager']
+        - selector:
+            xpath: //p[text()='Azure Red Hat OpenShift clusters do not connect to OpenShift Cluster Manager at creation time. Follow the']
+        - selector:
+            xpath: //a[text()='Microsoft documentation' and @href='https://docs.microsoft.com/en-us/azure/openshift/howto-add-update-pull-secret']
+        - selector:
+            xpath: //p[text()='if you would like to enable telemetry as a day 2 operation.']
+check_ibm_z_install_page_special_parts:
     params:
-        mac_url: aarch64/clients/ocp-dev-preview/pre-release/openshift-install-mac.tar.gz
-    action: check_linux_download_installer_button_aarch64_in_install_aws_arm_page
-    action: check_linux_download_installer_button_x86_64_in_install_aws_arm_page
-    action: check_mac_download_installer_button_in_page
-
+        pre_release_type: ibmz/pre-release
+    action: check_download_part_common_items
+    action: check_data_collection_message_in_install_page
+check_power_upi_install_page_special_parts:
+    params:
+        pre_release_type: power/pre-release
+    action: check_download_part_common_items
+    action: check_data_collection_message_in_install_page
+check_pre_release_page_special_parts:
+    params:
+        mac_url: x86_64/clients/ocp-dev-preview/pre-release/openshift-install-mac.tar.gz
+        linux_url: x86_64/clients/ocp-dev-preview/pre-release/openshift-install-linux.tar.gz
+    action: check_developer_preview_bar_in_install_page
+    elements:
+        - selector:
+            xpath: //h3[text()='OpenShift installer']
+        - selector:
+            xpath: //h3[text()='Command line interface']
+        - selector:
+            xpath: //a[contains(@href, '/latest/support/remote_health_monitoring/about-remote-health-monitoring.html') and contains(., 'Learn more')]
+        - selector:
+            xpath: //h3[text()='Feature Completion in Nightly Builds']
+        - selector:
+            xpath: //a[@href='https://github.com/openshift/installer/tree/master/docs/user' and text()='latest installer documentation']
+        - selector:
+            xpath: //a[@href='mailto:users@lists.openshift.redhat.com?subject=[dev preview build]' and text()='users@lists.openshift.redhat.com']
+        - selector:
+            xpath: //a[@href='https://access.redhat.com/articles/4307871' and text()='knowledge article']
+        - selector:
+            xpath: //h3[@class='pf-c-title pf-m-2xl' and contains(., 'Experimental Developer Preview Builds')]
 check_aws_arm_install_page_special_parts:
     elements:
         - selector:
@@ -727,20 +766,6 @@ check_aws_arm_install_page_special_parts:
             xpath: //a[@href='https://access.redhat.com/articles/4307871']
         - selector:
             xpath: //img[@src='/apps/chrome/js/../assets/images/logo.svg']
-
-check_download_installer_button_in_install_ibmz_pre_page:
-    params:
-        mac_url: s390x/clients/ocp-dev-preview/pre-release/openshift-install-mac.tar.gz
-    action: check_mac_download_installer_button_in_page
-    action: check_linux_download_installer_button_x86_64_in_install_ibmz_pre_release_page
-    action: check_linux_download_installer_button_s390x_in_install_ibmz_pre_release_page
-check_download_installer_button_in_install_power_pre_page:
-    params:
-        mac_url: ppc64le/clients/ocp-dev-preview/pre-release/openshift-install-mac.tar.gz
-    action: check_mac_download_installer_button_in_page
-    action: check_linux_download_installer_button_x86_64_in_install_power_pre_release_page
-    action: check_linux_download_installer_button_ppc64le_in_install_power_pre_release_page
-
 check_install_ibmz_pre_page_special_parts:
     action: check_developer_preview_bar_in_install_page
     elements:
