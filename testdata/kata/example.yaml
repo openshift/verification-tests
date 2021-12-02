@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: example
+  labels:
+    app: httpd
+  namespace: openshift-sandboxed-containers-operator
+spec:
+  containers:
+    - name: httpd
+      image: 'image-registry.openshift-image-registry.svc:5000/openshift/httpd:latest'
+      ports:
+        - containerPort: 8080
+  runtimeClassName: kata
