@@ -19,7 +19,7 @@ spec:
         app: elasticsearch-server
     spec:
       containers:
-      - image: quay.io/openshifttest/elasticsearch@sha256:87538ba78df48470563796df1dbbf2e7bf407e97542830bfd395f912b15c07f0
+      - image: quay.io/openshifttest/elasticsearch@sha256:ac2fc3a8191fd9244b49c2c4e40fbdfaa7e08f6aa5c2be343563f3a89d014dfc
         imagePullPolicy: IfNotPresent
         name: elasticsearch-server
         ports:
@@ -28,9 +28,6 @@ spec:
         - containerPort: 9200
           protocol: TCP
         resources: {}
-        securityContext:
-          privileged: true
-          procMount: Default
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
         volumeMounts:
@@ -43,8 +40,6 @@ spec:
       restartPolicy: Always
       schedulerName: default-scheduler
       securityContext: {}
-      serviceAccount: elasticsearch-server
-      serviceAccountName: elasticsearch-server
       terminationGracePeriodSeconds: 30
       volumes:
       - configMap:

@@ -11,6 +11,10 @@ module BushSlicer
     def log_level(user: nil, cached: true, quiet: false)
       raw_resource(user: user, cached: cached, quiet: quiet).dig("spec", "logLevel")
     end
+
+    def retention(user: nil, cached: true, quiet: true)
+      raw_resource(user: user, cached: cached, quiet: quiet).dig("spec", "retention")
+    end
     
   end
 end

@@ -26,7 +26,7 @@ spec:
         app: elasticsearch-server
     spec:
       containers:
-      - image: quay.io/openshifttest/elasticsearch@sha256:87538ba78df48470563796df1dbbf2e7bf407e97542830bfd395f912b15c07f0
+      - image: quay.io/openshifttest/elasticsearch@sha256:ac2fc3a8191fd9244b49c2c4e40fbdfaa7e08f6aa5c2be343563f3a89d014dfc
         imagePullPolicy: IfNotPresent
         name: elasticsearch-server
         ports:
@@ -34,9 +34,6 @@ spec:
           protocol: TCP
         - containerPort: 9200
           protocol: TCP
-        securityContext:
-          privileged: true
-          procMount: Default
         volumeMounts:
         - mountPath: /usr/share/elasticsearch/config/elasticsearch.yml
           subPath: elasticsearch.yml
@@ -55,7 +52,5 @@ spec:
         secret:
           defaultMode: 420
           secretName: elasticsearch-server
-      serviceAccount: elasticsearch-server
-      serviceAccountName: elasticsearch-server
       dnsPolicy: ClusterFirst
       restartPolicy: Always

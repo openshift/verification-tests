@@ -34,9 +34,6 @@ spec:
           protocol: TCP
         - containerPort: 9200
           protocol: TCP
-        securityContext:
-          privileged: true
-          procMount: Default
         volumeMounts:
         - mountPath: /usr/share/elasticsearch/config/elasticsearch.yml
           subPath: elasticsearch.yml
@@ -49,8 +46,6 @@ spec:
           defaultMode: 420
           name: elasticsearch-server
         name: elasticsearch-config
-      serviceAccount: elasticsearch-server
-      serviceAccountName: elasticsearch-server
       dnsPolicy: ClusterFirst
       restartPolicy: Always
 

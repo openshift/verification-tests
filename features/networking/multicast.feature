@@ -92,7 +92,7 @@ Feature: testing multicast scenarios
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
-  Scenario: multicast is disabled by default if not annotate the netnamespace
+  Scenario: multicast is disabled by default if not annotate the namespace
     # create multicast testing pods in the project and without multicast enable
     Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard
@@ -158,7 +158,7 @@ Feature: testing multicast scenarios
   @4.10 @4.9
   @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
   @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
-  Scenario: Same multicast groups can be created in multiple tenant
+  Scenario: Same multicast groups can be created in multiple namespace
     Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard
     Given I obtain test data file "networking/multicast-rc.json"
@@ -299,7 +299,7 @@ Feature: testing multicast scenarios
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
-  Scenario: pods in default project should not be able to receive multicast traffic from other tenants
+  Scenario: pods in default project should not be able to receive multicast traffic from other namespace
     # create multicast testing pod in one project
     Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard
@@ -477,7 +477,7 @@ Feature: testing multicast scenarios
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
-  Scenario: pods should not be able to receive multicast traffic from other pods in different tenant
+  Scenario: pods should not be able to receive multicast traffic from other pods in different namespace
     # create some multicast testing pods in one project
     Given I have a project
     And evaluation of `project.name` is stored in the :proj1 clipboard

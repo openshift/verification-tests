@@ -11,11 +11,11 @@ spec:
   ports:
   - name: rsyslogserver-tcp
     port: 514
-    targetPort: 514
+    targetPort: 6514
     protocol: TCP
   - name: rsyslogserver-udp
     port: 514
-    targetPort: 514
+    targetPort: 6514
     protocol: UDP
   selector:
     appname: rsyslogserver
