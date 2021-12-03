@@ -8,9 +8,12 @@
       "containers": [{
         "name": "iperf-server",
         "image": "quay.io/openshifttest/mcast-pod@sha256:7cccaa51ca2da1dba019ca2817674d0f35762e6dd099187184ff73e01f8764e4",
-    	  "args":[
+    	"command": [
+	      "iperf3"
+    	],
+    	 "args":[
     	  "-s"
-    	  ]
+    	 ]
       }]
   }
 }
