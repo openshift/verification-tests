@@ -11,9 +11,9 @@
     	"command": [
 	      "iperf3"
     	],
-    	 "args":[
+    	"args":[
     	  "-s"
-    	 ]
+    	]
       }]
   }
 }
