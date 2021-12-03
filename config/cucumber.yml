@@ -19,6 +19,7 @@
 %>
 
 default: --publish-quiet --profile devel
+plain: --publish-quiet --profile _plain
 debug: --profile _debug --profile devel
 devel: --profile _devel <%= default_args %>
 tcms: BUSHSLICER_TEST_CASE_MANAGER=tcms <%= tcms_args %>
@@ -29,5 +30,6 @@ report_portal: rp_config=<%= "#{report_dir}/report-portal.yml" %> -f ReportPorta
 
 _debug: BUSHSLICER_LOG_LEVEL=debug
 _devel: BUSHSLICER_DEBUG_AFTER_FAIL=true BUSHSLICER_DEBUG_ATTACHER_TIMEOUT=true
+_plain: BUSHSLICER_LOG_LEVEL=plain
 #
 # vim: set tabstop=2:shiftwidth=2:expandtab:
