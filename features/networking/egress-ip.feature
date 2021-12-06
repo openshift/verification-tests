@@ -869,3 +869,47 @@ Feature: Egress IP related features
     Then the step should succeed
     And the output should contain:
       | Hello OpenShift! |
+
+  # @author huirwang@redhat.com
+  # @case_id OCP-46637 
+  @admin
+  @destructive
+  @4.10 @4.9
+  @vsphere-ipi
+  @vsphere-upi
+  Scenario: [Bug 2024880] EgressIP should work when configuring networkpolicy
+    Given I save ipecho url to the clipboard
+    Given I store the schedulable workers in the :workers clipboard
+    And the valid egress IP is added to the "<%= cb.workers[0].name %>" node
+
+    # Patch egress IP to the project
+    Given I have a project
+    And evaluation of `project.name` is stored in the :proj1 clipboard
+    And as admin I successfully merge patch resource "netnamespace/<%= cb.proj1 %>" with:
+      | {"egressIPs": ["<%= cb.valid_ip %>"]} |
+
+    Given I obtain test data file "networking/list_for_pods.json"
+    When I run the :create client command with:
+      | f | list_for_pods.json |
+    Then the step should succeed
+    Given 2 pods become ready with labels:
+      | name=test-pods |
+    And evaluation of `pod(1).name` is stored in the :pod0_name clipboard
+    And evaluation of `pod(2).ip_url` is stored in the :pod2_ip clipboard
+
+    When I obtain test data file "networking/networkpolicy/defaultdeny-v1-semantic.yaml"
+    When I run the :create client command with:
+      | f | defaultdeny-v1-semantic.yaml |
+    Then the step should succeed
+
+    #Check networkpolicy working
+    When I execute on the "<%= cb.pod0_name %>" pod:
+      | curl | -s | --connect-timeout | 5 | <%= cb.pod2_ip %>:8080 |
+    Then the step should fail
+    And the output should not contain "Hello"
+
+    # The traffic should be allowed and the source ip is egress ip
+    When I execute on the "<%= cb.pod0_name %>" pod:
+      | curl | -s | --connect-timeout | 10 | <%= cb.ipecho_url %> |
+    Then the step should succeed
+    And the output should contain "<%= cb.valid_ip %>"
