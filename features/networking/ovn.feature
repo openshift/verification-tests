@@ -599,7 +599,16 @@ Feature: OVN related networking scenarios
   And the output should contain 1 times:
     | <%= cb.apiVIP %> |
   And evaluation of `@result[:response].scan(/\/* ([^\/]*) /)[1][0]` is stored in the :apiVIP_node clipboard
-  Given I use the "<%= cb.apiVIP_node %>" node
+  #Checking annotation exist for the node
+  When I run the :describe admin command with:
+    | resource | node                  |
+    | name     | <%= cb.apiVIP_node %> |
+  Then the step should succeed
+  And the output should contain:
+    | k8s.ovn.org/host-addresses |
+    | <%= cb.apiVIP %>           |
+  
+Given I use the "<%= cb.apiVIP_node %>" node
   And the host is rebooted and I wait it up to 600 seconds to become available
   #Make sure after the reboot apiVIp switches to new node and only 1 entry correspond to apiVIP exist in NB db (shouldn't be any stale or duplicates)
   Given I store the ovnkube-master "north" leader pod in the clipboard
@@ -609,4 +618,12 @@ Feature: OVN related networking scenarios
   And the output should contain 1 times:
     | <%= cb.apiVIP %> |
   And evaluation of `@result[:response].scan(/\/* ([^\/]*) /)[1][0]` is stored in the :apiVIP_node_new clipboard
+  #Checking annotation exist for the node
+  When I run the :describe admin command with:
+    | resource | node                      |
+    | name     | <%= cb.apiVIP_node_new %> |
+  Then the step should succeed
+  And the output should contain:
+    | k8s.ovn.org/host-addresses |
+    | <%= cb.apiVIP_new %>       |
   And the expression should be true> cb.apiVIP_node!=cb.apiVIP_node_new
