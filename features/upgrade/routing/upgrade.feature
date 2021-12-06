@@ -255,7 +255,8 @@ Feature: Routing and DNS related scenarios
     Given I use the "ocp45955" project
     And the expression should be true> service('service-unsecure').annotation('idling.alpha.openshift.io/unidle-targets', cached: false) == "[{\"kind\":\"ReplicationController\",\"name\":\"web-server-rc\",\"replicas\":1}]"
   
-    When I execute on the "hello-pod" pod:
+    Given I have a test-client-pod in the project
+    When I execute on the pod:
       | curl | -ksS | http://<%= route("service-unsecure", service("service-unsecure")).dns %>/ |
     Then the step should succeed
     And the output should contain "Hello-OpenShift web-server-rc"
