@@ -775,7 +775,6 @@ click_first_sub_item_in_resource_detail_list:
       xpath: (//div[@class='co-m-table-grid__body']//a)[1]
     op: click
 click_first_item_in_grid_cell_list:
-  action: check_name_column_header
   elements:
   - selector:
       xpath: (//td[@role='gridcell'][1])[1]
