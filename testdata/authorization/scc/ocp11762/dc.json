@@ -76,7 +76,7 @@
                 "containers": [
                     {
                         "name": "mysql-55-centos7",
-                        "image": "quay.io/openshifttest/mysql-56-centos7@sha256:a9fb44bd6753a8053516567a0416db84844e10989140ea2b19ed1d2d8bafc75f",
+                        "image": "quay.io/openshifttest/mysql@sha256:7a6a500fbdc89871973f1f2fe1e64ebb2548dea06df2cb1b3a2989236a26289e",
                         "ports": [
                             {
                                 "containerPort": 3306,
@@ -95,6 +95,10 @@
                             {
                                 "name": "MYSQL_DATABASE",
                                 "value": "root"
+                            },
+                            {
+                                "name": "MYSQL_RANDOM_ROOT_PASSWORD",
+                                "value": "yes"
                             }
                         ],
                         "resources": {},
