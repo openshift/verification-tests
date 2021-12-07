@@ -727,14 +727,32 @@ Feature: Testing route
   Scenario: The reencrypt route should support HSTS
     Given the master version >= "3.7"
     And I have a project
-    Given I obtain test data file "routing/reencrypt/reencrypt-without-all-cert.yaml"
-    When I run oc create over "reencrypt-without-all-cert.yaml" replacing paths:
-      | ["items"][0]["metadata"]["annotations"] | { haproxy.router.openshift.io/hsts_header: "max-age=100;includeSubDomains;preload" } |
+
+    Given I obtain test data file "routing/web-server-rc.yaml"
+    When I run the :create client command with:
+      | f | web-server-rc.yaml |
     Then the step should succeed
-    And all pods in the project are ready
+    And a pod becomes ready with labels:
+      | name=web-server-rc |
+
+    # Create reencrypt route and add annotation to the route
+    Given I obtain test data file "routing/reencrypt/route_reencrypt_dest.ca"
+    When I run the :create_route_reencrypt client command with:
+      | name       | reen-route              |
+      | service    | service-secure          |
+      | destcacert | route_reencrypt_dest.ca |
+    Then the step should succeed
+    When I run the :annotate client command with:
+      | resource     | route                                                                         |
+      | resourcename | reen-route                                                                    |
+      | keyval       | haproxy.router.openshift.io/hsts_header=max-age=100;includeSubDomains;preload |
+    Then the step should succeed
 
     Given I use the "service-secure" service
-    And I wait up to 60 seconds for a secure web server to become available via the "route-reencrypt" route
+    And I wait up to 30 seconds for the steps to pass:
+    """
+    And I wait for a secure web server to become available via the "reen-route" route
     Then the output should contain "Hello-OpenShift"
     And the expression should be true> @result[:headers]["strict-transport-security"] == ["max-age=100;includeSubDomains;preload"]
+    """
 
