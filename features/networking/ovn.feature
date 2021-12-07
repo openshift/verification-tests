@@ -581,7 +581,6 @@ Feature: OVN related networking scenarios
   @4.10 @4.9 @4.8
   @network-ovnkubernetes
   @vsphere-ipi
-  @vsphere-upi
   Scenario: Logical Router Policies and Annotations for a given node should be current
   Given the env is using "OVNKubernetes" networkType
   #Find apiVIP address of the cluster
