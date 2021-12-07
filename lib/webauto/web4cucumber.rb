@@ -105,11 +105,12 @@ require_relative 'chrome_extension'
           )
         end
       end
-      client = Selenium::WebDriver::Remote::Http::Default.new
+      client = Watir::HttpClient.new
       client.open_timeout = 180
       client.read_timeout = 600 # ff legacy vs `I have a jenkins v2 application`
       headless
       # Selenium::WebDriver.logger.level = :debug
+      # Watir.logger.level = :debug
       if @browser_type == :firefox
         logger.info "Launching Firefox Marionette/Geckodriver"
         raise "auth proxy not implemented for Firefox" if proxy_pass
@@ -145,12 +146,21 @@ require_relative 'chrome_extension'
         if self.class.container?
           chrome_switches.concat %w[--no-sandbox --disable-setuid-sandbox --disable-gpu --disable-infobars --disable-dev-shm-usage]
         end
+        options = {
+          browser_name: 'chrome',
+          accept_insecure_certs: true
+        }
+        options["goog:chromeOptions"] = {}
+        options["goog:chromeOptions"][:element_scroll_behavior] = @scroll_strategy if Integer === @scroll_strategy
         # options = Selenium::WebDriver::Chrome::Options.new
         # options.add_extension proxy_chrome_ext_file if proxy_chrome_ext_file
-        options = {}
         options[:extensions] = [proxy_chrome_ext_file] if proxy_chrome_ext_file
-        url_or_switches = @selenium_url ? {url: @selenium_url} : {switches: chrome_switches}
-        @browser = Watir::Browser.new :chrome, desired_capabilities: chrome_caps, options: options, **url_or_switches
+        if @selenium_url
+          @browser = Watir::Browser.new :chrome, options: options, url: @selenium_url
+        else
+          options["goog:chromeOptions"][:switches] = chrome_switches
+          @browser = Watir::Browser.new :chrome, options: options
+        end
         logger.info "#{browser.driver.capabilities[:browser_name]} version is #{browser.driver.capabilities[:browser_version]}"
         logger.info "Chromedriver version is #{browser.driver.capabilities['chrome']['chromedriverVersion']}"
         if @size
