@@ -615,8 +615,13 @@ Feature: OVN related networking scenarios
   And admin executes on the pod "northd" container:
     | bash | -c | ovn-nbctl find logical_router_policy \| grep -B 5 -A 10 <%= cb.apiVIP %> |
   Then the step should succeed
+  #apiVIP switches to new node in case of node reboot and in very rare case couple of entries might stay there until apiVIP 
+  #switching is done completely. Making sure 1 current entry should stay there eventually
+  Given I wait up to 120 seconds for the steps to pass:
+  """
   And the output should contain 1 times:
     | <%= cb.apiVIP %> |
+  """
   And evaluation of `@result[:response].scan(/\/* ([^\/]*) /)[1][0]` is stored in the :apiVIP_node_new clipboard
   #Checking annotation exist for the node
   When I run the :describe admin command with:
