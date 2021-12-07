@@ -609,7 +609,8 @@ Feature: OVN related networking scenarios
   
   Given I use the "<%= cb.apiVIP_node %>" node
   And the host is rebooted and I wait it up to 600 seconds to become available
-  #Make sure after the reboot apiVIp switches to new node and only 1 entry correspond to apiVIP exist in NB db (shouldn't be any stale or duplicates)
+  #Make sure after the reboot apiVIp switches to new node and only 1 entry correspond to apiVIP 
+  #exist in NB db (shouldn't be any stale or duplicates)
   Given I store the ovnkube-master "north" leader pod in the clipboard
   And admin executes on the pod "northd" container:
     | bash | -c | ovn-nbctl find logical_router_policy \| grep -B 5 -A 10 <%= cb.apiVIP %> |
