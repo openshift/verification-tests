@@ -233,13 +233,13 @@ Feature: build 'apps' with CLI
     Given I have a project
     When I run the :tag client command with:
       | source | quay.io/openshifttest/python:3.6 |
-      | dest   | python:latest |
+      | dest   | python:multiarch |
     Then the step should succeed
     And the "python" image stream becomes ready
     When I run the :new_build client command with:
       | app_repo | openshift/ruby:latest |
       | app_repo | https://github.com/openshift/ruby-hello-world |
-      | source_image | <%= project.name %>/python:latest |
+      | source_image | <%= project.name %>/python:multiarch |
       | source_image_path | /tmp:xiuwangtest/ |
       | name | final-app |
       | allow_missing_imagestream_tags| true |
@@ -247,7 +247,7 @@ Feature: build 'apps' with CLI
     When I get project build_config named "final-app" as YAML
     Then the output should match:
       | kind:\s+ImageStreamTag |
-      | name:\s+python:latest |
+      | name:\s+python:multiarch |
       | destinationDir:\s+xiuwangtest |
       | sourcePath:\s+/tmp |
     Given the "final-app-1" build completes
@@ -282,7 +282,7 @@ Feature: build 'apps' with CLI
       | image_name | python |
       | all | true |
       | confirm | true |
-      | from | quay.io/openshifttest/ruby-25-centos7 |
+      | from | quay.io/openshifttest/ruby-27 |
       | n | <%= project.name %> |
     Then the step should succeed
     Given I get project builds
@@ -740,15 +740,15 @@ Feature: build 'apps' with CLI
   Scenario: io.openshift.build.commit.ref displays correctly in build reference on imagestreamtag if building from git branch reference
     Given I have a project
     When I run the :new_app client command with:
-      | app_repo | quay.io/openshifttest/ruby-22-centos7:2.2~https://github.com/openshift/ruby-hello-world#beta4 |
+      | app_repo | quay.io/openshifttest/ruby-27:multiarch~https://github.com/openshift/ruby-hello-world#config |
     Then the step should succeed
     Given the "ruby-hello-world-1" build was created
     And the "ruby-hello-world-1" build completed
     When I run the :describe client command with:
       | resource | imagestreamtag |
     Then the output should contain:
-      | io.openshift.build.commit.ref=beta4 |
-      | OPENSHIFT_BUILD_REFERENCE=beta4     |
+      | io.openshift.build.commit.ref=config |
+      | OPENSHIFT_BUILD_REFERENCE=config    |
 
   # @author xiuwang@redhat.com
   # @case_id OCP-19631
@@ -914,7 +914,7 @@ Feature: build 'apps' with CLI
     Then the step should succeed
     #Insert cm and secret to bc with empty destination - succeed
     When I run the :new_build client command with:
-      | app_repo         | quay.io/openshifttest/ruby-27-centos7:centos7~https://github.com/openshift/ruby-hello-world |
+      | app_repo         | quay.io/openshifttest/ruby-27:multiarch~https://github.com/openshift/ruby-hello-world |
       | build_config_map | cmtest1:.                                                                                   |
       | build_config_map | cmtest2:./newdir                                                                            |
       | strategy         | docker                                                                                      |
@@ -946,7 +946,7 @@ Feature: build 'apps' with CLI
     Then the step should succeed
     #Add a configmaps with a multi-level dirs - succeed
     When I run the :new_build client command with:
-      | app_repo         | quay.io/openshifttest/ruby-27-centos7:centos7~https://github.com/openshift/ruby-hello-world |
+      | app_repo         | quay.io/openshifttest/ruby-27:multiarch~https://github.com/openshift/ruby-hello-world |
       | build_config_map | cmtest1:./newdir1/newdir2/newdir3                                                           |
       | strategy         | docker                                                                                      |
     Then the step should succeed

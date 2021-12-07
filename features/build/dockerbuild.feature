@@ -33,7 +33,7 @@ Feature: dockerbuild.feature
   Scenario: Docker build with dockerImage with specified tag
     Given I have a project
     When I run the :new_app client command with:
-      | docker_image | quay.io/openshifttest/ruby-27-centos7:centos7 |
+      | docker_image | quay.io/openshifttest/ruby-27:multiarch |
       | app_repo     | http://github.com/openshift/ruby-hello-world  |
       | strategy     | docker                                        |
     Then the step should succeed
@@ -95,7 +95,7 @@ Feature: dockerbuild.feature
     Given I have a project
     When I run the :new_build client command with:
       | code         | http://github.com/openshift/ruby-hello-world.git |
-      | docker_image | quay.io/openshifttest/ruby-27-centos7:centos7    |
+      | docker_image | quay.io/openshifttest/ruby-27:multiarch          |
       | strategy     | docker                                           |
       | build_arg    | ARG=VALUE                                        |
     Then the step should succeed
