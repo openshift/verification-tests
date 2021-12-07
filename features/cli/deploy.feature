@@ -207,12 +207,15 @@ Feature: deployment related features
       | "type": "ImageChange"     |
       | "replicas": 2             |
       | "value": "Plqe5Wevchange" |
+    And I wait for the steps to pass:
+    """
     When I run the :rollback client command with:
       | deployment_name         | hooks-1 |
     Then the output should contain:
       | #3 rolled back to hooks-1                            |
       | Warning: the following images triggers were disabled |
       | You can re-enable them with |
+    """
     And the pod named "hooks-3-deploy" becomes ready
     Given I wait for the pod named "hooks-3-deploy" to die
     When I get project pod
