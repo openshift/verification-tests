@@ -396,7 +396,7 @@ Feature: secrets related scenarios
       | deploymentconfig=git |
       | deployment=git-2     |
     And I execute on the pod:
-      | bash                                                                                                    |
+      | sh                                                                                                      |
       | -c                                                                                                      |
       | cd /var/lib/git/ && git clone --bare https://github.com/openshift/ruby-hello-world ruby-hello-world.git |
     Then the step should succeed
@@ -476,7 +476,7 @@ Feature: secrets related scenarios
       | deploymentconfig=git |
       | deployment=git-2     |
     And I execute on the pod:
-      | bash                                                                                                    |
+      | sh                                                                                                      |
       | -c                                                                                                      |
       | cd /var/lib/git/ && git clone --bare https://github.com/openshift/ruby-hello-world ruby-hello-world.git |
     Then the step should succeed

@@ -586,7 +586,7 @@ Given /^an IP echo service is setup on the master node and the ip is stored in t
   cb_name = "ipecho_ip" unless cb_name
   cb[cb_name] = host.local_ip
 
-  @result = host.exec_admin("docker run --name ipecho -d -p 8888:80 quay.io/openshifttest/ip-echo")
+  @result = host.exec_admin("docker run --name ipecho -d -p 8888:80 quay.io/openshifttest/ip-echo:multiarch")
   raise "Failed to create the IP echo service." unless @result[:success]
   teardown_add {
     @result = host.exec_admin("docker rm -f ipecho")
@@ -1048,8 +1048,9 @@ Given /^I store the ovnkube-master#{OPT_QUOTED} leader pod in the#{OPT_SYM} clip
     end
   }
   raise "Failed to execute network command!" unless cluster_state != nil
-  # for some reason "oc rsh" output contains CR, so we have to remove them
   leader_id = cluster_state.match(/Leader:\s+(\S+)/)
+  # leader_id can be "self"
+  # Leader: self
   if leader_id.nil? || leader_id[1] == "unknown"
     raise "Unknown leader"
   end
@@ -1058,7 +1059,14 @@ Given /^I store the ovnkube-master#{OPT_QUOTED} leader pod in the#{OPT_SYM} clip
   unless leader_line
     raise "Unable to find leader #{leader_id[1]}"
   end
-  splits = leader_line.match(/\((\S+)[^:]+:([^:]+):(\d+)\)/)
+  # Servers:
+  #   6e24 (6e24 at ssl:[fd2e:6f44:5dd8::81]:9643) (self) next_index=11214 match_index=11517
+  #   90fb (90fb at ssl:[fd2e:6f44:5dd8::68]:9643) next_index=11518 match_index=11517 last msg 350 ms ago
+  # Servers:
+  #   c977 (c977 at ssl:172.31.248.170:9643) next_index=3573 match_index=3572
+  #   d73f (d73f at ssl:172.31.248.168:9643) (self) next_index=3265 match_index=3572
+  # match first string in the parens, the everything from the first colon to a colon digit close-paren sequence
+  splits = leader_line.match(/\((\S+)[^:]+:\[?([^\]\[)]+)\]?:(\d+)\)/)
   leader_node = splits.captures[1]
   leader_pod = BushSlicer::Pod.get_labeled("app=ovnkube-master", project: project("openshift-ovn-kubernetes", switch: false),
                                            user: admin, quiet: true) { |pod, hash|

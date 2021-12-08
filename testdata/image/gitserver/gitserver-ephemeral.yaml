@@ -25,7 +25,7 @@ items:
         serviceAccountName: git
         containers:
         - name: git
-          image: quay.io/openshifttest/origin-gitserver@sha256:8062457c330f0da521b340f2dceb13c4852d46ec58e45a9ef276a5ec639a328c
+          image: quay.io/openshifttest/origin-gitserver@sha256:9b9e712a9b3d5d4ce1cdd2feaeeaf6d204883fe966790fd3b7d00664639cc7db
           imagePullPolicy: IfNotPresent
           ports:
           - containerPort: 8080
