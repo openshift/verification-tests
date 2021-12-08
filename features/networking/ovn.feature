@@ -582,53 +582,53 @@ Feature: OVN related networking scenarios
   @network-ovnkubernetes
   @vsphere-ipi
   Scenario: Logical Router Policies and Annotations for a given node should be current
-  Given the env is using "OVNKubernetes" networkType
-  #Find apiVIP address of the cluster
-  When I run the :get admin command with:
-    | resource | infrastructure                                                         |
-    | o        | jsonpath={.items[*].status.platformStatus.vsphere.apiServerInternalIP} |
-  Then the step should succeed
-  And evaluation of `@result[:response]` is stored in the :apiVIP clipboard
-  Given I store the ovnkube-master "north" leader pod in the clipboard
-  And admin executes on the pod "northd" container:
-    | bash | -c | ovn-nbctl find logical_router_policy \| grep -B 5 -A 10 <%= cb.apiVIP %> |
-  Then the step should succeed
-  And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :apiVIP_node clipboard
-  #This will make sure only one entry corresponds to apiVIP is stored in NB db, not any stale or duplicate entry
-  And the output should contain 1 times:
-    | <%= cb.apiVIP %> |
-  And evaluation of `@result[:response].scan(/\/* ([^\/]*) /)[1][0]` is stored in the :apiVIP_node clipboard
-  #Checking annotation exist for the node
-  When I run the :describe admin command with:
-    | resource | node                  |
-    | name     | <%= cb.apiVIP_node %> |
-  Then the step should succeed
-  And the output should contain:
-    | k8s.ovn.org/host-addresses |
-    | <%= cb.apiVIP %>           |
+    Given the env is using "OVNKubernetes" networkType
+    #Find apiVIP address of the cluster
+    When I run the :get admin command with:
+      | resource | infrastructure                                                         |
+      | o        | jsonpath={.items[*].status.platformStatus.vsphere.apiServerInternalIP} |
+    Then the step should succeed
+    And evaluation of `@result[:response]` is stored in the :apiVIP clipboard
+    Given I store the ovnkube-master "north" leader pod in the clipboard
+    And admin executes on the pod "northd" container:
+      | bash | -c | ovn-nbctl find logical_router_policy \| grep -B 5 -A 10 <%= cb.apiVIP %> |
+    Then the step should succeed
+    And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :apiVIP_node clipboard
+    #This will make sure only one entry corresponds to apiVIP is stored in NB db, not any stale or duplicate entry
+    And the output should contain 1 times:
+      | <%= cb.apiVIP %> |
+    And evaluation of `@result[:response].scan(/\/* ([^\/]*) /)[1][0]` is stored in the :apiVIP_node clipboard
+    #Checking annotation exist for the node
+    When I run the :describe admin command with:
+      | resource | node                  |
+      | name     | <%= cb.apiVIP_node %> |
+    Then the step should succeed
+    And the output should contain:
+      | k8s.ovn.org/host-addresses |
+      | <%= cb.apiVIP %>           |
   
-  Given I use the "<%= cb.apiVIP_node %>" node
-  And the host is rebooted and I wait it up to 600 seconds to become available
-  #Make sure after the reboot apiVIp switches to new node and only 1 entry correspond to apiVIP 
-  #exist in NB db (shouldn't be any stale or duplicates)
-  Given I store the ovnkube-master "north" leader pod in the clipboard
-  And admin executes on the pod "northd" container:
-    | bash | -c | ovn-nbctl find logical_router_policy \| grep -B 5 -A 10 <%= cb.apiVIP %> |
-  Then the step should succeed
-  #apiVIP switches to new node in case of node reboot and in very rare case couple of entries might stay there until apiVIP 
-  #switching is done completely. Making sure 1 current entry should stay there eventually
-  Given I wait up to 120 seconds for the steps to pass:
-  """
-  And the output should contain 1 times:
-    | <%= cb.apiVIP %> |
-  """
-  And evaluation of `@result[:response].scan(/\/* ([^\/]*) /)[1][0]` is stored in the :apiVIP_node_new clipboard
-  #Checking annotation exist for the node
-  When I run the :describe admin command with:
-    | resource | node                      |
-    | name     | <%= cb.apiVIP_node_new %> |
-  Then the step should succeed
-  And the output should contain:
-    | k8s.ovn.org/host-addresses |
-    | <%= cb.apiVIP_new %>       |
-  And the expression should be true> cb.apiVIP_node!=cb.apiVIP_node_new
+    Given I use the "<%= cb.apiVIP_node %>" node
+    And the host is rebooted and I wait it up to 600 seconds to become available
+    #Make sure after the reboot apiVIp switches to new node and only 1 entry correspond to apiVIP 
+    #exist in NB db (shouldn't be any stale or duplicates)
+    Given I store the ovnkube-master "north" leader pod in the clipboard
+    And admin executes on the pod "northd" container:
+      | bash | -c | ovn-nbctl find logical_router_policy \| grep -B 5 -A 10 <%= cb.apiVIP %> |
+    Then the step should succeed
+    #apiVIP switches to new node in case of node reboot and in very rare case couple of entries might stay there until apiVIP 
+    #switching is done completely. Making sure 1 current entry should stay there eventually
+    Given I wait up to 120 seconds for the steps to pass:
+    """
+    And the output should contain 1 times:
+      | <%= cb.apiVIP %> |
+    """
+    And evaluation of `@result[:response].scan(/\/* ([^\/]*) /)[1][0]` is stored in the :apiVIP_node_new clipboard
+    #Checking annotation exist for the node
+    When I run the :describe admin command with:
+      | resource | node                      |
+      | name     | <%= cb.apiVIP_node_new %> |
+    Then the step should succeed
+    And the output should contain:
+      | k8s.ovn.org/host-addresses |
+      | <%= cb.apiVIP_new %>       |
+    And the expression should be true> cb.apiVIP_node!=cb.apiVIP_node_new
