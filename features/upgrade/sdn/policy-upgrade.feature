@@ -610,14 +610,6 @@ Feature: SDN compoment upgrade testing
     And evaluation of `pod(0).name` is stored in the :rsyslog_server_pod clipboard
     Then the step should succeed
 
-    Given as admin I successfully merge patch resource "networks.operator.openshift.io/cluster" with:
-      | {"spec":{"defaultNetwork":{"ovnKubernetesConfig":{"policyAuditConfig": {"destination": "udp:<%= cb.svc_ip %>:514" }}}}} |
-    And I wait up to 300 seconds for the steps to pass:
-    """
-      Given the status of condition "Progressing" for network operator is :False
-      And the status of condition "Available" for network operator is :True
-    """
-
     Given I use the "<%= cb.proj1 %>" project
     Given a pod becomes ready with labels:
       | name=test-pods |
