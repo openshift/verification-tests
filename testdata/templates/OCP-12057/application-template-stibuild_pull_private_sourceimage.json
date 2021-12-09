@@ -136,7 +136,7 @@
             {
               "from": {
                 "kind": "DockerImage",
-                "name": "quay.io/openshifttest/ruby-25-centos7@sha256:575194aa8be12ea066fc3f4aa9103dcb4291d43f9ee32e4afe34e0063051610b"
+                "name": "quay.io/openshifttest/ruby-27@sha256:cdb6a13032184468b1e0607f36cfb8834c97dbeffeeff800e9e6834323bed8fc"
               },
               "pullSecret": { "name": "pull" },
               "paths": [
