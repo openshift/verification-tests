@@ -13,26 +13,26 @@ Feature: projects related features via cli
       | project_name | <%= cb.prj_name %> |
     Then the step should succeed
     When I create a new application with:
-      | docker image | quay.io/openshifttest/mysql-56-centos7        |
+      | docker image | quay.io/openshifttest/mysql:multiarch         |
       | code         | https://github.com/openshift/ruby-hello-world |
     ### get project resource
     When I run the :get client command with:
       | resource | dc,deployment |
     Then the step should succeed
     And the output should contain:
-      | mysql-56-centos7 |
+      | mysql            |
       | ruby-hello-world |
     When I run the :get client command with:
       | resource | services |
     Then the step should succeed
     And the output should contain:
-      | mysql-56-centos7 |
+      | mysql            |
       | ruby-hello-world |
     When I run the :get client command with:
       | resource | is |
     Then the step should succeed
     And the output should contain:
-      | mysql-56-centos7 |
+      | mysql            |
       | ruby-hello-world |
     ### delete this project,make sure project is deleted
     Given the "<%= cb.prj_name %>" project is deleted
@@ -42,21 +42,21 @@ Feature: projects related features via cli
       | n        | <%= cb.prj_name %>  |
     Then the step should fail
     And the output should not contain:
-      | mysql-56-centos7 |
+      | mysql            |
       | ruby-hello-world |
     When I run the :get client command with:
       | resource | services           |
       | n        | <%= cb.prj_name %> |
     Then the step should fail
     And the output should not contain:
-      | mysql-56-centos7 |
+      | mysql            |
       | ruby-hello-world |
     When I run the :get client command with:
       | resource | pods               |
       | n        | <%= cb.prj_name %> |
     Then the step should fail
     And the output should not contain:
-      | mysql-56-centos7 |
+      | mysql |
 
     ### create a project with same name, no context for this new one
     And I wait for the steps to pass:
