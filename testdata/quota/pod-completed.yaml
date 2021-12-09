@@ -5,7 +5,7 @@ metadata:
 spec:
   containers:
   - name: pi
-    image: quay.io/openshifttest/mysql-56-centos7@sha256:a9fb44bd6753a8053516567a0416db84844e10989140ea2b19ed1d2d8bafc75f
+    image: quay.io/openshifttest/mysql@sha256:7a6a500fbdc89871973f1f2fe1e64ebb2548dea06df2cb1b3a2989236a26289e
     command: ["perl",  "-Mbignum=bpi", "-wle", "print bpi(2000)"]
     resources:
       requests:
