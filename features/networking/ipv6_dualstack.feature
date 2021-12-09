@@ -3,10 +3,9 @@ Feature: ipv6 dual stack cluster test scenarios
   # @author zzhao@redhat.com
   # @case_id OCP-40581
   @admin
-  @4.8 @4.7 @4.10 @4.9
-  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
-  @upgrade-sanity
+  @network-ovnkubernetes
+  @4.10 @4.9
+  @baremetal-ipi
   Scenario: Project should be in isolation when using multitenant policy for ipv6 dual stack
     # create project and pods
     Given I have a project
@@ -80,3 +79,44 @@ Feature: ipv6 dual stack cluster test scenarios
     Then the step should fail
 
 
+  # @author zzhao@redhat.com
+  # @case_id OCP-46816
+  @admin
+  @network-ovnkubernetes
+  @4.10 @4.9
+  @baremetal-ipi
+  Scenario: ipv6 for nodeport service
+    Given I store the workers in the :workers clipboard
+    And the Internal IP of node "<%= cb.workers[1].name %>" is stored in the :worker1_ipv4 clipboard    
+    And the Internal IPv6 of node "<%= cb.workers[0].name %>" is stored in the :worker0_ipv6 clipboard
+    Given I have a project
+    And evaluation of `rand(30000..31000)` is stored in the :port clipboard
+    Given I obtain test data file "networking/nodeport_test_pod.yaml"
+    When I run the :create client command with:
+      | f | nodeport_test_pod.yaml |
+    Then the step should succeed
+    Given a pod becomes ready with labels:
+      | name=hello-pod |
+    When I obtain test data file "networking/nodeport_test_service.yaml"
+    When I run oc create over "nodeport_test_service.yaml" replacing paths:
+      | ["spec"]["ports"][0]["nodePort"] | <%= cb.port %> |
+      | ["spec"]["ipFamilyPolicy"] | "RequireDualStack" |
+    Then the step should succeed
+    Given I use the "<%= cb.workers[0].name %>" node
+    When I run commands on the host:
+      | curl --connect-timeout 5 <%= cb.worker1_ipv4 %>:<%= cb.port %> |
+    Then the step should succeed
+    And the output should contain:
+      | Hello OpenShift! |
+    When I run commands on the host:
+      | curl --connect-timeout 5 [<%= cb.worker0_ipv6 %>]:<%= cb.port %> |
+    Then the step should succeed
+    And the output should contain:
+      | Hello OpenShift! |
+    Given I ensure "hello-pod" service is deleted
+    When I run commands on the host:
+      | curl --connect-timeout 5 [<%= cb.worker0_ipv6 %>]:<%= cb.port %> |
+    Then the step should fail
+    When I run commands on the host:
+      | curl --connect-timeout 5 <%= cb.worker1_ipv4 %>:<%= cb.port %> |
+    Then the step should fail
