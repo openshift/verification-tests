@@ -605,20 +605,25 @@ Feature: Testing route
 
   # @author zzhao@redhat.com
   # @case_id OCP-14059
+  @admin
   @4.8 @4.7 @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Use the default destination CA of router if the route does not specify one for reencrypt route
-    Given I have a project
-    Given I obtain test data file "routing/reencrypt/reencrypt-without-all-cert.yaml"
-    When I run the :create client command with:
-      | f |  reencrypt-without-all-cert.yaml |
-    Then the step should succeed
-    And all pods in the project are ready
-    Given I use the "service-secure" service
-    When I wait up to 20 seconds for a secure web server to become available via the "route-reencrypt" route
-    And the output should contain "Hello-OpenShift"
+    # since console route is using the reencrypt route without destination CA so we use it to check
+    Given I switch to cluster admin pseudo user
+    And I use the "openshift-console" project
+    And I use the "console" service
+    And the expression should be true> service('console').annotation('service.alpha.openshift.io/serving-cert-secret-name') == "console-serving-cert"
+
+    Given I use the router project
+    And all default router pods become ready
+    Then evaluation of `pod.name` is stored in the :router_pod clipboard
+    When I execute on the "<%=cb.router_pod %>" pod:
+      | grep | console.openshift-console.svc | /var/lib/haproxy/conf/haproxy.config |
+    Then the output should contain:
+      | required ca-file /var/run/configmaps/service-ca/service-ca.crt |
 
   # @author yadu@redhat.com
   # @case_id OCP-14678
