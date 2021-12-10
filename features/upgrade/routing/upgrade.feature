@@ -241,6 +241,8 @@ Feature: Routing and DNS related scenarios
       | svc_name | service-unsecure |
     Then the step should succeed
     Given I wait for the resource "pod" named "<%= cb.pod_name %>" to disappear within 120 seconds
+    # will recreate test-client-pod in upgrade-check so delete the pod here
+    Given I ensure "hello-pod" pod is deleted
 
     # Check the servcie service-unsecure to see the idle annotation
     And the expression should be true> service('service-unsecure').annotation('idling.alpha.openshift.io/unidle-targets', cached: false) == "[{\"kind\":\"ReplicationController\",\"name\":\"web-server-rc\",\"replicas\":1}]"
