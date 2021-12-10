@@ -135,12 +135,12 @@ Feature: apiserver and auth related upgrade check
   @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
   Scenario: Default RBAC role, rolebinding, clusterrole and clusterrolebinding without any missing after upgraded - prepare
     When I run the :get admin command with:
-      | resource | clusterroles.rbac |
-      | o        | yaml              |
+      | resource | clusterroles.rbac                         |
+      | o        | jsonpath={.items[*].metadata.annotations} |
     Then the output should contain:
-      | autoupdate: "true" |
+      | autoupdate":"true" |
     And the output should not contain:
-      | autoupdate: "false" |
+      | autoupdate":"false" |
     # Make some changes on clusterrole resources before upgrade
     Given as admin I successfully patch resource "clusterrole.rbac/system:build-strategy-custom" with:
       | {"rules": [{"apiGroups": ["","build.openshift.io"],"resources": ["builds/custom"],"verbs": [ "get" ]}] } |
