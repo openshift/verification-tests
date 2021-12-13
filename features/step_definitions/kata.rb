@@ -8,21 +8,21 @@ Given /^I wait until number of completed kata runtime nodes for #{QUOTED} matche
   logger.info("#{installed_node_count} out of #{expected_node_count} worker nodes installed with kata runtime")
 end
 
-Given /^Valid cluster type for kata tests exists$/ do
+Given /^valid cluster type for kata tests exists$/ do
   accepted_platforms = ['gcp', 'azure']
   iaas_type = env.iaas[:type] rescue nil
   raise "Kata installation only supports #{accepted_platforms} platforms, #{iaas_type} is not a valid cluster type" unless accepted_platforms.include? iaas_type
   logger.info("Cluster type #{iaas_type.to_s.upcase} is a valid cluster type")
 end
 
-Given /^Catalog source #{QUOTED} exists in #{QUOTED} namespace$/ do |catalog_source_name, project_name|
+Given /^catalogsource #{QUOTED} exists in #{QUOTED} namespace$/ do |catalog_source_name, project_name|
   step %Q/I switch to cluster admin pseudo user/
   project(project_name)
   raise "Failed to create catalog source" unless catalog_source("#{catalog_source_name}").exists?
   logger.info("Catalog source #{catalog_source_name} exists")
 end
 
-When /^I install sandboxed-operator in #{QUOTED} namespace$/ do |kata_ns|
+When /^i install sandboxed-operator in #{QUOTED} namespace$/ do |kata_ns|
   step %Q/I store master major version in the :master_version clipboard/
   step %Q/I switch to cluster admin pseudo user/
   step %Q|I obtain test data file "kata/release-#{cb.master_version}/deployment.yaml"|
@@ -30,7 +30,7 @@ When /^I install sandboxed-operator in #{QUOTED} namespace$/ do |kata_ns|
   raise "Failed to install sandboxed-operator" unless @result[:success]
 end
 
-Then /^Operator should be up and running$/ do
+Then /^operator should be up and running$/ do
   step %Q/I wait until sandboxed operator is ready/
 end
 
