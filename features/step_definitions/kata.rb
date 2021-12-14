@@ -33,7 +33,7 @@ When /^i install sandboxed-operator in #{QUOTED} namespace$/ do |kata_ns|
   step %Q|I obtain test data file "kata/operatorgroup.yaml"|
   @result = user.cli_exec(:apply, f: "operatorgroup.yaml")
   raise "Failed to install sandboxed-operator" unless @result[:success]
-  step %Q|I obtain test data file "kata/supscription.yaml"|
+  step %Q|I obtain test data file "kata/subscription.yaml"|
   @result = user.cli_exec(:apply, f: "subscription.yaml")
   raise "Failed to install sandboxed-operator" unless @result[:success]
 end
