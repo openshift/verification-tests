@@ -583,7 +583,7 @@ check_insights_popover_info_when_unavailable:
 check_insights_status_when_available:
   params:
     status: Warning
-    status_text: issues found
+    status_text: issue
   action: click_insights_status
   action: check_status_card_health_item_text
   action: check_insights_popover_info_when_available
