@@ -68,11 +68,11 @@ When /^I apply #{QUOTED} pod in #{QUOTED} namespace$/ do |pod_name, kata_ns|
   raise "Failed to deploy a pod" unless @result[:success]
 end
 
-Then /^#{QUOTED} Pod should run using kata runtime$/ do |pod_name|
+Then /^#{QUOTED} pod should run using kata runtime$/ do |pod_name|
   step %Q|I wait until "#{pod_name}" is ready|
 end
 
-Given /^I wait until #{QUOTED} is ready$/ do |pod_name|
+Given /^I wait until #{QUOTED} pod is running$/ do |pod_name|
   timeout = 30
   kata_ns = "openshift-sandboxed-containers-operator"
   expected_status = "Running"
