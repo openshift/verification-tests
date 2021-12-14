@@ -521,6 +521,7 @@ Feature: OVN related networking scenarios
   @admin
   @destructive
   @4.10 @4.9
+  @inactive
   Scenario: Should no intermittent packet drop from pod to pod after change hostname
     Given I store the schedulable workers in the :nodes clipboard
     Given admin uses the "openshift-ovn-kubernetes" project

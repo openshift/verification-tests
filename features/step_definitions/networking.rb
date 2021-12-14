@@ -1412,9 +1412,9 @@ Given /^I set#{OPT_QUOTED} hostname to external ids on the "([^"]*)" node$/ do |
   }.first
   @result = ovn_pod.exec(*ovsvsctl_cmd, as: admin, container: "ovnkube-node")
   if @result[:success]
-    logger.info "Set the ${custom_hostname} to ovn external_ids successfully."
+    logger.info "Set the ovn external_ids to '#{custom_hostname}' successfully."
   else
-    raise "Set the ${custom_hostname} to ovn external_ids failed."
+    raise "Set the ovn external_ids to '#{custom_hostname}' failed."
   end
 end
 
