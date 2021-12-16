@@ -3,7 +3,7 @@ Feature: basic verification for upgrade testing
   @upgrade-prepare
   @users=upuser1,upuser2
   @admin
-  @4.8 @4.10 @4.9
+  @4.10 @4.9 @4.8
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: etcd-operator and cluster works well after upgrade - prepare
@@ -33,9 +33,9 @@ Feature: basic verification for upgrade testing
   # @case_id OCP-22606
   @upgrade-check
   @admin
-  @4.8 @4.10 @4.9
+  @4.10 @4.9 @4.8
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: etcd-operator and cluster works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "openshift-operators" project
@@ -46,9 +46,9 @@ Feature: basic verification for upgrade testing
   # @case_id OCP-22665
   @upgrade-check
   @admin
-  @4.8 @4.10 @4.9
+  @4.10 @4.9 @4.8
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Check etcd image have been udpated to target release value after upgrade
     # operands
     Given I switch to cluster admin pseudo user

@@ -1,9 +1,9 @@
 Feature: oc import-image related feature
   # @author chaoyang@redhat.com
   # @case_id OCP-10585
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Do not create tags for ImageStream if image repository does not have tags
     When I have a project
@@ -22,9 +22,9 @@ Feature: oc import-image related feature
 
   # @author wjiang@redhat.com
   # @case_id OCP-10721
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Could not import the tag when reference is true
     Given I have a project
@@ -82,9 +82,9 @@ Feature: oc import-image related feature
 
   # @author xiaocwan@redhat.com
   # @case_id OCP-11089
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Tags should be added to ImageStream if image repository is from an external docker registry
     Given I have a project
@@ -108,8 +108,8 @@ Feature: oc import-image related feature
   # @author geliu@redhat.com
   # @case_id OCP-12765
   @4.10 @4.9
-  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Allow imagestream request deployment config triggers by different mode('TagreferencePolicy':source/local)
     Given I have a project
     When I run the :tag client command with:
@@ -173,8 +173,8 @@ Feature: oc import-image related feature
   # @author geliu@redhat.com
   # @case_id OCP-12766
   @4.10 @4.9
-  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Allow imagestream request build config triggers by different mode('TagreferencePolicy':source/local)
     Given I have a project
     When I run the :import_image client command with:

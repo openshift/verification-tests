@@ -1,6 +1,6 @@
 Feature: stibuild.feature
   # @author xiuwang@redhat.com
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   Scenario Outline: Trigger s2i/docker/custom build using additional imagestream
     Given I have a project
     Given I obtain test data file "templates/<template>"
@@ -34,7 +34,7 @@ Feature: stibuild.feature
     And the output should not contain "sample-build-4"
 
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-    @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+    @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @upgrade-sanity
     Examples:
       | template          |
@@ -45,7 +45,7 @@ Feature: stibuild.feature
   @proxy
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: STI build with dockerImage with specified tag
     Given I have a project
     When I run the :new_app client command with:
@@ -82,8 +82,8 @@ Feature: stibuild.feature
   # @case_id OCP-22596
   @proxy
   @4.10 @4.9
-  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Create app with template eap73-basic-s2i with jbosseap rhel7 image
     Given I have a project
     When I run the :new_app client command with:
@@ -101,9 +101,9 @@ Feature: stibuild.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-28891
   @disconnected
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Test s2i build in disconnect cluster
     Given I have a project
@@ -131,7 +131,7 @@ Feature: stibuild.feature
   # @case_id OCP-42159
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Mount source secret and configmap to builder container- sourcestrategy
     Given I have a project

@@ -38,9 +38,9 @@ Feature: SDN related networking scenarios
   # @case_id OCP-11286
   @admin
   @destructive
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: iptables rules will be repaired automatically once it gets destroyed
     # we do not detect incomplete rule removal since ~4.3, BZ-1810316
@@ -76,9 +76,9 @@ Feature: SDN related networking scenarios
   # @author hongli@redhat.com
   # @case_id OCP-13847
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: an empty OPENSHIFT-ADMIN-OUTPUT-RULES chain is created in filter table at startup
     Given the master version >= "3.6"
@@ -182,9 +182,9 @@ Feature: SDN related networking scenarios
   # @author hongli@redhat.com
   # @case_id OCP-18535
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: should not show "No such device" message when run "ovs-vsctl show" command
     Given I have a project
@@ -205,7 +205,7 @@ Feature: SDN related networking scenarios
   @admin
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: The iptables binary and rules on sdn containers should be the same as host
     Given I select a random node's host
     When I run commands on the host:
@@ -285,9 +285,9 @@ Feature: SDN related networking scenarios
   # @author weliang@redhat.com
   # @case_id OCP-27655
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Networking should work on default namespace
   #Test for bug https://bugzilla.redhat.com/show_bug.cgi?id=1800324 and https://bugzilla.redhat.com/show_bug.cgi?id=1796157
@@ -340,8 +340,8 @@ Feature: SDN related networking scenarios
   @admin
   @4.10 @4.9
   @network-ovnkubernetes
-  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Don't write CNI configuration file until ovn-controller has done at least one iteration
     Given the env is using "OVNKubernetes" networkType
     And I store the masters in the :master clipboard
@@ -394,7 +394,7 @@ Feature: SDN related networking scenarios
   @4.10 @4.9
   @network-ovnkubernetes
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: NetworkManager should consider OVS interfaces as unmanaged
   Given the env is using "OVNKubernetes" networkType
   And I select a random node's host
@@ -454,8 +454,8 @@ Feature: SDN related networking scenarios
   @admin
   @destructive
   @4.10 @4.9
-  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Netnamespace should be recreated after deleting it before the project is deleted
     Given the env is using "OpenShiftSDN" networkType
     Given I have a project
@@ -488,7 +488,7 @@ Feature: SDN related networking scenarios
   @admin
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Disable conntrack for vxlan traffic
     Given the env is using "OpenShiftSDN" networkType
     Given I select a random node's host

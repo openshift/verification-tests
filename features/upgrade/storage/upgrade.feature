@@ -3,7 +3,7 @@ Feature: Storage upgrade tests
   @upgrade-prepare
   @users=upuser1,upuser2
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Cluster operator storage should be in correct status and dynamic provisioning should work well after upgrade - prepare
@@ -73,7 +73,7 @@ Feature: Storage upgrade tests
   @upgrade-check
   @users=upuser1,upuser2
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Cluster operator storage should be in correct status and dynamic provisioning should work well after upgrade
@@ -156,7 +156,7 @@ Feature: Storage upgrade tests
   @upgrade-prepare
   @users=upuser1,upuser2
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @baremetal-ipi
   Scenario: Cluster operator storage should be in correct status after upgrade - prepare
     Given I switch to cluster admin pseudo user
@@ -171,8 +171,9 @@ Feature: Storage upgrade tests
   @upgrade-check
   @users=upuser1,upuser2
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @baremetal-ipi
+  @baremetal-upi
   Scenario: Cluster operator storage should be in correct status after upgrade
     Given I switch to cluster admin pseudo user
     # Check storage operator version after upgraded
@@ -363,7 +364,7 @@ Feature: Storage upgrade tests
   @upgrade-prepare
   @users=upuser1,upuser2
   @admin
-  @4.8 @4.10 @4.9
+  @4.10 @4.9 @4.8
   @aws-ipi
   @aws-upi
   Scenario: [AWS-EBS-CSI] [Snapshot operator] should work well before and after upgrade of a cluster - prepare
@@ -458,7 +459,7 @@ Feature: Storage upgrade tests
   @upgrade-check
   @users=upuser1,upuser2
   @admin
-  @4.8 @4.10 @4.9
+  @4.10 @4.9 @4.8
   @aws-ipi
   @aws-upi
   Scenario: [AWS-EBS-CSI] [Snapshot operator] should work well before and after upgrade of a cluster

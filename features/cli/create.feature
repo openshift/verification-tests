@@ -4,9 +4,9 @@ Feature: creating 'apps' with CLI
   # @case_id OCP-11761
   @admin
   @proxy
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Process with special FSGroup id can be ran when using RunAsAny as the RunAsGroupStrategy
     Given I have a project
@@ -147,9 +147,9 @@ Feature: creating 'apps' with CLI
 
   # @author chuyu@redhat.com
   # @case_id OCP-22515
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: 4.x Could not create any context in non-existent project
     Given I create a new application with:
@@ -183,9 +183,9 @@ Feature: creating 'apps' with CLI
 
   # @author xiuwang@redhat.com
   # @case_id OCP-31250
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Create an application from source code test
     Given I have a project

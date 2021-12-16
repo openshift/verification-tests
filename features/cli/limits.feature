@@ -4,7 +4,7 @@ Feature: limit range related scenarios:
   # @author azagayno@redhat.com
   @admin
   @inactive
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   Scenario Outline: Limit range default request tests
     Given I have a project
     Given I obtain test data file "limits/<path>/limit.yaml"
@@ -21,7 +21,7 @@ Feature: limit range related scenarios:
     And admin ensures "limits" limit_range is deleted from the "<%= project.name %>" project
 
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-    @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+    @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @upgrade-sanity
     Examples:
       | path     | expr1                                                | expr2                                                |
@@ -32,7 +32,7 @@ Feature: limit range related scenarios:
   # @author pruan@redhat.com
   # @author azagayno@redhat.com
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   Scenario Outline: Limit range invalid values tests
     Given I have a project
     Given I obtain test data file "limits/<path>/limit.yaml"
@@ -48,7 +48,7 @@ Feature: limit range related scenarios:
       | default\[memory\].*<expr17> value <expr18> is greater than <expr19> value <expr20>         |
 
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-    @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+    @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @upgrade-sanity
     Examples:
       | path | expr1 | expr2 | expr3 | expr4 | expr5 | expr6 | expr7 | expr8 | expr9 | expr10 | expr11 |expr12 | expr13| expr14 | expr15 | expr16 | expr17 | expr18 | expr19| expr20 |
@@ -59,7 +59,7 @@ Feature: limit range related scenarios:
   # @author azagayno@redhat.com
   # @case_id OCP-12286
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   Scenario Outline: Limit range incorrect values
     Given I have a project
     Given I obtain test data file "limits/<path>/limit.yaml"
@@ -72,7 +72,7 @@ Feature: limit range related scenarios:
       | min\[cpu\].*<expr7> value <expr8> is greater than <expr9> value <expr10>   |
 
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-    @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+    @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @upgrade-sanity
     Examples:
       | path | expr1 | expr2 | expr3 | expr4 | expr5 | expr6 | expr7 | expr8 | expr9 | expr10 |
@@ -82,9 +82,9 @@ Feature: limit range related scenarios:
   # @author azagayno@redhat.com
   # @case_id OCP-12250
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Limit range does not allow min > defaultRequest
     Given I have a project
@@ -101,9 +101,9 @@ Feature: limit range related scenarios:
   # @author azagayno@redhat.com
   # @case_id OCP-11918
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Limit range does not allow defaultRequest > default
     Given I have a project
@@ -120,9 +120,9 @@ Feature: limit range related scenarios:
   # @author azagayno@redhat.com
   # @case_id OCP-12043
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Limit range does not allow defaultRequest > max
     Given I have a project
@@ -139,9 +139,9 @@ Feature: limit range related scenarios:
   # @author azagayno@redhat.com
   # @case_id OCP-12139
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Limit range does not allow maxLimitRequestRatio > Limit/Request
     Given I have a project
@@ -167,9 +167,9 @@ Feature: limit range related scenarios:
   # @author azagayno@redhat.com
   # @case_id OCP-12315
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Limit range with all values set with proper values
     Given I have a project
