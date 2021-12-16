@@ -2,9 +2,9 @@ Feature: ServiceAccount and Policy Managerment
 
   # @author anli@redhat.com
   # @case_id OCP-10642
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Could grant admin permission for the service account username to access to its own project
     Given I have a project
@@ -35,9 +35,9 @@ Feature: ServiceAccount and Policy Managerment
   # @author xiaocwan@redhat.com
   # @case_id OCP-11494
   @proxy
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Could grant admin permission for the service account group to access to its own project
     Given I have a project
@@ -73,9 +73,9 @@ Feature: ServiceAccount and Policy Managerment
 
   # @author wjiang@redhat.com
   # @case_id OCP-11249
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: User can get the serviceaccount token via client
     Given I have a project

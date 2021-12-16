@@ -66,6 +66,8 @@ Feature: IPsec upgrade scenarios
   @admin
   @upgrade-check
   @4.10 @4.9 @4.8
+  @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Confirm node-node and pod-pod packets are ESP enrypted on IPsec clusters post upgrade
     Given evaluation of `50` is stored in the :protocol clipboard
     Given I switch to cluster admin pseudo user

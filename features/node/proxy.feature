@@ -28,7 +28,7 @@ Feature: Node proxy configuration tests
       | Environment=NO_PROXY=.*<%= cb.proxy["spec"]["noProxy"] %>    |
 
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-    @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+    @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     Examples:
       | file                                                      |
       | /etc/systemd/system/kubelet.service.d/10-default-env.conf | # @case_id OCP-24429

@@ -20,9 +20,9 @@ Feature: pods related scenarios
 
   # @author chezhang@redhat.com
   # @case_id OCP-11527
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: kubectl describe pod should show qos tier info
     Given I have a project
@@ -156,9 +156,9 @@ Feature: pods related scenarios
 
   # @author qwang@redhat.com
   # @case_id OCP-11055
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: /dev/shm can be automatically shared among all of a pod's containers
     Given I have a project
@@ -211,9 +211,9 @@ Feature: pods related scenarios
   # @author chuyu@redhat.com
   # @case_id OCP-22283
   @proxy
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: 4.0 Oauth provider info should be consumed in a pod
     Given I have a project

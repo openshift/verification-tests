@@ -3,9 +3,9 @@ Feature: Node components upgrade tests
   @upgrade-prepare
   @admin
   @long-duration
-  @4.8 @4.10 @4.9
-  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
+  @4.10 @4.9 @4.8
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Make sure nodeConfig is not changed after upgrade - prepare
     Given I switch to cluster admin pseudo user
     When I run the :label admin command with:
@@ -48,9 +48,9 @@ Feature: Node components upgrade tests
   @upgrade-check
   @admin
   @long-duration
-  @4.8 @4.10 @4.9
-  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
+  @4.10 @4.9 @4.8
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Make sure nodeConfig is not changed after upgrade
     Given I switch to cluster admin pseudo user
     When I run the :get admin command with:

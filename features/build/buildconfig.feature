@@ -84,8 +84,8 @@ Feature: buildconfig.feature
     And the "ruby-sample-build-1" build was created
     Then the "ruby-sample-build-1" build completes
 
-    @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-    @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
+    @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+    @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     Examples:
       | template                  |
       | test-buildconfig-s2i.json | # @case_id OCP-11474
@@ -93,9 +93,9 @@ Feature: buildconfig.feature
   # @author xiuwang@redhat.com
   # @case_id OCP-12057
   @proxy
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Using secret to pull a docker image which be used as source input
     Given I have a project

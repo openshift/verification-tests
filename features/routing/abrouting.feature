@@ -267,9 +267,9 @@ Feature: Testing abrouting
   # @author yadu@redhat.com
   # @case_id OCP-15910
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Each endpoint gets weight/numberOfEndpoints portion of the requests - unsecure route
     Given I switch to cluster admin pseudo user
@@ -351,9 +351,9 @@ Feature: Testing abrouting
   # @author yadu@redhat.com
   # @case_id OCP-15994
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Each endpoint gets weight/numberOfEndpoints portion of the requests - passthrough route
     Given I switch to cluster admin pseudo user

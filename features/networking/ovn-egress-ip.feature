@@ -4,7 +4,7 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33618
   @admin
   @destructive
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi
   @vsphere-upi
   @upgrade-sanity
@@ -71,7 +71,7 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33723
   @admin
   @destructive
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi
   @vsphere-upi
   @upgrade-sanity
@@ -141,7 +141,7 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33641
   @admin
   @destructive
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi
   @vsphere-upi
   @upgrade-sanity
@@ -326,7 +326,7 @@ Feature: OVN Egress IP related features
   # @case_id OCP-33631
   @admin
   @destructive
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi
   @vsphere-upi
   @upgrade-sanity
@@ -582,8 +582,8 @@ Feature: OVN Egress IP related features
   @admin
   @destructive
   @4.10 @4.9
-  @baremetal-ipi @vsphere-ipi
-  @vsphere-upi
+  @vsphere-ipi @baremetal-ipi
+  @vsphere-upi @baremetal-upi
   Scenario: An EgressIP object can not have multiple egress IP assignments on the same node
     Given I store the schedulable workers in the :nodes clipboard
     Then label "k8s.ovn.org/egress-assignable=true" is added to the "<%= cb.nodes[0].name %>" node

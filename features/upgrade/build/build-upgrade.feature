@@ -3,7 +3,7 @@ Feature: build related upgrade check
   @upgrade-prepare
   @users=upuser1,upuser2
   @proxy
-  @4.8 @4.10 @4.9
+  @4.10 @4.9 @4.8
   Scenario: Check docker and sti build works well before and after upgrade - prepare
     Given I switch to the first user
     When I run the :new_project client command with:
@@ -25,7 +25,7 @@ Feature: build related upgrade check
   @upgrade-check
   @users=upuser1,upuser2
   @proxy
-  @4.8 @4.10 @4.9
+  @4.10 @4.9 @4.8
   Scenario: Check docker and sti build works well before and after upgrade
     Given I switch to the first user
     When I use the "build-upgrade" project

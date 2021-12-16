@@ -5,8 +5,8 @@ Feature: Builds and samples related metrics test
   @admin
   @destructive
   @4.10 @4.9
-  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Alerts on imagestream import retries
     When as admin I successfully merge patch resource "config.samples.operator.openshift.io/cluster" with:
       | {"spec":{"samplesRegistry":"registry.unconnected.redhat.com"}} |
@@ -63,8 +63,8 @@ Feature: Builds and samples related metrics test
   # @case_id OCP-33722
   @admin
   @4.10 @4.9
-  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Check build metrics
     Given I have a project
     When I run the :new_app client command with:
@@ -182,9 +182,9 @@ Feature: Builds and samples related metrics test
   # @case_id OCP-25598
   @admin
   @destructive
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Monitoring, Alerting, and Degraded Status Reporting-Samples-operator
     When as admin I successfully merge patch resource "config.samples.operator.openshift.io/cluster" with:

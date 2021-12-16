@@ -2,7 +2,7 @@ Feature: Quota related scenarios
 
   # @author qwang@redhat.com
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   Scenario Outline: The quota usage should be incremented if meet the following requirement
     Given I have a project
     Given I obtain test data file "quota/myquota.yaml"
@@ -32,7 +32,7 @@ Feature: Quota related scenarios
       | <expr2> |
 
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-    @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+    @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @upgrade-sanity
     Examples:
       | path     | file                           | pod_name                  | expr1             | expr2                       |
@@ -43,9 +43,9 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-12292
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: The quota usage should NOT be incremented if Requests and Limits aren't specified
     Given I have a project
@@ -79,9 +79,9 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-12256
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: The quota usage should NOT be incremented if Requests > Limits
     Given I have a project
@@ -119,9 +119,9 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-12206
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: The quota usage should NOT be incremented if Requests = Limits but exceeding hard quota
     Given I have a project
@@ -212,9 +212,9 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-10801
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Check BestEffort scope of resourcequota
     Given I have a project
@@ -269,9 +269,9 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-11251
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Check NotBestEffort scope of resourcequota
     Given I have a project
@@ -346,9 +346,9 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-11568
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Check NotTerminating scope of resourcequota
     Given I have a project
@@ -508,9 +508,9 @@ Feature: Quota related scenarios
   # @author chezhang@redhat.com
   # @case_id OCP-10706
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Could create quota if existing resources exceed to the hard quota but prevent to create further resources
     Given I have a project
@@ -640,9 +640,9 @@ Feature: Quota related scenarios
   # @case_id OCP-10033
   # @bug_id 1333122
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Quota events for compute resource failures shouldn't be redundant
     Given I have a project
@@ -716,9 +716,9 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-11927
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: The quota usage should be incremented if Requests = Limits and in the range of hard quota but exceed the real node available resources
     Given I have a project
@@ -760,9 +760,9 @@ Feature: Quota related scenarios
   # @author chezhang@redhat.com
   # @case_id OCP-10945
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: The quota usage should be released when pod completed
     Given I have a project
@@ -801,9 +801,9 @@ Feature: Quota related scenarios
   # @author chezhang@redhat.com
   # @case_id OCP-11983
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Quota with BestEffort and NotBestEffort scope
     Given I have a project
@@ -856,9 +856,9 @@ Feature: Quota related scenarios
   # @author chezhang@redhat.com
   # @case_id OCP-12086
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Quota with Terminating and NotTerminating scope
     Given I have a project
@@ -920,9 +920,9 @@ Feature: Quota related scenarios
   # @author chezhang@redhat.com
   # @case_id OCP-11348
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Quota combined scopes
     Given I have a project
@@ -1016,9 +1016,9 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-11636
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Quota scope conflict BestEffort and NotBestEffort
     Given I have a project
@@ -1033,9 +1033,9 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-11827
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Quota scope conflict Terminating and NotTerminating
     Given I have a project
@@ -1050,9 +1050,9 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-11000
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Negative test for requests.storage of quota
     Given I have a project
@@ -1098,9 +1098,9 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-10283
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Annotation selector supports special characters
     Given I have a project
@@ -1130,9 +1130,9 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-11660
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Quota requests.storage with PVC existing
     Given I have a project
@@ -1184,9 +1184,9 @@ Feature: Quota related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-11389
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Prevent creating further PVC if existing PVC exceeds the quota of requests.storage
     Given I have a project

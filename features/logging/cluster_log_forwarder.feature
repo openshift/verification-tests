@@ -506,8 +506,8 @@ Feature: cluster log forwarder features
   @admin
   @destructive
   @4.10 @4.9
-  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Send logs to both external fluentd and internalES
     #Creating secure fluentd receiver
     Given I switch to cluster admin pseudo user

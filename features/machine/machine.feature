@@ -4,7 +4,7 @@ Feature: Machine features testing
   # @case_id OCP-21196
   @smoke
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @upgrade-sanity
   Scenario: Machines should be linked to nodes
@@ -16,8 +16,8 @@ Feature: Machine features testing
   @smoke
   @admin
   @4.10 @4.9
-  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: machine-api clusteroperator should be in Available state
     Given evaluation of `cluster_operator('machine-api').condition(type: 'Available')` is stored in the :co_available clipboard
     Then the expression should be true> cb.co_available["status"]=="True"
@@ -46,7 +46,7 @@ Feature: Machine features testing
   # @case_id OCP-25436
   @admin
   @destructive
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   @upgrade-sanity
   Scenario: Scale up and scale down a machineSet
@@ -148,7 +148,7 @@ Feature: Machine features testing
   @admin
   @destructive
   @4.10 @4.9
-  @azure-ipi @openstack-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   Scenario: Scaling a machineset with providerSpec.publicIp set to true
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -166,7 +166,7 @@ Feature: Machine features testing
   @admin
   @destructive
   @4.10 @4.9
-  @azure-ipi @openstack-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   Scenario: [MAO] Reconciling machine taints with nodes
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user
@@ -298,7 +298,7 @@ Feature: Machine features testing
   @admin
   @destructive
   @4.10 @4.9
-  @azure-ipi @openstack-ipi @vsphere-ipi @gcp-ipi @aws-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   Scenario: Labels specified in a machineset should propagate to nodes
     Given I have an IPI deployment
     And I switch to cluster admin pseudo user

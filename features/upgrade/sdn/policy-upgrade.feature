@@ -3,9 +3,9 @@ Feature: SDN compoment upgrade testing
   # @author huirwang@redhat.com
   @admin
   @upgrade-prepare
-  @4.8 @4.7 @4.10 @4.9
-  @aws-ipi @gcp-ipi @vsphere-ipi @azure-ipi @baremetal-ipi @openstack-ipi
-  @aws-upi @gcp-upi @openstack-upi
+  @4.10 @4.9 @4.8 @4.7
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @openstack-upi @gcp-upi @aws-upi
   Scenario: network operator should be available after upgrade - prepare
   # According to our upgrade workflow, we need an upgrade-prepare and upgrade-check for each scenario.
   # But some of them do not need any prepare steps, which lead to errors "can not find scenarios" in the log.
@@ -16,9 +16,9 @@ Feature: SDN compoment upgrade testing
   # @case_id OCP-22707
   @admin
   @upgrade-check
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: network operator should be available after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "openshift-network-operator" project
@@ -36,9 +36,9 @@ Feature: SDN compoment upgrade testing
   # @author zzhao@redhat.com
   @admin
   @upgrade-prepare
-  @4.8 @4.10 @4.9
-  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
+  @4.10 @4.9 @4.8
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Check the networkpolicy works well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     When I run the :new_project client command with:
@@ -76,9 +76,9 @@ Feature: SDN compoment upgrade testing
   # @case_id OCP-22735
   @admin
   @upgrade-check
-  @4.8 @4.10 @4.9
-  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
+  @4.10 @4.9 @4.8
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Check the networkpolicy works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "policy-upgrade" project
@@ -95,9 +95,9 @@ Feature: SDN compoment upgrade testing
   # @author asood@redhat.com
   @admin
   @upgrade-prepare
-  @4.8 @4.7 @4.10 @4.9
-  @aws-ipi @gcp-ipi @vsphere-ipi @azure-ipi @baremetal-ipi @openstack-ipi
-  @aws-upi @gcp-upi @openstack-upi
+  @4.10 @4.9 @4.8 @4.7
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @openstack-upi @gcp-upi @aws-upi
   Scenario: Check the namespace networkpolicy for an application works well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     When I run the :new_project client command with:
@@ -183,9 +183,9 @@ Feature: SDN compoment upgrade testing
   # @case_id OCP-38751
   @admin
   @upgrade-check
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Check the namespace networkpolicy for an application works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "policy-upgrade1" project
@@ -255,9 +255,9 @@ Feature: SDN compoment upgrade testing
   # @author asood@redhat.com
   @admin
   @upgrade-prepare
-  @4.8 @4.10 @4.9
-  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
+  @4.10 @4.9 @4.8
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Check allow from router and allow from hostnetwork policy are functional post upgrade - prepare
     Given I switch to cluster admin pseudo user
     When I run the :new_project client command with:
@@ -343,9 +343,9 @@ Feature: SDN compoment upgrade testing
   # @case_id OCP-40620
   @admin
   @upgrade-check
-  @4.8 @4.10 @4.9
-  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
+  @4.10 @4.9 @4.8
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Check allow from router and allow from hostnetwork policy are functional post upgrade
     Given I switch to cluster admin pseudo user
     When I use the "policy-upgrade3" project
@@ -375,7 +375,7 @@ Feature: SDN compoment upgrade testing
   # @author anusaxen@redhat.com
   @admin
   @upgrade-prepare
-  @4.8 @4.10 @4.9
+  @4.10 @4.9 @4.8
   Scenario: Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted post upgrade - prepare
     Given I switch to cluster admin pseudo user
     And I store the workers in the :nodes clipboard
@@ -404,8 +404,9 @@ Feature: SDN compoment upgrade testing
   # @case_id OCP-44901
   @admin
   @upgrade-check
-  @4.8 @4.10 @4.9
-  @azure-upi
+  @4.10 @4.9 @4.8
+  @azure-upi @aws-upi
+  @azure-ipi @aws-ipi
   Scenario: Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted post upgrade
     Given I switch to cluster admin pseudo user
     And I use the "conntrack-upgrade" project
@@ -481,8 +482,8 @@ Feature: SDN compoment upgrade testing
   @admin
   @upgrade-prepare
   @4.10 @4.9
-  @aws-ipi @gcp-ipi @vsphere-ipi @azure-ipi @baremetal-ipi @openstack-ipi
-  @aws-upi @gcp-upi @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @openstack-upi @gcp-upi @aws-upi
   @destructive
   @network-ovnkubernetes
   Scenario: Check network policy ACL logging works post upgrade -prepare
@@ -592,8 +593,8 @@ Feature: SDN compoment upgrade testing
   @admin
   @upgrade-check
   @4.10 @4.9
-  @aws-ipi @gcp-ipi @vsphere-ipi @azure-ipi @baremetal-ipi @openstack-ipi
-  @aws-upi @gcp-upi @openstack-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @openstack-upi @gcp-upi @aws-upi
   @destructive
   @network-ovnkubernetes
   Scenario: Check network policy ACL logging works post upgrade 

@@ -3,7 +3,7 @@ Feature: web console related upgrade check
   @console
   @upgrade-prepare
   @users=upuser1,upuser2
-  @4.8 @4.10 @4.9
+  @4.10 @4.9 @4.8
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: check console accessibility - prepare
@@ -50,9 +50,9 @@ Feature: web console related upgrade check
   @admin
   @console
   @users=upuser1,upuser2
-  @4.8 @4.10 @4.9
+  @4.10 @4.9 @4.8
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: check console accessibility
     Given the first user is cluster-admin
     Given I open admin console in a browser

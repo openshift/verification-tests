@@ -2,7 +2,7 @@ Feature: cluster monitoring related upgrade check
   # @author hongyli@redhat.com
   @upgrade-prepare
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: upgrade cluster monitoring along with OCP - prepare
@@ -17,9 +17,9 @@ Feature: cluster monitoring related upgrade check
   # @case_id OCP-29797
   @upgrade-check
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: upgrade cluster monitoring along with OCP
     Given I switch to cluster admin pseudo user
     And I use the "openshift-monitoring" project
