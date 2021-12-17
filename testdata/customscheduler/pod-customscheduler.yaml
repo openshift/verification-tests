@@ -8,4 +8,4 @@ spec:
   schedulerName: my-scheduler
   containers:
   - name: pod-with-second-annotation-container
-    image: quay.io/openshifttest/hello-openshift@sha256:0ed6e7163863e52438a5ed189d82e572a6c2ddd1b4db224c2c4b0688fee2c2cc
+    image: quay.io/openshifttest/pause@sha256:e481caec2eb984ce023673a3ec280bf57dea8c0305009e246b019b3eef044f9e
