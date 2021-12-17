@@ -703,3 +703,81 @@ Feature: Service related networking scenarios
     Then the step should succeed
     And the output should contain "Hello OpenShift!"
 
+  # @author zzhao@redhat.com
+  # @case_id OCP-47087
+  @4.10
+  @admin
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  Scenario: Other node cannot be accessed for nodePort when externalTrafficPolicy is Local
+    Given I store the masters in the :masters clipboard
+    And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master0_ip clipboard
+    And evaluation of `rand(30000..32767)` is stored in the :port clipboard
+    Given I have a project
+    Given I obtain test data file "networking/nodeport_test_pod.yaml"
+    When I run the :create client command with:
+      | f | nodeport_test_pod.yaml |
+    Then the step should succeed
+    Given a pod becomes ready with labels:
+      | name=hello-pod |
+    And evaluation of `pod.node_ip` is stored in the :hostip clipboard
+    When I obtain test data file "networking/nodeport_test_service.yaml"
+    When I run oc create over "nodeport_test_service.yaml" replacing paths:
+      | ["spec"]["ports"][0]["nodePort"]  | <%= cb.port %> |
+      | ["spec"]["externalTrafficPolicy"] | Local          |
+    Then the step should succeed
+
+    Given I use the "<%= cb.masters[1].name %>" node
+    When I run commands on the host:
+      | curl --connect-timeout 5 <%= cb.hostip %>:<%= cb.port %> |
+    Then the step should succeed
+    And the output should contain:
+      | Hello OpenShift! |
+    When I run commands on the host:
+      | curl --connect-timeout 5 <%= cb.master0_ip %>:<%= cb.port %> |
+    Then the step should fail
+    And the output should not contain:
+      | Hello OpenShift! |
+    Given I ensure "hello-pod" service is deleted
+    When I run commands on the host:
+      | curl --connect-timeout 5 <%= cb.hostip %>:<%= cb.port %> |
+    Then the step should fail
+
+  # @author zzhao@redhat.com
+  # @case_id OCP-10770
+  @4.10 @4.9 @4.8 @4.7
+  @admin
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  Scenario: Be able to access the service via the nodeport
+    Given I store the masters in the :masters clipboard
+    And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master0_ip clipboard
+    And evaluation of `rand(30000..32767)` is stored in the :port clipboard
+    Given I have a project
+    Given I obtain test data file "networking/nodeport_test_pod.yaml"
+    When I run the :create client command with:
+      | f | nodeport_test_pod.yaml |
+    Then the step should succeed
+    Given a pod becomes ready with labels:
+      | name=hello-pod |
+    And evaluation of `pod.node_ip` is stored in the :hostip clipboard
+    When I obtain test data file "networking/nodeport_test_service.yaml"
+    When I run oc create over "nodeport_test_service.yaml" replacing paths:
+      | ["spec"]["ports"][0]["nodePort"]  | <%= cb.port %> |
+    Then the step should succeed
+
+    Given I use the "<%= cb.masters[1].name %>" node
+    When I run commands on the host:
+      | curl --connect-timeout 5 <%= cb.hostip %>:<%= cb.port %> |
+    Then the step should succeed
+    And the output should contain:
+      | Hello OpenShift! |
+    When I run commands on the host:
+      | curl --connect-timeout 5 <%= cb.master0_ip %>:<%= cb.port %> |
+    Then the step should succeed 
+    And the output should contain:
+      | Hello OpenShift! |
+    Given I ensure "hello-pod" service is deleted
+    When I run commands on the host:
+      | curl --connect-timeout 5 <%= cb.hostip %>:<%= cb.port %> |
+    Then the step should fail
