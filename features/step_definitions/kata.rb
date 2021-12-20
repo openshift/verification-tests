@@ -55,8 +55,14 @@ Given /^I wait until sandboxed operator is ready$/ do
     success: false,
   }
   operator_status[:success] = wait_for(timeout, stats: {}) do
-    @result = admin.cli_exec(:get, resource: "operators", o: "jsonpath=''{..status.components.refs[4].conditions[0].type}'", n:kata_ns)[:stdout].to_s.include? expected_status
-    @result = admin.cli_exec(:get, resource: "operators", o: "jsonpath=''{..status.components.refs[5].conditions[0].type}'", n:kata_ns)[:stdout].to_s.include? expected_state
+    step %Q/I store master major version in the :master_version clipboard/
+    if cb.master_version == "4.8"
+      @result = admin.cli_exec(:get, resource: "operators", o: "jsonpath=''{..status.components.refs[8].conditions[0].type}'", n:kata_ns)[:stdout].to_s.include? expected_status
+      @result = admin.cli_exec(:get, resource: "operators", o: "jsonpath=''{..status.components.refs[9].conditions[0].type}'", n:kata_ns)[:stdout].to_s.include? expected_state
+    else
+      @result = admin.cli_exec(:get, resource: "operators", o: "jsonpath=''{..status.components.refs[4].conditions[0].type}'", n:kata_ns)[:stdout].to_s.include? expected_status
+      @result = admin.cli_exec(:get, resource: "operators", o: "jsonpath=''{..status.components.refs[5].conditions[0].type}'", n:kata_ns)[:stdout].to_s.include? expected_state
+    end
   end
   raise "Failed to install sandboxed operator" unless @result
   logger.info("Sandboxed operator installation status is #{expected_status}")
