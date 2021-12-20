@@ -90,7 +90,8 @@
   @admin
   @upgrade-check
   @4.10 @4.9
-  @azure-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   Scenario: Check the multicast works well after upgrade
     Given I switch to cluster admin pseudo user
     When I use the "multicast-upgrade" project

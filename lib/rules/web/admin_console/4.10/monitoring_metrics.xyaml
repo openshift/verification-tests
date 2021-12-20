@@ -274,11 +274,11 @@ perform_enable_query:
     op: click
 perform_hide_table:
   params:
-    button_title: Hide Table
+    button_title: Hide table
   action: click_button_title
 perform_show_table:
   params:
-    button_title: Show Table
+    button_title: Show table
   action: click_button_title
 check_all_series_hide:
   params:

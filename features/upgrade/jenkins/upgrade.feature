@@ -4,9 +4,9 @@ Feature: Jenkins feature upgrade test
   @upgrade-prepare
   @users=upuser1,upuser2
   @console
-  @4.8 @4.10 @4.9
-  @azure-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @azure-upi @aws-upi @vsphere-upi @gcp-upi
+  @4.10 @4.9 @4.8
+  @vsphere-ipi @gcp-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Jenkins feature upgrade test - prepare
     Given I switch to the first user
     When I run the :new_project client command with:
@@ -22,9 +22,9 @@ Feature: Jenkins feature upgrade test
   @upgrade-check
   @users=upuser1,upuser2
   @console
-  @4.8 @4.10 @4.9
-  @azure-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @azure-upi @aws-upi @vsphere-upi @gcp-upi
+  @4.10 @4.9 @4.8
+  @vsphere-ipi @gcp-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @gcp-upi @azure-upi @aws-upi
   Scenario: Jenkins feature upgrade test
     Given I switch to the first user
     When I use the "jenkins-upgrade" project

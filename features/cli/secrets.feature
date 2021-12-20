@@ -2,9 +2,9 @@ Feature: secrets related scenarios
 
   # @author yinzhou@redhat.com
   # @case_id OCP-10725
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: deployment hook volume inheritance --with secret volume
     Given I have a project
@@ -33,9 +33,9 @@ Feature: secrets related scenarios
   # @author qwang@redhat.com
   # @case_id OCP-12281
   @smoke
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Pods do not have access to each other's secrets in the same namespace
     Given I have a project
@@ -82,9 +82,9 @@ Feature: secrets related scenarios
 
   # @author qwang@redhat.com
   # @case_id OCP-12310
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Pods do not have access to each other's secrets with the same secret name in different namespaces
     Given I have a project
@@ -125,7 +125,7 @@ Feature: secrets related scenarios
 
   # @author yantan@redhat.com
   @proxy
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   Scenario Outline: Insert secret to builder container via oc new-build - source/docker build
     Given I have a project
     Given I obtain test data file "secrets/testsecret1.json"
@@ -164,7 +164,7 @@ Feature: secrets related scenarios
     And the expression should be true> <expression>
 
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-    @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+    @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @upgrade-sanity
     Examples:
       | type   | build_secret         | path      | command | expression               |
@@ -173,9 +173,9 @@ Feature: secrets related scenarios
   # @author chezhang@redhat.com
   # @case_id OCP-10814
   @smoke
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Consume the same Secrets as environment variables in multiple pods
     Given I have a project
@@ -227,9 +227,9 @@ Feature: secrets related scenarios
   # @author chezhang@redhat.com
   # @case_id OCP-11260
   @smoke
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Using Secrets as Environment Variables
     Given I have a project
@@ -292,9 +292,9 @@ Feature: secrets related scenarios
 
   # @author qwang@redhat.com
   # @case_id OCP-10899
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Mapping specified secret volume should update when secret is updated
     Given I have a project
@@ -328,9 +328,9 @@ Feature: secrets related scenarios
 
   # @author qwang@redhat.com
   # @case_id OCP-10569
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: Allow specifying secret data using strings and images
     Given I have a project
@@ -378,9 +378,9 @@ Feature: secrets related scenarios
 
   # @author xiuwang@redhat.com
   # @case_id OCP-10982
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   @upgrade-sanity
   Scenario: oc new-app to gather git creds
     Given I have a project
@@ -396,7 +396,7 @@ Feature: secrets related scenarios
       | deploymentconfig=git |
       | deployment=git-2     |
     And I execute on the pod:
-      | bash                                                                                                    |
+      | sh                                                                                                      |
       | -c                                                                                                      |
       | cd /var/lib/git/ && git clone --bare https://github.com/openshift/ruby-hello-world ruby-hello-world.git |
     Then the step should succeed
@@ -476,7 +476,7 @@ Feature: secrets related scenarios
       | deploymentconfig=git |
       | deployment=git-2     |
     And I execute on the pod:
-      | bash                                                                                                    |
+      | sh                                                                                                      |
       | -c                                                                                                      |
       | cd /var/lib/git/ && git clone --bare https://github.com/openshift/ruby-hello-world ruby-hello-world.git |
     Then the step should succeed

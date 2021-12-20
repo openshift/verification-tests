@@ -573,7 +573,7 @@ check_insights_popover_info_when_available:
   - selector:
       xpath: //div[contains(@class,'pf-c-chart')]
   - selector:
-      xpath: //a[contains(@class,'co-external-link') and contains(@href,'https://cloud.redhat.com/openshift/details/<cluster_id>#insights')]
+      xpath: //a[contains(@class,'co-external-link') and contains(@href,'https://console.redhat.com/openshift/details/<cluster_id>#insights')]
 check_insights_popover_info_when_unavailable:
   elements:
   - selector:
@@ -583,7 +583,7 @@ check_insights_popover_info_when_unavailable:
 check_insights_status_when_available:
   params:
     status: Warning
-    status_text: issues found
+    status_text: issue
   action: click_insights_status
   action: check_status_card_health_item_text
   action: check_insights_popover_info_when_available

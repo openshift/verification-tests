@@ -687,6 +687,9 @@ Feature: Sriov related scenarios
   # @case_id OCP-25321
   @destructive
   @admin
+  @4.10 @4.9
+  @baremetal-ipi
+  @baremetal-upi
   Scenario: dpdk for intel card works well
     Given the sriov operator is running well
     Given I obtain test data file "networking/sriov/sriovnetworkpolicy/intel-dpdk.yaml"

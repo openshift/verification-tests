@@ -4,7 +4,7 @@ Feature: Persistent Volume Claim binding policies
   # @author lxia@redhat.com
   # @author chaoyang@redhat.com
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   Scenario Outline: PVC with one accessMode can bind PV with all accessMode
     Given I have a project
 
@@ -36,7 +36,7 @@ Feature: Persistent Volume Claim binding policies
     And the "pv2-<%= project.name %>" PV status is :available
 
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-    @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+    @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @upgrade-sanity
     Examples:
       | accessMode1   | accessMode2   | accessMode3   |
@@ -72,7 +72,7 @@ Feature: Persistent Volume Claim binding policies
 
   # @author lxia@redhat.com
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   Scenario Outline: PV can not bind PVC which request more storage
     Given I have a project
     # PV is 100Mi and PVC is 1Gi
@@ -93,7 +93,7 @@ Feature: Persistent Volume Claim binding policies
     And the "mypvc" PVC becomes :pending
 
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-    @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+    @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @upgrade-sanity
     Examples:
       | access_mode   |
@@ -104,7 +104,7 @@ Feature: Persistent Volume Claim binding policies
 
   # @author lxia@redhat.com
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   Scenario Outline: PV can not bind PVC with mismatched accessMode
     Given I have a project
     Given I obtain test data file "storage/nfs/auto/pv-template.json"
@@ -130,7 +130,7 @@ Feature: Persistent Volume Claim binding policies
     And the "mypvc2" PVC becomes :pending
 
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-    @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+    @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     @upgrade-sanity
     Examples:
       | pv_access_mode | pvc_access_mode1 | pvc_access_mode2 |

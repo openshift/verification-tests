@@ -1,7 +1,7 @@
 Feature: CSI Resizing related feature
   # @author chaoyang@redhat.com
   @admin
-  @4.8 @4.10 @4.9
+  @4.10 @4.9 @4.8
   Scenario Outline: Resize online volume from 1Gi to 2Gi
     Given I have a project
 

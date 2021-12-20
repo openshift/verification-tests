@@ -2,7 +2,7 @@ Feature: Routing and DNS related scenarios
 
   @upgrade-prepare
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: ensure ingress works well before and after upgrade - prepare
@@ -19,9 +19,9 @@ Feature: Routing and DNS related scenarios
   # @case_id OCP-29746
   @upgrade-check
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: ensure ingress works well before and after upgrade
     # Check console route after upgraded
     Given I switch to cluster admin pseudo user
@@ -34,7 +34,7 @@ Feature: Routing and DNS related scenarios
 
   @upgrade-prepare
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
   Scenario: ensure DNS works well before and after upgrade - prepare
@@ -54,9 +54,9 @@ Feature: Routing and DNS related scenarios
   # @case_id OCP-29747
   @upgrade-check
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: ensure DNS works well before and after upgrade
     # Check service name can be resolvede
     Given I switch to cluster admin pseudo user
@@ -72,8 +72,8 @@ Feature: Routing and DNS related scenarios
 
   @upgrade-prepare
   @admin
-  @4.8 @4.10 @4.9
-  @baremetal-ipi @vsphere-ipi
+  @4.10 @4.9 @4.8
+  @vsphere-ipi @baremetal-ipi
   @vsphere-upi
   Scenario: upgrade with running router pods on all worker nodes - prepare
     # Get the number of worker nodes and scale up router pods
@@ -97,9 +97,9 @@ Feature: Routing and DNS related scenarios
   # @case_id OCP-30501
   @upgrade-check
   @admin
-  @4.8 @4.10 @4.9
-  @baremetal-ipi @vsphere-ipi
-  @vsphere-upi
+  @4.10 @4.9 @4.8
+  @vsphere-ipi @baremetal-ipi
+  @vsphere-upi @baremetal-upi
   Scenario: upgrade with running router pods on all worker nodes
     Given I switch to cluster admin pseudo user
     And I store the number of worker nodes to the :num_workers clipboard
@@ -112,7 +112,7 @@ Feature: Routing and DNS related scenarios
   @upgrade-prepare
   @users=upuser1,upuser2
   @admin
-  @4.8 @4.10 @4.9
+  @4.10 @4.9 @4.8
   @gcp-ipi @azure-ipi
   @gcp-upi @azure-upi
   Scenario: upgrade with route shards - prepare
@@ -182,7 +182,7 @@ Feature: Routing and DNS related scenarios
   @upgrade-check
   @users=upuser1,upuser2
   @admin
-  @4.8 @4.10 @4.9
+  @4.10 @4.9 @4.8
   @gcp-ipi @azure-ipi
   @gcp-upi @azure-upi
   Scenario: upgrade with route shards
@@ -241,6 +241,8 @@ Feature: Routing and DNS related scenarios
       | svc_name | service-unsecure |
     Then the step should succeed
     Given I wait for the resource "pod" named "<%= cb.pod_name %>" to disappear within 120 seconds
+    # will recreate test-client-pod in upgrade-check so delete the pod here
+    Given I ensure "hello-pod" pod is deleted
 
     # Check the servcie service-unsecure to see the idle annotation
     And the expression should be true> service('service-unsecure').annotation('idling.alpha.openshift.io/unidle-targets', cached: false) == "[{\"kind\":\"ReplicationController\",\"name\":\"web-server-rc\",\"replicas\":1}]"
@@ -249,13 +251,17 @@ Feature: Routing and DNS related scenarios
   # @case_id OCP-45955
   @upgrade-check
   @users=upuser1,upuser2
+  @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Unidling a route work without user intervention
     # Check the servcie service-unsecure to see the idle annotation is still intact
     Given I switch to first user
     Given I use the "ocp45955" project
     And the expression should be true> service('service-unsecure').annotation('idling.alpha.openshift.io/unidle-targets', cached: false) == "[{\"kind\":\"ReplicationController\",\"name\":\"web-server-rc\",\"replicas\":1}]"
   
-    When I execute on the "hello-pod" pod:
+    Given I have a test-client-pod in the project
+    When I execute on the pod:
       | curl | -ksS | http://<%= route("service-unsecure", service("service-unsecure")).dns %>/ |
     Then the step should succeed
     And the output should contain "Hello-OpenShift web-server-rc"

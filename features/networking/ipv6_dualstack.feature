@@ -6,6 +6,7 @@ Feature: ipv6 dual stack cluster test scenarios
   @network-ovnkubernetes
   @4.10 @4.9
   @baremetal-ipi
+  @upgrade-sanity
   Scenario: Project should be in isolation when using multitenant policy for ipv6 dual stack
     # create project and pods
     Given I have a project

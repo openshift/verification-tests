@@ -4,7 +4,7 @@ Feature: kata smoke tests
   @admin
   @4.10 @4.9
   @gcp-ipi @baremetal-ipi @azure-ipi
-  @gcp-upi @azure-upi
+  @gcp-upi @baremetal-upi @azure-upi
   @flaky
   Scenario: [sandboxed containers] Namespace installed by operator
     Given kata container has been installed successfully

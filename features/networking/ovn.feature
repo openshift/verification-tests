@@ -8,7 +8,7 @@ Feature: OVN related networking scenarios
   @4.10 @4.9
   @network-ovnkubernetes
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Creating a resource in Kube API should be synced to OVN NB db correctly even post NB db crash too
     Given the env is using "OVNKubernetes" networkType
     Given I have a project
@@ -54,7 +54,7 @@ Feature: OVN related networking scenarios
   @4.10 @4.9
   @network-ovnkubernetes
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: OVN DB should be updated correctly if a resource only exist in Kube API but not in OVN NB db
     Given the env is using "OVNKubernetes" networkType
     Given I register clean-up steps:
@@ -108,7 +108,7 @@ Feature: OVN related networking scenarios
   @4.10 @4.9
   @network-ovnkubernetes
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: OVN DB should be updated correctly if a resource only exist in NB db but not in Kube API
     Given the env is using "OVNKubernetes" networkType
     Given I have a project
@@ -170,7 +170,7 @@ Feature: OVN related networking scenarios
   @4.10 @4.9
   @network-ovnkubernetes
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Thrashing ovnkube master IPAM allocator by creating and deleting various pods on a specific node
     Given the env is using "OVNKubernetes" networkType
     And I store all worker nodes to the :nodes clipboard
@@ -223,7 +223,7 @@ Feature: OVN related networking scenarios
   @4.10 @4.9
   @network-ovnkubernetes
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Create/delete pods while forcing OVN leader election
   #Test for bug https://bugzilla.redhat.com/show_bug.cgi?id=1781297
     Given the env is using "OVNKubernetes" networkType
@@ -251,7 +251,7 @@ Feature: OVN related networking scenarios
   @4.10 @4.9
   @network-ovnkubernetes
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Pods and Services should keep running when a new raft leader gets be elected
     Given the env is using "OVNKubernetes" networkType
     Given I store the ovnkube-master "south" leader pod in the clipboard
@@ -295,7 +295,7 @@ Feature: OVN related networking scenarios
   @4.10 @4.9
   @network-ovnkubernetes
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Traffic flow shouldn't be interrupted when master switches the leader positions
     Given the env is using "OVNKubernetes" networkType
     Given I switch to cluster admin pseudo user
@@ -362,7 +362,7 @@ Feature: OVN related networking scenarios
   @4.10 @4.9
   @network-ovnkubernetes
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: New raft leader should be elected if existing leader gets deleted or crashed in hybrid/non-hybrid clusters
     Given the env is using "OVNKubernetes" networkType
     Given admin uses the "openshift-ovn-kubernetes" project
@@ -386,7 +386,7 @@ Feature: OVN related networking scenarios
   @4.10 @4.9
   @network-ovnkubernetes
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: New corresponding raft leader should be elected if SB db or NB db on existing master is crashed
     Given the env is using "OVNKubernetes" networkType
     Given admin uses the "openshift-ovn-kubernetes" project
@@ -422,8 +422,8 @@ Feature: OVN related networking scenarios
   @admin
   @destructive
   @4.10 @4.9
-  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Inducing Split Brain in the OVN HA cluster
     Given admin uses the "openshift-ovn-kubernetes" project
     When I store the ovnkube-master "south" leader pod in the clipboard
@@ -473,8 +473,8 @@ Feature: OVN related networking scenarios
   @destructive
   @4.10 @4.9
   @network-ovnkubernetes
-  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Delete all OVN master pods and makes sure leader/follower election converges smoothly
     Given the env is using "OVNKubernetes" networkType
     Given admin uses the "openshift-ovn-kubernetes" project
@@ -499,7 +499,7 @@ Feature: OVN related networking scenarios
   @4.10 @4.9
   @network-ovnkubernetes
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: OVN handles projects that start with a digit
     Given the env is using "OVNKubernetes" networkType
     Given I create a project with leading digit name
@@ -521,6 +521,7 @@ Feature: OVN related networking scenarios
   @admin
   @destructive
   @4.10 @4.9
+  @inactive
   Scenario: Should no intermittent packet drop from pod to pod after change hostname
     Given I store the schedulable workers in the :nodes clipboard
     Given admin uses the "openshift-ovn-kubernetes" project
@@ -573,3 +574,62 @@ Feature: OVN related networking scenarios
       | ping | -c | 30 | -i | 0.2 | <%= cb.pod2_ip%> |
     Then the step should succeed
     And the output should contain "0% packet loss"
+  
+  # @author anusaxen@redhat.com
+  # @case_id OCP-46285
+  @admin
+  @destructive
+  @4.10 @4.9 @4.8
+  @network-ovnkubernetes
+  @vsphere-ipi
+  Scenario: Logical Router Policies and Annotations for a given node should be current
+    Given the env is using "OVNKubernetes" networkType
+    #Find apiVIP address of the cluster
+    When I run the :get admin command with:
+      | resource | infrastructure                                                         |
+      | o        | jsonpath={.items[*].status.platformStatus.vsphere.apiServerInternalIP} |
+    Then the step should succeed
+    And evaluation of `@result[:response]` is stored in the :apiVIP clipboard
+    Given I store the ovnkube-master "north" leader pod in the clipboard
+    And admin executes on the pod "northd" container:
+      | bash | -c | ovn-nbctl find logical_router_policy \| grep -B 5 -A 10 <%= cb.apiVIP %> |
+    Then the step should succeed
+    And evaluation of `@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]` is stored in the :apiVIP_node clipboard
+    #This will make sure only one entry corresponds to apiVIP is stored in NB db, not any stale or duplicate entry
+    And the output should contain 1 times:
+      | <%= cb.apiVIP %> |
+    And evaluation of `@result[:response].scan(/\/* ([^\/]*) /)[1][0]` is stored in the :apiVIP_node clipboard
+    #Checking annotation exist for the node
+    When I run the :describe admin command with:
+      | resource | node                  |
+      | name     | <%= cb.apiVIP_node %> |
+    Then the step should succeed
+    And the output should contain:
+      | k8s.ovn.org/host-addresses |
+      | <%= cb.apiVIP %>           |
+  
+    Given I use the "<%= cb.apiVIP_node %>" node
+    And the host is rebooted and I wait it up to 600 seconds to become available
+    #Make sure after the reboot apiVIp switches to new node and only 1 entry correspond to apiVIP 
+    #exist in NB db (shouldn't be any stale or duplicates)
+    Given I store the ovnkube-master "north" leader pod in the clipboard
+    And admin executes on the pod "northd" container:
+      | bash | -c | ovn-nbctl find logical_router_policy \| grep -B 5 -A 10 <%= cb.apiVIP %> |
+    Then the step should succeed
+    #apiVIP switches to new node in case of node reboot and in very rare case couple of entries might stay there until apiVIP 
+    #switching is done completely. Making sure 1 current entry should stay there eventually
+    Given I wait up to 120 seconds for the steps to pass:
+    """
+    And the output should contain 1 times:
+      | <%= cb.apiVIP %> |
+    """
+    And evaluation of `@result[:response].scan(/\/* ([^\/]*) /)[1][0]` is stored in the :apiVIP_node_new clipboard
+    #Checking annotation exist for the node
+    When I run the :describe admin command with:
+      | resource | node                      |
+      | name     | <%= cb.apiVIP_node_new %> |
+    Then the step should succeed
+    And the output should contain:
+      | k8s.ovn.org/host-addresses |
+      | <%= cb.apiVIP_new %>       |
+    And the expression should be true> cb.apiVIP_node!=cb.apiVIP_node_new

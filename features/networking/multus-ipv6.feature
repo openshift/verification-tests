@@ -56,8 +56,8 @@ Feature: Multus-CNI ipv6 related scenarios
   # @case_id OCP-38521
   @admin
   @4.10 @4.9
-  @azure-ipi @openstack-ipi @baremetal-ipi @vsphere-ipi @gcp-ipi @aws-ipi
-  @azure-upi @aws-upi @openstack-upi @vsphere-upi @gcp-upi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: IPv6 testing for OCP-31999: Whereabouts should exclude IPv6 ranges
   # Bug https://bugzilla.redhat.com/show_bug.cgi?id=1913062
   # Bug https://bugzilla.redhat.com/show_bug.cgi?id=1917984

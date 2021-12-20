@@ -37,7 +37,7 @@ Feature: CSI testing related feature
 
   # @author chaoyang@redhat.com
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   Scenario Outline: Configure 'Retain' reclaim policy
     Given I have a project
     And admin clones storage class "sc-<%= project.name %>" from "<sc_name>" with:
@@ -86,7 +86,7 @@ Feature: CSI testing related feature
   # @author wduan@redhat.com
   @admin
   @smoke
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   Scenario Outline: CSI dynamic provisioning with default fstype
     Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"
@@ -167,7 +167,7 @@ Feature: CSI testing related feature
   # @author wduan@redhat.com
   @admin
   @smoke
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   Scenario Outline: CSI dynamic provisioning with fstype
     Given I have a project
     When admin clones storage class "sc-<%= project.name %>" from "<sc_name>" with:
@@ -218,7 +218,7 @@ Feature: CSI testing related feature
 
 
   # @author wduan@redhat.com
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   Scenario Outline: CSI dynamic provisioning with block
     Given I have a project
     Given I obtain test data file "storage/misc/pvc.json"
@@ -315,7 +315,7 @@ Feature: CSI testing related feature
 
   # @author wduan@redhat.com
   @admin
-  @4.8 @4.7 @4.10 @4.9
+  @4.10 @4.9 @4.8 @4.7
   Scenario Outline: Check CSI Driver Operator installation
     When I run the :get admin command with:
       | resource | clusteroperator/storage                                                            |

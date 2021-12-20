@@ -8,7 +8,7 @@ Feature: elasticsearch-operator related tests
   @commonlogging
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: ServiceMonitor Object for Elasticsearch is deployed along with the Elasticsearch cluster
     Given I wait for the "monitor-elasticsearch-cluster" service_monitor to appear
     When I perform the HTTP request on the ES pod with labels "es-node-master=true":
@@ -74,7 +74,7 @@ Feature: elasticsearch-operator related tests
       | "alertstate":"pending\|firing" |
     """
     @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-    @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+    @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
     Examples:
       | cluster_setting |
       | transient       | # @case_id OCP-21530
@@ -88,7 +88,7 @@ Feature: elasticsearch-operator related tests
   @commonlogging
   @4.10 @4.9
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Additional essential metrics ES dashboard
     Given I switch to the first user
     And the first user is cluster-admin
