@@ -15,10 +15,10 @@ Feature: Upgrade Logging with ClusterLogForwarder
     Given fluentd receiver is deployed as insecure in the "logging-receivers" project
     And rsyslog receiver is deployed as insecure in the "logging-receivers" project
     And external elasticsearch server is deployed with:
-      | version               | 6.8               |
-      | scheme                | http              |
-      | transport_ssl_enabled | false             |
-      | project_name          | logging-receivers |
+      | version      | 6.8               |
+      | scheme       | http              |
+      | client_auth  | false             |
+      | project_name | logging-receivers |
     When I run the :new_project client command with:
       | project_name | logging-data |
     Then the step should succeed

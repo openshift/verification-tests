@@ -1,7 +1,7 @@
 kind: Template
 apiVersion: template.openshift.io/v1
 metadata:
-  name: es7-cm-template
+  name: external-log-store-template
 objects:
 - apiVersion: v1
   data:
@@ -13,8 +13,8 @@ objects:
       fi
 
     elasticsearch.yml: |
-      node.name:  elasticsearch-server
-      cluster.name: elasticsearch-server
+      node.name:  ${NAME}
+      cluster.name: ${NAME}
       discovery.zen.minimum_master_nodes: 1
       network.host: 0.0.0.0
       http.port: 9200
@@ -32,17 +32,24 @@ objects:
       xpack.security.authc.api_key.enabled: true
       xpack.monitoring.enabled : false
       xpack.license.self_generated.type: basic
-      xpack.security.transport.ssl.enabled: false
       xpack.security.http.ssl.enabled: true
       xpack.security.http.ssl.key:  /usr/share/elasticsearch/config/secret/elasticsearch.key
       xpack.security.http.ssl.certificate: /usr/share/elasticsearch/config/secret/elasticsearch.crt
       xpack.security.http.ssl.certificate_authorities: [ "/usr/share/elasticsearch/config/secret/admin-ca" ]
-      xpack.security.http.ssl.verification_mode: certificate
+      xpack.security.http.ssl.verification_mode: full
+      xpack.security.http.ssl.client_authentication: ${CLIENT_AUTH}
   kind: ConfigMap
   metadata:
-    name: elasticsearch-server
+    name: ${NAME}
+    namespace: ${NAMESPACE}
 parameters:
 - name: USERNAME
   value: "fluentd"
 - name: PASSWORD
   value: "redhat"
+- name: NAME
+  value: elasticsearch-server
+- name: NAMESPACE
+  value: openshift-logging
+- name: CLIENT_AUTH
+  value: none

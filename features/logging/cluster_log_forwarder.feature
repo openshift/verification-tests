@@ -412,10 +412,10 @@ Feature: cluster log forwarder features
     And I use the "openshift-logging" project
     And fluentd receiver is deployed as insecure in the "openshift-logging" project
     And external elasticsearch server is deployed with:
-      | version               | 6.8               |
-      | scheme                | http              |
-      | transport_ssl_enabled | false             |
-      | project_name          | openshift-logging |
+      | version      | 6.8               |
+      | scheme       | http              |
+      | client_auth  | false             |
+      | project_name | openshift-logging |
     # create clusterlogforwarder instace with multiple receiver
     Given admin ensures "instance" cluster_log_forwarder is deleted from the "openshift-logging" project after scenario
     And I obtain test data file "logging/clusterlogforwarder/multiple_receiver/clf_fluent_es.yaml"

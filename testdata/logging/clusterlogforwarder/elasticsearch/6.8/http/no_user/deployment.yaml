@@ -40,36 +40,20 @@ objects:
             protocol: TCP
           - containerPort: 9200
             protocol: TCP
-          readinessProbe:
-            exec:
-              command:
-              - sh
-              - /usr/share/elasticsearch/add-user.sh
-            failureThreshold: 3
-            initialDelaySeconds: 5
-            periodSeconds: 5
-            successThreshold: 1
-            timeoutSeconds: 10
+          volumeMounts:
+          - mountPath: /usr/share/elasticsearch/config/elasticsearch.yml
+            subPath: elasticsearch.yml
+            name: elasticsearch-config
           resources: {}
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
-          volumeMounts:
-          - mountPath: /usr/share/elasticsearch/config/elasticsearch.yml
-            name: elasticsearch-config
-            subPath: elasticsearch.yml
-          - mountPath: /usr/share/elasticsearch/add-user.sh
-            name: elasticsearch-config
-            subPath: add-user.sh
-        dnsPolicy: ClusterFirst
-        restartPolicy: Always
-        schedulerName: default-scheduler
-        securityContext: {}
-        terminationGracePeriodSeconds: 30
         volumes:
         - configMap:
             defaultMode: 420
             name: ${NAME}
           name: elasticsearch-config
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
 parameters:
 - name: NAME
   value: elasticsearch-server

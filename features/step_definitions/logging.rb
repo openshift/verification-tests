@@ -528,7 +528,7 @@ Given /^I create a pipeline secret with:$/ do | table |
   secret_name = opts[:secret_name]
   username = opts[:username]
   password = opts[:password]
-  transport_ssl_enabled = opts[:transport_ssl_enabled]
+  client_auth = opts[:client_auth]
   user_auth_enabled = opts[:user_auth_enabled]
   http_ssl_enabled = opts[:http_ssl_enabled]
   shared_key = opts[:shared_key]
@@ -545,7 +545,7 @@ Given /^I create a pipeline secret with:$/ do | table |
     ["n", "openshift-logging"]
   ]
 
-  if transport_ssl_enabled == "true" || auth_type == "mTLS" || auth_type == "mTLS_share"
+  if client_auth == "true" || auth_type == "mTLS" || auth_type == "mTLS_share"
     secret_keys << ["from_file", "tls.key=logging-es.key"] << ["from_file", "tls.crt=logging-es.crt"] << ["from_file", "ca-bundle.crt=ca.crt"]
   end
 
@@ -959,7 +959,7 @@ end
 # version: 6.8 or 7.12
 # project_name: where the external ES deployed
 # scheme: http or https
-# transport_ssl_enabled: true or false
+# client_auth: true or false
 # user_auth_enabled: true or false, if `true`, must provide username and password
 # secret_name: the name of the pipeline secret for the fluentd to use
 Given /^external elasticsearch server is deployed with:$/ do | table |
@@ -967,7 +967,7 @@ Given /^external elasticsearch server is deployed with:$/ do | table |
   version = opts[:version] # 6.8 or 7.12
   project_name = opts[:project_name]
   scheme = opts[:scheme]
-  transport_ssl_enabled = opts[:transport_ssl_enabled]
+  client_auth = opts[:client_auth]
   user_auth_enabled = opts[:user_auth_enabled]
   username = opts[:username]
   password = opts[:password]
@@ -993,7 +993,7 @@ Given /^external elasticsearch server is deployed with:$/ do | table |
   pod_label = "app=elasticsearch-server"
 
   # create secret/elasticsearch-server for ES if needed
-  if transport_ssl_enabled == "true" || scheme == "https"
+  if scheme == "https"
     step %Q/I generate certs for the "elasticsearch-server" receiver in the "<%= project.name %>" project/
     unless tagged_upgrade?
       step %Q/I ensure "elasticsearch-server" secret is deleted from the "<%= project.name %>" project after scenario/
@@ -1001,8 +1001,6 @@ Given /^external elasticsearch server is deployed with:$/ do | table |
     step %Q/I run the :create_secret client command with:/, table(%{
       | name        | elasticsearch-server                |
       | secret_type | generic                             |
-      | from_file   | logging-es.key=logging-es.key       |
-      | from_file   | logging-es.crt=logging-es.crt       |
       | from_file   | elasticsearch.key=elasticsearch.key |
       | from_file   | elasticsearch.crt=elasticsearch.crt |
       | from_file   | admin-ca=ca.crt                     |
@@ -1011,44 +1009,58 @@ Given /^external elasticsearch server is deployed with:$/ do | table |
     step %Q/the step should succeed/
   end
 
-  if user_auth_enabled == "true" || transport_ssl_enabled == "true" || http_ssl_enabled == "true"
+  if user_auth_enabled == "true" || http_ssl_enabled == "true"
     raise "secret_name is not specified or is empty" unless !(secret_name.nil? || secret_name.empty?)
     step %Q/I create a pipeline secret with:/, table(%{
-      | secret_name           | #{secret_name}           |
-      | username              | #{username}              |
-      | password              | #{password}              |
-      | transport_ssl_enabled | #{transport_ssl_enabled} |
-      | user_auth_enabled     | #{user_auth_enabled}     |
-      | http_ssl_enabled      | #{http_ssl_enabled}      |
+      | secret_name       | #{secret_name}       |
+      | username          | #{username}          |
+      | password          | #{password}          |
+      | client_auth       | #{client_auth}       |
+      | user_auth_enabled | #{user_auth_enabled} |
+      | http_ssl_enabled  | #{http_ssl_enabled}  |
     })
   end
 
-  # chose files per transport_ssl_enabled and user_auth_enabled
-  if transport_ssl_enabled == "true" && user_auth_enabled == "true"
-    step %Q/I run the :process client command with:/, table(%{
-      | f | #{file_dir}/user_auth_with_transport_tls/configmap.yaml |
-      | p | USERNAME=#{username} |
-      | p | PASSWORD=#{password} |
-    })
-    File.write(File.expand_path("cm.yaml".strip), @result[:stdout])
-    cm = "cm.yaml"
-    deploy = "#{file_dir}/user_auth_with_transport_tls/deployment.yaml"
-  elsif transport_ssl_enabled == "true" && user_auth_enabled != "true"
-    cm = "#{file_dir}/transport_tls/configmap.yaml"
-    deploy = "#{file_dir}/transport_tls/deployment.yaml"
-  elsif transport_ssl_enabled != "true" && user_auth_enabled == "true"
-    step %Q/I run the :process client command with:/, table(%{
-      | f | #{file_dir}/user_auth/configmap.yaml |
-      | p | USERNAME=#{username} |
-      | p | PASSWORD=#{password} |
-    })
-    File.write(File.expand_path("cm.yaml".strip), @result[:stdout])
-    cm = "cm.yaml"
-    deploy = "#{file_dir}/user_auth/deployment.yaml"
+  # get file per configurations
+  if user_auth_enabled == "true"
+    cm_file = "#{file_dir}/user_auth/configmap.yaml"
+    deploy_file = "#{file_dir}/user_auth/deployment.yaml"
   else
-    cm = "#{file_dir}/insecure/configmap.yaml"
-    deploy = "#{file_dir}/insecure/deployment.yaml"
+    cm_file = "#{file_dir}/no_user/configmap.yaml"
+    deploy_file = "#{file_dir}/no_user/deployment.yaml"
   end
+
+  # process configmap
+  cm_patch = [
+    ["f", "#{cm_file}"],
+    ["n", "#{project_name}"],
+    ["p", "NAMESPACE=#{project_name}"]
+  ]
+  if client_auth == "true" && http_ssl_enabled == "true"
+    cm_patch << ["p", "CLIENT_AUTH=required"]
+  end
+
+  if client_auth != "true" && http_ssl_enabled == "true"
+    cm_patch << ["p", "CLIENT_AUTH=none"]
+  end
+
+  if user_auth_enabled == "true"
+    cm_patch << ["p", "USERNAME=#{username}"] << ["p", "PASSWORD=#{password}"]
+  end
+
+  @result = admin.cli_exec(:process, opts_array_process(cm_patch.uniq))
+  File.write(File.expand_path("cm.yaml".strip), @result[:stdout])
+  cm = "cm.yaml"
+
+  deploy_patch = [
+    ["f", "#{deploy_file}"],
+    ["n", "#{project_name}"],
+    ["p", "NAMESPACE=#{project_name}"]
+  ]
+
+  @result = admin.cli_exec(:process, opts_array_process(deploy_patch.uniq))
+  File.write(File.expand_path("deploy.yaml".strip), @result[:stdout])
+  deploy = "deploy.yaml"
 
   step %Q/I create the resources for the receiver with:/, table(%{
     | namespace       | #{project_name}  |
@@ -1057,6 +1069,58 @@ Given /^external elasticsearch server is deployed with:$/ do | table |
     | deployment_file | #{deploy}        |
     | pod_label       | #{pod_label}     |
   })
+end
+
+Given /^I check in the external ES pod with:$/ do | table |
+  opts = opts_array_to_hash(table.raw)
+  project_name = opts[:project_name]
+  pod_label = opts[:pod_label]
+  scheme = opts[:scheme]
+  client_auth = opts[:client_auth]
+  user_auth_enabled = opts[:user_auth_enabled]
+  username = opts[:username]
+  password = opts[:password]
+  url_path = opts[:url_path]
+  query = opts[:query]
+  step %Q/I use the "#{project_name}" project/
+
+  curlString = "curl -H \"Content-Type: application/json\""
+  if user_auth_enabled == "true"
+    raise "please provide username/password" unless (username != "" && password != "")
+    curlString += " -u #{username}:#{password}"
+  end
+
+  if scheme == "https"
+    if client_auth == "true"
+      curlString += " --cert /usr/share/elasticsearch/config/secret/elasticsearch.crt --key /usr/share/elasticsearch/config/secret/elasticsearch.key"
+    end
+    curlString += " --cacert /usr/share/elasticsearch/config/secret/admin-ca -s https://localhost:9200/"
+  else
+    curlString += " -s http://localhost:9200/"
+  end
+
+  if url_path != ""
+    curlString += url_path
+  end
+
+  if query != ""
+    curlString += " -d '#{query}'"
+  end
+
+  step %Q/a pod becomes ready with labels:/, table(%{
+    | #{pod_label} |
+  })
+  @result = pod.exec("bash", "-c", curlString, as: admin, container: 'elasticsearch-server')
+  if @result[:success]
+    @result[:parsed] = YAML.load(@result[:response])
+    # curl returns 0 even with a http code of 403, we force it to match.
+    if @result[:parsed].is_a? Hash and @result[:parsed].has_key? 'status'
+      @result[:exitstatus] = @result[:parsed]['status']
+    end
+  else
+    raise "HTTP operation failed with error, #{@result[:response]}"
+  end
+
 end
 
 Given /^I have(?: "(\w+)")? log pod in project #{QUOTED}$/ do | log_type, project_name |
@@ -1123,7 +1187,7 @@ Given /^cluster-admin create the #{QUOTED} pattern for the #{WORD} user$/ do | p
     user_token=user.cached_tokens.first
     step %Q/I switch to cluster admin pseudo user/
     step %Q/I use the "openshift-logging" project/
-    
+
     rest_cmd="curl -s --connect-timeout 10  -XPOST \"http://localhost:5601/api/saved_objects/index-pattern/#{pattern_name}\" -H \"kbn-xsrf: true\" -H \"x-forwarded-user: #{user_name}\" -H \"securitytenant: __user__\" -H \"Authorization: Bearer #{user_token}\" -H \"Content-Type: application/json\" -d \'{\"attributes\": {\"title\": \"#{pattern_name}\", \"timeFieldName\": \"@timestamp\"}}\'"
 
     step %Q/a pod becomes ready with labels:/, table(%{
@@ -1182,7 +1246,7 @@ Given /^I have clusterlogging with(?: (\d+))? persistent storage ES$/ do |es_num
     if deploy_cluster_logging
       if(es_num==1)
         redundancy_policy="ZeroRedundancy"
-      end 
+      end
       step %Q/default storageclass is stored in the :default_sc clipboard/
       step %Q|I obtain test data file "logging/clusterlogging/clusterlogging-storage-template.yaml"|
       step %Q/I create clusterlogging instance with:/, table(%{
