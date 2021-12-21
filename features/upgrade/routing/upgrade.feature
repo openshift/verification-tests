@@ -213,6 +213,9 @@ Feature: Routing and DNS related scenarios
   # @author mjoseph@redhat.com
   @upgrade-prepare
   @users=upuser1,upuser2
+  @4.10 @4.9
+  @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Unidling a route work without user intervention - prepare
     Given I switch to first user
     And I run the :new_project client command with:
@@ -230,7 +233,7 @@ Feature: Routing and DNS related scenarios
     Then the expression should be true> service('service-unsecure').exists?
     When I expose the "service-unsecure" service
     Then the step should succeed
-    
+
     Given I have a test-client-pod in the project
     When I execute on the pod:
       | curl | -ksS | http://<%= route("service-unsecure", service("service-unsecure")).dns %>/ |
@@ -259,7 +262,7 @@ Feature: Routing and DNS related scenarios
     Given I switch to first user
     Given I use the "ocp45955" project
     And the expression should be true> service('service-unsecure').annotation('idling.alpha.openshift.io/unidle-targets', cached: false) == "[{\"kind\":\"ReplicationController\",\"name\":\"web-server-rc\",\"replicas\":1}]"
-  
+
     Given I have a test-client-pod in the project
     When I execute on the pod:
       | curl | -ksS | http://<%= route("service-unsecure", service("service-unsecure")).dns %>/ |
