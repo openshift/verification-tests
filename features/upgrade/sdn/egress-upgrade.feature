@@ -162,6 +162,8 @@ Feature: Egress compoment upgrade testing
   @admin
   @upgrade-prepare
   @4.10 @4.9
+  @vsphere-ipi
+  @vsphere-upi
   Scenario: Check sdn egressip is functional post upgrade - prepare
     Given I save ipecho url to the clipboard
     Given I switch to cluster admin pseudo user
