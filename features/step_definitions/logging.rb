@@ -959,7 +959,7 @@ end
 # version: 6.8 or 7.12
 # project_name: where the external ES deployed
 # scheme: http or https
-# client_auth: true or false
+# client_auth: true or false, if `true`, must provide client crendentials
 # user_auth_enabled: true or false, if `true`, must provide username and password
 # secret_name: the name of the pipeline secret for the fluentd to use
 Given /^external elasticsearch server is deployed with:$/ do | table |
