@@ -1,6 +1,5 @@
 Feature: apiserver and auth related upgrade check
   # @author pmali@redhat.com
-  # @case_id OCP-22734
   @upgrade-prepare
   @inactive
   Scenario: Check Authentication operators and operands are upgraded correctly - prepare
