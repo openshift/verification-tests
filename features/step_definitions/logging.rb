@@ -993,7 +993,7 @@ Given /^external elasticsearch server is deployed with:$/ do | table |
   pod_label = "app=elasticsearch-server"
 
   # create secret/elasticsearch-server for ES if needed
-  if scheme == "https"
+  if http_ssl_enabled = "true"
     step %Q/I generate certs for the "elasticsearch-server" receiver in the "<%= project.name %>" project/
     unless tagged_upgrade?
       step %Q/I ensure "elasticsearch-server" secret is deleted from the "<%= project.name %>" project after scenario/
