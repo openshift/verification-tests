@@ -328,14 +328,14 @@ Feature: CSI testing related feature
     Then the step should succeed
     And the output should contain:
       | <provisioner> |
-    When I run the :get admin command with:
-      | resource  | deployment/<deployment_operator>                             |
-      | o         | custom-columns=Management:.metadata.managedFields[*].manager |
-      | namespace | openshift-cluster-csi-drivers                                |
-    Then the step should succeed
-    And the output should contain:
-      | cluster-storage-operator |
-      | kube-controller-manager  |
+    #When I run the :get admin command with:
+    #  | resource  | deployment/<deployment_operator>                             |
+    #  | o         | custom-columns=Management:.metadata.managedFields[*].manager |
+    #  | namespace | openshift-cluster-csi-drivers                                |
+    #Then the step should succeed
+    #And the output should contain:
+    #  | cluster-storage-operator |
+    #  | kube-controller-manager  |
     When I run the :get client command with:
       | resource | storageclass |
     Then the output should match:
