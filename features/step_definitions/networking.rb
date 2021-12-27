@@ -965,7 +965,7 @@ Given /^the vxlan tunnel address of node "([^"]*)" is stored in the#{OPT_SYM} cl
   logger.info "The tunnel interface address is stored in the #{cb_address} clipboard."
 end
 
-Given /^the Internal IP of node "([^"]*)" is stored in the#{OPT_SYM} clipboard$/ do |node_name, cb_ipaddr|
+Given /^the Internal IP(v6)? of node "([^"]*)" is stored in the#{OPT_SYM} clipboard$/ do | v6, node_name, cb_ipaddr|
   ensure_admin_tagged
   node = node(node_name)
   host = node.host
@@ -975,7 +975,11 @@ Given /^the Internal IP of node "([^"]*)" is stored in the#{OPT_SYM} clipboard$/
   case network_type
   when "OVNKubernetes"
     # use -4 to limit output to just `default` interface, fixed in later iproute2 versions
-    step %Q/I run command on the node's ovnkube pod:/, table("| ip | -4 | route | show | default |")
+    if v6
+       step %Q/I run command on the node's ovnkube pod:/, table("| ip | -6 | route | show | default |")
+    else
+       step %Q/I run command on the node's ovnkube pod:/, table("| ip | -4 | route | show | default |")
+    end  
   when "OpenShiftSDN"
     step %Q/I run command on the node's sdn pod:/, table("| ip | -4 | route | show | default |")
   else
@@ -984,8 +988,13 @@ Given /^the Internal IP of node "([^"]*)" is stored in the#{OPT_SYM} clipboard$/
   # OVN uses `br-ex` and `-` is not a word char, so we have to split on whitespace
   def_inf = @result[:response].split("\n").first.split[4]
   logger.info "The node's default interface is #{def_inf}"
-  @result = host.exec_admin("ip -4 -brief addr show #{def_inf}")
-  cb[cb_ipaddr]=@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]
+  if v6
+     @result = host.exec_admin("ip -6 -brief addr show #{def_inf}")
+     cb[cb_ipaddr]=@result[:response].match(/([a-f0-9:]+:+)+[a-f0-9]+/)[0]  
+  else
+     @result = host.exec_admin("ip -4 -brief addr show #{def_inf}")
+     cb[cb_ipaddr]=@result[:response].match(/\d{1,3}\.\d{1,3}.\d{1,3}.\d{1,3}/)[0]
+  end
   logger.info "The Internal IP of node is stored in the #{cb_ipaddr} clipboard."
 end
 
