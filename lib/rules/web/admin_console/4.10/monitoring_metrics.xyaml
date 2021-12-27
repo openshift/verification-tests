@@ -296,12 +296,12 @@ click_pod_chart_link:
   action: click_link_with_text
   element:
     selector:
-      xpath: //h2[contains(text(),'<chart_name>')]/../..//a
+      xpath: //div[contains(text(),'<chart_name>')]/../..//a
     op: click
 check_data_diplayed_db:
   element:
     selector:
-      xpath: //h2[contains(text(),'<data_name>')]/../..//*[contains(text(), '<legend_name>')]
+      xpath: //div[contains(text(),'<data_name>')]/../..//*[contains(text(), '<legend_name>')]
     timeout: 60
 
 click_utilization_graph_link:
