@@ -376,6 +376,8 @@ Feature: SDN compoment upgrade testing
   @admin
   @upgrade-prepare
   @4.10 @4.9 @4.8
+  @azure-upi @aws-upi
+  @azure-ipi @aws-ipi
   Scenario: Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted post upgrade - prepare
     Given I switch to cluster admin pseudo user
     And I store the workers in the :nodes clipboard
