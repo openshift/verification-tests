@@ -587,30 +587,32 @@ subscribe_operator_to_namespace_with_manually_approval:
   action: select_target_namespace
   action: choose_approval_strategy
   action: click_subscribe_button
-check_message_during_installing:
+review_and_approve:
   elements:
   - selector:
-      xpath: //h2[contains(., 'Installing Operator')]
-    timeout: 20
+      xpath: //span[contains(.,'requires approval')]
+    op: click
   - selector:
-      xpath: //p[contains(., 'The Operator is being installed. This may take a few minutes.')]
+      xpath: //button[contains(.,'review')]
+    op: click
   - selector:
-      xpath: //a[contains(@href, '/k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion') and contains(., 'View installed Operators')]
+      xpath: //button[contains(.,'pprove')]
+    op: click
+manual_approve:
+  action: goto_one_project_subscription_page
+  action: review_and_approve
 check_manual_approve_info:
   elements:
   - selector:
       xpath: //h2[contains(., 'Manual approval required')]
     timeout: 20
 check_installation_failure_message:
+  action: goto_csv_detail_page
   elements:
   - selector:
-      xpath: //h4[contains(., 'Installation Failed') and contains(., 'Danger alert')]
+      xpath: //div[contains(text(), 'failed')]
     timeout: 30
-check_view_error_button:
-  params:
-    text: View error
-    link_url: /k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion
-  action: check_link_and_text
+check_view_error_button: {}
 check_customized_operator_purchase_link:
   params:
     text: Purchase
