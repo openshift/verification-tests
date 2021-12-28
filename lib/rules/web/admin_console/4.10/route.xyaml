@@ -166,13 +166,13 @@ check_metrics_charts_on_route_overview:
   action: wait_box_loaded
   elements:
   - selector:
-      xpath: //div/h2[text()='Traffic in']/following::div[1]//div[@class='pf-c-chart']
+      xpath: //div[contains(text(),'Traffic in')]/following::div[1]//div[@class='pf-c-chart']
     timeout: 20
   - selector:
-      xpath: //div/h2[text()='Traffic out']/following::div[1]//div[@class='pf-c-chart']
+      xpath: //div[contains(text(),'Traffic out')]/following::div[1]//div[@class='pf-c-chart']
     timeout: 20
   - selector:
-      xpath: //div/h2[text()='Connection rate']/following::div[1]//div[@class='pf-c-chart']
+      xpath: //div[contains(text(),'Connection rate')]/following::div[1]//div[@class='pf-c-chart']
     timeout: 20
   - selector:
       xpath: //h1[contains(@class,'graph-empty-state__title') and contains(text(),'No datapoints found')]

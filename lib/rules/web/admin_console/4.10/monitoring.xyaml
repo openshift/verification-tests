@@ -37,7 +37,21 @@ set_pagerduty_key:
   params:
     input_field_id: integration-key
   action: set_input_value
-
+  action: 
+    if_element:
+      selector:
+        xpath: //span[contains(@class,'co-required') and contains(., "Routing labels")] 
+    ref: 
+    - set_routing_labels_name
+    - set_routing_labels_value
+set_routing_labels_name:
+  params:
+    name: Name
+  action: set_placeholder_input
+set_routing_labels_value:
+  params:
+    name: Value
+  action: set_placeholder_input
 # metering rules
 check_reports_table:
   action: goto_chargeback_reports_page
