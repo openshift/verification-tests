@@ -132,7 +132,7 @@ check_acm_in_perspective_switcher:
 check_external_link:
   elements:
   - selector:
-      xpath: //h2[.='Launcher']
+      xpath: //div[contains(text(),'Launcher')] | //span[contains(text(),'Launcher')]
     timeout: 20
   - selector: &external_link
       xpath: //a[contains(@class,'co-external-link') and contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), translate('<link_text>', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'))]
