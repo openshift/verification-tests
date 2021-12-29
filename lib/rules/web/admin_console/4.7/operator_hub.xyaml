@@ -555,15 +555,8 @@ subscribe_operator_to_namespace_with_manually_approval:
   action: select_target_namespace
   action: choose_approval_strategy
   action: click_subscribe_button
-check_message_during_installing:
-  elements:
-  - selector:
-      xpath: //h2[contains(., 'Installing Operator')]
-    timeout: 20
-  - selector:
-      xpath: //p[contains(., 'The Operator is being installed. This may take a few minutes.')]
-  - selector:
-      xpath: //a[contains(@href, '/k8s/ns/<project_name>/operators.coreos.com~v1alpha1~ClusterServiceVersion') and contains(., 'View installed Operators')]
+manual_approve:
+  action: click_approve_button
 check_manual_approve_info:
   elements:
   - selector:
