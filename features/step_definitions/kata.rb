@@ -1,229 +1,121 @@
-Given /^kata container has been installed successfully(?: in the #{QUOTED} project)?$/ do |ns|
-  kata_ns ||= "openshift-sandboxed-containers-operator"
-  kata_config_name = "example-kataconfig"
-  step %Q/I switch to cluster admin pseudo user/
-  unless namespace(kata_ns).exists?
-    step %Q/the kata-operator is installed using OLM CLI/
-  else
-    logger.info("Checking for kata-operator existence...")
-    project(kata_ns)
-    step %Q/a pod is present with labels:/, table(%{
-      | control-plane=controller-manager |
-    })
-    logger.info("Checking for kataconfig...")
-    unless kata_config('example-kataconfig').exists?
-      step %Q/I store master major version in the :master_version clipboard/
-      step %Q|I obtain test data file "kata/release-#{cb.master_version}/kataconfiguration_v1_kataconfig.yaml"|
-      @result = user.cli_exec(:apply, f: 'kataconfiguration_v1_kataconfig.yaml')
-      raise "Failed to apply kataconfig" unless @result[:success]
-      step %Q/I wait until number of completed kata runtime nodes match for "#{kata_config_name}"/
-    end
-  end
-end
-
-Given /^I wait for #{QUOTED} (uninstall|install) to start$/ do | kc_name, mode |
-  timeout = 300
-  stats = {}
-  success = false
-  wait_for(timeout, stats: stats) do
-    if mode == 'install'
-      success = kata_config(kc_name).installing?(user: user, quiet: true, cached: false)
-    else
-      success = kata_config(kc_name).uninstalling?(user: user, quiet: true, cached: false)
-    end
-    break if success
-  end
-  unless success
-    raise "#{mode} failed to start after #{timeout} seconds"
-  else
-    logger.info("#{mode} started...")
-  end
-end
-
-Given /^I wait until number of completed kata runtime nodes match#{OPT_QUOTED} for #{QUOTED}$/ do |number, kc_name|
+Given /^I wait until number of completed kata runtime nodes for #{QUOTED} matches$/ do |kc_name|
   ready_timeout = 1200
   matched = kata_config(kc_name).wait_till_installed_counter_match(
     user: user, seconds: ready_timeout)
-  unless matched[:success]
-    installed_node_count = kata_config(kc_name).install_completed_node_count(user: user, cached: false)
-    expected_node_count = kata_config(kc_name).total_nodes_count
-    raise "Kata runtime did not install into all worker nodes, only #{installed_node_count} reached, expecting #{expected_node_count}"
-  end
+  installed_node_count = kata_config(kc_name).install_completed_node_count(user: user, cached: false)
+  expected_node_count = kata_config(kc_name).total_nodes_count
+  raise "Kata runtime did not install into all worker nodes, only #{installed_node_count} reached, expecting #{expected_node_count}" unless matched[:success]
+  logger.info("#{installed_node_count} out of #{expected_node_count} worker nodes installed with kata runtime")
 end
 
-Given /^I remove kata operator from the#{OPT_QUOTED} namespace$/ do | kata_ns |
-  ensure_admin_tagged
-  step %Q/I store master major version in the clipboard/
-  kata_ns ||= "openshift-sandboxed-containers-operator"
+Given /^valid cluster type for kata tests exists$/ do
+  accepted_platforms = ['gcp', 'azure']
+  iaas_type = env.iaas[:type] rescue nil
+  raise "Kata installation only supports #{accepted_platforms} platforms, #{iaas_type} is not a valid cluster type" unless accepted_platforms.include? iaas_type
+  logger.info("Cluster type #{iaas_type.to_s.upcase} is a valid cluster type")
+end
+
+Given /^catalogsource #{QUOTED} exists in #{QUOTED} namespace$/ do |catalog_source_name, project_name|
   step %Q/I switch to cluster admin pseudo user/
-  # 1. remove kataconfig first
-  project(kata_ns)
-  # prereq is that there are no outstanding pods in the cluster with
-  # kata-runtime.  Do the destructive action of removing them so kataconfig can be removed.
-  step %Q/I find all pods running with kata as runtime in the cluster and store them to the :kata_pods clipboard/
-  if cb.kata_pods.count > 0
-    logger.info("All existing pods using kata must be removed before kataconfig can be uninstalled.")
-    logger.info("Removing all pods using kata...")
-    step %Q/I remove all kata pods in the cluster stored in the clipboard/
-  end
-
-  kataconfig_name = BushSlicer::KataConfig.list(user: admin).first.name
-  step %Q/I ensure "#{kataconfig_name}" kata_config is deleted within 1500 seconds/
-  # 2. remove namespace
-  step %Q/I ensure "#{kata_ns}" project is deleted/
+  project(project_name)
+  raise "Failed to create catalog source" unless catalog_source("#{catalog_source_name}").exists?
+  logger.info("Catalog source #{catalog_source_name} exists")
 end
 
-# assumption is that kata is already installed
-And /^I verify kata container runtime is installed into a worker node$/ do
-  # create a project and install sample app has
-  org_user = user
-  step %Q/I switch to the first user/
-  step %Q/I create a new project/
-  cb.test_project_name = project.name
-  file_path = "kata/example-fedora-kata.yaml"
-  step %Q(I run oc create over ERB test file: #{file_path})
-  raise "Example kata pod creation failed" unless @result[:success]
-  logger.info("Waiting for 'example-fedora-kata' pod to be RUNNING")
-  step %Q/a pod becomes ready with labels:/, table(%{
-    | app=example-fedora-kata-app |
-  })
-  logger.info("Checking for runtime engine match...")
-  # 1. check pod's spec to make sure the runtimeClassName is 'kata'
-  pod_runtime_class_name = pod('example-fedora-kata').runtime_class_name
-  if pod_runtime_class_name != 'kata'
-    raise "Pod's runtimeclass name #{pod_runtime_class_name} should be `kata`"
-  end
-
-  logger.info("Checking for running process `qemu` with the pod...")
-  # 2. check there's a process with the pod name `qemu`
-  step %Q/I switch to cluster admin pseudo user/
-  node_cmd = "ps aux | grep qemu"
-  @result = node(pod.node_name).host.exec_admin(node_cmd)
-  raise "No qemu process detected inside pod node" unless @result[:response].include? 'qemu'
-end
-
-Given /^there is a catalogsource for kata container$/ do
-  step %Q/I switch to cluster admin pseudo user/
-  step %Q/I use the "openshift-marketplace" project/
-  step %Q|I obtain test data file "kata/catalogsource.yaml"|
-  user.cli_exec(:apply, f: 'catalogsource.yaml')
-  step %Q/a pod becomes ready with labels:/, table(%{
-    | olm.catalogSource=redhat-marketplace |
-  })
-end
-
-Given /^the kata-operator is installed(?: to #{OPT_QUOTED})? using OLM(?: (CLI|GUI))?$/ do | kata_ns, install_method |
-  ensure_admin_tagged
-  kata_ns ||= "openshift-sandboxed-containers-operator"
-  kata_config_name = "example-kataconfig"
+When /^I install sandboxed-operator in #{QUOTED} namespace$/ do |kata_ns|
   step %Q/I store master major version in the :master_version clipboard/
-  raise "Kata operator OLM installation only supported for OCP >= 4.8" unless cb.master_version >= "4.8"
-  install_method ||= 'CLI'
-  # first check pre-req
   step %Q/I switch to cluster admin pseudo user/
-  project('openshift-marketplace')
-  unless catalog_source('qe-app-registry').exists?
-    logger.info("Kata installation depends on `qe-app-registry`, which is missing in this cluster, calling step to create it...")
-    step %Q/I create "qe-app-registry" catalogsource for testing/
-  end
+  step %Q|I obtain test data file "kata/namespace.yaml"|
+  @result_namespace = user.cli_exec(:apply, f: "namespace.yaml")
+  raise "Failed to install sandboxed-operator" unless @result_namespace[:success]
+  step %Q|I obtain test data file "kata/operatorgroup.yaml"|
+  @result_operatorgroup = user.cli_exec(:apply, f: "operatorgroup.yaml")
+  raise "Failed to install sandboxed-operator" unless @result_operatorgroup[:success]
+  step %Q|I obtain test data file "kata/policy.yaml"|
+  @result_policy = user.cli_exec(:apply, f: "policy.yaml")
+  raise "Failed to install sandboxed-operator" unless @result_policy[:success]
+  step %Q|I obtain test data file "kata/catalogsource.yaml"|
+  @result_catalog = user.cli_exec(:apply, f: "catalogsource.yaml")
+  raise "Failed to install sandboxed-operator" unless @result_catalog[:success]
+  step %Q|I obtain test data file "kata/subscription.yaml"|
+  @result_subcription = user.cli_exec(:apply, f: "subscription.yaml")
+  raise "Failed to install sandboxed-operator" unless @result_subcription[:success]
+end
 
-  unless kata_config(kata_config_name).exists?
-    if install_method == 'GUI'
-      package_name = 'sandboxed-containers-operator'
-      catalog_name = 'qe-app-registry'
-      @result = admin.cli_exec(:create_namespace, name: kata_ns)
-      project(kata_ns)
-      step %Q/I switch to the first user/
-      step %Q/the first user is cluster-admin/
-      step %Q(I use the "#{kata_ns}" project)
-      step %Q/I open admin console in a browser/
-      step %Q/the step should succeed/
-      step %Q/I perform the :goto_operator_subscription_page web action with:/, table(%{
-        | package_name     | #{package_name} |
-        | catalog_name     | #{catalog_name} |
-        | target_namespace | #{kata_ns}      |
-      })
-      step %Q/the step should succeed/
-      # save the channel from subscription into cb.channel
-      step %Q/I extract the channel information from subscription and save it to the clipboard/
-      step %Q/I perform the :set_custom_channel_and_subscribe web action with:/, table(%{
-        | update_channel    | #{cb.channel} |
-        | install_mode      | OwnNamespace  |
-        | approval_strategy | Automatic     |
-      })
-      step %Q/the step should succeed/
-      step %Q/a pod becomes ready with labels:/, table(%{
-        | control-plane=controller-manager |
-      })
+Then /^sandboxed-operator operator should be installed and running$/ do
+  step %Q/I wait until sandboxed operator is ready/
+end
+
+Given /^I wait until sandboxed operator is ready$/ do
+  timeout = 120
+  kata_ns = "openshift-sandboxed-containers-operator"
+  expected_status = "Installed"
+  expected_state = "Succeeded"
+  operator_status = {
+    instruction: "Wait till operator is installed to all worker nodes",
+    success: false,
+  }
+  operator_status[:success] = wait_for(timeout, stats: {}) do
+    step %Q/I store master major version in the :master_version clipboard/
+    if cb.master_version == "4.9"
+      @result_status = admin.cli_exec(:get, resource: "operators", o: "jsonpath=''{..status.components.refs[4].conditions[0].type}'", n:kata_ns)[:stdout].to_s.include? expected_status
+      @result_state = admin.cli_exec(:get, resource: "operators", o: "jsonpath=''{..status.components.refs[5].conditions[0].type}'", n:kata_ns)[:stdout].to_s.include? expected_state
     else
-      step %Q/I switch to cluster admin pseudo user/
-      step %Q|I obtain test data file "kata/release-#{cb.master_version}/deployment.yaml"|
-      @result = user.cli_exec(:apply, f: "deployment.yaml")
-      raise "Failed to deploy kata operator" unless @result[:success]
-      project(kata_ns)
-    end
-
-    # make sure kata-operator is running first before installing the kataconfig
-    step %Q/a pod becomes ready with labels:/, table(%{
-      | control-plane=controller-manager |
-    })
-    step %Q|I obtain test data file "kata/release-#{cb.master_version}/kataconfiguration_v1_kataconfig.yaml"|
-    @result = user.cli_exec(:apply, f: 'kataconfiguration_v1_kataconfig.yaml')
-    raise "Failed to apply kataconfig" unless @result[:success]
-    step %Q/I wait for "#{kata_config_name}" install to start/
-  else
-    logger.info("There's already an existing 'kataconfig' resuing it...")
-    project(kata_ns)
-    step %Q/I switch to cluster admin pseudo user/
-    # make sure kata-operator is running first before installing the kataconfig
-    step %Q/a pod becomes ready with labels:/, table(%{
-      | control-plane=controller-manager |
-    })
-  end
-  logger.info("Using kata image: #{pod.container_specs.first.image}")
-  step %Q/I wait until number of completed kata runtime nodes match for "#{kata_config_name}"/
-end
-
-Given /^I extract the channel information from subscription and save it to the#{OPT_SYM} clipboard$/ do |cb_name|
-  cb_name ||= :channel
-  step %Q/I store master major version in the :master_version clipboard/ if cb.master_version.nil?
-  step %Q|I obtain test data file "kata/release-#{cb.master_version}/subscription.yaml"|
-  channel = YAML.load(open('subscription.yaml')).dig('spec', 'channel')
-  logger.info("Subscription using channel: #{channel}")
-  cb[cb_name] = channel
-end
-
-Given /^I find all pods running with kata as runtime in the cluster and store them to the#{OPT_SYM} clipboard$/ do |cb_name|
-  ensure_admin_tagged
-  cb_name ||= :kata_pods
-  @result_pods = admin.cli_exec(:get, resource: "pods", all_namespaces: true, o: "jsonpath='{.items[?(@.spec.runtimeClassName==\"kata\")].metadata.name}'")
-  @result_namespaces = admin.cli_exec(:get, resource: "pods", all_namespaces: true, o: "jsonpath='{.items[?(@.spec.runtimeClassName==\"kata\")].metadata.namespace}'")
-  pods = eval(@result_pods[:response]).split(' ')
-  ns = eval(@result_namespaces[:response]).split(' ')
-  ns_pods_list = ns.zip pods
-  kata_pods = []
-  ns_pods_list.each do |ns, p|
-    project(ns)
-    pod_obj = pod(p)
-    kata_pods << pod_obj
-  end
-  cb[cb_name] = kata_pods
-end
-
-Given /^I remove all kata pods in the cluster stored in the#{OPT_SYM} clipboard$/ do |cb_name|
-  cb_name ||= :kata_pods
-  cb[cb_name].each do | kp |
-    logger.info("Removing pod #{kp.name}...")
-    begin
-      res_type, res_name = kp.walk_owner_references(user: user, resource_name: pod.name, resource_type: kp)
-      unless res_type.is_a? String
-        res_type = res_type.class.name.split('BushSlicer::').last
-      end
-      resource_word = camel_to_snake_case(res_type) # BushSlicer::RESOURCES[res_type.class].to_s
-      step_sentence = "I ensure \"#{res_name}\" #{resource_word} is deleted from the \"#{project.name}\" project"
-      step %Q/#{step_sentence}/
-    rescue
-      next
+      @result_status = admin.cli_exec(:get, resource: "operators", o: "jsonpath=''{..status.components.refs[7].conditions[0].type}'", n:kata_ns)[:stdout].to_s.include? expected_status
+      @result_state = admin.cli_exec(:get, resource: "operators", o: "jsonpath=''{..status.components.refs[8].conditions[0].type}'", n:kata_ns)[:stdout].to_s.include? expected_state
     end
   end
+  raise "Failed to install sandboxed operator" unless @result_state
+  logger.info("Sandboxed operator installation status is #{expected_state}")
+end
+
+When /^I apply #{QUOTED} in #{QUOTED} namespace$/ do |kata_config_name, kata_ns|
+  step %Q/I store master major version in the :master_version clipboard/
+  step %Q|I obtain test data file "kata/release-#{cb.master_version}/kataconfiguration_v1_kataconfig.yaml"|
+  @result = user.cli_exec(:apply, f: 'kataconfiguration_v1_kataconfig.yaml', n:kata_ns)
+  raise "Failed to apply #{kata_config_name} kataconfig" unless @result[:success]
+end
+
+Then /^Kata runtime installed on selected worker nodes for #{QUOTED} kataconfig$/ do |kataconfig_name|
+  step %Q|I wait until number of completed kata runtime nodes for "#{kataconfig_name}" matches|
+end
+
+When /^I apply #{QUOTED} pod in #{QUOTED} namespace$/ do |pod_name, kata_ns|
+  step %Q|I obtain test data file "kata/#{pod_name}.yaml"|
+  @result = user.cli_exec(:apply, f: "#{pod_name}.yaml", n:kata_ns)
+  raise "Failed to deploy a pod" unless @result[:success]
+end
+
+Then /^#{QUOTED} pod should run using kata runtime$/ do |pod_name|
+  step %Q|I wait until "#{pod_name}" is ready|
+end
+
+Given /^I wait until #{QUOTED} pod is running$/ do |pod_name|
+  timeout = 30
+  kata_ns = "openshift-sandboxed-containers-operator"
+  expected_status = "Running"
+  pod_status = {
+    instruction: "Wait till pod is running",
+    success: false,
+  }
+  pod_status[:success] = wait_for(timeout) do
+    @result_status = admin.cli_exec(:get, resource: "pods/#{pod_name}", o: "jsonpath=''{..status.phase}'", n:kata_ns)[:stdout].to_s.include? expected_status
+  end
+  raise "Failed to deploy a pod" unless @result_status
+  logger.info("Pod deployment status is #{expected_status}")
+end
+
+Given /^I check if #{QUOTED} runtime is kata$/ do |pod_name|
+  timeout = 30
+  kata_ns = "openshift-sandboxed-containers-operator"
+  expected_runtime = "kata"
+  pod_status = {
+    instruction: "Check if pod runtime is kata",
+    success: false,
+  }
+  pod_status[:success] = wait_for(timeout) do
+    @result_runtime = admin.cli_exec(:get, resource: "pods/#{pod_name}", o: "jsonpath=''{..spec.runtimeClassName}'", n:kata_ns)[:stdout].to_s.include? expected_runtime
+  end
+  raise "Pod's runtime it not kata" unless @result_runtime
+  logger.info("Pod runtime is #{expected_runtime}")
 end
