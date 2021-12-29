@@ -133,10 +133,19 @@ Feature: Machine-api components upgrade tests
     And 1 pod becomes ready with labels:
       | k8s-app=termination-handler |
 
+    @aws-ipi
     Examples:
       | iaas_type | machineset_name        | value                   |
       | aws       | machineset-clone-41175 | "spotMarketOptions": {} |
+
+    @gcp-ipi
+    Examples:
+      | iaas_type | machineset_name        | value                   |
       | gcp       | machineset-clone-41803 | "preemptible": true     |
+
+    @azure-ipi
+    Examples:
+      | iaas_type | machineset_name        | value                   |
       | azure     | machineset-clone-41804 | "spotVMOptions": {}     |
 
   # @author zhsun@redhat.com
@@ -250,12 +259,8 @@ Feature: Machine-api components upgrade tests
 
   @upgrade-prepare
   @admin
-  @aws-ipi
-  @gcp-ipi
   @4.10 @4.9 @4.8 @4.7
-  @vsphere-ipi
-  @azure-ipi
-  @openstack-ipi
+  @vsphere-ipi @openstack-ipi @gcp-ipi @azure-ipi @aws-ipi
   Scenario: Registering Components delays should not be more than liveliness probe - prepare 
     Given the expression should be true> "True" == "True"
 
