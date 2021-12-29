@@ -1,13 +1,12 @@
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
 metadata:
-  name: kata-operator
-  namespace: sandboxed-containers-operator-system
+  name: sandboxed-containers-operator
+  namespace: openshift-sandboxed-containers-operator
 spec:
-  channel: <%= cb.cluster_ver %>
+  channel: "preview-1.1"
   installPlanApproval: Automatic
-  name: kata-operator
-  source: qe-app-registry
+  name: sandboxed-containers-operator
+  source: kataci-index
   sourceNamespace: openshift-marketplace
-  startingCSV: sandboxed-containers-operator.v1.0.0
-
+  startingCSV: sandboxed-containers-operator.v1.1.0
