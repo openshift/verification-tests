@@ -52,7 +52,7 @@ Feature: basic verification for upgrade oc client testing
   @users=upuser1,upuser2
   @4.10 @4.9 @4.8
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Check some container related oc commands still work for ocp45 after upgrade - prepare
     Given the master version >= "4.5"
     Given I switch to the first user

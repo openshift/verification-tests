@@ -158,6 +158,7 @@ Feature: Storage upgrade tests
   @admin
   @4.10 @4.9 @4.8 @4.7
   @baremetal-ipi
+  @baremetal-upi
   Scenario: Cluster operator storage should be in correct status after upgrade - prepare
     Given I switch to cluster admin pseudo user
     # Check cluster operator storage should be in correct status
