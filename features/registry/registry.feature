@@ -278,13 +278,12 @@ Feature: Testing registry
       | from_file   | /tmp/.dockerconfigjson |
     Then the step should succeed
     When I run the :tag client command with:
-      | source | registry.redhat.io/rhscl/mysql-80-rhel7:latest |
-      | dest   | mysql:8.0                                      |
+      | source | registry.redhat.io/rhel8/mysql-80:latest | 
+      | dest   | mysql:8.0-el8                            |
     Then the step should succeed
     When I run the :new_app client command with:
       | template | mysql-ephemeral               |
       | p        | NAMESPACE=<%= project.name %> |
-      | p        | MYSQL_VERSION=8.0             |
     Then the step should succeed
     When a pod becomes ready with labels:
       | deployment=mysql-1 |
