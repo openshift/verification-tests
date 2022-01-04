@@ -119,3 +119,9 @@ Given /^I check if #{QUOTED} runtime is kata$/ do |pod_name|
   raise "Pod's runtime it not kata" unless @result_runtime
   logger.info("Pod runtime is #{expected_runtime}")
 end
+
+Given  /^kata operator is installed successfully$/ do
+  step %Q/catalogsource "redhat-operators" exists in "openshift-marketplace" namespace/
+  step %Q/I install sandboxed-operator in "openshift-sandboxed-containers-operator" namespace/
+  step %Q/sandboxed-operator operator should be installed and running/
+end
