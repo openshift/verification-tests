@@ -5,7 +5,7 @@ Feature: web console related upgrade check
   @users=upuser1,upuser2
   @4.10 @4.9 @4.8
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: check console accessibility - prepare
     Given I switch to the first user
     When I run the :new_project client command with:
