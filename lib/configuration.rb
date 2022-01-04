@@ -36,7 +36,7 @@ module BushSlicer
       @opts[:files].each { |f| raw_configs << load_file(f) }
 
       # merge config from environment if present
-      if ENV["BUSHSLICER_CONFIG"] && !ENV["BUSHSLICER_CONFIG"].empty?
+      if ENV["BUSHSLICER_CONFIG"] && !ENV["BUSHSLICER_CONFIG"].strip.empty?
         raw_configs << YAML.load(ENV["BUSHSLICER_CONFIG"])
       end
 
