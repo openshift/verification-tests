@@ -69,6 +69,7 @@ Feature: Egress compoment upgrade testing
   # @author huirwang@redhat.com
   @admin
   @upgrade-prepare
+  @network-ovnkubernetes
   @4.10 @4.9 @4.8
   @vsphere-ipi
   @vsphere-upi
@@ -123,6 +124,7 @@ Feature: Egress compoment upgrade testing
   # @case_id OCP-44316
   @admin
   @upgrade-check
+  @network-ovnkubernetes
   @4.10 @4.9 @4.8
   @vsphere-ipi
   @vsphere-upi
