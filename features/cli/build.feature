@@ -142,7 +142,7 @@ Feature: build 'apps' with CLI
     Given I create a new project
     When I run the :new_app client command with:
       | image_stream      | openshift/mysql                                      |
-      | image             | registry.access.redhat.com/rhscl/postgresql-96-rhel7 |
+      | image             | registry.redhat.io/rhel8/postgresql-12       |
       | env               | POSTGRESQL_USER=user                                 |
       | env               | POSTGRESQL_DATABASE=db                               |
       | env               | POSTGRESQL_PASSWORD=test                             |
@@ -160,7 +160,7 @@ Feature: build 'apps' with CLI
     Then the step should succeed
     """
     And the output should contain "mysql"
-    Given I wait for the "postgresql-96-rhel7" service to become ready up to 300 seconds
+    Given I wait for the "postgresql-12" service to become ready up to 300 seconds
     And I get the service pods
     And I wait up to 120 seconds for the steps to pass:
     """

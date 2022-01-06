@@ -5,7 +5,7 @@ Feature: SDN compoment upgrade testing
   @upgrade-prepare
   @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @openstack-upi @gcp-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: network operator should be available after upgrade - prepare
   # According to our upgrade workflow, we need an upgrade-prepare and upgrade-check for each scenario.
   # But some of them do not need any prepare steps, which lead to errors "can not find scenarios" in the log.
@@ -38,7 +38,7 @@ Feature: SDN compoment upgrade testing
   @upgrade-prepare
   @4.10 @4.9 @4.8
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Check the networkpolicy works well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     When I run the :new_project client command with:
@@ -97,7 +97,7 @@ Feature: SDN compoment upgrade testing
   @upgrade-prepare
   @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @openstack-upi @gcp-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Check the namespace networkpolicy for an application works well after upgrade - prepare
     Given I switch to cluster admin pseudo user
     When I run the :new_project client command with:
@@ -257,7 +257,7 @@ Feature: SDN compoment upgrade testing
   @upgrade-prepare
   @4.10 @4.9 @4.8
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Check allow from router and allow from hostnetwork policy are functional post upgrade - prepare
     Given I switch to cluster admin pseudo user
     When I run the :new_project client command with:
@@ -376,6 +376,8 @@ Feature: SDN compoment upgrade testing
   @admin
   @upgrade-prepare
   @4.10 @4.9 @4.8
+  @azure-upi @aws-upi
+  @azure-ipi @aws-ipi
   Scenario: Conntrack rule for UDP traffic should be removed when the pod for NodePort service deleted post upgrade - prepare
     Given I switch to cluster admin pseudo user
     And I store the workers in the :nodes clipboard

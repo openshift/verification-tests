@@ -14,7 +14,7 @@ Feature: build related upgrade check
     Then the step should succeed
     When I run the :new_app_as_dc client command with:
       | app_repo | quay.io/openshifttest/ruby-27:multiarch~https://github.com/openshift/ruby-hello-world |
-      | strategy | docker                                                                                      |
+      | strategy | docker                                                                                |
     Then the step should succeed
     Given I use the "build-upgrade" project
     Then the "ruby-ex-1" build completed

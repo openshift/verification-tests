@@ -8,6 +8,7 @@ module BushSlicer
     def initialize(values)
       @memory_limit = values["limits.memory"]
       @storage_requests = values["requests.storage"]
+      @cpu = values["cpu"]
     end
 
     def memory_limit_raw
@@ -16,6 +17,10 @@ module BushSlicer
 
     def storage_requests_raw
       @storage_requests
+    end
+
+    def cpu
+      @cpu
     end
 
     # returns numeric representation of memrory limit in bytes

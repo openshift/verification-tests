@@ -8,7 +8,7 @@ Feature: Logging upgrading related features
   @users=upuser1,upuser2
   @4.10 @4.9 @4.8
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Cluster logging checking during cluster upgrade - prepare
     Given I switch to the first user
     Given I have "json" log pod in project "logging-upg-prep-1"

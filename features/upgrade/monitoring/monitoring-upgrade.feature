@@ -4,7 +4,7 @@ Feature: cluster monitoring related upgrade check
   @admin
   @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: upgrade cluster monitoring along with OCP - prepare
     Given I switch to cluster admin pseudo user
     Given I obtain test data file "monitoring/upgrade/cm-monitoring-retention.yaml"

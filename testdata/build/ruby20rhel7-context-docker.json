@@ -75,7 +75,7 @@
         "creationTimestamp": null
       },
       "spec": {
-        "dockerImageRepository": "registry.access.redhat.com/rhscl/ruby-22-rhel7"
+        "dockerImageRepository": "quay.io/openshifttest/ruby-27"
       },
       "status": {
         "dockerImageRepository": ""
@@ -116,7 +116,7 @@
         "source": {
           "type": "Git",
           "git": {
-            "uri": "https://github.com/openshift-qe/ruby-hello-world-context.git"
+            "uri": "https://github.com/openshift-qe/ruby-hello-world-context-dir",
           },
           "contextDir": "test"
         },
@@ -125,7 +125,7 @@
           "dockerStrategy": {
             "from": {
               "kind": "DockerImage",
-              "name": "registry.access.redhat.com/rhscl/ruby-22-rhel7:latest"
+              "name": "quay.io/openshifttest/ruby-27:multiarch"
             },
             "env": [
               {

@@ -6,7 +6,7 @@ Feature: fips enabled verification for upgrade
   @4.10 @4.9 @4.8
   @fips
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
-  @vsphere-upi @openstack-upi @gcp-upi @azure-upi @aws-upi
+  @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: FIPS mode checking command works for a cluster with fip mode on - prepare
     Given fips is enabled
 
