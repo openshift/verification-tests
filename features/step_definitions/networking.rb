@@ -1019,6 +1019,7 @@ Given /^I store "([^"]*)" node's corresponding default networkType pod name in t
   logger.info "node's corresponding networkType pod name is stored in the #{cb_pod_name} clipboard as #{cb[cb_pod_name]}."
 end
 
+
 Given /^I store the ovnkube-master#{OPT_QUOTED} leader pod in the#{OPT_SYM} clipboard(?: using node #{QUOTED})?$/ do |ovndb, cb_leader_name, node_name|
   ensure_admin_tagged
   cb_leader_name ||= "#{ovndb}_leader"
@@ -1436,4 +1437,22 @@ Given /^I save openflow egressip table number to the#{OPT_SYM} clipboard$/ do | 
     cb[cb_name]="101"
   end
   logger.info "The openfolw egressip related table number #{cb[cb_name]} is stored to the #{cb_name} clipboard."
+end
+
+Given /^I switch the ovn gateway mode on this cluster$/ do
+  ensure_admin_tagged
+  step "I store the masters in the clipboard"
+  ovnkube_master = BushSlicer::Pod.get_labeled("app=ovnkube-master", project: project("openshift-ovn-kubernetes", switch: false), user: admin, quiet: true) { |pod, hash| pod.node_name == node.name}.first
+  @result = admin.cli_exec(:logs, resource_name: ovnkube_master.name, n: "openshift-ovn-kubernetes", c: "ovnkube-master")
+  
+  if @result[:response].include? "Gateway:{Mode:local"
+    logger.info "OVN Gateway mode is Local. Changing Gateway mode to Shared now..."
+    @result = admin.cli_exec(:patch, resource: "network.operator", resource_name: "cluster", p: "{\"spec\":{\"defaultNetwork\":{\"ovnKubernetesConfig\":{\"gatewayConfig\":{\"routingViaHost\": false}}}}}", type: "merge")
+  else
+    logger.info "OVN Gateway mode is Shared. Changing Gateway mode to Local now..."
+    @result = admin.cli_exec(:patch, resource: "network.operator", resource_name: "cluster", p: "{\"spec\":{\"defaultNetwork\":{\"ovnKubernetesConfig\":{\"gatewayConfig\":{\"routingViaHost\": true}}}}}", type: "merge")
+  end
+  raise "Failed to patch network operator for gateway mode" unless @result[:success]
+  @result = admin.cli_exec(:rollout_status, resource: "daemonset", name: "ovnkube-master", n: "openshift-ovn-kubernetes")
+  raise "Failed to rollout masters" unless @result[:success]
 end
