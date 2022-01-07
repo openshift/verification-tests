@@ -540,7 +540,7 @@ check_metrics_query_filesystem_filter_by_node_type:
   scripts:
   - command:
       return /sum.*node_filesystem_size_bytes.*kube_node_role.*<node_type>/.test(decodeURI(document.querySelectorAll('div.co-utilization-card__item-chart>div>a')[2].href).replaceAll('\n',''))
-    expect_result: true   
+    expect_result: true
 check_metrics_query_network_filter_by_node_type:
   scripts:
   - command:
@@ -793,5 +793,5 @@ check_no_errors_in_charts:
 check_monitoring_dashboard_card:
   element:
     selector:
-      xpath: //h2[contains(@class,'co-dashboard-card__title') and text()='<card_name>']
+      xpath: //div[contains(@class,'pf-c-card__title') and text()='<card_name>']
     timeout: 60
