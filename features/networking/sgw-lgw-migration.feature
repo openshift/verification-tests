@@ -9,7 +9,8 @@ Feature: SGW<->LGW migration related scenarios
   @vsphere-ipi @baremetal-ipi
     Scenario: [SDN-2290] SGW <-> LGW migration scenario	
     ######## Prepare Data Pre Migration for multiple use cases############
-
+    Given the env is using "OVNKubernetes" networkType
+    
     #OCP-47087 - [bug_1903408]Other node cannot be accessed for nodePort when externalTrafficPolicy is Local	
     Given I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master0_ip clipboard
