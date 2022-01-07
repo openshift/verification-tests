@@ -5,7 +5,8 @@ Feature: SGW<->LGW migration related scenarios
   @4.10
   @admin
   @destructive
-  @baremetal-upi @aws-ipi
+  @network-ovnkubernetes
+  @vsphere-ipi @baremetal-ipi
     Scenario: [SDN-2290] SGW <-> LGW migration scenario	
     ######## Prepare Data Pre Migration for multiple use cases############
 
