@@ -158,9 +158,9 @@ module BushSlicer
     # target is the directory path to the file, which is not really a path but
     # a key index for example we can think of
     # 2021/09/04/12:11:12 and 2021/09/04/23:11:12 as differnt directories
-    def s3_upload_file(bucket:, file:, target: nil)
+    def s3_upload_file(bucket:, file:, target: nil, content_type: 'text/html')
       target ||= File.basename file
-      res = s3.bucket(bucket).object(target).upload_file(file)
+      res = s3.bucket(bucket).object(target).upload_file(file, content_type: content_type)
       logger.info("S3 upload file status: #{res}")
       unless res
         raise "Failed to upload file '#{file}' to #{target}'"
