@@ -20,6 +20,12 @@ create_cr_etcdcluster:
   action: create_custom_resource
   action: switch_to_yaml_view
   action: click_create_button
+create_cr_nfd:
+   params:
+     api: NodeFeatureDiscovery
+   action: create_custom_resource
+   action: switch_to_yaml_view
+   action: click_create_button
 create_cr_topic:
   params:
     api: Topic
@@ -31,7 +37,7 @@ create_cr_infinispancluster:
     api: Infinispan Cluster
   action: create_custom_resource
   action: switch_to_yaml_view
-  action: click_create_button 
+  action: click_create_button
 create_operand:
   params:
     tab_name: <operand_kind>
@@ -204,6 +210,14 @@ create_catalog_source:
     - click_radio_input
     - select_resource_item
   action: submit_changes
+subscribe_operator_to_namespace_with_default:
+  params:
+    project_name: <target_namespace>
+  action: goto_operator_subscription_page
+  action: click_radio_specific_ns
+  action: click_radio_to_pick_ns
+  action: select_target_namespace
+  action: click_subscribe_button
 subscribe_operator_to_namespace:
   params:
     project_name: <target_namespace>
@@ -574,6 +588,10 @@ enable_cluster_monitoring:
 click_radio_to_pick_ns:
   params:
     text: Select
+  action: click_radio_input_by_text
+click_radio_specific_ns:
+  params:
+    text: A specific namespace
   action: click_radio_input_by_text
 click_approve_button:
   params:
