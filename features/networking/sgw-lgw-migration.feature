@@ -8,9 +8,11 @@ Feature: SGW<->LGW migration related scenarios
   @network-ovnkubernetes
   @vsphere-ipi
     Scenario: [SDN-2290] SGW <-> LGW migration scenario	for vsphere platform
-    ######## Prepare Data Pre Migration for multiple use cases############
+		
     Given the env is using "OVNKubernetes" networkType
-    
+
+    ######## Prepare Data Pre Migration for multiple use cases############
+
     #OCP-47087 - [bug_1903408]Other node cannot be accessed for nodePort when externalTrafficPolicy is Local	
     Given I store the masters in the :masters clipboard
     And the Internal IP of node "<%= cb.masters[0].name %>" is stored in the :master0_ip clipboard
@@ -30,10 +32,14 @@ Feature: SGW<->LGW migration related scenarios
     Then the step should succeed
     
     #Switching cluster to another gateway mode and reverting back to original in clean up
-    Given I switch the ovn gateway mode on this cluster
+    Given the status of condition "Degraded" for network operator is :False
+    And the status of condition "Available" for network operator is :True
+    And I switch the ovn gateway mode on this cluster
     And I register clean-up steps:
     """
     I switch the ovn gateway mode on this cluster
+    And the status of condition "Degraded" for network operator is :False
+    And the status of condition "Available" for network operator is :True
     """
     
     ######## Check Data Post Migration for multiple use cases############
@@ -64,8 +70,10 @@ Feature: SGW<->LGW migration related scenarios
   @network-ovnkubernetes
   @baremetal-upi
     Scenario: [SDN-2290] SGW <-> LGW migration scenario	for BM platform
-    ######## Prepare Data Pre Migration for multiple use cases############
+		
     Given the env is using "OVNKubernetes" networkType
+
+    ######## Prepare Data Pre Migration for multiple use cases############
     
     #OCP-47087 - [bug_1903408]Other node cannot be accessed for nodePort when externalTrafficPolicy is Local	
     Given I store the masters in the :masters clipboard
@@ -85,15 +93,19 @@ Feature: SGW<->LGW migration related scenarios
       | ["spec"]["externalTrafficPolicy"] | Local          |
     Then the step should succeed
     
+    
     #Switching cluster to another gateway mode and reverting back to original in clean up
-    Given I switch the ovn gateway mode on this cluster
+    Given the status of condition "Degraded" for network operator is :False
+    And the status of condition "Available" for network operator is :True
+    And I switch the ovn gateway mode on this cluster
     And I register clean-up steps:
     """
     I switch the ovn gateway mode on this cluster
+    And the status of condition "Degraded" for network operator is :False
+    And the status of condition "Available" for network operator is :True
     """
     
     ######## Check Data Post Migration for multiple use cases############
-    
     
     #OCP-47087 - [bug_1903408]Other node cannot be accessed for nodePort when externalTrafficPolicy is Local	
     Given I use the "<%= cb.masters[1].name %>" node
