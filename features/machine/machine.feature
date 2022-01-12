@@ -587,3 +587,11 @@ Feature: Machine features testing
     And the output should contain:
       | Forbidden: publicIP is not allowed in Azure disconnected installation |
 
+  # @author miyadav@redhat.com
+  # @case_id OCP-47658
+  @admin
+  @4.10
+  Scenario: Operator cloud-controller-manager should not show empty version
+    Given I switch to cluster admin pseudo user
+    Then evaluation of `cluster_operator('cloud-controller-manager').versions` is stored in the :versions clipboard
+    And the expression should be true> cb.versions[0].include? "4"
