@@ -264,10 +264,17 @@ Feature: Routing and DNS related scenarios
     And the expression should be true> service('service-unsecure').annotation('idling.alpha.openshift.io/unidle-targets', cached: false) == "[{\"kind\":\"ReplicationController\",\"name\":\"web-server-rc\",\"replicas\":1}]"
 
     Given I have a test-client-pod in the project
+    # To wake the idling service
+    And I execute on the pod:
+      | curl | -ksS | http://<%= route("service-unsecure", service("service-unsecure")).dns %>/ |
+  
+    Given I wait up to 30 seconds for the steps to pass:
+    """
     When I execute on the pod:
       | curl | -ksS | http://<%= route("service-unsecure", service("service-unsecure")).dns %>/ |
     Then the step should succeed
     And the output should contain "Hello-OpenShift web-server-rc"
+    """
 
     # Check the servcie service-unsecure to see the idle annotation got removed
     And the expression should be true> !service('service-unsecure').annotation('idling.alpha.openshift.io/unidle-targets', cached: false)
