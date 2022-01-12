@@ -46,12 +46,13 @@ Given /^authentication successfully rolls out after config changes$/ do
   success = wait_for(timeout, interval: interval_time, stats: stats){
     begin
       step %Q/I run the :get admin command with:/, table(%{
-          | resource | pod                      |
-          | l        | app=oauth-openshift      |
-          | n        | openshift-authentication |
+          | resource         | pod                      |
+          | l                | app=oauth-openshift      |
+          | n                | openshift-authentication |
+          | --field-selector | status.phase!=Running    |
           })
       step %Q/the step should succeed/
-      step %Q/the output should not contain "Terminating"/
+      step %Q/the output should match "No resources found in openshift-authentication namespace."/
       true
     rescue => e
       error = e
