@@ -194,7 +194,7 @@ click_schema_tab:
   action: click_tab
 click_machine_configs_tab:
   params:
-    tab_name: Machine Configs
+    tab_name: MachineConfigs
   action: click_tab
 check_edit_yaml_enabled:
   params:
