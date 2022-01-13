@@ -7,7 +7,7 @@ Feature: SGW<->LGW migration related scenarios
   @destructive
   @network-ovnkubernetes
   @vsphere-ipi
-    Scenario: [SDN-2290] SGW <-> LGW migration scenario	for vsphere platform
+  Scenario: [SDN-2290] SGW <-> LGW migration scenario	for vsphere platform
     Given the env is using "OVNKubernetes" networkType
 
     ######## Prepare Data Pre Migration for multiple use cases############
@@ -68,7 +68,7 @@ Feature: SGW<->LGW migration related scenarios
   @destructive
   @network-ovnkubernetes
   @baremetal-upi
-    Scenario: [SDN-2290] SGW <-> LGW migration scenario	for BM platform
+  Scenario: [SDN-2290] SGW <-> LGW migration scenario	for BM platform
     Given the env is using "OVNKubernetes" networkType
 
     ######## Prepare Data Pre Migration for multiple use cases############
