@@ -422,6 +422,7 @@ Feature: OVN related networking scenarios
   @admin
   @destructive
   @4.10 @4.9
+  @network-ovnkubernetes
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
   @vsphere-upi @openstack-upi @gcp-upi @baremetal-upi @azure-upi @aws-upi
   Scenario: Inducing Split Brain in the OVN HA cluster
@@ -574,7 +575,7 @@ Feature: OVN related networking scenarios
       | ping | -c | 30 | -i | 0.2 | <%= cb.pod2_ip%> |
     Then the step should succeed
     And the output should contain "0% packet loss"
-  
+
   # @author anusaxen@redhat.com
   # @case_id OCP-46285
   @admin
@@ -607,16 +608,16 @@ Feature: OVN related networking scenarios
     And the output should contain:
       | k8s.ovn.org/host-addresses |
       | <%= cb.apiVIP %>           |
-  
+
     Given I use the "<%= cb.apiVIP_node %>" node
     And the host is rebooted and I wait it up to 600 seconds to become available
-    #Make sure after the reboot apiVIp switches to new node and only 1 entry correspond to apiVIP 
+    #Make sure after the reboot apiVIp switches to new node and only 1 entry correspond to apiVIP
     #exist in NB db (shouldn't be any stale or duplicates)
     Given I store the ovnkube-master "north" leader pod in the clipboard
     And admin executes on the pod "northd" container:
       | bash | -c | ovn-nbctl find logical_router_policy \| grep -B 5 -A 10 <%= cb.apiVIP %> |
     Then the step should succeed
-    #apiVIP switches to new node in case of node reboot and in very rare case couple of entries might stay there until apiVIP 
+    #apiVIP switches to new node in case of node reboot and in very rare case couple of entries might stay there until apiVIP
     #switching is done completely. Making sure 1 current entry should stay there eventually
     Given I wait up to 120 seconds for the steps to pass:
     """
