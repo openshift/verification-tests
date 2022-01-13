@@ -198,9 +198,15 @@ Given /^I terminate last background process$/ do
   @result = @bg_processes.last.result
 end
 
-Given /^I check status of last background process$/ do
+Given /^I check status of( and pop)? last background process$/ do |pop|
   @bg_processes.last.wait(10)
   @result = @bg_processes.last.result
+  if pop
+    raise "0 background process left" unless @bg_processes.length > 0
+    print "Background processes number: ", @bg_processes.length, " Last background process pid: ", @bg_processes.last.pid, "\n"
+    @bg_processes.last.kill_tree
+    @bg_processes = @bg_processes[0...-1]
+  end
 end
 
 # This step needs flexibly specify table.
