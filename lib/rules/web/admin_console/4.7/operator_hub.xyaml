@@ -541,7 +541,7 @@ enable_cluster_monitoring:
     op: click
 click_radio_to_pick_ns:
   params:
-    text: Select a namespace
+    text: Select
   action: click_radio_input_by_text
 click_approve_button:
   params:
