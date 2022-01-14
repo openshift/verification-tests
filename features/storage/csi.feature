@@ -78,6 +78,7 @@ Feature: CSI testing related feature
     @openstack-ipi
     @openstack-upi
     @upgrade-sanity
+    @qeci
     Examples:
       | sc_name      |
       | standard-csi | # @case_id OCP-37572
@@ -159,6 +160,7 @@ Feature: CSI testing related feature
     @openstack-ipi
     @openstack-upi
     @upgrade-sanity
+    @qeci
     Examples:
       | sc_name      |
       | standard-csi | # @case_id OCP-37562
@@ -211,6 +213,7 @@ Feature: CSI testing related feature
     @openstack-ipi
     @openstack-upi
     @upgrade-sanity
+    @qeci
     Examples:
       | sc_name       | fstype |
       | standard-csi  | xfs    | # @case_id OCP-37560
@@ -254,6 +257,7 @@ Feature: CSI testing related feature
 
     @openstack-ipi
     @openstack-upi
+    @qeci
     Examples:
       | sc_name      |
       | standard-csi | # @case_id OCP-37564
