@@ -391,11 +391,11 @@ Given /^(cluster-logging|elasticsearch-operator) channel name is stored in the#{
     when '4.2','4.3','4.4','4.5','4.6'
       cb[cb_name] = version
     when '4.7'
-      cb[cb_name] = "5.0"
-    when '4.8'
       cb[cb_name] = "stable-5.1"
-    when '4.9'
+    when '4.8'
       cb[cb_name] = "stable-5.2"
+    when '4.9'
+      cb[cb_name] = "stable-5.3"
     when '4.10'
       cb[cb_name] = "stable"
     else

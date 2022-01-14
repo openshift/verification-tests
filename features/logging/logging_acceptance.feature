@@ -45,24 +45,103 @@ Feature: Logging smoke test case
     Then the step should succeed
     Then I wait for the "openshift-operators-redhat" project to appear
     Given elasticsearch operator is ready in the "openshift-operators-redhat" namespace
-    Then I use the "openshift-logging" project
+
+    # create a pod to generate some logs
+    Given I switch to the second user
+    And I have a project
+    And evaluation of `project` is stored in the :proj clipboard
+    And I obtain test data file "logging/loggen/container_json_log_template.json"
+    When I run the :new_app client command with:
+      | file | container_json_log_template.json |
+    Then the step should succeed
+    Given a pod becomes ready with labels:
+      | run=centos-logtest,test=centos-logtest |
+    # deploy external log stores
+    Given I create a project with non-leading digit name
+    And evaluation of `project.name` is stored in the :logS_proj clipboard
+    Given external elasticsearch server is deployed with:
+      | version      | 6.8                 |
+      | scheme       | https               |
+      | client_auth  | true                |
+      | project_name | <%= cb.logS_proj %> |
+      | secret_name  | eessecret           |
+    Then the step should succeed
+    And fluentd receiver is deployed as secure with mTLS_share enabled in the "<%= cb.logS_proj %>" project
+    And rsyslog receiver is deployed as insecure in the "<%= cb.logS_proj %>" project
+
+    Given I switch to the first user
+    And I use the "openshift-logging" project
+    Given admin ensures "instance" cluster_log_forwarder is deleted from the "openshift-logging" project after scenario
+    And I obtain test data file "logging/clusterlogforwarder/37508.yaml"
+    When I process and create:
+      | f | 37508.yaml                                                       |
+      | p | ES_URL=https://elasticsearch-server.<%= cb.logS_proj %>.svc:9200 |
+      | p | ES_SECRET=eessecret                                              |
+      | p | FLUENTD_URL=tls://fluentdserver.<%= cb.logS_proj %>.svc:24224    |
+      | p | FLUENTD_SECRET=pipelinesecret                                    |
+      | p | SYSLOG_URL=tcp://rsyslogserver.<%= cb.logS_proj %>.svc:514       |
+    Then the step should succeed
+    And I wait for the "instance" cluster_log_forwarder to appear
+
     And default storageclass is stored in the :default_sc clipboard
     Given I obtain test data file "logging/clusterlogging/cl-storage-with-im-template.yaml"
-    When I process and create:
-      | f | cl-storage-with-im-template.yaml        |
-      | p | STORAGE_CLASS=<%= cb.default_sc.name %> |
-      | p | PVC_SIZE=10Gi                           |
-      | p | ES_NODE_COUNT=1                         |
-      | p | REDUNDANCY_POLICY=ZeroRedundancy        |
+    When I create clusterlogging instance with:
+      | crd_yaml          | cl-storage-with-im-template.yaml |
+      | storage_class     | <%= cb.default_sc.name %>        |
+      | storage_size      | 10Gi                             |
+      | es_node_count     | 1                                |
+      | redundancy_policy | ZeroRedundancy                   |
     Then the step should succeed
-    And I wait until ES cluster is ready
-    And I wait until kibana is ready
-    And I wait until fluentd is ready
 
     # check the .security index is created after ES pods started
     Given I wait for the ".security" index to appear in the ES pod with labels "es-node-master=true"
     And the expression should be true> cb.index_data['docs.count'] > "0"
+    Given I wait for the "app" index to appear in the ES pod with labels "es-node-master=true"
+    Given I wait for the "infra" index to appear in the ES pod with labels "es-node-master=true"
+    And I wait for the project "<%= cb.proj.name %>" logs to appear in the ES pod
+    And I wait for the "audit" index to appear in the ES pod with labels "es-node-master=true"
+
+    # store current indices
+    When I perform the HTTP request on the ES pod with labels "es-node-master=true":
+      | relative_url | _cat/indices?format=JSON |
+      | op           | GET                      |
+    Then the step should succeed
+    And evaluation of `@result[:parsed].select {|e| e['index'].start_with? "app"}.map {|x| x["index"]}` is stored in the :app_indices clipboard
+    And evaluation of `@result[:parsed].select {|e| e['index'].start_with? "infra"}.map {|x| x["index"]}` is stored in the :infra_indices clipboard
+    And evaluation of `@result[:parsed].select {|e| e['index'].start_with? "audit"}.map {|x| x["index"]}` is stored in the :audit_indices clipboard
+
+    # for testing purpose, update the schedule of cronjobs and maxAge of each log types
+    Given I register clean-up steps:
+    """
+    Given I switch to cluster admin pseudo user
+    And I use the "openshift-logging" project
+    Given I successfully merge patch resource "clusterlogging/instance" with:
+      | {"spec": {"logStore": {"retentionPolicy": {"application": {"maxAge": "6h"}, "audit": {"maxAge": "1w"}, "infra": {"maxAge": "3h"}}}}} |
+    And I successfully merge patch resource "elasticsearch/elasticsearch" with:
+      | {"spec": {"managementState": "Managed"}} |
+    """
+    Given I successfully merge patch resource "clusterlogging/instance" with:
+      | {"spec": {"logStore": {"retentionPolicy": {"application": {"maxAge": "6m"}, "audit": {"maxAge": "6m"}, "infra": {"maxAge": "6m"}}}}} |
+    And I wait up to 60 seconds for the steps to pass:
+    """
+    Given the expression should be true> elasticsearch("elasticsearch").delete_min_age(cached: false, name: "app-policy") == "6m"
+    And the expression should be true> elasticsearch("elasticsearch").delete_min_age(name: "infra-policy") == "6m"
+    And the expression should be true> elasticsearch("elasticsearch").delete_min_age(name: "audit-policy") == "6m"
+    """
+    Given I successfully merge patch resource "elasticsearch/elasticsearch" with:
+      | {"spec": {"managementState": "Unmanaged"}} |
+    And the expression should be true> elasticsearch("elasticsearch").management_state == "Unmanaged"
+
+    Given evaluation of `["elasticsearch-im-app", "elasticsearch-im-audit", "elasticsearch-im-infra"]` is stored in the :cj_names clipboard
+    And I repeat the following steps for each :cj_name in cb.cj_names:
+    """
+    Given I successfully merge patch resource "cronjob/#{cb.cj_name}" with:
+      | {"spec": {"schedule": "*/5 * * * *"}} |
+    And the expression should be true> cron_job('#{cb.cj_name}').schedule(cached: false) == "*/5 * * * *"
+    """
+
     # Console Dashboard
+    Given I switch to the first user
     When I run the :goto_monitoring_db_cluster_logging web action
     Then the step should succeed
     Given evaluation of `["Elastic Nodes", "Elastic Shards", "Elastic Documents", "Total Index Size on Disk", "Elastic Pending Tasks", "Elastic JVM GC time", "Elastic JVM GC Rate", "Elastic Query/Fetch Latency | Sum", "Elastic Query Rate | Top 5", "CPU", "Elastic JVM Heap Used", "Elasticsearch Disk Usage", "File Descriptors In Use", "FluentD emit count", "FluentD Buffer Availability", "Elastic rx bytes", "Elastic Index Failure Rate", "FluentD Output Error Rate"]` is stored in the :cards clipboard
@@ -79,8 +158,10 @@ Feature: Logging smoke test case
     Then the step should succeed
     """
     And I close the current browser
+
     # ES Metrics
-    Given I wait for the "monitor-elasticsearch-cluster" service_monitor to appear
+    Given I use the "openshift-logging" project
+    And I wait for the "monitor-elasticsearch-cluster" service_monitor to appear
     Given I wait up to 360 seconds for the steps to pass:
     """
     When I perform the GET prometheus rest client with:
@@ -89,6 +170,7 @@ Feature: Logging smoke test case
     Then the step should succeed
     And the expression should be true>  @result[:parsed]['data']['result'][0]['value']
     """
+
     # Fluentd Metrics
     Given I use the "openshift-logging" project
     Given logging collector name is stored in the :collector_name clipboard
@@ -100,31 +182,16 @@ Feature: Logging smoke test case
       | path  | /api/v1/query?                            |
       | query | fluentd_output_status_buffer_queue_length |
     Then the step should succeed
-    And the expression should be true>  @result[:parsed]['data']['result'][0]['value']
+    And the expression should be true> @result[:parsed]['data']['result'][0]['value']
     """
+
     # Kibana Access
-    Given I switch to the second user
-    Given I create a project with non-leading digit name
-    And evaluation of `project` is stored in the :proj clipboard
-    And I obtain test data file "logging/loggen/container_json_log_template.json"
-    When I run the :new_app client command with:
-      | file | container_json_log_template.json |
-    Then the step should succeed
-    Given a pod becomes ready with labels:
-      | run=centos-logtest,test=centos-logtest |
-
-    Given I switch to cluster admin pseudo user
-    And I use the "openshift-logging" project
-    Given I wait for the "app" index to appear in the ES pod with labels "es-node-master=true"
-    Given I wait for the "infra" index to appear in the ES pod with labels "es-node-master=true"
-    And I wait for the project "<%= cb.proj.name %>" logs to appear in the ES pod
-
     Given I switch to the second user
     And evaluation of `user.cached_tokens.first` is stored in the :user_token_2 clipboard
     When I login to kibana logging web console
     Then the step should succeed
     And I close the current browser
-    # Data Check
+
     # Authorization
     Given I switch to cluster admin pseudo user
     And I use the "openshift-logging" project
@@ -155,49 +222,67 @@ Feature: Logging smoke test case
     Then the step should succeed
     And the expression should be true> [401, 403].include? @result[:exitstatus]
 
-    # Cronjob
-    # check if the cronjobs could delete/rollover indices
-    When I perform the HTTP request on the ES pod with labels "es-node-master=true":
-      | relative_url | _cat/indices?format=JSON |
-      | op           | GET                      |
+    # check data in external log stores
+    Given I use the "<%= cb.logS_proj %>" project
+    Given I wait up to 300 seconds for the steps to pass:
+    """
+    When I check in the external ES pod with:
+      | project_name | <%= cb.logS_proj %>      |
+      | pod_label    | app=elasticsearch-server |
+      | scheme       | https                    |
+      | client_auth  | true                     |
+      | url_path     | */_count?format=JSON     |
+      | query        | {"query": {"match": {"kubernetes.namespace_name": "<%= cb.proj.name %>"}}} |
     Then the step should succeed
-    And evaluation of `@result[:parsed].select {|e| e['index'].start_with? "app"}.map {|x| x["index"]}` is stored in the :app_indices clipboard
-    And evaluation of `@result[:parsed].select {|e| e['index'].start_with? "infra"}.map {|x| x["index"]}` is stored in the :infra_indices clipboard
-    And evaluation of `@result[:parsed].select {|e| e['index'].start_with? "audit"}.map {|x| x["index"]}` is stored in the :audit_indices clipboard
+    And the expression should be true> JSON.parse(@result[:stdout])['count'] == 0
+    When I check in the external ES pod with:
+      | project_name | <%= cb.logS_proj %>      |
+      | pod_label    | app=elasticsearch-server |
+      | scheme       | https                    |
+      | client_auth  | true                     |
+      | url_path     | */_count?format=JSON     |
+      | query        | {"query": {"exists": {"field": "systemd"}}} |
+    Then the step should succeed
+    And the expression should be true> JSON.parse(@result[:stdout])['count'] > 0
+    When I check in the external ES pod with:
+      | project_name | <%= cb.logS_proj %>      |
+      | pod_label    | app=elasticsearch-server |
+      | scheme       | https                    |
+      | client_auth  | true                     |
+      | url_path     | */_count?format=JSON     |
+      | query        | {"query": {"regexp": {"kubernetes.namespace_name": "openshift@"}}} |
+    And the expression should be true> JSON.parse(@result[:stdout])['count'] > 0
+    """
 
-    Given I register clean-up steps:
-    """
-    Given I successfully merge patch resource "clusterlogging/instance" with:
-      | {"spec": {"logStore": {"retentionPolicy": {"application": {"maxAge": "6h"}, "audit": {"maxAge": "1w"}, "infra": {"maxAge": "3h"}}}}} |
-    And I successfully merge patch resource "elasticsearch/elasticsearch" with:
-      | {"spec": {"managementState": "Managed"}} |
-    """
-    Given I successfully merge patch resource "clusterlogging/instance" with:
-      | {"spec": {"logStore": {"retentionPolicy": {"application": {"maxAge": "6m"}, "audit": {"maxAge": "6m"}, "infra": {"maxAge": "6m"}}}}} |
-    And I wait up to 60 seconds for the steps to pass:
-    """
-    Given the expression should be true> elasticsearch("elasticsearch").delete_min_age(cached: false, name: "app-policy") == "6m"
-    And the expression should be true> elasticsearch("elasticsearch").delete_min_age(name: "infra-policy") == "6m"
-    And the expression should be true> elasticsearch("elasticsearch").delete_min_age(name: "audit-policy") == "6m"
-    """
-    Given I successfully merge patch resource "elasticsearch/elasticsearch" with:
-      | {"spec": {"managementState": "Unmanaged"}} |
-    And the expression should be true> elasticsearch("elasticsearch").management_state == "Unmanaged"
+    Given a pod becomes ready with labels:
+      | logging-infra=fluentdserver |
+    When I execute on the pod:
+      | ls | -l | /fluentd/log |
+    Then the output should contain:
+      | app.log             |
+    And the output should not contain:
+      | audit.log           |
+      | infra.log           |
+      | infra-container.log |
 
-    Given evaluation of `["elasticsearch-im-app", "elasticsearch-im-audit", "elasticsearch-im-infra"]` is stored in the :cj_names clipboard
-    And I repeat the following steps for each :cj_name in cb.cj_names:
-    """
-    Given I successfully merge patch resource "cronjob/#{cb.cj_name}" with:
-      | {"spec": {"schedule": "*/3 * * * *"}} |
-    And the expression should be true> cron_job('#{cb.cj_name}').schedule(cached: false) == "*/3 * * * *"
-    """
+    Given a pod becomes ready with labels:
+      | component=rsyslogserver |
+    When I execute on the pod:
+      | ls | -l | /var/log/clf/ |
+    Then the output should contain:
+      | audit.log           |
+    And the output should not contain:
+      | app-container.log   |
+      | infra.log           |
+      | infra-container.log |
 
     # check if there has new index created and check if the old index could be deleted or not
     # !(cb.new_app_indices - cb.app_indices).empty? ensures there has new index
     # !(cb.app_indices - cb.new_app_indices).empty? ensures some old indices can be deleted
-    Given I check the cronjob status
+    Given I use the "openshift-logging" project
+    And I check the cronjob status
     Then the step should succeed
-    Given I wait up to 660 seconds for the steps to pass:
+    Given I wait up to 360 seconds for the steps to pass:
     """
     When I perform the HTTP request on the ES pod with labels "es-node-master=true":
       | relative_url | _cat/indices?format=JSON |
