@@ -111,15 +111,14 @@ Feature: Pod related networking scenarios
       | ovs-vsctl | list | interface |
     Then the step should succeed
     And the output should contain "ingress_policing_rate: 1953"
-
     # test the bandwidth limit with qos for egress
     When I execute on the "<%= cb.iperf_client %>" pod:
-      | sh | -c | iperf3 -c <%= cb.iperf_server %> -i 1 -t 12s |
+      | sh | -c | iperf3 -c <%= cb.iperf_server %> -i 2 -t 24s |
     Then the step should succeed
     And the expression should be true> @result[:response].scan(/[12].[0-9][0-9] Mbits/).size >= 10
     # test the bandwidth limit with qos for ingress
     When I execute on the "<%= cb.iperf_client %>" pod:
-      | sh | -c | iperf3 -c <%= cb.iperf_server %> -i 1 -t 12s -R |
+      | sh | -c | iperf3 -c <%= cb.iperf_server %> -i 2 -t 24s -R |
     Then the step should succeed
     And the expression should be true> @result[:response].scan(/[45].[0-9][0-9] Mbits/).size >= 10
 
