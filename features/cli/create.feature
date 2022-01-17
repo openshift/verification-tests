@@ -3,6 +3,7 @@ Feature: creating 'apps' with CLI
   # @author yinzhou@redhat.com
   # @case_id OCP-11761
   @admin
+  @destructive
   @proxy
   @4.10 @4.9 @4.8 @4.7
   @vsphere-ipi @openstack-ipi @gcp-ipi @baremetal-ipi @azure-ipi @aws-ipi
