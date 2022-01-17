@@ -90,10 +90,10 @@ Feature: creating 'apps' with CLI
     #Check git github url
     Given an 8 character random string of type :dns952 is stored into the :appname3 clipboard
     When I run the :new_app client command with:
-      | code         | git@github.com:openshift/ruby-hello-world |
-      | image_stream | openshift/ruby                            |
-      | name         | <%= cb.appname3 %>                        |
-      | env          | MYSQL_ROOT_PASSWORD=test                  |
+      | code         | https://github.com:openshift/ruby-hello-world |
+      | image_stream | openshift/ruby                                |
+      | name         | <%= cb.appname3 %>                            |
+      | env          | MYSQL_ROOT_PASSWORD=test                      |
     Given the "<%= cb.appname3 %>-1" build completes
     Given 1 pod becomes ready with labels:
       | deployment=<%= cb.appname3 %>-1 |
