@@ -9,7 +9,7 @@ Given /^I run the ovs commands on the host:$/ do | table |
   else
     # For >=3.10 and runc env, should get containerID from the pod which landed on the node
     logger.info("OCP version >= 3.10 and environment may using runc to launch openvswith")
-    ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
+    ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin, quiet: true) { |pod, hash|
       pod.node_name == node.name
     }.first
     container_id = ovs_pod.containers.first.id
@@ -344,17 +344,17 @@ Given /^I wait for the networking components of the node to be terminated$/ do
   network_type = network_operator.network_type(user: admin)
   case network_type
   when "OpenShiftSDN"
-    ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
+    ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin, quiet: true) { |pod, hash|
       pod.node_name == node.name
     }.first
-    net_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: _admin) { |pod, hash|
+    net_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: _admin, quiet: true) { |pod, hash|
       pod.node_name == node.name
     }.first
   when "OVNKubernetes"
-    ovs_pod = BushSlicer::Pod.get_labeled("app=ovs-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
+    ovs_pod = BushSlicer::Pod.get_labeled("app=ovs-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin, quiet: true) { |pod, hash|
       pod.node_name == node.name
     }.first
-    net_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
+    net_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin, quiet: true) { |pod, hash|
       pod.node_name == node.name
     }.first
   else
@@ -391,7 +391,7 @@ Given /^I wait for the networking components of the node to become ready$/ do
     BushSlicer::Platform::SystemdService.new("ovsdb-server.service", _host).status[:success]
   else
 
-    ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
+    ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin, quiet: true) { |pod, hash|
       pod.node_name == node.name
     }.first
     @result = ovs_pod.wait_till_ready(_admin, 60)
@@ -406,7 +406,7 @@ Given /^I wait for the networking components of the node to become ready$/ do
   case network_type
   when "OpenShiftSDN"
 
-    sdn_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
+    sdn_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin, quiet: true) { |pod, hash|
       pod.node_name == node.name
     }.first
 
@@ -418,7 +418,7 @@ Given /^I wait for the networking components of the node to become ready$/ do
     cache_resources sdn_pod
     cb.sdn_pod = sdn_pod
   when "OVNKubernetes"
-    ovnkube_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
+    ovnkube_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin, quiet: true) { |pod, hash|
       pod.node_name == node.name
     }.first
     cache_resources ovnkube_pod
@@ -449,11 +449,11 @@ Given /^I restart the openvswitch service on the node$/ do
     network_type = network_operator.network_type(user: admin)
     case network_type
     when "OpenShiftSDN"
-      ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
+      ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin, quiet: true) { |pod, hash|
         pod.node_name == node.name
       }.first
     when "OVNKubernetes"
-      ovs_pod = BushSlicer::Pod.get_labeled("app=ovs-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
+      ovs_pod = BushSlicer::Pod.get_labeled("app=ovs-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin, quiet: true) { |pod, hash|
         pod.node_name == node.name
       }.first
     else
@@ -477,11 +477,11 @@ Given /^I restart the network components on the node( after scenario)?$/ do |aft
       network_type = network_operator.network_type(user: _admin)
       case network_type
       when "OpenShiftSDN"
-        net_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: _admin) { |pod, hash|
+        net_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: _admin, quiet: true) { |pod, hash|
           pod.node_name == _node.name
         }.first
       when "OVNKubernetes"
-        net_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
+        net_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin, quiet: true) { |pod, hash|
           pod.node_name == _node.name
         }.first
       else
@@ -506,12 +506,12 @@ Given /^I get the networking components logs of the node since "(.+)" ago$/ do |
   network_type = network_operator.network_type(user: admin)
   case network_type
   when "OpenShiftSDN"
-    sdn_pod = cb.sdn_pod || BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
+    sdn_pod = cb.sdn_pod || BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin, quiet: true) { |pod, hash|
       pod.node_name == node.name
     }.first
     @result = admin.cli_exec(:logs, resource_name: sdn_pod.name, n: "openshift-sdn", c: "sdn", since: duration)
   when "OVNKubernetes"
-    ovnkube_pod = cb.ovnkube_pod || BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
+    ovnkube_pod = cb.ovnkube_pod || BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin, quiet: true) { |pod, hash|
       pod.node_name == node_name
     }.first
     @result = admin.cli_exec(:logs, resource_name: ovnkube_pod.name, n: "openshift-ovn-kubernetes", since: duration)
@@ -642,13 +642,13 @@ Given /^I run command on the#{OPT_QUOTED} node's sdn pod:$/ do |node_name, table
   network_type = network_operator.network_type(user: admin)
   case network_type
   when "OpenShiftSDN"
-    sdn_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
+    sdn_pod = BushSlicer::Pod.get_labeled("app=sdn", project: project("openshift-sdn", switch: false), user: admin, quiet: true) { |pod, hash|
       pod.node_name == node_name
     }.first
     cache_resources sdn_pod
     @result = sdn_pod.exec(network_cmd, container: "sdn", as: admin)
   when "OVNKubernetes"
-    ovnkube_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
+    ovnkube_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin, quiet: true) { |pod, hash|
       pod.node_name == node_name
     }.first
     cache_resources ovnkube_pod
@@ -680,11 +680,11 @@ Given /^I restart the ovs pod on the#{OPT_QUOTED} node$/ do | node_name |
     network_type = network_operator.network_type(user: admin)
     case network_type
     when "OpenShiftSDN"
-      ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
+      ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin, quiet: true) { |pod, hash|
         pod.node_name == node_name
       }.first
     when "OVNKubernetes"
-      ovs_pod = BushSlicer::Pod.get_labeled("app=ovs-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
+      ovs_pod = BushSlicer::Pod.get_labeled("app=ovs-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin, quiet: true) { |pod, hash|
         pod.node_name == node_name
       }.first
     else
@@ -790,9 +790,9 @@ Given /^I run cmds on all ovs pods:$/ do | table |
     network_type = network_operator.network_type(user: admin)
     case network_type
     when "OpenShiftSDN"
-      ovs_pods = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin)
+      ovs_pods = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin, quiet: true)
     when "OVNKubernetes"
-      ovs_pods = BushSlicer::Pod.get_labeled("app=ovs-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin)
+      ovs_pods = BushSlicer::Pod.get_labeled("app=ovs-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin, quiet: true)
     else
       raise "unknown network_type"
     end
@@ -821,11 +821,11 @@ Given /^I run command on the#{OPT_QUOTED} node's ovs pod:$/ do |node_name, table
     network_type = network_operator.network_type(user: admin)
     case network_type
     when "OpenShiftSDN"
-      ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin) { |pod, hash|
+      ovs_pod = BushSlicer::Pod.get_labeled("app=ovs", project: project("openshift-sdn", switch: false), user: admin, quiet: true) { |pod, hash|
         pod.node_name == node_name
       }.first
     when "OVNKubernetes"
-      ovs_pod = BushSlicer::Pod.get_labeled("app=ovs-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
+      ovs_pod = BushSlicer::Pod.get_labeled("app=ovs-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin, quiet: true) { |pod, hash|
         pod.node_name == node_name
       }.first
     else
@@ -1373,7 +1373,7 @@ Given /^I store the hostname from external ids in the#{OPT_SYM} clipboard on the
   cb_ovn_hostname ||= "ovn_hostname"
 
   ovsvsctl_cmd = %w(ovs-vsctl list open .)
-  ovn_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
+  ovn_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin, quiet: true) { |pod, hash|
     pod.node_name == node_name
   }.first
   @result = ovn_pod.exec(*ovsvsctl_cmd, as: admin, container: "ovnkube-node")
@@ -1396,7 +1396,7 @@ Given /^I store the#{OPT_QUOTED} hostname in the#{OPT_SYM} clipboard for the "([
     ovn_cmd = %w(hostname -f)
   end
 
-  ovn_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
+  ovn_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin, quiet: true) { |pod, hash|
     pod.node_name == node_name
   }.first
   @result = ovn_pod.exec(*ovn_cmd, as: admin, container: "ovnkube-node")
@@ -1416,7 +1416,7 @@ Given /^I set#{OPT_QUOTED} hostname to external ids on the "([^"]*)" node$/ do |
   ovsvsctl_cmd = %w(ovs-vsctl set open .)
   external_hostname = "external_ids:hostname=#{custom_hostname}"
   ovsvsctl_cmd << external_hostname
-  ovn_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin) { |pod, hash|
+  ovn_pod = BushSlicer::Pod.get_labeled("app=ovnkube-node", project: project("openshift-ovn-kubernetes", switch: false), user: admin, quiet: true) { |pod, hash|
     pod.node_name == node_name
   }.first
   @result = ovn_pod.exec(*ovsvsctl_cmd, as: admin, container: "ovnkube-node")
