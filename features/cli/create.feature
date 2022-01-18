@@ -91,7 +91,7 @@ Feature: creating 'apps' with CLI
     #Check git github url
     Given an 8 character random string of type :dns952 is stored into the :appname3 clipboard
     When I run the :new_app client command with:
-      | code         | https://github.com:openshift/ruby-hello-world |
+      | code         | https://github.com/openshift/ruby-hello-world |
       | image_stream | openshift/ruby                                |
       | name         | <%= cb.appname3 %>                            |
       | env          | MYSQL_ROOT_PASSWORD=test                      |
@@ -237,24 +237,6 @@ Feature: creating 'apps' with CLI
     Given the "<%= cb.appname2 %>-1" build completes
     Given 1 pod becomes ready with labels:
       | deployment=<%= cb.appname2 %> |
-    And I wait for the steps to pass:
-    """
-    When I execute on the pod:
-      | curl | localhost:8080 |
-    Then the step should succeed
-    """
-    And the output should contain "Hello"
-    And I delete all resources from the project
-    #Check git github url
-    Given an 8 character random string of type :dns952 is stored into the :appname3 clipboard
-    When I run the :new_app client command with:
-      | code         | git@github.com:openshift/ruby-hello-world.git |
-      | image_stream | openshift/ruby                                |
-      | name         | <%= cb.appname3 %>                            |
-      | env          | MYSQL_ROOT_PASSWORD=test                      |
-    Given the "<%= cb.appname3 %>-1" build completes
-    Given 1 pod becomes ready with labels:
-      | deployment=<%= cb.appname3 %> |
     And I wait for the steps to pass:
     """
     When I execute on the pod:
