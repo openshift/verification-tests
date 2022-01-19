@@ -12,14 +12,23 @@ module BushSlicer
     }.freeze
 
     def target_cpu_utilization_percentage(user: nil, cached: true, quiet: false)
-      obj = raw_resource(user: user, cached: cached, quiet: quiet)
-      return obj.dig('spec', 'targetCPUUtilizationPercentage')
+      rr = raw_resource(user: user, cached: cached, quiet: quiet)
+      metrics = rr.dig('spec', 'metrics')
+      cpu = metrics.find { |metric|
+        metric.dig('resource', 'name') == 'cpu'
+        return metric.dig('resource', 'target', 'averageUtilization')
+      } unless metrics.nil? || rr.dig('spec', 'targetCPUUtilizationPercentage')
+      return cpu.to_i
     end
 
     def current_cpu_utilization_percentage(user: nil, cached: true, quiet: false)
-      raw_resource(user: user, cached: cached, quiet: quiet).
-        dig('status', 'currentCPUUtilizationPercentage').
-        to_i # it can be nil when zero thus using #to_i
+      rr = raw_resource(user: user, cached: cached, quiet: quiet)
+      metrics = rr.dig('status', 'currentMetrics')
+      cpu = metrics.find { |metric|
+        metric.dig('resource', 'name') == 'cpu'
+        return metric.dig('resource', 'current', 'averageUtilization')
+      } unless metrics.nil? || rr.dig('status', 'currentCPUUtilizationPercentage')
+      return cpu.to_i
     end
   end
 end
