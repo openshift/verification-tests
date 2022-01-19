@@ -595,3 +595,14 @@ Feature: Machine features testing
     Given I switch to cluster admin pseudo user
     Then evaluation of `cluster_operator('cloud-controller-manager').versions` is stored in the :versions clipboard
     And the expression should be true> cb.versions[0].include? "4"
+
+  # @author miyadav@redhat.com
+  # @case_id OCP-47989
+  @admin
+  @4.10
+  @vsphere-ipi @openstack-ipi @baremetal-ipi 
+  @vsphere-upi @openstack-upi @baremetal-upi
+  Scenario: Baremetal clusteroperator should be enabled in vsphere and osp 
+    Given evaluation of `cluster_operator('baremetal').condition(type: 'Disabled')` is stored in the :co_disabled clipboard
+    Then the expression should be true> cb.co_disabled["status"]=="False"
+   
