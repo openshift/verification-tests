@@ -615,7 +615,7 @@ Feature: Testing route
     Given I switch to cluster admin pseudo user
     And I use the "openshift-console" project
     And I use the "console" service
-    And the expression should be true> service('console').annotation('service.alpha.openshift.io/serving-cert-secret-name') == "console-serving-cert"
+    And the expression should be true> service('console').annotation('service.alpha.openshift.io/serving-cert-secret-name') == "console-serving-cert" || service('console').annotation('service.beta.openshift.io/serving-cert-secret-name') == "console-serving-cert"
 
     Given I use the router project
     And all default router pods become ready
