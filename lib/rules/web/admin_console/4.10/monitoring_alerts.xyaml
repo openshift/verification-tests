@@ -27,10 +27,11 @@ filter_alert:
   params:
     class_text: co-text-filter
     input_value: <alert_name>
-    content: <alert_name>
+    text: <alert_name>
+    link_url: monitoring
   action: clear_name_filter_if_exists
   action: set_input_class
-  action: check_page_contains
+  action: check_link_and_text
 open_alert_detail:
   action: Disable_all_filters
   action: filter_alert
@@ -45,8 +46,9 @@ open_silence_detail:
   action: click_alert_link_with_text
 check_alert_detail:
   params:
-    content: alertname=Watchdog
-  action: check_page_contains
+    text: Watchdog
+    link_url: monitoring
+  action: check_link_and_text
   action: check_alert_breadcrumb
 check_alert_breadcrumb:
   params:
