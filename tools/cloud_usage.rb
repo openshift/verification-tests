@@ -60,6 +60,12 @@ module BushSlicer
           options.config = conf
           say 'Getting summary...'
           ps.get_summary(target_region: options.region, options: options)
+          # add support for AWS-CHINA regions
+          global_region = :"AWS-CI-CHINA"
+          ps = AwsSummary.new(svc_name: global_region ,jenkins: @jenkins)
+          options.config = conf
+          say 'Getting summary...'
+          ps.get_summary(target_region: options.region, options: options, global_region: global_region)
 
         end
       end

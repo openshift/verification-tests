@@ -307,8 +307,8 @@ module BushSlicer
 
   class AwsSummary < InstanceSummary
     attr_accessor :amz, :amz_prices
-    def initialize(jenkins: nil)
-      @amz = Amz_EC2.new
+    def initialize(svc_name: :AWS, jenkins: nil)
+      @amz = Amz_EC2.new(service_name: svc_name)
       @jenkins = jenkins
       @table = Text::Table.new
       # hard-coded pricing lookup table name: => price/hr
@@ -399,7 +399,7 @@ module BushSlicer
       return summary
     end
 
-    def get_summary(target_region: nil, options: nil)
+    def get_summary(target_region: nil, options: nil, global_region: :AWS)
       regions = amz.get_regions
       region_names =  regions.map {|r| r.region_name }
       aws_instances = {}
@@ -410,7 +410,7 @@ module BushSlicer
           raise "Unsupported region '#{target_region}'" unless region_names.include? target_region
           region.region_name = target_region
         end
-        aws = Amz_EC2.new(region: region.region_name)
+        aws = Amz_EC2.new(service_name: global_region, region: region.region_name)
         instances = aws.get_instances_by_status('running')
         aws_instances[region.region_name] = instances
         ##  XXX commnet out thread implmentation for now as it's flaky when when in jenkins
