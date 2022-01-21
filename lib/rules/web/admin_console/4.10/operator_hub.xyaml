@@ -610,7 +610,7 @@ check_installation_failure_message:
   action: goto_csv_detail_page
   elements:
   - selector:
-      xpath: //div[contains(text(), 'failed')]
+      xpath: //*[contains(text(), 'ailed')]
     timeout: 30
 check_view_error_button: {}
 check_customized_operator_purchase_link:
