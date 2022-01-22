@@ -56,7 +56,7 @@ module BushSlicer
         c.option("-r", "--region region_name", "report on this region only")
         c.option("-u", "--uptime cluter uptime limit", "report for clusters having uptime over this limit")
         c.action do |args, options|
-          ps = AwsSummary.new(jenkins: @jenkins)
+          ps = AwsSummary.new(svc_name: :"AWS-CLOUD-USAGE", jenkins: @jenkins)
           options.config = conf
           say 'Getting summary...'
           ps.get_summary(target_region: options.region, options: options)

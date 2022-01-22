@@ -399,7 +399,7 @@ module BushSlicer
       return summary
     end
 
-    def get_summary(target_region: nil, options: nil, global_region: :AWS)
+    def get_summary(target_region: nil, options: nil, global_region: :"AWS-CLOUD-USAGE")
       regions = amz.get_regions
       region_names =  regions.map {|r| r.region_name }
       aws_instances = {}
